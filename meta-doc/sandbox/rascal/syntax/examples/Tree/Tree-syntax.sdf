@@ -1,0 +1,23 @@
+module Tree-syntax
+
+imports basic/Integers
+        Patterns
+        Declarations
+hiddens
+context-free start-symbols
+	Declaration
+exports 
+  sorts TREE
+  context-free syntax
+    Integer         -> TREE
+    f(TREE,TREE)    -> TREE
+    g(TREE,TREE)    -> TREE
+    h(TREE,TREE)    -> TREE
+    i(TREE,TREE)    -> TREE
+
+exports %% "Generated syntax (for every sort that is used in a pattern)
+  
+   context-free syntax
+      TREE             -> MatchPattern
+      "`"  TREE        -> ConstructPattern
+      "$" Variable     -> TREE

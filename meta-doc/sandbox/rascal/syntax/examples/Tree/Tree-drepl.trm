@@ -1,0 +1,6 @@
+fun TREE drepl(TREE T) {
+    TREE T1, T2;
+    replace T first {
+      g($T1, $T2)  =>  `i($T1, $T2)  
+    }
+}

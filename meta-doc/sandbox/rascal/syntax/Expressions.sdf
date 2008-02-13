@@ -15,7 +15,7 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression Predicate Strategy Signature SimpleCase SimpleCases RewriteCase RewriteCases
+sorts Expression Predicate Strategy Signature RewriteCase RewriteCases
 
 context-free syntax
          BoolCon                                                 -> Expression {cons("boolcon-exp")}
@@ -73,18 +73,13 @@ context-free syntax
 %% Do we want elseif etc.?
 
 context-free syntax
-         Pattern                                                 -> Expression
+         ConstructPattern                                         -> Expression
 
-	Pattern ("when" {Predicate ","}+ )?                     -> SimpleCase
-   	"{" SimpleCase+ "}"                                     -> SimpleCases
+   	MatchPattern "=>" Expression ("when" {Predicate ","}+ )? -> RewriteCase
+   	"{" RewriteCase+ "}"                                     -> RewriteCases
 
-   	Pattern "=>" Expression ("when" {Predicate ","}+ )?     -> RewriteCase
-   	"{" RewriteCase+ "}"                                    -> RewriteCases
-
-   	"select" Expression RewriteCases                        -> Expression
-   	"replace" Expression Strategy RewriteCases              -> Expression
-%%   	"search" Expression Strategy SimpleCases                -> Expression
-
+   	"select" Expression RewriteCases                         -> Expression
+   	"replace" Expression Strategy RewriteCases               -> Expression
 
 
 

@@ -3,7 +3,7 @@ module Patterns
 imports Variables Expressions
 
 exports
-sorts Pattern PatternChar PatternSymbol
+sorts QuotedPattern Pattern PatternChar PatternSymbol MatchPattern ConstructPattern
 
 lexical syntax
          "\\$"                                     -> PatternChar
@@ -11,11 +11,12 @@ lexical syntax
          ~[\$\|]                                   -> PatternChar {avoid}
 
 context-free syntax
-         "[|" PatternSymbol* "|]"                  -> Pattern
+         "[|" PatternSymbol* "|]"                  -> QuotedPattern
          PatternChar                               -> PatternSymbol {avoid}
          "$" Variable                              -> PatternSymbol
          "$(" VarDecl ")"                          -> PatternSymbol
          "$(" Expression ")"                       -> PatternSymbol
-         Pattern                                   -> Expression
+         QuotedPattern                             -> MatchPattern
+         QuotedPattern                             -> ConstructPattern
 
 

@@ -631,7 +631,8 @@ fun Bool reduce(Bool B){
 
 syntax module Tree-syntax
 imports Naturals
-exports TREE
+exports 
+  sorts TREE
   context-free syntax
     NAT             -&gt; TREE
     f(TREE,TREE)    -&gt; TREE
@@ -957,13 +958,16 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
       <title>Renaming</title>
 
       <para><programlisting>syntax module Let
+exports
 sorts Var %% variables
       Exp %% expressions
+lexical syntax
+     [a-z]+                          -&gt; Var
 context-free functions
      
      Var                             -&gt; Exp %% single variable
      
-     "let" Var "=" Exp "in Exp "end" -&gt; Exp %% function abstraction
+     "let" Var "=" Exp "in" Exp "end" -&gt; Exp %% function abstraction
 %%------------------------------------------
 
 module Let-Example

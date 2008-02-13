@@ -1,0 +1,33 @@
+module Let-syntax
+exports
+sorts Var %% variables
+      Exp %% expressions
+lexical syntax
+     [a-z]+                          -> Var
+context-free syntax
+     
+     Var                             -> Exp
+     
+     "let" Var "=" Exp "in" Exp "end" -> Exp 
+
+%% Generated syntax
+hiddens
+   imports basic/Integers
+        Patterns
+        Declarations
+   context-free start-symbols
+        Declaration 
+   context-free syntax
+%% Exp
+        Exp              -> MatchPattern
+        "`"  Exp         -> ConstructPattern
+        "$" Variable     -> Exp {prefer}
+%% Var
+        Var              -> MatchPattern
+        "`" Var          -> ConstructPattern
+        "$" Variable     -> Var {prefer}
+
+    context-free priorities
+     
+       "$" Variable -> Exp > "$" Variable     -> Var,
+       "$" Variable -> Exp > Var -> Exp
