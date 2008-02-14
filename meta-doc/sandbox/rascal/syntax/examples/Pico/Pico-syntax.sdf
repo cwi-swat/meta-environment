@@ -1,0 +1,48 @@
+module Pico-syntax
+
+imports languages/pico/syntax/Pico 
+
+imports basic/Whitespace
+
+
+%% "generated" syntax
+ hiddens
+   imports
+        Patterns
+        Declarations
+   context-free start-symbols
+        Declaration 
+   context-free syntax 
+
+%% PICO-ID
+	PICO-ID                    -> Pattern
+	"<PICO-ID" Variable ">"    -> PICO-ID
+         "$" Variable               -> PICO-ID
+%% TYPE
+	TYPE                       -> Pattern
+	"<TYPE" Variable ">"       -> TYPE
+         "$" Variable               -> TYPE
+%% PROGRAM
+        PROGRAM                     -> Pattern
+         "<PROGRAM" Variable ">"    -> PROGRAM
+        "$" Variable                -> PROGRAM
+%% DECL
+	DECLS                      -> Pattern
+         "<DECLS" Variable ">"      -> DECLS
+	"$" Variable               -> DECLS 
+%% ID-TYPE
+	ID-TYPE                    -> Pattern
+         "<ID-TYPE" Variable ">"   -> ID-TYPE
+	"$" Variable               -> ID-TYPE
+%% STATEMENT
+	STATEMENT                  -> Pattern
+	"<STATEMENT" Variable ">"  -> STATEMENT
+         "$" Variable               -> STATEMENT
+%% {STATEMENT ";"}*
+	{STATEMENT ";"}* -> Pattern
+	"<{STATEMENT \";\"}*" Variable ">"    -> {STATEMENT ";"}*
+         "$" Variable               -> {STATEMENT ";"}*
+%% EXP
+	EXP                        -> Pattern
+         "<EXP" Variable ">"        -> EXP
+	"$" Variable               -> EXP
