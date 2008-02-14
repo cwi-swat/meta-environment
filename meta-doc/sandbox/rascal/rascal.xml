@@ -1650,18 +1650,12 @@ fun PROGRAM cp(PROGRAM P) {
     <para>This is good for disambiguation but gives notational overhead. Is
     there a more concise scheme?</para>
 
-    <para>Here is an experiment.</para>
-  </section>
-
-  <section>
-    <title>Syntax Definition</title>
-
-    <para>See separate SDF definition. For every sort S in the syntax
-    definition add the following rules:</para>
+    <para>Here is an attempt. For every sort S in the syntax definition add
+    the following rules:</para>
 
     <programlisting><replaceable>N</replaceable>                 -&gt; Pattern
 "&lt;<replaceable>N</replaceable>" Variable "&gt;" -&gt; <replaceable>N</replaceable>       %% defining occurrence in pattern
-"$" Variable      -&gt; <replaceable>N</replaceable>       %% use in pattern</programlisting>
+"&lt;" Variable "&gt;"  -&gt; <replaceable>N</replaceable>       %% use in pattern</programlisting>
 
     <para>In the case of Pico, this leads to the following completely
     unambiguous examples:</para>
@@ -1697,6 +1691,12 @@ fun PROGRAM cp(PROGRAM P) {
      [| |] =&gt; venv 
     }
 }</programlisting>
+  </section>
+
+  <section>
+    <title>Syntax Definition</title>
+
+    <para>See separate SDF definition. </para>
   </section>
 
   <section xml:id="section.integration-tscript">
