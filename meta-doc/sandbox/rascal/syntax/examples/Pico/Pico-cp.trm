@@ -1,0 +1,18 @@
+fun PROGRAM cp(PROGRAM P) {
+    rel[STATEMENT, PICO-ID] Defs := defs(P);
+    rel[CP,CP] Pred := cflow(P).graph;
+    PICO-ID Id, Id1, Id2;
+
+    rel[PICO-ID, EXP] replacements := 
+      {<Id2, E> | STATEMENT S : P,
+                  [| <PICO-ID Id> := <EXP E> |] == S,
+                  is-constant(E),
+                  PICO-ID Id2 : reachX({S},Defs,Pred),
+                  Id2 == Id 
+      };  
+ 
+    replace P {
+     <Id> => E
+        when { E } := replacements[Id]
+    }  
+}

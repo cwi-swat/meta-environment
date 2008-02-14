@@ -15,7 +15,7 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression Predicate Strategy Signature RewriteCase RewriteCases
+sorts Expression LeftHandSide Predicate Strategy Signature RewriteCase RewriteCases
 
 context-free syntax
          BoolCon                                                 -> Expression {cons("boolcon-exp")}
@@ -43,11 +43,12 @@ context-free syntax
 
 context-free syntax
         ("first" | "all")? ("td" | "bu")?                        -> Strategy
-	Strategy Signature ":" Expression                       -> Predicate {cons("generator1")}
-         Strategy Pattern ":" Expression                         -> Predicate {cons("generator2")}
-	%%Type Variable                                         -> Signature
-	Type Expression                                         -> Signature
+	Strategy LeftHandSide ":" Expression                    -> Predicate {cons("generator")}
+	Type Variable                                         -> Signature
+%%| 	Type Expression                                         -> Signature
 	"<" Signature "," {Signature ","}+ ">"                  -> Signature
+         "{" Signature "," {Signature ","}+ "}"                  -> Signature
+         Signature | Pattern                                     -> LeftHandSide
 
 context-free syntax
 	"{" Expression "|" {Predicate ","}+ "}"                 -> Expression {cons("set-comprehension")}
@@ -55,9 +56,9 @@ context-free syntax
          Expression                                              -> Predicate
 	Expression "==" Expression                              -> Predicate {cons("equal")}
 	Expression "!=" Expression                              -> Predicate {cons("non-equal")}
-	Pattern ":=" Expression                                 -> Predicate {cons("match")}
+	LeftHandSide ":=" Expression                            -> Predicate {cons("match")}
 	Pattern "!:=" Expression                                -> Predicate {cons("non-match")}
-         Type Expression "<-" Expression                        -> Predicate {cons("assign")}
+         Type Expression "<-" Expression                         -> Predicate {cons("assign")}
 	Expression "in" Expression                              -> Predicate {cons("element-of")}
 
          Expression ">" Expression                               -> Predicate {cons("greater")}
