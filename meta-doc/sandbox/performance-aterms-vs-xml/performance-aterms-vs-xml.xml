@@ -153,19 +153,36 @@
     <section>
       <title>The test data generator</title>
 
-      <para></para>
+      <para>Due to the functional differences between ATerms and XML, we
+      decided to create a synthetic benchmark that creates test data in both
+      formats. The test data generator has the following parameters that are
+      used to characterize the generated trees:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Number of nodes.</para>
+        </listitem>
+
+        <listitem>
+          <para>Percentage of shared nodes.</para>
+        </listitem>
+
+        <listitem>
+          <para>... TBD</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
       <title>Software versions</title>
 
-      <para></para>
+      <para>(Versions of ATerms, XML parser)</para>
     </section>
 
     <section>
       <title>Hardware configuration</title>
 
-      <para></para>
+      <para>(Arnold's PC)</para>
     </section>
 
     <section>
