@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>Performance of ATerms compared with XML</title>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Arnold</firstname><surname>Lankamp</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
+
+  <note>
+    <para>This document is under development. See <xref
+    linkend="section.to-do" />.</para>
+  </note>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>ATerms are the ubiquitous data exchange format used in The
+    Meta-Environment. ATerms were designed with a specific application domain
+    in mind: exchanging parse tables, parse trees and other source code
+    related data that emerges in the context of Interactive Development
+    Environments and tools for source code analysis and transformation.</para>
+
+    <para>World-wide, XML is the defacto standard for data exchange in many
+    application domains and an obvious question to ask is how ATerms and XML
+    compare regarding</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>speed (efficiency of reading and writing data), and</para>
+      </listitem>
+
+      <listitem>
+        <para>size (the size of the intermediate data).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This document describes experiments to make this comparison.</para>
+  </section>
+
+  <section>
+    <title>Considerations</title>
+
+    <para>There are various considerations that influence a fair comparison of
+    ATerms and XML.</para>
+
+    <section>
+      <title>ATerms versus XML</title>
+
+      <para>There are various functional differences between ATerms and
+      XML:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ATerms may have annotations attached to each node; these
+          annotations may contain arbitrary ATerms; XML trees may have
+          attributes but they may only contain string values.</para>
+        </listitem>
+
+        <listitem>
+          <para>ATerms have a textual and a binary representation; XML only
+          has a textual representation.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Potential influences on measurements</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>Although we would prefer to compare the concepts underlying
+          ATerms and XML, it is unavoidable that we can only measure specific
+          implementations of these concepts.</para>
+        </listitem>
+
+        <listitem>
+          <para>ATerms only support ASCII while XML supports Unicode.</para>
+        </listitem>
+
+        <listitem>
+          <para>The following properties of test data may influence the
+          result:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The size of the data.</para>
+            </listitem>
+
+            <listitem>
+              <para>The amount of sharing.</para>
+            </listitem>
+
+            <listitem>
+              <para>The number of different function symbols/tags that is
+              used.</para>
+            </listitem>
+
+            <listitem>
+              <para>The width and depth of the data.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>We will compare Java implementations of ATerms and XML and the
+          unpredictable effects of hotspot compilers has to be taken into
+          account.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Experimental Setting</title>
+
+    <para></para>
+
+    <section>
+      <title>The test data generator</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Software versions</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Hardware configuration</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Measurement procedure</title>
+
+      <para></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Results</title>
+
+    <para></para>
+
+    <section>
+      <title>Speed comparison</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Size comparison</title>
+
+      <para></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Conclusions</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title xml:id="section.to-do">To Do</title>
+
+    <itemizedlist>
+      <listitem>
+        <para></para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>
