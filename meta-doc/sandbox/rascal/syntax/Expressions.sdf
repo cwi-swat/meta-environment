@@ -24,9 +24,9 @@ context-free syntax
 	IdCon "(" {Expression ","}* ")"                         -> Expression {cons("fun-call")}
 	Variable                                                -> Expression {cons("variable")}
          "#" Expression                                          -> Expression {cons("size-op")}
-         Expression "union" Expression                           -> Expression {cons("union-op")}
+         Expression "union" Expression                           -> Expression {cons("union-op"), left}
          Expression "\\" Expression                              -> Expression {cons("diff-op")}
-         Expression "+" Expression                               -> Expression {cons("add-op")}
+         Expression "+" Expression                               -> Expression {cons("add-op"), left}
          Expression "*" Expression                               -> Expression {cons("mul-op")}
          Expression "x" Expression                               -> Expression {cons("prod-op")}
          Expression "[" Expression "]"                           -> Expression {cons("image-op")}
@@ -44,10 +44,9 @@ context-free syntax
 context-free syntax
         ("first" | "all")? ("td" | "bu")?                        -> Strategy
 	Strategy LeftHandSide ":" Expression                    -> Predicate {cons("generator")}
-	Type Variable                                         -> Signature
-%%| 	Type Expression                                         -> Signature
-	"<" Signature "," {Signature ","}+ ">"                  -> Signature
-         "{" Signature "," {Signature ","}+ "}"                  -> Signature
+	Type Variable                                           -> Signature
+	"<" {Signature ","}+ ">"                                -> Signature
+         "{" {Signature ","}+ "}"                                -> Signature
          Signature | Pattern                                     -> LeftHandSide
 
 context-free syntax

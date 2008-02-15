@@ -1,20 +1,17 @@
 fun CFSEGMENT cflow(STATEMENT Stat){
-    rel[CP,CP] R1, R2;
-    set[CP] En1, En2, Ex1, Ex2;
-
     switch Stat {
-      while <EXP Exp> do <{STATEMENT ";"}* Stats> od =>
+      <STATEMENT> while <EXP> Exp do <{STATEMENT ";"}*> Stats od =>
              <{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}>
-         when <set[CP] En, rel[CP,CP] R, set[CP] Ex> <- cflow(Stats)
+         when <set[CP] En, rel[CP,CP] R, set[CP] Ex> := cflow(Stats)
                 
-      if <EXP Exp> then <{STATEMENT ";"}* Stats1> else <{STATEMENT ";"}* Stats2> fi =>
+      <STATEMENT> if <EXP> Exp then <{STATEMENT ";"}*> Stats1 else <{STATEMENT ";"}*> Stats2 fi =>
              < {Exp}, 
                ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
                 Ex1 union Ex2
              >
-         when <En1, R1, Ex1> := cflow(Stats1),
-              <En2, R2, Ex2> := cflow(Stats2)
+         when <set[CP] En1, rel[CP,CP] R1, set[CP] Ex1> := cflow(Stats1),
+              <set[CP] En2, rel[CP,CP] R2, set[CP] Ex2> := cflow(Stats2)
            
-      <STATEMENT Stat>  => <{Stat}, {}, {Stat}>
+       <STATEMENT> Stat  => <{Stat}, {}, {Stat}>
     }
 }
