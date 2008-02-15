@@ -48,10 +48,24 @@
       </listitem>
     </itemizedlist>
 
-    <para>This document describes experiments to make this comparison.</para>
+    <para>This document describes experiments to make this comparison. Our
+    findings can be summarized as follows:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>TBD</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In <xref linkend="section.considerations" /> we sketch the general
+    consideraions to be taken into account when performing such a comparions
+    and in <xref linkend="section.experimental-setting" /> we describe the
+    experimental setting. Results are presented in <xref
+    linkend="section.results" /> and our overall conclusions can be found in
+    <xref linkend="section.conclusions" />.</para>
   </section>
 
-  <section>
+  <section xml:id="section.considerations">
     <title>Considerations</title>
 
     <para>There are various considerations that influence a fair comparison of
@@ -60,14 +74,19 @@
     <section>
       <title>ATerms versus XML</title>
 
-      <para>There are various functional differences between ATerms and
-      XML:</para>
+      <para>There are various differences between ATerms and XML that may
+      affect a comparison:</para>
 
       <itemizedlist>
         <listitem>
           <para>ATerms may have annotations attached to each node; these
           annotations may contain arbitrary ATerms; XML trees may have
           attributes but they may only contain string values.</para>
+        </listitem>
+
+        <listitem>
+          <para>The implementation of ATerms support the notion of maximal
+          subterm sharing; XML has no counterpart for this.</para>
         </listitem>
 
         <listitem>
@@ -84,7 +103,9 @@
         <listitem>
           <para>Although we would prefer to compare the concepts underlying
           ATerms and XML, it is unavoidable that we can only measure specific
-          implementations of these concepts.</para>
+          implementations of these concepts. The implementation and
+          optimization effort invested in XML implementations is uncomparable
+          to the effort invested in the ATerm implementation.</para>
         </listitem>
 
         <listitem>
@@ -124,7 +145,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.experimental-setting">
     <title>Experimental Setting</title>
 
     <para></para>
@@ -154,7 +175,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.results">
     <title>Results</title>
 
     <para></para>
@@ -172,7 +193,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.conclusions">
     <title>Conclusions</title>
 
     <para></para>
