@@ -1,0 +1,21 @@
+module examples/Booleans/Booleans-syntax
+exports 
+  sorts Bool
+
+  context-free syntax
+    "true"        -> Bool
+    "false"       -> Bool
+    Bool "&" Bool -> Bool {left}
+    Bool "|" Bool -> Bool {right}
+
+%% Generated syntax
+hiddens
+   imports
+        Patterns Declarations
+   context-free start-symbols
+        Declaration 
+   context-free syntax
+%% Bool
+        Bool                       -> Pattern
+        "<" "Bool"? Variable  ">"  -> Bool
+

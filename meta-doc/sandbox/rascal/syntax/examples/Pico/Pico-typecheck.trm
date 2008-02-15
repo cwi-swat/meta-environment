@@ -1,19 +1,13 @@
-fun VEnv evalExp(Exp exp) {
+fun list[Error] tcst(Stat Stat, Env Env) {
+    switch Stat {
+      <PICO-ID Id> := <EXP Exp> => type-of(Exp, Type, Env)
+       when {<Id,Type>} == Env[Id]
 
-    switch exp {
-      <EXP exp1> + <EXP exp2> => nat1 + nat2
-         when Natural nat1 <- eve(exp1),
-              Natural nat2 <- eve(exp2)
-       
-      <EXP exp1> - <EXP exp2> => nat1 + nat2
-         when Natural nat1 <- eve(exp1),
-              Natural nat2 <- eve(exp2)
-        
-      <EXP exp1> || <EXP exp2> => str3
-         when StrCon str1 <- eve(exp1),
-              StrCon str2 <- eve(exp2),
-              StrCon str3 <- concat(str1, str2)
-
-      <EXP exp1>  => nil-value     %% default "equation"
-   } 
+      if <EXP Exp> then <{STATEMENT ";"}* Stats1> else <{STATEMENT ";"}* Stats2> fi  =>
+           type-of(Exp, natural, Env) + 
+           tcs(Stats1, Env) + tcs(Stats2, Env)
+ 
+      while <EXP Exp> do <{STATEMENT ";"}* Stats1> od =>
+           type-of(Exp, natural, Env) + tcs(Stats, Env)
+    }
 }

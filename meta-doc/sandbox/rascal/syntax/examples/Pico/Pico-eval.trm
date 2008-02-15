@@ -1,19 +1,19 @@
 fun VEnv evalExp(Exp exp) {
 
     switch exp {
-      <EXP> exp1 + <EXP> exp2 => nat1 + nat2
+      <EXP exp1> + <EXP exp2> => nat1 + nat2
          when Natural nat1 <- eve(exp1),
               Natural nat2 <- eve(exp2)
        
-      <EXP> exp1 - <EXP> exp2 => nat1 + nat2
+      <EXP exp1> - <EXP exp2> => nat1 + nat2
          when Natural nat1 <- eve(exp1),
               Natural nat2 <- eve(exp2)
         
-      <EXP> exp1 || <EXP> exp2 => str3
+      <EXP exp1> || <EXP exp2> => str3
          when StrCon str1 <- eve(exp1),
               StrCon str2 <- eve(exp2),
               StrCon str3 <- concat(str1, str2)
    
-      <EXP> exp1  => nil-value     %% default "equation"
+      <EXP exp1>  => nil-value     %% default "equation"
    } 
 }

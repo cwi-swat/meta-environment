@@ -38,8 +38,7 @@ context-free syntax
 context-free syntax
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
 	"{" {Expression ","}* "}"                               -> Expression {cons("set")}
-	"<" Expression "," {Expression ","}+ ">"                -> Expression {cons("tuple")}
-	"\\" IdCon                                              -> Expression {cons("func-ref")}
+	"<" {Expression ","}+ ">"                               -> Expression {cons("tuple")}
 
 context-free syntax
         ("first" | "all")? ("td" | "bu")?                        -> Strategy
@@ -47,7 +46,7 @@ context-free syntax
 	Type Variable                                           -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
          "{" {Signature ","}+ "}"                                -> Signature
-         Signature | Pattern                                     -> LeftHandSide
+         (Signature | Pattern)                                   -> LeftHandSide
 
 context-free syntax
 	"{" Expression "|" {Predicate ","}+ "}"                 -> Expression {cons("set-comprehension")}
@@ -57,7 +56,7 @@ context-free syntax
 	Expression "!=" Expression                              -> Predicate {cons("non-equal")}
 	LeftHandSide ":=" Expression                            -> Predicate {cons("match")}
 	Pattern "!:=" Expression                                -> Predicate {cons("non-match")}
-         Type Expression "<-" Expression                         -> Predicate {cons("assign")}
+         LeftHandSide "<-" Expression                            -> Predicate {cons("assign")}
 	Expression "in" Expression                              -> Predicate {cons("element-of")}
 
          Expression ">" Expression                               -> Predicate {cons("greater")}
@@ -75,16 +74,10 @@ context-free syntax
 
 context-free syntax
 %%        Pattern                                                 -> Expression
-         "[|" Pattern "|]"                                        -> Expression
+%%         "[|" Pattern "|]"                                        -> Expression
 
-   	Pattern "=>" Expression ("when" {Predicate ","}+ )?      -> RewriteCase
+   	Pattern "=>" (Pattern | Expression) ("when" {Predicate ","}+ )?      -> RewriteCase
    	"{" RewriteCase+ "}"                                     -> RewriteCases
 
    	"switch" Expression RewriteCases                         -> Expression
    	"replace" Expression Strategy RewriteCases               -> Expression
-
-
-
-	
-	
-

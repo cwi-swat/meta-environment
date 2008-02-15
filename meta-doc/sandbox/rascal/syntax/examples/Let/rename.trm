@@ -1,19 +1,16 @@
 fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
-    int Cnt1;
-    Var V, Y;
-    Exp E1, E2;
 
     switch E {
-    let $V = $E1 in $E2 end => let $Y = $R1 in $R2 end 
-        when Y := "x" + Cnt,   %% this + operator concatenates 
-                               %% (after converting the int to str)
-             Cnt1 := Cnt + 1,
-             R1 := rename(E1, Rn, Cnt),
-             R2 := rename(E2, {<V, Y>} union Rn, Cnt1)
 
-    $V => $V1
-       when { V1 } == Rn[V]
+      let <V> = <Exp E1> in <Exp E2> end => let <Var Y> = <Exp R1> in <Exp R2> end
+          when Var Y := "x" + Cnt, 
+             int Cnt1 := Cnt + 1,
+             Exp R1 := rename(E1, Rn, Cnt),
+             Exp R2 := rename(E2, {<V, Y>} union R1, Cnt1)
 
-    $E => $E
-    }
+      [| <Var V> |] => V1 
+        when { <Var V1> } <- Rn[V]
+
+      <Exp E> => E
+   }
 }

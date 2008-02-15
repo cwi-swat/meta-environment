@@ -1,0 +1,8 @@
+fun Bool and(Bool B1, B2) { %% reduce & operator
+    Bool B;
+    switch B1 {
+      true        => reduce(B2)
+      false       => false
+      <Bool B>    => <B1> & <B2>
+    }    
+}
