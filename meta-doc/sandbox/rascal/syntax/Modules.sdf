@@ -20,6 +20,6 @@ lexical restrictions
 
 context-free syntax
 
-    "imports" ModuleName+                                 -> Imports
+    "imports" ModuleName+ ";"?                                -> Imports
 
-   "syntax"? "module" ModuleName Imports? Declaration*    -> Module  
+   "syntax"? "module" ModuleName Imports? (Declaration ";"?)* -> Module  

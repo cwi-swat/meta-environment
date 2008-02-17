@@ -11,13 +11,9 @@ context-free syntax
 %% Generated syntax
 hiddens
    imports
-        Patterns Declarations
+        Patterns Modules
    context-free start-symbols
-        Declaration 
-   context-free syntax
-%% Exp
-        Exp                        -> Pattern
-        "<" "Exp"? Variable  ">"   -> Exp
-%% Var
-        Var                        -> Pattern
-        "<" "Var"? Variable ">"    -> Var 
+        Module 
+   imports 
+	EmbedSortAsPatternAndVar[Exp] 
+	EmbedSortAsPatternAndVar[Var]

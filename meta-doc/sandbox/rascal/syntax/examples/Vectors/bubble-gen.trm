@@ -1,0 +1,9 @@
+module Bubble
+
+fun &Elem* sort(Elem* Elements, fun bool GreaterThan(&Elem, &Elem)){
+    sort( replace Elements {
+            <E1> <E2> => <E2> <E1>
+            when GreaterThan(E1, E2)
+          }
+         )
+}

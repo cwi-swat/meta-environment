@@ -1,17 +1,36 @@
+module Pico-controlflow
+imports pico/syntax/Pico
+
+type CP = EXP | STATEMENT;     %% A Code Point, union of two types
+
+type CFSEGMENT = < set[CP] entry, rel[CP,CP] graph, set[CP] exit>;
+
+fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
+    switch Stats {
+      <STATEMENT Stat> ; <{STATEMENT ";"}* Stats2> =>
+             <En1, R1 union R2 union (Ex1 x En2), Ex2>
+         when <set[CP] En1, rel[CP,CP] R1, set[CP] Ex1> := cflow(Stat),
+              <set[CP] En2, rel[CP,CP] R2, set[CP] Ex2> := cflow(Stats2)
+
+      [| |] => <{}, {}, {}>
+    }
+}
+ 
 fun CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
-      [| while <EXP Exp> do <{STATEMENT ";"}* Stats> od |] =>
+      while <EXP Exp> do <{STATEMENT ";"}* Stats> od =>
              <{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}>
-         when <set[CP] En, rel[CP,CP] R, set[CP] Ex> := cflow(Stats)
+         when <set[CP] En,  rel[CP,CP] R,  set[CP] Ex> := cflow(Stats)
                 
-      if <EXP Exp> then <{STATEMENT ";"}* Stats1> else <{STATEMENT ";"}* Stats2> fi =>
+      if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
+                   else <{STATEMENT ";"}* Stats2> fi =>
              < {Exp}, 
                ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
                 Ex1 union Ex2
              >
          when <set[CP] En1, rel[CP,CP] R1, set[CP] Ex1> := cflow(Stats1),
               <set[CP] En2, rel[CP,CP] R2, set[CP] Ex2> := cflow(Stats2)
-            
-       <STATEMENT Stat>  => <{Stat}, {}, {Stat}>
+           
+      <STATEMENT Stat>  => <{Stat}, {}, {Stat}>
     }
 }

@@ -1,0 +1,9 @@
+module Bubble
+
+fun Integer* sort(Integer* Numbers){
+    replace Numbers {
+      <Integer* Rest1> <Integer N1> <Integer N2> <Integer* Rest2> =>
+         sort(<Integer* Rest1> <Integer N2> <Integer N1> <Integer* Rest>)
+      when N1 > N2
+    }
+}

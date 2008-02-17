@@ -11,11 +11,8 @@ exports
 %% Generated syntax
 hiddens
    imports
-        Patterns Declarations
+        Modules
    context-free start-symbols
-        Declaration 
-   context-free syntax
-%% Bool
-        Bool                       -> Pattern
-        "<" "Bool"? Variable  ">"  -> Bool
+        Module 
+   imports EmbedSortAsPatternAndVar[Bool]
 

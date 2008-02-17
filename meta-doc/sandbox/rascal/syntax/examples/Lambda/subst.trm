@@ -1,0 +1,52 @@
+module Lambda-Examples
+imports Lambda-syntax
+
+fun set[Var] allVars(Exp E) {
+    {V | Var V : E}
+}
+
+fun set[Var] boundVars(Exp E) {
+    {V | fn <Var V> => <Exp E1> : E}
+}
+
+fun set[Var] freeVars(Exp E) {
+    allVars(E) \ boundVars(E)
+}
+
+%% Generate a fresh variable if V does not occur in 
+%% given set of variables.
+
+fun Var fresh(Var V, set[Var] S) {
+    if V in S then prime(V) else V fi
+}
+
+%% Substitution: replace all occurrences of V in E2 by E1
+
+fun Exp subst(Var V1, Exp E1, Exp E2) {
+
+    switch E2 {
+      <Var V2> => V2
+         when V1 != V2
+
+      <Var V2> => E1
+         when V1 == V2 
+
+      <Exp Ea> <Exp Eb>  => <Exp EaS> <Exp EbS>
+         when Exp EaS := subst(V, E, Ea),
+	     Exp EbS := subst(V, E, Eb)
+
+      fn <Var V2> => <Var Ea> =>  fn <Var V2> => <Exp Ea>
+         when V1 == V2
+
+      fn <Var V2> => <Exp Ea> => fn <Var V2> => <Exp E1S>
+         when V1 != V2,
+              not(V1 in freeVars(E2) & V2 in freeVars(E1)),
+              Exp E1S := subst(V1, E1, Ea)
+ 
+       fn <Var V2> => <Exp Ea>  => fn <Var V3> => <Exp EaS>
+         when V1 != V2,
+              V1 in freeVars(Ea) & V2 in freeVars(E1),
+              V3 := fresh(V2, freeVars(Ea) union freeVars(E1)),
+              Exp EaS := subst(V1, E1, subst(V2, V3, E2))
+    }
+}

@@ -1,16 +1,28 @@
+module Let-Example
+imports Let
+
+%% Rename all bound variables in an Exp
+%% Version 1: purely functional
+%% Exp: given expression to be renamed
+%% rel[Var,Var]: renaming table
+%% Int: counter to generate global variables
+
 fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
-
-    switch E {
-
-      let <V> = <Exp E1> in <Exp E2> end => let <Var Y> = <Exp R1> in <Exp R2> end
-          when Var Y := "x" + Cnt, 
+    switch(E) {
+    let <Var V> = <Exp E1> in <Exp E2> end =>
+           let <Var Y >= <Exp E1R>
+           in 
+              <Exp E2R>
+           end 
+        when Var Y := "x" + Cnt,   %% this + operator concatenates 
+                               %% (after converting the int to str)
              int Cnt1 := Cnt + 1,
-             Exp R1 := rename(E1, Rn, Cnt),
-             Exp R2 := rename(E2, {<V, Y>} union R1, Cnt1)
+	    Exp E1R := rename(E1, Rn, Cnt),
+             Exp E2R := rename(E2, {<V, Y>} union Rn, Cnt1)
 
-      [| <Var V> |] => V1 
-        when { <Var V1> } <- Rn[V]
+    <Var V> => V1
+       when { Var V1 } := Rn[V]
 
-      <Exp E> => E
-   }
+    <Exp E1> => E1
+    }
 }

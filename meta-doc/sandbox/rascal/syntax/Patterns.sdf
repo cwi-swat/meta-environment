@@ -8,7 +8,8 @@ sorts Pattern PatternChar PatternSymbol QuotedPattern
 lexical syntax
          "\\<"                                     -> PatternChar
          "\\>"                                     -> PatternChar
-         ~[\<\>]                                   -> PatternChar
+         "\\|"                                     -> PatternChar
+         ~[\<\>\|]                                 -> PatternChar
 
 context-free syntax
          PatternChar                               -> PatternSymbol

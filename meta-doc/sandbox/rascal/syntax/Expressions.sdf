@@ -15,13 +15,13 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression LeftHandSide Predicate Strategy Signature RewriteCase RewriteCases
+sorts Expression ExpressionOrPattern LeftHandSide Predicate Strategy Signature RewriteCase RewriteCases
 
 context-free syntax
          BoolCon                                                 -> Expression {cons("boolcon-exp")}
          IntCon                                                  -> Expression {cons("intcon-exp")}
          StrCon                                                  -> Expression {cons("strcon-exp")}
-	IdCon "(" {Expression ","}* ")"                         -> Expression {cons("fun-call")}
+	IdCon "(" {ExpressionOrPattern ","}* ")"                -> Expression {cons("fun-call")}
 	Variable                                                -> Expression {cons("variable")}
          "#" Expression                                          -> Expression {cons("size-op")}
          Expression "union" Expression                           -> Expression {cons("union-op"), left}
@@ -29,7 +29,8 @@ context-free syntax
          Expression "+" Expression                               -> Expression {cons("add-op"), left}
          Expression "*" Expression                               -> Expression {cons("mul-op")}
          Expression "x" Expression                               -> Expression {cons("prod-op")}
-         Expression "[" Expression "]"                           -> Expression {cons("image-op")}
+         Expression "[" Expression "]"                           -> Expression {cons("limage-op")}
+         Expression "[-," Expression "]"                         -> Expression {cons("rimage-op")}
          Expression "." Variable                                 -> Expression {cons("field-op")}
 
          "(" Expression ")"                                      -> Expression {bracket}
@@ -43,7 +44,7 @@ context-free syntax
 context-free syntax
         ("first" | "all")? ("td" | "bu")?                        -> Strategy
 	Strategy LeftHandSide ":" Expression                    -> Predicate {cons("generator")}
-	Type Variable                                           -> Signature
+	Type? Variable                                          -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
          "{" {Signature ","}+ "}"                                -> Signature
          (Signature | Pattern)                                   -> LeftHandSide
@@ -55,9 +56,10 @@ context-free syntax
 	Expression "==" Expression                              -> Predicate {cons("equal")}
 	Expression "!=" Expression                              -> Predicate {cons("non-equal")}
 	LeftHandSide ":=" Expression                            -> Predicate {cons("match")}
-	Pattern "!:=" Expression                                -> Predicate {cons("non-match")}
+	LeftHandSide "!:=" Expression                           -> Predicate {cons("non-match")}
          LeftHandSide "<-" Expression                            -> Predicate {cons("assign")}
 	Expression "in" Expression                              -> Predicate {cons("element-of")}
+	Expression "notin" Expression                           -> Predicate {cons("not-element-of")}
 
          Expression ">" Expression                               -> Predicate {cons("greater")}
 
@@ -73,10 +75,9 @@ context-free syntax
 %% Do we want elseif etc.?
 
 context-free syntax
-%%        Pattern                                                 -> Expression
-%%         "[|" Pattern "|]"                                        -> Expression
+        Expression | Pattern                                     -> ExpressionOrPattern
 
-   	Pattern "=>" (Pattern | Expression) ("when" {Predicate ","}+ )?      -> RewriteCase
+   	Pattern "=>" ExpressionOrPattern ("when" {Predicate ","}+ )?      -> RewriteCase
    	"{" RewriteCase+ "}"                                     -> RewriteCases
 
    	"switch" Expression RewriteCases                         -> Expression
