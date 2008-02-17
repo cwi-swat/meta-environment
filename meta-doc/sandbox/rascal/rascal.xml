@@ -2156,6 +2156,13 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
+        <para>It is (not yet) possible to add equations to a function in
+        another module (as is the case in ASF+SDF). If we want to keep this
+        feature, we need an explicit "extend" construct to add cases to a
+        function. [Suggestion: let's look for a cleaner solution.]</para>
+      </listitem>
+
+      <listitem>
         <para>Shopping list of ideas in Tom:</para>
 
         <itemizedlist>
