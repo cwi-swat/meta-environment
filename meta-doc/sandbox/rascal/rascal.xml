@@ -26,8 +26,9 @@
   </info>
 
   <note>
-    <para>This document is a braindump of ideas. See <xref linkend="Issues" />
-    for the issues that have to be resolved.</para>
+    <para>This document is a braindump of ideas. See <xref
+    linkend="section.issues" /> for the issues that have to be
+    resolved.</para>
   </note>
 
   <section>
@@ -453,73 +454,165 @@
   <section>
     <title>Rascal at a glance</title>
 
-    <para>Rascal can be summarized as follows:</para>
+    <para>Rascal is summarized in the following subsections.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>"Syntax modules" are identical to standard SDF modules and
-        define concrete syntax.</para>
-      </listitem>
+    <para>See <xref linkend="Issues" /> for the issues that still have to be
+    resolved.</para>
 
-      <listitem>
-        <para>Ordinary modules define types and functions.</para>
-      </listitem>
+    <section>
+      <title>Modules</title>
 
-      <listitem>
-        <para>The type system (and notation) are mostly similar to that of
-        Rscript, but</para>
+      <itemizedlist>
+        <listitem>
+          <para>"Syntax modules" are identical to standard SDF modules and
+          define concrete syntax.</para>
+        </listitem>
 
-        <itemizedlist>
-          <listitem>
-            <para>Symbols (as defined by a syntax module) are also
-            types.</para>
-          </listitem>
+        <listitem>
+          <para>Ordinary modules may import other modules and define types and
+          functions.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
 
-          <listitem>
-            <para>There are built-in types (bool, int str, loc) that have a
-            syntactic counterpart (not yet defined how to do this
-            exactly).</para>
-          </listitem>
+    <section>
+      <title>Types</title>
 
-          <listitem>
-            <para>Relations can have optional column names.</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
+      <para>The type system (and notation) are mostly similar to that of
+      Rscript, but</para>
 
-      <listitem>
-        <para>Expressions correspond roughly to Rscript expressions with some
-        extensions:</para>
+      <itemizedlist>
+        <listitem>
+          <para>Symbols (as defined by a syntax module) are also types.</para>
+        </listitem>
 
-        <itemizedlist>
-          <listitem>
-            <para>There is a notation of "pattern": a quoted concrete syntax
-            fragment that may contain variables and subexpresions to be
-            evaluated.</para>
-          </listitem>
+        <listitem>
+          <para>There are built-in types (bool, int str, loc) that have a
+          syntactic counterpart (not yet defined how to do this
+          exactly).</para>
+        </listitem>
 
+        <listitem>
+          <para>Relations can have optional column names.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>As a design strategy we try to offer the option to leave out as
+      many type indications as possible.</para>
+
+      <para>A type declaration may introduce an abbreviation for a comples
+      type.</para>
+    </section>
+
+    <section>
+      <title>Functions</title>
+
+      <para>A function declaration consists of a function name, typed
+      arguments, result type and a function body.</para>
+
+      <para>A function body contains a number of variable declarations (with
+      optional initializations) followed by an expression. The value of the
+      expression is the value of the function.</para>
+    </section>
+
+    <section xml:id="section.patterns">
+      <title>Patterns</title>
+
+      <para>There is a notation of "pattern": a quoted concrete syntax
+      fragment that may contain variables and subexpresions to be evaluated.
+      We want to cover the whole spectrum from maximally quoted patterns that
+      can unambiguously describe <emphasis role="bold">any</emphasis> syntax
+      fragment to minimally quoted patterns as we are used to in ASF+SDF.
+      Therefore we support the following mechanisms:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Optionally typed variables, written as
+          <literal>&lt;<replaceable>TYPE</replaceable>
+          <replaceable>NAME</replaceable>&gt;</literal> or
+          <literal>&lt;<replaceable>NAME</replaceable>&gt;</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Quoted patterns enclosed between <literal>[|</literal> and
+          <literal>|]</literal>. Inside a fully quoted string, the characters
+          <literal>&lt;</literal>, <literal>&gt;</literal> and
+          <literal>|</literal> can be escaped as <literal>\&lt;</literal>,
+          <literal>\&gt;</literal>, <literal>\|</literal>. Fully quotred
+          patterns may contain variables.</para>
+        </listitem>
+
+        <listitem>
+          <para>Unquoted patterns are an (unquoted) syntax fragment that may
+          contain variables.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Quoted and unquoted patterns form the
+      <emphasis>patterns</emphasis> that are supported in Rascal.</para>
+
+      <para>Examples are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Quoted pattern with typed variables:<programlisting>[| while &lt;EXP Exp&gt; do &lt;${STATEMENT ";"}* Stats&gt; od |]</programlisting></para>
+        </listitem>
+
+        <listitem>
+          <para>Quoted pattern with untyped variables:<programlisting>[| while &lt;Exp&gt; do &lt;Stats&gt; od |]</programlisting></para>
+        </listitem>
+
+        <listitem>
+          <para>Unquoted pattern with typed variables:<programlisting>while &lt;EXP Exp&gt; do &lt;${STATEMENT ";"}* Stats&gt; od</programlisting></para>
+        </listitem>
+
+        <listitem>
+          <para>Unquoted pattern with untyped variables:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Obviously, with less quoting and type information, the probability
+      of ambiguities increases. Our assumption is that a type checker can
+      resolve them.</para>
+
+      <para>Implementation hint. For every sort S in the syntax definition add
+      the following rules:</para>
+
+      <programlisting><replaceable>S</replaceable>                     -&gt; Pattern
+"&lt;<replaceable>" "S</replaceable>"? Variable "&gt;" -&gt; <replaceable>S</replaceable>      </programlisting>
+    </section>
+
+    <section>
+      <title>Expressions</title>
+
+      <para>Expressions correspond roughly to Rscript expressions with some
+      extensions:<itemizedlist>
           <listitem>
             <para>There are lists, sets and relations together with
-            comprhensions for these types.</para>
+            comprehensions for these types.</para>
           </listitem>
 
           <listitem>
-            <para>A "switch" expression corresponds to the matching provided
-            by a set of rewrite rules. However, it provides only matching at
-            the top level of its argument.</para>
+            <para>A "switch" expression is similar to a Switch statement in C
+            or Java and corresponds to the matching provided by the left-hand
+            sides of a set of rewrite rules. However, it provides <emphasis
+            role="bold">only</emphasis> matching at the top level of its
+            argument and does not traverse its argument.</para>
           </listitem>
 
           <listitem>
             <para>A "replace" expression corresponds to a traversal function
             (transformer). Given a term and a list of pattern/replacement
-            pairs it traverses the term as long as replacements are
-            possible.</para>
+            pairs it traverses the term and performs replacements. Note that
+            replace does <emphasis role="bold">not</emphasis> provide the
+            fixed-point functionality of innermost rewriting (try to rewrite
+            as long as there is a change). This behaviour has to be made
+            explicit by recursion.</para>
           </listitem>
 
           <listitem>
-            <para>A "search" expression also corresponds to a traversal
-            function. Given a term and a list of patterns, it returns a list
-            all subterms that match any of patterns.</para>
+            <para>Pattern/replacement pairs may have conditions preceeded by
+            the keyword <literal>when</literal>.</para>
           </listitem>
 
           <listitem>
@@ -528,7 +621,7 @@
           </listitem>
 
           <listitem>
-            <para>Replace, search and generators have a strategy option to
+            <para>Replace and generators may have a strategy option to
             indicate:</para>
 
             <itemizedlist>
@@ -549,120 +642,51 @@
               </listitem>
             </itemizedlist>
           </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>A function contains a number of variable declarations followed
-        by an expression.</para>
-      </listitem>
-
-      <listitem>
-        <para>There is a notion of global (dynamically scoped) variables.
-        Status not yet clear.</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>See <xref linkend="Issues" /> for the issues that still have to be
-    resolved.</para>
+        </itemizedlist></para>
+    </section>
   </section>
 
   <section>
     <title>Examples</title>
 
-    <para>Here we list experimental examples of Rascal code to try out new and
-    old features.</para>
+    <para>Here we list experimental examples of Rascal code to try out
+    features.</para>
 
     <section>
-      <title>Booleans</title>
+      <title>Tree traversal</title>
 
-      <para>Probably a non-typical example, but let's try it anyway. It looks
-      horrible compared to the ASF version but gives an indication how we can
-      convert ASF+SDF specifications to Rascal. See <xref
-      linkend="section.booleans-with-replace" /> for a much shorter version
-      that uses <literal>replace</literal>.</para>
+      <para>Here is the TREE example that we use in explaining traversal
+      functions in ASF+SDF.<programlisting>module Tree-syntax
+imports basic/Integers
 
-      <programlisting>syntax module Booleans
-
-exports 
-  sorts Bool
-
-  context-free syntax
-    "true"        -&gt; Bool
-    "false"       -&gt; Bool
-    Bool "&amp;" Bool -&gt; Bool {left}
-    Bool "|" Bool -&gt; Bool {right}
-
-module Bool-examples
-imports Booleans
-
-fun Bool and(Bool B1, B2) { %% reduce &amp; operator
-    Bool B;
-    switch B1 {
-      [| true |]  =&gt; reduce(B2)
-      [| false |] =&gt; [| false |]
-      [| $B |]    =&gt; [| $B1 &amp; $B2 |]
-    }    
-}
-
-fun Bool or(Bool B1, B2) { %% reduce | operator
-    Bool B;
-    switch B1 {
-      [| true  |] =&gt; [| true |]
-      [| false |] =&gt; reduce(B2)
-      [| $B |]    =&gt; [| $B1 | $B2 |]
-    }    
-}
-
-fun Bool reduce(Bool B){
-    Bool B1, B2, B3;
-    switch B {
-      [| $B1 &amp; $B2 |]  =&gt; and(B1, B2)
-      [| $B1 \| $B2 |] =&gt; or(B1, B2)  %% Note: | has to be escaped!
-      [| $B3 |]        =&gt; B
-    }
-}</programlisting>
-    </section>
-
-    <section>
-      <title>Deep tree matching instead of tree traversal</title>
-
-      <para><programlisting>%% Mark a pure syntax module as such with "syntax"
-
-syntax module Tree-syntax
-imports Naturals
 exports 
   sorts TREE
   context-free syntax
-    NAT             -&gt; TREE
+    Integer         -&gt; TREE
     f(TREE,TREE)    -&gt; TREE
     g(TREE,TREE)    -&gt; TREE
     h(TREE,TREE)    -&gt; TREE
-    i(TREE,TREE)    -&gt; TREE
-
-%%--------------------------------
-
-module Tree-Examples
+    i(TREE,TREE)    -&gt; TREE</programlisting><programlisting>module Tree-Examples
 imports Tree-syntax
 
 %% Ex1a: Count leaves in a TREE
-%% Idea: NAT N : T generates alle NAT leaves in the tree
+%% Idea: int N : T generates alle Integer leaves in the tree
 %% # is the built-in length-of operator
 
 fun int cnt(TREE T) {
-    #{N | NAT N : T}
+    #{N | int N : T}
 }
 
 %% Ex1b: an equivalent,  more purist, version of the same function:
 fun int cnt(TREE T) {
-    #{N | [| $(NAT N) |] : T}
+    #{N | &lt;Integer N&gt; : T}
 }
 
 %% Ex2: Sum all leaves in a TREE
 %% NB sum is a built-in that adds all elements in a set or list.
 %% Here we see immediately the need to identify
 %% - the built-in sort "int"
-%% - the syntactic sort "NAT"
+%% - the syntactic sort "Integer"
 
 fun int sumtree(TREE T) {
     sum({N | int N : T})
@@ -679,101 +703,48 @@ fun int sumtree(TREE T) {
 %%   a NAT tree
 
 fun TREE inc(TREE T) {
-    int N;
     replace T {
-      [| $N |] =&gt; [| $(N + 1) |]
+      &lt;Integer N&gt; =&gt; &lt;N1&gt;
+      when Integer N1 := N + 1
     }
 }
-
-%% EXPERIMENT: eliminate the above replace construct:
-
-fun TREE inc(TREE T) {
-    int N;
-    switch T {
-      Node [| $N |] =&gt; [| $(N + 1) |]
-    }
-}
-
 
 %% Ex4: full replacement of g by i
-%% Question: how about the traversal order?
-%% Probable answer: bottom-up and top-down are both ok so it does 
-%% not matter in this example.
-%% Bottom-up case: g's are replaced by i's.
-%% Top-down case: g's are replaced by i's but in the arguments of 
-%% the new i-tree g's are later replaced by i's.
-%% Question: Is it relevant to fix the traversal order? 
-%% The choice should then be bottom-up since top-down can be
-%% achieved with recursion (see srepl, below).
-
-fun TREE frepl(TREE T) {
-    TREE T1, T2;
-    replace T {
-      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |]
-    }
-}
-
-%% Ex5a: deep replacement of g by i which usually requires
-%% a bottom-up traversal + break;
-
-fun TREE drepl(TREE T) {
-    TREE T1, T11, T12, T2, T21, T22;
-    replace T { 
-      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |]
-         when not exists [| g($T11, $T12) |] : T1, 
-              not exists [| g($T21, $T22)  |]: T2
-    }   
-}
-
-%% Assume that the traversal is always bottom-up
-%% and introduce a "first" directive (= break).
-%% Along this line "all" would be the default.
-
-fun TREE drepl(TREE T) {
-    TREE T1, T2;
-    replace T first {
-      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |] 
-    }
-}
-
-%% If we want the whole repertoire of traversal functions
-%% can be made available:
+%% The whole repertoire of traversal functions is available:
 %% - replace T first bu { ... }
 %% - replace T all td { ... }
 %% - etc.
+%% with:
+%% "first" (= break) and "all" (= continue).
+%% "bu" (= bottom-up) and "td" (=top-down)
 %% A nice touch is that these properties are not tied to the
 %% declaration of a travesal function (as in ASF+SDF) but to 
-%% its use. The above would become:
+%% its use.
+
+fun TREE frepl(TREE T) {
+    replace T all bu{
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
+    }
+}
 
 fun TREE drepl(TREE T) {
-    TREE T1, T2;
+    replace T first {
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
+    }
+}
+
+fun TREE drepl(TREE T) {
     replace T first bu {
-      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |] 
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
     }
 }
 
-%% Ex6a: shallow replacement of g by i (i.e. only outermost 
-%% g's are replaced); Usually done with a top-down traversal.
-%% For brevity, we use here a string variable FUN that matches
-%% a function symbol: do we want this? It corresponds to a 
-%% lexical variable.
+%% Ex6: shallow replacement of g by i (i.e. only outermost 
+%% g's are replaced); 
 
 fun TREE srepl(TREE T) {
-    TREE T1, T2;
-    str FUN;
-    
-    switch (T) {
-      [| g($T1, $T2) |]    =&gt; [| i($T1, $T2) |]
-      [| $FUN($T1, $T2) |] =&gt; [| $FUN($(srepl(T1)) $(srepl(T2))) |]
-    }
-}
-
-%% Using traversal attributes, one could write this as:
-
-fun TREE srepl(TREE T) {
-    TREE T1, T2;
     replace T first td {
-      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |]
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
     }
 }
 
@@ -782,9 +753,56 @@ fun TREE srepl(TREE T) {
 %% the default):
 
 fun set[TREE] find_outer_gs(TREE T) {
-    TREE T1, T2;
-    { S | first td STATEMENT S : T, [| g($T1, $T2) |] == S }
+    { S | first td STATEMENT S : T, 
+          g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) := S }
 }</programlisting></para>
+    </section>
+
+    <section>
+      <title>Booleans</title>
+
+      <para>Probably a non-typical example, but let's try it anyway. It looks
+      horrible compared to the ASF version but gives an indication how we can
+      convert ASF+SDF specifications to Rascal. See <xref
+      linkend="section.booleans-with-replace" /> for a much shorter version
+      that uses <literal>replace</literal>.</para>
+
+      <programlisting>module Booleans-syntax
+exports 
+  sorts Bool
+
+  context-free syntax
+    "true"        -&gt; Bool
+    "false"       -&gt; Bool
+    Bool "&amp;" Bool -&gt; Bool {left}
+    Bool "|" Bool -&gt; Bool {right}</programlisting>
+
+      <programlisting>module Bool-examples
+imports Booleans-syntax
+
+fun Bool and(Bool B1, B2) { %% reduce &amp; operator
+    switch B1 {
+      true      =&gt; reduce(B2)
+      false     =&gt; false
+      &lt;Bool B&gt;  =&gt; &lt;B1&gt; &amp; &lt;B2&gt;
+    }    
+}
+
+fun Bool or(Bool B1, B2) { %% reduce | operator
+    switch B1 {
+      true      =&gt; true
+      false     =&gt; reduce(B2)
+      &lt;Bool B&gt;  =&gt; &lt;B1&gt; | &lt;B2&gt;
+    }    
+}
+
+fun Bool reduce(Bool B){
+    switch B {
+      &lt;Bool B1&gt; &amp; &lt;Bool B2&gt; =&gt; and(B1, B2)
+      &lt;Bool B1&gt; | &lt;Bool B2&gt; =&gt; or(B1, B2)
+      &lt;Bool B3&gt;             =&gt; B
+    }
+}</programlisting>
     </section>
 
     <section xml:id="section.booleans-with-replace">
@@ -793,123 +811,68 @@ fun set[TREE] find_outer_gs(TREE T) {
       <para>The earlier definition of Booleans was quite involved. A much
       simpler solution exists using the replace construct that we have
       encountered in the above examples.<programlisting>module Bool-examples2
-imports Booleans
+imports Booleans-syntax
 
 fun Bool reduce(Bool B) {
-    Bool B1, B2;
     replace B bu {
-      [| true &amp; $B2 |]   =&gt; B2
-      [| false &amp; $B2 |]  =&gt; [| false |]
+      true &amp; &lt;Bool B2&gt;   =&gt; reduce(B2)   %% Style 1: Variables and recursion
+      false &amp; &lt;Bool B2&gt;  =&gt; false
 
-      [| true \| $B2 |]  =&gt; [| true |]
-      [| false \| $B2 |] =&gt; B2
+      true | true   =&gt; true              %% Style 2: truth table
+      true | false  =&gt; true
+      false | true  =&gt; true
+      false | false =&gt; false
     }
 }</programlisting></para>
+
+      <para>Observe that there are two styles:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Using variables on the left-hand side: a recursive application
+          of reduce is needed to fully normalize the result.</para>
+        </listitem>
+
+        <listitem>
+          <para>A truth table: this is sufficient as is.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
-      <title>Dot Product</title>
-
-      <para>[Example taken from TXL documentation]</para>
-
-      <programlisting>syntax module Vectors
-sorts Vector
-
-context-free syntax
-   "(" NAT* ")"      -&gt; Vector
-
-   Vector "." Vector -&gt; NAT %% innerproduct, e.g. (1 2 3).(3 2 1)  =&gt;  10
-
-module Innerproduct
-
-imports Vectors
-
-fun int innerProduct(Vector V1, V2){
-    NAT N1, N2;
-    NAT* Rest1, Rest2;
-
-    if [| ($N1 $Rest1) |] := V1 &amp; 
-       [| ($N2 $Rest2) |] := V2 
-    then
-       (N1*N2) + innerProduct([| ($Rest1) |], [| ($Rest2) |])
-    else 
-       0
-    fi
-}</programlisting>
-    </section>
-
-    <section>
-      <title>Bubble sort</title>
-
-      <para>[Example taken from TXL documentation]</para>
-
-      <programlisting>module Bubble
-
-fun NAT* sort(NAT* Numbers){
-    NAT N1, N2;
-    NAT* Rest1, Rest2;
-    replace Numbers {
-      [| $Rest1 $N1 $N2 $Rest2 |] =&gt; [| $Rest1 $N2 $N1 $Rest2 |]
-      when N1 &gt; N2
-    }
-}</programlisting>
-
-      <para>Are $Rest1 and $Rest2 needed? Would</para>
-
-      <programlisting>    replace Numbers {
-      [| $N1 $N2 |] =&gt; [| $N2 $N1 |]
-      when N1 &gt; N2
-    }</programlisting>
-
-      <para>be ok?</para>
-    </section>
-
-    <section>
-      <title>Generic Bubble sort</title>
-
-      <para>Here is a generic bubble sort wich uses type parameters
-      (&amp;ELEM) and a function parameter.<programlisting>module Bubble
-
-fun &amp;ELEM* sort(&amp;ELEM* Elements, fun bool GreaterThan(&amp;ELEM, &amp;ELEM)){
-    &amp;ELEM E1, NE2;
-    &amp;ELEM* Rest1, Rest2;
-    replace Elements {
-      [| $Rest1 $E1 $E2 $Rest2 |] =&gt; [| $Rest1 $E2 $E1 $Rest2 |]
-      when GreaterThan(E1, E2)
-    }
-}</programlisting>Do we want this generality? What are the implications for
-      the implementation?</para>
-    </section>
-
-    <section>
-      <title>Lambda Substitution</title>
+      <title>Substitution in Lambda</title>
 
       <para>Below a definition of substitution in lambda expressions. It would
       be nice to get this as simple as possible since it is a model for many
       binding mechanisms. It is also a challenge to write a generic
       substitution function that only depends on the syntax of variables and
-      argument binding.<programlisting>syntax module Lambda
+      argument binding.</para>
 
+      <programlisting>module examples/Lambda/Lambda-syntax
+
+exports
 sorts Var %% variables
       Exp %% expressions
-
-context-free functions
+lexical syntax
+     [a-z]+               -&gt; Var
+context-free syntax
      "prime" "(" Var ")"  -&gt; Var  %% generate unique name
      Var                  -&gt; Exp  %% single variable
      "fn" Var "=&gt;" Exp    -&gt; Exp  %% function abstraction
      Exp Exp              -&gt; Exp  %% function application
+</programlisting>
 
-%%------------------------------
+      <para>Examples:</para>
 
-module Lambda-Examples
-imports Lambda
+      <para><programlisting>module Lambda-Examples
+imports Lambda-syntax
 
 fun set[Var] allVars(Exp E) {
     {V | Var V : E}
 }
 
 fun set[Var] boundVars(Exp E) {
-    {V | [| fn $(Var V) =&gt; $(Exp E1) |] : E}
+    {V | fn &lt;Var V&gt; =&gt; &lt;Exp E1&gt; : E}
 }
 
 fun set[Var] freeVars(Exp E) {
@@ -926,52 +889,50 @@ fun Var fresh(Var V, set[Var] S) {
 %% Substitution: replace all occurrences of V in E2 by E1
 
 fun Exp subst(Var V1, Exp E1, Exp E2) {
-    Var V2;
-    Exp Ea, Eb;
 
     switch E2 {
-      [| $V2 |] =&gt; V2
+      &lt;Var V2&gt; =&gt; V2
          when V1 != V2
 
-      [| $V2 |] =&gt; E1
+      &lt;Var V2&gt; =&gt; E1
          when V1 == V2 
 
-      [| $Ea $Eb |]  =&gt; [| $(subst(V, E, Ea)) $(subst(V, E, Eb)) |]
+      &lt;Exp Ea&gt; &lt;Exp Eb&gt;  =&gt; &lt;Exp EaS&gt; &lt;Exp EbS&gt;
+         when Exp EaS := subst(V, E, Ea),
+              Exp EbS := subst(V, E, Eb)
 
-      [| fn $V2 =&gt; $Ea |] =&gt;  [| fn $V2 =&gt; $Ea |]
+      fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt; =&gt;  fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;
          when V1 == V2
 
-      [| fn $V2 =&gt; $Ea |] =&gt; [| fn $V2 =&gt; $(subst(V1, E1, Ea)) |]
+      fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt; =&gt; fn &lt;Var V2&gt; =&gt; &lt;Exp E1S&gt;
          when V1 != V2,
-              not(V1 in freeVars(E2) &amp; V2 in freeVars(E1))
-
-      [| fn $V2 =&gt; $Ea |] =&gt; 
-      [| fn $V3 =&gt; $(subst(V1, E1, subst(V2, V3, E2))) |]
+              not(V1 in freeVars(E2) &amp; V2 in freeVars(E1)),
+              Exp E1S := subst(V1, E1, Ea)
+ 
+       fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;  =&gt; fn &lt;Var V3&gt; =&gt; &lt;Exp EaS&gt;
          when V1 != V2,
               V1 in freeVars(Ea) &amp; V2 in freeVars(E1),
-              V3 := fresh(V2, freeVars(Ea) union freeVars(E1))
+              V3 := fresh(V2, freeVars(Ea) union freeVars(E1)),
+              Exp EaS := subst(V1, E1, subst(V2, V3, E2))
     }
-}</programlisting></para>
+}</programlisting><note>
+          <para>There are a lot of ambiguities in the body of subst!</para>
+        </note></para>
     </section>
 
     <section>
-      <title>Renaming</title>
+      <title>Renaming in Let</title>
 
-      <para><programlisting>syntax module Let
+      <para><programlisting>module Let-syntax
 exports
 sorts Var %% variables
       Exp %% expressions
 lexical syntax
-     [a-z]+                          -&gt; Var
-context-free functions
-     
-     Var                             -&gt; Exp %% single variable
-     
-     "let" Var "=" Exp "in" Exp "end" -&gt; Exp %% function abstraction
-%%------------------------------------------
-
-module Let-Example
-import Let
+     [a-z]+                           -&gt; Var
+context-free syntax
+     Var                              -&gt; Exp
+     "let" Var "=" Exp "in" Exp "end" -&gt; Exp </programlisting>Examples:<programlisting>module Let-Example
+imports Let
 
 %% Rename all bound variables in an Exp
 %% Version 1: purely functional
@@ -980,29 +941,25 @@ import Let
 %% Int: counter to generate global variables
 
 fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
-    int Cnt1;
-    Var V, Y;
-    Exp E1, E2;
-
     switch(E) {
-    [| let $V = $E1 in $E2 end |] =&gt;
-           [| let $Y = $(rename(E1, Rn, Cnt)) 
-              in 
-                 $(rename(E2, {&lt;V, Y&gt;} union Rn, Cnt1)) 
-              end 
-           |]
-        when Y := "x" + Cnt,   %% this + operator concatenates 
-                               %% (after converting the int to str)
-             Cnt1 := Cnt + 1
+    let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end =&gt;
+           let &lt;Var Y &gt;= &lt;Exp E1R&gt;
+           in 
+              &lt;Exp E2R&gt;
+           end 
+        when Var Y := "x" + Cnt,  %% this + operator concatenates 
+                                  %% (after converting the int to str)
+             int Cnt1 := Cnt + 1,
+	    Exp E1R := rename(E1, Rn, Cnt),
+             Exp E2R := rename(E2, {&lt;V, Y&gt;} union Rn, Cnt1)
 
-    [| $V' |] =&gt; V1
-       when { V1 } == Rn[V]
+    &lt;Var V&gt; =&gt; V1
+       when { Var V1 } := Rn[V]
 
-    [| $E' |] =&gt; E
+    &lt;Exp E1&gt; =&gt; E1
     }
-}
-
-%% Rename all bound variables in an Exp
+}</programlisting>Here are some OUTDATED experiments with global
+      variables:<programlisting>%% Rename all bound variables in an Exp
 %% Version 2: using a global variable
 %% to generate new variables
 
@@ -1078,67 +1035,66 @@ fun Exp rename(Exp E) {
       <title>Concise Pico Typechecker</title>
 
       <para>The following example shows the tight integration ASF with
-      comprehensions.</para>
-
-      <programlisting>module Typecheck
+      comprehensions.<programlisting>module Typecheck
 
 imports Pico-syntax
 imports Errors
 
-type Env = rel[PICO-ID,TYPE]
-
-var
-    DECLS Decls;
-    {STATEMENT ";"}* Series;
-    Id Id;
-    TYPE Type;
-    Env Env;
+type Env = rel[PICO-ID,TYPE];
 
 fun list[Error] tcp(PROGRAM P) {
     switch P {
-    [| begin $Decls $Series end |] =&gt;
-           [ tcst(S, Env) | Stat S : Series ] %% list comprehension
-       when Env := {&lt;Id, Type&gt; | 
-                    [| $(PICO-ID Id) : $(TYPE Type) |] : Decls}
+    begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end =&gt;
+           [ tcst(S, Env) | Stat S : Series ]     %% list comprehension
+       when Env Env := {&lt;Id, Type&gt; | 
+                        &lt;PICO-ID Id&gt; : &lt;TYPE Type&gt; : Decls}
     }
 }
 
 fun list[Error] tcst(Stat Stat, Env Env) {
     switch Stat {
-    [| $Id := $Exp |] =&gt; type-of(Exp, Type, Env)
-       when {&lt;Id,Type&gt;} := Env[Id]
+    &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; =&gt; type-of(Exp, Type, Env)
+       when {&lt;Id, Type&gt;} := Env[Id]
 
-    [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
+    if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
+                 else &lt;{STATEMENT ";"}* Stats1&gt; fi =&gt;
            type-of(Exp, natural, Env) + 
            tcs(Stats1, Env) + tcs(Stats2, Env)
 
-    [| while $Exp do $Stats od |] =&gt;
+    while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od =&gt;
            type-of(Exp, natural, Env) + tcs(Stats, Env)
     }
 }
 
 fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
-    NatCon NatCon;
-    StrCon StrCon;
-    Id Id;
-    Exp Exp;
-
     switch E {
-    [| $NatCon |] =&gt; []
+    &lt;NatCon N&gt; =&gt; []
        when Type == natural
 
-    [| $StrCon |] =&gt; []
+    &lt;StrCon S&gt; =&gt; []
        when Type == string
 
-    [| $Id |] =&gt; [] 
+    &lt;PICO-ID Id&gt; =&gt; [] 
        when {&lt;Id,Type2&gt;} := Env[Id],
             Type2 == Type
-            
-    [| $Exp |] =&gt; [error("Incorrect type")]
-    }
-}
 
-%% Discussion: it may be interesting to generalize switch to allow 
+    &lt;EXP E1&gt; + &lt;EXP E2&gt;  =&gt; type-of(E1, natural, Env) + 
+                            type-of(E1, natural, Env)
+       when Type == natural
+
+    &lt;EXP E1&gt; + &lt;EXP E2&gt;  =&gt; type-of(E1, natural, Env) + 
+                            type-of(E1, natural, Env)
+       when Type == natural
+
+    &lt;EXP E1&gt; || &lt;EXP E2&gt; =&gt; type-of(E1, string, Env) + 
+                            type-of(E1, string, Env)
+       when Type == string
+    
+    &lt;EXP Exp&gt; =&gt; [error("Incorrect type")]
+    }
+}</programlisting></para>
+
+      <programlisting>%% Discussion: it may be interesting to generalize switch to allow 
 %% multiple arguments:
    switch (E, Type) {
     [| $NatCon |], [| natural |] =&gt; []
@@ -1155,27 +1111,382 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
     </section>
 
     <section>
-      <title>Generating Dot files</title>
+      <title>Pico control flow extraction</title>
 
-      <para>This example illustrates the use of a comprehension on the
-      right-hand side of an equation.<programlisting>module Dot-generation
+      <programlisting>module Pico-controlflow
+imports pico/syntax/Pico
 
-imports Dot-syntax
+type CP = EXP | STATEMENT;     %% A Code Point, union of two types
 
-fun Dot gen-dot(rel[ID, ID] Rel) {
-    [| digraph example {
-                        $([ node(Tup) | &lt;ID,ID&gt; Tup : Rel ])
-                       }
-    |]
+type CFSEGMENT = &lt; set[CP] entry, rel[CP,CP] graph, set[CP] exit&gt;;
+
+fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
+    switch Stats {
+      &lt;STATEMENT Stat&gt; ; &lt;{STATEMENT ";"}* Stats2&gt; =&gt;
+             &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
+         when &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; := cflow(Stat),
+              &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; := cflow(Stats2)
+
+      [| |] =&gt; &lt;{}, {}, {}&gt;
+    }
 }
 
-fun DotElem* gen-node(&lt;ID Id1, ID Id2&gt;) {
-    [| node $Id1; node $Id2; $Id1 -&gt; $Id2 |}}
-}</programlisting></para>
+fun CFSEGMENT cflow(STATEMENT Stat){
+    switch Stat {
+      while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od =&gt;
+             &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;
+         when &lt;set[CP] En,  rel[CP,CP] R,  set[CP] Ex&gt; := cflow(Stats)
+                
+      if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
+                   else &lt;{STATEMENT ";"}* Stats2&gt; fi =&gt;
+             &lt; {Exp}, 
+               ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
+                Ex1 union Ex2
+             &gt;
+         when &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; := cflow(Stats1),
+              &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; := cflow(Stats2)
+           
+      &lt;STATEMENT Stat&gt;  =&gt; &lt;{Stat}, {}, {Stat}&gt;
+    }
+}</programlisting>
+
+      <para>Note that most type information in declarations can be omitted,
+      yielding a more friendly version, e.g.</para>
+
+      <programlisting>fun CFSEGMENT cflow(STATEMENT Stat){
+    switch Stat {
+      while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od =&gt;
+             &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;
+         when &lt;En, R, Ex&gt; := cflow(Stats)
+                
+      if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
+                   else &lt;{STATEMENT ";"}* Stats2&gt; fi =&gt;
+             &lt; {Exp}, 
+               ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
+                Ex1 union Ex2
+             &gt;
+         when &lt;En1, R1, Ex1&gt; := cflow(Stats1),
+              &lt;En2, R2, Ex2&gt; := cflow(Stats2)
+           
+      &lt;STATEMENT Stat&gt;  =&gt; &lt;{Stat}, {}, {Stat}&gt;
+    }
+}</programlisting>
     </section>
 
     <section>
-      <title>Pico Typecheck using dynamically scoped variables</title>
+      <title>Pico use def extraction</title>
+
+      <programlisting>module Pico-use-def
+
+imports pico/syntax/Pico
+
+fun rel[EXP,PICO-ID] uses(PROGRAM P) {
+  {&lt;E,Id&gt; | EXP E : P, PICO-ID Id := E}
+}
+
+fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
+  {&lt;S, Id&gt; | STATEMENT S : P, 
+                        &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; := S}
+}</programlisting>
+
+      <para>The above uses a "matching condition" to decompose
+      <literal>S</literal>. The problem solved is that we want to have a name
+      for the whole assignment <emphasis>and</emphasis> for the lhs
+      identifier.</para>
+    </section>
+
+    <section>
+      <title>Pico uninitialized variables</title>
+
+      <para><programlisting>module Pico-uninit
+imports pico/syntax/Pico 
+        Pico-controlflow 
+        Pico-use-def
+
+fun set[PICO-ID] uninit(PROGRAM P) {
+    rel[EXP,PICO-ID] Uses := uses(P);
+    rel[STATEMENT, PICO-ID] Defs := defs(P);
+    CFSEGMENT CFLOW := cflow(P);
+    set[CP] Root := CFLOW.entry;
+    rel[CP,CP] Pred := CFLOW.graph;
+
+    {Id | &lt;EXP E, PICO-ID Id&gt; : Uses,
+                 E in reachX(Root, Defs[-,Id], Pred)
+    }
+}</programlisting>Questions (UPDATE THIS):</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>There is a subtyping issue here. De type of
+          <literal>reachX</literal> is:</para>
+
+          <para><literal>set[&amp;T] reachX(set[&amp;T]
+          Start,</literal></para>
+
+          <para><literal> set[&amp;T] Excl, </literal></para>
+
+          <para><literal> rel[&amp;T,&amp;T] Rel)</literal></para>
+
+          <para>but <literal>E</literal> has type <literal>EXP</literal>,
+          <literal>{ROOT}</literal> has type
+          <literal>set[STATEMENT]</literal>, and <literal>cflow</literal> has
+          type <literal>rel[CP,CP]</literal>, with <literal>type CP = EXP |
+          STATEMENT</literal>. It requires proper subtyping, e.g.
+          set[STATEMENT] &lt; set[CP], to type this.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Pico common subsexpression elimination</title>
+
+      <para><programlisting>module Pico-common-subexpression
+
+imports pico/syntax/Pico 
+        Pico-controlflow 
+        Pico-use-def
+
+fun PROGRAM cse(PROGRAM P) {
+    rel[STATEMENT, PICO-ID] Defs := defs(P);
+    rel[CP,CP] Pred := cflow(P).graph;
+    rel[EXP, PICO-ID] replacements := 
+       {&lt;E2, Id&gt; | STATEMENT S : P,
+                   &lt;PICO-ID Id&gt; := &lt;EXP E&gt; := S,
+                   Id notin E,
+                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+       };
+ 
+    replace P {
+      &lt;EXP E &gt; =&gt; Id
+         when { Id } := replacements[E]   
+    }
+}</programlisting></para>
+
+      <para>Paraphrased: Replace in P all expressions E2 by Id, such
+      that</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>P contains a statement S of the form Id := E,</para>
+        </listitem>
+
+        <listitem>
+          <para>Id does not occur in E,</para>
+        </listitem>
+
+        <listitem>
+          <para>E2 can be reached from S,</para>
+        </listitem>
+
+        <listitem>
+          <para>There is no redefinition of Id between S and E2.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that a slight abbreviation is possible if we introduce
+      labelled patterns (here S):</para>
+
+      <programlisting> rel[EXP, PICO-ID] replacements := 
+       {&lt;E2, Id&gt; | &lt;PICO-ID Id&gt; := &lt;EXP E&gt; S : P,
+                   Id notin E,
+                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+       };</programlisting>
+
+      <para>Also note that we could factor out the assignment pattern to make
+      cse more generic if we introduce patterns a sfirst class
+      citizens:</para>
+
+      <programlisting>fun PROGRAM cse(PROGRAM P, pat STATEMENT Assign(PICO-ID Id, EXP E)) {
+ ...
+    rel[EXP, PICO-ID] replacements := 
+       {&lt;E2, Id&gt; | Assign S : P,
+                   Id notin E,
+                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+       };
+ 
+ ...
+}</programlisting>
+
+      <para>Example invocations (Pico style)</para>
+
+      <programlisting>cse(P, &lt;PICO-ID Id&gt; := &lt;EXP E&gt;)</programlisting>
+
+      <para>or (Cobol style):</para>
+
+      <programlisting>cse(P, move &lt;EXP E&gt; to &lt;PICO-ID Id&gt;)</programlisting>
+
+      <para>Note that the order of variables in the pattern and its
+      declaration may differ.</para>
+
+      <para>It is to be determined how the instantiation of a pattern looks,
+      e.g.</para>
+
+      <programlisting>Assign([|x|], [| y = 1 |])</programlisting>
+    </section>
+
+    <section>
+      <title>Pico constant propagation</title>
+
+      <para><programlisting>module Pico-constant-propagation
+
+imports pico/syntax/Pico 
+        Pico-controlflow 
+        Pico-use-def
+
+fun Boolean is-constant(EXP E) {
+   switch E {
+     &lt;NatCon N&gt; =&gt; true
+
+     &lt;StrCon S&gt; =&gt; true
+
+     &lt;EXP E&gt; =&gt; false
+   }
+}
+
+fun PROGRAM cp(PROGRAM P) {
+    rel[STATEMENT, PICO-ID] Defs := defs(P);
+    rel[CP,CP] Pred := cflow(P).graph;
+
+    rel[PICO-ID, EXP] replacements := 
+      {&lt;Id2, E&gt; | STATEMENT S : P,
+                  &lt;PICO-ID Id&gt; := &lt;EXP E&gt; := S,
+                  is-constant(E),
+                  PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
+                  Id2 == Id 
+      };  
+ 
+    replace P {
+     &lt;PICO-ID Id&gt; =&gt; E
+        when { EXP E } := replacements[Id]
+    }  
+}</programlisting></para>
+
+      <para>Paraphrased: Replace in P all expressions Id2 by the constant E,
+      such that</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>P contains a statement S of the form Id := E,</para>
+        </listitem>
+
+        <listitem>
+          <para>E is constant,</para>
+        </listitem>
+
+        <listitem>
+          <para>Id2 can be reached from S,</para>
+        </listitem>
+
+        <listitem>
+          <para>Id2 is equal to Id,</para>
+        </listitem>
+
+        <listitem>
+          <para>There is no redefinition of Id between S and Id2.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Innerproduct</title>
+
+      <para>[Example taken from TXL documentation]</para>
+
+      <para>Define nnerproduct on vectors of integers, e.g. (1 2 3).(3 2 1)
+      =&gt; 10.<programlisting>module examples/Vectors/Vector-syntax
+
+exports
+  imports basic/Integers
+sorts Vector
+
+context-free syntax
+   "(" Integer* ")"    -&gt; Vector
+   Vector "." Vector   -&gt; Integer</programlisting></para>
+
+      <programlisting>module Innerproduct
+
+imports Vector-syntax
+
+fun int innerProduct(Vector V1, V2){
+    if ( &lt;Integer N1&gt; &lt;Integer* Rest1&gt; ) := V1 &amp; 
+       ( &lt;Integer N2&gt; &lt;Integer* Rest2&gt; ) := V2 
+    then
+       (N1*N2) + innerProduct( (&lt;Rest1&gt;), (&lt;Rest2&gt;) )
+    else 
+       0
+    fi
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Bubble sort</title>
+
+      <para>[Example taken from TXL documentation]</para>
+
+      <programlisting>module Bubble
+
+fun Integer* sort(Integer* Numbers){
+    replace Numbers {
+      &lt;Integer* Rest1&gt; &lt;Integer N1&gt; &lt;Integer N2&gt; &lt;Integer* Rest2&gt; =&gt;
+         sort(&lt;Integer* Rest1&gt; &lt;Integer N2&gt; &lt;Integer N1&gt; &lt;Integer* Rest&gt;)
+      when N1 &gt; N2
+    }
+}</programlisting>
+
+      <para>This example raises a number of issues about the execution of
+      replace.</para>
+
+      <para>First, are Rest1 and Rest needed? Would</para>
+
+      <programlisting>    replace Numbers {
+      &lt;Integer N1&gt; &lt;Integer N2&gt; =&gt; &lt;Integer N2&gt; &lt;Integer N1&gt;
+      when N1 &gt; N2
+      &lt;
+    }</programlisting>
+
+      <para>be ok?</para>
+
+      <para>Another way to write this is:</para>
+
+      <programlisting>module Bubble
+
+fun Integer* sort(Integer* Numbers){
+    sort( replace Numbers {
+            &lt;Integer N1&gt; &lt;Integer N2&gt; =&gt; &lt;Integer N2&gt; &lt;Integer N1&gt;
+            when N1 &gt; N2
+          }
+        )
+}</programlisting>
+
+      <para>The replace will replace all adjacent pairs that are in the wrong
+      order in the current list. The resulting list becomes the argument of a
+      new call to sort.</para>
+    </section>
+
+    <section>
+      <title>Generic Bubble sort</title>
+
+      <para>Here is a generic bubble sort wich uses type parameters
+      (&amp;ELEM) and a function parameter.<programlisting>module Bubble
+
+fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
+    sort( replace Elements {
+            &lt;E1&gt; &lt;E2&gt; =&gt; &lt;E2&gt; &lt;E1&gt;
+            when GreaterThan(E1, E2)
+          }
+         )
+}</programlisting>Do we want this generality? What are the implications for
+      the implementation? The current syntax does not yet allow type variables
+      in patterns.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Outdated examples</title>
+
+    <section>
+      <title>Pico Typecheck using dynamically scoped variables
+      (OUTDATED)</title>
 
       <para>The following example details the use of a dynscope global
       variable for building up and using an environment. Notice that we
@@ -1251,7 +1562,7 @@ fun list[Error] type-of(Exp E, TYPE Type) {
     </section>
 
     <section>
-      <title>Pico eval with dynamically scoped variables</title>
+      <title>Pico eval with dynamically scoped variables (OUTDATED)</title>
 
       <para>A Pico evaluator using dynamic variables. It still uses functions
       that return VEnvs (this is not consistent and should be changed).</para>
@@ -1346,357 +1657,30 @@ fun VEnv evalExp(Exp exp) {
     </section>
 
     <section>
-      <title>Pico control flow extraction</title>
+      <title>Generating Graph files in Dot format</title>
 
-      <programlisting>module Pico-controlflow
-imports pico/syntax/Pico
+      <para>This example illustrates the use of a comprehension on the
+      right-hand side of an equation.<programlisting>module Dot-generation
 
-type CP = EXP | STATEMENT;     %% A Code Point, union of two types
+imports Dot-syntax
 
-type cf_segment &lt; set[CP] entry, rel[CP,CP] graph, set[CP] exit&gt;;
-
-fun cf_segment cflow({STATEMENT ";"}* Stats){
-    Stat Stat;
-    Stat+ Stats2;
-    rel[CP,CP] R1, R2;
-    set[CP] En1, En2, Ex1, Ex2;
-    
-    switch Stats {
-      [| Stat ; $Stats2 |] =&gt;
-             &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
-         when &lt;En1, R1, Ex1&gt; := cflow(Stat),
-              &lt;En2, R2, Ex2&gt; := cflow(Stats2)
-
-      [| |] =&gt; &lt;{}, {}, {}&gt;
-    }
+fun Dot gen-dot(rel[ID, ID] Rel) {
+    [| digraph example {
+                        $([ node(Tup) | &lt;ID,ID&gt; Tup : Rel ])
+                       }
+    |]
 }
 
-fun cf_segment cflow(STATEMENT Stat){
-    Exp Exp;
-    Stat* Stats, Stats1, Stats2;
-    rel[CP,CP] R1, R2;
-    set[CP] En1, En2, Ex1, Ex2;
-
-    switch Stat {
-      [| while $Exp do $Stats od |] =&gt;
-             &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;
-         when &lt;En, R, Ex&gt; := cflow(Stats)
-                
-      [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
-             &lt; {Exp}, 
-               ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
-                Ex1 union Ex2
-             &gt;
-         when &lt;En1, R1, Ex1&gt; := cflow(Stats1),
-              &lt;En2, R2, Ex2&gt; := cflow(Stats2)
-           
-      [| $Stat |]  =&gt; &lt;{Stat}, {}, {Stat}&gt;
-    }
-}</programlisting>
-    </section>
-
-    <section>
-      <title>Pico use def extraction</title>
-
-      <programlisting>module Pico-use-def
-
-imports pico/syntax/Pico
-
-fun rel[EXP,PICO-ID] uses(PROGRAM P) {
-  {&lt;E,Id&gt; | EXP E : P, [| $(PICO-ID Id) |] == E}
-}
-
-fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
-  {&lt;S, Id&gt; | STATEMENT S : P, 
-                        [| $(PICO-ID Id) := $(EXP Exp) |] == S}
-}</programlisting>
-
-      <para>The above uses a "matching condition" to decompose
-      <literal>S</literal>. The problem solved is that we want to have a name
-      for the whole assignment <emphasis>and</emphasis> for the lhs
-      identifier.</para>
-    </section>
-
-    <section>
-      <title>Pico uninitialized variables</title>
-
-      <para><programlisting>module Pico-uninit
-imports pico/syntax/Pico Pico-controlflow Pico-use-def
-
-fun set[PICO-ID] uninit(PROGRAM P) {
-    rel[EXP,PICO-ID] Uses := uses(P);
-    rel[STATEMENT, PICO-ID] Defs := defs(P);
-    cf_segment CFLOW := cflow(P);
-    set[CP] Root := CFLOW.entry;
-    rel[CP,CP] Pred := CFLOW.graph;
-
-    {Id | &lt;EXP E, PICO-ID Id&gt; : Uses,
-                 E in reachX(Root, Defs[-,Id], Pred)
-    }
-}</programlisting>Questions (UPDATE THIS):</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>There is a subtyping issue here. De type of
-          <literal>reachX</literal> is:</para>
-
-          <para><literal>set[&amp;T] reachX(set[&amp;T]
-          Start,</literal></para>
-
-          <para><literal> set[&amp;T] Excl, </literal></para>
-
-          <para><literal> rel[&amp;T,&amp;T] Rel)</literal></para>
-
-          <para>but <literal>E</literal> has type <literal>EXP</literal>,
-          <literal>{ROOT}</literal> has type
-          <literal>set[STATEMENT]</literal>, and <literal>cflow</literal> has
-          type <literal>rel[CP,CP]</literal>, with <literal>type CP = EXP |
-          STATEMENT</literal>. It requires proper subtyping, e.g.
-          set[STATEMENT] &lt; set[CP], to type this.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section>
-      <title>Pico common subsexpression elimination</title>
-
-      <para><programlisting>module Pico-common-subexpression
-
-fun PROGRAM cse(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs := defs(P);
-    rel[CP,CP] Pred := cflow(P).graph
-    rel[EXP, PICO-ID] replacements := 
-       {&lt;E2, Id&gt; | STATEMENT S : P,
-                   [| $(PICO-ID Id) := $(EXP E) |] == S,
-                   Id notin E,
-                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
-       };
- 
-    replace P {
-      [| E |] =&gt; Id
-         when { Id } := replacements[E]   
-    }
+fun DotElem* gen-node(&lt;ID Id1, ID Id2&gt;) {
+    [| node $Id1; node $Id2; $Id1 -&gt; $Id2 |}}
 }</programlisting></para>
-
-      <para>Paraphrased: Replace in P all expressions E2 by Id, such
-      that</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>P contains a statement S of the form Id := E,</para>
-        </listitem>
-
-        <listitem>
-          <para>Id does not occur in E,</para>
-        </listitem>
-
-        <listitem>
-          <para>E2 can be reached from S,</para>
-        </listitem>
-
-        <listitem>
-          <para>There is no redefinition of Id between S and E2.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Note that a slight abbreviation is possible if we introduce
-      labelled patterns (here S):</para>
-
-      <programlisting> rel[EXP, PICO-ID] replacements := 
-       {&lt;E2, Id&gt; | [| $(PICO-ID Id) := $(EXP E) |] S : P,
-                   Id notin E,
-                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
-       };</programlisting>
-
-      <para>Also note that we could factor out the assignment pattern to make
-      cse more generic if we introduce patterns a sfirst class
-      citizens:</para>
-
-      <programlisting>fun PROGRAM cse(PROGRAM P, pat STATEMENT Assign(PICO-ID Id, EXP E)) {
- ...
-    rel[EXP, PICO-ID] replacements := 
-       {&lt;E2, Id&gt; | Assign S : P,
-                   Id notin E,
-                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
-       };
- 
- ...
-}</programlisting>
-
-      <para>Example invocations:</para>
-
-      <programlisting>cse(P, [| $(PICO-ID Id) := $(EXP E) |])</programlisting>
-
-      <para>or</para>
-
-      <programlisting>cse(P, [| move $(EXP E) to $(PICO-ID Id) |])</programlisting>
-
-      <para>Note that the order of variables in the pattern and its
-      declaration may differ.</para>
-
-      <para>It is to be determined how the instantiation of a pattern looks,
-      e.g.</para>
-
-      <programlisting>Assign([|x|], [| y = 1 |])</programlisting>
     </section>
-
-    <section>
-      <title>Pico constant propagation</title>
-
-      <para><programlisting>module Pico-constant-propagation
-
-fun Boolean is-constant(EXP E) {
-   Int Int;
-   Str Str;
-   switch (E){
-     [| $Int |] =&gt; true
-
-     [| $Str |] =&gt; true
-
-     [| $E |] =&gt; false
-   }
-}
-
-fun PROGRAM cp(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs := defs(P);
-    rel[CP,CP] Pred := cflow(P).graph;
-    PICO-ID Id, Id1, Id2;
-
-    rel[PICO-ID, EXP] replacements := 
-      {&lt;Id2, E&gt; | STATEMENT S : P,
-                  [| $(PICO-ID Id) := $(EXP E) |] == S,
-                  is-constant(E),
-                  PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
-                  Id2 == Id 
-      };  
- 
-    replace P {
-     [| $Id |] =&gt; E
-        when { E } := replacements[Id]
-    }  
-}</programlisting></para>
-
-      <para>Paraphrased: Replace in P all expressions Id2 by the constant E,
-      such that</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>P contains a statement S of the form Id := E,</para>
-        </listitem>
-
-        <listitem>
-          <para>E is constant,</para>
-        </listitem>
-
-        <listitem>
-          <para>Id2 can be reached from S,</para>
-        </listitem>
-
-        <listitem>
-          <para>Id2 is equal to Id,</para>
-        </listitem>
-
-        <listitem>
-          <para>There is no redefinition of Id between S and Id2.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-  </section>
-
-  <section xml:id="section.on-quoting">
-    <title>On quoting</title>
-
-    <para>How will we quote patterns and terms? Currently we use the
-    convention:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Pattern is enclosed between [| and |]</para>
-      </listitem>
-
-      <listitem>
-        <para>Variables are prefixed with $</para>
-      </listitem>
-
-      <listitem>
-        <para>A declared variable is written as $(Type Var).</para>
-      </listitem>
-
-      <listitem>
-        <para>An expression <replaceable>E</replaceable> to be computed and
-        inserted is written as $(<replaceable>E</replaceable>).</para>
-      </listitem>
-
-      <listitem>
-        <para>Examples:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><programlisting>[| while $Exp do $Stats od |]</programlisting></para>
-          </listitem>
-
-          <listitem>
-            <para><programlisting>{&lt;S, Id&gt; | STATEMENT S : P, 
-           [| $(PICO-ID Id) := $(EXP Exp) |] == S}</programlisting></para>
-          </listitem>
-
-          <listitem>
-            <para><programlisting>[| let $Y = $(rename(E1)) in $(rename(E2)) end |]</programlisting></para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-    </itemizedlist>
-
-    <para>This is good for disambiguation but gives notational overhead. Is
-    there a more concise scheme?</para>
-
-    <para>Here is an attempt. For every sort S in the syntax definition add
-    the following rules:</para>
-
-    <programlisting><replaceable>N</replaceable>                 -&gt; Pattern
-"&lt;<replaceable>N</replaceable>" Variable "&gt;" -&gt; <replaceable>N</replaceable>       %% defining occurrence in pattern
-"&lt;" Variable "&gt;"  -&gt; <replaceable>N</replaceable>       %% use in pattern</programlisting>
-
-    <para>In the case of Pico, this leads to the following completely
-    unambiguous examples:</para>
-
-    <programlisting>fun VEnv evalExp(Exp exp) {
-
-    switch exp {
-      &lt;EXP exp1&gt; + &lt;EXP exp2&gt; =&gt; nat1 + nat2
-         when Natural nat1 &lt;- eve(exp1),
-              Natural nat2 &lt;- eve(exp2)
-       
-      &lt;EXP exp1&gt; - &lt;EXP exp2&gt; =&gt; nat1 + nat2
-         when Natural nat1 &lt;- eve(exp1),
-              Natural nat2 &lt;- eve(exp2)
-        
-      &lt;EXP exp1&gt; || &lt;EXP exp2&gt; =&gt; str3
-         when StrCon str1 &lt;- eve(exp1),
-              StrCon str2 &lt;- eve(exp2),
-              StrCon str3 &lt;- concat(str1, str2)
-
-      &lt;EXP exp1&gt;  =&gt; nil-value     %% default "equation"
-   } 
-}</programlisting>
-
-    <para>and</para>
-
-    <programlisting>fun VEnv evalStatements({STATEMENT ";"}* series) {
- 
-    switch series  {
-      &lt;STATEMENT stat&gt;; &lt;{STATEMENT ";"}* stats&gt; =&gt; venv
-      when venv &lt;- evalStatement(stat),
-           venv &lt;- evalStatements(stats)
-     [| |] =&gt; venv 
-    }
-}</programlisting>
   </section>
 
   <section>
     <title>Syntax Definition</title>
 
-    <para>See separate SDF definition. </para>
+    <para>See separate SDF definition.</para>
   </section>
 
   <section xml:id="section.integration-tscript">
@@ -2091,30 +2075,22 @@ process mkWave(int N) is ...</programlisting>
     </itemizedlist>
   </section>
 
-  <section>
+  <section xml:id="section.issues">
     <title xml:id="Issues">Issues</title>
 
     <itemizedlist>
       <listitem>
-        <para>How will we quote patterns and terms? See <xref
-        linkend="section.on-quoting" /> for a discussion.</para>
-      </listitem>
-
-      <listitem>
-        <para>More questions about patterns:</para>
+        <para>See <xref linkend="section.patterns" /> for a description of
+        patterns. There are still some questions about patterns:</para>
 
         <itemizedlist>
           <listitem>
-            <para>Do we want the subexpressions in patterns?</para>
+            <para>Do we want the subexpressions in patterns? [Proposal: no
+            since it complicates the syntax]</para>
           </listitem>
 
           <listitem>
-            <para>Should "patterns" be first-class citizens that can be used
-            as values?</para>
-          </listitem>
-
-          <listitem>
-            <para>Do we want string variables in patterns?</para>
+            <para>Do we want string variables in patterns? [Undecided]</para>
           </listitem>
 
           <listitem>
@@ -2131,19 +2107,14 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
-        <para>Dynamic variables need more thought; do we really want
-        them?</para>
+        <para>Dynamic variables need more thought; do we really want them?
+        [Proposal: let's do without them.]</para>
       </listitem>
 
       <listitem>
         <para>The relation (no pun intended) between local variable
         declarations in functions, patterns and comprehensions has to be
         established.</para>
-      </listitem>
-
-      <listitem>
-        <para>Do we add column names in relations (as Jurgen and Bob are
-        currently doing)? Currently both are supported.</para>
       </listitem>
 
       <listitem>
@@ -2182,11 +2153,6 @@ process mkWave(int N) is ...</programlisting>
 
       <listitem>
         <para>The "equations" from Rscript are not yet included.</para>
-      </listitem>
-
-      <listitem>
-        <para>Should "functions" be first-class citizens that can be used as
-        values?</para>
       </listitem>
 
       <listitem>
