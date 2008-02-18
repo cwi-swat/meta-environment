@@ -57,8 +57,8 @@
       </listitem>
 
       <listitem>
-        <para>Parsing ATerm ASCII is significantly slower then XML (partially
-        because of the sharing).</para>
+        <para>Parsing ATerm ASCII is both significantly slower and scales
+        worse then XML (partially because of the sharing).</para>
       </listitem>
 
       <listitem>
@@ -243,22 +243,109 @@
     <para></para>
 
     <section>
-      <title>Speed comparison</title>
+      <title>XML vs ATerm ASCII</title>
 
       <para></para>
+
+      <section>
+        <title>Speed comparison</title>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="ATerm_vs_XML_writing.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="ATerm_vs_XML_reading.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </section>
+
+      <section>
+        <title>Size comparison</title>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="ATerm_vs_XML_size.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </section>
     </section>
 
     <section>
-      <title>Size comparison</title>
+      <title>ATerm ASCII vs SAF</title>
 
       <para></para>
+
+      <section>
+        <title>Speed comparison</title>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="ASCII_vs_SAF_writing.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="ASCII_vs_SAF_reading.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </section>
+
+      <section>
+        <title>Size comparison</title>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="ASCII_vs_SAF_size.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </section>
     </section>
   </section>
 
   <section xml:id="section.conclusions">
     <title>Conclusions</title>
 
-    <para></para>
+    <para>TODO</para>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>Writing ATerm ASCII and XML is about as fast.</para>
+        </listitem>
+
+        <listitem>
+          <para>Parsing ATerm ASCII is both significantly slower and scales
+          worse then XML (partially because of the sharing).</para>
+        </listitem>
+
+        <listitem>
+          <para>ATerm ASCII is more compact (because we don't have close
+          tags).</para>
+        </listitem>
+
+        <listitem>
+          <para>ATerm SAF is useful for reading and writing large documents
+          with lots of sharing.</para>
+        </listitem>
+      </itemizedlist></para>
+
+    <para>TODO</para>
   </section>
 
   <section>
@@ -268,6 +355,10 @@
       <listitem>
         <para>Write down the findings in the introduction in a better
         way.</para>
+      </listitem>
+
+      <listitem>
+        <para>Write something usefull in the conclusion chapter.</para>
       </listitem>
 
       <listitem>
