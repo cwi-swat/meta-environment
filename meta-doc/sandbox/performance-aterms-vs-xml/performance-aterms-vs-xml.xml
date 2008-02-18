@@ -53,12 +53,27 @@
 
     <itemizedlist>
       <listitem>
-        <para>TBD</para>
+        <para>Writing ATerm ASCII and XML is about as fast.</para>
+      </listitem>
+
+      <listitem>
+        <para>Parsing ATerm ASCII is significantly slower then XML (partially
+        because of the sharing).</para>
+      </listitem>
+
+      <listitem>
+        <para>ATerm ASCII is more compact (because we don't have close
+        tags).</para>
+      </listitem>
+
+      <listitem>
+        <para>ATerm SAF is useful for reading and writing large documents with
+        lots of sharing.</para>
       </listitem>
     </itemizedlist>
 
     <para>In <xref linkend="section.considerations" /> we sketch the general
-    consideraions to be taken into account when performing such a comparions
+    considerations to be taken into account when performing such a comparions
     and in <xref linkend="section.experimental-setting" /> we describe the
     experimental setting. Results are presented in <xref
     linkend="section.results" /> and our overall conclusions can be found in
@@ -109,7 +124,8 @@
         </listitem>
 
         <listitem>
-          <para>ATerms only support ASCII while XML supports Unicode.</para>
+          <para>ATerms only support US-ASCII characters, while XML supports
+          Unicode.</para>
         </listitem>
 
         <listitem>
@@ -138,7 +154,7 @@
 
         <listitem>
           <para>We will compare Java implementations of ATerms and XML and the
-          unpredictable effects of hotspot compilers has to be taken into
+          unpredictable effects of the HotSpot compiler has to be taken into
           account.</para>
         </listitem>
       </itemizedlist>
@@ -164,11 +180,15 @@
         </listitem>
 
         <listitem>
-          <para>Percentage of shared nodes.</para>
+          <para>Depth of the tree.</para>
         </listitem>
 
         <listitem>
-          <para>... TBD</para>
+          <para>Average arity.</para>
+        </listitem>
+
+        <listitem>
+          <para>Percentage chance a node in the tree is shared.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -176,13 +196,38 @@
     <section>
       <title>Software versions</title>
 
-      <para>(Versions of ATerms, XML parser)</para>
+      <para>For the benchmarks the following software was used:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Sun JDK 1.5.0_12</para>
+        </listitem>
+
+        <listitem>
+          <para>ATerm-Java, version 1.7pre.24750.52534.</para>
+        </listitem>
+
+        <listitem>
+          <para>Xerces-J, version 2.6.2 (incorperated in JDK 1.5.0_12).</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
       <title>Hardware configuration</title>
 
-      <para>(Arnold's PC)</para>
+      <para>The benchmark was executed on a machine with the following
+      specifications:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Intel E6420 Core 2 Duo processor (2.13Ghz).</para>
+        </listitem>
+
+        <listitem>
+          <para>2GB DDR-800 memory.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
@@ -221,7 +266,12 @@
 
     <itemizedlist>
       <listitem>
-        <para></para>
+        <para>Write down the findings in the introduction in a better
+        way.</para>
+      </listitem>
+
+      <listitem>
+        <para>Paste the graphs in the results chapter.</para>
       </listitem>
     </itemizedlist>
   </section>
