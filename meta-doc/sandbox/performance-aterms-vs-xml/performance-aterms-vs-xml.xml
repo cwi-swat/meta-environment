@@ -257,7 +257,7 @@
   <section xml:id="section.results">
     <title>Results</title>
 
-    <para></para>
+    <para>g</para>
 
     <section>
       <title>XML vs ATerm ASCII</title>
@@ -276,6 +276,11 @@
           <imageobject>
             <imagedata fileref="ATerm_vs_XML_writing.png"></imagedata>
           </imageobject>
+
+          <caption>
+            <para>The time it takes (in ms) to serialize a document with a
+            certain number of nodes.</para>
+          </caption>
         </mediaobject>
 
         <para>In terms of parsing performance XML is well ahead. This is to be
@@ -288,6 +293,11 @@
           <imageobject>
             <imagedata fileref="ATerm_vs_XML_reading.png"></imagedata>
           </imageobject>
+
+          <caption>
+            <para>The time it takes (in ms) to parse a document with a certain
+            number of nodes.</para>
+          </caption>
         </mediaobject>
       </section>
 
@@ -305,6 +315,11 @@
           <imageobject>
             <imagedata fileref="ATerm_vs_XML_size.png"></imagedata>
           </imageobject>
+
+          <caption>
+            <para>The size of the serialized representation of a document with
+            a certain number of nodes (in bytes).</para>
+          </caption>
         </mediaobject>
       </section>
     </section>
@@ -332,6 +347,11 @@
           <imageobject>
             <imagedata fileref="ASCII_vs_SAF_writing.png"></imagedata>
           </imageobject>
+
+          <caption>
+            <para>The time it takes to serialize a document with 50000 nodes,
+            given a certain percentage of sharing.</para>
+          </caption>
         </mediaobject>
 
         <para>In terms for parsing performance, SAF does a lot better; ATerm
@@ -351,6 +371,11 @@
           <imageobject>
             <imagedata fileref="ASCII_vs_SAF_reading.png"></imagedata>
           </imageobject>
+
+          <caption>
+            <para>The time it takes to parse a document with 50000 nodes,
+            given a certain percentage of sharing.</para>
+          </caption>
         </mediaobject>
       </section>
 
@@ -365,6 +390,11 @@
           <imageobject>
             <imagedata fileref="ASCII_vs_SAF_size.png"></imagedata>
           </imageobject>
+
+          <caption>
+            <para>The size of the serialized representation of a document with
+            50000 nodes, given a certain percentage of sharing.</para>
+          </caption>
         </mediaobject>
       </section>
     </section>
