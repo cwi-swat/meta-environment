@@ -76,6 +76,8 @@ public class ToolBus{
 	
 	protected volatile boolean shuttingDown = false;
 	
+	private volatile String[] scriptsNames = null; // For debugging only.
+	
 	/**
 	 * Constructor with explicit PrintWriter
 	 * 
@@ -270,6 +272,8 @@ public class ToolBus{
 		    parser parser_obj = new parser(filename, this);
 			parser_obj.parse();
 			parser_obj.generateInitialProcessCalls();
+			
+			scriptsNames = parser_obj.scriptsNames();
 		}catch(ToolBusException e){
 			error(filename, e.getMessage());
 			e.printStackTrace();
@@ -367,6 +371,10 @@ public class ToolBus{
 		atomSignature.iterate(asih);
 		
 		return asih.res;
+	}
+	
+	public String[] getIncludedScripts(){
+		return scriptsNames;
 	}
 	
 	// TODO Fix the concurrency problems in here.

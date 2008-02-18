@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import toolbus.TBTermFactory;
@@ -887,6 +888,8 @@ public class parser extends java_cup.runtime.lr_parser {
 		this.toolbusProcessCalls = toolbusProcessCalls;
 		this.fileName = filename;
 		
+		includedFiles.add(filename);
+		
 		toolbus = tb;
 		tbfactory = toolbus.getTBTermFactory();
 		
@@ -897,6 +900,17 @@ public class parser extends java_cup.runtime.lr_parser {
 	/** ToolBus specific constructor */
 	public parser(String filename, ToolBus tb) throws FileNotFoundException  {
 		this(new HashSet<String>(), new ArrayList<ATerm>(), filename, tb);
+	}
+	
+	public String[] scriptsNames(){
+		List<String> scriptNamesList = new ArrayList<String>();
+		Iterator<String> scriptNamesIterator = includedFiles.iterator();
+		while(scriptNamesIterator.hasNext()){
+			scriptNamesList.add(scriptNamesIterator.next());
+		}
+		
+		String[] scriptNames = new String[scriptNamesList.size()];
+		return scriptNamesList.toArray(scriptNames);
 	}
 	
 	protected void enterIfdef (boolean yesOrno){

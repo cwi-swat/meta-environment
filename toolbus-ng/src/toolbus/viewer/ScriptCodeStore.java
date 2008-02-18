@@ -18,7 +18,7 @@ import toolbus.util.collections.ConcurrentHashMap;
  * @author Arnold Lankamp
  */
 public class ScriptCodeStore{
-	private final String[] scriptNames;
+	private final ToolBus toolbus;
 	private final ConcurrentHashMap<String, byte[]> scriptCodeCache;
 	
 	/**
@@ -30,43 +30,20 @@ public class ScriptCodeStore{
 	public ScriptCodeStore(ToolBus toolbus){
 		super();
 		
-		List<String> scriptNamesList = new ArrayList<String>();
-		
-		String includePath = toolbus.getProperty("include.path", ".");
-		String[] paths = includePath.split("[ ,\t\n\r]+");
-		for(int i = 0; i < paths.length; i++){
-			File file = new File(paths[i]);
-			if(file.exists()){
-				File[] scripts = file.listFiles(new FileFilter(){
-					public boolean accept(File pathname){
-						if(pathname.isFile()){
-							String filename = pathname.getName();
-							
-							return (filename.endsWith(".tb") || filename.endsWith(".idef"));
-						}
-						return false;
-					}
-				});
-				
-				for(int j = 0; j < scripts.length; j++){
-					scriptNamesList.add(scripts[j].getAbsolutePath());
-				}
-			}
-		}
-		
-		String[] scriptNamesArray = new String[scriptNamesList.size()];
-		this.scriptNames = scriptNamesList.toArray(scriptNamesArray);
+		this.toolbus = toolbus;
 		
 		scriptCodeCache = new ConcurrentHashMap<String, byte[]>();
 	}
 	
 	/**
-	 * Returns the list of absolute paths to all, for the ToolBus, reachable scripts.
+	 * Returns the list of absolute paths to all, for the ToolBus, reachable scripts. Returns null
+	 * in case the scripts haven't been parsed yet.
 	 * 
-	 * @return The list of absolute paths to all, for the ToolBus, reachable scripts.
+	 * @return The list of absolute paths to all, for the ToolBus, reachable scripts; null in case
+	 * the scripts haven't been parsed yet.
 	 */
 	public String[] getScriptNames(){
-		return scriptNames;
+		return toolbus.getIncludedScripts();
 	}
 	
 	/**

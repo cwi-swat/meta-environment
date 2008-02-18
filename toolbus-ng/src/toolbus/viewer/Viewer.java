@@ -624,6 +624,7 @@ public class Viewer implements IViewer{
 		
 		try{
 			if(debugToolBus.parsecup()){
+				System.out.println(new ScriptCodeStore(debugToolBus).getScriptNames().length);
 				debugToolBus.execute();
 			}else{
 				System.err.println("Failed to parse");
