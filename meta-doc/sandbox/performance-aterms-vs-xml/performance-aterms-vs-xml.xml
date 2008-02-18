@@ -61,17 +61,16 @@
 
       <listitem>
         <para>Parsing ATerm ASCII is both significantly slower and scales
-        worse then XML (partially because of the sharing).</para>
+        worse then XML.</para>
       </listitem>
 
       <listitem>
-        <para>ATerm ASCII is more compact (because we don't have close
-        tags).</para>
+        <para>ATerm ASCII is more compact.</para>
       </listitem>
 
       <listitem>
-        <para>ATerm SAF is useful for reading and writing large documents with
-        lots of sharing.</para>
+        <para>ATerm SAF is useful for reading and writing documents with a
+        'large' amount of sharing.</para>
       </listitem>
     </itemizedlist>
 
@@ -99,17 +98,12 @@
         <listitem>
           <para>ATerms may have annotations attached to each node; these
           annotations may contain arbitrary ATerms; XML trees may have
-          attributes but they may only contain string values.</para>
+          attributes but they may only contain a single value.</para>
         </listitem>
 
         <listitem>
           <para>The implementation of ATerms support the notion of maximal
           subterm sharing; XML has no counterpart for this.</para>
-        </listitem>
-
-        <listitem>
-          <para>ATerms have a textual and a binary representation; XML only
-          has a textual representation.</para>
         </listitem>
       </itemizedlist>
     </section>
