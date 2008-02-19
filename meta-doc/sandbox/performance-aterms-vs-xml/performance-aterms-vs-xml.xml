@@ -378,7 +378,7 @@
         <title>Size comparison</title>
 
         <para>The graph below looks fairly similair to the one in the previous
-        section, which compared parser speed. The more sharing the smaller the
+        section, which compares parser speed. The more sharing the smaller the
         document and consequently the faster it can be parsed.</para>
 
         <mediaobject>
@@ -398,30 +398,15 @@
   <section xml:id="section.conclusions">
     <title>Conclusions</title>
 
-    <para>TODO</para>
+    <para>We can conclude from the benchmarks the XML format has a definate
+    performance advantage in terms of parsing speed. The main reason for this
+    is the global sharing of ATerm objects; while this reduces overall memory
+    usage it also introduces a noticable overhead.</para>
 
-    <para><itemizedlist>
-        <listitem>
-          <para>Writing ATerm ASCII and XML is about as fast.</para>
-        </listitem>
-
-        <listitem>
-          <para>Parsing ATerm ASCII is both significantly slower and scales
-          worse then XML (partially because of the sharing).</para>
-        </listitem>
-
-        <listitem>
-          <para>ATerm ASCII is more compact (because we don't have close
-          tags).</para>
-        </listitem>
-
-        <listitem>
-          <para>ATerm SAF is useful for reading and writing large documents
-          with lots of sharing.</para>
-        </listitem>
-      </itemizedlist></para>
-
-    <para>TODO</para>
+    <para>In terms of size, the ATerm formats do have an advantage over XML.
+    Especially the binary SAF encoding, when it comes to documents with a lot
+    of sharing. Luckily these are exactly the kind of documents we chose to
+    represent using ATerms.</para>
   </section>
 
   <section>
@@ -429,7 +414,8 @@
 
     <itemizedlist>
       <listitem>
-        <para>Write something useful in the conclusion chapter.</para>
+        <para>Change the conclusions chapter. I'm not really satisfied with
+        it.</para>
       </listitem>
 
       <listitem>
