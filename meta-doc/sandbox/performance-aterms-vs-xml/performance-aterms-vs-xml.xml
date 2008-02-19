@@ -65,12 +65,12 @@
       </listitem>
 
       <listitem>
-        <para>ATerm ASCII is more compact.</para>
+        <para>The ATerm ASCII representation is more compact.</para>
       </listitem>
 
       <listitem>
         <para>ATerm SAF is useful for reading and writing documents with a
-        'large' amount of sharing.</para>
+        'large' percentage of shared nodes.</para>
       </listitem>
     </itemizedlist>
 
@@ -97,12 +97,12 @@
       <itemizedlist>
         <listitem>
           <para>ATerms may have annotations attached to each node; these
-          annotations may contain arbitrary ATerms; XML trees may have
-          attributes but they may only contain a single value.</para>
+          annotations may contain arbitrary ATerms; XML elements may have
+          attributes but these may only contain a single value.</para>
         </listitem>
 
         <listitem>
-          <para>The implementation of ATerms support the notion of maximal
+          <para>The implementation of ATerms supports the notion of maximal
           subterm sharing; XML has no counterpart for this.</para>
         </listitem>
       </itemizedlist>
@@ -151,7 +151,7 @@
 
         <listitem>
           <para>We will compare Java implementations of ATerms and XML and the
-          unpredictable effects of the HotSpot compiler has to be taken into
+          unpredictable effects of the HotSpot compiler have to be taken into
           account.</para>
         </listitem>
       </itemizedlist>
@@ -173,7 +173,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>Number of nodes.</para>
+          <para>Number of nodes in the tree.</para>
         </listitem>
 
         <listitem>
@@ -181,11 +181,11 @@
         </listitem>
 
         <listitem>
-          <para>Average arity.</para>
+          <para>Average arity of a node.</para>
         </listitem>
 
         <listitem>
-          <para>Percentage chance a node in the tree is shared.</para>
+          <para>Percentual chance any given node in the tree is shared.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -222,7 +222,7 @@
         </listitem>
 
         <listitem>
-          <para>2GB DDR-800 memory.</para>
+          <para>2GB DDR2-800 memory.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -251,7 +251,8 @@
   <section xml:id="section.results">
     <title>Results</title>
 
-    <para>g</para>
+    <para>In this chapter we will take a look at the results that were
+    produced by executing the different benchmarks. </para>
 
     <section>
       <title>XML vs ATerm ASCII</title>
@@ -321,7 +322,7 @@
     <section>
       <title>ATerm ASCII vs SAF</title>
 
-      <para>For smaller documents the text representation of ATerms are
+      <para>For smaller documents the text representation of ATerms is
       sufficient. However when it comes to reading and writing large documents
       it is clearly unsuitable. For this purpose several other ATerm formats
       were developed; SAF (semi-Streamable ATerm Format) is the latest
@@ -351,7 +352,7 @@
         <para>In terms for parsing performance, SAF does a lot better; ATerm
         ASCII is only faster in the case of complete absence of sharing. This
         can be explained by the difference in document size; the SAF parser
-        needs to read more characters.</para>
+        needs to read more characters in this specific case.</para>
 
         <para>Note that ATerm ASCII also becomes faster as a result of
         sharing. This is an implementation artifact. The factory that keeps
@@ -376,9 +377,9 @@
       <section>
         <title>Size comparison</title>
 
-        <para>The graph below looks very similair to the one in the previous
+        <para>The graph below looks fairly similair to the one in the previous
         section, which compared parser speed. The more sharing the smaller the
-        document and the faster it can be parsed.</para>
+        document and consequently the faster it can be parsed.</para>
 
         <mediaobject>
           <imageobject>
@@ -428,21 +429,11 @@
 
     <itemizedlist>
       <listitem>
-        <para>Write down the findings in the introduction in a better
-        way.</para>
+        <para>Write something useful in the conclusion chapter.</para>
       </listitem>
 
       <listitem>
-        <para>Write something usefull in the conclusion chapter.</para>
-      </listitem>
-
-      <listitem>
-        <para>Add text to the results chapter.</para>
-      </listitem>
-
-      <listitem>
-        <para>Say something about SAF/binary encoding in the
-        introduction.</para>
+        <para>Fill the 'holes' in the document.</para>
       </listitem>
     </itemizedlist>
   </section>
