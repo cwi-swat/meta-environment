@@ -52,7 +52,7 @@ equations
     < V [
         "declare"
         I [ _C1_ ]
-        I [H hs=0 [ A (r,l,l,l,l,l) [ SL op=R [[IdType*]]] _C2_ ";"]]
+        I [H hs=0 [ A (r,l,l,l,l,l) [ G gs=6 op=R [[IdType*]]] _C2_ ";"]]
         ]
     >
 
