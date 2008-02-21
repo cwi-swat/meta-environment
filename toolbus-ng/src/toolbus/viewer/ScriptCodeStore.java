@@ -1,13 +1,10 @@
 package toolbus.viewer;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.List;
 import toolbus.ToolBus;
 import toolbus.util.collections.ConcurrentHashMap;
 

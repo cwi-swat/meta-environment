@@ -19,7 +19,7 @@ public class CommandLine{
 		toolBusInputStreamHandler = new ToolBusInputStreamHandler(toolbus, System.in);
 	}
 	
-	public void startHandling(){
+	private void startHandling(){
 		Thread toolBusInputStreamHandlerThread = new Thread(toolBusInputStreamHandler);
 		toolBusInputStreamHandlerThread.setName("ToolBus inputstream handler");
 		toolBusInputStreamHandlerThread.setDaemon(true);

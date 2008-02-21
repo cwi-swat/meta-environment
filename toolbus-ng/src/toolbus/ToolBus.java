@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import toolbus.commandline.CommandLine;
 import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
@@ -519,6 +520,8 @@ public class ToolBus{
 			System.err.println("ToolBus cannot continue execution due to errors in Tscript");
 			return;
 		}
+		
+		if(propertyManager.withConsole()) CommandLine.createCommandLine(this);
 		
 		// Initialize and start the connection handler.
 		try{

@@ -1,3 +1,6 @@
+Thu Feb 21 13:57:03 CEST 2008 <lankamp@cwi.nl>
+  * src/toolbus/commandline/CommandLine.java: The ToolBus no longer starts with the Console on by default. Instead it can be enabled when required by starting the ToolBus with the --with-console flag.
+
 Mon Feb 18 15:47:25 CEST 2008 <lankamp@cwi.nl>
  * src/toolbus/viewer/ScriptCodeStore.java: Fixed a problem in the ScriptCodeStore. Not every include was being resolved.
 

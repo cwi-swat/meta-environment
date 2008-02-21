@@ -16,6 +16,7 @@ public class PropertyManager{
 	private String includes = "";
 	private String tbscript = null;
 	private int port;
+	private boolean withConsole = false;
 	
 	public PropertyManager(String[] args){
 		port = -1;
@@ -58,33 +59,36 @@ public class PropertyManager{
 				propertyFileName = args[i + 1];
 				i++;
 				continue;
-			}
-			Matcher mdefine = pdefine.matcher(arg);
-			if(mdefine.matches()){
-				String name = mdefine.group(1);
-				String val = "\"" + mdefine.group(2) + "\"";
-				//System.err.println("define: name = " + name + ", " + " val = " + val);
-				defines.put(name, val);
+			}else if(arg.equals("--with-console")){
+				withConsole = true;
 			}else{
-				Matcher idefine = pinclude.matcher(arg);
-				if(idefine.matches()){
-					String name = idefine.group(1);
-					//System.err.println("include: name = " + name);
-					includes = (includes == "") ? name : includes + ", " + name;
+				Matcher mdefine = pdefine.matcher(arg);
+				if(mdefine.matches()){
+					String name = mdefine.group(1);
+					String val = "\"" + mdefine.group(2) + "\"";
+					//System.err.println("define: name = " + name + ", " + " val = " + val);
+					defines.put(name, val);
 				}else{
-					Matcher sdefine = pscript.matcher(arg);
-					if (sdefine.matches()) {
-						String name = sdefine.group(1);
-						//System.err.println("tbscript: name = " + name);
-						if (tbscript != null) {
-							System.err.println("tbscript: already defined (" + tbscript + ")");
-						}
-						tbscript = name;					
+					Matcher idefine = pinclude.matcher(arg);
+					if(idefine.matches()){
+						String name = idefine.group(1);
+						//System.err.println("include: name = " + name);
+						includes = (includes == "") ? name : includes + ", " + name;
 					}else{
-						Matcher portDefine = pport.matcher(arg);
-						if(portDefine.matches()){
-							String portNumber = portDefine.group(1);
-							port = Integer.parseInt(portNumber);
+						Matcher sdefine = pscript.matcher(arg);
+						if (sdefine.matches()) {
+							String name = sdefine.group(1);
+							//System.err.println("tbscript: name = " + name);
+							if (tbscript != null) {
+								System.err.println("tbscript: already defined (" + tbscript + ")");
+							}
+							tbscript = name;					
+						}else{
+							Matcher portDefine = pport.matcher(arg);
+							if(portDefine.matches()){
+								String portNumber = portDefine.group(1);
+								port = Integer.parseInt(portNumber);
+							}
 						}
 					}
 				}
@@ -136,5 +140,9 @@ public class PropertyManager{
 	
 	public int getUserSpecifiedPort(){
 		return port;
+	}
+	
+	public boolean withConsole(){
+		return withConsole;
 	}
 }
