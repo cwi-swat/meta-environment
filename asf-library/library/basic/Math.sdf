@@ -15,7 +15,7 @@ exports
     root(Integer)  -> Rational
  
 hiddens
-  imports basic/Whitespace
+  imports basic/Whitespace basic/Comments
 
   context-free start-symbols
     RatCon Rational Integer

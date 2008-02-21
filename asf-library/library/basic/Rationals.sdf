@@ -73,7 +73,8 @@ exports
      Integer "-" Integer -> Integer {left} }
      
 hiddens
-  imports basic/Whitespace
+  imports basic/Whitespace basic/Comments
+
   context-free start-symbols
     Rational Boolean Integer
   variables
