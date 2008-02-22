@@ -1,0 +1,55 @@
+module languages/mse/syntax/MSE
+
+imports basic/Whitespace
+imports basic/Booleans
+imports basic/NatCon
+
+exports
+
+sorts Root Document ElementNode Serial AttributeNode ValueNode Primitive Reference 
+      IdReference NamedReference Digit Number Comment
+       UNDEFINED OPEN CLOSE ID REF String NamePart Letter Keyword Name
+
+context-free start-symbols Root
+
+context-free syntax
+
+  "nil" -> UNDEFINED
+  "ref:" -> REF
+  "id:" -> ID
+  "(" -> OPEN
+  ")" -> CLOSE
+
+
+context-free syntax
+  Document? -> Root
+  OPEN ElementNode* CLOSE -> Document
+  OPEN Name Serial? AttributeNode* CLOSE -> ElementNode
+  OPEN ID NatCon CLOSE -> Serial
+  OPEN ( Name | Keyword ) ValueNode* CLOSE -> AttributeNode
+  Primitive | Reference | ElementNode -> ValueNode
+  String | Number | Boolean | UNDEFINED -> Primitive
+  IdReference | NamedReference -> Reference
+  OPEN REF NatCon CLOSE -> IdReference
+  OPEN REF Name CLOSE -> NamedReference
+
+
+lexical syntax
+
+[\-]?Digit+([\.]Digit+)?([e][\-]?Digit+)? -> Number
+[0-9] -> Digit
+[a-zA-Z\_] -> Letter
+([\'](~[\'])*[\'])+ -> String
+Letter(Letter|Digit)* -> NamePart
+NamePart([\.]NamePart)* -> Name
+[\@]NamePart -> Keyword
+
+[\"](~[\"])*[\"] -> Comment
+Comment -> LAYOUT
+
+lexical restrictions
+    String -/- [\']
+
+
+context-free restrictions
+    LAYOUT? -/- [\"]

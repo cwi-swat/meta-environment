@@ -1,0 +1,19 @@
+(
+(Library (id: 1)
+      (nums 1.0 -2 3 4 5)
+	(name 'Sattose library')
+	(books "we do a comment here"
+		(Book (id: 2)
+			(title 'The Book of Foo'))
+	)
+)
+(Book (id: 32)
+	(title 'The Book of Foo'))
+
+(Library (id: 31)
+	(name 'Sattose library')
+	(books "we do a comment here"
+		(ref: 32) (ref: 33)))
+(Book (id: 33)
+	(title 'The Bible''Die Bibel'))
+)
