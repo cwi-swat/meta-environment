@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
       }
     }
     else {
-      ATwarning("No such file: %s\n", input); 
+      ATwarning("Failed to read ATerm from file: %s\n", input); 
       return 1; 
     }
   }
