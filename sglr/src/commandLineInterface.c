@@ -281,9 +281,14 @@ int runCommandLineTool (int argc, char **argv) {
 
   handleOptions(argc, argv);
 
-  /** \todo Need to allow the input string to be read from stdin if the option 
-   * is blank or - is used. */
   inputString = IS_createInputStringFromFile(MAIN_getInputFileName());
+
+  if (inputString == NULL) {
+    ERR_displaySummary(ERR_getManagerSummary());
+    outputResult(ERR_SummaryToTerm(ERR_getManagerSummary()), MAIN_getOutputFileName());
+    return 1;
+  }
+
   if (SG_AddParseTable(MAIN_getParseTableName()) == NULL) {
     ERR_displaySummary(ERR_getManagerSummary());
     outputResult(ERR_SummaryToTerm(ERR_getManagerSummary()), MAIN_getOutputFileName());

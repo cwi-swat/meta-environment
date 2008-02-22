@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <rsrc-usage.h>
+#include <Error-manager.h>
+
 
 /** We got this number by calculating the average number of characters in all 
  * c, java, asf, sdf, tb and idef files in the asfsdf-meta, rscript-meta, 
@@ -82,6 +84,7 @@ InputString IS_createInputStringFromFile(const char *path) {
   }
 
   if (in == NULL) {
+    ERR_managerStoreError("Can not open file", ERR_makeSubjectListSingle(ERR_makeSubjectSubject(path)));
     /** \todo Return a proper error (using strerror)! */
     return NULL;
   }

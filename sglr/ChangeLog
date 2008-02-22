@@ -1,5 +1,9 @@
 $Id$
 
+Fri Feb 22 10:26:35 EST 2008 <jurgenv@cwi.nl>
+ * src/inputStringBuilder,src/commandlineInterface.c: added creation
+   of proper errors when input files could not be found.
+
 Wed Jan 16 17:20:24 CET 2008 <economop@cwi.nl>
  * src/inputStringBuilder.c: fixed bug 822 again and hopefully didn't
    introduce any new bugs this time ;-) 
