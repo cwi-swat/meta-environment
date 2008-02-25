@@ -46,6 +46,8 @@
     <junit printsummary="withOutAndErr" showoutput="yes">
       <classpath>
 	<pathelement path="project.classpath"/>
+        <pathelement path="${env.JAVA_LOCAL_JARS}"/>
+        <pathelement path="${env.JAVA_EXTERNAL_JARS}"/>
 	<pathelement location="${env.BUILDDIR}/${build}"/>
       </classpath>
       <formatter type="plain"/>

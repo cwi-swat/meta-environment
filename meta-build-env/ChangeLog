@@ -1,5 +1,9 @@
 $Id$
 
+Mon Feb 25 13:17:41 EST 2008 <jurgenv@cwi.nl>
+ * meta-build.ant: Added LOCAL_JARS and EXTERNAL_JARS to class path 
+   of check target.
+
 Fri Jan 18 12:00:00 CEST 2008 <lankamp@cwi.nl>
  * meta-build.ant: The resources are now being packaged into the JAR files
  again.
