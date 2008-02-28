@@ -1,5 +1,3 @@
-
-
 Wed Jan 23 13:55:49 CET 2008 <{lankamp,basten,economop}@cwi.nl>
  * tbscripts/fbi.tb.src, tbscripts/fbmp.tb.src: fixed deadlock.
 
