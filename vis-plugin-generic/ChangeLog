@@ -1,4 +1,6 @@
-
+Fri Feb 29 14:40:59 CEST 2008 <basten@cwi.nl>
+ * **/src: fixed nullpointer in table visualization when displaying empty
+   set, now displaying message "This fact is empty.".
 
 Wed Aug 22 15:20:44 CEST 2007 <jurgenv@cwi.nl>
  * **/src: adapted table visualization to be able to visualize any type

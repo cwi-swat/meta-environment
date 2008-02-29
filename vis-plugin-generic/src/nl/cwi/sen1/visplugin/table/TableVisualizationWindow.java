@@ -9,6 +9,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -56,6 +57,12 @@ public class TableVisualizationWindow extends VisualizationPluginWindow {
 
         try {
             m_model.setRTupleData(fact);
+            
+            if (m_model.getRowCount() == 0) {
+            	controlArea.add(new JTextArea("This fact is empty."));
+            	return controlArea;
+            }
+
             m_table = new JTable(m_model);
 
             // create the buttons to enable header sorting
@@ -93,6 +100,7 @@ public class TableVisualizationWindow extends VisualizationPluginWindow {
 
         } catch (Exception ex) {
             System.err.println(ex);
+            ex.printStackTrace();
         }
 
         return controlArea;

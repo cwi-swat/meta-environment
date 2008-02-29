@@ -196,6 +196,7 @@ public class SortableTableModel extends DefaultTableModel {
 			m_data = data;
 		} catch (Exception exception) {
 			System.err.print(exception.getMessage());
+			exception.printStackTrace();
 		}
 	}
 
