@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -7,7 +7,8 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>Performance of ATerms compared with XML</title>
+    <title>A Java Implementation Performance Comparison Between ATerms and
+    XML</title>
 
     <authorgroup>
       <author>
@@ -34,7 +35,7 @@
     related data that emerges in the context of Interactive Development
     Environments and tools for source code analysis and transformation.</para>
 
-    <para>World-wide, XML is the de facto standard for data exchange in many
+    <para>World-wide, XML is the defacto standard for data exchange in many
     application domains and an obvious question to ask is how ATerms and XML
     compare regarding</para>
 
@@ -48,11 +49,13 @@
       </listitem>
     </itemizedlist>
 
-    <para>In addition we will also take a look at the binary encoding of
-    ATerms (SAF) and how it compares to the ATerm ASCII format.</para>
+    <para>In this document we will compare the Java implementation of the
+    ATerm library against the most commonly used Java XML Parser
+    implementation (Xerces), by means of a series of experiments. In addition
+    we will also take a look at the binary encoding of ATerms (SAF) and how it
+    measures up to the ATerm ASCII format.</para>
 
-    <para>This document describes experiments to make this comparison. Our
-    findings can be summarized as follows:</para>
+    <para>Our findings can be summarized as follows:</para>
 
     <itemizedlist>
       <listitem>
@@ -60,8 +63,8 @@
       </listitem>
 
       <listitem>
-        <para>Parsing ATerm ASCII is both significantly slower and scales
-        worse then XML.</para>
+        <para>Parsing ATerm ASCII is both significantly slower then parsing
+        XML.</para>
       </listitem>
 
       <listitem>
@@ -69,18 +72,18 @@
       </listitem>
 
       <listitem>
-        <para>ATerm SAF is useful for reading and writing documents with more
-        than 10% of shared nodes.</para>
+        <para>The binary ATerm SAF represenation is the fastest to read and
+        write and the smallest.</para>
       </listitem>
 
       <listitem>
-        <para>With increasing sharing percentage upto a thousand fold speed
-        and size reduction can be observed between ATerm ASCII and SAF.</para>
+        <para>Compressing XML documents using ZIP is reasonably
+        expensive.</para>
       </listitem>
     </itemizedlist>
 
     <para>In <xref linkend="section.considerations" /> we sketch the general
-    considerations to be taken into account when performing such comparisons
+    considerations to be taken into account when performing such a comparions
     and in <xref linkend="section.experimental-setting" /> we describe the
     experimental setting. Results are presented in <xref
     linkend="section.results" /> and our overall conclusions can be found in
@@ -121,7 +124,7 @@
           <para>Although we would prefer to compare the concepts underlying
           ATerms and XML, it is unavoidable that we can only measure specific
           implementations of these concepts. The implementation and
-          optimization effort invested in XML implementations is incomparable
+          optimization effort invested in XML implementations is uncomparable
           to the effort invested in the ATerm implementation.</para>
         </listitem>
 
@@ -166,6 +169,8 @@
   <section xml:id="section.experimental-setting">
     <title>Experimental Setting</title>
 
+    <para></para>
+
     <section>
       <title>The test data generator</title>
 
@@ -176,7 +181,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>Number of nodes in the tree.</para>
+          <para>Total number of nodes in the tree.</para>
         </listitem>
 
         <listitem>
@@ -184,12 +189,16 @@
         </listitem>
 
         <listitem>
-          <para>Average arity of a node.</para>
+          <para>Number of children per node.</para>
         </listitem>
 
         <listitem>
-          <para>Percentage chance that a given node in the tree is
-          shared.</para>
+          <para>Percentual chance any given node in the tree is shared.</para>
+        </listitem>
+
+        <listitem>
+          <para>The amount of different 'node names' (element types / function
+          symbols).</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -197,7 +206,7 @@
     <section>
       <title>Software versions</title>
 
-      <para>For the benchmarks we used the following software:</para>
+      <para>For the benchmarks the following software was used:</para>
 
       <itemizedlist>
         <listitem>
@@ -209,7 +218,7 @@
         </listitem>
 
         <listitem>
-          <para>Xerces-J, version 2.6.2 (incorporated in JDK 1.5.0_12).</para>
+          <para>Xerces-J, version 2.6.2 (incorperated in JDK 1.5.0_12).</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -226,7 +235,7 @@
         </listitem>
 
         <listitem>
-          <para>2GB DDR2-800 memory.</para>
+          <para>1GB DDR2-800 memory.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -237,9 +246,9 @@
       <para>The results that are summarized in the chapter below have been
       acquired in the following manner:<itemizedlist>
           <listitem>
-            <para>For every benchmark a separate function was created which
+            <para>For every benchmark a seperate function was created which
             measured the absolute elapsed time that was required to run a
-            certain operation hundred times.</para>
+            certain operation one hunderd times.</para>
           </listitem>
 
           <listitem>
@@ -255,147 +264,172 @@
   <section xml:id="section.results">
     <title>Results</title>
 
-    <para>We will now take a look at the results that were produced by
-    executing the different benchmarks.</para>
+    <para>In this chapter we will take a look at the results that were
+    produced by executing the different benchmarks.</para>
 
     <section>
-      <title>XML vs ATerm ASCII</title>
+      <title>ATerm vs XML</title>
+
+      <para>In this section we will look at the transformation and parsing
+      performance of the different formats and the size of the produced
+      documents. For completeness we have also included the results we
+      obtained by applying ZIP compression to the serial representation of the
+      produced XML documents, since this is the 'standard' way of reducing
+      their size of large XML documents when sending them over the
+      internet.</para>
 
       <section>
         <title>Speed comparison</title>
 
-        <para>The graph below illustrates the way ATerm ASCII and XML scale in
-        terms of writing speed. Both formats are able to write their object
-        model to a String in about the same time. The time it takes seems to
-        scale linearly with the number of nodes in the tree.</para>
+        <para>The graph below illustrates the way the ATerm formats and XML
+        scale in terms of transformation speed. Both ATerm ASCII and XML write
+        their object model to a String in about the same amount of time; with
+        the ATerm ASCII format being slightly on the upper hand. The binary
+        ATerm SAF encoding is clearly the fastest. On the other hand,
+        compressing an XML document using ZIP has a significant
+        overhead.</para>
 
-        <figure>
-          <title>Time needed (in ms, vertical axis) to serialize a document
-          with a variable number of nodes (horizontal axis)</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Transformer.png"></imagedata>
+          </imageobject>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="ATerm_vs_XML_writing.png" scale="75"></imagedata>
-            </imageobject>
-          </mediaobject>
-        </figure>
+          <caption>
+            <para>The time it takes (in ms) to serialize a document with a
+            certain number of nodes.</para>
+          </caption>
+        </mediaobject>
 
-        <para>Regarding parsing speed XML is well ahead. This is to be
-        expected, since the ATerm library needs to handle the sharing of the
-        parsed data as well and this takes a significant amount of time. The
-        relative overhead associated with this also seems to increase with the
-        size of the document.</para>
+        <para>When if comes to parsing the tables have turned. XML is
+        significantly faster then ATerm ASCII in this respect; which is mainly
+        caused by the extra work that is needed to calculate the sharing of
+        the nodes. However ATerm SAF is the clear winner yet again.
+        Additionally, as expected, decompression of Zipped XML documents has a
+        noticable performance overhead.</para>
 
-        <figure>
-          <title>Time needed (in ms, vertical axis) to parse a document with a
-          variable number of nodes.</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Parser.png"></imagedata>
+          </imageobject>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="ATerm_vs_XML_reading.png" scale="75"></imagedata>
-            </imageobject>
-          </mediaobject>
-        </figure>
+          <caption>
+            <para>The time it takes (in ms) to parse a document with a certain
+            number of nodes.</para>
+          </caption>
+        </mediaobject>
+
+        <para>When we look at the combined transformation and parsing times,
+        XML is the fastest of the two text representations. However eventhough
+        the data does not contain any shared nodes, ATerm SAF is already the
+        clear winner. As for XML+ZIP, it's reasonably expensive.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Combined.png"></imagedata>
+          </imageobject>
+
+          <caption>
+            <para>The combined time (in ms) of transformation and parsing a
+            document with a certain number of nodes.</para>
+          </caption>
+        </mediaobject>
       </section>
 
       <section>
         <title>Size comparison</title>
 
-        <para>Regarding size the ATerm ASCII format is the clear winner. The
-        major reason for this is that the ATerm ASCII format doesn't have
-        close tags, like XML does, but instead uses a single token (')') for
-        this purpose. The number of nodes in the document doesn't seem to have
-        any impact of the relative difference in size; it stays about the
-        same.</para>
+        <para>In terms of document size the ATerm ASCII representation is
+        smaller then XML, mainly because it uses brackets as close tags,
+        instead of the entire name of the element. The binary ATerm SAF
+        encoding seems to be on par with the ZIP compression of XML.</para>
 
-        <figure>
-          <title>Size (in bytes, vertical axis) of the serialized
-          representation of a document with a variable number of
-          nodes.</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Size.png"></imagedata>
+          </imageobject>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="ATerm_vs_XML_size.png" scale="75"></imagedata>
-            </imageobject>
-          </mediaobject>
-        </figure>
+          <caption>
+            <para>The size (in bytes) of the serialized representation of a
+            document with a certain number of nodes.</para>
+          </caption>
+        </mediaobject>
       </section>
     </section>
 
     <section>
       <title>ATerm ASCII vs SAF</title>
 
-      <para>For smaller documents the text representation of ATerms is
+      <para>For smaller documents the text (ASCII) representation of ATerms is
       sufficient. However when it comes to reading and writing large documents
       it is clearly unsuitable. For this purpose several other ATerm formats
       were developed; SAF (semi-Streamable ATerm Format) is the latest
-      addition. Here we will take a look at how they compare.</para>
+      addition. Here we will take a look at how they compare when sharing is
+      added to the equation.</para>
 
       <section>
         <title>Speed comparison</title>
 
-        <para>Writing ATerms in the SAF format ranges from clearly worse to
-        significantly better, and this depends on the amount of sharing in the
-        document. This can be explained by the fact that the SAF writer
-        implementation needs to keep track of sharing for compression
-        purposes; if there is nothing to compress, the extra work does not
-        result in any gain.</para>
+        <para>Writing ATerms in the SAF format ranges from moderately better
+        to astonishingly better, when compared to ATerm ASCII, wholey
+        dependant on the amount of sharing in the document. The more sharing
+        the less it needs to do.</para>
 
-        <figure>
-          <title>Time (in ms, vertical axis) needed to serialize a document
-          with 50000 nodes, given a variable percentage of sharing (horizontal
-          axis)</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Transformer_shared.png"></imagedata>
+          </imageobject>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="ASCII_vs_SAF_writing.png" scale="75"></imagedata>
-            </imageobject>
-          </mediaobject>
-        </figure>
+          <caption>
+            <para>The time (in ms) it takes to serialize a document with 50000
+            nodes, given a certain percentage of sharing.</para>
+          </caption>
+        </mediaobject>
 
-        <para>Regarding parsing speed, SAF does a lot better; ATerm ASCII is
-        only faster in the case of complete absence of sharing. This can be
-        explained by the difference in document size; the SAF parser needs to
-        read more characters in this specific case.</para>
+        <para>In terms for parsing performance, SAF is in a league of it's
+        own; even in complete absence of shared nodes it is still
+        significantly faster. The more sharing the smaller the document and
+        the less characters need to be parsed. Additionally, since the sharing
+        is preserved in the SAF representation it does not need to be
+        recalculated when parsing, which is one of the main
+        bottlenecks.</para>
 
-        <para>Note that ATerm ASCII also becomes faster as a result of
-        sharing. This is an implementation artifact. The factory that keeps
+        <para>Note that ATerm ASCII also becomes slightly faster as a result
+        of sharing. This is an implementation artifact. The factory that keeps
         track of the shared ATerm objects uses weak-references to refer to
         them. Since a weak-reference needs to be checked by the VM at every
-        garbage collection invocation (both major and minor) it incurs a
+        garbage collection invokation (both major and minor) it incurs a
         certain performance overhead. If there is more sharing there are less
         objects in the factory and thus less overhead.</para>
 
-        <figure>
-          <title>Time (in ms, vertical axis) needed to parse a document with
-          50000 nodes, given a variable percentage of sharing (horizontal
-          axis)</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Parser_shared.png"></imagedata>
+          </imageobject>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="ASCII_vs_SAF_reading.png" scale="75"></imagedata>
-            </imageobject>
-          </mediaobject>
-        </figure>
+          <caption>
+            <para>The time (in ms) it takes to parse a document with 50000
+            nodes, given a certain percentage of sharing.</para>
+          </caption>
+        </mediaobject>
       </section>
 
       <section>
         <title>Size comparison</title>
 
-        <para>The graph below looks fairly similar to the one in the previous
-        section, which compared parser speed. The more sharing the smaller the
-        document and consequently the faster it can be parsed.</para>
+        <para>In terms of document size, there are no real surprices. The more
+        sharing, the smaller the SAF encoded document.</para>
 
-        <figure>
-          <title>Size of the serialized representation of a document with
-          50000 nodes, given a variable percentage of sharing.</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Size_shared.png"></imagedata>
+          </imageobject>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="ASCII_vs_SAF_size.png" scale="75"></imagedata>
-            </imageobject>
-          </mediaobject>
-        </figure>
+          <caption>
+            <para>The size (in bytes) of the serialized representation of a
+            document with 50000 nodes, given a certain percentage of
+            sharing.</para>
+          </caption>
+        </mediaobject>
       </section>
     </section>
   </section>
@@ -403,16 +437,21 @@
   <section xml:id="section.conclusions">
     <title>Conclusions</title>
 
-    <para>We can conclude from the benchmarks that the XML format has a clear
-    performance advantage in terms of parsing speed. The main reason that
-    ATerm parsing is slower is the global sharing of ATerm objects; while this
-    reduces overall memory usage it also introduces a noticeable
-    overhead.</para>
+    <para>We can conclude from the benchmarks the XML format has a definate
+    performance advantage in terms of parsing speed over ATerm ASCII. The main
+    reason for this is the global sharing of ATerm objects; while this reduces
+    overall memory usage it also introduces a noticable overhead. On the other
+    hand, documents using the ATerm ASCII representation are significantly
+    smaller.</para>
 
-    <para>Regarding size, the ATerm formats do have an advantage over XML.
-    Especially the binary SAF encoding, when it comes to documents with a lot
-    of sharing. Fortunately these are exactly the kind of documents (parse
-    tables, parse trees) ATerms were designed for.</para>
+    <para>ATerm SAF is the clear winner in all the tests. It dominates in both
+    transformation and parsing speed as in document size. When sharing is
+    added to the equation it becomes even better.</para>
+
+    <para>In contrast, applying ZIP compression to XML documents, while
+    reducing their size, does introduce a significant overhead. So unless
+    bandwidth or diskspace is an issue, this doesn't seem to be a good idea to
+    use.</para>
   </section>
 
   <section>
@@ -420,22 +459,7 @@
 
     <itemizedlist>
       <listitem>
-        <para>Change the conclusions chapter. I'm not really satisfied with
-        it.</para>
-      </listitem>
-
-      <listitem>
         <para>Fill the 'holes' in the document.</para>
-      </listitem>
-
-      <listitem>
-        <para>What are the sharing percentages observed in actual ATerm
-        data?</para>
-      </listitem>
-
-      <listitem>
-        <para>What is the effect on size and speed of gzipping the XML
-        data?</para>
       </listitem>
     </itemizedlist>
   </section>
