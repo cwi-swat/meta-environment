@@ -367,7 +367,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="Transformer.png"></imagedata>
+            <imagedata fileref="Transformer.png" scale="65"></imagedata>
           </imageobject>
 
           <caption>
@@ -384,7 +384,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="Parser.png"></imagedata>
+            <imagedata fileref="Parser.png" scale="65"></imagedata>
           </imageobject>
 
           <caption>
@@ -400,7 +400,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="Combined.png"></imagedata>
+            <imagedata fileref="Combined.png" scale="65"></imagedata>
           </imageobject>
 
           <caption>
@@ -420,7 +420,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="Size.png"></imagedata>
+            <imagedata fileref="Size.png" scale="65"></imagedata>
           </imageobject>
 
           <caption>
@@ -450,7 +450,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="Transformer_shared.png"></imagedata>
+            <imagedata fileref="Transformer_shared.png" scale="65"></imagedata>
           </imageobject>
 
           <caption>
@@ -477,7 +477,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="Parser_shared.png"></imagedata>
+            <imagedata fileref="Parser_shared.png" scale="65"></imagedata>
           </imageobject>
 
           <caption>
@@ -495,7 +495,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="Size_shared.png"></imagedata>
+            <imagedata fileref="Size_shared.png" scale="65"></imagedata>
           </imageobject>
 
           <caption>
