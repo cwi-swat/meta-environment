@@ -56,7 +56,7 @@
     measures up to the ATerm ASCII format.</para>
 
     <table xml:id="table.findings">
-      <title>Summary of findings</title>
+      <title>Summary of findings (no sharing)</title>
 
       <tgroup cols="5">
         <thead>
@@ -125,8 +125,9 @@
       </tgroup>
     </table>
 
-    <para>Our findings are shown in <xref linkend="table.findings" /> and can
-    be summarized as follows:</para>
+    <para><emphasis role="bold">For the case that there is no
+    sharing</emphasis>, our findings are shown in <xref
+    linkend="table.findings" /> and can be summarized as follows:</para>
 
     <itemizedlist>
       <listitem>
@@ -158,6 +159,14 @@
         spectacularly.</para>
       </listitem>
     </itemizedlist>
+
+    <para>In the absence of sharing, SAF is two times as fast and yields
+    results that are two times as small as compared to ATerm ASCII.</para>
+
+    <para><emphasis role="bold">For the case that there is sharing</emphasis>,
+    results vary depending on the sharing percentage. For 90% shared nodes,
+    SAF is over 1000 times as fast and the result is also 1000 times
+    smaller.</para>
 
     <para>In <xref linkend="section.considerations" /> we sketch the general
     considerations to be taken into account when performing such a comparions
