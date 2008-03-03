@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>Error Detection and Fault Tolerance in the Calc Example</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The goal of this note is to play with variants of the calculator
+    example in order to explore options for error detection and error
+    recovery.<warning>
+        <para>These are just thought experiments!</para>
+      </warning></para>
+  </section>
+
+  <section>
+    <title>The Calculator Example</title>
+
+    <para>Consider the following simplified version of the calculator (that
+    already uses the new from/to extensions in snd-msg/rec-msg):</para>
+
+    <para><programlisting>process CALC is
+    let Tid : calc, E : str, V : term, P : process-id
+    in
+         execute(calc, Tid?).
+          (
+            rec-msg(compute(E?)) from P? .
+            snd-eval(Tid, expr(E)) . 
+            rec-value(Tid, val(V?)) .
+            snd-msg(compute(E, V)) to P
+          )* delta
+    endlet
+
+tool calc is { command = &#8220;calc&#8221;}
+
+process CALC-BUTTON(Tid : ui) is
+    let N : int, E : str, V : term, P : process-id
+    in
+       execute(ui, Tid?) .
+       ( rec-event(Tid, N?, button(calc, E?)) . 
+         snd-msg(compute(E)) to P? .
+         rec-msg(compute(E, V?)) from P .
+         snd-do(Tid, display-value(V))
+         snd-ack-event(Tid, N) 
+       )* delta        
+    endlet
+
+tool ui is {command = "ui"}
+
+toolbus(CALC, UI)</programlisting></para>
+  </section>
+
+  <section>
+    <title>Case: cannot execute calc</title>
+
+    <para>What can we reasonably do in this case:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Print a message and shutdown the application.</para>
+      </listitem>
+
+      <listitem>
+        <para>Retry a few times and then give up.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Error detection</title>
+
+      <para>Assumptions:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Current situation: an execute that cannot execute the
+          corresponding tool never becomes enabled.</para>
+        </listitem>
+
+        <listitem>
+          <para>Envisaged situation: execute generates a note in this
+          case.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We add an extra monitor process that does a shutdown of the
+      application:<programlisting>process CALC-monitor is
+let P : process-id
+in
+    create(CALC, P?) .
+    rec-note(fatal-error(P, S?)).
+    printf("Fatal tool error: %s\n", S) .
+    shutdown(S)
+endlet</programlisting>Discussion:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>There is a range of options how to send the note: is it an
+          ordinary broadcast or do we send it to the parent process?</para>
+        </listitem>
+
+        <listitem>
+          <para>What are the error categories: info, warning, fatal? Where the
+          former only print a message and fatal stops the current
+          process.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Error correction</title>
+
+      <para>We add an extra monitor process that does 3 restarts of the CALC
+      process:<programlisting>process CALC-monitor is
+let P : process-id, Retry : int
+in
+    Retry := 0 .
+    create(CALC, P?) .
+    ( rec-note(fatal-execute-error(P, S?)).
+      if less(Retry, 3) then
+         printf("tool error: %s\n", S) .
+         Retry := Retry + 1 .
+         create(CALC, P?)
+      else 
+         printf("Fatal tool error: %s\n", S) .
+         shutdown(S)
+      fi
+    +
+    ) * delta
+endlet</programlisting></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Case: calc tools dies while executing eval request</title>
+
+    <para>This case is trickier since now UI and CALC are in the middle of a
+    conversation. In fact both have to be killed and the complete application
+    has to be restarted! It does not seem that much more error recovery is
+    possible.</para>
+  </section>
+
+  <section>
+    <title>Wrap up</title>
+
+    <para>TBD</para>
+  </section>
+</chapter>
