@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -77,13 +77,13 @@
           <row>
             <entry>ATerm ASCII</entry>
 
-            <entry>+</entry>
+            <entry>+/-</entry>
 
             <entry>--</entry>
 
-            <entry>+/-</entry>
+            <entry>-</entry>
 
-            <entry>+</entry>
+            <entry>+/-</entry>
           </row>
 
           <row>
@@ -101,11 +101,11 @@
           <row>
             <entry>XML</entry>
 
-            <entry>+</entry>
+            <entry>+/-</entry>
 
-            <entry>+</entry>
+            <entry>+/-</entry>
 
-            <entry>+</entry>
+            <entry>+/-</entry>
 
             <entry>--</entry>
           </row>
@@ -160,13 +160,11 @@
       </listitem>
     </itemizedlist>
 
-    <para>In the absence of sharing, SAF is two times as fast and yields
-    results that are two times as small as compared to ATerm ASCII.</para>
-
-    <para>For the case that there is <emphasis>sharing</emphasis>, results
-    vary depending on the sharing percentage. For 90% shared nodes, SAF is
-    over 1000 times as fast and the result is also over 1000 times
-    smaller.</para>
+    <para>In the absence of sharing, SAF is about two times as fast and yields
+    results that are generally over two times as small compared to ATerm
+    ASCII. However when we add sharing to the equation, the advantage ATerm
+    SAF has over ATerm ASCII increases considerably. The benchmarks with
+    'real-life' ATerm examples confirm these observations.</para>
 
     <para>In <xref linkend="section.considerations" /> we sketch the general
     considerations to be taken into account when performing such a comparions
@@ -512,6 +510,39 @@
             document with 50000 nodes, given a certain percentage of
             sharing.</para>
           </caption>
+        </mediaobject>
+      </section>
+
+      <section>
+        <title>Real life examples</title>
+
+        <para>To provide some insight into the 'real-life' performance of both
+        the ATerm formats we executed a number of tests with documents from
+        the Meta-environment. Parse tables that were generated from a
+        (ASF-)SDF specification to be precise. Generally these parse tables
+        contain lots of shared nodes, which the ATerm SAF encoding can take
+        advantage of. As can be observed, using ATerm SAF instead of ATerm
+        ASCII has a noticable benefit, especially in the case of the
+        SDF-syntax parse table example; here it reduced parsing speed by a
+        factor 100 and achieved a compression rate of over 99.6%. Admittedly
+        this is an extreme case though. </para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Transformer_real.png" scale="65"></imagedata>
+          </imageobject>
+        </mediaobject>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Parser_real.png" scale="65"></imagedata>
+          </imageobject>
+        </mediaobject>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="Size_real.png" scale="65"></imagedata>
+          </imageobject>
         </mediaobject>
       </section>
     </section>
