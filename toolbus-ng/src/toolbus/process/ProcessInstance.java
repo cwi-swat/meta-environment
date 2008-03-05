@@ -67,6 +67,10 @@ public class ProcessInstance{
 		addPartnersToAllProcesses(elements);
 	}
 	
+	public ProcessDefinition getProcessDefinition(){
+		return definition;
+	}
+	
 	public TBTermFactory getTBTermFactory(){
 		return tbfactory;
 	}
