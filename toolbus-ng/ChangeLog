@@ -1,3 +1,6 @@
+Wed Mar 05 10:37:50 CEST 2008 <lankamp@cwi.nl>
+  * src/toolbus/parsercup/*: Position information is now properly being added to process definitions.
+
 Thu Feb 21 13:57:03 CEST 2008 <lankamp@cwi.nl>
   * src/toolbus/commandline/CommandLine.java: The ToolBus no longer starts with the Console on by default. Instead it can be enabled when required by starting the ToolBus with the --with-console flag.
 

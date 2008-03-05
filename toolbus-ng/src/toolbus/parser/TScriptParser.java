@@ -301,13 +301,13 @@ class TScriptNodeBuilders{
 		
 		define(new NodeBuilder("ttt-ProcessDefinition0"){
 			public Object build(Object args[], ATerm posInfo){
-				return new ProcessDefinition(((ATermAppl) args[0]).getName(), tbfactory.EmptyList, (ProcessExpression) args[1], tbfactory);
+				return new ProcessDefinition(((ATermAppl) args[0]).getName(), tbfactory.EmptyList, (ProcessExpression) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-ProcessDefinition"){
 			public Object build(Object args[], ATerm posInfo){
-				return new ProcessDefinition(((ATermAppl) args[0]).getName(), (ATermList) args[1], (ProcessExpression) args[2], tbfactory);
+				return new ProcessDefinition(((ATermAppl) args[0]).getName(), (ATermList) args[1], (ProcessExpression) args[2], tbfactory, null);
 			}
 		});
 		

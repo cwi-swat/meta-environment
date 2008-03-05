@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import toolbus.TBTermFactory;
@@ -566,15 +567,15 @@ let_tail::=
      ;
 
 proc_def_name::=
-       PROCESS NAME:nm                       {: parser.processName = nm;
+       NAME:nm                               {: parser.processName = nm;
                                                 RESULT = nm; 
                                              :}                
      ;
 
 proc_def::=
-       proc_def_name:nm formals:fml IS proc:p
+       PROCESS proc_def_name:nm formals:fml IS proc:p
                                              {: if(parser.generating()){
-                                             	  ProcessDefinition pd = new ProcessDefinition(nm, fml, p, parser.tbfactory);
+                                             	  ProcessDefinition pd = new ProcessDefinition(nm, fml, p, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)));
                                                   parser.toolbus.addProcessDefinition(pd); 
                                                   parser.processName = "";
                                                 }

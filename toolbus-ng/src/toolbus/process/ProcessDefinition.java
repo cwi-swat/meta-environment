@@ -8,6 +8,7 @@ import toolbus.Functions;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.exceptions.ToolBusError;
+import toolbus.parsercup.PositionInformation;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -19,12 +20,18 @@ public class ProcessDefinition{
 	private final ATermList formals;
 	private final ProcessExpression PE;
 	private final TBTermFactory tbfactory;
+	private final PositionInformation posInfo;
 	
-	public ProcessDefinition(String name, ATermList formals, ProcessExpression PE, TBTermFactory tbfactory){
+	public ProcessDefinition(String name, ATermList formals, ProcessExpression PE, TBTermFactory tbfactory, PositionInformation posInfo){
 		this.name = name;
 		this.formals = formals;
 		this.PE = PE;
 		this.tbfactory = tbfactory;
+		this.posInfo = posInfo;
+	}
+	
+	public PositionInformation getPosInfo(){
+		return posInfo;
 	}
 	
 	public String getName(){
