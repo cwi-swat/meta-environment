@@ -12,18 +12,23 @@ exports
 sorts Declaration VarDecl VarDeclInit 
 
 context-free syntax
-   (BasicType | StructuredType) {Variable ","}+                    -> VarDecl {cons("variable-decl1")}
-   FunctionType | PatternType                                      -> VarDecl {cons("variable-decl2")}
 
-context-free syntax
-   "var" {VarDeclInit ";"}+                                        -> Declaration {cons("variables")}
-   VarDecl (":=" Expression)?                                      -> VarDeclInit
+%% Variable declaration
+   (BasicType | StructuredType) {Variable ","}+                    -> VarDecl {cons("variable-decls")}
+   VarDecl ":=" Expression                                         -> VarDeclInit {cons("var-init-decl")}
 
-context-free syntax
+%% Declarations
+   VarDeclInit                                                     -> Declaration 
    "type" Sort "=" Type                                            -> Declaration {cons("type-decl")}
 
-context-free syntax
    FunctionType "{"  (VarDeclInit ";")* Expression  "}"            -> Declaration {cons("function-decl")}
+
+   "assert" String ":" Expression                                  -> Declaration {cons("assert-decl")}
+
+%% Still missing:
+%% - equations
+%% - yield
+%% - += and -= variable initializations
                                     
 
 

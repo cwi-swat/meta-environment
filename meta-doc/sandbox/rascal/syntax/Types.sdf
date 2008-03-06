@@ -19,12 +19,13 @@ context-free syntax
    "&" Variable                                            -> TypeVar
    TypeVar                                                 -> Sort
 
-   Type Variable?                                         -> LabelledType
+   Type Variable?                                          -> LabelledType
 
    "bool"                                                  -> BasicType {cons("bool-type")} 
    "int"                                                   -> BasicType {cons("int-type")} 
    "str"                                                   -> BasicType {cons("str-type")} 
-%% add locations
+   "loc"                                                   -> BasicType {cons("loc-type")}
+   "any"                                                   -> BasicType {cons("any-type")}
    
    {LabelledType ","}+                                     -> LabelledTypes
    "list" "[" Type "]"                                     -> StructuredType {cons("list-type")} 
@@ -33,9 +34,9 @@ context-free syntax
    "<" LabelledType "," LabelledTypes ">"                  -> StructuredType {cons("tuple-type")}
    Symbol                                                  -> StructuredType {cons("symbol-type")}
 
-   "fun" Type Variable "(" LabelledTypes ")"               -> FunctionType {cond("function-type")}
+   "fun" Type Variable "(" LabelledTypes ")"               -> FunctionType {cons("function-type")}
 
-   "pat" Type Variable "(" LabelledTypes ")"               -> PatternType
+   "pat" Type Variable "(" LabelledTypes ")"               -> PatternType {cons("patttern-type")}
 
    BasicType | StructuredType | FunctionType | PatternType -> Type
  

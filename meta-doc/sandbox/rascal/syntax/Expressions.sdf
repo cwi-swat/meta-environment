@@ -5,79 +5,119 @@ imports
          basic/BoolCon
          basic/StrCon
          basic/IntCon
+         basic/Area
          Variables
 	Types
          Patterns
          Declarations
 
 hiddens
-context-free start-symbols
+context-free start-symbols 
 	Expression
 
 exports
-sorts Expression ExpressionOrPattern LeftHandSide Predicate Strategy Signature RewriteCase RewriteCases
+sorts Expression ExpressionOrPattern LeftHandSide Predicate SimpleGenerator Generator
+      Strategy Signature RewriteCase RewriteCases
 
 context-free syntax
+         "(" Expression ")"                                      -> Expression {bracket}
          BoolCon                                                 -> Expression {cons("boolcon-exp")}
          IntCon                                                  -> Expression {cons("intcon-exp")}
          StrCon                                                  -> Expression {cons("strcon-exp")}
+         Location                                                -> Expression {cons("loccon-exp")}
 	IdCon "(" {ExpressionOrPattern ","}* ")"                -> Expression {cons("fun-call")}
 	Variable                                                -> Expression {cons("variable")}
-         "#" Expression                                          -> Expression {cons("size-op")}
-         Expression "union" Expression                           -> Expression {cons("union-op"), left}
-         Expression "\\" Expression                              -> Expression {cons("diff-op")}
-         Expression "+" Expression                               -> Expression {cons("add-op"), left}
-         Expression "*" Expression                               -> Expression {cons("mul-op")}
-         Expression "x" Expression                               -> Expression {cons("prod-op")}
-         Expression "[" Expression "]"                           -> Expression {cons("limage-op")}
-         Expression "[-," Expression "]"                         -> Expression {cons("rimage-op")}
-         Expression "." Variable                                 -> Expression {cons("field-op")}
-
-         "(" Expression ")"                                      -> Expression {bracket}
-         %% and all other operators ...
-
-context-free syntax
+%% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
 	"{" {Expression ","}* "}"                               -> Expression {cons("set")}
 	"<" {Expression ","}+ ">"                               -> Expression {cons("tuple")}
 
+context-free priorities
+
+%% Closure operators
+       {
+         Expression "*"                                          -> Expression {cons("trans0")}
+         Expression "+"                                          -> Expression {cons("trans1")}
+       } >
+
+         Expression "." Variable                                 -> Expression {cons("field")} > 
+         Expression "o" Expression                               -> Expression {cons("comp"), left} >
+         Expression "x" Expression                               -> Expression {cons("prod"), left} >
+
+%% Set operators
+         Expression "inter" Expression                           -> Expression {cons("inter"), left} >
+         Expression "union" Expression                           -> Expression {cons("union"), left} >
+         Expression "\\" Expression                              -> Expression {cons("diff"), left} >
+        "#" Expression                                           -> Expression {cons("size")} >
+
+%% Arithmetic operators
+
+        Expression "*" Expression                               -> Expression {cons("mul"), left} >
+        Expression "/" Expression                               -> Expression {cons("div"), left} >
+        { Expression "+" Expression                               -> Expression {cons("add"), left}
+          Expression "-" Expression                               -> Expression {cons("sub"), left}
+        } >
+ 
+%% Relational operators
+         {
+         Expression "<" Expression                               -> Predicate {cons("less")}
+         Expression "<=" Expression                              -> Predicate {cons("less-equal")}
+         Expression ">" Expression                               -> Predicate {cons("greater")}
+         Expression ">=" Expression                              -> Predicate {cons("greater-equal")}
+	Expression "in" Expression                              -> Predicate {cons("element-of")}
+	Expression "notin" Expression                           -> Predicate {cons("not-element-of")}
+	Expression "==" Expression                              -> Predicate {cons("equal")}
+	Expression "!=" Expression                              -> Predicate {cons("not-equal")}
+         } >
+
+	"not" Predicate                                         -> Predicate {cons("not")} >
+	Predicate "&" Predicate                                 -> Predicate {cons("and")} >
+	Predicate "|" Predicate                                 -> Predicate {cons("or")} >
+         Predicate "==>" Predicate                               -> Predicate {cons("implies")}
+
 context-free syntax
+	LeftHandSide ":=" Expression                            -> Predicate {cons("match")}
+	LeftHandSide "!:=" Expression                           -> Predicate {cons("not-match")}
+         LeftHandSide "<-" Expression                            -> Predicate {cons("assign")}
+
+context-free priorities 
+
+
+
+context-free syntax
+ 
+
+%% Image operators 
+         Expression "[" Expression "]"                           -> Expression {cons("limage")}
+         Expression "[" Expression "," "-" "]"                   -> Expression {cons("limage2")}
+         Expression "[-," Expression "]"                         -> Expression {cons("rimage")}
+
+%% Generators
         ("first" | "all")? ("td" | "bu")?                        -> Strategy
-	Strategy LeftHandSide ":" Expression                    -> Predicate {cons("generator")}
+	Strategy LeftHandSide ":" Expression                    -> SimpleGenerator {cons("generator")}
 	Type? Variable                                          -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
          "{" {Signature ","}+ "}"                                -> Signature
          (Signature | Pattern)                                   -> LeftHandSide
+         SimpleGenerator                                         -> Generator
+         Predicate                                               -> Generator
 
-context-free syntax
-	"{" Expression "|" {Predicate ","}+ "}"                 -> Expression {cons("set-comprehension")}
-	"[" Expression "|" {Predicate ","}+ "]"                 -> Expression {cons("list-comprehension")}
-         Expression                                              -> Predicate
-	Expression "==" Expression                              -> Predicate {cons("equal")}
-	Expression "!=" Expression                              -> Predicate {cons("non-equal")}
-	LeftHandSide ":=" Expression                            -> Predicate {cons("match")}
-	LeftHandSide "!:=" Expression                           -> Predicate {cons("non-match")}
-         LeftHandSide "<-" Expression                            -> Predicate {cons("assign")}
-	Expression "in" Expression                              -> Predicate {cons("element-of")}
-	Expression "notin" Expression                           -> Predicate {cons("not-element-of")}
-
-         Expression ">" Expression                               -> Predicate {cons("greater")}
+%% Comprehensions
+	"{" Expression "|" {Generator ","}+ "}"                 -> Expression {cons("set-comprehension")}
+	"[" Expression "|" {Generator ","}+ "]"                 -> Expression {cons("list-comprehension")}
+         "exists" "(" SimpleGenerator "|" Predicate ")"          -> Expression {cons("exists")}
+         "forall" "(" SimpleGenerator "|" Predicate ")"          -> Expression {cons("forall")}
 
 	"(" Predicate ")"                                       -> Predicate {bracket}
-
-context-free priorities
-	"not" Predicate                                         -> Predicate {cons("not")} >
-	Predicate "&" Predicate                                 -> Predicate {cons("and")} >
-	Predicate "|" Predicate                                 -> Predicate {cons("or")}
 
 context-free syntax
          "if" Predicate "then" Expression "else" Expression "fi" -> Expression
 %% Do we want elseif etc.?
 
-context-free syntax
-        Expression | Pattern                                     -> ExpressionOrPattern
+%% Switch and replace
+         Expression | Pattern                                     -> ExpressionOrPattern
 
-   	Pattern "=>" ExpressionOrPattern ("when" {Predicate ","}+ )?      -> RewriteCase
+         Pattern "=>" ExpressionOrPattern ("when" {Predicate ","}+ )?      -> RewriteCase
    	"{" RewriteCase+ "}"                                     -> RewriteCases
 
    	"switch" Expression RewriteCases                         -> Expression
