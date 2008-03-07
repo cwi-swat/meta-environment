@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1478,6 +1478,86 @@ fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
 }</programlisting>Do we want this generality? What are the implications for
       the implementation? The current syntax does not yet allow type variables
       in patterns.</para>
+    </section>
+
+    <section>
+      <title>Reaching definitions</title>
+
+      <para>Recall the equations construct as used, for example, in the
+      reaching definitions example in the Rscript guide. It computes the
+      values of a set of variables until none of them changes any
+      longer.<programlisting>type def  = &lt;stat theStat, var theVar&gt;
+type use  = &lt;stat theStat, var theVar&gt;
+
+set[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
+
+set[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
+
+rel[stat, def] reaching-definitions(rel[stat,var] DEFS, 
+                                    rel[stat,stat] PRED) = 
+   IN
+where
+    set[stat] STATEMENT = carrier(PRED)
+
+    rel[stat,def] DEF  = {&lt;S,&lt;S,V&gt;&gt; | &lt;stat S, var V&gt; : DEFS}
+
+    rel[stat,def] KILL = 
+        {&lt;S1, &lt;S2, V&gt;&gt; | &lt;stat S1, var V&gt; : DEFS, 
+                         &lt;stat S2, V&gt; : DEFS, 
+                         S1 != S2
+        }
+
+    equations 
+       initial
+           rel[stat,def] IN init {}
+           rel[stat,def] OUT init DEF
+       satisfy
+           IN  =  {&lt;S, D&gt; | int S : STATEMENT, 
+                            stat P : predecessor(PRED,S), 
+                            def D : OUT[P]}
+           OUT = {&lt;S, D&gt; |  int S : STATEMENT, 
+                            def D : DEF[S] union (IN[S] \ KILL[S])}
+    end equations
+end where</programlisting>We could replace the equations part by a recursive
+      function that iterates as long as changes are observed. However, this
+      introduces various scope issues since how DEF, KILL etc be accessed from
+      within this inner recursive function? Here is an adapted version with a
+      similar equations construct (now indicated by <literal>with ... solve
+      ... </literal>):</para>
+
+      <para><programlisting>type def  = &lt;stat theStat, var theVar&gt;
+type use  = &lt;stat theStat, var theVar&gt;
+
+set[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
+
+set[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
+
+&lt;rel[stat,def], rel[stat,def]&gt; reaching_definitions(
+                                    rel[stat,var] DEFS, 
+                                    rel[stat,stat] PRED){
+   set[stat] STATEMENTS := carrier(PRED)
+
+   rel[stat,def] DEF := {&lt;S,&lt;S,V&gt;&gt; | &lt;stat S, var V&gt; : DEFS}
+
+   rel[stat,def] KILL := 
+        {&lt;S1, &lt;S2, V&gt;&gt; | &lt;stat S1, var V&gt; : DEFS, 
+                         &lt;stat S2, V&gt; : DEFS, 
+                         S1 != S2
+        }
+
+   with {
+     rel[stat,def] IN := {};
+     rel[stat,def] OUT := DEF
+   } solve {
+     IN  = {&lt;S, D&gt; | stat S : STATEMENTS, 
+                                  stat P : predecessor(S), 
+                                  def D : OUT[P]};
+     OUT = {&lt;S, D&gt; | stat S : STATEMENTS, 
+                                  def D : DEF[S] union (IN[S] \ KILL[S])};
+   }
+}</programlisting><note>
+          <para>We should explore solutions that only use recursion.</para>
+        </note></para>
     </section>
   </section>
 
