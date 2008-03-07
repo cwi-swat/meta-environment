@@ -555,7 +555,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>Quoted pattern with typed variables:<programlisting>[| while &lt;EXP Exp&gt; do &lt;${STATEMENT ";"}* Stats&gt; od |]</programlisting></para>
+          <para>Quoted pattern with typed variables:<programlisting>[| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od |]</programlisting></para>
         </listitem>
 
         <listitem>
@@ -563,7 +563,7 @@
         </listitem>
 
         <listitem>
-          <para>Unquoted pattern with typed variables:<programlisting>while &lt;EXP Exp&gt; do &lt;${STATEMENT ";"}* Stats&gt; od</programlisting></para>
+          <para>Unquoted pattern with typed variables:<programlisting>while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od</programlisting></para>
         </listitem>
 
         <listitem>
