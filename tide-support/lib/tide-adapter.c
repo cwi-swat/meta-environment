@@ -439,6 +439,7 @@ int TA_createProcess(int proc_cid, char *name)
         processes[pid].rules[rid].id = RID_FREE;
       }
       ATBpostEvent(proc_cid, ATmake("process-created(<int>,<str>)", pid, name));
+      ATBhandleOne(proc_cid);
 
       return pid;
     }
@@ -614,6 +615,7 @@ static void triggerRule(int pid, TA_Rule *rule)
   TA_Expr value = TA_evaluate(pid, rule->action);
 
   ATBpostEvent(cid, ATmake("event(<int>,<int>,<term>)", pid, rule->id, value)); 
+  ATBhandleOne(cid);
 }
 
 /*}}}  */
