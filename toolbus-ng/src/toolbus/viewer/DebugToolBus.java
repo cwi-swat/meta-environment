@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import toolbus.IOperations;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
@@ -24,10 +23,7 @@ import toolbus.process.ProcessCall;
 import toolbus.process.ProcessInstance;
 import toolbus.process.debug.ExecutionResult;
 import toolbus.tool.ToolInstance;
-import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashSet;
-import toolbus.util.collections.EntryHandlerConstants;
-import toolbus.util.collections.ConcurrentHashMap.HashMapEntryHandler;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -50,18 +46,13 @@ public class DebugToolBus extends ToolBus{
 	private volatile boolean breakWhileStepping;
 	
 	private final IViewer viewer;
-	private final IPerformanceMonitor performanceMonitor;
 	
 	private final ConcurrentHashSet<Integer> processInstanceBreakPoints;
 	private final ConcurrentHashSet<String> processBreakPoints;
 	private final ConcurrentHashSet<StateElement> stateElementBreakPoints;
 	private final Map<String, List<Integer>> sourceCodeBreakPoints;
-
-	private final ConcurrentHashSet<ATerm> toolInstancesToMonitor;
-	private final ConcurrentHashSet<String> toolTypesToMonitor;
 	
-	private final ConcurrentHashMap<ToolInstance, ATerm> arrivedPerformanceStats;
-	private final PerformanceStatsEntryHandler performanceStatsEntryHandler;
+	private final PerformanceInformationHandler performanceInformationRetriever;
 	
 	private long nextTime;
 	
@@ -80,18 +71,13 @@ public class DebugToolBus extends ToolBus{
 		super(args);
 		
 		this.viewer = viewer;
-		this.performanceMonitor = performanceMonitor;
+		
+		this.performanceInformationRetriever = (performanceMonitor != null) ? new PerformanceInformationHandler(performanceMonitor): null;
 		
 		processInstanceBreakPoints = new ConcurrentHashSet<Integer>();
 		processBreakPoints = new ConcurrentHashSet<String>();
 		stateElementBreakPoints = new ConcurrentHashSet<StateElement>();
 		sourceCodeBreakPoints = new HashMap<String, List<Integer>>();
-
-		toolInstancesToMonitor = new ConcurrentHashSet<ATerm>();
-		toolTypesToMonitor = new ConcurrentHashSet<String>();
-		
-		arrivedPerformanceStats = new ConcurrentHashMap<ToolInstance, ATerm>();
-		performanceStatsEntryHandler = new PerformanceStatsEntryHandler(performanceMonitor);
 		
 		nextTime = 0;
 		
@@ -199,7 +185,7 @@ public class DebugToolBus extends ToolBus{
 								// Just ignore this, it's not harmfull.
 							}
 							
-							if(performanceMonitor != null) arrivedPerformanceStats.iterate(performanceStatsEntryHandler); // Handle the arrived performance stats before continueing to execute the process logic.
+							if(performanceInformationRetriever != null) performanceInformationRetriever.handleRetrievedData(); // Handle the arrived performance stats before continueing to execute the process logic.
 						}
 						
 						if(shuttingDown) return; // Stop executing if a shutdown is triggered.
@@ -290,7 +276,7 @@ public class DebugToolBus extends ToolBus{
 						}
 					}
 					
-					if(performanceMonitor != null) arrivedPerformanceStats.iterate(performanceStatsEntryHandler); // Handle the arrived performance stats before continueing the process.
+					if(performanceInformationRetriever != null) performanceInformationRetriever.handleRetrievedData(); // Handle the arrived performance stats before continueing the process.
 				}while((doRun && (work || !reset)) || (doStep && !reset));
 				workHasArrived |= work; // If we did something, set this to ensure we can release the lock when needed.
 			}while(running);
@@ -306,19 +292,8 @@ public class DebugToolBus extends ToolBus{
 	 * @see toolbus.ToolBus#workArrived()
 	 */
 	public void workArrived(ToolInstance toolInstance, byte operation){
-		if(performanceMonitor != null){
-			if(operation == IOperations.DEBUGPERFORMANCESTATS){
-				arrivedPerformanceStats.put(toolInstance, toolInstance.getLastDebugPerformanceStats());
-			}else if(operation == IOperations.CONNECT){
-				performanceMonitor.toolConnected(toolInstance);
-			}else if(operation == IOperations.END){
-				performanceMonitor.toolConnectionClosed(toolInstance);
-			}else if(toolInstance.isConnected()){
-				// TODO Add timeouts and deadlines and such.
-				if(toolInstancesToMonitor.contains(toolInstance.getToolKey()) || toolTypesToMonitor.contains(toolInstance.getToolName())){
-					toolInstance.sendDebugPerformanceStatsRequest();
-				}
-			}
+		if(performanceInformationRetriever != null){
+			performanceInformationRetriever.toolCommunicationTriggered(toolInstance, operation);
 		}
 		
 		if(!workHasArrived){
@@ -582,7 +557,7 @@ public class DebugToolBus extends ToolBus{
 	 *            The tool key associated with the tool we want to monitor.
 	 */
 	public void startMonitoringTool(ATerm toolKey){
-		toolInstancesToMonitor.put(toolKey);
+		performanceInformationRetriever.startMonitoringTool(toolKey);
 	}
 	
 	/**
@@ -592,7 +567,7 @@ public class DebugToolBus extends ToolBus{
 	 *            The tool key associated with the tool which we want to stop monitoring.
 	 */
 	public void stopMonitoringTool(ATerm toolKey){
-		toolInstancesToMonitor.remove(toolKey);
+		performanceInformationRetriever.startMonitoringTool(toolKey);
 	}
 	
 	/**
@@ -603,7 +578,7 @@ public class DebugToolBus extends ToolBus{
 	 *            The tool type of tool we want to monitor.
 	 */
 	public void startMonitorToolType(String toolName){
-		toolTypesToMonitor.put(toolName);
+		performanceInformationRetriever.startMonitorToolType(toolName);
 	}
 	
 	/**
@@ -613,36 +588,6 @@ public class DebugToolBus extends ToolBus{
 	 *            The type of tool which we want to stop monitoring.
 	 */
 	public void stopMonitoringToolType(String toolName){
-		toolTypesToMonitor.remove(toolName);
-	}
-	
-	/**
-	 * Entry handler used for iterating over the arrived performance statistics.
-	 * 
-	 * @author Arnold Lankamp
-	 */
-	private static class PerformanceStatsEntryHandler extends HashMapEntryHandler<ToolInstance, ATerm>{
-		private final IPerformanceMonitor performanceMonitor;
-	
-		/**
-		 * Costructor.
-		 * 
-		 * @param performanceMonitor
-		 *            The performance monitor that handles the data.
-		 */
-		public PerformanceStatsEntryHandler(IPerformanceMonitor performanceMonitor){
-			super();
-			
-			this.performanceMonitor = performanceMonitor;
-		}
-		
-		/**
-		 * @see toolbus.util.collections.ConcurrentHashMap.HashMapEntryHandler#handle(Object, Object)
-		 */
-		public int handle(ToolInstance toolInstance, ATerm performanceStats){
-			performanceMonitor.performanceStatsArrived(toolInstance, performanceStats);
-			
-			return EntryHandlerConstants.REMOVE;
-		}
+		performanceInformationRetriever.stopMonitoringToolType(toolName);
 	}
 }

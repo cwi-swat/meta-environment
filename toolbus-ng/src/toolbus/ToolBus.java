@@ -35,6 +35,7 @@ import toolbus.tool.ToolInstance;
 import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashSet;
 import toolbus.util.collections.EntryHandlerConstants;
+import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
 import toolbus.util.collections.ConcurrentHashSet.ReadOnlyHashSetEntryHandler;
 import aterm.ATerm;
 import aterm.ATermList;
@@ -320,6 +321,20 @@ public class ToolBus{
 			processes.add(pi);
 		}
 		return pi;
+	}
+	
+	public List<ProcessDefinition> getProcessDefinitions(){
+		final List<ProcessDefinition> processDefinitions = new ArrayList<ProcessDefinition>();
+		
+		procdefs.iterate(new ReadOnlyHashMapEntryHandler<String, ProcessDefinition>(){
+			public int handle(String key, ProcessDefinition value){
+				processDefinitions.add(value);
+				
+				return CONTINUE;
+			}
+		});
+		
+		return processDefinitions;
 	}
 	
 	/**
