@@ -21,6 +21,7 @@ import toolbus.util.concurrency.Latch;
  */
 public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 	private final Latch selectionPreventionLatch = new Latch();
+	private final Object registrationLock = new Object();
 	
 	private final AbstractConnectionHandler connectionHandler;
 	private final Selector selector;
@@ -135,7 +136,9 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 
 		// If there is not more data that needs to be written or the channel has been closed in the
 		// mean time, de-register it.
-		if(!ioHandler.hasMoreToWrite() || !channel.isOpen()) deregisterForWrite(channel);
+		synchronized(registrationLock){
+			if(!ioHandler.hasMoreToWrite() || !channel.isOpen()) deregisterForWrite(channel);
+		}
 	}
 
 	/**
@@ -148,12 +151,14 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 			selector.wakeup();
 			
 			try{
-				SelectionKey key = channel.keyFor(selector);
-				if(key == null){
-					channel.register(selector, SelectionKey.OP_WRITE, ioHandler);
-				}else{
-					key.interestOps(SelectionKey.OP_WRITE);
-					key.attach(ioHandler);
+				synchronized(registrationLock){
+					SelectionKey key = channel.keyFor(selector);
+					if(key == null){
+						channel.register(selector, SelectionKey.OP_WRITE, ioHandler);
+					}else{
+						key.interestOps(SelectionKey.OP_WRITE);
+						key.attach(ioHandler);
+					}
 				}
 			}catch(IOException ioex){
 				LoggerFactory.log("Registering a channel for writing failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
@@ -173,15 +178,16 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 		
 		try{
 			selector.wakeup();
-	
-			SelectionKey key = channel.keyFor(selector);
-	
-			if(key != null){
-				if(key.isValid()) key.interestOps(0);
-				else key.cancel();
-	
-				// Remove the attachment (if any), so it can be GCed
-				key.attach(null);
+			
+			synchronized(registrationLock){
+				SelectionKey key = channel.keyFor(selector);
+				if(key != null){
+					if(key.isValid()) key.interestOps(0);
+					else key.cancel();
+		
+					// Remove the attachment (if any), so it can be GCed
+					key.attach(null);
+				}
 			}
 		}finally{
 			selectionPreventionLatch.release();

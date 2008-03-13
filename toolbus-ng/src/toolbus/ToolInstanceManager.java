@@ -247,6 +247,36 @@ public class ToolInstanceManager{
 		return (activeTools.size() + dynamiclyConnectedTools.size());
 	}
 	
+	/**
+	 * Prints all current queued values and events.
+	 */
+	public void printQueueTerms(){
+		HashMapEntryHandler<ATerm, ToolInstance> activeToolsIterationHandler = new ReadOnlyHashMapEntryHandler<ATerm, ToolInstance>(){
+			public int handle(ATerm toolKey, ToolInstance toolInstance){
+				ATerm[] queuedValues = toolInstance.getQueuedValues();
+				ATerm[] queuedEvents = toolInstance.getQueuedEvents();
+				
+				int nrOfQueueValues = queuedValues.length;
+				int nrOfQueueEvents = queuedEvents.length;
+				
+				if((nrOfQueueValues + nrOfQueueEvents) > 0){
+					System.err.println(toolKey+":");
+					
+					for(int i = nrOfQueueValues - 1; i >= 0; i--){
+						System.err.println("rec-value("+queuedValues[i]+")");
+					}
+					
+					for(int i = nrOfQueueEvents - 1; i >= 0; i--){
+						System.err.println("rec-event("+queuedEvents[i]+")");
+					}
+				}
+				
+				return EntryHandlerConstants.CONTINUE;
+			}
+		};
+		activeTools.iterate(activeToolsIterationHandler);
+	}
+	
 	public void showStatus(){
 		// Show the active tools.
 		HashMapEntryHandler<ATerm, ToolInstance> activeToolsIterationHandler = new ReadOnlyHashMapEntryHandler<ATerm, ToolInstance>(){

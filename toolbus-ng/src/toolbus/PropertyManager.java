@@ -47,7 +47,7 @@ public class PropertyManager{
 		}
 	}
 	
-	public void handleComandLineArguments(String args[]){
+	private void handleComandLineArguments(String args[]){
 		Pattern pdefine = Pattern.compile("-D(.*)=(.*)");
 		Pattern pinclude = Pattern.compile("-I(.*)");
 		Pattern pscript = Pattern.compile("-S(.*)");

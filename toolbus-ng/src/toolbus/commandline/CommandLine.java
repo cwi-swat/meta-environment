@@ -51,6 +51,8 @@ public class CommandLine{
 						toolbus.dumpPerformanceStats();
 					}else if(line.equals("dump tools status")){
 						toolbus.getToolInstanceManager().showStatus();
+					}else if(line.equals("dump queued messages")){
+						toolbus.getToolInstanceManager().printQueueTerms();
 					}else if(line.equals("dump toolbus state")){
 						toolbus.showStatus();
 					}else if(line.equals("shutdown")){
@@ -59,6 +61,7 @@ public class CommandLine{
 						System.err.println("dump unhandled messages: Prints all (currently) unhandled messages and enqueued notes.");
 						System.err.println("dump performance stats: Prints some performance statistics related to the execution of the ToolBus.");
 						System.err.println("dump tools status: Prints a listing of currently connected tools with their corresponding state.");
+						System.err.println("dump queued messages: Prints all (currently) queued values and events.");
 						System.err.println("dump toolbus state: Dumps all available information about the current state of the process logic to the command line.");
 						System.err.println("shutdown: Initiates the forcefull termination of the ToolBus.");
 					}else if(line.equals("")){

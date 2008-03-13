@@ -516,7 +516,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 	private final static int UNREACHABLE = 6; // Error state.
 	private final static int TERMINATED = 7; // End state.
 	
-	private int state = UNCONNECTED;
+	private volatile int state = UNCONNECTED;
 	
 	private final Object stateLock = new Object();
 	
@@ -524,17 +524,15 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * Notifies this tool instance that the tool connected.
 	 */
 	private void goConnected(){
-		synchronized(stateLock){
-			state = READY;
-		}
+		state = READY;
 	}
 	
 	/**
 	 * Notifies this tool instance that the tool is ready to receive a new DO or EVAL request.
 	 */
-	private void goReady(){
+	public void goReady(){
 		synchronized(stateLock){
-			if(state == BLOCKED) state = READY;
+			if(state == BLOCKED) state = READY; // Only go back to ready when we're still reachable (i.e. not killed/terminated/disconnected).
 		}
 	}
 	
@@ -543,7 +541,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 */
 	private void goDisconnected(){
 		synchronized(stateLock){
-			if(isConnected()) state = DISCONNECTED;
+			if(isConnected()) state = DISCONNECTED; // Only go back to disconnected when we're still reachable (i.e. not killed/terminated).
 		}
 	}
 	
@@ -551,27 +549,21 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * Notifies this tool instance that the tool has terminated.
 	 */
 	private void goTerminated(){
-		synchronized(stateLock){
-			state = TERMINATED;
-		}
-	}
-	
-	/**
-	 * Notifies this tool instance that the tool has become unreachable.
-	 */
-	private void goUnreachable(){
-		synchronized(stateLock){
-			state = UNREACHABLE;
-		}
+		state = TERMINATED;
 	}
 	
 	/**
 	 * Notifies this tool instance that the tool has been killed.
 	 */
 	private void goKilled(){
-		synchronized(stateLock){
-			state = KILLED;
-		}
+		state = KILLED;
+	}
+	
+	/**
+	 * Notifies this tool instance that the tool has become unreachable.
+	 */
+	private void goUnreachable(){
+		state = UNREACHABLE;
 	}
 	
 	/**
@@ -580,9 +572,16 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * @return True if the tool is connected; false otherwise.
 	 */
 	public boolean isConnected(){
-		synchronized(stateLock){
-			return ((state & (READY | BLOCKED)) != 0);
-		}
+		return ((state & (READY | BLOCKED)) != 0); // We can do something smart here (0x2 indicates that we're connected since the ready and blocked states are the only two states for which this bit is set).
+	}
+	
+	/**
+	 * Checks if the tool is ready.
+	 * 
+	 * @return True if the tool is ready; false otherwise.
+	 */
+	public boolean isReady(){
+		return (state == READY);
 	}
 	
 	/**
@@ -591,20 +590,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * @return True if the tool has disconnected; false otherwise.
 	 */
 	public boolean isDisconnected(){
-		synchronized(stateLock){
-			return (state == DISCONNECTED);
-		}
-	}
-	
-	/**
-	 * Checks if the tool has become unreachable.
-	 * 
-	 * @return True if the tool has become unreachable.
-	 */
-	public boolean isUnreachable(){
-		synchronized(stateLock){
-			return (state == UNREACHABLE);
-		}
+		return (state == DISCONNECTED);
 	}
 	
 	/**
@@ -613,9 +599,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * @return True if the tool has been terminated.
 	 */
 	public boolean isTerminated(){
-		synchronized(stateLock){
-			return (state == KILLED);
-		}
+		return (state == TERMINATED);
 	}
 	
 	/**
@@ -624,9 +608,16 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * @return True if the tool has been killed; false otherwise.
 	 */
 	public boolean isKilled(){
-		synchronized(stateLock){
-			return (state == KILLED);
-		}
+		return (state == KILLED);
+	}
+	
+	/**
+	 * Checks if the tool has become unreachable.
+	 * 
+	 * @return True if the tool has become unreachable.
+	 */
+	public boolean isUnreachable(){
+		return (state == UNREACHABLE);
 	}
 	
 	/**
@@ -643,6 +634,32 @@ public class ToolInstance implements IDataHandler, IOperations{
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns an array of all queued rec-value terms for this tool instance.
+	 * 
+	 * @return An array of all queued rec-value terms for this tool instance.
+	 */
+	public ATerm[] getQueuedValues(){
+		synchronized(valuesFromTool){
+			ATerm[] queuedValues = new ATerm[valuesFromTool.size()];
+			valuesFromTool.toArray(queuedValues);
+			return queuedValues;
+		}
+	}
+	
+	/**
+	 * Returns an array of all queued rec-event terms for this tool instance.
+	 * 
+	 * @return An array of all queued rec-event terms for this tool instance.
+	 */
+	public ATerm[] getQueuedEvents(){
+		synchronized(eventsFromTool){
+			ATerm[] queuedEvents = new ATerm[eventsFromTool.size()];
+			eventsFromTool.toArray(queuedEvents);
+			return queuedEvents;
+		}
 	}
 	
 	/**

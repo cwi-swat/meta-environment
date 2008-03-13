@@ -26,7 +26,6 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 	private final ProcessExpression[] expr;
 	
 	private final State[] state;
-	private final State[] initialState;
 	private final State mergeState;
 	
 	private boolean rightLast = false;
@@ -39,7 +38,6 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 		expr[RIGHT] = right;
 		
 		state = new State[2];
-		initialState = new State[2];
 		mergeState = new State();
 		mergeState.addElement(this);
 	}
@@ -53,10 +51,10 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 		this.processInstance = processInstance;
 		
 		expr[LEFT].compile(processInstance, calls, follows);
-		initialState[LEFT] = state[LEFT] = expr[LEFT].getFirst();
+		state[LEFT] = expr[LEFT].getFirst();
 		
 		expr[RIGHT].compile(processInstance, calls, follows);
-		initialState[RIGHT] = state[RIGHT] = expr[RIGHT].getFirst();
+		state[RIGHT] = expr[RIGHT].getFirst();
 		setFollow(follows);
 	}
 	
