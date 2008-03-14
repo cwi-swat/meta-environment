@@ -21,6 +21,7 @@ import toolbus.util.concurrency.Latch;
  */
 public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMultiplexer, Runnable{
 	private final Latch selectionPreventionLatch = new Latch();
+	private final Object registrationLock = new Object();
 	
 	private final AbstractConnectionHandler connectionHandler;
 	
@@ -107,8 +108,7 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 						write(key);
 					}
 				}catch(RuntimeException rex){
-					// Catch all RuntimeExceptions. We don't want to risk the termination of this
-					// thread.
+					// Catch all RuntimeExceptions. We don't want to risk the termination of this thread.
 					LoggerFactory.log("A runtime exception occured during the execution of the read multiplexer; killing associated connection.", rex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
 					connectionHandler.closeDueToException((SocketChannel) key.channel(), (SocketIOHandler) key.attachment());
 				}
@@ -148,7 +148,9 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 
 		// If there is not more data that needs to be written or the channel has been closed in the
 		// mean time, de-register it.
-		if(!ioHandler.hasMoreToWrite() || !channel.isOpen()) deregisterForWrite(channel);
+		synchronized(registrationLock){
+			if(!ioHandler.hasMoreToWrite() || !channel.isOpen()) deregisterForWrite(channel);
+		}
 	}
 
 	/**
@@ -161,10 +163,12 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 			selector.wakeup();
 	
 			try{
-				SelectionKey key = channel.keyFor(selector);
-				int interestOps = SelectionKey.OP_READ;
-				if(key != null) interestOps |= key.interestOps();
-				channel.register(selector, interestOps, ioHandler);
+				synchronized(registrationLock){
+					SelectionKey key = channel.keyFor(selector);
+					int interestOps = SelectionKey.OP_READ;
+					if(key != null) interestOps |= key.interestOps();
+					channel.register(selector, interestOps, ioHandler);
+				}
 			}catch(IOException ioex){
 				LoggerFactory.log("Registering a channel for reading failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
 	
@@ -183,18 +187,19 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 		
 		try{
 			selector.wakeup();
-	
-			SelectionKey key = channel.keyFor(selector);
-	
-			if(key != null){
-				if(key.isValid()){
-					key.interestOps(key.interestOps() & (~SelectionKey.OP_READ));
-	
-					// Remove the attachment (if any), so it can be GCed
-					if(key.interestOps() == 0) key.attach(null);
-				}else{
-					key.cancel();
-					key.attach(null);
+			
+			synchronized(registrationLock){
+				SelectionKey key = channel.keyFor(selector);
+				if(key != null){
+					if(key.isValid()){
+						key.interestOps(key.interestOps() & (~SelectionKey.OP_READ));
+		
+						// Remove the attachment (if any), so it can be GCed
+						if(key.interestOps() == 0) key.attach(null);
+					}else{
+						key.cancel();
+						key.attach(null);
+					}
 				}
 			}
 		}finally{
@@ -211,15 +216,17 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 		try{
 			selector.wakeup();
 			
-			try{
-				SelectionKey key = channel.keyFor(selector);
-				int interestOps = SelectionKey.OP_WRITE;
-				if(key != null) interestOps |= key.interestOps();
-				channel.register(selector, interestOps, ioHandler);
-			}catch(IOException ioex){
-				LoggerFactory.log("Registering a channel for writing failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
-	
-				connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
+			synchronized(registrationLock){
+				try{
+					SelectionKey key = channel.keyFor(selector);
+					int interestOps = SelectionKey.OP_WRITE;
+					if(key != null) interestOps |= key.interestOps();
+					channel.register(selector, interestOps, ioHandler);
+				}catch(IOException ioex){
+					LoggerFactory.log("Registering a channel for writing failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
+		
+					connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
+				}
 			}
 		}finally{
 			selectionPreventionLatch.release();
@@ -234,18 +241,19 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 		
 		try{
 			selector.wakeup();
-	
-			SelectionKey key = channel.keyFor(selector);
-	
-			if(key != null){
-				if(key.isValid()){
-					key.interestOps(key.interestOps() & (~SelectionKey.OP_WRITE));
-	
-					// Remove the attachment (if any), so it can be GCed
-					if(key.interestOps() == 0) key.attach(null);
-				}else{
-					key.cancel();
-					key.attach(null);
+			
+			synchronized(registrationLock){
+				SelectionKey key = channel.keyFor(selector);
+				if(key != null){
+					if(key.isValid()){
+						key.interestOps(key.interestOps() & (~SelectionKey.OP_WRITE));
+		
+						// Remove the attachment (if any), so it can be GCed
+						if(key.interestOps() == 0) key.attach(null);
+					}else{
+						key.cancel();
+						key.attach(null);
+					}
 				}
 			}
 		}finally{

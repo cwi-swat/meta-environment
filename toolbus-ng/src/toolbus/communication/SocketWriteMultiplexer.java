@@ -21,7 +21,6 @@ import toolbus.util.concurrency.Latch;
  */
 public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 	private final Latch selectionPreventionLatch = new Latch();
-	private final Object registrationLock = new Object();
 	
 	private final AbstractConnectionHandler connectionHandler;
 	private final Selector selector;
@@ -105,8 +104,7 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 					try{
 						write(key);
 					}catch(RuntimeException rex){
-						// Catch all RuntimeExceptions. We don't want to risk the termination of
-						// this thread.
+						// Catch all RuntimeExceptions. We don't want to risk the termination of this thread.
 						LoggerFactory.log("A runtime exception occured during the execution of the write multiplexer; killing associated connection.", rex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
 						connectionHandler.closeDueToException((SocketChannel) key.channel(), (SocketIOHandler) key.attachment());
 					}
@@ -136,7 +134,7 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 
 		// If there is not more data that needs to be written or the channel has been closed in the
 		// mean time, de-register it.
-		synchronized(registrationLock){
+		synchronized(key){
 			if(!ioHandler.hasMoreToWrite() || !channel.isOpen()) deregisterForWrite(channel);
 		}
 	}
@@ -151,11 +149,11 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 			selector.wakeup();
 			
 			try{
-				synchronized(registrationLock){
-					SelectionKey key = channel.keyFor(selector);
-					if(key == null){
-						channel.register(selector, SelectionKey.OP_WRITE, ioHandler);
-					}else{
+				SelectionKey key = channel.keyFor(selector);
+				if(key == null){
+					channel.register(selector, SelectionKey.OP_WRITE, ioHandler);
+				}else{
+					synchronized(key){
 						key.interestOps(SelectionKey.OP_WRITE);
 						key.attach(ioHandler);
 					}
@@ -179,9 +177,9 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 		try{
 			selector.wakeup();
 			
-			synchronized(registrationLock){
-				SelectionKey key = channel.keyFor(selector);
-				if(key != null){
+			SelectionKey key = channel.keyFor(selector);
+			if(key != null){
+				synchronized(key){
 					if(key.isValid()) key.interestOps(0);
 					else key.cancel();
 		

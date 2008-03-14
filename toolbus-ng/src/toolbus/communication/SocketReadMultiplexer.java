@@ -106,8 +106,7 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 						read(key);
 					}
 				}catch(RuntimeException rex){
-					// Catch all RuntimeExceptions. We don't want to risk the termination of this
-					// thread.
+					// Catch all RuntimeExceptions. We don't want to risk the termination of this thread.
 					LoggerFactory.log("A runtime exception occured during the execution of the read multiplexer; killing associated connection.", rex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
 					connectionHandler.closeDueToException((SocketChannel) key.channel(), (SocketIOHandler) key.attachment());
 				}
@@ -147,8 +146,10 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 				if(key == null){
 					channel.register(selector, SelectionKey.OP_READ, ioHandler);
 				}else{
-					key.interestOps(SelectionKey.OP_READ);
-					key.attach(ioHandler);
+					synchronized(key){
+						key.interestOps(SelectionKey.OP_READ);
+						key.attach(ioHandler);
+					}
 				}
 			}catch(IOException ioex){
 				LoggerFactory.log("Registering a channel for reading failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
@@ -172,11 +173,13 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 			SelectionKey key = channel.keyFor(selector);
 	
 			if(key != null){
-				if(key.isValid()) key.interestOps(0);
-				else key.cancel();
-	
-				// Remove the attachment (if any), so it can be GCed
-				key.attach(null);
+				synchronized(key){
+					if(key.isValid()) key.interestOps(0);
+					else key.cancel();
+		
+					// Remove the attachment (if any), so it can be GCed
+					key.attach(null);
+				}
 			}
 		}finally{
 			selectionPreventionLatch.release();
