@@ -157,17 +157,11 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		// env.removeBindings(formals);
 		calls.pop();
 		// System.err.println(name + " expanded as:\n" + PE);
-		
-		processInstance.addToAtomSignature(PE.getAtoms());
 	}
 	
 	private void initDynamicCall() throws ToolBusException{
 		ATermAppl dynprocessname = (ATermAppl) env.getValue(nameAsVar);
 		name = dynprocessname.getName();
-		if(!processInstance.getToolBus().existsProcessDefinition(name, originalActuals.getLength())){
-			//System.err.println("initDynamicCall: Dynamic process " + name +", with "+ originalActuals.getLength() + " actuals, does not exist");
-			return;
-		}
 		compileStaticOrDynamicCall();
 		//System.err.println("Dynamic process name " + name + " => " + dynprocessname);
 		AtomSet callElements = PE.getAtoms();
@@ -178,6 +172,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	private void finishCall(){
 		activated = executing = false;
 		if(!isStaticCall){
+			definition = null;
 			AtomSet callElements = PE.getAtoms();
 			processInstance.delElements(callElements);
 			processInstance.delPartnersFromAllProcesses(callElements);
@@ -186,7 +181,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	
 	public AtomSet getAtoms(){
 		AtomSet r;
-		if(isStaticCall || ((definition != null) && activated)){
+		if((isStaticCall || ((definition != null) && activated)) && PE != null){
 			r = PE.getAtoms();
 		}else{
 			r = new AtomSet();
@@ -234,10 +229,14 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	
 	public boolean isEnabled(){
 		//System.err.println("ProcessCall.isEnabled");
-		if(isStaticCall || ((definition != null) && activated)){
+		/*if(activated && (isStaticCall || definition != null)){
 			return PE.getFirst().isEnabled();
 		}
-		return false;
+		return false;*/
+		
+		// TODO The above code doesn't work for some reason (the 'first state' doesn't always get activated (I think it has to do with the Merge atom)).
+		
+		return (activated && (isStaticCall || definition != null));
 	}
 	
 	public State gotoNextStateAndActivate(){
@@ -262,78 +261,75 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	
 	public void activate(){
 		// System.err.println("ProcessCall.activate: " + this);
-		// System.err.println("isStaticCall = " + isStaticCall + "; activated = " + activated + ";
-		// executing = " + executing);
-		if(activated && executing){
-			return;
-		}
+		// System.err.println("isStaticCall = " + isStaticCall + "; activated = " + activated + "; executing = " + executing);
+		if(activated && executing) return;
 		
 		// System.err.println("ProcessCall.activate: [" + name + "]" + this);
 		// System.err.println("isStaticCall = " + isStaticCall + "; activated = " + activated);
 		if(!isStaticCall){
 			try{
-				definition = null;
 				initDynamicCall();
-				if(definition == null){
-					activated = true;
-					executing = false;
-					return;
-				}
 			}catch(ToolBusException e){
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println(e.getMessage());
+				activated = false;
+				return;
 			}
 		}
 		// System.err.println("ProcessCall: activate first set of PE");
 		activated = true;
-		executing = false;
 		PE.getFirst().activate();
 	}
 	
 	public boolean execute() throws ToolBusException{
 		// System.err.println("ProcessCall.execute: [" + getProcess().getProcessName() + "]" + this);
 		// System.err.println("activated = " + activated + "; executing = " + executing + "; first = " + PE.getFirst());
-		if(activated && !executing){
-			if(definition == null){
-				return false;
+		if(isEnabled()){
+			if(!executing){
+				if(definition == null){
+					return false;
+				}
+				if(PE.getFirst().size() == 0){
+					// System.err.println("case size = 0");
+					executing = true;
+					// System.err.println("ProcessCall [" + getProcess().getProcessName() + "] enter");
+					return true;
+				}
+				// System.err.println("case size != 0");
+				executing = PE.getFirst().execute();
+				// System.err.println("executing => " + executing);
+				// if(executing)System.err.println("ProcessCall [" + getProcess().getProcessName() + "] enter");
+				return executing;
 			}
-			if(PE.getFirst().size() == 0){
-				// System.err.println("case size = 0");
-				executing = true;
-				// System.err.println("ProcessCall [" + getProcess().getProcessName() + "] enter");
-				return true;
-			}
-			// System.err.println("case size != 0");
-			executing = PE.getFirst().execute();
-			// System.err.println("executing => " + executing);
-			// if(executing)System.err.println("ProcessCall [" + getProcess().getProcessName() + "] enter");
-			return executing;
+			// System.err.println("execute: moving on to: " + follows);
+			// System.err.println("ProcessCall [" + getProcess().getProcessName() + "] leave");
+			finishCall();
+			return true;
 		}
-		// System.err.println("execute: moving on to: " + follows);
-		// System.err.println("ProcessCall [" + getProcess().getProcessName() + "] leave");
-		finishCall();
-		return true;
+		return false;
 	}
 	
 	public ProcessInstance[] debugExecute() throws ToolBusException{
-		if(activated && !executing){
-			if(definition == null){
+		if(isEnabled()){
+			if(!executing){
+				if(definition == null){
+					return null;
+				}
+				if(PE.getFirst().size() == 0){
+					executing = true;
+					return new ProcessInstance[0];
+				}
+				ExecutionResult er = PE.getFirst().debugExecute();
+				if(er != null){
+					executing = true;
+					return er.partners;
+				}
+				executing = false;
 				return null;
 			}
-			if(PE.getFirst().size() == 0){
-				executing = true;
-				return new ProcessInstance[0];
-			}
-			ExecutionResult er = PE.getFirst().debugExecute();
-			if(er != null){
-				executing = true;
-				return er.partners;
-			}
-			executing = false;
-			return null;
+			finishCall();
+			return new ProcessInstance[0];
 		}
-		finishCall();
-		return new ProcessInstance[0];
+		return null;
 	}
 	
 	/**

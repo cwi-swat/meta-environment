@@ -25,6 +25,8 @@ public class DisConnect extends Atom{
 		
 		this.toolId = new Ref(toolId);
 		setAtomArgs(this.toolId);
+		
+		externalNameAsReceivedByTool = "snd-disconnect";
 	}
 	
 	public ProcessExpression copy(){

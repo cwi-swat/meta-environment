@@ -75,15 +75,6 @@ public class ProcessInstance{
 		return tbfactory;
 	}
 	
-	public void addToAtomSignature(AtomSet atoms){
-		Iterator<Atom> atomSetIterator = atoms.iterator();
-		while(atomSetIterator.hasNext()){
-			Atom a = atomSetIterator.next();
-			
-			toolbus.addToSignature(a.toATerm());
-		}
-	}
-	
 	public ToolBus getToolBus(){
 		return toolbus;
 	}

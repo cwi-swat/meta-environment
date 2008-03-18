@@ -135,7 +135,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 			ToolBridge toolBridge = tool.getToolBridge();
 			
 			// Check if the tool provides the given signature.
-			if(!toolBridge.checkSignature(getSignature())){
+			if(!toolBridge.checkSignature(toolDef.getSignature())){
 				String error = "Tool: " + toolDef.getName() + " did not provide the expected signature.";
 				LoggerFactory.log(error, ILogger.WARNING, IToolBusLoggerConstants.TOOLINSTANCE);
 				throw new ToolBusException(error);
@@ -236,15 +236,6 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 */
 	public String getToolName(){
 		return toolKey.getName();
-	}
-	
-	/**
-	 * Returns the signature of the tool that is associated with this tool instance.
-	 * 
-	 * @return The signature of the tool that is associated with this tool instance.
-	 */
-	public ATerm getSignature(){
-		return toolDef.getSignature();
 	}
 	
 	/**

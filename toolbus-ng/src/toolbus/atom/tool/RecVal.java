@@ -24,6 +24,7 @@ public class RecVal extends Atom{
 		this.toolId = new Ref(toolId);
 		this.result = new Ref(result);
 		setAtomArgs(this.toolId, this.result);
+		externalNameAsReceivedByTool = "snd-value";
 	}
 	
 	public ProcessExpression copy(){

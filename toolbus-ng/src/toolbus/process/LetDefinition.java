@@ -19,9 +19,9 @@ public class LetDefinition extends ProcessExpression{
 	private final ProcessExpression PE;
 	private Environment env;
 	
-	public LetDefinition(ATermList formals, ProcessExpression PE, TBTermFactory tbfactory, PositionInformation posInfo){
+	public LetDefinition(ATermList locals, ProcessExpression PE, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
-		this.locals = formals;
+		this.locals = locals;
 		PEinit = PE;
 		this.PE = PE;
 	}

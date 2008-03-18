@@ -18,6 +18,8 @@ public class PropertyManager{
 	private int port;
 	private boolean withConsole = false;
 	
+	private String genTifsOutputFile = null;
+	
 	public PropertyManager(String[] args){
 		port = -1;
 		
@@ -45,6 +47,9 @@ public class PropertyManager{
 		if(tbscript != null){
 			set("script.path", tbscript);
 		}
+		if(genTifsOutputFile != null){
+			set("gentifs.output", genTifsOutputFile);
+		}
 	}
 	
 	private void handleComandLineArguments(String args[]){
@@ -56,11 +61,13 @@ public class PropertyManager{
 		for(int i = 0; i < args.length; i++){
 			String arg = args[i];
 			if(arg.equals("-properties") && i + 1 < args.length){
-				propertyFileName = args[i + 1];
-				i++;
+				propertyFileName = args[++i];
 				continue;
 			}else if(arg.equals("--with-console")){
 				withConsole = true;
+			}else if(arg.equals("-output")){
+				 genTifsOutputFile = args[++i];
+				 continue;
 			}else{
 				Matcher mdefine = pdefine.matcher(arg);
 				if(mdefine.matches()){

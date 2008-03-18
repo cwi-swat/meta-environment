@@ -260,7 +260,7 @@ public class JavaToolBridge extends ToolBridge{
 			ATermAppl sig = (ATermAppl) inputSignatures.getFirst();
 			String operation = sig.getName();
 			if(operation.equals("rec-eval")){
-				ATermAppl methodTerm = (ATermAppl) sig.getArgument(0);
+				ATermAppl methodTerm = (ATermAppl) sig.getArgument(1);
 
 				ATerm[] arguments = methodTerm.getArgumentArray();
 				Class<?>[] parameters = new Class[arguments.length];
@@ -276,7 +276,7 @@ public class JavaToolBridge extends ToolBridge{
 					break;
 				}
 			}else if(operation.equals("rec-do")){
-				ATermAppl methodTerm = (ATermAppl) sig.getArgument(0);
+				ATermAppl methodTerm = (ATermAppl) sig.getArgument(1);
 
 				ATerm[] arguments = methodTerm.getArgumentArray();
 				Class<?>[] parameters = new Class[arguments.length];

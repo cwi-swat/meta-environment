@@ -49,9 +49,12 @@ public class ProcessDefinition{
 		return formals.getLength();
 	}
 	
+	public ProcessExpression getOriginalProcessExpression(){
+		return PE;
+	}
+	
 	public ProcessExpression getProcessExpression(ATermList actuals) throws ToolBusError{
-		// System.err.println("ProcessDefiniton:" + name + " formals = " + formals + "; actuals = "
-		// + actuals);
+		// System.err.println("ProcessDefiniton:" + name + " formals = " + formals + "; actuals = " + actuals);
 		if(actuals.getLength() != formals.getLength()){
 			throw new ToolBusError("process " + name + ": mismatch between formals " + formals + " and actuals " + actuals);
 		}

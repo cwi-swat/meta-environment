@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import toolbus.atom.Atom;
 import toolbus.commandline.CommandLine;
 import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
@@ -40,7 +41,6 @@ import toolbus.util.collections.ConcurrentHashSet.ReadOnlyHashSetEntryHandler;
 import aterm.ATerm;
 import aterm.ATermList;
 
-
 /**
  * ToolBus implements the behaviour of one ToolBus.
  */
@@ -57,11 +57,10 @@ public class ToolBus{
 	
 	protected final TBTermFactory tbfactory;
 	
-	protected final List<ProcessInstance> processes; // process instances
+	protected final List<ProcessInstance> processes;
 	private int processIdCounter;
 	private final ConcurrentHashMap<String, ProcessDefinition> procdefs;
-	private final ConcurrentHashSet<ATerm> atomSignature; // Signature of all atoms in executing processes
-												// TODO: should this not be for ALL defined processes?
+	private final ConcurrentHashSet<ATerm> atomSignature;
 	
 	private final ToolInstanceManager toolInstanceManager;
 	private final ConcurrentHashMap<String, ToolDefinition> tooldefs;
@@ -250,7 +249,7 @@ public class ToolBus{
 	/**
 	 * Parse a Tscript from file and add definitions to this ToolBus.
 	 */
-	public boolean parsecup1(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls,  String filename){
+	public boolean parsecup1(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename){
 		try{
 		    parser parser_obj = new parser(includedFiles, toolbusProcessCalls, filename, this);
 			parser_obj.parse();
@@ -275,6 +274,16 @@ public class ToolBus{
 			parser_obj.parse();
 			parser_obj.generateInitialProcessCalls();
 			
+			// Initialize the atom signature.
+			procdefs.iterate(new ReadOnlyHashMapEntryHandler<String, ProcessDefinition>(){
+				public int handle(String key, ProcessDefinition value){
+					addToSignature(value.getOriginalProcessExpression().getAtoms());
+					
+					return CONTINUE;
+				}
+			});
+			
+			// Keep track of the names of all the scripts for debuggin purposes.
 			scriptsNames = parser_obj.scriptsNames();
 		}catch(ToolBusException e){
 			error(filename, e.getMessage());
@@ -308,7 +317,35 @@ public class ToolBus{
 		if(tooldefs.contains(name)) throw new ToolBusError("duplicate definition of tool " + name);
 		
 		tooldefs.put(name, TD);
-		TD.setToolBus(this);
+	}
+	
+	/**
+	 * Get a tool definition by name.
+	 */
+	public ToolDefinition getToolDefinition(String name) throws ToolBusError{
+		ToolDefinition definition = tooldefs.get(name);
+		if(definition != null){
+			definition.setToolSignatures(getSignature());
+			return definition;
+		}
+		
+		throw new ToolBusError("No tool definition for tool " + name);
+	}
+	
+	public List<ToolDefinition> getToolDefinitions(){
+		final List<ToolDefinition> toolDefinitions = new ArrayList<ToolDefinition>();
+		
+		tooldefs.iterate(new ReadOnlyHashMapEntryHandler<String, ToolDefinition>(){
+			public int handle(String key, ToolDefinition value){
+				toolDefinitions.add(value);
+				
+				value.setToolSignatures(getSignature());
+				
+				return CONTINUE;
+			}
+		});
+		
+		return toolDefinitions;
 	}
 	
 	/**
@@ -346,7 +383,7 @@ public class ToolBus{
 	public ProcessDefinition getProcessDefinition(String name, int numberOfActuals) throws ToolBusError{
 		String uname = name + numberOfActuals;
 		ProcessDefinition definition = procdefs.get(uname);
-		if(definition == null) throw new ToolBusError("No definition for process " + uname); 
+		if(definition == null) throw new ToolBusError("No definition for process "+name+", with "+numberOfActuals+" actuals"); 
 		
 		return definition;
 	}
@@ -355,22 +392,14 @@ public class ToolBus{
 		return procdefs.contains(name + numberOfActuals);
 	}
 	
-	/**
-	 * Get a tool definition by name.
-	 */
-	public ToolDefinition getToolDefinition(String name) throws ToolBusError{
-		ToolDefinition definition = tooldefs.get(name);
-		if(definition != null){
-			definition.setToolSignatures(getSignature());
-			return definition;
+	public void addToSignature(AtomSet atoms){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		while(atomSetIterator.hasNext()){
+			Atom a = atomSetIterator.next();
+			
+			ATerm pat = tbfactory.makePattern(a.toATerm());
+			atomSignature.put(pat);
 		}
-		
-		throw new ToolBusError("No tool definition for tool " + name);
-	}
-	
-	public void addToSignature(ATerm asig){
-		ATerm pat = tbfactory.makePattern(asig);
-		atomSignature.put(pat);
 	}
 	
 	private ATermList getSignature(){

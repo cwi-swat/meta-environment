@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -66,6 +67,8 @@ parser code {:
    protected String processName = "";
    private HashSet<String> includedFiles = new HashSet<String>();
    protected List<ATerm> toolbusProcessCalls = new ArrayList<ATerm>();
+   
+   protected HashMap<String, ATerm> declaredVaribles = new HashMap<String, ATerm>();
    
    protected Stack<Boolean> ifdefStack;
 	
@@ -315,19 +318,23 @@ term ::=
      | LANGLE type:t RANGLE                {: RESULT = parser.tbfactory.makePlaceholder(t); :}
      ;
 
-result_var ::= NAME:nm QUESTION            {: AFun af = parser.tbfactory.makeAFun(nm.toString(), 0, false);
+result_var ::= NAME:nm QUESTION            {: AFun af = parser.tbfactory.makeAFun(nm, 0, false);
      									      ATerm at = parser.tbfactory.makeAppl(af);
-     									      RESULT = parser.tbfactory.mkResVar(at, parser.processName, parser.tbfactory.make("none"));
+     									      ATerm type = parser.declaredVaribles.get(nm);
+     									      if(type == null) throw new RuntimeException("Undeclared variable: "+nm);
+     									      RESULT = parser.tbfactory.mkResVar(at, parser.processName, type);
      									   :}
     ;
 
-var ::=  NAME:nm                           {: AFun af = parser.tbfactory.makeAFun(nm.toString(), 0, false);
+var ::=  NAME:nm                           {: AFun af = parser.tbfactory.makeAFun(nm, 0, false);
      									      ATerm at = parser.tbfactory.makeAppl(af);
      									      String replacement = parser.toolbus.getProperty(nm);
 				                              if(replacement != null){
 												RESULT = parser.tbfactory.make(replacement);
 										      } else {
-     									        RESULT = parser.tbfactory.mkVar(at, parser.processName, parser.tbfactory.make("none"));
+										        ATerm type = parser.declaredVaribles.get(nm);
+     									        if(type == null) throw new RuntimeException("Undeclared variable: "+nm);
+     									        RESULT = parser.tbfactory.mkVar(at, parser.processName, type);
      									      }
      									   :}
     ;
@@ -433,8 +440,10 @@ shutdown::=
 
 assign::=
         NAME:nm ASSIGN term:t               {: ATerm tnm = parser.tbfactory.make(nm);
-        										RESULT = new Assign(
-        												   parser.tbfactory.mkVar(tnm, parser.processName, parser.tbfactory.make("none")),
+                                               ATerm type = parser.declaredVaribles.get(nm);
+     									       if(type == null) throw new RuntimeException("Undeclared variable: "+nm);
+        									   RESULT = new Assign(
+        												   parser.tbfactory.mkVar(tnm, parser.processName, type),
         									               t,
         									               parser.tbfactory, 
         									               makePosInfoWithEndColumnOffset((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), 2));
@@ -522,11 +531,13 @@ formals::=
      ;
      
 form_decl::=
-       NAME:nm COLON type:tp                 {: AFun af = parser.tbfactory.makeAFun(nm.toString(), 0, false);
+       NAME:nm COLON type:tp                 {: AFun af = parser.tbfactory.makeAFun(nm, 0, false);
+                                                parser.declaredVaribles.put(nm, tp);
                                                 RESULT = parser.tbfactory.mkVar(af, parser.processName, tp);
                                              :} 
                                              
-     | NAME:nm COLON type:tp QUESTION        {: AFun af = parser.tbfactory.makeAFun(nm.toString(), 0, false);
+     | NAME:nm COLON type:tp QUESTION        {: AFun af = parser.tbfactory.makeAFun(nm, 0, false);
+                                                parser.declaredVaribles.put(nm, tp);
                                                 RESULT = parser.tbfactory.mkResVar(af, parser.processName, tp);
                                              :}        
      ;
@@ -545,6 +556,7 @@ type::=
 
 var_decl::=
        NAME:nm COLON type:tp                 {: AFun af = parser.tbfactory.makeAFun(nm.toString(), 0, false);
+       											parser.declaredVaribles.put(nm, tp);
                                                 RESULT = parser.tbfactory.mkVar(af, parser.processName, tp);
                                              :} 
      ;
@@ -609,7 +621,7 @@ class::=
 tool_def::=       
      TOOL IDENT:nm IS LBRACE host:h kind:k command:cmd class:cls RBRACE
                                                {: if(parser.generating()){
-                                                     ToolDefinition td = new ToolDefinition(nm, h, k, cmd, cls, parser.tbfactory);
+                                                     ToolDefinition td = new ToolDefinition(nm, h, k, cmd, cls, parser.toolbus);
                                                      //System.err.println("Adding: " + td);
                                                      parser.toolbus.addToolDefinition(td);
                                                   }

@@ -1,3 +1,10 @@
+Tue Mar 18 14:50:06 CEST 2008 <lankamp@cwi.nl>
+  * Added genTifs tool.
+  * The 'atom signature' is now being calculated in advance instead of being updated at runtime.
+  * Fixed the missing type information in the 'atom signature'.
+  * Added more script error detection to the parser. It is now able to detect 'undeclared variable' errors.
+  * Made some minor adjustments to the ProcessCall atom.
+
 Fri Mar 14 09:35:24 CEST 2008 <lankamp@cwi.nl>
   * Fixed concurrency problems in the other multiplexers.
   * Reduced contended locking in the SocketWriteMultiplexer.

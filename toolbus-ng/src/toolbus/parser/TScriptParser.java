@@ -424,7 +424,7 @@ class TScriptNodeBuilders{
 				String clazz = ((ATermAppl) args[4]).getName();
 				clazz = (clazz == "None") ? null : ((clazz == "Some") ? ((ATermAppl) ((ATermAppl) args[4]).getArgument(0)).getName() : clazz);
 				
-				return new ToolDefinition(name, host, kind, command, clazz, tbfactory);
+				return new ToolDefinition(name, host, kind, command, clazz, toolbus);
 			}
 		});
 		

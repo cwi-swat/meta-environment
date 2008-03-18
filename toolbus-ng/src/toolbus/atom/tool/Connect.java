@@ -29,6 +29,8 @@ public class Connect extends Atom{
 		setAtomArgs(this.toolId);
 		
 		this.followsExecute = followsExecute;
+		
+		externalNameAsReceivedByTool = "snd-connect";
 	}
 	
 	public ProcessExpression copy(){

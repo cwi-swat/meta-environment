@@ -28,7 +28,7 @@ public class Event extends Atom{
 	}
 	
 	public ProcessExpression copy(){
-		Atom a = new Event(this.toolId.value, this.result.value, tbfactory, getPosInfo());
+		Atom a = new Event(toolId.value, result.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		
 		return a;
