@@ -4,9 +4,9 @@ ACLOCAL_AMFLAGS = -I .
 
 SUBDIRS = lib
 
-bin_SCRIPTS = toolbus toolbus-viewer
+bin_SCRIPTS = toolbus toolbus-viewer toolbus-gentifs
 
-CLEANFILES += toolbus toolbus-viewer
+CLEANFILES += toolbus toolbus-viewer toolbus-gentifs
 
 EXTRA_DIST += $(wildcard *.src)
 

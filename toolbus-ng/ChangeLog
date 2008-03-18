@@ -1,3 +1,6 @@
+Tue Mar 18 15:14:30 CEST 2008 <lankamp@cwi.nl>
+  * Added toolbus-gentifs script.
+
 Tue Mar 18 14:50:06 CEST 2008 <lankamp@cwi.nl>
   * Added genTifs tool.
   * The 'atom signature' is now being calculated in advance instead of being updated at runtime.
