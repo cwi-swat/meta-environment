@@ -2,12 +2,12 @@ package toolbus.process;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Stack;
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
-import toolbus.ToolBus;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import toolbus.parsercup.PositionInformation;
@@ -20,6 +20,8 @@ import aterm.ATerm;
  *         When both arguments are exhausted, execution continues with the followSet of the merge.
  */
 public class Merge extends ProcessExpression implements StateElement{
+	private final static Random rand = new Random();
+	
 	private final int LEFT = 0;
 	private final int RIGHT = 1;
 	
@@ -194,9 +196,16 @@ public class Merge extends ProcessExpression implements StateElement{
 		state[RIGHT].activate();
 	}
 	
+	/**
+	 * Generate next random boolean.
+	 */
+	public static boolean nextBoolean(){
+		return rand.nextBoolean();
+	}
+	
 	public boolean execute() throws ToolBusException{
 		int l, r;
-		if(ToolBus.nextBoolean()){
+		if(nextBoolean()){
 			l = LEFT;
 			r = RIGHT;
 		}else{
@@ -215,7 +224,7 @@ public class Merge extends ProcessExpression implements StateElement{
 	
 	public ProcessInstance[] debugExecute() throws ToolBusException{
 		int l, r;
-		if(ToolBus.nextBoolean()){
+		if(nextBoolean()){
 			l = LEFT;
 			r = RIGHT;
 		}else{

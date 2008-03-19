@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import toolbus.atom.Atom;
 import toolbus.commandline.CommandLine;
 import toolbus.exceptions.ToolBusError;
@@ -25,21 +24,16 @@ import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
-import toolbus.parser.ExternalParser;
-import toolbus.parser.TScriptParser;
 import toolbus.parsercup.parser;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessDefinition;
+import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
 import toolbus.util.collections.ConcurrentHashMap;
-import toolbus.util.collections.ConcurrentHashSet;
-import toolbus.util.collections.EntryHandlerConstants;
 import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
-import toolbus.util.collections.ConcurrentHashSet.ReadOnlyHashSetEntryHandler;
 import aterm.ATerm;
-import aterm.ATermList;
 
 /**
  * ToolBus implements the behaviour of one ToolBus.
@@ -48,8 +42,6 @@ public class ToolBus{
 	// The amount of time we wait for tools to terminate when the toolbus's shutdown sequence is
 	// initiated.
 	private final static int SHUTDOWNTIMEOUT = 5000;
-	
-	private final static Random rand = new Random();
 	
 	protected final PropertyManager propertyManager;
 	
@@ -60,7 +52,6 @@ public class ToolBus{
 	protected final List<ProcessInstance> processes;
 	private int processIdCounter;
 	private final ConcurrentHashMap<String, ProcessDefinition> procdefs;
-	private final ConcurrentHashSet<ATerm> atomSignature;
 	
 	private final ToolInstanceManager toolInstanceManager;
 	private final ConcurrentHashMap<String, ToolDefinition> tooldefs;
@@ -97,7 +88,6 @@ public class ToolBus{
 		processIdCounter = 0;
 		procdefs = new ConcurrentHashMap<String, ProcessDefinition>();
 		tooldefs = new ConcurrentHashMap<String, ToolDefinition>();
-		atomSignature = new ConcurrentHashSet<ATerm>();
 		
 		propertyManager = new PropertyManager(args);
 		
@@ -204,13 +194,6 @@ public class ToolBus{
 		nerrors = nwarnings = 0;
 	}
 	
-	/**
-	 * Generate next random boolean.
-	 */
-	public static boolean nextBoolean(){
-		return rand.nextBoolean();
-	}
-	
 	public long getRunTime(){
 		return System.currentTimeMillis() - startTime;
 	}
@@ -228,22 +211,6 @@ public class ToolBus{
 			nextTime = next;
 		}
 		//System.err.println("setNextTime: set to " + nextTime);
-	}
-	
-	/**
-	 * Parse a Tscript from file and add definitions to this ToolBus.
-	 */
-	public boolean parse(){
-		String filename = propertyManager.get("script.path");
-		if(filename == null) throw new RuntimeException("Script name undefined.");
-		
-		TScriptParser parser = new TScriptParser(new ExternalParser(this), this);
-		try{
-			parser.parse(filename);
-		}catch(ToolBusException e){
-			error(filename, e.getMessage());
-		}
-		return nerrors == 0;
 	}
 	
 	/**
@@ -274,14 +241,24 @@ public class ToolBus{
 			parser_obj.parse();
 			parser_obj.generateInitialProcessCalls();
 			
-			// Initialize the atom signature.
+			// Initialize the signatures.
+			final List<ATerm> atomSignature = new ArrayList<ATerm>();
 			procdefs.iterate(new ReadOnlyHashMapEntryHandler<String, ProcessDefinition>(){
 				public int handle(String key, ProcessDefinition value){
-					addToSignature(value.getOriginalProcessExpression().getAtoms());
+					ProcessExpression originalProcessExpression = value.getOriginalProcessExpression();
+					AtomSet atoms = originalProcessExpression.getAtoms();
+					Iterator<Atom> atomSetIterator = atoms.iterator();
+					while(atomSetIterator.hasNext()){
+						Atom a = atomSetIterator.next();
+						
+						ATerm pat = tbfactory.makePattern(a.toATerm());
+						atomSignature.add(pat);
+					}
 					
 					return CONTINUE;
 				}
 			});
+			calculateToolSignatures(atomSignature);
 			
 			// Keep track of the names of all the scripts for debuggin purposes.
 			scriptsNames = parser_obj.scriptsNames();
@@ -324,12 +301,9 @@ public class ToolBus{
 	 */
 	public ToolDefinition getToolDefinition(String name) throws ToolBusError{
 		ToolDefinition definition = tooldefs.get(name);
-		if(definition != null){
-			definition.setToolSignatures(getSignature());
-			return definition;
-		}
+		if(definition == null) throw new ToolBusError("No tool definition for tool " + name);
 		
-		throw new ToolBusError("No tool definition for tool " + name);
+		return definition;
 	}
 	
 	public List<ToolDefinition> getToolDefinitions(){
@@ -339,13 +313,25 @@ public class ToolBus{
 			public int handle(String key, ToolDefinition value){
 				toolDefinitions.add(value);
 				
-				value.setToolSignatures(getSignature());
-				
 				return CONTINUE;
 			}
 		});
 		
 		return toolDefinitions;
+	}
+	
+	private void calculateToolSignatures(final List<ATerm> atomSignature){
+		final List<ToolDefinition> toolDefinitions = new ArrayList<ToolDefinition>();
+		
+		tooldefs.iterate(new ReadOnlyHashMapEntryHandler<String, ToolDefinition>(){
+			public int handle(String key, ToolDefinition value){
+				toolDefinitions.add(value);
+				
+				value.calculateToolSignature(atomSignature);
+				
+				return CONTINUE;
+			}
+		});
 	}
 	
 	/**
@@ -386,36 +372,6 @@ public class ToolBus{
 		if(definition == null) throw new ToolBusError("No definition for process "+name+", with "+numberOfActuals+" actuals"); 
 		
 		return definition;
-	}
-	
-	public boolean existsProcessDefinition(String name, int numberOfActuals){
-		return procdefs.contains(name + numberOfActuals);
-	}
-	
-	public void addToSignature(AtomSet atoms){
-		Iterator<Atom> atomSetIterator = atoms.iterator();
-		while(atomSetIterator.hasNext()){
-			Atom a = atomSetIterator.next();
-			
-			ATerm pat = tbfactory.makePattern(a.toATerm());
-			atomSignature.put(pat);
-		}
-	}
-	
-	private ATermList getSignature(){
-		class AtomSignatureIterationHandler extends ReadOnlyHashSetEntryHandler<ATerm>{
-			public ATermList res = tbfactory.EmptyList;
-
-			public int handle(ATerm value){
-				res = tbfactory.makeList(value, res);
-				
-				return EntryHandlerConstants.CONTINUE;
-			}
-		}
-		AtomSignatureIterationHandler asih = new AtomSignatureIterationHandler();
-		atomSignature.iterate(asih);
-		
-		return asih.res;
 	}
 	
 	public String[] getIncludedScripts(){

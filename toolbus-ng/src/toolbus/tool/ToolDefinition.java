@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
@@ -107,18 +108,22 @@ public class ToolDefinition{
 		return outputSignature;
 	}
 	
+	public ATermList getOtherSignature(){
+		return otherSignature;
+	}
+	
 	public ATerm getSignature(){
 		return tbfactory.make("signature(<term>,<term>))", inputSignature, outputSignature);
 	}
 	
-	public void setToolSignatures(ATermList sigs){
+	public void calculateToolSignature(List<ATerm> atoms){
 		if(signatureIsSet) return;
 		
-		ATermList signatures = sigs;
 		ATermPlaceholder toolPlaceholder = getNameAsPlaceholder();
-		while(!signatures.isEmpty()){
-			ATermAppl sig = (ATermAppl) signatures.getFirst();
-			signatures = signatures.getNext();
+		
+		Iterator<ATerm> atomsIterator = atoms.iterator();
+		while(atomsIterator.hasNext()){
+			ATermAppl sig = (ATermAppl) atomsIterator.next();
 			if(sig.getArity() > 0){
 				ATerm ap = sig.getArgument(0);
 				if(ap.equals(toolPlaceholder)){
@@ -136,56 +141,6 @@ public class ToolDefinition{
 		otherSignature = tbfactory.makeList(tbfactory.parse("rec-terminate(<"+toolName+">, <term>)"), otherSignature);
 		
 		signatureIsSet = true;
-	}
-	
-	private final static int LENSPECSIZE = 11;
-	private final static char LENSPECSEPERATOR = ':';
-	private final static int SIGNATURESIZE = 127;
-	private final static char ENDOFENTRYLINE = '\0';
-	
-	private void appendSignature(ATermList signature, StringBuilder stringBuilder){
-		ATermList empty = tbfactory.EmptyList;
-		ATermList signatureList = signature;
-		while(signatureList != empty){
-			ATerm signatureEntry = signatureList.getFirst();
-			
-			String serializedSignatureEntry = signatureEntry.toString();
-			int serializedSignatureEntrySize = serializedSignatureEntry.length() + LENSPECSIZE + 1;
-			int shiftableSerializedSignatureEntrySize = serializedSignatureEntrySize;
-			int i = LENSPECSIZE;
-			int[] lenSpec = new int[i];
-			do{
-				lenSpec[--i] = shiftableSerializedSignatureEntrySize % 10;
-				shiftableSerializedSignatureEntrySize /= 10;
-			}while(shiftableSerializedSignatureEntrySize > 0);
-			
-			for(i = 0; i < LENSPECSIZE; i++){
-				stringBuilder.append(lenSpec[i]);
-			}
-			stringBuilder.append(LENSPECSEPERATOR);
-			stringBuilder.append(serializedSignatureEntry);
-			stringBuilder.append(ENDOFENTRYLINE);
-			
-			for(i = SIGNATURESIZE - serializedSignatureEntrySize - 1; i >= 0; i--){
-				stringBuilder.append(' ');
-			}
-			
-			signatureList = signatureList.getNext();
-		}
-	}
-	
-	/**
-	 * Generates the tifs for this tool in exactly the same way as the 'old' C toolbus did it.
-	 * @return The generated tifs for this tool.
-	 */
-	public String generateTifs(){
-		StringBuilder sb = new StringBuilder();
-		
-		appendSignature(inputSignature, sb);
-		appendSignature(outputSignature, sb);
-		appendSignature(otherSignature, sb);
-		
-		return sb.toString();
 	}
 	
 	public ClassLoader createClassLoader(){
