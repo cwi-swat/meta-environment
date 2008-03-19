@@ -124,7 +124,7 @@ public class ToolDefinition{
 				if(ap.equals(toolPlaceholder)){
 					if(sig.getName().equals("rec-eval") || sig.getName().equals("rec-do")){
 						inputSignature = tbfactory.makeList(sig, inputSignature);
-					}else if(sig.getName().equals("snd-event") || sig.getName().equals("snd-value")){
+					}else if(sig.getName().equals("snd-event") || sig.getName().equals("snd-value") || sig.getName().equals("rec-ack-event")){
 						outputSignature = tbfactory.makeList(sig, outputSignature);
 					}else if(sig.getName().equals("snd-connect") || sig.getName().equals("snd-disconnect")){
 						otherSignature = tbfactory.makeList(sig, otherSignature);
@@ -140,7 +140,7 @@ public class ToolDefinition{
 	
 	private final static int LENSPECSIZE = 11;
 	private final static char LENSPECSEPERATOR = ':';
-	private final static int SIGNATURESIZE = 256 - 11 - 1 - 1;
+	private final static int SIGNATURESIZE = 127;
 	private final static char ENDOFENTRYLINE = '\0';
 	
 	private void appendSignature(ATermList signature, StringBuilder stringBuilder){
@@ -150,7 +150,7 @@ public class ToolDefinition{
 			ATerm signatureEntry = signatureList.getFirst();
 			
 			String serializedSignatureEntry = signatureEntry.toString();
-			int serializedSignatureEntrySize = serializedSignatureEntry.length();
+			int serializedSignatureEntrySize = serializedSignatureEntry.length() + LENSPECSIZE + 1;
 			int shiftableSerializedSignatureEntrySize = serializedSignatureEntrySize;
 			int i = LENSPECSIZE;
 			int[] lenSpec = new int[i];

@@ -45,7 +45,7 @@ public class GenTifs{
 			sb.append(tifsForTool);
 		}
 		
-		sb.append("00000000023:end-of-tifs");
+		sb.append("00000000023:end-of-tifs\0                                                                                                        "); // This is stupid, but necessary :-/ .
 		
 		String allTifs = sb.toString();
 		writeToFile(allTifs.getBytes(), outputFile);
