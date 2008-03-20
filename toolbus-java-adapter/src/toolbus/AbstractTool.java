@@ -13,10 +13,11 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 import jjtraveler.VisitFailure;
 import aterm.AFun;
 import aterm.ATerm;
@@ -641,6 +642,18 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		ATerm memory = factory.makeAppl(factory.makeAFun("memory-usage", 2, false), heapUsage, nonHeapUsage);
 		
 		// Thread stuff
+		ThreadGroup currentThreadGroup = Thread.currentThread().getThreadGroup();
+		Thread[] relevantThreads = new Thread[currentThreadGroup.activeCount() * 2 + 10]; // Create an array that's more then big enough.
+		currentThreadGroup.enumerate(relevantThreads);
+		
+		Set<Long> relevantThreadIds = new HashSet<Long>();
+		for(int i = 0; i < relevantThreads.length; i++){
+			Thread thread = relevantThreads[i];
+			if(thread != null){
+				relevantThreadIds.add(new Long(thread.getId()));
+			}
+		}
+		
 		ThreadMXBean tmxb = ManagementFactory.getThreadMXBean();
 		
 		ATerm threads;
@@ -650,17 +663,22 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		try{
 			ATermList threadsList = factory.makeList();
 			for(int i = 0; i < nrOfThreads; i++){
-				ThreadInfo ti = tmxb.getThreadInfo(threadIds[i]);
-				if(ti != null){
-					String threadName = ti.getThreadName();
-					long userTime = tmxb.getThreadUserTime(threadIds[i]);
-					long systemTime = tmxb.getThreadCpuTime(threadIds[i]) - userTime;
-					
-					ATerm userTimeTerm = factory.makeAppl(factory.makeAFun("user-time", 1, false), factory.makeInt(((int) (userTime / 1000000))));
-					ATerm systemTimeTerm = factory.makeAppl(factory.makeAFun("system-time", 1, false), factory.makeInt(((int) (systemTime / 1000000))));
-					ATerm thread = factory.makeAppl(factory.makeAFun(threadName, 2, false), userTimeTerm, systemTimeTerm);
-					
-					threadsList = factory.makeList(thread, threadsList);
+				long threadId = threadIds[i];
+				if(relevantThreadIds.contains(new Long(threadId))){ // Only list the info if we're interested in it.
+					ThreadInfo ti = tmxb.getThreadInfo(threadId);
+					if(ti != null){
+						String threadName = ti.getThreadName();
+						long userTime = tmxb.getThreadUserTime(threadIds[i]);
+						long systemTime = tmxb.getThreadCpuTime(threadIds[i]) - userTime;
+						
+						if((userTime + systemTime) <= 0) continue;
+						
+						ATerm userTimeTerm = factory.makeAppl(factory.makeAFun("user-time", 1, false), factory.makeInt(((int) (userTime / 1000000))));
+						ATerm systemTimeTerm = factory.makeAppl(factory.makeAFun("system-time", 1, false), factory.makeInt(((int) (systemTime / 1000000))));
+						ATerm thread = factory.makeAppl(factory.makeAFun(threadName, 2, false), userTimeTerm, systemTimeTerm);
+						
+						threadsList = factory.makeList(thread, threadsList);
+					}
 				}
 			}
 			
