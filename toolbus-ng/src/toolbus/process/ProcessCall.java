@@ -338,7 +338,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	 * @return The last, by this process call, executed state element; may be null if this process call isn't currently executing.
 	 */
 	public StateElement getExecutedStateElement(){
-		if(!(activated || executing)) return new Tau(tbfactory, null); // Pretend nothing happened if the call was just completed.
+		if(!executing) return new Tau(tbfactory, null); // Pretend nothing happened if the call was just completed.
 		
 		StateElement executedStateElement = PE.getFirst().getLastExecutedStateElement();
 		while(executedStateElement instanceof ProcessCall){
