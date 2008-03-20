@@ -356,7 +356,7 @@ AC_DEFUN([META_JAVA_SETUP],[
   JAVA_TEST_CLASS=META_GET_PKG_USER_VAR([TestClass])
   AC_SUBST([JAVA_TEST_CLASS])
 
-  META_GENERATE_ECLIPSE_PLUGIN_FILES(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]),[$JAVA_JAR],[$JAVA_PACKAGES],[$PACKAGE_ALL_DEPS],[$JAVA_MAIN_CLASS])
+  META_GENERATE_ECLIPSE_PLUGIN_FILES(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]),[$JAVA_JAR],[$JAVA_PACKAGES],[$PACKAGE_ALL_DEPS],[$JAVA_MAIN_CLASS],[$JAVA_LOCAL_JARS])
 ])
 
 dnl META_C_SETUP()
@@ -408,7 +408,7 @@ cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' >
 echo "PkgConfigPath=$PKG_CONFIG_PATH" >> $1.pc
 ])
 
-dnl META_GENERATE_ECLIPSE_PLUGIN_FILES(PKGNAME,VERSION,JARFILE,PACKAGES,DEPS,MAINCLASS)
+dnl META_GENERATE_ECLIPSE_PLUGIN_FILES(PKGNAME,VERSION,JARFILE,PACKAGES,DEPS,MAINCLASS,LOCALJARS)
 dnl ----------------------------------
 AC_DEFUN([META_GENERATE_ECLIPSE_PLUGIN_FILES],[
 if ! test -d META-INF ; then
@@ -458,6 +458,8 @@ source.$3 = src/
 bin.includes = META-INF/,.,$3
 ENDCAT
 
+BUNDLE_LOCAL_JARS=`echo $7 | tr ':' ' '`
+
 cat > .classpath << ENDCAT
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
@@ -465,6 +467,9 @@ cat > .classpath << ENDCAT
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
   <classpathentry kind="output" path="bin"/>
+`for i in ${BUNDLE_LOCAL_JARS}; do \
+   echo "<classpathentry kind=\"lib\" path=\"$[]i\"/>"; \
+ done`
 </classpath>
 ENDCAT
 

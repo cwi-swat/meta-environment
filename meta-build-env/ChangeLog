@@ -1,5 +1,8 @@
 $Id$
 
+Thu Mar 20 16:42:14 EDT 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: use of LOCAL_JARS to fill .classpath entries
+
 Thu Mar 20 15:38:22 EDT 2008 <jurgenv@cwi.nl>
  * meta-build.m4: added PACKAGE_ALL_DEPS variable which contains the
    transitive dependencies of the current package without double entries.
