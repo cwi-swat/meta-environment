@@ -5,5 +5,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/aterm-java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JJTraveler"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
