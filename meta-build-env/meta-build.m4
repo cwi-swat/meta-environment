@@ -420,6 +420,10 @@ else
   BUNDLE_CLASSPATH=$3
 fi
 
+if ! test -z "$7"; then
+  BUNDLE_CLASSPATH="${BUNDLE_CLASSPATH} `echo "$7" | tr ':' ','`"
+fi
+
 if test -z "$5"; then
   REQUIRE_BUNDLE=""
 else
