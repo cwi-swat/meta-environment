@@ -1,5 +1,14 @@
 $Id$
 
+Thu Mar 20 15:38:22 EDT 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: added PACKAGE_ALL_DEPS variable which contains the
+   transitive dependencies of the current package without double entries.
+ * meta-build.m4: added generation of META-INF/MANIFEST.MF,
+   build.properties, .project and .classpath files when META_JAVA_SETUP is 
+   called.  This makes proper Eclipse plugin bundles from every Java-based 
+   package we have, based on the information in the .pc.in files.
+   It's a step towards a seemless integration of our Java code into Eclipse.
+
 Mon Feb 25 13:17:41 EST 2008 <jurgenv@cwi.nl>
  * meta-build.ant: Added LOCAL_JARS and EXTERNAL_JARS to class path 
    of check target.

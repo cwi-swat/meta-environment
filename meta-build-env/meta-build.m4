@@ -132,6 +132,7 @@ dnl and extends the variables:
 dnl
 dnl   EXTERNAL_JARS: JARS to use at build time.
 dnl   EXTERNAL_INSTALLED_JARS: JARS to use after installation.
+dnl   PACKAGE_ALL_DEPS: transitive dependencies
 dnl
 AC_DEFUN([META_INSPECT_PACKAGE],
 [m4_pushdef([AC_Var], AS_TR_CPP([$1]))dnl
@@ -183,10 +184,26 @@ AC_DEFUN([META_INSPECT_PACKAGE],
   meta_dependencies=$(meta_requires $1)
   AC_MSG_RESULT([$meta_dependencies])
 
+  META_MERGE_DEPENDENCIES([$meta_dependencies])
+
   META_INSPECT_PACKAGE_JARS([$1],[AC_Var],[${meta_dependencies}])
   META_INSPECT_PACKAGE_TOOLBUSFLAGS([$1],[AC_Var],[${meta_dependencies}])
 
 m4_popdef([AC_Var])dnl
+])
+
+dnl META_MERGE_DEPENDENCIES(NEWDEPS)
+dnl -------------------------------
+AC_DEFUN([META_MERGE_DEPENDENCIES],[
+  for j in $1; do
+    if test -z "${PACKAGE_ALL_DEPS}"; then
+      PACKAGE_ALL_DEPS=$1
+    else
+      META_IF_NOT_CONTAINS([${PACKAGE_ALL_DEPS}],[$j],[
+        PACKAGE_ALL_DEPS="${PACKAGE_ALL_DEPS} $[]j"
+      ])
+    fi
+  done 
 ])
 
 dnl META_INSPECT_PACKAGE_JARS(PACKAGE,PACKAGEVAR,DEPENDENCIES)
@@ -338,6 +355,8 @@ AC_DEFUN([META_JAVA_SETUP],[
 
   JAVA_TEST_CLASS=META_GET_PKG_USER_VAR([TestClass])
   AC_SUBST([JAVA_TEST_CLASS])
+
+  META_GENERATE_ECLIPSE_PLUGIN_FILES(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]),[$JAVA_JAR],[$JAVA_PACKAGES],[$PACKAGE_ALL_DEPS],[$JAVA_MAIN_CLASS])
 ])
 
 dnl META_C_SETUP()
@@ -362,7 +381,7 @@ dnl META_GET_PKG_VAR_LIST(VARNAME)
 dnl ------------------------------
 dnl Is substituted by the value of VARNAME from a pkg-config file, 
 dnl without trimming, at reconf time
-AC_DEFUN([META_GET_PKG_VAR_LIST],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr '[,]' '[ ]'])])
+AC_DEFUN([META_GET_PKG_VAR_LIST],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:space:]' | tr '[,]' '[ ]'])])
 
 dnl META_GET_PKG_USER_VAR(VARNAME)
 dnl ------------------------------
@@ -387,6 +406,93 @@ dnl ---------------------------------
 AC_DEFUN([META_GENERATE_PKG_CONFIG_FILES],[
 cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' > $1-uninstalled.pc
 echo "PkgConfigPath=$PKG_CONFIG_PATH" >> $1.pc
+])
+
+dnl META_GENERATE_ECLIPSE_PLUGIN_FILES(PKGNAME,VERSION,JARFILE,PACKAGES,DEPS,MAINCLASS)
+dnl ----------------------------------
+AC_DEFUN([META_GENERATE_ECLIPSE_PLUGIN_FILES],[
+if ! test -d META-INF ; then
+  mkdir META-INF
+fi
+if test -z "${EXTERNAL_JARS}"; then
+  BUNDLE_CLASSPATH=$3,`echo ${EXTERNAL_JARS} | tr ':' ','`
+else
+  BUNDLE_CLASSPATH=$3
+fi
+
+if test -z "$5"; then
+  REQUIRE_BUNDLE=""
+else
+  REQUIRED_BUNDLES=`echo "$5" | tr '-' '_' | tr ' ' ','`
+  ECLIPSE_REQUIRES=META_GET_PKG_USER_VAR_PLAIN([EclipseRequires])
+
+  if test -z "$ECLIPSE_REQUIRES"; then
+    REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES}"
+  else
+    REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES},${ECLIPSE_REQUIRES}"
+  fi
+fi
+
+if test -z "$6"; then
+  BUNDLE_MAIN_CLASS=""
+else 
+  BUNDLE_MAIN_CLASS="Bundle-Activator: $6"
+fi
+
+cat > META-INF/MANIFEST.MF << ENDCAT
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: $1
+Eclipse-LazyStart: true
+Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
+Bundle-Version: $2
+Bundle-ClassPath: ${BUNDLE_CLASSPATH}
+Bundle-Localization: plugin
+Export-Package: $4
+${REQUIRE_BUNDLE}
+${BUNDLE_MAIN_CLASS}
+ENDCAT
+
+cat > build.properties << ENDCAT
+source.$3 = src/
+bin.includes = META-INF/,.,$3
+ENDCAT
+
+cat > .classpath << ENDCAT
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+  <classpathentry kind="src" path="src"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+  <classpathentry kind="output" path="bin"/>
+</classpath>
+ENDCAT
+
+cat > .project << ENDCAT
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>$1</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.pde.PluginNature</nature>
+	</natures>
+</projectDescription>
+ENDCAT
 ])
 
 dnl META_IF_NOT_CONTAINS(STRING,SUBSTRING,CODE)
