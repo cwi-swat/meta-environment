@@ -12,6 +12,7 @@ import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
+import toolbus.atom.Tau;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import toolbus.parsercup.PositionInformation;
@@ -44,8 +45,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	
 	private Environment env;
 	
-	private ProcessDefinition definition = null; 	// May remain null for dynamic calls to
-													// non-existing processes
+	private ProcessDefinition definition = null; 	// May remain null for dynamic calls to non-existing processes
 	
 	protected ProcessExpression PE;
 	
@@ -335,9 +335,11 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	/**
 	 * Returns the last, by this process call, executed state element.
 	 * (This method is used for debugging only).
-	 * @return The last, by this process call, executed state element; null if this process call isn't currently executing.
+	 * @return The last, by this process call, executed state element; may be null if this process call isn't currently executing.
 	 */
 	public StateElement getExecutedStateElement(){
+		if(!(activated || executing)) return new Tau(tbfactory, null); // Pretend nothing happened if the call was just completed.
+		
 		StateElement executedStateElement = PE.getFirst().getLastExecutedStateElement();
 		while(executedStateElement instanceof ProcessCall){
 			executedStateElement = ((ProcessCall) executedStateElement).getExecutedStateElement();

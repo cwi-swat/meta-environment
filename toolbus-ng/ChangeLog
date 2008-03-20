@@ -1,3 +1,6 @@
+Thu Mar 20 11:21:34 CEST 2008 <lankamp@cwi.nl>
+  * Fixed a problem in the debug code of the ProcessCall atom. It 'appeared' that duplicate steps where being executed, eventhough that wasn't the case.
+
 Thu Mar 20 10:09:24 CEST 2008 <lankamp@cwi.nl>
   * The performance statistics gatherer now assumes we're only interested in the information related to the threads in the current threadgroup and it's children. Usually this will be 'main'; but in case more then one tool is running in the same virtual machine, this change provides the user with the ability to enable the adapter to filter out the correct information.
 
