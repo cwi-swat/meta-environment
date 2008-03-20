@@ -9,8 +9,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-
+import java.util.Set;
 import toolbus.IOperations;
 import toolbus.adapter.AbstractTool;
 import toolbus.adapter.ToolBridge;
@@ -479,6 +480,18 @@ public class JavaToolBridge extends ToolBridge{
 		ATerm memory = termFactory.makeAppl(termFactory.makeAFun("memory-usage", 2, false), heapUsage, nonHeapUsage);
 		
 		// Thread stuff
+		ThreadGroup currentThreadGroup = Thread.currentThread().getThreadGroup();
+		Thread[] relevantThreads = new Thread[currentThreadGroup.activeCount() * 2 + 10]; // Create an array that's more then big enough.
+		currentThreadGroup.enumerate(relevantThreads);
+		
+		Set<Long> relevantThreadIds = new HashSet<Long>();
+		for(int i = 0; i < relevantThreads.length; i++){
+			Thread thread = relevantThreads[i];
+			if(thread != null){
+				relevantThreadIds.add(new Long(thread.getId()));
+			}
+		}
+		
 		ThreadMXBean tmxb = ManagementFactory.getThreadMXBean();
 		
 		ATerm threads;
@@ -488,19 +501,22 @@ public class JavaToolBridge extends ToolBridge{
 		try{
 			ATermList threadsList = termFactory.makeList();
 			for(int i = 0; i < nrOfThreads; i++){
-				ThreadInfo ti = tmxb.getThreadInfo(threadIds[i]);
-				if(ti != null){
-					String threadName = ti.getThreadName();
-					long userTime = tmxb.getThreadUserTime(threadIds[i]);
-					long systemTime = tmxb.getThreadCpuTime(threadIds[i]) - userTime;
-					
-					if((userTime + systemTime) <= 0) continue;
-					
-					ATerm userTimeTerm = termFactory.makeAppl(termFactory.makeAFun("user-time", 1, false), termFactory.makeInt(((int) (userTime / 1000000))));
-					ATerm systemTimeTerm = termFactory.makeAppl(termFactory.makeAFun("system-time", 1, false), termFactory.makeInt(((int) (systemTime / 1000000))));
-					ATerm thread = termFactory.makeAppl(termFactory.makeAFun(threadName, 2, false), userTimeTerm, systemTimeTerm);
-					
-					threadsList = termFactory.makeList(thread, threadsList);
+				long threadId = threadIds[i];
+				if(relevantThreadIds.contains(new Long(threadId))){ // Only list the info if we're interested in it.
+					ThreadInfo ti = tmxb.getThreadInfo(threadId);
+					if(ti != null){
+						String threadName = ti.getThreadName();
+						long userTime = tmxb.getThreadUserTime(threadIds[i]);
+						long systemTime = tmxb.getThreadCpuTime(threadIds[i]) - userTime;
+						
+						if((userTime + systemTime) <= 0) continue;
+						
+						ATerm userTimeTerm = termFactory.makeAppl(termFactory.makeAFun("user-time", 1, false), termFactory.makeInt(((int) (userTime / 1000000))));
+						ATerm systemTimeTerm = termFactory.makeAppl(termFactory.makeAFun("system-time", 1, false), termFactory.makeInt(((int) (systemTime / 1000000))));
+						ATerm thread = termFactory.makeAppl(termFactory.makeAFun(threadName, 2, false), userTimeTerm, systemTimeTerm);
+						
+						threadsList = termFactory.makeList(thread, threadsList);
+					}
 				}
 			}
 			

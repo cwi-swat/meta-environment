@@ -293,7 +293,7 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		return shortName()/* + pidStr + args + strtest*/;
 	}
 	
-	public ATerm toATerm(){
+	public ATermAppl toATerm(){
 		int nargs = atomArgs.length;
 		// System.err.println("toATerm: " + externalNameAsReceivedByTool);
 		

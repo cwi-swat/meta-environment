@@ -300,7 +300,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				LoggerFactory.log("Dunno where the ToolBus is running.", ILogger.FATAL, IToolBusLoggerConstants.TOOL);
 				throw new RuntimeException("Dunno where the ToolBus is running.");
 			}
-
+			
 			ToolConnectionHandler toolConnectionHandler = new ToolConnectionHandler(this, host, port);
 			toolConnectionHandler.run();
 			

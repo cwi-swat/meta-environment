@@ -34,6 +34,7 @@ import toolbus.tool.ToolInstance;
 import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
 import aterm.ATerm;
+import aterm.ATermAppl;
 
 /**
  * ToolBus implements the behaviour of one ToolBus.
@@ -242,7 +243,7 @@ public class ToolBus{
 			parser_obj.generateInitialProcessCalls();
 			
 			// Initialize the signatures.
-			final List<ATerm> atomSignature = new ArrayList<ATerm>();
+			final List<ATermAppl> atomSignature = new ArrayList<ATermAppl>();
 			procdefs.iterate(new ReadOnlyHashMapEntryHandler<String, ProcessDefinition>(){
 				public int handle(String key, ProcessDefinition value){
 					ProcessExpression originalProcessExpression = value.getOriginalProcessExpression();
@@ -251,8 +252,7 @@ public class ToolBus{
 					while(atomSetIterator.hasNext()){
 						Atom a = atomSetIterator.next();
 						
-						ATerm pat = tbfactory.makePattern(a.toATerm());
-						atomSignature.add(pat);
+						atomSignature.add(a.toATerm());
 					}
 					
 					return CONTINUE;
@@ -320,13 +320,9 @@ public class ToolBus{
 		return toolDefinitions;
 	}
 	
-	private void calculateToolSignatures(final List<ATerm> atomSignature){
-		final List<ToolDefinition> toolDefinitions = new ArrayList<ToolDefinition>();
-		
+	private void calculateToolSignatures(final List<ATermAppl> atomSignature){
 		tooldefs.iterate(new ReadOnlyHashMapEntryHandler<String, ToolDefinition>(){
 			public int handle(String key, ToolDefinition value){
-				toolDefinitions.add(value);
-				
 				value.calculateToolSignature(atomSignature);
 				
 				return CONTINUE;
