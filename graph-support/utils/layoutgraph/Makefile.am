@@ -42,5 +42,5 @@ y.tab.c y.tab.h: dot.y
 	$(YACC) -v $(AM_YFLAGS) $(YFLAGS) $<
 
 lex.yy.c : dot.l y.tab.h
-	$(LEX) $(AM_LFLAGS) $(LFLAGS) $<
+	$(LEX) --nounput $(AM_LFLAGS) $(LFLAGS) $<
 

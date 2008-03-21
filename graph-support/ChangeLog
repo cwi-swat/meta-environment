@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 21 15:39:01 EDT 2008 <jurgenv@cwi.nl>
+ * utils/layoutgraph/Makefile.am: added --nounput option to flex, such
+   that the newest flex implementations will work.
+
 2007-09-05    <storm@cwi.nl>
  * utils/layoutgraph/Makefile.am: changed layoutgraph to take the location
    of dot from the path instead of the configured path in the Makefile.
