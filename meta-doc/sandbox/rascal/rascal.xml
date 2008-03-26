@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -759,15 +759,29 @@ fun set[TREE] find_outer_gs(TREE T) {
     </section>
 
     <section>
-      <title>Booleans</title>
+      <title>Variations on Booleans</title>
 
-      <para>Probably a non-typical example, but let's try it anyway. It looks
-      horrible compared to the ASF version but gives an indication how we can
-      convert ASF+SDF specifications to Rascal. See <xref
-      linkend="section.booleans-with-replace" /> for a much shorter version
-      that uses <literal>replace</literal>.</para>
+      <para>It seems that every language specification effort has to produce a
+      specification of the Booleans at some moment, so let's try it now. We
+      try three version:</para>
 
-      <programlisting>module Booleans-syntax
+      <itemizedlist>
+        <listitem>
+          <para>A version with an explicit reduction function, see <xref
+          linkend="section.booleans-explicit-reduction-function." /></para>
+        </listitem>
+
+        <listitem>
+          <para>A version using replace, see <xref
+          linkend="section.booleans-with-replace" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>A version using an implicit reduction function</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The have the following syntax in common:<programlisting>module Booleans-syntax
 exports 
   sorts Bool
 
@@ -775,9 +789,16 @@ exports
     "true"        -&gt; Bool
     "false"       -&gt; Bool
     Bool "&amp;" Bool -&gt; Bool {left}
-    Bool "|" Bool -&gt; Bool {right}</programlisting>
+    Bool "|" Bool -&gt; Bool {right}</programlisting></para>
 
-      <programlisting>module Bool-examples
+      <section xml:id="section.booleans-explicit-reduction-function.">
+        <title>Booleans with explicit reduction function</title>
+
+        <para>This first version defines reduction functions for each operator
+        and an overall reduction function for Booleans. Be warned, it looks
+        horrible!</para>
+
+        <programlisting>module Bool-examples
 imports Booleans-syntax
 
 fun Bool and(Bool B1, B2) { %% reduce &amp; operator
@@ -803,14 +824,13 @@ fun Bool reduce(Bool B){
       &lt;Bool B3&gt;             =&gt; B
     }
 }</programlisting>
-    </section>
+      </section>
 
-    <section xml:id="section.booleans-with-replace">
-      <title>Booleans (version2 using replace)</title>
+      <section xml:id="section.booleans-with-replace">
+        <title>Booleans using replace</title>
 
-      <para>The earlier definition of Booleans was quite involved. A much
-      simpler solution exists using the replace construct that we have
-      encountered in the above examples.<programlisting>module Bool-examples2
+        <para>A much simpler solution exists using the replace construct that
+        we have encountered in the above examples.<programlisting>module Bool-examples2
 imports Booleans-syntax
 
 fun Bool reduce(Bool B) {
@@ -825,18 +845,97 @@ fun Bool reduce(Bool B) {
     }
 }</programlisting></para>
 
-      <para>Observe that there are two styles:</para>
+        <para>Observe that there are two styles:</para>
 
-      <itemizedlist>
-        <listitem>
-          <para>Using variables on the left-hand side: a recursive application
-          of reduce is needed to fully normalize the result.</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>Using variables on the left-hand side: a recursive
+            application of reduce is needed to fully normalize the result.
+            Compared to ASF, this explicit reduce looks redundant (see
+            below).</para>
+          </listitem>
 
-        <listitem>
-          <para>A truth table: this is sufficient as is.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>A truth table: this is sufficient as is.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Booleans with implicit reduce</title>
+
+        <para>In order to eliminate the explicit reduce function in the
+        previous example, we introduce the possibility to associate a
+        reduction function with all values of a sort:</para>
+
+        <para><programlisting>simplify Bool B as reduce(B)</programlisting>with
+        as meaning that the (sort preserving) function
+        <literal>reduce</literal> is applied whenever a value of type
+        <literal>Bool</literal> is constructed. The previous version will then
+        become:</para>
+
+        <para><programlisting>module Bool-examples3
+imports Booleans-syntax
+
+simplify Bool B as reduce(B)
+
+fun Bool reduce(Bool B) {
+    replace B bu {
+      true &amp; &lt;Bool B2&gt;   =&gt; B2    %% Style 1: implicit invocation of reduce
+      false &amp; &lt;Bool B2&gt;  =&gt; false
+
+      true | true   =&gt; true       %% Style 2: truth table
+      true | false  =&gt; true
+      false | true  =&gt; true
+      false | false =&gt; false
+    }
+}</programlisting></para>
+
+        <para>In fact, usign this style (and if we are not interested in
+        traversal order) we do not need the replace at all, since the
+        following simpler version suffices:<programlisting>module Bool-examples4
+imports Booleans-syntax
+
+simplify Bool B as reduce(B)
+
+fun Bool reduce(Bool B) {
+    switch B {
+      true &amp; &lt;Bool B2&gt;   =&gt; B2    %% Style 1: implicit invocation of reduce
+      false &amp; &lt;Bool B2&gt;  =&gt; false
+
+      true | true   =&gt; true       %% Style 2: truth table
+      true | false  =&gt; true
+      false | true  =&gt; true
+      false | false =&gt; false
+    }
+}</programlisting>There are some issues here:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>It should be forbidden that more than one simplify applies
+            for the same sort. This situation could arise due to
+            imports.</para>
+          </listitem>
+
+          <listitem>
+            <para>We could (optionally) forbid or warn for the explicit use of
+            a function that is used as simplifier.</para>
+          </listitem>
+
+          <listitem>
+            <para>We have not yet addressed visibility (public/private/hidden
+            etc) of names. We should be carefull in determining the visibility
+            and scope of the simplify construct.</para>
+          </listitem>
+
+          <listitem>
+            <para>It is interesting that the simplify construct allows us to
+            explicitly use certain sorts as free terms or as terms that are to
+            be simplfied, depending on the context. This flexibility is absent
+            in ASF.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
     </section>
 
     <section>
