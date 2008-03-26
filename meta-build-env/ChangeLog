@@ -1,5 +1,12 @@
 $Id$
 
+Wed Mar 26 11:48:15 CEST 2008 <lankamp@cwi.nl>
+ * Added workaround for the "ERROR: files left in build directory after
+ distclean" problem, so distcheck stops complaining. .project, .classpath,
+ build.properties and META-INF/MANIFEST.MF are now being ignored.
+ * Fixed a problem in meta-build.ant. The build, dist and doc directories were
+ being created in the wrong place (the project prefix was being appended).
+
 Thu Mar 20 16:42:14 EDT 2008 <jurgenv@cwi.nl>
  * meta-build.m4: use of LOCAL_JARS to fill .classpath entries
 

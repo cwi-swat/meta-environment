@@ -2,11 +2,11 @@
 
 <project>
   <property environment="env"/>
-  <property name="build" location="build"/>
-  <property name="dist" location="dist"/>
+  <property name="build" value="build"/>
+  <property name="dist" value="dist"/>
   <property name="src" value="src"/>
   <property name="resources" value="resources"/>
-  <property name="doc" location="doc/html"/> 
+  <property name="doc" value="doc/html"/> 
   <property environment="env"/>
 
   <path id="project.classpath">

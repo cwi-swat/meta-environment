@@ -16,6 +16,9 @@ EXTRA_DIST += $(wildcard *.m4) \
 
 CLEANFILES+=$(PACKAGE)-uninstalled.pc
 
+#Ignore the generated Eclipse stuff (ugly but necessary to prevent distcheck warnings unfortunately).
+distcleancheck_listfiles = find -type f | grep -v "./.project" | grep -v "./.classpath" | grep -v "./META-INF/MANIFEST.MF" | grep -v "./build.properties"
+
 pkgconfig_DATA = $(PACKAGE).pc
 
 JARFILE_ENV = JAR=$(JAVA_JAR)
