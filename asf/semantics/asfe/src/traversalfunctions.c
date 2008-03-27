@@ -139,7 +139,7 @@ static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data) {
   bool = (ATbool*) data;
   
   if (PT_isAttrTerm(attr)) {
-    ATerm term = PT_getAttrTerm(attr);
+    ATerm term = PT_getAttrValue(attr);
 
     if (ATgetType(term) == AT_APPL) {
       char *fun = ATgetName(ATgetSymbol(term));
@@ -185,7 +185,7 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav) {
 
     PT_foreachAttrInAttrs(attrs, getTraversalAttr, (PT_AttrVisitorData) &attr);
 
-    args = ATgetArguments((ATermAppl) PT_getAttrTerm(attr));
+    args = ATgetArguments((ATermAppl) PT_getAttrValue(attr));
 
     for(;!ATisEmpty(args);args = ATgetNext(args)) {
       ATerm arg = ATgetFirst(args);

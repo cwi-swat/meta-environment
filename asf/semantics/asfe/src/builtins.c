@@ -23,7 +23,7 @@ ATerm getTreeBuiltin(PT_Tree tree) {
 	PT_Attr head = PT_getAttrsHead(attrs);
 
 	if (PT_isAttrTerm(head)) {
-	  ATerm term = PT_getAttrTerm(head);
+	  ATerm term = PT_getAttrValue(head);
 
 	  if (ATgetType(term) == AT_APPL &&
 	      ATgetAFun((ATermAppl) term) == builtin) {

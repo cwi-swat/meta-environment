@@ -308,7 +308,7 @@ static MA_Term attrToTerm(PT_Attr attr)
 			      MA_makeTermArgsSingle(arg), em);
   }
   else if (PT_isAttrTerm(attr)) {
-    ATerm term = (ATerm) PT_getAttrTerm(attr);
+    ATerm term = (ATerm) PT_getAttrValue(attr);
     
     result =  atermToTerm(term);
   }
