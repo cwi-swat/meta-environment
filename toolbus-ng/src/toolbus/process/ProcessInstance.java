@@ -288,8 +288,11 @@ public class ProcessInstance{
 			ExecutionResult executionResult = currentState.debugExecute();
 			if(executionResult != null){
 				StateElement stateElement = executionResult.stateElement;
-				if(stateElement instanceof ProcessCall){ // If we just encountered a process call, find out what element it executed (so we can pretent it got inlined).
+				// If we just encountered a (dynamic) process call, find out what element it executed (so we can pretent it got inlined).
+				if(stateElement instanceof ProcessCall){
 					executionResult = new ExecutionResult(((ProcessCall) stateElement).getExecutedStateElement(), executionResult.partners);
+				}else if(stateElement instanceof DynamicProcessCall){
+					executionResult = new ExecutionResult(((DynamicProcessCall) stateElement).getExecutedStateElement(), executionResult.partners);
 				}
 				gotoNextStateAndActivate();
 				return executionResult;

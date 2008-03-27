@@ -49,7 +49,7 @@ public class Create extends Atom{
 		ATermList cargs = ((ATermAppl) pcall.value).getArguments();
 		ATermList evargs = (ATermList) Functions.eval(cargs, getProcess(), getEnv());
 		
-		ToolBus TB = getProcess().getToolBus();
+		ToolBus TB = getToolBus();
 		
 		ProcessInstance P = TB.addProcess(new ProcessCall(name, evargs, false, TB.getTBTermFactory(), null));
 		

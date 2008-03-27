@@ -69,7 +69,7 @@ public class Assign extends Atom{
 	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
-		ProcessInstance p = this.getProcess();
+		ProcessInstance p = getProcess();
 		Environment env = getEnv();
 		// System.err.println("Atom.execute: "+ this);
 		// System.err.println("Assign: " + env);

@@ -11,6 +11,7 @@ import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.atom.Tau;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
@@ -20,20 +21,10 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 
-/**
- * ProcessCall implements a call to a process P(f1, f2, ...). There are two main cases: (1) A static
- * process call: the current environment does not contain a declaration for a string variable P and
- * the name of the process is P. Its declaration is taken and the call is replaced statically by the
- * corresponding process expression. (2) A dynamic process call: the current environment *does*
- * contain a declaration for a string variable P and the name of the process is the *string value*
- * of that variable. The declaration correspodning to that value is taken and the call is replaced
- * dynamically by the corresponding process expression. In the dynamic case, each the call is
- * encountered during execution it the may thus be expanded into a different process expression. Due
- * to the possibility of dynamic calls, a process call is a StateElement and exists during
- * execution.
- */
-public class ProcessCall extends ProcessExpression implements StateElement{
+public class DynamicProcessCall extends ProcessExpression implements StateElement{
 	private String name;
+	
+	private TBTermVar nameAsVar;
 	
 	protected final ATermList originalActuals;
 	protected ATermList actuals;
@@ -42,13 +33,11 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	
 	private Environment env;
 	
-	private ProcessDefinition definition = null;
+	private ProcessDefinition definition = null; // May remain null for dynamic calls to non-existing processes
 	
 	protected ProcessExpression PE;
 	
 	protected ProcessInstance processInstance;
-	
-	private boolean evalArgs = true;
 	
 	private final State firstState;
 	
@@ -56,10 +45,12 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	
 	private boolean activated = false;
 	
+	private Stack<String> calls;
+	
 	private ATerm test;
 	private Environment testEnv;
 	
-	public ProcessCall(String name, ATermList actuals, TBTermFactory tbfactory, PositionInformation posInfo){
+	public DynamicProcessCall(String name, ATermList actuals, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.name = name;
 		this.originalActuals = actuals;
@@ -69,21 +60,8 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		firstState.addElement(this);
 	}
 	
-	public ProcessCall(ATerm call, TBTermFactory tbfactory, PositionInformation posInfo){
-		this(((ATermAppl) call).getName(), ((ATermAppl) call).getArguments(), tbfactory, posInfo);
-	}
-	
-	public ProcessCall(String name, ATermList actuals, boolean evalArgs, TBTermFactory tbfactory, PositionInformation posInfo){
-		this(name, actuals, tbfactory, posInfo);
-		this.evalArgs = evalArgs;
-	}
-	
-	public void setEvalArgs(boolean b){
-		evalArgs = b;
-	}
-	
 	protected ProcessExpression copy(){
-		return new ProcessCall(name, actuals, evalArgs, tbfactory, getPosInfo());
+		return new DynamicProcessCall(name, actuals, tbfactory, getPosInfo());
 	}
 	
 	protected void computeFirst(){
@@ -101,9 +79,17 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	
 	protected void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException{
 		processInstance = P;
+		this.calls = calls;
 		setFollow(follows);
+		nameAsVar = tbfactory.mkVar(tbfactory.make(name), calls.peek(), tbfactory.StrType);
 		
-		if(calls.contains(name)) throw new ToolBusException("Recursive call of " + name);
+		definition = null;
+	}
+	
+	private void compileStaticOrDynamicCall() throws ToolBusException{
+		if(calls.contains(name)){
+			throw new ToolBusException("Recursive call of " + name);
+		}
 		
 		definition = processInstance.getToolBus().getProcessDefinition(name, originalActuals.getLength());
 		
@@ -117,7 +103,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		formals = definition.getFormals();
 		actuals = (ATermList) tbfactory.resolveVarTypes(actuals, env);
 		
-		env.introduceBindings(formals, actuals, evalArgs);
+		env.introduceBindings(formals, actuals, true);
 		actuals = (ATermList) tbfactory.replaceFormals(actuals, env);
 		
 		// System.err.println("ProcessCall.compile(" + name + "): " + env);
@@ -132,6 +118,25 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		PE.getFirst().setTest(test, testEnv);
 		// env.removeBindings(formals);
 		// System.err.println(name + " expanded as:\n" + PE);
+	}
+	
+	private void initDynamicCall() throws ToolBusException{
+		ATermAppl dynprocessname = (ATermAppl) env.getValue(nameAsVar);
+		name = dynprocessname.getName();
+		compileStaticOrDynamicCall();
+		//System.err.println("Dynamic process name " + name + " => " + dynprocessname);
+		AtomSet callElements = PE.getAtoms();
+		processInstance.addElements(callElements);
+		processInstance.addPartnersToAllProcesses(callElements);
+	}
+	
+	private void finishCall(){
+		activated = executing = false;
+		definition = null;
+		AtomSet callElements = PE.getAtoms();
+		PE = null;
+		processInstance.delElements(callElements);
+		processInstance.delPartnersFromAllProcesses(callElements);
 	}
 	
 	public AtomSet getAtoms(){
@@ -157,7 +162,9 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	// Implementation of the StateElement interface
 	
 	public boolean contains(StateElement a){
-		return PE.getFirst().contains(a);
+		// if(!isStaticCall){ System.err.println(name + ": contains " + a); }
+		
+		return ((definition != null) && activated) ? PE.getFirst().contains(a) : false;
 	}
 	
 	public ProcessInstance getProcess(){
@@ -165,7 +172,8 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	}
 	
 	public void setTest(ATerm test, Environment env) throws ToolBusException{
-		PE.getFirst().setTest(test, env);
+		this.test = test;
+		this.testEnv = env;
 	}
 	
 	public List<ATerm> getTests(){
@@ -175,7 +183,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	}
 	
 	public boolean isEnabled(){
-		return activated;
+		return (activated && definition != null);
 	}
 	
 	public State gotoNextStateAndActivate(){
@@ -201,30 +209,30 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	public void activate(){
 		if(activated && executing) return;
 		
+		try{
+			initDynamicCall();
+		}catch(ToolBusException e){
+			System.err.println(e.getMessage());
+			activated = false;
+			return;
+		}
+		
 		activated = true;
 		PE.getFirst().activate();
 	}
 	
 	public boolean execute() throws ToolBusException{
-		// System.err.println("ProcessCall.execute: [" + getProcess().getProcessName() + "]" + this);
-		// System.err.println("activated = " + activated + "; executing = " + executing + "; first = " + PE.getFirst());
 		if(isEnabled()){
 			if(!executing){
 				if(PE.getFirst().size() == 0){
 					// System.err.println("case size = 0");
 					executing = true;
-					// System.err.println("ProcessCall [" + getProcess().getProcessName() + "] enter");
 					return true;
 				}
-				// System.err.println("case size != 0");
 				executing = PE.getFirst().execute();
-				// System.err.println("executing => " + executing);
-				// if(executing)System.err.println("ProcessCall [" + getProcess().getProcessName() + "] enter");
 				return executing;
 			}
-			// System.err.println("execute: moving on to: " + follows);
-			// System.err.println("ProcessCall [" + getProcess().getProcessName() + "] leave");
-			activated = executing = false;
+			finishCall();
 			return true;
 		}
 		return false;
@@ -245,7 +253,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 				executing = false;
 				return null;
 			}
-			activated = executing = false;
+			finishCall();
 			return new ProcessInstance[0];
 		}
 		return null;

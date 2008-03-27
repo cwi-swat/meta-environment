@@ -52,7 +52,7 @@ public class Execute extends Atom{
 		if(!isEnabled()) return false;
 		
 		String name = ((ATermAppl) tool.value).getName();
-		ToolBus toolbus = getProcess().getToolBus();
+		ToolBus toolbus = getToolBus();
 		ToolInstance toolInstance = new ToolInstance(toolbus.getToolDefinition(name), toolbus);
 		ToolInstanceManager toolInstanceManager = toolbus.getToolInstanceManager();
 		toolInstanceManager.addPendingTool(toolInstance);

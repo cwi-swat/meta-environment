@@ -355,7 +355,7 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 			while(testIterator.hasNext()){
 				Test t = testIterator.next();
 				//System.err.print("evaluate: " + t);
-				boolean res = tbfactory.isTrue(Functions.eval(t.testExpr, getProcess(), t.testEnv));
+				boolean res = tbfactory.isTrue(Functions.eval(t.testExpr, processInstance, t.testEnv));
 				//System.err.println(" ==> " + res);
 				if(!res){
 					/*incr(notEnabled);*/

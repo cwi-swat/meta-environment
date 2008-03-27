@@ -254,6 +254,7 @@ public class Merge extends ProcessExpression implements StateElement{
 	}*/
 	
 	/*public void delPartners(AtomSet s) throws ToolBusException{
-		state[LEFT].delPartners(s); state[RIGHT].delPartners(s);
+		state[LEFT].delPartners(s);
+		state[RIGHT].delPartners(s);
 	}*/
 }
