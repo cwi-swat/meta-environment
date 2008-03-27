@@ -135,7 +135,7 @@ static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data)
   bool = (ATbool*) data;
   
   if (PT_isAttrTerm(attr)) {
-    ATerm term = PT_getAttrTerm(attr);
+    ATerm term = PT_getAttrValue(attr);
 
     if (ATgetType(term) == AT_APPL) {
       char *fun = ATgetName(ATgetSymbol(term));
