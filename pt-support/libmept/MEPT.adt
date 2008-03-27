@@ -16,7 +16,7 @@ constructor(Attributes, attrs, attrs(<attrs(Attrs)>)),
 list(Attrs, Attr),
 
 constructor(Attr, assoc, assoc(<assoc(Associativity)>)), 
-constructor(Attr, term, term(<term(term)>)), 
+constructor(Attr, term, term(<value(term)>)), 
 constructor(Attr, id, id(<module-name(str)>)), 
 constructor(Attr, bracket, bracket), 
 constructor(Attr, reject, reject), 

@@ -1143,11 +1143,11 @@ PT_Attr PT_makeAttrAssoc(PT_Associativity assoc) {
 }
 /**
  * Constructs a term of type PT_Attr. Like all ATerm types, PT_Attrs are maximally shared.
- * \param[in] term a child of the new term
+ * \param[in] value a child of the new term
  * \return A pointer to a term, either newly constructed or shared
  */
-PT_Attr PT_makeAttrTerm(ATerm term) {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun9, (ATerm) term);
+PT_Attr PT_makeAttrTerm(ATerm value) {
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun9, (ATerm) value);
 }
 /**
  * Constructs a id of type PT_Attr. Like all ATerm types, PT_Attrs are maximally shared.
@@ -2519,7 +2519,7 @@ inline ATbool PT_isAttrAssoc(PT_Attr arg){
 }
 
 /**
- * Assert whether a PT_Attr is a term by checking against the following ATerm pattern: term(<term(term)>). May not be used to assert correctness of the PT_Attr
+ * Assert whether a PT_Attr is a term by checking against the following ATerm pattern: term(<value(term)>). May not be used to assert correctness of the PT_Attr
  * \param[in] arg input PT_Attr
  * \return ATtrue if #arg corresponds to the signature of a term, or ATfalse otherwise
  */
@@ -2615,11 +2615,11 @@ ATbool PT_hasAttrAssoc(PT_Attr arg) {
 }
 
 /**
- * Assert whether a PT_Attr has a term. 
+ * Assert whether a PT_Attr has a value. 
  * \param[in] arg input PT_Attr
- * \return ATtrue if the PT_Attr had a term, or ATfalse otherwise
+ * \return ATtrue if the PT_Attr had a value, or ATfalse otherwise
  */
-ATbool PT_hasAttrTerm(PT_Attr arg) {
+ATbool PT_hasAttrValue(PT_Attr arg) {
   if (PT_isAttrTerm(arg)) {
     return ATtrue;
   }
@@ -2649,11 +2649,11 @@ PT_Associativity PT_getAttrAssoc(PT_Attr arg) {
 }
 
 /**
- * Get the term ATerm of a PT_Attr. Note that the precondition is that this PT_Attr actually has a term
+ * Get the value ATerm of a PT_Attr. Note that the precondition is that this PT_Attr actually has a value
  * \param[in] arg input PT_Attr
- * \return the term of #arg, if it exist or an undefined value if it does not
+ * \return the value of #arg, if it exist or an undefined value if it does not
  */
-ATerm PT_getAttrTerm(PT_Attr arg) {
+ATerm PT_getAttrValue(PT_Attr arg) {
   
     return (ATerm)ATgetArgument((ATermAppl)arg, 0);
 }
@@ -2684,17 +2684,17 @@ PT_Attr PT_setAttrAssoc(PT_Attr arg, PT_Associativity assoc) {
 }
 
 /**
- * Set the term of a PT_Attr. The precondition being that this PT_Attr actually has a term
+ * Set the value of a PT_Attr. The precondition being that this PT_Attr actually has a value
  * \param[in] arg input PT_Attr
- * \param[in] term new ATerm to set in #arg
- * \return A new PT_Attr with term at the right place, or a core dump if #arg did not have a term
+ * \param[in] value new ATerm to set in #arg
+ * \return A new PT_Attr with value at the right place, or a core dump if #arg did not have a value
  */
-PT_Attr PT_setAttrTerm(PT_Attr arg, ATerm term) {
+PT_Attr PT_setAttrValue(PT_Attr arg, ATerm value) {
   if (PT_isAttrTerm(arg)) {
-    return (PT_Attr)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) term), 0);
+    return (PT_Attr)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) value), 0);
   }
 
-  ATabort("Attr has no Term: %t\n", arg);
+  ATabort("Attr has no Value: %t\n", arg);
   return (PT_Attr)NULL;
 }
 
@@ -4298,14 +4298,14 @@ PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr)) {
  * Apply functions to the children of a PT_Attr. 
  * \return A new PT_Attr with new children where the argument functions might have applied
  */
-PT_Attr PT_visitAttr(PT_Attr arg, PT_Associativity (*acceptAssoc)(PT_Associativity), ATerm (*acceptTerm)(ATerm), char* (*acceptModuleName)(char*)) {
+PT_Attr PT_visitAttr(PT_Attr arg, PT_Associativity (*acceptAssoc)(PT_Associativity), ATerm (*acceptValue)(ATerm), char* (*acceptModuleName)(char*)) {
   if (PT_isAttrAssoc(arg)) {
     return PT_makeAttrAssoc(
         acceptAssoc ? acceptAssoc(PT_getAttrAssoc(arg)) : PT_getAttrAssoc(arg));
   }
   if (PT_isAttrTerm(arg)) {
     return PT_makeAttrTerm(
-        acceptTerm ? acceptTerm(PT_getAttrTerm(arg)) : PT_getAttrTerm(arg));
+        acceptValue ? acceptValue(PT_getAttrValue(arg)) : PT_getAttrValue(arg));
   }
   if (PT_isAttrId(arg)) {
     return PT_makeAttrId(

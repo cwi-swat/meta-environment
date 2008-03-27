@@ -184,7 +184,7 @@ static int lengthOfAttr(PT_Attr attr)
     attribute = PT_AssociativityToTerm(PT_getAttrAssoc(attr));
   }
   else if (PT_isAttrTerm(attr)) {
-    attribute = PT_getAttrTerm(attr);
+    attribute = PT_getAttrValue(attr);
   }
   else {
     attribute = PT_AttrToTerm(attr);
@@ -557,7 +557,7 @@ yieldAttr(PT_Attr attr, int idx, char *buf, int bufSize)
     attribute = PT_AssociativityToTerm(PT_getAttrAssoc(attr));
   }
   else if (PT_isAttrTerm(attr)) {
-    attribute = PT_getAttrTerm(attr);
+    attribute = PT_getAttrValue(attr);
   }
   else {
     attribute = PT_AttrToTerm(attr);

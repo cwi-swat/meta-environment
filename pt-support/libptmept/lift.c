@@ -591,7 +591,7 @@ static PTPT_Attr PTPT_liftAttr(PT_Attr attr)
     result = PTPT_makeAttrAssoc(e,e,assoc,e);
   }
   else if (PT_isAttrTerm(attr)) {
-    PTPT_ATerm term = PTPT_liftATerm(PT_getAttrTerm(attr));
+    PTPT_ATerm term = PTPT_liftATerm(PT_getAttrValue(attr));
     result = PTPT_makeAttrTerm(e,e,term,e);
   }
   else if (PT_isAttrId(attr)) {
