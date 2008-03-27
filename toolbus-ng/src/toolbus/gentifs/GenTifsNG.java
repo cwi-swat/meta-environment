@@ -39,7 +39,7 @@ public class GenTifsNG{
 			ToolDefinition toolDefinition = toolDefinitionsIterator.next();
 			
 			ATerm toolName = factory.makeAppl(factory.makeAFun(toolDefinition.getName(), 0, true));
-			factory.makeList(factory.makeAppl(toolSignatureFun, toolName, toolDefinition.getInputSignature()), signatures);
+			signatures = factory.makeList(factory.makeAppl(toolSignatureFun, toolName, toolDefinition.getInputSignature()), signatures);
 		}
 		
 		FileOutputStream fos = new FileOutputStream(outputFile);
