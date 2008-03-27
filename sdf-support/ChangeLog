@@ -1,5 +1,8 @@
 $Id$
 
+Thu Mar 27 10:20:53 EDT 2008 <jurgenv@cwi.nl>
+ * src/pt2sdf.c: little change after change in MEPT.adt
+
 Mon Mar 12 19:03:46 CET 2007 <economop@cwi.nl>
  * test/pt2sdf-test.c: commented out an ATwarning.
 
