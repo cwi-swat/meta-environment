@@ -20,7 +20,7 @@ static int pid;
 static TA_Expr eval_resume(int pid, AFun fun, TA_ExprList args)
 {
   TA_setProcessState(pid, STATE_RUNNING);
-
+ATwarning("eval resume");
   return ATparse("true");
 }
 
@@ -30,6 +30,7 @@ static TA_Expr eval_resume(int pid, AFun fun, TA_ExprList args)
 static TA_Expr eval_break(int pid, AFun fun, TA_ExprList args)
 {
   TA_setProcessState(pid, STATE_STOPPED);
+ATwarning("eval break\n");
 
   return ATparse("true");
 }
