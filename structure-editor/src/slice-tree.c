@@ -47,7 +47,7 @@ static ATerm getProductionCategory(PT_Tree tree)
 	  if (PT_isAttrTerm(head)) {
 	    ATerm cat = NULL;
 
-	    if (ATmatchTerm(PT_getAttrTerm(head), categoryPattern,&cat)) {
+	    if (ATmatchTerm(PT_getAttrValue(head), categoryPattern,&cat)) {
 	      return cat;
 	    }
 	  }

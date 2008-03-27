@@ -1,5 +1,8 @@
 $Id$
 
+Thu Mar 27 10:41:05 EDT 2008 <jurgenv@cwi.nl>
+ * src/slice-tree.c: little change due to API change in pt-support
+
 Mon Dec  3 10:45:54 EST 2007 <jurgenv@cwi.nl>
  * src/*.c: replaced all LOC_ calls to ERR_ calls.
 
