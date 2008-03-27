@@ -104,6 +104,33 @@ public class JavaTif{
 		this.swingTool = swingTool;
 	}
 	
+	private void populateMaps(ATermList tifs){
+		ATermList empty = factory.makeList();
+		ATermList toolSignature = tifs;
+		while(toolSignature != empty){
+			ATermAppl request = (ATermAppl) tifs.getFirst();
+			if(request.getAFun().getName().equals("rec-do")){
+				ATermAppl appl = (ATermAppl) request.getArgument(1);
+				appl = normalize(appl);
+				SpecOrderVector specOrderVector = new SpecOrderVector();
+				specOrderVector.insert(appl);
+				doEvents.put(appl.toString(), specOrderVector);
+			}else if(request.getAFun().getName().equals("rec-eval")){
+				ATermAppl appl = (ATermAppl) request.getArgument(1);
+				appl = normalize(appl);
+				SpecOrderVector specOrderVector = new SpecOrderVector();
+				specOrderVector.insert(appl);
+				evalEvents.put(appl.toString(), specOrderVector);
+			}else{
+				ATermAppl appl = (ATermAppl) request.getArgument(1);
+				appl = normalize(appl);
+				SpecOrderVector specOrderVector = new SpecOrderVector();
+				specOrderVector.insert(appl);
+				otherEvents.put(appl.toString(), specOrderVector);
+			}
+		}
+	}
+	
 	static public String capitalize(String str, boolean fc){
 		boolean firstCap = fc;
 		StringBuffer name = new StringBuffer();
@@ -128,6 +155,7 @@ public class JavaTif{
 			
 			if(((ATermAppl) toolSignature.getArgument(0)).getAFun().getName().equals(tool)){
 				tifs = (ATermList) toolSignature.getArgument(1);
+				populateMaps(tifs);
 				return;
 			}
 			
@@ -474,6 +502,43 @@ public class JavaTif{
 		out.println("public class " + tool_bridge);
 		out.println("  extends " + tool_class);
 		out.println("{");
+	}
+	
+	private ATermAppl normalize(ATermAppl appl){
+		ATermList args = appl.getArguments();
+		int len = args.getLength();
+		ATerm[] newargs = new ATerm[len];
+		String type = null;
+		
+		for(int i = 0; i < len; i++){
+			ATerm arg = args.getFirst();
+			args = args.getNext();
+			switch(arg.getType()){
+				case ATerm.APPL:
+					type = "<term>";
+					break;
+				case ATerm.INT:
+					type = "<int>";
+					break;
+				case ATerm.REAL:
+					type = "<real>";
+					break;
+				case ATerm.PLACEHOLDER:
+					type = arg.toString();
+					if(!type.equals("<int>") && !type.equals("<str>") && !type.equals("<real>")){
+						type = "<term>";
+					}
+					// newargs[i] = arg;
+					break;
+				case ATerm.LIST:
+					type = "<term>";
+					break;
+			}
+			if(newargs[i] == null){
+				newargs[i] = factory.parse(type);
+			}
+		}
+		return factory.makeAppl(appl.getAFun(), newargs);
 	}
 }
 
