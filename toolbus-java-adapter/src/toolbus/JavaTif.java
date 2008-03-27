@@ -128,6 +128,7 @@ public class JavaTif{
 				specOrderVector.insert(appl);
 				otherEvents.put(appl.toString(), specOrderVector);
 			}
+			toolSignature = toolSignature.getNext();
 		}
 	}
 	
