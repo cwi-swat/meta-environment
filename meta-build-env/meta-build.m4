@@ -411,6 +411,8 @@ echo "PkgConfigPath=$PKG_CONFIG_PATH" >> $1.pc
 dnl META_GENERATE_ECLIPSE_PLUGIN_FILES(PKGNAME,VERSION,JARFILE,PACKAGES,DEPS,MAINCLASS,LOCALJARS)
 dnl ----------------------------------
 AC_DEFUN([META_GENERATE_ECLIPSE_PLUGIN_FILES],[
+if ! test -f .project ; then
+
 if ! test -d META-INF ; then
   mkdir META-INF
 fi
@@ -502,6 +504,9 @@ cat > .project << ENDCAT
 	</natures>
 </projectDescription>
 ENDCAT
+else
+  echo "Detected the presence of a .project file, so no Eclipse configuration will be generated at this time. If you do wish to do so, please remove it and re-run the configure script."
+fi
 ])
 
 dnl META_IF_NOT_CONTAINS(STRING,SUBSTRING,CODE)

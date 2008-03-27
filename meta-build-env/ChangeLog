@@ -1,5 +1,10 @@
 $Id$
 
+Thu Mar 27 11:41:30 CEST 2008 <lankamp@cwi.nl>
+ * We now check if a .project file is present or not before generating it.
+ This prevents peoples personal configuration from getting messed up when they
+ run the configure script.
+
 Wed Mar 26 11:48:15 CEST 2008 <lankamp@cwi.nl>
  * Added workaround for the "ERROR: files left in build directory after
  distclean" problem, so distcheck stops complaining. .project, .classpath,
