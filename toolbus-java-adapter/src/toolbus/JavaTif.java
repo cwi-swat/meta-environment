@@ -154,7 +154,7 @@ public class JavaTif{
 		while(allSignatures != empty){
 			ATermAppl toolSignature = (ATermAppl) allSignatures.getFirst();
 			
-			if(((ATermAppl) toolSignature.getArgument(0)).getAFun().getName().equals("\""+tool+"\"")){
+			if(((ATermAppl) toolSignature.getArgument(0)).getAFun().getName().equals(tool)){
 				tifs = (ATermList) toolSignature.getArgument(1);
 				populateMaps(tifs);
 				return;
