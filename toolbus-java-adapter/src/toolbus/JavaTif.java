@@ -26,6 +26,9 @@ public class JavaTif{
 	private final Map<ATermAppl, SpecOrderVector> doEvents;
 	private final Map<ATermAppl, SpecOrderVector> evalEvents;
 	private final Map<ATermAppl, SpecOrderVector> otherEvents;
+	private boolean hasRecAckEvent = false;
+	
+	private static String tool;
 	
 	private final String package_name;
 	private final String tool_interface;
@@ -39,7 +42,7 @@ public class JavaTif{
 	}
 	
 	public static void main(String[] args) throws IOException{
-		String tool = null, tifsfile = null;
+		String tifsfile = null;
 		String package_name = null, tool_interface = null, tool_class = null;
 		String tool_bridge = null;
 		boolean swingTool = false;
@@ -99,31 +102,59 @@ public class JavaTif{
 		this.swingTool = swingTool;
 	}
 	
-	private void populateMaps(ATermList tifs){
+	private void populateMap(ATermList signature){
 		ATermList empty = factory.makeList();
-		ATermList toolSignature = tifs;
+		
+		ATermList toolSignature = signature;
 		while(toolSignature != empty){
 			ATermAppl request = (ATermAppl) toolSignature.getFirst();
-			if(request.getAFun().getName().equals("rec-do")){
-				ATermAppl appl = (ATermAppl) request.getArgument(1);
-				appl = normalize(appl);
-				SpecOrderVector specOrderVector = new SpecOrderVector();
-				specOrderVector.insert(appl);
-				doEvents.put(appl, specOrderVector);
-			}else if(request.getAFun().getName().equals("rec-eval")){
-				ATermAppl appl = (ATermAppl) request.getArgument(1);
-				appl = normalize(appl);
-				SpecOrderVector specOrderVector = new SpecOrderVector();
-				specOrderVector.insert(appl);
-				evalEvents.put(appl, specOrderVector);
-			}else{
-				ATermAppl appl = (ATermAppl) request.getArgument(1);
-				appl = normalize(appl);
-				SpecOrderVector specOrderVector = new SpecOrderVector();
-				specOrderVector.insert(appl);
-				otherEvents.put(appl, specOrderVector);
+			
+			if(request.getAFun().getArity() == 2 && request.getAFun().getName().startsWith("rec-")){
+				ATerm pattern = request.getArgument(1);
+				if(pattern instanceof ATermAppl){
+					ATermAppl appl = (ATermAppl) request.getArgument(1);
+					appl = normalize(appl);
+					SpecOrderVector specOrderVector = new SpecOrderVector();
+					specOrderVector.insert(appl);
+					
+					tifs = factory.makeList(request, tifs);
+					
+					if(request.getAFun().getName().equals("rec-do")){
+						doEvents.put(appl, specOrderVector);
+					}else if(request.getAFun().getName().equals("rec-eval")){
+						evalEvents.put(appl, specOrderVector);
+					}else if(request.getAFun().getName().equals("rec-ack-event")){
+						hasRecAckEvent = true;
+					}else{
+						otherEvents.put(appl, specOrderVector);
+					}
+				}
 			}
 			toolSignature = toolSignature.getNext();
+		}
+	}
+	
+	private void populateMaps(ATermList inputSignature, ATermList outputSignature, ATermList otherSignature){
+		tifs = factory.makeList();
+		
+		populateMap(inputSignature);
+		populateMap(outputSignature);
+		populateMap(otherSignature);
+		
+		ATermAppl recTerminate = (ATermAppl) factory.parse("rec-terminate(<"+tool+">, <term>)");
+		tifs = factory.makeList(recTerminate, tifs);
+		
+		SpecOrderVector terminateSpecOrderVector = new SpecOrderVector();
+		terminateSpecOrderVector.insert((ATermAppl) factory.parse("rec-terminate(<term>)"));
+		otherEvents.put(recTerminate, terminateSpecOrderVector);
+		
+		if(hasRecAckEvent){
+			ATermAppl recAckEvent = (ATermAppl) factory.parse("rec-ack-event(<"+tool+">, <term>)");
+			tifs = factory.makeList(recAckEvent, tifs);
+			
+			SpecOrderVector ackEventSpecOrderVector = new SpecOrderVector();
+			ackEventSpecOrderVector.insert((ATermAppl) factory.parse("rec-ack-event(<term>)"));
+			otherEvents.put(recAckEvent, ackEventSpecOrderVector);
 		}
 	}
 	
@@ -150,8 +181,7 @@ public class JavaTif{
 			ATermAppl toolSignature = (ATermAppl) allSignatures.getFirst();
 			
 			if(((ATermAppl) toolSignature.getArgument(0)).getAFun().getName().equals(tool)){
-				tifs = (ATermList) toolSignature.getArgument(1);
-				populateMaps(tifs);
+				populateMaps((ATermList) toolSignature.getArgument(1), (ATermList) toolSignature.getArgument(2), (ATermList) toolSignature.getArgument(3));
 				return;
 			}
 			
