@@ -3,9 +3,9 @@ EXTRA_DIST = \
 	pt-dump.sh.src \
 	def-dump.sh.src
 
-TESTS = \
-	pt-dump.sh \
-	def-dump.sh
+#TESTS = \
+#	pt-dump.sh \
+#	def-dump.sh
 
 GENERATED_BY_TESTS = \
 	test.ref \
