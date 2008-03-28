@@ -23,11 +23,9 @@ public class JavaTif{
 	
 	private final ATermFactory factory;
 	
-	private final Map<String, SpecOrderVector> doEvents;
-	private final Map<String, SpecOrderVector> evalEvents;
-	private final Map<String, SpecOrderVector> otherEvents;
-	
-	private boolean found_one = false;
+	private final Map<ATermAppl, SpecOrderVector> doEvents;
+	private final Map<ATermAppl, SpecOrderVector> evalEvents;
+	private final Map<ATermAppl, SpecOrderVector> otherEvents;
 	
 	private final String package_name;
 	private final String tool_interface;
@@ -82,9 +80,6 @@ public class JavaTif{
 			
 			JavaTif gen = new JavaTif(package_name, tool_interface, tool_class, tool_bridge, swingTool);
 			gen.readTifs(tifsfile, tool);
-			if(!gen.found_one){
-				System.err.println("warning: no tifs found for tool " + tool);
-			}
 			gen.genTif();
 			gen.genTool();
 			gen.genBridge();
@@ -92,9 +87,9 @@ public class JavaTif{
 	}
 	
 	public JavaTif(String pkg_name, String tool_interface, String tool_class, String tool_bridge, boolean swingTool){
-		doEvents = new HashMap<String, SpecOrderVector>();
-		evalEvents = new HashMap<String, SpecOrderVector>();
-		otherEvents = new HashMap<String, SpecOrderVector>();
+		doEvents = new HashMap<ATermAppl, SpecOrderVector>();
+		evalEvents = new HashMap<ATermAppl, SpecOrderVector>();
+		otherEvents = new HashMap<ATermAppl, SpecOrderVector>();
 		factory = new PureFactory();
 		
 		this.package_name = pkg_name;
@@ -108,31 +103,31 @@ public class JavaTif{
 		ATermList empty = factory.makeList();
 		ATermList toolSignature = tifs;
 		while(toolSignature != empty){
-			ATermAppl request = (ATermAppl) tifs.getFirst();
+			ATermAppl request = (ATermAppl) toolSignature.getFirst();
 			if(request.getAFun().getName().equals("rec-do")){
 				ATermAppl appl = (ATermAppl) request.getArgument(1);
 				appl = normalize(appl);
 				SpecOrderVector specOrderVector = new SpecOrderVector();
 				specOrderVector.insert(appl);
-				doEvents.put(appl.toString(), specOrderVector);
+				doEvents.put(appl, specOrderVector);
 			}else if(request.getAFun().getName().equals("rec-eval")){
 				ATermAppl appl = (ATermAppl) request.getArgument(1);
 				appl = normalize(appl);
 				SpecOrderVector specOrderVector = new SpecOrderVector();
 				specOrderVector.insert(appl);
-				evalEvents.put(appl.toString(), specOrderVector);
+				evalEvents.put(appl, specOrderVector);
 			}else{
 				ATermAppl appl = (ATermAppl) request.getArgument(1);
 				appl = normalize(appl);
 				SpecOrderVector specOrderVector = new SpecOrderVector();
 				specOrderVector.insert(appl);
-				otherEvents.put(appl.toString(), specOrderVector);
+				otherEvents.put(appl, specOrderVector);
 			}
 			toolSignature = toolSignature.getNext();
 		}
 	}
 	
-	static public String capitalize(String str, boolean fc){
+	private static String capitalize(String str, boolean fc){
 		boolean firstCap = fc;
 		StringBuffer name = new StringBuffer();
 		for(int i = 0; i < str.length(); i++){
@@ -148,7 +143,7 @@ public class JavaTif{
 		return name.toString();
 	}
 	
-	public void readTifs(String tifsfile, String tool) throws IOException{
+	private void readTifs(String tifsfile, String tool) throws IOException{
 		ATermList empty = factory.makeList();
 		ATermList allSignatures = (ATermList) factory.readFromFile(tifsfile);
 		while(allSignatures != empty){
@@ -165,7 +160,7 @@ public class JavaTif{
 		throw new RuntimeException("No tifs found for tool: "+tool);
 	}
 	
-	public void genTif() throws IOException{
+	private void genTif() throws IOException{
 		File path;
 		if(package_name != null){
 			path = new File(package_name.replaceAll("[.]", File.separator));
@@ -195,13 +190,11 @@ public class JavaTif{
 		}
 		out.println();
 		out.println("import aterm.*;");
-		// out.println("import toolbus.*;");
 		out.println();
-		out.println("public interface " + tool_interface);
-		out.println("{");
+		out.println("public interface " + tool_interface + "{");
 	}
 	
-	public void genTool() throws IOException{
+	private void genTool() throws IOException{
 		File path;
 		if(package_name != null){
 			path = new File(package_name.replaceAll("[.]", File.separator));
@@ -239,7 +232,7 @@ public class JavaTif{
 	
 	private void genSigTable(PrintWriter out){
 		out.println("  // This table will hold the complete input signature");
-		out.println("  private Set<ATerm> sigTable = new HashSet<ATerm>();");
+		out.println("  private final Set<ATerm> sigTable = new HashSet<ATerm>();");
 		out.println();
 	}
 	
@@ -269,41 +262,41 @@ public class JavaTif{
 		out.println("import aterm.ATermFactory;");
 		out.println("import aterm.ATermList;");
 		out.println();
-		out.println("abstract public class " + tool_class);
+		out.print("abstract public class " + tool_class);
 		if(swingTool){
-			out.println("  extends SwingTool");
+			out.print(" extends SwingTool");
 		}else{
-			out.println("  extends AbstractTool");
+			out.print(" extends AbstractTool");
 		}
-		out.println("  implements " + tool_interface);
+		out.print(" implements " + tool_interface);
 		out.println("{");
 	}
 	
 	private void genPatternAttribs(PrintWriter out){
 		out.println("  // Patterns that are used to match against incoming terms");
 		
-		Set<String> eventKeys = doEvents.keySet();
-		Iterator<String> eventKeysIterator = eventKeys.iterator();
+		Set<ATermAppl> eventKeys = doEvents.keySet();
+		Iterator<ATermAppl> eventKeysIterator = eventKeys.iterator();
 		while(eventKeysIterator.hasNext()){
-			String key = eventKeysIterator.next();
+			ATermAppl key = eventKeysIterator.next();
 			SpecOrderVector v = doEvents.get(key);
-			v.genPatternAttribs(out, capitalize(key, false));
+			v.genPatternAttribs(out, capitalize(key.getName(), false));
 		}
 		
-		Set<String> evalKeys = evalEvents.keySet();
-		Iterator<String> evalKeysIterator = evalKeys.iterator();
+		Set<ATermAppl> evalKeys = evalEvents.keySet();
+		Iterator<ATermAppl> evalKeysIterator = evalKeys.iterator();
 		while(evalKeysIterator.hasNext()){
-			String key = evalKeysIterator.next();
+			ATermAppl key = evalKeysIterator.next();
 			SpecOrderVector v = evalEvents.get(key);
-			v.genPatternAttribs(out, capitalize(key, false));
+			v.genPatternAttribs(out, capitalize(key.getName(), false));
 		}
 		
-		Set<String> otherEventsKeys = otherEvents.keySet();
-		Iterator<String> otherEventsKeysIterator = otherEventsKeys.iterator();
+		Set<ATermAppl> otherEventsKeys = otherEvents.keySet();
+		Iterator<ATermAppl> otherEventsKeysIterator = otherEventsKeys.iterator();
 		while(otherEventsKeysIterator.hasNext()){
-			String key = otherEventsKeysIterator.next();
+			ATermAppl key = otherEventsKeysIterator.next();
 			SpecOrderVector v = otherEvents.get(key);
-			v.genPatternAttribs(out, capitalize(key, false));
+			v.genPatternAttribs(out, capitalize(key.getName(), false));
 		}
 	}
 	
@@ -340,28 +333,28 @@ public class JavaTif{
 		out.println("  " + decl);
 		out.println("  {");
 		
-		Set<String> eventKeys = doEvents.keySet();
-		Iterator<String> eventKeysIterator = eventKeys.iterator();
+		Set<ATermAppl> eventKeys = doEvents.keySet();
+		Iterator<ATermAppl> eventKeysIterator = eventKeys.iterator();
 		while(eventKeysIterator.hasNext()){
-			String key = eventKeysIterator.next();
+			ATermAppl key = eventKeysIterator.next();
 			SpecOrderVector v = doEvents.get(key);
-			v.genPatterns(out, capitalize(key, false), "rec-do");
+			v.genPatterns(out, capitalize(key.getName(), false), "rec-do");
 		}
 		
-		Set<String> evalKeys = evalEvents.keySet();
-		Iterator<String> evalKeysIterator = evalKeys.iterator();
+		Set<ATermAppl> evalKeys = evalEvents.keySet();
+		Iterator<ATermAppl> evalKeysIterator = evalKeys.iterator();
 		while(evalKeysIterator.hasNext()){
-			String key = evalKeysIterator.next();
+			ATermAppl key = evalKeysIterator.next();
 			SpecOrderVector v = evalEvents.get(key);
-			v.genPatterns(out, capitalize(key, false), "rec-eval");
+			v.genPatterns(out, capitalize(key.getName(), false), "rec-eval");
 		}
 		
-		Set<String> otherEventsKeys = otherEvents.keySet();
-		Iterator<String> otherEventsKeysIterator = otherEventsKeys.iterator();
+		Set<ATermAppl> otherEventsKeys = otherEvents.keySet();
+		Iterator<ATermAppl> otherEventsKeysIterator = otherEventsKeys.iterator();
 		while(otherEventsKeysIterator.hasNext()){
-			String key = otherEventsKeysIterator.next();
+			ATermAppl key = otherEventsKeysIterator.next();
 			SpecOrderVector v = otherEvents.get(key);
-			v.genPatterns(out, capitalize(key, false), null);
+			v.genPatterns(out, capitalize(key.getName(), false), null);
 		}
 		
 		out.println("  }");
@@ -375,28 +368,28 @@ public class JavaTif{
 		out.println("    List<?> result;");
 		out.println();
 		
-		Set<String> eventKeys = doEvents.keySet();
-		Iterator<String> eventKeysIterator = eventKeys.iterator();
+		Set<ATermAppl> eventKeys = doEvents.keySet();
+		Iterator<ATermAppl> eventKeysIterator = eventKeys.iterator();
 		while(eventKeysIterator.hasNext()){
-			String key = eventKeysIterator.next();
+			ATermAppl key = eventKeysIterator.next();
 			SpecOrderVector v = doEvents.get(key);
-			v.genCalls(out, capitalize(key, false), false);
+			v.genCalls(out, capitalize(key.getName(), false), false);
 		}
 		
-		Set<String> evalKeys = evalEvents.keySet();
-		Iterator<String> evalKeysIterator = evalKeys.iterator();
+		Set<ATermAppl> evalKeys = evalEvents.keySet();
+		Iterator<ATermAppl> evalKeysIterator = evalKeys.iterator();
 		while(evalKeysIterator.hasNext()){
-			String key = evalKeysIterator.next();
+			ATermAppl key = evalKeysIterator.next();
 			SpecOrderVector v = evalEvents.get(key);
-			v.genCalls(out, capitalize(key, false), true);
+			v.genCalls(out, capitalize(key.getName(), false), true);
 		}
 		
-		Set<String> otherEventsKeys = otherEvents.keySet();
-		Iterator<String> otherEventsKeysIterator = otherEventsKeys.iterator();
+		Set<ATermAppl> otherEventsKeys = otherEvents.keySet();
+		Iterator<ATermAppl> otherEventsKeysIterator = otherEventsKeys.iterator();
 		while(otherEventsKeysIterator.hasNext()){
-			String key = otherEventsKeysIterator.next();
+			ATermAppl key = otherEventsKeysIterator.next();
 			SpecOrderVector v = otherEvents.get(key);
-			v.genCalls(out, capitalize(key, false), false);
+			v.genCalls(out, capitalize(key.getName(), false), false);
 		}
 		
 		out.println();
@@ -406,28 +399,28 @@ public class JavaTif{
 	}
 	
 	private void genMethods(PrintWriter out, boolean gen_impl){
-		Set<String> eventKeys = doEvents.keySet();
-		Iterator<String> eventKeysIterator = eventKeys.iterator();
+		Set<ATermAppl> eventKeys = doEvents.keySet();
+		Iterator<ATermAppl> eventKeysIterator = eventKeys.iterator();
 		while(eventKeysIterator.hasNext()){
-			String key = eventKeysIterator.next();
+			ATermAppl key = eventKeysIterator.next();
 			SpecOrderVector v = doEvents.get(key);
-			v.genMethods(out, capitalize(key, false), false, gen_impl);
+			v.genMethods(out, capitalize(key.getName(), false), false, gen_impl);
 		}
 		
-		Set<String> evalKeys = evalEvents.keySet();
-		Iterator<String> evalKeysIterator = evalKeys.iterator();
+		Set<ATermAppl> evalKeys = evalEvents.keySet();
+		Iterator<ATermAppl> evalKeysIterator = evalKeys.iterator();
 		while(evalKeysIterator.hasNext()){
-			String key = evalKeysIterator.next();
+			ATermAppl key = evalKeysIterator.next();
 			SpecOrderVector v = evalEvents.get(key);
-			v.genMethods(out, capitalize(key, false), true, gen_impl);
+			v.genMethods(out, capitalize(key.getName(), false), true, gen_impl);
 		}
 		
-		Set<String> otherEventsKeys = otherEvents.keySet();
-		Iterator<String> otherEventsKeysIterator = otherEventsKeys.iterator();
+		Set<ATermAppl> otherEventsKeys = otherEvents.keySet();
+		Iterator<ATermAppl> otherEventsKeysIterator = otherEventsKeys.iterator();
 		while(otherEventsKeysIterator.hasNext()){
-			String key = otherEventsKeysIterator.next();
+			ATermAppl key = otherEventsKeysIterator.next();
 			SpecOrderVector v = otherEvents.get(key);
-			v.genMethods(out, capitalize(key, false), false, gen_impl);
+			v.genMethods(out, capitalize(key.getName(), false), false, gen_impl);
 		}
 	}
 	
@@ -471,11 +464,10 @@ public class JavaTif{
 		PrintWriter out = new PrintWriter(new FileOutputStream(filename));
 		genBridgeHeader(out);
 		
-		out.println("  private " + tool_interface + " tool;");
+		out.println("  private final " + tool_interface + " tool;");
 		out.println();
 		String decl = "public " + tool_bridge + "(ATermFactory factory, " + tool_interface + " tool)";
-		out.println("  " + decl);
-		out.println("  {");
+		out.println("  " + decl + "{");
 		out.println("    super(factory);");
 		out.println("    this.tool = tool;");
 		out.println("  }");
@@ -498,10 +490,9 @@ public class JavaTif{
 		}
 		out.println();
 		out.println("import aterm.*;");
-		// out.println("import toolbus.*;");
 		out.println();
-		out.println("public class " + tool_bridge);
-		out.println("  extends " + tool_class);
+		out.print("public class " + tool_bridge);
+		out.print(" extends " + tool_class);
 		out.println("{");
 	}
 	
@@ -646,18 +637,18 @@ class SpecOrderVector extends ArrayList<ATermAppl>{
 			String fun = ((ATermAppl) ph.getPlaceholder()).getName();
 			arguments = arguments.getNext();
 			if(fun.equals("int"))
-				out.print("((Integer)result.get(" + idx + ")).intValue()");
+				out.print("((Integer) result.get(" + idx + ")).intValue()");
 			else if(fun.equals("real"))
-				out.print("((Double)result.get(" + idx + ")).doubleValue()");
+				out.print("((Double) result.get(" + idx + ")).doubleValue()");
 			else if(fun.equals("term"))
-				out.print("(ATerm)result.get(" + idx + ")");
+				out.print("(ATerm) result.get(" + idx + ")");
 			else if(fun.equals("appl"))
-				out.print("(ATermAppl)result.get(" + idx + ")");
+				out.print("(ATermAppl) result.get(" + idx + ")");
 			else if(fun.equals("list"))
-				out.print("(ATermList)result.get(" + idx + ")");
+				out.print("(ATermList) result.get(" + idx + ")");
 			else if(fun.equals("str"))
-				out.print("(String)result.get(" + idx + ")");
-			else out.print("(ATermAppl)result.get(" + idx + ")");
+				out.print("(String) result.get(" + idx + ")");
+			else out.print("(ATermAppl) result.get(" + idx + ")");
 			if(!arguments.isEmpty()) out.print(", ");
 			idx++;
 		}
@@ -681,22 +672,12 @@ class SpecOrderVector extends ArrayList<ATermAppl>{
 			out.print("  " + decl);
 			
 			if(gen_impl){
-				out.println();
-				out.println("  {");
-				out.println("    if (tool != null) {");
-				out.print("      " + (ret ? "return " : "") + "tool." + base + "(");
+				out.println("{");
+				out.print("    " + (ret ? "return " : "") + "tool." + base + "(");
 				genActuals(out, appl.getArguments());
 				out.println(");");
-				out.println("    }");
-				if(!ret){
-					out.println("    else {");
-				}
-				out.print("      throw new UnsupportedOperationException(");
-				out.println("\"method `" + base + "' not supported.\");");
-				if(!ret){
-					out.println("    }");
-				}
 				out.println("  }");
+				out.println();
 			}else{
 				out.println(";");
 			}
