@@ -514,7 +514,8 @@ proc ::=
 
 proc_call ::=
        NAME:nm actuals:act                  {: PositionInformation posInfo = makePosInfoWithEndColumnOffset((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), nm.length());
-                                               RESULT = (parser.declaredVaribles.get(nm) != parser.tbfactory.StrType) ? new ProcessCall(nm, act, parser.tbfactory, posInfo) : new DynamicProcessCall(nm, act, parser.tbfactory, posInfo);
+                                               if(parser.declaredVaribles.get(nm) != parser.tbfactory.StrType) RESULT = new ProcessCall(nm, act, parser.tbfactory, posInfo);
+                                               else RESULT = new DynamicProcessCall(nm, act, parser.tbfactory, posInfo);
                                             :}
      ;
 

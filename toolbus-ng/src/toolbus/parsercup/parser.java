@@ -1510,7 +1510,9 @@ class CUP$parser$actions {
 		      String nm = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		      ATermList act = (ATermList)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		      PositionInformation posInfo = makePosInfoWithEndColumnOffset((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), nm.length());
-              RESULT = (parser.declaredVaribles.get(nm) != parser.tbfactory.StrType) ? new ProcessCall(nm, act, parser.tbfactory, posInfo) : new DynamicProcessCall(nm, act, parser.tbfactory, posInfo);
+              if(parser.declaredVaribles.get(nm) != parser.tbfactory.StrType) RESULT = new ProcessCall(nm, act, parser.tbfactory, posInfo);
+              else RESULT = new DynamicProcessCall(nm, act, parser.tbfactory, posInfo);
+		      
               CUP$parser$result = parser.getSymbolFactory().newSymbol("proc_call",14, RESULT);
             }
           return CUP$parser$result;
