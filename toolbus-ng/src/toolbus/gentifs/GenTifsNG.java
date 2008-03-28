@@ -30,7 +30,7 @@ public class GenTifsNG{
 	}
 	
 	public void generate() throws IOException{
-		AFun toolSignatureFun = factory.makeAFun("toolSignature", 2, false);
+		AFun toolSignatureFun = factory.makeAFun("toolSignature", 4, false);
 		ATermList signatures = factory.EmptyList;
 		
 		List<ToolDefinition> toolDefinitions = toolBus.getToolDefinitions();
@@ -39,7 +39,7 @@ public class GenTifsNG{
 			ToolDefinition toolDefinition = toolDefinitionsIterator.next();
 			
 			ATerm toolName = factory.makeAppl(factory.makeAFun(toolDefinition.getName(), 0, true));
-			signatures = factory.makeList(factory.makeAppl(toolSignatureFun, toolName, toolDefinition.getInputSignature()), signatures);
+			signatures = factory.makeList(factory.makeAppl(toolSignatureFun, toolName, toolDefinition.getInputSignature(), toolDefinition.getOutputSignature(), toolDefinition.getOtherSignature()), signatures);
 		}
 		
 		FileOutputStream fos = new FileOutputStream(outputFile);
