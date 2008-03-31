@@ -3,6 +3,6 @@ Maintainers=lankamp
 Name: tifsto
 Version: 1.0
 Description:
-Requires: aterm
+Requires: aterm,aterm-java
 Cflags:
 Libs:
