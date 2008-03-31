@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "tifs.h"
 
@@ -523,8 +524,6 @@ int main(int argc, char *argv[])
   char *p, *codename, *headername;
   FILE *file;
   char buf[2][BUFSIZ];
-  int  ATargc    = 2;
-  char *ATargv[] = { "", "-silent" };
 
   prg = argv[0];
 
