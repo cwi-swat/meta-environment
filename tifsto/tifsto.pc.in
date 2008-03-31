@@ -1,0 +1,8 @@
+prefix=@prefix@
+Maintainers=lankamp
+Name: tifsto
+Version: 1.0
+Description:
+Requires: aterm
+Cflags:
+Libs:
