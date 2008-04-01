@@ -1,5 +1,5 @@
 include $(top_srcdir)/Makefile.top.meta
 
-SUBDIRS = tifstoc  
+SUBDIRS = tifstoc
 
 ACLOCAL_AMFLAGS = -I .

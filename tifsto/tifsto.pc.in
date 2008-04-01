@@ -1,8 +1,10 @@
 prefix=@prefix@
-Maintainers=lankamp
+Maintainers=lankamp@cwi.nl
 Name: tifsto
 Version: 1.0
 Description:
 Requires: aterm,aterm-java
 Cflags:
 Libs:
+JarFile=tifstojava.jar
+Packages=toolbus
