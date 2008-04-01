@@ -56,9 +56,6 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	
 	private boolean activated = false;
 	
-	private ATerm test;
-	private Environment testEnv;
-	
 	public ProcessCall(String name, ATermList actuals, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.name = name;
@@ -129,7 +126,6 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		PE.compile(processInstance, calls, firstState);
 		calls.pop();
 		
-		PE.getFirst().setTest(test, testEnv);
 		// env.removeBindings(formals);
 		// System.err.println(name + " expanded as:\n" + PE);
 	}
@@ -169,9 +165,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	}
 	
 	public List<ATerm> getTests(){
-		List<ATerm> testExpressions = new ArrayList<ATerm>(1);
-		if(test != null) testExpressions.add(test);
-		return testExpressions;
+		return new ArrayList<ATerm>(0);
 	}
 	
 	public boolean isEnabled(){
