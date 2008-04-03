@@ -28,8 +28,6 @@ public class JavaTif{
 	private final Map<ATermAppl, SpecOrderVector> otherEvents;
 	private boolean hasRecAckEvent = false;
 	
-	private static String tool;
-	
 	private final String package_name;
 	private final String tool_interface;
 	private final String tool_class;
@@ -46,6 +44,7 @@ public class JavaTif{
 		String package_name = null, tool_interface = null, tool_class = null;
 		String tool_bridge = null;
 		boolean swingTool = false;
+		String tool = null;
 		
 		for(int i = 0; i < args.length; i++){
 			if(args[i].equals("-h")){
@@ -134,7 +133,7 @@ public class JavaTif{
 		}
 	}
 	
-	private void populateMaps(ATermList inputSignature, ATermList outputSignature, ATermList otherSignature){
+	private void populateMaps(ATermList inputSignature, ATermList outputSignature, ATermList otherSignature, String tool){
 		tifs = factory.makeList();
 		
 		populateMap(inputSignature);
@@ -181,7 +180,7 @@ public class JavaTif{
 			ATermAppl toolSignature = (ATermAppl) allSignatures.getFirst();
 			
 			if(((ATermAppl) toolSignature.getArgument(0)).getAFun().getName().equals(tool)){
-				populateMaps((ATermList) toolSignature.getArgument(1), (ATermList) toolSignature.getArgument(2), (ATermList) toolSignature.getArgument(3));
+				populateMaps((ATermList) toolSignature.getArgument(1), (ATermList) toolSignature.getArgument(2), (ATermList) toolSignature.getArgument(3), tool);
 				return;
 			}
 			
