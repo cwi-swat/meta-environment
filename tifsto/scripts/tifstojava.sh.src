@@ -1,3 +1,0 @@
-#! /bin/sh
-
-java -classpath __EXTERNAL_JARS__:__JARFILE__ toolbus.TifsToJava $@
