@@ -1,5 +1,8 @@
 $Id$
 
+Thu Mar 03 10:19:05 CEST 2007 <lankamp@cwi.nl>
+ * tifstoc: Added the tifstoc tool.
+
 Mon Mar 19 09:41:46 CET 2007 <jurgenv@cwi.nl>
  * src/*: adapted to new ATwriteToBinaryString interface
 
