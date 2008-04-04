@@ -63,12 +63,12 @@ CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
 if MAINTAINER_MODE 
 
 .idef.c:
-	$(call check_available,toolbus,toolbus-gentifs -tool $*.tifs -S$<)
-	$(call check_available,tifstoc,tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS))
+	$(call check_available,toolbus,toolbus-gentifs -output $*.tifs -S$<)
+	$(call check_available,tifstoc,tifstoc -tool $ $*.tifs $(call stemvar,_TIF_OPTIONS))
 
 .idef.h:
-	$(call check_available,toolbus,toolbus-gentifs -tool $*.tifs -S$<)
-	$(call check_available,tifstoc,tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS))
+	$(call check_available,toolbus,toolbus-gentifs -output $*.tifs -S$<)
+	$(call check_available,tifstoc,tifstoc -tool $ $*.tifs $(call stemvar,_TIF_OPTIONS))
 
 else
 .idef.c: 
