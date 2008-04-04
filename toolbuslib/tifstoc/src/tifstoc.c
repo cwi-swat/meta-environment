@@ -551,8 +551,8 @@ int main(int argc, char *argv[])
   if (!tifname) {
     usage(argv[0]);
   }
-  else if (!tool && !output) {
-    ATwarning("If -tool is omitted, -output is needed\n");
+  else if (!tool) {
+    ATwarning("-tool has been omitted\n");
     usage(argv[0]);
   }
 
