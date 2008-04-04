@@ -7,7 +7,7 @@
 #
 %.tifs: %.idef 
 	$(call check_available, toolbus, \
-       	toolbus -output $@ -gentifs $<)
+       	toolbus-gentifs -output $@ -S$<)
 
 %.tif.c %.tif.h: %.tifs Makefile
 	$(call check_available, tifstoc, \

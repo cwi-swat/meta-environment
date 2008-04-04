@@ -1,5 +1,8 @@
 $Id$
 
+Fri Apr 03 11:43:54 CEST 2008 <lankamp@cwi.nl>
+ * Modified the gentifs stuff to work with the updated version.
+
 Thu Mar 27 11:41:30 CEST 2008 <lankamp@cwi.nl>
  * We now check if a .project file is present or not before generating it.
  This prevents peoples personal configuration from getting messed up when they
