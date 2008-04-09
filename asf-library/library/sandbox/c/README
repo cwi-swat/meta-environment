@@ -1,0 +1,12 @@
+Apr 9 2008, Magiel Bruntink
+
+I imported the C disambiguation and extraction tools developed by Mehmet 
+Oktener as follows:
+
+languages/c90/syntax		C90 grammar
+languages/c90/disambiguate	Disambiguation tools
+ctools/extract			Call graph and control-flow graph extraction
+terms				Various test terms
+
+Note that the there are several version of the disambiguation tools.
+At this time languages/c90/disambiguate/disamb5.sdf seems to work.
