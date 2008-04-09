@@ -1,0 +1,21 @@
+equations
+
+[]	dis-amb($translationunit)			= dis-ambiguate($translationunit)
+
+[]	dis-ambiguate(amb($functiondefinition	)) = dis-ambiguate($functiondefinition)
+[]	dis-ambiguate(amb($structdeclaration	)) = dis-ambiguate($structdeclaration)
+[]	dis-ambiguate(amb($parameterdeclaration	)) = dis-ambiguate($parameterdeclaration)
+[]	dis-ambiguate(amb($directdeclarator		)) = dis-ambiguate($directdeclarator)
+[]	dis-ambiguate(amb($constantexpression	)) = dis-ambiguate($constantexpression)
+[]	dis-ambiguate(amb($compoundstatement	)) = dis-ambiguate($compoundstatement)
+[]	dis-ambiguate(amb($unaryexpression		)) = dis-ambiguate($unaryexpression)
+[]	dis-ambiguate(amb($assignementexpression	)) = dis-ambiguate($assignementexpression)
+
+[]	dis-ambiguate(amb($functiondefinition,	$functiondefinition+	)) = dis-ambiguate(amb($functiondefinition+	))
+[]	dis-ambiguate(amb($structdeclaration,	$structdeclaration+	)) = dis-ambiguate(amb($structdeclaration+	))
+[]	dis-ambiguate(amb($parameterdeclaration,	$parameterdeclaration+	)) = dis-ambiguate(amb($parameterdeclaration+	))
+[]	dis-ambiguate(amb($directdeclarator,	$directdeclarator+	)) = dis-ambiguate(amb($directdeclarator+		))
+[]	dis-ambiguate(amb($constantexpression,	$constantexpression+	)) = dis-ambiguate(amb($constantexpression+	))
+[]	dis-ambiguate(amb($compoundstatement,	$compoundstatement+	)) = dis-ambiguate(amb($compoundstatement+	))
+[]	dis-ambiguate(amb($unaryexpression,	$unaryexpression+			)) = dis-ambiguate(amb($unaryexpression+		))
+[]	dis-ambiguate(amb($assignementexpression,	$assignementexpression+	)) = dis-ambiguate(amb($assignementexpression+	))

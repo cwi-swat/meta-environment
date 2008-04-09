@@ -1,0 +1,17 @@
+int a;
+int main(void)
+{
+	int c;
+	enum {a, b};
+	{
+		int a = 0;
+		int b = a;
+	}
+	b = a;
+	{
+		enum{a,b};
+		int add(int x, int y);
+		int b = a;
+	}
+}
+int b;

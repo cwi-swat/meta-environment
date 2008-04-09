@@ -1,0 +1,16 @@
+extract-calls(
+
+int a;
+void* HTputElement(HashTable hashTable, void *key, unsigned int h, void *value){
+	unsigned int bucketPos;
+	Entry **table;
+	Entry *currentEntry, *entry;
+	
+	unsigned int hash = supplementalHash(h);
+	
+	ensureTableCapacity(hashTable);
+	
+	return 0 ;
+}
+,<{},{},{}>,<"",file("")>,{}
+)
