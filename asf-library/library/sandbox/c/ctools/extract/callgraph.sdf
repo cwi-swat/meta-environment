@@ -1,0 +1,75 @@
+%% ---------- ---------- ---------- ----------
+%% PART OF DEFAULT EXTRACTION TOOLS FOR ANSI-C
+%% ---------- ---------- ---------- ----------
+module ctools/extract/callgraph
+
+%%----------
+%% GRAMMARS
+%%----------
+imports basic/RStores
+imports languages/c90/syntax/TranslationUnit
+
+%%----------
+%% Utilities
+%%----------
+imports containers/Sets-and-Relations
+
+imports utilities/PosInfo[Identifier]
+imports utilities/Parsing[Identifier]
+
+exports
+	context-free syntax
+		extract-callgraph(TranslationUnit)					-> RElem
+
+		extract-callgraph(TranslationUnit, RElem, RElem, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(FunctionDefinition, RElem, RElem, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(CompoundStatement, RElem, RElem, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph((Declaration* Statement*), RElem, RElem, RElem)	-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(DirectDeclarator, RElem, RElem, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(ParameterTypeList, RElem, RElem, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(UnaryExpression, RElem, RElem, RElem)		-> RElem {traversal(accu, break, top-down)}
+
+		get-functionname(Declarator,	RElem)				-> RElem {traversal(accu, break, top-down)}
+		get-functionname(UnaryExpression,	RElem)				-> RElem {traversal(accu, break, top-down)}
+		get-functionname(Identifier,	RElem)				-> RElem	{traversal(accu, break, top-down)}
+
+		get-prototype(DirectDeclarator)					-> RElem
+		get-prototype(DirectDeclarator, 	RElem)				-> RElem	{traversal(accu, continue, top-down)}
+		get-prototype(Declarator, 		RElem)				-> RElem	{traversal(accu, continue, top-down)}
+		get-prototype(Identifier, 		RElem)				-> RElem	{traversal(accu, continue, top-down)}
+
+		lookup-function(RElem, StrCon)					-> RElem
+
+hiddens
+	imports languages/c90/syntax/Whitespace
+	imports languages/generic-cpp/syntax/CommentsAsLayout
+
+	context-free start-symbols RStore TranslationUnit RElem
+	variables
+		"$relem"[0-9]*				-> RElem
+		"$relem*"[0-9]*				-> {RElem ","}*
+		"$strcon"[0-9]*				-> StrCon
+		"$location"[0-9]*				-> Location
+
+		"$translationunit"			-> TranslationUnit
+		"$functiondefinition"			-> FunctionDefinition
+		"$declarationspecifiers?"			-> DeclarationSpecifiers?
+		"$declarator"				-> Declarator
+		"$declaration*"				-> Declaration*
+		"$compoundstatement"			-> CompoundStatement
+		"$statement*"				-> Statement*
+
+		"$function"				-> RElem
+		"$vertice*"				-> { RElem ","}*
+		"$edge*"[0-9]*				-> { RElem ","}*
+		"$gathered*"[0-9]*			-> { RElem ","}*
+		"$known*"[0-9]*				-> { RElem ","}*
+
+		"$identifier"				-> Identifier
+		"$pointer"				-> Pointer
+		"$directdeclarator"			-> DirectDeclarator
+
+		"$parametertypelist"			-> ParameterTypeList
+
+		"$unaryexpression"			-> UnaryExpression
+		"$assignmentexpression*"			-> {AssignmentExpression ","}*

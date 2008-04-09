@@ -1,0 +1,78 @@
+%% ---------- ---------- ---------- ----------
+%% PART OF DEFAULT EXTRACTION TOOLS FOR ANSI-C
+%% ---------- ---------- ---------- ----------
+module ctools/extract/cflow
+
+%%----------
+%% GRAMMARS
+%%----------
+imports basic/RStores
+imports languages/c90/syntax/TranslationUnit
+
+%%----------
+%% Utilities
+%%----------
+imports containers/Sets-and-Relations
+
+imports utilities/Parsing[Identifier]
+
+exports
+	context-free syntax
+		extract-callgraph(TranslationUnit)					-> RElem
+
+		extract-callgraph(TranslationUnit, RElem, StrCon, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(FunctionDefinition, RElem, StrCon, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(CompoundStatement, RElem, StrCon, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph((Declaration* Statement*), RElem, StrCon, RElem)	-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(DirectDeclarator, RElem, StrCon, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(ParameterTypeList, RElem, StrCon, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph(UnaryExpression, RElem, StrCon, RElem)		-> RElem {traversal(accu, break, top-down)}
+		extract-callgraph({AssignmentExpression ","}*, RElem, StrCon, RElem)	-> RElem {traversal(accu, break, top-down)}
+
+		get-functionname(Declarator,	StrCon)				-> StrCon {traversal(accu, break, top-down)}
+		get-functionname(UnaryExpression,	StrCon)				-> StrCon {traversal(accu, break, top-down)}
+		get-functionname(Identifier,	StrCon)				-> StrCon {traversal(accu, break, top-down)}
+
+		get-prototype(DirectDeclarator)					-> RElem
+		get-prototype(DirectDeclarator, 	RElem)				-> RElem	{traversal(accu, continue, top-down)}
+		get-prototype(Declarator, 		RElem)				-> RElem	{traversal(accu, continue, top-down)}
+		get-prototype(Identifier, 		RElem)				-> RElem	{traversal(accu, continue, top-down)}
+
+		lookup-function(RElem, StrCon)					-> RElem
+
+hiddens
+	imports languages/c90/syntax/Whitespace
+	imports languages/generic-cpp/syntax/CommentsAsLayout
+
+	context-free start-symbols RElem
+	variables
+		"$relem"[0-9]*				-> RElem
+		"$relem*"[0-9]*				-> {RElem ","}*
+		"$strcon"[0-9]*				-> StrCon
+
+		"$translationunit"			-> TranslationUnit
+		"$functiondefinition"			-> FunctionDefinition
+		"$declarationspecifiers?"			-> DeclarationSpecifiers?
+		"$declarator"				-> Declarator
+		"$declaration*"				-> Declaration*
+		"$compoundstatement"			-> CompoundStatement
+		"$statement*"				-> Statement*
+
+		"$function"				-> StrCon
+		"$edge*"[0-9]*				-> { RElem ","}*
+		"$gathered*"[0-9]*			-> { RElem ","}*
+		"$known*"[0-9]*				-> { RElem ","}*
+
+		"$identifier"				-> Identifier
+		"$pointer"				-> Pointer
+		"$directdeclarator"			-> DirectDeclarator
+
+		"$parametertypelist"			-> ParameterTypeList
+
+		"$unaryexpression"			-> UnaryExpression
+		"$assignmentexpression*"			-> {AssignmentExpression ","}*
+
+		"$object"				-> ObjectName
+	lexical variables
+		"$strchar*"				-> StrChar*
+

@@ -1,0 +1,103 @@
+equations
+/* ---------- ---------- ---------- ----------
+	EXTRACT
+   ---------- ---------- ---------- ---------- */
+
+[MAIN]	<{$vertice*}, {$edge*}, {$gathered*}>	:= extract-callgraph($translationunit)
+	====
+	start(TranslationUnit, $translationunit)	= start(RStore, rstore([<CallGraph, rel[str,str], <{$vertice*}, {$edge*}> >]) )
+
+[]	extract-callgraph($translationunit) = extract-callgraph($translationunit, <{}, {}, {}>, <"",file("")>, {})
+
+/* ---------- ---------- ---------- ----------
+	SCOPES
+   ---------- ---------- ---------- ---------- */
+
+/*	functiondefinition	*/
+
+[]	$declarationspecifiers? $declarator $declaration* $compoundstatement 	:=	$functiondefinition,
+	<$strcon, $location>						:=	get-functionname($declarator,{}),
+	< {$relem*1}, {$relem*2}, {$relem*3} > 				:= 	extract-callgraph($compoundstatement, <{$vertice*}, {$edge*}, {}>, <$strcon, $location>, {$known*, $gathered*, <$strcon, $location, "-FUNCTION-">})
+	====
+	extract-callgraph($functiondefinition, <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = < {$relem*1, <$strcon, $location>}, {$relem*2}, {$gathered*, <$strcon, $location, "-FUNCTION-">} >
+
+/*	compoundstatement		*/
+
+[]	< {$relem*1}, {$relem*2}, {$relem*3} > := extract-callgraph($declaration* $statement*, <{$vertice*}, {$edge*}, {}>, $function, {$known*, $gathered*})
+	====
+	extract-callgraph({ $declaration* $statement* }, <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = < {$relem*1}, {$relem*2}, {$gathered*} >
+
+/* ---------- ---------- ---------- ----------
+	FUNCTION PROTOTYPE 
+   ---------- ---------- ---------- ---------- */
+
+[]	< {$relem*1}, {$relem*2}, {$relem*3} > := extract-callgraph($parametertypelist, <{$vertice*}, {$edge*}, {$gathered*,get-prototype($directdeclarator)}>, $function, {$known*})
+	====
+	extract-callgraph($directdeclarator ( $parametertypelist ), <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = < {$relem*1}, {$relem*2}, {$relem*3} >
+
+/* ---------- ---------- ---------- ----------
+	 UNARY EXPRESSION
+   ---------- ---------- ---------- ---------- */
+
+[]	<$strcon, $location>			:=	get-functionname($unaryexpression, {}),
+	<$strcon, $location1, "-FUNCTION-">		:= 	lookup-function({$known*, $gathered*}, $strcon)
+	====
+	extract-callgraph($unaryexpression ($assignmentexpression*), <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = <{$vertice*}, {$edge*, <$function, <$strcon, $location1> >}, {$gathered*}>
+
+[]	<$strcon, $location>			:=	get-functionname($unaryexpression, {}),
+	<$strcon, $location1, "-EXTERN-">		:= 	lookup-function({$known*, $gathered*}, $strcon)
+	====
+	extract-callgraph($unaryexpression ($assignmentexpression*), <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = <{$vertice*}, {$edge*, <$function, <$strcon, $location1> >}, {$gathered*}>
+
+[]	<$strcon, $location>			:=	get-functionname($unaryexpression, {}),
+	<$strcon, $location1, "-POINTER-">		:= 	lookup-function({$known*, $gathered*}, $strcon)
+	====
+	extract-callgraph($unaryexpression ($assignmentexpression*), <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = <{$vertice*}, {$edge*, <$function, <"-POINTER-", $location1> >}, {$gathered*}>
+
+[]	<$strcon, $location>			:=	get-functionname($unaryexpression, {}),
+	<$strcon, $location1, "-NOT-FOUND-">		:= 	lookup-function({$known*, $gathered*}, $strcon)
+	====
+	extract-callgraph($unaryexpression ($assignmentexpression*), <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = <{$vertice*}, {$edge*, <$function, <"-NOT-FOUND-", $location1> >}, {$gathered*}>
+
+
+[]	<$strcon, $location>			:=	get-functionname($identifier, {}),
+	<$strcon, $location1, "-FUNCTION-">		:= 	lookup-function({$known*, $gathered*}, $strcon)
+	====
+	extract-callgraph($identifier ($assignmentexpression*), <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = <{$vertice*}, {$edge*, <$function, <$strcon, $location1> >}, {$gathered*}>
+
+[]	<$strcon, $location>			:=	get-functionname($identifier, {}),
+	<$strcon, $location1, "-EXTERN-">		:= 	lookup-function({$known*, $gathered*}, $strcon)
+	====
+	extract-callgraph($identifier ($assignmentexpression*), <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = <{$vertice*}, {$edge*, <$function, <$strcon, $location1> >}, {$gathered*}>
+
+[]	<$strcon, $location>			:=	get-functionname($identifier, {}),
+	<$strcon, $location1, "-POINTER-">		:= 	lookup-function({$known*, $gathered*}, $strcon)
+	====
+	extract-callgraph($identifier ($assignmentexpression*), <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = <{$vertice*}, {$edge*, <$function, <"-POINTER-", $location1> >}, {$gathered*}>
+
+[]	<$strcon, $location>			:=	get-functionname($identifier, {}),
+	<$strcon, $location1, "-NOT-FOUND-">		:= 	lookup-function({$known*, $gathered*}, $strcon)
+	====
+	extract-callgraph($identifier ($assignmentexpression*), <{$vertice*}, {$edge*}, {$gathered*}>, $function, {$known*}) = <{$vertice*}, {$edge*, <$function, <"-NOT-FOUND-", $location1> >}, {$gathered*}>
+
+
+/* ---------- ---------- ---------- ----------
+	 HELP FUNCTIONS
+   ---------- ---------- ---------- ---------- */
+
+/*	check if directdeclarator is prototype or functionpointer */
+
+[]	get-functionname($identifier,{}) 	= <unparse-to-string($identifier), get-location($identifier)>
+
+
+[]	get-prototype($directdeclarator) 	= get-prototype($directdeclarator, <"",file(""),"-EXTERN-">)
+
+[]	get-prototype($pointer $directdeclarator, <$strcon1, $location, $strcon2> )	= <$strcon1, $location, "-POINTER-">
+[]	get-prototype($identifier, <$strcon1, $location, $strcon2> ) 			= <unparse-to-string($identifier), get-location($identifier), $strcon2>
+
+equations
+[]		lookup-function({}, $strcon) 					= <$strcon, file(""), "-NOT-FOUND-">
+[]		lookup-function({$relem*, <$strcon1, $location, $strcon2>}, $strcon1) 	= <$strcon1, $location, $strcon2>
+[]		$strcon1 != $strcon
+		====
+		lookup-function({$relem*, <$strcon1, $location, $strcon2>}, $strcon) 	= lookup-function({$relem*}, $strcon)

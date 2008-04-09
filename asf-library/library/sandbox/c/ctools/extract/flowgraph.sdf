@@ -1,0 +1,102 @@
+%% ---------- ---------- ---------- ----------
+%% PART OF DEFAULT EXTRACTION TOOLS FOR c89/c90
+%% ---------- ---------- ---------- ----------
+module ctools/extract/flowgraph
+
+%%----------
+%% GRAMMARS
+%%----------
+imports languages/c90/syntax/TranslationUnit			%%-- c90 grammar
+imports basic/RStores			 		%%-- rstore
+
+%%----------
+%% Utilities
+%%----------
+imports utilities/Parsing[Declaration]
+imports utilities/PosInfo[Declaration]
+imports utilities/Parsing[Statement]
+imports utilities/PosInfo[Statement]
+imports utilities/Parsing[Expression]
+imports utilities/PosInfo[Expression]
+imports utilities/PosInfo[Expression?]
+imports utilities/Parsing[ConstantExpression]
+imports utilities/PosInfo[ConstantExpression]
+imports utilities/Parsing[Identifier]
+imports utilities/PosInfo[Identifier]
+
+exports
+	context-free syntax
+		controlflow(TranslationUnit,RStore)			-> RStore	{traversal(accu, top-down, break)}
+		controlflow(FunctionDefinition,RStore)		-> RStore	{traversal(accu, top-down, break)}
+
+		function-flow(FunctionDefinition)			-> RElem
+		function-flow((Declaration* Statement*), RElem)	-> RElem
+
+		get-next-node(Statement*, RElem)			-> RElem
+		create-node(Declaration)				-> RElem
+		create-node(Statement)				-> RElem
+		create-node(Expression)				-> RElem
+
+		case-default-prevnode(prevnode:RElem, node:RElem)	-> edge:RElem
+
+		check-for-default(Statement, BoolCon)		-> exist:BoolCon {traversal(accu, top-down, break)}
+		switch-edge(RElem, BoolCon)			-> RElem
+		edges-forloop1(Expression?, RElem, RElem)		-> RElem
+		edges-forloop2(Expression?, RElem)			-> RElem
+		nodes-forloop(Expression?,Expression?)		-> RElem
+		nodes-forloop(Expression?)				-> RElem
+
+		extract-labels(FunctionDefinition, RElem)		-> RElem {traversal(accu,continue,top-down)}
+		extract-labels(Statement, RElem)			-> RElem {traversal(accu,continue,top-down)}
+		find-label(StrCon, RElem)				-> RElem
+
+		get-functionname(Declarator, RElem)			-> RElem {traversal(accu, continue, top-down)}
+		get-functionname(DirectDeclarator, RElem)		-> RElem {traversal(accu, continue, top-down)}
+
+
+hiddens
+	imports basic/Whitespace
+	imports languages/generic-cpp/syntax/CommentsAsLayout
+	context-free start-symbols RStore RElem
+
+	variables
+		"$externaldeclaration"			-> ExternalDeclaration
+		"$externaldeclaration+"			-> ExternalDeclaration+
+		"$externaldeclaration*"			-> ExternalDeclaration*
+		"$functiondefinition"			-> FunctionDefinition
+		"$specifiers?"				-> DeclarationSpecifiers?
+		"$declarator"				-> Declarator
+		"$declaration*"[0-9]*			-> Declaration*
+		"$statement*"[0-9]*			-> Statement*
+		"$declaration"				-> Declaration
+		"$statement"[0-9]*			-> Statement
+		"$expression"[0-9]*			-> Expression
+		"$identifier"				-> Identifier
+		"$expression?"[0-9]*			-> Expression?
+		"$constantexpression"			-> ConstantExpression
+		"$directdeclarator"			-> DirectDeclarator
+
+		"$relem*"[0-9]*				-> {RElem","}*
+		"$relem"					-> RElem
+		"$strcon"				-> StrCon
+		"$location"				-> Location
+		"$boolcon"				-> BoolCon
+
+		"$node"[0-9]*				-> RElem
+		"$edge"[0-9]*				-> RElem
+		"$label*"				-> {RElem","}*
+		"$labels"				-> RElem
+		"$goto*"					-> {RElem","}*
+		"$switch"				-> RElem
+		"$continue"				-> RElem
+		"$break"					-> RElem
+		"$prevnode"				-> RElem
+		"$nextnode"				-> RElem
+		"$end"					-> RElem
+		"$newnextnode"				-> RElem
+		"$newprevnode"				-> RElem
+
+		"$nodes*"[0-9]*				-> {RElem ","}*
+		"$edges*"[0-9]*				-> {RElem ","}*
+
+		"$rtuple*"[0-9]*				-> {RTuple ","}*

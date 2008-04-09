@@ -1,0 +1,361 @@
+equations
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	
+	----  ---- ----  ---- ----  ---- ----  ---- */
+
+[]	{$relem*2} 	:= function-flow($functiondefinition)
+	====
+	controlflow($functiondefinition, rstore([$rtuple*1, <controlflowgraph,rel[<str,loc>,<str,loc>], {$relem*1}>, $rtuple*2])) =
+		rstore([$rtuple*1, <controlflowgraph,rel[<str,loc>,<str,loc>], {$relem*1, $relem*2}>, $rtuple*2])
+
+[]	$specifiers? $declarator $declaration* { $declaration*1 $statement*1 } := $functiondefinition,
+	$node			:= get-functionname($declarator, <"",file("")>),
+	<$strcon, $location>	:= $node,
+	$labels			:= extract-labels($functiondefinition, {}),
+	$switch			:= <"_NO_SWITCH_",file("")>,
+	$continue		:= <"_NO_CONTINUE_",file("")>,
+	$break			:= <"_NO_BREAK_",file("")>,
+	$prevnode		:= $node,
+	$nextnode		:= <"_EXIT_", $location>,
+	$end			:= <"_EXIT_", $location>,
+	$edge			:= < <"_ENTER_", $location>, $node>,
+	<{$nodes*},{$edges*}> 	:= function-flow($declaration*1 $statement*1, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end})
+	====
+	function-flow($functiondefinition) = {$edge, $edges*}
+
+[]	$identifier := $directdeclarator
+	====
+	get-functionname($directdeclarator, <"", $location>) = <unparse-to-string($identifier), get-location($identifier)>
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	LABELEXTRACTION
+	----  ---- ----  ---- ----  ---- ----  ---- */
+
+[]	$identifier : $statement1 	:= $statement,
+	$node			:= create-node($statement)
+	====
+	extract-labels($statement,{$relem*})	= {$relem*,$node}
+
+[]	find-label($strcon, {$relem*1, <$strcon, $location>, $relem*2}) = <$strcon, $location>
+[default-r]
+	find-label($strcon, {$relem*1, <$strcon, $location>, $relem*2}) = <"_NO_LABEL_FOUND_", file("")>
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	DECLARATIONS / START
+	----  ---- ----  ---- ----  ---- ----  ---- */
+
+/* Declaration */
+
+[]	$node			:= create-node($declaration),
+	$edge			:= <$prevnode, $node>,
+	<{$nodes*},{$edges*}>	:= function-flow($declaration* $statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($declaration $declaration* $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge,$edges*}>
+
+[]	$edge		:= <$prevnode, $nextnode>,
+	$nextnode 	!= $end
+	====
+	function-flow( , {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{},{$edge}>
+
+[default-r]
+	$nextnode 	== $end
+	====
+	function-flow( , {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{},{}>
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	3.6.1 LABELED STATEMENTS
+	----  ---- ----  ---- ----  ---- ----  ---- */
+
+/* Identifier ":" Statement */
+/* ____ edges done in goto */
+
+[]	$identifier : $statement1 	:= $statement,
+	$node			:= create-node($statement),
+	$edge			:= <$prevnode, $node>,
+	<{$nodes*},{$edges*}>	:= function-flow($statement1 $statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge,$edges*}>
+
+/* "case" ConstantExpression ":" Statement 	*/
+
+[]	case $constantexpression : $statement1 := $statement,
+	$node			:= create-node($statement),
+	{$edges*1}		:= case-default-prevnode($prevnode, $node),
+	$edge			:= <$switch, $node>,
+	<{$nodes*2},{$edges*2}>	:= function-flow($statement1 $statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*2},{$edges*1, $edge, $edges*2}>
+
+/* "default" ":" Statement 					*/
+
+[]	default : $statement1	:= $statement,
+	$node			:= create-node($statement),
+	{$edges*1}		:= case-default-prevnode($prevnode, $node),
+	$edge			:= <$switch, $node>,
+	<{$nodes*2},{$edges*2}>	:= function-flow($statement1 $statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*2},{$edges*1, $edge, $edges*2}>
+
+/* for speedup(if-else): check if an edge is needed or not for the switch part */
+[]		case-default-prevnode(<"_NO_PREV_NODE_",$location>, $node) 	= {}
+[default-r]	case-default-prevnode($prevnode, $node) 			= {<$prevnode, $node>}
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	3.6.2 COMPOUND STATEMENT, or BLOCK
+	----  ---- ----  ---- ----  ---- ----  ---- */
+
+/* "{" Declaration* Statement* "}" */
+
+[default-r]
+	{$declaration*1 $statement*1}	:= $statement
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = 
+		function-flow($declaration*1 $statement*1 $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end})
+
+/* "{" "}" */
+
+[]	{}			:= $statement,
+	$node			:= create-node($statement),
+	$edge			:= <$prevnode, $node>,
+	<{$nodes*},{$edges*}>	:= function-flow($statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge,$edges*}>
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	3.6.3 EXPRESSION and NULL STATEMENTS
+	----  ---- ----  ---- ----  ---- ----  ---- */
+
+/* Expression ";" */
+
+[]	$expression ;		:= $statement,
+	$node			:= create-node($statement),
+	$edge			:= <$prevnode, $node>,
+	<{$nodes*},{$edges*}>	:= function-flow($statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge,$edges*}>
+
+/* ";" */
+
+[]	;			:= $statement,
+	$node			:= create-node($statement),
+	$edge			:= <$prevnode, $node>,
+	<{$nodes*},{$edges*}>	:= function-flow($statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge,$edges*}>
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	3.6.4 SELECTION STATEMENTS
+	----  ---- ----  ---- ----  ---- ----  ---- */
+
+/* "if" "(" Expression ")" Statement */
+
+[]	if ( $expression ) $statement1	:= $statement,
+	$node				:= create-node($statement),
+	$newnextnode			:= get-next-node($statement*, $nextnode),
+	$edge1				:= <$prevnode, $node>,
+	$edge2				:= <$node, $newnextnode>,
+	<{$nodes*},{$edges*}>		:= function-flow($statement1 $statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge1, $edge2, $edges*}>
+
+/* "if" "(" Expression ")" Statement "else" Statement 		*/
+
+[]	if ( $expression ) $statement1 else $statement2	:= $statement,
+	$node						:= create-node($statement),
+	$edge						:= <$prevnode, $node>,
+	$newnextnode					:= get-next-node($statement*, $nextnode),
+	<{$nodes*1},{$edges*1}>				:= function-flow($statement1 $statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end}),
+	<{$nodes*2},{$edges*2}>				:= function-flow($statement2, {$labels,$switch,$continue,$break,$node,$newnextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*1,$nodes*2},{$edge, $edges*1, $edges*2}>
+
+/* "switch" "(" Expression ")" Statement */
+
+[]	switch ( $expression ) $statement1 	:= $statement,
+	$node				:= create-node($statement),
+	$edge				:= <$prevnode, $node>,
+	$newnextnode			:= get-next-node($statement*, $nextnode),
+	$boolcon				:= check-for-default($statement1, false),
+	$node1				:= <"_NO_PREV_NODE_",file("")>,
+	$node2				:= switch-edge($node, $boolcon),
+	<{$nodes*1},{$edges*1}>		:= function-flow($statement1, {$labels,$node,$continue,$newnextnode,$node1,$newnextnode,$end}),
+	<{$nodes*2},{$edges*2}>		:= function-flow($statement*, {$labels,$switch,$continue,$break,$node2,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*1,$nodes*2},{$edge, $edges*1, $edges*2}>
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	3.6.5 Iteration Statements
+	----  ---- ----  ---- ----  ---- ----  ---- */
+
+/* "while" "(" Expression ")" Statement */
+
+[]	while ( $expression ) $statement1 	:= $statement,
+	$node				:= create-node($statement),
+	$edge				:= <$prevnode,$node>,
+	$newnextnode			:= get-next-node($statement*, $nextnode),
+	<{$nodes*1},{$edges*1}>		:= function-flow($statement1, {$labels,$switch,$node,$newnextnode,$node,$node,$end}),
+	<{$nodes*2},{$edges*2}>		:= function-flow($statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*1,$nodes*2},{$edge, $edges*1, $edges*2}>
+
+/* "do" Statement "while" "(" Expression ")" ";" */
+
+[]	do $statement1 while ( $expression ) ;	:= $statement,
+	$node					:= create-node($statement),
+	$node1					:= get-next-node($statement1, $nextnode),
+	$newnextnode				:= get-next-node($statement*, $nextnode),
+	$edge					:= <$node,$node1>,
+	<{$nodes*1},{$edges*1}>			:= function-flow($statement1, {$labels,$switch,$node,$newnextnode,$prevnode,$node,$end}),
+	<{$nodes*2},{$edges*2}>			:= function-flow($statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*1,$nodes*2},{$edge, $edges*1, $edges*2}>
+
+/* "for" "(" Expression? ";" Expression? ";" Expression? ")" Statement */
+
+[]	for ( $expression?1 ; $expression?2 ; $expression?3) $statement1 := $statement,
+	$node					:= create-node($statement),
+	{$edges*1}				:= edges-forloop1($expression?1,$prevnode,$node),
+	{$nodes*1}				:= nodes-forloop($expression?1, $expression?3),
+	$newnextnode				:= get-next-node($statement*, $nextnode),
+	<$node2,{$edges*2}>			:= edges-forloop2($expression?3, $node),
+	<{$nodes*3},{$edges*3}>			:= function-flow($statement1, {$labels,$switch,$node2,$newnextnode,$node,$node2,$end}),
+	<{$nodes*4},{$edges*4}>			:= function-flow($statement*, {$labels,$switch,$continue,$break,$node,$nextnode,$end})
+	====
+ 	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = 
+		<{$node,$nodes*1,$nodes*3,$nodes*4},{$edges*1,$edges*2,$edges*3,$edges*4}>
+
+[]	edges-forloop1(  ,$prevnode, $node)		= {<$prevnode,$node>}
+[]	$node1	:= <unparse-to-string($expression), get-location($expression)>
+	====
+	edges-forloop1($expression, $prevnode, $node)= {<$prevnode,$node1>,<$node1,$node>}
+
+[]	edges-forloop2( ,$node)		= <$node, {}>
+[]	$node1	:= <unparse-to-string($expression), get-location($expression)>
+	====
+	edges-forloop2($expression, $node)	= <$node1, {<$node1,$node>}>
+
+[]	{$nodes*1}			:= nodes-forloop($expression?1),
+	{$nodes*2}			:= nodes-forloop($expression?2)
+	====
+	nodes-forloop($expression?1, $expression?2)	= {$nodes*1,$nodes*2}
+
+[]	nodes-forloop($expression)	= {<unparse-to-string($expression), get-location($expression)>}
+[]	nodes-forloop()		= {}
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	3.6.6 JUMP STATEMENTS
+	----  ---- ----  ---- ----  ---- ----  ---- */
+	/* statement after jump statement should not occur so create _no_prev_node_ */
+
+/* "goto" Identifier ";" */
+
+[]	goto $identifier ;	:= $statement,
+	$node			:= create-node($statement),
+	$node1			:= <"_NO_PREV_NODE_",file("")>,
+	$node2			:= find-label(unparse-to-string($identifier), $labels),
+	$edge1			:= <$prevnode, $node>,
+	$edge2			:= <$node, $node2>,
+	<{$nodes*},{$edges*}>	:= function-flow($statement*, {$labels,$switch,$continue,$break,$node1,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge1,$edge2,$edges*}>
+
+/* "continue" ";" */
+
+[]	continue ;		:= $statement,
+	$node			:= create-node($statement),
+	$node1			:= <"_NO_PREV_NODE_",file("")>,
+	$edge1			:= <$prevnode, $node>,
+	$edge2			:= <$node, $continue>,
+	<{$nodes*},{$edges*}>	:= function-flow($statement*, {$labels,$switch,$continue,$break,$node1,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge1,$edge2,$edges*}>
+
+/* "break" ";" */
+
+[]	break ;			:= $statement,
+	$node			:= create-node($statement),
+	$node1			:= <"_NO_PREV_NODE_",file("")>,
+	$edge1			:= <$prevnode, $node>,
+	$edge2			:= <$node, $break>,
+	<{$nodes*},{$edges*}>	:= function-flow($statement*, {$labels,$switch,$continue,$break,$node1,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge1,$edge2,$edges*}>
+
+/* "return" ";" */
+
+[]	return ;			:= $statement,
+	$node			:= create-node($statement),
+	$node1			:= <"_NO_PREV_NODE_",file("")>,
+	$edge1			:= <$prevnode, $node>,
+	$edge2			:= <$node, $end>,
+	<{$nodes*},{$edges*}>	:= function-flow($statement*, {$labels,$switch,$continue,$break,$node1,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge1,$edge2,$edges*}>
+
+/* "return" Expression ";" */
+
+[]	return $expression;	:= $statement,
+	$node			:= create-node($statement),
+	$node1			:= <"_NO_PREV_NODE_",file("")>,
+	$edge1			:= <$prevnode, $node>,
+	$edge2			:= <$node, $end>,
+	<{$nodes*},{$edges*}>	:= function-flow($statement*, {$labels,$switch,$continue,$break,$node1,$nextnode,$end})
+	====
+	function-flow($statement $statement*, {$labels,$switch,$continue,$break,$prevnode,$nextnode,$end}) = <{$node,$nodes*},{$edge1,$edge2,$edges*}>
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	CREATE NODES
+	----  ---- ----  ---- ----  ---- ----  ---- */
+/* When using the graph the node creation should be universal so it is called in a seperate function to see easily what each node is */
+
+[]	create-node($declaration)					= <unparse-to-string($declaration), get-location($declaration)>
+[]	create-node($identifier : $statement1)			= <unparse-to-string($identifier), get-location($identifier)>
+[]	create-node(case $constantexpression : $statement)		= <unparse-to-string($constantexpression), get-location($constantexpression)>
+[]	default : $statement1	:= $statement			====>
+	create-node($statement)					= <"default", get-location($statement)>
+[]	{}			:= $statement			====>
+	create-node($statement)					= <"{}", get-location($statement)>
+[]	;			:= $statement			====>
+	create-node($statement)					= <";", get-location($statement)>
+[]	$expression ;		:= $statement			====>
+	create-node($statement)					= <unparse-to-string($expression), get-location($expression)>
+[]	create-node(if($expression) $statement)			= <unparse-to-string($expression), get-location($expression)>
+[]	create-node(if($expression) $statement1 else $statement2)	= <unparse-to-string($expression), get-location($expression)>
+[]	create-node(switch($expression) $statement)			= <unparse-to-string($expression), get-location($expression)>
+[]	create-node(while($expression) $statement)			= <unparse-to-string($expression), get-location($expression)>
+[]	create-node(do $statement while ($expression);)		= <unparse-to-string($expression), get-location($expression)>
+[]	for($expression?1;$expression;$expression?3) $statement1 	:= $statement ====>
+	create-node($statement) 					= <unparse-to-string($expression), get-location($expression)>
+	/* X3.159-1989 p80 line 02 An omitted expression-2 is replaced by a nonzero constant. */
+[default-r]
+	for($expression?1;$expression?2;$expression?3) $statement1 	:= $statement ====>
+	create-node($statement) 					= <"_NONZERO_CONSTANT_", get-location($expression?2)>
+[]	goto $identifier;		:= $statement			====>
+	create-node($statement)					= <unparse-to-string($statement), get-location($statement)>
+[]	continue;		:= $statement			====>
+	create-node($statement)					= <unparse-to-string($statement), get-location($statement)>
+[]	break;			:= $statement			====>
+	create-node($statement)					= <unparse-to-string($statement), get-location($statement)>
+[]	return;			:= $statement			====>
+	create-node($statement)					= <unparse-to-string($statement), get-location($statement)>
+[]	return $expression;	:= $statement			====>
+	create-node($statement)					= <unparse-to-string($statement), get-location($statement)>
+
+/*	----  ---- ----  ---- ----  ---- ----  ----
+	EXTRA FUNCTIONS
+	----  ---- ----  ---- ----  ---- ----  ---- */
+
+[]		get-next-node({$declaration $declaration* $statement*} $statement*1, $nextnode)	= create-node($declaration)
+[]		get-next-node({$statement $statement*} $statement*1, $nextnode)		= get-next-node($statement, $nextnode)
+[default-r]	get-next-node($statement $statement*, $nextnode)				= create-node($statement)
+[]		get-next-node(, $nextnode)							= $nextnode
+
+
+/* should be at start false and when one default is found return true */
+	/* do no go inside other switch */
+[]	check-for-default(switch ( $expression ) $statement, $boolcon) = $boolcon
+	/* found one default */
+[]	check-for-default(default : $statement, $boolcon)		= true
+
+[]	switch-edge($node,false)					= $node
+[]	switch-edge($node,true)					= <"_CLEANUP_", file("")>
