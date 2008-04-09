@@ -18,14 +18,10 @@ public class PropertyManager{
 	private int port;
 	private boolean withConsole = false;
 	
-	private String genTifsOutputFile = null;
-	
 	public PropertyManager(String[] args){
 		port = -1;
 		
 		defines = new HashMap<String, String>();
-		
-		handleComandLineArguments(args);
 		
 		properties = new Properties(System.getProperties());
 		try{
@@ -35,6 +31,9 @@ public class PropertyManager{
 		}catch(Exception e){
 			System.err.println("Cannot open configuration file; using built-in settings");
 		}
+		
+		handleComandLineArguments(args);
+		
 		Iterator<String> definesIterator = defines.keySet().iterator();
 		while(definesIterator.hasNext()){
 			String key = definesIterator.next();
@@ -46,9 +45,6 @@ public class PropertyManager{
 		}
 		if(tbscript != null){
 			set("script.path", tbscript);
-		}
-		if(genTifsOutputFile != null){
-			set("gentifs.output", genTifsOutputFile);
 		}
 	}
 	
@@ -62,12 +58,10 @@ public class PropertyManager{
 			String arg = args[i];
 			if(arg.equals("-properties") && i + 1 < args.length){
 				propertyFileName = args[++i];
-				continue;
 			}else if(arg.equals("--with-console")){
 				withConsole = true;
-			}else if(arg.equals("-output")){
-				 genTifsOutputFile = args[++i];
-				 continue;
+			}else if(arg.equals("-output") && i + 1 < args.length){
+				set("gentifs.output", args[++i]);
 			}else{
 				Matcher mdefine = pdefine.matcher(arg);
 				if(mdefine.matches()){
