@@ -191,6 +191,12 @@ static ATerm implodeFlatList(PT_Tree tree)
 static ATerm implodeLexical(PT_Tree tree)
 {
   if (implode_lexicals) {
+    PT_Production prod = PT_getTreeProd(tree);
+    PT_Symbol symbol = PT_getProductionRhs(prod);
+    char *sort = PT_getSymbolSort(PT_getSymbolSymbol((symbol)));
+    if (strcmp(sort, "NatCon") == 0 || strcmp(sort, "StrCon") == 0) {
+      return ATparse(PT_yieldTreeToString(tree, ATfalse));
+    }
     return ATmake("<str>", PT_yieldTreeToString(tree, ATfalse));
   }
 

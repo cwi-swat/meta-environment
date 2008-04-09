@@ -1,5 +1,9 @@
 $Id$
 
+Wed Apr 9 16:33  2008 CET  Tijs van der Storm  <tvdstorm@wlan1-52.cwi.nl>
+ * libmept/MEPT-implode.c: Implode now detects NatCons and StrCons
+   and implodes them to equivalent ATerms.
+
 Thu Mar 27 10:18:36 EDT 2008 <jurgenv@cwi.nl>
  * libmept/MEPT.adt: changed field name of term attributes to productions
    to "value", such that generating a Java API from MEPT.adt produces
