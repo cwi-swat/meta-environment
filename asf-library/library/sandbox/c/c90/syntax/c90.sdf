@@ -1,0 +1,8 @@
+module languages/c90/syntax/c90
+
+imports languages/c90/syntax/TranslationUnit
+
+hiddens
+	%% for direct usage
+	context-free start-symbols TranslationUnit
+	imports languages/c90/syntax/Whitespace

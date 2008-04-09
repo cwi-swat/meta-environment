@@ -1,0 +1,362 @@
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+FLAGS
+
+NAMESPACES
+0	labelnames
+1	tags
+2	members
+3	ordinary identifiers
+   -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+equations
+/*
+[Main]	start(TranslationUnit, $translationunit) = start(<TranslationUnit, Error?>, dis-amb($translationunit))
+[]	<$translationunit1, <$accu, $error?> >	:= dis-amb($translationunit,<{},>, <{},get-location($translationunit),"object",false>)
+	====
+	dis-amb($translationunit)	= <$translationunit1, $error?>
+*/
+[]	<$translationunit1, <$accu, $error?> >	:= dis-amb($translationunit,<{},>, <{},get-location($translationunit),"object",false>)
+	====
+	dis-amb($translationunit)  = $translationunit1
+
+[]	dis-amb-error($translationunit)  = dis-amb($translationunit,<{},>, <{},get-location($translationunit),"object",false>)
+
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	SCOPE
+   -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+
+/* functiondefinition */
+
+[]	$declarationspecifiers? $declarator $declaration* $compoundstatement 	:= $functiondefinition,
+	<$strcon, $location>						:= get-functionname($declarator, <"", file("")>),
+	$record								:= <$strcon, $location, "object", 0, 3, $scope>,
+	<$declarationspecifiers?1 $declarator1, <$accu1, $error?1> >		:= dis-amb($declarationspecifiers? $declarator, <$accu, >, <$known, $scope, "object", true>),
+	<$declaration*1 $compoundstatement1, <$accu2, $error?2> >		:= dis-amb($declaration* $compoundstatement, <{}, >, <merge-symboltables($known, $accu1), $scope, $decltype, false>)
+	====
+	dis-amb($functiondefinition, <$accu, >, <$known, $scope, $decltype, $function>) 	= <$declarationspecifiers?1 $declarator1 $declaration*1 $compoundstatement1, <add-record($record, $accu), > >
+
+/* compoundstatement */
+
+[]	{$declaration* $statement*}			:= $compoundstatement,
+	<$declaration*1 $statement*1, <$accu1, $error?> >	:= dis-amb($declaration* $statement*, <{}, >, <merge-symboltables($known, $accu), get-location($compoundstatement), $decltype, $function>)
+	====
+	dis-amb($compoundstatement, <$accu, >, <$known, $scope, $decltype, $function>) = <{$declaration*1 $statement*1}, <$accu, $error?> >
+
+/* prototype */
+
+[]	<$directdeclarator1, <$accu1, $error?1> >		:= dis-amb($directdeclarator, <$accu, >, <$known, $scope, $decltype, false>),
+	<$parametertypelist1, <$accu2, $error?2> >		:= dis-amb($parametertypelist, <{}, $error?1>, <merge-symboltables($known, $accu), $scope, $decltype, false>)
+	====
+	dis-amb($directdeclarator ($parametertypelist), <$accu, >, <$known, $scope, $decltype, false>) = <$directdeclarator1 ($parametertypelist1), <$accu1, > >
+
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	INFO
+   -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+
+/* DECLARATION */
+/* inform if the declaration is a typedef declaration or not */
+/* ugly because you cannot choose to continue in a break traversal */
+/* page 21 line 42: Any other identifier has scope that begins just after the completion of its declarator */
+
+
+[D01]	$declarationspecifiers $initdeclarator+ ;			:= $declaration,
+	<$declarationspecifiers1 $initdeclarator+1, <$accu1, $error?> >:= dis-amb($declarationspecifiers $initdeclarator+, <$accu, >, <$known, $scope, check-typedef($declarationspecifiers), $function>)
+	====
+	dis-amb($declaration, <$accu, >, <$known, $scope, $decltype, $function>) = <$declarationspecifiers1 $initdeclarator+1;, <$accu1, $error?> >
+
+
+/* unnamed bitfield vs named bitfield with typedef 
+TODO STRUCTDECLARATOR *
+*/
+[]	$typespecifierorqualifier* $typedefname : $constantexpression ; := $structdeclaration,
+	$identifier						 := $typedefname,
+	"typedef"						 != find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu))
+	====
+	dis-amb($structdeclaration, <$accu, >, <$known, $scope, $decltype, $function>) = <$structdeclaration, <$accu, error("typedefname in struct is not found in",[localized(unparse-to-string($identifier) ,get-location($identifier))])> >
+
+[]	$typespecifierorqualifier* $typedefname : $constantexpression ; := $structdeclaration,
+	$identifier						 := $typedefname,
+	"typedef"						 == find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu)),
+	true							 == find-typespecifier($typespecifierorqualifier*)
+	====
+	dis-amb($structdeclaration, <$accu, >, <$known, $scope, $decltype, $function>) = <$structdeclaration, <$accu, error("other typespecifier exist",[localized(unparse-to-string($identifier) ,get-location($identifier))])> >
+
+[]	$typespecifierorqualifier+ $declarator : $constantexpression ;		:= $structdeclaration,
+	$directdeclarator						 	:= $declarator,
+	$identifier						 	:= $directdeclarator,
+	"typedef"						 	== find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu)),
+	false							 	== find-typespecifier($typespecifierorqualifier+)
+	====
+	dis-amb($structdeclaration, <$accu, >, <$known, $scope, $decltype, $function>) = <$structdeclaration, <$accu, error("identifier must be an typedefname",[localized(unparse-to-string($identifier) ,get-location($identifier))])> >
+
+/* in a function there is always an identifier */
+/*
+[]	$declarationspecifiers						:= $parameterdeclaration
+	====
+	dis-amb($parameterdeclaration, <$accu, >, <$known, $scope, $decltype, true>) = <$parameterdeclaration, <$accu, error("in a function an identifier has to be given as parameter",[])> >
+*/
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	GATHER
+   -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+
+/* DIRECTDECLARATOR	- is a definition for either a typedefname or an objectname */
+
+/* object		*/
+
+[GDO]	$identifier	:= $directdeclarator,
+	$record		:= <unparse-to-string($identifier), get-location($identifier), "object", 0, 3, $scope>
+	====
+	dis-amb($directdeclarator, <$accu, >, <$known, $scope, "object", $function>) = <$directdeclarator, <add-record($record, $accu),  > >
+
+/* typedef 		*/
+
+[GDT]	$identifier	:= $directdeclarator,
+	$record		:= <unparse-to-string($identifier), get-location($identifier), "typedef", 0, 3, $scope>
+	====
+	dis-amb($directdeclarator, <$accu, >, <$known, $scope, "typedef", $function>) = <$directdeclarator, <add-record($record, $accu), > >
+
+/* ENUMERATOR 		- add enumerationconstants */
+
+[GED]	$identifier 	:= $enumerator,
+	$record 		:= <unparse-to-string($identifier), get-location($identifier), "enum", 0, 3, $scope>
+	====
+	dis-amb($enumerator, <$accu, >, <$known, $scope, $decltype, $function>) = <$enumerator, <add-record($record,$accu), > >
+
+/* ENUMERATOR		
+	page 21 line 39: Each enumeration constant has scope that begins just after the appearance of the its defining enumerator in an enumerator list */
+
+[GEI]	$identifier = $constantexpression		:= $enumerator,
+	<$constantexpression1, <$accu1, $error?> >	:= dis-amb($constantexpression, <$accu, >, <$known, $scope, $decltype, $function>),
+	$record 					:= <unparse-to-string($identifier), get-location($identifier), "enum", 0, 3, $scope>
+	====
+	dis-amb($enumerator, <$accu, >, <$known, $scope, $decltype, $function>) = <$identifier = $constantexpression1, <add-record($record, $accu1), $error?> >
+
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	INFO
+   -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+
+/* TYPEDEFNAME */
+
+/* typedefname		true	*/
+/*
+[ITC]	$identifier 	:= $typedefname,
+	"typedef"	== find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu)),
+	$record 		:= <unparse-to-string($identifier), get-location($identifier), "typedef", 1, 3, $scope>
+	====
+	dis-amb($typedefname, <$accu, >, <$known, $scope, $decltype, $function>) = <$typedefname, <add-record($record,$accu), > >
+*/
+/* typedefname		false	*/
+
+[ITF]	$identifier 	:= $typedefname,
+	"typedef"	!= find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu))
+	====
+	dis-amb($typedefname, <$accu, >, <$known, $scope, $decltype, $function>) = <$typedefname, <$accu, error( "ITF",[localized(unparse-to-string($identifier) ,get-location($identifier))]) > >
+
+/* OBJECT */
+/*
+[OOF]	$identifier		:= $object,
+	"object"			!= find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu))
+	====
+	dis-amb($object, <$accu, >, <$known, $scope, $decltype, $function>) = <$object, <$accu, error( "OOF",[localized(unparse-to-string($identifier) ,get-location($identifier))]) > >
+*/
+
+/* unaryexpression	true	*/
+/*
+[IOC]	$identifier	:= $unaryexpression,
+	"object"		== find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu)),
+	$record 		:= <unparse-to-string($identifier), get-location($identifier), "object", 1, 3, $scope>
+	====
+	dis-amb($unaryexpression, <$accu, >, <$known, $scope, $decltype, $function>) = <$unaryexpression, <add-record($record, $accu), > >
+*/
+/* unaryexpression	false	*/
+
+[IOF]	$identifier		:= $unaryexpression,
+	"object"			!= find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu))
+	====
+	dis-amb($unaryexpression, <$accu, >, <$known, $scope, $decltype, $function>) = <$unaryexpression, <$accu, error( "IOF",[localized(unparse-to-string($identifier) ,get-location($identifier))]) > >
+
+/* ENUMERATIONCONSTANT */
+
+/* unaryexpression	true	*/
+
+[IEC]	$enumerationconstant	:= $unaryexpression,
+	$identifier		:= $enumerationconstant,
+	"enum"			== find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu)),
+	$record 			:= <unparse-to-string($identifier), get-location($identifier), "enum", 1, 3, $scope>
+	====
+	dis-amb($unaryexpression, <$accu, >, <$known, $scope, $decltype, $function>) = <$unaryexpression, <add-record($record, $accu), > >
+
+/* unaryexpression	false	*/
+
+[IEF]	$enumerationconstant	:= $unaryexpression,
+	$identifier		:= $enumerationconstant,
+	"enum"			!= find-type(unparse-to-string($identifier), 3, merge-symboltables($known, $accu))
+	====
+	dis-amb($unaryexpression, <$accu, >, <$known, $scope, $decltype, $function>) = <$unaryexpression, <$accu, error( "enum",[localized(unparse-to-string($identifier) ,get-location($identifier))]) > >
+
+/* IDENTIFIERLIST	*/
+
+/* function		false */
+
+[]	false		== 	check-function-parameters($parametertypelist)
+	====
+	dis-amb($directdeclarator ($parametertypelist), <$accu, >, <$known, $scope, $decltype, true>) = <$directdeclarator ($parametertypelist), <$accu, error( "function with incorrect parametertypelist",[]) > >
+
+/* PARAMETERTYPELIST */
+
+/* prototype		false */
+
+[]	dis-amb($directdeclarator ($identifierlist), <$accu, >, <$known, $scope, $decltype, false>) = <$directdeclarator ($identifierlist), <$accu, error( "prototype with idlist",[]) > >
+
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	dis-amb
+   -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+
+/* constant expression	*/
+
+[]	<$constantexpression1, <$accu1, > >		:= dis-amb($constantexpression, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($constantexpression, $constantexpression*), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb($constantexpression1, <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$constantexpression1, <$accu1, $error> >	:= dis-amb($constantexpression, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($constantexpression, $constantexpression+), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb(amb($constantexpression+), <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$constantexpression1, <$accu1, $error> > 	:= dis-amb($constantexpression, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($constantexpression), <$accu, >, <$known, $scope, $decltype, $function>) 			= <$constantexpression1, <$accu1, $error> >
+
+
+/* assignment expression	*/
+
+[]	<$assignmentexpression1, <$accu1, > >		:= dis-amb($assignmentexpression, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($assignmentexpression, $assignmentexpression*), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb($assignmentexpression1, <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$assignmentexpression1, <$accu1, $error> >	:= dis-amb($assignmentexpression, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($assignmentexpression, $assignmentexpression+), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb(amb($assignmentexpression+), <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$assignmentexpression1, <$accu1, $error> > 	:= dis-amb($assignmentexpression, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($assignmentexpression), <$accu, >, <$known, $scope, $decltype, $function>) 			= <$assignmentexpression1, <$accu1, $error> >
+
+/* unary expression 	*/
+
+[]	<$unaryexpression1, <$accu1, > >		:= dis-amb($unaryexpression, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($unaryexpression, $unaryexpression*), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb($unaryexpression1, <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$unaryexpression1, <$accu1, $error> >	:= dis-amb($unaryexpression, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($unaryexpression, $unaryexpression+), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb(amb($unaryexpression+), <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$unaryexpression1, <$accu1, $error> > 	:= dis-amb($unaryexpression, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($unaryexpression), <$accu, >, <$known, $scope, $decltype, $function>) = <$unaryexpression1, <$accu1, $error> >
+
+/* directdeclarator 	*/
+
+[]	<$directdeclarator1, <$accu1, > >		:= dis-amb($directdeclarator, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($directdeclarator, $directdeclarator*), <$accu, >, <$known, $scope, $decltype, $function>) = dis-amb($directdeclarator1, <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$directdeclarator1, <$accu1, $error> >	:= dis-amb($directdeclarator, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($directdeclarator, $directdeclarator+), <$accu, >, <$known, $scope, $decltype, $function>) = dis-amb(amb($directdeclarator+), <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$directdeclarator1, <$accu1, $error> > 	:= dis-amb($directdeclarator, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($directdeclarator), <$accu, >, <$known, $scope, $decltype, $function>) 			= <$directdeclarator, <$accu1, $error> >
+
+/* compoundstatement 	*/
+
+[]	<$compoundstatement1, <$accu1, > >		:= dis-amb($compoundstatement, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($compoundstatement, $compoundstatement*), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb($compoundstatement1, <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$compoundstatement1, <$accu1, $error> >	:= dis-amb($compoundstatement, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($compoundstatement, $compoundstatement+), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb(amb($compoundstatement+), <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$compoundstatement1, <$accu1, $error> > 	:= dis-amb($compoundstatement, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($compoundstatement), <$accu, >, <$known, $scope, $decltype, $function>) 				= <$compoundstatement, <$accu1, $error> >
+
+/* structdeclaration 	*/
+
+[]	<$structdeclaration1, <$accu1, > >		:= dis-amb($structdeclaration, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($structdeclaration, $structdeclaration*), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb($structdeclaration1, <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$structdeclaration1, <$accu1, $error> >	:= dis-amb($structdeclaration, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($structdeclaration, $structdeclaration+), <$accu, >, <$known, $scope, $decltype, $function>) 	= dis-amb(amb($structdeclaration+), <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$structdeclaration1, <$accu1, $error> > 	:= dis-amb($structdeclaration, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($structdeclaration), <$accu, >, <$known, $scope, $decltype, $function>) 				= <$structdeclaration, <$accu1, $error> >
+
+/* parameterdeclaration 	*/
+
+[]	<$parameterdeclaration1, <$accu1, > >	:= dis-amb($parameterdeclaration, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($parameterdeclaration, $parameterdeclaration*), <$accu, >, <$known, $scope, $decltype, $function>) = dis-amb($parameterdeclaration1, <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$parameterdeclaration1, <$accu1, $error> >	:= dis-amb($parameterdeclaration, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($parameterdeclaration, $parameterdeclaration+), <$accu, >, <$known, $scope, $decltype, $function>) = dis-amb(amb($parameterdeclaration+), <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$parameterdeclaration1, <$accu1, $error> > 	:= dis-amb($parameterdeclaration, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($parameterdeclaration), <$accu, >, <$known, $scope, $decltype, $function>) 		= <$parameterdeclaration, <$accu1, $error> >
+
+/* declaration 		*/
+
+[]	<$declaration1, <$accu1, > >	:= dis-amb($declaration, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($declaration, $declaration*), <$accu, >, <$known, $scope, $decltype, $function>) = dis-amb($declaration1, <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$declaration1, <$accu1, $error> >	:= dis-amb($declaration, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($declaration, $declaration+), <$accu, >, <$known, $scope, $decltype, $function>) = dis-amb(amb($declaration+), <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$declaration1, <$accu1, $error> > 	:= dis-amb($declaration, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($declaration), <$accu, >, <$known, $scope, $decltype, $function>) 		= <$declaration, <$accu1, $error> >
+
+
+/* functiondefinition 	*/
+
+[]	<$functiondefinition1, <$accu1, > >	:= dis-amb($functiondefinition, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($functiondefinition, $functiondefinition*), <$accu, >, <$known, $scope, $decltype, $function>) = dis-amb($functiondefinition1, <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$functiondefinition1, <$accu1, $error> >	:= dis-amb($functiondefinition, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($functiondefinition, $functiondefinition+), <$accu, >, <$known, $scope, $decltype, $function>) = dis-amb(amb($functiondefinition+), <$accu, >, <$known, $scope, $decltype, $function>)
+
+[]	<$functiondefinition1, <$accu1, $error> > 	:= dis-amb($functiondefinition, <$accu, >, <$known, $scope, $decltype, $function>)
+	====
+	dis-amb(amb($functiondefinition), <$accu, >, <$known, $scope, $decltype, $function>) 		= <$functiondefinition, <$accu1, $error> >
+
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	FUNCTION
+   -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+
+[ct1]		check-typedef($specifiers*1 typedef $specifiers*2)		= "typedef"
+[default-ct2]	check-typedef($specifiers+) 				= "object"
+
+[]		find-typespecifier($typespecifierorqualifier*1 $typespecifier $typespecifierorqualifier*2) 	= true
+[default-l]	find-typespecifier($typespecifierorqualifier*)						= false
+
+[]		get-functionname($identifier, <"", file("")>)			= <unparse-to-string($identifier), get-location($identifier)>
+
+tests
+[]	check-typedef(const extern)	== "object"
+[]	check-typedef(const typedef extern)	== "typedef"
+
+
+equations
+[]		check-function-parameters($parameterdeclaration*1, $declarationspecifiers, $parameterdeclaration*2) = false
+[]		check-function-parameters($parameterdeclaration*1, $declarationspecifiers $abstractdeclarator, $parameterdeclaration*2) = false
+[default-l]	check-function-parameters($parametertypelist) = true

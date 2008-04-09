@@ -1,0 +1,34 @@
+%% ---------- ---------- ----------
+%% ANSI X3.159-1989
+%% ---------- ---------- ----------
+module languages/c90/syntax/EscapeSequences
+
+exports
+	sorts EscapeSequence
+	sorts OctalEscapeSequence HexadecimalEscapeSequence SimpleEscapeSequence
+
+	lexical syntax
+		SimpleEscapeSequence		-> EscapeSequence
+		OctalEscapeSequence		-> EscapeSequence
+		HexadecimalEscapeSequence		-> EscapeSequence
+
+	lexical syntax
+		[\\][\'\"\?\\abfnrtv]		-> SimpleEscapeSequence
+		[\\][x][0-9a-fA-F]+		-> HexadecimalEscapeSequence
+
+	lexical restrictions
+		HexadecimalEscapeSequence	-/- [0-9a-fA-F]
+
+	%% to solve ambiguity
+	sorts OctalEscapeSequence1 OctalEscapeSequence2 OctalEscapeSequence3
+	lexical syntax
+		OctalEscapeSequence1		-> OctalEscapeSequence
+		OctalEscapeSequence2		-> OctalEscapeSequence
+		OctalEscapeSequence3		-> OctalEscapeSequence
+		[\\][0-7]			-> OctalEscapeSequence1
+		[\\][0-7][0-7]			-> OctalEscapeSequence2
+		[\\][0-7][0-7][0-7]		-> OctalEscapeSequence3
+
+	lexical restrictions
+		OctalEscapeSequence1	-/- [0-7]
+		OctalEscapeSequence2	-/- [0-7]
