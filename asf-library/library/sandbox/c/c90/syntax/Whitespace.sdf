@@ -1,0 +1,22 @@
+%% ---------- ---------- ----------
+%% ANSI X3.159-1989
+%% ---------- ---------- ----------
+%% page 19 line 37
+%% Preprocessing tokens can be seperated by white space, this consists of comments, or 
+%% white space characters (space, horizontal tab, new-line, vertical tab and form feed), or both.
+%% ---------- ---------- ----------
+%% ASCII decimals
+%% [\ ]	\32	space
+%% [\t]	\9	horizontal tab
+%% [\n]	\10	line feed, new line
+%% [\v]	\11	vertical tab
+%% [\f]	\12	form feed, new page
+%% ---------- ---------- ----------
+
+module languages/c90/syntax/Whitespace
+
+exports
+	lexical syntax
+		[\ \t\n\11\12]	-> LAYOUT
+	context-free restrictions
+		LAYOUT? -/- [\ \t\n\11\12]

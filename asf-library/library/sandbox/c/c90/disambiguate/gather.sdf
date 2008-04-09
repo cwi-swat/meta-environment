@@ -1,0 +1,68 @@
+module languages/c90/disambiguate/gather
+
+
+%% ---------- ---------- ---------- ----------
+%% Part of the c89/c90 framework
+%% ---------- ---------- ---------- ----------
+module languages/c90/disambiguate/disambiguate
+
+%%----------
+%% GRAMMARS
+%%----------
+imports languages/c90/syntax/TranslationUnit
+imports languages/c90/disambiguate/symboltable
+
+%%----------
+%% Utilities
+%%----------
+
+imports utilities/Parsing[Identifier]		%% for symboltable
+imports utilities/PosInfo[Identifier]		%% for symboltable
+imports utilities/PosInfo[TranslationUnit]		%% for symboltable (scoping)
+imports utilities/PosInfo[FunctionDefinition]	%% for symboltable (scoping)
+imports utilities/PosInfo[CompoundStatement]		%% for symboltable (scoping)
+imports utilities/PosInfo[IdentifierList]		%% for symboltable (scoping)
+imports utilities/PosInfo[ParameterTypeList]		%% for symboltable (scoping)
+
+
+exports
+	sorts Result Known
+	context-free syntax
+
+		disambiguate(TranslationUnit)					-> TranslationUnit
+
+		"<" inscope:SymbolTable "," notinscope:SymbolTable "," valid:BoolCon "," ambcnt:Integer ">"	-> Result
+		"<" known:SymbolTable "," scope:Location "," decl-type:StrCon "," function:BoolCon ">"		-> Known
+
+		disambiguate(TranslationUnit, Result, Known) 			-> <TranslationUnit, Result>			{traversal(trafo, accu, break, top-down)}
+		disambiguate(FunctionDefinition, Result, Known) 			-> <FunctionDefinition, Result>			{traversal(trafo, accu, break, top-down)}
+		disambiguate((DeclarationSpecifiers? Declarator), Result, Known) 	-> <(DeclarationSpecifiers? Declarator), Result>	{traversal(trafo, accu, break, top-down)}
+		disambiguate((Declaration CompoundStatement), Result, Known) 		-> <(Declaration CompoundStatement), Result>	{traversal(trafo, accu, break, top-down)}
+
+		%% INFO
+		disambiguate(CompoundStatement, Result, Known) 			-> <CompoundStatement, Result>			{traversal(trafo, accu, break, top-down)}
+		disambiguate((Declaration* Statement*), Result, Known) 		-> <(Declaration* Statement*), Result>		{traversal(trafo, accu, break, top-down)}
+		disambiguate(ParameterDeclaration, Result, Known) 			-> <ParameterDeclaration, Result>			{traversal(trafo, accu, break, top-down)}
+
+		%% INFO
+		disambiguate(Declaration, Result, Known) 				-> <Declaration, Result>				{traversal(trafo, accu, break, top-down)}
+		disambiguate(StructDeclaration, Result, Known) 			-> <StructDeclaration, Result>			{traversal(trafo, accu, break, top-down)}
+		disambiguate((DeclarationSpecifiers { InitDeclarator "," }+), Result, Known) -> <(DeclarationSpecifiers { InitDeclarator "," }+), Result>	{traversal(trafo, accu, break, top-down)}
+
+
+		%% DEFINITIONS
+		disambiguate(DirectDeclarator, Result, Known) 	-> <DirectDeclarator, Result>	{traversal(trafo, accu, break, top-down)}
+		disambiguate(Enumerator, Result, Known) 		-> <Enumerator, Result>		{traversal(trafo, accu, break, top-down)}
+		disambiguate(ConstantExpression, Result, Known) 	-> <ConstantExpression, Result>	{traversal(trafo, accu, break, top-down)}
+
+		%% USAGE		
+		disambiguate(TypedefName, Result, Known) 		-> <TypedefName, Result>		{traversal(trafo, accu, break, top-down)}
+		disambiguate(UnaryExpression, Result, Known) 	-> <UnaryExpression, Result>	{traversal(trafo, accu, break, top-down)}
+
+		check-typedef(DeclarationSpecifiers)		-> StrCon
+
+hiddens
+	imports languages/c90/syntax/Whitespace
+	imports languages/generic-cpp/syntax/CommentsAsLayout
+
+	context-free start-symbols TranslationUnit
