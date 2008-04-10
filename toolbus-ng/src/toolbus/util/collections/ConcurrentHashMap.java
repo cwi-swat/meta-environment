@@ -266,7 +266,8 @@ public class ConcurrentHashMap<T, R> {
 			// Insert.
 			ensureCapacity();
 			
-			table = entries; // Get the latest version of the entries table, in case we rehashed.
+			table = entries; // Get the latest version of the entries table and hashmask, just in case we rehashed.
+			position = hash & hashMask;
 			
 			Entry<T, R> next = table[position];
 			e = new Entry<T, R>(next, key, value, hash);

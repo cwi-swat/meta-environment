@@ -217,7 +217,6 @@ public class ConcurrentHashSet<T> {
 			
 			int position = hash & hashMask;
 			
-			
 			// Check if the set already contains the given value.
 			Entry<T>[] table = entries;
 			Entry<T> e = table[position];
@@ -234,7 +233,8 @@ public class ConcurrentHashSet<T> {
 			// Insert.
 			ensureCapacity();
 			
-			table = entries; // Get the latest version of the entries table, in case we rehashed.
+			table = entries; // Get the latest version of the entries table and hashmask, just in case we rehashed.
+			position = hash & hashMask;
 			
 			Entry<T> next = table[position];
 			e = new Entry<T>(next, value, hash);
