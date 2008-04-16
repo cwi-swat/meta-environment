@@ -279,7 +279,7 @@ void _PT_unprotectCharRanges(PT_CharRanges *arg) {
  * \return PT_ParseTree that was encoded by \arg
  */
 PT_ParseTree _PT_ParseTreeFromTerm(ATerm t) {
-  return (PT_ParseTree)t;
+  return (((union {PT_ParseTree target; ATerm source; })(t)).target);
 }
 
 /**
@@ -288,7 +288,7 @@ PT_ParseTree _PT_ParseTreeFromTerm(ATerm t) {
  * \return ATerm that represents the PT_ParseTree
  */
 ATerm _PT_ParseTreeToTerm(PT_ParseTree arg) {
-  return (ATerm)arg;
+  return (((union {PT_ParseTree source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -297,7 +297,7 @@ ATerm _PT_ParseTreeToTerm(PT_ParseTree arg) {
  * \return PT_Tree that was encoded by \arg
  */
 PT_Tree _PT_TreeFromTerm(ATerm t) {
-  return (PT_Tree)t;
+  return (((union {PT_Tree target; ATerm source; })(t)).target);
 }
 
 /**
@@ -306,7 +306,7 @@ PT_Tree _PT_TreeFromTerm(ATerm t) {
  * \return ATerm that represents the PT_Tree
  */
 ATerm _PT_TreeToTerm(PT_Tree arg) {
-  return (ATerm)arg;
+  return (((union {PT_Tree source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -315,7 +315,7 @@ ATerm _PT_TreeToTerm(PT_Tree arg) {
  * \return PT_Args that was encoded by \arg
  */
 PT_Args _PT_ArgsFromTerm(ATerm t) {
-  return (PT_Args)t;
+  return (((union {PT_Args target; ATerm source; })(t)).target);
 }
 
 /**
@@ -324,7 +324,7 @@ PT_Args _PT_ArgsFromTerm(ATerm t) {
  * \return ATerm that represents the PT_Args
  */
 ATerm _PT_ArgsToTerm(PT_Args arg) {
-  return (ATerm)arg;
+  return (((union {PT_Args source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -333,7 +333,7 @@ ATerm _PT_ArgsToTerm(PT_Args arg) {
  * \return PT_Production that was encoded by \arg
  */
 PT_Production _PT_ProductionFromTerm(ATerm t) {
-  return (PT_Production)t;
+  return (((union {PT_Production target; ATerm source; })(t)).target);
 }
 
 /**
@@ -342,7 +342,7 @@ PT_Production _PT_ProductionFromTerm(ATerm t) {
  * \return ATerm that represents the PT_Production
  */
 ATerm _PT_ProductionToTerm(PT_Production arg) {
-  return (ATerm)arg;
+  return (((union {PT_Production source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -351,7 +351,7 @@ ATerm _PT_ProductionToTerm(PT_Production arg) {
  * \return PT_Attributes that was encoded by \arg
  */
 PT_Attributes _PT_AttributesFromTerm(ATerm t) {
-  return (PT_Attributes)t;
+  return (((union {PT_Attributes target; ATerm source; })(t)).target);
 }
 
 /**
@@ -360,7 +360,7 @@ PT_Attributes _PT_AttributesFromTerm(ATerm t) {
  * \return ATerm that represents the PT_Attributes
  */
 ATerm _PT_AttributesToTerm(PT_Attributes arg) {
-  return (ATerm)arg;
+  return (((union {PT_Attributes source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -369,7 +369,7 @@ ATerm _PT_AttributesToTerm(PT_Attributes arg) {
  * \return PT_Attrs that was encoded by \arg
  */
 PT_Attrs _PT_AttrsFromTerm(ATerm t) {
-  return (PT_Attrs)t;
+  return (((union {PT_Attrs target; ATerm source; })(t)).target);
 }
 
 /**
@@ -378,7 +378,7 @@ PT_Attrs _PT_AttrsFromTerm(ATerm t) {
  * \return ATerm that represents the PT_Attrs
  */
 ATerm _PT_AttrsToTerm(PT_Attrs arg) {
-  return (ATerm)arg;
+  return (((union {PT_Attrs source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -387,7 +387,7 @@ ATerm _PT_AttrsToTerm(PT_Attrs arg) {
  * \return PT_Attr that was encoded by \arg
  */
 PT_Attr _PT_AttrFromTerm(ATerm t) {
-  return (PT_Attr)t;
+  return (((union {PT_Attr target; ATerm source; })(t)).target);
 }
 
 /**
@@ -396,7 +396,7 @@ PT_Attr _PT_AttrFromTerm(ATerm t) {
  * \return ATerm that represents the PT_Attr
  */
 ATerm _PT_AttrToTerm(PT_Attr arg) {
-  return (ATerm)arg;
+  return (((union {PT_Attr source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -405,7 +405,7 @@ ATerm _PT_AttrToTerm(PT_Attr arg) {
  * \return PT_Associativity that was encoded by \arg
  */
 PT_Associativity _PT_AssociativityFromTerm(ATerm t) {
-  return (PT_Associativity)t;
+  return (((union {PT_Associativity target; ATerm source; })(t)).target);
 }
 
 /**
@@ -414,7 +414,7 @@ PT_Associativity _PT_AssociativityFromTerm(ATerm t) {
  * \return ATerm that represents the PT_Associativity
  */
 ATerm _PT_AssociativityToTerm(PT_Associativity arg) {
-  return (ATerm)arg;
+  return (((union {PT_Associativity source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -423,7 +423,7 @@ ATerm _PT_AssociativityToTerm(PT_Associativity arg) {
  * \return PT_Symbol that was encoded by \arg
  */
 PT_Symbol _PT_SymbolFromTerm(ATerm t) {
-  return (PT_Symbol)t;
+  return (((union {PT_Symbol target; ATerm source; })(t)).target);
 }
 
 /**
@@ -432,7 +432,7 @@ PT_Symbol _PT_SymbolFromTerm(ATerm t) {
  * \return ATerm that represents the PT_Symbol
  */
 ATerm _PT_SymbolToTerm(PT_Symbol arg) {
-  return (ATerm)arg;
+  return (((union {PT_Symbol source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -441,7 +441,7 @@ ATerm _PT_SymbolToTerm(PT_Symbol arg) {
  * \return PT_Symbols that was encoded by \arg
  */
 PT_Symbols _PT_SymbolsFromTerm(ATerm t) {
-  return (PT_Symbols)t;
+  return (((union {PT_Symbols target; ATerm source; })(t)).target);
 }
 
 /**
@@ -450,7 +450,7 @@ PT_Symbols _PT_SymbolsFromTerm(ATerm t) {
  * \return ATerm that represents the PT_Symbols
  */
 ATerm _PT_SymbolsToTerm(PT_Symbols arg) {
-  return (ATerm)arg;
+  return (((union {PT_Symbols source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -459,7 +459,7 @@ ATerm _PT_SymbolsToTerm(PT_Symbols arg) {
  * \return PT_CharRange that was encoded by \arg
  */
 PT_CharRange _PT_CharRangeFromTerm(ATerm t) {
-  return (PT_CharRange)t;
+  return (((union {PT_CharRange target; ATerm source; })(t)).target);
 }
 
 /**
@@ -468,7 +468,7 @@ PT_CharRange _PT_CharRangeFromTerm(ATerm t) {
  * \return ATerm that represents the PT_CharRange
  */
 ATerm _PT_CharRangeToTerm(PT_CharRange arg) {
-  return (ATerm)arg;
+  return (((union {PT_CharRange source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -477,7 +477,7 @@ ATerm _PT_CharRangeToTerm(PT_CharRange arg) {
  * \return PT_CharRanges that was encoded by \arg
  */
 PT_CharRanges _PT_CharRangesFromTerm(ATerm t) {
-  return (PT_CharRanges)t;
+  return (((union {PT_CharRanges target; ATerm source; })(t)).target);
 }
 
 /**
@@ -486,7 +486,7 @@ PT_CharRanges _PT_CharRangesFromTerm(ATerm t) {
  * \return ATerm that represents the PT_CharRanges
  */
 ATerm _PT_CharRangesToTerm(PT_CharRanges arg) {
-  return (ATerm)arg;
+  return (((union {PT_CharRanges source; ATerm target; })(arg)).target);
 }
 
 /**

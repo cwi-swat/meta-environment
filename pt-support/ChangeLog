@@ -1,5 +1,9 @@
 $Id$
 
+Wed Apr 16 11:02:29 CEST 2008 <jurgenv@cwi.nl>
+ * libmept/*: regenerated API with cast functions that fix
+   type punned aliasing issues.
+
 Wed Apr 9 16:33  2008 CET  Tijs van der Storm  <tvdstorm@wlan1-52.cwi.nl>
  * libmept/MEPT-implode.c: Implode now detects NatCons and StrCons
    and implodes them to equivalent ATerms.

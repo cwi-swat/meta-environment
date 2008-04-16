@@ -171,145 +171,145 @@ void _PT_unprotectCharRanges(PT_CharRanges *arg);
 #define PT_unprotectCharRanges(arg) (_PT_unprotectCharRanges(arg))
 #endif
 #ifdef FAST_API
-#define PT_ParseTreeFromTerm(t) ((PT_ParseTree)(t))
+#define PT_ParseTreeFromTerm(t) ((((union {PT_ParseTree target; ATerm source; })(t)).target))
 #else
 PT_ParseTree _PT_ParseTreeFromTerm(ATerm t);
 #define PT_ParseTreeFromTerm(t) (_PT_ParseTreeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_ParseTreeToTerm(arg) ((ATerm)(arg))
+#define PT_ParseTreeToTerm(arg) ((((union {PT_ParseTree source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_ParseTreeToTerm(PT_ParseTree arg);
 #define PT_ParseTreeToTerm(arg) (_PT_ParseTreeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_TreeFromTerm(t) ((PT_Tree)(t))
+#define PT_TreeFromTerm(t) ((((union {PT_Tree target; ATerm source; })(t)).target))
 #else
 PT_Tree _PT_TreeFromTerm(ATerm t);
 #define PT_TreeFromTerm(t) (_PT_TreeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_TreeToTerm(arg) ((ATerm)(arg))
+#define PT_TreeToTerm(arg) ((((union {PT_Tree source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_TreeToTerm(PT_Tree arg);
 #define PT_TreeToTerm(arg) (_PT_TreeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_ArgsFromTerm(t) ((PT_Args)(t))
+#define PT_ArgsFromTerm(t) ((((union {PT_Args target; ATerm source; })(t)).target))
 #else
 PT_Args _PT_ArgsFromTerm(ATerm t);
 #define PT_ArgsFromTerm(t) (_PT_ArgsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_ArgsToTerm(arg) ((ATerm)(arg))
+#define PT_ArgsToTerm(arg) ((((union {PT_Args source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_ArgsToTerm(PT_Args arg);
 #define PT_ArgsToTerm(arg) (_PT_ArgsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_ProductionFromTerm(t) ((PT_Production)(t))
+#define PT_ProductionFromTerm(t) ((((union {PT_Production target; ATerm source; })(t)).target))
 #else
 PT_Production _PT_ProductionFromTerm(ATerm t);
 #define PT_ProductionFromTerm(t) (_PT_ProductionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_ProductionToTerm(arg) ((ATerm)(arg))
+#define PT_ProductionToTerm(arg) ((((union {PT_Production source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_ProductionToTerm(PT_Production arg);
 #define PT_ProductionToTerm(arg) (_PT_ProductionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_AttributesFromTerm(t) ((PT_Attributes)(t))
+#define PT_AttributesFromTerm(t) ((((union {PT_Attributes target; ATerm source; })(t)).target))
 #else
 PT_Attributes _PT_AttributesFromTerm(ATerm t);
 #define PT_AttributesFromTerm(t) (_PT_AttributesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_AttributesToTerm(arg) ((ATerm)(arg))
+#define PT_AttributesToTerm(arg) ((((union {PT_Attributes source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_AttributesToTerm(PT_Attributes arg);
 #define PT_AttributesToTerm(arg) (_PT_AttributesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_AttrsFromTerm(t) ((PT_Attrs)(t))
+#define PT_AttrsFromTerm(t) ((((union {PT_Attrs target; ATerm source; })(t)).target))
 #else
 PT_Attrs _PT_AttrsFromTerm(ATerm t);
 #define PT_AttrsFromTerm(t) (_PT_AttrsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_AttrsToTerm(arg) ((ATerm)(arg))
+#define PT_AttrsToTerm(arg) ((((union {PT_Attrs source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_AttrsToTerm(PT_Attrs arg);
 #define PT_AttrsToTerm(arg) (_PT_AttrsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_AttrFromTerm(t) ((PT_Attr)(t))
+#define PT_AttrFromTerm(t) ((((union {PT_Attr target; ATerm source; })(t)).target))
 #else
 PT_Attr _PT_AttrFromTerm(ATerm t);
 #define PT_AttrFromTerm(t) (_PT_AttrFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_AttrToTerm(arg) ((ATerm)(arg))
+#define PT_AttrToTerm(arg) ((((union {PT_Attr source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_AttrToTerm(PT_Attr arg);
 #define PT_AttrToTerm(arg) (_PT_AttrToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_AssociativityFromTerm(t) ((PT_Associativity)(t))
+#define PT_AssociativityFromTerm(t) ((((union {PT_Associativity target; ATerm source; })(t)).target))
 #else
 PT_Associativity _PT_AssociativityFromTerm(ATerm t);
 #define PT_AssociativityFromTerm(t) (_PT_AssociativityFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_AssociativityToTerm(arg) ((ATerm)(arg))
+#define PT_AssociativityToTerm(arg) ((((union {PT_Associativity source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_AssociativityToTerm(PT_Associativity arg);
 #define PT_AssociativityToTerm(arg) (_PT_AssociativityToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_SymbolFromTerm(t) ((PT_Symbol)(t))
+#define PT_SymbolFromTerm(t) ((((union {PT_Symbol target; ATerm source; })(t)).target))
 #else
 PT_Symbol _PT_SymbolFromTerm(ATerm t);
 #define PT_SymbolFromTerm(t) (_PT_SymbolFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_SymbolToTerm(arg) ((ATerm)(arg))
+#define PT_SymbolToTerm(arg) ((((union {PT_Symbol source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_SymbolToTerm(PT_Symbol arg);
 #define PT_SymbolToTerm(arg) (_PT_SymbolToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_SymbolsFromTerm(t) ((PT_Symbols)(t))
+#define PT_SymbolsFromTerm(t) ((((union {PT_Symbols target; ATerm source; })(t)).target))
 #else
 PT_Symbols _PT_SymbolsFromTerm(ATerm t);
 #define PT_SymbolsFromTerm(t) (_PT_SymbolsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_SymbolsToTerm(arg) ((ATerm)(arg))
+#define PT_SymbolsToTerm(arg) ((((union {PT_Symbols source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_SymbolsToTerm(PT_Symbols arg);
 #define PT_SymbolsToTerm(arg) (_PT_SymbolsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_CharRangeFromTerm(t) ((PT_CharRange)(t))
+#define PT_CharRangeFromTerm(t) ((((union {PT_CharRange target; ATerm source; })(t)).target))
 #else
 PT_CharRange _PT_CharRangeFromTerm(ATerm t);
 #define PT_CharRangeFromTerm(t) (_PT_CharRangeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_CharRangeToTerm(arg) ((ATerm)(arg))
+#define PT_CharRangeToTerm(arg) ((((union {PT_CharRange source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_CharRangeToTerm(PT_CharRange arg);
 #define PT_CharRangeToTerm(arg) (_PT_CharRangeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_CharRangesFromTerm(t) ((PT_CharRanges)(t))
+#define PT_CharRangesFromTerm(t) ((((union {PT_CharRanges target; ATerm source; })(t)).target))
 #else
 PT_CharRanges _PT_CharRangesFromTerm(ATerm t);
 #define PT_CharRangesFromTerm(t) (_PT_CharRangesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_CharRangesToTerm(arg) ((ATerm)(arg))
+#define PT_CharRangesToTerm(arg) ((((union {PT_CharRanges source; ATerm target; })(arg)).target))
 #else
 ATerm _PT_CharRangesToTerm(PT_CharRanges arg);
 #define PT_CharRangesToTerm(arg) (_PT_CharRangesToTerm(arg))
