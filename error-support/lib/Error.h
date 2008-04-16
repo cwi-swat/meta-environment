@@ -171,145 +171,145 @@ void _ERR_unprotectAreaAreas (ERR_AreaAreas * arg);
 #define ERR_unprotectAreaAreas(arg) (_ERR_unprotectAreaAreas(arg))
 #endif
 #ifdef FAST_API
-#define ERR_StrCharFromTerm(t) ((ERR_StrChar)(t))
+#define ERR_StrCharFromTerm(t) ((((union {ERR_StrChar target; ATerm source; })(t)).target))
 #else
 ERR_StrChar _ERR_StrCharFromTerm (ATerm t);
 #define ERR_StrCharFromTerm(t) (_ERR_StrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_StrCharToTerm(arg) ((ATerm)(arg))
+#define ERR_StrCharToTerm(arg) ((((union {ERR_StrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_StrCharToTerm (ERR_StrChar arg);
 #define ERR_StrCharToTerm(arg) (_ERR_StrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_StrConFromTerm(t) ((ERR_StrCon)(t))
+#define ERR_StrConFromTerm(t) ((((union {ERR_StrCon target; ATerm source; })(t)).target))
 #else
 ERR_StrCon _ERR_StrConFromTerm (ATerm t);
 #define ERR_StrConFromTerm(t) (_ERR_StrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_StrConToTerm(arg) ((ATerm)(arg))
+#define ERR_StrConToTerm(arg) ((((union {ERR_StrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_StrConToTerm (ERR_StrCon arg);
 #define ERR_StrConToTerm(arg) (_ERR_StrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_NatConFromTerm(t) ((ERR_NatCon)(t))
+#define ERR_NatConFromTerm(t) ((((union {ERR_NatCon target; ATerm source; })(t)).target))
 #else
 ERR_NatCon _ERR_NatConFromTerm (ATerm t);
 #define ERR_NatConFromTerm(t) (_ERR_NatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_NatConToTerm(arg) ((ATerm)(arg))
+#define ERR_NatConToTerm(arg) ((((union {ERR_NatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_NatConToTerm (ERR_NatCon arg);
 #define ERR_NatConToTerm(arg) (_ERR_NatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_SubjectFromTerm(t) ((ERR_Subject)(t))
+#define ERR_SubjectFromTerm(t) ((((union {ERR_Subject target; ATerm source; })(t)).target))
 #else
 ERR_Subject _ERR_SubjectFromTerm (ATerm t);
 #define ERR_SubjectFromTerm(t) (_ERR_SubjectFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_SubjectToTerm(arg) ((ATerm)(arg))
+#define ERR_SubjectToTerm(arg) ((((union {ERR_Subject source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_SubjectToTerm (ERR_Subject arg);
 #define ERR_SubjectToTerm(arg) (_ERR_SubjectToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_ErrorFromTerm(t) ((ERR_Error)(t))
+#define ERR_ErrorFromTerm(t) ((((union {ERR_Error target; ATerm source; })(t)).target))
 #else
 ERR_Error _ERR_ErrorFromTerm (ATerm t);
 #define ERR_ErrorFromTerm(t) (_ERR_ErrorFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_ErrorToTerm(arg) ((ATerm)(arg))
+#define ERR_ErrorToTerm(arg) ((((union {ERR_Error source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_ErrorToTerm (ERR_Error arg);
 #define ERR_ErrorToTerm(arg) (_ERR_ErrorToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_SummaryFromTerm(t) ((ERR_Summary)(t))
+#define ERR_SummaryFromTerm(t) ((((union {ERR_Summary target; ATerm source; })(t)).target))
 #else
 ERR_Summary _ERR_SummaryFromTerm (ATerm t);
 #define ERR_SummaryFromTerm(t) (_ERR_SummaryFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_SummaryToTerm(arg) ((ATerm)(arg))
+#define ERR_SummaryToTerm(arg) ((((union {ERR_Summary source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_SummaryToTerm (ERR_Summary arg);
 #define ERR_SummaryToTerm(arg) (_ERR_SummaryToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_SubjectListFromTerm(t) ((ERR_SubjectList)(t))
+#define ERR_SubjectListFromTerm(t) ((((union {ERR_SubjectList target; ATerm source; })(t)).target))
 #else
 ERR_SubjectList _ERR_SubjectListFromTerm (ATerm t);
 #define ERR_SubjectListFromTerm(t) (_ERR_SubjectListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_SubjectListToTerm(arg) ((ATerm)(arg))
+#define ERR_SubjectListToTerm(arg) ((((union {ERR_SubjectList source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_SubjectListToTerm (ERR_SubjectList arg);
 #define ERR_SubjectListToTerm(arg) (_ERR_SubjectListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_ErrorListFromTerm(t) ((ERR_ErrorList)(t))
+#define ERR_ErrorListFromTerm(t) ((((union {ERR_ErrorList target; ATerm source; })(t)).target))
 #else
 ERR_ErrorList _ERR_ErrorListFromTerm (ATerm t);
 #define ERR_ErrorListFromTerm(t) (_ERR_ErrorListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_ErrorListToTerm(arg) ((ATerm)(arg))
+#define ERR_ErrorListToTerm(arg) ((((union {ERR_ErrorList source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_ErrorListToTerm (ERR_ErrorList arg);
 #define ERR_ErrorListToTerm(arg) (_ERR_ErrorListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_LocationFromTerm(t) ((ERR_Location)(t))
+#define ERR_LocationFromTerm(t) ((((union {ERR_Location target; ATerm source; })(t)).target))
 #else
 ERR_Location _ERR_LocationFromTerm (ATerm t);
 #define ERR_LocationFromTerm(t) (_ERR_LocationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_LocationToTerm(arg) ((ATerm)(arg))
+#define ERR_LocationToTerm(arg) ((((union {ERR_Location source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_LocationToTerm (ERR_Location arg);
 #define ERR_LocationToTerm(arg) (_ERR_LocationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_AreaFromTerm(t) ((ERR_Area)(t))
+#define ERR_AreaFromTerm(t) ((((union {ERR_Area target; ATerm source; })(t)).target))
 #else
 ERR_Area _ERR_AreaFromTerm (ATerm t);
 #define ERR_AreaFromTerm(t) (_ERR_AreaFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_AreaToTerm(arg) ((ATerm)(arg))
+#define ERR_AreaToTerm(arg) ((((union {ERR_Area source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_AreaToTerm (ERR_Area arg);
 #define ERR_AreaToTerm(arg) (_ERR_AreaToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_SliceFromTerm(t) ((ERR_Slice)(t))
+#define ERR_SliceFromTerm(t) ((((union {ERR_Slice target; ATerm source; })(t)).target))
 #else
 ERR_Slice _ERR_SliceFromTerm (ATerm t);
 #define ERR_SliceFromTerm(t) (_ERR_SliceFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_SliceToTerm(arg) ((ATerm)(arg))
+#define ERR_SliceToTerm(arg) ((((union {ERR_Slice source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_SliceToTerm (ERR_Slice arg);
 #define ERR_SliceToTerm(arg) (_ERR_SliceToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ERR_AreaAreasFromTerm(t) ((ERR_AreaAreas)(t))
+#define ERR_AreaAreasFromTerm(t) ((((union {ERR_AreaAreas target; ATerm source; })(t)).target))
 #else
 ERR_AreaAreas _ERR_AreaAreasFromTerm (ATerm t);
 #define ERR_AreaAreasFromTerm(t) (_ERR_AreaAreasFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ERR_AreaAreasToTerm(arg) ((ATerm)(arg))
+#define ERR_AreaAreasToTerm(arg) ((((union {ERR_AreaAreas source; ATerm target; })(arg)).target))
 #else
 ATerm _ERR_AreaAreasToTerm (ERR_AreaAreas arg);
 #define ERR_AreaAreasToTerm(arg) (_ERR_AreaAreasToTerm(arg))

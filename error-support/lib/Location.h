@@ -106,85 +106,85 @@ void _LOC_unprotectAreaAreas (LOC_AreaAreas * arg);
 #define LOC_unprotectAreaAreas(arg) (_LOC_unprotectAreaAreas(arg))
 #endif
 #ifdef FAST_API
-#define LOC_StrCharFromTerm(t) ((LOC_StrChar)(t))
+#define LOC_StrCharFromTerm(t) ((((union {LOC_StrChar target; ATerm source; })(t)).target))
 #else
 LOC_StrChar _LOC_StrCharFromTerm (ATerm t);
 #define LOC_StrCharFromTerm(t) (_LOC_StrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_StrCharToTerm(arg) ((ATerm)(arg))
+#define LOC_StrCharToTerm(arg) ((((union {LOC_StrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _LOC_StrCharToTerm (LOC_StrChar arg);
 #define LOC_StrCharToTerm(arg) (_LOC_StrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_StrConFromTerm(t) ((LOC_StrCon)(t))
+#define LOC_StrConFromTerm(t) ((((union {LOC_StrCon target; ATerm source; })(t)).target))
 #else
 LOC_StrCon _LOC_StrConFromTerm (ATerm t);
 #define LOC_StrConFromTerm(t) (_LOC_StrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_StrConToTerm(arg) ((ATerm)(arg))
+#define LOC_StrConToTerm(arg) ((((union {LOC_StrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _LOC_StrConToTerm (LOC_StrCon arg);
 #define LOC_StrConToTerm(arg) (_LOC_StrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_NatConFromTerm(t) ((LOC_NatCon)(t))
+#define LOC_NatConFromTerm(t) ((((union {LOC_NatCon target; ATerm source; })(t)).target))
 #else
 LOC_NatCon _LOC_NatConFromTerm (ATerm t);
 #define LOC_NatConFromTerm(t) (_LOC_NatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_NatConToTerm(arg) ((ATerm)(arg))
+#define LOC_NatConToTerm(arg) ((((union {LOC_NatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _LOC_NatConToTerm (LOC_NatCon arg);
 #define LOC_NatConToTerm(arg) (_LOC_NatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_LocationFromTerm(t) ((LOC_Location)(t))
+#define LOC_LocationFromTerm(t) ((((union {LOC_Location target; ATerm source; })(t)).target))
 #else
 LOC_Location _LOC_LocationFromTerm (ATerm t);
 #define LOC_LocationFromTerm(t) (_LOC_LocationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_LocationToTerm(arg) ((ATerm)(arg))
+#define LOC_LocationToTerm(arg) ((((union {LOC_Location source; ATerm target; })(arg)).target))
 #else
 ATerm _LOC_LocationToTerm (LOC_Location arg);
 #define LOC_LocationToTerm(arg) (_LOC_LocationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_AreaFromTerm(t) ((LOC_Area)(t))
+#define LOC_AreaFromTerm(t) ((((union {LOC_Area target; ATerm source; })(t)).target))
 #else
 LOC_Area _LOC_AreaFromTerm (ATerm t);
 #define LOC_AreaFromTerm(t) (_LOC_AreaFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_AreaToTerm(arg) ((ATerm)(arg))
+#define LOC_AreaToTerm(arg) ((((union {LOC_Area source; ATerm target; })(arg)).target))
 #else
 ATerm _LOC_AreaToTerm (LOC_Area arg);
 #define LOC_AreaToTerm(arg) (_LOC_AreaToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_SliceFromTerm(t) ((LOC_Slice)(t))
+#define LOC_SliceFromTerm(t) ((((union {LOC_Slice target; ATerm source; })(t)).target))
 #else
 LOC_Slice _LOC_SliceFromTerm (ATerm t);
 #define LOC_SliceFromTerm(t) (_LOC_SliceFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_SliceToTerm(arg) ((ATerm)(arg))
+#define LOC_SliceToTerm(arg) ((((union {LOC_Slice source; ATerm target; })(arg)).target))
 #else
 ATerm _LOC_SliceToTerm (LOC_Slice arg);
 #define LOC_SliceToTerm(arg) (_LOC_SliceToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_AreaAreasFromTerm(t) ((LOC_AreaAreas)(t))
+#define LOC_AreaAreasFromTerm(t) ((((union {LOC_AreaAreas target; ATerm source; })(t)).target))
 #else
 LOC_AreaAreas _LOC_AreaAreasFromTerm (ATerm t);
 #define LOC_AreaAreasFromTerm(t) (_LOC_AreaAreasFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_AreaAreasToTerm(arg) ((ATerm)(arg))
+#define LOC_AreaAreasToTerm(arg) ((((union {LOC_AreaAreas source; ATerm target; })(arg)).target))
 #else
 ATerm _LOC_AreaAreasToTerm (LOC_AreaAreas arg);
 #define LOC_AreaAreasToTerm(arg) (_LOC_AreaAreasToTerm(arg))

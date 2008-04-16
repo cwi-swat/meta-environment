@@ -210,181 +210,181 @@ void _PLOC_unprotectAreaAreas (PLOC_AreaAreas * arg);
 #define PLOC_unprotectAreaAreas(arg) (_PLOC_unprotectAreaAreas(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_OptLayoutFromTerm(t) ((PLOC_OptLayout)(t))
+#define PLOC_OptLayoutFromTerm(t) ((((union {PLOC_OptLayout target; ATerm source; })(t)).target))
 #else
 PLOC_OptLayout _PLOC_OptLayoutFromTerm (ATerm t);
 #define PLOC_OptLayoutFromTerm(t) (_PLOC_OptLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_OptLayoutToTerm(arg) ((ATerm)(arg))
+#define PLOC_OptLayoutToTerm(arg) ((((union {PLOC_OptLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_OptLayoutToTerm (PLOC_OptLayout arg);
 #define PLOC_OptLayoutToTerm(arg) (_PLOC_OptLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_LayoutFromTerm(t) ((PLOC_Layout)(t))
+#define PLOC_LayoutFromTerm(t) ((((union {PLOC_Layout target; ATerm source; })(t)).target))
 #else
 PLOC_Layout _PLOC_LayoutFromTerm (ATerm t);
 #define PLOC_LayoutFromTerm(t) (_PLOC_LayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_LayoutToTerm(arg) ((ATerm)(arg))
+#define PLOC_LayoutToTerm(arg) ((((union {PLOC_Layout source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_LayoutToTerm (PLOC_Layout arg);
 #define PLOC_LayoutToTerm(arg) (_PLOC_LayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_LexLayoutListFromTerm(t) ((PLOC_LexLayoutList)(t))
+#define PLOC_LexLayoutListFromTerm(t) ((((union {PLOC_LexLayoutList target; ATerm source; })(t)).target))
 #else
 PLOC_LexLayoutList _PLOC_LexLayoutListFromTerm (ATerm t);
 #define PLOC_LexLayoutListFromTerm(t) (_PLOC_LexLayoutListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_LexLayoutListToTerm(arg) ((ATerm)(arg))
+#define PLOC_LexLayoutListToTerm(arg) ((((union {PLOC_LexLayoutList source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_LexLayoutListToTerm (PLOC_LexLayoutList arg);
 #define PLOC_LexLayoutListToTerm(arg) (_PLOC_LexLayoutListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_LexStrCharFromTerm(t) ((PLOC_LexStrChar)(t))
+#define PLOC_LexStrCharFromTerm(t) ((((union {PLOC_LexStrChar target; ATerm source; })(t)).target))
 #else
 PLOC_LexStrChar _PLOC_LexStrCharFromTerm (ATerm t);
 #define PLOC_LexStrCharFromTerm(t) (_PLOC_LexStrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_LexStrCharToTerm(arg) ((ATerm)(arg))
+#define PLOC_LexStrCharToTerm(arg) ((((union {PLOC_LexStrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_LexStrCharToTerm (PLOC_LexStrChar arg);
 #define PLOC_LexStrCharToTerm(arg) (_PLOC_LexStrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_StrCharFromTerm(t) ((PLOC_StrChar)(t))
+#define PLOC_StrCharFromTerm(t) ((((union {PLOC_StrChar target; ATerm source; })(t)).target))
 #else
 PLOC_StrChar _PLOC_StrCharFromTerm (ATerm t);
 #define PLOC_StrCharFromTerm(t) (_PLOC_StrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_StrCharToTerm(arg) ((ATerm)(arg))
+#define PLOC_StrCharToTerm(arg) ((((union {PLOC_StrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_StrCharToTerm (PLOC_StrChar arg);
 #define PLOC_StrCharToTerm(arg) (_PLOC_StrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_LexStrConFromTerm(t) ((PLOC_LexStrCon)(t))
+#define PLOC_LexStrConFromTerm(t) ((((union {PLOC_LexStrCon target; ATerm source; })(t)).target))
 #else
 PLOC_LexStrCon _PLOC_LexStrConFromTerm (ATerm t);
 #define PLOC_LexStrConFromTerm(t) (_PLOC_LexStrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_LexStrConToTerm(arg) ((ATerm)(arg))
+#define PLOC_LexStrConToTerm(arg) ((((union {PLOC_LexStrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_LexStrConToTerm (PLOC_LexStrCon arg);
 #define PLOC_LexStrConToTerm(arg) (_PLOC_LexStrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_StrConFromTerm(t) ((PLOC_StrCon)(t))
+#define PLOC_StrConFromTerm(t) ((((union {PLOC_StrCon target; ATerm source; })(t)).target))
 #else
 PLOC_StrCon _PLOC_StrConFromTerm (ATerm t);
 #define PLOC_StrConFromTerm(t) (_PLOC_StrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_StrConToTerm(arg) ((ATerm)(arg))
+#define PLOC_StrConToTerm(arg) ((((union {PLOC_StrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_StrConToTerm (PLOC_StrCon arg);
 #define PLOC_StrConToTerm(arg) (_PLOC_StrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_LexStrCharCharsFromTerm(t) ((PLOC_LexStrCharChars)(t))
+#define PLOC_LexStrCharCharsFromTerm(t) ((((union {PLOC_LexStrCharChars target; ATerm source; })(t)).target))
 #else
 PLOC_LexStrCharChars _PLOC_LexStrCharCharsFromTerm (ATerm t);
 #define PLOC_LexStrCharCharsFromTerm(t) (_PLOC_LexStrCharCharsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_LexStrCharCharsToTerm(arg) ((ATerm)(arg))
+#define PLOC_LexStrCharCharsToTerm(arg) ((((union {PLOC_LexStrCharChars source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_LexStrCharCharsToTerm (PLOC_LexStrCharChars arg);
 #define PLOC_LexStrCharCharsToTerm(arg) (_PLOC_LexStrCharCharsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_LexNatConFromTerm(t) ((PLOC_LexNatCon)(t))
+#define PLOC_LexNatConFromTerm(t) ((((union {PLOC_LexNatCon target; ATerm source; })(t)).target))
 #else
 PLOC_LexNatCon _PLOC_LexNatConFromTerm (ATerm t);
 #define PLOC_LexNatConFromTerm(t) (_PLOC_LexNatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_LexNatConToTerm(arg) ((ATerm)(arg))
+#define PLOC_LexNatConToTerm(arg) ((((union {PLOC_LexNatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_LexNatConToTerm (PLOC_LexNatCon arg);
 #define PLOC_LexNatConToTerm(arg) (_PLOC_LexNatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_NatConFromTerm(t) ((PLOC_NatCon)(t))
+#define PLOC_NatConFromTerm(t) ((((union {PLOC_NatCon target; ATerm source; })(t)).target))
 #else
 PLOC_NatCon _PLOC_NatConFromTerm (ATerm t);
 #define PLOC_NatConFromTerm(t) (_PLOC_NatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_NatConToTerm(arg) ((ATerm)(arg))
+#define PLOC_NatConToTerm(arg) ((((union {PLOC_NatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_NatConToTerm (PLOC_NatCon arg);
 #define PLOC_NatConToTerm(arg) (_PLOC_NatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_LexLayoutFromTerm(t) ((PLOC_LexLayout)(t))
+#define PLOC_LexLayoutFromTerm(t) ((((union {PLOC_LexLayout target; ATerm source; })(t)).target))
 #else
 PLOC_LexLayout _PLOC_LexLayoutFromTerm (ATerm t);
 #define PLOC_LexLayoutFromTerm(t) (_PLOC_LexLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_LexLayoutToTerm(arg) ((ATerm)(arg))
+#define PLOC_LexLayoutToTerm(arg) ((((union {PLOC_LexLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_LexLayoutToTerm (PLOC_LexLayout arg);
 #define PLOC_LexLayoutToTerm(arg) (_PLOC_LexLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_LocationFromTerm(t) ((PLOC_Location)(t))
+#define PLOC_LocationFromTerm(t) ((((union {PLOC_Location target; ATerm source; })(t)).target))
 #else
 PLOC_Location _PLOC_LocationFromTerm (ATerm t);
 #define PLOC_LocationFromTerm(t) (_PLOC_LocationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_LocationToTerm(arg) ((ATerm)(arg))
+#define PLOC_LocationToTerm(arg) ((((union {PLOC_Location source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_LocationToTerm (PLOC_Location arg);
 #define PLOC_LocationToTerm(arg) (_PLOC_LocationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_AreaFromTerm(t) ((PLOC_Area)(t))
+#define PLOC_AreaFromTerm(t) ((((union {PLOC_Area target; ATerm source; })(t)).target))
 #else
 PLOC_Area _PLOC_AreaFromTerm (ATerm t);
 #define PLOC_AreaFromTerm(t) (_PLOC_AreaFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_AreaToTerm(arg) ((ATerm)(arg))
+#define PLOC_AreaToTerm(arg) ((((union {PLOC_Area source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_AreaToTerm (PLOC_Area arg);
 #define PLOC_AreaToTerm(arg) (_PLOC_AreaToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_SliceFromTerm(t) ((PLOC_Slice)(t))
+#define PLOC_SliceFromTerm(t) ((((union {PLOC_Slice target; ATerm source; })(t)).target))
 #else
 PLOC_Slice _PLOC_SliceFromTerm (ATerm t);
 #define PLOC_SliceFromTerm(t) (_PLOC_SliceFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_SliceToTerm(arg) ((ATerm)(arg))
+#define PLOC_SliceToTerm(arg) ((((union {PLOC_Slice source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_SliceToTerm (PLOC_Slice arg);
 #define PLOC_SliceToTerm(arg) (_PLOC_SliceToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PLOC_AreaAreasFromTerm(t) ((PLOC_AreaAreas)(t))
+#define PLOC_AreaAreasFromTerm(t) ((((union {PLOC_AreaAreas target; ATerm source; })(t)).target))
 #else
 PLOC_AreaAreas _PLOC_AreaAreasFromTerm (ATerm t);
 #define PLOC_AreaAreasFromTerm(t) (_PLOC_AreaAreasFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PLOC_AreaAreasToTerm(arg) ((ATerm)(arg))
+#define PLOC_AreaAreasToTerm(arg) ((((union {PLOC_AreaAreas source; ATerm target; })(arg)).target))
 #else
 ATerm _PLOC_AreaAreasToTerm (PLOC_AreaAreas arg);
 #define PLOC_AreaAreasToTerm(arg) (_PLOC_AreaAreasToTerm(arg))

@@ -1,5 +1,8 @@
 $Id$
 
+Wed Apr 16 11:33:50 CEST 2008 <jurgenv@cwi.nl>
+ * lib/*.c: regenerated API to fix type punned aliasing issues.
+
 Mon Aug 20 15:04:28 CEST 2007 <kooiker@cwi.nl>
  * util/display-error.c: commandline utility that displays errors in a user
    readable way

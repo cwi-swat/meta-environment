@@ -330,7 +330,7 @@ void _PLOC_unprotectAreaAreas(PLOC_AreaAreas *arg) {
  * \return PLOC_OptLayout that was encoded by \arg
  */
 PLOC_OptLayout _PLOC_OptLayoutFromTerm(ATerm t) {
-  return (PLOC_OptLayout)t;
+  return (((union {PLOC_OptLayout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -339,7 +339,7 @@ PLOC_OptLayout _PLOC_OptLayoutFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_OptLayout
  */
 ATerm _PLOC_OptLayoutToTerm(PLOC_OptLayout arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_OptLayout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -348,7 +348,7 @@ ATerm _PLOC_OptLayoutToTerm(PLOC_OptLayout arg) {
  * \return PLOC_Layout that was encoded by \arg
  */
 PLOC_Layout _PLOC_LayoutFromTerm(ATerm t) {
-  return (PLOC_Layout)t;
+  return (((union {PLOC_Layout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -357,7 +357,7 @@ PLOC_Layout _PLOC_LayoutFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_Layout
  */
 ATerm _PLOC_LayoutToTerm(PLOC_Layout arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_Layout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -366,7 +366,7 @@ ATerm _PLOC_LayoutToTerm(PLOC_Layout arg) {
  * \return PLOC_LexLayoutList that was encoded by \arg
  */
 PLOC_LexLayoutList _PLOC_LexLayoutListFromTerm(ATerm t) {
-  return (PLOC_LexLayoutList)t;
+  return (((union {PLOC_LexLayoutList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -375,7 +375,7 @@ PLOC_LexLayoutList _PLOC_LexLayoutListFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_LexLayoutList
  */
 ATerm _PLOC_LexLayoutListToTerm(PLOC_LexLayoutList arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_LexLayoutList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -384,7 +384,7 @@ ATerm _PLOC_LexLayoutListToTerm(PLOC_LexLayoutList arg) {
  * \return PLOC_LexStrChar that was encoded by \arg
  */
 PLOC_LexStrChar _PLOC_LexStrCharFromTerm(ATerm t) {
-  return (PLOC_LexStrChar)t;
+  return (((union {PLOC_LexStrChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -393,7 +393,7 @@ PLOC_LexStrChar _PLOC_LexStrCharFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_LexStrChar
  */
 ATerm _PLOC_LexStrCharToTerm(PLOC_LexStrChar arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_LexStrChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -402,7 +402,7 @@ ATerm _PLOC_LexStrCharToTerm(PLOC_LexStrChar arg) {
  * \return PLOC_StrChar that was encoded by \arg
  */
 PLOC_StrChar _PLOC_StrCharFromTerm(ATerm t) {
-  return (PLOC_StrChar)t;
+  return (((union {PLOC_StrChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -411,7 +411,7 @@ PLOC_StrChar _PLOC_StrCharFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_StrChar
  */
 ATerm _PLOC_StrCharToTerm(PLOC_StrChar arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_StrChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -420,7 +420,7 @@ ATerm _PLOC_StrCharToTerm(PLOC_StrChar arg) {
  * \return PLOC_LexStrCon that was encoded by \arg
  */
 PLOC_LexStrCon _PLOC_LexStrConFromTerm(ATerm t) {
-  return (PLOC_LexStrCon)t;
+  return (((union {PLOC_LexStrCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -429,7 +429,7 @@ PLOC_LexStrCon _PLOC_LexStrConFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_LexStrCon
  */
 ATerm _PLOC_LexStrConToTerm(PLOC_LexStrCon arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_LexStrCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -438,7 +438,7 @@ ATerm _PLOC_LexStrConToTerm(PLOC_LexStrCon arg) {
  * \return PLOC_StrCon that was encoded by \arg
  */
 PLOC_StrCon _PLOC_StrConFromTerm(ATerm t) {
-  return (PLOC_StrCon)t;
+  return (((union {PLOC_StrCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -447,7 +447,7 @@ PLOC_StrCon _PLOC_StrConFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_StrCon
  */
 ATerm _PLOC_StrConToTerm(PLOC_StrCon arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_StrCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -456,7 +456,7 @@ ATerm _PLOC_StrConToTerm(PLOC_StrCon arg) {
  * \return PLOC_LexStrCharChars that was encoded by \arg
  */
 PLOC_LexStrCharChars _PLOC_LexStrCharCharsFromTerm(ATerm t) {
-  return (PLOC_LexStrCharChars)t;
+  return (((union {PLOC_LexStrCharChars target; ATerm source; })(t)).target);
 }
 
 /**
@@ -465,7 +465,7 @@ PLOC_LexStrCharChars _PLOC_LexStrCharCharsFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_LexStrCharChars
  */
 ATerm _PLOC_LexStrCharCharsToTerm(PLOC_LexStrCharChars arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_LexStrCharChars source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -474,7 +474,7 @@ ATerm _PLOC_LexStrCharCharsToTerm(PLOC_LexStrCharChars arg) {
  * \return PLOC_LexNatCon that was encoded by \arg
  */
 PLOC_LexNatCon _PLOC_LexNatConFromTerm(ATerm t) {
-  return (PLOC_LexNatCon)t;
+  return (((union {PLOC_LexNatCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -483,7 +483,7 @@ PLOC_LexNatCon _PLOC_LexNatConFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_LexNatCon
  */
 ATerm _PLOC_LexNatConToTerm(PLOC_LexNatCon arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_LexNatCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -492,7 +492,7 @@ ATerm _PLOC_LexNatConToTerm(PLOC_LexNatCon arg) {
  * \return PLOC_NatCon that was encoded by \arg
  */
 PLOC_NatCon _PLOC_NatConFromTerm(ATerm t) {
-  return (PLOC_NatCon)t;
+  return (((union {PLOC_NatCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -501,7 +501,7 @@ PLOC_NatCon _PLOC_NatConFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_NatCon
  */
 ATerm _PLOC_NatConToTerm(PLOC_NatCon arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_NatCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -510,7 +510,7 @@ ATerm _PLOC_NatConToTerm(PLOC_NatCon arg) {
  * \return PLOC_LexLayout that was encoded by \arg
  */
 PLOC_LexLayout _PLOC_LexLayoutFromTerm(ATerm t) {
-  return (PLOC_LexLayout)t;
+  return (((union {PLOC_LexLayout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -519,7 +519,7 @@ PLOC_LexLayout _PLOC_LexLayoutFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_LexLayout
  */
 ATerm _PLOC_LexLayoutToTerm(PLOC_LexLayout arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_LexLayout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -528,7 +528,7 @@ ATerm _PLOC_LexLayoutToTerm(PLOC_LexLayout arg) {
  * \return PLOC_Location that was encoded by \arg
  */
 PLOC_Location _PLOC_LocationFromTerm(ATerm t) {
-  return (PLOC_Location)t;
+  return (((union {PLOC_Location target; ATerm source; })(t)).target);
 }
 
 /**
@@ -537,7 +537,7 @@ PLOC_Location _PLOC_LocationFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_Location
  */
 ATerm _PLOC_LocationToTerm(PLOC_Location arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_Location source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -546,7 +546,7 @@ ATerm _PLOC_LocationToTerm(PLOC_Location arg) {
  * \return PLOC_Area that was encoded by \arg
  */
 PLOC_Area _PLOC_AreaFromTerm(ATerm t) {
-  return (PLOC_Area)t;
+  return (((union {PLOC_Area target; ATerm source; })(t)).target);
 }
 
 /**
@@ -555,7 +555,7 @@ PLOC_Area _PLOC_AreaFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_Area
  */
 ATerm _PLOC_AreaToTerm(PLOC_Area arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_Area source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -564,7 +564,7 @@ ATerm _PLOC_AreaToTerm(PLOC_Area arg) {
  * \return PLOC_Slice that was encoded by \arg
  */
 PLOC_Slice _PLOC_SliceFromTerm(ATerm t) {
-  return (PLOC_Slice)t;
+  return (((union {PLOC_Slice target; ATerm source; })(t)).target);
 }
 
 /**
@@ -573,7 +573,7 @@ PLOC_Slice _PLOC_SliceFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_Slice
  */
 ATerm _PLOC_SliceToTerm(PLOC_Slice arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_Slice source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -582,7 +582,7 @@ ATerm _PLOC_SliceToTerm(PLOC_Slice arg) {
  * \return PLOC_AreaAreas that was encoded by \arg
  */
 PLOC_AreaAreas _PLOC_AreaAreasFromTerm(ATerm t) {
-  return (PLOC_AreaAreas)t;
+  return (((union {PLOC_AreaAreas target; ATerm source; })(t)).target);
 }
 
 /**
@@ -591,7 +591,7 @@ PLOC_AreaAreas _PLOC_AreaAreasFromTerm(ATerm t) {
  * \return ATerm that represents the PLOC_AreaAreas
  */
 ATerm _PLOC_AreaAreasToTerm(PLOC_AreaAreas arg) {
-  return (ATerm)arg;
+  return (((union {PLOC_AreaAreas source; ATerm target; })(arg)).target);
 }
 
 /**

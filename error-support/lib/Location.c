@@ -194,7 +194,7 @@ void _LOC_unprotectAreaAreas(LOC_AreaAreas *arg) {
  * \return LOC_StrChar that was encoded by \arg
  */
 LOC_StrChar _LOC_StrCharFromTerm(ATerm t) {
-  return (LOC_StrChar)t;
+  return (((union {LOC_StrChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -203,7 +203,7 @@ LOC_StrChar _LOC_StrCharFromTerm(ATerm t) {
  * \return ATerm that represents the LOC_StrChar
  */
 ATerm _LOC_StrCharToTerm(LOC_StrChar arg) {
-  return (ATerm)arg;
+  return (((union {LOC_StrChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -212,7 +212,7 @@ ATerm _LOC_StrCharToTerm(LOC_StrChar arg) {
  * \return LOC_StrCon that was encoded by \arg
  */
 LOC_StrCon _LOC_StrConFromTerm(ATerm t) {
-  return (LOC_StrCon)t;
+  return (((union {LOC_StrCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -221,7 +221,7 @@ LOC_StrCon _LOC_StrConFromTerm(ATerm t) {
  * \return ATerm that represents the LOC_StrCon
  */
 ATerm _LOC_StrConToTerm(LOC_StrCon arg) {
-  return (ATerm)arg;
+  return (((union {LOC_StrCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -230,7 +230,7 @@ ATerm _LOC_StrConToTerm(LOC_StrCon arg) {
  * \return LOC_NatCon that was encoded by \arg
  */
 LOC_NatCon _LOC_NatConFromTerm(ATerm t) {
-  return (LOC_NatCon)t;
+  return (((union {LOC_NatCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -239,7 +239,7 @@ LOC_NatCon _LOC_NatConFromTerm(ATerm t) {
  * \return ATerm that represents the LOC_NatCon
  */
 ATerm _LOC_NatConToTerm(LOC_NatCon arg) {
-  return (ATerm)arg;
+  return (((union {LOC_NatCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -248,7 +248,7 @@ ATerm _LOC_NatConToTerm(LOC_NatCon arg) {
  * \return LOC_Location that was encoded by \arg
  */
 LOC_Location _LOC_LocationFromTerm(ATerm t) {
-  return (LOC_Location)t;
+  return (((union {LOC_Location target; ATerm source; })(t)).target);
 }
 
 /**
@@ -257,7 +257,7 @@ LOC_Location _LOC_LocationFromTerm(ATerm t) {
  * \return ATerm that represents the LOC_Location
  */
 ATerm _LOC_LocationToTerm(LOC_Location arg) {
-  return (ATerm)arg;
+  return (((union {LOC_Location source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -266,7 +266,7 @@ ATerm _LOC_LocationToTerm(LOC_Location arg) {
  * \return LOC_Area that was encoded by \arg
  */
 LOC_Area _LOC_AreaFromTerm(ATerm t) {
-  return (LOC_Area)t;
+  return (((union {LOC_Area target; ATerm source; })(t)).target);
 }
 
 /**
@@ -275,7 +275,7 @@ LOC_Area _LOC_AreaFromTerm(ATerm t) {
  * \return ATerm that represents the LOC_Area
  */
 ATerm _LOC_AreaToTerm(LOC_Area arg) {
-  return (ATerm)arg;
+  return (((union {LOC_Area source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -284,7 +284,7 @@ ATerm _LOC_AreaToTerm(LOC_Area arg) {
  * \return LOC_Slice that was encoded by \arg
  */
 LOC_Slice _LOC_SliceFromTerm(ATerm t) {
-  return (LOC_Slice)t;
+  return (((union {LOC_Slice target; ATerm source; })(t)).target);
 }
 
 /**
@@ -293,7 +293,7 @@ LOC_Slice _LOC_SliceFromTerm(ATerm t) {
  * \return ATerm that represents the LOC_Slice
  */
 ATerm _LOC_SliceToTerm(LOC_Slice arg) {
-  return (ATerm)arg;
+  return (((union {LOC_Slice source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -302,7 +302,7 @@ ATerm _LOC_SliceToTerm(LOC_Slice arg) {
  * \return LOC_AreaAreas that was encoded by \arg
  */
 LOC_AreaAreas _LOC_AreaAreasFromTerm(ATerm t) {
-  return (LOC_AreaAreas)t;
+  return (((union {LOC_AreaAreas target; ATerm source; })(t)).target);
 }
 
 /**
@@ -311,7 +311,7 @@ LOC_AreaAreas _LOC_AreaAreasFromTerm(ATerm t) {
  * \return ATerm that represents the LOC_AreaAreas
  */
 ATerm _LOC_AreaAreasToTerm(LOC_AreaAreas arg) {
-  return (ATerm)arg;
+  return (((union {LOC_AreaAreas source; ATerm target; })(arg)).target);
 }
 
 /**

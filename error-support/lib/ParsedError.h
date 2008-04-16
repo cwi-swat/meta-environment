@@ -288,253 +288,253 @@ void _PERR_unprotectAreaAreas (PERR_AreaAreas * arg);
 #define PERR_unprotectAreaAreas(arg) (_PERR_unprotectAreaAreas(arg))
 #endif
 #ifdef FAST_API
-#define PERR_OptLayoutFromTerm(t) ((PERR_OptLayout)(t))
+#define PERR_OptLayoutFromTerm(t) ((((union {PERR_OptLayout target; ATerm source; })(t)).target))
 #else
 PERR_OptLayout _PERR_OptLayoutFromTerm (ATerm t);
 #define PERR_OptLayoutFromTerm(t) (_PERR_OptLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_OptLayoutToTerm(arg) ((ATerm)(arg))
+#define PERR_OptLayoutToTerm(arg) ((((union {PERR_OptLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_OptLayoutToTerm (PERR_OptLayout arg);
 #define PERR_OptLayoutToTerm(arg) (_PERR_OptLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LayoutFromTerm(t) ((PERR_Layout)(t))
+#define PERR_LayoutFromTerm(t) ((((union {PERR_Layout target; ATerm source; })(t)).target))
 #else
 PERR_Layout _PERR_LayoutFromTerm (ATerm t);
 #define PERR_LayoutFromTerm(t) (_PERR_LayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LayoutToTerm(arg) ((ATerm)(arg))
+#define PERR_LayoutToTerm(arg) ((((union {PERR_Layout source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_LayoutToTerm (PERR_Layout arg);
 #define PERR_LayoutToTerm(arg) (_PERR_LayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexLayoutListFromTerm(t) ((PERR_LexLayoutList)(t))
+#define PERR_LexLayoutListFromTerm(t) ((((union {PERR_LexLayoutList target; ATerm source; })(t)).target))
 #else
 PERR_LexLayoutList _PERR_LexLayoutListFromTerm (ATerm t);
 #define PERR_LexLayoutListFromTerm(t) (_PERR_LexLayoutListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexLayoutListToTerm(arg) ((ATerm)(arg))
+#define PERR_LexLayoutListToTerm(arg) ((((union {PERR_LexLayoutList source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_LexLayoutListToTerm (PERR_LexLayoutList arg);
 #define PERR_LexLayoutListToTerm(arg) (_PERR_LexLayoutListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrCharFromTerm(t) ((PERR_LexStrChar)(t))
+#define PERR_LexStrCharFromTerm(t) ((((union {PERR_LexStrChar target; ATerm source; })(t)).target))
 #else
 PERR_LexStrChar _PERR_LexStrCharFromTerm (ATerm t);
 #define PERR_LexStrCharFromTerm(t) (_PERR_LexStrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrCharToTerm(arg) ((ATerm)(arg))
+#define PERR_LexStrCharToTerm(arg) ((((union {PERR_LexStrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_LexStrCharToTerm (PERR_LexStrChar arg);
 #define PERR_LexStrCharToTerm(arg) (_PERR_LexStrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_StrCharFromTerm(t) ((PERR_StrChar)(t))
+#define PERR_StrCharFromTerm(t) ((((union {PERR_StrChar target; ATerm source; })(t)).target))
 #else
 PERR_StrChar _PERR_StrCharFromTerm (ATerm t);
 #define PERR_StrCharFromTerm(t) (_PERR_StrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_StrCharToTerm(arg) ((ATerm)(arg))
+#define PERR_StrCharToTerm(arg) ((((union {PERR_StrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_StrCharToTerm (PERR_StrChar arg);
 #define PERR_StrCharToTerm(arg) (_PERR_StrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrConFromTerm(t) ((PERR_LexStrCon)(t))
+#define PERR_LexStrConFromTerm(t) ((((union {PERR_LexStrCon target; ATerm source; })(t)).target))
 #else
 PERR_LexStrCon _PERR_LexStrConFromTerm (ATerm t);
 #define PERR_LexStrConFromTerm(t) (_PERR_LexStrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrConToTerm(arg) ((ATerm)(arg))
+#define PERR_LexStrConToTerm(arg) ((((union {PERR_LexStrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_LexStrConToTerm (PERR_LexStrCon arg);
 #define PERR_LexStrConToTerm(arg) (_PERR_LexStrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_StrConFromTerm(t) ((PERR_StrCon)(t))
+#define PERR_StrConFromTerm(t) ((((union {PERR_StrCon target; ATerm source; })(t)).target))
 #else
 PERR_StrCon _PERR_StrConFromTerm (ATerm t);
 #define PERR_StrConFromTerm(t) (_PERR_StrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_StrConToTerm(arg) ((ATerm)(arg))
+#define PERR_StrConToTerm(arg) ((((union {PERR_StrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_StrConToTerm (PERR_StrCon arg);
 #define PERR_StrConToTerm(arg) (_PERR_StrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrCharCharsFromTerm(t) ((PERR_LexStrCharChars)(t))
+#define PERR_LexStrCharCharsFromTerm(t) ((((union {PERR_LexStrCharChars target; ATerm source; })(t)).target))
 #else
 PERR_LexStrCharChars _PERR_LexStrCharCharsFromTerm (ATerm t);
 #define PERR_LexStrCharCharsFromTerm(t) (_PERR_LexStrCharCharsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrCharCharsToTerm(arg) ((ATerm)(arg))
+#define PERR_LexStrCharCharsToTerm(arg) ((((union {PERR_LexStrCharChars source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_LexStrCharCharsToTerm (PERR_LexStrCharChars arg);
 #define PERR_LexStrCharCharsToTerm(arg) (_PERR_LexStrCharCharsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexNatConFromTerm(t) ((PERR_LexNatCon)(t))
+#define PERR_LexNatConFromTerm(t) ((((union {PERR_LexNatCon target; ATerm source; })(t)).target))
 #else
 PERR_LexNatCon _PERR_LexNatConFromTerm (ATerm t);
 #define PERR_LexNatConFromTerm(t) (_PERR_LexNatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexNatConToTerm(arg) ((ATerm)(arg))
+#define PERR_LexNatConToTerm(arg) ((((union {PERR_LexNatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_LexNatConToTerm (PERR_LexNatCon arg);
 #define PERR_LexNatConToTerm(arg) (_PERR_LexNatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_NatConFromTerm(t) ((PERR_NatCon)(t))
+#define PERR_NatConFromTerm(t) ((((union {PERR_NatCon target; ATerm source; })(t)).target))
 #else
 PERR_NatCon _PERR_NatConFromTerm (ATerm t);
 #define PERR_NatConFromTerm(t) (_PERR_NatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_NatConToTerm(arg) ((ATerm)(arg))
+#define PERR_NatConToTerm(arg) ((((union {PERR_NatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_NatConToTerm (PERR_NatCon arg);
 #define PERR_NatConToTerm(arg) (_PERR_NatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexLayoutFromTerm(t) ((PERR_LexLayout)(t))
+#define PERR_LexLayoutFromTerm(t) ((((union {PERR_LexLayout target; ATerm source; })(t)).target))
 #else
 PERR_LexLayout _PERR_LexLayoutFromTerm (ATerm t);
 #define PERR_LexLayoutFromTerm(t) (_PERR_LexLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexLayoutToTerm(arg) ((ATerm)(arg))
+#define PERR_LexLayoutToTerm(arg) ((((union {PERR_LexLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_LexLayoutToTerm (PERR_LexLayout arg);
 #define PERR_LexLayoutToTerm(arg) (_PERR_LexLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_StartFromTerm(t) ((PERR_Start)(t))
+#define PERR_StartFromTerm(t) ((((union {PERR_Start target; ATerm source; })(t)).target))
 #else
 PERR_Start _PERR_StartFromTerm (ATerm t);
 #define PERR_StartFromTerm(t) (_PERR_StartFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_StartToTerm(arg) ((ATerm)(arg))
+#define PERR_StartToTerm(arg) ((((union {PERR_Start source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_StartToTerm (PERR_Start arg);
 #define PERR_StartToTerm(arg) (_PERR_StartToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_SubjectFromTerm(t) ((PERR_Subject)(t))
+#define PERR_SubjectFromTerm(t) ((((union {PERR_Subject target; ATerm source; })(t)).target))
 #else
 PERR_Subject _PERR_SubjectFromTerm (ATerm t);
 #define PERR_SubjectFromTerm(t) (_PERR_SubjectFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_SubjectToTerm(arg) ((ATerm)(arg))
+#define PERR_SubjectToTerm(arg) ((((union {PERR_Subject source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_SubjectToTerm (PERR_Subject arg);
 #define PERR_SubjectToTerm(arg) (_PERR_SubjectToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_ErrorFromTerm(t) ((PERR_Error)(t))
+#define PERR_ErrorFromTerm(t) ((((union {PERR_Error target; ATerm source; })(t)).target))
 #else
 PERR_Error _PERR_ErrorFromTerm (ATerm t);
 #define PERR_ErrorFromTerm(t) (_PERR_ErrorFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_ErrorToTerm(arg) ((ATerm)(arg))
+#define PERR_ErrorToTerm(arg) ((((union {PERR_Error source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_ErrorToTerm (PERR_Error arg);
 #define PERR_ErrorToTerm(arg) (_PERR_ErrorToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_SummaryFromTerm(t) ((PERR_Summary)(t))
+#define PERR_SummaryFromTerm(t) ((((union {PERR_Summary target; ATerm source; })(t)).target))
 #else
 PERR_Summary _PERR_SummaryFromTerm (ATerm t);
 #define PERR_SummaryFromTerm(t) (_PERR_SummaryFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_SummaryToTerm(arg) ((ATerm)(arg))
+#define PERR_SummaryToTerm(arg) ((((union {PERR_Summary source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_SummaryToTerm (PERR_Summary arg);
 #define PERR_SummaryToTerm(arg) (_PERR_SummaryToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_SubjectListFromTerm(t) ((PERR_SubjectList)(t))
+#define PERR_SubjectListFromTerm(t) ((((union {PERR_SubjectList target; ATerm source; })(t)).target))
 #else
 PERR_SubjectList _PERR_SubjectListFromTerm (ATerm t);
 #define PERR_SubjectListFromTerm(t) (_PERR_SubjectListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_SubjectListToTerm(arg) ((ATerm)(arg))
+#define PERR_SubjectListToTerm(arg) ((((union {PERR_SubjectList source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_SubjectListToTerm (PERR_SubjectList arg);
 #define PERR_SubjectListToTerm(arg) (_PERR_SubjectListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_ErrorListFromTerm(t) ((PERR_ErrorList)(t))
+#define PERR_ErrorListFromTerm(t) ((((union {PERR_ErrorList target; ATerm source; })(t)).target))
 #else
 PERR_ErrorList _PERR_ErrorListFromTerm (ATerm t);
 #define PERR_ErrorListFromTerm(t) (_PERR_ErrorListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_ErrorListToTerm(arg) ((ATerm)(arg))
+#define PERR_ErrorListToTerm(arg) ((((union {PERR_ErrorList source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_ErrorListToTerm (PERR_ErrorList arg);
 #define PERR_ErrorListToTerm(arg) (_PERR_ErrorListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LocationFromTerm(t) ((PERR_Location)(t))
+#define PERR_LocationFromTerm(t) ((((union {PERR_Location target; ATerm source; })(t)).target))
 #else
 PERR_Location _PERR_LocationFromTerm (ATerm t);
 #define PERR_LocationFromTerm(t) (_PERR_LocationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LocationToTerm(arg) ((ATerm)(arg))
+#define PERR_LocationToTerm(arg) ((((union {PERR_Location source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_LocationToTerm (PERR_Location arg);
 #define PERR_LocationToTerm(arg) (_PERR_LocationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_AreaFromTerm(t) ((PERR_Area)(t))
+#define PERR_AreaFromTerm(t) ((((union {PERR_Area target; ATerm source; })(t)).target))
 #else
 PERR_Area _PERR_AreaFromTerm (ATerm t);
 #define PERR_AreaFromTerm(t) (_PERR_AreaFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_AreaToTerm(arg) ((ATerm)(arg))
+#define PERR_AreaToTerm(arg) ((((union {PERR_Area source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_AreaToTerm (PERR_Area arg);
 #define PERR_AreaToTerm(arg) (_PERR_AreaToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_SliceFromTerm(t) ((PERR_Slice)(t))
+#define PERR_SliceFromTerm(t) ((((union {PERR_Slice target; ATerm source; })(t)).target))
 #else
 PERR_Slice _PERR_SliceFromTerm (ATerm t);
 #define PERR_SliceFromTerm(t) (_PERR_SliceFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_SliceToTerm(arg) ((ATerm)(arg))
+#define PERR_SliceToTerm(arg) ((((union {PERR_Slice source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_SliceToTerm (PERR_Slice arg);
 #define PERR_SliceToTerm(arg) (_PERR_SliceToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_AreaAreasFromTerm(t) ((PERR_AreaAreas)(t))
+#define PERR_AreaAreasFromTerm(t) ((((union {PERR_AreaAreas target; ATerm source; })(t)).target))
 #else
 PERR_AreaAreas _PERR_AreaAreasFromTerm (ATerm t);
 #define PERR_AreaAreasFromTerm(t) (_PERR_AreaAreasFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_AreaAreasToTerm(arg) ((ATerm)(arg))
+#define PERR_AreaAreasToTerm(arg) ((((union {PERR_AreaAreas source; ATerm target; })(arg)).target))
 #else
 ATerm _PERR_AreaAreasToTerm (PERR_AreaAreas arg);
 #define PERR_AreaAreasToTerm(arg) (_PERR_AreaAreasToTerm(arg))

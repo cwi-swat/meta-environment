@@ -279,7 +279,7 @@ void _ERR_unprotectAreaAreas(ERR_AreaAreas *arg) {
  * \return ERR_StrChar that was encoded by \arg
  */
 ERR_StrChar _ERR_StrCharFromTerm(ATerm t) {
-  return (ERR_StrChar)t;
+  return (((union {ERR_StrChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -288,7 +288,7 @@ ERR_StrChar _ERR_StrCharFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_StrChar
  */
 ATerm _ERR_StrCharToTerm(ERR_StrChar arg) {
-  return (ATerm)arg;
+  return (((union {ERR_StrChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -297,7 +297,7 @@ ATerm _ERR_StrCharToTerm(ERR_StrChar arg) {
  * \return ERR_StrCon that was encoded by \arg
  */
 ERR_StrCon _ERR_StrConFromTerm(ATerm t) {
-  return (ERR_StrCon)t;
+  return (((union {ERR_StrCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -306,7 +306,7 @@ ERR_StrCon _ERR_StrConFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_StrCon
  */
 ATerm _ERR_StrConToTerm(ERR_StrCon arg) {
-  return (ATerm)arg;
+  return (((union {ERR_StrCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -315,7 +315,7 @@ ATerm _ERR_StrConToTerm(ERR_StrCon arg) {
  * \return ERR_NatCon that was encoded by \arg
  */
 ERR_NatCon _ERR_NatConFromTerm(ATerm t) {
-  return (ERR_NatCon)t;
+  return (((union {ERR_NatCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -324,7 +324,7 @@ ERR_NatCon _ERR_NatConFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_NatCon
  */
 ATerm _ERR_NatConToTerm(ERR_NatCon arg) {
-  return (ATerm)arg;
+  return (((union {ERR_NatCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -333,7 +333,7 @@ ATerm _ERR_NatConToTerm(ERR_NatCon arg) {
  * \return ERR_Subject that was encoded by \arg
  */
 ERR_Subject _ERR_SubjectFromTerm(ATerm t) {
-  return (ERR_Subject)t;
+  return (((union {ERR_Subject target; ATerm source; })(t)).target);
 }
 
 /**
@@ -342,7 +342,7 @@ ERR_Subject _ERR_SubjectFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_Subject
  */
 ATerm _ERR_SubjectToTerm(ERR_Subject arg) {
-  return (ATerm)arg;
+  return (((union {ERR_Subject source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -351,7 +351,7 @@ ATerm _ERR_SubjectToTerm(ERR_Subject arg) {
  * \return ERR_Error that was encoded by \arg
  */
 ERR_Error _ERR_ErrorFromTerm(ATerm t) {
-  return (ERR_Error)t;
+  return (((union {ERR_Error target; ATerm source; })(t)).target);
 }
 
 /**
@@ -360,7 +360,7 @@ ERR_Error _ERR_ErrorFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_Error
  */
 ATerm _ERR_ErrorToTerm(ERR_Error arg) {
-  return (ATerm)arg;
+  return (((union {ERR_Error source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -369,7 +369,7 @@ ATerm _ERR_ErrorToTerm(ERR_Error arg) {
  * \return ERR_Summary that was encoded by \arg
  */
 ERR_Summary _ERR_SummaryFromTerm(ATerm t) {
-  return (ERR_Summary)t;
+  return (((union {ERR_Summary target; ATerm source; })(t)).target);
 }
 
 /**
@@ -378,7 +378,7 @@ ERR_Summary _ERR_SummaryFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_Summary
  */
 ATerm _ERR_SummaryToTerm(ERR_Summary arg) {
-  return (ATerm)arg;
+  return (((union {ERR_Summary source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -387,7 +387,7 @@ ATerm _ERR_SummaryToTerm(ERR_Summary arg) {
  * \return ERR_SubjectList that was encoded by \arg
  */
 ERR_SubjectList _ERR_SubjectListFromTerm(ATerm t) {
-  return (ERR_SubjectList)t;
+  return (((union {ERR_SubjectList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -396,7 +396,7 @@ ERR_SubjectList _ERR_SubjectListFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_SubjectList
  */
 ATerm _ERR_SubjectListToTerm(ERR_SubjectList arg) {
-  return (ATerm)arg;
+  return (((union {ERR_SubjectList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -405,7 +405,7 @@ ATerm _ERR_SubjectListToTerm(ERR_SubjectList arg) {
  * \return ERR_ErrorList that was encoded by \arg
  */
 ERR_ErrorList _ERR_ErrorListFromTerm(ATerm t) {
-  return (ERR_ErrorList)t;
+  return (((union {ERR_ErrorList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -414,7 +414,7 @@ ERR_ErrorList _ERR_ErrorListFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_ErrorList
  */
 ATerm _ERR_ErrorListToTerm(ERR_ErrorList arg) {
-  return (ATerm)arg;
+  return (((union {ERR_ErrorList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -423,7 +423,7 @@ ATerm _ERR_ErrorListToTerm(ERR_ErrorList arg) {
  * \return ERR_Location that was encoded by \arg
  */
 ERR_Location _ERR_LocationFromTerm(ATerm t) {
-  return (ERR_Location)t;
+  return (((union {ERR_Location target; ATerm source; })(t)).target);
 }
 
 /**
@@ -432,7 +432,7 @@ ERR_Location _ERR_LocationFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_Location
  */
 ATerm _ERR_LocationToTerm(ERR_Location arg) {
-  return (ATerm)arg;
+  return (((union {ERR_Location source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -441,7 +441,7 @@ ATerm _ERR_LocationToTerm(ERR_Location arg) {
  * \return ERR_Area that was encoded by \arg
  */
 ERR_Area _ERR_AreaFromTerm(ATerm t) {
-  return (ERR_Area)t;
+  return (((union {ERR_Area target; ATerm source; })(t)).target);
 }
 
 /**
@@ -450,7 +450,7 @@ ERR_Area _ERR_AreaFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_Area
  */
 ATerm _ERR_AreaToTerm(ERR_Area arg) {
-  return (ATerm)arg;
+  return (((union {ERR_Area source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -459,7 +459,7 @@ ATerm _ERR_AreaToTerm(ERR_Area arg) {
  * \return ERR_Slice that was encoded by \arg
  */
 ERR_Slice _ERR_SliceFromTerm(ATerm t) {
-  return (ERR_Slice)t;
+  return (((union {ERR_Slice target; ATerm source; })(t)).target);
 }
 
 /**
@@ -468,7 +468,7 @@ ERR_Slice _ERR_SliceFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_Slice
  */
 ATerm _ERR_SliceToTerm(ERR_Slice arg) {
-  return (ATerm)arg;
+  return (((union {ERR_Slice source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -477,7 +477,7 @@ ATerm _ERR_SliceToTerm(ERR_Slice arg) {
  * \return ERR_AreaAreas that was encoded by \arg
  */
 ERR_AreaAreas _ERR_AreaAreasFromTerm(ATerm t) {
-  return (ERR_AreaAreas)t;
+  return (((union {ERR_AreaAreas target; ATerm source; })(t)).target);
 }
 
 /**
@@ -486,7 +486,7 @@ ERR_AreaAreas _ERR_AreaAreasFromTerm(ATerm t) {
  * \return ATerm that represents the ERR_AreaAreas
  */
 ATerm _ERR_AreaAreasToTerm(ERR_AreaAreas arg) {
-  return (ATerm)arg;
+  return (((union {ERR_AreaAreas source; ATerm target; })(arg)).target);
 }
 
 /**

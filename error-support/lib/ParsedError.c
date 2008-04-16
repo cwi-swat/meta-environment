@@ -432,7 +432,7 @@ void _PERR_unprotectAreaAreas(PERR_AreaAreas *arg) {
  * \return PERR_OptLayout that was encoded by \arg
  */
 PERR_OptLayout _PERR_OptLayoutFromTerm(ATerm t) {
-  return (PERR_OptLayout)t;
+  return (((union {PERR_OptLayout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -441,7 +441,7 @@ PERR_OptLayout _PERR_OptLayoutFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_OptLayout
  */
 ATerm _PERR_OptLayoutToTerm(PERR_OptLayout arg) {
-  return (ATerm)arg;
+  return (((union {PERR_OptLayout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -450,7 +450,7 @@ ATerm _PERR_OptLayoutToTerm(PERR_OptLayout arg) {
  * \return PERR_Layout that was encoded by \arg
  */
 PERR_Layout _PERR_LayoutFromTerm(ATerm t) {
-  return (PERR_Layout)t;
+  return (((union {PERR_Layout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -459,7 +459,7 @@ PERR_Layout _PERR_LayoutFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_Layout
  */
 ATerm _PERR_LayoutToTerm(PERR_Layout arg) {
-  return (ATerm)arg;
+  return (((union {PERR_Layout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -468,7 +468,7 @@ ATerm _PERR_LayoutToTerm(PERR_Layout arg) {
  * \return PERR_LexLayoutList that was encoded by \arg
  */
 PERR_LexLayoutList _PERR_LexLayoutListFromTerm(ATerm t) {
-  return (PERR_LexLayoutList)t;
+  return (((union {PERR_LexLayoutList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -477,7 +477,7 @@ PERR_LexLayoutList _PERR_LexLayoutListFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_LexLayoutList
  */
 ATerm _PERR_LexLayoutListToTerm(PERR_LexLayoutList arg) {
-  return (ATerm)arg;
+  return (((union {PERR_LexLayoutList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -486,7 +486,7 @@ ATerm _PERR_LexLayoutListToTerm(PERR_LexLayoutList arg) {
  * \return PERR_LexStrChar that was encoded by \arg
  */
 PERR_LexStrChar _PERR_LexStrCharFromTerm(ATerm t) {
-  return (PERR_LexStrChar)t;
+  return (((union {PERR_LexStrChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -495,7 +495,7 @@ PERR_LexStrChar _PERR_LexStrCharFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_LexStrChar
  */
 ATerm _PERR_LexStrCharToTerm(PERR_LexStrChar arg) {
-  return (ATerm)arg;
+  return (((union {PERR_LexStrChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -504,7 +504,7 @@ ATerm _PERR_LexStrCharToTerm(PERR_LexStrChar arg) {
  * \return PERR_StrChar that was encoded by \arg
  */
 PERR_StrChar _PERR_StrCharFromTerm(ATerm t) {
-  return (PERR_StrChar)t;
+  return (((union {PERR_StrChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -513,7 +513,7 @@ PERR_StrChar _PERR_StrCharFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_StrChar
  */
 ATerm _PERR_StrCharToTerm(PERR_StrChar arg) {
-  return (ATerm)arg;
+  return (((union {PERR_StrChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -522,7 +522,7 @@ ATerm _PERR_StrCharToTerm(PERR_StrChar arg) {
  * \return PERR_LexStrCon that was encoded by \arg
  */
 PERR_LexStrCon _PERR_LexStrConFromTerm(ATerm t) {
-  return (PERR_LexStrCon)t;
+  return (((union {PERR_LexStrCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -531,7 +531,7 @@ PERR_LexStrCon _PERR_LexStrConFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_LexStrCon
  */
 ATerm _PERR_LexStrConToTerm(PERR_LexStrCon arg) {
-  return (ATerm)arg;
+  return (((union {PERR_LexStrCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -540,7 +540,7 @@ ATerm _PERR_LexStrConToTerm(PERR_LexStrCon arg) {
  * \return PERR_StrCon that was encoded by \arg
  */
 PERR_StrCon _PERR_StrConFromTerm(ATerm t) {
-  return (PERR_StrCon)t;
+  return (((union {PERR_StrCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -549,7 +549,7 @@ PERR_StrCon _PERR_StrConFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_StrCon
  */
 ATerm _PERR_StrConToTerm(PERR_StrCon arg) {
-  return (ATerm)arg;
+  return (((union {PERR_StrCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -558,7 +558,7 @@ ATerm _PERR_StrConToTerm(PERR_StrCon arg) {
  * \return PERR_LexStrCharChars that was encoded by \arg
  */
 PERR_LexStrCharChars _PERR_LexStrCharCharsFromTerm(ATerm t) {
-  return (PERR_LexStrCharChars)t;
+  return (((union {PERR_LexStrCharChars target; ATerm source; })(t)).target);
 }
 
 /**
@@ -567,7 +567,7 @@ PERR_LexStrCharChars _PERR_LexStrCharCharsFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_LexStrCharChars
  */
 ATerm _PERR_LexStrCharCharsToTerm(PERR_LexStrCharChars arg) {
-  return (ATerm)arg;
+  return (((union {PERR_LexStrCharChars source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -576,7 +576,7 @@ ATerm _PERR_LexStrCharCharsToTerm(PERR_LexStrCharChars arg) {
  * \return PERR_LexNatCon that was encoded by \arg
  */
 PERR_LexNatCon _PERR_LexNatConFromTerm(ATerm t) {
-  return (PERR_LexNatCon)t;
+  return (((union {PERR_LexNatCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -585,7 +585,7 @@ PERR_LexNatCon _PERR_LexNatConFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_LexNatCon
  */
 ATerm _PERR_LexNatConToTerm(PERR_LexNatCon arg) {
-  return (ATerm)arg;
+  return (((union {PERR_LexNatCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -594,7 +594,7 @@ ATerm _PERR_LexNatConToTerm(PERR_LexNatCon arg) {
  * \return PERR_NatCon that was encoded by \arg
  */
 PERR_NatCon _PERR_NatConFromTerm(ATerm t) {
-  return (PERR_NatCon)t;
+  return (((union {PERR_NatCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -603,7 +603,7 @@ PERR_NatCon _PERR_NatConFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_NatCon
  */
 ATerm _PERR_NatConToTerm(PERR_NatCon arg) {
-  return (ATerm)arg;
+  return (((union {PERR_NatCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -612,7 +612,7 @@ ATerm _PERR_NatConToTerm(PERR_NatCon arg) {
  * \return PERR_LexLayout that was encoded by \arg
  */
 PERR_LexLayout _PERR_LexLayoutFromTerm(ATerm t) {
-  return (PERR_LexLayout)t;
+  return (((union {PERR_LexLayout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -621,7 +621,7 @@ PERR_LexLayout _PERR_LexLayoutFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_LexLayout
  */
 ATerm _PERR_LexLayoutToTerm(PERR_LexLayout arg) {
-  return (ATerm)arg;
+  return (((union {PERR_LexLayout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -630,7 +630,7 @@ ATerm _PERR_LexLayoutToTerm(PERR_LexLayout arg) {
  * \return PERR_Start that was encoded by \arg
  */
 PERR_Start _PERR_StartFromTerm(ATerm t) {
-  return (PERR_Start)t;
+  return (((union {PERR_Start target; ATerm source; })(t)).target);
 }
 
 /**
@@ -639,7 +639,7 @@ PERR_Start _PERR_StartFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_Start
  */
 ATerm _PERR_StartToTerm(PERR_Start arg) {
-  return (ATerm)arg;
+  return (((union {PERR_Start source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -648,7 +648,7 @@ ATerm _PERR_StartToTerm(PERR_Start arg) {
  * \return PERR_Subject that was encoded by \arg
  */
 PERR_Subject _PERR_SubjectFromTerm(ATerm t) {
-  return (PERR_Subject)t;
+  return (((union {PERR_Subject target; ATerm source; })(t)).target);
 }
 
 /**
@@ -657,7 +657,7 @@ PERR_Subject _PERR_SubjectFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_Subject
  */
 ATerm _PERR_SubjectToTerm(PERR_Subject arg) {
-  return (ATerm)arg;
+  return (((union {PERR_Subject source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -666,7 +666,7 @@ ATerm _PERR_SubjectToTerm(PERR_Subject arg) {
  * \return PERR_Error that was encoded by \arg
  */
 PERR_Error _PERR_ErrorFromTerm(ATerm t) {
-  return (PERR_Error)t;
+  return (((union {PERR_Error target; ATerm source; })(t)).target);
 }
 
 /**
@@ -675,7 +675,7 @@ PERR_Error _PERR_ErrorFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_Error
  */
 ATerm _PERR_ErrorToTerm(PERR_Error arg) {
-  return (ATerm)arg;
+  return (((union {PERR_Error source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -684,7 +684,7 @@ ATerm _PERR_ErrorToTerm(PERR_Error arg) {
  * \return PERR_Summary that was encoded by \arg
  */
 PERR_Summary _PERR_SummaryFromTerm(ATerm t) {
-  return (PERR_Summary)t;
+  return (((union {PERR_Summary target; ATerm source; })(t)).target);
 }
 
 /**
@@ -693,7 +693,7 @@ PERR_Summary _PERR_SummaryFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_Summary
  */
 ATerm _PERR_SummaryToTerm(PERR_Summary arg) {
-  return (ATerm)arg;
+  return (((union {PERR_Summary source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -702,7 +702,7 @@ ATerm _PERR_SummaryToTerm(PERR_Summary arg) {
  * \return PERR_SubjectList that was encoded by \arg
  */
 PERR_SubjectList _PERR_SubjectListFromTerm(ATerm t) {
-  return (PERR_SubjectList)t;
+  return (((union {PERR_SubjectList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -711,7 +711,7 @@ PERR_SubjectList _PERR_SubjectListFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_SubjectList
  */
 ATerm _PERR_SubjectListToTerm(PERR_SubjectList arg) {
-  return (ATerm)arg;
+  return (((union {PERR_SubjectList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -720,7 +720,7 @@ ATerm _PERR_SubjectListToTerm(PERR_SubjectList arg) {
  * \return PERR_ErrorList that was encoded by \arg
  */
 PERR_ErrorList _PERR_ErrorListFromTerm(ATerm t) {
-  return (PERR_ErrorList)t;
+  return (((union {PERR_ErrorList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -729,7 +729,7 @@ PERR_ErrorList _PERR_ErrorListFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_ErrorList
  */
 ATerm _PERR_ErrorListToTerm(PERR_ErrorList arg) {
-  return (ATerm)arg;
+  return (((union {PERR_ErrorList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -738,7 +738,7 @@ ATerm _PERR_ErrorListToTerm(PERR_ErrorList arg) {
  * \return PERR_Location that was encoded by \arg
  */
 PERR_Location _PERR_LocationFromTerm(ATerm t) {
-  return (PERR_Location)t;
+  return (((union {PERR_Location target; ATerm source; })(t)).target);
 }
 
 /**
@@ -747,7 +747,7 @@ PERR_Location _PERR_LocationFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_Location
  */
 ATerm _PERR_LocationToTerm(PERR_Location arg) {
-  return (ATerm)arg;
+  return (((union {PERR_Location source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -756,7 +756,7 @@ ATerm _PERR_LocationToTerm(PERR_Location arg) {
  * \return PERR_Area that was encoded by \arg
  */
 PERR_Area _PERR_AreaFromTerm(ATerm t) {
-  return (PERR_Area)t;
+  return (((union {PERR_Area target; ATerm source; })(t)).target);
 }
 
 /**
@@ -765,7 +765,7 @@ PERR_Area _PERR_AreaFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_Area
  */
 ATerm _PERR_AreaToTerm(PERR_Area arg) {
-  return (ATerm)arg;
+  return (((union {PERR_Area source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -774,7 +774,7 @@ ATerm _PERR_AreaToTerm(PERR_Area arg) {
  * \return PERR_Slice that was encoded by \arg
  */
 PERR_Slice _PERR_SliceFromTerm(ATerm t) {
-  return (PERR_Slice)t;
+  return (((union {PERR_Slice target; ATerm source; })(t)).target);
 }
 
 /**
@@ -783,7 +783,7 @@ PERR_Slice _PERR_SliceFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_Slice
  */
 ATerm _PERR_SliceToTerm(PERR_Slice arg) {
-  return (ATerm)arg;
+  return (((union {PERR_Slice source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -792,7 +792,7 @@ ATerm _PERR_SliceToTerm(PERR_Slice arg) {
  * \return PERR_AreaAreas that was encoded by \arg
  */
 PERR_AreaAreas _PERR_AreaAreasFromTerm(ATerm t) {
-  return (PERR_AreaAreas)t;
+  return (((union {PERR_AreaAreas target; ATerm source; })(t)).target);
 }
 
 /**
@@ -801,7 +801,7 @@ PERR_AreaAreas _PERR_AreaAreasFromTerm(ATerm t) {
  * \return ATerm that represents the PERR_AreaAreas
  */
 ATerm _PERR_AreaAreasToTerm(PERR_AreaAreas arg) {
-  return (ATerm)arg;
+  return (((union {PERR_AreaAreas source; ATerm target; })(arg)).target);
 }
 
 /**
