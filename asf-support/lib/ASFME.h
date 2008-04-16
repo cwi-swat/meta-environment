@@ -444,397 +444,397 @@ void _ASF_unprotectCharacter(ASF_Character *arg);
 #define ASF_unprotectCharacter(arg) (_ASF_unprotectCharacter(arg))
 #endif
 #ifdef FAST_API
-#define ASF_OptLayoutFromTerm(t) ((ASF_OptLayout)(t))
+#define ASF_OptLayoutFromTerm(t) ((((union {ASF_OptLayout target; ATerm source; })(t)).target))
 #else
 ASF_OptLayout _ASF_OptLayoutFromTerm(ATerm t);
 #define ASF_OptLayoutFromTerm(t) (_ASF_OptLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_OptLayoutToTerm(arg) ((ATerm)(arg))
+#define ASF_OptLayoutToTerm(arg) ((((union {ASF_OptLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_OptLayoutToTerm(ASF_OptLayout arg);
 #define ASF_OptLayoutToTerm(arg) (_ASF_OptLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LayoutFromTerm(t) ((ASF_Layout)(t))
+#define ASF_LayoutFromTerm(t) ((((union {ASF_Layout target; ATerm source; })(t)).target))
 #else
 ASF_Layout _ASF_LayoutFromTerm(ATerm t);
 #define ASF_LayoutFromTerm(t) (_ASF_LayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LayoutToTerm(arg) ((ATerm)(arg))
+#define ASF_LayoutToTerm(arg) ((((union {ASF_Layout source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_LayoutToTerm(ASF_Layout arg);
 #define ASF_LayoutToTerm(arg) (_ASF_LayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexLayoutListFromTerm(t) ((ASF_LexLayoutList)(t))
+#define ASF_LexLayoutListFromTerm(t) ((((union {ASF_LexLayoutList target; ATerm source; })(t)).target))
 #else
 ASF_LexLayoutList _ASF_LexLayoutListFromTerm(ATerm t);
 #define ASF_LexLayoutListFromTerm(t) (_ASF_LexLayoutListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexLayoutListToTerm(arg) ((ATerm)(arg))
+#define ASF_LexLayoutListToTerm(arg) ((((union {ASF_LexLayoutList source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_LexLayoutListToTerm(ASF_LexLayoutList arg);
 #define ASF_LexLayoutListToTerm(arg) (_ASF_LexLayoutListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_TreeFromTerm(t) ((ASF_Tree)(t))
+#define ASF_TreeFromTerm(t) ((((union {ASF_Tree target; ATerm source; })(t)).target))
 #else
 ASF_Tree _ASF_TreeFromTerm(ATerm t);
 #define ASF_TreeFromTerm(t) (_ASF_TreeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_TreeToTerm(arg) ((ATerm)(arg))
+#define ASF_TreeToTerm(arg) ((((union {ASF_Tree source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_TreeToTerm(ASF_Tree arg);
 #define ASF_TreeToTerm(arg) (_ASF_TreeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexCHARFromTerm(t) ((ASF_LexCHAR)(t))
+#define ASF_LexCHARFromTerm(t) ((((union {ASF_LexCHAR target; ATerm source; })(t)).target))
 #else
 ASF_LexCHAR _ASF_LexCHARFromTerm(ATerm t);
 #define ASF_LexCHARFromTerm(t) (_ASF_LexCHARFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexCHARToTerm(arg) ((ATerm)(arg))
+#define ASF_LexCHARToTerm(arg) ((((union {ASF_LexCHAR source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_LexCHARToTerm(ASF_LexCHAR arg);
 #define ASF_LexCHARToTerm(arg) (_ASF_LexCHARToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_CHARFromTerm(t) ((ASF_CHAR)(t))
+#define ASF_CHARFromTerm(t) ((((union {ASF_CHAR target; ATerm source; })(t)).target))
 #else
 ASF_CHAR _ASF_CHARFromTerm(ATerm t);
 #define ASF_CHARFromTerm(t) (_ASF_CHARFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_CHARToTerm(arg) ((ATerm)(arg))
+#define ASF_CHARToTerm(arg) ((((union {ASF_CHAR source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_CHARToTerm(ASF_CHAR arg);
 #define ASF_CHARToTerm(arg) (_ASF_CHARToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionFromTerm(t) ((ASF_ASFCondition)(t))
+#define ASF_ASFConditionFromTerm(t) ((((union {ASF_ASFCondition target; ATerm source; })(t)).target))
 #else
 ASF_ASFCondition _ASF_ASFConditionFromTerm(ATerm t);
 #define ASF_ASFConditionFromTerm(t) (_ASF_ASFConditionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFConditionToTerm(arg) ((((union {ASF_ASFCondition source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFConditionToTerm(ASF_ASFCondition arg);
 #define ASF_ASFConditionToTerm(arg) (_ASF_ASFConditionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionsFromTerm(t) ((ASF_ASFConditions)(t))
+#define ASF_ASFConditionsFromTerm(t) ((((union {ASF_ASFConditions target; ATerm source; })(t)).target))
 #else
 ASF_ASFConditions _ASF_ASFConditionsFromTerm(ATerm t);
 #define ASF_ASFConditionsFromTerm(t) (_ASF_ASFConditionsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionsToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFConditionsToTerm(arg) ((((union {ASF_ASFConditions source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFConditionsToTerm(ASF_ASFConditions arg);
 #define ASF_ASFConditionsToTerm(arg) (_ASF_ASFConditionsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionListFromTerm(t) ((ASF_ASFConditionList)(t))
+#define ASF_ASFConditionListFromTerm(t) ((((union {ASF_ASFConditionList target; ATerm source; })(t)).target))
 #else
 ASF_ASFConditionList _ASF_ASFConditionListFromTerm(ATerm t);
 #define ASF_ASFConditionListFromTerm(t) (_ASF_ASFConditionListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionListToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFConditionListToTerm(arg) ((((union {ASF_ASFConditionList source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFConditionListToTerm(ASF_ASFConditionList arg);
 #define ASF_ASFConditionListToTerm(arg) (_ASF_ASFConditionListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_TreeAmbsFromTerm(t) ((ASF_TreeAmbs)(t))
+#define ASF_TreeAmbsFromTerm(t) ((((union {ASF_TreeAmbs target; ATerm source; })(t)).target))
 #else
 ASF_TreeAmbs _ASF_TreeAmbsFromTerm(ATerm t);
 #define ASF_TreeAmbsFromTerm(t) (_ASF_TreeAmbsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_TreeAmbsToTerm(arg) ((ATerm)(arg))
+#define ASF_TreeAmbsToTerm(arg) ((((union {ASF_TreeAmbs source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_TreeAmbsToTerm(ASF_TreeAmbs arg);
 #define ASF_TreeAmbsToTerm(arg) (_ASF_TreeAmbsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_CHARListFromTerm(t) ((ASF_CHARList)(t))
+#define ASF_CHARListFromTerm(t) ((((union {ASF_CHARList target; ATerm source; })(t)).target))
 #else
 ASF_CHARList _ASF_CHARListFromTerm(ATerm t);
 #define ASF_CHARListFromTerm(t) (_ASF_CHARListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_CHARListToTerm(arg) ((ATerm)(arg))
+#define ASF_CHARListToTerm(arg) ((((union {ASF_CHARList source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_CHARListToTerm(ASF_CHARList arg);
 #define ASF_CHARListToTerm(arg) (_ASF_CHARListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFBarEndFromTerm(t) ((ASF_LexASFBarEnd)(t))
+#define ASF_LexASFBarEndFromTerm(t) ((((union {ASF_LexASFBarEnd target; ATerm source; })(t)).target))
 #else
 ASF_LexASFBarEnd _ASF_LexASFBarEndFromTerm(ATerm t);
 #define ASF_LexASFBarEndFromTerm(t) (_ASF_LexASFBarEndFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFBarEndToTerm(arg) ((ATerm)(arg))
+#define ASF_LexASFBarEndToTerm(arg) ((((union {ASF_LexASFBarEnd source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_LexASFBarEndToTerm(ASF_LexASFBarEnd arg);
 #define ASF_LexASFBarEndToTerm(arg) (_ASF_LexASFBarEndToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFBarEndFromTerm(t) ((ASF_ASFBarEnd)(t))
+#define ASF_ASFBarEndFromTerm(t) ((((union {ASF_ASFBarEnd target; ATerm source; })(t)).target))
 #else
 ASF_ASFBarEnd _ASF_ASFBarEndFromTerm(ATerm t);
 #define ASF_ASFBarEndFromTerm(t) (_ASF_ASFBarEndFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFBarEndToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFBarEndToTerm(arg) ((((union {ASF_ASFBarEnd source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFBarEndToTerm(ASF_ASFBarEnd arg);
 #define ASF_ASFBarEndToTerm(arg) (_ASF_ASFBarEndToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFImpliesFromTerm(t) ((ASF_LexASFImplies)(t))
+#define ASF_LexASFImpliesFromTerm(t) ((((union {ASF_LexASFImplies target; ATerm source; })(t)).target))
 #else
 ASF_LexASFImplies _ASF_LexASFImpliesFromTerm(ATerm t);
 #define ASF_LexASFImpliesFromTerm(t) (_ASF_LexASFImpliesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFImpliesToTerm(arg) ((ATerm)(arg))
+#define ASF_LexASFImpliesToTerm(arg) ((((union {ASF_LexASFImplies source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_LexASFImpliesToTerm(ASF_LexASFImplies arg);
 #define ASF_LexASFImpliesToTerm(arg) (_ASF_LexASFImpliesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFImpliesFromTerm(t) ((ASF_ASFImplies)(t))
+#define ASF_ASFImpliesFromTerm(t) ((((union {ASF_ASFImplies target; ATerm source; })(t)).target))
 #else
 ASF_ASFImplies _ASF_ASFImpliesFromTerm(ATerm t);
 #define ASF_ASFImpliesFromTerm(t) (_ASF_ASFImpliesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFImpliesToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFImpliesToTerm(arg) ((((union {ASF_ASFImplies source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFImpliesToTerm(ASF_ASFImplies arg);
 #define ASF_ASFImpliesToTerm(arg) (_ASF_ASFImpliesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionalEquationFromTerm(t) ((ASF_ASFConditionalEquation)(t))
+#define ASF_ASFConditionalEquationFromTerm(t) ((((union {ASF_ASFConditionalEquation target; ATerm source; })(t)).target))
 #else
 ASF_ASFConditionalEquation _ASF_ASFConditionalEquationFromTerm(ATerm t);
 #define ASF_ASFConditionalEquationFromTerm(t) (_ASF_ASFConditionalEquationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionalEquationToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFConditionalEquationToTerm(arg) ((((union {ASF_ASFConditionalEquation source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFConditionalEquationToTerm(ASF_ASFConditionalEquation arg);
 #define ASF_ASFConditionalEquationToTerm(arg) (_ASF_ASFConditionalEquationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFEquationFromTerm(t) ((ASF_ASFEquation)(t))
+#define ASF_ASFEquationFromTerm(t) ((((union {ASF_ASFEquation target; ATerm source; })(t)).target))
 #else
 ASF_ASFEquation _ASF_ASFEquationFromTerm(ATerm t);
 #define ASF_ASFEquationFromTerm(t) (_ASF_ASFEquationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFEquationToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFEquationToTerm(arg) ((((union {ASF_ASFEquation source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFEquationToTerm(ASF_ASFEquation arg);
 #define ASF_ASFEquationToTerm(arg) (_ASF_ASFEquationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_StartFromTerm(t) ((ASF_Start)(t))
+#define ASF_StartFromTerm(t) ((((union {ASF_Start target; ATerm source; })(t)).target))
 #else
 ASF_Start _ASF_StartFromTerm(ATerm t);
 #define ASF_StartFromTerm(t) (_ASF_StartFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_StartToTerm(arg) ((ATerm)(arg))
+#define ASF_StartToTerm(arg) ((((union {ASF_Start source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_StartToTerm(ASF_Start arg);
 #define ASF_StartToTerm(arg) (_ASF_StartToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFModuleFromTerm(t) ((ASF_ASFModule)(t))
+#define ASF_ASFModuleFromTerm(t) ((((union {ASF_ASFModule target; ATerm source; })(t)).target))
 #else
 ASF_ASFModule _ASF_ASFModuleFromTerm(ATerm t);
 #define ASF_ASFModuleFromTerm(t) (_ASF_ASFModuleFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFModuleToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFModuleToTerm(arg) ((((union {ASF_ASFModule source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFModuleToTerm(ASF_ASFModule arg);
 #define ASF_ASFModuleToTerm(arg) (_ASF_ASFModuleToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFSectionFromTerm(t) ((ASF_ASFSection)(t))
+#define ASF_ASFSectionFromTerm(t) ((((union {ASF_ASFSection target; ATerm source; })(t)).target))
 #else
 ASF_ASFSection _ASF_ASFSectionFromTerm(ATerm t);
 #define ASF_ASFSectionFromTerm(t) (_ASF_ASFSectionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFSectionToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFSectionToTerm(arg) ((((union {ASF_ASFSection source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFSectionToTerm(ASF_ASFSection arg);
 #define ASF_ASFSectionToTerm(arg) (_ASF_ASFSectionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFSectionListFromTerm(t) ((ASF_ASFSectionList)(t))
+#define ASF_ASFSectionListFromTerm(t) ((((union {ASF_ASFSectionList target; ATerm source; })(t)).target))
 #else
 ASF_ASFSectionList _ASF_ASFSectionListFromTerm(ATerm t);
 #define ASF_ASFSectionListFromTerm(t) (_ASF_ASFSectionListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFSectionListToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFSectionListToTerm(arg) ((((union {ASF_ASFSectionList source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFSectionListToTerm(ASF_ASFSectionList arg);
 #define ASF_ASFSectionListToTerm(arg) (_ASF_ASFSectionListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionalEquationListFromTerm(t) ((ASF_ASFConditionalEquationList)(t))
+#define ASF_ASFConditionalEquationListFromTerm(t) ((((union {ASF_ASFConditionalEquationList target; ATerm source; })(t)).target))
 #else
 ASF_ASFConditionalEquationList _ASF_ASFConditionalEquationListFromTerm(ATerm t);
 #define ASF_ASFConditionalEquationListFromTerm(t) (_ASF_ASFConditionalEquationListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionalEquationListToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFConditionalEquationListToTerm(arg) ((((union {ASF_ASFConditionalEquationList source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFConditionalEquationListToTerm(ASF_ASFConditionalEquationList arg);
 #define ASF_ASFConditionalEquationListToTerm(arg) (_ASF_ASFConditionalEquationListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTestEquationTestListFromTerm(t) ((ASF_ASFTestEquationTestList)(t))
+#define ASF_ASFTestEquationTestListFromTerm(t) ((((union {ASF_ASFTestEquationTestList target; ATerm source; })(t)).target))
 #else
 ASF_ASFTestEquationTestList _ASF_ASFTestEquationTestListFromTerm(ATerm t);
 #define ASF_ASFTestEquationTestListFromTerm(t) (_ASF_ASFTestEquationTestListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTestEquationTestListToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFTestEquationTestListToTerm(arg) ((((union {ASF_ASFTestEquationTestList source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFTestEquationTestListToTerm(ASF_ASFTestEquationTestList arg);
 #define ASF_ASFTestEquationTestListToTerm(arg) (_ASF_ASFTestEquationTestListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFTagIdFromTerm(t) ((ASF_LexASFTagId)(t))
+#define ASF_LexASFTagIdFromTerm(t) ((((union {ASF_LexASFTagId target; ATerm source; })(t)).target))
 #else
 ASF_LexASFTagId _ASF_LexASFTagIdFromTerm(ATerm t);
 #define ASF_LexASFTagIdFromTerm(t) (_ASF_LexASFTagIdFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFTagIdToTerm(arg) ((ATerm)(arg))
+#define ASF_LexASFTagIdToTerm(arg) ((((union {ASF_LexASFTagId source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_LexASFTagIdToTerm(ASF_LexASFTagId arg);
 #define ASF_LexASFTagIdToTerm(arg) (_ASF_LexASFTagIdToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTagIdFromTerm(t) ((ASF_ASFTagId)(t))
+#define ASF_ASFTagIdFromTerm(t) ((((union {ASF_ASFTagId target; ATerm source; })(t)).target))
 #else
 ASF_ASFTagId _ASF_ASFTagIdFromTerm(ATerm t);
 #define ASF_ASFTagIdFromTerm(t) (_ASF_ASFTagIdFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTagIdToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFTagIdToTerm(arg) ((((union {ASF_ASFTagId source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFTagIdToTerm(ASF_ASFTagId arg);
 #define ASF_ASFTagIdToTerm(arg) (_ASF_ASFTagIdToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTagFromTerm(t) ((ASF_ASFTag)(t))
+#define ASF_ASFTagFromTerm(t) ((((union {ASF_ASFTag target; ATerm source; })(t)).target))
 #else
 ASF_ASFTag _ASF_ASFTagFromTerm(ATerm t);
 #define ASF_ASFTagFromTerm(t) (_ASF_ASFTagFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTagToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFTagToTerm(arg) ((((union {ASF_ASFTag source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFTagToTerm(ASF_ASFTag arg);
 #define ASF_ASFTagToTerm(arg) (_ASF_ASFTagToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTestEquationFromTerm(t) ((ASF_ASFTestEquation)(t))
+#define ASF_ASFTestEquationFromTerm(t) ((((union {ASF_ASFTestEquation target; ATerm source; })(t)).target))
 #else
 ASF_ASFTestEquation _ASF_ASFTestEquationFromTerm(ATerm t);
 #define ASF_ASFTestEquationFromTerm(t) (_ASF_ASFTestEquationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTestEquationToTerm(arg) ((ATerm)(arg))
+#define ASF_ASFTestEquationToTerm(arg) ((((union {ASF_ASFTestEquation source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ASFTestEquationToTerm(ASF_ASFTestEquation arg);
 #define ASF_ASFTestEquationToTerm(arg) (_ASF_ASFTestEquationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexLayoutFromTerm(t) ((ASF_LexLayout)(t))
+#define ASF_LexLayoutFromTerm(t) ((((union {ASF_LexLayout target; ATerm source; })(t)).target))
 #else
 ASF_LexLayout _ASF_LexLayoutFromTerm(ATerm t);
 #define ASF_LexLayoutFromTerm(t) (_ASF_LexLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexLayoutToTerm(arg) ((ATerm)(arg))
+#define ASF_LexLayoutToTerm(arg) ((((union {ASF_LexLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_LexLayoutToTerm(ASF_LexLayout arg);
 #define ASF_LexLayoutToTerm(arg) (_ASF_LexLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexNumCharFromTerm(t) ((ASF_LexNumChar)(t))
+#define ASF_LexNumCharFromTerm(t) ((((union {ASF_LexNumChar target; ATerm source; })(t)).target))
 #else
 ASF_LexNumChar _ASF_LexNumCharFromTerm(ATerm t);
 #define ASF_LexNumCharFromTerm(t) (_ASF_LexNumCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexNumCharToTerm(arg) ((ATerm)(arg))
+#define ASF_LexNumCharToTerm(arg) ((((union {ASF_LexNumChar source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_LexNumCharToTerm(ASF_LexNumChar arg);
 #define ASF_LexNumCharToTerm(arg) (_ASF_LexNumCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_NumCharFromTerm(t) ((ASF_NumChar)(t))
+#define ASF_NumCharFromTerm(t) ((((union {ASF_NumChar target; ATerm source; })(t)).target))
 #else
 ASF_NumChar _ASF_NumCharFromTerm(ATerm t);
 #define ASF_NumCharFromTerm(t) (_ASF_NumCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_NumCharToTerm(arg) ((ATerm)(arg))
+#define ASF_NumCharToTerm(arg) ((((union {ASF_NumChar source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_NumCharToTerm(ASF_NumChar arg);
 #define ASF_NumCharToTerm(arg) (_ASF_NumCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexShortCharFromTerm(t) ((ASF_LexShortChar)(t))
+#define ASF_LexShortCharFromTerm(t) ((((union {ASF_LexShortChar target; ATerm source; })(t)).target))
 #else
 ASF_LexShortChar _ASF_LexShortCharFromTerm(ATerm t);
 #define ASF_LexShortCharFromTerm(t) (_ASF_LexShortCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexShortCharToTerm(arg) ((ATerm)(arg))
+#define ASF_LexShortCharToTerm(arg) ((((union {ASF_LexShortChar source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_LexShortCharToTerm(ASF_LexShortChar arg);
 #define ASF_LexShortCharToTerm(arg) (_ASF_LexShortCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ShortCharFromTerm(t) ((ASF_ShortChar)(t))
+#define ASF_ShortCharFromTerm(t) ((((union {ASF_ShortChar target; ATerm source; })(t)).target))
 #else
 ASF_ShortChar _ASF_ShortCharFromTerm(ATerm t);
 #define ASF_ShortCharFromTerm(t) (_ASF_ShortCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ShortCharToTerm(arg) ((ATerm)(arg))
+#define ASF_ShortCharToTerm(arg) ((((union {ASF_ShortChar source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_ShortCharToTerm(ASF_ShortChar arg);
 #define ASF_ShortCharToTerm(arg) (_ASF_ShortCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_CharacterFromTerm(t) ((ASF_Character)(t))
+#define ASF_CharacterFromTerm(t) ((((union {ASF_Character target; ATerm source; })(t)).target))
 #else
 ASF_Character _ASF_CharacterFromTerm(ATerm t);
 #define ASF_CharacterFromTerm(t) (_ASF_CharacterFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_CharacterToTerm(arg) ((ATerm)(arg))
+#define ASF_CharacterToTerm(arg) ((((union {ASF_Character source; ATerm target; })(arg)).target))
 #else
 ATerm _ASF_CharacterToTerm(ASF_Character arg);
 #define ASF_CharacterToTerm(arg) (_ASF_CharacterToTerm(arg))
@@ -1136,7 +1136,7 @@ ASF_ASFImplies ASF_makeASFImpliesLexToCf(ASF_LexASFImplies ASFImplies);
 ASF_ASFConditionalEquation ASF_makeASFConditionalEquationSimple(ASF_ASFTag ASFTag, ASF_OptLayout wsAfterASFTag, ASF_ASFEquation ASFEquation);
 ASF_ASFConditionalEquation ASF_makeASFConditionalEquationImplies(ASF_ASFTag ASFTag, ASF_OptLayout wsAfterASFTag, ASF_ASFConditions ASFConditions, ASF_OptLayout wsAfterASFConditions, ASF_ASFImplies ASFImplies, ASF_OptLayout wsAfterASFImplies, ASF_ASFEquation ASFEquation);
 ASF_ASFConditionalEquation ASF_makeASFConditionalEquationWhen(ASF_ASFTag ASFTag, ASF_OptLayout wsAfterASFTag, ASF_ASFEquation ASFEquation, ASF_OptLayout wsAfterASFEquation, ASF_OptLayout wsAfterWhen, ASF_ASFConditions ASFConditions);
-ASF_ASFEquation ASF_makeASFEquationDefault(ATerm typeOfLhs, ATerm typeOfRhs, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterEquals, ASF_Tree rhs);
+ASF_ASFEquation ASF_makeASFEquationDefault(ATerm typeOfLhs, ATerm typeOfRhs, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterEquality, ASF_Tree rhs);
 ASF_Start ASF_makeStartASFModule(ASF_OptLayout wsBefore, ASF_ASFModule topASFModule, ASF_OptLayout wsAfter, int ambCnt);
 ASF_Start ASF_makeStartASFSection(ASF_OptLayout wsBefore, ASF_ASFSection topASFSection, ASF_OptLayout wsAfter, int ambCnt);
 ASF_ASFModule ASF_makeASFModuleDefault(ASF_ASFSectionList list);
@@ -1568,19 +1568,19 @@ ATbool ASF_hasASFEquationTypeOfLhs(ASF_ASFEquation arg);
 ATbool ASF_hasASFEquationTypeOfRhs(ASF_ASFEquation arg);
 ATbool ASF_hasASFEquationLhs(ASF_ASFEquation arg);
 ATbool ASF_hasASFEquationWsAfterLhs(ASF_ASFEquation arg);
-ATbool ASF_hasASFEquationWsAfterEquals(ASF_ASFEquation arg);
+ATbool ASF_hasASFEquationWsAfterEquality(ASF_ASFEquation arg);
 ATbool ASF_hasASFEquationRhs(ASF_ASFEquation arg);
 ATerm ASF_getASFEquationTypeOfLhs(ASF_ASFEquation arg);
 ATerm ASF_getASFEquationTypeOfRhs(ASF_ASFEquation arg);
 ASF_Tree ASF_getASFEquationLhs(ASF_ASFEquation arg);
 ASF_OptLayout ASF_getASFEquationWsAfterLhs(ASF_ASFEquation arg);
-ASF_OptLayout ASF_getASFEquationWsAfterEquals(ASF_ASFEquation arg);
+ASF_OptLayout ASF_getASFEquationWsAfterEquality(ASF_ASFEquation arg);
 ASF_Tree ASF_getASFEquationRhs(ASF_ASFEquation arg);
 ASF_ASFEquation ASF_setASFEquationTypeOfLhs(ASF_ASFEquation arg, ATerm typeOfLhs);
 ASF_ASFEquation ASF_setASFEquationTypeOfRhs(ASF_ASFEquation arg, ATerm typeOfRhs);
 ASF_ASFEquation ASF_setASFEquationLhs(ASF_ASFEquation arg, ASF_Tree lhs);
 ASF_ASFEquation ASF_setASFEquationWsAfterLhs(ASF_ASFEquation arg, ASF_OptLayout wsAfterLhs);
-ASF_ASFEquation ASF_setASFEquationWsAfterEquals(ASF_ASFEquation arg, ASF_OptLayout wsAfterEquals);
+ASF_ASFEquation ASF_setASFEquationWsAfterEquality(ASF_ASFEquation arg, ASF_OptLayout wsAfterEquality);
 ASF_ASFEquation ASF_setASFEquationRhs(ASF_ASFEquation arg, ASF_Tree rhs);
 ATbool ASF_isValidStart(ASF_Start arg);
 inline ATbool ASF_isStartASFModule(ASF_Start arg);
@@ -1777,7 +1777,7 @@ ASF_ASFBarEnd ASF_visitASFBarEnd(ASF_ASFBarEnd arg, ASF_LexASFBarEnd (*acceptASF
 ASF_LexASFImplies ASF_visitLexASFImplies(ASF_LexASFImplies arg, char* (*acceptBar)(char*), ASF_LexASFBarEnd (*acceptEnd)(ASF_LexASFBarEnd));
 ASF_ASFImplies ASF_visitASFImplies(ASF_ASFImplies arg, ASF_LexASFImplies (*acceptASFImplies)(ASF_LexASFImplies));
 ASF_ASFConditionalEquation ASF_visitASFConditionalEquation(ASF_ASFConditionalEquation arg, ASF_ASFTag (*acceptASFTag)(ASF_ASFTag), ASF_OptLayout (*acceptWsAfterASFTag)(ASF_OptLayout), ASF_ASFEquation (*acceptASFEquation)(ASF_ASFEquation), ASF_ASFConditions (*acceptASFConditions)(ASF_ASFConditions), ASF_OptLayout (*acceptWsAfterASFConditions)(ASF_OptLayout), ASF_ASFImplies (*acceptASFImplies)(ASF_ASFImplies), ASF_OptLayout (*acceptWsAfterASFImplies)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterASFEquation)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterWhen)(ASF_OptLayout));
-ASF_ASFEquation ASF_visitASFEquation(ASF_ASFEquation arg, ATerm (*acceptTypeOfLhs)(ATerm), ATerm (*acceptTypeOfRhs)(ATerm), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterLhs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEquals)(ASF_OptLayout), ASF_Tree (*acceptRhs)(ASF_Tree));
+ASF_ASFEquation ASF_visitASFEquation(ASF_ASFEquation arg, ATerm (*acceptTypeOfLhs)(ATerm), ATerm (*acceptTypeOfRhs)(ATerm), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterLhs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEquality)(ASF_OptLayout), ASF_Tree (*acceptRhs)(ASF_Tree));
 ASF_Start ASF_visitStart(ASF_Start arg, ASF_OptLayout (*acceptWsBefore)(ASF_OptLayout), ASF_ASFModule (*acceptTopASFModule)(ASF_ASFModule), ASF_OptLayout (*acceptWsAfter)(ASF_OptLayout), int (*acceptAmbCnt)(int), ASF_ASFSection (*acceptTopASFSection)(ASF_ASFSection));
 ASF_ASFModule ASF_visitASFModule(ASF_ASFModule arg, ASF_ASFSectionList (*acceptList)(ASF_ASFSectionList));
 ASF_ASFSection ASF_visitASFSection(ASF_ASFSection arg, ASF_OptLayout (*acceptWsAfterEquations)(ASF_OptLayout), ASF_ASFConditionalEquationList (*acceptList)(ASF_ASFConditionalEquationList), ASF_OptLayout (*acceptWsAfterTests)(ASF_OptLayout), ASF_ASFTestEquationTestList (*acceptTestList)(ASF_ASFTestEquationTestList));

@@ -636,7 +636,7 @@ void _ASF_unprotectCharacter(ASF_Character *arg) {
  * \return ASF_OptLayout that was encoded by \arg
  */
 ASF_OptLayout _ASF_OptLayoutFromTerm(ATerm t) {
-  return (ASF_OptLayout)t;
+  return (((union {ASF_OptLayout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -645,7 +645,7 @@ ASF_OptLayout _ASF_OptLayoutFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_OptLayout
  */
 ATerm _ASF_OptLayoutToTerm(ASF_OptLayout arg) {
-  return (ATerm)arg;
+  return (((union {ASF_OptLayout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -654,7 +654,7 @@ ATerm _ASF_OptLayoutToTerm(ASF_OptLayout arg) {
  * \return ASF_Layout that was encoded by \arg
  */
 ASF_Layout _ASF_LayoutFromTerm(ATerm t) {
-  return (ASF_Layout)t;
+  return (((union {ASF_Layout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -663,7 +663,7 @@ ASF_Layout _ASF_LayoutFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_Layout
  */
 ATerm _ASF_LayoutToTerm(ASF_Layout arg) {
-  return (ATerm)arg;
+  return (((union {ASF_Layout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -672,7 +672,7 @@ ATerm _ASF_LayoutToTerm(ASF_Layout arg) {
  * \return ASF_LexLayoutList that was encoded by \arg
  */
 ASF_LexLayoutList _ASF_LexLayoutListFromTerm(ATerm t) {
-  return (ASF_LexLayoutList)t;
+  return (((union {ASF_LexLayoutList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -681,7 +681,7 @@ ASF_LexLayoutList _ASF_LexLayoutListFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_LexLayoutList
  */
 ATerm _ASF_LexLayoutListToTerm(ASF_LexLayoutList arg) {
-  return (ATerm)arg;
+  return (((union {ASF_LexLayoutList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -690,7 +690,7 @@ ATerm _ASF_LexLayoutListToTerm(ASF_LexLayoutList arg) {
  * \return ASF_Tree that was encoded by \arg
  */
 ASF_Tree _ASF_TreeFromTerm(ATerm t) {
-  return (ASF_Tree)t;
+  return (((union {ASF_Tree target; ATerm source; })(t)).target);
 }
 
 /**
@@ -699,7 +699,7 @@ ASF_Tree _ASF_TreeFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_Tree
  */
 ATerm _ASF_TreeToTerm(ASF_Tree arg) {
-  return (ATerm)arg;
+  return (((union {ASF_Tree source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -708,7 +708,7 @@ ATerm _ASF_TreeToTerm(ASF_Tree arg) {
  * \return ASF_LexCHAR that was encoded by \arg
  */
 ASF_LexCHAR _ASF_LexCHARFromTerm(ATerm t) {
-  return (ASF_LexCHAR)t;
+  return (((union {ASF_LexCHAR target; ATerm source; })(t)).target);
 }
 
 /**
@@ -717,7 +717,7 @@ ASF_LexCHAR _ASF_LexCHARFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_LexCHAR
  */
 ATerm _ASF_LexCHARToTerm(ASF_LexCHAR arg) {
-  return (ATerm)arg;
+  return (((union {ASF_LexCHAR source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -726,7 +726,7 @@ ATerm _ASF_LexCHARToTerm(ASF_LexCHAR arg) {
  * \return ASF_CHAR that was encoded by \arg
  */
 ASF_CHAR _ASF_CHARFromTerm(ATerm t) {
-  return (ASF_CHAR)t;
+  return (((union {ASF_CHAR target; ATerm source; })(t)).target);
 }
 
 /**
@@ -735,7 +735,7 @@ ASF_CHAR _ASF_CHARFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_CHAR
  */
 ATerm _ASF_CHARToTerm(ASF_CHAR arg) {
-  return (ATerm)arg;
+  return (((union {ASF_CHAR source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -744,7 +744,7 @@ ATerm _ASF_CHARToTerm(ASF_CHAR arg) {
  * \return ASF_ASFCondition that was encoded by \arg
  */
 ASF_ASFCondition _ASF_ASFConditionFromTerm(ATerm t) {
-  return (ASF_ASFCondition)t;
+  return (((union {ASF_ASFCondition target; ATerm source; })(t)).target);
 }
 
 /**
@@ -753,7 +753,7 @@ ASF_ASFCondition _ASF_ASFConditionFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFCondition
  */
 ATerm _ASF_ASFConditionToTerm(ASF_ASFCondition arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFCondition source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -762,7 +762,7 @@ ATerm _ASF_ASFConditionToTerm(ASF_ASFCondition arg) {
  * \return ASF_ASFConditions that was encoded by \arg
  */
 ASF_ASFConditions _ASF_ASFConditionsFromTerm(ATerm t) {
-  return (ASF_ASFConditions)t;
+  return (((union {ASF_ASFConditions target; ATerm source; })(t)).target);
 }
 
 /**
@@ -771,7 +771,7 @@ ASF_ASFConditions _ASF_ASFConditionsFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFConditions
  */
 ATerm _ASF_ASFConditionsToTerm(ASF_ASFConditions arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFConditions source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -780,7 +780,7 @@ ATerm _ASF_ASFConditionsToTerm(ASF_ASFConditions arg) {
  * \return ASF_ASFConditionList that was encoded by \arg
  */
 ASF_ASFConditionList _ASF_ASFConditionListFromTerm(ATerm t) {
-  return (ASF_ASFConditionList)t;
+  return (((union {ASF_ASFConditionList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -789,7 +789,7 @@ ASF_ASFConditionList _ASF_ASFConditionListFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFConditionList
  */
 ATerm _ASF_ASFConditionListToTerm(ASF_ASFConditionList arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFConditionList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -798,7 +798,7 @@ ATerm _ASF_ASFConditionListToTerm(ASF_ASFConditionList arg) {
  * \return ASF_TreeAmbs that was encoded by \arg
  */
 ASF_TreeAmbs _ASF_TreeAmbsFromTerm(ATerm t) {
-  return (ASF_TreeAmbs)t;
+  return (((union {ASF_TreeAmbs target; ATerm source; })(t)).target);
 }
 
 /**
@@ -807,7 +807,7 @@ ASF_TreeAmbs _ASF_TreeAmbsFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_TreeAmbs
  */
 ATerm _ASF_TreeAmbsToTerm(ASF_TreeAmbs arg) {
-  return (ATerm)arg;
+  return (((union {ASF_TreeAmbs source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -816,7 +816,7 @@ ATerm _ASF_TreeAmbsToTerm(ASF_TreeAmbs arg) {
  * \return ASF_CHARList that was encoded by \arg
  */
 ASF_CHARList _ASF_CHARListFromTerm(ATerm t) {
-  return (ASF_CHARList)t;
+  return (((union {ASF_CHARList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -825,7 +825,7 @@ ASF_CHARList _ASF_CHARListFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_CHARList
  */
 ATerm _ASF_CHARListToTerm(ASF_CHARList arg) {
-  return (ATerm)arg;
+  return (((union {ASF_CHARList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -834,7 +834,7 @@ ATerm _ASF_CHARListToTerm(ASF_CHARList arg) {
  * \return ASF_LexASFBarEnd that was encoded by \arg
  */
 ASF_LexASFBarEnd _ASF_LexASFBarEndFromTerm(ATerm t) {
-  return (ASF_LexASFBarEnd)t;
+  return (((union {ASF_LexASFBarEnd target; ATerm source; })(t)).target);
 }
 
 /**
@@ -843,7 +843,7 @@ ASF_LexASFBarEnd _ASF_LexASFBarEndFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_LexASFBarEnd
  */
 ATerm _ASF_LexASFBarEndToTerm(ASF_LexASFBarEnd arg) {
-  return (ATerm)arg;
+  return (((union {ASF_LexASFBarEnd source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -852,7 +852,7 @@ ATerm _ASF_LexASFBarEndToTerm(ASF_LexASFBarEnd arg) {
  * \return ASF_ASFBarEnd that was encoded by \arg
  */
 ASF_ASFBarEnd _ASF_ASFBarEndFromTerm(ATerm t) {
-  return (ASF_ASFBarEnd)t;
+  return (((union {ASF_ASFBarEnd target; ATerm source; })(t)).target);
 }
 
 /**
@@ -861,7 +861,7 @@ ASF_ASFBarEnd _ASF_ASFBarEndFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFBarEnd
  */
 ATerm _ASF_ASFBarEndToTerm(ASF_ASFBarEnd arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFBarEnd source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -870,7 +870,7 @@ ATerm _ASF_ASFBarEndToTerm(ASF_ASFBarEnd arg) {
  * \return ASF_LexASFImplies that was encoded by \arg
  */
 ASF_LexASFImplies _ASF_LexASFImpliesFromTerm(ATerm t) {
-  return (ASF_LexASFImplies)t;
+  return (((union {ASF_LexASFImplies target; ATerm source; })(t)).target);
 }
 
 /**
@@ -879,7 +879,7 @@ ASF_LexASFImplies _ASF_LexASFImpliesFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_LexASFImplies
  */
 ATerm _ASF_LexASFImpliesToTerm(ASF_LexASFImplies arg) {
-  return (ATerm)arg;
+  return (((union {ASF_LexASFImplies source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -888,7 +888,7 @@ ATerm _ASF_LexASFImpliesToTerm(ASF_LexASFImplies arg) {
  * \return ASF_ASFImplies that was encoded by \arg
  */
 ASF_ASFImplies _ASF_ASFImpliesFromTerm(ATerm t) {
-  return (ASF_ASFImplies)t;
+  return (((union {ASF_ASFImplies target; ATerm source; })(t)).target);
 }
 
 /**
@@ -897,7 +897,7 @@ ASF_ASFImplies _ASF_ASFImpliesFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFImplies
  */
 ATerm _ASF_ASFImpliesToTerm(ASF_ASFImplies arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFImplies source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -906,7 +906,7 @@ ATerm _ASF_ASFImpliesToTerm(ASF_ASFImplies arg) {
  * \return ASF_ASFConditionalEquation that was encoded by \arg
  */
 ASF_ASFConditionalEquation _ASF_ASFConditionalEquationFromTerm(ATerm t) {
-  return (ASF_ASFConditionalEquation)t;
+  return (((union {ASF_ASFConditionalEquation target; ATerm source; })(t)).target);
 }
 
 /**
@@ -915,7 +915,7 @@ ASF_ASFConditionalEquation _ASF_ASFConditionalEquationFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFConditionalEquation
  */
 ATerm _ASF_ASFConditionalEquationToTerm(ASF_ASFConditionalEquation arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFConditionalEquation source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -924,7 +924,7 @@ ATerm _ASF_ASFConditionalEquationToTerm(ASF_ASFConditionalEquation arg) {
  * \return ASF_ASFEquation that was encoded by \arg
  */
 ASF_ASFEquation _ASF_ASFEquationFromTerm(ATerm t) {
-  return (ASF_ASFEquation)t;
+  return (((union {ASF_ASFEquation target; ATerm source; })(t)).target);
 }
 
 /**
@@ -933,7 +933,7 @@ ASF_ASFEquation _ASF_ASFEquationFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFEquation
  */
 ATerm _ASF_ASFEquationToTerm(ASF_ASFEquation arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFEquation source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -942,7 +942,7 @@ ATerm _ASF_ASFEquationToTerm(ASF_ASFEquation arg) {
  * \return ASF_Start that was encoded by \arg
  */
 ASF_Start _ASF_StartFromTerm(ATerm t) {
-  return (ASF_Start)t;
+  return (((union {ASF_Start target; ATerm source; })(t)).target);
 }
 
 /**
@@ -951,7 +951,7 @@ ASF_Start _ASF_StartFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_Start
  */
 ATerm _ASF_StartToTerm(ASF_Start arg) {
-  return (ATerm)arg;
+  return (((union {ASF_Start source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -960,7 +960,7 @@ ATerm _ASF_StartToTerm(ASF_Start arg) {
  * \return ASF_ASFModule that was encoded by \arg
  */
 ASF_ASFModule _ASF_ASFModuleFromTerm(ATerm t) {
-  return (ASF_ASFModule)t;
+  return (((union {ASF_ASFModule target; ATerm source; })(t)).target);
 }
 
 /**
@@ -969,7 +969,7 @@ ASF_ASFModule _ASF_ASFModuleFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFModule
  */
 ATerm _ASF_ASFModuleToTerm(ASF_ASFModule arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFModule source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -978,7 +978,7 @@ ATerm _ASF_ASFModuleToTerm(ASF_ASFModule arg) {
  * \return ASF_ASFSection that was encoded by \arg
  */
 ASF_ASFSection _ASF_ASFSectionFromTerm(ATerm t) {
-  return (ASF_ASFSection)t;
+  return (((union {ASF_ASFSection target; ATerm source; })(t)).target);
 }
 
 /**
@@ -987,7 +987,7 @@ ASF_ASFSection _ASF_ASFSectionFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFSection
  */
 ATerm _ASF_ASFSectionToTerm(ASF_ASFSection arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFSection source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -996,7 +996,7 @@ ATerm _ASF_ASFSectionToTerm(ASF_ASFSection arg) {
  * \return ASF_ASFSectionList that was encoded by \arg
  */
 ASF_ASFSectionList _ASF_ASFSectionListFromTerm(ATerm t) {
-  return (ASF_ASFSectionList)t;
+  return (((union {ASF_ASFSectionList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1005,7 +1005,7 @@ ASF_ASFSectionList _ASF_ASFSectionListFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFSectionList
  */
 ATerm _ASF_ASFSectionListToTerm(ASF_ASFSectionList arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFSectionList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1014,7 +1014,7 @@ ATerm _ASF_ASFSectionListToTerm(ASF_ASFSectionList arg) {
  * \return ASF_ASFConditionalEquationList that was encoded by \arg
  */
 ASF_ASFConditionalEquationList _ASF_ASFConditionalEquationListFromTerm(ATerm t) {
-  return (ASF_ASFConditionalEquationList)t;
+  return (((union {ASF_ASFConditionalEquationList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1023,7 +1023,7 @@ ASF_ASFConditionalEquationList _ASF_ASFConditionalEquationListFromTerm(ATerm t) 
  * \return ATerm that represents the ASF_ASFConditionalEquationList
  */
 ATerm _ASF_ASFConditionalEquationListToTerm(ASF_ASFConditionalEquationList arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFConditionalEquationList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1032,7 +1032,7 @@ ATerm _ASF_ASFConditionalEquationListToTerm(ASF_ASFConditionalEquationList arg) 
  * \return ASF_ASFTestEquationTestList that was encoded by \arg
  */
 ASF_ASFTestEquationTestList _ASF_ASFTestEquationTestListFromTerm(ATerm t) {
-  return (ASF_ASFTestEquationTestList)t;
+  return (((union {ASF_ASFTestEquationTestList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1041,7 +1041,7 @@ ASF_ASFTestEquationTestList _ASF_ASFTestEquationTestListFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFTestEquationTestList
  */
 ATerm _ASF_ASFTestEquationTestListToTerm(ASF_ASFTestEquationTestList arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFTestEquationTestList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1050,7 +1050,7 @@ ATerm _ASF_ASFTestEquationTestListToTerm(ASF_ASFTestEquationTestList arg) {
  * \return ASF_LexASFTagId that was encoded by \arg
  */
 ASF_LexASFTagId _ASF_LexASFTagIdFromTerm(ATerm t) {
-  return (ASF_LexASFTagId)t;
+  return (((union {ASF_LexASFTagId target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1059,7 +1059,7 @@ ASF_LexASFTagId _ASF_LexASFTagIdFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_LexASFTagId
  */
 ATerm _ASF_LexASFTagIdToTerm(ASF_LexASFTagId arg) {
-  return (ATerm)arg;
+  return (((union {ASF_LexASFTagId source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1068,7 +1068,7 @@ ATerm _ASF_LexASFTagIdToTerm(ASF_LexASFTagId arg) {
  * \return ASF_ASFTagId that was encoded by \arg
  */
 ASF_ASFTagId _ASF_ASFTagIdFromTerm(ATerm t) {
-  return (ASF_ASFTagId)t;
+  return (((union {ASF_ASFTagId target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1077,7 +1077,7 @@ ASF_ASFTagId _ASF_ASFTagIdFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFTagId
  */
 ATerm _ASF_ASFTagIdToTerm(ASF_ASFTagId arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFTagId source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1086,7 +1086,7 @@ ATerm _ASF_ASFTagIdToTerm(ASF_ASFTagId arg) {
  * \return ASF_ASFTag that was encoded by \arg
  */
 ASF_ASFTag _ASF_ASFTagFromTerm(ATerm t) {
-  return (ASF_ASFTag)t;
+  return (((union {ASF_ASFTag target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1095,7 +1095,7 @@ ASF_ASFTag _ASF_ASFTagFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFTag
  */
 ATerm _ASF_ASFTagToTerm(ASF_ASFTag arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFTag source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1104,7 +1104,7 @@ ATerm _ASF_ASFTagToTerm(ASF_ASFTag arg) {
  * \return ASF_ASFTestEquation that was encoded by \arg
  */
 ASF_ASFTestEquation _ASF_ASFTestEquationFromTerm(ATerm t) {
-  return (ASF_ASFTestEquation)t;
+  return (((union {ASF_ASFTestEquation target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1113,7 +1113,7 @@ ASF_ASFTestEquation _ASF_ASFTestEquationFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ASFTestEquation
  */
 ATerm _ASF_ASFTestEquationToTerm(ASF_ASFTestEquation arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ASFTestEquation source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1122,7 +1122,7 @@ ATerm _ASF_ASFTestEquationToTerm(ASF_ASFTestEquation arg) {
  * \return ASF_LexLayout that was encoded by \arg
  */
 ASF_LexLayout _ASF_LexLayoutFromTerm(ATerm t) {
-  return (ASF_LexLayout)t;
+  return (((union {ASF_LexLayout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1131,7 +1131,7 @@ ASF_LexLayout _ASF_LexLayoutFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_LexLayout
  */
 ATerm _ASF_LexLayoutToTerm(ASF_LexLayout arg) {
-  return (ATerm)arg;
+  return (((union {ASF_LexLayout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1140,7 +1140,7 @@ ATerm _ASF_LexLayoutToTerm(ASF_LexLayout arg) {
  * \return ASF_LexNumChar that was encoded by \arg
  */
 ASF_LexNumChar _ASF_LexNumCharFromTerm(ATerm t) {
-  return (ASF_LexNumChar)t;
+  return (((union {ASF_LexNumChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1149,7 +1149,7 @@ ASF_LexNumChar _ASF_LexNumCharFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_LexNumChar
  */
 ATerm _ASF_LexNumCharToTerm(ASF_LexNumChar arg) {
-  return (ATerm)arg;
+  return (((union {ASF_LexNumChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1158,7 +1158,7 @@ ATerm _ASF_LexNumCharToTerm(ASF_LexNumChar arg) {
  * \return ASF_NumChar that was encoded by \arg
  */
 ASF_NumChar _ASF_NumCharFromTerm(ATerm t) {
-  return (ASF_NumChar)t;
+  return (((union {ASF_NumChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1167,7 +1167,7 @@ ASF_NumChar _ASF_NumCharFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_NumChar
  */
 ATerm _ASF_NumCharToTerm(ASF_NumChar arg) {
-  return (ATerm)arg;
+  return (((union {ASF_NumChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1176,7 +1176,7 @@ ATerm _ASF_NumCharToTerm(ASF_NumChar arg) {
  * \return ASF_LexShortChar that was encoded by \arg
  */
 ASF_LexShortChar _ASF_LexShortCharFromTerm(ATerm t) {
-  return (ASF_LexShortChar)t;
+  return (((union {ASF_LexShortChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1185,7 +1185,7 @@ ASF_LexShortChar _ASF_LexShortCharFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_LexShortChar
  */
 ATerm _ASF_LexShortCharToTerm(ASF_LexShortChar arg) {
-  return (ATerm)arg;
+  return (((union {ASF_LexShortChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1194,7 +1194,7 @@ ATerm _ASF_LexShortCharToTerm(ASF_LexShortChar arg) {
  * \return ASF_ShortChar that was encoded by \arg
  */
 ASF_ShortChar _ASF_ShortCharFromTerm(ATerm t) {
-  return (ASF_ShortChar)t;
+  return (((union {ASF_ShortChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1203,7 +1203,7 @@ ASF_ShortChar _ASF_ShortCharFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_ShortChar
  */
 ATerm _ASF_ShortCharToTerm(ASF_ShortChar arg) {
-  return (ATerm)arg;
+  return (((union {ASF_ShortChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1212,7 +1212,7 @@ ATerm _ASF_ShortCharToTerm(ASF_ShortChar arg) {
  * \return ASF_Character that was encoded by \arg
  */
 ASF_Character _ASF_CharacterFromTerm(ATerm t) {
-  return (ASF_Character)t;
+  return (((union {ASF_Character target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1221,7 +1221,7 @@ ASF_Character _ASF_CharacterFromTerm(ATerm t) {
  * \return ATerm that represents the ASF_Character
  */
 ATerm _ASF_CharacterToTerm(ASF_Character arg) {
-  return (ATerm)arg;
+  return (((union {ASF_Character source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -2690,12 +2690,12 @@ ASF_ASFConditionalEquation ASF_makeASFConditionalEquationWhen(ASF_ASFTag ASFTag,
  * \param[in] typeOfRhs a child of the new Default
  * \param[in] lhs a child of the new Default
  * \param[in] wsAfterLhs a child of the new Default
- * \param[in] wsAfterEquals a child of the new Default
+ * \param[in] wsAfterEquality a child of the new Default
  * \param[in] rhs a child of the new Default
  * \return A pointer to a Default, either newly constructed or shared
  */
-ASF_ASFEquation ASF_makeASFEquationDefault(ATerm typeOfLhs, ATerm typeOfRhs, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterEquals, ASF_Tree rhs) {
-  return (ASF_ASFEquation)(ATerm)ATmakeAppl2(ASF_afun0, (ATerm)ATmakeAppl3(ASF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) typeOfRhs), (ATerm)ATmakeAppl1(ASF_afun2, (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl0(ASF_afun4)))), (ATerm)ATmakeAppl1(ASF_afun9, (ATerm)ATmakeAppl0(ASF_afun49))), (ATerm)ATmakeAppl1(ASF_afun2, (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl0(ASF_afun4)))), (ATerm) typeOfLhs), (ATerm)ATmakeAppl1(ASF_afun2, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun43))), (ATerm)ATmakeAppl0(ASF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) rhs), (ATerm) wsAfterEquals), (ATerm)ATmakeAppl2(ASF_afun0, (ATerm)ATmakeAppl3(ASF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun21, (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm)ATmakeAppl1(ASF_afun9, (ATerm)ATmakeAppl0(ASF_afun49)), (ATerm)ATmakeAppl0(ASF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm) wsAfterLhs), (ATerm) lhs));
+ASF_ASFEquation ASF_makeASFEquationDefault(ATerm typeOfLhs, ATerm typeOfRhs, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterEquality, ASF_Tree rhs) {
+  return (ASF_ASFEquation)(ATerm)ATmakeAppl2(ASF_afun0, (ATerm)ATmakeAppl3(ASF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) typeOfRhs), (ATerm)ATmakeAppl1(ASF_afun2, (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl0(ASF_afun4)))), (ATerm)ATmakeAppl1(ASF_afun9, (ATerm)ATmakeAppl0(ASF_afun49))), (ATerm)ATmakeAppl1(ASF_afun2, (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl0(ASF_afun4)))), (ATerm) typeOfLhs), (ATerm)ATmakeAppl1(ASF_afun2, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun43))), (ATerm)ATmakeAppl0(ASF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) rhs), (ATerm) wsAfterEquality), (ATerm)ATmakeAppl2(ASF_afun0, (ATerm)ATmakeAppl3(ASF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun21, (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm)ATmakeAppl1(ASF_afun9, (ATerm)ATmakeAppl0(ASF_afun49)), (ATerm)ATmakeAppl0(ASF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm) wsAfterLhs), (ATerm) lhs));
 }
 /**
  * Constructs a ASF-Module of type ASF_Start. Like all ATerm types, ASF_Starts are maximally shared.
@@ -9448,7 +9448,7 @@ ATbool ASF_hasASFEquationWsAfterLhs(ASF_ASFEquation arg) {
  * \param[in] arg input ASF_ASFEquation
  * \return ATtrue if the ASF_ASFEquation had a ws-after-=, or ATfalse otherwise
  */
-ATbool ASF_hasASFEquationWsAfterEquals(ASF_ASFEquation arg) {
+ATbool ASF_hasASFEquationWsAfterEquality(ASF_ASFEquation arg) {
   if (ASF_isASFEquationDefault(arg)) {
     return ATtrue;
   }
@@ -9512,7 +9512,7 @@ ASF_OptLayout ASF_getASFEquationWsAfterLhs(ASF_ASFEquation arg) {
  * \param[in] arg input ASF_ASFEquation
  * \return the ws-after-= of #arg, if it exist or an undefined value if it does not
  */
-ASF_OptLayout ASF_getASFEquationWsAfterEquals(ASF_ASFEquation arg) {
+ASF_OptLayout ASF_getASFEquationWsAfterEquality(ASF_ASFEquation arg) {
   
     return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
 }
@@ -9590,15 +9590,15 @@ ASF_ASFEquation ASF_setASFEquationWsAfterLhs(ASF_ASFEquation arg, ASF_OptLayout 
 /**
  * Set the ws-after-= of a ASF_ASFEquation. The precondition being that this ASF_ASFEquation actually has a ws-after-=
  * \param[in] arg input ASF_ASFEquation
- * \param[in] wsAfterEquals new ASF_OptLayout to set in #arg
- * \return A new ASF_ASFEquation with wsAfterEquals at the right place, or a core dump if #arg did not have a wsAfterEquals
+ * \param[in] wsAfterEquality new ASF_OptLayout to set in #arg
+ * \return A new ASF_ASFEquation with wsAfterEquality at the right place, or a core dump if #arg did not have a wsAfterEquality
  */
-ASF_ASFEquation ASF_setASFEquationWsAfterEquals(ASF_ASFEquation arg, ASF_OptLayout wsAfterEquals) {
+ASF_ASFEquation ASF_setASFEquationWsAfterEquality(ASF_ASFEquation arg, ASF_OptLayout wsAfterEquality) {
   if (ASF_isASFEquationDefault(arg)) {
-    return (ASF_ASFEquation)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterEquals), 3), 1);
+    return (ASF_ASFEquation)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterEquality), 3), 1);
   }
 
-  ATabort("ASFEquation has no WsAfterEquals: %t\n", arg);
+  ATabort("ASFEquation has no WsAfterEquality: %t\n", arg);
   return (ASF_ASFEquation)NULL;
 }
 
@@ -16696,14 +16696,14 @@ ASF_ASFConditionalEquation ASF_visitASFConditionalEquation(ASF_ASFConditionalEqu
  * Apply functions to the children of a ASF_ASFEquation. 
  * \return A new ASF_ASFEquation with new children where the argument functions might have applied
  */
-ASF_ASFEquation ASF_visitASFEquation(ASF_ASFEquation arg, ATerm (*acceptTypeOfLhs)(ATerm), ATerm (*acceptTypeOfRhs)(ATerm), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterLhs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEquals)(ASF_OptLayout), ASF_Tree (*acceptRhs)(ASF_Tree)) {
+ASF_ASFEquation ASF_visitASFEquation(ASF_ASFEquation arg, ATerm (*acceptTypeOfLhs)(ATerm), ATerm (*acceptTypeOfRhs)(ATerm), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterLhs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEquality)(ASF_OptLayout), ASF_Tree (*acceptRhs)(ASF_Tree)) {
   if (ASF_isASFEquationDefault(arg)) {
     return ASF_makeASFEquationDefault(
         acceptTypeOfLhs ? acceptTypeOfLhs(ASF_getASFEquationTypeOfLhs(arg)) : ASF_getASFEquationTypeOfLhs(arg),
         acceptTypeOfRhs ? acceptTypeOfRhs(ASF_getASFEquationTypeOfRhs(arg)) : ASF_getASFEquationTypeOfRhs(arg),
         acceptLhs ? acceptLhs(ASF_getASFEquationLhs(arg)) : ASF_getASFEquationLhs(arg),
         acceptWsAfterLhs ? acceptWsAfterLhs(ASF_getASFEquationWsAfterLhs(arg)) : ASF_getASFEquationWsAfterLhs(arg),
-        acceptWsAfterEquals ? acceptWsAfterEquals(ASF_getASFEquationWsAfterEquals(arg)) : ASF_getASFEquationWsAfterEquals(arg),
+        acceptWsAfterEquality ? acceptWsAfterEquality(ASF_getASFEquationWsAfterEquality(arg)) : ASF_getASFEquationWsAfterEquality(arg),
         acceptRhs ? acceptRhs(ASF_getASFEquationRhs(arg)) : ASF_getASFEquationRhs(arg));
   }
   ATabort("not a ASFEquation: %t\n", arg);
