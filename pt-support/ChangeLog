@@ -3,6 +3,10 @@ $Id$
 Wed Apr 16 11:02:29 CEST 2008 <jurgenv@cwi.nl>
  * libmept/*: regenerated API with cast functions that fix
    type punned aliasing issues.
+ * libmept/*: removed many direct casts and replaced them by toTerm, fromTerm
+   macro calls.
+ * libmept/MEPT-posinfo.c: commented out 'volatile' attribute that used to fix
+   a type punned aliasing issue. 
 
 Wed Apr 9 16:33  2008 CET  Tijs van der Storm  <tvdstorm@wlan1-52.cwi.nl>
  * libmept/MEPT-implode.c: Implode now detects NatCons and StrCons

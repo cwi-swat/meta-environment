@@ -238,7 +238,7 @@ static PT_Args PT_orderArgs(PT_Args args, ATermTable cache)
 
 static PT_Tree PT_orderAmbiguitiesRec(PT_Tree input, ATermTable cache)
 {
-  PT_Tree result = (PT_Tree) ATtableGet(cache, (ATerm) input);
+  PT_Tree result = PT_TreeFromTerm(ATtableGet(cache, PT_TreeToTerm(input)));
 
   if (result != NULL) {
     return result;
@@ -263,7 +263,7 @@ static PT_Tree PT_orderAmbiguitiesRec(PT_Tree input, ATermTable cache)
     }
   }
 
-  ATtablePut(cache, (ATerm) input, (ATerm) result);
+  ATtablePut(cache, PT_TreeToTerm(input), PT_TreeToTerm(result));
   return result;
 }
 

@@ -701,7 +701,7 @@ static PT_Tree flattenTreeRec(PT_Tree tree)
 {
   PT_Production prod;
   PT_Args args;
-  PT_Tree result = (PT_Tree) ATtableGet(memotable, (ATerm) tree);
+  PT_Tree result = PT_TreeFromTerm(ATtableGet(memotable, PT_TreeToTerm(tree)));
 
   if (result != NULL) {
     return result;
@@ -738,7 +738,7 @@ static PT_Tree flattenTreeRec(PT_Tree tree)
     }
   }
 
-  ATtablePut(memotable, (ATerm) tree, (ATerm) result);
+  ATtablePut(memotable, PT_TreeToTerm(tree), PT_TreeToTerm(result));
 
   return result;
 }

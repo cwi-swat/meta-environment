@@ -25,7 +25,7 @@ PT_Tree PT_findTreeParentRecursive(PT_Tree needle, PT_Tree haystack)
   assert(haystack != NULL);
   assert(needle != haystack);
 
-  if (ATtableGet(findParentCache, (ATerm) haystack) != NULL) {
+  if (ATtableGet(findParentCache, PT_TreeToTerm(haystack)) != NULL) {
 	  return NULL;
   }
 
@@ -46,7 +46,7 @@ PT_Tree PT_findTreeParentRecursive(PT_Tree needle, PT_Tree haystack)
     }
   }
 
-  ATtablePut(findParentCache, (ATerm) haystack, (ATerm) NeedleNotHere);
+  ATtablePut(findParentCache, PT_TreeToTerm(haystack), PT_TreeToTerm(NeedleNotHere));
   return NULL;
 }
 

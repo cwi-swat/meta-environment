@@ -28,7 +28,7 @@ typedef struct PT_Amb_Position_Tag {
 static ATermTable visited = NULL;
 
 static ATerm makeKey(int offset, PT_Tree tree) {
-  return (ATerm) ATmakeAppl2(ATmakeAFun("key",2,ATfalse), (ATerm) tree, 
+  return (ATerm) ATmakeAppl2(ATmakeAFun("key",2,ATfalse), PT_TreeToTerm(tree), 
 			     (ATerm) ATmakeInt(offset));
 }
 
@@ -41,11 +41,11 @@ static void cleanupCache() {
 }
 
 static void cacheLocation(int offset, PT_Tree tree, ERR_Location location) {
-  ATtablePut(visited, makeKey(offset, tree), (ATerm) location);
+  ATtablePut(visited, makeKey(offset, tree), ERR_LocationToTerm(location));
 }
 
 static ERR_Location getCachedLocation(int offset, PT_Tree tree) {
-  return (ERR_Location) ATtableGet(visited, makeKey(offset, tree));
+  return ERR_LocationFromTerm(ATtableGet(visited, makeKey(offset, tree)));
 }
 
 

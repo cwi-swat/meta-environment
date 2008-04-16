@@ -37,11 +37,11 @@ PT_Tree PT_removeTreeAnnotationsMemo(PT_Tree arg)
     cache = ATtableCreate(1024, 75);
   }
 
-  result = (PT_Tree) ATtableGet(cache, (ATerm) arg);
+  result = PT_TreeFromTerm(ATtableGet(cache, PT_TreeToTerm(arg)));
 
   if (result == NULL) {
     result = PT_removeTreeAnnotations(arg);
-    ATtablePut(cache, (ATerm) arg, (ATerm) result);
+    ATtablePut(cache, PT_TreeToTerm(arg), PT_TreeToTerm(result));
   }
 
   return result;

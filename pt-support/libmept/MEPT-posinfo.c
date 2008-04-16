@@ -36,7 +36,7 @@ static ATermTable cache = NULL;
 
 static ATerm makeKey(int offset, PT_Tree tree)
 {
-	return (ATerm) ATmakeAppl2(ATmakeAFun("key",2,ATfalse), (ATerm) tree, 
+	return (ATerm) ATmakeAppl2(ATmakeAFun("key",2,ATfalse), PT_TreeToTerm(tree), 
 			(ATerm) ATmakeInt(offset));
 }
 
@@ -52,12 +52,12 @@ static void cleanupCache()
 
 static void cacheTree(int offset, PT_Tree tree, PT_Tree annotated)
 {
-	ATtablePut(cache, makeKey(offset, tree), (ATerm) annotated);
+	ATtablePut(cache, makeKey(offset, tree), PT_TreeToTerm(annotated));
 }
 
 static PT_Tree getCachedTree(int offset, PT_Tree tree)
 {
-	return (PT_Tree) ATtableGet(cache, makeKey(offset, tree));
+	return PT_TreeFromTerm(ATtableGet(cache, makeKey(offset, tree)));
 }
 
 	
@@ -175,9 +175,11 @@ static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset)
 
 /* The volatile attribute fixes a bug (#674) on Darwin; but we do not know 
  * why. The bug dissappears when instruction scheduling optimizations are
- * turned off, which inspired us to try volatile.  
+ * turned off, which inspired us to try volatile. 
+ * The volatile was removed now, since apigen generates casts via a union
+ * that fixes problems with type punned aliasing. 
  */ 
-static PT_Tree PT_addTreePosInfo(volatile PT_Tree tree, PT_Position* current)
+static PT_Tree PT_addTreePosInfo(/*volatile*/ PT_Tree tree, PT_Position* current)
 {
   PT_Tree input = tree;
   int start_line = current->line;
