@@ -210,181 +210,181 @@ void _unprotectPoint(Point *arg);
 #define unprotectPoint(arg) (_unprotectPoint(arg))
 #endif
 #ifdef FAST_API
-#define GraphFromTerm(t) ((Graph)(t))
+#define GraphFromTerm(t) ((((union {Graph target; ATerm source; })(t)).target))
 #else
 Graph _GraphFromTerm(ATerm t);
 #define GraphFromTerm(t) (_GraphFromTerm(t))
 #endif
 #ifdef FAST_API
-#define GraphToTerm(arg) ((ATerm)(arg))
+#define GraphToTerm(arg) ((((union {Graph source; ATerm target; })(arg)).target))
 #else
 ATerm _GraphToTerm(Graph arg);
 #define GraphToTerm(arg) (_GraphToTerm(arg))
 #endif
 #ifdef FAST_API
-#define NodeListFromTerm(t) ((NodeList)(t))
+#define NodeListFromTerm(t) ((((union {NodeList target; ATerm source; })(t)).target))
 #else
 NodeList _NodeListFromTerm(ATerm t);
 #define NodeListFromTerm(t) (_NodeListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define NodeListToTerm(arg) ((ATerm)(arg))
+#define NodeListToTerm(arg) ((((union {NodeList source; ATerm target; })(arg)).target))
 #else
 ATerm _NodeListToTerm(NodeList arg);
 #define NodeListToTerm(arg) (_NodeListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define NodeFromTerm(t) ((Node)(t))
+#define NodeFromTerm(t) ((((union {Node target; ATerm source; })(t)).target))
 #else
 Node _NodeFromTerm(ATerm t);
 #define NodeFromTerm(t) (_NodeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define NodeToTerm(arg) ((ATerm)(arg))
+#define NodeToTerm(arg) ((((union {Node source; ATerm target; })(arg)).target))
 #else
 ATerm _NodeToTerm(Node arg);
 #define NodeToTerm(arg) (_NodeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define NodeIdFromTerm(t) ((NodeId)(t))
+#define NodeIdFromTerm(t) ((((union {NodeId target; ATerm source; })(t)).target))
 #else
 NodeId _NodeIdFromTerm(ATerm t);
 #define NodeIdFromTerm(t) (_NodeIdFromTerm(t))
 #endif
 #ifdef FAST_API
-#define NodeIdToTerm(arg) ((ATerm)(arg))
+#define NodeIdToTerm(arg) ((((union {NodeId source; ATerm target; })(arg)).target))
 #else
 ATerm _NodeIdToTerm(NodeId arg);
 #define NodeIdToTerm(arg) (_NodeIdToTerm(arg))
 #endif
 #ifdef FAST_API
-#define AttributeListFromTerm(t) ((AttributeList)(t))
+#define AttributeListFromTerm(t) ((((union {AttributeList target; ATerm source; })(t)).target))
 #else
 AttributeList _AttributeListFromTerm(ATerm t);
 #define AttributeListFromTerm(t) (_AttributeListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define AttributeListToTerm(arg) ((ATerm)(arg))
+#define AttributeListToTerm(arg) ((((union {AttributeList source; ATerm target; })(arg)).target))
 #else
 ATerm _AttributeListToTerm(AttributeList arg);
 #define AttributeListToTerm(arg) (_AttributeListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define AttributeFromTerm(t) ((Attribute)(t))
+#define AttributeFromTerm(t) ((((union {Attribute target; ATerm source; })(t)).target))
 #else
 Attribute _AttributeFromTerm(ATerm t);
 #define AttributeFromTerm(t) (_AttributeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define AttributeToTerm(arg) ((ATerm)(arg))
+#define AttributeToTerm(arg) ((((union {Attribute source; ATerm target; })(arg)).target))
 #else
 ATerm _AttributeToTerm(Attribute arg);
 #define AttributeToTerm(arg) (_AttributeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define FileFromTerm(t) ((File)(t))
+#define FileFromTerm(t) ((((union {File target; ATerm source; })(t)).target))
 #else
 File _FileFromTerm(ATerm t);
 #define FileFromTerm(t) (_FileFromTerm(t))
 #endif
 #ifdef FAST_API
-#define FileToTerm(arg) ((ATerm)(arg))
+#define FileToTerm(arg) ((((union {File source; ATerm target; })(arg)).target))
 #else
 ATerm _FileToTerm(File arg);
 #define FileToTerm(arg) (_FileToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ColorFromTerm(t) ((Color)(t))
+#define ColorFromTerm(t) ((((union {Color target; ATerm source; })(t)).target))
 #else
 Color _ColorFromTerm(ATerm t);
 #define ColorFromTerm(t) (_ColorFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ColorToTerm(arg) ((ATerm)(arg))
+#define ColorToTerm(arg) ((((union {Color source; ATerm target; })(arg)).target))
 #else
 ATerm _ColorToTerm(Color arg);
 #define ColorToTerm(arg) (_ColorToTerm(arg))
 #endif
 #ifdef FAST_API
-#define StyleFromTerm(t) ((Style)(t))
+#define StyleFromTerm(t) ((((union {Style target; ATerm source; })(t)).target))
 #else
 Style _StyleFromTerm(ATerm t);
 #define StyleFromTerm(t) (_StyleFromTerm(t))
 #endif
 #ifdef FAST_API
-#define StyleToTerm(arg) ((ATerm)(arg))
+#define StyleToTerm(arg) ((((union {Style source; ATerm target; })(arg)).target))
 #else
 ATerm _StyleToTerm(Style arg);
 #define StyleToTerm(arg) (_StyleToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ShapeFromTerm(t) ((Shape)(t))
+#define ShapeFromTerm(t) ((((union {Shape target; ATerm source; })(t)).target))
 #else
 Shape _ShapeFromTerm(ATerm t);
 #define ShapeFromTerm(t) (_ShapeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ShapeToTerm(arg) ((ATerm)(arg))
+#define ShapeToTerm(arg) ((((union {Shape source; ATerm target; })(arg)).target))
 #else
 ATerm _ShapeToTerm(Shape arg);
 #define ShapeToTerm(arg) (_ShapeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define DirectionFromTerm(t) ((Direction)(t))
+#define DirectionFromTerm(t) ((((union {Direction target; ATerm source; })(t)).target))
 #else
 Direction _DirectionFromTerm(ATerm t);
 #define DirectionFromTerm(t) (_DirectionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define DirectionToTerm(arg) ((ATerm)(arg))
+#define DirectionToTerm(arg) ((((union {Direction source; ATerm target; })(arg)).target))
 #else
 ATerm _DirectionToTerm(Direction arg);
 #define DirectionToTerm(arg) (_DirectionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define EdgeListFromTerm(t) ((EdgeList)(t))
+#define EdgeListFromTerm(t) ((((union {EdgeList target; ATerm source; })(t)).target))
 #else
 EdgeList _EdgeListFromTerm(ATerm t);
 #define EdgeListFromTerm(t) (_EdgeListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define EdgeListToTerm(arg) ((ATerm)(arg))
+#define EdgeListToTerm(arg) ((((union {EdgeList source; ATerm target; })(arg)).target))
 #else
 ATerm _EdgeListToTerm(EdgeList arg);
 #define EdgeListToTerm(arg) (_EdgeListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define EdgeFromTerm(t) ((Edge)(t))
+#define EdgeFromTerm(t) ((((union {Edge target; ATerm source; })(t)).target))
 #else
 Edge _EdgeFromTerm(ATerm t);
 #define EdgeFromTerm(t) (_EdgeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define EdgeToTerm(arg) ((ATerm)(arg))
+#define EdgeToTerm(arg) ((((union {Edge source; ATerm target; })(arg)).target))
 #else
 ATerm _EdgeToTerm(Edge arg);
 #define EdgeToTerm(arg) (_EdgeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PolygonFromTerm(t) ((Polygon)(t))
+#define PolygonFromTerm(t) ((((union {Polygon target; ATerm source; })(t)).target))
 #else
 Polygon _PolygonFromTerm(ATerm t);
 #define PolygonFromTerm(t) (_PolygonFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PolygonToTerm(arg) ((ATerm)(arg))
+#define PolygonToTerm(arg) ((((union {Polygon source; ATerm target; })(arg)).target))
 #else
 ATerm _PolygonToTerm(Polygon arg);
 #define PolygonToTerm(arg) (_PolygonToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PointFromTerm(t) ((Point)(t))
+#define PointFromTerm(t) ((((union {Point target; ATerm source; })(t)).target))
 #else
 Point _PointFromTerm(ATerm t);
 #define PointFromTerm(t) (_PointFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PointToTerm(arg) ((ATerm)(arg))
+#define PointToTerm(arg) ((((union {Point source; ATerm target; })(arg)).target))
 #else
 ATerm _PointToTerm(Point arg);
 #define PointToTerm(arg) (_PointToTerm(arg))

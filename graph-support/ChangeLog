@@ -1,5 +1,8 @@
 $Id$
 
+Wed Apr 16 11:34:49 CEST 2008 <jurgenv@cwi.nl>
+ * lib/*: regenerated API to fixed type punned aliasing issues.
+
 Fri Mar 21 15:39:01 EDT 2008 <jurgenv@cwi.nl>
  * utils/layoutgraph/Makefile.am: added --nounput option to flex, such
    that the newest flex implementations will work.

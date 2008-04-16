@@ -330,7 +330,7 @@ void _unprotectPoint(Point *arg) {
  * \return Graph that was encoded by \arg
  */
 Graph _GraphFromTerm(ATerm t) {
-  return (Graph)t;
+  return (((union {Graph target; ATerm source; })(t)).target);
 }
 
 /**
@@ -339,7 +339,7 @@ Graph _GraphFromTerm(ATerm t) {
  * \return ATerm that represents the Graph
  */
 ATerm _GraphToTerm(Graph arg) {
-  return (ATerm)arg;
+  return (((union {Graph source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -348,7 +348,7 @@ ATerm _GraphToTerm(Graph arg) {
  * \return NodeList that was encoded by \arg
  */
 NodeList _NodeListFromTerm(ATerm t) {
-  return (NodeList)t;
+  return (((union {NodeList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -357,7 +357,7 @@ NodeList _NodeListFromTerm(ATerm t) {
  * \return ATerm that represents the NodeList
  */
 ATerm _NodeListToTerm(NodeList arg) {
-  return (ATerm)arg;
+  return (((union {NodeList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -366,7 +366,7 @@ ATerm _NodeListToTerm(NodeList arg) {
  * \return Node that was encoded by \arg
  */
 Node _NodeFromTerm(ATerm t) {
-  return (Node)t;
+  return (((union {Node target; ATerm source; })(t)).target);
 }
 
 /**
@@ -375,7 +375,7 @@ Node _NodeFromTerm(ATerm t) {
  * \return ATerm that represents the Node
  */
 ATerm _NodeToTerm(Node arg) {
-  return (ATerm)arg;
+  return (((union {Node source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -384,7 +384,7 @@ ATerm _NodeToTerm(Node arg) {
  * \return NodeId that was encoded by \arg
  */
 NodeId _NodeIdFromTerm(ATerm t) {
-  return (NodeId)t;
+  return (((union {NodeId target; ATerm source; })(t)).target);
 }
 
 /**
@@ -393,7 +393,7 @@ NodeId _NodeIdFromTerm(ATerm t) {
  * \return ATerm that represents the NodeId
  */
 ATerm _NodeIdToTerm(NodeId arg) {
-  return (ATerm)arg;
+  return (((union {NodeId source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -402,7 +402,7 @@ ATerm _NodeIdToTerm(NodeId arg) {
  * \return AttributeList that was encoded by \arg
  */
 AttributeList _AttributeListFromTerm(ATerm t) {
-  return (AttributeList)t;
+  return (((union {AttributeList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -411,7 +411,7 @@ AttributeList _AttributeListFromTerm(ATerm t) {
  * \return ATerm that represents the AttributeList
  */
 ATerm _AttributeListToTerm(AttributeList arg) {
-  return (ATerm)arg;
+  return (((union {AttributeList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -420,7 +420,7 @@ ATerm _AttributeListToTerm(AttributeList arg) {
  * \return Attribute that was encoded by \arg
  */
 Attribute _AttributeFromTerm(ATerm t) {
-  return (Attribute)t;
+  return (((union {Attribute target; ATerm source; })(t)).target);
 }
 
 /**
@@ -429,7 +429,7 @@ Attribute _AttributeFromTerm(ATerm t) {
  * \return ATerm that represents the Attribute
  */
 ATerm _AttributeToTerm(Attribute arg) {
-  return (ATerm)arg;
+  return (((union {Attribute source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -438,7 +438,7 @@ ATerm _AttributeToTerm(Attribute arg) {
  * \return File that was encoded by \arg
  */
 File _FileFromTerm(ATerm t) {
-  return (File)t;
+  return (((union {File target; ATerm source; })(t)).target);
 }
 
 /**
@@ -447,7 +447,7 @@ File _FileFromTerm(ATerm t) {
  * \return ATerm that represents the File
  */
 ATerm _FileToTerm(File arg) {
-  return (ATerm)arg;
+  return (((union {File source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -456,7 +456,7 @@ ATerm _FileToTerm(File arg) {
  * \return Color that was encoded by \arg
  */
 Color _ColorFromTerm(ATerm t) {
-  return (Color)t;
+  return (((union {Color target; ATerm source; })(t)).target);
 }
 
 /**
@@ -465,7 +465,7 @@ Color _ColorFromTerm(ATerm t) {
  * \return ATerm that represents the Color
  */
 ATerm _ColorToTerm(Color arg) {
-  return (ATerm)arg;
+  return (((union {Color source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -474,7 +474,7 @@ ATerm _ColorToTerm(Color arg) {
  * \return Style that was encoded by \arg
  */
 Style _StyleFromTerm(ATerm t) {
-  return (Style)t;
+  return (((union {Style target; ATerm source; })(t)).target);
 }
 
 /**
@@ -483,7 +483,7 @@ Style _StyleFromTerm(ATerm t) {
  * \return ATerm that represents the Style
  */
 ATerm _StyleToTerm(Style arg) {
-  return (ATerm)arg;
+  return (((union {Style source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -492,7 +492,7 @@ ATerm _StyleToTerm(Style arg) {
  * \return Shape that was encoded by \arg
  */
 Shape _ShapeFromTerm(ATerm t) {
-  return (Shape)t;
+  return (((union {Shape target; ATerm source; })(t)).target);
 }
 
 /**
@@ -501,7 +501,7 @@ Shape _ShapeFromTerm(ATerm t) {
  * \return ATerm that represents the Shape
  */
 ATerm _ShapeToTerm(Shape arg) {
-  return (ATerm)arg;
+  return (((union {Shape source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -510,7 +510,7 @@ ATerm _ShapeToTerm(Shape arg) {
  * \return Direction that was encoded by \arg
  */
 Direction _DirectionFromTerm(ATerm t) {
-  return (Direction)t;
+  return (((union {Direction target; ATerm source; })(t)).target);
 }
 
 /**
@@ -519,7 +519,7 @@ Direction _DirectionFromTerm(ATerm t) {
  * \return ATerm that represents the Direction
  */
 ATerm _DirectionToTerm(Direction arg) {
-  return (ATerm)arg;
+  return (((union {Direction source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -528,7 +528,7 @@ ATerm _DirectionToTerm(Direction arg) {
  * \return EdgeList that was encoded by \arg
  */
 EdgeList _EdgeListFromTerm(ATerm t) {
-  return (EdgeList)t;
+  return (((union {EdgeList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -537,7 +537,7 @@ EdgeList _EdgeListFromTerm(ATerm t) {
  * \return ATerm that represents the EdgeList
  */
 ATerm _EdgeListToTerm(EdgeList arg) {
-  return (ATerm)arg;
+  return (((union {EdgeList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -546,7 +546,7 @@ ATerm _EdgeListToTerm(EdgeList arg) {
  * \return Edge that was encoded by \arg
  */
 Edge _EdgeFromTerm(ATerm t) {
-  return (Edge)t;
+  return (((union {Edge target; ATerm source; })(t)).target);
 }
 
 /**
@@ -555,7 +555,7 @@ Edge _EdgeFromTerm(ATerm t) {
  * \return ATerm that represents the Edge
  */
 ATerm _EdgeToTerm(Edge arg) {
-  return (ATerm)arg;
+  return (((union {Edge source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -564,7 +564,7 @@ ATerm _EdgeToTerm(Edge arg) {
  * \return Polygon that was encoded by \arg
  */
 Polygon _PolygonFromTerm(ATerm t) {
-  return (Polygon)t;
+  return (((union {Polygon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -573,7 +573,7 @@ Polygon _PolygonFromTerm(ATerm t) {
  * \return ATerm that represents the Polygon
  */
 ATerm _PolygonToTerm(Polygon arg) {
-  return (ATerm)arg;
+  return (((union {Polygon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -582,7 +582,7 @@ ATerm _PolygonToTerm(Polygon arg) {
  * \return Point that was encoded by \arg
  */
 Point _PointFromTerm(ATerm t) {
-  return (Point)t;
+  return (((union {Point target; ATerm source; })(t)).target);
 }
 
 /**
@@ -591,7 +591,7 @@ Point _PointFromTerm(ATerm t) {
  * \return ATerm that represents the Point
  */
 ATerm _PointToTerm(Point arg) {
-  return (ATerm)arg;
+  return (((union {Point source; ATerm target; })(arg)).target);
 }
 
 /**
