@@ -1224,1117 +1224,1117 @@ void _SDF_unprotectIdCon(SDF_IdCon *arg);
 #define SDF_unprotectIdCon(arg) (_SDF_unprotectIdCon(arg))
 #endif
 #ifdef FAST_API
-#define SDF_OptLayoutFromTerm(t) ((SDF_OptLayout)(t))
+#define SDF_OptLayoutFromTerm(t) ((((union {SDF_OptLayout target; ATerm source; })(t)).target))
 #else
 SDF_OptLayout _SDF_OptLayoutFromTerm(ATerm t);
 #define SDF_OptLayoutFromTerm(t) (_SDF_OptLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_OptLayoutToTerm(arg) ((ATerm)(arg))
+#define SDF_OptLayoutToTerm(arg) ((((union {SDF_OptLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_OptLayoutToTerm(SDF_OptLayout arg);
 #define SDF_OptLayoutToTerm(arg) (_SDF_OptLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LayoutFromTerm(t) ((SDF_Layout)(t))
+#define SDF_LayoutFromTerm(t) ((((union {SDF_Layout target; ATerm source; })(t)).target))
 #else
 SDF_Layout _SDF_LayoutFromTerm(ATerm t);
 #define SDF_LayoutFromTerm(t) (_SDF_LayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LayoutToTerm(arg) ((ATerm)(arg))
+#define SDF_LayoutToTerm(arg) ((((union {SDF_Layout source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LayoutToTerm(SDF_Layout arg);
 #define SDF_LayoutToTerm(arg) (_SDF_LayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexLayoutListFromTerm(t) ((SDF_LexLayoutList)(t))
+#define SDF_LexLayoutListFromTerm(t) ((((union {SDF_LexLayoutList target; ATerm source; })(t)).target))
 #else
 SDF_LexLayoutList _SDF_LexLayoutListFromTerm(ATerm t);
 #define SDF_LexLayoutListFromTerm(t) (_SDF_LexLayoutListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexLayoutListToTerm(arg) ((ATerm)(arg))
+#define SDF_LexLayoutListToTerm(arg) ((((union {SDF_LexLayoutList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexLayoutListToTerm(SDF_LexLayoutList arg);
 #define SDF_LexLayoutListToTerm(arg) (_SDF_LexLayoutListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_AFunFromTerm(t) ((SDF_AFun)(t))
+#define SDF_AFunFromTerm(t) ((((union {SDF_AFun target; ATerm source; })(t)).target))
 #else
 SDF_AFun _SDF_AFunFromTerm(ATerm t);
 #define SDF_AFunFromTerm(t) (_SDF_AFunFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_AFunToTerm(arg) ((ATerm)(arg))
+#define SDF_AFunToTerm(arg) ((((union {SDF_AFun source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_AFunToTerm(SDF_AFun arg);
 #define SDF_AFunToTerm(arg) (_SDF_AFunToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ATermFromTerm(t) ((SDF_ATerm)(t))
+#define SDF_ATermFromTerm(t) ((((union {SDF_ATerm target; ATerm source; })(t)).target))
 #else
 SDF_ATerm _SDF_ATermFromTerm(ATerm t);
 #define SDF_ATermFromTerm(t) (_SDF_ATermFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ATermToTerm(arg) ((ATerm)(arg))
+#define SDF_ATermToTerm(arg) ((((union {SDF_ATerm source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ATermToTerm(SDF_ATerm arg);
 #define SDF_ATermToTerm(arg) (_SDF_ATermToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_AnnotationFromTerm(t) ((SDF_Annotation)(t))
+#define SDF_AnnotationFromTerm(t) ((((union {SDF_Annotation target; ATerm source; })(t)).target))
 #else
 SDF_Annotation _SDF_AnnotationFromTerm(ATerm t);
 #define SDF_AnnotationFromTerm(t) (_SDF_AnnotationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_AnnotationToTerm(arg) ((ATerm)(arg))
+#define SDF_AnnotationToTerm(arg) ((((union {SDF_Annotation source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_AnnotationToTerm(SDF_Annotation arg);
 #define SDF_AnnotationToTerm(arg) (_SDF_AnnotationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_StartFromTerm(t) ((SDF_Start)(t))
+#define SDF_StartFromTerm(t) ((((union {SDF_Start target; ATerm source; })(t)).target))
 #else
 SDF_Start _SDF_StartFromTerm(ATerm t);
 #define SDF_StartFromTerm(t) (_SDF_StartFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_StartToTerm(arg) ((ATerm)(arg))
+#define SDF_StartToTerm(arg) ((((union {SDF_Start source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_StartToTerm(SDF_Start arg);
 #define SDF_StartToTerm(arg) (_SDF_StartToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ATermArgsFromTerm(t) ((SDF_ATermArgs)(t))
+#define SDF_ATermArgsFromTerm(t) ((((union {SDF_ATermArgs target; ATerm source; })(t)).target))
 #else
 SDF_ATermArgs _SDF_ATermArgsFromTerm(ATerm t);
 #define SDF_ATermArgsFromTerm(t) (_SDF_ATermArgsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ATermArgsToTerm(arg) ((ATerm)(arg))
+#define SDF_ATermArgsToTerm(arg) ((((union {SDF_ATermArgs source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ATermArgsToTerm(SDF_ATermArgs arg);
 #define SDF_ATermArgsToTerm(arg) (_SDF_ATermArgsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ATermElemsFromTerm(t) ((SDF_ATermElems)(t))
+#define SDF_ATermElemsFromTerm(t) ((((union {SDF_ATermElems target; ATerm source; })(t)).target))
 #else
 SDF_ATermElems _SDF_ATermElemsFromTerm(ATerm t);
 #define SDF_ATermElemsFromTerm(t) (_SDF_ATermElemsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ATermElemsToTerm(arg) ((ATerm)(arg))
+#define SDF_ATermElemsToTerm(arg) ((((union {SDF_ATermElems source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ATermElemsToTerm(SDF_ATermElems arg);
 #define SDF_ATermElemsToTerm(arg) (_SDF_ATermElemsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ATermAnnosFromTerm(t) ((SDF_ATermAnnos)(t))
+#define SDF_ATermAnnosFromTerm(t) ((((union {SDF_ATermAnnos target; ATerm source; })(t)).target))
 #else
 SDF_ATermAnnos _SDF_ATermAnnosFromTerm(ATerm t);
 #define SDF_ATermAnnosFromTerm(t) (_SDF_ATermAnnosFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ATermAnnosToTerm(arg) ((ATerm)(arg))
+#define SDF_ATermAnnosToTerm(arg) ((((union {SDF_ATermAnnos source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ATermAnnosToTerm(SDF_ATermAnnos arg);
 #define SDF_ATermAnnosToTerm(arg) (_SDF_ATermAnnosToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_IntConFromTerm(t) ((SDF_IntCon)(t))
+#define SDF_IntConFromTerm(t) ((((union {SDF_IntCon target; ATerm source; })(t)).target))
 #else
 SDF_IntCon _SDF_IntConFromTerm(ATerm t);
 #define SDF_IntConFromTerm(t) (_SDF_IntConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_IntConToTerm(arg) ((ATerm)(arg))
+#define SDF_IntConToTerm(arg) ((((union {SDF_IntCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_IntConToTerm(SDF_IntCon arg);
 #define SDF_IntConToTerm(arg) (_SDF_IntConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_OptExpFromTerm(t) ((SDF_OptExp)(t))
+#define SDF_OptExpFromTerm(t) ((((union {SDF_OptExp target; ATerm source; })(t)).target))
 #else
 SDF_OptExp _SDF_OptExpFromTerm(ATerm t);
 #define SDF_OptExpFromTerm(t) (_SDF_OptExpFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_OptExpToTerm(arg) ((ATerm)(arg))
+#define SDF_OptExpToTerm(arg) ((((union {SDF_OptExp source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_OptExpToTerm(SDF_OptExp arg);
 #define SDF_OptExpToTerm(arg) (_SDF_OptExpToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_RealConFromTerm(t) ((SDF_RealCon)(t))
+#define SDF_RealConFromTerm(t) ((((union {SDF_RealCon target; ATerm source; })(t)).target))
 #else
 SDF_RealCon _SDF_RealConFromTerm(ATerm t);
 #define SDF_RealConFromTerm(t) (_SDF_RealConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_RealConToTerm(arg) ((ATerm)(arg))
+#define SDF_RealConToTerm(arg) ((((union {SDF_RealCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_RealConToTerm(SDF_RealCon arg);
 #define SDF_RealConToTerm(arg) (_SDF_RealConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_GrammarFromTerm(t) ((SDF_Grammar)(t))
+#define SDF_GrammarFromTerm(t) ((((union {SDF_Grammar target; ATerm source; })(t)).target))
 #else
 SDF_Grammar _SDF_GrammarFromTerm(ATerm t);
 #define SDF_GrammarFromTerm(t) (_SDF_GrammarFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_GrammarToTerm(arg) ((ATerm)(arg))
+#define SDF_GrammarToTerm(arg) ((((union {SDF_Grammar source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_GrammarToTerm(SDF_Grammar arg);
 #define SDF_GrammarToTerm(arg) (_SDF_GrammarToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_AliasFromTerm(t) ((SDF_Alias)(t))
+#define SDF_AliasFromTerm(t) ((((union {SDF_Alias target; ATerm source; })(t)).target))
 #else
 SDF_Alias _SDF_AliasFromTerm(ATerm t);
 #define SDF_AliasFromTerm(t) (_SDF_AliasFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_AliasToTerm(arg) ((ATerm)(arg))
+#define SDF_AliasToTerm(arg) ((((union {SDF_Alias source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_AliasToTerm(SDF_Alias arg);
 #define SDF_AliasToTerm(arg) (_SDF_AliasToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_AliasesFromTerm(t) ((SDF_Aliases)(t))
+#define SDF_AliasesFromTerm(t) ((((union {SDF_Aliases target; ATerm source; })(t)).target))
 #else
 SDF_Aliases _SDF_AliasesFromTerm(ATerm t);
 #define SDF_AliasesFromTerm(t) (_SDF_AliasesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_AliasesToTerm(arg) ((ATerm)(arg))
+#define SDF_AliasesToTerm(arg) ((((union {SDF_Aliases source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_AliasesToTerm(SDF_Aliases arg);
 #define SDF_AliasesToTerm(arg) (_SDF_AliasesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_AliasListFromTerm(t) ((SDF_AliasList)(t))
+#define SDF_AliasListFromTerm(t) ((((union {SDF_AliasList target; ATerm source; })(t)).target))
 #else
 SDF_AliasList _SDF_AliasListFromTerm(ATerm t);
 #define SDF_AliasListFromTerm(t) (_SDF_AliasListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_AliasListToTerm(arg) ((ATerm)(arg))
+#define SDF_AliasListToTerm(arg) ((((union {SDF_AliasList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_AliasListToTerm(SDF_AliasList arg);
 #define SDF_AliasListToTerm(arg) (_SDF_AliasListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolFromTerm(t) ((SDF_Symbol)(t))
+#define SDF_SymbolFromTerm(t) ((((union {SDF_Symbol target; ATerm source; })(t)).target))
 #else
 SDF_Symbol _SDF_SymbolFromTerm(ATerm t);
 #define SDF_SymbolFromTerm(t) (_SDF_SymbolFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolToTerm(arg) ((ATerm)(arg))
+#define SDF_SymbolToTerm(arg) ((((union {SDF_Symbol source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SymbolToTerm(SDF_Symbol arg);
 #define SDF_SymbolToTerm(arg) (_SDF_SymbolToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_CharRangeFromTerm(t) ((SDF_CharRange)(t))
+#define SDF_CharRangeFromTerm(t) ((((union {SDF_CharRange target; ATerm source; })(t)).target))
 #else
 SDF_CharRange _SDF_CharRangeFromTerm(ATerm t);
 #define SDF_CharRangeFromTerm(t) (_SDF_CharRangeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_CharRangeToTerm(arg) ((ATerm)(arg))
+#define SDF_CharRangeToTerm(arg) ((((union {SDF_CharRange source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_CharRangeToTerm(SDF_CharRange arg);
 #define SDF_CharRangeToTerm(arg) (_SDF_CharRangeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_CharRangesFromTerm(t) ((SDF_CharRanges)(t))
+#define SDF_CharRangesFromTerm(t) ((((union {SDF_CharRanges target; ATerm source; })(t)).target))
 #else
 SDF_CharRanges _SDF_CharRangesFromTerm(ATerm t);
 #define SDF_CharRangesFromTerm(t) (_SDF_CharRangesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_CharRangesToTerm(arg) ((ATerm)(arg))
+#define SDF_CharRangesToTerm(arg) ((((union {SDF_CharRanges source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_CharRangesToTerm(SDF_CharRanges arg);
 #define SDF_CharRangesToTerm(arg) (_SDF_CharRangesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_OptCharRangesFromTerm(t) ((SDF_OptCharRanges)(t))
+#define SDF_OptCharRangesFromTerm(t) ((((union {SDF_OptCharRanges target; ATerm source; })(t)).target))
 #else
 SDF_OptCharRanges _SDF_OptCharRangesFromTerm(ATerm t);
 #define SDF_OptCharRangesFromTerm(t) (_SDF_OptCharRangesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_OptCharRangesToTerm(arg) ((ATerm)(arg))
+#define SDF_OptCharRangesToTerm(arg) ((((union {SDF_OptCharRanges source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_OptCharRangesToTerm(SDF_OptCharRanges arg);
 #define SDF_OptCharRangesToTerm(arg) (_SDF_OptCharRangesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_CharClassFromTerm(t) ((SDF_CharClass)(t))
+#define SDF_CharClassFromTerm(t) ((((union {SDF_CharClass target; ATerm source; })(t)).target))
 #else
 SDF_CharClass _SDF_CharClassFromTerm(ATerm t);
 #define SDF_CharClassFromTerm(t) (_SDF_CharClassFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_CharClassToTerm(arg) ((ATerm)(arg))
+#define SDF_CharClassToTerm(arg) ((((union {SDF_CharClass source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_CharClassToTerm(SDF_CharClass arg);
 #define SDF_CharClassToTerm(arg) (_SDF_CharClassToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexNumCharFromTerm(t) ((SDF_LexNumChar)(t))
+#define SDF_LexNumCharFromTerm(t) ((((union {SDF_LexNumChar target; ATerm source; })(t)).target))
 #else
 SDF_LexNumChar _SDF_LexNumCharFromTerm(ATerm t);
 #define SDF_LexNumCharFromTerm(t) (_SDF_LexNumCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexNumCharToTerm(arg) ((ATerm)(arg))
+#define SDF_LexNumCharToTerm(arg) ((((union {SDF_LexNumChar source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexNumCharToTerm(SDF_LexNumChar arg);
 #define SDF_LexNumCharToTerm(arg) (_SDF_LexNumCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_NumCharFromTerm(t) ((SDF_NumChar)(t))
+#define SDF_NumCharFromTerm(t) ((((union {SDF_NumChar target; ATerm source; })(t)).target))
 #else
 SDF_NumChar _SDF_NumCharFromTerm(ATerm t);
 #define SDF_NumCharFromTerm(t) (_SDF_NumCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_NumCharToTerm(arg) ((ATerm)(arg))
+#define SDF_NumCharToTerm(arg) ((((union {SDF_NumChar source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_NumCharToTerm(SDF_NumChar arg);
 #define SDF_NumCharToTerm(arg) (_SDF_NumCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexShortCharFromTerm(t) ((SDF_LexShortChar)(t))
+#define SDF_LexShortCharFromTerm(t) ((((union {SDF_LexShortChar target; ATerm source; })(t)).target))
 #else
 SDF_LexShortChar _SDF_LexShortCharFromTerm(ATerm t);
 #define SDF_LexShortCharFromTerm(t) (_SDF_LexShortCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexShortCharToTerm(arg) ((ATerm)(arg))
+#define SDF_LexShortCharToTerm(arg) ((((union {SDF_LexShortChar source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexShortCharToTerm(SDF_LexShortChar arg);
 #define SDF_LexShortCharToTerm(arg) (_SDF_LexShortCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ShortCharFromTerm(t) ((SDF_ShortChar)(t))
+#define SDF_ShortCharFromTerm(t) ((((union {SDF_ShortChar target; ATerm source; })(t)).target))
 #else
 SDF_ShortChar _SDF_ShortCharFromTerm(ATerm t);
 #define SDF_ShortCharFromTerm(t) (_SDF_ShortCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ShortCharToTerm(arg) ((ATerm)(arg))
+#define SDF_ShortCharToTerm(arg) ((((union {SDF_ShortChar source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ShortCharToTerm(SDF_ShortChar arg);
 #define SDF_ShortCharToTerm(arg) (_SDF_ShortCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_CharacterFromTerm(t) ((SDF_Character)(t))
+#define SDF_CharacterFromTerm(t) ((((union {SDF_Character target; ATerm source; })(t)).target))
 #else
 SDF_Character _SDF_CharacterFromTerm(ATerm t);
 #define SDF_CharacterFromTerm(t) (_SDF_CharacterFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_CharacterToTerm(arg) ((ATerm)(arg))
+#define SDF_CharacterToTerm(arg) ((((union {SDF_Character source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_CharacterToTerm(SDF_Character arg);
 #define SDF_CharacterToTerm(arg) (_SDF_CharacterToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ATermAttributeFromTerm(t) ((SDF_ATermAttribute)(t))
+#define SDF_ATermAttributeFromTerm(t) ((((union {SDF_ATermAttribute target; ATerm source; })(t)).target))
 #else
 SDF_ATermAttribute _SDF_ATermAttributeFromTerm(ATerm t);
 #define SDF_ATermAttributeFromTerm(t) (_SDF_ATermAttributeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ATermAttributeToTerm(arg) ((ATerm)(arg))
+#define SDF_ATermAttributeToTerm(arg) ((((union {SDF_ATermAttribute source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ATermAttributeToTerm(SDF_ATermAttribute arg);
 #define SDF_ATermAttributeToTerm(arg) (_SDF_ATermAttributeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_AttributeFromTerm(t) ((SDF_Attribute)(t))
+#define SDF_AttributeFromTerm(t) ((((union {SDF_Attribute target; ATerm source; })(t)).target))
 #else
 SDF_Attribute _SDF_AttributeFromTerm(ATerm t);
 #define SDF_AttributeFromTerm(t) (_SDF_AttributeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_AttributeToTerm(arg) ((ATerm)(arg))
+#define SDF_AttributeToTerm(arg) ((((union {SDF_Attribute source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_AttributeToTerm(SDF_Attribute arg);
 #define SDF_AttributeToTerm(arg) (_SDF_AttributeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_AttributesFromTerm(t) ((SDF_Attributes)(t))
+#define SDF_AttributesFromTerm(t) ((((union {SDF_Attributes target; ATerm source; })(t)).target))
 #else
 SDF_Attributes _SDF_AttributesFromTerm(ATerm t);
 #define SDF_AttributesFromTerm(t) (_SDF_AttributesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_AttributesToTerm(arg) ((ATerm)(arg))
+#define SDF_AttributesToTerm(arg) ((((union {SDF_Attributes source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_AttributesToTerm(SDF_Attributes arg);
 #define SDF_AttributesToTerm(arg) (_SDF_AttributesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ProductionFromTerm(t) ((SDF_Production)(t))
+#define SDF_ProductionFromTerm(t) ((((union {SDF_Production target; ATerm source; })(t)).target))
 #else
 SDF_Production _SDF_ProductionFromTerm(ATerm t);
 #define SDF_ProductionFromTerm(t) (_SDF_ProductionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ProductionToTerm(arg) ((ATerm)(arg))
+#define SDF_ProductionToTerm(arg) ((((union {SDF_Production source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ProductionToTerm(SDF_Production arg);
 #define SDF_ProductionToTerm(arg) (_SDF_ProductionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ProductionsFromTerm(t) ((SDF_Productions)(t))
+#define SDF_ProductionsFromTerm(t) ((((union {SDF_Productions target; ATerm source; })(t)).target))
 #else
 SDF_Productions _SDF_ProductionsFromTerm(ATerm t);
 #define SDF_ProductionsFromTerm(t) (_SDF_ProductionsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ProductionsToTerm(arg) ((ATerm)(arg))
+#define SDF_ProductionsToTerm(arg) ((((union {SDF_Productions source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ProductionsToTerm(SDF_Productions arg);
 #define SDF_ProductionsToTerm(arg) (_SDF_ProductionsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_AttributeListFromTerm(t) ((SDF_AttributeList)(t))
+#define SDF_AttributeListFromTerm(t) ((((union {SDF_AttributeList target; ATerm source; })(t)).target))
 #else
 SDF_AttributeList _SDF_AttributeListFromTerm(ATerm t);
 #define SDF_AttributeListFromTerm(t) (_SDF_AttributeListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_AttributeListToTerm(arg) ((ATerm)(arg))
+#define SDF_AttributeListToTerm(arg) ((((union {SDF_AttributeList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_AttributeListToTerm(SDF_AttributeList arg);
 #define SDF_AttributeListToTerm(arg) (_SDF_AttributeListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ProductionListFromTerm(t) ((SDF_ProductionList)(t))
+#define SDF_ProductionListFromTerm(t) ((((union {SDF_ProductionList target; ATerm source; })(t)).target))
 #else
 SDF_ProductionList _SDF_ProductionListFromTerm(ATerm t);
 #define SDF_ProductionListFromTerm(t) (_SDF_ProductionListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ProductionListToTerm(arg) ((ATerm)(arg))
+#define SDF_ProductionListToTerm(arg) ((((union {SDF_ProductionList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ProductionListToTerm(SDF_ProductionList arg);
 #define SDF_ProductionListToTerm(arg) (_SDF_ProductionListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LabelFromTerm(t) ((SDF_Label)(t))
+#define SDF_LabelFromTerm(t) ((((union {SDF_Label target; ATerm source; })(t)).target))
 #else
 SDF_Label _SDF_LabelFromTerm(ATerm t);
 #define SDF_LabelFromTerm(t) (_SDF_LabelFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LabelToTerm(arg) ((ATerm)(arg))
+#define SDF_LabelToTerm(arg) ((((union {SDF_Label source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LabelToTerm(SDF_Label arg);
 #define SDF_LabelToTerm(arg) (_SDF_LabelToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexSingleQuotedStrCharFromTerm(t) ((SDF_LexSingleQuotedStrChar)(t))
+#define SDF_LexSingleQuotedStrCharFromTerm(t) ((((union {SDF_LexSingleQuotedStrChar target; ATerm source; })(t)).target))
 #else
 SDF_LexSingleQuotedStrChar _SDF_LexSingleQuotedStrCharFromTerm(ATerm t);
 #define SDF_LexSingleQuotedStrCharFromTerm(t) (_SDF_LexSingleQuotedStrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexSingleQuotedStrCharToTerm(arg) ((ATerm)(arg))
+#define SDF_LexSingleQuotedStrCharToTerm(arg) ((((union {SDF_LexSingleQuotedStrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexSingleQuotedStrCharToTerm(SDF_LexSingleQuotedStrChar arg);
 #define SDF_LexSingleQuotedStrCharToTerm(arg) (_SDF_LexSingleQuotedStrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SingleQuotedStrCharFromTerm(t) ((SDF_SingleQuotedStrChar)(t))
+#define SDF_SingleQuotedStrCharFromTerm(t) ((((union {SDF_SingleQuotedStrChar target; ATerm source; })(t)).target))
 #else
 SDF_SingleQuotedStrChar _SDF_SingleQuotedStrCharFromTerm(ATerm t);
 #define SDF_SingleQuotedStrCharFromTerm(t) (_SDF_SingleQuotedStrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SingleQuotedStrCharToTerm(arg) ((ATerm)(arg))
+#define SDF_SingleQuotedStrCharToTerm(arg) ((((union {SDF_SingleQuotedStrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SingleQuotedStrCharToTerm(SDF_SingleQuotedStrChar arg);
 #define SDF_SingleQuotedStrCharToTerm(arg) (_SDF_SingleQuotedStrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexSingleQuotedStrConFromTerm(t) ((SDF_LexSingleQuotedStrCon)(t))
+#define SDF_LexSingleQuotedStrConFromTerm(t) ((((union {SDF_LexSingleQuotedStrCon target; ATerm source; })(t)).target))
 #else
 SDF_LexSingleQuotedStrCon _SDF_LexSingleQuotedStrConFromTerm(ATerm t);
 #define SDF_LexSingleQuotedStrConFromTerm(t) (_SDF_LexSingleQuotedStrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexSingleQuotedStrConToTerm(arg) ((ATerm)(arg))
+#define SDF_LexSingleQuotedStrConToTerm(arg) ((((union {SDF_LexSingleQuotedStrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexSingleQuotedStrConToTerm(SDF_LexSingleQuotedStrCon arg);
 #define SDF_LexSingleQuotedStrConToTerm(arg) (_SDF_LexSingleQuotedStrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SingleQuotedStrConFromTerm(t) ((SDF_SingleQuotedStrCon)(t))
+#define SDF_SingleQuotedStrConFromTerm(t) ((((union {SDF_SingleQuotedStrCon target; ATerm source; })(t)).target))
 #else
 SDF_SingleQuotedStrCon _SDF_SingleQuotedStrConFromTerm(ATerm t);
 #define SDF_SingleQuotedStrConFromTerm(t) (_SDF_SingleQuotedStrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SingleQuotedStrConToTerm(arg) ((ATerm)(arg))
+#define SDF_SingleQuotedStrConToTerm(arg) ((((union {SDF_SingleQuotedStrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SingleQuotedStrConToTerm(SDF_SingleQuotedStrCon arg);
 #define SDF_SingleQuotedStrConToTerm(arg) (_SDF_SingleQuotedStrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_FunctionNameFromTerm(t) ((SDF_FunctionName)(t))
+#define SDF_FunctionNameFromTerm(t) ((((union {SDF_FunctionName target; ATerm source; })(t)).target))
 #else
 SDF_FunctionName _SDF_FunctionNameFromTerm(ATerm t);
 #define SDF_FunctionNameFromTerm(t) (_SDF_FunctionNameFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_FunctionNameToTerm(arg) ((ATerm)(arg))
+#define SDF_FunctionNameToTerm(arg) ((((union {SDF_FunctionName source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_FunctionNameToTerm(SDF_FunctionName arg);
 #define SDF_FunctionNameToTerm(arg) (_SDF_FunctionNameToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexSingleQuotedStrCharCharsFromTerm(t) ((SDF_LexSingleQuotedStrCharChars)(t))
+#define SDF_LexSingleQuotedStrCharCharsFromTerm(t) ((((union {SDF_LexSingleQuotedStrCharChars target; ATerm source; })(t)).target))
 #else
 SDF_LexSingleQuotedStrCharChars _SDF_LexSingleQuotedStrCharCharsFromTerm(ATerm t);
 #define SDF_LexSingleQuotedStrCharCharsFromTerm(t) (_SDF_LexSingleQuotedStrCharCharsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexSingleQuotedStrCharCharsToTerm(arg) ((ATerm)(arg))
+#define SDF_LexSingleQuotedStrCharCharsToTerm(arg) ((((union {SDF_LexSingleQuotedStrCharChars source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexSingleQuotedStrCharCharsToTerm(SDF_LexSingleQuotedStrCharChars arg);
 #define SDF_LexSingleQuotedStrCharCharsToTerm(arg) (_SDF_LexSingleQuotedStrCharCharsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolArgumentsFromTerm(t) ((SDF_SymbolArguments)(t))
+#define SDF_SymbolArgumentsFromTerm(t) ((((union {SDF_SymbolArguments target; ATerm source; })(t)).target))
 #else
 SDF_SymbolArguments _SDF_SymbolArgumentsFromTerm(ATerm t);
 #define SDF_SymbolArgumentsFromTerm(t) (_SDF_SymbolArgumentsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolArgumentsToTerm(arg) ((ATerm)(arg))
+#define SDF_SymbolArgumentsToTerm(arg) ((((union {SDF_SymbolArguments source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SymbolArgumentsToTerm(SDF_SymbolArguments arg);
 #define SDF_SymbolArgumentsToTerm(arg) (_SDF_SymbolArgumentsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexModuleWordFromTerm(t) ((SDF_LexModuleWord)(t))
+#define SDF_LexModuleWordFromTerm(t) ((((union {SDF_LexModuleWord target; ATerm source; })(t)).target))
 #else
 SDF_LexModuleWord _SDF_LexModuleWordFromTerm(ATerm t);
 #define SDF_LexModuleWordFromTerm(t) (_SDF_LexModuleWordFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexModuleWordToTerm(arg) ((ATerm)(arg))
+#define SDF_LexModuleWordToTerm(arg) ((((union {SDF_LexModuleWord source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexModuleWordToTerm(SDF_LexModuleWord arg);
 #define SDF_LexModuleWordToTerm(arg) (_SDF_LexModuleWordToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleWordFromTerm(t) ((SDF_ModuleWord)(t))
+#define SDF_ModuleWordFromTerm(t) ((((union {SDF_ModuleWord target; ATerm source; })(t)).target))
 #else
 SDF_ModuleWord _SDF_ModuleWordFromTerm(ATerm t);
 #define SDF_ModuleWordFromTerm(t) (_SDF_ModuleWordFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleWordToTerm(arg) ((ATerm)(arg))
+#define SDF_ModuleWordToTerm(arg) ((((union {SDF_ModuleWord source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ModuleWordToTerm(SDF_ModuleWord arg);
 #define SDF_ModuleWordToTerm(arg) (_SDF_ModuleWordToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexModuleIdFromTerm(t) ((SDF_LexModuleId)(t))
+#define SDF_LexModuleIdFromTerm(t) ((((union {SDF_LexModuleId target; ATerm source; })(t)).target))
 #else
 SDF_LexModuleId _SDF_LexModuleIdFromTerm(ATerm t);
 #define SDF_LexModuleIdFromTerm(t) (_SDF_LexModuleIdFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexModuleIdToTerm(arg) ((ATerm)(arg))
+#define SDF_LexModuleIdToTerm(arg) ((((union {SDF_LexModuleId source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexModuleIdToTerm(SDF_LexModuleId arg);
 #define SDF_LexModuleIdToTerm(arg) (_SDF_LexModuleIdToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleIdFromTerm(t) ((SDF_ModuleId)(t))
+#define SDF_ModuleIdFromTerm(t) ((((union {SDF_ModuleId target; ATerm source; })(t)).target))
 #else
 SDF_ModuleId _SDF_ModuleIdFromTerm(ATerm t);
 #define SDF_ModuleIdFromTerm(t) (_SDF_ModuleIdFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleIdToTerm(arg) ((ATerm)(arg))
+#define SDF_ModuleIdToTerm(arg) ((((union {SDF_ModuleId source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ModuleIdToTerm(SDF_ModuleId arg);
 #define SDF_ModuleIdToTerm(arg) (_SDF_ModuleIdToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_DefinitionFromTerm(t) ((SDF_Definition)(t))
+#define SDF_DefinitionFromTerm(t) ((((union {SDF_Definition target; ATerm source; })(t)).target))
 #else
 SDF_Definition _SDF_DefinitionFromTerm(ATerm t);
 #define SDF_DefinitionFromTerm(t) (_SDF_DefinitionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_DefinitionToTerm(arg) ((ATerm)(arg))
+#define SDF_DefinitionToTerm(arg) ((((union {SDF_Definition source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_DefinitionToTerm(SDF_Definition arg);
 #define SDF_DefinitionToTerm(arg) (_SDF_DefinitionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleFromTerm(t) ((SDF_Module)(t))
+#define SDF_ModuleFromTerm(t) ((((union {SDF_Module target; ATerm source; })(t)).target))
 #else
 SDF_Module _SDF_ModuleFromTerm(ATerm t);
 #define SDF_ModuleFromTerm(t) (_SDF_ModuleFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleToTerm(arg) ((ATerm)(arg))
+#define SDF_ModuleToTerm(arg) ((((union {SDF_Module source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ModuleToTerm(SDF_Module arg);
 #define SDF_ModuleToTerm(arg) (_SDF_ModuleToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SectionFromTerm(t) ((SDF_Section)(t))
+#define SDF_SectionFromTerm(t) ((((union {SDF_Section target; ATerm source; })(t)).target))
 #else
 SDF_Section _SDF_SectionFromTerm(ATerm t);
 #define SDF_SectionFromTerm(t) (_SDF_SectionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SectionToTerm(arg) ((ATerm)(arg))
+#define SDF_SectionToTerm(arg) ((((union {SDF_Section source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SectionToTerm(SDF_Section arg);
 #define SDF_SectionToTerm(arg) (_SDF_SectionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SectionsFromTerm(t) ((SDF_Sections)(t))
+#define SDF_SectionsFromTerm(t) ((((union {SDF_Sections target; ATerm source; })(t)).target))
 #else
 SDF_Sections _SDF_SectionsFromTerm(ATerm t);
 #define SDF_SectionsFromTerm(t) (_SDF_SectionsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SectionsToTerm(arg) ((ATerm)(arg))
+#define SDF_SectionsToTerm(arg) ((((union {SDF_Sections source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SectionsToTerm(SDF_Sections arg);
 #define SDF_SectionsToTerm(arg) (_SDF_SectionsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleNameFromTerm(t) ((SDF_ModuleName)(t))
+#define SDF_ModuleNameFromTerm(t) ((((union {SDF_ModuleName target; ATerm source; })(t)).target))
 #else
 SDF_ModuleName _SDF_ModuleNameFromTerm(ATerm t);
 #define SDF_ModuleNameFromTerm(t) (_SDF_ModuleNameFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleNameToTerm(arg) ((ATerm)(arg))
+#define SDF_ModuleNameToTerm(arg) ((((union {SDF_ModuleName source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ModuleNameToTerm(SDF_ModuleName arg);
 #define SDF_ModuleNameToTerm(arg) (_SDF_ModuleNameToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ImpSectionFromTerm(t) ((SDF_ImpSection)(t))
+#define SDF_ImpSectionFromTerm(t) ((((union {SDF_ImpSection target; ATerm source; })(t)).target))
 #else
 SDF_ImpSection _SDF_ImpSectionFromTerm(ATerm t);
 #define SDF_ImpSectionFromTerm(t) (_SDF_ImpSectionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ImpSectionToTerm(arg) ((ATerm)(arg))
+#define SDF_ImpSectionToTerm(arg) ((((union {SDF_ImpSection source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ImpSectionToTerm(SDF_ImpSection arg);
 #define SDF_ImpSectionToTerm(arg) (_SDF_ImpSectionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ImportsFromTerm(t) ((SDF_Imports)(t))
+#define SDF_ImportsFromTerm(t) ((((union {SDF_Imports target; ATerm source; })(t)).target))
 #else
 SDF_Imports _SDF_ImportsFromTerm(ATerm t);
 #define SDF_ImportsFromTerm(t) (_SDF_ImportsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ImportsToTerm(arg) ((ATerm)(arg))
+#define SDF_ImportsToTerm(arg) ((((union {SDF_Imports source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ImportsToTerm(SDF_Imports arg);
 #define SDF_ImportsToTerm(arg) (_SDF_ImportsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ImportFromTerm(t) ((SDF_Import)(t))
+#define SDF_ImportFromTerm(t) ((((union {SDF_Import target; ATerm source; })(t)).target))
 #else
 SDF_Import _SDF_ImportFromTerm(ATerm t);
 #define SDF_ImportFromTerm(t) (_SDF_ImportFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ImportToTerm(arg) ((ATerm)(arg))
+#define SDF_ImportToTerm(arg) ((((union {SDF_Import source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ImportToTerm(SDF_Import arg);
 #define SDF_ImportToTerm(arg) (_SDF_ImportToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleListFromTerm(t) ((SDF_ModuleList)(t))
+#define SDF_ModuleListFromTerm(t) ((((union {SDF_ModuleList target; ATerm source; })(t)).target))
 #else
 SDF_ModuleList _SDF_ModuleListFromTerm(ATerm t);
 #define SDF_ModuleListFromTerm(t) (_SDF_ModuleListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ModuleListToTerm(arg) ((ATerm)(arg))
+#define SDF_ModuleListToTerm(arg) ((((union {SDF_ModuleList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ModuleListToTerm(SDF_ModuleList arg);
 #define SDF_ModuleListToTerm(arg) (_SDF_ModuleListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ImpSectionListFromTerm(t) ((SDF_ImpSectionList)(t))
+#define SDF_ImpSectionListFromTerm(t) ((((union {SDF_ImpSectionList target; ATerm source; })(t)).target))
 #else
 SDF_ImpSectionList _SDF_ImpSectionListFromTerm(ATerm t);
 #define SDF_ImpSectionListFromTerm(t) (_SDF_ImpSectionListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ImpSectionListToTerm(arg) ((ATerm)(arg))
+#define SDF_ImpSectionListToTerm(arg) ((((union {SDF_ImpSectionList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ImpSectionListToTerm(SDF_ImpSectionList arg);
 #define SDF_ImpSectionListToTerm(arg) (_SDF_ImpSectionListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SectionListFromTerm(t) ((SDF_SectionList)(t))
+#define SDF_SectionListFromTerm(t) ((((union {SDF_SectionList target; ATerm source; })(t)).target))
 #else
 SDF_SectionList _SDF_SectionListFromTerm(ATerm t);
 #define SDF_SectionListFromTerm(t) (_SDF_SectionListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SectionListToTerm(arg) ((ATerm)(arg))
+#define SDF_SectionListToTerm(arg) ((((union {SDF_SectionList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SectionListToTerm(SDF_SectionList arg);
 #define SDF_SectionListToTerm(arg) (_SDF_SectionListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ImportListFromTerm(t) ((SDF_ImportList)(t))
+#define SDF_ImportListFromTerm(t) ((((union {SDF_ImportList target; ATerm source; })(t)).target))
 #else
 SDF_ImportList _SDF_ImportListFromTerm(ATerm t);
 #define SDF_ImportListFromTerm(t) (_SDF_ImportListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ImportListToTerm(arg) ((ATerm)(arg))
+#define SDF_ImportListToTerm(arg) ((((union {SDF_ImportList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ImportListToTerm(SDF_ImportList arg);
 #define SDF_ImportListToTerm(arg) (_SDF_ImportListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_AssociativityFromTerm(t) ((SDF_Associativity)(t))
+#define SDF_AssociativityFromTerm(t) ((((union {SDF_Associativity target; ATerm source; })(t)).target))
 #else
 SDF_Associativity _SDF_AssociativityFromTerm(ATerm t);
 #define SDF_AssociativityFromTerm(t) (_SDF_AssociativityFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_AssociativityToTerm(arg) ((ATerm)(arg))
+#define SDF_AssociativityToTerm(arg) ((((union {SDF_Associativity source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_AssociativityToTerm(SDF_Associativity arg);
 #define SDF_AssociativityToTerm(arg) (_SDF_AssociativityToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_ArgumentIndicatorFromTerm(t) ((SDF_ArgumentIndicator)(t))
+#define SDF_ArgumentIndicatorFromTerm(t) ((((union {SDF_ArgumentIndicator target; ATerm source; })(t)).target))
 #else
 SDF_ArgumentIndicator _SDF_ArgumentIndicatorFromTerm(ATerm t);
 #define SDF_ArgumentIndicatorFromTerm(t) (_SDF_ArgumentIndicatorFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_ArgumentIndicatorToTerm(arg) ((ATerm)(arg))
+#define SDF_ArgumentIndicatorToTerm(arg) ((((union {SDF_ArgumentIndicator source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_ArgumentIndicatorToTerm(SDF_ArgumentIndicator arg);
 #define SDF_ArgumentIndicatorToTerm(arg) (_SDF_ArgumentIndicatorToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_GroupFromTerm(t) ((SDF_Group)(t))
+#define SDF_GroupFromTerm(t) ((((union {SDF_Group target; ATerm source; })(t)).target))
 #else
 SDF_Group _SDF_GroupFromTerm(ATerm t);
 #define SDF_GroupFromTerm(t) (_SDF_GroupFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_GroupToTerm(arg) ((ATerm)(arg))
+#define SDF_GroupToTerm(arg) ((((union {SDF_Group source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_GroupToTerm(SDF_Group arg);
 #define SDF_GroupToTerm(arg) (_SDF_GroupToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_PriorityFromTerm(t) ((SDF_Priority)(t))
+#define SDF_PriorityFromTerm(t) ((((union {SDF_Priority target; ATerm source; })(t)).target))
 #else
 SDF_Priority _SDF_PriorityFromTerm(ATerm t);
 #define SDF_PriorityFromTerm(t) (_SDF_PriorityFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_PriorityToTerm(arg) ((ATerm)(arg))
+#define SDF_PriorityToTerm(arg) ((((union {SDF_Priority source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_PriorityToTerm(SDF_Priority arg);
 #define SDF_PriorityToTerm(arg) (_SDF_PriorityToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_PrioritiesFromTerm(t) ((SDF_Priorities)(t))
+#define SDF_PrioritiesFromTerm(t) ((((union {SDF_Priorities target; ATerm source; })(t)).target))
 #else
 SDF_Priorities _SDF_PrioritiesFromTerm(ATerm t);
 #define SDF_PrioritiesFromTerm(t) (_SDF_PrioritiesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_PrioritiesToTerm(arg) ((ATerm)(arg))
+#define SDF_PrioritiesToTerm(arg) ((((union {SDF_Priorities source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_PrioritiesToTerm(SDF_Priorities arg);
 #define SDF_PrioritiesToTerm(arg) (_SDF_PrioritiesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_NatConArgumentsFromTerm(t) ((SDF_NatConArguments)(t))
+#define SDF_NatConArgumentsFromTerm(t) ((((union {SDF_NatConArguments target; ATerm source; })(t)).target))
 #else
 SDF_NatConArguments _SDF_NatConArgumentsFromTerm(ATerm t);
 #define SDF_NatConArgumentsFromTerm(t) (_SDF_NatConArgumentsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_NatConArgumentsToTerm(arg) ((ATerm)(arg))
+#define SDF_NatConArgumentsToTerm(arg) ((((union {SDF_NatConArguments source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_NatConArgumentsToTerm(SDF_NatConArguments arg);
 #define SDF_NatConArgumentsToTerm(arg) (_SDF_NatConArgumentsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_GroupListFromTerm(t) ((SDF_GroupList)(t))
+#define SDF_GroupListFromTerm(t) ((((union {SDF_GroupList target; ATerm source; })(t)).target))
 #else
 SDF_GroupList _SDF_GroupListFromTerm(ATerm t);
 #define SDF_GroupListFromTerm(t) (_SDF_GroupListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_GroupListToTerm(arg) ((ATerm)(arg))
+#define SDF_GroupListToTerm(arg) ((((union {SDF_GroupList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_GroupListToTerm(SDF_GroupList arg);
 #define SDF_GroupListToTerm(arg) (_SDF_GroupListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_PriorityListFromTerm(t) ((SDF_PriorityList)(t))
+#define SDF_PriorityListFromTerm(t) ((((union {SDF_PriorityList target; ATerm source; })(t)).target))
 #else
 SDF_PriorityList _SDF_PriorityListFromTerm(ATerm t);
 #define SDF_PriorityListFromTerm(t) (_SDF_PriorityListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_PriorityListToTerm(arg) ((ATerm)(arg))
+#define SDF_PriorityListToTerm(arg) ((((union {SDF_PriorityList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_PriorityListToTerm(SDF_PriorityList arg);
 #define SDF_PriorityListToTerm(arg) (_SDF_PriorityListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolTailFromTerm(t) ((SDF_SymbolTail)(t))
+#define SDF_SymbolTailFromTerm(t) ((((union {SDF_SymbolTail target; ATerm source; })(t)).target))
 #else
 SDF_SymbolTail _SDF_SymbolTailFromTerm(ATerm t);
 #define SDF_SymbolTailFromTerm(t) (_SDF_SymbolTailFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolTailToTerm(arg) ((ATerm)(arg))
+#define SDF_SymbolTailToTerm(arg) ((((union {SDF_SymbolTail source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SymbolTailToTerm(SDF_SymbolTail arg);
 #define SDF_SymbolTailToTerm(arg) (_SDF_SymbolTailToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolRestFromTerm(t) ((SDF_SymbolRest)(t))
+#define SDF_SymbolRestFromTerm(t) ((((union {SDF_SymbolRest target; ATerm source; })(t)).target))
 #else
 SDF_SymbolRest _SDF_SymbolRestFromTerm(ATerm t);
 #define SDF_SymbolRestFromTerm(t) (_SDF_SymbolRestFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolRestToTerm(arg) ((ATerm)(arg))
+#define SDF_SymbolRestToTerm(arg) ((((union {SDF_SymbolRest source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SymbolRestToTerm(SDF_SymbolRest arg);
 #define SDF_SymbolRestToTerm(arg) (_SDF_SymbolRestToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_RenamingsFromTerm(t) ((SDF_Renamings)(t))
+#define SDF_RenamingsFromTerm(t) ((((union {SDF_Renamings target; ATerm source; })(t)).target))
 #else
 SDF_Renamings _SDF_RenamingsFromTerm(ATerm t);
 #define SDF_RenamingsFromTerm(t) (_SDF_RenamingsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_RenamingsToTerm(arg) ((ATerm)(arg))
+#define SDF_RenamingsToTerm(arg) ((((union {SDF_Renamings source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_RenamingsToTerm(SDF_Renamings arg);
 #define SDF_RenamingsToTerm(arg) (_SDF_RenamingsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_RenamingFromTerm(t) ((SDF_Renaming)(t))
+#define SDF_RenamingFromTerm(t) ((((union {SDF_Renaming target; ATerm source; })(t)).target))
 #else
 SDF_Renaming _SDF_RenamingFromTerm(ATerm t);
 #define SDF_RenamingFromTerm(t) (_SDF_RenamingFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_RenamingToTerm(arg) ((ATerm)(arg))
+#define SDF_RenamingToTerm(arg) ((((union {SDF_Renaming source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_RenamingToTerm(SDF_Renaming arg);
 #define SDF_RenamingToTerm(arg) (_SDF_RenamingToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_RenamingListFromTerm(t) ((SDF_RenamingList)(t))
+#define SDF_RenamingListFromTerm(t) ((((union {SDF_RenamingList target; ATerm source; })(t)).target))
 #else
 SDF_RenamingList _SDF_RenamingListFromTerm(ATerm t);
 #define SDF_RenamingListFromTerm(t) (_SDF_RenamingListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_RenamingListToTerm(arg) ((ATerm)(arg))
+#define SDF_RenamingListToTerm(arg) ((((union {SDF_RenamingList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_RenamingListToTerm(SDF_RenamingList arg);
 #define SDF_RenamingListToTerm(arg) (_SDF_RenamingListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LookaheadFromTerm(t) ((SDF_Lookahead)(t))
+#define SDF_LookaheadFromTerm(t) ((((union {SDF_Lookahead target; ATerm source; })(t)).target))
 #else
 SDF_Lookahead _SDF_LookaheadFromTerm(ATerm t);
 #define SDF_LookaheadFromTerm(t) (_SDF_LookaheadFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LookaheadToTerm(arg) ((ATerm)(arg))
+#define SDF_LookaheadToTerm(arg) ((((union {SDF_Lookahead source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LookaheadToTerm(SDF_Lookahead arg);
 #define SDF_LookaheadToTerm(arg) (_SDF_LookaheadToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LookaheadsFromTerm(t) ((SDF_Lookaheads)(t))
+#define SDF_LookaheadsFromTerm(t) ((((union {SDF_Lookaheads target; ATerm source; })(t)).target))
 #else
 SDF_Lookaheads _SDF_LookaheadsFromTerm(ATerm t);
 #define SDF_LookaheadsFromTerm(t) (_SDF_LookaheadsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LookaheadsToTerm(arg) ((ATerm)(arg))
+#define SDF_LookaheadsToTerm(arg) ((((union {SDF_Lookaheads source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LookaheadsToTerm(SDF_Lookaheads arg);
 #define SDF_LookaheadsToTerm(arg) (_SDF_LookaheadsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_RestrictionFromTerm(t) ((SDF_Restriction)(t))
+#define SDF_RestrictionFromTerm(t) ((((union {SDF_Restriction target; ATerm source; })(t)).target))
 #else
 SDF_Restriction _SDF_RestrictionFromTerm(ATerm t);
 #define SDF_RestrictionFromTerm(t) (_SDF_RestrictionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_RestrictionToTerm(arg) ((ATerm)(arg))
+#define SDF_RestrictionToTerm(arg) ((((union {SDF_Restriction source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_RestrictionToTerm(SDF_Restriction arg);
 #define SDF_RestrictionToTerm(arg) (_SDF_RestrictionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_RestrictionsFromTerm(t) ((SDF_Restrictions)(t))
+#define SDF_RestrictionsFromTerm(t) ((((union {SDF_Restrictions target; ATerm source; })(t)).target))
 #else
 SDF_Restrictions _SDF_RestrictionsFromTerm(ATerm t);
 #define SDF_RestrictionsFromTerm(t) (_SDF_RestrictionsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_RestrictionsToTerm(arg) ((ATerm)(arg))
+#define SDF_RestrictionsToTerm(arg) ((((union {SDF_Restrictions source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_RestrictionsToTerm(SDF_Restrictions arg);
 #define SDF_RestrictionsToTerm(arg) (_SDF_RestrictionsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LookaheadListFromTerm(t) ((SDF_LookaheadList)(t))
+#define SDF_LookaheadListFromTerm(t) ((((union {SDF_LookaheadList target; ATerm source; })(t)).target))
 #else
 SDF_LookaheadList _SDF_LookaheadListFromTerm(ATerm t);
 #define SDF_LookaheadListFromTerm(t) (_SDF_LookaheadListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LookaheadListToTerm(arg) ((ATerm)(arg))
+#define SDF_LookaheadListToTerm(arg) ((((union {SDF_LookaheadList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LookaheadListToTerm(SDF_LookaheadList arg);
 #define SDF_LookaheadListToTerm(arg) (_SDF_LookaheadListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_RestrictionListFromTerm(t) ((SDF_RestrictionList)(t))
+#define SDF_RestrictionListFromTerm(t) ((((union {SDF_RestrictionList target; ATerm source; })(t)).target))
 #else
 SDF_RestrictionList _SDF_RestrictionListFromTerm(ATerm t);
 #define SDF_RestrictionListFromTerm(t) (_SDF_RestrictionListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_RestrictionListToTerm(arg) ((ATerm)(arg))
+#define SDF_RestrictionListToTerm(arg) ((((union {SDF_RestrictionList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_RestrictionListToTerm(SDF_RestrictionList arg);
 #define SDF_RestrictionListToTerm(arg) (_SDF_RestrictionListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SortFromTerm(t) ((SDF_Sort)(t))
+#define SDF_SortFromTerm(t) ((((union {SDF_Sort target; ATerm source; })(t)).target))
 #else
 SDF_Sort _SDF_SortFromTerm(ATerm t);
 #define SDF_SortFromTerm(t) (_SDF_SortFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SortToTerm(arg) ((ATerm)(arg))
+#define SDF_SortToTerm(arg) ((((union {SDF_Sort source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SortToTerm(SDF_Sort arg);
 #define SDF_SortToTerm(arg) (_SDF_SortToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SDFFromTerm(t) ((SDF_SDF)(t))
+#define SDF_SDFFromTerm(t) ((((union {SDF_SDF target; ATerm source; })(t)).target))
 #else
 SDF_SDF _SDF_SDFFromTerm(ATerm t);
 #define SDF_SDFFromTerm(t) (_SDF_SDFFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SDFToTerm(arg) ((ATerm)(arg))
+#define SDF_SDFToTerm(arg) ((((union {SDF_SDF source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SDFToTerm(SDF_SDF arg);
 #define SDF_SDFToTerm(arg) (_SDF_SDFToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexSortFromTerm(t) ((SDF_LexSort)(t))
+#define SDF_LexSortFromTerm(t) ((((union {SDF_LexSort target; ATerm source; })(t)).target))
 #else
 SDF_LexSort _SDF_LexSortFromTerm(ATerm t);
 #define SDF_LexSortFromTerm(t) (_SDF_LexSortFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexSortToTerm(arg) ((ATerm)(arg))
+#define SDF_LexSortToTerm(arg) ((((union {SDF_LexSort source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexSortToTerm(SDF_LexSort arg);
 #define SDF_LexSortToTerm(arg) (_SDF_LexSortToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolParametersFromTerm(t) ((SDF_SymbolParameters)(t))
+#define SDF_SymbolParametersFromTerm(t) ((((union {SDF_SymbolParameters target; ATerm source; })(t)).target))
 #else
 SDF_SymbolParameters _SDF_SymbolParametersFromTerm(ATerm t);
 #define SDF_SymbolParametersFromTerm(t) (_SDF_SymbolParametersFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolParametersToTerm(arg) ((ATerm)(arg))
+#define SDF_SymbolParametersToTerm(arg) ((((union {SDF_SymbolParameters source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SymbolParametersToTerm(SDF_SymbolParameters arg);
 #define SDF_SymbolParametersToTerm(arg) (_SDF_SymbolParametersToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolsFromTerm(t) ((SDF_Symbols)(t))
+#define SDF_SymbolsFromTerm(t) ((((union {SDF_Symbols target; ATerm source; })(t)).target))
 #else
 SDF_Symbols _SDF_SymbolsFromTerm(ATerm t);
 #define SDF_SymbolsFromTerm(t) (_SDF_SymbolsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolsToTerm(arg) ((ATerm)(arg))
+#define SDF_SymbolsToTerm(arg) ((((union {SDF_Symbols source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SymbolsToTerm(SDF_Symbols arg);
 #define SDF_SymbolsToTerm(arg) (_SDF_SymbolsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolListFromTerm(t) ((SDF_SymbolList)(t))
+#define SDF_SymbolListFromTerm(t) ((((union {SDF_SymbolList target; ATerm source; })(t)).target))
 #else
 SDF_SymbolList _SDF_SymbolListFromTerm(ATerm t);
 #define SDF_SymbolListFromTerm(t) (_SDF_SymbolListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_SymbolListToTerm(arg) ((ATerm)(arg))
+#define SDF_SymbolListToTerm(arg) ((((union {SDF_SymbolList source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_SymbolListToTerm(SDF_SymbolList arg);
 #define SDF_SymbolListToTerm(arg) (_SDF_SymbolListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexLayoutFromTerm(t) ((SDF_LexLayout)(t))
+#define SDF_LexLayoutFromTerm(t) ((((union {SDF_LexLayout target; ATerm source; })(t)).target))
 #else
 SDF_LexLayout _SDF_LexLayoutFromTerm(ATerm t);
 #define SDF_LexLayoutFromTerm(t) (_SDF_LexLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexLayoutToTerm(arg) ((ATerm)(arg))
+#define SDF_LexLayoutToTerm(arg) ((((union {SDF_LexLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexLayoutToTerm(SDF_LexLayout arg);
 #define SDF_LexLayoutToTerm(arg) (_SDF_LexLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexStrCharFromTerm(t) ((SDF_LexStrChar)(t))
+#define SDF_LexStrCharFromTerm(t) ((((union {SDF_LexStrChar target; ATerm source; })(t)).target))
 #else
 SDF_LexStrChar _SDF_LexStrCharFromTerm(ATerm t);
 #define SDF_LexStrCharFromTerm(t) (_SDF_LexStrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexStrCharToTerm(arg) ((ATerm)(arg))
+#define SDF_LexStrCharToTerm(arg) ((((union {SDF_LexStrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexStrCharToTerm(SDF_LexStrChar arg);
 #define SDF_LexStrCharToTerm(arg) (_SDF_LexStrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_StrCharFromTerm(t) ((SDF_StrChar)(t))
+#define SDF_StrCharFromTerm(t) ((((union {SDF_StrChar target; ATerm source; })(t)).target))
 #else
 SDF_StrChar _SDF_StrCharFromTerm(ATerm t);
 #define SDF_StrCharFromTerm(t) (_SDF_StrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_StrCharToTerm(arg) ((ATerm)(arg))
+#define SDF_StrCharToTerm(arg) ((((union {SDF_StrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_StrCharToTerm(SDF_StrChar arg);
 #define SDF_StrCharToTerm(arg) (_SDF_StrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexStrConFromTerm(t) ((SDF_LexStrCon)(t))
+#define SDF_LexStrConFromTerm(t) ((((union {SDF_LexStrCon target; ATerm source; })(t)).target))
 #else
 SDF_LexStrCon _SDF_LexStrConFromTerm(ATerm t);
 #define SDF_LexStrConFromTerm(t) (_SDF_LexStrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexStrConToTerm(arg) ((ATerm)(arg))
+#define SDF_LexStrConToTerm(arg) ((((union {SDF_LexStrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexStrConToTerm(SDF_LexStrCon arg);
 #define SDF_LexStrConToTerm(arg) (_SDF_LexStrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_StrConFromTerm(t) ((SDF_StrCon)(t))
+#define SDF_StrConFromTerm(t) ((((union {SDF_StrCon target; ATerm source; })(t)).target))
 #else
 SDF_StrCon _SDF_StrConFromTerm(ATerm t);
 #define SDF_StrConFromTerm(t) (_SDF_StrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_StrConToTerm(arg) ((ATerm)(arg))
+#define SDF_StrConToTerm(arg) ((((union {SDF_StrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_StrConToTerm(SDF_StrCon arg);
 #define SDF_StrConToTerm(arg) (_SDF_StrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexStrCharCharsFromTerm(t) ((SDF_LexStrCharChars)(t))
+#define SDF_LexStrCharCharsFromTerm(t) ((((union {SDF_LexStrCharChars target; ATerm source; })(t)).target))
 #else
 SDF_LexStrCharChars _SDF_LexStrCharCharsFromTerm(ATerm t);
 #define SDF_LexStrCharCharsFromTerm(t) (_SDF_LexStrCharCharsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexStrCharCharsToTerm(arg) ((ATerm)(arg))
+#define SDF_LexStrCharCharsToTerm(arg) ((((union {SDF_LexStrCharChars source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexStrCharCharsToTerm(SDF_LexStrCharChars arg);
 #define SDF_LexStrCharCharsToTerm(arg) (_SDF_LexStrCharCharsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexNatConFromTerm(t) ((SDF_LexNatCon)(t))
+#define SDF_LexNatConFromTerm(t) ((((union {SDF_LexNatCon target; ATerm source; })(t)).target))
 #else
 SDF_LexNatCon _SDF_LexNatConFromTerm(ATerm t);
 #define SDF_LexNatConFromTerm(t) (_SDF_LexNatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexNatConToTerm(arg) ((ATerm)(arg))
+#define SDF_LexNatConToTerm(arg) ((((union {SDF_LexNatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexNatConToTerm(SDF_LexNatCon arg);
 #define SDF_LexNatConToTerm(arg) (_SDF_LexNatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_NatConFromTerm(t) ((SDF_NatCon)(t))
+#define SDF_NatConFromTerm(t) ((((union {SDF_NatCon target; ATerm source; })(t)).target))
 #else
 SDF_NatCon _SDF_NatConFromTerm(ATerm t);
 #define SDF_NatConFromTerm(t) (_SDF_NatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_NatConToTerm(arg) ((ATerm)(arg))
+#define SDF_NatConToTerm(arg) ((((union {SDF_NatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_NatConToTerm(SDF_NatCon arg);
 #define SDF_NatConToTerm(arg) (_SDF_NatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_LexIdConFromTerm(t) ((SDF_LexIdCon)(t))
+#define SDF_LexIdConFromTerm(t) ((((union {SDF_LexIdCon target; ATerm source; })(t)).target))
 #else
 SDF_LexIdCon _SDF_LexIdConFromTerm(ATerm t);
 #define SDF_LexIdConFromTerm(t) (_SDF_LexIdConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_LexIdConToTerm(arg) ((ATerm)(arg))
+#define SDF_LexIdConToTerm(arg) ((((union {SDF_LexIdCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_LexIdConToTerm(SDF_LexIdCon arg);
 #define SDF_LexIdConToTerm(arg) (_SDF_LexIdConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define SDF_IdConFromTerm(t) ((SDF_IdCon)(t))
+#define SDF_IdConFromTerm(t) ((((union {SDF_IdCon target; ATerm source; })(t)).target))
 #else
 SDF_IdCon _SDF_IdConFromTerm(ATerm t);
 #define SDF_IdConFromTerm(t) (_SDF_IdConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define SDF_IdConToTerm(arg) ((ATerm)(arg))
+#define SDF_IdConToTerm(arg) ((((union {SDF_IdCon source; ATerm target; })(arg)).target))
 #else
 ATerm _SDF_IdConToTerm(SDF_IdCon arg);
 #define SDF_IdConToTerm(arg) (_SDF_IdConToTerm(arg))
@@ -3305,7 +3305,7 @@ SDF_Symbol SDF_makeSymbolIterStar(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol
 SDF_Symbol SDF_makeSymbolIterSep(SDF_OptLayout wsAfterBraceOpen, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_Symbol sep, SDF_OptLayout wsAfterSep, SDF_OptLayout wsAfterBraceClose);
 SDF_Symbol SDF_makeSymbolIterStarSep(SDF_OptLayout wsAfterBraceOpen, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_Symbol sep, SDF_OptLayout wsAfterSep, SDF_OptLayout wsAfterBraceClose);
 SDF_Symbol SDF_makeSymbolTuple(SDF_OptLayout wsAfterLessThan, SDF_Symbol head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterComma, SDF_SymbolRest rest, SDF_OptLayout wsAfterRest);
-SDF_Symbol SDF_makeSymbolFunc(SDF_OptLayout wsAfterParenOpen, SDF_Symbols arguments, SDF_OptLayout wsAfterArguments, SDF_OptLayout wsAfterEqualsGreaterThan, SDF_Symbol results, SDF_OptLayout wsAfterResults);
+SDF_Symbol SDF_makeSymbolFunc(SDF_OptLayout wsAfterParenOpen, SDF_Symbols arguments, SDF_OptLayout wsAfterArguments, SDF_OptLayout wsAfterEqualityGreaterThan, SDF_Symbol results, SDF_OptLayout wsAfterResults);
 SDF_Symbol SDF_makeSymbolAlt(SDF_Symbol left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterBar, SDF_Symbol right);
 SDF_Symbol SDF_makeSymbolStrategy(SDF_OptLayout wsAfterParenOpen, SDF_Symbol left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterGreaterThan, SDF_Symbol right, SDF_OptLayout wsAfterRight);
 SDF_Symbol SDF_makeSymbolStart(void);
@@ -3434,8 +3434,8 @@ SDF_SymbolRest SDF_makeSymbolRestEmpty(void);
 SDF_SymbolRest SDF_makeSymbolRestSingle(SDF_Symbol head);
 SDF_SymbolRest SDF_makeSymbolRestMany(SDF_Symbol head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_SymbolRest tail);
 SDF_Renamings SDF_makeRenamingsRenamings(SDF_OptLayout wsAfterBracketOpen, SDF_RenamingList list, SDF_OptLayout wsAfterList);
-SDF_Renaming SDF_makeRenamingSymbol(SDF_Symbol from, SDF_OptLayout wsAfterFrom, SDF_OptLayout wsAfterEqualsGreaterThan, SDF_Symbol to);
-SDF_Renaming SDF_makeRenamingProduction(SDF_Production fromProd, SDF_OptLayout wsAfterFromProd, SDF_OptLayout wsAfterEqualsGreaterThan, SDF_Production toProd);
+SDF_Renaming SDF_makeRenamingSymbol(SDF_Symbol from, SDF_OptLayout wsAfterFrom, SDF_OptLayout wsAfterEqualityGreaterThan, SDF_Symbol to);
+SDF_Renaming SDF_makeRenamingProduction(SDF_Production fromProd, SDF_OptLayout wsAfterFromProd, SDF_OptLayout wsAfterEqualityGreaterThan, SDF_Production toProd);
 SDF_RenamingList SDF_makeRenamingListEmpty(void);
 SDF_RenamingList SDF_makeRenamingListSingle(SDF_Renaming head);
 SDF_RenamingList SDF_makeRenamingListMany(SDF_Renaming head, SDF_OptLayout wsAfterHead, SDF_RenamingList tail);
@@ -4427,7 +4427,7 @@ ATbool SDF_hasSymbolRest(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterRest(SDF_Symbol arg);
 ATbool SDF_hasSymbolArguments(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterArguments(SDF_Symbol arg);
-ATbool SDF_hasSymbolWsAfterEqualsGreaterThan(SDF_Symbol arg);
+ATbool SDF_hasSymbolWsAfterEqualityGreaterThan(SDF_Symbol arg);
 ATbool SDF_hasSymbolResults(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterResults(SDF_Symbol arg);
 ATbool SDF_hasSymbolLeft(SDF_Symbol arg);
@@ -4468,7 +4468,7 @@ SDF_SymbolRest SDF_getSymbolRest(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterRest(SDF_Symbol arg);
 SDF_Symbols SDF_getSymbolArguments(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterArguments(SDF_Symbol arg);
-SDF_OptLayout SDF_getSymbolWsAfterEqualsGreaterThan(SDF_Symbol arg);
+SDF_OptLayout SDF_getSymbolWsAfterEqualityGreaterThan(SDF_Symbol arg);
 SDF_Symbol SDF_getSymbolResults(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterResults(SDF_Symbol arg);
 SDF_Symbol SDF_getSymbolLeft(SDF_Symbol arg);
@@ -4509,7 +4509,7 @@ SDF_Symbol SDF_setSymbolRest(SDF_Symbol arg, SDF_SymbolRest rest);
 SDF_Symbol SDF_setSymbolWsAfterRest(SDF_Symbol arg, SDF_OptLayout wsAfterRest);
 SDF_Symbol SDF_setSymbolArguments(SDF_Symbol arg, SDF_Symbols arguments);
 SDF_Symbol SDF_setSymbolWsAfterArguments(SDF_Symbol arg, SDF_OptLayout wsAfterArguments);
-SDF_Symbol SDF_setSymbolWsAfterEqualsGreaterThan(SDF_Symbol arg, SDF_OptLayout wsAfterEqualsGreaterThan);
+SDF_Symbol SDF_setSymbolWsAfterEqualityGreaterThan(SDF_Symbol arg, SDF_OptLayout wsAfterEqualityGreaterThan);
 SDF_Symbol SDF_setSymbolResults(SDF_Symbol arg, SDF_Symbol results);
 SDF_Symbol SDF_setSymbolWsAfterResults(SDF_Symbol arg, SDF_OptLayout wsAfterResults);
 SDF_Symbol SDF_setSymbolLeft(SDF_Symbol arg, SDF_Symbol left);
@@ -5195,21 +5195,21 @@ inline ATbool SDF_isRenamingSymbol(SDF_Renaming arg);
 inline ATbool SDF_isRenamingProduction(SDF_Renaming arg);
 ATbool SDF_hasRenamingFrom(SDF_Renaming arg);
 ATbool SDF_hasRenamingWsAfterFrom(SDF_Renaming arg);
-ATbool SDF_hasRenamingWsAfterEqualsGreaterThan(SDF_Renaming arg);
+ATbool SDF_hasRenamingWsAfterEqualityGreaterThan(SDF_Renaming arg);
 ATbool SDF_hasRenamingTo(SDF_Renaming arg);
 ATbool SDF_hasRenamingFromProd(SDF_Renaming arg);
 ATbool SDF_hasRenamingWsAfterFromProd(SDF_Renaming arg);
 ATbool SDF_hasRenamingToProd(SDF_Renaming arg);
 SDF_Symbol SDF_getRenamingFrom(SDF_Renaming arg);
 SDF_OptLayout SDF_getRenamingWsAfterFrom(SDF_Renaming arg);
-SDF_OptLayout SDF_getRenamingWsAfterEqualsGreaterThan(SDF_Renaming arg);
+SDF_OptLayout SDF_getRenamingWsAfterEqualityGreaterThan(SDF_Renaming arg);
 SDF_Symbol SDF_getRenamingTo(SDF_Renaming arg);
 SDF_Production SDF_getRenamingFromProd(SDF_Renaming arg);
 SDF_OptLayout SDF_getRenamingWsAfterFromProd(SDF_Renaming arg);
 SDF_Production SDF_getRenamingToProd(SDF_Renaming arg);
 SDF_Renaming SDF_setRenamingFrom(SDF_Renaming arg, SDF_Symbol from);
 SDF_Renaming SDF_setRenamingWsAfterFrom(SDF_Renaming arg, SDF_OptLayout wsAfterFrom);
-SDF_Renaming SDF_setRenamingWsAfterEqualsGreaterThan(SDF_Renaming arg, SDF_OptLayout wsAfterEqualsGreaterThan);
+SDF_Renaming SDF_setRenamingWsAfterEqualityGreaterThan(SDF_Renaming arg, SDF_OptLayout wsAfterEqualityGreaterThan);
 SDF_Renaming SDF_setRenamingTo(SDF_Renaming arg, SDF_Symbol to);
 SDF_Renaming SDF_setRenamingFromProd(SDF_Renaming arg, SDF_Production fromProd);
 SDF_Renaming SDF_setRenamingWsAfterFromProd(SDF_Renaming arg, SDF_OptLayout wsAfterFromProd);
@@ -5487,7 +5487,7 @@ SDF_Grammar SDF_visitGrammar(SDF_Grammar arg, SDF_OptLayout (*acceptWsAfterAlias
 SDF_Alias SDF_visitAlias(SDF_Alias arg, SDF_Symbol (*acceptSymbol)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterSymbol)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterArrow)(SDF_OptLayout), SDF_Symbol (*acceptAlias)(SDF_Symbol));
 SDF_Aliases SDF_visitAliases(SDF_Aliases arg, SDF_AliasList (*acceptList)(SDF_AliasList));
 SDF_AliasList SDF_visitAliasList(SDF_AliasList arg, SDF_Alias (*acceptHead)(SDF_Alias), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout));
-SDF_Symbol SDF_visitSymbol(SDF_Symbol arg, SDF_OptLayout (*acceptWsAfterLessThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSymbol)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterCF)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLEX)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterVAR)(SDF_OptLayout), SDF_CharClass (*acceptCharClass)(SDF_CharClass), SDF_Label (*acceptLabel)(SDF_Label), SDF_OptLayout (*acceptWsAfterLabel)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterColon)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeftQuote)(SDF_OptLayout), SDF_StrCon (*acceptString)(SDF_StrCon), SDF_SingleQuotedStrCon (*acceptCiString)(SDF_SingleQuotedStrCon), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_SymbolTail (*acceptTail)(SDF_SymbolTail), SDF_OptLayout (*acceptWsAfterTail)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBraceOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBraceClose)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterComma)(SDF_OptLayout), SDF_SymbolRest (*acceptRest)(SDF_SymbolRest), SDF_OptLayout (*acceptWsAfterRest)(SDF_OptLayout), SDF_Symbols (*acceptArguments)(SDF_Symbols), SDF_OptLayout (*acceptWsAfterArguments)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterEqualsGreaterThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterResults)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBar)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGreaterThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterRight)(SDF_OptLayout), SDF_Sort (*acceptSort)(SDF_Sort), SDF_OptLayout (*acceptWsAfterSort)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBracketOpenBracketOpen)(SDF_OptLayout), SDF_SymbolParameters (*acceptParameters)(SDF_SymbolParameters), SDF_OptLayout (*acceptWsAfterParameters)(SDF_OptLayout));
+SDF_Symbol SDF_visitSymbol(SDF_Symbol arg, SDF_OptLayout (*acceptWsAfterLessThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSymbol)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterCF)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLEX)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterVAR)(SDF_OptLayout), SDF_CharClass (*acceptCharClass)(SDF_CharClass), SDF_Label (*acceptLabel)(SDF_Label), SDF_OptLayout (*acceptWsAfterLabel)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterColon)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeftQuote)(SDF_OptLayout), SDF_StrCon (*acceptString)(SDF_StrCon), SDF_SingleQuotedStrCon (*acceptCiString)(SDF_SingleQuotedStrCon), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_SymbolTail (*acceptTail)(SDF_SymbolTail), SDF_OptLayout (*acceptWsAfterTail)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBraceOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBraceClose)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterComma)(SDF_OptLayout), SDF_SymbolRest (*acceptRest)(SDF_SymbolRest), SDF_OptLayout (*acceptWsAfterRest)(SDF_OptLayout), SDF_Symbols (*acceptArguments)(SDF_Symbols), SDF_OptLayout (*acceptWsAfterArguments)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterEqualityGreaterThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterResults)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBar)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGreaterThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterRight)(SDF_OptLayout), SDF_Sort (*acceptSort)(SDF_Sort), SDF_OptLayout (*acceptWsAfterSort)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBracketOpenBracketOpen)(SDF_OptLayout), SDF_SymbolParameters (*acceptParameters)(SDF_SymbolParameters), SDF_OptLayout (*acceptWsAfterParameters)(SDF_OptLayout));
 SDF_CharRange SDF_visitCharRange(SDF_CharRange arg, SDF_Character (*acceptCharacter)(SDF_Character), SDF_Character (*acceptStart)(SDF_Character), SDF_OptLayout (*acceptWsAfterStart)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfter)(SDF_OptLayout), SDF_Character (*acceptEnd)(SDF_Character));
 SDF_CharRanges SDF_visitCharRanges(SDF_CharRanges arg, SDF_CharRange (*acceptCharRange)(SDF_CharRange), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterCharRanges)(SDF_OptLayout));
 SDF_OptCharRanges SDF_visitOptCharRanges(SDF_OptCharRanges arg, SDF_CharRanges (*acceptCharRanges)(SDF_CharRanges));
@@ -5539,7 +5539,7 @@ SDF_PriorityList SDF_visitPriorityList(SDF_PriorityList arg, SDF_Priority (*acce
 SDF_SymbolTail SDF_visitSymbolTail(SDF_SymbolTail arg, SDF_Symbol (*acceptHead)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout));
 SDF_SymbolRest SDF_visitSymbolRest(SDF_SymbolRest arg, SDF_Symbol (*acceptHead)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
 SDF_Renamings SDF_visitRenamings(SDF_Renamings arg, SDF_OptLayout (*acceptWsAfterBracketOpen)(SDF_OptLayout), SDF_RenamingList (*acceptList)(SDF_RenamingList), SDF_OptLayout (*acceptWsAfterList)(SDF_OptLayout));
-SDF_Renaming SDF_visitRenaming(SDF_Renaming arg, SDF_Symbol (*acceptFrom)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterFrom)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterEqualsGreaterThan)(SDF_OptLayout), SDF_Symbol (*acceptTo)(SDF_Symbol), SDF_Production (*acceptFromProd)(SDF_Production), SDF_OptLayout (*acceptWsAfterFromProd)(SDF_OptLayout), SDF_Production (*acceptToProd)(SDF_Production));
+SDF_Renaming SDF_visitRenaming(SDF_Renaming arg, SDF_Symbol (*acceptFrom)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterFrom)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterEqualityGreaterThan)(SDF_OptLayout), SDF_Symbol (*acceptTo)(SDF_Symbol), SDF_Production (*acceptFromProd)(SDF_Production), SDF_OptLayout (*acceptWsAfterFromProd)(SDF_OptLayout), SDF_Production (*acceptToProd)(SDF_Production));
 SDF_RenamingList SDF_visitRenamingList(SDF_RenamingList arg, SDF_Renaming (*acceptHead)(SDF_Renaming), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout));
 SDF_Lookahead SDF_visitLookahead(SDF_Lookahead arg, SDF_CharClass (*acceptCharClass)(SDF_CharClass), SDF_CharClass (*acceptHead)(SDF_CharClass), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterPeriod)(SDF_OptLayout), SDF_Lookaheads (*acceptTail)(SDF_Lookaheads));
 SDF_Lookaheads SDF_visitLookaheads(SDF_Lookaheads arg, SDF_Lookahead (*acceptLookahead)(SDF_Lookahead), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBar)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLookaheads)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBracketOpenBracketOpen)(SDF_OptLayout), SDF_LookaheadList (*acceptList)(SDF_LookaheadList), SDF_OptLayout (*acceptWsAfterList)(SDF_OptLayout));
