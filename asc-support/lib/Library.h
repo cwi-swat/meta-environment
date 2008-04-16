@@ -405,361 +405,361 @@ void _CO_unprotectBoolean(CO_Boolean *arg);
 #define CO_unprotectBoolean(arg) (_CO_unprotectBoolean(arg))
 #endif
 #ifdef FAST_API
-#define CO_OptLayoutFromTerm(t) ((CO_OptLayout)(t))
+#define CO_OptLayoutFromTerm(t) ((((union {CO_OptLayout target; ATerm source; })(t)).target))
 #else
 CO_OptLayout _CO_OptLayoutFromTerm(ATerm t);
 #define CO_OptLayoutFromTerm(t) (_CO_OptLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_OptLayoutToTerm(arg) ((ATerm)(arg))
+#define CO_OptLayoutToTerm(arg) ((((union {CO_OptLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_OptLayoutToTerm(CO_OptLayout arg);
 #define CO_OptLayoutToTerm(arg) (_CO_OptLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LayoutFromTerm(t) ((CO_Layout)(t))
+#define CO_LayoutFromTerm(t) ((((union {CO_Layout target; ATerm source; })(t)).target))
 #else
 CO_Layout _CO_LayoutFromTerm(ATerm t);
 #define CO_LayoutFromTerm(t) (_CO_LayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LayoutToTerm(arg) ((ATerm)(arg))
+#define CO_LayoutToTerm(arg) ((((union {CO_Layout source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LayoutToTerm(CO_Layout arg);
 #define CO_LayoutToTerm(arg) (_CO_LayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LexLayoutListFromTerm(t) ((CO_LexLayoutList)(t))
+#define CO_LexLayoutListFromTerm(t) ((((union {CO_LexLayoutList target; ATerm source; })(t)).target))
 #else
 CO_LexLayoutList _CO_LexLayoutListFromTerm(ATerm t);
 #define CO_LexLayoutListFromTerm(t) (_CO_LexLayoutListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LexLayoutListToTerm(arg) ((ATerm)(arg))
+#define CO_LexLayoutListToTerm(arg) ((((union {CO_LexLayoutList source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LexLayoutListToTerm(CO_LexLayoutList arg);
 #define CO_LexLayoutListToTerm(arg) (_CO_LexLayoutListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LexLayoutFromTerm(t) ((CO_LexLayout)(t))
+#define CO_LexLayoutFromTerm(t) ((((union {CO_LexLayout target; ATerm source; })(t)).target))
 #else
 CO_LexLayout _CO_LexLayoutFromTerm(ATerm t);
 #define CO_LexLayoutFromTerm(t) (_CO_LexLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LexLayoutToTerm(arg) ((ATerm)(arg))
+#define CO_LexLayoutToTerm(arg) ((((union {CO_LexLayout source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LexLayoutToTerm(CO_LexLayout arg);
 #define CO_LexLayoutToTerm(arg) (_CO_LexLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_StartFromTerm(t) ((CO_Start)(t))
+#define CO_StartFromTerm(t) ((((union {CO_Start target; ATerm source; })(t)).target))
 #else
 CO_Start _CO_StartFromTerm(ATerm t);
 #define CO_StartFromTerm(t) (_CO_StartFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_StartToTerm(arg) ((ATerm)(arg))
+#define CO_StartToTerm(arg) ((((union {CO_Start source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_StartToTerm(CO_Start arg);
 #define CO_StartToTerm(arg) (_CO_StartToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LexStrCharFromTerm(t) ((CO_LexStrChar)(t))
+#define CO_LexStrCharFromTerm(t) ((((union {CO_LexStrChar target; ATerm source; })(t)).target))
 #else
 CO_LexStrChar _CO_LexStrCharFromTerm(ATerm t);
 #define CO_LexStrCharFromTerm(t) (_CO_LexStrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LexStrCharToTerm(arg) ((ATerm)(arg))
+#define CO_LexStrCharToTerm(arg) ((((union {CO_LexStrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LexStrCharToTerm(CO_LexStrChar arg);
 #define CO_LexStrCharToTerm(arg) (_CO_LexStrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_StrCharFromTerm(t) ((CO_StrChar)(t))
+#define CO_StrCharFromTerm(t) ((((union {CO_StrChar target; ATerm source; })(t)).target))
 #else
 CO_StrChar _CO_StrCharFromTerm(ATerm t);
 #define CO_StrCharFromTerm(t) (_CO_StrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_StrCharToTerm(arg) ((ATerm)(arg))
+#define CO_StrCharToTerm(arg) ((((union {CO_StrChar source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_StrCharToTerm(CO_StrChar arg);
 #define CO_StrCharToTerm(arg) (_CO_StrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LexStrConFromTerm(t) ((CO_LexStrCon)(t))
+#define CO_LexStrConFromTerm(t) ((((union {CO_LexStrCon target; ATerm source; })(t)).target))
 #else
 CO_LexStrCon _CO_LexStrConFromTerm(ATerm t);
 #define CO_LexStrConFromTerm(t) (_CO_LexStrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LexStrConToTerm(arg) ((ATerm)(arg))
+#define CO_LexStrConToTerm(arg) ((((union {CO_LexStrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LexStrConToTerm(CO_LexStrCon arg);
 #define CO_LexStrConToTerm(arg) (_CO_LexStrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_StrConFromTerm(t) ((CO_StrCon)(t))
+#define CO_StrConFromTerm(t) ((((union {CO_StrCon target; ATerm source; })(t)).target))
 #else
 CO_StrCon _CO_StrConFromTerm(ATerm t);
 #define CO_StrConFromTerm(t) (_CO_StrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_StrConToTerm(arg) ((ATerm)(arg))
+#define CO_StrConToTerm(arg) ((((union {CO_StrCon source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_StrConToTerm(CO_StrCon arg);
 #define CO_StrConToTerm(arg) (_CO_StrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LexStrCharCharsFromTerm(t) ((CO_LexStrCharChars)(t))
+#define CO_LexStrCharCharsFromTerm(t) ((((union {CO_LexStrCharChars target; ATerm source; })(t)).target))
 #else
 CO_LexStrCharChars _CO_LexStrCharCharsFromTerm(ATerm t);
 #define CO_LexStrCharCharsFromTerm(t) (_CO_LexStrCharCharsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LexStrCharCharsToTerm(arg) ((ATerm)(arg))
+#define CO_LexStrCharCharsToTerm(arg) ((((union {CO_LexStrCharChars source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LexStrCharCharsToTerm(CO_LexStrCharChars arg);
 #define CO_LexStrCharCharsToTerm(arg) (_CO_LexStrCharCharsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_BoolConFromTerm(t) ((CO_BoolCon)(t))
+#define CO_BoolConFromTerm(t) ((((union {CO_BoolCon target; ATerm source; })(t)).target))
 #else
 CO_BoolCon _CO_BoolConFromTerm(ATerm t);
 #define CO_BoolConFromTerm(t) (_CO_BoolConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_BoolConToTerm(arg) ((ATerm)(arg))
+#define CO_BoolConToTerm(arg) ((((union {CO_BoolCon source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_BoolConToTerm(CO_BoolCon arg);
 #define CO_BoolConToTerm(arg) (_CO_BoolConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LexNatConFromTerm(t) ((CO_LexNatCon)(t))
+#define CO_LexNatConFromTerm(t) ((((union {CO_LexNatCon target; ATerm source; })(t)).target))
 #else
 CO_LexNatCon _CO_LexNatConFromTerm(ATerm t);
 #define CO_LexNatConFromTerm(t) (_CO_LexNatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LexNatConToTerm(arg) ((ATerm)(arg))
+#define CO_LexNatConToTerm(arg) ((((union {CO_LexNatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LexNatConToTerm(CO_LexNatCon arg);
 #define CO_LexNatConToTerm(arg) (_CO_LexNatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_NatConFromTerm(t) ((CO_NatCon)(t))
+#define CO_NatConFromTerm(t) ((((union {CO_NatCon target; ATerm source; })(t)).target))
 #else
 CO_NatCon _CO_NatConFromTerm(ATerm t);
 #define CO_NatConFromTerm(t) (_CO_NatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_NatConToTerm(arg) ((ATerm)(arg))
+#define CO_NatConToTerm(arg) ((((union {CO_NatCon source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_NatConToTerm(CO_NatCon arg);
 #define CO_NatConToTerm(arg) (_CO_NatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LexByteFromTerm(t) ((CO_LexByte)(t))
+#define CO_LexByteFromTerm(t) ((((union {CO_LexByte target; ATerm source; })(t)).target))
 #else
 CO_LexByte _CO_LexByteFromTerm(ATerm t);
 #define CO_LexByteFromTerm(t) (_CO_LexByteFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LexByteToTerm(arg) ((ATerm)(arg))
+#define CO_LexByteToTerm(arg) ((((union {CO_LexByte source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LexByteToTerm(CO_LexByte arg);
 #define CO_LexByteToTerm(arg) (_CO_LexByteToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_ByteFromTerm(t) ((CO_Byte)(t))
+#define CO_ByteFromTerm(t) ((((union {CO_Byte target; ATerm source; })(t)).target))
 #else
 CO_Byte _CO_ByteFromTerm(ATerm t);
 #define CO_ByteFromTerm(t) (_CO_ByteFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_ByteToTerm(arg) ((ATerm)(arg))
+#define CO_ByteToTerm(arg) ((((union {CO_Byte source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_ByteToTerm(CO_Byte arg);
 #define CO_ByteToTerm(arg) (_CO_ByteToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LexBytesFromTerm(t) ((CO_LexBytes)(t))
+#define CO_LexBytesFromTerm(t) ((((union {CO_LexBytes target; ATerm source; })(t)).target))
 #else
 CO_LexBytes _CO_LexBytesFromTerm(ATerm t);
 #define CO_LexBytesFromTerm(t) (_CO_LexBytesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LexBytesToTerm(arg) ((ATerm)(arg))
+#define CO_LexBytesToTerm(arg) ((((union {CO_LexBytes source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LexBytesToTerm(CO_LexBytes arg);
 #define CO_LexBytesToTerm(arg) (_CO_LexBytesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_BytesFromTerm(t) ((CO_Bytes)(t))
+#define CO_BytesFromTerm(t) ((((union {CO_Bytes target; ATerm source; })(t)).target))
 #else
 CO_Bytes _CO_BytesFromTerm(ATerm t);
 #define CO_BytesFromTerm(t) (_CO_BytesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_BytesToTerm(arg) ((ATerm)(arg))
+#define CO_BytesToTerm(arg) ((((union {CO_Bytes source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_BytesToTerm(CO_Bytes arg);
 #define CO_BytesToTerm(arg) (_CO_BytesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LexByteListFromTerm(t) ((CO_LexByteList)(t))
+#define CO_LexByteListFromTerm(t) ((((union {CO_LexByteList target; ATerm source; })(t)).target))
 #else
 CO_LexByteList _CO_LexByteListFromTerm(ATerm t);
 #define CO_LexByteListFromTerm(t) (_CO_LexByteListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LexByteListToTerm(arg) ((ATerm)(arg))
+#define CO_LexByteListToTerm(arg) ((((union {CO_LexByteList source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LexByteListToTerm(CO_LexByteList arg);
 #define CO_LexByteListToTerm(arg) (_CO_LexByteListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_SubjectFromTerm(t) ((CO_Subject)(t))
+#define CO_SubjectFromTerm(t) ((((union {CO_Subject target; ATerm source; })(t)).target))
 #else
 CO_Subject _CO_SubjectFromTerm(ATerm t);
 #define CO_SubjectFromTerm(t) (_CO_SubjectFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_SubjectToTerm(arg) ((ATerm)(arg))
+#define CO_SubjectToTerm(arg) ((((union {CO_Subject source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_SubjectToTerm(CO_Subject arg);
 #define CO_SubjectToTerm(arg) (_CO_SubjectToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_ErrorFromTerm(t) ((CO_Error)(t))
+#define CO_ErrorFromTerm(t) ((((union {CO_Error target; ATerm source; })(t)).target))
 #else
 CO_Error _CO_ErrorFromTerm(ATerm t);
 #define CO_ErrorFromTerm(t) (_CO_ErrorFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_ErrorToTerm(arg) ((ATerm)(arg))
+#define CO_ErrorToTerm(arg) ((((union {CO_Error source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_ErrorToTerm(CO_Error arg);
 #define CO_ErrorToTerm(arg) (_CO_ErrorToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_SummaryFromTerm(t) ((CO_Summary)(t))
+#define CO_SummaryFromTerm(t) ((((union {CO_Summary target; ATerm source; })(t)).target))
 #else
 CO_Summary _CO_SummaryFromTerm(ATerm t);
 #define CO_SummaryFromTerm(t) (_CO_SummaryFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_SummaryToTerm(arg) ((ATerm)(arg))
+#define CO_SummaryToTerm(arg) ((((union {CO_Summary source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_SummaryToTerm(CO_Summary arg);
 #define CO_SummaryToTerm(arg) (_CO_SummaryToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_SubjectListFromTerm(t) ((CO_SubjectList)(t))
+#define CO_SubjectListFromTerm(t) ((((union {CO_SubjectList target; ATerm source; })(t)).target))
 #else
 CO_SubjectList _CO_SubjectListFromTerm(ATerm t);
 #define CO_SubjectListFromTerm(t) (_CO_SubjectListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_SubjectListToTerm(arg) ((ATerm)(arg))
+#define CO_SubjectListToTerm(arg) ((((union {CO_SubjectList source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_SubjectListToTerm(CO_SubjectList arg);
 #define CO_SubjectListToTerm(arg) (_CO_SubjectListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_ErrorListFromTerm(t) ((CO_ErrorList)(t))
+#define CO_ErrorListFromTerm(t) ((((union {CO_ErrorList target; ATerm source; })(t)).target))
 #else
 CO_ErrorList _CO_ErrorListFromTerm(ATerm t);
 #define CO_ErrorListFromTerm(t) (_CO_ErrorListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_ErrorListToTerm(arg) ((ATerm)(arg))
+#define CO_ErrorListToTerm(arg) ((((union {CO_ErrorList source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_ErrorListToTerm(CO_ErrorList arg);
 #define CO_ErrorListToTerm(arg) (_CO_ErrorListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_LocationFromTerm(t) ((CO_Location)(t))
+#define CO_LocationFromTerm(t) ((((union {CO_Location target; ATerm source; })(t)).target))
 #else
 CO_Location _CO_LocationFromTerm(ATerm t);
 #define CO_LocationFromTerm(t) (_CO_LocationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_LocationToTerm(arg) ((ATerm)(arg))
+#define CO_LocationToTerm(arg) ((((union {CO_Location source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_LocationToTerm(CO_Location arg);
 #define CO_LocationToTerm(arg) (_CO_LocationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_AreaFromTerm(t) ((CO_Area)(t))
+#define CO_AreaFromTerm(t) ((((union {CO_Area target; ATerm source; })(t)).target))
 #else
 CO_Area _CO_AreaFromTerm(ATerm t);
 #define CO_AreaFromTerm(t) (_CO_AreaFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_AreaToTerm(arg) ((ATerm)(arg))
+#define CO_AreaToTerm(arg) ((((union {CO_Area source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_AreaToTerm(CO_Area arg);
 #define CO_AreaToTerm(arg) (_CO_AreaToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_ReadFromTerm(t) ((CO_Read)(t))
+#define CO_ReadFromTerm(t) ((((union {CO_Read target; ATerm source; })(t)).target))
 #else
 CO_Read _CO_ReadFromTerm(ATerm t);
 #define CO_ReadFromTerm(t) (_CO_ReadFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_ReadToTerm(arg) ((ATerm)(arg))
+#define CO_ReadToTerm(arg) ((((union {CO_Read source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_ReadToTerm(CO_Read arg);
 #define CO_ReadToTerm(arg) (_CO_ReadToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_WriteFromTerm(t) ((CO_Write)(t))
+#define CO_WriteFromTerm(t) ((((union {CO_Write target; ATerm source; })(t)).target))
 #else
 CO_Write _CO_WriteFromTerm(ATerm t);
 #define CO_WriteFromTerm(t) (_CO_WriteFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_WriteToTerm(arg) ((ATerm)(arg))
+#define CO_WriteToTerm(arg) ((((union {CO_Write source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_WriteToTerm(CO_Write arg);
 #define CO_WriteToTerm(arg) (_CO_WriteToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_ParsetreeXFromTerm(t) ((CO_ParsetreeX)(t))
+#define CO_ParsetreeXFromTerm(t) ((((union {CO_ParsetreeX target; ATerm source; })(t)).target))
 #else
 CO_ParsetreeX _CO_ParsetreeXFromTerm(ATerm t);
 #define CO_ParsetreeXFromTerm(t) (_CO_ParsetreeXFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_ParsetreeXToTerm(arg) ((ATerm)(arg))
+#define CO_ParsetreeXToTerm(arg) ((((union {CO_ParsetreeX source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_ParsetreeXToTerm(CO_ParsetreeX arg);
 #define CO_ParsetreeXToTerm(arg) (_CO_ParsetreeXToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_XFromTerm(t) ((CO_X)(t))
+#define CO_XFromTerm(t) ((((union {CO_X target; ATerm source; })(t)).target))
 #else
 CO_X _CO_XFromTerm(ATerm t);
 #define CO_XFromTerm(t) (_CO_XFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_XToTerm(arg) ((ATerm)(arg))
+#define CO_XToTerm(arg) ((((union {CO_X source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_XToTerm(CO_X arg);
 #define CO_XToTerm(arg) (_CO_XToTerm(arg))
 #endif
 #ifdef FAST_API
-#define CO_BooleanFromTerm(t) ((CO_Boolean)(t))
+#define CO_BooleanFromTerm(t) ((((union {CO_Boolean target; ATerm source; })(t)).target))
 #else
 CO_Boolean _CO_BooleanFromTerm(ATerm t);
 #define CO_BooleanFromTerm(t) (_CO_BooleanFromTerm(t))
 #endif
 #ifdef FAST_API
-#define CO_BooleanToTerm(arg) ((ATerm)(arg))
+#define CO_BooleanToTerm(arg) ((((union {CO_Boolean source; ATerm target; })(arg)).target))
 #else
 ATerm _CO_BooleanToTerm(CO_Boolean arg);
 #define CO_BooleanToTerm(arg) (_CO_BooleanToTerm(arg))

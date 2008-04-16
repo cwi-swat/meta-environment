@@ -1,5 +1,9 @@
 $Id$
 
+Wed Apr 16 11:10:31 CEST 2008 <jurgenv@cwi.nl>
+ * lib/Library.*: regenerated with new apigen to fix problems
+   with type punned aliasing.
+
 Thu Mar 27 10:23:31 EDT 2008 <jurgenv@cwi.nl>
  * lib/asc-traversals.c,lib/builtin-tide.c: little changes due to
    API change in pt-support

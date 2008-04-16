@@ -585,7 +585,7 @@ void _CO_unprotectBoolean(CO_Boolean *arg) {
  * \return CO_OptLayout that was encoded by \arg
  */
 CO_OptLayout _CO_OptLayoutFromTerm(ATerm t) {
-  return (CO_OptLayout)t;
+  return (((union {CO_OptLayout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -594,7 +594,7 @@ CO_OptLayout _CO_OptLayoutFromTerm(ATerm t) {
  * \return ATerm that represents the CO_OptLayout
  */
 ATerm _CO_OptLayoutToTerm(CO_OptLayout arg) {
-  return (ATerm)arg;
+  return (((union {CO_OptLayout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -603,7 +603,7 @@ ATerm _CO_OptLayoutToTerm(CO_OptLayout arg) {
  * \return CO_Layout that was encoded by \arg
  */
 CO_Layout _CO_LayoutFromTerm(ATerm t) {
-  return (CO_Layout)t;
+  return (((union {CO_Layout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -612,7 +612,7 @@ CO_Layout _CO_LayoutFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Layout
  */
 ATerm _CO_LayoutToTerm(CO_Layout arg) {
-  return (ATerm)arg;
+  return (((union {CO_Layout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -621,7 +621,7 @@ ATerm _CO_LayoutToTerm(CO_Layout arg) {
  * \return CO_LexLayoutList that was encoded by \arg
  */
 CO_LexLayoutList _CO_LexLayoutListFromTerm(ATerm t) {
-  return (CO_LexLayoutList)t;
+  return (((union {CO_LexLayoutList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -630,7 +630,7 @@ CO_LexLayoutList _CO_LexLayoutListFromTerm(ATerm t) {
  * \return ATerm that represents the CO_LexLayoutList
  */
 ATerm _CO_LexLayoutListToTerm(CO_LexLayoutList arg) {
-  return (ATerm)arg;
+  return (((union {CO_LexLayoutList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -639,7 +639,7 @@ ATerm _CO_LexLayoutListToTerm(CO_LexLayoutList arg) {
  * \return CO_LexLayout that was encoded by \arg
  */
 CO_LexLayout _CO_LexLayoutFromTerm(ATerm t) {
-  return (CO_LexLayout)t;
+  return (((union {CO_LexLayout target; ATerm source; })(t)).target);
 }
 
 /**
@@ -648,7 +648,7 @@ CO_LexLayout _CO_LexLayoutFromTerm(ATerm t) {
  * \return ATerm that represents the CO_LexLayout
  */
 ATerm _CO_LexLayoutToTerm(CO_LexLayout arg) {
-  return (ATerm)arg;
+  return (((union {CO_LexLayout source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -657,7 +657,7 @@ ATerm _CO_LexLayoutToTerm(CO_LexLayout arg) {
  * \return CO_Start that was encoded by \arg
  */
 CO_Start _CO_StartFromTerm(ATerm t) {
-  return (CO_Start)t;
+  return (((union {CO_Start target; ATerm source; })(t)).target);
 }
 
 /**
@@ -666,7 +666,7 @@ CO_Start _CO_StartFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Start
  */
 ATerm _CO_StartToTerm(CO_Start arg) {
-  return (ATerm)arg;
+  return (((union {CO_Start source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -675,7 +675,7 @@ ATerm _CO_StartToTerm(CO_Start arg) {
  * \return CO_LexStrChar that was encoded by \arg
  */
 CO_LexStrChar _CO_LexStrCharFromTerm(ATerm t) {
-  return (CO_LexStrChar)t;
+  return (((union {CO_LexStrChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -684,7 +684,7 @@ CO_LexStrChar _CO_LexStrCharFromTerm(ATerm t) {
  * \return ATerm that represents the CO_LexStrChar
  */
 ATerm _CO_LexStrCharToTerm(CO_LexStrChar arg) {
-  return (ATerm)arg;
+  return (((union {CO_LexStrChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -693,7 +693,7 @@ ATerm _CO_LexStrCharToTerm(CO_LexStrChar arg) {
  * \return CO_StrChar that was encoded by \arg
  */
 CO_StrChar _CO_StrCharFromTerm(ATerm t) {
-  return (CO_StrChar)t;
+  return (((union {CO_StrChar target; ATerm source; })(t)).target);
 }
 
 /**
@@ -702,7 +702,7 @@ CO_StrChar _CO_StrCharFromTerm(ATerm t) {
  * \return ATerm that represents the CO_StrChar
  */
 ATerm _CO_StrCharToTerm(CO_StrChar arg) {
-  return (ATerm)arg;
+  return (((union {CO_StrChar source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -711,7 +711,7 @@ ATerm _CO_StrCharToTerm(CO_StrChar arg) {
  * \return CO_LexStrCon that was encoded by \arg
  */
 CO_LexStrCon _CO_LexStrConFromTerm(ATerm t) {
-  return (CO_LexStrCon)t;
+  return (((union {CO_LexStrCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -720,7 +720,7 @@ CO_LexStrCon _CO_LexStrConFromTerm(ATerm t) {
  * \return ATerm that represents the CO_LexStrCon
  */
 ATerm _CO_LexStrConToTerm(CO_LexStrCon arg) {
-  return (ATerm)arg;
+  return (((union {CO_LexStrCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -729,7 +729,7 @@ ATerm _CO_LexStrConToTerm(CO_LexStrCon arg) {
  * \return CO_StrCon that was encoded by \arg
  */
 CO_StrCon _CO_StrConFromTerm(ATerm t) {
-  return (CO_StrCon)t;
+  return (((union {CO_StrCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -738,7 +738,7 @@ CO_StrCon _CO_StrConFromTerm(ATerm t) {
  * \return ATerm that represents the CO_StrCon
  */
 ATerm _CO_StrConToTerm(CO_StrCon arg) {
-  return (ATerm)arg;
+  return (((union {CO_StrCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -747,7 +747,7 @@ ATerm _CO_StrConToTerm(CO_StrCon arg) {
  * \return CO_LexStrCharChars that was encoded by \arg
  */
 CO_LexStrCharChars _CO_LexStrCharCharsFromTerm(ATerm t) {
-  return (CO_LexStrCharChars)t;
+  return (((union {CO_LexStrCharChars target; ATerm source; })(t)).target);
 }
 
 /**
@@ -756,7 +756,7 @@ CO_LexStrCharChars _CO_LexStrCharCharsFromTerm(ATerm t) {
  * \return ATerm that represents the CO_LexStrCharChars
  */
 ATerm _CO_LexStrCharCharsToTerm(CO_LexStrCharChars arg) {
-  return (ATerm)arg;
+  return (((union {CO_LexStrCharChars source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -765,7 +765,7 @@ ATerm _CO_LexStrCharCharsToTerm(CO_LexStrCharChars arg) {
  * \return CO_BoolCon that was encoded by \arg
  */
 CO_BoolCon _CO_BoolConFromTerm(ATerm t) {
-  return (CO_BoolCon)t;
+  return (((union {CO_BoolCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -774,7 +774,7 @@ CO_BoolCon _CO_BoolConFromTerm(ATerm t) {
  * \return ATerm that represents the CO_BoolCon
  */
 ATerm _CO_BoolConToTerm(CO_BoolCon arg) {
-  return (ATerm)arg;
+  return (((union {CO_BoolCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -783,7 +783,7 @@ ATerm _CO_BoolConToTerm(CO_BoolCon arg) {
  * \return CO_LexNatCon that was encoded by \arg
  */
 CO_LexNatCon _CO_LexNatConFromTerm(ATerm t) {
-  return (CO_LexNatCon)t;
+  return (((union {CO_LexNatCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -792,7 +792,7 @@ CO_LexNatCon _CO_LexNatConFromTerm(ATerm t) {
  * \return ATerm that represents the CO_LexNatCon
  */
 ATerm _CO_LexNatConToTerm(CO_LexNatCon arg) {
-  return (ATerm)arg;
+  return (((union {CO_LexNatCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -801,7 +801,7 @@ ATerm _CO_LexNatConToTerm(CO_LexNatCon arg) {
  * \return CO_NatCon that was encoded by \arg
  */
 CO_NatCon _CO_NatConFromTerm(ATerm t) {
-  return (CO_NatCon)t;
+  return (((union {CO_NatCon target; ATerm source; })(t)).target);
 }
 
 /**
@@ -810,7 +810,7 @@ CO_NatCon _CO_NatConFromTerm(ATerm t) {
  * \return ATerm that represents the CO_NatCon
  */
 ATerm _CO_NatConToTerm(CO_NatCon arg) {
-  return (ATerm)arg;
+  return (((union {CO_NatCon source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -819,7 +819,7 @@ ATerm _CO_NatConToTerm(CO_NatCon arg) {
  * \return CO_LexByte that was encoded by \arg
  */
 CO_LexByte _CO_LexByteFromTerm(ATerm t) {
-  return (CO_LexByte)t;
+  return (((union {CO_LexByte target; ATerm source; })(t)).target);
 }
 
 /**
@@ -828,7 +828,7 @@ CO_LexByte _CO_LexByteFromTerm(ATerm t) {
  * \return ATerm that represents the CO_LexByte
  */
 ATerm _CO_LexByteToTerm(CO_LexByte arg) {
-  return (ATerm)arg;
+  return (((union {CO_LexByte source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -837,7 +837,7 @@ ATerm _CO_LexByteToTerm(CO_LexByte arg) {
  * \return CO_Byte that was encoded by \arg
  */
 CO_Byte _CO_ByteFromTerm(ATerm t) {
-  return (CO_Byte)t;
+  return (((union {CO_Byte target; ATerm source; })(t)).target);
 }
 
 /**
@@ -846,7 +846,7 @@ CO_Byte _CO_ByteFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Byte
  */
 ATerm _CO_ByteToTerm(CO_Byte arg) {
-  return (ATerm)arg;
+  return (((union {CO_Byte source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -855,7 +855,7 @@ ATerm _CO_ByteToTerm(CO_Byte arg) {
  * \return CO_LexBytes that was encoded by \arg
  */
 CO_LexBytes _CO_LexBytesFromTerm(ATerm t) {
-  return (CO_LexBytes)t;
+  return (((union {CO_LexBytes target; ATerm source; })(t)).target);
 }
 
 /**
@@ -864,7 +864,7 @@ CO_LexBytes _CO_LexBytesFromTerm(ATerm t) {
  * \return ATerm that represents the CO_LexBytes
  */
 ATerm _CO_LexBytesToTerm(CO_LexBytes arg) {
-  return (ATerm)arg;
+  return (((union {CO_LexBytes source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -873,7 +873,7 @@ ATerm _CO_LexBytesToTerm(CO_LexBytes arg) {
  * \return CO_Bytes that was encoded by \arg
  */
 CO_Bytes _CO_BytesFromTerm(ATerm t) {
-  return (CO_Bytes)t;
+  return (((union {CO_Bytes target; ATerm source; })(t)).target);
 }
 
 /**
@@ -882,7 +882,7 @@ CO_Bytes _CO_BytesFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Bytes
  */
 ATerm _CO_BytesToTerm(CO_Bytes arg) {
-  return (ATerm)arg;
+  return (((union {CO_Bytes source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -891,7 +891,7 @@ ATerm _CO_BytesToTerm(CO_Bytes arg) {
  * \return CO_LexByteList that was encoded by \arg
  */
 CO_LexByteList _CO_LexByteListFromTerm(ATerm t) {
-  return (CO_LexByteList)t;
+  return (((union {CO_LexByteList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -900,7 +900,7 @@ CO_LexByteList _CO_LexByteListFromTerm(ATerm t) {
  * \return ATerm that represents the CO_LexByteList
  */
 ATerm _CO_LexByteListToTerm(CO_LexByteList arg) {
-  return (ATerm)arg;
+  return (((union {CO_LexByteList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -909,7 +909,7 @@ ATerm _CO_LexByteListToTerm(CO_LexByteList arg) {
  * \return CO_Subject that was encoded by \arg
  */
 CO_Subject _CO_SubjectFromTerm(ATerm t) {
-  return (CO_Subject)t;
+  return (((union {CO_Subject target; ATerm source; })(t)).target);
 }
 
 /**
@@ -918,7 +918,7 @@ CO_Subject _CO_SubjectFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Subject
  */
 ATerm _CO_SubjectToTerm(CO_Subject arg) {
-  return (ATerm)arg;
+  return (((union {CO_Subject source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -927,7 +927,7 @@ ATerm _CO_SubjectToTerm(CO_Subject arg) {
  * \return CO_Error that was encoded by \arg
  */
 CO_Error _CO_ErrorFromTerm(ATerm t) {
-  return (CO_Error)t;
+  return (((union {CO_Error target; ATerm source; })(t)).target);
 }
 
 /**
@@ -936,7 +936,7 @@ CO_Error _CO_ErrorFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Error
  */
 ATerm _CO_ErrorToTerm(CO_Error arg) {
-  return (ATerm)arg;
+  return (((union {CO_Error source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -945,7 +945,7 @@ ATerm _CO_ErrorToTerm(CO_Error arg) {
  * \return CO_Summary that was encoded by \arg
  */
 CO_Summary _CO_SummaryFromTerm(ATerm t) {
-  return (CO_Summary)t;
+  return (((union {CO_Summary target; ATerm source; })(t)).target);
 }
 
 /**
@@ -954,7 +954,7 @@ CO_Summary _CO_SummaryFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Summary
  */
 ATerm _CO_SummaryToTerm(CO_Summary arg) {
-  return (ATerm)arg;
+  return (((union {CO_Summary source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -963,7 +963,7 @@ ATerm _CO_SummaryToTerm(CO_Summary arg) {
  * \return CO_SubjectList that was encoded by \arg
  */
 CO_SubjectList _CO_SubjectListFromTerm(ATerm t) {
-  return (CO_SubjectList)t;
+  return (((union {CO_SubjectList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -972,7 +972,7 @@ CO_SubjectList _CO_SubjectListFromTerm(ATerm t) {
  * \return ATerm that represents the CO_SubjectList
  */
 ATerm _CO_SubjectListToTerm(CO_SubjectList arg) {
-  return (ATerm)arg;
+  return (((union {CO_SubjectList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -981,7 +981,7 @@ ATerm _CO_SubjectListToTerm(CO_SubjectList arg) {
  * \return CO_ErrorList that was encoded by \arg
  */
 CO_ErrorList _CO_ErrorListFromTerm(ATerm t) {
-  return (CO_ErrorList)t;
+  return (((union {CO_ErrorList target; ATerm source; })(t)).target);
 }
 
 /**
@@ -990,7 +990,7 @@ CO_ErrorList _CO_ErrorListFromTerm(ATerm t) {
  * \return ATerm that represents the CO_ErrorList
  */
 ATerm _CO_ErrorListToTerm(CO_ErrorList arg) {
-  return (ATerm)arg;
+  return (((union {CO_ErrorList source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -999,7 +999,7 @@ ATerm _CO_ErrorListToTerm(CO_ErrorList arg) {
  * \return CO_Location that was encoded by \arg
  */
 CO_Location _CO_LocationFromTerm(ATerm t) {
-  return (CO_Location)t;
+  return (((union {CO_Location target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1008,7 +1008,7 @@ CO_Location _CO_LocationFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Location
  */
 ATerm _CO_LocationToTerm(CO_Location arg) {
-  return (ATerm)arg;
+  return (((union {CO_Location source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1017,7 +1017,7 @@ ATerm _CO_LocationToTerm(CO_Location arg) {
  * \return CO_Area that was encoded by \arg
  */
 CO_Area _CO_AreaFromTerm(ATerm t) {
-  return (CO_Area)t;
+  return (((union {CO_Area target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1026,7 +1026,7 @@ CO_Area _CO_AreaFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Area
  */
 ATerm _CO_AreaToTerm(CO_Area arg) {
-  return (ATerm)arg;
+  return (((union {CO_Area source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1035,7 +1035,7 @@ ATerm _CO_AreaToTerm(CO_Area arg) {
  * \return CO_Read that was encoded by \arg
  */
 CO_Read _CO_ReadFromTerm(ATerm t) {
-  return (CO_Read)t;
+  return (((union {CO_Read target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1044,7 +1044,7 @@ CO_Read _CO_ReadFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Read
  */
 ATerm _CO_ReadToTerm(CO_Read arg) {
-  return (ATerm)arg;
+  return (((union {CO_Read source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1053,7 +1053,7 @@ ATerm _CO_ReadToTerm(CO_Read arg) {
  * \return CO_Write that was encoded by \arg
  */
 CO_Write _CO_WriteFromTerm(ATerm t) {
-  return (CO_Write)t;
+  return (((union {CO_Write target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1062,7 +1062,7 @@ CO_Write _CO_WriteFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Write
  */
 ATerm _CO_WriteToTerm(CO_Write arg) {
-  return (ATerm)arg;
+  return (((union {CO_Write source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1071,7 +1071,7 @@ ATerm _CO_WriteToTerm(CO_Write arg) {
  * \return CO_ParsetreeX that was encoded by \arg
  */
 CO_ParsetreeX _CO_ParsetreeXFromTerm(ATerm t) {
-  return (CO_ParsetreeX)t;
+  return (((union {CO_ParsetreeX target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1080,7 +1080,7 @@ CO_ParsetreeX _CO_ParsetreeXFromTerm(ATerm t) {
  * \return ATerm that represents the CO_ParsetreeX
  */
 ATerm _CO_ParsetreeXToTerm(CO_ParsetreeX arg) {
-  return (ATerm)arg;
+  return (((union {CO_ParsetreeX source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1089,7 +1089,7 @@ ATerm _CO_ParsetreeXToTerm(CO_ParsetreeX arg) {
  * \return CO_X that was encoded by \arg
  */
 CO_X _CO_XFromTerm(ATerm t) {
-  return (CO_X)t;
+  return (((union {CO_X target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1098,7 +1098,7 @@ CO_X _CO_XFromTerm(ATerm t) {
  * \return ATerm that represents the CO_X
  */
 ATerm _CO_XToTerm(CO_X arg) {
-  return (ATerm)arg;
+  return (((union {CO_X source; ATerm target; })(arg)).target);
 }
 
 /**
@@ -1107,7 +1107,7 @@ ATerm _CO_XToTerm(CO_X arg) {
  * \return CO_Boolean that was encoded by \arg
  */
 CO_Boolean _CO_BooleanFromTerm(ATerm t) {
-  return (CO_Boolean)t;
+  return (((union {CO_Boolean target; ATerm source; })(t)).target);
 }
 
 /**
@@ -1116,7 +1116,7 @@ CO_Boolean _CO_BooleanFromTerm(ATerm t) {
  * \return ATerm that represents the CO_Boolean
  */
 ATerm _CO_BooleanToTerm(CO_Boolean arg) {
-  return (ATerm)arg;
+  return (((union {CO_Boolean source; ATerm target; })(arg)).target);
 }
 
 /**
