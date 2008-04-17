@@ -662,6 +662,80 @@
   </section>
 
   <section>
+    <title>Memo-pad for traversal functions</title>
+
+    <para><note>
+        <para>This is a very temporary section to organize ideas about
+        traversal functions.</para>
+      </note>We need the following functionality:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Ordinary functions with arguments and a result value.</para>
+      </listitem>
+
+      <listitem>
+        <para>Generators that enumerate all elements of a certain type in a
+        value (set, relation, tree).</para>
+      </listitem>
+
+      <listitem>
+        <para>Transformers that traverse a tree and perform replacements
+        according to a set of rewrite rules (conditional pattern/replacement
+        pairs).</para>
+      </listitem>
+
+      <listitem>
+        <para>Rewriters that repeatedly apply a set of rewrite rules until no
+        further rule applies.</para>
+      </listitem>
+
+      <listitem>
+        <para>Accumulators that accumulate a value during a traversal.</para>
+      </listitem>
+
+      <listitem>
+        <para>Accumulating transformers.</para>
+      </listitem>
+
+      <listitem>
+        <para>Fit the "equations" construct of Rscript in this (= set of
+        simultaneous equalities over a lattice).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Let's try to put all info in an trafo attribute:<programlisting>trafo[all|first|td|bu|fix] T1 name(T2 tree) {
+  <emphasis>local variables</emphasis>
+  switch tree {
+  <emphasis>rewrite rules that can acces and modify the local variables</emphasis>
+  }
+  return tree
+}</programlisting></para>
+
+    <para>Accumulators can use local variables and return them as
+    value.</para>
+
+    <para>Booleans now look as follows (fix = repeat as long as
+    possible):</para>
+
+    <para><programlisting>module Bool-examples6
+imports Booleans-syntax
+
+trafo[fix] Bool reduce(Bool B) {
+    switch B {
+      true &amp; &lt;Bool B2&gt;   =&gt; B2     %% Style 1: implicit invocation of reduce
+      false &amp; &lt;Bool B2&gt;  =&gt; false
+
+      true | true   =&gt; true        %% Style 2: truth table
+      true | false  =&gt; true
+      false | true  =&gt; true
+      false | false =&gt; false
+    }
+    return B
+}</programlisting></para>
+  </section>
+
+  <section>
     <title>Examples</title>
 
     <para>Here we list experimental examples of Rascal code to try out
