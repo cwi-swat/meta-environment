@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -666,7 +666,8 @@
 
     <para><note>
         <para>This is a very temporary section to organize ideas about
-        traversal functions.</para>
+        traversal functions. Several examples from the Examples section are
+        repeated here in experimental form.</para>
       </note>We need the following functionality:</para>
 
     <itemizedlist>
@@ -704,7 +705,37 @@
       </listitem>
     </itemizedlist>
 
-    <para>Let's try to put all info in an trafo attribute:<programlisting>trafo[all|first|td|bu|fix] T1 name(T2 tree) {
+    <para>The <emphasis role="bold">big</emphasis> questions are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>How can we relate the traversal behaviour of the function with
+        rewrite rules in its body?</para>
+      </listitem>
+
+      <listitem>
+        <para>Is a traversal function with a body <emphasis
+        role="bold">other</emphasis> than a switch meaningfull?</para>
+      </listitem>
+
+      <listitem>
+        <para>What is the relationship between the "tree" argument of a
+        traversal function and the argument of the switch in its body?</para>
+      </listitem>
+
+      <listitem>
+        <para>How do we handle local variables? Can they be used to model
+        accumulators?</para>
+      </listitem>
+
+      <listitem>
+        <para>While traversing the tree: how can we address/name the current
+        tree?</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Let's try to put all info in a single trafo
+    attribute:<programlisting>trafo[all|first|td|bu|fix] T1 name(T2 tree) {
   <emphasis>local variables</emphasis>
   switch tree {
   <emphasis>rewrite rules that can acces and modify the local variables</emphasis>
@@ -712,7 +743,7 @@
   return tree
 }</programlisting></para>
 
-    <para>Accumulators can use local variables and return them as
+    <para>Accumulators can use local variables and can return them as
     value.</para>
 
     <para>Booleans now look as follows (fix = repeat as long as
@@ -733,6 +764,85 @@ trafo[fix] Bool reduce(Bool B) {
     }
     return B
 }</programlisting></para>
+
+    <para></para>
+
+    <para></para>
+
+    <para>Here are other examples (adapter from the examples later on this
+    document):<programlisting>module Tree-Examples
+imports Tree-syntax
+
+%% Ex1: Count leaves in a TREE
+
+trafo int cnt(TREE T, int C) {
+    int C := 0;
+    switch T {
+      &lt;Integer N&gt; : C := C+1
+    }
+    return C;
+}
+
+%% Ex2: Sum all leaves in a TREE
+
+accu int cnt(TREE T) {
+    int C := 0;
+    switch T {
+      &lt;Integer N&gt; : C := C+N
+    }
+    return C;
+}
+
+%% Ex3: Increment all leaves in a TREE
+
+trafo TREE inc(TREE T) {
+    switch T {
+      &lt;Integer N&gt; =&gt; &lt;N1&gt;
+      when Integer N1 := N + 1
+    }
+    return T
+}
+
+%% Ex4: full replacement of g by i
+
+trafo[all, bu] TREE frepl(TREE T) {
+    switch T {
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
+    }
+}
+
+%% Ex5: Deep replacement of g by i
+
+trafo[first, bu] TREE drepl(TREE T) {
+    switch T {
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
+    }
+}
+
+%% Ex6: shallow replacement of g by i (i.e. only outermost 
+%% g's are replaced); 
+
+trafo[first] TREE srepl(TREE T) {
+    switch T {
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
+    }
+}
+
+%% Ex8: accumulating transformer that increments leaves with amount D and counts them
+
+trafo &lt;int, TREE&gt; count_and_inc(TREE T, int D) {
+    int C := 0;
+    switch T {
+      &lt;Integer N&gt; =&gt; &lt;N1&gt;
+      when Integer N1 := N + D,
+           C := C + 1
+    }
+    return &lt;C, T&gt;
+}</programlisting></para>
+
+    <para></para>
+
+    <para></para>
   </section>
 
   <section>
