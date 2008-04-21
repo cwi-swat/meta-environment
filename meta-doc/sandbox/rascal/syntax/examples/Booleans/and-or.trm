@@ -1,4 +1,5 @@
 module Bool-example1
+imports Boolean-syntax
 
 fun Bool reduce(Bool B) {
     visit bu B {
