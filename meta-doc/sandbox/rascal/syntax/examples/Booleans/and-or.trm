@@ -1,8 +1,13 @@
-fun Bool and(Bool B1, B2) { %% reduce & operator
-    Bool B;
-    switch B1 {
-      true        => reduce(B2)
-      false       => false
-      <Bool B>    => <B1> & <B2>
-    }    
+module Bool-example1
+
+fun Bool reduce(Bool B) {
+    visit bu B {
+      true & <Bool B2>   => B2     %% Style 1: Use Variables
+      false & <Bool B2>  => false
+
+      true | true   => true        %% Style 2: Use a truth table
+      true | false  => true
+      false | true  => true
+      false | false => false
+    }
 }

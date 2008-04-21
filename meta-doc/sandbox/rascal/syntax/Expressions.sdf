@@ -17,7 +17,7 @@ context-free start-symbols
 
 exports
 sorts Expression ExpressionOrPattern LeftHandSide Predicate SimpleGenerator Generator
-      Strategy Signature RewriteCase RewriteCases
+      Strategy Signature SwitchCase VisitCase
 
 context-free syntax
          "(" Expression ")"                                      -> Expression {bracket}
@@ -80,12 +80,7 @@ context-free syntax
 	LeftHandSide "!:=" Expression                           -> Predicate {cons("not-match")}
          LeftHandSide "<-" Expression                            -> Predicate {cons("assign")}
 
-context-free priorities 
-
-
-
 context-free syntax
- 
 
 %% Image operators 
          Expression "[" Expression "]"                           -> Expression {cons("limage")}
@@ -94,7 +89,7 @@ context-free syntax
 
 %% Generators
         ("first" | "all")? ("td" | "bu")?                        -> Strategy
-	Strategy LeftHandSide ":" Expression                    -> SimpleGenerator {cons("generator")}
+	LeftHandSide ":" Strategy Expression                    -> SimpleGenerator {cons("generator")}
 	Type? Variable                                          -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
          "{" {Signature ","}+ "}"                                -> Signature
@@ -114,11 +109,14 @@ context-free syntax
          "if" Predicate "then" Expression "else" Expression "fi" -> Expression
 %% Do we want elseif etc.?
 
-%% Switch and replace
-         Expression | Pattern                                     -> ExpressionOrPattern
+%% Switch and visit
+         Expression | Pattern                                          -> ExpressionOrPattern
 
-         Pattern "=>" ExpressionOrPattern ("when" {Predicate ","}+ )?      -> RewriteCase
-   	"{" RewriteCase+ "}"                                     -> RewriteCases
+         Pattern "=>" ExpressionOrPattern ("when" {Predicate ","}+ )?  -> SwitchCase
+  	"switch" Expression "{" {SwitchCases ","}+    "}"             -> Expression
 
-   	"switch" Expression RewriteCases                         -> Expression
-   	"replace" Expression Strategy RewriteCases               -> Expression
+         SwitchCase                                                    -> VisitCase
+         Pattern ":" {Predicate ","}+                                  -> VisitCase
+   	"{" RewriteCase+ "}"                                          -> RewriteCases
+
+   	"visit" Strategy Expression "{" {VisitCases ","}+ "}"         -> Expression

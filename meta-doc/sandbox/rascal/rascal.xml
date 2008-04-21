@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -505,26 +505,57 @@
       <para>As a design strategy we try to offer the option to leave out as
       many type indications as possible.</para>
 
-      <para>A type declaration may introduce an abbreviation for a comples
+      <para>A type declaration may introduce an abbreviation for a complex
       type.</para>
+
+      <para>Types may include type variables like
+      <literal>&amp;<replaceable>T</replaceable></literal> as in
+      rscript.</para>
     </section>
 
     <section>
       <title>Functions</title>
 
-      <para>A function declaration consists of a function name, typed
-      arguments, result type and a function body.</para>
+      <para>A function declaration consists of a visibility declaration, the
+      keyword <literal>fun</literal>, result type, a function name, typed
+      arguments and a function body.</para>
 
-      <para>A function body contains a number of variable declarations (with
+      <para>A visibility declaration is one of the keywords
+      <literal>public</literal> or <literal>private</literal>
+      (default).</para>
+
+      <para>A function body contains optional variable declarations (with
       optional initializations) followed by an expression. The value of the
       expression is the value of the function.</para>
 
-      <note>
-        <para>We should decide where the functionality of traversal functions
-        is attached to functions or to the <literal>replace</literal>
-        construct discussed below. In the examples we use both
-        alternatives.</para>
-      </note>
+      <para>Functions can later be extended:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The keyword <literal>extend</literal> before a function
+          declaration extends a previously defined function with the same
+          signature.</para>
+        </listitem>
+
+        <listitem>
+          <para>Local declarations in the extension function are added to the
+          original function.</para>
+        </listitem>
+
+        <listitem>
+          <para>If both bodies consist of a <literal>switch</literal> or
+          <literal>visit</literal> construct, the cases are merged.</para>
+        </listitem>
+
+        <listitem>
+          <para>Other cases may be considered: switch + expr, expr + switch,
+          visit + expr, and expr + visit.</para>
+        </listitem>
+
+        <listitem>
+          <para>No other extensions are allowed.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section xml:id="section.patterns">
@@ -550,7 +581,7 @@
           <literal>|]</literal>. Inside a fully quoted string, the characters
           <literal>&lt;</literal>, <literal>&gt;</literal> and
           <literal>|</literal> can be escaped as <literal>\&lt;</literal>,
-          <literal>\&gt;</literal>, <literal>\|</literal>. Fully quotred
+          <literal>\&gt;</literal>, <literal>\|</literal>. Fully quoted
           patterns may contain variables.</para>
         </listitem>
 
@@ -605,29 +636,30 @@
           </listitem>
 
           <listitem>
-            <para>A "switch" expression is similar to a Switch statement in C
-            or Java and corresponds to the matching provided by the left-hand
-            sides of a set of rewrite rules. However, it provides <emphasis
-            role="bold">only</emphasis> matching at the top level of its
-            argument and does not traverse its argument.</para>
+            <para>A "switch" expression is similar to a switch statement in C
+            or Java and for a given subject term, it corresponds to the
+            matching provided by the left-hand sides of a set of rewrite
+            rules. However, it provides <emphasis role="bold">only</emphasis>
+            matching at the top level of the subject term and does not
+            traverse it. The type of each pattern must be identical to the
+            type of the subject term (or be a subtype of it).</para>
           </listitem>
 
           <listitem>
-            <para>A "replace" expression corresponds to a traversal function
-            (transformer). Given a term and a list of pattern/replacement
-            pairs it traverses the term and performs replacements. Note that
-            replace does <emphasis role="bold">not</emphasis> provide the
-            fixed-point functionality of innermost rewriting (try to rewrite
-            as long as there is a change). This behaviour has to be made
-            explicit by recursion.<note>
-                <para>traversal attributes for functions and the select
-                statement are competing design alternatives.</para>
-              </note></para>
+            <para>A rewrite rule consists of a Pattern optionally followed by
+            =&gt; and a replacement and optional conditions:<programlisting><replaceable>Pattern</replaceable> =&gt; <replaceable>Replacement</replaceable> when <replaceable>Condition1</replaceable>, <replaceable>Condition2</replaceable>, ...</programlisting></para>
           </listitem>
 
           <listitem>
-            <para>Pattern/replacement pairs may have conditions preceeded by
-            the keyword <literal>when</literal>.</para>
+            <para>When the replacement is missing we write:<programlisting><replaceable>Pattern</replaceable>: <replaceable>Condition1</replaceable>, <replaceable>Condition2</replaceable>, ...</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para>A "visit" expression corresponds to a traversal function.
+            Given a subject term and a list of pattern/replacement pairs it
+            traverses the term. Depending on the precise rules it may perform
+            replacement (mimicking a transformer), update local variables
+            (mimicking an accumulator) or a combination of these two.</para>
           </listitem>
 
           <listitem>
@@ -636,7 +668,7 @@
           </listitem>
 
           <listitem>
-            <para>Replace and generators may have a strategy option to
+            <para>Visit and generators may have a strategy option to
             indicate:</para>
 
             <itemizedlist>
@@ -655,6 +687,11 @@
               <listitem>
                 <para>bu = bottom-up</para>
               </listitem>
+
+              <listitem>
+                <para>fix = fixed-point (repeat as long as the function value
+                changes)</para>
+              </listitem>
             </itemizedlist>
           </listitem>
         </itemizedlist></para>
@@ -664,39 +701,12 @@
   <section>
     <title>Memo-pad for traversal functions</title>
 
-    <para><note>
-        <para>This is a very temporary section to organize ideas about
-        traversal functions. Several examples from the Examples section are
-        repeated here in experimental form.</para>
-      </note>We need the following functionality:</para>
+    <para>We need the following functionality:</para>
 
     <itemizedlist>
       <listitem>
-        <para>Ordinary functions with arguments and a result value.</para>
-      </listitem>
-
-      <listitem>
-        <para>Generators that enumerate all elements of a certain type in a
-        value (set, relation, tree).</para>
-      </listitem>
-
-      <listitem>
-        <para>Transformers that traverse a tree and perform replacements
-        according to a set of rewrite rules (conditional pattern/replacement
-        pairs).</para>
-      </listitem>
-
-      <listitem>
         <para>Rewriters that repeatedly apply a set of rewrite rules until no
         further rule applies.</para>
-      </listitem>
-
-      <listitem>
-        <para>Accumulators that accumulate a value during a traversal.</para>
-      </listitem>
-
-      <listitem>
-        <para>Accumulating transformers.</para>
       </listitem>
 
       <listitem>
@@ -704,145 +714,6 @@
         simultaneous equalities over a lattice).</para>
       </listitem>
     </itemizedlist>
-
-    <para>The <emphasis role="bold">big</emphasis> questions are:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>How can we relate the traversal behaviour of the function with
-        rewrite rules in its body?</para>
-      </listitem>
-
-      <listitem>
-        <para>Is a traversal function with a body <emphasis
-        role="bold">other</emphasis> than a switch meaningfull?</para>
-      </listitem>
-
-      <listitem>
-        <para>What is the relationship between the "tree" argument of a
-        traversal function and the argument of the switch in its body?</para>
-      </listitem>
-
-      <listitem>
-        <para>How do we handle local variables? Can they be used to model
-        accumulators?</para>
-      </listitem>
-
-      <listitem>
-        <para>While traversing the tree: how can we address/name the current
-        tree?</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>Let's try to put all info in a single trafo
-    attribute:<programlisting>trafo[all|first|td|bu|fix] T1 name(T2 tree) {
-  <emphasis>local variables</emphasis>
-  switch tree {
-  <emphasis>rewrite rules that can acces and modify the local variables</emphasis>
-  }
-  return tree
-}</programlisting></para>
-
-    <para>Accumulators can use local variables and can return them as
-    value.</para>
-
-    <para>Booleans now look as follows (fix = repeat as long as
-    possible):</para>
-
-    <para><programlisting>module Bool-examples6
-imports Booleans-syntax
-
-trafo[fix] Bool reduce(Bool B) {
-    switch B {
-      true &amp; &lt;Bool B2&gt;   =&gt; B2     %% Style 1: implicit invocation of reduce
-      false &amp; &lt;Bool B2&gt;  =&gt; false
-
-      true | true   =&gt; true        %% Style 2: truth table
-      true | false  =&gt; true
-      false | true  =&gt; true
-      false | false =&gt; false
-    }
-    return B
-}</programlisting></para>
-
-    <para></para>
-
-    <para></para>
-
-    <para>Here are other examples (adapter from the examples later on this
-    document):<programlisting>module Tree-Examples
-imports Tree-syntax
-
-%% Ex1: Count leaves in a TREE
-
-trafo int cnt(TREE T, int C) {
-    int C := 0;
-    switch T {
-      &lt;Integer N&gt; : C := C+1
-    }
-    return C;
-}
-
-%% Ex2: Sum all leaves in a TREE
-
-accu int cnt(TREE T) {
-    int C := 0;
-    switch T {
-      &lt;Integer N&gt; : C := C+N
-    }
-    return C;
-}
-
-%% Ex3: Increment all leaves in a TREE
-
-trafo TREE inc(TREE T) {
-    switch T {
-      &lt;Integer N&gt; =&gt; &lt;N1&gt;
-      when Integer N1 := N + 1
-    }
-    return T
-}
-
-%% Ex4: full replacement of g by i
-
-trafo[all, bu] TREE frepl(TREE T) {
-    switch T {
-      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    }
-}
-
-%% Ex5: Deep replacement of g by i
-
-trafo[first, bu] TREE drepl(TREE T) {
-    switch T {
-      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    }
-}
-
-%% Ex6: shallow replacement of g by i (i.e. only outermost 
-%% g's are replaced); 
-
-trafo[first] TREE srepl(TREE T) {
-    switch T {
-      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    }
-}
-
-%% Ex8: accumulating transformer that increments leaves with amount D and counts them
-
-trafo &lt;int, TREE&gt; count_and_inc(TREE T, int D) {
-    int C := 0;
-    switch T {
-      &lt;Integer N&gt; =&gt; &lt;N1&gt;
-      when Integer N1 := N + D,
-           C := C + 1
-    }
-    return &lt;C, T&gt;
-}</programlisting></para>
-
-    <para></para>
-
-    <para></para>
   </section>
 
   <section>
@@ -882,14 +753,13 @@ fun int cnt(TREE T) {
 }
 
 %% Ex1: alternative solution using trafo functions:
-%% We replace the keyword fun by accumulate (or accu) or transform (trafo).
-%% The most verbose option is "accumulate transform"
-%% Each may be followed by the options bu/td/all/first.
 
-accumulate int cnt(TREE T, int C) {
-    switch T {
+int cnt(TREE T) {
+    int C := 0;
+    visit T {
       &lt;Integer N&gt; : C+1
     }
+    return C;
 }
 
 %% Ex2: Sum all leaves in a TREE
@@ -904,34 +774,25 @@ fun int sumtree(TREE T) {
 
 %% Ex2: using accumulator
 
-accu int cnt(TREE T, int C) {
-    switch T {
+int cnt(TREE T) {
+    int C := 0;
+    visit T {
       &lt;Integer N&gt; : C+N
     }
+    return C;
 }
 
 %% Ex3: Increment all leaves in a TREE
-%% Idea: using the construct "replace T { ... }" all leaves in the 
-%% tree T that match an integer and replaces each N in T by N+1.
+%% Idea: using the construct "visit T { ... }" visit all leaves in the 
+%% tree T that match an integer and replace each N in T by N+1.
 %% The expression as a whole returns the modified term.
-%% This is an extremely compact manner of writing a transformer!
 %% Note that two conversions are needed here:
 %% - from int to NAT to match subterms
 %% - from int to NAT to convert the result of addition into 
 %%   a NAT tree
 
 fun TREE inc(TREE T) {
-    replace T {
-      &lt;Integer N&gt; =&gt; &lt;N1&gt;
-      when Integer N1 := N + 1
-    }
-}
-
-%% Ex3: alternative solution. Attach the traversal functionality 
-%% to the function declaration
-
-trafo TREE inc(TREE T) {
-    switch T {
+    visit T {
       &lt;Integer N&gt; =&gt; &lt;N1&gt;
       when Integer N1 := N + 1
     }
@@ -939,8 +800,8 @@ trafo TREE inc(TREE T) {
 
 %% Ex4: full replacement of g by i
 %% The whole repertoire of traversal functions is available:
-%% - replace T first bu { ... }
-%% - replace T all td { ... }
+%% - visit first bu T { ... }
+%% - visit all td  T { ... }
 %% - etc.
 %% with:
 %% "first" (= break) and "all" (= continue).
@@ -950,15 +811,7 @@ trafo TREE inc(TREE T) {
 %% its use.
 
 fun TREE frepl(TREE T) {
-    replace T all bu {
-      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    }
-}
-
-%% Alternative solution with traversal function notation:
-
-trafo[all, bu] TREE frepl(TREE T) {
-    switch T {
+    visit all bu T {
       g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
     }
 }
@@ -966,15 +819,7 @@ trafo[all, bu] TREE frepl(TREE T) {
 %% Ex5: Deep replacement of g by i
 
 fun TREE frepl(TREE T) {
-    replace T first bu {
-      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    }
-}
-
-%% Ex5: using trafo
-
-trafo[first, bu] TREE drepl(TREE T) {
-    switch T {
+    visit first bu T {
       g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
     }
 }
@@ -983,35 +828,32 @@ trafo[first, bu] TREE drepl(TREE T) {
 %% g's are replaced); 
 
 fun TREE srepl(TREE T) {
-    replace T first td {
+    visit first td T {
       g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
     }
 }
 
-%% Ex6: using trafo functions
-
-trafo[first] TREE srepl(TREE T) {
-    switch T {
-      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    }
-}
 
 %% Ex7: We can also add the first/td directives to all generators 
 %% (where "all td" would be the default):
 
 fun set[TREE] find_outer_gs(TREE T) {
-    { S | first td STATEMENT S : T, 
+    { S | STATEMENT S : first td T, 
           g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) := S }
 }
 
-
 %% Ex8: accumulating transformer that increments leaves with amount D and counts them
 
-accu trafo &lt;int, TREE&gt; count_and_inc(TREE T, int C, int D) {
-    switch T {
-      &lt;Integer N&gt; =&gt; &lt; &lt;N1&gt;, C + 1 &gt;
-      when Integer N1 := N + D
-    }
+fun &lt;int, TREE&gt; count_and_inc(TREE T, int C, int D) {
+    int C := 0;
+    
+    &lt; visit T {
+      &lt;Integer N&gt; =&gt; &lt;N1&gt;
+      when Integer N1 := N + D, 
+           C := C + 1
+     },
+     C
+    &gt;
 }</programlisting></para>
     </section>
 
@@ -1020,17 +862,12 @@ accu trafo &lt;int, TREE&gt; count_and_inc(TREE T, int C, int D) {
 
       <para>It seems that every language specification effort has to produce a
       specification of the Booleans at some moment, so let's try it now. We
-      try three version:</para>
+      try the following versions:</para>
 
       <itemizedlist>
         <listitem>
-          <para>A version with an explicit reduction function, see <xref
-          linkend="section.booleans-explicit-reduction-function." /></para>
-        </listitem>
-
-        <listitem>
-          <para>A version using replace, see <xref
-          linkend="section.booleans-with-replace" />.</para>
+          <para>A version using visit, see <xref
+          linkend="section.booleans-with-visit" />.</para>
         </listitem>
 
         <listitem>
@@ -1038,7 +875,7 @@ accu trafo &lt;int, TREE&gt; count_and_inc(TREE T, int C, int D) {
         </listitem>
       </itemizedlist>
 
-      <para>The have the following syntax in common:<programlisting>module Booleans-syntax
+      <para>We use the following common syntax:<programlisting>module Booleans-syntax
 exports 
   sorts Bool
 
@@ -1048,54 +885,19 @@ exports
     Bool "&amp;" Bool -&gt; Bool {left}
     Bool "|" Bool -&gt; Bool {right}</programlisting></para>
 
-      <section xml:id="section.booleans-explicit-reduction-function.">
-        <title>Booleans with explicit reduction function</title>
+      <section xml:id="section.booleans-with-visit">
+        <title>Booleans using visit</title>
 
-        <para>This first version defines reduction functions for each operator
-        and an overall reduction function for Booleans. Be warned, it looks
-        horrible!</para>
-
-        <programlisting>module Bool-examples
-imports Booleans-syntax
-
-fun Bool and(Bool B1, B2) { %% reduce &amp; operator
-    switch B1 {
-      true      =&gt; reduce(B2)
-      false     =&gt; false
-      &lt;Bool B&gt;  =&gt; &lt;B1&gt; &amp; &lt;B2&gt;
-    }    
-}
-
-fun Bool or(Bool B1, B2) { %% reduce | operator
-    switch B1 {
-      true      =&gt; true
-      false     =&gt; reduce(B2)
-      &lt;Bool B&gt;  =&gt; &lt;B1&gt; | &lt;B2&gt;
-    }    
-}
-
-fun Bool reduce(Bool B){
-    switch B {
-      &lt;Bool B1&gt; &amp; &lt;Bool B2&gt; =&gt; and(B1, B2)
-      &lt;Bool B1&gt; | &lt;Bool B2&gt; =&gt; or(B1, B2)
-      &lt;Bool B3&gt;             =&gt; B
-    }
-}</programlisting>
-      </section>
-
-      <section xml:id="section.booleans-with-replace">
-        <title>Booleans using replace</title>
-
-        <para>A much simpler solution exists using the replace construct that
-        we have encountered in the above examples.<programlisting>module Bool-examples2
+        <para>A simple solution exists using the visit construct that we have
+        encountered in the above examples.<programlisting>module Bool-examples2
 imports Booleans-syntax
 
 fun Bool reduce(Bool B) {
-    replace B bu {
-      true &amp; &lt;Bool B2&gt;   =&gt; reduce(B2)   %% Style 1: Variables and recursion
+    visit bu B {
+      true &amp; &lt;Bool B2&gt;   =&gt; B2     %% Style 1: Use Variables
       false &amp; &lt;Bool B2&gt;  =&gt; false
 
-      true | true   =&gt; true              %% Style 2: truth table
+      true | true   =&gt; true        %% Style 2: Use a truth table
       true | false  =&gt; true
       false | true  =&gt; true
       false | false =&gt; false
@@ -1106,10 +908,8 @@ fun Bool reduce(Bool B) {
 
         <itemizedlist>
           <listitem>
-            <para>Using variables on the left-hand side: a recursive
-            application of reduce is needed to fully normalize the result.
-            Compared to ASF, this explicit reduce looks redundant (see
-            below).</para>
+            <para>Using variables on the left-hand side: the visit is needed
+            to fully normalize the result.</para>
           </listitem>
 
           <listitem>
@@ -1121,51 +921,18 @@ fun Bool reduce(Bool B) {
       <section>
         <title>Booleans with implicit reduce</title>
 
-        <para>In order to eliminate the explicit reduce function in the
-        previous example, we introduce the possibility to associate a
-        reduction function with all values of a sort:</para>
+        <para>In ASF, values are always reduced to a normal form when they are
+        created. In order to approximate this bahaviour we introduce the
+        possibility to associate a reduction function with all values of a
+        sort:</para>
 
         <para><programlisting>simplify Bool B as reduce(B)</programlisting>with
         as meaning that the (sort preserving) function
         <literal>reduce</literal> is applied whenever a value of type
-        <literal>Bool</literal> is constructed. The previous version will then
-        become:</para>
+        <literal>Bool</literal> is constructed. A notational alternative is to
+        include this in the function declaration:<programlisting>reduction fun Bool reduce(Bool B) { ... }</programlisting></para>
 
-        <para><programlisting>module Bool-examples3
-imports Booleans-syntax
-
-simplify Bool B as reduce(B)
-
-fun Bool reduce(Bool B) {
-    replace B bu {
-      true &amp; &lt;Bool B2&gt;   =&gt; B2    %% Style 1: implicit invocation of reduce
-      false &amp; &lt;Bool B2&gt;  =&gt; false
-
-      true | true   =&gt; true       %% Style 2: truth table
-      true | false  =&gt; true
-      false | true  =&gt; true
-      false | false =&gt; false
-    }
-}</programlisting></para>
-
-        <para>In fact, usign this style (and if we are not interested in
-        traversal order) we do not need the replace at all, since the
-        following simpler version suffices:<programlisting>module Bool-examples4
-imports Booleans-syntax
-
-simplify Bool B as reduce(B)
-
-fun Bool reduce(Bool B) {
-    switch B {
-      true &amp; &lt;Bool B2&gt;   =&gt; B2    %% Style 1: implicit invocation of reduce
-      false &amp; &lt;Bool B2&gt;  =&gt; false
-
-      true | true   =&gt; true       %% Style 2: truth table
-      true | false  =&gt; true
-      false | true  =&gt; true
-      false | false =&gt; false
-    }
-}</programlisting>There are some issues here:</para>
+        <para>There are some issues here:</para>
 
         <itemizedlist>
           <listitem>
@@ -1192,25 +959,6 @@ fun Bool reduce(Bool B) {
             in ASF.</para>
           </listitem>
         </itemizedlist>
-      </section>
-
-      <section>
-        <title>Booleans with traversal functions</title>
-
-        <para><programlisting>module Bool-examples5
-imports Booleans-syntax
-
-trafo[bu] Bool reduce(Bool B) {
-    switch B {
-      true &amp; &lt;Bool B2&gt;   =&gt; B2     %% Style 1: implicit invocation of reduce
-      false &amp; &lt;Bool B2&gt;  =&gt; false
-
-      true | true   =&gt; true        %% Style 2: truth table
-      true | false  =&gt; true
-      false | true  =&gt; true
-      false | false =&gt; false
-    }
-}</programlisting></para>
       </section>
     </section>
 
@@ -1316,7 +1064,7 @@ imports Let
 %% Int: counter to generate global variables
 
 fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
-    switch(E) {
+    switch E {
     let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end =&gt;
            let &lt;Var Y &gt;= &lt;Exp E1R&gt;
            in 
@@ -1631,7 +1379,7 @@ fun PROGRAM cse(PROGRAM P) {
                    EXP E2 : reachX({S}, Defs[-,Id], Pred)
        };
  
-    replace P {
+    visit P {
       &lt;EXP E &gt; =&gt; Id
          when { Id } := replacements[E]   
     }
@@ -1730,7 +1478,7 @@ fun PROGRAM cp(PROGRAM P) {
                   Id2 == Id 
       };  
  
-    replace P {
+    visit P {
      &lt;PICO-ID Id&gt; =&gt; E
         when { EXP E } := replacements[Id]
     }  
@@ -1801,7 +1549,7 @@ fun int innerProduct(Vector V1, V2){
       <programlisting>module Bubble
 
 fun Integer* sort(Integer* Numbers){
-    replace Numbers {
+    visit Numbers {
       &lt;Integer* Rest1&gt; &lt;Integer N1&gt; &lt;Integer N2&gt; &lt;Integer* Rest2&gt; =&gt;
          sort(&lt;Integer* Rest1&gt; &lt;Integer N2&gt; &lt;Integer N1&gt; &lt;Integer* Rest&gt;)
       when N1 &gt; N2
@@ -1813,7 +1561,7 @@ fun Integer* sort(Integer* Numbers){
 
       <para>First, are Rest1 and Rest needed? Would</para>
 
-      <programlisting>    replace Numbers {
+      <programlisting>    visit Numbers {
       &lt;Integer N1&gt; &lt;Integer N2&gt; =&gt; &lt;Integer N2&gt; &lt;Integer N1&gt;
       when N1 &gt; N2
       &lt;
@@ -1826,7 +1574,7 @@ fun Integer* sort(Integer* Numbers){
       <programlisting>module Bubble
 
 fun Integer* sort(Integer* Numbers){
-    sort( replace Numbers {
+    sort( visit Numbers {
             &lt;Integer N1&gt; &lt;Integer N2&gt; =&gt; &lt;Integer N2&gt; &lt;Integer N1&gt;
             when N1 &gt; N2
           }
@@ -1845,7 +1593,7 @@ fun Integer* sort(Integer* Numbers){
       (&amp;ELEM) and a function parameter.<programlisting>module Bubble
 
 fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
-    sort( replace Elements {
+    sort( visit Elements {
             &lt;E1&gt; &lt;E2&gt; =&gt; &lt;E2&gt; &lt;E1&gt;
             when GreaterThan(E1, E2)
           }
@@ -2638,10 +2386,6 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
-        <para>We keep the polymorphic types &amp;T1 as in Rscript.</para>
-      </listitem>
-
-      <listitem>
         <para>How does list matching fit in? Probably no problem, see above
         examples.</para>
       </listitem>
@@ -2673,13 +2417,6 @@ process mkWave(int N) is ...</programlisting>
 
       <listitem>
         <para>The "equations" from Rscript are not yet included.</para>
-      </listitem>
-
-      <listitem>
-        <para>It is (not yet) possible to add equations to a function in
-        another module (as is the case in ASF+SDF). If we want to keep this
-        feature, we need an explicit "extend" construct to add cases to a
-        function. [Suggestion: let's look for a cleaner solution.]</para>
       </listitem>
 
       <listitem>
@@ -2726,12 +2463,6 @@ process mkWave(int N) is ...</programlisting>
             <para>An "any" sort that matches anything.</para>
           </listitem>
         </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>We have not yet a hiding mechanism. Proposal: add keywords
-        <literal>public</literal> and <literal>private</literal> (with private
-        the default) to all declarations.</para>
       </listitem>
     </itemizedlist>
   </section>
