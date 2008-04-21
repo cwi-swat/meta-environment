@@ -5,7 +5,7 @@ imports
          basic/BoolCon
          basic/StrCon
          basic/IntCon
-         basic/Area
+         basic/Areas
          Variables
 	Types
          Patterns
@@ -24,13 +24,15 @@ context-free syntax
          BoolCon                                                 -> Expression {cons("boolcon-exp")}
          IntCon                                                  -> Expression {cons("intcon-exp")}
          StrCon                                                  -> Expression {cons("strcon-exp")}
-         Location                                                -> Expression {cons("loccon-exp")}
+         Area                                                    -> Expression {cons("areacon-exp")}
 	IdCon "(" {ExpressionOrPattern ","}* ")"                -> Expression {cons("fun-call")}
 	Variable                                                -> Expression {cons("variable")}
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
 	"{" {Expression ","}* "}"                               -> Expression {cons("set")}
 	"<" {Expression ","}+ ">"                               -> Expression {cons("tuple")}
+
+         "return" Expression                                     -> Expression {cons("return")}
 
 context-free priorities
 
@@ -52,10 +54,10 @@ context-free priorities
 
 %% Arithmetic operators
 
-        Expression "*" Expression                               -> Expression {cons("mul"), left} >
-        Expression "/" Expression                               -> Expression {cons("div"), left} >
-        { Expression "+" Expression                               -> Expression {cons("add"), left}
-          Expression "-" Expression                               -> Expression {cons("sub"), left}
+        Expression "*" Expression                                -> Expression {cons("mul"), left} >
+        Expression "/" Expression                                -> Expression {cons("div"), left} >
+        { Expression "+" Expression                              -> Expression {cons("add"), left}
+          Expression "-" Expression                              -> Expression {cons("sub"), left}
         } >
  
 %% Relational operators
@@ -81,7 +83,6 @@ context-free syntax
          LeftHandSide "<-" Expression                            -> Predicate {cons("assign")}
 
 context-free syntax
-
 %% Image operators 
          Expression "[" Expression "]"                           -> Expression {cons("limage")}
          Expression "[" Expression "," "-" "]"                   -> Expression {cons("limage2")}
@@ -113,10 +114,9 @@ context-free syntax
          Expression | Pattern                                          -> ExpressionOrPattern
 
          Pattern "=>" ExpressionOrPattern ("when" {Predicate ","}+ )?  -> SwitchCase
-  	"switch" Expression "{" {SwitchCases ","}+    "}"             -> Expression
+  	"switch" Expression "{" SwitchCase+ "}"                       -> Expression
 
          SwitchCase                                                    -> VisitCase
-         Pattern ":" {Predicate ","}+                                  -> VisitCase
-   	"{" RewriteCase+ "}"                                          -> RewriteCases
+         Pattern ":" {(Predicate | Expression) ","}+                   -> VisitCase
 
-   	"visit" Strategy Expression "{" {VisitCases ","}+ "}"         -> Expression
+   	"visit" Strategy Expression "{" VisitCase+ "}"                -> Expression

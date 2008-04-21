@@ -1,0 +1,12 @@
+module Pico-use-def
+
+imports pico/syntax/Pico
+
+fun rel[EXP,PICO-ID] uses(PROGRAM P) {
+  {<E,Id> | EXP E : P, PICO-ID Id := E};
+}
+
+fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
+  {<S, Id> | STATEMENT S : P, 
+                        <PICO-ID Id> := <EXP Exp> := S};
+}

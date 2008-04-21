@@ -9,5 +9,5 @@ fun int innerProduct(Vector V1, V2){
        (N1*N2) + innerProduct( (<Rest1>), (<Rest2>) )
     else 
        0
-    fi
+    fi;
 }

@@ -1,0 +1,12 @@
+module Bool-examples1
+imports Booleans-syntax
+
+fun Bool reduce(Bool B) {
+    visit bu B {
+      true & <Bool B2>   => B2
+      false & <Bool B2>  => false
+
+      true | <Bool B2>   => true
+      false | <Bool B2>  => B2
+    };
+}

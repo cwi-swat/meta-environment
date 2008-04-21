@@ -11,7 +11,7 @@ fun Boolean is-constant(EXP E) {
      <StrCon S> => true
 
      <EXP E> => false
-   }
+   };
 }
 
 fun PROGRAM cp(PROGRAM P) {
@@ -26,8 +26,8 @@ fun PROGRAM cp(PROGRAM P) {
                   Id2 == Id 
       };  
  
-    replace P {
+    visit P {
      <PICO-ID Id> => E
         when { EXP E } := replacements[Id]
-    }  
+    };
 }

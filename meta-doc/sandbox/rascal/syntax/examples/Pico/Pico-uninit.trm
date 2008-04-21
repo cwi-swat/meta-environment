@@ -1,0 +1,16 @@
+module Pico-uninit
+imports pico/syntax/Pico 
+        Pico-controlflow 
+        Pico-use-def
+
+fun set[PICO-ID] uninit(PROGRAM P) {
+    rel[EXP,PICO-ID] Uses := uses(P);
+    rel[STATEMENT, PICO-ID] Defs := defs(P);
+    CFSEGMENT CFLOW := cflow(P);
+    set[CP] Root := CFLOW.entry;
+    rel[CP,CP] Pred := CFLOW.graph;
+
+    {Id | <EXP E, PICO-ID Id> : Uses,
+                 E in reachX(Root, Defs[-,Id], Pred)
+    };
+}

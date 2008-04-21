@@ -1,0 +1,119 @@
+module Tree-Examples
+imports Tree-syntax
+
+%% Ex1: Count leaves in a TREE
+%% Idea: int N : T generates alle Integer leaves in the tree
+%% # is the built-in length-of operator
+
+fun int cnt(TREE T) {
+    return #{N | int N : T};
+}
+
+%% Ex1: an equivalent,  more purist, version of the same function:
+fun int cnt(TREE T) {
+    return #{N | <Integer N> : T};
+}
+
+%% Ex1: alternative solution using trafo functions:
+
+fun int cnt(TREE T) {
+    int C := 0;
+    visit T {
+      <Integer N> : C+1
+    };
+    return C;
+}
+
+%% Ex2: Sum all leaves in a TREE
+%% NB sum is a built-in that adds all elements in a set or list.
+%% Here we see immediately the need to identify
+%% - the built-in sort "int"
+%% - the syntactic sort "Integer"
+
+fun int sumtree(TREE T) {
+    return sum({N | int N : T});
+}
+
+%% Ex2: using accumulator
+
+fun int cnt(TREE T) {
+    int C := 0;
+    visit T {
+      <Integer N> : C+N
+    };
+    return C;
+}
+
+%% Ex3: Increment all leaves in a TREE
+%% Idea: using the construct "visit T { ... }" visit all leaves in the 
+%% tree T that match an integer and replace each N in T by N+1.
+%% The expression as a whole returns the modified term.
+%% Note that two conversions are needed here:
+%% - from int to NAT to match subterms
+%% - from int to NAT to convert the result of addition into 
+%%   a NAT tree
+
+fun TREE inc(TREE T) {
+    visit T {
+      <Integer N> => <N1>
+      when Integer N1 := N + 1
+    };
+}
+
+%% Ex4: full replacement of g by i
+%% The whole repertoire of traversal functions is available:
+%% - visit first bu T { ... }
+%% - visit all td  T { ... }
+%% - etc.
+%% with:
+%% "first" (= break) and "all" (= continue).
+%% "bu" (= bottom-up) and "td" (=top-down)
+%% A nice touch is that these properties are not tied to the
+%% declaration of a travesal function (as in ASF+SDF) but to 
+%% its use.
+
+fun TREE frepl(TREE T) {
+    visit all bu T {
+      g(<TREE T1>, <TREE T2>) => i(<TREE T1>, <TREE T2>)
+    };
+}
+
+%% Ex5: Deep replacement of g by i
+
+fun TREE frepl(TREE T) {
+    visit first bu T {
+      g(<TREE T1>, <TREE T2>) => i(<TREE T1>, <TREE T2>)
+    };
+}
+
+%% Ex6: shallow replacement of g by i (i.e. only outermost 
+%% g's are replaced); 
+
+fun TREE srepl(TREE T) {
+    visit first td T {
+      g(<TREE T1>, <TREE T2>) => i(<TREE T1>, <TREE T2>)
+    };
+}
+
+
+%% Ex7: We can also add the first/td directives to all generators 
+%% (where "all td" would be the default):
+
+fun set[TREE] find_outer_gs(TREE T) {
+    { S | STATEMENT S : first td T, 
+          g(<TREE T1>, <TREE T2>) := S };
+}
+
+%% Ex8: accumulating transformer that increments leaves with amount D and counts them
+
+fun <int, TREE> count_and_inc(TREE T, int C, int D) {
+    int C := 0;
+    
+    < visit T {
+      <Integer N> => <N1>
+      when Integer N1 := N + D, 
+           C := C + 1
+     },
+     C
+    >;
+}

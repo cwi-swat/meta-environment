@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -744,21 +744,21 @@ imports Tree-syntax
 %% # is the built-in length-of operator
 
 fun int cnt(TREE T) {
-    #{N | int N : T}
+    return #{N | int N : T};
 }
 
 %% Ex1: an equivalent,  more purist, version of the same function:
 fun int cnt(TREE T) {
-    #{N | &lt;Integer N&gt; : T}
+    return #{N | &lt;Integer N&gt; : T};
 }
 
 %% Ex1: alternative solution using trafo functions:
 
-int cnt(TREE T) {
+fun int cnt(TREE T) {
     int C := 0;
     visit T {
       &lt;Integer N&gt; : C+1
-    }
+    };
     return C;
 }
 
@@ -769,16 +769,16 @@ int cnt(TREE T) {
 %% - the syntactic sort "Integer"
 
 fun int sumtree(TREE T) {
-    sum({N | int N : T})
+    return sum({N | int N : T});
 }
 
 %% Ex2: using accumulator
 
-int cnt(TREE T) {
+fun int cnt(TREE T) {
     int C := 0;
     visit T {
       &lt;Integer N&gt; : C+N
-    }
+    };
     return C;
 }
 
@@ -795,7 +795,7 @@ fun TREE inc(TREE T) {
     visit T {
       &lt;Integer N&gt; =&gt; &lt;N1&gt;
       when Integer N1 := N + 1
-    }
+    };
 }
 
 %% Ex4: full replacement of g by i
@@ -813,7 +813,7 @@ fun TREE inc(TREE T) {
 fun TREE frepl(TREE T) {
     visit all bu T {
       g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    }
+    };
 }
 
 %% Ex5: Deep replacement of g by i
@@ -821,7 +821,7 @@ fun TREE frepl(TREE T) {
 fun TREE frepl(TREE T) {
     visit first bu T {
       g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    }
+    };
 }
 
 %% Ex6: shallow replacement of g by i (i.e. only outermost 
@@ -830,7 +830,7 @@ fun TREE frepl(TREE T) {
 fun TREE srepl(TREE T) {
     visit first td T {
       g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    }
+    };
 }
 
 
@@ -839,7 +839,7 @@ fun TREE srepl(TREE T) {
 
 fun set[TREE] find_outer_gs(TREE T) {
     { S | STATEMENT S : first td T, 
-          g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) := S }
+          g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) := S };
 }
 
 %% Ex8: accumulating transformer that increments leaves with amount D and counts them
@@ -853,7 +853,7 @@ fun &lt;int, TREE&gt; count_and_inc(TREE T, int C, int D) {
            C := C + 1
      },
      C
-    &gt;
+    &gt;;
 }</programlisting></para>
     </section>
 
@@ -889,7 +889,7 @@ exports
         <title>Booleans using visit</title>
 
         <para>A simple solution exists using the visit construct that we have
-        encountered in the above examples.<programlisting>module Bool-examples2
+        encountered in the above examples.<programlisting>module Bool-example1
 imports Booleans-syntax
 
 fun Bool reduce(Bool B) {
@@ -991,22 +991,22 @@ context-free syntax
 imports Lambda-syntax
 
 fun set[Var] allVars(Exp E) {
-    {V | Var V : E}
+    {V | Var V : E};
 }
 
 fun set[Var] boundVars(Exp E) {
-    {V | fn &lt;Var V&gt; =&gt; &lt;Exp E1&gt; : E}
-}
+    {V | fn &lt;Var V&gt; =&gt; &lt;Exp E1&gt; : E};
+}Lamb
 
 fun set[Var] freeVars(Exp E) {
-    allVars(E) \ boundVars(E)
+    allVars(E) \ boundVars(E);
 }
 
 %% Generate a fresh variable if V does not occur in 
 %% given set of variables.
 
 fun Var fresh(Var V, set[Var] S) {
-    if V in S then prime(V) else V fi
+    if V in S then prime(V) else V fi;
 }
 
 %% Substitution: replace all occurrences of V in E2 by E1
@@ -1037,7 +1037,7 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
               V1 in freeVars(Ea) &amp; V2 in freeVars(E1),
               V3 := fresh(V2, freeVars(Ea) union freeVars(E1)),
               Exp EaS := subst(V1, E1, subst(V2, V3, E2))
-    }
+    };
 }</programlisting><note>
           <para>There are a lot of ambiguities in the body of subst!</para>
         </note></para>
@@ -1080,7 +1080,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
        when { Var V1 } := Rn[V]
 
     &lt;Exp E1&gt; =&gt; E1
-    }
+    };
 }</programlisting>Here are some OUTDATED experiments with global
       variables:<programlisting>%% Rename all bound variables in an Exp
 %% Version 2: using a global variable
@@ -1171,7 +1171,7 @@ fun list[Error] tcp(PROGRAM P) {
            [ tcst(S, Env) | Stat S : Series ]     %% list comprehension
        when Env Env := {&lt;Id, Type&gt; | 
                         &lt;PICO-ID Id&gt; : &lt;TYPE Type&gt; : Decls}
-    }
+    };
 }
 
 fun list[Error] tcst(Stat Stat, Env Env) {
@@ -1186,7 +1186,7 @@ fun list[Error] tcst(Stat Stat, Env Env) {
 
     while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od =&gt;
            type-of(Exp, natural, Env) + tcs(Stats, Env)
-    }
+    };
 }
 
 fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
@@ -1214,7 +1214,7 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
        when Type == string
     
     &lt;EXP Exp&gt; =&gt; [error("Incorrect type")]
-    }
+    };
 }</programlisting></para>
 
       <programlisting>%% Discussion: it may be interesting to generalize switch to allow 
@@ -1251,7 +1251,7 @@ fun CFSEGMENT cflow({STATEMENT ";"}* Stats){
               &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; := cflow(Stats2)
 
       [| |] =&gt; &lt;{}, {}, {}&gt;
-    }
+    };
 }
 
 fun CFSEGMENT cflow(STATEMENT Stat){
@@ -1270,7 +1270,7 @@ fun CFSEGMENT cflow(STATEMENT Stat){
               &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; := cflow(Stats2)
            
       &lt;STATEMENT Stat&gt;  =&gt; &lt;{Stat}, {}, {Stat}&gt;
-    }
+    };
 }</programlisting>
 
       <para>Note that most type information in declarations can be omitted,
@@ -1304,12 +1304,12 @@ fun CFSEGMENT cflow(STATEMENT Stat){
 imports pico/syntax/Pico
 
 fun rel[EXP,PICO-ID] uses(PROGRAM P) {
-  {&lt;E,Id&gt; | EXP E : P, PICO-ID Id := E}
+  {&lt;E,Id&gt; | EXP E : P, PICO-ID Id := E};
 }
 
 fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
   {&lt;S, Id&gt; | STATEMENT S : P, 
-                        &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; := S}
+                        &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; := S};
 }</programlisting>
 
       <para>The above uses a "matching condition" to decompose
@@ -1335,7 +1335,7 @@ fun set[PICO-ID] uninit(PROGRAM P) {
 
     {Id | &lt;EXP E, PICO-ID Id&gt; : Uses,
                  E in reachX(Root, Defs[-,Id], Pred)
-    }
+    };
 }</programlisting>Questions (UPDATE THIS):</para>
 
       <itemizedlist>
@@ -1382,7 +1382,7 @@ fun PROGRAM cse(PROGRAM P) {
     visit P {
       &lt;EXP E &gt; =&gt; Id
          when { Id } := replacements[E]   
-    }
+    };
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions E2 by Id, such
@@ -1481,7 +1481,7 @@ fun PROGRAM cp(PROGRAM P) {
     visit P {
      &lt;PICO-ID Id&gt; =&gt; E
         when { EXP E } := replacements[Id]
-    }  
+    };  
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions Id2 by the constant E,
@@ -1537,7 +1537,7 @@ fun int innerProduct(Vector V1, V2){
        (N1*N2) + innerProduct( (&lt;Rest1&gt;), (&lt;Rest2&gt;) )
     else 
        0
-    fi
+    fi;
 }</programlisting>
     </section>
 
@@ -1553,7 +1553,7 @@ fun Integer* sort(Integer* Numbers){
       &lt;Integer* Rest1&gt; &lt;Integer N1&gt; &lt;Integer N2&gt; &lt;Integer* Rest2&gt; =&gt;
          sort(&lt;Integer* Rest1&gt; &lt;Integer N2&gt; &lt;Integer N1&gt; &lt;Integer* Rest&gt;)
       when N1 &gt; N2
-    }
+    };
 }</programlisting>
 
       <para>This example raises a number of issues about the execution of

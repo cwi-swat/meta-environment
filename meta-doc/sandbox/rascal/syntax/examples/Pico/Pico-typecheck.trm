@@ -11,7 +11,7 @@ fun list[Error] tcp(PROGRAM P) {
            [ tcst(S, Env) | Stat S : Series ]     %% list comprehension
        when Env Env := {<Id, Type> | 
                         <PICO-ID Id> : <TYPE Type> : Decls}
-    }
+    };
 }
 
 fun list[Error] tcst(Stat Stat, Env Env) {
@@ -26,7 +26,7 @@ fun list[Error] tcst(Stat Stat, Env Env) {
 
     while <EXP Exp> do <{STATEMENT ";"}* Stats1> od =>
            type-of(Exp, natural, Env) + tcs(Stats, Env)
-    }
+    };
 }
 
 fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
@@ -54,5 +54,5 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
        when Type == string
     
     <EXP Exp> => [error("Incorrect type")]
-    }
+    };
 }
