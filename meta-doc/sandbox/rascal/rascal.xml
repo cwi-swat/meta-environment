@@ -588,7 +588,7 @@
     </section>
 
     <section xml:id="section.patterns">
-      <title>Patterns</title>
+      <title>Concrete Patterns</title>
 
       <para>There is a notation of "pattern": a quoted concrete syntax
       fragment that may contain variables and subexpresions to be evaluated.
@@ -652,6 +652,15 @@
 
       <programlisting><replaceable>S</replaceable>                     -&gt; Pattern
 "&lt;<replaceable>" "S</replaceable>"? Variable "&gt;" -&gt; <replaceable>S</replaceable>      </programlisting>
+    </section>
+
+    <section>
+      <title>Abstract Patterns</title>
+
+      <para>Type declarations may introduce a signature of abstract terms.
+      These terms (possibly including typed variables as introduced for
+      concrete patterns) may be used as abstract patterns at the same postion
+      where concrete patterns are allowed.</para>
     </section>
 
     <section>
@@ -749,14 +758,14 @@
 
           <itemizedlist>
             <listitem>
-              <para>repeat = fixed-point (repeat as long as the traversal
-              function changes values)</para>
+              <para>repeat = compute a fixed-point: repeat as long as the
+              traversal function changes values.</para>
             </listitem>
           </itemizedlist>
         </listitem>
 
         <listitem>
-          <para>A yield statement that delivers a value during a
+          <para>A "yield" statement that delivers a value during a
           traversal.</para>
         </listitem>
 
@@ -765,24 +774,6 @@
         </listitem>
       </itemizedlist>
     </section>
-  </section>
-
-  <section>
-    <title>Memo-pad for traversal functions</title>
-
-    <para>We need the following functionality:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Rewriters that repeatedly apply a set of rewrite rules until no
-        further rule applies.</para>
-      </listitem>
-
-      <listitem>
-        <para>Fit the "equations" construct of Rscript in this (= set of
-        simultaneous equalities over a lattice).</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <section>
@@ -1114,25 +1105,30 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
       &lt;Var V2&gt;: if(V1 == V2){ yield E1; }
 
       &lt;Exp Ea&gt; &lt;Exp Eb&gt;: {
-                Exp EaS = subst(V, E, Ea);
-                Exp EbS = subst(V, E, Eb);
-                return &lt;Exp EaS&gt; &lt;Exp EbS&gt;;
-         } 
+         Exp EaS = subst(V, E, Ea);
+         Exp EbS = subst(V, E, Eb);
+         return &lt;Exp EaS&gt; &lt;Exp EbS&gt;;
+      } 
 
-      fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt;: if (V1 == V2) { yield fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt; }
+      fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt;: 
+         if (V1 == V2) { yield fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt; }
 
       fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;:
-                if(V1 != V2 &amp;&amp; not(V1 in freeVars(E2) &amp;&amp; V2 in freeVars(E1))){
-                   Exp E1S = subst(V1, E1, Ea);
-                   yield fn &lt;Var V2&gt; =&gt; &lt;Exp E1S&gt;;
-                }              
+         if(V1 != V2 &amp;&amp; 
+            not(V1 in freeVars(E2) &amp;&amp; 
+            V2 in freeVars(E1))){
+           Exp E1S = subst(V1, E1, Ea);
+           yield fn &lt;Var V2&gt; =&gt; &lt;Exp E1S&gt;;
+         }              
  
        fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;: 
-               if(V1 != V2 &amp;&amp; V1 in freeVars(Ea) &amp;&amp; V2 in freeVars(E1)){
-                  Var V3 = fresh(V2, freeVars(Ea) union freeVars(E1));
-                  Exp EaS = subst(V1, E1, subst(V2, V3, E2));
-                  yield fn &lt;Var V3&gt; =&gt; &lt;Exp EaS&gt;;
-               }
+          if(V1 != V2 &amp;&amp; 
+             V1 in freeVars(Ea) &amp;&amp; 
+             V2 in freeVars(E1)){
+             Var V3 = fresh(V2, freeVars(Ea) union freeVars(E1));
+             Exp EaS = subst(V1, E1, subst(V2, V3, E2));
+             yield fn &lt;Var V3&gt; =&gt; &lt;Exp EaS&gt;;
+          }
     };
 }</programlisting><note>
           <para>There are a lot of ambiguities in the body of subst!</para>
@@ -1327,9 +1323,10 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
       <programlisting>module Pico-controlflow
 imports pico/syntax/Pico
 
-type CP = EXP | STATEMENT;     %% A Code Point, union of two types
+type CP EXP;     %% A Code Point, union of two types
+type CP STATEMENT;
 
-type CFSEGMENT = &lt; set[CP] entry, rel[CP,CP] graph, set[CP] exit&gt;;
+type CFSEGMENT &lt; set[CP] entry, rel[CP,CP] graph, set[CP] exit&gt;;
 
 fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {
@@ -1375,12 +1372,12 @@ fun CFSEGMENT cflow(STATEMENT Stat){
 imports pico/syntax/Pico
 
 fun rel[EXP,PICO-ID] uses(PROGRAM P) {
-  {&lt;E,Id&gt; | EXP E : P, PICO-ID Id := E};
+  return {&lt;E,Id&gt; | EXP E : P, PICO-ID Id := E};
 }
 
 fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
-  {&lt;S, Id&gt; | STATEMENT S : P, 
-                        &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; := S};
+  return {&lt;S, Id&gt; | STATEMENT S : P, 
+                    &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; := S};
 }</programlisting>
 
       <para>The above uses a "matching condition" to decompose

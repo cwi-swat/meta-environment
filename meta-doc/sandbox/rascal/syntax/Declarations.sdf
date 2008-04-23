@@ -19,9 +19,9 @@ context-free syntax
    VarDecl "=" Expression                               -> VarDeclInit {cons("var-init-decl")}
 
 %% Declarations
-   VarDeclInit                                          -> Declaration 
+%%   VarDeclInit                                          -> Declaration 
    "type" IdCon Type                                    -> Declaration {cons("type-decl")}
-   VarDeclInit                                          -> Statement
+%%   VarDeclInit                                          -> Statement
 
    FunctionType "{"  {Statement ";"}* ";"? "}"          -> Declaration {cons("function-decl")}
 

@@ -71,6 +71,6 @@ context-free syntax
    TypeName                                                -> TypePattern
    TypeName "(" {TypePattern ","}* ")"                     -> TypePattern
 
-   "<" Type Variable ">"                                   -> TypePattern
+   "<" Type Variable ">"                                   -> TypePattern {avoid}
    "(" TypePattern ")"                                     -> TypePattern {bracket}     
 

@@ -1,9 +1,10 @@
 module Pico-controlflow
 imports pico/syntax/Pico
 
-type CP = EXP | STATEMENT;     %% A Code Point, union of two types
+type CP EXP;     %% A Code Point, union of two types
+type CP STATEMENT;
 
-type CFSEGMENT = < set[CP] entry, rel[CP,CP] graph, set[CP] exit>;
+type CFSEGMENT < set[CP] entry, rel[CP,CP] graph, set[CP] exit>;
 
 fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {

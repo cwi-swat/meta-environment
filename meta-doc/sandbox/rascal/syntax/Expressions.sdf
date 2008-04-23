@@ -25,7 +25,7 @@ context-free syntax
          IntCon                                                  -> Expression {cons("intcon-exp")}
          StrCon                                                  -> Expression {cons("strcon-exp")}
          Area                                                    -> Expression {cons("areacon-exp")}
-	IdCon "(" {ExpressionOrPattern ","}* ")"                -> Expression {cons("fun-call")}
+	IdCon "(" {Expression ","}* ")"                         -> Expression {cons("fun-call")}
 	Variable                                                -> Expression {cons("variable")}
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
@@ -124,7 +124,7 @@ context-free syntax
 %% Do we want elseif etc.?
 
 context-free syntax
-         LeftHandSide "=" ExpressionOrPattern                    -> Assignment {cons("assign")}
+         Signature "=" ExpressionOrPattern                       -> Assignment {cons("assign")}
          Assignment                                              -> Statement
         "return" ExpressionOrPattern                             -> Statement {cons("return")}
         "yield" ExpressionOrPattern                              -> Statement {cons("yield")}

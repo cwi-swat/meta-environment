@@ -23,6 +23,6 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
 
     <Var V>: return Rn[V]
 
-    <Exp E1>: return E1;
+    <Exp E1>: return [| <E1> |];
     };
 }
