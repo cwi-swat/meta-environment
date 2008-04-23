@@ -11,22 +11,22 @@ context-free start-symbols
   Type
 
 exports
-sorts Type LabelledType LabelledTypes TypeVar 
-      BasicType StructuredType FunctionType PatternType
+sorts TypeName Type LabelledType LabelledTypes TypeVar BasicType StructuredType FunctionType
+      TypePattern LabelledTypePattern LabelledTypesPattern BasicTypePattern StructuredTypePattern
+
+  lexical syntax
+    head:[a-z]                                        -> TypeName {cons("one-char")}
+    head:[a-z] middle:[A-Za-z0-9\-]* last:[A-Za-z0-9] -> TypeName {cons("more-chars")} 
 
 context-free syntax
-
-   "&" Variable                                            -> TypeVar
-   TypeVar                                                 -> Sort
-
-   Type Variable?                                          -> LabelledType
 
    "bool"                                                  -> BasicType {cons("bool-type")} 
    "int"                                                   -> BasicType {cons("int-type")} 
    "str"                                                   -> BasicType {cons("str-type")} 
    "loc"                                                   -> BasicType {cons("loc-type")}
    "any"                                                   -> BasicType {cons("any-type")}
-   
+ 
+   Type Variable?                                          -> LabelledType  
    {LabelledType ","}+                                     -> LabelledTypes
    "list" "[" Type "]"                                     -> StructuredType {cons("list-type")} 
    "set" "[" Type "]"                                      -> StructuredType {cons("set-type")}
@@ -36,9 +36,41 @@ context-free syntax
 
    "fun" Type Variable "(" LabelledTypes ")"               -> FunctionType {cons("function-type")}
 
-   "pat" Type Variable "(" LabelledTypes ")"               -> PatternType {cons("patttern-type")}
+%%   "pat" Type Variable "(" LabelledTypes ")"               -> PatternType {cons("patttern-type")}
 
-   BasicType | StructuredType | FunctionType | PatternType -> Type
+   "&" Variable                                            -> TypeVar
+
+   TypeVar | BasicType | StructuredType | FunctionType     -> Type
+   TypeName                                                -> Type
+   TypeName "(" {Type ","}* ")"                            -> Type
  
-   "(" Type ")"                                            -> Type {bracket}     
+   "(" Type ")"                                            -> Type {bracket} 
+
+%% TypePattern (undesirable repetition!)
+
+   "bool"                                                  -> BasicTypePattern {cons("bool-type")} 
+   "int"                                                   -> BasicTypePattern {cons("int-type")} 
+   "str"                                                   -> BasicTypePattern {cons("str-type")} 
+   "loc"                                                   -> BasicTypePattern {cons("loc-type")}
+   "any"                                                   -> BasicTypePattern {cons("any-type")}
+
+   Type Variable?                                          -> LabelledTypePattern
+   
+   {LabelledType ","}+                                     -> LabelledTypesPattern
+   "list" "[" TypePattern "]"                              -> StructuredTypePattern {cons("list-type")} 
+   "set" "[" TypePattern "]"                               -> StructuredTypePattern {cons("set-type")}
+   "rel" "[" LabelledTypesPattern "]"                      -> StructuredTypePattern {cons("rel-type")}
+   "<" LabelledTypePattern "," LabelledTypesPattern ">"    -> StructuredTypePattern {cons("tuple-type")}
+   Symbol                                                  -> StructuredTypePattern {cons("symbol-type")}
+
+%%   "fun" Type Variable "(" LabelledTypes ")"               -> FunctionType {cons("function-type")}
+
+%%   "pat" Type Variable "(" LabelledTypes ")"               -> PatternType {cons("patttern-type")}
+
+   BasicTypePattern | StructuredTypePattern                -> TypePattern
+   TypeName                                                -> TypePattern
+   TypeName "(" {TypePattern ","}* ")"                     -> TypePattern
+
+   "<" Type Variable ">"                                   -> TypePattern
+   "(" TypePattern ")"                                     -> TypePattern {bracket}     
 

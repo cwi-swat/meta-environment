@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -498,19 +498,48 @@
         </listitem>
 
         <listitem>
+          <para>There is a catch-all type "any".</para>
+        </listitem>
+
+        <listitem>
           <para>Relations can have optional column names.</para>
+        </listitem>
+
+        <listitem>
+          <para>There is subtyping (as opposed to aliasing of types in
+          Rscript)</para>
+        </listitem>
+
+        <listitem>
+          <para>All syntactic types are a subtype of the type TREE that
+          corresponds to AsFix.</para>
+        </listitem>
+
+        <listitem>
+          <para>Up casts from a subtype to enclosing type are
+          automatic.</para>
+        </listitem>
+
+        <listitem>
+          <para>Down casts require a run-time check.</para>
         </listitem>
       </itemizedlist>
 
       <para>As a design strategy we try to offer the option to leave out as
       many type indications as possible.</para>
 
-      <para>A type declaration may introduce an abbreviation for a complex
-      type.</para>
+      <para>Type declarations may introduce new structured (abstract as oopsed
+      to concrete) types.</para>
 
       <para>Types may include type variables like
       <literal>&amp;<replaceable>T</replaceable></literal> as in
-      rscript.</para>
+      Rscript.</para>
+    </section>
+
+    <section>
+      <title>Variables</title>
+
+      <para></para>
     </section>
 
     <section>
@@ -636,40 +665,12 @@
           </listitem>
 
           <listitem>
-            <para>A "switch" expression is similar to a switch statement in C
-            or Java and for a given subject term, it corresponds to the
-            matching provided by the left-hand sides of a set of rewrite
-            rules. However, it provides <emphasis role="bold">only</emphasis>
-            matching at the top level of the subject term and does not
-            traverse it. The type of each pattern must be identical to the
-            type of the subject term (or be a subtype of it).</para>
-          </listitem>
-
-          <listitem>
-            <para>A rewrite rule consists of a Pattern optionally followed by
-            =&gt; and a replacement and optional conditions:<programlisting><replaceable>Pattern</replaceable> =&gt; <replaceable>Replacement</replaceable> when <replaceable>Condition1</replaceable>, <replaceable>Condition2</replaceable>, ...</programlisting></para>
-          </listitem>
-
-          <listitem>
-            <para>When the replacement is missing we write:<programlisting><replaceable>Pattern</replaceable>: <replaceable>Condition1</replaceable>, <replaceable>Condition2</replaceable>, ...</programlisting></para>
-          </listitem>
-
-          <listitem>
-            <para>A "visit" expression corresponds to a traversal function.
-            Given a subject term and a list of pattern/replacement pairs it
-            traverses the term. Depending on the precise rules it may perform
-            replacement (mimicking a transformer), update local variables
-            (mimicking an accumulator) or a combination of these two.</para>
-          </listitem>
-
-          <listitem>
             <para>Generators in comprehensions may range over syntax
             trees.</para>
           </listitem>
 
           <listitem>
-            <para>Visit and generators may have a strategy option to
-            indicate:</para>
+            <para>Generators may have a strategy option to indicate:</para>
 
             <itemizedlist>
               <listitem>
@@ -687,14 +688,82 @@
               <listitem>
                 <para>bu = bottom-up</para>
               </listitem>
-
-              <listitem>
-                <para>fix = fixed-point (repeat as long as the function value
-                changes)</para>
-              </listitem>
             </itemizedlist>
           </listitem>
+
+          <listitem>
+            <para>The complete repertoire of operators in Rscript is
+            available.</para>
+          </listitem>
         </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Statements</title>
+
+      <para>Rascal has the following statement types:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Variable declaration with initialization.</para>
+        </listitem>
+
+        <listitem>
+          <para>An assignment statement assigns a value to a (local or global)
+          variable.</para>
+        </listitem>
+
+        <listitem>
+          <para>If-then statement and if-then-else statement.</para>
+        </listitem>
+
+        <listitem>
+          <para>A "return" statement returns a value from a function.</para>
+        </listitem>
+
+        <listitem>
+          <para>A "switch" statement is similar to a switch statement in C or
+          Java and for a given subject term, it corresponds to the matching
+          provided by the left-hand sides of a set of rewrite rules. However,
+          it provides <emphasis role="bold">only</emphasis> matching at the
+          top level of the subject term and does not traverse it. The type of
+          each pattern must be identical to the type of the subject term (or
+          be a subtype of it).</para>
+        </listitem>
+
+        <listitem>
+          <para>A rewrite rule consists of a Pattern followed by =&gt; and a
+          replacement:<programlisting><replaceable>Pattern</replaceable> =&gt; <replaceable>Replacement</replaceable></programlisting>or
+          the pattern is followed by a block of statements:<programlisting>Pattern: Block</programlisting></para>
+
+          <para>A block may consist of declarations and statements.</para>
+        </listitem>
+
+        <listitem>
+          <para>A "visit" statement corresponds to a traversal function. Given
+          a subject term and a list of rewrite rules it traverses the term.
+          Depending on the precise rules it may perform replacement (mimicking
+          a transformer), update local variables (mimicking an accumulator) or
+          a combination of these two. The visit statement may contain the same
+          strategy options as a generator and also:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>repeat = fixed-point (repeat as long as the traversal
+              function changes values)</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>A yield statement that delivers a value during a
+          traversal.</para>
+        </listitem>
+
+        <listitem>
+          <para>A "solve" statement to solve a set of linear equations.</para>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
@@ -759,7 +828,7 @@ imports Booleans-syntax
 
 fun Bool reduce(Bool B) {
     visit bu B {
-      true &amp; &lt;Bool B2&gt;  =&gt; B2     %% Style 1: Use Variables
+      true &amp; &lt;Bool B2&gt;  =&gt; B2    %% Style 1: Use Variables
       false &amp; &lt;Bool B2&gt; =&gt; false
 
       true | true   =&gt; true      %% Style 2: Use a truth table
@@ -781,6 +850,35 @@ fun Bool reduce(Bool B) {
             <para>A truth table: this is sufficient as is.</para>
           </listitem>
         </itemizedlist>
+      </section>
+
+      <section>
+        <title>Abstract Booleans</title>
+
+        <para>In the above example we used concrete syntax for Booleans
+        expressions. It also possible to define Booleans as abstract
+        terms.<programlisting>module Bool-abstract
+
+type Bool true;
+type Bool false;
+type Bool and(Bool,Bool);
+type Bool or(Bool, Bool);
+
+fun Bool reduce(Bool B) {
+    visit bu B {
+      and(true, &lt;Bool B2&gt;)  =&gt; B2    %% Style 1: Use Variables
+      and(false, &lt;Bool B2&gt;) =&gt; false
+
+      or(true, true)   =&gt; true      %% Style 2: Use a truth table
+      or(true, false)  =&gt; true
+      or(false, true)  =&gt; true
+      or(false, false) =&gt; false
+    }
+}</programlisting></para>
+
+        <para>First, type declarations are used to define the abstract syntax
+        of the type Bool. Next, a similar reduce function is defined as
+        before, but now we use abstract patterns.</para>
       </section>
 
       <section>
@@ -1037,12 +1135,12 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
                }
     };
 }</programlisting><note>
-          <para> There are a lot of ambiguities in the body of subst!</para>
+          <para>There are a lot of ambiguities in the body of subst!</para>
         </note></para>
     </section>
 
     <section>
-      <title> Renaming in Let</title>
+      <title>Renaming in Let</title>
 
       <para><programlisting>module Let-syntax
 exports
@@ -2308,11 +2406,6 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
-        <para>How does list matching fit in? Probably no problem, see above
-        examples.</para>
-      </listitem>
-
-      <listitem>
         <para>How do we identify built-in sorts (bool, int, etc) with their
         syntactic counterparts?</para>
       </listitem>
@@ -2335,10 +2428,6 @@ process mkWave(int N) is ...</programlisting>
         <para>Unexplored idea: add (possibly lazy) generators for all types;
         this allows to generate, for instance, all statements in a
         program.</para>
-      </listitem>
-
-      <listitem>
-        <para>The "equations" from Rscript are not yet included.</para>
       </listitem>
 
       <listitem>

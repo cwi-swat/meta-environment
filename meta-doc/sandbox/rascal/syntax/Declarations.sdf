@@ -3,6 +3,7 @@ module Declarations
 imports	languages/sdf2/syntax/Sorts
 	Types 
 	Expressions 
+         basic/IdentifierCon
 
 hiddens
 context-free start-symbols
@@ -19,12 +20,12 @@ context-free syntax
 
 %% Declarations
    VarDeclInit                                          -> Declaration 
-   "type" Sort "=" Type                                 -> Declaration {cons("type-decl")}
+   "type" IdCon Type                                    -> Declaration {cons("type-decl")}
    VarDeclInit                                          -> Statement
 
    FunctionType "{"  {Statement ";"}* ";"? "}"          -> Declaration {cons("function-decl")}
 
-   "assert" StrCon ":" Expression                       -> Declaration {cons("assert-decl")}
+   "assert" StrCon ":" Predicate                        -> Declaration {cons("assert-decl")}
 
 %% Still missing:
 %% - equations

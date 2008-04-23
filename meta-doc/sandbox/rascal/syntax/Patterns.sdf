@@ -16,4 +16,5 @@ context-free syntax
          "<" Type? Variable  ">"                   -> PatternSymbol
          "[|" PatternSymbol* "|]"                  -> QuotedPattern
           QuotedPattern                            -> Pattern
+         TypePattern                               -> Pattern
 
