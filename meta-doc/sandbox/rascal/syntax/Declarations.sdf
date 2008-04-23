@@ -14,16 +14,17 @@ sorts Declaration VarDecl VarDeclInit
 context-free syntax
 
 %% Variable declaration
-   (BasicType | StructuredType) {Variable ","}+                    -> VarDecl {cons("variable-decls")}
-   VarDecl ":=" Expression                                         -> VarDeclInit {cons("var-init-decl")}
+   (BasicType | StructuredType) Variable                -> VarDecl {cons("variable-decl")}
+   VarDecl "=" Expression                               -> VarDeclInit {cons("var-init-decl")}
 
 %% Declarations
-   VarDeclInit                                                     -> Declaration 
-   "type" Sort "=" Type                                            -> Declaration {cons("type-decl")}
+   VarDeclInit                                          -> Declaration 
+   "type" Sort "=" Type                                 -> Declaration {cons("type-decl")}
+   VarDeclInit                                          -> Statement
 
-   FunctionType "{"  (VarDeclInit ";")* (Expression ";")+  "}"     -> Declaration {cons("function-decl")}
+   FunctionType "{"  {Statement ";"}* ";"? "}"          -> Declaration {cons("function-decl")}
 
-   "assert" StrCon ":" Expression                                  -> Declaration {cons("assert-decl")}
+   "assert" StrCon ":" Expression                       -> Declaration {cons("assert-decl")}
 
 %% Still missing:
 %% - equations

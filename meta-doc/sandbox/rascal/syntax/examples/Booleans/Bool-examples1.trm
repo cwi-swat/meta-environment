@@ -8,5 +8,5 @@ fun Bool reduce(Bool B) {
 
       true | <Bool B2>   => true
       false | <Bool B2>  => B2
-    };
+    }
 }

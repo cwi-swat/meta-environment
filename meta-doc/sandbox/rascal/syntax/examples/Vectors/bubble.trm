@@ -2,8 +2,10 @@ module Bubble
 
 fun Integer* sort(Integer* Numbers){
     visit Numbers {
-      <Integer* Rest1> <Integer N1> <Integer N2> <Integer* Rest2> =>
-         sort(<Integer* Rest1> <Integer N2> <Integer N1> <Integer* Rest>)
-      when N1 > N2
+      <Integer* Rest1> <Integer N1> <Integer N2> <Integer* Rest2>:
+        if(N1 > N2){
+          return sort(<Integer* Rest1> <Integer N2> <Integer N1> <Integer* Rest>);
+        }
     };
+    return Numbers
 }

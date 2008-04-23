@@ -11,14 +11,14 @@ fun Boolean is-constant(EXP E) {
      <StrCon S> => true
 
      <EXP E> => false
-   };
+   }
 }
 
 fun PROGRAM cp(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs := defs(P);
-    rel[CP,CP] Pred := cflow(P).graph;
+    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    rel[CP,CP] Pred = cflow(P).graph;
 
-    rel[PICO-ID, EXP] replacements := 
+    rel[PICO-ID, EXP] replacements = 
       {<Id2, E> | STATEMENT S : P,
                   <PICO-ID Id> := <EXP E> := S,
                   is-constant(E),
@@ -27,7 +27,6 @@ fun PROGRAM cp(PROGRAM P) {
       };  
  
     visit P {
-     <PICO-ID Id> => E
-        when { EXP E } := replacements[Id]
-    };
+     <PICO-ID Id>: if({ EXP E } := replacements[Id]) return E
+    };  
 }

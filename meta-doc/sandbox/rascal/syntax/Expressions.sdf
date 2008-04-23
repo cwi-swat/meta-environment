@@ -17,7 +17,7 @@ context-free start-symbols
 
 exports
 sorts Expression ExpressionOrPattern LeftHandSide Predicate SimpleGenerator Generator
-      Strategy Signature SwitchCase VisitCase
+      Strategy Signature Statement Rule Block Assignment
 
 context-free syntax
          "(" Expression ")"                                      -> Expression {bracket}
@@ -32,7 +32,7 @@ context-free syntax
 	"{" {Expression ","}* "}"                               -> Expression {cons("set")}
 	"<" {Expression ","}+ ">"                               -> Expression {cons("tuple")}
 
-         "return" Expression                                     -> Expression {cons("return")}
+ 
 
 context-free priorities
 
@@ -73,8 +73,8 @@ context-free priorities
          } >
 
 	"not" Predicate                                         -> Predicate {cons("not")} >
-	Predicate "&" Predicate                                 -> Predicate {cons("and")} >
-	Predicate "|" Predicate                                 -> Predicate {cons("or")} >
+	Predicate "&&" Predicate                                -> Predicate {cons("and")} >
+	Predicate "||" Predicate                                -> Predicate {cons("or")} >
          Predicate "==>" Predicate                               -> Predicate {cons("implies")}
 
 context-free syntax
@@ -89,7 +89,7 @@ context-free syntax
          Expression "[-," Expression "]"                         -> Expression {cons("rimage")}
 
 %% Generators
-        ("first" | "all")? ("td" | "bu")?                        -> Strategy
+         ("first" | "all")? ("td" | "bu")?                       -> Strategy
 	LeftHandSide ":" Strategy Expression                    -> SimpleGenerator {cons("generator")}
 	Type? Variable                                          -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
@@ -104,19 +104,29 @@ context-free syntax
          "exists" "(" SimpleGenerator "|" Predicate ")"          -> Expression {cons("exists")}
          "forall" "(" SimpleGenerator "|" Predicate ")"          -> Expression {cons("forall")}
 
+	 IdCon "(" {Expression","}* ")"                         -> Predicate {cons("pred-fun-call")}
+
 	"(" Predicate ")"                                       -> Predicate {bracket}
 
 context-free syntax
-         "if" Predicate "then" Expression "else" Expression "fi" -> Expression
+%% Switch and visit and solve
+         Expression | Pattern                                    -> ExpressionOrPattern
+
+         Pattern ":" Block                                       -> Rule
+         Pattern "=>" ExpressionOrPattern                        -> Rule
+
+ 	"switch" Expression "{" Rule+ "}"                       -> Statement
+   	"visit" "repeat"? Strategy Expression "{" Rule+ "}"     -> Statement
+         "solve" "{" { Assignment ";"}+ "}"                      -> Statement
+
+         "if" "(" Predicate ")" Block "else" Block               -> Statement
+         "if" "(" Predicate ")" Block                            -> Statement
 %% Do we want elseif etc.?
 
-%% Switch and visit
-         Expression | Pattern                                          -> ExpressionOrPattern
-
-         Pattern "=>" ExpressionOrPattern ("when" {Predicate ","}+ )?  -> SwitchCase
-  	"switch" Expression "{" SwitchCase+ "}"                       -> Expression
-
-         SwitchCase                                                    -> VisitCase
-         Pattern ":" {(Predicate | Expression) ","}+                   -> VisitCase
-
-   	"visit" Strategy Expression "{" VisitCase+ "}"                -> Expression
+context-free syntax
+         LeftHandSide "=" ExpressionOrPattern                    -> Assignment {cons("assign")}
+         Assignment                                              -> Statement
+        "return" ExpressionOrPattern                             -> Statement {cons("return")}
+        "yield" ExpressionOrPattern                              -> Statement {cons("yield")}
+        Statement ";"?                                           -> Block
+        "{" {Statement ";"}+ ";"? "}"                            -> Block

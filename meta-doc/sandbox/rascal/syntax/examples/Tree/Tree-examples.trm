@@ -1,25 +1,25 @@
 module Tree-Examples
-imports Tree-syntax
+imports Tree-syntax 
 
 %% Ex1: Count leaves in a TREE
 %% Idea: int N : T generates alle Integer leaves in the tree
 %% # is the built-in length-of operator
 
 fun int cnt(TREE T) {
-    return #{N | int N : T};
+    return #{N | int N : T}
 }
 
 %% Ex1: an equivalent,  more purist, version of the same function:
 fun int cnt(TREE T) {
-    return #{N | <Integer N> : T};
+    return #{N | <Integer N> : T}
 }
 
 %% Ex1: alternative solution using trafo functions:
 
 fun int cnt(TREE T) {
-    int C := 0;
+    int C = 0;
     visit T {
-      <Integer N> : C+1
+      <Integer N> : C = C+1
     };
     return C;
 }
@@ -37,9 +37,9 @@ fun int sumtree(TREE T) {
 %% Ex2: using accumulator
 
 fun int cnt(TREE T) {
-    int C := 0;
+    int C = 0;
     visit T {
-      <Integer N> : C+N
+      <Integer N> : C = C+N
     };
     return C;
 }
@@ -55,8 +55,7 @@ fun int cnt(TREE T) {
 
 fun TREE inc(TREE T) {
     visit T {
-      <Integer N> => <N1>
-      when Integer N1 := N + 1
+      <Integer N>: yield (N + 1)
     };
 }
 
@@ -100,20 +99,17 @@ fun TREE srepl(TREE T) {
 %% (where "all td" would be the default):
 
 fun set[TREE] find_outer_gs(TREE T) {
+    return
     { S | STATEMENT S : first td T, 
           g(<TREE T1>, <TREE T2>) := S };
 }
 
 %% Ex8: accumulating transformer that increments leaves with amount D and counts them
-
 fun <int, TREE> count_and_inc(TREE T, int C, int D) {
-    int C := 0;
+    int C = 0;
     
-    < visit T {
-      <Integer N> => <N1>
-      when Integer N1 := N + D, 
-           C := C + 1
-     },
-     C
-    >;
+    visit T {
+      <Integer N>: { C = C + 1; yield N+D }
+     };
+     return <C, T>;
 }

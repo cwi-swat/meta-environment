@@ -1,9 +1,9 @@
-module Bubble
+module Bubble-Gen
 
 fun &Elem* sort(Elem* Elements, fun bool GreaterThan(&Elem, &Elem)){
-    sort( visit Elements {
-            <E1> <E2> => <E2> <E1>
-            when GreaterThan(E1, E2)
-          }
-         )
+   
+  visit repeat Elements {
+      <Elem E1> <Elem E2>: if(GreaterThan(E1, E2)) yield <Elem E2> <Elem E1>
+
+     }
 }

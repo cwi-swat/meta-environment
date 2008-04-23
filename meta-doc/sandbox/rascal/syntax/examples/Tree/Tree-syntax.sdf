@@ -17,5 +17,8 @@ hiddens
    context-free start-symbols
         Module 
    imports 
-	EmbedSortAsPatternAndVar[Integer]
+	EmbedSortAsVar[Integer]        %% Do not include as Pattern to avoid the ambiguity
+                                        %%    Integer -> Pattern
+                                        %% and
+                                        %%    Integer -> TREE -> Pattern
 	EmbedSortAsPatternAndVar[TREE]

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -723,141 +723,6 @@
     features.</para>
 
     <section>
-      <title>Tree traversal</title>
-
-      <para>Here is the TREE example that we use in explaining traversal
-      functions in ASF+SDF.<programlisting>module Tree-syntax
-imports basic/Integers
-
-exports 
-  sorts TREE
-  context-free syntax
-    Integer         -&gt; TREE
-    f(TREE,TREE)    -&gt; TREE
-    g(TREE,TREE)    -&gt; TREE
-    h(TREE,TREE)    -&gt; TREE
-    i(TREE,TREE)    -&gt; TREE</programlisting><programlisting>module Tree-Examples
-imports Tree-syntax
-
-%% Ex1: Count leaves in a TREE
-%% Idea: int N : T generates alle Integer leaves in the tree
-%% # is the built-in length-of operator
-
-fun int cnt(TREE T) {
-    return #{N | int N : T};
-}
-
-%% Ex1: an equivalent,  more purist, version of the same function:
-fun int cnt(TREE T) {
-    return #{N | &lt;Integer N&gt; : T};
-}
-
-%% Ex1: alternative solution using trafo functions:
-
-fun int cnt(TREE T) {
-    int C := 0;
-    visit T {
-      &lt;Integer N&gt; : C+1
-    };
-    return C;
-}
-
-%% Ex2: Sum all leaves in a TREE
-%% NB sum is a built-in that adds all elements in a set or list.
-%% Here we see immediately the need to identify
-%% - the built-in sort "int"
-%% - the syntactic sort "Integer"
-
-fun int sumtree(TREE T) {
-    return sum({N | int N : T});
-}
-
-%% Ex2: using accumulator
-
-fun int cnt(TREE T) {
-    int C := 0;
-    visit T {
-      &lt;Integer N&gt; : C+N
-    };
-    return C;
-}
-
-%% Ex3: Increment all leaves in a TREE
-%% Idea: using the construct "visit T { ... }" visit all leaves in the 
-%% tree T that match an integer and replace each N in T by N+1.
-%% The expression as a whole returns the modified term.
-%% Note that two conversions are needed here:
-%% - from int to NAT to match subterms
-%% - from int to NAT to convert the result of addition into 
-%%   a NAT tree
-
-fun TREE inc(TREE T) {
-    visit T {
-      &lt;Integer N&gt; =&gt; &lt;N1&gt;
-      when Integer N1 := N + 1
-    };
-}
-
-%% Ex4: full replacement of g by i
-%% The whole repertoire of traversal functions is available:
-%% - visit first bu T { ... }
-%% - visit all td  T { ... }
-%% - etc.
-%% with:
-%% "first" (= break) and "all" (= continue).
-%% "bu" (= bottom-up) and "td" (=top-down)
-%% A nice touch is that these properties are not tied to the
-%% declaration of a travesal function (as in ASF+SDF) but to 
-%% its use.
-
-fun TREE frepl(TREE T) {
-    visit all bu T {
-      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    };
-}
-
-%% Ex5: Deep replacement of g by i
-
-fun TREE frepl(TREE T) {
-    visit first bu T {
-      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    };
-}
-
-%% Ex6: shallow replacement of g by i (i.e. only outermost 
-%% g's are replaced); 
-
-fun TREE srepl(TREE T) {
-    visit first td T {
-      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
-    };
-}
-
-
-%% Ex7: We can also add the first/td directives to all generators 
-%% (where "all td" would be the default):
-
-fun set[TREE] find_outer_gs(TREE T) {
-    { S | STATEMENT S : first td T, 
-          g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) := S };
-}
-
-%% Ex8: accumulating transformer that increments leaves with amount D and counts them
-
-fun &lt;int, TREE&gt; count_and_inc(TREE T, int C, int D) {
-    int C := 0;
-    
-    &lt; visit T {
-      &lt;Integer N&gt; =&gt; &lt;N1&gt;
-      when Integer N1 := N + D, 
-           C := C + 1
-     },
-     C
-    &gt;;
-}</programlisting></para>
-    </section>
-
-    <section>
       <title>Variations on Booleans</title>
 
       <para>It seems that every language specification effort has to produce a
@@ -894,10 +759,10 @@ imports Booleans-syntax
 
 fun Bool reduce(Bool B) {
     visit bu B {
-      true &amp; &lt;Bool B2&gt;   =&gt; B2     %% Style 1: Use Variables
-      false &amp; &lt;Bool B2&gt;  =&gt; false
+      true &amp; &lt;Bool B2&gt;  =&gt; B2     %% Style 1: Use Variables
+      false &amp; &lt;Bool B2&gt; =&gt; false
 
-      true | true   =&gt; true        %% Style 2: Use a truth table
+      true | true   =&gt; true      %% Style 2: Use a truth table
       true | false  =&gt; true
       false | true  =&gt; true
       false | false =&gt; false
@@ -963,6 +828,138 @@ fun Bool reduce(Bool B) {
     </section>
 
     <section>
+      <title>Tree traversal</title>
+
+      <para>Here is the TREE example that we use in explaining traversal
+      functions in ASF+SDF.<programlisting>module Tree-syntax
+imports basic/Integers
+
+exports 
+  sorts TREE
+  context-free syntax
+    Integer         -&gt; TREE
+    f(TREE,TREE)    -&gt; TREE
+    g(TREE,TREE)    -&gt; TREE
+    h(TREE,TREE)    -&gt; TREE
+    i(TREE,TREE)    -&gt; TREE</programlisting><programlisting>module Tree-Examples
+imports Tree-syntax 
+
+%% Ex1: Count leaves in a TREE
+%% Idea: int N : T generates alle Integer leaves in the tree
+%% # is the built-in length-of operator
+
+fun int cnt(TREE T) {
+    return #{N | int N : T}
+}
+
+%% Ex1: an equivalent,  more purist, version of the same function:
+fun int cnt(TREE T) {
+    return #{N | &lt;Integer N&gt; : T}
+}
+
+%% Ex1: alternative solution using trafo functions:
+
+fun int cnt(TREE T) {
+    int C = 0;
+    visit T {
+      &lt;Integer N&gt; : C = C+1
+    };
+    return C;
+}
+
+%% Ex2: Sum all leaves in a TREE
+%% NB sum is a built-in that adds all elements in a set or list.
+%% Here we see immediately the need to identify
+%% - the built-in sort "int"
+%% - the syntactic sort "Integer"
+
+fun int sumtree(TREE T) {
+    return sum({N | int N : T});
+}
+
+%% Ex2: using accumulator
+
+fun int cnt(TREE T) {
+    int C = 0;
+    visit T {
+      &lt;Integer N&gt; : C = C+N
+    };
+    return C;
+}
+
+%% Ex3: Increment all leaves in a TREE
+%% Idea: using the construct "visit T { ... }" visit all leaves in the 
+%% tree T that match an integer and replace each N in T by N+1.
+%% The expression as a whole returns the modified term.
+%% Note that two conversions are needed here:
+%% - from int to NAT to match subterms
+%% - from int to NAT to convert the result of addition into 
+%%   a NAT tree
+
+fun TREE inc(TREE T) {
+    visit T {
+      &lt;Integer N&gt;: yield (N + 1)
+    };
+}
+
+%% Ex4: full replacement of g by i
+%% The whole repertoire of traversal functions is available:
+%% - visit first bu T { ... }
+%% - visit all td  T { ... }
+%% - etc.
+%% with:
+%% "first" (= break) and "all" (= continue).
+%% "bu" (= bottom-up) and "td" (=top-down)
+%% A nice touch is that these properties are not tied to the
+%% declaration of a travesal function (as in ASF+SDF) but to 
+%% its use.
+
+fun TREE frepl(TREE T) {
+    visit all bu T {
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
+    };
+}
+
+%% Ex5: Deep replacement of g by i
+
+fun TREE frepl(TREE T) {
+    visit first bu T {
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
+    };
+}
+
+%% Ex6: shallow replacement of g by i (i.e. only outermost 
+%% g's are replaced); 
+
+fun TREE srepl(TREE T) {
+    visit first td T {
+      g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) =&gt; i(&lt;TREE T1&gt;, &lt;TREE T2&gt;)
+    };
+}
+
+
+%% Ex7: We can also add the first/td directives to all generators 
+%% (where "all td" would be the default):
+
+fun set[TREE] find_outer_gs(TREE T) {
+    return
+    { S | STATEMENT S : first td T, 
+          g(&lt;TREE T1&gt;, &lt;TREE T2&gt;) := S };
+}
+
+%% Ex8: accumulating transformer that increments leaves with amount D and counts them
+fun &lt;int, TREE&gt; count_and_inc(TREE T, int C, int D) {
+    int C = 0;
+    
+    visit T {
+      &lt;Integer N&gt;: { C = C + 1; yield N+D }
+     };
+     return &lt;C, T&gt;;
+}
+</programlisting></para>
+    </section>
+
+    <section>
       <title>Substitution in Lambda</title>
 
       <para>Below a definition of substitution in lambda expressions. It would
@@ -991,22 +988,22 @@ context-free syntax
 imports Lambda-syntax
 
 fun set[Var] allVars(Exp E) {
-    {V | Var V : E};
+    return {V | Var V : E}
 }
 
 fun set[Var] boundVars(Exp E) {
-    {V | fn &lt;Var V&gt; =&gt; &lt;Exp E1&gt; : E};
-}Lamb
+    return {V | fn &lt;Var V&gt; =&gt; &lt;Exp E1&gt; : E};
+} 
 
 fun set[Var] freeVars(Exp E) {
-    allVars(E) \ boundVars(E);
+    return allVars(E) \ boundVars(E);
 }
 
 %% Generate a fresh variable if V does not occur in 
 %% given set of variables.
 
 fun Var fresh(Var V, set[Var] S) {
-    if V in S then prime(V) else V fi;
+    if (V in S){ return prime(V); } else {return V;};
 }
 
 %% Substitution: replace all occurrences of V in E2 by E1
@@ -1014,37 +1011,38 @@ fun Var fresh(Var V, set[Var] S) {
 fun Exp subst(Var V1, Exp E1, Exp E2) {
 
     switch E2 {
-      &lt;Var V2&gt; =&gt; V2
-         when V1 != V2
+      &lt;Var V2&gt;: if(V1 != V2){ yield V2; }
 
-      &lt;Var V2&gt; =&gt; E1
-         when V1 == V2 
+      &lt;Var V2&gt;: if(V1 == V2){ yield E1; }
 
-      &lt;Exp Ea&gt; &lt;Exp Eb&gt;  =&gt; &lt;Exp EaS&gt; &lt;Exp EbS&gt;
-         when Exp EaS := subst(V, E, Ea),
-              Exp EbS := subst(V, E, Eb)
+      &lt;Exp Ea&gt; &lt;Exp Eb&gt;: {
+                Exp EaS = subst(V, E, Ea);
+                Exp EbS = subst(V, E, Eb);
+                return &lt;Exp EaS&gt; &lt;Exp EbS&gt;;
+         } 
 
-      fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt; =&gt;  fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;
-         when V1 == V2
+      fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt;: if (V1 == V2) { yield fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt; }
 
-      fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt; =&gt; fn &lt;Var V2&gt; =&gt; &lt;Exp E1S&gt;
-         when V1 != V2,
-              not(V1 in freeVars(E2) &amp; V2 in freeVars(E1)),
-              Exp E1S := subst(V1, E1, Ea)
+      fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;:
+                if(V1 != V2 &amp;&amp; not(V1 in freeVars(E2) &amp;&amp; V2 in freeVars(E1))){
+                   Exp E1S = subst(V1, E1, Ea);
+                   yield fn &lt;Var V2&gt; =&gt; &lt;Exp E1S&gt;;
+                }              
  
-       fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;  =&gt; fn &lt;Var V3&gt; =&gt; &lt;Exp EaS&gt;
-         when V1 != V2,
-              V1 in freeVars(Ea) &amp; V2 in freeVars(E1),
-              V3 := fresh(V2, freeVars(Ea) union freeVars(E1)),
-              Exp EaS := subst(V1, E1, subst(V2, V3, E2))
+       fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;: 
+               if(V1 != V2 &amp;&amp; V1 in freeVars(Ea) &amp;&amp; V2 in freeVars(E1)){
+                  Var V3 = fresh(V2, freeVars(Ea) union freeVars(E1));
+                  Exp EaS = subst(V1, E1, subst(V2, V3, E2));
+                  yield fn &lt;Var V3&gt; =&gt; &lt;Exp EaS&gt;;
+               }
     };
 }</programlisting><note>
-          <para>There are a lot of ambiguities in the body of subst!</para>
+          <para> There are a lot of ambiguities in the body of subst!</para>
         </note></para>
     </section>
 
     <section>
-      <title>Renaming in Let</title>
+      <title> Renaming in Let</title>
 
       <para><programlisting>module Let-syntax
 exports
@@ -1065,21 +1063,21 @@ imports Let
 
 fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     switch E {
-    let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end =&gt;
-           let &lt;Var Y &gt;= &lt;Exp E1R&gt;
-           in 
-              &lt;Exp E2R&gt;
-           end 
-        when Var Y := "x" + Cnt,  %% this + operator concatenates 
-                                  %% (after converting the int to str)
-             int Cnt1 := Cnt + 1,
-             Exp E1R := rename(E1, Rn, Cnt),
-             Exp E2R := rename(E2, {&lt;V, Y&gt;} union Rn, Cnt1)
+      let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end: {
+        Var Y = "x" + Cnt;  %% this + operator concatenates 
+                            %% (after converting the int to str)
+        int Cnt1 = Cnt + 1;
+        Exp E1R = rename(E1, Rn, Cnt);
+        Exp E2R = rename(E2, {&lt;V, Y&gt;} union Rn, Cnt1);
+        return let &lt;Var Y &gt;= &lt;Exp E1R&gt;
+               in 
+                   &lt;Exp E2R&gt;
+               end;
+      }
 
-    &lt;Var V&gt; =&gt; V1
-       when { Var V1 } := Rn[V]
+    &lt;Var V&gt;: return Rn[V]
 
-    &lt;Exp E1&gt; =&gt; E1
+    &lt;Exp E1&gt;: return E1
     };
 }</programlisting>Here are some OUTDATED experiments with global
       variables:<programlisting>%% Rename all bound variables in an Exp
@@ -1167,70 +1165,62 @@ type Env = rel[PICO-ID,TYPE];
 
 fun list[Error] tcp(PROGRAM P) {
     switch P {
-    begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end =&gt;
-           [ tcst(S, Env) | Stat S : Series ]     %% list comprehension
-       when Env Env := {&lt;Id, Type&gt; | 
-                        &lt;PICO-ID Id&gt; : &lt;TYPE Type&gt; : Decls}
+      begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
+        Env Env = {&lt;Id, Type&gt; | &lt;PICO-ID Id&gt; : &lt;TYPE Type&gt; : Decls};
+        return [ tcst(S, Env) | Stat S : Series ]     %% list comprehension
+      }
     };
 }
 
 fun list[Error] tcst(Stat Stat, Env Env) {
     switch Stat {
-    &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; =&gt; type-of(Exp, Type, Env)
-       when {&lt;Id, Type&gt;} := Env[Id]
+      &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt;: {
+        {&lt;Id, Type&gt;} = Env[Id];
+        return type-of(Exp, Type, Env);
+      }
 
-    if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
-                 else &lt;{STATEMENT ";"}* Stats1&gt; fi =&gt;
-           type-of(Exp, natural, Env) + 
-           tcs(Stats1, Env) + tcs(Stats2, Env)
+      if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
+                   else &lt;{STATEMENT ";"}* Stats1&gt; fi:
+        return type-of(Exp, natural, Env) + 
+               tcs(Stats1, Env) + tcs(Stats2, Env);
 
-    while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od =&gt;
-           type-of(Exp, natural, Env) + tcs(Stats, Env)
+      while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od: 
+        yield type-of(Exp, natural, Env) + tcs(Stats, Env);
     };
 }
 
 fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
     switch E {
-    &lt;NatCon N&gt; =&gt; []
-       when Type == natural
+      &lt;NatCon N&gt;: if(Type == natural){ return []; }
 
-    &lt;StrCon S&gt; =&gt; []
-       when Type == string
+      &lt;StrCon S&gt;: if(Type == string) { return []; }
 
-    &lt;PICO-ID Id&gt; =&gt; [] 
-       when {&lt;Id,Type2&gt;} := Env[Id],
-            Type2 == Type
+      &lt;PICO-ID Id&gt;: {
+        {&lt;Id,Type2&gt;} = Env[Id];
+        if(Type2 == Type) { return []; }
+      }
 
-    &lt;EXP E1&gt; + &lt;EXP E2&gt;  =&gt; type-of(E1, natural, Env) + 
-                            type-of(E1, natural, Env)
-       when Type == natural
+      &lt;EXP E1&gt; + &lt;EXP E2&gt;:
+        if(Type == natural){
+           return type-of(E1, natural, Env) + 
+                  type-of(E1, natural, Env);
+        }
 
-    &lt;EXP E1&gt; + &lt;EXP E2&gt;  =&gt; type-of(E1, natural, Env) + 
-                            type-of(E1, natural, Env)
-       when Type == natural
+      &lt;EXP E1&gt; + &lt;EXP E2&gt;:
+        if(Type == natural){
+           return type-of(E1, natural, Env) + 
+                  type-of(E1, natural, Env);
+        }
 
-    &lt;EXP E1&gt; || &lt;EXP E2&gt; =&gt; type-of(E1, string, Env) + 
-                            type-of(E1, string, Env)
-       when Type == string
+      &lt;EXP E1&gt; || &lt;EXP E2&gt; =&gt; 
+        if(Type == string){
+          return type-of(E1, string, Env) + 
+                 type-of(E1, string, Env)
+        }
     
-    &lt;EXP Exp&gt; =&gt; [error("Incorrect type")]
+      &lt;EXP Exp&gt;: return [error("Incorrect type")];
     };
 }</programlisting></para>
-
-      <programlisting>%% Discussion: it may be interesting to generalize switch to allow 
-%% multiple arguments:
-   switch (E, Type) {
-    [| $NatCon |], [| natural |] =&gt; []
-
-    [| $StrCon |], [| string |] =&gt; []
-
-    [| $Id |], Type =&gt; [] 
-       when {&lt;Id,Type2&gt;} := Env[Id],
-            Type2 == Type
-            
-    [| $Exp |], Type =&gt; [error("Incorrect type")]
-    }
-%% Even patterns and expressions could be allowed as cases.</programlisting>
     </section>
 
     <section>
@@ -1245,55 +1235,38 @@ type CFSEGMENT = &lt; set[CP] entry, rel[CP,CP] graph, set[CP] exit&gt;;
 
 fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {
-      &lt;STATEMENT Stat&gt; ; &lt;{STATEMENT ";"}* Stats2&gt; =&gt;
-             &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
-         when &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; := cflow(Stat),
-              &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; := cflow(Stats2)
+      &lt;STATEMENT Stat&gt; ; &lt;{STATEMENT ";"}* Stats2&gt;: { 
+         &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = cflow(Stat);
+         &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = cflow(Stats2);
+         return &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;;
+      }
 
-      [| |] =&gt; &lt;{}, {}, {}&gt;
+      [| |]: return &lt;{}, {}, {}&gt;;
     };
 }
 
 fun CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
-      while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od =&gt;
-             &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;
-         when &lt;set[CP] En,  rel[CP,CP] R,  set[CP] Ex&gt; := cflow(Stats)
+      while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od: {
+        &lt;set[CP] En,  rel[CP,CP] R,  set[CP] Ex&gt; = cflow(Stats);
+        return &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;;
+      }
                 
       if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
-                   else &lt;{STATEMENT ";"}* Stats2&gt; fi =&gt;
-             &lt; {Exp}, 
-               ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
-                Ex1 union Ex2
-             &gt;
-         when &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; := cflow(Stats1),
-              &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; := cflow(Stats2)
-           
-      &lt;STATEMENT Stat&gt;  =&gt; &lt;{Stat}, {}, {Stat}&gt;
+                   else &lt;{STATEMENT ";"}* Stats2&gt; fi: {
+        &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = cflow(Stats1);
+        &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = cflow(Stats2);
+        return &lt; {Exp}, 
+                 ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
+                 Ex1 union Ex2
+               &gt;;
+      }
+          
+      &lt;STATEMENT Stat&gt;: return &lt;{Stat}, {}, {Stat}&gt;;
     };
 }</programlisting>
 
-      <para>Note that most type information in declarations can be omitted,
-      yielding a more friendly version, e.g.</para>
-
-      <programlisting>fun CFSEGMENT cflow(STATEMENT Stat){
-    switch Stat {
-      while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od =&gt;
-             &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;
-         when &lt;En, R, Ex&gt; := cflow(Stats)
-                
-      if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
-                   else &lt;{STATEMENT ";"}* Stats2&gt; fi =&gt;
-             &lt; {Exp}, 
-               ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
-                Ex1 union Ex2
-             &gt;
-         when &lt;En1, R1, Ex1&gt; := cflow(Stats1),
-              &lt;En2, R2, Ex2&gt; := cflow(Stats2)
-           
-      &lt;STATEMENT Stat&gt;  =&gt; &lt;{Stat}, {}, {Stat}&gt;
-    }
-}</programlisting>
+      <para></para>
     </section>
 
     <section>
@@ -1327,11 +1300,11 @@ imports pico/syntax/Pico
         Pico-use-def
 
 fun set[PICO-ID] uninit(PROGRAM P) {
-    rel[EXP,PICO-ID] Uses := uses(P);
-    rel[STATEMENT, PICO-ID] Defs := defs(P);
-    CFSEGMENT CFLOW := cflow(P);
-    set[CP] Root := CFLOW.entry;
-    rel[CP,CP] Pred := CFLOW.graph;
+    rel[EXP,PICO-ID] Uses = uses(P);
+    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    CFSEGMENT CFLOW = cflow(P);
+    set[CP] Root = CFLOW.entry;
+    rel[CP,CP] Pred = CFLOW.graph;
 
     {Id | &lt;EXP E, PICO-ID Id&gt; : Uses,
                  E in reachX(Root, Defs[-,Id], Pred)
@@ -1370,9 +1343,9 @@ imports pico/syntax/Pico
         Pico-use-def
 
 fun PROGRAM cse(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs := defs(P);
-    rel[CP,CP] Pred := cflow(P).graph;
-    rel[EXP, PICO-ID] replacements := 
+    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    rel[CP,CP] Pred = cflow(P).graph;
+    rel[EXP, PICO-ID] replacements = 
        {&lt;E2, Id&gt; | STATEMENT S : P,
                    &lt;PICO-ID Id&gt; := &lt;EXP E&gt; := S,
                    Id notin E,
@@ -1380,8 +1353,7 @@ fun PROGRAM cse(PROGRAM P) {
        };
  
     visit P {
-      &lt;EXP E &gt; =&gt; Id
-         when { Id } := replacements[E]   
+      &lt;EXP E &gt; =&gt; if({ Id } := replacements[E]) yield Id;
     };
 }</programlisting></para>
 
@@ -1467,10 +1439,10 @@ fun Boolean is-constant(EXP E) {
 }
 
 fun PROGRAM cp(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs := defs(P);
-    rel[CP,CP] Pred := cflow(P).graph;
+    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    rel[CP,CP] Pred = cflow(P).graph;
 
-    rel[PICO-ID, EXP] replacements := 
+    rel[PICO-ID, EXP] replacements = 
       {&lt;Id2, E&gt; | STATEMENT S : P,
                   &lt;PICO-ID Id&gt; := &lt;EXP E&gt; := S,
                   is-constant(E),
@@ -1479,8 +1451,7 @@ fun PROGRAM cp(PROGRAM P) {
       };  
  
     visit P {
-     &lt;PICO-ID Id&gt; =&gt; E
-        when { EXP E } := replacements[Id]
+     &lt;PICO-ID Id&gt;: if({ EXP E } := replacements[Id]) return E
     };  
 }</programlisting></para>
 
@@ -1531,13 +1502,12 @@ context-free syntax
 imports Vector-syntax
 
 fun int innerProduct(Vector V1, V2){
-    if ( &lt;Integer N1&gt; &lt;Integer* Rest1&gt; ) := V1 &amp; 
-       ( &lt;Integer N2&gt; &lt;Integer* Rest2&gt; ) := V2 
-    then
-       (N1*N2) + innerProduct( (&lt;Rest1&gt;), (&lt;Rest2&gt;) )
+    if ( ( &lt;Integer N1&gt; &lt;Integer* Rest1&gt; ) := V1 &amp;&amp;
+         ( &lt;Integer N2&gt; &lt;Integer* Rest2&gt; ) := V2 
+       )
+       return (N1*N2) + innerProduct( (&lt;Rest1&gt;), (&lt;Rest2&gt;) )
     else 
-       0
-    fi;
+       return 0;
 }</programlisting>
     </section>
 
@@ -1550,54 +1520,44 @@ fun int innerProduct(Vector V1, V2){
 
 fun Integer* sort(Integer* Numbers){
     visit Numbers {
-      &lt;Integer* Rest1&gt; &lt;Integer N1&gt; &lt;Integer N2&gt; &lt;Integer* Rest2&gt; =&gt;
-         sort(&lt;Integer* Rest1&gt; &lt;Integer N2&gt; &lt;Integer N1&gt; &lt;Integer* Rest&gt;)
-      when N1 &gt; N2
+      &lt;Integer* Rest1&gt; &lt;Integer N1&gt; &lt;Integer N2&gt; &lt;Integer* Rest2&gt;:
+        if(N1 &gt; N2){
+          return sort(&lt;Integer* Rest1&gt; &lt;Integer N2&gt; &lt;Integer N1&gt; &lt;Integer* Rest&gt;);
+        }
     };
 }</programlisting>
 
       <para>This example raises a number of issues about the execution of
-      replace.</para>
-
-      <para>First, are Rest1 and Rest needed? Would</para>
-
-      <programlisting>    visit Numbers {
-      &lt;Integer N1&gt; &lt;Integer N2&gt; =&gt; &lt;Integer N2&gt; &lt;Integer N1&gt;
-      when N1 &gt; N2
-      &lt;
-    }</programlisting>
-
-      <para>be ok?</para>
+      visit.</para>
 
       <para>Another way to write this is:</para>
 
-      <programlisting>module Bubble
+      <programlisting>module Bubble2
 
 fun Integer* sort(Integer* Numbers){
-    sort( visit Numbers {
-            &lt;Integer N1&gt; &lt;Integer N2&gt; =&gt; &lt;Integer N2&gt; &lt;Integer N1&gt;
-            when N1 &gt; N2
-          }
-        )
+    visit repeat Numbers {
+      &lt;Integer N1&gt; &lt;Integer N2&gt;: if( N1 &gt; N2) yield &lt;Integer N2&gt; &lt;Integer N1&gt;
+
+     }
 }</programlisting>
 
-      <para>The replace will replace all adjacent pairs that are in the wrong
-      order in the current list. The resulting list becomes the argument of a
-      new call to sort.</para>
+      <para>The visit will replace all adjacent pairs that are in the wrong
+      order in the current list. This is repeated (fixed point operator) until
+      no more changes are possible.</para>
     </section>
 
     <section>
       <title>Generic Bubble sort</title>
 
       <para>Here is a generic bubble sort wich uses type parameters
-      (&amp;ELEM) and a function parameter.<programlisting>module Bubble
+      (&amp;ELEM) and a function parameter.<programlisting>module Bubble-Gen
 
 fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
-    sort( visit Elements {
-            &lt;E1&gt; &lt;E2&gt; =&gt; &lt;E2&gt; &lt;E1&gt;
-            when GreaterThan(E1, E2)
-          }
-         )
+   
+  visit repeat Elements {
+      &lt;E1&gt; &lt;E2&gt;: if(GreaterThan(E1, E2)) yield &lt;E2&gt; &lt;E1&gt;
+
+     }
 }</programlisting>Do we want this generality? What are the implications for
       the implementation? The current syntax does not yet allow type variables
       in patterns.</para>
@@ -1609,78 +1569,40 @@ fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
       <para>Recall the equations construct as used, for example, in the
       reaching definitions example in the Rscript guide. It computes the
       values of a set of variables until none of them changes any
-      longer.<programlisting>type def  = &lt;stat theStat, var theVar&gt;
-type use  = &lt;stat theStat, var theVar&gt;
+      longer.<programlisting>module Pico-reaching-defs
 
-set[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
+type Def  = &lt;Stat theStat, Var theVar&gt;
+type Use  = &lt;Stat theStat, Var theVar&gt;
 
-set[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
+fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { return P[-,S] }
 
-rel[stat, def] reaching-definitions(rel[stat,var] DEFS, 
-                                    rel[stat,stat] PRED) = 
-   IN
-where
-    set[stat] STATEMENT = carrier(PRED)
+fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { return P[S,-] }
 
-    rel[stat,def] DEF  = {&lt;S,&lt;S,V&gt;&gt; | &lt;stat S, var V&gt; : DEFS}
+fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS, 
+                                        rel[Stat,Stat] PRED) {
 
-    rel[stat,def] KILL = 
-        {&lt;S1, &lt;S2, V&gt;&gt; | &lt;stat S1, var V&gt; : DEFS, 
-                         &lt;stat S2, V&gt; : DEFS, 
+    set[Stat] STATEMENT = carrier(PRED);
+
+    rel[Stat,Def] DEF  = {&lt;S,&lt;S,V&gt;&gt; | &lt;Stat S, Var V&gt; : DEFS};
+
+    rel[Stat,Def] KILL = 
+        {&lt;S1, &lt;S2, V&gt;&gt; | &lt;Stat S1, Var V&gt; : DEFS, 
+                         &lt;Stat S2, V&gt; : DEFS, 
                          S1 != S2
-        }
+        };
 
-    equations 
-       initial
-           rel[stat,def] IN init {}
-           rel[stat,def] OUT init DEF
-       satisfy
+     rel[Stat,Def] IN = {};
+     rel[Stat,Def] OUT = DEF;
+
+     solve {
            IN  =  {&lt;S, D&gt; | int S : STATEMENT, 
-                            stat P : predecessor(PRED,S), 
-                            def D : OUT[P]}
+                            Stat P : predecessor(PRED,S), 
+                            Def D : OUT[P]};
            OUT = {&lt;S, D&gt; |  int S : STATEMENT, 
-                            def D : DEF[S] union (IN[S] \ KILL[S])}
-    end equations
-end where</programlisting>We could replace the equations part by a recursive
-      function that iterates as long as changes are observed. However, this
-      introduces various scope issues since how DEF, KILL etc be accessed from
-      within this inner recursive function? Here is an adapted version with a
-      similar equations construct (now indicated by <literal>with ... solve
-      ... </literal>):</para>
-
-      <para><programlisting>type def  = &lt;stat theStat, var theVar&gt;
-type use  = &lt;stat theStat, var theVar&gt;
-
-set[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
-
-set[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
-
-&lt;rel[stat,def], rel[stat,def]&gt; reaching_definitions(
-                                    rel[stat,var] DEFS, 
-                                    rel[stat,stat] PRED){
-   set[stat] STATEMENTS := carrier(PRED)
-
-   rel[stat,def] DEF := {&lt;S,&lt;S,V&gt;&gt; | &lt;stat S, var V&gt; : DEFS}
-
-   rel[stat,def] KILL := 
-        {&lt;S1, &lt;S2, V&gt;&gt; | &lt;stat S1, var V&gt; : DEFS, 
-                         &lt;stat S2, V&gt; : DEFS, 
-                         S1 != S2
-        }
-
-   with {
-     rel[stat,def] IN := {};
-     rel[stat,def] OUT := DEF
-   } solve {
-     IN  = {&lt;S, D&gt; | stat S : STATEMENTS, 
-                                  stat P : predecessor(S), 
-                                  def D : OUT[P]};
-     OUT = {&lt;S, D&gt; | stat S : STATEMENTS, 
-                                  def D : DEF[S] union (IN[S] \ KILL[S])};
-   }
-}</programlisting><note>
-          <para>We should explore solutions that only use recursion.</para>
-        </note></para>
+                            Def D : DEF[S] union (IN[S] \ KILL[S])}
+    };
+    return IN;
+}</programlisting></para>
     </section>
 
     <section>

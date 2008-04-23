@@ -5,9 +5,9 @@ imports pico/syntax/Pico
         Pico-use-def
 
 fun PROGRAM cse(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs := defs(P);
-    rel[CP,CP] Pred := cflow(P).graph;
-    rel[EXP, PICO-ID] replacements := 
+    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    rel[CP,CP] Pred = cflow(P).graph;
+    rel[EXP, PICO-ID] replacements = 
        {<E2, Id> | STATEMENT S : P,
                    <PICO-ID Id> := <EXP E> := S,
                    Id notin E,
@@ -15,7 +15,6 @@ fun PROGRAM cse(PROGRAM P) {
        };
  
     visit P {
-      <EXP E > => Id
-         when { Id } := replacements[E]   
+      <EXP E > => if({ Id } := replacements[E]) yield Id;
     };
 }
