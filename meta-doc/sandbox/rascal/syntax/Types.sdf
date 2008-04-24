@@ -25,6 +25,9 @@ context-free syntax
    "str"                                                   -> BasicType {cons("str-type")} 
    "loc"                                                   -> BasicType {cons("loc-type")}
    "any"                                                   -> BasicType {cons("any-type")}
+   "term"                                                  -> BasicType {cons("term-type")}
+
+    "bool" | "int" | "str" | "loc" | "any" | "term"        -> TypeName {reject}
  
    Type Variable?                                          -> LabelledType  
    {LabelledType ","}+                                     -> LabelledTypes
@@ -42,7 +45,7 @@ context-free syntax
 
    TypeVar | BasicType | StructuredType | FunctionType     -> Type
    TypeName                                                -> Type
-   TypeName "(" {Type ","}* ")"                            -> Type
+   TypeName "(" {LabelledType ","}* ")"                    -> Type
  
    "(" Type ")"                                            -> Type {bracket} 
 
@@ -69,7 +72,7 @@ context-free syntax
 
    BasicTypePattern | StructuredTypePattern                -> TypePattern
    TypeName                                                -> TypePattern
-   TypeName "(" {TypePattern ","}* ")"                     -> TypePattern
+   TypeName "(" {LabelledTypePattern ","}* ")"             -> TypePattern
 
    "<" Type Variable ">"                                   -> TypePattern {avoid}
    "(" TypePattern ")"                                     -> TypePattern {bracket}     

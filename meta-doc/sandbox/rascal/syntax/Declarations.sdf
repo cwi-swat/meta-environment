@@ -20,7 +20,7 @@ context-free syntax
 
 %% Declarations
 %%   VarDeclInit                                          -> Declaration 
-   "type" IdCon Type                                    -> Declaration {cons("type-decl")}
+   "type" IdCon { Type "|"}+                              -> Declaration {cons("type-decl")}
 %%   VarDeclInit                                          -> Statement
 
    FunctionType "{"  {Statement ";"}* ";"? "}"          -> Declaration {cons("function-decl")}

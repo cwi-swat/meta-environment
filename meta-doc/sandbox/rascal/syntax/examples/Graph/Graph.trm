@@ -1,0 +1,45 @@
+module Graph
+
+type Graph graph(NodeList nodes, EdgeList edges, AttributeList attributes);
+
+type Nodelist list[Node];
+
+type Node node(NodeId id, AttributeList attributes);
+type Node subgraph(NodeId id, NodeList nodes, EdgeList edges, AttributeList attributes);
+
+type NodeId id(term id);
+
+type AttributeList list[Attribute];
+
+type Attribute bounding-box(Point first, Point second);
+type Attribute color(Color color);
+type Attribute curve-points(Polygon points);
+type Attribute direction(Direction direction);
+type Attribute fill-color(Color color);
+type Attribute info(str key, term value);
+type Attribute label(str label);
+type Attribute tooltip(str tooltip);
+type Attribute location(int x, int y);
+type Attribute shape(Shape shape);
+type Attribute size(int width, int height);
+type Attribute style(Style style);
+type Attribute level(str level);
+type Attribute file(File file);
+type Attribute file(term file);
+
+type Color rgb(int red, int green, int blue);
+
+type Style bold | dashed | dotted | filled | invisible | solid;
+
+type Shape box | circle | diamond | egg | elipse | hexagon | house | 
+           octagon | parallelogram | plaintext | trapezium | triangle;
+
+type Direction forward | back | both | none;
+
+type Edgelist list[Edge];
+
+type Edge edge(NodeId from, NodeId to, AttributeList attributes);
+
+type Polygon list[Point];
+
+type Point point(int x, int y);
