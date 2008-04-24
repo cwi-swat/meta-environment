@@ -1,0 +1,68 @@
+module AsFix
+
+type ParseTree parsetree(Tree top, int amb-cnt);
+
+type Tree appl(Production prod, Args args);
+type Tree cycle(Symbol symbol, int cycle-length);
+type Tree amb(Args args);
+
+%% constructor(Tree, char, <character(int)>), %%??
+type Tree char(int character);
+
+type Args list[Tree];
+
+type Production prod(Symbols lhs, Symbol rhs, Attributes attributes);
+ 
+%% constructor(Production, List, list(<rhs(Symbol)>)), 
+type Production list[Symbol]; %% ???
+
+type Attributes no-attrs;
+type Attributes attrs(Attrs attrs);
+
+type Attrs list[Attr];
+
+type Attr assoc(Associativity assoc) | %% term(term term) |
+          id(str module-name) | bracket | reject | prefer | avoid;
+
+type Associativity left | right | assoc | non-assoc;
+
+type Symbol lit(str string);
+type Symbol cilit(str string);
+type Symbol cf(Symbol symbol);
+type Symbol lex(Symbol symbol);
+type Symbol empty;
+type Symbol seq(Symbols symbols);
+type Symbol opt(Symbol symbol);
+type Symbol alt(Symbol lhs, Symbol rhs);
+type Symbol tuple(Symbol head, Symbols rest);
+type Symbol sort (str string); 
+type Symbol iter-plus(Symbol); 
+type Symbol iter-star(Symbol symbol); 
+type Symbol iter-plus-sep(Symbol symbol, Symbol separator); 
+type Symbol iter-start-sep(Symbol symbol, Symbol separator); 
+type Symbol iter-n(Symbol symbol, int number); 
+type Symbol iter-sep-n(Symbol symbol, Symbol separator, int number); 
+type Symbol func(Symbols symbols, Symbol symbol); 
+type Symbol parameterized-sort(str sort, Symbols parameters); 
+type Symbol strategy(Symbol lhs, Symbol rhs);
+type Symbol var-sym(Symbol symbol);
+type Symbol layout; 
+type Symbol char-class(CharRanges ranges);
+
+type Symbols list[Symbol];
+
+%% constructor(CharRange, character, <start(int)>), 
+type CharRange character(int start); %%???
+%% constructor(CharRange, range, range(<start(int)>, <end(int)>)),
+type CharRange range(int start, int end);
+
+type CharRanges list(CharRange);
+
+fun int cnt-char-class(Tree T){
+     int Cnt = 0;
+     visit T {
+       char-class(<CharRanges ranges>): Cnt = Cnt + 1;
+     };
+     return Cnt;
+}
+
