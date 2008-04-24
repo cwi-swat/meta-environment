@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -731,6 +731,11 @@
         </listitem>
 
         <listitem>
+          <para>A "return-pat" statement returns an (instantiated) pattern
+          from a function.</para>
+        </listitem>
+
+        <listitem>
           <para>A "switch" statement is similar to a switch statement in C or
           Java and for a given subject term, it corresponds to the matching
           provided by the left-hand sides of a set of rewrite rules. However,
@@ -767,6 +772,11 @@
         <listitem>
           <para>A "yield" statement that delivers a value during a
           traversal.</para>
+        </listitem>
+
+        <listitem>
+          <para>A "yield-pat" statement that delivers an instantiated pattern
+          as value during a traversal.</para>
         </listitem>
 
         <listitem>
@@ -857,8 +867,8 @@ type Bool or(Bool, Bool);
 
 fun Bool reduce(Bool B) {
     visit bu B {
-      and(true, &lt;Bool B2&gt;)  =&gt; B2    %% Style 1: Use Variables
-      and(false, &lt;Bool B2&gt;) =&gt; false
+      and(true, Bool B2)  =&gt; B2    %% Style 1: Use Variables
+      and(false, Bool B2) =&gt; false
 
       or(true, true)   =&gt; true      %% Style 2: Use a truth table
       or(true, false)  =&gt; true

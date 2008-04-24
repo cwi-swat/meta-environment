@@ -27,12 +27,15 @@ context-free syntax
          Area                                                    -> Expression {cons("areacon-exp")}
 	IdCon "(" {Expression ","}* ")"                         -> Expression {cons("fun-call")}
 	Variable                                                -> Expression {cons("variable")}
+
+%% A hack to get rid of manu ambiguities
+%%         "true" | "false"                                        -> Variable {reject}
+%%         "bool" | "int" | "str" | "loc" | "any" | "term"         -> Variable {reject}
+
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
 	"{" {Expression ","}* "}"                               -> Expression {cons("set")}
 	"<" {Expression ","}+ ">"                               -> Expression {cons("tuple")}
-
- 
 
 context-free priorities
 
@@ -94,7 +97,7 @@ context-free syntax
 	Type? Variable                                          -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
          "{" {Signature ","}+ "}"                                -> Signature
-         (Signature | Pattern)                                   -> LeftHandSide
+         (Signature | QuotedCPattern | APattern)                 -> LeftHandSide
          SimpleGenerator                                         -> Generator
          Predicate                                               -> Generator
 
@@ -110,10 +113,11 @@ context-free syntax
 
 context-free syntax
 %% Switch and visit and solve
-         Expression | Pattern                                    -> ExpressionOrPattern
+         Expression | QuotedCPattern | APattern                  -> ExpressionOrPattern
 
          Pattern ":" Block                                       -> Rule
-         Pattern "=>" ExpressionOrPattern                        -> Rule
+         Pattern "=>" Expression                                 -> Rule
+         Pattern "==>" Pattern                                   -> Rule
 
  	"switch" Expression "{" Rule+ "}"                       -> Statement
    	"visit" "repeat"? Strategy Expression "{" Rule+ "}"     -> Statement
@@ -126,7 +130,9 @@ context-free syntax
 context-free syntax
          Signature "=" ExpressionOrPattern                       -> Assignment {cons("assign")}
          Assignment                                              -> Statement
-        "return" ExpressionOrPattern                             -> Statement {cons("return")}
-        "yield" ExpressionOrPattern                              -> Statement {cons("yield")}
+        "return" Expression                                      -> Statement {cons("return")}
+        "return-pat" Pattern                                     -> Statement {cons("return-pat")}
+        "yield" Expression                                       -> Statement {cons("yield")}
+        "yield-pat" Pattern                                      -> Statement {cons("yield-pat")}
         Statement ";"?                                           -> Block
         "{" {Statement ";"}+ ";"? "}"                            -> Block

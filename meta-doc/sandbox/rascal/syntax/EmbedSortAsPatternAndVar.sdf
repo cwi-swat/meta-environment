@@ -2,6 +2,6 @@ module EmbedSortAsPatternAndVar[SORT]
 exports
 imports Patterns
 context-free syntax
-        SORT                       -> Pattern
+        SORT                       -> CPattern
         "<" `SORT`? Variable  ">"  -> SORT
 
