@@ -1,0 +1,23 @@
+module ATerms
+
+imports languages/aterm/syntax/IntCon 
+        languages/aterm/syntax/RealCon
+        basic/StrCon
+        basic/IdentifierCon
+
+type AFun quoted(StrCon);
+type AFun unquoted(IdCon);
+
+type ATerm aint(IntCon);
+type ATerm areal(RealCon);
+type ATerm afun(AFun);
+type ATerm appl(AFun fun, list[ATerm] args);
+type ATerm placeholder(ATerm type);
+type ATerm list(list[ATerm] elems);
+type ATerm annotated(ATerm trm, Annotation);
+
+type Annotation default(list[ATerm] annos);
+
+
+
+

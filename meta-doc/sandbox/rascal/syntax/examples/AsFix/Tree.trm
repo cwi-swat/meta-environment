@@ -1,0 +1,11 @@
+module Tree
+
+type Tree appl(Production prod, Args args);
+type Tree cycle(Symbol symbol, NatCon length);
+type Tree amb(Args args);
+type Tree char(NatCon character);
+
+type Args list[Tree];
+
+type Production prod(Symbols lhs, Symbol rhs, Attributes attributes);
+type Production list(Symbol rhs);
