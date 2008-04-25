@@ -76,7 +76,18 @@ public abstract class AbstractTool implements IOperations{
 	 *            The term that contains the data about the event.
 	 */
 	public void sendEvent(ATerm aTerm){
-		toolBridge.send(EVENT, aTerm);
+		toolBridge.postEvent(aTerm);
+	}
+	
+	/**
+	 * Posts a request to the ToolBus.
+	 * 
+	 * @param aTerm
+	 *            The term that contains the data about the request.
+	 * @return The response.
+	 */
+	public ATerm sendRequest(ATerm aTerm){
+		return toolBridge.postRequest(aTerm);
 	}
 
 	/**

@@ -248,18 +248,20 @@ public class ToolInstanceManager{
 	}
 	
 	/**
-	 * Prints all current queued values and events.
+	 * Prints all currently queued values, events and requests.
 	 */
 	public void printQueueTerms(){
 		HashMapEntryHandler<ATerm, ToolInstance> activeToolsIterationHandler = new ReadOnlyHashMapEntryHandler<ATerm, ToolInstance>(){
 			public int handle(ATerm toolKey, ToolInstance toolInstance){
 				ATerm[] queuedValues = toolInstance.getQueuedValues();
 				ATerm[] queuedEvents = toolInstance.getQueuedEvents();
+				ATerm[] queuedRequests = toolInstance.getQueuedRequests();
 				
 				int nrOfQueueValues = queuedValues.length;
 				int nrOfQueueEvents = queuedEvents.length;
+				int nrOfQueuedRequests = queuedRequests.length;
 				
-				if((nrOfQueueValues + nrOfQueueEvents) > 0){
+				if((nrOfQueueValues + nrOfQueueEvents + nrOfQueuedRequests) > 0){
 					System.err.println(toolKey+":");
 					
 					for(int i = nrOfQueueValues - 1; i >= 0; i--){
@@ -268,6 +270,10 @@ public class ToolInstanceManager{
 					
 					for(int i = nrOfQueueEvents - 1; i >= 0; i--){
 						System.err.println("rec-event("+queuedEvents[i]+")");
+					}
+					
+					for(int i = nrOfQueuedRequests - 1; i >= 0; i--){
+						System.err.println("rec-request("+queuedRequests[i]+")");
 					}
 				}
 				

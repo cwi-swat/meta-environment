@@ -27,8 +27,8 @@ import aterm.pure.PureFactory;
 public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	private final PureFactory termFactory;
 
-	private final Map<Long, ThreadLocalEventQueue> threadLocalQueues;
-	private final Map<AFun, EventQueue> queues;
+	private final Map<Long, ThreadLocalJobQueue> threadLocalQueues;
+	private final Map<AFun, JobQueue> queues;
 
 	private IIOHandler ioHandler;
 
@@ -64,8 +64,8 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		this.host = host;
 		this.port = port;
 
-		threadLocalQueues = new HashMap<Long, ThreadLocalEventQueue>();
-		queues = new HashMap<AFun, EventQueue>();
+		threadLocalQueues = new HashMap<Long, ThreadLocalJobQueue>();
+		queues = new HashMap<AFun, JobQueue>();
 	}
 	
 	/**
@@ -196,20 +196,45 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * @see IDataHandler#send(byte, ATerm)
 	 */
 	public void send(byte operation, ATerm aTerm){
-		if(operation == EVENT){
-			long threadId = Thread.currentThread().getId();
-			ThreadLocalEventQueue threadLocalQueue = null;
-			synchronized(threadLocalQueues){
-				threadLocalQueue = threadLocalQueues.get(new Long(threadId));
-				if(threadLocalQueue == null){
-					threadLocalQueue = new ThreadLocalEventQueue();
-					threadLocalQueues.put(new Long(threadId), threadLocalQueue);
-				}
+		ioHandler.send(operation, aTerm);
+	}
+	
+	/**
+	 * Posts the given event.
+	 * 
+	 * @param aTerm
+	 *            The event.
+	 */
+	public void postEvent(ATerm aTerm){
+		long threadId = Thread.currentThread().getId();
+		ThreadLocalJobQueue threadLocalQueue;
+		synchronized(threadLocalQueues){
+			threadLocalQueue = threadLocalQueues.get(new Long(threadId));
+			if(threadLocalQueue == null){
+				threadLocalQueue = new ThreadLocalJobQueue();
+				threadLocalQueues.put(new Long(threadId), threadLocalQueue);
 			}
-			threadLocalQueue.postEvent(aTerm, threadId);
-		}else{
-			ioHandler.send(operation, aTerm);
 		}
+		threadLocalQueue.postEvent(aTerm, threadId);
+	}
+	
+	/**
+	 * Posts the given request.
+	 * 
+	 * @param aTerm
+	 *            The request.
+	 */
+	public ATerm postRequest(ATerm aTerm){
+		long threadId = Thread.currentThread().getId();
+		ThreadLocalJobQueue threadLocalQueue;
+		synchronized(threadLocalQueues){
+			threadLocalQueue = threadLocalQueues.get(new Long(threadId));
+			if(threadLocalQueue == null){
+				threadLocalQueue = new ThreadLocalJobQueue();
+				threadLocalQueues.put(new Long(threadId), threadLocalQueue);
+			}
+		}
+		return threadLocalQueue.postRequest(aTerm, threadId);
 	}
 
 	/**
@@ -228,20 +253,33 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				ATermList ackEvent = ((ATermList) aTerm);
 				ATerm event = ackEvent.getFirst();
 				
-				AFun sourceFun = ((ATermAppl) event).getAFun();
+				AFun ackSourceFun = ((ATermAppl) event).getAFun();
 				
-				EventQueue eventQueue;
+				JobQueue eventQueue;
 				synchronized(queues){
-					eventQueue = queues.get(sourceFun);
+					eventQueue = queues.get(ackSourceFun);
 				}
 				if(eventQueue == null){
-					LoggerFactory.log("Received acknowledgement for a non-existent event: " + sourceFun, ILogger.WARNING, IToolBusLoggerConstants.TOOL);
+					LoggerFactory.log("Received acknowledgement for a non-existent event: " + ackSourceFun, ILogger.WARNING, IToolBusLoggerConstants.TOOL);
 					return;
 				}
 				eventQueue.ackEvent();
 				
 				ATerm callBackInfo = ackEvent.elementAt(1);
 				doReceiveAckEvent(callBackInfo);
+				break;
+			case RESPONSE:
+				AFun responseSourceFun = ((ATermAppl) aTerm).getAFun();
+				
+				JobQueue requestQueue;
+				synchronized(queues){
+					requestQueue = queues.get(responseSourceFun);
+				}
+				if(requestQueue == null){
+					LoggerFactory.log("Received response on a non-existent request: " + responseSourceFun, ILogger.WARNING, IToolBusLoggerConstants.TOOL);
+					return;
+				}
+				requestQueue.recResponse(aTerm);
 				break;
 			case TERMINATE:
 				doTerminate(aTerm);
@@ -316,13 +354,14 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	}
 	
 	/**
-	 * An event.
+	 * A job.
 	 * 
 	 * @author Arnold Lankamp
 	 */
-	private static class Event{
+	private static class Job{
 		public final ATerm term;
 		public final long threadId;
+		public ATerm response; // Optional field
 		
 		/**
 		 * Constructor.
@@ -332,7 +371,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 * @param threadId
 		 *            The id of the thread associated with this event.
 		 */
-		public Event(ATerm term, long threadId){
+		public Job(ATerm term, long threadId){
 			super();
 			
 			this.term = term;
@@ -341,101 +380,122 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	}
 
 	/**
-	 * This event queue holds all the events that are send from a single source.
+	 * This job queue holds all the jobs that are send from a single source.
 	 * 
 	 * @author Arnold Lankamp
 	 */
-	private class EventQueue{
-		private final List<Event> events;
-		private Event current;
+	private class JobQueue{
+		private final List<Job> jobs;
+		private Job current;
 
 		/**
 		 * Default constructor.
 		 */
-		public EventQueue(){
+		public JobQueue(){
 			super();
 			
-			events = new LinkedList<Event>();
+			jobs = new LinkedList<Job>();
 			
 			current = null;
 		}
-
+		
 		/**
-		 * Schedules the given event for transmission to the ToolBus. If there are currently no
-		 * messages in the queue, the event will be send immediately; otherwise we'll need to wait
-		 * till all the events (of the same source) that where previously scheduled have been send
-		 * and acknowledged.
+		 * Schedules the given job for transmission to the ToolBus. If there are currently no
+		 * jobs in the queue, the event will be send immediately; otherwise we'll need to wait till
+		 * all the requests (of the same source) that where previously scheduled have been send and
+		 * acknowledged.
 		 * 
-		 * @param aTerm
-		 *            The term that hold the details about the event.
-		 * @param threadId
-		 *            The id of the thread associated with the event.
+		 * @param job
+		 *            A container that hold the details about the request.
 		 */
-		public synchronized void postEvent(ATerm aTerm, long threadId){
-			Event event = new Event(aTerm, threadId);
+		public synchronized void post(Job job){
 			if(current == null){
-				ioHandler.send(EVENT, aTerm);
-				current = event;
+				ioHandler.send(EVENT, job.term);
+				current = job;
 			}else{
-				events.add(event);
+				jobs.add(job);
 			}
 		}
 
 		/**
-		 * Returns the next event in the queue.
+		 * Returns the next job in the queue.
 		 * 
-		 * @return The next event in the queue; null if the queue is empty.
+		 * @return The next job in the queue; null if the queue is empty.
 		 */
-		public synchronized Event getNext(){
-			if(!events.isEmpty()) return events.remove(0);
+		public synchronized Job getNext(){
+			if(!jobs.isEmpty()) return jobs.remove(0);
 			
 			return null;
 		}
-
+		
 		/**
-		 * Acknowledges the last event that was send from the source this queue is associated with.
-		 * It will send the next term in the queue if there are any.
+		 * Notifies the thread local queue of the acknowledgement and executes the next queued job
+		 * (if present).
 		 */
-		public synchronized void ackEvent(){
+		private synchronized void acknowledge(){
 			long threadId = current.threadId;
-			ThreadLocalEventQueue threadLocalQueue;
+			ThreadLocalJobQueue threadLocalQueue;
 			synchronized(threadLocalQueues){
 				threadLocalQueue = threadLocalQueues.get(new Long(threadId));
 			}
-			threadLocalQueue.ackEvent();
+			threadLocalQueue.acknowledge();
 			
-			Event next = getNext();
+			Job next = getNext();
 			current = next;
 			if(next != null){
 				ioHandler.send(EVENT, next.term);
 			}
 		}
+
+		/**
+		 * Acknowledges the last event that was send from the source this queue is associated with.
+		 * It will execute the next job in the queue if there are any.
+		 */
+		public void ackEvent(){
+			acknowledge();
+		}
+		
+		/**
+		 * Acknowledges the last request that was send from the source this queue is associated
+		 * with. It will execute the next job in the queue if there are any.
+		 * 
+		 * @param response
+		 *            The response.
+		 */
+		public synchronized void recResponse(ATerm response){
+			synchronized(current){
+				current.response = response;
+				current.notify();
+			}
+			
+			acknowledge();
+		}
 	}
 	
 	/**
-	 * This event queue holds all the events that are posted by a certain thread.
+	 * This job queue holds all the jobs that are posted by a certain thread.
 	 * 
 	 * @author Arnold Lankamp
 	 */
-	private class ThreadLocalEventQueue{
-		private final List<Event> events;
+	private class ThreadLocalJobQueue{
+		private final List<Job> requests;
 		
 		private boolean awaitingAck;
 
 		/**
 		 * Default constructor.
 		 */
-		public ThreadLocalEventQueue(){
+		public ThreadLocalJobQueue(){
 			super();
 			
-			events = new LinkedList<Event>();
+			requests = new LinkedList<Job>();
 		}
 		
 		/**
 		 * Schedules the given event for transmission to the ToolBus. If there are currently no
-		 * messages in the thread local queue, the event will be send immediately; otherwise we'll
-		 * need to wait till all the events (associated with the current thread) that were
-		 * previously scheduled have been submitted to the event queue.
+		 * jobs in the thread local queue, the event will be send immediately; otherwise we'll need
+		 * to wait till all the jobs (associated with the current thread) that were previously
+		 * scheduled have been submitted to the request queue.
 		 * 
 		 * @param aTerm
 		 *            The term that hold the details about the event.
@@ -443,57 +503,102 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 *            The id of the thread associated with the event.
 		 */
 		public synchronized void postEvent(ATerm aTerm, long threadId){
+			Job request = new Job(aTerm, threadId);
+			
 			if(!awaitingAck){
 				AFun sourceFun = ((ATermAppl) aTerm).getAFun();
 				
-				EventQueue eventQueue;
+				JobQueue requestQueue;
 				synchronized(queues){
-					eventQueue = queues.get(sourceFun);
-					if(eventQueue == null){
-						eventQueue = new EventQueue();
-						queues.put(sourceFun, eventQueue);
+					requestQueue = queues.get(sourceFun);
+					if(requestQueue == null){
+						requestQueue = new JobQueue();
+						queues.put(sourceFun, requestQueue);
 					}
 				}
-				eventQueue.postEvent(aTerm, threadId);
+				requestQueue.post(request);
 				awaitingAck = true;
 			}else{
-				events.add(new Event(aTerm, threadId));
+				requests.add(request);
 			}
 		}
 		
 		/**
-		 * Returns the next event in the queue.
+		 * Schedules the given request for transmission to the ToolBus. If there are currently no
+		 * jobs in the thread local queue, the event will be send immediately; otherwise we'll need
+		 * to wait till all the jobs (associated with the current thread) that were previously
+		 * scheduled have been submitted to the request queue.
 		 * 
-		 * @return The next event in the queue; null if the queue is empty.
+		 * @param aTerm
+		 *            The term that hold the details about the request.
+		 * @param threadId
+		 *            The id of the thread associated with the request.
+		 * @return The received response on the issued request.
 		 */
-		public synchronized Event getNext(){
-			if(!events.isEmpty()) return events.remove(0);
+		public synchronized ATerm postRequest(ATerm aTerm, long threadId){
+			Job job = new Job(aTerm, threadId);
+			synchronized(job){
+				if(!awaitingAck){
+					AFun sourceFun = ((ATermAppl) aTerm).getAFun();
+					
+					JobQueue requestQueue;
+					synchronized(queues){
+						requestQueue = queues.get(sourceFun);
+						if(requestQueue == null){
+							requestQueue = new JobQueue();
+							queues.put(sourceFun, requestQueue);
+						}
+					}
+					requestQueue.post(job);
+					awaitingAck = true;
+				}else{
+					requests.add(job);
+				}
+				
+				while(job.response == null){
+					try{
+						job.wait();
+					}catch(InterruptedException irex){
+						// Ignore this, since I don't want to know about it.
+					}
+				}
+			}
+			return job.response;
+		}
+		
+		/**
+		 * Returns the next job in the queue.
+		 * 
+		 * @return The next job in the queue; null if the queue is empty.
+		 */
+		public synchronized Job getNext(){
+			if(!requests.isEmpty()) return requests.remove(0);
 			
 			return null;
 		}
 		
 		/**
-		 * Acknowledges the last event that was send from the source the current thread is associated
-		 * with. It will submit the next term in the queue if there are any.
+		 * Acknowledges the last job that was send from the source the current thread is associated
+		 * with. It will submit the next job in the queue if there are any.
 		 */
-		public synchronized void ackEvent(){
-			Event next = getNext();
+		public synchronized void acknowledge(){
+			Job next = getNext();
 			if(next == null){
 				awaitingAck = false;
 			}else{
 				ATerm term = next.term;
 				AFun sourceFun = ((ATermAppl) term).getAFun();
 				
-				EventQueue eventQueue;
+				JobQueue requestQueue;
 				synchronized(queues){
-					eventQueue = queues.get(sourceFun);
-					if(eventQueue == null){
-						eventQueue = new EventQueue();
-						queues.put(sourceFun, eventQueue);
+					requestQueue = queues.get(sourceFun);
+					if(requestQueue == null){
+						requestQueue = new JobQueue();
+						queues.put(sourceFun, requestQueue);
 					}
 				}
 				
-				eventQueue.postEvent(term, next.threadId);
+				requestQueue.post(next);
 			}
 		}
 	}

@@ -50,6 +50,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 	
 	private final List<ATerm> valuesFromTool;
 	private final List<ATerm> eventsFromTool;
+	private final List<ATerm> requestsFromTool;
 	
 	private final List<ATerm> performanceStats;
 	
@@ -79,6 +80,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 		
 		valuesFromTool = new LinkedList<ATerm>();
 		eventsFromTool = new LinkedList<ATerm>();
+		requestsFromTool = new LinkedList<ATerm>();
 		
 		performanceStats = new LinkedList<ATerm>();
 	}
@@ -296,6 +298,16 @@ public class ToolInstance implements IDataHandler, IOperations{
 	}
 	
 	/**
+	 * Sends an response to the with this tool instance associated tool.
+	 * 
+	 * @param aTerm
+	 *            The response.
+	 */
+	public void sendResponse(ATerm aTerm){
+		send(RESPONSE, aTerm);
+	}
+	
+	/**
 	 * Sends a do request to the with this tool instance associated tool.
 	 * 
 	 * @param aTerm
@@ -458,6 +470,30 @@ public class ToolInstance implements IDataHandler, IOperations{
 				boolean matches = tbfactory.matchPatternToValue(aTerm, env, eventsIterator.next());
 				if(matches){
 					eventsIterator.remove();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Attempts to find a request that matches the given signature. If one is found the environment
+	 * will be updated.
+	 * 
+	 * @param aTerm
+	 *            The signature we need to match on.
+	 * @param env
+	 *            The enviroment in which we need to make updates, when a match have been made.
+	 * @return Indicates if the matches was successful.
+	 */
+	public boolean getRequestFromTool(ATerm aTerm, Environment env){
+		synchronized(requestsFromTool){
+			Iterator<ATerm> requestsIterator = requestsFromTool.iterator();
+			while(requestsIterator.hasNext()){
+				boolean matches = tbfactory.matchPatternToValue(aTerm, env, requestsIterator.next());
+				if(matches){
+					requestsIterator.remove();
 					return true;
 				}
 			}
@@ -650,6 +686,19 @@ public class ToolInstance implements IDataHandler, IOperations{
 			ATerm[] queuedEvents = new ATerm[eventsFromTool.size()];
 			eventsFromTool.toArray(queuedEvents);
 			return queuedEvents;
+		}
+	}
+	
+	/**
+	 * Returns an array of all queued rec-request terms for this tool instance.
+	 * 
+	 * @return An array of all queued rec-request terms for this tool instance.
+	 */
+	public ATerm[] getQueuedRequests(){
+		synchronized(requestsFromTool){
+			ATerm[] queuedRequests = new ATerm[requestsFromTool.size()];
+			requestsFromTool.toArray(queuedRequests);
+			return queuedRequests;
 		}
 	}
 	

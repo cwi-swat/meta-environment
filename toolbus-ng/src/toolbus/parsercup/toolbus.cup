@@ -36,14 +36,17 @@ import toolbus.atom.tool.Event;
 import toolbus.atom.tool.Execute;
 import toolbus.atom.tool.GetPerfStats;
 import toolbus.atom.tool.RecPerfStats;
+import toolbus.atom.tool.RecRequest;
 import toolbus.atom.tool.RecVal;
 import toolbus.atom.tool.SndKill;
+import toolbus.atom.tool.SndResponse;
 import toolbus.atom.tool.Terminate;
 import toolbus.exceptions.ToolBusException;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
 import toolbus.process.Alternative;
 import toolbus.process.Disrupt;
+import toolbus.process.DynamicProcessCall;
 import toolbus.process.IfElse;
 import toolbus.process.IfThen;
 import toolbus.process.Iteration;
@@ -206,6 +209,8 @@ terminal PRINTF;
 terminal READ;
 terminal REC_EVENT;
 terminal SND_ACK_EVENT;
+terminal REC_REQUEST;
+terminal SND_RESPONSE;
 terminal SND_EVAL;
 terminal SND_CANCEL;
 terminal SND_DO;
@@ -378,24 +383,30 @@ note_atom::=
 
 tool_atom::=
        REC_CONNECT LPAR term:rv RPAR        {: RESULT = new Connect(rv, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top)), false); :}
-        
+     
      | REC_DISCONNECT LPAR term:rv RPAR     {: RESULT = new DisConnect(rv, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
-          
+     
      | SND_TERMINATE LPAR term:t1 COMMA term:t2 RPAR
                                             {: RESULT= new Terminate(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
-
+     
      | SND_KILL LPAR term:t1 COMMA term:t2 RPAR
                                             {: RESULT= new SndKill(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
-
+     
      | REC_EVENT LPAR term:t1 COMMA term:t2 RPAR 
                                             {: RESULT= new Event(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
-        
+     
      | SND_ACK_EVENT LPAR term:t1 COMMA term:t2 RPAR 
                                             {: RESULT= new AckEvent(t1, t2, null, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
      
+     | REC_REQUEST LPAR term:t1 COMMA term:t2 RPAR 
+                                            {: RESULT= new RecRequest(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | SND_RESPONSE LPAR term:t1 COMMA term:t2 RPAR 
+                                            {: RESULT= new SndResponse(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
      | SND_ACK_EVENT LPAR term:t1 COMMA term:t2 COMMA term:t3 RPAR 
                                             {: RESULT= new AckEvent(t1, t2, t3, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-7), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
-        
+     
      | SND_EVAL LPAR term:t1 COMMA term:t2 RPAR
                                             {: RESULT= new Eval(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
      
@@ -404,12 +415,12 @@ tool_atom::=
      
      | REC_PERF_STATS LPAR term:t1 COMMA term:t2 RPAR
                                             {: RESULT= new RecPerfStats(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
-          
+     
      | SND_CANCEL LPAR term:t1 COMMA term:t2 RPAR /* not implemented */
      
      | SND_DO LPAR term:t1 COMMA term:t2 RPAR
                                             {: RESULT= new Do(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
-            
+     
      | REC_VALUE LPAR term:t1 COMMA term:t2  RPAR
                                             {: RESULT= new RecVal(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
      ;

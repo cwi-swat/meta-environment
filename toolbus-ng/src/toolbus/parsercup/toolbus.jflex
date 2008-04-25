@@ -60,6 +60,8 @@ Real  = -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
   "read"                         { return symbol(sym.READ); }
   "rec-event"                    { return symbol(sym.REC_EVENT); }
   "snd-ack-event"                { return symbol(sym.SND_ACK_EVENT); }
+  "snd-request"                  { return symbol(sym.REC_REQUEST); }
+  "snd-response"                 { return symbol(sym.SND_RESPONSE); }
   "snd-eval"                     { return symbol(sym.SND_EVAL); }
   "snd-cancel"                   { return symbol(sym.SND_CANCEL); }
   "snd-do"                       { return symbol(sym.SND_DO); }
