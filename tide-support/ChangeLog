@@ -1,3 +1,9 @@
+
+
+Fri Apr 25 13:48:15 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
+  * lib/*: this directory was broken after adaptations to Makefile.meta wrt use of tifstoc
+  Fixed this by renaming debug-adapter.c to debug-tool.c and adapter.isrc to debug-adapter.isrc
+
 Tue Mar 11 13:31:48 CEST 2008 <lankamp@cwi.nl>
  * Added workaround for the queued ToolBus event problem. When sending an
  event one should wait for the acknowledgement before continueing, to prevent
