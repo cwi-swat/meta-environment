@@ -57,7 +57,7 @@ datatype CharRange range(int start, int end);
 
 datatype CharRanges list(CharRange);
 
-fun str join(list[&T] lst, fun str tostring (&T arg), str asep){ 
+fun str join(list[&T] lst, fun str tostring(&T arg), str asep){ 
     str res = "";
     str sep = "";
     for(&T t : lst){

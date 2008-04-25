@@ -113,12 +113,11 @@ context-free syntax
 
 context-free syntax
 %% Switch and visit and solve
-         Expression | QuotedCPattern | APattern                  -> ExpressionOrPattern
+         Expression | ("cpat" CPattern) | ("apat" APattern)      -> ExpressionOrPattern
 
          "case" Pattern ":" Block                                -> Rule
          "default" ":" Block                                     -> Rule
-         "case" Pattern "=>" Expression                          -> Rule
-%%         Pattern "==>" Pattern                                   -> Rule
+         "case" Pattern "=>" ExpressionOrPattern                 -> Rule
 
  	"switch" Expression "{" Rule+ "}"                       -> Statement
    	"visit" "repeat"? Strategy Expression "{" Rule+ "}"     -> Statement
@@ -129,14 +128,11 @@ context-free syntax
          "if" "(" Predicate ")" Block                            -> Statement
 %% Do we want elseif etc.?
 
-context-free syntax
          Variable "=" ExpressionOrPattern                        -> Assignment {cons("assign")}
          Assignment                                              -> Statement
          Type Variable "=" ExpressionOrPattern                   -> Statement
-        "return" Expression                                      -> Statement {cons("return")}
-        "return-pat" Pattern                                     -> Statement {cons("return-pat")}
-        "yield" Expression                                       -> Statement {cons("yield")}
-        "yield-pat" Pattern                                      -> Statement {cons("yield-pat")}
+        "return" ExpressionOrPattern                             -> Statement {cons("return")}
+        "yield" ExpressionOrPattern                              -> Statement {cons("yield")}
         "assert" StrCon ":" Predicate                            -> Statement {cons("assert")}
 
         Statement ";"?                                           -> Block

@@ -11,11 +11,13 @@ context-free start-symbols
   Type
 
 exports
-sorts TypeName Type LabelledType LabelledTypes OptLabelledType OptLabelledTypes TypeVar BasicType StructuredType FunctionType
+sorts TypeName Type OptLabelledType OptLabelledTypes TypeVar BasicType StructuredType FunctionType
 
   lexical syntax
     head:[a-z]                                        -> TypeName {cons("one-char")}
     head:[a-z] middle:[A-Za-z0-9\-]* last:[A-Za-z0-9] -> TypeName {cons("more-chars")} 
+  lexical restrictions
+    TypeName -/- [A-Za-z0-9]
 
 context-free syntax
 
@@ -25,7 +27,6 @@ context-free syntax
    "loc"                                                   -> BasicType {prefer,cons("loc-type")}
    "any"                                                   -> BasicType {prefer,cons("any-type")}
    "term"                                                  -> BasicType {prefer,cons("term-type")}
-
  
    Type Variable?                                          -> OptLabelledType  
    {OptLabelledType ","}+                                  -> OptLabelledTypes
@@ -33,20 +34,17 @@ context-free syntax
    "set" "[" Type "]"                                      -> StructuredType {cons("set-type")}
    "rel" "[" OptLabelledTypes "]"                          -> StructuredType {cons("rel-type")}
    "<" OptLabelledType "," OptLabelledTypes ">"            -> StructuredType {cons("tuple-type")}
-   Symbol                                                  -> StructuredType {cons("symbol-type")}
 
-   Type Variable                                           -> LabelledType
-   {LabelledType ","}+                                     -> LabelledTypes
-
-   "fun" Type Variable "(" LabelledTypes ")"               -> FunctionType {cons("function-type")}
+   "fun" Type Variable "(" OptLabelledTypes ")"            -> FunctionType {cons("function-type")}
 
    "&" Variable                                            -> TypeVar
 
+   Symbol                                                  -> Type {cons("symbol-type")}
    TypeVar | BasicType | StructuredType | FunctionType     -> Type
-   TypeName                                                -> Type {prefer}
-   TypeName "(" {LabelledType ","}* ")"                    -> Type
+   TypeName                                                -> Type
+   TypeName "(" {OptLabelledType ","}* ")"                 -> Type
 
-   "<" Type Variable ">"                                   -> Type
+%%   "<" Type Variable? ">"                                  -> Type
  
    "(" Type ")"                                            -> Type {bracket} 
 
