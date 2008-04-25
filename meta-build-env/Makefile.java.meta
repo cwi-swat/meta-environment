@@ -17,7 +17,7 @@ EXTRA_DIST += $(wildcard *.m4) \
 CLEANFILES+=$(PACKAGE)-uninstalled.pc
 
 #Ignore the generated Eclipse stuff (ugly but necessary to prevent distcheck warnings unfortunately).
-distcleancheck_listfiles = find -type f | grep -v "./.project" | grep -v "./.classpath" | grep -v "./META-INF/MANIFEST.MF" | grep -v "./build.properties"
+distcleancheck_listfiles = find -type f | grep -v "./.project" | grep -v "./.classpath" | grep -v "./META-INF/MANIFEST.MF" | grep -v "./build.properties" | grep -v "./.settings/org.eclipse.jdt.ui.prefs" | grep -v "./.settings/org.eclipse.jdt.core.prefs"
 
 pkgconfig_DATA = $(PACKAGE).pc
 
