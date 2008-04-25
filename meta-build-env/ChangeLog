@@ -1,3 +1,9 @@
+
+
+Fri Apr 25 15:42:01 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
+ * meta-build.m4: added generation of .settings directory and contents for
+   default Eclipse settings (like source compliance level)
+
 Fri Apr 03 11:43:54 CEST 2008 <lankamp@cwi.nl>
  * Modified the gentifs stuff to work with the updated version.
 

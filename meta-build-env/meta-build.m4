@@ -416,6 +416,9 @@ if ! test -f .project ; then
 if ! test -d META-INF ; then
   mkdir META-INF
 fi
+if ! test -d .settings ; then
+  mkdir .settings
+fi
 if test -z "${EXTERNAL_JARS}"; then
   BUNDLE_CLASSPATH=$3,`echo ${EXTERNAL_JARS} | tr ':' ','`
 else
@@ -457,6 +460,25 @@ Bundle-Localization: plugin
 Export-Package: $4
 ${REQUIRE_BUNDLE}
 ${BUNDLE_MAIN_CLASS}
+ENDCAT
+
+cat > .settings/org.eclipse.jdt.core.prefs << ENDCAT
+eclipse.preferences.version=1
+org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.5
+org.eclipse.jdt.core.compiler.codegen.unusedLocal=preserve
+org.eclipse.jdt.core.compiler.compliance=1.5
+org.eclipse.jdt.core.compiler.debug.lineNumber=generate
+org.eclipse.jdt.core.compiler.debug.localVariable=generate
+org.eclipse.jdt.core.compiler.debug.sourceFile=generate
+org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
+org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
+org.eclipse.jdt.core.compiler.source=1.5
+ENDCAT
+
+cat > .settings/org.eclipse.jdt.ui.prefs << ENDCAT
+eclipse.preferences.version=1
+internal.default.compliance=default
 ENDCAT
 
 cat > build.properties << ENDCAT
