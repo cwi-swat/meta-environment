@@ -1,3 +1,9 @@
+
+
+Fri Apr 25 13:15:02 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
+ * build-environment.xml: upated example .bootrollrc file to latest version of
+   sisyphus
+
 Mon Oct  8 15:42:44 CEST 2007 <paulk@cwi.nl>
 * Adapted Makefile.am to do replacements in *.xsl.src files
   used for the docbook customization layer

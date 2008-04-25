@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="build-environment"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ns6="http://www.w3.org/1999/xhtml"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/2001/XInclude"
-         xmlns:ns="http://docbook.org/ns/docbook"
-	xml:id="build-environment">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>Build environment of The Meta-Environment</title>
 
@@ -69,7 +69,7 @@
 
     <para>This document is incomplete, please help. You may find <link
     xlink:href="http://sourceware.org/autobook/">The Goat Book</link>
-    documentation useful. </para>
+    documentation useful.</para>
   </section>
 
   <section>
@@ -344,9 +344,10 @@ TestClass=</programlisting>
         <filename>.bootrollrc</filename> file:</para>
 
         <programlisting>boot_roll:
-  build_dir: /ufs/jurgenv/glt/build
-  install_dir: /ufs/jurgenv/glt/installed/roll
-  vcs_user: jurgenv
+  build_dir: /ufs/&lt;yourlogin&gt;/glt/build
+  install_dir: /ufs/&lt;yourlogin&gt;/glt/installed
+  vcs_user: &lt;yourlogin&gt;
+  roots: [asfsdf-meta]
 sisyphus:
   url: sisyphus-configuration
   host: sjofar.sen.cwi.nl
@@ -356,16 +357,14 @@ sisyphus:
   password: daybuild
 templates:
  reconf: ./reconf
- configure: ./configure --prefix=&lt;%= prefix%&gt; &lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt; --enable-maintainer-mode
+ configure: CFLAGS="-g -O2 -m32 -Wall -Werror" ./configure --prefix=/ufs/&lt;yourlogin&gt;/glt/installed &lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=/ufs/&lt;yourlogin&gt;/glt/installed &lt;%end%&gt; --enable-maintainer-mode
  make: echo 'use make install'
- install: make install
- check: make check
- distcheck: DISTCHECK_CONFIGURE_FLAGS="&lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt;" make distcheck
+ install: CFLAGS="-g -O2 -m32 -Wall -Werror" make install
+ check: CFLAGS="-g -O2 -m32 -Wall -Werror" make check
+ distcheck: CFLAGS="-g -O2 -m32 -Wall -Werror" DISTCHECK_CONFIGURE_FLAGS="&lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=/ufs/&lt;yourlogin&gt;/glt/installed &lt;%end%&gt;" make distcheck
  clean: make uninstall clean 
  update: make uninstall ; svn update
  maintainer-clean: make uninstall maintainer-clean
-
- configure-user: ./configure --prefix=&lt;%= prefix%&gt; &lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt; --with-cflags="-Wall -Werror -g -O2"
 </programlisting>
 
         <para>If your workstation is outside the CWI domain, it is necessary
@@ -380,7 +379,7 @@ templates:
   password: daybuild
   tunnel:
     host: ssh.cwi.nl
-    user: jurgenv</programlisting><warning>
+    user: &lt;yourlogin&gt;</programlisting><warning>
             <para>The connection with the Subversion repository uses the
             Secure Shell. Be aware that this set up will not work if you use
             password-protected identities like <literal>id_rsa</literal> as
@@ -394,7 +393,7 @@ templates:
 
         <para>Run the command:</para>
 
-        <programlisting>boot-roll asfsdf-meta</programlisting>
+        <programlisting>boot-roll</programlisting>
 
         <para>This generates a file '<filename>.rollrc</filename>' which
         contains, amongst others, the dependencies between the packages. The
