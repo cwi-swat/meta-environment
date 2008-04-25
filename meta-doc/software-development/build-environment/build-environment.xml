@@ -402,6 +402,14 @@ templates:
       </section>
 
       <section>
+        <title>Step 4: Add your installation bin directory to your PATH
+        environment variable</title>
+
+        <para><programlisting>export PATH=/ufs/&lt;yourlogin&gt;/glt/installed/bin:${PATH}</programlisting>Adapt
+        to the syntax of your favorite shell.</para>
+      </section>
+
+      <section>
         <title>Step 4: Run <command>roll</command></title>
 
         <para>As explained earlier, each package can be built by way of the
