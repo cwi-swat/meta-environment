@@ -19,7 +19,8 @@ context-free syntax
 %%   VarDecl "=" Expression                               -> VarDeclInit {cons("var-init-decl")}
 
 %% Declarations
-   "type" Variable { Type "|"}+                         -> Declaration {cons("type-decl")}
+   "datatype" Variable Variable? { Type "|"}+           -> Declaration {cons("datatype-decl")}
+   "subtype" Variable Type                              -> Declaration {cons("subtype-decl")}
 
    FunctionType "{"  {Statement ";"}* ";"? "}"          -> Declaration {cons("function-decl")}
 

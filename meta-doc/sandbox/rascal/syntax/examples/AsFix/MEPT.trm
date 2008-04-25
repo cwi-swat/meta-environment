@@ -7,14 +7,14 @@ type Tree cycle(Symbol symbol, int cycle-length);
 type Tree amb(Args args);
 
 %% constructor(Tree, char, <character(int)>), %%??
-type Tree char(int character);
+type Tree int;
 
 type Args list[Tree];
 
 type Production prod(Symbols lhs, Symbol rhs, Attributes attributes);
  
 %% constructor(Production, List, list(<rhs(Symbol)>)), 
-type Production list[Symbol]; %% ???
+type Production list(Symbol rhs);
 
 type Attributes no-attrs;
 type Attributes attrs(Attrs attrs);
@@ -52,8 +52,7 @@ type Symbol char-class(CharRanges ranges);
 type Symbols list[Symbol];
 
 %% constructor(CharRange, character, <start(int)>), 
-type CharRange character(int start); %%???
-%% constructor(CharRange, range, range(<start(int)>, <end(int)>)),
+type CharRange int;
 type CharRange range(int start, int end);
 
 type CharRanges list(CharRange);

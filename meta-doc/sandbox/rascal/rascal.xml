@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -481,7 +481,7 @@
     </section>
 
     <section>
-      <title>Types</title>
+      <title>Types and Values</title>
 
       <para>The type system (and notation) are mostly similar to that of
       Rscript, but</para>
@@ -498,7 +498,7 @@
         </listitem>
 
         <listitem>
-          <para>There is a catch-all type "any".</para>
+          <para>There is a catch-all type "Value".</para>
         </listitem>
 
         <listitem>
@@ -528,16 +528,73 @@
       <para>As a design strategy we try to offer the option to leave out as
       many type indications as possible.</para>
 
-      <para>Type declarations may introduce new structured (abstract as oopsed
-      to concrete) types.</para>
+      <para>Datatype declarations may introduce new structured types.</para>
+
+      <para>Subtype declarations may define inclusions between types.</para>
 
       <para>Types may include type variables like
       <literal>&amp;<replaceable>T</replaceable></literal> as in
       Rscript.</para>
+
+      <para>The root of the type system is the type Value. It has the
+      following subtypes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>bool</para>
+        </listitem>
+
+        <listitem>
+          <para>int</para>
+        </listitem>
+
+        <listitem>
+          <para>str</para>
+        </listitem>
+
+        <listitem>
+          <para>loc</para>
+        </listitem>
+
+        <listitem>
+          <para>lists, sets, tuples, and relations of Values.</para>
+        </listitem>
+
+        <listitem>
+          <para>datatype: all structures defined with a datatype definition.
+          One of the subtypes of datatype is Tree.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Tree is a subtype of datatype and is the type that
+              corresponds with concrete syntax trees (AsFix in the case of the
+              Meta-Environment). Tree has as subtype all types that are
+              derived from SDF definitions, i.e., all notions that are defined
+              using a grammar.</para>
+            </listitem>
+
+            <listitem>
+              <para>The type Tree is "special" in the following sense:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>Parsers generates value of type Tree.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Although the datatype Tree can be defined in Rascal,
+                  its definition is built-in in order to preserve the
+                  consistency with the parser.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
-      <title>Variables</title>
+      <title>Variables [TO BE DONE]</title>
 
       <para></para>
     </section>
@@ -554,8 +611,8 @@
       (default).</para>
 
       <para>A function body contains optional variable declarations (with
-      optional initializations) followed by an expression. The value of the
-      expression is the value of the function.</para>
+      optional initializations) followed by a number of statements. A return
+      statement produces the value of the function.</para>
 
       <para>Functions can later be extended:</para>
 
@@ -883,7 +940,7 @@ fun Bool reduce(Bool B) {
       </section>
 
       <section>
-        <title>Booleans with implicit reduce</title>
+        <title>Booleans with implicit reduce (NOT YET DECIDED)</title>
 
         <para>In ASF, values are always reduced to a normal form when they are
         created. In order to approximate this bahaviour we introduce the
@@ -2480,6 +2537,14 @@ process mkWave(int N) is ...</programlisting>
 
       <listitem>
         <para>Ditto for set comprehensions.</para>
+      </listitem>
+
+      <listitem>
+        <para>We need an io-library.</para>
+      </listitem>
+
+      <listitem>
+        <para>How are annotations handled?</para>
       </listitem>
 
       <listitem>
