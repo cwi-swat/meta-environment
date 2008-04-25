@@ -31,4 +31,6 @@ public interface Tool{
 	public void sendEvent(ATerm term);
 	
 	public void postEvent(ATerm term);
+	
+	public ATerm postRequest(ATerm term);
 }
