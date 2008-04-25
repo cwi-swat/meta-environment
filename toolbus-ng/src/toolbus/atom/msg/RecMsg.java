@@ -1,11 +1,14 @@
 package toolbus.atom.msg;
 
-import java.util.Iterator;
-import toolbus.AtomSet;
+import java.util.Stack;
+import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
+import toolbus.exceptions.ToolBusException;
+import toolbus.matching.MatchStore;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
+import toolbus.process.ProcessInstance;
 import aterm.ATerm;
 
 /**
@@ -18,28 +21,25 @@ public class RecMsg extends MsgAtom{
 	}
 	
 	public ProcessExpression copy(){
-		Atom a = new RecMsg(getMsg(), tbfactory, getPosInfo());
+		Atom a = new RecMsg(msg, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}
 	
-	public boolean canCommunicate(SndMsg a){
-		return tbfactory.mightMatch(getMsg(), a.getMsg());
+	public void compile(ProcessInstance pi, Stack<String> calls, State follow) throws ToolBusException{
+		super.compile(pi, calls, follow);
+		
+		registerPartners();
 	}
 	
-	public void addPartners(AtomSet atoms){
-		Iterator<Atom> atomSetIterator = atoms.iterator();
-		
-		while(atomSetIterator.hasNext()){
-			Atom b = atomSetIterator.next();
-			
-			if(b instanceof SndMsg){
-				SndMsg cb = (SndMsg) b;
-				if(canCommunicate(cb)){
-					cb.addMsgPartner(this);
-				}
-			}
-		}
+	public void registerPartners(){
+		MatchStore matchStore = getToolBus().getMatchStore();
+		matchStore.registerReceiveMessage(this);
+	}
+	
+	public void destroy(){
+		MatchStore matchStore = getToolBus().getMatchStore();
+		matchStore.deregisterReceiveMessage(this);
 	}
 	
 	public boolean execute(){

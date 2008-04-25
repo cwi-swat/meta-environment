@@ -23,12 +23,12 @@ public class RecVal extends Atom{
 		
 		this.toolId = new Ref(toolId);
 		this.result = new Ref(result);
-		setAtomArgs(this.toolId, this.result);
+		setAtomArgs(new Ref[]{this.toolId, this.result});
 		externalNameAsReceivedByTool = "snd-value";
 	}
 	
 	public ProcessExpression copy(){
-		Atom a = new RecVal(this.toolId.value, this.result.value, tbfactory, getPosInfo());
+		Atom a = new RecVal(toolId.value, result.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		
 		return a;

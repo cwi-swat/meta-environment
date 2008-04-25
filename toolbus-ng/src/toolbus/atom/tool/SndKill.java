@@ -26,7 +26,7 @@ public class SndKill extends Atom{
 		
 		this.toolId = new Ref(toolId);
 		this.message = new Ref(value);
-		setAtomArgs(this.toolId);
+		setAtomArgs(new Ref[]{this.toolId});
 		externalNameAsReceivedByTool = "snd-kill";
 	}
 	

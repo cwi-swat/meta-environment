@@ -24,6 +24,7 @@ import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
+import toolbus.matching.MatchStore;
 import toolbus.parsercup.parser;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessDefinition;
@@ -34,7 +35,6 @@ import toolbus.tool.ToolInstance;
 import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
 import aterm.ATerm;
-import aterm.ATermAppl;
 
 /**
  * ToolBus implements the behaviour of one ToolBus.
@@ -53,6 +53,8 @@ public class ToolBus{
 	protected final List<ProcessInstance> processes;
 	private int processIdCounter;
 	private final ConcurrentHashMap<String, ProcessDefinition> procdefs;
+	
+	protected final MatchStore matchStore;
 	
 	private final ToolInstanceManager toolInstanceManager;
 	private final ConcurrentHashMap<String, ToolDefinition> tooldefs;
@@ -90,6 +92,8 @@ public class ToolBus{
 		procdefs = new ConcurrentHashMap<String, ProcessDefinition>();
 		tooldefs = new ConcurrentHashMap<String, ToolDefinition>();
 		
+		matchStore = new MatchStore(tbfactory);
+		
 		propertyManager = new PropertyManager(args);
 		
 		toolBusConnectionHandler = new ToolBusConnectionHandler(this);
@@ -108,6 +112,11 @@ public class ToolBus{
 	public ToolInstanceManager getToolInstanceManager(){
 		return toolInstanceManager;
 	}
+	
+	public MatchStore getMatchStore(){
+		return matchStore;
+	}
+	
 	
 	/**
 	 * Constructor with explicit StringWriter
@@ -240,10 +249,9 @@ public class ToolBus{
 		try{
 		    parser parser_obj = new parser(filename, this);
 			parser_obj.parse();
-			parser_obj.generateInitialProcessCalls();
 			
 			// Initialize the signatures.
-			final List<ATermAppl> atomSignature = new ArrayList<ATermAppl>();
+			final List<Atom> atomSignature = new ArrayList<Atom>();
 			procdefs.iterate(new ReadOnlyHashMapEntryHandler<String, ProcessDefinition>(){
 				public int handle(String key, ProcessDefinition value){
 					ProcessExpression originalProcessExpression = value.getOriginalProcessExpression();
@@ -251,16 +259,20 @@ public class ToolBus{
 					Iterator<Atom> atomSetIterator = atoms.iterator();
 					while(atomSetIterator.hasNext()){
 						Atom a = atomSetIterator.next();
-						
-						atomSignature.add(a.toATerm());
+						atomSignature.add(a);
 					}
 					
 					return CONTINUE;
 				}
 			});
+			
+			matchStore.calculateMatches(atomSignature);
+			
 			calculateToolSignatures(atomSignature);
 			
-			// Keep track of the names of all the scripts for debuggin purposes.
+			parser_obj.generateInitialProcessCalls();
+			
+			// Keep track of the names of all the scripts for debugging purposes.
 			scriptsNames = parser_obj.scriptsNames();
 		}catch(ToolBusException e){
 			error(filename, e.getMessage());
@@ -320,7 +332,7 @@ public class ToolBus{
 		return toolDefinitions;
 	}
 	
-	private void calculateToolSignatures(final List<ATermAppl> atomSignature){
+	private void calculateToolSignatures(final List<Atom> atomSignature){
 		tooldefs.iterate(new ReadOnlyHashMapEntryHandler<String, ToolDefinition>(){
 			public int handle(String key, ToolDefinition value){
 				value.calculateToolSignature(atomSignature);
