@@ -1,0 +1,18 @@
+module Bool-abstract
+
+type Bool true;
+type Bool false;
+type Bool and(Bool,Bool);
+type Bool or(Bool, Bool); 
+
+fun Bool reduce(Bool B) {
+    visit bu B {
+      and(true, <Bool B2>)  => <B2>     %% Style 1: Use Variables
+      and(false, Bool B2) => false
+
+      or(true, true)   ==> true        %% Style 2: Use a truth table
+      or(true, false)  ==> true
+      or(false, true)  ==> true
+      or(false, false) ==> false
+    }
+}
