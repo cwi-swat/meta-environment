@@ -3,8 +3,10 @@ package toolbus;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import toolbus.environment.Binding;
 import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
 import toolbus.exceptions.ToolBusInternalError;
 import aterm.AFun;
@@ -42,6 +44,11 @@ public class TBTermFactory extends PureFactory{
 	public final ATerm ListPlaceholder;
 	
 	public final ATermList EmptyList;
+	
+	// public TBTermVar TransactionIdVar;
+	// public TBTermVar TransactionIdResVar;
+	// public ATerm transaction;
+	// private int nTransactions = 0;
 	
 	protected TBTermFactory(){
 		super();
@@ -105,6 +112,7 @@ public class TBTermFactory extends PureFactory{
 	}
 	
 	public TBTermVar mkVar(ATerm name, String processName, ATerm type){
+		//System.err.println("mkVar(" + name + ", " + processName + ", " + type + ")");
 		return makeTBTermVar(name.toString() + "$" + processName, type);
 	}
 	
@@ -300,6 +308,62 @@ public class TBTermFactory extends PureFactory{
 		return t.getType() == VAR;
 	}
 	
+	public TBTermVar changeResVarIntoVar(TBTermVar rvar){
+		return makeTBTermVar(rvar.getVarName(), rvar.getVarType());
+	}
+	
+	/**
+	 * Resolve the types of variables in ATerm t using Environment env. The declaration information
+	 * in env is used to include type information in every variable occurence.
+	 * 
+	 * @param t
+	 *            Aterm to be resolved.
+	 * @param env
+	 *            environment to be used.
+	 */
+	public ATerm resolveVarTypes(ATerm t, Environment env) throws ToolBusError{
+		// System.err.println("resolveVarTypes: " + t + ": " + env);
+		if(t == Undefined){
+			return t;
+		}
+		switch(t.getType()){
+			case ATerm.BLOB:
+			case ATerm.INT:
+			case ATerm.PLACEHOLDER:
+			case ATerm.REAL:
+				return t;
+				
+			case VAR:
+				TBTermVar v = (TBTermVar) t;
+				v = v.setVarType(env.getVarType(v));
+				// System.err.println("resolveVarTypes(" + t + ") returns: " + v + "; " + env);
+				return v;
+				
+			case ATerm.APPL:
+				ATermAppl apt = (ATermAppl) t;
+				
+				AFun afun = apt.getAFun();
+				ATerm args[] = apt.getArgumentArray();
+				int nargs = args.length;
+				if(nargs == 0) return t;
+				ATerm cargs[] = new ATerm[nargs];
+				for(int i = 0; i < nargs; i++){
+					cargs[i] = resolveVarTypes(args[i], env);
+				}
+				return makeAppl(afun, cargs);
+				
+			case ATerm.LIST:
+				ATermList lst = EmptyList;
+				ATermList tlst = (ATermList) t;
+				for(int i = tlst.getLength() - 1; i >= 0; i--){
+					lst = lst.insert(resolveVarTypes(tlst.elementAt(i), env));
+				}
+				
+				return lst;
+		}
+		throw new ToolBusInternalError("illegal ATerm in resolveVars: " + t);
+	}
+	
 	public TBTermVar replaceAssignableVar(TBTermVar v, Environment env) throws ToolBusException{
 		// System.err.println("replaceAssignableVar: " + v + "; " + env);
 		
@@ -323,8 +387,6 @@ public class TBTermFactory extends PureFactory{
 	 *            environment to be used.
 	 */
 	public ATerm replaceFormals(ATerm t, Environment env) throws ToolBusException{
-		if(env.size() == 0) return t;
-		
 		switch(t.getType()){
 			case ATerm.BLOB:
 			case ATerm.INT:
@@ -357,6 +419,43 @@ public class TBTermFactory extends PureFactory{
 				return lst;
 		}
 		throw new ToolBusInternalError("illegal ATerm in replaceFormals: " + t);
+	}
+	
+	public ATermList getVariables(ATerm t, ATermList collected){
+		ATermList c = collected;
+		
+		switch(t.getType()){
+			case ATerm.BLOB:
+			case ATerm.INT:
+			case ATerm.PLACEHOLDER:
+			case ATerm.REAL:
+				return c;
+				
+			case VAR:
+				if(member(t, c)) return c;
+				
+				return makeList(t, c);
+				
+			case ATerm.APPL:
+				ATermAppl apt = (ATermAppl) t;
+				
+				ATerm args[] = apt.getArgumentArray();
+				int nargs = args.length;
+				if(nargs == 0) return c;
+				for(int i = 0; i < nargs; i++){
+					c = (ATermList) join(c, getVariables(args[i], c));
+				}
+				return c;
+				
+			case ATerm.LIST:
+				ATermList tlst = (ATermList) t;
+				for(int i = tlst.getLength() - 1; i >= 0; i--){
+					c = (ATermList) join(c, getVariables(tlst.elementAt(i), c));
+				}
+				return c;
+			default:
+				throw new ToolBusInternalError("illegal ATerm in getVariables: " + t);
+		}
 	}
 	
 	/**

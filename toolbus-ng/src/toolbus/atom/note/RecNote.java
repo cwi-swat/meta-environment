@@ -13,16 +13,16 @@ import toolbus.process.ProcessInstance;
 import aterm.ATerm;
 
 public class RecNote extends Atom{
-	public final ATerm notePattern;
+	private final Ref msgpat;
 	
 	public RecNote(ATerm msgpat, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
-		this.notePattern = msgpat;
-		setAtomArgs(new Ref[]{new Ref(msgpat)});
+		this.msgpat = new Ref(msgpat);
+		setAtomArgs(this.msgpat);
 	}
 	
 	public ProcessExpression copy(){
-		Atom a = new RecNote(notePattern, tbfactory, getPosInfo());
+		Atom a = new RecNote(msgpat.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}
@@ -30,7 +30,7 @@ public class RecNote extends Atom{
 	public boolean execute() throws ToolBusException{
 		ProcessInstance pi = getProcess();
 		if(!pi.hasNotes()) return false;
-		if(isEnabled() && pi.getNoteFromQueue(notePattern, getEnv())) return true;
+		if(isEnabled() && pi.getNoteFromQueue(this.msgpat.value, getEnv())) return true;
 		
 		return false;
 	}

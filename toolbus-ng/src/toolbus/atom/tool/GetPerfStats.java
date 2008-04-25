@@ -18,7 +18,7 @@ public class GetPerfStats extends Atom{
 		super(tbfactory, posInfo);
 		
 		this.toolId = new Ref(toolId);
-		setAtomArgs(new Ref[]{this.toolId});
+		setAtomArgs(this.toolId);
 		externalNameAsReceivedByTool = "snd-perf-stats";
 	}
 	

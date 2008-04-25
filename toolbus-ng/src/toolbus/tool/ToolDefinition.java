@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.atom.Atom;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -117,14 +116,14 @@ public class ToolDefinition{
 		return tbfactory.make("signature(<term>, <term>, <term>))", inputSignature, outputSignature, otherSignature);
 	}
 	
-	public void calculateToolSignature(List<Atom> atoms){
+	public void calculateToolSignature(List<ATermAppl> atoms){
 		if(signatureIsSet) return;
 		
 		ATermPlaceholder toolPlaceholder = getNameAsPlaceholder();
 		
-		Iterator<Atom> atomsIterator = atoms.iterator();
+		Iterator<ATermAppl> atomsIterator = atoms.iterator();
 		while(atomsIterator.hasNext()){
-			ATermAppl sig = atomsIterator.next().toATerm();
+			ATermAppl sig = atomsIterator.next();
 			if(sig.getArity() > 0){
 				ATerm ap = sig.getArgument(0);
 				if(ap.equals(toolPlaceholder)){

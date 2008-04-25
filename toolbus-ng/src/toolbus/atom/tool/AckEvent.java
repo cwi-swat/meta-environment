@@ -28,7 +28,7 @@ public class AckEvent extends Atom{
 		this.toolId = new Ref(toolId);
 		this.event = new Ref(event);
 		this.callbackData = new Ref(callbackData);
-		setAtomArgs(new Ref[]{this.toolId, this.event});
+		setAtomArgs(this.toolId, this.event);
 		externalNameAsReceivedByTool = "rec-ack-event";
 	}
 	

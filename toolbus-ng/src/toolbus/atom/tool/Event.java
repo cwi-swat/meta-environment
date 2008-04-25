@@ -23,7 +23,7 @@ public class Event extends Atom{
 		
 		this.toolId = new Ref(toolId);
 		this.result = new Ref(result);
-		setAtomArgs(new Ref[]{this.toolId, this.result});
+		setAtomArgs(this.toolId, this.result);
 		externalNameAsReceivedByTool = "snd-event";
 	}
 	

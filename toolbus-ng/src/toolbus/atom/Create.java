@@ -26,7 +26,7 @@ public class Create extends Atom{
 		super(tbfactory, posInfo);
 		pcall = new Ref(c);
 		rvar = new Ref(v);
-		setAtomArgs(new Ref[]{pcall, rvar});
+		setAtomArgs(pcall, rvar);
 	}
 	
 	public ProcessExpression copy(){

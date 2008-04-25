@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
@@ -21,6 +22,8 @@ import aterm.ATerm;
  * @author paulk, Jul 23, 2002
  */
 public class ProcessInstance{
+	private static State empty = new State();
+	
 	private final ProcessDefinition definition;
 	private final String processName;
 	private final int processId;
@@ -38,8 +41,6 @@ public class ProcessInstance{
 	
 	private boolean running = true;
 	
-	private boolean deregistered = false;
-	
 	public ProcessInstance(ToolBus TB, ProcessCall call, int processId) throws ToolBusException{
 		toolbus = TB;
 		tbfactory = TB.getTBTermFactory();
@@ -55,13 +56,15 @@ public class ProcessInstance{
 		call.replaceFormals(new Environment(tbfactory));
 		Stack<String> stack = new Stack<String>();
 		stack.push("TOPLEVEL");
-		call.compile(this, stack, new State());
+		call.compile(this, stack, empty);
 		
 		elements = call.getAtoms();
 		
 		currentState = call.getFirst();
 		initialState = call.PE.getFirst();
 		currentState.activate();
+		
+		addPartnersToAllProcesses(elements);
 	}
 	
 	public ProcessDefinition getProcessDefinition(){
@@ -91,18 +94,107 @@ public class ProcessInstance{
 	public void terminate(ATerm msg){
 		running = false;
 		
-		deregisterCommunicationAtoms(elements);
+		Iterator<ProcessInstance> processInstanceIterator = toolbus.getProcesses().iterator();
+		while(processInstanceIterator.hasNext()){
+			ProcessInstance pi = processInstanceIterator.next();
+			
+			if(pi != this){
+				pi.delPartners(elements);
+			}
+		}
 	}
 	
-	public void deregisterCommunicationAtoms(AtomSet atoms){
-		if(!deregistered){
-			Iterator<Atom> atomsIterator = atoms.iterator();
-			while(atomsIterator.hasNext()){
-				Atom atom = atomsIterator.next();
-				atom.destroy();
-			}
-			deregistered = true;
+	public void addElements(AtomSet atoms){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		while(atomSetIterator.hasNext()){
+			Atom a = atomSetIterator.next();
+			
+			elements.addAtom(a);
 		}
+	}
+	
+	public void delElements(AtomSet atoms){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		while(atomSetIterator.hasNext()){
+			Atom a = atomSetIterator.next();
+			
+			elements.delAtom(a);
+		}
+	}
+	
+	/**
+	 * Add potential partners to this StateElement. This may optimize execution. Typical examples:
+	 * partnering SndMsg with RecMsg, and SndNote with Subscribe
+	 * 
+	 * @param atoms
+	 *            containing the potential partners
+	 */
+	public void addPartners(AtomSet atoms){
+		// LoggerFactory.log(this.getProcessName(), "add the partners " + atoms,
+		// IToolBusLoggerConstants.MESSAGES);
+		Iterator<Atom> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			Atom e = elementsIterator.next();
+			
+			e.addPartners(atoms);
+		}
+	}
+	
+	/**
+	 * Delete partners from this StateElement. This is necessary when processes die and partners are
+	 * no longer available.
+	 * 
+	 * @param atoms
+	 *            containing the partners
+	 */
+	public void delPartners(AtomSet atoms){
+		Iterator<Atom> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			Atom e = elementsIterator.next();
+			
+			e.delPartners(atoms);
+		}
+	}
+	
+	public void addPartnersToAllProcesses(AtomSet atoms){
+		// System.err.println("Enter addPartnersToAllProcesses for: " + this.getProcessName());
+		Iterator<ProcessInstance> processInstanceIterator = toolbus.getProcesses().iterator();
+		while(processInstanceIterator.hasNext()){
+			ProcessInstance pi = processInstanceIterator.next();
+			
+			// System.err.println("[" + this.getProcessName() + "] addPartnersToAllProcesses: " +
+			// P.getProcessName());
+			if(pi != this){
+				// LoggerFactory.log(this.getProcessName(), "add partners to " + P.getProcessName(),
+				// IToolBusLoggerConstants.MESSAGES);
+				pi.addPartners(atoms);
+			}
+		}
+	}
+	
+	public void delPartnersFromAllProcesses(AtomSet atoms){
+		Iterator<ProcessInstance> processInstanceIterator = toolbus.getProcesses().iterator();
+		while(processInstanceIterator.hasNext()){
+			ProcessInstance pi = processInstanceIterator.next();
+			
+			if(pi != this){
+				pi.delPartners(atoms);
+			}
+		}
+	}
+	
+	/*
+	 * Note manipulation
+	 */
+
+	public void subscribe(ATerm pat){
+		//LoggerFactory.log(definition.getName(), "subscribe " + pat, IToolBusLoggerConstants.NOTES);
+		if(!subscriptions.contains(pat)) subscriptions.add(pat);
+	}
+	
+	public void unsubscribe(ATerm pat){
+		//LoggerFactory.log(definition.getName(), "unsubscribe: " + pat, IToolBusLoggerConstants.NOTES);
+		subscriptions.remove(pat);
 	}
 	
 	public boolean getNoteFromQueue(ATerm pat, Environment env){
@@ -128,16 +220,6 @@ public class ProcessInstance{
 			}
 		}
 		return true;
-	}
-	
-	public void subscribe(ATerm pat){
-		//LoggerFactory.log(definition.getName(), "subscribe " + pat, IToolBusLoggerConstants.NOTES);
-		if(!subscriptions.contains(pat)) subscriptions.add(pat);
-	}
-	
-	public void unsubscribe(ATerm pat){
-		//LoggerFactory.log(definition.getName(), "unsubscribe: " + pat, IToolBusLoggerConstants.NOTES);
-		subscriptions.remove(pat);
 	}
 	
 	public boolean putNoteInQueue(ATerm note){

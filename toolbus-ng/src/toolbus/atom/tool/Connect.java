@@ -26,7 +26,7 @@ public class Connect extends Atom{
 		super(tbfactory, posInfo);
 		
 		this.toolId = new Ref(toolId);
-		setAtomArgs(new Ref[]{this.toolId});
+		setAtomArgs(this.toolId);
 		
 		this.followsExecute = followsExecute;
 		

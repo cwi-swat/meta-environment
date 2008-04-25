@@ -1,8 +1,3 @@
-Fri Apr 25 11:05:35 CEST 2008 <lankamp@cwi.nl>
-  * Potential communication links are now indexed prior to the starting of the
-  ToolBus. This reduces runtime overhead considerably (and provides us with
-  some usefull information).
-
 Thu Mar 20 11:21:34 CEST 2008 <lankamp@cwi.nl>
   * Fixed a problem in the debug code of the ProcessCall atom. It 'appeared' that duplicate steps where being executed, eventhough that wasn't the case.
 

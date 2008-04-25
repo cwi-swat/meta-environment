@@ -26,6 +26,24 @@ import aterm.ATermInt;
 import aterm.ATermList;
 
 /**
+ * This class represents a test associated with an atom.
+ * It carries its own execution environment.
+ *
+ */
+class Test{
+	ATerm testExpr;
+	Environment testEnv;
+	
+	public Test(ATerm test, Environment env){
+		testExpr = test;
+		testEnv = env;
+	}
+	public String toString(){
+		return "Test(" + testExpr + ", " + testEnv + ")";
+	}
+}
+
+/**
  * The class Atom forms the basic building block of Tscripts. Instances of Atom
  * are both the most primitive elements of process expressions and the elements of
  * the states to which process exprssions are being compiled.
@@ -36,12 +54,10 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 	private final static String SECS = "sec";
 	private final static String MSECS = "msec";
 	
-	private final static Ref[] NOATOMARGS = new Ref[0];
-	
 	private ProcessInstance processInstance;	// process instance to which the atom belongs
 	private Environment env;					// the environment of this atom
 	private List<Test> tests;					// optional tests that guard this atom
-	private Ref[] atomArgs = NOATOMARGS;		// arguments of the atom
+	private Ref[] atomArgs = new Ref[0];		// arguments of the atom
 	private int delay = 0;						// time delay before atom can be executed
 	private int timeout = 0;					// timeout after which atom can no longer be executed
 	private boolean timeExpr = false;			// the actual time expression for delay/timeout
@@ -49,17 +65,83 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 	private long enabledTime;					// When this atom becomes ready for execution
 	private long timeoutTime;					// When this atom becomes no longer eligable for execution
 	protected String externalNameAsReceivedByTool;
+/*	
+	static private HashMap<String, Integer> instances = new HashMap<String, Integer>(32);
+	static private HashMap<String, Integer> enabled = new HashMap<String, Integer>(32);
+	static private HashMap<String, Integer> notEnabled = new HashMap<String, Integer>(32);
+	static private HashMap<String, Integer> size_env = new HashMap<String, Integer>(32);
+	static private HashMap<String, Integer> size_used_env = new HashMap<String, Integer>(32);
+*/
 	
 	public Atom(TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		addToFirst(this);
 		externalNameAsReceivedByTool = shortName();
+		/* incr(instances);*/
+	}
+/*	
+	protected void incr(HashMap<String, Integer> map){
+		incr(map, 1);
 	}
 	
-	public void destroy(){/* Intended to (optionally) be overwritten in subclasses to enable them to execute cleanup actions if needed. */}
+	protected void incr(HashMap<String, Integer> map, int d){
+		String name = this.getClass().getName();
+		if(map.containsKey(name)){
+			int n = map.get(name).intValue();
+			map.put(name, new Integer(n + d));
+		}else{
+			map.put(name, new Integer(d));
+		}
+	}
+	
+	public static void statistics(){
+		int ninstances = 0;
+		int nenabled = 0;
+		int nNotEnabled = 0;
+		System.err.printf("\n========================= Atom Statistics ========================\n");
+		
+		for(String name : instances.keySet()){
+			Integer ins = instances.get(name);
+			ninstances += ins.intValue();
+			Integer en = enabled.get(name) == null ? new Integer(0) : enabled.get(name);
+			nenabled += en.intValue();
+			Integer ne = notEnabled.get(name) == null ? new Integer(0) : notEnabled.get(name);
+			nNotEnabled += ne.intValue();
+			System.err.printf("| %30s%8d%8d (+)%8d (-) |\n", name, ins, en, ne);
+		}
+		System.err.printf("| %30s%8d%8d    %8d     |\n", "TOTAL", new Integer(ninstances), new Integer(nenabled), new Integer(nNotEnabled));
+		System.err.printf("==================================================================\n");
+		
+		for(String name : instances.keySet()){
+			System.err.printf("%s, %d, %d\n", name, size_env.get(name), size_used_env.get(name));
+		}
+	}
+*/
+	
+	public void setAtomArgs(Ref r){
+		atomArgs = new Ref[]{r};
+	}
+	
+	public void setAtomArgs(Ref r1, Ref r2){
+		atomArgs = new Ref[]{r1, r2};
+	}
+	
+	public void setAtomArgs(Ref r1, Ref r2, Ref r3){
+		atomArgs = new Ref[]{r1, r2, r3};
+	}
 	
 	public void setAtomArgs(Ref[] refs){
 		atomArgs = refs;
+	}
+	
+	public void addAtomArg(ATerm arg){
+		int n = atomArgs.length;
+		Ref[] newAtomArgs = new Ref[n + 1];
+		for(int i = 0; i < n; i++){
+			newAtomArgs[i] = atomArgs[i];
+		}
+		newAtomArgs[n] = new Ref(arg);
+		atomArgs = newAtomArgs;
 	}
 	
 	public ATerm getAtomArgValue(int i){
@@ -83,8 +165,9 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 	public void setTest(ATerm test, Environment e) throws ToolBusException{
 		if(test != null){
 			//System.err.println(this + "." + "setTest: env " + env.hashCode() + " => " + e.hashCode());
+			ATerm rtst = tbfactory.resolveVarTypes(test, e);
 			if(tests == null) tests = new ArrayList<Test>(4);
-			Test t = new Test(test, e);
+			Test t = new Test(rtst, e);
 			//System.out.println("setTest: " + t);
 			this.tests.add(t);
 		}
@@ -230,7 +313,8 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		//System.err.println("Atom.replaceFormals: " + env);
 		for(int i = 0; i < atomArgs.length; i++){
 			//System.err.println("atomArg[" + i + "] = " + atomArgs[i] + " ; env = " + env);
-			ATerm arg = tbfactory.replaceFormals(atomArgs[i].value, env);
+			ATerm arg = tbfactory.resolveVarTypes(atomArgs[i].value, env);
+			arg = tbfactory.replaceFormals(arg, env);
 			//System.err.println("atomArg[" + i + "] = " + atomArgs[i].value + " => " + arg + "; env = " + env);
 			atomArgs[i].value = arg;
 		}
@@ -291,6 +375,10 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		return processInstance;
 	}
 	
+	public void addPartners(AtomSet s){/* Overwritten in subclass */}
+	
+	public void delPartners(AtomSet s){/* Overwritten in subclass */}
+	
 	public State gotoNextStateAndActivate(){
 		// System.err.println(this + "getNextState ==> " + getFollow());
 		State s = getFollow();
@@ -313,41 +401,22 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		enabledTime = activateTime + delay;
 		timeoutTime = activateTime + timeout;
 		
+		/*incr(size_env, env.size());*/
+		
+		/*ATermList collected = tbfactory.EmptyList;
+		for(int i = 0; i < atomArgs.length; i++){
+			collected = tbfactory.getVariables(atomArgs[i].value, collected);
+		}*/
+		
+		/*incr(size_used_env, collected.getLength());*/
+		
 		// System.err.println("used_vars = " + collected);
 		// System.err.println("Atom.activate: " + this);
 	}
 	
-	/**
-	 * This class holds static reference to an empty process instance array, which can be used as
-	 * return value in the debugExecute method. Using this instead of a newly created array every
-	 * time will reduce garbage creation. 
-	 * 
-	 * @author Arnold Lankamp
-	 */
-	private static class EmptyProcessInstanceArrayHolder{
-		public final static ProcessInstance[] ZEROPARTNERS = new ProcessInstance[0];
-	}
-	
 	public ProcessInstance[] debugExecute() throws ToolBusException{
-		if(execute()) return EmptyProcessInstanceArrayHolder.ZEROPARTNERS;
+		if(execute()) return new ProcessInstance[0];
 		
 		return null;
-	}
-	
-	/**
-	 * This class represents a test associated with an atom.
-	 * It carries its own execution environment.
-	 */
-	private static class Test{
-		public final ATerm testExpr;
-		public final Environment testEnv;
-		
-		public Test(ATerm test, Environment env){
-			testExpr = test;
-			testEnv = env;
-		}
-		public String toString(){
-			return "Test(" + testExpr + ", " + testEnv + ")";
-		}
 	}
 }

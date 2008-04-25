@@ -6,40 +6,67 @@ package toolbus.atom.note;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import toolbus.AtomSet;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
-import toolbus.matching.MatchStore;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
 
 public class SndNote extends Atom{
-	public final ATerm notePattern;
+	private final Ref note;
+	
+	private List<ProcessInstance> notePartners = new ArrayList<ProcessInstance>();
 	
 	public SndNote(ATerm note, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
-		this.notePattern = note;
-		setAtomArgs(new Ref[]{new Ref(note)});
+		this.note = new Ref(note);
+		setAtomArgs(this.note);
 	}
 	
 	public ProcessExpression copy(){
-		Atom a = new SndNote(notePattern, tbfactory, getPosInfo());
+		Atom a = new SndNote(note.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}
 	
+	void addPartnerIfMatch(Subscribe subs){
+		ATerm subscribeValue = tbfactory.fullSubstitute(subs.getMatchPattern(), subs.getEnv());
+		if(subscribeValue == null){
+			//LoggerFactory.log(this.getProcess().getProcessName(), "Illegal subscription pattern: "+subs.getMatchPattern()+".", IToolBusLoggerConstants.NOTES);
+			return;
+		}
+		
+		if(tbfactory.mightMatch(subscribeValue, note.value)){
+			ProcessInstance pi = subs.getProcess();
+			if(!notePartners.contains(pi)) notePartners.add(pi);
+		}
+	}
+	
+	public void addPartners(AtomSet atoms){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		
+		while(atomSetIterator.hasNext()){
+			Atom b = atomSetIterator.next();
+			
+			if(b instanceof Subscribe){
+				Subscribe subs = (Subscribe) b;
+				addPartnerIfMatch(subs);
+			}
+		}
+	}
+	
+	public ProcessInstance[] getNotePartners(){
+		ProcessInstance[] partners = new ProcessInstance[notePartners.size()];
+		return notePartners.toArray(partners);
+	}
+	
 	public boolean execute() throws ToolBusException{
 		if(isEnabled()){
-			MatchStore matchStore = getToolBus().getMatchStore();
-			Set<ProcessInstance> notePartners = matchStore.getPossibleNotePartners(notePattern);
-			
-			if(notePartners.size() == 0) return false;
-			
-			ATerm theNote = tbfactory.fullSubstitute(notePattern, getEnv());
+			ATerm theNote = tbfactory.fullSubstitute(note.value, getEnv());
 			if(theNote == null) throw new ToolBusException("Illegal note pattern: "+theNote+".");
 			
 			Iterator<ProcessInstance> notePartnersIterator = notePartners.iterator();
@@ -55,12 +82,7 @@ public class SndNote extends Atom{
 	
 	public ProcessInstance[] debugExecute() throws ToolBusException{
 		if(isEnabled()){
-			MatchStore matchStore = getToolBus().getMatchStore();
-			Set<ProcessInstance> notePartners = matchStore.getPossibleNotePartners(notePattern);
-			
-			if(notePartners.size() == 0) return null;
-			
-			ATerm theNote = tbfactory.fullSubstitute(notePattern, getEnv());
+			ATerm theNote = tbfactory.fullSubstitute(note.value, getEnv());
 			if(theNote == null) throw new ToolBusException("Illegal note pattern: "+theNote+".");
 			
 			List<ProcessInstance> subscribedPartners = new ArrayList<ProcessInstance>();

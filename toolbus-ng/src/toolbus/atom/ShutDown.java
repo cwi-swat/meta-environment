@@ -15,7 +15,7 @@ public class ShutDown extends Atom{
 	public ShutDown(ATerm trm, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		arg = new Ref(trm);
-		setAtomArgs(new Ref[]{arg});
+		setAtomArgs(arg);
 	}
 	
 	public ProcessExpression copy(){

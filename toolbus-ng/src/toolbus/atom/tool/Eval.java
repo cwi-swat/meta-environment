@@ -23,7 +23,7 @@ public class Eval extends Atom{
 		
 		this.toolId = new Ref(toolId);
 		this.request = new Ref(request);
-		setAtomArgs(new Ref[]{this.toolId, this.request});
+		setAtomArgs(this.toolId, this.request);
 		externalNameAsReceivedByTool = "rec-eval";
 	}
 	
@@ -49,7 +49,7 @@ public class Eval extends Atom{
 		}
 		
 		if(toolInstance.tryDoEval()){
-			ATerm req = tbfactory.fullSubstitute(request.value, getEnv());
+			ATerm req = tbfactory.substitute(request.value, getEnv());
 			if(req == null) throw new ToolBusException("Illegal eval request pattern: "+request.value+".");
 			
 			toolInstance.sendEval(req);

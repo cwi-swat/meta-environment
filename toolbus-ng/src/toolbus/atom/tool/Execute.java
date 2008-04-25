@@ -31,7 +31,7 @@ public class Execute extends Atom{
 		super(tbfactory, posInfo);
 		this.tool = new Ref(tool);
 		this.rvar = new Ref(rvar);
-		setAtomArgs(new Ref[]{this.tool, this.rvar});
+		setAtomArgs(this.tool, this.rvar);
 	}
 	public ProcessExpression copy(){
 		Atom a = new Execute(tool.value, rvar.value, tbfactory, getPosInfo());
