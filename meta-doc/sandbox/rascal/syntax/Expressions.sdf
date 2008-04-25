@@ -29,7 +29,7 @@ context-free syntax
 	Variable                                                -> Expression {cons("variable")}
 
 %% A hack to get rid of manu ambiguities
-%%         "true" | "false"                                        -> Variable {reject}
+           "true" | "false"                                        -> Variable {reject}
 %%         "bool" | "int" | "str" | "loc" | "any" | "term"         -> Variable {reject}
 
 %% Lists, sets and tuples
@@ -94,7 +94,7 @@ context-free syntax
 %% Generators
          ("first" | "all")? ("td" | "bu")?                       -> Strategy
 	LeftHandSide ":" Strategy Expression                    -> SimpleGenerator {cons("generator")}
-	Type? Variable                                          -> Signature
+	Type Variable                                           -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
          "{" {Signature ","}+ "}"                                -> Signature
          (Signature | QuotedCPattern | APattern)                 -> LeftHandSide
@@ -115,24 +115,29 @@ context-free syntax
 %% Switch and visit and solve
          Expression | QuotedCPattern | APattern                  -> ExpressionOrPattern
 
-         Pattern ":" Block                                       -> Rule
-         Pattern "=>" Expression                                 -> Rule
-         Pattern "==>" Pattern                                   -> Rule
+         "case" Pattern ":" Block                                -> Rule
+         "default" ":" Block                                     -> Rule
+         "case" Pattern "=>" Expression                          -> Rule
+%%         Pattern "==>" Pattern                                   -> Rule
 
  	"switch" Expression "{" Rule+ "}"                       -> Statement
    	"visit" "repeat"? Strategy Expression "{" Rule+ "}"     -> Statement
          "solve" "{" { Assignment ";"}+ "}"                      -> Statement
+         "for" "(" {Generator ","}+ ")" Block                    -> Statement
 
          "if" "(" Predicate ")" Block "else" Block               -> Statement
          "if" "(" Predicate ")" Block                            -> Statement
 %% Do we want elseif etc.?
 
 context-free syntax
-         Signature "=" ExpressionOrPattern                       -> Assignment {cons("assign")}
+         Variable "=" ExpressionOrPattern                        -> Assignment {cons("assign")}
          Assignment                                              -> Statement
+         Type Variable "=" ExpressionOrPattern                   -> Statement
         "return" Expression                                      -> Statement {cons("return")}
         "return-pat" Pattern                                     -> Statement {cons("return-pat")}
         "yield" Expression                                       -> Statement {cons("yield")}
         "yield-pat" Pattern                                      -> Statement {cons("yield-pat")}
+        "assert" StrCon ":" Predicate                            -> Statement {cons("assert")}
+
         Statement ";"?                                           -> Block
         "{" {Statement ";"}+ ";"? "}"                            -> Block

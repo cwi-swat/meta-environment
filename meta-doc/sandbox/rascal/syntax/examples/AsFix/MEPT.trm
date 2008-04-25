@@ -1,67 +1,99 @@
 module AsFix
 
-type ParseTree parsetree(Tree top, int amb-cnt);
+datatype ParseTree parsetree(Tree top, int amb-cnt);
 
-type Tree appl(Production prod, Args args);
-type Tree cycle(Symbol symbol, int cycle-length);
-type Tree amb(Args args);
+datatype Tree appl(Production prod, Args args);
+datatype Tree cycle(Symbol symbol, int cycle-length);
+datatype Tree amb(Args args);
 
 %% constructor(Tree, char, <character(int)>), %%??
-type Tree int;
+subtype Tree int;
 
-type Args list[Tree];
+subtype Args list[Tree];
 
-type Production prod(Symbols lhs, Symbol rhs, Attributes attributes);
+datatype Production prod(Symbols lhs, Symbol rhs, Attributes attributes);
  
 %% constructor(Production, List, list(<rhs(Symbol)>)), 
-type Production list(Symbol rhs);
+subtype Production list(Symbol rhs);
 
-type Attributes no-attrs;
-type Attributes attrs(Attrs attrs);
+datatype Attributes no-attrs;
+datatype Attributes attrs(Attrs attrs);
 
-type Attrs list[Attr];
+subtype Attrs list[Attr];
 
-type Attr assoc(Associativity assoc) | %% term(term term) |
-          id(str module-name) | bracket | reject | prefer | avoid;
+datatype Attr assoc(Associativity assoc) | %% term(term term) |
+             id(str module-name) | bracket | reject | prefer | avoid;
 
-type Associativity left | right | assoc | non-assoc;
+datatype Associativity left | right | assoc | non-assoc;
 
-type Symbol lit(str string);
-type Symbol cilit(str string);
-type Symbol cf(Symbol symbol);
-type Symbol lex(Symbol symbol);
-type Symbol empty;
-type Symbol seq(Symbols symbols);
-type Symbol opt(Symbol symbol);
-type Symbol alt(Symbol lhs, Symbol rhs);
-type Symbol tuple(Symbol head, Symbols rest);
-type Symbol sort (str string); 
-type Symbol iter-plus(Symbol); 
-type Symbol iter-star(Symbol symbol); 
-type Symbol iter-plus-sep(Symbol symbol, Symbol separator); 
-type Symbol iter-start-sep(Symbol symbol, Symbol separator); 
-type Symbol iter-n(Symbol symbol, int number); 
-type Symbol iter-sep-n(Symbol symbol, Symbol separator, int number); 
-type Symbol func(Symbols symbols, Symbol symbol); 
-type Symbol parameterized-sort(str sort, Symbols parameters); 
-type Symbol strategy(Symbol lhs, Symbol rhs);
-type Symbol var-sym(Symbol symbol);
-type Symbol layout; 
-type Symbol char-class(CharRanges ranges);
+datatype Symbol lit(str string);
+datatype Symbol cilit(str string);
+datatype Symbol cf(Symbol symbol);
+datatype Symbol lex(Symbol symbol);
+datatype Symbol empty;
+datatype Symbol seq(Symbols symbols);
+datatype Symbol opt(Symbol symbol);
+datatype Symbol alt(Symbol lhs, Symbol rhs);
+datatype Symbol tuple(Symbol head, Symbols rest);
+datatype Symbol sort (str string); 
+datatype Symbol iter-plus(Symbol symbol); 
+datatype Symbol iter-star(Symbol symbol); 
+datatype Symbol iter-plus-sep(Symbol symbol, Symbol separator); 
+datatype Symbol iter-start-sep(Symbol symbol, Symbol separator); 
+datatype Symbol iter-n(Symbol symbol, int number); 
+datatype Symbol iter-sep-n(Symbol symbol, Symbol separator, int number); 
+datatype Symbol func(Symbols symbols, Symbol symbol); 
+datatype Symbol parameterized-sort(str sort, Symbols parameters); 
+datatype Symbol strategy(Symbol lhs, Symbol rhs);
+datatype Symbol var-sym(Symbol symbol);
+datatype Symbol layout; 
+datatype Symbol char-class(CharRanges ranges);
 
-type Symbols list[Symbol];
+subtype Symbols list[Symbol];
 
 %% constructor(CharRange, character, <start(int)>), 
-type CharRange int;
-type CharRange range(int start, int end);
+subtype CharRange int;
+datatype CharRange range(int start, int end);
 
-type CharRanges list(CharRange);
+datatype CharRanges list(CharRange);
 
-fun int cnt-char-class(Tree T){
-     int Cnt = 0;
-     visit T {
-       char-class(<CharRanges ranges>): Cnt = Cnt + 1;
+fun str join(list[&T] lst, fun str tostring (&T arg), str asep){ 
+    str res = "";
+    str sep = "";
+    for(&T t : lst){
+         res = sep + tostring(t);
+         sep = asep;
+      };
+     return res;
+}
+
+fun str yieldTree(Tree T) {
+  switch T {
+  case appl(Production prod, Args args): {
+     str res = "";
+     visit prod.lhs {
+       case lit(str s): {
+         res = res + s.string;
+       }
+       case cf(Symbol sym): {
+         res = res + yieldTree(head(args)); args = rest(args);
+         res = res + yieldTree(head(args)); args = rest(args);
+       }
+       %% ...
      };
-     return Cnt;
+     if(args != [])
+        res = res + yieldTree(head(args));
+     assert "args should be empty": args == [];
+     return res;
+   }
+   case amb(Args args): {
+     return "<<<" + join(args, yieldTree, ",") + ">>>";
+ 
+   }
+   case <int n>: return n;
+   
+   case cycle(Symbol symbol, int cycle-length): return "";
+   
+ }
 }
 

@@ -11,7 +11,7 @@ context-free start-symbols
   Type
 
 exports
-sorts TypeName Type LabelledType LabelledTypes TypeVar BasicType StructuredType FunctionType
+sorts TypeName Type LabelledType LabelledTypes OptLabelledType OptLabelledTypes TypeVar BasicType StructuredType FunctionType
 
   lexical syntax
     head:[a-z]                                        -> TypeName {cons("one-char")}
@@ -27,23 +27,24 @@ context-free syntax
    "term"                                                  -> BasicType {prefer,cons("term-type")}
 
  
-   Type Variable?                                          -> LabelledType  
-   {LabelledType ","}+                                     -> LabelledTypes
+   Type Variable?                                          -> OptLabelledType  
+   {OptLabelledType ","}+                                  -> OptLabelledTypes
    "list" "[" Type "]"                                     -> StructuredType {cons("list-type")} 
    "set" "[" Type "]"                                      -> StructuredType {cons("set-type")}
-   "rel" "[" LabelledTypes "]"                             -> StructuredType {cons("rel-type")}
-   "<" LabelledType "," LabelledTypes ">"                  -> StructuredType {cons("tuple-type")}
+   "rel" "[" OptLabelledTypes "]"                          -> StructuredType {cons("rel-type")}
+   "<" OptLabelledType "," OptLabelledTypes ">"            -> StructuredType {cons("tuple-type")}
    Symbol                                                  -> StructuredType {cons("symbol-type")}
 
-   "fun" Type Variable "(" LabelledTypes ")"               -> FunctionType {cons("function-type")}
+   Type Variable                                           -> LabelledType
+   {LabelledType ","}+                                     -> LabelledTypes
 
-%%   "pat" Type Variable "(" LabelledTypes ")"               -> PatternType {cons("patttern-type")}
+   "fun" Type Variable "(" LabelledTypes ")"               -> FunctionType {cons("function-type")}
 
    "&" Variable                                            -> TypeVar
 
    TypeVar | BasicType | StructuredType | FunctionType     -> Type
-   TypeName                                                -> Type
-   (TypeName | Sort) "(" {LabelledType ","}* ")"           -> Type
+   TypeName                                                -> Type {prefer}
+   TypeName "(" {LabelledType ","}* ")"                    -> Type
 
    "<" Type Variable ">"                                   -> Type
  

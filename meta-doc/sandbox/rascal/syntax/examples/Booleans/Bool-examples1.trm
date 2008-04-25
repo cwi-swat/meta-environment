@@ -3,10 +3,10 @@ imports Booleans-syntax
 
 fun Bool reduce(Bool B) {
     visit bu B {
-      true & <Bool B2>   => B2
-      false & <Bool B2>  => false
+      case true & <Bool B2>   => B2
+      case false & <Bool B2>  => false
 
-      true | <Bool B2>   => true
-      false | <Bool B2>  => B2
+      case true | <Bool B2>   => true
+      case false | <Bool B2>  => B2
     }
 }

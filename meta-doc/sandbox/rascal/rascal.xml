@@ -886,13 +886,13 @@ imports Booleans-syntax
 
 fun Bool reduce(Bool B) {
     visit bu B {
-      true &amp; &lt;Bool B2&gt;  =&gt; B2    %% Style 1: Use Variables
-      false &amp; &lt;Bool B2&gt; =&gt; false
+      case true &amp; &lt;Bool B2&gt;  =&gt; B2    %% Style 1: Use Variables
+      case false &amp; &lt;Bool B2&gt; =&gt; false
 
-      true | true   =&gt; true      %% Style 2: Use a truth table
-      true | false  =&gt; true
-      false | true  =&gt; true
-      false | false =&gt; false
+      case true | true   =&gt; true      %% Style 2: Use a truth table
+      case true | false  =&gt; true
+      case false | true  =&gt; true
+      case false | false =&gt; false
     }
 }</programlisting></para>
 
@@ -917,20 +917,20 @@ fun Bool reduce(Bool B) {
         expressions. It also possible to define Booleans as abstract
         terms.<programlisting>module Bool-abstract
 
-type Bool true;
-type Bool false;
-type Bool and(Bool,Bool);
-type Bool or(Bool, Bool);
+datatype Bool true;
+datatype Bool false;
+datatype Bool and(Bool,Bool);
+datatype Bool or(Bool, Bool); 
 
 fun Bool reduce(Bool B) {
     visit bu B {
-      and(true, Bool B2)  =&gt; B2    %% Style 1: Use Variables
-      and(false, Bool B2) =&gt; false
+      case and(true, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt;     %% Style 1: Use Variables
+      case and(false, Bool B2) =&gt; false
 
-      or(true, true)   =&gt; true      %% Style 2: Use a truth table
-      or(true, false)  =&gt; true
-      or(false, true)  =&gt; true
-      or(false, false) =&gt; false
+      case or(true, true)   ==&gt; true        %% Style 2: Use a truth table
+      case or(true, false)  ==&gt; true
+      case or(false, true)  ==&gt; true
+      case or(false, false) ==&gt; false
     }
 }</programlisting></para>
 
@@ -989,49 +989,49 @@ fun Bool reduce(Bool B) {
       <para>In the Meta-Environment we use an abstract data type to exchange
       data representing graphs. It can be defined as follows.<programlisting>module Graph
 
-type Graph graph(NodeList nodes, EdgeList edges, AttributeList attributes);
+datatype Graph graph(NodeList nodes, EdgeList edges, AttributeList attributes);
 
-type Nodelist list[Node];
+subtype Nodelist list[Node];
 
-type Node node(NodeId id, AttributeList attributes);
-type Node subgraph(NodeId id, NodeList nodes, EdgeList edges, AttributeList attributes);
+datatype Node node(NodeId id, AttributeList attributes);
+datatype Node subgraph(NodeId id, NodeList nodes, EdgeList edges, AttributeList attributes);
 
-type NodeId id(term id);
+datatype NodeId id(term id);
 
-type AttributeList list[Attribute];
+subtype AttributeList list[Attribute];
 
-type Attribute bounding-box(Point first, Point second);
-type Attribute color(Color color);
-type Attribute curve-points(Polygon points);
-type Attribute direction(Direction direction);
-type Attribute fill-color(Color color);
-type Attribute info(str key, term value);
-type Attribute label(str label);
-type Attribute tooltip(str tooltip);
-type Attribute location(int x, int y);
-type Attribute shape(Shape shape);
-type Attribute size(int width, int height);
-type Attribute style(Style style);
-type Attribute level(str level);
-type Attribute file(File file);
-type Attribute file(term file);
+datatype Attribute bounding-box(Point first, Point second);
+datatype Attribute color(Color color);
+datatype Attribute curve-points(Polygon points);
+datatype Attribute direction(Direction direction);
+datatype Attribute fill-color(Color color);
+datatype Attribute info(str key, term value);
+datatype Attribute label(str label);
+datatype Attribute tooltip(str tooltip);
+datatype Attribute location(int x, int y);
+datatype Attribute shape(Shape shape);
+datatype Attribute size(int width, int height);
+datatype Attribute style(Style style);
+datatype Attribute level(str level);
+datatype Attribute file(File file);
+datatype Attribute file(term file);
 
-type Color rgb(int red, int green, int blue);
+datatype Color rgb(int red, int green, int blue);
 
-type Style bold | dashed | dotted | filled | invisible | solid;
+datatype Style bold | dashed | dotted | filled | invisible | solid;
 
-type Shape box | circle | diamond | egg | elipse | hexagon | house | 
-           octagon | parallelogram | plaintext | trapezium | triangle;
+datatype Shape box | circle | diamond | egg | elipse | hexagon | house | 
+               octagon | parallelogram | plaintext | trapezium | triangle;
 
-type Direction forward | back | both | none;
+datatype Direction forward | back | both | none;
 
-type Edgelist list[Edge];
+subtype Edgelist list[Edge];
 
-type Edge edge(NodeId from, NodeId to, AttributeList attributes);
+datatype Edge edge(NodeId from, NodeId to, AttributeList attributes);
 
-type Polygon list[Point];
+subtype Polygon list[Point];
 
-type Point point(int x, int y);</programlisting></para>
+datatype Point point(int x, int y);</programlisting></para>
     </section>
 
     <section>
@@ -2541,6 +2541,10 @@ process mkWave(int N) is ...</programlisting>
 
       <listitem>
         <para>We need an io-library.</para>
+      </listitem>
+
+      <listitem>
+        <para>We need memo functions.</para>
       </listitem>
 
       <listitem>

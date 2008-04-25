@@ -10,28 +10,11 @@ context-free start-symbols
         Declaration
 
 exports
-sorts Declaration %% VarDecl VarDeclInit 
+sorts Declaration
 
 context-free syntax
 
-%% Variable declaration
-%%   (BasicType | StructuredType) Variable                -> VarDecl {cons("variable-decl")}
-%%   VarDecl "=" Expression                               -> VarDeclInit {cons("var-init-decl")}
-
-%% Declarations
    "datatype" Variable Variable? { Type "|"}+           -> Declaration {cons("datatype-decl")}
    "subtype" Variable Type                              -> Declaration {cons("subtype-decl")}
 
    FunctionType "{"  {Statement ";"}* ";"? "}"          -> Declaration {cons("function-decl")}
-
-   "assert" StrCon ":" Predicate                        -> Declaration {cons("assert-decl")}
-
-%% Still missing:
-%% - yield
-%% - += and -= variable initializations
-                                    
-
-
- 
-
-       
