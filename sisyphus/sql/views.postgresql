@@ -36,3 +36,24 @@ group by
 	si_items.si_host_id,
 	si_components.id
 ;
+
+
+
+create view si_my_builds as
+ SELECT
+  max(si_items.id) as id, 
+  si_hosts.uname as host,
+  si_components.name AS name,
+  max(si_items.id) as si_item_id
+
+   FROM si_revisions, si_components, si_items, si_hosts
+
+  WHERE si_items.si_revision_id = si_revisions.id AND
+   si_revisions.si_component_id = si_components.id AND 
+   si_items.si_host_id = si_hosts.id and
+   si_hosts.active = 't'
+group by si_hosts.uname, si_components.name
+
+
+
+/* SiMyBuild.find(:all, :include => :si_item) */
