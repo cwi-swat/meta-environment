@@ -14,7 +14,7 @@ sorts Declaration
 
 context-free syntax
 
-   "datatype" Variable  { Type "|"}+ Variable?          -> Declaration {cons("datatype-decl")}
+   "datatype" Variable  { AbstractType "|"}+ Variable?  -> Declaration {cons("datatype-decl")}
    "subtype" Variable Type                              -> Declaration {cons("subtype-decl")}
 
-   FunctionType "{"  {Statement ";"}* ";"? "}"          -> Declaration {cons("function-decl")}
+   FunctionType Block                                   -> Declaration {cons("function-decl")}

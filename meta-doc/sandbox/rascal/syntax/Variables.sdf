@@ -4,7 +4,7 @@ exports
 sorts  Variable
 
 lexical syntax
-	[a-zA-Z][a-zA-Z0-9\-\_]*  -> Variable
+	[a-zA-Z][a-zA-Z0-9\-]*       -> Variable
 
 lexical restrictions
-	Variable -/- [a-zA-Z0-9\-\_]
+	Variable -/- [a-zA-Z0-9\-]

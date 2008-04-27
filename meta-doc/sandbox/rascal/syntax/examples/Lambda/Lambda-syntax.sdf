@@ -5,6 +5,8 @@ sorts Var %% variables
       Exp %% expressions
 lexical syntax
      [a-z]+               -> Var
+lexical restrictions
+     Var -/- [a-z]
 context-free syntax
      "prime" "(" Var ")"  -> Var  %% generate unique name
      Var                  -> Exp  %% single variable

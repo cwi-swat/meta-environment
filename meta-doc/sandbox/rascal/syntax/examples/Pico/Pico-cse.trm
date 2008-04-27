@@ -15,6 +15,6 @@ fun PROGRAM cse(PROGRAM P) {
        };
  
     visit P {
-      <EXP E > => if({ Id } := replacements[E]) yield Id;
+      case <EXP E>: if({ PICO-ID Id } := replacements[E]) yield Id
     };
 }

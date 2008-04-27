@@ -73,7 +73,7 @@ fun TREE inc(TREE T) {
 
 fun TREE frepl(TREE T) {
     visit all bu T {
-      case g(<TREE T1>, <TREE T2>) => cpat i(<TREE T1>, <TREE T2>)
+      case g(<TREE T1>, <TREE T2>) => make i(<TREE T1>, <TREE T2>)
     };
 }
 
@@ -81,7 +81,7 @@ fun TREE frepl(TREE T) {
 
 fun TREE frepl(TREE T) {
     visit first bu T {
-      case g(<TREE T1>, <TREE T2>) => cpat i(<TREE T1>, <TREE T2>)
+      case g(<TREE T1>, <TREE T2>) => make i(<TREE T1>, <TREE T2>)
     };
 }
 
@@ -90,7 +90,7 @@ fun TREE frepl(TREE T) {
 
 fun TREE srepl(TREE T) {
     visit first td T {
-      case g(<TREE T1>, <TREE T2>) => cpat i(<TREE T1>, <TREE T2>)
+      case g(<TREE T1>, <TREE T2>) => make i(<TREE T1>, <TREE T2>)
     };
 }
 
@@ -98,14 +98,14 @@ fun TREE srepl(TREE T) {
 %% Ex7: We can also add the first/td directives to all generators 
 %% (where "all td" would be the default):
 
-fun set[TREE] find_outer_gs(TREE T) {
+fun set[TREE] find-outer-gs(TREE T) {
     return
     { S | STATEMENT S : first td T, 
-          [| g(<TREE T1>, <TREE T2>) |] := S };
+          g(<TREE T1>, <TREE T2>) := S };
 }
  
 %% Ex8: accumulating transformer that increments leaves with amount D and counts them
-fun <int, TREE> count_and_inc(TREE T, int C, int D) {
+fun tuple(int, TREE) count-and-inc(TREE T, int C, int D) {
     int C = 0;
     
     visit T {

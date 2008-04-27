@@ -1,19 +1,25 @@
+module Pico-eval
+imports pico/syntax/Pico 
+
 fun VEnv evalExp(Exp exp) {
 
     switch exp {
-      <EXP exp1> + <EXP exp2> => nat1 + nat2
-         when Natural nat1 <- eve(exp1),
-              Natural nat2 <- eve(exp2)
-       
-      <EXP exp1> - <EXP exp2> => nat1 + nat2
-         when Natural nat1 <- eve(exp1),
-              Natural nat2 <- eve(exp2)
-        
-      <EXP exp1> || <EXP exp2> => str3
-         when StrCon str1 <- eve(exp1),
-              StrCon str2 <- eve(exp2),
-              StrCon str3 <- concat(str1, str2)
+      case <EXP exp1> + <EXP exp2>: {
+           Natural nat1 = evalExp(exp1);
+           Natural nat2 = evalExp(exp2);
+           return nat1 + nat2;
+      }
+      case <EXP exp1> - <EXP exp2>: {
+           Natural nat1 = evalExp(exp1);
+           Natural nat2 = evalExp(exp2);
+           return nat1 + nat2;
+      }
+      case <EXP exp1> || <EXP exp2>: {
+           StrCon str1 = evalExp(exp1);
+           StrCon str2 = evalExp(exp2);
+           return concat(str1, str2);
+      }
    
-      <EXP exp1>  => nil-value     %% default "equation"
+      default: return nil-value
    } 
 }

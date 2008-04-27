@@ -25,29 +25,29 @@ fun Var fresh(Var V, set[Var] S) {
 fun Exp subst(Var V1, Exp E1, Exp E2) {
 
     switch E2 {
-      <Var V2>: if(V1 != V2){ yield V2; }
+      case <Var V2>: if(V1 != V2){ yield V2; }
 
-      <Var V2>: if(V1 == V2){ yield E1; }
+      case <Var V2>: if(V1 == V2){ yield E1; }
 
-      <Exp Ea> <Exp Eb>: {
+      case <Exp Ea> <Exp Eb>: {
                 Exp EaS = subst(V, E, Ea);
                 Exp EbS = subst(V, E, Eb);
-                return <Exp EaS> <Exp EbS>;
+                return make <Exp EaS> <Exp EbS>;
          } 
 
-      fn <Var V2> => <Var Ea>: if (V1 == V2) { yield fn <Var V2> => <Exp Ea> }
+      case fn <Var V2> => <Var Ea>: if (V1 == V2) { yield make fn <Var V2> => <Exp Ea> }
 
-      fn <Var V2> => <Exp Ea>:
+      case fn <Var V2> => <Exp Ea>:
                 if(V1 != V2 && not(V1 in freeVars(E2) && V2 in freeVars(E1))){
                    Exp E1S = subst(V1, E1, Ea);
-                   yield fn <Var V2> => <Exp E1S>;
+                   yield make fn <Var V2> => <Exp E1S>;
                 }              
  
-       fn <Var V2> => <Exp Ea>: 
+      case fn <Var V2> => <Exp Ea>: 
                if(V1 != V2 && V1 in freeVars(Ea) && V2 in freeVars(E1)){
                   Var V3 = fresh(V2, freeVars(Ea) union freeVars(E1));
                   Exp EaS = subst(V1, E1, subst(V2, V3, E2));
-                  yield fn <Var V3> => <Exp EaS>;
+                  yield make fn <Var V3> => <Exp EaS>;
                }
     };
 }

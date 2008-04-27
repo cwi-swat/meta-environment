@@ -9,20 +9,20 @@ imports Let
 
 fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     switch E {
-    let <Var V> = <Exp E1> in <Exp E2> end: {
-             Var Y = "x" + Cnt;  %% this + operator concatenates 
-                                  %% (after converting the int to str)
-             int Cnt1 = Cnt + 1;
-             Exp E1R = rename(E1, Rn, Cnt);
-             Exp E2R = rename(E2, {<V, Y>} union Rn, Cnt1);
-             return let <Var Y >= <Exp E1R>
-                    in 
-                      <Exp E2R>
-                    end;
+    case let <Var V> = <Exp E1> in <Exp E2> end: {
+         Var Y = "x" + Cnt;  %% this + operator concatenates 
+                             %% (after converting the int to str)
+         int Cnt1 = Cnt + 1;
+         Exp E1R = rename(E1, Rn, Cnt);
+         Exp E2R = rename(E2, {<V, Y>} union Rn, Cnt1);
+         return make let <Var Y >= <Exp E1R>
+                     in 
+                        <Exp E2R>
+                     end;
           }
 
-    <Var V>: return Rn[V]
+    case <Var V>: return Rn[V]
 
-    <Exp E1>: return [| <E1> |];
+    default: return E
     };
 }

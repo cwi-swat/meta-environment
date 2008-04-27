@@ -6,11 +6,11 @@ imports pico/syntax/Pico
 
 fun Boolean is-constant(EXP E) {
    switch E {
-     <NatCon N> => true
+     case <NatCon N> => true
 
-     <StrCon S> => true
+     case <StrCon S> => true
 
-     <EXP E> => false
+     case <EXP E> => false
    }
 }
 
@@ -20,13 +20,13 @@ fun PROGRAM cp(PROGRAM P) {
 
     rel[PICO-ID, EXP] replacements = 
       {<Id2, E> | STATEMENT S : P,
-                  <PICO-ID Id> := <EXP E> := S,
+                  [| <PICO-ID Id> := <EXP E> |] := S,
                   is-constant(E),
                   PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
                   Id2 == Id 
       };  
  
     visit P {
-     <PICO-ID Id>: if({ EXP E } := replacements[Id]) return E
+     case <PICO-ID Id>: if({ EXP E } := replacements[Id]) yield E
     };  
 }

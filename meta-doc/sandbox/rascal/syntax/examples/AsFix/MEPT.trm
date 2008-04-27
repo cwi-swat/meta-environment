@@ -14,7 +14,7 @@ subtype Args list[Tree];
 datatype Production prod(Symbols lhs, Symbol rhs, Attributes attributes);
  
 %% constructor(Production, List, list(<rhs(Symbol)>)), 
-subtype Production list(Symbol rhs);
+subtype Production list[Symbol];
 
 datatype Attributes no-attrs;
 datatype Attributes attrs(Attrs attrs);
@@ -34,7 +34,7 @@ datatype Symbol empty;
 datatype Symbol seq(Symbols symbols);
 datatype Symbol opt(Symbol symbol);
 datatype Symbol alt(Symbol lhs, Symbol rhs);
-datatype Symbol tuple(Symbol head, Symbols rest);
+datatype Symbol atuple(Symbol head, Symbols rest);  %% clash with keyword tuple!
 datatype Symbol sort (str string); 
 datatype Symbol iter-plus(Symbol symbol); 
 datatype Symbol iter-star(Symbol symbol); 
@@ -55,7 +55,7 @@ subtype Symbols list[Symbol];
 subtype CharRange int;
 datatype CharRange range(int start, int end);
 
-datatype CharRanges list(CharRange);
+datatype CharRanges alist(CharRange);  %% clash with keyword list!
 
 fun str join(list[&T] lst, fun str tostring(&T arg), str asep){ 
     str res = "";
@@ -81,8 +81,9 @@ fun str yieldTree(Tree T) {
        }
        %% ...
      };
-     if(args != [])
+     if(args != []){
         res = res + yieldTree(head(args));
+     };
      assert "args should be empty": args == [];
      return res;
    }
@@ -90,9 +91,9 @@ fun str yieldTree(Tree T) {
      return "<<<" + join(args, yieldTree, ",") + ">>>";
  
    }
-   case <int n>: return n;
+%%   case int n: return n;
    
-   case cycle(Symbol symbol, int cycle-length): return "";
+   case cycle(Symbol symbol, int cycle-length): { return ""; }
    
  }
 }

@@ -16,7 +16,7 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression ExpressionOrPattern LeftHandSide Predicate SimpleGenerator Generator
+sorts Expression LeftHandSide Predicate SimpleGenerator Generator
       Strategy Signature Statement Rule Block Assignment
 
 context-free syntax
@@ -25,12 +25,8 @@ context-free syntax
          IntCon                                                  -> Expression {cons("intcon-exp")}
          StrCon                                                  -> Expression {cons("strcon-exp")}
          Area                                                    -> Expression {cons("areacon-exp")}
-	IdCon "(" {Expression ","}* ")"                         -> Expression {cons("fun-call")}
+	Variable "(" {Expression ","}* ")"                      -> Expression {cons("fun-call")}
 	Variable                                                -> Expression {cons("variable")}
-
-%% A hack to get rid of manu ambiguities
-           "true" | "false"                                        -> Variable {reject}
-%%         "bool" | "int" | "str" | "loc" | "any" | "term"         -> Variable {reject}
 
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
@@ -76,8 +72,8 @@ context-free priorities
          } >
 
 	"not" Predicate                                         -> Predicate {cons("not")} >
-	Predicate "&&" Predicate                                -> Predicate {cons("and")} >
-	Predicate "||" Predicate                                -> Predicate {cons("or")} >
+	Predicate "&&" Predicate                                -> Predicate {left,cons("and")} >
+	Predicate "||" Predicate                                -> Predicate {left,cons("or")} >
          Predicate "==>" Predicate                               -> Predicate {cons("implies")}
 
 context-free syntax
@@ -97,7 +93,8 @@ context-free syntax
 	Type Variable                                           -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
          "{" {Signature ","}+ "}"                                -> Signature
-         (Signature | QuotedCPattern | APattern)                 -> LeftHandSide
+         Signature | CPattern | APattern                         -> LeftHandSide
+         
          SimpleGenerator                                         -> Generator
          Predicate                                               -> Generator
 
@@ -113,11 +110,13 @@ context-free syntax
 
 context-free syntax
 %% Switch and visit and solve
-         Expression | ("cpat" CPattern) | ("apat" APattern)      -> ExpressionOrPattern
+          QuotedCPattern                                         -> Expression
+         "make" CPattern                                         -> Expression
+         "make" APattern                                         -> Expression
 
          "case" Pattern ":" Block                                -> Rule
          "default" ":" Block                                     -> Rule
-         "case" Pattern "=>" ExpressionOrPattern                 -> Rule
+         "case" Pattern "=>" Expression                          -> Rule
 
  	"switch" Expression "{" Rule+ "}"                       -> Statement
    	"visit" "repeat"? Strategy Expression "{" Rule+ "}"     -> Statement
@@ -128,12 +127,20 @@ context-free syntax
          "if" "(" Predicate ")" Block                            -> Statement
 %% Do we want elseif etc.?
 
-         Variable "=" ExpressionOrPattern                        -> Assignment {cons("assign")}
-         Assignment                                              -> Statement
-         Type Variable "=" ExpressionOrPattern                   -> Statement
-        "return" ExpressionOrPattern                             -> Statement {cons("return")}
-        "yield" ExpressionOrPattern                              -> Statement {cons("yield")}
-        "assert" StrCon ":" Predicate                            -> Statement {cons("assert")}
+         Variable "=" Expression                                 -> Assignment {cons("assign")}
+         LeftHandSide "=" Expression                             -> Statement
+         "return" Expression                                     -> Statement {cons("return")}
+         "yield" Expression                                      -> Statement {cons("yield")}
+         "fail"                                                  -> Statement {cons("fail")}
+         "assert" StrCon ":" Predicate                           -> Statement {cons("assert")}
 
-        Statement ";"?                                           -> Block
-        "{" {Statement ";"}+ ";"? "}"                            -> Block
+         Statement                                               -> Block
+         "{" {Statement ";"}+ ";"? "}"                           -> Block
+
+%% Define reserved words:
+%%         "o" | "x" | 
+         "true" | "false" |
+         "inter" | "union" |
+         "make" | "case" | "default" | "switch" | "visit" | 
+         "solve"  | "for" | "if" | "else" | "return" |
+         "yield" | "fail" | "assert"                             -> Variable {reject}

@@ -1,9 +1,11 @@
 module Bubble-Gen
 
-fun &Elem* sort(Elem* Elements, fun bool GreaterThan(&Elem, &Elem)){
+fun &Elem* sort(&Elem* Elements, fun bool GreaterThan(&Elem, &Elem)){
    
   visit repeat Elements {
-      <Elem E1> <Elem E2>: if(GreaterThan(E1, E2)) yield <Elem E2> <Elem E1>
+      case <Elem E1> <Elem E2>: 
+        if(GreaterThan(E1, E2)) 
+           yield make <Elem E2> <Elem E1>
 
      }
 }
