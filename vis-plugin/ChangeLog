@@ -1,3 +1,7 @@
+Mon Apr 28 16:11:17 2008    <bruntink@cwi.nl>
+
+	* vis-plugin.pc.in: Changed dependency on module-support to module-support-java.
+
 Thu May  3 17:01:05 CEST 2007 <jurgenv@cwi.nl>
  * **/*.tb.src: removed superfluous brackets, printfs and comments.
 
