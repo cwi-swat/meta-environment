@@ -1,0 +1,34 @@
+module Pico-reaching-defs
+
+subtype Def  tuple(Stat theStat, Var theVar);
+subtype Use  tuple(Stat theStat, Var theVar);
+
+fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { return P[-,S] }
+
+fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { return P[S,-] }
+
+fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS, 
+                                        rel[Stat,Stat] PRED) {
+
+    set[Stat] STATEMENT = carrier(PRED);
+
+    rel[Stat,Def] DEF  = {<S,<S,V>> | <Stat S, Var V> : DEFS};
+
+    rel[Stat,Def] KILL = 
+        {<S1, <S2, V>> | <Stat S1, Var V> : DEFS, 
+                         tuple(Stat S2, V) : DEFS, 
+                         S1 != S2
+        };
+
+     rel[Stat,Def] IN = {};
+     rel[Stat,Def] OUT = DEF;
+
+     solve {
+           IN  =  {<S, D> | int S : STATEMENT, 
+                            Stat P : predecessor(PRED,S), 
+                            Def D : OUT[P]};
+           OUT = {<S, D> |  int S : STATEMENT, 
+                            Def D : DEF[S] union (IN[S] \ KILL[S])}
+    };
+    return IN;
+}
