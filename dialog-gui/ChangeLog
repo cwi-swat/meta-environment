@@ -1,4 +1,6 @@
-$Id$
+Mon Apr 28 16:22:03 2008    <bruntink@cwi.nl>
+
+	* dialog-gui.pc.in: Changed dependency on module-support to module-support-java.
 
 Wed Jan 10 11:30:13 CET 2007 <{jurgenv,kooiker}@cwi.nl>
  * src/**/Dialog.java: fixed problem with growing number of file filters.
