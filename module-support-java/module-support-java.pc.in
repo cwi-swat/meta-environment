@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=bruntink@cwi.nl
+
+Name: module-support-java
+Version: 1.0
+Description:
+Requires: aterm-java
+JarFile=module-support-java.jar 
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.moduleapi,nl.cwi.sen1.moduleapi.types,nl.cwi.sen1.moduleapi.types.attribute,nl.cwi.sen1.moduleapi.types.attributemap,nl.cwi.sen1.moduleapi.types.dependencies,nl.cwi.sen1.moduleapi.types.dependency,nl.cwi.sen1.moduleapi.types.module,nl.cwi.sen1.moduleapi.types.moduleattribute,nl.cwi.sen1.moduleapi.types.moduleid,nl.cwi.sen1.moduleapi.types.modules,nl.cwi.sen1.moduleapi.types.natcon,nl.cwi.sen1.moduleapi.types.tableentry
+MainClass=
+TestClass=
