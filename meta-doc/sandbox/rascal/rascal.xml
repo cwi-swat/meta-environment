@@ -32,12 +32,54 @@
   </note>
 
   <section>
+    <title>Rationale</title>
+
+    <para>In the domain of software analysis and transformation, there exists
+    a phletora of domain-specific languages for defining grammars, rewrite
+    rules, software analysis and the like. So why embark on the design of yet
+    another DSL in this area? We see the following arguments for this:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Many existing DSLs are based on more or less exotic concepts
+        that do excite researchers but are frightening for users without an
+        appropriate research background.</para>
+      </listitem>
+
+      <listitem>
+        <para>The notation used in many DSLs is uninviting to say the
+        least.</para>
+      </listitem>
+
+      <listitem>
+        <para>The scope of DSLs is usually narrow (this is where the word
+        "domain-specific" kicks in). The tasks involved in carrying out a code
+        analysis or renovation project require several DSLs. Integration
+        between these DSLs is insufficient.</para>
+      </listitem>
+
+      <listitem>
+        <para>As designers of various DSLs (ASF+SDF, Tscript, Rscript, ...) we
+        have seen the positive as well as the negative side of DSLs. We
+        certainly know howto implement DSLs in this area.</para>
+      </listitem>
+
+      <listitem>
+        <para>We see an opportunity for a user-friendly, conceptually
+        high-level, and rich DSL for all tasks related to software analysis
+        and transformation.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>With this background and an essential dose of optimism, we embark on
+    this trip ... .</para>
+  </section>
+
+  <section>
     <title>Introduction</title>
 
-    <para>Rascal is the working name for a new version of ASF+SDF, which will
-    be extended with an efficient built-in set and relation data-type. This
-    basically means that we include most features of the RScript language into
-    ASF+SDF. The goals of this language are:</para>
+    <para> The goals of the envisaged language (with working name Rascal)
+    are:</para>
 
     <itemizedlist>
       <listitem>
@@ -66,6 +108,11 @@
       <listitem>
         <para>Efficient and scalable implementation.</para>
       </listitem>
+
+      <listitem>
+        <para>Unsuprising syntax and concepts. Where possible we will stay
+        close to C and Java notation.</para>
+      </listitem>
     </itemizedlist>
 
     <para>The above goals are all but one already met in the current design of
@@ -73,7 +120,10 @@
     connection (and to be honest: an efficient implementation of relational
     operators). Alas, any bridge between the two languages is both complex to
     manage and an efficiency bottleneck. This work is an attempt to
-    consolidate this engineering trade-off.</para>
+    consolidate this engineering trade-off. This basically means that we
+    include most features of the RScript language into ASF+SDF. Although we
+    take these languages as conceptual starting point, Rascal is a completely
+    new design.</para>
 
     <para>In <xref linkend="section.integration-tscript" /> we will also
     explore the issues when we take integration one step further and also
@@ -147,335 +197,58 @@
   </section>
 
   <section>
-    <title>Mapping features to datatypes</title>
+    <title>Rascal at a glance</title>
 
-    <para>Emphasized cells indicate a new datatype/feature combination that
-    needs to be thought out.</para>
-
-    <table xml:id="table.features">
-      <title>Features vs datatypes</title>
-
-      <tgroup cols="9">
-        <colspec align="left" colname="col1" colnum="1" colwidth="2*" />
-
-        <colspec align="center" colname="col2" colnum="2" colwidth="1*" />
-
-        <colspec align="center" colname="col3" colnum="3" colwidth="1*" />
-
-        <colspec align="center" colname="col4" colnum="4" colwidth="1*" />
-
-        <colspec align="center" colname="col5" colnum="5" colwidth="1*" />
-
-        <colspec align="center" colname="col6" colnum="6" colwidth="1*" />
-
-        <colspec align="center" colname="col7" colnum="7" colwidth="1*" />
-
-        <colspec align="center" colname="col8" colnum="8" colwidth="1*" />
-
-        <colspec align="center" colname="col9" colnum="9" colwidth="1*" />
-
-        <thead>
-          <row>
-            <entry>Which features work on which datatypes?</entry>
-
-            <entry>CF syntax trees</entry>
-
-            <entry>CF syntax lists</entry>
-
-            <entry>Lexical syntax trees</entry>
-
-            <entry>Lexical syntax lists</entry>
-
-            <entry>Lists</entry>
-
-            <entry>Sets</entry>
-
-            <entry>Relations</entry>
-
-            <entry>Tuples</entry>
-          </row>
-        </thead>
-
-        <tbody>
-          <row>
-            <entry>Pattern matching</entry>
-
-            <entry>Y (CS)</entry>
-
-            <entry>Y, CS, LM</entry>
-
-            <entry>Y, PS</entry>
-
-            <entry>Y, PS, LM</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Pattern construction</entry>
-
-            <entry>Y, CS</entry>
-
-            <entry>Y, PS</entry>
-
-            <entry>Y, PS</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Generator/ Comprehension</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>LC</entry>
-
-            <entry>SC</entry>
-
-            <entry>SC</entry>
-
-            <entry>N</entry>
-          </row>
-
-          <row>
-            <entry>Complete Functions</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Equations</entry>
-
-            <entry>Y, BC</entry>
-
-            <entry>Y, BC</entry>
-
-            <entry>Y, BC</entry>
-
-            <entry>Y, BC</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Polymorphism</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Serialization</entry>
-
-            <entry>AsFix</entry>
-
-            <entry>AsFix</entry>
-
-            <entry>AsFix</entry>
-
-            <entry>AsFix</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Traversal Functions</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Subtyping</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N, except character class inclusion</entry>
-
-            <entry>N</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+    <para>Rascal consists of the following elements:</para>
 
     <itemizedlist>
       <listitem>
-        <para>BC = Backward Compatible with ASF</para>
+        <para>Modules to group definitions.</para>
       </listitem>
 
       <listitem>
-        <para>CS = Concrete Syntax</para>
+        <para>A type system and corresponding values.</para>
       </listitem>
 
       <listitem>
-        <para>HT= head/tail matching</para>
+        <para>Variables to associate a name with a value in some scope.</para>
       </listitem>
 
       <listitem>
-        <para>LC = List comprehension</para>
+        <para>Parameterized functions.</para>
       </listitem>
 
       <listitem>
-        <para>LM = List Matching</para>
+        <para>Abstract and concrete patterns to deconstruct (match) values and
+        to construct (make) them.</para>
       </listitem>
 
       <listitem>
-        <para>N = No</para>
+        <para>Expressions provide the elementary computations on
+        values.</para>
       </listitem>
 
       <listitem>
-        <para>PS = Prefic Syntax</para>
-      </listitem>
-
-      <listitem>
-        <para>SC = Set Comprehension</para>
-      </listitem>
-
-      <listitem>
-        <para>Y = Yes</para>
+        <para>Statements for providing more advanced control flow in
+        computations.</para>
       </listitem>
     </itemizedlist>
-  </section>
 
-  <section>
-    <title>Questions</title>
-
-    <para><itemizedlist>
-        <listitem>
-          <para>Q1: What about the overlap between sets of tuples and
-          relations? We should build relations in for efficiency. Is there
-          going to be a type equivalence. Are tuples going to be first class
-          datatypes?</para>
-        </listitem>
-
-        <listitem>
-          <para>Q2: Do we need to introduce the basic datatypes Integer and
-          Boolean because sets and relations have typical builtin functions
-          for that? Or can we put these things in a library? How about
-          Locations? We need to introduce as few builtin syntax as possible to
-          prevent ambiguity and confusion... Can we offer efficient relations
-          without introducing a dependency on a fixed Integer/Boolean
-          syntax??? It would be SIMPLE if only syntax trees are the leafs of
-          nested lists/sets/relations/tuples.</para>
-        </listitem>
-
-        <listitem>
-          <para>Q3: Concrete syntax will introduce problems with the new fixed
-          syntax builtin datatypes (prefix functions, lists, sets, relations,
-          tuples). Efficiently make a type-checker that can resolve most of
-          the ambiguities.</para>
-        </listitem>
-
-        <listitem>
-          <para>Q4: We should allow (optionally) quoting/escaping concrete
-          syntax parts. If Q3 results in error or undecidable disambiguation,
-          the user must be able to clarify precisely.</para>
-        </listitem>
-      </itemizedlist></para>
-  </section>
-
-  <section>
-    <title>Rascal at a glance</title>
-
-    <para>Rascal is summarized in the following subsections.</para>
-
-    <para>See <xref linkend="Issues" /> for the issues that still have to be
-    resolved.</para>
+    <para>These elements are summarized in the following subsections. </para>
 
     <section>
       <title>Modules</title>
 
+      <para>Modules are the organizational unit of Rascal. They may:</para>
+
       <itemizedlist>
         <listitem>
-          <para>"Syntax modules" are identical to standard SDF modules and
-          define concrete syntax.</para>
+          <para>import other modules (either Rascal modules or SDF
+          modules).</para>
         </listitem>
 
         <listitem>
-          <para>Ordinary modules may import other modules and define types and
-          functions.</para>
+          <para>Define datatypes, subtypes or functions.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -488,7 +261,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>Symbols (as defined by a syntax module) are also types.</para>
+          <para>Symbols (as defined by an SDF module) are also types.</para>
         </listitem>
 
         <listitem>
@@ -512,29 +285,24 @@
 
         <listitem>
           <para>All syntactic types are a subtype of the type TREE that
-          corresponds to AsFix.</para>
+          corresponds to AsFix. Up casts from a subtype to an enclosing type
+          are automatic; Down casts require a run-time check.</para>
         </listitem>
 
         <listitem>
-          <para>Up casts from a subtype to an enclosing type are
-          automatic.</para>
+          <para>Datatype declarations may introduce new structured
+          types.</para>
         </listitem>
 
         <listitem>
-          <para>Down casts require a run-time check.</para>
+          <para>Types may include type variables like
+          <literal>&amp;<replaceable>T</replaceable></literal> as in
+          Rscript.</para>
         </listitem>
       </itemizedlist>
 
       <para>As a design strategy we try to offer the option to leave out as
       many type indications as possible.</para>
-
-      <para>Datatype declarations may introduce new structured types.</para>
-
-      <para>Subtype declarations may define inclusions between types.</para>
-
-      <para>Types may include type variables like
-      <literal>&amp;<replaceable>T</replaceable></literal> as in
-      Rscript.</para>
 
       <para>The root of the type system is the type Value. It has the
       following subtypes:</para>
@@ -578,7 +346,7 @@
 
               <itemizedlist>
                 <listitem>
-                  <para>Parsers generates value of type Tree.</para>
+                  <para>Parsers generates values of type Tree.</para>
                 </listitem>
 
                 <listitem>
@@ -591,12 +359,52 @@
           </itemizedlist>
         </listitem>
       </itemizedlist>
+
+      <note>
+        <para>There is inconsistency in naming here. Probably switch to
+        "tree", "value", etc. so that all built-in types are in
+        lowercase.</para>
+      </note>
     </section>
 
     <section>
-      <title>Variables [TO BE DONE]</title>
+      <title>Variables</title>
 
-      <para></para>
+      <para>Variables are names that have an associated scope and in that
+      scope they have a value. A variable declaration consists of a type
+      followed by the variable name and---depending on the syntactic
+      position---they are followed by an initialization. Variables may be
+      introduced at the following syntactic positions:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>As formal parameters of a function. Their scope is the
+          function and they get their initial value when the function is
+          called.</para>
+        </listitem>
+
+        <listitem>
+          <para>Local variables in a function body are declared and
+          initialized. Their scope is the function body.</para>
+        </listitem>
+
+        <listitem>
+          <para>Variables in patterns. For patterns in match positions,
+          variables are initialized during the match and their scope is the
+          rule in which they occur. For patterns in make positions, the values
+          of variables are taken from the local scope.</para>
+        </listitem>
+
+        <listitem>
+          <para>Variables that are introduced by generators in comprehensions
+          or for statement, have the comprehension, respectively, for
+          statement as scope.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><note>
+          <para>To do: global/dynamic variables.</para>
+        </note></para>
     </section>
 
     <section>
@@ -708,18 +516,19 @@
         terms.These terms (possibly including typed variables as introduced
         for concrete patterns) may be used as abstract patterns at the same
         position where concrete patterns are allowed. Subtype declarations
-        define an inclusion relation between types. </para>
+        define an inclusion relation between types.</para>
       </section>
 
       <section xml:id="section.patterns">
         <title>Concrete Patterns</title>
 
-        <para>There is a notation of aconcrete pattern": a (possibly quoted)
-        concrete syntax fragment that may contain variables. We want to cover
-        the whole spectrum from maximally quoted patterns that can
-        unambiguously describe <emphasis role="bold">any</emphasis> syntax
-        fragment to minimally quoted patterns as we are used to in ASF+SDF.
-        Therefore we support the following mechanisms:</para>
+        <para>There is a notation of a <emphasis>concrete pattern</emphasis>:
+        a (possibly quoted) concrete syntax fragment that may contain
+        variables. We want to cover the whole spectrum from maximally quoted
+        patterns that can unambiguously describe <emphasis
+        role="bold">any</emphasis> syntax fragment to minimally quoted
+        patterns as we are used to in ASF+SDF. Therefore we support the
+        following mechanisms:</para>
 
         <itemizedlist>
           <listitem>
@@ -903,7 +712,7 @@
     features.</para>
 
     <section>
-      <title>Variations on Booleans</title>
+      <title>Booleans</title>
 
       <para>It seems that every language specification effort has to produce a
       specification of the Booleans at some moment, so let's try it now. We
@@ -1354,77 +1163,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
 
     default: return E
     };
-}</programlisting>Here are some OUTDATED experiments with global
-      variables:<programlisting>%% Rename all bound variables in an Exp
-%% Version 2: using a global variable
-%% to generate new variables
-
-fun Var newVar() {
-    global int Cnt := 0   %% Initialize global Cnt on first call 
-                          %% of newVar. This is similar to a 
-                          %% local static var in C.
-    Cnt := Cnt + 1;
-    "x" + Cnt
-}       
-
-%% Rename -- Version 2
-
-fun Exp rename(Exp E, rel[Var,Var] Rn) {
-    Var V, Y;
-
-    switch E {
-
-    [| let $V = $E1 in $E2 end |] =&gt;
-           [| let $Y = $(rename(E1, Rn)) 
-              in 
-                $(rename(E2, {&lt;V, Y&gt;} union Rn)) 
-              end
-           |]
-       when Y := newVar()
-
-    [| $V |] =&gt; V1
-       when { V1 } == Rn[V]
-  
-    [| $E |] =&gt; E
-    }
-}
-
-%% Rename -- Version 3, with Rn also as global variabele
-
-fun Var newVar() {
-    global int Cnt := 0   
-    Cnt := Cnt + 1;
-    "x" + Cnt
-}       
-
-fun Exp rename(Exp E) {
-    global rel[Var, Var] Rn := {}
-    Var V, Y;
- 
-    switch E {
-    [| let $V = $E1 in $E2 end |] =&gt;
-           [| let $Y = $rename(E1) 
-              in 
-                 $rename(E2) 
-              end
-           |]
-       when Y := newVar,
-            Rn :=  {&lt;V, Y&gt;} union Rn
-              
-    [| $V |] =&gt; V1
-       when { V1 } == Rn[V]
- 
-    [| $E |] = E
-    }
-}
-
-%% Question: how to reset the value of global variables?
-%% Idea: model them as arguments:
-%% - fun Var newVar(global int Cnt := 0) { ... }
-%% and allow calls without arguments (as in above example) or
-%% with arguments:
-%% - newVar(13)
-%% which resets the value of Cnt.</programlisting></para>
+}</programlisting></para>
     </section>
 
     <section>
@@ -1954,6 +1693,658 @@ fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
   </section>
 
   <section>
+    <title>Syntax Definition</title>
+
+    <para>See separate SDF definition.</para>
+  </section>
+
+  <section>
+    <title>Protyping/implementation of Rascal</title>
+
+    <para>Every prototype will have to address the following issues:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Parsing/typechecking/evaluating Rascal.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement the relational operations.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement matching.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement replacement.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement traversals.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The following options should be considered:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Implementation of a typechecker in ASF+SDF:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Gives good insight in the type system and is comparable in
+            complexity to the Rscript typechecker.</para>
+          </listitem>
+
+          <listitem>
+            <para>Work: 2 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of an evaluator in ASF+SDF.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Requires reimplementation of matching &amp; rewriting in
+            ASF+SDF.</para>
+          </listitem>
+
+          <listitem>
+            <para>Bound to be very slow.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 4 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of a typechecker in Rascal.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Interesting exercise to asses Rascal.</para>
+          </listitem>
+
+          <listitem>
+            <para>Not so easy to do without working Rascal
+            implementation.</para>
+          </listitem>
+
+          <listitem>
+            <para>Not so easy when Rascal is still in flux.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 1 week</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of an evaluator in Rascal.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Ditto.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Extending the current ASF+SDF interpreter.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>This is a viable options. It requires extensions of
+            AsFix.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 4 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Translation of Rascal to ASF+SDF in ASF+SDF.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Unclear whether this has longer term merit.</para>
+          </listitem>
+
+          <listitem>
+            <para>Allows easy experimentation and reuse of current ASF+SDF
+            implementation.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 4 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of an interpreter in Java.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A future proof and efficient solution.</para>
+          </listitem>
+
+          <listitem>
+            <para>Requires reimplementation of matching &amp; rewriting in
+            Java.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 8 weeks.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="section.issues">
+    <title xml:id="Issues">Issues</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>See <xref linkend="section.patterns" /> for a description of
+        patterns. There are still some questions about patterns:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Do we want the subexpressions in patterns? [Proposal: no
+            since it complicates the syntax]</para>
+          </listitem>
+
+          <listitem>
+            <para>Do we want string variables in patterns? [Undecided]</para>
+          </listitem>
+
+          <listitem>
+            <para>Do we want to add regular expression matching primitives to
+            patterns? Ex.</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><programlisting>[| if @any@ $Stats fi |]</programlisting></para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Dynamic variables need more thought; do we really want them?
+        [Proposal: let's do without them.]</para>
+      </listitem>
+
+      <listitem>
+        <para>The relation (no pun intended) between local variable
+        declarations in functions, patterns and comprehensions has to be
+        established.</para>
+      </listitem>
+
+      <listitem>
+        <para>How do we identify built-in sorts (bool, int, etc) with their
+        syntactic counterparts?</para>
+      </listitem>
+
+      <listitem>
+        <para>What happens if no case in a switch matches? Some kind of
+        failure? How does it propagate? Runtime error?</para>
+      </listitem>
+
+      <listitem>
+        <para>In a list comprehension: do list values splice into the list
+        result?</para>
+      </listitem>
+
+      <listitem>
+        <para>Ditto for set comprehensions.</para>
+      </listitem>
+
+      <listitem>
+        <para>Some clean up of Rscript notation (operators "o" and "x" should
+        go, improve the image notation. Why "inter" and "union" but no "diff"
+        (that is written as "\"?).</para>
+      </listitem>
+
+      <listitem>
+        <para>We need an io-library.</para>
+      </listitem>
+
+      <listitem>
+        <para>We need memo functions.</para>
+      </listitem>
+
+      <listitem>
+        <para>How are annotations handled?</para>
+      </listitem>
+
+      <listitem>
+        <para>Add public/private indications.</para>
+      </listitem>
+
+      <listitem>
+        <para>Unexplored idea: add (possibly lazy) generators for all types;
+        this allows to generate, for instance, all statements in a
+        program.</para>
+      </listitem>
+
+      <listitem>
+        <para>Shopping list of ideas in Tom:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Named patterns to avoid building a term, i.e. w@[| while
+            $Exp do $stat od |].</para>
+          </listitem>
+
+          <listitem>
+            <para>Anti-patterns, i.e. the complement of a patterns: ! [| while
+            $Exp do $stat od |] matches anything but a while.</para>
+          </listitem>
+
+          <listitem>
+            <para>Anonymous variables a la Prolog: [| while $_ do $stat od
+            |].</para>
+          </listitem>
+
+          <listitem>
+            <para>String matching in patterns.</para>
+          </listitem>
+
+          <listitem>
+            <para>Tom uses the notation %[ ... ]% for quoted strings with
+            embedded @...@ constructs that are evaluated. It also has a
+            backquote construct.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Shopping list of ideas from TXL:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>"redefine" allows modification of an imported
+            grammar.</para>
+          </listitem>
+
+          <listitem>
+            <para>An "any" sort that matches anything.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Graveyard</title>
+
+    <para>Don't read the following sections.</para>
+  </section>
+
+  <section>
+    <title>Mapping features to datatypes</title>
+
+    <para><note>
+        <para>This section has played a role during initial design; it is now
+        outdated.</para>
+      </note>Emphasized cells indicate a new datatype/feature combination that
+    needs to be thought out.</para>
+
+    <table xml:id="table.features">
+      <title>Features vs datatypes</title>
+
+      <tgroup cols="9">
+        <colspec align="left" colname="col1" colnum="1" colwidth="2*" />
+
+        <colspec align="center" colname="col2" colnum="2" colwidth="1*" />
+
+        <colspec align="center" colname="col3" colnum="3" colwidth="1*" />
+
+        <colspec align="center" colname="col4" colnum="4" colwidth="1*" />
+
+        <colspec align="center" colname="col5" colnum="5" colwidth="1*" />
+
+        <colspec align="center" colname="col6" colnum="6" colwidth="1*" />
+
+        <colspec align="center" colname="col7" colnum="7" colwidth="1*" />
+
+        <colspec align="center" colname="col8" colnum="8" colwidth="1*" />
+
+        <colspec align="center" colname="col9" colnum="9" colwidth="1*" />
+
+        <thead>
+          <row>
+            <entry>Which features work on which datatypes?</entry>
+
+            <entry>CF syntax trees</entry>
+
+            <entry>CF syntax lists</entry>
+
+            <entry>Lexical syntax trees</entry>
+
+            <entry>Lexical syntax lists</entry>
+
+            <entry>Lists</entry>
+
+            <entry>Sets</entry>
+
+            <entry>Relations</entry>
+
+            <entry>Tuples</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>Pattern matching</entry>
+
+            <entry>Y (CS)</entry>
+
+            <entry>Y, CS, LM</entry>
+
+            <entry>Y, PS</entry>
+
+            <entry>Y, PS, LM</entry>
+
+            <entry>Y, HT</entry>
+
+            <entry>Y, HT</entry>
+
+            <entry>Y, HT</entry>
+
+            <entry>Y</entry>
+          </row>
+
+          <row>
+            <entry>Pattern construction</entry>
+
+            <entry>Y, CS</entry>
+
+            <entry>Y, PS</entry>
+
+            <entry>Y, PS</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y, HT</entry>
+
+            <entry>Y, HT</entry>
+
+            <entry>Y, HT</entry>
+
+            <entry>Y</entry>
+          </row>
+
+          <row>
+            <entry>Generator/ Comprehension</entry>
+
+            <entry>N</entry>
+
+            <entry>N</entry>
+
+            <entry>N</entry>
+
+            <entry>N</entry>
+
+            <entry>LC</entry>
+
+            <entry>SC</entry>
+
+            <entry>SC</entry>
+
+            <entry>N</entry>
+          </row>
+
+          <row>
+            <entry>Complete Functions</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+          </row>
+
+          <row>
+            <entry>Equations</entry>
+
+            <entry>Y, BC</entry>
+
+            <entry>Y, BC</entry>
+
+            <entry>Y, BC</entry>
+
+            <entry>Y, BC</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+          </row>
+
+          <row>
+            <entry>Polymorphism</entry>
+
+            <entry>N</entry>
+
+            <entry>N</entry>
+
+            <entry>N</entry>
+
+            <entry>N</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+          </row>
+
+          <row>
+            <entry>Serialization</entry>
+
+            <entry>AsFix</entry>
+
+            <entry>AsFix</entry>
+
+            <entry>AsFix</entry>
+
+            <entry>AsFix</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+          </row>
+
+          <row>
+            <entry>Traversal Functions</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+          </row>
+
+          <row>
+            <entry>Subtyping</entry>
+
+            <entry>N</entry>
+
+            <entry>N</entry>
+
+            <entry>N, except character class inclusion</entry>
+
+            <entry>N</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <itemizedlist>
+      <listitem>
+        <para>BC = Backward Compatible with ASF</para>
+      </listitem>
+
+      <listitem>
+        <para>CS = Concrete Syntax</para>
+      </listitem>
+
+      <listitem>
+        <para>HT= head/tail matching</para>
+      </listitem>
+
+      <listitem>
+        <para>LC = List comprehension</para>
+      </listitem>
+
+      <listitem>
+        <para>LM = List Matching</para>
+      </listitem>
+
+      <listitem>
+        <para>N = No</para>
+      </listitem>
+
+      <listitem>
+        <para>PS = Prefic Syntax</para>
+      </listitem>
+
+      <listitem>
+        <para>SC = Set Comprehension</para>
+      </listitem>
+
+      <listitem>
+        <para>Y = Yes</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Renaming in Let using global variables</title>
+
+    <para><programlisting>%% Rename all bound variables in an Exp
+%% Version 2: using a global variable
+%% to generate new variables
+
+fun Var newVar() {
+    global int Cnt := 0   %% Initialize global Cnt on first call 
+                          %% of newVar. This is similar to a 
+                          %% local static var in C.
+    Cnt := Cnt + 1;
+    "x" + Cnt
+}       
+
+%% Rename -- Version 2
+
+fun Exp rename(Exp E, rel[Var,Var] Rn) {
+    Var V, Y;
+
+    switch E {
+
+    [| let $V = $E1 in $E2 end |] =&gt;
+           [| let $Y = $(rename(E1, Rn)) 
+              in 
+                $(rename(E2, {&lt;V, Y&gt;} union Rn)) 
+              end
+           |]
+       when Y := newVar()
+
+    [| $V |] =&gt; V1
+       when { V1 } == Rn[V]
+  
+    [| $E |] =&gt; E
+    }
+}
+
+%% Rename -- Version 3, with Rn also as global variabele
+
+fun Var newVar() {
+    global int Cnt := 0   
+    Cnt := Cnt + 1;
+    "x" + Cnt
+}       
+
+fun Exp rename(Exp E) {
+    global rel[Var, Var] Rn := {}
+    Var V, Y;
+ 
+    switch E {
+    [| let $V = $E1 in $E2 end |] =&gt;
+           [| let $Y = $rename(E1) 
+              in 
+                 $rename(E2) 
+              end
+           |]
+       when Y := newVar,
+            Rn :=  {&lt;V, Y&gt;} union Rn
+              
+    [| $V |] =&gt; V1
+       when { V1 } == Rn[V]
+ 
+    [| $E |] = E
+    }
+}
+
+%% Question: how to reset the value of global variables?
+%% Idea: model them as arguments:
+%% - fun Var newVar(global int Cnt := 0) { ... }
+%% and allow calls without arguments (as in above example) or
+%% with arguments:
+%% - newVar(13)
+%% which resets the value of Cnt.</programlisting></para>
+  </section>
+
+  <section>
     <title>Outdated examples</title>
 
     <section>
@@ -2147,12 +2538,6 @@ fun DotElem* gen-node(&lt;ID Id1, ID Id2&gt;) {
     [| node $Id1; node $Id2; $Id1 -&gt; $Id2 |}}
 }</programlisting></para>
     </section>
-  </section>
-
-  <section>
-    <title>Syntax Definition</title>
-
-    <para>See separate SDF definition.</para>
   </section>
 
   <section xml:id="section.integration-tscript">
@@ -2393,284 +2778,5 @@ process mkWave(int N) is ...</programlisting>
         </listitem>
       </itemizedlist>
     </section>
-  </section>
-
-  <section>
-    <title>Protyping/implementation of Rascal</title>
-
-    <para>Every prototype will have to address the following issues:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Parsing/typechecking/evaluating Rascal.</para>
-      </listitem>
-
-      <listitem>
-        <para>How to implement the relational operations.</para>
-      </listitem>
-
-      <listitem>
-        <para>How to implement matching.</para>
-      </listitem>
-
-      <listitem>
-        <para>How to implement replacement.</para>
-      </listitem>
-
-      <listitem>
-        <para>How to implement traversals.</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>The following options should be considered:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Implementation of a typechecker in ASF+SDF:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Gives good insight in the type system and is comparable in
-            complexity to the Rscript typechecker.</para>
-          </listitem>
-
-          <listitem>
-            <para>Work: 2 weeks</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Implementation of an evaluator in ASF+SDF.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Requires reimplementation of matching &amp; rewriting in
-            ASF+SDF.</para>
-          </listitem>
-
-          <listitem>
-            <para>Bound to be very slow.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 4 weeks</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Implementation of a typechecker in Rascal.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Interesting exercise to asses Rascal.</para>
-          </listitem>
-
-          <listitem>
-            <para>Not so easy to do without working Rascal
-            implementation.</para>
-          </listitem>
-
-          <listitem>
-            <para>Not so easy when Rascal is still in flux.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 1 week</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Implementation of an evaluator in Rascal.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Ditto.</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Extending the current ASF+SDF interpreter.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>This is a viable options. It requires extensions of
-            AsFix.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 4 weeks</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Translation of Rascal to ASF+SDF in ASF+SDF.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Unclear whether this has longer term merit.</para>
-          </listitem>
-
-          <listitem>
-            <para>Allows easy experimentation and reuse of current ASF+SDF
-            implementation.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 4 weeks</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Implementation of an interpreter in Java.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>A future proof and efficient solution.</para>
-          </listitem>
-
-          <listitem>
-            <para>Requires reimplementation of matching &amp; rewriting in
-            Java.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 8 weeks.</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section xml:id="section.issues">
-    <title xml:id="Issues">Issues</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>See <xref linkend="section.patterns" /> for a description of
-        patterns. There are still some questions about patterns:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Do we want the subexpressions in patterns? [Proposal: no
-            since it complicates the syntax]</para>
-          </listitem>
-
-          <listitem>
-            <para>Do we want string variables in patterns? [Undecided]</para>
-          </listitem>
-
-          <listitem>
-            <para>Do we want to add regular expression matching primitives to
-            patterns? Ex.</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><programlisting>[| if @any@ $Stats fi |]</programlisting></para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Dynamic variables need more thought; do we really want them?
-        [Proposal: let's do without them.]</para>
-      </listitem>
-
-      <listitem>
-        <para>The relation (no pun intended) between local variable
-        declarations in functions, patterns and comprehensions has to be
-        established.</para>
-      </listitem>
-
-      <listitem>
-        <para>How do we identify built-in sorts (bool, int, etc) with their
-        syntactic counterparts?</para>
-      </listitem>
-
-      <listitem>
-        <para>What happens if no case in a switch matches? Some kind of
-        failure? How does it propagate? Runtime error?</para>
-      </listitem>
-
-      <listitem>
-        <para>In a list comprehension: do list values splice into the list
-        result?</para>
-      </listitem>
-
-      <listitem>
-        <para>Ditto for set comprehensions.</para>
-      </listitem>
-
-      <listitem>
-        <para>We need an io-library.</para>
-      </listitem>
-
-      <listitem>
-        <para>We need memo functions.</para>
-      </listitem>
-
-      <listitem>
-        <para>How are annotations handled?</para>
-      </listitem>
-
-      <listitem>
-        <para>Unexplored idea: add (possibly lazy) generators for all types;
-        this allows to generate, for instance, all statements in a
-        program.</para>
-      </listitem>
-
-      <listitem>
-        <para>Shopping list of ideas in Tom:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Named patterns to avoid building a term, i.e. w@[| while
-            $Exp do $stat od |].</para>
-          </listitem>
-
-          <listitem>
-            <para>Anti-patterns, i.e. the complement of a patterns: ! [| while
-            $Exp do $stat od |] matches anything but a while.</para>
-          </listitem>
-
-          <listitem>
-            <para>Anonymous variables a la Prolog: [| while $_ do $stat od
-            |].</para>
-          </listitem>
-
-          <listitem>
-            <para>String matching in patterns.</para>
-          </listitem>
-
-          <listitem>
-            <para>Tom uses the notation %[ ... ]% for quoted strings with
-            embedded @...@ constructs that are evaluated. It also has a
-            backquote construct.</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Shopping list of ideas from TXL:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>"redefine" allows modification of an imported
-            grammar.</para>
-          </listitem>
-
-          <listitem>
-            <para>An "any" sort that matches anything.</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-    </itemizedlist>
   </section>
 </article>

@@ -17,7 +17,7 @@ context-free start-symbols
 
 exports
 sorts Expression LeftHandSide Predicate SimpleGenerator Generator
-      Strategy Signature Statement Rule Block Assignment
+      Strategy Signature Statement Rule Assignment
 
 context-free syntax
          "(" Expression ")"                                      -> Expression {bracket}
@@ -114,17 +114,17 @@ context-free syntax
          "make" CPattern                                         -> Expression
          "make" APattern                                         -> Expression
 
-         "case" Pattern ":" Block                                -> Rule
-         "default" ":" Block                                     -> Rule
+         "case" Pattern ":" Statement                            -> Rule
+         "default" ":" Statement                                 -> Rule
          "case" Pattern "=>" Expression                          -> Rule
 
  	"switch" Expression "{" Rule+ "}"                       -> Statement
    	"visit" "repeat"? Strategy Expression "{" Rule+ "}"     -> Statement
          "solve" "{" { Assignment ";"}+ "}"                      -> Statement
-         "for" "(" {Generator ","}+ ")" Block                    -> Statement
+         "for" "(" {Generator ","}+ ")" Statement                -> Statement
 
-         "if" "(" Predicate ")" Block "else" Block               -> Statement
-         "if" "(" Predicate ")" Block                            -> Statement
+         "if" "(" Predicate ")" Statement "else" Statement       -> Statement
+         "if" "(" Predicate ")" Statement                        -> Statement
 %% Do we want elseif etc.?
 
          Variable "=" Expression                                 -> Assignment {cons("assign")}
@@ -134,8 +134,7 @@ context-free syntax
          "fail"                                                  -> Statement {cons("fail")}
          "assert" StrCon ":" Predicate                           -> Statement {cons("assert")}
 
-         Statement                                               -> Block
-         "{" {Statement ";"}+ ";"? "}"                           -> Block
+         "{" {Statement ";"}+ ";"? "}"                           -> Statement
 
 %% Define reserved words:
 %%         "o" | "x" | 

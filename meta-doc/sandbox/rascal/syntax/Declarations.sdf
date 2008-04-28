@@ -10,11 +10,12 @@ context-free start-symbols
         Declaration
 
 exports
-sorts Declaration
+sorts Declaration Visibility
 
 context-free syntax
 
-   "datatype" Variable  { AbstractType "|"}+ Variable?  -> Declaration {cons("datatype-decl")}
-   "subtype" Variable Type                              -> Declaration {cons("subtype-decl")}
+   "public" | "private"                                            -> Visibility  {cons("visibility")}
+   Visibility? "datatype" Variable  { AbstractType "|"}+ Variable? -> Declaration {cons("datatype-decl")}
+   Visibility? "subtype" Variable Type                             -> Declaration {cons("subtype-decl")}
 
-   FunctionType Block                                   -> Declaration {cons("function-decl")}
+   Visibility? FunctionType Statement                              -> Declaration {cons("function-decl")}
