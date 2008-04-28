@@ -1,4 +1,6 @@
+Mon Apr 28 16:14:13 2008    <bruntink@cwi.nl>
 
+	* Changed dependency on module-support to module-support-java.
 
 Thu Sep 13 10:52:42 CEST 2007 <jurgenv@cwi.nl>
  * src/**/barchart: added rel[int,int] as supported type.

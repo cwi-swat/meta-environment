@@ -3,7 +3,7 @@ prefix=@prefix@
 Name: vis-plugin-charts
 Version: 1.0
 Description: 
-Requires: vis-plugin,aterm-java,config-support,toolbus-java-adapter,meta-studio,rstore-container,tunit,relation-stores
+Requires: vis-plugin,aterm-java,config-support-java,toolbus-java-adapter,meta-studio,rstore-container,tunit,relation-stores
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 JarFile=vis-plugin-charts.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/junit-4.1.jar
