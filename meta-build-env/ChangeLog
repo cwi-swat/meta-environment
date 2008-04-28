@@ -1,5 +1,9 @@
 
 
+Mon Apr 28 15:50:13 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
+ * meta-build.m4: fixed generation of MANIFEST.MF using line continuations
+   such that Eclipse does not complain about lines that are too long
+
 Fri Apr 25 15:42:01 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
  * meta-build.m4: added generation of .settings directory and contents for
    default Eclipse settings (like source compliance level)

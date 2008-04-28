@@ -457,7 +457,7 @@ Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
 Bundle-Version: $2
 Bundle-ClassPath: ${BUNDLE_CLASSPATH}
 Bundle-Localization: plugin
-Export-Package: $4
+Export-Package: `echo "$4" | sed "s@,@,\n @g"`
 ${REQUIRE_BUNDLE}
 ${BUNDLE_MAIN_CLASS}
 ENDCAT
