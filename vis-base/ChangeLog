@@ -1,3 +1,7 @@
+Mon Apr 28 16:19:28 2008    <bruntink@cwi.nl>
+
+	* vis-base.pc.in: Changed dependency on module-support to module-support-java.
+
 Wed Jan 23 13:55:49 CET 2008 <{lankamp,basten,economop}@cwi.nl>
  * tbscripts/fbi.tb.src, tbscripts/fbmp.tb.src: fixed deadlock.
 
