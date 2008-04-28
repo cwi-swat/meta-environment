@@ -1,5 +1,9 @@
 
 
+Mon Apr 28 15:00:59 CEST 2008 <jurgenv@cwi.nl>
+ * architecture-meta-environment.xml: started view on detailed
+   communication processes within the Meta-Environment.
+
 Mon Apr 28 13:10:37 CEST 2008 <jurgenv@cwi.nl>
  * Makefile.am: added a generic rule to generate pdf from any specific
    docbook xml file. In the toplevel directory simple type:

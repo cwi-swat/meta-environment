@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article [
+<!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
 <!ENTITY euro "&#8364;">
 <!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
 %dbcent;
 ]>
-<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="architecture-meta-environment"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:svg="http://www.w3.org/2000/svg"
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
-         xmlns:db="http://docbook.org/ns/docbook"
-         xml:id="architecture-meta-environment">
+         xmlns:db="http://docbook.org/ns/docbook">
   <info>
     <title>The Architecture of The Meta-Environment</title>
 
@@ -197,6 +197,12 @@
         <listitem>
           <para>The <link linkend="coordination-view">coordination view</link>
           (CRD) describes the cooperation between components.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <link linkend="coordination-view">detailed coordination
+          view</link> (DCRD) describes the high level design of several main
+          coordination processes within The Meta-Environment</para>
         </listitem>
 
         <listitem>
@@ -1842,6 +1848,332 @@
             settings may prevent this.</para>
           </listitem>
         </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Other Information</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>The ToolBus uses TCP/IP sockets to implement the connections
+          with tools.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>The Detailed Coordination View (DCRD)</title>
+
+    <para>As the coordination view explained, the main coordination
+    architecture of The Meta-Environment is provided by the ToolBus. The
+    ToolBus runs a ToolBus script containing many processes that coordinate
+    the features of The Meta-Environment. This Detailed Coordination View
+    highlights these processes. There are no diagrams in this view, just a
+    number of explanations. These are the major coordination processes:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Editing - the process of editing files, which includes
+        triggering several tools that provide feedback to the user.</para>
+      </listitem>
+
+      <listitem>
+        <para>Module management - the process of managing modules, builds and
+        dependencies, which includes triggering tools that provide feedback to
+        the user.</para>
+      </listitem>
+
+      <listitem>
+        <para>Configuration management - the processes of managing the
+        configuration of The Meta-Environment in terms of the visible menu
+        options and other keyboard and mouse user interactions.</para>
+      </listitem>
+
+      <listitem>
+        <para>Transaction management - a generic mechanism to define critical
+        sections that lock the use of certain available data and tools to
+        prevent racing conditions</para>
+      </listitem>
+    </orderedlist>
+
+    <para>Note that the main coordination processes of The Meta-Environment
+    are designed to be language independent. They reside in the meta package
+    which is a part of the kernel layer. Other packages that depend on the
+    meta package, such as sdf-meta (SDF layer) and asfsdf-meta (ASF+SDF
+    layer), bind configuration parameters and specialize the generic
+    functionality to obtain programming language specific IDE's. The way that
+    the language specific layers extend the kernel layer is governed by this
+    architecture description.</para>
+
+    <section>
+      <title>Processes</title>
+
+      <para>The common scheme of all ToolBus script processes is that there
+      are 'listener', 'util', 'action' and 'other' processes. They are grouped
+      into files with a straightforward file naming scheme. </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Listeners catch notes that are send by other ToolBus
+          processes, and forward to util processes.</para>
+        </listitem>
+
+        <listitem>
+          <para>Actions are processes that are triggered directly by a user
+          interaction, which forward to util processes.</para>
+        </listitem>
+
+        <listitem>
+          <para>Utils are the implementation processes, they do the actual
+          work.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that communication can be done in ToolBus scripts in three
+      ways: sending messages, sending notes and calling processes. In general
+      the rules communication of The Meta-Environment management processes
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>tool processes - which are single processes each associated
+          with a single tool, also called 'idefs' - send and receive
+          <emphasis>messages, </emphasis>except for manager tools which can
+          also send <emphasis>notes</emphasis>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>notes</emphasis> are received by listener processes,
+          which <emphasis>call </emphasis>util processes</para>
+        </listitem>
+
+        <listitem>
+          <para>utilitity processes <emphasis>call</emphasis> eachother, and
+          send messages to tool processes, where it is tried to wrap single
+          messages to tools in simple process definitions</para>
+        </listitem>
+      </itemizedlist>
+
+      <section>
+        <title>Editing</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Module management</title>
+
+        <para>The goal of module management is to trigger functionality
+        (utils) on source files, such as .sdf or .asf files, at the right time
+        and to provide the user with a consistent view of the state of the
+        source files that are edited by the user in the environment.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The module-manager tool connects to the Bus and maintains an
+            administration of which modules are currently loaded and what
+            their dependencies are</para>
+          </listitem>
+
+          <listitem>
+            <para>The module-manager maintains a list of key-value attributes
+            (ATerms) for each module. Each key has a namespace and a name. Any
+            T-script can set or change the attributes of a module.</para>
+          </listitem>
+
+          <listitem>
+            <para>The module-manager broadcasts notifications on the ToolBus
+            whenever a module is added or removed, a dependency is added or
+            removed, or an attribute is changed.</para>
+          </listitem>
+
+          <listitem>
+            <para>Language specific scripts in the SDF or ASF+SDF layer
+            register 'event rules' with the module-manager. The event rules
+            define how some attributes on modules are set automatically by
+            propagating information acros the dependency graph between
+            modules. This event rule mechanism can deal with cyclic
+            dependencies. A single change of an attribute on a module, can
+            thus spawn a number of changes on other modules, all changes are
+            broadcasted as independently on the ToolBus.</para>
+          </listitem>
+
+          <listitem>
+            <para>Event listeners (note receivers in T-script) listen to the
+            changes in the module manager and trigger appropriate utils. Some
+            utils change the attributes of modules, triggering other utils via
+            other listeners.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>There is one central attribute that is used a lot by The
+        Meta-Environment called "status". A particular view on The
+        Meta-Environment module management process is that it is a collection
+        of state machines, one per each module:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The status attribute of a module can have a fixed set of
+            values, called the "states" of the module.</para>
+          </listitem>
+
+          <listitem>
+            <para>Specific processes are tied to states by the event
+            listeners. When the status attribute changes to a particular
+            state, the processes that belong to that state are executed using
+            listeners</para>
+          </listitem>
+
+          <listitem>
+            <para>Processes that are finished set the next state of
+            modules.</para>
+          </listitem>
+
+          <listitem>
+            <para>The state attribute can also be updated by event rules, such
+            that modules change to a different state without ToolBus script
+            intervention.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Configuration management</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Transaction management</title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Element Catalog</title>
+
+      <para> <link linkend="def-errors-and-warnings">Errors &amp;
+      warnings</link>,<link linkend="def-GUI"> GUI</link>, <link
+      linkend="def-module-manager">Module manager</link>, <link
+      linkend="def-structure-editor">Structure editor</link>, <link
+      linkend="def-text-editor">Text editor</link>, <link
+      linkend="def-toolbus">ToolBus</link>, Editor Manager, Configuration
+      Manager, Transaction Manager</para>
+    </section>
+
+    <section>
+      <title>Context Diagram</title>
+
+      <para>See <link linkend="fig-coordination-view">Coordination
+      view</link></para>
+    </section>
+
+    <section>
+      <title>Variability Guide</title>
+
+      <para>For each of the main coordination processes there are different
+      variability stories</para>
+
+      <section>
+        <title>Editor management</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Module management</title>
+
+        <para>The generic nature of the module manager makes it easy to adapt
+        and extends it to new programming languages. </para>
+
+        <orderedlist>
+          <listitem>
+            <para>Add a new 'name space' to add a new language</para>
+          </listitem>
+
+          <listitem>
+            <para>Add a new 'event rule' to propagate new information acros
+            the dependency graph</para>
+          </listitem>
+
+          <listitem>
+            <para>Add a new note listener to add new automatic features to the
+            environment.</para>
+          </listitem>
+        </orderedlist>
+      </section>
+
+      <section>
+        <title>Configuration management</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Transaction management</title>
+
+        <para>The asynchronous and parallel nature of the other processes -
+        i.e. ToolBus scripts implementing module management and configuration
+        management using notes as an event mechanism - introduces the default
+        problems with shared resources: deadlock and racing conditions.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Architecture Background</title>
+
+      <section>
+        <title>Design Rationale</title>
+
+        <para>In general, the design rationale behind the processes in The
+        Meta-Environment is <emphasis>reusability</emphasis>. The main
+        processes are to be designed in such a way that they are programming
+        language independent. The goal is to be able to instantiate an IDE by
+        providing the right parameters to the generic ToolBus scripts to
+        obtain language specific IDE behavior. </para>
+
+        <para>The other main rationale behind these designs is
+        <emphasis>extensibility</emphasis>. For example, the asynchronous,
+        parallel and independently addeable event listeners make sure that the
+        system can be layered, and also extended without changing the existing
+        functionality. However, this does introduce the need for transaction
+        management.</para>
+
+        <para>For <emphasis>traceability</emphasis> of ToolBus scripts we try
+        to use ToolBus process calls over snd-messages whenever possible,
+        except to communicate with tools. This allows the ToolBus type checker
+        to find common mistakes early in the process. Also the trace of
+        process calls is more easy to get an overview of than the trace of
+        messages and notes, since every process call has a single caller and a
+        single callee. Messages on the other hand are send by one message but
+        could be received by anybody.</para>
+      </section>
+
+      <section>
+        <title>Analysis of Results</title>
+
+        <para>The configuration management process of The Meta-Environment is
+        not general enough to be easily reusable or extensible. There is still
+        a lot of editing in existing source code involved when reusing or
+        extending it.</para>
+
+        <para>The focus on reusability and extensibility has introduced
+        strains on the ToolBus in terms of efficiency. Specific optimizations
+        that help managing large volumes of snd-notes have helped a lot in
+        making the systems run more smoothly. There is more to be gained by
+        optimizing for large volumes of small messages.</para>
+      </section>
+
+      <section>
+        <title>Assumptions</title>
+
+        <para>The programmer needs to understand the contracts between tools
+        and the ToolBus well in order to handle the management processes of
+        the Meta-Environment. These contracts are expressed in the idef files
+        for each tool.</para>
       </section>
     </section>
 
