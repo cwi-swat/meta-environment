@@ -28,6 +28,7 @@ books:	Makefile ${ALL_XSL_FILES} ${ALL_XML_FILES}
 	DOCBOOKXSLPREFIX=${DOCBOOK_XSL_PREFIX} \
 	FOPPREFIX=${FOP_PREFIX} \
 	${top_srcdir}/website.sh
+
 complete-book:	Makefile ${ALL_XSL_FILES} ${ALL_XML_FILES}
 	DOCBOOKXSLPREFIX=${DOCBOOK_XSL_PREFIX} \
 	FOPPREFIX=${FOP_PREFIX} \
@@ -43,4 +44,11 @@ complete-book:	Makefile ${ALL_XSL_FILES} ${ALL_XML_FILES}
 	     s@__DOCBOOKXSLPREFIX__@${DOCBOOK_XSL_PREFIX}@g" \
 	     < $< > $@
 
+# convenience shortcut for creating pdf documents
+%.pdf: %.xml Makefile
+	(xsltproc  --xinclude --stringparam now "`date`" ./pubdate.xsl $< | \
+          xsltproc  --output $*.fo \
+                    --xinclude --stringparam current.docid $* \
+		                    ./fo-customization.xsl -)
+	${FOP_PREFIX}/fop -fo $*.fo -pdf $@
 

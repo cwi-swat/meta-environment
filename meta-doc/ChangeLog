@@ -1,5 +1,11 @@
 
 
+Mon Apr 28 13:10:37 CEST 2008 <jurgenv@cwi.nl>
+ * Makefile.am: added a generic rule to generate pdf from any specific
+   docbook xml file. In the toplevel directory simple type:
+   'make path/to/doc.pdf', which will generate the pdf file for the
+   'path/to/doc.xml' docbook xml file.
+
 Fri Apr 25 13:15:02 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
  * build-environment.xml: upated example .bootrollrc file to latest version of
    sisyphus
