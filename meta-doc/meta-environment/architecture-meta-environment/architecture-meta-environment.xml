@@ -1863,7 +1863,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="detailed-coordination-view">
     <title>The Detailed Coordination View (DCRD)</title>
 
     <para>As the coordination view explained, the main coordination
