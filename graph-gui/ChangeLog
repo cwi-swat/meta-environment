@@ -1,6 +1,6 @@
 Mon Apr 28 13:32:22 2008    <bruntink@cwi.nl>
 
-	* Changed dependency on module-support to module-support-java.
+	* graph-gui.pc.in: Changed dependency on module-support to module-support-java.
 
 Wed Sep  5 17:50:48 CEST 2007 <{storm,jurgenv}@cwi.nl>
  * src/**/GraphAdapter.java: made adapter robust against the non-existence
