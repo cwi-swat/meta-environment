@@ -1,8 +1,0 @@
-prefix=@prefix@
-Maintainers=kooiker@cwi.nl
-
-Name: module-support
-Version: 1.1.1
-Description:
-Requires: 
-Jars=${prefix}/share/moduleapi.jar
