@@ -1,4 +1,6 @@
+Mon Apr 28 16:13:16 2008    <bruntink@cwi.nl>
 
+	* vis-plugin-graph.pc.in: Changed dependency on module-support to module-support-java.
 
 Thu Aug 16 14:34:21 CEST 2007 <jurgenv@cwi.nl>
  * **/GraphBuilder.java: removed author names per method, and fixed
