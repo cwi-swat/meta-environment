@@ -1,4 +1,6 @@
-$Id$
+Mon Apr 28 16:15:13 2008    <bruntink@cwi.nl>
+
+	* meta-studio.pc.in: Changed dependency on module-support to module-support-java.
 
 Tue Sep 18 15:59:08 CEST 2007 <kooiker@cwi.nl>
  * src/**/DefaultPopupImpl.java: catch IllegalStateException prevents
