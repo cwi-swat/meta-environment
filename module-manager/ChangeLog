@@ -1,3 +1,8 @@
+Mon Apr 28 17:20:44 2008    <bruntink@cwi.nl>
+
+	* module-manager.pc.in: Removed spurious packages like nl, nl.cwi, etc. 
+	* Removed .project and .classpath from repository.
+
 Mon Apr 28 13:38:10 2008    <bruntink@cwi.nl>
 
 	* Changed dependency on module-support to module-support-java.
