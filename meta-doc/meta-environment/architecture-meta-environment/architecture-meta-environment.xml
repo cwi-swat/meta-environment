@@ -1875,7 +1875,7 @@
 
     <orderedlist>
       <listitem>
-        <para>Editing - the process of editing files, which includes
+        <para>Editor management - the process of editing files, which includes
         triggering several tools that provide feedback to the user.</para>
       </listitem>
 
@@ -1917,17 +1917,20 @@
       <itemizedlist>
         <listitem>
           <para>Listeners catch notes that are send by other ToolBus
-          processes, and forward to util processes.</para>
+          processes, and forward to util processes. Files begin with a
+          language name or a feature name and end with "-listeners.tb"</para>
         </listitem>
 
         <listitem>
           <para>Actions are processes that are triggered directly by a user
-          interaction, which forward to util processes.</para>
+          interaction, which forward to util processes. Files begin with a
+          language name or a feature name and end with "-actions.tb"</para>
         </listitem>
 
         <listitem>
           <para>Utils are the implementation processes, they do the actual
-          work.</para>
+          work. Files begin with a language name or a feature name and end
+          with "-utils.tb"</para>
         </listitem>
       </itemizedlist>
 
@@ -1957,7 +1960,7 @@
       </itemizedlist>
 
       <section>
-        <title>Editing</title>
+        <title>Editor management</title>
 
         <para></para>
       </section>
