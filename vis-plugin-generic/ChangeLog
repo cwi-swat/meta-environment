@@ -1,3 +1,7 @@
+Mon Apr 28 16:05:34 2008    <bruntink@cwi.nl>
+
+	* vis-plugin-generic.pc.in: Changed config-support dependency to config-support-java.
+
 Fri Feb 29 14:40:59 CEST 2008 <basten@cwi.nl>
  * **/src: fixed nullpointer in table visualization when displaying empty
    set, now displaying message "This fact is empty.".
