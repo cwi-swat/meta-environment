@@ -7,7 +7,7 @@ Description:
 Requires: aterm-java,config-support-java,graph-support,io-support,meta-studio,toolbus-java-adapter
 JarFile=navigator.jar
 Jars=${prefix}/share/${JarFile}
-Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.data
+Packages=nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.data
 MainClass=nl.cwi.sen1.gui.plugin.Navigator
 TestClass=
 ToolBusFlags=-I${prefix}/share/navigator-gui

@@ -1,3 +1,8 @@
+Mon Apr 28 17:35:17 2008    <bruntink@cwi.nl>
+
+	* navigator-gui.pc.in: Removed spurious packages like nl, nl.cwi, etc.
+        * Removed .project and .classpath from repository.
+
 Mon Apr 28 16:00:15 2008    <bruntink@cwi.nl>
 
 	* navigator-gui.pc.in: Changed config-support depedency to config-support-java.
