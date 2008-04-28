@@ -1,4 +1,6 @@
-# $Id$
+Mon Apr 28 16:20:23 2008    <bruntink@cwi.nl>
+
+	* editor-plugin.pc.in: Changed dependency on module-support to module-support-java.
 
 Wed May  9 11:53:51 CEST 2007 <kooiker@cwi.nl>
  * src/**/EditorKit.java:
