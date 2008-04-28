@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=bruntink@cwi.nl
+
+Name: config-support-java
+Version: 1.0
+Description:
+Requires: aterm-java
+JarFile=config-support-java.jar 
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.configapi
+MainClass=
+TestClass=
