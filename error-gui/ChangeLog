@@ -1,4 +1,6 @@
-# $Id$
+Tue Apr 29 14:17:03 2008    <bruntink@cwi.nl>
+
+	* error-gui.pc.in: Changed dependency on error-support to error-support-java.
 
 Thu Aug 23 13:13:59 CEST 2007 <kooiker@cwi.nl>
  * src/**/ErrorViewer.java: do not show summaries with an empty error list
