@@ -7,16 +7,18 @@ ACLOCAL_AMFLAGS = -I .
 # instead of a source directory.
 
 if MAINTAINER_MODE
+
 api: c-api java-api
 
 c-api: Graph.adt
-    adt-to-c --input $< --name Graph
+	adt-to-c --input $< --name Graph
 
 java-api: Graph.adt
-    adt-to-java \                                                               
-        --input Graph.adt \                                                     
-        --package nl.cwi.sen1 \                                                 
-        --name graph \                                                          
-        --version ${VERSION}
-    mv graph-${VERSION}.jar graph.jar
+	adt-to-java \                                                               
+		--input Graph.adt \                                                     
+		--package nl.cwi.sen1 \                                                 
+		--name graph \                                                          
+		--version ${VERSION}
+	mv graph-${VERSION}.jar graph.jar
+
 endif
