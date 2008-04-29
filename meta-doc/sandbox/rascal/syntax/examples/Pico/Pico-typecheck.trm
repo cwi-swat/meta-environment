@@ -1,7 +1,7 @@
 module Typecheck
 
-imports Pico-syntax
-imports Errors
+imports Pico-syntax;
+imports Errors;
 
 subtype Env rel[PICO-ID,TYPE];
 
@@ -17,7 +17,7 @@ fun list[Error] tcp(PROGRAM P) {
 fun list[Error] tcst(Stat Stat, Env Env) {
     switch Stat {
       case [| <PICO-ID Id> = <EXP Exp>|]: {
-%%        {<Id, Type>} = Env[Id];
+        TYPE Type = Env(Id);
         return type-of(Exp, Type, Env);
       }
 
@@ -38,8 +38,8 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
       case <StrCon S>: if(Type == string) { return []; }
 
       case <PICO-ID Id>: {
-%%        {<Id,Type2>} = Env[Id];
-        if(Type2 == Type) { return []; }
+         TYPE Type2 = Env(Id);
+         if(Type2 == Type) { return []; }
       }
 
       case <EXP E1> + <EXP E2>:

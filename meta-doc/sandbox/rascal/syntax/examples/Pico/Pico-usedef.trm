@@ -1,6 +1,6 @@
 module Pico-use-def
 
-imports pico/syntax/Pico
+imports pico/syntax/Pico;
 
 fun rel[EXP,PICO-ID] uses(PROGRAM P) {
   return {<E,Id> | EXP E : P, PICO-ID Id := E}

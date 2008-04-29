@@ -7,7 +7,7 @@ context-free start-symbols
   Module
 
 exports
-sorts Module ModuleWord ModuleName Imports
+sorts Module ModuleWord ModuleName Import
 
 lexical syntax
   letters:[A-Za-z0-9\_\-]+                       -> ModuleWord {cons("word")} 
@@ -20,6 +20,6 @@ lexical restrictions
 
 context-free syntax
 
-    "imports" ModuleName+ ";"?                                -> Imports
+    "imports" ModuleName+ ";"                        -> Import
 
-   "syntax"? "module" ModuleName Imports? (Declaration ";"?)* -> Module  
+    "module" ModuleName Import* (Declaration ";"?)*  -> Module  

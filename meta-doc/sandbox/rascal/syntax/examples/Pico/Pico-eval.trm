@@ -1,25 +1,102 @@
 module Pico-eval
-imports pico/syntax/Pico 
+imports pico/syntax/Pico;
 
-fun VEnv evalExp(Exp exp) {
+subtype PICO-VALUE int;
+subtype PICO-VALUE str;
 
+subtype VEnv rel[PICO-ID, PICO-VALUE];
+
+fun VEnv evalProgram(PROGRAM P){
+    switch P {
+      case begin <DECLS Decls> <{STATEMENT ";"}* Series> end: {
+          VEnv Env = evalDecls(Decls);
+          return evalStatements(Series, Env);
+      }
+   }
+};
+
+%% Improve the following two environment handling functions:
+%% - assign should replace an existing pair
+%% - valueOf shoudl return a single value.
+
+fun VEnv assign(VEnv Env, PICO-ID Id, PICO-VALUE V){
+%%  Env(Id) = V;
+  return Env;
+}
+
+fun PICO-VALUE valueOf(VEnv Env, PICO-ID Id){
+  return Env(Id);
+}
+
+fun VEnv evalDecls(DECLS Decls){
+    VEnv Env = {};
+    visit Decls {
+      case <PICO-ID Id> : string:  Env = assign(Env, Id, "")
+      case <PICO-ID Id> : natural: Env = assign(Env, Id, 0)
+    }
+}
+
+fun VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
+    switch Series {
+      case <STATEMENT Stat>; <{STATEMENT ";"}* Series2>: {
+        Env Env2 = evalStatement(Stat, Env);
+        return evalStatements(Series2, Env2);
+      }
+      case [| |]: return Env
+    }
+}
+
+fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
+    switch Stat {
+      case [| <PICO-ID Id> = <EXP Exp> |]: {
+        PICO-VALUE Val = evalExp(Exp, Env);
+        return assign(Env, Id, Val)
+      }
+
+      case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
+                   else <{STATEMENT ";"}* Stats1> fi:{
+        PICO-VALUE Val = evalExp(Exp, Env);
+        if(Val != 0)
+          return evalStatments(Stats1, Env)
+        else 
+          return evalStatements(Stats2, Env)
+
+      }
+
+      case while <EXP Exp> do <{STATEMENT ";"}* Stats1> od:{
+        PICO-VALUE Val = evalExp(Exp, Env);
+        if(Val != 0)
+          return Env
+        else {
+          VEnv Env2 = evalStatements(Stats1, Env);
+          return evalStatement(Stat, Env2)
+        }
+      }
+    };
+};
+
+fun PICO-VALUE evalExp(Exp exp, VEnv Env) {
     switch exp {
+      case <NatCon N>: return N
+
+      case <StrCon S>: return S
+
+      case <PICO-ID Id>: return valueOf(Env, Id)
+
       case <EXP exp1> + <EXP exp2>: {
-           Natural nat1 = evalExp(exp1);
-           Natural nat2 = evalExp(exp2);
+           Natural nat1 = evalExp(exp1, Env);
+           Natural nat2 = evalExp(exp2, Env);
            return nat1 + nat2;
       }
       case <EXP exp1> - <EXP exp2>: {
-           Natural nat1 = evalExp(exp1);
-           Natural nat2 = evalExp(exp2);
+           Natural nat1 = evalExp(exp1, Env);
+           Natural nat2 = evalExp(exp2, Env);
            return nat1 + nat2;
       }
       case <EXP exp1> || <EXP exp2>: {
-           StrCon str1 = evalExp(exp1);
-           StrCon str2 = evalExp(exp2);
+           StrCon str1 = evalExp(exp1, Env);
+           StrCon str2 = evalExp(exp2, Env);
            return concat(str1, str2);
       }
-   
-      default: return nil-value
    } 
 }

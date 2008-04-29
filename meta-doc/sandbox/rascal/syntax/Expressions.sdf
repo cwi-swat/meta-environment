@@ -17,7 +17,7 @@ context-free start-symbols
 
 exports
 sorts Expression LeftHandSide Predicate SimpleGenerator Generator
-      Strategy Signature Statement Rule Assignment
+      Strategy Signature Statement Rule Assignment AssignOp
 
 context-free syntax
          "(" Expression ")"                                      -> Expression {bracket}
@@ -25,7 +25,8 @@ context-free syntax
          IntCon                                                  -> Expression {cons("intcon-exp")}
          StrCon                                                  -> Expression {cons("strcon-exp")}
          Area                                                    -> Expression {cons("areacon-exp")}
-	Variable "(" {Expression ","}* ")"                      -> Expression {cons("fun-call")}
+	Variable "(" {Expression ","}* ")"                      -> Expression {cons("fun-map-call")}
+         Variable "{" Expression "}"                             -> Expression {cons("multi-map-call")}
 	Variable                                                -> Expression {cons("variable")}
 
 %% Lists, sets and tuples
@@ -46,16 +47,19 @@ context-free priorities
          Expression "x" Expression                               -> Expression {cons("prod"), left} >
 
 %% Set operators
-         Expression "inter" Expression                           -> Expression {cons("inter"), left} >
-         Expression "union" Expression                           -> Expression {cons("union"), left} >
-         Expression "\\" Expression                              -> Expression {cons("diff"), left} >
+%%         Expression "inter" Expression                           -> Expression {cons("inter"), left} >
+%%         Expression "union" Expression                           -> Expression {cons("union"), left} >
+%%         Expression "\\" Expression                              -> Expression {cons("diff"), left} >
         "#" Expression                                           -> Expression {cons("size")} >
 
 %% Arithmetic operators
-
+   %% multiplication/intersection
         Expression "*" Expression                                -> Expression {cons("mul"), left} >
+   %% division
         Expression "/" Expression                                -> Expression {cons("div"), left} >
+   %% addition/union/concatenation
         { Expression "+" Expression                              -> Expression {cons("add"), left}
+   %% subtraction/difference
           Expression "-" Expression                              -> Expression {cons("sub"), left}
         } >
  
@@ -72,14 +76,14 @@ context-free priorities
          } >
 
 	"not" Predicate                                         -> Predicate {cons("not")} >
-	Predicate "&&" Predicate                                -> Predicate {left,cons("and")} >
-	Predicate "||" Predicate                                -> Predicate {left,cons("or")} >
-         Predicate "==>" Predicate                               -> Predicate {cons("implies")}
+	Predicate "and" Predicate                               -> Predicate {left,cons("and")} >
+	Predicate "or" Predicate                                -> Predicate {left,cons("or")} >
+         Predicate "implies" Predicate                           -> Predicate {cons("implies")}
 
 context-free syntax
 	LeftHandSide ":=" Expression                            -> Predicate {cons("match")}
 	LeftHandSide "!:=" Expression                           -> Predicate {cons("not-match")}
-         LeftHandSide "<-" Expression                            -> Predicate {cons("assign")}
+         LeftHandSide "<-" Expression                            -> Predicate {cons("match-assign")}
 
 context-free syntax
 %% Image operators 
@@ -126,8 +130,9 @@ context-free syntax
          "if" "(" Predicate ")" Statement "else" Statement       -> Statement
          "if" "(" Predicate ")" Statement                        -> Statement
 %% Do we want elseif etc.?
+          "=" | "+=" | "-=" | "*=" | "/="                        -> AssignOp
 
-         Variable "=" Expression                                 -> Assignment {cons("assign")}
+         Variable AssignOp Expression                            -> Assignment {cons("assign")}
          LeftHandSide "=" Expression                             -> Statement
          "return" Expression                                     -> Statement {cons("return")}
          "yield" Expression                                      -> Statement {cons("yield")}
@@ -139,7 +144,7 @@ context-free syntax
 %% Define reserved words:
 %%         "o" | "x" | 
          "true" | "false" |
-         "inter" | "union" |
+         "and" | "or" | "implies" |
          "make" | "case" | "default" | "switch" | "visit" | 
          "solve"  | "for" | "if" | "else" | "return" |
          "yield" | "fail" | "assert"                             -> Variable {reject}

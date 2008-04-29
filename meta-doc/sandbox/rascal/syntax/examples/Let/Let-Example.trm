@@ -1,5 +1,5 @@
 module Let-Example
-imports Let
+imports Let;
 
 %% Rename all bound variables in an Exp
 %% Version 1: purely functional
@@ -14,7 +14,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
                              %% (after converting the int to str)
          int Cnt1 = Cnt + 1;
          Exp E1R = rename(E1, Rn, Cnt);
-         Exp E2R = rename(E2, {<V, Y>} union Rn, Cnt1);
+         Exp E2R = rename(E2, {<V, Y>} + Rn, Cnt1);
          return make let <Var Y >= <Exp E1R>
                      in 
                         <Exp E2R>

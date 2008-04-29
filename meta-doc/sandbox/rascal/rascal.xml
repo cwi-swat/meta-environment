@@ -626,8 +626,45 @@
           </listitem>
 
           <listitem>
-            <para>The complete repertoire of operators in Rscript is
-            available.</para>
+            <para>The complete repertoire of operators in Rscript is available
+            but we have applied some rationalization:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>+ is now used for addition, union and concatenation
+                (union is gone).</para>
+              </listitem>
+
+              <listitem>
+                <para>- is now used for substraction, difference (\ operator
+                is gone)</para>
+              </listitem>
+
+              <listitem>
+                <para>* is now used for multiplication and intersection (inter
+                is gone).</para>
+              </listitem>
+
+              <listitem>
+                <para>There are new assignment operators +=, -=, *=.</para>
+              </listitem>
+
+              <listitem>
+                <para>For a binary relation R that is a map (i.e. it
+                associated a single value with each domain element) R(n),
+                returns the single image value corresponding with n.</para>
+              </listitem>
+
+              <listitem>
+                <para>For an arbitrary binary relation, R{n} returns a set of
+                corresponding image elements.</para>
+              </listitem>
+
+              <listitem>
+                <para>The Rscript image notation R[n] and R[-,n] will be
+                discontinued.</para>
+              </listitem>
+            </itemizedlist>
           </listitem>
         </itemizedlist></para>
     </section>
@@ -744,7 +781,7 @@ exports
 
         <para>A simple solution exists using the visit construct that we have
         encountered in the above examples.<programlisting>module Bool-example1
-imports Booleans-syntax
+imports Booleans-syntax;
 
 fun Bool reduce(Bool B) {
     visit bu B {
@@ -912,7 +949,10 @@ datatype Point point(int x, int y);</programlisting></para>
       <title>Tree traversal</title>
 
       <para>Here is the TREE example that we use in explaining traversal
-      functions in ASF+SDF.<programlisting>module Tree-syntax
+      functions in ASF+SDF.<note>
+          <para>Do not confuse these TREEs with the Tree type in our type
+          hierarchy. Rename TREE in this example!</para>
+        </note><programlisting>module Tree-syntax
 imports basic/Integers
 
 exports 
@@ -923,7 +963,7 @@ exports
     g(TREE,TREE)    -&gt; TREE
     h(TREE,TREE)    -&gt; TREE
     i(TREE,TREE)    -&gt; TREE</programlisting><programlisting>module Tree-Examples
-imports Tree-syntax 
+imports Tree-syntax; 
 
 %% Ex1: Count leaves in a TREE
 %% Idea: int N : T generates alle Integer leaves in the tree
@@ -1069,7 +1109,7 @@ context-free syntax
       <para>Examples:</para>
 
       <para><programlisting>module Lambda-Examples
-imports Lambda-syntax
+imports Lambda-syntax;
 
 fun set[Var] allVars(Exp E) {
     return {V | Var V : E}
@@ -1080,7 +1120,7 @@ fun set[Var] boundVars(Exp E) {
 } 
 
 fun set[Var] freeVars(Exp E) {
-    return allVars(E) \ boundVars(E);
+    return allVars(E) - boundVars(E);
 }
 
 %% Generate a fresh variable if V does not occur in 
@@ -1105,22 +1145,20 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
                 return make &lt;Exp EaS&gt; &lt;Exp EbS&gt;;
          } 
 
-      case fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt;: 
-        if (V1 == V2) { yield make fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt; }
+      case fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt;: if (V1 == V2) { yield make fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt; }
 
       case fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;:
-        if(V1 != V2 &amp;&amp; not(V1 in freeVars(E2) &amp;&amp; 
-           V2 in freeVars(E1))){
-           Exp E1S = subst(V1, E1, Ea);
-           yield make fn &lt;Var V2&gt; =&gt; &lt;Exp E1S&gt;;
-        }              
+                if(V1 != V2 and not(V1 in freeVars(E2) and V2 in freeVars(E1))){
+                   Exp E1S = subst(V1, E1, Ea);
+                   yield make fn &lt;Var V2&gt; =&gt; &lt;Exp E1S&gt;;
+                }              
  
       case fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;: 
-        if(V1 != V2 &amp;&amp; V1 in freeVars(Ea) &amp;&amp; V2 in freeVars(E1)){
-           Var V3 = fresh(V2, freeVars(Ea) union freeVars(E1));
-           Exp EaS = subst(V1, E1, subst(V2, V3, E2));
-           yield make fn &lt;Var V3&gt; =&gt; &lt;Exp EaS&gt;;
-         }
+               if(V1 != V2 and V1 in freeVars(Ea) and V2 in freeVars(E1)){
+                  Var V3 = fresh(V2, freeVars(Ea) + freeVars(E1));
+                  Exp EaS = subst(V1, E1, subst(V2, V3, E2));
+                  yield make fn &lt;Var V3&gt; =&gt; &lt;Exp EaS&gt;;
+               }
     };
 }</programlisting></para>
     </section>
@@ -1137,7 +1175,7 @@ lexical syntax
 context-free syntax
      Var                              -&gt; Exp
      "let" Var "=" Exp "in" Exp "end" -&gt; Exp </programlisting>Examples:<programlisting>module Let-Example
-imports Let
+imports Let;
 
 %% Rename all bound variables in an Exp
 %% Version 1: purely functional
@@ -1152,7 +1190,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
                              %% (after converting the int to str)
          int Cnt1 = Cnt + 1;
          Exp E1R = rename(E1, Rn, Cnt);
-         Exp E2R = rename(E2, {&lt;V, Y&gt;} union Rn, Cnt1);
+         Exp E2R = rename(E2, {&lt;V, Y&gt;} + Rn, Cnt1);
          return make let &lt;Var Y &gt;= &lt;Exp E1R&gt;
                      in 
                         &lt;Exp E2R&gt;
@@ -1172,8 +1210,8 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
       <para>The following example shows the tight integration ASF with
       comprehensions.<programlisting>module Typecheck
 
-imports Pico-syntax
-imports Errors
+imports Pico-syntax;
+imports Errors;
 
 subtype Env rel[PICO-ID,TYPE];
 
@@ -1189,7 +1227,7 @@ fun list[Error] tcp(PROGRAM P) {
 fun list[Error] tcst(Stat Stat, Env Env) {
     switch Stat {
       case [| &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt;|]: {
-%%        {&lt;Id, Type&gt;} = Env[Id];
+        TYPE Type = Env(Id);
         return type-of(Exp, Type, Env);
       }
 
@@ -1210,8 +1248,8 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
       case &lt;StrCon S&gt;: if(Type == string) { return []; }
 
       case &lt;PICO-ID Id&gt;: {
-%%        {&lt;Id,Type2&gt;} = Env[Id];
-        if(Type2 == Type) { return []; }
+         TYPE Type2 = Env(Id);
+         if(Type2 == Type) { return []; }
       }
 
       case &lt;EXP E1&gt; + &lt;EXP E2&gt;:
@@ -1238,6 +1276,114 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
     </section>
 
     <section>
+      <title>Pico evaluator</title>
+
+      <para><programlisting>module Pico-eval
+imports pico/syntax/Pico;
+
+subtype PICO-VALUE int;
+subtype PICO-VALUE str;
+
+subtype VEnv rel[PICO-ID, PICO-VALUE];
+
+fun VEnv evalProgram(PROGRAM P){
+    switch P {
+      case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
+          VEnv Env = evalDecls(Decls);
+          return evalStatements(Series, Env);
+      }
+   }
+};
+
+%% Improve the following two environment handling functions:
+%% - assign should replace an existing pair
+%% - valueOf shoudl return a single value.
+
+fun VEnv assign(VEnv Env, PICO-ID Id, PICO-VALUE V){
+%%  Env(Id) = V;
+  return Env;
+}
+
+fun PICO-VALUE valueOf(VEnv Env, PICO-ID Id){
+  return Env(Id);
+}
+
+fun VEnv evalDecls(DECLS Decls){
+    VEnv Env = {};
+    visit Decls {
+      case &lt;PICO-ID Id&gt; : string:  Env = assign(Env, Id, "")
+      case &lt;PICO-ID Id&gt; : natural: Env = assign(Env, Id, 0)
+    }
+}
+
+fun VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
+    switch Series {
+      case &lt;STATEMENT Stat&gt;; &lt;{STATEMENT ";"}* Series2&gt;: {
+        Env Env2 = evalStatement(Stat, Env);
+        return evalStatements(Series2, Env2);
+      }
+      case [| |]: return Env
+    }
+}
+
+fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
+    switch Stat {
+      case [| &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt; |]: {
+        PICO-VALUE Val = evalExp(Exp, Env);
+        return assign(Env, Id, Val)
+      }
+
+      case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
+                   else &lt;{STATEMENT ";"}* Stats1&gt; fi:{
+        PICO-VALUE Val = evalExp(Exp, Env);
+        if(Val != 0)
+          return evalStatments(Stats1, Env)
+        else 
+          return evalStatements(Stats2, Env)
+
+      }
+
+      case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od:{
+        PICO-VALUE Val = evalExp(Exp, Env);
+        if(Val != 0)
+          return Env
+        else {
+          VEnv Env2 = evalStatements(Stats1, Env);
+          return evalStatement(Stat, Env2)
+        }
+      }
+    };
+};
+
+fun PICO-VALUE evalExp(Exp exp, VEnv Env) {
+    switch exp {
+      case &lt;NatCon N&gt;: return N
+
+      case &lt;StrCon S&gt;: return S
+
+      case &lt;PICO-ID Id&gt;: return valueOf(Env, Id)
+
+      case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;: {
+           Natural nat1 = evalExp(exp1, Env);
+           Natural nat2 = evalExp(exp2, Env);
+           return nat1 + nat2;
+      }
+      case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;: {
+           Natural nat1 = evalExp(exp1, Env);
+           Natural nat2 = evalExp(exp2, Env);
+           return nat1 + nat2;
+      }
+      case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;: {
+           StrCon str1 = evalExp(exp1, Env);
+           StrCon str2 = evalExp(exp2, Env);
+           return concat(str1, str2);
+      }
+   } 
+}
+</programlisting></para>
+    </section>
+
+    <section>
       <title>Pico control flow extraction</title>
 
       <programlisting>module Pico-controlflow
@@ -1253,7 +1399,7 @@ fun CFSEGMENT cflow({STATEMENT ";"}* Stats){
       case &lt;STATEMENT Stat&gt; ; &lt;{STATEMENT ";"}* Stats2&gt;: { 
            &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = cflow(Stat);
            &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = cflow(Stats2);
-           return &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
+           return &lt;En1, R1 + R2 + (Ex1 x En2), Ex2&gt;
       }
 
       case [| |]: return &lt;{}, {}, {}&gt;
@@ -1264,7 +1410,7 @@ fun CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
       case [| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od |] : {
            &lt;set[CP] En,  rel[CP,CP] R,  set[CP] Ex&gt; = cflow(Stats);
-           return &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;;
+           return &lt;{Exp}, ({Exp} x En) + R + (Ex x {Exp}),{Exp}&gt;;
       }
                 
       case [| if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
@@ -1272,8 +1418,8 @@ fun CFSEGMENT cflow(STATEMENT Stat){
           &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = cflow(Stats1);
            &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = cflow(Stats2);
            return &lt; {Exp}, 
-                    ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
-                    Ex1 union Ex2
+                    ({Exp} x En1) + ({Exp} x En2) + R1 + R2,
+                    Ex1 + Ex2 
                   &gt;;
       }
          
@@ -1290,7 +1436,7 @@ fun CFSEGMENT cflow(STATEMENT Stat){
 
       <programlisting>module Pico-use-def
 
-imports pico/syntax/Pico
+imports pico/syntax/Pico;
 
 fun rel[EXP,PICO-ID] uses(PROGRAM P) {
   return {&lt;E,Id&gt; | EXP E : P, PICO-ID Id := E}
