@@ -3,7 +3,7 @@ Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 Name: editor-plugin
 Version: 1.1.2
 Description:
-Requires: aterm-java,config-support-java,error-support,meta-studio,toolbus-java-adapter
+Requires: aterm-java,config-support-java,error-support-java,meta-studio,toolbus-java-adapter
 JarFile=editor-plugin.jar
 Jars=${prefix}/share/${JarFile}
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.editor
