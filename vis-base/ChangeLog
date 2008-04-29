@@ -1,6 +1,7 @@
 Tue Apr 29 17:18:30 2008    <bruntink@cwi.nl>
 
 	* Removed .project and .classpath from repository.
+	* vis-base.pc.in: Fixed typo.
 
 Mon Apr 28 16:19:28 2008    <bruntink@cwi.nl>
 
