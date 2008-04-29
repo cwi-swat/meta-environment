@@ -2,6 +2,7 @@ Tue Apr 29 14:38:32 2008    <bruntink@cwi.nl>
 
 	* meta.pc.in: Added dependency to error-support-java.
 	* meta.pc.in: Added dependency to graph-support-java.
+	* meta.pc.in: Added dependency to io-support-java.
 
 Wed Dec 5 9:24:45 CEST 2007 <kooiker@cwi.nl>
  * tbscripts/gui-utils.tb: 
