@@ -1,3 +1,7 @@
+Tue Apr 29 15:17:59 2008    <bruntink@cwi.nl>
+
+	* navigator-gui.pc.in: Changed dependency on graph-support to graph-support-java.
+
 Mon Apr 28 17:35:17 2008    <bruntink@cwi.nl>
 
 	* navigator-gui.pc.in: Removed spurious packages like nl, nl.cwi, etc.
