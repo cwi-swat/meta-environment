@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=bruntink@cwi.nl
+
+Name: graph-support-java
+Version: 1.0
+Description:
+Requires: aterm-java
+JarFile=graph-support-java.jar 
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.graph,nl.cwi.sen1.graph.types,nl.cwi.sen1.graph.types.attribute,nl.cwi.sen1.graph.types.color,nl.cwi.sen1.graph.types.direction,nl.cwi.sen1.graph.types.edge,nl.cwi.sen1.graph.types.file,nl.cwi.sen1.graph.types.graph,nl.cwi.sen1.graph.types.node,nl.cwi.sen1.graph.types.nodeid,nl.cwi.sen1.graph.types.point,nl.cwi.sen1.graph.types.shape,nl.cwi.sen1.graph.types.style
+MainClass=
+TestClass=
