@@ -1,3 +1,7 @@
+Tue Apr 29 17:18:30 2008    <bruntink@cwi.nl>
+
+	* Removed .project and .classpath from repository.
+
 Mon Apr 28 16:19:28 2008    <bruntink@cwi.nl>
 
 	* vis-base.pc.in: Changed dependency on module-support to module-support-java.
