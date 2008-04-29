@@ -4,7 +4,7 @@ Maintainers=kooiker@cwi.nl
 Name: module-manager
 Version: 1.1.2
 Description:
-Requires: aterm-java,graph-support,module-support-java,toolbus-java-adapter
+Requires: aterm-java,graph-support-java,module-support-java,toolbus-java-adapter
 JarFile=module-manager.jar
 Jars=${prefix}/share/${JarFile}
 Packages=nl.cwi.sen1.modulemanager,nl.cwi.sen1.modulemanager.model

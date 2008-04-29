@@ -1,3 +1,7 @@
+Tue Apr 29 15:16:43 2008    <bruntink@cwi.nl>
+
+	* module-manager.pc.in: Changed dependency on graph-support to graph-support-java.
+
 Mon Apr 28 17:20:44 2008    <bruntink@cwi.nl>
 
 	* module-manager.pc.in: Removed spurious packages like nl, nl.cwi, etc. 
