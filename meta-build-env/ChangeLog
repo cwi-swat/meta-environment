@@ -1,4 +1,8 @@
+Tue Apr 29 17:14:41 2008    <bruntink@cwi.nl>
 
+	* meta-build.m4: The Require-Bundle part of MANIFEST.MF is split
+	  over multiple lines to prevent generating a line that would be
+	  too long.
 
 Mon Apr 28 15:50:13 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
  * meta-build.m4: fixed generation of MANIFEST.MF using line continuations

@@ -432,7 +432,7 @@ fi
 if test -z "$5"; then
   REQUIRE_BUNDLE=""
 else
-  REQUIRED_BUNDLES=`echo "$5" | tr '-' '_' | tr ' ' ','`
+  REQUIRED_BUNDLES=`echo "$5" | tr '-' '_' | tr ' ' ',' | sed "s@,@,\n @g"`
   ECLIPSE_REQUIRES=META_GET_PKG_USER_VAR_PLAIN([EclipseRequires])
 
   if test -z "$ECLIPSE_REQUIRES"; then
