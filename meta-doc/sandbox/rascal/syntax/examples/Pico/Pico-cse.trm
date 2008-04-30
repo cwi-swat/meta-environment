@@ -2,19 +2,19 @@ module Pico-common-subexpression
 
 imports pico/syntax/Pico 
         Pico-controlflow 
-        Pico-use-def
+        Pico-use-def;
 
 fun PROGRAM cse(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    rel[PICO-ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
     rel[EXP, PICO-ID] replacements = 
        {<E2, Id> | STATEMENT S : P,
-                   <PICO-ID Id> := <EXP E> := S,
+                   [| <PICO-ID Id> := <EXP E> |] := S,
                    Id notin E,
-                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+                   EXP E2 : reachX({S}, Defs{Id}, Pred)
        };
  
     visit P {
-      case <EXP E>: if({ PICO-ID Id } := replacements[E]) yield Id
+      case <EXP E>: if({ PICO-ID Id } := replacements{E}) yield Id
     };
 }

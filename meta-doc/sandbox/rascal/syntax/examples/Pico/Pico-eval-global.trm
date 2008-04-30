@@ -1,0 +1,112 @@
+module Pico-eval
+imports pico/syntax/Pico;
+
+subtype PICO-VALUE int;
+subtype PICO-VALUE str;
+
+subtype VEnv rel[PICO-ID, PICO-VALUE];
+
+fun void evalProgram(PROGRAM P){
+    switch P {
+      case begin <DECLS Decls> <{STATEMENT ";"}* Series> end: {
+          evalDecls(Decls);
+          evalStatements(Series);
+      }
+   }
+};
+
+%% Improve the following two environment handling functions:
+%% - assign should replace an existing pair
+%% - valueOf shoudl return a single value.
+
+fun void assign(PICO-ID Id, PICO-VALUE V){
+  global Venv Env;
+%%  Env(Id) = V;
+  return;
+}
+
+fun PICO-VALUE valueOf(PICO-ID Id){
+  global Venv Env;
+  return Env(Id); 
+}
+
+fun VEnv evalDecls(DECLS Decls){
+    global VEnv Env = {};
+    visit Decls {
+      case <PICO-ID Id> : string:  assign(Id, "")
+      case <PICO-ID Id> : natural: assign(Id, 0)
+    }
+}
+
+fun void evalStatements({STATEMENT ";"}* Series){
+    global VEnv Env;
+    switch Series {
+      case <STATEMENT Stat>; <{STATEMENT ";"}* Series2>: {
+        evalStatement(Stat);
+        evalStatements(Series2);
+        return
+      }
+      case [| |]: return
+    }
+}
+
+fun void evalStatement(STATEMENT Stat){
+    global VEnv Env;
+    switch Stat {
+      case [| <PICO-ID Id> = <EXP Exp> |]: {
+        PICO-VALUE Val = evalExp(Exp);
+        assign(Id, Val);
+        return
+      }
+
+      case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
+                   else <{STATEMENT ";"}* Stats1> fi:{
+        PICO-VALUE Val = evalExp(Exp);
+        if(Val != 0) {
+          evalStatements(Stats1);
+          return
+        } else {
+          evalStatements(Stats2);
+          return
+        }
+      }
+
+      case while <EXP Exp> do <{STATEMENT ";"}* Stats1> od:{
+        PICO-VALUE Val = evalExp(Exp);
+        if(Val != 0)
+          return
+        else {
+          evalStatements(Stats1);
+          evalStatement(Stat);
+          return
+        }
+      }
+    };
+};
+
+fun PICO-VALUE evalExp(Exp exp) {
+    global VEnv Env;
+    switch exp {
+      case <NatCon N>: return N
+
+      case <StrCon S>: return S
+
+      case <PICO-ID Id>: return valueOf(Id)
+
+      case <EXP exp1> + <EXP exp2>: {
+           Natural nat1 = evalExp(exp1);
+           Natural nat2 = evalExp(exp2);
+           return nat1 + nat2;
+      }
+      case <EXP exp1> - <EXP exp2>: {
+           Natural nat1 = evalExp(exp1);
+           Natural nat2 = evalExp(exp2);
+           return nat1 + nat2;
+      }
+      case <EXP exp1> || <EXP exp2>: {
+           StrCon str1 = evalExp(exp1);
+           StrCon str2 = evalExp(exp2);
+           return concat(str1, str2);
+      }
+   } 
+}

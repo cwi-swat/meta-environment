@@ -2,7 +2,7 @@ module Pico-constant-propagation
 
 imports pico/syntax/Pico 
         Pico-controlflow 
-        Pico-use-def
+        Pico-use-def;
 
 fun Boolean is-constant(EXP E) {
    switch E {
@@ -15,18 +15,18 @@ fun Boolean is-constant(EXP E) {
 }
 
 fun PROGRAM cp(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    rel[PICO-ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
 
     rel[PICO-ID, EXP] replacements = 
       {<Id2, E> | STATEMENT S : P,
                   [| <PICO-ID Id> := <EXP E> |] := S,
                   is-constant(E),
-                  PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
+                  PICO-ID Id2 : reachX({S},Defs{Id},Pred),
                   Id2 == Id 
       };  
  
     visit P {
-     case <PICO-ID Id>: if({ EXP E } := replacements[Id]) yield E
+     case <PICO-ID Id>: if({ EXP E } := replacements{Id}) yield E
     };  
 }

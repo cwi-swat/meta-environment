@@ -27,6 +27,7 @@ context-free syntax
    "loc"                                                   -> BasicType {cons("loc-type")}
    "any"                                                   -> BasicType {cons("any-type")}
    "term"                                                  -> BasicType {cons("term-type")}
+   "void"                                                  -> BasicType {cons("void-type")}
  
    Type Variable?                                          -> OptLabelledType  
    {OptLabelledType ","}+                                  -> OptLabelledTypes
@@ -35,7 +36,7 @@ context-free syntax
    "rel" "[" OptLabelledTypes "]"                          -> StructuredType {cons("rel-type")}
    "tuple" "(" OptLabelledType "," OptLabelledTypes ")"    -> StructuredType {cons("tuple-type")}
 
-   "fun" Type Variable "(" OptLabelledTypes ")"            -> FunctionType {cons("function-type")}
+   "fun" Type Variable "(" OptLabelledTypes? ")"           -> FunctionType {cons("function-type")}
 
    "&" Variable                                            -> TypeVar
 
@@ -48,7 +49,7 @@ context-free syntax
    FunctionType | AbstractType                             -> Type
 
 %% Define reserved words
-   "bool" | "int" | "str" | "loc" | "any" | "term" | 
+   "bool" | "int" | "str" | "loc" | "any" | "term" | "void" |
    "list" | "set" | "rel" | "tuple" | "fun"                -> TypeName {reject}
  
 

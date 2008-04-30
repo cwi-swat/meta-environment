@@ -17,5 +17,6 @@ context-free syntax
    "public" | "private"                                            -> Visibility  {cons("visibility")}
    Visibility? "datatype" Variable  { AbstractType "|"}+ Variable? -> Declaration {cons("datatype-decl")}
    Visibility? "subtype" Variable Type                             -> Declaration {cons("subtype-decl")}
+   Visibility? "global" Type Variable ("=" Expression)?            -> Declaration {cons("global-decl")}
 
    Visibility? FunctionType Statement                              -> Declaration {cons("function-decl")}

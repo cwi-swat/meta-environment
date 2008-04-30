@@ -2,11 +2,12 @@ module Pico-use-def
 
 imports pico/syntax/Pico;
 
-fun rel[EXP,PICO-ID] uses(PROGRAM P) {
-  return {<E,Id> | EXP E : P, PICO-ID Id := E}
+
+fun rel[PICO-ID, EXP] uses(PROGRAM P) {
+  return {<Id, E> | EXP E : P, PICO-ID Id := E}
 }
 
-fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
-  return {<S, Id> | STATEMENT S : P, 
-                        [| <PICO-ID Id> := <EXP Exp> |] := S}
+fun rel[PICO-ID, STATEMENT] defs(PROGRAM P) { 
+  return {<Id, S> | STATEMENT S : P, 
+                    [| <PICO-ID Id> := <EXP Exp> |] := S}
 }

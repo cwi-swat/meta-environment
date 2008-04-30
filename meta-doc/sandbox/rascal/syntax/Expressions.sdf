@@ -132,9 +132,11 @@ context-free syntax
 %% Do we want elseif etc.?
           "=" | "+=" | "-=" | "*=" | "/="                        -> AssignOp
 
+         Expression                                              -> Statement
          Variable AssignOp Expression                            -> Assignment {cons("assign")}
          LeftHandSide "=" Expression                             -> Statement
-         "return" Expression                                     -> Statement {cons("return")}
+         "global" Type Variable ("=" Expression)?                -> Statement
+         "return" Expression?                                    -> Statement {cons("return")}
          "yield" Expression                                      -> Statement {cons("yield")}
          "fail"                                                  -> Statement {cons("fail")}
          "assert" StrCon ":" Predicate                           -> Statement {cons("assert")}
@@ -144,7 +146,7 @@ context-free syntax
 %% Define reserved words:
 %%         "o" | "x" | 
          "true" | "false" |
-         "and" | "or" | "implies" |
+         "and" | "or" | "implies" | "global" | 
          "make" | "case" | "default" | "switch" | "visit" | 
          "solve"  | "for" | "if" | "else" | "return" |
          "yield" | "fail" | "assert"                             -> Variable {reject}

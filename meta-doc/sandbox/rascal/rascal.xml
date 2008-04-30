@@ -400,11 +400,18 @@
           or for statement, have the comprehension, respectively, for
           statement as scope.</para>
         </listitem>
+
+        <listitem>
+          <para>Global variables are declared and optionally initialized at
+          the top level of each module. Functions that use a global variable
+          have to be explicitly declared it as well. The value of a global
+          variable can be used and replaced by all functions that have locally
+          declared it.</para>
+        </listitem>
       </itemizedlist>
 
-      <para><note>
-          <para>To do: global/dynamic variables.</para>
-        </note></para>
+      <para>We will see below that there are certain contexts in which
+      assignments to variables are undone in the case of failure.</para>
     </section>
 
     <section>
@@ -412,7 +419,8 @@
 
       <para>A function declaration consists of a visibility declaration, the
       keyword <literal>fun</literal>, result type, a function name, typed
-      arguments and a function body.</para>
+      arguments and a function body. Function without a result type have type
+      <literal>void</literal>.</para>
 
       <para>A visibility declaration is one of the keywords
       <literal>public</literal> or <literal>private</literal>
@@ -705,9 +713,9 @@
         <listitem>
           <para>A rewrite rule consists of a Pattern followed by =&gt; and a
           replacement expression:<programlisting>case <replaceable>Pattern</replaceable> =&gt; <replaceable>Replacement</replaceable></programlisting>or
-          the pattern is followed by a block of statements:<programlisting>case <replaceable>Pattern</replaceable>: <replaceable>Block</replaceable></programlisting></para>
+          the pattern is followed by a block of statements:<programlisting>case <replaceable>Pattern</replaceable>: <replaceable>Statement</replaceable></programlisting></para>
 
-          <para>A block may consist of declarations and statements.</para>
+          <para>A statement may consist of declarations and statements.</para>
         </listitem>
 
         <listitem>
@@ -737,6 +745,48 @@
         <listitem>
           <para>A "yield" statement that delivers a value during a
           traversal.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>There are two contexts in which side-effects, i.e., assignment to
+      variables, have to be undone in case of failure. These contexts are a
+      rewrite rule in a switch or visit statement. If the pattern on the
+      left-handside of the rule matches there are various
+      possibilities:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>All control flow path through the right-hand side of the rule
+          end in a return statement. In this case, the rule can not fail and
+          all side-effects caused by the execution of the right-hand side are
+          committed.</para>
+        </listitem>
+
+        <listitem>
+          <para>One or more control path can fail. This can be caused by an
+          explicit fail statement or an if-then statement with missing
+          else-branch. In the case of failure all side-effects are
+          undone.<note>
+              <para>Will we undo all side-effects or only the side-effects on
+              global variables?</para>
+            </note></para>
+        </listitem>
+
+        <listitem>
+          <para>If a rule fails there are two possibilities:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>the left-hand side contains a list patterns that has more
+              matching options; the next option is tried.</para>
+            </listitem>
+
+            <listitem>
+              <para>the left-hand side contains a list patterns that has no
+              more matching options or it contains no list pattern at all; the
+              next rule is tried.</para>
+            </listitem>
+          </itemizedlist>
         </listitem>
       </itemizedlist>
     </section>
@@ -1205,6 +1255,49 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     </section>
 
     <section>
+      <title>Renaming in Let using globals</title>
+
+      <para>Here is the same renaming function now using two global
+      variables.<programlisting>module Let-Example
+imports Let;
+
+%% Rename all bound variables in an Exp
+%% Version 2: using global variables
+%% Cnt: global counter to generate fresh variables
+%% rel[Var,Var]: global renaming table
+
+global int Cnt = 0;
+global rel[Var,Var] Rn = {};
+
+fun Var newVar() {
+    global int Cnt;  
+    Cnt = Cnt + 1;
+    return "x" + Cnt
+}
+
+fun Exp rename(Exp E) {
+    global int Cnt;
+    global rel[Var,Var] Rn;
+    switch E {
+    case let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end: {
+         Var Y = newVar();
+         Rn = {&lt;V, Y&gt;} + Rn;
+         Exp E1R = rename(E1);
+         Exp E2R = rename(E2);
+         return make let &lt;Var Y &gt;= &lt;Exp E1R&gt;
+                     in 
+                        &lt;Exp E2R&gt;
+                     end;
+          }
+
+    case &lt;Var V&gt;: return Rn(V)
+
+    default: return E
+    };
+}</programlisting></para>
+    </section>
+
+    <section>
       <title>Concise Pico Typechecker</title>
 
       <para>The following example shows the tight integration ASF with
@@ -1313,7 +1406,8 @@ fun VEnv evalDecls(DECLS Decls){
     visit Decls {
       case &lt;PICO-ID Id&gt; : string:  Env = assign(Env, Id, "")
       case &lt;PICO-ID Id&gt; : natural: Env = assign(Env, Id, 0)
-    }
+    };
+    return Env;
 }
 
 fun VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
@@ -1384,6 +1478,125 @@ fun PICO-VALUE evalExp(Exp exp, VEnv Env) {
     </section>
 
     <section>
+      <title>Pico evaluator with globals</title>
+
+      <para>Here is the same evaluator but now using a global variable to
+      represent the value environment.<programlisting>module Pico-eval
+imports pico/syntax/Pico;
+
+subtype PICO-VALUE int;
+subtype PICO-VALUE str;
+
+subtype VEnv rel[PICO-ID, PICO-VALUE];
+
+fun void evalProgram(PROGRAM P){
+    switch P {
+      case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
+          evalDecls(Decls);
+          evalStatements(Series);
+      }
+   }
+};
+
+%% Improve the following two environment handling functions:
+%% - assign should replace an existing pair
+%% - valueOf shoudl return a single value.
+
+fun void assign(PICO-ID Id, PICO-VALUE V){
+  global Venv Env;
+%%  Env(Id) = V;
+  return;
+}
+
+fun PICO-VALUE valueOf(PICO-ID Id){
+  global Venv Env;
+  return Env(Id); 
+}
+
+fun VEnv evalDecls(DECLS Decls){
+    global VEnv Env = {};
+    visit Decls {
+      case &lt;PICO-ID Id&gt; : string:  assign(Id, "")
+      case &lt;PICO-ID Id&gt; : natural: assign(Id, 0)
+    }
+}
+
+fun void evalStatements({STATEMENT ";"}* Series){
+    global VEnv Env;
+    switch Series {
+      case &lt;STATEMENT Stat&gt;; &lt;{STATEMENT ";"}* Series2&gt;: {
+        evalStatement(Stat);
+        evalStatements(Series2);
+        return
+      }
+      case [| |]: return
+    }
+}
+
+fun void evalStatement(STATEMENT Stat){
+    global VEnv Env;
+    switch Stat {
+      case [| &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt; |]: {
+        PICO-VALUE Val = evalExp(Exp);
+        assign(Id, Val);
+        return
+      }
+
+      case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
+                   else &lt;{STATEMENT ";"}* Stats1&gt; fi:{
+        PICO-VALUE Val = evalExp(Exp);
+        if(Val != 0) {
+          evalStatements(Stats1);
+          return
+        } else {
+          evalStatements(Stats2);
+          return
+        }
+      }
+
+      case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od:{
+        PICO-VALUE Val = evalExp(Exp);
+        if(Val != 0)
+          return
+        else {
+          evalStatements(Stats1);
+          evalStatement(Stat);
+          return
+        }
+      }
+    };
+};
+
+fun PICO-VALUE evalExp(Exp exp) {
+    global VEnv Env;
+    switch exp {
+      case &lt;NatCon N&gt;: return N
+
+      case &lt;StrCon S&gt;: return S
+
+      case &lt;PICO-ID Id&gt;: return valueOf(Id)
+
+      case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;: {
+           Natural nat1 = evalExp(exp1);
+           Natural nat2 = evalExp(exp2);
+           return nat1 + nat2;
+      }
+      case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;: {
+           Natural nat1 = evalExp(exp1);
+           Natural nat2 = evalExp(exp2);
+           return nat1 + nat2;
+      }
+      case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;: {
+           StrCon str1 = evalExp(exp1);
+           StrCon str2 = evalExp(exp2);
+           return concat(str1, str2);
+      }
+   } 
+}
+</programlisting></para>
+    </section>
+
+    <section>
       <title>Pico control flow extraction</title>
 
       <programlisting>module Pico-controlflow
@@ -1438,19 +1651,22 @@ fun CFSEGMENT cflow(STATEMENT Stat){
 
 imports pico/syntax/Pico;
 
-fun rel[EXP,PICO-ID] uses(PROGRAM P) {
-  return {&lt;E,Id&gt; | EXP E : P, PICO-ID Id := E}
+
+fun rel[PICO-ID, EXP] uses(PROGRAM P) {
+  return {&lt;Id, E&gt; | EXP E : P, PICO-ID Id := E}
 }
 
-fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
-  return {&lt;S, Id&gt; | STATEMENT S : P, 
-                        [| &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; |] := S}
+fun rel[PICO-ID, STATEMENT] defs(PROGRAM P) { 
+  return {&lt;Id, S&gt; | STATEMENT S : P, 
+                    [| &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; |] := S}
 }</programlisting>
 
       <para>The above uses a "matching condition" to decompose
       <literal>S</literal>. The problem solved is that we want to have a name
       for the whole assignment <emphasis>and</emphasis> for the lhs
-      identifier.</para>
+      identifier. Also note that, compared to older definitions of these
+      functions, the iudentifier is placed as first element in each
+      tuple.</para>
     </section>
 
     <section>
@@ -1459,40 +1675,19 @@ fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) {
       <para><programlisting>module Pico-uninit
 imports pico/syntax/Pico 
         Pico-controlflow 
-        Pico-use-def
+        Pico-use-def;
 
 fun set[PICO-ID] uninit(PROGRAM P) {
     rel[EXP,PICO-ID] Uses = uses(P);
-    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    rel[PICO-ID, STATEMENT] Defs = defs(P);
     CFSEGMENT CFLOW = cflow(P);
     set[CP] Root = CFLOW.entry;
     rel[CP,CP] Pred = CFLOW.graph;
 
     return {Id | tuple(EXP E, PICO-ID Id) : Uses,
-                 E in reachX(Root, Defs[-,Id], Pred)
+                 E in reachX(Root, Defs{Id}, Pred)
     };
-}</programlisting>Questions (UPDATE THIS):</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>There is a subtyping issue here. De type of
-          <literal>reachX</literal> is:</para>
-
-          <para><literal>set[&amp;T] reachX(set[&amp;T]
-          Start,</literal></para>
-
-          <para><literal> set[&amp;T] Excl, </literal></para>
-
-          <para><literal> rel[&amp;T,&amp;T] Rel)</literal></para>
-
-          <para>but <literal>E</literal> has type <literal>EXP</literal>,
-          <literal>{ROOT}</literal> has type
-          <literal>set[STATEMENT]</literal>, and <literal>cflow</literal> has
-          type <literal>rel[CP,CP]</literal>, with <literal>type CP = EXP |
-          STATEMENT</literal>. It requires proper subtyping, e.g.
-          set[STATEMENT] &lt; set[CP], to type this.</para>
-        </listitem>
-      </itemizedlist>
+}</programlisting></para>
     </section>
 
     <section>
@@ -1502,20 +1697,20 @@ fun set[PICO-ID] uninit(PROGRAM P) {
 
 imports pico/syntax/Pico 
         Pico-controlflow 
-        Pico-use-def
+        Pico-use-def;
 
 fun PROGRAM cse(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    rel[PICO-ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
     rel[EXP, PICO-ID] replacements = 
        {&lt;E2, Id&gt; | STATEMENT S : P,
-                   &lt;PICO-ID Id&gt; := &lt;EXP E&gt; := S,
+                   [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] := S,
                    Id notin E,
-                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+                   EXP E2 : reachX({S}, Defs{Id}, Pred)
        };
  
     visit P {
-      case &lt;EXP E&gt;: if({ PICO-ID Id } := replacements[E]) yield Id
+      case &lt;EXP E&gt;: if({ PICO-ID Id } := replacements{E}) yield Id
     };
 }</programlisting></para>
 
@@ -1541,16 +1736,16 @@ fun PROGRAM cse(PROGRAM P) {
       </itemizedlist>
 
       <para>Note that a slight abbreviation is possible if we introduce
-      labelled patterns (here S):</para>
+      labelled patterns (here S): [UNDER DISCUSSION]</para>
 
       <programlisting> rel[EXP, PICO-ID] replacements := 
        {&lt;E2, Id&gt; | &lt;PICO-ID Id&gt; := &lt;EXP E&gt; S : P,
                    Id notin E,
-                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+                   EXP E2 : reachX({S}, Defs(Id), Pred)
        };</programlisting>
 
       <para>Also note that we could factor out the assignment pattern to make
-      cse more generic if we introduce patterns a sfirst class
+      cse more generic if we introduce patterns as first class
       citizens:</para>
 
       <programlisting>fun PROGRAM cse(PROGRAM P, pat STATEMENT Assign(PICO-ID Id, EXP E)) {
@@ -1558,7 +1753,7 @@ fun PROGRAM cse(PROGRAM P) {
     rel[EXP, PICO-ID] replacements := 
        {&lt;E2, Id&gt; | Assign S : P,
                    Id notin E,
-                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+                   EXP E2 : reachX({S}, Defs(Id), Pred)
        };
  
  ...
@@ -1588,7 +1783,7 @@ fun PROGRAM cse(PROGRAM P) {
 
 imports pico/syntax/Pico 
         Pico-controlflow 
-        Pico-use-def
+        Pico-use-def;
 
 fun Boolean is-constant(EXP E) {
    switch E {
@@ -1601,19 +1796,19 @@ fun Boolean is-constant(EXP E) {
 }
 
 fun PROGRAM cp(PROGRAM P) {
-    rel[STATEMENT, PICO-ID] Defs = defs(P);
+    rel[PICO-ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
 
     rel[PICO-ID, EXP] replacements = 
       {&lt;Id2, E&gt; | STATEMENT S : P,
                   [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] := S,
                   is-constant(E),
-                  PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
+                  PICO-ID Id2 : reachX({S},Defs{Id},Pred),
                   Id2 == Id 
       };  
  
     visit P {
-     case &lt;PICO-ID Id&gt;: if({ EXP E } := replacements[Id]) yield E
+     case &lt;PICO-ID Id&gt;: if({ EXP E } := replacements{Id}) yield E
     };  
 }</programlisting></para>
 
@@ -1677,9 +1872,9 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
      solve {
            IN  =  {&lt;S, D&gt; | int S : STATEMENT, 
                             Stat P : predecessor(PRED,S), 
-                            Def D : OUT[P]};
+                            Def D : OUT{P}};
            OUT = {&lt;S, D&gt; |  int S : STATEMENT, 
-                            Def D : DEF[S] union (IN[S] \ KILL[S])}
+                            Def D : DEF{S} +  (IN{S} - KILL{S})}
     };
     return IN;
 }</programlisting></para>
@@ -2076,7 +2271,7 @@ fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
       </listitem>
 
       <listitem>
-        <para>Add public/private indications.</para>
+        <para>How is lexical matching incorporated?</para>
       </listitem>
 
       <listitem>
@@ -2136,7 +2331,9 @@ fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
   <section>
     <title>Graveyard</title>
 
-    <para>Don't read the following sections.</para>
+    <para>Don't read the following sections; they are leftovers from earlier
+    versions of this document but may still contain material that can be
+    reused.</para>
   </section>
 
   <section>
@@ -2416,254 +2613,7 @@ fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
   </section>
 
   <section>
-    <title>Renaming in Let using global variables</title>
-
-    <para><programlisting>%% Rename all bound variables in an Exp
-%% Version 2: using a global variable
-%% to generate new variables
-
-fun Var newVar() {
-    global int Cnt := 0   %% Initialize global Cnt on first call 
-                          %% of newVar. This is similar to a 
-                          %% local static var in C.
-    Cnt := Cnt + 1;
-    "x" + Cnt
-}       
-
-%% Rename -- Version 2
-
-fun Exp rename(Exp E, rel[Var,Var] Rn) {
-    Var V, Y;
-
-    switch E {
-
-    [| let $V = $E1 in $E2 end |] =&gt;
-           [| let $Y = $(rename(E1, Rn)) 
-              in 
-                $(rename(E2, {&lt;V, Y&gt;} union Rn)) 
-              end
-           |]
-       when Y := newVar()
-
-    [| $V |] =&gt; V1
-       when { V1 } == Rn[V]
-  
-    [| $E |] =&gt; E
-    }
-}
-
-%% Rename -- Version 3, with Rn also as global variabele
-
-fun Var newVar() {
-    global int Cnt := 0   
-    Cnt := Cnt + 1;
-    "x" + Cnt
-}       
-
-fun Exp rename(Exp E) {
-    global rel[Var, Var] Rn := {}
-    Var V, Y;
- 
-    switch E {
-    [| let $V = $E1 in $E2 end |] =&gt;
-           [| let $Y = $rename(E1) 
-              in 
-                 $rename(E2) 
-              end
-           |]
-       when Y := newVar,
-            Rn :=  {&lt;V, Y&gt;} union Rn
-              
-    [| $V |] =&gt; V1
-       when { V1 } == Rn[V]
- 
-    [| $E |] = E
-    }
-}
-
-%% Question: how to reset the value of global variables?
-%% Idea: model them as arguments:
-%% - fun Var newVar(global int Cnt := 0) { ... }
-%% and allow calls without arguments (as in above example) or
-%% with arguments:
-%% - newVar(13)
-%% which resets the value of Cnt.</programlisting></para>
-  </section>
-
-  <section>
     <title>Outdated examples</title>
-
-    <section>
-      <title>Pico Typecheck using dynamically scoped variables
-      (OUTDATED)</title>
-
-      <para>The following example details the use of a dynscope global
-      variable for building up and using an environment. Notice that we
-      introduce <emphasis>void</emphasis> functions as a
-      result.<programlisting>module Typecheck
-
-imports Pico-syntax
-
-hiddens
-
-type Env = rel[PICO-ID,TYPE]
-
-exports
-
-fun Bool tc(PROGRAM P) {
-    dyn Env Env := {};
-    switch P {
-      [| begin $Decls $Stats end |] =&gt; tcs(Stats)
-         when Env := tcd(Decls)
-    }
-}
-
-fun Env tcd(Decls Decls) {
-    {&lt; Id, Type&gt; | [| $(PICO-ID Id) : $(TYPE Type) |] : Decls}
-}
-
-fun Bool tcs(Stats Stats) {
-    Stat Stat;
-    Stats Stats;
-    switch (Stats) {
-    [| |]                =&gt; true
-
-    [| $Stat ; $Stats |] =&gt; tcst(Stat) + tcst(Stats)
-    }
-}
-
-fun Bool tcst(Stat Stat) {
-    Id Id;
-    Exp Exp;
-    Stats Stats, Stats1, Stats2;
-    switch (Stat) {
-      [| $Id := $Exp |] =&gt; type-of(Exp, Type)
-         when {&lt;Id, Type&gt;} := Env[Id]
-
-      [| if $Exp then $Stats1 else $Stats2y fi |] =&gt;
-         type-of(Exp, natural) + tcs(Stats1) + tcs(Stats2)
-
-      [| while $Exp do $Stats od |] =&gt;
-         type-of(Exp, natural) + tcs(Stats)
-    }
-}
-
-fun list[Error] type-of(Exp E, TYPE Type) {
-    NatCon NatCon;
-    StrCon StrCon;
-    Id Id;
-    Exp Exp;
-
-    switch (E) {
-      [| $NatCon |] =&gt; []
-         when Type == natural
-
-      [| $StrCon |] =&gt; []
-         when Type == string
-
-      [| $Id |] =&gt; [] 
-         when {&lt;Id,Type2&gt;} := Env[Id],
-              Type2 == Type
-            
-      [| $Exp |] =&gt; [error("Incorrect type")]
-    }
-}</programlisting></para>
-    </section>
-
-    <section>
-      <title>Pico eval with dynamically scoped variables (OUTDATED)</title>
-
-      <para>A Pico evaluator using dynamic variables. It still uses functions
-      that return VEnvs (this is not consistent and should be changed).</para>
-
-      <programlisting>fun VEnv evalProgram(Program p) {
-    dyn VEnv venv;
-    Decls decls;
-    Series series;
-
-    switch p {
-      [| begin $decls $series end |] =&gt; evalStatements(series)
-         when venv := evalDecls(decls);
-    }
-}
-
-fun VEnv evalDecls(Decls decls) {
-    Id-Type* idtypes;
-    switch decls {
-      [| declare $idtypes |] =&gt; evalIdTypes(idtypes)
-    }
-}
-
-fun VEnv evalIdTypes(Id-Type* idtypes) {
-    Id id;
-    Id-Type* tail;
-    switch idtypes { 
-      [| $id : natural, $tail |] =&gt; store(evalIdTypes(tail),id,0)
-  
-      [| $id : string, $ tail |] =&gt; store(evalIdTypes(tail),id,"")
-
-      [| |] =&gt; []
-    }
-}
-
-fun VEnv evalStatements(Statement* series) {
-    Statement stat; Statement* stats;
-    switch series  {
-      [| $stat; $stats |] =&gt; venv
-         when venv := evalStatement(stat),
-              venv := evalStatements(stats)
-      [| |] =&gt; venv
-    }
-}
-
-fun VEnv evalStatement(Statement stat) {
-    Exp exp;
-    Series series, series1, series2;
-    
-    switch stat {    
-      [| if $exp then $series1 else $series2 fi |] =&gt; 
-         evalStatements(series1)
-         when evalExp(exp, venv) != 0
-
-      [| if $exp then $series1 else $series2 fi |] =&gt; 
-         evalStatements(series2)
-         when evalExp(exp, venv) == 0
-        
-      [| while $exp do $series od |] =&gt; venv
-         when evalExp(exp, venv) == 0
-
-      
-      [| while $exp do $series od |] =&gt; 
-         evalStatement([|while $exp do $series od |])
-         when evalExp(exp, venv) != 0,
-              venv := evalStatements(series)
-    }
-}
-
-fun VEnv evalExp(Exp exp) {
-    Exp exp1, exp2;
-    Natural nat1, nat2;
-    StrCon str1, str2, str3;
-
-    switch exp {
-      [| $exp1 + $exp2 |] =&gt; nat1 + nat2
-         when nat1 := eve(exp1),
-              nat2 := eve(exp2)
-       
-      [| $exp1 - $exp2 |] =&gt; nat1 -/ nat2
-         when nat1 := eve(exp1),
-              nat2 := eve(exp2)
-        
-        
-      [| $exp1 \|\| $exp2 |] =&gt; str3
-         when str1 := eve(exp1),
-              str2 := eve(exp2),
-              str3 := concat(str1, str2)
-
-      [| $exp1 |] =&gt; nil-value     %% default "equation"
-   }
-}</programlisting>
-    </section>
 
     <section>
       <title>Generating Graph files in Dot format</title>
