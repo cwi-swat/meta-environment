@@ -16,7 +16,7 @@ context-free syntax
          "<" Type? Variable  ">"                   -> CPatternSymbol
          "[|" CPatternSymbol* "|]"                 -> QuotedCPattern
          QuotedCPattern                            -> CPattern
-         Type                                      -> APattern
+         AbstractValue                             -> APattern
 
          CPattern | APattern                       -> Pattern
 

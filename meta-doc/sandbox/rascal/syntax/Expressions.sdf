@@ -16,18 +16,37 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression LeftHandSide Predicate SimpleGenerator Generator
-      Strategy Signature Statement Rule Assignment AssignOp
+sorts Expression LeftHandSide Predicate SimpleGenerator Generator FieldSelection Callable
+      Strategy Signature Statement Rule Assignment AssignOp Value AbstractValue
 
 context-free syntax
-         "(" Expression ")"                                      -> Expression {bracket}
-         BoolCon                                                 -> Expression {cons("boolcon-exp")}
-         IntCon                                                  -> Expression {cons("intcon-exp")}
-         StrCon                                                  -> Expression {cons("strcon-exp")}
-         Area                                                    -> Expression {cons("areacon-exp")}
-	Variable "(" {Expression ","}* ")"                      -> Expression {cons("fun-map-call")}
-         Variable "{" Expression "}"                             -> Expression {cons("multi-map-call")}
+%% Basic values
+         BoolCon                                                 -> Value {cons("boolcon-exp")}
+         IntCon                                                  -> Value {cons("intcon-exp")}
+         StrCon                                                  -> Value {cons("strcon-exp")}
+         Area                                                    -> Value {cons("areacon-exp")}
+
+%% Abstract values used for datatypes
+         Value                                                   -> AbstractValue
+         Variable                                                -> AbstractValue
+         Variable "(" {AbstractValue ","}* ")"                   -> AbstractValue
+         "[" {AbstractValue ","}* "]"                            -> AbstractValue
+         "{" {AbstractValue ","}* "}"                            -> AbstractValue
+         "<" {AbstractValue ","}+ ">"                            -> AbstractValue
+
+%% Expressions
+         Value                                                   -> Expression
+        "(" Expression ")"                                       -> Expression {bracket}
 	Variable                                                -> Expression {cons("variable")}
+
+         Variable ("." Variable)+                                -> FieldSelection
+         FieldSelection                                          -> Expression
+
+         Variable | FieldSelection                               -> Callable
+
+	Callable "(" {Expression ","}* ")"                      -> Expression {cons("fun-or-map-call")}
+         Callable "{" Expression "}"                             -> Expression {cons("multi-map-call")}
+ 
 
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
@@ -42,14 +61,11 @@ context-free priorities
          Expression "+"                                          -> Expression {cons("trans1")}
        } >
 
-         Expression "." Variable                                 -> Expression {cons("field")} > 
+%%         Expression "." Variable                                 -> Expression {cons("field")} > 
          Expression "o" Expression                               -> Expression {cons("comp"), left} >
          Expression "x" Expression                               -> Expression {cons("prod"), left} >
 
 %% Set operators
-%%         Expression "inter" Expression                           -> Expression {cons("inter"), left} >
-%%         Expression "union" Expression                           -> Expression {cons("union"), left} >
-%%         Expression "\\" Expression                              -> Expression {cons("diff"), left} >
         "#" Expression                                           -> Expression {cons("size")} >
 
 %% Arithmetic operators
@@ -84,13 +100,10 @@ context-free syntax
 	LeftHandSide ":=" Expression                            -> Predicate {cons("match")}
 	LeftHandSide "!:=" Expression                           -> Predicate {cons("not-match")}
          LeftHandSide "<-" Expression                            -> Predicate {cons("match-assign")}
+	IdCon "(" {Expression","}* ")"                          -> Predicate {cons("pred-fun-call")}
+	"(" Predicate ")"                                       -> Predicate {bracket}
 
 context-free syntax
-%% Image operators 
-         Expression "[" Expression "]"                           -> Expression {cons("limage")}
-         Expression "[" Expression "," "-" "]"                   -> Expression {cons("limage2")}
-         Expression "[-," Expression "]"                         -> Expression {cons("rimage")}
-
 %% Generators
          ("first" | "all")? ("td" | "bu")?                       -> Strategy
 	LeftHandSide ":" Strategy Expression                    -> SimpleGenerator {cons("generator")}
@@ -108,12 +121,8 @@ context-free syntax
          "exists" "(" SimpleGenerator "|" Predicate ")"          -> Expression {cons("exists")}
          "forall" "(" SimpleGenerator "|" Predicate ")"          -> Expression {cons("forall")}
 
-	 IdCon "(" {Expression","}* ")"                         -> Predicate {cons("pred-fun-call")}
-
-	"(" Predicate ")"                                       -> Predicate {bracket}
-
 context-free syntax
-%% Switch and visit and solve
+%% Rules, Switch, visit and solve
           QuotedCPattern                                         -> Expression
          "make" CPattern                                         -> Expression
          "make" APattern                                         -> Expression

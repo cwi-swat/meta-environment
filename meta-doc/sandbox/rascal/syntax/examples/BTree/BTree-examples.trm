@@ -1,22 +1,22 @@
-module Tree-Examples
-imports Tree-syntax; 
+module BTree-Examples
+imports BTree-syntax; 
 
-%% Ex1: Count leaves in a TREE
+%% Ex1: Count leaves in a BTREE
 %% Idea: int N : T generates alle Integer leaves in the tree
 %% # is the built-in length-of operator
 
-fun int cnt(TREE T) {
+fun int cnt(BTREE T) {
     return #{N | int N : T}
 }
 
 %% Ex1: an equivalent,  more purist, version of the same function:
-fun int cnt(TREE T) {
+fun int cnt(BTREE T) {
     return #{N | <Integer N> : T}
 }
 
 %% Ex1: alternative solution using trafo functions:
 
-fun int cnt(TREE T) {
+fun int cnt(BTREE T) {
     int C = 0;
     visit T {
       case <Integer N> : C = C+1
@@ -24,19 +24,19 @@ fun int cnt(TREE T) {
     return C;
 }
 
-%% Ex2: Sum all leaves in a TREE
+%% Ex2: Sum all leaves in a BTREE
 %% NB sum is a built-in that adds all elements in a set or list.
 %% Here we see immediately the need to identify
 %% - the built-in sort "int"
 %% - the syntactic sort "Integer"
 
-fun int sumtree(TREE T) {
+fun int sumtree(BTREE T) {
     return sum({N | int N : T});
 }
 
 %% Ex2: using accumulator
 
-fun int cnt(TREE T) {
+fun int cnt(BTREE T) {
     int C = 0;
     visit T {
       case <Integer N> : C = C+N
@@ -44,7 +44,7 @@ fun int cnt(TREE T) {
     return C;
 }
 
-%% Ex3: Increment all leaves in a TREE
+%% Ex3: Increment all leaves in a BTREE
 %% Idea: using the construct "visit T { ... }" visit all leaves in the 
 %% tree T that match an integer and replace each N in T by N+1.
 %% The expression as a whole returns the modified term.
@@ -53,7 +53,7 @@ fun int cnt(TREE T) {
 %% - from int to NAT to convert the result of addition into 
 %%   a NAT tree
 
-fun TREE inc(TREE T) {
+fun BTREE inc(BTREE T) {
     visit T {
       case <Integer N>: yield (N + 1)
     };
@@ -71,26 +71,26 @@ fun TREE inc(TREE T) {
 %% declaration of a travesal function (as in ASF+SDF) but to 
 %% its use.
 
-fun TREE frepl(TREE T) {
+fun BTREE frepl(BTREE T) {
     visit all bu T {
-      case g(<TREE T1>, <TREE T2>) => make i(<TREE T1>, <TREE T2>)
+      case g(<BTREE T1>, <BTREE T2>) => make i(<BTREE T1>, <BTREE T2>)
     };
 }
 
 %% Ex5: Deep replacement of g by i
 
-fun TREE frepl(TREE T) {
+fun BTREE frepl(BTREE T) {
     visit first bu T {
-      case g(<TREE T1>, <TREE T2>) => make i(<TREE T1>, <TREE T2>)
+      case g(<BTREE T1>, <BTREE T2>) => make i(<BTREE T1>, <BTREE T2>)
     };
 }
 
 %% Ex6: shallow replacement of g by i (i.e. only outermost 
 %% g's are replaced); 
 
-fun TREE srepl(TREE T) {
+fun BTREE srepl(BTREE T) {
     visit first td T {
-      case g(<TREE T1>, <TREE T2>) => make i(<TREE T1>, <TREE T2>)
+      case g(<BTREE T1>, <BTREE T2>) => make i(<BTREE T1>, <BTREE T2>)
     };
 }
 
@@ -98,14 +98,14 @@ fun TREE srepl(TREE T) {
 %% Ex7: We can also add the first/td directives to all generators 
 %% (where "all td" would be the default):
 
-fun set[TREE] find-outer-gs(TREE T) {
+fun set[BTREE] find-outer-gs(BTREE T) {
     return
     { S | STATEMENT S : first td T, 
-          g(<TREE T1>, <TREE T2>) := S };
+          g(<BTREE T1>, <BTREE T2>) := S };
 }
  
 %% Ex8: accumulating transformer that increments leaves with amount D and counts them
-fun tuple(int, TREE) count-and-inc(TREE T, int C, int D) {
+fun tuple(int, BTREE) count-and-inc(BTREE T, int C, int D) {
     int C = 0;
     
     visit T {

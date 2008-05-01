@@ -1,14 +1,14 @@
-module Tree-syntax
+module BTree-syntax
 imports basic/Integers
 
 exports 
-  sorts TREE
+  sorts BTREE
   context-free syntax
-    Integer         -> TREE
-    f(TREE,TREE)    -> TREE
-    g(TREE,TREE)    -> TREE
-    h(TREE,TREE)    -> TREE
-    i(TREE,TREE)    -> TREE
+    Integer           -> BTREE
+    f(BTREE,BTREE)    -> BTREE
+    g(BTREE,BTREE)    -> BTREE
+    h(BTREE,BTREE)    -> BTREE
+    i(BTREE,BTREE)    -> BTREE
 
 %% Generated syntax
 hiddens
@@ -20,5 +20,5 @@ hiddens
 	EmbedSortAsVar[Integer]        %% Do not include as Pattern to avoid the ambiguity
                                         %%    Integer -> Pattern
                                         %% and
-                                        %%    Integer -> TREE -> Pattern
-	EmbedSortAsPatternAndVar[TREE]
+                                        %%    Integer -> BTREE -> Pattern
+	EmbedSortAsPatternAndVar[BTREE]

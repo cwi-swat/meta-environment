@@ -15,13 +15,8 @@ fun VEnv evalProgram(PROGRAM P){
    }
 };
 
-%% Improve the following two environment handling functions:
-%% - assign should replace an existing pair
-%% - valueOf shoudl return a single value.
-
 fun VEnv assign(VEnv Env, PICO-ID Id, PICO-VALUE V){
-%%  Env(Id) = V;
-  return Env;
+  return Env +> {<Id, V>}  %% we need a nice tuple replacement operator here
 }
 
 fun PICO-VALUE valueOf(VEnv Env, PICO-ID Id){
