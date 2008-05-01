@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -78,7 +78,7 @@
   <section>
     <title>Introduction</title>
 
-    <para> The goals of the envisaged language (with working name Rascal)
+    <para>The goals of the envisaged language (with working name Rascal)
     are:</para>
 
     <itemizedlist>
@@ -142,13 +142,13 @@
         </listitem>
 
         <listitem>
-          <para>R2: Backward compatible with ASF+SDF. We need to port old
-          ASF+SDF definitions to Rascal.</para>
+          <para>R2: Old ASF+SDF programs are translatable to Rascal.</para>
         </listitem>
 
         <listitem>
-          <para>R3: Compilation speed: parsetable generation is a major
-          bottleneck in current ASF+SDF. This needs to be fixed.</para>
+          <para>R3: Parsing and compilation speed needs to be faster than
+          ASF+SDF, comparable to the speed of the Java compiler. Parsetable
+          generation is a major bottleneck in current ASF+SDF.</para>
         </listitem>
 
         <listitem>
@@ -157,7 +157,8 @@
         </listitem>
 
         <listitem>
-          <para>R5: Functional (no side-effects).</para>
+          <para>R5: (<emphasis role="bold">dropped</emphasis>) Functional (no
+          side-effects), dropped due to incompatibility with R7, R6</para>
         </listitem>
 
         <listitem>
@@ -185,13 +186,19 @@
         </listitem>
 
         <listitem>
-          <para>R11: Features are orthogonal: try to keep the number of ways
-          to write down a program minimal</para>
+          <para>R11: Try to keep features orthogonal: try to keep the number
+          of ways to write down a program minimal. </para>
         </listitem>
 
         <listitem>
           <para>R12 (<emphasis role="bold">new</emphasis>): Minimize possible
           syntactic ambiguities; resolve them by type inference.</para>
+        </listitem>
+
+        <listitem>
+          <para>R13 (<emphasis role="bold">new</emphasis>): Can integrate with
+          Eclipse analysis and refactoring infra-structure, such as providing
+          synopsis and previews of source-to-source transformations. </para>
         </listitem>
       </itemizedlist></para>
   </section>
@@ -234,7 +241,7 @@
       </listitem>
     </itemizedlist>
 
-    <para>These elements are summarized in the following subsections. </para>
+    <para>These elements are summarized in the following subsections.</para>
 
     <section>
       <title>Modules</title>
@@ -911,41 +918,48 @@ fun Bool reduce(Bool B) {
         <title>Booleans with implicit reduce (NOT YET DECIDED)</title>
 
         <para>In ASF, values are always reduced to a normal form when they are
-        created. In order to approximate this bahaviour we introduce the
-        possibility to associate a reduction function with all values of a
-        sort:</para>
+        created. For some applications this normalization or canonicalization
+        feature is very handy. We introduce the following syntax, which can
+        also help in the transformation of old ASF+SDF programs to
+        Rascal:</para>
 
-        <para><programlisting>simplify Bool B as reduce(B)</programlisting>with
-        as meaning that the (sort preserving) function
-        <literal>reduce</literal> is applied whenever a value of type
-        <literal>Bool</literal> is constructed. A notational alternative is to
-        include this in the function declaration:<programlisting>reduction fun Bool reduce(Bool B) { ... }</programlisting></para>
+        <para><programlisting>rules (Bool) {
+  and(true, &lt;Bool B2&gt;) =&gt; B2
+  and(false, Bool) =&gt; false
+}
+%% or
+rules (Bool) { 
+  and(true, &lt;Bool B2&gt;) : { yield B2 }
+  and(false, Bool) : { yield false }
+}</programlisting>These rules are applied on every Bool that is constructed.
+        Like in ASF+SDF it is the responsibility of the programmer to make
+        sure the rules are confluent and terminating. The body of a rules
+        definition has the same syntax and semantics as the switch construct,
+        allowing backtracking, side-effects and checking of conditions.
+        </para>
 
         <para>There are some issues here:</para>
 
         <itemizedlist>
           <listitem>
-            <para>It should be forbidden that more than one simplify applies
-            for the same sort. This situation could arise due to
-            imports.</para>
+            <para>It should be dissallowed to have private rules on public
+            constructors; normalization is a global effect on public
+            data-structures. On the other hand, constructors that are local to
+            a module may have some private rules applied to them; but public
+            rules on private constructors are dissallowed too.</para>
           </listitem>
 
           <listitem>
-            <para>We could (optionally) forbid or warn for the explicit use of
-            a function that is used as simplifier.</para>
-          </listitem>
-
-          <listitem>
-            <para>We have not yet addressed visibility (public/private/hidden
-            etc) of names. We should be carefull in determining the visibility
-            and scope of the simplify construct.</para>
-          </listitem>
-
-          <listitem>
-            <para>It is interesting that the simplify construct allows us to
-            explicitly use certain sorts as free terms or as terms that are to
-            be simplfied, depending on the context. This flexibility is absent
-            in ASF.</para>
+            <para>We previously had other ideas about this feature. We
+            introduced a reduce keyword that would call a certain named
+            function at the construction of every Bool. The problem with that
+            feature is that the operational semantics (in the eyes of the
+            Rascal programmer) really looks like first some term is to be
+            created, and then a function will be applied to normalize it. In
+            reality though, we want to normalize the terms in an innermost
+            fashion, and at construction time, so that the terms on the
+            left-hand side of the rules are never actually created or
+            allocated.</para>
           </listitem>
         </itemizedlist>
       </section>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article [
+<!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
 <!ENTITY euro "&#8364;">
@@ -14,8 +14,7 @@
          xmlns:svg="http://www.w3.org/2000/svg"
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
-         xmlns:db="http://docbook.org/ns/docbook"
-         xml-id="extending-meta-environment">
+         xmlns:db="http://docbook.org/ns/docbook">
   <title>The Extension Points of The Meta-Environment</title>
 
   <info>
@@ -495,9 +494,9 @@
     Meta-Environment packages have a similar package structure. For
     extensions, we advise to reuse this design. This will enable easy
     integration and deployment of your extension. For details regarding the
-    build tools for Meta-Environment package see the <link linkend="bla"><uri
-    xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/project/build-environment.html">Build
-    Environment documentation</uri></link>.</para>
+    build tools for Meta-Environment package see the <link
+    xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/project/build-environment.html">Meta-Environment
+    Build Environment document</link>.</para>
 
     <para>Every package corresponds to a module in a version control system,
     and contains at least the following files.</para>
