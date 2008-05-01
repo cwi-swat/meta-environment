@@ -675,7 +675,7 @@
 
               <listitem>
                 <para>For a binary relation R that is a map (i.e. it
-                associated a single value with each domain element) R(n),
+                associates a single value with each domain element) R(n),
                 returns the single image value corresponding with n.</para>
               </listitem>
 
@@ -685,7 +685,7 @@
               </listitem>
 
               <listitem>
-                <para>The Rscript image notation R[n] and R[-,n] will be
+                <para>The Rscript image notation R[n] and R[-,n] are
                 discontinued.</para>
               </listitem>
             </itemizedlist>
@@ -729,7 +729,7 @@
           it provides <emphasis role="bold">only</emphasis> matching at the
           top level of the subject term and does not traverse it. The type of
           each pattern must be identical to the type of the subject term (or
-          be a subtype of it).</para>
+          be a subtype of it). It is an error if no case matches.</para>
         </listitem>
 
         <listitem>
@@ -2307,24 +2307,8 @@ fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
       </listitem>
 
       <listitem>
-        <para>Dynamic variables need more thought; do we really want them?
-        [Proposal: let's do without them.]</para>
-      </listitem>
-
-      <listitem>
-        <para>The relation (no pun intended) between local variable
-        declarations in functions, patterns and comprehensions has to be
-        established.</para>
-      </listitem>
-
-      <listitem>
         <para>How do we identify built-in sorts (bool, int, etc) with their
         syntactic counterparts?</para>
-      </listitem>
-
-      <listitem>
-        <para>What happens if no case in a switch matches? Some kind of
-        failure? How does it propagate? Runtime error?</para>
       </listitem>
 
       <listitem>
@@ -2338,8 +2322,7 @@ fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
 
       <listitem>
         <para>Some clean up of Rscript notation (operators "o" and "x" should
-        go, improve the image notation. Why "inter" and "union" but no "diff"
-        (that is written as "\"?).</para>
+        go).</para>
       </listitem>
 
       <listitem>
