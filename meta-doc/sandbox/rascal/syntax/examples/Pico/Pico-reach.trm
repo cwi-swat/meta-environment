@@ -3,9 +3,13 @@ module Pico-reaching-defs
 subtype Def  tuple(Stat theStat, Var theVar);
 subtype Use  tuple(Stat theStat, Var theVar);
 
-fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { return P[-,S] }
+fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
+    return P[-,S] %% outdated image operator
+}
 
-fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { return P[S,-] }
+fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
+    return P[S,-]
+}
 
 fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS, 
                                         rel[Stat,Stat] PRED) {

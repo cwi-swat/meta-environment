@@ -35,7 +35,8 @@ fun STable value(STable ST, ScopeId scope, Name N){
 fun STable update(STable ST, Name N, Value V){
   ScopeId scope = ST.scope;
   ScopeMap smap = ST.scopes(scope) + {<N,V>};
-  return new(scope, ST.scopes + (ST.scopes(scope) + {<scope, smap>}));
+  return new(scope, ST.scopes + 
+                    (ST.scopes(scope) + {<scope, smap>}));
 }
 
 %% Get, in the current scope, the value of a variable

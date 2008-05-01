@@ -1,6 +1,7 @@
 module Bubble-Gen
 
-fun &Elem* sort(&Elem* Elements, fun bool GreaterThan(&Elem, &Elem)){
+fun &Elem* sort(&Elem* Elements, 
+                fun bool GreaterThan(&Elem, &Elem)){
    
   visit repeat Elements {
       case <Elem E1> <Elem E2>: 

@@ -8,8 +8,9 @@ subtype Env rel[PICO-ID,TYPE];
 fun list[Error] tcp(PROGRAM P) {
     switch P {
       case begin <DECLS Decls> <{STATEMENT ";"}* Series> end: {
-           Env Env = {<Id, Type> | [| <PICO-ID Id> : <TYPE Type> |] : Decls};
-           return [ tcst(S, Env) | Stat S : Series ]     %% list comprehension
+           Env Env = {<Id, Type> | 
+                      [| <PICO-ID Id> : <TYPE Type> |] : Decls};
+           return [ tcst(S, Env) | Stat S : Series ] 
       }
     };
 }

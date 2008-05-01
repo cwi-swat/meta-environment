@@ -16,7 +16,8 @@ fun VEnv evalProgram(PROGRAM P){
 };
 
 fun VEnv assign(VEnv Env, PICO-ID Id, PICO-VALUE V){
-  return Env +> {<Id, V>}  %% we need a nice tuple replacement operator here
+  return Env +> {<Id, V>}  
+  %% we need a nice tuple replacement operator here
 }
 
 fun PICO-VALUE valueOf(VEnv Env, PICO-ID Id){

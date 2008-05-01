@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -187,7 +187,7 @@
 
         <listitem>
           <para>R11: Try to keep features orthogonal: try to keep the number
-          of ways to write down a program minimal. </para>
+          of ways to write down a program minimal.</para>
         </listitem>
 
         <listitem>
@@ -198,7 +198,7 @@
         <listitem>
           <para>R13 (<emphasis role="bold">new</emphasis>): Can integrate with
           Eclipse analysis and refactoring infra-structure, such as providing
-          synopsis and previews of source-to-source transformations. </para>
+          synopsis and previews of source-to-source transformations.</para>
         </listitem>
       </itemizedlist></para>
   </section>
@@ -899,10 +899,10 @@ datatype Bool or(Bool, Bool);
 
 fun Bool reduce(Bool B) {
     visit bu B {
-      case and(true, Bool B2) =&gt; B2    %% Style 1: Use Variables
+      case and(true, Bool B2) =&gt; B2   %% Style 1: Use Variables
       case and(false, Bool)   =&gt; false
 
-      case or(true, true)     =&gt; true  %% Style 2: Use a truth table
+      case or(true, true)     =&gt; true %% Style 2: Use a truth table
       case or(true, false)    =&gt; true
       case or(false, true)    =&gt; true
       case or(false, false)   =&gt; false
@@ -935,8 +935,7 @@ rules (Bool) {
         Like in ASF+SDF it is the responsibility of the programmer to make
         sure the rules are confluent and terminating. The body of a rules
         definition has the same syntax and semantics as the switch construct,
-        allowing backtracking, side-effects and checking of conditions.
-        </para>
+        allowing backtracking, side-effects and checking of conditions.</para>
 
         <para>There are some issues here:</para>
 
@@ -1089,8 +1088,8 @@ fun int cnt(BTREE T) {
 }
 
 %% Ex3: Increment all leaves in a BTREE
-%% Idea: using the construct "visit T { ... }" visit all leaves in the 
-%% tree T that match an integer and replace each N in T by N+1.
+%% Idea: using the construct "visit T { ... }" visit all leaves in
+%% thetree T that match an integer and replace each N in T by N+1.
 %% The expression as a whole returns the modified term.
 %% Note that two conversions are needed here:
 %% - from int to NAT to match subterms
@@ -1117,7 +1116,8 @@ fun BTREE inc(BTREE T) {
 
 fun BTREE frepl(BTREE T) {
     visit all bu T {
-      case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt; make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
+      case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
+           make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
 }
 
@@ -1125,7 +1125,8 @@ fun BTREE frepl(BTREE T) {
 
 fun BTREE frepl(BTREE T) {
     visit first bu T {
-      case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt; make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
+      case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
+           make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
 }
 
@@ -1134,10 +1135,10 @@ fun BTREE frepl(BTREE T) {
 
 fun BTREE srepl(BTREE T) {
     visit first td T {
-      case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt; make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
+      case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt; 
+           make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
 }
-
 
 %% Ex7: We can also add the first/td directives to all generators 
 %% (where "all td" would be the default):
@@ -1148,7 +1149,8 @@ fun set[BTREE] find-outer-gs(BTREE T) {
           g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) := S };
 }
  
-%% Ex8: accumulating transformer that increments leaves with amount D and counts them
+%% Ex8: accumulating transformer that increments leaves with 
+%% amount D and counts them
 fun tuple(int, BTREE) count-and-inc(BTREE T, int C, int D) {
     int C = 0;
     
@@ -1341,8 +1343,9 @@ subtype Env rel[PICO-ID,TYPE];
 fun list[Error] tcp(PROGRAM P) {
     switch P {
       case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
-           Env Env = {&lt;Id, Type&gt; | [| &lt;PICO-ID Id&gt; : &lt;TYPE Type&gt; |] : Decls};
-           return [ tcst(S, Env) | Stat S : Series ]     %% list comprehension
+           Env Env = {&lt;Id, Type&gt; | 
+                      [| &lt;PICO-ID Id&gt; : &lt;TYPE Type&gt; |] : Decls};
+           return [ tcst(S, Env) | Stat S : Series ] 
       }
     };
 }
@@ -1419,7 +1422,8 @@ fun VEnv evalProgram(PROGRAM P){
 };
 
 fun VEnv assign(VEnv Env, PICO-ID Id, PICO-VALUE V){
-  return Env +&gt; {&lt;Id, V&gt;}  %% we need a nice tuple replacement operator here
+  return Env +&gt; {&lt;Id, V&gt;}  
+  %% we need a nice tuple replacement operator here
 }
 
 fun PICO-VALUE valueOf(VEnv Env, PICO-ID Id){
@@ -1625,13 +1629,16 @@ imports pico/syntax/Pico;
 subtype CP EXP;         %% A Code Point, union of two types
 subtype CP STATEMENT;
 
-subtype CFSEGMENT tuple(set[CP] entry, rel[CP,CP] graph, set[CP] exit);
+subtype CFSEGMENT tuple(set[CP] entry, 
+                        rel[CP,CP] graph, 
+                        set[CP] exit);
 
 fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {
       case &lt;STATEMENT Stat&gt; ; &lt;{STATEMENT ";"}* Stats2&gt;: { 
            &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = cflow(Stat);
-           &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = cflow(Stats2);
+           &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = 
+                                                     cflow(Stats2);
            return &lt;En1, R1 + R2 + (Ex1 x En2), Ex2&gt;
       }
 
@@ -1648,8 +1655,10 @@ fun CFSEGMENT cflow(STATEMENT Stat){
                 
       case [| if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats2&gt; fi |]: {
-          &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = cflow(Stats1);
-           &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = cflow(Stats2);
+           &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = 
+                                                      cflow(Stats1);
+           &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = 
+                                                      cflow(Stats2);
            return &lt; {Exp}, 
                     ({Exp} x En1) + ({Exp} x En2) + R1 + R2,
                     Ex1 + Ex2 
@@ -1768,7 +1777,8 @@ fun PROGRAM cse(PROGRAM P) {
       cse more generic if we introduce patterns as first class
       citizens:</para>
 
-      <programlisting>fun PROGRAM cse(PROGRAM P, pat STATEMENT Assign(PICO-ID Id, EXP E)) {
+      <programlisting>fun PROGRAM cse(PROGRAM P, 
+                pat STATEMENT Assign(PICO-ID Id, EXP E)) {
  ...
     rel[EXP, PICO-ID] replacements := 
        {&lt;E2, Id&gt; | Assign S : P,
@@ -1869,9 +1879,13 @@ fun PROGRAM cp(PROGRAM P) {
 subtype Def  tuple(Stat theStat, Var theVar);
 subtype Use  tuple(Stat theStat, Var theVar);
 
-fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { return P[-,S] }
+fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
+    return P[-,S] %% outdated image operator
+}
 
-fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { return P[S,-] }
+fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
+    return P[S,-]
+}
 
 fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS, 
                                         rel[Stat,Stat] PRED) {
@@ -1943,7 +1957,8 @@ fun STable value(STable ST, ScopeId scope, Name N){
 fun STable update(STable ST, Name N, Value V){
   ScopeId scope = ST.scope;
   ScopeMap smap = ST.scopes(scope) + {&lt;N,V&gt;};
-  return new(scope, ST.scopes + (ST.scopes(scope) + {&lt;scope, smap&gt;}));
+  return new(scope, ST.scopes + 
+                    (ST.scopes(scope) + {&lt;scope, smap&gt;}));
 }
 
 %% Get, in the current scope, the value of a variable
@@ -1961,7 +1976,9 @@ fun STable new-scope(STable ST){
 %% switch to another scope
 fun STable switch-scope(STable ST, ScopeId scope){
   return new(scope, ST.scopes);
-}</programlisting></para>
+}
+
+</programlisting></para>
     </section>
 
     <section>
@@ -2003,12 +2020,14 @@ fun int innerProduct(Vector V1, V2){
 
 fun Integer* sort(Integer* Numbers){
     visit Numbers {
-      case &lt;Integer* Rest1&gt; &lt;Integer N1&gt; &lt;Integer N2&gt; &lt;Integer* Rest2&gt;:
-        if(N1 &gt; N2){
-          return sort(make &lt;Integer* Rest1&gt; 
-                             &lt;Integer N2&gt; &lt;Integer N1&gt; 
-                           &lt;Integer* Rest&gt;);
-        }
+      case &lt;Integer* Rest1&gt; 
+              &lt;Integer N1&gt; &lt;Integer N2&gt; 
+           &lt;Integer* Rest2&gt;:
+           if(N1 &gt; N2){
+              return sort(make &lt;Integer* Rest1&gt; 
+                                  &lt;Integer N2&gt; &lt;Integer N1&gt; 
+                               &lt;Integer* Rest&gt;);
+           }
     };
     return Numbers
 }</programlisting>
@@ -2040,10 +2059,13 @@ fun Integer* sort(Integer* Numbers){
       <para>Here is a generic bubble sort wich uses type parameters
       (&amp;ELEM) and a function parameter.<programlisting>module Bubble-Gen
 
-fun &amp;Elem* sort(Elem* Elements, fun bool GreaterThan(&amp;Elem, &amp;Elem)){
+fun &amp;Elem* sort(&amp;Elem* Elements, 
+                fun bool GreaterThan(&amp;Elem, &amp;Elem)){
    
   visit repeat Elements {
-      &lt;E1&gt; &lt;E2&gt;: if(GreaterThan(E1, E2)) yield &lt;E2&gt; &lt;E1&gt;
+      case &lt;Elem E1&gt; &lt;Elem E2&gt;: 
+        if(GreaterThan(E1, E2)) 
+           yield make &lt;Elem E2&gt; &lt;Elem E1&gt;
 
      }
 }</programlisting>Do we want this generality? What are the implications for

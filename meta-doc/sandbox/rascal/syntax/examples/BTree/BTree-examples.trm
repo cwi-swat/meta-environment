@@ -45,8 +45,8 @@ fun int cnt(BTREE T) {
 }
 
 %% Ex3: Increment all leaves in a BTREE
-%% Idea: using the construct "visit T { ... }" visit all leaves in the 
-%% tree T that match an integer and replace each N in T by N+1.
+%% Idea: using the construct "visit T { ... }" visit all leaves in
+%% thetree T that match an integer and replace each N in T by N+1.
 %% The expression as a whole returns the modified term.
 %% Note that two conversions are needed here:
 %% - from int to NAT to match subterms
@@ -73,7 +73,8 @@ fun BTREE inc(BTREE T) {
 
 fun BTREE frepl(BTREE T) {
     visit all bu T {
-      case g(<BTREE T1>, <BTREE T2>) => make i(<BTREE T1>, <BTREE T2>)
+      case g(<BTREE T1>, <BTREE T2>) =>
+           make i(<BTREE T1>, <BTREE T2>)
     };
 }
 
@@ -81,7 +82,8 @@ fun BTREE frepl(BTREE T) {
 
 fun BTREE frepl(BTREE T) {
     visit first bu T {
-      case g(<BTREE T1>, <BTREE T2>) => make i(<BTREE T1>, <BTREE T2>)
+      case g(<BTREE T1>, <BTREE T2>) =>
+           make i(<BTREE T1>, <BTREE T2>)
     };
 }
 
@@ -90,10 +92,10 @@ fun BTREE frepl(BTREE T) {
 
 fun BTREE srepl(BTREE T) {
     visit first td T {
-      case g(<BTREE T1>, <BTREE T2>) => make i(<BTREE T1>, <BTREE T2>)
+      case g(<BTREE T1>, <BTREE T2>) => 
+           make i(<BTREE T1>, <BTREE T2>)
     };
 }
-
 
 %% Ex7: We can also add the first/td directives to all generators 
 %% (where "all td" would be the default):
@@ -104,7 +106,8 @@ fun set[BTREE] find-outer-gs(BTREE T) {
           g(<BTREE T1>, <BTREE T2>) := S };
 }
  
-%% Ex8: accumulating transformer that increments leaves with amount D and counts them
+%% Ex8: accumulating transformer that increments leaves with 
+%% amount D and counts them
 fun tuple(int, BTREE) count-and-inc(BTREE T, int C, int D) {
     int C = 0;
     

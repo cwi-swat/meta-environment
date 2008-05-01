@@ -7,10 +7,10 @@ datatype Bool or(Bool, Bool);
 
 fun Bool reduce(Bool B) {
     visit bu B {
-      case and(true, Bool B2) => B2   %% Style 1: Use Variables
+      case and(true, Bool B2) => B2  %% Style 1: Use Variables
       case and(false, Bool)   => false
 
-      case or(true, true)     => true  %% Style 2: Use a truth table
+      case or(true, true)     => true %% Style 2: Use a truth table
       case or(true, false)    => true
       case or(false, true)    => true
       case or(false, false)   => false

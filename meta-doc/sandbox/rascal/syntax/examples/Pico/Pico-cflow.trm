@@ -4,13 +4,16 @@ imports pico/syntax/Pico;
 subtype CP EXP;         %% A Code Point, union of two types
 subtype CP STATEMENT;
 
-subtype CFSEGMENT tuple(set[CP] entry, rel[CP,CP] graph, set[CP] exit);
+subtype CFSEGMENT tuple(set[CP] entry, 
+                        rel[CP,CP] graph, 
+                        set[CP] exit);
 
 fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {
       case <STATEMENT Stat> ; <{STATEMENT ";"}* Stats2>: { 
            <set[CP] En1, rel[CP,CP] R1, set[CP] Ex1> = cflow(Stat);
-           <set[CP] En2, rel[CP,CP] R2, set[CP] Ex2> = cflow(Stats2);
+           <set[CP] En2, rel[CP,CP] R2, set[CP] Ex2> = 
+                                                     cflow(Stats2);
            return <En1, R1 + R2 + (Ex1 x En2), Ex2>
       }
 
@@ -27,8 +30,10 @@ fun CFSEGMENT cflow(STATEMENT Stat){
                 
       case [| if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
                    else <{STATEMENT ";"}* Stats2> fi |]: {
-          <set[CP] En1, rel[CP,CP] R1, set[CP] Ex1> = cflow(Stats1);
-           <set[CP] En2, rel[CP,CP] R2, set[CP] Ex2> = cflow(Stats2);
+           <set[CP] En1, rel[CP,CP] R1, set[CP] Ex1> = 
+                                                      cflow(Stats1);
+           <set[CP] En2, rel[CP,CP] R2, set[CP] Ex2> = 
+                                                      cflow(Stats2);
            return < {Exp}, 
                     ({Exp} x En1) + ({Exp} x En2) + R1 + R2,
                     Ex1 + Ex2 
