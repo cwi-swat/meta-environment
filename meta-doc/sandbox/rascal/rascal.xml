@@ -250,6 +250,11 @@
         <listitem>
           <para>Define datatypes, subtypes or functions.</para>
         </listitem>
+
+        <listitem>
+          <para>Be parameterized with the names of formal types that are
+          instantiated with an actual type when the module is imported.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -1886,14 +1891,15 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
 
       <para>Here is a (probably naive) implementation of a symbol table that
       maintains a list of numbered scopes as well as a (Name, Value) mapping
-      in each scope.<programlisting>module SymTable  %%[&amp;Name, &amp;Value]
+      in each scope. Note that we introduce parameterized modules to do this
+      right.<programlisting>module SymTable[Name, Value]
 
 %% A scope-oriented symbol table.
 %% Each scope consists of a map from names to values. 
 %% THis more intended to explore whether this can be expressed
 %% *at all* than that the datatype is well designed.
 
-subtype ScopeMap rel[&amp;Name, &amp;Value];
+subtype ScopeMap rel[Name, Value];
 subtype ScopeId  int
 datatype STable  stable(ScopeId scope, rel[int, ScopeMap] scopes); 
 
@@ -1908,26 +1914,26 @@ fun STable new(ScopeId scope, rel[int, ScopeMap] scopes){
 } 
 
 %% Update, in a given scope, the value of a variable
-fun STable update(STable ST, ScopeId scope, &amp;Name N, &amp;Value V){
+fun STable update(STable ST, ScopeId scope, Name N, Value V){
   X = ST.scopes(scope) + {&lt;N, V&gt;};
   return new(scope, ST.scopes + (ST.scopes(scope) + {&lt;N, V&gt;}));
 }
 
 %% Get, in a given scope, the value of a variable
-fun STable value(STable ST, ScopeId scope, &amp;Name N){
+fun STable value(STable ST, ScopeId scope, Name N){
   ScopeMap smap = ST.scopes(scope);
   return smap(N);
 }
 
 %% update, in the current scope, the value of a variable
-fun STable update(STable ST, &amp;Name N, &amp;Value V){
+fun STable update(STable ST, Name N, Value V){
   ScopeId scope = ST.scope;
   ScopeMap smap = ST.scopes(scope) + {&lt;N,V&gt;};
   return new(scope, ST.scopes + (ST.scopes(scope) + {&lt;scope, smap&gt;}));
 }
 
 %% Get, in the current scope, the value of a variable
-fun STable value(STable ST, &amp;Name N){
+fun STable value(STable ST, Name N){
   ScopeMap smap = ST.scopes(ST.scope);
   return smap(N);
 }
