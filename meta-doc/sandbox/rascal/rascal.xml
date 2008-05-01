@@ -192,13 +192,24 @@
 
         <listitem>
           <para>R12 (<emphasis role="bold">new</emphasis>): Minimize possible
-          syntactic ambiguities; resolve them by type inference.</para>
+          syntactic ambiguities; resolve them by type checking.</para>
         </listitem>
 
         <listitem>
           <para>R13 (<emphasis role="bold">new</emphasis>): Can integrate with
           Eclipse analysis and refactoring infra-structure, such as providing
           synopsis and previews of source-to-source transformations.</para>
+        </listitem>
+
+        <listitem>
+          <para>R14 (<emphasis role="bold">new</emphasis>): no 'null' values,
+          preventing common programming errors</para>
+        </listitem>
+
+        <listitem>
+          <para>R15 (<emphasis role="bold">new</emphasis>): all values
+          immutable, preventing common programming errors and allowing for
+          certain kinds of optimizations</para>
         </listitem>
       </itemizedlist></para>
   </section>
@@ -236,8 +247,9 @@
       </listitem>
 
       <listitem>
-        <para>Statements for providing more advanced control flow in
-        computations.</para>
+        <para>Statements for providing structured control flow and more
+        advanced control flow in computations, such as visitors and fixed
+        point computations</para>
       </listitem>
     </itemizedlist>
 
@@ -277,13 +289,13 @@
         </listitem>
 
         <listitem>
-          <para>There are built-in types (bool, int str, loc) that have a
-          syntactic counterpart (not yet defined how to do this
-          exactly).</para>
+          <para>There are built-in types (bool, int str, loc) that have
+          corresponding values.</para>
         </listitem>
 
         <listitem>
-          <para>There is a catch-all type "Value".</para>
+          <para>There is a single root to the type hierarchy, everything is a
+          "Value".</para>
         </listitem>
 
         <listitem>
@@ -418,11 +430,11 @@
         </listitem>
 
         <listitem>
-          <para>Global variables are declared and optionally initialized at
-          the top level of each module. Functions that use a global variable
-          have to be explicitly declared it as well. The value of a global
-          variable can be used and replaced by all functions that have locally
-          declared it.</para>
+          <para>Global variables are declared and ALWAYS initialized
+          (<emphasis role="bold">new</emphasis>) at the top level of each
+          module. Functions that use a global variable have to be explicitly
+          declared it as well. The value of a global variable can be used and
+          replaced by all functions that have locally declared it.</para>
         </listitem>
       </itemizedlist>
 
@@ -719,7 +731,14 @@
 
         <listitem>
           <para>A "yield" statement that delivers a replacement value during a
-          traversal initiated by a visit statement.</para>
+          traversal initiated by a visit statement, or a switch
+          statement</para>
+        </listitem>
+
+        <listitem>
+          <para>A "fail" statement which jumps to the deepest nested choice
+          point (i.e. a switch or a visit) and tries the next option
+          available. Fail is the dual of return/yield.</para>
         </listitem>
 
         <listitem>
@@ -746,12 +765,13 @@
         </listitem>
 
         <listitem>
-          <para>A "visit" statement corresponds to a traversal function. Given
-          a subject term and a list of rewrite rules it traverses the term.
-          Depending on the precise rules it may perform replacement (mimicking
-          a transformer), update local variables (mimicking an accumulator) or
-          a combination of these two. The visit statement may contain the same
-          strategy options as a generator and also:</para>
+          <para>A "visit" statement corresponds to a traversal function from
+          ASF+SDF. Given a subject term and a list of rewrite rules it
+          traverses the term. Depending on the precise rules it may perform
+          replacement (mimicking a transformer), update local variables
+          (mimicking an accumulator) or a combination of these two. The visit
+          statement may contain the same strategy options as a generator and
+          also:</para>
 
           <itemizedlist>
             <listitem>
@@ -917,11 +937,11 @@ fun Bool reduce(Bool B) {
       <section>
         <title>Booleans with implicit reduce (NOT YET DECIDED)</title>
 
-        <para>In ASF, values are always reduced to a normal form when they are
-        created. For some applications this normalization or canonicalization
-        feature is very handy. We introduce the following syntax, which can
-        also help in the transformation of old ASF+SDF programs to
-        Rascal:</para>
+        <para>In ASF, values are always reduced to a normal form before they
+        are created. For some applications this normalization or
+        canonicalization feature is very handy. We introduce the following
+        syntax, which can also help in the transformation of old ASF+SDF
+        programs to Rascal:</para>
 
         <para><programlisting>rules (Bool) {
   and(true, &lt;Bool B2&gt;) =&gt; B2
