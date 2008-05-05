@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -407,7 +407,7 @@
       <para>As a design strategy we try to offer the option to leave out as
       many type indications as possible.</para>
 
-      <para>The root of the type system is the type Value. It has the
+      <para>The root of the type system is the type named "value". It has the
       following subtypes:</para>
 
       <itemizedlist>
@@ -432,46 +432,40 @@
         </listitem>
 
         <listitem>
-          <para>lists, sets, tuples, and relations of Values.</para>
+          <para>lists, sets, tuples, maps and relations of values.</para>
         </listitem>
 
         <listitem>
-          <para>datatype: all structures defined with a datatype definition.
-          One of the subtypes of datatype is Tree.</para>
+          <para>all structures defined with a datatype definition. One of the
+          subtypes of datatype is called "tree".</para>
 
           <itemizedlist>
             <listitem>
-              <para>Tree is a subtype of datatype and is the type that
-              corresponds with concrete syntax trees (AsFix in the case of the
-              Meta-Environment). Tree has as subtype all types that are
-              derived from SDF definitions, i.e., all notions that are defined
-              using a grammar.</para>
+              <para>Type tree is the type that corresponds with concrete
+              syntax trees (AsFix in the case of the Meta-Environment). Type
+              tree has as subtype all types that are derived from SDF
+              definitions, i.e., all notions that are defined using a
+              grammar.</para>
             </listitem>
 
             <listitem>
-              <para>The type Tree is "special" in the following sense:</para>
+              <para>The type tree is "special" in the following sense:</para>
 
               <itemizedlist>
                 <listitem>
-                  <para>Parsers generates values of type Tree.</para>
+                  <para>Parsers generate values of type tree.</para>
                 </listitem>
 
                 <listitem>
-                  <para>Although the datatype Tree can be defined in Rascal,
-                  its definition is built-in in order to preserve the
-                  consistency with the parser.</para>
+                  <para>Although the type tree can be defined in Rascal, its
+                  definition is built-in in order to preserve the consistency
+                  with the parser.</para>
                 </listitem>
               </itemizedlist>
             </listitem>
           </itemizedlist>
         </listitem>
       </itemizedlist>
-
-      <note>
-        <para>There is inconsistency in naming here. Probably switch to
-        "tree", "value", etc. so that all built-in types are in
-        lowercase.</para>
-      </note>
     </section>
 
     <section>
@@ -484,7 +478,7 @@
       values, which implies that all variables must be initialized at
       declaration time. Also, this implies that all expressions must return a
       value. Especially for functions, this means that all execution paths of
-      a function must have a return statement. </para>
+      a function must have a return statement.</para>
 
       <para>Variables may be introduced at the following syntactic
       positions:</para>
@@ -505,7 +499,7 @@
           <para>Variables in patterns. For patterns in match positions,
           variables are initialized during the match and their scope is the
           rule in which they occur. For patterns in make positions, the values
-          of variables are taken from the local scope. </para>
+          of variables are taken from the local scope.</para>
         </listitem>
 
         <listitem>
@@ -555,7 +549,7 @@
       <para>A function body is a list of statements, optionally separated by
       semi-colons. Each unique control flow path through a function must have
       a return statement, such that each function always returns a proper
-      value. </para>
+      value.</para>
 
       <para>Functions can later be extended:<note>
           <para>Function extension is still under discussion.</para>
@@ -2611,7 +2605,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
         <listitem>
           <para>Rascal has roughly all the high level features of ASF+SDF and
           some more. Old ASF+SDF specifications can be transformed to Rascal
-          programs using a conversion tool. </para>
+          programs using a conversion tool.</para>
         </listitem>
 
         <listitem>
