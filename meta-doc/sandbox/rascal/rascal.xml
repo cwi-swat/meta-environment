@@ -83,6 +83,11 @@
 
     <itemizedlist>
       <listitem>
+        <para>Providing a successor of ASF+SDF that has of all its benefits
+        and fixes all of its shortcomings.</para>
+      </listitem>
+
+      <listitem>
         <para>Separating pure syntax definitions (SDF) from function
         definitions.</para>
       </listitem>
@@ -110,8 +115,8 @@
       </listitem>
 
       <listitem>
-        <para>Unsuprising syntax and concepts. Where possible we will stay
-        close to C and Java notation.</para>
+        <para>Unsurprising concepts, syntax and semantics for a wide audience.
+        Where possible we will stay close to C and Java notation.</para>
       </listitem>
     </itemizedlist>
 
@@ -123,7 +128,8 @@
     consolidate this engineering trade-off. This basically means that we
     include most features of the RScript language into ASF+SDF. Although we
     take these languages as conceptual starting point, Rascal is a completely
-    new design.</para>
+    new design that has an imperative semantics at it's core rather than a
+    functional semantics.</para>
 
     <para>In <xref linkend="section.integration-tscript" /> we will also
     explore the issues when we take integration one step further and also
@@ -171,13 +177,14 @@
         </listitem>
 
         <listitem>
-          <para>R8: List matching (because of R2, influences R7).</para>
+          <para>R8: List matching (because of R2, influences R7, but also very
+          handy for manipulating lists in concrete syntax).</para>
         </listitem>
 
         <listitem>
           <para>R9: Nesting of data-structures: relations can be nested to
-          model nested features of programming languages (such as
-          scoping).</para>
+          model nested features of programming languages (such as scoping),
+          allowing to factor out common code.</para>
         </listitem>
 
         <listitem>
@@ -225,6 +232,58 @@
           from databases, such as the pdb from Eclipse IMP, but possibly also
           from ODBC/JDBC data sources.</para>
         </listitem>
+
+        <listitem>
+          <para>R18 (<emphasis role="bold">new</emphasis>): type safe, but
+          flexible. We want a type system that prevents common programming
+          errors, but still allows ample opportunity for reuse.</para>
+        </listitem>
+
+        <listitem>
+          <para>R19 (<emphasis role="bold">new</emphasis>): syntax safe,
+          programmers should not be allowed to construct programs that are
+          syntactically incorrect w.r.t a certain context-free grammar.</para>
+        </listitem>
+
+        <listitem>
+          <para>R20 (<emphasis role="bold">new</emphasis>): backtracking safe,
+          programmers should not have to deal with the mind boggling feature
+          interactions between side-effects and backtracking.</para>
+        </listitem>
+
+        <listitem>
+          <para>R21 (<emphasis role="bold">new</emphasis>):
+          traceable/debuggable, programmers should be able to easily trace
+          through the execution of a Rascal program using the simplest of
+          debugging tools, like printf statements, and the use of a simple
+          debugging interface which allows to step through the source code and
+          inspect values in a transparent fashion.</para>
+        </listitem>
+
+        <listitem>
+          <para>R22 (<emphasis role="bold">new</emphasis>): minimize the use
+          of type inference, such that the programmer must always declare her
+          intentions by providing types for functions, data-types and
+          variables. This makes debugging easier and providing clear error
+          messages too. When variables are implicitly bound by pattern
+          matching or related functionality, exceptions to this requirement
+          might be made in favor of conciseness.</para>
+        </listitem>
+
+        <listitem>
+          <para>R23 (<emphasis role="bold">new</emphasis>): allow the
+          implementation of reusable modules and functions (i.e. parametric
+          polymorphism and or functions as parameters).</para>
+        </listitem>
+
+        <listitem>
+          <para>R24 (<emphasis role="bold">new</emphasis>): we need something
+          like rewrite rules for implementing data-types that are always
+          canonicalized/normalized. For some analysis algorithms this allows
+          the programmer to implement domain specific optimizations over plain
+          relational calculus or tree visiting that actually needed for
+          scalability.</para>
+        </listitem>
       </itemizedlist></para>
   </section>
 
@@ -235,11 +294,13 @@
 
     <itemizedlist>
       <listitem>
-        <para>Modules to group definitions.</para>
+        <para>Modules to group definitions, proving scopes and visibility
+        constructs</para>
       </listitem>
 
       <listitem>
-        <para>A type system and corresponding values.</para>
+        <para>A type system and corresponding values, providing parameterized
+        types, polymorphic functions and higher-order parameters.</para>
       </listitem>
 
       <listitem>
@@ -281,7 +342,7 @@
         </listitem>
 
         <listitem>
-          <para>Define datatypes, subtypes or functions.</para>
+          <para>Define datatypes, subtypes, or rules and functions.</para>
         </listitem>
 
         <listitem>
@@ -289,6 +350,10 @@
           instantiated with an actual type when the module is imported.</para>
         </listitem>
       </itemizedlist>
+
+      <para>Functions, subtypes and datatypes may be either private to a
+      module or public to all modules that import the current module. Rules
+      are always public and globally applied.</para>
     </section>
 
     <section>
@@ -415,8 +480,14 @@
       <para>Variables are names that have an associated scope and in that
       scope they have a value. A variable declaration consists of a type
       followed by the variable name and---depending on the syntactic
-      position---they are followed by an initialization. Variables may be
-      introduced at the following syntactic positions:</para>
+      position---they are followed by an initialization. There are no null
+      values, which implies that all variables must be initialized at
+      declaration time. Also, this implies that all expressions must return a
+      value. Especially for functions, this means that all execution paths of
+      a function must have a return statement. </para>
+
+      <para>Variables may be introduced at the following syntactic
+      positions:</para>
 
       <itemizedlist>
         <listitem>
@@ -434,7 +505,20 @@
           <para>Variables in patterns. For patterns in match positions,
           variables are initialized during the match and their scope is the
           rule in which they occur. For patterns in make positions, the values
-          of variables are taken from the local scope.</para>
+          of variables are taken from the local scope. </para>
+        </listitem>
+
+        <listitem>
+          <para>For variables ntroduced by pattern matching in conditional
+          statements (if-then, and while), if the condition succeeds, the
+          scope of the variables are the block of code that is executed
+          conditionally.</para>
+        </listitem>
+
+        <listitem>
+          <para>Variables in anti-patterns are never visible, but nevertheless
+          their names are reserved in the scope that they would have had when
+          the pattern was a normal positive matching pattern.</para>
         </listitem>
 
         <listitem>
