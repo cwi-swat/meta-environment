@@ -1912,7 +1912,7 @@
 
       <para>The common scheme of all ToolBus script processes is that there
       are 'listener', 'util', 'action' and 'other' processes. They are grouped
-      into files with a straightforward file naming scheme. </para>
+      into files with a straightforward file naming scheme.</para>
 
       <itemizedlist>
         <listitem>
@@ -1962,7 +1962,68 @@
       <section>
         <title>Editor management</title>
 
-        <para></para>
+        <para>The goal of the editor manager is to manage the complexity of
+        appearing and dissappearing editors. An editor in the Meta-Environment
+        is the tuple of a visual text editor, implemented in Java, and a
+        structural tree 'editor' implemented in C. Editors are data-sources
+        for several (interactive) usage scenarios in the Meta-Environment.
+        Because they appear and dissappear when the user opens or closes
+        files, this is where the first racing conditions start to occur in The
+        Meta-Environment. The editor-manager pre-dates the transaction
+        management system and implements it's own kind of transactions to lock
+        resources that are associated with editors.</para>
+
+        <para>There are four ToolBus tools involved:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>editor-manager - a C tool that maintains a registry of
+            editing processes. Each process is identified with a unique id.
+            The creation and garbage collection of editors is managed here.
+            Also this tool provides the binding between a text-editor instance
+            and a tree that is stored in the structure-editor.</para>
+          </listitem>
+
+          <listitem>
+            <para>structure-editor - a C tool that stores parse trees with
+            editor id's and supports a number of interesting queries on these
+            trees. The tool actually is not an editor in the sense that it
+            never changes a tree</para>
+          </listitem>
+
+          <listitem>
+            <para>addPosInfo - the editing infra-structure highly depends on
+            the fact that all parse trees are passed through this tool before
+            anything else happens</para>
+          </listitem>
+
+          <listitem>
+            <para>editor-plugin - a Java program that uses the Swing editor
+            kit to provide visual editing of source files</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Most of the coordination work is implemented in ToolBus
+        scripts:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>editing.tb - provides generic and reusable processes</para>
+          </listitem>
+
+          <listitem>
+            <para>&lt;lang&gt;-editor-utils - binds the parameters of
+            editing.tb processes and makes them language specific. This is
+            where it is decided what happens when the user clicks the mouse or
+            activates a pop-up menu.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>There is always at least one ToolBus process per file edited,
+        which stays alive until the last transaction as declared using the
+        editor-manager has ended. This means that although an editor is not
+        visible on the screen anymore, the data stored with it in Java and in
+        the structure-editor is available until the transaction ends.</para>
       </section>
 
       <section>
@@ -2045,20 +2106,73 @@
       <section>
         <title>Configuration management</title>
 
-        <para></para>
+        <para>Although preferences and other kinds of start-up and run-time
+        configuration parameters have been factored out in the config-support
+        and configuration-manager packages, they have not been generalized or
+        parameterized. These two packages support a fixed set of parameters
+        that is specific for the ASF+SDF Meta-Environment. Which configuration
+        options are supported is define in
+        <filename>sdf-library/library/basic/Config.sdf</filename>. Although
+        this functionality resides in the core of the Meta-Environment, it is
+        explicitly linked with features in ASF+SDF. This needs to be fixed in
+        the future, because it is hard to know where and how to extend this
+        implementation to add new configuration parameters.</para>
+
+        <para>Configuration management works as follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>At start-up time, the Meta-Environment ToolBus script read
+            two <filename>.actions</filename> files from disk. One contains
+            the default bindings of the parameters of all tools in The
+            Meta-Environment (i.e.
+            <filename>asfsdf-meta/tbscripts/standard.asfsdf.actions</filename>),
+            the other is a <filename>.actions</filename> files in the users
+            workspace directory. The files are registered with the
+            configuration-manager, which resolves import statements and
+            maintains a hierarchy where user preferences have precedence over
+            default system preferences.</para>
+          </listitem>
+
+          <listitem>
+            <para>Several dedicated ToolBus scripts distribute the
+            configuration information on demand to the tools that need it. For
+            example, when an editor is started, the editing scripts ask the
+            config-manager what kind of menu's need to be shown. This
+            information is forwarded to the editor. The editor tool will
+            receive an ATerm encoding of the menu structure, which is
+            interpreted to produce the right menu's. </para>
+          </listitem>
+        </itemizedlist>
       </section>
 
       <section>
         <title>Transaction management</title>
 
-        <para></para>
+        <para>Due to the design of the module manager and the scheduling of
+        processes via listeners, many things in the Meta-Environment happen
+        asynchronously. Still the processes share common data sources which
+        they read and write to. The transaction management system is based on
+        simple locking. For each shared resource the
+        <filename>transactions.tb</filename> script allows to start a locking
+        process. A lock is obtained by sending a message to this unique
+        process, which only allows the next process to obtain a lock until the
+        previous has released it.</para>
+
+        <para>This system is completely incremental and demand driven.
+        Processes do not have to obtain a lock to obtain access to shared
+        resources. Instead, when the programmer knows that his process could
+        lead to racing conditions, he first obtains a lock to the resource.
+        Processes that are robust against changing values, such as progress
+        views, do not lock the resources they read from, which improves
+        efficiency by allowing parallelism. </para>
       </section>
     </section>
 
     <section>
       <title>Element Catalog</title>
 
-      <para> <link linkend="def-errors-and-warnings">Errors &amp;
+      <para><link linkend="def-errors-and-warnings">Errors &amp;
       warnings</link>,<link linkend="def-GUI"> GUI</link>, <link
       linkend="def-module-manager">Module manager</link>, <link
       linkend="def-structure-editor">Structure editor</link>, <link
@@ -2083,14 +2197,19 @@
       <section>
         <title>Editor management</title>
 
-        <para></para>
+        <para>Each editor has a type name to identify the language it is for.
+        It therefore can behave differently by getting different configuration
+        parameters, and show different menus and do different things for mouse
+        actions. Also, each type of language has a different editing process,
+        which extends the functionality of <filename>editing.tb</filename>
+        with listeners that act differently for every language.</para>
       </section>
 
       <section>
         <title>Module management</title>
 
         <para>The generic nature of the module manager makes it easy to adapt
-        and extends it to new programming languages. </para>
+        and extends it to new programming languages.</para>
 
         <orderedlist>
           <listitem>
@@ -2112,16 +2231,29 @@
       <section>
         <title>Configuration management</title>
 
-        <para></para>
+        <para>The configuration manager has all parameters more or less hard
+        wired. They are generated from the
+        <filename>basic/Config.sdf</filename> file. The manager also knows
+        about specific parameters, taking care for example that menu options
+        are treated in order.</para>
       </section>
 
       <section>
         <title>Transaction management</title>
 
-        <para>The asynchronous and parallel nature of the other processes -
-        i.e. ToolBus scripts implementing module management and configuration
-        management using notes as an event mechanism - introduces the default
-        problems with shared resources: deadlock and racing conditions.</para>
+        <para>The transaction mechanism is totally orthogonal and can be
+        extended with new kinds of locks using a ToolBus script onliner. Note
+        however that adding new requests for existing locks always has the
+        possibility of introducing deadlock. This occurs naturally when
+        requests for locks of the same resource are nested in a single
+        scenario. It can also happen if ToolBus scripts accidentally become
+        dependent on eachother in a circular fashion. Care must be taken to
+        fully understand which resources are needed and when.</para>
+
+        <para>In other words, adding locks to the ToolBus scripts of The
+        Meta-Environment is not a modular activity. One must fully understand
+        all dependencies between processes and shared resources to make sure
+        this is done correctly.</para>
       </section>
     </section>
 
@@ -2136,7 +2268,7 @@
         processes are to be designed in such a way that they are programming
         language independent. The goal is to be able to instantiate an IDE by
         providing the right parameters to the generic ToolBus scripts to
-        obtain language specific IDE behavior. </para>
+        obtain language specific IDE behavior.</para>
 
         <para>The other main rationale behind these designs is
         <emphasis>extensibility</emphasis>. For example, the asynchronous,
