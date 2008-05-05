@@ -33,6 +33,9 @@ context-free syntax
    {OptLabelledType ","}+                                  -> OptLabelledTypes
    "list" "[" Type "]"                                     -> StructuredType {cons("list-type")} 
    "set" "[" Type "]"                                      -> StructuredType {cons("set-type")}
+   "map" "[" OptLabelledType "," OptLabelledType "]"       -> StructuredType {cons("map-type")}
+%% We could also add the multi-map type:
+%%   "mmap" "[" OptLabelledType "," OptLabelledType "]"       -> StructuredType {cons("mmap-type")}
    "rel" "[" OptLabelledTypes "]"                          -> StructuredType {cons("rel-type")}
    "tuple" "(" OptLabelledType "," OptLabelledTypes ")"    -> StructuredType {cons("tuple-type")}
 
@@ -50,7 +53,7 @@ context-free syntax
 
 %% Define reserved words
    "bool" | "int" | "str" | "loc" | "any" | "term" | "void" |
-   "list" | "set" | "rel" | "tuple" | "fun"                -> TypeName {reject}
+   "list" | "set" | "map" | "rel" | "tuple" | "fun"        -> TypeName {reject}
  
 
   
