@@ -552,9 +552,10 @@
       <literal>public</literal> or <literal>private</literal>
       (default).</para>
 
-      <para>A function body contains optional variable declarations (with
-      optional initializations) followed by a number of statements. A return
-      statement produces the value of the function.</para>
+      <para>A function body is a list of statements, optionally separated by
+      semi-colons. Each unique control flow path through a function must have
+      a return statement, such that each function always returns a proper
+      value. </para>
 
       <para>Functions can later be extended:<note>
           <para>Function extension is still under discussion.</para>
@@ -806,7 +807,8 @@
     <section>
       <title>Statements</title>
 
-      <para>Rascal has the following statement types:</para>
+      <para>Rascal has the following statement types, which can be nested and
+      composed in the usual structured manner:</para>
 
       <itemizedlist>
         <listitem>
@@ -819,12 +821,16 @@
         </listitem>
 
         <listitem>
-          <para>If-then statement and if-then-else statement.</para>
+          <para>If-then statement and if-then-else statement. Warning! The
+          if-then statement has an implicit 'fail' if the condition fails (see
+          fail statement).</para>
         </listitem>
 
         <listitem>
           <para>A "return" statement returns a value from a function, or just
-          returns (for functions with result type void).</para>
+          returns (for functions with result type void). Note that return
+          jumps out of an entire function, even if it is nested in a
+          complicated control flow statement such as visit.</para>
         </listitem>
 
         <listitem>
@@ -850,7 +856,8 @@
         </listitem>
 
         <listitem>
-          <para>A rewrite rule consists of a Pattern followed by : and a
+          <para>A rewrite rule (not a top-level statement, but a child of
+          switch and visit) consists of a Pattern followed by : and a
           statement that returns the replacement value:<programlisting>case <replaceable>Pattern</replaceable> : <replaceable>Statement</replaceable></programlisting></para>
 
           <para>A statement may consist of declarations and statements. To
@@ -874,7 +881,17 @@
           <itemizedlist>
             <listitem>
               <para>repeat = compute a fixed-point: repeat as long as the
-              traversal function changes values.</para>
+              traversal function changes values. <note>
+                  <para>Jurgen: I find this confusing. The strategy definition
+                  should include the behavior whether to repeat or not, that's
+                  what they are for.</para>
+                </note><note>
+                  <para>Jurgen: The fact that generators can use the same
+                  strategy definitions is fine. It just means that some
+                  strategy definitions are not usuable in the context of
+                  generators. I static check should check strategy definitions
+                  and usages for: non-termination, fallability.</para>
+                </note></para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -887,6 +904,77 @@
           <para>A "solve" statement to solve a set of linear equations.</para>
         </listitem>
       </itemizedlist>
+    </section>
+
+    <section>
+      <title>Visitor definitions (UNDECIDED and INCOMPLETE)</title>
+
+      <para>Visitor definitions are a new idea that borrow the programmability
+      of Systems S's single level traversals and add them to Rascal. The idea
+      is to be able to define the strategy annotations of visit statements and
+      generators using a simple expression language. A definition takes as
+      formal argument the code block of the visit statement (s), which is what
+      needs to be done at every node (the visitor).</para>
+
+      <para><programlisting>%% first recurse to the arguments, then try v, which if it fails returns the original structure.
+<emphasis role="bold">visitor</emphasis> bottom-up(v) = <emphasis role="bold">all</emphasis>(bottom-up(v)) ; (v <emphasis
+            role="bold">&lt;+</emphasis> <emphasis role="bold">id</emphasis>)
+
+<emphasis role="bold">visitor</emphasis> innermost(t,v) = <emphasis
+            role="bold">all</emphasis>(innermost(t,v)) ; <emphasis role="bold">repeat</emphasis>(v &lt;+ id) 
+    </programlisting>We demand that all visitors are infallible, which means
+      that when the v block fails, they must return a default result of the
+      correct type. In most cases, this would be the identity (id).</para>
+
+      <para>We can also try to give these definitions a more imperative look,
+      as if they are patterns for generating code for the visitors, as
+      in:</para>
+
+      <para><programlisting><emphasis role="bold">visitor</emphasis> bottom-up(v) {
+  <emphasis role="bold">all</emphasis> {
+     bottom-up(v);
+  }
+
+  <emphasis role="bold">try</emphasis> {              %% try is the '&lt;+' of System S, if only if v fails the catch block is executed.
+    v;
+  } <emphasis role="bold">catch</emphasis> <emphasis role="bold">fail</emphasis>(t) {
+    <emphasis role="bold">yield</emphasis> t;
+  } 
+}
+
+%% innermost goes down and only returns after nothing changes anymore:
+<emphasis role="bold">visitor</emphasis> innermost(v) {
+  <emphasis role="bold">all</emphasis> {
+    innermost(v);  %% apply this to all children first.
+  }
+  <emphasis role="bold">while (true) {</emphasis> { %% then until kingdom come, apply this block:
+    <emphasis role="bold">try</emphasis> {
+      v;                 %% if v succeeds, it has a yield or a return statement that updates the current node. 
+    } <emphasis role="bold">catch fail</emphasis>(t) {    %% if v fails after all, we obtain a reference to the current node visited which we can return;
+      <emphasis role="bold">yield</emphasis> t;
+    } 
+  }
+}   
+
+visitor bottom-up-dbg(v) {  <emphasis role="bold">
+  all</emphasis> {
+     bottom-up(v);
+  }
+
+  <emphasis role="bold">try</emphasis> {              %% try is the '&lt;+' of System S, if only if v fails the catch block is executed.
+    v;
+  } <emphasis role="bold">catch</emphasis> <emphasis role="bold">fail</emphasis>(t) {
+    printf("DBG: bottom-up visitor failed on: " + t);
+    <emphasis role="bold">yield</emphasis> t;
+  } 
+}</programlisting>After such definitions, most of which would be in the
+      standard library of Rascal, we can use them to program actual
+      visits:</para>
+
+      <para><programlisting>visit bottom-up (t) {
+  pattern =&gt; pattern
+  pattern2 : { effect; }
+}</programlisting></para>
     </section>
 
     <section>
