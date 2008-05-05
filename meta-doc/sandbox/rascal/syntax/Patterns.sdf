@@ -3,20 +3,25 @@ module Patterns
 imports Variables Types Expressions
  
 exports
-sorts Pattern CPattern APattern CPatternChar CPatternSymbol QuotedCPattern
+sorts Pattern SynPattern AbsPattern SynPatternChar SynPatternSymbol QuotedSynPattern
+      RegPattern RegPatternChar
 
 lexical syntax
-         "\\<"                                     -> CPatternChar
-         "\\>"                                     -> CPatternChar
-         "\\|"                                     -> CPatternChar
-         ~[\<\>\|]                                 -> CPatternChar
+         "\\<"                                     -> SynPatternChar
+         "\\>"                                     -> SynPatternChar
+         "\\|"                                     -> SynPatternChar
+         ~[\<\>\|]                                 -> SynPatternChar
+
+         ~[\/]                                     -> RegPatternChar
+         "\\/"                                     -> RegPatternChar
+         "/" RegPatternChar* "/"                   -> RegPattern
 
 context-free syntax
-         CPatternChar                              -> CPatternSymbol
-         "<" Type? Variable  ">"                   -> CPatternSymbol
-         "[|" CPatternSymbol* "|]"                 -> QuotedCPattern
-         QuotedCPattern                            -> CPattern
-         AbstractValue                             -> APattern
+         SynPatternChar                            -> SynPatternSymbol
+         "<" Type? Variable  ">"                   -> SynPatternSymbol
+         "[|" SynPatternSymbol* "|]"               -> QuotedSynPattern
+         QuotedSynPattern                          -> SynPattern
+         AbstractValue                             -> AbsPattern
 
-         CPattern | APattern                       -> Pattern
+         RegPattern | SynPattern | AbsPattern      -> Pattern
 

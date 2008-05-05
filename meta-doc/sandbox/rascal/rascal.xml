@@ -787,12 +787,25 @@
               <listitem>
                 <para>For a binary relation R that is a map (i.e. it
                 associates a single value with each domain element) R(n),
-                returns the single image value corresponding with n.</para>
+                returns the single image value corresponding with n. This
+                expression may also occur as left-hand side of an
+                assignment:<programlisting>R(N) = V</programlisting>first
+                removes from R the tuple with domain value N and then adds the
+                tuple &lt;N, V&gt;,</para>
               </listitem>
 
               <listitem>
                 <para>For an arbitrary binary relation, R{n} returns a set of
-                corresponding image elements.</para>
+                corresponding image elements. This expression may also occur
+                as left-hand side of an assignment:<programlisting>R{N} = V</programlisting>first
+                removes all tuples with domain value N and then adds the tuple
+                &lt;N, V&gt;. When the right-hand side is a set, new tuples
+                are added for each element in the set:</para>
+
+                <programlisting>R{N} = {V1, ..., Vn}</programlisting>
+
+                <para>first removes all tuples with domain value N and then
+                adds the tuples &lt;N, V1&gt;, ..., &lt;N, Vn&gt;.</para>
               </listitem>
 
               <listitem>
@@ -816,8 +829,7 @@
         </listitem>
 
         <listitem>
-          <para>An assignment statement assigns a value to a (local or global)
-          variable.</para>
+          <para>An assignment statement assigns a value to a variable.</para>
         </listitem>
 
         <listitem>

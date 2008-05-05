@@ -16,7 +16,7 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression LeftHandSide Predicate SimpleGenerator Generator FieldSelection Callable
+sorts Expression LeftHandSide Predicate SimpleGenerator Generator FieldSelection Callable Call
       Strategy Signature Statement Rule Assignment AssignOp Value AbstractValue
 
 context-free syntax
@@ -44,9 +44,9 @@ context-free syntax
 
          Variable | FieldSelection                               -> Callable
 
-	Callable "(" {Expression ","}* ")"                      -> Expression {cons("fun-or-map-call")}
-         Callable "{" Expression "}"                             -> Expression {cons("multi-map-call")}
- 
+	Callable "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
+         Callable "{" Expression  "}"                            -> Call {cons("multi-map-call")}
+         Call                                                    -> Expression
 
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
@@ -99,7 +99,7 @@ context-free priorities
 context-free syntax
 	LeftHandSide ":=" Expression                            -> Predicate {cons("match")}
 	LeftHandSide "!:=" Expression                           -> Predicate {cons("not-match")}
-         LeftHandSide "<-" Expression                            -> Predicate {cons("match-assign")}
+%%         LeftHandSide "<-" Expression                            -> Predicate {cons("match-assign")}
 	IdCon "(" {Expression","}* ")"                          -> Predicate {cons("pred-fun-call")}
 	"(" Predicate ")"                                       -> Predicate {bracket}
 
@@ -110,7 +110,7 @@ context-free syntax
 	Type Variable                                           -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
          "{" {Signature ","}+ "}"                                -> Signature
-         Signature | CPattern | APattern                         -> LeftHandSide
+         Signature | SynPattern | AbsPattern |RegPattern         -> LeftHandSide
          
          SimpleGenerator                                         -> Generator
          Predicate                                               -> Generator
@@ -123,9 +123,8 @@ context-free syntax
 
 context-free syntax
 %% Rules, Switch, visit and solve
-          QuotedCPattern                                         -> Expression
-         "make" CPattern                                         -> Expression
-         "make" APattern                                         -> Expression
+          QuotedSynPattern                                       -> Expression
+         "make" Pattern                                          -> Expression
 
          "case" Pattern ":" Statement                            -> Rule
          "default" ":" Statement                                 -> Rule
@@ -139,10 +138,11 @@ context-free syntax
          "if" "(" Predicate ")" Statement "else" Statement       -> Statement
          "if" "(" Predicate ")" Statement                        -> Statement
 %% Do we want elseif etc.?
+
           "=" | "+=" | "-=" | "*=" | "/="                        -> AssignOp
 
          Expression                                              -> Statement
-         Variable AssignOp Expression                            -> Assignment {cons("assign")}
+         (Variable | Call) AssignOp Expression                   -> Assignment {cons("assign")}
          LeftHandSide "=" Expression                             -> Statement
          "global" Type Variable ("=" Expression)?                -> Statement
          "return" Expression?                                    -> Statement {cons("return")}
