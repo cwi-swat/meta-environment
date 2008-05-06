@@ -3,7 +3,7 @@ module Bool-examples1
 imports Booleans-syntax;
 
 fun Bool reduce(Bool B) {
-    visit bu B {
+    visit bottom-up B {
       case true & <Bool B2>   => B2
       case false & <Bool B2>  => false
 

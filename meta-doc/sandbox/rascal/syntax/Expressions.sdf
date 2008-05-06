@@ -29,6 +29,7 @@ context-free syntax
 
 %% Abstract values used for datatypes
          Value                                                   -> AbstractValue
+%%         Type Variable?                                          -> AbstractValue
          Variable                                                -> AbstractValue
          Variable "(" {AbstractValue ","}* ")"                   -> AbstractValue
          "[" {AbstractValue ","}* "]"                            -> AbstractValue
@@ -134,7 +135,7 @@ context-free syntax
          "case" Pattern "=>" Expression                          -> Rule
 
  	"switch" Expression "{" Rule+ "}"                       -> Statement
-   	"visit" "repeat"? Strategy Expression "{" Rule+ "}"     -> Statement
+   	"visit" Strategy Expression "{" Rule+ "}"               -> Statement
          "solve" "{" { Assignment ";"}+ "}"                      -> Statement
          "for" "(" {Generator ","}+ ")" Statement                -> Statement
 
@@ -154,11 +155,11 @@ context-free syntax
          "throw" Expression                                      -> Statement {cons("throw")}
          "assert" StrCon ":" Predicate                           -> Statement {cons("assert")}
 
-         "try" Statement Catch* Finally?                        -> Statement
-         "catch" Pattern ":" Statement                          -> Catch
-         "finally" ":" Statement                                -> Finally
+         "try" Statement Catch* Finally?                        -> Statement  {cons("try")}
+         "catch" Pattern ":" Statement                          -> Catch      {cons("catch")}
+         "finally" ":" Statement                                -> Finally    {cons("finally")}
 
-         "{" {Statement ";"}+ ";"? "}"                           -> Statement
+         "{" {Statement ";"}+ ";"? "}"                          -> Statement  {cons("block")}
 
 %% Define reserved words:
 %%         "o" | "x" | 

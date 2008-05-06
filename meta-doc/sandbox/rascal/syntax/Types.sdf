@@ -7,53 +7,56 @@ imports basic/Whitespace
         Variables
 
 hiddens
-context-free start-symbols
-  Type
+  context-free start-symbols
+        Type
 
 exports
-sorts TypeName Type OptLabelledType OptLabelledTypes TypeVar BasicType StructuredType FunctionType AbstractType
+  sorts TypeName Type OptNamedType OptNamedTypes TypeVar 
+        BasicType StructuredType FunctionType AbstractType
 
   lexical syntax
-    head:[a-z]                                           -> TypeName {cons("one-char")}
-    head:[a-z] middle:[A-Za-z0-9\-]* last:[A-Za-z0-9]    -> TypeName {cons("more-chars")} 
+    head:[a-z]                                          -> TypeName {cons("one-char")}
+    head:[a-z] middle:[A-Za-z0-9\-]* last:[A-Za-z0-9]   -> TypeName {cons("more-chars")} 
   lexical restrictions
     TypeName -/- [A-Za-z0-9]
 
-context-free syntax
+  context-free syntax
 
-   "bool"                                                  -> BasicType {cons("bool-type")} 
-   "int"                                                   -> BasicType {cons("int-type")} 
-   "str"                                                   -> BasicType {cons("str-type")} 
-   "loc"                                                   -> BasicType {cons("loc-type")}
-   "value"                                                 -> BasicType {cons("any-type")}
-   "term"                                                  -> BasicType {cons("term-type")}
-   "void"                                                  -> BasicType {cons("void-type")}
+    "bool"                                              -> BasicType {cons("bool-type")} 
+    "int"                                               -> BasicType {cons("int-type")} 
+    "str"                                               -> BasicType {cons("str-type")} 
+    "loc"                                               -> BasicType {cons("loc-type")}
+    "value"                                             -> BasicType {cons("any-type")}
+    "term"                                              -> BasicType {cons("term-type")}
+    "void"                                              -> BasicType {cons("void-type")}
  
-   Type Variable?                                          -> OptLabelledType  
-   {OptLabelledType ","}+                                  -> OptLabelledTypes
-   "list" "[" Type "]"                                     -> StructuredType {cons("list-type")} 
-   "set" "[" Type "]"                                      -> StructuredType {cons("set-type")}
-   "map" "[" OptLabelledType "," OptLabelledType "]"       -> StructuredType {cons("map-type")}
+    Type Variable?                                      -> OptNamedType  
+    {OptNamedType ","}+                                 -> OptNamedTypes
+    "list" "[" Type "]"                                 -> StructuredType {cons("list-type")} 
+    "set" "[" Type "]"                                  -> StructuredType {cons("set-type")}
+    "map" "[" OptNamedType "," OptNamedType "]"         -> StructuredType {cons("map-type")}
 %% We could also add the multi-map type:
-%%   "mmap" "[" OptLabelledType "," OptLabelledType "]"       -> StructuredType {cons("mmap-type")}
-   "rel" "[" OptLabelledTypes "]"                          -> StructuredType {cons("rel-type")}
-   "tuple" "(" OptLabelledType "," OptLabelledTypes ")"    -> StructuredType {cons("tuple-type")}
+%%   "mmap" "[" OptNamedType "," OptNamedType "]"       -> StructuredType {cons("mmap-type")}
+    "rel" "[" OptNamedTypes "]"                         -> StructuredType {cons("rel-type")}
+    "tuple" "[" OptNamedType "," OptNamedTypes "]"      -> StructuredType {cons("tuple-type")}
 
-   "fun" Type Variable "(" OptLabelledTypes? ")"           -> FunctionType {cons("function-type")}
+    "fun" Type Variable "(" OptNamedTypes? ")"          -> FunctionType {cons("function-type")}
 
-   "&" Variable                                            -> TypeVar
+    "&" Variable                                        -> TypeVar
 
-   Symbol                                                  -> Type {cons("symbol-type")}
+    Symbol                                              -> Type {cons("symbol-type")}
 
-   TypeName                                                -> AbstractType
-   TypeName "(" {OptLabelledType ","}* ")"                 -> AbstractType
+    TypeName                                            -> AbstractType
+    TypeVar                                             -> AbstractType
+    TypeName "(" {OptNamedType ","}* ")"                -> AbstractType
 
-   TypeVar | BasicType | StructuredType | 
-   FunctionType | AbstractType                             -> Type
+    TypeVar | BasicType | StructuredType | 
+    FunctionType | AbstractType                         -> Type
 
 %% Define reserved words
-   "bool" | "int" | "str" | "loc" | "value" | "term" | "void" |
-   "list" | "set" | "map" | "rel" | "tuple" | "fun"        -> TypeName {reject}
+   "bool" | "int" | "str" | "loc" | "value" | "term" | 
+   "void" | "list" | "set" | "map" | "rel" | "tuple" |
+   "fun"                                                -> TypeName {reject}
  
 
   

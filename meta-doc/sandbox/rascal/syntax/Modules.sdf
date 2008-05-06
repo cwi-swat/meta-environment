@@ -1,6 +1,7 @@
 module Modules
 
 imports Declarations
+        Types
 
 hiddens
 context-free start-symbols
@@ -21,12 +22,13 @@ lexical restrictions
 
 context-free syntax
 
-    "[" {Variable ","}+ "]"                      -> ModuleParameters
+    "[" {TypeVar ","}+ "]"                       -> ModuleParameters
     "[" {Type ","}+ "]"                          -> ModuleActuals
 
     ModuleName ModuleActuals?                    -> ImportedModule
 
     "imports" ImportedModule+ ";"                -> Import
+    "java-imports"                               -> Import  %% FIX THIS
 
     "module" ModuleName ModuleParameters?
              Import* 
