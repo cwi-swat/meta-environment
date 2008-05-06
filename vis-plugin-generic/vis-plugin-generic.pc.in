@@ -9,6 +9,6 @@ JarFile=vis-plugin-generic.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/jcommon-1.0.8.jar:${prefix}/share/junit-4.1.jar
 LocalJars=lib/jcommon-1.0.8.jar:lib/junit-4.1.jar
 MainClass=nl.cwi.sen1.visplugin.GenericVisualizationPluginsLoader
-Packages=nl.cwi.sen1,nl.cwi.sen1.visplugin,nl.cwi.sen1.visplugin.table,nl.cwi.sen1.visplugin.csvexport,nl.cwi.sen1.visplugin.text
+Packages=com.csvreader,nl.cwi.sen1.visplugin,nl.cwi.sen1.visplugin.csvexport,nl.cwi.sen1.visplugin.table,nl.cwi.sen1.visplugin.table.model,nl.cwi.sen1.visplugin.text
 TestClass=
 ToolBusFlags=-I${prefix}/share/vis-plugin-generic
