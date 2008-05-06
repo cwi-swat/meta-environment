@@ -312,6 +312,8 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 	}
 	
 	public void run(){
+		workerQueue.start();
+		
 		setRunning(true);
 		try{
 			while(running){
@@ -325,6 +327,7 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 	
 	public void stopRunning(){
 		setRunning(false);
+		workerQueue.terminate();
 	}
 	
 	public void handleIncomingTerm() throws IOException{
