@@ -6,7 +6,7 @@ Description:
 Requires: aterm-java,meta-studio,toolbus-java-adapter
 JarFile=console-gui.jar
 Jars=${prefix}/share/${JarFile}
-Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
+Packages=nl.cwi.sen1.gui.plugin
 MainClass=nl.cwi.sen1.gui.plugin.Console
 TestClass=
 ToolBusFlags=-I${prefix}/share/console-gui
