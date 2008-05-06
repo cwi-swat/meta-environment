@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import jjtraveler.VisitFailure;
 import aterm.AFun;
@@ -47,6 +48,8 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 	private final Map<Long, ThreadLocalJobQueue> threadLocalQueues;
 	private final Map<AFun, JobQueue> queues;
 	
+	private final WorkerQueue workerQueue;
+	
 	private ATerm empty;
 	
 	private Object lockObject;
@@ -63,6 +66,9 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		empty = factory.makeList();
 		threadLocalQueues = new HashMap<Long, ThreadLocalJobQueue>();
 		queues = new HashMap<AFun, JobQueue>();
+		
+		workerQueue = new WorkerQueue();
+		
 		lockObject = this;
 		
 		writeBuffer = ByteBuffer.allocateDirect(32768);
@@ -338,15 +344,23 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		handleTerm(operation, t);
 	}
 	
-	protected void handleTerm(byte operation, ATerm t){
+	protected void handleTerm(byte operation, final ATerm t){
 		switch(operation){
 			case DO:
-				handler(factory.make("rec-do(<term>)", t));
-				sendTerm(ACKDO, empty);
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						handler(factory.make("rec-do(<term>)", t));
+						sendTerm(ACKDO, empty);
+					}
+				});
 				break;
 			case EVAL:
-				ATermAppl result = (ATermAppl) handler(factory.make("rec-eval(<term>)", t));
-				sendTerm(VALUE, result.getArgument(0));
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						ATermAppl result = (ATermAppl) handler(factory.make("rec-eval(<term>)", t));
+						sendTerm(VALUE, result.getArgument(0));
+					}
+				});
 				break;
 			case ACKEVENT:
 				ATerm ackEvent = ((ATermList) t).getLast();
@@ -367,9 +381,13 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 				requestQueue.recResponse(t);
 				break;
 			case TERMINATE:
-				handler(factory.make("rec-terminate(<term>)", t));
-				expectingDisconnect = true;
-				sendTerm(END, empty);
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						handler(factory.make("rec-terminate(<term>)", t));
+						expectingDisconnect = true;
+						sendTerm(END, empty);
+					}
+				});
 				break;
 			case PERFORMANCESTATS:
 				ATerm performaceStats = getPerformanceStats();
@@ -704,6 +722,109 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 				}
 				
 				requestQueue.post(next);
+			}
+		}
+	}
+	/**
+	 * The queue that is meant to take care of the asynchroneous execution and queueing of anything
+	 * that invokes stuff on a tool.
+	 * 
+	 * @author Arnold Lankamp
+	 */
+	private static class WorkerQueue{
+		private final Object lock = new Object();
+		
+		private final Queue<Runnable> queue;
+		private final Worker worker;
+		
+		/**
+		 * Default constructor.
+		 */
+		public WorkerQueue(){
+			super();
+			
+			this.queue = new LinkedList<Runnable>();
+			this.worker = new Worker();
+			worker.setDaemon(true);
+		}
+		
+		/**
+		 * Starts the worker thread.
+		 */
+		public void start(){
+			worker.start();
+		}
+		
+		/**
+		 * Executes or queues the given runnable for execution.
+		 * 
+		 * @param r
+		 *            The runnable containing the stuff that needs to be executed.
+		 */
+		public void execute(Runnable r){
+			synchronized(lock){
+				boolean notBusy = queue.isEmpty();
+				queue.offer(r);
+				if(notBusy) lock.notify();
+			}
+		}
+		
+		/**
+		 * Terminates the worker thread as soon as is gracefully possible.
+		 */
+		public void terminate(){
+			worker.terminate();
+		}
+		
+		/**
+		 * The worker thread of this queue.
+		 * 
+		 * @author Arnold Lankamp
+		 */
+		private class Worker extends Thread{
+			private volatile boolean running;
+			
+			/**
+			 * Default constructor.
+			 */
+			public Worker(){
+				super();
+				
+				running = true;
+			}
+			
+			/**
+			 * The main execution loop.
+			 */
+			public void run(){
+				do{
+					Runnable r;
+					synchronized(lock){
+						r = queue.poll();
+						while(r == null){
+							try{
+								lock.wait();
+							}catch(InterruptedException irex){
+								// Ignore this.
+							}
+							if(!running) return;
+							
+							r = queue.poll();
+						}
+					}
+					
+					r.run();
+				}while(running);
+			}
+			
+			/**
+			 * Terminates this worker thread after the current iteration.
+			 */
+			public void terminate(){
+				running = false;
+				synchronized(lock){
+					lock.notify();
+				}
 			}
 		}
 	}
