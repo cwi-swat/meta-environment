@@ -8,9 +8,9 @@
 #define NR_SIG_ENTRIES	3
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<graph-converter>,tree2graph(<term>,<bool>,<bool>,<term>))",
-  "rec-eval(<graph-converter>,get-node-origin(<term>))",
   "rec-terminate(<graph-converter>,<term>)",
+  "rec-eval(<graph-converter>,get-node-origin(<term>))",
+  "rec-eval(<graph-converter>,tree2graph(<term>,<bool>,<bool>,<term>))",
 };
 
 /* Event handler for tool 'graph-converter' */
@@ -20,15 +20,15 @@ ATerm graph_converter_handler(int conn, ATerm term)
   /* We need some temporary variables during matching */
   ATerm t0, t1, t2, t3;
 
-  if(ATmatch(term, "rec-eval(tree2graph(<term>,<term>,<term>,<term>))", &t0, &t1, &t2, &t3)) {
-    return tree2graph(conn, t0, t1, t2, t3);
-  }
   if(ATmatch(term, "rec-eval(get-node-origin(<term>))", &t0)) {
     return get_node_origin(conn, t0);
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
+  }
+  if(ATmatch(term, "rec-eval(tree2graph(<term>,<term>,<term>,<term>))", &t0, &t1, &t2, &t3)) {
+    return tree2graph(conn, t0, t1, t2, t3);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = graph_converter_checker(conn, in);

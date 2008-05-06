@@ -9,8 +9,8 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm layout_graph(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
+ATerm layout_graph(int conn, ATerm);
 extern ATerm layoutgraph_handler(int conn, ATerm term);
 extern ATerm layoutgraph_checker(int conn, ATerm sigs);
 

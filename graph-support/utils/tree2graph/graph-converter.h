@@ -9,9 +9,9 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm tree2graph(int conn, ATerm, ATerm, ATerm, ATerm);
 ATerm get_node_origin(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
+ATerm tree2graph(int conn, ATerm, ATerm, ATerm, ATerm);
 extern ATerm graph_converter_handler(int conn, ATerm term);
 extern ATerm graph_converter_checker(int conn, ATerm sigs);
 
