@@ -369,6 +369,7 @@ AC_DEFUN([META_C_SETUP],[
   AC_LIBTOOL_WIN32_DLL
   AC_PROG_LIBTOOL
   AC_PROG_MAKE_SET([])
+  META_GENERATE_ECLIPSE_PLUGIN_FILES_FOR_C(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]),[],[],[],[],[])
 ])
 
 dnl META_GET_PKG_VAR(VARNAME)
@@ -522,6 +523,86 @@ cat > .project << ENDCAT
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.pde.PluginNature</nature>
+	</natures>
+</projectDescription>
+ENDCAT
+else
+  echo "Detected the presence of a .project file, so no Eclipse configuration will be generated at this time. If you do wish to do so, please remove it and re-run the configure script."
+fi
+])
+
+dnl META_GENERATE_ECLIPSE_PLUGIN_FILES_FOR_C(PKGNAME,VERSION,JARFILE,PACKAGES,DEPS,MAINCLASS,LOCALJARS)
+dnl ----------------------------------
+AC_DEFUN([META_GENERATE_ECLIPSE_PLUGIN_FILES_FOR_C],[
+if ! test -f .project ; then
+
+if ! test -d META-INF ; then
+  mkdir META-INF
+fi
+if ! test -d .settings ; then
+  mkdir .settings
+fi
+if test -z "${EXTERNAL_JARS}"; then
+  BUNDLE_CLASSPATH=$3,`echo ${EXTERNAL_JARS} | tr ':' ','`
+else
+  BUNDLE_CLASSPATH=$3
+fi
+
+if ! test -z "$7"; then
+  BUNDLE_CLASSPATH="${BUNDLE_CLASSPATH} `echo "$7" | tr ':' ','`"
+fi
+
+if test -z "$5"; then
+  REQUIRE_BUNDLE=""
+else
+  REQUIRED_BUNDLES=`echo "$5" | tr '-' '_' | tr ' ' ',' | sed "s@,@,\n @g"`
+  ECLIPSE_REQUIRES=META_GET_PKG_USER_VAR_PLAIN([EclipseRequires])
+
+  if test -z "$ECLIPSE_REQUIRES"; then
+    REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES}"
+  else
+    REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES},${ECLIPSE_REQUIRES}"
+  fi
+fi
+
+if test -z "$6"; then
+  BUNDLE_MAIN_CLASS=""
+else 
+  BUNDLE_MAIN_CLASS="Bundle-Activator: $6"
+fi
+
+cat > META-INF/MANIFEST.MF << ENDCAT
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: $1
+Eclipse-LazyStart: true
+Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
+Bundle-Version: $2
+Bundle-ClassPath: .
+Bundle-Localization: plugin
+Export-Package: `echo "$4" | sed "s@,@,\n @g"`
+${REQUIRE_BUNDLE}
+${BUNDLE_MAIN_CLASS}
+ENDCAT
+
+BUNDLE_LOCAL_JARS=`echo $7 | tr ':' ' '`
+
+cat > .project << ENDCAT
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>$1</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
 		<nature>org.eclipse.pde.PluginNature</nature>
 	</natures>
 </projectDescription>
