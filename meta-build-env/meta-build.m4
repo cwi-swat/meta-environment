@@ -427,7 +427,7 @@ else
 fi
 
 if ! test -z "$7"; then
-  BUNDLE_CLASSPATH="${BUNDLE_CLASSPATH} `echo "$7" | tr ':' ','`"
+  BUNDLE_CLASSPATH="${BUNDLE_CLASSPATH},`echo "$7" | tr ':' ','`"
 fi
 
 if test -z "$5"; then
@@ -456,7 +456,7 @@ Bundle-Name: $1
 Eclipse-LazyStart: true
 Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
 Bundle-Version: $2
-Bundle-ClassPath: ${BUNDLE_CLASSPATH}
+Bundle-ClassPath: `echo "${BUNDLE_CLASSPATH}" | sed "s@,@,\n @g"`
 Bundle-Localization: plugin
 Export-Package: `echo "$4" | sed "s@,@,\n @g"`
 ${REQUIRE_BUNDLE}
@@ -484,7 +484,7 @@ ENDCAT
 
 cat > build.properties << ENDCAT
 source.$3 = src/
-bin.includes = META-INF/,.,$3
+bin.includes = META-INF/,.,`echo "${BUNDLE_CLASSPATH}" | sed "s@,@,\\\\\\ @g" | sed "s@ @\n @g"`
 ENDCAT
 
 BUNDLE_LOCAL_JARS=`echo $7 | tr ':' ' '`
@@ -497,7 +497,7 @@ cat > .classpath << ENDCAT
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
   <classpathentry kind="output" path="bin"/>
 `for i in ${BUNDLE_LOCAL_JARS}; do \
-   echo "<classpathentry kind=\"lib\" path=\"$[]i\"/>"; \
+   echo "<classpathentry exported=\"true\" kind=\"lib\" path=\"$[]i\"/>"; \
  done`
 </classpath>
 ENDCAT
