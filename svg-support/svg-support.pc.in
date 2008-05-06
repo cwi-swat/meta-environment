@@ -3,5 +3,8 @@ Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 Name: svg-support
 Version: 1.0
 Description: A wrapper for batik in the Meta-Environment.
-Requires: 
+Requires:
+JarFile=lib/batik.jar
 Jars=${prefix}/share/svg-support/batik.jar
+LocalJars=lib/batik.jar:lib/lib/batik-awt-util.jar:lib/lib/batik-bridge.jar:lib/lib/batik-css.jar:lib/lib/batik-dom.jar:lib/lib/batik-ext.jar:lib/lib/batik-extension.jar:lib/lib/batik-gui-util.jar:lib/lib/batik-gvt.jar:lib/lib/batik-parser.jar:lib/lib/batik-script.jar:lib/lib/batik-svg-dom.jar:lib/lib/batik-svggen.jar:lib/lib/batik-swing.jar:lib/lib/batik-transcoder.jar:lib/lib/batik-util.jar:lib/lib/batik-xml.jar:lib/lib/js.jar:lib/lib/pdf-transcoder.jar:lib/lib/xerces_2_5_0.jar:lib/lib/xml-apis.jar
+
