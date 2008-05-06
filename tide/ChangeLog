@@ -1,4 +1,7 @@
-# $Id$
+Tue May  6 11:17:56 2008    <bruntink@cwi.nl>
+
+	* configure.ac: Removed META_C_SETUP because there are no C sources in this package.
+	* .project, .classpath: Deleted.
 
 Mon Apr 28 14:11:45 CEST 2008 <jurgenv@cwi.nl>
  * lib: removed directory with not-used jar files.
