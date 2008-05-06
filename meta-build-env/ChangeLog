@@ -1,3 +1,7 @@
+Tue May  6 11:34:30 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: There now is a META_GENERATE_ECLIPSE_PLUGIN_FILES_FOR_C target that is used to generate Eclipse meta data for C packages.
+
 Tue Apr 29 17:14:41 2008    <bruntink@cwi.nl>
 
 	* meta-build.m4: The Require-Bundle part of MANIFEST.MF is split
