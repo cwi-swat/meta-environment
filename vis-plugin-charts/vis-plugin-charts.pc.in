@@ -9,6 +9,6 @@ JarFile=vis-plugin-charts.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/junit-4.1.jar
 LocalJars=lib/jcommon-1.0.8.jar:lib/log4j-1.2.14.jar:lib/jfreechart-1.0.4.jar:lib/prefuse.jar:lib/junit-4.1.jar
 MainClass=nl.cwi.sen1.visplugin.PluginLoader
-Packages=nl.cwi.sen1,nl.cwi.sen1.visplugin,nl.cwi.sen1.visplugin.scatterchartplugin,nl.cwi.sen1.visplugin.piechartplugin,nl.cwi.sen1.visplugin.linechartplugin,nl.cwi.sen1.visplugin.barchartplugin
+Packages=nl.cwi.sen1.gui.plugin.prefusedot,nl.cwi.sen1.visplugin,nl.cwi.sen1.visplugin.scatterchart,nl.cwi.sen1.visplugin.piechart,nl.cwi.sen1.visplugin.linechart,nl.cwi.sen1.visplugin.barchart
 TestClass=
 ToolBusFlags=-I${prefix}/share/vis-plugin-charts
