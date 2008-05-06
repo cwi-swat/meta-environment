@@ -45,11 +45,6 @@ public class TBTermFactory extends PureFactory{
 	
 	public final ATermList EmptyList;
 	
-	// public TBTermVar TransactionIdVar;
-	// public TBTermVar TransactionIdResVar;
-	// public ATerm transaction;
-	// private int nTransactions = 0;
-	
 	protected TBTermFactory(){
 		super();
 		
@@ -540,17 +535,18 @@ public class TBTermFactory extends PureFactory{
 				
 				AFun afun = apt.getAFun();
 				ATerm args[] = apt.getArgumentArray();
-				ATermList annos = apt.getAnnotations();
+				ATermList applAnnos = apt.getAnnotations();
 				
 				int nargs = args.length;
 				ATerm vargs[] = new ATerm[nargs];
 				for(int i = 0; i < nargs; i++){
 					vargs[i] = substitute(args[i], env);
 				}
-				return makeAppl(afun, vargs, annos);
+				return makeAppl(afun, vargs, applAnnos);
 				
 			case ATerm.LIST:
 				ATermList tlst = (ATermList) t;
+				ATermList listAnnos = t.getAnnotations();
 				
 				if(tlst == EmptyList) return t;
 				
@@ -566,7 +562,7 @@ public class TBTermFactory extends PureFactory{
 					lst = lst.insert((substitute(listContent[i], env)));
 				}
 				
-				// We can ignore annotations, since lists with annotations aren't supported
+				lst = (ATermList) lst.setAnnotations(listAnnos);
 				
 				return lst;
 		}
@@ -605,7 +601,7 @@ public class TBTermFactory extends PureFactory{
 				
 				AFun afun = apt.getAFun();
 				ATerm args[] = apt.getArgumentArray();
-				ATermList annos = apt.getAnnotations();
+				ATermList applAnnos = apt.getAnnotations();
 				
 				int nargs = args.length;
 				ATerm vargs[] = new ATerm[nargs];
@@ -614,10 +610,11 @@ public class TBTermFactory extends PureFactory{
 					if(result == null) return null;
 					vargs[i] = result;
 				}
-				return makeAppl(afun, vargs, annos);
+				return makeAppl(afun, vargs, applAnnos);
 				
 			case ATerm.LIST:
 				ATermList tlst = (ATermList) t;
+				ATermList listAnnos = t.getAnnotations();
 				
 				if(tlst == EmptyList) return t;
 				
@@ -634,8 +631,8 @@ public class TBTermFactory extends PureFactory{
 					if(result == null) return null;
 					lst = lst.insert(result);
 				}
-				
-				// We can ignore annotations, since lists with annotations aren't supported
+
+				lst = (ATermList) lst.setAnnotations(listAnnos);
 				
 				return lst;
 		}
