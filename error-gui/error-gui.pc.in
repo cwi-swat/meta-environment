@@ -8,7 +8,7 @@ Requires: aterm-java,error-support-java,meta-studio,toolbus-java-adapter
 JarFile=error-gui.jar
 LocalJars=lib/jlfgr-1_0.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/jlfgr-1_0.jar
-Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.error,nl.cwi.sen1.error.model,nl.cwi.sen1.error.viewer
+Packages=nl.cwi.sen1.error.model,nl.cwi.sen1.error.viewer
 MainClass=nl.cwi.sen1.error.viewer.ErrorViewer
 TestClass=
 ToolBusFlags=-I${prefix}/share/error-gui
