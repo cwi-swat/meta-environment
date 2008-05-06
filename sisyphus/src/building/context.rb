@@ -86,6 +86,10 @@ module Building
       end
     end
 
+    def tr_deps_all
+      @tr_deps
+    end
+
     def deps
       return @deps.reject do |dep| 
         @config.build_env_packages.include?(dep.name)
