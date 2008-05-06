@@ -29,7 +29,7 @@ context-free syntax
 
 %% Abstract values used for datatypes
          Value                                                   -> AbstractValue
-%%         Type Variable?                                          -> AbstractValue
+         PatternVar                                              -> AbstractValue
          Variable                                                -> AbstractValue
          Variable "(" {AbstractValue ","}* ")"                   -> AbstractValue
          "[" {AbstractValue ","}* "]"                            -> AbstractValue
@@ -63,7 +63,7 @@ context-free priorities
          Expression "+"                                          -> Expression {cons("trans1")}
        } >
 
-%%         Expression "." Variable                                 -> Expression {cons("field")} > 
+%%         Expression "." Variable                               -> Expression {cons("field")} > 
          Expression "o" Expression                               -> Expression {cons("comp"), left} >
          Expression "x" Expression                               -> Expression {cons("prod"), left} >
 
@@ -147,19 +147,19 @@ context-free syntax
 
          Expression                                              -> Statement
          (Variable | Call) AssignOp Expression                   -> Assignment {cons("assign")}
-         LeftHandSide "=" Expression                             -> Statement
-         "global" Type Variable ("=" Expression)?                -> Statement
+         LeftHandSide "=" Expression                             -> Statement {cons("assignment")}
+         "global" Type Variable ("=" Expression)?                -> Statement {cons("global")}
          "return" Expression?                                    -> Statement {cons("return")}
          "yield" Expression                                      -> Statement {cons("yield")}
          "fail"                                                  -> Statement {cons("fail")}
          "throw" Expression                                      -> Statement {cons("throw")}
          "assert" StrCon ":" Predicate                           -> Statement {cons("assert")}
 
-         "try" Statement Catch* Finally?                        -> Statement  {cons("try")}
-         "catch" Pattern ":" Statement                          -> Catch      {cons("catch")}
-         "finally" ":" Statement                                -> Finally    {cons("finally")}
+         "try" Statement Catch* Finally?                         -> Statement  {cons("try")}
+         "catch" Pattern ":" Statement                           -> Catch      {cons("catch")}
+         "finally" ":" Statement                                 -> Finally    {cons("finally")}
 
-         "{" {Statement ";"}+ ";"? "}"                          -> Statement  {cons("block")}
+         "{" {Statement ";"}+ ";"? "}"                           -> Statement  {cons("block")}
 
 %% Define reserved words:
 %%         "o" | "x" | 

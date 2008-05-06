@@ -1,45 +1,45 @@
 module Graph
 
-datatype Graph graph(NodeList nodes, EdgeList edges, AttributeList attributes);
+data Graph graph(NodeList nodes, EdgeList edges, AttributeList attributes);
 
-subtype Nodelist list[Node];
+type list[Node] Nodelist;
 
-datatype Node node(NodeId id, AttributeList attributes);
-datatype Node subgraph(NodeId id, NodeList nodes, EdgeList edges, AttributeList attributes);
+data Node node(NodeId id, AttributeList attributes);
+data Node subgraph(NodeId id, NodeList nodes, EdgeList edges, AttributeList attributes);
 
-datatype NodeId id(term id);
+data NodeId id(term id);
 
-subtype AttributeList list[Attribute];
+type list[Attribute] AttributeList;
 
-datatype Attribute bounding-box(Point first, Point second);
-datatype Attribute color(Color color);
-datatype Attribute curve-points(Polygon points);
-datatype Attribute direction(Direction direction);
-datatype Attribute fill-color(Color color);
-datatype Attribute info(str key, term value);
-datatype Attribute label(str label);
-datatype Attribute tooltip(str tooltip);
-datatype Attribute location(int x, int y);
-datatype Attribute shape(Shape shape);
-datatype Attribute size(int width, int height);
-datatype Attribute style(Style style);
-datatype Attribute level(str level);
-datatype Attribute file(File file);
-datatype Attribute file(term file);
+data Attribute bounding-box(Point first, Point second);
+data Attribute color(Color color);
+data Attribute curve-points(Polygon points);
+data Attribute direction(Direction direction);
+data Attribute fill-color(Color color);
+data Attribute info(str key, term value);
+data Attribute label(str label);
+data Attribute tooltip(str tooltip);
+data Attribute location(int x, int y);
+data Attribute shape(Shape shape);
+data Attribute size(int width, int height);
+data Attribute style(Style style);
+data Attribute level(str level);
+data Attribute file(File file);
+data Attribute file(term file);
 
-datatype Color rgb(int red, int green, int blue);
+data Color rgb(int red, int green, int blue);
 
-datatype Style bold | dashed | dotted | filled | invisible | solid;
+data Style bold | dashed | dotted | filled | invisible | solid;
 
-datatype Shape box | circle | diamond | egg | elipse | hexagon | house | 
-               octagon | parallelogram | plaintext | trapezium | triangle;
+data Shape box | circle | diamond | egg | elipse | hexagon | house | 
+           octagon | parallelogram | plaintext | trapezium | triangle;
 
-datatype Direction forward | back | both | none;
+data Direction forward | back | both | none;
 
-subtype Edgelist list[Edge];
+type list[Edge] Edgelist;
 
-datatype Edge edge(NodeId from, NodeId to, AttributeList attributes);
+data Edge edge(NodeId from, NodeId to, AttributeList attributes);
 
-subtype Polygon list[Point];
+type list[Point] Polygon;
 
-datatype Point point(int x, int y);
+data Point point(int x, int y);

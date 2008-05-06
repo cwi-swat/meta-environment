@@ -26,7 +26,7 @@ exports
     "int"                                               -> BasicType {cons("int-type")} 
     "str"                                               -> BasicType {cons("str-type")} 
     "loc"                                               -> BasicType {cons("loc-type")}
-    "value"                                             -> BasicType {cons("any-type")}
+    "value"                                             -> BasicType {cons("value-type")}
     "term"                                              -> BasicType {cons("term-type")}
     "void"                                              -> BasicType {cons("void-type")}
  
@@ -42,16 +42,16 @@ exports
 
     "fun" Type Variable "(" OptNamedTypes? ")"          -> FunctionType {cons("function-type")}
 
-    "&" Variable                                        -> TypeVar
+    "&" Variable                                        -> TypeVar {cons("type-var")}
 
     Symbol                                              -> Type {cons("symbol-type")}
 
-    TypeName                                            -> AbstractType
-    TypeVar                                             -> AbstractType
-    TypeName "(" {OptNamedType ","}* ")"                -> AbstractType
+    TypeName                                            -> AbstractType {cons("typename-abstype")}
+    TypeVar                                             -> AbstractType {cons("typevar-abstype")}
+    TypeName "(" {OptNamedType ","}* ")"                -> AbstractType {cons("constructor-abstype")}
 
     TypeVar | BasicType | StructuredType | 
-    FunctionType | AbstractType                         -> Type
+    FunctionType | AbstractType                         -> Type {cons("type")}
 
 %% Define reserved words
    "bool" | "int" | "str" | "loc" | "value" | "term" | 

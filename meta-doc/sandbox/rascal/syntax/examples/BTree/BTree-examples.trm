@@ -61,18 +61,15 @@ fun BTREE inc(BTREE T) {
 
 %% Ex4: full replacement of g by i
 %% The whole repertoire of traversal functions is available:
-%% - visit first bu T { ... }
-%% - visit all td  T { ... }
+%% - visit bottom-up T { ... }
+%% - visit bottom-up-break  T { ... }
 %% - etc.
-%% with:
-%% "first" (= break) and "all" (= continue).
-%% "bu" (= bottom-up) and "td" (=top-down)
 %% A nice touch is that these properties are not tied to the
 %% declaration of a travesal function (as in ASF+SDF) but to 
 %% its use.
 
 fun BTREE frepl(BTREE T) {
-    visit all bu T {
+    visit bottom-up T {
       case g(<BTREE T1>, <BTREE T2>) =>
            make i(<BTREE T1>, <BTREE T2>)
     };
@@ -81,7 +78,7 @@ fun BTREE frepl(BTREE T) {
 %% Ex5: Deep replacement of g by i
 
 fun BTREE frepl(BTREE T) {
-    visit first bu T {
+    visit bottom-up-break T {
       case g(<BTREE T1>, <BTREE T2>) =>
            make i(<BTREE T1>, <BTREE T2>)
     };
@@ -91,7 +88,7 @@ fun BTREE frepl(BTREE T) {
 %% g's are replaced); 
 
 fun BTREE srepl(BTREE T) {
-    visit first td T {
+    visit top-down-break T {
       case g(<BTREE T1>, <BTREE T2>) => 
            make i(<BTREE T1>, <BTREE T2>)
     };
@@ -102,13 +99,13 @@ fun BTREE srepl(BTREE T) {
 
 fun set[BTREE] find-outer-gs(BTREE T) {
     return
-    { S | STATEMENT S : first td T, 
+    { S | STATEMENT S : top-down-break T, 
           g(<BTREE T1>, <BTREE T2>) := S };
 }
  
 %% Ex8: accumulating transformer that increments leaves with 
 %% amount D and counts them
-fun tuple(int, BTREE) count-and-inc(BTREE T, int C, int D) {
+fun tuple[int, BTREE] count-and-inc(BTREE T, int C, int D) {
     int C = 0;
     
     visit T {

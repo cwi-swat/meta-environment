@@ -7,12 +7,12 @@ data Bool bor(Bool, Bool);
 
 fun Bool reduce(Bool B) {
     visit bottom-up B {
-      case band(true, Bool B2) => B2  %% Style 1: Use Variables
-      case band(bfalse, Bool)   => false
+      case band(btrue, <Bool B2>)   => B2  %% Style 1: Use Variables
+      case band(bfalse, <Bool B2>)  => bfalse
 
-      case bor(btrue, btrue)    => btrue %% Style 2: Use a truth table
-      case bor(btrue, bfalse)   => btrue
-      case bor(bfalse, btrue)   => btrue
-      case bor(bfalse, bfalse)  => bfalse
+      case bor(btrue, btrue)        => btrue %% Style 2: Use a truth table
+      case bor(btrue, bfalse)       => btrue
+      case bor(bfalse, btrue)       => btrue
+      case bor(bfalse, bfalse)      => bfalse
     }
 }

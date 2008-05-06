@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -120,20 +120,17 @@
       </listitem>
     </itemizedlist>
 
-    <para>The above goals are all but one already met in the current design of
-    ASF+SDF, and the current design of RScript. What is missing is the
-    connection (and to be honest: an efficient implementation of relational
-    operators). Alas, any bridge between the two languages is both complex to
-    manage and an efficiency bottleneck. This work is an attempt to
-    consolidate this engineering trade-off. This basically means that we
-    include most features of the RScript language into ASF+SDF. Although we
-    take these languages as conceptual starting point, Rascal is a completely
-    new design that has an imperative semantics at it's core rather than a
-    functional semantics.</para>
-
-    <para>In <xref linkend="section.integration-tscript" /> we will also
-    explore the issues when we take integration one step further and also
-    include Tscripts in the considerations.</para>
+    <para>Many of the above goals are to a certain extent already met in the
+    current design of ASF+SDF, and the current design of RScript. What is
+    missing is the connection (and to be honest: an efficient implementation
+    of relational operators). Alas, any bridge between the two languages is
+    both complex to manage and an efficiency bottleneck. This work is an
+    attempt to consolidate this engineering trade-off. This basically means
+    that we include most features of the RScript language into ASF+SDF.
+    Although we take these languages as conceptual starting point, Rascal is a
+    completely new design that has an imperative semantics at it's core rather
+    than a functional semantics. As a whole, Rascal is a simpler but more
+    expressive language.</para>
   </section>
 
   <section>
@@ -337,8 +334,13 @@
 
       <itemizedlist>
         <listitem>
-          <para>import other modules (either Rascal modules or SDF
-          modules).</para>
+          <para>Import other modules (either Rascal modules or SDF modules)
+          using <literal>import</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Import Java modules (for the benefit of functions written in
+          Java) using <literal>java-import</literal>.</para>
         </listitem>
 
         <listitem>
@@ -349,11 +351,20 @@
           <para>Be parameterized with the names of formal types that are
           instantiated with an actual type when the module is imported.</para>
         </listitem>
+
+        <listitem>
+          <para>Contain a main function that is the starting point of
+          execution:<programlisting>public int main(list[str] argv) { ... }</programlisting></para>
+        </listitem>
       </itemizedlist>
 
       <para>Functions, subtypes and datatypes may be either private to a
       module or public to all modules that import the current module. Rules
       are always public and globally applied.</para>
+
+      <para>Modules introduce a namespace and qualified names may be used to
+      uniquely identify elements of a module from the outside. Inside the
+      module, this qualification is implicit.</para>
     </section>
 
     <section>
@@ -368,13 +379,14 @@
         </listitem>
 
         <listitem>
-          <para>There are built-in types (bool, int str, loc) that have
-          corresponding values.</para>
+          <para>There are built-in types (<literal>bool</literal>,
+          <literal>int</literal>, <literal>str</literal>,
+          <literal>loc</literal>) that have corresponding values.</para>
         </listitem>
 
         <listitem>
           <para>There is a single root to the type hierarchy, everything is a
-          "Value".</para>
+          "<literal>value</literal>".</para>
         </listitem>
 
         <listitem>
@@ -387,9 +399,10 @@
         </listitem>
 
         <listitem>
-          <para>All syntactic types are a subtype of the type TREE that
-          corresponds to AsFix. Up casts from a subtype to an enclosing type
-          are automatic; Down casts require a run-time check.</para>
+          <para>All syntactic types are a subtype of the type
+          <literal>tree</literal> that corresponds to AsFix. Up casts from a
+          subtype to an enclosing type are automatic; Down casts require a
+          run-time check.</para>
         </listitem>
 
         <listitem>
@@ -407,28 +420,28 @@
       <para>As a design strategy we try to offer the option to leave out as
       many type indications as possible.</para>
 
-      <para>The root of the type system is the type named "value". It has the
-      following subtypes:</para>
+      <para>The root of the type system is the type named
+      "<literal>value</literal>". It has the following subtypes:</para>
 
       <itemizedlist>
         <listitem>
-          <para>bool</para>
+          <para><literal>bool</literal></para>
         </listitem>
 
         <listitem>
-          <para>int</para>
+          <para><literal>int</literal></para>
         </listitem>
 
         <listitem>
-          <para>str</para>
+          <para><literal>str</literal></para>
         </listitem>
 
         <listitem>
-          <para>loc</para>
+          <para><literal>loc</literal></para>
         </listitem>
 
         <listitem>
-          <para>void</para>
+          <para><literal>void</literal></para>
         </listitem>
 
         <listitem>
@@ -438,29 +451,31 @@
 
         <listitem>
           <para>all structures defined with a datatype definition. One of the
-          subtypes of datatype is called "tree".</para>
+          subtypes is called "<literal>tree</literal>".</para>
 
           <itemizedlist>
             <listitem>
-              <para>Type tree is the type that corresponds with concrete
-              syntax trees (AsFix in the case of the Meta-Environment). Type
-              tree has as subtype all types that are derived from SDF
-              definitions, i.e., all notions that are defined using a
-              grammar.</para>
+              <para>Type <literal>tree</literal> is the type that corresponds
+              with concrete syntax trees (AsFix in the case of the
+              Meta-Environment). Type <literal>tree</literal> has as subtype
+              all types that are derived from SDF definitions, i.e., all
+              notions that are defined using a grammar.</para>
             </listitem>
 
             <listitem>
-              <para>The type tree is "special" in the following sense:</para>
+              <para>The type <literal>tree</literal> is "special" in the
+              following sense:</para>
 
               <itemizedlist>
                 <listitem>
-                  <para>Parsers generate values of type tree.</para>
+                  <para>Parsers generate values of type
+                  <literal>tree</literal>.</para>
                 </listitem>
 
                 <listitem>
-                  <para>Although the type tree can be defined in Rascal, its
-                  definition is built-in in order to preserve the consistency
-                  with the parser.</para>
+                  <para>Although the type <literal>tree</literal> can be
+                  defined in Rascal, its definition is built-in in order to
+                  preserve the consistency with the parser.</para>
                 </listitem>
               </itemizedlist>
             </listitem>
@@ -476,7 +491,12 @@
       by a mapping of type <literal>map[str,value]</literal>, i.e., annotation
       names are strings and annotation values are arbitrary values of type
       <literal>value</literal>. The following library functions handle
-      annotations:<programlisting>%% Get the value of a named annotation
+      annotations:<programlisting>%% Test whether a named annotation exists.
+public bool has-annotation(&amp;T Subject);
+
+%% Get the value of a named annotation
+%% Note: get-annotation throws an exception when the named 
+%% annotation does not exist.
 public value get-annotation(&amp;T Subject, str Name);
 
 %% Get all annotations
@@ -486,10 +506,7 @@ public map[str,value] get-annotations(&amp;T Subject);
 public &amp;T set-annotation(&amp;T Subject, str Name, value AValue);
 
 %% Set all annotations
-public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programlisting><note>
-          <para>What does get-annotation return when the named annotation does
-          not exist?</para>
-        </note></para>
+public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programlisting></para>
     </section>
 
     <section>
@@ -549,7 +566,7 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
           <para>Global variables are declared and ALWAYS initialized
           (<emphasis role="bold">new</emphasis>) at the top level of each
           module. Functions that use a global variable have to be explicitly
-          declared it as well. The value of a global variable can be used and
+          declare it as well. The value of a global variable can be used and
           replaced by all functions that have locally declared it.</para>
         </listitem>
       </itemizedlist>
@@ -563,7 +580,7 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
 
       <para>A function declaration consists of a visibility declaration, the
       keyword <literal>fun</literal>, result type, a function name, typed
-      arguments and a function body. Function without a result type have type
+      arguments and a function body. Functions without a result type have type
       <literal>void</literal>.</para>
 
       <para>A visibility declaration is one of the keywords
@@ -578,9 +595,7 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
       <para>Functions can raise exceptions but these are not declared as part
       of the function signature.</para>
 
-      <para>Functions can later be extended:<note>
-          <para>Function extension is still under discussion.</para>
-        </note></para>
+      <para>Functions can later be extended [STILL UNDER DISCUSSION]</para>
 
       <itemizedlist>
         <listitem>
@@ -606,6 +621,31 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
 
         <listitem>
           <para>No other extensions are allowed.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Functions preceeded by the keyword "<literal>java</literal>" have
+      a body written in Java. They have the following properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Arguments and result are pure Rascal values.</para>
+        </listitem>
+
+        <listitem>
+          <para>Inside the body variables may be declared both with a Java
+          Type or with a Rascal type. The latter will be converted by the
+          Rascal compiler to appropriate implementation types.</para>
+        </listitem>
+
+        <listitem>
+          <para>Java functions cannot acces the global state of the Rascal
+          program.</para>
+        </listitem>
+
+        <listitem>
+          <para>Side effects cause by Java functions in the Java state, are
+          not undone in the case of backtracking.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -685,11 +725,10 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
 
         <para>Regular expression patterns are ordinary regular expressions
         that are used to match a string value and to decompose it in parts and
-        also to compose new strings.</para>
-
-        <note>
-          <para>We have to add RE variabeles.</para>
-        </note>
+        also to compose new strings. In a match position, a regular expression
+        is followed by a newly declared variable (always of type
+        <literal>list[str]</literal>) that contains the matches obtained by
+        the regular expression.</para>
       </section>
 
       <section xml:id="section.patterns">
@@ -808,18 +847,18 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
 
             <itemizedlist>
               <listitem>
-                <para>+ is now used for addition, union and concatenation
-                (union is gone).</para>
+                <para>+ is now used for addition, union and concatenation (the
+                operator <literal>union</literal> is gone).</para>
               </listitem>
 
               <listitem>
-                <para>- is now used for substraction, difference (\ operator
-                is gone)</para>
+                <para>- is now used for substraction, difference (the operator
+                <literal>\</literal> is gone)</para>
               </listitem>
 
               <listitem>
-                <para>* is now used for multiplication and intersection (inter
-                is gone).</para>
+                <para>* is now used for multiplication and intersection (the
+                operator <literal>inter</literal> is gone).</para>
               </listitem>
 
               <listitem>
@@ -827,28 +866,44 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
               </listitem>
 
               <listitem>
-                <para>For a binary relation R that is a map (i.e. it
-                associates a single value with each domain element) R(n),
-                returns the single image value corresponding with n. This
-                expression may also occur as left-hand side of an
-                assignment:<programlisting>R(N) = V</programlisting>first
-                removesfrom R the tuple with domain value N and then adds the
-                tuple &lt;N, V&gt;. The net effect is that a new map value is
-                assigned to R.</para>
+                <para>For a binary relation <replaceable>R</replaceable> that
+                is a map (i.e. it associates a single value with each domain
+                element)
+                <replaceable>R</replaceable>(<replaceable>N</replaceable>),
+                returns the single image value corresponding with
+                <replaceable>N</replaceable>. This expression may also occur
+                as left-hand side of an assignment:<programlisting><replaceable>R</replaceable>(<replaceable>N</replaceable>) = <replaceable>V</replaceable></programlisting>first
+                removes from <replaceable>R</replaceable> the tuple with
+                domain value <replaceable>N</replaceable> and then adds the
+                tuple &lt;<replaceable>N</replaceable>,
+                <replaceable>V</replaceable>&gt;. The net effect is that a new
+                map value is assigned to <replaceable>R</replaceable>.</para>
               </listitem>
 
               <listitem>
-                <para>For an arbitrary binary relation, R{n} returns a set of
-                corresponding image elements. This expression may also occur
-                as left-hand side of an assignment:<programlisting>R{N} = V</programlisting>first
-                removes all tuples with domain value N and then adds the tuple
-                &lt;N, V&gt;. When the right-hand side is a set, new tuples
-                are added for each element in the set:</para>
+                <para>For an arbitrary binary relation,
+                <replaceable>R</replaceable>{<replaceable>N</replaceable>}
+                returns a set of corresponding image elements. This expression
+                may also occur as left-hand side of an
+                assignment:<programlisting><replaceable>R</replaceable>{<replaceable>N</replaceable>} = <replaceable>V</replaceable></programlisting>first
+                removes all tuples with domain value
+                <replaceable>N</replaceable> and then adds the tuple
+                &lt;<replaceable>N</replaceable>,
+                <replaceable>V</replaceable>&gt;. When the right-hand side is
+                a set, new tuples are added for each element in the
+                set:</para>
 
-                <programlisting>R{N} = {V1, ..., Vn}</programlisting>
+                <programlisting><replaceable>R</replaceable>{<replaceable>N</replaceable>} = {<replaceable>V1</replaceable>, ..., <replaceable>Vn</replaceable>}</programlisting>
 
-                <para>first removes all tuples with domain value N and then
-                adds the tuples &lt;N, V1&gt;, ..., &lt;N, Vn&gt;.</para>
+                <para>first removes all tuples with domain value
+                <replaceable>N</replaceable> and then adds the tuples
+                &lt;<replaceable>N</replaceable>,
+                <replaceable>V1</replaceable>&gt;, ...,
+                &lt;<replaceable>N</replaceable>,
+                <replaceable>Vn</replaceable>&gt;.<note>
+                    <para>Consider to replace the above by standard array
+                    notation.</para>
+                  </note></para>
               </listitem>
 
               <listitem>
@@ -876,7 +931,7 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
         </listitem>
 
         <listitem>
-          <para>If-then statement and if-then-else statement. </para>
+          <para>If-then statement and if-then-else statement.</para>
         </listitem>
 
         <listitem>
@@ -942,13 +997,13 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
             <listitem>
               <para><literal>innermost</literal> = compute a fixed-point:
               repeat a bottom-up traversal as long as the traversal function
-              changes values. </para>
+              changes values.</para>
             </listitem>
 
             <listitem>
               <para><literal>outermost</literal> = compute a fixed-point:
               repeat a traversal traversal as long as the traversal function
-              changes values. </para>
+              changes values.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -1135,18 +1190,17 @@ exports
         <title>Booleans using visit</title>
 
         <para>A simple solution exists using the visit construct that we have
-        encountered in the above examples.<programlisting>module Bool-example1
+        encountered in the above examples.<programlisting>module Bool-examples1
+
 imports Booleans-syntax;
 
 fun Bool reduce(Bool B) {
-    visit bu B {
-      case true &amp; &lt;Bool B2&gt;  =&gt; B2    %% Style 1: Use Variables
-      case false &amp; &lt;Bool B2&gt; =&gt; false
+    visit bottom-up B {
+      case true &amp; &lt;Bool B2&gt;   =&gt; B2
+      case false &amp; &lt;Bool B2&gt;  =&gt; false
 
-      case true | true   =&gt; true      %% Style 2: Use a truth table
-      case true | false  =&gt; true
-      case false | true  =&gt; true
-      case false | false =&gt; false
+      case true | &lt;Bool B2&gt;   =&gt; true
+      case false | &lt;Bool B2&gt;  =&gt; B2
     }
 }</programlisting></para>
 
@@ -1171,20 +1225,20 @@ fun Bool reduce(Bool B) {
         expressions. It also possible to define Booleans as abstract
         terms.<programlisting>module Bool-abstract
 
-datatype Bool true;
-datatype Bool false;
-datatype Bool and(Bool,Bool);
-datatype Bool or(Bool, Bool); 
+data Bool btrue;
+data Bool bfalse;
+data Bool band(Bool, Bool);
+data Bool bor(Bool, Bool); 
 
 fun Bool reduce(Bool B) {
-    visit bu B {
-      case and(true, Bool B2) =&gt; B2   %% Style 1: Use Variables
-      case and(false, Bool)   =&gt; false
+    visit bottom-up B {
+      case band(btrue, &lt;Bool B2&gt;)   =&gt; B2  %% Style 1: Use Variables
+      case band(bfalse, &lt;Bool B2&gt;)  =&gt; bfalse
 
-      case or(true, true)     =&gt; true %% Style 2: Use a truth table
-      case or(true, false)    =&gt; true
-      case or(false, true)    =&gt; true
-      case or(false, false)   =&gt; false
+      case bor(btrue, btrue)        =&gt; btrue %% Style 2: Use a truth table
+      case bor(btrue, bfalse)       =&gt; btrue
+      case bor(bfalse, btrue)       =&gt; btrue
+      case bor(bfalse, bfalse)      =&gt; bfalse
     }
 }</programlisting></para>
 
@@ -1249,61 +1303,49 @@ rules (Bool) {
       <para>In the Meta-Environment we use an abstract data type to exchange
       data representing graphs. It can be defined as follows.<programlisting>module Graph
 
-datatype Graph graph(NodeList nodes, 
-                     EdgeList edges, 
-                     AttributeList attributes);
+data Graph graph(NodeList nodes, EdgeList edges, AttributeList attributes);
 
-subtype Nodelist list[Node];
+type list[Node] Nodelist;
 
-datatype Node node(NodeId id, 
-                   AttributeList attributes);
+data Node node(NodeId id, AttributeList attributes);
+data Node subgraph(NodeId id, NodeList nodes, EdgeList edges, AttributeList attributes);
 
-datatype Node subgraph(NodeId id, 
-                   NodeList nodes, 
-                   EdgeList edges, 
-                   AttributeList attributes);
+data NodeId id(term id);
 
-datatype NodeId id(term id);
+type list[Attribute] AttributeList;
 
-subtype AttributeList list[Attribute];
+data Attribute bounding-box(Point first, Point second);
+data Attribute color(Color color);
+data Attribute curve-points(Polygon points);
+data Attribute direction(Direction direction);
+data Attribute fill-color(Color color);
+data Attribute info(str key, term value);
+data Attribute label(str label);
+data Attribute tooltip(str tooltip);
+data Attribute location(int x, int y);
+data Attribute shape(Shape shape);
+data Attribute size(int width, int height);
+data Attribute style(Style style);
+data Attribute level(str level);
+data Attribute file(File file);
+data Attribute file(term file);
 
-datatype Attribute bounding-box(Point first, Point second);
-datatype Attribute color(Color color);
-datatype Attribute curve-points(Polygon points);
-datatype Attribute direction(Direction direction);
-datatype Attribute fill-color(Color color);
-datatype Attribute info(str key, term value);
-datatype Attribute label(str label);
-datatype Attribute tooltip(str tooltip);
-datatype Attribute location(int x, int y);
-datatype Attribute shape(Shape shape);
-datatype Attribute size(int width, int height);
-datatype Attribute style(Style style);
-datatype Attribute level(str level);
-datatype Attribute file(File file);
-datatype Attribute file(term file);
+data Color rgb(int red, int green, int blue);
 
-datatype Color rgb(int red, int green, int blue);
+data Style bold | dashed | dotted | filled | invisible | solid;
 
-datatype Style bold | dashed | dotted | 
-               filled | invisible | solid;
+data Shape box | circle | diamond | egg | elipse | hexagon | house | 
+           octagon | parallelogram | plaintext | trapezium | triangle;
 
-datatype Shape box | circle | diamond | egg | 
-               elipse | hexagon | house | octagon | 
-               parallelogram | plaintext | trapezium | 
-               triangle;
+data Direction forward | back | both | none;
 
-datatype Direction forward | back | both | none;
+type list[Edge] Edgelist;
 
-subtype Edgelist list[Edge];
+data Edge edge(NodeId from, NodeId to, AttributeList attributes);
 
-datatype Edge edge(NodeId from, 
-                   NodeId to, 
-                   AttributeList attributes);
+type list[Point] Polygon;
 
-subtype Polygon list[Point];
-
-datatype Point point(int x, int y);</programlisting></para>
+data Point point(int x, int y);</programlisting></para>
     </section>
 
     <section>
@@ -1383,18 +1425,15 @@ fun BTREE inc(BTREE T) {
 
 %% Ex4: full replacement of g by i
 %% The whole repertoire of traversal functions is available:
-%% - visit first bu T { ... }
-%% - visit all td  T { ... }
+%% - visit bottom-up T { ... }
+%% - visit bottom-up-break  T { ... }
 %% - etc.
-%% with:
-%% "first" (= break) and "all" (= continue).
-%% "bu" (= bottom-up) and "td" (=top-down)
 %% A nice touch is that these properties are not tied to the
 %% declaration of a travesal function (as in ASF+SDF) but to 
 %% its use.
 
 fun BTREE frepl(BTREE T) {
-    visit all bu T {
+    visit bottom-up T {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
            make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
@@ -1403,7 +1442,7 @@ fun BTREE frepl(BTREE T) {
 %% Ex5: Deep replacement of g by i
 
 fun BTREE frepl(BTREE T) {
-    visit first bu T {
+    visit bottom-up-break T {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
            make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
@@ -1413,7 +1452,7 @@ fun BTREE frepl(BTREE T) {
 %% g's are replaced); 
 
 fun BTREE srepl(BTREE T) {
-    visit first td T {
+    visit top-down-break T {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt; 
            make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
@@ -1424,13 +1463,13 @@ fun BTREE srepl(BTREE T) {
 
 fun set[BTREE] find-outer-gs(BTREE T) {
     return
-    { S | STATEMENT S : first td T, 
+    { S | STATEMENT S : top-down-break T, 
           g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) := S };
 }
  
 %% Ex8: accumulating transformer that increments leaves with 
 %% amount D and counts them
-fun tuple(int, BTREE) count-and-inc(BTREE T, int C, int D) {
+fun tuple[int, BTREE] count-and-inc(BTREE T, int C, int D) {
     int C = 0;
     
     visit T {
