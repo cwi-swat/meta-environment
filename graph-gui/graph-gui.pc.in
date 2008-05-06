@@ -7,7 +7,7 @@ Description:
 Requires: aterm-java,config-support-java,graph-support-java,meta-studio,module-support-java,toolbus-java-adapter
 JarFile=graph-painter.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/prefuse.jar
-Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
+Packages=nl.cwi.sen1.gui.plugin
 MainClass=nl.cwi.sen1.gui.plugin.GraphPainter
 LocalJars=lib/prefuse.jar
 TestClass=
