@@ -151,6 +151,7 @@ context-free syntax
          "return" Expression?                                    -> Statement {cons("return")}
          "yield" Expression                                      -> Statement {cons("yield")}
          "fail"                                                  -> Statement {cons("fail")}
+         "throw" Expression                                      -> Statement {cons("throw")}
          "assert" StrCon ":" Predicate                           -> Statement {cons("assert")}
 
          "try" Statement Catch* Finally?                        -> Statement
@@ -164,5 +165,6 @@ context-free syntax
          "true" | "false" |
          "and" | "or" | "implies" | "global" | 
          "make" | "case" | "default" | "switch" | "visit" | 
-         "solve"  | "for" | "if" | "else" | "return" |
+         "try" | "catch" | "finally" |
+         "solve"  | "for" | "if" | "else" | "return" | "throw" |
          "yield" | "fail" | "assert"                             -> Variable {reject}
