@@ -131,7 +131,7 @@ public class TideControl extends JPanel implements TideControlTif, Runnable {
 
     public void recTerminate(ATerm arg) {
         bridge.stopRunning();
-        debugTool.stopRunning();
+        //debugTool.stopRunning();
         plugin.closeTide();
     }
 
