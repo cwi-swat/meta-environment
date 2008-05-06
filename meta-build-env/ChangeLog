@@ -1,3 +1,7 @@
+Tue May  6 16:27:56 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: Fixed various things such that MANIFEST.MF, build.properties, and .classpath files are correctly generated.
+
 Tue May  6 11:34:30 2008    <bruntink@cwi.nl>
 
 	* meta-build.m4: There now is a META_GENERATE_ECLIPSE_PLUGIN_FILES_FOR_C target that is used to generate Eclipse meta data for C packages.
