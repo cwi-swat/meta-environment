@@ -432,7 +432,8 @@
         </listitem>
 
         <listitem>
-          <para>lists, sets, tuples, maps and relations of values.</para>
+          <para>lists, sets, tuples, maps (single valued binary brelations)
+          and relations of values.</para>
         </listitem>
 
         <listitem>
@@ -466,6 +467,29 @@
           </itemizedlist>
         </listitem>
       </itemizedlist>
+    </section>
+
+    <section>
+      <title>Annotations</title>
+
+      <para>Annotations may be associated with any value and are represented
+      by a mapping of type <literal>map[str,value]</literal>, i.e., annotation
+      names are strings and annotation values are arbitrary values of type
+      <literal>value</literal>. The following library functions handle
+      annotations:<programlisting>%% Get the value of a named annotation
+public value get-annotation(&amp;T Subject, str Name);
+
+%% Get all annotations
+public map[str,value] get-annotations(&amp;T Subject);
+
+%% Set the value of a named annotation
+public &amp;T set-annotation(&amp;T Subject, str Name, value AValue);
+
+%% Set all annotations
+public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programlisting><note>
+          <para>What does get-annotation return when the named annotation does
+          not exist?</para>
+        </note></para>
     </section>
 
     <section>
