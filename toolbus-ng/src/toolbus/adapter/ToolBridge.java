@@ -6,12 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import toolbus.IOperations;
-import toolbus.adapter.AbstractTool;
 import toolbus.communication.IDataHandler;
 import toolbus.communication.IIOHandler;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
+import toolbus.util.collections.RotatingQueue;
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -29,6 +29,8 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 
 	private final Map<Long, ThreadLocalJobQueue> threadLocalQueues;
 	private final Map<AFun, JobQueue> queues;
+	
+	private final WorkerQueue workerQueue;
 
 	private IIOHandler ioHandler;
 
@@ -66,6 +68,8 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 
 		threadLocalQueues = new HashMap<Long, ThreadLocalJobQueue>();
 		queues = new HashMap<AFun, JobQueue>();
+		
+		workerQueue = new WorkerQueue();
 	}
 	
 	/**
@@ -240,14 +244,22 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	/**
 	 * @see IDataHandler#receive(byte, ATerm)
 	 */
-	public void receive(byte operation, ATerm aTerm){
+	public void receive(byte operation, final ATerm aTerm){
 		switch(operation){
 			case DO:
-				doDo(aTerm);
-				send(ACKDO, termFactory.makeList());
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						doDo(aTerm);
+						send(ACKDO, termFactory.makeList());
+					}
+				});
 				break;
 			case EVAL:
-				send(VALUE, doEval(aTerm));
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						send(VALUE, doEval(aTerm));
+					}
+				});
 				break;
 			case ACKEVENT:
 				ATermList ackEvent = ((ATermList) aTerm);
@@ -282,8 +294,12 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				requestQueue.recResponse(aTerm);
 				break;
 			case TERMINATE:
-				doTerminate(aTerm);
-				terminate();
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						doTerminate(aTerm);
+						terminate();
+					}
+				});
 				break;
 			case PERFORMANCESTATS:
 				ATerm performanceStats = doGetPerformanceStats();
@@ -306,6 +322,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 */
 	public void terminate(){
 		ioHandler.terminate();
+		workerQueue.terminate();
 	}
 
 	/**
@@ -332,6 +349,9 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * @see Runnable#run()
 	 */
 	public void run(){
+		// Initialize the worker queue.
+		workerQueue.start();
+		
 		// Only start the connection stuff if we haven't been linked to an I/O handler yet.
 		if(type.equals(AbstractTool.REMOTETOOL)){
 			if(host == null || port == -1){
@@ -599,6 +619,110 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				}
 				
 				requestQueue.post(next);
+			}
+		}
+	}
+	
+	/**
+	 * The queue that is meant to take care of the asynchroneous execution and queueing of anything
+	 * that invokes stuff on a tool.
+	 * 
+	 * @author Arnold Lankamp
+	 */
+	private static class WorkerQueue{
+		private final Object lock = new Object();
+		
+		private final RotatingQueue<Runnable> queue;
+		private final Worker worker;
+		
+		/**
+		 * Default constructor.
+		 */
+		public WorkerQueue(){
+			super();
+			
+			this.queue = new RotatingQueue<Runnable>();
+			this.worker = new Worker();
+			worker.setDaemon(true);
+		}
+		
+		/**
+		 * Starts the worker thread.
+		 */
+		public void start(){
+			worker.start();
+		}
+		
+		/**
+		 * Executes or queues the given runnable for execution.
+		 * 
+		 * @param r
+		 *            The runnable containing the stuff that needs to be executed.
+		 */
+		public void execute(Runnable r){
+			synchronized(lock){
+				boolean notBusy = queue.isEmpty();
+				queue.put(r);
+				if(notBusy) lock.notify();
+			}
+		}
+		
+		/**
+		 * Terminates the worker thread as soon as is gracefully possible.
+		 */
+		public void terminate(){
+			worker.terminate();
+		}
+		
+		/**
+		 * The worker thread of this queue.
+		 * 
+		 * @author Arnold Lankamp
+		 */
+		private class Worker extends Thread{
+			private volatile boolean running;
+			
+			/**
+			 * Default constructor.
+			 */
+			public Worker(){
+				super();
+				
+				running = true;
+			}
+			
+			/**
+			 * The main execution loop.
+			 */
+			public void run(){
+				do{
+					Runnable r;
+					synchronized(lock){
+						r = queue.get();
+						while(r == null){
+							try{
+								lock.wait();
+							}catch(InterruptedException irex){
+								// Ignore this.
+							}
+							if(!running) return;
+							
+							r = queue.get();
+						}
+					}
+					
+					r.run();
+				}while(running);
+			}
+			
+			/**
+			 * Terminates this worker thread after the current iteration.
+			 */
+			public void terminate(){
+				running = false;
+				synchronized(lock){
+					lock.notify();
+				}
 			}
 		}
 	}
