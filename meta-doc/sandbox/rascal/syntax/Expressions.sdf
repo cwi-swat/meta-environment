@@ -18,6 +18,7 @@ context-free start-symbols
 exports
 sorts Expression LeftHandSide Predicate SimpleGenerator Generator FieldSelection Callable Call
       Strategy Signature Statement Rule Assignment AssignOp Value AbstractValue
+      Catch Finally
 
 context-free syntax
 %% Basic values
@@ -105,7 +106,9 @@ context-free syntax
 
 context-free syntax
 %% Generators
-         ("first" | "all")? ("td" | "bu")?                       -> Strategy
+         ("top-down" | "top-down-break" | 
+          "bottom-up" | "bottom-up-break" |
+          "outermost" | "innermost")?                            -> Strategy
 	LeftHandSide ":" Strategy Expression                    -> SimpleGenerator {cons("generator")}
 	Type Variable                                           -> Signature
 	"<" {Signature ","}+ ">"                                -> Signature
@@ -149,6 +152,10 @@ context-free syntax
          "yield" Expression                                      -> Statement {cons("yield")}
          "fail"                                                  -> Statement {cons("fail")}
          "assert" StrCon ":" Predicate                           -> Statement {cons("assert")}
+
+         "try" Statement Catch* Finally?                        -> Statement
+         "catch" Pattern ":" Statement                          -> Catch
+         "finally" ":" Statement                                -> Finally
 
          "{" {Statement ";"}+ ";"? "}"                           -> Statement
 
