@@ -6,7 +6,7 @@ Description:
 Requires: aterm-java,config-support-java,error-support-java,meta-studio,toolbus-java-adapter
 JarFile=editor-plugin.jar
 Jars=${prefix}/share/${JarFile}
-Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.editor
+Packages=nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.editor
 MainClass=nl.cwi.sen1.gui.plugin.EditorPlugin
 TestClass=
 ToolBusFlags=-I${prefix}/share/editor-plugin
