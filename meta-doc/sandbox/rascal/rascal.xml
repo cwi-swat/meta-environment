@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -149,9 +149,9 @@
         </listitem>
 
         <listitem>
-          <para>R3: Parsing and compilation speed needs to be faster than
-          ASF+SDF, comparable to the speed of the Java compiler. Parsetable
-          generation is a major bottleneck in current ASF+SDF.</para>
+          <para>R3: Edit Rascal and SDF and compile complex programs within a
+          few minutes maximally (parsetable generation is a major bottleneck
+          in current ASF+SDF. This needs to be fixed.)</para>
         </listitem>
 
         <listitem>
@@ -199,13 +199,12 @@
           <para>R12 (<emphasis role="bold">new</emphasis>): Minimize possible
           syntactic ambiguities; resolve them by type checking.</para>
         </listitem>
-
         <listitem>
-          <para>R13 (<emphasis role="bold">new</emphasis>): Can integrate with
-          Eclipse analysis and refactoring infra-structure, such as providing
-          synopsis and previews of source-to-source transformations.</para>
+          <para>R13:(<emphasis role="bold">new</emphasis>): Integrates well
+          with refactoring infra-structure (i.e. can provide appropriate
+          interfaces with pre-condition checking, previews and commits as
+          found in interactive refactoring contexts)</para>
         </listitem>
-
         <listitem>
           <para>R14 (<emphasis role="bold">new</emphasis>): no 'null' values,
           preventing common programming errors</para>
@@ -1294,6 +1293,13 @@ rules (Bool) {
             allocated.</para>
           </listitem>
         </itemizedlist>
+
+        <para>The following seems more declarative and more close to the
+        semantics of rewrite rules being applied everywhere and in any
+        order:</para>
+
+        <para><programlisting> rule and(true,B2) =&gt; B2
+ rule and(true,B2) : { print("rule!"); yield B2 }</programlisting></para>
       </section>
     </section>
 
