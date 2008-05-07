@@ -2946,7 +2946,9 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
     compiled language experience. Also, it needs to integrate fully with
     Meta-Environment and Eclipse IMP. Therefore, we have both a simple and
     unoptimized interpreter in mind, as well as a compiler that aggressively,
-    but correctly, optimizes Rascal programs.</para>
+    but correctly, optimizes Rascal programs. The run-time of compiled
+    programs and the interpreter will share the implementation of
+    data-structures.</para>
 
     <section>
       <title>Data structures</title>
