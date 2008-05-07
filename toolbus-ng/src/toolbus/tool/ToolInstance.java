@@ -257,6 +257,11 @@ public class ToolInstance implements IDataHandler, IOperations{
 					eventsFromTool.add(aTerm);
 				}
 				break;
+			case REQUEST:
+				synchronized(requestsFromTool){
+					requestsFromTool.add(aTerm);
+				}
+				break;
 			case ACKDO:
 				goReady();
 				break;

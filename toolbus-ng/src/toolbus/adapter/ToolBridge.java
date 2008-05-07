@@ -379,6 +379,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * @author Arnold Lankamp
 	 */
 	private static class Job{
+		public final byte operation;
 		public final ATerm term;
 		public final long threadId;
 		public ATerm response; // Optional field
@@ -386,14 +387,17 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		/**
 		 * Constructor.
 		 * 
+		 * @param operation
+		 *            The op-code.
 		 * @param term
 		 *            The message associated with this event.
 		 * @param threadId
 		 *            The id of the thread associated with this event.
 		 */
-		public Job(ATerm term, long threadId){
+		public Job(byte operation, ATerm term, long threadId){
 			super();
 			
+			this.operation = operation;
 			this.term = term;
 			this.threadId = threadId;
 		}
@@ -430,7 +434,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 */
 		public synchronized void post(Job job){
 			if(current == null){
-				ioHandler.send(EVENT, job.term);
+				ioHandler.send(job.operation, job.term);
 				current = job;
 			}else{
 				jobs.add(job);
@@ -523,7 +527,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 *            The id of the thread associated with the event.
 		 */
 		public synchronized void postEvent(ATerm aTerm, long threadId){
-			Job request = new Job(aTerm, threadId);
+			Job request = new Job(EVENT, aTerm, threadId);
 			
 			if(!awaitingAck){
 				AFun sourceFun = ((ATermAppl) aTerm).getAFun();
@@ -556,7 +560,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 * @return The received response on the issued request.
 		 */
 		public synchronized ATerm postRequest(ATerm aTerm, long threadId){
-			Job job = new Job(aTerm, threadId);
+			Job job = new Job(REQUEST, aTerm, threadId);
 			synchronized(job){
 				if(!awaitingAck){
 					AFun sourceFun = ((ATermAppl) aTerm).getAFun();

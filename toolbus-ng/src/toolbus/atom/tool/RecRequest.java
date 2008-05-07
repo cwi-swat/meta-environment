@@ -44,7 +44,6 @@ public class RecRequest extends Atom{
 			toolInstance = getToolBus().getToolInstanceManager().get(tid);
 			if(toolInstance == null) return false;
 		}
-		
 		return toolInstance.getRequestFromTool(request.value, getEnv());
 	}
 }

@@ -25,7 +25,7 @@ public class SndResponse extends Atom{
 	}
 	
 	public ProcessExpression copy(){
-		Atom a = new RecRequest(toolId.value, response.value, tbfactory, getPosInfo());
+		Atom a = new SndResponse(toolId.value, response.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		
 		return a;
