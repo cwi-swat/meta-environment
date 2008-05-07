@@ -1,3 +1,7 @@
+Wed May  7 13:01:45 2008    <bruntink@cwi.nl>
+
+	* vis-base.pc.in: Removed dependency on meta package.
+
 Wed May  7 11:47:58 2008    <bruntink@cwi.nl>
 
 	* vis-base.pc.in: Changed dependency on relation-support to rstore-support-java.
