@@ -3725,8 +3725,10 @@
       contains both language independent and language parametric
       functionality. The goal of a PIMP'ed Meta-Environment is to bridge
       Meta-Environment to IMP at this kernel layer in such a way that we can
-      easily use Meta-Environment to get other IMP-based IDE's. Therefore, we
-      need language parametric implementations of all IMP services.</para>
+      easily use Meta-Environment to get other IMP-based IDE's. We expect for
+      example to produce IDE's for RScript and newer version of ASF+SDF.
+      Therefore, we need language parametric implementations of all IMP
+      services.</para>
 
       <itemizedlist>
         <listitem>
@@ -3760,8 +3762,11 @@
         <listitem>
           <para>To communicate with these Eclipse features, small tools that
           bridge to the ToolBus should be created, and data that are
-          interfaces and classes in Eclipse should be reifed as ATerms.
-          </para>
+          interfaces and classes in Eclipse should be reifed as ATerms. This
+          is completely parallel to the implementation of IMP services. The
+          difference is that the number of IMP services is a closed and small
+          set, while Eclipse features are open-ended, especially considering
+          the pletora of Eclipse plugins.</para>
         </listitem>
 
         <listitem>
@@ -3775,7 +3780,11 @@
         <listitem>
           <para>Some concepts have "impedence mismatch". The concept of an
           Eclipse resource closely resembles the Meta-Environment concept of a
-          module. However, the two are actually rather different. </para>
+          module. However, the two are actually rather different. The module
+          concept of the Meta-Environment needs to be adapted to fit the
+          resource concept of Eclipse. The end result of the PIMP'ed
+          Meta-Environment should be something that satisfies the expectations
+          of Eclipse users.</para>
         </listitem>
       </itemizedlist>
     </section>
