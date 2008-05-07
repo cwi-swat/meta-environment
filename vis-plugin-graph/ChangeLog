@@ -1,3 +1,7 @@
+Wed May  7 11:44:29 2008    <bruntink@cwi.nl>
+
+	* vis-plugin-graph.pc.in: Changed dependency on relation-stores to rstore-support-java.
+
 Mon Apr 28 16:13:16 2008    <bruntink@cwi.nl>
 
 	* vis-plugin-graph.pc.in: Changed dependency on module-support to module-support-java.
