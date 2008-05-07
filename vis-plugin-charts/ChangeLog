@@ -1,3 +1,7 @@
+Wed May  7 11:45:38 2008    <bruntink@cwi.nl>
+
+	* Changed dependency on relation-stores to rstore-support-java.
+
 Mon Apr 28 16:14:13 2008    <bruntink@cwi.nl>
 
 	* Changed dependency on module-support to module-support-java.
