@@ -3,7 +3,7 @@ prefix=@prefix@
 Name: vis-plugin-graph
 Version: 1.1
 Description: 
-Requires: aterm-java,config-support-java,toolbus-java-adapter,meta-studio,vis-plugin,tunit,relation-stores
+Requires: aterm-java,config-support-java,toolbus-java-adapter,meta-studio,vis-plugin,tunit,rstore-support-java
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 JarFile=vis-plugin-graph.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/jcommon-1.0.8.jar:${prefix}/share/junit-4.1.jar:${prefix}/share/prefuse.jar
