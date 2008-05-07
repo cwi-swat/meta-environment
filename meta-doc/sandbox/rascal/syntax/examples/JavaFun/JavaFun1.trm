@@ -1,0 +1,5 @@
+module JavaFun
+
+java fun int incr(int N) {
+   return N + 1;
+}
