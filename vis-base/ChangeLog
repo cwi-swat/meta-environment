@@ -1,3 +1,7 @@
+Wed May  7 11:47:58 2008    <bruntink@cwi.nl>
+
+	* vis-base.pc.in: Changed dependency on relation-support to rstore-support-java.
+
 Tue Apr 29 17:18:30 2008    <bruntink@cwi.nl>
 
 	* Removed .project and .classpath from repository.
