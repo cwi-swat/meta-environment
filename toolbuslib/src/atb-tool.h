@@ -24,6 +24,7 @@ typedef struct _OperationTermPair
 } *OperationTermPair;
 
 void   ATBpostEvent(int file_desc, ATerm event);
+ATerm  ATBpostRequest(int file_desc, ATerm request);
 
 ATbool ATBpeekOne(int file_desc);
 int    ATBpeekAny(void);

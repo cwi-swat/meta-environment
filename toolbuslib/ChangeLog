@@ -1,6 +1,11 @@
 $Id$
 
-Thu Mar 03 10:19:05 CEST 2007 <lankamp@cwi.nl>
+Wed May 07 12:00:05 CEST 2008 <lankamp@cwi.nl>
+ * src/atb-tool.*: Added basic support for the request<->response stuff.
+   To guarantee sequential ordering with respect to events, changes were made to the event-queue as well
+   (e.g. it was removed since there was no point in having it).
+
+Thu Mar 03 10:19:05 CEST 2008 <lankamp@cwi.nl>
  * tifstoc: Added the tifstoc tool.
 
 Mon Mar 19 09:41:46 CET 2007 <jurgenv@cwi.nl>

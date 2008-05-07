@@ -46,11 +46,13 @@
 #define EVENT 3
 #define VALUE 4
 #define ACKDO 5
+#define RESPONSE 6
 /* From ToolBus to Tool. */
 #define ACKEVENT 11
 #define EVAL 12
 #define DO 13
 #define TERMINATE 14
+#define REQUEST 15
 /* Stats. */
 #define PERFORMANCE_STATS 21
 #define DEBUG_PERFORMANCE_STATS 22
@@ -73,15 +75,6 @@ typedef struct
   ATbool      verbose;	  /* Should info be dumped on stderr           */
 } Connection;
 
-typedef struct
-{
-  AFun afun;		/* afun -1 => slot is empty            */
-  ATbool ack_pending;	/* ack of event is still pending       */
-  int first;		/* First element in the (cyclic) queue */
-  int last;		/* Last element in the (cyclic) queue  */
-  ATerm data[MAX_QUEUE_LEN];	/* Actual queue elements               */
-} EventQueue;
-
 /*}}}  */
 /*{{{  globals */
 
@@ -102,6 +95,7 @@ static int nrOfConnectedTools = 0;
 static AFun symbol_rec_eval;
 static AFun symbol_rec_do;
 static AFun symbol_rec_ack_event;
+static AFun symbol_rec_response;
 static AFun symbol_rec_terminate;
 static ATerm empty;
 static ATerm snd_ack_do;
@@ -123,13 +117,9 @@ static ByteBuffer readBuffer;
 
 static OperationTermPair otp;
 
-/* Event Queues */
-static EventQueue event_queues[MAX_NR_QUEUES];
-static int nr_event_queues = 0;
-
 /* Static functions */
-static OperationTermPair ATBreadTermWithOp(int fd);
-static int ATBwriteTermWithOp(int file_desc, ATerm term, int operation);
+static OperationTermPair readTerm(int fd);
+static int writeTerm(int file_desc, ATerm term, int operation);
 static int connect_to_socket(const char *host, int port);
 static int mwrite(int fd, char *buf, int len);
 static int mread(int fd, char *buf, int len);
@@ -216,6 +206,64 @@ static void closeConnection(int fd){
   }
 }
 
+/**
+ * Handle a single term from the ToolBus.
+ */
+
+int handle(int fd)
+{
+  ATermAppl tbTerm;
+  ATerm result, term;
+  int operation;
+  
+  OperationTermPair otp = readTerm(fd);
+  if(otp == NULL) return -1;
+  
+  operation = otp->operation;
+  term = otp->term;
+
+  switch(operation){
+    case DO:
+      tbTerm = ATmakeAppl1(symbol_rec_do, term);
+      connections[fd]->handler(fd, (ATerm) tbTerm);
+      return writeTerm(fd, snd_ack_do, ACKDO);
+    case EVAL:
+      tbTerm = ATmakeAppl1(symbol_rec_eval, term);
+      result = connections[fd]->handler(fd, (ATerm) tbTerm);
+      result = ATgetArgument((ATermAppl) result, 0);
+      return writeTerm(fd, result, VALUE);
+    case ACKEVENT:
+      /* We are not suppost to receive 'ackevent' stuff here. */
+      ATerror("Unexpected ACKEVENT received.");
+      return -1;
+    case RESPONSE:
+      /* We are not suppost to receive 'response' stuff here. */
+      ATerror("Unexpected RESPONSE received.");
+      return -1;
+    case TERMINATE:
+      nrOfConnectedTools--;
+      writeTerm(fd, empty, END_OPC);
+      tbTerm = ATmakeAppl1(symbol_rec_terminate, term);
+      connections[fd]->handler(fd, (ATerm) tbTerm);
+      return 0;
+    case PERFORMANCE_STATS:
+      result = getPerformanceStats();
+      writeTerm(fd, result, PERFORMANCE_STATS);
+      return 0;
+    case DEBUG_PERFORMANCE_STATS:
+      result = getPerformanceStats();
+      writeTerm(fd, result, DEBUG_PERFORMANCE_STATS);
+      return 0;
+    case END_OPC:
+	  nrOfConnectedTools--;
+      /* Returning -1 has as result that closeConnection will be called */
+      return -1;
+    default:
+      return -1;
+  }
+  return -1;
+}
+
 /*{{{  void disconnectHandler(int sig) */
 
 void disconnectHandler(int sig)
@@ -276,6 +324,8 @@ int ATBinit(int argc, char *argv[], ATerm *stack_bottom)
   ATprotectSymbol(symbol_rec_do);
   symbol_rec_ack_event = ATmakeSymbol("rec-ack-event", 1, ATfalse);
   ATprotectSymbol(symbol_rec_ack_event);
+  symbol_rec_response = ATmakeSymbol("rec-response", 1, ATfalse);
+  ATprotectSymbol(symbol_rec_response);
   symbol_rec_terminate = ATmakeSymbol("rec-terminate", 1, ATfalse);
   ATprotectSymbol(symbol_rec_terminate);
   empty = (ATerm) ATmakeList0();
@@ -298,10 +348,6 @@ int ATBinit(int argc, char *argv[], ATerm *stack_bottom)
   readBuffer = ATcreateByteBuffer(BYTEBUFFERSIZE * sizeof(char));
   
   otp = (OperationTermPair) malloc(sizeof(struct _OperationTermPair));
-
-  /* Initialize event_queues. */
-  for (lcv=0; lcv<MAX_NR_QUEUES; lcv++)
-    event_queues[lcv].afun = -1;
 
   /* Initialize handlers for OS signals */
   {
@@ -385,7 +431,7 @@ int ATBconnect(char *toolname, char *host, int port, ATBhandler h)
   /* Send connect */
   toolIDTerm = ATmakeInt(tid);
   connectTerm = (ATerm) ATmakeAppl1(ATmakeAFun(toolname, 1, ATfalse), (ATerm) toolIDTerm);
-  ATBwriteTermWithOp(fd, connectTerm, CONNECT);
+  writeTerm(fd, connectTerm, CONNECT);
   
   nrOfConnectedTools++;
 
@@ -397,73 +443,7 @@ int ATBconnect(char *toolname, char *host, int port, ATBhandler h)
 
 void ATBdisconnect(int fd)
 {
-	ATBwriteTermWithOp(fd, snd_disconnect, DISCONNECT);
-}
-
-/*}}}  */
-
-/*{{{  void ATBpostEvent(int fd, ATerm event) */
-
-void ATBpostEvent(int fd, ATerm event)
-{
-  int free_index, i;
-  AFun afun;
-
-  if(ATgetType(event) != AT_APPL) ATabort("Illegal eventtype (should be appl): %t\n", event);
-  afun = ATgetAFun((ATermAppl) event);
-  for(i = 0, free_index = -1; i < MAX_NR_QUEUES; i++){
-    if(event_queues[i].afun == -1){
-      free_index = i;
-    }else if(event_queues[i].afun == afun){
-      break;
-   }
-  }
-
-  if(i >= MAX_NR_QUEUES){
-    if(free_index == -1) ATerror("Maximum number of eventqueues exceeded.\n");
-    i = free_index;		/* occupy free slot */
-    event_queues[i].afun  = afun;
-    ATprotectAFun(afun);
-    event_queues[i].first = 0;
-    event_queues[i].last  = 0;
-    memset(event_queues[i].data, sizeof(event_queues[i].data), 0);
-    ATprotectArray(event_queues[i].data, MAX_QUEUE_LEN);
-    event_queues[i].ack_pending = ATfalse;
-    nr_event_queues++;
-  }
-
-  if(event_queues[i].ack_pending == ATfalse){
-    ATBwriteTermWithOp(fd, event, EVENT);
-    event_queues[i].ack_pending = ATtrue;
-  }else{
-    if((event_queues[i].last + 1) % MAX_QUEUE_LEN == event_queues[i].first)
-      ATerror("Maximum number of events in queue %y exceeded.\n", afun);
-
-    event_queues[i].data[event_queues[i].last] = event;
-    event_queues[i].last = (event_queues[i].last + 1) % MAX_QUEUE_LEN;
-  }
-}
-
-/*}}}  */
-/*{{{  static void handle_ack_event(int fd, AFun afun) */
-
-static void handle_ack_event(int fd, AFun afun)
-{
-  int i;
-
-  for(i = MAX_NR_QUEUES - 1; i >= 0; i--){
-    if((event_queues[i].afun != -1) && event_queues[i].afun == afun){
-      if(event_queues[i].first != event_queues[i].last){
-        ATerm event = event_queues[i].data[event_queues[i].first];
-        event_queues[i].first = (event_queues[i].first + 1) % MAX_QUEUE_LEN;
-        ATBwriteTermWithOp(fd, event, EVENT);
-        /* still pending */
-      }else{
-        event_queues[i].ack_pending = ATfalse;
-      }
-      break;
-    }
-  }
+	writeTerm(fd, snd_disconnect, DISCONNECT);
 }
 
 /*}}}  */
@@ -523,7 +503,7 @@ int ATBeventloop(void)
  * Send a term to the ToolBus.
  */
 
-static int ATBwriteTermWithOp(int fd, ATerm term, int operation){
+static int writeTerm(int fd, ATerm term, int operation){
 	BinaryWriter binaryWriter = ATcreateBinaryWriter(term);
 	
 	/* Write opcode. */
@@ -555,7 +535,7 @@ static int ATBwriteTermWithOp(int fd, ATerm term, int operation){
  * Receive a term from the ToolBus.
  */
 
-static OperationTermPair ATBreadTermWithOp(int fd){
+static OperationTermPair readTerm(int fd){
 	int operation;
 	
 	BinaryReader binaryReader = ATcreateBinaryReader();
@@ -584,6 +564,50 @@ static OperationTermPair ATBreadTermWithOp(int fd){
 	ATdestroyBinaryReader(binaryReader);
 	
 	return otp;
+}
+
+/*}}}  */
+/*{{{  void ATBpostEvent(int fd, ATerm event) */
+
+void ATBpostEvent(int fd, ATerm event)
+{
+	int operation;
+	OperationTermPair otp;
+	ATermList ackEvent;
+	ATerm callbackData;
+	ATermAppl tbTerm;
+	
+    writeTerm(fd, event, EVENT);
+    
+    otp = readTerm(fd);
+  	if(otp == NULL) ATerror("Something went from while reading from a socket.\n");
+  
+  	operation = otp->operation;
+  	if(operation != ACKEVENT) ATerror("Received aterm with op-code: %d, expected ACKEVENT.\n", operation);
+  	
+  	ackEvent = (ATermList) otp->term;
+	callbackData = ATgetFirst(ATgetLast(ackEvent));
+	
+	tbTerm = ATmakeAppl1(symbol_rec_ack_event, callbackData);
+	connections[fd]->handler(fd, (ATerm) tbTerm);
+}
+
+/*}}}  */
+/*{{{  void ATBpostRequest(int fd, ATerm event) */
+
+ATerm ATBpostRequest(int fd, ATerm request){
+	int operation;
+	OperationTermPair otp;
+	
+	writeTerm(fd, request, REQUEST);
+	
+	otp = readTerm(fd);
+  	if(otp == NULL) ATerror("Something went from while reading from a socket.\n");
+  
+  	operation = otp->operation;
+  	if(operation != RESPONSE) ATerror("Received aterm with op-code: %d, expected RESPONSE.\n", operation);
+  	
+  	return otp->term;
 }
 
 /*}}}  */
@@ -649,65 +673,8 @@ int ATBpeekAny(void)
 /*}}}  */
 /*{{{  int ATBhandleOne(int fd) */
 
-/**
- * Handle a single term from the ToolBus.
- */
-
-int ATBhandleOne(int fd)
-{
-  ATermAppl tbTerm;
-  ATerm result, term;
-  int operation;
-  
-  OperationTermPair otp = ATBreadTermWithOp(fd);
-  if(otp == NULL) return -1;
-  
-  operation = otp->operation;
-  term = otp->term;
-
-  switch(operation){
-  	case DO:
-      tbTerm = ATmakeAppl1(symbol_rec_do, term);
-      connections[fd]->handler(fd, (ATerm) tbTerm);
-      return ATBwriteTermWithOp(fd, snd_ack_do, ACKDO);
-    case EVAL:
-      tbTerm = ATmakeAppl1(symbol_rec_eval, term);
-      result = connections[fd]->handler(fd, (ATerm) tbTerm);
-      result = ATgetArgument((ATermAppl) result, 0);
-      return ATBwriteTermWithOp(fd, result, VALUE);
-    case ACKEVENT:
-      {
-	      ATermList ackEvent = (ATermList) term;
-	      ATermAppl event = (ATermAppl) ATgetFirst(ackEvent);
-	      ATerm callbackData = ATgetFirst(ATgetLast(ackEvent));
-	      
-	      tbTerm = ATmakeAppl1(symbol_rec_ack_event, callbackData);
-	      connections[fd]->handler(fd, (ATerm) tbTerm);
-	      handle_ack_event(fd, ATgetAFun(event));
-      }
-      return 0;
-    case TERMINATE:
-      nrOfConnectedTools--;
-      ATBwriteTermWithOp(fd, empty, END_OPC);
-      tbTerm = ATmakeAppl1(symbol_rec_terminate, term);
-      connections[fd]->handler(fd, (ATerm) tbTerm);
-      return 0;
-    case PERFORMANCE_STATS:
-      result = getPerformanceStats();
-      ATBwriteTermWithOp(fd, result, PERFORMANCE_STATS);
-      return 0;
-    case DEBUG_PERFORMANCE_STATS:
-      result = getPerformanceStats();
-      ATBwriteTermWithOp(fd, result, DEBUG_PERFORMANCE_STATS);
-      return 0;
-    case END_OPC:
-	  nrOfConnectedTools--;
-      /* Returning -1 has as result that closeConnection will be called */
-      return -1;
-    default:
-      return -1;
-  }
-  return -1;
+int ATBhandleOne(int fd){
+	return 0; // No-op.
 }
 
 /*}}}  */
@@ -742,7 +709,7 @@ int ATBhandleAny(void)
   do {
     if(connections[cur] && FD_ISSET(cur, &set)) {
       last = cur;
-      if(ATBhandleOne(cur) < 0) {
+      if(handle(cur) < 0) {
       	closeConnection(cur);
       }
       /* Signal 'activity', even on error! */
