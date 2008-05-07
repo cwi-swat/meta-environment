@@ -16,8 +16,8 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression LeftHandSide Predicate SimpleGenerator Generator FieldSelection Callable Call
-      Strategy Signature Statement Rule Assignment AssignOp Value AbstractValue
+sorts Expression DeclLeftHandSide Predicate SimpleGenerator Generator FieldSelection Callable Call
+      Strategy Statement Rule Assignment IncrAssignOp Value AbstractValue
       Catch Finally
 
 context-free syntax
@@ -41,10 +41,10 @@ context-free syntax
         "(" Expression ")"                                       -> Expression {bracket}
 	Variable                                                -> Expression {cons("variable")}
 
-         Variable ("." Variable)+                                -> FieldSelection
+         Callable ("." Variable)+                                -> FieldSelection
          FieldSelection                                          -> Expression
 
-         Variable | FieldSelection                               -> Callable
+         Variable | FieldSelection | Call                        -> Callable
 
 	Callable "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
          Callable "{" Expression  "}"                            -> Call {cons("multi-map-call")}
@@ -99,9 +99,9 @@ context-free priorities
          Predicate "implies" Predicate                           -> Predicate {cons("implies")}
 
 context-free syntax
-	LeftHandSide ":=" Expression                            -> Predicate {cons("match")}
-	LeftHandSide "!:=" Expression                           -> Predicate {cons("not-match")}
-%%         LeftHandSide "<-" Expression                            -> Predicate {cons("match-assign")}
+	DeclLeftHandSide ":=" Expression                        -> Predicate {cons("match")}
+	DeclLeftHandSide "!:=" Expression                       -> Predicate {cons("not-match")}
+%%       DeclLeftHandSide "<-" Expression                        -> Predicate {cons("match-assign")}
 	IdCon "(" {Expression","}* ")"                          -> Predicate {cons("pred-fun-call")}
 	"(" Predicate ")"                                       -> Predicate {bracket}
 
@@ -110,11 +110,13 @@ context-free syntax
          ("top-down" | "top-down-break" | 
           "bottom-up" | "bottom-up-break" |
           "outermost" | "innermost")?                            -> Strategy
-	LeftHandSide ":" Strategy Expression                    -> SimpleGenerator {cons("generator")}
-	Type Variable                                           -> Signature
-	"<" {Signature ","}+ ">"                                -> Signature
-         "{" {Signature ","}+ "}"                                -> Signature
-         Signature | SynPattern | AbsPattern |RegPattern         -> LeftHandSide
+	DeclLeftHandSide ":" Strategy Expression                -> SimpleGenerator {cons("generator")}
+         Type Variable                                           -> DeclLeftHandSide
+         StructuredType                                          -> DeclLeftHandSide
+         AbstractType                                            -> DeclLeftHandSide
+         SynPattern                                              -> DeclLeftHandSide
+         AbsPattern                                              -> DeclLeftHandSide
+         RegPattern                                              -> DeclLeftHandSide
          
          SimpleGenerator                                         -> Generator
          Predicate                                               -> Generator
@@ -130,30 +132,30 @@ context-free syntax
           QuotedSynPattern                                       -> Expression
          "make" Pattern                                          -> Expression
 
-         "case" Pattern ":" Statement                            -> Rule
-         "default" ":" Statement                                 -> Rule
-         "case" Pattern "=>" Expression                          -> Rule
+         "case" Pattern ":" Statement                            -> Rule       {cons("case-state")}
+         "default" ":" Statement                                 -> Rule       {cond("default")}
+         "case" Pattern "=>" Expression                          -> Rule       {cons("case-expr")}
 
- 	"switch" Expression "{" Rule+ "}"                       -> Statement
-   	"visit" Strategy Expression "{" Rule+ "}"               -> Statement
-         "solve" "{" { Assignment ";"}+ "}"                      -> Statement
-         "for" "(" {Generator ","}+ ")" Statement                -> Statement
+ 	"switch" Expression "{" Rule+ "}"                       -> Statement  {cons("switch")}
+   	"visit" Strategy Expression "{" Rule+ "}"               -> Statement  {cons("visit")}
+         "solve" "{" { Assignment ";"}+ "}"                      -> Statement  {cons("solve")}
+         "for" "(" {Generator ","}+ ")" Statement                -> Statement  {cons("for")}
 
-         "if" "(" Predicate ")" Statement "else" Statement       -> Statement
-         "if" "(" Predicate ")" Statement                        -> Statement
+         "if" "(" Predicate ")" Statement "else" Statement       -> Statement  {cons("if-else")}
+         "if" "(" Predicate ")" Statement                        -> Statement  {cons("if-then")}
 %% Do we want elseif etc.?
 
-          "=" | "+=" | "-=" | "*=" | "/="                        -> AssignOp
+         "+=" | "-=" | "*=" | "/="                               -> IncrAssignOp {cons("incr-assignop")}
 
          Expression                                              -> Statement
-         (Variable | Call) AssignOp Expression                   -> Assignment {cons("assign")}
-         LeftHandSide "=" Expression                             -> Statement {cons("assignment")}
-         "global" Type Variable ("=" Expression)?                -> Statement {cons("global")}
-         "return" Expression?                                    -> Statement {cons("return")}
-         "yield" Expression                                      -> Statement {cons("yield")}
-         "fail"                                                  -> Statement {cons("fail")}
-         "throw" Expression                                      -> Statement {cons("throw")}
-         "assert" StrCon ":" Predicate                           -> Statement {cons("assert")}
+         (Variable | Call) IncrAssignOp Expression               -> Assignment {cons("assign")}
+         (DeclLeftHandSide | Variable | Call) "=" Expression     -> Statement  {cons("assignment")}
+         "global" Type Variable ("=" Expression)?                -> Statement  {cons("global")}
+         "return" Expression?                                    -> Statement  {cons("return")}
+         "yield" Expression                                      -> Statement  {cons("yield")}
+         "fail"                                                  -> Statement  {cons("fail")}
+         "throw" Expression                                      -> Statement  {cons("throw")}
+         "assert" StrCon ":" Predicate                           -> Statement  {cons("assert")}
 
          "try" Statement Catch* Finally?                         -> Statement  {cons("try")}
          "catch" Pattern ":" Statement                           -> Catch      {cons("catch")}

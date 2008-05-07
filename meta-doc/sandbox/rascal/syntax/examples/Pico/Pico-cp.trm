@@ -18,7 +18,7 @@ fun PROGRAM cp(PROGRAM P) {
     rel[PICO-ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
 
-    rel[PICO-ID, EXP] replacements = 
+    map[PICO-ID, EXP] replacements = 
       {<Id2, E> | STATEMENT S : P,
                   [| <PICO-ID Id> := <EXP E> |] := S,
                   is-constant(E),
@@ -27,6 +27,6 @@ fun PROGRAM cp(PROGRAM P) {
       };  
  
     visit P {
-     case <PICO-ID Id>: if({ EXP E } := replacements{Id}) yield E
+     case <PICO-ID Id>: if(EXP E := replacements(Id)) yield E
     };  
 }

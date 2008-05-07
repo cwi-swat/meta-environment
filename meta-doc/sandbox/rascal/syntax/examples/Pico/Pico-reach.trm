@@ -1,14 +1,14 @@
 module Pico-reaching-defs
 
-subtype Def  tuple(Stat theStat, Var theVar);
-subtype Use  tuple(Stat theStat, Var theVar);
+type tuple[Stat theStat, Var theVar] Def;
+type tuple[Stat theStat, Var theVar] Use;
 
 fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
-    return P[-,S] %% outdated image operator
+    return invert(P)(S)
 }
 
 fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
-    return P[S,-]
+    return P(S)
 }
 
 fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS, 
@@ -16,11 +16,11 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
 
     set[Stat] STATEMENT = carrier(PRED);
 
-    rel[Stat,Def] DEF  = {<S,<S,V>> | <Stat S, Var V> : DEFS};
+    rel[Stat,Def] DEF  = {<S,<S,V>> | tuple[Stat S, Var V]: DEFS};
 
     rel[Stat,Def] KILL = 
-        {<S1, <S2, V>> | <Stat S1, Var V> : DEFS, 
-                         tuple(Stat S2, V) : DEFS, 
+        {<S1, <S2, V>> | tuple[Stat S1, Var V] : DEFS, 
+                         tuple[Stat S2, V] : DEFS, 
                          S1 != S2
         };
 
@@ -31,7 +31,7 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
            IN  =  {<S, D> | int S : STATEMENT, 
                             Stat P : predecessor(PRED,S), 
                             Def D : OUT{P}};
-           OUT = {<S, D> |  int S : STATEMENT, 
+           OUT =  {<S, D> | int S : STATEMENT, 
                             Def D : DEF{S} +  (IN{S} - KILL{S})}
     };
     return IN;

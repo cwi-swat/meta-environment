@@ -1605,7 +1605,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
                      end;
           }
 
-    case &lt;Var V&gt;: return Rn[V]
+    case &lt;Var V&gt;: return Rn(V)
 
     default: return E
     };
@@ -1733,10 +1733,10 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
       <para><programlisting>module Pico-eval
 imports pico/syntax/Pico;
 
-subtype PICO-VALUE int;
-subtype PICO-VALUE str;
+type int PICO-VALUE;
+type str PICO-VALUE;
 
-subtype VEnv rel[PICO-ID, PICO-VALUE];
+type map[PICO-ID, PICO-VALUE] VEnv;
 
 fun VEnv evalProgram(PROGRAM P){
     switch P {
@@ -1748,8 +1748,8 @@ fun VEnv evalProgram(PROGRAM P){
 };
 
 fun VEnv assign(VEnv Env, PICO-ID Id, PICO-VALUE V){
-  return Env +&gt; {&lt;Id, V&gt;}  
-  %% we need a nice tuple replacement operator here
+  Env(Id) = V;
+  return Env
 }
 
 fun PICO-VALUE valueOf(VEnv Env, PICO-ID Id){
@@ -1838,10 +1838,10 @@ fun PICO-VALUE evalExp(Exp exp, VEnv Env) {
       represent the value environment.<programlisting>module Pico-eval
 imports pico/syntax/Pico;
 
-subtype PICO-VALUE int;
-subtype PICO-VALUE str;
+type int PICO-VALUE;
+type str PICO-VALUE;
 
-subtype VEnv rel[PICO-ID, PICO-VALUE];
+type map[PICO-ID, PICO-VALUE] VEnv;
 
 fun void evalProgram(PROGRAM P){
     switch P {
@@ -1854,7 +1854,7 @@ fun void evalProgram(PROGRAM P){
 
 fun void assign(PICO-ID Id, PICO-VALUE V){
   global Venv Env;
- Env = Env +&gt; {&lt;Id, V&gt;}
+  Env(Id) = V;
   return;
 }
 
@@ -1952,12 +1952,12 @@ fun PICO-VALUE evalExp(Exp exp) {
       <programlisting>module Pico-controlflow
 imports pico/syntax/Pico;
 
-subtype CP EXP;         %% A Code Point, union of two types
-subtype CP STATEMENT;
+type EXP CP;         %% A Code Point, union of two types
+type STATEMENT CP;
 
-subtype CFSEGMENT tuple(set[CP] entry, 
-                        rel[CP,CP] graph, 
-                        set[CP] exit);
+type tuple[set[CP] entry, 
+           rel[CP,CP] graph, 
+           set[CP] exit] CFSEGMENT;
 
 fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {
@@ -1982,9 +1982,9 @@ fun CFSEGMENT cflow(STATEMENT Stat){
       case [| if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats2&gt; fi |]: {
            &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = 
-                                                     cflow(Stats1);
+                                                      cflow(Stats1);
            &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = 
-                                                     cflow(Stats2);
+                                                      cflow(Stats2);
            return &lt; {Exp}, 
                     ({Exp} x En1) + ({Exp} x En2) + R1 + R2,
                     Ex1 + Ex2 
@@ -2037,9 +2037,9 @@ fun set[PICO-ID] uninit(PROGRAM P) {
     rel[PICO-ID, STATEMENT] Defs = defs(P);
     CFSEGMENT CFLOW = cflow(P);
     set[CP] Root = CFLOW.entry;
-    rel[CP,CP] Pred = CFLOW.graph;
+    rel[CP,CP] Pred = CFLOW.graph; 
 
-    return {Id | tuple(EXP E, PICO-ID Id) : Uses,
+    return {Id | tuple[EXP E, PICO-ID Id] : Uses,
                  E in reachX(Root, Defs{Id}, Pred)
     };
 }</programlisting></para>
@@ -2057,15 +2057,15 @@ imports pico/syntax/Pico
 fun PROGRAM cse(PROGRAM P) {
     rel[PICO-ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
-    rel[EXP, PICO-ID] replacements = 
+    map[EXP, PICO-ID] replacements = 
        {&lt;E2, Id&gt; | STATEMENT S : P,
                    [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] := S,
                    Id notin E,
                    EXP E2 : reachX({S}, Defs{Id}, Pred)
        };
- 
+  
     visit P {
-      case &lt;EXP E&gt;: if({ PICO-ID Id } := replacements{E}) yield Id
+      case &lt;EXP E&gt;: if(PICO-ID Id := replacements(E)) yield Id
     };
 }</programlisting></para>
 
@@ -2155,7 +2155,7 @@ fun PROGRAM cp(PROGRAM P) {
     rel[PICO-ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
 
-    rel[PICO-ID, EXP] replacements = 
+    map[PICO-ID, EXP] replacements = 
       {&lt;Id2, E&gt; | STATEMENT S : P,
                   [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] := S,
                   is-constant(E),
@@ -2164,7 +2164,7 @@ fun PROGRAM cp(PROGRAM P) {
       };  
  
     visit P {
-     case &lt;PICO-ID Id&gt;: if({ EXP E } := replacements{Id}) yield E
+     case &lt;PICO-ID Id&gt;: if(EXP E := replacements(Id)) yield E
     };  
 }</programlisting></para>
 
@@ -2202,15 +2202,15 @@ fun PROGRAM cp(PROGRAM P) {
       values of a set of variables until none of them changes any longer. The
       "solve" statement achives the same effect.<programlisting>module Pico-reaching-defs
 
-subtype Def  tuple(Stat theStat, Var theVar);
-subtype Use  tuple(Stat theStat, Var theVar);
+type tuple[Stat theStat, Var theVar] Def;
+type tuple[Stat theStat, Var theVar] Use;
 
 fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
-    return P[-,S] %% outdated image operator
+    return invert(P)(S)
 }
 
 fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
-    return P[S,-]
+    return P(S)
 }
 
 fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS, 
@@ -2218,11 +2218,11 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
 
     set[Stat] STATEMENT = carrier(PRED);
 
-    rel[Stat,Def] DEF  = {&lt;S,&lt;S,V&gt;&gt; | &lt;Stat S, Var V&gt; : DEFS};
+    rel[Stat,Def] DEF  = {&lt;S,&lt;S,V&gt;&gt; | tuple[Stat S, Var V]: DEFS};
 
     rel[Stat,Def] KILL = 
-        {&lt;S1, &lt;S2, V&gt;&gt; | &lt;Stat S1, Var V&gt; : DEFS, 
-                         tuple(Stat S2, V) : DEFS, 
+        {&lt;S1, &lt;S2, V&gt;&gt; | tuple[Stat S1, Var V] : DEFS, 
+                         tuple[Stat S2, V] : DEFS, 
                          S1 != S2
         };
 
@@ -2233,7 +2233,7 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
            IN  =  {&lt;S, D&gt; | int S : STATEMENT, 
                             Stat P : predecessor(PRED,S), 
                             Def D : OUT{P}};
-           OUT = {&lt;S, D&gt; |  int S : STATEMENT, 
+           OUT =  {&lt;S, D&gt; | int S : STATEMENT, 
                             Def D : DEF{S} +  (IN{S} - KILL{S})}
     };
     return IN;
@@ -2246,61 +2246,57 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
       <para>Here is a (probably naive) implementation of a symbol table that
       maintains a list of numbered scopes as well as a (Name, Value) mapping
       in each scope. Note that we introduce parameterized modules to do this
-      right.<programlisting>module SymTable[Name, Value]
+      right.<programlisting>module SymTable[&amp;Name, &amp;Value]
 
 %% A scope-oriented symbol table.
 %% Each scope consists of a map from names to values. 
 %% THis more intended to explore whether this can be expressed
 %% *at all* than that the datatype is well designed.
 
-subtype ScopeMap rel[Name, Value];
-subtype ScopeId  int
-datatype STable  stable(ScopeId scope, rel[int, ScopeMap] scopes); 
+type rel[&amp;Name, &amp;Value] ScopeMap;
+type int ScopeId;
+data STable[&amp;Name, &amp;Value] stable(ScopeId scope, rel[int, ScopeMap] scopes); 
 
 %% Create a new, empty,  table
-fun STable new(){
+fun STable[&amp;Name, &amp;Value] new(){
   return make stable(0, {&lt;0, {}&gt;});
 }
 
 %% Create a new, non-empty, table
-fun STable new(ScopeId scope, rel[int, ScopeMap] scopes){
+fun STable[&amp;Name, &amp;Value] new(ScopeId scope, rel[int, ScopeMap] scopes){
   return make stable(scope, scopes);
 } 
 
 %% Update, in a given scope, the value of a variable
-fun STable update(STable ST, ScopeId scope, Name N, Value V){
-  X = ST.scopes(scope) + {&lt;N, V&gt;};
-  return new(scope, ST.scopes + (ST.scopes(scope) + {&lt;N, V&gt;}));
+fun STable[&amp;Name, &amp;Value] update(STable ST, ScopeId scope, Name N, Value V){
+  ST.scopes(scope)(N) = V;
+  return new(scope, ST.scopes)
 }
 
 %% Get, in a given scope, the value of a variable
-fun STable value(STable ST, ScopeId scope, Name N){
-  ScopeMap smap = ST.scopes(scope);
-  return smap(N);
+fun STable[&amp;Name, &amp;Value] value(STable ST, ScopeId scope, Name N){
+  return ST.scopes(scope)(N)
 }
 
 %% update, in the current scope, the value of a variable
-fun STable update(STable ST, Name N, Value V){
-  ScopeId scope = ST.scope;
-  ScopeMap smap = ST.scopes(scope) + {&lt;N,V&gt;};
-  return new(scope, ST.scopes + 
-                    (ST.scopes(scope) + {&lt;scope, smap&gt;}));
+fun STable[&amp;Name, &amp;Value] update(STable ST, Name N, Value V){
+  ST.scopes(scope)(N) = V;
+  return new(scope, ST.scopes)
 }
 
 %% Get, in the current scope, the value of a variable
 fun STable value(STable ST, Name N){
-  ScopeMap smap = ST.scopes(ST.scope);
-  return smap(N);
+  return ST.scopes(ST.scope)(N)
 }
 
 %% add a new scope and make it the current scope
-fun STable new-scope(STable ST){
+fun STable[&amp;Name, &amp;Value] new-scope(STable ST){
   ScopeId scope = ST.scope + 1;
-  return new(scope, ST.scopes + {&lt;scope, {}&gt;});
+  return new(scope, ST.scopes);
 }
 
 %% switch to another scope
-fun STable switch-scope(STable ST, ScopeId scope){
+fun STable[&amp;Name, &amp;Value] switch-scope(STable ST, ScopeId scope){
   return new(scope, ST.scopes);
 }
 
@@ -2408,10 +2404,12 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 &gt; str source := read("program.java");
 &gt; CU program := Java.CU.parse(source);
 
-&gt; accu int count(CU P, int cnt) {
-&gt;   switch P {
+&gt; fun int count(CU P) {
+    int cnt := 0;
+&gt;   visit P {
 &gt;     Java.Statements.IF =&gt; cnt++;
 &gt;   }
+    return cnt
 &gt; }
 
 &gt; count(program)
@@ -2954,7 +2952,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
       <title>Data structures</title>
 
       <para>Both the compiled code and the interpreter will run on the same
-      data-structures which are defined by the IMP PDB project. </para>
+      data-structures which are defined by the IMP PDB project.</para>
 
       <itemizedlist>
         <listitem>

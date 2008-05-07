@@ -3,7 +3,7 @@ module Typecheck
 imports Pico-syntax;
 imports Errors;
 
-subtype Env rel[PICO-ID,TYPE];
+type map[PICO-ID,TYPE] Env;
 
 fun list[Error] tcp(PROGRAM P) {
     switch P {

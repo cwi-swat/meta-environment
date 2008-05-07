@@ -1,58 +1,54 @@
-module SymTable[Name, Value]
+module SymTable[&Name, &Value]
 
 %% A scope-oriented symbol table.
 %% Each scope consists of a map from names to values. 
 %% THis more intended to explore whether this can be expressed
 %% *at all* than that the datatype is well designed.
 
-subtype ScopeMap rel[Name, Value];
-subtype ScopeId  int
-datatype STable  stable(ScopeId scope, rel[int, ScopeMap] scopes); 
+type rel[&Name, &Value] ScopeMap;
+type int ScopeId;
+data STable[&Name, &Value] stable(ScopeId scope, rel[int, ScopeMap] scopes); 
 
 %% Create a new, empty,  table
-fun STable new(){
+fun STable[&Name, &Value] new(){
   return make stable(0, {<0, {}>});
 }
 
 %% Create a new, non-empty, table
-fun STable new(ScopeId scope, rel[int, ScopeMap] scopes){
+fun STable[&Name, &Value] new(ScopeId scope, rel[int, ScopeMap] scopes){
   return make stable(scope, scopes);
 } 
 
 %% Update, in a given scope, the value of a variable
-fun STable update(STable ST, ScopeId scope, Name N, Value V){
-  X = ST.scopes(scope) + {<N, V>};
-  return new(scope, ST.scopes + (ST.scopes(scope) + {<N, V>}));
+fun STable[&Name, &Value] update(STable[&Name, &Value] ST, ScopeId scope, &Name N, &Value V){
+  ST.scopes(scope)(N) = V;
+  return new(scope, ST.scopes)
 }
 
 %% Get, in a given scope, the value of a variable
-fun STable value(STable ST, ScopeId scope, Name N){
-  ScopeMap smap = ST.scopes(scope);
-  return smap(N);
+fun STable[&Name, &Value] value(STable[&Name, &Value] ST, ScopeId scope, &Name N){
+  return ST.scopes(scope)(N)
 }
 
 %% update, in the current scope, the value of a variable
-fun STable update(STable ST, Name N, Value V){
-  ScopeId scope = ST.scope;
-  ScopeMap smap = ST.scopes(scope) + {<N,V>};
-  return new(scope, ST.scopes + 
-                    (ST.scopes(scope) + {<scope, smap>}));
+fun STable[&Name, &Value] update(STable[&Name, &Value] ST, &Name N, &Value V){
+  ST.scopes(scope)(N) = V;
+  return new(scope, ST.scopes)
 }
 
 %% Get, in the current scope, the value of a variable
-fun STable value(STable ST, Name N){
-  ScopeMap smap = ST.scopes(ST.scope);
-  return smap(N);
+fun STable value(STable[&Name, &Value] ST, &Name N){
+  return ST.scopes(ST.scope)(N)
 }
 
 %% add a new scope and make it the current scope
-fun STable new-scope(STable ST){
+fun STable[&Name, &Value] new-scope(STable[&Name, &Value] ST){
   ScopeId scope = ST.scope + 1;
-  return new(scope, ST.scopes + {<scope, {}>});
+  return new(scope, ST.scopes);
 }
 
 %% switch to another scope
-fun STable switch-scope(STable ST, ScopeId scope){
+fun STable[&Name, &Value] switch-scope(STable[&Name, &Value] ST, ScopeId scope){
   return new(scope, ST.scopes);
 }
 

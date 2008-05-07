@@ -1,10 +1,10 @@
 module Pico-eval
 imports pico/syntax/Pico;
 
-subtype PICO-VALUE int;
-subtype PICO-VALUE str;
+type int PICO-VALUE;
+type str PICO-VALUE;
 
-subtype VEnv rel[PICO-ID, PICO-VALUE];
+type map[PICO-ID, PICO-VALUE] VEnv;
 
 fun VEnv evalProgram(PROGRAM P){
     switch P {
@@ -16,8 +16,8 @@ fun VEnv evalProgram(PROGRAM P){
 };
 
 fun VEnv assign(VEnv Env, PICO-ID Id, PICO-VALUE V){
-  return Env +> {<Id, V>}  
-  %% we need a nice tuple replacement operator here
+  Env(Id) = V;
+  return Env
 }
 
 fun PICO-VALUE valueOf(VEnv Env, PICO-ID Id){

@@ -13,6 +13,7 @@ hiddens
 exports
   sorts TypeName Type OptNamedType OptNamedTypes TypeVar 
         BasicType StructuredType FunctionType AbstractType
+        ParameterizedType
 
   lexical syntax
     head:[a-z]                                          -> TypeName {cons("one-char")}
@@ -35,23 +36,22 @@ exports
     "list" "[" Type "]"                                 -> StructuredType {cons("list-type")} 
     "set" "[" Type "]"                                  -> StructuredType {cons("set-type")}
     "map" "[" OptNamedType "," OptNamedType "]"         -> StructuredType {cons("map-type")}
-%% We could also add the multi-map type:
-%%   "mmap" "[" OptNamedType "," OptNamedType "]"       -> StructuredType {cons("mmap-type")}
     "rel" "[" OptNamedTypes "]"                         -> StructuredType {cons("rel-type")}
     "tuple" "[" OptNamedType "," OptNamedTypes "]"      -> StructuredType {cons("tuple-type")}
 
     "fun" Type Variable "(" OptNamedTypes? ")"          -> FunctionType {cons("function-type")}
 
     "&" Variable                                        -> TypeVar {cons("type-var")}
+    (TypeName | Sort) "[" {TypeVar ","}+ "]"            -> ParameterizedType
 
     Symbol                                              -> Type {cons("symbol-type")}
 
     TypeName                                            -> AbstractType {cons("typename-abstype")}
-    TypeVar                                             -> AbstractType {cons("typevar-abstype")}
+%%    TypeVar                                             -> AbstractType {cons("typevar-abstype")}
     TypeName "(" {OptNamedType ","}* ")"                -> AbstractType {cons("constructor-abstype")}
 
     TypeVar | BasicType | StructuredType | 
-    FunctionType | AbstractType                         -> Type {cons("type")}
+    FunctionType | AbstractType | ParameterizedType     -> Type {cons("type")}
 
 %% Define reserved words
    "bool" | "int" | "str" | "loc" | "value" | "term" | 

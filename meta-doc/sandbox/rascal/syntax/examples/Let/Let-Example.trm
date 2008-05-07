@@ -21,7 +21,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
                      end;
           }
 
-    case <Var V>: return Rn[V]
+    case <Var V>: return Rn(V)
 
     default: return E
     };
