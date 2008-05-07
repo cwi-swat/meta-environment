@@ -3,7 +3,7 @@ prefix=@prefix@
 Name: vis-base
 Version: 1.0
 Description: 
-Requires: aterm-java,config-support-java,toolbus-java-adapter,meta-studio,rstore-container,tunit,meta,rstore-support-java
+Requires: aterm-java,config-support-java,toolbus-java-adapter,meta-studio,rstore-container,tunit,rstore-support-java
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 JarFile=vis-base.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/log4j-1.2.14.jar:${prefix}/share/junit-4.1.jar:${prefix}/share/commons-logging-1.1.jar
