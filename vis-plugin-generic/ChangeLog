@@ -1,3 +1,7 @@
+Wed May  7 11:42:28 2008    <bruntink@cwi.nl>
+
+	* vis-plugin-generic.pc.on: Changed relation-stores dependency to rstore-support-java.
+
 Mon Apr 28 16:05:34 2008    <bruntink@cwi.nl>
 
 	* vis-plugin-generic.pc.in: Changed config-support dependency to config-support-java.
