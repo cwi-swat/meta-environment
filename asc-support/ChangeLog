@@ -1,4 +1,6 @@
-$Id$
+Wed May  7 13:08:29 2008    <bruntink@cwi.nl>
+
+	* asc-support.pc.in: Changed dependency on relation-stores to rstore-support.
 
 Wed Apr 16 11:10:31 CEST 2008 <jurgenv@cwi.nl>
  * lib/Library.*: regenerated with new apigen to fix problems
