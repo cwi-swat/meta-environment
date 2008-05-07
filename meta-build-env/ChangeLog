@@ -1,3 +1,7 @@
+Wed May  7 16:05:56 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: Required Eclipse and Meta bundles are now all put on a separate line to prevent lines becoming too long.
+
 Tue May  6 16:27:56 2008    <bruntink@cwi.nl>
 
 	* meta-build.m4: Fixed various things such that MANIFEST.MF, build.properties, and .classpath files are correctly generated.
