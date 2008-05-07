@@ -9,6 +9,6 @@ JarFile=vis-plugin.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/jcommon-1.0.8.jar:${prefix}/share/jfreechart-1.0.4.jar:${prefix}/share/junit-4.1.jar:${prefix}/share/prefuse.jar
 LocalJars=lib/jcommon-1.0.8.jar:lib/jfreechart-1.0.4.jar:lib/junit-4.1.jar:lib/prefuse.jar
 MainClass=nl.cwi.sen1.visplugin.ExampleVisualizationController
-Packages=nl.cwi.sen1.visplugin.piechartplugin,nl.cwi.sen1.visplugin.screenshotmaker
+Packages=nl.cwi.sen1.visplugin,nl.cwi.sen1.visplugin.screenshotmaker
 TestClass=
 ToolBusFlags=-I${prefix}/share/vis-plugin
