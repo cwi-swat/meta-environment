@@ -543,15 +543,6 @@ fi
 if ! test -d .settings ; then
   mkdir .settings
 fi
-if test -z "${EXTERNAL_JARS}"; then
-  BUNDLE_CLASSPATH=$3,`echo ${EXTERNAL_JARS} | tr ':' ','`
-else
-  BUNDLE_CLASSPATH=$3
-fi
-
-if ! test -z "$7"; then
-  BUNDLE_CLASSPATH="${BUNDLE_CLASSPATH} `echo "$7" | tr ':' ','`"
-fi
 
 if test -z "$5"; then
   REQUIRE_BUNDLE=""
@@ -566,12 +557,6 @@ else
   fi
 fi
 
-if test -z "$6"; then
-  BUNDLE_MAIN_CLASS=""
-else 
-  BUNDLE_MAIN_CLASS="Bundle-Activator: $6"
-fi
-
 cat > META-INF/MANIFEST.MF << ENDCAT
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
@@ -581,12 +566,8 @@ Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
 Bundle-Version: $2
 Bundle-ClassPath: .
 Bundle-Localization: plugin
-Export-Package: `echo "$4" | sed "s@,@,\n @g"`
 `echo ${REQUIRE_BUNDLE} | sed "s@,@,\n @g"`
-${BUNDLE_MAIN_CLASS}
 ENDCAT
-
-BUNDLE_LOCAL_JARS=`echo $7 | tr ':' ' '`
 
 cat > .project << ENDCAT
 <?xml version="1.0" encoding="UTF-8"?>
