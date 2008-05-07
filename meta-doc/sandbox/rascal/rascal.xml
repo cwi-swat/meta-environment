@@ -3021,6 +3021,11 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
           implementation which does not do type checking at run-time in order
           to improve performance.</para>
         </listitem>
+
+        <listitem>
+          <para>The immutability feature of Rascal data is implemented in the
+          data-structures and not by the compiler or the interpeter</para>
+        </listitem>
       </itemizedlist>
     </section>
 
