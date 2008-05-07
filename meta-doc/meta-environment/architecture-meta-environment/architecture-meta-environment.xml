@@ -227,6 +227,12 @@
           (PWR) describes the system as a suite of commands and
           libraries.</para>
         </listitem>
+
+        <listitem>
+          <para>The <link linkend="power-user-view">PIMP Meta-Environment
+          view</link> (PMV) describes the difference of the MetaStudio based
+          Meta-Environment and Eclipse-IMP based Meta-Environment.</para>
+        </listitem>
       </itemizedlist>
 
       <para>Obviously, not all views are relevant for all stakeholders. Table
@@ -2141,7 +2147,7 @@
             config-manager what kind of menu's need to be shown. This
             information is forwarded to the editor. The editor tool will
             receive an ATerm encoding of the menu structure, which is
-            interpreted to produce the right menu's. </para>
+            interpreted to produce the right menu's.</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -2165,7 +2171,7 @@
         lead to racing conditions, he first obtains a lock to the resource.
         Processes that are robust against changing values, such as progress
         views, do not lock the resources they read from, which improves
-        efficiency by allowing parallelism. </para>
+        efficiency by allowing parallelism.</para>
       </section>
     </section>
 
@@ -2427,7 +2433,7 @@
   </section>
 
   <section xml:id="package-view">
-    <title>The package view (PCK)</title>
+    <title>The Package View (PCK)</title>
 
     <para>For reasons of modularity, reuse and maintenance, the implementation
     of The Meta-Environment is subdivided in <emphasis>packages</emphasis>. A
@@ -3645,6 +3651,133 @@
       <para>Also see Extension Points for The Meta-Environment and Build
       Environment for The Meta-Environment. <remark>(Add
       Links).</remark></para>
+    </section>
+  </section>
+
+  <section>
+    <title>The PIMP Meta-Environment view (PMV)</title>
+
+    <para>There are two versions of The Meta-Environment. One has a home grown
+    GUI and GUI extension framework (MetaStudio), the other is based on and
+    fully integrated with Eclipse using IMP (http://www.eclipse.org/imp). This
+    view describes the differences between the two instances. The goal of this
+    view is to help the designers and implementers of the Eclipse based
+    Meta-Environment make design decisions.</para>
+
+    <section>
+      <title>Same high-level architecture</title>
+
+      <para>The main thing to notice is that both environments have the same
+      high-level architecture: the <emphasis>ToolBus</emphasis> is the central
+      mechanism for coordination. However, as Eclipse already integrates and
+      composes several tools and does not use the ToolBus there may be
+      overlapping functionality, or functionality from Meta-Environment needs
+      to be replaced by or ported to Eclipse.</para>
+
+      <para>The ToolBus design allows us to maintain a heterogeneous
+      implementation of The Meta-Environment. This allows phased evolution and
+      separation of concerns, at the price of integration which is mitigated
+      by the ToolBus.</para>
+    </section>
+
+    <section>
+      <title>How does IMP work?</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>IMP builds on Eclipse, and in particular on Eclipse's plugin
+          mechanism that uses the concept of <emphasis>extension
+          points.</emphasis> Read about extension points at
+          eclipse.org.</para>
+        </listitem>
+
+        <listitem>
+          <para>IMP revolves around the concept of a <emphasis>language
+          descriptor</emphasis>, which identifies the name of a language using
+          an identifier and the associated file extensions. A language
+          descriptor is declared using an extension point. </para>
+        </listitem>
+
+        <listitem>
+          <para>IMP <emphasis>services</emphasis> are predefined interfaces
+          that can be implemented for every language. The binding between an
+          implementation of such an interface and a language is done using an
+          extension point.</para>
+        </listitem>
+
+        <listitem>
+          <para>IMP uses the implementation of services to orchestrate IDE
+          features of Eclipse. The central orchestration is done in the
+          "UniversalEditor" class. Other orchestration is done via the Eclipse
+          Nature and Builder facilities.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>IMP services implemented as language parametric ToolBus
+      tools</title>
+
+      <para>In our case, the languages we are talking about are SDF and
+      ASF+SDF. So, we could instantiate IMP by implementing the IMP services
+      specifically for these languages. This is not the way Meta-Environment
+      is designed. As said in other views, there is a kernel layer which
+      contains both language independent and language parametric
+      functionality. The goal of a PIMP'ed Meta-Environment is to bridge
+      Meta-Environment to IMP at this kernel layer in such a way that we can
+      easily use Meta-Environment to get other IMP-based IDE's. Therefore, we
+      need language parametric implementations of all IMP services.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A language that builds on the Meta-Environment kernel, such as
+          SDF, will declare an extension point for each service that points to
+          the language parametric service implementation.</para>
+        </listitem>
+
+        <listitem>
+          <para>This service implementation will (in 99% of the cases) be a
+          ToolBus tool (a facade basically), that forwards the work to a
+          ToolBus script.</para>
+        </listitem>
+
+        <listitem>
+          <para>The ToolBus script implements the features that the service
+          needs and communicates information back to the language parametric
+          service implementation class, and/or activates other tools.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Eclipse features reifed as ToolBus tools</title>
+
+      <para>IMP does not hide all of Eclipse. Especially concepts such as
+      projects, resources, and error markers &amp; annotations originate from
+      Eclipse. </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>To communicate with these Eclipse features, small tools that
+          bridge to the ToolBus should be created, and data that are
+          interfaces and classes in Eclipse should be reifed as ATerms.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>In many cases, the Meta-Environment has similar concepts that
+          only need to be adapted to fit with Eclipse IMP. One example is
+          errors. The error ATerms can be registered as Eclipse error
+          annotations by a simple adapter written in Java that is connected to
+          the ToolBus.</para>
+        </listitem>
+
+        <listitem>
+          <para>Some concepts have "impedence mismatch". The concept of an
+          Eclipse resource closely resembles the Meta-Environment concept of a
+          module. However, the two are actually rather different. </para>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
