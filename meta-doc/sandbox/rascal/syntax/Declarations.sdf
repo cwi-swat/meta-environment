@@ -5,14 +5,18 @@ imports	languages/sdf2/syntax/Sorts
 	Expressions 
          basic/IdentifierCon
 
-         languages/java/syntax/Statements
+         languages/java/syntax/Statements [Type => JavaType
+                                           Block => JavaBlock
+                                           Statement => JavaStatement
+                                           Expression => JavaExpression
+                                          ]
 
 hiddens
 context-free start-symbols
         Declaration
 
 exports
-sorts Declaration Visibility DatatypeParameters JavaFunctionBody
+sorts Declaration Visibility DatatypeParameters
 
 context-free syntax
 
@@ -24,5 +28,7 @@ context-free syntax
    Visibility? "global" Type Variable ("=" Expression)?  -> Declaration {cons("global-decl")}
 
    Visibility? "memo"? FunctionType Statement            -> Declaration {cons("function-decl")}
-   Visibility? "java" FunctionType JavaFunctionBody      -> Declaration {cons("java-function-decl")}
-   Block                                                 -> JavaFunctionBody
+
+   "rules" "(" Type ")" "{" Rule+ "}"                    -> Declaration {cons("rules-decl")}
+
+   Visibility? "java" FunctionType JavaBlock             -> Declaration {cons("java-function-decl")}

@@ -17,7 +17,7 @@ context-free start-symbols
 
 exports
 sorts Expression DeclLeftHandSide Predicate SimpleGenerator Generator FieldSelection Callable Call
-      Strategy Statement Rule Assignment IncrAssignOp Value AbstractValue
+      Strategy Statement Rule Case Assignment IncrAssignOp Value AbstractValue
       Catch Finally
 
 context-free syntax
@@ -132,12 +132,14 @@ context-free syntax
           QuotedSynPattern                                       -> Expression
          "make" Pattern                                          -> Expression
 
-         "case" Pattern ":" Statement                            -> Rule       {cons("case-state")}
-         "default" ":" Statement                                 -> Rule       {cond("default")}
-         "case" Pattern "=>" Expression                          -> Rule       {cons("case-expr")}
+          Pattern "=>" Expression                                -> Rule       {cons("rule1")}
+          Pattern ":" Statement                                  -> Rule       {cons("rule1")}
+          
+         "case" Rule                                             -> Case       {cons("case")}
+         "default" ":" Statement                                 -> Case       {cond("default-case")}
 
- 	"switch" Expression "{" Rule+ "}"                       -> Statement  {cons("switch")}
-   	"visit" Strategy Expression "{" Rule+ "}"               -> Statement  {cons("visit")}
+ 	"switch" Expression "{" Case+ "}"                       -> Statement  {cons("switch")}
+   	"visit" Strategy Expression "{" Case+ "}"               -> Statement  {cons("visit")}
          "solve" "{" { Assignment ";"}+ "}"                      -> Statement  {cons("solve")}
          "for" "(" {Generator ","}+ ")" Statement                -> Statement  {cons("for")}
 

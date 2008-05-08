@@ -1,14 +1,32 @@
 module JavaFun
 
+imports pico/syntax/Pico;
+
+fun rel[PICO-ID, EXP] uses(PROGRAM P) {
+  return {<Id, E> | EXP E : P, PICO-ID Id := E}
+}
+
+fun rel[PICO-ID, STATEMENT] defs(PROGRAM P) {
+  return {<Id, S> | STATEMENT S : P,
+                    [| <PICO-ID Id> := <EXP Exp> |] := S}
+}
+
 java fun str factorial(int x) {
-   rel[int,int] somerel = {};
-   if (x < 0)
+     int n;
+     String s;
+     if (x < 0)
 	return "0.0";
-   double fact = 1.0;
-   return (N + 1).toString();
-   while(x > 1){
-     fact = fact * x;
-     x = x - 1;
-   }
-   return fact.toString();
+     double fact = 1.0;
+     return (N + 1).toString();
+     while(x > 1){
+       fact = fact * x;
+       x = x - 1;
+     }
+     return fact.toString();
+}
+
+
+java fun list[&x] topsort(rel[&x,&x]) {
+%% ...
+  return vf.list( );
 }

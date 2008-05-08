@@ -594,7 +594,33 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
       value.</para>
 
       <para>Functions can raise exceptions but these are not declared as part
-      of the function signature.</para>
+      of the function signature (i.e., we have unchecked execptions in
+      contrast with checked exceptions in Java).</para>
+
+      <para>Functions preceeded by the keyword "<literal>java</literal>" have
+      a body written in Java. They have the following properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Arguments and result are pure Rascal values.</para>
+        </listitem>
+
+        <listitem>
+          <para>Java functions cannot acces the global state of the Rascal
+          program. Their only interface is via input parameters and a result
+          value. They cannot access Rascal global variables.</para>
+        </listitem>
+
+        <listitem>
+          <para>Side effects caused by Java functions in the Java state, are
+          not undone in the case of backtracking.</para>
+        </listitem>
+      </itemizedlist>
+
+      <note>
+        <para>These Java functions are primarily intended for implementing
+        library functions and for interfacing with Eclipse. </para>
+      </note>
 
       <para>Functions can later be extended [STILL UNDER DISCUSSION]</para>
 
@@ -622,31 +648,6 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
 
         <listitem>
           <para>No other extensions are allowed.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Functions preceeded by the keyword "<literal>java</literal>" have
-      a body written in Java. They have the following properties:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Arguments and result are pure Rascal values.</para>
-        </listitem>
-
-        <listitem>
-          <para>Inside the body variables may be declared both with a Java
-          Type or with a Rascal type. The latter will be converted by the
-          Rascal compiler to appropriate implementation types.</para>
-        </listitem>
-
-        <listitem>
-          <para>Java functions cannot acces the global state of the Rascal
-          program.</para>
-        </listitem>
-
-        <listitem>
-          <para>Side effects cause by Java functions in the Java state, are
-          not undone in the case of backtracking.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1233,13 +1234,13 @@ data Bool bor(Bool, Bool);
 
 fun Bool reduce(Bool B) {
     visit bottom-up B {
-      case band(btrue, &lt;Bool B2&gt;)   =&gt; B2  %% Style 1: Use Variables
-      case band(bfalse, &lt;Bool B2&gt;)  =&gt; bfalse
+      case band(btrue, &lt;Bool B2&gt;)  =&gt; B2    %% Use Variables
+      case band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
 
-      case bor(btrue, btrue)        =&gt; btrue %% Style 2: Use a truth table
-      case bor(btrue, bfalse)       =&gt; btrue
-      case bor(bfalse, btrue)       =&gt; btrue
-      case bor(bfalse, bfalse)      =&gt; bfalse
+      case bor(btrue, btrue)       =&gt; btrue %% Use a truth table
+      case bor(btrue, bfalse)      =&gt; btrue
+      case bor(bfalse, btrue)      =&gt; btrue
+      case bor(bfalse, bfalse)     =&gt; bfalse
     }
 }</programlisting></para>
 
@@ -1257,14 +1258,21 @@ fun Bool reduce(Bool B) {
         syntax, which can also help in the transformation of old ASF+SDF
         programs to Rascal:</para>
 
-        <para><programlisting>rules (Bool) {
-  and(true, &lt;Bool B2&gt;) =&gt; B2
-  and(false, Bool) =&gt; false
-}
-%% or
-rules (Bool) { 
-  and(true, &lt;Bool B2&gt;) : { yield B2 }
-  and(false, Bool) : { yield false }
+        <para><programlisting>module Bool-rules
+
+data Bool btrue;
+data Bool bfalse;
+data Bool band(Bool, Bool);
+data Bool bor(Bool, Bool); 
+
+rules(Bool) {
+      band(btrue, &lt;Bool B2&gt;)   =&gt; B2 
+      band(bfalse, &lt;Bool B2&gt;)  =&gt; bfalse
+
+      bor(btrue, btrue)        =&gt; btrue
+      bor(btrue, bfalse)       =&gt; btrue
+      bor(bfalse, btrue)       =&gt; btrue
+      bor(bfalse, bfalse)      =&gt; bfalse
 }</programlisting>These rules are applied on every Bool that is constructed.
         Like in ASF+SDF it is the responsibility of the programmer to make
         sure the rules are confluent and terminating. The body of a rules
@@ -1311,12 +1319,19 @@ rules (Bool) {
       <para>In the Meta-Environment we use an abstract data type to exchange
       data representing graphs. It can be defined as follows.<programlisting>module Graph
 
-data Graph graph(NodeList nodes, EdgeList edges, AttributeList attributes);
+data Graph graph(NodeList nodes, 
+                 EdgeList edges, 
+                 AttributeList attributes);
 
 type list[Node] Nodelist;
 
-data Node node(NodeId id, AttributeList attributes);
-data Node subgraph(NodeId id, NodeList nodes, EdgeList edges, AttributeList attributes);
+data Node node(NodeId id, 
+               AttributeList attributes);
+
+data Node subgraph(NodeId id, 
+                   NodeList nodes, 
+                   EdgeList edges, 
+                   AttributeList attributes);
 
 data NodeId id(term id);
 
@@ -1327,7 +1342,7 @@ data Attribute color(Color color);
 data Attribute curve-points(Polygon points);
 data Attribute direction(Direction direction);
 data Attribute fill-color(Color color);
-data Attribute info(str key, term value);
+data Attribute info(str key, value value);
 data Attribute label(str label);
 data Attribute tooltip(str tooltip);
 data Attribute location(int x, int y);
@@ -1336,20 +1351,23 @@ data Attribute size(int width, int height);
 data Attribute style(Style style);
 data Attribute level(str level);
 data Attribute file(File file);
-data Attribute file(term file);
+data Attribute file(value file);
 
 data Color rgb(int red, int green, int blue);
 
 data Style bold | dashed | dotted | filled | invisible | solid;
 
-data Shape box | circle | diamond | egg | elipse | hexagon | house | 
-           octagon | parallelogram | plaintext | trapezium | triangle;
+data Shape box | circle | diamond | egg | elipse | hexagon | 
+           house | octagon | parallelogram | plaintext | 
+           trapezium | triangle;
 
 data Direction forward | back | both | none;
 
 type list[Edge] Edgelist;
 
-data Edge edge(NodeId from, NodeId to, AttributeList attributes);
+data Edge edge(NodeId from, 
+               NodeId to, 
+               AttributeList attributes);
 
 type list[Point] Polygon;
 
@@ -2255,7 +2273,8 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
 
 type rel[&amp;Name, &amp;Value] ScopeMap;
 type int ScopeId;
-data STable[&amp;Name, &amp;Value] stable(ScopeId scope, rel[int, ScopeMap] scopes); 
+data STable[&amp;Name, &amp;Value] stable(ScopeId scope, 
+                                  rel[int, ScopeMap] scopes); 
 
 %% Create a new, empty,  table
 fun STable[&amp;Name, &amp;Value] new(){
@@ -2263,40 +2282,50 @@ fun STable[&amp;Name, &amp;Value] new(){
 }
 
 %% Create a new, non-empty, table
-fun STable[&amp;Name, &amp;Value] new(ScopeId scope, rel[int, ScopeMap] scopes){
+fun STable[&amp;Name, &amp;Value] new(ScopeId scope, 
+                              rel[int, ScopeMap] scopes){
   return make stable(scope, scopes);
 } 
 
 %% Update, in a given scope, the value of a variable
-fun STable[&amp;Name, &amp;Value] update(STable ST, ScopeId scope, Name N, Value V){
+fun STable[&amp;Name, &amp;Value] update(STable[&amp;Name, &amp;Value] ST, 
+                                 ScopeId scope, 
+                                 &amp;Name N, 
+                                 &amp;Value V){
   ST.scopes(scope)(N) = V;
   return new(scope, ST.scopes)
 }
 
 %% Get, in a given scope, the value of a variable
-fun STable[&amp;Name, &amp;Value] value(STable ST, ScopeId scope, Name N){
+fun STable[&amp;Name, &amp;Value] value(STable[&amp;Name, &amp;Value] ST, 
+                                ScopeId scope, 
+                                &amp;Name N){
   return ST.scopes(scope)(N)
 }
 
 %% update, in the current scope, the value of a variable
-fun STable[&amp;Name, &amp;Value] update(STable ST, Name N, Value V){
+fun STable[&amp;Name, &amp;Value] update(STable[&amp;Name, &amp;Value] ST, 
+                                 &amp;Name N, 
+                                 &amp;Value V){
   ST.scopes(scope)(N) = V;
   return new(scope, ST.scopes)
 }
 
 %% Get, in the current scope, the value of a variable
-fun STable value(STable ST, Name N){
+fun STable value(STable[&amp;Name, &amp;Value] ST, 
+                 &amp;Name N){
   return ST.scopes(ST.scope)(N)
 }
 
 %% add a new scope and make it the current scope
-fun STable[&amp;Name, &amp;Value] new-scope(STable ST){
+fun STable[&amp;Name, &amp;Value] new-scope(STable[&amp;Name, &amp;Value] ST){
   ScopeId scope = ST.scope + 1;
   return new(scope, ST.scopes);
 }
 
 %% switch to another scope
-fun STable[&amp;Name, &amp;Value] switch-scope(STable ST, ScopeId scope){
+fun STable[&amp;Name, &amp;Value] switch-scope(STable[&amp;Name, &amp;Value] ST, 
+                                       ScopeId scope){
   return new(scope, ST.scopes);
 }
 
@@ -2467,158 +2496,6 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
     <title>Syntax Definition</title>
 
     <para>See separate SDF definition.</para>
-  </section>
-
-  <section>
-    <title>Protyping/implementation of Rascal</title>
-
-    <para>Every prototype will have to address the following issues:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Parsing/typechecking/evaluating Rascal.</para>
-      </listitem>
-
-      <listitem>
-        <para>How to implement the relational operations.</para>
-      </listitem>
-
-      <listitem>
-        <para>How to implement matching.</para>
-      </listitem>
-
-      <listitem>
-        <para>How to implement replacement.</para>
-      </listitem>
-
-      <listitem>
-        <para>How to implement traversals.</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>The following options should be considered:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Implementation of a typechecker in ASF+SDF:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Gives good insight in the type system and is comparable in
-            complexity to the Rscript typechecker.</para>
-          </listitem>
-
-          <listitem>
-            <para>Work: 2 weeks</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Implementation of an evaluator in ASF+SDF.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Requires reimplementation of matching &amp; rewriting in
-            ASF+SDF.</para>
-          </listitem>
-
-          <listitem>
-            <para>Bound to be very slow.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 4 weeks</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Implementation of a typechecker in Rascal.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Interesting exercise to asses Rascal.</para>
-          </listitem>
-
-          <listitem>
-            <para>Not so easy to do without working Rascal
-            implementation.</para>
-          </listitem>
-
-          <listitem>
-            <para>Not so easy when Rascal is still in flux.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 1 week</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Implementation of an evaluator in Rascal.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Ditto.</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Extending the current ASF+SDF interpreter.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>This is a viable options. It requires extensions of
-            UPTR.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 4 weeks</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Translation of Rascal to ASF+SDF in ASF+SDF.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Unclear whether this has longer term merit.</para>
-          </listitem>
-
-          <listitem>
-            <para>Allows easy experimentation and reuse of current ASF+SDF
-            implementation.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 4 weeks</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Implementation of an interpreter in Java.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>A future proof and efficient solution.</para>
-          </listitem>
-
-          <listitem>
-            <para>Requires reimplementation of matching &amp; rewriting in
-            Java.</para>
-          </listitem>
-
-          <listitem>
-            <para>Effort: 8 weeks.</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <section>
@@ -2938,6 +2815,158 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
   </section>
 
   <section>
+    <title>Protyping/implementation of Rascal</title>
+
+    <para>Every prototype will have to address the following issues:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Parsing/typechecking/evaluating Rascal.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement the relational operations.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement matching.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement replacement.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement traversals.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The following options should be considered:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Implementation of a typechecker in ASF+SDF:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Gives good insight in the type system and is comparable in
+            complexity to the Rscript typechecker.</para>
+          </listitem>
+
+          <listitem>
+            <para>Work: 2 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of an evaluator in ASF+SDF.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Requires reimplementation of matching &amp; rewriting in
+            ASF+SDF.</para>
+          </listitem>
+
+          <listitem>
+            <para>Bound to be very slow.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 4 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of a typechecker in Rascal.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Interesting exercise to asses Rascal.</para>
+          </listitem>
+
+          <listitem>
+            <para>Not so easy to do without working Rascal
+            implementation.</para>
+          </listitem>
+
+          <listitem>
+            <para>Not so easy when Rascal is still in flux.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 1 week</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of an evaluator in Rascal.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Ditto.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Extending the current ASF+SDF interpreter.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>This is a viable options. It requires extensions of
+            UPTR.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 4 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Translation of Rascal to ASF+SDF in ASF+SDF.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Unclear whether this has longer term merit.</para>
+          </listitem>
+
+          <listitem>
+            <para>Allows easy experimentation and reuse of current ASF+SDF
+            implementation.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 4 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of an interpreter in Java.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A future proof and efficient solution.</para>
+          </listitem>
+
+          <listitem>
+            <para>Requires reimplementation of matching &amp; rewriting in
+            Java.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 8 weeks.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
     <title>Rascal implementation ideas</title>
 
     <para>Rascal needs to support both a scripting experience as an optimized
@@ -3010,19 +3039,19 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
           <para>It may be a good idea to generate Rascal data-types from SDF
           definitions as an intermediate step, however, Rascal should still
           implement special code for UPTR trees for performance reasons
-          (unlike Apigen which does not now anything about UPTR).</para>
+          (unlike Apigen which does not know anything about UPTR).</para>
         </listitem>
 
         <listitem>
           <para>The current PDB implementation does type checking at run-time.
-          After implementing an type-checker for Rascal, we can easily add an
+          After implementing a type-checker for Rascal, we can easily add an
           implementation which does not do type checking at run-time in order
           to improve performance.</para>
         </listitem>
 
         <listitem>
           <para>The immutability feature of Rascal data is implemented in the
-          data-structures and not by the compiler or the interpeter</para>
+          data-structures and not by the compiler or the interpeter.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -3035,7 +3064,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
       <itemizedlist>
         <listitem>
           <para>Write the interpreter in Java, and use it later to bootstrap
-          the compiler which will be written in Rascal</para>
+          the compiler which will be written in Rascal.</para>
         </listitem>
 
         <listitem>
@@ -3044,7 +3073,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
         </listitem>
 
         <listitem>
-          <para>"fail" can be implemented using an Java exception, the catch
+          <para>"fail" can be implemented using a Java exception, the catch
           will be at the choice points (switch).</para>
         </listitem>
 
@@ -3070,7 +3099,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
         <listitem>
           <para>We use apigen to bootstrap the interpreter. The interpreter
           will traverse the apigen object trees to implement it's
-          functionality using seperate classes.</para>
+          functionality using separate classes.</para>
         </listitem>
 
         <listitem>
@@ -3091,17 +3120,17 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
       <itemizedlist>
         <listitem>
-          <para>Bootstrap the compiler using the interpreter</para>
+          <para>Bootstrap the compiler using the interpreter.</para>
         </listitem>
 
         <listitem>
           <para>Generate as readable function names as possible, mainly taking
           hints from the Rascal programs and of course from the SDF
-          definitions</para>
+          definitions.</para>
         </listitem>
 
         <listitem>
-          <para>Generate Java code, one class per module</para>
+          <para>Generate Java code, one class per module.</para>
         </listitem>
 
         <listitem>
@@ -3189,6 +3218,27 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             </listitem>
           </itemizedlist>
         </listitem>
+
+        <listitem>
+          <para>Rascal functions with a Java body need the following:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Generate for each argument an Java argument with
+              appropirtae Java type.</para>
+            </listitem>
+
+            <listitem>
+              <para>For each return statement, check the type of the resulting
+              value against the return type in the function header.</para>
+            </listitem>
+
+            <listitem>
+              <para>Catch any exceptions raised by the Java code, convert them
+              to string and rethrow as Rascal exception.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
       </itemizedlist>
     </section>
   </section>
@@ -3245,10 +3295,6 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
       <listitem>
         <para>We need an io-library.</para>
-      </listitem>
-
-      <listitem>
-        <para>We need memo functions.</para>
       </listitem>
 
       <listitem>

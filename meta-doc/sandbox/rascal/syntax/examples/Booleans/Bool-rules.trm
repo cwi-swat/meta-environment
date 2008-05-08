@@ -1,0 +1,16 @@
+module Bool-abstract
+
+data Bool btrue;
+data Bool bfalse;
+data Bool band(Bool, Bool);
+data Bool bor(Bool, Bool); 
+
+rules(Bool) {
+      band(btrue, <Bool B2>)   => B2 
+      band(bfalse, <Bool B2>)  => bfalse
+
+      bor(btrue, btrue)        => btrue
+      bor(btrue, bfalse)       => btrue
+      bor(bfalse, btrue)       => btrue
+      bor(bfalse, bfalse)      => bfalse
+}

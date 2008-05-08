@@ -7,7 +7,8 @@ module SymTable[&Name, &Value]
 
 type rel[&Name, &Value] ScopeMap;
 type int ScopeId;
-data STable[&Name, &Value] stable(ScopeId scope, rel[int, ScopeMap] scopes); 
+data STable[&Name, &Value] stable(ScopeId scope, 
+                                  rel[int, ScopeMap] scopes); 
 
 %% Create a new, empty,  table
 fun STable[&Name, &Value] new(){
@@ -15,29 +16,38 @@ fun STable[&Name, &Value] new(){
 }
 
 %% Create a new, non-empty, table
-fun STable[&Name, &Value] new(ScopeId scope, rel[int, ScopeMap] scopes){
+fun STable[&Name, &Value] new(ScopeId scope, 
+                              rel[int, ScopeMap] scopes){
   return make stable(scope, scopes);
 } 
 
 %% Update, in a given scope, the value of a variable
-fun STable[&Name, &Value] update(STable[&Name, &Value] ST, ScopeId scope, &Name N, &Value V){
+fun STable[&Name, &Value] update(STable[&Name, &Value] ST, 
+                                 ScopeId scope, 
+                                 &Name N, 
+                                 &Value V){
   ST.scopes(scope)(N) = V;
   return new(scope, ST.scopes)
 }
 
 %% Get, in a given scope, the value of a variable
-fun STable[&Name, &Value] value(STable[&Name, &Value] ST, ScopeId scope, &Name N){
+fun STable[&Name, &Value] value(STable[&Name, &Value] ST, 
+                                ScopeId scope, 
+                                &Name N){
   return ST.scopes(scope)(N)
 }
 
 %% update, in the current scope, the value of a variable
-fun STable[&Name, &Value] update(STable[&Name, &Value] ST, &Name N, &Value V){
+fun STable[&Name, &Value] update(STable[&Name, &Value] ST, 
+                                 &Name N, 
+                                 &Value V){
   ST.scopes(scope)(N) = V;
   return new(scope, ST.scopes)
 }
 
 %% Get, in the current scope, the value of a variable
-fun STable value(STable[&Name, &Value] ST, &Name N){
+fun STable value(STable[&Name, &Value] ST, 
+                 &Name N){
   return ST.scopes(ST.scope)(N)
 }
 
@@ -48,7 +58,8 @@ fun STable[&Name, &Value] new-scope(STable[&Name, &Value] ST){
 }
 
 %% switch to another scope
-fun STable[&Name, &Value] switch-scope(STable[&Name, &Value] ST, ScopeId scope){
+fun STable[&Name, &Value] switch-scope(STable[&Name, &Value] ST, 
+                                       ScopeId scope){
   return new(scope, ST.scopes);
 }
 
