@@ -1,0 +1,47 @@
+module Hanoi
+
+imports basic/Whitespace
+
+exports
+  sorts Disk Tower Move List
+
+  context-free start-symbols List
+
+  context-free syntax
+    "0" -> Disk
+    "1" -> Disk
+    "2" -> Disk
+    "3" -> Disk
+    "4" -> Disk
+    "5" -> Disk
+    "6" -> Disk
+    "7" -> Disk
+    "8" -> Disk
+    "9" -> Disk
+    "10" -> Disk
+    "11" -> Disk
+    "12" -> Disk
+    "13" -> Disk
+    "14" -> Disk
+    "15" -> Disk
+    "16" -> Disk
+    dec(Disk) -> Disk
+    "a" -> Tower
+    "b" -> Tower
+    "c" -> Tower
+
+    other(Tower, Tower) -> Tower
+    move(Disk, Tower, Tower) -> Move
+    
+    "nil" -> List
+    l(Move, List) -> List
+    conc(List, List) -> List
+    solve(Tower, Tower, Disk) -> List
+
+hiddens
+  variables
+   "H" -> Move
+   [TL] -> List
+   "ORG" -> Tower
+   "DEST" -> Tower
+   "D" -> Disk

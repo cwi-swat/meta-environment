@@ -1,0 +1,7 @@
+equations
+
+  [] dup(l) = conc(l,l)
+
+  [] conc(l(e,l1), l2) = l(e, conc(l1,l2))
+  
+  [] conc(nil, l) = l

@@ -1,0 +1,20 @@
+module OddEven
+
+imports basic/Whitespace
+
+exports 
+  sorts Nat Bool
+  context-free start-symbols Bool
+
+  context-free syntax
+    "true" -> Bool
+    "false" -> Bool
+    "0" -> Nat
+    s(Nat) -> Nat
+    
+    odd(Nat) -> Bool
+    even(Nat) -> Bool
+
+hiddens
+  variables
+    [NM] -> Nat

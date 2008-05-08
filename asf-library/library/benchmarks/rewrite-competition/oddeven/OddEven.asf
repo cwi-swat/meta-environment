@@ -1,0 +1,12 @@
+equations
+
+  [] odd(0) = false
+  [] even(0) = true
+  [] odd(s(N)) = true
+     when even(N) == true
+  [] even(s(N)) = true
+     when odd(N) == true
+  [] odd(s(N)) = false
+     when even(N) == false
+  [] even(s(N)) = false
+     when odd(N) == false

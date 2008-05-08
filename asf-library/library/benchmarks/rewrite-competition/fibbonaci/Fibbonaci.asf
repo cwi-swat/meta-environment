@@ -1,0 +1,7 @@
+equations
+
+  [] fibb(0) = s(0)
+
+  [] fibb(s(0)) = s(0)
+
+  [] fibb(s(s(n))) = plus(fibb(s(n)), fibb(n))

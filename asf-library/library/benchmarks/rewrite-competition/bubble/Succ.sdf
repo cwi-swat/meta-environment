@@ -1,0 +1,26 @@
+module Succ
+
+imports basic/Whitespace
+
+exports
+  sorts Nat Bool
+  context-free syntax
+    "0"    -> Nat
+    s(Nat) -> Nat
+
+exports
+  context-free start-symbols Nat Bool
+
+exports
+  context-free syntax
+    "true"  -> Bool
+    "false" -> Bool
+
+    plus(Nat, Nat) -> Nat
+    mult(Nat, Nat) -> Nat
+
+    lt(Nat, Nat)   -> Bool
+
+hiddens
+  variables
+    "n"[0-9]* -> Nat

@@ -1,0 +1,17 @@
+module Reverse
+
+imports basic/Whitespace
+imports List
+
+exports
+  context-free start-symbols List
+
+  context-free syntax
+    rev(List) -> List
+
+hiddens
+  variables
+    "i"[0-9]*  -> Elt
+    "l"[0-9]*  -> List
+
+  

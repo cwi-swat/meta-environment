@@ -1,0 +1,80 @@
+equations
+
+  [] and(true, L) = L
+  [] and(false, L) = false
+
+  [] or(true, L) = true
+  [] or(false, L) = L
+
+  [] not(true) = false
+  [] not(false) = true
+
+  [] s(p(X)) = X
+
+  [] p(s(X)) = X
+
+  [] plus(0, Y) = Y
+  [] plus(s(X), Y) = s(plus(X, Y))
+  [] plus(p(X), Y) = p(plus(X, Y))
+
+  [] get(0, 0) = true
+  [] get(0, s(0)) = false
+  [] get(s(X), Y) = get(X, p(Y))
+  [] get(p(X), Y) = get(X, s(Y))
+  [] get(0, p(Y)) = true 
+    when get(0, Y) == true
+  [] get(0, s(Y)) = false 
+    when get(0, Y) == false
+
+  [] equal(X, X) = true
+  [] equal(X, Y) = false when X != Y 
+
+  [] 1 = s(0)
+  [] 2 = s(s(0))
+  [] -1 = p(0)
+  [] -2 = p(p(0))
+  [] 3 = s(s(s(0)))
+
+  []  moves 
+   = cm(mov(missionary-rows-east, -1, 0, 1, 0, east),
+     cm(mov(two-missionaries-row-east, -2, 0, 2, 0, east),
+     cm(mov(missionary-and-cannibal-row-east, -1, -1, 1, 1, east),
+     cm(mov(cannibal-rows-east, 0, -1, 0, 1, east),
+     cm(mov(two-cannibals-row-east, 0, -2, 0, 2, east),
+     cm(mov(missionary-rows-west, 1, 0, -1, 0, west),
+     cm(mov(two-missionaries-row-west, 2, 0, -2, 0, west),
+     cm(mov(missionary-and-cannibal-row-west, 1, 1, -1, -1, west),
+     cm(mov(cannibal-rows-west, 0, 1, 0, -1, west),
+     cm(mov(two-cannibals-row-west, 0, 2, 0, -2, west), nil-ml))))))))))
+ []  member(NP, nil-pl) = false
+ []  member(NP, cp(NP, Prev)) = true
+ []  member(NP, cp(Pos, Prev)) = member(NP, Prev) 
+    when NP != Pos
+ []  ct(T, fail) = fail
+ []  gettl(TL, nil) = true
+ []  gettl(nil, ct(T, TL)) = false
+ []  gettl(ct(T, TL), ct(T2, TL2)) = gettl(TL, TL2)
+ []  best(fail, TL) = TL
+ []  best(TL, fail) = TL
+ []  best(TL, TL2) = TL2 
+    when TL != fail, TL2 != fail, gettl(TL, TL2) == true
+ []  best(TL, TL2) = TL
+    when TL != fail, TL2 != fail, gettl(TL, TL2) == false
+ []  solve(Pos, Pos, Prev) = nil
+ []  solve(Pos, Final, Prev) = try(moves, Pos, Final, Prev)
+    when Pos != Final
+ [] try(nil-ml, Pos, Final, Prev) = fail
+ [] try(cm(M, ML), Pos, Final, Prev) 
+    = best(apply(M, Pos, Final, Prev), try(ML, Pos, Final, Prev))
+ [] apply(mov(T, DMW, DCW, DME, DCE, D), pos(B, MW, CW, ME, CE), Final, Prev) = 
+      check(T, pos(D, plus(MW, DMW), plus(CW, DCW), plus(ME, DME), plus(CE, DCE)), Final, Prev)
+    when D != B
+ [] apply(mov(T, DMW, DCW, DME, DCE, D), pos(B, MW, CW, ME, CE), Final, Prev) = fail
+    when D == B
+ [] check(T, NP, Final, Prev) = ct(T, solve(NP, Final, cp(NP, Prev)))
+    when member(NP, Prev) == false, valid(NP) == true
+ [] check(T, NP, Final, Prev) = fail
+    when or(member(NP,Prev),not(valid(NP))) == true
+ [] valid(pos(B, MW, CW, ME, CE)) 
+    = and(get(MW, 0), and(get(CW, 0), and(get(ME, 0), and(get(CE, 0), 
+       and(or(equal(MW, 0), get(MW, CW)), or(equal(ME, 0), get(ME, CE)))))))

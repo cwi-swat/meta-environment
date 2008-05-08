@@ -1,0 +1,10 @@
+equations
+
+  [] fact(0) = s(0)
+  [] fact(s(n)) = mult(s(n), fact(n))
+
+  [] rev(s(n)) = cons(s(n), rev(n))
+  [] rev(0) = cons(0, nil)
+
+  [] cons(n1, cons(n2, l)) = cons(n2, cons(n1, l))
+        when lt(n2, n1) == true

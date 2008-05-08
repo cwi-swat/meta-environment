@@ -1,0 +1,14 @@
+module Factorial
+
+imports basic/Whitespace
+        Succ
+
+exports
+  context-free start-symbols Nat
+
+  context-free syntax
+    fact(Nat) -> Nat
+
+hiddens
+  variables
+    "n"[0-9]* -> Nat

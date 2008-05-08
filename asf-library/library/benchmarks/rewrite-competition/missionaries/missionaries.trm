@@ -1,0 +1,1 @@
+solve(pos(west, 3, 3, 0, 0), pos(east, 0, 0, 3, 3), nil-pl)
