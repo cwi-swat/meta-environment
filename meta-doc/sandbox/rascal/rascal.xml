@@ -134,6 +134,322 @@
   </section>
 
   <section>
+    <title>Rascal for various audiences</title>
+
+    <para>In this section we enumerate numerous facts about Rascal that
+    advertise it to different audiences</para>
+
+    <section>
+      <title>Generic arguments</title>
+
+      <para>What is good about Rascal in a few words?</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Rascal is a DSL for source code analysis and transformation.
+          It provides a pletora of high level statements and expressions,
+          taking away the boilerplate of implementing and debugging tools that
+          manipulate programs.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal combines the best features of imperative programming
+          with the best features of functional programming and term rewriting.
+          <itemizedlist>
+              <listitem>
+                <para>Simple structured statements for control flow and
+                variable assignments for data flow are powerful and simple
+                features of the imperative programming paradigm. They allow
+                control flow and data flow to be understandable and
+                traceable.</para>
+              </listitem>
+
+              <listitem>
+                <para>From functional programming we borrow that all values
+                are immutable and non-null. Issues with aliasing and
+                referential integrity, such as frequently occur in imperative
+                and OO programming therefore do not exist in Rascal.</para>
+              </listitem>
+
+              <listitem>
+                <para>The Rascal type system is as powerful as most functional
+                languages (higher-order polymorphic functions), however to
+                make the language debuggable and understandable it, in
+                principle, does not provide type inference.</para>
+              </listitem>
+
+              <listitem>
+                <para>From term rewriting we inherit powerful pattern matching
+                facilities, integration with context-free parsing and concrete
+                syntax.</para>
+              </listitem>
+            </itemizedlist></para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal supports both a scripting experience, and a compiled
+          program experience.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal is type safe, but flexible. It's type system prevents
+          common programming errors, but still allows ample opportunity for
+          reusable code. The reasons are the we allow co-variance in the
+          sub-typing relationship, high-order polymorphic functions and
+          parameterized data-types.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal allows different styles of programming. From extremely
+          high level specification, down to straight imperative
+          programming.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal was inspired by and borrows from several other DSL's
+          for program analysis and transformation in academia and industry,
+          namely ASF+SDF, Rscript, TXL, TOM, DMS, Stratego, Elan, Maude, Grok,
+          Haskell, ML and Setl.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal integrates seemlessly with Eclipse IMP and The
+          Meta-Environment.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Rascal for ASF+SDF programmers</title>
+
+      <para>Rascal is the successor of ASF+SDF. What's the difference? What's
+      the same?</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Rascal has roughly all the high level features of ASF+SDF and
+          some more. Old ASF+SDF specifications can be transformed to Rascal
+          programs using a conversion tool.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal still uses SDF for syntax definition and parser
+          generation.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal has a module system that is independent of SDF. Rascal
+          modules introduce a namespace scope for variables and functions,
+          which can be either private or public. Rewrite rules are global as
+          in ASF+SDF. Modules can have type parameters as in SDF, which are
+          instantiated by import statements.</para>
+        </listitem>
+
+        <listitem>
+          <para>In Rascal, patterns and variables in concrete syntax may
+          optionally be quoted and escaped, and support explicit declaration
+          of the top non-terminal to solve ambiguity.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal rules read in the order of execution instead of first
+          the left-hand side, then the conditions, and then the right-hand
+          side of ASF+SDF equations</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal has primitive and efficient implementations for sets,
+          relations and maps</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal can be used without SDF, supporting for example regular
+          expressions and abstract data types (pure ATerms)</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal has primitive support for functions, which have a fixed
+          syntax, always return a value and have imperative control flow
+          statements. Adding a function will not trigger the need for
+          regenerating parse tables. Function types can be polymorphic in
+          their parameters and also allow functions as arguments to implement
+          reusable algorithms.</para>
+        </listitem>
+
+        <listitem>
+          <para>The imperative nature of Rascal allows you to factor out
+          common code and nest conditionals, unlike in ASF+SDF where
+          alternative control flow paths had to be encoded by enumerating
+          equations with non-overlapping conditions.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal is an imperative language, which natively supports I/O
+          and other side-effects without work-arounds. When backtracking
+          occurs, for example over list matching, Rascal makes sure that most
+          side-effects are undone, and that I/O is delayed until no more
+          backtracking can occur. Even rewrite rules support side-effects in
+          Rascal.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal has native support for traversals, instead of the
+          add-on it used to be in ASF+SDF. The visit statement is comparable
+          to a traversal function, and is as type-safe as the previous, and
+          more programmeable.</para>
+        </listitem>
+
+        <listitem>
+          <para>Instead of accumulator values of traversal functions in
+          ASF+SDF, Rascal simply supports lexically scoped variables that can
+          be updated using assignments.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal adds specific expressions for relational calculus, all
+          borrowed directly from RScript.</para>
+        </listitem>
+
+        <listitem>
+          <para>When programming using Rascal functions, instead of rules, the
+          control flow of a program becomes easily traceable and debuggable.
+          It is simply like stepping through well structured code.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal is based on a Java interpreter, or a Java run-time when
+          compiled. So the code is more portable.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Rascal for imperative and object-oriented programmers</title>
+
+      <para>Rascal is an imperative DSL with high level statements and
+      expressions specifically targeted at the domain of analysis and
+      transformation of source code:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Rascal is safe: there are no null values, and all values are
+          immutable. Source code and abstract syntax trees, and the facts
+          extracted from them are immutable. The Rascal interpreter and
+          compiler make sure this is implemented efficiently. Without
+          mutability it is easy to combine stages of your programs that
+          analyse or annotate with stages that transform. Sharing a value does
+          not introduce a coupling like in OO, simply because changes are only
+          visible to the code that changes the values.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal is extra safe: it has a type system that prevents
+          casting exceptions and other run-time failures. Still the type
+          system specifically allows many kinds of combinations. For example,
+          unlike in Java a set of integers is a subtype of a set of numbers
+          (co-variance), which allows you to reuse algorithm for sets of
+          numbers on sets of integers. It also provides true polymorphic and
+          functions (no erasure), and functions can safely be parameters to
+          other functions.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal provides high level statements and expressions
+          for:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Visitors in all kinds of orders, expressed very concisely,
+              and type safe.</para>
+            </listitem>
+
+            <listitem>
+              <para>Pattern matching and construction (with concrete
+              syntax!)</para>
+            </listitem>
+
+            <listitem>
+              <para>Equation/constraint solving</para>
+            </listitem>
+
+            <listitem>
+              <para>Relational calculus</para>
+            </listitem>
+
+            <listitem>
+              <para>Rewrite rules for normalization/canonicalization of any
+              kind of data-structure</para>
+            </listitem>
+
+            <listitem>
+              <para>Support for parsing using context-free grammars (via
+              importing modules from the SDF language).</para>
+            </listitem>
+
+            <listitem>
+              <para>(de)Serialization of values</para>
+            </listitem>
+
+            <listitem>
+              <para>Communication with databases</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Rascal provides typed data constructors for common
+          mathematical structures, such as:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>terms (a.k.a. abstract data types, tree nodes)</para>
+            </listitem>
+
+            <listitem>
+              <para>parse trees (derivations of context-free grammars, for
+              concrete syntax and direct manipulation of source code)</para>
+            </listitem>
+
+            <listitem>
+              <para>relations</para>
+            </listitem>
+
+            <listitem>
+              <para>sets</para>
+            </listitem>
+
+            <listitem>
+              <para>maps</para>
+            </listitem>
+
+            <listitem>
+              <para>tuples</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>In Rascal you can implement high-fidelity source-to-source
+          transformations. Without too much overhead, programs can do
+          extensive rewriting of the source code without the loss of
+          particular layout standards or source code comments.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal is syntax-safe. When you use Rascal to generate or
+          transform source code, it statically detects whether the resulting
+          source code is syntactically correct.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rascal is executed by an interpreter written in Java, or it
+          can be compiled to Java classes.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
     <title>Requirements</title>
 
     <para><itemizedlist>
@@ -1026,85 +1342,6 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
           statement.</para>
         </listitem>
       </itemizedlist>
-    </section>
-
-    <section>
-      <title>Visitor definitions (UNDECIDED and INCOMPLETE)</title>
-
-      <para>Visitor definitions are a new idea that borrow the programmability
-      of Systems S's single level traversals and add them to Rascal. The idea
-      is to be able to define the strategy annotations of visit statements and
-      generators using a simple expression language. A definition takes as
-      formal argument the code block of the visit statement (s), which is what
-      needs to be done at every node (the visitor).</para>
-
-      <para><programlisting>%% first recurse to the arguments, then try v, 
-%% which if it fails returns the original structure.
-<emphasis role="bold">visitor</emphasis> bottom-up(v) = <emphasis role="bold">all</emphasis>(bottom-up(v)) ; (v <emphasis
-            role="bold">&lt;+</emphasis> <emphasis role="bold">id</emphasis>)
-
-<emphasis role="bold">visitor</emphasis> innermost(t,v) = <emphasis
-            role="bold">all</emphasis>(innermost(t,v)) ; <emphasis role="bold">repeat</emphasis>(v &lt;+ id) 
-    </programlisting>We demand that all visitors are infallible, which means
-      that when the v block fails, they must return a default result of the
-      correct type. In most cases, this would be the identity (id).</para>
-
-      <para>We can also try to give these definitions a more imperative look,
-      as if they are patterns for generating code for the visitors, as
-      in:</para>
-
-      <para><programlisting><emphasis role="bold">visitor</emphasis> bottom-up(v) {
-  <emphasis role="bold">all</emphasis> {
-     bottom-up(v);
-  }
-
-  <emphasis role="bold">try</emphasis> {             %% try is the '&lt;+' of System S, 
-                    %% only if v fails the catch block is executed.
-    v;
-  } <emphasis role="bold">catch</emphasis> <emphasis role="bold">fail</emphasis>(t) {
-    <emphasis role="bold">yield</emphasis> t;
-  } 
-}
-
-%% innermost goes down and only returns after 
-%% nothing changes anymore
-
-<emphasis role="bold">visitor</emphasis> innermost(v) {
-  <emphasis role="bold">all</emphasis> {
-    innermost(v);     %% apply this to all children first.
-  }
-  <emphasis role="bold">while (true) {</emphasis> {    %% then until kingdom come, apply this block:
-    <emphasis role="bold">try</emphasis> {
-      v;              %% if v succeeds, it has a yield or a return
-                      %% statement that updates the current node. 
-    } <emphasis role="bold">catch fail</emphasis>(t) { %% if v fails after all, we obtain a reference
-                      %% to the current node visited which we can 
-                      %% return;
-      <emphasis role="bold">yield</emphasis> t;
-    } 
-  }
-}   
-
-visitor bottom-up-dbg(v) {  <emphasis role="bold">
-  all</emphasis> {
-     bottom-up(v);
-  }
-
-  <emphasis role="bold">try</emphasis> {              %% try is the '&lt;+' of System S,
-                     %% only if v fails the catch block is executed.
-    v;
-  } <emphasis role="bold">catch</emphasis> <emphasis role="bold">fail</emphasis>(t) {
-    printf("DBG: bottom-up visitor failed on: " + t);
-    <emphasis role="bold">yield</emphasis> t;
-  } 
-}</programlisting>After such definitions, most of which would be in the
-      standard library of Rascal, we can use them to program actual
-      visits:</para>
-
-      <para><programlisting>visit bottom-up (t) {
-  pattern =&gt; pattern
-  pattern2 : { effect; }
-}</programlisting></para>
     </section>
 
     <section>
@@ -2499,322 +2736,6 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
   </section>
 
   <section>
-    <title>Rascal advertisements</title>
-
-    <para>In this section we enumerate numerous facts about Rascal that
-    advertise it to different audiences</para>
-
-    <section>
-      <title>Generic arguments</title>
-
-      <para>What is good about Rascal in a few words?</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Rascal is a DSL for source code analysis and transformation.
-          It provides a pletora of high level statements and expressions,
-          taking away the boilerplate of implementing and debugging tools that
-          manipulate programs.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal combines the best features of imperative programming
-          with the best features of functional programming and term rewriting.
-          <itemizedlist>
-              <listitem>
-                <para>Simple structured statements for control flow and
-                variable assignments for data flow are powerful and simple
-                features of the imperative programming paradigm. They allow
-                control flow and data flow to be understandable and
-                traceable.</para>
-              </listitem>
-
-              <listitem>
-                <para>From functional programming we borrow that all values
-                are immutable and non-null. Issues with aliasing and
-                referential integrity, such as frequently occur in imperative
-                and OO programming therefore do not exist in Rascal.</para>
-              </listitem>
-
-              <listitem>
-                <para>The Rascal type system is as powerful as most functional
-                languages (higher-order polymorphic functions), however to
-                make the language debuggable and understandable it, in
-                principle, does not provide type inference.</para>
-              </listitem>
-
-              <listitem>
-                <para>From term rewriting we inherit powerful pattern matching
-                facilities, integration with context-free parsing and concrete
-                syntax.</para>
-              </listitem>
-            </itemizedlist></para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal supports both a scripting experience, and a compiled
-          program experience.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal is type safe, but flexible. It's type system prevents
-          common programming errors, but still allows ample opportunity for
-          reusable code. The reasons are the we allow co-variance in the
-          sub-typing relationship, high-order polymorphic functions and
-          parameterized data-types.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal allows different styles of programming. From extremely
-          high level specification, down to straight imperative
-          programming.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal was inspired by and borrows from several other DSL's
-          for program analysis and transformation in academia and industry,
-          namely ASF+SDF, Rscript, TXL, TOM, DMS, Stratego, Elan, Maude, Grok,
-          Haskell, ML and Setl.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal integrates seemlessly with Eclipse IMP and The
-          Meta-Environment.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section>
-      <title>Rascal for ASF+SDF programmers</title>
-
-      <para>Rascal is the successor of ASF+SDF. What's the difference? What's
-      the same?</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Rascal has roughly all the high level features of ASF+SDF and
-          some more. Old ASF+SDF specifications can be transformed to Rascal
-          programs using a conversion tool.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal still uses SDF for syntax definition and parser
-          generation.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal has a module system that is independent of SDF. Rascal
-          modules introduce a namespace scope for variables and functions,
-          which can be either private or public. Rewrite rules are global as
-          in ASF+SDF. Modules can have type parameters as in SDF, which are
-          instantiated by import statements.</para>
-        </listitem>
-
-        <listitem>
-          <para>In Rascal, patterns and variables in concrete syntax may
-          optionally be quoted and escaped, and support explicit declaration
-          of the top non-terminal to solve ambiguity.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal rules read in the order of execution instead of first
-          the left-hand side, then the conditions, and then the right-hand
-          side of ASF+SDF equations</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal has primitive and efficient implementations for sets,
-          relations and maps</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal can be used without SDF, supporting for example regular
-          expressions and abstract data types (pure ATerms)</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal has primitive support for functions, which have a fixed
-          syntax, always return a value and have imperative control flow
-          statements. Adding a function will not trigger the need for
-          regenerating parse tables. Function types can be polymorphic in
-          their parameters and also allow functions as arguments to implement
-          reusable algorithms.</para>
-        </listitem>
-
-        <listitem>
-          <para>The imperative nature of Rascal allows you to factor out
-          common code and nest conditionals, unlike in ASF+SDF where
-          alternative control flow paths had to be encoded by enumerating
-          equations with non-overlapping conditions.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal is an imperative language, which natively supports I/O
-          and other side-effects without work-arounds. When backtracking
-          occurs, for example over list matching, Rascal makes sure that most
-          side-effects are undone, and that I/O is delayed until no more
-          backtracking can occur. Even rewrite rules support side-effects in
-          Rascal.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal has native support for traversals, instead of the
-          add-on it used to be in ASF+SDF. The visit statement is comparable
-          to a traversal function, and is as type-safe as the previous, and
-          more programmeable.</para>
-        </listitem>
-
-        <listitem>
-          <para>Instead of accumulator values of traversal functions in
-          ASF+SDF, Rascal simply supports lexically scoped variables that can
-          be updated using assignments.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal adds specific expressions for relational calculus, all
-          borrowed directly from RScript.</para>
-        </listitem>
-
-        <listitem>
-          <para>When programming using Rascal functions, instead of rules, the
-          control flow of a program becomes easily traceable and debuggable.
-          It is simply like stepping through well structured code.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal is based on a Java interpreter, or a Java run-time when
-          compiled. So the code is more portable.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section>
-      <title>Rascal for imperative and object-oriented programmers</title>
-
-      <para>Rascal is an imperative DSL with high level statements and
-      expressions specifically targeted at the domain of analysis and
-      transformation of source code:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Rascal is safe: there are no null values, and all values are
-          immutable. Source code and abstract syntax trees, and the facts
-          extracted from them are immutable. The Rascal interpreter and
-          compiler make sure this is implemented efficiently. Without
-          mutability it is easy to combine stages of your programs that
-          analyse or annotate with stages that transform. Sharing a value does
-          not introduce a coupling like in OO, simply because changes are only
-          visible to the code that changes the values.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal is extra safe: it has a type system that prevents
-          casting exceptions and other run-time failures. Still the type
-          system specifically allows many kinds of combinations. For example,
-          unlike in Java a set of integers is a subtype of a set of numbers
-          (co-variance), which allows you to reuse algorithm for sets of
-          numbers on sets of integers. It also provides true polymorphic and
-          functions (no erasure), and functions can safely be parameters to
-          other functions.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal provides high level statements and expressions
-          for:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>Visitors in all kinds of orders, expressed very concisely,
-              and type safe.</para>
-            </listitem>
-
-            <listitem>
-              <para>Pattern matching and construction (with concrete
-              syntax!)</para>
-            </listitem>
-
-            <listitem>
-              <para>Equation/constraint solving</para>
-            </listitem>
-
-            <listitem>
-              <para>Relational calculus</para>
-            </listitem>
-
-            <listitem>
-              <para>Rewrite rules for normalization/canonicalization of any
-              kind of data-structure</para>
-            </listitem>
-
-            <listitem>
-              <para>Support for parsing using context-free grammars (via
-              importing modules from the SDF language).</para>
-            </listitem>
-
-            <listitem>
-              <para>(de)Serialization of values</para>
-            </listitem>
-
-            <listitem>
-              <para>Communication with databases</para>
-            </listitem>
-          </itemizedlist>
-        </listitem>
-
-        <listitem>
-          <para>Rascal provides typed data constructors for common
-          mathematical structures, such as:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>terms (a.k.a. abstract data types, tree nodes)</para>
-            </listitem>
-
-            <listitem>
-              <para>parse trees (derivations of context-free grammars, for
-              concrete syntax and direct manipulation of source code)</para>
-            </listitem>
-
-            <listitem>
-              <para>relations</para>
-            </listitem>
-
-            <listitem>
-              <para>sets</para>
-            </listitem>
-
-            <listitem>
-              <para>maps</para>
-            </listitem>
-
-            <listitem>
-              <para>tuples</para>
-            </listitem>
-          </itemizedlist>
-        </listitem>
-
-        <listitem>
-          <para>In Rascal you can implement high-fidelity source-to-source
-          transformations. Without too much overhead, programs can do
-          extensive rewriting of the source code without the loss of
-          particular layout standards or source code comments.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal is syntax-safe. When you use Rascal to generate or
-          transform source code, it statically detects whether the resulting
-          source code is syntactically correct.</para>
-        </listitem>
-
-        <listitem>
-          <para>Rascal is executed by an interpreter written in Java, or it
-          can be compiled to Java classes.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-  </section>
-
-  <section>
     <title>Protyping/implementation of Rascal</title>
 
     <para>Every prototype will have to address the following issues:</para>
@@ -3638,6 +3559,84 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
         <para>Y = Yes</para>
       </listitem>
     </itemizedlist>
+  </section>
+
+  <section>
+    <title>Visitor definitions (UNDECIDED and INCOMPLETE)</title>
+
+    <para>Visitor definitions are a new idea that borrow the programmability
+    of Systems S's single level traversals and add them to Rascal. The idea is
+    to be able to define the strategy annotations of visit statements and
+    generators using a simple expression language. A definition takes as
+    formal argument the code block of the visit statement (s), which is what
+    needs to be done at every node (the visitor).</para>
+
+    <para><programlisting>%% first recurse to the arguments, then try v, 
+%% which if it fails returns the original structure.
+<emphasis role="bold">visitor</emphasis> bottom-up(v) = <emphasis role="bold">all</emphasis>(bottom-up(v)) ; (v <emphasis
+          role="bold">&lt;+</emphasis> <emphasis role="bold">id</emphasis>)
+
+<emphasis role="bold">visitor</emphasis> innermost(t,v) = <emphasis
+          role="bold">all</emphasis>(innermost(t,v)) ; <emphasis role="bold">repeat</emphasis>(v &lt;+ id) 
+    </programlisting>We demand that all visitors are infallible, which means
+    that when the v block fails, they must return a default result of the
+    correct type. In most cases, this would be the identity (id).</para>
+
+    <para>We can also try to give these definitions a more imperative look, as
+    if they are patterns for generating code for the visitors, as in:</para>
+
+    <para><programlisting><emphasis role="bold">visitor</emphasis> bottom-up(v) {
+  <emphasis role="bold">all</emphasis> {
+     bottom-up(v);
+  }
+
+  <emphasis role="bold">try</emphasis> {             %% try is the '&lt;+' of System S, 
+                    %% only if v fails the catch block is executed.
+    v;
+  } <emphasis role="bold">catch</emphasis> <emphasis role="bold">fail</emphasis>(t) {
+    <emphasis role="bold">yield</emphasis> t;
+  } 
+}
+
+%% innermost goes down and only returns after 
+%% nothing changes anymore
+
+<emphasis role="bold">visitor</emphasis> innermost(v) {
+  <emphasis role="bold">all</emphasis> {
+    innermost(v);     %% apply this to all children first.
+  }
+  <emphasis role="bold">while (true) {</emphasis> {    %% then until kingdom come, apply this block:
+    <emphasis role="bold">try</emphasis> {
+      v;              %% if v succeeds, it has a yield or a return
+                      %% statement that updates the current node. 
+    } <emphasis role="bold">catch fail</emphasis>(t) { %% if v fails after all, we obtain a reference
+                      %% to the current node visited which we can 
+                      %% return;
+      <emphasis role="bold">yield</emphasis> t;
+    } 
+  }
+}   
+
+visitor bottom-up-dbg(v) {  <emphasis role="bold">
+  all</emphasis> {
+     bottom-up(v);
+  }
+
+  <emphasis role="bold">try</emphasis> {              %% try is the '&lt;+' of System S,
+                     %% only if v fails the catch block is executed.
+    v;
+  } <emphasis role="bold">catch</emphasis> <emphasis role="bold">fail</emphasis>(t) {
+    printf("DBG: bottom-up visitor failed on: " + t);
+    <emphasis role="bold">yield</emphasis> t;
+  } 
+}</programlisting>After such definitions, most of which would be in the
+    standard library of Rascal, we can use them to program actual
+    visits:</para>
+
+    <para><programlisting>visit bottom-up (t) {
+  pattern =&gt; pattern
+  pattern2 : { effect; }
+}</programlisting></para>
   </section>
 
   <section>
