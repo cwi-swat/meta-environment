@@ -3,6 +3,7 @@ package toolbus;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -11,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class PropertyManager{
 	private final Properties properties;
-	private String propertyFileName;
+	private String propertyFileName = null;
 	private final HashMap<String, String> defines;
 	private String includes = "";
 	private String tbscript = null;
@@ -24,15 +25,24 @@ public class PropertyManager{
 		defines = new HashMap<String, String>();
 		
 		properties = new Properties(System.getProperties());
-		try{
-			String pname = getPropertyFile();
-			File configfile = new File(pname);
-			properties.load(new FileInputStream(configfile));
-		}catch(Exception e){
-			System.err.println("Cannot open configuration file; using built-in settings");
-		}
 		
 		handleComandLineArguments(args);
+		
+		FileInputStream fis = null;
+		try{
+			fis = new FileInputStream(getPropertyFile());
+			properties.load(fis);
+		}catch(IOException ioex){
+			System.err.println("Cannot open configuration file; using built-in settings.");
+		}finally{
+			if(fis != null){
+				try{
+					fis.close();
+				}catch(IOException ioex){
+					System.err.println("Unable to close properties file stream."+ioex.getMessage());
+				}
+			}
+		}
 		
 		Iterator<String> definesIterator = defines.keySet().iterator();
 		while(definesIterator.hasNext()){

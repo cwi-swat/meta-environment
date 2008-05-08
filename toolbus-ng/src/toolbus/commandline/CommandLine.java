@@ -9,14 +9,13 @@ import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
 
-// TODO More then one ToolBus can run in the same VM; handle this.
 public class CommandLine{
 	private final ToolBusInputStreamHandler toolBusInputStreamHandler;
 	
-	private CommandLine(ToolBus toolbus){
+	private CommandLine(ToolBus toolbus, InputStream is){
 		super();
 		
-		toolBusInputStreamHandler = new ToolBusInputStreamHandler(toolbus, System.in);
+		toolBusInputStreamHandler = new ToolBusInputStreamHandler(toolbus, is == null ? System.in : is);
 	}
 	
 	private void startHandling(){
@@ -26,13 +25,13 @@ public class CommandLine{
 		toolBusInputStreamHandlerThread.start();
 	}
 	
-	public static CommandLine createCommandLine(ToolBus toolbus){
-		CommandLine commandLine = new CommandLine(toolbus);
+	public static CommandLine createCommandLine(ToolBus toolbus, InputStream is){
+		CommandLine commandLine = new CommandLine(toolbus, is);
 		commandLine.startHandling();
 		return commandLine;
 	}
 	
-	private static class ToolBusInputStreamHandler implements Runnable{
+	public static class ToolBusInputStreamHandler implements Runnable{
 		private final ToolBus toolbus;
 		private final BufferedReader reader;
 		

@@ -517,7 +517,7 @@ public class ToolBus{
 			return;
 		}
 		
-		if(propertyManager.withConsole()) CommandLine.createCommandLine(this);
+		if(propertyManager.withConsole()) CommandLine.createCommandLine(this, System.in);
 		
 		// Initialize and start the connection handler.
 		try{

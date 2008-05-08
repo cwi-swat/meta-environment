@@ -357,6 +357,23 @@ public class JavaToolBridge extends ToolBridge{
 		return returnValue;
 	}
 
+	private static String toMethodName(String str){
+		StringBuilder name = new StringBuilder();
+		
+		boolean capNext = false;
+		for(int i = 0; i < str.length(); i++){
+			if(str.charAt(i) == '-'){
+				capNext = true;
+			}else if(capNext){
+					name.append(Character.toUpperCase(str.charAt(i)));
+					capNext = false;
+			}else{
+				name.append(str.charAt(i));
+			}
+		}
+		return name.toString();
+	}
+	
 	/**
 	 * Returns the tool method that matches the given name, arguments and operation.
 	 * 
@@ -370,7 +387,7 @@ public class JavaToolBridge extends ToolBridge{
 	 */
 	private Method findMethod(byte operation, String methodName, Class<?>[] parameters){
 		CallableMethodSignature cms = new CallableMethodSignature();
-		cms.methodName = methodName;
+		cms.methodName = toMethodName(methodName);
 		cms.parameters = parameters;
 
 		if(operation == EVAL){
