@@ -14,10 +14,12 @@ EXTRA_DIST += $(wildcard *.m4) \
 	     $(JAVA_JAR) \
 	     $(shell cd ${top_srcdir}; find src -name "*.java")
 
-CLEANFILES+=$(PACKAGE)-uninstalled.pc
-
-#Ignore the generated Eclipse stuff (ugly but necessary to prevent distcheck warnings unfortunately).
-distcleancheck_listfiles = find -type f | grep -v "./.project" | grep -v "./.classpath" | grep -v "./META-INF/MANIFEST.MF" | grep -v "./build.properties" | grep -v "./.settings/org.eclipse.jdt.ui.prefs" | grep -v "./.settings/org.eclipse.jdt.core.prefs"
+CLEANFILES+=$(PACKAGE)-uninstalled.pc \
+			.project \
+			.classpath \
+            META-INF/MANIFEST.MF \
+			build.properties \
+			.settings/*.prefs
 
 pkgconfig_DATA = $(PACKAGE).pc
 
