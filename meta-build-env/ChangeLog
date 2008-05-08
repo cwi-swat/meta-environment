@@ -1,3 +1,8 @@
+Thu May  8 11:30:41 2008    <bruntink@cwi.nl>
+
+	* Makefile.java.meta, Makefile.top.meta: Added Eclipse meta data
+	files to CLEANFILES.
+
 Wed May  7 16:05:56 2008    <bruntink@cwi.nl>
 
 	* meta-build.m4: Required Eclipse and Meta bundles are now all put on a separate line to prevent lines becoming too long.
