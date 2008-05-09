@@ -28,7 +28,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	private final PureFactory termFactory;
 
 	private final Map<Long, ThreadLocalJobQueue> threadLocalQueues;
-	private final Map<AFun, JobQueue> queues;
+	private final Map<String, JobQueue> queues;
 	
 	private final WorkerQueue workerQueue;
 
@@ -67,7 +67,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		this.port = port;
 
 		threadLocalQueues = new HashMap<Long, ThreadLocalJobQueue>();
-		queues = new HashMap<AFun, JobQueue>();
+		queues = new HashMap<String, JobQueue>();
 		
 		workerQueue = new WorkerQueue();
 	}
@@ -265,14 +265,14 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				ATermList ackEvent = ((ATermList) aTerm);
 				ATerm event = ackEvent.getFirst();
 				
-				AFun ackSourceFun = ((ATermAppl) event).getAFun();
+				String ackSourceName = ((ATermAppl) event).getAFun().getName();
 				
 				JobQueue eventQueue;
 				synchronized(queues){
-					eventQueue = queues.get(ackSourceFun);
+					eventQueue = queues.get(ackSourceName);
 				}
 				if(eventQueue == null){
-					LoggerFactory.log("Received acknowledgement for a non-existent event: " + ackSourceFun, ILogger.WARNING, IToolBusLoggerConstants.TOOL);
+					LoggerFactory.log("Received acknowledgement for a non-existent event: " + ackSourceName, ILogger.WARNING, IToolBusLoggerConstants.TOOL);
 					return;
 				}
 				eventQueue.ackEvent();
@@ -281,17 +281,18 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				doReceiveAckEvent(callBackInfo);
 				break;
 			case RESPONSE:
-				AFun responseSourceFun = ((ATermAppl) aTerm).getAFun();
+				ATermAppl response = (ATermAppl) aTerm;
+				String responseSourceName = response.getAFun().toString();
 				
 				JobQueue requestQueue;
 				synchronized(queues){
-					requestQueue = queues.get(responseSourceFun);
+					requestQueue = queues.get(responseSourceName);
 				}
 				if(requestQueue == null){
-					LoggerFactory.log("Received response on a non-existent request: " + responseSourceFun, ILogger.WARNING, IToolBusLoggerConstants.TOOL);
+					LoggerFactory.log("Received response on a non-existent request: " + responseSourceName, ILogger.WARNING, IToolBusLoggerConstants.TOOL);
 					return;
 				}
-				requestQueue.recResponse(aTerm);
+				requestQueue.recResponse(response);
 				break;
 			case TERMINATE:
 				workerQueue.execute(new Runnable(){
@@ -486,9 +487,9 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 * @param response
 		 *            The response.
 		 */
-		public synchronized void recResponse(ATerm response){
+		public synchronized void recResponse(ATermAppl response){
 			synchronized(current){
-				current.response = response;
+				current.response = response.getArgument(0);
 				current.notify();
 			}
 			
@@ -530,14 +531,14 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			Job request = new Job(EVENT, aTerm, threadId);
 			
 			if(!awaitingAck){
-				AFun sourceFun = ((ATermAppl) aTerm).getAFun();
+				String sourceName = ((ATermAppl) aTerm).getAFun().getName();
 				
 				JobQueue requestQueue;
 				synchronized(queues){
-					requestQueue = queues.get(sourceFun);
+					requestQueue = queues.get(sourceName);
 					if(requestQueue == null){
 						requestQueue = new JobQueue();
-						queues.put(sourceFun, requestQueue);
+						queues.put(sourceName, requestQueue);
 					}
 				}
 				requestQueue.post(request);
@@ -563,14 +564,14 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			Job job = new Job(REQUEST, aTerm, threadId);
 			synchronized(job){
 				if(!awaitingAck){
-					AFun sourceFun = ((ATermAppl) aTerm).getAFun();
+					String sourceName = ((ATermAppl) aTerm).getAFun().getName();
 					
 					JobQueue requestQueue;
 					synchronized(queues){
-						requestQueue = queues.get(sourceFun);
+						requestQueue = queues.get(sourceName);
 						if(requestQueue == null){
 							requestQueue = new JobQueue();
-							queues.put(sourceFun, requestQueue);
+							queues.put(sourceName, requestQueue);
 						}
 					}
 					requestQueue.post(job);
@@ -611,14 +612,14 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				awaitingAck = false;
 			}else{
 				ATerm term = next.term;
-				AFun sourceFun = ((ATermAppl) term).getAFun();
+				String sourceName = ((ATermAppl) term).getAFun().getName();
 				
 				JobQueue requestQueue;
 				synchronized(queues){
-					requestQueue = queues.get(sourceFun);
+					requestQueue = queues.get(sourceName);
 					if(requestQueue == null){
 						requestQueue = new JobQueue();
-						queues.put(sourceFun, requestQueue);
+						queues.put(sourceName, requestQueue);
 					}
 				}
 				
