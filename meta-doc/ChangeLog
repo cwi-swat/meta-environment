@@ -4,6 +4,7 @@ Mon May  5 16:11:34 CEST 2008 <jurgenv@cwi.nl>
  * architecture-meta-environment.xml: added detailed information
    on editor-management, configuration-management and transaction-management.
 
+
 Mon Apr 28 15:00:59 CEST 2008 <jurgenv@cwi.nl>
  * architecture-meta-environment.xml: started view on detailed
    communication processes within the Meta-Environment.
