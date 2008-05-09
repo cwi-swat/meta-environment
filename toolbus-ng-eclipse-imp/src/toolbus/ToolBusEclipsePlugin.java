@@ -19,8 +19,21 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	private static final String pluginId = "toolbus";
 	private static final String toolbusConfig = "config";
 
-	private static ToolBusEclipsePlugin instance;
-	private static ToolBus toolbus;
+	private static SingletonToolBus instance;
+	
+	private static class SingletonToolBus{
+		private final ToolBus toolbus;
+		
+		private SingletonToolBus(){
+			super();
+			
+			toolbus = new ToolBus(new String[]{"-properties", getConfigFile()});
+		}
+		
+		public ToolBus getToolBus(){
+			return toolbus;
+		}
+	}
 
 	/**
 	 * This constructor should only be called by the Eclipse Workbench.
@@ -36,11 +49,10 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	/**
 	 * The plugin activator is a singleton. Use this method to obtain the instance.
 	 */
-	public synchronized static ToolBusEclipsePlugin getInstance(){
+	private static synchronized SingletonToolBus getInstance(){
 		if(instance == null){
-			instance = new ToolBusEclipsePlugin();
-			toolbus = new ToolBus(new String[]{"-properties", getConfigFile()});
-			runToolBus(toolbus);
+			instance = new SingletonToolBus();
+			runToolBus(instance.getToolBus());
 		}
 		return instance;
 	}
@@ -50,12 +62,12 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	 * 
 	 * @return The port number to connect to using the adapter.
 	 */
-	public int getPort(){
-		return toolbus.getPort();
+	public static int getPort(){
+		return getInstance().getToolBus().getPort();
 	}
 
-	public PureFactory getFactory(){
-		return toolbus.getTBTermFactory();
+	public static PureFactory getFactory(){
+		return getInstance().getToolBus().getTBTermFactory();
 	}
 
 	private static void runToolBus(final ToolBus toolbus){
@@ -68,13 +80,13 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			});
 			thread.setName(pluginId);
 			thread.start();
-			createConsole();
+			createConsole(toolbus);
 		}else{
 			System.err.println("Failed to parse ToolBus script");
 		}
 	}
 
-	private static void createConsole(){
+	private static void createConsole(ToolBus toolbus){
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager manager = plugin.getConsoleManager();
 		IOConsole console = new IOConsole("ToolBus", null);
