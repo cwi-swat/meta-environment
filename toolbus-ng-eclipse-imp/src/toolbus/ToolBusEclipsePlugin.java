@@ -75,6 +75,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		setProperties(getConfigFile());
 
 		if(toolbus.parsecup()){
+			toolbus.prepare();
 			Thread thread = new Thread(new Runnable(){
 				public void run(){
 					toolbus.execute();
