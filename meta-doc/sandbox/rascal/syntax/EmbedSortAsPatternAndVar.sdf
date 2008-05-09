@@ -3,5 +3,5 @@ exports
 imports Patterns
 context-free syntax
         SORT                       -> SynPattern
-        "<" `SORT`? Variable  ">"  -> SORT
+        "<" `SORT`? Name  ">"  -> SORT
 

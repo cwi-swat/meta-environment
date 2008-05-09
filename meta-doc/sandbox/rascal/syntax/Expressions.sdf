@@ -1,12 +1,11 @@
 module Expressions
 
 imports 
-	basic/IdentifierCon
          basic/BoolCon
          basic/StrCon
          basic/IntCon
          basic/Areas
-         Variables
+         Names
 	Types
          Patterns
          Declarations
@@ -16,7 +15,7 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression DeclLeftHandSide Predicate SimpleGenerator Generator FieldSelection Callable Call
+sorts Expression DeclLeftHandSide Predicate SimpleGenerator Generator Call
       Strategy Statement Rule Case Assignment IncrAssignOp Value AbstractValue
       Catch Finally
 
@@ -30,8 +29,8 @@ context-free syntax
 %% Abstract values used for datatypes
          Value                                                   -> AbstractValue
          PatternVar                                              -> AbstractValue
-         Variable                                                -> AbstractValue
-         Variable "(" {AbstractValue ","}* ")"                   -> AbstractValue
+         QualName                                                -> AbstractValue
+         QualName "(" {AbstractValue ","}* ")"                   -> AbstractValue
          "[" {AbstractValue ","}* "]"                            -> AbstractValue
          "{" {AbstractValue ","}* "}"                            -> AbstractValue
          "<" {AbstractValue ","}+ ">"                            -> AbstractValue
@@ -39,15 +38,15 @@ context-free syntax
 %% Expressions
          Value                                                   -> Expression
         "(" Expression ")"                                       -> Expression {bracket}
-	Variable                                                -> Expression {cons("variable")}
+	QualName                                                -> Expression {cons("variable")}
 
-         Callable ("." Variable)+                                -> FieldSelection
-         FieldSelection                                          -> Expression
+%%         Callable ("." Variable)+                                -> FieldSelection
+%%         FieldSelection                                          -> Expression
 
-         Variable | FieldSelection | Call                        -> Callable
+%%         Variable | FieldSelection | Call                        -> Callable
 
-	Callable "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
-         Callable "{" Expression  "}"                            -> Call {cons("multi-map-call")}
+	Expression "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
+         Expression "{" Expression  "}"                            -> Call {cons("multi-map-call")}
          Call                                                    -> Expression
 
 %% Lists, sets and tuples
@@ -102,7 +101,7 @@ context-free syntax
 	DeclLeftHandSide ":=" Expression                        -> Predicate {cons("match")}
 	DeclLeftHandSide "!:=" Expression                       -> Predicate {cons("not-match")}
 %%       DeclLeftHandSide "<-" Expression                        -> Predicate {cons("match-assign")}
-	IdCon "(" {Expression","}* ")"                          -> Predicate {cons("pred-fun-call")}
+	QualName "(" {Expression","}* ")"                       -> Predicate {cons("pred-fun-call")}
 	"(" Predicate ")"                                       -> Predicate {bracket}
 
 context-free syntax
@@ -111,7 +110,7 @@ context-free syntax
           "bottom-up" | "bottom-up-break" |
           "outermost" | "innermost")?                            -> Strategy
 	DeclLeftHandSide ":" Strategy Expression                -> SimpleGenerator {cons("generator")}
-         Type Variable                                           -> DeclLeftHandSide
+         Type Name                                              -> DeclLeftHandSide
          StructuredType                                          -> DeclLeftHandSide
          AbstractType                                            -> DeclLeftHandSide
          SynPattern                                              -> DeclLeftHandSide
@@ -150,9 +149,9 @@ context-free syntax
          "+=" | "-=" | "*=" | "/="                               -> IncrAssignOp {cons("incr-assignop")}
 
          Expression                                              -> Statement
-         (Variable | Call) IncrAssignOp Expression               -> Assignment {cons("assign")}
-         (DeclLeftHandSide | Variable | Call) "=" Expression     -> Statement  {cons("assignment")}
-         "global" Type Variable ("=" Expression)?                -> Statement  {cons("global")}
+         (QualName | Call) IncrAssignOp Expression               -> Assignment {cons("assign")}
+         (DeclLeftHandSide | QualName | Call) "=" Expression      -> Statement  {cons("assignment")}
+         "global" Type Name ("=" Expression)?                    -> Statement  {cons("global")}
          "return" Expression?                                    -> Statement  {cons("return")}
          "yield" Expression                                      -> Statement  {cons("yield")}
          "fail"                                                  -> Statement  {cons("fail")}
@@ -172,4 +171,4 @@ context-free syntax
          "make" | "case" | "default" | "switch" | "visit" | 
          "try" | "catch" | "finally" |
          "solve"  | "for" | "if" | "else" | "return" | "throw" |
-         "yield" | "fail" | "assert"                             -> Variable {reject}
+         "yield" | "fail" | "assert"                             -> Name {reject}

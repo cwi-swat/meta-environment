@@ -4,7 +4,7 @@ imports basic/Whitespace
         languages/sdf2/syntax/Regular
         languages/sdf2/syntax/Sorts
         languages/sdf2/syntax/Literals
-        Variables
+        Names
 
 hiddens
   context-free start-symbols
@@ -31,7 +31,7 @@ exports
     "term"                                              -> BasicType {cons("term-type")}
     "void"                                              -> BasicType {cons("void-type")}
  
-    Type Variable?                                      -> OptNamedType  
+    Type Name?                                          -> OptNamedType  
     {OptNamedType ","}+                                 -> OptNamedTypes
     "list" "[" Type "]"                                 -> StructuredType {cons("list-type")} 
     "set" "[" Type "]"                                  -> StructuredType {cons("set-type")}
@@ -39,9 +39,9 @@ exports
     "rel" "[" OptNamedTypes "]"                         -> StructuredType {cons("rel-type")}
     "tuple" "[" OptNamedType "," OptNamedTypes "]"      -> StructuredType {cons("tuple-type")}
 
-    "fun" Type Variable "(" OptNamedTypes? ")"          -> FunctionType {cons("function-type")}
+    "fun" Type Name "(" OptNamedTypes? ")"              -> FunctionType {cons("function-type")}
 
-    "&" Variable                                        -> TypeVar {cons("type-var")}
+    "&" Name                                           -> TypeVar {cons("type-var")}
     (TypeName | Sort) "[" {TypeVar ","}+ "]"            -> ParameterizedType
 
     Symbol                                              -> Type {cons("symbol-type")}

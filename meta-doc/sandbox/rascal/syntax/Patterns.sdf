@@ -1,6 +1,6 @@
 module Patterns
 
-imports Variables Types Expressions
+imports Names Types Expressions
  
 exports
 sorts Pattern SynPattern AbsPattern SynPatternChar SynPatternSymbol PatternVar QuotedSynPattern
@@ -17,7 +17,7 @@ lexical syntax
          "/" RegPatternChar* "/"                   -> RegPattern
 
 context-free syntax
-         "<" Type? Variable  ">"                   -> PatternVar
+         "<" Type? Name  ">"                      -> PatternVar
 
          SynPatternChar                            -> SynPatternSymbol
          PatternVar                                -> SynPatternSymbol

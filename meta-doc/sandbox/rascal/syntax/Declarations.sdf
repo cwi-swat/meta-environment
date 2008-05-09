@@ -9,6 +9,8 @@ imports	languages/sdf2/syntax/Sorts
                                            Block => JavaBlock
                                            Statement => JavaStatement
                                            Expression => JavaExpression
+                                           Identifier => JavaIdentifier
+                                           Name       => JavaName
                                           ]
 
 hiddens
@@ -22,10 +24,10 @@ context-free syntax
 
    "public" | "private"                                  -> Visibility  {cons("visibility")}
    "[" {TypeVar ","}+ "]"                                -> DatatypeParameters {cons("datatype-parameters")}
-   Visibility? "data" Variable  DatatypeParameters?
-                          { AbstractType "|"}+ Variable? -> Declaration {cons("data-decl")}
-   Visibility? "type" Type Variable                      -> Declaration {cons("type-decl")}
-   Visibility? "global" Type Variable ("=" Expression)?  -> Declaration {cons("global-decl")}
+   Visibility? "data" Name  DatatypeParameters?
+                          { AbstractType "|"}+ Name?     -> Declaration {cons("data-decl")}
+   Visibility? "type" Type Name                          -> Declaration {cons("type-decl")}
+   Visibility? "global" Type Name ("=" Expression)?      -> Declaration {cons("global-decl")}
 
    Visibility? "memo"? FunctionType Statement            -> Declaration {cons("function-decl")}
 

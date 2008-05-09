@@ -1,0 +1,9 @@
+module Names
+
+exports
+
+imports basic/IdentifierCon [IdCon => Name]
+sorts QualName
+context-free syntax
+
+   {Name "."}+  -> QualName {avoid,cons("QualName")}
