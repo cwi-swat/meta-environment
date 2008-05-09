@@ -6,13 +6,8 @@ import aterm.ATermFactory;
 
 public class HelloTool extends AbstractJavaTool{
 	
-	public HelloTool(String[] args){
+	public HelloTool(){
 		super();
-		try{
-			connect(args);
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
 	}
 	
 	public ATerm getText(){
@@ -29,6 +24,11 @@ public class HelloTool extends AbstractJavaTool{
 	}
 	
 	public static void main(String[] args){
-		new HelloTool(args);
+		HelloTool helloTool = new HelloTool();
+		try{
+			helloTool.connect(args);
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
 	}
 }

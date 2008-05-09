@@ -17,14 +17,8 @@ public class ReceiveTool extends AbstractJavaTool{
 	private final JFrame frame;
 	private final JTextPane textPane;
 
-	public ReceiveTool(String[] args){
+	public ReceiveTool(){
 		super();
-		
-		try{
-			connect(args);
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
 		
 		frame = new JFrame();
 		textPane = new JTextPane();
@@ -63,6 +57,11 @@ public class ReceiveTool extends AbstractJavaTool{
 	}
 	
 	public static void main(String[] args){
-		new ReceiveTool(args);
+		ReceiveTool receiveTool = new ReceiveTool();
+		try{
+			receiveTool.connect(args);
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
 	}
 }

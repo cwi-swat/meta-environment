@@ -24,14 +24,8 @@ public class SendTool extends AbstractJavaTool{
 	private final JTextPane textPane;
 	private final JButton submitButton;
 
-	public SendTool(String[] args){
+	public SendTool(){
 		super();
-		
-		try{
-			connect(args);
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
 		
 		frame = new JFrame();
 		textPane = new JTextPane();
@@ -58,7 +52,9 @@ public class SendTool extends AbstractJavaTool{
 		contentPane.add(textPane, BorderLayout.CENTER);
 		
 		contentPane.add(submitButton, BorderLayout.SOUTH);
-		
+	}
+	
+	public void show(){
 		frame.setVisible(true);
 	}
 	
@@ -102,6 +98,12 @@ public class SendTool extends AbstractJavaTool{
 	}
 	
 	public static void main(String[] args){
-		new SendTool(args);
+		SendTool sendTool = new SendTool();
+		try{
+			sendTool.connect(args);
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
+		sendTool.show();
 	}
 }
