@@ -95,7 +95,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		IOConsole console = new IOConsole("ToolBus", null);
 		manager.addConsoles(new IConsole[]{console});
 		
-		CommandLine.createCommandLine(toolbus, console.getInputStream());
+		CommandLine.createCommandLine(toolbus, console.getInputStream(), false);
 	}
 
 	private void setProperties(String file){
