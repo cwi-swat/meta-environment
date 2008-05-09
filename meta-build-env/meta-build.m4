@@ -3,6 +3,7 @@ dnl META_ left in configure is the sign a macro was not defined, or there was
 dnl a typo in a macro invocation.
 m4_pattern_forbid([^META_])
 m4_pattern_allow([^META_STUDIO])
+m4_pattern_allow([^META_ECLIPSE])
 m4_pattern_allow([^_PKG_ERRORS])
 
 
