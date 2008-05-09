@@ -1876,8 +1876,8 @@
     architecture of The Meta-Environment is provided by the ToolBus. The
     ToolBus runs a ToolBus script containing many processes that coordinate
     the features of The Meta-Environment. This Detailed Coordination View
-    highlights these processes. There are no diagrams in this view, just a
-    number of explanations. These are the major coordination processes:</para>
+    highlights these processes. These are the major coordination
+    processes:</para>
 
     <orderedlist>
       <listitem>
@@ -1922,9 +1922,11 @@
 
       <itemizedlist>
         <listitem>
-          <para>Listeners catch notes that are send by other ToolBus
-          processes, and forward to util processes. Files begin with a
-          language name or a feature name and end with "-listeners.tb"</para>
+          <para>Listeners catch notes that are send by mostly the idef of the
+          module manager and sometimes by utility processes. The listeners are
+          a facade only, they forward to util processes. Listener files begin
+          with a language name or a feature name and end with
+          "-listeners.tb"</para>
         </listitem>
 
         <listitem>
@@ -1964,6 +1966,20 @@
           messages to tools in simple process definitions</para>
         </listitem>
       </itemizedlist>
+
+      <para>The following picture provides an overview:</para>
+
+      <figure>
+        <title>A high level view of groups of processes and their control flow
+        in The Meta-Environment</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="detailed-coordination-view.png"
+                       valign="middle" xml:id="defailed-coordination-view"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
 
       <section>
         <title>Editor management</title>
@@ -2107,6 +2123,10 @@
             intervention.</para>
           </listitem>
         </itemizedlist>
+
+        <para>See <link linkend="detailed-coordination-view">fig. the detailed
+        coordination view</link> on the role of the module manager in its
+        environment.</para>
       </section>
 
       <section>
@@ -2148,6 +2168,21 @@
             information is forwarded to the editor. The editor tool will
             receive an ATerm encoding of the menu structure, which is
             interpreted to produce the right menu's.</para>
+          </listitem>
+
+          <listitem>
+            <para>Some configuration parameters define
+            <emphasis>what</emphasis> needs to be done and
+            <emphasis>when</emphasis>. Since this is a responsibility of the
+            ToolBus scripts there is a bridge. Such configuration parameters
+            carry the names of processes to run. The idef of a tool that
+            interprets such a configuration parameter will call the
+            appropriate process using a <emphasis>dynamic process
+            call</emphasis>. For example, the MetaStudio knows which menus to
+            show. Each menu option will have an associated Process name. When
+            the menu option is selected by the user the MetaStudio sends an
+            event to its idef, which calls the process using a dynamic
+            call.</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -3695,7 +3730,7 @@
           <para>IMP revolves around the concept of a <emphasis>language
           descriptor</emphasis>, which identifies the name of a language using
           an identifier and the associated file extensions. A language
-          descriptor is declared using an extension point. </para>
+          descriptor is declared using an extension point.</para>
         </listitem>
 
         <listitem>
@@ -3756,7 +3791,7 @@
 
       <para>IMP does not hide all of Eclipse. Especially concepts such as
       projects, resources, and error markers &amp; annotations originate from
-      Eclipse. </para>
+      Eclipse.</para>
 
       <itemizedlist>
         <listitem>
