@@ -18,12 +18,12 @@ data NodeId id(term id);
 
 type list[Attribute] AttributeList;
 
-data Attribute bounding-box(Point first, Point second);
+data Attribute "bounding-box"(Point first, Point second);
 data Attribute color(Color color);
-data Attribute curve-points(Polygon points);
+data Attribute "curve-points"(Polygon points);
 data Attribute direction(Direction direction);
-data Attribute fill-color(Color color);
-data Attribute info(str key, value value);
+data Attribute "fill-color"(Color color);
+data Attribute info(str key, value val);
 data Attribute label(str label);
 data Attribute tooltip(str tooltip);
 data Attribute location(int x, int y);

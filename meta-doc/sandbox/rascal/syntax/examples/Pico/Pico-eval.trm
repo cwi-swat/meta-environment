@@ -27,8 +27,8 @@ fun PICO_VALUE valueOf(VEnv Env, PICO_ID Id){
 fun VEnv evalDecls(DECLS Decls){
     VEnv Env = {};
     visit Decls {
-      case <PICO-ID Id> : string:  Env = assign(Env, Id, "")
-      case <PICO-ID Id> : natural: Env = assign(Env, Id, 0)
+      case <PICO_ID Id> : string:  Env = assign(Env, Id, "")
+      case <PICO_ID Id> : natural: Env = assign(Env, Id, 0)
     }
 }
 

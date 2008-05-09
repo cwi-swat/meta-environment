@@ -1,5 +1,6 @@
 module Let-Example
-imports Let;
+
+import-syntax Let;
 
 %% Rename all bound variables in an Exp
 %% Version 2: using global variables

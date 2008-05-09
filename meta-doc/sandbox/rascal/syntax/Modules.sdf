@@ -2,7 +2,7 @@ module Modules
 
 imports Declarations
         Types
-        basic/Whitespace
+        basic/Comments
 
 hiddens
 context-free start-symbols

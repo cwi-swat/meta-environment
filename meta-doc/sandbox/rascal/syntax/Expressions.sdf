@@ -13,7 +13,7 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression DeclLeftHandSide Predicate SimpleGenerator Generator Call
+sorts Expression DeclLeftHandSide Predicate SimpleGenerator Generator Call Callable
       Strategy Statement Rule Case Assignment IncrAssignOp Value AbstractValue
       Catch Finally
 
@@ -28,8 +28,8 @@ context-free syntax
 %% Abstract values used for datatypes
          Value                                                   -> AbstractValue
          PatternVar                                              -> AbstractValue
-         QualName                                                -> AbstractValue
-         QualName "(" {AbstractValue ","}* ")"                   -> AbstractValue
+         Name                                                    -> AbstractValue
+         Name "(" {AbstractValue ","}* ")"                       -> AbstractValue
          "[" {AbstractValue ","}* "]"                            -> AbstractValue
          "{" {AbstractValue ","}* "}"                            -> AbstractValue
          "<" {AbstractValue ","}+ ">"                            -> AbstractValue
@@ -39,14 +39,13 @@ context-free syntax
         "(" Expression ")"                                       -> Expression {bracket}
 	QualName                                                -> Expression {cons("variable")}
 
-%%         Callable ("." Variable)+                                -> FieldSelection
-%%         FieldSelection                                          -> Expression
+         QualName | Call                                         -> Callable
 
-%%         Variable | FieldSelection | Call                        -> Callable
-
-	Expression "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
-         Expression "{" Expression  "}"                            -> Call {cons("multi-map-call")}
+	Callable "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
+         Callable "{" Expression  "}"                            -> Call {cons("multi-map-call")}
          Call                                                    -> Expression
+
+         Expression "." Name                                     -> Expression
 
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
@@ -145,11 +144,13 @@ context-free syntax
          "if" "(" Predicate ")" Statement                        -> Statement  {cons("if-then")}
 %% Do we want elseif etc.?
 
-         "+=" | "-=" | "*=" | "/="                               -> IncrAssignOp {cons("incr-assignop")}
+         "="  | "+=" | "-=" | "*=" | "/="                          -> IncrAssignOp {cons("incr-assignop")}
 
          Expression                                              -> Statement
+
          (QualName | Call) IncrAssignOp Expression               -> Assignment {cons("assign")}
-         (DeclLeftHandSide | QualName | Call) "=" Expression     -> Statement  {cons("assignment")}
+
+         DeclLeftHandSide  "=" Expression                        -> Statement  {cons("varinit")}
          "global" Type Name ("=" Expression)?                    -> Statement  {cons("global")}
          "return" Expression?                                    -> Statement  {cons("return")}
          "yield" Expression                                      -> Statement  {cons("yield")}

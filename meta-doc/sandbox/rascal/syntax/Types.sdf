@@ -9,15 +9,15 @@ hiddens
         Type
 
 exports
-  sorts TypeName Type OptNamedType OptNamedTypes TypeVar 
+  sorts Type OptNamedType OptNamedTypes TypeVar 
         BasicType StructuredType FunctionType AbstractType
         ParameterizedType
 
-  lexical syntax
-    head:[a-z]                                          -> TypeName {cons("one-char")}
-    head:[a-z] middle:[A-Za-z0-9\-]* last:[A-Za-z0-9]   -> TypeName {cons("more-chars")} 
-  lexical restrictions
-    TypeName -/- [A-Za-z0-9]
+%%  lexical syntax
+%%    head:[a-z]                                          -> TypeName {cons("one-char")}
+%%    head:[a-z] middle:[A-Za-z0-9\-]* last:[A-Za-z0-9]   -> TypeName {cons("more-chars")} 
+ %% lexical restrictions
+%%    TypeName -/- [A-Za-z0-9]
 
   context-free syntax
 
@@ -26,7 +26,7 @@ exports
 
     "bool"                                              -> BasicType {cons("bool-type")} 
     "int"                                               -> BasicType {cons("int-type")} 
-    "float"                                             -> BasicType {cons("float-type")}
+    "double"                                            -> BasicType {cons("double-type")}
     "str"                                               -> BasicType {cons("str-type")} 
     "loc"                                               -> BasicType {cons("loc-type")}
     "value"                                             -> BasicType {cons("value-type")}
@@ -45,21 +45,21 @@ exports
     "fun" Type Name "(" OptNamedTypes? ")"              -> FunctionType {cons("function-type")}
 
     "&" Name                                            -> TypeVar {cons("type-var")}
-    (TypeName ) "[" {TypeVar ","}+ "]"                  -> ParameterizedType
+    Name "[" {TypeVar ","}+ "]"                         -> ParameterizedType
 
-    Symbol                                              -> Type {cons("symbol-type")}
+    Name                                                -> AbstractType {cons("typename-abstype")}
+    TypeVar                                             -> AbstractType {cons("typevar-abstype")}
+    Type                                                -> AbstractType {cons("type-abstype")}
+    Name "(" {OptNamedType ","}* ")"                    -> AbstractType {cons("cons-abstype-name")}
+    StringLiteral "(" {OptNamedType ","}* ")"           -> AbstractType {cons("const-abstype-str")}
 
-    TypeName                                            -> AbstractType {cons("typename-abstype")}
-%%    TypeVar                                             -> AbstractType {cons("typevar-abstype")}
-    TypeName "(" {OptNamedType ","}* ")"                -> AbstractType {cons("constructor-abstype")}
-
-    TypeVar | BasicType | StructuredType | 
-    FunctionType | AbstractType | ParameterizedType     -> Type {cons("type")}
+    BasicType | StructuredType | FunctionType | 
+    TypeVar | ParameterizedType | Symbol                -> Type {cons("type")}
 
 %% Define reserved words
-   "bool" | "int" | "float" | "str" | "loc" | "value" | "term" | 
-   "void" | "list" | "set" | "map" | "rel" | "tuple" |
-   "fun"                                                -> TypeName {reject}
+   "bool" | "int" | "double" | "str" | "loc" | 
+   "value" | "term" | "void" | "list" | "set" | 
+   "map" | "rel" | "tuple" | "fun"                      -> Name {reject}
  
 
   

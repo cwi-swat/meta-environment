@@ -1,61 +1,62 @@
 module AsFix
 
-datatype ParseTree parsetree(Tree top, int amb-cnt);
+data ParseTree parsetree(Tree top, int amb_cnt);
 
-datatype Tree appl(Production prod, Args args);
-datatype Tree cycle(Symbol symbol, int cycle-length);
-datatype Tree amb(Args args);
+data Tree appl(Production prod, Args args);
+data Tree cycle(Symbol symbol, int cycle_length);
+data Tree amb(Args args);
 
 %% constructor(Tree, char, <character(int)>), %%??
-subtype Tree int;
 
-subtype Args list[Tree];
+type int Tree;
 
-datatype Production prod(Symbols lhs, Symbol rhs, Attributes attributes);
+type list[Tree] Args;
+
+data Production prod(Symbols lhs, Symbol rhs, Attributes attributes);
  
 %% constructor(Production, List, list(<rhs(Symbol)>)), 
-subtype Production list[Symbol];
+type list[Symbol] Production;
 
-datatype Attributes no-attrs;
-datatype Attributes attrs(Attrs attrs);
+data Attributes "no-attrs";
+data Attributes attrs(Attrs attrs);
 
-subtype Attrs list[Attr];
+type list[Attr] Attrs;
 
-datatype Attr assoc(Associativity assoc) | %% term(term term) |
-             id(str module-name) | bracket | reject | prefer | avoid;
+data Attr assoc(Associativity assoc) | %% term(term term) |
+             id(str module_name) | bracket | reject | prefer | avoid;
 
-datatype Associativity left | right | assoc | non-assoc;
+data Associativity left | right | assoc | "non-assoc";
 
-datatype Symbol lit(str string);
-datatype Symbol cilit(str string);
-datatype Symbol cf(Symbol symbol);
-datatype Symbol lex(Symbol symbol);
-datatype Symbol empty;
-datatype Symbol seq(Symbols symbols);
-datatype Symbol opt(Symbol symbol);
-datatype Symbol alt(Symbol lhs, Symbol rhs);
-datatype Symbol atuple(Symbol head, Symbols rest);  %% clash with keyword tuple!
-datatype Symbol sort (str string); 
-datatype Symbol iter-plus(Symbol symbol); 
-datatype Symbol iter-star(Symbol symbol); 
-datatype Symbol iter-plus-sep(Symbol symbol, Symbol separator); 
-datatype Symbol iter-start-sep(Symbol symbol, Symbol separator); 
-datatype Symbol iter-n(Symbol symbol, int number); 
-datatype Symbol iter-sep-n(Symbol symbol, Symbol separator, int number); 
-datatype Symbol func(Symbols symbols, Symbol symbol); 
-datatype Symbol parameterized-sort(str sort, Symbols parameters); 
-datatype Symbol strategy(Symbol lhs, Symbol rhs);
-datatype Symbol var-sym(Symbol symbol);
-datatype Symbol layout; 
-datatype Symbol char-class(CharRanges ranges);
+data Symbol lit(str string);
+data Symbol cilit(str string);
+data Symbol cf(Symbol symbol);
+data Symbol lex(Symbol symbol);
+data Symbol empty;
+data Symbol seq(Symbols symbols);
+data Symbol opt(Symbol symbol);
+data Symbol alt(Symbol lhs, Symbol rhs);
+data Symbol atuple(Symbol head, Symbols rest);  %% clash with keyword tuple!
+data Symbol sort (str string); 
+data Symbol "iter-plus"(Symbol symbol); 
+data Symbol "iter-star"(Symbol symbol); 
+data Symbol "iter-plus-sep"(Symbol symbol, Symbol separator); 
+data Symbol "iter-start-sep"(Symbol symbol, Symbol separator); 
+data Symbol "iter-n"(Symbol symbol, int number); 
+data Symbol "iter-sep-n"(Symbol symbol, Symbol separator, int number); 
+data Symbol func(Symbols symbols, Symbol symbol); 
+data Symbol "parameterized-sort"(str sort, Symbols parameters); 
+data Symbol strategy(Symbol lhs, Symbol rhs);
+data Symbol "var-sym"(Symbol symbol);
+data Symbol layout; 
+data Symbol "char-class"(CharRanges ranges);
 
-subtype Symbols list[Symbol];
+type  list[Symbol] Symbols;
 
 %% constructor(CharRange, character, <start(int)>), 
-subtype CharRange int;
-datatype CharRange range(int start, int end);
+type int CharRange;
+data CharRange range(int start, int end);
 
-datatype CharRanges alist(CharRange);  %% clash with keyword list!
+data CharRanges alist(CharRange);  %% clash with keyword list!
 
 fun str join(list[&T] lst, fun str tostring(&T arg), str asep){ 
     str res = "";

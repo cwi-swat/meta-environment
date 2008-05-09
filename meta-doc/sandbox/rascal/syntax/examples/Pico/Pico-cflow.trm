@@ -1,5 +1,6 @@
 module Pico-controlflow
-import pico/syntax/Pico;
+
+import-syntax pico/syntax/Pico;
 
 type EXP CP;         
 type STATEMENT CP;

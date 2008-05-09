@@ -1,22 +1,22 @@
 module ATerms
 
-imports languages/aterm/syntax/IntCon 
-        languages/aterm/syntax/RealCon
-        basic/StrCon
-        basic/IdentifierCon
+import-syntax languages/aterm/syntax/IntCon;
+import-syntax languages/aterm/syntax/RealCon;
+import-syntax basic/StrCon;
+import-syntax basic/IdentifierCon;
 
-type AFun quoted(StrCon);
-type AFun unquoted(IdCon);
+data AFun quoted(StrCon);
+data AFun unquoted(IdCon);
 
-type ATerm aint(IntCon);
-type ATerm areal(RealCon);
-type ATerm afun(AFun);
-type ATerm appl(AFun fun, list[ATerm] args);
-type ATerm placeholder(ATerm type);
-type ATerm list(list[ATerm] elems);
-type ATerm annotated(ATerm trm, Annotation);
+data ATerm aint(IntCon);
+data ATerm areal(RealCon);
+data ATerm afun(AFun);
+data ATerm appl(AFun fn, list[ATerm] args);
+data ATerm placeholder(ATerm type);
+data ATerm "list"(list[ATerm] elems);
+data ATerm annotated(ATerm trm, Annotation);
 
-type Annotation default(list[ATerm] annos);
+data Annotation "default"(list[ATerm] annos);
 
 
 

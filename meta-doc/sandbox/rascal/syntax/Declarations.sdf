@@ -23,7 +23,7 @@ context-free syntax
 
    "[" {TypeVar ","}+ "]"                                -> DatatypeParameters {cons("datatype-parameters")}
    Visibility "data" Name  DatatypeParameters?
-                          { AbstractType "|"}+ Name?     -> Declaration {cons("data-decl")}
+                          { AbstractType "|"}+           -> Declaration {cons("data-decl")}
 
    Visibility "type" Type Name                           -> Declaration {cons("type-decl")}
 

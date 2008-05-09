@@ -11,7 +11,7 @@ fun set[Stat] successor(rel[Stat,Stat] P, Stat S) {
     return P(S)
 }
 
-fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS, 
+fun rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS, 
                                         rel[Stat,Stat] PRED) {
 
     set[Stat] STATEMENT = carrier(PRED);
@@ -32,7 +32,7 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
                             Stat P : predecessor(PRED,S), 
                             Def D : OUT{P}};
            OUT =  {<S, D> | int S : STATEMENT, 
-                            Def D : DEF{S} +  (IN{S} - KILL{S})}
+                            Def D : DEF{S} + (IN{S} - KILL{S})}
     };
     return IN;
 }

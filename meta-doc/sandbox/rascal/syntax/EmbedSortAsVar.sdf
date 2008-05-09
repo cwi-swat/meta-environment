@@ -2,4 +2,4 @@ module EmbedSortAsVar[SORT]
 exports
 imports Patterns
 context-free syntax
-        "<" `SORT`? Variable  ">"  -> SORT
+        "<" `SORT`? Name  ">"  -> SORT

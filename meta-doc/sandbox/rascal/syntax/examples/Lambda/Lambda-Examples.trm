@@ -1,5 +1,6 @@
 module Lambda-Examples
-imports Lambda-syntax;
+
+import-syntax Lambda-syntax;
 
 fun set[Var] allVars(Exp E) {
     return {V | Var V : E}
