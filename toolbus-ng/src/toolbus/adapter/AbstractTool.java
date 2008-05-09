@@ -11,7 +11,7 @@ import aterm.pure.PureFactory;
  * @author Arnold Lankamp
  */
 public abstract class AbstractTool implements IOperations{
-	private final static PureFactory termFactory = TBTermFactory.getInstance();
+	protected final static PureFactory termFactory = TBTermFactory.getInstance();
 
 	public final static String DIRECTTOOL = "direct";
 	public final static String REMOTETOOL = "remote";

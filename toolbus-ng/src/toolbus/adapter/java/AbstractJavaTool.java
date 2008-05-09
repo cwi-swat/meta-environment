@@ -1,9 +1,8 @@
 package toolbus.adapter.java;
 
 import java.net.InetAddress;
-import toolbus.TBTermFactory;
+
 import toolbus.adapter.AbstractTool;
-import aterm.pure.PureFactory;
 
 /**
  * This class facilitates the functions a tool needs to be able to functions.
@@ -11,8 +10,7 @@ import aterm.pure.PureFactory;
  * @author Arnold Lankamp
  */
 public abstract class AbstractJavaTool extends AbstractTool{
-	private final static PureFactory termFactory = TBTermFactory.getInstance();
-
+	
 	/**
 	 * Default constructor.
 	 */
