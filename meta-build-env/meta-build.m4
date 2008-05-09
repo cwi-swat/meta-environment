@@ -412,7 +412,6 @@ echo "PkgConfigPath=$PKG_CONFIG_PATH" >> $1.pc
 dnl META_GENERATE_ECLIPSE_PLUGIN_FILES(PKGNAME,VERSION,JARFILE,PACKAGES,DEPS,MAINCLASS,LOCALJARS)
 dnl ----------------------------------
 AC_DEFUN([META_GENERATE_ECLIPSE_PLUGIN_FILES],[
-if ! test -f .project ; then
 
 if ! test -d META-INF ; then
   mkdir META-INF
@@ -440,6 +439,15 @@ else
     REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES}"
   else
     REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES},${ECLIPSE_REQUIRES}"
+
+	META_REQUIRE_SOFTWARE(eclipse,plugins)
+
+	eclipse_bundles=`ls ${ECLIPSE_PREFIX}/plugins | grep .jar`
+
+	for bundle in ${eclipse_bundles}; do
+		  EXTERNAL_JARS+=:${ECLIPSE_PREFIX}/plugins/${bundle}
+		  EXTERNAL_INSTALLED_JARS+=:${ECLIPSE_PREFIX}/plugins/${bundle}
+	done
   fi
 fi
 
@@ -527,15 +535,11 @@ cat > .project << ENDCAT
 	</natures>
 </projectDescription>
 ENDCAT
-else
-  echo "Detected the presence of a .project file, so no Eclipse configuration will be generated at this time. If you do wish to do so, please remove it and re-run the configure script."
-fi
 ])
 
 dnl META_GENERATE_ECLIPSE_PLUGIN_FILES_FOR_C(PKGNAME,VERSION,JARFILE,PACKAGES,DEPS,MAINCLASS,LOCALJARS)
 dnl ----------------------------------
 AC_DEFUN([META_GENERATE_ECLIPSE_PLUGIN_FILES_FOR_C],[
-if ! test -f .project ; then
 
 if ! test -d META-INF ; then
   mkdir META-INF
@@ -588,9 +592,6 @@ cat > .project << ENDCAT
 	</natures>
 </projectDescription>
 ENDCAT
-else
-  echo "Detected the presence of a .project file, so no Eclipse configuration will be generated at this time. If you do wish to do so, please remove it and re-run the configure script."
-fi
 ])
 
 dnl META_IF_NOT_CONTAINS(STRING,SUBSTRING,CODE)
