@@ -217,7 +217,6 @@ public class GraphBuilder {
 	private Graph convertRelStrStrToDataset(RElemElements elements) {
 		// Setup the new graph.
 		m_nodeCache.clear();
-		boolean directedGraph = true;
 		DotAdapter graph = new DotAdapter();
 
 		while (elements.hasTail()) {
