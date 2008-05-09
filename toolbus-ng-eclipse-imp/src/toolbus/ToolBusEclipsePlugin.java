@@ -23,34 +23,30 @@ import aterm.pure.PureFactory;
 
 public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	private static final String pluginId = "toolbus";
-
 	private static final String toolbusConfig = "config";
 
-	private final ToolBus toolbus;
-
-	private volatile static ToolBusEclipsePlugin instance;
-
-	volatile private boolean initialized = false;
+	private static ToolBusEclipsePlugin instance;
+	private static ToolBus toolbus;
 
 	/**
 	 * This constructor should only be called by the Eclipse Workbench.
 	 */
 	public ToolBusEclipsePlugin(){
 		super();
-		
-		toolbus = new ToolBus(new String[0]);
-		
-		instance = this;
+	}
+	
+	public void earlyStartup() {
+		getInstance(); // Initialize this thing.
 	}
 
 	/**
 	 * The plugin activator is a singleton. Use this method to obtain the instance.
 	 */
-	public static ToolBusEclipsePlugin getInstance(){
-		// If another early startup plugin wants to get this instance, it
-		// first has to wait for ToolBus to start up.
-		if (!instance.initialized) {
-			instance.earlyStartup();
+	public synchronized static ToolBusEclipsePlugin getInstance(){
+		if(instance == null){
+			instance = new ToolBusEclipsePlugin();
+			toolbus = new ToolBus(new String[0]);
+			instance.runToolBus();
 		}
 		return instance;
 	}
@@ -75,35 +71,24 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		toolbus.shutdown(toolbus.getTBTermFactory().parse("\"Eclipse shutdown\""));
 	}
 
-	/**
-	 * This method is called by the Eclipse workbench
-	 */
-	public synchronized void earlyStartup(){
-		// Early startup might be called before via getInstance();
-		runToolBus();
-	}
-
 	protected void runToolBus(){
-		if(!initialized){
-			setProperties(getConfigFile());
+		setProperties(getConfigFile());
 
-			if(toolbus.parsecup()){
-				Thread thread = new Thread(new Runnable(){
-					public void run(){
-						toolbus.execute();
-					}
-				});
-				thread.setName(pluginId);
-				thread.start();
-				initialized = true;
-				createConsole();
-			}else{
-				System.err.println("Failed to parse ToolBus script");
-			}
+		if(toolbus.parsecup()){
+			Thread thread = new Thread(new Runnable(){
+				public void run(){
+					toolbus.execute();
+				}
+			});
+			thread.setName(pluginId);
+			thread.start();
+			createConsole();
+		}else{
+			System.err.println("Failed to parse ToolBus script");
 		}
 	}
 
-	protected void createConsole(){
+	private void createConsole(){
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager manager = plugin.getConsoleManager();
 		IOConsole console = new IOConsole("ToolBus", null);
@@ -112,7 +97,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		CommandLine.createCommandLine(toolbus, console.getInputStream());
 	}
 
-	protected void setProperties(String file){
+	private void setProperties(String file){
 		Properties properties = new Properties();
 		try{
 			properties.load(new FileInputStream(file));
@@ -127,7 +112,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		}
 	}
 
-	protected String getConfigFile(){
+	private String getConfigFile(){
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IExtensionPoint point = registry.getExtensionPoint(pluginId, toolbusConfig);
 
