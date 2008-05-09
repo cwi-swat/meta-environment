@@ -64,13 +64,6 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		return toolbus.getTBTermFactory();
 	}
 
-	/**
-	 * This method is called by the Eclipse workbench
-	 */
-	public void stop(BundleContext context) throws Exception{
-		toolbus.shutdown(toolbus.getTBTermFactory().parse("\"Eclipse shutdown\""));
-	}
-
 	protected void runToolBus(){
 		setProperties(getConfigFile());
 
