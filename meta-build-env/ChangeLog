@@ -1,3 +1,16 @@
+Fri May  9 15:14:30 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: Added the --with-eclipse configure switch that is
+	required for packages that use EclipseRequires. It needs to be set
+	to $ECLIPSE_HOME.
+
+	If a package has EclipseRequires, it will now get *all* the jars
+	in $ECLIPSE_HOME/plugins on its EXTERNAL_JARS list, such that it
+	can be build from the command line.
+
+	The Eclipse meta data are now generated every time configure is
+	run, overwriting meta data that are already present.
+
 Fri May  9 09:29:03 2008    <bruntink@cwi.nl>
 
 	* Makefile.java.meta: Fixed CLEANFILE specification.
