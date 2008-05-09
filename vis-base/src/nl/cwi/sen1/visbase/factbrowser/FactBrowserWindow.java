@@ -230,7 +230,9 @@ public class FactBrowserWindow extends JPanel {
         mdlTree = new DefaultTreeModel(rootNode);
         scrlTreeScroller = new JScrollPane();
         treeRstores = new JTree(mdlTree) {
-        	public String getToolTipText(MouseEvent e) {
+			private static final long serialVersionUID = 2356329800583434058L;
+
+			public String getToolTipText(MouseEvent e) {
 				Object tip = null;
 				TreePath path = getPathForLocation(e.getX(), e.getY());
 				if (path != null) {
