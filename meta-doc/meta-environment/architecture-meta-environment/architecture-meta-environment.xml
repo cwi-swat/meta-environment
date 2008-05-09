@@ -3866,14 +3866,15 @@
     </section>
 
     <section>
-      <title>How does IMP work?</title>
+      <title>Know about IMP</title>
 
       <itemizedlist>
         <listitem>
           <para>IMP builds on Eclipse, and in particular on Eclipse's plugin
           mechanism that uses the concept of <emphasis>extension
-          points.</emphasis> Read about extension points at
-          eclipse.org.</para>
+          points.</emphasis> Read about extension points at eclipse.org. It is
+          important to understand OSGI and Eclipse's plugin mechanism in some
+          detail.</para>
         </listitem>
 
         <listitem>
@@ -3933,11 +3934,49 @@
           needs and communicates information back to the language parametric
           service implementation class, and/or activates other tools.</para>
         </listitem>
+
+        <listitem>
+          <para>Note that for each IMP service there will be</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>a Java class that both is a ToolBus tool and implements
+              the IMP service interface</para>
+            </listitem>
+
+            <listitem>
+              <para>a ToolBus idef process that communicates with this tool
+              integrates with the rest of the Meta-Environment coordination
+              scripts</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>Examples of IMP services that are ToolBus tools are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>IParseController - is called when a file needs to be parsed
+          according to the UniversalEditor, the IParseController
+          implementation relays this message to the ToolBus, which calls sglr,
+          etc. etc.</para>
+        </listitem>
+
+        <listitem>
+          <para>ITokenColorer - is called when the UniversalEditor decides it
+          is time to add highlighting to the editor. The ITokenColorer
+          implementation receives a handle to the UPTR parse tree (an ATerm),
+          sends this to the ToolBus to be processed by the structure editor
+          and receives a list of source locations tupled with font names back.
+          Then it returns the TokenIterator which is requires by the
+          UniversalEditor which iterates over the source locations.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
     <section>
-      <title>Eclipse features reifed as ToolBus tools</title>
+      <title>Eclipse features reified as ToolBus tools</title>
 
       <para>IMP does not hide all of Eclipse. Especially concepts such as
       projects, resources, and error markers &amp; annotations originate from
@@ -3970,6 +4009,48 @@
           resource concept of Eclipse. The end result of the PIMP'ed
           Meta-Environment should be something that satisfies the expectations
           of Eclipse users.</para>
+        </listitem>
+
+        <listitem>
+          <para>Note that each Eclipse feature that is reifed as a ToolBus
+          tool will have:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>A Java class that is a ToolBus tool which takes ATerms
+              from the ToolBus an gives them a meaning by calling Eclipse
+              functionality</para>
+            </listitem>
+
+            <listitem>
+              <para>A ToolBus idef process that communicates with this tool
+              and integrates with the rest of the Meta-Environment
+              coordination scripts.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>Examples of tools that reify Eclipse features are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>org.meta_environment.eclipse.errors.ErrorViewer: it implements
+          the same idef as the Meta-Environment error viewer, receiving lists
+          of error messages. The implementation of the tool simply registers
+          the errors with the Eclipse annotation manager</para>
+        </listitem>
+
+        <listitem>
+          <para>org.meta_environment.eclipse.files: communicates all
+          identified resources and registers them with the module
+          manager.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para></para>
+            </listitem>
+          </itemizedlist>
         </listitem>
       </itemizedlist>
     </section>
