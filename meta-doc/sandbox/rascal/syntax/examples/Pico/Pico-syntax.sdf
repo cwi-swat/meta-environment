@@ -6,12 +6,17 @@ imports languages/pico/syntax/Pico
  hiddens
    imports
         Modules
+        languages/java/syntax/Lexical [ Identifier => JavaIdentifier
+                                        
+                                      ]
+
+
    context-free start-symbols
         Module 
    imports 
 	EmbedSortAsPatternAndVar[NatCon]
-	EmbedSortAsPatternAndVar[IntCon]
-	EmbedSortAsPatternAndVar[StrCon]
+	EmbedSortAsPatternAndVar[IntegerLiteral]
+	EmbedSortAsPatternAndVar[StringLiteral]
 
 	EmbedSortAsPatternAndVar[PICO-ID]
 	EmbedSortAsPatternAndVar[TYPE]

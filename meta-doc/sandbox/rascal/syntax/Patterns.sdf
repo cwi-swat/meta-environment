@@ -17,7 +17,7 @@ lexical syntax
          "/" RegPatternChar* "/"                   -> RegPattern
 
 context-free syntax
-         "<" Type? Name  ">"                      -> PatternVar
+         "<" Type? Name  ">"                       -> PatternVar
 
          SynPatternChar                            -> SynPatternSymbol
          PatternVar                                -> SynPatternSymbol

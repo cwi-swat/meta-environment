@@ -2,6 +2,7 @@ module Modules
 
 imports Declarations
         Types
+        basic/Whitespace
 
 hiddens
 context-free start-symbols
@@ -27,8 +28,9 @@ context-free syntax
 
     ModuleName ModuleActuals?                    -> ImportedModule
 
-    "imports" ImportedModule+ ";"                -> Import
-    "java-imports"                               -> Import  %% FIX THIS
+    "import" ImportedModule ";"                  -> Import
+    "import-java"  QualName ";"                  -> Import
+    "import-syntax" ModuleName ";"               -> Import
 
     "module" ModuleName ModuleParameters?
              Import* 

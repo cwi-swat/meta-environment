@@ -1,9 +1,7 @@
 module Types
 
-imports basic/Whitespace
-        languages/sdf2/syntax/Regular
-        languages/sdf2/syntax/Sorts
-        languages/sdf2/syntax/Literals
+imports 
+        SDFSymbol
         Names
 
 hiddens
@@ -23,8 +21,12 @@ exports
 
   context-free syntax
 
+    Name                                                -> Symbol
+    StringLiteral                                       -> Symbol
+
     "bool"                                              -> BasicType {cons("bool-type")} 
     "int"                                               -> BasicType {cons("int-type")} 
+    "float"                                             -> BasicType {cons("float-type")}
     "str"                                               -> BasicType {cons("str-type")} 
     "loc"                                               -> BasicType {cons("loc-type")}
     "value"                                             -> BasicType {cons("value-type")}
@@ -33,6 +35,7 @@ exports
  
     Type Name?                                          -> OptNamedType  
     {OptNamedType ","}+                                 -> OptNamedTypes
+
     "list" "[" Type "]"                                 -> StructuredType {cons("list-type")} 
     "set" "[" Type "]"                                  -> StructuredType {cons("set-type")}
     "map" "[" OptNamedType "," OptNamedType "]"         -> StructuredType {cons("map-type")}
@@ -41,8 +44,8 @@ exports
 
     "fun" Type Name "(" OptNamedTypes? ")"              -> FunctionType {cons("function-type")}
 
-    "&" Name                                           -> TypeVar {cons("type-var")}
-    (TypeName | Sort) "[" {TypeVar ","}+ "]"            -> ParameterizedType
+    "&" Name                                            -> TypeVar {cons("type-var")}
+    (TypeName ) "[" {TypeVar ","}+ "]"                  -> ParameterizedType
 
     Symbol                                              -> Type {cons("symbol-type")}
 
@@ -54,7 +57,7 @@ exports
     FunctionType | AbstractType | ParameterizedType     -> Type {cons("type")}
 
 %% Define reserved words
-   "bool" | "int" | "str" | "loc" | "value" | "term" | 
+   "bool" | "int" | "float" | "str" | "loc" | "value" | "term" | 
    "void" | "list" | "set" | "map" | "rel" | "tuple" |
    "fun"                                                -> TypeName {reject}
  

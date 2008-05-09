@@ -1,14 +1,12 @@
 module Expressions
 
-imports 
-         basic/BoolCon
-         basic/StrCon
-         basic/IntCon
-         basic/Areas
+imports  basic/Areas
          Names
 	Types
          Patterns
-         Declarations
+         languages/java/syntax/Lexical [ Identifier => JavaIdentifier
+                                         Name       => JavaName
+                                       ]
 
 hiddens
 context-free start-symbols 
@@ -21,9 +19,10 @@ sorts Expression DeclLeftHandSide Predicate SimpleGenerator Generator Call
 
 context-free syntax
 %% Basic values
-         BoolCon                                                 -> Value {cons("boolcon-exp")}
-         IntCon                                                  -> Value {cons("intcon-exp")}
-         StrCon                                                  -> Value {cons("strcon-exp")}
+         BooleanLiteral                                          -> Value {cons("boollit-exp")}
+         IntegerLiteral                                          -> Value {cons("intlit-exp")}
+         FloatingPointLiteral                                    -> Value {cons("floatlit-exp")}
+         StringLiteral                                           -> Value {cons("strlit-exp")}
          Area                                                    -> Value {cons("areacon-exp")}
 
 %% Abstract values used for datatypes
@@ -150,13 +149,13 @@ context-free syntax
 
          Expression                                              -> Statement
          (QualName | Call) IncrAssignOp Expression               -> Assignment {cons("assign")}
-         (DeclLeftHandSide | QualName | Call) "=" Expression      -> Statement  {cons("assignment")}
+         (DeclLeftHandSide | QualName | Call) "=" Expression     -> Statement  {cons("assignment")}
          "global" Type Name ("=" Expression)?                    -> Statement  {cons("global")}
          "return" Expression?                                    -> Statement  {cons("return")}
          "yield" Expression                                      -> Statement  {cons("yield")}
          "fail"                                                  -> Statement  {cons("fail")}
          "throw" Expression                                      -> Statement  {cons("throw")}
-         "assert" StrCon ":" Predicate                           -> Statement  {cons("assert")}
+         "assert" StringLiteral ":" Predicate                    -> Statement  {cons("assert")}
 
          "try" Statement Catch* Finally?                         -> Statement  {cons("try")}
          "catch" Pattern ":" Statement                           -> Catch      {cons("catch")}

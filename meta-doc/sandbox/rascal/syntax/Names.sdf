@@ -2,7 +2,9 @@ module Names
 
 exports
 
-imports basic/IdentifierCon [IdCon => Name]
+%%imports basic/IdentifierCon [IdCon => Name]
+
+imports languages/java/syntax/Lexical [Identifier => Name]
 sorts QualName
 context-free syntax
 

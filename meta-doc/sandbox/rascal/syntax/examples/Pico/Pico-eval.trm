@@ -1,10 +1,10 @@
 module Pico-eval
-imports pico/syntax/Pico;
+import-syntax pico/syntax/Pico;
 
-type int PICO-VALUE;
-type str PICO-VALUE;
+type int PICO_VALUE;
+type str PICO_VALUE;
 
-type map[PICO-ID, PICO-VALUE] VEnv;
+type map[PICO_ID, PICO_VALUE] VEnv;
 
 fun VEnv evalProgram(PROGRAM P){
     switch P {
@@ -15,12 +15,12 @@ fun VEnv evalProgram(PROGRAM P){
    }
 };
 
-fun VEnv assign(VEnv Env, PICO-ID Id, PICO-VALUE V){
+fun VEnv assign(VEnv Env, PICO_ID Id, PICO_VALUE V){
   Env(Id) = V;
   return Env
 }
 
-fun PICO-VALUE valueOf(VEnv Env, PICO-ID Id){
+fun PICO_VALUE valueOf(VEnv Env, PICO_ID Id){
   return Env(Id);
 }
 
@@ -44,14 +44,14 @@ fun VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
 
 fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
     switch Stat {
-      case [| <PICO-ID Id> = <EXP Exp> |]: {
-        PICO-VALUE Val = evalExp(Exp, Env);
+      case [| <PICO_ID Id> = <EXP Exp> |]: {
+        PICO_VALUE Val = evalExp(Exp, Env);
         return assign(Env, Id, Val)
       }
 
       case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
                    else <{STATEMENT ";"}* Stats1> fi:{
-        PICO-VALUE Val = evalExp(Exp, Env);
+        PICO_VALUE Val = evalExp(Exp, Env);
         if(Val != 0)
           return evalStatments(Stats1, Env)
         else 
@@ -60,7 +60,7 @@ fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
       }
 
       case while <EXP Exp> do <{STATEMENT ";"}* Stats1> od:{
-        PICO-VALUE Val = evalExp(Exp, Env);
+        PICO_VALUE Val = evalExp(Exp, Env);
         if(Val != 0)
           return Env
         else {
@@ -71,7 +71,7 @@ fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
     };
 };
 
-fun PICO-VALUE evalExp(Exp exp, VEnv Env) {
+fun PICO_VALUE evalExp(Exp exp, VEnv Env) {
     switch exp {
       case <NatCon N>: return N
 
