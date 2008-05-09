@@ -11,6 +11,8 @@ Fri May  9 15:14:30 2008    <bruntink@cwi.nl>
 	The Eclipse meta data are now generated every time configure is
 	run, overwriting meta data that are already present.
 
+	* meta-build.m4: Allow patterns beginning with META_ECLIPSE.
+
 Fri May  9 09:29:03 2008    <bruntink@cwi.nl>
 
 	* Makefile.java.meta: Fixed CLEANFILE specification.
