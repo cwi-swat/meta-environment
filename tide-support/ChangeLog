@@ -1,4 +1,7 @@
+Fri May  9 11:27:11 2008    <bruntink@cwi.nl>
 
+	* lib/debug-adapter.{c,h}: Added to repository because it cannot
+	be generated without the toolbus.
 
 Fri Apr 25 13:48:15 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
   * lib/*: this directory was broken after adaptations to Makefile.meta wrt use of tifstoc
