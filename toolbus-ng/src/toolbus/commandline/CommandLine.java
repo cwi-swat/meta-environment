@@ -12,10 +12,10 @@ import toolbus.logging.LoggerFactory;
 public class CommandLine{
 	private final ToolBusInputStreamHandler toolBusInputStreamHandler;
 	
-	private CommandLine(ToolBus toolbus, InputStream is){
+	private CommandLine(ToolBus toolbus, InputStream is, boolean closeStreamWhenDone){
 		super();
 		
-		toolBusInputStreamHandler = new ToolBusInputStreamHandler(toolbus, is == null ? System.in : is);
+		toolBusInputStreamHandler = new ToolBusInputStreamHandler(toolbus, is == null ? System.in : is, closeStreamWhenDone);
 	}
 	
 	private void startHandling(){
@@ -25,8 +25,8 @@ public class CommandLine{
 		toolBusInputStreamHandlerThread.start();
 	}
 	
-	public static CommandLine createCommandLine(ToolBus toolbus, InputStream is){
-		CommandLine commandLine = new CommandLine(toolbus, is);
+	public static CommandLine createCommandLine(ToolBus toolbus, InputStream is, boolean closeStreamWhenDone){
+		CommandLine commandLine = new CommandLine(toolbus, is, closeStreamWhenDone);
 		commandLine.startHandling();
 		return commandLine;
 	}
@@ -34,10 +34,12 @@ public class CommandLine{
 	public static class ToolBusInputStreamHandler implements Runnable{
 		private final ToolBus toolbus;
 		private final BufferedReader reader;
+		private final boolean closeStreamWhenDone;
 		
-		public ToolBusInputStreamHandler(ToolBus toolbus, InputStream inputStream){
+		public ToolBusInputStreamHandler(ToolBus toolbus, InputStream inputStream, boolean closeStreamWhenDone){
 			this.toolbus = toolbus;
 			reader = new BufferedReader(new InputStreamReader(inputStream));
+			this.closeStreamWhenDone = closeStreamWhenDone;
 		}
 		
 		public void run(){
@@ -74,10 +76,12 @@ public class CommandLine{
 			}catch(RuntimeException rex){
 				LoggerFactory.log("An RuntimeException occured while reading from the ToolBus's inputstream.", rex, ILogger.ERROR, IToolBusLoggerConstants.EXECUTE);
 			}finally{
-				try{
-					reader.close();
-				}catch(IOException ioex){
-					LoggerFactory.log("Unable to close the ToolBus's input stream.", ILogger.FATAL, IToolBusLoggerConstants.TOOLINSTANCE);
+				if(closeStreamWhenDone){
+					try{
+						reader.close();
+					}catch(IOException ioex){
+						LoggerFactory.log("Unable to close the ToolBus's input stream.", ILogger.FATAL, IToolBusLoggerConstants.TOOLINSTANCE);
+					}
 				}
 			}
 		}

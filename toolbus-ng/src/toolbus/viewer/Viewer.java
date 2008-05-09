@@ -618,7 +618,7 @@ public class Viewer implements IViewer{
 		DebugToolBus debugToolBus = viewer.getDebugToolBus();
 		debugToolBus.setBreakWhileStepping(false);
 		
-		CommandLine.createCommandLine(debugToolBus, System.in);
+		CommandLine.createCommandLine(debugToolBus, System.in, false);
 		
 		debugToolBus.doStop(); // The initial state is stopped.
 		
