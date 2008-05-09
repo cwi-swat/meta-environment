@@ -1,3 +1,7 @@
+Fri May  9 09:29:03 2008    <bruntink@cwi.nl>
+
+	* Makefile.java.meta: Fixed CLEANFILE specification.
+
 Thu May  8 11:30:41 2008    <bruntink@cwi.nl>
 
 	* Makefile.java.meta, Makefile.top.meta: Added Eclipse meta data
