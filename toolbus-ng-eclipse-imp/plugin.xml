@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="toolbus.config" name="toolbus.config" schema="schema/ToolBus.config.exsd"/>
+   <extension
+         id="toolbus_ng"
+         name="ToolBus"
+         point="org.eclipse.ui.startup">
+   </extension>
+
+</plugin>
