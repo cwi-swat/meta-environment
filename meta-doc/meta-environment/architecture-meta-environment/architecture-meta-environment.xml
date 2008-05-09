@@ -1922,11 +1922,19 @@
 
       <itemizedlist>
         <listitem>
-          <para>Listeners catch notes that are send by mostly the idef of the
-          module manager and sometimes by utility processes. The listeners are
-          a facade only, they forward to util processes. Listener files begin
-          with a language name or a feature name and end with
-          "-listeners.tb"</para>
+          <para>Idefs are ToolBus processes that manage the connectivity
+          between a specific tool with the ToolBus. Each idef describes
+          exactly when and how other processes may interact with its tool, and
+          when and how the tool interacts with the ToolBus. The abbreviation
+          "idef" stands for interface definition.</para>
+        </listitem>
+
+        <listitem>
+          <para>Listener are processes that catch notes that are send by
+          mostly the idef of the module manager and sometimes by utility
+          processes. The listeners are a facade only, they forward to util
+          processes. Listener files begin with a language name or a feature
+          name and end with "-listeners.tb"</para>
         </listitem>
 
         <listitem>
@@ -1951,8 +1959,9 @@
         <listitem>
           <para>tool processes - which are single processes each associated
           with a single tool, also called 'idefs' - send and receive
-          <emphasis>messages, </emphasis>except for manager tools which can
-          also send <emphasis>notes</emphasis>.</para>
+          synchronous <emphasis>messages, </emphasis>except for manager tools
+          which can also broadcast asynchronous
+          <emphasis>notes</emphasis>.</para>
         </listitem>
 
         <listitem>
@@ -1961,13 +1970,18 @@
         </listitem>
 
         <listitem>
-          <para>utilitity processes <emphasis>call</emphasis> eachother, and
-          send messages to tool processes, where it is tried to wrap single
-          messages to tools in simple process definitions</para>
+          <para>utilitity processes <emphasis>call</emphasis> eachother
+          (synchronously), and send messages to tool processes, where it is
+          tried to wrap single messages to tools in simple process
+          definitions</para>
         </listitem>
       </itemizedlist>
 
-      <para>The following picture provides an overview:</para>
+      <para>The following picture provides an overview of the kinds of
+      processes and their interaction with eachother and tools. The module
+      manager is just a tool, but it is very central to the scheduling of all
+      work in the Meta-Environment, so it has been singled out. See also the
+      following section on module management.</para>
 
       <figure>
         <title>A high level view of groups of processes and their control flow
@@ -1986,7 +2000,7 @@
 
         <para>The goal of the editor manager is to manage the complexity of
         appearing and dissappearing editors. An editor in the Meta-Environment
-        is the tuple of a visual text editor, implemented in Java, and a
+        is the pair of a visual text editor, implemented in Java, and a
         structural tree 'editor' implemented in C. Editors are data-sources
         for several (interactive) usage scenarios in the Meta-Environment.
         Because they appear and dissappear when the user opens or closes
@@ -2079,7 +2093,7 @@
             <para>Language specific scripts in the SDF or ASF+SDF layer
             register 'event rules' with the module-manager. The event rules
             define how some attributes on modules are set automatically by
-            propagating information acros the dependency graph between
+            propagating information across the dependency graph between
             modules. This event rule mechanism can deal with cyclic
             dependencies. A single change of an attribute on a module, can
             thus spawn a number of changes on other modules, all changes are
@@ -2118,15 +2132,135 @@
           </listitem>
 
           <listitem>
-            <para>The state attribute can also be updated by event rules, such
-            that modules change to a different state without ToolBus script
-            intervention.</para>
+            <para>Like any other attribute, the state attribute can also be
+            updated by event rules, such that modules change to a different
+            state without ToolBus script intervention. Examples of common
+            state values are</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>unknown - for modules that somebody depends on, but
+                nothing is known about yet</para>
+              </listitem>
+
+              <listitem>
+                <para>identified - for modules that have been located on disk
+                and have been given a name and a path attribute</para>
+              </listitem>
+
+              <listitem>
+                <para>error - for modules that contain errors that need to be
+                solved by the user</para>
+              </listitem>
+
+              <listitem>
+                <para>child-error - for modules that depend on modules that
+                have errors that need to be solved by the user</para>
+              </listitem>
+
+              <listitem>
+                <para>complete - for modules that are in an executable
+                state</para>
+              </listitem>
+            </itemizedlist>
           </listitem>
         </itemizedlist>
 
         <para>See <link linkend="detailed-coordination-view">fig. the detailed
         coordination view</link> on the role of the module manager in its
-        environment.</para>
+        environment. As an example, consider the scenario in which a user
+        saves an SDF file in The Meta-Environment:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>The editor is a GUI tool, which will send an event to the
+            ToolBus, containing for which language (SDF), and which file the
+            event is meant for</para>
+          </listitem>
+
+          <listitem>
+            <para>The idef of the editor will receive the event and call the
+            action process that deals with SDF file saving</para>
+          </listitem>
+
+          <listitem>
+            <para>The action process will first find out to which module the
+            file belongs to by querying the 'path' attribute in the module
+            manager. Then it will call the appropriate utility process to do
+            the work. </para>
+          </listitem>
+
+          <listitem>
+            <para>The utility process coordinates everything that needs to be
+            done for the <emphasis>current</emphasis> module. It works by
+            activating tools such as the in-output tool which can save files
+            to disk. When the work for file saving is done, the utility
+            process will also update the status attribute in the module
+            manager by sending a message to the idef of the module
+            manager</para>
+          </listitem>
+
+          <listitem>
+            <para>The idef of the module manager relays the updated status
+            attribute value to the module manager</para>
+          </listitem>
+
+          <listitem>
+            <para>The module manager receives the updated status attribute
+            value and - starting from the initial change and using the
+            dependencies between modules - it will change the status
+            attributes of other modules. The changing is governed by several
+            attribute update rules.</para>
+          </listitem>
+
+          <listitem>
+            <para>For every changed status attribute for a specific module,
+            the module manager sends out an event</para>
+          </listitem>
+
+          <listitem>
+            <para>The event is caught by the idef of the module manager, which
+            broadcasts the updated status attribute values information using a
+            ToolBus note</para>
+          </listitem>
+
+          <listitem>
+            <para>Several listener processes may be subscribed to such status
+            notes. One example is the SDF module parser listener. This
+            listener will trigger the SDF parsing utility process for a
+            specific module. </para>
+          </listitem>
+
+          <listitem>
+            <para>The SDF parsing utility process, and many other processes
+            triggered by other listeners are now working in parallel as in
+            Step <emphasis role="bold">4</emphasis>. Some utility processes
+            may send messages to GUI tools, for example the new tokens to
+            highlight are send to the editor tool from Step <emphasis
+            role="bold">1</emphasis>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Steps <emphasis role="bold">4</emphasis> to <emphasis
+            role="bold">10</emphasis> will repeat until a fixed point is
+            reached and no more attributes in the module manager change, or no
+            more listeners react to the changes in attributes.</para>
+          </listitem>
+        </orderedlist>
+
+        <para><note>
+            <para>Utility processes should generally deal with only one module
+            at a time. The distribution of work for several modules should be
+            scheduled by attribute event rules and the notes that are send out
+            by the module manager because of these rules. If a utility process
+            asks for the dependencies of a module, then this is a sign of code
+            that goes agains this architecture.</para>
+          </note><note>
+            <para>After the initial attribute change, the listeners will
+            trigger many instances of many processes which will run mostly in
+            parallel and asynchronously. This is when racing conditions can
+            occur and transaction management starts playing its role.</para>
+          </note></para>
       </section>
 
       <section>
@@ -2161,13 +2295,15 @@
           </listitem>
 
           <listitem>
-            <para>Several dedicated ToolBus scripts distribute the
-            configuration information on demand to the tools that need it. For
-            example, when an editor is started, the editing scripts ask the
-            config-manager what kind of menu's need to be shown. This
-            information is forwarded to the editor. The editor tool will
-            receive an ATerm encoding of the menu structure, which is
-            interpreted to produce the right menu's.</para>
+            <para>Several utility processes distribute the configuration
+            information on demand to the tools that need it. These processes
+            first query the configuration manager for information (using
+            cm-... messages), and then forward this information to the
+            appropriate tools. For example, when an editor is started, the
+            editing scripts ask the config-manager what kind of menu's need to
+            be shown. This information is forwarded to the editor. The editor
+            tool will receive an ATerm encoding of the menu structure, which
+            is interpreted to produce the right menu's.</para>
           </listitem>
 
           <listitem>
@@ -2195,18 +2331,18 @@
         asynchronously. Still the processes share common data sources which
         they read and write to. The transaction management system is based on
         simple locking. For each shared resource the
-        <filename>transactions.tb</filename> script allows to start a locking
-        process. A lock is obtained by sending a message to this unique
-        process, which only allows the next process to obtain a lock until the
-        previous has released it.</para>
+        <filename>transactions.tb</filename> script allows to start a
+        TransactionManager process. A lock is obtained by sending a message to
+        this unique process, which only allows the next process to obtain a
+        lock until the previous has released it.</para>
 
         <para>This system is completely incremental and demand driven.
-        Processes do not have to obtain a lock to obtain access to shared
+        Processes are not obliged to obtain a lock to obtain access to shared
         resources. Instead, when the programmer knows that his process could
-        lead to racing conditions, he first obtains a lock to the resource.
-        Processes that are robust against changing values, such as progress
-        views, do not lock the resources they read from, which improves
-        efficiency by allowing parallelism.</para>
+        lead to racing conditions, he decided to first obtain a lock to the
+        resource. Processes that are robust against changing values, such as
+        progress views, do not lock the resources they read from, which
+        improves efficiency by allowing parallelism.</para>
       </section>
     </section>
 
@@ -2250,7 +2386,7 @@
         <title>Module management</title>
 
         <para>The generic nature of the module manager makes it easy to adapt
-        and extends it to new programming languages.</para>
+        and extend it to new programming languages.</para>
 
         <orderedlist>
           <listitem>
@@ -2283,9 +2419,9 @@
         <title>Transaction management</title>
 
         <para>The transaction mechanism is totally orthogonal and can be
-        extended with new kinds of locks using a ToolBus script onliner. Note
-        however that adding new requests for existing locks always has the
-        possibility of introducing deadlock. This occurs naturally when
+        extended with new kinds of locks using a ToolBus script one-liner.
+        Note however that adding new requests for existing locks always has
+        the possibility of introducing deadlock. This occurs naturally when
         requests for locks of the same resource are nested in a single
         scenario. It can also happen if ToolBus scripts accidentally become
         dependent on eachother in a circular fashion. Care must be taken to
@@ -2313,7 +2449,7 @@
 
         <para>The other main rationale behind these designs is
         <emphasis>extensibility</emphasis>. For example, the asynchronous,
-        parallel and independently addeable event listeners make sure that the
+        parallel and independently addable event listeners make sure that the
         system can be layered, and also extended without changing the existing
         functionality. However, this does introduce the need for transaction
         management.</para>
@@ -2338,9 +2474,23 @@
 
         <para>The focus on reusability and extensibility has introduced
         strains on the ToolBus in terms of efficiency. Specific optimizations
-        that help managing large volumes of snd-notes have helped a lot in
-        making the systems run more smoothly. There is more to be gained by
-        optimizing for large volumes of small messages.</para>
+        that help managing large volumes of notes, messages and process calls
+        have helped a lot in making the systems run more smoothly: </para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Statically computing and dynamically maintaining a map that
+            finds possible communication partners for both messages and notes,
+            as opposed to looping over all available processes.</para>
+          </listitem>
+
+          <listitem>
+            <para>Changing the use of highly generic snd-msg's for binding
+            configuration parameters to the use of dynamic process calls. The
+            benefit is that there is no need to find a communication partner
+            since the process is already named.</para>
+          </listitem>
+        </itemizedlist>
       </section>
 
       <section>

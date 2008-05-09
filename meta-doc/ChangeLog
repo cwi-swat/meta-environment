@@ -1,9 +1,13 @@
 
 
+Fri May  9 15:04:41 CEST 2008 <jurgenv@cwi.nl>
+ * architecture-meta-environment.xml: added more detail and stories to
+   the describtion of the detailed coordination view. A picture was also
+   added and some mistakes fixed.
+
 Mon May  5 16:11:34 CEST 2008 <jurgenv@cwi.nl>
  * architecture-meta-environment.xml: added detailed information
    on editor-management, configuration-management and transaction-management.
-
 
 Mon Apr 28 15:00:59 CEST 2008 <jurgenv@cwi.nl>
  * architecture-meta-environment.xml: started view on detailed
