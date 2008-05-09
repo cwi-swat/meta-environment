@@ -15,7 +15,9 @@ import javax.swing.JPanel;
  * @date 16-3-2007
  */
 public class ContainerPanel extends JPanel{
-    private JPanel m_contentPanel = null;
+	private static final long serialVersionUID = -5928381544709327449L;
+	
+	private JPanel m_contentPanel = null;
     private JPanel m_warningPanel = null;
     private JLabel m_warningLabel = null;
 
