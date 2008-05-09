@@ -1,3 +1,12 @@
+Fri May  9 09:42:22 2008    <bruntink@cwi.nl>
+
+	* Makefile.am: Included Makefile.java.meta instead of
+	Makefile.top.meta.
+
+	* svg-support.pc.in: The package now installs an empty
+	svg-support.jar to prevent the lib/batik.jar from being
+	overwritten during install.
+
 Wed May  7 09:42:45 2008    <bruntink@cwi.nl>
 
 	* svg-support.pc.in: Added all the Java packages that are in the
