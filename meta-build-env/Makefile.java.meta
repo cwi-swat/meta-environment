@@ -14,12 +14,13 @@ EXTRA_DIST += $(wildcard *.m4) \
 	     $(JAVA_JAR) \
 	     $(shell cd ${top_srcdir}; find src -name "*.java")
 
-CLEANFILES+=$(PACKAGE)-uninstalled.pc \
+CLEANFILES += $(PACKAGE)-uninstalled.pc \
 			.project \
 			.classpath \
             META-INF/MANIFEST.MF \
 			build.properties \
-			.settings/*.prefs
+			.settings/org.eclipse.jdt.ui.prefs \
+			.settings/org.eclipse.jdt.core.prefs
 
 pkgconfig_DATA = $(PACKAGE).pc
 
