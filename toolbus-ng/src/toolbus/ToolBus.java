@@ -506,12 +506,7 @@ public class ToolBus{
 		}
 	}
 	
-	// TODO Replace the process logic loop stuff by a full blown scheduler. This code is rather ugly and fragile.
-	/**
-	 * The ToolBus's main process loop.
-	 * This method handles the execution of the process logic.
-	 */
-	public void execute(){
+	public void prepare(){
 		if(nerrors > 0){
 			System.err.println("ToolBus cannot continue execution due to errors in Tscript");
 			return;
@@ -538,6 +533,14 @@ public class ToolBus{
 		tbConnectionHandler.start();
 		
 		System.out.println("The ToolBus server allocated port ("+portNumber+")");
+	}
+	
+	// TODO Replace the process logic loop stuff by a full blown scheduler. This code is rather ugly and fragile.
+	/**
+	 * The ToolBus's main process loop.
+	 * This method handles the execution of the process logic.
+	 */
+	public void execute(){
 		ProcessInstance pi = null;
 		ProcessInstanceIterator processesIterator = new ProcessInstanceIterator(processes);
 		running = true;

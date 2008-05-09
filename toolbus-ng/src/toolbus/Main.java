@@ -11,6 +11,7 @@ public class Main{
 		
 		try{
 			if(toolbus.parsecup()){
+				toolbus.prepare();
 				toolbus.execute();
 				//Atom.statistics();
 			}else{

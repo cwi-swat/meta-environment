@@ -122,12 +122,7 @@ public class DebugToolBus extends ToolBus{
 		//System.err.println("setNextTime: set to " + nextTime);
 	}
 	
-	/**
-	 * The main process loop of the ToolBus.
-	 * 
-	 * @see toolbus.ToolBus#execute()
-	 */
-	public void execute(){
+	public void prepare(){
 		if(nerrors > 0){
 			System.err.println("ToolBus cannot continue execution due to errors in Tscript");
 			return;
@@ -153,6 +148,14 @@ public class DebugToolBus extends ToolBus{
 		tbConnectionHandler.start();
 		
 		System.out.println("The ToolBus server allocated port (" + portNumber + ")");
+	}
+	
+	/**
+	 * The main process loop of the ToolBus.
+	 * 
+	 * @see toolbus.ToolBus#execute()
+	 */
+	public void execute(){
 		ProcessInstance pi = null;
 		ProcessInstanceIterator processesIterator = new ProcessInstanceIterator(processes);
 		running = true;

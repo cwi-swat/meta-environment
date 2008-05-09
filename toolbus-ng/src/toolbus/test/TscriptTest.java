@@ -49,6 +49,7 @@ public class TscriptTest extends TestCase{
 		ToolBus T = new ToolBus(new String[0], sout);
 		T.setProperty("script.path", dir + name + ".tb");
 		T.parsecup();
+		T.prepare();
 		T.execute();
 		
 		try{

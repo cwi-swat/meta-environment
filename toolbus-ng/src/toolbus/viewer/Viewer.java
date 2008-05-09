@@ -624,6 +624,7 @@ public class Viewer implements IViewer{
 		
 		try{
 			if(debugToolBus.parsecup()){
+				debugToolBus.prepare();
 				debugToolBus.execute();
 			}else{
 				System.err.println("Failed to parse");
