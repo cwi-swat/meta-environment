@@ -12,13 +12,13 @@ data STable[&Name, &Value] stable(ScopeId scope,
 
 %%Create a new, empty,  table
 fun STable[&Name, &Value] new_table(){
-  return make stable(0, {<0, {}>});
+  return @stable(0, {<0, {}>});
 }
 
 %% Create a new, non-empty, table
 fun STable[&Name, &Value] new_table(ScopeId scope, 
                               rel[int, ScopeMap] scopes){
-  return make stable(scope, scopes);
+  return @stable(scope, scopes);
 } 
 
 %% Update, in a given scope, the value of a variable
@@ -26,7 +26,7 @@ fun STable[&Name, &Value] update(STable[&Name, &Value] ST,
                                  ScopeId scope, 
                                  &Name N, 
                                  &Value V){
-  ST.scopes(scope)= V;
+  ST.scopes(scope) = V;
   return new_table(scope, ST.scopes)
 }
 

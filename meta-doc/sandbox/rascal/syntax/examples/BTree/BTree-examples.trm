@@ -71,7 +71,7 @@ fun BTREE inc(BTREE T) {
 fun BTREE frepl(BTREE T) {
     visit bottom-up T {
       case g(<BTREE T1>, <BTREE T2>) =>
-           make i(<BTREE T1>, <BTREE T2>)
+            i(<BTREE T1>, <BTREE T2>)
     };
 }
 

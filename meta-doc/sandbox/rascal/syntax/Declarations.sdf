@@ -2,34 +2,42 @@ module Declarations
 
 imports  Types 
 	Expressions 
-%%         languages/java/syntax/Statements [Type       => JavaType
-%%                                           Block      => JavaBlock
-%%                                           Statement  => JavaStatement
-%%                                           Expression => JavaExpression
-%%                                           Identifier => JavaIdentifier
-%%                                           Name       => JavaName
-%%                                          ]
+         languages/java/syntax/Statements [Type       => JavaType
+                                           Block      => JavaBlock
+                                           Statement  => JavaStatement
+                                           Assignment => JavaAssignment
+                                           Expression => JavaExpression
+                                           Identifier => JavaIdentifier
+                                           Name       => JavaName
+                                          ]
 
 hiddens
-context-free start-symbols
+  context-free start-symbols
         Declaration
 
 exports
-sorts Declaration Visibility DatatypeParameters
+  sorts Declaration Visibility DatatypeParameters
 
-context-free syntax
+  context-free syntax
 
-   ("public" | "private")?                               -> Visibility  {cons("visibility")}
+    ("public" | "private")?                         -> Visibility  {cons("visibility")}
 
-   "[" {TypeVar ","}+ "]"                                -> DatatypeParameters {cons("datatype-parameters")}
-   Visibility "data" Name  DatatypeParameters?
-                          { AbstractType "|"}+           -> Declaration {cons("data-decl")}
+    "[" {TypeVar ","}+ "]"                          -> DatatypeParameters 
+                                                                   {cons("datatype-parameters")}
+    Visibility "data" Name  DatatypeParameters?
+                            { AbstractType "|"}+    -> Declaration {cons("data-decl")}
 
-   Visibility "type" Type Name                           -> Declaration {cons("type-decl")}
+    Visibility "type" Type Name                     -> Declaration {cons("type-decl")}
 
-   Visibility "global" Type Name ("=" Expression)?       -> Declaration {cons("global-decl")}
+    Visibility "global" Type Name ("=" Expression)? -> Declaration {cons("global-decl")}
 
-   Visibility "memo"? FunctionType Statement             -> Declaration {cons("function-decl")}
-%%   Visibility "java" FunctionType JavaBlock              -> Declaration {cons("java-function-decl")}
+    Visibility "memo"? FunctionType Statement       -> Declaration {cons("function-decl")}
+    Visibility "java" FunctionType JavaBlock        -> Declaration {cons("java-function-decl")}
 
-  "rules" "(" Type ")" "{" Rule+ "}"                     -> Declaration {cons("rules-decl")}
+   "rules" "(" Type ")" "{" Rule+ "}"               -> Declaration {cons("rules-decl")}
+
+%% Define reserved words
+   "public" | "private" | "data" | "type" | 
+   "global" | "memo" | "java" | "rules"             -> Name {reject}
+
+  

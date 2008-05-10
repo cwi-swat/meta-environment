@@ -1,6 +1,6 @@
 module Bool-examples1
 
-import Booleans-syntax;
+import-syntax Booleans-syntax;
 
 fun Bool reduce(Bool B) {
     visit bottom-up B {

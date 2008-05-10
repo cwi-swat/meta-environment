@@ -35,3 +35,7 @@ context-free syntax
     "module" ModuleName ModuleParameters?
              Import* 
              (Declaration ";"?)*                 -> Module  
+
+%% Define reserved words
+    "import" | "import=java" | "import-syntax" |
+    "module"                                     -> Name {reject}

@@ -70,13 +70,13 @@ fun str join(list[&T] lst, fun str tostring(&T arg), str asep){
 
 fun str yieldTree(Tree T) {
   switch T {
-  case appl(Production prod, Args args): {
+  acase appl(<Production prod>, <Args args>): {
      str res = "";
      visit prod.lhs {
-       case lit(str s): {
+       acase lit(<str s>): {
          res = res + s.string;
        }
-       case cf(Symbol sym): {
+       acase cf(<Symbol sym>): {
          res = res + yieldTree(head(args)); args = rest(args);
          res = res + yieldTree(head(args)); args = rest(args);
        }
@@ -88,13 +88,13 @@ fun str yieldTree(Tree T) {
      assert "args should be empty": args == [];
      return res;
    }
-   case amb(Args args): {
+   acase amb(<Args args>): {
      return "<<<" + join(args, yieldTree, ",") + ">>>";
  
    }
 %%   case int n: return n;
    
-   case cycle(Symbol symbol, int cycle-length): { return ""; }
+   acase cycle(<Symbol symbol>, <int cycle_length>): { return ""; }
    
  }
 }

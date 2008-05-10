@@ -38,7 +38,7 @@ fun list[Error] type_of(Exp E, TYPE Type, Env Env) {
 
       case <StrCon S>: if(Type == string) { return []; }
 
-      case <PICO_ID Id>: {
+      case <PICO-ID Id>: {
          TYPE Type2 = Env(Id);
          if(Type2 == Type) { return []; }
       }

@@ -24,13 +24,13 @@ fun CFSEGMENT cflow({STATEMENT ";"}* Stats){
 
 fun CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
-      case [| while <EXP Exp> do <{STATEMENT ";"}* Stats> od |] : {
+      case while <EXP Exp> do <{STATEMENT ";"}* Stats> od : {
            tuple[set[CP] En,  rel[CP,CP] R,  set[CP] Ex] = cflow(Stats);
            return <{Exp}, ({Exp} x En) + R + (Ex x {Exp}),{Exp}>;
       }
                 
-      case [| if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
-                   else <{STATEMENT ";"}* Stats2> fi |]: {
+      case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
+                   else <{STATEMENT ";"}* Stats2> fi: {
            tuple[set[CP] En1, rel[CP,CP] R1, set[CP] Ex1] = 
                                                       cflow(Stats1);
            tuple[set[CP] En2, rel[CP,CP] R2, set[CP] Ex2] = 
@@ -41,6 +41,6 @@ fun CFSEGMENT cflow(STATEMENT Stat){
                   >;
       }
          
-      case [| <STATEMENT Stat> |]: return <{Stat}, {}, {Stat}>
+      case <STATEMENT Stat>: return <{Stat}, {}, {Stat}>
     };
 }

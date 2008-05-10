@@ -13,25 +13,15 @@ exports
         BasicType StructuredType FunctionType AbstractType
         ParameterizedType
 
-%%  lexical syntax
-%%    head:[a-z]                                          -> TypeName {cons("one-char")}
-%%    head:[a-z] middle:[A-Za-z0-9\-]* last:[A-Za-z0-9]   -> TypeName {cons("more-chars")} 
- %% lexical restrictions
-%%    TypeName -/- [A-Za-z0-9]
-
   context-free syntax
-
-    Name                                                -> Symbol
-    StringLiteral                                       -> Symbol
-
-    "bool"                                              -> BasicType {cons("bool-type")} 
-    "int"                                               -> BasicType {cons("int-type")} 
-    "double"                                            -> BasicType {cons("double-type")}
-    "str"                                               -> BasicType {cons("str-type")} 
-    "loc"                                               -> BasicType {cons("loc-type")}
-    "value"                                             -> BasicType {cons("value-type")}
-    "term"                                              -> BasicType {cons("term-type")}
-    "void"                                              -> BasicType {cons("void-type")}
+    "bool"                                              -> BasicType      {cons("bool-type")} 
+    "int"                                               -> BasicType      {cons("int-type")} 
+    "double"                                            -> BasicType      {cons("double-type")}
+    "str"                                               -> BasicType      {cons("str-type")} 
+    "loc"                                               -> BasicType      {cons("loc-type")}
+    "value"                                             -> BasicType      {cons("value-type")}
+    "term"                                              -> BasicType      {cons("term-type")}
+    "void"                                              -> BasicType      {cons("void-type")}
  
     Type Name?                                          -> OptNamedType  
     {OptNamedType ","}+                                 -> OptNamedTypes
@@ -42,24 +32,26 @@ exports
     "rel" "[" OptNamedTypes "]"                         -> StructuredType {cons("rel-type")}
     "tuple" "[" OptNamedType "," OptNamedTypes "]"      -> StructuredType {cons("tuple-type")}
 
-    "fun" Type Name "(" OptNamedTypes? ")"              -> FunctionType {cons("function-type")}
+    "fun" Type Name "(" OptNamedTypes? ")"              -> FunctionType   {cons("function-type")}
 
-    "&" Name                                            -> TypeVar {cons("type-var")}
+    "&" Name                                            -> TypeVar        {cons("type-var")}
     Name "[" {TypeVar ","}+ "]"                         -> ParameterizedType
+                                                                          {cons("par-type")}
 
-    Name                                                -> AbstractType {cons("typename-abstype")}
-    TypeVar                                             -> AbstractType {cons("typevar-abstype")}
-    Type                                                -> AbstractType {cons("type-abstype")}
-    Name "(" {OptNamedType ","}* ")"                    -> AbstractType {cons("cons-abstype-name")}
-    StringLiteral "(" {OptNamedType ","}* ")"           -> AbstractType {cons("const-abstype-str")}
+    Name                                                -> AbstractType   {cons("typename-abstype")}
+    StringLiteral                                       -> AbstractType   {cons("typestr-abstype")}
+    TypeVar                                             -> AbstractType   {cons("typevar-abstype")}
+    Name "(" {OptNamedType ","}* ")"                    -> AbstractType   {cons("cons-abstype-name")}
+    StringLiteral "(" {OptNamedType ","}* ")"           -> AbstractType   {cons("const-abstype-str")}
 
     BasicType | StructuredType | FunctionType | 
-    TypeVar | ParameterizedType | Symbol                -> Type {cons("type")}
+    TypeVar | ParameterizedType | Symbol                -> Type           {cons("type")}
+
 
 %% Define reserved words
-   "bool" | "int" | "double" | "str" | "loc" | 
-   "value" | "term" | "void" | "list" | "set" | 
-   "map" | "rel" | "tuple" | "fun"                      -> Name {reject}
+    "bool" | "int" | "double" | "str" | "loc" | 
+    "value" | "term" | "void" | "list" | "set" | 
+    "map" | "rel" | "tuple" | "fun"                     -> Name {reject}
  
 
   

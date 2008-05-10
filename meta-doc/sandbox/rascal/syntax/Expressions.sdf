@@ -7,14 +7,13 @@ imports  basic/Areas
          languages/java/syntax/Lexical [ Identifier => JavaIdentifier
                                          Name       => JavaName
                                        ]
-
 hiddens
 context-free start-symbols 
 	Expression
 
 exports
-sorts Expression DeclLeftHandSide Predicate SimpleGenerator Generator Call Callable
-      Strategy Statement Rule Case Assignment IncrAssignOp Value AbstractValue
+sorts Expression Declarator Predicate SimpleGenerator Generator Call Callable
+      Strategy Statement Rule Case CaseAction Assignment IncrAssignOp Value AbstractValue
       Catch Finally
 
 context-free syntax
@@ -37,15 +36,13 @@ context-free syntax
 %% Expressions
          Value                                                   -> Expression
         "(" Expression ")"                                       -> Expression {bracket}
-	QualName                                                -> Expression {cons("variable")}
+	QualName                                                -> Expression {cons("qual-variable")}
 
          QualName | Call                                         -> Callable
 
 	Callable "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
          Callable "{" Expression  "}"                            -> Call {cons("multi-map-call")}
          Call                                                    -> Expression
-
-         Expression "." Name                                     -> Expression
 
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
@@ -60,12 +57,12 @@ context-free priorities
          Expression "+"                                          -> Expression {cons("trans1")}
        } >
 
-%%         Expression "." Variable                               -> Expression {cons("field")} > 
-         Expression "o" Expression                               -> Expression {cons("comp"), left} >
-         Expression "x" Expression                               -> Expression {cons("prod"), left} >
+%% Replace "o" and "x" by "compose" and "product" library functions
+%%         Expression "o" Expression                               -> Expression {cons("comp"), left} >
+%%         Expression "x" Expression                               -> Expression {cons("prod"), left} >
 
-%% Set operators
-        "#" Expression                                           -> Expression {cons("size")} >
+%% Replace "#" by "size" library function
+%%        "#" Expression                                           -> Expression {cons("size")} >
 
 %% Arithmetic operators
    %% multiplication/intersection
@@ -96,25 +93,25 @@ context-free priorities
          Predicate "implies" Predicate                           -> Predicate {cons("implies")}
 
 context-free syntax
-	DeclLeftHandSide ":=" Expression                        -> Predicate {cons("match")}
-	DeclLeftHandSide "!:=" Expression                       -> Predicate {cons("not-match")}
-%%       DeclLeftHandSide "<-" Expression                        -> Predicate {cons("match-assign")}
-	QualName "(" {Expression","}* ")"                       -> Predicate {cons("pred-fun-call")}
+	Declarator ":=" Expression                              -> Predicate {cons("match")}
+	Declarator "!:=" Expression                             -> Predicate {cons("not-match")}
+         Call                                                    -> Predicate
 	"(" Predicate ")"                                       -> Predicate {bracket}
 
 context-free syntax
 %% Generators
+         Type Name                                               -> Declarator
+         StructuredType                                          -> Declarator
+         AbstractType                                            -> Declarator
+         QuotedSynPattern                                        -> Declarator
+         Name "~=" RegPattern                                    -> Declarator
+
          ("top-down" | "top-down-break" | 
           "bottom-up" | "bottom-up-break" |
           "outermost" | "innermost")?                            -> Strategy
-	DeclLeftHandSide ":" Strategy Expression                -> SimpleGenerator {cons("generator")}
-         Type Name                                              -> DeclLeftHandSide
-         StructuredType                                          -> DeclLeftHandSide
-         AbstractType                                            -> DeclLeftHandSide
-         SynPattern                                              -> DeclLeftHandSide
-         AbsPattern                                              -> DeclLeftHandSide
-         RegPattern                                              -> DeclLeftHandSide
-         
+
+	Declarator ":" Strategy Expression                      -> SimpleGenerator {cons("generator")}
+
          SimpleGenerator                                         -> Generator
          Predicate                                               -> Generator
 
@@ -126,13 +123,16 @@ context-free syntax
 
 context-free syntax
 %% Rules, Switch, visit and solve
-          QuotedSynPattern                                       -> Expression
-         "make" Pattern                                          -> Expression
+         QuotedSynPattern                                        -> Expression
+         "@" AbsPattern                                          -> Expression
 
-          Pattern "=>" Expression                                -> Rule       {cons("rule1")}
-          Pattern ":" Statement                                  -> Rule       {cons("rule1")}
-          
-         "case" Rule                                             -> Case       {cons("case")}
+         "=>" Expression                                         -> CaseAction
+         ":" Statement                                           -> CaseAction
+
+         "case"  SynPattern CaseAction                           -> Case       {cons("case")}
+         "acase" AbsPattern CaseAction                           -> Case       {cons("acase")}
+         "rcase" Name "~=" RegPattern CaseAction                 -> Case       {cons("rcase")}
+
          "default" ":" Statement                                 -> Case       {cond("default-case")}
 
  	"switch" Expression "{" Case+ "}"                       -> Statement  {cons("switch")}
@@ -144,13 +144,14 @@ context-free syntax
          "if" "(" Predicate ")" Statement                        -> Statement  {cons("if-then")}
 %% Do we want elseif etc.?
 
-         "="  | "+=" | "-=" | "*=" | "/="                          -> IncrAssignOp {cons("incr-assignop")}
+         "="  | "+=" | "-=" | "*=" | "/="                        -> IncrAssignOp {cons("incr-assignop")}
 
          Expression                                              -> Statement
 
-         (QualName | Call) IncrAssignOp Expression               -> Assignment {cons("assign")}
+         Callable IncrAssignOp Expression                        -> Assignment {cons("assign")}
+         Assignment                                              -> Statement
 
-         DeclLeftHandSide  "=" Expression                        -> Statement  {cons("varinit")}
+         Declarator  "=" Expression                              -> Statement  {cons("varinit")}
          "global" Type Name ("=" Expression)?                    -> Statement  {cons("global")}
          "return" Expression?                                    -> Statement  {cons("return")}
          "yield" Expression                                      -> Statement  {cons("yield")}
@@ -165,10 +166,9 @@ context-free syntax
          "{" {Statement ";"}+ ";"? "}"                           -> Statement  {cons("block")}
 
 %% Define reserved words:
-%%         "o" | "x" | 
          "true" | "false" |
          "and" | "or" | "implies" | "global" | 
-         "make" | "case" | "default" | "switch" | "visit" | 
-         "try" | "catch" | "finally" |
-         "solve"  | "for" | "if" | "else" | "return" | "throw" |
+         "case" | "acase" | "rcase" | "default" | "switch" | 
+         "visit" | "try" | "catch" | "finally" | "solve"  |
+         "for" | "if" | "else" | "return" | "throw" |
          "yield" | "fail" | "assert"                             -> Name {reject}

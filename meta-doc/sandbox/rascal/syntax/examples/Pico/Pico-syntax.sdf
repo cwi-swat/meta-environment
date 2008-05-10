@@ -10,13 +10,12 @@ imports languages/pico/syntax/Pico
                                         
                                       ]
 
-
    context-free start-symbols
         Module 
    imports 
 	EmbedSortAsPatternAndVar[NatCon]
-	EmbedSortAsPatternAndVar[IntegerLiteral]
-	EmbedSortAsPatternAndVar[StringLiteral]
+%%	EmbedSortAsPatternAndVar[IntCon]
+	EmbedSortAsPatternAndVar[StrCon]
 
 	EmbedSortAsPatternAndVar[PICO-ID]
 	EmbedSortAsPatternAndVar[TYPE]
