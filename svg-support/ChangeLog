@@ -1,3 +1,8 @@
+Sat May 10 12:41:06 2008    <bruntink@cwi.nl>
+
+	* svg-support.pc.in: Added the batik.jar to the Jars that other
+	packages get on their build path.
+
 Fri May  9 09:42:22 2008    <bruntink@cwi.nl>
 
 	* Makefile.am: Included Makefile.java.meta instead of
