@@ -697,8 +697,9 @@
 
         <listitem>
           <para>There are built-in types (<literal>bool</literal>,
-          <literal>int</literal>, <literal>str</literal>,
-          <literal>loc</literal>) that have corresponding values.</para>
+          <literal>int</literal>, <literal>double</literal>,
+          <literal>str</literal>, <literal>loc</literal>) that have
+          corresponding values.</para>
         </listitem>
 
         <listitem>
@@ -707,7 +708,8 @@
         </listitem>
 
         <listitem>
-          <para>Relations and tuples can have optional column names.</para>
+          <para>Sets, maps, relations and tuples can be formed from value;
+          Maps, relations and tuples can have optional column names.</para>
         </listitem>
 
         <listitem>
@@ -733,8 +735,29 @@
 
         <listitem>
           <para>Types may include type variables like
-          <literal>&amp;<replaceable>T</replaceable></literal> as in
-          Rscript.</para>
+          <literal>&amp;<replaceable>T</replaceable></literal> as in Rscript
+          with the following refinement:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>In the type
+              <literal>rel[&amp;<replaceable>T</replaceable>]</literal>, the
+              type variable
+              <literal>&amp;<replaceable>T</replaceable></literal> is bound to
+              the tuple type of the relation, i.e. an actual type
+              <literal>rel[int,str]</literal> will bind
+              &amp;<replaceable>T</replaceable> to
+              <literal>tuple[int,str]</literal>.</para>
+            </listitem>
+
+            <listitem>
+              <para>In a similar fashion, in
+              <literal>map[&amp;<replaceable>T</replaceable>]</literal>, the
+              type variable
+              <literal>&amp;<replaceable>T</replaceable></literal> is bound to
+              the tuple type of the map.</para>
+            </listitem>
+          </itemizedlist>
         </listitem>
       </itemizedlist>
 
