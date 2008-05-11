@@ -23,7 +23,7 @@ context-free syntax
          PatternVar                                -> SynPatternSymbol
          "[|" SynPatternSymbol* "|]"               -> QuotedSynPattern
          QuotedSynPattern                          -> SynPattern
-         AbstractValue                             -> AbsPattern
+         AbstractType                              -> AbsPattern
 
          RegPattern | SynPattern | AbsPattern      -> Pattern
 

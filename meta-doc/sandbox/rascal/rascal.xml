@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -723,8 +723,12 @@
         </listitem>
 
         <listitem>
-          <para>Datatype declarations may introduce new structured
-          types.</para>
+          <para>Datatype declarations may introduce new structured types.
+          <note>
+              <para>We assume that all constructors for a datatype lead to a
+              corresponding function to construct a term of that datatype.
+              This eliminates the need to quote abstract terms.</para>
+            </note></para>
         </listitem>
 
         <listitem>
@@ -807,23 +811,8 @@
       <para>Annotations may be associated with any value and are represented
       by a mapping of type <literal>map[str,value]</literal>, i.e., annotation
       names are strings and annotation values are arbitrary values of type
-      <literal>value</literal>. The following library functions handle
-      annotations:<programlisting>%% Test whether a named annotation exists.
-public bool has-annotation(&amp;T Subject);
-
-%% Get the value of a named annotation
-%% Note: get-annotation throws an exception when the named 
-%% annotation does not exist.
-public value get-annotation(&amp;T Subject, str Name);
-
-%% Get all annotations
-public map[str,value] get-annotations(&amp;T Subject);
-
-%% Set the value of a named annotation
-public &amp;T set-annotation(&amp;T Subject, str Name, value AValue);
-
-%% Set all annotations
-public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programlisting></para>
+      <literal>value</literal>. The standard library provdies functions for
+      handling annotations.</para>
     </section>
 
     <section>
@@ -935,7 +924,7 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
 
       <note>
         <para>These Java functions are primarily intended for implementing
-        library functions and for interfacing with Eclipse. </para>
+        library functions and for interfacing with Eclipse.</para>
       </note>
 
       <para>Functions can later be extended [STILL UNDER DISCUSSION]</para>
@@ -1161,26 +1150,48 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
 
           <listitem>
             <para>The complete repertoire of operators in Rscript is available
-            but we have applied some rationalization:</para>
+            but we have applied some rationalization. Note that with each
+            operator, we also associate a named function that can be used as
+            function argument.</para>
 
             <itemizedlist>
               <listitem>
-                <para>+ is now used for addition, union and concatenation (the
+                <para><literal>+</literal> (function: <literal>add</literal>)
+                is now used for addition, union and concatenation (the
                 operator <literal>union</literal> is gone).</para>
               </listitem>
 
               <listitem>
-                <para>- is now used for substraction, difference (the operator
+                <para><literal>-</literal> (function: <literal>sub</literal>)
+                is now used for substraction, difference (the operator
                 <literal>\</literal> is gone)</para>
               </listitem>
 
               <listitem>
-                <para>* is now used for multiplication and intersection (the
-                operator <literal>inter</literal> is gone).</para>
+                <para><literal>*</literal> (function: <literal>mul</literal>)
+                is now used for multiplication and intersection (the operator
+                <literal>inter</literal> is gone).</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>/</literal> (function: <literal>div</literal>)
+                is used for integer and double division.</para>
               </listitem>
 
               <listitem>
                 <para>There are new assignment operators +=, -=, *=.</para>
+              </listitem>
+
+              <listitem>
+                <para>The relational operators <literal>==</literal>
+                (function: <literal>equal</literal>) and
+                <literal>&lt;</literal> (function: <literal>less</literal>)
+                are available for values of all types. They are used to define
+                <literal>&lt;=</literal> (function:
+                <literal>less_equal</literal>), <literal>&gt;</literal>
+                (function: <literal>greater</literal>) and
+                <literal>&gt;=</literal> (function:
+                <literal>greater_equal</literal>)</para>
               </listitem>
 
               <listitem>
@@ -1199,33 +1210,15 @@ public &amp;T set-annotations(&amp;T Subject, map[str, value] Annos);</programli
               </listitem>
 
               <listitem>
-                <para>For an arbitrary binary relation,
-                <replaceable>R</replaceable>{<replaceable>N</replaceable>}
-                returns a set of corresponding image elements. This expression
-                may also occur as left-hand side of an
-                assignment:<programlisting><replaceable>R</replaceable>{<replaceable>N</replaceable>} = <replaceable>V</replaceable></programlisting>first
-                removes all tuples with domain value
-                <replaceable>N</replaceable> and then adds the tuple
-                &lt;<replaceable>N</replaceable>,
-                <replaceable>V</replaceable>&gt;. When the right-hand side is
-                a set, new tuples are added for each element in the
-                set:</para>
-
-                <programlisting><replaceable>R</replaceable>{<replaceable>N</replaceable>} = {<replaceable>V1</replaceable>, ..., <replaceable>Vn</replaceable>}</programlisting>
-
-                <para>first removes all tuples with domain value
-                <replaceable>N</replaceable> and then adds the tuples
-                &lt;<replaceable>N</replaceable>,
-                <replaceable>V1</replaceable>&gt;, ...,
-                &lt;<replaceable>N</replaceable>,
-                <replaceable>Vn</replaceable>&gt;.<note>
-                    <para>Consider to replace the above by standard array
-                    notation.</para>
-                  </note></para>
+                <para>An index operator
+                <literal><replaceable>R</replaceable>[<replaceable>N</replaceable>]</literal>
+                can be applied to values of types list, set, tuple, rel,
+                string and returns the <replaceable>N</replaceable>-the
+                element.</para>
               </listitem>
 
               <listitem>
-                <para>The Rscript image notation R[n] and R[-,n] are
+                <para>The Rscript image notation R[n] and R[-,n] is
                 discontinued.</para>
               </listitem>
             </itemizedlist>
@@ -2727,6 +2720,528 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
         </listitem>
       </itemizedlist>
     </section>
+  </section>
+
+  <section>
+    <title>The Rascal standard library</title>
+
+    <para></para>
+
+    <table>
+      <title>Main function in Rascal Standard Library</title>
+
+      <tgroup cols="11">
+        <colspec align="center" />
+
+        <thead>
+          <row>
+            <entry align="center">&#160;</entry>
+
+            <entry align="center">bool</entry>
+
+            <entry align="center">int</entry>
+
+            <entry align="center">double</entry>
+
+            <entry align="center">str&#160;</entry>
+
+            <entry align="center">loc</entry>
+
+            <entry align="center">list</entry>
+
+            <entry align="center">set</entry>
+
+            <entry align="center">map</entry>
+
+            <entry align="center">rel</entry>
+
+            <entry align="center">tuple</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>equal</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>less</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>add</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>sub</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>mul</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>div</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>size</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>arb</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>toString</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>list[int]</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>toList</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry>-</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>toSet</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>?</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>-</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>toMap</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>-</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>toRel</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>-</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>reverse</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>reduce</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>min</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>max</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>sum</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>multiply</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>average</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
   </section>
 
   <section>
