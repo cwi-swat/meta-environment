@@ -1,5 +1,5 @@
 module Pico-controlflow
-
+ 
 import-syntax pico/syntax/Pico;
 
 type EXP CP;         
@@ -12,10 +12,11 @@ type tuple[set[CP] entry,
 fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {
       case <STATEMENT Stat> ; <{STATEMENT ";"}* Stats2>: { 
-           tuple[set[CP] En1, rel[CP,CP] R1, set[CP] Ex1] = cflow(Stat);
+           tuple[set[CP] En1, rel[CP,CP] R1, set[CP] Ex1] = 
+                                                     cflow(Stat);
            tuple[set[CP] En2, rel[CP,CP] R2, set[CP] Ex2] = 
                                                      cflow(Stats2);
-           return <En1, R1 + R2 + (Ex1 x En2), Ex2>
+           return <En1, R1 + R2 + product(Ex1, En2), Ex2>
       }
 
       case [| |]: return <{}, {}, {}>
@@ -25,18 +26,22 @@ fun CFSEGMENT cflow({STATEMENT ";"}* Stats){
 fun CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
       case while <EXP Exp> do <{STATEMENT ";"}* Stats> od : {
-           tuple[set[CP] En,  rel[CP,CP] R,  set[CP] Ex] = cflow(Stats);
-           return <{Exp}, ({Exp} x En) + R + (Ex x {Exp}),{Exp}>;
+           tuple[set[CP] En,  rel[CP,CP] R,  set[CP] Ex] = 
+                                                     cflow(Stats);
+           return <{Exp}, product({Exp}, En) + R + 
+                          product(Ex, {Exp}),
+                   {Exp}>;
       }
                 
       case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
                    else <{STATEMENT ";"}* Stats2> fi: {
            tuple[set[CP] En1, rel[CP,CP] R1, set[CP] Ex1] = 
-                                                      cflow(Stats1);
+                                                    cflow(Stats1);
            tuple[set[CP] En2, rel[CP,CP] R2, set[CP] Ex2] = 
-                                                      cflow(Stats2);
+                                                    cflow(Stats2);
            return < {Exp}, 
-                    ({Exp} x En1) + ({Exp} x En2) + R1 + R2,
+                    product({Exp}, En1) + 
+                    product({Exp}, En2) + R1 + R2,
                     Ex1 + Ex2 
                   >;
       }

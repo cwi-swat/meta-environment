@@ -13,6 +13,6 @@ fun set[PICO_ID] uninit(PROGRAM P) {
     rel[CP,CP] Pred = CFLOW.graph; 
 
     return {Id | tuple[EXP E, PICO_ID Id] : Uses,
-                 E in reachX(Root, Defs{Id}, Pred)
+                 E in reachX(Root, Defs[Id], Pred)
     };
 }

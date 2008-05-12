@@ -1,11 +1,9 @@
 module Names
 
 exports
+  imports languages/java/syntax/Lexical [Identifier => Name]
 
-%%imports basic/IdentifierCon [IdCon => Name]
+  sorts QualName
+  context-free syntax
 
-imports languages/java/syntax/Lexical [Identifier => Name]
-sorts QualName
-context-free syntax
-
-   {Name "."}+  -> QualName {avoid,cons("QualName")}
+    {Name "."}+  -> QualName {avoid,cons("QualName")}

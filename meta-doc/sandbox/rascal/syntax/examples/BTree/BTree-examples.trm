@@ -3,15 +3,14 @@ import-syntax BTree-syntax;
 
 %% Ex1: Count leaves in a BTREE
 %% Idea: int N : T generates alle Integer leaves in the tree
-%% # is the built-in length-of operator
 
 fun int cnt(BTREE T) {
-    return #{N | int N : T}
+    return size({N | int N : T})
 }
 
 %% Ex1: an equivalent,  more purist, version of the same function:
 fun int cnt(BTREE T) {
-    return #{N | <Integer N> : T}
+    return size({N | Integer N : T})
 }
 
 %% Ex1: alternative solution using trafo functions:
@@ -23,7 +22,7 @@ fun int cnt(BTREE T) {
     };
     return C;
 }
-
+ 
 %% Ex2: Sum all leaves in a BTREE
 %% NB sum is a built-in that adds all elements in a set or list.
 %% Here we see immediately the need to identify
@@ -71,7 +70,7 @@ fun BTREE inc(BTREE T) {
 fun BTREE frepl(BTREE T) {
     visit bottom-up T {
       case g(<BTREE T1>, <BTREE T2>) =>
-            i(<BTREE T1>, <BTREE T2>)
+           i(<BTREE T1>, <BTREE T2>)
     };
 }
 
@@ -80,7 +79,7 @@ fun BTREE frepl(BTREE T) {
 fun BTREE frepl(BTREE T) {
     visit bottom-up-break T {
       case g(<BTREE T1>, <BTREE T2>) =>
-           make i(<BTREE T1>, <BTREE T2>)
+           i(<BTREE T1>, <BTREE T2>)
     };
 }
 
@@ -90,7 +89,7 @@ fun BTREE frepl(BTREE T) {
 fun BTREE srepl(BTREE T) {
     visit top-down-break T {
       case g(<BTREE T1>, <BTREE T2>) => 
-           make i(<BTREE T1>, <BTREE T2>)
+           i(<BTREE T1>, <BTREE T2>)
     };
 }
 
@@ -109,7 +108,7 @@ fun tuple[int, BTREE] count_and_inc(BTREE T, int C, int D) {
     int C = 0;
     
     visit T {
-      case <Integer N>: { C = C + 1; yield N+D }
+      case <Integer N>: { C = C + 1; N = N + D; yield [| <N> |]}
      };
      return <C, T>;
 }

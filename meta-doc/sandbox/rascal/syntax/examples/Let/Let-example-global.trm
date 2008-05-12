@@ -25,10 +25,11 @@ fun Exp rename(Exp E) {
          Rn = {<V, Y>} + Rn;
          Exp E1R = rename(E1);
          Exp E2R = rename(E2);
-         return make let <Var Y >= <Exp E1R>
-                     in 
-                        <Exp E2R>
-                     end;
+         return [| let <Var Y >= <Exp E1R>
+                   in 
+                      <Exp E2R>
+                   end 
+                |]
           }
 
     case <Var V>: return Rn(V)

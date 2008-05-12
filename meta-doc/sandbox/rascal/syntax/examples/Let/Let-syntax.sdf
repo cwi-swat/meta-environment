@@ -1,4 +1,4 @@
-module Let-syntax
+module examples/Let/Let-syntax
 exports
 sorts Var %% variables
       Exp %% expressions

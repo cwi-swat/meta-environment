@@ -10,7 +10,7 @@ fun Boolean is_constant(EXP E) {
 
      case <StrCon S> => true
 
-     case <EXP E> => false
+     case <EXP E>    => false
    }
 }
 
@@ -22,11 +22,11 @@ fun PROGRAM cp(PROGRAM P) {
       {<Id2, E> | STATEMENT S : P,
                   [| <PICO_ID Id> := <EXP E> |] := S,
                   is_constant(E),
-                  PICO_ID Id2 : reachX({S},Defs{Id},Pred),
+                  PICO_ID Id2 : reachX({S},Defs[Id],Pred),
                   Id2 == Id 
       };  
  
     visit P {
-     case <PICO-ID Id>: if(EXP E := replacements(Id)) yield E
+     case <PICO-ID Id>: if(EXP E := replacements[Id]) yield E
     };  
 }

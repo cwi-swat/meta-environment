@@ -30,9 +30,9 @@ fun rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS,
      solve {
            IN  =  {<S, D> | int S : STATEMENT, 
                             Stat P : predecessor(PRED,S), 
-                            Def D : OUT{P}};
+                            Def D : OUT[P]};
            OUT =  {<S, D> | int S : STATEMENT, 
-                            Def D : DEF{S} + (IN{S} - KILL{S})}
+                            Def D : DEF[S] + (IN[S] - KILL[S])}
     };
     return IN;
 }

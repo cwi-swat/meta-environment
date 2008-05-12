@@ -5,7 +5,7 @@ data Tree cycle(Symbol symbol, NatCon length);
 data Tree amb(Args args);
 data Tree "char"(NatCon character);
 
-data Args list[Tree];
+type list[Tree] Args;
 
 data Production prod(Symbols lhs, Symbol rhs, Attributes attributes);
 data Production "list"(Symbol rhs);

@@ -651,13 +651,18 @@
 
       <itemizedlist>
         <listitem>
-          <para>Import other modules (either Rascal modules or SDF modules)
-          using <literal>import</literal>.</para>
+          <para>Import other Rascal modules using
+          <literal>import</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Import SDF modules using
+          <literal>import-syntax</literal>.</para>
         </listitem>
 
         <listitem>
           <para>Import Java modules (for the benefit of functions written in
-          Java) using <literal>java-import</literal>.</para>
+          Java) using <literal>import-java</literal>.</para>
         </listitem>
 
         <listitem>
@@ -685,7 +690,33 @@
     </section>
 
     <section>
-      <title>Types and Values</title>
+      <title>Names, Types and Values</title>
+
+      <para>Rascal aims at seamless integration with and its names adhere to
+      the following conventions:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A Rascal Name is identical to a Java Indentifier. All reserved
+          words in both Java and Rascal cannot be used as a Name.<warning>
+              <para>For better syntax errors it is probably better to warn for
+              Java keywords later on.</para>
+            </warning></para>
+        </listitem>
+
+        <listitem>
+          <para>Sorts and Symbols are inherited from SDF but we extend sort
+          (that may only start with an uppercase letter in SDF) to be a more
+          liberal Name.<warning>
+              <para>SDF Sorts may include a dash symbol (<literal>-</literal>)
+              which is not allowed in Java Identifiers. Forbidding the dash
+              requires changing all existing SDF definitions. Allowing a dash
+              in Names requires an added check in the compiler that
+              Identifiers with dashes are generated as Java names. Suggestion:
+              add dash and check in compiler.</para>
+            </warning></para>
+        </listitem>
+      </itemizedlist>
 
       <para>The type system (and notation) are mostly similar to that of
       Rscript, but</para>
@@ -731,6 +762,11 @@
               corresponding function to construct a term of that datatype.
               This eliminates the need to quote abstract terms.</para>
             </note></para>
+
+          <note>
+            <para>Constructor names of datatypes may be quoted in order to
+            avoid clashes with reserved words or illegal names.</para>
+          </note>
         </listitem>
 
         <listitem>
@@ -834,7 +870,7 @@
       <para>Annotations may be associated with any value and are represented
       by a mapping of type <literal>map[str,value]</literal>, i.e., annotation
       names are strings and annotation values are arbitrary values of type
-      <literal>value</literal>. The standard library provdies functions for
+      <literal>value</literal>. The standard library provides functions for
       handling annotations.</para>
     </section>
 
@@ -922,7 +958,7 @@
       value.</para>
 
       <para>Functions can raise exceptions but these are not declared as part
-      of the function signature (i.e., we have unchecked execptions in
+      of the function signature (i.e., we have unchecked exceptions in
       contrast with checked exceptions in Java).</para>
 
       <para>Functions preceeded by the keyword "<literal>java</literal>" have
@@ -949,6 +985,12 @@
         <para>These Java functions are primarily intended for implementing
         library functions and for interfacing with Eclipse.</para>
       </note>
+
+      <para>Functions preceeded by the keyword "memo" are memo functions that
+      cache previous arguments/result combinations.<note>
+          <para>Do we need library functions to tune the memo behaviour (e.g.,
+          flush cache, change cache size)?</para>
+        </note></para>
 
       <para>Functions can later be extended [STILL UNDER DISCUSSION]</para>
 
@@ -1056,8 +1098,9 @@
         <para>Regular expression patterns are ordinary regular expressions
         that are used to match a string value and to decompose it in parts and
         also to compose new strings. In a match position, a regular expression
-        is followed by a newly declared variable (always of type
-        <literal>list[str]</literal>) that contains the matches obtained by
+        may be prceeded by a newly declared variable (always of type
+        <literal>list[str]</literal>) and the symbol <literal>~=</literal>.
+        When the variable is present it will contain the matches obtained by
         the regular expression.</para>
       </section>
 
@@ -1121,11 +1164,12 @@
         probability of ambiguities increases. Our assumption is that a type
         checker can resolve them.</para>
 
-        <para>Implementation hint. For every sort S in the syntax definition
-        add the following rules:</para>
+        <para>Implementation hint (used to check the examples in this
+        document). For every sort S in the syntax definition add the following
+        rules:</para>
 
-        <programlisting><replaceable>S</replaceable>                     -&gt; Pattern
-"&lt;<replaceable>" "S</replaceable>"? Variable "&gt;" -&gt; <replaceable>S</replaceable>      </programlisting>
+        <programlisting><replaceable>S</replaceable>                   -&gt; Pattern
+"&lt;<replaceable>" "S</replaceable>"? Name "&gt;"   -&gt; <replaceable>S</replaceable>      </programlisting>
       </section>
     </section>
 
@@ -1214,7 +1258,8 @@
                 <literal>less_equal</literal>), <literal>&gt;</literal>
                 (function: <literal>greater</literal>) and
                 <literal>&gt;=</literal> (function:
-                <literal>greater_equal</literal>)</para>
+                <literal>greater_equal</literal>) as well as the functions
+                <literal>min</literal> and <literal>max</literal>.</para>
               </listitem>
 
               <listitem>
@@ -1236,7 +1281,7 @@
                 <para>An index operator
                 <literal><replaceable>R</replaceable>[<replaceable>N</replaceable>]</literal>
                 can be applied to values of types list, set, tuple, rel,
-                string and returns the <replaceable>N</replaceable>-the
+                string and returns the <replaceable>N</replaceable>-th
                 element.</para>
               </listitem>
 
@@ -1315,7 +1360,25 @@
 
           <programlisting>case <replaceable>Pattern</replaceable> =&gt; <replaceable>Replacement</replaceable></programlisting>
 
-          <para>which is an abbreviation for<programlisting>case <replaceable>Pattern</replaceable> : yield <replaceable>Replacement</replaceable></programlisting></para>
+          <para>which is an abbreviation for<programlisting>case <replaceable>Pattern</replaceable> : yield <replaceable>Replacement</replaceable></programlisting>Depending
+          on the kind of pattern we use a different keyword:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>case</literal> for syntax patterns.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>acase</literal> for abstract patterns.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>rcase</literal> for regular patterns.<note>
+                  <para>These three different keywords are not very elegant
+                  but they help to remove disambiguities.</para>
+                </note></para>
+            </listitem>
+          </itemizedlist>
         </listitem>
 
         <listitem>
@@ -1487,13 +1550,13 @@ data Bool bor(Bool, Bool);
 
 fun Bool reduce(Bool B) {
     visit bottom-up B {
-      case band(btrue, &lt;Bool B2&gt;)  =&gt; B2    %% Use Variables
-      case band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
+      acase band(btrue, Bool B2)   =&gt; B2     %% Use Variables
+      acase band(bfalse, Bool B2)  =&gt; bfalse
 
-      case bor(btrue, btrue)       =&gt; btrue %% Use a truth table
-      case bor(btrue, bfalse)      =&gt; btrue
-      case bor(bfalse, btrue)      =&gt; btrue
-      case bor(bfalse, bfalse)     =&gt; bfalse
+      acase bor(btrue, btrue)      =&gt; btrue  %% Use a truth table
+      acase bor(btrue, bfalse)     =&gt; btrue
+      acase bor(bfalse, btrue)     =&gt; btrue
+      acase bor(bfalse, bfalse)    =&gt; bfalse
     }
 }</programlisting></para>
 
@@ -1519,13 +1582,13 @@ data Bool band(Bool, Bool);
 data Bool bor(Bool, Bool); 
 
 rules(Bool) {
-      band(btrue, &lt;Bool B2&gt;)   =&gt; B2 
-      band(bfalse, &lt;Bool B2&gt;)  =&gt; bfalse
+      band(btrue, Bool B2)   =&gt; B2 
+      band(bfalse, Bool B2)  =&gt; bfalse
 
-      bor(btrue, btrue)        =&gt; btrue
-      bor(btrue, bfalse)       =&gt; btrue
-      bor(bfalse, btrue)       =&gt; btrue
-      bor(bfalse, bfalse)      =&gt; bfalse
+      bor(btrue, btrue)      =&gt; btrue
+      bor(btrue, bfalse)     =&gt; btrue
+      bor(bfalse, btrue)     =&gt; btrue
+      bor(bfalse, bfalse)    =&gt; bfalse
 }</programlisting>These rules are applied on every Bool that is constructed.
         Like in ASF+SDF it is the responsibility of the programmer to make
         sure the rules are confluent and terminating. The body of a rules
@@ -1642,19 +1705,18 @@ exports
     g(BTREE,BTREE)  -&gt; BTREE
     h(BTREE,BTREE)  -&gt; BTREE
     i(BTREE,BTREE)  -&gt; BTREE</programlisting><programlisting>module BTree-Examples
-imports BTree-syntax; 
+import-syntax BTree-syntax; 
 
 %% Ex1: Count leaves in a BTREE
 %% Idea: int N : T generates alle Integer leaves in the tree
-%% # is the built-in length-of operator
 
 fun int cnt(BTREE T) {
-    return #{N | int N : T}
+    return size({N | int N : T})
 }
 
 %% Ex1: an equivalent,  more purist, version of the same function:
 fun int cnt(BTREE T) {
-    return #{N | &lt;Integer N&gt; : T}
+    return size({N | Integer N : T})
 }
 
 %% Ex1: alternative solution using trafo functions:
@@ -1666,7 +1728,7 @@ fun int cnt(BTREE T) {
     };
     return C;
 }
-
+ 
 %% Ex2: Sum all leaves in a BTREE
 %% NB sum is a built-in that adds all elements in a set or list.
 %% Here we see immediately the need to identify
@@ -1714,7 +1776,7 @@ fun BTREE inc(BTREE T) {
 fun BTREE frepl(BTREE T) {
     visit bottom-up T {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
-           make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
+           i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
 }
 
@@ -1723,7 +1785,7 @@ fun BTREE frepl(BTREE T) {
 fun BTREE frepl(BTREE T) {
     visit bottom-up-break T {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
-           make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
+           i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
 }
 
@@ -1733,14 +1795,14 @@ fun BTREE frepl(BTREE T) {
 fun BTREE srepl(BTREE T) {
     visit top-down-break T {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt; 
-           make i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
+           i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
 }
 
 %% Ex7: We can also add the first/td directives to all generators 
 %% (where "all td" would be the default):
 
-fun set[BTREE] find-outer-gs(BTREE T) {
+fun set[BTREE] find_outer_gs(BTREE T) {
     return
     { S | STATEMENT S : top-down-break T, 
           g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) := S };
@@ -1748,11 +1810,11 @@ fun set[BTREE] find-outer-gs(BTREE T) {
  
 %% Ex8: accumulating transformer that increments leaves with 
 %% amount D and counts them
-fun tuple[int, BTREE] count-and-inc(BTREE T, int C, int D) {
+fun tuple[int, BTREE] count_and_inc(BTREE T, int C, int D) {
     int C = 0;
     
     visit T {
-      case &lt;Integer N&gt;: { C = C + 1; yield N+D }
+      case &lt;Integer N&gt;: { C = C + 1; N = N + D; yield [| &lt;N&gt; |]}
      };
      return &lt;C, T&gt;;
 }
@@ -1785,7 +1847,8 @@ context-free syntax
       <para>Examples:</para>
 
       <para><programlisting>module Lambda-Examples
-imports Lambda-syntax;
+
+import-syntax Lambda-syntax;
 
 fun set[Var] allVars(Exp E) {
     return {V | Var V : E}
@@ -1811,24 +1874,24 @@ fun Var fresh(Var V, set[Var] S) {
 fun Exp subst(Var V1, Exp E1, Exp E2) {
 
     switch E2 {
-      case &lt;Var V2&gt;: if(V1 != V2){ yield V2; }
+      case &lt;Var V2&gt;: if(V1 != V2){ yield [| &lt;V2&gt; |] }
 
-      case &lt;Var V2&gt;: if(V1 == V2){ yield E1; }
+      case &lt;Var V2&gt;: if(V1 == V2){ yield [| &lt;E1&gt; |] }
 
       case &lt;Exp Ea&gt; &lt;Exp Eb&gt;: {
         Exp EaS = subst(V, E, Ea);
         Exp EbS = subst(V, E, Eb);
-        return make &lt;Exp EaS&gt; &lt;Exp EbS&gt;;
+        return [| &lt;Exp EaS&gt; &lt;Exp EbS&gt; |];
       } 
 
       case fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt;:
-        if (V1 == V2) { yield make fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt; }
+        if (V1 == V2) { yield [| fn &lt;V2&gt; =\&gt; &lt;Ea&gt; |] }
 
       case fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;:
         if(V1 != V2 and not(V1 in freeVars(E2) and 
            V2 in freeVars(E1))){
            Exp E1S = subst(V1, E1, Ea);
-           yield make fn &lt;Var V2&gt; =&gt; &lt;Exp E1S&gt;;
+           yield [| fn &lt;Var V2&gt; =\&gt; &lt;Exp E1S&gt; |];
         }              
  
       case fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;: 
@@ -1836,7 +1899,7 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
            V2 in freeVars(E1)){
            Var V3 = fresh(V2, freeVars(Ea) + freeVars(E1));
            Exp EaS = subst(V1, E1, subst(V2, V3, E2));
-           yield make fn &lt;Var V3&gt; =&gt; &lt;Exp EaS&gt;;
+           yield [| fn &lt;Var V3&gt; =\&gt; &lt;Exp EaS&gt; |];
         }
     };
 }</programlisting></para>
@@ -1888,7 +1951,8 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
 
       <para>Here is the same renaming function now using two global
       variables.<programlisting>module Let-Example
-imports Let;
+
+import-syntax Let;
 
 %% Rename all bound variables in an Exp
 %% Version 2: using global variables
@@ -1913,10 +1977,11 @@ fun Exp rename(Exp E) {
          Rn = {&lt;V, Y&gt;} + Rn;
          Exp E1R = rename(E1);
          Exp E2R = rename(E2);
-         return make let &lt;Var Y &gt;= &lt;Exp E1R&gt;
-                     in 
-                        &lt;Exp E2R&gt;
-                     end;
+         return [| let &lt;Var Y &gt;= &lt;Exp E1R&gt;
+                   in 
+                      &lt;Exp E2R&gt;
+                   end 
+                |]
           }
 
     case &lt;Var V&gt;: return Rn(V)
@@ -2221,9 +2286,10 @@ fun PICO-VALUE evalExp(Exp exp) {
       <title>Pico control flow extraction</title>
 
       <programlisting>module Pico-controlflow
-imports pico/syntax/Pico;
+ 
+import-syntax pico/syntax/Pico;
 
-type EXP CP;         %% A Code Point, union of two types
+type EXP CP;         
 type STATEMENT CP;
 
 type tuple[set[CP] entry, 
@@ -2233,10 +2299,11 @@ type tuple[set[CP] entry,
 fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {
       case &lt;STATEMENT Stat&gt; ; &lt;{STATEMENT ";"}* Stats2&gt;: { 
-           &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = cflow(Stat);
-           &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = 
+           tuple[set[CP] En1, rel[CP,CP] R1, set[CP] Ex1] = 
+                                                     cflow(Stat);
+           tuple[set[CP] En2, rel[CP,CP] R2, set[CP] Ex2] = 
                                                      cflow(Stats2);
-           return &lt;En1, R1 + R2 + (Ex1 x En2), Ex2&gt;
+           return &lt;En1, R1 + R2 + product(Ex1, En2), Ex2&gt;
       }
 
       case [| |]: return &lt;{}, {}, {}&gt;
@@ -2245,24 +2312,28 @@ fun CFSEGMENT cflow({STATEMENT ";"}* Stats){
 
 fun CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
-      case [| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od |] : {
-           &lt;set[CP] En,  rel[CP,CP] R,  set[CP] Ex&gt; = cflow(Stats);
-           return &lt;{Exp}, ({Exp} x En) + R + (Ex x {Exp}),{Exp}&gt;;
+      case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od : {
+           tuple[set[CP] En,  rel[CP,CP] R,  set[CP] Ex] = 
+                                                     cflow(Stats);
+           return &lt;{Exp}, product({Exp}, En) + R + 
+                          product(Ex, {Exp}),
+                   {Exp}&gt;;
       }
                 
-      case [| if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
-                   else &lt;{STATEMENT ";"}* Stats2&gt; fi |]: {
-           &lt;set[CP] En1, rel[CP,CP] R1, set[CP] Ex1&gt; = 
-                                                      cflow(Stats1);
-           &lt;set[CP] En2, rel[CP,CP] R2, set[CP] Ex2&gt; = 
-                                                      cflow(Stats2);
+      case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
+                   else &lt;{STATEMENT ";"}* Stats2&gt; fi: {
+           tuple[set[CP] En1, rel[CP,CP] R1, set[CP] Ex1] = 
+                                                    cflow(Stats1);
+           tuple[set[CP] En2, rel[CP,CP] R2, set[CP] Ex2] = 
+                                                    cflow(Stats2);
            return &lt; {Exp}, 
-                    ({Exp} x En1) + ({Exp} x En2) + R1 + R2,
+                    product({Exp}, En1) + 
+                    product({Exp}, En2) + R1 + R2,
                     Ex1 + Ex2 
                   &gt;;
       }
          
-      case [| &lt;STATEMENT Stat&gt; |]: return &lt;{Stat}, {}, {Stat}&gt;
+      case &lt;STATEMENT Stat&gt;: return &lt;{Stat}, {}, {Stat}&gt;
     };
 }
 </programlisting>
@@ -2275,16 +2346,15 @@ fun CFSEGMENT cflow(STATEMENT Stat){
 
       <programlisting>module Pico-use-def
 
-imports pico/syntax/Pico;
+import-syntax pico/syntax/Pico;
 
-
-fun rel[PICO-ID, EXP] uses(PROGRAM P) {
-  return {&lt;Id, E&gt; | EXP E : P, PICO-ID Id := E}
+fun rel[PICO_ID, EXP] uses(PROGRAM P) {
+  return {&lt;Id, E&gt; | EXP E : P, PICO_ID Id := E}
 }
 
-fun rel[PICO-ID, STATEMENT] defs(PROGRAM P) { 
+fun rel[PICO_ID, STATEMENT] defs(PROGRAM P) { 
   return {&lt;Id, S&gt; | STATEMENT S : P, 
-                    [| &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; |] := S}
+                    [| &lt;PICO_ID Id&gt; := &lt;EXP Exp&gt; |] := S}
 }</programlisting>
 
       <para>The above uses a "matching condition" to decompose
@@ -2299,19 +2369,21 @@ fun rel[PICO-ID, STATEMENT] defs(PROGRAM P) {
       <title>Pico uninitialized variables</title>
 
       <para><programlisting>module Pico-uninit
-imports pico/syntax/Pico 
-        Pico-controlflow 
-        Pico-use-def;
 
-fun set[PICO-ID] uninit(PROGRAM P) {
-    rel[EXP,PICO-ID] Uses = uses(P);
-    rel[PICO-ID, STATEMENT] Defs = defs(P);
+import-syntax pico/syntax/Pico;
+
+import Pico-controlflow;
+import Pico-use-def;
+
+fun set[PICO_ID] uninit(PROGRAM P) {
+    rel[EXP,PICO_ID] Uses = uses(P);
+    rel[PICO_ID, STATEMENT] Defs = defs(P);
     CFSEGMENT CFLOW = cflow(P);
     set[CP] Root = CFLOW.entry;
     rel[CP,CP] Pred = CFLOW.graph; 
 
-    return {Id | tuple[EXP E, PICO-ID Id] : Uses,
-                 E in reachX(Root, Defs{Id}, Pred)
+    return {Id | tuple[EXP E, PICO_ID Id] : Uses,
+                 E in reachX(Root, Defs[Id], Pred)
     };
 }</programlisting></para>
     </section>
@@ -2321,22 +2393,22 @@ fun set[PICO-ID] uninit(PROGRAM P) {
 
       <para><programlisting>module Pico-common-subexpression
 
-imports pico/syntax/Pico 
-        Pico-controlflow 
-        Pico-use-def;
+import-syntax pico/syntax/Pico;
+import Pico-controlflow;
+import Pico-use-def;
 
 fun PROGRAM cse(PROGRAM P) {
-    rel[PICO-ID, STATEMENT] Defs = defs(P);
+    rel[PICO_ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
-    map[EXP, PICO-ID] replacements = 
+    map[EXP, PICO_ID] replacements = 
        {&lt;E2, Id&gt; | STATEMENT S : P,
-                   [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] := S,
+                   [| &lt;PICO_ID Id&gt; := &lt;EXP E&gt; |] := S,
                    Id notin E,
-                   EXP E2 : reachX({S}, Defs{Id}, Pred)
+                   EXP E2 : reachX({S}, Defs[Id], Pred)
        };
   
     visit P {
-      case &lt;EXP E&gt;: if(PICO-ID Id := replacements(E)) yield Id
+      case &lt;EXP E&gt;: if(PICO_ID Id := replacements(E)) yield Id
     };
 }</programlisting></para>
 
@@ -2408,34 +2480,34 @@ fun PROGRAM cse(PROGRAM P) {
 
       <para><programlisting>module Pico-constant-propagation
 
-imports pico/syntax/Pico 
-        Pico-controlflow 
-        Pico-use-def;
+import-syntax pico/syntax/Pico;
+import  Pico-controlflow;
+import  Pico-use-def;
 
-fun Boolean is-constant(EXP E) {
+fun Boolean is_constant(EXP E) {
    switch E {
      case &lt;NatCon N&gt; =&gt; true
 
      case &lt;StrCon S&gt; =&gt; true
 
-     case &lt;EXP E&gt; =&gt; false
+     case &lt;EXP E&gt;    =&gt; false
    }
 }
 
 fun PROGRAM cp(PROGRAM P) {
-    rel[PICO-ID, STATEMENT] Defs = defs(P);
+    rel[PICO_ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
 
-    map[PICO-ID, EXP] replacements = 
+    map[PICO_ID, EXP] replacements = 
       {&lt;Id2, E&gt; | STATEMENT S : P,
-                  [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] := S,
-                  is-constant(E),
-                  PICO-ID Id2 : reachX({S},Defs{Id},Pred),
+                  [| &lt;PICO_ID Id&gt; := &lt;EXP E&gt; |] := S,
+                  is_constant(E),
+                  PICO_ID Id2 : reachX({S},Defs[Id],Pred),
                   Id2 == Id 
       };  
  
     visit P {
-     case &lt;PICO-ID Id&gt;: if(EXP E := replacements(Id)) yield E
+     case &lt;PICO-ID Id&gt;: if(EXP E := replacements[Id]) yield E
     };  
 }</programlisting></para>
 
@@ -2484,7 +2556,7 @@ fun set[Stat] successor(rel[Stat,Stat] P, Stat S) {
     return P(S)
 }
 
-fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS, 
+fun rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS, 
                                         rel[Stat,Stat] PRED) {
 
     set[Stat] STATEMENT = carrier(PRED);
@@ -2503,9 +2575,9 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
      solve {
            IN  =  {&lt;S, D&gt; | int S : STATEMENT, 
                             Stat P : predecessor(PRED,S), 
-                            Def D : OUT{P}};
+                            Def D : OUT[P]};
            OUT =  {&lt;S, D&gt; | int S : STATEMENT, 
-                            Def D : DEF{S} +  (IN{S} - KILL{S})}
+                            Def D : DEF[S] + (IN[S] - KILL[S])}
     };
     return IN;
 }</programlisting></para>
@@ -2521,7 +2593,7 @@ fun rel[Stat, Def] reaching-definitions(rel[Stat,Var] DEFS,
 
 %% A scope-oriented symbol table.
 %% Each scope consists of a map from names to values. 
-%% THis more intended to explore whether this can be expressed
+%% This is more intended to explore whether this can be expressed
 %% *at all* than that the datatype is well designed.
 
 type rel[&amp;Name, &amp;Value] ScopeMap;
@@ -2529,15 +2601,15 @@ type int ScopeId;
 data STable[&amp;Name, &amp;Value] stable(ScopeId scope, 
                                   rel[int, ScopeMap] scopes); 
 
-%% Create a new, empty,  table
-fun STable[&amp;Name, &amp;Value] new(){
-  return make stable(0, {&lt;0, {}&gt;});
+%%Create a new, empty,  table
+fun STable[&amp;Name, &amp;Value] new_table(){
+  return stable(0, {&lt;0, {}&gt;});
 }
 
 %% Create a new, non-empty, table
-fun STable[&amp;Name, &amp;Value] new(ScopeId scope, 
+fun STable[&amp;Name, &amp;Value] new_table(ScopeId scope, 
                               rel[int, ScopeMap] scopes){
-  return make stable(scope, scopes);
+  return stable(scope, scopes);
 } 
 
 %% Update, in a given scope, the value of a variable
@@ -2545,12 +2617,12 @@ fun STable[&amp;Name, &amp;Value] update(STable[&amp;Name, &amp;Value] ST,
                                  ScopeId scope, 
                                  &amp;Name N, 
                                  &amp;Value V){
-  ST.scopes(scope)(N) = V;
-  return new(scope, ST.scopes)
+  ST.scopes(scope) = V;
+  return new_table(scope, ST.scopes)
 }
 
 %% Get, in a given scope, the value of a variable
-fun STable[&amp;Name, &amp;Value] value(STable[&amp;Name, &amp;Value] ST, 
+fun STable[&amp;Name, &amp;Value] value_of(STable[&amp;Name, &amp;Value] ST, 
                                 ScopeId scope, 
                                 &amp;Name N){
   return ST.scopes(scope)(N)
@@ -2560,26 +2632,26 @@ fun STable[&amp;Name, &amp;Value] value(STable[&amp;Name, &amp;Value] ST,
 fun STable[&amp;Name, &amp;Value] update(STable[&amp;Name, &amp;Value] ST, 
                                  &amp;Name N, 
                                  &amp;Value V){
-  ST.scopes(scope)(N) = V;
-  return new(scope, ST.scopes)
+%%  ST.scopes(scope)(N)= V;
+  return new_table(scope, ST.scopes)
 }
 
 %% Get, in the current scope, the value of a variable
-fun STable value(STable[&amp;Name, &amp;Value] ST, 
+fun STable value_of(STable[&amp;Name, &amp;Value] ST, 
                  &amp;Name N){
   return ST.scopes(ST.scope)(N)
 }
 
 %% add a new scope and make it the current scope
-fun STable[&amp;Name, &amp;Value] new-scope(STable[&amp;Name, &amp;Value] ST){
+fun STable[&amp;Name, &amp;Value] new_scope(STable[&amp;Name, &amp;Value] ST){
   ScopeId scope = ST.scope + 1;
-  return new(scope, ST.scopes);
+  return new_table(scope, ST.scopes);
 }
 
 %% switch to another scope
-fun STable[&amp;Name, &amp;Value] switch-scope(STable[&amp;Name, &amp;Value] ST, 
+fun STable[&amp;Name, &amp;Value] switch_scope(STable[&amp;Name, &amp;Value] ST, 
                                        ScopeId scope){
-  return new(scope, ST.scopes);
+  return new_table(scope, ST.scopes);
 }
 
 </programlisting></para>
@@ -2678,7 +2750,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
     </section>
 
     <section>
-      <title>Read-Eval-Print Loop (REPR)</title>
+      <title>Read-Eval-Print Loop (REPR) [Needs further discussion]</title>
 
       <para>For the scripting of application it is important to have a command
       language and read-eval-print loop. Here is an attempt. The command
@@ -2748,991 +2820,1856 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
   <section>
     <title>The Rascal standard library</title>
 
-    <para></para>
+    <para>In this section we summarize the (over 300!) functions in the Rascal
+    Standard Library.</para>
 
-    <table>
-      <title>Main function in Rascal Standard Library</title>
+    <section>
+      <title>Main functions</title>
 
-      <tgroup cols="11">
-        <colspec align="center" />
+      <para>The main functions of the library are listed in the following
+      table.</para>
 
-        <thead>
-          <row>
-            <entry align="center">&#160;</entry>
+      <table>
+        <title>Main functions in Rascal Standard Library</title>
 
-            <entry align="center">bool</entry>
+        <tgroup cols="11">
+          <colspec align="center" />
 
-            <entry align="center">int</entry>
+          <thead>
+            <row>
+              <entry align="center">&#160;</entry>
 
-            <entry align="center">double</entry>
+              <entry align="center">bool</entry>
 
-            <entry align="center">str&#160;</entry>
+              <entry align="center">int</entry>
 
-            <entry align="center">loc</entry>
+              <entry align="center">double</entry>
 
-            <entry align="center">list</entry>
+              <entry align="center">str&#160;</entry>
 
-            <entry align="center">set</entry>
+              <entry align="center">loc</entry>
 
-            <entry align="center">map</entry>
+              <entry align="center">list</entry>
 
-            <entry align="center">rel</entry>
+              <entry align="center">set</entry>
 
-            <entry align="center">tuple</entry>
-          </row>
-        </thead>
+              <entry align="center">map</entry>
 
-        <tbody>
-          <row>
-            <entry>equal</entry>
+              <entry align="center">rel</entry>
 
-            <entry>x</entry>
+              <entry align="center">tuple</entry>
+            </row>
+          </thead>
 
-            <entry>x</entry>
+          <tbody>
+            <row>
+              <entry>equal</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
-          </row>
+              <entry>x</entry>
 
-          <row>
-            <entry>less</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
+            </row>
 
-            <entry>x</entry>
+            <row>
+              <entry>less</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
-          </row>
+              <entry>x</entry>
 
-          <row>
-            <entry>add</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
+            </row>
 
-            <entry>x</entry>
+            <row>
+              <entry>add</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>sub</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
+            </row>
 
-            <entry>x</entry>
+            <row>
+              <entry>sub</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>mul</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
+            </row>
 
-            <entry>x</entry>
+            <row>
+              <entry>mul</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>div</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry>x</entry>
+            <row>
+              <entry>div</entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>size</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>size</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
-          </row>
+              <entry>x</entry>
 
-          <row>
-            <entry>get</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>get</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>arb</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
+            </row>
 
-            <entry>x</entry>
+            <row>
+              <entry>arb</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry>x</entry>
 
-          <row>
-            <entry>toString</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry></entry>
+            </row>
 
-            <entry>x</entry>
+            <row>
+              <entry>toString</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
-          </row>
+              <entry>x</entry>
 
-          <row>
-            <entry>toList</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>toList</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>-</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>-</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry>x</entry>
 
-          <row>
-            <entry>toSet</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>toSet</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>-</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>-</entry>
 
-            <entry></entry>
-          </row>
+              <entry>x</entry>
 
-          <row>
-            <entry>toMap</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>toMap</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>-</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry>-</entry>
 
-          <row>
-            <entry>toRel</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>toRel</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>-</entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry>x</entry>
 
-          <row>
-            <entry>reverse</entry>
+              <entry>-</entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>reverse</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>reduce</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>reduce</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>apply</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>apply</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry>x</entry>
 
-          <row>
-            <entry>min</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry></entry>
+            </row>
 
-            <entry>x</entry>
+            <row>
+              <entry>min</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>max</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
+            </row>
 
-            <entry>x</entry>
+            <row>
+              <entry>max</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry>x</entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>sum</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>sum</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>multiply</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>multiply</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>average</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>average</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>get_location</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>get_location</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
-          </row>
+              <entry></entry>
 
-          <row>
-            <entry>set_location</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
+            </row>
 
-            <entry></entry>
+            <row>
+              <entry>set_location</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry>x</entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry>x</entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
+              <entry></entry>
 
-            <entry></entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+              <entry></entry>
 
-    <para>Notes:</para>
+              <entry></entry>
 
-    <itemizedlist>
-      <listitem>
-        <para><literal>equal</literal> (operator: <literal>==</literal>)
-        implements equality on all types. It is extended for data types using
-        structural equality.</para>
-      </listitem>
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
 
-      <listitem>
-        <para><literal>less</literal> (operator: <literal>&lt;</literal>)
-        implements less-than on all types.</para>
-      </listitem>
+      <para>Notes:</para>
 
-      <listitem>
-        <para>add (+), sub (-), mul(*), div(/) implement these operators for
-        most types. For structured types these operatords exist in three
-        flavours: structured value op struct, structured value op element, and
-        element op structured value.</para>
-      </listitem>
+      <itemizedlist>
+        <listitem>
+          <para><literal>equal</literal> (operator: <literal>==</literal>)
+          implements equality on all types. It is extended for data types
+          using structural equality.</para>
+        </listitem>
 
-      <listitem>
-        <para><literal>size</literal> gives the number of elements of many
-        types.</para>
-      </listitem>
+        <listitem>
+          <para><literal>less</literal> (operator: <literal>&lt;</literal>)
+          implements less-than on all types.</para>
+        </listitem>
 
-      <listitem>
-        <para><literal>get</literal> (corresponds to the indexing notation
-        R[N]) gives the N-th element of a structure.</para>
-      </listitem>
+        <listitem>
+          <para>add (+), sub (-), mul(*), div(/) implement these operators for
+          most types. For structured types these operatords exist in three
+          flavours: structured value op struct, structured value op element,
+          and element op structured value.</para>
+        </listitem>
 
-      <listitem>
-        <para><literal>arb</literal> generates an arbitrary element from a
-        structured value.</para>
-      </listitem>
+        <listitem>
+          <para><literal>size</literal> gives the number of elements of many
+          types.</para>
+        </listitem>
 
-      <listitem>
-        <para><literal>toString</literal> converts all values to a string
-        representation.</para>
-      </listitem>
+        <listitem>
+          <para><literal>get</literal> (corresponds to the indexing notation
+          R[N]) gives the N-th element of a structure.</para>
+        </listitem>
 
-      <listitem>
-        <para><literal>toList</literal>, <literal>toSet</literal>,
-        <literal>toMap</literal>, <literal>toRel</literal> provide conversions
-        between structured types. They may be implemented as just a type
-        conversion (and not a data conversion).</para>
-      </listitem>
+        <listitem>
+          <para><literal>arb</literal> generates an arbitrary element from a
+          structured value.</para>
+        </listitem>
 
-      <listitem>
-        <para><literal>reverse</literal> reverses the elements of ordered
-        structured types.</para>
-      </listitem>
+        <listitem>
+          <para><literal>toString</literal> converts all values to a string
+          representation.</para>
+        </listitem>
 
-      <listitem>
-        <para><literal>reduce</literal> and <literal>apply</literal> take a
-        function as argument and traverse a structured value.<note>
-            <para>Due to a name class with the type constructor
-            <literal>map</literal>, we use the name <literal>apply</literal>
-            for a function that is ussually called
-            <literal>map</literal>.</para>
-          </note></para>
-      </listitem>
+        <listitem>
+          <para><literal>toList</literal>, <literal>toSet</literal>,
+          <literal>toMap</literal>, <literal>toRel</literal> provide
+          conversions between structured types. They may be implemented as
+          just a type conversion (and not a data conversion).</para>
+        </listitem>
 
-      <listitem>
-        <para><literal>min</literal> and <literal>max</literal> compute the
-        smallest (largest) of two basic values or all elements of structured
-        values.</para>
-      </listitem>
+        <listitem>
+          <para><literal>reverse</literal> reverses the elements of ordered
+          structured types.</para>
+        </listitem>
 
-      <listitem>
-        <para><literal>average</literal> computes the average value of
-        structured values that contain integers or doubles.</para>
-      </listitem>
+        <listitem>
+          <para><literal>reduce</literal> and <literal>apply</literal> take a
+          function as argument and traverse a structured value.<note>
+              <para>Due to a name class with the type constructor
+              <literal>map</literal>, we use the name <literal>apply</literal>
+              for a function that is ussually called
+              <literal>map</literal>.</para>
+            </note></para>
+        </listitem>
 
-      <listitem>
-        <para>get_location and set_location are access functions for values of
-        type <literal>loc</literal>.</para>
-      </listitem>
+        <listitem>
+          <para><literal>min</literal> and <literal>max</literal> compute the
+          smallest (largest) of two basic values or all elements of structured
+          values.</para>
+        </listitem>
 
-      <listitem>
-        <para>For relations</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para><literal>average</literal> computes the average value of
+          structured values that contain integers or doubles.</para>
+        </listitem>
 
-    <table>
-      <title>Additional functions on lists, sets, relations and maps</title>
+        <listitem>
+          <para>get_location and set_location are access functions for values
+          of type <literal>loc</literal>.</para>
+        </listitem>
 
-      <tgroup cols="5">
-        <colspec align="center" />
+        <listitem>
+          <para>For relations</para>
+        </listitem>
+      </itemizedlist>
+    </section>
 
-        <thead>
-          <row>
-            <entry align="center">&#160;</entry>
+    <section>
+      <title>Additional functions on lists sets, maps and relations</title>
 
-            <entry align="center">list</entry>
+      <para>Additional functions on lists, sets maps and relations are listed
+      in the following table.<table>
+          <title>Additional functions on lists, sets, maps and
+          relations</title>
 
-            <entry align="center">set</entry>
+          <tgroup cols="5">
+            <colspec align="center" />
 
-            <entry align="center">map</entry>
+            <thead>
+              <row>
+                <entry align="center">&#160;</entry>
 
-            <entry align="center">rel</entry>
-          </row>
-        </thead>
+                <entry align="center">list</entry>
 
-        <tbody>
-          <row>
-            <entry>first</entry>
+                <entry align="center">set</entry>
 
-            <entry>x</entry>
+                <entry align="center">map</entry>
 
-            <entry></entry>
+                <entry align="center">rel</entry>
+              </row>
+            </thead>
 
-            <entry></entry>
+            <tbody>
+              <row>
+                <entry>first</entry>
 
-            <entry></entry>
-          </row>
+                <entry>x</entry>
 
-          <row>
-            <entry>rest</entry>
+                <entry></entry>
 
-            <entry>x</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry></entry>
+              </row>
 
-            <entry></entry>
+              <row>
+                <entry>rest</entry>
 
-            <entry></entry>
-          </row>
+                <entry>x</entry>
 
-          <row>
-            <entry>makeString</entry>
+                <entry></entry>
 
-            <entry>x</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry></entry>
+              </row>
 
-            <entry></entry>
+              <row>
+                <entry>makeString</entry>
 
-            <entry></entry>
-          </row>
+                <entry>x</entry>
 
-          <row>
-            <entry>id</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry></entry>
 
-            <entry>x</entry>
+                <entry></entry>
+              </row>
 
-            <entry></entry>
+              <row>
+                <entry>id</entry>
 
-            <entry></entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>power</entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry></entry>
 
-            <entry>x</entry>
+                <entry></entry>
+              </row>
 
-            <entry></entry>
+              <row>
+                <entry>power</entry>
 
-            <entry></entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>product</entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry></entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>product</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>compose</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry>x</entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>compose</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>invert</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>invert</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>complement</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>complement</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>domain</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>domain</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>range</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>range</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>carrier</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>carrier</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>domainR</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>domainR</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>rangeR</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>rangeR</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>carrierR</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>carrierR</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>domainX</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>domainX</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>rangeX</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>rangeX</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>carrierX</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry>x</entry>
+              <row>
+                <entry>carrierX</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>top</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry></entry>
+              <row>
+                <entry>top</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>bottom</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry></entry>
+              <row>
+                <entry>bottom</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>reachR</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry></entry>
+              <row>
+                <entry>reachR</entry>
 
-            <entry>x</entry>
-          </row>
+                <entry></entry>
 
-          <row>
-            <entry>reachX</entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry></entry>
 
-            <entry></entry>
+                <entry>x</entry>
+              </row>
 
-            <entry></entry>
+              <row>
+                <entry>reachX</entry>
 
-            <entry>x</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry>x</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>Notes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>These functions are borrowed from the Rscript library.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Other functions</title>
+
+      <para>The remaining functions take care of annotations, input/output and
+      communication with the global database with program facts, the Program
+      Database (PDB).</para>
+    </section>
+
+    <section>
+      <title>Source code</title>
+
+      <para>This is a very first draft of the library. When the structure is
+      stable we will split it in modules.<note>
+          <para>The following code is maintained externally and then copied
+          :-( to this document, so be carefull with changes.</para>
+        </note><programlisting>module RascalStandardLibrary
+
+%% Here is a flat list of library functions that will
+%% structured in to coherent submodules.
+
+%% --- Comparison operators ----------------------------------
+%% Each type defines equal and less. The following
+%% functions extend them.
+
+%% Operator &lt;=
+public fun bool less_equal(&amp;T A, &amp;T B){ 
+  return less(A, B) or equal(A, B);
+}
+
+%% Operator &gt;
+public fun bool greater(&amp;T A, &amp;T B){
+  return less(B, A) and not equal(A, B);
+}
+
+%% Operator &gt;=
+public fun bool greater_equal(&amp;T A, &amp;T B){
+  return less(B, A);
+}
+
+public fun &amp;T min(&amp;T A, &amp;T B){
+  if(less(A, B))
+    return A
+  else
+    return B;
+}
+
+public fun &amp;T max(&amp;T A, &amp;T B){
+  if(less(A, B))
+    return B
+  else
+    return A;
+}
+
+%% --- Boolean (bool) ----------------------------------------
+
+public fun bool equal(bool B1, bool B2)
+  throw unimplemented("equal of bool")
+
+public fun bool less(bool B1, bool B2)
+  throw unimplemented("less of bool")
+
+public fun bool add(bool B1, bool B2)
+  throw unimplemented("add on bool")
+
+public fun bool sub(bool B1, bool B2)
+  throw unimplemented("sub on bool")
+
+public fun bool mul(bool B1, bool B2)
+  throw unimplemented("mul on bool")
+
+public fun bool div(bool B1, bool B2)
+  throw unimplemented("div on bool")
+
+%% Arbitrary boolean: arb
+public fun int arb(){
+  throw unimplemented("bool arb");
+}
+
+public fun str toString(bool B)
+  throw unimplemented("bool toString");
+
+%% --- Integer (int)------------------------------------------
+
+public fun bool equal(int I1, int I2)
+  throw unimplemented("equal of int")
+
+public fun bool less(int I1, int I2)
+  throw unimplemented("less of int")
+
+public fun int add(int I1, int I2)
+  throw unimplemented("add on int")
+
+public fun int sub(int I1, int I2)
+  throw unimplemented("sub on int")
+
+public fun int mul(int I1, int I2)
+  throw unimplemented("mul on int")
+
+
+%% Arbitrary integer: arb
+public fun int arb(int bgn, int end){
+  throw unimplemented("int arb");
+  if(end - bgn &lt;= 0)
+     throw illegal_argument("int arb");
+}
+
+public fun str toString(int I)
+  throw unimplemented("int toString");
+
+%% --- Double (double) ---------------------------------------
+
+public fun bool equal(double D1, double D2)
+  throw unimplemented("equal of double")
+
+public fun bool less(double D1, double D2)
+  throw unimplemented("less of double")
+
+public fun double add(double D1, double D2)
+  throw unimplemented("add on double")
+
+public fun double sub(double D1, double D2)
+  throw unimplemented("sub on double")
+
+public fun double mul(double D1, double D2)
+  throw unimplemented("mul on double")
+
+public fun double div(double D1, double D2)
+  throw unimplemented("div on double")
+
+%% Arbitrary double: arb
+public fun double arb(double bgn, double end){
+  throw unimplemented("double arb");
+  if(end - bgn &lt;= 0)
+     throw illegal_argument("double arb");
+}
+
+public fun str toString(double D)
+  throw unimplemented("double toString");
+
+%% --- Strings (str) -----------------------------------------
+
+public fun bool equal(str S1, str S2)
+  throw unimplemented("equal of string")
+
+public fun bool less(str S1, str S2)
+  throw unimplemented("less of string")
+
+public fun str add(str S1, str S2)
+  throw unimplemented("add on str")
+
+public fun int size(str S)
+  throw unimplemented("size of string")
+
+public fun int get(str S, int N)
+  throw unimplemented("get of string")
+
+public fun list[int] toList(str S){
+  list[int] result = [];
+  for(int E : S){
+    result += E
+  };
+  return result;
+}
+
+public fun set[int] toSet(str S){
+  set[int] result = {};
+  for(int E : S){
+    result += E
+  };
+  return result;
+}
+
+public fun str reverse(str S)
+  throw unimplemented("reverse of string")
+
+%% Add functions for other methods of Java's String class
+
+%% --- Locations ---------------------------------------------
+
+%% The location datatype
+data location location(str filename,
+                       int beginline,
+                       int endline,
+                       int begincol,
+                       int endcol,
+                       int offset,
+                       int length);
+
+public fun bool equal(loc L1, loc L2)
+  throw unimplemented("equal loc")
+
+public fun bool less(loc L1, loc L2)
+  throw unimplemented("less loc")
+
+public fun str toString(loc L)
+  throw unimplemented("loc toString");
+
+public fun loc get_location(&amp;T Subject)
+  throw unimplemented("get_location")
+
+public fun &amp;T set_location(&amp;T Subject, loc L)
+  throw unimplemented("set_location")
+
+%% --- Lists -------------------------------------------------
+
+public fun bool equal(list[&amp;T] L1, list[&amp;T] L2){
+  throw unimplemented("equal on list")
+}
+
+public fun bool less(list[&amp;T] L1, list[&amp;T] L2){
+  throw unimplemented("less on list")
+}
+
+public fun list[&amp;T] add(list[&amp;T] L1, list[&amp;T] L2)
+  throw unimplemented("add on list")
+
+public fun list[&amp;T] add(list[&amp;T] L, &amp;T E)
+  return L + [E];
+
+public fun list[&amp;T] add(&amp;T E, list[&amp;T] L)
+  return [E] + L;
+
+%% Size of list: size
+public fun int size(list[&amp;T] L){
+  int N = 0;
+  for(&amp;T E : L)
+    N += 1;
+  return N;
+}
+
+%% Get list element: get
+public fun &amp;T get(list[&amp;T] L, int N){
+  return L[N];
+}
+
+%% Arbitrary element of list: arb
+public fun &amp;T arb(list[&amp;T] L) {
+  int N = arb(0, size(L));
+  return L[N];
+}
+
+public fun str toString(list[&amp;T] L)
+  throw unimplemented("list toString");
+
+public fun str makeString(list[int] L)
+  throw unimplemented("toString on list[int]")
+
+public fun set[&amp;T] toSet(list[&amp;T] L){
+  set[&amp;T] result = {};
+  for(&amp;T E : L){
+    result += E
+  };
+  return result;
+}
+
+public fun map[&amp;T, &amp;U] toMap(list[tuple[&amp;T, &amp;U]] L){
+  map[&amp;T, &amp;U] result = {};
+  for(tuple[&amp;T, &amp;U] Tup : L)
+    result += Tup;
+  return result
+}
+
+public fun rel[&amp;T] toRel(list[&amp;T] L){
+  rel[&amp;T] result = {};
+  for(&amp;T Tup : L)
+    result += Tup;
+  return result
+}
+
+public fun list[&amp;T] reverse(list[&amp;T] L){
+  list[&amp;T] result = [];
+  for(&amp;T E : L)
+    result = [E] + result;
+  return result;
+}
+
+public fun &amp;T reduce(list[&amp;T] L, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
+  &amp;T result = unit;
+  for(&amp;T E : L){
+    result = F(result, E)
+  };
+  return result
+}
+
+public fun list[&amp;T] apply(list[&amp;T] L, fun &amp;T F (&amp;T,&amp;T))
+  return [F(E) | &amp;T E : L];
+
+%% Minimum element of a list: min
+public fun &amp;T min(list[&amp;T] L){
+  &amp;T result = arb(L);
+  for(&amp;T E : L)
+   if(less(E, result))
+      result = min(result, E);
+  return result
+}
+
+%% Maximum element of a list: max
+public fun &amp;T max(list[&amp;T] L){
+  &amp;T result = arb(L);
+  for(&amp;T E : L)
+   if(less(result, E))
+      result = max(result, E);
+  return result
+}
+
+%% Add elements of a List: sum
+public fun &amp;T sum(list[&amp;T] L, &amp;T zero){
+  return reduce(L, add, zero);
+}
+
+%% Multiply elements of a list: multiply
+public fun &amp;T multiply(set[&amp;T] R, &amp;T one){
+  return reduce(L, mul, zero);
+}
+
+%% Average of elements of a list: average
+public fun &amp;T prod(list[&amp;T] L, &amp;T zero)
+  return sum(L, zero)/size(L)
+
+%% First element of list; first
+public fun &amp;T first(list[&amp;T] L)
+  return L[1];
+
+%% Remaining elements of list: rest
+public fun &amp;T rest(list[&amp;T] L)
+  throw unimplemented("rest list");
+
+%% --- Tuples ------------------------------------------------
+
+public fun bool equal(tuple[&amp;T] R, tuple[&amp;T] S)
+  throw unimplemented("equal tuple");
+
+%% less
+public fun bool less(tuple[&amp;T] R, tuple[&amp;T] S)
+  throw unimplemented("less tuple");
+
+%% Note the use of + on types to concatenate the types
+%% of tuple elements
+
+public fun tuple[&amp;T + &amp;U] add(tuple[&amp;T] R, tuple[&amp;U] S){
+  throw unimplemented("add tuple");
+}
+
+public fun tuple[&amp;T + &amp;U] add(tuple[&amp;T] R, &amp;U E){
+  return R + &lt;E&gt;;
+}
+
+public fun tuple[&amp;T + &amp;U] add(&amp;T E, tuple[&amp;U] R){
+  return &lt;E&gt; + R;
+}
+
+public fun int size(tuple[&amp;T] R)
+  throw unimplemented("size tuple");
+
+public fun value get(tuple[&amp;T] R, int N)
+  return R[N];
+
+public fun str toString(tuple[&amp;T] R)
+  throw unimplemented("tuple toString");
+
+%% --- Sets  -------------------------------------------------
+
+%% equal
+
+public fun bool equal(set[&amp;T] R, set[&amp;T] S)
+  throw unimplemented("equal set");
+
+%% less
+public fun bool less(set[&amp;T] R, set[&amp;T] S)
+  throw unimplemented("less set");
+
+%% Add two sets (set union): add (operator +)
+public fun set[&amp;T] add(set[&amp;T] R, set[&amp;T] S){
+  throw unimplemented("add set");
+}
+
+public fun set[&amp;T] add(set[&amp;T] S, &amp;T E){
+ return S + {E};
+}
+
+public fun set[&amp;T] add(&amp;T E, set[&amp;T] S){
+ return {E} + S;
+}
+
+%% Substract two sets (set difference): sub (operator -)
+public fun set[&amp;T] sub(set[&amp;T] R, set[&amp;T] S){
+   throw unimplemented("sub set");
+}
+
+public fun set[&amp;T] sub(set[&amp;T] S, &amp;T E){
+   return S - {E};
+}
+
+public fun set[&amp;T] sub(&amp;T E, set[&amp;T] S){
+   return {E} - S;
+}
+
+%% Multiply two sets (set intersection): mul (operator *)
+public fun set[&amp;T] mul(set[&amp;T] R, set[&amp;T] S){
+   throw unimplemented("mul set");
+}
+
+public fun set[&amp;T] mul(set[&amp;T] S, &amp;T E){
+  return S * {E};
+}
+
+public fun set[&amp;T] mul(&amp;T E, set[&amp;T] S){
+  return {E} * S;
+}
+
+%% Size of set: size
+public fun int size(set[&amp;T] R){
+  int N = 0;
+  for(&amp;T E : R)
+    N += 1;
+  return N;
+}
+
+%% Arbitrary element of set: arb
+public fun &amp;T arb(set[&amp;T] S) {
+  int N = arb(0, size(S));
+  return S[N];
+}
+
+public fun str toString(set[&amp;T] R)
+  throw unimplemented("set toString");
+
+public fun list[&amp;T] toList(set[&amp;T] S){
+  list[&amp;T] result = [];
+  for(&amp;T E : S){
+    result += E
+  };
+  return result;
+}
+
+public fun map[&amp;T, &amp;U] toMap(set[tuple[&amp;T, &amp;U]] S){
+  map[&amp;T, &amp;U] result = {};
+  for(tuple[&amp;T, &amp;U] Tup : S)
+    result += Tup;
+  return result
+}
+
+public fun rel[&amp;T] toRel(set[&amp;T] S){
+  rel[&amp;T] result = {};
+  for(&amp;T E : S){
+    result += E
+  };
+  return result;
+}
+
+public fun &amp;T reduce(set[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
+  &amp;T result = unit;
+  for(&amp;T E : S){
+    result = F(result, E)
+  };
+  return result
+}
+
+public fun set[&amp;T] apply(set[&amp;T] S, fun &amp;T F (&amp;T,&amp;T))
+  return {F(E) | &amp;T E : S};
+
+%% Minimum of a set: min
+public fun &amp;T min(set[&amp;T] S){
+  &amp;T result = arb(S);
+  for(&amp;T E : S)
+    result = min(result, E);
+  return result
+}
+
+%% Maximum of a set: max
+public fun &amp;T max(set[&amp;T] R){
+  &amp;T result = arb(R);
+  for(&amp;T E : R)
+    result = max(result, E);
+  return result
+}
+
+%% Sum elements of a Set: sum
+public fun &amp;T sum(set[&amp;T] S, &amp;T zero){
+  return reduce(S, add, zero);
+}
+
+%% Multiply elements of a Set: multiply
+public fun &amp;T multiply(set[&amp;T] S, &amp;T one){
+  return reduce(S, mul, zero);
+}
+
+%% Average of elements of a set; average
+public fun &amp;T average(set[&amp;T] S, &amp;T zero)
+  return add(S, zero)/size(R)
+
+%% Powerset: power0
+public fun set[set[&amp;T]] power0(set[&amp;T] R)
+ throw unimplemented("power0")
+
+%% Powerset: power1
+public fun set[set[&amp;T]] power1(set[&amp;T] R)
+  throw unimplemented("power0")
+
+%% --- Maps --------------------------------------------------
+
+public fun bool equal(map[&amp;T, &amp;U] M1, map[&amp;T, &amp;U] M2){
+  throw unimplemented("equal map")
+} 
+
+public fun bool less(map[&amp;T, &amp;U] M1, map[&amp;T, &amp;U] M2){
+  throw unimplemented("less map")
+} 
+
+public fun map[&amp;T] add(map[&amp;T] R, map[&amp;T] S){
+  throw unimplemented("add map");
+}
+
+public fun map[&amp;T] add(map[&amp;T] S, &amp;T E){
+ return S + {E};
+}
+
+public fun map[&amp;T] add(&amp;T E, map[&amp;T] S){
+ return {E} + S;
+}
+
+%% Substract two maps (set difference): sub (operator -)
+public fun map[&amp;T] sub(map[&amp;T] R, map[&amp;T] S){
+   throw unimplemented("sub map");
+}
+
+public fun map[&amp;T] sub(map[&amp;T] S, &amp;T E){
+   return S - {E};
+}
+
+public fun map[&amp;T] sub(&amp;T E, map[&amp;T] S){
+   return {E} - S;
+}
+
+%% Multiply two maps (set intersection): mul (operator *)
+public fun map[&amp;T] mul(map[&amp;T] R, map[&amp;T] S){
+   throw unimplemented("mul map");
+}
+
+public fun map[&amp;T] mul(map[&amp;T] S, &amp;T E){
+  return S * {E};
+}
+
+public fun map[&amp;T] mul(&amp;T E, map[&amp;T] S){
+  return {E} * S;
+}
+
+public fun int size(map[&amp;T] M)
+  return size(toList(M));
+
+public fun &amp;T arb(map[&amp;T] M)
+  return(arb(toList(M)));
+
+public fun str toString(map[&amp;T] R)
+  throw unimplemented("map toString");
+
+public fun list[tuple[&amp;T, &amp;U]] toList(map[&amp;T, &amp;U] M){
+  list[tuple[&amp;T, &amp;U]] result = [];
+  for(tuple[&amp;T, &amp;U] Tup : M)
+    result += Tup;
+  return result
+}
+
+public fun rel[tuple[&amp;T, &amp;U]] toSet(map[&amp;T, &amp;U] M){
+  set[tuple[&amp;T, &amp;U]] result = {};
+  for(tuple[&amp;T, &amp;U] Tup : M)
+    result += Tup;
+  return result
+}
+
+public fun rel[tuple[&amp;T, &amp;U]] toRel(map[&amp;T, &amp;U] M){
+  rel[tuple[&amp;T, &amp;U]] result = {};
+  for(&amp;T Tup : R)
+    result += Tup;
+  return result
+}
+
+%% Is this meaningfull?
+public fun &amp;T reduce(map[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
+  &amp;T result = unit;
+  for(&amp;T E : S){
+    result = F(result, E)
+  };
+  return result
+}
+
+public fun map[&amp;T] apply(map[&amp;T] M, fun &amp;T F (&amp;T,&amp;T))
+  return {F(E) | &amp;T E : M};
+
+%% --- Relations ---------------------------------------------
+
+public fun bool equal(rel[&amp;T] R, rel[&amp;T] S)
+  throw unimplemented("equal rel");
+
+public fun bool less(rel[&amp;T] R, rel[&amp;T] S)
+  throw unimplemented("less rel");
+
+%% Add two relations (union): add (operator +)
+public fun rel[&amp;T] add(rel[&amp;T] R1, rel[&amp;T] R2){
+  return toRel(toSet(R1) + toSet(R2))
+}
+
+public fun rel[&amp;T] add(&amp;T E, rel[&amp;T] R){
+  return toRel(E + toSet(R))
+}
+
+public fun rel[&amp;T] add(rel[&amp;T] R, &amp;T E){
+  return toRel(toSet(R) + E)
+}
+
+%% Substract two relations (difference): sub (operator -)
+public fun rel[&amp;T] sub(rel[&amp;T] R1, rel[&amp;T] R2){
+  return toRel(toSet(R1) - toSet(R2))
+}
+
+%% Multiply two relations (intersection): mul (operator *)
+public fun rel[&amp;T] mul(rel[&amp;T] R1, rel[&amp;T] R1){
+  return toRel(toSet(R1) * toSet(R2))
+}
+
+%% Size of relation: size
+public fun int size(rel[&amp;T] R){
+  return size(toSet(R))
+}
+
+public fun &amp;T arb(rel[&amp;T] R)
+  return arb(toList(R));
+
+public fun str toString(rel[&amp;T] R)
+  throw unimplemented("rel toString");
+
+%% Note: in rel[&amp;T], the type variable &amp;T refers 
+%% to the tuple type of the relation.
+
+public fun list[&amp;T] toList(rel[&amp;T] R){
+  list[&amp;T] result = [];
+  for(&amp;T Tup : R)
+    result += Tup;
+  return result
+}
+
+public fun set[&amp;T] toSet(rel[&amp;T] R){
+  set[&amp;T] result = {};
+  for(&amp;T Tup : R)
+    result += Tup;
+  return result
+}
+
+public fun rel[&amp;T] toRel(set[&amp;T] S){
+  rel[&amp;T] result = {};
+  for(&amp;T Tup : R)
+    result += Tup;
+  return result
+}
+
+public fun rel[&amp;T] apply(rel[&amp;T] R, fun &amp;T F (&amp;T,&amp;T))
+  return {F(E) | &amp;T E : R};
+
+%% Carthesian product of two sets: product (was: x)
+public fun rel[&amp;T1, &amp;T2] product(rel[&amp;T1] R, rel[&amp;T2] S)
+  return {&lt;X, Y&gt; | &amp;T1 X : R, &amp;T2 Y : S}
+
+%% Compose two relations: compose (was: o)
+public fun rel[&amp;T1, &amp;T3] compose(rel[&amp;T1, &amp;T2] R,
+                                 rel[&amp;T2, &amp;T3] S)
+   return {&lt;X, Z&gt; | tuple[&amp;T1 X, &amp;T2 Y1]: R, 
+                    tuple[&amp;T2 Y2, &amp;T3 Z]: S, Y1 == Y2}
+
+%% Identity relation: id
+public fun rel[&amp;T, &amp;T] id(set[&amp;T] S)
+  return { &lt;X, X&gt; | &amp;T X : S}
+
+%% Inverse relation: invert (was: inv)
+public fun rel[&amp;T2, &amp;T1] invert (rel[&amp;T1, &amp;T2] R)
+  return { &lt;Y, X&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R }
+
+%% Complement of relation: complement (was: compl)
+public fun rel[&amp;T1, &amp;T2] complement(rel[&amp;T1, &amp;T2] R)
+  return product(domain(R), range(R)) - R
+
+%% Domain of relation: domain
+public fun set[&amp;T1] domain (rel[&amp;T1,&amp;T2] R)
+  return { X | tuple[&amp;T1 X, &amp;T2 Y] : R }
+
+%% Range of relation: range
+public fun set[&amp;T1] range (rel[&amp;T1,&amp;T2] R)
+  return { Y | tuple[&amp;T1 X, &amp;T2 Y] : R }
+
+%% Carrier of relation: carrier
+public fun set[&amp;T]  carrier (rel[&amp;T,&amp;T] R) 
+  return domain(R) + range(R)
+
+%% Domain Restriction of a Relation: domainR
+public fun rel[&amp;T1,&amp;T2] domainR (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S)
+  return { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, X in S }
+
+%% Range Restriction of a Relation: rangeR
+public fun rel[&amp;T1,&amp;T2] rangeR (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S)
+  return { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, Y in S }
+
+%% Carrier Restriction of a Relation: carrierR
+public fun rel[&amp;T,&amp;T] carrierR (rel[&amp;T,&amp;T] R, set[&amp;T] S)
+  return { &lt;X, Y&gt; | tuple[&amp;T X, &amp;T Y] : R, X in S, Y in S }
+
+%% Domain Exclusion of a Relation: domainX
+public fun rel[&amp;T1,&amp;T2] domainX (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S)
+  return { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, X notin S }
+
+%% Range Exclusion of a Relation: rangeX
+public fun rel[&amp;T1,&amp;T2] rangeX (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S)
+   { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, Y notin S }
+
+%% Carrier Exclusion of a Relation: carrierX
+public fun rel[&amp;T,&amp;T] carrierX (rel[&amp;T,&amp;T] R, set[&amp;T] S)
+  return { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, 
+                    X notin S, Y notin S }
+
+%% Relations viewed as graphs
+
+%% Top of a Relation: top
+public fun set[&amp;T] top(rel[&amp;T, &amp;T] R)
+  return domain(R) - range(R)
+
+%% Bottom of a Relation: bottom
+public fun set[&amp;T] bottom(rel[&amp;T,&amp;T] R)
+  return range(R) - domain(R)
+
+%% Reachability with Restriction: reachR
+public fun set[&amp;T] reachR(set[&amp;T] Start, set[&amp;T] Restr,
+                          rel[&amp;T,&amp;T] Rel)
+  return range(compose(domainR(Rel, Start), 
+                       carrierR(Rel, Restr)+))
+
+%% Reachability with Exclusion: reachX
+public fun set[&amp;T] reachX(set[&amp;T] Start, set[&amp;T] Excl, 
+                          rel[&amp;T,&amp;T] Rel)
+  return range(compose(domainR(Rel, Start), 
+                       carrierX(Rel, Excl)+))
+
+%% --- Annotations -------------------------------------------
+
+%% Test whether a named annotation exists.
+public fun bool has_annotation(&amp;T Subject)
+   throw unimplemented("has_annotation");
+
+%% Get the value of a named annotation
+public fun value get_annotation(&amp;T Subject, str Name){
+  if(not has_annotation(Subject))
+    throw argument_error("get_annotation", Subject);
+  throw unimplemented("get_annotation");
+}
+
+%% Get all annotations
+public fun map[str,value] get_annotations(&amp;T Subject)
+  throw unimplemented("get_annotations");
+
+%% Set the value of a named annotation
+public fun &amp;T set_annotation(&amp;T Subject, 
+                             str Name, value AValue)
+  throw unimplemented("set_annotation");
+
+%% Set all annotations
+public fun &amp;T set_annotations(&amp;T Subject, 
+                              map[str, value] Annos)
+  throw unimplemented("set_annotation");
+
+%% --- Parsing/Unparsing -------------------------------------
+
+public fun &amp;T parseFile(str filename){
+  throw unimplemented("parseFile");
+  throw file_error;
+  throw syntax_error;
+}
+
+public fun &amp;T parseString(str source){
+  throw unimplemented("parseString");
+  throw file_error;
+  throw syntax_error;
+}
+
+public fun str unparseToString(&amp;T Subject){
+  throw unimplemented("unparseToString");
+}
+
+public fun str unparseToFile(&amp;T Subject, str filename){
+  throw unimplemented("unparseToFile");
+}
+
+%% --- io ----------------------------------------------------
+
+public fun str readFile(str filename){
+  throw unimplemented("read");
+  throw file_error;
+}
+
+public fun &amp;T readTerm(str filename){
+  throw unimplemented("readTerm");
+  throw file_error;
+}
+
+public fun void write(str filename, &amp;T Subject){
+  throw unimplemented("write");
+  throw file_error;
+}
+
+%% --- Interface with the Program Database -------------------
+%% The following function provide a bare minimum and will
+%% have to compared with the current PDB interface.
+%% We assume one active PDB that can be opened and closed.
+%% Values can be written to and read from the PDB.
+
+%% Idea: it would be nice to model the PDB as a value
+%% of type map[str, value] and to access it that way!
+
+public fun void openPDB(str name)
+  throw unimplemented("openPDB");
+%% may throw cannot_open("PDB " + name)
+
+public fun void closePDB()
+  throw unimplemented("closePDB");
+%% may throw cannot_close("PDB")
+
+public fun void writePDB(str name, &amp;T val)
+  throw unimplemented("writePDB");
+%% may throw cannot_write("PDB " + name)
+
+public fun &amp;T readPDB(str name)
+  throw unimplemented("readPDB");
+%% may throw cannot_read("PDB " + name)
+
+%% If name is of type set[&amp;T], then the set incr
+%% is added to it. Similar for a rel[&amp;T]
+
+public fun void addSetPDB(str name, set[&amp;T] incr)
+  throw unimplemented("addSetPDB");
+
+public fun void addRelPDB(str name, rel[&amp;T] incr)
+ throw unimplemented("addRelPDB");
+
+
+
+
+</programlisting></para>
+    </section>
   </section>
 
   <section>
@@ -4213,15 +5150,6 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
       <listitem>
         <para>Ditto for set comprehensions.</para>
-      </listitem>
-
-      <listitem>
-        <para>Some clean up of Rscript notation (operators "o" and "x" should
-        go).</para>
-      </listitem>
-
-      <listitem>
-        <para>We need an io-library.</para>
       </listitem>
 
       <listitem>

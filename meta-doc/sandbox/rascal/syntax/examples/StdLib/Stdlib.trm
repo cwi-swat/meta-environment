@@ -3,7 +3,7 @@ module RascalStandardLibrary
 %% Here is a flat list of library functions that will
 %% structured in to coherent submodules.
 
-%% --- Comparison operators ----------------------
+%% --- Comparison operators ----------------------------------
 %% Each type defines equal and less. The following
 %% functions extend them.
 
@@ -36,7 +36,7 @@ public fun &T max(&T A, &T B){
     return A;
 }
 
-%% --- Boolean (bool) ----------------------------------
+%% --- Boolean (bool) ----------------------------------------
 
 public fun bool equal(bool B1, bool B2)
   throw unimplemented("equal of bool")
@@ -64,7 +64,7 @@ public fun int arb(){
 public fun str toString(bool B)
   throw unimplemented("bool toString");
 
-%% --- Integer (int)------------------------------------
+%% --- Integer (int)------------------------------------------
 
 public fun bool equal(int I1, int I2)
   throw unimplemented("equal of int")
@@ -92,7 +92,7 @@ public fun int arb(int bgn, int end){
 public fun str toString(int I)
   throw unimplemented("int toString");
 
-%% --- Double (double) -------------------------------------
+%% --- Double (double) ---------------------------------------
 
 public fun bool equal(double D1, double D2)
   throw unimplemented("equal of double")
@@ -122,7 +122,7 @@ public fun double arb(double bgn, double end){
 public fun str toString(double D)
   throw unimplemented("double toString");
 
-%% --- Strings (str) ------------------------------------
+%% --- Strings (str) -----------------------------------------
 
 public fun bool equal(str S1, str S2)
   throw unimplemented("equal of string")
@@ -160,7 +160,7 @@ public fun str reverse(str S)
 
 %% Add functions for other methods of Java's String class
 
-%% --- Locations ---------------------------------
+%% --- Locations ---------------------------------------------
 
 %% The location datatype
 data location location(str filename,
@@ -186,7 +186,7 @@ public fun loc get_location(&T Subject)
 public fun &T set_location(&T Subject, loc L)
   throw unimplemented("set_location")
 
-%% --- Lists ---------------------------------------
+%% --- Lists -------------------------------------------------
 
 public fun bool equal(list[&T] L1, list[&T] L2){
   throw unimplemented("equal on list")
@@ -310,7 +310,7 @@ public fun &T first(list[&T] L)
 public fun &T rest(list[&T] L)
   throw unimplemented("rest list");
 
-%% --- Tuples --------------------------------------
+%% --- Tuples ------------------------------------------------
 
 public fun bool equal(tuple[&T] R, tuple[&T] S)
   throw unimplemented("equal tuple");
@@ -343,7 +343,7 @@ public fun value get(tuple[&T] R, int N)
 public fun str toString(tuple[&T] R)
   throw unimplemented("tuple toString");
 
-%% --- Sets  ---------------------------------------
+%% --- Sets  -------------------------------------------------
 
 %% equal
 
@@ -482,7 +482,7 @@ public fun set[set[&T]] power0(set[&T] R)
 public fun set[set[&T]] power1(set[&T] R)
   throw unimplemented("power0")
 
-%% --- Maps
+%% --- Maps --------------------------------------------------
 
 public fun bool equal(map[&T, &U] M1, map[&T, &U] M2){
   throw unimplemented("equal map")
@@ -572,7 +572,7 @@ public fun &T reduce(map[&T] S, fun &T F (&T,&T), &T unit){
 public fun map[&T] apply(map[&T] M, fun &T F (&T,&T))
   return {F(E) | &T E : M};
 
-%% --- Relations
+%% --- Relations ---------------------------------------------
 
 public fun bool equal(rel[&T] R, rel[&T] S)
   throw unimplemented("equal rel");
@@ -614,7 +614,8 @@ public fun &T arb(rel[&T] R)
 public fun str toString(rel[&T] R)
   throw unimplemented("rel toString");
 
-%% Note: in rel[&T], the type variable &T refers to the tuple type of the relation.
+%% Note: in rel[&T], the type variable &T refers 
+%% to the tuple type of the relation.
 
 public fun list[&T] toList(rel[&T] R){
   list[&T] result = [];
@@ -645,8 +646,10 @@ public fun rel[&T1, &T2] product(rel[&T1] R, rel[&T2] S)
   return {<X, Y> | &T1 X : R, &T2 Y : S}
 
 %% Compose two relations: compose (was: o)
-public fun rel[&T1, &T3] compose(rel[&T1, &T2] R, rel[&T2, &T3] S)
-   return {<X, Z> | tuple[&T1 X, &T2 Y1]: R, tuple[&T2 Y2, &T3 Z]: S, Y1 == Y2}
+public fun rel[&T1, &T3] compose(rel[&T1, &T2] R,
+                                 rel[&T2, &T3] S)
+   return {<X, Z> | tuple[&T1 X, &T2 Y1]: R, 
+                    tuple[&T2 Y2, &T3 Z]: S, Y1 == Y2}
 
 %% Identity relation: id
 public fun rel[&T, &T] id(set[&T] S)
@@ -694,7 +697,8 @@ public fun rel[&T1,&T2] rangeX (rel[&T1,&T2] R, set[&T2] S)
 
 %% Carrier Exclusion of a Relation: carrierX
 public fun rel[&T,&T] carrierX (rel[&T,&T] R, set[&T] S)
-  return { <X, Y> | tuple[&T1 X, &T2 Y] : R, X notin S, Y notin S }
+  return { <X, Y> | tuple[&T1 X, &T2 Y] : R, 
+                    X notin S, Y notin S }
 
 %% Relations viewed as graphs
 
@@ -707,14 +711,18 @@ public fun set[&T] bottom(rel[&T,&T] R)
   return range(R) - domain(R)
 
 %% Reachability with Restriction: reachR
-public fun set[&T] reachR( set[&T] Start, set[&T] Restr, rel[&T,&T] Rel)
-  return range(compose(domainR(Rel, Start), carrierR(Rel, Restr)+))
+public fun set[&T] reachR(set[&T] Start, set[&T] Restr,
+                          rel[&T,&T] Rel)
+  return range(compose(domainR(Rel, Start), 
+                       carrierR(Rel, Restr)+))
 
 %% Reachability with Exclusion: reachX
-public fun set[&T] reachX( set[&T] Start, set[&T] Excl, rel[&T,&T] Rel)
-  return range(compose(domainR(Rel, Start), carrierX(Rel, Excl)+))
+public fun set[&T] reachX(set[&T] Start, set[&T] Excl, 
+                          rel[&T,&T] Rel)
+  return range(compose(domainR(Rel, Start), 
+                       carrierX(Rel, Excl)+))
 
-%% --- Annotations --------------------------------
+%% --- Annotations -------------------------------------------
 
 %% Test whether a named annotation exists.
 public fun bool has_annotation(&T Subject)
@@ -732,14 +740,16 @@ public fun map[str,value] get_annotations(&T Subject)
   throw unimplemented("get_annotations");
 
 %% Set the value of a named annotation
-public fun &T set_annotation(&T Subject, str Name, value AValue)
+public fun &T set_annotation(&T Subject, 
+                             str Name, value AValue)
   throw unimplemented("set_annotation");
 
 %% Set all annotations
-public fun &T set_annotations(&T Subject, map[str, value] Annos)
+public fun &T set_annotations(&T Subject, 
+                              map[str, value] Annos)
   throw unimplemented("set_annotation");
 
-%% --- Parsing/Unparsing --------------------------
+%% --- Parsing/Unparsing -------------------------------------
 
 public fun &T parseFile(str filename){
   throw unimplemented("parseFile");
@@ -761,7 +771,7 @@ public fun str unparseToFile(&T Subject, str filename){
   throw unimplemented("unparseToFile");
 }
 
-%% --- io ------------------------------------------
+%% --- io ----------------------------------------------------
 
 public fun str readFile(str filename){
   throw unimplemented("read");
@@ -777,6 +787,41 @@ public fun void write(str filename, &T Subject){
   throw unimplemented("write");
   throw file_error;
 }
+
+%% --- Interface with the Program Database -------------------
+%% The following function provide a bare minimum and will
+%% have to compared with the current PDB interface.
+%% We assume one active PDB that can be opened and closed.
+%% Values can be written to and read from the PDB.
+
+%% Idea: it would be nice to model the PDB as a value
+%% of type map[str, value] and to access it that way!
+
+public fun void openPDB(str name)
+  throw unimplemented("openPDB");
+%% may throw cannot_open("PDB " + name)
+
+public fun void closePDB()
+  throw unimplemented("closePDB");
+%% may throw cannot_close("PDB")
+
+public fun void writePDB(str name, &T val)
+  throw unimplemented("writePDB");
+%% may throw cannot_write("PDB " + name)
+
+public fun &T readPDB(str name)
+  throw unimplemented("readPDB");
+%% may throw cannot_read("PDB " + name)
+
+%% If name is of type set[&T], then the set incr
+%% is added to it. Similar for a rel[&T]
+
+public fun void addSetPDB(str name, set[&T] incr)
+  throw unimplemented("addSetPDB");
+
+public fun void addRelPDB(str name, rel[&T] incr)
+ throw unimplemented("addRelPDB");
+
 
 
 

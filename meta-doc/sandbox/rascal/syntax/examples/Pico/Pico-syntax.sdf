@@ -1,4 +1,4 @@
-module Pico-syntax
+module examples/Pico/Pico-syntax
 
 imports languages/pico/syntax/Pico 
 

@@ -1,4 +1,4 @@
-module BTree-syntax
+module examples/BTree/BTree-syntax
 imports basic/Integers
 
 exports 

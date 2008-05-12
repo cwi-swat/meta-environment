@@ -43,6 +43,7 @@ context-free syntax
 	Callable "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
          Callable "[" Expression  "]"                            -> Call {cons("index-call")}
          Call                                                    -> Expression
+         Call "." Name                                           -> Expression
 
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}
@@ -95,9 +96,9 @@ context-free syntax
 %% Generators
          Type Name                                               -> Declarator
          StructuredType                                          -> Declarator
-         AbstractType                                            -> Declarator
-         QuotedSynPattern                                        -> Declarator
-         Name "~=" RegPattern                                    -> Declarator
+         "@" AbstractType                                        -> Declarator
+         SynPattern                                              -> Declarator
+         (Name "~=")? RegPattern                                 -> Declarator
 
          ("top-down" | "top-down-break" | 
           "bottom-up" | "bottom-up-break" |
@@ -117,14 +118,16 @@ context-free syntax
 context-free syntax
 %% Rules, Switch, visit and solve
          QuotedSynPattern                                        -> Expression
-         "@" AbsPattern                                          -> Expression
 
          "=>" Expression                                         -> CaseAction
          ":" Statement                                           -> CaseAction
 
-         "case"  SynPattern CaseAction                           -> Case       {cons("case")}
+         "case"  SynPattern "=>" SynPattern                      -> Case       {cons("case1")}
+         "case" SynPattern ":" Statement                         -> Case       {cons("case2")}
          "acase" AbsPattern CaseAction                           -> Case       {cons("acase")}
-         "rcase" Name "~=" RegPattern CaseAction                 -> Case       {cons("rcase")}
+         "rcase" (Name "~=")? RegPattern CaseAction              -> Case       {cons("rcase")}
+
+          AbsPattern CaseAction                                  -> Rule       {cons("rule")}
 
          "default" ":" Statement                                 -> Case       {cond("default-case")}
 
@@ -145,9 +148,9 @@ context-free syntax
          Assignment                                              -> Statement
 
          Declarator  "=" Expression                              -> Statement  {cons("varinit")}
-         "global" Type Name ("=" Expression)?                    -> Statement  {cons("global")}
+         "global" Type Name "=" Expression                       -> Statement  {cons("global")}
          "return" Expression?                                    -> Statement  {cons("return-exp")}
-         "return" Predicate                                      -> Statement  {cons("return-pred")}
+         "return" Predicate                                      -> Statement  {avoid, cons("return-pred")}
          "yield" Expression                                      -> Statement  {cons("yield")}
          "fail"                                                  -> Statement  {cons("fail")}
          "throw" Expression                                      -> Statement  {cons("throw")}
