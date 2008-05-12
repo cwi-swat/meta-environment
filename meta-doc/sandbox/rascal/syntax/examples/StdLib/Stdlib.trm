@@ -36,7 +36,7 @@ public fun &T max(&T A, &T B){
     return A;
 }
 
-%% --- Booleans ----------------------------------
+%% --- Boolean (bool) ----------------------------------
 
 public fun bool equal(bool B1, bool B2)
   throw unimplemented("equal of bool")
@@ -61,7 +61,10 @@ public fun int arb(){
   throw unimplemented("bool arb");
 }
 
-%% --- Integer ------------------------------------
+public fun str toString(bool B)
+  throw unimplemented("bool toString");
+
+%% --- Integer (int)------------------------------------
 
 public fun bool equal(int I1, int I2)
   throw unimplemented("equal of int")
@@ -78,8 +81,6 @@ public fun int sub(int I1, int I2)
 public fun int mul(int I1, int I2)
   throw unimplemented("mul on int")
 
-public fun int div(int I1, int I2)
-  throw unimplemented("div on int")
 
 %% Arbitrary integer: arb
 public fun int arb(int bgn, int end){
@@ -88,8 +89,10 @@ public fun int arb(int bgn, int end){
      throw illegal_argument("int arb");
 }
 
+public fun str toString(int I)
+  throw unimplemented("int toString");
 
-%% --- Double -------------------------------------
+%% --- Double (double) -------------------------------------
 
 public fun bool equal(double D1, double D2)
   throw unimplemented("equal of double")
@@ -116,7 +119,10 @@ public fun double arb(double bgn, double end){
      throw illegal_argument("double arb");
 }
 
-%% --- Strings ------------------------------------
+public fun str toString(double D)
+  throw unimplemented("double toString");
+
+%% --- Strings (str) ------------------------------------
 
 public fun bool equal(str S1, str S2)
   throw unimplemented("equal of string")
@@ -130,8 +136,19 @@ public fun str add(str S1, str S2)
 public fun int size(str S)
   throw unimplemented("size of string")
 
+public fun int get(str S, int N)
+  throw unimplemented("get of string")
+
 public fun list[int] toList(str S){
   list[int] result = [];
+  for(int E : S){
+    result += E
+  };
+  return result;
+}
+
+public fun set[int] toSet(str S){
+  set[int] result = {};
   for(int E : S){
     result += E
   };
@@ -141,9 +158,33 @@ public fun list[int] toList(str S){
 public fun str reverse(str S)
   throw unimplemented("reverse of string")
 
-
-
 %% Add functions for other methods of Java's String class
+
+%% --- Locations ---------------------------------
+
+%% The location datatype
+data location location(str filename,
+                       int beginline,
+                       int endline,
+                       int begincol,
+                       int endcol,
+                       int offset,
+                       int length);
+
+public fun bool equal(loc L1, loc L2)
+  throw unimplemented("equal loc")
+
+public fun bool less(loc L1, loc L2)
+  throw unimplemented("less loc")
+
+public fun str toString(loc L)
+  throw unimplemented("loc toString");
+
+public fun loc get_location(&T Subject)
+  throw unimplemented("get_location")
+
+public fun &T set_location(&T Subject, loc L)
+  throw unimplemented("set_location")
 
 %% --- Lists ---------------------------------------
 
@@ -172,20 +213,21 @@ public fun int size(list[&T] L){
   return N;
 }
 
+%% Get list element: get
+public fun &T get(list[&T] L, int N){
+  return L[N];
+}
+
 %% Arbitrary element of list: arb
 public fun &T arb(list[&T] L) {
   int N = arb(0, size(L));
   return L[N];
 }
 
-public fun list[&T] reverse(list[&T] L){
-  list[&T] result = [];
-  for(&T E : L)
-    result = [E] + result;
-  return result;
-}
+public fun str toString(list[&T] L)
+  throw unimplemented("list toString");
 
-public fun str toString(list[int] L)
+public fun str makeString(list[int] L)
   throw unimplemented("toString on list[int]")
 
 public fun set[&T] toSet(list[&T] L){
@@ -210,11 +252,30 @@ public fun rel[&T] toRel(list[&T] L){
   return result
 }
 
+public fun list[&T] reverse(list[&T] L){
+  list[&T] result = [];
+  for(&T E : L)
+    result = [E] + result;
+  return result;
+}
+
 public fun &T reduce(list[&T] L, fun &T F (&T,&T), &T unit){
   &T result = unit;
   for(&T E : L){
     result = F(result, E)
   };
+  return result
+}
+
+public fun list[&T] apply(list[&T] L, fun &T F (&T,&T))
+  return [F(E) | &T E : L];
+
+%% Minimum element of a list: min
+public fun &T min(list[&T] L){
+  &T result = arb(L);
+  for(&T E : L)
+   if(less(E, result))
+      result = min(result, E);
   return result
 }
 
@@ -227,22 +288,13 @@ public fun &T max(list[&T] L){
   return result
 }
 
-%% Minimum element of a list: min
-public fun &T min(list[&T] L){
-  &T result = arb(L);
-  for(&T E : L)
-   if(less(E, result))
-      result = min(result, E);
-  return result
-}
-
 %% Add elements of a List: sum
 public fun &T sum(list[&T] L, &T zero){
   return reduce(L, add, zero);
 }
 
-%% Multiply elements of a list: product
-public fun &T product(set[&T] R, &T one){
+%% Multiply elements of a list: multiply
+public fun &T multiply(set[&T] R, &T one){
   return reduce(L, mul, zero);
 }
 
@@ -250,10 +302,46 @@ public fun &T product(set[&T] R, &T one){
 public fun &T prod(list[&T] L, &T zero)
   return sum(L, zero)/size(L)
 
+%% First element of list; first
+public fun &T first(list[&T] L)
+  return L[1];
 
+%% Remaining elements of list: rest
+public fun &T rest(list[&T] L)
+  throw unimplemented("rest list");
 
 %% --- Tuples --------------------------------------
 
+public fun bool equal(tuple[&T] R, tuple[&T] S)
+  throw unimplemented("equal tuple");
+
+%% less
+public fun bool less(tuple[&T] R, tuple[&T] S)
+  throw unimplemented("less tuple");
+
+%% Note the use of + on types to concatenate the types
+%% of tuple elements
+
+public fun tuple[&T + &U] add(tuple[&T] R, tuple[&U] S){
+  throw unimplemented("add tuple");
+}
+
+public fun tuple[&T + &U] add(tuple[&T] R, &U E){
+  return R + <E>;
+}
+
+public fun tuple[&T + &U] add(&T E, tuple[&U] R){
+  return <E> + R;
+}
+
+public fun int size(tuple[&T] R)
+  throw unimplemented("size tuple");
+
+public fun value get(tuple[&T] R, int N)
+  return R[N];
+
+public fun str toString(tuple[&T] R)
+  throw unimplemented("tuple toString");
 
 %% --- Sets  ---------------------------------------
 
@@ -319,6 +407,9 @@ public fun &T arb(set[&T] S) {
   return S[N];
 }
 
+public fun str toString(set[&T] R)
+  throw unimplemented("set toString");
+
 public fun list[&T] toList(set[&T] S){
   list[&T] result = [];
   for(&T E : S){
@@ -349,6 +440,9 @@ public fun &T reduce(set[&T] S, fun &T F (&T,&T), &T unit){
   };
   return result
 }
+
+public fun set[&T] apply(set[&T] S, fun &T F (&T,&T))
+  return {F(E) | &T E : S};
 
 %% Minimum of a set: min
 public fun &T min(set[&T] S){
@@ -442,6 +536,9 @@ public fun int size(map[&T] M)
 public fun &T arb(map[&T] M)
   return(arb(toList(M)));
 
+public fun str toString(map[&T] R)
+  throw unimplemented("map toString");
+
 public fun list[tuple[&T, &U]] toList(map[&T, &U] M){
   list[tuple[&T, &U]] result = [];
   for(tuple[&T, &U] Tup : M)
@@ -472,6 +569,9 @@ public fun &T reduce(map[&T] S, fun &T F (&T,&T), &T unit){
   return result
 }
 
+public fun map[&T] apply(map[&T] M, fun &T F (&T,&T))
+  return {F(E) | &T E : M};
+
 %% --- Relations
 
 public fun bool equal(rel[&T] R, rel[&T] S)
@@ -479,7 +579,6 @@ public fun bool equal(rel[&T] R, rel[&T] S)
 
 public fun bool less(rel[&T] R, rel[&T] S)
   throw unimplemented("less rel");
-
 
 %% Add two relations (union): add (operator +)
 public fun rel[&T] add(rel[&T] R1, rel[&T] R2){
@@ -512,6 +611,9 @@ public fun int size(rel[&T] R){
 public fun &T arb(rel[&T] R)
   return arb(toList(R));
 
+public fun str toString(rel[&T] R)
+  throw unimplemented("rel toString");
+
 %% Note: in rel[&T], the type variable &T refers to the tuple type of the relation.
 
 public fun list[&T] toList(rel[&T] R){
@@ -534,6 +636,9 @@ public fun rel[&T] toRel(set[&T] S){
     result += Tup;
   return result
 }
+
+public fun rel[&T] apply(rel[&T] R, fun &T F (&T,&T))
+  return {F(E) | &T E : R};
 
 %% Carthesian product of two sets: product (was: x)
 public fun rel[&T1, &T2] product(rel[&T1] R, rel[&T2] S)
@@ -609,30 +714,6 @@ public fun set[&T] reachR( set[&T] Start, set[&T] Restr, rel[&T,&T] Rel)
 public fun set[&T] reachX( set[&T] Start, set[&T] Excl, rel[&T,&T] Rel)
   return range(compose(domainR(Rel, Start), carrierX(Rel, Excl)+))
 
-%% --- Locations ---------------------------------
-
-%% The location datatype
-data location location(str filename,
-                       int beginline,
-                       int endline,
-                       int begincol,
-                       int endcol,
-                       int offset,
-                       int length);
-
-public fun loc get_location(&T Subject)
-  throw unimplemented("get_location")
-
-public fun &T set_location(&T Subject, loc L)
-  throw unimplemented("set_location")
-
-public fun bool equal(loc L1, loc L2)
-  throw unimplemented("equal loc")
-
-public fun bool less(loc L1, loc L2)
-  throw unimplemented("less loc")
-
-
 %% --- Annotations --------------------------------
 
 %% Test whether a named annotation exists.
@@ -696,3 +777,6 @@ public fun void write(str filename, &T Subject){
   throw unimplemented("write");
   throw file_error;
 }
+
+
+

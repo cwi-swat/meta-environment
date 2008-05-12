@@ -2804,7 +2804,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
           </row>
 
           <row>
@@ -2828,7 +2828,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
           </row>
 
           <row>
@@ -2852,7 +2852,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <entry></entry>
 
-            <entry></entry>
+            <entry>x</entry>
           </row>
 
           <row>
@@ -2906,7 +2906,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
           <row>
             <entry>div</entry>
 
-            <entry>x</entry>
+            <entry></entry>
 
             <entry>x</entry>
 
@@ -2948,7 +2948,31 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <entry></entry>
 
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>get</entry>
+
             <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
           </row>
 
           <row>
@@ -2978,25 +3002,25 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
           <row>
             <entry>toString</entry>
 
-            <entry></entry>
+            <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
 
-            <entry>list[int]</entry>
+            <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
 
-            <entry></entry>
+            <entry>x</entry>
           </row>
 
           <row>
@@ -3032,7 +3056,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <entry></entry>
 
-            <entry>?</entry>
+            <entry>x</entry>
 
             <entry></entry>
 
@@ -3139,6 +3163,30 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             <entry></entry>
 
             <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>apply</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
 
             <entry></entry>
           </row>
@@ -3261,6 +3309,426 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             <entry></entry>
 
             <entry></entry>
+          </row>
+
+          <row>
+            <entry>get_location</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>set_location</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>Notes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>equal</literal> (operator: <literal>==</literal>)
+        implements equality on all types. It is extended for data types using
+        structural equality.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>less</literal> (operator: <literal>&lt;</literal>)
+        implements less-than on all types.</para>
+      </listitem>
+
+      <listitem>
+        <para>add (+), sub (-), mul(*), div(/) implement these operators for
+        most types. For structured types these operatords exist in three
+        flavours: structured value op struct, structured value op element, and
+        element op structured value.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>size</literal> gives the number of elements of many
+        types.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>get</literal> (corresponds to the indexing notation
+        R[N]) gives the N-th element of a structure.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>arb</literal> generates an arbitrary element from a
+        structured value.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>toString</literal> converts all values to a string
+        representation.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>toList</literal>, <literal>toSet</literal>,
+        <literal>toMap</literal>, <literal>toRel</literal> provide conversions
+        between structured types. They may be implemented as just a type
+        conversion (and not a data conversion).</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>reverse</literal> reverses the elements of ordered
+        structured types.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>reduce</literal> and <literal>apply</literal> take a
+        function as argument and traverse a structured value.<note>
+            <para>Due to a name class with the type constructor
+            <literal>map</literal>, we use the name <literal>apply</literal>
+            for a function that is ussually called
+            <literal>map</literal>.</para>
+          </note></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>min</literal> and <literal>max</literal> compute the
+        smallest (largest) of two basic values or all elements of structured
+        values.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>average</literal> computes the average value of
+        structured values that contain integers or doubles.</para>
+      </listitem>
+
+      <listitem>
+        <para>get_location and set_location are access functions for values of
+        type <literal>loc</literal>.</para>
+      </listitem>
+
+      <listitem>
+        <para>For relations</para>
+      </listitem>
+    </itemizedlist>
+
+    <table>
+      <title>Additional functions on lists, sets, relations and maps</title>
+
+      <tgroup cols="5">
+        <colspec align="center" />
+
+        <thead>
+          <row>
+            <entry align="center">&#160;</entry>
+
+            <entry align="center">list</entry>
+
+            <entry align="center">set</entry>
+
+            <entry align="center">map</entry>
+
+            <entry align="center">rel</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>first</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>rest</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>makeString</entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>id</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>power</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>product</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>compose</entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>invert</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>complement</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>domain</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>range</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>carrier</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>domainR</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>rangeR</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>carrierR</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>domainX</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>rangeX</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>carrierX</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>top</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>bottom</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>reachR</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
+          </row>
+
+          <row>
+            <entry>reachX</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>x</entry>
           </row>
         </tbody>
       </tgroup>
