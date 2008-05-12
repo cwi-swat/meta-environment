@@ -1292,6 +1292,10 @@
             </itemizedlist>
           </listitem>
         </itemizedlist></para>
+
+      <note>
+        <para>We need a cast operator to down cast values.</para>
+      </note>
     </section>
 
     <section>
