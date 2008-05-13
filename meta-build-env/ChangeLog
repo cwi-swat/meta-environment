@@ -1,3 +1,9 @@
+Tue May 13 18:27:50 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: Added generation of Eclipse meta data for basic
+	META packages, i.e., those that call META_SETUP. Java packages
+	overwrite that meta data.
+
 Tue May 13 12:49:34 2008    <bruntink@cwi.nl>
 
 	* meta-build.m4: Fixed the problem that empty clauses or empty
