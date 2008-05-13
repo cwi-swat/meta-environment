@@ -430,32 +430,23 @@ if ! test -z "$7"; then
   BUNDLE_CLASSPATH="${BUNDLE_CLASSPATH},`echo "$7" | tr ':' ','`"
 fi
 
-if test -z "$5"; then
-  REQUIRE_BUNDLE=""
-else
+REQUIRED_BUNDLES=""
+if test -n "$5"; then
   REQUIRED_BUNDLES=`echo "$5" | tr '-' '_' | tr ' ' ','`
   ECLIPSE_REQUIRES=META_GET_PKG_USER_VAR_PLAIN([EclipseRequires])
 
-  if test -z "$ECLIPSE_REQUIRES"; then
-    REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES}"
-  else
-    REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES},${ECLIPSE_REQUIRES}"
+  if test -n "$ECLIPSE_REQUIRES"; then
+    REQUIRED_BUNDLES="${REQUIRED_BUNDLES},${ECLIPSE_REQUIRES}"
 
 	META_REQUIRE_SOFTWARE(eclipse,plugins)
 
-	eclipse_bundles=`ls ${ECLIPSE_PREFIX}/plugins | grep .jar`
+	ECLIPSE_BUNDLES=`ls ${ECLIPSE_PREFIX}/plugins | grep .jar`
 
-	for bundle in ${eclipse_bundles}; do
-		  EXTERNAL_JARS+=:${ECLIPSE_PREFIX}/plugins/${bundle}
-		  EXTERNAL_INSTALLED_JARS+=:${ECLIPSE_PREFIX}/plugins/${bundle}
+	for BUNDLE in ${ECLIPSE_BUNDLES}; do
+		  EXTERNAL_JARS+=:${ECLIPSE_PREFIX}/plugins/${BUNDLE}
+		  EXTERNAL_INSTALLED_JARS+=:${ECLIPSE_PREFIX}/plugins/${BUNDLE}
 	done
   fi
-fi
-
-if test -z "$6"; then
-  BUNDLE_MAIN_CLASS=""
-else 
-  BUNDLE_MAIN_CLASS="Bundle-Activator: $6"
 fi
 
 cat > META-INF/MANIFEST.MF << ENDCAT
@@ -468,9 +459,13 @@ Bundle-Version: $2
 Bundle-ClassPath: `echo "${BUNDLE_CLASSPATH}" | sed "s@,@,\n @g"`
 Bundle-Localization: plugin
 Export-Package: `echo "$4" | sed "s@,@,\n @g"`
-`echo ${REQUIRE_BUNDLE} | sed "s@,@,\n @g"`
-${BUNDLE_MAIN_CLASS}
+Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,\n @g"`
+Bundle-Activator: $6
 ENDCAT
+
+# Remove empty clauses from the manifest
+MANIFEST=`cat META-INF/MANIFEST.MF | sed '/.*:[ \t]*$/d'`
+echo "${MANIFEST}" > META-INF/MANIFEST.MF
 
 cat > .settings/org.eclipse.jdt.core.prefs << ENDCAT
 eclipse.preferences.version=1
@@ -549,16 +544,13 @@ if ! test -d .settings ; then
   mkdir .settings
 fi
 
-if test -z "$5"; then
-  REQUIRE_BUNDLE=""
-else
+REQUIRED_BUNDLES=""
+if test -n "$5"; then
   REQUIRED_BUNDLES=`echo "$5" | tr '-' '_' | tr ' ' ','`
   ECLIPSE_REQUIRES=META_GET_PKG_USER_VAR_PLAIN([EclipseRequires])
 
-  if test -z "$ECLIPSE_REQUIRES"; then
-    REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES}"
-  else
-    REQUIRE_BUNDLE="Require-Bundle: ${REQUIRED_BUNDLES},${ECLIPSE_REQUIRES}"
+  if test -n "$ECLIPSE_REQUIRES"; then
+    REQUIRED_BUNDLES="${REQUIRED_BUNDLES},${ECLIPSE_REQUIRES}"
   fi
 fi
 
@@ -571,8 +563,12 @@ Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
 Bundle-Version: $2
 Bundle-ClassPath: .
 Bundle-Localization: plugin
-`echo ${REQUIRE_BUNDLE} | sed "s@,@,\n @g"`
+Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,\n @g"`
 ENDCAT
+
+# Remove empty clauses from the manifest
+MANIFEST=`cat META-INF/MANIFEST.MF | sed '/.*:[ \t]*$/d'`
+echo "${MANIFEST}" > META-INF/MANIFEST.MF
 
 cat > .project << ENDCAT
 <?xml version="1.0" encoding="UTF-8"?>
