@@ -69,6 +69,10 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	public static PureFactory getFactory(){
 		return getInstance().getToolBus().getTBTermFactory();
 	}
+	
+	public static ToolBus getToolBus(){
+		return getInstance().getToolBus();
+	}
 
 	private static void runToolBus(final ToolBus toolbus){
 		if(toolbus.parsecup()){
