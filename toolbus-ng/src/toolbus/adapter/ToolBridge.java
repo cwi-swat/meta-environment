@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import toolbus.IOperations;
 import toolbus.communication.IDataHandler;
 import toolbus.communication.IIOHandler;
@@ -12,7 +13,6 @@ import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
 import toolbus.util.collections.RotatingQueue;
-import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
