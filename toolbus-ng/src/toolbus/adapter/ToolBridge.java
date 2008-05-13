@@ -238,7 +238,8 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				threadLocalQueues.put(new Long(threadId), threadLocalQueue);
 			}
 		}
-		return threadLocalQueue.postRequest(aTerm, threadId);
+		Job job = threadLocalQueue.postRequest(aTerm, threadId);
+		return threadLocalQueue.waitForResponse(job);
 	}
 
 	/**
@@ -457,7 +458,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 * Notifies the thread local queue of the acknowledgement and executes the next queued job
 		 * (if present).
 		 */
-		private synchronized void acknowledge(){
+		private void acknowledge(){
 			long threadId = current.threadId;
 			ThreadLocalJobQueue threadLocalQueue;
 			synchronized(threadLocalQueues){
@@ -476,7 +477,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 * Acknowledges the last event that was send from the source this queue is associated with.
 		 * It will execute the next job in the queue if there are any.
 		 */
-		public void ackEvent(){
+		public synchronized void ackEvent(){
 			acknowledge();
 		}
 		
@@ -560,26 +561,29 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 *            The id of the thread associated with the request.
 		 * @return The received response on the issued request.
 		 */
-		public synchronized ATerm postRequest(ATerm aTerm, long threadId){
+		public synchronized Job postRequest(ATerm aTerm, long threadId){
 			Job job = new Job(REQUEST, aTerm, threadId);
-			synchronized(job){
-				if(!awaitingAck){
-					String sourceName = ((ATermAppl) aTerm).getAFun().getName();
-					
-					JobQueue requestQueue;
-					synchronized(queues){
-						requestQueue = queues.get(sourceName);
-						if(requestQueue == null){
-							requestQueue = new JobQueue();
-							queues.put(sourceName, requestQueue);
-						}
-					}
-					requestQueue.post(job);
-					awaitingAck = true;
-				}else{
-					requests.add(job);
-				}
+			if(!awaitingAck){
+				String sourceName = ((ATermAppl) aTerm).getAFun().getName();
 				
+				JobQueue requestQueue;
+				synchronized(queues){
+					requestQueue = queues.get(sourceName);
+					if(requestQueue == null){
+						requestQueue = new JobQueue();
+						queues.put(sourceName, requestQueue);
+					}
+				}
+				requestQueue.post(job);
+				awaitingAck = true;
+			}else{
+				requests.add(job);
+				}
+			return job;
+		}
+		
+		public ATerm waitForResponse(Job job){
+			synchronized(job){
 				while(job.response == null){
 					try{
 						job.wait();
