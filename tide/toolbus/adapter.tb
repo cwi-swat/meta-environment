@@ -1,4 +1,4 @@
-#include <adapter.idef>
+#include <debug-adapter.idef>
 
 process TIDE-ADAPTER-CONNECT is
 let
