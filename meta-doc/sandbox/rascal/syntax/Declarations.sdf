@@ -16,7 +16,7 @@ hiddens
         Declaration
 
 exports
-  sorts Declaration Visibility DatatypeParameters
+  sorts Declaration Visibility DatatypeParameters Primitive
 
   context-free syntax
 
@@ -31,13 +31,17 @@ exports
 
     Visibility "global" Type Name ("=" Expression)? -> Declaration {cons("global-decl")}
 
-    Visibility "memo"? FunctionType Statement       -> Declaration {cons("function-decl")}
+    "primitive" ( "(" StringLiteral ")" )?          -> Primitive
+
+    Visibility "memo"? FunctionType 
+                       (Statement | Primitive)    -> Declaration {cons("function-decl")}
     Visibility "java" FunctionType JavaBlock        -> Declaration {cons("java-function-decl")}
 
    "rules" "(" Type ")" "{" Rule+ "}"               -> Declaration {cons("rules-decl")}
 
 %% Define reserved words
    "public" | "private" | "data" | "type" | 
-   "global" | "memo" | "java" | "rules"             -> Name {reject}
+   "global" | "memo" | "primitive" | "java" | 
+   "rules"                                          -> Name {reject}
 
   

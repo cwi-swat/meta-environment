@@ -36,9 +36,10 @@ context-free syntax
 %% Expressions
          Value                                                   -> Expression
         "(" Expression ")"                                       -> Expression {bracket}
+        FunctionName                                             -> Expression
 	QualName                                                -> Expression {cons("qual-variable")}
 
-         QualName | Call                                         -> Callable
+         FunctionName | QualName | Call                          -> Callable
 
 	Callable "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
          Callable "[" Expression  "]"                            -> Call {cons("index-call")}

@@ -10,7 +10,7 @@ hiddens
 
 exports
   sorts Type OptNamedType OptNamedTypes TypeVar 
-        BasicType StructuredType FunctionType AbstractType
+        BasicType StructuredType FunctionType FunctionName AbstractType
         ParameterizedType
 
   context-free syntax
@@ -28,14 +28,15 @@ exports
 
     OptNamedTypes "+" OptNamedTypes                     -> OptNamedTypes
 
-    "list" "[" Type "]"                                 -> StructuredType {cons("list-type")} 
-    "set" "[" Type "]"                                  -> StructuredType {cons("set-type")}
-    "map" "[" OptNamedType "]"                          -> StructuredType {cons("map1-type")}
-    "map" "[" OptNamedType "," OptNamedType "]"         -> StructuredType {cons("map2-type")}
+    "list" "[" OptNamedType "]"                         -> StructuredType {cons("list-type")} 
+    "set" "[" OptNamedType "]"                          -> StructuredType {cons("set-type")}
+    "map" "[" OptNamedTypes "]"                          -> StructuredType {cons("map-type")}
     "rel" "[" OptNamedTypes "]"                         -> StructuredType {cons("rel-type")}
     "tuple" "[" OptNamedTypes "]"                       -> StructuredType {cons("tuple-type")}
 
-    "fun" Type Name "(" OptNamedTypes? ")"              -> FunctionType   {cons("function-type")}
+    Name | "+" | "-" | "*" | "/" | "==" | "<" | "<=" |
+    ">" | ">="                                          -> FunctionName { avoid }
+    "fun" Type FunctionName "(" OptNamedTypes? ")"      -> FunctionType   {cons("function-type")}
 
     "&" Name                                            -> TypeVar        {cons("type-var")}
     Name "[" {TypeVar ","}+ "]"                         -> ParameterizedType
