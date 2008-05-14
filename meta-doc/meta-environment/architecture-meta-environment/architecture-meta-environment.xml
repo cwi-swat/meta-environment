@@ -2187,7 +2187,7 @@
             <para>The action process will first find out to which module the
             file belongs to by querying the 'path' attribute in the module
             manager. Then it will call the appropriate utility process to do
-            the work. </para>
+            the work.</para>
           </listitem>
 
           <listitem>
@@ -2228,7 +2228,7 @@
             <para>Several listener processes may be subscribed to such status
             notes. One example is the SDF module parser listener. This
             listener will trigger the SDF parsing utility process for a
-            specific module. </para>
+            specific module.</para>
           </listitem>
 
           <listitem>
@@ -2475,7 +2475,7 @@
         <para>The focus on reusability and extensibility has introduced
         strains on the ToolBus in terms of efficiency. Specific optimizations
         that help managing large volumes of notes, messages and process calls
-        have helped a lot in making the systems run more smoothly: </para>
+        have helped a lot in making the systems run more smoothly:</para>
 
         <itemizedlist>
           <listitem>
@@ -4019,7 +4019,7 @@
             <listitem>
               <para>A Java class that is a ToolBus tool which takes ATerms
               from the ToolBus an gives them a meaning by calling Eclipse
-              functionality</para>
+              functionality.</para>
             </listitem>
 
             <listitem>
