@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+
 import jjtraveler.VisitFailure;
 import aterm.AFun;
 import aterm.ATerm;
@@ -46,7 +47,7 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 	private int port = -1;
 	
 	private final Map<Long, ThreadLocalJobQueue> threadLocalQueues;
-	private final Map<AFun, JobQueue> queues;
+	private final Map<String, JobQueue> queues;
 	
 	private final WorkerQueue workerQueue;
 	
@@ -65,7 +66,7 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		
 		empty = factory.makeList();
 		threadLocalQueues = new HashMap<Long, ThreadLocalJobQueue>();
-		queues = new HashMap<AFun, JobQueue>();
+		queues = new HashMap<String, JobQueue>();
 		
 		workerQueue = new WorkerQueue();
 		
@@ -371,17 +372,18 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 				ackEvent((ATermList) t);
 				break;
 			case RESPONSE:
-				AFun responseSourceFun = ((ATermAppl) t).getAFun();
+				ATermAppl response = (ATermAppl) t;
+				String responseSourceName = response.getAFun().toString();
 				
 				JobQueue requestQueue;
 				synchronized(queues){
-					requestQueue = queues.get(responseSourceFun);
+					requestQueue = queues.get(responseSourceName);
 				}
 				if(requestQueue == null){
-					System.err.println("Received response on a non-existent request: " + responseSourceFun);
+					System.err.println("Received response on a non-existent request: " + responseSourceName);
 					return;
 				}
-				requestQueue.recResponse(t);
+				requestQueue.recResponse(response);
 				break;
 			case TERMINATE:
 				workerQueue.execute(new Runnable(){
@@ -433,7 +435,7 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 	
 	public ATerm postRequest(ATerm term){
 		long threadId = Thread.currentThread().getId();
-		ThreadLocalJobQueue threadLocalQueue = null;
+		ThreadLocalJobQueue threadLocalQueue;
 		synchronized(threadLocalQueues){
 			threadLocalQueue = threadLocalQueues.get(new Long(threadId));
 			if(threadLocalQueue == null){
@@ -441,7 +443,8 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 				threadLocalQueues.put(new Long(threadId), threadLocalQueue);
 			}
 		}
-		return threadLocalQueue.postRequest(term, threadId);
+		Job job = threadLocalQueue.postRequest(term, threadId);
+		return threadLocalQueue.waitForResponse(job);
 	}
 	
 	private void ackEvent(ATermList ackEvent){
@@ -562,7 +565,7 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		 * Notifies the thread local queue of the acknowledgement and executes the next queued job
 		 * (if present).
 		 */
-		private synchronized void acknowledge(){
+		private void acknowledge(){
 			long threadId = current.threadId;
 			ThreadLocalJobQueue threadLocalQueue;
 			synchronized(threadLocalQueues){
@@ -581,7 +584,7 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		 * Acknowledges the last event that was send from the source this queue is associated with.
 		 * It will execute the next job in the queue if there are any.
 		 */
-		public void ackEvent(){
+		public synchronized void ackEvent(){
 			acknowledge();
 		}
 		
@@ -592,9 +595,9 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		 * @param response
 		 *            The response.
 		 */
-		public synchronized void recResponse(ATerm response){
+		public synchronized void recResponse(ATermAppl response){
 			synchronized(current){
-				current.response = response;
+				current.response = response.getArgument(0);
 				current.notify();
 			}
 			
@@ -636,14 +639,14 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 			Job request = new Job(EVENT, aTerm, threadId);
 			
 			if(!awaitingAck){
-				AFun sourceFun = ((ATermAppl) aTerm).getAFun();
+				String sourceName = ((ATermAppl) aTerm).getAFun().getName();
 				
 				JobQueue requestQueue;
 				synchronized(queues){
-					requestQueue = queues.get(sourceFun);
+					requestQueue = queues.get(sourceName);
 					if(requestQueue == null){
 						requestQueue = new JobQueue();
-						queues.put(sourceFun, requestQueue);
+						queues.put(sourceName, requestQueue);
 					}
 				}
 				requestQueue.post(request);
@@ -665,26 +668,29 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		 *            The id of the thread associated with the request.
 		 * @return The received response on the issued request.
 		 */
-		public synchronized ATerm postRequest(ATerm aTerm, long threadId){
+		public synchronized Job postRequest(ATerm aTerm, long threadId){
 			Job job = new Job(REQUEST, aTerm, threadId);
-			synchronized(job){
-				if(!awaitingAck){
-					AFun sourceFun = ((ATermAppl) aTerm).getAFun();
-					
-					JobQueue requestQueue;
-					synchronized(queues){
-						requestQueue = queues.get(sourceFun);
-						if(requestQueue == null){
-							requestQueue = new JobQueue();
-							queues.put(sourceFun, requestQueue);
-						}
-					}
-					requestQueue.post(job);
-					awaitingAck = true;
-				}else{
-					requests.add(job);
-				}
+			if(!awaitingAck){
+				String sourceName = ((ATermAppl) aTerm).getAFun().getName();
 				
+				JobQueue requestQueue;
+				synchronized(queues){
+					requestQueue = queues.get(sourceName);
+					if(requestQueue == null){
+						requestQueue = new JobQueue();
+						queues.put(sourceName, requestQueue);
+					}
+				}
+				requestQueue.post(job);
+				awaitingAck = true;
+			}else{
+				requests.add(job);
+				}
+			return job;
+		}
+		
+		public ATerm waitForResponse(Job job){
+			synchronized(job){
 				while(job.response == null){
 					try{
 						job.wait();
@@ -717,14 +723,14 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 				awaitingAck = false;
 			}else{
 				ATerm term = next.term;
-				AFun sourceFun = ((ATermAppl) term).getAFun();
+				String sourceName = ((ATermAppl) term).getAFun().getName();
 				
 				JobQueue requestQueue;
 				synchronized(queues){
-					requestQueue = queues.get(sourceFun);
+					requestQueue = queues.get(sourceName);
 					if(requestQueue == null){
 						requestQueue = new JobQueue();
-						queues.put(sourceFun, requestQueue);
+						queues.put(sourceName, requestQueue);
 					}
 				}
 				
