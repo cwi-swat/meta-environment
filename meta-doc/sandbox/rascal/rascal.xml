@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -2834,7 +2834,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
       table.</para>
 
       <table>
-        <title>Main functions in Rascal Standard Library</title>
+        <title>Main functions and operators in Rascal Standard Library</title>
 
         <tgroup cols="11">
           <colspec align="center" />
@@ -2861,13 +2861,13 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">rel</entry>
 
-              <entry align="center">tuple</entry>
+              <entry align="center">tuple_</entry>
             </row>
           </thead>
 
           <tbody>
             <row>
-              <entry>equal</entry>
+              <entry>_==_</entry>
 
               <entry>x</entry>
 
@@ -2891,7 +2891,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             </row>
 
             <row>
-              <entry>less</entry>
+              <entry>_&lt;_</entry>
 
               <entry>x</entry>
 
@@ -2915,7 +2915,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             </row>
 
             <row>
-              <entry>add</entry>
+              <entry>_+_</entry>
 
               <entry>x</entry>
 
@@ -2939,7 +2939,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             </row>
 
             <row>
-              <entry>sub</entry>
+              <entry>_-_</entry>
 
               <entry>x</entry>
 
@@ -2963,7 +2963,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             </row>
 
             <row>
-              <entry>mul</entry>
+              <entry>_*_</entry>
 
               <entry>x</entry>
 
@@ -2987,7 +2987,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             </row>
 
             <row>
-              <entry>div</entry>
+              <entry>_/_</entry>
 
               <entry></entry>
 
@@ -3449,21 +3449,21 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
       <itemizedlist>
         <listitem>
-          <para><literal>equal</literal> (operator: <literal>==</literal>)
-          implements equality on all types. It is extended for data types
-          using structural equality.</para>
+          <para>Operator <literal>==</literal> implements equality on all
+          types. It is extended for data types using structural
+          equality.</para>
         </listitem>
 
         <listitem>
-          <para><literal>less</literal> (operator: <literal>&lt;</literal>)
-          implements less-than on all types.</para>
+          <para>Operator <literal>&lt;</literal> implements less-than on all
+          types.</para>
         </listitem>
 
         <listitem>
-          <para>add (+), sub (-), mul(*), div(/) implement these operators for
-          most types. For structured types these operatords exist in three
-          flavours: structured value op struct, structured value op element,
-          and element op structured value.</para>
+          <para>Operators +, -, *, / implement these operators for most types.
+          For structured types these operatords exist in three flavours:
+          structured value op struct, structured value op element, and element
+          op structured value.</para>
         </listitem>
 
         <listitem>
@@ -3828,6 +3828,10 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
           <para>These functions are borrowed from the Rscript library.</para>
         </listitem>
       </itemizedlist>
+
+      <note>
+        <para>closure is missing</para>
+      </note>
     </section>
 
     <section>
@@ -3851,33 +3855,27 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 %% structured in to coherent submodules.
 
 %% --- Comparison operators ----------------------------------
-%% Each type defines equal and less. The following
+%% Each type defines == and &lt;. The following
 %% functions extend them.
 
-%% Operator &lt;=
-public fun bool less_equal(&amp;T A, &amp;T B){ 
-  return less(A, B) or equal(A, B);
-}
+public fun bool &lt;=(&amp;T A, &amp;T B)
+  return A &lt; B or A == B
 
-%% Operator &gt;
-public fun bool greater(&amp;T A, &amp;T B){
-  return less(B, A) and not equal(A, B);
-}
+public fun bool &gt;(&amp;T A, &amp;T B)
+  return B &lt; A and not A == B
 
-%% Operator &gt;=
-public fun bool greater_equal(&amp;T A, &amp;T B){
-  return less(B, A);
-}
+public fun bool &gt;=(&amp;T A, &amp;T B)
+  return B &lt; A
 
 public fun &amp;T min(&amp;T A, &amp;T B){
-  if(less(A, B))
+  if(A &lt; B)
     return A
   else
     return B;
 }
 
 public fun &amp;T max(&amp;T A, &amp;T B){
-  if(less(A, B))
+  if(A &lt; B)
     return B
   else
     return A;
@@ -3885,125 +3883,111 @@ public fun &amp;T max(&amp;T A, &amp;T B){
 
 %% --- Boolean (bool) ----------------------------------------
 
-public fun bool equal(bool B1, bool B2)
-  throw unimplemented("equal of bool")
+public fun bool ==(bool B1, bool B2)
+ primitive("Bool.equal")
 
-public fun bool less(bool B1, bool B2)
-  throw unimplemented("less of bool")
+public fun bool &lt;(bool B1, bool B2)
+  primitive("Bool.less")
 
-public fun bool add(bool B1, bool B2)
-  throw unimplemented("add on bool")
+public fun bool +(bool B1, bool B2)
+  primitive("Bool.add")
 
-public fun bool sub(bool B1, bool B2)
-  throw unimplemented("sub on bool")
+public fun bool -(bool B1, bool B2)
+ primitive("Bool.sub")
 
-public fun bool mul(bool B1, bool B2)
-  throw unimplemented("mul on bool")
+public fun bool *(bool B1, bool B2)
+  primitive("Bool.mul")
 
-public fun bool div(bool B1, bool B2)
-  throw unimplemented("div on bool")
+%%public fun bool div(bool B1, bool B2)
+%%  throw unimplemented("div on bool")
 
 %% Arbitrary boolean: arb
-public fun int arb(){
-  throw unimplemented("bool arb");
-}
+public fun int arb()
+ primitive("Bool.arb")
 
 public fun str toString(bool B)
-  throw unimplemented("bool toString");
+ primitive("Bool.toString")
 
 %% --- Integer (int)------------------------------------------
 
-public fun bool equal(int I1, int I2)
-  throw unimplemented("equal of int")
+public fun bool ==(int I1, int I2)
+ primitive("Int.equal")
 
-public fun bool less(int I1, int I2)
-  throw unimplemented("less of int")
+public fun bool &lt;(int I1, int I2)
+  primitive("Int.less")
 
-public fun int add(int I1, int I2)
-  throw unimplemented("add on int")
+public fun int +(int I1, int I2)
+ primitive("Int.add")
 
-public fun int sub(int I1, int I2)
-  throw unimplemented("sub on int")
+public fun int -(int I1, int I2)
+  primitive("-Int")
 
-public fun int mul(int I1, int I2)
-  throw unimplemented("mul on int")
-
+public fun int *(int I1, int I2)
+  primitive("Int.mul")
 
 %% Arbitrary integer: arb
-public fun int arb(int bgn, int end){
-  throw unimplemented("int arb");
-  if(end - bgn &lt;= 0)
-     throw illegal_argument("int arb");
-}
+public fun int arb(int bgn, int end)
+ primitive("Int.arb")
+%% if(end - bgn &lt;= 0)
+%%   throw illegal_argument("int arb");
 
 public fun str toString(int I)
-  throw unimplemented("int toString");
+ primitive("toStringInt")
 
 %% --- Double (double) ---------------------------------------
 
-public fun bool equal(double D1, double D2)
-  throw unimplemented("equal of double")
+public fun bool ==(double D1, double D2)
+  primitive("Double.equal")
 
-public fun bool less(double D1, double D2)
-  throw unimplemented("less of double")
+public fun bool &lt;(double D1, double D2)
+  primitive("Double.less")
 
-public fun double add(double D1, double D2)
-  throw unimplemented("add on double")
+public fun double +(double D1, double D2)
+  primitive("Double.add")
 
-public fun double sub(double D1, double D2)
-  throw unimplemented("sub on double")
+public fun double -(double D1, double D2)
+  primitive("Double.sub")
 
-public fun double mul(double D1, double D2)
-  throw unimplemented("mul on double")
+public fun double *(double D1, double D2)
+  primitive("Double.mul")
 
-public fun double div(double D1, double D2)
-  throw unimplemented("div on double")
+public fun double /(double D1, double D2)
+  primitive("Double.div")
 
 %% Arbitrary double: arb
-public fun double arb(double bgn, double end){
-  throw unimplemented("double arb");
-  if(end - bgn &lt;= 0)
-     throw illegal_argument("double arb");
-}
+public fun double arb(double bgn, double end)
+ primitive("Double.arb")
+%%  if(end - bgn &lt;= 0)
+%%     throw illegal_argument("double arb");
 
 public fun str toString(double D)
-  throw unimplemented("double toString");
+  primitive("Double.toString")
 
 %% --- Strings (str) -----------------------------------------
 
-public fun bool equal(str S1, str S2)
-  throw unimplemented("equal of string")
+public fun bool ==(str S1, str S2)
+  primitive("String.equal")
 
-public fun bool less(str S1, str S2)
-  throw unimplemented("less of string")
+public fun bool &lt;(str S1, str S2)
+ primitive("String.less")
 
-public fun str add(str S1, str S2)
-  throw unimplemented("add on str")
+public fun str +(str S1, str S2)
+  primitive("String.add")
 
 public fun int size(str S)
-  throw unimplemented("size of string")
+  primitive("String.size")
 
 public fun int get(str S, int N)
-  throw unimplemented("get of string")
+ primitive("String.get")
 
-public fun list[int] toList(str S){
-  list[int] result = [];
-  for(int E : S){
-    result += E
-  };
-  return result;
-}
-
-public fun set[int] toSet(str S){
-  set[int] result = {};
-  for(int E : S){
-    result += E
-  };
-  return result;
-}
+public fun list[int] toList(str S)
+  primitive("String.toList")
+ 
+public fun set[int] toSet(str S)
+  primitive("String.toSet")
 
 public fun str reverse(str S)
-  throw unimplemented("reverse of string")
+  primitive("String.reverse")
 
 %% Add functions for other methods of Java's String class
 
@@ -4018,93 +4002,67 @@ data location location(str filename,
                        int offset,
                        int length);
 
-public fun bool equal(loc L1, loc L2)
-  throw unimplemented("equal loc")
+public fun bool ==(loc L1, loc L2)
+  primitive("Location.equal")
 
-public fun bool less(loc L1, loc L2)
-  throw unimplemented("less loc")
+public fun bool &lt;(loc L1, loc L2)
+  primitive("Location.less")
 
 public fun str toString(loc L)
-  throw unimplemented("loc toString");
+  primitive("Location.toString")
 
 public fun loc get_location(&amp;T Subject)
-  throw unimplemented("get_location")
+ primitive("Location.get_location")
 
 public fun &amp;T set_location(&amp;T Subject, loc L)
-  throw unimplemented("set_location")
+   primitive("Location.set_location")
 
 %% --- Lists -------------------------------------------------
 
-public fun bool equal(list[&amp;T] L1, list[&amp;T] L2){
-  throw unimplemented("equal on list")
-}
+public fun bool ==(list[&amp;T] L1, list[&amp;T] L2)
+  primitive("List.equal")
 
-public fun bool less(list[&amp;T] L1, list[&amp;T] L2){
-  throw unimplemented("less on list")
-}
+public fun bool &lt;(list[&amp;T] L1, list[&amp;T] L2)
+  primitive("List.less")
 
-public fun list[&amp;T] add(list[&amp;T] L1, list[&amp;T] L2)
-  throw unimplemented("add on list")
+public fun list[&amp;T] +(list[&amp;T] L1, list[&amp;T] L2)
+   primitive("List.add")
 
-public fun list[&amp;T] add(list[&amp;T] L, &amp;T E)
+public fun list[&amp;T] +(list[&amp;T] L, &amp;T E)
   return L + [E];
 
-public fun list[&amp;T] add(&amp;T E, list[&amp;T] L)
+public fun list[&amp;T] +(&amp;T E, list[&amp;T] L)
   return [E] + L;
 
 %% Size of list: size
-public fun int size(list[&amp;T] L){
-  int N = 0;
-  for(&amp;T E : L)
-    N += 1;
-  return N;
-}
+public fun int size(list[&amp;T] L)
+  primitive("List.size")
 
 %% Get list element: get
-public fun &amp;T get(list[&amp;T] L, int N){
-  return L[N];
-}
+public fun &amp;T get(list[&amp;T] L, int N)
+  primitive("List.get")
 
 %% Arbitrary element of list: arb
-public fun &amp;T arb(list[&amp;T] L) {
-  int N = arb(0, size(L));
-  return L[N];
-}
+public fun &amp;T arb(list[&amp;T] L)
+  primitive("List.arb")
 
 public fun str toString(list[&amp;T] L)
-  throw unimplemented("list toString");
+  primitive("List.toString")
 
 public fun str makeString(list[int] L)
-  throw unimplemented("toString on list[int]")
+  primitive("List.makeString")
 
-public fun set[&amp;T] toSet(list[&amp;T] L){
-  set[&amp;T] result = {};
-  for(&amp;T E : L){
-    result += E
-  };
-  return result;
-}
+public fun set[&amp;T] toSet(list[&amp;T] L)
+  primitive("List.toSet")
 
-public fun map[&amp;T, &amp;U] toMap(list[tuple[&amp;T, &amp;U]] L){
-  map[&amp;T, &amp;U] result = {};
-  for(tuple[&amp;T, &amp;U] Tup : L)
-    result += Tup;
-  return result
-}
+public fun map[&amp;T, &amp;U] toMap(list[tuple[&amp;T, &amp;U]] L)
+  primitive("List.toMap")
 
-public fun rel[&amp;T] toRel(list[&amp;T] L){
-  rel[&amp;T] result = {};
-  for(&amp;T Tup : L)
-    result += Tup;
-  return result
-}
+public fun rel[&amp;T] toRel(list[&amp;T] L)
+  primitive("List.toRel")
 
-public fun list[&amp;T] reverse(list[&amp;T] L){
-  list[&amp;T] result = [];
-  for(&amp;T E : L)
-    result = [E] + result;
-  return result;
-}
+public fun list[&amp;T] reverse(list[&amp;T] L)
+  primitive("List.reverse")
 
 public fun &amp;T reduce(list[&amp;T] L, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
   &amp;T result = unit;
@@ -4137,148 +4095,117 @@ public fun &amp;T max(list[&amp;T] L){
 
 %% Add elements of a List: sum
 public fun &amp;T sum(list[&amp;T] L, &amp;T zero){
-  return reduce(L, add, zero);
+  return reduce(L, +, zero);
 }
 
 %% Multiply elements of a list: multiply
 public fun &amp;T multiply(set[&amp;T] R, &amp;T one){
-  return reduce(L, mul, zero);
+  return reduce(L, *, one);
 }
 
 %% Average of elements of a list: average
-public fun &amp;T prod(list[&amp;T] L, &amp;T zero)
+public fun &amp;T average(list[&amp;T] L, &amp;T zero)
   return sum(L, zero)/size(L)
 
 %% First element of list; first
 public fun &amp;T first(list[&amp;T] L)
-  return L[1];
+  primitive("List.first")
 
 %% Remaining elements of list: rest
 public fun &amp;T rest(list[&amp;T] L)
-  throw unimplemented("rest list");
+  primitive("List.rest")
 
 %% --- Tuples ------------------------------------------------
 
-public fun bool equal(tuple[&amp;T] R, tuple[&amp;T] S)
-  throw unimplemented("equal tuple");
+public fun bool ==(tuple[&amp;T] R, tuple[&amp;T] S)
+  primitive("Tuple.equal")
 
 %% less
-public fun bool less(tuple[&amp;T] R, tuple[&amp;T] S)
-  throw unimplemented("less tuple");
+public fun bool &lt;(tuple[&amp;T] R, tuple[&amp;T] S)
+  primitive("Tuple.less")
 
 %% Note the use of + on types to concatenate the types
 %% of tuple elements
 
-public fun tuple[&amp;T + &amp;U] add(tuple[&amp;T] R, tuple[&amp;U] S){
-  throw unimplemented("add tuple");
-}
+public fun tuple[&amp;T + &amp;U] +(tuple[&amp;T] R, tuple[&amp;U] S)
+  primitive("Tuple.add")
 
-public fun tuple[&amp;T + &amp;U] add(tuple[&amp;T] R, &amp;U E){
+public fun tuple[&amp;T + &amp;U] +(tuple[&amp;T] R, &amp;U E){
   return R + &lt;E&gt;;
 }
 
-public fun tuple[&amp;T + &amp;U] add(&amp;T E, tuple[&amp;U] R){
+public fun tuple[&amp;T + &amp;U] +(&amp;T E, tuple[&amp;U] R){
   return &lt;E&gt; + R;
 }
 
 public fun int size(tuple[&amp;T] R)
-  throw unimplemented("size tuple");
+  primitive("Tuple.size")
 
 public fun value get(tuple[&amp;T] R, int N)
-  return R[N];
+  primitive("Tuple.get")
 
 public fun str toString(tuple[&amp;T] R)
-  throw unimplemented("tuple toString");
+  primitive("Tuple.toString")
 
 %% --- Sets  -------------------------------------------------
 
-%% equal
+%% ==
 
-public fun bool equal(set[&amp;T] R, set[&amp;T] S)
-  throw unimplemented("equal set");
-
-%% less
-public fun bool less(set[&amp;T] R, set[&amp;T] S)
-  throw unimplemented("less set");
+public fun bool ==(set[&amp;T] R, set[&amp;T] S)
+  primitive("Set.equal")
+%% &lt;
+public fun bool &lt;(set[&amp;T] R, set[&amp;T] S)
+  primitive("Set.less")
 
 %% Add two sets (set union): add (operator +)
-public fun set[&amp;T] add(set[&amp;T] R, set[&amp;T] S){
-  throw unimplemented("add set");
-}
+public fun set[&amp;T] +(set[&amp;T] R, set[&amp;T] S)
+  primitive("Set.add")
 
-public fun set[&amp;T] add(set[&amp;T] S, &amp;T E){
- return S + {E};
-}
+public fun set[&amp;T] +(set[&amp;T] S, &amp;T E)
+  return S + {E}
 
-public fun set[&amp;T] add(&amp;T E, set[&amp;T] S){
- return {E} + S;
-}
+public fun set[&amp;T] +(&amp;T E, set[&amp;T] S)
+  return {E} + S
 
 %% Substract two sets (set difference): sub (operator -)
-public fun set[&amp;T] sub(set[&amp;T] R, set[&amp;T] S){
-   throw unimplemented("sub set");
-}
+public fun set[&amp;T] -(set[&amp;T] R, set[&amp;T] S)
+  primitive("Set.sub")
 
-public fun set[&amp;T] sub(set[&amp;T] S, &amp;T E){
-   return S - {E};
-}
+public fun set[&amp;T] -(set[&amp;T] S, &amp;T E)
+  return S - {E};
 
-public fun set[&amp;T] sub(&amp;T E, set[&amp;T] S){
-   return {E} - S;
-}
+public fun set[&amp;T] -(&amp;T E, set[&amp;T] S)
+  return {E} - S;
 
 %% Multiply two sets (set intersection): mul (operator *)
-public fun set[&amp;T] mul(set[&amp;T] R, set[&amp;T] S){
-   throw unimplemented("mul set");
-}
+public fun set[&amp;T] *(set[&amp;T] R, set[&amp;T] S)
+  primitive("Set.mul")
 
-public fun set[&amp;T] mul(set[&amp;T] S, &amp;T E){
-  return S * {E};
-}
+public fun set[&amp;T] *(set[&amp;T] S, &amp;T E)
+  return S * {E}
 
-public fun set[&amp;T] mul(&amp;T E, set[&amp;T] S){
+public fun set[&amp;T] *(&amp;T E, set[&amp;T] S)
   return {E} * S;
-}
 
 %% Size of set: size
-public fun int size(set[&amp;T] R){
-  int N = 0;
-  for(&amp;T E : R)
-    N += 1;
-  return N;
-}
+public fun int size(set[&amp;T] R)
+  primitive("Set.size")
 
 %% Arbitrary element of set: arb
-public fun &amp;T arb(set[&amp;T] S) {
-  int N = arb(0, size(S));
-  return S[N];
-}
+public fun &amp;T arb(set[&amp;T] S)
+  primitive("Set.arb")
 
 public fun str toString(set[&amp;T] R)
-  throw unimplemented("set toString");
+  primitive("Set.toString")
 
-public fun list[&amp;T] toList(set[&amp;T] S){
-  list[&amp;T] result = [];
-  for(&amp;T E : S){
-    result += E
-  };
-  return result;
-}
+public fun list[&amp;T] toList(set[&amp;T] S)
+  primitive("List.toList")
 
-public fun map[&amp;T, &amp;U] toMap(set[tuple[&amp;T, &amp;U]] S){
-  map[&amp;T, &amp;U] result = {};
-  for(tuple[&amp;T, &amp;U] Tup : S)
-    result += Tup;
-  return result
-}
+public fun map[&amp;T, &amp;U] toMap(set[tuple[&amp;T, &amp;U]] S)
+  primitive("Set.toMap")
 
-public fun rel[&amp;T] toRel(set[&amp;T] S){
-  rel[&amp;T] result = {};
-  for(&amp;T E : S){
-    result += E
-  };
-  return result;
-}
+public fun rel[&amp;T] toRel(set[&amp;T] S)
+  primitive("Set.toRel")
 
 public fun &amp;T reduce(set[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
   &amp;T result = unit;
@@ -4309,17 +4236,17 @@ public fun &amp;T max(set[&amp;T] R){
 
 %% Sum elements of a Set: sum
 public fun &amp;T sum(set[&amp;T] S, &amp;T zero){
-  return reduce(S, add, zero);
+  return reduce(S, +, zero);
 }
 
 %% Multiply elements of a Set: multiply
 public fun &amp;T multiply(set[&amp;T] S, &amp;T one){
-  return reduce(S, mul, zero);
+  return reduce(S, *, one);
 }
 
 %% Average of elements of a set; average
 public fun &amp;T average(set[&amp;T] S, &amp;T zero)
-  return add(S, zero)/size(R)
+  return sum(S, zero)/size(R)
 
 %% Powerset: power0
 public fun set[set[&amp;T]] power0(set[&amp;T] R)
@@ -4331,81 +4258,58 @@ public fun set[set[&amp;T]] power1(set[&amp;T] R)
 
 %% --- Maps --------------------------------------------------
 
-public fun bool equal(map[&amp;T, &amp;U] M1, map[&amp;T, &amp;U] M2){
-  throw unimplemented("equal map")
-} 
+public fun bool ==(map[&amp;T, &amp;U] M1, map[&amp;T, &amp;U] M2)
+  primitive("Map.equal")
 
-public fun bool less(map[&amp;T, &amp;U] M1, map[&amp;T, &amp;U] M2){
-  throw unimplemented("less map")
-} 
+public fun bool &lt;(map[&amp;T, &amp;U] M1, map[&amp;T, &amp;U] M2)
+  primitive("Map.less")
 
-public fun map[&amp;T] add(map[&amp;T] R, map[&amp;T] S){
-  throw unimplemented("add map");
-}
+public fun map[&amp;T] +(map[&amp;T] R, map[&amp;T] S)
+  primitive("Map.add")
 
-public fun map[&amp;T] add(map[&amp;T] S, &amp;T E){
- return S + {E};
-}
+public fun map[&amp;T] +(map[&amp;T] S, &amp;T E)
+  return S + {E};
 
-public fun map[&amp;T] add(&amp;T E, map[&amp;T] S){
- return {E} + S;
-}
+public fun map[&amp;T] +(&amp;T E, map[&amp;T] S)
+  return {E} + S
 
 %% Substract two maps (set difference): sub (operator -)
-public fun map[&amp;T] sub(map[&amp;T] R, map[&amp;T] S){
-   throw unimplemented("sub map");
-}
+public fun map[&amp;T] -(map[&amp;T] R, map[&amp;T] S)
+   primitive("Map.sub")
 
-public fun map[&amp;T] sub(map[&amp;T] S, &amp;T E){
-   return S - {E};
-}
+public fun map[&amp;T] -(map[&amp;T] S, &amp;T E)
+  return S - {E}
 
-public fun map[&amp;T] sub(&amp;T E, map[&amp;T] S){
-   return {E} - S;
-}
+public fun map[&amp;T] -(&amp;T E, map[&amp;T] S)
+  return {E} - S
 
 %% Multiply two maps (set intersection): mul (operator *)
-public fun map[&amp;T] mul(map[&amp;T] R, map[&amp;T] S){
-   throw unimplemented("mul map");
-}
+public fun map[&amp;T] *(map[&amp;T] R, map[&amp;T] S)
+  primitive("Map.mul")
 
-public fun map[&amp;T] mul(map[&amp;T] S, &amp;T E){
-  return S * {E};
-}
+public fun map[&amp;T] *(map[&amp;T] S, &amp;T E)
+  return S * {E}
 
-public fun map[&amp;T] mul(&amp;T E, map[&amp;T] S){
-  return {E} * S;
-}
+public fun map[&amp;T] *(&amp;T E, map[&amp;T] S)
+  return {E} * S
 
 public fun int size(map[&amp;T] M)
-  return size(toList(M));
+  primitive("Map.size")
 
 public fun &amp;T arb(map[&amp;T] M)
-  return(arb(toList(M)));
+  primitive("Map.arb")
 
 public fun str toString(map[&amp;T] R)
-  throw unimplemented("map toString");
+  primitive("Map.toString")
 
-public fun list[tuple[&amp;T, &amp;U]] toList(map[&amp;T, &amp;U] M){
-  list[tuple[&amp;T, &amp;U]] result = [];
-  for(tuple[&amp;T, &amp;U] Tup : M)
-    result += Tup;
-  return result
-}
+public fun list[tuple[&amp;T, &amp;U]] toList(map[&amp;T, &amp;U] M)
+  primitive("Map.toList")
 
-public fun rel[tuple[&amp;T, &amp;U]] toSet(map[&amp;T, &amp;U] M){
-  set[tuple[&amp;T, &amp;U]] result = {};
-  for(tuple[&amp;T, &amp;U] Tup : M)
-    result += Tup;
-  return result
-}
+public fun rel[tuple[&amp;T, &amp;U]] toSet(map[&amp;T, &amp;U] M)
+  primitive("Map.toSet")
 
-public fun rel[tuple[&amp;T, &amp;U]] toRel(map[&amp;T, &amp;U] M){
-  rel[tuple[&amp;T, &amp;U]] result = {};
-  for(&amp;T Tup : R)
-    result += Tup;
-  return result
-}
+public fun rel[tuple[&amp;T, &amp;U]] toRel(map[&amp;T, &amp;U] M)
+  primitive("Map.toRel")
 
 %% Is this meaningfull?
 public fun &amp;T reduce(map[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
@@ -4421,69 +4325,51 @@ public fun map[&amp;T] apply(map[&amp;T] M, fun &amp;T F (&amp;T,&amp;T))
 
 %% --- Relations ---------------------------------------------
 
-public fun bool equal(rel[&amp;T] R, rel[&amp;T] S)
-  throw unimplemented("equal rel");
+public fun bool ==(rel[&amp;T] R, rel[&amp;T] S)
+  primitive("Rel.equal")
 
-public fun bool less(rel[&amp;T] R, rel[&amp;T] S)
-  throw unimplemented("less rel");
+public fun bool &lt;(rel[&amp;T] R, rel[&amp;T] S)
+  primitive("Rel.less")
 
 %% Add two relations (union): add (operator +)
-public fun rel[&amp;T] add(rel[&amp;T] R1, rel[&amp;T] R2){
-  return toRel(toSet(R1) + toSet(R2))
-}
+public fun rel[&amp;T] +(rel[&amp;T] R1, rel[&amp;T] R2)
+  primitive("Rel.add")
 
-public fun rel[&amp;T] add(&amp;T E, rel[&amp;T] R){
-  return toRel(E + toSet(R))
-}
+public fun rel[&amp;T] +(&amp;T E, rel[&amp;T] R)
+  return toRel({E}) + R
 
-public fun rel[&amp;T] add(rel[&amp;T] R, &amp;T E){
-  return toRel(toSet(R) + E)
-}
+public fun rel[&amp;T] +(rel[&amp;T] R, &amp;T E)
+  return R + toRel({E})
 
 %% Substract two relations (difference): sub (operator -)
-public fun rel[&amp;T] sub(rel[&amp;T] R1, rel[&amp;T] R2){
-  return toRel(toSet(R1) - toSet(R2))
-}
+public fun rel[&amp;T] -(rel[&amp;T] R1, rel[&amp;T] R2)
+  primitive("Rel.sub")
 
 %% Multiply two relations (intersection): mul (operator *)
-public fun rel[&amp;T] mul(rel[&amp;T] R1, rel[&amp;T] R1){
-  return toRel(toSet(R1) * toSet(R2))
-}
+public fun rel[&amp;T] *(rel[&amp;T] R1, rel[&amp;T] R1)
+  primitive("Rel.mull")
 
 %% Size of relation: size
-public fun int size(rel[&amp;T] R){
-  return size(toSet(R))
-}
+public fun int size(rel[&amp;T] R)
+  primitive("Rel.size")
 
 public fun &amp;T arb(rel[&amp;T] R)
-  return arb(toList(R));
+  primitive("Rel.arb")
 
 public fun str toString(rel[&amp;T] R)
-  throw unimplemented("rel toString");
+  primitive("Rel.toString")
 
 %% Note: in rel[&amp;T], the type variable &amp;T refers 
 %% to the tuple type of the relation.
 
-public fun list[&amp;T] toList(rel[&amp;T] R){
-  list[&amp;T] result = [];
-  for(&amp;T Tup : R)
-    result += Tup;
-  return result
-}
+public fun list[&amp;T] toList(rel[&amp;T] R)
+  primitive("Rel.toList")
 
-public fun set[&amp;T] toSet(rel[&amp;T] R){
-  set[&amp;T] result = {};
-  for(&amp;T Tup : R)
-    result += Tup;
-  return result
-}
+public fun set[&amp;T] toSet(rel[&amp;T] R)
+  primitive("Rel.toSet")
 
-public fun rel[&amp;T] toRel(set[&amp;T] S){
-  rel[&amp;T] result = {};
-  for(&amp;T Tup : R)
-    result += Tup;
-  return result
-}
+public fun rel[&amp;T] toRel(set[&amp;T] S)
+  primitive("Set.toRel")
 
 public fun rel[&amp;T] apply(rel[&amp;T] R, fun &amp;T F (&amp;T,&amp;T))
   return {F(E) | &amp;T E : R};
@@ -4569,71 +4455,60 @@ public fun set[&amp;T] reachX(set[&amp;T] Start, set[&amp;T] Excl,
   return range(compose(domainR(Rel, Start), 
                        carrierX(Rel, Excl)+))
 
+%% TO DO
+
+public fun rel[&amp;T, &amp;T] closure(rel[&amp;T, &amp;T])
+  primitive("Rel.closure")
+
 %% --- Annotations -------------------------------------------
 
 %% Test whether a named annotation exists.
 public fun bool has_annotation(&amp;T Subject)
-   throw unimplemented("has_annotation");
+  primitive("Annotation.has_annotation");
 
 %% Get the value of a named annotation
-public fun value get_annotation(&amp;T Subject, str Name){
-  if(not has_annotation(Subject))
-    throw argument_error("get_annotation", Subject);
-  throw unimplemented("get_annotation");
-}
+public fun value get_annotation(&amp;T Subject, str Name)
+  primitive("Annotation.get_annotation")
 
 %% Get all annotations
 public fun map[str,value] get_annotations(&amp;T Subject)
-  throw unimplemented("get_annotations");
+  primitive("Annotation.get_annotation")
 
 %% Set the value of a named annotation
 public fun &amp;T set_annotation(&amp;T Subject, 
                              str Name, value AValue)
-  throw unimplemented("set_annotation");
+  primitive("Annotation.set_annotation")
 
 %% Set all annotations
 public fun &amp;T set_annotations(&amp;T Subject, 
                               map[str, value] Annos)
-  throw unimplemented("set_annotation");
+  primitive("Annotation.set_annotations")
+
 
 %% --- Parsing/Unparsing -------------------------------------
 
-public fun &amp;T parseFile(str filename){
-  throw unimplemented("parseFile");
-  throw file_error;
-  throw syntax_error;
-}
+public fun &amp;T parseFile(str filename)
+  primitive("Parse.parseFile")
 
-public fun &amp;T parseString(str source){
-  throw unimplemented("parseString");
-  throw file_error;
-  throw syntax_error;
-}
+public fun &amp;T parseString(str source)
+  primitive("Parse.parseString")
 
-public fun str unparseToString(&amp;T Subject){
-  throw unimplemented("unparseToString");
-}
+public fun str unparseToString(&amp;T Subject)
+  primitive("Parse.unparseToString")
 
-public fun str unparseToFile(&amp;T Subject, str filename){
-  throw unimplemented("unparseToFile");
-}
+public fun str unparseToFile(&amp;T Subject, str filename)
+  primitive("Parse.unparseToFile")
 
 %% --- io ----------------------------------------------------
 
-public fun str readFile(str filename){
-  throw unimplemented("read");
-  throw file_error;
-}
+public fun str readFile(str filename)
+  primitive("IO.read")
 
-public fun &amp;T readTerm(str filename){
-  throw unimplemented("readTerm");
-  throw file_error;
-}
+public fun &amp;T readTerm(str filename)
+  primitive("IO.readTerm")
 
-public fun void write(str filename, &amp;T Subject){
-  throw unimplemented("write");
-  throw file_error;
-}
+public fun void write(str filename, &amp;T Subject)
+  primitive("IO.write")
 
 %% --- Interface with the Program Database -------------------
 %% The following function provide a bare minimum and will
@@ -4645,29 +4520,29 @@ public fun void write(str filename, &amp;T Subject){
 %% of type map[str, value] and to access it that way!
 
 public fun void openPDB(str name)
-  throw unimplemented("openPDB");
+ primitive("PDB.open")
 %% may throw cannot_open("PDB " + name)
 
 public fun void closePDB()
-  throw unimplemented("closePDB");
+  primitive("PDB.close")
 %% may throw cannot_close("PDB")
 
 public fun void writePDB(str name, &amp;T val)
-  throw unimplemented("writePDB");
+  primitive("PDB.write")
 %% may throw cannot_write("PDB " + name)
 
 public fun &amp;T readPDB(str name)
-  throw unimplemented("readPDB");
+  primitive("PDB.readPDB")
 %% may throw cannot_read("PDB " + name)
 
 %% If name is of type set[&amp;T], then the set incr
 %% is added to it. Similar for a rel[&amp;T]
 
 public fun void addSetPDB(str name, set[&amp;T] incr)
-  throw unimplemented("addSetPDB");
+  primitive("PDB.addSet)
 
 public fun void addRelPDB(str name, rel[&amp;T] incr)
- throw unimplemented("addRelPDB");
+  primitive(PDB.addRel")
 
 
 
