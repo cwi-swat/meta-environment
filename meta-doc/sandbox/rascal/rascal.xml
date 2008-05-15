@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -690,10 +690,10 @@
     </section>
 
     <section>
-      <title>Names, Types and Values</title>
+      <title>Names</title>
 
-      <para>Rascal aims at seamless integration with and its names adhere to
-      the following conventions:</para>
+      <para>Rascal aims at seamless integration with Java and its names adhere
+      to the following conventions:</para>
 
       <itemizedlist>
         <listitem>
@@ -717,6 +717,10 @@
             </warning></para>
         </listitem>
       </itemizedlist>
+    </section>
+
+    <section>
+      <title>Types and Type Conversions</title>
 
       <para>The type system (and notation) are mostly similar to that of
       Rscript, but</para>
@@ -729,8 +733,8 @@
         <listitem>
           <para>There are built-in types (<literal>bool</literal>,
           <literal>int</literal>, <literal>double</literal>,
-          <literal>str</literal>, <literal>loc</literal>) that have
-          corresponding values.</para>
+          <literal>str</literal>, <literal>loc</literal>,
+          <literal>void</literal>).</para>
         </listitem>
 
         <listitem>
@@ -739,8 +743,9 @@
         </listitem>
 
         <listitem>
-          <para>Sets, maps, relations and tuples can be formed from value;
-          Maps, relations and tuples can have optional column names.</para>
+          <para>Types for sets, maps, relations and tuples can be formed from
+          types; Maps, relations and tuples can have optional column
+          names.</para>
         </listitem>
 
         <listitem>
@@ -752,7 +757,7 @@
           <para>All syntactic types are a subtype of the type
           <literal>tree</literal> that corresponds to UPTR. Up casts from a
           subtype to an enclosing type are automatic; Down casts require a
-          run-time check.</para>
+          run-time check/cast.</para>
         </listitem>
 
         <listitem>
@@ -760,7 +765,8 @@
           <note>
               <para>We assume that all constructors for a datatype lead to a
               corresponding function to construct a term of that datatype.
-              This eliminates the need to quote abstract terms.</para>
+              This eliminates the need to quote abstract terms in
+              statements.</para>
             </note></para>
 
           <note>
@@ -800,8 +806,9 @@
       <para>As a design strategy we try to offer the option to leave out as
       many type indications as possible.</para>
 
-      <para>The root of the type system is the type named
-      "<literal>value</literal>". It has the following subtypes:</para>
+      <para>The above can be summarized as follows. The root of the type
+      system is the type named "<literal>value</literal>" and It has the
+      following subtypes:</para>
 
       <itemizedlist>
         <listitem>
@@ -810,6 +817,10 @@
 
         <listitem>
           <para><literal>int</literal></para>
+        </listitem>
+
+        <listitem>
+          <para>double</para>
         </listitem>
 
         <listitem>
@@ -860,6 +871,39 @@
               </itemizedlist>
             </listitem>
           </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>Some upward conversions between types are possible:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>bool -&gt; int</para>
+        </listitem>
+
+        <listitem>
+          <para>int -&gt; double</para>
+        </listitem>
+
+        <listitem>
+          <para>double -&gt; str</para>
+        </listitem>
+
+        <listitem>
+          <para>loc -&gt; str</para>
+        </listitem>
+
+        <listitem>
+          <para>lists, sets, maps, tuples and relations can be converted to
+          the same structure but with upward converted element type(s).</para>
+        </listitem>
+
+        <listitem>
+          <para>A map can be converted to a rel.</para>
+        </listitem>
+
+        <listitem>
+          <para>A set of tuples can be converted to a rel.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -960,6 +1004,59 @@
       <para>Functions can raise exceptions but these are not declared as part
       of the function signature (i.e., we have unchecked exceptions in
       contrast with checked exceptions in Java).</para>
+
+      <para><warning>
+          <para>The following proposal for overlaoding is to be
+          discussed.</para>
+        </warning></para>
+
+      <para>Functions may be <emphasis>overloaded</emphasis>, i.e., functions
+      with the same name but with different argument types can be declared.
+      Overloading is subject to the restriction that if several versions of a
+      function with the same name and the same number of arguments exist,
+      these versions can be partially ordered (from more specific to more
+      general) such that for each F that comes before G and for each argument
+      i one of the following holds:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>typeof(arg(F, i)) can be converted to typeof(arg(G,i))</para>
+        </listitem>
+
+        <listitem>
+          <para>typeof(arg(F, i)) can not be converted typeof(arg(G,i))</para>
+        </listitem>
+
+        <listitem>
+          <para>typeof(arg(F, i)) and typeof(arg(G,i)) are equal.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>It is forbidden that two functions have identical arguments.
+      Function calls are resolved according to the above order, from specific
+      to general. Consider the declarations:<programlisting>fun int f(int i, int j) ...
+fun double f(int i, double y) ...
+fun double f(double x, int j) ...
+fun double f (double z, double y) ...</programlisting></para>
+
+      <para>Here we have, with obvious abbreviation:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>f(i,i) &lt; f(i,d) &lt; f(d,d) and</para>
+        </listitem>
+
+        <listitem>
+          <para>f(i,i) &lt; f(d,i) &lt; f(d,d)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><note>
+          <para>We need additional constraints on the ordering. For instance,
+          <programlisting>fun double f(int i, double y) ...
+fun double f(double x, int j) ...</programlisting>should be rejected since we
+          cannot resolve f(i,i).</para>
+        </note></para>
 
       <para>Functions preceeded by the keyword "<literal>java</literal>" have
       a body written in Java. They have the following properties:</para>
