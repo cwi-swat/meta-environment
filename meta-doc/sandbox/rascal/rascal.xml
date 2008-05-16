@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -761,8 +761,7 @@
         </listitem>
 
         <listitem>
-          <para>Datatype declarations may introduce new structured types.
-          <note>
+          <para>Data declarations may introduce new structured types. <note>
               <para>We assume that all constructors for a datatype lead to a
               corresponding function to construct a term of that datatype.
               This eliminates the need to quote abstract terms in
@@ -801,10 +800,20 @@
             </listitem>
           </itemizedlist>
         </listitem>
-      </itemizedlist>
 
-      <para>As a design strategy we try to offer the option to leave out as
-      many type indications as possible.</para>
+        <listitem>
+          <para>A type declaration introduces a name for a new type that is a
+          subtype of a given type, e.g., <literal>type rel[node,node]
+          Graph</literal>, introduces the type <literal>Graph</literal> as a
+          subtype of <literal>rel[node,node]</literal>. There are no built-in
+          subtypes.</para>
+
+          <warning>
+            <para>Subtypes cause many, many problems in combination with
+            overloading. We should reconsider what we want here.</para>
+          </warning>
+        </listitem>
+      </itemizedlist>
 
       <para>The above can be summarized as follows. The root of the type
       system is the type named "<literal>value</literal>" and It has the
@@ -874,36 +883,35 @@
         </listitem>
       </itemizedlist>
 
-      <para>Some upward conversions between types are possible:</para>
+      <para>Two types are <emphasis>equivalent</emphasis> iff:</para>
 
       <itemizedlist>
         <listitem>
-          <para>bool -&gt; int</para>
+          <para>They are identical.</para>
         </listitem>
 
         <listitem>
-          <para>int -&gt; double</para>
+          <para>One is a set of tuples and the other is a relation with the
+          same elements as the tuple.</para>
         </listitem>
 
         <listitem>
-          <para>double -&gt; str</para>
+          <para>One is a map and the other is a relation with the same element
+          types as the map (but not vice versa).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A type T1 can be <emphasis>widened</emphasis> to a type T2
+      iff:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>T1 is a subtype of T2.</para>
         </listitem>
 
         <listitem>
-          <para>loc -&gt; str</para>
-        </listitem>
-
-        <listitem>
-          <para>lists, sets, maps, tuples and relations can be converted to
-          the same structure but with upward converted element type(s).</para>
-        </listitem>
-
-        <listitem>
-          <para>A map can be converted to a rel.</para>
-        </listitem>
-
-        <listitem>
-          <para>A set of tuples can be converted to a rel.</para>
+          <para>T1 and T2 are both structured types and the element types of
+          T1 can be widened to the element types of T2.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -987,136 +995,153 @@
     <section>
       <title>Functions</title>
 
-      <para>A function declaration consists of a visibility declaration, the
-      keyword <literal>fun</literal>, result type, a function name, typed
-      arguments and a function body. Functions without a result type have type
-      <literal>void</literal>.</para>
+      <section>
+        <title>Overview</title>
 
-      <para>A visibility declaration is one of the keywords
-      <literal>public</literal> or <literal>private</literal>
-      (default).</para>
+        <para>A function declaration consists of a visibility declaration, the
+        keyword <literal>fun</literal>, result type, a function name, typed
+        arguments and a function body. Functions without a result type have
+        type <literal>void</literal>.</para>
 
-      <para>A function body is a list of statements, optionally separated by
-      semi-colons. Each unique control flow path through a function must have
-      a return statement, such that each function always returns a proper
-      value.</para>
+        <para>A visibility declaration is one of the keywords
+        <literal>public</literal> or <literal>private</literal>
+        (default).</para>
 
-      <para>Functions can raise exceptions but these are not declared as part
-      of the function signature (i.e., we have unchecked exceptions in
-      contrast with checked exceptions in Java).</para>
+        <para>A function body is a list of statements, optionally separated by
+        semi-colons. Each unique control flow path through a function must
+        have a return statement, such that each function always returns a
+        proper value.</para>
 
-      <para><warning>
-          <para>The following proposal for overlaoding is to be
-          discussed.</para>
-        </warning></para>
+        <para>Functions can raise exceptions but these are not declared as
+        part of the function signature (i.e., we have unchecked exceptions in
+        contrast with checked exceptions in Java).</para>
 
-      <para>Functions may be <emphasis>overloaded</emphasis>, i.e., functions
-      with the same name but with different argument types can be declared.
-      Overloading is subject to the restriction that if several versions of a
-      function with the same name and the same number of arguments exist,
-      these versions can be partially ordered (from more specific to more
-      general) such that for each F that comes before G and for each argument
-      i one of the following holds:</para>
+        <para>Functions preceeded by the keyword "<literal>java</literal>"
+        have a body written in Java. They have the following
+        properties:</para>
 
-      <itemizedlist>
-        <listitem>
-          <para>typeof(arg(F, i)) can be converted to typeof(arg(G,i))</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>Arguments and result are pure Rascal values.</para>
+          </listitem>
 
-        <listitem>
-          <para>typeof(arg(F, i)) can not be converted typeof(arg(G,i))</para>
-        </listitem>
+          <listitem>
+            <para>Java functions cannot acces the global state of the Rascal
+            program. Their only interface is via input parameters and a result
+            value. They cannot access Rascal global variables.</para>
+          </listitem>
 
-        <listitem>
-          <para>typeof(arg(F, i)) and typeof(arg(G,i)) are equal.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>Side effects caused by Java functions in the Java state, are
+            not undone in the case of backtracking.</para>
+          </listitem>
+        </itemizedlist>
 
-      <para>It is forbidden that two functions have identical arguments.
-      Function calls are resolved according to the above order, from specific
-      to general. Consider the declarations:<programlisting>fun int f(int i, int j) ...
+        <note>
+          <para>These Java functions are primarily intended for implementing
+          library functions and for interfacing with Eclipse.</para>
+        </note>
+
+        <para>Functions preceeded by the keyword "memo" are memo functions
+        that cache previous arguments/result combinations.<note>
+            <para>Do we need library functions to tune the memo behaviour
+            (e.g., flush cache, change cache size)?</para>
+          </note></para>
+
+        <para>Functions can later be extended [STILL UNDER DISCUSSION]</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The keyword <literal>extend</literal> before a function
+            declaration extends a previously defined function with the same
+            signature.</para>
+          </listitem>
+
+          <listitem>
+            <para>Local declarations in the extension function are added to
+            the original function.</para>
+          </listitem>
+
+          <listitem>
+            <para>If both bodies consist of a <literal>switch</literal> or
+            <literal>visit</literal> construct, the cases are merged.</para>
+          </listitem>
+
+          <listitem>
+            <para>Other cases may be considered: switch + expr, expr + switch,
+            visit + expr, and expr + visit.</para>
+          </listitem>
+
+          <listitem>
+            <para>No other extensions are allowed.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Overloading</title>
+
+        <para><warning>
+            <para>The following proposal for overloading is to be discussed.
+            There is a strong interaction with subtyping that seriously
+            complicates overloading resolution (as we all know from the PL/I
+            and ADA times).</para>
+          </warning></para>
+
+        <para>Functions may be <emphasis>overloaded</emphasis>, i.e.,
+        functions with the same name but with different argument types can be
+        declared. Overloading is subject to the restriction that if several
+        versions of a function with the same name and the same number of
+        arguments exist, these versions can be partially ordered (from more
+        specific to more general) such that for each F that comes before G and
+        for each argument i one of the following holds:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>typeof(arg(F, i)) and typeof(arg(G,i)) are
+            equivalent;</para>
+          </listitem>
+
+          <listitem>
+            <para>typeof(arg(F, i)) can be widened to typeof(arg(G,i));</para>
+          </listitem>
+
+          <listitem>
+            <para>none of the previous cases applies,</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>It is forbidden that two functions have equivalent arguments.
+        Function calls are resolved according to the above order, from
+        specific to general. Consider the declarations (assuming that int is a
+        subtype of double, which we currently do NOT propose):<programlisting>fun int f(int i, int j) ...
 fun double f(int i, double y) ...
 fun double f(double x, int j) ...
 fun double f (double z, double y) ...</programlisting></para>
 
-      <para>Here we have, with obvious abbreviation:</para>
+        <para>Here we have, with obvious abbreviation:</para>
 
-      <itemizedlist>
-        <listitem>
-          <para>f(i,i) &lt; f(i,d) &lt; f(d,d) and</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>f(i,i) &lt; f(i,d) &lt; f(d,d) and</para>
+          </listitem>
 
-        <listitem>
-          <para>f(i,i) &lt; f(d,i) &lt; f(d,d)</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>f(i,i) &lt; f(d,i) &lt; f(d,d)</para>
+          </listitem>
+        </itemizedlist>
 
-      <para><note>
-          <para>We need additional constraints on the ordering. For instance,
-          <programlisting>fun double f(int i, double y) ...
+        <para><warning>
+            <para>We need additional constraints on the ordering. For
+            instance, <programlisting>fun double f(int i, double y) ...
 fun double f(double x, int j) ...</programlisting>should be rejected since we
-          cannot resolve f(i,i).</para>
-        </note></para>
-
-      <para>Functions preceeded by the keyword "<literal>java</literal>" have
-      a body written in Java. They have the following properties:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Arguments and result are pure Rascal values.</para>
-        </listitem>
-
-        <listitem>
-          <para>Java functions cannot acces the global state of the Rascal
-          program. Their only interface is via input parameters and a result
-          value. They cannot access Rascal global variables.</para>
-        </listitem>
-
-        <listitem>
-          <para>Side effects caused by Java functions in the Java state, are
-          not undone in the case of backtracking.</para>
-        </listitem>
-      </itemizedlist>
-
-      <note>
-        <para>These Java functions are primarily intended for implementing
-        library functions and for interfacing with Eclipse.</para>
-      </note>
-
-      <para>Functions preceeded by the keyword "memo" are memo functions that
-      cache previous arguments/result combinations.<note>
-          <para>Do we need library functions to tune the memo behaviour (e.g.,
-          flush cache, change cache size)?</para>
-        </note></para>
-
-      <para>Functions can later be extended [STILL UNDER DISCUSSION]</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>The keyword <literal>extend</literal> before a function
-          declaration extends a previously defined function with the same
-          signature.</para>
-        </listitem>
-
-        <listitem>
-          <para>Local declarations in the extension function are added to the
-          original function.</para>
-        </listitem>
-
-        <listitem>
-          <para>If both bodies consist of a <literal>switch</literal> or
-          <literal>visit</literal> construct, the cases are merged.</para>
-        </listitem>
-
-        <listitem>
-          <para>Other cases may be considered: switch + expr, expr + switch,
-          visit + expr, and expr + visit.</para>
-        </listitem>
-
-        <listitem>
-          <para>No other extensions are allowed.</para>
-        </listitem>
-      </itemizedlist>
+            cannot resolve f(i,i).</para>
+          </warning><warning>
+            <para>In a world without subtyping, overloading is simple: forbid
+            identical versions of an overloaded function and loop over the
+            versions until one matches.</para>
+          </warning></para>
+      </section>
     </section>
 
     <section>
@@ -2938,7 +2963,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
               <entry align="center">bool</entry>
 
@@ -2946,7 +2971,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str&#160;</entry>
+              <entry align="center">str </entry>
 
               <entry align="center">loc</entry>
 
@@ -3640,7 +3665,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center">&#160;</entry>
+                <entry align="center"> </entry>
 
                 <entry align="center">list</entry>
 
@@ -5088,30 +5113,8 @@ public fun void addRelPDB(str name, rel[&amp;T] incr)
 
     <itemizedlist>
       <listitem>
-        <para>See <xref linkend="section.patterns" /> for a description of
-        patterns. There are still some questions about patterns:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Do we want the subexpressions in patterns? [Proposal: no
-            since it complicates the syntax]</para>
-          </listitem>
-
-          <listitem>
-            <para>Do we want string variables in patterns? [Undecided]</para>
-          </listitem>
-
-          <listitem>
-            <para>Do we want to add regular expression matching primitives to
-            patterns? Ex.</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><programlisting>[| if @any@ $Stats fi |]</programlisting></para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
+        <para>Decide whether we will have subtypes or not (see complication
+        regarding overloading).</para>
       </listitem>
 
       <listitem>
