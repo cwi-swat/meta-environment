@@ -19,14 +19,15 @@
 	<td colspan="2">
         <em><%= item.label %></em>
 	<% end %>
-	</td>
+      </td>
+      <!--
       <% elsif item.not_tried? then %>
 	<td>
         not tried	
 	</td>
 	<td>
         <%= item.time %>
-	</td>
+      </td> -->
       <% else %>
         <td>
         <span class="<%=item.style_class%>"><%=item.label%></span>
