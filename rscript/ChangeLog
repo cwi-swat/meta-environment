@@ -1,6 +1,11 @@
 # $Id$
 
-Thu May 22 02:46:02 CEST 2008 <basten@cwi.nl>
+Thu May 22 18:36:54 CEST 2008 <basten@cwi.nl>
+ * spec/languages/rscript/run/RscriptCalculator.sdf: fixed bug in Rscript
+   interpreter where declaration of variables in rstores results in empty
+   variables.
+	
+Thu May 22 14:46:02 CEST 2008 <basten@cwi.nl>
  * util/rscript.sh.src: Fixed command line rscript interpreter.
  * Added dependency to error-support
 

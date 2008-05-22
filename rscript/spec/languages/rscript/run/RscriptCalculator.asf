@@ -99,14 +99,6 @@ equations
 %% ---- Eval one statement
 
 [S0]	eval-rstat(yield $Etype $Var, $REnv)	= eval-rstat($Etype $Var, yield($Var, $REnv))
-[S1]	eval-rstat(bool $Var, $REnv) 		= assign-variable($Var, bool, true, $REnv)
-[S2]	eval-rstat(int $Var, $REnv)  		= assign-variable($Var, int, 0, $REnv)
-[S3]	eval-rstat(str $Var, $REnv)  		= assign-variable($Var, str, "", $REnv)
-[S4]	eval-rstat(loc $Var, $REnv)		= assign-variable($Var, loc, file(""), $REnv)
-[S5]	eval-rstat(set[$Etype] $Var, $REnv)  	= assign-variable($Var, set[$Etype], {}, $REnv)
-	
-[S6]	eval-rstat(rel[$Etype1, $Etype2] $Var, $REnv) 
-						= assign-variable($Var, rel[$Etype1, $Etype2], {}, $REnv)
 [S7]	eval-rstat($Etype $Var, $REnv)	= $REnv
 
 [S8a]   	eval-rstat(yield $Etype $Var = $Exp, $REnv) = eval-rstat($Etype $Var = $Exp, yield($Var, $REnv))
