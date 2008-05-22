@@ -1,5 +1,11 @@
 $Id$
 
+Thu May 22 02:29:61 CEST 2008 <basten@cwi.nl>
+ * lib/Error-utils.*: added function to count the number of errors, warnings,
+   etc. in error reports.
+ * utils/display-error.c: program now exits with exit code 1 if error report
+   contains (fatal) errors.
+
 Wed Apr 16 11:33:50 CEST 2008 <jurgenv@cwi.nl>
  * lib/*.c: regenerated API to fix type punned aliasing issues.
 

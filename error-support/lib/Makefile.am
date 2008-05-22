@@ -31,7 +31,8 @@ libErrorAPI_la_SOURCES = \
 	display.c \
 	lift.c \
 	lower.c \
-	manager.c
+	manager.c \
+	Error-utils.c
 
 libLocationAPI_la_CPPFLAGS = $(ATERM_CFLAGS)
 libLocationAPI_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)

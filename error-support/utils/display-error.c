@@ -65,12 +65,21 @@ int main(int argc, char *argv[]) {
   }
 
   if (output != NULL) {
-    ERR_fdisplaySummary(output, ERR_SummaryFromTerm(input));
+    ERR_Summary summary = ERR_SummaryFromTerm(input);
+    ERR_fdisplaySummary(output, summary);
+    fclose(output);
+    
+    int num_errors, num_warnings, num_infos, num_fatal;
+    ERR_countErrors(summary, &num_errors, &num_warnings, &num_infos, &num_fatal);
+
+    if (num_errors + num_fatal > 0) {
+      return 1;
+    }
   } 
   else {
     fprintf(stderr, "%s: could not open file %s\n", myname, output_file_name);
+    return 1;
   }
 
-  fclose(output);
-  return 0;
+  return 0;    
 }

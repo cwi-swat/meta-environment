@@ -23,5 +23,6 @@ ERR_Summary PERR_lowerSummary(PERR_Summary pSummary);
 void ERR_displaySummary(ERR_Summary summary);
 void ERR_fdisplaySummary(FILE *fp, ERR_Summary summary);
 void ERR_fdisplayError(FILE *fp, ERR_Error error, const char* producer);
+void ERR_countErrors(ERR_Summary summary, int *num_errors, int *num_warnings, int *num_infos, int *num_fatal);
 
 #endif
