@@ -247,5 +247,5 @@ else
     echo "There are type errors in $THE_RSCRIPT; script is not executed"
 fi
 
-#cleanup
+cleanup
 
