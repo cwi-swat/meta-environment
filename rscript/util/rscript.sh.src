@@ -7,8 +7,8 @@
 # - parse, check and evaluate an Rscript with a given Rstore
 # - parse and check an Rscript and run it as test suite
 
-set -e
-set -x
+#set -e
+#set -x
 
 #   variables
 prefix=__PREFIX__
@@ -48,7 +48,6 @@ DISPLAY_OUTPUT=__ERROR_SUPPORT__/bin/display-error
 RSTORE=
 TYPE_CHECKER=${bindir}/rscriptchecker
 OUTPUT_TYPE_CHECKER=./.checker.feedback
-TYPE_CHECKING_OK="Rscript is type correct!"
 TMP_FILES=$OUTPUT_TYPE_CHECKER
 
 # 
@@ -231,21 +230,19 @@ check
 
 if test "$CHECK_ONLY" = "yes"
 then
-    if grep  -q "$TYPE_CHECKING_OK" "$OUTPUT_TYPE_CHECKER"
-    then 
+    if $DISPLAY_OUTPUT -i $OUTPUT_TYPE_CHECKER
+    then
 	echo $THE_RSCRIPT is type correct
-    else
-	$DISPLAY_OUTPUT -i $OUTPUT_TYPE_CHECKER
+    else	
 	echo ""
     fi
     exit
 fi
    
-if grep  -q "$TYPE_CHECKING_OK" "$OUTPUT_TYPE_CHECKER"
-then 
+if $DISPLAY_OUTPUT -i $OUTPUT_TYPE_CHECKER
+then
     evaluate
-else 
-    $DISPLAY_OUTPUT -i $OUTPUT_TYPE_CHECKER
+else    
     echo ""
     echo "There are type errors in $THE_RSCRIPT; script is not executed"
 fi
