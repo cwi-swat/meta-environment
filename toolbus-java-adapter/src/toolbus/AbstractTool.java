@@ -450,11 +450,11 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 	private void ackEvent(ATermList ackEvent){
 		ATerm event = ackEvent.getFirst();
 		
-		AFun sourceFun = ((ATermAppl) event).getAFun();
+		String sourceName = ((ATermAppl) event).getAFun().toString();
 		
 		JobQueue eventQueue;
 		synchronized(queues){
-			eventQueue = queues.get(sourceFun);
+			eventQueue = queues.get(sourceName);
 		}
 		eventQueue.ackEvent();
 	}
