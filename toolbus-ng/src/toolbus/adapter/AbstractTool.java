@@ -65,7 +65,7 @@ public abstract class AbstractTool implements IOperations{
 	 * 
 	 * @return A reference to the aterm factory.
 	 */
-	public PureFactory getFactory(){
+	public static PureFactory getFactory(){
 		return termFactory;
 	}
 
