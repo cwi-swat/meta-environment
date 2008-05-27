@@ -52,9 +52,7 @@ public class SendTool extends AbstractJavaTool{
 		contentPane.add(textPane, BorderLayout.CENTER);
 		
 		contentPane.add(submitButton, BorderLayout.SOUTH);
-	}
-	
-	public void show(){
+		
 		frame.setVisible(true);
 	}
 	
@@ -104,6 +102,5 @@ public class SendTool extends AbstractJavaTool{
 		}catch(Exception ex){
 			throw new RuntimeException(ex);
 		}
-		sendTool.show();
 	}
 }

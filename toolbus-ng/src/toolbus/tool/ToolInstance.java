@@ -108,10 +108,11 @@ public class ToolInstance implements IDataHandler, IOperations{
 			// Instantiate the tool.
 			AbstractJavaTool tool;
 			try{
-				Constructor<?> toolConstructor = toolClass.getConstructor(new Class[]{String[].class});
+				Constructor<?> toolConstructor = toolClass.getConstructor();
 				
-				Object[] args = new Object[]{new String[]{"-TYPE", AbstractTool.DIRECTTOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID)}};
-				tool = (AbstractJavaTool) toolConstructor.newInstance(args);
+				String[] args = new String[]{"-TYPE", AbstractTool.DIRECTTOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID)};
+				tool = (AbstractJavaTool) toolConstructor.newInstance();
+				tool.connect(args);
 			}catch(InstantiationException iex){
 				String error = "Unable to instantiate the tool. Classname: " + toolClass.getName();
 				LoggerFactory.log(error, iex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
@@ -131,6 +132,10 @@ public class ToolInstance implements IDataHandler, IOperations{
 			}catch(SecurityException sex){
 				String error = "We don't have permission to invoke the constructor of: " + toolClass.getName();
 				LoggerFactory.log(error, sex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
+				throw new ToolBusException(error);
+			}catch(Exception ex){
+				String error = "Unable to connect tool to the ToolBus directly: " + toolClass.getName();
+				LoggerFactory.log(error, ex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
 				throw new ToolBusException(error);
 			}
 			
