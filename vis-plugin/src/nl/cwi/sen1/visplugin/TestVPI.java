@@ -3,9 +3,8 @@ package nl.cwi.sen1.visplugin;
 import java.io.File;
 import java.net.URL;
 
-import nl.cwi.sen1.tunit.StackTraceUtil;
 import nl.cwi.sen1.tunit.TUnitTestCase;
-import nl.cwi.sen1.tunit.ToolStub;
+import nl.cwi.sen1.tunit.ToolStubNG;
 import aterm.ATerm;
 
 /**
@@ -18,9 +17,8 @@ import aterm.ATerm;
  */
 public class TestVPI extends TUnitTestCase {
 
-    private ToolStub m_vpiProcess = null;
-
-    private ToolStub m_vpiProcessStub = null;
+    private ToolStubNG m_vpiProcess;
+    private ToolStubNG m_vpiProcessStub;
 
     private static final int TIMEOUT = 5000;
 
@@ -36,20 +34,22 @@ public class TestVPI extends TUnitTestCase {
         // tests can be run.
         if (connectTools()) {
             try {
-
                 // Run the actual tests.
                 visualisationSupported();
                 visualiseFact();
                 factUpdated();
                 linkClicked();
                 rstoreUnloaded();
-
-                // Cleanup the toolbus processes.
-                disconnectToolStubs();
-
+                
+                m_vpiProcess.waitForCompletion();
+                m_vpiProcessStub.waitForCompletion();
+                
             } catch (Exception ex) {
-                System.out.println(StackTraceUtil.getStackTrace(ex));
+            	ex.printStackTrace();
                 fail(ex.toString());
+            } finally {
+            	m_vpiProcess.disconnect();
+            	m_vpiProcessStub.disconnect();
             }
         }
     }
@@ -67,19 +67,21 @@ public class TestVPI extends TUnitTestCase {
     private boolean connectTools() {
         Boolean success = true;
         try {
-            m_vpiProcess = createToolStub("visualizationPlugin");
-            m_vpiProcessStub = createToolStub("vpistub");
-            this.connectToolStubs();
+            m_vpiProcess = new ToolStubNG("visualizationPlugin", "localhost", getPort(), true);
+            m_vpiProcessStub = new ToolStubNG("vpistub", "localhost", getPort(), true);
+            
+            m_vpiProcess.connect();
+            m_vpiProcessStub.connect();
 
             // The VPI sends a request for a name right after connections, this
             // is the reason this request is handled here.
             ATerm vpGetName = factory.make("vp-get-name");
-            m_vpiProcess.expectEval(vpGetName, TIMEOUT);
             ATerm vpName = factory.make("vp-name(<str>)", "TestName");
-            m_vpiProcess.sendValue(vpName);
+            m_vpiProcess.registerForEval(vpGetName, vpName);
+            m_vpiProcess.expectAction();
 
         } catch (Exception ex) {
-            System.out.println(StackTraceUtil.getStackTrace(ex));
+        	ex.printStackTrace();
             success = false;
         }
         return success;
@@ -97,20 +99,15 @@ public class TestVPI extends TUnitTestCase {
     private void visualisationSupported() throws Exception {
         ATerm vpiSendTestNote = factory.make("vpi-send-test-note");
         m_vpiProcessStub.sendEvent(vpiSendTestNote);
-        m_vpiProcessStub.expectAckEvent(vpiSendTestNote, TIMEOUT);
 
-        ATerm vpIsTypeSupported = factory.make("vp-is-type-supported(<str>)",
-                "Test type");
-        m_vpiProcess.expectEval(vpIsTypeSupported, TIMEOUT);
-
+        ATerm vpIsTypeSupported = factory.make("vp-is-type-supported(<str>)", "Test type");
         ATerm vpTypeSupported = factory.make("vp-type-supported(<bool>)", true);
-        m_vpiProcess.sendValue(vpTypeSupported);
+        m_vpiProcess.registerForEval(vpIsTypeSupported, vpTypeSupported);
+        m_vpiProcess.expectAction();
 
-        ATerm vpGetAvailableVisualizationPluginsTest = factory
-                .make("vp-get-available-visualization-plugins-test");
-        m_vpiProcessStub.expectDo(vpGetAvailableVisualizationPluginsTest,
-                TIMEOUT);
-
+        ATerm vpGetAvailableVisualizationPluginsTest = factory.make("vp-get-available-visualization-plugins-test");
+        m_vpiProcessStub.registerForDo(vpGetAvailableVisualizationPluginsTest);
+        m_vpiProcessStub.expectAction();
     }
 
     /**
@@ -126,11 +123,10 @@ public class TestVPI extends TUnitTestCase {
 
         ATerm vpiVisualizeFact = factory.make("vp-visualize-fact");
         m_vpiProcessStub.sendEvent(vpiVisualizeFact);
-        m_vpiProcessStub.expectAckEvent(vpiVisualizeFact, TIMEOUT);
-
-        ATerm vpVisualizeFact = factory.make(
-                "vp-visualize-fact(<int>, <int>, <str>)", 0, 0, "Test type");
-        m_vpiProcess.expectDo(vpVisualizeFact, TIMEOUT);
+        
+        ATerm vpVisualizeFact = factory.make("vp-visualize-fact(<int>, <int>, <str>)", 0, 0, "Test type");
+        m_vpiProcess.registerForDo(vpVisualizeFact);
+        m_vpiProcess.expectAction();
     }
 
     /**
@@ -144,11 +140,10 @@ public class TestVPI extends TUnitTestCase {
     private void factUpdated() throws Exception {
         ATerm vpiSendTestUpdateNote = factory.make("vpi-send-test-update-note");
         m_vpiProcessStub.sendEvent(vpiSendTestUpdateNote);
-        m_vpiProcessStub.expectAckEvent(vpiSendTestUpdateNote, TIMEOUT);
 
-        ATerm vpFactOutOfDate = factory.make(
-                "vp-fact-out-of-date(<int>, <int>)", 0, 0);
-        m_vpiProcess.expectDo(vpFactOutOfDate, TIMEOUT);
+        ATerm vpFactOutOfDate = factory.make("vp-fact-out-of-date(<int>, <int>)", 0, 0);
+        m_vpiProcess.registerForDo(vpFactOutOfDate);
+        m_vpiProcess.expectAction();
     }
 
     /**
@@ -163,9 +158,9 @@ public class TestVPI extends TUnitTestCase {
         ATerm location = factory.make("loc");
         ATerm vpLinkClicked = factory.make("vp-link-clicked(<term>)", location);
         m_vpiProcess.sendEvent(vpLinkClicked);
-        m_vpiProcess.expectAckEvent(vpLinkClicked, TIMEOUT);
 
-        m_vpiProcessStub.expectDo(vpLinkClicked, TIMEOUT);
+        m_vpiProcessStub.registerForDo(vpLinkClicked);
+        m_vpiProcessStub.expectAction();
     }
 
     /**
@@ -180,10 +175,10 @@ public class TestVPI extends TUnitTestCase {
     private void rstoreUnloaded() throws Exception {
         ATerm rcRStoreUnloaded = factory.make("rc-rstore-unloaded(<int>)", 123);
         m_vpiProcessStub.sendEvent(rcRStoreUnloaded);
-        m_vpiProcessStub.expectAckEvent(rcRStoreUnloaded, TIMEOUT);
 
         ATerm vpRStoreUnloaded = factory.make("vp-rstore-unloaded(<int>)", 123);
-        m_vpiProcess.expectDo(vpRStoreUnloaded, TIMEOUT);
+        m_vpiProcess.registerForDo(vpRStoreUnloaded);
+        m_vpiProcess.expectAction();
     }
 
     /**
@@ -195,16 +190,14 @@ public class TestVPI extends TUnitTestCase {
      * @date 06-03-2007
      */
     protected void setUp() {
+    	String topSrcDir = ".";
+
+        System.out.println(topSrcDir);
+         
         try {
-            //Retrieve the fbmp file
-            URL url = this.getClass().getResource("/tbscript/startVPIUnitTest.tb");
-
-            //Make a File object from the URL so we can determine the search path
-            File file = new File(url.toURI());
-
-            this.startToolbus(file.getParent(), url.getPath(), 7000);
+            startToolbus(topSrcDir + "/tbscript/", topSrcDir + "/tbscript/startVPIUnitTest.tb");
         } catch (Exception ex) {
-            System.out.println(StackTraceUtil.getStackTrace(ex));
+        	ex.printStackTrace();
             this.stopToolbus();
             fail(ex.toString());
         }

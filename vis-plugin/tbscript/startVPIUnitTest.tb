@@ -1,5 +1,5 @@
-#include "vpcp.tb"
-#include "vpitest.tb"
+#include <vpcp.tb>
+#include <vpitest.tb>
 
 %% Start The stub, the VPCP starts itself.
 toolbus(VPISTUB, NOTIFY-START)
