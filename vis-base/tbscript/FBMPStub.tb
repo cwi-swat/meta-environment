@@ -35,7 +35,7 @@ in
   +
     rec-msg(fb-type-selected(FactType?))
     . snd-do(Tid, fb-type-selected-recieved)
-      snd-msg(fb-visualization-plugin-available(FactType, PluginId, PluginName))
+    . snd-msg(fb-visualization-plugin-available(FactType, PluginId, PluginName))
   +
     rec-msg(fb-visualization-selected(RstoreId?, FactId?, PluginId?))
     . snd-do(Tid, fb-visualization-selected-recieved)

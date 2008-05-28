@@ -1,5 +1,5 @@
-#include "fbmp.tb"
-#include "fbmp_test.tb"
+#include <fbmp.tb>
+#include <fbmp_test.tb>
 
 toolbus(FBMP-TEST, NOTIFY-START)
 

@@ -42,7 +42,7 @@ in
         . snd-msg(fb-selected-rstoreid(RStoreId))
       +
         rec-value(Tid, no-rstore-selected)
-	. snd-msg(fb-no-rstore-selected)
+	  . snd-msg(fb-no-rstore-selected)
       )
     +
       rec-event(Tid, fb-type-selected(FactType?))

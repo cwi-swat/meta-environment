@@ -1,13 +1,7 @@
 package nl.cwi.sen1.visbase.factbrowser;
 
-import java.io.File;
-import java.net.URL;
-
-import nl.cwi.sen1.tunit.StackTraceUtil;
 import nl.cwi.sen1.tunit.TUnitTestCase;
-import nl.cwi.sen1.tunit.ToolStub;
-import nl.cwi.sen1.tunit.ToolStub.TimeoutExceededException;
-import nl.cwi.sen1.tunit.ToolStub.UnexpectedTermException;
+import nl.cwi.sen1.tunit.ToolStubNG;
 import aterm.ATerm;
 
 /**
@@ -18,11 +12,10 @@ import aterm.ATerm;
  * @date 23-02-2007
  */
 public class FBITBTest extends TUnitTestCase {
-    private ToolStub m_metaStudioDialogStubTool;
-
-    private ToolStub m_fbiTool;
-
-    private ToolStub m_fbmpStubTool;
+	
+    private ToolStubNG m_metaStudioDialogStubTool;
+    private ToolStubNG m_fbiTool;
+    private ToolStubNG m_fbmpStubTool;
 
     /**
      * The function that contains executes all the test cases.
@@ -34,22 +27,30 @@ public class FBITBTest extends TUnitTestCase {
     public void testFBI() {
         try {
             // Initialize the tools
-            m_metaStudioDialogStubTool = this.createToolStub("msdialogstub");
-            m_fbiTool = this.createToolStub("factbrowser");
-            m_fbmpStubTool = this.createToolStub("fbmpstub");
+            m_metaStudioDialogStubTool = new ToolStubNG("msdialogstub", "localhost", getPort(), true);
+            m_fbiTool = new ToolStubNG("factbrowser", "localhost", getPort(), true);
+            m_fbmpStubTool = new ToolStubNG("fbmpstub", "localhost", getPort(), true);
 
-            connectToolStubs();
+            m_metaStudioDialogStubTool.connect();
+            m_fbiTool.connect();
+            m_fbmpStubTool.connect();
 
             // Run test cases
             loadRStore();
             selectFacts();
             selectVisualization();
             unloadRStore();
-
-            disconnectToolStubs();
+            
+            m_metaStudioDialogStubTool.waitForCompletion();
+            m_fbiTool.waitForCompletion();
+            m_fbmpStubTool.waitForCompletion();
         } catch (Exception ex) {
-            System.out.println(StackTraceUtil.getStackTrace(ex));
+            ex.printStackTrace();
             fail(ex.toString());
+        } finally {
+        	m_metaStudioDialogStubTool.disconnect();
+            m_fbiTool.disconnect();
+            m_fbmpStubTool.disconnect();
         }
     }
 
@@ -60,16 +61,13 @@ public class FBITBTest extends TUnitTestCase {
      * @author Srinivasan Tharmarajah
      * @date 21-02-2007
      */
-    private void selectVisualization() throws UnexpectedTermException,
-            TimeoutExceededException {
-        ATerm fbVisualizationSelected = this.factory.make(
-                "fb-visualization-selected(<int>,<int>,<int>)", 1, 1, 1);
+    private void selectVisualization() {
+        ATerm fbVisualizationSelected = factory.make("fb-visualization-selected(<int>,<int>,<int>)", 1, 1, 1);
         m_fbiTool.sendEvent(fbVisualizationSelected);
-        m_fbiTool.expectAckEvent(fbVisualizationSelected, 3000);
 
-        ATerm fbVisualizationSelectedRecieved = this.factory
-                .make("fb-visualization-selected-recieved");
-        m_fbmpStubTool.expectDo(fbVisualizationSelectedRecieved, 3000);
+        ATerm fbVisualizationSelectedRecieved = factory.make("fb-visualization-selected-recieved");
+        m_fbmpStubTool.registerForDo(fbVisualizationSelectedRecieved);
+        m_fbmpStubTool.expectAction();
     }
 
     /**
@@ -79,21 +77,19 @@ public class FBITBTest extends TUnitTestCase {
      * @author Srinivasan Tharmarajah
      * @date 21-02-2007
      */
-    private void selectFacts() throws UnexpectedTermException,
-            TimeoutExceededException {
-        ATerm fbTypeSelected = this.factory.make("fb-type-selected(<term>)",
-                this.factory.make("rType"));
+    private void selectFacts() {
+        ATerm fbTypeSelected = factory.make("fb-type-selected(<term>)", factory.make("rType"));
         m_fbiTool.sendEvent(fbTypeSelected);
-        m_fbiTool.expectAckEvent(fbTypeSelected, 3000);
 
-        ATerm fbTypeSelectedRecieved = this.factory
-                .make("fb-type-selected-recieved");
-        m_fbmpStubTool.expectDo(fbTypeSelectedRecieved, 3000);
+        ATerm fbTypeSelectedRecieved = factory.make("fb-type-selected-recieved");
+        m_fbmpStubTool.registerForDo(fbTypeSelectedRecieved);
+        m_fbmpStubTool.expectAction();
 
-        ATerm fbAddVisualizationPlugin = this.factory.make(
+        ATerm fbAddVisualizationPlugin = factory.make(
                 "fb-add-visualization-plugin(<term>, <int>, <str>)",
-                this.factory.make("rType"), 1, "pluginTestName");
-        m_fbiTool.expectDo(fbAddVisualizationPlugin, 3000);
+                factory.make("rType"), 1, "pluginTestName");
+        m_fbiTool.registerForDo(fbAddVisualizationPlugin);
+        m_fbiTool.expectAction();
     }
 
     /**
@@ -103,33 +99,35 @@ public class FBITBTest extends TUnitTestCase {
      * @author Srinivasan Tharmarajah
      * @date 21-02-2007
      */
-    private void loadRStore() throws UnexpectedTermException,
-            TimeoutExceededException {
-        ATerm fbLoadRstore = this.factory.make("fb-load-rstore()");
+    private void loadRStore() {
+        ATerm fbLoadRstore = factory.make("fb-load-rstore()");
         m_fbiTool.sendEvent(fbLoadRstore);
-        m_fbiTool.expectAckEvent(fbLoadRstore, 3000);
 
-        ATerm askForFileRecieved = this.factory.make("ask-for-file-recieved");
-        m_metaStudioDialogStubTool.expectDo(askForFileRecieved, 3000);
+        ATerm askForFileRecieved = factory.make("ask-for-file-recieved");
+        m_metaStudioDialogStubTool.registerForDo(askForFileRecieved);
+        m_metaStudioDialogStubTool.expectAction();
 
-        ATerm fbRstoreLoaded = this.factory.make("fb-rstore-loaded");
-        m_fbmpStubTool.expectDo(fbRstoreLoaded, 3000);
+        ATerm fbRstoreLoaded = factory.make("fb-rstore-loaded");
+        m_fbmpStubTool.registerForDo(fbRstoreLoaded);
+        m_fbmpStubTool.expectAction();
 
-        ATerm fbShowRstoreFacts = this.factory.make(
-                "fb-show-rstore-facts(<str>, <int>, <list>)", "rstoreTestName",
-                1, this.factory.makeList());
-        m_fbiTool.expectDo(fbShowRstoreFacts, 3000);
+        ATerm fbShowRstoreFacts = factory.make(
+                "fb-show-rstore-facts(<str>, <int>, <list>)",
+                "rstoreTestName", 1, factory.makeList());
+        m_fbiTool.registerForDo(fbShowRstoreFacts);
+        m_fbiTool.expectAction();
     }
     
-    private void unloadRStore() throws UnexpectedTermException, TimeoutExceededException {
+    private void unloadRStore() {
         int rstoreId = 5;
-        ATerm fbUnloadRstore = this.factory.make("fb-unload-rstore(<int>)", rstoreId);
-        m_fbiTool.sendEvent(fbUnloadRstore);
-        m_fbiTool.expectAckEvent(fbUnloadRstore, 3000);        
-        m_fbmpStubTool.expectDo(fbUnloadRstore, 3000);
+        ATerm fbUnloadRstore = factory.make("fb-unload-rstore(<int>)", rstoreId);
+        m_fbiTool.sendEvent(fbUnloadRstore);        
+        m_fbmpStubTool.registerForDo(fbUnloadRstore);
+        m_fbmpStubTool.expectAction();
         
-        ATerm fbRStoreUnloaded = this.factory.make("fb-rstore-unloaded(<int>)", rstoreId);
-        m_fbiTool.expectDo(fbRStoreUnloaded, 3000);
+        ATerm fbRStoreUnloaded = factory.make("fb-rstore-unloaded(<int>)", rstoreId);
+        m_fbiTool.registerForDo(fbRStoreUnloaded);
+        m_fbiTool.expectAction();
     }
 
     /**
@@ -145,18 +143,15 @@ public class FBITBTest extends TUnitTestCase {
      * @date 23-02-2007
      */
     protected void setUp() {
+    	String topSrcDir = ".";
+
+        System.out.println(topSrcDir);
+         
         try {
-            // Retrieve the fbmp file
-            URL url = this.getClass().getResource("/tbscript/init.tb");
-
-            // Make a File object from the URL so we can determine the search
-            // path
-            File file = new File(url.toURI());
-
-            this.startToolbus(file.getParent(), url.getPath(), 7000);
+            startToolbus(topSrcDir + "/tbscript/", topSrcDir + "/tbscript/init.tb");
         } catch (Exception ex) {
-            System.out.println(StackTraceUtil.getStackTrace(ex));
-            this.stopToolbus();
+        	ex.printStackTrace();
+            stopToolbus();
             fail(ex.toString());
         }
     }
@@ -169,6 +164,6 @@ public class FBITBTest extends TUnitTestCase {
      * @date 23-02-2007
      */
     protected void tearDown() {
-        this.stopToolbus();
+        stopToolbus();
     }
 }

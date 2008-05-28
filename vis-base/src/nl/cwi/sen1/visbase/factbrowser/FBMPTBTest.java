@@ -3,11 +3,8 @@ package nl.cwi.sen1.visbase.factbrowser;
 import java.io.File;
 import java.net.URL;
 
-import nl.cwi.sen1.tunit.StackTraceUtil;
 import nl.cwi.sen1.tunit.TUnitTestCase;
-import nl.cwi.sen1.tunit.ToolStub;
-import nl.cwi.sen1.tunit.ToolStub.TimeoutExceededException;
-import nl.cwi.sen1.tunit.ToolStub.UnexpectedTermException;
+import nl.cwi.sen1.tunit.ToolStubNG;
 import aterm.ATerm;
 
 /**
@@ -19,7 +16,7 @@ import aterm.ATerm;
  * 
  */
 public class FBMPTBTest extends TUnitTestCase {
-	private ToolStub m_FBMPTool;
+	private ToolStubNG m_FBMPTool;
 	
     /**
      * Test the all the toolbus scenarios.
@@ -30,10 +27,10 @@ public class FBMPTBTest extends TUnitTestCase {
      *   
      */
 	public void testFBMP() {
+		m_FBMPTool = new ToolStubNG("fbmp-test-tool", "localhost", getPort(), true);
+
 		try {
-			m_FBMPTool = this.createToolStub("fbmp-test-tool");
-		
-			this.connectToolStubs();
+			m_FBMPTool.connect();
 
 			this.checkScenario(1);
 			this.checkScenario(2);
@@ -42,11 +39,13 @@ public class FBMPTBTest extends TUnitTestCase {
             this.checkScenario(5);
             this.checkScenario(6);
 			
-			this.disconnectToolStubs();
+			m_FBMPTool.waitForCompletion();
 		}
 		catch (Exception ex) {
-			System.out.println(StackTraceUtil.getStackTrace(ex));
+			ex.printStackTrace();
 			fail(ex.toString());
+		} finally {
+			m_FBMPTool.disconnect();
 		}
 	}
 
@@ -66,12 +65,12 @@ public class FBMPTBTest extends TUnitTestCase {
      * @throws UnexpectedTermException
      * @throws TimeoutExceededException
      */
-	private void checkScenario(int scenarioNumber) throws UnexpectedTermException, TimeoutExceededException {
+	private void checkScenario(int scenarioNumber) {
 		ATerm scenarioStart = this.factory.make("start-scenario(<int>)", scenarioNumber);
 		m_FBMPTool.sendEvent(scenarioStart);
-		m_FBMPTool.expectAckEvent(scenarioStart, 3000);
 		ATerm scenarioResult = this.factory.make("scenario-successful(<int>)", scenarioNumber);
-		m_FBMPTool.expectDo(scenarioResult, 3000);
+		m_FBMPTool.registerForDo(scenarioResult);
+		m_FBMPTool.expectAction();
 	}
 	
 	/**
@@ -87,23 +86,14 @@ public class FBMPTBTest extends TUnitTestCase {
 	 * @date 07-03-2007
 	 */
 	protected void setUp() {
-		// Get the absolute path of the top directory of the current package.
-		// For example: /tmp/<user>/metarepos/tunit
-		String topSrcDir = getTopSrcDir();
-		
-		System.out.println(topSrcDir);
-		
-		try {
-            //Retrieve the fbmp file
-            URL url = this.getClass().getResource("/tbscript/fbmp_test_init.tb");
-            
-            //Make a File object from the URL so we can determine the search path
-            File file = new File(url.toURI());
+		String topSrcDir = ".";
 
-            this.startToolbus(file.getParent(), url.getPath(), 7000);
-		}
-		catch (Exception ex) {
-			System.out.println(StackTraceUtil.getStackTrace(ex));
+        System.out.println(topSrcDir);
+         
+        try {
+            startToolbus(topSrcDir + "/tbscript/", topSrcDir + "/tbscript/fbmp_test_init.tb");
+        } catch (Exception ex) {
+			ex.printStackTrace();
 			this.stopToolbus();
 			fail(ex.toString());			
 		}

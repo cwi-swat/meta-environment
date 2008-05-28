@@ -1,6 +1,6 @@
-#include "MSDialogStub.tb"
-#include "FBMPStub.tb"
-#include "fbi.tb"
+#include <MSDialogStub.tb>
+#include <FBMPStub.tb>
+#include <fbi.tb>
 
 toolbus(MSDialogStubStart, FBMPStubStart, StartFBI, NOTIFY-START)
 
