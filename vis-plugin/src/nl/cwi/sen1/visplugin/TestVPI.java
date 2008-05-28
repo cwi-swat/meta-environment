@@ -1,8 +1,5 @@
 package nl.cwi.sen1.visplugin;
 
-import java.io.File;
-import java.net.URL;
-
 import nl.cwi.sen1.tunit.TUnitTestCase;
 import nl.cwi.sen1.tunit.ToolStubNG;
 import aterm.ATerm;
@@ -19,8 +16,6 @@ public class TestVPI extends TUnitTestCase {
 
     private ToolStubNG m_vpiProcess;
     private ToolStubNG m_vpiProcessStub;
-
-    private static final int TIMEOUT = 5000;
 
     /**
      * The function that contains the actual test cases.
