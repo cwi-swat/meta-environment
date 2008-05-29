@@ -4,10 +4,6 @@
  * \ingroup parser
  *  Implementation of a Scannerless Generalized LR (SGLR) parser.
  *  
- * All reject filtering described in Eelco Visser's thesis has been removed 
- * from the parser and is performed during a post parse traversal of the parse 
- * forest.
- *
  * If all tokens have been read or if no more GSS nodes are alive, parsing
  * is done and the the result of parsing is returned.  If parsing
  * succeeded, there is a node (the accept node) in the GSS that has a direct
