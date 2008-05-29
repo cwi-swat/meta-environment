@@ -1,5 +1,8 @@
 
 
+Thu May 29 08:21:32 CEST 2008 <jurgenv@cwi.nl>
+ * COPYING: changed license file to BSD
+
 Wed Dec  5 10:34:40 EST 2007 <jurgenv@cwi.nl>
  * generate-installer.sh: added commandline options to the generated
    scripts for skipping certain tests and providing answers to the questions.
