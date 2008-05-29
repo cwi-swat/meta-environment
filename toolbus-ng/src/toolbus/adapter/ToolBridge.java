@@ -649,8 +649,10 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		public WorkerQueue(){
 			super();
 			
-			this.queue = new RotatingQueue<Runnable>();
-			this.worker = new Worker();
+			ThreadGroup toolGroup = new ThreadGroup("ToolGroup");
+			queue = new RotatingQueue<Runnable>();
+			worker = new Worker(toolGroup);
+			
 			worker.setDaemon(true);
 		}
 		
@@ -692,9 +694,11 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			
 			/**
 			 * Default constructor.
+			 * @param threadGroup
+			 *            The thread group to join.
 			 */
-			public Worker(){
-				super();
+			public Worker(ThreadGroup threadGroup){
+				super(threadGroup, "Worker");
 				
 				running = true;
 			}

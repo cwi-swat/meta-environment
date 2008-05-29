@@ -475,7 +475,6 @@ public class JavaToolBridge extends ToolBridge{
 	 */
 	private ATerm getPerformanceStats(){
 		String type = getType();
-		if(type == AbstractTool.DIRECTTOOL) return termFactory.make("performance-stats(unsupported-operation)"); // You can't request the stats from a direct tool in this way.
 		
 		// Type stuff
 		ATerm remote = termFactory.makeAppl(termFactory.makeAFun(type, 0, true));
