@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import toolbus.ToolBus;
-import toolbus.adapter.AbstractTool;
 import toolbus.adapter.ToolBridge;
 import toolbus.adapter.java.AbstractJavaTool;
 import toolbus.exceptions.ToolBusException;
