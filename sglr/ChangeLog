@@ -1,5 +1,12 @@
 $Id$
 
+Thu May 29 08:41:58 CEST 2008 <jurgenv@cwi.nl>
+ * doc/Mainpage.dox: removed superfluous comments.
+
+Thu May 29 08:26:34 CEST 2008 <jurgenv@cwi.nl>
+ * src/gss/gssGarbageCollector.c: removed references to papers that
+   are not used.
+
 Fri Feb 22 10:26:35 EST 2008 <jurgenv@cwi.nl>
  * src/inputStringBuilder,src/commandlineInterface.c: added creation
    of proper errors when input files could not be found.
