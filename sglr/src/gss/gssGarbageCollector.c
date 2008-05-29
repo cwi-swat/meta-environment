@@ -12,35 +12,6 @@
  * \f$ i+1\f$ can be removed from the GSS. This is achieved by using the 
  * standard <em> mark and sweep</em> garbage collection algorithm.
  *
- * The following two papers discuss a reference counting approach to garbage 
- * collection which may be interesting to imlepement and compare to the 
- * current approach. 
- *
- * \code
- * @inproceedings{bacon01,
- * author =    {Bacon, David F. and Rajan, V. T.},
- * title =     {Concurrent Cycle Collection in Reference Counted Systems},
- * booktitle = {ECOOP '01: Proceedings of the 15th European Conference on Object-Oriented Programming},
- * year =      {2001},
- * isbn =      {3-540-42206-4},
- * pages =     {207--235},
- * publisher = {Springer-Verlag},
- * address =   {London, UK},
- * }
- *
- * @inproceedings{levanoni01,
- * author =    {Levanoni, Yossi and Petrank, Erez},
- * title =     {An on-the-fly reference counting garbage collector for Java},
- * booktitle = {OOPSLA '01: Proceedings of the 16th ACM SIGPLAN conference on Object oriented programming, systems, languages, and applications},
- * year =      {2001},
- * isbn =      {1-58113-335-9},
- * pages =     {367--380},
- * location =  {Tampa Bay, FL, USA},
- * doi =       {http://doi.acm.org/10.1145/504282.504309},
- * publisher = {ACM Press},
- * address =   {New York, NY, USA},
- * }
- * \endcode
  */
 
 #include <assert.h>
