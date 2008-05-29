@@ -57,7 +57,7 @@ public class SndKill extends Atom{
 		if(toolInstance.isExecutedTool()){
 			toolInstance.kill();
 		}else{
-			LoggerFactory.log("Unable to kill tool with id: "+getEnv().getValue((TBTermVar) toolId.value)+", since it it's not an executed tool.", ILogger.ERROR, IToolBusLoggerConstants.TOOLCOM);
+			LoggerFactory.log("Unable to kill tool with id: "+getEnv().getValue((TBTermVar) toolId.value)+", since it it's not a remotely executed tool.", ILogger.ERROR, IToolBusLoggerConstants.TOOLCOM);
 		}
 		//LoggerFactory.log(getProcess().getProcessName(), "Send kill: "+message.value, IToolBusLoggerConstants.TOOLCOM);
 		return true;

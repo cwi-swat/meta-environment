@@ -4,20 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import toolbus.IOperations;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolInstanceManager;
-import toolbus.adapter.AbstractTool;
-import toolbus.adapter.ToolBridge;
-import toolbus.adapter.java.AbstractJavaTool;
-import toolbus.communication.DirectClientIOHandler;
-import toolbus.communication.DirectServerIOHandler;
 import toolbus.communication.IDataHandler;
 import toolbus.communication.IIOHandler;
 import toolbus.environment.Environment;
@@ -86,154 +80,32 @@ public class ToolInstance implements IDataHandler, IOperations{
 	}
 	
 	/**
-	 * Executes the tool that will be associated with this tool instance.
+	 * Executes the tool that should be associated with this tool instance.
 	 * 
 	 * @throws ToolBusException
-	 *            Thrown when the tool could not be started.
+	 *            Thrown when the tool could not be executed.
 	 */
 	public void executeTool() throws ToolBusException{
-		if(toolDef.isDirectlyStartableJavaNGTool()){
-			// Create a new classloader for the tool instance.
-			ClassLoader toolClassLoader = toolDef.createClassLoader();
-			// Load the tool's main class.
-			String toolClassName = toolDef.getClassName();
-			Class<?> toolClass;
-			try{
-				toolClass = toolClassLoader.loadClass(toolClassName);
-			}catch(ClassNotFoundException cnfex){
-				LoggerFactory.log("Unable to load the main class of tool: " + toolClassName, cnfex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(cnfex);
-			}
-			
-			// Instantiate the tool.
-			AbstractJavaTool tool;
-			try{
-				Constructor<?> toolConstructor = toolClass.getConstructor();
-				
-				String[] args = new String[]{"-TYPE", AbstractTool.DIRECTTOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID)};
-				tool = (AbstractJavaTool) toolConstructor.newInstance();
-				tool.connect(args);
-			}catch(InstantiationException iex){
-				String error = "Unable to instantiate the tool. Classname: " + toolClass.getName();
-				LoggerFactory.log(error, iex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}catch(IllegalAccessException iaex){
-				String error = "The constructor of the tool we are trying to instantiate isn't public. Classname: " + toolClass.getName();
-				LoggerFactory.log(error, iaex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}catch(InvocationTargetException itex){
-				String error = "An exception occured during the invokation of the constructor of the tool we are trying to instantiate. Classname: " + toolClass.getName();
-				LoggerFactory.log(error, itex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}catch(NoSuchMethodException nsmex){
-				String error = "The tool we are trying to instantiate doesn't have a proper constructor. Classname: " + toolClass.getName();
-				LoggerFactory.log(error, nsmex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}catch(SecurityException sex){
-				String error = "We don't have permission to invoke the constructor of: " + toolClass.getName();
-				LoggerFactory.log(error, sex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}catch(Exception ex){
-				String error = "Unable to connect tool to the ToolBus directly: " + toolClass.getName();
-				LoggerFactory.log(error, ex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}
-			
-			ToolBridge toolBridge = tool.getToolBridge();
-			
-			// Check if the tool provides the given signature.
-			if(!toolBridge.checkSignature(toolDef.getSignature())){
-				String error = "Tool: " + toolDef.getName() + " did not provide the expected signature.";
-				LoggerFactory.log(error, ILogger.WARNING, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}
-			
-			// Link the handlers.
-			DirectClientIOHandler toolDirectIOHandler = new DirectClientIOHandler(toolBridge);
-			toolBridge.setIOHandler(toolDirectIOHandler);
-			
-			DirectServerIOHandler toolBusDirectIOHandler = new DirectServerIOHandler(this, toolClassLoader);
-			setIOHandler(toolBusDirectIOHandler);
-			
-			toolDirectIOHandler.setServerDirectIOHandler(toolBusDirectIOHandler);
-			toolBusDirectIOHandler.setClientDirectIOHandler(toolDirectIOHandler);
-			
-			// We're connected (a direct tool will not send a connect message).
-			goConnected();
-			
-			// Notify the ToolBus that something happend (we connected).
-			toolbus.workArrived(this, CONNECT);
-		}else if(toolDef.getClassName() != null){
-			String classpath = System.getProperty("java.class.path");
-			// Use the -Xshare=off switch to conserve memory. We don't want to load the entire
-			// standard library in memory every time we start a tool. We're only using a tiny
-			// bit of that library. And do NOT listen to Sun, who says that it will reduce the
-			// memory footprint, because it can share a part of it between all running JVMs; it
-			// can only share about 50% of this memory between JVMs, so this is simply not true.
-			// The last time I checked 1.5MB < (50% of 12.5MB). Thanks Sun for turning this
-			// rubbish feature on by default on the client VM.
-			String[] command = new String[]{"java", "-Xshare:off", "-cp", classpath, toolDef.getClassName(), "-TYPE", AbstractTool.REMOTETOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID), "-TB_HOST", "localhost", "-TB_PORT", "" + toolbus.getPort()};
-			
-			ProcessBuilder pb = new ProcessBuilder(command);
-			pb.redirectErrorStream(true);
-			
-			try{
-				Process process = pb.start();
-				streamHandler = new StreamHandler(process, toolKey.toString());
-				Thread streamHandlerThread = new Thread(streamHandler);
-				streamHandlerThread.setName("Stream handler");
-				streamHandlerThread.setDaemon(true);
-				streamHandlerThread.start();
-			}catch(IOException ioex){
-				String error = "Unable to start remote tool: " + toolKey;
-				LoggerFactory.log(error, ioex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}
-		}else if(toolDef.getCommand() != null){
-			String[] toolCommand = toolDef.getCommand().split(" ");
-			int commandLength = toolCommand.length;
-			String[] command = new String[commandLength + 10];
-			System.arraycopy(toolCommand, 0, command, 0, commandLength);
-			command[commandLength] = "-TYPE";
-			command[commandLength + 1] = AbstractTool.REMOTETOOL;
-			command[commandLength + 2] = "-TB_TOOL_NAME";
-			command[commandLength + 3] = toolDef.getName();
-			command[commandLength + 4] = "-TB_TOOL_ID";
-			command[commandLength + 5] = Integer.toString(toolID);
-			command[commandLength + 6] = "-TB_HOST";
-			command[commandLength + 7] = "localhost";
-			command[commandLength + 8] = "-TB_PORT";
-			command[commandLength + 9] = "" + toolbus.getPort();
-			
-			ProcessBuilder pb = new ProcessBuilder(command);
-			pb.redirectErrorStream(true);
-			
-			try{
-				Process process = pb.start();
-				streamHandler = new StreamHandler(process, toolKey.toString());
-				Thread streamHandlerThread = new Thread(streamHandler);
-				streamHandlerThread.setName("Stream handler");
-				streamHandlerThread.setDaemon(true);
-				streamHandlerThread.start();
-			}catch(IOException ioex){
-				String error = "Unable to start remote tool: " + toolKey;
-				LoggerFactory.log(error, ioex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}
-		}else{
-			String error = "Unable to start tool: " + toolKey + "; command or classname missing in tool definition.";
-			LoggerFactory.log(error, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-			throw new ToolBusException(error);
-		}
+		ToolExecutor toolExecutor = new ToolExecutor(this, toolDef, toolbus);
+		toolExecutor.execute();
 	}
 	
 	/**
-	 * Returns the key that is associated with this tool instance.
+	 * Returns the key of the tool that is associated with this tool instance.
 	 * 
-	 * @return The key that is associated with this tool instance.
+	 * @return The key of the tool that is associated with this tool instance.
 	 */
 	public ATermAppl getToolKey(){
 		return toolKey;
+	}
+	
+	/**
+	 * Returns the id of the tool that is associated with this tool instance.
+	 * 
+	 * @return The id of the tool that is associated with this tool instance.
+	 */
+	public int getToolID(){
+		return toolID;
 	}
 	
 	/**
@@ -243,6 +115,16 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 */
 	public String getToolName(){
 		return toolKey.getName();
+	}
+	
+	/**
+	 * Sets the stream handler for this tool instance.
+	 * 
+	 * @param streamHandler
+	 *            The stream handler to use.
+	 */
+	void setStreamHandler(StreamHandler streamHandler){
+		this.streamHandler = streamHandler;
 	}
 	
 	/**
@@ -728,7 +610,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * 
 	 * @author Arnold Lankamp
 	 */
-	private static class StreamHandler implements Runnable{
+	static class StreamHandler implements Runnable{
 		private final Process process;
 		private final String toolID;
 		

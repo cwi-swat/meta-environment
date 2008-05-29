@@ -363,9 +363,6 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			
 			ToolConnectionHandler toolConnectionHandler = new ToolConnectionHandler(this, host, port);
 			toolConnectionHandler.run();
-			
-			// Send a connect message to the ToolBus.
-			send(CONNECT, termFactory.makeAppl(termFactory.makeAFun(toolName, 1, false), termFactory.makeInt(toolID)));
 		}else if(type.equals(AbstractTool.DIRECTTOOL)){
 			// We don't need to do anything in this case we will be linked to a direct I/O handler.
 		}else{
@@ -373,6 +370,8 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			LoggerFactory.log(error, ILogger.FATAL, IToolBusLoggerConstants.TOOL);
 			throw new RuntimeException(error);
 		}
+		// Send a connect message to the ToolBus.
+		send(CONNECT, termFactory.makeAppl(termFactory.makeAFun(toolName, 1, false), termFactory.makeInt(toolID)));
 	}
 	
 	/**
