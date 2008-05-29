@@ -1,35 +1,7 @@
 /** \mainpage SGLR Documentation Index Page
  * \section intro_sec Introduction
  *
- * Introduction needed...
- *
- * \section improvingPerformance  Improving the performance of generalised parsers
  * 
- * Parsing ambiguous sentences is always going to be less efficient than 
- * parsing non-ambiguous ones. The goal of ambiguous parsing should be to do 
- * it as efficiently as possible. I believe that one way to achieve this is to
- * introduce memoization ie., determine where things are repeated and prevent 
- * this redundant work from happening. Consider the following examples that 
- * have improved their performance by doing this. 
- * \li The BRNGLR algorithm improves its worst case time complexity by ensuring 
- * that reduction paths of length greater than three are only traced once.
- * \li The filtering algorithm does a depth-first traveral of the forest, but 
- * it only performs the filtering as it backtracks up the tree. In other words 
- * the creation of nodes and the filtering of trees is done is a bottom-up 
- * fashion. Because of the way that the parse forest can split as a result of 
- * an ambiguity and later re-combine to share a common subtree, the filtering 
- * can end up traversing the same sub-trees more than once. To ensure that any
- * given sub-tree is only traversed once a set of visited nodes is maintained. 
- *
- * 
- *
- * There are several points during parsing that require an efficient 
- * implementation: 
- * \li Before creating a new edge between two GSS nodes determine if an edge 
- *     already exists that can be re-used.
- * \li Before creating a new parse tree node determine if there is an existing 
- *     node that has the same label and derives the same portion of the input 
- *     string.
  */
 
 #\htmlonly <a href="../Parsing/parsing.html#SCOTT00">Scott ref</a> 
