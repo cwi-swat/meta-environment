@@ -33,6 +33,8 @@ public abstract class AbstractJavaTool extends AbstractTool{
 	 *             establishing of the connection.
 	 */
 	public void connect(String[] args) throws Exception{
+		if(toolBridge != null) throw new RuntimeException("Already connected.");
+		
 		String toolName = null;
 		int toolID = -1;
 
