@@ -1,0 +1,188 @@
+%%
+%%    Meta-Environment - An environment for language prototyping.
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%
+%%    This program is free software; you can redistribute it and/or modify
+%%    it under the terms of the GNU General Public License as published by
+%%    the Free Software Foundation; either version 2 of the License, or
+%%    (at your option) any later version.
+%%
+%%    This program is distributed in the hope that it will be useful,
+%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%    GNU General Public License for more details.
+%%
+%%    You should have received a copy of the GNU General Public License
+%%    along with this program; if not, write to the Free Software
+%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+%%
+\section{General Architecture}
+\label{garch}
+
+The architecture of the new \metaenv\ is depicted in
+Figure~\ref{picarch}.  This figure is a snapshot of the current
+state of the prototype, see Table~\ref{components} for a more detailed list
+of integrated components and their implementation languages.
+The future architecture of the new \metaenv\ will contain more
+components, such as, parsers, unparsers, debuggers, a parser
+generator, an unparser generator, and an evaluator generator.
+
+\input{newarch}
+\begin{figure}[tb]
+\centerline{\box\graph}
+\caption{\label{picarch} General architecture of new \metaenv.}
+\end{figure}
+
+Table~\ref{components} gives an overview of all currently available
+components in the prototype. For each component it is listed whether
+this component is specified and in which language it is implemented.
+
+\begin{table}[b]
+\begin{center}
+\begin{tabular}{|l|l|l|} \hline
+Activity            & Specification & Implementation  \\
+                    & Language      & Language        \\ \hline \hline
+\aterms             & \asdf         & C, Java         \\
+\asfix              & \asdf         & C               \\
+\TB                 & \asdf         & C               \\
+Structure editor    & \asdf         & Java            \\
+Text editor         &               & \tcltk{}        \\
+Interpreter         & \asdf         & C               \\
+Tree repository     & \asdf         & C               \\
+Import manager      & \asdf         & C               \\
+User interface      &               & \tcltk{}, \tcldot{}     \\ \hline
+\end{tabular}
+\end{center}
+\caption{\label{components} Components of the new \metaenv\ which are finished.}
+\end{table}
+
+\subsection{ToolBus}
+\label{toolbus}
+
+%{{{ Intro
+
+Our whole design is based on the \TB\ software coordination
+architecture~\cite{TB-AMAST96,BK96a} which utilizes a 
+scripting language based on process
+algebra~\cite{BW90} to describe the communication between software
+tools. A \TB\ \emph{script} describes a number of processes that can
+communicate with each other and with \emph{tools} existing outside the
+\TB\ (Figure \ref{TB}).  A tool is more or less equivalent to an operating
+system process.  A language-dependent adapter that translates between
+the internal \TB\ data format and the data format used by the
+individual tools makes it possible to write every tool in the language
+best suitable for the task(s) it has to perform.
+
+\begin{figure}[htb]
+  \centerline{\epsfig{file=toolbus.ps,scale=0.5}}
+  \caption{\label{TB}The \TB\ software application architecture}
+\end{figure}
+
+Processes are described as expressions which are built using the \TB\
+primitives and process composition operators.
+The following subsections give an overview of the most important \TB\
+primitives and operators. For a more complete description of \TB\ 
+expressions and primitives see~\cite{BK96a}.
+
+\subsubsection{Communication Inside the \TB}
+There are two mechanisms available for processes in the \TB\ to
+communicate with each other, message passing and selective broadcasting.
+A process can synchronously send a \emph{message} using the {\tt snd-msg} 
+primitive which must be received by another process using the {\tt rec-msg} 
+primitive. A process can send a \emph{note} using 
+{\tt snd-note} to all processes that have subscribed, using {\tt subscribe},
+to that particular note type. The receiving processes read notes 
+asynchronously using {\tt rec-note}, at low priority. Transmitting notes 
+amounts to \emph{asynchronous selective broadcasting}.
+
+%}}}
+%{{{ Communication between the ToolBus and Tools
+
+\subsubsection{Communication Between \TB\ and Tools}
+A \TB\ process can initiate communication with a tool by sending a 
+message to a tool using {\tt snd-do} when no answer is expected
+or {\tt snd-eval} when an answer is expected. 
+A process can receive the answer to a {\tt snd-eval} request 
+using the {\tt rec-value} action.
+
+A tool can initiate communication by sending an \emph{event}
+to the \TB. A \TB\ process receives this event using
+the {\tt rec-event} primitive and must acknowledge the event using 
+the {\tt snd-ack-event} primitive.
+
+Furthermore, the execution and termination of the tools attached to the \TB\, 
+as well
+as their con\-nec\-tion/dis\-con\-nec\-tion can be controlled explicitly by appropriate
+primitives.
+
+%}}}
+%{{{ Process Composition
+
+\subsubsection{Process Composition}
+More complex processes can be created using process composition operators
+for \emph{choice} ({\tt +} operator), \emph{sequential composition} 
+({\tt .} operator), 
+\emph{parallel composition} ({\tt ||} operator),
+\emph{iteration} ({\tt *} operator)
+and \emph{guarded (conditional) execution}
+(the {\tt if-then-fi} operator). The \emph{process creation}
+primitive {\tt create} can be used to create new processes.
+
+%}}}
+%{{{ Types and Variables
+
+\subsubsection{Types and Variables}
+All terms within the \TB\ are \emph{typed}. The \TB\ defines a number
+of basic types for booleans, integers, reals, strings, and binary
+strings. Complex types can be formed using a list constructor or
+function application. The type {\tt term} is a supertype of all other
+types. The {\tt let-in-endlet} construction makes it possible to
+declare variables.
+
+%}}}
+
+\subsection{Implementation}
+
+The new \metaenv\ is based on the \TB. This means that the \TB\ is used as
+a communication mechanism for the various components available in the
+environment. 
+The components of the new \metaenv\ can not communicate directly
+with each other.
+The \TB\ script takes care of {\em all} communication between the
+components. This script should allow a maximal freedom in order
+to facilitate future experiments, for instance addition of new
+components.
+
+The information exchange between components is done using the ATerm format,
+see Section~\ref{treerepr}. The \TB\ already provides a debugging
+facility for \TB\ scripts. Currently, we are working on the
+implementation of a sophisticated debugging technique which allows the
+debugging of components as well. We plan to extend this technique to 
+support the debugging of specifications as well.
+
+%%Debugging in the context of the new \metaenv\ has three dimensions:
+%%\begin{enumerate}
+%%\item Debugging the new \metaenv\ itself.
+%%\item Debugging \asdf\ specifications and generated programming environments.
+%%\item Debugging programs developed using the generated 
+%%      programming environments.
+%%\end{enumerate}
+%%
+%%Our recent work on generic debugging techniques for distributed,
+%%he\-te\-ro\-ge\-neous en\-vi\-ron\-ments~\cite{COORD97.tide} cover
+%%both dimension {\tt 1} and {\tt 2}.  More research is needed to also
+%%use this technology to cover dimension {\tt 3}, which is closely
+%%related to techniques like {\em origin tracking}~\cite{DHK96}.
+
+
+\subsection{Discussion}
+
+First of all, the
+parser and parser generator~\cite{Vis97.SGLRP} have to be integrated
+in the new \metaenv.  Second, the unparser and unparser
+generator~\cite{BV96} have to be integrated as well as the To\LaTeX\ 
+facilities~\cite{Vis95.tolatex}. This should be done on top of the
+{\sc Box} language.  Third, the \metaenv\ should provide facilities to
+compile specifications in order to generate stand-alone environments.
+
+

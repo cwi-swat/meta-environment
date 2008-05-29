@@ -1,0 +1,176 @@
+%%
+%%    Meta-Environment - An environment for language prototyping.
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%
+%%    This program is free software; you can redistribute it and/or modify
+%%    it under the terms of the GNU General Public License as published by
+%%    the Free Software Foundation; either version 2 of the License, or
+%%    (at your option) any later version.
+%%
+%%    This program is distributed in the hope that it will be useful,
+%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%    GNU General Public License for more details.
+%%
+%%    You should have received a copy of the GNU General Public License
+%%    along with this program; if not, write to the Free Software
+%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+%%
+%%% $Id$
+
+%% This file is part of the document 
+%% Design and implementation of a new ASF+SDF Meta-Environment
+
+%%\newcommand{\gse}{\textsc{gse}}
+%%\newenvironment{codebox}{\vspace{-.3cm}\begin{alltt}\begin{boxedminipage}[t]{6cm}}{\end{boxedminipage}\end{alltt}}
+\newenvironment{codebox}{\begin{center}\begin{minipage}[t]{6cm}\begin{alltt}}{\end{alltt}\end{minipage}\end{center}}
+
+\section{Editors}
+\label{edit}
+
+The structure editing system in the new implementation provides roughly the
+same functionality as the Generic Structure Editor
+(\gse~\cite{Koo94.thesis}). There are, however a number of
+differences, both in the external and the internal behaviour.
+
+\subsection{Internal Behaviour}
+
+The structure editing system consists of two parts. One is a
+\emph{structure} editor, the other is a \emph{text} editor. The
+structure editor operates on parse trees (encoded as AsFix terms). It
+only manipulates (sub)trees, i.e., it does not manipulate the lexical
+content of 
+nodes in a parse tree. The text editor operates on a character level,
+it \emph{does} manipulate the content of nodes in a parse tree.
+
+Both the text editor and the structure editor have a well defined
+external behaviour (a ToolBus interface)~\cite{Kui96}. This 
+makes it possible to use any (existing) text editor as long as it
+adheres to the interface. One of the main weaknesses of \gse\ has
+always been its limited text editing capabilities. By separating text
+and structure editing functionality we hope to address this problem. 
+
+The text and structure editors are tied together by means of a ToolBus 
+script.  The script provides us with a one-to-one mapping from text to 
+structure and back.  It makes sure that at any given time the data 
+structure in the text editor (the text) can be translated to the data 
+structure in the structure editor (the parse tree), and vice versa.  
+If a string $\alpha$ is a syntactically correct string in the language 
+$L$, and we have a parser $\Pi_L$ over this language and a pretty 
+printer $pp$ then $pp(\Pi_L(\alpha)) = \alpha$.  As a consequence, if 
+$t$ is the parse tree that results from $\Pi_L(\alpha)$ then also 
+$\Pi_L(pp(t)) = t$.
+
+\subsection{External Behaviour}\label{externaleditor}
+
+If the edited text is not syntactically correct (which is inevitable
+during editing) then the smallest subtree that contains an incorrect
+program fragment will be held in a focus. In \gse\ a similar approach
+is used. The main difference between \gse\ and the new structure
+editor is that \gse\ has two specific modes, one for text editing and one
+for structure editing. Once the switch to text-editing mode is made,
+all structure information is lost. 
+
+The new editor does not need this
+distinction. It allows text-editing while retaining structure
+information. Furthermore, the new structure editor can create multiple
+focuses, thus minimalizing the amount of text that needs to be
+(re)parsed after an edit session. 
+
+The difference between these approaches is perhaps best
+illustrated with an example.
+
+Consider the following program in the language While (See \cite{Vis97.spl} for a specification).
+\begin{codebox}
+ x := 10 ;
+ while x > 0 do x := x - 1 \end{codebox}
+Now suppose we want to decrease x with 2 during each iteration. We
+replace the character \texttt{1} with the character \texttt{2}. After
+this replacement the focus will be on the integer 2 (The underlined
+character).
+\begin{codebox}
+ x := 10 ;
+ while x > 0 do x := x - \underline{2} \end{codebox}
+Now suppose we want to edit the stop condition of the while loop, such
+that the loop terminates when x is greater than 2. In \gse\ the focus
+would then look like this:
+\begin{codebox}
+ x := 10 ;
+ \underline{while x > 2 do x := x - 2} \end{codebox}
+In the new editor, instead of increasing the focus, a new focus will
+be created, which looks like this:
+\begin{codebox}
+ x := 10 ;
+ while x > \underline{2} do x := x - \underline{2} \end{codebox}
+One of the motivations for using structure editors is the fact that they
+allow us to parse text incrementally. Only the parts of the text that
+have been changed need to be reparsed. As shown in the last example:
+this strategy obviously
+results in less parsing than in \gse. 
+
+This is not always the case. If we take the original program again, and
+decide to put the body of the while loop between brackets, we get the
+following focus positions.
+\begin{codebox}
+ x := 10 ;
+ while x > 0 do \underline{\{x} := x - \underline{1\}} \end{codebox}
+where in \gse\ we would have had
+\begin{codebox}
+ x := 10 ;
+ while x > 0 do \underline{\{x := x - 1\}} \end{codebox}
+In this case, the last solution is better, because the first solution
+leaves us with two syntactically incorrect focuses. However, there are
+a number of strategies that could help us here. In this case, the
+solution would be to create a new focus that exactly contains all the
+old focuses, effectively giving the same functionality as \gse.
+
+
+\subsection{Implementation}
+
+As stated above, the editing system has been implemented as two
+separate tools. The structure editor was specified in \asdf. This
+specification can be used as implementation using the interpreter
+described in Section \ref{interpreter}. Because of the experimental
+nature of the system in this stage, it proves to be difficult to use
+the interpreter at two levels at the same time (as a rewrite machine
+for specifications written using the \metaenv, and as a implementation
+of the editor this specification is written in). Besides, the
+interpreter is not (currently) fast enough to support interactive
+use. We therefore implemented the structure editor in \java, which
+provides us with an implementation that is independent of the other
+components of the \metaenv, and sufficiently fast to cater for
+interactive use.
+
+The text editor we use is \texttt{jedit}, a public domain text editor written
+in \tcltk. It is easily extendible which allows us to experiment with
+different lay-outs and {\ui}s. 
+
+The parsing strategies mentioned in the previous section are
+implemented as part of the \TB-script. In the script we decide whether
+a focus should be parsed, or whether it should first be expanded, and
+then parsed.
+
+\subsection{Future Work}
+
+In Section \ref{externaleditor} we mentioned the need for
+experimenting with different parsing strategies. By moving the
+implementation of these strategies out of the structure editor and
+into the \TB-script, we hope to create a system that provides us with
+the flexibility to try out different strategies. 
+
+The structure editing specification so far has only been tested on
+small examples. We need to see how the specification holds up when
+used with larger, more complex editing sessions. 
+
+The text editor that is used currently needs to be replaced with a
+well known editor. We will try to incorporate emacs into the structure
+editing system.
+
+Finally, we need to realize a link between the structure editing
+system and the tree-repository (Section \ref{repos}). In \gse, when
+expanding a meta-variable, the editor lists all productions with the
+same sort as the meta-variable. As the new editing system is
+completely language independent, it needs to get the list of
+productions from the tree-repository explicitly.
+
+
