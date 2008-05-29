@@ -1,3 +1,8 @@
+
+
+Thu May 29 08:23:13 CEST 2008 <jurgenv@cwi.nl>
+ * COPYING: changed license to BSD
+
 2006-07-27    <storm@cwi.nl>
 
 	* Feature: Sisyphus now support multiple build-env-packages that
