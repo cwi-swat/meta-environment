@@ -1,8 +1,3 @@
-sglr.path=/ufs/lankamp/metaNG/installed/bin/sglr
-parsetable.path=/home/lankamp/workspace/ToolbusNG_InterTool/src/toolbus/parser/Tscript.trm.tbl
-implodePT.path=/ufs/lankamp/metaNG/installed/bin/implodePT
-addPosInfo.path=/ufs/lankamp/metaNG/installed/bin/addPosInfo
-
 include.path=/ufs/lankamp/metaNG/installed/share/sdf-meta, \
 /ufs/lankamp/metaNG/installed/share/pgen, \
 /ufs/lankamp/metaNG/installed/share/sdf-support, \
@@ -43,6 +38,3 @@ include.path=/ufs/lankamp/metaNG/installed/share/sdf-meta, \
 /ufs/lankamp/metaNG/installed/share/vis-plugin-generic, \
 /ufs/lankamp/metaNG/installed/share/vis-plugin, \
 /ufs/lankamp/metaNG/installed/share/vis-base
-
-java.classpath=/home/lankamp/workspace/ToolbusNG_InterTool/bin, \
-                /ufs/lankamp/metaNG/share/toolbus-java-adapter.jar

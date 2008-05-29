@@ -1,12 +1,12 @@
 package toolbus.tool;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import aterm.ATerm;
@@ -68,25 +68,21 @@ public class ToolDefinition{
 	public URL[] getLoadPath(){
 		// System.err.println("toolName = " + toolName);
 		String path = toolbus.getProperty(toolName + ".classpath");
-		if(path == null){
-			path = toolbus.getProperty("java.classpath");
-		}
+		if(path == null) return new URL[]{};
+		
 		// System.err.println("path = " + path);
-		String[] elems = path.split("[ ,\n\r]+");
+		String[] elems = path.split("[ ;:,\n\r]");
 		List<URL> urls = new ArrayList<URL>(elems.length);
-		String url = "";
 		for(int i = 0; i < elems.length; i++){
-			try{
-				url = elems[i];
-				if(url.length() > 0){
-					if(url.charAt(0) == File.separatorChar){
-						url = "file://" + url;
-					}
-					// System.err.println("url = '" + url + "'");
+			String url = elems[i];
+			if(url.length() > 0){
+				url = "file://" + url;
+				// System.err.println("url = '" + url + "'");
+				try{
 					urls.add(new URL(url));
+				}catch(MalformedURLException e){
+					System.err.println("Malformed URL " + url + " ignored.");
 				}
-			}catch(MalformedURLException e){
-				System.err.println("Malformed URL " + url + " ignored");
 			}
 		}
 		return urls.toArray(new URL[urls.size()]);

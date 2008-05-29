@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -13,7 +14,8 @@ import java.util.regex.Pattern;
 public class PropertyManager{
 	private final Properties properties;
 	private String propertyFileName = null;
-	private final HashMap<String, String> defines;
+	private final Map<String, String> defines;
+	private final Map<String, String> toolClasspaths;
 	private String includes = "";
 	private String tbscript = null;
 	private int port;
@@ -23,6 +25,7 @@ public class PropertyManager{
 		port = -1;
 		
 		defines = new HashMap<String, String>();
+		toolClasspaths = new HashMap<String, String>();
 		
 		properties = new Properties(System.getProperties());
 		
@@ -50,6 +53,12 @@ public class PropertyManager{
 			
 			set(key, defines.get(key));
 		}
+		Iterator<String> toolClasspathsIterator = toolClasspaths.keySet().iterator();
+		while(definesIterator.hasNext()){
+			String key = toolClasspathsIterator.next();
+			
+			set(key, defines.get(key));
+		}
 		if(includes != ""){
 			set("include.path", includes);
 		}
@@ -63,6 +72,7 @@ public class PropertyManager{
 		Pattern pinclude = Pattern.compile("-I(.*)");
 		Pattern pscript = Pattern.compile("-S(.*)");
 		Pattern pport = Pattern.compile("-P(.*)");
+		Pattern toolClassPath = Pattern.compile("-TC(.*)=(.*)");
 		
 		for(int i = 0; i < args.length; i++){
 			String arg = args[i];
@@ -99,6 +109,14 @@ public class PropertyManager{
 							if(portDefine.matches()){
 								String portNumber = portDefine.group(1);
 								port = Integer.parseInt(portNumber);
+							}else{
+								Matcher toolClassPathMatcher = toolClassPath.matcher(arg);
+								if(toolClassPathMatcher.matches()){
+									String toolClasspathName = toolClassPathMatcher.group(1);
+									String classpath = toolClassPathMatcher.group(2);
+									
+									toolClasspaths.put(toolClasspathName, classpath);
+								}
 							}
 						}
 					}
@@ -128,13 +146,6 @@ public class PropertyManager{
 		}
 		
 		throw new FileNotFoundException("Property file");
-	}
-	
-	/**
-	 * Get workspace
-	 */
-	public String getWorkspace(){
-		return properties.getProperty("workspace.path");
 	}
 	
 	public String get(String p){
