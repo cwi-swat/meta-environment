@@ -293,8 +293,8 @@ non terminal define, include, ifdef_head, ifdef;
 
 
 precedence left FMERGE;
-precedence left LEFTCHOICE; 
 precedence right RIGHTCHOICE;
+precedence left LEFTCHOICE; 
 precedence left CHOICE ;                       
 precedence right SEQ ;                      
 precedence left ITER;
