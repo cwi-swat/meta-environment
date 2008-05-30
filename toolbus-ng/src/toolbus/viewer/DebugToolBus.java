@@ -133,17 +133,17 @@ public class DebugToolBus extends ToolBus{
 		try{
 			int userSpecifiedPort = propertyManager.getUserSpecifiedPort();
 			if(userSpecifiedPort == -1){
-				toolBusConnectionHandler.initialize();
+				connectionHandler.initialize();
 			}else{
-				toolBusConnectionHandler.initialize(userSpecifiedPort);
+				connectionHandler.initialize(userSpecifiedPort);
 			}
 		}catch(IOException ioex){
 			LoggerFactory.log("Unable initialize the ToolBus connection handler.", ioex, ILogger.FATAL, IToolBusLoggerConstants.COMMUNICATION);
 			throw new RuntimeException(ioex);
 		}
-		portNumber = toolBusConnectionHandler.getPort();
+		portNumber = connectionHandler.getPort();
 		
-		Thread tbConnectionHandler = new Thread(toolBusConnectionHandler);
+		Thread tbConnectionHandler = new Thread(connectionHandler);
 		tbConnectionHandler.setName("ToolBus connection handler");
 		tbConnectionHandler.start();
 		

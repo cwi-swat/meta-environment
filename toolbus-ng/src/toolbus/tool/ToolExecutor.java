@@ -68,7 +68,7 @@ public class ToolExecutor{
 				Constructor<?> toolConstructor = toolClass.getConstructor();
 				
 				tool = (AbstractJavaTool) toolConstructor.newInstance();
-				tool.connectDirectly(toolInstance, toolClassLoader, toolDefinition.getName(), toolInstance.getToolID());
+				tool.connectDirectly(toolbus, toolClassLoader, toolDefinition.getName(), toolInstance.getToolID());
 			}catch(InstantiationException iex){
 				String error = "Unable to instantiate the tool. Classname: " + toolClass.getName();
 				LoggerFactory.log(error, iex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);

@@ -59,7 +59,8 @@ public class ToolBus{
 	private final ToolInstanceManager toolInstanceManager;
 	private final ConcurrentHashMap<String, ToolDefinition> tooldefs;
 	
-	protected final ToolBusConnectionHandler toolBusConnectionHandler;
+	protected final SocketConnectionHandler connectionHandler;
+	private final DirectConnectionHandler directConnectionHandler;
 	
 	private final PrintWriter out;
 	
@@ -94,7 +95,8 @@ public class ToolBus{
 		
 		propertyManager = new PropertyManager(args);
 		
-		toolBusConnectionHandler = new ToolBusConnectionHandler(this);
+		connectionHandler = new SocketConnectionHandler(this);
+		directConnectionHandler = new DirectConnectionHandler(this);
 		startTime = System.currentTimeMillis();
 	}
 	
@@ -107,10 +109,6 @@ public class ToolBus{
 		this(args, new PrintWriter(System.out));
 	}
 	
-	public ToolInstanceManager getToolInstanceManager(){
-		return toolInstanceManager;
-	}
-	
 	/**
 	 * Constructor with explicit StringWriter
 	 * 
@@ -118,6 +116,14 @@ public class ToolBus{
 	 */
 	public ToolBus(String[] args, StringWriter out){
 		this(args, new PrintWriter(out));
+	}
+	
+	public ToolInstanceManager getToolInstanceManager(){
+		return toolInstanceManager;
+	}
+	
+	public DirectConnectionHandler getDirectConnectionHandler(){
+		return directConnectionHandler;
 	}
 	
 	/**
@@ -430,7 +436,7 @@ public class ToolBus{
 			}
 		}while(toolInstanceManager.numberOfConnectedTools() > 0);
 		
-		toolBusConnectionHandler.stopRunning();
+		connectionHandler.stopRunning();
 		
 		synchronized(processLock){
 			running = false;
@@ -520,17 +526,17 @@ public class ToolBus{
 		try{
 			int userSpecifiedPort = propertyManager.getUserSpecifiedPort();
 			if(userSpecifiedPort == -1){
-				toolBusConnectionHandler.initialize();
+				connectionHandler.initialize();
 			}else{
-				toolBusConnectionHandler.initialize(userSpecifiedPort);
+				connectionHandler.initialize(userSpecifiedPort);
 			}
 		}catch(IOException ioex){
 			LoggerFactory.log("Unable initialize the ToolBus connection handler.", ioex, ILogger.FATAL, IToolBusLoggerConstants.COMMUNICATION);
 			throw new RuntimeException(ioex);
 		}
-		portNumber = toolBusConnectionHandler.getPort();
+		portNumber = connectionHandler.getPort();
 		
-		Thread tbConnectionHandler = new Thread(toolBusConnectionHandler);
+		Thread tbConnectionHandler = new Thread(connectionHandler);
 		tbConnectionHandler.setName("ToolBus connection handler");
 		tbConnectionHandler.start();
 		

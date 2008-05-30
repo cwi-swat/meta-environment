@@ -2,10 +2,9 @@ package toolbus.adapter.java;
 
 import java.net.InetAddress;
 
+import toolbus.ToolBus;
+import toolbus.DirectConnectionHandler;
 import toolbus.adapter.AbstractTool;
-import toolbus.communication.DirectClientIOHandler;
-import toolbus.communication.DirectServerIOHandler;
-import toolbus.tool.ToolInstance;
 
 /**
  * This class facilitates the functions a tool needs to be able to functions.
@@ -61,10 +60,10 @@ public abstract class AbstractJavaTool extends AbstractTool{
 	}
 	
 	/**
-	 * Connects to the ToolBus directly instead of through TCP/IP.
+	 * Connects to the ToolBus directly (instead of through TCP/IP).
 	 * 
-	 * @param toolInstance
-	 *            The tool instance that is associated with the tool.
+	 * @param toolbus
+	 *            The toolbus to connect to.
 	 * @param toolClassLoader
 	 *            The classloader that will be used for the tool's classes.
 	 * @param toolName
@@ -74,20 +73,14 @@ public abstract class AbstractJavaTool extends AbstractTool{
 	 * @throws Exception
 	 *            When connecting to the toolbus directly failed.
 	 */
-	public void connectDirectly(ToolInstance toolInstance, ClassLoader toolClassLoader, String toolName, int toolID) throws Exception{
+	public void connectDirectly(ToolBus toolbus, ClassLoader toolClassLoader, String toolName, int toolID) throws Exception{
 		if(toolName == null || toolID == -1) throw new RuntimeException("Missing tool identification.");
 
 		toolBridge = new JavaToolBridge(termFactory, DIRECTTOOL, this, toolName, toolID, null, -1);
 		
-		// Link the handlers.
-		DirectClientIOHandler toolDirectIOHandler = new DirectClientIOHandler(toolBridge);
-		toolBridge.setIOHandler(toolDirectIOHandler);
-		
-		DirectServerIOHandler toolBusDirectIOHandler = new DirectServerIOHandler(toolInstance, toolClassLoader);
-		toolInstance.setIOHandler(toolBusDirectIOHandler);
-		
-		toolDirectIOHandler.setServerDirectIOHandler(toolBusDirectIOHandler);
-		toolBusDirectIOHandler.setClientDirectIOHandler(toolDirectIOHandler);
+		// Establish the connection.
+		DirectConnectionHandler directConnectionHandler = toolbus.getDirectConnectionHandler();
+		directConnectionHandler.dock(toolBridge, toolClassLoader);
 
 		toolBridge.run();
 	}

@@ -30,10 +30,10 @@ import aterm.pure.binary.BinaryWriter;
  * 
  * @author Arnold Lankamp
  */
-public class ToolBusConnectionHandler extends AbstractConnectionHandler implements Runnable{
+public class SocketConnectionHandler extends AbstractConnectionHandler implements Runnable{
 	private final static int HANDSHAKEBUFFERSIZE = 4096;
 	
-	private final ToolBus toolBus;
+	private final ToolBus toolbus;
 
 	private final SocketReadMultiplexer readMultiplexer;
 	private final SocketWriteMultiplexer writeMultiplexer;
@@ -45,13 +45,13 @@ public class ToolBusConnectionHandler extends AbstractConnectionHandler implemen
 	/**
 	 * Constructor.
 	 * 
-	 * @param toolBus
-	 *            A reference to the main class of the ToolBus.
+	 * @param toolbus
+	 *            A reference to the main class of the Toolbus.
 	 */
-	public ToolBusConnectionHandler(ToolBus toolBus){
+	public SocketConnectionHandler(ToolBus toolbus){
 		super();
 		
-		this.toolBus = toolBus;
+		this.toolbus = toolbus;
 		
 		try{
 			serverSocketChannel = ServerSocketChannel.open();
@@ -227,24 +227,24 @@ public class ToolBusConnectionHandler extends AbstractConnectionHandler implemen
 		socketChannel.configureBlocking(true);
 		
 		// Receive tool id.
-		ATermAppl toolKey = (ATermAppl) readTermFromChannel(toolBus.getTBTermFactory(), socketChannel, handShakeBuffer);
+		ATermAppl toolKey = (ATermAppl) readTermFromChannel(toolbus.getTBTermFactory(), socketChannel, handShakeBuffer);
 		String toolName = toolKey.getAFun().getName();
 		
-		ToolDefinition toolDef = toolBus.getToolDefinition(toolName);
+		ToolDefinition toolDef = toolbus.getToolDefinition(toolName);
 		if(toolDef == null){
 			String error = "No toolDef found for tool with name: " + toolName;
 			LoggerFactory.log(error, ILogger.WARNING, IToolBusLoggerConstants.COMMUNICATION);
 			throw new RuntimeException(error);
 		}
 
-		ToolInstanceManager toolInstanceManager = toolBus.getToolInstanceManager();
+		ToolInstanceManager toolInstanceManager = toolbus.getToolInstanceManager();
 
 		ToolInstance toolInstance = toolInstanceManager.getPendingTool(toolKey);
 		
 		// If we didn't request the tool with the given id to execute, it's connecting on it's own
 		// initiative.
 		if(toolInstance == null){
-			toolInstance = new ToolInstance(toolDef, toolBus);
+			toolInstance = new ToolInstance(toolDef, toolbus);
 			toolInstanceManager.addDynamiclyConnectedTool(toolInstance);
 
 			LoggerFactory.log("Tool: " + toolInstance.getToolKey() + ", connected at its own initiative.", ILogger.INFO, IToolBusLoggerConstants.COMMUNICATION);
