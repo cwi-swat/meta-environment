@@ -75,18 +75,23 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	}
 
 	private static void runToolBus(final ToolBus toolbus){
-		if(toolbus.parsecup()){
-			toolbus.prepare();
-			Thread thread = new Thread(new Runnable(){
-				public void run(){
-					toolbus.execute();
-				}
-			});
-			thread.setName(pluginId);
-			thread.start();
-			createConsole(toolbus);
-		}else{
-			System.err.println("Failed to parse ToolBus script");
+		try{
+			if(toolbus.parsecup()){
+				toolbus.prepare();
+				Thread thread = new Thread(new Runnable(){
+					public void run(){
+						toolbus.execute();
+					}
+				});
+				thread.setName(pluginId);
+				thread.start();
+				createConsole(toolbus);
+			}else{
+				System.err.println("Failed to parse ToolBus script");
+			}
+		}catch(RuntimeException rex){
+			rex.printStackTrace();
+			throw rex;
 		}
 	}
 
