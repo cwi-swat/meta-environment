@@ -7,6 +7,7 @@ package toolbus.process;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
@@ -14,6 +15,7 @@ import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.atom.Tau;
 import toolbus.environment.Environment;
+import toolbus.exceptions.NoSuchProcessDefinitionException;
 import toolbus.exceptions.ToolBusException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.debug.ExecutionResult;
@@ -155,7 +157,7 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 	}
 	
 	public String toString(){
-		return "ProcessCall(" + name + ", " + originalActuals + ")";
+		return "DynamicProcessCall(" + name + ", " + originalActuals + ")";
 	}
 	
 	
@@ -211,6 +213,10 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 		
 		try{
 			initDynamicCall();
+		}catch(NoSuchProcessDefinitionException nspdex){
+			// Ignore this warning and emulate 'delta'.
+			activated = false;
+			return;
 		}catch(ToolBusException e){
 			System.err.println(e.getMessage());
 			activated = false;

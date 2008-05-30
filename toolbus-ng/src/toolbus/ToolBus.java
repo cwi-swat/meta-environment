@@ -17,8 +17,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
 import toolbus.atom.Atom;
 import toolbus.commandline.CommandLine;
+import toolbus.exceptions.NoSuchProcessDefinitionException;
 import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
@@ -365,7 +367,7 @@ public class ToolBus{
 	public ProcessDefinition getProcessDefinition(String name, int numberOfActuals) throws ToolBusError{
 		String uname = name + numberOfActuals;
 		ProcessDefinition definition = procdefs.get(uname);
-		if(definition == null) throw new ToolBusError("No definition for process "+name+", with "+numberOfActuals+" actuals"); 
+		if(definition == null) throw new NoSuchProcessDefinitionException("No definition for process "+name+", with "+numberOfActuals+" actuals"); 
 		
 		return definition;
 	}
