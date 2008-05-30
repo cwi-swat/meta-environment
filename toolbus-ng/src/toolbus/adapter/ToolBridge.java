@@ -200,7 +200,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * @see IDataHandler#send(byte, ATerm)
 	 */
 	public void send(byte operation, ATerm aTerm){
-		ioHandler.send(operation, aTerm);
+		ioHandler.send(operation, termFactory.importTerm(aTerm));
 	}
 	
 	/**
