@@ -60,6 +60,20 @@ public abstract class AbstractJavaTool extends AbstractTool{
 		toolBridge.run();
 	}
 	
+	/**
+	 * Connects to the ToolBus directly instead of through TCP/IP.
+	 * 
+	 * @param toolInstance
+	 *            The tool instance that is associated with the tool.
+	 * @param toolClassLoader
+	 *            The classloader that will be used for the tool's classes.
+	 * @param toolName
+	 *            The name of the tool.
+	 * @param toolID
+	 *            The ID of the tool.
+	 * @throws Exception
+	 *            When connecting to the toolbus directly failed.
+	 */
 	public void connectDirectly(ToolInstance toolInstance, ClassLoader toolClassLoader, String toolName, int toolID) throws Exception{
 		if(toolName == null || toolID == -1) throw new RuntimeException("Missing tool identification.");
 
