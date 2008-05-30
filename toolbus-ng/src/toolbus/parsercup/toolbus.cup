@@ -55,6 +55,7 @@ import toolbus.process.Merge;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessExpression;
+import toolbus.process.LeftBiasedAlternative;
 import toolbus.process.RightBiasedAlternative;
 import toolbus.process.Sequence;
 import toolbus.tool.ToolDefinition;
@@ -233,6 +234,7 @@ terminal ELSE;
 terminal FI;
 terminal ASSIGN;
 terminal FMERGE;
+terminal LEFTCHOICE;
 terminal RIGHTCHOICE;
 terminal DISRUPT;
 terminal REL_DELAY;
@@ -488,6 +490,8 @@ proc ::=
      
          
      | proc:p1 CHOICE proc:p2               {: RESULT = new Alternative(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))); :}
+     
+     | proc:p1 LEFTCHOICE proc:p2          {: RESULT = new LeftBiasedAlternative(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))); :}
      
      | proc:p1 RIGHTCHOICE proc:p2          {: RESULT = new RightBiasedAlternative(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))); :}
      

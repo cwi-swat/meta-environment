@@ -138,6 +138,8 @@ public class TscriptTest extends TestCase{
 		assertTrue(runTest("Define"));
 		assertTrue(runTest("RightChoice1"));
 		assertTrue(runTest("RightChoice2"));
+		assertTrue(runTest("LeftChoice1"));
+		assertTrue(runTest("LeftChoice2"));
 		assertTrue(runTest("Sieve"));
 		assertTrue(runTest("Prod"));
 	}

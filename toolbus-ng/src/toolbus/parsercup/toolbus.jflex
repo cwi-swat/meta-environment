@@ -135,7 +135,6 @@ Real  = -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
   ","                            { return symbol(sym.COMMA); }
   "{"                            { return symbol(sym.LBRACE); }
   "}"                            { return symbol(sym.RBRACE); }
-  ">>"                           { return symbol(sym.DISRUPT); }
   "<"                            { return symbol(sym.LANGLE); }
   ">"                            { return symbol(sym.RANGLE); }
   "["                            { return symbol(sym.LSQUARE); }
@@ -148,6 +147,8 @@ Real  = -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
   "||"                           { return symbol(sym.FMERGE); }
   "+"                            { return symbol(sym.CHOICE); }
   "+>"                           { return symbol(sym.RIGHTCHOICE); }
+  "<+"                           { return symbol(sym.LEFTCHOICE); }
+  ">>"                           { return symbol(sym.DISRUPT); }
   "?"                            { return symbol(sym.QUESTION); }
   "."                            { return symbol(sym.SEQ); }
   "*"                            { return symbol(sym.ITER); }
