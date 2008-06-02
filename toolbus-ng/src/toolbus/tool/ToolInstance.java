@@ -15,8 +15,9 @@ import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
+import toolbus.tool.execution.IToolExecutor;
+import toolbus.tool.execution.IToolExecutorFactory;
 import toolbus.tool.execution.StreamHandler;
-import toolbus.tool.execution.ToolExecutor;
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -84,7 +85,9 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 *            Thrown when the tool could not be executed.
 	 */
 	public void executeTool() throws ToolBusException{
-		ToolExecutor toolExecutor = new ToolExecutor(this, toolDef, toolbus);
+		IToolExecutorFactory toolExecutorFactory = toolbus.getToolExecutorFactory();
+		
+		IToolExecutor toolExecutor = toolExecutorFactory.getToolExecutor(this, toolDef, toolbus);
 		toolExecutor.execute();
 	}
 	

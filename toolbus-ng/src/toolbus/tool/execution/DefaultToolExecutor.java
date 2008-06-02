@@ -15,11 +15,12 @@ import toolbus.tool.ToolInstance;
 import aterm.ATerm;
 
 /**
- * Takes care of the execution of tools.
+ * This tool executor implements the default behavior of an executor.
+ * (Which means it just executes tools and nothing else).
  * 
  * @author Arnold Lankamp
  */
-public class ToolExecutor{
+public class DefaultToolExecutor implements IToolExecutor{
 	private final ToolInstance toolInstance;
 	private final ToolDefinition toolDefinition;
 	private final ToolBus toolbus;
@@ -34,7 +35,7 @@ public class ToolExecutor{
 	 * @param toolbus
 	 *            The toolbus to which the tool should connect.
 	 */
-	public ToolExecutor(ToolInstance toolInstance, ToolDefinition toolDefinition, ToolBus toolbus){
+	public DefaultToolExecutor(ToolInstance toolInstance, ToolDefinition toolDefinition, ToolBus toolbus){
 		super();
 		
 		this.toolInstance = toolInstance;
@@ -43,10 +44,7 @@ public class ToolExecutor{
 	}
 	
 	/**
-	 * Executes the tool that will be associated with the tool instance.
-	 * 
-	 * @throws ToolBusException
-	 *            Thrown when the tool could not be started.
+	 * @see toolbus.tool.execution.IToolExecutor#execute()
 	 */
 	public void execute() throws ToolBusException{
 		if(toolDefinition.isDirectlyStartableJavaNGTool()){
@@ -135,7 +133,7 @@ public class ToolExecutor{
 			command[commandLength + 4] = "-TB_HOST";
 			command[commandLength + 5] = "localhost";
 			command[commandLength + 6] = "-TB_PORT";
-			command[commandLength + 7] = "" + toolbus.getPort();
+			command[commandLength + 7] = Integer.toString(toolbus.getPort());
 			
 			ProcessBuilder pb = new ProcessBuilder(command);
 			pb.redirectErrorStream(true);

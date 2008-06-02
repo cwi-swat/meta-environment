@@ -33,6 +33,8 @@ import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
+import toolbus.tool.execution.DefaultToolExecutorFactory;
+import toolbus.tool.execution.IToolExecutorFactory;
 import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
 import aterm.ATerm;
@@ -56,8 +58,9 @@ public class ToolBus{
 	private int processIdCounter;
 	private final ConcurrentHashMap<String, ProcessDefinition> procdefs;
 	
-	private final ToolInstanceManager toolInstanceManager;
 	private final ConcurrentHashMap<String, ToolDefinition> tooldefs;
+	private final ToolInstanceManager toolInstanceManager;
+	private volatile IToolExecutorFactory toolExecutorFactory;
 	
 	protected final SocketConnectionHandler connectionHandler;
 	private final DirectConnectionHandler directConnectionHandler;
@@ -85,6 +88,7 @@ public class ToolBus{
 		portNumber = -1; // Undefined.
 		
 		toolInstanceManager = new ToolInstanceManager();
+		toolExecutorFactory = new DefaultToolExecutorFactory();
 		
 		tbfactory = TBTermFactory.getInstance();
 		this.out = out;
@@ -120,6 +124,10 @@ public class ToolBus{
 	
 	public ToolInstanceManager getToolInstanceManager(){
 		return toolInstanceManager;
+	}
+	
+	public IToolExecutorFactory getToolExecutorFactory(){
+		return toolExecutorFactory;
 	}
 	
 	public DirectConnectionHandler getDirectConnectionHandler(){
