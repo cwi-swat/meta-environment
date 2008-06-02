@@ -126,6 +126,10 @@ public class ToolBus{
 		return toolInstanceManager;
 	}
 	
+	public void setToolExecutorFactory(IToolExecutorFactory toolExecutorFactory){
+		this.toolExecutorFactory = toolExecutorFactory;
+	}
+	
 	public IToolExecutorFactory getToolExecutorFactory(){
 		return toolExecutorFactory;
 	}
