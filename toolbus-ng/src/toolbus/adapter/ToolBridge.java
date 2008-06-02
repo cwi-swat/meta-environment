@@ -6,9 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import toolbus.DirectConnectionHandler;
 import toolbus.IOperations;
+import toolbus.ToolBus;
 import toolbus.communication.IDataHandler;
 import toolbus.communication.IIOHandler;
+import toolbus.exceptions.ToolBusError;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
@@ -41,12 +44,13 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 
 	private final InetAddress host;
 	private final int port;
+	
+	private final ClassLoader classLoader;
+	private final ToolBus toolbus;
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param type
-	 *            The type of the tool (Remote of direct).
 	 * @param toolName
 	 *            The name of the with this bridge associated tool.
 	 * @param toolID
@@ -56,15 +60,47 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * @param port
 	 *            The port on which the ToolBus is running.
 	 */
-	public ToolBridge(PureFactory termFactory, String type,  String toolName, int toolID, InetAddress host, int port){
+	public ToolBridge(PureFactory termFactory, String toolName, int toolID, InetAddress host, int port){
 		super();
 		
 		this.termFactory = termFactory;
-		this.type = type;
+		this.type = AbstractTool.REMOTETOOL;
 		this.toolName = toolName;
 		this.toolID = toolID;
 		this.host = host;
 		this.port = port;
+		
+		this.classLoader = null;
+		this.toolbus = null;
+
+		threadLocalQueues = new HashMap<Long, ThreadLocalJobQueue>();
+		queues = new HashMap<String, JobQueue>();
+		
+		workerQueue = new WorkerQueue();
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param toolName
+	 *            The name of the with this bridge associated tool.
+	 * @param toolID
+	 *            The id of the with this bridge associated tool.
+	 * @param classLoader
+	 *            The classLoader to use for loading classes.
+	 */
+	public ToolBridge(PureFactory termFactory, String toolName, int toolID, ClassLoader classLoader, ToolBus toolbus){
+		super();
+		
+		this.termFactory = termFactory;
+		this.type = AbstractTool.DIRECTTOOL;
+		this.toolName = toolName;
+		this.toolID = toolID;
+		this.classLoader = classLoader;
+		this.toolbus = toolbus;
+		
+		this.host = null;
+		this.port = -1;
 
 		threadLocalQueues = new HashMap<Long, ThreadLocalJobQueue>();
 		queues = new HashMap<String, JobQueue>();
@@ -364,7 +400,12 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			ToolConnectionHandler toolConnectionHandler = new ToolConnectionHandler(this, host, port);
 			toolConnectionHandler.run();
 		}else if(type.equals(AbstractTool.DIRECTTOOL)){
-			// We don't need to do anything in this case we will be linked to a direct I/O handler.
+			DirectConnectionHandler directConnectionHandler = toolbus.getDirectConnectionHandler();
+			try{
+				directConnectionHandler.dock(this, classLoader);
+			}catch(ToolBusError tberr){
+				throw new RuntimeException(tberr);
+			}
 		}else{
 			String error = "Unknown tool type: " + type;
 			LoggerFactory.log(error, ILogger.FATAL, IToolBusLoggerConstants.TOOL);

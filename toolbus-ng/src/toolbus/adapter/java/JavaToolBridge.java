@@ -12,7 +12,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import toolbus.IOperations;
+import toolbus.ToolBus;
 import toolbus.adapter.AbstractTool;
 import toolbus.adapter.ToolBridge;
 import toolbus.logging.ILogger;
@@ -41,8 +43,6 @@ public class JavaToolBridge extends ToolBridge{
 	/**
 	 * Constructor.
 	 * 
-	 * @param type
-	 *            The type of the tool (Remote of direct).
 	 * @param tool
 	 *            The tool this bridge needs to be associated with.
 	 * @param toolName
@@ -54,8 +54,33 @@ public class JavaToolBridge extends ToolBridge{
 	 * @param port
 	 *            The port on which the ToolBus is running.
 	 */
-	public JavaToolBridge(PureFactory termFactory, String type, AbstractTool tool, String toolName, int toolID, InetAddress host, int port){
-		super(termFactory, type, toolName, toolID, host, port);
+	public JavaToolBridge(PureFactory termFactory, AbstractTool tool, String toolName, int toolID, InetAddress host, int port){
+		super(termFactory, toolName, toolID, host, port);
+		
+		this.termFactory = termFactory;
+		this.tool = tool;
+		callableFunctions = new HashMap<CallableMethodSignature, Method>();
+		initCallableMethods();
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param type
+	 *            The type of the tool (Remote of direct).
+	 * @param tool
+	 *            The tool this bridge needs to be associated with.
+	 * @param toolName
+	 *            The name of the with this bridge associated tool.
+	 * @param toolID
+	 *            The id of the with this bridge associated tool.
+	 * @param classLoader
+	 *            The classLoader to use for loading classes.
+	 * @param toolbus
+	 *            The toolbus to link this bridge to.
+	 */
+	public JavaToolBridge(PureFactory termFactory, AbstractTool tool, String toolName, int toolID, ClassLoader classLoader, ToolBus toolbus){
+		super(termFactory, toolName, toolID, classLoader, toolbus);
 		
 		this.termFactory = termFactory;
 		this.tool = tool;

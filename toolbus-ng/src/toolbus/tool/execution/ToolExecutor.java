@@ -1,4 +1,4 @@
-package toolbus.tool;
+package toolbus.tool.execution;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -11,7 +11,8 @@ import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
-import toolbus.tool.ToolInstance.StreamHandler;
+import toolbus.tool.ToolDefinition;
+import toolbus.tool.ToolInstance;
 import aterm.ATerm;
 
 /**

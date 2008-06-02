@@ -3,7 +3,6 @@ package toolbus.adapter.java;
 import java.net.InetAddress;
 
 import toolbus.ToolBus;
-import toolbus.DirectConnectionHandler;
 import toolbus.adapter.AbstractTool;
 
 /**
@@ -55,7 +54,7 @@ public abstract class AbstractJavaTool extends AbstractTool{
 
 		if(toolName == null) throw new RuntimeException("Missing tool identification.");
 
-		toolBridge = new JavaToolBridge(termFactory, REMOTETOOL, this, toolName, toolID, host, port);
+		toolBridge = new JavaToolBridge(termFactory, this, toolName, toolID, host, port);
 		toolBridge.run();
 	}
 	
@@ -76,12 +75,7 @@ public abstract class AbstractJavaTool extends AbstractTool{
 	public void connectDirectly(ToolBus toolbus, ClassLoader toolClassLoader, String toolName, int toolID) throws Exception{
 		if(toolName == null) throw new RuntimeException("Missing tool identification.");
 
-		toolBridge = new JavaToolBridge(termFactory, DIRECTTOOL, this, toolName, toolID, null, -1);
-		
-		// Establish the connection.
-		DirectConnectionHandler directConnectionHandler = toolbus.getDirectConnectionHandler();
-		directConnectionHandler.dock(toolBridge, toolClassLoader);
-
+		toolBridge = new JavaToolBridge(termFactory, this, toolName, toolID, toolClassLoader, toolbus);
 		toolBridge.run();
 	}
 }
