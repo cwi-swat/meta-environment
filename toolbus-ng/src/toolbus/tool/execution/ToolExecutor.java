@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import toolbus.ToolBus;
-import toolbus.adapter.ToolBridge;
 import toolbus.adapter.java.AbstractJavaTool;
 import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
@@ -93,15 +92,6 @@ public class ToolExecutor{
 			}catch(Exception ex){
 				String error = "Unable to connect tool to the ToolBus directly: " + toolClass.getName();
 				LoggerFactory.log(error, ex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(error);
-			}
-			
-			ToolBridge toolBridge = tool.getToolBridge();
-			
-			// Check if the tool provides the given signature.
-			if(!toolBridge.checkSignature(toolDefinition.getSignature())){
-				String error = "Tool: " + toolDefinition.getName() + " did not provide the expected signature.";
-				LoggerFactory.log(error, ILogger.WARNING, IToolBusLoggerConstants.TOOLINSTANCE);
 				throw new ToolBusException(error);
 			}
 		}else if(toolDefinition.getClassName() != null){
