@@ -74,7 +74,7 @@ public abstract class AbstractJavaTool extends AbstractTool{
 	 *            When connecting to the toolbus directly failed.
 	 */
 	public void connectDirectly(ToolBus toolbus, ClassLoader toolClassLoader, String toolName, int toolID) throws Exception{
-		if(toolName == null || toolID == -1) throw new RuntimeException("Missing tool identification.");
+		if(toolName == null) throw new RuntimeException("Missing tool identification.");
 
 		toolBridge = new JavaToolBridge(termFactory, DIRECTTOOL, this, toolName, toolID, null, -1);
 		
