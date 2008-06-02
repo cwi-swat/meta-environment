@@ -18,8 +18,6 @@ import aterm.pure.PureFactory;
 public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	private static final String pluginId = "toolbus";
 	private static final String toolbusConfig = "config";
-
-	private static SingletonToolBus instance;
 	
 	private static class SingletonToolBus{
 		private final ToolBus toolbus;
@@ -32,6 +30,14 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		
 		public ToolBus getToolBus(){
 			return toolbus;
+		}
+	}
+	
+	private static class InstanceKeeper{
+		private static SingletonToolBus instance;
+		static{
+			instance = new SingletonToolBus();
+			runToolBus(instance.getToolBus());
 		}
 	}
 
@@ -49,12 +55,8 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	/**
 	 * The plugin activator is a singleton. Use this method to obtain the instance.
 	 */
-	private static synchronized SingletonToolBus getInstance(){
-		if(instance == null){
-			instance = new SingletonToolBus();
-			runToolBus(instance.getToolBus());
-		}
-		return instance;
+	private static SingletonToolBus getInstance(){
+		return InstanceKeeper.instance;
 	}
 
 	/**
