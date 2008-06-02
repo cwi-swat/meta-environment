@@ -55,8 +55,7 @@ public class WishAdapter extends AbstractTool{
     }
 	
     public void connect(String[] args) throws Exception{
-	String type = AbstractTool.REMOTETOOL;
-
+	
 	String toolName = null;
 	int toolID = -1;
 
@@ -67,28 +66,26 @@ public class WishAdapter extends AbstractTool{
 		
 	for(int i = 0; i < args.length; i++){
 	    String arg = args[i];
-	    if(arg.equals("-TYPE")){
-		type = args[++i];
-	    }else if(arg.equals("-TB_TOOL_NAME")){
-		toolName = args[++i];
+	    if(arg.equals("-TB_TOOL_NAME")){
+	    	toolName = args[++i];
 	    }else if(arg.equals("-TB_TOOL_ID")){
-		toolID = Integer.parseInt(args[++i]);
+	    	toolID = Integer.parseInt(args[++i]);
 	    }else if(arg.equals("-TB_HOST")){
-		host = InetAddress.getByName(args[++i]);
+	    	host = InetAddress.getByName(args[++i]);
 	    }else if(arg.equals("-TB_PORT")){
-		port = Integer.parseInt(args[++i]);
+	    	port = Integer.parseInt(args[++i]);
 	    }else if(arg.equals("-script")){
-		scriptName = args[++i];
+	    	scriptName = args[++i];
 	    }else if(arg.equals("-tbtcl")){
-		tbtcl = args[++i];
+	    	tbtcl = args[++i];
 	    }else if(arg.equals("-libdir")){
-		libdir = args[++i];
+	    	libdir = args[++i];
 	    }else if(arg.equals("-script-args")){
-		while(++i < args.length){
-		    arguments.add(args[i]);
-		}
+			while(++i < args.length){
+			    arguments.add(args[i]);
+			}
 	    }else{
-		throw new RuntimeException("Unknown argument: "+arg);
+	    	throw new RuntimeException("Unknown argument: "+arg);
 	    }
 	}
 
@@ -96,7 +93,7 @@ public class WishAdapter extends AbstractTool{
 	if(scriptName == null) throw new RuntimeException("No script name supplied.");
 	if(tbtcl == null || libdir == null) throw new RuntimeException("No library paths supplied.");
 		
-	toolBridge = new WishAdapterBridge(getFactory(), type, this, toolName, toolID, host, port);
+	toolBridge = new WishAdapterBridge(getFactory(), this, toolName, toolID, host, port);
 		
 	executeScript();
 		
