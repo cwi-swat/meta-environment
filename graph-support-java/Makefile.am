@@ -14,10 +14,10 @@ c-api: Graph.adt
 	adt-to-c --input $< --name Graph
 
 java-api: Graph.adt
-	adt-to-java \                                                               
-		--input Graph.adt \                                                     
-		--package nl.cwi.sen1 \                                                 
-		--name graph \                                                          
+	adt-to-java \
+		--input Graph.adt \
+		--package nl.cwi.sen1 \
+		--name graph \
 		--version ${VERSION}
 	mv graph-${VERSION}.jar graph.jar
 
