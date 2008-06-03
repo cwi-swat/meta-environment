@@ -14,7 +14,8 @@ AM_CPPFLAGS =
 # moves with it. The extra /foo in front is to work around a check in libtool
 # which demands that all rpaths are absolute. Note that this 'solution'
 # will only work on platforms that have support for $ORIGIN substitution.
-AM_LDFLAGS = -rpath '/foo:\$$ORIGIN/../lib'
+AM_LDFLAGS = 
+#-rpath '/foo:\$$ORIGIN/../lib'
 AM_LIBTOOLFLAGS= 
 LDADD = 
 
