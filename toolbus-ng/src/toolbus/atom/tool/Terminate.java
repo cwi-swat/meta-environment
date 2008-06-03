@@ -50,12 +50,15 @@ public class Terminate extends Atom{
 			toolInstance = getToolBus().getToolInstanceManager().get(tid);
 			if(toolInstance == null) return false;
 		}
-		
-		ATerm req = tbfactory.fullSubstitute(request.value, getEnv());
-		if(req == null) throw new ToolBusException("Illegal terminate request pattern: "+request.value+".");
-		
-		toolInstance.sendTerminate(req);
-		//LoggerFactory.log(this.getProcess().getProcessName(), "Terminate " + request.value, IToolBusLoggerConstants.TOOLCOM);
-		return true;
+
+		if(toolInstance.tryDoEval()){
+			ATerm req = tbfactory.fullSubstitute(request.value, getEnv());
+			if(req == null) throw new ToolBusException("Illegal terminate request pattern: "+request.value+".");
+			
+			toolInstance.sendTerminate(req);
+			//LoggerFactory.log(this.getProcess().getProcessName(), "Terminate " + request.value, IToolBusLoggerConstants.TOOLCOM);
+			return true;
+		}
+		return false;
 	}
 }
