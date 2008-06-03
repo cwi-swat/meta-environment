@@ -51,6 +51,8 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	/**
 	 * Constructor.
 	 * 
+	 * @param termFactory
+	 *            The term factory to use.
 	 * @param toolName
 	 *            The name of the with this bridge associated tool.
 	 * @param toolID
@@ -82,12 +84,16 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	/**
 	 * Constructor.
 	 * 
+	 * @param termFactory
+	 *            The term factory to use.
 	 * @param toolName
 	 *            The name of the with this bridge associated tool.
 	 * @param toolID
 	 *            The id of the with this bridge associated tool.
 	 * @param classLoader
 	 *            The classLoader to use for loading classes.
+	 * @param toolbus
+	 *            The toolbus to connect to.
 	 */
 	public ToolBridge(PureFactory termFactory, String toolName, int toolID, ClassLoader classLoader, ToolBus toolbus){
 		super();
