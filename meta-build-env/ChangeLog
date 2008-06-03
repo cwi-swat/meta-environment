@@ -1,3 +1,11 @@
+
+
+Tue Jun  3 09:32:00 CEST 2008 <jurgenv@cwi.nl>
+ * Makefile.meta: made all binaries that are made in a Makefile that
+   includes Makefile.meta relocatable. The precondition is that the
+   libraries used are installed in ../lib. This works only on platforms
+   that support $ORIGIN substitution.
+
 Tue May 13 18:27:50 2008    <bruntink@cwi.nl>
 
 	* meta-build.m4: Added generation of Eclipse meta data for basic
