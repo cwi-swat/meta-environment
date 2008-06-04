@@ -26,7 +26,7 @@ public class DirectServerIOHandler implements IIOHandler{
 				return t;
 			}
 		};
-		executor = Executors.newFixedThreadPool(5, threadFactory);
+		executor = Executors.newFixedThreadPool(1, threadFactory);
 	}
 
 	private final IDataHandler dataHandler;
