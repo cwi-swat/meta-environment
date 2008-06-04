@@ -9,7 +9,7 @@ hiddens
         Type
 
 exports
-  sorts Type OptNamedType OptNamedTypes TypeVar 
+  sorts Type OptNamedType OptNamedTypes TypeVar StandardOperator
         BasicType StructuredType FunctionType FunctionName AbstractType
         ParameterizedType
 
@@ -17,6 +17,7 @@ exports
     "bool"                                              -> BasicType      {cons("bool-type")} 
     "int"                                               -> BasicType      {cons("int-type")} 
     "double"                                            -> BasicType      {cons("double-type")}
+    "number"                                            -> BasicType      {cons("number-type")}
     "str"                                               -> BasicType      {cons("str-type")} 
     "loc"                                               -> BasicType      {cons("loc-type")}
     "value"                                             -> BasicType      {cons("value-type")}
@@ -30,15 +31,18 @@ exports
 
     "list" "[" OptNamedType "]"                         -> StructuredType {cons("list-type")} 
     "set" "[" OptNamedType "]"                          -> StructuredType {cons("set-type")}
-    "map" "[" OptNamedTypes "]"                          -> StructuredType {cons("map-type")}
+    "map" "[" OptNamedTypes "]"                         -> StructuredType {cons("map-type")}
     "rel" "[" OptNamedTypes "]"                         -> StructuredType {cons("rel-type")}
     "tuple" "[" OptNamedTypes "]"                       -> StructuredType {cons("tuple-type")}
 
-    Name | "+" | "-" | "*" | "/" | "==" | "<" | "<=" |
-    ">" | ">="                                          -> FunctionName { avoid }
+    "+" | "-" | "*" | "/" | "==" | 
+    "<" | "<=" |">" | ">="                              -> StandardOperator
+     Name | StandardOperator                            -> FunctionName   { avoid }
     "fun" Type FunctionName "(" OptNamedTypes? ")"      -> FunctionType   {cons("function-type")}
 
     "&" Name                                            -> TypeVar        {cons("type-var")}
+    "&" Name "<=" Type                                  -> TypeVar        {cons("type-var-less-equal")}
+
     Name "[" {TypeVar ","}+ "]"                         -> ParameterizedType
                                                                           {cons("par-type")}
 
@@ -53,7 +57,7 @@ exports
 
 
 %% Define reserved words
-    "bool" | "int" | "double" | "str" | "loc" | 
+    "bool" | "int" | "double" | "number" | "str" | "loc" | 
     "value" | "term" | "void" | "list" | "set" | 
     "map" | "rel" | "tuple" | "fun"                     -> Name {reject}
  

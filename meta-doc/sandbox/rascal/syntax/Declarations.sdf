@@ -32,10 +32,11 @@ exports
     Visibility "global" Type Name ("=" Expression)? -> Declaration {cons("global-decl")}
 
     "primitive" ( "(" StringLiteral ")" )?          -> Primitive
+    ("throws" AbsPattern)*                          -> Throws
 
-    Visibility "memo"? FunctionType 
-                       (Statement | Primitive)    -> Declaration {cons("function-decl")}
-    Visibility "java" FunctionType JavaBlock        -> Declaration {cons("java-function-decl")}
+    Visibility "memo"? FunctionType Throws
+                       (Statement | Primitive)      -> Declaration {cons("function-decl")}
+    Visibility "java" FunctionType Throws JavaBlock -> Declaration {cons("java-function-decl")}
 
    "rules" "(" Type ")" "{" Rule+ "}"               -> Declaration {cons("rules-decl")}
 

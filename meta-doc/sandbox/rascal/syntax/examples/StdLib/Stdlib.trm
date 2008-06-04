@@ -47,9 +47,6 @@ public fun bool -(bool B1, bool B2)
 public fun bool *(bool B1, bool B2)
   primitive("Bool.mul")
 
-%%public fun bool div(bool B1, bool B2)
-%%  throw unimplemented("div on bool")
-
 %% Arbitrary boolean: arb
 public fun int arb()
  primitive("Bool.arb")
@@ -76,9 +73,8 @@ public fun int *(int I1, int I2)
 
 %% Arbitrary integer: arb
 public fun int arb(int bgn, int end)
- primitive("Int.arb")
-%% if(end - bgn <= 0)
-%%   throw illegal_argument("int arb");
+       throws illegal_argument(str msg) %% if(end - bgn <= 0)
+ primitive("Int.arb") 
 
 public fun str toString(int I)
  primitive("toStringInt")
@@ -105,9 +101,8 @@ public fun double /(double D1, double D2)
 
 %% Arbitrary double: arb
 public fun double arb(double bgn, double end)
+       throws illegal_argument(str msg) %% if(end - bgn <= 0)
  primitive("Double.arb")
-%%  if(end - bgn <= 0)
-%%     throw illegal_argument("double arb");
 
 public fun str toString(double D)
   primitive("Double.toString")
@@ -127,9 +122,11 @@ public fun int size(str S)
   primitive("String.size")
 
 public fun int get(str S, int N)
+       throws out_of_range(str msg)
  primitive("String.get")
 
 public fun list[int] toList(str S)
+       throws cannot_convert_int_to_char(str msg)
   primitive("String.toList")
  
 public fun set[int] toSet(str S)
@@ -161,6 +158,7 @@ public fun str toString(loc L)
   primitive("Location.toString")
 
 public fun loc get_location(&T Subject)
+       throws location_missing(str msg)
  primitive("Location.get_location")
 
 public fun &T set_location(&T Subject, loc L)
@@ -189,6 +187,7 @@ public fun int size(list[&T] L)
 
 %% Get list element: get
 public fun &T get(list[&T] L, int N)
+       throws out_of_range(str msg)
   primitive("List.get")
 
 %% Arbitrary element of list: arb
@@ -199,12 +198,14 @@ public fun str toString(list[&T] L)
   primitive("List.toString")
 
 public fun str makeString(list[int] L)
+       throws cannot_convert_int_to_char(str msg)
   primitive("List.makeString")
 
 public fun set[&T] toSet(list[&T] L)
   primitive("List.toSet")
 
 public fun map[&T, &U] toMap(list[tuple[&T, &U]] L)
+       throws domain_not_unique(str msg)
   primitive("List.toMap")
 
 public fun rel[&T] toRel(list[&T] L)
@@ -221,7 +222,7 @@ public fun &T reduce(list[&T] L, fun &T F (&T,&T), &T unit){
   return result
 }
 
-public fun list[&T] apply(list[&T] L, fun &T F (&T,&T))
+public fun list[&T] mapper(list[&T] L, fun &T F (&T,&T))
   return [F(E) | &T E : L];
 
 %% Minimum element of a list: min
@@ -258,10 +259,12 @@ public fun &T average(list[&T] L, &T zero)
 
 %% First element of list; first
 public fun &T first(list[&T] L)
+       throws empty_list(str msg)
   primitive("List.first")
 
 %% Remaining elements of list: rest
 public fun &T rest(list[&T] L)
+      throws empty_list(str msg)
   primitive("List.rest")
 
 %% --- Tuples ------------------------------------------------
@@ -291,6 +294,7 @@ public fun int size(tuple[&T] R)
   primitive("Tuple.size")
 
 public fun value get(tuple[&T] R, int N)
+       throws out_of_range(str msg)
   primitive("Tuple.get")
 
 public fun str toString(tuple[&T] R)
@@ -351,6 +355,7 @@ public fun list[&T] toList(set[&T] S)
   primitive("List.toList")
 
 public fun map[&T, &U] toMap(set[tuple[&T, &U]] S)
+       throws non_unique_domain(str msg)
   primitive("Set.toMap")
 
 public fun rel[&T] toRel(set[&T] S)
@@ -364,7 +369,7 @@ public fun &T reduce(set[&T] S, fun &T F (&T,&T), &T unit){
   return result
 }
 
-public fun set[&T] apply(set[&T] S, fun &T F (&T,&T))
+public fun set[&T] mapper(set[&T] S, fun &T F (&T,&T))
   return {F(E) | &T E : S};
 
 %% Minimum of a set: min
@@ -469,7 +474,7 @@ public fun &T reduce(map[&T] S, fun &T F (&T,&T), &T unit){
   return result
 }
 
-public fun map[&T] apply(map[&T] M, fun &T F (&T,&T))
+public fun map[&T] mapper(map[&T] M, fun &T F (&T,&T))
   return {F(E) | &T E : M};
 
 %% --- Relations ---------------------------------------------
@@ -520,7 +525,7 @@ public fun set[&T] toSet(rel[&T] R)
 public fun rel[&T] toRel(set[&T] S)
   primitive("Set.toRel")
 
-public fun rel[&T] apply(rel[&T] R, fun &T F (&T,&T))
+public fun rel[&T] mapper(rel[&T] R, fun &T F (&T,&T))
   return {F(E) | &T E : R};
 
 %% Carthesian product of two sets: product (was: x)
@@ -617,6 +622,7 @@ public fun bool has_annotation(&T Subject)
 
 %% Get the value of a named annotation
 public fun value get_annotation(&T Subject, str Name)
+       throws missing_annotation(str msg)
   primitive("Annotation.get_annotation")
 
 %% Get all annotations
@@ -637,26 +643,38 @@ public fun &T set_annotations(&T Subject,
 %% --- Parsing/Unparsing -------------------------------------
 
 public fun &T parseFile(str filename)
+       throws file_does_not_exist(str msg)
   primitive("Parse.parseFile")
 
+%% TODO
 public fun &T parseString(str source)
   primitive("Parse.parseString")
 
+%% TODO
 public fun str unparseToString(&T Subject)
   primitive("Parse.unparseToString")
 
 public fun str unparseToFile(&T Subject, str filename)
+       throws cannot_create(str msg) 
+       throws write_error(str msg) 
   primitive("Parse.unparseToFile")
 
 %% --- io ----------------------------------------------------
 
 public fun str readFile(str filename)
+       throws does_not_exist(str msg)            
+       throws read_error(str msg)
   primitive("IO.read")
 
-public fun &T readTerm(str filename)
+public fun &T readTerm(str filename) 
+       throws does_not_exist(str msg)  
+       throws read_error(str msg)
+       throws term_error(str msg, loc l)
   primitive("IO.readTerm")
 
-public fun void write(str filename, &T Subject)
+public fun void write(str filename, &T Subject) 
+       throws cannot_create(str msg)  
+       throws write_error(str msg)
   primitive("IO.write")
 
 %% --- Interface with the Program Database -------------------
@@ -668,31 +686,29 @@ public fun void write(str filename, &T Subject)
 %% Idea: it would be nice to model the PDB as a value
 %% of type map[str, value] and to access it that way!
 
-public fun void openPDB(str name)
+public fun void openPDB(str name) 
+       throws cannot_open(str msg)
  primitive("PDB.open")
-%% may throw cannot_open("PDB " + name)
 
 public fun void closePDB()
+       throws cannot_close(str msg)
   primitive("PDB.close")
-%% may throw cannot_close("PDB")
 
 public fun void writePDB(str name, &T val)
+       throws cannot_write(str msg)
   primitive("PDB.write")
-%% may throw cannot_write("PDB " + name)
 
 public fun &T readPDB(str name)
+       throws cannot_read(str msg)
   primitive("PDB.readPDB")
-%% may throw cannot_read("PDB " + name)
 
 %% If name is of type set[&T], then the set incr
 %% is added to it. Similar for a rel[&T]
 
 public fun void addSetPDB(str name, set[&T] incr)
-  primitive("PDB.addSet)
+       throws does_not_exist(str msg)
+  primitive("PDB.addSet")
 
 public fun void addRelPDB(str name, rel[&T] incr)
-  primitive(PDB.addRel")
-
-
-
-
+       throws does_not_exist(str msg)
+  primitive("PDB.addRel")

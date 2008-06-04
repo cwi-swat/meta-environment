@@ -1,49 +1,63 @@
 equations
 
-%% simplify
-[s1]   simplify(ONT, ONTs) = simplify(ONT), simplify(ONTs)
- 
-[s2]   T := simplify(ONT)
-       =============================
-       simplify(list[ONT]) = list[T]
-[s3]   T := simplify(ONT)
-       ============================
-       simplify(set[ONT])   = set[T]
-[s4]   simplify(tuple[ONTs]) = tuple[simplify(ONTs)]
-[s4]   simplify(rel[ONTs])   = set[tuple[simplify(ONTs)]]
-[s5]   simplify(map[ONTs])   = set[tuple[simplify(ONTs)]]
-[s6]   T2 := simplify(T)
-       ===================================================
-       simplify(fun T N (ONTs)) = fun T2 N (simplify(ONTs))
-[default]
-       simplify(T N) = T
-[default]
-       simplify(T) = T
-[default]
-       simplify(N) = N
-%%  =
-[eq1]  simplify(T1) == simplify(T2)
-       ============================
-       T1 == T2 = true
-[default]
-       T1 == T2 = false
+%% Subtyping rules (<=) on OptionalNamedTypes
 
-%% <
+[leo1] T N <= T' N'                        = T <= T'
+[leo2] T N, ONTs <= T' N, ONTs'            = T <= T' & ONTs <= ONTs'
+[leo3] ONTs1 + ONTs2 <= ONTs3              = ONTs1, ONTs2 <= ONTs3
+[leo4] ONTs1 <= ONTs2 + ONTs3              = ONTs1 <=  ONTs2, ONTs3
+[default-leo]
+       ONTs <= ONTs'                       = false
 
-[lt1]  T1 N1 < T2 N2 = T1 < T2
-[lt2]  T1 N1, ONTs1 < T2 N2, ONTs2 = T1 < T2 & ONTs1 < ONTs2
-[lt3]  T < & N      = true
-[lt4]  bool < int   = true
-[lt5]  int < double = true
-[lt6]  double < str = true
-[lt7]  list[T1] < list[T2] = T1 < T2
-[lt8]  set[T1] < set[T2] = T1 < T2
-[lt9]  tuple[ONTs1] < tuple[ONTs2] =  ONTs1 < ONTs2
-[lt10] map[T1, T2] < map[T3, T4] = T1 < T3 &  T2 < T4
-[lt11] rel[ONTs1] < rel[ONTs2] = ONTs1 < ONTs2
+%% Subtyping rules (<=) on Types
 
-[lt12] T1 < T2 == true,
-       ONTs1 < ONTs2 == true
-       ==========================================
-       fun T1 N (ONTs1) < fun T2 N (ONTs2) = true
+[let01] int <= number                      = true
+
+[let02] double <= number                   = true
+
+[let03] T <= value                         = true
+
+[let04] T <= T                             = true
+
+[let04] T <= & N                           = true
+
+[let05] T <= &N <= T'                      = T <= T'
+
+[let06] list[T] <= list[T']                = T <= T'
+
+[let07] set[T] <= set[T']                  = T <= T'
+
+[let08] tuple[ONTs] <= tuple[ONTs']        = ONTs <= ONTs'
+
+[let09] map[T1, T2] <= map[T1', T2']       = T1 <= T1' &  T2 <= T2'
+
+[let10] map[T1, T2] <= rel[T1', T2']       = T1 <= T1' &  T2 <= T2'
+
+[let11] rel[ONTs] <= rel[ONTs']            = ONTs <= ONTs'
+
+[let12] rel[ONTs] <= set[tuple[ONTs']]     = ONTs <= ONTs'
+
+[let13] set[tuple[ONTs]] <= rel[ONTs']     = ONTs <= ONTs'
+
+[let14] T <= T' == true,
+        ONTs <= ONTs' == true
+        =========================================
+        fun T N (ONTs) <= fun T' N (ONTs') = true
+[default-let]
+        T <= T'                            = false
+
+%% Equality (==) on Names
+
+[eqn] N == N  = true
+[default-eqn]
+      N == N' = false
+
+%% Incomparable
+
+[com1] incomparable(ONTs, ONTs') = not((ONTs <= ONTs') | (ONTs' <= ONTs))
+
+%% May-overload
+
+[mo-1] may-overload(fun T N (ONTs), fun T' N' (ONTs')) = 
+       not(N == N') | incomparable(ONTs, ONTs') | incomparable(T, T')
 

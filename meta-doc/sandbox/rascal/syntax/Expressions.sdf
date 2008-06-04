@@ -24,22 +24,18 @@ context-free syntax
          StringLiteral                                           -> Value {cons("strlit-exp")}
          Area                                                    -> Value {cons("areacon-exp")}
 
-%% Abstract values used for datatypes
-%%         Value                                                   -> AbstractValue
-%%         PatternVar                                              -> AbstractValue
-%%         Name                                                    -> AbstractValue
-%%         Name "(" {AbstractValue ","}* ")"                       -> AbstractValue
-%%         "[" {AbstractValue ","}* "]"                            -> AbstractValue
-%%         "{" {AbstractValue ","}* "}"                            -> AbstractValue
-%%         "<" {AbstractValue ","}+ ">"                            -> AbstractValue
-
 %% Expressions
          Value                                                   -> Expression
-        "(" Expression ")"                                       -> Expression {bracket}
-        FunctionName                                             -> Expression
-	QualName                                                -> Expression {cons("qual-variable")}
+         "(" Expression ")"                                      -> Expression {bracket}
 
-         FunctionName | QualName | Call                          -> Callable
+%%context-free priorities
+	QualName                                                -> Expression {cons("qual-variable")}
+         StandardOperator                                        -> Expression {cons("std-op")}
+%%         FunctionName                                            -> Expression
+
+context-free syntax
+%%       FunctionName | 
+         QualName | Call                                         -> Callable
 
 	Callable "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
          Callable "[" Expression  "]"                            -> Call {cons("index-call")}
