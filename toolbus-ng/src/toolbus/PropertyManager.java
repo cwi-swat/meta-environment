@@ -35,6 +35,8 @@ public class PropertyManager{
 		try{
 			fis = new FileInputStream(getPropertyFile());
 			properties.load(fis);
+		}catch(FileNotFoundException fnfio){
+			// Ignore this.
 		}catch(IOException ioex){
 			System.err.println("Cannot open configuration file; using built-in settings.");
 		}finally{
