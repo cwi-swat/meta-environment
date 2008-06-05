@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -682,7 +682,7 @@
 
       <para>Functions, subtypes and datatypes may be either private to a
       module or public to all modules that import the current module. Rules
-      are always public and globally applied.</para>
+      are always public and are globally applied.</para>
 
       <para>Modules introduce a namespace and qualified names may be used to
       uniquely identify elements of a module from the outside. Inside the
@@ -720,200 +720,185 @@
     </section>
 
     <section>
-      <title>Types and Type Conversions</title>
+      <title>Types and Subtypes</title>
 
-      <para>The type system (and notation) are mostly similar to that of
-      Rscript, but</para>
+      <section>
+        <title>Types</title>
 
-      <itemizedlist>
-        <listitem>
-          <para>Symbols (as defined by an SDF module) are also types.</para>
-        </listitem>
+        <para>The type system (and notation) are mostly similar to that of
+        Rscript, but</para>
 
-        <listitem>
-          <para>There are built-in types (<literal>bool</literal>,
-          <literal>int</literal>, <literal>double</literal>,
-          <literal>str</literal>, <literal>loc</literal>,
-          <literal>void</literal>).</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>We have a type hierarchy that defines a partial order on
+            types.</para>
+          </listitem>
 
-        <listitem>
-          <para>There is a single root to the type hierarchy, everything is a
-          "<literal>value</literal>".</para>
-        </listitem>
+          <listitem>
+            <para>There is a single root for this type hierarchy, it is called
+            "<literal>value</literal>".</para>
+          </listitem>
 
-        <listitem>
-          <para>Types for sets, maps, relations and tuples can be formed from
-          types; Maps, relations and tuples can have optional column
-          names.</para>
-        </listitem>
+          <listitem>
+            <para>There are built-in types (<literal>bool</literal>,
+            <literal>int</literal>, <literal>double</literal>,
+            <literal>number</literal>, <literal>str</literal>,
+            <literal>loc</literal>, <literal>void</literal>).</para>
+          </listitem>
 
-        <listitem>
-          <para>There is subtyping (as opposed to aliasing of types in
-          Rscript)</para>
-        </listitem>
+          <listitem>
+            <para>The types <literal>int</literal> and
+            <literal>double</literal> are subtypes of
+            <literal>number</literal>.</para>
+          </listitem>
 
-        <listitem>
-          <para>All syntactic types are a subtype of the type
-          <literal>tree</literal> that corresponds to UPTR. Up casts from a
-          subtype to an enclosing type are automatic; Down casts require a
-          run-time check/cast.</para>
-        </listitem>
+          <listitem>
+            <para>Symbols (as defined by an SDF module) are also types.</para>
+          </listitem>
 
-        <listitem>
-          <para>Data declarations may introduce new structured types. <note>
-              <para>We assume that all constructors for a datatype lead to a
-              corresponding function to construct a term of that datatype.
-              This eliminates the need to quote abstract terms in
-              statements.</para>
-            </note></para>
+          <listitem>
+            <para>All syntactic types are a subtype of the type
+            <literal>tree</literal> that corresponds to UPTR. Up casts from a
+            subtype to an enclosing type are automatic; Down casts require a
+            run-time check/cast. The type <literal>tree</literal> is "special"
+            in the following sense:</para>
 
-          <note>
-            <para>Constructor names of datatypes may be quoted in order to
-            avoid clashes with reserved words or illegal names.</para>
-          </note>
-        </listitem>
+            <itemizedlist>
+              <listitem>
+                <para>Parsers generate values of type
+                <literal>tree</literal>.</para>
+              </listitem>
 
-        <listitem>
-          <para>Types may include type variables like
-          <literal>&amp;<replaceable>T</replaceable></literal> as in Rscript
-          with the following refinement:</para>
+              <listitem>
+                <para>Although the type <literal>tree</literal> can be defined
+                in Rascal, its definition is built-in in order to preserve the
+                consistency with the parser.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
 
-          <itemizedlist>
-            <listitem>
-              <para>In the type
-              <literal>rel[&amp;<replaceable>T</replaceable>]</literal>, the
-              type variable
-              <literal>&amp;<replaceable>T</replaceable></literal> is bound to
-              the tuple type of the relation, i.e. an actual type
-              <literal>rel[int,str]</literal> will bind
-              &amp;<replaceable>T</replaceable> to
-              <literal>tuple[int,str]</literal>.</para>
-            </listitem>
+          <listitem>
+            <para>Types for sets, maps, relations and tuples can be formed
+            from types; Maps, relations and tuples can have optional column
+            names.</para>
+          </listitem>
 
-            <listitem>
-              <para>In a similar fashion, in
-              <literal>map[&amp;<replaceable>T</replaceable>]</literal>, the
-              type variable
-              <literal>&amp;<replaceable>T</replaceable></literal> is bound to
-              the tuple type of the map.</para>
-            </listitem>
-          </itemizedlist>
-        </listitem>
+          <listitem>
+            <para>Functions can be polymorphic in their parameters as well as
+            in their return type.</para>
+          </listitem>
 
-        <listitem>
-          <para>A type declaration introduces a name for a new type that is a
-          subtype of a given type, e.g., <literal>type rel[node,node]
-          Graph</literal>, introduces the type <literal>Graph</literal> as a
-          subtype of <literal>rel[node,node]</literal>. There are no built-in
-          subtypes.</para>
+          <listitem>
+            <para>Function parameters can be function types, maening that the
+            name of a properly types function can be passed as a
+            parameter.</para>
+          </listitem>
 
-          <warning>
-            <para>Subtypes cause many, many problems in combination with
-            overloading. We should reconsider what we want here.</para>
-          </warning>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>Arbitrarily nested expressions may contain calls to
+            overloaded functions that need to be resolved.</para>
+          </listitem>
 
-      <para>The above can be summarized as follows. The root of the type
-      system is the type named "<literal>value</literal>" and It has the
-      following subtypes:</para>
+          <listitem>
+            <para>Data declarations may introduce new structured types. <note>
+                <para>We assume that all constructors for a datatype lead to a
+                corresponding function to construct a term of that datatype.
+                This eliminates the need to quote abstract terms in
+                statements.</para>
+              </note></para>
 
-      <itemizedlist>
-        <listitem>
-          <para><literal>bool</literal></para>
-        </listitem>
+            <note>
+              <para>Constructor names of datatypes may be quoted in order to
+              avoid clashes with reserved words or illegal names.</para>
+            </note>
+          </listitem>
 
-        <listitem>
-          <para><literal>int</literal></para>
-        </listitem>
+          <listitem>
+            <para>Types may include type variables like
+            <literal>&amp;<replaceable>T</replaceable></literal> as in Rscript
+            with the following refinement:</para>
 
-        <listitem>
-          <para>double</para>
-        </listitem>
+            <itemizedlist>
+              <listitem>
+                <para>In the type
+                <literal>rel[&amp;<replaceable>T</replaceable>]</literal>, the
+                type variable
+                <literal>&amp;<replaceable>T</replaceable></literal> is bound
+                to the tuple type of the relation, i.e. an actual type
+                <literal>rel[int,str]</literal> will bind
+                &amp;<replaceable>T</replaceable> to the type
+                <literal>tuple[int,str]</literal>.</para>
+              </listitem>
 
-        <listitem>
-          <para><literal>str</literal></para>
-        </listitem>
+              <listitem>
+                <para>In a similar fashion, in
+                <literal>map[&amp;<replaceable>T</replaceable>]</literal>, the
+                type variable
+                <literal>&amp;<replaceable>T</replaceable></literal> is bound
+                to the tuple type of the map.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
 
-        <listitem>
-          <para><literal>loc</literal></para>
-        </listitem>
+          <listitem>
+            <para>A type declaration introduces a name for a new type that is
+            a subtype of a given type, e.g.,<programlisting>type rel[node,node] Graph</programlisting>introduces
+            the type <literal>Graph</literal> as a subtype of
+            <literal>rel[node,node]</literal>. There are no built-in
+            subtypes.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
 
-        <listitem>
-          <para><literal>void</literal></para>
-        </listitem>
+      <section>
+        <title>Subtypes</title>
 
-        <listitem>
-          <para>lists, sets, tuples, maps (single valued binary brelations)
-          and relations of values.</para>
-        </listitem>
+        <para>The type hierarchy leads to a subtype relation &lt;= that can be
+        defined (in ASF+SDF) as follows:<programlisting>%% Subtyping rules (&lt;=) on Types
 
-        <listitem>
-          <para>all structures defined with a datatype definition. One of the
-          subtypes is called "<literal>tree</literal>".</para>
+[let01] int &lt;= number                      = true
 
-          <itemizedlist>
-            <listitem>
-              <para>Type <literal>tree</literal> is the type that corresponds
-              with concrete syntax trees (UPTR in the case of the
-              Meta-Environment). Type <literal>tree</literal> has as subtype
-              all types that are derived from SDF definitions, i.e., all
-              notions that are defined using a grammar.</para>
-            </listitem>
+[let02] double &lt;= number                   = true
 
-            <listitem>
-              <para>The type <literal>tree</literal> is "special" in the
-              following sense:</para>
+[let03] T &lt;= value                         = true
 
-              <itemizedlist>
-                <listitem>
-                  <para>Parsers generate values of type
-                  <literal>tree</literal>.</para>
-                </listitem>
+[let04] T &lt;= T                             = true
 
-                <listitem>
-                  <para>Although the type <literal>tree</literal> can be
-                  defined in Rascal, its definition is built-in in order to
-                  preserve the consistency with the parser.</para>
-                </listitem>
-              </itemizedlist>
-            </listitem>
-          </itemizedlist>
-        </listitem>
-      </itemizedlist>
+[let04] T &lt;= &amp; N                           = true
 
-      <para>Two types are <emphasis>equivalent</emphasis> iff:</para>
+[let05] T &lt;= &amp;N &lt;= T'                      = T &lt;= T'
 
-      <itemizedlist>
-        <listitem>
-          <para>They are identical.</para>
-        </listitem>
+[let06] list[T] &lt;= list[T']                = T &lt;= T'
 
-        <listitem>
-          <para>One is a set of tuples and the other is a relation with the
-          same elements as the tuple.</para>
-        </listitem>
+[let07] set[T] &lt;= set[T']                  = T &lt;= T'
 
-        <listitem>
-          <para>One is a map and the other is a relation with the same element
-          types as the map (but not vice versa).</para>
-        </listitem>
-      </itemizedlist>
+[let08] tuple[ONTs] &lt;= tuple[ONTs']        = ONTs &lt;= ONTs'
 
-      <para>A type T1 can be <emphasis>widened</emphasis> to a type T2
-      iff:</para>
+[let09] map[T1, T2] &lt;= map[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
 
-      <itemizedlist>
-        <listitem>
-          <para>T1 is a subtype of T2.</para>
-        </listitem>
+[let10] map[T1, T2] &lt;= rel[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
 
-        <listitem>
-          <para>T1 and T2 are both structured types and the element types of
-          T1 can be widened to the element types of T2.</para>
-        </listitem>
-      </itemizedlist>
+[let11] rel[ONTs] &lt;= rel[ONTs']            = ONTs &lt;= ONTs'
+
+[let12] rel[ONTs] &lt;= set[tuple[ONTs']]     = ONTs &lt;= ONTs'
+
+[let13] set[tuple[ONTs]] &lt;= rel[ONTs']     = ONTs &lt;= ONTs'
+
+[let14] T &lt;= T' == true,
+        ONTs &lt;= ONTs' == true
+        =========================================
+        fun T N (ONTs) &lt;= fun T' N (ONTs') = true
+[default-let]
+        T &lt;= T'                            = false</programlisting></para>
+
+        <para>Here T, T1, T2, T' etc represent types, and ONTs, ONTs' etc
+        represented lists of OptionallyNamedTypes, e.g., a type that
+        optionally followed by a named. We omit the definition of &lt;= on
+        OptionallyNamedTypes. The above rules also describe certain
+        equivalences between types, e.g., a map can be compared with a
+        relation, a relation can be compared with a set of tuples, and the
+        like.</para>
+      </section>
     </section>
 
     <section>
@@ -1012,9 +997,10 @@
         have a return statement, such that each function always returns a
         proper value.</para>
 
-        <para>Functions can raise exceptions but these are not declared as
-        part of the function signature (i.e., we have unchecked exceptions in
-        contrast with checked exceptions in Java).</para>
+        <para>Functions can raise exceptions and these may -- for
+        documentation purposes -- optionally be declared as part of the
+        function signature (i.e., we have unchecked exceptions in contrast
+        with checked exceptions in Java).</para>
 
         <para>Functions preceeded by the keyword "<literal>java</literal>"
         have a body written in Java. They have the following
@@ -1081,66 +1067,147 @@
       <section>
         <title>Overloading</title>
 
-        <para><warning>
-            <para>The following proposal for overloading is to be discussed.
-            There is a strong interaction with subtyping that seriously
-            complicates overloading resolution (as we all know from the PL/I
-            and ADA times).</para>
-          </warning></para>
-
         <para>Functions may be <emphasis>overloaded</emphasis>, i.e.,
-        functions with the same name but with different argument types can be
-        declared. Overloading is subject to the restriction that if several
-        versions of a function with the same name and the same number of
-        arguments exist, these versions can be partially ordered (from more
-        specific to more general) such that for each F that comes before G and
-        for each argument i one of the following holds:</para>
+        functions with the same name but with different argument and result
+        types can be declared. Overloading is subject to the restriction that
+        if several versions of a function are declared with the same name,
+        then one or more of the following conditions should hold:</para>
 
         <itemizedlist>
           <listitem>
-            <para>typeof(arg(F, i)) and typeof(arg(G,i)) are
-            equivalent;</para>
+            <para>the number of arguments differs;</para>
           </listitem>
 
           <listitem>
-            <para>typeof(arg(F, i)) can be widened to typeof(arg(G,i));</para>
+            <para>there is at least one argument position with incomparable
+            types w.r.t. the type hierarchy, i.e., not (A &lt;= B) and not
+            (B&lt;=A).</para>
           </listitem>
 
           <listitem>
-            <para>none of the previous cases applies,</para>
+            <para>the result types of the two functions are
+            incomparable.</para>
           </listitem>
         </itemizedlist>
 
-        <para>It is forbidden that two functions have equivalent arguments.
-        Function calls are resolved according to the above order, from
-        specific to general. Consider the declarations (assuming that int is a
-        subtype of double, which we currently do NOT propose):<programlisting>fun int f(int i, int j) ...
-fun double f(int i, double y) ...
-fun double f(double x, int j) ...
-fun double f (double z, double y) ...</programlisting></para>
+        <para>Here are some examples.</para>
 
-        <para>Here we have, with obvious abbreviation:</para>
+        <para><programlisting>%% OK, since int and double are incomparable 
+%% (both subtypes of 'number')
 
-        <itemizedlist>
-          <listitem>
-            <para>f(i,i) &lt; f(i,d) &lt; f(d,d) and</para>
-          </listitem>
+fun int +(int a, int b) { ... }
+fun double +(double a, double b) { ... }
 
-          <listitem>
-            <para>f(i,i) &lt; f(d,i) &lt; f(d,d)</para>
-          </listitem>
-        </itemizedlist>
+%% KO, since int is comparable to value 
+%% (int is a subtype of number which is a subtype of value)
 
-        <para><warning>
-            <para>We need additional constraints on the ordering. For
-            instance, <programlisting>fun double f(int i, double y) ...
-fun double f(double x, int j) ...</programlisting>should be rejected since we
-            cannot resolve f(i,i).</para>
-          </warning><warning>
-            <para>In a world without subtyping, overloading is simple: forbid
-            identical versions of an overloaded function and loop over the
-            versions until one matches.</para>
-          </warning></para>
+fun int +(value a, value b) { ... }
+fun int +(int a, int b) { ... }
+
+%% OK, but the context must be specific enough to 
+%% see the difference
+
+fun int +(number a, number b) { ... }
+fun double +(number a, number b) { ... }
+
+fun test() {
+  int x = 1 + 2       %% OK, x = 3 because + resolved to int
+  int y = 1.5 + 2     %% OK, y = 3 (truncated from 3.5)
+                      %% because + resolved to int
+  double z = 1.5 + 2  %% OK, z = 3.5, because + resolved to double
+  number w = 1 + 3    %% KO, context too unspecific to resolve +.
+}
+
+%% OK since for every two definitions selected from this
+%% set there is at least one parameter position different;
+%% in this example the overloading on result types will never 
+%% be used to select the function
+
+fun int    +(int a, int b)
+fun int    +(int a, double b)
+fun int    +(double a, int b)
+fun double +(double a, double b)
+fun double +(int a, double b)
+fun double +(double a, int b)
+
+%% KO, since str is a subtype of value
+
+fun value randomValue()
+fun str   randomValue()
+
+%% OK, but the context must be specific enough:
+
+fun str randomValue()
+fun int randomValue()
+
+fun test() {
+  str x = randomValue();   %% OK
+  int y = randomValue();   %% OK
+  value z = randomValue(); %% KO, too unspecific to resolve randomValue.
+}</programlisting></para>
+
+        <para>How should overloading be resolved in the presence of type
+        parameters? Our approach is simple but effective: a type parameter
+        <literal>&amp;<replaceable><replaceable>T</replaceable></replaceable></literal>
+        is taken to be of type <literal>value</literal>, unless it is
+        explicitly constrained to be smaller than (or smaller than or equal
+        to) another type U by writing
+        <literal>&amp;<replaceable>T</replaceable> &lt;
+        <replaceable>U</replaceable></literal> or
+        <literal>&amp;<replaceable>T</replaceable> &lt;=
+        <replaceable>U</replaceable></literal>. For the sake of overloading
+        resolution, a constrained type parameter will be considered to have
+        the type of the constraint, i.e., in <literal>fun
+        F(&amp;<replaceable>T</replaceable> &lt; number)</literal> we assume
+        the <literal>&amp;<replaceable>T</replaceable></literal> to be of type
+        <literal>number</literal>.</para>
+
+        <para>Here are some examples:</para>
+
+        <para><programlisting>%% KO, because &amp;T might be any type (i.e. value),
+%% which is comparable to int
+
+fun str f(int x)
+fun str f(&amp;T x)
+
+%% KO, since both T's may bind to comparable types and
+%% number and int are comparable
+
+fun int f(&amp;T x, number y)
+fun int f(&amp;T y, int x)
+
+%% OK, since the second arguments have incomparable types
+
+fun int f(&amp;T x, int y)
+fun int f(&amp;T y, double x)
+
+%% OK, because the result types will be incomparable
+%% however &amp;T is bound
+
+fun &amp;T &lt;= int    foo()
+fun &amp;T &lt;= double foo()
+
+%% KO, since both &amp;T's might be comparable:
+fun &amp;T      bar()
+fun &amp;T &lt;= A bar()</programlisting></para>
+      </section>
+
+      <section>
+        <title>Formal description of overloading</title>
+
+        <para>Given the subtype relation <literal>&lt;=</literal> defined
+        earlier, we can easily formalize overloading resolution by defining
+        two predicates: <literal>incomparable</literal> describes when two
+        lists of OptionallyNamedTypes can be compared and
+        <literal>may-overload</literal> describes when two function types
+        satisfy the overloading restrictions:<programlisting>%% Incomparable
+
+[com1] incomparable(ONTs, ONTs') = not((ONTs &lt;= ONTs') | (ONTs' &lt;= ONTs))
+
+%% May-overload
+
+[mo-1] may-overload(fun T N (ONTs), fun T' N' (ONTs')) = 
+       not(N == N') | incomparable(ONTs, ONTs') | incomparable(T, T')</programlisting></para>
       </section>
     </section>
 
@@ -2963,7 +3030,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -2971,7 +3038,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
@@ -3373,7 +3440,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             </row>
 
             <row>
-              <entry>apply</entry>
+              <entry>mapper</entry>
 
               <entry></entry>
 
@@ -3621,11 +3688,11 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
         </listitem>
 
         <listitem>
-          <para><literal>reduce</literal> and <literal>apply</literal> take a
+          <para><literal>reduce</literal> and <literal>mapper</literal> take a
           function as argument and traverse a structured value.<note>
               <para>Due to a name class with the type constructor
-              <literal>map</literal>, we use the name <literal>apply</literal>
-              for a function that is ussually called
+              <literal>map</literal>, we use the name
+              <literal>mapper</literal> for a function that is ussually called
               <literal>map</literal>.</para>
             </note></para>
         </listitem>
@@ -3665,7 +3732,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 
@@ -4020,9 +4087,6 @@ public fun bool -(bool B1, bool B2)
 public fun bool *(bool B1, bool B2)
   primitive("Bool.mul")
 
-%%public fun bool div(bool B1, bool B2)
-%%  throw unimplemented("div on bool")
-
 %% Arbitrary boolean: arb
 public fun int arb()
  primitive("Bool.arb")
@@ -4049,9 +4113,8 @@ public fun int *(int I1, int I2)
 
 %% Arbitrary integer: arb
 public fun int arb(int bgn, int end)
- primitive("Int.arb")
-%% if(end - bgn &lt;= 0)
-%%   throw illegal_argument("int arb");
+       throws illegal_argument(str msg) %% if(end - bgn &lt;= 0)
+ primitive("Int.arb") 
 
 public fun str toString(int I)
  primitive("toStringInt")
@@ -4078,9 +4141,8 @@ public fun double /(double D1, double D2)
 
 %% Arbitrary double: arb
 public fun double arb(double bgn, double end)
+       throws illegal_argument(str msg) %% if(end - bgn &lt;= 0)
  primitive("Double.arb")
-%%  if(end - bgn &lt;= 0)
-%%     throw illegal_argument("double arb");
 
 public fun str toString(double D)
   primitive("Double.toString")
@@ -4100,9 +4162,11 @@ public fun int size(str S)
   primitive("String.size")
 
 public fun int get(str S, int N)
+       throws out_of_range(str msg)
  primitive("String.get")
 
 public fun list[int] toList(str S)
+       throws cannot_convert_int_to_char(str msg)
   primitive("String.toList")
  
 public fun set[int] toSet(str S)
@@ -4134,6 +4198,7 @@ public fun str toString(loc L)
   primitive("Location.toString")
 
 public fun loc get_location(&amp;T Subject)
+       throws location_missing(str msg)
  primitive("Location.get_location")
 
 public fun &amp;T set_location(&amp;T Subject, loc L)
@@ -4162,6 +4227,7 @@ public fun int size(list[&amp;T] L)
 
 %% Get list element: get
 public fun &amp;T get(list[&amp;T] L, int N)
+       throws out_of_range(str msg)
   primitive("List.get")
 
 %% Arbitrary element of list: arb
@@ -4172,12 +4238,14 @@ public fun str toString(list[&amp;T] L)
   primitive("List.toString")
 
 public fun str makeString(list[int] L)
+       throws cannot_convert_int_to_char(str msg)
   primitive("List.makeString")
 
 public fun set[&amp;T] toSet(list[&amp;T] L)
   primitive("List.toSet")
 
 public fun map[&amp;T, &amp;U] toMap(list[tuple[&amp;T, &amp;U]] L)
+       throws domain_not_unique(str msg)
   primitive("List.toMap")
 
 public fun rel[&amp;T] toRel(list[&amp;T] L)
@@ -4194,7 +4262,7 @@ public fun &amp;T reduce(list[&amp;T] L, fun &amp;T F (&amp;T,&amp;T), &amp;T un
   return result
 }
 
-public fun list[&amp;T] apply(list[&amp;T] L, fun &amp;T F (&amp;T,&amp;T))
+public fun list[&amp;T] mapper(list[&amp;T] L, fun &amp;T F (&amp;T,&amp;T))
   return [F(E) | &amp;T E : L];
 
 %% Minimum element of a list: min
@@ -4231,10 +4299,12 @@ public fun &amp;T average(list[&amp;T] L, &amp;T zero)
 
 %% First element of list; first
 public fun &amp;T first(list[&amp;T] L)
+       throws empty_list(str msg)
   primitive("List.first")
 
 %% Remaining elements of list: rest
 public fun &amp;T rest(list[&amp;T] L)
+      throws empty_list(str msg)
   primitive("List.rest")
 
 %% --- Tuples ------------------------------------------------
@@ -4264,6 +4334,7 @@ public fun int size(tuple[&amp;T] R)
   primitive("Tuple.size")
 
 public fun value get(tuple[&amp;T] R, int N)
+       throws out_of_range(str msg)
   primitive("Tuple.get")
 
 public fun str toString(tuple[&amp;T] R)
@@ -4324,6 +4395,7 @@ public fun list[&amp;T] toList(set[&amp;T] S)
   primitive("List.toList")
 
 public fun map[&amp;T, &amp;U] toMap(set[tuple[&amp;T, &amp;U]] S)
+       throws non_unique_domain(str msg)
   primitive("Set.toMap")
 
 public fun rel[&amp;T] toRel(set[&amp;T] S)
@@ -4337,7 +4409,7 @@ public fun &amp;T reduce(set[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T uni
   return result
 }
 
-public fun set[&amp;T] apply(set[&amp;T] S, fun &amp;T F (&amp;T,&amp;T))
+public fun set[&amp;T] mapper(set[&amp;T] S, fun &amp;T F (&amp;T,&amp;T))
   return {F(E) | &amp;T E : S};
 
 %% Minimum of a set: min
@@ -4442,7 +4514,7 @@ public fun &amp;T reduce(map[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T uni
   return result
 }
 
-public fun map[&amp;T] apply(map[&amp;T] M, fun &amp;T F (&amp;T,&amp;T))
+public fun map[&amp;T] mapper(map[&amp;T] M, fun &amp;T F (&amp;T,&amp;T))
   return {F(E) | &amp;T E : M};
 
 %% --- Relations ---------------------------------------------
@@ -4493,7 +4565,7 @@ public fun set[&amp;T] toSet(rel[&amp;T] R)
 public fun rel[&amp;T] toRel(set[&amp;T] S)
   primitive("Set.toRel")
 
-public fun rel[&amp;T] apply(rel[&amp;T] R, fun &amp;T F (&amp;T,&amp;T))
+public fun rel[&amp;T] mapper(rel[&amp;T] R, fun &amp;T F (&amp;T,&amp;T))
   return {F(E) | &amp;T E : R};
 
 %% Carthesian product of two sets: product (was: x)
@@ -4590,6 +4662,7 @@ public fun bool has_annotation(&amp;T Subject)
 
 %% Get the value of a named annotation
 public fun value get_annotation(&amp;T Subject, str Name)
+       throws missing_annotation(str msg)
   primitive("Annotation.get_annotation")
 
 %% Get all annotations
@@ -4610,26 +4683,38 @@ public fun &amp;T set_annotations(&amp;T Subject,
 %% --- Parsing/Unparsing -------------------------------------
 
 public fun &amp;T parseFile(str filename)
+       throws file_does_not_exist(str msg)
   primitive("Parse.parseFile")
 
+%% TODO
 public fun &amp;T parseString(str source)
   primitive("Parse.parseString")
 
+%% TODO
 public fun str unparseToString(&amp;T Subject)
   primitive("Parse.unparseToString")
 
 public fun str unparseToFile(&amp;T Subject, str filename)
+       throws cannot_create(str msg) 
+       throws write_error(str msg) 
   primitive("Parse.unparseToFile")
 
 %% --- io ----------------------------------------------------
 
 public fun str readFile(str filename)
+       throws does_not_exist(str msg)            
+       throws read_error(str msg)
   primitive("IO.read")
 
-public fun &amp;T readTerm(str filename)
+public fun &amp;T readTerm(str filename) 
+       throws does_not_exist(str msg)  
+       throws read_error(str msg)
+       throws term_error(str msg, loc l)
   primitive("IO.readTerm")
 
-public fun void write(str filename, &amp;T Subject)
+public fun void write(str filename, &amp;T Subject) 
+       throws cannot_create(str msg)  
+       throws write_error(str msg)
   primitive("IO.write")
 
 %% --- Interface with the Program Database -------------------
@@ -4641,34 +4726,32 @@ public fun void write(str filename, &amp;T Subject)
 %% Idea: it would be nice to model the PDB as a value
 %% of type map[str, value] and to access it that way!
 
-public fun void openPDB(str name)
+public fun void openPDB(str name) 
+       throws cannot_open(str msg)
  primitive("PDB.open")
-%% may throw cannot_open("PDB " + name)
 
 public fun void closePDB()
+       throws cannot_close(str msg)
   primitive("PDB.close")
-%% may throw cannot_close("PDB")
 
 public fun void writePDB(str name, &amp;T val)
+       throws cannot_write(str msg)
   primitive("PDB.write")
-%% may throw cannot_write("PDB " + name)
 
 public fun &amp;T readPDB(str name)
+       throws cannot_read(str msg)
   primitive("PDB.readPDB")
-%% may throw cannot_read("PDB " + name)
 
 %% If name is of type set[&amp;T], then the set incr
 %% is added to it. Similar for a rel[&amp;T]
 
 public fun void addSetPDB(str name, set[&amp;T] incr)
-  primitive("PDB.addSet)
+       throws does_not_exist(str msg)
+  primitive("PDB.addSet")
 
 public fun void addRelPDB(str name, rel[&amp;T] incr)
-  primitive(PDB.addRel")
-
-
-
-
+       throws does_not_exist(str msg)
+  primitive("PDB.addRel")
 </programlisting></para>
     </section>
   </section>
@@ -5112,11 +5195,6 @@ public fun void addRelPDB(str name, rel[&amp;T] incr)
     <title xml:id="Issues">Issues</title>
 
     <itemizedlist>
-      <listitem>
-        <para>Decide whether we will have subtypes or not (see complication
-        regarding overloading).</para>
-      </listitem>
-
       <listitem>
         <para>How do we identify built-in sorts (bool, int, etc) with their
         syntactic counterparts?</para>
