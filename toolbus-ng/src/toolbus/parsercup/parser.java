@@ -1029,17 +1029,28 @@ public class parser extends java_cup.runtime.lr_parser {
 	}
     
     public void syntax_error(java_cup.runtime.Symbol badToken){
-    	throw new SyntaxErrorException("Syntax error in "+fileName+", at line: "+(badToken.left + 1)+", column: "+(badToken.right + 1)+", symbol id: "+badToken.sym);
+    	throw new SyntaxErrorException(badToken.left + 1, badToken.right + 1, badToken.sym);
     }
 	
-	private class SyntaxErrorException extends RuntimeException{
+	public class SyntaxErrorException extends RuntimeException{
 		private static final long serialVersionUID = 2315538188275748342L;
+		
+		private final int line;
+		private final int column;
+		private final int sym;
 
-		public SyntaxErrorException(String message){
-			super(message);
+		public SyntaxErrorException(int line, int column, int sym){
+			super();
+			
+			this.line = line;
+			this.column = column;
+			this.sym = sym;
+		}
+		
+		public String getMessage(){
+			return "Syntax error in "+fileName+", at line: "+line+", column: "+column+", symbol id: "+sym;
 		}
 	}
-
 }
 
 /** Cup generated class to encapsulate user supplied action code.*/
