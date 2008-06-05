@@ -385,7 +385,7 @@ public class ToolBus{
 	public ProcessDefinition getProcessDefinition(String name, int numberOfActuals) throws ToolBusError{
 		String uname = name + numberOfActuals;
 		ProcessDefinition definition = procdefs.get(uname);
-		if(definition == null) throw new NoSuchProcessDefinitionException("No definition for process "+name+", with "+numberOfActuals+" actuals"); 
+		if(definition == null) throw new NoSuchProcessDefinitionException(name, numberOfActuals); 
 		
 		return definition;
 	}
