@@ -21,7 +21,6 @@ import java.util.Queue;
 import java.util.Set;
 
 import jjtraveler.VisitFailure;
-import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
