@@ -77,6 +77,8 @@ public class ToolBus{
 	
 	private volatile String[] scriptsNames = null; // For debugging only.
 	
+	private final Object shutdownLock = new Object();
+	
 	/**
 	 * Constructor with explicit PrintWriter
 	 * 
@@ -573,7 +575,7 @@ public class ToolBus{
 					work = false;
 					
 					while(processesIterator.hasNext()){
-						if(shuttingDown) return;
+						if(shuttingDown) break PROCESSLOOP;
 						
 						pi = processesIterator.next();
 						work |= pi.step();
@@ -621,6 +623,10 @@ public class ToolBus{
 		
 		// If the ToolBus is still running, shut it down.
 		if(!shuttingDown) shutdown(tbfactory.make("ToolBus halted"));
+		
+		synchronized(shutdownLock){
+			shutdownLock.notifyAll();
+		}
 	}
 	
 	/**
@@ -638,6 +644,18 @@ public class ToolBus{
 			workHasArrived = true;
 			synchronized(processLock){
 				processLock.notify();
+			}
+		}
+	}
+	
+	public void waitTillShutdown(){
+		synchronized(shutdownLock){
+			while(!shuttingDown && running){
+				try{
+					shutdownLock.wait();
+				}catch(InterruptedException irex){
+					// Ignore this exception.
+				}
 			}
 		}
 	}
