@@ -109,7 +109,7 @@ archive=/tmp/sisyphus_bin_dister.$$.tar
 rm -f ${archive}
 for prefix in ${prefixes}; do
     if [ -e ${archive} ]; then
-	(cd ${prefix}; tar uf ${archive} *)
+	(cd ${prefix}; tar --update -f ${archive} *)
     else
 	(cd ${prefix}; tar cf ${archive} *)
     fi

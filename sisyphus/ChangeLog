@@ -1,5 +1,11 @@
 
 
+Fri Jun  6 13:54:41 CEST 2008 <jurgenv@cwi.nl>
+ * generate-installer.sh: replaced uf option to tar by --update -f.
+   I don't understand how this could have worked in the past, since
+   the tar u option mean update existing files in the tar, not append
+   to the end of the file.
+
 Thu May 29 08:21:32 CEST 2008 <jurgenv@cwi.nl>
  * COPYING: changed license file to BSD
 
