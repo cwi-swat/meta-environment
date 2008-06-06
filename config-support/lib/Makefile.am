@@ -2,10 +2,6 @@
 
 include $(top_srcdir)/Makefile.meta
 
-data_DATA = configapi.jar
-
-EXTRA_DIST += configapi.jar
-
 lib_LTLIBRARIES = libConfigAPI.la
 
 include_HEADERS = \
@@ -36,17 +32,7 @@ ABS_CONFIG_MODULES = \
 MetaConfig.def: Makefile
 	@(echo "definition"; cat ${ABS_CONFIG_MODULES}) > $@
 
-config-api: c-config-api java-config-api
-
-java-config-api: MetaConfig.def Makefile
-	sdf2-to-java \
-		--imploded \
-		--input $< \
-		--package nl.cwi.sen1 \
-		--name configapi \
-		--output . \
-		--version ${VERSION}
-	mv configapi-${VERSION}.jar configapi.jar
+config-api: c-config-api 
 
 c-config-api: MetaConfig.def Makefile
 	sdf2-to-c \
