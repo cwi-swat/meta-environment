@@ -1,5 +1,5 @@
 prefix=@prefix@
-Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
+Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
 Name: console-gui
 Version: 1.1
 Description:
