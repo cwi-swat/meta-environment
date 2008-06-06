@@ -1,5 +1,5 @@
 prefix=@prefix@
-Maintainers=kooiker@cwi.nl
+Maintainers=lankamp@cwi.nl
 Name: io-support
 Version: 1.0.1
 Description:
