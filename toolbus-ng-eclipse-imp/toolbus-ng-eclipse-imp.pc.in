@@ -1,5 +1,5 @@
 prefix=@prefix@
-Maintainers=lankamp@cwi.nl
+Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
 
 Name: toolbus-ng-eclipse-imp
 Description: 
