@@ -7,12 +7,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.ui.IStartup;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IOConsole;
 
-import toolbus.commandline.CommandLine;
 import aterm.pure.PureFactory;
 
 public class ToolBusEclipsePlugin extends Plugin implements IStartup{
@@ -87,7 +82,9 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 				});
 				thread.setName(pluginId);
 				thread.start();
-				createConsole(toolbus);
+				
+				DebugConsole debugConsole = new DebugConsole(toolbus);
+				debugConsole.show();
 			}else{
 				System.err.println("Failed to parse ToolBus script");
 			}
@@ -95,15 +92,6 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			rex.printStackTrace();
 			throw rex;
 		}
-	}
-
-	private static void createConsole(ToolBus toolbus){
-		ConsolePlugin plugin = ConsolePlugin.getDefault();
-		IConsoleManager manager = plugin.getConsoleManager();
-		IOConsole console = new IOConsole("ToolBus", null);
-		manager.addConsoles(new IConsole[]{console});
-		
-		CommandLine.createCommandLine(toolbus, console.getInputStream(), false);
 	}
 
 	private static String getConfigFile(){
