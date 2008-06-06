@@ -13,6 +13,7 @@ import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Tau;
 import toolbus.environment.Environment;
+import toolbus.exceptions.NoSuchProcessDefinitionException;
 import toolbus.exceptions.ToolBusException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.debug.ExecutionResult;
@@ -102,7 +103,11 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		
 		if(calls.contains(name)) throw new ToolBusException("Recursive call of " + name);
 		
-		definition = processInstance.getToolBus().getProcessDefinition(name, originalActuals.getLength());
+		try{
+			definition = processInstance.getToolBus().getProcessDefinition(name, originalActuals.getLength());
+		}catch(NoSuchProcessDefinitionException nspdex){
+			throw new ToolBusException(nspdex);
+		}
 		
 		// System.err.println("name = " + name);
 		// System.err.println("definition = " + definition);

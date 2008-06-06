@@ -214,11 +214,7 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 		try{
 			initDynamicCall();
 		}catch(NoSuchProcessDefinitionException nspdex){
-			// Only print exception if it is not this process that is not found, otherwise simulate delta.
-			if (!nspdex.getProcessName().equals(name) || nspdex.getActuals() != originalActuals.getLength()) {
-				nspdex.printStackTrace();
-			}
-			
+			// Ignore this and emulate Delta.
 			activated = false;
 			return;			
 		}catch(ToolBusException e){
