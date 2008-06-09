@@ -1,3 +1,8 @@
+
+
+Mon Jun  9 13:27:34 CEST 2008 <jurgenv@cwi.nl>
+ * asc-support.pc.in: Bumped to version 2.5
+
 Wed May  7 13:08:29 2008    <bruntink@cwi.nl>
 
 	* asc-support.pc.in: Changed dependency on relation-stores to rstore-support.
