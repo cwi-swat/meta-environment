@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=jurgenv@cwi.nl,economop@cwi.nl
 Name: c-library
-Version: 1.0
+Version: 1.1
 Description:
 Requires: aterm
 Cflags: -I${prefix}/include
