@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Mon Jun  9 13:28:26 CEST 2008 <jurgenv@cwi.nl>
+ * pandora.pc.in: Bumped version to 1.5
+
 Fri Nov  9 15:40:20 EST 2007 <jurgenv@cwi.nl>
  * spec/text/Normalize-Groups.asf: fixed a non-confluence issue with the
    removal of nested G group boxes. If two G boxes where directly nested,
