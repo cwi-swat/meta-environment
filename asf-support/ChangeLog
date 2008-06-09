@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Jun  9 13:21:08 CEST 2008 <jurgenv@cwi.nl>
+ * asf-support.pc.in: Bumped version to 1.7
+
 Wed Apr 16 11:06:27 CEST 2008 <jurgenv@cwi.nl>
  * lib/*.c: regenerated API with cast functions that fix type punned
    aliasing issues.

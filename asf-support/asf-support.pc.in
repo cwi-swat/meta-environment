@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=jurgenv@cwi.nl
 
 Name: asf-support
-Version: 1.6
+Version: 1.7
 Description:
 Requires: aterm,error-support,pt-support
 Cflags: -I${prefix}/include
