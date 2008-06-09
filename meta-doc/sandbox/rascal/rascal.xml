@@ -694,7 +694,24 @@
       <para>Modules introduce a namespace and qualified names (using the
       <literal>::</literal> operator) may be used to uniquely identify
       elements of a module from the outside. Inside the module, this
-      qualification is implicit.</para>
+      qualification is implicit.<note>
+          <para>We should clarify what we want to have:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>modules: yes</para>
+            </listitem>
+
+            <listitem>
+              <para>a nested structure (directory style) of modules:
+              yes</para>
+            </listitem>
+
+            <listitem>
+              <para>packages: no?</para>
+            </listitem>
+          </itemizedlist>
+        </note></para>
     </section>
 
     <section>
@@ -930,6 +947,8 @@
             <para>How do we handle the optional names that occur in types?
             Currently, we throw them away in the subtype relation. Should we
             also compare these names?</para>
+          </note><note>
+            <para>What is the final word on int, double and number?</para>
           </note></para>
       </section>
     </section>
