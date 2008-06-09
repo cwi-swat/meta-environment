@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jun  9 13:19:26 CEST 2008 <jurgenv@cwi.nl>
+ * pt-support.pc.in: Bumped version to 2.3
+
 Wed Apr 16 11:02:29 CEST 2008 <jurgenv@cwi.nl>
  * libmept/*: regenerated API with cast functions that fix
    type punned aliasing issues.

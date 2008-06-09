@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=jurgenv@cwi.nl,economop@cwi.nl
 Name: pt-support
-Version: 2.2
+Version: 2.3
 Description:
 Requires: aterm,error-support,toolbuslib
 Cflags: -I${prefix}/include -DFAST_API
