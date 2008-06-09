@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jun  9 13:17:49 CEST 2008 <jurgenv@cwi.nl>
+ * error-support.pc.in: Bumped version to 1.5
+
 Thu May 22 02:29:61 CEST 2008 <basten@cwi.nl>
  * lib/Error-utils.*: added function to count the number of errors, warnings,
    etc. in error reports.
