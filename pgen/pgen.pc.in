@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=economop@cwi.nl,jurgenv@cwi.nl
 Name: pgen
-Version: 2.6
+Version: 2.6.1
 Description:
 Requires: asc-support,aterm,error-support,pt-support,sdf-support,sglr,toolbuslib,ptable-support,config-support,c-library
 ToolBusFlags=-I${prefix}/share/pgen

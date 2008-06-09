@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jun  9 13:30:33 CEST 2008 <jurgenv@cwi.nl>
+ * pgen.pc.in: Bumped to version 2.6.1
+
 Thu Jan 24 11:23:03 CET 2008 <economop@cwi.nl>
  * Removed the svnmerge-integrated property that was left over from a branch 
    merge.
