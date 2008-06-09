@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jun  9 16:32:56 CEST 2008 <jurgenv@cwi.nl>
+ * error-support.pc.in: Bumped version to 1.5.1
+
 Mon Jun  9 13:17:49 CEST 2008 <jurgenv@cwi.nl>
  * error-support.pc.in: Bumped version to 1.5
 

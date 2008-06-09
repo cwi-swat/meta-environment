@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
 Name: error-support
 Description: Standard Error Representation
-Version: 1.5
+Version: 1.5.1
 Libs: -L${prefix}/lib -lErrorAPI -lLocationAPI
 Cflags: -I${prefix}/include
 #uninstalled Libs: -L@abs_top_builddir@/lib -lErrorAPI -lLocationAPI
