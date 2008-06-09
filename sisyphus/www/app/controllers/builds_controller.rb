@@ -215,7 +215,7 @@ class LinkLabel
   end
   
   def not_tried?
-    failed? && @item.not_tried == 't'
+    failed? && @item.not_tried?
   end
 
   def id
@@ -234,7 +234,7 @@ class LinkLabel
     else
       if @item.success then
         return 'success'
-      elsif @item.not_tried == 'f' then
+      elsif !@item.not_tried?
         return 'failed'
       else
         return 'not tried'

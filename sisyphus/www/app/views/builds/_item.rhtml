@@ -6,28 +6,29 @@
 
      <% if not item.nil? then %>
 
-      <% if item.progress? then %>
-	<% if item.item.si_results.length > 0 then %>
-	<td>
-	<%= link_to item.item.si_results.last.action, :action => 'show', :controller => 'si_results', :id => 
-	item.item.si_results.last.id %>
-        </td>
-        <td>
-        <%= link_to item.time, :action => 'show', :controller => 'si_items', :id => item.id %>
-        </td>
+      <% nresults = item.item.si_results.length; if item.progress? then %>
+
+	<% if nresults > 0 then %>
+	  <td>
+	   <%= link_to item.item.si_results.last.action, :action => 'show', :controller => 'si_results', :id => 
+	   item.item.si_results.last.id %>
+          </td>
+          <td>
+           <%= link_to item.time, :action => 'show', :controller => 'si_items', :id => item.id %>
+          </td>
 	<% else %>
-	<td colspan="2">
-        <em><%= item.label %></em>
+	  <td colspan="2">
+           <em><%= item.label %></em>
 	<% end %>
-      </td>
-      <!--
-      <% elsif item.not_tried? then %>
+          </td>
+
+      <% elsif nresults == 0 then %>
 	<td>
         not tried	
 	</td>
 	<td>
         <%= item.time %>
-      </td> -->
+        </td>
       <% else %>
         <td>
         <span class="<%=item.style_class%>"><%=item.label%></span>

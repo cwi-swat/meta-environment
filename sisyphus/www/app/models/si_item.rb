@@ -12,6 +12,11 @@ class SiItem < ActiveRecord::Base
   :foreign_key => 'si_item_id',
   :association_foreign_key => 'si_dep_id'   
 
+  def not_tried?
+    !self.success && si_results.length == 0
+  end
+
+
   def informative_version
     return si_revision.informative_version.strip
   end
