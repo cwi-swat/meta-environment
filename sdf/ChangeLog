@@ -2,6 +2,7 @@
 
 Thu Jun  5 16:10:57 CEST 2008 <jurgenv@cwi.nl>
  * sdf.pc.in: bumped version to 2.6.1.
+ * sdf.pc.in: bumped version to 2.6.2.
 
 Mon Dec 31 10:41:38 EST 2007 <jurgenv@cwi.nl>
  * sdf.pc.in: added pandora to the SDF bundle.
