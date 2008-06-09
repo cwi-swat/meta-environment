@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jun  9 13:21:54 CEST 2008 <jurgenv@cwi.nl>
+ * pt-support.pc.in: Bumped version to 1.1
+
 Thu Mar 15 15:14:23 CET 2007 <{economop,kooiker}@cwi.nl>
  * lib/*: regenerated api fixing macro bug
 
