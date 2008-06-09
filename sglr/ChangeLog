@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jun  9 13:23:37 CEST 2008 <jurgenv@cwi.nl>
+ * sglr.pc.in: Bumped version to 4.5.2 since SDF needs to be released.
+
 Thu May 29 08:41:58 CEST 2008 <jurgenv@cwi.nl>
  * doc/Mainpage.dox: removed superfluous comments.
 
