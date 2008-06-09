@@ -3,7 +3,7 @@ module Bool-conc-rules
 import Booleans-syntax;
 
 rules(Bool) {
-      true & <Bool B2>   => B2
+      true & <Bool B2>   => <B2>
       false & <Bool B2>  => false
 
       true | true        => true

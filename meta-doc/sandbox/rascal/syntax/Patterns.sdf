@@ -3,7 +3,7 @@ module Patterns
 imports Names Types Expressions
  
 exports
-sorts Pattern SynPattern AbsPattern SynPatternChar SynPatternSymbol PatternVar QuotedSynPattern
+sorts Pattern AbsPattern SynPattern SynPatternChar SynPatternSymbol PatternVar QuotedSynPattern
       RegPattern RegPatternChar
 
 lexical syntax
@@ -23,7 +23,12 @@ context-free syntax
          PatternVar                                -> SynPatternSymbol
          "[|" SynPatternSymbol* "|]"               -> QuotedSynPattern
          QuotedSynPattern                          -> SynPattern
-         AbstractType                              -> AbsPattern
+
+         Name                                      -> AbsPattern   {cons("typename-abspat")}
+         StringLiteral                             -> AbsPattern   {cons("typestr-abspat")}
+         PatternVar                                -> AbsPattern   {cons("typevar-abspat")}
+         Name "(" {AbsPattern ","}* ")"            -> AbsPattern   {cons("cons-abspat-name")}
+         StringLiteral "(" {AbsPattern ","}* ")"   -> AbsPattern   {cons("const-abspat-str")}
 
          RegPattern | SynPattern | AbsPattern      -> Pattern
 

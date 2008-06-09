@@ -998,7 +998,7 @@
         </listitem>
 
         <listitem>
-          <para>For variables ntroduced by pattern matching in conditional
+          <para>For variables introduced by pattern matching in conditional
           statements (if-then, and while), if the condition succeeds, the
           scope of the variables are the block of code that is executed
           conditionally.</para>
@@ -1114,7 +1114,9 @@
           </listitem>
         </itemizedlist>
 
-        <para>Here are some examples.</para>
+        <para>Here are some examples.<note>
+            <para>These examples need more thought!</para>
+          </note></para>
 
         <para><programlisting>%% OK, since int and double are incomparable 
 %% (both subtypes of 'number')
@@ -1438,13 +1440,14 @@ fun &amp;T &lt;= A bar()</programlisting></para>
       <section>
         <title>Lexical Patterns</title>
 
-        <para>A special case of syntax patterns, are lexical patterns:
-        concrete syntax patterns for lexical notions like identifiers, numeric
-        constants and the like. Our solution is a middle road between the
-        original solution used in ASF+SDF (simple but not type safe) and the
-        current solution in ASF+SDF (complex but type safe). The key idea is
-        that a constructor function is implicitly created for every lexical
-        definition, i.e., when the SDF definition defines the lexical sort
+        <para>A special case of syntax patterns, are lexical patterns that
+        describe lexical notions such as identifiers, numeric constants and
+        the like. Lexical patterns can appear as part of a concrete syntax
+        pattern. Our solution is a middle road between the original solution
+        used in ASF+SDF (simple but not type safe) and the current solution in
+        ASF+SDF (complex but type safe). The key idea is that a constructor
+        function is implicitly created for every lexical definition, i.e.,
+        when the SDF definition defines the lexical sort
         <literal>LS</literal>, then the following lexical constructor function
         <literal>ls</literal> (the sort name in lower case) is implicitly
         defined:<programlisting>    ls( LEXARGS ) -&gt; LS</programlisting></para>
@@ -1476,7 +1479,12 @@ lexical syntax
    DIGIT+   -&gt; NAT-CON</programlisting></para>
 
         <para>A rule that would remove leading zeros looks like
-        this:<programlisting>  natcon("0" &lt;DIGIT+ Ds&gt;) =&gt; natcon(&lt;Ds&gt;)</programlisting></para>
+        this:<programlisting>  natcon("0" &lt;DIGIT+ Ds&gt;) =&gt; natcon(&lt;Ds&gt;)</programlisting><note>
+            <para>Unlike the ASF+SDF solution, it is not necessary to make a
+            distinction between ordinary variables, lexical variables, and
+            layout variables. Here, all variables are treated equal and their
+            syntactic position determines how they are used.</para>
+          </note></para>
       </section>
     </section>
 
@@ -1601,7 +1609,7 @@ lexical syntax
         </itemizedlist></para>
 
       <note>
-        <para>We need a cast operator to down cast values.</para>
+        <para>Do we need a cast operator to down cast values?</para>
       </note>
     </section>
 
@@ -1676,7 +1684,7 @@ lexical syntax
 
           <itemizedlist>
             <listitem>
-              <para><literal>case</literal> for (cobcrete) syntax
+              <para><literal>case</literal> for (concrete) syntax
               patterns.</para>
             </listitem>
 
@@ -1729,7 +1737,7 @@ lexical syntax
 
         <listitem>
           <para>A <literal>try</literal> statement can be used to execute a
-          statement and to catch any exeception raised by that
+          statement and to catch any exception raised by that
           statement.</para>
         </listitem>
       </itemizedlist>
@@ -1793,18 +1801,7 @@ lexical syntax
 
       <para>It seems that every language specification effort has to produce a
       specification of the Booleans at some moment, so let's try it now. We
-      try the following versions:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>A version using visit, see <xref
-          linkend="section.booleans-with-visit" />.</para>
-        </listitem>
-
-        <listitem>
-          <para>A version using an implicit reduction function</para>
-        </listitem>
-      </itemizedlist>
+      try several variations.</para>
 
       <para>We use the following common syntax:<programlisting>module Booleans-syntax
 exports 
@@ -1827,7 +1824,7 @@ import-syntax Booleans-syntax;
 
 fun Bool reduce(Bool B) {
     visit bottom-up B {
-      case true &amp; &lt;Bool B2&gt;   =&gt; B2
+      case true &amp; &lt;Bool B2&gt;   =&gt; &lt;B2&gt;
       case false &amp; &lt;Bool B2&gt;  =&gt; false
 
       case true | true        =&gt; true
@@ -1867,13 +1864,13 @@ data Bool bor(Bool, Bool);
 
 fun Bool reduce(Bool B) {
     visit bottom-up B {
-      acase band(btrue, Bool B2)   =&gt; B2     %% Use Variables
-      acase band(bfalse, Bool B2)  =&gt; bfalse
+      acase band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt;     %% Use Variables
+      acase band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
 
-      acase bor(btrue, btrue)      =&gt; btrue  %% Use a truth table
-      acase bor(btrue, bfalse)     =&gt; btrue
-      acase bor(bfalse, btrue)     =&gt; btrue
-      acase bor(bfalse, bfalse)    =&gt; bfalse
+      acase bor(btrue, btrue)       =&gt; btrue  %% Use a truth table
+      acase bor(btrue, bfalse)      =&gt; btrue
+      acase bor(bfalse, btrue)      =&gt; btrue
+      acase bor(bfalse, bfalse)     =&gt; bfalse
     }
 }</programlisting></para>
 
@@ -1899,13 +1896,13 @@ data Bool band(Bool, Bool);
 data Bool bor(Bool, Bool); 
 
 arules(Bool) {
-      band(btrue, Bool B2)   =&gt; B2 
-      band(bfalse, Bool B2)  =&gt; bfalse
+      band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt; 
+      band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
 
-      bor(btrue, btrue)      =&gt; btrue
-      bor(btrue, bfalse)     =&gt; btrue
-      bor(bfalse, btrue)     =&gt; btrue
-      bor(bfalse, bfalse)    =&gt; bfalse
+      bor(btrue, btrue)       =&gt; btrue
+      bor(btrue, bfalse)      =&gt; btrue
+      bor(bfalse, btrue)      =&gt; btrue
+      bor(bfalse, bfalse)     =&gt; bfalse
 }</programlisting>These rules are applied on every Bool that is constructed.
         Like in ASF+SDF it is the responsibility of the programmer to make
         sure the rules are confluent and terminating. The body of a rules
@@ -1956,7 +1953,7 @@ arules(Bool) {
 import Booleans-syntax;
 
 rules(Bool) {
-      true &amp; &lt;Bool B2&gt;   =&gt; B2
+      true &amp; &lt;Bool B2&gt;   =&gt; &lt;B2&gt;
       false &amp; &lt;Bool B2&gt;  =&gt; false
 
       true | true        =&gt; true

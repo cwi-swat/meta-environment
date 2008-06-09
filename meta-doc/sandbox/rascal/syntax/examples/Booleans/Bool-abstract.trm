@@ -7,12 +7,12 @@ data Bool bor(Bool, Bool);
 
 fun Bool reduce(Bool B) {
     visit bottom-up B {
-      acase band(btrue, Bool B2)   => B2     %% Use Variables
-      acase band(bfalse, Bool B2)  => bfalse
+      acase band(btrue, <Bool B2>)   => <B2>     %% Use Variables
+      acase band(bfalse, <Bool B2>)  => bfalse
 
-      acase bor(btrue, btrue)      => btrue  %% Use a truth table
-      acase bor(btrue, bfalse)     => btrue
-      acase bor(bfalse, btrue)     => btrue
-      acase bor(bfalse, bfalse)    => bfalse
+      acase bor(btrue, btrue)        => btrue  %% Use a truth table
+      acase bor(btrue, bfalse)       => btrue
+      acase bor(bfalse, btrue)       => btrue
+      acase bor(bfalse, bfalse)      => bfalse
     }
 }

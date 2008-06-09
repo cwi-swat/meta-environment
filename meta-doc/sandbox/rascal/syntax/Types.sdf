@@ -12,6 +12,7 @@ exports
   sorts Type OptNamedType OptNamedTypes TypeVar StandardOperator
         BasicType StructuredType FunctionType FunctionName AnonymousFunctionType AbstractType
         ParameterizedType
+        AbsPattern
 
   context-free syntax
     "bool"                                              -> BasicType      {cons("bool-type")} 
@@ -54,14 +55,17 @@ exports
     Name "(" {OptNamedType ","}* ")"                    -> AbstractType   {cons("cons-abstype-name")}
     StringLiteral "(" {OptNamedType ","}* ")"           -> AbstractType   {cons("const-abstype-str")}
 
+ 
+
+
     BasicType | StructuredType | FunctionType | 
     TypeVar | ParameterizedType | Symbol                -> Type           {cons("type")}
 
 
 %% Define reserved words
-    "bool" | "int" | "double" | "number" | "str" | "loc" | 
-    "value" | "term" | "void" | "list" | "set" | 
-    "map" | "rel" | "tuple" | "fun"                     -> Name {reject}
+    "bool" | "int" | "double" | "number" | "str" | 
+    "loc" | "value" | "term" | "void" | "list" | 
+    "set" | "map" | "rel" | "tuple" | "fun"             -> Name {reject}
  
 
   
