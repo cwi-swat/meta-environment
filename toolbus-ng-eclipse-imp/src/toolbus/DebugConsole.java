@@ -34,12 +34,12 @@ public class DebugConsole{
 		
 		frame = new JFrame();
 		
-		unhandledMessages = new JButton("Unhandled messages");
-		performanceStats = new JButton("Performance stats");
-		toolsStatus = new JButton("Tools status");
-		queuedMessages = new JButton("Queued messages");
-		toolbusState = new JButton("Toolbus state");
-		shutdown = new JButton("Shut down");
+		unhandledMessages = new JButton("Unhandled Messages");
+		performanceStats = new JButton("Performance Stats");
+		toolsStatus = new JButton("Tools Status");
+		queuedMessages = new JButton("Queued Messages");
+		toolbusState = new JButton("Toolbus State");
+		shutdown = new JButton("Shut Down & Die");
 		
 		layout();
 	}
@@ -92,6 +92,7 @@ public class DebugConsole{
 				toolbus.showStatus();
 			}else if(source == shutdown){
 				toolbus.shutdown(toolbus.getTBTermFactory().makeList());
+				System.exit(0);
 			}
 		}
 	}
