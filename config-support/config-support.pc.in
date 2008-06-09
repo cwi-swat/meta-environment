@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=lankamp@cwi.nl
 Name: config-support
-Version: 1.1.1
+Version: 1.2
 Description:
 Requires: aterm
 Cflags: -I${prefix}/include

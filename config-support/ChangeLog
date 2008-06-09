@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jun  9 13:19:57 CEST 2008 <jurgenv@cwi.nl>
+ * config-support.pc.in: Bumped version to 1.2
+
 Thu Jan 10 11:13:39 CET 2008 <economop@cwi.nl>
  * src/options.{c,h}: reimplemented so that memory allocation is done
    automatically. It is no longer necessary to pass in the number of options
