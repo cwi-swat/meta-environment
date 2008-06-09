@@ -1,10 +1,6 @@
 # $Id$
 include $(top_srcdir)/Makefile.meta
 
-pkgdata_DATA = errorapi.jar locationapi.jar
-
-EXTRA_DIST += errorapi.jar locationapi.jar
-
 lib_LTLIBRARIES = libErrorAPI.la libLocationAPI.la
 
 include_HEADERS = \
@@ -70,15 +66,6 @@ imploded-error-api: MetaErrors.def Makefile
 	sdf2-to-c --imploded --input $< --prefix ERR_ --output Error
 	indent Error.h
 
-java-error-api: MetaErrors.def Makefile
-	sdf2-to-java \
-		--imploded \
-		--input $< \
-		--name errorapi \
-		--output . \
-		--version ${VERSION}
-	mv errorapi-${VERSION}.jar errorapi.jar
-
 ABS_LOCATION_MODULES = \
 	$(foreach i, \
 	${BASIC_MODULES} ${LOCATION_MODULES}, \
@@ -97,12 +84,4 @@ imploded-location-api: Location.def Makefile
 	sdf2-to-c --imploded --input $< --prefix LOC_ --output Location
 	indent Location.h
 
-java-location-api: Location.def Makefile
-	sdf2-to-java \
-		--imploded \
-		--input $< \
-		--name locationapi \
-		--output . \
-		--version ${VERSION}
-	mv locationapi-${VERSION}.jar locationapi.jar
 endif
