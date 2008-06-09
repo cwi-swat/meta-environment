@@ -29,6 +29,7 @@ context-free syntax
     ModuleName ModuleActuals?                    -> ImportedModule
 
     "import" ImportedModule ";"                  -> Import
+    "extend" ImportedModule ";"                  -> Import
     "import-java"  QualName ";"                  -> Import
     "import-syntax" ModuleName ";"               -> Import
 

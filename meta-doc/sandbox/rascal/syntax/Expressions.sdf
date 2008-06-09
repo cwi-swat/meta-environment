@@ -28,19 +28,17 @@ context-free syntax
          Value                                                   -> Expression
          "(" Expression ")"                                      -> Expression {bracket}
 
-%%context-free priorities
 	QualName                                                -> Expression {cons("qual-variable")}
          StandardOperator                                        -> Expression {cons("std-op")}
-%%         FunctionName                                            -> Expression
 
-context-free syntax
-%%       FunctionName | 
          QualName | Call                                         -> Callable
 
 	Callable "(" {Expression ","}* ")"                      -> Call {cons("fun-or-map-call")}
          Callable "[" Expression  "]"                            -> Call {cons("index-call")}
          Call                                                    -> Expression
          Call "." Name                                           -> Expression
+
+         AnonymousFunctionType Statement                         -> Expression
 
 %% Lists, sets and tuples
 	"[" {Expression ","}* "]"                               -> Expression {cons("list")}

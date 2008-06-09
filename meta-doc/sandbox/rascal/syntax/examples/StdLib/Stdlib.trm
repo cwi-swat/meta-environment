@@ -214,7 +214,7 @@ public fun rel[&T] toRel(list[&T] L)
 public fun list[&T] reverse(list[&T] L)
   primitive("List.reverse")
 
-public fun &T reduce(list[&T] L, fun &T F (&T,&T), &T unit){
+public fun &T reducer(list[&T] L, fun &T F (&T,&T), &T unit){
   &T result = unit;
   for(&T E : L){
     result = F(result, E)
@@ -245,12 +245,12 @@ public fun &T max(list[&T] L){
 
 %% Add elements of a List: sum
 public fun &T sum(list[&T] L, &T zero){
-  return reduce(L, +, zero);
+  return reducer(L, +, zero);
 }
 
 %% Multiply elements of a list: multiply
 public fun &T multiply(set[&T] R, &T one){
-  return reduce(L, *, one);
+  return reducer(L, *, one);
 }
 
 %% Average of elements of a list: average
@@ -361,7 +361,7 @@ public fun map[&T, &U] toMap(set[tuple[&T, &U]] S)
 public fun rel[&T] toRel(set[&T] S)
   primitive("Set.toRel")
 
-public fun &T reduce(set[&T] S, fun &T F (&T,&T), &T unit){
+public fun &T reducer(set[&T] S, fun &T F (&T,&T), &T unit){
   &T result = unit;
   for(&T E : S){
     result = F(result, E)
@@ -390,12 +390,12 @@ public fun &T max(set[&T] R){
 
 %% Sum elements of a Set: sum
 public fun &T sum(set[&T] S, &T zero){
-  return reduce(S, +, zero);
+  return reducer(S, +, zero);
 }
 
 %% Multiply elements of a Set: multiply
 public fun &T multiply(set[&T] S, &T one){
-  return reduce(S, *, one);
+  return reducer(S, *, one);
 }
 
 %% Average of elements of a set; average
@@ -466,7 +466,7 @@ public fun rel[tuple[&T, &U]] toRel(map[&T, &U] M)
   primitive("Map.toRel")
 
 %% Is this meaningfull?
-public fun &T reduce(map[&T] S, fun &T F (&T,&T), &T unit){
+public fun &T reducer(map[&T] S, fun &T F (&T,&T), &T unit){
   &T result = unit;
   for(&T E : S){
     result = F(result, E)

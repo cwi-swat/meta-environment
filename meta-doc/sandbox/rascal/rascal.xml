@@ -651,8 +651,15 @@
 
       <itemizedlist>
         <listitem>
-          <para>Import other Rascal modules using
-          <literal>import</literal>.</para>
+          <para>Import another Rascal module using <literal>import</literal>.
+          <remark>Do we allow circular imports? Proposal: No.</remark></para>
+        </listitem>
+
+        <listitem>
+          <para>Extend another Rascal module using <literal>extend</literal>.
+          This includes a verbatim copy (similar to
+          <literal>#include</literal>) of the-module-to-be-extended in the
+          current module. We allow redefinitions of declared names.</para>
         </listitem>
 
         <listitem>
@@ -684,9 +691,10 @@
       module or public to all modules that import the current module. Rules
       are always public and are globally applied.</para>
 
-      <para>Modules introduce a namespace and qualified names may be used to
-      uniquely identify elements of a module from the outside. Inside the
-      module, this qualification is implicit.</para>
+      <para>Modules introduce a namespace and qualified names (using the
+      <literal>::</literal> operator) may be used to uniquely identify
+      elements of a module from the outside. Inside the module, this
+      qualification is implicit.</para>
     </section>
 
     <section>
@@ -698,23 +706,20 @@
       <itemizedlist>
         <listitem>
           <para>A Rascal Name is identical to a Java Indentifier. All reserved
-          words in both Java and Rascal cannot be used as a Name.<warning>
-              <para>For better syntax errors it is probably better to warn for
-              Java keywords later on.</para>
-            </warning></para>
+          words in both Java and Rascal cannot be used as a Name. <remark>For
+          better syntax errors it is probably better to warn for Java keywords
+          later on.</remark></para>
         </listitem>
 
         <listitem>
           <para>Sorts and Symbols are inherited from SDF but we extend sort
           (that may only start with an uppercase letter in SDF) to be a more
-          liberal Name.<warning>
-              <para>SDF Sorts may include a dash symbol (<literal>-</literal>)
-              which is not allowed in Java Identifiers. Forbidding the dash
-              requires changing all existing SDF definitions. Allowing a dash
-              in Names requires an added check in the compiler that
-              Identifiers with dashes are generated as Java names. Suggestion:
-              add dash and check in compiler.</para>
-            </warning></para>
+          liberal Name. <remark>SDF Sorts may include a dash symbol (-)which
+          is not allowed in Java Identifiers. Forbidding the dash requires
+          changing all existing SDF definitions. Allowing a dash in Names
+          requires an added check in the compiler that Identifiers with dashes
+          are generated as Java names. Suggestion: add dash and check in
+          compiler.</remark></para>
         </listitem>
       </itemizedlist>
     </section>
@@ -847,6 +852,16 @@
             <literal>rel[node,node]</literal>. There are no built-in
             subtypes.</para>
           </listitem>
+
+          <listitem>
+            <para>The name that is introduced by a type declaration may even
+            be parameterized with one or more type variables,
+            e.g.,<programlisting>type rel[&amp;Node, &amp;Node] Graph[&amp;Node]</programlisting></para>
+
+            <para>Of course, the type variables that are used in the type in
+            the left part should occur as parameters in the right part of the
+            definition.</para>
+          </listitem>
         </itemizedlist>
       </section>
 
@@ -868,28 +883,31 @@
 
 [let05] T &lt;= &amp;N &lt;= T'                      = T &lt;= T'
 
-[let06] list[T] &lt;= list[T']                = T &lt;= T'
+[let06] N[&amp;T] &lt;= N[&amp;U]                     = true
 
-[let07] set[T] &lt;= set[T']                  = T &lt;= T'
+[let07] list[T] &lt;= list[T']                = T &lt;= T'
 
-[let08] tuple[ONTs] &lt;= tuple[ONTs']        = ONTs &lt;= ONTs'
+[let08] set[T] &lt;= set[T']                  = T &lt;= T'
 
-[let09] map[T1, T2] &lt;= map[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
+[let09] tuple[ONTs] &lt;= tuple[ONTs']        = ONTs &lt;= ONTs'
 
-[let10] map[T1, T2] &lt;= rel[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
+[let10] map[T1, T2] &lt;= map[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
 
-[let11] rel[ONTs] &lt;= rel[ONTs']            = ONTs &lt;= ONTs'
+[let11] map[T1, T2] &lt;= rel[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
 
-[let12] rel[ONTs] &lt;= set[tuple[ONTs']]     = ONTs &lt;= ONTs'
+[let12] rel[ONTs] &lt;= rel[ONTs']            = ONTs &lt;= ONTs'
 
-[let13] set[tuple[ONTs]] &lt;= rel[ONTs']     = ONTs &lt;= ONTs'
+[let13] rel[ONTs] &lt;= set[tuple[ONTs']]     = ONTs &lt;= ONTs'
 
-[let14] T &lt;= T' == true,
+[let14] set[tuple[ONTs]] &lt;= rel[ONTs']     = ONTs &lt;= ONTs'
+
+[let15] T &lt;= T' == true,
         ONTs &lt;= ONTs' == true
         =========================================
         fun T N (ONTs) &lt;= fun T' N (ONTs') = true
 [default-let]
-        T &lt;= T'                            = false</programlisting></para>
+        T &lt;= T'                            = false
+</programlisting></para>
 
         <para>Here T, T1, T2, T' etc represent types, and ONTs, ONTs' etc
         represented lists of OptionallyNamedTypes, e.g., a type that
@@ -904,6 +922,15 @@
         <programlisting>type rel[node,node] Graph</programlisting></para>
 
         <para>introduces the following subtype relation:<programlisting>Graph &lt;= rel[node,node]</programlisting></para>
+
+        <para><note>
+            <para>Do chain rules (injections) in imported SDF module introduce
+            a subtype relation?</para>
+          </note><note>
+            <para>How do we handle the optional names that occur in types?
+            Currently, we throw them away in the subtype relation. Should we
+            also compare these names?</para>
+          </note></para>
       </section>
     </section>
 
@@ -971,11 +998,12 @@
         </listitem>
 
         <listitem>
-          <para>Global variables are declared and ALWAYS initialized
-          (<emphasis role="bold">new</emphasis>) at the top level of each
-          module. Functions that use a global variable have to be explicitly
-          declare it as well. The value of a global variable can be used and
-          replaced by all functions that have locally declared it.</para>
+          <para>Global variables are declared and ALWAYS initialized at the
+          top level of each module and <emphasis role="bold">these
+          initialization may not contain function calls.</emphasis> Functions
+          that use a global variable have to be explicitly declare it as well.
+          The value of a global variable can be used and replaced by all
+          functions that have locally declared it.</para>
         </listitem>
       </itemizedlist>
 
@@ -1040,34 +1068,7 @@
             (e.g., flush cache, change cache size)?</para>
           </note></para>
 
-        <para>Functions can later be extended [STILL UNDER DISCUSSION]</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>The keyword <literal>extend</literal> before a function
-            declaration extends a previously defined function with the same
-            signature.</para>
-          </listitem>
-
-          <listitem>
-            <para>Local declarations in the extension function are added to
-            the original function.</para>
-          </listitem>
-
-          <listitem>
-            <para>If both bodies consist of a <literal>switch</literal> or
-            <literal>visit</literal> construct, the cases are merged.</para>
-          </listitem>
-
-          <listitem>
-            <para>Other cases may be considered: switch + expr, expr + switch,
-            visit + expr, and expr + visit.</para>
-          </listitem>
-
-          <listitem>
-            <para>No other extensions are allowed.</para>
-          </listitem>
-        </itemizedlist>
+        <para></para>
       </section>
 
       <section>
@@ -1196,6 +1197,10 @@ fun &amp;T &lt;= double foo()
 %% KO, since both &amp;T's might be comparable:
 fun &amp;T      bar()
 fun &amp;T &lt;= A bar()</programlisting></para>
+
+        <para><note>
+            <para>What are the use cases of bounded polymorphism?</para>
+          </note></para>
       </section>
 
       <section>
@@ -1214,6 +1219,22 @@ fun &amp;T &lt;= A bar()</programlisting></para>
 
 [mo-1] may-overload(fun T N (ONTs), fun T' N' (ONTs')) = 
        not(N == N') | incomparable(ONTs, ONTs') | incomparable(T, T')</programlisting></para>
+      </section>
+
+      <section>
+        <title>Anonymous Functions</title>
+
+        <para>We also allow <emphasis>anonymous functions</emphasis>, i.e.,
+        functions that are declared locally and can be passed as argument to
+        another function, be returned as value of a function, or even be
+        stored as value in a set or relation. When such functions are called
+        they are called in the lexical scope in which they were defined. For
+        instance, the Rascal standard Library defines a
+        <literal>mapper</literal> function that applies a function to a list
+        or set. An anonymous function can be used to define such function
+        arguments. Here is a function <literal>addOne</literal>, that adds 1
+        to each element of its argument list:<programlisting>fun list[int] addOne(list[int] L)
+    return mapper(L, fun int (int N) { return N +1 })</programlisting></para>
       </section>
     </section>
 
@@ -3422,7 +3443,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             </row>
 
             <row>
-              <entry>reduce</entry>
+              <entry>reducer</entry>
 
               <entry></entry>
 
@@ -3694,8 +3715,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
         </listitem>
 
         <listitem>
-          <para><literal>reduce</literal> and <literal>mapper</literal> take a
-          function as argument and traverse a structured value.<note>
+          <para><literal>reduce</literal>r and <literal>mapper</literal> take
+          a function as argument and traverse a structured value.<note>
               <para>Due to a name class with the type constructor
               <literal>map</literal>, we use the name
               <literal>mapper</literal> for a function that is ussually called
@@ -4260,7 +4281,7 @@ public fun rel[&amp;T] toRel(list[&amp;T] L)
 public fun list[&amp;T] reverse(list[&amp;T] L)
   primitive("List.reverse")
 
-public fun &amp;T reduce(list[&amp;T] L, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
+public fun &amp;T reducer(list[&amp;T] L, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
   &amp;T result = unit;
   for(&amp;T E : L){
     result = F(result, E)
@@ -4291,12 +4312,12 @@ public fun &amp;T max(list[&amp;T] L){
 
 %% Add elements of a List: sum
 public fun &amp;T sum(list[&amp;T] L, &amp;T zero){
-  return reduce(L, +, zero);
+  return reducer(L, +, zero);
 }
 
 %% Multiply elements of a list: multiply
 public fun &amp;T multiply(set[&amp;T] R, &amp;T one){
-  return reduce(L, *, one);
+  return reducer(L, *, one);
 }
 
 %% Average of elements of a list: average
@@ -4407,7 +4428,7 @@ public fun map[&amp;T, &amp;U] toMap(set[tuple[&amp;T, &amp;U]] S)
 public fun rel[&amp;T] toRel(set[&amp;T] S)
   primitive("Set.toRel")
 
-public fun &amp;T reduce(set[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
+public fun &amp;T reducer(set[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
   &amp;T result = unit;
   for(&amp;T E : S){
     result = F(result, E)
@@ -4436,12 +4457,12 @@ public fun &amp;T max(set[&amp;T] R){
 
 %% Sum elements of a Set: sum
 public fun &amp;T sum(set[&amp;T] S, &amp;T zero){
-  return reduce(S, +, zero);
+  return reducer(S, +, zero);
 }
 
 %% Multiply elements of a Set: multiply
 public fun &amp;T multiply(set[&amp;T] S, &amp;T one){
-  return reduce(S, *, one);
+  return reducer(S, *, one);
 }
 
 %% Average of elements of a set; average
@@ -4512,7 +4533,7 @@ public fun rel[tuple[&amp;T, &amp;U]] toRel(map[&amp;T, &amp;U] M)
   primitive("Map.toRel")
 
 %% Is this meaningfull?
-public fun &amp;T reduce(map[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
+public fun &amp;T reducer(map[&amp;T] S, fun &amp;T F (&amp;T,&amp;T), &amp;T unit){
   &amp;T result = unit;
   for(&amp;T E : S){
     result = F(result, E)
@@ -5202,7 +5223,13 @@ public fun void addRelPDB(str name, rel[&amp;T] incr)
 
     <itemizedlist>
       <listitem>
-        <para>Extensibility of modules and functions.</para>
+        <para>Which comment convention will we use? <remark>Let's use Java
+        style comments.</remark></para>
+      </listitem>
+
+      <listitem>
+        <para>Extensibility of functions. <remark>Proposal: let's not provide
+        facilities for this.</remark></para>
       </listitem>
 
       <listitem>

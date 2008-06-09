@@ -10,7 +10,7 @@ hiddens
 
 exports
   sorts Type OptNamedType OptNamedTypes TypeVar StandardOperator
-        BasicType StructuredType FunctionType FunctionName AbstractType
+        BasicType StructuredType FunctionType FunctionName AnonymousFunctionType AbstractType
         ParameterizedType
 
   context-free syntax
@@ -39,6 +39,8 @@ exports
     "<" | "<=" |">" | ">="                              -> StandardOperator
      Name | StandardOperator                            -> FunctionName   { avoid }
     "fun" Type FunctionName "(" OptNamedTypes? ")"      -> FunctionType   {cons("function-type")}
+
+    "fun" Type "(" OptNamedTypes? ")"                   -> AnonymousFunctionType
 
     "&" Name                                            -> TypeVar        {cons("type-var")}
     "&" Name "<=" Type                                  -> TypeVar        {cons("type-var-less-equal")}
