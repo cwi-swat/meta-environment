@@ -124,7 +124,7 @@ context-free syntax
 
           SynPattern "=>" SynPattern                             -> Rule       {cons("rule1")}
           SynPattern ":" Statement                               -> Rule       {cons("rule2")}
-          AbsPattern CaseAction                                  -> ARule       {cons("arule")}
+          AbsPattern CaseAction                                  -> ARule      {cons("arule")}
 
          "default" ":" Statement                                 -> Case       {cond("default-case")}
 
