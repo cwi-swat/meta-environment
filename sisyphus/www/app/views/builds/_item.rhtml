@@ -7,28 +7,22 @@
      <% if not item.nil? then %>
 
       <% if item.progress? then %>
-	<% nresults = if item.item.si_results.length > 0 then %>
-	<td>
-	<%= link_to item.item.si_results.last.action, :action => 'show', :controller => 'si_results', :id => 
-	item.item.si_results.last.id %>
-        </td>
-        <td>
-        <%= link_to item.time, :action => 'show', :controller => 'si_items', :id => item.id %>
-        </td>
+	
+        <% if item.item.si_results.length > 0 then %>
+ 	  <td>
+	  <%= link_to item.item.si_results.last.action, :action => 'show', :controller => 'si_results', :id => 
+	  item.item.si_results.last.id %>
+          </td>
+          <td>
+          <%= link_to item.time, :action => 'show', :controller => 'si_items', :id => item.id %>
+          </td>
 	<% else %>
-	<td colspan="2">
-        <em><%= item.label %></em>
+	  <td colspan="2">
+          <em><%= item.label %></em>
+          </td>
 	<% end %>
-      </td>
 
-      <% elsif item.item.si_results.length == 0 then %>
-	<td>
-        not tried	
-	</td>
-	<td>
-        <%= item.time %>
-      </td>
-      <% else %>
+    <% else %>
         <td>
         <span class="<%=item.style_class%>"><%=item.label%></span>
         </td>
@@ -36,13 +30,13 @@
         <%= link_to item.time, :action => 'show', :controller => 'si_items', :id => item.id %>
         </td>
 
-      <% end %> 
+    <% end %> 
 
-    <% else %>
+   <% else %>
 	<td colspan="2">
       &nbsp;
 	</td>
-    <% end %>
+   <% end %>
 
 </tr>
 </tbody>
