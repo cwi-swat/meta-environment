@@ -39,8 +39,12 @@
       <div class="subHeader">
         <span class="doNotDisplay">Navigation: </span>
         <a href="<%= url_for( :controller => "builds", :action => "index") %>">Builds</a> 
+        <a href="<%= url_for( :controller => "sessions", :action => "index") %>">Sessions</a> 
+        <a href="<%= url_for( :controller => "packages", :action => "index") %>">Packages</a> 
         <a href="<%= url_for( :controller => "hosts", :action => "index") %>">Hosts</a> 
         <a href="<%= url_for( :controller => "si_logs", :action => "index") %>">Logs</a> 
+        <a href="<%= url_for( :controller => "sisyphus", :action => "index") %>">Sisyphus</a> 
+        <a href="<%= url_for( :controller => "stats", :action => "index") %>">Statistics</a> 
       </div>
     </div>
 
@@ -60,8 +64,18 @@
         <p class="sideBarTitle">Status</p>
         <ul>
         <li><a href="<%= url_for( :controller => "builds", :action => "index") %>">Builds</a></li>
+        <li><a href="<%= url_for( :controller => "sessions", :action => "index") %>">Sessions</a></li>
+        <li><a href="<%= url_for( :controller => "packages", :action => "index") %>">Packages</a></li>
         <li><a href="<%= url_for( :controller => "hosts", :action => "index") %>">Hosts</a></li>
         <li><a href="<%= url_for( :controller => "si_logs", :action => "index") %>">Logs</a></li>
+        <li><a href="<%= url_for( :controller => "sisyphus", :action => "index") %>">Sisyphus</a></li>
+        </ul>
+
+        <p class="sideBarTitle">Configuration</p>
+        <ul> 
+        <li><a href="<%= url_for( :controller => "si_profiles", :action => "index") %>">Profiles</a></li>
+        <li><a href="<%= url_for( :controller => "sources", :action => "index") %>">Sources</a></li>
+        <li><a href="<%= url_for( :controller => "script", :action => "index") %>">Script</a></li>
         </ul>
 
         <p class="sideBarTitle">Comments</p>
@@ -87,7 +101,7 @@
 	    else 
 		"<span class=\"failure\">failed</span>" 
 	end %></strong><br/>
-	<%= item.host %> at <%= link_to item.time.strftime("%H:%M %d/%m"), :action => 'show', :controller => 'si_items', :id => item.id %>
+	<%= item.si_host.name %> at <%= link_to item.si_session.time.strftime("%H:%M %d/%m"), :action => 'show', :controller => 'si_items', :id => item.id %>
 	</div>
 	<% end %>
 
