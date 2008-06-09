@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jun  9 13:29:54 CEST 2008 <jurgenv@cwi.nl>
+ * sdf-support.pc.in: Bumped to version 2.4
+
 Wed Apr 16 11:15:33 CEST 2008 <jurgenv@cwi.nl>
  * lib/SDFME.*: regenerated API to fix issues with type punned
    aliasing.

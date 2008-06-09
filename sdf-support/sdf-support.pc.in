@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=economop@cwi.nl,jurgenv@cwi.nl
 Name: sdf-support
-Version: 2.3.1
+Version: 2.4
 Description:
 Requires: aterm,error-support,pt-support,toolbuslib
 Cflags: -I${prefix}/include
