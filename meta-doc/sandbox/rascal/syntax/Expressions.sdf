@@ -13,7 +13,7 @@ context-free start-symbols
 
 exports
 sorts Expression Declarator Predicate SimpleGenerator Generator Call Callable
-      Strategy Statement Rule Case CaseAction Assignment IncrAssignOp Value
+      Strategy Statement Rule ARule Case CaseAction Assignment IncrAssignOp Value
       Catch Finally
 
 context-free syntax
@@ -122,7 +122,9 @@ context-free syntax
          "acase" AbsPattern CaseAction                           -> Case       {cons("acase")}
          "rcase" (Name "~=")? RegPattern CaseAction              -> Case       {cons("rcase")}
 
-          AbsPattern CaseAction                                  -> Rule       {cons("rule")}
+          SynPattern "=>" SynPattern                             -> Rule       {cons("rule1")}
+          SynPattern ":" Statement                               -> Rule       {cons("rule2")}
+          AbsPattern CaseAction                                  -> ARule       {cons("arule")}
 
          "default" ":" Statement                                 -> Case       {cond("default-case")}
 

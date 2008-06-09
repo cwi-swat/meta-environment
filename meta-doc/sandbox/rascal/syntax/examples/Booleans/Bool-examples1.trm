@@ -7,7 +7,9 @@ fun Bool reduce(Bool B) {
       case true & <Bool B2>   => B2
       case false & <Bool B2>  => false
 
-      case true | <Bool B2>   => true
-      case false | <Bool B2>  => B2
+      case true | true        => true
+      case true | false       => true
+      case false | true       => true
+      case false | false      => false
     }
 }

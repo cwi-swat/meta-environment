@@ -39,6 +39,7 @@ exports
     Visibility "java" FunctionType Throws JavaBlock    -> Declaration {cons("java-function-decl")}
 
    "rules" "(" Type ")" "{" Rule+ "}"                  -> Declaration {cons("rules-decl")}
+   "arules" "(" Type ")" "{" ARule+ "}"                -> Declaration {cons("arules-decl")}
 
 %% Define reserved words
    "public" | "private" | "data" | "type" | "global" | 

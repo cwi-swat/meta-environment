@@ -1086,8 +1086,6 @@
             <para>Do we need library functions to tune the memo behaviour
             (e.g., flush cache, change cache size)?</para>
           </note></para>
-
-        <para></para>
       </section>
 
       <section>
@@ -1169,7 +1167,8 @@ fun int randomValue()
 fun test() {
   str x = randomValue();   %% OK
   int y = randomValue();   %% OK
-  value z = randomValue(); %% KO, too unspecific to resolve randomValue.
+  value z = randomValue(); %% KO, too unspecific to resolve 
+                           %% randomValue.
 }</programlisting></para>
 
         <para>How should overloading be resolved in the presence of type
@@ -1232,12 +1231,15 @@ fun &amp;T &lt;= A bar()</programlisting></para>
         <literal>may-overload</literal> describes when two function types
         satisfy the overloading restrictions:<programlisting>%% Incomparable
 
-[com1] incomparable(ONTs, ONTs') = not((ONTs &lt;= ONTs') | (ONTs' &lt;= ONTs))
+[com1] incomparable(ONTs, ONTs') = 
+       not((ONTs &lt;= ONTs') | (ONTs' &lt;= ONTs))
 
 %% May-overload
 
 [mo-1] may-overload(fun T N (ONTs), fun T' N' (ONTs')) = 
-       not(N == N') | incomparable(ONTs, ONTs') | incomparable(T, T')</programlisting></para>
+       not(N == N') | 
+       incomparable(ONTs, ONTs') | 
+       incomparable(T, T')</programlisting></para>
       </section>
 
       <section>
@@ -1604,7 +1606,8 @@ fun &amp;T &lt;= A bar()</programlisting></para>
 
           <itemizedlist>
             <listitem>
-              <para><literal>case</literal> for syntax patterns.</para>
+              <para><literal>case</literal> for (cobcrete) syntax
+              patterns.</para>
             </listitem>
 
             <listitem>
@@ -1744,20 +1747,23 @@ exports
     Bool "|" Bool -&gt; Bool {right}</programlisting></para>
 
       <section xml:id="section.booleans-with-visit">
-        <title>Booleans using visit</title>
+        <title>Concrete Booleans defined with visit</title>
 
-        <para>A simple solution exists using the visit construct that we have
-        encountered in the above examples.<programlisting>module Bool-examples1
+        <para>Using the visit construct that we have described above, we can
+        write the definitions for the functions <literal>&amp;</literal> and
+        <literal>|</literal> as follows:<programlisting>module Bool-examples1
 
-imports Booleans-syntax;
+import-syntax Booleans-syntax;
 
 fun Bool reduce(Bool B) {
     visit bottom-up B {
       case true &amp; &lt;Bool B2&gt;   =&gt; B2
       case false &amp; &lt;Bool B2&gt;  =&gt; false
 
-      case true | &lt;Bool B2&gt;   =&gt; true
-      case false | &lt;Bool B2&gt;  =&gt; B2
+      case true | true        =&gt; true
+      case true | false       =&gt; true
+      case false | true       =&gt; true
+      case false | false      =&gt; false
     }
 }</programlisting></para>
 
@@ -1765,18 +1771,20 @@ fun Bool reduce(Bool B) {
 
         <itemizedlist>
           <listitem>
-            <para>Using variables on the left-hand side: the visit is needed
-            to fully normalize the result.</para>
+            <para>In the definition for <literal>&amp;</literal>, we use
+            variables on the left-hand side: the visit is needed to fully
+            normalize the result.</para>
           </listitem>
 
           <listitem>
-            <para>A truth table: this is sufficient as is.</para>
+            <para>In the definition of <literal>|</literal>, we use a truth
+            table.</para>
           </listitem>
         </itemizedlist>
       </section>
 
       <section>
-        <title>Abstract Booleans</title>
+        <title>Abstract Booleans defined with visit</title>
 
         <para>In the above example we used concrete syntax for Booleans
         expressions. It also possible to define Booleans as abstract
@@ -1805,7 +1813,7 @@ fun Bool reduce(Bool B) {
       </section>
 
       <section>
-        <title>Booleans with implicit reduce (NOT YET DECIDED)</title>
+        <title>Abstract Booleans defined with arules</title>
 
         <para>In ASF, values are always reduced to a normal form before they
         are created. For some applications this normalization or
@@ -1820,7 +1828,7 @@ data Bool bfalse;
 data Bool band(Bool, Bool);
 data Bool bor(Bool, Bool); 
 
-rules(Bool) {
+arules(Bool) {
       band(btrue, Bool B2)   =&gt; B2 
       band(bfalse, Bool B2)  =&gt; bfalse
 
@@ -1859,12 +1867,33 @@ rules(Bool) {
           </listitem>
         </itemizedlist>
 
-        <para>The following seems more declarative and more close to the
-        semantics of rewrite rules being applied everywhere and in any
-        order:</para>
+        <note>
+          <para>The following seems more declarative and more close to the
+          semantics of rewrite rules being applied everywhere and in any
+          order:</para>
 
-        <para><programlisting> rule and(true,B2) =&gt; B2
+          <para><programlisting> rule and(true,B2) =&gt; B2
  rule and(true,B2) : { print("rule!"); yield B2 }</programlisting></para>
+        </note>
+      </section>
+
+      <section>
+        <title>Concrete Booleans defined with rules</title>
+
+        <para>In a similar fashion, the concrete syntax version of Booleans
+        can be defined using rules:<programlisting>module Bool-conc-rules
+
+import Booleans-syntax;
+
+rules(Bool) {
+      true &amp; &lt;Bool B2&gt;   =&gt; B2
+      false &amp; &lt;Bool B2&gt;  =&gt; false
+
+      true | true        =&gt; true
+      true | false       =&gt; true
+      false | true       =&gt; true
+      false | false      =&gt; false
+}</programlisting></para>
       </section>
     </section>
 
