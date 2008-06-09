@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1438,28 +1438,45 @@ fun &amp;T &lt;= A bar()</programlisting></para>
       <section>
         <title>Lexical Patterns</title>
 
-        <para><note>
-            <para>To be written.</para>
-          </note></para>
-
         <para>A special case of syntax patterns, are lexical patterns:
         concrete syntax patterns for lexical notions like identifiers, numeric
         constants and the like. Our solution is a middle road between the
         original solution used in ASF+SDF (simple but not type safe) and the
-        current solution ASF+SDF (complex but type safe). The key idea is that
-        a constructor function is implicitly created for every lexical
+        current solution in ASF+SDF (complex but type safe). The key idea is
+        that a constructor function is implicitly created for every lexical
         definition, i.e., when the SDF definition defines the lexical sort
-        <literal>LEX</literal>, then the following lexical constructor
-        function is implicitly defined:<programlisting>lex( LEX ) -&gt; LEX</programlisting></para>
+        <literal>LS</literal>, then the following lexical constructor function
+        <literal>ls</literal> (the sort name in lower case) is implicitly
+        defined:<programlisting>    ls( LEXARGS ) -&gt; LS</programlisting></para>
 
-        <para>This function can now be used in syntax patterns, provided that
-        its argument is of type LEX. The argument may consist of a mixture of
-        literal symbols and variables of lexical sorts that may form strings
-        of sort LEX.<note>
+        <para><literal>LEXARGS</literal> consist of zero or more:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>String constants.</para>
+          </listitem>
+
+          <listitem>
+            <para>Typed Variables enclosed in angle brackets (as used in other
+            patterns).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The <literal>LEXARGS</literal> argument combined should form a
+        strings of sort <literal>LS</literal>.<note>
             <para>The current solution in ASF+SDF requires that all
             intermediate lexical constructors are explicitly written in the
             pattern. Here we relax this requirement.</para>
           </note></para>
+
+        <para>For instance, given a lexical syntax for numbers (part of an SDF
+        definition):<programlisting>sorts DIGIT NAT-CON
+lexical syntax
+   [0-9]    -&gt; DIGIT
+   DIGIT+   -&gt; NAT-CON</programlisting></para>
+
+        <para>A rule that would remove leading zeros looks like
+        this:<programlisting>  natcon("0" &lt;DIGIT+ Ds&gt;) =&gt; natcon(&lt;Ds&gt;)</programlisting></para>
       </section>
     </section>
 
@@ -2909,6 +2926,43 @@ fun rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS,
     </section>
 
     <section>
+      <title>Structured lexicals: numbers</title>
+
+      <para>Given the SDF definition:<programlisting>sorts Digit Number Real  
+lexical syntax
+   [0-9]             -&gt; Digit
+   Digit+            -&gt; Number
+   Number "." Number -&gt; Real</programlisting>we can write normalization
+      rules for <literal>Number</literal> that remove leading
+      zeros:<programlisting>rules(Number){
+   number("0" &lt;Digit+ Ds&gt;) =&gt; number(&lt;Ds&gt;)
+}</programlisting>A truncation function on <literal>Real</literal> can replace
+      the mantissa by 0:</para>
+
+      <para><programlisting>fun Real trunk(Real R){
+    switch R {
+       case real(&lt;Number Num&gt; "." &lt;Digit+ Ds&gt;) =&gt; real(&lt;Num&gt; "." "0")
+    }
+}</programlisting></para>
+    </section>
+
+    <section>
+      <title>Structured Lexicals: strings</title>
+
+      <para>Given the SDF definition:<programlisting>sorts String NQChar
+lexical syntax
+   ~[\"]             -&gt; NQChar
+   [\"] NQChar* [\"] -&gt; String</programlisting>A function that removes the
+      <emphasis>first</emphasis> newline from a string can be written
+      as:<programlisting>fun String removeNL(String S){
+    switch S {
+      case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2 "\"") =&gt;
+           string("\"" &lt;Chars1&gt; &lt;Chars2&gt; "\"")
+    }
+}</programlisting></para>
+    </section>
+
+    <section>
       <title>Symbol table with scopes</title>
 
       <para>Here is a (probably naive) implementation of a symbol table that
@@ -3162,7 +3216,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -3170,7 +3224,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
@@ -3864,7 +3918,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 
@@ -5349,10 +5403,6 @@ public fun void addRelPDB(str name, rel[&amp;T] incr)
 
       <listitem>
         <para>Ditto for set comprehensions.</para>
-      </listitem>
-
-      <listitem>
-        <para>How is lexical matching incorporated?</para>
       </listitem>
 
       <listitem>
