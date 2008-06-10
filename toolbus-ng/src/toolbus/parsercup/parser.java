@@ -1035,9 +1035,9 @@ public class parser extends java_cup.runtime.lr_parser {
 	public class SyntaxErrorException extends RuntimeException{
 		private static final long serialVersionUID = 2315538188275748342L;
 		
-		private final int line;
-		private final int column;
-		private final int sym;
+		public final int line;
+		public final int column;
+		public final int sym;
 
 		public SyntaxErrorException(int line, int column, int sym){
 			super();
