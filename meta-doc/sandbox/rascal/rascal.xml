@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1484,7 +1484,8 @@ lexical syntax
             distinction between ordinary variables, lexical variables, and
             layout variables. Here, all variables are treated equal and their
             syntactic position determines how they are used.</para>
-          </note></para>
+          </note>We also allow arbitrary character classes as type in a
+        pattern variable, e.g., one could also write:<programlisting>  natcon("0" &lt;[0-9]+ Ds&gt;) =&gt; natcon(&lt;Ds&gt;)</programlisting></para>
       </section>
     </section>
 
@@ -3213,7 +3214,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
               <entry align="center">bool</entry>
 
@@ -3221,7 +3222,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str&#160;</entry>
+              <entry align="center">str </entry>
 
               <entry align="center">loc</entry>
 
@@ -3915,7 +3916,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center">&#160;</entry>
+                <entry align="center"> </entry>
 
                 <entry align="center">list</entry>
 

@@ -1,0 +1,4 @@
+module Numbers-example
+rules(Number){
+   case number("0" <Digit+ Ds>) => number(<Ds>)
+}

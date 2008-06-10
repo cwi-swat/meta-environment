@@ -4,6 +4,8 @@ module SDFSymbol
 
 %%imports languages/sdf2/syntax/Kernel 
 %%imports languages/aterm/syntax/IntCon
+
+imports languages/sdf2/syntax/Character-Class
 imports languages/java/syntax/Lexical [Identifier => Name]
 
 exports
@@ -18,10 +20,9 @@ exports
     Symbol "*"                                    -> Symbol {cons("iter-star")}
     "{" Symbol sep:StringLiteral "}" "+"          -> Symbol {cons("iter-sep")}
     "{" Symbol sep:StringLiteral "}" "*"          -> Symbol {cons("iter-star-sep")}
-%%    "<" head:Symbol "," rest:{Symbol ","}+ ">"    -> Symbol {cons("tuple")}
-%%    "(" arguments:Symbols "=>" results:Symbol ")" -> Symbol {cons("func")}
     "left":Symbol "|" "right":Symbol              -> Symbol {right,cons("alt")}
-%%    "(" "left":Symbol "->" "right":Symbol ")"     -> Symbol {cons("strategy")}
+
+     CharClass                                    -> Symbol {cons("cc")}
 
   context-free priorities
     {Symbol "?"               -> Symbol
