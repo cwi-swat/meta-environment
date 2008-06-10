@@ -213,4 +213,34 @@ public class MatchStore{
 			return subNotesMappings.keySet();
 		}
 	}
+	
+	public void printPartnerlessSenders(){
+		boolean foundPartnerlessSender = false;
+		
+		synchronized(messageLock){
+			Iterator<ATerm> sendMessages = messageMappings.keySet().iterator();
+			while(sendMessages.hasNext()){
+				ATerm sendMessage = sendMessages.next();
+				if(messageMappings.get(sendMessage).isEmpty()){
+					System.out.println(sendMessage);
+					foundPartnerlessSender = true;
+				}
+			}
+		}
+		
+		synchronized(noteLock){
+			Iterator<ATerm> sendNotes = noteMappings.keySet().iterator();
+			while(sendNotes.hasNext()){
+				ATerm sendNote = sendNotes.next();
+				if(noteMappings.get(sendNote).isEmpty()){
+					System.out.println(sendNote);
+					foundPartnerlessSender = true;
+				}
+			}
+		}
+		
+		if(!foundPartnerlessSender){
+			System.out.println("No partnerless senders found.");
+		}
+	}
 }
