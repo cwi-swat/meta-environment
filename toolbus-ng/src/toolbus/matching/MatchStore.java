@@ -215,15 +215,14 @@ public class MatchStore{
 	}
 	
 	public void printPartnerlessSenders(){
-		boolean foundPartnerlessSender = false;
+		List<ATerm> partnerlessSenders = new ArrayList<ATerm>();
 		
 		synchronized(messageLock){
 			Iterator<ATerm> sendMessages = messageMappings.keySet().iterator();
 			while(sendMessages.hasNext()){
 				ATerm sendMessage = sendMessages.next();
 				if(messageMappings.get(sendMessage).isEmpty()){
-					System.out.println(sendMessage);
-					foundPartnerlessSender = true;
+					partnerlessSenders.add(sendMessage);
 				}
 			}
 		}
@@ -233,14 +232,21 @@ public class MatchStore{
 			while(sendNotes.hasNext()){
 				ATerm sendNote = sendNotes.next();
 				if(noteMappings.get(sendNote).isEmpty()){
-					System.out.println(sendNote);
-					foundPartnerlessSender = true;
+					partnerlessSenders.add(sendNote);
 				}
 			}
 		}
 		
-		if(!foundPartnerlessSender){
+		if(partnerlessSenders.isEmpty()){
 			System.out.println("No partnerless senders found.");
+		}else{
+			System.out.println("Partnerless senders:");
+			System.out.println("{");
+			Iterator<ATerm> partnerlessSendersIterator = partnerlessSenders.iterator();
+			while(partnerlessSendersIterator.hasNext()){
+				System.out.println(partnerlessSendersIterator.next());
+			}
+			System.out.println("}");
 		}
 	}
 }
