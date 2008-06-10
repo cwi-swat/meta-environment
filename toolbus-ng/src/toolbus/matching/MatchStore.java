@@ -223,6 +223,11 @@ public class MatchStore{
 	}
 	
 	public void printPartnerlessSenders(){
+		if(1 == 1){
+			System.out.println("Under construction. This doesn't work yet.");
+			return;
+		}
+		
 		final List<ATerm> partnerlessSenders = new ArrayList<ATerm>();
 		
 		messageLinks.iterate(new ReadOnlyHashMapEntryHandler<ATerm, List<ATerm>>(){
