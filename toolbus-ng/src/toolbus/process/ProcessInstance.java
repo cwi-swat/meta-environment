@@ -234,7 +234,7 @@ public class ProcessInstance{
 		String r1 = "process " + definition.getName() + "(" + processId + "):\n  " + elements.size() + " elements\n" + currentState;
 		if(subscriptions.size() > 0){
 			String r2 = "\n  Subscriptions: {";
-			Iterator<ATerm> SubscriptionsIterator = notes.iterator();
+			Iterator<ATerm> SubscriptionsIterator = subscriptions.iterator();
 			while(SubscriptionsIterator.hasNext()){
 				ATerm sub = SubscriptionsIterator.next();
 				r2 = r2 + "\n    " + sub.toString();
