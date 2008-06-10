@@ -16,15 +16,13 @@ hiddens
         Declaration
 
 exports
-  sorts Declaration Visibility DatatypeParameters Primitive Throws ThrowDecl
+  sorts Declaration Visibility Primitive Throws ThrowDecl
 
   context-free syntax
 
     ("public" | "private")?                            -> Visibility  {cons("visibility")}
 
-    "[" {TypeVar ","}+ "]"                             -> DatatypeParameters 
-                                                                   {cons("datatype-parameters")}
-    Visibility "data" Name  DatatypeParameters?
+    Visibility "data" ( Name | ParameterizedType)
                             { AbstractType "|"}+       -> Declaration {cons("data-decl")}
 
     Visibility "type" Type (Name  | ParameterizedType) -> Declaration {cons("type-decl")}
@@ -41,8 +39,8 @@ exports
                        (Statement | Primitive)         -> Declaration {cons("function-decl")}
     Visibility "java" FunctionType Throws JavaBlock    -> Declaration {cons("java-function-decl")}
 
-   "rules" "(" Type ")" "{" Rule+ "}"                  -> Declaration {cons("rules-decl")}
-   "arules" "(" Type ")" "{" ARule+ "}"                -> Declaration {cons("arules-decl")}
+    "rules" "(" Type ")" "{" Rule+ "}"                 -> Declaration {cons("rules-decl")}
+    "arules" "(" Type ")" "{" ARule+ "}"               -> Declaration {cons("arules-decl")}
 
 %% Define reserved words
    "public" | "private" | "data" | "type" | "global" | 
