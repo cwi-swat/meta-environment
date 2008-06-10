@@ -652,14 +652,15 @@
       <itemizedlist>
         <listitem>
           <para>Import another Rascal module using <literal>import</literal>.
-          <remark>Do we allow circular imports? Proposal: No.</remark></para>
+          We do not allow circular imports.</para>
         </listitem>
 
         <listitem>
           <para>Extend another Rascal module using <literal>extend</literal>.
           This includes a verbatim copy (similar to
           <literal>#include</literal>) of the-module-to-be-extended in the
-          current module. We allow redefinitions of declared names.</para>
+          current module. We allow redefinitions of declared names. We do not
+          allow circular extension.</para>
         </listitem>
 
         <listitem>
@@ -694,7 +695,7 @@
       <para>Modules introduce a namespace and qualified names (using the
       <literal>::</literal> operator) may be used to uniquely identify
       elements of a module from the outside. Inside the module, this
-      qualification is implicit.<note>
+      qualification is implicit.<caution>
           <para>We should clarify what we want to have:</para>
 
           <itemizedlist>
@@ -711,7 +712,7 @@
               <para>packages: no?</para>
             </listitem>
           </itemizedlist>
-        </note></para>
+        </caution></para>
     </section>
 
     <section>
@@ -940,16 +941,16 @@
 
         <para>introduces the following subtype relation:<programlisting>Graph &lt;= rel[node,node]</programlisting></para>
 
-        <para><note>
+        <para><caution>
             <para>Do chain rules (injections) in imported SDF module introduce
             a subtype relation?</para>
-          </note><note>
+          </caution><caution>
             <para>How do we handle the optional names that occur in types?
             Currently, we throw them away in the subtype relation. Should we
             also compare these names?</para>
-          </note><note>
+          </caution><caution>
             <para>What is the final word on int, double and number?</para>
-          </note></para>
+          </caution></para>
       </section>
     </section>
 
@@ -1082,10 +1083,10 @@
         </note>
 
         <para>Functions preceeded by the keyword "memo" are memo functions
-        that cache previous arguments/result combinations.<note>
+        that cache previous arguments/result combinations.<caution>
             <para>Do we need library functions to tune the memo behaviour
             (e.g., flush cache, change cache size)?</para>
-          </note></para>
+          </caution></para>
       </section>
 
       <section>
@@ -1114,9 +1115,9 @@
           </listitem>
         </itemizedlist>
 
-        <para>Here are some examples.<note>
+        <para>Here are some examples.<caution>
             <para>These examples need more thought!</para>
-          </note></para>
+          </caution></para>
 
         <para><programlisting>%% OK, since int and double are incomparable 
 %% (both subtypes of 'number')
@@ -1218,9 +1219,9 @@ fun &amp;T &lt;= double foo()
 fun &amp;T      bar()
 fun &amp;T &lt;= A bar()</programlisting></para>
 
-        <para><note>
+        <para><caution>
             <para>What are the use cases of bounded polymorphism?</para>
-          </note></para>
+          </caution></para>
       </section>
 
       <section>
@@ -1615,9 +1616,9 @@ lexical syntax
           </listitem>
         </itemizedlist></para>
 
-      <note>
+      <caution>
         <para>Do we need a cast operator to down cast values?</para>
-      </note>
+      </caution>
     </section>
 
     <section>
@@ -1771,10 +1772,10 @@ lexical syntax
           <para>One or more control path can fail. This can be caused by an
           explicit fail statement or an if-then statement with missing
           else-branch. In the case of failure all side-effects are
-          undone.<note>
+          undone.<caution>
               <para>Will we undo all side-effects or only the side-effects on
               global variables?</para>
-            </note></para>
+            </caution></para>
         </listitem>
 
         <listitem>
@@ -1941,14 +1942,14 @@ arules(Bool) {
           </listitem>
         </itemizedlist>
 
-        <note>
+        <caution>
           <para>The following seems more declarative and more close to the
           semantics of rewrite rules being applied everywhere and in any
           order:</para>
 
           <para><programlisting> rule and(true,B2) =&gt; B2
  rule and(true,B2) : { print("rule!"); yield B2 }</programlisting></para>
-        </note>
+        </caution>
       </section>
 
       <section>
@@ -2627,9 +2628,9 @@ fun PICO-VALUE evalExp(Exp exp) {
     <section>
       <title>Pico control flow extraction</title>
 
-      <para><note>
-          <para>Is the definition of CP ok?</para>
-        </note></para>
+      <para><caution>
+          <para>Is the definition of CP ok? Better to use a datatype?</para>
+        </caution></para>
 
       <programlisting>module Pico-controlflow
  
@@ -2779,14 +2780,10 @@ fun PROGRAM cse(PROGRAM P) {
         </listitem>
       </itemizedlist>
 
-      <para>Note that a slight abbreviation is possible if we introduce
-      labelled patterns (here S): [UNDER DISCUSSION]</para>
-
-      <programlisting> rel[EXP, PICO-ID] replacements := 
-       {&lt;E2, Id&gt; | &lt;PICO-ID Id&gt; := &lt;EXP E&gt; S : P,
-                   Id notin E,
-                   EXP E2 : reachX({S}, Defs(Id), Pred)
-       };</programlisting>
+      <para><caution>
+          <para>The following is to be discussed and will probably be
+          omitted.</para>
+        </caution></para>
 
       <para>Also note that we could factor out the assignment pattern to make
       cse more generic if we introduce patterns as first class
@@ -3897,7 +3894,9 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
               <para>Due to a name class with the type constructor
               <literal>map</literal>, we use the name
               <literal>mapper</literal> for a function that is ussually called
-              <literal>map</literal>.</para>
+              <literal>map</literal>. The usual function
+              <literal>reduce</literal> is therefore called
+              <literal>reducer</literal>.</para>
             </note></para>
         </listitem>
 
@@ -3931,7 +3930,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
           <title>Additional functions on lists, sets, maps and
           relations</title>
 
-          <tgroup cols="5">
+          <tgroup cols="6">
             <colspec align="center" />
 
             <thead>
@@ -3945,6 +3944,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry align="center">map</entry>
 
                 <entry align="center">rel</entry>
+
+                <entry align="center">graph</entry>
               </row>
             </thead>
 
@@ -3953,6 +3954,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>first</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
 
                 <entry></entry>
 
@@ -3971,12 +3974,16 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry></entry>
 
                 <entry></entry>
+
+                <entry></entry>
               </row>
 
               <row>
                 <entry>makeString</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
 
                 <entry></entry>
 
@@ -3995,6 +4002,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry></entry>
 
                 <entry></entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4003,6 +4012,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry></entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
 
                 <entry></entry>
 
@@ -4019,6 +4030,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4031,6 +4044,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4043,6 +4058,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4055,6 +4072,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4067,6 +4086,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4079,6 +4100,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4091,6 +4114,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4103,6 +4128,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4115,6 +4142,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4127,6 +4156,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4139,6 +4170,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4151,6 +4184,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4163,6 +4198,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry>x</entry>
 
                 <entry>x</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -4173,6 +4210,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry></entry>
 
                 <entry></entry>
+
+                <entry>x</entry>
 
                 <entry>x</entry>
               </row>
@@ -4187,6 +4226,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry></entry>
 
                 <entry>x</entry>
+
+                <entry>x</entry>
               </row>
 
               <row>
@@ -4197,6 +4238,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry></entry>
 
                 <entry></entry>
+
+                <entry>x</entry>
 
                 <entry>x</entry>
               </row>
@@ -4211,6 +4254,8 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
                 <entry></entry>
 
                 <entry>x</entry>
+
+                <entry>x</entry>
               </row>
             </tbody>
           </tgroup>
@@ -4222,9 +4267,9 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
         </listitem>
       </itemizedlist>
 
-      <note>
+      <caution>
         <para>closure is missing</para>
-      </note>
+      </caution>
     </section>
 
     <section>
@@ -4239,10 +4284,10 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
       <title>Source code</title>
 
       <para>This is a very first draft of the library. When the structure is
-      stable we will split it in modules.<note>
+      stable we will split it in modules.<caution>
           <para>The following code is maintained externally and then copied
           :-( to this document, so be carefull with changes.</para>
-        </note><programlisting>module RascalStandardLibrary
+        </caution><programlisting>module RascalStandardLibrary
 
 %% Here is a flat list of library functions that will
 %% structured in to coherent submodules.
@@ -4833,25 +4878,27 @@ public fun rel[&amp;T,&amp;T] carrierX (rel[&amp;T,&amp;T] R, set[&amp;T] S)
 
 %% Relations viewed as graphs
 
-%% Top of a Relation: top
-public fun set[&amp;T] top(rel[&amp;T, &amp;T] R)
-  return domain(R) - range(R)
+type rel[&amp;T,&amp;T] graph[&amp;T];
 
-%% Bottom of a Relation: bottom
-public fun set[&amp;T] bottom(rel[&amp;T,&amp;T] R)
-  return range(R) - domain(R)
+%% Top of a Graph: top
+public fun set[&amp;T] top(graph[&amp;T] G)
+  return domain(G) - range(G)
+
+%% Bottom of a Graph: bottom
+public fun set[&amp;T] bottom(graph[&amp;T] G)
+  return range(G) - domain(G)
 
 %% Reachability with Restriction: reachR
 public fun set[&amp;T] reachR(set[&amp;T] Start, set[&amp;T] Restr,
-                          rel[&amp;T,&amp;T] Rel)
-  return range(compose(domainR(Rel, Start), 
-                       carrierR(Rel, Restr)+))
+                          graph[&amp;T] G)
+  return range(compose(domainR(G, Start), 
+                       carrierR(G, Restr)+))
 
 %% Reachability with Exclusion: reachX
 public fun set[&amp;T] reachX(set[&amp;T] Start, set[&amp;T] Excl, 
-                          rel[&amp;T,&amp;T] Rel)
-  return range(compose(domainR(Rel, Start), 
-                       carrierX(Rel, Excl)+))
+                          graph[&amp;T] G)
+  return range(compose(domainR(G, Start), 
+                       carrierX(G, Excl)+))
 
 %% TO DO
 

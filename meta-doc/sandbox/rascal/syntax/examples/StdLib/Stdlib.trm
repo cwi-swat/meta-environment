@@ -589,27 +589,27 @@ public fun rel[&T,&T] carrierX (rel[&T,&T] R, set[&T] S)
 
 %% Relations viewed as graphs
 
-type rel[&T,&T] Graph[&T]
+type rel[&T,&T] graph[&T];
 
-%% Top of a Relation: top
-public fun set[&T] top(graph[&T] R)
-  return domain(R) - range(R)
+%% Top of a Graph: top
+public fun set[&T] top(graph[&T] G)
+  return domain(G) - range(G)
 
-%% Bottom of a Relation: bottom
-public fun set[&T] bottom(graph[&T] R)
-  return range(R) - domain(R)
+%% Bottom of a Graph: bottom
+public fun set[&T] bottom(graph[&T] G)
+  return range(G) - domain(G)
 
 %% Reachability with Restriction: reachR
 public fun set[&T] reachR(set[&T] Start, set[&T] Restr,
-                          graph[&T] Rel)
-  return range(compose(domainR(Rel, Start), 
-                       carrierR(Rel, Restr)+))
+                          graph[&T] G)
+  return range(compose(domainR(G, Start), 
+                       carrierR(G, Restr)+))
 
 %% Reachability with Exclusion: reachX
 public fun set[&T] reachX(set[&T] Start, set[&T] Excl, 
-                          graph[&T] Rel)
-  return range(compose(domainR(Rel, Start), 
-                       carrierX(Rel, Excl)+))
+                          graph[&T] G)
+  return range(compose(domainR(G, Start), 
+                       carrierX(G, Excl)+))
 
 %% TO DO
 

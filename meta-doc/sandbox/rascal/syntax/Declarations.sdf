@@ -16,7 +16,7 @@ hiddens
         Declaration
 
 exports
-  sorts Declaration Visibility DatatypeParameters Primitive
+  sorts Declaration Visibility DatatypeParameters Primitive Throws ThrowDecl
 
   context-free syntax
 
@@ -32,7 +32,10 @@ exports
     Visibility "global" Type Name ("=" Expression)?    -> Declaration {cons("global-decl")}
 
     "primitive" ( "(" StringLiteral ")" )?             -> Primitive
-    ("throws" AbsPattern)*                             -> Throws
+
+    ("throws" ThrowDecl)*                              -> Throws
+
+     Name "(" OptNamedTypes ")"                        -> ThrowDecl
 
     Visibility "memo"? FunctionType Throws
                        (Statement | Primitive)         -> Declaration {cons("function-decl")}
@@ -43,6 +46,6 @@ exports
 
 %% Define reserved words
    "public" | "private" | "data" | "type" | "global" | 
-   "memo" | "primitive" | "java" | "rules"             -> Name {reject}
+   "memo" | "primitive" | "java" | "rules" | "arules"  -> Name {reject}
 
   
