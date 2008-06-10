@@ -120,7 +120,7 @@ context-free syntax
          "case"  SynPattern "=>" SynPattern                      -> Case       {cons("case1")}
          "case" SynPattern ":" Statement                         -> Case       {cons("case2")}
          "acase" AbsPattern CaseAction                           -> Case       {cons("acase")}
-         "rcase" (list[str] Name ":=")? RegPattern CaseAction    -> Case       {cons("rcase")}
+         "rcase" ("list[str]" Name ":=")? RegPattern CaseAction  -> Case       {cons("rcase")}
 
           SynPattern "=>" SynPattern                             -> Rule       {cons("rule1")}
           SynPattern ":" Statement                               -> Rule       {cons("rule2")}
