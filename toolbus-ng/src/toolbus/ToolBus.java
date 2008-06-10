@@ -284,15 +284,17 @@ public class ToolBus{
 			
 			// Keep track of the names of all the scripts for debuggin purposes.
 			scriptsNames = parser_obj.scriptsNames();
-		}catch(ToolBusException e){
-			error(filename, e.getMessage());
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			error(filename, e.getMessage());
-			e.printStackTrace();
-		} catch (Exception e) {
-			error(filename, e.getMessage());
-			e.printStackTrace();
+		}catch(ToolBusException te){
+			error(filename, te.getMessage());
+			te.printStackTrace();
+		}catch(FileNotFoundException fnfex){
+			error(filename, fnfex.getMessage());
+			fnfex.printStackTrace();
+		}catch(RuntimeException rex){
+			throw rex;
+		}catch(Exception ex){
+			error(filename, ex.getMessage());
+			ex.printStackTrace();
 		}
 		return nerrors == 0;
 	}
