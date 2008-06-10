@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -2934,10 +2934,17 @@ lexical syntax
       rules for <literal>Number</literal> that remove leading
       zeros:<programlisting>rules(Number){
    number("0" &lt;Digit+ Ds&gt;) =&gt; number(&lt;Ds&gt;)
-}</programlisting>A truncation function on <literal>Real</literal> can replace
-      the mantissa by 0:</para>
+}</programlisting></para>
 
-      <para><programlisting>fun Real trunk(Real R){
+      <para>Note that a character class can be used instead of the sort
+      <literal>Digit</literal>:<programlisting>rules(Number){
+   number("0" &lt;[0-9]+ Ds&gt;) =&gt; number(&lt;Ds&gt;)
+}</programlisting></para>
+
+      <para>A truncation function on <literal>Real</literal> can replace the
+      mantissa by 0:</para>
+
+      <para><programlisting>fun Real truncate(Real R){
     switch R {
        case real(&lt;Number Num&gt; "." &lt;Digit+ Ds&gt;) =&gt; real(&lt;Num&gt; "." "0")
     }
@@ -2954,7 +2961,7 @@ lexical syntax
       <emphasis>first</emphasis> newline from a string can be written
       as:<programlisting>fun String removeNL(String S){
     switch S {
-      case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2 "\"") =&gt;
+      case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2&gt; "\"") =&gt;
            string("\"" &lt;Chars1&gt; &lt;Chars2&gt; "\"")
     }
 }</programlisting></para>
@@ -3214,7 +3221,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -3222,7 +3229,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
@@ -3916,7 +3923,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 
