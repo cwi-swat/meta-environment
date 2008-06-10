@@ -16,6 +16,7 @@ import toolbus.atom.note.SndNote;
 import toolbus.atom.note.Subscribe;
 import toolbus.process.ProcessInstance;
 import toolbus.util.collections.ConcurrentHashMap;
+import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
 import aterm.ATerm;
 
 public class MatchStore{
@@ -68,6 +69,8 @@ public class MatchStore{
 				addSendNotePattern((SndNote) atom, subscribeNotes);
 			}
 		}
+		
+		printPartnerlessSenders();
 	}
 	
 	private void addReceiveMessagePattern(RecMsg message, List<ATerm> receiveMessages){
@@ -215,27 +218,27 @@ public class MatchStore{
 	}
 	
 	public void printPartnerlessSenders(){
-		List<ATerm> partnerlessSenders = new ArrayList<ATerm>();
+		final List<ATerm> partnerlessSenders = new ArrayList<ATerm>();
 		
-		synchronized(messageLock){
-			Iterator<ATerm> sendMessages = messageMappings.keySet().iterator();
-			while(sendMessages.hasNext()){
-				ATerm sendMessage = sendMessages.next();
-				if(messageMappings.get(sendMessage).isEmpty()){
+		messageLinks.iterate(new ReadOnlyHashMapEntryHandler<ATerm, List<ATerm>>(){
+			public int handle(ATerm sendMessage, List<ATerm> value){
+				if(messageLinks.get(sendMessage).isEmpty()){
 					partnerlessSenders.add(sendMessage);
 				}
+				
+				return CONTINUE;
 			}
-		}
+		});
 		
-		synchronized(noteLock){
-			Iterator<ATerm> sendNotes = noteMappings.keySet().iterator();
-			while(sendNotes.hasNext()){
-				ATerm sendNote = sendNotes.next();
-				if(noteMappings.get(sendNote).isEmpty()){
-					partnerlessSenders.add(sendNote);
+		noteLinks.iterate(new ReadOnlyHashMapEntryHandler<ATerm, List<ATerm>>(){
+			public int handle(ATerm sendMessage, List<ATerm> value){
+				if(noteLinks.get(sendMessage).isEmpty()){
+					partnerlessSenders.add(sendMessage);
 				}
+				
+				return CONTINUE;
 			}
-		}
+		});
 		
 		if(partnerlessSenders.isEmpty()){
 			System.out.println("No partnerless senders found.");
@@ -244,7 +247,7 @@ public class MatchStore{
 			System.out.println("{");
 			Iterator<ATerm> partnerlessSendersIterator = partnerlessSenders.iterator();
 			while(partnerlessSendersIterator.hasNext()){
-				System.out.println(partnerlessSendersIterator.next());
+				System.out.println("\t"+partnerlessSendersIterator.next());
 			}
 			System.out.println("}");
 		}
