@@ -20,7 +20,7 @@ public class Print extends Atom{
 		super(tbfactory, posInfo);
 		
 		arg = new Ref(a);
-		setAtomArgs(arg);
+		setAtomArgs(new Ref[]{arg});
 	}
 	
 	public ProcessExpression copy(){

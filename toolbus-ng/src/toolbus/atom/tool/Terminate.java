@@ -23,7 +23,7 @@ public class Terminate extends Atom{
 		
 		this.toolId = new Ref(toolId);
 		this.request = new Ref(request);
-		setAtomArgs(this.toolId);
+		setAtomArgs(new Ref[]{this.toolId});
 		externalNameAsReceivedByTool = "rec-terminate";
 	}
 	

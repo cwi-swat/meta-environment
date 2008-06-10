@@ -12,23 +12,23 @@ import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 
 public class NoNote extends Atom{
-	private final Ref msgpat;
+	private final ATerm msgpat;
 	
 	public NoNote(ATerm msgpat, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
-		this.msgpat = new Ref(msgpat);
-		setAtomArgs(this.msgpat);
+		this.msgpat = msgpat;
+		setAtomArgs(new Ref[]{new Ref(msgpat)});
 	}
 	
 	public ProcessExpression copy(){
-		Atom a = new NoNote(msgpat.value, tbfactory, getPosInfo());
+		Atom a = new NoNote(msgpat, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}
 	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
-		if(getProcess().noNoteInQueue(this.msgpat.value, getEnv())) return true;
+		if(getProcess().noNoteInQueue(msgpat, getEnv())) return true;
 		
 		return false;
 	}

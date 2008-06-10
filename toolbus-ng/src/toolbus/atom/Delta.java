@@ -10,6 +10,7 @@ import toolbus.process.ProcessExpression;
  */
 
 public class Delta extends Atom{
+	private final static State empty = new State();
 	
 	public Delta(TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
@@ -22,7 +23,7 @@ public class Delta extends Atom{
 	}
 	
 	public State getFirst(){
-		return new State(); // replace by single copy
+		return empty;
 	}
 	
 	public boolean execute(){

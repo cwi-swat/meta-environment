@@ -16,7 +16,7 @@ public class EndScope extends Atom{
 	public EndScope(ATermList formals, TBTermFactory tbfactory){
 		super(tbfactory, null);
 		refformals = new Ref(formals);
-		setAtomArgs(this.refformals);
+		setAtomArgs(new Ref[]{refformals});
 	}
 	
 	public ProcessExpression copy(){

@@ -20,7 +20,7 @@ public class RecRequest extends Atom{
 		
 		this.toolId = new Ref(toolId);
 		this.request = new Ref(request);
-		setAtomArgs(this.toolId, this.request);
+		setAtomArgs(new Ref[]{this.toolId, this.request});
 		externalNameAsReceivedByTool = "snd-request";
 	}
 	

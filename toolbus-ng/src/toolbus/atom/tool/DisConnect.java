@@ -24,7 +24,7 @@ public class DisConnect extends Atom{
 		super(tbfactory, posInfo);
 		
 		this.toolId = new Ref(toolId);
-		setAtomArgs(this.toolId);
+		setAtomArgs(new Ref[]{this.toolId});
 		
 		externalNameAsReceivedByTool = "snd-disconnect";
 	}

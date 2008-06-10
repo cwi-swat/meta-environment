@@ -93,7 +93,6 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		//System.err.println("ProcessCall.replaceFormals(" + name + "): " + env);
 		env = e.copy();
 		
-		// env = e;
 		actuals = (ATermList) tbfactory.replaceFormals(originalActuals, env);
 	}
 	
@@ -117,7 +116,6 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		
 		// System.err.println("ProcessCall.compile(" + name + ", " + processInstance + "," + PE + ")");
 		formals = definition.getFormals();
-		actuals = (ATermList) tbfactory.resolveVarTypes(actuals, env);
 		
 		env.introduceBindings(formals, actuals, evalArgs);
 		actuals = (ATermList) tbfactory.replaceFormals(actuals, env);

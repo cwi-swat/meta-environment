@@ -48,15 +48,14 @@ public class IfElse extends ProcessExpression{
 	
 	protected void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException{
 		left.compile(P, calls, follows);
-		ATerm rtest = P.getTBTermFactory().resolveVarTypes(test, env);
-		left.getFirst().setTest(rtest, env);
+		left.getFirst().setTest(test, env);
 		right.compile(P, calls, follows);
 		
-		ATerm notTest = rtest.getFactory().make("not(<term>)", rtest);
+		ATerm notTest = test.getFactory().make("not(<term>)", test);
 		
 		right.getFirst().setTest(notTest, env);
 		
-		setFollow(left.getFollow().union(right.getFollow()));
+		setFollow(follows);
 		// System.err.println("rtest = " + rtest);
 		// System.err.println("notTest = " + notTest);
 		// System.err.println("env = " + env);

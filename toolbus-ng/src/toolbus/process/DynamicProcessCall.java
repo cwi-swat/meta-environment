@@ -103,7 +103,6 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 		
 		// System.err.println("ProcessCall.compile(" + name + ", " + processInstance + "," + PE + ")");
 		formals = definition.getFormals();
-		actuals = (ATermList) tbfactory.resolveVarTypes(actuals, env);
 		
 		env.introduceBindings(formals, actuals, true);
 		actuals = (ATermList) tbfactory.replaceFormals(actuals, env);
@@ -127,9 +126,6 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 		name = dynprocessname.getName();
 		compileStaticOrDynamicCall();
 		//System.err.println("Dynamic process name " + name + " => " + dynprocessname);
-		AtomSet callElements = PE.getAtoms();
-		processInstance.addElements(callElements);
-		processInstance.addPartnersToAllProcesses(callElements);
 	}
 	
 	private void finishCall(){
@@ -137,8 +133,7 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 		definition = null;
 		AtomSet callElements = PE.getAtoms();
 		PE = null;
-		processInstance.delElements(callElements);
-		processInstance.delPartnersFromAllProcesses(callElements);
+		processInstance.deregisterCommunicationAtoms(callElements);
 	}
 	
 	public AtomSet getAtoms(){

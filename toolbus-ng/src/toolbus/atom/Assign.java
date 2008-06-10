@@ -24,7 +24,7 @@ public class Assign extends Atom{
 		
 		var = new Ref(v);
 		exp = new Ref(e);
-		setAtomArgs(var, exp);
+		setAtomArgs(new Ref[]{var, exp});
 	}
 	
 	public ProcessExpression copy(){
@@ -38,13 +38,11 @@ public class Assign extends Atom{
 		setEnv(env);
 		// System.err.println("Assign.replaceformals: " + var.value + "; " + exp.value);
 		// System.err.println("env = " + env);
-		var.value = tbfactory.resolveVarTypes(var.value, env);
 		env.setAssignable((TBTermVar) var.value);
 		
 		// System.err.println("Assign.replaceformals: " + var.value);
 		var.value = tbfactory.replaceAssignableVar((TBTermVar) var.value, env);
 		
-		exp.value = tbfactory.resolveVarTypes(exp.value, env);
 		exp.value = tbfactory.replaceFormals(exp.value, env);
 		// System.err.println("Assign.replaceformals: => " + var.value + "; " + exp.value);
 		// System.err.println("Assign.replaceformals: env = "+env);;

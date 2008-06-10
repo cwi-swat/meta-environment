@@ -4,72 +4,40 @@
 
 package toolbus.atom.msg;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import toolbus.AtomSet;
-import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.exceptions.ToolBusException;
+import toolbus.matching.MatchStore;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
 
 public class SndMsg extends MsgAtom{
-	// The RecMsgs in other processes with this SndMsg can communicate
-	private final List<RecMsg> msgPartners;
 	private int index;
 	
 	public SndMsg(ATerm msg, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(msg, tbfactory, posInfo);
 		
-		msgPartners = new ArrayList<RecMsg>();
 		index = 0;
 	}
 	
 	public ProcessExpression copy(){
-		Atom a = new SndMsg(getMsg(), tbfactory, getPosInfo());
+		Atom a = new SndMsg(msg, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}
 	
-	public boolean canCommunicate(RecMsg recMsg){
-		return tbfactory.mightMatch(recMsg.getMsg(), getMsg());
-	}
-
-	public boolean matchesPartner(RecMsg recMsg){
-		return tbfactory.match(recMsg.getMatchPattern(), recMsg.getEnv(), matchPattern, getEnv());
-	}
-	
-	public void addMsgPartner(RecMsg a){
-		if(msgPartners.contains(a)) return; // This is to prevent the same rec-msg from being added multiple times.
-		
-		msgPartners.add(a);
-		//LoggerFactory.log(this.getProcess().getProcessName(), "add partner " + a, IToolBusLoggerConstants.MESSAGES);
-	}
-	
-	public void delMsgPartner(StateElement a){
-		msgPartners.remove(a);
-	}
-	
-	public void addPartners(AtomSet atoms){
-		Iterator<Atom> atomSetIterator = atoms.iterator();
-		while(atomSetIterator.hasNext()){
-			Atom b = atomSetIterator.next();
-			
-			if(b instanceof RecMsg){
-				RecMsg cb = (RecMsg) b;
-				if(canCommunicate(cb)){
-					addMsgPartner(cb);
-				}
-			}
-		}
+	private boolean matchesPartner(RecMsg recMsg){
+		return tbfactory.match(recMsg.msg, recMsg.getEnv(), msg, getEnv());
 	}
 	
 	public boolean execute() throws ToolBusException{
 		if(isEnabled()){
+			MatchStore matchStore = getToolBus().getMatchStore();
+			List<RecMsg> msgPartners = matchStore.getPossibleMessagePartners(msg);
+			
 			int size = msgPartners.size();
 			
 			if(size == 0) return false;
@@ -91,6 +59,9 @@ public class SndMsg extends MsgAtom{
 	
 	public ProcessInstance[] debugExecute() throws ToolBusException{
 		if(isEnabled()){
+			MatchStore matchStore = getToolBus().getMatchStore();
+			List<RecMsg> msgPartners = matchStore.getPossibleMessagePartners(msg);
+			
 			int size = msgPartners.size();
 			
 			if(size == 0) return null;
@@ -100,8 +71,9 @@ public class SndMsg extends MsgAtom{
 				ProcessInstance pb = recMsg.getProcess();
 				
 				if(pb.contains(recMsg) && recMsg.isEnabled() && matchesPartner(recMsg)){
+					//LoggerFactory.log("unknown", "    " + this, IToolBusLoggerConstants.MESSAGES);
+					//LoggerFactory.log("unknown", "<=> " + b, IToolBusLoggerConstants.MESSAGES);
 					pb.gotoNextStateAndActivate(recMsg);
-					
 					return new ProcessInstance[]{pb};
 				}
 			}

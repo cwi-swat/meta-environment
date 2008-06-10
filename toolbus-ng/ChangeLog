@@ -1,3 +1,6 @@
+Tue Jun 10 14:42:14 CEST 2008 <lankamp@cwi.nl>
+  * Merged the message matching stuff from the parallelization branch to the trunk. This speeds up inter-process communication considerably.
+
 Fri Apr 25 15:13:15 CEST 2008 <lankamp@cwi.nl>
   * Added Request and Response atoms. These make it possible to create
   blocking events (sort of). The adapter will guarantee thread-local

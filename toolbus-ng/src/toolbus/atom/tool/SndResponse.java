@@ -20,7 +20,7 @@ public class SndResponse extends Atom{
 		
 		this.toolId = new Ref(toolId);
 		this.response = new Ref(response);
-		setAtomArgs(this.toolId, this.response);
+		setAtomArgs(new Ref[]{this.toolId, this.response});
 		externalNameAsReceivedByTool = "rec-response";
 	}
 	
