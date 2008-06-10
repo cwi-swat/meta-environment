@@ -7,28 +7,28 @@ sorts Pattern AbsPattern SynPattern SynPatternChar SynPatternSymbol PatternVar Q
       RegPattern RegPatternChar
 
 lexical syntax
-         "\\<"                                     -> SynPatternChar
-         "\\>"                                     -> SynPatternChar
-         "\\|"                                     -> SynPatternChar
-         ~[\<\>\|]                                 -> SynPatternChar
+         "\\<"                                       -> SynPatternChar
+         "\\>"                                       -> SynPatternChar
+         "\\|"                                       -> SynPatternChar
+         ~[\<\>\|]                                   -> SynPatternChar
 
-         ~[\/]                                     -> RegPatternChar
-         "\\/"                                     -> RegPatternChar
-         "/" RegPatternChar* "/"                   -> RegPattern
+         ~[\/]                                       -> RegPatternChar
+         "\\/"                                       -> RegPatternChar
+         "/" RegPatternChar* "/"                     -> RegPattern
 
 context-free syntax
-         "<" Type? Name  ">"                       -> PatternVar
+         "<" Type? Name  ">"                         -> PatternVar
 
-         SynPatternChar                            -> SynPatternSymbol
-         PatternVar                                -> SynPatternSymbol
-         "[|" SynPatternSymbol* "|]"               -> QuotedSynPattern
-         QuotedSynPattern                          -> SynPattern
+         SynPatternChar                              -> SynPatternSymbol
+         PatternVar                                  -> SynPatternSymbol
+         "[|" SynPatternSymbol* "|]"                 -> QuotedSynPattern
+         QuotedSynPattern                            -> SynPattern
 
-         Name                                      -> AbsPattern   {cons("typename-abspat")}
-         StringLiteral                             -> AbsPattern   {cons("typestr-abspat")}
-         PatternVar                                -> AbsPattern   {cons("typevar-abspat")}
-         Name "(" {AbsPattern ","}* ")"            -> AbsPattern   {cons("cons-abspat-name")}
-         StringLiteral "(" {AbsPattern ","}* ")"   -> AbsPattern   {cons("const-abspat-str")}
+         Name                                        -> AbsPattern   {cons("typename-abspat")}
+         StringLiteral                               -> AbsPattern   {cons("typestr-abspat")}
+         PatternVar                                  -> AbsPattern   {cons("typevar-abspat")}
+         Name "(" {AbsPattern ","}* ")"              -> AbsPattern   {cons("cons-abspat-name")}
+         StringLiteral "(" {AbsPattern ","}* ")"     -> AbsPattern   {cons("const-abspat-str")}
 
-         RegPattern | SynPattern | AbsPattern      -> Pattern
+         "!"? (RegPattern | SynPattern | AbsPattern) -> Pattern
 

@@ -1264,7 +1264,7 @@ fun &amp;T &lt;= A bar()</programlisting></para>
     <section>
       <title>Patterns</title>
 
-      <para>We distinguish three kinds of patterns:</para>
+      <para>We distinguish four kinds of patterns:</para>
 
       <itemizedlist>
         <listitem>
@@ -1342,6 +1342,12 @@ fun &amp;T &lt;= A bar()</programlisting></para>
         </listitem>
       </itemizedlist>
 
+      <para>A pattern may be turned into an <emphasis>anti-pattern</emphasis>
+      by prefixing it with the symbol <literal>!</literal>. An anti-pattern
+      matches in all cases where the original pattern does not match. A match
+      of an anti-pattern cannot bind any variables but these variables are
+      nonetheless reserved in the corresponding scope.</para>
+
       <section>
         <title>Abstract Patterns</title>
 
@@ -1359,7 +1365,7 @@ fun &amp;T &lt;= A bar()</programlisting></para>
         that are used to match a string value and to decompose it in parts and
         also to compose new strings. In a match position, a regular expression
         may be preceeded by a newly declared variable (always of type
-        <literal>list[str]</literal>) and the symbol <literal>~=</literal>.
+        <literal>list[str]</literal>) and the symbol <literal>:=</literal>.
         When the variable is present it will contain the matches obtained by
         the regular expression.</para>
       </section>
@@ -2959,8 +2965,15 @@ lexical syntax
    ~[\"]             -&gt; NQChar
    [\"] NQChar* [\"] -&gt; String</programlisting>A function that removes the
       <emphasis>first</emphasis> newline from a string can be written
-      as:<programlisting>fun String removeNL(String S){
+      as:<programlisting>fun String removeFirstNL(String S){
     switch S {
+      case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2&gt; "\"") =&gt;
+           string("\"" &lt;Chars1&gt; &lt;Chars2&gt; "\"")
+    }
+}</programlisting></para>
+
+      <para>A function that removes all newline from a string:<programlisting>fun String removeAllNL(String S){
+    visit S {
       case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2&gt; "\"") =&gt;
            string("\"" &lt;Chars1&gt; &lt;Chars2&gt; "\"")
     }
@@ -5423,12 +5436,6 @@ public fun void addRelPDB(str name, rel[&amp;T] incr)
           <listitem>
             <para>Named patterns to avoid building a term, i.e. w@[| while
             $Exp do $stat od |].</para>
-          </listitem>
-
-          <listitem>
-            <para>Anti-patterns, i.e. the complement of a patterns: ! [| while
-            $Exp do $stat od |] matches anything but a while. (we had that in
-            ASF+SDF too, it's needed)</para>
           </listitem>
 
           <listitem>
