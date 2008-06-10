@@ -168,7 +168,7 @@ parser code {:
 	}
     
     public void syntax_error(java_cup.runtime.Symbol badToken){
-    	throw new SyntaxErrorException(badToken.left + 1, badToken.right + 1, badToken.sym);
+    	throw new SyntaxErrorException(badToken.left + 1, badToken.right + 1, ((Lexer) getScanner()).getPosition() + 1, badToken.sym);
     }
 	
 	public class SyntaxErrorException extends RuntimeException{
@@ -176,13 +176,15 @@ parser code {:
 		
 		public final int line;
 		public final int column;
+		public final int position;
 		public final int sym;
 
-		public SyntaxErrorException(int line, int column, int sym){
+		public SyntaxErrorException(int line, int column, int position, int sym){
 			super();
 			
 			this.line = line;
 			this.column = column;
+			this.position = position;
 			this.sym = sym;
 		}
 		

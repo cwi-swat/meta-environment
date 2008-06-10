@@ -2,7 +2,7 @@ package toolbus.parsercup;
 
 
 /* Lexical syntax for ToolBus scripts */
-import java_cup.runtime.*;
+import java_cup.runtime.Symbol;
 
 %%
 
@@ -10,17 +10,23 @@ import java_cup.runtime.*;
 %unicode
 %cup
 %public
+%char
 %line
 %column
 
 %{
   StringBuilder string = new StringBuilder();
 
-  private Symbol symbol(int type) {
+  private Symbol symbol(int type){
     return new Symbol(type, yyline, yycolumn);
   }
-  private Symbol symbol(int type, Object value) {
+  
+  private Symbol symbol(int type, Object value){
     return new Symbol(type, yyline, yycolumn, value);
+  }
+  
+  public int getPosition(){
+	  return yychar;
   }
 %}
 
