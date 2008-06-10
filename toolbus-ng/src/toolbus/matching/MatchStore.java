@@ -69,8 +69,6 @@ public class MatchStore{
 				addSendNotePattern((SndNote) atom, subscribeNotes);
 			}
 		}
-		
-		printPartnerlessSenders();
 	}
 	
 	private void addReceiveMessagePattern(RecMsg message, List<ATerm> receiveMessages){
