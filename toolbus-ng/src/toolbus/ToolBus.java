@@ -101,7 +101,7 @@ public class ToolBus{
 		procdefs = new ConcurrentHashMap<String, ProcessDefinition>();
 		tooldefs = new ConcurrentHashMap<String, ToolDefinition>();
 		
-		matchStore = new MatchStore(tbfactory);
+		matchStore = new MatchStore(this);
 		
 		propertyManager = new PropertyManager(args);
 		

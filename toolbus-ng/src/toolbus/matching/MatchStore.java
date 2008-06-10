@@ -8,12 +8,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import toolbus.AtomSet;
 import toolbus.TBTermFactory;
+import toolbus.ToolBus;
 import toolbus.atom.Atom;
 import toolbus.atom.msg.RecMsg;
 import toolbus.atom.msg.SndMsg;
 import toolbus.atom.note.SndNote;
 import toolbus.atom.note.Subscribe;
+import toolbus.process.ProcessDefinition;
+import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
@@ -23,6 +28,7 @@ public class MatchStore{
 	private final static List<RecMsg> NOMESSAGEPARTNERS = new ArrayList<RecMsg>(0);
 	private final static Set<ProcessInstance> NONOTEPARTNERS = new HashSet<ProcessInstance>(0);
 	
+	private final ToolBus toolbus;
 	private final TBTermFactory tbFactory;
 	
 	private final ConcurrentHashMap<ATerm, List<ATerm>> messageLinks;
@@ -34,10 +40,11 @@ public class MatchStore{
 	private final Object messageLock = new Object();
 	private final Object noteLock = new Object();
 	
-	public MatchStore(TBTermFactory tbFactory){
+	public MatchStore(ToolBus toolbus){
 		super();
 		
-		this.tbFactory = tbFactory;
+		this.toolbus = toolbus;
+		this.tbFactory = toolbus.getTBTermFactory();
 		
 		messageLinks = new ConcurrentHashMap<ATerm, List<ATerm>>();
 		noteLinks = new ConcurrentHashMap<ATerm, List<ATerm>>();
@@ -241,11 +248,32 @@ public class MatchStore{
 		if(partnerlessSenders.isEmpty()){
 			System.out.println("No partnerless senders found.");
 		}else{
-			System.out.println("Partnerless senders:");
+			System.out.println("Partnerless sender patterns:");
 			System.out.println("{");
 			Iterator<ATerm> partnerlessSendersIterator = partnerlessSenders.iterator();
 			while(partnerlessSendersIterator.hasNext()){
 				System.out.println("\t"+partnerlessSendersIterator.next());
+			}
+			System.out.println("}");
+			
+			
+			System.out.println("Positions of partnerless atoms:");
+			System.out.println("{");
+			List<ProcessDefinition> processDefinitions = toolbus.getProcessDefinitions();
+			Iterator<ProcessDefinition> processDefinitionsIterator = processDefinitions.iterator();
+			while(processDefinitionsIterator.hasNext()){
+				ProcessDefinition processDefinition = processDefinitionsIterator.next();
+				ProcessExpression processExpression = processDefinition.getOriginalProcessExpression();
+				AtomSet atoms = processExpression.getAtoms();
+				Iterator<Atom> atomsIterator = atoms.iterator();
+				while(atomsIterator.hasNext()){
+					Atom atom = atomsIterator.next();
+					if(atom instanceof SndMsg){
+						System.out.println("\t"+atom.getPosInfo()+"\t\t: "+atom);
+					}else if(atom instanceof SndNote){
+						System.out.println("\t"+atom.getPosInfo()+"\t\t: "+atom);
+					}
+				}
 			}
 			System.out.println("}");
 		}

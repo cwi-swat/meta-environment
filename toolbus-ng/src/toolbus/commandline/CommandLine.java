@@ -56,6 +56,8 @@ public class CommandLine{
 						toolbus.getToolInstanceManager().printQueueTerms();
 					}else if(line.equals("dump toolbus state")){
 						toolbus.showStatus();
+					}else if(line.equals("dump partnerless senders")){
+						toolbus.getMatchStore().printPartnerlessSenders();
 					}else if(line.equals("shutdown")){
 						toolbus.shutdown(toolbus.getTBTermFactory().makeList());
 					}else if(line.equals("help")){
