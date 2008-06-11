@@ -1032,6 +1032,10 @@ public class parser extends java_cup.runtime.lr_parser {
     	throw new SyntaxErrorException(badToken.left + 1, badToken.right + 1, ((Lexer) getScanner()).getPosition() + 1, badToken.sym);
     }
 	
+	public void undeclaredVariableError(java_cup.runtime.Symbol badToken){
+		throw new UndeclaredVariableException(badToken.left + 1, badToken.right + 1, ((Lexer) getScanner()).getPosition() + 1, badToken.toString());
+	}
+	
 	public class SyntaxErrorException extends RuntimeException{
 		private static final long serialVersionUID = 2315538188275748342L;
 		
@@ -1051,6 +1055,28 @@ public class parser extends java_cup.runtime.lr_parser {
 		
 		public String getMessage(){
 			return "Syntax error in "+fileName+", at line: "+line+", column: "+column+", symbol id: "+sym;
+		}
+	}
+	
+	public class UndeclaredVariableException extends RuntimeException{
+		private static final long serialVersionUID = 1485650590025885587L;
+		
+		public final int line;
+		public final int column;
+		public final int position;
+		public final String var;
+
+		public UndeclaredVariableException(int line, int column, int position, String var){
+			super();
+			
+			this.line = line;
+			this.column = column;
+			this.position = position;
+			this.var = var;
+		}
+		
+		public String getMessage(){
+			return "Undeclared variable in "+fileName+", at line: "+line+", column: "+column+", symbol id: "+var;
 		}
 	}
 
@@ -1824,11 +1850,11 @@ class CUP$parser$actions {
           case 55: // assign ::= NAME ASSIGN term 
             {
               Atom RESULT =null;
-		String nm = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		String nm = (String) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		ATerm t = (ATerm)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 ATerm tnm = parser.tbfactory.make(nm);
                                                ATerm type = parser.declaredVaribles.get(nm);
-     									       if(type == null) throw new RuntimeException("Undeclared variable: "+nm);
+     									       if(type == null) parser.undeclaredVariableError((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2));
         									   RESULT = new Assign(
         												   parser.tbfactory.mkVar(tnm, parser.processName, type),
         									               t,
@@ -2245,7 +2271,7 @@ class CUP$parser$actions {
           case 15: // var ::= NAME 
             {
               ATerm RESULT =null;
-		String nm = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		String nm = (String) ((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 AFun af = parser.tbfactory.makeAFun(nm, 0, false);
      									      ATerm at = parser.tbfactory.makeAppl(af);
      									      String replacement = parser.toolbus.getProperty(nm);
@@ -2253,7 +2279,7 @@ class CUP$parser$actions {
 												RESULT = parser.tbfactory.make(replacement);
 										      } else {
 										        ATerm type = parser.declaredVaribles.get(nm);
-     									        if(type == null) throw new RuntimeException("Undeclared variable: "+nm);
+     									        if(type == null) parser.undeclaredVariableError((java_cup.runtime.Symbol) CUP$parser$stack.peek());
      									        RESULT = parser.tbfactory.mkVar(at, parser.processName, type);
      									      }
      									   
@@ -2265,11 +2291,11 @@ class CUP$parser$actions {
           case 14: // result_var ::= NAME QUESTION 
             {
               ATerm RESULT =null;
-		String nm = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		String nm = (String) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 AFun af = parser.tbfactory.makeAFun(nm, 0, false);
      									      ATerm at = parser.tbfactory.makeAppl(af);
      									      ATerm type = parser.declaredVaribles.get(nm);
-     									      if(type == null) throw new RuntimeException("Undeclared variable: "+nm);
+     									      if(type == null) parser.undeclaredVariableError((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1));
      									      RESULT = parser.tbfactory.mkResVar(at, parser.processName, type);
      									   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("result_var",1, RESULT);
