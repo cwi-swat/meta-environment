@@ -13,7 +13,6 @@ import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.atom.msg.RecMsg;
 import toolbus.atom.msg.SndMsg;
-import toolbus.atom.note.RecNote;
 import toolbus.atom.note.SndNote;
 import toolbus.atom.note.Subscribe;
 import toolbus.process.ProcessInstance;
@@ -427,7 +426,7 @@ public class MatchStore{
 	 */
 	private void printPartnerlessReceivers(){
 		final Set<ATerm> partnerlessMessages = new HashSet<ATerm>();
-		final Set<ATerm> partnerlessNotes = new HashSet<ATerm>();
+		final Set<ATerm> partnerlessSubscribes = new HashSet<ATerm>();
 		
 		messageLinks.iterate(new ReadOnlyHashMapEntryHandler<ATerm, List<ATerm>>(){
 			public int handle(ATerm receiveMessage, List<ATerm> value){
@@ -440,16 +439,16 @@ public class MatchStore{
 		});
 
 		noteLinks.iterate(new ReadOnlyHashMapEntryHandler<ATerm, List<ATerm>>(){
-			public int handle(ATerm receiveNote, List<ATerm> value){
-				if(noteLinks.get(receiveNote).isEmpty()){
-					partnerlessNotes.add(receiveNote);
+			public int handle(ATerm subscribe, List<ATerm> value){
+				if(noteLinks.get(subscribe).isEmpty()){
+					partnerlessSubscribes.add(subscribe);
 				}
 				
 				return CONTINUE;
 			}
 		});
 		
-		if((partnerlessMessages.size() + partnerlessNotes.size()) == 0){
+		if((partnerlessMessages.size() + partnerlessSubscribes.size()) == 0){
 			System.out.println("No partnerless receivers found.");
 		}else{
 			System.out.println("Partnerless receive atoms:");
@@ -460,8 +459,8 @@ public class MatchStore{
 				Atom atom = atomsIterator.next();
 				if(atom instanceof RecMsg){
 					if(partnerlessMessages.contains(((RecMsg) atom).msg)) System.out.println("\t"+atom.getPosInfo()+"\t\t: "+atom);
-				}else if(atom instanceof RecNote){
-					if(partnerlessMessages.contains(((RecNote) atom).notePattern)) System.out.println("\t"+atom.getPosInfo()+"\t\t: "+atom);
+				}else if(atom instanceof Subscribe){
+					if(partnerlessSubscribes.contains(((Subscribe) atom).notePattern)) System.out.println("\t"+atom.getPosInfo()+"\t\t: "+atom);
 				}
 			}
 			
