@@ -6,9 +6,10 @@ fun Integer* sort(Integer* Numbers){
               <Integer N1> <Integer N2> 
            <Integer* Rest2>:
            if(N1 > N2){
-              return sort(make <Integer* Rest1> 
+              return sort( [| <Integer* Rest1> 
                                   <Integer N2> <Integer N1> 
-                               <Integer* Rest>);
+                               <Integer* Rest>
+                           |] );
            }
     };
     return Numbers
