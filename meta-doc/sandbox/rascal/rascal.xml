@@ -423,6 +423,10 @@
             </listitem>
 
             <listitem>
+              <para>graphs</para>
+            </listitem>
+
+            <listitem>
               <para>tuples</para>
             </listitem>
           </itemizedlist>
@@ -732,7 +736,7 @@
         <listitem>
           <para>Sorts and Symbols are inherited from SDF but we extend sort
           (that may only start with an uppercase letter in SDF) to be a more
-          liberal Name. <remark>SDF Sorts may include a dash symbol (-)which
+          liberal Name. <remark>SDF Sorts may include a dash symbol (-) which
           is not allowed in Java Identifiers. Forbidding the dash requires
           changing all existing SDF definitions. Allowing a dash in Names
           requires an added check in the compiler that Identifiers with dashes
@@ -867,8 +871,10 @@
             <para>A type declaration introduces a name for a new type that is
             a subtype of a given type, e.g.,<programlisting>type rel[node,node] Graph</programlisting>introduces
             the type <literal>Graph</literal> as a subtype of
-            <literal>rel[node,node]</literal>. There are no built-in
-            subtypes.</para>
+            <literal>rel[node,node]</literal>. There are no built-in subtypes.
+            <caution>
+                <para>Is that true? How about int/double/number?</para>
+              </caution></para>
           </listitem>
 
           <listitem>
@@ -1116,8 +1122,60 @@
         </itemizedlist>
 
         <para>Here are some examples.<caution>
-            <para>These examples need more thought!</para>
+            <para>These examples need more thought! In particular the
+            int/double/number stuff sucks. Proposal:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Drop <literal>the type number</literal>: we only have
+                <literal>int</literal> and <literal>double</literal>.</para>
+              </listitem>
+
+              <listitem>
+                <para>We have conversion functions <literal>toInt</literal>
+                and <literal>toDouble</literal> in the standard
+                library:<programlisting>public fun double toDouble(int I)
+ primitive("Int.toDouble")
+
+public fun int toInt(double D)
+  primitive("Double.toInt")</programlisting></para>
+              </listitem>
+
+              <listitem>
+                <para>There are no automatic conversions, use explicit
+                conversions when needed.</para>
+              </listitem>
+            </itemizedlist>
+          </caution><caution>
+            <para>There is one case where this can become unacceptable:
+            printing messages. In Java, the string concatenation operator + is
+            highly polymorphic and converts its arguments to string when
+            needed. How can we get the equivalent of<programlisting>stdout.println("Value " + v + " of arg " + n + " too large")</programlisting></para>
+
+            <para>Solution directions:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Introduce a polymorphic + on strings. This not so easy
+                given our restrictions on overloading.</para>
+              </listitem>
+
+              <listitem>
+                <para>Introduce a print statement with variable
+                arguments:<programlisting>print "Value ", v, " of arg ", n, " too large"</programlisting></para>
+              </listitem>
+
+              <listitem>
+                <para>Introduce a polymorphic print function that can print
+                any value:<programlisting>public fun void print(&amp;T V)
+  primitive("IO.print")</programlisting></para>
+
+                <para>The example would now become:<programlisting>print([| Value &lt;v&gt; of arg &lt;n&gt; too large |])</programlisting></para>
+              </listitem>
+            </itemizedlist>
           </caution></para>
+
+        <para>Here are, after all the warnings, the original examples:</para>
 
         <para><programlisting>%% OK, since int and double are incomparable 
 %% (both subtypes of 'number')
@@ -3507,6 +3565,54 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
             </row>
 
             <row>
+              <entry>toInt</entry>
+
+              <entry>x</entry>
+
+              <entry>-</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>toDouble</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>-</entry>
+
+              <entry>x</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
               <entry>toString</entry>
 
               <entry>x</entry>
@@ -4387,6 +4493,12 @@ public fun int arb()
 public fun str toString(bool B)
  primitive("Bool.toString")
 
+public fun int toInt(bool B)
+ primitive("Bool.toInt")
+
+public fun double toDouble(bool B)
+ primitive("Bool.toDouble")
+
 %% --- Integer (int)------------------------------------------
 
 public fun bool ==(int I1, int I2)
@@ -4408,6 +4520,9 @@ public fun int *(int I1, int I2)
 public fun int arb(int bgn, int end)
        throws illegal_argument(str msg) %% if(end - bgn &lt;= 0)
  primitive("Int.arb") 
+
+public fun double toDouble(int I)
+ primitive("Int.toDouble")
 
 public fun str toString(int I)
  primitive("toStringInt")
@@ -4437,6 +4552,9 @@ public fun double arb(double bgn, double end)
        throws illegal_argument(str msg) %% if(end - bgn &lt;= 0)
  primitive("Double.arb")
 
+public fun int toInt(double D)
+  primitive("Double.toInt")
+
 public fun str toString(double D)
   primitive("Double.toString")
 
@@ -4457,6 +4575,14 @@ public fun int size(str S)
 public fun int get(str S, int N)
        throws out_of_range(str msg)
  primitive("String.get")
+
+public fun int toInt(str S)
+       throws cannot_convert_to_int(str msg)
+  primitive("String.toInt")
+
+public fun int toDouble(str S)
+       throws cannot_convert_to_double(str msg)
+  primitive("String.toDouble")
 
 public fun list[int] toList(str S)
        throws cannot_convert_int_to_char(str msg)
@@ -5027,6 +5153,12 @@ public fun void write(str filename, &amp;T Subject)
        throws cannot_create(str msg)  
        throws write_error(str msg)
   primitive("IO.write")
+
+public fun void print(&amp;T V)
+  primitive("IO.print")
+
+public fun void println(&amp;T V)
+  primitive("IO.println")
 
 %% --- Interface with the Program Database -------------------
 %% The following function provide a bare minimum and will

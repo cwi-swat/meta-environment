@@ -54,6 +54,12 @@ public fun int arb()
 public fun str toString(bool B)
  primitive("Bool.toString")
 
+public fun int toInt(bool B)
+ primitive("Bool.toInt")
+
+public fun double toDouble(bool B)
+ primitive("Bool.toDouble")
+
 %% --- Integer (int)------------------------------------------
 
 public fun bool ==(int I1, int I2)
@@ -75,6 +81,9 @@ public fun int *(int I1, int I2)
 public fun int arb(int bgn, int end)
        throws illegal_argument(str msg) %% if(end - bgn <= 0)
  primitive("Int.arb") 
+
+public fun double toDouble(int I)
+ primitive("Int.toDouble")
 
 public fun str toString(int I)
  primitive("toStringInt")
@@ -104,6 +113,9 @@ public fun double arb(double bgn, double end)
        throws illegal_argument(str msg) %% if(end - bgn <= 0)
  primitive("Double.arb")
 
+public fun int toInt(double D)
+  primitive("Double.toInt")
+
 public fun str toString(double D)
   primitive("Double.toString")
 
@@ -124,6 +136,14 @@ public fun int size(str S)
 public fun int get(str S, int N)
        throws out_of_range(str msg)
  primitive("String.get")
+
+public fun int toInt(str S)
+       throws cannot_convert_to_int(str msg)
+  primitive("String.toInt")
+
+public fun int toDouble(str S)
+       throws cannot_convert_to_double(str msg)
+  primitive("String.toDouble")
 
 public fun list[int] toList(str S)
        throws cannot_convert_int_to_char(str msg)
@@ -694,6 +714,12 @@ public fun void write(str filename, &T Subject)
        throws cannot_create(str msg)  
        throws write_error(str msg)
   primitive("IO.write")
+
+public fun void print(&T V)
+  primitive("IO.print")
+
+public fun void println(&T V)
+  primitive("IO.println")
 
 %% --- Interface with the Program Database -------------------
 %% The following function provide a bare minimum and will
