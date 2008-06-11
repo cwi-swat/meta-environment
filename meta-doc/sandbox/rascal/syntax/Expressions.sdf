@@ -53,9 +53,11 @@ context-free priorities
          Expression "+"                                          -> Expression {cons("trans1")}
        } >
 
-%% Arithmetic operators
+%% Standard operators
    %% multiplication/intersection
         Expression "*" Expression                                -> Expression {cons("mul"), left} >
+   %% intersection
+        Expression "&" Expression                                -> Expression {cons("inter"), left} >     
    %% division
         Expression "/" Expression                                -> Expression {cons("div"), left} >
    %% addition/union/concatenation (of tuples, lists and strings)
@@ -137,7 +139,7 @@ context-free syntax
          "if" "(" Predicate ")" Statement                        -> Statement  {cons("if-then")}
 %% Do we want elseif etc.?
 
-         "="  | "+=" | "-=" | "*=" | "/="                        -> IncrAssignOp {cons("incr-assignop")}
+         "="  | "+=" | "-=" | "*=" | "/="  | "&="                -> IncrAssignOp {cons("incr-assignop")}
 
          Expression                                              -> Statement
 

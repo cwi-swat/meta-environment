@@ -3069,15 +3069,15 @@ context-free syntax
 
       <programlisting>module Innerproduct
 
-imports Vector-syntax
+import Vector-syntax;
 
 fun int innerProduct(Vector V1, V2){
-    if ( ( &lt;Integer N1&gt; &lt;Integer* Rest1&gt; ) := V1 &amp;&amp;
-         ( &lt;Integer N2&gt; &lt;Integer* Rest2&gt; ) := V2 
+    if ( &lt;Integer N1&gt; &lt;Integer* Rest1&gt; := V1 and
+         &lt;Integer N2&gt; &lt;Integer* Rest2&gt; := V2 
        )
-       return (N1*N2) + innerProduct( (&lt;Rest1&gt;), (&lt;Rest2&gt;) )
-    else 
-       return 0;
+       return (N1*N2) + innerProduct( [| (&lt;Rest1&gt;) |], [| (&lt;Rest2&gt;) |] )
+    else
+       return 0
 }</programlisting>
     </section>
 
@@ -3094,53 +3094,61 @@ fun Integer* sort(Integer* Numbers){
               &lt;Integer N1&gt; &lt;Integer N2&gt; 
            &lt;Integer* Rest2&gt;:
            if(N1 &gt; N2){
-              return sort(make &lt;Integer* Rest1&gt; 
+              return sort( [| &lt;Integer* Rest1&gt; 
                                   &lt;Integer N2&gt; &lt;Integer N1&gt; 
-                               &lt;Integer* Rest&gt;);
+                               &lt;Integer* Rest&gt;
+                           |] );
            }
     };
     return Numbers
 }</programlisting>
 
-      <para>This example raises a number of issues about the execution of
-      visit.</para>
-
       <para>Another way to write this is:</para>
 
-      <programlisting>module Bubble2
+      <programlisting>module Bubble
 
 fun Integer* sort(Integer* Numbers){
-    visit repeat Numbers {
+    visit Numbers {
       case &lt;Integer N1&gt; &lt;Integer N2&gt;:
-        if( N1 &gt; N2) 
-            yield make &lt;Integer N2&gt; &lt;Integer N1&gt;
+        if( N1 &gt; N2 ) 
+            yield [| &lt;Integer N2&gt; &lt;Integer N1&gt; |]
     };
     return Numbers
 }</programlisting>
 
       <para>The visit will replace all adjacent pairs that are in the wrong
-      order in the current list. This is repeated (fixed point operator) until
-      no more changes are possible.</para>
+      order in the current list. This is repeated until no more changes are
+      possible.<caution>
+          <para>In the two above examples it is not elegant that the pattern
+          following the case needs no quoting, and that the pattern following
+          the <literal>return</literal>/<literal>yield</literal> has to be
+          quoted.</para>
+        </caution></para>
     </section>
 
     <section>
-      <title>Generic Bubble sort [under discussion]</title>
+      <title>Generic Bubble sort</title>
 
-      <para>Here is a generic bubble sort wich uses type parameters
+      <para><caution>
+          <para>The current syntax does not yet allow type variables in
+          patterns. What are the implications for the implementation? Do we
+          want this generality? Proposal: no since the ramifications are
+          unclear. </para>
+        </caution>Here is a generic bubble sort wich uses type parameters
       (&amp;ELEM) and a function parameter.<programlisting>module Bubble-Gen
 
 fun &amp;Elem* sort(&amp;Elem* Elements, 
                 fun bool GreaterThan(&amp;Elem, &amp;Elem)){
    
   visit repeat Elements {
-      case &lt;Elem E1&gt; &lt;Elem E2&gt;: 
+      case &lt;&amp;Elem E1&gt; &lt;&amp;Elem E2&gt;: 
         if(GreaterThan(E1, E2)) 
-           yield make &lt;Elem E2&gt; &lt;Elem E1&gt;
+           yield &lt;&amp;Elem E2&gt; &lt;&amp;Elem E1&gt;
 
      }
-}</programlisting>Do we want this generality? What are the implications for
-      the implementation? The current syntax does not yet allow type variables
-      in patterns.</para>
+}</programlisting></para>
+
+      <para>Of course, we can write a generic sort on arbitrary lists.</para>
     </section>
 
     <section>
@@ -3165,7 +3173,9 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
       <itemizedlist>
         <listitem>
-          <para>The import associates a name with the imported module.<note>
+          <para>The import associates a name with the imported module.<caution>
+              <para>Work out the details.</para>
+            </caution><note>
               <para>This means that "grammar" and "rule" become notions that
               can be manipulated.</para>
             </note></para>
@@ -3173,10 +3183,10 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
         <listitem>
           <para>There is a read functions that reads a text file into a
-          string.<note>
+          string.<caution>
               <para>We need an io library that reads/writes strings and data
-              values.</para>
-            </note></para>
+              values. The current version is not yet ok.</para>
+            </caution></para>
         </listitem>
 
         <listitem>
@@ -3396,6 +3406,30 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
               <entry></entry>
 
               <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>_&amp;_</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
 
               <entry></entry>
             </row>
@@ -3915,10 +3949,6 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
           <para>get_location and set_location are access functions for values
           of type <literal>loc</literal>.</para>
         </listitem>
-
-        <listitem>
-          <para>For relations</para>
-        </listitem>
       </itemizedlist>
     </section>
 
@@ -3980,6 +4010,20 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <row>
                 <entry>makeString</entry>
+
+                <entry>x</entry>
+
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>sort</entry>
 
                 <entry>x</entry>
 
@@ -4556,6 +4600,10 @@ public fun &amp;T rest(list[&amp;T] L)
       throws empty_list(str msg)
   primitive("List.rest")
 
+%% Sort elements of list: sort
+public fun list[&amp;T] sort(list[&amp;T] L, fun bool less(&amp;T, &amp;T))
+   primitive("list.sort")
+
 %% --- Tuples ------------------------------------------------
 
 public fun bool ==(tuple[&amp;T] R, tuple[&amp;T] S)
@@ -4599,7 +4647,7 @@ public fun bool ==(set[&amp;T] R, set[&amp;T] S)
 public fun bool &lt;(set[&amp;T] R, set[&amp;T] S)
   primitive("Set.less")
 
-%% Add two sets (set union): add (operator +)
+%% Add two sets (set union): operator +
 public fun set[&amp;T] +(set[&amp;T] R, set[&amp;T] S)
   primitive("Set.add")
 
@@ -4609,7 +4657,7 @@ public fun set[&amp;T] +(set[&amp;T] S, &amp;T E)
 public fun set[&amp;T] +(&amp;T E, set[&amp;T] S)
   return {E} + S
 
-%% Substract two sets (set difference): sub (operator -)
+%% Substract two sets (set difference): operator -
 public fun set[&amp;T] -(set[&amp;T] R, set[&amp;T] S)
   primitive("Set.sub")
 
@@ -4619,14 +4667,14 @@ public fun set[&amp;T] -(set[&amp;T] S, &amp;T E)
 public fun set[&amp;T] -(&amp;T E, set[&amp;T] S)
   return {E} - S;
 
-%% Multiply two sets (set intersection): mul (operator *)
-public fun set[&amp;T] *(set[&amp;T] R, set[&amp;T] S)
-  primitive("Set.mul")
+%% Intersection of two sets: operator &amp;
+public fun set[&amp;T] &amp;(set[&amp;T] R, set[&amp;T] S)
+  primitive("Set.intersection")
 
-public fun set[&amp;T] *(set[&amp;T] S, &amp;T E)
+public fun set[&amp;T] &amp;(set[&amp;T] S, &amp;T E)
   return S * {E}
 
-public fun set[&amp;T] *(&amp;T E, set[&amp;T] S)
+public fun set[&amp;T] &amp;(&amp;T E, set[&amp;T] S)
   return {E} * S;
 
 %% Size of set: size
@@ -4716,7 +4764,7 @@ public fun map[&amp;T] +(map[&amp;T] S, &amp;T E)
 public fun map[&amp;T] +(&amp;T E, map[&amp;T] S)
   return {E} + S
 
-%% Substract two maps (set difference): sub (operator -)
+%% Substract two maps (set difference): operator -
 public fun map[&amp;T] -(map[&amp;T] R, map[&amp;T] S)
    primitive("Map.sub")
 
@@ -4726,14 +4774,14 @@ public fun map[&amp;T] -(map[&amp;T] S, &amp;T E)
 public fun map[&amp;T] -(&amp;T E, map[&amp;T] S)
   return {E} - S
 
-%% Multiply two maps (set intersection): mul (operator *)
-public fun map[&amp;T] *(map[&amp;T] R, map[&amp;T] S)
+%% Intersection of two maps: operator &amp;
+public fun map[&amp;T] &amp;(map[&amp;T] R, map[&amp;T] S)
   primitive("Map.mul")
 
-public fun map[&amp;T] *(map[&amp;T] S, &amp;T E)
+public fun map[&amp;T] &amp;(map[&amp;T] S, &amp;T E)
   return S * {E}
 
-public fun map[&amp;T] *(&amp;T E, map[&amp;T] S)
+public fun map[&amp;T] &amp;(&amp;T E, map[&amp;T] S)
   return {E} * S
 
 public fun int size(map[&amp;T] M)
@@ -4774,7 +4822,7 @@ public fun bool ==(rel[&amp;T] R, rel[&amp;T] S)
 public fun bool &lt;(rel[&amp;T] R, rel[&amp;T] S)
   primitive("Rel.less")
 
-%% Add two relations (union): add (operator +)
+%% Add two relations (union): operator +
 public fun rel[&amp;T] +(rel[&amp;T] R1, rel[&amp;T] R2)
   primitive("Rel.add")
 
@@ -4784,11 +4832,11 @@ public fun rel[&amp;T] +(&amp;T E, rel[&amp;T] R)
 public fun rel[&amp;T] +(rel[&amp;T] R, &amp;T E)
   return R + toRel({E})
 
-%% Substract two relations (difference): sub (operator -)
+%% Substract two relations (difference): operator -
 public fun rel[&amp;T] -(rel[&amp;T] R1, rel[&amp;T] R2)
   primitive("Rel.sub")
 
-%% Multiply two relations (intersection): mul (operator *)
+%% Intersection of two relations: operator &amp;
 public fun rel[&amp;T] *(rel[&amp;T] R1, rel[&amp;T] R1)
   primitive("Rel.mull")
 

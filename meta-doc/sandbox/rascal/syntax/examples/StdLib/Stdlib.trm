@@ -314,7 +314,7 @@ public fun bool ==(set[&T] R, set[&T] S)
 public fun bool <(set[&T] R, set[&T] S)
   primitive("Set.less")
 
-%% Add two sets (set union): add (operator +)
+%% Add two sets (set union): operator +
 public fun set[&T] +(set[&T] R, set[&T] S)
   primitive("Set.add")
 
@@ -324,7 +324,7 @@ public fun set[&T] +(set[&T] S, &T E)
 public fun set[&T] +(&T E, set[&T] S)
   return {E} + S
 
-%% Substract two sets (set difference): sub (operator -)
+%% Substract two sets (set difference): operator -
 public fun set[&T] -(set[&T] R, set[&T] S)
   primitive("Set.sub")
 
@@ -334,14 +334,14 @@ public fun set[&T] -(set[&T] S, &T E)
 public fun set[&T] -(&T E, set[&T] S)
   return {E} - S;
 
-%% Multiply two sets (set intersection): mul (operator *)
-public fun set[&T] *(set[&T] R, set[&T] S)
-  primitive("Set.mul")
+%% Intersection of two sets: operator &
+public fun set[&T] &(set[&T] R, set[&T] S)
+  primitive("Set.intersection")
 
-public fun set[&T] *(set[&T] S, &T E)
+public fun set[&T] &(set[&T] S, &T E)
   return S * {E}
 
-public fun set[&T] *(&T E, set[&T] S)
+public fun set[&T] &(&T E, set[&T] S)
   return {E} * S;
 
 %% Size of set: size
@@ -431,7 +431,7 @@ public fun map[&T] +(map[&T] S, &T E)
 public fun map[&T] +(&T E, map[&T] S)
   return {E} + S
 
-%% Substract two maps (set difference): sub (operator -)
+%% Substract two maps (set difference): operator -
 public fun map[&T] -(map[&T] R, map[&T] S)
    primitive("Map.sub")
 
@@ -441,14 +441,14 @@ public fun map[&T] -(map[&T] S, &T E)
 public fun map[&T] -(&T E, map[&T] S)
   return {E} - S
 
-%% Multiply two maps (set intersection): mul (operator *)
-public fun map[&T] *(map[&T] R, map[&T] S)
+%% Intersection of two maps: operator &
+public fun map[&T] &(map[&T] R, map[&T] S)
   primitive("Map.mul")
 
-public fun map[&T] *(map[&T] S, &T E)
+public fun map[&T] &(map[&T] S, &T E)
   return S * {E}
 
-public fun map[&T] *(&T E, map[&T] S)
+public fun map[&T] &(&T E, map[&T] S)
   return {E} * S
 
 public fun int size(map[&T] M)
@@ -489,7 +489,7 @@ public fun bool ==(rel[&T] R, rel[&T] S)
 public fun bool <(rel[&T] R, rel[&T] S)
   primitive("Rel.less")
 
-%% Add two relations (union): add (operator +)
+%% Add two relations (union): operator +
 public fun rel[&T] +(rel[&T] R1, rel[&T] R2)
   primitive("Rel.add")
 
@@ -499,11 +499,11 @@ public fun rel[&T] +(&T E, rel[&T] R)
 public fun rel[&T] +(rel[&T] R, &T E)
   return R + toRel({E})
 
-%% Substract two relations (difference): sub (operator -)
+%% Substract two relations (difference): operator -
 public fun rel[&T] -(rel[&T] R1, rel[&T] R2)
   primitive("Rel.sub")
 
-%% Multiply two relations (intersection): mul (operator *)
+%% Intersection of two relations: operator &
 public fun rel[&T] *(rel[&T] R1, rel[&T] R1)
   primitive("Rel.mull")
 

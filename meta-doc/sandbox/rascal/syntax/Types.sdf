@@ -36,7 +36,7 @@ exports
     "rel" "[" OptNamedTypes "]"                         -> StructuredType {cons("rel-type")}
     "tuple" "[" OptNamedTypes "]"                       -> StructuredType {cons("tuple-type")}
 
-    "+" | "-" | "*" | "/" | "==" | 
+    "+" | "-" | "*" | "/" | "&" | "==" | 
     "<" | "<=" |">" | ">="                              -> StandardOperator
      Name | StandardOperator                            -> FunctionName   { avoid }
     "fun" Type FunctionName "(" OptNamedTypes? ")"      -> FunctionType   {cons("function-type")}
