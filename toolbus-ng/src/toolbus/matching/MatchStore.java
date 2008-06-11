@@ -21,6 +21,11 @@ import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
 import aterm.ATerm;
 
+/**
+ * This store keeps track of all links between sending and receiving communication atoms.
+ * 
+ * @author Arnold Lankamp
+ */
 public class MatchStore{
 	private final static List<RecMsg> NOMESSAGEPARTNERS = new ArrayList<RecMsg>(0);
 	private final static Set<ProcessInstance> NONOTEPARTNERS = new HashSet<ProcessInstance>(0);
@@ -37,6 +42,12 @@ public class MatchStore{
 	private final Object messageLock = new Object();
 	private final Object noteLock = new Object();
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param tbTermFactory
+	 *            The term factory to use for matching.
+	 */
 	public MatchStore(TBTermFactory tbTermFactory){
 		super();
 		
@@ -49,12 +60,21 @@ public class MatchStore{
 		noteMappings = new HashMap<ATerm, Map<ProcessInstance, MappingRefCount>>();
 	}
 	
+	/**
+	 * Initializes this match store with the given set of atoms.
+	 * 
+	 * @param atomSet
+	 *            The complete collection of atoms, for which the relations must to be calculated.
+	 */
 	public void intialize(List<Atom> atomSet){
 		this.atomSet = atomSet;
 		
 		calculateMatches();
 	}
 	
+	/**
+	 * Staticly determains all (potential) relations between the atoms.
+	 */
 	private void calculateMatches(){
 		List<ATerm> receiveMessages = new LinkedList<ATerm>();
 		List<ATerm> subscribeNotes = new LinkedList<ATerm>();
@@ -80,12 +100,30 @@ public class MatchStore{
 		}
 	}
 	
+	/**
+	 * Indexes the given receive message atom.
+	 * 
+	 * @param message
+	 *            The receive message atom.
+	 * @param receiveMessages
+	 *            The list to add the message's match pattern to.
+	 */
 	private void addReceiveMessagePattern(RecMsg message, List<ATerm> receiveMessages){
 		ATerm matchPattern = message.msg;
 		receiveMessages.add(matchPattern);
 		messageLinks.put(matchPattern, new ArrayList<ATerm>());
 	}
 	
+	/**
+	 * Indexes the given send message atom. NOTE: All receive message atoms need to have been added
+	 * prior to the invokation of this method, otherwise the the ToolBus may exhibit undefined
+	 * runtime behaviour.
+	 * 
+	 * @param message
+	 *            The send message atom.
+	 * @param receiveMessages
+	 *            The complete list of receive messages.
+	 */
 	private void addSendMessagePattern(SndMsg message, List<ATerm> receiveMessages){
 		ATerm matchPattern = message.msg;
 		
@@ -100,12 +138,30 @@ public class MatchStore{
 		}
 	}
 	
+	/**
+	 * Indexes the given subscribe atom.
+	 * 
+	 * @param subscribeNote
+	 *            The subscribe atom.
+	 * @param subscribeNotes
+	 *            The list to add the subscribe's match pattern to.
+	 */
 	private void addSubscribeNotePattern(Subscribe subscribeNote, List<ATerm> subscribeNotes){
 		ATerm matchPattern = subscribeNote.notePattern;
 		subscribeNotes.add(matchPattern);
 		noteLinks.put(matchPattern, new ArrayList<ATerm>());
 	}
 	
+	/**
+	 * Indexes the given send note atom. NOTE: All subscribe atoms need to have been added prior to
+	 * the invokation of this method, otherwise the the ToolBus may exhibit undefined runtime
+	 * behaviour.
+	 * 
+	 * @param message
+	 *            The send note atom.
+	 * @param subscribeNotes
+	 *            The complete list of subscribes.
+	 */
 	private void addSendNotePattern(SndNote message, List<ATerm> subscribeNotes){
 		ATerm matchPattern = message.notePattern;
 		
@@ -120,6 +176,12 @@ public class MatchStore{
 		}
 	}
 	
+	/**
+	 * Registers the given, instantiated, receive message atom.
+	 * 
+	 * @param receiveMessage
+	 *            The receive message atom to register.
+	 */
 	public void registerReceiveMessage(RecMsg receiveMessage){
 		List<ATerm> matches = messageLinks.get(receiveMessage.msg);
 		Iterator<ATerm> matchesIterator = matches.iterator();
@@ -137,6 +199,12 @@ public class MatchStore{
 		}
 	}
 	
+	/**
+	 * Deregisteres the given, instantiated, receive message atom.
+	 * 
+	 * @param receiveMessage
+	 *            The receive message atom to deregister.
+	 */
 	public void deregisterReceiveMessage(RecMsg receiveMessage){
 		List<ATerm> matches = messageLinks.get(receiveMessage.msg);
 		Iterator<ATerm> matchesIterator = matches.iterator();
@@ -150,6 +218,13 @@ public class MatchStore{
 		}
 	}
 	
+	/**
+	 * Gathers the potential partners for the given send message pattern.
+	 * 
+	 * @param pattern
+	 *            The send message pattern.
+	 * @return The collections of potentially matching partners.
+	 */
 	public List<RecMsg> getPossibleMessagePartners(ATerm pattern){
 		List<RecMsg> recMessages;
 		
@@ -162,10 +237,21 @@ public class MatchStore{
 		return recMessages;
 	}
 	
+	/**
+	 * Reference count structure.
+	 * 
+	 * @author Arnold Lankamp
+	 */
 	private static class MappingRefCount{
 		public int nrOfMappings;
 	}
 	
+	/**
+	 * Registers the given, instantiated, subscribe atom.
+	 * 
+	 * @param subscribeNote
+	 *            The subscribe atom to register.
+	 */
 	public void registerSubscribeNote(Subscribe subscribeNote){
 		List<ATerm> matches = noteLinks.get(subscribeNote.notePattern);
 		Iterator<ATerm> matchesIterator = matches.iterator();
@@ -198,6 +284,12 @@ public class MatchStore{
 		}
 	}
 	
+	/**
+	 * Deregisters the given, instantiated, subscribe atom.
+	 * 
+	 * @param subscribeNote
+	 *            The subscribe atom to deregister.
+	 */
 	public void deregisterSubscribeNote(Subscribe subscribeNote){
 		List<ATerm> matches = noteLinks.get(subscribeNote.notePattern);
 		Iterator<ATerm> matchesIterator = matches.iterator();
@@ -215,6 +307,13 @@ public class MatchStore{
 		}
 	}
 	
+	/**
+	 * Gathers the potential partners for the given send note pattern.
+	 * 
+	 * @param pattern
+	 *            The send message pattern.
+	 * @return The collections of potentially matching partners.
+	 */
 	public Set<ProcessInstance> getPossibleNotePartners(ATerm pattern){
 		synchronized(noteLock){
 			Map<ProcessInstance, MappingRefCount> subNotesMappings = noteMappings.get(pattern);
@@ -224,12 +323,20 @@ public class MatchStore{
 		}
 	}
 	
+	/**
+	 * Dumps a list of partnerless communication atoms to standard out.
+	 */
 	public void printPartnerlessCommunicationAtoms(){
 		printPartnerlessSenders();
 		printPartnerlessReceivers();
 	}
 	
-	private void findDeadReceiveAtoms(List<Atom> deadSendAtoms){
+	/**
+	 * Gathers a list of partnerless sending atoms.
+	 */
+	private List<Atom> findDeadReceiveAtoms(){
+		List<Atom> deadSendAtoms = new ArrayList<Atom>();
+		
 		List<ATerm> receiveMessages = new LinkedList<ATerm>();
 		List<ATerm> subscribeNotes = new LinkedList<ATerm>();
 
@@ -282,11 +389,15 @@ public class MatchStore{
 				if(!added) deadSendAtoms.add(sendNote);
 			}
 		}
+		
+		return deadSendAtoms;
 	}
 	
+	/**
+	 * Dumps a list of partnerless sending atoms to standard out.
+	 */
 	private void printPartnerlessSenders(){
-		List<Atom> deadSendAtoms = new ArrayList<Atom>();
-		findDeadReceiveAtoms(deadSendAtoms);
+		List<Atom> deadSendAtoms = findDeadReceiveAtoms();
 		
 		Set<Atom> partnerlessAtoms = new HashSet<Atom>();
 		
@@ -311,6 +422,9 @@ public class MatchStore{
 		}
 	}
 	
+	/**
+	 * Dumps a list of partnerless receiving atoms to standard out.
+	 */
 	private void printPartnerlessReceivers(){
 		final Set<ATerm> partnerlessMessages = new HashSet<ATerm>();
 		final Set<ATerm> partnerlessNotes = new HashSet<ATerm>();
