@@ -9,16 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import toolbus.AtomSet;
 import toolbus.TBTermFactory;
-import toolbus.ToolBus;
 import toolbus.atom.Atom;
 import toolbus.atom.msg.RecMsg;
 import toolbus.atom.msg.SndMsg;
+import toolbus.atom.note.RecNote;
 import toolbus.atom.note.SndNote;
 import toolbus.atom.note.Subscribe;
-import toolbus.process.ProcessDefinition;
-import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
@@ -28,8 +25,8 @@ public class MatchStore{
 	private final static List<RecMsg> NOMESSAGEPARTNERS = new ArrayList<RecMsg>(0);
 	private final static Set<ProcessInstance> NONOTEPARTNERS = new HashSet<ProcessInstance>(0);
 	
-	private final ToolBus toolbus;
 	private final TBTermFactory tbFactory;
+	private volatile List<Atom> atomSet;
 	
 	private final ConcurrentHashMap<ATerm, List<ATerm>> messageLinks;
 	private final ConcurrentHashMap<ATerm, List<ATerm>> noteLinks;
@@ -40,11 +37,10 @@ public class MatchStore{
 	private final Object messageLock = new Object();
 	private final Object noteLock = new Object();
 	
-	public MatchStore(ToolBus toolbus){
+	public MatchStore(TBTermFactory tbTermFactory){
 		super();
 		
-		this.toolbus = toolbus;
-		this.tbFactory = toolbus.getTBTermFactory();
+		this.tbFactory = tbTermFactory;
 		
 		messageLinks = new ConcurrentHashMap<ATerm, List<ATerm>>();
 		noteLinks = new ConcurrentHashMap<ATerm, List<ATerm>>();
@@ -53,7 +49,13 @@ public class MatchStore{
 		noteMappings = new HashMap<ATerm, Map<ProcessInstance, MappingRefCount>>();
 	}
 	
-	public void calculateMatches(List<Atom> atomSet){
+	public void intialize(List<Atom> atomSet){
+		this.atomSet = atomSet;
+		
+		calculateMatches();
+	}
+	
+	private void calculateMatches(){
 		List<ATerm> receiveMessages = new LinkedList<ATerm>();
 		List<ATerm> subscribeNotes = new LinkedList<ATerm>();
 		
@@ -222,64 +224,133 @@ public class MatchStore{
 		}
 	}
 	
-	public void printPartnerlessSenders(){
-		if(1 == 1){
-			System.out.println("Under construction. This doesn't work yet.");
-			return;
+	public void printPartnerlessCommunicationAtoms(){
+		printPartnerlessSenders();
+		printPartnerlessReceivers();
+	}
+	
+	private void findDeadReceiveAtoms(List<Atom> deadSendAtoms){
+		List<ATerm> receiveMessages = new LinkedList<ATerm>();
+		List<ATerm> subscribeNotes = new LinkedList<ATerm>();
+
+		Iterator<Atom> atomsIteratorForRecMsg = atomSet.iterator();
+		while(atomsIteratorForRecMsg.hasNext()){
+			Atom atom = atomsIteratorForRecMsg.next();
+			if(atom instanceof RecMsg){
+				receiveMessages.add(((RecMsg) atom).msg);
+			}else if(atom instanceof Subscribe){
+				subscribeNotes.add(((Subscribe) atom).notePattern);
+			}
 		}
 		
-		final List<ATerm> partnerlessSenders = new ArrayList<ATerm>();
-		
-		messageLinks.iterate(new ReadOnlyHashMapEntryHandler<ATerm, List<ATerm>>(){
-			public int handle(ATerm sendMessage, List<ATerm> value){
-				if(messageLinks.get(sendMessage).isEmpty()){
-					partnerlessSenders.add(sendMessage);
-				}
+		Iterator<Atom> atomsIteratorForSndMsg = atomSet.iterator();
+		while(atomsIteratorForSndMsg.hasNext()){
+			Atom atom = atomsIteratorForSndMsg.next();
+			if(atom instanceof SndMsg){
+				SndMsg sendMessage = (SndMsg) atom;
+				ATerm matchPattern = sendMessage.msg;
 				
-				return CONTINUE;
-			}
-		});
-		
-		noteLinks.iterate(new ReadOnlyHashMapEntryHandler<ATerm, List<ATerm>>(){
-			public int handle(ATerm sendMessage, List<ATerm> value){
-				if(noteLinks.get(sendMessage).isEmpty()){
-					partnerlessSenders.add(sendMessage);
-				}
+				boolean added = false;
 				
-				return CONTINUE;
-			}
-		});
-		
-		if(partnerlessSenders.isEmpty()){
-			System.out.println("No partnerless senders found.");
-		}else{
-			System.out.println("Partnerless sender patterns:");
-			System.out.println("{");
-			Iterator<ATerm> partnerlessSendersIterator = partnerlessSenders.iterator();
-			while(partnerlessSendersIterator.hasNext()){
-				System.out.println("\t"+partnerlessSendersIterator.next());
-			}
-			System.out.println("}");
-			
-			
-			System.out.println("Positions of partnerless atoms:");
-			System.out.println("{");
-			List<ProcessDefinition> processDefinitions = toolbus.getProcessDefinitions();
-			Iterator<ProcessDefinition> processDefinitionsIterator = processDefinitions.iterator();
-			while(processDefinitionsIterator.hasNext()){
-				ProcessDefinition processDefinition = processDefinitionsIterator.next();
-				ProcessExpression processExpression = processDefinition.getOriginalProcessExpression();
-				AtomSet atoms = processExpression.getAtoms();
-				Iterator<Atom> atomsIterator = atoms.iterator();
-				while(atomsIterator.hasNext()){
-					Atom atom = atomsIterator.next();
-					if(atom instanceof SndMsg){
-						System.out.println("\t"+atom.getPosInfo()+"\t\t: "+atom);
-					}else if(atom instanceof SndNote){
-						System.out.println("\t"+atom.getPosInfo()+"\t\t: "+atom);
+				Iterator<ATerm> receiveMessagePatternIterator = receiveMessages.iterator();
+				while(receiveMessagePatternIterator.hasNext()){
+					ATerm receiveMessagePattern = receiveMessagePatternIterator.next();
+					
+					if(tbFactory.mightMatch(matchPattern, receiveMessagePattern)){
+						added = true;
+						break;
 					}
 				}
+				
+				if(!added) deadSendAtoms.add(sendMessage);
+			}else if(atom instanceof SndNote){
+				SndNote sendNote = (SndNote) atom;
+				ATerm matchPattern = sendNote.notePattern;
+
+				boolean added = false;
+				
+				Iterator<ATerm> subscribeNotePatternIterator = subscribeNotes.iterator();
+				while(subscribeNotePatternIterator.hasNext()){
+					ATerm subscribeNotePattern = subscribeNotePatternIterator.next();
+					
+					if(tbFactory.mightMatch(matchPattern, subscribeNotePattern)){
+						added = true;
+						break;
+					}
+				}
+				
+				if(!added) deadSendAtoms.add(sendNote);
 			}
+		}
+	}
+	
+	private void printPartnerlessSenders(){
+		List<Atom> deadSendAtoms = new ArrayList<Atom>();
+		findDeadReceiveAtoms(deadSendAtoms);
+		
+		Set<Atom> partnerlessAtoms = new HashSet<Atom>();
+		
+		Iterator<Atom> deadSendAtomsIterator = deadSendAtoms.iterator();
+		while(deadSendAtomsIterator.hasNext()){
+			partnerlessAtoms.add(deadSendAtomsIterator.next());
+		}
+		
+		if((partnerlessAtoms.size()) == 0){
+			System.out.println("No partnerless send atoms found.");
+		}else{
+			System.out.println("Partnerless send atoms:");
+			System.out.println("{");
+			
+			Iterator<Atom> partnerlessMessagesIterator = partnerlessAtoms.iterator();
+			while(partnerlessMessagesIterator.hasNext()){
+				Atom sendAtom = partnerlessMessagesIterator.next();
+				System.out.println("\t"+sendAtom.getPosInfo()+"\t\t: "+sendAtom);
+			}
+			
+			System.out.println("}");
+		}
+	}
+	
+	private void printPartnerlessReceivers(){
+		final Set<ATerm> partnerlessMessages = new HashSet<ATerm>();
+		final Set<ATerm> partnerlessNotes = new HashSet<ATerm>();
+		
+		messageLinks.iterate(new ReadOnlyHashMapEntryHandler<ATerm, List<ATerm>>(){
+			public int handle(ATerm receiveMessage, List<ATerm> value){
+				if(messageLinks.get(receiveMessage).isEmpty()){
+					partnerlessMessages.add(receiveMessage);
+				}
+				
+				return CONTINUE;
+			}
+		});
+
+		noteLinks.iterate(new ReadOnlyHashMapEntryHandler<ATerm, List<ATerm>>(){
+			public int handle(ATerm receiveNote, List<ATerm> value){
+				if(noteLinks.get(receiveNote).isEmpty()){
+					partnerlessNotes.add(receiveNote);
+				}
+				
+				return CONTINUE;
+			}
+		});
+		
+		if((partnerlessMessages.size() + partnerlessNotes.size()) == 0){
+			System.out.println("No partnerless receivers found.");
+		}else{
+			System.out.println("Partnerless receive atoms:");
+			System.out.println("{");
+			
+			Iterator<Atom> atomsIterator = atomSet.iterator();
+			while(atomsIterator.hasNext()){
+				Atom atom = atomsIterator.next();
+				if(atom instanceof RecMsg){
+					if(partnerlessMessages.contains(((RecMsg) atom).msg)) System.out.println("\t"+atom.getPosInfo()+"\t\t: "+atom);
+				}else if(atom instanceof RecNote){
+					if(partnerlessMessages.contains(((RecNote) atom).notePattern)) System.out.println("\t"+atom.getPosInfo()+"\t\t: "+atom);
+				}
+			}
+			
 			System.out.println("}");
 		}
 	}

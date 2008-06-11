@@ -57,7 +57,7 @@ public class CommandLine{
 					}else if(line.equals("dump toolbus state")){
 						toolbus.showStatus();
 					}else if(line.equals("dump partnerless senders")){
-						toolbus.getMatchStore().printPartnerlessSenders();
+						toolbus.getMatchStore().printPartnerlessCommunicationAtoms();
 					}else if(line.equals("shutdown")){
 						toolbus.shutdown(toolbus.getTBTermFactory().makeList());
 					}else if(line.equals("help")){

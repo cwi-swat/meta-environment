@@ -101,7 +101,7 @@ public class ToolBus{
 		procdefs = new ConcurrentHashMap<String, ProcessDefinition>();
 		tooldefs = new ConcurrentHashMap<String, ToolDefinition>();
 		
-		matchStore = new MatchStore(this);
+		matchStore = new MatchStore(tbfactory);
 		
 		propertyManager = new PropertyManager(args);
 		
@@ -288,7 +288,7 @@ public class ToolBus{
 				}
 			});
 			
-			matchStore.calculateMatches(atomSignature);
+			matchStore.intialize(atomSignature);
 			
 			calculateToolSignatures(atomSignature);
 			
