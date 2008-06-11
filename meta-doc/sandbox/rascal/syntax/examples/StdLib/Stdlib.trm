@@ -267,6 +267,10 @@ public fun &T rest(list[&T] L)
       throws empty_list(str msg)
   primitive("List.rest")
 
+%% Sort elements of list: sort
+public fun list[&T] sort(list[&T] L, fun bool less(&T, &T))
+   primitive("list.sort")
+
 %% --- Tuples ------------------------------------------------
 
 public fun bool ==(tuple[&T] R, tuple[&T] S)
