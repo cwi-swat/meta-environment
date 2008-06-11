@@ -3377,7 +3377,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry></entry>
 
-              <entry>x</entry>
+              <entry></entry>
 
               <entry></entry>
 
@@ -3549,7 +3549,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry>x</entry>
 
-              <entry></entry>
+              <entry>x</entry>
 
               <entry></entry>
             </row>
@@ -3573,7 +3573,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry>x</entry>
 
-              <entry></entry>
+              <entry>x</entry>
 
               <entry></entry>
             </row>
@@ -3667,9 +3667,9 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry>x</entry>
 
-              <entry></entry>
+              <entry>x</entry>
 
-              <entry></entry>
+              <entry>x</entry>
 
               <entry></entry>
             </row>
@@ -4947,6 +4947,18 @@ public fun set[&amp;T] reachX(set[&amp;T] Start, set[&amp;T] Excl,
                           graph[&amp;T] G)
   return range(compose(domainR(G, Start), 
                        carrierX(G, Excl)+))
+
+%% Shortest path between pair of nodes
+public fun list[&amp;T] shortestPathPair(&amp;T From, &amp;T To, graph[&amp;T] G)
+   primitive("Graph.shortestPathPair")
+
+%% Shortest path between one node and all others
+public fun set[list[&amp;T]] shortestPathFrom(&amp;T From, graph[&amp;T] G)
+   primitive("Graph.shortestPathFrom")
+
+%% Shortest path between all nodes
+public fun set[list[&amp;T]] shortestPathAll(graph[&amp;T] G)
+   primitive("Graph.shortestPathAll")
 
 %% TO DO
 

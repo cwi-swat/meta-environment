@@ -615,6 +615,18 @@ public fun set[&T] reachX(set[&T] Start, set[&T] Excl,
   return range(compose(domainR(G, Start), 
                        carrierX(G, Excl)+))
 
+%% Shortest path between pair of nodes
+public fun list[&T] shortestPathPair(&T From, &T To, graph[&T] G)
+   primitive("Graph.shortestPathPair")
+
+%% Shortest path between one node and all others
+public fun set[list[&T]] shortestPathFrom(&T From, graph[&T] G)
+   primitive("Graph.shortestPathFrom")
+
+%% Shortest path between all nodes
+public fun set[list[&T]] shortestPathAll(graph[&T] G)
+   primitive("Graph.shortestPathAll")
+
 %% TO DO
 
 public fun rel[&T, &T] closure(rel[&T, &T])
