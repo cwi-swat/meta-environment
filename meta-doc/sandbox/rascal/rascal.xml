@@ -1604,26 +1604,28 @@ lexical syntax
 
             <itemizedlist>
               <listitem>
-                <para><literal>+</literal> (function: <literal>add</literal>)
-                is now used for addition, union and concatenation (the
-                operator <literal>union</literal> is gone).</para>
+                <para><literal>+</literal> is now used for addition, union and
+                concatenation (the operator <literal>union</literal> is
+                gone).</para>
               </listitem>
 
               <listitem>
-                <para><literal>-</literal> (function: <literal>sub</literal>)
-                is now used for substraction, difference (the operator
-                <literal>\</literal> is gone)</para>
+                <para><literal>-</literal> is now used for substraction,
+                difference (the operator <literal>\</literal> is gone)</para>
               </listitem>
 
               <listitem>
-                <para><literal>*</literal> (function: <literal>mul</literal>)
-                is now used for multiplication and intersection (the operator
-                <literal>inter</literal> is gone).</para>
+                <para><literal>*</literal> is now used for
+                multiplication.</para>
               </listitem>
 
               <listitem>
-                <para><literal>/</literal> (function: <literal>div</literal>)
-                is used for integer and double division.</para>
+                <para><literal>/</literal> is used for integer and double
+                division.</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>&amp;</literal> is used for intersection</para>
               </listitem>
 
               <listitem>
