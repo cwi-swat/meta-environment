@@ -16,29 +16,28 @@ import org.osgi.framework.Bundle;
 
 import aterm.pure.PureFactory;
 
-public class ToolBusEclipsePlugin extends Plugin implements IStartup {
+public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	private static final String pluginId = "toolbus";
 
 	private static final String toolbusConfig = "config";
 
-	private static class SingletonToolBus {
+	private static class SingletonToolBus{
 		private final ToolBus toolbus;
 
-		private SingletonToolBus() {
+		private SingletonToolBus(){
 			super();
 
-			toolbus = new ToolBus(
-					new String[] { "-properties", getConfigFile() });
+			toolbus = new ToolBus(new String[]{"-properties", getConfigFile()});
 		}
 
-		public ToolBus getToolBus() {
+		public ToolBus getToolBus(){
 			return toolbus;
 		}
 	}
 
-	private static class InstanceKeeper {
+	private static class InstanceKeeper{
 		private static SingletonToolBus instance;
-		static {
+		static{
 			instance = new SingletonToolBus();
 			runToolBus(instance.getToolBus());
 		}
@@ -47,11 +46,11 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup {
 	/**
 	 * This constructor should only be called by the Eclipse Workbench.
 	 */
-	public ToolBusEclipsePlugin() {
+	public ToolBusEclipsePlugin(){
 		super();
 	}
 
-	public void earlyStartup() {
+	public void earlyStartup(){
 		getInstance(); // Initialize this thing.
 	}
 
@@ -59,7 +58,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup {
 	 * The plugin activator is a singleton. Use this method to obtain the
 	 * instance.
 	 */
-	private static SingletonToolBus getInstance() {
+	private static SingletonToolBus getInstance(){
 		return InstanceKeeper.instance;
 	}
 
@@ -68,23 +67,23 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup {
 	 * 
 	 * @return The port number to connect to using the adapter.
 	 */
-	public static int getPort() {
+	public static int getPort(){
 		return getInstance().getToolBus().getPort();
 	}
 
-	public static PureFactory getFactory() {
+	public static PureFactory getFactory(){
 		return getInstance().getToolBus().getTBTermFactory();
 	}
 
-	public static ToolBus getToolBus() {
+	public static ToolBus getToolBus(){
 		return getInstance().getToolBus();
 	}
 
-	private static void runToolBus(final ToolBus toolbus) {
-		try {
-			if (toolbus.parsecup()) {
+	private static void runToolBus(final ToolBus toolbus){
+		try{
+			if (toolbus.parsecup()){
 				toolbus.prepare();
-				Thread thread = new Thread(new Runnable() {
+				Thread thread = new Thread(new Runnable(){
 					public void run() {
 						toolbus.execute();
 					}
@@ -94,32 +93,29 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup {
 
 				DebugConsole debugConsole = new DebugConsole(toolbus);
 				debugConsole.show();
-			} else {
+			}else{
 				System.err.println("Failed to parse ToolBus script");
 			}
-		} catch (RuntimeException rex) {
+		}catch(RuntimeException rex){
 			rex.printStackTrace();
 			throw rex;
 		}
 	}
 
-	private static String getConfigFile() {
+	private static String getConfigFile(){
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint point = registry.getExtensionPoint(pluginId,
-				toolbusConfig);
+		IExtensionPoint point = registry.getExtensionPoint(pluginId, toolbusConfig);
 
 		IExtension extensions[] = point.getExtensions();
 
-		if (extensions.length == 1) {
-			IConfigurationElement[] configElements = extensions[0]
-					.getConfigurationElements();
-			for (int i = configElements.length - 1; i >= 0; i--) {
+		if(extensions.length == 1){
+			IConfigurationElement[] configElements = extensions[0].getConfigurationElements();
+			for(int i = configElements.length - 1; i >= 0; i--){
 				IConfigurationElement ce = configElements[i];
-				if (ce.getName().equals("toolbus")) {
+				if (ce.getName().equals("toolbus")){
 					String configPath = ce.getAttribute("config");
 
-					Bundle bundle = Platform.getBundle(ce.getContributor()
-							.getName());
+					Bundle bundle = Platform.getBundle(ce.getContributor().getName());
 					File file;
 
 					try {
@@ -128,9 +124,8 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup {
 						if (file != null) {
 							return file.getAbsolutePath();
 						}
-					} catch (IOException e) {
-						System.err.println("Failed to get config file: "
-								+ configPath);
+					}catch(IOException e){
+						System.err.println("Failed to get config file: " + configPath);
 						e.printStackTrace();
 					}
 				}
@@ -148,13 +143,12 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup {
 	 * @return
 	 * @throws IOException
 	 */
-	public static File getFile(Bundle bundle, String resourcePath)
-			throws IOException {
+	public static File getFile(Bundle bundle, String resourcePath) throws IOException {
 		URL url = bundle.getEntry(resourcePath);
 
 		File file = null;
 
-		if (url != null) {
+		if(url != null){
 			file = new File(FileLocator.toFileURL(url).getPath());
 		}
 

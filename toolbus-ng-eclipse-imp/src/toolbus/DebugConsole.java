@@ -23,7 +23,7 @@ public class DebugConsole{
 	private final JButton toolsStatus;
 	private final JButton queuedMessages;
 	private final JButton toolbusState;
-	private final JButton partnerlessSenders;
+	private final JButton partnerlessStuff;
 	private final JButton shutdown;
 	
 	public DebugConsole(ToolBus toolbus){
@@ -40,7 +40,7 @@ public class DebugConsole{
 		toolsStatus = new JButton("Tools Status");
 		queuedMessages = new JButton("Queued Messages");
 		toolbusState = new JButton("Toolbus State");
-		partnerlessSenders = new JButton("Partnerless Senders");
+		partnerlessStuff = new JButton("Partnerless Stuff");
 		shutdown = new JButton("Shut Down & Die");
 		
 		layout();
@@ -59,8 +59,8 @@ public class DebugConsole{
 		buttonPanel.add(queuedMessages);
 		toolbusState.addActionListener(buttonListener);
 		buttonPanel.add(toolbusState);
-		partnerlessSenders.addActionListener(buttonListener);
-		buttonPanel.add(partnerlessSenders);
+		partnerlessStuff.addActionListener(buttonListener);
+		buttonPanel.add(partnerlessStuff);
 		
 		Container frameContent = frame.getContentPane();
 		frameContent.setLayout(new BorderLayout());
@@ -95,8 +95,8 @@ public class DebugConsole{
 				toolbus.getToolInstanceManager().printQueueTerms();
 			}else if(source == toolbusState){
 				toolbus.showStatus();
-			}else if(source == partnerlessSenders){
-				toolbus.getMatchStore().printPartnerlessSenders();
+			}else if(source == partnerlessStuff){
+				toolbus.getMatchStore().printPartnerlessCommunicationAtoms();
 			}else if(source == shutdown){
 				toolbus.shutdown(toolbus.getTBTermFactory().makeList());
 				System.exit(0);
