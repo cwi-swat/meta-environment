@@ -24,3 +24,4 @@ context-free syntax
   DCLIdCon "init" REXP                                                                      -> INITVAR   
   IdCon "=" REXP                                                                            -> EQU       
   "equations" ("(" "limit" NatCon ")")? "initial" INITVAR+ "satisfy" EQU+ "end" "equations" -> RSTAT     
+  "equations" ("(" "limit" NatCon ")")? "initial" INITVAR+ "satisfy" EQU+ "return" IdCon "end" "equations" -> REXP     

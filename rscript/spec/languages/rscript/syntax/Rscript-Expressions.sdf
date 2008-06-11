@@ -50,7 +50,7 @@ context-free priorities
     REXP "*"                  -> REXP 
     REXP "[" REXP "]"         -> REXP        
     REXP "[" REXP "," "-" "]" -> REXP        
-    REXP "[" "-" "," REXP "]" -> REXP         } >
+    REXP "[" "-" "," REXP "]" -> REXP         } <0> >
   REXP "." REXP -> REXP {left} >
   REXP "o" REXP -> REXP {left} >
   REXP "x" REXP -> REXP {left} >
@@ -74,3 +74,6 @@ context-free priorities
   REXP "or" REXP -> REXP {left} >
   "not" REXP -> REXP >
   REXP "implies" REXP -> REXP {left}
+
+lexical restrictions
+  "o" -/- [r]
