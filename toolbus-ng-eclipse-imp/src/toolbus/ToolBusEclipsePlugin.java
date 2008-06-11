@@ -112,13 +112,13 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			IConfigurationElement[] configElements = extensions[0].getConfigurationElements();
 			for(int i = configElements.length - 1; i >= 0; i--){
 				IConfigurationElement ce = configElements[i];
-				if (ce.getName().equals("toolbus")){
+				if(ce.getName().equals("toolbus")){
 					String configPath = ce.getAttribute("config");
 
 					Bundle bundle = Platform.getBundle(ce.getContributor().getName());
 					File file;
 
-					try {
+					try{
 						file = getFile(bundle, configPath);
 
 						if (file != null) {
