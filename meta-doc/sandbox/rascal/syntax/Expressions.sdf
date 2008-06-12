@@ -14,7 +14,7 @@ context-free start-symbols
 exports
 sorts Expression Declarator Predicate SimpleGenerator Generator Call Callable
       Strategy Statement Rule ARule Case CaseAction Assignment IncrAssignOp Value
-      Catch Finally
+      Catch Finally Increment Range
 
 context-free syntax
 %% Basic values
@@ -101,6 +101,8 @@ context-free syntax
           "bottom-up" | "bottom-up-break" |
           "outermost" | "innermost")?                            -> Strategy
 
+         "," Expression ","                                      -> Increment
+         "[" Expression Increment? ".." Expression "]"           -> Range
 	Declarator ":" Strategy Expression                      -> SimpleGenerator {cons("generator")}
 
          SimpleGenerator                                         -> Generator

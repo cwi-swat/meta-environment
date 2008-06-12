@@ -1782,6 +1782,81 @@ lexical syntax
     features.</para>
 
     <section>
+      <title>Hello world</title>
+
+      <para>The ritual first example:<programlisting>module Hello
+
+public fun int main(list[str] argv) {
+   println("Hello, this is my first Rascal program");
+   return 0;
+}</programlisting><caution>
+          <para>How do we type <literal>main</literal>? This is the type as
+          defined it earlier but this is verbose. Can we provide alternatives
+          including void main(), this would eliminate the need for the ugly
+          return statement:<programlisting>module Hello
+
+public fun void main()
+   println("Hello, this is my first Rascal program")</programlisting></para>
+        </caution></para>
+    </section>
+
+    <section>
+      <title>Table of squares</title>
+
+      <para>Another ritual example, printing a table of
+      squares:<programlisting>module Squares
+
+public fun main(list[str] argv){
+  int N = toInt(argv[0]);
+  map[int,int] squares = {};
+  for(int I : [1..N]){
+     squares[I] = I * I
+  }
+  println("Table of squares from 1 to &lt;N&gt;");
+  println(squares);
+}</programlisting><caution>
+          <para>We have currently no mechanism to loop over integers.
+          Proposal: lets introduce integer ranges of the form
+          <literal>[<replaceable>B</replaceable>..<replaceable>E</replaceable>]</literal>,
+          where <replaceable>B</replaceable> and <replaceable>E</replaceable>
+          are integers. The following operations are defined on integer
+          ranges:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>They can be used as generator.</para>
+            </listitem>
+
+            <listitem>
+              <para>The set operations union, intersection and
+              difference.</para>
+            </listitem>
+          </itemizedlist>
+        </caution><caution>
+          <para>A less ambituous proposal is to add only a special generator
+          of the form
+          [<replaceable>B</replaceable>..<replaceable>E</replaceable>]. This
+          can be used in all place where a generator may occur.</para>
+        </caution><caution>
+          <para>A minor addition could be to also allow an optional increment
+          between the steps:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para> [1..5] generates 1, 2, 3, 4, 5.</para>
+            </listitem>
+
+            <listitem>
+              <para>[1,2,..5] generates 1, 3, 5</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>This version is included in the current syntax
+          definition.</para>
+        </caution></para>
+    </section>
+
+    <section>
       <title>Booleans</title>
 
       <para>It seems that every language specification effort has to produce a
