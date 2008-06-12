@@ -1,5 +1,9 @@
 
 
+Thu Jun 12 16:16:08 CEST 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: added another trick to generate newlines in MANIFEST.MF,
+   the code was not portable to macosx, now it is.
+
 Tue Jun  3 09:32:00 CEST 2008 <jurgenv@cwi.nl>
  * Makefile.meta: made all binaries that are made in a Makefile that
    includes Makefile.meta relocatable. The precondition is that the

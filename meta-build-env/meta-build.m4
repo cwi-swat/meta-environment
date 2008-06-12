@@ -462,10 +462,10 @@ Bundle-Name: $1
 Eclipse-LazyStart: true
 Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
 Bundle-Version: $2
-Bundle-ClassPath: `echo "${BUNDLE_CLASSPATH}" | sed "s@,@,\n @g"`
+Bundle-ClassPath: `echo "${BUNDLE_CLASSPATH}" | sed "s@,@,# @g" | tr '#' '\n'`
 Bundle-Localization: plugin
 Export-Package: `echo "$4" | sed "s@,@,\n @g"`
-Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,\n @g"`
+Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,# @g" | tr '#' '\n'`
 Bundle-Activator: $6
 ENDCAT
 
