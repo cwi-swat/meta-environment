@@ -128,8 +128,12 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 	 *            The key associated with the channel that we can read from.
 	 */
 	private void read(SelectionKey key){
-		SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
-		ioHandler.read();
+		SelectableChannel channel = key.channel();
+		
+		synchronized(channel){
+			SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
+			ioHandler.read();
+		}
 	}
 
 	/**
@@ -141,20 +145,20 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 		try{
 			selector.wakeup();
 	
-			try{
-				SelectionKey key = channel.keyFor(selector);
-				if(key == null){
-					channel.register(selector, SelectionKey.OP_READ, ioHandler);
-				}else{
-					synchronized(key){
+			synchronized(channel){
+				try{
+					SelectionKey key = channel.keyFor(selector);
+					if(key == null){
+						channel.register(selector, SelectionKey.OP_READ, ioHandler);
+					}else{
 						key.interestOps(SelectionKey.OP_READ);
 						key.attach(ioHandler);
 					}
+				}catch(IOException ioex){
+					LoggerFactory.log("Registering a channel for reading failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
+		
+					connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 				}
-			}catch(IOException ioex){
-				LoggerFactory.log("Registering a channel for reading failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
-	
-				connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 			}
 		}finally{
 			selectionPreventionLatch.release();
@@ -170,10 +174,10 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 		try{
 			selector.wakeup();
 	
-			SelectionKey key = channel.keyFor(selector);
-	
-			if(key != null){
-				synchronized(key){
+			synchronized(channel){
+				SelectionKey key = channel.keyFor(selector);
+				
+				if(key != null){
 					if(key.isValid()) key.interestOps(0);
 					else key.cancel();
 		

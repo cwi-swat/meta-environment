@@ -130,8 +130,12 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 	 *            The key associated with the channel that we can read from.
 	 */
 	private void read(SelectionKey key){
-		SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
-		ioHandler.read();
+		SelectableChannel channel = key.channel();
+		
+		synchronized(channel){
+			SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
+			ioHandler.read();
+		}
 	}
 
 	/**
@@ -142,13 +146,14 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 	 */
 	private void write(SelectionKey key){
 		SelectableChannel channel = key.channel();
-		SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
-
-		ioHandler.write();
-
-		// If there is not more data that needs to be written or the channel has been closed in the
-		// mean time, de-register it.
+		
 		synchronized(registrationLock){
+			SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
+	
+			ioHandler.write();
+	
+			// If there is not more data that needs to be written or the channel has been closed in the
+			// mean time, de-register it.
 			if(!ioHandler.hasMoreToWrite() || !channel.isOpen()) deregisterForWrite(channel);
 		}
 	}
@@ -161,18 +166,18 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 		
 		try{
 			selector.wakeup();
-	
-			try{
-				synchronized(registrationLock){
+
+			synchronized(registrationLock){
+				try{
 					SelectionKey key = channel.keyFor(selector);
 					int interestOps = SelectionKey.OP_READ;
 					if(key != null) interestOps |= key.interestOps();
 					channel.register(selector, interestOps, ioHandler);
+				}catch(IOException ioex){
+					LoggerFactory.log("Registering a channel for reading failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
+		
+					connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 				}
-			}catch(IOException ioex){
-				LoggerFactory.log("Registering a channel for reading failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
-	
-				connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 			}
 		}finally{
 			selectionPreventionLatch.release();

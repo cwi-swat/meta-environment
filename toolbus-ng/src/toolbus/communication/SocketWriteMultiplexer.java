@@ -128,13 +128,14 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 	 */
 	private void write(SelectionKey key){
 		SelectableChannel channel = key.channel();
-		SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
-
-		ioHandler.write();
-
-		// If there is not more data that needs to be written or the channel has been closed in the
-		// mean time, de-register it.
-		synchronized(key){
+		
+		synchronized(channel){
+			SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
+	
+			ioHandler.write();
+	
+			// If there is not more data that needs to be written or the channel has been closed in the
+			// mean time, de-register it.
 			if(!ioHandler.hasMoreToWrite() || !channel.isOpen()) deregisterForWrite(channel);
 		}
 	}
@@ -147,21 +148,21 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 		
 		try{
 			selector.wakeup();
-			
-			try{
-				SelectionKey key = channel.keyFor(selector);
-				if(key == null){
-					channel.register(selector, SelectionKey.OP_WRITE, ioHandler);
-				}else{
-					synchronized(key){
+
+			synchronized(channel){
+				try{
+					SelectionKey key = channel.keyFor(selector);
+					if(key == null){
+						channel.register(selector, SelectionKey.OP_WRITE, ioHandler);
+					}else{
 						key.interestOps(SelectionKey.OP_WRITE);
 						key.attach(ioHandler);
 					}
+				}catch(IOException ioex){
+					LoggerFactory.log("Registering a channel for writing failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
+		
+					connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 				}
-			}catch(IOException ioex){
-				LoggerFactory.log("Registering a channel for writing failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
-	
-				connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 			}
 		}finally{
 			selectionPreventionLatch.release();
@@ -177,9 +178,9 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 		try{
 			selector.wakeup();
 			
-			SelectionKey key = channel.keyFor(selector);
-			if(key != null){
-				synchronized(key){
+			synchronized(channel){
+				SelectionKey key = channel.keyFor(selector);
+				if(key != null){
 					if(key.isValid()) key.interestOps(0);
 					else key.cancel();
 		
