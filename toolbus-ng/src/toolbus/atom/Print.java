@@ -4,9 +4,11 @@
 package toolbus.atom;
 
 import java.io.PrintWriter;
+
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
@@ -30,8 +32,8 @@ public class Print extends Atom{
 	}
 	
 	private String sprintf(ATermList args){
-		if(args.getLength() == 0) new ToolBusException("missing arguments");
-		if(tbfactory.isStr(args.elementAt(0))) new ToolBusException("first argument should be a string");
+		if(args.getLength() == 0) new ToolBusExecutionException("Missing arguments.", getPosInfo());
+		if(tbfactory.isStr(args.elementAt(0))) new ToolBusExecutionException("First argument should be a string.", getPosInfo());
 		String fmt = ((ATermAppl) args.elementAt(0)).getName();
 		String res = new String();
 		int iarg = 1;
@@ -43,7 +45,7 @@ public class Print extends Atom{
 					continue;
 				}
 				
-				if(i == fmt.length()) new ToolBusException("format string too short");
+				if(i == fmt.length()) new ToolBusExecutionException("Format string too short.", getPosInfo());
 				i++;
 				char d = fmt.charAt(i);
 				if(d == 'n')
@@ -53,13 +55,13 @@ public class Print extends Atom{
 				else res += d;
 				continue;
 			}
-			if(i == fmt.length()) new ToolBusException("format string too short");
+			if(i == fmt.length()) new ToolBusExecutionException("Format string too short.", getPosInfo());
 			i++;
 			
-			if(iarg == args.getLength()) new ToolBusException("argument list too short");
+			if(iarg == args.getLength()) new ToolBusExecutionException("Argument list too short.", getPosInfo());
 			res += args.elementAt(iarg++);
 		}
-		if(iarg < args.getLength()) new ToolBusException("argument list too long");
+		if(iarg < args.getLength()) new ToolBusExecutionException("Argument list too long.", getPosInfo());
 		return res;
 	}
 	
@@ -69,7 +71,7 @@ public class Print extends Atom{
 			// System.err.println("Print.execute: " + this + "; env = " + e);
 			PrintWriter out = getToolBus().getPrintWriter();
 			ATerm res = tbfactory.fullSubstitute(arg.value, e);
-			if(res == null) throw new ToolBusException("Illegal printf pattern: "+arg.value+".");
+			if(res == null) throw new ToolBusExecutionException("Illegal printf pattern: "+arg.value+".", getPosInfo());
 			// System.err.println("res =" + res);
 			out.print(sprintf((ATermList) res));
 			out.flush();

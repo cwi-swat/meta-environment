@@ -4,6 +4,7 @@
 package toolbus.atom.tool;
 
 import java.util.Stack;
+
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTermFactory;
@@ -13,6 +14,7 @@ import toolbus.ToolInstanceManager;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
@@ -43,9 +45,9 @@ public class Execute extends Atom{
 	public void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException{
 		super.compile(P, calls, follow);
 		
-		if(tool.value.getType() != ATerm.APPL) throw new ToolBusException("malformed first argument in execute");
-		if(!tbfactory.isResultVar(rvar.value)) throw new ToolBusException("second argument of execute should be a result variable");
-		if(!Functions.compatibleTypes(tool.value, rvar.value)) throw new ToolBusException("arguments of execute should have the same (tool) type");
+		if(tool.value.getType() != ATerm.APPL) throw new ToolBusExecutionException("Malformed first argument in execute.", getPosInfo());
+		if(!tbfactory.isResultVar(rvar.value)) throw new ToolBusExecutionException("Second argument of execute should be a result variable.", getPosInfo());
+		if(!Functions.compatibleTypes(tool.value, rvar.value)) throw new ToolBusExecutionException("Arguments of execute should have the same (tool) type.", getPosInfo());
 	}
 	
 	public boolean execute() throws ToolBusException{

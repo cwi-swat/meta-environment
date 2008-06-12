@@ -4,12 +4,14 @@
 package toolbus.atom;
 
 import java.util.Stack;
+
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
@@ -51,7 +53,7 @@ public class Assign extends Atom{
 	public void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException{
 		super.compile(P, calls, follow);
 		// System.err.println("Assign.compile: " + this + " env = " + getEnv());
-		if(!tbfactory.isAnyVar(var.value)) throw new ToolBusException("left-hand side of := should be a variable");
+		if(!tbfactory.isAnyVar(var.value)) throw new ToolBusExecutionException("Left-hand side of := should be a variable.", getPosInfo());
 		ATerm vartype = ((TBTermVar) var.value).getVarType();
 		
 		// System.err.println(this + "; var = " + var +"; vartype = " + vartype);
@@ -61,7 +63,7 @@ public class Assign extends Atom{
 		// System.err.println(this + "; exp = " + exp.value + "; exptype = " + exptype);
 		
 		if(!Functions.compatibleTypes(vartype, exptype)){// lhs = term!
-			throw new ToolBusException("wrong types in assignment " + this + "; " + vartype + " := " + exptype);
+			throw new ToolBusExecutionException("Wrong types in assignment "+this+"; "+vartype+" := "+exptype, getPosInfo());
 		}
 	}
 	

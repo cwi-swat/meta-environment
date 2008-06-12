@@ -5,6 +5,7 @@ import toolbus.TBTermVar;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -46,7 +47,7 @@ public class SndResponse extends Atom{
 		}
 		
 		ATerm responseTerm = tbfactory.fullSubstitute(response.value, getEnv());
-		if(responseTerm == null) throw new ToolBusException("Illegal response term pattern: "+responseTerm+".");
+		if(responseTerm == null) throw new ToolBusExecutionException("Illegal response term pattern: "+responseTerm+".", getPosInfo());
 		
 		toolInstance.sendResponse(responseTerm);
 		

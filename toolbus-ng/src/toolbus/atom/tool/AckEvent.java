@@ -5,6 +5,7 @@ import toolbus.TBTermVar;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -68,7 +69,7 @@ public class AckEvent extends Atom{
 			callbackTerm = tbfactory.EmptyList;
 		}else{
 			callbackTerm = tbfactory.fullSubstitute(callbackTerm, getEnv());
-			if(callbackTerm == null) throw new ToolBusException("Illegal callback term pattern: "+callbackTerm+".");
+			if(callbackTerm == null) throw new ToolBusExecutionException("Illegal callback term pattern: "+callbackTerm+".", getPosInfo());
 		}
 		
 		// Construct the ack event.

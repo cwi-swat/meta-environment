@@ -5,6 +5,7 @@ import toolbus.TBTermVar;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -50,7 +51,7 @@ public class Eval extends Atom{
 		
 		if(toolInstance.tryDoEval()){
 			ATerm req = tbfactory.fullSubstitute(request.value, getEnv());
-			if(req == null) throw new ToolBusException("Illegal eval request pattern: "+request.value+".");
+			if(req == null) throw new ToolBusExecutionException("Illegal eval request pattern: "+request.value+".", getPosInfo());
 			
 			toolInstance.sendEval(req);
 			//LoggerFactory.log(this.getProcess().getProcessName(), "Eval " + request.value, IToolBusLoggerConstants.TOOLCOM);

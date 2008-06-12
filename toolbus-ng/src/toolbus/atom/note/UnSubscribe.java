@@ -7,6 +7,7 @@ import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
@@ -33,7 +34,7 @@ public class UnSubscribe extends Atom{
 		if(!isEnabled()) return false;
 		
 		ATerm unsubscribePattern = tbfactory.fullSubstitute(msgpat, getEnv());
-		if(unsubscribePattern == null) throw new ToolBusException("Illegal subscription pattern: "+msgpat+".");
+		if(unsubscribePattern == null) throw new ToolBusExecutionException("Illegal subscription pattern: "+msgpat+".", getPosInfo());
 		
 		getProcess().unsubscribe(unsubscribePattern);
 		

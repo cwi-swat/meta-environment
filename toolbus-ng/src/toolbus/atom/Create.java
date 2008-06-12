@@ -4,12 +4,14 @@
 package toolbus.atom;
 
 import java.util.Stack;
+
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.ToolBus;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessExpression;
@@ -38,8 +40,8 @@ public class Create extends Atom{
 	public void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException{
 		super.compile(P, calls, follow);
 		
-		if(pcall.value.getType() != ATerm.APPL) throw new ToolBusException("malformed first argument in create");
-		if(!tbfactory.isResultVar(rvar.value)) throw new ToolBusException("second argument of create should be a result variable");
+		if(pcall.value.getType() != ATerm.APPL) throw new ToolBusExecutionException("Malformed first argument in create.", getPosInfo());
+		if(!tbfactory.isResultVar(rvar.value)) throw new ToolBusExecutionException("Second argument of create should be a result variable.", getPosInfo());
 	}
 	
 	public boolean execute() throws ToolBusException{

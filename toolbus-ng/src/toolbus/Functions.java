@@ -70,7 +70,6 @@ abstract class FunctionDescriptor{
 	 *            an array of types of actual parameters
 	 * @return boolean
 	 * @throws ToolBusError
-	 * @throws ToolBusException
 	 */
 	public boolean checkStatic(ATerm actual[]) throws ToolBusError{
 		if(argtypes.length != actual.length) throw new ToolBusError("funcion " + name + " has wrong number of arguments");

@@ -17,6 +17,7 @@ import toolbus.atom.Tau;
 import toolbus.environment.Environment;
 import toolbus.exceptions.NoSuchProcessDefinitionException;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.debug.ExecutionResult;
 import aterm.ATerm;
@@ -90,7 +91,7 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 	
 	private void compileStaticOrDynamicCall() throws ToolBusException{
 		if(calls.contains(name)){
-			throw new ToolBusException("Recursive call of " + name);
+			throw new ToolBusExecutionException("Recursive call of "+name, getPosInfo());
 		}
 		
 		definition = processInstance.getToolBus().getProcessDefinition(name, originalActuals.getLength());

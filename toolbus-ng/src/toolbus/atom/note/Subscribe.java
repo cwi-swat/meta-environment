@@ -4,11 +4,13 @@
 package toolbus.atom.note;
 
 import java.util.Stack;
+
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.matching.MatchStore;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
@@ -54,7 +56,7 @@ public class Subscribe extends Atom{
 		if(!isEnabled()) return false;
 		
 		ATerm subscribePattern = tbfactory.fullSubstitute(notePattern, getEnv());
-		if(subscribePattern == null) throw new ToolBusException("Illegal subscription pattern: "+notePattern+".");
+		if(subscribePattern == null) throw new ToolBusExecutionException("Illegal subscription pattern: "+notePattern+".", getPosInfo());
 		
 		getProcess().subscribe(subscribePattern);
 		return true;

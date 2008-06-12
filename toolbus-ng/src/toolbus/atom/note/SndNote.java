@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.matching.MatchStore;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
@@ -40,7 +42,7 @@ public class SndNote extends Atom{
 			if(notePartners.size() == 0) return true;
 			
 			ATerm theNote = tbfactory.fullSubstitute(notePattern, getEnv());
-			if(theNote == null) throw new ToolBusException("Illegal note pattern: "+theNote+".");
+			if(theNote == null) throw new ToolBusExecutionException("Illegal note pattern: "+theNote+".", getPosInfo());
 			
 			Iterator<ProcessInstance> notePartnersIterator = notePartners.iterator();
 			while(notePartnersIterator.hasNext()){
@@ -61,7 +63,7 @@ public class SndNote extends Atom{
 			if(notePartners.size() == 0) return new ProcessInstance[0];
 			
 			ATerm theNote = tbfactory.fullSubstitute(notePattern, getEnv());
-			if(theNote == null) throw new ToolBusException("Illegal note pattern: "+theNote+".");
+			if(theNote == null) throw new ToolBusExecutionException("Illegal note pattern: "+theNote+".", getPosInfo());
 			
 			List<ProcessInstance> subscribedPartners = new ArrayList<ProcessInstance>();
 			Iterator<ProcessInstance> notePartnersIterator = notePartners.iterator();
