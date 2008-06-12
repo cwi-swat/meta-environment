@@ -464,7 +464,7 @@ Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
 Bundle-Version: $2
 Bundle-ClassPath: `echo "${BUNDLE_CLASSPATH}" | sed "s@,@,# @g" | tr '#' '\n'`
 Bundle-Localization: plugin
-Export-Package: `echo "$4" | sed "s@,@,\n @g"`
+Export-Package: `echo "$4" | sed "s@,@,# @g" | tr '#' '\n'`
 Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,# @g" | tr '#' '\n'`
 Bundle-Activator: $6
 ENDCAT
@@ -494,7 +494,7 @@ ENDCAT
 
 cat > build.properties << ENDCAT
 source.$3 = src/
-bin.includes = META-INF/,.,`echo "${BUNDLE_CLASSPATH}" | sed "s@,@,\\\\\\ @g" | sed "s@ @\n @g"`
+bin.includes = META-INF/,.,`echo "${BUNDLE_CLASSPATH}" | sed "s@,@,\\\\\\ @g" | sed "s@ @# @g" | tr '#' '\n'`
 ENDCAT
 
 BUNDLE_LOCAL_JARS=`echo $7 | tr ':' ' '`
@@ -569,7 +569,7 @@ Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
 Bundle-Version: $2
 Bundle-ClassPath: .
 Bundle-Localization: plugin
-Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,\n @g"`
+Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,# @g" | tr '#' '\n'`
 ENDCAT
 
 # Remove empty clauses from the manifest
