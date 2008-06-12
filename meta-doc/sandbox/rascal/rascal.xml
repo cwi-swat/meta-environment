@@ -769,14 +769,8 @@
           <listitem>
             <para>There are built-in types (<literal>bool</literal>,
             <literal>int</literal>, <literal>double</literal>,
-            <literal>number</literal>, <literal>str</literal>,
-            <literal>loc</literal>, <literal>void</literal>).</para>
-          </listitem>
-
-          <listitem>
-            <para>The types <literal>int</literal> and
-            <literal>double</literal> are subtypes of
-            <literal>number</literal>.</para>
+            <literal>str</literal>, <literal>loc</literal>,
+            <literal>void</literal>).</para>
           </listitem>
 
           <listitem>
@@ -872,9 +866,7 @@
             a subtype of a given type, e.g.,<programlisting>type rel[node,node] Graph</programlisting>introduces
             the type <literal>Graph</literal> as a subtype of
             <literal>rel[node,node]</literal>. There are no built-in subtypes.
-            <caution>
-                <para>Is that true? How about int/double/number?</para>
-              </caution></para>
+            </para>
           </listitem>
 
           <listitem>
@@ -895,37 +887,33 @@
         <para>The type hierarchy leads to a subtype relation &lt;= that can be
         defined (in ASF+SDF) as follows:<programlisting>%% Subtyping rules (&lt;=) on Types
 
-[let01] int &lt;= number                      = true
+[let01] T &lt;= value                         = true
 
-[let02] double &lt;= number                   = true
+[let02] T &lt;= T                             = true
 
-[let03] T &lt;= value                         = true
+[let03] T &lt;= &amp; N                           = true
 
-[let04] T &lt;= T                             = true
+[let04] T &lt;= &amp;N &lt;= T'                      = T &lt;= T'
 
-[let04] T &lt;= &amp; N                           = true
+[let05] N[&amp;T] &lt;= N[&amp;U]                     = true
 
-[let05] T &lt;= &amp;N &lt;= T'                      = T &lt;= T'
+[let06] list[T] &lt;= list[T']                = T &lt;= T'
 
-[let06] N[&amp;T] &lt;= N[&amp;U]                     = true
+[let07] set[T] &lt;= set[T']                  = T &lt;= T'
 
-[let07] list[T] &lt;= list[T']                = T &lt;= T'
+[let08] tuple[ONTs] &lt;= tuple[ONTs']        = ONTs &lt;= ONTs'
 
-[let08] set[T] &lt;= set[T']                  = T &lt;= T'
+[let09] map[T1, T2] &lt;= map[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
 
-[let09] tuple[ONTs] &lt;= tuple[ONTs']        = ONTs &lt;= ONTs'
+[let10] map[T1, T2] &lt;= rel[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
 
-[let10] map[T1, T2] &lt;= map[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
+[let11] rel[ONTs] &lt;= rel[ONTs']            = ONTs &lt;= ONTs'
 
-[let11] map[T1, T2] &lt;= rel[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
+[let12] rel[ONTs] &lt;= set[tuple[ONTs']]     = ONTs &lt;= ONTs'
 
-[let12] rel[ONTs] &lt;= rel[ONTs']            = ONTs &lt;= ONTs'
+[let13] set[tuple[ONTs]] &lt;= rel[ONTs']     = ONTs &lt;= ONTs'
 
-[let13] rel[ONTs] &lt;= set[tuple[ONTs']]     = ONTs &lt;= ONTs'
-
-[let14] set[tuple[ONTs]] &lt;= rel[ONTs']     = ONTs &lt;= ONTs'
-
-[let15] T &lt;= T' == true,
+[let14] T &lt;= T' == true,
         ONTs &lt;= ONTs' == true
         =========================================
         fun T N (ONTs) &lt;= fun T' N (ONTs') = true
@@ -954,8 +942,6 @@
             <para>How do we handle the optional names that occur in types?
             Currently, we throw them away in the subtype relation. Should we
             also compare these names?</para>
-          </caution><caution>
-            <para>What is the final word on int, double and number?</para>
           </caution></para>
       </section>
     </section>
@@ -1114,43 +1100,81 @@
             types w.r.t. the type hierarchy, i.e., not (A &lt;= B) and not
             (B&lt;=A).</para>
           </listitem>
-
-          <listitem>
-            <para>the result types of the two functions are
-            incomparable.</para>
-          </listitem>
         </itemizedlist>
 
-        <para>Here are some examples.<caution>
-            <para>These examples need more thought! In particular the
-            int/double/number stuff sucks. Proposal:</para>
+        <para>Here are some examples.</para>
 
-            <itemizedlist>
-              <listitem>
-                <para>Drop <literal>the type number</literal>: we only have
-                <literal>int</literal> and <literal>double</literal>.</para>
-              </listitem>
+        <para>Here are, after all the warnings, the original examples:</para>
 
-              <listitem>
-                <para>We have conversion functions <literal>toInt</literal>
-                and <literal>toDouble</literal> in the standard
-                library:<programlisting>public fun double toDouble(int I)
- primitive("Int.toDouble")
+        <para><programlisting>%% OK, since int and double are incomparable 
 
-public fun int toInt(double D)
-  primitive("Double.toInt")</programlisting></para>
-              </listitem>
+fun int +(int a, int b) { ... }
+fun double +(double a, double b) { ... }
 
-              <listitem>
-                <para>There are no automatic conversions, use explicit
-                conversions when needed.</para>
-              </listitem>
-            </itemizedlist>
-          </caution><caution>
-            <para>There is one case where this can become unacceptable:
-            printing messages. In Java, the string concatenation operator + is
-            highly polymorphic and converts its arguments to string when
-            needed. How can we get the equivalent of<programlisting>stdout.println("Value " + v + " of arg " + n + " too large")</programlisting></para>
+%% KO, since int is comparable to value 
+%% (int is -- like all types -- a subtype of value)
+
+fun int +(value a, value b) { ... }
+fun int +(int a, int b) { ... }
+
+%% OK since for every two definitions selected from this
+%% set there is at least one parameter position different;
+%% in this example the overloading on result types will never 
+%% be used to select the function
+
+fun int    +(int a, int b)
+fun double +(int a, double b)
+fun double +(double a, int b)
+fun double +(double a, double b)
+
+%% KO, since arguments cannot be resolved.
+
+fun int randomValue()
+fun str randomValue()</programlisting></para>
+
+        <para>How should overloading be resolved in the presence of type
+        parameters? Our approach is simple but effective: a type parameter
+        <literal>&amp;<replaceable><replaceable>T</replaceable></replaceable></literal>
+        is taken to be of type <literal>value</literal>, unless it is
+        explicitly constrained to be smaller than (or smaller than or equal
+        to) another type U by writing
+        <literal>&amp;<replaceable>T</replaceable> &lt;=
+        <replaceable>U</replaceable></literal>. For the sake of overloading
+        resolution, a constrained type parameter will be considered to have
+        the type of the constraint, i.e., in <literal>fun
+        F(&amp;<replaceable>T</replaceable> &lt; U)</literal> we assume the
+        <literal>&amp;<replaceable>T</replaceable></literal> to be of type
+        <literal>U</literal>.</para>
+
+        <caution>
+          <para>What are the use cases of bounded polymorphism?</para>
+        </caution>
+
+        <para>Here are more examples:</para>
+
+        <para><programlisting>%% KO, because &amp;T might be any type (i.e. value),
+%% which is comparable to int
+
+fun str f(int x)
+fun str f(&amp;T x)
+
+%% KO, since both T's may bind to comparable types and
+%% value and int are comparable
+
+fun int f(&amp;T x, value y)
+fun int f(&amp;T y, int x)
+
+%% OK, since the second arguments have incomparable types
+
+fun int f(&amp;T x, int y)
+fun int f(&amp;T y, double x)</programlisting></para>
+
+        <para><caution>
+            <para>There is one case where the above rules can become
+            unacceptable: printing messages. In Java, the string concatenation
+            operator + is highly polymorphic and converts its arguments to
+            string when needed. How can we get the equivalent
+            of<programlisting>stdout.println("Value " + v + " of arg " + n + " too large")</programlisting></para>
 
             <para>Solution directions:</para>
 
@@ -1174,112 +1198,6 @@ public fun int toInt(double D)
               </listitem>
             </itemizedlist>
           </caution></para>
-
-        <para>Here are, after all the warnings, the original examples:</para>
-
-        <para><programlisting>%% OK, since int and double are incomparable 
-%% (both subtypes of 'number')
-
-fun int +(int a, int b) { ... }
-fun double +(double a, double b) { ... }
-
-%% KO, since int is comparable to value 
-%% (int is a subtype of number which is a subtype of value)
-
-fun int +(value a, value b) { ... }
-fun int +(int a, int b) { ... }
-
-%% OK, but the context must be specific enough to 
-%% see the difference
-
-fun int +(number a, number b) { ... }
-fun double +(number a, number b) { ... }
-
-fun test() {
-  int x = 1 + 2       %% OK, x = 3 because + resolved to int
-  int y = 1.5 + 2     %% OK, y = 3 (truncated from 3.5)
-                      %% because + resolved to int
-  double z = 1.5 + 2  %% OK, z = 3.5, because + resolved to double
-  number w = 1 + 3    %% KO, context too unspecific to resolve +.
-}
-
-%% OK since for every two definitions selected from this
-%% set there is at least one parameter position different;
-%% in this example the overloading on result types will never 
-%% be used to select the function
-
-fun int    +(int a, int b)
-fun int    +(int a, double b)
-fun int    +(double a, int b)
-fun double +(double a, double b)
-fun double +(int a, double b)
-fun double +(double a, int b)
-
-%% KO, since str is a subtype of value
-
-fun value randomValue()
-fun str   randomValue()
-
-%% OK, but the context must be specific enough:
-
-fun str randomValue()
-fun int randomValue()
-
-fun test() {
-  str x = randomValue();   %% OK
-  int y = randomValue();   %% OK
-  value z = randomValue(); %% KO, too unspecific to resolve 
-                           %% randomValue.
-}</programlisting></para>
-
-        <para>How should overloading be resolved in the presence of type
-        parameters? Our approach is simple but effective: a type parameter
-        <literal>&amp;<replaceable><replaceable>T</replaceable></replaceable></literal>
-        is taken to be of type <literal>value</literal>, unless it is
-        explicitly constrained to be smaller than (or smaller than or equal
-        to) another type U by writing
-        <literal>&amp;<replaceable>T</replaceable> &lt;
-        <replaceable>U</replaceable></literal> or
-        <literal>&amp;<replaceable>T</replaceable> &lt;=
-        <replaceable>U</replaceable></literal>. For the sake of overloading
-        resolution, a constrained type parameter will be considered to have
-        the type of the constraint, i.e., in <literal>fun
-        F(&amp;<replaceable>T</replaceable> &lt; number)</literal> we assume
-        the <literal>&amp;<replaceable>T</replaceable></literal> to be of type
-        <literal>number</literal>.</para>
-
-        <para>Here are some examples:</para>
-
-        <para><programlisting>%% KO, because &amp;T might be any type (i.e. value),
-%% which is comparable to int
-
-fun str f(int x)
-fun str f(&amp;T x)
-
-%% KO, since both T's may bind to comparable types and
-%% number and int are comparable
-
-fun int f(&amp;T x, number y)
-fun int f(&amp;T y, int x)
-
-%% OK, since the second arguments have incomparable types
-
-fun int f(&amp;T x, int y)
-fun int f(&amp;T y, double x)
-
-%% OK, because the result types will be incomparable
-%% however &amp;T is bound
-
-fun &amp;T &lt;= int    foo()
-fun &amp;T &lt;= double foo()
-
-%% KO, since both &amp;T's might be comparable:
-fun &amp;T      bar()
-fun &amp;T &lt;= A bar()</programlisting></para>
-
-        <para><caution>
-            <para>What are the use cases of bounded polymorphism?</para>
-          </caution></para>
       </section>
 
       <section>
@@ -1299,8 +1217,7 @@ fun &amp;T &lt;= A bar()</programlisting></para>
 
 [mo-1] may-overload(fun T N (ONTs), fun T' N' (ONTs')) = 
        not(N == N') | 
-       incomparable(ONTs, ONTs') | 
-       incomparable(T, T')</programlisting></para>
+       incomparable(ONTs, ONTs')</programlisting></para>
       </section>
 
       <section>
@@ -3193,7 +3110,7 @@ fun Integer* sort(Integer* Numbers){
           <para>The current syntax does not yet allow type variables in
           patterns. What are the implications for the implementation? Do we
           want this generality? Proposal: no since the ramifications are
-          unclear. </para>
+          unclear.</para>
         </caution>Here is a generic bubble sort wich uses type parameters
       (&amp;ELEM) and a function parameter.<programlisting>module Bubble-Gen
 
@@ -4518,6 +4435,10 @@ public fun int -(int I1, int I2)
 public fun int *(int I1, int I2)
   primitive("Int.mul")
 
+public fun int /(int I1, int I2)
+  throws divide_by_zero(str msg)
+  primitive("Int.div")
+
 %% Arbitrary integer: arb
 public fun int arb(int bgn, int end)
        throws illegal_argument(str msg) %% if(end - bgn &lt;= 0)
@@ -4534,20 +4455,57 @@ public fun str toString(int I)
 public fun bool ==(double D1, double D2)
   primitive("Double.equal")
 
+public fun bool ==(double D, int I)
+  return D == toDouble(I)
+
+public fun bool ==(int I, double D)
+  return toDouble(I) == D
+
 public fun bool &lt;(double D1, double D2)
   primitive("Double.less")
+
+public fun bool &lt;(double D, int I)
+  return D &lt; toDouble(I)
+
+public fun bool &lt;(int I, double D)
+  return toDouble(I) &lt; D
 
 public fun double +(double D1, double D2)
   primitive("Double.add")
 
+public fun bool +(double D, int I)
+  return D + toDouble(I)
+
+public fun bool +(int I, double D)
+  return toDouble(I) + D
+
 public fun double -(double D1, double D2)
   primitive("Double.sub")
+
+public fun bool -(double D, int I)
+  return D - toDouble(I)
+
+public fun bool -(int I, double D)
+  return toDouble(I) - D
 
 public fun double *(double D1, double D2)
   primitive("Double.mul")
 
+public fun bool *(double D, int I)
+  return D * toDouble(I)
+
+public fun bool *(int I, double D)
+  return toDouble(I) * D
+
 public fun double /(double D1, double D2)
+  throws divide_by_zero(str msg)
   primitive("Double.div")
+
+public fun bool /(double D, int I)
+  return D / toDouble(I)
+
+public fun bool /(int I, double D)
+  return toDouble(I) / D
 
 %% Arbitrary double: arb
 public fun double arb(double bgn, double end)

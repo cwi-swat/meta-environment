@@ -11,37 +11,33 @@ equations
 
 %% Subtyping rules (<=) on Types
 
-[let01] int <= number                      = true
+[let01] T <= value                         = true
 
-[let02] double <= number                   = true
+[let02] T <= T                             = true
 
-[let03] T <= value                         = true
+[let03] T <= & N                           = true
 
-[let04] T <= T                             = true
+[let04] T <= &N <= T'                      = T <= T'
 
-[let04] T <= & N                           = true
+[let05] N[&T] <= N[&U]                     = true
 
-[let05] T <= &N <= T'                      = T <= T'
+[let06] list[T] <= list[T']                = T <= T'
 
-[let06] N[&T] <= N[&U]                     = true
+[let07] set[T] <= set[T']                  = T <= T'
 
-[let07] list[T] <= list[T']                = T <= T'
+[let08] tuple[ONTs] <= tuple[ONTs']        = ONTs <= ONTs'
 
-[let08] set[T] <= set[T']                  = T <= T'
+[let09] map[T1, T2] <= map[T1', T2']       = T1 <= T1' &  T2 <= T2'
 
-[let09] tuple[ONTs] <= tuple[ONTs']        = ONTs <= ONTs'
+[let10] map[T1, T2] <= rel[T1', T2']       = T1 <= T1' &  T2 <= T2'
 
-[let10] map[T1, T2] <= map[T1', T2']       = T1 <= T1' &  T2 <= T2'
+[let11] rel[ONTs] <= rel[ONTs']            = ONTs <= ONTs'
 
-[let11] map[T1, T2] <= rel[T1', T2']       = T1 <= T1' &  T2 <= T2'
+[let12] rel[ONTs] <= set[tuple[ONTs']]     = ONTs <= ONTs'
 
-[let12] rel[ONTs] <= rel[ONTs']            = ONTs <= ONTs'
+[let13] set[tuple[ONTs]] <= rel[ONTs']     = ONTs <= ONTs'
 
-[let13] rel[ONTs] <= set[tuple[ONTs']]     = ONTs <= ONTs'
-
-[let14] set[tuple[ONTs]] <= rel[ONTs']     = ONTs <= ONTs'
-
-[let15] T <= T' == true,
+[let14] T <= T' == true,
         ONTs <= ONTs' == true
         =========================================
         fun T N (ONTs) <= fun T' N (ONTs') = true
@@ -61,5 +57,5 @@ equations
 %% May-overload
 
 [mo-1] may-overload(fun T N (ONTs), fun T' N' (ONTs')) = 
-       not(N == N') | incomparable(ONTs, ONTs') | incomparable(T, T')
+       not(N == N') | incomparable(ONTs, ONTs')
 

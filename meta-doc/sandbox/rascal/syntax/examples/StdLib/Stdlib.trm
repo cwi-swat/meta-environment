@@ -77,6 +77,10 @@ public fun int -(int I1, int I2)
 public fun int *(int I1, int I2)
   primitive("Int.mul")
 
+public fun int /(int I1, int I2)
+  throws divide_by_zero(str msg)
+  primitive("Int.div")
+
 %% Arbitrary integer: arb
 public fun int arb(int bgn, int end)
        throws illegal_argument(str msg) %% if(end - bgn <= 0)
@@ -93,20 +97,57 @@ public fun str toString(int I)
 public fun bool ==(double D1, double D2)
   primitive("Double.equal")
 
+public fun bool ==(double D, int I)
+  return D == toDouble(I)
+
+public fun bool ==(int I, double D)
+  return toDouble(I) == D
+
 public fun bool <(double D1, double D2)
   primitive("Double.less")
+
+public fun bool <(double D, int I)
+  return D < toDouble(I)
+
+public fun bool <(int I, double D)
+  return toDouble(I) < D
 
 public fun double +(double D1, double D2)
   primitive("Double.add")
 
+public fun bool +(double D, int I)
+  return D + toDouble(I)
+
+public fun bool +(int I, double D)
+  return toDouble(I) + D
+
 public fun double -(double D1, double D2)
   primitive("Double.sub")
+
+public fun bool -(double D, int I)
+  return D - toDouble(I)
+
+public fun bool -(int I, double D)
+  return toDouble(I) - D
 
 public fun double *(double D1, double D2)
   primitive("Double.mul")
 
+public fun bool *(double D, int I)
+  return D * toDouble(I)
+
+public fun bool *(int I, double D)
+  return toDouble(I) * D
+
 public fun double /(double D1, double D2)
+  throws divide_by_zero(str msg)
   primitive("Double.div")
+
+public fun bool /(double D, int I)
+  return D / toDouble(I)
+
+public fun bool /(int I, double D)
+  return toDouble(I) / D
 
 %% Arbitrary double: arb
 public fun double arb(double bgn, double end)

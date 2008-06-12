@@ -12,7 +12,6 @@ exports
   sorts Type OptNamedType OptNamedTypes TypeVar StandardOperator
         BasicType StructuredType FunctionType FunctionName AnonymousFunctionType AbstractType
         ParameterizedType
-        AbsPattern
 
   context-free syntax
     "bool"                                              -> BasicType      {cons("bool-type")} 
