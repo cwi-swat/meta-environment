@@ -8,4 +8,4 @@ Requires: aterm-java
 JarFile=toolbus-ng.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/java-cup-11a.jar
 LocalJars=lib/junit.jar:lib/java-cup-11a.jar
-Packages=toolbus,toolbus.adapter,toolbus.adapter.java,toolbus.exceptions,toolbus.logging,toolbus.testerror,toolbus.parser,toolbus.atom,toolbus.atom.note,toolbus.atom.msg,toolbus.atom.tool,toolbus.commandline,toolbus.environment,toolbus.communication,toolbus.tifs,toolbus.tool,toolbus.tool.execution,toolbus.util,toolbus.process,toolbus.viewer,toolbus.parsercup,toolbus.matching
+Packages=toolbus,toolbus.adapter,toolbus.adapter.java,toolbus.exceptions,toolbus.logging,toolbus.testerror,toolbus.parser,toolbus.atom,toolbus.atom.note,toolbus.atom.msg,toolbus.atom.tool,toolbus.commandline,toolbus.environment,toolbus.communication,toolbus.tifs,toolbus.tool,toolbus.tool.execution,toolbus.util,toolbus.process,toolbus.viewer,toolbus.parsercup,toolbus.matching,java_cup.runtime
