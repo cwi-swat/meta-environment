@@ -29,7 +29,7 @@ import aterm.ATermList;
  * the name of the process is P. Its declaration is taken and the call is replaced statically by the
  * corresponding process expression. (2) A dynamic process call: the current environment *does*
  * contain a declaration for a string variable P and the name of the process is the *string value*
- * of that variable. The declaration correspodning to that value is taken and the call is replaced
+ * of that variable. The declaration corresponding to that value is taken and the call is replaced
  * dynamically by the corresponding process expression. In the dynamic case, each the call is
  * encountered during execution it the may thus be expanded into a different process expression. Due
  * to the possibility of dynamic calls, a process call is a StateElement and exists during
@@ -102,7 +102,9 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		processInstance = P;
 		setFollow(follows);
 		
-		if(calls.contains(name)) throw new ToolBusExecutionException("Recursive call of "+name, getPosInfo());
+		String uname = name + originalActuals.getLength();
+		
+		if(calls.contains(uname)) throw new ToolBusExecutionException("Recursive call of "+uname, getPosInfo());
 		
 		try{
 			definition = processInstance.getToolBus().getProcessDefinition(name, originalActuals.getLength());
@@ -127,7 +129,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		PE.computeFirst();
 		PE.replaceFormals(env);
 		
-		calls.push(name);
+		calls.push(uname);
 		PE.compile(processInstance, calls, firstState);
 		calls.pop();
 		
