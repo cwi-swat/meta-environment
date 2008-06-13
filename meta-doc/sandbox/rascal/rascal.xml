@@ -1469,6 +1469,18 @@ lexical syntax
           </listitem>
 
           <listitem>
+            <para>Generators in comprehension may rane over integer ranges of
+            the form
+            <literal>[<replaceable>B</replaceable>..<replaceable>E</replaceable>]</literal>
+            or
+            <literal>[<replaceable>B</replaceable>,<replaceable>I</replaceable>,..<replaceable>E</replaceable>]</literal>,
+            where <replaceable>B</replaceable> indicates the begin value,
+            <replaceable>E</replaceable> the end value, and
+            <replaceable>I</replaceable> the optional increment between
+            values.</para>
+          </listitem>
+
+          <listitem>
             <para>Generators may have a strategy option to indicate:</para>
 
             <itemizedlist>
@@ -1533,14 +1545,12 @@ lexical syntax
 
               <listitem>
                 <para>The relational operators <literal>==</literal>
-                (function: <literal>equal</literal>) and
-                <literal>&lt;</literal> (function: <literal>less</literal>)
-                are available for values of all types. They are used to define
-                <literal>&lt;=</literal> (function:
-                <literal>less_equal</literal>), <literal>&gt;</literal>
-                (function: <literal>greater</literal>) and
-                <literal>&gt;=</literal> (function:
-                <literal>greater_equal</literal>) as well as the functions
+                (<literal>equal</literal>) and <literal>&lt;</literal>
+                (<literal>less</literal>) are available for values of all
+                types. They are used to define <literal>&lt;=</literal>
+                (<literal>less_equal</literal>), <literal>&gt;</literal>
+                (<literal>greater</literal>) and <literal>&gt;=</literal>
+                (<literal>greater_equal</literal>) as well as the functions
                 <literal>min</literal> and <literal>max</literal>.</para>
               </listitem>
 
@@ -1548,10 +1558,10 @@ lexical syntax
                 <para>For a binary relation <replaceable>R</replaceable> that
                 is a map (i.e. it associates a single value with each domain
                 element)
-                <replaceable>R</replaceable>(<replaceable>N</replaceable>),
+                <replaceable>R</replaceable>[<replaceable>N</replaceable>],
                 returns the single image value corresponding with
                 <replaceable>N</replaceable>. This expression may also occur
-                as left-hand side of an assignment:<programlisting><replaceable>R</replaceable>(<replaceable>N</replaceable>) = <replaceable>V</replaceable></programlisting>first
+                as left-hand side of an assignment:<programlisting><replaceable>R</replaceable>[<replaceable>N</replaceable>] = <replaceable>V</replaceable></programlisting>first
                 removes from <replaceable>R</replaceable> the tuple with
                 domain value <replaceable>N</replaceable> and then adds the
                 tuple &lt;<replaceable>N</replaceable>,
@@ -1568,7 +1578,7 @@ lexical syntax
               </listitem>
 
               <listitem>
-                <para>The Rscript image notation R[n] and R[-,n] is
+                <para>The Rscript image notation <literal>R[-,n]</literal> is
                 discontinued.</para>
               </listitem>
             </itemizedlist>
