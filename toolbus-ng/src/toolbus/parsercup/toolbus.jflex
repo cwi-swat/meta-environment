@@ -112,15 +112,12 @@ Real  = -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
   "#ifdef"                       { return symbol(sym.IFDEF); }
   "#ifndef"                      { return symbol(sym.IFNDEF); }
   "#endif"                       { return symbol(sym.ENDIF); }
- }
+}
  
 <INCLUDE> {
   "<"                            { string.setLength(0); }
-
   [^\n\r\"\\<>]+                 { string.append( yytext() ); }
-  ">"                            { yybegin(YYINITIAL); 
-                                   return symbol(sym.FILENAME, 
-                                   string.toString()); }
+  ">"                            { yybegin(YYINITIAL); return symbol(sym.FILENAME, string.toString()); }
 }
    
    
@@ -169,9 +166,7 @@ Real  = -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
 }
 
 <STRING> {
-  \"                             { yybegin(YYINITIAL); 
-                                   return symbol(sym.STRING, 
-                                   string.toString()); }
+  \"                             { yybegin(YYINITIAL); return symbol(sym.STRING, string.toString()); }
   [^\n\r\"\\]+                   { string.append( yytext() ); }
   \\t                            { string.append('\t'); }
   \\n                            { string.append('\n'); }
@@ -182,6 +177,5 @@ Real  = -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
 }
 
 /* error fallback */
-.|\n                             { throw new Error("Illegal character <"+
-                                                    yytext()+">"); }
+.|\n                             { throw new Error("Illegal character <"+yytext()+">"); }
 

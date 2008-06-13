@@ -14,7 +14,7 @@ public class TestParser {
 			//String src = "/home/paulk/.eclipse/toolbusNG/toolbus/test/Notes.tb";
 			String src = "/home/paulk/.eclipse/toolbusNG/toolbus/parsercup/tmp";
 			
-			parser parser_obj = new parser(src, new ToolBus(new String[0]));
+			parser parser_obj = new parser(new ToolBus(new String[0]), src);
 		
 			Symbol parse_tree = parser_obj.debug_parse();
 			System.err.println("parse tree is:\n" + parse_tree.value);

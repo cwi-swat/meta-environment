@@ -5,6 +5,7 @@ package toolbus.parsercup;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,8 +78,8 @@ parser code {:
    protected Stack<Boolean> ifdefStack;
 	
    /** ToolBus specific constructor */
-   public parser(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename, ToolBus tb) throws FileNotFoundException  {
-     super(new Lexer(new FileInputStream(filename)));
+   public parser(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename, Reader input, ToolBus tb){
+     super(new Lexer(input));
      
      this.includedFiles = includedFiles;
      this.toolbusProcessCalls = toolbusProcessCalls;
@@ -90,12 +91,17 @@ parser code {:
      tbfactory = toolbus.getTBTermFactory();
      
      ifdefStack = new Stack<Boolean>();
-     ifdefStack.push(true);
+     ifdefStack.push(Boolean.TRUE);
    }
    
    /** ToolBus specific constructor */
-   public parser(String filename, ToolBus tb) throws FileNotFoundException  {
-     this(new HashSet<String>(), new ArrayList<ATerm>(), filename, tb);
+   public parser(ToolBus tb, String filename) throws FileNotFoundException{
+     this(new HashSet<String>(), new ArrayList<ATerm>(), filename, new FileReader(filename), tb);
+   }
+   
+   /** ToolBus specific constructor */
+   public parser(ToolBus tb, String filename, Reader input){
+     this(new HashSet<String>(), new ArrayList<ATerm>(), filename, input, tb);
    }
    
    public String[] scriptsNames(){

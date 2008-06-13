@@ -7,14 +7,16 @@
 package toolbus.parsercup;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.atom.Assign;
@@ -54,12 +56,12 @@ import toolbus.process.DynamicProcessCall;
 import toolbus.process.IfElse;
 import toolbus.process.IfThen;
 import toolbus.process.Iteration;
+import toolbus.process.LeftBiasedAlternative;
 import toolbus.process.LetDefinition;
 import toolbus.process.Merge;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessExpression;
-import toolbus.process.LeftBiasedAlternative;
 import toolbus.process.RightBiasedAlternative;
 import toolbus.process.Sequence;
 import toolbus.tool.ToolDefinition;
@@ -938,8 +940,8 @@ public class parser extends java_cup.runtime.lr_parser {
    protected Stack<Boolean> ifdefStack;
 	
    /** ToolBus specific constructor */
-   public parser(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename, ToolBus tb) throws FileNotFoundException  {
-     super(new Lexer(new FileInputStream(filename)));
+   public parser(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename, Reader input, ToolBus tb){
+     super(new Lexer(input));
      
      this.includedFiles = includedFiles;
      this.toolbusProcessCalls = toolbusProcessCalls;
@@ -955,8 +957,13 @@ public class parser extends java_cup.runtime.lr_parser {
    }
    
    /** ToolBus specific constructor */
-   public parser(String filename, ToolBus tb) throws FileNotFoundException  {
-     this(new HashSet<String>(), new ArrayList<ATerm>(), filename, tb);
+   public parser(ToolBus tb, String filename) throws FileNotFoundException{
+     this(new HashSet<String>(), new ArrayList<ATerm>(), filename, new FileReader(filename), tb);
+   }
+   
+   /** ToolBus specific constructor */
+   public parser(ToolBus tb, String filename, Reader input){
+     this(new HashSet<String>(), new ArrayList<ATerm>(), filename, input, tb);
    }
    
    public String[] scriptsNames(){
