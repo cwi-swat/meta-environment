@@ -90,7 +90,9 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 	}
 	
 	private void compileStaticOrDynamicCall() throws ToolBusException{
-		if(calls.contains(name)){
+		String uname = name + originalActuals.getLength();
+		
+		if(calls.contains(uname)){
 			throw new ToolBusExecutionException("Recursive call of "+name, getPosInfo());
 		}
 		
@@ -113,7 +115,7 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 		PE.computeFirst();
 		PE.replaceFormals(env);
 		
-		calls.push(name);
+		calls.push(uname);
 		PE.compile(processInstance, calls, firstState);
 		calls.pop();
 		
