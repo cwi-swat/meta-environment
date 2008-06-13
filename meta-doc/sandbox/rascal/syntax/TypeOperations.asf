@@ -1,48 +1,48 @@
 equations
 
-%% Subtyping rules (<=) on OptionalNamedTypes
+%% Subtyping rules (<:) on OptionalNamedTypes
 
-[leo1] T N <= T' N'                        = T <= T'
-[leo2] T N, ONTs <= T' N, ONTs'            = T <= T' & ONTs <= ONTs'
-[leo3] ONTs1 + ONTs2 <= ONTs3              = ONTs1, ONTs2 <= ONTs3
-[leo4] ONTs1 <= ONTs2 + ONTs3              = ONTs1 <=  ONTs2, ONTs3
+[leo1] T N <: T' N'                        = T <: T'
+[leo2] T N, ONTs <: T' N, ONTs'            = T <: T' & ONTs <: ONTs'
+[leo3] ONTs1 + ONTs2 <: ONTs3              = ONTs1, ONTs2 <: ONTs3
+[leo4] ONTs1 <: ONTs2 + ONTs3              = ONTs1 <:  ONTs2, ONTs3
 [default-leo]
-       ONTs <= ONTs'                       = false
+       ONTs <: ONTs'                       = false
 
-%% Subtyping rules (<=) on Types
+%% Subtyping rules (<:) on Types
 
-[let01] T <= value                         = true
+[let01] T <: value                         = true
 
-[let02] T <= T                             = true
+[let02] T <: T                             = true
 
-[let03] T <= & N                           = true
+[let03] T <: & N                           = true
 
-[let04] T <= &N <= T'                      = T <= T'
+[let04] T <: &N <: T'                      = T <: T'
 
-[let05] N[&T] <= N[&U]                     = true
+[let05] N[&T] <: N[&U]                     = true
 
-[let06] list[T] <= list[T']                = T <= T'
+[let06] list[T] <: list[T']                = T <: T'
 
-[let07] set[T] <= set[T']                  = T <= T'
+[let07] set[T] <: set[T']                  = T <: T'
 
-[let08] tuple[ONTs] <= tuple[ONTs']        = ONTs <= ONTs'
+[let08] tuple[ONTs] <: tuple[ONTs']        = ONTs <: ONTs'
 
-[let09] map[T1, T2] <= map[T1', T2']       = T1 <= T1' &  T2 <= T2'
+[let09] map[T1, T2] <: map[T1', T2']       = T1 <: T1' &  T2 <: T2'
 
-[let10] map[T1, T2] <= rel[T1', T2']       = T1 <= T1' &  T2 <= T2'
+[let10] map[T1, T2] <: rel[T1', T2']       = T1 <: T1' &  T2 <: T2'
 
-[let11] rel[ONTs] <= rel[ONTs']            = ONTs <= ONTs'
+[let11] rel[ONTs] <: rel[ONTs']            = ONTs <: ONTs'
 
-[let12] rel[ONTs] <= set[tuple[ONTs']]     = ONTs <= ONTs'
+[let12] rel[ONTs] <: set[tuple[ONTs']]     = ONTs <: ONTs'
 
-[let13] set[tuple[ONTs]] <= rel[ONTs']     = ONTs <= ONTs'
+[let13] set[tuple[ONTs]] <: rel[ONTs']     = ONTs <: ONTs'
 
-[let14] T <= T' == true,
-        ONTs <= ONTs' == true
+[let14] T <: T' == true,        %% covariant
+        ONTs' <: ONTs == true   %% contravariant
         =========================================
-        fun T N (ONTs) <= fun T' N (ONTs') = true
+        fun T N (ONTs) <: fun T' N (ONTs') = true
 [default-let]
-        T <= T'                            = false
+        T <: T'                            = false
 
 %% Equality (==) on Names
 
@@ -52,7 +52,7 @@ equations
 
 %% Incomparable
 
-[com1] incomparable(ONTs, ONTs') = not((ONTs <= ONTs') | (ONTs' <= ONTs))
+[com1] incomparable(ONTs, ONTs') = not((ONTs <: ONTs') | (ONTs' <: ONTs))
 
 %% May-overload
 

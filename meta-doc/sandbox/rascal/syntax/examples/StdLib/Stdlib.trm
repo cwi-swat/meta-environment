@@ -721,19 +721,17 @@ public fun &T set_annotations(&T Subject,
 
 %% --- Parsing/Unparsing -------------------------------------
 
-public fun &T parseFile(str filename)
+public fun tree parseFile(str filename)
        throws file_does_not_exist(str msg)
   primitive("Parse.parseFile")
 
-%% TODO
-public fun &T parseString(str source)
+public fun tree parseString(str source)
   primitive("Parse.parseString")
 
-%% TODO
-public fun str unparseToString(&T Subject)
+public fun str unparseToString(tree Subject)
   primitive("Parse.unparseToString")
 
-public fun str unparseToFile(&T Subject, str filename)
+public fun str unparseToFile(tree Subject, str filename)
        throws cannot_create(str msg) 
        throws write_error(str msg) 
   primitive("Parse.unparseToFile")
@@ -756,10 +754,10 @@ public fun void write(str filename, &T Subject)
        throws write_error(str msg)
   primitive("IO.write")
 
-public fun void print(&T V)
+public fun void print(list[value] V...)
   primitive("IO.print")
 
-public fun void println(&T V)
+public fun void println(list[value] V...)
   primitive("IO.println")
 
 %% --- Interface with the Program Database -------------------

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -811,8 +811,16 @@
 
           <listitem>
             <para>Function parameters can be function types, maening that the
-            name of a properly types function can be passed as a
+            name of a properly typed function can be passed as a
             parameter.</para>
+          </listitem>
+
+          <listitem>
+            <para>The last argument of a function may be of the form
+            <literal>list[<replaceable>T</replaceable>]
+            <replaceable>Name</replaceable>...</literal> and indicates a
+            variable list of remaining arguments of type
+            <replaceable>T</replaceable>.</para>
           </listitem>
 
           <listitem>
@@ -865,8 +873,8 @@
             <para>A type declaration introduces a name for a new type that is
             a subtype of a given type, e.g.,<programlisting>type rel[node,node] Graph</programlisting>introduces
             the type <literal>Graph</literal> as a subtype of
-            <literal>rel[node,node]</literal>. There are no built-in subtypes.
-            </para>
+            <literal>rel[node,node]</literal>. There are no built-in
+            subtypes.</para>
           </listitem>
 
           <listitem>
@@ -884,41 +892,41 @@
       <section>
         <title>Subtypes</title>
 
-        <para>The type hierarchy leads to a subtype relation &lt;= that can be
-        defined (in ASF+SDF) as follows:<programlisting>%% Subtyping rules (&lt;=) on Types
+        <para>The type hierarchy leads to a subtype relation &lt;: that can be
+        defined (in ASF+SDF) as follows:<programlisting>%% Subtyping rules (&lt;:) on Types
 
-[let01] T &lt;= value                         = true
+[let01] T &lt;: value                         = true
 
-[let02] T &lt;= T                             = true
+[let02] T &lt;: T                             = true
 
-[let03] T &lt;= &amp; N                           = true
+[let03] T &lt;: &amp; N                           = true
 
-[let04] T &lt;= &amp;N &lt;= T'                      = T &lt;= T'
+[let04] T &lt;: &amp;N &lt;: T'                      = T &lt;: T'
 
-[let05] N[&amp;T] &lt;= N[&amp;U]                     = true
+[let05] N[&amp;T] &lt;: N[&amp;U]                     = true
 
-[let06] list[T] &lt;= list[T']                = T &lt;= T'
+[let06] list[T] &lt;: list[T']                = T &lt;: T'
 
-[let07] set[T] &lt;= set[T']                  = T &lt;= T'
+[let07] set[T] &lt;: set[T']                  = T &lt;: T'
 
-[let08] tuple[ONTs] &lt;= tuple[ONTs']        = ONTs &lt;= ONTs'
+[let08] tuple[ONTs] &lt;: tuple[ONTs']        = ONTs &lt;: ONTs'
 
-[let09] map[T1, T2] &lt;= map[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
+[let09] map[T1, T2] &lt;: map[T1', T2']       = T1 &lt;: T1' &amp;  T2 &lt;: T2'
 
-[let10] map[T1, T2] &lt;= rel[T1', T2']       = T1 &lt;= T1' &amp;  T2 &lt;= T2'
+[let10] map[T1, T2] &lt;: rel[T1', T2']       = T1 &lt;: T1' &amp;  T2 &lt;: T2'
 
-[let11] rel[ONTs] &lt;= rel[ONTs']            = ONTs &lt;= ONTs'
+[let11] rel[ONTs] &lt;: rel[ONTs']            = ONTs &lt;: ONTs'
 
-[let12] rel[ONTs] &lt;= set[tuple[ONTs']]     = ONTs &lt;= ONTs'
+[let12] rel[ONTs] &lt;: set[tuple[ONTs']]     = ONTs &lt;: ONTs'
 
-[let13] set[tuple[ONTs]] &lt;= rel[ONTs']     = ONTs &lt;= ONTs'
+[let13] set[tuple[ONTs]] &lt;: rel[ONTs']     = ONTs &lt;: ONTs'
 
-[let14] T &lt;= T' == true,
-        ONTs &lt;= ONTs' == true
+[let14] T &lt;: T' == true,        %% covariant
+        ONTs' &lt;: ONTs == true   %% contravariant
         =========================================
-        fun T N (ONTs) &lt;= fun T' N (ONTs') = true
+        fun T N (ONTs) &lt;: fun T' N (ONTs') = true
 [default-let]
-        T &lt;= T'                            = false
+        T &lt;: T'                            = false
 </programlisting></para>
 
         <para>Here T, T1, T2, T' etc represent types, and ONTs, ONTs' etc
@@ -933,12 +941,9 @@
         additional subtype relation, e.g., the previous definition for Graph,
         <programlisting>type rel[node,node] Graph</programlisting></para>
 
-        <para>introduces the following subtype relation:<programlisting>Graph &lt;= rel[node,node]</programlisting></para>
+        <para>introduces the following subtype relation:<programlisting>Graph &lt;: rel[node,node]</programlisting></para>
 
         <para><caution>
-            <para>Do chain rules (injections) in imported SDF module introduce
-            a subtype relation?</para>
-          </caution><caution>
             <para>How do we handle the optional names that occur in types?
             Currently, we throw them away in the subtype relation. Should we
             also compare these names?</para>
@@ -1097,8 +1102,8 @@
 
           <listitem>
             <para>there is at least one argument position with incomparable
-            types w.r.t. the type hierarchy, i.e., not (A &lt;= B) and not
-            (B&lt;=A).</para>
+            types w.r.t. the type hierarchy, i.e., not (A &lt;: B) and not
+            (B&lt;:A).</para>
           </listitem>
         </itemizedlist>
 
@@ -1138,17 +1143,13 @@ fun str randomValue()</programlisting></para>
         is taken to be of type <literal>value</literal>, unless it is
         explicitly constrained to be smaller than (or smaller than or equal
         to) another type U by writing
-        <literal>&amp;<replaceable>T</replaceable> &lt;=
+        <literal>&amp;<replaceable>T</replaceable> &lt;:
         <replaceable>U</replaceable></literal>. For the sake of overloading
         resolution, a constrained type parameter will be considered to have
         the type of the constraint, i.e., in <literal>fun
         F(&amp;<replaceable>T</replaceable> &lt; U)</literal> we assume the
         <literal>&amp;<replaceable>T</replaceable></literal> to be of type
         <literal>U</literal>.</para>
-
-        <caution>
-          <para>What are the use cases of bounded polymorphism?</para>
-        </caution>
 
         <para>Here are more examples:</para>
 
@@ -1168,42 +1169,12 @@ fun int f(&amp;T y, int x)
 
 fun int f(&amp;T x, int y)
 fun int f(&amp;T y, double x)</programlisting></para>
-
-        <para><caution>
-            <para>There is one case where the above rules can become
-            unacceptable: printing messages. In Java, the string concatenation
-            operator + is highly polymorphic and converts its arguments to
-            string when needed. How can we get the equivalent
-            of<programlisting>stdout.println("Value " + v + " of arg " + n + " too large")</programlisting></para>
-
-            <para>Solution directions:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>Introduce a polymorphic + on strings. This not so easy
-                given our restrictions on overloading.</para>
-              </listitem>
-
-              <listitem>
-                <para>Introduce a print statement with variable
-                arguments:<programlisting>print "Value ", v, " of arg ", n, " too large"</programlisting></para>
-              </listitem>
-
-              <listitem>
-                <para>Introduce a polymorphic print function that can print
-                any value:<programlisting>public fun void print(&amp;T V)
-  primitive("IO.print")</programlisting></para>
-
-                <para>The example would now become:<programlisting>print([| Value &lt;v&gt; of arg &lt;n&gt; too large |])</programlisting></para>
-              </listitem>
-            </itemizedlist>
-          </caution></para>
       </section>
 
       <section>
         <title>Formal description of overloading</title>
 
-        <para>Given the subtype relation <literal>&lt;=</literal> defined
+        <para>Given the subtype relation <literal>&lt;=:</literal> defined
         earlier, we can easily formalize overloading resolution by defining
         two predicates: <literal>incomparable</literal> describes when two
         lists of OptionallyNamedTypes can be compared and
@@ -1211,7 +1182,7 @@ fun int f(&amp;T y, double x)</programlisting></para>
         satisfy the overloading restrictions:<programlisting>%% Incomparable
 
 [com1] incomparable(ONTs, ONTs') = 
-       not((ONTs &lt;= ONTs') | (ONTs' &lt;= ONTs))
+       not((ONTs &lt;: ONTs') | (ONTs' &lt;: ONTs))
 
 %% May-overload
 
@@ -1812,7 +1783,7 @@ public fun main(list[str] argv){
   for(int I : [1..N]){
      squares[I] = I * I
   }
-  println("Table of squares from 1 to &lt;N&gt;");
+  println("Table of squares from 1 to ", N);
   println(squares);
 }</programlisting><caution>
           <para>We have currently no mechanism to loop over integers.
@@ -1843,7 +1814,7 @@ public fun main(list[str] argv){
 
           <itemizedlist>
             <listitem>
-              <para> [1..5] generates 1, 2, 3, 4, 5.</para>
+              <para>[1..5] generates 1, 2, 3, 4, 5.</para>
             </listitem>
 
             <listitem>
@@ -1853,6 +1824,9 @@ public fun main(list[str] argv){
 
           <para>This version is included in the current syntax
           definition.</para>
+        </caution><caution>
+          <para>We need a mechanism to insert values in strings,
+          e.g.<programlisting> println("Table of squares from 1 to &lt;N&gt;");</programlisting></para>
         </caution></para>
     </section>
 
@@ -3293,7 +3267,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
               <entry align="center">bool</entry>
 
@@ -3301,7 +3275,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str&#160;</entry>
+              <entry align="center">str </entry>
 
               <entry align="center">loc</entry>
 
@@ -4065,7 +4039,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center">&#160;</entry>
+                <entry align="center"> </entry>
 
                 <entry align="center">list</entry>
 
@@ -5154,19 +5128,17 @@ public fun &amp;T set_annotations(&amp;T Subject,
 
 %% --- Parsing/Unparsing -------------------------------------
 
-public fun &amp;T parseFile(str filename)
+public fun tree parseFile(str filename)
        throws file_does_not_exist(str msg)
   primitive("Parse.parseFile")
 
-%% TODO
-public fun &amp;T parseString(str source)
+public fun tree parseString(str source)
   primitive("Parse.parseString")
 
-%% TODO
-public fun str unparseToString(&amp;T Subject)
+public fun str unparseToString(tree Subject)
   primitive("Parse.unparseToString")
 
-public fun str unparseToFile(&amp;T Subject, str filename)
+public fun str unparseToFile(tree Subject, str filename)
        throws cannot_create(str msg) 
        throws write_error(str msg) 
   primitive("Parse.unparseToFile")

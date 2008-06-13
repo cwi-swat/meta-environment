@@ -6,14 +6,14 @@ imports Types
 exports
 context-free syntax
    Name "==" Name                              -> Boolean         
-   OptNamedTypes "<=" OptNamedTypes            -> Boolean
-   Type "<=" Type                              -> Boolean
+   OptNamedTypes "<:" OptNamedTypes            -> Boolean
+   Type "<:" Type                              -> Boolean
    incomparable(OptNamedTypes, OptNamedTypes)  -> Boolean
    may-overload(FunctionType, FunctionType)    -> Boolean
 
 context-free priorities
-  Type "<=" Type                      -> Boolean >
-  OptNamedTypes "<=" OptNamedTypes    -> Boolean
+  Type "<:" Type                      -> Boolean >
+  OptNamedTypes "<:" OptNamedTypes    -> Boolean
 
 context-free start-symbols
    Boolean
