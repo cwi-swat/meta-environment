@@ -37,9 +37,6 @@ public class ProcessDefinition{
 	public String getName(){
 		return name;
 	}
-	public String getUniqueName(){
-		return name + getNumberOfFormals();
-	}
 	
 	public ATermList getFormals(){
 		return formals;

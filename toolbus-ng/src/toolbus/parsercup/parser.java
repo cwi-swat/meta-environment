@@ -47,6 +47,7 @@ import toolbus.atom.tool.RecVal;
 import toolbus.atom.tool.SndKill;
 import toolbus.atom.tool.SndResponse;
 import toolbus.atom.tool.Terminate;
+import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
@@ -1421,7 +1422,11 @@ class CUP$parser$actions {
 		ProcessExpression p = (ProcessExpression)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 if(parser.generating()){
                                              	  ProcessDefinition pd = new ProcessDefinition(nm, fml, p, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)));
-                                                  parser.toolbus.addProcessDefinition(pd); 
+                                             	  try{
+                                             		  parser.toolbus.addProcessDefinition(pd);
+                                             	  }catch(ToolBusError tbe){
+                                             		  parser.syntax_error(((java_cup.runtime.Symbol)CUP$parser$stack.peek()));
+                                             	  }
                                                   parser.processName = "";
                                                 }
                                              

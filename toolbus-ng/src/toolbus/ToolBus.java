@@ -361,11 +361,11 @@ public class ToolBus{
 	 * Add a process definition.
 	 */
 	public void addProcessDefinition(ProcessDefinition PD) throws ToolBusError{
-		String uname = PD.getUniqueName();
-		//System.err.println("addProcessDefinition: " + uname);
-		if(procdefs.contains(uname)) throw new ToolBusError("duplicate definition of process " + uname);
+		String name = PD.getName();
+		//System.err.println("addProcessDefinition: " + name);
+		if(procdefs.contains(name)) throw new ToolBusError("duplicate definition of process " + name);
 		
-		procdefs.put(uname, PD);
+		procdefs.put(name, PD);
 	}
 	
 	/**
@@ -445,8 +445,7 @@ public class ToolBus{
 	 *            TODO
 	 */
 	public ProcessDefinition getProcessDefinition(String name, int numberOfActuals) throws ToolBusError{
-		String uname = name + numberOfActuals;
-		ProcessDefinition definition = procdefs.get(uname);
+		ProcessDefinition definition = procdefs.get(name);
 		if(definition == null) throw new NoSuchProcessDefinitionException(name, numberOfActuals); 
 		
 		return definition;
