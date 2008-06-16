@@ -1,29 +1,29 @@
 module Lambda-Examples
 
-import-syntax Lambda-syntax;
+import Lambda-syntax;
 
-fun set[Var] allVars(Exp E) {
+set[Var] allVars(Exp E) {
     return {V | Var V : E}
 }
 
-fun set[Var] boundVars(Exp E) {
+set[Var] boundVars(Exp E) {
     return {V | fn <Var V> => <Exp E1> : E};
 } 
 
-fun set[Var] freeVars(Exp E) {
+set[Var] freeVars(Exp E) {
     return allVars(E) - boundVars(E);
 }
 
 %% Generate a fresh variable if V does not occur in 
 %% given set of variables.
 
-fun Var fresh(Var V, set[Var] S) {
+Var fresh(Var V, set[Var] S) {
     if (V in S){ return prime(V); } else {return V;};
 }
 
 %% Substitution: replace all occurrences of V in E2 by E1
 
-fun Exp subst(Var V1, Exp E1, Exp E2) {
+Exp subst(Var V1, Exp E1, Exp E2) {
 
     switch E2 {
       case <Var V2>: if(V1 != V2){ yield [| <V2> |] }

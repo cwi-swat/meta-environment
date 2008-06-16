@@ -1,6 +1,6 @@
 module Let-Example
 
-import-syntax Let;
+import Let;
 
 %% Rename all bound variables in an Exp
 %% Version 2: using global variables
@@ -10,13 +10,13 @@ import-syntax Let;
 global int Cnt = 0;
 global rel[Var,Var] Rn = {};
 
-fun Var newVar() {
+Var newVar() {
     global int Cnt;  
     Cnt = Cnt + 1;
     return "x" + Cnt
 }
 
-fun Exp rename(Exp E) {
+Exp rename(Exp E) {
     global int Cnt;
     global rel[Var,Var] Rn;
     switch E {

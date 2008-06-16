@@ -1,6 +1,8 @@
 module Bubble
 
-fun Integer* sort(Integer* Numbers){
+import Vector-syntax;
+
+Integer* sort(Integer* Numbers){
     visit Numbers {
       case <Integer* Rest1> 
               <Integer N1> <Integer N2> 

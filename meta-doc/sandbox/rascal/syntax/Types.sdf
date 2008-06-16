@@ -38,11 +38,11 @@ exports
     "+" | "-" | "*" | "/" | "&" | "==" | 
     "<" | "<=" |">" | ">="                                   -> StandardOperator
 
-     "..."                                                   -> VarArgs
-     Name | StandardOperator                                 -> FunctionName   { avoid }
-    "fun" Type FunctionName "(" OptNamedTypes? VarArgs? ")"  -> FunctionType   {cons("function-type")}
+    "..."                                                    -> VarArgs
+    Name | StandardOperator                                  -> FunctionName   { avoid }
+    Type FunctionName "(" OptNamedTypes? VarArgs? ")"        -> FunctionType   {cons("function-type")}
 
-    "fun" Type "(" OptNamedTypes? ")"                        -> AnonymousFunctionType
+    Type "(" OptNamedTypes? ")"                              -> AnonymousFunctionType
 
     "&" Name                                                 -> TypeVar        {cons("type-var")}
     "&" Name "<:" Type                                       -> TypeVar        {cons("type-var-less-equal")}
@@ -50,7 +50,8 @@ exports
     Name "[" {TypeVar ","}+ "]"                              -> ParameterizedType
                                                                           {cons("par-type")}
 
-    Name                                                     -> AbstractType   {cons("typename-abstype")}
+ %%   Name                                                     -> AbstractType   {avoid,cons("typename-abstype")}
+    OptNamedType                                             -> AbstractType   {cons("namedtype-abstype")}
     StringLiteral                                            -> AbstractType   {cons("typestr-abstype")}
     TypeVar                                                  -> AbstractType   {cons("typevar-abstype")}
     Name "(" {OptNamedType ","}* ")"                         -> AbstractType   {cons("cons-abstype-name")}
@@ -64,9 +65,9 @@ exports
 
 
 %% Define reserved words
- %%   "bool" | "int" | "double" | "number" | "str" | 
- %%   "loc" | "value" | "term" | "void" | "list" | 
- %%   "set" | "map" | "rel" | "tuple" | "fun"                  -> Name {reject}
+   "bool" | "int" | "double" | "number" | "str" | 
+   "loc" | "value" | "term" | "void" | "list" | 
+   "set" | "map" | "rel" | "tuple" | "fun"                  -> Name {reject}
  
 
   

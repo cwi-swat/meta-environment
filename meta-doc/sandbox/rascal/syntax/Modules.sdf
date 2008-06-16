@@ -11,6 +11,7 @@ context-free start-symbols
 exports
 sorts Module ModuleWord ModuleName Import 
       ModuleParameters ModuleActuals ImportedModule
+      Renaming Renamings
 
 lexical syntax
   letters:[A-Za-z0-9\_\-]+                       -> ModuleWord {cons("word")} 
@@ -26,17 +27,18 @@ context-free syntax
     "[" {TypeVar ","}+ "]"                       -> ModuleParameters
     "[" {Type ","}+ "]"                          -> ModuleActuals
 
-    ModuleName ModuleActuals?                    -> ImportedModule
+    ModuleName ModuleActuals? Renamings?         -> ImportedModule
+    Name "=>" Name                               -> Renaming
+    "{" {Renaming ","}+ "}"                      -> Renamings
 
     "import" ImportedModule ";"                  -> Import
     "extend" ImportedModule ";"                  -> Import
-    "import-java"  QualName ";"                  -> Import
-    "import-syntax" ModuleName ";"               -> Import
+%%    "import-java"  QualName ";"                  -> Import
+%%    "import-syntax" ModuleName ";"               -> Import
 
     "module" ModuleName ModuleParameters?
              Import* 
              (Declaration ";"?)*                 -> Module  
 
 %% Define reserved words
-    "import" | "import=java" | "import-syntax" |
-    "module"                                     -> Name {reject}
+    "import" | "module"                          -> Name {reject}

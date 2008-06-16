@@ -1,13 +1,13 @@
 module Pico-eval
 
-import-syntax pico/syntax/Pico;
+import pico/syntax/Pico;
 
 type int PICO_VALUE;
 type str PICO_VALUE;
 
 type map[PICO_ID, PICO_VALUE] VEnv;
 
-fun void evalProgram(PROGRAM P){
+void evalProgram(PROGRAM P){
     switch P {
       case begin <DECLS Decls> <{STATEMENT ";"}* Series> end: {
           evalDecls(Decls);
@@ -16,18 +16,18 @@ fun void evalProgram(PROGRAM P){
    }
 };
 
-fun void assign(PICO_ID Id, PICO_VALUE V){
+void assign(PICO_ID Id, PICO_VALUE V){
   global Venv Env;
   Env(Id) = V;
   return;
 }
 
-fun PICO_VALUE valueOf(PICO_ID Id){
+PICO_VALUE valueOf(PICO_ID Id){
   global Venv Env;
   return Env(Id); 
 }
 
-fun VEnv evalDecls(DECLS Decls){
+VEnv evalDecls(DECLS Decls){
     global VEnv Env = {};
     visit Decls {
       case <PICO-ID Id> : string:  assign(Id, "")
@@ -35,7 +35,7 @@ fun VEnv evalDecls(DECLS Decls){
     }
 }
 
-fun void evalStatements({STATEMENT ";"}* Series){
+void evalStatements({STATEMENT ";"}* Series){
     global VEnv Env;
     switch Series {
       case <STATEMENT Stat>; <{STATEMENT ";"}* Series2>: {
@@ -47,7 +47,7 @@ fun void evalStatements({STATEMENT ";"}* Series){
     }
 }
 
-fun void evalStatement(STATEMENT Stat){
+void evalStatement(STATEMENT Stat){
     global VEnv Env;
     switch Stat {
       case [| <PICO_ID Id> = <EXP Exp> |]: {
@@ -81,7 +81,7 @@ fun void evalStatement(STATEMENT Stat){
     };
 };
 
-fun PICO_VALUE evalExp(Exp exp) {
+PICO_VALUE evalExp(Exp exp) {
     global VEnv Env;
     switch exp {
       case <NatCon N>: return N

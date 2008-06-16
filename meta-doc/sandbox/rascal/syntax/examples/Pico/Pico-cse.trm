@@ -1,10 +1,10 @@
 module Pico-common-subexpression
 
-import-syntax pico/syntax/Pico;
+import pico/syntax/Pico;
 import Pico-controlflow;
 import Pico-use-def;
 
-fun PROGRAM cse(PROGRAM P) {
+PROGRAM cse(PROGRAM P) {
     rel[PICO_ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
     map[EXP, PICO_ID] replacements = 

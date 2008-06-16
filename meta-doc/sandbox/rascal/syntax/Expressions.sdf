@@ -164,9 +164,9 @@ context-free syntax
          "{" {Statement ";"}+ ";"? "}"                           -> Statement  {cons("block")}
 
 %% Define reserved words:
-%%         "true" | "false" |
-%%         "not" | "and" | "or" | "implies" | "global" | 
-%%         "case" | "acase" | "rcase" | "default" | "switch" | 
-%%         "visit" | "try" | "catch" | "finally" | "solve"  |
-%%         "for" | "if" | "else" | "return" | "throw" |
-%%         "yield" | "fail" | "assert"                             -> Name {reject}
+         "true" | "false" |
+         "not" | "and" | "or" | "implies" | "global" | 
+         "case" | "acase" | "rcase" | "default" | "switch" | 
+         "visit" | "try" | "catch" | "finally" | "solve"  |
+         "for" | "if" | "else" | "return" | "throw" |
+         "yield" | "fail" | "assert"                             -> Name {reject}

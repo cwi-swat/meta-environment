@@ -1,8 +1,8 @@
 module Bool-examples1
 
-import-syntax Booleans-syntax;
+import languages/Booleans/syntax;
 
-fun Bool reduce(Bool B) {
+Bool reduce(Bool B) {
     visit bottom-up B {
       case true & <Bool B2>   => <B2>
       case false & <Bool B2>  => false

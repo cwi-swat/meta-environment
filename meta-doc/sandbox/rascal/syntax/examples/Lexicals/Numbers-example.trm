@@ -8,7 +8,7 @@ rules(Number){
    number("0" <[0-9]+ Ds>) => number(<Ds>)
 }
 
-fun Real truncate(Real R){
+Real truncate(Real R){
     switch R {
        case real(<Number Num> "." <Digit+ Ds>) => real(<Num> "." "0")
     }

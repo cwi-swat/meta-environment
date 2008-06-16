@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -32,56 +32,14 @@
   </note>
 
   <section>
-    <title>Rationale</title>
-
-    <para>WEG</para>
-
-    <para>In the domain of software analysis and transformation, there exists
-    a phletora of domain-specific languages for defining grammars, rewrite
-    rules, software analysis and the like. So why embark on the design of yet
-    another DSL in this area? We see the following arguments for this:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Many existing DSLs are based on more or less exotic concepts
-        that do excite researchers but are frightening for users without an
-        appropriate research background.</para>
-      </listitem>
-
-      <listitem>
-        <para>The notation used in many DSLs is uninviting to say the
-        least.</para>
-      </listitem>
-
-      <listitem>
-        <para>The scope of DSLs is usually narrow (this is where the word
-        "domain-specific" kicks in). The tasks involved in carrying out a code
-        analysis or renovation project require several DSLs. Integration
-        between these DSLs is insufficient.</para>
-      </listitem>
-
-      <listitem>
-        <para>As designers of various DSLs (ASF+SDF, Tscript, Rscript, ...) we
-        have seen the positive as well as the negative side of DSLs. We
-        certainly know howto implement DSLs in this area.</para>
-      </listitem>
-
-      <listitem>
-        <para>We see an opportunity for a user-friendly, conceptually
-        high-level, and rich DSL for all tasks related to software analysis
-        and transformation.</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>With this background and an essential dose of optimism, we embark on
-    this trip ... .</para>
-  </section>
-
-  <section>
     <title>Introduction</title>
 
-    <para>The goals of the envisaged language (with working name Rascal)
-    are:</para>
+    <para>We have identified the need for better language support for
+    specifying and implementing software analysis and transformation tools. In
+    this document we embark on the design of a domain-specific language that
+    is intended to provide a comprehensive and easy to use set of concepts for
+    that domain. The goals of the envisaged language (with working name
+    Rascal) are:</para>
 
     <itemizedlist>
       <listitem>
@@ -211,7 +169,7 @@
           <para>Rascal was inspired by and borrows from several other DSL's
           for program analysis and transformation in academia and industry,
           namely ASF+SDF, Rscript, TXL, TOM, DMS, Stratego, Elan, Maude, Grok,
-          Haskell, ML and Setl.</para>
+          Haskell, ML and SETL.</para>
         </listitem>
 
         <listitem>
@@ -482,122 +440,116 @@
         </listitem>
 
         <listitem>
-          <para>R6: File I/O (contradicts R5).</para>
+          <para>R5: File I/O (contradicts R5).</para>
         </listitem>
 
         <listitem>
-          <para>R7: Easily accessible fact storage (similar to a heap, but
+          <para>R6: Easily accessible fact storage (similar to a heap, but
           remember R5 and the details of backtracking).</para>
         </listitem>
 
         <listitem>
-          <para>R8: List matching (because of R2, influences R7, but also very
+          <para>R7: List matching (because of R2, influences R7, but also very
           handy for manipulating lists in concrete syntax).</para>
         </listitem>
 
         <listitem>
-          <para>R9: Nesting of data-structures: relations can be nested to
+          <para>R8: Nesting of data-structures: relations can be nested to
           model nested features of programming languages (such as scoping),
           allowing to factor out common code.</para>
         </listitem>
 
         <listitem>
-          <para>R10: Syntax trees can be elements of the builtin
+          <para>R9: Syntax trees can be elements of the builtin
           data-structures (but not vice versa).</para>
         </listitem>
 
         <listitem>
-          <para>R11: Try to keep features orthogonal: try to keep the number
+          <para>R10: Try to keep features orthogonal: try to keep the number
           of ways to write down a program minimal, this is not a law since
           other requirements take precedence</para>
         </listitem>
 
         <listitem>
-          <para>R12 (<emphasis role="bold">new</emphasis>): Minimize possible
-          syntactic ambiguities; resolve them by type checking.</para>
+          <para>R11: Minimize possible syntactic ambiguities; resolve them by
+          type checking.</para>
         </listitem>
 
         <listitem>
-          <para>R13:(<emphasis role="bold">new</emphasis>): Integrates well
-          with refactoring infra-structure (i.e. can provide appropriate
-          interfaces with pre-condition checking, previews and commits as
-          found in interactive refactoring contexts)</para>
+          <para>R12: Integrates well with refactoring infra-structure (i.e.
+          can provide appropriate interfaces with pre-condition checking,
+          previews and commits as found in interactive refactoring
+          contexts)</para>
         </listitem>
 
         <listitem>
-          <para>R14 (<emphasis role="bold">new</emphasis>): no 'null' values,
-          preventing common programming errors</para>
+          <para>R13: no 'null' values, preventing common programming
+          errors</para>
         </listitem>
 
         <listitem>
-          <para>R15 (<emphasis role="bold">new</emphasis>): all values
-          immutable, preventing common programming errors and allowing for
-          certain kinds of optimizations</para>
+          <para>R14: all values immutable, preventing common programming
+          errors and allowing for certain kinds of optimizations</para>
         </listitem>
 
         <listitem>
-          <para>R16 (<emphasis role="bold">new</emphasis>): should be able to
-          match and construct strings using regular expressions (for making
-          the simpler things simple, if you can do without a grammar, why
-          not?)</para>
+          <para>R15: should be able to match and construct strings using
+          regular expressions (for making the simpler things simple, if you
+          can do without a grammar, why not?)</para>
         </listitem>
 
         <listitem>
-          <para>R17 (<emphasis role="bold">new</emphasis>): can get/set data
-          from databases, such as the pdb from Eclipse IMP, but possibly also
-          from ODBC/JDBC data sources.</para>
+          <para>R16: can get/set data from databases, such as the pdb from
+          Eclipse IMP, but possibly also from ODBC/JDBC data sources.</para>
         </listitem>
 
         <listitem>
-          <para>R18 (<emphasis role="bold">new</emphasis>): type safe, but
-          flexible. We want a type system that prevents common programming
-          errors, but still allows ample opportunity for reuse.</para>
+          <para>R17: type safe, but flexible. We want a type system that
+          prevents common programming errors, but still allows ample
+          opportunity for reuse.</para>
         </listitem>
 
         <listitem>
-          <para>R19 (<emphasis role="bold">new</emphasis>): syntax safe,
-          programmers should not be allowed to construct programs that are
-          syntactically incorrect w.r.t a certain context-free grammar.</para>
+          <para>R18: syntax safe, programmers should not be allowed to
+          construct programs that are syntactically incorrect w.r.t a certain
+          context-free grammar.</para>
         </listitem>
 
         <listitem>
-          <para>R20 (<emphasis role="bold">new</emphasis>): backtracking safe,
-          programmers should not have to deal with the mind boggling feature
-          interactions between side-effects and backtracking.</para>
+          <para>R19: backtracking safe, programmers should not have to deal
+          with the mind boggling feature interactions between side-effects and
+          backtracking.</para>
         </listitem>
 
         <listitem>
-          <para>R21 (<emphasis role="bold">new</emphasis>):
-          traceable/debuggable, programmers should be able to easily trace
-          through the execution of a Rascal program using the simplest of
-          debugging tools, like printf statements, and the use of a simple
-          debugging interface which allows to step through the source code and
-          inspect values in a transparent fashion.</para>
+          <para>R20: traceable/debuggable, programmers should be able to
+          easily trace through the execution of a Rascal program using the
+          simplest of debugging tools, like printf statements, and the use of
+          a simple debugging interface which allows to step through the source
+          code and inspect values in a transparent fashion.</para>
         </listitem>
 
         <listitem>
-          <para>R22 (<emphasis role="bold">new</emphasis>): minimize the use
-          of type inference, such that the programmer must always declare her
-          intentions by providing types for functions, data-types and
-          variables. This makes debugging easier and providing clear error
-          messages too. When variables are implicitly bound by pattern
-          matching or related functionality, exceptions to this requirement
-          might be made in favor of conciseness.</para>
+          <para>R21: minimize the use of type inference, such that the
+          programmer must always declare her intentions by providing types for
+          functions, data-types and variables. This makes debugging easier and
+          providing clear error messages too. When variables are implicitly
+          bound by pattern matching or related functionality, exceptions to
+          this requirement might be made in favor of conciseness.</para>
         </listitem>
 
         <listitem>
-          <para>R23 (<emphasis role="bold">new</emphasis>): allow the
-          implementation of reusable modules and functions (i.e. parametric
-          polymorphism and or functions as parameters).</para>
+          <para>R22: allow the implementation of reusable modules and
+          functions (i.e. parametric polymorphism and or functions as
+          parameters).</para>
         </listitem>
 
         <listitem>
-          <para>R24 (<emphasis role="bold">new</emphasis>): we need something
-          like rewrite rules for implementing data-types that are always
-          canonicalized/normalized. For some analysis algorithms this allows
-          the programmer to implement domain specific optimizations over plain
-          relational calculus or tree visiting that actually needed for
-          scalability.</para>
+          <para>R23: we need something like rewrite rules for implementing
+          data-types that are always canonicalized/normalized. For some
+          analysis algorithms this allows the programmer to implement domain
+          specific optimizations over plain relational calculus or tree
+          visiting that actually needed for scalability.</para>
         </listitem>
       </itemizedlist></para>
   </section>
@@ -648,19 +600,24 @@
     <section>
       <title>Modules</title>
 
-      <para>Modules are the organizational unit of Rascal. They may:<caution>
-          <para>Collapse to one import.</para>
-        </caution><caution>
-          <para>Add renaming to import: import M rename A to B, B to C, ... or
-          import M { A =&gt; B, B =&gt; C, ...}</para>
-        </caution><caution>
-          <para>Import is NOT transitive.</para>
-        </caution></para>
+      <para>Modules are the organizational unit of Rascal. They may:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Import another Rascal module using <literal>import</literal>.
-          We do allow circular imports.</para>
+          <para>Import another Rascal module (suffix: <literal>.ras</literal>)
+          using <literal>import</literal>. Imports are not transitive. We do
+          allow circular imports.</para>
+        </listitem>
+
+        <listitem>
+          <para>Import SDF modules (suffix: <literal>.sdf</literal>) using
+          <literal>import</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Import Java modules (for the benefit of functions written in
+          Java, suffix <literal>.java</literal>) using
+          <literal>import</literal>.</para>
         </listitem>
 
         <listitem>
@@ -669,16 +626,6 @@
           <literal>#include</literal>) of the-module-to-be-extended in the
           current module. We allow redefinitions of declared names. We do not
           allow circular extension.</para>
-        </listitem>
-
-        <listitem>
-          <para>Import SDF modules using
-          <literal>import-syntax</literal>.</para>
-        </listitem>
-
-        <listitem>
-          <para>Import Java modules (for the benefit of functions written in
-          Java) using <literal>import-java</literal>.</para>
         </listitem>
 
         <listitem>
@@ -692,15 +639,16 @@
 
         <listitem>
           <para>Contain a main function that is the starting point of
-          execution:<caution>
-              <para>Allow several types here.</para>
-            </caution><programlisting>public int fun main(list[str] argv) { ... }</programlisting></para>
+          execution. We allow several flavours of main
+          function:<programlisting>public void main() { ... }</programlisting>does
+          not give access to program arguments while<programlisting>public void main(list[str] argv) { ... }</programlisting></para>
+
+          <para>gives access to all program arguments. We may add extra types
+          that help in parsing command line arguments.</para>
         </listitem>
       </itemizedlist>
 
-      <para><caution>
-          <para>fun keyword weg.</para>
-        </caution>Functions, subtypes and datatypes may be either private to a
+      <para>Functions, subtypes and datatypes may be either private to a
       module or public to all modules that import the current module. Rules
       are always public and are globally applied.</para>
 
@@ -708,14 +656,16 @@
       <literal>::</literal> operator) may be used to uniquely identify
       elements of a module from the outside. Inside the module, this
       qualification is implicit. The qualified name consist of two parts: a
-      directory name ( a list of names separated by /) and a module
-      name.</para>
+      directory name (a list of names separated by <literal>/</literal>) and a
+      module name.</para>
 
-      <para>Modules are located in a file with the name of the module, with
-      suffix <literal>.ras</literal>. They should located in a directory
-      corresponding to the directory part of the module name. From other
-      modules, <literal>m::f</literal> denotes function <literal>f</literal>
-      from module <literal>m</literal>.</para>
+      <para>Rascal modules are located in a file with the name of the module,
+      with suffix <literal>.ras</literal>. They should be located in a
+      directory corresponding to the directory part of the module name. From
+      other modules,
+      <literal><replaceable>M</replaceable>::<replaceable>F</replaceable></literal>
+      denotes function <replaceable>F</replaceable> from module
+      <replaceable>M</replaceable>.</para>
     </section>
 
     <section>
@@ -761,15 +711,15 @@
           </listitem>
 
           <listitem>
-            <para>There is a single root for this type hierarchy, it is called
-            "<literal>value</literal>".</para>
+            <para>There is a single top for this type hierarchy, it is called
+            "<literal>value</literal>" and a single bottom that is called
+            "<literal>void</literal>".</para>
           </listitem>
 
           <listitem>
             <para>There are built-in types (<literal>bool</literal>,
             <literal>int</literal>, <literal>double</literal>,
-            <literal>str</literal>, <literal>loc</literal>,
-            <literal>void</literal>).</para>
+            <literal>str</literal>, <literal>loc</literal>).</para>
           </listitem>
 
           <listitem>
@@ -823,34 +773,32 @@
           </listitem>
 
           <listitem>
-            <para>Arbitrarily nested expressions may contain calls to
-            overloaded functions that need to be resolved.</para>
-          </listitem>
-
-          <listitem>
-            <para>Data declarations may introduce new structured types. <note>
+            <para>Data declarations may introduce new structured types and
+            have the form<programlisting>data N Pat1 | Pat2 | ...</programlisting>where
+            N is the name of the datatype and Pat1, Pat2, are prefix patterns
+            describing the variants of the datatype.<note>
                 <para>We assume that all constructors for a datatype lead to a
                 corresponding function to construct a term of that datatype.
                 This eliminates the need to quote abstract terms in
                 statements.</para>
               </note></para>
 
-            <caution>
+            <note>
               <para>Constructor names of datatypes may be quoted in order to
               avoid clashes with reserved words or illegal names.</para>
-            </caution>
-
-            <caution>
-              <para>How to handle constructorless data types, e.g., data tree
-              int char?</para>
-            </caution>
+            </note>
           </listitem>
 
           <listitem>
-            <para>We have views on data types: view Bool &lt;: tree and
-            appl(...) | or appl(...)<note>
-                <para>Views for the same type are exclusive.</para>
-              </note></para>
+            <para>We have <emphasis>views</emphasis> on data types that define
+            templates or overlays over an existing type. The form
+            is:<programlisting>view Bool &lt;: tree and appl(...) | or appl(...)</programlisting></para>
+
+            <para>This defines the type <literal>Bool</literal> as a view on
+            trees with two alternatives named <literal>and</literal> and
+            <literal>or</literal>. Each view should be of type
+            <literal>tree</literal>. Views for the same type are
+            exclusive.</para>
           </listitem>
 
           <listitem>
@@ -912,15 +860,10 @@
       <section>
         <title>Subtypes</title>
 
-        <para><caution>
-            <para>Types are compatible if they occur on the same path from
-            void to value in the type lattice. This is a middle road between
-            structural and nominal type equivalence. Intensional structural
-            type equivalence.</para>
-          </caution></para>
-
         <para>The type hierarchy leads to a subtype relation &lt;: that can be
         defined (in ASF+SDF) as follows:<programlisting>%% Subtyping rules (&lt;:) on Types
+
+[let00] void &lt;: T                          = true
 
 [let01] T &lt;: value                         = true
 
@@ -964,28 +907,51 @@
         relation, a relation can be compared with a set of tuples, and the
         like.</para>
 
+        <para>We throw the names in types away in the subtype relation.</para>
+
         <para>The subtyping relation for function types is tricky and treats
         result type and argument types differently. We have, for instance,
         that</para>
 
-        <para><programlisting>fun set[int] f(int i) &lt;: fun set[&amp;T] f(int i)  %% since int &lt; &amp;T
+        <para><programlisting>set[int] f(int i) &lt;: fun set[&amp;T] f(int i)  %% since int &lt; &amp;T
 
-fun int f(number x) &lt;: fun number f (int x)    %% assuming int &lt;: number</programlisting>but
+int f(number x) &lt;: fun number f (int x)    %% assuming int &lt;: number</programlisting>but
         <emphasis>not</emphasis> that</para>
 
-        <para><programlisting>fun number f(int x) &lt;: fun number f (number x) %% assuming int &lt;: number</programlisting></para>
+        <para><programlisting>number f(int x) &lt;: fun number f (number x) %% assuming int &lt;: number</programlisting></para>
 
         <para>In addition to the above rules for subtyping, each type
         definition introduces an additional subtype relation, e.g., the
         previous definition for Graph, <programlisting>type rel[node,node] Graph</programlisting></para>
 
         <para>introduces the following subtype relation:<programlisting>Graph &lt;: rel[node,node]</programlisting></para>
-
-        <para><note>
-            <para>We throw the names in types away in the subtype
-            relation.</para>
-          </note></para>
       </section>
+    </section>
+
+    <section>
+      <title>Type Equivalence</title>
+
+      <para>Types are compatible if they occur on the same path from void to
+      value in the type lattice. This is a middle road between structural and
+      nominal type equivalence, we call it <emphasis>intensional structural
+      type equivalence</emphasis>. An example can illustrate this. Assume we
+      have the following definitions for general graphs, control flow graphs
+      and data flow graphs:<programlisting>type rel[node,node] Graph
+type Graph CFGraph
+type Graph DFGraph</programlisting></para>
+
+      <para><literal>CFGraph</literal> and <literal>Graph</literal> are
+      compatible, and the same holds for <literal>DFGraph</literal> and
+      <literal>Graph</literal>. This implies that the types
+      <literal>CFGraph</literal> and <literal>Graph</literal> (resp.
+      <literal>DFGraph</literal> and <literal>Graph</literal>) can be freely
+      passed as parameter, assigned, returned and value. This is, however, not
+      true for CFGraph and DFGraph since they are incompatible. Passing a
+      value from the one to the other type can only be done via the common
+      type <literal>Graph</literal>. This uncomventional type scheme allows
+      flexible conversion between subtypes (without casting or runtime checks)
+      while preserving the opaqueness of disjoint subtypes of the same
+      ancestor type.</para>
     </section>
 
     <section>
@@ -1084,10 +1050,10 @@ fun int f(number x) &lt;: fun number f (int x)    %% assuming int &lt;: number</
       <section>
         <title>Overview</title>
 
-        <para>A function declaration consists of a visibility declaration, the
-        keyword <literal>fun</literal>, result type, a function name, typed
-        arguments and a function body. Functions without a result type have
-        type <literal>void</literal>.</para>
+        <para>A function declaration consists of a visibility declaration,
+        result type, a function name, typed arguments and a function body.
+        Functions without a result type have type
+        <literal>void</literal>.</para>
 
         <para>A visibility declaration is one of the keywords
         <literal>public</literal> or <literal>private</literal>
@@ -1163,29 +1129,29 @@ fun int f(number x) &lt;: fun number f (int x)    %% assuming int &lt;: number</
 
         <para><programlisting>%% OK, since int and double are incomparable 
 
-fun int +(int a, int b) { ... }
-fun double +(double a, double b) { ... }
+int +(int a, int b) { ... }
+double +(double a, double b) { ... }
 
 %% KO, since int is comparable to value 
 %% (int is -- like all types -- a subtype of value)
 
-fun int +(value a, value b) { ... }
-fun int +(int a, int b) { ... }
+int +(value a, value b) { ... }
+int +(int a, int b) { ... }
 
 %% OK since for every two definitions selected from this
 %% set there is at least one parameter position different;
 %% in this example the overloading on result types will never 
 %% be used to select the function
 
-fun int    +(int a, int b)
-fun double +(int a, double b)
-fun double +(double a, int b)
-fun double +(double a, double b)
+int    +(int a, int b)
+double +(int a, double b)
+double +(double a, int b)
+double +(double a, double b)
 
 %% KO, since arguments cannot be resolved.
 
-fun int randomValue()
-fun str randomValue()</programlisting></para>
+int randomValue()
+str randomValue()</programlisting></para>
 
         <para>How should overloading be resolved in the presence of type
         parameters? Our approach is simple but effective: a type parameter
@@ -1206,19 +1172,19 @@ fun str randomValue()</programlisting></para>
         <para><programlisting>%% KO, because &amp;T might be any type (i.e. value),
 %% which is comparable to int
 
-fun str f(int x)
-fun str f(&amp;T x)
+str f(int x)
+str f(&amp;T x)
 
 %% KO, since both T's may bind to comparable types and
 %% value and int are comparable
 
-fun int f(&amp;T x, value y)
-fun int f(&amp;T y, int x)
+int f(&amp;T x, value y)
+int f(&amp;T y, int x)
 
 %% OK, since the second arguments have incomparable types
 
-fun int f(&amp;T x, int y)
-fun int f(&amp;T y, double x)</programlisting></para>
+int f(&amp;T x, int y)
+int f(&amp;T y, double x)</programlisting></para>
       </section>
 
       <section>
@@ -1253,8 +1219,8 @@ fun int f(&amp;T y, double x)</programlisting></para>
         <literal>mapper</literal> function that applies a function to a list
         or set. An anonymous function can be used to define such function
         arguments. Here is a function <literal>addOne</literal>, that adds 1
-        to each element of its argument list:<programlisting>fun list[int] addOne(list[int] L)
-    return mapper(L, fun int (int N) { return N +1 })</programlisting></para>
+        to each element of its argument list:<programlisting>list[int] addOne(list[int] L)
+    return mapper(L, int (int N) { return N +1 })</programlisting></para>
       </section>
     </section>
 
@@ -1817,18 +1783,9 @@ lexical syntax
 
       <para>The ritual first example:<programlisting>module Hello
 
-public fun int main(list[str] argv) {
+public void main() {
    println("Hello, this is my first Rascal program");
-   return 0;
-}</programlisting><caution>
-          <para>How do we type <literal>main</literal>? This is the type as
-          defined it earlier but this is verbose. Can we provide alternatives
-          including void main(), this would eliminate the need for the ugly
-          return statement:<programlisting>module Hello
-
-public fun void main()
-   println("Hello, this is my first Rascal program")</programlisting></para>
-        </caution></para>
+}</programlisting></para>
     </section>
 
     <section>
@@ -1837,7 +1794,7 @@ public fun void main()
       <para>Another ritual example, printing a table of
       squares:<programlisting>module Squares
 
-public fun int main(list[str] argv){
+public void main(list[str] argv){
   int N = toInt(argv[0]);
   map[int,int] squares = {};
   for(int I : [1..N]){
@@ -1875,9 +1832,9 @@ exports
         write the definitions for the functions <literal>&amp;</literal> and
         <literal>|</literal> as follows:<programlisting>module Bool-examples1
 
-import-syntax Booleans-syntax;
+import languages/Booleans/syntax;
 
-fun Bool reduce(Bool B) {
+Bool reduce(Bool B) {
     visit bottom-up B {
       case true &amp; &lt;Bool B2&gt;   =&gt; &lt;B2&gt;
       case false &amp; &lt;Bool B2&gt;  =&gt; false
@@ -1917,15 +1874,15 @@ data Bool bfalse;
 data Bool band(Bool, Bool);
 data Bool bor(Bool, Bool); 
 
-fun Bool reduce(Bool B) {
+Bool reduce(Bool B) {
     visit bottom-up B {
-      acase band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt;     %% Use Variables
-      acase band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
+      acase band(btrue, &lt;Bool B2&gt;)   =&gt; &lt;B2&gt;     %% Use Variables
+      acase band(bfalse, &lt;Bool B2&gt;)  =&gt; bfalse
 
-      acase bor(btrue, btrue)       =&gt; btrue  %% Use a truth table
-      acase bor(btrue, bfalse)      =&gt; btrue
-      acase bor(bfalse, btrue)      =&gt; btrue
-      acase bor(bfalse, bfalse)     =&gt; bfalse
+      acase bor(btrue, btrue)        =&gt; btrue  %% Use a truth table
+      acase bor(btrue, bfalse)       =&gt; btrue
+      acase bor(bfalse, btrue)       =&gt; btrue
+      acase bor(bfalse, bfalse)      =&gt; bfalse
     }
 }</programlisting></para>
 
@@ -2005,7 +1962,7 @@ arules(Bool) {
         <para>In a similar fashion, the concrete syntax version of Booleans
         can be defined using rules:<programlisting>module Bool-conc-rules
 
-import Booleans-syntax;
+import languages/Booleans/syntax;
 
 rules(Bool) {
       true &amp; &lt;Bool B2&gt;   =&gt; &lt;B2&gt;
@@ -2095,23 +2052,23 @@ exports
     g(BTREE,BTREE)  -&gt; BTREE
     h(BTREE,BTREE)  -&gt; BTREE
     i(BTREE,BTREE)  -&gt; BTREE</programlisting><programlisting>module BTree-Examples
-import-syntax BTree-syntax; 
+import BTree-syntax; 
 
 %% Ex1: Count leaves in a BTREE
 %% Idea: int N : T generates alle Integer leaves in the tree
 
-fun int cnt(BTREE T) {
+int cnt(BTREE T) {
     return size({N | int N : T})
 }
 
 %% Ex1: an equivalent,  more purist, version of the same function:
-fun int cnt(BTREE T) {
+int cnt(BTREE T) {
     return size({N | Integer N : T})
 }
 
 %% Ex1: alternative solution using trafo functions:
 
-fun int cnt(BTREE T) {
+int cnt(BTREE T) {
     int C = 0;
     visit T {
       case &lt;Integer N&gt; : C = C+1
@@ -2125,13 +2082,13 @@ fun int cnt(BTREE T) {
 %% - the built-in sort "int"
 %% - the syntactic sort "Integer"
 
-fun int sumtree(BTREE T) {
+int sumtree(BTREE T) {
     return sum({N | int N : T});
 }
 
 %% Ex2: using accumulator
 
-fun int cnt(BTREE T) {
+int cnt(BTREE T) {
     int C = 0;
     visit T {
       case &lt;Integer N&gt; : C = C+N
@@ -2148,7 +2105,7 @@ fun int cnt(BTREE T) {
 %% - from int to NAT to convert the result of addition into 
 %%   a NAT tree
 
-fun BTREE inc(BTREE T) {
+BTREE inc(BTREE T) {
     visit T {
       case &lt;Integer N&gt;: yield (N + 1)
     };
@@ -2163,7 +2120,7 @@ fun BTREE inc(BTREE T) {
 %% declaration of a travesal function (as in ASF+SDF) but to 
 %% its use.
 
-fun BTREE frepl(BTREE T) {
+BTREE frepl(BTREE T) {
     visit bottom-up T {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
            i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
@@ -2172,7 +2129,7 @@ fun BTREE frepl(BTREE T) {
 
 %% Ex5: Deep replacement of g by i
 
-fun BTREE frepl(BTREE T) {
+BTREE frepl(BTREE T) {
     visit bottom-up-break T {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
            i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
@@ -2182,7 +2139,7 @@ fun BTREE frepl(BTREE T) {
 %% Ex6: shallow replacement of g by i (i.e. only outermost 
 %% g's are replaced); 
 
-fun BTREE srepl(BTREE T) {
+BTREE srepl(BTREE T) {
     visit top-down-break T {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt; 
            i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
@@ -2192,7 +2149,7 @@ fun BTREE srepl(BTREE T) {
 %% Ex7: We can also add the first/td directives to all generators 
 %% (where "all td" would be the default):
 
-fun set[BTREE] find_outer_gs(BTREE T) {
+set[BTREE] find_outer_gs(BTREE T) {
     return
     { S | STATEMENT S : top-down-break T, 
           g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) := S };
@@ -2200,7 +2157,7 @@ fun set[BTREE] find_outer_gs(BTREE T) {
  
 %% Ex8: accumulating transformer that increments leaves with 
 %% amount D and counts them
-fun tuple[int, BTREE] count_and_inc(BTREE T, int C, int D) {
+tuple[int, BTREE] count_and_inc(BTREE T, int C, int D) {
     int C = 0;
     
     visit T {
@@ -2238,30 +2195,30 @@ context-free syntax
 
       <para><programlisting>module Lambda-Examples
 
-import-syntax Lambda-syntax;
+import Lambda-syntax;
 
-fun set[Var] allVars(Exp E) {
+set[Var] allVars(Exp E) {
     return {V | Var V : E}
 }
 
-fun set[Var] boundVars(Exp E) {
+set[Var] boundVars(Exp E) {
     return {V | fn &lt;Var V&gt; =&gt; &lt;Exp E1&gt; : E};
 } 
 
-fun set[Var] freeVars(Exp E) {
+set[Var] freeVars(Exp E) {
     return allVars(E) - boundVars(E);
 }
 
 %% Generate a fresh variable if V does not occur in 
 %% given set of variables.
 
-fun Var fresh(Var V, set[Var] S) {
+Var fresh(Var V, set[Var] S) {
     if (V in S){ return prime(V); } else {return V;};
 }
 
 %% Substitution: replace all occurrences of V in E2 by E1
 
-fun Exp subst(Var V1, Exp E1, Exp E2) {
+Exp subst(Var V1, Exp E1, Exp E2) {
 
     switch E2 {
       case &lt;Var V2&gt;: if(V1 != V2){ yield [| &lt;V2&gt; |] }
@@ -2307,7 +2264,8 @@ lexical syntax
 context-free syntax
      Var                              -&gt; Exp
      "let" Var "=" Exp "in" Exp "end" -&gt; Exp </programlisting>Examples:<programlisting>module Let-Example
-imports Let;
+
+import Let;
 
 %% Rename all bound variables in an Exp
 %% Version 1: purely functional
@@ -2315,7 +2273,7 @@ imports Let;
 %% rel[Var,Var]: renaming table
 %% Int: counter to generate global variables
 
-fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
+Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     switch E {
     case let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end: {
          Var Y = "x" + Cnt;  %% this + operator concatenates 
@@ -2323,10 +2281,11 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
          int Cnt1 = Cnt + 1;
          Exp E1R = rename(E1, Rn, Cnt);
          Exp E2R = rename(E2, {&lt;V, Y&gt;} + Rn, Cnt1);
-         return make let &lt;Var Y &gt;= &lt;Exp E1R&gt;
-                     in 
-                        &lt;Exp E2R&gt;
-                     end;
+         return [| let &lt;Var Y&gt; = &lt;Exp E1R&gt;
+                   in 
+                      &lt;Exp E2R&gt;
+                   end
+                |]
           }
 
     case &lt;Var V&gt;: return Rn(V)
@@ -2342,7 +2301,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
       <para>Here is the same renaming function now using two global
       variables.<programlisting>module Let-Example
 
-import-syntax Let;
+import Let;
 
 %% Rename all bound variables in an Exp
 %% Version 2: using global variables
@@ -2352,13 +2311,13 @@ import-syntax Let;
 global int Cnt = 0;
 global rel[Var,Var] Rn = {};
 
-fun Var newVar() {
+Var newVar() {
     global int Cnt;  
     Cnt = Cnt + 1;
     return "x" + Cnt
 }
 
-fun Exp rename(Exp E) {
+Exp rename(Exp E) {
     global int Cnt;
     global rel[Var,Var] Rn;
     switch E {
@@ -2387,39 +2346,39 @@ fun Exp rename(Exp E) {
       <para>The following example shows the tight integration ASF with
       comprehensions.<programlisting>module Typecheck
 
-imports Pico-syntax;
-imports Errors;
+import Pico-syntax;
+import Errors;
 
-subtype Env rel[PICO-ID,TYPE];
+type map[PICO_ID,TYPE] Env;
 
-fun list[Error] tcp(PROGRAM P) {
+list[Error] tcp(PROGRAM P) {
     switch P {
       case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
            Env Env = {&lt;Id, Type&gt; | 
-                      [| &lt;PICO-ID Id&gt; : &lt;TYPE Type&gt; |] : Decls};
+                      [| &lt;PICO_ID Id&gt; : &lt;TYPE Type&gt; |] : Decls};
            return [ tcst(S, Env) | Stat S : Series ] 
       }
     };
 }
 
-fun list[Error] tcst(Stat Stat, Env Env) {
+list[Error] tcst(Stat Stat, Env Env) {
     switch Stat {
-      case [| &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt;|]: {
+      case [| &lt;PICO_ID Id&gt; = &lt;EXP Exp&gt;|]: {
         TYPE Type = Env(Id);
-        return type-of(Exp, Type, Env);
+        return type_of(Exp, Type, Env);
       }
 
       case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats1&gt; fi:
-        return type-of(Exp, natural, Env) + 
+        return type_of(Exp, natural, Env) + 
                tcs(Stats1, Env) + tcs(Stats2, Env)
 
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od: 
-        yield type-of(Exp, natural, Env) + tcs(Stats, Env)
+        yield type_of(Exp, natural, Env) + tcs(Stats, Env)
     };
 }
 
-fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
+list[Error] type_of(Exp E, TYPE Type, Env Env) {
     switch E {
       case &lt;NatCon N&gt;: if(Type == natural){ return []; }
 
@@ -2432,20 +2391,20 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
 
       case &lt;EXP E1&gt; + &lt;EXP E2&gt;:
         if(Type == natural){
-           return type-of(E1, natural, Env) + 
-                  type-of(E1, natural, Env);
+           return type_of(E1, natural, Env) + 
+                  type_of(E1, natural, Env);
         }
 
       case &lt;EXP E1&gt; + &lt;EXP E2&gt;:
         if(Type == natural){
-           return type-of(E1, natural, Env) + 
-                  type-of(E1, natural, Env);
+           return type_of(E1, natural, Env) + 
+                  type_of(E1, natural, Env);
         }
 
       case &lt;EXP E1&gt; || &lt;EXP E2&gt;: 
         if(Type == string){
-          return type-of(E1, string, Env) + 
-                 type-of(E1, string, Env)
+          return type_of(E1, string, Env) + 
+                 type_of(E1, string, Env)
         }
     
       default: return [error("Incorrect type")]
@@ -2457,14 +2416,14 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
       <title>Pico evaluator</title>
 
       <para><programlisting>module Pico-eval
-imports pico/syntax/Pico;
+import pico/syntax/Pico;
 
-type int PICO-VALUE;
-type str PICO-VALUE;
+type int PICO_VALUE;
+type str PICO_VALUE;
 
-type map[PICO-ID, PICO-VALUE] VEnv;
+type map[PICO_ID, PICO_VALUE] VEnv;
 
-fun VEnv evalProgram(PROGRAM P){
+VEnv evalProgram(PROGRAM P){
     switch P {
       case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
           VEnv Env = evalDecls(Decls);
@@ -2473,16 +2432,16 @@ fun VEnv evalProgram(PROGRAM P){
    }
 };
 
-fun VEnv assign(VEnv Env, PICO-ID Id, PICO-VALUE V){
+VEnv assign(VEnv Env, PICO_ID Id, PICO_VALUE V){
   Env(Id) = V;
   return Env
 }
 
-fun PICO-VALUE valueOf(VEnv Env, PICO-ID Id){
+PICO_VALUE valueOf(VEnv Env, PICO_ID Id){
   return Env(Id);
 }
 
-fun VEnv evalDecls(DECLS Decls){
+VEnv evalDecls(DECLS Decls){
     VEnv Env = {};
     visit Decls {
       case &lt;PICO-ID Id&gt; : string:  Env = assign(Env, Id, "")
@@ -2490,7 +2449,7 @@ fun VEnv evalDecls(DECLS Decls){
     }
 }
 
-fun VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
+VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
     switch Series {
       case &lt;STATEMENT Stat&gt;; &lt;{STATEMENT ";"}* Series2&gt;: {
         Env Env2 = evalStatement(Stat, Env);
@@ -2500,16 +2459,16 @@ fun VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
     }
 }
 
-fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
+VEnv evalStatement(STATEMENT Stat, VEnv Env){
     switch Stat {
-      case [| &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt; |]: {
-        PICO-VALUE Val = evalExp(Exp, Env);
+      case [| &lt;PICO_ID Id&gt; = &lt;EXP Exp&gt; |]: {
+        PICO_VALUE Val = evalExp(Exp, Env);
         return assign(Env, Id, Val)
       }
 
       case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats1&gt; fi:{
-        PICO-VALUE Val = evalExp(Exp, Env);
+        PICO_VALUE Val = evalExp(Exp, Env);
         if(Val != 0)
           return evalStatments(Stats1, Env)
         else 
@@ -2518,7 +2477,7 @@ fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
       }
 
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od:{
-        PICO-VALUE Val = evalExp(Exp, Env);
+        PICO_VALUE Val = evalExp(Exp, Env);
         if(Val != 0)
           return Env
         else {
@@ -2529,7 +2488,7 @@ fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
     };
 };
 
-fun PICO-VALUE evalExp(Exp exp, VEnv Env) {
+PICO_VALUE evalExp(Exp exp, VEnv Env) {
     switch exp {
       case &lt;NatCon N&gt;: return N
 
@@ -2562,14 +2521,15 @@ fun PICO-VALUE evalExp(Exp exp, VEnv Env) {
 
       <para>Here is the same evaluator but now using a global variable to
       represent the value environment.<programlisting>module Pico-eval
-imports pico/syntax/Pico;
 
-type int PICO-VALUE;
-type str PICO-VALUE;
+import pico/syntax/Pico;
 
-type map[PICO-ID, PICO-VALUE] VEnv;
+type int PICO_VALUE;
+type str PICO_VALUE;
 
-fun void evalProgram(PROGRAM P){
+type map[PICO_ID, PICO_VALUE] VEnv;
+
+void evalProgram(PROGRAM P){
     switch P {
       case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
           evalDecls(Decls);
@@ -2578,18 +2538,18 @@ fun void evalProgram(PROGRAM P){
    }
 };
 
-fun void assign(PICO-ID Id, PICO-VALUE V){
+void assign(PICO_ID Id, PICO_VALUE V){
   global Venv Env;
   Env(Id) = V;
   return;
 }
 
-fun PICO-VALUE valueOf(PICO-ID Id){
+PICO_VALUE valueOf(PICO_ID Id){
   global Venv Env;
   return Env(Id); 
 }
 
-fun VEnv evalDecls(DECLS Decls){
+VEnv evalDecls(DECLS Decls){
     global VEnv Env = {};
     visit Decls {
       case &lt;PICO-ID Id&gt; : string:  assign(Id, "")
@@ -2597,7 +2557,7 @@ fun VEnv evalDecls(DECLS Decls){
     }
 }
 
-fun void evalStatements({STATEMENT ";"}* Series){
+void evalStatements({STATEMENT ";"}* Series){
     global VEnv Env;
     switch Series {
       case &lt;STATEMENT Stat&gt;; &lt;{STATEMENT ";"}* Series2&gt;: {
@@ -2609,18 +2569,18 @@ fun void evalStatements({STATEMENT ";"}* Series){
     }
 }
 
-fun void evalStatement(STATEMENT Stat){
+void evalStatement(STATEMENT Stat){
     global VEnv Env;
     switch Stat {
-      case [| &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt; |]: {
-        PICO-VALUE Val = evalExp(Exp);
+      case [| &lt;PICO_ID Id&gt; = &lt;EXP Exp&gt; |]: {
+        PICO_VALUE Val = evalExp(Exp);
         assign(Id, Val);
         return
       }
 
       case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats1&gt; fi:{
-        PICO-VALUE Val = evalExp(Exp);
+        PICO_VALUE Val = evalExp(Exp);
         if(Val != 0) {
           evalStatements(Stats1);
           return
@@ -2631,7 +2591,7 @@ fun void evalStatement(STATEMENT Stat){
       }
 
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od:{
-        PICO-VALUE Val = evalExp(Exp);
+        PICO_VALUE Val = evalExp(Exp);
         if(Val != 0)
           return
         else {
@@ -2643,7 +2603,7 @@ fun void evalStatement(STATEMENT Stat){
     };
 };
 
-fun PICO-VALUE evalExp(Exp exp) {
+PICO_VALUE evalExp(Exp exp) {
     global VEnv Env;
     switch exp {
       case &lt;NatCon N&gt;: return N
@@ -2681,7 +2641,7 @@ fun PICO-VALUE evalExp(Exp exp) {
 
       <programlisting>module Pico-controlflow
  
-import-syntax pico/syntax/Pico;
+import pico/syntax/Pico;
 
 type EXP CP;         
 type STATEMENT CP;
@@ -2690,7 +2650,7 @@ type tuple[set[CP] entry,
            rel[CP,CP] graph, 
            set[CP] exit] CFSEGMENT;
 
-fun CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
+CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {
       case &lt;STATEMENT Stat&gt; ; &lt;{STATEMENT ";"}* Stats2&gt;: { 
            tuple[set[CP] En1, rel[CP,CP] R1, set[CP] Ex1] = 
@@ -2704,7 +2664,7 @@ fun CFSEGMENT cflow({STATEMENT ";"}* Stats){
     }
 }; 
 
-fun CFSEGMENT cflow(STATEMENT Stat){
+CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od : {
            tuple[set[CP] En,  rel[CP,CP] R,  set[CP] Ex] = 
@@ -2740,13 +2700,13 @@ fun CFSEGMENT cflow(STATEMENT Stat){
 
       <programlisting>module Pico-use-def
 
-import-syntax pico/syntax/Pico;
+import pico/syntax/Pico;
 
-fun rel[PICO_ID, EXP] uses(PROGRAM P) {
+rel[PICO_ID, EXP] uses(PROGRAM P) {
   return {&lt;Id, E&gt; | EXP E : P, PICO_ID Id := E}
 }
 
-fun rel[PICO_ID, STATEMENT] defs(PROGRAM P) { 
+rel[PICO_ID, STATEMENT] defs(PROGRAM P) { 
   return {&lt;Id, S&gt; | STATEMENT S : P, 
                     [| &lt;PICO_ID Id&gt; := &lt;EXP Exp&gt; |] := S}
 }</programlisting>
@@ -2764,12 +2724,12 @@ fun rel[PICO_ID, STATEMENT] defs(PROGRAM P) {
 
       <para><programlisting>module Pico-uninit
 
-import-syntax pico/syntax/Pico;
+import pico/syntax/Pico;
 
 import Pico-controlflow;
 import Pico-use-def;
 
-fun set[PICO_ID] uninit(PROGRAM P) {
+set[PICO_ID] uninit(PROGRAM P) {
     rel[EXP,PICO_ID] Uses = uses(P);
     rel[PICO_ID, STATEMENT] Defs = defs(P);
     CFSEGMENT CFLOW = cflow(P);
@@ -2779,7 +2739,8 @@ fun set[PICO_ID] uninit(PROGRAM P) {
     return {Id | tuple[EXP E, PICO_ID Id] : Uses,
                  E in reachX(Root, Defs[Id], Pred)
     };
-}</programlisting></para>
+}
+</programlisting></para>
     </section>
 
     <section>
@@ -2787,16 +2748,16 @@ fun set[PICO_ID] uninit(PROGRAM P) {
 
       <para><programlisting>module Pico-common-subexpression
 
-import-syntax pico/syntax/Pico;
+import pico/syntax/Pico;
 import Pico-controlflow;
 import Pico-use-def;
 
-fun PROGRAM cse(PROGRAM P) {
+PROGRAM cse(PROGRAM P) {
     rel[PICO_ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
     map[EXP, PICO_ID] replacements = 
        {&lt;E2, Id&gt; | STATEMENT S : P,
-                   [| &lt;PICO_ID Id&gt; := &lt;EXP E&gt; |] := S,
+                   &lt;PICO_ID Id&gt; := &lt;EXP E&gt; := S,
                    Id notin E,
                    EXP E2 : reachX({S}, Defs[Id], Pred)
        };
@@ -2836,7 +2797,7 @@ fun PROGRAM cse(PROGRAM P) {
       cse more generic if we introduce patterns as first class
       citizens:</para>
 
-      <programlisting>fun PROGRAM cse(PROGRAM P, 
+      <programlisting>PROGRAM cse(PROGRAM P, 
                 pat STATEMENT Assign(PICO-ID Id, EXP E)) {
  ...
     rel[EXP, PICO-ID] replacements := 
@@ -2870,11 +2831,11 @@ fun PROGRAM cse(PROGRAM P) {
 
       <para><programlisting>module Pico-constant-propagation
 
-import-syntax pico/syntax/Pico;
+import  pico/syntax/Pico;
 import  Pico-controlflow;
 import  Pico-use-def;
 
-fun Boolean is_constant(EXP E) {
+Boolean is_constant(EXP E) {
    switch E {
      case &lt;NatCon N&gt; =&gt; true
 
@@ -2884,7 +2845,7 @@ fun Boolean is_constant(EXP E) {
    }
 }
 
-fun PROGRAM cp(PROGRAM P) {
+PROGRAM cp(PROGRAM P) {
     rel[PICO_ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
 
@@ -2938,15 +2899,15 @@ fun PROGRAM cp(PROGRAM P) {
 type tuple[Stat theStat, Var theVar] Def;
 type tuple[Stat theStat, Var theVar] Use;
 
-fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
+set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
     return invert(P)(S)
 }
 
-fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
+set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
     return P(S)
 }
 
-fun rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS, 
+rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS, 
                                         rel[Stat,Stat] PRED) {
 
     set[Stat] STATEMENT = carrier(PRED);
@@ -2994,7 +2955,7 @@ lexical syntax
       <para>A truncation function on <literal>Real</literal> can replace the
       mantissa by 0:</para>
 
-      <para><programlisting>fun Real truncate(Real R){
+      <para><programlisting>Real truncate(Real R){
     switch R {
        case real(&lt;Number Num&gt; "." &lt;Digit+ Ds&gt;) =&gt; real(&lt;Num&gt; "." "0")
     }
@@ -3009,14 +2970,14 @@ lexical syntax
    ~[\"]             -&gt; NQChar
    [\"] NQChar* [\"] -&gt; String</programlisting>A function that removes the
       <emphasis>first</emphasis> newline from a string can be written
-      as:<programlisting>fun String removeFirstNL(String S){
+      as:<programlisting>String removeFirstNL(String S){
     switch S {
       case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2&gt; "\"") =&gt;
            string("\"" &lt;Chars1&gt; &lt;Chars2&gt; "\"")
     }
 }</programlisting></para>
 
-      <para>A function that removes all newline from a string:<programlisting>fun String removeAllNL(String S){
+      <para>A function that removes all newline from a string:<programlisting>String removeAllNL(String S){
     visit S {
       case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2&gt; "\"") =&gt;
            string("\"" &lt;Chars1&gt; &lt;Chars2&gt; "\"")
@@ -3118,7 +3079,7 @@ context-free syntax
 
 import Vector-syntax;
 
-fun int innerProduct(Vector V1, V2){
+int innerProduct(Vector V1, V2){
     if ( &lt;Integer N1&gt; &lt;Integer* Rest1&gt; := V1 and
          &lt;Integer N2&gt; &lt;Integer* Rest2&gt; := V2 
        )
@@ -3135,7 +3096,9 @@ fun int innerProduct(Vector V1, V2){
 
       <programlisting>module Bubble
 
-fun Integer* sort(Integer* Numbers){
+import Vector-syntax;
+
+Integer* sort(Integer* Numbers){
     visit Numbers {
       case &lt;Integer* Rest1&gt; 
               &lt;Integer N1&gt; &lt;Integer N2&gt; 
@@ -3154,7 +3117,7 @@ fun Integer* sort(Integer* Numbers){
 
       <programlisting>module Bubble
 
-fun Integer* sort(Integer* Numbers){
+Integer* sort(Integer* Numbers){
     visit Numbers {
       case &lt;Integer N1&gt; &lt;Integer N2&gt;:
         if( N1 &gt; N2 ) 
@@ -3207,7 +3170,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 &gt; str source := read("program.java");
 &gt; CU program := Java.CU.parse(source);
 
-&gt; fun int count(CU P) {
+&gt; int count(CU P) {
     int cnt := 0;
 &gt;   visit P {
 &gt;     Java.Statements.IF =&gt; cnt++;

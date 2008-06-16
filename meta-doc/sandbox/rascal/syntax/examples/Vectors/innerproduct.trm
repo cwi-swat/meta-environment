@@ -2,7 +2,7 @@ module Innerproduct
 
 import Vector-syntax;
 
-fun int innerProduct(Vector V1, V2){
+int innerProduct(Vector V1, V2){
     if ( <Integer N1> <Integer* Rest1> := V1 and
          <Integer N2> <Integer* Rest2> := V2 
        )

@@ -11,6 +11,8 @@ equations
 
 %% Subtyping rules (<:) on Types
 
+[let00] void <: T                          = true
+
 [let01] T <: value                         = true
 
 [let02] T <: T                             = true
@@ -40,7 +42,7 @@ equations
 [let14] T <: T' == true,        %% covariant
         ONTs' <: ONTs == true   %% contravariant
         =========================================
-        fun T N (ONTs) <: fun T' N (ONTs') = true
+        fun T (ONTs) <: fun T' (ONTs') = true
 [default-let]
         T <: T'                            = false
 

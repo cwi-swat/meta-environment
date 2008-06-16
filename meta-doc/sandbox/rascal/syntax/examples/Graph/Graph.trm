@@ -6,7 +6,7 @@ data Graph graph(NodeList nodes,
 
 type list[Node] Nodelist;
 
-data Node node(NodeId id, 
+data Node node(NodeId id,  
                AttributeList attributes);
 
 data Node subgraph(NodeId id, 

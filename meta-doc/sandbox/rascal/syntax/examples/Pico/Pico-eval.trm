@@ -1,12 +1,12 @@
 module Pico-eval
-import-syntax pico/syntax/Pico;
+import pico/syntax/Pico;
 
 type int PICO_VALUE;
 type str PICO_VALUE;
 
 type map[PICO_ID, PICO_VALUE] VEnv;
 
-fun VEnv evalProgram(PROGRAM P){
+VEnv evalProgram(PROGRAM P){
     switch P {
       case begin <DECLS Decls> <{STATEMENT ";"}* Series> end: {
           VEnv Env = evalDecls(Decls);
@@ -15,16 +15,16 @@ fun VEnv evalProgram(PROGRAM P){
    }
 };
 
-fun VEnv assign(VEnv Env, PICO_ID Id, PICO_VALUE V){
+VEnv assign(VEnv Env, PICO_ID Id, PICO_VALUE V){
   Env(Id) = V;
   return Env
 }
 
-fun PICO_VALUE valueOf(VEnv Env, PICO_ID Id){
+PICO_VALUE valueOf(VEnv Env, PICO_ID Id){
   return Env(Id);
 }
 
-fun VEnv evalDecls(DECLS Decls){
+VEnv evalDecls(DECLS Decls){
     VEnv Env = {};
     visit Decls {
       case <PICO-ID Id> : string:  Env = assign(Env, Id, "")
@@ -32,7 +32,7 @@ fun VEnv evalDecls(DECLS Decls){
     }
 }
 
-fun VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
+VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
     switch Series {
       case <STATEMENT Stat>; <{STATEMENT ";"}* Series2>: {
         Env Env2 = evalStatement(Stat, Env);
@@ -42,7 +42,7 @@ fun VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
     }
 }
 
-fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
+VEnv evalStatement(STATEMENT Stat, VEnv Env){
     switch Stat {
       case [| <PICO_ID Id> = <EXP Exp> |]: {
         PICO_VALUE Val = evalExp(Exp, Env);
@@ -71,7 +71,7 @@ fun VEnv evalStatement(STATEMENT Stat, VEnv Env){
     };
 };
 
-fun PICO_VALUE evalExp(Exp exp, VEnv Env) {
+PICO_VALUE evalExp(Exp exp, VEnv Env) {
     switch exp {
       case <NatCon N>: return N
 

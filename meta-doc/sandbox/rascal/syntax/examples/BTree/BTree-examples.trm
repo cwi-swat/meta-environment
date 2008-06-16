@@ -1,21 +1,21 @@
 module BTree-Examples
-import-syntax BTree-syntax; 
+import BTree-syntax; 
 
 %% Ex1: Count leaves in a BTREE
 %% Idea: int N : T generates alle Integer leaves in the tree
 
-fun int cnt(BTREE T) {
+int cnt(BTREE T) {
     return size({N | int N : T})
 }
 
 %% Ex1: an equivalent,  more purist, version of the same function:
-fun int cnt(BTREE T) {
+int cnt(BTREE T) {
     return size({N | Integer N : T})
 }
 
 %% Ex1: alternative solution using trafo functions:
 
-fun int cnt(BTREE T) {
+int cnt(BTREE T) {
     int C = 0;
     visit T {
       case <Integer N> : C = C+1
@@ -29,13 +29,13 @@ fun int cnt(BTREE T) {
 %% - the built-in sort "int"
 %% - the syntactic sort "Integer"
 
-fun int sumtree(BTREE T) {
+int sumtree(BTREE T) {
     return sum({N | int N : T});
 }
 
 %% Ex2: using accumulator
 
-fun int cnt(BTREE T) {
+int cnt(BTREE T) {
     int C = 0;
     visit T {
       case <Integer N> : C = C+N
@@ -52,7 +52,7 @@ fun int cnt(BTREE T) {
 %% - from int to NAT to convert the result of addition into 
 %%   a NAT tree
 
-fun BTREE inc(BTREE T) {
+BTREE inc(BTREE T) {
     visit T {
       case <Integer N>: yield (N + 1)
     };
@@ -67,7 +67,7 @@ fun BTREE inc(BTREE T) {
 %% declaration of a travesal function (as in ASF+SDF) but to 
 %% its use.
 
-fun BTREE frepl(BTREE T) {
+BTREE frepl(BTREE T) {
     visit bottom-up T {
       case g(<BTREE T1>, <BTREE T2>) =>
            i(<BTREE T1>, <BTREE T2>)
@@ -76,7 +76,7 @@ fun BTREE frepl(BTREE T) {
 
 %% Ex5: Deep replacement of g by i
 
-fun BTREE frepl(BTREE T) {
+BTREE frepl(BTREE T) {
     visit bottom-up-break T {
       case g(<BTREE T1>, <BTREE T2>) =>
            i(<BTREE T1>, <BTREE T2>)
@@ -86,7 +86,7 @@ fun BTREE frepl(BTREE T) {
 %% Ex6: shallow replacement of g by i (i.e. only outermost 
 %% g's are replaced); 
 
-fun BTREE srepl(BTREE T) {
+BTREE srepl(BTREE T) {
     visit top-down-break T {
       case g(<BTREE T1>, <BTREE T2>) => 
            i(<BTREE T1>, <BTREE T2>)
@@ -96,7 +96,7 @@ fun BTREE srepl(BTREE T) {
 %% Ex7: We can also add the first/td directives to all generators 
 %% (where "all td" would be the default):
 
-fun set[BTREE] find_outer_gs(BTREE T) {
+set[BTREE] find_outer_gs(BTREE T) {
     return
     { S | STATEMENT S : top-down-break T, 
           g(<BTREE T1>, <BTREE T2>) := S };
@@ -104,7 +104,7 @@ fun set[BTREE] find_outer_gs(BTREE T) {
  
 %% Ex8: accumulating transformer that increments leaves with 
 %% amount D and counts them
-fun tuple[int, BTREE] count_and_inc(BTREE T, int C, int D) {
+tuple[int, BTREE] count_and_inc(BTREE T, int C, int D) {
     int C = 0;
     
     visit T {

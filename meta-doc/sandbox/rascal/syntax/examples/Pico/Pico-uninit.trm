@@ -1,11 +1,11 @@
 module Pico-uninit
 
-import-syntax pico/syntax/Pico;
+import pico/syntax/Pico;
 
 import Pico-controlflow;
 import Pico-use-def;
 
-fun set[PICO_ID] uninit(PROGRAM P) {
+set[PICO_ID] uninit(PROGRAM P) {
     rel[EXP,PICO_ID] Uses = uses(P);
     rel[PICO_ID, STATEMENT] Defs = defs(P);
     CFSEGMENT CFLOW = cflow(P);

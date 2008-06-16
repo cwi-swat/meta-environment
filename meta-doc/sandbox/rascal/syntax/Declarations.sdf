@@ -25,6 +25,9 @@ exports
     Visibility "data" ( Name | ParameterizedType)
                             { AbstractType "|"}+       -> Declaration {cons("data-decl")}
 
+    Visibility "view" Name "<:" Name
+                         { (Name AbstractType) "|"}+   -> Declaration {cons("view-decl")}
+
     Visibility "type" Type (Name  | ParameterizedType) -> Declaration {cons("type-decl")}
 
     Visibility "global" Type Name ("=" Expression)?    -> Declaration {cons("global-decl")}

@@ -3,15 +3,15 @@ module Pico-reaching-defs
 type tuple[Stat theStat, Var theVar] Def;
 type tuple[Stat theStat, Var theVar] Use;
 
-fun set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
+set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
     return invert(P)(S)
 }
 
-fun set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
+set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
     return P(S)
 }
 
-fun rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS, 
+rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS, 
                                         rel[Stat,Stat] PRED) {
 
     set[Stat] STATEMENT = carrier(PRED);

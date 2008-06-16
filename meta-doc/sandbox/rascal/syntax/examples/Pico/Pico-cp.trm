@@ -1,10 +1,10 @@
 module Pico-constant-propagation
 
-import-syntax pico/syntax/Pico;
+import  pico/syntax/Pico;
 import  Pico-controlflow;
 import  Pico-use-def;
 
-fun Boolean is_constant(EXP E) {
+Boolean is_constant(EXP E) {
    switch E {
      case <NatCon N> => true
 
@@ -14,7 +14,7 @@ fun Boolean is_constant(EXP E) {
    }
 }
 
-fun PROGRAM cp(PROGRAM P) {
+PROGRAM cp(PROGRAM P) {
     rel[PICO_ID, STATEMENT] Defs = defs(P);
     rel[CP,CP] Pred = cflow(P).graph;
 

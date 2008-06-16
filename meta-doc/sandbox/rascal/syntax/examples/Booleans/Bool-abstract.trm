@@ -5,7 +5,7 @@ data Bool bfalse;
 data Bool band(Bool, Bool);
 data Bool bor(Bool, Bool); 
 
-fun Bool reduce(Bool B) {
+Bool reduce(Bool B) {
     visit bottom-up B {
       acase band(btrue, <Bool B2>)   => <B2>     %% Use Variables
       acase band(bfalse, <Bool B2>)  => bfalse
