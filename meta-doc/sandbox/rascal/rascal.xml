@@ -34,6 +34,8 @@
   <section>
     <title>Rationale</title>
 
+    <para>WEG</para>
+
     <para>In the domain of software analysis and transformation, there exists
     a phletora of domain-specific languages for defining grammars, rewrite
     rules, software analysis and the like. So why embark on the design of yet
@@ -480,11 +482,6 @@
         </listitem>
 
         <listitem>
-          <para>R5: (<emphasis role="bold">dropped</emphasis>) Functional (no
-          side-effects), dropped due to incompatibility with R7, R6</para>
-        </listitem>
-
-        <listitem>
           <para>R6: File I/O (contradicts R5).</para>
         </listitem>
 
@@ -651,12 +648,19 @@
     <section>
       <title>Modules</title>
 
-      <para>Modules are the organizational unit of Rascal. They may:</para>
+      <para>Modules are the organizational unit of Rascal. They may:<caution>
+          <para>Collapse to one import.</para>
+        </caution><caution>
+          <para>Add renaming to import: import M rename A to B, B to C, ... or
+          import M { A =&gt; B, B =&gt; C, ...}</para>
+        </caution><caution>
+          <para>Import is NOT transitive.</para>
+        </caution></para>
 
       <itemizedlist>
         <listitem>
           <para>Import another Rascal module using <literal>import</literal>.
-          We do not allow circular imports.</para>
+          We do allow circular imports.</para>
         </listitem>
 
         <listitem>
@@ -688,35 +692,30 @@
 
         <listitem>
           <para>Contain a main function that is the starting point of
-          execution:<programlisting>public int main(list[str] argv) { ... }</programlisting></para>
+          execution:<caution>
+              <para>Allow several types here.</para>
+            </caution><programlisting>public int fun main(list[str] argv) { ... }</programlisting></para>
         </listitem>
       </itemizedlist>
 
-      <para>Functions, subtypes and datatypes may be either private to a
+      <para><caution>
+          <para>fun keyword weg.</para>
+        </caution>Functions, subtypes and datatypes may be either private to a
       module or public to all modules that import the current module. Rules
       are always public and are globally applied.</para>
 
       <para>Modules introduce a namespace and qualified names (using the
       <literal>::</literal> operator) may be used to uniquely identify
       elements of a module from the outside. Inside the module, this
-      qualification is implicit.<caution>
-          <para>We should clarify what we want to have:</para>
+      qualification is implicit. The qualified name consist of two parts: a
+      directory name ( a list of names separated by /) and a module
+      name.</para>
 
-          <itemizedlist>
-            <listitem>
-              <para>modules: yes</para>
-            </listitem>
-
-            <listitem>
-              <para>a nested structure (directory style) of modules:
-              yes</para>
-            </listitem>
-
-            <listitem>
-              <para>packages: no?</para>
-            </listitem>
-          </itemizedlist>
-        </caution></para>
+      <para>Modules are located in a file with the name of the module, with
+      suffix <literal>.ras</literal>. They should located in a directory
+      corresponding to the directory part of the module name. From other
+      modules, <literal>m::f</literal> denotes function <literal>f</literal>
+      from module <literal>m</literal>.</para>
     </section>
 
     <section>
@@ -741,7 +740,7 @@
           changing all existing SDF definitions. Allowing a dash in Names
           requires an added check in the compiler that Identifiers with dashes
           are generated as Java names. Suggestion: add dash and check in
-          compiler.</remark></para>
+          compiler. Allow - and _ and not $.</remark></para>
         </listitem>
       </itemizedlist>
     </section>
@@ -780,9 +779,9 @@
           <listitem>
             <para>All syntactic types are a subtype of the type
             <literal>tree</literal> that corresponds to UPTR. Up casts from a
-            subtype to an enclosing type are automatic; Down casts require a
-            run-time check/cast. The type <literal>tree</literal> is "special"
-            in the following sense:</para>
+            subtype to an enclosing type are automatic. The type
+            <literal>tree</literal> is "special" in the following
+            sense:</para>
 
             <itemizedlist>
               <listitem>
@@ -810,9 +809,9 @@
           </listitem>
 
           <listitem>
-            <para>Function parameters can be function types, maening that the
-            name of a properly typed function can be passed as a
-            parameter.</para>
+            <para>Function parameters can be function types, meaning that the
+            name of a properly typed function or a locally defined anonymous
+            function can be passed as a parameter.</para>
           </listitem>
 
           <listitem>
@@ -836,10 +835,22 @@
                 statements.</para>
               </note></para>
 
-            <note>
+            <caution>
               <para>Constructor names of datatypes may be quoted in order to
               avoid clashes with reserved words or illegal names.</para>
-            </note>
+            </caution>
+
+            <caution>
+              <para>How to handle constructorless data types, e.g., data tree
+              int char?</para>
+            </caution>
+          </listitem>
+
+          <listitem>
+            <para>We have views on data types: view Bool &lt;: tree and
+            appl(...) | or appl(...)<note>
+                <para>Views for the same type are exclusive.</para>
+              </note></para>
           </listitem>
 
           <listitem>
@@ -850,20 +861,24 @@
             <itemizedlist>
               <listitem>
                 <para>In the type
-                <literal>rel[&amp;<replaceable>T</replaceable>]</literal>, the
-                type variable
+                <literal>rel[&amp;<replaceable>*T</replaceable>]</literal>,
+                the type variable
                 <literal>&amp;<replaceable>T</replaceable></literal> is bound
                 to the tuple type of the relation, i.e. an actual type
                 <literal>rel[int,str]</literal> will bind
-                &amp;<replaceable>T</replaceable> to the type
+                &amp;<replaceable>*T</replaceable> to the type
                 <literal>tuple[int,str]</literal>.</para>
               </listitem>
 
               <listitem>
+                <para>Composition is only allowed in the result type.</para>
+              </listitem>
+
+              <listitem>
                 <para>In a similar fashion, in
-                <literal>map[&amp;<replaceable>T</replaceable>]</literal>, the
-                type variable
-                <literal>&amp;<replaceable>T</replaceable></literal> is bound
+                <literal>map[&amp;<replaceable>*T</replaceable>]</literal>,
+                the type variable
+                <literal>&amp;<replaceable>*T</replaceable></literal> is bound
                 to the tuple type of the map.</para>
               </listitem>
             </itemizedlist>
@@ -884,13 +899,25 @@
 
             <para>Of course, the type variables that are used in the type in
             the left part should occur as parameters in the right part of the
-            definition.</para>
+            definition and vice versa.</para>
+          </listitem>
+
+          <listitem>
+            <para>Types may be declared only once and are mutually
+            exclusive.</para>
           </listitem>
         </itemizedlist>
       </section>
 
       <section>
         <title>Subtypes</title>
+
+        <para><caution>
+            <para>Types are compatible if they occur on the same path from
+            void to value in the type lattice. This is a middle road between
+            structural and nominal type equivalence. Intensional structural
+            type equivalence.</para>
+          </caution></para>
 
         <para>The type hierarchy leads to a subtype relation &lt;: that can be
         defined (in ASF+SDF) as follows:<programlisting>%% Subtyping rules (&lt;:) on Types
@@ -954,11 +981,10 @@ fun int f(number x) &lt;: fun number f (int x)    %% assuming int &lt;: number</
 
         <para>introduces the following subtype relation:<programlisting>Graph &lt;: rel[node,node]</programlisting></para>
 
-        <para><caution>
-            <para>How do we handle the optional names that occur in types?
-            Currently, we throw them away in the subtype relation. Should we
-            also compare these names?</para>
-          </caution></para>
+        <para><note>
+            <para>We throw the names in types away in the subtype
+            relation.</para>
+          </note></para>
       </section>
     </section>
 
@@ -969,7 +995,20 @@ fun int f(number x) &lt;: fun number f (int x)    %% assuming int &lt;: number</
       by a mapping of type <literal>map[str,value]</literal>, i.e., annotation
       names are strings and annotation values are arbitrary values of type
       <literal>value</literal>. The standard library provides functions for
-      handling annotations.</para>
+      handling annotations.<caution>
+          <para>Syntax: X @ atr and X @ atr = V parallels field operations. X
+          ? attr checks for attribute attr.</para>
+        </caution><caution>
+          <para>Do we want a symbol type?</para>
+        </caution><caution>
+          <para>Declaration of annotation in data decl?</para>
+        </caution><caution>
+          <para>Add meta-data annotation for declarations (modules, variables,
+          functions, data, ...): license, todo, deprecated, memo, JDBC,
+          ...</para>
+        </caution><caution>
+          <para>Add doc strings.</para>
+        </caution></para>
     </section>
 
     <section>
@@ -3249,7 +3288,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -3257,7 +3296,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
@@ -4021,7 +4060,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 

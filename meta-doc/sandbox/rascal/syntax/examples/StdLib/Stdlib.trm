@@ -18,7 +18,7 @@ public fun bool >=(&T A, &T B)
 
 public fun &T min(&T A, &T B){
   if(A < B)
-    return A
+    return A;
   else
     return B;
 }
@@ -185,7 +185,7 @@ public fun int toInt(str S)
 public fun int toDouble(str S)
        throws cannot_convert_to_double(str msg)
   primitive("String.toDouble")
-
+   
 public fun list[int] toList(str S)
        throws cannot_convert_int_to_char(str msg)
   primitive("String.toList")
@@ -697,7 +697,7 @@ public fun rel[&T, &T] closure(rel[&T, &T])
 
 %% Test whether a named annotation exists.
 public fun bool has_annotation(&T Subject)
-  primitive("Annotation.has_annotation");
+  @primitive{Annotation.has_annotation};
 
 %% Get the value of a named annotation
 public fun value get_annotation(&T Subject, str Name)

@@ -64,9 +64,9 @@ exports
 
 
 %% Define reserved words
-    "bool" | "int" | "double" | "number" | "str" | 
-    "loc" | "value" | "term" | "void" | "list" | 
-    "set" | "map" | "rel" | "tuple" | "fun"                  -> Name {reject}
+ %%   "bool" | "int" | "double" | "number" | "str" | 
+ %%   "loc" | "value" | "term" | "void" | "list" | 
+ %%   "set" | "map" | "rel" | "tuple" | "fun"                  -> Name {reject}
  
 
   
