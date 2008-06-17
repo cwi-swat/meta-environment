@@ -1062,7 +1062,7 @@ public class parser extends java_cup.runtime.lr_parser {
 		}
 		
 		public String getMessage(){
-			return "Syntax error in "+fileName+", at line: "+line+", column: "+column+", symbol id: "+sym;
+			return "Syntax error in "+fileName+", at offset: " +position + ", line: "+line+", column: "+column+", symbol id: "+sym;
 		}
 	}
 	
