@@ -1,3 +1,9 @@
+
+
+Wed Jun 18 09:38:38 CEST 2008 <jurgenv@cwi.nl>
+ * Improved locations of error messages produces during parsing. This
+   improves the IDE a lot.
+
 Tue Jun 10 14:42:14 CEST 2008 <lankamp@cwi.nl>
   * Merged the message matching stuff from the parallelization branch to the trunk. This speeds up inter-process communication considerably.
 

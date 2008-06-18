@@ -8,6 +8,7 @@ package toolbus.parsercup;
  */
 public class PositionInformation{
 	private final String fileName;
+	private final int offset;
 	private final int beginLine;
 	private final int beginColumn;
 	private final int endLine;
@@ -27,7 +28,8 @@ public class PositionInformation{
 	 * @param endColumn
 	 *            The end column.
 	 */
-	public PositionInformation(String fileName, int beginLine, int beginColumn, int endLine, int endColumn){
+	public PositionInformation(String fileName, int offset, int beginLine, int beginColumn, int endLine, int endColumn){
+		this.offset = offset;
 		this.fileName = fileName;
 		this.beginLine = beginLine;
 		this.beginColumn = beginColumn;
@@ -35,6 +37,13 @@ public class PositionInformation{
 		this.endColumn = endColumn;
 	}
 	
+	/**
+	 * 
+	 * @return the character offset of the file this position is in
+	 */
+	public int getOffset() {
+		return offset;
+	}
 	/**
 	 * Returns the name of the file this position is in.
 	 * 

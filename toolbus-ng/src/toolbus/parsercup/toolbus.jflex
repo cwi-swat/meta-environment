@@ -3,6 +3,7 @@ package toolbus.parsercup;
 
 /* Lexical syntax for ToolBus scripts */
 import java_cup.runtime.Symbol;
+import toolbus.parsercup.SyntaxErrorException;
 
 %%
 
@@ -177,5 +178,5 @@ Real  = -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
 }
 
 /* error fallback */
-.|\n                             { throw new Error("Illegal character <"+yytext()+">"); }
+.|\n                             { throw new SyntaxErrorException(yyline, yycolumn, yychar, yy_action); }
 

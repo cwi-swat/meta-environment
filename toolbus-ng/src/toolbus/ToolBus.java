@@ -25,12 +25,13 @@ import toolbus.commandline.CommandLine;
 import toolbus.exceptions.NoSuchProcessDefinitionException;
 import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
 import toolbus.matching.MatchStore;
 import toolbus.parsercup.parser;
-import toolbus.parsercup.parser.SyntaxErrorException;
+import toolbus.parsercup.SyntaxErrorException;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessExpression;
@@ -313,7 +314,7 @@ public class ToolBus{
 		return nerrors == 0;
 	}
 	
-	public boolean parsecupString(String filename, String inMemoryScript){
+	public boolean parsecupString(String filename, String inMemoryScript) throws ToolBusException{
 		try{
 			parser parser_obj = new parser(this, filename, new StringReader(inMemoryScript));
 			parser_obj.parse();
@@ -345,6 +346,7 @@ public class ToolBus{
 		}catch(ToolBusException te){
 			error(filename, te.getMessage());
 			te.printStackTrace();
+			throw te;
 		}catch(FileNotFoundException fnfex){
 			error(filename, fnfex.getMessage());
 			fnfex.printStackTrace();
