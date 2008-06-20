@@ -31,14 +31,12 @@ context-free syntax
     Name "=>" Name                               -> Renaming
     "{" {Renaming ","}+ "}"                      -> Renamings
 
-    "import" ImportedModule ";"                  -> Import
-    "extend" ImportedModule ";"                  -> Import
-%%    "import-java"  QualName ";"                  -> Import
-%%    "import-syntax" ModuleName ";"               -> Import
+    DeclAnnos "import" ImportedModule ";"        -> Import
+    DeclAnnos "extend" ImportedModule ";"        -> Import
 
-    "module" ModuleName ModuleParameters?
+    DeclAnnos "module" ModuleName ModuleParameters? 
              Import* 
-             (Declaration ";"?)*                 -> Module  
+             (DeclAnnos Declaration ";"?)*       -> Module  
 
 %% Define reserved words
     "import" | "module"                          -> Name {reject}

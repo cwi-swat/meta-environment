@@ -1,10 +1,10 @@
 module RascalStandardLibrary
 
-@rascal-anno function primitive string
-@rascal-anno function memo void
-@rascal-anno function java CompilationUnit
+decl-anno function primitive string
+decl-anno function memo void
+decl-anno function java CompilationUnit
 
-@rascal-anno all doc string
+decl-anno all doc string
 
 %% Here is a flat list of library functions that will
 %% structured in to coherent submodules.
@@ -41,70 +41,69 @@ public &T max(&T A, &T B){
 
 %% --- Boolean (bool) ----------------------------------------
 
-public bool ==(bool B1, bool B2)
- @primitive{Bool.equal}
+@doc{Equality on Booleans}
+@primitive{Bool.equal}
+  public bool ==(bool B1, bool B2)
+ 
+@primitive{Bool.less}
+  public bool <(bool B1, bool B2)
 
-public bool <(bool B1, bool B2)
-  @primitive{Bool.less}
+@primitive{Bool.add}
+  public bool +(bool B1, bool B2)
 
-public bool +(bool B1, bool B2)
-  @primitive{Bool.add}
+@primitive{Bool.sub}
+  public bool -(bool B1, bool B2)
 
-public bool -(bool B1, bool B2)
- @primitive{Bool.sub}
+@primitive{Bool.mul}
+  public bool *(bool B1, bool B2)
+ 
+@primitive{Bool.arb}
+  public int arb()
 
-public bool *(bool B1, bool B2)
-  @primitive{Bool.mul}
+@primitive{Bool.toString}
+  public str toString(bool B)
 
-%% Arbitrary boolean: arb
-public int arb()
- @primitive{Bool.arb}
+@primitive{Bool.toInt}
+  public int toInt(bool B)
 
-public str toString(bool B)
- @primitive{Bool.toString}
-
-public int toInt(bool B)
- @primitive{Bool.toInt}
-
-public double toDouble(bool B)
- @primitive{Bool.toDouble}
+@primitive{Bool.toDouble}
+  public double toDouble(bool B)
 
 %% --- Integer (int)------------------------------------------
 
-public bool ==(int I1, int I2)
- @primitive{Int.equal}
+@primitive{Int.equal}
+  public bool ==(int I1, int I2)
 
-public bool <(int I1, int I2)
-  @primitive{Int.less}
+@primitive{Int.less}
+  public bool <(int I1, int I2)
 
-public int +(int I1, int I2)
- @primitive{Int.add}
+@primitive{Int.add}
+  public int +(int I1, int I2)
 
-public int -(int I1, int I2)
-  @primitive{-Int}
+@primitive{Int.sub}
+  public int -(int I1, int I2)
 
-public int *(int I1, int I2)
-  @primitive{Int.mul}
-
-public int /(int I1, int I2)
+@primitive{Int.mul}
+  public int *(int I1, int I2)
+ 
+@primitive{Int.div}
+  public int /(int I1, int I2)
   throws divide_by_zero(str msg)
-  @primitive{Int.div}
 
-%% Arbitrary integer: arb
-public int arb(int bgn, int end)
-       throws illegal_argument(str msg) %% if(end - bgn <= 0)
- @primitive{Int.arb} 
+@primitive{Int.arb} 
+  public int arb(int bgn, int end)
+  throws illegal_argument(str msg) %% if(end - bgn <= 0)
 
-public double toDouble(int I)
- @primitive{Int.toDouble}
+@primitive{Int.toDouble}
+  public double toDouble(int I)
 
-public str toString(int I)
- @primitive{toStringInt}
+@primitive{toStringInt}
+  public str toString(int I)
 
 %% --- Double (double) ---------------------------------------
 
-public bool ==(double D1, double D2)
-  @primitive{Double.equal}
+@primitive{Double.equal}
+  public bool ==(double D1, double D2)
 
 public bool ==(double D, int I){
   return D == toDouble(I)
@@ -114,8 +113,8 @@ public bool ==(int I, double D){
   return toDouble(I) == D
 }
 
-public bool <(double D1, double D2)
-  @primitive{Double.less}
+@primitive{Double.less}
+  public bool <(double D1, double D2)
 
 public bool <(double D, int I){
   return D < toDouble(I)
@@ -125,8 +124,8 @@ public bool <(int I, double D){
   return toDouble(I) < D
 }
 
-public double +(double D1, double D2)
-  @primitive{Double.add}
+@primitive{Double.add}
+  public double +(double D1, double D2)
 
 public bool +(double D, int I){
   return D + toDouble(I)
@@ -136,8 +135,8 @@ public bool +(int I, double D){
   return toDouble(I) + D
 }
 
-public double -(double D1, double D2)
-  @primitive{Double.sub}
+@primitive{Double.sub}
+  public double -(double D1, double D2)
 
 public bool -(double D, int I){
   return D - toDouble(I)
@@ -147,8 +146,8 @@ public bool -(int I, double D){
   return toDouble(I) - D
 }
 
-public double *(double D1, double D2)
-  @primitive{Double.mul}
+@primitive{Double.mul}
+  public double *(double D1, double D2)
 
 public bool *(double D, int I){
   return D * toDouble(I)
@@ -157,10 +156,11 @@ public bool *(double D, int I){
 public bool *(int I, double D){
   return toDouble(I) * D
 }
-public double /(double D1, double D2)
-  throws divide_by_zero(str msg)
-  @primitive{Double.div}
 
+@primitive{Double.div}
+  public double /(double D1, double D2)
+  throws divide_by_zero(str msg)
+ 
 public bool /(double D, int I){
   return D / toDouble(I)
 }
@@ -169,52 +169,51 @@ public bool /(int I, double D){
   return toDouble(I) / D
 }
 
-%% Arbitrary double: arb
-public double arb(double bgn, double end)
-       throws illegal_argument(str msg) %% if(end - bgn <= 0)
- @primitive{Double.arb}
+@primitive{Double.arb}
+  public double arb(double bgn, double end)
+  throws illegal_argument(str msg) %% if(end - bgn <= 0)
 
-public int toInt(double D)
-  @primitive{Double.toInt}
-
-public str toString(double D)
-  @primitive{Double.toString}
+@primitive{Double.toInt}
+  public int toInt(double D)
+ 
+@primitive{Double.toString}
+  public str toString(double D)
 
 %% --- Strings (str) -----------------------------------------
 
-public bool ==(str S1, str S2)
-  @primitive{String.equal}
+@primitive{String.equal}
+  public bool ==(str S1, str S2)
 
-public bool <(str S1, str S2)
- @primitive{String.less}
+@primitive{String.less}
+  public bool <(str S1, str S2)
 
-public str +(str S1, str S2)
-  @primitive{String.add}
+@primitive{String.add}
+  public str +(str S1, str S2)
 
-public int size(str S)
-  @primitive{String.size}
+@primitive{String.size}
+  public int size(str S)
 
-public int get(str S, int N)
-       throws out_of_range(str msg)
- @primitive{String.get}
+@primitive{String.get}
+  public int get(str S, int N)
+  throws out_of_range(str msg)
 
-public int toInt(str S)
-       throws cannot_convert_to_int(str msg)
-  @primitive{String.toInt}
+@primitive{String.toInt}
+  public int toInt(str S)
+  throws cannot_convert_to_int(str msg)
 
-public int toDouble(str S)
-       throws cannot_convert_to_double(str msg)
-  @primitive{String.toDouble}
-   
-public list[int] toList(str S)
-       throws cannot_convert_int_to_char(str msg)
-  @primitive{String.toList}
+@primitive{String.toDouble}
+  public int toDouble(str S)
+  throws cannot_convert_to_double(str msg)
+
+@primitive{String.toList}
+  public list[int] toList(str S)
+  throws cannot_convert_int_to_char(str msg)
  
-public set[int] toSet(str S)
-  @primitive{String.toSet}
+@primitive{String.toSet}
+  public set[int] toSet(str S)
 
-public str reverse(str S)
-  @primitive{String.reverse}
+@primitive{String.reverse}
+  public str reverse(str S)
 
 %% Add functions for other methods of Java's String class
 
@@ -229,71 +228,73 @@ data location location(str filename,
                        int offset,
                        int length);
 
-public bool ==(loc L1, loc L2)
-  @primitive{Location.equal} 
+@primitive{Location.equal} 
+  public bool ==(loc L1, loc L2)
 
-public bool <(loc L1, loc L2)
-  @primitive{Location.less}
+@primitive{Location.less}
+  public bool <(loc L1, loc L2)
 
-public str toString(loc L)
-  @primitive{Location.toString}
+@primitive{Location.toString}
+  public str toString(loc L)
 
-public loc get_location(&T Subject)
-       throws location_missing(str msg)
- @primitive{Location.get_location}
+@primitive{Location.get_location}
+  public loc get_location(&T Subject)
+  throws location_missing(str msg)
 
-public &T set_location(&T Subject, loc L)
-   @primitive{Location.set_location}
+@primitive{Location.set_location}
+  public &T set_location(&T Subject, loc L)
 
 %% --- Lists -------------------------------------------------
 
-public bool ==(list[&T] L1, list[&T] L2)
-  @primitive{List.equal}
+@primitive{List.equal}
+  public bool ==(list[&T] L1, list[&T] L2)
 
-public bool <(list[&T] L1, list[&T] L2)
-  @primitive{List.less}
+@primitive{List.less}
+  public bool <(list[&T] L1, list[&T] L2)
 
-public list[&T] +(list[&T] L1, list[&T] L2)
-   @primitive{List.add}
+@primitive{List.add}
+  public list[&T] +(list[&T] L1, list[&T] L2)
 
-public list[&T] +(list[&T] L, &T E)
+public list[&T] +(list[&T] L, &T E){
   return L + [E];
+}
 
-public list[&T] +(&T E, list[&T] L)
+public list[&T] +(&T E, list[&T] L){
   return [E] + L;
+}
 
-%% Size of list: size
-public int size(list[&T] L)
-  @primitive{List.size}
+@primitive{List.size}
+  public int size(list[&T] L)
+ 
+@primitive{List.get}
+@doc{Get list element: get}
+  public &T get(list[&T] L, int N)
+  throws out_of_range(str msg)
 
-%% Get list element: get
-public &T get(list[&T] L, int N)
-       throws out_of_range(str msg)
-  @primitive{List.get}
+@primitive{List.arb}
+  public &T arb(list[&T] L)
 
-%% Arbitrary element of list: arb
-public &T arb(list[&T] L)
-  @primitive{List.arb}
+@primitive{List.toString}
+  public str toString(list[&T] L)
 
-public str toString(list[&T] L)
-  @primitive{List.toString}
+@primitive{List.makeString}
+  public str makeString(list[int] L)
+  throws cannot_convert_int_to_char(str msg)
 
-public str makeString(list[int] L)
-       throws cannot_convert_int_to_char(str msg)
-  @primitive{List.makeString}
 
-public set[&T] toSet(list[&T] L)
-  @primitive{List.toSet}
+@primitive{List.toSet}
+  
+ public set[&T] toSet(list[&T] L)
 
-public map[&T, &U] toMap(list[tuple[&T, &U]] L)
-       throws domain_not_unique(str msg)
-  @primitive{List.toMap}
+@primitive{List.toMap}
+  public map[&T, &U] toMap(list[tuple[&T, &U]] L)
+  throws domain_not_unique(str msg)
+ 
+@primitive{List.toRel}
+  public rel[&T] toRel(list[&T] L)
 
-public rel[&T] toRel(list[&T] L)
-  @primitive{List.toRel}
-
-public list[&T] reverse(list[&T] L)
-  @primitive{List.reverse}
+@primitive{List.reverse}
+  public list[&T] reverse(list[&T] L)
 
 public &T reducer(list[&T] L, &T F (&T,&T), &T unit){
   &T result = unit;
@@ -303,10 +304,11 @@ public &T reducer(list[&T] L, &T F (&T,&T), &T unit){
   return result
 }
 
-public list[&T] mapper(list[&T] L, &T F (&T,&T))
+public list[&T] mapper(list[&T] L, &T F (&T,&T)){
   return [F(E) | &T E : L];
 
-%% Minimum element of a list: min
+
+@doc{Minimum element of a list: min}
 public &T min(list[&T] L){
   &T result = arb(L);
   for(&T E : L)
@@ -315,7 +317,7 @@ public &T min(list[&T] L){
   return result
 }
 
-%% Maximum element of a list: max
+@doc{Maximum element of a list: max}
 public &T max(list[&T] L){
   &T result = arb(L);
   for(&T E : L)
@@ -324,49 +326,45 @@ public &T max(list[&T] L){
   return result
 }
 
-%% Add elements of a List: sum
+@doc{Add elements of a List: sum}
 public &T sum(list[&T] L, &T zero){
   return reducer(L, +, zero);
 }
 
-%% Multiply elements of a list: multiply
+@doc{Multiply elements of a list: multiply}
 public &T multiply(set[&T] R, &T one){
   return reducer(L, *, one);
 }
 
-%% Average of elements of a list: average
+@doc{Average of elements of a list: average}
 public &T average(list[&T] L, &T zero){
-  return sum(L, zero)/size(L)
+  return sum(L, zero)+size(L)
 }
 
-%% First element of list; first
-public &T first(list[&T] L)
-       throws empty_list(str msg)
-  @primitive{List.first}
+@primitive{List.first}
+@doc{First element of list: first}
+  public &T first(list[&T] L)
+  throws empty_list(str msg)
+ 
+@primitive{List.rest}
+@doc{Remaining elements of list: rest}
+  public &T rest(list[&T] L)
+  throws empty_list(str msg)
 
-%% Remaining elements of list: rest
-public &T rest(list[&T] L)
-      throws empty_list(str msg)
-  @primitive{List.rest}
-
-%% Sort elements of list: sort
-public list[&T] sort(list[&T] L, bool less(&T, &T))
-   @primitive{list.sort}
-
+@primitive{list.sort}
+@doc{Sort elements of list: sort}
+  public list[&T] sort(list[&T] L, bool less(&T, &T))
+ 
 %% --- Tuples ------------------------------------------------
 
-public bool ==(tuple[&T] R, tuple[&T] S)
-  @primitive{Tuple.equal}
-
-%% less
-public bool <(tuple[&T] R, tuple[&T] S)
-  @primitive{Tuple.less}
-
-%% Note the use of + on types to concatenate the types
-%% of tuple elements
-
-public tuple[&T + &U] +(tuple[&T] R, tuple[&U] S)
-  @primitive{Tuple.add}
+@primitive{Tuple.equal}
+  public bool ==(tuple[&T] R, tuple[&T] S)
+ 
+@primitive{Tuple.less}
+  public bool <(tuple[&T] R, tuple[&T] S)
+ 
+@primitive{Tuple.add}
+  public tuple[&T + &U] +(tuple[&T] R, tuple[&U] S)
 
 public tuple[&T + &U] +(tuple[&T] R, &U E){
   return R + <E>;
@@ -376,29 +374,27 @@ public tuple[&T + &U] +(&T E, tuple[&U] R){
   return <E> + R;
 }
 
-public int size(tuple[&T] R)
-  @primitive{Tuple.size}
+@primitive{Tuple.size}
+  public int size(tuple[&T] R)
 
-public value get(tuple[&T] R, int N)
-       throws out_of_range(str msg)
-  @primitive{Tuple.get}
+@primitive{Tuple.get}
+  public value get(tuple[&T] R, int N)
+  throws out_of_range(str msg)
 
-public str toString(tuple[&T] R)
-  @primitive{Tuple.toString}
+@primitive{Tuple.toString}
+  public str toString(tuple[&T] R)
 
 %% --- Sets  -------------------------------------------------
 
-%% ==
+@primitive{Set.equal}
+  public bool ==(set[&T] R, set[&T] S)
 
-public bool ==(set[&T] R, set[&T] S)
-  @primitive{Set.equal}
-%% <
-public bool <(set[&T] R, set[&T] S)
-  @primitive{Set.less}
+@primitive{Set.less}
+  public bool <(set[&T] R, set[&T] S)
 
-%% Add two sets (set union): operator +
-public set[&T] +(set[&T] R, set[&T] S)
-  @primitive{Set.add}
+@primitive{Set.add}
+@doc{Add two sets (set union): operator +}
+  public set[&T] +(set[&T] R, set[&T] S)
 
 public set[&T] +(set[&T] S, &T E){
   return S + {E}
@@ -408,9 +404,9 @@ public set[&T] +(&T E, set[&T] S){
   return {E} + S
 }
 
-%% Substract two sets (set difference): operator -
-public set[&T] -(set[&T] R, set[&T] S)
-  @primitive{Set.sub}
+@primitive{Set.sub}
+@doc{Substract two sets (set difference): operator -}
+  public set[&T] -(set[&T] R, set[&T] S)
 
 public set[&T] -(set[&T] S, &T E){
   return S - {E};
@@ -420,38 +416,36 @@ public set[&T] -(&T E, set[&T] S){
   return {E} - S;
 }
 
-%% Intersection of two sets: operator &
-public set[&T] &(set[&T] R, set[&T] S)
-  @primitive{Set.intersection}
+@primitive{Set.intersection}
+@doc{Intersection of two sets: operator &}
+  public set[&T] &(set[&T] R, set[&T] S)
 
 public set[&T] &(set[&T] S, &T E){
-  return S * {E}
+  return S & {E}
 }
 
 public set[&T] &(&T E, set[&T] S){
-  return {E} * S;
+  return {E} & S;
 }
 
-%% Size of set: size
-public int size(set[&T] R)
-  @primitive{Set.size}
+@primitive{Set.size}
+  public int size(set[&T] S)
 
-%% Arbitrary element of set: arb
-public &T arb(set[&T] S)
-  @primitive{Set.arb}
+@primitive{Set.arb}
+  public &T arb(set[&T] S)
 
-public str toString(set[&T] R)
-  @primitive{Set.toString}
+@primitive{Set.toString}
+  public str toString(set[&T] S)
 
-public list[&T] toList(set[&T] S)
-  @primitive{List.toList}
+@primitive{List.toList}
+  public list[&T] toList(set[&T] S)
 
-public map[&T, &U] toMap(set[tuple[&T, &U]] S)
-       throws non_unique_domain(str msg)
-  @primitive{Set.toMap}
+@primitive{Set.toMap}
+  public map[&T, &U] toMap(set[tuple[&T, &U]] S)
+  throws non_unique_domain(str msg)
 
-public rel[&T] toRel(set[&T] S)
-  @primitive{Set.toRel}
+@primitive{Set.toRel}
+  public rel[&T] toRel(set[&T] S)
 
 public &T reducer(set[&T] S, &T F (&T,&T), &T unit){
   &T result = unit;
@@ -465,7 +459,7 @@ public set[&T] mapper(set[&T] S, &T F (&T,&T)){
   return {F(E) | &T E : S};
 }
 
-%% Minimum of a set: min
+@doc{Minimum of a set: min}
 public &T min(set[&T] S){
   &T result = arb(S);
   for(&T E : S)
@@ -473,7 +467,7 @@ public &T min(set[&T] S){
   return result
 }
 
-%% Maximum of a set: max
+@doc{Maximum of a set: max}
 public &T max(set[&T] R){
   &T result = arb(R);
   for(&T E : R)
@@ -481,19 +475,19 @@ public &T max(set[&T] R){
   return result
 }
 
-%% Sum elements of a Set: sum
+@doc{Sum elements of a Set: sum}
 public &T sum(set[&T] S, &T zero){
   return reducer(S, +, zero);
 }
 
-%% Multiply elements of a Set: multiply
+@doc{Multiply elements of a Set: multiply}
 public &T multiply(set[&T] S, &T one){
   return reducer(S, *, one);
 }
 
-%% Average of elements of a set; average
+@doc{Average of elements of a set: average}
 public &T average(set[&T] S, &T zero){
-  return sum(S, zero)/size(R)
+  return sum(S, zero)+size(R)
 }
 
 %% Powerset: power0
@@ -506,14 +500,14 @@ public set[set[&T]] power1(set[&T] R)
 
 %% --- Maps --------------------------------------------------
 
-public bool ==(map[&T, &U] M1, map[&T, &U] M2)
-  @primitive{Map.equal}
+@primitive{Map.equal}
+  public bool ==(map[&T, &U] M1, map[&T, &U] M2)
 
-public bool <(map[&T, &U] M1, map[&T, &U] M2)
-  @primitive{Map.less}
-
-public map[&T] +(map[&T] R, map[&T] S)
-  @primitive{Map.add}
+@primitive{Map.less}
+  public bool <(map[&T, &U] M1, map[&T, &U] M2)
+  
+@primitive{Map.add}
+  public map[&T] +(map[&T] R, map[&T] S)
 
 public map[&T] +(map[&T] S, &T E){
   return S + {E};
@@ -523,9 +517,9 @@ public map[&T] +(&T E, map[&T] S){
   return {E} + S
 }
 
-%% Substract two maps (set difference): operator -
-public map[&T] -(map[&T] R, map[&T] S)
-   @primitive{Map.sub}
+@primitive{Map.sub}
+@doc{Substract two maps (set difference): operator -}
+  public map[&T] -(map[&T] R, map[&T] S)
 
 public map[&T] -(map[&T] S, &T E){
   return S - {E}
@@ -535,35 +529,35 @@ public map[&T] -(&T E, map[&T] S){
   return {E} - S
 }
 
-%% Intersection of two maps: operator &
-public map[&T] &(map[&T] R, map[&T] S)
-  @primitive{Map.mul}
+@primitive{Map.mul}
+@doc{Intersection of two maps: operator &}
+  public map[&T] &(map[&T] R, map[&T] S)
 
 public map[&T] &(map[&T] S, &T E){
-  return S * {E}
+  return S & {E}
 }
 
 public map[&T] &(&T E, map[&T] S){
-  return {E} * S
+  return {E} & S
 }
 
-public int size(map[&T] M)
-  @primitive{Map.size}
+@primitive{Map.size}
+  public int size(map[&T] M)
 
-public &T arb(map[&T] M)
-  @primitive{Map.arb}
+@primitive{Map.arb}
+  public &T arb(map[&T] M)
 
-public str toString(map[&T] R)
-  @primitive{Map.toString}
+@primitive{Map.toString}
+  public str toString(map[&T] R)
 
-public list[tuple[&T, &U]] toList(map[&T, &U] M)
-  @primitive{Map.toList}
+@primitive{Map.toList}
+  public list[tuple[&T, &U]] toList(map[&T, &U] M)
 
-public rel[tuple[&T, &U]] toSet(map[&T, &U] M)
-  @primitive{Map.toSet}
+@primitive{Map.toSet}
+  public rel[tuple[&T, &U]] toSet(map[&T, &U] M)
 
-public rel[tuple[&T, &U]] toRel(map[&T, &U] M)
-  @primitive{Map.toRel}
+@primitive{Map.toRel}
+  public rel[tuple[&T, &U]] toRel(map[&T, &U] M)
 
 %% Is this meaningfull?
 public &T reducer(map[&T] S, &T F (&T,&T), &T unit){
@@ -580,15 +574,15 @@ public map[&T] mapper(map[&T] M, &T F (&T,&T)){
 
 %% --- Relations ---------------------------------------------
 
-public bool ==(rel[&T] R, rel[&T] S)
-  @primitive{Rel.equal}
+@primitive{Rel.equal}
+  public bool ==(rel[&T] R, rel[&T] S)
 
-public bool <(rel[&T] R, rel[&T] S)
-  @primitive{Rel.less}
+@primitive{Rel.less}
+  public bool <(rel[&T] R, rel[&T] S)
 
-%% Add two relations (union): operator +
-public rel[&T] +(rel[&T] R1, rel[&T] R2)
-  @primitive{Rel.add}
+@primitive{Rel.add}
+@doc{Add two relations (union): operator +}
+  public rel[&T] +(rel[&T] R1, rel[&T] R2)
 
 public rel[&T] +(&T E, rel[&T] R){
   return toRel({E}) + R
@@ -598,20 +592,19 @@ public rel[&T] +(rel[&T] R, &T E){
   return R + toRel({E})
 }
 
-%% Substract two relations (difference): operator -
-public rel[&T] -(rel[&T] R1, rel[&T] R2)
-  @primitive{Rel.sub}
+@primitive{Rel.sub}
+@doc{Substract two relations (difference): operator -}
+  public rel[&T] -(rel[&T] R1, rel[&T] R2)
 
-%% Intersection of two relations: operator &
-public rel[&T] *(rel[&T] R1, rel[&T] R1)
-  @primitive{Rel.mull}
+@doc{Intersection of two relations: operator &}
+@primitive{Rel.inter}
+  public rel[&T] &(rel[&T] R1, rel[&T] R1)
 
-%% Size of relation: size
-public int size(rel[&T] R)
-  @primitive{Rel.size}
+@primitive{Rel.size}
+  public int size(rel[&T] R)
 
-public &T arb(rel[&T] R)
-  @primitive{Rel.arb}
+@primitive{Rel.arb}
+  public &T arb(rel[&T] R)
 
 public str toString(rel[&T] R)
   @primitive{Rel.toString}
@@ -619,14 +612,14 @@ public str toString(rel[&T] R)
 %% Note: in rel[&T], the type variable &T refers 
 %% to the tuple type of the relation.
 
-public list[&T] toList(rel[&T] R)
-  @primitive{Rel.toList}
+@primitive{Rel.toList}
+  public list[&T] toList(rel[&T] R)
 
-public set[&T] toSet(rel[&T] R)
-  @primitive{Rel.toSet}
-
-public rel[&T] toRel(set[&T] S)
-  @primitive{Set.toRel}
+@primitive{Rel.toSet}
+  public set[&T] toSet(rel[&T] R)
+ 
+@primitive{Set.toRel}
+  public rel[&T] toRel(set[&T] S)
 
 public rel[&T] mapper(rel[&T] R, &T F (&T,&T)){
   return {F(E) | &T E : R};
@@ -733,90 +726,90 @@ public set[&T] reachX(set[&T] Start, set[&T] Excl,
                        carrierX(G, Excl)+))
 }
 
-%% Shortest path between pair of nodes
-public list[&T] shortestPathPair(&T From, &T To, graph[&T] G)
-   @primitive{Graph.shortestPathPair}
+@primitive{Graph.shortestPathPair}
+@doc{Shortest path between pair of nodes}
+  public list[&T] shortestPathPair(&T From, &T To, graph[&T] G)
+ 
+@primitive{Graph.shortestPathFrom}
+@doc{Shortest path between one node and all others}
+  public set[list[&T]] shortestPathFrom(&T From, graph[&T] G)
 
-%% Shortest path between one node and all others
-public set[list[&T]] shortestPathFrom(&T From, graph[&T] G)
-   @primitive{Graph.shortestPathFrom}
-
-%% Shortest path between all nodes
-public set[list[&T]] shortestPathAll(graph[&T] G)
-   @primitive{Graph.shortestPathAll}
+@primitive{Graph.shortestPathAll}
+@doc{Shortest path between all nodes}
+  public set[list[&T]] shortestPathAll(graph[&T] G)
 
 %% TO DO
 
-public rel[&T, &T] closure(rel[&T, &T])
-  @primitive{Rel.closure}
+@primitive{Rel.closure}
+  public rel[&T, &T] closure(rel[&T, &T])
+ 
 
 %% --- Annotations -------------------------------------------
 
-%% Test whether a named annotation exists.
-public bool has_annotation(&T Subject)
-  @primitive{Annotation.has_annotation};
+@primitive{Annotation.has_annotation};
+@doc{Test whether a named annotation exists}
+  public bool has_annotation(&T Subject, str Name)
 
-%% Get the value of a named annotation
-public value get_annotation(&T Subject, str Name)
-       throws missing_annotation(str msg)
-  @primitive{Annotation.get_annotation}
+@primitive{Annotation.get_annotation}
+@doc{Get the value of a named annotation}
+  public value get_annotation(&T Subject, str Name)
+  throws missing_annotation(str msg)
 
-%% Get all annotations
-public map[str,value] get_annotations(&T Subject)
-  @primitive{Annotation.get_annotation}
-
-%% Set the value of a named annotation
-public &T set_annotation(&T Subject, 
+@primitive{Annotation.get_annotations}
+@doc{Get all annotations}
+  public map[str,value] get_annotations(&T Subject)
+ 
+@primitive{Annotation.set_annotation}
+@doc{Set the value of a named annotation}
+  public &T set_annotation(&T Subject, 
                              str Name, value AValue)
-  @primitive{Annotation.set_annotation}
 
-%% Set all annotations
+@primitive{Annotation.set_annotations}
+@doc{Set all annotations}
 public &T set_annotations(&T Subject, 
                               map[str, value] Annos)
-  @primitive{Annotation.set_annotations}
-
 
 %% --- Parsing and Unparsing -------------------------------------
 
-public tree parseFile(str filename)
-       throws file_does_not_exist(str msg)
-  @primitive{Parse.parseFile}
+@primitive{Parse.parseFile}
+  public tree parseFile(str filename)
+  throws file_does_not_exist(str msg)
 
-public tree parseString(str source)
-  @primitive{Parse.parseString}
+@primitive{Parse.parseString}
+  public tree parseString(str source)
+ 
+@primitive{Parse.unparseToString}
+  public str unparseToString(tree Subject)
 
-public str unparseToString(tree Subject)
-  @primitive{Parse.unparseToString}
-
-public str unparseToFile(tree Subject, str filename)
+@primitive{Parse.unparseToFile}
+  public str unparseToFile(tree Subject, str filename)
        throws cannot_create(str msg) 
        throws write_error(str msg) 
-  @primitive{Parse.unparseToFile}
 
 %% --- io ----------------------------------------------------
 
-public str readFile(str filename)
+@primitive{IO.read}
+  public str readFile(str filename)
        throws does_not_exist(str msg)            
        throws read_error(str msg)
-  @primitive{IO.read}
 
-public &T readTerm(str filename) 
+@primitive{IO.readTerm}
+  public &T readTerm(str filename) 
        throws does_not_exist(str msg)  
        throws read_error(str msg)
        throws term_error(str msg, loc l)
-  @primitive{IO.readTerm}
 
-public void write(str filename, &T Subject) 
+@primitive{IO.write}
+  public void write(str filename, &T Subject) 
        throws cannot_create(str msg)  
        throws write_error(str msg)
-  @primitive{IO.write}
 
-public void print(list[value] V...)
-  @primitive{IO.print}
+@primitive{IO.print}
+  public void print(list[value] V...)
 
-public void println(list[value] V...)
-  @primitive{IO.println}
-
+@primitive{IO.println}
+  public void println(list[value] V...)
+ 
 %% --- Interface with the Program Database -------------------
 %% The following function provide a bare minimum and will
 %% have to compared with the current PDB interface.
@@ -826,30 +819,29 @@ public void println(list[value] V...)
 %% Idea: it would be nice to model the PDB as a value
 %% of type map[str, value] and to access it that way!
 
-public void openPDB(str name) 
+@primitive{PDB.open}
+  public void openPDB(str name) 
        throws cannot_open(str msg)
- @primitive{PDB.open}
 
-public void closePDB()
+@primitive{PDB.close}
+  public void closePDB()
        throws cannot_close(str msg)
-  @primitive{PDB.close}
 
-public void writePDB(str name, &T val)
+@primitive{PDB.write}
+  public void writePDB(str name, &T val)
        throws cannot_write(str msg)
-  @primitive{PDB.write}
 
-public &T readPDB(str name)
+@primitive{PDB.readPDB}
+  public &T readPDB(str name)
        throws cannot_read(str msg)
-  @primitive{PDB.readPDB}
 
 %% If name is of type set[&T], then the set incr
 %% is added to it. Similar for a rel[&T]
 
-public void addSetPDB(str name, set[&T] incr)
+@primitive{PDB.addSet}
+  public void addSetPDB(str name, set[&T] incr)
        throws does_not_exist(str msg)
-  @primitive{PDB.addSet}
 
-public void addRelPDB(str name, rel[&T] incr)
+@primitive{PDB.addRel}
+  public void addRelPDB(str name, rel[&T] incr)
        throws does_not_exist(str msg)
-  @primitive{PDB.addRel}
-

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -960,39 +960,94 @@ type Graph DFGraph</programlisting></para>
     <section>
       <title>Annotations</title>
 
-      <para>Annotations may be associated with any value and are represented
-      by a mapping of type <literal>map[str,value]</literal>, i.e., annotation
-      names are strings and annotation values are arbitrary values of type
-      <literal>value</literal>. The standard library provides functions for
-      handling annotations.<caution>
-          <para>Syntax: X @ atr and X @ atr = V parallels field operations. X
-          ? attr checks for attribute attr.</para>
-        </caution><caution>
-          <para>Do we want a symbol type?</para>
-        </caution><caution>
-          <para>Declaration of annotation in data decl?</para>
-        </caution>Any value of any named type can be annotated and the type of
-      these annotations can be declared. For instance, The graph datatype
-      introduced earlier, could be annotated with an indication which graph
-      layout algorithm to apply to this graph, e.g.,<programlisting>anno Graph LayoutStrategy "dot" | "tree" | "force" | "hierarchy" | "fisheye"</programlisting>In
-      a similar way, certain syntactic constructs of programs could be
-      annotated with location information:<programlisting>anno STATEMENT posinfo loc</programlisting><caution>
-          <para>Add meta-data annotation for declarations (modules, variables,
-          functions, data, ...): license, todo, deprecated, memo, JDBC,
-          ...</para>
-        </caution>To all declarations a Rascal annotation
-      (<literal>rascal-anno</literal>) can be attached in a fixed position. A
-      rascal-anno is declared by declaring its name, the declaration type to
-      which it can be attached and the type of the annotation. All Rascal
-      annottion have the generic format <literal>@{ ... }</literal>, where
-      there is arbitrary text between the brackets that is further contrained
-      by the declaraed type. Here is an example of a license
-      annotation:<programlisting>rascal-anno module license string</programlisting>This
-      will allow one to write things like:<programlisting>module Booleans
+      <para>Annotations come in two flavours:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>value annotations</emphasis> that allow associating
+          one or more named values to another value.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>declaration annotations</emphasis> that allow
+          associating one or more named values to a declaration in a Rascal
+          program.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The former are intended to attach application data to value, like
+      adding position information or control flow information to source code.
+      The latter are intended to add metadata to a Rascal program and are
+      intended to change the meaning or the execution of a Rascal
+      program.</para>
+
+      <section>
+        <title>Value annotations</title>
+
+        <para>Annotations may be associated with any value and are represented
+        by a mapping of type <literal>map[str,value]</literal>, i.e.,
+        annotation names are strings and annotation values are arbitrary
+        values of type <literal>value</literal>. The folllowing three
+        operators are provided for handling annotations:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal><replaceable>Val</replaceable> ?
+            <replaceable>Anno</replaceable></literal>: tests whether
+            <replaceable>Val</replaceable> has an annotation with name
+            <replaceable>Anno</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal><replaceable>Val</replaceable> @
+            <replaceable>Anno</replaceable></literal>: retrieves the value of
+            annotation <replaceable>Anno</replaceable> of value
+            <replaceable>Val</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal><replaceable>Var</replaceable> @
+            <replaceable>Anno</replaceable> =
+            <replaceable>Val</replaceable></literal>: set the value of
+            annotation <replaceable>Anno</replaceable> of the value of
+            variable <replaceable>Var</replaceable> to
+            <replaceable>Val</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para><caution>
+            <para>Do we want a symbol type?</para>
+          </caution>Any value of any named type can be annotated and the type
+        of these annotations can be declared more precisely. For instance, the
+        graph datatype introduced earlier, could be annotated with an
+        indication which graph layout algorithm to apply to a particular
+        graph, e.g.,<programlisting>anno Graph LayoutStrategy "dot" | "tree" | "force" | "hierarchy" | "fisheye"</programlisting>In
+        a similar way, certain syntactic constructs of programs could be
+        annotated with location information:<programlisting>anno STATEMENT posinfo loc</programlisting>or
+        location information could be added for all syntax
+        trees:<programlisting>anno tree posinfo loc</programlisting></para>
+      </section>
+
+      <section>
+        <title>Declaration annotations</title>
+
+        <para>To all declarations in a Rascal program, a Rascal annotation
+        (<literal>decl-anno</literal>) can be attached in a fixed position. A
+        decl-anno is defined by declaring its name, the declaration type to
+        which it can be attached, and the name and type of the annotation. All
+        declaration annotions have the generic format
+        <literal>@<replaceable>Name</replaceable>{ ... }</literal>, whith
+        arbitrary text between the brackets that is further constrained by the
+        declared type. Here is an example of a license
+        annotation:<programlisting>decl-anno module license string</programlisting>This
+        will allow one to write things like:<programlisting>module Booleans
 @license{This module is distributed under the GPL}
-...</programlisting><caution>
-          <para>Add doc strings.</para>
-        </caution></para>
+...</programlisting>Other examples of Rascal annotations are:<programlisting>decl-anno all todo string          %% a todo note
+decl-anno function deprecated void %% marks a deprecated function
+decl-anno function memo int        %% bounded memoization of 
+                                   %% function calls
+decl-anno all doc string           %% documentation string</programlisting></para>
+      </section>
     </section>
 
     <section>
@@ -3269,7 +3324,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -3277,7 +3332,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
@@ -4041,7 +4096,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 

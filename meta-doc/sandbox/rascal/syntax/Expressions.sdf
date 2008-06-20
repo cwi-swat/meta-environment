@@ -65,7 +65,7 @@ context-free priorities
    %% subtraction/difference
           Expression "-" Expression                              -> Expression {cons("sub"), left}
         } >
-   %% annotation
+   %% get value of annotation
         Expression "@" Expression                               -> Expression {cons("get-anno"), left} >
  
 %% Relational operators
@@ -149,6 +149,7 @@ context-free syntax
          Expression                                              -> Statement
 
          Callable IncrAssignOp Expression                        -> Assignment {cons("assign")}
+         Callable "@" Expression IncrAssignOp Expression         -> Assignment {cons("assign-anno")}
          Assignment                                              -> Statement
 
          Declarator  "=" Expression                              -> Statement  {cons("varinit")}
