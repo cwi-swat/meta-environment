@@ -16,21 +16,39 @@ hiddens
         Declaration
 
 exports
-  sorts Declaration Visibility Primitive Throws ThrowDecl
+  sorts Declaration Visibility Primitive Throws ThrowDecl 
+        DeclarationUnit RascalAnno RascalAnnoChar
+
+  lexical syntax
+    "@" Name "{" RascalAnnoChar* "}"                   -> RascalAnno
+    ~[\}]                                              -> RascalAnnoChar
+    [\\\}]                                             -> RascalAnnoChar
+
 
   context-free syntax
 
     ("public" | "private")?                            -> Visibility  {cons("visibility")}
 
-    Visibility "data" ( Name | ParameterizedType)
-                            { AbstractType "|"}+       -> Declaration {cons("data-decl")}
+    Visibility "data" RascalAnno? 
+      ( Name | ParameterizedType) { AbstractType "|"}+ -> Declaration {cons("data-decl")}
 
-    Visibility "view" Name "<:" Name
-                         { (Name AbstractType) "|"}+   -> Declaration {cons("view-decl")}
+    Visibility "anno" RascalAnno? 
+      Name Name { AbstractType "|"}+                   -> Declaration {cons("anno-decl")}
 
-    Visibility "type" Type (Name  | ParameterizedType) -> Declaration {cons("type-decl")}
+    "module" | "function" | "global" | "data" | 
+    "view" | "type" | "anno" | "rascal-anno"           -> DeclarationUnit
 
-    Visibility "global" Type Name ("=" Expression)?    -> Declaration {cons("global-decl")}
+    Visibility "rascal-anno" RascalAnno?
+      DeclarationUnit Name AbstractType                                                         
+                                                       -> Declaration {cons("rascal-anno-decl")}
+    Visibility "view" RascalAnno? 
+      Name "<:" Name { (Name AbstractType) "|"}+       -> Declaration {cons("view-decl")}
+
+    Visibility "type" RascalAnno? 
+      Type (Name  | ParameterizedType)                 -> Declaration {cons("type-decl")}
+
+    Visibility "global" RascalAnno? 
+      Type Name ("=" Expression)?                      -> Declaration {cons("global-decl")}
 
     "primitive" ( "(" StringLiteral ")" )?             -> Primitive
 
@@ -38,12 +56,12 @@ exports
 
      Name "(" OptNamedTypes ")"                        -> ThrowDecl
 
-    Visibility "memo"? FunctionType Throws
-                       (Statement | Primitive)         -> Declaration {cons("function-decl")}
+    Visibility FunctionType Throws RascalAnno? 
+                       Block?                          -> Declaration {cons("function-decl")}
     Visibility "java" FunctionType Throws JavaBlock    -> Declaration {cons("java-function-decl")}
 
-    "rules" "(" Type ")" "{" Rule+ "}"                 -> Declaration {cons("rules-decl")}
-    "arules" "(" Type ")" "{" ARule+ "}"               -> Declaration {cons("arules-decl")}
+    "rules"  "(" Type ")" RascalAnno? "{" Rule+ "}"    -> Declaration {cons("rules-decl")}
+    "arules" "(" Type ")" RascalAnno? "{" ARule+ "}"   -> Declaration {cons("arules-decl")}
 
 %% Define reserved words
    "public" | "private" | "data" | "type" | "global" | 
