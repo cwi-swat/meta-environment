@@ -27,6 +27,8 @@ PROGRAM cp(PROGRAM P) {
       };  
  
     visit P {
-     case <PICO-ID Id>: if(EXP E := replacements[Id]) yield E
+     case <PICO-ID Id>: if(EXP E := replacements[Id]){
+                           yield E
+                        }
     };  
 }

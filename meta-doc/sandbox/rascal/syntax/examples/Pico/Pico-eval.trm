@@ -1,8 +1,7 @@
 module Pico-eval
 import pico/syntax/Pico;
 
-type int PICO_VALUE;
-type str PICO_VALUE;
+data PICO_VALUE int ival | str sval;
 
 type map[PICO_ID, PICO_VALUE] VEnv;
 
@@ -16,12 +15,12 @@ VEnv evalProgram(PROGRAM P){
 };
 
 VEnv assign(VEnv Env, PICO_ID Id, PICO_VALUE V){
-  Env(Id) = V;
+  Env[Id] = V;
   return Env
 }
 
 PICO_VALUE valueOf(VEnv Env, PICO_ID Id){
-  return Env(Id);
+  return Env[Id];
 }
 
 VEnv evalDecls(DECLS Decls){
@@ -52,18 +51,19 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
       case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
                    else <{STATEMENT ";"}* Stats1> fi:{
         PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0)
+        if(Val != 0){
           return evalStatments(Stats1, Env)
-        else 
+        } else {
           return evalStatements(Stats2, Env)
+        }
 
       }
 
       case while <EXP Exp> do <{STATEMENT ";"}* Stats1> od:{
         PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0)
+        if(Val != 0){
           return Env
-        else {
+        } else {
           VEnv Env2 = evalStatements(Stats1, Env);
           return evalStatement(Stat, Env2)
         }

@@ -15,7 +15,7 @@ data Node subgraph(NodeId id,
                    AttributeList attributes);
 
 data NodeId id(term id);
-
+ 
 type list[Attribute] AttributeList;
 
 data Attribute "bounding-box"(Point first, Point second);

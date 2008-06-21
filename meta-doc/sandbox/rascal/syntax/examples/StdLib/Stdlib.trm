@@ -1,10 +1,9 @@
 module RascalStandardLibrary
 
-decl-anno function primitive string
-decl-anno function memo void
-decl-anno function java CompilationUnit
-
-decl-anno all doc string
+decl-anno function primitive str;
+decl-anno function memo void;
+decl-anno function java CompilationUnit;
+decl-anno all doc str;
 
 %% Here is a flat list of library functions that will
 %% structured in to coherent submodules.
@@ -26,17 +25,19 @@ public bool >=(&T A, &T B){
 }
 
 public &T min(&T A, &T B){
-  if(A < B)
+  if(A < B){
     return A
-  else
+  } else {
     return B;
+  }
 }
 
 public &T max(&T A, &T B){
-  if(A < B)
+  if(A < B){
     return B
-  else
+  } else {
     return A;
+  }
 }
 
 %% --- Boolean (bool) ----------------------------------------
@@ -218,7 +219,7 @@ public bool /(int I, double D){
 %% Add functions for other methods of Java's String class
 
 %% --- Locations ---------------------------------------------
-
+   
 %% The location datatype
 data location location(str filename,
                        int beginline,
@@ -227,6 +228,8 @@ data location location(str filename,
                        int endcol,
                        int offset,
                        int length);
+
+anno tree posinfo loc;
 
 @primitive{Location.equal} 
   public bool ==(loc L1, loc L2)
@@ -283,7 +286,6 @@ public list[&T] +(&T E, list[&T] L){
 
 
 @primitive{List.toSet}
-  
  public set[&T] toSet(list[&T] L)
 
 @primitive{List.toMap}
@@ -306,23 +308,27 @@ public &T reducer(list[&T] L, &T F (&T,&T), &T unit){
 
 public list[&T] mapper(list[&T] L, &T F (&T,&T)){
   return [F(E) | &T E : L];
-
+}
 
 @doc{Minimum element of a list: min}
 public &T min(list[&T] L){
   &T result = arb(L);
-  for(&T E : L)
-   if(less(E, result))
-      result = min(result, E);
+  for(&T E : L){
+   if(less(E, result)){
+      result = min(result, E)
+   }
+  };
   return result
 }
 
 @doc{Maximum element of a list: max}
 public &T max(list[&T] L){
   &T result = arb(L);
-  for(&T E : L)
-   if(less(result, E))
+  for(&T E : L){
+   if(less(result, E)){
       result = max(result, E);
+   }
+  };
   return result
 }
 
@@ -338,7 +344,7 @@ public &T multiply(set[&T] R, &T one){
 
 @doc{Average of elements of a list: average}
 public &T average(list[&T] L, &T zero){
-  return sum(L, zero)+size(L)
+  return sum(L, zero)/size(L)
 }
 
 @primitive{List.first}
@@ -462,16 +468,18 @@ public set[&T] mapper(set[&T] S, &T F (&T,&T)){
 @doc{Minimum of a set: min}
 public &T min(set[&T] S){
   &T result = arb(S);
-  for(&T E : S)
+  for(&T E : S){
     result = min(result, E);
+  };
   return result
 }
 
 @doc{Maximum of a set: max}
 public &T max(set[&T] R){
   &T result = arb(R);
-  for(&T E : R)
+  for(&T E : R){
     result = max(result, E);
+  };
   return result
 }
 
@@ -487,16 +495,20 @@ public &T multiply(set[&T] S, &T one){
 
 @doc{Average of elements of a set: average}
 public &T average(set[&T] S, &T zero){
-  return sum(S, zero)+size(R)
+  return sum(S, zero)/size(R)
 }
 
+%% TODO
+
 %% Powerset: power0
-public set[set[&T]] power0(set[&T] R)
- throw unimplemented("power0}
+public set[set[&T]] power0(set[&T] R){
+ throw unimplemented("power0")
+}
 
 %% Powerset: power1
-public set[set[&T]] power1(set[&T] R)
-  throw unimplemented("power0}
+public set[set[&T]] power1(set[&T] R){
+  throw unimplemented("power0")
+}
 
 %% --- Maps --------------------------------------------------
 
@@ -689,7 +701,7 @@ public rel[&T1,&T2] domainX (rel[&T1,&T2] R, set[&T1] S){
 
 %% Range Exclusion of a Relation: rangeX
 public rel[&T1,&T2] rangeX (rel[&T1,&T2] R, set[&T2] S){
-   { <X, Y> | tuple[&T1 X, &T2 Y] : R, Y notin S }
+  return { <X, Y> | tuple[&T1 X, &T2 Y] : R, Y notin S }
 }
 
 %% Carrier Exclusion of a Relation: carrierX
@@ -746,7 +758,7 @@ public set[&T] reachX(set[&T] Start, set[&T] Excl,
 
 %% --- Annotations -------------------------------------------
 
-@primitive{Annotation.has_annotation};
+@primitive{Annotation.has_annotation}
 @doc{Test whether a named annotation exists}
   public bool has_annotation(&T Subject, str Name)
 

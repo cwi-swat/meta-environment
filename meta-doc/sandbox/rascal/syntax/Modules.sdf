@@ -11,7 +11,7 @@ context-free start-symbols
 exports
 sorts Module ModuleWord ModuleName Import 
       ModuleParameters ModuleActuals ImportedModule
-      Renaming Renamings
+      Renaming Renamings Visibility DeclAnno DeclAnnos DeclAnnoChar
 
 lexical syntax
   letters:[A-Za-z0-9\_\-]+                       -> ModuleWord {cons("word")} 
@@ -22,6 +22,11 @@ lexical syntax
 lexical restrictions
   ModuleName -/- [A-Za-z0-9\_\-\/]
 
+  lexical syntax
+    "@" Name "{" DeclAnnoChar* "}"               -> DeclAnno
+    ~[\}]                                        -> DeclAnnoChar
+    "\\}"                                        -> DeclAnnoChar
+
 context-free syntax
 
     "[" {TypeVar ","}+ "]"                       -> ModuleParameters
@@ -31,12 +36,17 @@ context-free syntax
     Name "=>" Name                               -> Renaming
     "{" {Renaming ","}+ "}"                      -> Renamings
 
-    DeclAnnos "import" ImportedModule ";"        -> Import
-    DeclAnnos "extend" ImportedModule ";"        -> Import
+    DeclAnno*                                    -> DeclAnnos
+    "import" ImportedModule ";"?                 -> Import
+    "extend" ImportedModule ";"?                 -> Import
 
-    DeclAnnos "module" ModuleName ModuleParameters? 
-             Import* 
-             (DeclAnnos Declaration ";"?)*       -> Module  
+    ("public" | "private")?                      -> Visibility  {cons("visibility")}
+
+    DeclAnnos 
+       "module" ModuleName ModuleParameters? 
+       Import* 
+       (DeclAnnos Visibility Declaration ";"?)*  -> Module  
 
 %% Define reserved words
-    "import" | "module"                          -> Name {reject}
+     "public" | "private" | "import" | 
+     "extend" | "module"                         -> Name {reject}

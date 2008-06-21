@@ -9,20 +9,23 @@ hiddens
         Type
 
 exports
-  sorts Type OptNamedType OptNamedTypes TypeVar StandardOperator
-        BasicType StructuredType FunctionType FunctionName AnonymousFunctionType AbstractType
+  sorts Type NamedType NamedTypes OptNamedType OptNamedTypes TypeVar StandardOperator
+        BasicType StructuredType FunctionType FunctionName AnonymousFunctionType 
+        AbstractType AbsTypeName AbsTypeArgs
         ParameterizedType VarArgs
 
   context-free syntax
     "bool"                                                   -> BasicType      {cons("bool-type")} 
     "int"                                                    -> BasicType      {cons("int-type")} 
     "double"                                                 -> BasicType      {cons("double-type")}
-    "number"                                                 -> BasicType      {cons("number-type")}
     "str"                                                    -> BasicType      {cons("str-type")} 
     "loc"                                                    -> BasicType      {cons("loc-type")}
     "value"                                                  -> BasicType      {cons("value-type")}
     "term"                                                   -> BasicType      {cons("term-type")}
     "void"                                                   -> BasicType      {cons("void-type")}
+
+    Type Name                                                -> NamedType
+    {NamedType ","}+                                         -> NamedTypes
  
     Type Name?                                               -> OptNamedType  
     {OptNamedType ","}+                                      -> OptNamedTypes
@@ -45,27 +48,24 @@ exports
     Type "(" OptNamedTypes? ")"                              -> AnonymousFunctionType
 
     "&" Name                                                 -> TypeVar        {cons("type-var")}
-    "&" Name "<:" Type                                       -> TypeVar        {cons("type-var-less-equal")}
+    "&" Name "<:" Type                                       -> TypeVar        {cons("type-var-constrained")}
 
     Name "[" {TypeVar ","}+ "]"                              -> ParameterizedType
                                                                           {cons("par-type")}
 
- %%   Name                                                     -> AbstractType   {avoid,cons("typename-abstype")}
-    OptNamedType                                             -> AbstractType   {cons("namedtype-abstype")}
-    StringLiteral                                            -> AbstractType   {cons("typestr-abstype")}
-    TypeVar                                                  -> AbstractType   {cons("typevar-abstype")}
-    Name "(" {OptNamedType ","}* ")"                         -> AbstractType   {cons("cons-abstype-name")}
-    StringLiteral "(" {OptNamedType ","}* ")"                -> AbstractType   {cons("const-abstype-str")}
+    Name | StringLiteral                                     -> AbsTypeName  {cons("abstype-name")} 
+    "(" {NamedType ","}* ")"                                 -> AbsTypeArgs  {cons("abstype-args")}
 
- 
-
+    NamedType                                                -> AbstractType {cons("abstype-namedtype")}
+    TypeVar                                                  -> AbstractType {cons("abstype-typevat")}
+    AbsTypeName AbsTypeArgs?                                 -> AbstractType {cons("abstype-call")}
 
     BasicType | StructuredType | FunctionType | 
     TypeVar | ParameterizedType | Symbol                     -> Type           {cons("type")}
 
 
 %% Define reserved words
-   "bool" | "int" | "double" | "number" | "str" | 
+   "bool" | "int" | "double" | "str" | 
    "loc" | "value" | "term" | "void" | "list" | 
    "set" | "map" | "rel" | "tuple" | "fun"                  -> Name {reject}
  

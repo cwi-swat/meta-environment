@@ -16,53 +16,37 @@ hiddens
         Declaration
 
 exports
-  sorts Declaration Visibility Throws ThrowDecl 
-        DeclarationUnit DeclAnno DeclAnnos DeclAnnoChar
-
-  lexical syntax
-    "@" Name "{" DeclAnnoChar* "}"                     -> DeclAnno
-    ~[\}]                                              -> DeclAnnoChar
-    "\\}"                                              -> DeclAnnoChar
+  sorts Declaration Throws ThrowDecl DeclarationUnit 
 
   context-free syntax
-    DeclAnno*                                          -> DeclAnnos
+    "data" ( Name | ParameterizedType) { AbstractType "|"}+ -> Declaration {cons("data-decl")}
 
-    ("public" | "private")?                            -> Visibility  {cons("visibility")}
+    "view" Name "<:" Name { (Name AbstractType) "|"}+       -> Declaration {cons("view-decl")}
 
-    Visibility "data"
-      ( Name | ParameterizedType) { AbstractType "|"}+ -> Declaration {cons("data-decl")}
+    "type" Type (Name  | ParameterizedType)                 -> Declaration {cons("type-decl")}
 
-    Visibility "anno"
-      Name Name { AbstractType "|"}+                   -> Declaration {cons("anno-decl")}
+    "anno" Type Name { Type "|"}+                           -> Declaration {cons("anno-decl")}
 
     "module" | "function" | "global" | "data" | 
-    "view" | "type" | "anno" | "decl-anno" | "all"     -> DeclarationUnit
+    "view" | "type" | "anno" | "decl-anno" | "all"          -> DeclarationUnit
 
-    Visibility "decl-anno"
-      DeclarationUnit Name AbstractType                                                         
-                                                       -> Declaration {cons("decl-anno-decl")}
-    Visibility "view"
-      Name "<:" Name { (Name AbstractType) "|"}+       -> Declaration {cons("view-decl")}
+    "decl-anno" DeclarationUnit Name {Type "|"}+            -> Declaration {cons("decl-anno-decl")}
+ 
+    "global" Type Name ("=" Expression)?                    -> Declaration {cons("global-decl")}
 
-    Visibility "type"
-      Type (Name  | ParameterizedType)                 -> Declaration {cons("type-decl")}
+    ("throws" ThrowDecl)*                                   -> Throws
+    Name "(" OptNamedTypes ")"                              -> ThrowDecl
+    FunctionType Throws Block?                              -> Declaration {cons("function-decl")}
 
-    Visibility "global"
-      Type Name ("=" Expression)?                      -> Declaration {cons("global-decl")}
+%%  Visibility "java" FunctionType Throws JavaBlock    -> Declaration {cons("java-function-decl")}
 
-    ("throws" ThrowDecl)*                              -> Throws
-
-     Name "(" OptNamedTypes ")"                        -> ThrowDecl
-
-    Visibility FunctionType Throws 
-                       Block?                          -> Declaration {cons("function-decl")}
-%%    Visibility "java" FunctionType Throws JavaBlock    -> Declaration {cons("java-function-decl")}
-
-    "rules"  "(" Type ")" "{" Rule+ "}"                -> Declaration {cons("rules-decl")}
-    "arules" "(" Type ")" "{" ARule+ "}"               -> Declaration {cons("arules-decl")}
+    "rules"  "(" Type ")" "{" Rule+ "}"                     -> Declaration {cons("rules-decl")}
+    "arules" "(" Type ")" "{" ARule+ "}"                    -> Declaration {cons("arules-decl")}
 
 %% Define reserved words
-   "public" | "private" | "data" | "type" | "global" | 
-   "rules" | "arules" | "anno" | "decl-anno"           -> Name {reject}
+    "data" | "view" | "type" | "anno" | "decl-anno" |
+    "global" | "throws" |"rules" | "arules"                 -> Name {reject}
+
+    DeclarationUnit                                         -> Name {reject}
 
   

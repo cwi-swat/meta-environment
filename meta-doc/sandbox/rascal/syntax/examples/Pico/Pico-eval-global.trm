@@ -2,10 +2,11 @@ module Pico-eval
 
 import pico/syntax/Pico;
 
-type int PICO_VALUE;
-type str PICO_VALUE;
+data PICO_VALUE int ival | str sval;
 
 type map[PICO_ID, PICO_VALUE] VEnv;
+
+global VEnv Env = {};
 
 void evalProgram(PROGRAM P){
     switch P {
@@ -18,7 +19,7 @@ void evalProgram(PROGRAM P){
 
 void assign(PICO_ID Id, PICO_VALUE V){
   global Venv Env;
-  Env(Id) = V;
+  Env[Id] = V;
   return;
 }
 
@@ -28,7 +29,6 @@ PICO_VALUE valueOf(PICO_ID Id){
 }
 
 VEnv evalDecls(DECLS Decls){
-    global VEnv Env = {};
     visit Decls {
       case <PICO-ID Id> : string:  assign(Id, "")
       case <PICO-ID Id> : natural: assign(Id, 0)
@@ -36,7 +36,6 @@ VEnv evalDecls(DECLS Decls){
 }
 
 void evalStatements({STATEMENT ";"}* Series){
-    global VEnv Env;
     switch Series {
       case <STATEMENT Stat>; <{STATEMENT ";"}* Series2>: {
         evalStatement(Stat);
@@ -48,7 +47,6 @@ void evalStatements({STATEMENT ";"}* Series){
 }
 
 void evalStatement(STATEMENT Stat){
-    global VEnv Env;
     switch Stat {
       case [| <PICO_ID Id> = <EXP Exp> |]: {
         PICO_VALUE Val = evalExp(Exp);
@@ -70,9 +68,9 @@ void evalStatement(STATEMENT Stat){
 
       case while <EXP Exp> do <{STATEMENT ";"}* Stats1> od:{
         PICO_VALUE Val = evalExp(Exp);
-        if(Val != 0)
+        if(Val != 0){
           return
-        else {
+        } else {
           evalStatements(Stats1);
           evalStatement(Stat);
           return
@@ -82,7 +80,6 @@ void evalStatement(STATEMENT Stat){
 };
 
 PICO_VALUE evalExp(Exp exp) {
-    global VEnv Env;
     switch exp {
       case <NatCon N>: return N
 

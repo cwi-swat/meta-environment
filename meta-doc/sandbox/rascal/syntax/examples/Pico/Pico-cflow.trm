@@ -2,8 +2,7 @@ module Pico-controlflow
  
 import pico/syntax/Pico;
 
-type EXP CP;         
-type STATEMENT CP;
+data CP EXP exp | STATEMENT stat;
 
 type tuple[set[CP] entry, 
            rel[CP,CP] graph, 
@@ -12,11 +11,11 @@ type tuple[set[CP] entry,
 CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
     switch Stats {
       case <STATEMENT Stat> ; <{STATEMENT ";"}* Stats2>: { 
-           tuple[set[CP] En1, rel[CP,CP] R1, set[CP] Ex1] = 
-                                                     cflow(Stat);
-           tuple[set[CP] En2, rel[CP,CP] R2, set[CP] Ex2] = 
-                                                     cflow(Stats2);
-           return <En1, R1 + R2 + product(Ex1, En2), Ex2>
+           CFSEGMENT CF1 = cflow(Stat);
+           CFSEGMENT CF2 = cflow(Stats2);
+           return <CF1.entry, 
+                   CF1.graph + CF2.graph + product(CF1.exit, CF2.entry), 
+                   CF2.exit>
       }
 
       case [| |]: return <{}, {}, {}>
@@ -26,23 +25,20 @@ CFSEGMENT cflow({STATEMENT ";"}* Stats){
 CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
       case while <EXP Exp> do <{STATEMENT ";"}* Stats> od : {
-           tuple[set[CP] En,  rel[CP,CP] R,  set[CP] Ex] = 
-                                                     cflow(Stats);
-           return <{Exp}, product({Exp}, En) + R + 
-                          product(Ex, {Exp}),
+           CFSEGMENT CF = cflow(Stats);
+           return <{Exp}, product({Exp}, CF.entry) + CF.graph + 
+                          product(CF.exit, {Exp}),
                    {Exp}>;
       }
                 
       case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
                    else <{STATEMENT ";"}* Stats2> fi: {
-           tuple[set[CP] En1, rel[CP,CP] R1, set[CP] Ex1] = 
-                                                    cflow(Stats1);
-           tuple[set[CP] En2, rel[CP,CP] R2, set[CP] Ex2] = 
-                                                    cflow(Stats2);
+           CFSEGMENT CF1 = cflow(Stats1);
+           CFSEGMENT CF2 = cflow(Stats2);
            return < {Exp}, 
-                    product({Exp}, En1) + 
-                    product({Exp}, En2) + R1 + R2,
-                    Ex1 + Ex2 
+                    product({Exp}, CF1.entry) + 
+                    product({Exp}, CF2.entry) + CF1.graph + CF2.graph,
+                    CF1.exit + CF2.exit
                   >;
       }
          

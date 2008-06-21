@@ -2,8 +2,8 @@ module Bool-abstract
 
 data Bool btrue;
 data Bool bfalse;
-data Bool band(Bool, Bool);
-data Bool bor(Bool, Bool); 
+data Bool band(Bool L, Bool R);
+data Bool bor(Bool L, Bool R); 
 
 Bool reduce(Bool B) {
     visit bottom-up B {

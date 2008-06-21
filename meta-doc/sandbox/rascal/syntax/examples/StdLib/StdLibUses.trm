@@ -1,4 +1,5 @@
 module LibUses
 
-list[int] addOne(list[int] L)
-	return mapper(L, int (int N) { return N +1 })
+list[int] addOne(list[int] L){
+	return mapper(L, fun int (int N) { return N +1 })
+}
