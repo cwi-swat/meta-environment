@@ -1892,6 +1892,34 @@ public void main(list[str] argv){
     </section>
 
     <section>
+      <title>Table of word counts per file</title>
+
+      <para><programlisting>module WordCount
+ 
+public void main(list[str] argv){
+  map[str, int] counts = {};
+  for(str fileName : argv){
+    try {
+      counts[fileName] = wordCount(readFile(fileName));
+    }
+    finally: println("Skipping file &lt;fileName&gt;");
+  };
+ 
+  int total = sum(range(counts));
+  println("In total &lt;total&gt; words in all files");
+  println("Word counts per file: &lt;counts&gt;");
+}
+
+int wordCount(str S){
+  switch S {
+    rcase list[str] words = /[a-zA-Z0-9]+/:
+        return size(words)
+  }
+}
+</programlisting></para>
+    </section>
+
+    <section>
       <title>Booleans</title>
 
       <para>It seems that every language specification effort has to produce a

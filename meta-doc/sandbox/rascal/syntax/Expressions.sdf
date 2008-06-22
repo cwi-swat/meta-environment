@@ -96,7 +96,7 @@ context-free syntax
          Type Name                                               -> Declarator {cons("decl-type-name")}
          StructuredType                                          -> Declarator {cons("decl-struct-type")}
          SynPattern                                              -> Declarator {cons("decl-synpat")}
-         ("list[str]" Name ":=")? RegPattern                     -> Declarator {cons("decl-regpat")}
+         (Type Name "=")? RegPattern                             -> Declarator {cons("decl-regpat")}
 
          ("top-down" | "top-down-break" | 
           "bottom-up" | "bottom-up-break" |
@@ -126,7 +126,7 @@ context-free syntax
          "case"  SynPattern "=>" SynPattern                      -> Case       {cons("case1")}
          "case" SynPattern ":" Statement                         -> Case       {cons("case2")}
          "acase" AbsPattern CaseAction                           -> Case       {cons("acase")}
-         "rcase" ("list[str]" Name ":=")? RegPattern CaseAction  -> Case       {cons("rcase")}
+         "rcase" (Type Name "=")? RegPattern CaseAction          -> Case       {cons("rcase")}
 
           SynPattern "=>" SynPattern                             -> Rule       {cons("rule1")}
           SynPattern ":" Statement                               -> Rule       {cons("rule2")}

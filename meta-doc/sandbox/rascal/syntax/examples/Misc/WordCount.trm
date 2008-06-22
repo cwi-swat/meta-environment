@@ -1,0 +1,22 @@
+module WordCount
+ 
+public void main(list[str] argv){
+  map[str, int] counts = {};
+  for(str fileName : argv){
+    try {
+      counts[fileName] = wordCount(readFile(fileName));
+    }
+    finally: println("Skipping file <fileName>");
+  };
+ 
+  int total = sum(range(counts));
+  println("In total <total> words in all files");
+  println("Word counts per file: <counts>");
+}
+
+int wordCount(str S){
+  switch S {
+    rcase list[str] words = /[a-zA-Z0-9]+/:
+        return size(words)
+  }
+}
