@@ -5,12 +5,10 @@ data Bool bfalse;
 data Bool band(Bool L, Bool R);
 data Bool bor(Bool L, Bool R);  
 
-arules(Bool) {
-      band(btrue, <Bool B2>)  => <B2> 
-      band(bfalse, <Bool B2>) => bfalse
+arule a1 band(btrue, <Bool B2>)  => <B2> 
+arule a2 band(bfalse, <Bool B2>) => bfalse
 
-      bor(btrue, btrue)       => btrue
-      bor(btrue, bfalse)      => btrue
-      bor(bfalse, btrue)      => btrue
-      bor(bfalse, bfalse)     => bfalse
-}
+arule o1 bor(btrue, btrue)       => btrue
+arule o2 bor(btrue, bfalse)      => btrue
+arule o3 bor(bfalse, btrue)      => btrue
+arule o4 bor(bfalse, bfalse)     => bfalse

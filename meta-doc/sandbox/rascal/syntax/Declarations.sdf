@@ -16,37 +16,45 @@ hiddens
         Declaration
 
 exports
-  sorts Declaration Throws ThrowDecl DeclarationUnit 
+  sorts Declaration Throws ThrowDecl DeclarationUnit DeclAnno DeclAnnos DeclAnnoChar
+
+  lexical syntax
+    "@" Name "{" DeclAnnoChar* "}"               -> DeclAnno
+    ~[\}]                                        -> DeclAnnoChar
+    "\\}"                                        -> DeclAnnoChar
 
   context-free syntax
-    "data" ( Name | ParameterizedType) { AbstractType "|"}+ -> Declaration {cons("data-decl")}
 
-    "view" Name "<:" Name { (Name AbstractType) "|"}+       -> Declaration {cons("view-decl")}
+    DeclAnno*                                          -> DeclAnnos
 
-    "type" Type (Name  | ParameterizedType)                 -> Declaration {cons("type-decl")}
+    "data" ( Name | ParameterizedType) 
+           DeclAnnos { AbstractType "|"}+              -> Declaration {cons("data-decl")}
 
-    "anno" Type Name { Type "|"}+                           -> Declaration {cons("anno-decl")}
+    "view" Name "<:" Name 
+           DeclAnnos { (Name AbstractType) "|"}+        -> Declaration {cons("view-decl")}
+
+    "type" Type (Name  | ParameterizedType)  DeclAnnos  -> Declaration {cons("type-decl")}
+
+    "anno" Type Name DeclAnnos { Type "|"}+             -> Declaration {cons("anno-decl")}
 
     "module" | "function" | "global" | "data" | 
-    "view" | "type" | "anno" | "decl-anno" | "all"          -> DeclarationUnit
+    "view" | "type" | "anno" | "tag" | "all"            -> DeclarationUnit
 
-    "decl-anno" DeclarationUnit Name {Type "|"}+            -> Declaration {cons("decl-anno-decl")}
+    "tag" DeclarationUnit Name DeclAnnos {Type "|"}+    -> Declaration {cons("tag-decl")}
  
-    "global" Type Name ("=" Expression)?                    -> Declaration {cons("global-decl")}
+    "global" Type Name DeclAnnos ("=" Expression)?      -> Declaration {cons("global-decl")}
 
-    ("throws" ThrowDecl)*                                   -> Throws
-    Name "(" OptNamedTypes ")"                              -> ThrowDecl
-    FunctionType Throws Block?                              -> Declaration {cons("function-decl")}
+    ("throws" ThrowDecl)*                               -> Throws
+    Name "(" OptNamedTypes ")"                          -> ThrowDecl
+    FunctionType Throws DeclAnnos Block?                -> Declaration {cons("function-decl")}
 
-%%  Visibility "java" FunctionType Throws JavaBlock    -> Declaration {cons("java-function-decl")}
-
-    "rules"  "(" Type ")" "{" Rule+ "}"                     -> Declaration {cons("rules-decl")}
-    "arules" "(" Type ")" "{" ARule+ "}"                    -> Declaration {cons("arules-decl")}
+    "rule"  Name DeclAnnos Rule                         -> Declaration {cons("rule-decl")}
+    "arule" Name DeclAnnos ARule                        -> Declaration {cons("arule-decl")}
 
 %% Define reserved words
-    "data" | "view" | "type" | "anno" | "decl-anno" |
-    "global" | "throws" |"rules" | "arules"                 -> Name {reject}
+    "data" | "view" | "type" | "anno" | "tag" |
+    "global" | "throws" | "rule" | "arule"             -> Name {reject}
 
-    DeclarationUnit                                         -> Name {reject}
+    DeclarationUnit                                    -> Name {reject}
 
   

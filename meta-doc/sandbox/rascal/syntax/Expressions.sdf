@@ -14,7 +14,7 @@ context-free start-symbols
 exports
 sorts Expression Declarator Predicate SimpleGenerator Generator Call Assignable
       Strategy Statement Block Rule ARule Case CaseAction Assignment IncrAssignOp Value
-      Catch Finally Increment Range
+      Catch Finally Increment Range FunctionClosure
 
 context-free syntax
 %% Basic values
@@ -22,6 +22,7 @@ context-free syntax
          IntegerLiteral                                          -> Value {cons("intlit")}
          FloatingPointLiteral                                    -> Value {cons("floatlit")}
          StringLiteral                                           -> Value {cons("strlit")}
+         FunctionClosure                                         -> Value {cons("fun-closure")}
 %% TODO include proper locations here
          Area                                                    -> Value {cons("areacon")}
 
@@ -141,8 +142,8 @@ context-free syntax
          "for" "(" {Generator ","}+ ")" Block                    -> Statement  {cons("stat-for")}
          "if" "(" Predicate ")" Block "else" Block               -> Statement  {cons("stat-if-else")}
          "if" "(" Predicate ")" Block                            -> Statement  {cons("stat-if-then")}
-         Call                                                    -> Statement  {cons("stat-call")}
-         "assert" StringLiteral ":" Predicate                    -> Statement  {cons("stat-assert")}
+         Call  ";"                                               -> Statement  {cons("stat-call")}
+         "assert" StringLiteral ":" Predicate ";"                -> Statement  {cons("stat-assert")}
 
 %% Assignment statement
          QualName                                                -> Assignable {cons("asg-qname")}
@@ -154,25 +155,25 @@ context-free syntax
          Assignable IncrAssignOp Expression                      -> Assignment  {cons("assign")}
          Assignable "@" Expression IncrAssignOp Expression       -> Assignment  {cons("assign-anno")}
 
-         Assignment                                              -> Statement   {cons("stat-assign")}
+         Assignment  ";"                                         -> Statement   {cons("stat-assign")}
 
 %% Declaration statements
-         Declarator  "=" Expression                              -> Statement   {cons("varinit")}
-         "global" Type Name ("=" Expression)?                    -> Statement   {cons("-stat-global")}
+         Declarator  "=" Expression ";"                          -> Statement   {cons("varinit")}
+         "global" Type Name ("=" Expression)? ";"                -> Statement   {cons("-stat-global")}
 
 %% Return, yield, fail
-         "return" Predicate?                                     -> Statement   {cons("stat-return")}
-         "yield" Expression                                      -> Statement   {cons("stat-yield")}
-         "fail"                                                  -> Statement   {cons("stat-fail")}
+         "return" Predicate? ";"                                 -> Statement   {cons("stat-return")}
+         "yield" Expression ";"                                  -> Statement   {cons("stat-yield")}
+         "fail" ";"                                              -> Statement   {cons("stat-fail")}
 
 %% Exception statements
-         "throw" Expression                                      -> Statement   {cons("stat-throw")}
+         "throw" Expression ";"                                  -> Statement   {cons("stat-throw")}
          "catch" Pattern ":" Statement                           -> Catch       {cons("catch")}
          "finally" ":" Statement                                 -> Finally     {cons("finally")}
-         "try" Statement Catch* Finally?                         -> Statement   {cons("stat-try")}
+         "try" Statement Catch* Finally? ";"                     -> Statement   {cons("stat-try")}
 
 %% Statement sequencing and blocks
-         "{" {Statement ";"}*  ";"? "}"                          -> Block       {cons("block")}
+         "{" Statement* "}"                                      -> Block       {cons("block")}
          Block                                                   -> Statement   {cons("stat-block")}
 
 %% Define reserved words:
