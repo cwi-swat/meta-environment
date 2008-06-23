@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -784,7 +784,9 @@
                 corresponding function to construct a term of that datatype.
                 This eliminates the need to quote abstract terms in
                 statements.</para>
-              </note></para>
+              </note><caution>
+                <para>Constructors can also generate types.</para>
+              </caution></para>
 
             <note>
               <para>Constructor names of datatypes may be quoted in order to
@@ -1032,7 +1034,9 @@ type Graph DFGraph</programlisting></para>
       <section>
         <title>Declaration annotations</title>
 
-        <para>All declarations in a Rascal program may be
+        <para><caution>
+            <para>decl-anno =&gt; tag</para>
+          </caution>All declarations in a Rascal program may be
         <emphasis>preceeded</emphasis> by one or more declaration annotations
         (<literal>decl-anno</literal>). A decl-anno is defined by declaring
         its name, the declaration type to which it can be attached, and the
@@ -1082,9 +1086,10 @@ decl-anno all doc str              %% documentation string</programlisting></par
 
         <listitem>
           <para>Variables in patterns. For patterns in match positions,
-          variables are initialized during the match and their scope is the
-          rule in which they occur. For patterns in make positions, the values
-          of variables are taken from the local scope.</para>
+          <emphasis>declared</emphasis> variables are initialized during the
+          match and their scope is the rule in which they occur. For
+          <emphasis>used</emphasis> variables, their value is substituted
+          during the match. </para>
         </listitem>
 
         <listitem>
@@ -1109,10 +1114,13 @@ decl-anno all doc str              %% documentation string</programlisting></par
         <listitem>
           <para>Global variables are declared and ALWAYS initialized at the
           top level of each module and <emphasis role="bold">these
-          initialization may not contain function calls.</emphasis> Functions
-          that use a global variable have to be explicitly declare it as well.
-          The value of a global variable can be used and replaced by all
-          functions that have locally declared it.</para>
+          initialization may not contain circular calls.</emphasis> </para>
+        </listitem>
+
+        <listitem>
+          <para>Functions that use a global variable have to be explicitly
+          declare it as well. The value of a global variable can be used and
+          replaced by all functions that have locally declared it.</para>
         </listitem>
       </itemizedlist>
 
@@ -1136,9 +1144,11 @@ decl-anno all doc str              %% documentation string</programlisting></par
         (default).</para>
 
         <para>A function body is a list of statements, optionally separated by
-        semi-colons. Each unique control flow path through a function must
-        have a return statement, such that each function always returns a
-        proper value.</para>
+        semi-colons. <caution>
+            <para>Decide on separator/terminator.</para>
+          </caution>Each unique control flow path through a function must have
+        a return statement, such that each function always returns a proper
+        value.</para>
 
         <para>Functions can raise exceptions and these may -- for
         documentation purposes -- optionally be declared as part of the
@@ -1146,8 +1156,9 @@ decl-anno all doc str              %% documentation string</programlisting></par
         with checked exceptions in Java).</para>
 
         <para>Functions preceeded by the keyword "<literal>java</literal>"
-        have a body written in Java. They have the following
-        properties:</para>
+        have a body written in Java. <caution>
+            <para>Becomes a tag.</para>
+          </caution>They have the following properties:</para>
 
         <itemizedlist>
           <listitem>
@@ -1173,10 +1184,7 @@ decl-anno all doc str              %% documentation string</programlisting></par
 
         <para>Functions preceeded by the <literal>@memo</literal> declaration
         annotation are memo functions that cache previous arguments/result
-        combinations.<caution>
-            <para>Do we need library functions to tune the memo behaviour
-            (e.g., flush cache, change cache size)?</para>
-          </caution></para>
+        combinations.</para>
       </section>
 
       <section>
@@ -1291,8 +1299,10 @@ int f(&amp;T y, double x)</programlisting></para>
         functions that are declared locally and can be passed as argument to
         another function, be returned as value of a function, or even be
         stored as value in a set or relation. <caution>
-            <para>Anonymous functions are currently not allowed as
-            value.</para>
+            <para>Add anonymous functions as value.</para>
+          </caution><caution>
+            <para>Causes aliasing; How doe this interfere with
+            backtracking?</para>
           </caution>When such functions are called they are called in the
         lexical scope in which they were defined. For instance, the Rascal
         standard Library defines a <literal>mapper</literal> function that
@@ -1300,7 +1310,10 @@ int f(&amp;T y, double x)</programlisting></para>
         to define such function arguments. Here is a function
         <literal>addOne</literal>, that adds 1 to each element of its argument
         list:<programlisting>list[int] addOne(list[int] L)
-    return mapper(L, fun int (int N) { return N +1 })</programlisting></para>
+    return mapper(L, fun int (int N) { return N +1 })</programlisting><code></code></para>
+
+        <programlisting>fun fun(int) -&gt; int makeAdder(int n)
+    return fun int (int x) { return x + 1 }</programlisting>
       </section>
     </section>
 
@@ -1402,15 +1415,44 @@ int f(&amp;T y, double x)</programlisting></para>
       </section>
 
       <section>
-        <title>Regular Expression Patterns</title>
+        <title>Regular Expression Patterns (or operator)?</title>
 
         <para>Regular expression patterns are ordinary regular expressions
         that are used to match a string value and to decompose it in parts and
-        also to compose new strings. In a match position, a regular expression
-        may be preceeded by a newly declared variable (always of type
-        <literal>list[str]</literal>) and the symbol <literal>:=</literal>.
-        When the variable is present it will contain the matches obtained by
-        the regular expression.</para>
+        also to compose new strings. Regular expression patterns bind
+        variables of type str when the match succeeds, otherwise they do not
+        bind anything. Their syntax and semantics parallels abstract and
+        concrete syntax patterns as much as possible.<caution>
+            <para>Is a regular expression a pattern or an expression. If it is
+            a pattern, it may occur on the left-hand side of the matching
+            operator as well as in visit and match statements. In this case,
+            the pattern works by returning the bindings of the first match it
+            can find. To find all occurrences of a pattern in a string, the
+            programmer should program a cursor or something similar around
+            it.</para>
+
+            <para>An alternative is that regular expressions are not patterns,
+            but functions or operators. A regular expression is a function
+            that takes a string and returns a binding. In this case we can
+            also use regular expressions as generators which take a string and
+            return all possible bindings.</para>
+          </caution><caution>
+            <para>We use the regular expression language of Java regex.
+            </para>
+          </caution><caution>
+            <para>Note that Java regular expressions might have optional
+            groups, which may introduce null bindings. Since null pointers are
+            not allowed in Rascal, we have to limit the kinds of expressions
+            people can write here.</para>
+          </caution><caution>
+            <para>Note: we do not allow nesting of named groups. </para>
+          </caution><caution>
+            <para>We allow named groups, syntax (name:regex), which introduce
+            a variable of type str named 'name'.</para>
+          </caution><caution>
+            <para>Named groups have to outermost, such that they can only bind
+            in one way.</para>
+          </caution></para>
       </section>
 
       <section xml:id="section.patterns">
@@ -1433,8 +1475,10 @@ int f(&amp;T y, double x)</programlisting></para>
 
           <listitem>
             <para>Quoted patterns enclosed between <literal>[|</literal> and
-            <literal>|]</literal>. Inside a fully quoted string, the
-            characters <literal>&lt;</literal>, <literal>&gt;</literal> and
+            <literal>|]</literal>.<caution>
+                <para>We need a typed quote.</para>
+              </caution> Inside a fully quoted string, the characters
+            <literal>&lt;</literal>, <literal>&gt;</literal> and
             <literal>|</literal> can be escaped as <literal>\&lt;</literal>,
             <literal>\&gt;</literal>, <literal>\|</literal>. Fully quoted
             patterns may contain variables.</para>
@@ -1449,7 +1493,9 @@ int f(&amp;T y, double x)</programlisting></para>
         <para>Quoted and unquoted patterns form the syntax patterns that are
         supported in Rascal.</para>
 
-        <para>Examples are:</para>
+        <para>Examples are:<caution>
+            <para>Decl versus use of vars.</para>
+          </caution></para>
 
         <itemizedlist>
           <listitem>
@@ -1527,8 +1573,13 @@ lexical syntax
    [0-9]    -&gt; DIGIT
    DIGIT+   -&gt; NAT-CON</programlisting></para>
 
-        <para>A rule that would remove leading zeros looks like
-        this:<programlisting>  natcon("0" &lt;DIGIT+ Ds&gt;) =&gt; natcon(&lt;Ds&gt;)</programlisting><note>
+        <para>A rule that would remove leading zeros looks like this:<caution>
+            <para>Is [0-9]+ etc a type?</para>
+          </caution><caution>
+            <para>Are "x" and 'x' types?</para>
+          </caution><caution>
+            <para>Check how ALL SDF types behave in our type system.</para>
+          </caution><programlisting>  natcon("0" &lt;DIGIT+ Ds&gt;) =&gt; natcon(&lt;Ds&gt;)</programlisting><note>
             <para>Unlike the ASF+SDF solution, it is not necessary to make a
             distinction between ordinary variables, lexical variables, and
             layout variables. Here, all variables are treated equal and their
@@ -1600,17 +1651,19 @@ lexical syntax
 
             <itemizedlist>
               <listitem>
-                <para><literal>+</literal> is used for addition, union and
-                concatenation.</para>
+                <para><literal>+</literal> is used for addition, union (|) and
+                concatenation (++)</para>
               </listitem>
 
               <listitem>
                 <para><literal>-</literal> is used for substraction,
-                difference.</para>
+                difference (\)</para>
               </listitem>
 
               <listitem>
-                <para><literal>*</literal> is used for multiplication.</para>
+                <para><literal>*</literal> is used for multiplication.<caution>
+                    <para>product =&gt; *</para>
+                  </caution></para>
               </listitem>
 
               <listitem>
@@ -1642,7 +1695,9 @@ lexical syntax
                 <para>The predicates <literal>and</literal>,
                 <literal>or</literal>, <literal>not</literal> and
                 <literal>implies</literal> are written as such (and not using
-                operator symbols)</para>
+                operator symbols)<caution>
+                    <para>&amp;&amp;, ||, -&gt;, !</para>
+                  </caution></para>
               </listitem>
 
               <listitem>
@@ -1663,10 +1718,10 @@ lexical syntax
               <listitem>
                 <para>An index operator
                 <literal><replaceable>R</replaceable>[<replaceable>N</replaceable>]</literal>
-                can be applied to values of types list, set, tuple, rel,
-                string and returns the <replaceable>N</replaceable>-th
-                element. It thows the exception <literal>out_of_range(str
-                msg)</literal> when the index value if out of range.</para>
+                can be applied to values of types list, tuple, string and
+                returns the <replaceable>N</replaceable>-th element. It thows
+                the exception <literal>out_of_range(str msg)</literal> when
+                the index value if out of range.</para>
               </listitem>
 
               <listitem>
@@ -1713,7 +1768,8 @@ lexical syntax
         <listitem>
           <para>A <literal>fail</literal> statement which jumps to the deepest
           nested choice point (i.e. a switch or a visit) and tries the next
-          option available. Fail is the dual of return/yield.</para>
+          option available. Both yield and fail should occur in the lexical
+          context of a choice point.</para>
         </listitem>
 
         <listitem>
@@ -1809,6 +1865,31 @@ lexical syntax
     </section>
 
     <section>
+      <title>Rules</title>
+
+      <para><caution>
+          <para>We have not defined the rules, we do use them in
+          examples.</para>
+        </caution><caution>
+          <para>The syntax of rules should reflect their ungrouped and
+          non-deterministic natur</para>
+        </caution></para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Rules are applied non-deterministically, and in any order of
+          matching</para>
+        </listitem>
+
+        <listitem>
+          <para>The right hand side of rule declarations can contain fail
+          statements, which cause backtracking over the alternative rules for
+          a certain constructor.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
       <title>Failure and side-effects</title>
 
       <para>There are two contexts in which side-effects, i.e., assignment to
@@ -1888,6 +1969,18 @@ public void main(list[str] argv){
 }</programlisting><caution>
           <para>We need a mechanism to insert values in strings,
           e.g.<programlisting> println("Table of squares from 1 to &lt;N&gt;");</programlisting></para>
+        </caution><caution>
+          <para>#{ ...} toelaten?</para>
+        </caution><caution>
+          <para>What is the syntax of a map value: { x=&gt;y } or { x : y} ??
+          </para>
+        </caution><caution>
+          <para>Map comprehensions should also be possible as in { int x : int
+          y | x : {1,2,3}, y : {1,2,3} } </para>
+        </caution><caution>
+          <para>Maps should also be generators, but notice the overloading of
+          :. { &lt;int x, int y&gt; | x:y : { 1:2 } } or { &lt;int x, int
+          y&gt; | x=&gt;y : { 1=&gt;2 } }</para>
         </caution></para>
     </section>
 
@@ -1912,11 +2005,31 @@ public void main(list[str] argv){
 
 int wordCount(str S){
   switch S {
-    rcase list[str] words = /[a-zA-Z0-9]+/:
+    rcase list[str] words = /\&lt;(.*)\&gt;/:  // caution: this example does not work because it only matches the first occurrence
         return size(words)
   }
 }
-</programlisting></para>
+
+int alternativeWordCount(str S){ // this example is ugly, since the programmer needs to implement a cursor
+  int count = 0;
+
+  while (S != "") {
+    switch (S) {
+      case /.*(woord:\&lt;.*\&gt;)(rest:.*)/ : { count++; S = rest; } // groups have to be outermost expressions
+      default: return count;
+    }
+  }
+
+  while (/^.*?(woord:\w+)(rest:.*)/m := S) { 
+    count += 1; 
+    S = rest; 
+  }
+
+
+  return count;
+} 
+
+    </programlisting></para>
     </section>
 
     <section>
@@ -1990,7 +2103,7 @@ Bool reduce(Bool B) {
       acase band(btrue, &lt;Bool B2&gt;)   =&gt; &lt;B2&gt;     %% Use Variables
       acase band(bfalse, &lt;Bool B2&gt;)  =&gt; bfalse
 
-      acase bor(btrue, btrue)        =&gt; btrue  %% Use a truth table
+      acase bor(btrue, btrue)        =&gt; Bool-abstract::btrue  %% Use a truth table
       acase bor(btrue, bfalse)       =&gt; btrue
       acase bor(bfalse, btrue)       =&gt; btrue
       acase bor(bfalse, bfalse)      =&gt; bfalse
@@ -2026,7 +2139,17 @@ arules(Bool) {
       bor(btrue, bfalse)      =&gt; btrue
       bor(bfalse, btrue)      =&gt; btrue
       bor(bfalse, bfalse)     =&gt; bfalse
-}</programlisting>These rules are applied on every Bool that is constructed.
+}
+
+// caution replace by this syntax:
+arule fiets 
+@doc{hoi dit is een leuke rule} 
+  band(btrue, &lt;Bool B2&gt;)  =&gt; 1+1;  
+
+arule foo   band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
+
+band(&lt;Bool B1&gt;, &lt;Bool B2&gt;) : { if (B1 == B2) { yield true; } yield; }
+</programlisting>These rules are applied on every Bool that is constructed.
         Like in ASF+SDF it is the responsibility of the programmer to make
         sure the rules are confluent and terminating. The body of a rules
         definition has the same syntax and semantics as the switch construct,
@@ -2169,7 +2292,7 @@ import BTree-syntax;
 %% Idea: int N : T generates alle Integer leaves in the tree
 
 int cnt(BTREE T) {
-    return size({N | int N : T})
+    return size({N | int N : T}) // we don't have a mapping from Integer to int
 }
 
 %% Ex1: an equivalent,  more purist, version of the same function:
@@ -2182,7 +2305,7 @@ int cnt(BTREE T) {
 int cnt(BTREE T) {
     int C = 0;
     visit T {
-      case &lt;Integer N&gt; : C = C+1
+      case &lt;Integer N&gt; : C = C+1 // implicitly there is a yield here, such that visit does not backtrack.
     };
     return C;
 }
@@ -2193,8 +2316,26 @@ int cnt(BTREE T) {
 %% - the built-in sort "int"
 %% - the syntactic sort "Integer"
 
+%% intermezzo
+str unparse(tree t) {
+  str result = "";
+  visit(t) {
+    &lt;int ch&gt; : result += chr(ch);
+  }
+  return result;
+}
+
+int toInt(Integer i) {
+    switch (i) {
+      &lt;NatCon n&gt; : return toInt(unparse(i));
+      - &lt;Integer i&gt; : return -1 * toInt(I);
+    }
+    throw "can not convert this Integer structure: &lt;i&gt;";
+}
+// end intermezzo
+
 int sumtree(BTREE T) {
-    return sum({N | int N : T});
+    return sum({toInt(N) | Integer N : T});
 }
 
 %% Ex2: using accumulator
@@ -2202,7 +2343,7 @@ int sumtree(BTREE T) {
 int cnt(BTREE T) {
     int C = 0;
     visit T {
-      case &lt;Integer N&gt; : C = C+N
+      case &lt;Integer N&gt; : C = C+N;
     };
     return C;
 }
@@ -3318,7 +3459,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
               <entry align="center">bool</entry>
 
@@ -3326,7 +3467,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str&#160;</entry>
+              <entry align="center">str </entry>
 
               <entry align="center">loc</entry>
 
@@ -4090,7 +4231,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center">&#160;</entry>
+                <entry align="center"> </entry>
 
                 <entry align="center">list</entry>
 
