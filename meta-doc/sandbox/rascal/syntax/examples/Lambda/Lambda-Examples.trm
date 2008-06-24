@@ -3,7 +3,7 @@ module Lambda-Examples
 import Lambda-syntax;
 
 set[Var] allVars(Exp E) {
-    return {V | Var V : E}
+    return {V | Var V : E};
 }
 
 set[Var] boundVars(Exp E) {
@@ -18,7 +18,7 @@ set[Var] freeVars(Exp E) {
 %% given set of variables.
 
 Var fresh(Var V, set[Var] S) {
-    if (V in S){ return prime(V); } else {return V;};
+    if (V in S){ return prime(V); } else {return V;}
 }
 
 %% Substitution: replace all occurrences of V in E2 by E1
@@ -26,18 +26,16 @@ Var fresh(Var V, set[Var] S) {
 Exp subst(Var V1, Exp E1, Exp E2) {
 
     switch E2 {
-      case <Var V2>: if(V1 != V2){ yield [| <V2> |] }
-
-      case <Var V2>: if(V1 == V2){ yield [| <E1> |] }
+      case <Var V2>: if(V1 == V2){ yield E1 ; } else { yield V2; }
 
       case <Exp Ea> <Exp Eb>: {
         Exp EaS = subst(V, E, Ea);
         Exp EbS = subst(V, E, Eb);
-        return [| <Exp EaS> <Exp EbS> |];
+        return [| <EaS> <EbS> |];
       } 
 
       case fn <Var V2> => <Var Ea>:
-        if (V1 == V2) { yield [| fn <V2> =\> <Ea> |] }
+        if (V1 == V2) { yield [| fn <V2> =\> <Ea> |]; }
 
       case fn <Var V2> => <Exp Ea>:
         if(V1 != V2 and not(V1 in freeVars(E2) and 
@@ -53,5 +51,5 @@ Exp subst(Var V1, Exp E1, Exp E2) {
            Exp EaS = subst(V1, E1, subst(V2, V3, E2));
            yield [| fn <Var V3> =\> <Exp EaS> |];
         }
-    };
+    }
 }

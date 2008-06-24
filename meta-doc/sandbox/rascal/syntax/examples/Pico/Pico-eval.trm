@@ -1,6 +1,6 @@
 module Pico-eval
 import pico/syntax/Pico;
-
+ 
 data PICO_VALUE int ival | str sval;
 
 type map[PICO_ID, PICO_VALUE] VEnv;
@@ -12,22 +12,13 @@ VEnv evalProgram(PROGRAM P){
           return evalStatements(Series, Env);
       }
    }
-};
-
-VEnv assign(VEnv Env, PICO_ID Id, PICO_VALUE V){
-  Env[Id] = V;
-  return Env
-}
-
-PICO_VALUE valueOf(VEnv Env, PICO_ID Id){
-  return Env[Id];
 }
 
 VEnv evalDecls(DECLS Decls){
     VEnv Env = {};
     visit Decls {
-      case <PICO-ID Id> : string:  Env = assign(Env, Id, "")
-      case <PICO-ID Id> : natural: Env = assign(Env, Id, 0)
+      case <PICO-ID Id> : string:  { Env[Id] = ""; return Env;}
+      case <PICO-ID Id> : natural: { Env[Id] = 0;  return Env;}
     }
 }
 
@@ -37,62 +28,60 @@ VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
         Env Env2 = evalStatement(Stat, Env);
         return evalStatements(Series2, Env2);
       }
-      case [| |]: return Env
+      case [| |]: return Env;
     }
 }
 
 VEnv evalStatement(STATEMENT Stat, VEnv Env){
     switch Stat {
       case [| <PICO_ID Id> = <EXP Exp> |]: {
-        PICO_VALUE Val = evalExp(Exp, Env);
-        return assign(Env, Id, Val)
+        Env[Id] = evalExp(Exp, Env);
+        return Env;
       }
 
-      case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
-                   else <{STATEMENT ";"}* Stats1> fi:{
+      case STATEMENT[| if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
+                       else <{STATEMENT ";"}* Stats1> fi |]:{
         PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0){
-          return evalStatments(Stats1, Env)
+        if(Val.ival != 0){
+          return evalStatments(Stats1, Env);
         } else {
-          return evalStatements(Stats2, Env)
+          return evalStatements(Stats2, Env);
         }
-
       }
 
-      case while <EXP Exp> do <{STATEMENT ";"}* Stats1> od:{
+      case STATEMENT[| while <EXP Exp> do <{STATEMENT ";"}* Stats1> od|]: {
         PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0){
-          return Env
+        if(Val.ival != 0){
+          return Env;
         } else {
           VEnv Env2 = evalStatements(Stats1, Env);
-          return evalStatement(Stat, Env2)
+          return evalStatement(Stat, Env2);
         }
       }
-    };
-};
+    }
+}
 
 PICO_VALUE evalExp(Exp exp, VEnv Env) {
     switch exp {
-      case <NatCon N>: return N
+      case NatCon[| <NatCon N> |]: 
+           return toInt(unparseToString(N));
 
-      case <StrCon S>: return S
+      case StrCon[| <StrCon S> |]: 
+           return unparseToString(S);
 
-      case <PICO-ID Id>: return valueOf(Env, Id)
+      case PICO_ID[| <PICO_ID Id> |]: 
+           return Env[Id];
 
-      case <EXP exp1> + <EXP exp2>: {
-           Natural nat1 = evalExp(exp1, Env);
-           Natural nat2 = evalExp(exp2, Env);
-           return nat1 + nat2;
-      }
-      case <EXP exp1> - <EXP exp2>: {
-           Natural nat1 = evalExp(exp1, Env);
-           Natural nat2 = evalExp(exp2, Env);
-           return nat1 + nat2;
-      }
-      case <EXP exp1> || <EXP exp2>: {
-           StrCon str1 = evalExp(exp1, Env);
-           StrCon str2 = evalExp(exp2, Env);
-           return concat(str1, str2);
-      }
+      case <EXP exp1> + <EXP exp2>:
+           return evalExp(exp1, Env).ival +
+                  evalExp(exp2, Env).ival;
+      
+      case <EXP exp1> - <EXP exp2>:
+           return evalExp(exp1, Env).ival -
+                  evalExp(exp2, Env).ival;
+      
+      case <EXP exp1> || <EXP exp2>:
+           return evalExp(exp1, Env).sval +
+                  evalExp(exp2, Env).sval;
    } 
 }

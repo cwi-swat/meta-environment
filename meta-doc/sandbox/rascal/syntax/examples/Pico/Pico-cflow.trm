@@ -15,12 +15,12 @@ CFSEGMENT cflow({STATEMENT ";"}* Stats){
            CFSEGMENT CF2 = cflow(Stats2);
            return <CF1.entry, 
                    CF1.graph + CF2.graph + product(CF1.exit, CF2.entry), 
-                   CF2.exit>
+                   CF2.exit>;
       }
 
-      case [| |]: return <{}, {}, {}>
+      case [| |]: return <{}, {}, {}>;
     }
-}; 
+}
 
 CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
@@ -42,6 +42,6 @@ CFSEGMENT cflow(STATEMENT Stat){
                   >;
       }
          
-      case <STATEMENT Stat>: return <{Stat}, {}, {Stat}>
-    };
+      case <STATEMENT Stat>: return <{Stat}, {}, {Stat}>;
+    }
 }

@@ -22,7 +22,7 @@ context-free syntax
 
          SynPatternChar                              -> SynPatternSymbol
          PatternVar                                  -> SynPatternSymbol
-         "[|" SynPatternSymbol* "|]"                 -> QuotedSynPattern
+         Symbol? "[|" SynPatternSymbol* "|]"         -> QuotedSynPattern
          QuotedSynPattern                            -> SynPattern
 
          Name | StringLiteral                        -> AbsPatternName {cons("abspat-name")}

@@ -16,7 +16,7 @@ PROGRAM cse(PROGRAM P) {
   
     visit P {
       case <EXP E>: if(PICO_ID Id := replacements(E)){
-                       yield Id
+                       yield Id;
                     }
-    };
+    }
 }

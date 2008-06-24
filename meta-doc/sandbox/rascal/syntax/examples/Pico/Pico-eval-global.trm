@@ -15,23 +15,13 @@ void evalProgram(PROGRAM P){
           evalStatements(Series);
       }
    }
-};
-
-void assign(PICO_ID Id, PICO_VALUE V){
-  global Venv Env;
-  Env[Id] = V;
-  return;
-}
-
-PICO_VALUE valueOf(PICO_ID Id){
-  global Venv Env;
-  return Env(Id); 
 }
 
 VEnv evalDecls(DECLS Decls){
+    global Venv Env;
     visit Decls {
-      case <PICO-ID Id> : string:  assign(Id, "")
-      case <PICO-ID Id> : natural: assign(Id, 0)
+      case <PICO-ID Id> : string:  Env[Id] = "";
+      case <PICO-ID Id> : natural: Env[Id] = 0;
     }
 }
 
@@ -40,67 +30,64 @@ void evalStatements({STATEMENT ";"}* Series){
       case <STATEMENT Stat>; <{STATEMENT ";"}* Series2>: {
         evalStatement(Stat);
         evalStatements(Series2);
-        return
+        return;
       }
-      case [| |]: return
+      case [| |]: return;
     }
 }
 
 void evalStatement(STATEMENT Stat){
+    global Venv Env;
     switch Stat {
       case [| <PICO_ID Id> = <EXP Exp> |]: {
-        PICO_VALUE Val = evalExp(Exp);
-        assign(Id, Val);
-        return
+        Env[Id] = evalExp(Exp);
+        return;
       }
 
       case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
                    else <{STATEMENT ";"}* Stats1> fi:{
         PICO_VALUE Val = evalExp(Exp);
-        if(Val != 0) {
+        if(Val.ival != 0) {
           evalStatements(Stats1);
-          return
+          return;
         } else {
           evalStatements(Stats2);
-          return
+          return;
         }
       }
 
       case while <EXP Exp> do <{STATEMENT ";"}* Stats1> od:{
         PICO_VALUE Val = evalExp(Exp);
-        if(Val != 0){
-          return
+        if(Val.ival != 0){
+          return;
         } else {
           evalStatements(Stats1);
           evalStatement(Stat);
-          return
+          return;
         }
       }
-    };
+    }
 };
 
 PICO_VALUE evalExp(Exp exp) {
+    global Venv Env;
     switch exp {
-      case <NatCon N>: return N
+      case <NatCon N>: toInt(unparseToString(N));
 
-      case <StrCon S>: return S
+      case <StrCon S>: return unparseToString(S);
 
-      case <PICO-ID Id>: return valueOf(Id)
+      case <PICO-ID Id>: return Env[Id];
 
-      case <EXP exp1> + <EXP exp2>: {
-           Natural nat1 = evalExp(exp1);
-           Natural nat2 = evalExp(exp2);
-           return nat1 + nat2;
-      }
-      case <EXP exp1> - <EXP exp2>: {
-           Natural nat1 = evalExp(exp1);
-           Natural nat2 = evalExp(exp2);
-           return nat1 + nat2;
-      }
-      case <EXP exp1> || <EXP exp2>: {
-           StrCon str1 = evalExp(exp1);
-           StrCon str2 = evalExp(exp2);
-           return concat(str1, str2);
-      }
+      case <EXP exp1> + <EXP exp2>:
+           return evalExp(exp1, Env).ival +
+                  evalExp(exp2, Env).ival;
+
+      case <EXP exp1> - <EXP exp2>:
+           return evalExp(exp1, Env).ival -
+                  evalExp(exp2, Env).ival;
+   
+      case <EXP exp1> || <EXP exp2>:
+          return evalExp(exp1, Env).sval +
+                  evalExp(exp2, Env).sval;
    } 
 }

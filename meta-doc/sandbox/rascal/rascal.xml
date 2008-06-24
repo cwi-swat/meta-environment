@@ -1314,8 +1314,9 @@ int f(&amp;T y, double x)</programlisting></para>
         functions that are declared locally and can be passed as argument to
         another function, be returned as value of a function, or even be
         stored as value in a set or relation. <caution>
-            <para>Causes aliasing; How doe this interfere with
-            backtracking?</para>
+            <para>Causes aliasing; How doe this interfere with backtracking?
+            We may forbid write access to globals outside the current
+            context.</para>
           </caution>When such functions are called they are called in the
         lexical scope in which they were defined. For instance, the Rascal
         standard Library defines a <literal>mapper</literal> function that
@@ -1495,18 +1496,23 @@ int f(&amp;T y, double x)</programlisting></para>
 
           <listitem>
             <para>Quoted patterns enclosed between <literal>[|</literal> and
-            <literal>|]</literal>.<caution>
-                <para>We need a typed quote.</para>
-              </caution> Inside a fully quoted string, the characters
-            <literal>&lt;</literal>, <literal>&gt;</literal> and
+            <literal>|]</literal>. Inside a fully quoted string, the
+            characters <literal>&lt;</literal>, <literal>&gt;</literal> and
             <literal>|</literal> can be escaped as <literal>\&lt;</literal>,
             <literal>\&gt;</literal>, <literal>\|</literal>. Fully quoted
-            patterns may contain variables.</para>
+            patterns may contain pattern variable declarations and pattern
+            variable uses.</para>
           </listitem>
 
           <listitem>
-            <para>Unquoted patterns are an (unquoted) syntax fragment that may
-            contain variables.</para>
+            <para>A quoted pattern may be optionally preceeded by an SDF
+            symbol to define its desired syntactic type.</para>
+          </listitem>
+
+          <listitem>
+            <para>Unquoted patterns are (unquoted) syntax fragments that may
+            contain pattern variable declarations and pattern variable
+            uses.</para>
           </listitem>
         </itemizedlist>
 
@@ -1524,6 +1530,11 @@ int f(&amp;T y, double x)</programlisting></para>
           <listitem>
             <para>Quoted syntax pattern with two pattern variable
             uses:<programlisting>[| while &lt;Exp&gt; do &lt;Stats&gt; od |]</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para>Identical to the previous example, but with a declaration of
+            the desired syntactic type:<programlisting>STATEMENT [| while &lt;Exp&gt; do &lt;Stats&gt; od |]</programlisting></para>
           </listitem>
 
           <listitem>
@@ -1593,11 +1604,24 @@ lexical syntax
    DIGIT+   -&gt; NAT-CON</programlisting></para>
 
         <para>A rule that would remove leading zeros looks like this:<caution>
-            <para>Is [0-9]+ etc a type?</para>
-          </caution><caution>
-            <para>Are "x" and 'x' types?</para>
-          </caution><caution>
-            <para>Check how ALL SDF types behave in our type system.</para>
+            <para>Check how ALL SDF types behave in our type system.
+            Results:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Charclasses are included in Symbol (and hence in
+                Type).</para>
+              </listitem>
+
+              <listitem>
+                <para>Single and double quoted literals are not yet
+                included.</para>
+              </listitem>
+
+              <listitem>
+                <para>Other cases for Symbols not yet checked.</para>
+              </listitem>
+            </itemizedlist>
           </caution><programlisting>  natcon("0" &lt;DIGIT+ Ds&gt;) =&gt; natcon(&lt;Ds&gt;)</programlisting><note>
             <para>Unlike the ASF+SDF solution, it is not necessary to make a
             distinction between ordinary variables, lexical variables, and
@@ -2430,7 +2454,7 @@ context-free syntax
 import Lambda-syntax;
 
 set[Var] allVars(Exp E) {
-    return {V | Var V : E}
+    return {V | Var V : E};
 }
 
 set[Var] boundVars(Exp E) {
@@ -2445,7 +2469,7 @@ set[Var] freeVars(Exp E) {
 %% given set of variables.
 
 Var fresh(Var V, set[Var] S) {
-    if (V in S){ return prime(V); } else {return V;};
+    if (V in S){ return prime(V); } else {return V;}
 }
 
 %% Substitution: replace all occurrences of V in E2 by E1
@@ -2453,18 +2477,16 @@ Var fresh(Var V, set[Var] S) {
 Exp subst(Var V1, Exp E1, Exp E2) {
 
     switch E2 {
-      case &lt;Var V2&gt;: if(V1 != V2){ yield [| &lt;V2&gt; |] }
-
-      case &lt;Var V2&gt;: if(V1 == V2){ yield [| &lt;E1&gt; |] }
+      case &lt;Var V2&gt;: if(V1 == V2){ yield E1 ; } else { yield V2; }
 
       case &lt;Exp Ea&gt; &lt;Exp Eb&gt;: {
         Exp EaS = subst(V, E, Ea);
         Exp EbS = subst(V, E, Eb);
-        return [| &lt;Exp EaS&gt; &lt;Exp EbS&gt; |];
+        return [| &lt;EaS&gt; &lt;EbS&gt; |];
       } 
 
       case fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt;:
-        if (V1 == V2) { yield [| fn &lt;V2&gt; =\&gt; &lt;Ea&gt; |] }
+        if (V1 == V2) { yield [| fn &lt;V2&gt; =\&gt; &lt;Ea&gt; |]; }
 
       case fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;:
         if(V1 != V2 and not(V1 in freeVars(E2) and 
@@ -2480,7 +2502,7 @@ Exp subst(Var V1, Exp E1, Exp E2) {
            Exp EaS = subst(V1, E1, subst(V2, V3, E2));
            yield [| fn &lt;Var V3&gt; =\&gt; &lt;Exp EaS&gt; |];
         }
-    };
+    }
 }</programlisting></para>
     </section>
 
@@ -2503,27 +2525,25 @@ import Let;
 %% Version 1: purely functional
 %% Exp: given expression to be renamed
 %% rel[Var,Var]: renaming table
-%% Int: counter to generate global variables
+%% Int: counter to generate unique variables
 
 Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     switch E {
     case let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end: {
-         Var Y = "x" + Cnt;  %% this + operator concatenates 
-                             %% (after converting the int to str)
-         int Cnt1 = Cnt + 1;
+         Var Y = "x" + toString(Cnt);
          Exp E1R = rename(E1, Rn, Cnt);
          Exp E2R = rename(E2, {&lt;V, Y&gt;} + Rn, Cnt1);
-         return [| let &lt;Var Y&gt; = &lt;Exp E1R&gt;
+         return [| let &lt;Y&gt; = &lt;E1R&gt;
                    in 
-                      &lt;Exp E2R&gt;
+                      &lt;E2R&gt;
                    end
-                |]
+                |];
           }
 
-    case &lt;Var V&gt;: return Rn(V)
+    case &lt;Var V&gt;: return Rn(V);
 
-    default: return E
-    };
+    default: return E;
+    }
 }</programlisting></para>
     </section>
 
@@ -2546,7 +2566,7 @@ global rel[Var,Var] Rn = {};
 Var newVar() {
     global int Cnt;  
     Cnt = Cnt + 1;
-    return "x" + Cnt
+    return "x" + toString(Cnt);
 }
 
 Exp rename(Exp E) {
@@ -2558,17 +2578,17 @@ Exp rename(Exp E) {
          Rn = {&lt;V, Y&gt;} + Rn;
          Exp E1R = rename(E1);
          Exp E2R = rename(E2);
-         return [| let &lt;Var Y &gt;= &lt;Exp E1R&gt;
+         return [| let &lt;Y&gt;= &lt;E1R&gt;
                    in 
-                      &lt;Exp E2R&gt;
+                      &lt;E2R&gt;
                    end 
-                |]
+                |];
           }
 
-    case &lt;Var V&gt;: return Rn(V)
+    case &lt;Var V&gt;: return Rn(V);
 
-    default: return E
-    };
+    default: return E;
+    }
 }</programlisting></para>
     </section>
 
@@ -2588,9 +2608,9 @@ list[Error] tcp(PROGRAM P) {
       case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
            Env Env = {&lt;Id, Type&gt; | 
                       [| &lt;PICO_ID Id&gt; : &lt;TYPE Type&gt; |] : Decls};
-           return [ tcst(S, Env) | Stat S : Series ] 
+           return [ tcst(S, Env) | Stat S : Series ];
       }
-    };
+    }
 }
 
 list[Error] tcst(Stat Stat, Env Env) {
@@ -2603,11 +2623,11 @@ list[Error] tcst(Stat Stat, Env Env) {
       case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats1&gt; fi:
         return type_of(Exp, natural, Env) + 
-               tcs(Stats1, Env) + tcs(Stats2, Env)
+               tcs(Stats1, Env) + tcs(Stats2, Env);
 
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od: 
-        return type_of(Exp, natural, Env) + tcs(Stats, Env)
-    };
+        return type_of(Exp, natural, Env) + tcs(Stats, Env);
+    }
 }
 
 list[Error] type_of(Exp E, TYPE Type, Env Env) {
@@ -2636,11 +2656,11 @@ list[Error] type_of(Exp E, TYPE Type, Env Env) {
       case &lt;EXP E1&gt; || &lt;EXP E2&gt;: 
         if(Type == string){
           return type_of(E1, string, Env) + 
-                 type_of(E1, string, Env)
+                 type_of(E1, string, Env);
         }
     
-      default: return [error("Incorrect type")]
-    };
+      default: return [error("Incorrect type")];
+    }
 }</programlisting></para>
     </section>
 
@@ -2649,7 +2669,7 @@ list[Error] type_of(Exp E, TYPE Type, Env Env) {
 
       <para><programlisting>module Pico-eval
 import pico/syntax/Pico;
-
+ 
 data PICO_VALUE int ival | str sval;
 
 type map[PICO_ID, PICO_VALUE] VEnv;
@@ -2661,22 +2681,13 @@ VEnv evalProgram(PROGRAM P){
           return evalStatements(Series, Env);
       }
    }
-};
-
-VEnv assign(VEnv Env, PICO_ID Id, PICO_VALUE V){
-  Env[Id] = V;
-  return Env
-}
-
-PICO_VALUE valueOf(VEnv Env, PICO_ID Id){
-  return Env[Id];
 }
 
 VEnv evalDecls(DECLS Decls){
     VEnv Env = {};
     visit Decls {
-      case &lt;PICO-ID Id&gt; : string:  Env = assign(Env, Id, "")
-      case &lt;PICO-ID Id&gt; : natural: Env = assign(Env, Id, 0)
+      case &lt;PICO-ID Id&gt; : string:  { Env[Id] = ""; return Env;}
+      case &lt;PICO-ID Id&gt; : natural: { Env[Id] = 0;  return Env;}
     }
 }
 
@@ -2686,63 +2697,61 @@ VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
         Env Env2 = evalStatement(Stat, Env);
         return evalStatements(Series2, Env2);
       }
-      case [| |]: return Env
+      case [| |]: return Env;
     }
 }
 
 VEnv evalStatement(STATEMENT Stat, VEnv Env){
     switch Stat {
       case [| &lt;PICO_ID Id&gt; = &lt;EXP Exp&gt; |]: {
-        PICO_VALUE Val = evalExp(Exp, Env);
-        return assign(Env, Id, Val)
+        Env[Id] = evalExp(Exp, Env);
+        return Env;
       }
 
-      case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
-                   else &lt;{STATEMENT ";"}* Stats1&gt; fi:{
+      case STATEMENT[| if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
+                       else &lt;{STATEMENT ";"}* Stats1&gt; fi |]:{
         PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0){
-          return evalStatments(Stats1, Env)
+        if(Val.ival != 0){
+          return evalStatments(Stats1, Env);
         } else {
-          return evalStatements(Stats2, Env)
+          return evalStatements(Stats2, Env);
         }
-
       }
 
-      case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od:{
+      case STATEMENT[| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od|]: {
         PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0){
-          return Env
+        if(Val.ival != 0){
+          return Env;
         } else {
           VEnv Env2 = evalStatements(Stats1, Env);
-          return evalStatement(Stat, Env2)
+          return evalStatement(Stat, Env2);
         }
       }
-    };
-};
+    }
+}
 
 PICO_VALUE evalExp(Exp exp, VEnv Env) {
     switch exp {
-      case &lt;NatCon N&gt;: return N
+      case NatCon[| &lt;NatCon N&gt; |]: 
+           return toInt(unparseToString(N));
 
-      case &lt;StrCon S&gt;: return S
+      case StrCon[| &lt;StrCon S&gt; |]: 
+           return unparseToString(S);
 
-      case &lt;PICO-ID Id&gt;: return valueOf(Env, Id)
+      case PICO_ID[| &lt;PICO_ID Id&gt; |]: 
+           return Env[Id];
 
-      case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;: {
-           Natural nat1 = evalExp(exp1, Env);
-           Natural nat2 = evalExp(exp2, Env);
-           return nat1 + nat2;
-      }
-      case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;: {
-           Natural nat1 = evalExp(exp1, Env);
-           Natural nat2 = evalExp(exp2, Env);
-           return nat1 + nat2;
-      }
-      case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;: {
-           StrCon str1 = evalExp(exp1, Env);
-           StrCon str2 = evalExp(exp2, Env);
-           return concat(str1, str2);
-      }
+      case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
+           return evalExp(exp1, Env).ival +
+                  evalExp(exp2, Env).ival;
+      
+      case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
+           return evalExp(exp1, Env).ival -
+                  evalExp(exp2, Env).ival;
+      
+      case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
+           return evalExp(exp1, Env).sval +
+                  evalExp(exp2, Env).sval;
    } 
 }
 </programlisting></para>
@@ -2769,23 +2778,13 @@ void evalProgram(PROGRAM P){
           evalStatements(Series);
       }
    }
-};
-
-void assign(PICO_ID Id, PICO_VALUE V){
-  global Venv Env;
-  Env[Id] = V;
-  return;
-}
-
-PICO_VALUE valueOf(PICO_ID Id){
-  global Venv Env;
-  return Env(Id); 
 }
 
 VEnv evalDecls(DECLS Decls){
+    global Venv Env;
     visit Decls {
-      case &lt;PICO-ID Id&gt; : string:  assign(Id, "")
-      case &lt;PICO-ID Id&gt; : natural: assign(Id, 0)
+      case &lt;PICO-ID Id&gt; : string:  Env[Id] = "";
+      case &lt;PICO-ID Id&gt; : natural: Env[Id] = 0;
     }
 }
 
@@ -2794,68 +2793,65 @@ void evalStatements({STATEMENT ";"}* Series){
       case &lt;STATEMENT Stat&gt;; &lt;{STATEMENT ";"}* Series2&gt;: {
         evalStatement(Stat);
         evalStatements(Series2);
-        return
+        return;
       }
-      case [| |]: return
+      case [| |]: return;
     }
 }
 
 void evalStatement(STATEMENT Stat){
+    global Venv Env;
     switch Stat {
       case [| &lt;PICO_ID Id&gt; = &lt;EXP Exp&gt; |]: {
-        PICO_VALUE Val = evalExp(Exp);
-        assign(Id, Val);
-        return
+        Env[Id] = evalExp(Exp);
+        return;
       }
 
       case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats1&gt; fi:{
         PICO_VALUE Val = evalExp(Exp);
-        if(Val != 0) {
+        if(Val.ival != 0) {
           evalStatements(Stats1);
-          return
+          return;
         } else {
           evalStatements(Stats2);
-          return
+          return;
         }
       }
 
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od:{
         PICO_VALUE Val = evalExp(Exp);
-        if(Val != 0){
-          return
+        if(Val.ival != 0){
+          return;
         } else {
           evalStatements(Stats1);
           evalStatement(Stat);
-          return
+          return;
         }
       }
-    };
+    }
 };
 
 PICO_VALUE evalExp(Exp exp) {
+    global Venv Env;
     switch exp {
-      case &lt;NatCon N&gt;: return N
+      case &lt;NatCon N&gt;: toInt(unparseToString(N));
 
-      case &lt;StrCon S&gt;: return S
+      case &lt;StrCon S&gt;: return unparseToString(S);
 
-      case &lt;PICO-ID Id&gt;: return valueOf(Id)
+      case &lt;PICO-ID Id&gt;: return Env[Id];
 
-      case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;: {
-           Natural nat1 = evalExp(exp1);
-           Natural nat2 = evalExp(exp2);
-           return nat1 + nat2;
-      }
-      case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;: {
-           Natural nat1 = evalExp(exp1);
-           Natural nat2 = evalExp(exp2);
-           return nat1 + nat2;
-      }
-      case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;: {
-           StrCon str1 = evalExp(exp1);
-           StrCon str2 = evalExp(exp2);
-           return concat(str1, str2);
-      }
+      case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
+           return evalExp(exp1, Env).ival +
+                  evalExp(exp2, Env).ival;
+
+      case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
+           return evalExp(exp1, Env).ival -
+                  evalExp(exp2, Env).ival;
+   
+      case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
+          return evalExp(exp1, Env).sval +
+                  evalExp(exp2, Env).sval;
    } 
 }
 </programlisting></para>
@@ -2881,12 +2877,12 @@ CFSEGMENT cflow({STATEMENT ";"}* Stats){
            CFSEGMENT CF2 = cflow(Stats2);
            return &lt;CF1.entry, 
                    CF1.graph + CF2.graph + product(CF1.exit, CF2.entry), 
-                   CF2.exit&gt;
+                   CF2.exit&gt;;
       }
 
-      case [| |]: return &lt;{}, {}, {}&gt;
+      case [| |]: return &lt;{}, {}, {}&gt;;
     }
-}; 
+}
 
 CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
@@ -2908,8 +2904,8 @@ CFSEGMENT cflow(STATEMENT Stat){
                   &gt;;
       }
          
-      case &lt;STATEMENT Stat&gt;: return &lt;{Stat}, {}, {Stat}&gt;
-    };
+      case &lt;STATEMENT Stat&gt;: return &lt;{Stat}, {}, {Stat}&gt;;
+    }
 }
 </programlisting>
 
@@ -2924,12 +2920,12 @@ CFSEGMENT cflow(STATEMENT Stat){
 import pico/syntax/Pico;
 
 rel[PICO_ID, EXP] uses(PROGRAM P) {
-  return {&lt;Id, E&gt; | EXP E : P, PICO_ID Id := E}
+  return {&lt;Id, E&gt; | EXP E : P, PICO_ID Id := E};
 }
 
 rel[PICO_ID, STATEMENT] defs(PROGRAM P) { 
   return {&lt;Id, S&gt; | STATEMENT S : P, 
-                    [| &lt;PICO_ID Id&gt; := &lt;EXP Exp&gt; |] := S}
+                    [| &lt;PICO_ID Id&gt; := &lt;EXP Exp&gt; |] := S};
 }</programlisting>
 
       <para>The above uses a "matching condition" to decompose
@@ -2985,9 +2981,9 @@ PROGRAM cse(PROGRAM P) {
   
     visit P {
       case &lt;EXP E&gt;: if(PICO_ID Id := replacements(E)){
-                       yield Id
+                       yield Id;
                     }
-    };
+    }
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions E2 by Id, such
@@ -3045,9 +3041,9 @@ PROGRAM cp(PROGRAM P) {
  
     visit P {
      case &lt;PICO-ID Id&gt;: if(EXP E := replacements[Id]){
-                           yield E
+                           yield E;
                         }
-    };  
+    }
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions Id2 by the constant E,
@@ -3088,11 +3084,11 @@ type tuple[Stat theStat, Var theVar] Def;
 type tuple[Stat theStat, Var theVar] Use;
 
 set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
-    return invert(P)[S]
+    return invert(P)[S];
 }
 
 set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
-    return P(S)
+    return P(S);
 }
 
 rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS, 
@@ -3117,7 +3113,7 @@ rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS,
                             Def D : OUT[P]};
            OUT =  {&lt;S, D&gt; | int S : STATEMENT, 
                             Def D : DEF[S] + (IN[S] - KILL[S])}
-    };
+    }
     return IN;
 }</programlisting></para>
     </section>

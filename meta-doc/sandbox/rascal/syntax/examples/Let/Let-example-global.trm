@@ -13,7 +13,7 @@ global rel[Var,Var] Rn = {};
 Var newVar() {
     global int Cnt;  
     Cnt = Cnt + 1;
-    return "x" + Cnt
+    return "x" + toString(Cnt);
 }
 
 Exp rename(Exp E) {
@@ -25,15 +25,15 @@ Exp rename(Exp E) {
          Rn = {<V, Y>} + Rn;
          Exp E1R = rename(E1);
          Exp E2R = rename(E2);
-         return [| let <Var Y >= <Exp E1R>
+         return [| let <Y>= <E1R>
                    in 
-                      <Exp E2R>
+                      <E2R>
                    end 
-                |]
+                |];
           }
 
-    case <Var V>: return Rn(V)
+    case <Var V>: return Rn(V);
 
-    default: return E
-    };
+    default: return E;
+    }
 }
