@@ -1,0 +1,18 @@
+module Visitors
+
+imports Names
+
+exports
+
+sorts Visitor
+
+context-free syntax
+
+"all" "{" Visitor+ "}" -> Visitor {cons("all")}
+"one" "{" Visitor+ "}" -> Visitor {cons("one")}
+"some" "{" Visitor+ "}" -> Visitor {cons("some")}
+"yield" ";"            -> Visitor {cons("yield")}
+"repeat" "{" Visitor+ "}"               -> Visitor {cons("repeat")}
+"try" "{" Visitor+ "}" "fail" "{" Visitor+ "}" -> Visitor {cons("try-else")}
+Name ";"               -> Visitor {cons("call")}
+Statement             -> Visitor {cons("statement")}

@@ -2,6 +2,7 @@ module Declarations
 
 imports  Types 
 	Expressions 
+         Visitors
          languages/java/syntax/Statements [Type       => JavaType
                                            Block      => JavaBlock
                                            Statement  => JavaStatement
@@ -50,6 +51,8 @@ exports
 
     "rule"  Name DeclAnnos Rule                         -> Declaration {cons("rule-decl")}
     "arule" Name DeclAnnos ARule                        -> Declaration {cons("arule-decl")}
+
+    "visitor" Name "{" Visitor+ "}"                      -> Declaration {cons("visitor")}
 
 %% Define reserved words
     "data" | "view" | "type" | "anno" | "tag" |
