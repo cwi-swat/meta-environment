@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1805,7 +1805,9 @@ lexical syntax
         <listitem>
           <para>A <literal>yield</literal> statement that delivers a
           replacement value during a traversal initiated by a visit statement,
-          or a switch statement.</para>
+          or a switch statement.<caution>
+              <para>yield =&gt; replace? subst?</para>
+            </caution></para>
         </listitem>
 
         <listitem>
@@ -1952,11 +1954,8 @@ lexical syntax
         <listitem>
           <para>One or more control path can fail. This can be caused by an
           explicit fail statement or an if-then statement with missing
-          else-branch. In the case of failure all side-effects are
-          undone.<caution>
-              <para>Will we undo all side-effects or only the side-effects on
-              global variables?</para>
-            </caution></para>
+          else-branch. In the case of failure all side-effects (of local and
+          global variables) are undone.</para>
         </listitem>
 
         <listitem>
@@ -1974,6 +1973,75 @@ lexical syntax
               next rule is tried.</para>
             </listitem>
           </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>The possible choice points are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>case in a switch, visit statement.</para>
+            </listitem>
+
+            <listitem>
+              <para>match of left-hand side of rule, arule.</para>
+            </listitem>
+
+            <listitem>
+              <para>Selection of a binding of list variables during list
+              matching, except if there is one possibility left.</para>
+            </listitem>
+
+            <listitem>
+              <para>Selection of an element by a generator.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>The possible failure points are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>fail statement</para>
+            </listitem>
+
+            <listitem>
+              <para>a predicate used as generator in a comprehension.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>The possible success points are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>return (jumps out of function scope and pops all choice
+              points).</para>
+            </listitem>
+
+            <listitem>
+              <para>yield/replace (jumps to enclosing switch or visit or rule
+              choice)</para>
+            </listitem>
+
+            <listitem>
+              <para>true predicate in comprehension (jumos to next assignment
+              of generator).</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>On failure, the currently active choice point is used to undo
+          side-effects and to continue execution.</para>
+        </listitem>
+
+        <listitem>
+          <para>Side effects caused by built-in functions (like file i/o,
+          sockhet communication, etc.) are <emphasis
+          role="bold">not</emphasis> undone.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2503,7 +2571,13 @@ Exp subst(Var V1, Exp E1, Exp E2) {
            yield [| fn &lt;Var V3&gt; =\&gt; &lt;Exp EaS&gt; |];
         }
     }
-}</programlisting></para>
+}</programlisting><caution>
+          <para>\ in quoted patterns.</para>
+        </caution><caution>
+          <para>Ignore layout in SyntaxPatterns.</para>
+        </caution><caution>
+          <para>Call inside &lt; ... &gt;</para>
+        </caution></para>
     </section>
 
     <section>
@@ -2530,7 +2604,7 @@ import Let;
 Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     switch E {
     case let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end: {
-         Var Y = "x" + toString(Cnt);
+         Var Y = "x" + toString(Cnt);    %% PARSE!!!!!!!!!!!!!!!!!!
          Exp E1R = rename(E1, Rn, Cnt);
          Exp E2R = rename(E2, {&lt;V, Y&gt;} + Rn, Cnt1);
          return [| let &lt;Y&gt; = &lt;E1R&gt;
