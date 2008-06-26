@@ -8,4 +8,4 @@ equations
 
 equations
 
-[] syntax Production* = <V ["syntax" I is=2 [ A(l,c,l,l,l) [ G op=R gs=2  [[Production*]] ] ] ]>
+[] syntax Production* = <V ["syntax" I is=2 [ A(l,c,l,l,l) [ G op=R gs=5  [[Production*]] ] ] ]>
