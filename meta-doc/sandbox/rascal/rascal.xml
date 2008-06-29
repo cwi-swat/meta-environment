@@ -1458,7 +1458,7 @@ int f(&amp;T y, double x)</programlisting></para>
       </section>
 
       <section>
-        <title>Regular Expression Patterns (or operator)?</title>
+        <title>Regular Expression Patterns</title>
 
         <para>Regular expression patterns are ordinary regular expressions
         that are used to match a string value and to decompose it in parts and
@@ -1469,12 +1469,25 @@ int f(&amp;T y, double x)</programlisting></para>
         This means that they can occur in cases of <literal>visit</literal>
         and <literal>switch</literal> statements, on the left-hand side of the
         match operator (<literal>:=</literal>) and as declarator in
-        generators.</para>
+        generators.<caution>
+            <para>The following proposal differs slightly from what we
+            discussed earlier.</para>
+          </caution></para>
 
-        <para>We use the regular expression language of Java regex with the
-        following exceptions:</para>
+        <para>We use a regular expression language that extends the lexical
+        syntax rules found in SDF towards Java regex with the following
+        exceptions:</para>
 
         <itemizedlist>
+          <listitem>
+            <para>Regular expression are delimited by / and / optionally
+            followed by a modifier (see below).</para>
+          </listitem>
+
+          <listitem>
+            <para>Character classes are written in the SDF way.</para>
+          </listitem>
+
           <listitem>
             <para>Java regular expressions might have optional groups, which
             may introduce null bindings. Since null pointers are not allowed
@@ -1484,9 +1497,23 @@ int f(&amp;T y, double x)</programlisting></para>
 
           <listitem>
             <para>We allow named groups, syntax
-            <literal>(<replaceable>Name</replaceable>:<replaceable>Regex</replaceable>)</literal>,
+            <literal>&lt;<replaceable>Name</replaceable>:<replaceable>Regex</replaceable>&gt;</literal>,
             which introduce a variable of type <literal>str</literal> named
             <replaceable>Name</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para>We allow name use in a regular expression:
+            <literal>&lt;<replaceable>Name</replaceable>&gt;</literal> which
+            inserts the string value of <replaceable>Name</replaceable> in the
+            pattern.</para>
+          </listitem>
+
+          <listitem>
+            <para>We allow function calls inside a regular expression:
+            <literal>&lt;<replaceable>F</replaceable>(...)&gt;</literal> which
+            inserts the string value of the function call in the regular
+            expression.</para>
           </listitem>
 
           <listitem>
@@ -1497,37 +1524,35 @@ int f(&amp;T y, double x)</programlisting></para>
             <para>Named groups have to outermost, such that they can only bind
             in one way.</para>
           </listitem>
+
+          <listitem>
+            <para>Unlike Perl, Java uses the notation
+            <literal>(?<replaceable>Option</replaceable>)</literal> inside the
+            regular expression to set options like multi-line matching
+            <literal>(?m)</literal>, case-insensitive matching
+            <literal>(?i)</literal> etc. We let these options follow te
+            regular expression.</para>
+          </listitem>
+
+          <listitem>
+            <para>We omit some more esoteric features of Java regex like
+            (octal and hex constants, look ahead and look behind) but these
+            can always be added.</para>
+          </listitem>
+
+          <listitem>
+            <para>We have an explicit grammar for the regular expression
+            language that facilitates translation to Java regex.</para>
+          </listitem>
         </itemizedlist>
 
-        <caution>
-          <para>We need, as in other patterns, the possibility to insert
-          values in the regular expression. Proposal:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>&lt;Var: Rexexp&gt; declares a variable that matches
-              regexp.</para>
-            </listitem>
-
-            <listitem>
-              <para>&lt;Var&gt; inserts the string value of
-              <replaceable>Var</replaceable> in the pattern.</para>
-            </listitem>
-          </itemizedlist>
-        </caution>
-
-        <caution>
-          <para>It is probably best to give a grammar of all allowed regular
-          expressions (extended with the above addition).</para>
-        </caution>
-
-        <caution>
-          <para>Unlike Perl, Java uses the notation
-          <literal>(?<replaceable>Option</replaceable>)</literal> inside the
-          regular expression to set options like multi-line matching
-          <literal>(?m)</literal>, case-insensitive matching
-          <literal>(?i)</literal> etc.</para>
-        </caution>
+        <para>Here are some examples of regular patterns.<programlisting>/\brascal\b/i</programlisting>does
+        a case-insensitive match (<literal>i</literal>) of the word rascal
+        between word boundaries (<literal>\b</literal>). And<programlisting>/^.*?&lt;word:\w+&gt;&lt;rest:.*$&gt;/m</programlisting>does
+        a multi-line match (<literal>m</literal>), matches the first
+        consecutive word characters (<literal>\w</literal>) and assigns them
+        to the variable <literal>word</literal>. The remainder of the string
+        is assigned to the variable <literal>rest</literal>.</para>
       </section>
 
       <section xml:id="section.patterns">
@@ -2181,7 +2206,8 @@ public void main(list[str] argv){
 
 int wordCount(str S){
   int count = 0;
-  for(/[a-zA-Z0-9]+/: S){
+  %% the m-option enables multi-line matching
+  for(/[a-zA-Z0-9]+/m: S){
        count += 1;
   }
   return count;
@@ -2190,10 +2216,10 @@ int wordCount(str S){
 %% Here is an alternative declaration:
 int wordCount2(str S){
   int count = 0;
-  %% (?m) turns on multi-line matching
   %% \w matches any word character
   %% &lt;...&gt; are groups and should appear at the top level.
-  while (/(?m)^.*?&lt;word:\w+&gt;&lt;rest:.*&gt;/ := S) { 
+  %% m turns on multi-line matching
+  while (/^.*?&lt;word:\w+&gt;&lt;rest:.*$&gt;/m := S) { 
     count += 1; 
     S = rest; 
   }
@@ -2210,16 +2236,16 @@ int wordCount2(str S){
 
 str capitalize1(str S){
     visit S {
-      %% (?i) turns on case-independent matching
-      %% \b matchges a word boundary
-      case /(?i)\brascal\b/ =&gt; "Rascal"
+      %% \b matches a word boundary
+      %% i turns on case-independent matching
+      case /\brascal\b/i =&gt; "Rascal"
     }
     return S;
 }
 
 str capitalize2(str S, str Pat, str Repl){
     visit S {
-      case /(?i)\b&lt;Pat&gt;\b/ =&gt; Repl
+      case /\b&lt;Pat&gt;\b/i =&gt; Repl
     }
     return S;
 }</programlisting>The function <literal>capitalize1</literal>, replaces all
@@ -2233,6 +2259,18 @@ str capitalize2(str S, str Pat, str Repl){
       <para>The call <literal>capitalize2(Subject, "rascal",
       "Rascal")</literal> will have the same effect as
       <literal>capitalize1(Subject)</literal>.</para>
+    </section>
+
+    <section>
+      <title>Finding date-related variables</title>
+
+      <para>In year 2000 conversions, the starting point for analysis could be
+      variables with a date-related name. Here is how to find
+      them:<programlisting>module DateVars
+
+set[Var] getDateVars(Program P){
+   return {V | Var V : P, /.*(date|dt|year|yr).*$/i := V};
+}</programlisting></para>
     </section>
 
     <section>

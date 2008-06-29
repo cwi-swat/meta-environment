@@ -15,7 +15,8 @@ public void main(list[str] argv){
 
 int wordCount(str S){
   int count = 0;
-  for(/[a-zA-Z0-9]+/: S){
+  %% the m-option enables multi-line matching
+  for(/[a-zA-Z0-9]+/m: S){
        count += 1;
   }
   return count;
@@ -24,10 +25,10 @@ int wordCount(str S){
 %% Here is an alternative declaration:
 int wordCount2(str S){
   int count = 0;
-  %% (?m) turns on multi-line matching
   %% \w matches any word character
   %% <...> are groups and should appear at the top level.
-  while (/(?m)^.*?<word:\w+><rest:.*>/ := S) { 
+  %% m turns on multi-line matching
+  while (/^.*?<word:\w+><rest:.*$>/m := S) { 
     count += 1; 
     S = rest; 
   }

@@ -1,23 +1,21 @@
 module Patterns
 
-imports Names Types Expressions
- 
-exports
-sorts Pattern AbsPattern AbsPatternName AbsPatternArgs
-      SynPattern SynPatternChar SynPatternSymbol PatternVar QuotedSynPattern
-      RegPattern RegPatternChar
+imports Names Types Expressions RegExp
 
-lexical syntax
+exports
+  sorts Pattern AbsPattern AbsPatternName AbsPatternArgs
+        SynPattern SynPatternChar SynPatternSymbol PatternVar QuotedSynPattern
+        RegPattern
+
+  lexical syntax
          "\\<"                                       -> SynPatternChar
          "\\>"                                       -> SynPatternChar
          "\\|"                                       -> SynPatternChar
          ~[\<\>\|]                                   -> SynPatternChar
+         
+         "/" RegExp "/"  RegModifier?                -> RegPattern
 
-         ~[\/]                                       -> RegPatternChar
-         "\\/"                                       -> RegPatternChar
-         "/" RegPatternChar* "/"                     -> RegPattern
-
-context-free syntax
+  context-free syntax
          "<" Type? Name  ">"                         -> PatternVar
          "<" Call ">"                                -> PatternVar  %% TODO: better naming
 
