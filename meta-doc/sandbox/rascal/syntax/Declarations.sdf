@@ -3,14 +3,14 @@ module Declarations
 imports  Types 
 	Expressions 
          Visitors
-         languages/java/syntax/Statements [Type       => JavaType
-                                           Block      => JavaBlock
-                                           Statement  => JavaStatement
-                                           Assignment => JavaAssignment
-                                           Expression => JavaExpression
-                                           Identifier => JavaIdentifier
-                                           Name       => JavaName
-                                          ]
+%%         languages/java/syntax/Statements [Type       => JavaType
+%%                                           Block      => JavaBlock
+%%                                           Statement  => JavaStatement
+%%                                           Assignment => JavaAssignment
+%%                                           Expression => JavaExpression
+%%                                           Identifier => JavaIdentifier
+%%                                           Name       => JavaName
+%%                                          ]
 
 hiddens
   context-free start-symbols

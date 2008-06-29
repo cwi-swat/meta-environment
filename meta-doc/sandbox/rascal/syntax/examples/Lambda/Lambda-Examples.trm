@@ -26,30 +26,26 @@ Var fresh(Var V, set[Var] S) {
 Exp subst(Var V1, Exp E1, Exp E2) {
 
     switch E2 {
-      case <Var V2>: if(V1 == V2){ yield E1 ; } else { yield V2; }
+      case <Var V2>: replace-by (V1==V2) ? E1 : V2;
 
-      case <Exp Ea> <Exp Eb>: {
-        Exp EaS = subst(V, E, Ea);
-        Exp EbS = subst(V, E, Eb);
-        return [| <EaS> <EbS> |];
-      } 
+      case <Exp Ea> <Exp Eb>:
+        return [| <subst(V, E, Ea)> <subst(V, E, Eb)> |];
 
       case fn <Var V2> => <Var Ea>:
-        if (V1 == V2) { yield [| fn <V2> =\> <Ea> |]; }
+        if (V1 == V2) { replace-by [| fn <V2> =\> <Ea> |]; }
 
       case fn <Var V2> => <Exp Ea>:
-        if(V1 != V2 and not(V1 in freeVars(E2) and 
+        if(V1 != V2 && !(V1 in freeVars(E2) && 
            V2 in freeVars(E1))){
-           Exp E1S = subst(V1, E1, Ea);
-           yield [| fn <Var V2> =\> <Exp E1S> |];
+           replace-by [| fn <V2> =\> <subst(V1, E1, Ea)> |];
         }              
  
       case fn <Var V2> => <Exp Ea>: 
-        if(V1 != V2 and V1 in freeVars(Ea) and 
+        if(V1 != V2 && V1 in freeVars(Ea) &&
            V2 in freeVars(E1)){
            Var V3 = fresh(V2, freeVars(Ea) + freeVars(E1));
            Exp EaS = subst(V1, E1, subst(V2, V3, E2));
-           yield [| fn <Var V3> =\> <Exp EaS> |];
+           replace-by [| fn <V3> =\> <EaS> |];
         }
     }
 }

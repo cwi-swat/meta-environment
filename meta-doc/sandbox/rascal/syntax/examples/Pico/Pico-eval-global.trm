@@ -4,7 +4,7 @@ import pico/syntax/Pico;
 
 data PICO_VALUE int ival | str sval;
 
-type map[PICO_ID, PICO_VALUE] VEnv;
+type map[PICO-ID, PICO_VALUE] VEnv;
 
 global VEnv Env = {};
 
@@ -39,7 +39,7 @@ void evalStatements({STATEMENT ";"}* Series){
 void evalStatement(STATEMENT Stat){
     global Venv Env;
     switch Stat {
-      case [| <PICO_ID Id> = <EXP Exp> |]: {
+      case [| <PICO-ID Id> = <EXP Exp> |]: {
         Env[Id] = evalExp(Exp);
         return;
       }

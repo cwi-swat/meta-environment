@@ -36,7 +36,6 @@ context-free syntax
 	QualName                                                -> Expression {cons("exp-qual-variable")}
          StandardOperator                                        -> Expression {cons("exp-std-op")}
          Call                                                    -> Expression {cons("exp-call")}
-         Expression "[" Expression  "]"                          -> Expression {cons("exp-index")}
          "fun" AnonymousFunctionType Block                       -> Expression {cons("exp-anon-fun")}
 
 %% Lists, sets and tuples
@@ -45,6 +44,8 @@ context-free syntax
 	"<" {Expression ","}+ ">"                               -> Expression {cons("exp-tuple")}
 
 context-free priorities
+%% Indexing
+         Expression "[" Expression  "]"                          -> Expression {cons("exp-index")} >
 %% Field selection
          Expression "." Name                                     -> Expression {cons("exp-field")} >
 %% Closure operators
@@ -54,7 +55,7 @@ context-free priorities
        } >
 
 %% Standard operators
-   %% multiplication/intersection
+   %% multiplication/product
         Expression "*" Expression                                -> Expression {cons("exp-mul"), left} >
    %% intersection
         Expression "&" Expression                                -> Expression {cons("exp-inter"), left} >     
@@ -62,7 +63,7 @@ context-free priorities
         Expression "/" Expression                                -> Expression {cons("exp-div"), left} >
    %% addition/union/concatenation (of tuples, lists and strings)
         { Expression "+" Expression                              -> Expression {cons("exp-add"), left}
-   %% subtraction/difference
+   %% subtraction, difference
           Expression "-" Expression                              -> Expression {cons("exp-sub"), left}
         } >
    %% get value of annotation
@@ -81,10 +82,10 @@ context-free priorities
          Expression "?"  Expression                              -> Predicate {cons("pred-has-anno")}
          } >
 
-	"not" Predicate                                         -> Predicate {cons("pred-not")} >
-	Predicate "and" Predicate                               -> Predicate {left,cons("pred-and")} >
-	Predicate "or" Predicate                                -> Predicate {left,cons("pred-or")} >
-         Predicate "implies" Predicate                           -> Predicate {cons("pred-implies")}
+	"!" Predicate                                           -> Predicate {cons("pred-not")} >
+	Predicate "&&" Predicate                                -> Predicate {left,cons("pred-and")} >
+	Predicate "||" Predicate                                -> Predicate {left,cons("pred-or")}
+%%         Predicate "->" Predicate                                -> Predicate {cons("pred-implies")}
 
 context-free syntax
 	Declarator ":=" Expression                              -> Predicate {cons("pred-match")}
@@ -97,7 +98,7 @@ context-free syntax
          Type Name                                               -> Declarator {cons("decl-type-name")}
          StructuredType                                          -> Declarator {cons("decl-struct-type")}
          SynPattern                                              -> Declarator {cons("decl-synpat")}
-         (Type Name "=")? RegPattern                             -> Declarator {cons("decl-regpat")}
+         RegPattern                                              -> Declarator {cons("decl-regpat")}
 
          ("top-down" | "top-down-break" | 
           "bottom-up" | "bottom-up-break" |
@@ -118,16 +119,18 @@ context-free syntax
          "forall" "(" SimpleGenerator "|" Predicate ")"          -> Expression {cons("exp-forall")}
 
 context-free syntax
+%% Conditional Expression
+          Predicate "?" Expression ":" Expression                -> Expression {cons("exp-cond")}
 %% Cases and Rules
          QuotedSynPattern                                        -> Expression {cons("exp-qpat")}
 
          "=>" Expression                                         -> CaseAction {cons("case-action-1")}
          ":" Statement                                           -> CaseAction {cons("case-action-2")}
 
-         "case"  SynPattern "=>" SynPattern                      -> Case       {cons("case1")}
+         "case" SynPattern "=>" SynPattern                       -> Case       {cons("case1")}
          "case" SynPattern ":" Statement                         -> Case       {cons("case2")}
+         "case" RegPattern CaseAction                            -> Case       {cons("rcase")}
          "acase" AbsPattern CaseAction                           -> Case       {cons("acase")}
-         "rcase" (Type Name "=")? RegPattern CaseAction          -> Case       {cons("rcase")}
 
           SynPattern "=>" SynPattern                             -> Rule       {cons("rule1")}
           SynPattern ":" Statement                               -> Rule       {cons("rule2")}
@@ -140,6 +143,7 @@ context-free syntax
    	"visit" Strategy Expression "{" Case+ "}"               -> Statement  {cons("stat-visit")}
          "solve" "{" { Assignment ";"}+ "}"                      -> Statement  {cons("stat-solve")}
          "for" "(" {Generator ","}+ ")" Block                    -> Statement  {cons("stat-for")}
+         "while" "(" Predicate ")" Block                         -> Statement  {cons("stat-while")}
          "if" "(" Predicate ")" Block "else" Block               -> Statement  {cons("stat-if-else")}
          "if" "(" Predicate ")" Block                            -> Statement  {cons("stat-if-then")}
          Call  ";"                                               -> Statement  {cons("stat-call")}
@@ -161,16 +165,16 @@ context-free syntax
          Declarator  "=" Expression ";"                          -> Statement   {cons("varinit")}
          "global" Type Name ("=" Expression)? ";"                -> Statement   {cons("-stat-global")}
 
-%% Return, yield, fail
+%% Return, replace-by, fail
          "return" Predicate? ";"                                 -> Statement   {cons("stat-return")}
-         "yield" Expression ";"                                  -> Statement   {cons("stat-yield")}
+         "replace-by" Expression ";"                             -> Statement   {cons("stat-replace-by")}
          "fail" ";"                                              -> Statement   {cons("stat-fail")}
 
 %% Exception statements
          "throw" Expression ";"                                  -> Statement   {cons("stat-throw")}
-         "catch" Pattern ":" Statement                           -> Catch       {cons("catch")}
+         "catch" Pattern? ":" Statement                          -> Catch       {cons("catch")}
          "finally" ":" Statement                                 -> Finally     {cons("finally")}
-         "try" Statement Catch* Finally? ";"                     -> Statement   {cons("stat-try")}
+         "try" Statement Catch* Finally?                         -> Statement   {cons("stat-try")}
 
 %% Statement sequencing and blocks
          "{" Statement* "}"                                      -> Block       {cons("block")}
@@ -181,5 +185,5 @@ context-free syntax
          "not" | "and" | "or" | "implies" | "global" | 
          "case" | "acase" | "rcase" | "default" | "switch" | 
          "visit" | "try" | "catch" | "finally" | "solve"  |
-         "for" | "if" | "else" | "return" | "throw" |
-         "yield" | "fail" | "assert"                             -> Name {reject}
+         "for" | "while" | "if" | "else" | "return" | "throw" |
+         "replace-by" | "fail" | "assert"                       -> Name {reject}

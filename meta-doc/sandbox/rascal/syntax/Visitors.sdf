@@ -1,6 +1,6 @@
 module Visitors
 
-imports Names
+imports Names Expressions
 
 exports
 

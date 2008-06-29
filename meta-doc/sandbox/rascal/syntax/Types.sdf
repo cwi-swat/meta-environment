@@ -3,6 +3,7 @@ module Types
 imports 
         SDFSymbol
         Names
+        languages/java/syntax/Lexical
 
 hiddens
   context-free start-symbols
@@ -38,7 +39,7 @@ exports
     "rel" "[" OptNamedTypes "]"                              -> StructuredType {cons("rel-type")}
     "tuple" "[" OptNamedTypes "]"                            -> StructuredType {cons("tuple-type")}
 
-    "+" | "-" | "*" | "/" | "&" | "==" | 
+    "+" | "-" | "*" | "/" | "&" | "==" | "!=" |
     "<" | "<=" |">" | ">="                                   -> StandardOperator
 
     "..."                                                    -> VarArgs

@@ -6,17 +6,30 @@ public void main(list[str] argv){
     try {
       counts[fileName] = wordCount(readFile(fileName));
     }
-    finally: println("Skipping file <fileName>");
-  };
- 
-  int total = sum(range(counts));
-  println("In total <total> words in all files");
+    catch: println("Skipping file <fileName>");
+  }
+
+  println("In total <sum(range(counts))> words in all files");
   println("Word counts per file: <counts>");
 }
 
 int wordCount(str S){
-  switch S {
-    rcase list[str] words = /[a-zA-Z0-9]+/:
-        return size(words)
+  int count = 0;
+  for(/[a-zA-Z0-9]+/: S){
+       count += 1;
   }
+  return count;
+}
+
+%% Here is an alternative declaration:
+int wordCount2(str S){
+  int count = 0;
+  %% (?m) turns on multi-line matching
+  %% \w matches any word character
+  %% <...> are groups and should appear at the top level.
+  while (/(?m)^.*?<word:\w+><rest:.*>/ := S) { 
+    count += 1; 
+    S = rest; 
+  }
+  return count;
 }

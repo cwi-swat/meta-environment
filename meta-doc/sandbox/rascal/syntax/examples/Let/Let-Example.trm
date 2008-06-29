@@ -11,12 +11,10 @@ import Let;
 Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     switch E {
     case let <Var V> = <Exp E1> in <Exp E2> end: {
-         Var Y = "x" + toString(Cnt);
-         Exp E1R = rename(E1, Rn, Cnt);
-         Exp E2R = rename(E2, {<V, Y>} + Rn, Cnt1);
-         return [| let <Y> = <E1R>
+         return [| let <parseString("x" + toString(Cnt))> = 
+                       <rename(E1, Rn, Cnt)>
                    in 
-                      <E2R>
+                      <rename(E2, {<V, Y>} + Rn, Cnt+1)>
                    end
                 |];
           }

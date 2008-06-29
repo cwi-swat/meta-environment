@@ -1,9 +1,12 @@
 module Names
 
 exports
-  imports languages/java/syntax/Lexical [Identifier => Name]
+  sorts Name QualName
+  lexical syntax
+    [A-Za-z\_] [A-Za-z0-9\_\-]* -> Name
 
-  sorts QualName
+  lexical restrictions
+    Name -/- [a-zA-Z0-9\_\-]
+ 
   context-free syntax
-
     {Name "::"}+  -> QualName {avoid,cons("QualName")}

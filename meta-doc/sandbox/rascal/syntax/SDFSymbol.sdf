@@ -6,10 +6,25 @@ module SDFSymbol
 %%imports languages/aterm/syntax/IntCon
 
 imports languages/sdf2/syntax/Character-Class
-imports languages/java/syntax/Lexical [Identifier => Name]
+imports languages/java/syntax/Lexical
+imports Names
+imports basic/StrCon
 
 exports
   sorts Symbol
+
+  sorts SingleQuotedStrCon SingleQuotedStrChar
+  lexical syntax
+
+    "\\n"                                         -> SingleQuotedStrChar {cons("newline")}
+    "\\t"                                         -> SingleQuotedStrChar {cons("tab")}
+    "\\'"                                         -> SingleQuotedStrChar {cons("quote")}
+    "\\\\"                                        -> SingleQuotedStrChar {cons("backslash")}
+    "\\" a:[0-9]b:[0-9]c:[0-9]                    -> SingleQuotedStrChar {cons("decimal")}
+    ~[\0-\31\n\t\'\\]                             -> SingleQuotedStrChar {cons("normal")}
+
+    [\'] chars:SingleQuotedStrChar* [\']          -> SingleQuotedStrCon  {cons("default")}
+
   context-free syntax
 
     Name                                          -> Symbol {cons("name")}
@@ -23,6 +38,11 @@ exports
     "left":Symbol "|" "right":Symbol              -> Symbol {right,cons("alt")}
 
      CharClass                                    -> Symbol {cons("cc")}
+
+    left-quote:"`" Symbol right-quote:"`"         -> Symbol  {cons("lifting")}
+    string:StrCon                                 -> Symbol {cons("lit")}
+    ci-string:SingleQuotedStrCon                  -> Symbol {cons("ci-lit")}
+
 
   context-free priorities
     {Symbol "?"               -> Symbol

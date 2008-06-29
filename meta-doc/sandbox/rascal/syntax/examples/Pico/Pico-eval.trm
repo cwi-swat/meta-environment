@@ -3,7 +3,7 @@ import pico/syntax/Pico;
  
 data PICO_VALUE int ival | str sval;
 
-type map[PICO_ID, PICO_VALUE] VEnv;
+type map[PICO-ID, PICO_VALUE] VEnv;
 
 VEnv evalProgram(PROGRAM P){
     switch P {
@@ -34,7 +34,7 @@ VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
 
 VEnv evalStatement(STATEMENT Stat, VEnv Env){
     switch Stat {
-      case [| <PICO_ID Id> = <EXP Exp> |]: {
+      case [| <PICO-ID Id> = <EXP Exp> |]: {
         Env[Id] = evalExp(Exp, Env);
         return Env;
       }
@@ -69,7 +69,7 @@ PICO_VALUE evalExp(Exp exp, VEnv Env) {
       case StrCon[| <StrCon S> |]: 
            return unparseToString(S);
 
-      case PICO_ID[| <PICO_ID Id> |]: 
+      case PICO-ID[| <PICO-ID Id> |]: 
            return Env[Id];
 
       case <EXP exp1> + <EXP exp2>:

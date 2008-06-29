@@ -52,7 +52,7 @@ int cnt(BTREE T) {
 
 BTREE inc(BTREE T) {
     visit T {
-      case <Integer N>: yield parseString(toInt(N)+1);
+      case <Integer N>: replace-by parseString(toInt(N)+1);
     }
 }
 
@@ -108,7 +108,7 @@ tuple[int, BTREE] count_and_inc(BTREE T, int D) {
     visit T {
       case <Integer N>: { C = C + 1; 
                           int N1 = toInt(N) + D; 
-                          yield parse(unparseToString(N1));
+                          replace-by parse(unparseToString(N1));
                         }
      }
      return <C, T>;

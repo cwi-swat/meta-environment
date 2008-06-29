@@ -14,7 +14,7 @@ CFSEGMENT cflow({STATEMENT ";"}* Stats){
            CFSEGMENT CF1 = cflow(Stat);
            CFSEGMENT CF2 = cflow(Stats2);
            return <CF1.entry, 
-                   CF1.graph + CF2.graph + product(CF1.exit, CF2.entry), 
+                   CF1.graph + CF2.graph + (CF1.exit * CF2.entry), 
                    CF2.exit>;
       }
 
@@ -26,8 +26,8 @@ CFSEGMENT cflow(STATEMENT Stat){
     switch Stat {
       case while <EXP Exp> do <{STATEMENT ";"}* Stats> od : {
            CFSEGMENT CF = cflow(Stats);
-           return <{Exp}, product({Exp}, CF.entry) + CF.graph + 
-                          product(CF.exit, {Exp}),
+           return <{Exp}, ({Exp} * CF.entry) + CF.graph + 
+                          (CF.exit * {Exp}),
                    {Exp}>;
       }
                 
@@ -36,8 +36,8 @@ CFSEGMENT cflow(STATEMENT Stat){
            CFSEGMENT CF1 = cflow(Stats1);
            CFSEGMENT CF2 = cflow(Stats2);
            return < {Exp}, 
-                    product({Exp}, CF1.entry) + 
-                    product({Exp}, CF2.entry) + CF1.graph + CF2.graph,
+                    ({Exp} * CF1.entry) + 
+                    ({Exp} * CF2.entry) + CF1.graph + CF2.graph,
                     CF1.exit + CF2.exit
                   >;
       }

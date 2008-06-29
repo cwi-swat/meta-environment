@@ -19,6 +19,7 @@ lexical syntax
 
 context-free syntax
          "<" Type? Name  ">"                         -> PatternVar
+         "<" Call ">"                                -> PatternVar  %% TODO: better naming
 
          SynPatternChar                              -> SynPatternSymbol
          PatternVar                                  -> SynPatternSymbol
