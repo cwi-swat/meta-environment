@@ -49,9 +49,6 @@ AC_DEFUN([META_SETUP],
   AC_SUBST([EXTERNAL_INSTALLED_JARS])
   AC_SUBST([TOOLBUSFLAGS])
 
-dnl Only generate basic Eclipse meta data if no Eclipse meta
-dnl data for Java packages have been generated already.
-
   if test -z "$JAVA" ; then
     META_GENERATE_ECLIPSE_PLUGIN_FILES(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]),[],[],[],[],[])
   fi
@@ -414,6 +411,9 @@ dnl ---------------------------------
 AC_DEFUN([META_GENERATE_PKG_CONFIG_FILES],[
 cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' > $1-uninstalled.pc
 echo "PkgConfigPath=$PKG_CONFIG_PATH" >> $1.pc
+if test "a" != "a${BUILD_ID}" ; then
+  echo "BuildId=${BUILD_ID}" >> $1.pc
+fi
 ])
 
 dnl META_GENERATE_ECLIPSE_PLUGIN_FILES_FOR_JAVA(PKGNAME,VERSION,JARFILE,PACKAGES,DEPS,MAINCLASS,LOCALJARS)

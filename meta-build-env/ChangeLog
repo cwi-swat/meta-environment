@@ -1,5 +1,11 @@
 
 
+Mon Jun 30 15:26:38 CEST 2008 <{storm,jurgenv}@cwi.nl>
+ * meta-build.ant: use generated MANIFEST.MF in jar target such that
+   eclipse plugins will work.
+ * meta-build.m4: generates build id in pc files when BUILD_ID environment
+   variable is set.
+
 Thu Jun 12 16:16:08 CEST 2008 <jurgenv@cwi.nl>
  * meta-build.m4: added another trick to generate newlines in MANIFEST.MF,
    the code was not portable to macosx, now it is.
