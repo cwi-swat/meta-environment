@@ -632,10 +632,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			synchronized(job){
 				while(job.response == null){
 					try{
-						job.wait(2000);
-						if (job.response == null) {
-							return termFactory.parse("time-out");
-						}
+						job.wait();
 					}catch(InterruptedException irex){
 						// Ignore this, since I don't want to know about it.
 					}

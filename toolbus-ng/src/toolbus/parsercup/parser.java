@@ -7,16 +7,16 @@
 package toolbus.parsercup;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.Reader;
 import java.io.FileReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.atom.Assign;
@@ -58,15 +58,14 @@ import toolbus.process.DynamicProcessCall;
 import toolbus.process.IfElse;
 import toolbus.process.IfThen;
 import toolbus.process.Iteration;
+import toolbus.process.LeftBiasedAlternative;
 import toolbus.process.LetDefinition;
 import toolbus.process.Merge;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessExpression;
-import toolbus.process.LeftBiasedAlternative;
 import toolbus.process.RightBiasedAlternative;
 import toolbus.process.Sequence;
-import toolbus.parsercup.SyntaxErrorException;
 import toolbus.tool.ToolDefinition;
 import aterm.AFun;
 import aterm.ATerm;
@@ -1964,9 +1963,6 @@ class CUP$parser$actions {
           case 46: // tool_atom ::= SND_CANCEL LPAR term COMMA term RPAR 
             {
               Atom RESULT =null;
-		ATerm t1 = (ATerm)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		ATerm t2 = (ATerm)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-
               CUP$parser$result = parser.getSymbolFactory().newSymbol("tool_atom",7, RESULT);
             }
           return CUP$parser$result;

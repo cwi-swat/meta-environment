@@ -25,13 +25,11 @@ import toolbus.commandline.CommandLine;
 import toolbus.exceptions.NoSuchProcessDefinitionException;
 import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
-import toolbus.exceptions.ToolBusExecutionException;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
 import toolbus.matching.MatchStore;
 import toolbus.parsercup.parser;
-import toolbus.parsercup.SyntaxErrorException;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessExpression;
@@ -65,11 +63,11 @@ public class ToolBus{
 	protected final MatchStore matchStore;
 	
 	private final ConcurrentHashMap<String, ToolDefinition> tooldefs;
-	private ToolInstanceManager toolInstanceManager;
+	private final ToolInstanceManager toolInstanceManager;
 	private volatile IToolExecutorFactory toolExecutorFactory;
 	
-	protected SocketConnectionHandler connectionHandler;
-	private DirectConnectionHandler directConnectionHandler;
+	protected volatile SocketConnectionHandler connectionHandler;
+	private final DirectConnectionHandler directConnectionHandler;
 	
 	private final PrintWriter out;
 	
@@ -95,7 +93,8 @@ public class ToolBus{
 		
 		portNumber = -1; // Undefined.
 		
-		
+		toolInstanceManager = new ToolInstanceManager();
+		toolExecutorFactory = new DefaultToolExecutorFactory();
 		
 		tbfactory = TBTermFactory.getInstance();
 		this.out = out;
@@ -108,7 +107,7 @@ public class ToolBus{
 		
 		propertyManager = new PropertyManager(args);
 		
-		
+		directConnectionHandler = new DirectConnectionHandler(this);
 		
 		startTime = System.currentTimeMillis();
 	}
@@ -590,8 +589,6 @@ public class ToolBus{
 	}
 	
 	public void prepare(){
-		initializeToolAdministration();
-		
 		if(nerrors > 0){
 			System.err.println("ToolBus cannot continue execution due to errors in Tscript");
 			return;
@@ -600,6 +597,8 @@ public class ToolBus{
 		if(propertyManager.withConsole()) CommandLine.createCommandLine(this, System.in, false);
 		
 		// Initialize and start the connection handler.
+		connectionHandler = new SocketConnectionHandler(this);
+		
 		try{
 			int userSpecifiedPort = propertyManager.getUserSpecifiedPort();
 			if(userSpecifiedPort == -1){
@@ -626,7 +625,6 @@ public class ToolBus{
 	 * This method handles the execution of the process logic.
 	 */
 	public void execute(){
-		
 		ProcessInstance pi = null;
 		ProcessInstanceIterator processesIterator = new ProcessInstanceIterator(processes);
 		running = true;
@@ -691,13 +689,6 @@ public class ToolBus{
 		synchronized(shutdownLock){
 			shutdownLock.notifyAll();
 		}
-	}
-
-	private void initializeToolAdministration() {
-		toolInstanceManager = new ToolInstanceManager();
-		toolExecutorFactory = new DefaultToolExecutorFactory();
-		connectionHandler = new SocketConnectionHandler(this);
-		directConnectionHandler = new DirectConnectionHandler(this);
 	}
 	
 	/**

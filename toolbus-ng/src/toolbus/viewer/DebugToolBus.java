@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import toolbus.SocketConnectionHandler;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
@@ -129,6 +131,8 @@ public class DebugToolBus extends ToolBus{
 		}
 		
 		viewer.toolbusStarting();
+
+		connectionHandler = new SocketConnectionHandler(this);
 		
 		try{
 			int userSpecifiedPort = propertyManager.getUserSpecifiedPort();
