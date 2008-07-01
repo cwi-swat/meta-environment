@@ -1426,6 +1426,7 @@ class CUP$parser$actions {
                                                       throw new ToolBusExecutionException(tbe.getMessage(), makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)));
                                              	  }
                                                   parser.processName = "";
+                                         		  parser.declaredVaribles.clear();
                                                 }
                                              
               CUP$parser$result = parser.getSymbolFactory().newSymbol("proc_def",26, RESULT);

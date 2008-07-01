@@ -648,6 +648,7 @@ proc_def::=
                                                       throw new ToolBusExecutionException(tbe.getMessage(), makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)));
                                              	  }
                                                   parser.processName = "";
+                                         		  parser.declaredVaribles.clear();
                                                 }
                                              :}
      ;
