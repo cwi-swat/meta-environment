@@ -938,6 +938,7 @@ public class parser extends java_cup.runtime.lr_parser {
    protected List<ATerm> toolbusProcessCalls = new ArrayList<ATerm>();
    
    protected HashMap<String, ATerm> declaredVaribles = new HashMap<String, ATerm>();
+   private boolean parseIncludes = true;
    
    protected Stack<Boolean> ifdefStack;
 	
@@ -968,6 +969,10 @@ public class parser extends java_cup.runtime.lr_parser {
      this(new HashSet<String>(), new ArrayList<ATerm>(), filename, input, tb);
    }
    
+   public void parseIncludes(boolean parseIncludes){
+	   this.parseIncludes = parseIncludes;
+   }
+   
    public String[] scriptsNames(){
 		List<String> scriptNamesList = new ArrayList<String>();
 		Iterator<String> scriptNamesIterator = includedFiles.iterator();
@@ -995,7 +1000,7 @@ public class parser extends java_cup.runtime.lr_parser {
 		if(filename.length() > 0 && filename.charAt(0) == File.separatorChar){
 			File f = new File(filename);
 			if(f.exists()){
-				doParse(filename);
+				if(parseIncludes) doParse(filename);
 				return;
 			}
 		}else{

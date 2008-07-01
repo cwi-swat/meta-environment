@@ -65,7 +65,7 @@ public class MatchStore{
 	 * @param atomSet
 	 *            The complete collection of atoms, for which the relations must to be calculated.
 	 */
-	public void intialize(List<Atom> atomSet){
+	public void initialize(List<Atom> atomSet){
 		this.atomSet = atomSet;
 		
 		calculateMatches();

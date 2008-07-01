@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
@@ -290,7 +289,7 @@ public class ToolBus{
 				}
 			});
 			
-			matchStore.intialize(atomSignature);
+			matchStore.initialize(atomSignature);
 			
 			calculateToolSignatures(atomSignature);
 			
@@ -301,51 +300,6 @@ public class ToolBus{
 		}catch(ToolBusException te){
 			error(filename, te.getMessage());
 			te.printStackTrace();
-		}catch(FileNotFoundException fnfex){
-			error(filename, fnfex.getMessage());
-			fnfex.printStackTrace();
-		}catch(RuntimeException rex){
-			throw rex;
-		}catch(Exception ex){
-			error(filename, ex.getMessage());
-			ex.printStackTrace();
-		}
-		return nerrors == 0;
-	}
-	
-	public boolean parsecupString(String filename, String inMemoryScript) throws ToolBusException{
-		try{
-			parser parser_obj = new parser(this, filename, new StringReader(inMemoryScript));
-			parser_obj.parse();
-			
-			// Initialize the signatures.
-			final List<Atom> atomSignature = new ArrayList<Atom>();
-			procdefs.iterate(new ReadOnlyHashMapEntryHandler<String, ProcessDefinition>(){
-				public int handle(String key, ProcessDefinition value){
-					ProcessExpression originalProcessExpression = value.getOriginalProcessExpression();
-					AtomSet atoms = originalProcessExpression.getAtoms();
-					Iterator<Atom> atomSetIterator = atoms.iterator();
-					while(atomSetIterator.hasNext()){
-						Atom a = atomSetIterator.next();
-						atomSignature.add(a);
-					}
-					
-					return CONTINUE;
-				}
-			});
-			
-			matchStore.intialize(atomSignature);
-			
-			calculateToolSignatures(atomSignature);
-			
-			parser_obj.generateInitialProcessCalls();
-			
-			// Keep track of the names of all the scripts for debugging purposes.
-			scriptsNames = parser_obj.scriptsNames();
-		}catch(ToolBusException te){
-			error(filename, te.getMessage());
-			te.printStackTrace();
-			throw te;
 		}catch(FileNotFoundException fnfex){
 			error(filename, fnfex.getMessage());
 			fnfex.printStackTrace();
