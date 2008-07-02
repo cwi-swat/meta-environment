@@ -26,8 +26,14 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 
 		private SingletonToolBus(){
 			super();
-
-			toolbus = new ToolBus(new String[]{"-properties", getConfigFile()});
+			String configFile = getConfigFile();
+			
+			if (configFile != null) {
+			  toolbus = new ToolBus(new String[]{"-properties", getConfigFile()});
+			}
+			else {
+				throw new RuntimeException("There was no proper toolbus extension found, so the ToolBus will not function");
+			}
 		}
 
 		public ToolBus getToolBus(){
@@ -81,7 +87,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 
 	private static void runToolBus(final ToolBus toolbus){
 		try{
-			if (toolbus.parsecup()){
+			if (toolbus != null && toolbus.parsecup()){
 				toolbus.prepare();
 				Thread thread = new Thread(new Runnable(){
 					public void run() {
