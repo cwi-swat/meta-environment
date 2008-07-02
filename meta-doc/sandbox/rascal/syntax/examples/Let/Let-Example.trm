@@ -9,7 +9,7 @@ import Let;
 %% Int: counter to generate unique variables
 
 Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
-    switch E {
+    switch (E) {
     case let <Var V> = <Exp E1> in <Exp E2> end: {
          return [| let <parseString("x" + toString(Cnt))> = 
                        <rename(E1, Rn, Cnt)>

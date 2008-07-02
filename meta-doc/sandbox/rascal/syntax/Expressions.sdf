@@ -98,6 +98,7 @@ context-free syntax
          Type Name                                               -> Declarator {cons("decl-type-name")}
          StructuredType                                          -> Declarator {cons("decl-struct-type")}
          SynPattern                                              -> Declarator {cons("decl-synpat")}
+         AbsPattern                                              -> Declarator {cons("decl-abspat")}
          RegPattern                                              -> Declarator {cons("decl-regpat")}
 
          ("top-down" | "top-down-break" | 
@@ -107,7 +108,7 @@ context-free syntax
          "," Expression ","                                      -> Increment   {cons("increment")}
          "[" Expression Increment? ".." Expression "]"           -> Range       {cons("range")}
 
-	Declarator ":" Strategy (Expression | Range)            -> SimpleGenerator {cons("generator")}
+	Strategy Declarator ":"  (Expression | Range)           -> SimpleGenerator {cons("generator")}
 
          SimpleGenerator                                         -> Generator
          Predicate                                               -> Generator
@@ -139,8 +140,8 @@ context-free syntax
          "default" ":" Statement                                 -> Case       {cond("default-case")}
 
 %% Switch, visit, solve, for, if and call statement
- 	"switch" Expression "{" Case+ "}"                       -> Statement  {cons("stat-switch")}
-   	"visit" Strategy Expression "{" Case+ "}"               -> Statement  {cons("stat-visit")}
+ 	"switch" "(" Expression ")" "{" Case+ "}"               -> Statement  {cons("stat-switch")}
+   	Strategy "visit"  "(" Expression ")" "{" Case+ "}"      -> Statement  {cons("stat-visit")}
          "solve" "{" { Assignment ";"}+ "}"                      -> Statement  {cons("stat-solve")}
          "for" "(" {Generator ","}+ ")" Block                    -> Statement  {cons("stat-for")}
          "while" "(" Predicate ")" Block                         -> Statement  {cons("stat-while")}
@@ -162,12 +163,12 @@ context-free syntax
          Assignment  ";"                                         -> Statement   {cons("stat-assign")}
 
 %% Declaration statements
-         Declarator  "=" Expression ";"                          -> Statement   {cons("varinit")}
-         "global" Type Name ("=" Expression)? ";"                -> Statement   {cons("-stat-global")}
+         Declarator  ("=" Expression)? ";"                       -> Statement   {cons("varinit")}
+         ("global" | "dynamic")  Type Name ("=" Expression)? ";" -> Statement   {cons("stat-global-dynamic")}
 
 %% Return, replace-by, fail
          "return" Predicate? ";"                                 -> Statement   {cons("stat-return")}
-         "replace-by" Expression ";"                             -> Statement   {cons("stat-replace-by")}
+         "insert" Expression ";"                                -> Statement    {cons("stat-insert")}
          "fail" ";"                                              -> Statement   {cons("stat-fail")}
 
 %% Exception statements
@@ -181,9 +182,8 @@ context-free syntax
          Block                                                   -> Statement   {cons("stat-block")}
 
 %% Define reserved words:
-         "true" | "false" |
-         "not" | "and" | "or" | "implies" | "global" | 
-         "case" | "acase" | "rcase" | "default" | "switch" | 
+         "true" | "false" | "global" | 
+         "case" | "acase" | "default" | "switch" | 
          "visit" | "try" | "catch" | "finally" | "solve"  |
          "for" | "while" | "if" | "else" | "return" | "throw" |
-         "replace-by" | "fail" | "assert"                       -> Name {reject}
+         "insert" | "fail" | "assert"                       -> Name {reject}

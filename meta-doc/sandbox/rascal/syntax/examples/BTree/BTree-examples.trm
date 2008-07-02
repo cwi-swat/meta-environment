@@ -14,7 +14,7 @@ int cnt(BTREE T) {
 
 int cnt(BTREE T) {
     int C = 0;
-    visit T {
+    visit(T) {
       case <Integer N> : C = C+1;
     }
     return C;
@@ -36,7 +36,7 @@ int sumtree(BTREE T) {
 
 int cnt(BTREE T) {
     int C = 0;
-    visit T {
+    visit(T) {
       case <Integer N> : C = C+toInt(N);
     }
     return C;
@@ -51,22 +51,22 @@ int cnt(BTREE T) {
 %% - from int back to Integer (using parseString)
 
 BTREE inc(BTREE T) {
-    visit T {
-      case <Integer N>: replace-by parseString(toInt(N)+1);
+    visit (T) {
+      case <Integer N>: insert parseString(toInt(N)+1);
     }
 }
 
 %% Ex4: full replacement of g by i
 %% The whole repertoire of ASF+SDF traversal functions is available:
-%% - visit bottom-up T { ... }
-%% - visit bottom-up-break  T { ... }
+%% - bottom-up visit (T) { ... }
+%% - bottom-up-break visit (T) { ... }
 %% - etc.
 %% A nice touch is that these properties are not tied to the
 %% declaration of a travesal function (as in ASF+SDF) but to 
 %% its use.
 
 BTREE frepl(BTREE T) {
-    visit bottom-up T {
+    bottom-up visit (T) {
       case g(<BTREE T1>, <BTREE T2>) =>
            i(<BTREE T1>, <BTREE T2>)
     }
@@ -75,7 +75,7 @@ BTREE frepl(BTREE T) {
 %% Ex5: Deep replacement of g by i
 
 BTREE frepl(BTREE T) {
-    visit bottom-up-break T {
+    bottom-up-break visit (T) {
       case g(<BTREE T1>, <BTREE T2>) =>
            i(<BTREE T1>, <BTREE T2>)
     }
@@ -85,7 +85,7 @@ BTREE frepl(BTREE T) {
 %% g's are replaced); 
 
 BTREE srepl(BTREE T) {
-    visit top-down-break T {
+    top-down-break visit (T) {
       case g(<BTREE T1>, <BTREE T2>) => 
            i(<BTREE T1>, <BTREE T2>)
     }
@@ -96,7 +96,7 @@ BTREE srepl(BTREE T) {
 
 set[BTREE] find_outer_gs(BTREE T) {
     return
-    { S | STATEMENT S : top-down-break T, 
+    { S | top-down-break STATEMENT S : T, 
           g(<BTREE T1>, <BTREE T2>) := S };
 }
  
@@ -105,10 +105,10 @@ set[BTREE] find_outer_gs(BTREE T) {
 tuple[int, BTREE] count_and_inc(BTREE T, int D) {
     int C = 0;
     
-    visit T {
+    visit (T) {
       case <Integer N>: { C = C + 1; 
                           int N1 = toInt(N) + D; 
-                          replace-by parse(unparseToString(N1));
+                          insert parse(unparseToString(N1));
                         }
      }
      return <C, T>;

@@ -55,7 +55,7 @@ exports
                                                                           {cons("par-type")}
 
     Name | StringLiteral                                     -> AbsTypeName  {cons("abstype-name")} 
-    "(" {NamedType ","}* ")"                                 -> AbsTypeArgs  {cons("abstype-args")}
+    "(" {OptNamedType ","}* ")"                              -> AbsTypeArgs  {cons("abstype-args")}
 
     NamedType                                                -> AbstractType {cons("abstype-namedtype")}
     TypeVar                                                  -> AbstractType {cons("abstype-typevat")}

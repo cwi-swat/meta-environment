@@ -3,7 +3,7 @@ module Patterns
 imports Names Types Expressions RegExp
 
 exports
-  sorts Pattern AbsPattern AbsPatternName AbsPatternArgs
+  sorts Pattern AbsPattern AbsPatternName AbsPatternArg AbsPatternArgs
         SynPattern SynPatternChar SynPatternSymbol PatternVar QuotedSynPattern
         RegPattern
 
@@ -16,6 +16,7 @@ exports
          "/" RegExp "/"  RegModifier?                -> RegPattern
 
   context-free syntax
+%%         Name                                        -> PatternVar
          "<" Type? Name  ">"                         -> PatternVar
          "<" Call ">"                                -> PatternVar  %% TODO: better naming
 
@@ -25,10 +26,14 @@ exports
          QuotedSynPattern                            -> SynPattern
 
          Name | StringLiteral                        -> AbsPatternName {cons("abspat-name")}
-         "(" {AbsPattern ","}* ")"                   -> AbsPatternArgs {cons("abspat-args")}
+         AbsPattern                                  -> AbsPatternArg
+         Type Name                                   -> AbsPatternArg
+         "(" {AbsPatternArg ","}* ")"                -> AbsPatternArgs {cons("abspat-args")}
 
-         PatternVar                                  -> AbsPattern     {cons("abspat-pattern-var")}
+%%         PatternVar                                  -> AbsPattern     {cons("abspat-pattern-var")}
          AbsPatternName AbsPatternArgs?              -> AbsPattern     {cons("abspat-call")}
 
          "!"? (RegPattern | SynPattern | AbsPattern) -> Pattern        {cons("negated-pattern")}
+
+
 

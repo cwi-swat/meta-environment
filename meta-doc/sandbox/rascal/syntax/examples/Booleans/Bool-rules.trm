@@ -5,7 +5,7 @@ data Bool bfalse;
 data Bool band(Bool L, Bool R);
 data Bool bor(Bool L, Bool R);  
 
-arule a1 band(btrue, <Bool B2>)  => <B2> 
+arule a1 band(btrue, <Bool B2>)  => B2 
 arule a2 band(bfalse, <Bool B2>) => bfalse
 
 arule o1 bor(btrue, btrue)       => btrue

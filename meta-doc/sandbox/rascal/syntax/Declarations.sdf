@@ -43,7 +43,7 @@ exports
 
     "tag" DeclarationUnit Name DeclAnnos {Type "|"}+    -> Declaration {cons("tag-decl")}
  
-    "global" Type Name DeclAnnos ("=" Expression)?      -> Declaration {cons("global-decl")}
+    Type Name DeclAnnos ("=" Expression)?               -> Declaration {cons("global-decl")}
 
     ("throws" ThrowDecl)*                               -> Throws
     Name "(" OptNamedTypes ")"                          -> ThrowDecl
@@ -52,11 +52,11 @@ exports
     "rule"  Name DeclAnnos Rule                         -> Declaration {cons("rule-decl")}
     "arule" Name DeclAnnos ARule                        -> Declaration {cons("arule-decl")}
 
-    "visitor" Name "{" Visitor+ "}"                      -> Declaration {cons("visitor")}
+    "visitor" Name "{" Visitor+ "}"                     -> Declaration {cons("visitor")}
 
 %% Define reserved words
     "data" | "view" | "type" | "anno" | "tag" |
-    "global" | "throws" | "rule" | "arule"             -> Name {reject}
+    "dynamic" | "throws" | "rule" | "arule"            -> Name {reject}
 
     DeclarationUnit                                    -> Name {reject}
 

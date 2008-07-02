@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1708,6 +1708,380 @@ lexical syntax
     <section>
       <title>Expressions</title>
 
+      <para></para>
+
+      <table>
+        <title>Proposed Operator set (DISCUSS)</title>
+
+        <tgroup cols="11">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="center">&#160;</entry>
+
+              <entry align="center">bool&#160;</entry>
+
+              <entry align="center">int</entry>
+
+              <entry align="center">double</entry>
+
+              <entry align="center">str</entry>
+
+              <entry align="center">loc</entry>
+
+              <entry align="center">list</entry>
+
+              <entry align="center">set</entry>
+
+              <entry align="center">tuple</entry>
+
+              <entry align="center">map</entry>
+
+              <entry align="center">rel</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>equal</entry>
+
+              <entry>==</entry>
+
+              <entry>==</entry>
+
+              <entry>==</entry>
+
+              <entry>==</entry>
+
+              <entry>==</entry>
+
+              <entry>==</entry>
+
+              <entry>==</entry>
+
+              <entry>==</entry>
+
+              <entry>==</entry>
+
+              <entry>==</entry>
+            </row>
+
+            <row>
+              <entry>nequal</entry>
+
+              <entry>!=</entry>
+
+              <entry>!=</entry>
+
+              <entry>!=</entry>
+
+              <entry>!=</entry>
+
+              <entry>!=</entry>
+
+              <entry>!=</entry>
+
+              <entry>!=</entry>
+
+              <entry>!=</entry>
+
+              <entry>!=</entry>
+
+              <entry>!=</entry>
+            </row>
+
+            <row>
+              <entry>less</entry>
+
+              <entry>&lt;</entry>
+
+              <entry>&lt;</entry>
+
+              <entry>&lt;</entry>
+
+              <entry>&lt;</entry>
+
+              <entry>&lt;</entry>
+
+              <entry>&lt;</entry>
+
+              <entry>&lt;</entry>
+
+              <entry>&lt;</entry>
+
+              <entry>&lt;</entry>
+
+              <entry>&lt;</entry>
+            </row>
+
+            <row>
+              <entry>lesseq</entry>
+
+              <entry>&lt;=</entry>
+
+              <entry>&lt;=</entry>
+
+              <entry>&lt;=</entry>
+
+              <entry>&lt;=</entry>
+
+              <entry>&lt;=</entry>
+
+              <entry>&lt;=</entry>
+
+              <entry>&lt;=</entry>
+
+              <entry>&lt;=</entry>
+
+              <entry>&lt;=</entry>
+
+              <entry>&lt;=</entry>
+            </row>
+
+            <row>
+              <entry>greater</entry>
+
+              <entry>&gt;</entry>
+
+              <entry>&gt;</entry>
+
+              <entry>&gt;</entry>
+
+              <entry>&gt;</entry>
+
+              <entry>&gt;</entry>
+
+              <entry>&gt;</entry>
+
+              <entry>&gt;</entry>
+
+              <entry>&gt;</entry>
+
+              <entry>&gt;</entry>
+
+              <entry>&gt;greater</entry>
+            </row>
+
+            <row>
+              <entry>greatereq</entry>
+
+              <entry>&gt;=</entry>
+
+              <entry>&gt;=</entry>
+
+              <entry>&gt;=</entry>
+
+              <entry>&gt;=</entry>
+
+              <entry>&gt;=</entry>
+
+              <entry>&gt;=</entry>
+
+              <entry>&gt;=</entry>
+
+              <entry>&gt;=</entry>
+
+              <entry>&gt;=</entry>
+
+              <entry>&gt;=</entry>
+            </row>
+
+            <row>
+              <entry>and/inter</entry>
+
+              <entry>&amp;&amp;</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>&amp;</entry>
+
+              <entry>&amp;</entry>
+
+              <entry></entry>
+
+              <entry>&amp;</entry>
+
+              <entry>&amp;</entry>
+            </row>
+
+            <row>
+              <entry>or/union</entry>
+
+              <entry>||</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>|</entry>
+
+              <entry>|</entry>
+
+              <entry></entry>
+
+              <entry>|</entry>
+
+              <entry>|</entry>
+            </row>
+
+            <row>
+              <entry>not</entry>
+
+              <entry>!</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>add/conc</entry>
+
+              <entry></entry>
+
+              <entry>+</entry>
+
+              <entry>+</entry>
+
+              <entry>+</entry>
+
+              <entry></entry>
+
+              <entry>+</entry>
+
+              <entry></entry>
+
+              <entry>+</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>sub</entry>
+
+              <entry></entry>
+
+              <entry>_</entry>
+
+              <entry>_</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>prod</entry>
+
+              <entry></entry>
+
+              <entry>*</entry>
+
+              <entry>*</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>*</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>div</entry>
+
+              <entry></entry>
+
+              <entry>/</entry>
+
+              <entry>/</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>diff</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>\</entry>
+
+              <entry>\</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
       <para>Expressions correspond roughly to Rscript expressions with some
       extensions:<itemizedlist>
           <listitem>
@@ -1881,7 +2255,7 @@ lexical syntax
         </listitem>
 
         <listitem>
-          <para>A <literal>raplace</literal> statement that delivers a
+          <para>An <literal>insert</literal> statement that inserts a
           replacement value during a traversal initiated by a visit statement,
           or a switch statement.</para>
         </listitem>
@@ -1921,7 +2295,7 @@ lexical syntax
 
           <programlisting>case <replaceable>Pattern</replaceable> =&gt; <replaceable>Replacement</replaceable></programlisting>
 
-          <para>which is an abbreviation for<programlisting>case <replaceable>Pattern</replaceable> : replace-by <replaceable>Replacement</replaceable></programlisting>Depending
+          <para>which is an abbreviation for<programlisting>case <replaceable>Pattern</replaceable> : insert <replaceable>Replacement</replaceable></programlisting>Depending
           on the kind of pattern we use a different keyword:</para>
 
           <itemizedlist>
@@ -1931,13 +2305,9 @@ lexical syntax
             </listitem>
 
             <listitem>
-              <para><literal>acase</literal> for abstract patterns.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>rcase</literal> for regular patterns.<note>
-                  <para>These three different keywords are not very elegant
-                  but they help to remove disambiguities.</para>
+              <para><literal>acase</literal> for abstract patterns.<note>
+                  <para>These two different keywords are not very elegant but
+                  they help to remove disambiguities.</para>
                 </note></para>
             </listitem>
           </itemizedlist>
@@ -2115,8 +2485,8 @@ lexical syntax
             </listitem>
 
             <listitem>
-              <para><literal>replace-by</literal> (jumps to enclosing switch
-              or visit or rule choice)</para>
+              <para><literal>insert</literal> (jumps to enclosing switch or
+              visit or rule choice)</para>
             </listitem>
 
             <listitem>
@@ -2269,7 +2639,7 @@ str capitalize2(str S, str Pat, str Repl){
       them:<programlisting>module DateVars
 
 set[Var] getDateVars(Program P){
-   return {V | Var V : P, /.*(date|dt|year|yr).*$/i := V};
+   return {V | Var V : P, /.*(date|dt|year|yr).*$/i := toString(V)};
 }</programlisting></para>
     </section>
 
@@ -2300,14 +2670,15 @@ exports
 import languages/Booleans/syntax;
 
 Bool reduce(Bool B) {
-    visit bottom-up B {
-      case true &amp; &lt;Bool B2&gt;   =&gt; &lt;B2&gt;
-      case false &amp; &lt;Bool B2&gt;  =&gt; false
+    Bool B1; Bool B2;
+    bottom-up visit(B) {
+      case true &amp; B2     =&gt; B2
+      case false &amp; B2    =&gt; false
 
-      case true | true        =&gt; true
-      case true | false       =&gt; true
-      case false | true       =&gt; true
-      case false | false      =&gt; false
+      case true | true   =&gt; true
+      case true | false  =&gt; true
+      case false | true  =&gt; true
+      case false | false =&gt; false
     }
 }</programlisting></para>
 
@@ -2340,11 +2711,12 @@ data Bool band(Bool L, Bool R);
 data Bool bor(Bool L, Bool R); 
 
 Bool reduce(Bool B) {
-    visit bottom-up B {
-      acase band(btrue, &lt;Bool B2&gt;)   =&gt; &lt;B2&gt;     %% Use Variables
-      acase band(bfalse, &lt;Bool B2&gt;)  =&gt; bfalse
+    Bool B1; Bool B2;
+    bottom-up visit(B) {
+      acase band(btrue, &lt;B2&gt;)   =&gt; B2     %% Use Variables
+      acase band(bfalse, B2)  =&gt; bfalse
 
-      acase bor(btrue, btrue)        =&gt; Bool-abstract::btrue  %% Use a truth table
+      acase bor(btrue, btrue)        =&gt; btrue  %% Use a truth table
       acase bor(btrue, bfalse)       =&gt; btrue
       acase bor(bfalse, btrue)       =&gt; btrue
       acase bor(bfalse, bfalse)      =&gt; bfalse
@@ -2372,7 +2744,7 @@ data Bool bfalse;
 data Bool band(Bool L, Bool R);
 data Bool bor(Bool L, Bool R);  
 
-arule a1 band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt; 
+arule a1 band(btrue, &lt;Bool B2&gt;)  =&gt; B2 
 arule a2 band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
 
 arule o1 bor(btrue, btrue)       =&gt; btrue
@@ -2520,7 +2892,7 @@ int cnt(BTREE T) {
 
 int cnt(BTREE T) {
     int C = 0;
-    visit T {
+    visit(T) {
       case &lt;Integer N&gt; : C = C+1;
     }
     return C;
@@ -2542,7 +2914,7 @@ int sumtree(BTREE T) {
 
 int cnt(BTREE T) {
     int C = 0;
-    visit T {
+    visit(T) {
       case &lt;Integer N&gt; : C = C+toInt(N);
     }
     return C;
@@ -2557,32 +2929,22 @@ int cnt(BTREE T) {
 %% - from int back to Integer (using parseString)
 
 BTREE inc(BTREE T) {
-    visit T {
-      case &lt;Integer N&gt;: put parseString(toInt(N)+1);
-      case &lt;Integer N&gt;: set parseString(toInt(N)+1);
-      case &lt;Integer N&gt;: give parseString(toInt(N)+1);
-      case &lt;Integer N&gt;: make parseString(toInt(N)+1);
-      case &lt;Integer N&gt;: enter parseString(toInt(N)+1);
-      case &lt;Integer N&gt;: paste parseString(toInt(N)+1);
+    visit (T) {
       case &lt;Integer N&gt;: insert parseString(toInt(N)+1);
-      case &lt;Integer N&gt;: enter parseString(toInt(N)+1);
-      case &lt;Integer N&gt;: enter parseString(toInt(N)+1);
-      case &lt;Integer N&gt;: enter parseString(toInt(N)+1);
-
     }
 }
 
 %% Ex4: full replacement of g by i
 %% The whole repertoire of ASF+SDF traversal functions is available:
-%% - visit bottom-up T { ... }
-%% - visit bottom-up-break  T { ... }
+%% - bottom-up visit (T) { ... }
+%% - bottom-up-break visit (T) { ... }
 %% - etc.
 %% A nice touch is that these properties are not tied to the
 %% declaration of a travesal function (as in ASF+SDF) but to 
 %% its use.
 
 BTREE frepl(BTREE T) {
-    visit bottom-up T {
+    bottom-up visit (T) {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
            i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     }
@@ -2591,7 +2953,7 @@ BTREE frepl(BTREE T) {
 %% Ex5: Deep replacement of g by i
 
 BTREE frepl(BTREE T) {
-    visit bottom-up-break T {
+    bottom-up-break visit (T) {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
            i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     }
@@ -2601,7 +2963,7 @@ BTREE frepl(BTREE T) {
 %% g's are replaced); 
 
 BTREE srepl(BTREE T) {
-    visit top-down-break T {
+    top-down-break visit (T) {
       case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt; 
            i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     }
@@ -2612,7 +2974,7 @@ BTREE srepl(BTREE T) {
 
 set[BTREE] find_outer_gs(BTREE T) {
     return
-    { S | STATEMENT S : top-down-break T, 
+    { S | top-down-break STATEMENT S : T, 
           g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) := S };
 }
  
@@ -2621,10 +2983,10 @@ set[BTREE] find_outer_gs(BTREE T) {
 tuple[int, BTREE] count_and_inc(BTREE T, int D) {
     int C = 0;
     
-    visit T {
+    visit (T) {
       case &lt;Integer N&gt;: { C = C + 1; 
                           int N1 = toInt(N) + D; 
-                          replace-by parse(unparseToString(N1));
+                          insert parse(unparseToString(N1));
                         }
      }
      return &lt;C, T&gt;;
@@ -2684,19 +3046,19 @@ Var fresh(Var V, set[Var] S) {
 
 Exp subst(Var V1, Exp E1, Exp E2) {
 
-    switch E2 {
-      case &lt;Var V2&gt;: replace-by (V1==V2) ? E1 : V2;
+    visit (E2) { 
+      case &lt;Var V2&gt;: insert (V1==V2) ? E1 : V2;
 
       case &lt;Exp Ea&gt; &lt;Exp Eb&gt;:
-        return [| &lt;subst(V, E, Ea)&gt; &lt;subst(V, E, Eb)&gt; |];
+        insert [| &lt;subst(V, E, Ea)&gt; &lt;subst(V, E, Eb)&gt; |];  %%% amb??
 
       case fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt;:
-        if (V1 == V2) { replace-by [| fn &lt;V2&gt; =\&gt; &lt;Ea&gt; |]; }
+        if (V1 == V2) { insert [| fn &lt;V2&gt; =\&gt; &lt;Ea&gt; |]; }
 
       case fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;:
         if(V1 != V2 &amp;&amp; !(V1 in freeVars(E2) &amp;&amp; 
            V2 in freeVars(E1))){
-           replace-by [| fn &lt;V2&gt; =\&gt; &lt;subst(V1, E1, Ea)&gt; |];
+           insert [| fn &lt;V2&gt; =\&gt; &lt;subst(V1, E1, Ea)&gt; |];
         }              
  
       case fn &lt;Var V2&gt; =&gt; &lt;Exp Ea&gt;: 
@@ -2704,9 +3066,10 @@ Exp subst(Var V1, Exp E1, Exp E2) {
            V2 in freeVars(E1)){
            Var V3 = fresh(V2, freeVars(Ea) + freeVars(E1));
            Exp EaS = subst(V1, E1, subst(V2, V3, E2));
-           replace-by [| fn &lt;V3&gt; =\&gt; &lt;EaS&gt; |];
+           insert [| fn &lt;V3&gt; =\&gt; &lt;EaS&gt; |];
         }
     }
+    return E2;
 }</programlisting></para>
     </section>
 
@@ -2732,7 +3095,7 @@ import Let;
 %% Int: counter to generate unique variables
 
 Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
-    switch E {
+    switch (E) {
     case let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end: {
          return [| let &lt;parseString("x" + toString(Cnt))&gt; = 
                        &lt;rename(E1, Rn, Cnt)&gt;
@@ -2762,8 +3125,8 @@ import Let;
 %% Cnt: global counter to generate fresh variables
 %% rel[Var,Var]: global renaming table
 
-global int Cnt = 0;
-global rel[Var,Var] Rn = {};
+int Cnt = 0;
+rel[Var,Var] Rn = {};
 
 Var newVar() {
     global int Cnt;  
@@ -2774,7 +3137,7 @@ Var newVar() {
 Exp rename(Exp E) {
     global int Cnt;
     global rel[Var,Var] Rn;
-    switch E {
+    switch (E) {
     case let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end: {
          Var Y = newVar();
          Rn = {&lt;V, Y&gt;} + Rn;
@@ -2795,8 +3158,8 @@ Exp rename(Exp E) {
     <section>
       <title>Pico Typechecker</title>
 
-      <para>The following example shows the tight integration ASF with
-      comprehensions.<programlisting>module Typecheck
+      <para>The following example shows a typechecker for Pico that generates
+      a list of error messages.<programlisting>module Typecheck
 
 import Pico-syntax;
 import Errors;
@@ -2804,7 +3167,7 @@ import Errors;
 type map[PICO-ID,TYPE] Env;
 
 list[Error] tcp(PROGRAM P) {
-    switch P {
+    switch (P) {
       case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
            Env Env = {&lt;Id, Type&gt; | 
                       [| &lt;PICO-ID Id&gt; : &lt;TYPE Type&gt; |] : Decls};
@@ -2815,7 +3178,7 @@ list[Error] tcp(PROGRAM P) {
 }
 
 list[Error] tcst(Stat Stat, Env Env) {
-    switch Stat {
+    switch (Stat) {
       case [| &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt;|]: {
         TYPE Type = Env[Id];
         return type_of(Exp, Type, Env);
@@ -2829,10 +3192,11 @@ list[Error] tcst(Stat Stat, Env Env) {
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od: 
         return type_of(Exp, natural, Env) + tcs(Stats, Env);
     }
+    return [];
 }
 
 list[Error] type_of(Exp E, TYPE Type, Env Env) {
-    switch E {
+    switch (E) {
       case &lt;NatCon N&gt;: if(Type == natural){ return []; }
 
       case &lt;StrCon S&gt;: if(Type == string) { return []; }
@@ -2848,7 +3212,7 @@ list[Error] type_of(Exp E, TYPE Type, Env Env) {
                   type_of(E1, natural, Env);
         }
 
-      case &lt;EXP E1&gt; + &lt;EXP E2&gt;:
+      case &lt;EXP E1&gt; - &lt;EXP E2&gt;:
         if(Type == natural){
            return type_of(E1, natural, Env) + 
                   type_of(E1, natural, Env);
@@ -2871,12 +3235,12 @@ list[Error] type_of(Exp E, TYPE Type, Env Env) {
       <para><programlisting>module Pico-eval
 import pico/syntax/Pico;
  
-data PICO_VALUE int ival | str sval;
+data PICO_VALUE intval(int) | strval(str);
 
 type map[PICO-ID, PICO_VALUE] VEnv;
 
 VEnv evalProgram(PROGRAM P){
-    switch P {
+    switch (P) {
       case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
           VEnv Env = evalDecls(Decls);
           return evalStatements(Series, Env);
@@ -2886,24 +3250,25 @@ VEnv evalProgram(PROGRAM P){
 
 VEnv evalDecls(DECLS Decls){
     VEnv Env = {};
-    visit Decls {
-      case &lt;PICO-ID Id&gt; : string:  { Env[Id] = ""; return Env;}
-      case &lt;PICO-ID Id&gt; : natural: { Env[Id] = 0;  return Env;}
+    visit (Decls) {
+      case &lt;PICO-ID Id&gt; : string:  { Env[Id] = strval(""); return Env;}
+      case &lt;PICO-ID Id&gt; : natural: { Env[Id] = intval(0);  return Env;}
     }
+    return Env;
 }
 
 VEnv evalStatements({STATEMENT ";"}* Series, VEnv Env){
-    switch Series {
+    switch (Series) {
       case &lt;STATEMENT Stat&gt;; &lt;{STATEMENT ";"}* Series2&gt;: {
         Env Env2 = evalStatement(Stat, Env);
         return evalStatements(Series2, Env2);
       }
-      case [| |]: return Env;
+      default: return Env;
     }
 }
 
 VEnv evalStatement(STATEMENT Stat, VEnv Env){
-    switch Stat {
+    switch (Stat) {
       case [| &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt; |]: {
         Env[Id] = evalExp(Exp, Env);
         return Env;
@@ -2913,7 +3278,7 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
                        else &lt;{STATEMENT ";"}* Stats1&gt; fi |]:{
         PICO_VALUE Val = evalExp(Exp, Env);
         if(Val != 0){
-          return evalStatements(Stats1, Env);
+          return evalStatments(Stats1, Env);
         } else {
           return evalStatements(Stats2, Env);
         }
@@ -2921,38 +3286,45 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
 
       case STATEMENT[| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od|]: {
         PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val.ival != 0){
+        if(Val != 0){
           return Env;
         } else {
           VEnv Env2 = evalStatements(Stats1, Env);
           return evalStatement(Stat, Env2);
         }
       }
+      default: return Env;
     }
 }
 
 PICO_VALUE evalExp(Exp exp, VEnv Env) {
-    switch exp {
+    switch (exp) {
       case NatCon[| &lt;NatCon N&gt; |]: 
-           return toInt(unparseToString(N));
+           return intval(toInt(unparseToString(N)));
 
       case StrCon[| &lt;StrCon S&gt; |]: 
-           return unparseToString(S);
+           return strval(unparseToString(S));
 
       case PICO-ID[| &lt;PICO-ID Id&gt; |]: 
            return Env[Id];
 
       case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
-           return evalExp(exp1, Env).ival +
-                  evalExp(exp2, Env).ival;
+           if(intval(int n1) := evalExp(exp1, Env) &amp;&amp;
+              intval(int n2) := evalExp(exp2, Env)){
+              return intval(n1 + n2);
+           }
       
       case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
-           return evalExp(exp1, Env).ival -
-                  evalExp(exp2, Env).ival;
-      
+            if(intval(int n1) := evalExp(exp1, Env) &amp;&amp;
+              intval(int n2) := evalExp(exp2, Env)){
+              return intval(n1 - n2);
+           }
+ 
       case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
-           return evalExp(exp1, Env).sval +
-                  evalExp(exp2, Env).sval;
+           if(strval(str s1) := evalExp(exp1, Env) &amp;&amp;
+              strval(str s2) := evalExp(exp2, Env)){
+              return strval(s1 + s2);
+           }
    } 
 }
 </programlisting></para>
@@ -2966,47 +3338,43 @@ PICO_VALUE evalExp(Exp exp, VEnv Env) {
 
 import pico/syntax/Pico;
 
-data PICO_VALUE int ival | str sval;
+data PICO_VALUE intval(int) | strval(str);
 
 type map[PICO-ID, PICO_VALUE] VEnv;
 
 VEnv Env = {};
 
 void evalProgram(PROGRAM P){
-    dynamic VEnv env = {};
-    switch P {
+    switch(P) {
       case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
           evalDecls(Decls);
           evalStatements(Series);
       }
    }
-  
 }
 
-VEnv evalDecls(DECLS Decls)
-  @global{"Env"}
-{
+VEnv evalDecls(DECLS Decls){
     global Venv Env;
-    visit Decls {
-      case &lt;PICO-ID Id&gt; : string:  Env[Id] = "";
-      case &lt;PICO-ID Id&gt; : natural: Env[Id] = 0;
+    visit (Decls) {
+      case &lt;PICO-ID Id&gt; : string:  Env[Id] = strval("");
+      case &lt;PICO-ID Id&gt; : natural: Env[Id] = intval(0);
     }
 }
 
 void evalStatements({STATEMENT ";"}* Series){
-    switch Series {
+    switch (Series) {
       case &lt;STATEMENT Stat&gt;; &lt;{STATEMENT ";"}* Series2&gt;: {
         evalStatement(Stat);
         evalStatements(Series2);
         return;
       }
-      case [| |]: return;
+      default: return;
     }
 }
 
 void evalStatement(STATEMENT Stat){
     global Venv Env;
-    switch Stat {
+    switch (Stat) {
       case [| &lt;PICO-ID Id&gt; = &lt;EXP Exp&gt; |]: {
         Env[Id] = evalExp(Exp);
         return;
@@ -3015,7 +3383,7 @@ void evalStatement(STATEMENT Stat){
       case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats1&gt; fi:{
         PICO_VALUE Val = evalExp(Exp);
-        if(Val.ival != 0) {
+        if(Val != 0) {
           evalStatements(Stats1);
           return;
         } else {
@@ -3026,7 +3394,7 @@ void evalStatement(STATEMENT Stat){
 
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od:{
         PICO_VALUE Val = evalExp(Exp);
-        if(Val.ival != 0){
+        if(Val != 0){
           return;
         } else {
           evalStatements(Stats1);
@@ -3039,24 +3407,30 @@ void evalStatement(STATEMENT Stat){
 
 PICO_VALUE evalExp(Exp exp) {
     global Venv Env;
-    switch exp {
-      case &lt;NatCon N&gt;: toInt(unparseToString(N));
+    switch (exp) {
+      case &lt;NatCon N&gt;: intval(toInt(unparseToString(N)));
 
-      case &lt;StrCon S&gt;: return unparseToString(S);
+      case &lt;StrCon S&gt;: return strval(unparseToString(S));
 
       case &lt;PICO-ID Id&gt;: return Env[Id];
 
       case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
-           return evalExp(exp1, Env).ival +
-                  evalExp(exp2, Env).ival;
+           if(intval(int n1) := evalExp(exp1) &amp;&amp;
+              intval(int n2) := evalExp(exp2)){
+              return intval(n1 + n2);
+           }
 
       case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
-           return evalExp(exp1, Env).ival -
-                  evalExp(exp2, Env).ival;
+           if(intval(int n1) := evalExp(exp1) &amp;&amp;
+              intval(int n2) := evalExp(exp2)){
+              return intval(n1 - n2);
+           }
    
       case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
-          return evalExp(exp1, Env).sval +
-                  evalExp(exp2, Env).sval;
+           if(strval(str s1) := evalExp(exp1) &amp;&amp;
+              strval(str s2) := evalExp(exp2)){
+              return strval(s1 + s2);
+           }
    } 
 }
 </programlisting></para>
@@ -3663,7 +4037,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -3671,7 +4045,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
@@ -4435,7 +4809,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 
