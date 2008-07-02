@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -2228,7 +2228,7 @@ int wordCount2(str S){
     </section>
 
     <section>
-      <title>Word replacement </title>
+      <title>Word replacement</title>
 
       <para>Here are two versions of a word replacement function:</para>
 
@@ -2558,7 +2558,17 @@ int cnt(BTREE T) {
 
 BTREE inc(BTREE T) {
     visit T {
-      case &lt;Integer N&gt;: replace-by parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: put parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: set parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: give parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: make parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: enter parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: paste parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: insert parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: enter parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: enter parseString(toInt(N)+1);
+      case &lt;Integer N&gt;: enter parseString(toInt(N)+1);
+
     }
 }
 
@@ -2801,6 +2811,7 @@ list[Error] tcp(PROGRAM P) {
            return [ tcst(S, Env) | Stat S : Series ];
       }
     }
+    return [];
 }
 
 list[Error] tcst(Stat Stat, Env Env) {
@@ -2901,8 +2912,8 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
       case STATEMENT[| if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                        else &lt;{STATEMENT ";"}* Stats1&gt; fi |]:{
         PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val.ival != 0){
-          return evalStatments(Stats1, Env);
+        if(Val != 0){
+          return evalStatements(Stats1, Env);
         } else {
           return evalStatements(Stats2, Env);
         }
@@ -2959,18 +2970,22 @@ data PICO_VALUE int ival | str sval;
 
 type map[PICO-ID, PICO_VALUE] VEnv;
 
-global VEnv Env = {};
+VEnv Env = {};
 
 void evalProgram(PROGRAM P){
+    dynamic VEnv env = {};
     switch P {
       case begin &lt;DECLS Decls&gt; &lt;{STATEMENT ";"}* Series&gt; end: {
           evalDecls(Decls);
           evalStatements(Series);
       }
    }
+  
 }
 
-VEnv evalDecls(DECLS Decls){
+VEnv evalDecls(DECLS Decls)
+  @global{"Env"}
+{
     global Venv Env;
     visit Decls {
       case &lt;PICO-ID Id&gt; : string:  Env[Id] = "";
@@ -3054,7 +3069,8 @@ PICO_VALUE evalExp(Exp exp) {
  
 import pico/syntax/Pico;
 
-data CP EXP exp | STATEMENT stat;
+data CP EXP exp;
+data CP STATEMENT stat;
 
 type tuple[set[CP] entry, 
            rel[CP,CP] graph, 
@@ -3094,7 +3110,7 @@ CFSEGMENT cflow(STATEMENT Stat){
                   &gt;;
       }
          
-      case &lt;STATEMENT Stat&gt;: return &lt;{Stat}, {}, {Stat}&gt;;
+      case &lt;STATEMENT Stat&gt;: { CP cp = stat(Stat); return &lt;{cp}, {}, {cp}&gt;; }
     }
 }
 </programlisting>
@@ -3110,7 +3126,7 @@ CFSEGMENT cflow(STATEMENT Stat){
 import pico/syntax/Pico;
 
 rel[PICO-ID, EXP] uses(PROGRAM P) {
-  return {&lt;Id, E&gt; | EXP E : P, PICO-ID Id := E};
+  return {&lt;Id, E&gt; | EXP E : P, PICO-ID Id&gt; := E};
 }
 
 rel[PICO-ID, STATEMENT] defs(PROGRAM P) { 
@@ -3143,7 +3159,7 @@ set[PICO-ID] uninit(PROGRAM P) {
     set[CP] Root = CFLOW.entry;
     rel[CP,CP] Pred = CFLOW.graph; 
 
-    return {Id | tuple[EXP E, PICO-ID Id] : Uses,
+    return {Id | &lt;EXP E, PICO-ID Id&gt;  : Uses,
                  E in reachX(Root, Defs[Id], Pred)
     };
 }
@@ -3453,7 +3469,9 @@ context-free syntax
 
 import Vector-syntax;
 
-int innerProduct(Vector V1, V2){
+int innerProduct(Vector V1, V2) {
+    Integer N1, N2;
+
     if ( &lt;Integer N1&gt; &lt;Integer* Rest1&gt; := V1 and
          &lt;Integer N2&gt; &lt;Integer* Rest2&gt; := V2 
        )
@@ -3536,20 +3554,40 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
     </section>
 
     <section>
-      <title>Read-Eval-Print Loop (REPR) [Needs further discussion]</title>
+      <title>Read-Eval-Print Loop (REPL) [Needs further discussion]</title>
 
       <para>For the scripting of application it is important to have a command
       language and read-eval-print loop. Here is an attempt. The command
       prompt is "&gt;".<programlisting>&gt; import lang.java.syntax.Main as Java
-&gt; str source := read("program.java");
-&gt; CU program := Java.CU.parse(source);
+&gt; str source = read("program.java");
+&gt; CU program = parseString(source);
+
+data B and(B b1, B b2)
+
+B.and &lt;= B &lt;= value
+
+lexical syntax
+  [\n\ \t\n] -&gt; LAYOUT
+
+
+view Boolean &lt;= tree and(B b1, LAYOUT? l, 'a' a?, LAYOUT? l2, B b2) appl(prod([ B &amp; B -&gt; B], [ B b1 , LAYOUT? _, lit('a'), LAYOUT? _ = appl(),B b2 ])
+view Boolean &lt;= tree or()            appl()
+
+Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
 &gt; int count(CU P) {
-    int cnt := 0;
-&gt;   visit P {
-&gt;     Java.Statements.IF =&gt; cnt++;
+&gt;   int cnt = 0;
+    Boolean B1 = true, B2, B3;
+
+&gt;   visit(P) {
+      acase and(B1,l1=&lt;LAYOUT? L&gt;,&lt;Boolean B2&gt;) =&gt; and(B1, l1=parseString(" "), a=A, l2=" ", B2) 
+      case &lt;Boolean B1&gt; &amp; &lt;B2&gt; : 
+      case B &amp; B : 
+      case [| &lt;Identifier&gt; |] : natural =&gt;
+&gt;     acase if(&lt;E&gt;,&lt;S&gt;) : cnt++;
+      acase &lt;Bool.and is&gt; 
 &gt;   }
-    return cnt
+&gt;   return cnt
 &gt; }
 
 &gt; count(program)
@@ -3625,7 +3663,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
               <entry align="center">bool</entry>
 
@@ -3633,7 +3671,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
               <entry align="center">double</entry>
 
-              <entry align="center">str&#160;</entry>
+              <entry align="center">str </entry>
 
               <entry align="center">loc</entry>
 
@@ -4397,7 +4435,7 @@ fun &amp;Elem* sort(&amp;Elem* Elements,
 
             <thead>
               <row>
-                <entry align="center">&#160;</entry>
+                <entry align="center"> </entry>
 
                 <entry align="center">list</entry>
 
