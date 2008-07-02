@@ -253,14 +253,12 @@ public class ToolBus{
 		try{
 		    parser parser_obj = new parser(includedFiles, toolbusProcessCalls, filename, new FileReader(filename), this);
 			parser_obj.parse();
-		}catch(ToolBusException e){
+		}catch(ToolBusException e){ // TODO do not catch exceptions here
 			error(filename, e.getMessage());
 		}catch (FileNotFoundException e){
 			error(filename, e.getMessage());
-			e.printStackTrace();
 		}catch (Exception e){
 			error(filename, e.getMessage());
-			e.printStackTrace();
 		}
 		return nerrors == 0;
 	}
