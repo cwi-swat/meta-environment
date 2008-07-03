@@ -70,50 +70,50 @@ import aterm.ATermList;
 
 parser code {:
 
-   protected ToolBus toolbus;
-   protected TBTermFactory tbfactory;
-   protected String fileName;
-   protected String processName = "";
-   private HashSet<String> includedFiles = new HashSet<String>();
-   protected List<ATerm> toolbusProcessCalls = new ArrayList<ATerm>();
-   
-   protected HashMap<String, ATerm> declaredVaribles = new HashMap<String, ATerm>();
-   private boolean parseIncludes = true;
-   
-   protected Stack<Boolean> ifdefStack;
+	protected ToolBus toolbus;
+	protected TBTermFactory tbfactory;
+	protected String fileName;
+	protected String processName = "";
+	private HashSet<String> includedFiles = new HashSet<String>();
+	protected List<ATerm> toolbusProcessCalls = new ArrayList<ATerm>();
 	
-   /** ToolBus specific constructor */
-   public parser(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename, Reader input, ToolBus tb){
-     super(new Lexer(input));
-     
-     this.includedFiles = includedFiles;
-     this.toolbusProcessCalls = toolbusProcessCalls;
-     this.fileName = filename;
-     
-     includedFiles.add(filename);
-     
-     toolbus = tb;
-     tbfactory = toolbus.getTBTermFactory();
-     
-     ifdefStack = new Stack<Boolean>();
-     ifdefStack.push(Boolean.TRUE);
-   }
-   
-   /** ToolBus specific constructor */
-   public parser(ToolBus tb, String filename) throws FileNotFoundException{
-     this(new HashSet<String>(), new ArrayList<ATerm>(), filename, new FileReader(filename), tb);
-   }
-   
-   /** ToolBus specific constructor */
-   public parser(ToolBus tb, String filename, Reader input){
-     this(new HashSet<String>(), new ArrayList<ATerm>(), filename, input, tb);
-   }
-   
-   public void parseIncludes(boolean parseIncludes){
-	   this.parseIncludes = parseIncludes;
-   }
-   
-   public String[] scriptsNames(){
+	protected HashMap<String, ATerm> declaredVaribles = new HashMap<String, ATerm>();
+	private boolean parseIncludes = true;
+	
+	protected Stack<Boolean> ifdefStack;
+	
+	/** ToolBus specific constructor */
+	public parser(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename, Reader input, ToolBus tb){
+		super(new Lexer(input));
+		
+		this.includedFiles = includedFiles;
+		this.toolbusProcessCalls = toolbusProcessCalls;
+		this.fileName = filename;
+		
+		includedFiles.add(filename);
+		
+		toolbus = tb;
+		tbfactory = toolbus.getTBTermFactory();
+		
+		ifdefStack = new Stack<Boolean>();
+		ifdefStack.push(Boolean.TRUE);
+	}
+	
+	/** ToolBus specific constructor */
+	public parser(ToolBus tb, String filename) throws FileNotFoundException{
+		this(new HashSet<String>(), new ArrayList<ATerm>(), filename, new FileReader(filename), tb);
+	}
+	
+	/** ToolBus specific constructor */
+	public parser(ToolBus tb, String filename, Reader input){
+		this(new HashSet<String>(), new ArrayList<ATerm>(), filename, input, tb);
+	}
+	
+	public void parseIncludes(boolean parseIncludes){
+		this.parseIncludes = parseIncludes;
+	}
+	
+	public String[] scriptsNames(){
 		List<String> scriptNamesList = new ArrayList<String>();
 		Iterator<String> scriptNamesIterator = includedFiles.iterator();
 		while(scriptNamesIterator.hasNext()){
@@ -122,25 +122,27 @@ parser code {:
 		
 		String[] scriptNames = new String[scriptNamesList.size()];
 		return scriptNamesList.toArray(scriptNames);
-   }
+	}
    
-   protected void enterIfdef (boolean yesOrno){
-      ifdefStack.push(yesOrno);
-   }
-   
-   protected void leaveIfdef(){
-      ifdefStack.pop();
-   }
-   
-   protected boolean generating() {
-   	  return ifdefStack.peek();
-   }
-  
-   protected void doParseInclude(String filename) throws ToolBusException{
+	protected void enterIfdef (boolean yesOrno){
+		ifdefStack.push(yesOrno);
+	}
+	
+	protected void leaveIfdef(){
+		ifdefStack.pop();
+	}
+	
+	protected boolean generating() {
+	return ifdefStack.peek();
+	}
+	
+	protected void doParseInclude(String filename) throws ToolBusException{
+		if(!parseIncludes) return;
+		
 		if(filename.length() > 0 && filename.charAt(0) == File.separatorChar){
 			File f = new File(filename);
 			if(f.exists()){
-				if(parseIncludes) doParse(filename);
+				doParse(filename);
 				return;
 			}
 		}else{
@@ -162,7 +164,7 @@ parser code {:
 			}
 		}
 		throw new ToolBusException("Cannot resolve include file '" + filename + "'");
-	} 
+	}
 	
 	private void doParse(String filename) throws ToolBusException{
 		if(includedFiles.contains(filename)){
