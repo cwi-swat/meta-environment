@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
+import toolbus.exceptions.ToolBusException;
 import toolbus.tool.ToolDefinition;
 import aterm.AFun;
 import aterm.ATerm;
@@ -17,7 +18,7 @@ public class GenTifsNG{
 	
 	private final String outputFile;
 	
-	public GenTifsNG(String[] args){
+	public GenTifsNG(String[] args) throws ToolBusException{
 		super();
 		
 		toolBus = new ToolBus(args);
@@ -50,7 +51,7 @@ public class GenTifsNG{
 		}
 	}
 	
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws Exception{
 		GenTifsNG genTifsNG = new GenTifsNG(args);
 		genTifsNG.generate();
 	}

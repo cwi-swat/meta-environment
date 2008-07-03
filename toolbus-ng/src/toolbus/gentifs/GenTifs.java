@@ -8,6 +8,7 @@ import java.util.List;
 import aterm.ATerm;
 import aterm.ATermList;
 import toolbus.ToolBus;
+import toolbus.exceptions.ToolBusException;
 import toolbus.tool.ToolDefinition;
 
 public class GenTifs{
@@ -20,7 +21,7 @@ public class GenTifs{
 	
 	private final String outputFile;
 	
-	public GenTifs(String[] args){
+	public GenTifs(String[] args) throws ToolBusException{
 		super();
 		
 		toolBus = new ToolBus(args);
@@ -108,7 +109,7 @@ public class GenTifs{
 		writeToFile(allTifs.getBytes(), outputFile);
 	}
 	
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws Exception{
 		GenTifs genTifs = new GenTifs(args);
 		genTifs.generate();
 	}

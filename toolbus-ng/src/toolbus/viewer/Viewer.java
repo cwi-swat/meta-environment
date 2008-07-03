@@ -11,6 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
@@ -33,12 +34,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.commandline.CommandLine;
 import toolbus.environment.Binding;
 import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessInstance;
 import aterm.AFun;
 import aterm.ATerm;
@@ -613,7 +616,7 @@ public class Viewer implements IViewer{
 		return result.toString();
 	}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws ToolBusException{
 		Viewer viewer = new Viewer(args);
 		DebugToolBus debugToolBus = viewer.getDebugToolBus();
 		debugToolBus.setBreakWhileStepping(false);
@@ -622,15 +625,8 @@ public class Viewer implements IViewer{
 		
 		debugToolBus.doStop(); // The initial state is stopped.
 		
-		try{
-			if(debugToolBus.parsecup()){
-				debugToolBus.prepare();
-				debugToolBus.execute();
-			}else{
-				System.err.println("Failed to parse");
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		debugToolBus.parsecup();
+		debugToolBus.prepare();
+		debugToolBus.execute();
 	}
 }

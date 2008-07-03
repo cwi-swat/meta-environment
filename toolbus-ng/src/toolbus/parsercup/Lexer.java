@@ -5,7 +5,7 @@ package toolbus.parsercup;
 
 /* Lexical syntax for ToolBus scripts */
 import java_cup.runtime.Symbol;
-import toolbus.parsercup.SyntaxErrorException;
+import toolbus.exceptions.SyntaxErrorException;
 
 
 /**

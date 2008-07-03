@@ -47,6 +47,7 @@ import toolbus.atom.tool.RecVal;
 import toolbus.atom.tool.SndKill;
 import toolbus.atom.tool.SndResponse;
 import toolbus.atom.tool.Terminate;
+import toolbus.exceptions.SyntaxErrorException;
 import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
 import toolbus.exceptions.ToolBusExecutionException;
@@ -1024,7 +1025,7 @@ public class parser extends java_cup.runtime.lr_parser {
 		throw new ToolBusException("Cannot resolve include file '" + filename + "'");
 	} 
 	
-	private void doParse(String filename) {
+	private void doParse(String filename) throws ToolBusException{
 		if(includedFiles.contains(filename)){
 			//System.err.println("Skipping include of " + filename);
 			return;

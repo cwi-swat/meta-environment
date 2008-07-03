@@ -1,4 +1,4 @@
-package toolbus.parsercup;
+package toolbus.exceptions;
 
 public class SyntaxErrorException extends RuntimeException{
 	private static final long serialVersionUID = 2315538188275748342L;

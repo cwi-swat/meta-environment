@@ -7,6 +7,7 @@ import java.io.StringWriter;
 
 import junit.framework.TestCase;
 import toolbus.ToolBus;
+import toolbus.exceptions.ToolBusException;
 
 public class TscriptTest extends TestCase{
 	
@@ -46,11 +47,15 @@ public class TscriptTest extends TestCase{
 	private boolean runTest(String name){
 		StringWriter sout = new StringWriter();
 		
-		ToolBus T = new ToolBus(new String[0], sout);
-		T.setProperty("script.path", dir + name + ".tb");
-		T.parsecup();
-		T.prepare();
-		T.execute();
+		ToolBus toolbus = new ToolBus(new String[0], sout);
+		toolbus.setProperty("script.path", dir + name + ".tb");
+		try{
+			toolbus.parsecup();
+		}catch(ToolBusException tbex){
+			throw new RuntimeException(tbex);
+		}
+		toolbus.prepare();
+		toolbus.execute();
 		
 		try{
 			sout.close();

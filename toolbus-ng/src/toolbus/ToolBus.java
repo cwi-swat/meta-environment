@@ -71,7 +71,6 @@ public class ToolBus{
 	private final PrintWriter out;
 	
 	protected int nerrors = 0;
-	private int nwarnings = 0;
 	
 	private long startTime;
 	private long nextTime = 0;
@@ -218,13 +217,8 @@ public class ToolBus{
 		nerrors++;
 	}
 	
-	public void warning(String src, String msg){
-		System.err.println(src + ": " + msg + " (warning)");
-		nwarnings++;
-	}
-	
 	public void clearErrorsAndWarnings(){
-		nerrors = nwarnings = 0;
+		nerrors = 0;
 	}
 	
 	public long getRunTime(){
@@ -249,21 +243,23 @@ public class ToolBus{
 	/**
 	 * Parse a Tscript from file and add definitions to this ToolBus.
 	 */
-	public boolean parsecup1(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename){
+	public void parsecup1(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename) throws ToolBusException{
 		try{
 		    parser parser_obj = new parser(includedFiles, toolbusProcessCalls, filename, new FileReader(filename), this);
 			parser_obj.parse();
-		}catch(ToolBusException e){ // TODO do not catch exceptions here
-			error(filename, e.getMessage());
-		}catch (FileNotFoundException e){
-			error(filename, e.getMessage());
-		}catch (Exception e){
-			error(filename, e.getMessage());
+		}catch(ToolBusException tbex){
+			error(filename, tbex.getMessage());
+			throw tbex;
+		}catch(FileNotFoundException fnfex){
+			error(filename, fnfex.getMessage());
+			throw new ToolBusException(fnfex);
+		}catch(Exception ex){
+			error(filename, ex.getMessage());
+			throw new ToolBusException(ex);
 		}
-		return nerrors == 0;
 	}
 	
-	public boolean parsecup(){
+	public void parsecup() throws ToolBusException{
 		String filename = propertyManager.get("script.path");
 		if(filename == null) throw new RuntimeException("Script name undefined.");
 		
@@ -295,19 +291,18 @@ public class ToolBus{
 			
 			// Keep track of the names of all the scripts for debugging purposes.
 			scriptsNames = parser_obj.scriptsNames();
-		}catch(ToolBusException te){
-			error(filename, te.getMessage());
-			te.printStackTrace();
-		}catch(FileNotFoundException fnfex){
-			error(filename, fnfex.getMessage());
-			fnfex.printStackTrace();
 		}catch(RuntimeException rex){
 			throw rex;
+		}catch(ToolBusException tbex){
+			error(filename, tbex.getMessage());
+			throw tbex;
+		}catch(FileNotFoundException fnfex){
+			error(filename, fnfex.getMessage());
+			throw new ToolBusException(fnfex);
 		}catch(Exception ex){
 			error(filename, ex.getMessage());
-			ex.printStackTrace();
+			throw new ToolBusException(ex);
 		}
-		return nerrors == 0;
 	}
 	
 	/**

@@ -6,21 +6,11 @@ package toolbus;
 
 public class Main{
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 		ToolBus toolbus = new ToolBus(args);
 		
-		try{
-			if(toolbus.parsecup()){
-				toolbus.prepare();
-				toolbus.execute();
-				//Atom.statistics();
-			}else{
-				System.err.println("Failed to parse");// Temp
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
-		// System.err.println(T.getTBTermFactory().statistics());
+		toolbus.parsecup();
+		toolbus.prepare();
+		toolbus.execute();
 	}
 }
