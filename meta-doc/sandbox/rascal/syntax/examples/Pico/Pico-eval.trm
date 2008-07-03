@@ -42,8 +42,7 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
 
       case STATEMENT[| if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
                        else <{STATEMENT ";"}* Stats1> fi |]:{
-        PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0){
+        if(evalExp(Exp, Env) != intval(0)){
           return evalStatments(Stats1, Env);
         } else {
           return evalStatements(Stats2, Env);
@@ -51,8 +50,7 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
       }
 
       case STATEMENT[| while <EXP Exp> do <{STATEMENT ";"}* Stats1> od|]: {
-        PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0){
+        if(evalExp(Exp, Env) != intval(0)){
           return Env;
         } else {
           VEnv Env2 = evalStatements(Stats1, Env);

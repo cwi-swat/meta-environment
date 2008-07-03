@@ -166,9 +166,9 @@ context-free syntax
          Declarator  ("=" Expression)? ";"                       -> Statement   {cons("varinit")}
          ("global" | "dynamic")  Type Name ("=" Expression)? ";" -> Statement   {cons("stat-global-dynamic")}
 
-%% Return, replace-by, fail
+%% Return, insert, fail
          "return" Predicate? ";"                                 -> Statement   {cons("stat-return")}
-         "insert" Expression ";"                                -> Statement    {cons("stat-insert")}
+         "insert" Expression ";"                                 -> Statement    {cons("stat-insert")}
          "fail" ";"                                              -> Statement   {cons("stat-fail")}
 
 %% Exception statements
@@ -186,4 +186,4 @@ context-free syntax
          "case" | "acase" | "default" | "switch" | 
          "visit" | "try" | "catch" | "finally" | "solve"  |
          "for" | "while" | "if" | "else" | "return" | "throw" |
-         "insert" | "fail" | "assert"                       -> Name {reject}
+         "insert" | "fail" | "assert"                            -> Name {reject}

@@ -3276,8 +3276,7 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
 
       case STATEMENT[| if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                        else &lt;{STATEMENT ";"}* Stats1&gt; fi |]:{
-        PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0){
+        if(evalExp(Exp, Env) != intval(0)){
           return evalStatments(Stats1, Env);
         } else {
           return evalStatements(Stats2, Env);
@@ -3285,8 +3284,7 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
       }
 
       case STATEMENT[| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od|]: {
-        PICO_VALUE Val = evalExp(Exp, Env);
-        if(Val != 0){
+        if(evalExp(Exp, Env) != intval(0)){
           return Env;
         } else {
           VEnv Env2 = evalStatements(Stats1, Env);
@@ -3382,8 +3380,7 @@ void evalStatement(STATEMENT Stat){
 
       case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats1&gt; fi:{
-        PICO_VALUE Val = evalExp(Exp);
-        if(Val != 0) {
+        if(evalExp(Exp) != intval(0)) {
           evalStatements(Stats1);
           return;
         } else {
@@ -3393,8 +3390,7 @@ void evalStatement(STATEMENT Stat){
       }
 
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od:{
-        PICO_VALUE Val = evalExp(Exp);
-        if(Val != 0){
+        if(evalExp(Exp) != intval(0)){
           return;
         } else {
           evalStatements(Stats1);

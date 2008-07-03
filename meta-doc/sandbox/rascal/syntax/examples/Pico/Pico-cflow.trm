@@ -9,7 +9,7 @@ type tuple[set[CP] entry,
            set[CP] exit] CFSEGMENT;
 
 CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
-    switch Stats {
+    switch (Stats) {
       case <STATEMENT Stat> ; <{STATEMENT ";"}* Stats2>: { 
            CFSEGMENT CF1 = cflow(Stat);
            CFSEGMENT CF2 = cflow(Stats2);
@@ -23,7 +23,7 @@ CFSEGMENT cflow({STATEMENT ";"}* Stats){
 }
 
 CFSEGMENT cflow(STATEMENT Stat){
-    switch Stat {
+    switch (Stat) {
       case while <EXP Exp> do <{STATEMENT ";"}* Stats> od : {
            CFSEGMENT CF = cflow(Stats);
            return <{Exp}, ({Exp} * CF.entry) + CF.graph + 
