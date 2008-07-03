@@ -447,7 +447,7 @@ public class MatchStore{
 	 * 
 	 * @return A list of partnerless subscribe atoms.
 	 */
-	public List<Subscribe> findPartnerLessSubscribeAtoms(){
+	public List<Subscribe> findPartnerlessSubscribeAtoms(){
 		List<Subscribe> deadSubscribeAtoms = new ArrayList<Subscribe>();
 		
 		Iterator<Atom> atomsIterator = atomSet.iterator();
@@ -505,7 +505,7 @@ public class MatchStore{
 	 */
 	private void printPartnerlessReceivers(){
 		List<RecMsg> partnerlessReceiveMessageAtoms = findPartnerLessReceiveMessageAtoms();
-		List<Subscribe> partnerlessSubscribeAtoms = findPartnerLessSubscribeAtoms();
+		List<Subscribe> partnerlessSubscribeAtoms = findPartnerlessSubscribeAtoms();
 		
 		List<Atom> partnerlessReceivers = new ArrayList<Atom>();
 		partnerlessReceivers.addAll(partnerlessReceiveMessageAtoms);
