@@ -616,10 +616,8 @@ public class Lexer implements java_cup.runtime.Scanner {
     if (numRead < 0) {
       return true;
     }
-    else {
-      yy_endRead+= numRead;  
-      return false;
-    }
+    yy_endRead+= numRead;  
+    return false;
   }
 
 
@@ -852,9 +850,7 @@ public class Lexer implements java_cup.runtime.Scanner {
               yy_input = YYEOF;
               break yy_forAction;
             }
-            else {
-              yy_input = yy_buffer_l[yy_currentPos_l++];
-            }
+            yy_input = yy_buffer_l[yy_currentPos_l++];
           }
           int yy_next = yytrans_l[ yy_rowMap_l[yy_state] + yycmap_l[yy_input] ];
           if (yy_next == -1) break yy_forAction;
@@ -901,7 +897,7 @@ public class Lexer implements java_cup.runtime.Scanner {
         case 363: break;
         case 10: 
         case 13: 
-          {  return symbol(sym.INT, Integer.parseInt(yytext()));  }
+          {  return symbol(sym.INT, new Integer(yytext()));  }
         case 364: break;
         case 318: 
           {  return symbol(sym.ABS_DELAY);  }
@@ -1388,10 +1384,8 @@ public class Lexer implements java_cup.runtime.Scanner {
             yy_atEOF = true;
             yy_do_eof();
               { return new java_cup.runtime.Symbol(sym.EOF); }
-          } 
-          else {
-            yy_ScanError(YY_NO_MATCH);
           }
+          yy_ScanError(YY_NO_MATCH);
       }
     }
   }

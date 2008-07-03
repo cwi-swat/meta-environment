@@ -985,7 +985,7 @@ public class parser extends java_cup.runtime.lr_parser {
 	}
    
 	protected void enterIfdef (boolean yesOrno){
-		ifdefStack.push(yesOrno);
+		ifdefStack.push(new Boolean(yesOrno));
 	}
 	
 	protected void leaveIfdef(){
@@ -993,7 +993,7 @@ public class parser extends java_cup.runtime.lr_parser {
 	}
 	
 	protected boolean generating() {
-	return ifdefStack.peek();
+	return ifdefStack.peek().booleanValue();
 	}
 	
 	protected void doParseInclude(String filename) throws ToolBusException{
@@ -1346,7 +1346,6 @@ class CUP$parser$actions {
           case 101: // class ::= 
             {
               String RESULT =null;
-		 RESULT = null; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("class",30, RESULT);
             }
           return CUP$parser$result;
@@ -1365,7 +1364,6 @@ class CUP$parser$actions {
           case 99: // command ::= 
             {
               String RESULT =null;
-		 RESULT = null; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("command",29, RESULT);
             }
           return CUP$parser$result;
@@ -1384,7 +1382,6 @@ class CUP$parser$actions {
           case 97: // host ::= 
             {
               String RESULT =null;
-		 RESULT = null; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("host",28, RESULT);
             }
           return CUP$parser$result;
@@ -1403,7 +1400,6 @@ class CUP$parser$actions {
           case 95: // kind ::= 
             {
               String RESULT =null;
-		 RESULT = null; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("kind",27, RESULT);
             }
           return CUP$parser$result;
@@ -2439,7 +2435,7 @@ class CUP$parser$actions {
             {
               ATerm RESULT =null;
 		Integer i = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = parser.tbfactory.makeInt(i); 
+		 RESULT = parser.tbfactory.makeInt(i.intValue()); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",0, RESULT);
             }
           return CUP$parser$result;
@@ -2448,7 +2444,7 @@ class CUP$parser$actions {
           case 1: // $START ::= script EOF 
             {
               Object RESULT =null;
-		Object start_val = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		Object start_val = ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		RESULT = start_val;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("$START",0, RESULT);
             }

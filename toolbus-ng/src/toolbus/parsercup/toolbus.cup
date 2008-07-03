@@ -125,7 +125,7 @@ parser code {:
 	}
    
 	protected void enterIfdef (boolean yesOrno){
-		ifdefStack.push(yesOrno);
+		ifdefStack.push(new Boolean(yesOrno));
 	}
 	
 	protected void leaveIfdef(){
@@ -133,7 +133,7 @@ parser code {:
 	}
 	
 	protected boolean generating() {
-	return ifdefStack.peek();
+	return ifdefStack.peek().booleanValue();
 	}
 	
 	protected void doParseInclude(String filename) throws ToolBusException{
