@@ -1049,20 +1049,22 @@ public class parser extends java_cup.runtime.lr_parser {
     }
 	
 	public void undeclaredVariableError(java_cup.runtime.Symbol badToken){
-		throw new UndeclaredVariableException(badToken.left + 1, badToken.right + 1, ((Lexer) getScanner()).getPosition() + 1, badToken.toString());
+		throw new UndeclaredVariableException(fileName, badToken.left + 1, badToken.right + 1, ((Lexer) getScanner()).getPosition() + 1, badToken.toString());
 	}
 	
-	public class UndeclaredVariableException extends RuntimeException{
+	public static class UndeclaredVariableException extends RuntimeException{
 		private static final long serialVersionUID = 1485650590025885587L;
-		
+
+		public final String filename;
 		public final int line;
 		public final int column;
 		public final int position;
 		public final String var;
 
-		public UndeclaredVariableException(int line, int column, int position, String var){
+		public UndeclaredVariableException(String filename, int line, int column, int position, String var){
 			super();
 			
+			this.filename = filename;
 			this.line = line;
 			this.column = column;
 			this.position = position;
@@ -1070,7 +1072,7 @@ public class parser extends java_cup.runtime.lr_parser {
 		}
 		
 		public String getMessage(){
-			return "Undeclared variable in "+fileName+", at line: "+line+", column: "+column+", symbol id: "+var;
+			return "Undeclared variable in "+filename+", at line: "+line+", column: "+column+", symbol id: "+var;
 		}
 	}
 	
