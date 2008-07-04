@@ -1,7 +1,7 @@
 module Names
 
 exports
-  sorts Name QualName
+  sorts Name QualName Reserved
   lexical syntax
     [A-Za-z\_] [A-Za-z0-9\_\-]* -> Name
 
@@ -10,3 +10,5 @@ exports
  
   context-free syntax
     {Name "::"}+  -> QualName {avoid,cons("QualName")}
+
+    Reserved      -> Name {reject}

@@ -190,14 +190,14 @@ public bool <(str S1, str S2)
   @primitive{"String.less"}
 
 public str +(str S1, str S2)
-  @primitive{"String.add"}
+  @primitive{"String.concat"}
 
 public int size(str S)
-  @primitive{"String.size"}
+  @primitive{"String.length"}
 
-public int get(str S, int N)
+public int charAt(str S, int N)
   throws out_of_range(str msg)
-  @primitive{"String.get"}
+  @primitive{"String.charAt"}
 
 public int toInt(str S)
   throws cannot_convert_to_int(str msg)
@@ -217,7 +217,24 @@ public set[int] toSet(str S)
 public str reverse(str S)
   @primitive{"String.reverse"}
 
-%% Add functions for other methods of Java's String class
+public list[str] split(str S, str Regex)
+  @primitive{"String.split"}
+
+public bool startsWith(str S, str Prefix)
+  @primitive{"String.startsWith"}
+
+public bool endsWith(str S, str Suffix)
+  @primitive{"String.endsWith"}
+
+public str toLowerCase(str S)
+  @primitive{"String.toLowerCase"}
+
+public str toUpperCase(str S)
+  @primitive{"String.toUpperCase"}
+
+
+%% The above is a selection of methods from Java's String class.
+%% Others will be added on demand.
 
 %% --- Locations ---------------------------------------------
    
@@ -653,8 +670,8 @@ public rel[&T1, &T2] *(rel[&T1] R, rel[&T2] S){
 %% Compose two relations: compose (was: o)
 public rel[&T1, &T3] compose(rel[&T1, &T2] R,
                                  rel[&T2, &T3] S){
-   return {<X, Z> | tuple[&T1 X, &T2 Y1]: R, 
-                    tuple[&T2 Y2, &T3 Z]: S, Y1 == Y2};
+   return {<X, Z> | <&T1 X, &T2 Y1>: R, 
+                    <&T2 Y2, &T3 Z>: S, Y1 == Y2};
 }
 
 %% Identity relation: id
@@ -664,7 +681,7 @@ public rel[&T, &T] id(set[&T] S){
 
 %% Inverse relation: invert (was: inv)
 public rel[&T2, &T1] invert (rel[&T1, &T2] R){
-  return { <Y, X> | tuple[&T1 X, &T2 Y] : R };
+  return { <Y, X> | <&T1 X, &T2 Y> : R };
 }
 
 %% Complement of relation: complement (was: compl)
@@ -674,12 +691,12 @@ public rel[&T1, &T2] complement(rel[&T1, &T2] R){
 
 %% Domain of relation: domain
 public set[&T1] domain (rel[&T1,&T2] R){
-  return { X | tuple[&T1 X, &T2 Y] : R };
+  return { X | <&T1 X, &T2 Y> : R };
 }
 
 %% Range of relation: range
 public set[&T1] range (rel[&T1,&T2] R){
-  return { Y | tuple[&T1 X, &T2 Y] : R };
+  return { Y | <&T1 X, &T2 Y> : R };
 }
 
 %% Carrier of relation: carrier
@@ -689,33 +706,33 @@ public set[&T]  carrier (rel[&T,&T] R) {
 
 %% Domain Restriction of a Relation: domainR
 public rel[&T1,&T2] domainR (rel[&T1,&T2] R, set[&T1] S){
-  return { <X, Y> | tuple[&T1 X, &T2 Y] : R, X in S };
+  return { <X, Y> | <&T1 X, &T2 Y> : R, X in S };
 }
 
 %% Range Restriction of a Relation: rangeR
 public rel[&T1,&T2] rangeR (rel[&T1,&T2] R, set[&T2] S){
-  return { <X, Y> | tuple[&T1 X, &T2 Y] : R, Y in S };
+  return { <X, Y> | <&T1 X, &T2 Y> : R, Y in S };
 }
 
 %% Carrier Restriction of a Relation: carrierR
 public rel[&T,&T] carrierR (rel[&T,&T] R, set[&T] S){
-  return { <X, Y> | tuple[&T X, &T Y] : R, X in S, Y in S };
+  return { <X, Y> | <&T X, &T Y> : R, X in S, Y in S };
 }
 
 %% Domain Exclusion of a Relation: domainX
 public rel[&T1,&T2] domainX (rel[&T1,&T2] R, set[&T1] S){
-  return { <X, Y> | tuple[&T1 X, &T2 Y] : R, X notin S };
+  return { <X, Y> | <&T1 X, &T2 Y> : R, !(X in S) };
 }
 
 %% Range Exclusion of a Relation: rangeX
 public rel[&T1,&T2] rangeX (rel[&T1,&T2] R, set[&T2] S){
-  return { <X, Y> | tuple[&T1 X, &T2 Y] : R, Y notin S };
+  return { <X, Y> | <&T1 X, &T2 Y> : R, !(Y in S) };
 }
 
 %% Carrier Exclusion of a Relation: carrierX
 public rel[&T,&T] carrierX (rel[&T,&T] R, set[&T] S){
-  return { <X, Y> | tuple[&T1 X, &T2 Y] : R, 
-                    X notin S, Y notin S };
+  return { <X, Y> | <&T1 X, &T2 Y> : R, 
+                    !(X in S), !(Y in S) };
 }
 
 %% Relations viewed as graphs
@@ -821,6 +838,10 @@ public int toDouble(tree Subject)
 public int toString(tree Subject)
   throws cannot_convert(str msg)
   @primitive{"Tree.toString"}
+
+public bool elementOf(tree S1, tree S2)
+  @primitive{"Tree.elementOf"}
+
 
 %% --- io ----------------------------------------------------
 

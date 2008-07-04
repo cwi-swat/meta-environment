@@ -16,16 +16,16 @@ rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS,
 
     set[Stat] STATEMENT = carrier(PRED);
 
-    rel[Stat,Def] DEF  = {<S,<S,V>> | tuple[Stat S, Var V]: DEFS};
+    rel[Stat,Def] DEF  = {<S,<S,V>> | <Stat S, Var V>: DEFS},
 
-    rel[Stat,Def] KILL = 
-        {<S1, <S2, V>> | tuple[Stat S1, Var V] : DEFS, 
-                         tuple[Stat S2, V] : DEFS, 
-                         S1 != S2
-        };
+                  KILL = {<S1, <S2, V>> | <Stat S1, Var V> : DEFS, 
+                                          <Stat S2, V> : DEFS, 
+                                          S1 != S2
+                         },
 
-     rel[Stat,Def] IN = {};
-     rel[Stat,Def] OUT = DEF;
+                  IN = {},
+
+                  OUT = DEF;
 
      solve {
            IN  =  {<S, D> | int S : STATEMENT, 

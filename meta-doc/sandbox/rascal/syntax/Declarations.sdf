@@ -1,63 +1,37 @@
 module Declarations
 
-imports  Types 
+imports  DeclAnnos
+         Types 
 	Expressions 
          Visitors
-%%         languages/java/syntax/Statements [Type       => JavaType
-%%                                           Block      => JavaBlock
-%%                                           Statement  => JavaStatement
-%%                                           Assignment => JavaAssignment
-%%                                           Expression => JavaExpression
-%%                                           Identifier => JavaIdentifier
-%%                                           Name       => JavaName
-%%                                          ]
 
 hiddens
   context-free start-symbols
         Declaration
 
 exports
-  sorts Declaration Throws ThrowDecl DeclarationUnit DeclAnno DeclAnnos DeclAnnoChar
+  sorts Declaration DeclarationUnit   
 
-  lexical syntax
-    "@" Name "{" DeclAnnoChar* "}"               -> DeclAnno
-    ~[\}]                                        -> DeclAnnoChar
-    "\\}"                                        -> DeclAnnoChar
+   context-free syntax
 
-  context-free syntax
-
-    DeclAnno*                                          -> DeclAnnos
-
-    "data" ( Name | ParameterizedType) 
-           DeclAnnos { AbstractType "|"}+              -> Declaration {cons("data-decl")}
-
-    "view" Name "<:" Name 
-           DeclAnnos { (Name AbstractType) "|"}+        -> Declaration {cons("view-decl")}
-
-    "type" Type (Name  | ParameterizedType)  DeclAnnos  -> Declaration {cons("type-decl")}
+    TypeDeclaration | DataDeclaration | 
+    ViewDeclaration  | VariableDeclaration |
+    FunctionDeclaration                                 -> Declaration
 
     "anno" Type Name DeclAnnos { Type "|"}+             -> Declaration {cons("anno-decl")}
 
-    "module" | "function" | "global" | "data" | 
+    "module" | "function" | "variable" | "data" |
     "view" | "type" | "anno" | "tag" | "all"            -> DeclarationUnit
-
+ 
     "tag" DeclarationUnit Name DeclAnnos {Type "|"}+    -> Declaration {cons("tag-decl")}
  
-    Type Name DeclAnnos ("=" Expression)?               -> Declaration {cons("global-decl")}
-
-    ("throws" ThrowDecl)*                               -> Throws
-    Name "(" OptNamedTypes ")"                          -> ThrowDecl
-    FunctionType Throws DeclAnnos Block?                -> Declaration {cons("function-decl")}
-
     "rule"  Name DeclAnnos Rule                         -> Declaration {cons("rule-decl")}
     "arule" Name DeclAnnos ARule                        -> Declaration {cons("arule-decl")}
 
     "visitor" Name "{" Visitor+ "}"                     -> Declaration {cons("visitor")}
 
 %% Define reserved words
-    "data" | "view" | "type" | "anno" | "tag" |
-    "dynamic" | "throws" | "rule" | "arule"            -> Name {reject}
-
-    DeclarationUnit                                    -> Name {reject}
+    "anno" | "tag" | "rule" | "arule"                   -> Reserved
+    DeclarationUnit                                     -> Reserved
 
   

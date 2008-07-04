@@ -29,7 +29,7 @@ Exp subst(Var V1, Exp E1, Exp E2) {
       case <Var V2>: insert (V1==V2) ? E1 : V2;
 
       case <Exp Ea> <Exp Eb>:
-        insert [| <subst(V, E, Ea)> <subst(V, E, Eb)> |];  %%% amb??
+        insert [| <subst(V, E, Ea)> <subst(V, E, Eb)> |];
 
       case fn <Var V2> => <Var Ea>:
         if (V1 == V2) { insert [| fn <V2> =\> <Ea> |]; }

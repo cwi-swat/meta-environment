@@ -2,6 +2,7 @@ module Expressions
 
 imports  basic/Areas
          Names
+         DeclAnnos
 	Types
          Patterns
          languages/java/syntax/Lexical [ Identifier => JavaIdentifier
@@ -12,9 +13,10 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression Declarator Predicate SimpleGenerator Generator Call Assignable
+sorts Expression Binder Predicate SimpleGenerator Generator Call Assignable
       Strategy Statement Block Rule ARule Case CaseAction Assignment IncrAssignOp Value
-      Catch Finally Increment Range FunctionClosure
+      Catch Finally Increment Range FunctionClosure VariableDeclaration Scope OneVarDecl
+      Throws ThrowDecl FunctionDeclaration
 
 context-free syntax
 %% Basic values
@@ -85,21 +87,26 @@ context-free priorities
 	"!" Predicate                                           -> Predicate {cons("pred-not")} >
 	Predicate "&&" Predicate                                -> Predicate {left,cons("pred-and")} >
 	Predicate "||" Predicate                                -> Predicate {left,cons("pred-or")}
-%%         Predicate "->" Predicate                                -> Predicate {cons("pred-implies")}
 
 context-free syntax
-	Declarator ":=" Expression                              -> Predicate {cons("pred-match")}
-	Declarator "!:=" Expression                             -> Predicate {cons("pred-not-match")}
+	Pattern ":=" Expression                                 -> Predicate {cons("pred-match")}
+	Pattern "!:=" Expression                                -> Predicate {cons("pred-not-match")}
          Expression                                              -> Predicate {cons("pred-exp")}
 	"(" Predicate ")"                                       -> Predicate {bracket}
 
+%% Add , as alternative for &&
+
 context-free syntax
 %% Generators
-         Type Name                                               -> Declarator {cons("decl-type-name")}
-         StructuredType                                          -> Declarator {cons("decl-struct-type")}
-         QuotedSynPattern                                        -> Declarator {cons("decl-quotedsynpat")}
-         AbsPattern                                              -> Declarator {cons("decl-abspat")}
-         RegPattern                                              -> Declarator {cons("decl-regpat")}
+%%         Type Name                                               -> Declarator {cons("decl-type-name")}
+%%         StructuredType                                          -> Declarator {cons("decl-struct-type")}
+%%         QuotedSynPattern                                        -> Declarator {cons("decl-quotedsynpat")}
+%%         AbsPattern                                              -> Declarator {cons("decl-abspat")}
+%%         RegPattern                                              -> Declarator {cons("decl-regpat")}
+
+           Pattern                                               -> Binder
+           NamedType                                             -> Binder
+           "<" {(NamedType | Name) ","}+ ">"                     -> Binder
 
          ("top-down" | "top-down-break" | 
           "bottom-up" | "bottom-up-break" |
@@ -108,7 +115,7 @@ context-free syntax
          "," Expression ","                                      -> Increment   {cons("increment")}
          "[" Expression Increment? ".." Expression "]"           -> Range       {cons("range")}
 
-	Strategy Declarator ":"  (Expression | Range)           -> SimpleGenerator {cons("generator")}
+	Strategy Binder ":" (Expression | Range)                -> SimpleGenerator {cons("generator")}
 
          SimpleGenerator                                         -> Generator
          Predicate                                               -> Generator
@@ -162,9 +169,8 @@ context-free syntax
 
          Assignment  ";"                                         -> Statement   {cons("stat-assign")}
 
-%% Declaration statements
-         Declarator  ("=" Expression)? ";"                       -> Statement   {cons("varinit")}
-         ("global" | "dynamic")  Type Name ("=" Expression)? ";" -> Statement   {cons("stat-global-dynamic")}
+
+         VariableDeclaration                                     -> Statement  {cons("stat-decl-var")}
 
 context-free syntax
 %% Return, insert, fail
@@ -182,9 +188,19 @@ context-free syntax
          "{" Statement* "}"                                      -> Block       {cons("block")}
          Block                                                   -> Statement   {cons("stat-block")}
 
+%% Variable Declaration
+         ("global" | "dynamic")?                                 -> Scope
+         Name DeclAnnos ("=" Expression)?                        -> OneVarDecl
+         Scope Type {OneVarDecl ","}+ ";"                        -> VariableDeclaration {cons("decl-var")}
+
+%% Function Declaration
+         ("throws" ThrowDecl)*                                   -> Throws
+         Name "(" OptNamedTypes ")"                              -> ThrowDecl
+         FunctionType Throws DeclAnnos Block?                    -> FunctionDeclaration {cons("function-decl")}
+
 %% Define reserved words:
-         "true" | "false" | "global" | 
+         "true" | "false" | "global" | "dynamic" |
          "case" | "acase" | "default" | "switch" | 
          "visit" | "try" | "catch" | "finally" | "solve"  |
-         "for" | "while" | "if" | "else" | "return" | "throw" |
-         "insert" | "fail" | "assert"                            -> Name {reject}
+         "for" | "while" | "if" | "else" | "return" | "throw" | 
+         "throws" | "insert" | "fail" | "assert"                 -> Reserved

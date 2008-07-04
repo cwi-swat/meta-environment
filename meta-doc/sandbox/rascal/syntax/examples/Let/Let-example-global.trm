@@ -7,8 +7,8 @@ import Let;
 %% Cnt: global counter to generate fresh variables
 %% rel[Var,Var]: global renaming table
 
-int Cnt = 0;
-rel[Var,Var] Rn = {};
+global int Cnt = 0;
+global rel[Var,Var] Rn = {};
 
 Var newVar() {
     global int Cnt;  

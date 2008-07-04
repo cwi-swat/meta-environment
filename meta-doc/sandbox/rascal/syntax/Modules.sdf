@@ -43,4 +43,4 @@ context-free syntax
 
 %% Define reserved words
      "public" | "private" | "import" | 
-     "extend" | "module"                         -> Name {reject}
+     "extend" | "module"                         -> Reserved

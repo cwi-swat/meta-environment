@@ -43,6 +43,7 @@ exports
     string:StrCon                                 -> Symbol {cons("lit")}
     ci-string:SingleQuotedStrCon                  -> Symbol {cons("ci-lit")}
 
+    Reserved                                      -> Symbol {reject}
 
   context-free priorities
     {Symbol "?"               -> Symbol

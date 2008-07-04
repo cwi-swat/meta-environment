@@ -8,32 +8,31 @@ exports
         RegPattern
 
   lexical syntax
-         "\\<"                                       -> SynPatternChar
-         "\\>"                                       -> SynPatternChar
-         "\\|"                                       -> SynPatternChar
-         ~[\<\>\|]                                   -> SynPatternChar
+         "\\<"                                        -> SynPatternChar
+         "\\>"                                        -> SynPatternChar
+         "\\|"                                        -> SynPatternChar
+         ~[\<\>\|]                                    -> SynPatternChar
          
-         "/" RegExp "/"  RegModifier?                -> RegPattern
+         "/" RegExp "/"  RegModifier?                 -> RegPattern
 
   context-free syntax
-%%         Name                                        -> PatternVar
-         "<" Type? Name  ">"                         -> PatternVar
-         "<" Call ">"                                -> PatternVar  %% TODO: better naming
+         "<" Type? Name  ">"                          -> PatternVar
+         "<" Call ">"                                 -> PatternVar  %% TODO: better naming
 
-         SynPatternChar                              -> SynPatternSymbol
-         PatternVar                                  -> SynPatternSymbol
-         Symbol? "[|" SynPatternSymbol* "|]"         -> QuotedSynPattern
-         QuotedSynPattern                            -> SynPattern
+         SynPatternChar                               -> SynPatternSymbol
+         PatternVar                                   -> SynPatternSymbol
+         Symbol? "[|" SynPatternSymbol* "|]"          -> QuotedSynPattern
+         QuotedSynPattern                             -> SynPattern
 
-         Name | StringLiteral                        -> AbsPatternName {cons("abspat-name")}
-         AbsPattern                                  -> AbsPatternArg
+         Name | StringLiteral                         -> AbsPatternName {cons("abspat-name")}
+         AbsPattern                                   -> AbsPatternArg
 %%         Type Name                                   -> AbsPatternArg
-         "(" {AbsPatternArg ","}* ")"                -> AbsPatternArgs {cons("abspat-args")}
+         "(" {AbsPatternArg ","}* ")"                 -> AbsPatternArgs {cons("abspat-args")}
 
-         PatternVar                                  -> AbsPattern     {cons("abspat-pattern-var")}
-         AbsPatternName AbsPatternArgs               -> AbsPattern     {cons("abspat-call")}
+         PatternVar                                   -> AbsPattern     {cons("abspat-pattern-var")}
+         AbsPatternName AbsPatternArgs?               -> AbsPattern     {cons("abspat-call")}
 
-         "!"? (RegPattern | SynPattern | AbsPattern) -> Pattern        {cons("negated-pattern")}
+         "!"? (RegPattern | SynPattern | AbsPattern)  -> Pattern        {cons("negated-pattern")}
 
 
 
