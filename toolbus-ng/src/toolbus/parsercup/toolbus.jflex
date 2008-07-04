@@ -18,7 +18,9 @@ import toolbus.exceptions.SyntaxErrorException;
 %column
 
 %{
-  StringBuilder string = new StringBuilder();
+  private StringBuilder string = new StringBuilder();
+  
+  private int previousYYchar = 0;
 
   private Symbol symbol(int type){
     return new Symbol(type, yyline, yycolumn);
@@ -30,6 +32,10 @@ import toolbus.exceptions.SyntaxErrorException;
   
   public int getPosition(){
 	  return yychar;
+  }
+  
+  public int getPreviousPosition(){
+	  return previousYYchar;
   }
 %}
 

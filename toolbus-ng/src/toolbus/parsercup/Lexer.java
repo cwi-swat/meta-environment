@@ -493,7 +493,7 @@ public class Lexer implements java_cup.runtime.Scanner {
   private boolean yy_eof_done;
 
   /* user code: */
-  StringBuilder string = new StringBuilder();
+  private StringBuilder string = new StringBuilder();
 
   private Symbol symbol(int type){
     return new Symbol(type, yyline, yycolumn);
@@ -501,6 +501,12 @@ public class Lexer implements java_cup.runtime.Scanner {
   
   private Symbol symbol(int type, Object value){
     return new Symbol(type, yyline, yycolumn, value);
+  }
+  
+  private volatile int previousYYchar = 0;
+  
+  public int getPreviousPosition(){
+	  return previousYYchar;
   }
   
   public int getPosition(){
@@ -750,6 +756,8 @@ public class Lexer implements java_cup.runtime.Scanner {
    * @exception   IOException  if any I/O-Error occurs
    */
   public java_cup.runtime.Symbol next_token() throws java.io.IOException {
+	  previousYYchar = yychar;
+	  
     int yy_input;
     int yy_action;
 

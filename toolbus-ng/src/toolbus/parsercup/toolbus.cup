@@ -221,7 +221,7 @@ parser code {:
 	 }
 	 
 	 public int getPosition() {
-	   return ((Lexer) getScanner()).getPosition();
+	   return ((Lexer) getScanner()).getPreviousPosition();
 	 }
 :}
 

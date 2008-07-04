@@ -1081,7 +1081,7 @@ public class parser extends java_cup.runtime.lr_parser {
 	 }
 	 
 	 public int getPosition() {
-	   return ((Lexer) getScanner()).getPosition();
+	   return ((Lexer) getScanner()).getPreviousPosition();
 	 }
 
 }
