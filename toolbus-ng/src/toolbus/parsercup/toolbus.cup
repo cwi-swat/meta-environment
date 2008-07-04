@@ -727,13 +727,8 @@ toolbus_def ::= toolbus
               ;
               
 include ::= INCLUDE FILENAME:fn             {: if(parser.generating()){
-                                                 try {
-                                                   parser.doParseInclude(fn);
-                                                 } 
-                                                 catch (ToolBusException e) {
-                                                    throw new ToolBusExecutionException(e.getMessage(), makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)));
-                                                 }
-                                               }
+		 											parser.doParseInclude(fn);
+		 								       }
                                             :}                      
           ;
 

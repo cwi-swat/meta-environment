@@ -1194,14 +1194,9 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		String fn = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 if(parser.generating()){
-                                                 try {
-                                                   parser.doParseInclude(fn);
-                                                 } 
-                                                 catch (ToolBusException e) {
-                                                    throw new ToolBusExecutionException(e.getMessage(), makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)));
-                                                 }
-                                               }
+		 		if(parser.generating()){
+		 			parser.doParseInclude(fn);
+		 		}
                                             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("include",39, RESULT);
             }

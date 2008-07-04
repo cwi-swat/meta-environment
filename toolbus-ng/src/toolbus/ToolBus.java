@@ -22,6 +22,7 @@ import java.util.List;
 import toolbus.atom.Atom;
 import toolbus.commandline.CommandLine;
 import toolbus.exceptions.NoSuchProcessDefinitionException;
+import toolbus.exceptions.SyntaxErrorException;
 import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
@@ -250,6 +251,9 @@ public class ToolBus{
 		}catch(ToolBusException tbex){
 			error(filename, tbex.getMessage());
 			throw tbex;
+		}catch(SyntaxErrorException seex){
+			error(filename, seex.getMessage());
+			throw seex;
 		}catch(FileNotFoundException fnfex){
 			error(filename, fnfex.getMessage());
 			throw new ToolBusException(fnfex);
