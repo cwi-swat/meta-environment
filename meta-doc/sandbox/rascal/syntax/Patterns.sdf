@@ -27,11 +27,11 @@ exports
 
          Name | StringLiteral                        -> AbsPatternName {cons("abspat-name")}
          AbsPattern                                  -> AbsPatternArg
-         Type Name                                   -> AbsPatternArg
+%%         Type Name                                   -> AbsPatternArg
          "(" {AbsPatternArg ","}* ")"                -> AbsPatternArgs {cons("abspat-args")}
 
-%%         PatternVar                                  -> AbsPattern     {cons("abspat-pattern-var")}
-         AbsPatternName AbsPatternArgs?              -> AbsPattern     {cons("abspat-call")}
+         PatternVar                                  -> AbsPattern     {cons("abspat-pattern-var")}
+         AbsPatternName AbsPatternArgs               -> AbsPattern     {cons("abspat-call")}
 
          "!"? (RegPattern | SynPattern | AbsPattern) -> Pattern        {cons("negated-pattern")}
 

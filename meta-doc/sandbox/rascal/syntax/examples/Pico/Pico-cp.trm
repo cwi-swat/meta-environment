@@ -5,7 +5,7 @@ import  Pico-controlflow;
 import  Pico-use-def;
 
 Boolean is_constant(EXP E) {
-   switch E {
+   switch (E) {
      case <NatCon N> => true
 
      case <StrCon S> => true
@@ -26,7 +26,7 @@ PROGRAM cp(PROGRAM P) {
                   Id2 == Id 
       };  
  
-    visit P {
+    visit (P) {
      case <PICO-ID Id>: if(EXP E := replacements[Id]){
                            replace-by E;
                         }

@@ -1,14 +1,14 @@
 module String-example
 
 String removeFirstNL(String S){
-    switch S {
+    switch (S) {
       case string("\"" <NQChar* Chars1> "\n" <NQChar* Chars2> "\"") =>
            string("\"" <Chars1> <Chars2> "\"")
     }
 }
 
 String removeAllNL(String S){
-    visit S {
+    visit (S) {
       case string("\"" <NQChar* Chars1> "\n" <NQChar* Chars2> "\"") =>
            string("\"" <Chars1> <Chars2> "\"")
     }

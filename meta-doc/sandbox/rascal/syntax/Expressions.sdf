@@ -76,7 +76,7 @@ context-free priorities
          Expression ">" Expression                               -> Predicate {cons("pred-greater")}
          Expression ">=" Expression                              -> Predicate {cons("pred-greater-equal")}
 	Expression "in" Expression                              -> Predicate {cons("pred-element-of")}
-	Expression "notin" Expression                           -> Predicate {cons("pred-not-element-of")}
+%%	Expression "notin" Expression                           -> Predicate {cons("pred-not-element-of")}
 	Expression "==" Expression                              -> Predicate {cons("pred-equal")}
 	Expression "!=" Expression                              -> Predicate {cons("pred-not-equal")}
          Expression "?"  Expression                              -> Predicate {cons("pred-has-anno")}
@@ -97,7 +97,7 @@ context-free syntax
 %% Generators
          Type Name                                               -> Declarator {cons("decl-type-name")}
          StructuredType                                          -> Declarator {cons("decl-struct-type")}
-         SynPattern                                              -> Declarator {cons("decl-synpat")}
+         QuotedSynPattern                                        -> Declarator {cons("decl-quotedsynpat")}
          AbsPattern                                              -> Declarator {cons("decl-abspat")}
          RegPattern                                              -> Declarator {cons("decl-regpat")}
 
@@ -155,7 +155,7 @@ context-free syntax
          QualName "[" Expression "]"                             -> Assignable {cons("asg-index")}
          QualName "." Name                                       -> Assignable {cons("asg-field")}
 
-         "="  | "+=" | "-=" | "*=" | "/="  | "&="                -> IncrAssignOp {cons("incr-assignop")}
+         "="  | "+=" | "-=" | "*=" | "/="  | "&=" | "|="         -> IncrAssignOp {cons("incr-assignop")}
 
          Assignable IncrAssignOp Expression                      -> Assignment  {cons("assign")}
          Assignable "@" Expression IncrAssignOp Expression       -> Assignment  {cons("assign-anno")}
@@ -166,6 +166,7 @@ context-free syntax
          Declarator  ("=" Expression)? ";"                       -> Statement   {cons("varinit")}
          ("global" | "dynamic")  Type Name ("=" Expression)? ";" -> Statement   {cons("stat-global-dynamic")}
 
+context-free syntax
 %% Return, insert, fail
          "return" Predicate? ";"                                 -> Statement   {cons("stat-return")}
          "insert" Expression ";"                                 -> Statement    {cons("stat-insert")}

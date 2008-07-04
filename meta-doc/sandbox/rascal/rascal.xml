@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1469,10 +1469,7 @@ int f(&amp;T y, double x)</programlisting></para>
         This means that they can occur in cases of <literal>visit</literal>
         and <literal>switch</literal> statements, on the left-hand side of the
         match operator (<literal>:=</literal>) and as declarator in
-        generators.<caution>
-            <para>The following proposal differs slightly from what we
-            discussed earlier.</para>
-          </caution></para>
+        generators.</para>
 
         <para>We use a regular expression language that extends the lexical
         syntax rules found in SDF towards Java regex with the following
@@ -1702,25 +1699,28 @@ lexical syntax
             syntactic position determines how they are used.</para>
           </note>We also allow arbitrary character classes as type in a
         pattern variable, e.g., one could also write:<programlisting>  natcon("0" &lt;[0-9]+ Ds&gt;) =&gt; natcon(&lt;Ds&gt;)</programlisting></para>
+
+        <para><caution>
+            <para>Make lexical patterns and regular patterns more similar to
+            each other.</para>
+          </caution></para>
       </section>
     </section>
 
     <section>
       <title>Expressions</title>
 
-      <para></para>
-
       <table>
-        <title>Proposed Operator set (DISCUSS)</title>
+        <title>Operators on Datatypes (DISCUSS)</title>
 
         <tgroup cols="11">
           <colspec align="center" />
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
-              <entry align="center">bool&#160;</entry>
+              <entry align="center">bool </entry>
 
               <entry align="center">int</entry>
 
@@ -1732,9 +1732,9 @@ lexical syntax
 
               <entry align="center">list</entry>
 
-              <entry align="center">set</entry>
-
               <entry align="center">tuple</entry>
+
+              <entry align="center">set</entry>
 
               <entry align="center">map</entry>
 
@@ -1860,7 +1860,7 @@ lexical syntax
 
               <entry>&gt;</entry>
 
-              <entry>&gt;greater</entry>
+              <entry>&gt;</entry>
             </row>
 
             <row>
@@ -1900,11 +1900,11 @@ lexical syntax
 
               <entry></entry>
 
-              <entry>&amp;</entry>
-
-              <entry>&amp;</entry>
+              <entry></entry>
 
               <entry></entry>
+
+              <entry>&amp;</entry>
 
               <entry>&amp;</entry>
 
@@ -1924,11 +1924,11 @@ lexical syntax
 
               <entry></entry>
 
-              <entry>|</entry>
-
-              <entry>|</entry>
+              <entry></entry>
 
               <entry></entry>
+
+              <entry>|</entry>
 
               <entry>|</entry>
 
@@ -1974,9 +1974,9 @@ lexical syntax
 
               <entry>+</entry>
 
-              <entry></entry>
-
               <entry>+</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -1984,27 +1984,27 @@ lexical syntax
             </row>
 
             <row>
-              <entry>sub</entry>
+              <entry>sub/diff</entry>
 
               <entry></entry>
 
-              <entry>_</entry>
+              <entry>-</entry>
 
-              <entry>_</entry>
-
-              <entry></entry>
-
-              <entry></entry>
+              <entry>-</entry>
 
               <entry></entry>
 
               <entry></entry>
 
-              <entry></entry>
+              <entry>-</entry>
 
               <entry></entry>
 
-              <entry></entry>
+              <entry>-</entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
             </row>
 
             <row>
@@ -2024,11 +2024,11 @@ lexical syntax
 
               <entry>*</entry>
 
-              <entry></entry>
+              <entry>*</entry>
 
-              <entry></entry>
+              <entry>*</entry>
 
-              <entry></entry>
+              <entry>*</entry>
             </row>
 
             <row>
@@ -2056,7 +2056,31 @@ lexical syntax
             </row>
 
             <row>
-              <entry>diff</entry>
+              <entry>in</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>in</entry>
+
+              <entry></entry>
+
+              <entry>in</entry>
+
+              <entry>in</entry>
+
+              <entry>in</entry>
+
+              <entry>in</entry>
+
+              <entry>in</entry>
+            </row>
+
+            <row>
+              <entry>*-closure</entry>
 
               <entry></entry>
 
@@ -2068,19 +2092,99 @@ lexical syntax
 
               <entry></entry>
 
-              <entry>\</entry>
+              <entry></entry>
 
-              <entry>\</entry>
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>*</entry>
+
+              <entry>*</entry>
+            </row>
+
+            <row>
+              <entry>+-closure</entry>
 
               <entry></entry>
 
               <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>+</entry>
+
+              <entry>+</entry>
+            </row>
+
+            <row>
+              <entry>project</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>[ _ ]</entry>
+
+              <entry></entry>
+
+              <entry>[ _ ]</entry>
+
+              <entry>[ _ ]</entry>
+
+              <entry></entry>
+
+              <entry>[ _ ]</entry>
 
               <entry></entry>
             </row>
           </tbody>
         </tgroup>
       </table>
+
+      <para><caution>
+          <para>We will have incremental assignment operators:
+          <literal>+=</literal>, <literal>-=</literal>, <literal>*=</literal>,
+          <literal>/=</literal> , <literal>&amp;=</literal> and
+          <literal>|=</literal>.</para>
+        </caution><caution>
+          <para>Some operators do not fit nicely in this scheme since they do
+          not operate on the basic data types:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>?</literal> test for annotation</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>@</literal> get annotation value</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>:=</literal> match</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>!:=</literal> no match</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>_ ? _ : _</literal> conditional expression</para>
+            </listitem>
+          </itemizedlist>
+        </caution></para>
 
       <para>Expressions correspond roughly to Rscript expressions with some
       extensions:<itemizedlist>
@@ -3251,8 +3355,14 @@ VEnv evalProgram(PROGRAM P){
 VEnv evalDecls(DECLS Decls){
     VEnv Env = {};
     visit (Decls) {
-      case &lt;PICO-ID Id&gt; : string:  { Env[Id] = strval(""); return Env;}
-      case &lt;PICO-ID Id&gt; : natural: { Env[Id] = intval(0);  return Env;}
+      case &lt;PICO-ID Id&gt; : string: { 
+           Env[Id] = strval(""); 
+           return Env;
+      }
+      case &lt;PICO-ID Id&gt; : natural: { 
+           Env[Id] = intval(0);  
+           return Env;
+      }
     }
     return Env;
 }
@@ -3274,8 +3384,8 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
         return Env;
       }
 
-      case STATEMENT[| if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
-                       else &lt;{STATEMENT ";"}* Stats1&gt; fi |]:{
+      case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
+                       else &lt;{STATEMENT ";"}* Stats1&gt; fi:{
         if(evalExp(Exp, Env) != intval(0)){
           return evalStatments(Stats1, Env);
         } else {
@@ -3283,7 +3393,7 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
         }
       }
 
-      case STATEMENT[| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od|]: {
+      case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats1&gt; od: {
         if(evalExp(Exp, Env) != intval(0)){
           return Env;
         } else {
@@ -3439,15 +3549,14 @@ PICO_VALUE evalExp(Exp exp) {
  
 import pico/syntax/Pico;
 
-data CP EXP exp;
-data CP STATEMENT stat;
+data CP exp(EXP) | stat(STATEMENT);
 
 type tuple[set[CP] entry, 
            rel[CP,CP] graph, 
            set[CP] exit] CFSEGMENT;
 
 CFSEGMENT cflow({STATEMENT ";"}* Stats){ 
-    switch Stats {
+    switch (Stats) {
       case &lt;STATEMENT Stat&gt; ; &lt;{STATEMENT ";"}* Stats2&gt;: { 
            CFSEGMENT CF1 = cflow(Stat);
            CFSEGMENT CF2 = cflow(Stats2);
@@ -3461,26 +3570,28 @@ CFSEGMENT cflow({STATEMENT ";"}* Stats){
 }
 
 CFSEGMENT cflow(STATEMENT Stat){
-    switch Stat {
+    switch (Stat) {
       case while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od : {
            CFSEGMENT CF = cflow(Stats);
-           return &lt;{Exp}, ({Exp} * CF.entry) + CF.graph + 
-                          (CF.exit * {Exp}),
-                   {Exp}&gt;;
+           set[CP] E = {exp(Exp)};
+           return &lt; E, 
+                    (E * CF.entry) + CF.graph + (CF.exit * E),
+                    E
+                  &gt;;
       }
                 
       case if &lt;EXP Exp&gt; then &lt;{STATEMENT ";"}* Stats1&gt; 
                    else &lt;{STATEMENT ";"}* Stats2&gt; fi: {
            CFSEGMENT CF1 = cflow(Stats1);
            CFSEGMENT CF2 = cflow(Stats2);
-           return &lt; {Exp}, 
-                    ({Exp} * CF1.entry) + 
-                    ({Exp} * CF2.entry) + CF1.graph + CF2.graph,
+           set[CP] E = {exp(Exp)};
+           return &lt; E, 
+                    (E * CF1.entry) + (E * CF2.entry) + CF1.graph + CF2.graph,
                     CF1.exit + CF2.exit
                   &gt;;
       }
          
-      case &lt;STATEMENT Stat&gt;: { CP cp = stat(Stat); return &lt;{cp}, {}, {cp}&gt;; }
+      case &lt;STATEMENT Stat&gt;: return &lt;{Stat}, {}, {Stat}&gt;;
     }
 }
 </programlisting>
@@ -3551,11 +3662,11 @@ PROGRAM cse(PROGRAM P) {
     map[EXP, PICO-ID] replacements = 
        {&lt;E2, Id&gt; | STATEMENT S : P,
                    [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] := S,
-                   Id notin E,
+                   !(Id in E),
                    EXP E2 : reachX({S}, Defs[Id], Pred)
        };
   
-    visit P {
+    visit (P) {
       case &lt;EXP E&gt;: if(PICO-ID Id := replacements(E)){
                        replace-by Id;
                     }
@@ -3594,7 +3705,7 @@ import  Pico-controlflow;
 import  Pico-use-def;
 
 Boolean is_constant(EXP E) {
-   switch E {
+   switch (E) {
      case &lt;NatCon N&gt; =&gt; true
 
      case &lt;StrCon S&gt; =&gt; true
@@ -3615,7 +3726,7 @@ PROGRAM cp(PROGRAM P) {
                   Id2 == Id 
       };  
  
-    visit P {
+    visit (P) {
      case &lt;PICO-ID Id&gt;: if(EXP E := replacements[Id]){
                            replace-by E;
                         }
@@ -3701,22 +3812,18 @@ rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS,
 lexical syntax
    [0-9]             -&gt; Digit
    Digit+            -&gt; Number
-   Number "." Number -&gt; Real</programlisting>we can write normalization
-      rules for <literal>Number</literal> that remove leading
-      zeros:<programlisting>rules(Number){
-   number("0" &lt;Digit+ Ds&gt;) =&gt; number(&lt;Ds&gt;)
-}</programlisting></para>
+   Number "." Number -&gt; Real</programlisting>we can write a normalization
+      rule for <literal>Number</literal> that removes leading
+      zeros:<programlisting>rule n1 number("0" &lt;Digit+ Ds&gt;) =&gt; number(&lt;Ds&gt;)</programlisting></para>
 
       <para>Note that a character class can be used instead of the sort
-      <literal>Digit</literal>:<programlisting>rules(Number){
-   number("0" &lt;[0-9]+ Ds&gt;) =&gt; number(&lt;Ds&gt;)
-}</programlisting></para>
+      <literal>Digit</literal>:<programlisting>rule n2 number("0" &lt;[0-9]+ Ds&gt;) =&gt; number(&lt;Ds&gt;)</programlisting></para>
 
       <para>A truncation function on <literal>Real</literal> can replace the
       mantissa by 0:</para>
 
       <para><programlisting>Real truncate(Real R){
-    switch R {
+    switch (R) {
        case real(&lt;Number Num&gt; "." &lt;Digit+ Ds&gt;) =&gt; real(&lt;Num&gt; "." "0")
     }
 }</programlisting></para>
@@ -3731,14 +3838,14 @@ lexical syntax
    [\"] NQChar* [\"] -&gt; String</programlisting>A function that removes the
       <emphasis>first</emphasis> newline from a string can be written
       as:<programlisting>String removeFirstNL(String S){
-    switch S {
+    switch (S) {
       case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2&gt; "\"") =&gt;
            string("\"" &lt;Chars1&gt; &lt;Chars2&gt; "\"")
     }
 }</programlisting></para>
 
       <para>A function that removes all newline from a string:<programlisting>String removeAllNL(String S){
-    visit S {
+    visit (S) {
       case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2&gt; "\"") =&gt;
            string("\"" &lt;Chars1&gt; &lt;Chars2&gt; "\"")
     }
@@ -4033,7 +4140,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
               <entry align="center">bool</entry>
 
@@ -4041,7 +4148,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry align="center">double</entry>
 
-              <entry align="center">str&#160;</entry>
+              <entry align="center">str </entry>
 
               <entry align="center">loc</entry>
 
@@ -4805,7 +4912,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
             <thead>
               <row>
-                <entry align="center">&#160;</entry>
+                <entry align="center"> </entry>
 
                 <entry align="center">list</entry>
 

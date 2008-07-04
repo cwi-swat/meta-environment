@@ -17,8 +17,14 @@ VEnv evalProgram(PROGRAM P){
 VEnv evalDecls(DECLS Decls){
     VEnv Env = {};
     visit (Decls) {
-      case <PICO-ID Id> : string:  { Env[Id] = strval(""); return Env;}
-      case <PICO-ID Id> : natural: { Env[Id] = intval(0);  return Env;}
+      case <PICO-ID Id> : string: { 
+           Env[Id] = strval(""); 
+           return Env;
+      }
+      case <PICO-ID Id> : natural: { 
+           Env[Id] = intval(0);  
+           return Env;
+      }
     }
     return Env;
 }
@@ -40,8 +46,8 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
         return Env;
       }
 
-      case STATEMENT[| if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
-                       else <{STATEMENT ";"}* Stats1> fi |]:{
+      case if <EXP Exp> then <{STATEMENT ";"}* Stats1> 
+                       else <{STATEMENT ";"}* Stats1> fi:{
         if(evalExp(Exp, Env) != intval(0)){
           return evalStatments(Stats1, Env);
         } else {
@@ -49,7 +55,7 @@ VEnv evalStatement(STATEMENT Stat, VEnv Env){
         }
       }
 
-      case STATEMENT[| while <EXP Exp> do <{STATEMENT ";"}* Stats1> od|]: {
+      case while <EXP Exp> do <{STATEMENT ";"}* Stats1> od: {
         if(evalExp(Exp, Env) != intval(0)){
           return Env;
         } else {
@@ -73,20 +79,20 @@ PICO_VALUE evalExp(Exp exp, VEnv Env) {
            return Env[Id];
 
       case <EXP exp1> + <EXP exp2>:
-           if(intval(int n1) := evalExp(exp1, Env) &&
-              intval(int n2) := evalExp(exp2, Env)){
+           if(intval(<int n1>) := evalExp(exp1, Env) &&
+              intval(<int n2>) := evalExp(exp2, Env)){
               return intval(n1 + n2);
            }
       
       case <EXP exp1> - <EXP exp2>:
-            if(intval(int n1) := evalExp(exp1, Env) &&
-              intval(int n2) := evalExp(exp2, Env)){
+            if(intval(<int n1>) := evalExp(exp1, Env) &&
+              intval(<int n2>) := evalExp(exp2, Env)){
               return intval(n1 - n2);
            }
  
       case <EXP exp1> || <EXP exp2>:
-           if(strval(str s1) := evalExp(exp1, Env) &&
-              strval(str s2) := evalExp(exp2, Env)){
+           if(strval(<str s1>) := evalExp(exp1, Env) &&
+              strval(<str s2>) := evalExp(exp2, Env)){
               return strval(s1 + s2);
            }
    } 
