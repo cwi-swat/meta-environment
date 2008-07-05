@@ -64,7 +64,9 @@ exports
     BasicType | StructuredType | FunctionType | 
     TypeVar | ParameterizedType | Symbol                     -> Type           {cons("type")}
 
-   "type" Type (Name  | ParameterizedType)  DeclAnnos        -> TypeDeclaration {cons("type-decl")}
+%% Type-related declarations
+
+    "type" Type (Name  | ParameterizedType)  DeclAnnos       -> TypeDeclaration {cons("type-decl")}
 
     "data" ( Name | ParameterizedType) 
            DeclAnnos { AbstractType "|"}+                    -> DataDeclaration {cons("data-decl")}
@@ -73,7 +75,7 @@ exports
            DeclAnnos { (Name AbstractType) "|"}+             -> ViewDeclaration {cons("view-decl")}
 
 
-%% Define reserved words
+%% Reserved words
    "bool" | "int" | "double" | "str" | 
    "loc" | "value" | "term" | "void" | "list" | 
    "set" | "map" | "rel" | "tuple" | "fun" |

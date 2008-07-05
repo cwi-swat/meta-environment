@@ -5,42 +5,42 @@ imports Declarations
         basic/Comments
 
 hiddens
-context-free start-symbols
-  Module
+  context-free start-symbols
+    Module
 
 exports
-sorts Module ModuleWord ModuleName Import 
-      ModuleParameters ModuleActuals ImportedModule
-      Renaming Renamings Visibility 
+  sorts Module ModuleWord ModuleName Import 
+        ModuleParameters ModuleActuals ImportedModule
+        Renaming Renamings Visibility 
 
-lexical syntax
-  letters:[A-Za-z0-9\_\-]+                       -> ModuleWord {cons("word")} 
-  ModuleWord                                     -> ModuleName {cons("leaf")} 
-  sep:"/" basename:ModuleName                    -> ModuleName {cons("root")} 
-  dirname:ModuleWord sep:"/" basename:ModuleName -> ModuleName {cons("path")} 
+  lexical syntax
+    letters:[A-Za-z0-9\_\-]+                       -> ModuleWord {cons("word")} 
+    ModuleWord                                     -> ModuleName {cons("leaf")} 
+    sep:"/" basename:ModuleName                    -> ModuleName {cons("root")} 
+    dirname:ModuleWord sep:"/" basename:ModuleName -> ModuleName {cons("path")} 
 
-lexical restrictions
-  ModuleName -/- [A-Za-z0-9\_\-\/]
+  lexical restrictions
+    ModuleName -/- [A-Za-z0-9\_\-\/]
 
-context-free syntax
+  context-free syntax
 
-    "[" {TypeVar ","}+ "]"                       -> ModuleParameters
-    "[" {Type ","}+ "]"                          -> ModuleActuals
+    "[" {TypeVar ","}+ "]"                         -> ModuleParameters
+    "[" {Type ","}+ "]"                            -> ModuleActuals
 
-    ModuleName ModuleActuals? Renamings?         -> ImportedModule
-    Name "=>" Name                               -> Renaming
-    "{" {Renaming ","}+ "}"                      -> Renamings
+    ModuleName ModuleActuals? Renamings?           -> ImportedModule
+    Name "=>" Name                                 -> Renaming
+    "{" {Renaming ","}+ "}"                        -> Renamings
 
-    "import" ImportedModule ";"?                 -> Import
-    "extend" ImportedModule ";"?                 -> Import
+    "import" ImportedModule ";"?                   -> Import
+    "extend" ImportedModule ";"?                   -> Import
 
-    ("public" | "private")?                      -> Visibility  {cons("visibility")}
+    ("public" | "private")?                        -> Visibility  {cons("visibility")}
 
     "module" ModuleName ModuleParameters? 
        DeclAnnos 
        Import* 
-       (Visibility Declaration ";"?)*            -> Module  
+       (Visibility Declaration ";"?)*              -> Module  
 
-%% Define reserved words
+%% Reserved words
      "public" | "private" | "import" | 
-     "extend" | "module"                         -> Reserved
+     "extend" | "module"                           -> Reserved

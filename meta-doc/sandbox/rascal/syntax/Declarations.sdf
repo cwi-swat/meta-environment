@@ -3,35 +3,22 @@ module Declarations
 imports  DeclAnnos
          Types 
 	Expressions 
+         Attributes
          Visitors
 
-hiddens
-  context-free start-symbols
-        Declaration
-
 exports
-  sorts Declaration DeclarationUnit   
+  sorts Declaration  
 
    context-free syntax
 
     TypeDeclaration | DataDeclaration | 
     ViewDeclaration  | VariableDeclaration |
-    FunctionDeclaration                                 -> Declaration
+    FunctionDeclaration | RuleDeclaration |
+    AnnoDeclaration | TagDeclaration |
+    VisitorDeclaration                         -> Declaration
 
-    "anno" Type Name DeclAnnos { Type "|"}+             -> Declaration {cons("anno-decl")}
 
-    "module" | "function" | "variable" | "data" |
-    "view" | "type" | "anno" | "tag" | "all"            -> DeclarationUnit
  
-    "tag" DeclarationUnit Name DeclAnnos {Type "|"}+    -> Declaration {cons("tag-decl")}
- 
-    "rule"  Name DeclAnnos Rule                         -> Declaration {cons("rule-decl")}
-    "arule" Name DeclAnnos ARule                        -> Declaration {cons("arule-decl")}
 
-    "visitor" Name "{" Visitor+ "}"                     -> Declaration {cons("visitor")}
-
-%% Define reserved words
-    "anno" | "tag" | "rule" | "arule"                   -> Reserved
-    DeclarationUnit                                     -> Reserved
 
   

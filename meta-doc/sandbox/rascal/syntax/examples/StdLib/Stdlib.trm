@@ -1,9 +1,9 @@
 module RascalStandardLibrary
 
-tag function primitive str;
-tag function memo void;
-tag function java CompilationUnit;
-tag all doc str;
+%%tag function primitive QualName;
+%%tag function memo void;
+%%tag function java CompilationUnit;
+%%tag all doc str;
 
 %% Here is a flat list of library functions that will
 %% structured in to coherent submodules.
@@ -357,10 +357,10 @@ public &T sum(list[&T] L, &T zero)
   return reducer(L, +, zero);
 }
 
-public &T multiply(set[&T] R, &T one)
+public &T multiply(set[&T] R, &T unity)
 @doc{Multiply elements of a list: multiply}
 {
-  return reducer(L, *, one);
+  return reducer(L, *, unity);
 }
 
 public &T average(list[&T] L, &T zero)
@@ -513,10 +513,10 @@ public &T sum(set[&T] S, &T zero)
   return reducer(S, +, zero);
 }
 
-public &T multiply(set[&T] S, &T one)
+public &T multiply(set[&T] S, &T unity)
   @doc{Multiply elements of a Set: multiply}
 {
-  return reducer(S, *, one);
+  return reducer(S, *, unity);
 }
 
 public &T average(set[&T] S, &T zero)

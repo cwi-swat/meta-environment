@@ -33,7 +33,7 @@ list[Error] tcst(Stat Stat, Env Env) {
     }
     return [];
 }
-
+ 
 list[Error] type_of(Exp E, TYPE Type, Env Env) {
     switch (E) {
       case <NatCon N>: if(Type == natural){ return []; }

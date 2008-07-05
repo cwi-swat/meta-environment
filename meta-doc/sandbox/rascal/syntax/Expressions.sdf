@@ -14,9 +14,9 @@ context-free start-symbols
 
 exports
 sorts Expression Binder Predicate SimpleGenerator Generator Call Assignable
-      Strategy Statement Block Rule ARule Case CaseAction Assignment IncrAssignOp Value
-      Catch Finally Increment Range FunctionClosure VariableDeclaration Scope OneVarDecl
-      Throws ThrowDecl FunctionDeclaration
+      Strategy Statement Block Rule Case Assignment IncrAssignOp Value
+      Catch Finally Increment Range FunctionClosure VariableDeclaration Scope SingleVariableDeclaration
+      Throws ThrowDeclaration FunctionDeclaration RuleDeclaration
 
 context-free syntax
 %% Basic values
@@ -94,16 +94,10 @@ context-free syntax
          Expression                                              -> Predicate {cons("pred-exp")}
 	"(" Predicate ")"                                       -> Predicate {bracket}
 
-%% Add , as alternative for &&
+%% TODO: Add , as alternative for &&
 
 context-free syntax
 %% Generators
-%%         Type Name                                               -> Declarator {cons("decl-type-name")}
-%%         StructuredType                                          -> Declarator {cons("decl-struct-type")}
-%%         QuotedSynPattern                                        -> Declarator {cons("decl-quotedsynpat")}
-%%         AbsPattern                                              -> Declarator {cons("decl-abspat")}
-%%         RegPattern                                              -> Declarator {cons("decl-regpat")}
-
            Pattern                                               -> Binder
            NamedType                                             -> Binder
            "<" {(NamedType | Name) ","}+ ">"                     -> Binder
@@ -130,22 +124,16 @@ context-free syntax
 %% Conditional Expression
           Predicate "?" Expression ":" Expression                -> Expression {cons("exp-cond")}
 %% Cases and Rules
-         QuotedSynPattern                                        -> Expression {cons("exp-qpat")}
+         QuotedSyntaxPattern                                     -> Expression {cons("exp-qpat")}
 
-         "=>" Expression                                         -> CaseAction {cons("case-action-1")}
-         ":" Statement                                           -> CaseAction {cons("case-action-2")}
+         SyntaxPattern "=>" SyntaxPattern                        -> Rule       {cons("conrule")}
+         AbstractPattern "=>" (AbstractPattern | PatternVariable)-> Rule       {cons("absrule")}
+         RegExpPattern "=>" StringLiteral                        -> Rule       {cons("regrule")}
+         Pattern ":" Statement                                   -> Rule       {cons("patrule")}
 
-         "case" SynPattern "=>" SynPattern                       -> Case       {cons("case1")}
-         "case" SynPattern ":" Statement                         -> Case       {cons("case2")}
-         "case" RegPattern CaseAction                            -> Case       {cons("rcase")}
-         "acase" AbsPattern CaseAction                           -> Case       {cons("acase")}
-
-          SynPattern "=>" SynPattern                             -> Rule       {cons("rule1")}
-          SynPattern ":" Statement                               -> Rule       {cons("rule2")}
-          AbsPattern CaseAction                                  -> ARule      {cons("arule")}
-
+         "case" Rule                                             -> Case       {cons("case")}
          "default" ":" Statement                                 -> Case       {cond("default-case")}
-
+ 
 %% Switch, visit, solve, for, if and call statement
  	"switch" "(" Expression ")" "{" Case+ "}"               -> Statement  {cons("stat-switch")}
    	Strategy "visit"  "(" Expression ")" "{" Case+ "}"      -> Statement  {cons("stat-visit")}
@@ -170,7 +158,7 @@ context-free syntax
          Assignment  ";"                                         -> Statement   {cons("stat-assign")}
 
 
-         VariableDeclaration                                     -> Statement  {cons("stat-decl-var")}
+         VariableDeclaration ";"                                 -> Statement  {cons("stat-decl-var")}
 
 context-free syntax
 %% Return, insert, fail
@@ -188,19 +176,25 @@ context-free syntax
          "{" Statement* "}"                                      -> Block       {cons("block")}
          Block                                                   -> Statement   {cons("stat-block")}
 
+%% Expression-related declarations
 %% Variable Declaration
          ("global" | "dynamic")?                                 -> Scope
-         Name DeclAnnos ("=" Expression)?                        -> OneVarDecl
-         Scope Type {OneVarDecl ","}+ ";"                        -> VariableDeclaration {cons("decl-var")}
+         Name DeclAnnos ("=" Expression)?                        -> SingleVariableDeclaration
+         Scope Type {SingleVariableDeclaration ","}+             -> VariableDeclaration {cons("decl-var")}
 
 %% Function Declaration
-         ("throws" ThrowDecl)*                                   -> Throws
-         Name "(" OptNamedTypes ")"                              -> ThrowDecl
+         ("throws" ThrowDeclaration)*                            -> Throws
+         Name "(" OptNamedTypes ")"                              -> ThrowDeclaration
+
          FunctionType Throws DeclAnnos Block?                    -> FunctionDeclaration {cons("function-decl")}
 
-%% Define reserved words:
+%% Rule Declarations 
+        "rule"  Name DeclAnnos Rule                              -> RuleDeclaration {cons("rule-decl")}
+
+%% Reserved words:
          "true" | "false" | "global" | "dynamic" |
          "case" | "acase" | "default" | "switch" | 
          "visit" | "try" | "catch" | "finally" | "solve"  |
          "for" | "while" | "if" | "else" | "return" | "throw" | 
-         "throws" | "insert" | "fail" | "assert"                 -> Reserved
+         "throws" | "insert" | "fail" | "assert" |
+         "rule"                                                  -> Reserved

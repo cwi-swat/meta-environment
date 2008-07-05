@@ -3,36 +3,38 @@ module Patterns
 imports Names Types Expressions RegExp
 
 exports
-  sorts Pattern AbsPattern AbsPatternName AbsPatternArg AbsPatternArgs
-        SynPattern SynPatternChar SynPatternSymbol PatternVar QuotedSynPattern
-        RegPattern
+  sorts Pattern AbstractPattern AbstractPatternName AbstractPatternArgument AbstractPatternArguments
+        SyntaxPattern SyntaxPatternChar SyntaxPatternSymbol PatternVariable QuotedSyntaxPattern
+        RegExpPattern
 
   lexical syntax
-         "\\<"                                        -> SynPatternChar
-         "\\>"                                        -> SynPatternChar
-         "\\|"                                        -> SynPatternChar
-         ~[\<\>\|]                                    -> SynPatternChar
+         "\\<"                                            -> SyntaxPatternChar
+         "\\>"                                            -> SyntaxPatternChar
+         "\\|"                                            -> SyntaxPatternChar
+         ~[\<\>\|]                                        -> SyntaxPatternChar
          
-         "/" RegExp "/"  RegModifier?                 -> RegPattern
+         "/" RegExp "/"  RegModifier?                     -> RegExpPattern
 
   context-free syntax
-         "<" Type? Name  ">"                          -> PatternVar
-         "<" Call ">"                                 -> PatternVar  %% TODO: better naming
+         "<" Type? Name  ">"                              -> PatternVariable
+         "<" Call ">"                                     -> PatternVariable  %% TODO: better naming
 
-         SynPatternChar                               -> SynPatternSymbol
-         PatternVar                                   -> SynPatternSymbol
-         Symbol? "[|" SynPatternSymbol* "|]"          -> QuotedSynPattern
-         QuotedSynPattern                             -> SynPattern
+         SyntaxPatternChar                                -> SyntaxPatternSymbol
+         PatternVariable                                  -> SyntaxPatternSymbol
+         Symbol? "[|" SyntaxPatternSymbol* "|]"           -> QuotedSyntaxPattern
+         QuotedSyntaxPattern                              -> SyntaxPattern
 
-         Name | StringLiteral                         -> AbsPatternName {cons("abspat-name")}
-         AbsPattern                                   -> AbsPatternArg
-%%         Type Name                                   -> AbsPatternArg
-         "(" {AbsPatternArg ","}* ")"                 -> AbsPatternArgs {cons("abspat-args")}
+         Name | StringLiteral                             -> AbstractPatternName {cons("abspat-name")}
+         AbstractPattern                                  -> AbstractPatternArgument
+         PatternVariable                                  -> AbstractPatternArgument     {cons("abspat-pattern-var")}
+         "(" {AbstractPatternArgument ","}* ")"           -> AbstractPatternArguments {cons("abspat-args")}
 
-         PatternVar                                   -> AbsPattern     {cons("abspat-pattern-var")}
-         AbsPatternName AbsPatternArgs?               -> AbsPattern     {cons("abspat-call")}
+ 
+         AbstractPatternName AbstractPatternArguments?    -> AbstractPattern     {cons("abspat-call")}
 
-         "!"? (RegPattern | SynPattern | AbsPattern)  -> Pattern        {cons("negated-pattern")}
+         "!"? (RegExpPattern | 
+               SyntaxPattern | 
+               AbstractPattern)                           -> Pattern        {cons("pattern")}
 
 
 
