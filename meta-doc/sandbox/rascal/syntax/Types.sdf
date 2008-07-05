@@ -1,6 +1,6 @@
 module Types
 
-imports DeclAnnos
+imports DeclarationAnnotations
         SDFSymbol
         Names
         languages/java/syntax/Lexical
@@ -12,74 +12,77 @@ hiddens
 exports
   sorts Type NamedType NamedTypes OptNamedType OptNamedTypes TypeVar StandardOperator
         BasicType StructuredType FunctionType FunctionName AnonymousFunctionType 
-        AbstractType AbsTypeName AbsTypeArgs
+        AbstractType AbstractTypeName AbstractTypeArguments
         ParameterizedType VarArgs TypeDeclaration DataDeclaration ViewDeclaration
 
   context-free syntax
-    "bool"                                                   -> BasicType      {cons("bool-type")} 
-    "int"                                                    -> BasicType      {cons("int-type")} 
-    "double"                                                 -> BasicType      {cons("double-type")}
-    "str"                                                    -> BasicType      {cons("str-type")} 
-    "loc"                                                    -> BasicType      {cons("loc-type")}
-    "value"                                                  -> BasicType      {cons("value-type")}
-    "term"                                                   -> BasicType      {cons("term-type")}
-    "void"                                                   -> BasicType      {cons("void-type")}
+    "bool"                                                    -> BasicType      {cons("bool-type")} 
+    "int"                                                     -> BasicType      {cons("int-type")} 
+    "double"                                                  -> BasicType      {cons("double-type")}
+    "str"                                                     -> BasicType      {cons("str-type")} 
+    "loc"                                                     -> BasicType      {cons("loc-type")}
+    "value"                                                   -> BasicType      {cons("value-type")}
+    "term"                                                    -> BasicType      {cons("term-type")}
+    "void"                                                    -> BasicType      {cons("void-type")}
 
-    Type Name                                                -> NamedType
-    {NamedType ","}+                                         -> NamedTypes
+    Type Name                                                 -> NamedType
+    {NamedType ","}+                                          -> NamedTypes
  
-    Type Name?                                               -> OptNamedType  
-    {OptNamedType ","}+                                      -> OptNamedTypes
+    Type Name?                                                -> OptNamedType  
+    {OptNamedType ","}+                                       -> OptNamedTypes
 
-    OptNamedTypes "+" OptNamedTypes                          -> OptNamedTypes
+    OptNamedTypes "+" OptNamedTypes                           -> OptNamedTypes
 
-    "list" "[" OptNamedType "]"                              -> StructuredType {cons("list-type")} 
-    "set" "[" OptNamedType "]"                               -> StructuredType {cons("set-type")}
-    "map" "[" OptNamedTypes "]"                              -> StructuredType {cons("map-type")}
-    "rel" "[" OptNamedTypes "]"                              -> StructuredType {cons("rel-type")}
-    "tuple" "[" OptNamedTypes "]"                            -> StructuredType {cons("tuple-type")}
+    "list" "[" OptNamedType "]"                               -> StructuredType {cons("list-type")} 
+    "set" "[" OptNamedType "]"                                -> StructuredType {cons("set-type")}
+    "map" "[" OptNamedTypes "]"                               -> StructuredType {cons("map-type")}
+    "rel" "[" OptNamedTypes "]"                               -> StructuredType {cons("rel-type")}
+    "tuple" "[" OptNamedTypes "]"                             -> StructuredType {cons("tuple-type")}
 
     "+" | "-" | "*" | "/" | "&" | "==" | "!=" |
-    "<" | "<=" |">" | ">="                                   -> StandardOperator
+    "<" | "<=" |">" | ">="                                    -> StandardOperator
 
-    "..."                                                    -> VarArgs
-    Name | StandardOperator                                  -> FunctionName   { avoid }
-    Type FunctionName "(" OptNamedTypes? VarArgs? ")"        -> FunctionType   {cons("function-type")}
+    "..."                                                     -> VarArgs
+    Name | StandardOperator                                   -> FunctionName   { avoid }
+    Type FunctionName "(" OptNamedTypes? VarArgs? ")"         -> FunctionType   {cons("function-type")}
 
-    Type "(" OptNamedTypes? ")"                              -> AnonymousFunctionType
+    Type "(" OptNamedTypes? ")"                               -> AnonymousFunctionType
 
-    "&" Name                                                 -> TypeVar        {cons("type-var")}
-    "&" Name "<:" Type                                       -> TypeVar        {cons("type-var-constrained")}
+    "&" Name                                                  -> TypeVar        {cons("type-var")}
+    "&" Name "<:" Type                                        -> TypeVar        {cons("type-var-constrained")}
 
-    Name "[" {TypeVar ","}+ "]"                              -> ParameterizedType
+    Name "[" {TypeVar ","}+ "]"                               -> ParameterizedType
                                                                           {cons("par-type")}
 
-    Name | StringLiteral                                     -> AbsTypeName  {cons("abstype-name")} 
-    "(" {OptNamedType ","}* ")"                              -> AbsTypeArgs  {cons("abstype-args")}
+    Name | StringLiteral                                      -> AbstractTypeName  {cons("abstype-name")} 
+    "(" {OptNamedType ","}* ")"                               -> AbstractTypeArguments  {cons("abstype-args")}
 
-    NamedType                                                -> AbstractType {cons("abstype-namedtype")}
-    TypeVar                                                  -> AbstractType {cons("abstype-typevat")}
-    AbsTypeName AbsTypeArgs?                                 -> AbstractType {cons("abstype-call")}
+    NamedType                                                 -> AbstractType {cons("abstype-namedtype")}
+    TypeVar                                                   -> AbstractType {cons("abstype-typevat")}
+    AbstractTypeName AbstractTypeArguments?                   -> AbstractType {cons("abstype-call")}
+
+    Type "." AbstractTypeName                                 -> Type
 
     BasicType | StructuredType | FunctionType | 
-    TypeVar | ParameterizedType | Symbol                     -> Type           {cons("type")}
+    TypeVar | ParameterizedType | Symbol                      -> Type           {cons("type")}
 
 %% Type-related declarations
 
-    "type" Type (Name  | ParameterizedType)  DeclAnnos       -> TypeDeclaration {cons("type-decl")}
+    "type" Type (Name  | ParameterizedType)  
+           DeclarationAnnotations                             -> TypeDeclaration {cons("type-decl")}
 
     "data" ( Name | ParameterizedType) 
-           DeclAnnos { AbstractType "|"}+                    -> DataDeclaration {cons("data-decl")}
+           DeclarationAnnotations { AbstractType "|"}+        -> DataDeclaration {cons("data-decl")}
 
     "view" Name "<:" Name 
-           DeclAnnos { (Name AbstractType) "|"}+             -> ViewDeclaration {cons("view-decl")}
+           DeclarationAnnotations { (Name AbstractType) "|"}+ -> ViewDeclaration {cons("view-decl")}
 
 
 %% Reserved words
    "bool" | "int" | "double" | "str" | 
    "loc" | "value" | "term" | "void" | "list" | 
    "set" | "map" | "rel" | "tuple" | "fun" |
-   "data" | "type" | "view"                                  -> Reserved
+   "data" | "type" | "view"                                   -> Reserved
  
 
   

@@ -30,7 +30,7 @@ Exp rename(Exp E) {
                 |];
           }
 
-    case <Var V>: return Rn(V);
+    case <Var V>: return Rn[V];
 
     default: return E;
     }

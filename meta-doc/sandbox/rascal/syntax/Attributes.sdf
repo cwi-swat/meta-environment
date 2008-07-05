@@ -1,6 +1,6 @@
 module Attributes
 
-imports  DeclAnnos
+imports  DeclarationAnnotations
          Types 
 
 exports
@@ -8,15 +8,17 @@ exports
 
   context-free syntax 
 
-    "anno" Type Name DeclAnnos { Type "|"}+             -> AnnoDeclaration {cons("anno-decl")}
+    "anno" Type Name 
+           DeclarationAnnotations { Type "|"}+      -> AnnoDeclaration {cons("anno-decl")}
 
     "module" | "function" | "variable" | "data" |
     "view" | "type" | "anno" | "tag" | "visitor" |
-    "all"                                               -> DeclarationKind
+    "all"                                            -> DeclarationKind
  
-    "tag" DeclarationKind Name DeclAnnos {Type "|"}+    -> TagDeclaration {cons("tag-decl")}
+    "tag" DeclarationKind Name 
+          DeclarationAnnotations {Type "|"}+         -> TagDeclaration {cons("tag-decl")}
 
 %% Reserved words
-    "anno" | "tag"                                      -> Reserved
-    DeclarationKind                                     -> Reserved
+    "anno" | "tag"                                   -> Reserved
+    DeclarationKind                                  -> Reserved
  

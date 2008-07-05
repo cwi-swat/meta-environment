@@ -22,8 +22,8 @@ imports basic/StrCon
 
 sorts LEXARG
 context-free syntax
-      StrCon     -> LEXARG
-      PatternVar -> LEXARG
+      StrCon          -> LEXARG
+      PatternVariable -> LEXARG
 
       digit(LEXARG*)   -> Digit
       number(LEXARG*)  -> Number

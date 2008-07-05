@@ -19,7 +19,7 @@ imports basic/StrCon
 
 sorts LEXARG
 context-free syntax
-      StrCon     -> LEXARG
-      PatternVar -> LEXARG
+      StrCon          -> LEXARG
+      PatternVariable -> LEXARG
 
-      string(LEXARG*)   -> String
+      string(LEXARG*) -> String

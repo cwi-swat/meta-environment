@@ -2,7 +2,7 @@ module Expressions
 
 imports  basic/Areas
          Names
-         DeclAnnos
+         DeclarationAnnotations
 	Types
          Patterns
          languages/java/syntax/Lexical [ Identifier => JavaIdentifier
@@ -28,14 +28,20 @@ context-free syntax
 %% TODO include proper locations here
          Area                                                    -> Value {cons("areacon")}
 
+%% Assignable expressions
+         QualName                                                -> Assignable {cons("asg")}
+         Assignable "." Name                                     -> Assignable {cons("asg-field")}
+         Assignable "[" Expression "]"                           -> Assignable {cons("asg-index")}
+
+         Assignable                                              -> Expression
+
 %% Function call
-	QualName "(" {Expression ","}* ")"                      -> Call       {con("call")}
+	Assignable "(" {Expression ","}* ")"                    -> Call       {con("call")}
 
 %% Expressions
         "(" Expression ")"                                       -> Expression {bracket}
 
          Value                                                   -> Expression {cons("exp-value")}
-	QualName                                                -> Expression {cons("exp-qual-variable")}
          StandardOperator                                        -> Expression {cons("exp-std-op")}
          Call                                                    -> Expression {cons("exp-call")}
          "fun" AnonymousFunctionType Block                       -> Expression {cons("exp-anon-fun")}
@@ -46,14 +52,11 @@ context-free syntax
 	"<" {Expression ","}+ ">"                               -> Expression {cons("exp-tuple")}
 
 context-free priorities
-%% Indexing
-         Expression "[" Expression  "]"                          -> Expression {cons("exp-index")} >
-%% Field selection
-         Expression "." Name                                     -> Expression {cons("exp-field")} >
+
 %% Closure operators
        {
-         Expression "*"                                          -> Expression {cons("trans0")}
-         Expression "+"                                          -> Expression {cons("trans1")}
+         Expression "*"                                          -> Expression {cons("closure0")}
+         Expression "+"                                          -> Expression {cons("closure1")}
        } >
 
 %% Standard operators
@@ -64,7 +67,9 @@ context-free priorities
    %% division
         Expression "/" Expression                                -> Expression {cons("exp-div"), left} >
    %% addition/union/concatenation (of tuples, lists and strings)
-        { Expression "+" Expression                              -> Expression {cons("exp-add"), left}
+        { 
+          Expression "|" Expression                              -> Expression {cons("exp-union"), left}
+          Expression "+" Expression                              -> Expression {cons("exp-add"), left}
    %% subtraction, difference
           Expression "-" Expression                              -> Expression {cons("exp-sub"), left}
         } >
@@ -126,9 +131,11 @@ context-free syntax
 %% Cases and Rules
          QuotedSyntaxPattern                                     -> Expression {cons("exp-qpat")}
 
-         SyntaxPattern "=>" SyntaxPattern                        -> Rule       {cons("conrule")}
-         AbstractPattern "=>" (AbstractPattern | PatternVariable)-> Rule       {cons("absrule")}
-         RegExpPattern "=>" StringLiteral                        -> Rule       {cons("regrule")}
+         SyntaxPattern   "=>" SyntaxPattern                      -> Rule       {cons("conrule")}
+         AbstractPattern "=>" (AbstractPattern | 
+                               PatternVariable)                  -> Rule       {cons("absrule")}
+         RegExpPattern   "=>" (StringLiteral |
+                               PatternVariable)                  -> Rule       {cons("regrule")}
          Pattern ":" Statement                                   -> Rule       {cons("patrule")}
 
          "case" Rule                                             -> Case       {cons("case")}
@@ -146,9 +153,7 @@ context-free syntax
          "assert" StringLiteral ":" Predicate ";"                -> Statement  {cons("stat-assert")}
 
 %% Assignment statement
-         QualName                                                -> Assignable {cons("asg-qname")}
-         QualName "[" Expression "]"                             -> Assignable {cons("asg-index")}
-         QualName "." Name                                       -> Assignable {cons("asg-field")}
+
 
          "="  | "+=" | "-=" | "*=" | "/="  | "&=" | "|="         -> IncrAssignOp {cons("incr-assignop")}
 
@@ -157,13 +162,12 @@ context-free syntax
 
          Assignment  ";"                                         -> Statement   {cons("stat-assign")}
 
-
-         VariableDeclaration ";"                                 -> Statement  {cons("stat-decl-var")}
+         VariableDeclaration ";"                                 -> Statement   {cons("stat-decl-var")}
 
 context-free syntax
 %% Return, insert, fail
          "return" Predicate? ";"                                 -> Statement   {cons("stat-return")}
-         "insert" Expression ";"                                 -> Statement    {cons("stat-insert")}
+         "insert" Expression ";"                                 -> Statement   {cons("stat-insert")}
          "fail" ";"                                              -> Statement   {cons("stat-fail")}
 
 %% Exception statements
@@ -178,18 +182,24 @@ context-free syntax
 
 %% Expression-related declarations
 %% Variable Declaration
-         ("global" | "dynamic")?                                 -> Scope
-         Name DeclAnnos ("=" Expression)?                        -> SingleVariableDeclaration
-         Scope Type {SingleVariableDeclaration ","}+             -> VariableDeclaration {cons("decl-var")}
+         ("global" | "dynamic")?                                 -> Scope       {cons("scope")}
+         
+         Name DeclarationAnnotations ("=" Expression)?           -> SingleVariableDeclaration
+                                                                                {cons("single-vardecl")}
+         Scope Type {SingleVariableDeclaration ","}+             -> VariableDeclaration 
+                                                                                {cons("vardecl")}
 
 %% Function Declaration
-         ("throws" ThrowDeclaration)*                            -> Throws
-         Name "(" OptNamedTypes ")"                              -> ThrowDeclaration
+         ("throws" ThrowDeclaration)*                            -> Throws      {cons("throws")}
+         Name "(" OptNamedTypes ")"                              -> ThrowDeclaration 
+                                                                                {cons("throwdecl")}
 
-         FunctionType Throws DeclAnnos Block?                    -> FunctionDeclaration {cons("function-decl")}
+         FunctionType Throws DeclarationAnnotations Block?       -> FunctionDeclaration 
+                                                                                {cons("function-decl")}
 
 %% Rule Declarations 
-        "rule"  Name DeclAnnos Rule                              -> RuleDeclaration {cons("rule-decl")}
+        "rule"  Name DeclarationAnnotations Rule                 -> RuleDeclaration 
+                                                                                {cons("rule-decl")}
 
 %% Reserved words:
          "true" | "false" | "global" | "dynamic" |

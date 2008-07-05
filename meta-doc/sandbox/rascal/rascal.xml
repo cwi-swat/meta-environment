@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -565,7 +565,7 @@
     <itemizedlist>
       <listitem>
         <para>Modules to group definitions, proving scopes and visibility
-        constructs</para>
+        constructs.</para>
       </listitem>
 
       <listitem>
@@ -582,8 +582,9 @@
       </listitem>
 
       <listitem>
-        <para>Abstract, regular expression and syntax patterns to deconstruct
-        (match) values and to construct (make) them.</para>
+        <para>Abstract patterns, regular expression patterns and syntax
+        patterns to deconstruct (match) values and to construct (make)
+        them.</para>
       </listitem>
 
       <listitem>
@@ -592,9 +593,9 @@
       </listitem>
 
       <listitem>
-        <para>Statements for providing structured control flow and more
-        advanced control flow in computations, such as visitors and fixed
-        point computations</para>
+        <para>Statements provide structured control flow and more advanced
+        control flow in computations, such as visitors and fixed point
+        computations</para>
       </listitem>
     </itemizedlist>
 
@@ -632,7 +633,7 @@
         </listitem>
 
         <listitem>
-          <para>Define datatypes, subtypes, or rules and functions.</para>
+          <para>Define data, views on data, types, rules or functions.</para>
         </listitem>
 
         <listitem>
@@ -651,9 +652,9 @@
         </listitem>
       </itemizedlist>
 
-      <para>Functions, subtypes and datatypes may be either private to a
-      module or public to all modules that import the current module. Rules
-      are always public and are globally applied.</para>
+      <para>Declarations may be either private to a module or public to all
+      modules that import the current module. Rules are always public and are
+      globally applied.</para>
 
       <para>Modules introduce a namespace and qualified names (using the
       <literal>::</literal> operator) may be used to uniquely identify
@@ -1704,6 +1705,19 @@ lexical syntax
             <para>Make lexical patterns and regular patterns more similar to
             each other.</para>
           </caution></para>
+
+        <para>According to conventions imposed by the SDF implementation, for
+        each lexically defined sort <replaceable>S</replaceable> the sorts
+        <literal><replaceable>S</replaceable>-Lex</literal> (lexical
+        definition of <replaceable>S</replaceable>) and
+        <literal><replaceable>S</replaceable>-CF</literal> (context-free
+        definition of <replaceable>S</replaceable>) are created together with
+        the inclusion rule<programlisting><replaceable>S</replaceable>-Lex -&gt; <replaceable>S</replaceable>-CF</programlisting></para>
+
+        <para>For precise typing of lexical patterns, one may have to resort
+        to these generated types.<caution>
+            <para>How do we parameterize layout?<programlisting>import Java[LAYOUT =&gt; JAVA-LAYOUT]</programlisting></para>
+          </caution></para>
       </section>
     </section>
 
@@ -1711,16 +1725,16 @@ lexical syntax
       <title>Expressions</title>
 
       <table>
-        <title>Operators on Datatypes (DISCUSS)</title>
+        <title>Operators on Datatypes</title>
 
         <tgroup cols="11">
           <colspec align="center" />
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
-              <entry align="center">bool </entry>
+              <entry align="center">bool&#160;</entry>
 
               <entry align="center">int</entry>
 
@@ -2155,11 +2169,6 @@ lexical syntax
       </table>
 
       <para><caution>
-          <para>We will have incremental assignment operators:
-          <literal>+=</literal>, <literal>-=</literal>, <literal>*=</literal>,
-          <literal>/=</literal> , <literal>&amp;=</literal> and
-          <literal>|=</literal>.</para>
-        </caution><caution>
           <para>Some operators do not fit nicely in this scheme since they do
           not operate on the basic data types:</para>
 
@@ -2185,6 +2194,126 @@ lexical syntax
             </listitem>
           </itemizedlist>
         </caution></para>
+
+      <para></para>
+
+      <table>
+        <title>Usage of selected characters in Rascal Syntax</title>
+
+        <tgroup cols="2">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="center">&#160;Characters</entry>
+
+              <entry align="center">Used in</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>+</entry>
+
+              <entry>+ (add/conc), +=, + (closure)</entry>
+            </row>
+
+            <row>
+              <entry>-</entry>
+
+              <entry>- (sub/diff), -=, in names</entry>
+            </row>
+
+            <row>
+              <entry>*</entry>
+
+              <entry>* (prod), *=, * (closure)</entry>
+            </row>
+
+            <row>
+              <entry>/</entry>
+
+              <entry>/ (div)</entry>
+            </row>
+
+            <row>
+              <entry>=</entry>
+
+              <entry>:= (match), !:= (nomatch), == (equal), != (nequal), =&gt;
+              (case), +=, -=, *=, /=, &amp;=, |=, &lt;= (leq), &gt;=
+              (geq)</entry>
+            </row>
+
+            <row>
+              <entry>&amp;</entry>
+
+              <entry>&amp; (intersection), &amp;&amp; (and), &amp;=, &amp;
+              (type var)</entry>
+            </row>
+
+            <row>
+              <entry>@</entry>
+
+              <entry>@ (get annotation), _ @ _ = _ (modify annotation), @{...}
+              (declaration annotation)</entry>
+            </row>
+
+            <row>
+              <entry>|</entry>
+
+              <entry>| (union), || (or), [| _ |] (quotes), { _ | _ }
+              (comprehension), |=</entry>
+            </row>
+
+            <row>
+              <entry>!</entry>
+
+              <entry>! (not), != (neq), !:= (nomatch)</entry>
+            </row>
+
+            <row>
+              <entry>&gt;</entry>
+
+              <entry>&gt; (gt), &gt;= (geq), =&gt; (case), &lt; _ &gt;
+              (PatternVariable), &lt; _ &gt; (tuple)</entry>
+            </row>
+
+            <row>
+              <entry>&lt;</entry>
+
+              <entry>&lt; (lt), &lt;= (leq), &lt; _ &gt; (PatternVariable),
+              &lt; _ &gt; (tuple), &lt;: (subtype)</entry>
+            </row>
+
+            <row>
+              <entry>?</entry>
+
+              <entry>? (anno operator), _ ? _ : _ (cond expr)</entry>
+            </row>
+
+            <row>
+              <entry>:</entry>
+
+              <entry>:= (match), !:= (nomatch), case _ : (case), in generator,
+              &lt;: (subtype)</entry>
+            </row>
+
+            <row>
+              <entry>[ and ]</entry>
+
+              <entry>[| _ |] (quote), [ _ ] (projection), [ _ | _ ] (list
+              comprehension), [ _ ] (list), type decls</entry>
+            </row>
+
+            <row>
+              <entry>{ and }</entry>
+
+              <entry>{ _ } (statements), { _ } (set/rel), { _ | _ } (set/rel
+              comprehension)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
 
       <para>Expressions correspond roughly to Rscript expressions with some
       extensions:<itemizedlist>
@@ -2245,18 +2374,13 @@ lexical syntax
 
             <itemizedlist>
               <listitem>
-                <para><literal>+</literal> is used for addition, union (|) and
-                concatenation (++)<caution>
-                    <para>Paul: I want to rediscuss this since using + for all
-                    these operations is also nice.</para>
-                  </caution></para>
+                <para><literal>+</literal> is used for addition and
+                concatenation.</para>
               </listitem>
 
               <listitem>
-                <para><literal>-</literal> is used for substraction,
-                difference (\)<caution>
-                    <para>Ditto.</para>
-                  </caution></para>
+                <para><literal>-</literal> is used for substraction and
+                difference.</para>
               </listitem>
 
               <listitem>
@@ -2275,10 +2399,14 @@ lexical syntax
               </listitem>
 
               <listitem>
-                <para>There are assignment operators +=, -=, *=,
-                <literal>&amp;=</literal>.<caution>
-                    <para>Do we want /=, @=</para>
-                  </caution></para>
+                <para>| is used for union.</para>
+              </listitem>
+
+              <listitem>
+                <para>There are assignment operators <literal>+=</literal>,
+                <literal>-=</literal>, <literal>*=</literal>,
+                <literal>/=</literal>, <literal>&amp;=</literal>, and
+                <literal>|=</literal>.</para>
               </listitem>
 
               <listitem>
@@ -2293,10 +2421,14 @@ lexical syntax
 
               <listitem>
                 <para>The Boolean predicates are <literal>&amp;&amp;</literal>
-                (and) and <literal>||</literal> (or).<caution>
-                    <para>Let's drop implies and replace by a conditional
-                    expression.</para>
-                  </caution></para>
+                (and) and <literal>||</literal> (or).</para>
+              </listitem>
+
+              <listitem>
+                <para>The are condional expression written as
+                <literal><replaceable>P</replaceable> ?
+                <replaceable>E1</replaceable> :
+                <replaceable>E2</replaceable></literal>.</para>
               </listitem>
 
               <listitem>
@@ -2321,11 +2453,6 @@ lexical syntax
                 returns the <replaceable>N</replaceable>-th element. It thows
                 the exception <literal>out_of_range(str msg)</literal> when
                 the index value if out of range.</para>
-              </listitem>
-
-              <listitem>
-                <para>The Rscript image notation <literal>R[-,n]</literal> is
-                discontinued.</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -2482,8 +2609,8 @@ lexical syntax
       replacement part may also have the form colon (<literal>:</literal>)
       followed by an arbitrary statement.</para>
 
-      <para>Abstract rules have the same structure, execept that abstract
-      patterns are used, for example:<programlisting>arule a1 band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt; </programlisting></para>
+      <para>Abstract rules have the same structure, except that abstract
+      patterns are used, for example:<programlisting>rule a1 band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt; </programlisting></para>
 
       <para>During execution of rules the following applies:</para>
 
@@ -2551,7 +2678,7 @@ lexical syntax
             </listitem>
 
             <listitem>
-              <para>match of left-hand side of rule, arule.</para>
+              <para>match of left-hand side of rule.</para>
             </listitem>
 
             <listitem>
@@ -2833,7 +2960,7 @@ Bool reduce(Bool B) {
       </section>
 
       <section>
-        <title>Abstract Booleans defined with arules</title>
+        <title>Abstract Booleans defined with rules</title>
 
         <para>In ASF, values are always reduced to a normal form before they
         are created. For some applications this normalization or
@@ -4094,8 +4221,8 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
         </listitem>
 
         <listitem>
-          <para>The notation <literal>Java.Statements.IF</literal> consists of
-          three parts:</para>
+          <para>The notation <literal>Java::Statements.IF</literal> consists
+          of three parts:</para>
 
           <itemizedlist>
             <listitem>
@@ -4113,7 +4240,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
           </itemizedlist>
 
           <para>It can be used as pattern. Other potential uses are as
-          generator:<programlisting>{S | Java.Statements.IF S : P}</programlisting>It
+          generator:<programlisting>{S | Java::Statements.IF S : P}</programlisting>It
           generates all if statements in P.</para>
         </listitem>
       </itemizedlist>
@@ -4140,7 +4267,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -4148,7 +4275,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
@@ -4912,7 +5039,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 

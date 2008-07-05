@@ -6,11 +6,11 @@ import  Pico-use-def;
 
 Boolean is_constant(EXP E) {
    switch (E) {
-     case <NatCon N> => true
+     case <NatCon N>: return true;
 
-     case <StrCon S> => true
+     case <StrCon S>: return true;
 
-     case <EXP E>    => false
+     case <EXP E>: return false;
    }
 }
 

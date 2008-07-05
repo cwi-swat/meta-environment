@@ -22,7 +22,7 @@ int wordCount(str S){
   return count;
 }
 
-%% Here is an alternative declaration:
+%% Here is an alternative (but less desirable) declaration:
 int wordCount2(str S){
   int count = 0;
   %% \w matches any word character
@@ -33,4 +33,15 @@ int wordCount2(str S){
     S = rest; 
   }
   return count;
+}
+
+%% Note how the += operator initializes each map entry
+%% to an appropriate value (0 in this case)
+map[str,int] wordCountPerWord(str S){
+  map[str,int] allCounts = {};
+
+ for(/<word:[a-zA-Z0-9]+>/m: S){
+       allCounts[word] += 1;
+  }
+  return allCounts;
 }

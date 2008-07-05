@@ -37,7 +37,7 @@ exports
     ("public" | "private")?                        -> Visibility  {cons("visibility")}
 
     "module" ModuleName ModuleParameters? 
-       DeclAnnos 
+       DeclarationAnnotations
        Import* 
        (Visibility Declaration ";"?)*              -> Module  
 

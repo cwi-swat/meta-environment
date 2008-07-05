@@ -1,6 +1,6 @@
 module Declarations
 
-imports  DeclAnnos
+imports  DeclarationAnnotations
          Types 
 	Expressions 
          Attributes

@@ -8,16 +8,17 @@ exports
 
   context-free syntax
 
-    "all" "{" Visitor+ "}"                         -> Visitor {cons("all")}
-    "one" "{" Visitor+ "}"                         -> Visitor {cons("one")}
-    "some" "{" Visitor+ "}"                        -> Visitor {cons("some")}
-    "yield" ";"                                    -> Visitor {cons("yield")}
-    "repeat" "{" Visitor+ "}"                      -> Visitor {cons("repeat")}
-    "try" "{" Visitor+ "}" "fail" "{" Visitor+ "}" -> Visitor {cons("try-else")}
-    Name ";"                                       -> Visitor {cons("call")}
-    Statement                                      -> Visitor {cons("statement")}
+    "all" "{" Visitor+ "}"                           -> Visitor {cons("all")}
+    "one" "{" Visitor+ "}"                           -> Visitor {cons("one")}
+    "some" "{" Visitor+ "}"                          -> Visitor {cons("some")}
+    "yield" ";"                                      -> Visitor {cons("yield")}
+    "repeat" "{" Visitor+ "}"                        -> Visitor {cons("repeat")}
+    "try" "{" Visitor+ "}" "fail" "{" Visitor+ "}"   -> Visitor {cons("try-else")}
+    Name ";"                                         -> Visitor {cons("call")}
+    Statement                                        -> Visitor {cons("statement")}
 
-   "visitor" Name DeclAnnos "{" Visitor+ "}"       -> VisitorDeclaration {cons("visitor")}
+   "visitor" Name 
+             DeclarationAnnotations "{" Visitor+ "}" -> VisitorDeclaration {cons("visitor")}
 
    "all" | "one" | "some" | "yield" | "repeat" |
-   "try" | "visitor"                               -> Reserved
+   "try" | "visitor"                                 -> Reserved
