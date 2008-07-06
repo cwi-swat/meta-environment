@@ -34,7 +34,8 @@ STable[&Name, &Value] update(STable[&Name, &Value] ST,
 STable[&Name, &Value] value_of(STable[&Name, &Value] ST, 
                                 ScopeId scope, 
                                 &Name N){
-  return ST.scopes[scope][N];
+%%  return ST.scopes[scope][N];
+  return ST.scopes[scope];
 }
 
 %% update, in the current scope, the value of a variable

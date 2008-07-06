@@ -12,7 +12,7 @@ hiddens
 exports
   sorts Type NamedType NamedTypes OptNamedType OptNamedTypes TypeVar StandardOperator
         BasicType StructuredType FunctionType FunctionName AnonymousFunctionType 
-        AbstractType AbstractTypeName AbstractTypeArguments
+        AbstractType AbstractTypeName AbstractTypeArguments AbstractTypeSelector
         ParameterizedType VarArgs TypeDeclaration DataDeclaration ViewDeclaration
 
   context-free syntax
@@ -61,10 +61,11 @@ exports
     TypeVar                                                   -> AbstractType {cons("abstype-typevat")}
     AbstractTypeName AbstractTypeArguments?                   -> AbstractType {cons("abstype-call")}
 
-    Type "." AbstractTypeName                                 -> Type
+    Type "." AbstractTypeName                                 -> AbstractTypeSelector
 
     BasicType | StructuredType | FunctionType | 
-    TypeVar | ParameterizedType | Symbol                      -> Type           {cons("type")}
+    TypeVar | ParameterizedType | Symbol |
+    AbstractTypeSelector                                      -> Type           {cons("type")}
 
 %% Type-related declarations
 

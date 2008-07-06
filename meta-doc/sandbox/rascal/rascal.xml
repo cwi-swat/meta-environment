@@ -1452,10 +1452,19 @@ int f(&amp;T y, double x)</programlisting></para>
         <title>Abstract Patterns</title>
 
         <para>Datatype declarations introduce a signature of abstract
-        terms.These terms (possibly including typed variables as introduced
-        for concrete patterns) may be used as abstract patterns at the same
-        position where concrete patterns are allowed. Type declarations define
-        an inclusion relation between types.</para>
+        terms.These terms (possibly including typed pattern variables as
+        introduced for syntax patterns) may be used as abstract patterns at
+        the same position where concrete patterns are allowed.</para>
+
+        <para>An abstract pattern may not consist of a single pattern
+        variable.</para>
+
+        <para>An abstract pattern may be preceeded by the key word
+        <literal>abs</literal>, in order to resolve ambiguities with syntax
+        patterns.</para>
+
+        <para>Type declarations define an inclusion relation between
+        types.</para>
       </section>
 
       <section>
@@ -1489,8 +1498,8 @@ int f(&amp;T y, double x)</programlisting></para>
           <listitem>
             <para>Java regular expressions might have optional groups, which
             may introduce null bindings. Since null pointers are not allowed
-            in Rascal, we have to limit the kinds of expressions people can
-            write here.</para>
+            in Rascal, we limit the kinds of expressions one can write here by
+            not allowing nesting of named groups.</para>
           </listitem>
 
           <listitem>
@@ -1512,10 +1521,6 @@ int f(&amp;T y, double x)</programlisting></para>
             <literal>&lt;<replaceable>F</replaceable>(...)&gt;</literal> which
             inserts the string value of the function call in the regular
             expression.</para>
-          </listitem>
-
-          <listitem>
-            <para>We do not allow nesting of named groups.</para>
           </listitem>
 
           <listitem>
@@ -1718,6 +1723,306 @@ lexical syntax
         to these generated types.<caution>
             <para>How do we parameterize layout?<programlisting>import Java[LAYOUT =&gt; JAVA-LAYOUT]</programlisting></para>
           </caution></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Statements</title>
+
+      <para>The different statement types are described in the following
+      subsections.</para>
+
+      <section>
+        <title>Declaration and assignment</title>
+
+        <para>Rascal provides variable declarations with optional
+        initialization. If the initialization is missing, no control flow path
+        may exist with use before definition. An assignment statement assigns
+        a value to a variable. The left-hand side is of syntactic type
+        <replaceable>Assignable</replaceable>, and may be a simple variable,
+        index of variable, field selection of variable, or a combination of
+        these. Assignments may be undone in the context of a failing case of a
+        switch or visit statement.</para>
+      </section>
+
+      <section>
+        <title>Standard control statements</title>
+
+        <para>Rascal supports the following standard control
+        statements:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>If-then statement and if-then-else statement.</para>
+          </listitem>
+
+          <listitem>
+            <para>A <literal>while</literal> statement to repeat a block of
+            code while a given Predicate is true.</para>
+          </listitem>
+
+          <listitem>
+            <para>A <literal>for</literal> statement repeats a block of code
+            for each value produced by a generator.</para>
+          </listitem>
+
+          <listitem>
+            <para>A <literal>return</literal> statement returns a value from a
+            function, or just returns (for functions with result type void).
+            Note that return jumps out of an entire function, even if it is
+            nested in a complicated control flow statement such as
+            visit.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Solve statement</title>
+
+        <para>Rascal provides a solve statement for the solution of sets of
+        simultations linear equations. The format is:<programlisting>solve (<replaceable>Expression</replaceable>) {
+  <replaceable>Assignable1</replaceable> = <replaceable>Expression1</replaceable>;
+  <replaceable>Assignable2</replaceable> = <replaceable>Expression2</replaceable>;
+  ...
+}</programlisting></para>
+
+        <para>The solve statement is executed by performing the assignments in
+        its body as long as the value of at least one assignable at the
+        left-hand side of an assignment changes. The optional
+        <replaceable>Expression</replaceable> directly following the
+        <literal>solve</literal> keyword, gives an upperbound on the number of
+        iterations.</para>
+      </section>
+
+      <section>
+        <title>Exception handling</title>
+
+        <para>A <literal>try</literal> statement can be used to execute a
+        statement and to catch any exception raised by that statement and
+        resembles the corresponding Java construct:<programlisting>try <replaceable>Statement</replaceable>
+catch <replaceable>Pattern1</replaceable> : <replaceable>Statement1</replaceable>
+catch <replaceable>Pattern2</replaceable> : <replaceable>Statement2</replaceable>
+...
+finally: Statement</programlisting>A throw statement can raise an
+        exception.</para>
+      </section>
+
+      <section>
+        <title>Switch and fail statement</title>
+
+        <para>A <literal>switch</literal> statement is similar to a switch
+        statement in C or Java and has the form:<programlisting>switch ( <replaceable>Expression</replaceable> ) {
+case <replaceable>Rule</replaceable>1;
+case <replaceable>Rule</replaceable>2;
+...
+default: ...
+}</programlisting></para>
+
+        <para>The value of the expression is the subject term that will be
+        matched by the successive cases in the switch statement. This
+        corresponds to the matching provided by the left-hand sides of a set
+        of rewrite rules. However, the switch statement provides <emphasis
+        role="bold">only</emphasis> matching at the top level of the subject
+        term and does not traverse it. The type of the pattern in each case
+        must be identical to the type of the subject term (or be a subtype of
+        it). If no case matches, the switch acts as a dummy statement. There
+        is no fall through from one case to the next.</para>
+
+        <para>Each case contains a Rule that can have one of the following
+        forms:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><programlisting><replaceable>SyntaxPattern</replaceable>1 =&gt; <replaceable>SyntaxPattern2</replaceable></programlisting>When
+            the subject matches <replaceable>SyntaxPattern</replaceable>1,
+            <replaceable>SyntaxPattern</replaceable>2 is returned from the
+            enclosing function (after proper substitution).<caution>
+                <para>Is <literal>return</literal> the right choice here, it
+                seems a forced choice?</para>
+              </caution></para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>AbstractPattern</replaceable>1 =&gt; <replaceable>AbstractPattern</replaceable>2 <emphasis
+                  role="bold">or</emphasis> <replaceable>PatternVariable</replaceable></programlisting>When
+            the subject matches <replaceable>Abstractpattern</replaceable>1,
+            <replaceable>AbstractPattern</replaceable>2 (or the single
+            <replaceable>PatternVariable</replaceable>) is returned from the
+            enclosing function (after proper substitution).</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>RegExpPattern</replaceable> =&gt; <replaceable>StringLiteral</replaceable> <replaceable>or</replaceable> <replaceable>PatternVariable</replaceable></programlisting></para>
+
+            <para>When the subject matches
+            <replaceable>RexExpPattern</replaceable>1,
+            <replaceable>StringLiteral</replaceable> (or the single
+            <replaceable>PatternVariable</replaceable>) is returned from the
+            enclosing function (after proper substitution).</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>Pattern</replaceable> : <replaceable>Statement</replaceable></programlisting></para>
+
+            <para>This is the most general case. When the subject matches
+            <replaceable>Pattern</replaceable>, the
+            <replaceable>Statement</replaceable> is executed. The execution of
+            <replaceable>Statement</replaceable> should lead to one of the
+            following:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Execution of a <literal>return</literal> statement that
+                returns a value from the enclosing function.</para>
+              </listitem>
+
+              <listitem>
+                <para>Execution of a <literal>fail</literal> statement: all
+                side effects of <replaceable>Statement</replaceable> are
+                undone and the next case is tried.</para>
+              </listitem>
+
+              <listitem>
+                <para>None of the above: execution continues with the
+                statement following the switch.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Visit and insert statement</title>
+
+        <para>A <literal>visit</literal> statement corresponds to a traversal
+        function in ASF+SDF and has the form:<programlisting><replaceable>Strategy</replaceable> visit ( <replaceable>Assignable</replaceable> ) {
+case <replaceable>Rule</replaceable>1;
+case <replaceable>Rule</replaceable>2;
+...
+default: ...
+}</programlisting>Given a subject term (the current value of
+        <replaceable>Assignable</replaceable>) and a list of cases (resembling
+        rewrite rules) it traverses the term. Depending on the precise rules
+        it may perform replacement (mimicking a transformer), update local
+        variables (mimicking an accumulator) or a combination of these two. If
+        <emphasis role="bold">any</emphasis> of the cases contains an
+        <literal>insert</literal> statement, the value of
+        <replaceable>Assignable</replaceable> is replaced by a new value that
+        is obtained by successive insertions in its original value by
+        executing one or more cases. </para>
+
+        <para>The visit statement is optionally preceeded by one of the
+        following strategy indications that determine the traversal order of
+        the subject:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>top-down</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>top-down-break</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>bottom-up</literal> (this is the default)</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>bottom-up-break</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>innermost</literal> = compute a fixed-point: repeat
+            a bottom-up traversal as long as the traversal function changes
+            values.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>outermost</literal> = compute a fixed-point: repeat
+            a traversal traversal as long as the traversal function changes
+            values.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The execution of the cases is similar to the cases in a switch
+        statement with the following exceptions:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The three Rule cases of the form ... =&gt; ... <emphasis
+            role="bold">insert</emphasis> their result in the subject (instead
+            of returning a value).</para>
+          </listitem>
+
+          <listitem>
+            <para>In the fourth case
+            <literal><replaceable>Pattern</replaceable> :
+            <replaceable>Statement</replaceable></literal>, executing
+            <replaceable>Statement</replaceable> should lead to one of the
+            following:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Execution of an <literal>insert</literal> statement of
+                the form <literal>insert
+                <replaceable>Expression</replaceable></literal>. The value of
+                <replaceable>Expression</replaceable> replaces the subtree of
+                the subject that is currently being visited. Note that a copy
+                of the subject is created at the start of the visit statement
+                and all insertions are made in this copy. As a consequence,
+                insertions cannot influence matches later on.<note>
+                    <para>An <literal>insert</literal> statement may only
+                    occur inside a <literal>visit</literal> statement.</para>
+                  </note></para>
+              </listitem>
+
+              <listitem>
+                <para>Execution of a <literal>fail</literal> statement: all
+                side effects of <replaceable>Statement</replaceable> are
+                undone, no insertion is made, and the next case is
+                tried.</para>
+              </listitem>
+
+              <listitem>
+                <para>Execution of a <literal>return</literal> statement that
+                returns a value from the enclosing function. This is possible,
+                but unlikely since this leads to loss of all perviously made
+                insertions (if any).<caution>
+                    <para>Forbid return when inserts are present?</para>
+                  </caution></para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+        <para>The precise behaviour of the visit statement depends on the type
+        of the subject:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>For type <literal>tree</literal>, all nodes of the tree are
+            visited (in the order determined by the strategy). SyntaxPatterns
+            and AbstractPatterns directly match tree nodes. RexExpPatterns
+            match the result of prettyprinting each node. <caution>
+                <para>Decide on this.</para>
+              </caution></para>
+          </listitem>
+
+          <listitem>
+            <para>For type <literal>str</literal>, all characters are visited
+            in order and the cases are applied. Only RegExpPatterns are
+            meaningfull here. </para>
+          </listitem>
+
+          <listitem>
+            <para>For structured types (list, set, map, rel), the elements of
+            the structured type are visited and matched against the cases.
+            When inserts are made, a new structured value is created.<caution>
+                <para>Have strategies any effect for non-tree subjects?</para>
+              </caution></para>
+          </listitem>
+        </itemizedlist>
       </section>
     </section>
 
@@ -2195,8 +2500,6 @@ lexical syntax
           </itemizedlist>
         </caution></para>
 
-      <para></para>
-
       <table>
         <title>Usage of selected characters in Rascal Syntax</title>
 
@@ -2460,159 +2763,29 @@ lexical syntax
     </section>
 
     <section>
-      <title>Statements</title>
+      <title>Global rules</title>
 
-      <para>Rascal has the following statement types, which can be nested and
-      composed in the usual structured manner:</para>
+      <para>The Rules that we have already encountered in switch and visit
+      statement, can also be defined globally and are the closest to rewrite
+      rules as we will get in Rascal. Unlike functions that are always called
+      explicitly when needed, global rules are always applied implicitly,
+      i.e., whenever a value of some type is created and there are rules
+      defined for that type, they are immediately applied. In principle, rules
+      can be used to define arbitrary computations. In practice, they are
+      mostly used to guarantee that certain constraints are satisfied whenever
+      a value of some type is created.</para>
 
-      <itemizedlist>
-        <listitem>
-          <para>Variable declaration with initialization.</para>
-        </listitem>
+      <para>Rules have the general form:<programlisting>rule <replaceable>Name</replaceable> <replaceable>Rule</replaceable></programlisting>Here
+      is an example for concrete Booleans:</para>
 
-        <listitem>
-          <para>An assignment statement assigns a value to a variable.</para>
-        </listitem>
+      <para><programlisting>rule a1 true &amp; &lt;Bool B2&gt;   =&gt; &lt;B2&gt;</programlisting>and
+      here for abstract Booleans:</para>
 
-        <listitem>
-          <para>If-then statement and if-then-else statement.</para>
-        </listitem>
+      <para><programlisting>rule a1 band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt; </programlisting></para>
 
-        <listitem>
-          <para>A <literal>return</literal> statement returns a value from a
-          function, or just returns (for functions with result type void).
-          Note that return jumps out of an entire function, even if it is
-          nested in a complicated control flow statement such as visit.</para>
-        </listitem>
-
-        <listitem>
-          <para>An <literal>insert</literal> statement that inserts a
-          replacement value during a traversal initiated by a visit statement,
-          or a switch statement.</para>
-        </listitem>
-
-        <listitem>
-          <para>A <literal>fail</literal> statement which jumps to the deepest
-          nested choice point (i.e. a switch or a visit) and tries the next
-          option available. Both yield and fail should occur in the lexical
-          context of a choice point.</para>
-        </listitem>
-
-        <listitem>
-          <para>A throw statement can raise an exception.</para>
-        </listitem>
-
-        <listitem>
-          <para>A <literal>switch</literal> statement is similar to a switch
-          statement in C or Java and for a given subject term, it corresponds
-          to the matching provided by the left-hand sides of a set of rewrite
-          rules. However, it provides <emphasis role="bold">only</emphasis>
-          matching at the top level of the subject term and does not traverse
-          it. The type of each pattern must be identical to the type of the
-          subject term (or be a subtype of it). It is an error if no case
-          matches.</para>
-        </listitem>
-
-        <listitem>
-          <para>A rewrite rule (not a top-level statement, but a child of
-          switch and visit) consists of a Pattern followed by : and a
-          statement that returns the replacement value:<programlisting>case <replaceable>Pattern</replaceable> : <replaceable>Statement</replaceable></programlisting></para>
-
-          <para>A statement may consist of declarations and statements and is
-          implicitly extended with a <literal>fail</literal> statement. The
-          statement must therefore replace or return a value or the case as a
-          whole will fail. To maintain some resemblance with rewrite rules, we
-          also support the form</para>
-
-          <programlisting>case <replaceable>Pattern</replaceable> =&gt; <replaceable>Replacement</replaceable></programlisting>
-
-          <para>which is an abbreviation for<programlisting>case <replaceable>Pattern</replaceable> : insert <replaceable>Replacement</replaceable></programlisting>Depending
-          on the kind of pattern we use a different keyword:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>case</literal> for (concrete) syntax
-              patterns.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>acase</literal> for abstract patterns.<note>
-                  <para>These two different keywords are not very elegant but
-                  they help to remove disambiguities.</para>
-                </note></para>
-            </listitem>
-          </itemizedlist>
-        </listitem>
-
-        <listitem>
-          <para>A <literal>visit</literal> statement corresponds to a
-          traversal function from ASF+SDF. Given a subject term and a list of
-          rewrite rules it traverses the term. Depending on the precise rules
-          it may perform replacement (mimicking a transformer), update local
-          variables (mimicking an accumulator) or a combination of these two.
-          The visit statement may contain the same strategy options as a
-          generator and also:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>innermost</literal> = compute a fixed-point:
-              repeat a bottom-up traversal as long as the traversal function
-              changes values.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>outermost</literal> = compute a fixed-point:
-              repeat a traversal traversal as long as the traversal function
-              changes values.</para>
-            </listitem>
-          </itemizedlist>
-        </listitem>
-
-        <listitem>
-          <para>A <literal>for</literal> statement to repeat a block of
-          code.</para>
-        </listitem>
-
-        <listitem>
-          <para>A <literal>solve</literal> statement to solve a set of linear
-          equations.</para>
-        </listitem>
-
-        <listitem>
-          <para>A <literal>try</literal> statement can be used to execute a
-          statement and to catch any exception raised by that
-          statement.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section>
-      <title>Rules</title>
-
-      <para>Rules are the closest to rewrite rules as we will get in Rascal.
-      Unlike functions that are always called explicitly wehen needed, rules
-      are always applied implicitly, i.e., whenever a value of some type is
-      created and there are rules defined for that type, they are immediately
-      applied. In principle, rules can be used to define arbitrary
-      computations. In practice, they are mostly used to guarantee that
-      certain constraints are satisfied whenever a value of some type is
-      created.</para>
-
-      <para>Rules come in two flavours: concrete rules that describe rewriting
-      of concrete syntax patterns and abstract rules that describe rewriting
-      of abstract patterns. Concrete rules start with the keyword
-      <literal>rule</literal>, a name for identification, a concrete syntax
-      pattern, an arrow (<literal>=&gt;</literal>) and another syntax pattern
-      that describes the desired replacement. Here is an example:</para>
-
-      <para><programlisting>rule a1 true &amp; &lt;Bool B2&gt;   =&gt; &lt;B2&gt;</programlisting>The
-      replacement part may also have the form colon (<literal>:</literal>)
-      followed by an arbitrary statement.</para>
-
-      <para>Abstract rules have the same structure, except that abstract
-      patterns are used, for example:<programlisting>rule a1 band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt; </programlisting></para>
-
-      <para>During execution of rules the following applies:</para>
+      <para>As we have seen before, the replacement part may also have the
+      form colon (<literal>:</literal>) followed by an arbitrary statement.
+      During execution of rules the following applies:</para>
 
       <itemizedlist>
         <listitem>
@@ -2625,6 +2798,11 @@ lexical syntax
           which cause backtracking over the alternative rules for a certain
           constructor.</para>
         </listitem>
+
+        <listitem>
+          <para>When the right-hand side is a statement, a return statement
+          determines the value of the actual replacement.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -2633,9 +2811,8 @@ lexical syntax
 
       <para>There are two contexts in which side-effects, i.e., assignment to
       variables, have to be undone in case of failure. These contexts are a
-      rewrite rule in a switch or visit statement. If the pattern on the
-      left-handside of the rule matches there are various
-      possibilities:</para>
+      rule in a switch or visit statement. If the pattern on the left-handside
+      of the rule matches there are various possibilities:</para>
 
       <itemizedlist>
         <listitem>
@@ -2721,7 +2898,7 @@ lexical syntax
             </listitem>
 
             <listitem>
-              <para>true predicate in comprehension (jumos to next assignment
+              <para>true predicate in comprehension (jumps to next assignment
               of generator).</para>
             </listitem>
           </itemizedlist>
@@ -2814,7 +2991,7 @@ int wordCount(str S){
   return count;
 }
 
-%% Here is an alternative declaration:
+%% Here is an alternative (but less desirable) declaration:
 int wordCount2(str S){
   int count = 0;
   %% \w matches any word character
@@ -2825,6 +3002,18 @@ int wordCount2(str S){
     S = rest; 
   }
   return count;
+}
+
+%% Maintain word count per word.
+%% Note how the += operator initializes each map entry
+%% to an appropriate value (0 in this case)
+map[str,int] wordCountPerWord(str S){
+  map[str,int] allCounts = {};
+
+ for(/&lt;word:[a-zA-Z0-9]+&gt;/m: S){
+       allCounts[word] += 1;
+  }
+  return allCounts;
 }</programlisting></para>
     </section>
 
@@ -2870,7 +3059,8 @@ str capitalize2(str S, str Pat, str Repl){
       them:<programlisting>module DateVars
 
 set[Var] getDateVars(Program P){
-   return {V | Var V : P, /.*(date|dt|year|yr).*$/i := toString(V)};
+   return {V | Var V : P, 
+               /.*(date|dt|year|yr).*$/i := toString(V)};
 }</programlisting></para>
     </section>
 
@@ -2901,16 +3091,17 @@ exports
 import languages/Booleans/syntax;
 
 Bool reduce(Bool B) {
-    Bool B1; Bool B2;
+    Bool B1, B2;
     bottom-up visit(B) {
-      case true &amp; B2     =&gt; B2
-      case false &amp; B2    =&gt; false
+      case true &amp; &lt;B2&gt;   =&gt; &lt;B2&gt;
+      case false &amp; &lt;B2&gt;  =&gt; false
 
       case true | true   =&gt; true
       case true | false  =&gt; true
       case false | true  =&gt; true
       case false | false =&gt; false
     }
+    return B;
 }</programlisting></para>
 
         <para>Observe that there are two styles:</para>
@@ -2939,19 +3130,19 @@ Bool reduce(Bool B) {
 data Bool btrue;
 data Bool bfalse;
 data Bool band(Bool L, Bool R);
-data Bool bor(Bool L, Bool R); 
+data Bool bor(Bool L, Bool R);  
 
 Bool reduce(Bool B) {
-    Bool B1; Bool B2;
+    Bool B1, B2;
     bottom-up visit(B) {
-      acase band(btrue, &lt;B2&gt;)   =&gt; B2     %% Use Variables
-      acase band(bfalse, B2)  =&gt; bfalse
-
-      acase bor(btrue, btrue)        =&gt; btrue  %% Use a truth table
-      acase bor(btrue, bfalse)       =&gt; btrue
-      acase bor(bfalse, btrue)       =&gt; btrue
-      acase bor(bfalse, bfalse)      =&gt; bfalse
+      case band(btrue, &lt;B2&gt;)    =&gt; &lt;B2&gt;   %% Use Variables
+      case band(bfalse, B2)     =&gt; bfalse
+      case bor(btrue, btrue)    =&gt; btrue  %% Use a truth table
+      case bor(btrue, bfalse)   =&gt; btrue
+      case bor(bfalse, btrue)   =&gt; btrue
+      case bor(bfalse, bfalse)  =&gt; bfalse
     }
+    return B;
 }</programlisting></para>
 
         <para>First, type declarations are used to define the abstract syntax
@@ -2975,18 +3166,18 @@ data Bool bfalse;
 data Bool band(Bool L, Bool R);
 data Bool bor(Bool L, Bool R);  
 
-arule a1 band(btrue, &lt;Bool B2&gt;)  =&gt; B2 
-arule a2 band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
+rule a1 band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt; 
+rule a2 band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
 
-arule o1 bor(btrue, btrue)       =&gt; btrue
-arule o2 bor(btrue, bfalse)      =&gt; btrue
-arule o3 bor(bfalse, btrue)      =&gt; btrue
-arule o4 bor(bfalse, bfalse)     =&gt; bfalse</programlisting>These rules are
+rule o1 bor(btrue, btrue)       =&gt; btrue
+rule o2 bor(btrue, bfalse)      =&gt; btrue
+rule o3 bor(bfalse, btrue)      =&gt; btrue
+rule o4 bor(bfalse, bfalse)     =&gt; bfalse</programlisting>These rules are
         applied on every Bool that is constructed. Like in ASF+SDF it is the
         responsibility of the programmer to make sure the rules are confluent
-        and terminating. The body of a rules definition has the same syntax
-        and semantics as the switch construct, allowing backtracking,
-        side-effects and checking of conditions.</para>
+        and terminating. A rule definition has the same syntax and semantics
+        as the switch construct, allowing backtracking, side-effects and
+        checking of conditions.</para>
 
         <para>There are some issues here:</para>
 
@@ -2997,19 +3188,6 @@ arule o4 bor(bfalse, bfalse)     =&gt; bfalse</programlisting>These rules are
             data-structures. On the other hand, constructors that are local to
             a module may have some private rules applied to them; but public
             rules on private constructors are dissallowed too.</para>
-          </listitem>
-
-          <listitem>
-            <para>We previously had other ideas about this feature. We
-            introduced a reduce keyword that would call a certain named
-            function at the construction of every Bool. The problem with that
-            feature is that the operational semantics (in the eyes of the
-            Rascal programmer) really looks like first some term is to be
-            created, and then a function will be applied to normalize it. In
-            reality though, we want to normalize the terms in an innermost
-            fashion, and at construction time, so that the terms on the
-            left-hand side of the rules are never actually created or
-            allocated.</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -3112,8 +3290,8 @@ import BTree-syntax;
 
 %% Ex1: Count leaves in a BTREE
 %% Idea: int N : T generates alle Integer leaves in the tree
-%% Observe that there is no need to touch the contents of each Integer
-%% since we only count them.
+%% Observe that there is no need to touch the contents of 
+%% each Integer since we only count them.
 
 int cnt(BTREE T) {
     return size({N | Integer N : T});
@@ -3185,8 +3363,8 @@ BTREE frepl(BTREE T) {
 
 BTREE frepl(BTREE T) {
     bottom-up-break visit (T) {
-      case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
-           i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
+      case[| g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) |] =&gt;
+             i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     }
 }
 
@@ -3195,18 +3373,18 @@ BTREE frepl(BTREE T) {
 
 BTREE srepl(BTREE T) {
     top-down-break visit (T) {
-      case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt; 
-           i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
+      case [| g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) |] =&gt; 
+              i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     }
 }
 
-%% Ex7: We can also add the top-down-break directive to the generator
-%% to get only outermost nodes.
+%% Ex7: We can also add the top-down-break directive to the 
+%% generator to get only outermost nodes.
 
 set[BTREE] find_outer_gs(BTREE T) {
     return
     { S | top-down-break STATEMENT S : T, 
-          g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) := S };
+          [| g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) |] := S };
 }
  
 %% Ex8: accumulating transformer that increments leaves with 
@@ -3281,7 +3459,7 @@ Exp subst(Var V1, Exp E1, Exp E2) {
       case &lt;Var V2&gt;: insert (V1==V2) ? E1 : V2;
 
       case &lt;Exp Ea&gt; &lt;Exp Eb&gt;:
-        insert [| &lt;subst(V, E, Ea)&gt; &lt;subst(V, E, Eb)&gt; |];  %%% amb??
+        insert [| &lt;subst(V, E, Ea)&gt; &lt;subst(V, E, Eb)&gt; |];
 
       case fn &lt;Var V2&gt; =&gt; &lt;Var Ea&gt;:
         if (V1 == V2) { insert [| fn &lt;V2&gt; =\&gt; &lt;Ea&gt; |]; }
@@ -3327,16 +3505,15 @@ import Let;
 
 Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     switch (E) {
-    case let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end: {
+    case let &lt;Var V&gt; = &lt;Exp E1&gt; in &lt;Exp E2&gt; end:
          return [| let &lt;parseString("x" + toString(Cnt))&gt; = 
                        &lt;rename(E1, Rn, Cnt)&gt;
                    in 
-                      &lt;rename(E2, {&lt;V, Y&gt;} + Rn, Cnt+1)&gt;
+                       &lt;rename(E2, {&lt;V, Y&gt;} + Rn, Cnt+1)&gt;
                    end
                 |];
-          }
-
-    case &lt;Var V&gt;: return Rn(V);
+          
+    case &lt;Var V&gt;: return Rn[V];
 
     default: return E;
     }
@@ -3356,8 +3533,8 @@ import Let;
 %% Cnt: global counter to generate fresh variables
 %% rel[Var,Var]: global renaming table
 
-int Cnt = 0;
-rel[Var,Var] Rn = {};
+global int Cnt = 0;
+global rel[Var,Var] Rn = {};
 
 Var newVar() {
     global int Cnt;  
@@ -3379,7 +3556,7 @@ Exp rename(Exp E) {
                 |];
           }
 
-    case &lt;Var V&gt;: return Rn(V);
+    case &lt;Var V&gt;: return Rn[V];
 
     default: return E;
     }
@@ -3425,7 +3602,7 @@ list[Error] tcst(Stat Stat, Env Env) {
     }
     return [];
 }
-
+ 
 list[Error] type_of(Exp E, TYPE Type, Env Env) {
     switch (E) {
       case &lt;NatCon N&gt;: if(Type == natural){ return []; }
@@ -3544,20 +3721,20 @@ PICO_VALUE evalExp(Exp exp, VEnv Env) {
            return Env[Id];
 
       case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
-           if(intval(int n1) := evalExp(exp1, Env) &amp;&amp;
-              intval(int n2) := evalExp(exp2, Env)){
+           if(intval(&lt;int n1&gt;) := evalExp(exp1, Env) &amp;&amp;
+              intval(&lt;int n2&gt;) := evalExp(exp2, Env)){
               return intval(n1 + n2);
            }
       
       case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
-            if(intval(int n1) := evalExp(exp1, Env) &amp;&amp;
-              intval(int n2) := evalExp(exp2, Env)){
+            if(intval(&lt;int n1&gt;) := evalExp(exp1, Env) &amp;&amp;
+              intval(&lt;int n2&gt;) := evalExp(exp2, Env)){
               return intval(n1 - n2);
            }
  
       case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
-           if(strval(str s1) := evalExp(exp1, Env) &amp;&amp;
-              strval(str s2) := evalExp(exp2, Env)){
+           if(strval(&lt;str s1&gt;) := evalExp(exp1, Env) &amp;&amp;
+              strval(&lt;str s2&gt;) := evalExp(exp2, Env)){
               return strval(s1 + s2);
            }
    } 
@@ -3648,20 +3825,20 @@ PICO_VALUE evalExp(Exp exp) {
       case &lt;PICO-ID Id&gt;: return Env[Id];
 
       case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
-           if(intval(int n1) := evalExp(exp1) &amp;&amp;
-              intval(int n2) := evalExp(exp2)){
+           if(intval(&lt;int n1&gt;) := evalExp(exp1) &amp;&amp;
+              intval(&lt;int n2&gt;) := evalExp(exp2)){
               return intval(n1 + n2);
            }
 
       case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
-           if(intval(int n1) := evalExp(exp1) &amp;&amp;
-              intval(int n2) := evalExp(exp2)){
+           if(intval(&lt;int n1&gt;) := evalExp(exp1) &amp;&amp;
+              intval(&lt;int n2&gt;) := evalExp(exp2)){
               return intval(n1 - n2);
            }
    
       case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
-           if(strval(str s1) := evalExp(exp1) &amp;&amp;
-              strval(str s2) := evalExp(exp2)){
+           if(strval(&lt;str s1&gt;) := evalExp(exp1) &amp;&amp;
+              strval(&lt;str s2&gt;) := evalExp(exp2)){
               return strval(s1 + s2);
            }
    } 
@@ -3688,7 +3865,7 @@ CFSEGMENT cflow({STATEMENT ";"}* Stats){
            CFSEGMENT CF1 = cflow(Stat);
            CFSEGMENT CF2 = cflow(Stats2);
            return &lt;CF1.entry, 
-                   CF1.graph + CF2.graph + (CF1.exit * CF2.entry), 
+                   CF1.graph | CF2.graph | (CF1.exit * CF2.entry), 
                    CF2.exit&gt;;
       }
 
@@ -3702,7 +3879,7 @@ CFSEGMENT cflow(STATEMENT Stat){
            CFSEGMENT CF = cflow(Stats);
            set[CP] E = {exp(Exp)};
            return &lt; E, 
-                    (E * CF.entry) + CF.graph + (CF.exit * E),
+                    (E * CF.entry) | CF.graph | (CF.exit * E),
                     E
                   &gt;;
       }
@@ -3713,8 +3890,9 @@ CFSEGMENT cflow(STATEMENT Stat){
            CFSEGMENT CF2 = cflow(Stats2);
            set[CP] E = {exp(Exp)};
            return &lt; E, 
-                    (E * CF1.entry) + (E * CF2.entry) + CF1.graph + CF2.graph,
-                    CF1.exit + CF2.exit
+                    (E * CF1.entry) | (E * CF2.entry) | 
+                                      CF1.graph | CF2.graph,
+                    CF1.exit | CF2.exit
                   &gt;;
       }
          
@@ -3734,7 +3912,7 @@ CFSEGMENT cflow(STATEMENT Stat){
 import pico/syntax/Pico;
 
 rel[PICO-ID, EXP] uses(PROGRAM P) {
-  return {&lt;Id, E&gt; | EXP E : P, PICO-ID Id&gt; := E};
+  return {&lt;Id, E&gt; | EXP E : P, [| &lt;PICO-ID Id&gt; |] := E};
 }
 
 rel[PICO-ID, STATEMENT] defs(PROGRAM P) { 
@@ -3767,7 +3945,7 @@ set[PICO-ID] uninit(PROGRAM P) {
     set[CP] Root = CFLOW.entry;
     rel[CP,CP] Pred = CFLOW.graph; 
 
-    return {Id | &lt;EXP E, PICO-ID Id&gt;  : Uses,
+    return {Id | &lt;EXP E, PICO-ID Id&gt; : Uses,
                  E in reachX(Root, Defs[Id], Pred)
     };
 }
@@ -3794,7 +3972,7 @@ PROGRAM cse(PROGRAM P) {
        };
   
     visit (P) {
-      case &lt;EXP E&gt;: if(PICO-ID Id := replacements(E)){
+      case &lt;EXP E&gt;: if([| &lt;PICO-ID Id&gt; |] := replacements(E)){
                        replace-by Id;
                     }
     }
@@ -3833,11 +4011,11 @@ import  Pico-use-def;
 
 Boolean is_constant(EXP E) {
    switch (E) {
-     case &lt;NatCon N&gt; =&gt; true
+     case &lt;NatCon N&gt;: return true;
 
-     case &lt;StrCon S&gt; =&gt; true
+     case &lt;StrCon S&gt;: return true;
 
-     case &lt;EXP E&gt;    =&gt; false
+     case &lt;EXP E&gt;: return false;
    }
 }
 
@@ -3854,7 +4032,7 @@ PROGRAM cp(PROGRAM P) {
       };  
  
     visit (P) {
-     case &lt;PICO-ID Id&gt;: if(EXP E := replacements[Id]){
+     case &lt;PICO-ID Id&gt;: if(&lt;EXP E&gt; := replacements[Id]){
                            replace-by E;
                         }
     }
@@ -4056,102 +4234,54 @@ fun STable[&amp;Name, &amp;Value] switch_scope(STable[&amp;Name, &amp;Value] ST,
     <section>
       <title>Innerproduct</title>
 
-      <para>[Example taken from TXL documentation]</para>
+      <para>[Example inspired by TXL documentation]</para>
 
-      <para>Define nnerproduct on vectors of integers, e.g. (1 2 3).(3 2 1)
-      =&gt; 10.<programlisting>module examples/Vectors/Vector-syntax
-
-exports
-  imports basic/Integers
-sorts Vector
-
-context-free syntax
-   "(" Integer* ")"    -&gt; Vector
-   Vector "." Vector   -&gt; Integer</programlisting></para>
+      <para>Define nnerproduct on lists of integers, e.g. innerProduct([1, 2,
+      3] .[3, 2, 1]) =&gt; 10.</para>
 
       <programlisting>module Innerproduct
 
-import Vector-syntax;
-
-int innerProduct(Vector V1, V2) {
-    Integer N1, N2;
-
-    if ( &lt;Integer N1&gt; &lt;Integer* Rest1&gt; := V1 and
-         &lt;Integer N2&gt; &lt;Integer* Rest2&gt; := V2 
-       )
-       return (N1*N2) + innerProduct( [| (&lt;Rest1&gt;) |], [| (&lt;Rest2&gt;) |] )
-    else
-       return 0
-}</programlisting>
+int innerProduct(list[int] V1, list[int] V2){
+    if (size(V1) == 0 || size(V2) == 0){
+       return 0;
+    } else {
+       return (N1*N2) + innerProduct(rest(V1), rest(V2));
+    }
+ }</programlisting>
     </section>
 
     <section>
       <title>Bubble sort</title>
 
-      <para>[Example taken from TXL documentation]</para>
+      <para>[Example inspired byTXL documentation]</para>
 
       <programlisting>module Bubble
 
-import Vector-syntax;
-
-Integer* sort(Integer* Numbers){
-    visit Numbers {
-      case &lt;Integer* Rest1&gt; 
-              &lt;Integer N1&gt; &lt;Integer N2&gt; 
-           &lt;Integer* Rest2&gt;:
-           if(N1 &gt; N2){
-              return sort( [| &lt;Integer* Rest1&gt; 
-                                  &lt;Integer N2&gt; &lt;Integer N1&gt; 
-                               &lt;Integer* Rest&gt;
-                           |] );
-           }
-    };
-    return Numbers
+list[int] sort(list[int] Numbers){
+  for(int I : [1 .. size(Numbers) - 1 ]){
+     if(Numbers[I] &gt; Numbers[I+1]){
+       &lt;Numbers[I], Numbers[I+1]&gt; = &lt;Numbers[I+1], Numbers[I]&gt;;
+       return sort(Numbers);
+     }
+  }
+  return Numbers;
 }</programlisting>
-
-      <para>Another way to write this is:</para>
-
-      <programlisting>module Bubble
-
-Integer* sort(Integer* Numbers){
-    visit Numbers {
-      case &lt;Integer N1&gt; &lt;Integer N2&gt;:
-        if( N1 &gt; N2 ) 
-            yield [| &lt;Integer N2&gt; &lt;Integer N1&gt; |]
-    };
-    return Numbers
-}</programlisting>
-
-      <para>The visit will replace all adjacent pairs that are in the wrong
-      order in the current list. This is repeated until no more changes are
-      possible.<caution>
-          <para>In the two above examples it is not elegant that the pattern
-          following the case needs no quoting, and that the pattern following
-          the <literal>return</literal>/<literal>replace</literal> has to be
-          quoted.</para>
-        </caution></para>
     </section>
 
     <section>
       <title>Generic Bubble sort</title>
 
-      <para><caution>
-          <para>The current syntax does not yet allow type variables in
-          patterns. What are the implications for the implementation? Do we
-          want this generality? Proposal: no since the ramifications are
-          unclear.</para>
-        </caution>Here is a generic bubble sort wich uses type parameters
-      (&amp;ELEM) and a function parameter.<programlisting>module Bubble-Gen
+      <para>Here is a generic bubble sort wich uses type parameters (&amp;E)
+      and a function parameter.<programlisting>module Bubble-Gen
 
-fun &amp;Elem* sort(&amp;Elem* Elements, 
-                fun bool GreaterThan(&amp;Elem, &amp;Elem)){
-   
-  visit repeat Elements {
-      case &lt;&amp;Elem E1&gt; &lt;&amp;Elem E2&gt;: 
-        if(GreaterThan(E1, E2)) 
-           yield &lt;&amp;Elem E2&gt; &lt;&amp;Elem E1&gt;
-
+list[&amp;E] sort(list[&amp;E] Elements, bool GreaterThan(&amp;E, &amp;E)){
+  for(int I : [1 .. size(Elements) - 1 ]){
+     if(GreaterThan(Elements[I],  Elements[I+1])){
+       &lt;Elements[I], Elements[I+1]&gt; = &lt;Elements[I+1], Elements[I]&gt;;
+       return sort(Elements);
      }
+  }
+  return Elements;
 }</programlisting></para>
 
       <para>Of course, we can write a generic sort on arbitrary lists.</para>
@@ -6739,16 +6869,6 @@ public void addRelPDB(str name, rel[&amp;T] incr)
       </listitem>
 
       <listitem>
-        <para>Extensibility of functions. <remark>Proposal: let's not provide
-        facilities for this.</remark></para>
-      </listitem>
-
-      <listitem>
-        <para>How do we identify built-in sorts (bool, int, etc) with their
-        syntactic counterparts?</para>
-      </listitem>
-
-      <listitem>
         <para>In a list comprehension: do list values splice into the list
         result?</para>
       </listitem>
@@ -6797,10 +6917,6 @@ public void addRelPDB(str name, rel[&amp;T] incr)
             <para>"redefine" allows modification of an imported
             grammar.</para>
           </listitem>
-
-          <listitem>
-            <para>An "any" sort that matches anything.</para>
-          </listitem>
         </itemizedlist>
       </listitem>
     </itemizedlist>
@@ -6812,282 +6928,6 @@ public void addRelPDB(str name, rel[&amp;T] incr)
     <para>Don't read the following sections; they are leftovers from earlier
     versions of this document but may still contain material that can be
     reused.</para>
-  </section>
-
-  <section>
-    <title>Mapping features to datatypes</title>
-
-    <para><note>
-        <para>This section has played a role during initial design; it is now
-        outdated.</para>
-      </note>Emphasized cells indicate a new datatype/feature combination that
-    needs to be thought out.</para>
-
-    <table xml:id="table.features">
-      <title>Features vs datatypes</title>
-
-      <tgroup cols="9">
-        <colspec align="left" colname="col1" colnum="1" colwidth="2*" />
-
-        <colspec align="center" colname="col2" colnum="2" colwidth="1*" />
-
-        <colspec align="center" colname="col3" colnum="3" colwidth="1*" />
-
-        <colspec align="center" colname="col4" colnum="4" colwidth="1*" />
-
-        <colspec align="center" colname="col5" colnum="5" colwidth="1*" />
-
-        <colspec align="center" colname="col6" colnum="6" colwidth="1*" />
-
-        <colspec align="center" colname="col7" colnum="7" colwidth="1*" />
-
-        <colspec align="center" colname="col8" colnum="8" colwidth="1*" />
-
-        <colspec align="center" colname="col9" colnum="9" colwidth="1*" />
-
-        <thead>
-          <row>
-            <entry>Which features work on which datatypes?</entry>
-
-            <entry>CF syntax trees</entry>
-
-            <entry>CF syntax lists</entry>
-
-            <entry>Lexical syntax trees</entry>
-
-            <entry>Lexical syntax lists</entry>
-
-            <entry>Lists</entry>
-
-            <entry>Sets</entry>
-
-            <entry>Relations</entry>
-
-            <entry>Tuples</entry>
-          </row>
-        </thead>
-
-        <tbody>
-          <row>
-            <entry>Pattern matching</entry>
-
-            <entry>Y (CS)</entry>
-
-            <entry>Y, CS, LM</entry>
-
-            <entry>Y, PS</entry>
-
-            <entry>Y, PS, LM</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Pattern construction</entry>
-
-            <entry>Y, CS</entry>
-
-            <entry>Y, PS</entry>
-
-            <entry>Y, PS</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y, HT</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Generator/ Comprehension</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>LC</entry>
-
-            <entry>SC</entry>
-
-            <entry>SC</entry>
-
-            <entry>N</entry>
-          </row>
-
-          <row>
-            <entry>Complete Functions</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Equations</entry>
-
-            <entry>Y, BC</entry>
-
-            <entry>Y, BC</entry>
-
-            <entry>Y, BC</entry>
-
-            <entry>Y, BC</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Polymorphism</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Serialization</entry>
-
-            <entry>UPTR</entry>
-
-            <entry>UPTR</entry>
-
-            <entry>UPTR</entry>
-
-            <entry>UPTR</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Traversal Functions</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-
-          <row>
-            <entry>Subtyping</entry>
-
-            <entry>N</entry>
-
-            <entry>N</entry>
-
-            <entry>N, except character class inclusion</entry>
-
-            <entry>N</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-
-            <entry>Y</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
-
-    <itemizedlist>
-      <listitem>
-        <para>BC = Backward Compatible with ASF</para>
-      </listitem>
-
-      <listitem>
-        <para>CS = Concrete Syntax</para>
-      </listitem>
-
-      <listitem>
-        <para>HT= head/tail matching</para>
-      </listitem>
-
-      <listitem>
-        <para>LC = List comprehension</para>
-      </listitem>
-
-      <listitem>
-        <para>LM = List Matching</para>
-      </listitem>
-
-      <listitem>
-        <para>N = No</para>
-      </listitem>
-
-      <listitem>
-        <para>PS = Prefic Syntax</para>
-      </listitem>
-
-      <listitem>
-        <para>SC = Set Comprehension</para>
-      </listitem>
-
-      <listitem>
-        <para>Y = Yes</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <section>
@@ -7166,269 +7006,5 @@ visitor bottom-up-dbg(v) {  <emphasis role="bold">
   pattern =&gt; pattern
   pattern2 : { effect; }
 }</programlisting></para>
-  </section>
-
-  <section>
-    <title>Outdated examples</title>
-
-    <section>
-      <title>Generating Graph files in Dot format</title>
-
-      <para>This example illustrates the use of a comprehension on the
-      right-hand side of an equation.<programlisting>module Dot-generation
-
-imports Dot-syntax
-
-fun Dot gen-dot(rel[ID, ID] Rel) {
-    [| digraph example {
-                        $([ node(Tup) | &lt;ID,ID&gt; Tup : Rel ])
-                       }
-    |]
-}
-
-fun DotElem* gen-node(&lt;ID Id1, ID Id2&gt;) {
-    [| node $Id1; node $Id2; $Id1 -&gt; $Id2 |}}
-}</programlisting></para>
-    </section>
-  </section>
-
-  <section xml:id="section.integration-tscript">
-    <title>Integration with Tscripts (Outdated)</title>
-
-    <note>
-      <para>It is not yet clear whether we will also include Tscript in the
-      integration effort. For the time being, this section is considered
-      outdated.</para>
-    </note>
-
-    <section>
-      <title>Introduction</title>
-
-      <para>It is possible to speculate on an even further integration of
-      formalisms and combining the above amalgan of ASF+SDF and Rscript with
-      Tscripts.</para>
-    </section>
-
-    <section>
-      <title>Requirements</title>
-
-      <itemizedlist>
-        <listitem>
-          <para>R12: The resulting language uses a single type system. This
-          means that relational types (possible including syntactic objects)
-          can be used in Tscripts.</para>
-        </listitem>
-
-        <listitem>
-          <para>R13: The current "expressions" in Tscript (terms that occur at
-          the rhs of an assignment) are replaced by calls to ASF+SDF or
-          Rscript functions.</para>
-        </listitem>
-
-        <listitem>
-          <para>R14: There is minimal duplication in functionality between
-          ASF+SDF/Rscript/Tscript.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section>
-      <title>Different styles of Type Declarations</title>
-
-      <para>We have at the moment, unfortunately, a proliferation of
-      declaration styles for types.</para>
-
-      <para>Functions are declared in ASF+SDF as:</para>
-
-      <programlisting>typecheck(PROGRAM) -&gt; Boolean</programlisting>
-
-      <para>Observe that only the type of the parameter is given but that it
-      does not have a name.</para>
-
-      <para>In Rscript we have:</para>
-
-      <programlisting>int sum(set[int] SI) = ...</programlisting>
-
-      <para>while in Tscript processes are declared as</para>
-
-      <programlisting>process mkWave(N : int) is ...</programlisting>
-
-      <para>For variables a similar story applies. Variables are declared in
-      ASF+SDF as:</para>
-
-      <programlisting>"X" [0-9]+    -&gt; INT</programlisting>
-
-      <para>In Rscript we have:</para>
-
-      <programlisting>int X
-
-int X : S   (in comprehensions)</programlisting>
-
-      <para>and in Tscript we have:</para>
-
-      <programlisting>X : int</programlisting>
-
-      <para>In order to unify these styles, we might do the following:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>The type of an entity is always written before the entity
-          itself.</para>
-        </listitem>
-
-        <listitem>
-          <para>Formal parameters have a name.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>In essence, this amounts to using the declaration style as used in
-      Rscript. So we get:</para>
-
-      <programlisting>Boolean typecheck(PROGRAM P) is ...
-
-process mkWave(int N) is ...</programlisting>
-
-      <para>Or do we want things like:</para>
-
-      <programlisting>function typecheck(P : PROGRAM) -&gt; Boolean is ...
-
-var X -&gt; int
-
-process mkWave(int N) is ...</programlisting>
-
-      <para>Advantages are:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>The category of the entity is immediately clear (function,
-          var, process, tool, ...).</para>
-        </listitem>
-
-        <listitem>
-          <para>It is readable to further qualify the category, i.e.,
-          traversal function, hidden var, restartable tool)</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section>
-      <title>Global Flow of Control</title>
-
-      <para>We have to settle the possible flow of control between the three
-      entities ASF+SDF, Rscript and Tscript. Since Tscript imposes the notion
-      of an atomic action it would be problematic to have completely
-      unrestricted flow of control. Therefore it is logical to use Tscript for
-      the top-level control and to limit the use of ASF+SDF and Rscript to
-      computations within atomic actions. There is no reason to restrict the
-      flow of control between ASF+SDF and Rscript.</para>
-
-      <para>What are the consequences of the above choice? Let's analyze two
-      cases:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Parse a file from within an ASF+SDF specification. This (and
-          similar built-ins) that use the operating system are removed from
-          ASF+SDF. Their effect has to be achieved at the Tscript-level which
-          is the natural place for such primitives.</para>
-        </listitem>
-
-        <listitem>
-          <para>Describe I/O for a defined language. Consider Pico extended
-          with a read statement. Here the situation is more complicated. We
-          cannot argue that the flow of control in the Pico program (as
-          determined by an interpreter written in ASF+SDF) should be moved to
-          the Tscript level since Tscript simply does not have the primitives
-          to express this. On the other hand, we have to interrupt the flow of
-          control of the Pico interpreter when we need to execute a read
-          statement. The obvious way to achieve this is</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>At the Tscript level, a loop repeatedly calls the Pico
-              interpreter until it is done.</para>
-            </listitem>
-
-            <listitem>
-              <para>After each call the Pico interpreter returns with
-              either:</para>
-
-              <itemizedlist>
-                <listitem>
-                  <para>An indication that the eecution is complete (and
-                  possibly a final state and/or final value).</para>
-                </listitem>
-
-                <listitem>
-                  <para>An indication that an external action has to be
-                  executed, for instance the read statement. This indication
-                  should also contain the intermediate state of the
-                  interpreter. When the external action has been executed, the
-                  Pico interpreter can be restarted with as arguments the
-                  value of the external action and the intermediate
-                  state.</para>
-                </listitem>
-              </itemizedlist>
-            </listitem>
-          </itemizedlist>
-        </listitem>
-      </itemizedlist>
-
-      <para>Experimentation will have to show whether such a framework is
-      acceptable.</para>
-    </section>
-
-    <section>
-      <title>Modularization</title>
-
-      <para>Rscript and Tscript have no, respectively, very limited mechanisms
-      for modularization. ASF+SDF, however, provides a module mechanism with
-      imports, hiding, parameters and renaming. This mechanism was originally
-      included in ASF, was taken over by SDF and is now reused in ASF+SDF.
-      Currently, there are not yet sufficiently large Rscripts to feel the
-      need for modules. In Tscript, there is a strong need for restricted name
-      spaces and for imposing limitations on name visibility in order to limit
-      the possible interactions of a process with its surroundings and to make
-      it possible to create nested process definitions. What are the design
-      options we have to explore?</para>
-
-      <para>First, we can design a new module system that is more suited for
-      our current requirements. The advantage is that we can create an optimal
-      solution, the disadvantage is that there are high costs involved
-      regarding implementation effort and migrations of existing ASF+SDF
-      specifications to the new module scheme.</para>
-
-      <para>Second, we can design an add-on to the ASF+SDF module system that
-      addresses our current needs.</para>
-
-      <para>Third, we can try to reuse the current ASF+SDF module
-      system.</para>
-
-      <para>As a general note, parameterized modules, polymorphics types and
-      renamings are competing features. We should understand what we want. It
-      is likely that we do not need all of them.</para>
-
-      <para>Before delving into one of the above alternative approaches, let's
-      list our requirements first.</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>We need grammar modules that allow the following operations:
-          import, renaming, deletion (currently not supported but important to
-          have a fixed base grammar on many variations on it).
-          Parameterization and export/hidden: unclear.</para>
-        </listitem>
-
-        <listitem>
-          <para>We need function modules (ASF+SDF and Rscript) that provide:
-          import, maybe parametrization, and export/hidden.</para>
-        </listitem>
-
-        <listitem>
-          <para>We need process modules (Tscript) that provide: import,
-          export, hiding.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
   </section>
 </article>

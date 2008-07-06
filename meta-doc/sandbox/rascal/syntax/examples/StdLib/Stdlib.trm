@@ -162,7 +162,7 @@ public bool *(int I, double D){
 public double /(double D1, double D2)
 throws divide_by_zero(str msg)
   @primitive{"Double.div"}
- 
+  
 public bool /(double D, int I){
   return D / toDouble(I);
 }

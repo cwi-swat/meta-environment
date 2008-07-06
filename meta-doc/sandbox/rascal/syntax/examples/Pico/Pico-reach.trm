@@ -4,7 +4,7 @@ type tuple[Stat theStat, Var theVar] Def;
 type tuple[Stat theStat, Var theVar] Use;
 
 set[Stat] predecessor(rel[Stat,Stat] P, Stat S) { 
-    return invert(P)[S];
+    return invert(P)[S]; 
 }
 
 set[Stat] successor(rel[Stat,Stat] P, Stat S) { 
@@ -32,7 +32,7 @@ rel[Stat, Def] reaching_definitions(rel[Stat,Var] DEFS,
                             Stat P : predecessor(PRED,S), 
                             Def D : OUT[P]};
            OUT =  {<S, D> | int S : STATEMENT, 
-                            Def D : DEF[S] + (IN[S] - KILL[S])}
+                            Def D : DEF[S] | (IN[S] - KILL[S])}
     }
     return IN;
 }

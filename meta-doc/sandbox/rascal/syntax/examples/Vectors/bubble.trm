@@ -1,18 +1,11 @@
 module Bubble
 
-import Vector-syntax;
-
-Integer* sort(Integer* Numbers){
-    visit Numbers {
-      case <Integer* Rest1> 
-              <Integer N1> <Integer N2> 
-           <Integer* Rest2>:
-           if(N1 > N2){
-              return sort( [| <Integer* Rest1> 
-                                  <Integer N2> <Integer N1> 
-                               <Integer* Rest>
-                           |] );
-           }
-    };
-    return Numbers
+list[int] sort(list[int] Numbers){
+  for(int I : [1 .. size(Numbers) - 1 ]){
+     if(Numbers[I] > Numbers[I+1]){
+       <Numbers[I], Numbers[I+1]> = <Numbers[I+1], Numbers[I]>;
+       return sort(Numbers);
+     }
+  }
+  return Numbers;
 }

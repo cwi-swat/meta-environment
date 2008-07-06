@@ -13,4 +13,5 @@ Bool reduce(Bool B) {
       case false | true  => true
       case false | false => false
     }
+    return B;
 }

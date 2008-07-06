@@ -15,7 +15,7 @@ PROGRAM cse(PROGRAM P) {
        };
   
     visit (P) {
-      case <EXP E>: if(<PICO-ID Id> := replacements(E)){
+      case <EXP E>: if([| <PICO-ID Id> |] := replacements(E)){
                        replace-by Id;
                     }
     }

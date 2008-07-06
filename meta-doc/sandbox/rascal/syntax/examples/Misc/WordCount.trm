@@ -35,6 +35,7 @@ int wordCount2(str S){
   return count;
 }
 
+%% Maintain word count per word.
 %% Note how the += operator initializes each map entry
 %% to an appropriate value (0 in this case)
 map[str,int] wordCountPerWord(str S){

@@ -7,6 +7,7 @@ exports
 
   lexical restrictions
     Name -/- [a-zA-Z0-9\_\-]
+    Reserved -/- [a-zA-Z0-9\_\-]
  
   context-free syntax
     {Name "::"}+  -> QualName {avoid,cons("QualName")}

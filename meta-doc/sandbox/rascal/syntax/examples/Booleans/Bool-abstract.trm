@@ -15,4 +15,5 @@ Bool reduce(Bool B) {
       case bor(bfalse, btrue)   => btrue
       case bor(bfalse, bfalse)  => bfalse
     }
+    return B;
 }

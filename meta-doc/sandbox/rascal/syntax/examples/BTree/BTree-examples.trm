@@ -3,8 +3,8 @@ import BTree-syntax;
 
 %% Ex1: Count leaves in a BTREE
 %% Idea: int N : T generates alle Integer leaves in the tree
-%% Observe that there is no need to touch the contents of each Integer
-%% since we only count them.
+%% Observe that there is no need to touch the contents of 
+%% each Integer since we only count them.
 
 int cnt(BTREE T) {
     return size({N | Integer N : T});
@@ -76,8 +76,8 @@ BTREE frepl(BTREE T) {
 
 BTREE frepl(BTREE T) {
     bottom-up-break visit (T) {
-      case g(<BTREE T1>, <BTREE T2>) =>
-           i(<BTREE T1>, <BTREE T2>)
+      case[| g(<BTREE T1>, <BTREE T2>) |] =>
+             i(<BTREE T1>, <BTREE T2>)
     }
 }
 
@@ -86,18 +86,18 @@ BTREE frepl(BTREE T) {
 
 BTREE srepl(BTREE T) {
     top-down-break visit (T) {
-      case g(<BTREE T1>, <BTREE T2>) => 
-           i(<BTREE T1>, <BTREE T2>)
+      case [| g(<BTREE T1>, <BTREE T2>) |] => 
+              i(<BTREE T1>, <BTREE T2>)
     }
 }
 
-%% Ex7: We can also add the top-down-break directive to the generator
-%% to get only outermost nodes.
+%% Ex7: We can also add the top-down-break directive to the 
+%% generator to get only outermost nodes.
 
 set[BTREE] find_outer_gs(BTREE T) {
     return
     { S | top-down-break STATEMENT S : T, 
-          g(<BTREE T1>, <BTREE T2>) := S };
+          [| g(<BTREE T1>, <BTREE T2>) |] := S };
 }
  
 %% Ex8: accumulating transformer that increments leaves with 

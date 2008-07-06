@@ -8,203 +8,201 @@ imports  basic/Areas
          languages/java/syntax/Lexical [ Identifier => JavaIdentifier
                                          Name       => JavaName
                                        ]
-hiddens
-context-free start-symbols 
-	Expression
-
 exports
-sorts Expression Binder Predicate SimpleGenerator Generator Call Assignable
+  sorts BasicExpression Expression Binder Predicate SimpleGenerator Generator Call Assignable Selector
       Strategy Statement Block Rule Case Assignment IncrAssignOp Value
       Catch Finally Increment Range FunctionClosure VariableDeclaration Scope SingleVariableDeclaration
-      Throws ThrowDeclaration FunctionDeclaration RuleDeclaration
+      Throws ThrowDeclaration FunctionDeclaration RuleDeclaration Upperbound
 
-context-free syntax
+  context-free syntax
 %% Basic values
-         BooleanLiteral                                          -> Value {cons("boollit")}
-         IntegerLiteral                                          -> Value {cons("intlit")}
-         FloatingPointLiteral                                    -> Value {cons("floatlit")}
-         StringLiteral                                           -> Value {cons("strlit")}
-         FunctionClosure                                         -> Value {cons("fun-closure")}
+    BooleanLiteral                                    -> Value {cons("boollit")}
+    IntegerLiteral                                    -> Value {cons("intlit")}
+    FloatingPointLiteral                              -> Value {cons("floatlit")}
+    StringLiteral                                     -> Value {cons("strlit")}
+    FunctionClosure                                   -> Value {cons("fun-closure")}
 %% TODO include proper locations here
-         Area                                                    -> Value {cons("areacon")}
+    Area                                              -> Value {cons("areacon")}
+    "fun" AnonymousFunctionType Block                 -> Value {cons("anon-fun")}
 
-%% Assignable expressions
-         QualName                                                -> Assignable {cons("asg")}
-         Assignable "." Name                                     -> Assignable {cons("asg-field")}
-         Assignable "[" Expression "]"                           -> Assignable {cons("asg-index")}
-
-         Assignable                                              -> Expression
-
-%% Function call
-	Assignable "(" {Expression ","}* ")"                    -> Call       {con("call")}
-
-%% Expressions
-        "(" Expression ")"                                       -> Expression {bracket}
-
-         Value                                                   -> Expression {cons("exp-value")}
-         StandardOperator                                        -> Expression {cons("exp-std-op")}
-         Call                                                    -> Expression {cons("exp-call")}
-         "fun" AnonymousFunctionType Block                       -> Expression {cons("exp-anon-fun")}
+    Value                                             -> Expression {cons("exp-value")}
 
 %% Lists, sets and tuples
-	"[" {Expression ","}* "]"                               -> Expression {cons("exp-list")}
-	"{" {Expression ","}* "}"                               -> Expression {cons("exp-set")}
-	"<" {Expression ","}+ ">"                               -> Expression {cons("exp-tuple")}
+    "[" {Expression ","}* "]"                         -> Expression {cons("exp-list")}
+    "{" {Expression ","}* "}"                         -> Expression {cons("exp-set")}
+    "<" {Expression ","}+ ">"                         -> Expression {cons("exp-tuple")}
 
-context-free priorities
+%% Selectors and assignable expressions
+    "." Name                                          -> Selector        {cons("sel-field")}
+    "[" Expression "]"                                -> Selector        {cons("sel-index")}
+
+    QualName Selector*                                -> Assignable      {cons("asg-select")}
+    "<" {Assignable ","}+ ">"                         -> Assignable      {cons("asg-tuple")}
+
+    QualName                                          -> BasicExpression {cons("bexp-qname")}
+    StandardOperator                                  -> BasicExpression {cons("bexp-std-op")}
+    BasicExpression Selector                          -> BasicExpression {cons("bexp-select")}
+
+%% Function call
+    BasicExpression "(" {Expression ","}* ")"         -> Call            {con("call")}
+    Call                                              -> BasicExpression {cons("exp-call")}
+
+    BasicExpression                                   -> Expression
+ 
+%% Expressions
+       
+    "(" Expression ")"                                -> Expression {bracket}
+
+  context-free priorities
 
 %% Closure operators
-       {
-         Expression "*"                                          -> Expression {cons("closure0")}
-         Expression "+"                                          -> Expression {cons("closure1")}
-       } >
+  {
+    Expression "*"                                    -> Expression {cons("closure0")}
+    Expression "+"                                    -> Expression {cons("closure1")}
+  } >
 
 %% Standard operators
    %% multiplication/product
-        Expression "*" Expression                                -> Expression {cons("exp-mul"), left} >
+    Expression "*" Expression                         -> Expression {cons("exp-mul"), left} >
    %% intersection
-        Expression "&" Expression                                -> Expression {cons("exp-inter"), left} >     
+    Expression "&" Expression                         -> Expression {cons("exp-inter"), left} >     
    %% division
-        Expression "/" Expression                                -> Expression {cons("exp-div"), left} >
+    Expression "/" Expression                         -> Expression {cons("exp-div"), left} >
    %% addition/union/concatenation (of tuples, lists and strings)
-        { 
-          Expression "|" Expression                              -> Expression {cons("exp-union"), left}
-          Expression "+" Expression                              -> Expression {cons("exp-add"), left}
+    { 
+    Expression "|" Expression                         -> Expression {cons("exp-union"), left}
+    Expression "+" Expression                         -> Expression {cons("exp-add"), left}
    %% subtraction, difference
-          Expression "-" Expression                              -> Expression {cons("exp-sub"), left}
-        } >
+    Expression "-" Expression                         -> Expression {cons("exp-sub"), left}
+    } >
    %% get value of annotation
-        Expression "@" Expression                                -> Expression {cons("exp-get-anno"), left} >
+    Expression "@" Expression                         -> Expression {cons("exp-get-anno"), left} >
  
 %% Relational operators
-         {
-         Expression "<" Expression                               -> Predicate {cons("pred-less")}
-         Expression "<=" Expression                              -> Predicate {cons("pred-less-equal")}
-         Expression ">" Expression                               -> Predicate {cons("pred-greater")}
-         Expression ">=" Expression                              -> Predicate {cons("pred-greater-equal")}
-	Expression "in" Expression                              -> Predicate {cons("pred-element-of")}
-%%	Expression "notin" Expression                           -> Predicate {cons("pred-not-element-of")}
-	Expression "==" Expression                              -> Predicate {cons("pred-equal")}
-	Expression "!=" Expression                              -> Predicate {cons("pred-not-equal")}
-         Expression "?"  Expression                              -> Predicate {cons("pred-has-anno")}
-         } >
+    {
+    Expression "<" Expression                         -> Predicate {cons("pred-less")}
+    Expression "<=" Expression                        -> Predicate {cons("pred-less-equal")}
+    Expression ">" Expression                         -> Predicate {cons("pred-greater")}
+    Expression ">=" Expression                        -> Predicate {cons("pred-greater-equal")}
+    Expression "in" Expression                        -> Predicate {cons("pred-element-of")}
+    Expression "==" Expression                        -> Predicate {cons("pred-equal")}
+    Expression "!=" Expression                        -> Predicate {cons("pred-not-equal")}
+    Expression "?"  Expression                        -> Predicate {cons("pred-has-anno")}
+    } >
 
-	"!" Predicate                                           -> Predicate {cons("pred-not")} >
-	Predicate "&&" Predicate                                -> Predicate {left,cons("pred-and")} >
-	Predicate "||" Predicate                                -> Predicate {left,cons("pred-or")}
+    "!" Predicate                                     -> Predicate {cons("pred-not")} >
+    Predicate "&&" Predicate                          -> Predicate {left,cons("pred-and")} >
+    Predicate "||" Predicate                          -> Predicate {left,cons("pred-or")}
 
-context-free syntax
-	Pattern ":=" Expression                                 -> Predicate {cons("pred-match")}
-	Pattern "!:=" Expression                                -> Predicate {cons("pred-not-match")}
-         Expression                                              -> Predicate {cons("pred-exp")}
-	"(" Predicate ")"                                       -> Predicate {bracket}
+
+  context-free syntax
+    Binder ":=" Expression                            -> Predicate {cons("pred-match")}
+    Binder "!:=" Expression                           -> Predicate {cons("pred-not-match")}
+    Expression                                        -> Predicate {cons("pred-exp")}
+    "(" Predicate ")"                                 -> Predicate {bracket}
 
 %% TODO: Add , as alternative for &&
 
-context-free syntax
+  context-free syntax
 %% Generators
-           Pattern                                               -> Binder
-           NamedType                                             -> Binder
-           "<" {(NamedType | Name) ","}+ ">"                     -> Binder
+    Pattern                                           -> Binder
+    NamedType                                         -> Binder
+    "<" {(NamedType | Name) ","}+ ">"                 -> Binder
 
-         ("top-down" | "top-down-break" | 
-          "bottom-up" | "bottom-up-break" |
-          "outermost" | "innermost")?                            -> Strategy    {cons("strategy")}
+    ("top-down"  | "top-down-break"  | 
+     "bottom-up" | "bottom-up-break" |
+     "outermost" | "innermost"       )?               -> Strategy    {cons("strategy")}
 
-         "," Expression ","                                      -> Increment   {cons("increment")}
-         "[" Expression Increment? ".." Expression "]"           -> Range       {cons("range")}
+    "," Expression ","                                -> Increment   {cons("increment")}
+    "[" Expression Increment? ".." Expression "]"     -> Range       {cons("range")}
 
-	Strategy Binder ":" (Expression | Range)                -> SimpleGenerator {cons("generator")}
+    Strategy Binder ":" (Expression | Range)          -> SimpleGenerator {cons("generator")}
 
-         SimpleGenerator                                         -> Generator
-         Predicate                                               -> Generator
+    SimpleGenerator                                   -> Generator
+    Predicate                                         -> Generator
 
 %% Comprehensions
-	"{" Expression "|" {Generator ","}+ "}"                 -> Expression {cons("set-comprehension")}
-	"[" Expression "|" {Generator ","}+ "]"                 -> Expression {cons("list-comprehension")}
-         "exists" "(" SimpleGenerator "|" Predicate ")"          -> Expression {cons("exp-exists")}
-         "forall" "(" SimpleGenerator "|" Predicate ")"          -> Expression {cons("exp-forall")}
+    "{" Expression "|" {Generator ","}+ "}"           -> Expression {cons("set-comprehension")}
+    "[" Expression "|" {Generator ","}+ "]"           -> Expression {cons("list-comprehension")}
+    "exists" "(" SimpleGenerator "|" Predicate ")"    -> Expression {cons("exp-exists")}
+    "forall" "(" SimpleGenerator "|" Predicate ")"    -> Expression {cons("exp-forall")}
 
-context-free syntax
+  context-free syntax
 %% Conditional Expression
-          Predicate "?" Expression ":" Expression                -> Expression {cons("exp-cond")}
+    Predicate "?" Expression ":" Expression           -> Expression {cons("exp-cond")}
 %% Cases and Rules
-         QuotedSyntaxPattern                                     -> Expression {cons("exp-qpat")}
+    QuotedSyntaxPattern                               -> Expression {cons("exp-qpat")}
 
-         SyntaxPattern   "=>" SyntaxPattern                      -> Rule       {cons("conrule")}
-         AbstractPattern "=>" (AbstractPattern | 
-                               PatternVariable)                  -> Rule       {cons("absrule")}
-         RegExpPattern   "=>" (StringLiteral |
-                               PatternVariable)                  -> Rule       {cons("regrule")}
-         Pattern ":" Statement                                   -> Rule       {cons("patrule")}
+    SyntaxPattern   "=>" SyntaxPattern                -> Rule       {cons("conrule")}
+    AbstractPattern "=>" (AbstractPattern | 
+                          PatternVariable)            -> Rule       {cons("absrule")}
+    RegExpPattern   "=>" (StringLiteral |
+                          PatternVariable)            -> Rule       {cons("regrule")}
+    Pattern ":" Statement                             -> Rule       {cons("patrule")}
 
-         "case" Rule                                             -> Case       {cons("case")}
-         "default" ":" Statement                                 -> Case       {cond("default-case")}
+    "case" Rule                                       -> Case       {cons("case")}
+    "default" ":" Statement                           -> Case       {cond("default-case")}
  
 %% Switch, visit, solve, for, if and call statement
- 	"switch" "(" Expression ")" "{" Case+ "}"               -> Statement  {cons("stat-switch")}
-   	Strategy "visit"  "(" Expression ")" "{" Case+ "}"      -> Statement  {cons("stat-visit")}
-         "solve" "{" { Assignment ";"}+ "}"                      -> Statement  {cons("stat-solve")}
-         "for" "(" {Generator ","}+ ")" Block                    -> Statement  {cons("stat-for")}
-         "while" "(" Predicate ")" Block                         -> Statement  {cons("stat-while")}
-         "if" "(" Predicate ")" Block "else" Block               -> Statement  {cons("stat-if-else")}
-         "if" "(" Predicate ")" Block                            -> Statement  {cons("stat-if-then")}
-         Call  ";"                                               -> Statement  {cons("stat-call")}
-         "assert" StringLiteral ":" Predicate ";"                -> Statement  {cons("stat-assert")}
+    "switch" "(" Expression ")" "{" Case+ "}"         -> Statement  {cons("stat-switch")}
+    Strategy "visit" "(" Assignable ")" "{" Case+ "}" -> Statement  {cons("stat-visit")}
+
+    "(" Expression ")"                                -> Upperbound
+    "solve" Upperbound? "{" { Assignment ";"}+ "}"    -> Statement  {cons("stat-solve")}
+    "for" "(" {Generator ","}+ ")" Block              -> Statement  {cons("stat-for")}
+    "while" "(" Predicate ")" Block                   -> Statement  {cons("stat-while")}
+    "if" "(" Predicate ")" Block "else" Block         -> Statement  {cons("stat-if-else")}
+    "if" "(" Predicate ")" Block                      -> Statement  {cons("stat-if-then")}
+    Call  ";"                                         -> Statement  {cons("stat-call")}
+    "assert" StringLiteral ":" Predicate ";"          -> Statement  {cons("stat-assert")}
 
 %% Assignment statement
 
+    "="  | "+=" | "-=" | "*=" | "/="  | "&=" | "|="   -> IncrAssignOp {cons("incr-assignop")}
 
-         "="  | "+=" | "-=" | "*=" | "/="  | "&=" | "|="         -> IncrAssignOp {cons("incr-assignop")}
+    Assignable IncrAssignOp Expression                -> Assignment  {cons("assign")}
+    Assignable "@" Expression IncrAssignOp Expression -> Assignment  {cons("assign-anno")}
 
-         Assignable IncrAssignOp Expression                      -> Assignment  {cons("assign")}
-         Assignable "@" Expression IncrAssignOp Expression       -> Assignment  {cons("assign-anno")}
+    Assignment  ";"                                   -> Statement   {cons("stat-assign")}
 
-         Assignment  ";"                                         -> Statement   {cons("stat-assign")}
+    VariableDeclaration ";"                           -> Statement   {cons("stat-decl-var")}
 
-         VariableDeclaration ";"                                 -> Statement   {cons("stat-decl-var")}
-
-context-free syntax
 %% Return, insert, fail
-         "return" Predicate? ";"                                 -> Statement   {cons("stat-return")}
-         "insert" Expression ";"                                 -> Statement   {cons("stat-insert")}
-         "fail" ";"                                              -> Statement   {cons("stat-fail")}
+    "return" Predicate? ";"                           -> Statement   {cons("stat-return")}
+    "insert" Expression ";"                           -> Statement   {cons("stat-insert")}
+    "fail" ";"                                        -> Statement   {cons("stat-fail")}
 
 %% Exception statements
-         "throw" Expression ";"                                  -> Statement   {cons("stat-throw")}
-         "catch" Pattern? ":" Statement                          -> Catch       {cons("catch")}
-         "finally" ":" Statement                                 -> Finally     {cons("finally")}
-         "try" Statement Catch* Finally?                         -> Statement   {cons("stat-try")}
+    "throw" Expression ";"                            -> Statement   {cons("stat-throw")}
+    "catch" Pattern? ":" Statement                    -> Catch       {cons("catch")}
+    "finally" ":" Statement                           -> Finally     {cons("finally")}
+    "try" Statement Catch* Finally?                   -> Statement   {cons("stat-try")}
 
 %% Statement sequencing and blocks
-         "{" Statement* "}"                                      -> Block       {cons("block")}
-         Block                                                   -> Statement   {cons("stat-block")}
+    "{" Statement* "}"                                -> Block       {cons("block")}
+    Block                                             -> Statement   {cons("stat-block")}
 
 %% Expression-related declarations
 %% Variable Declaration
-         ("global" | "dynamic")?                                 -> Scope       {cons("scope")}
+    ("global" | "dynamic")?                           -> Scope       {cons("scope")}
          
-         Name DeclarationAnnotations ("=" Expression)?           -> SingleVariableDeclaration
-                                                                                {cons("single-vardecl")}
-         Scope Type {SingleVariableDeclaration ","}+             -> VariableDeclaration 
-                                                                                {cons("vardecl")}
+    Name DeclarationAnnotations ("=" Expression)?     -> SingleVariableDeclaration
+                                                                             {cons("single-vardecl")}
+    Scope Type {SingleVariableDeclaration ","}+       -> VariableDeclaration {cons("vardecl")}
 
 %% Function Declaration
-         ("throws" ThrowDeclaration)*                            -> Throws      {cons("throws")}
-         Name "(" OptNamedTypes ")"                              -> ThrowDeclaration 
-                                                                                {cons("throwdecl")}
+    ("throws" ThrowDeclaration)*                      -> Throws              {cons("throws")}
+    Name "(" OptNamedTypes ")"                        -> ThrowDeclaration    {cons("throwdecl")}
 
-         FunctionType Throws DeclarationAnnotations Block?       -> FunctionDeclaration 
-                                                                                {cons("function-decl")}
+    FunctionType Throws DeclarationAnnotations Block? -> FunctionDeclaration {cons("function-decl")}
 
 %% Rule Declarations 
-        "rule"  Name DeclarationAnnotations Rule                 -> RuleDeclaration 
-                                                                                {cons("rule-decl")}
+    "rule" Name DeclarationAnnotations Rule           -> RuleDeclaration     {cons("rule-decl")}
 
 %% Reserved words:
-         "true" | "false" | "global" | "dynamic" |
-         "case" | "acase" | "default" | "switch" | 
-         "visit" | "try" | "catch" | "finally" | "solve"  |
-         "for" | "while" | "if" | "else" | "return" | "throw" | 
-         "throws" | "insert" | "fail" | "assert" |
-         "rule"                                                  -> Reserved
+    "true"   | "false"   | "global"  | "dynamic" |
+    "case"   | "default" | "switch"  | "in"      |
+    "visit"  | "try"     | "catch"   | "finally" | 
+    "solve"  | "for"     | "while"   | "if"      | 
+    "else"   | "return"  | "throw"   | "throws"  |
+    "insert" | "fail"    | "assert"  | "rule"         -> Reserved

@@ -33,12 +33,15 @@ exports
     PatternVariable                               -> AbstractPatternArgument  {cons("abspat-arg2")}
     "(" {AbstractPatternArgument ","}* ")"        -> AbstractPatternArguments {cons("abspat-args")}
 
-    AbstractPatternName AbstractPatternArguments? -> AbstractPattern          {cons("abspat")}
+    "abs"? AbstractPatternName 
+           AbstractPatternArguments?              -> AbstractPattern          {cons("abspat")}
 
 %% Pattern
     "!"? (RegExpPattern | 
           SyntaxPattern | 
           AbstractPattern)                        -> Pattern                  {cons("pattern")}
+
+    "abs"                                         -> Reserved
 
 
 
