@@ -1,5 +1,5 @@
 prefix=@prefix@
-Maintainers=bruntink@cwi.nl
+Maintainers=bruntink@cwi.nl,lankamp@cwi.nl
 
 Name: pt-support-java
 Version: 1.0
@@ -7,6 +7,6 @@ Description:
 Requires: aterm-java
 JarFile=pt-support-java.jar 
 Jars=${prefix}/share/${JarFile}
-Packages=
+Packages=nl.cwi.sen1.ptapi,nl.cwi.sen1.ptapi.types,nl.cwi.sen1.ptapi.types.associativity,nl.cwi.sen1.ptapi.types.attr,nl.cwi.sen1.ptapi.types.attributes,nl.cwi.sen1.ptapi.types.charrange,nl.cwi.sen1.ptapi.types.parsetree,nl.cwi.sen1.ptapi.types.production,nl.cwi.sen1.ptapi.types.symbol,nl.cwi.sen1.ptapi.types.tree
 MainClass=
 TestClass=
