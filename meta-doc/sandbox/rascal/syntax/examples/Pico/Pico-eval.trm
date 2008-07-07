@@ -25,7 +25,7 @@ VEnv evalDecls(DECLS Decls){
            Env[Id] = intval(0);  
            return Env;
       }
-    }
+    };
     return Env;
 }
 

@@ -8,8 +8,8 @@ String removeFirstNL(String S){
 }
 
 String removeAllNL(String S){
-    visit (S) {
+    return visit (S) {
       case string("\"" <NQChar* Chars1> "\n" <NQChar* Chars2> "\"") =>
            string("\"" <Chars1> <Chars2> "\"")
-    }
+    };
 }

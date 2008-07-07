@@ -10,8 +10,8 @@ imports  basic/Areas
                                        ]
 exports
   sorts BasicExpression Expression Binder Predicate SimpleGenerator Generator Call Assignable Selector
-      Strategy Statement Block Rule Case Assignment IncrAssignOp Value
-      Catch Finally Increment Range FunctionClosure VariableDeclaration Scope SingleVariableDeclaration
+      Strategy Statement Block Rule Case Assignment IncrAssignOp Value TypeConstraint
+      Catch Finally FunctionClosure VariableDeclaration Scope SingleVariableDeclaration
       Throws ThrowDeclaration FunctionDeclaration RuleDeclaration Upperbound
 
   context-free syntax
@@ -19,7 +19,10 @@ exports
     BooleanLiteral                                    -> Value {cons("boollit")}
     IntegerLiteral                                    -> Value {cons("intlit")}
     FloatingPointLiteral                              -> Value {cons("floatlit")}
+
+    "#" Name                                          -> StringLiteral {cons("hash-quoted-strlit")}
     StringLiteral                                     -> Value {cons("strlit")}
+
     FunctionClosure                                   -> Value {cons("fun-closure")}
 %% TODO include proper locations here
     Area                                              -> Value {cons("areacon")}
@@ -29,8 +32,14 @@ exports
 
 %% Lists, sets and tuples
     "[" {Expression ","}* "]"                         -> Expression {cons("exp-list")}
+    "[" Expression ".." Expression "]"                -> Expression {cons("exp-range1")}
+    "[" Expression "," Expression ",.." Expression "]"-> Expression {cons("exp-range2")}
+
     "{" {Expression ","}* "}"                         -> Expression {cons("exp-set")}
     "<" {Expression ","}+ ">"                         -> Expression {cons("exp-tuple")}
+
+    "<" Expression "->" Expression ">"                -> Expression {cons("exp-mtuple")}
+
 
 %% Selectors and assignable expressions
     "." Name                                          -> Selector        {cons("sel-field")}
@@ -76,7 +85,7 @@ exports
     Expression "-" Expression                         -> Expression {cons("exp-sub"), left}
     } >
    %% get value of annotation
-    Expression "@" Expression                         -> Expression {cons("exp-get-anno"), left} >
+    Expression "@" Name                               -> Expression {cons("exp-get-anno")} >
  
 %% Relational operators
     {
@@ -85,15 +94,14 @@ exports
     Expression ">" Expression                         -> Predicate {cons("pred-greater")}
     Expression ">=" Expression                        -> Predicate {cons("pred-greater-equal")}
     Expression "in" Expression                        -> Predicate {cons("pred-element-of")}
+    Expression "notin" Expression                     -> Predicate {cons("pred-not-element-of")}
     Expression "==" Expression                        -> Predicate {cons("pred-equal")}
     Expression "!=" Expression                        -> Predicate {cons("pred-not-equal")}
-    Expression "?"  Expression                        -> Predicate {cons("pred-has-anno")}
     } >
 
     "!" Predicate                                     -> Predicate {cons("pred-not")} >
     Predicate "&&" Predicate                          -> Predicate {left,cons("pred-and")} >
     Predicate "||" Predicate                          -> Predicate {left,cons("pred-or")}
-
 
   context-free syntax
     Binder ":=" Expression                            -> Predicate {cons("pred-match")}
@@ -113,10 +121,7 @@ exports
      "bottom-up" | "bottom-up-break" |
      "outermost" | "innermost"       )?               -> Strategy    {cons("strategy")}
 
-    "," Expression ","                                -> Increment   {cons("increment")}
-    "[" Expression Increment? ".." Expression "]"     -> Range       {cons("range")}
-
-    Strategy Binder ":" (Expression | Range)          -> SimpleGenerator {cons("generator")}
+    Strategy Binder ":" Expression                    -> SimpleGenerator {cons("generator")}
 
     SimpleGenerator                                   -> Generator
     Predicate                                         -> Generator
@@ -140,12 +145,19 @@ exports
                           PatternVariable)            -> Rule       {cons("regrule")}
     Pattern ":" Statement                             -> Rule       {cons("patrule")}
 
-    "case" Rule                                       -> Case       {cons("case")}
+    "[" Type "]"                                      -> TypeConstraint
+                                                                    {cons("type-constraint")}
+
+    "case" TypeConstraint? Rule                       -> Case       {cons("case")}
     "default" ":" Statement                           -> Case       {cond("default-case")}
- 
-%% Switch, visit, solve, for, if and call statement
+
+    Strategy "visit" "(" Expression ")" "{" Case+ "}" -> Expression  {cons("stat-visit")}
+
+%% Statements
+    Expression  ";"                                   -> Statement  {cons("stat-exp")}
+
+%% Switch, solve, for, if and call statement
     "switch" "(" Expression ")" "{" Case+ "}"         -> Statement  {cons("stat-switch")}
-    Strategy "visit" "(" Assignable ")" "{" Case+ "}" -> Statement  {cons("stat-visit")}
 
     "(" Expression ")"                                -> Upperbound
     "solve" Upperbound? "{" { Assignment ";"}+ "}"    -> Statement  {cons("stat-solve")}
@@ -153,7 +165,7 @@ exports
     "while" "(" Predicate ")" Block                   -> Statement  {cons("stat-while")}
     "if" "(" Predicate ")" Block "else" Block         -> Statement  {cons("stat-if-else")}
     "if" "(" Predicate ")" Block                      -> Statement  {cons("stat-if-then")}
-    Call  ";"                                         -> Statement  {cons("stat-call")}
+ 
     "assert" StringLiteral ":" Predicate ";"          -> Statement  {cons("stat-assert")}
 
 %% Assignment statement
@@ -197,11 +209,13 @@ exports
     FunctionType Throws DeclarationAnnotations Block? -> FunctionDeclaration {cons("function-decl")}
 
 %% Rule Declarations 
-    "rule" Name DeclarationAnnotations Rule           -> RuleDeclaration     {cons("rule-decl")}
+    "rule" TypeConstraint? Name 
+           DeclarationAnnotations Rule                -> RuleDeclaration     {cons("rule-decl")}
 
 %% Reserved words:
     "true"   | "false"   | "global"  | "dynamic" |
     "case"   | "default" | "switch"  | "in"      |
+    "notin"  |
     "visit"  | "try"     | "catch"   | "finally" | 
     "solve"  | "for"     | "while"   | "if"      | 
     "else"   | "return"  | "throw"   | "throws"  |

@@ -16,7 +16,7 @@ int cnt(BTREE T) {
     int C = 0;
     visit(T) {
       case <Integer N> : C = C+1;
-    }
+    };
     return C;
 }
  
@@ -38,7 +38,7 @@ int cnt(BTREE T) {
     int C = 0;
     visit(T) {
       case <Integer N> : C = C+toInt(N);
-    }
+    };
     return C;
 }
 
@@ -51,9 +51,9 @@ int cnt(BTREE T) {
 %% - from int back to Integer (using parseString)
 
 BTREE inc(BTREE T) {
-    visit (T) {
+    return visit (T) {
       case <Integer N>: insert parseString(toInt(N)+1);
-    }
+    };
 }
 
 %% Ex4: full replacement of g by i
@@ -66,29 +66,29 @@ BTREE inc(BTREE T) {
 %% its use.
 
 BTREE frepl(BTREE T) {
-    bottom-up visit (T) {
+    return bottom-up visit (T) {
       case g(<BTREE T1>, <BTREE T2>) =>
            i(<BTREE T1>, <BTREE T2>)
-    }
+    };
 }
 
 %% Ex5: Deep replacement of g by i
 
 BTREE frepl(BTREE T) {
-    bottom-up-break visit (T) {
+    return bottom-up-break visit (T) {
       case[| g(<BTREE T1>, <BTREE T2>) |] =>
              i(<BTREE T1>, <BTREE T2>)
-    }
+    };
 }
 
 %% Ex6: shallow replacement of g by i (i.e. only outermost 
 %% g's are replaced); 
 
 BTREE srepl(BTREE T) {
-    top-down-break visit (T) {
+    return top-down-break visit (T) {
       case [| g(<BTREE T1>, <BTREE T2>) |] => 
               i(<BTREE T1>, <BTREE T2>)
-    }
+    };
 }
 
 %% Ex7: We can also add the top-down-break directive to the 
@@ -110,6 +110,6 @@ tuple[int, BTREE] count_and_inc(BTREE T, int D) {
                           int N1 = toInt(N) + D; 
                           insert parse(unparseToString(N1));
                         }
-     }
-     return <C, T>;
+    };
+    return <C, T>;
 }

@@ -25,7 +25,7 @@ Var fresh(Var V, set[Var] S) {
 
 Exp subst(Var V1, Exp E1, Exp E2) {
 
-    visit (E2) { 
+    return visit (E2) { 
       case <Var V2>: insert (V1==V2) ? E1 : V2;
 
       case <Exp Ea> <Exp Eb>:
@@ -47,6 +47,5 @@ Exp subst(Var V1, Exp E1, Exp E2) {
            Exp EaS = subst(V1, E1, subst(V2, V3, E2));
            insert [| fn <V3> =\> <EaS> |];
         }
-    }
-    return E2;
+    };
 }

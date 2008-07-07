@@ -22,7 +22,8 @@ VEnv evalDecls(DECLS Decls){
     visit (Decls) {
       case <PICO-ID Id> : string:  Env[Id] = strval("");
       case <PICO-ID Id> : natural: Env[Id] = intval(0);
-    }
+    };
+    return Env;
 }
 
 void evalStatements({STATEMENT ";"}* Series){
