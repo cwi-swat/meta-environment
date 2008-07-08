@@ -46,7 +46,7 @@ exports
     "[" Expression "]"                                -> Selector        {cons("sel-index")}
 
     QualName Selector*  ("?" Expression)?             -> Assignable      {cons("asg-select")}
-    "<" {Assignable ","}+ ">"                         -> Assignable      {cons("asg-tuple")}
+    {Assignable ","}+                                 -> Assignable      {cons("asg-tuple")}
 
     QualName                                          -> BasicExpression {cons("bexp-qname")}
     StandardOperator                                  -> BasicExpression {cons("bexp-std-op")}
@@ -172,6 +172,7 @@ exports
 
     "="  | "+=" | "-=" | "*=" | "/="  | "&=" | "|="   -> IncrAssignOp {cons("incr-assignop")}
 
+    {Assignable ","}+ "=" {Expression ","}+           -> Assignment   
     Assignable IncrAssignOp Expression                -> Assignment  {cons("assign")}
     Assignable "@" Expression IncrAssignOp Expression -> Assignment  {cons("assign-anno")}
 
