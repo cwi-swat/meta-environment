@@ -9,7 +9,7 @@ imports  basic/Areas
                                          Name       => JavaName
                                        ]
 exports
-  sorts BasicExpression Expression Binder Predicate SimpleGenerator Generator Call Assignable Selector
+  sorts BasicExpression Expression Predicate SimpleGenerator Generator Call Assignable Selector
       Strategy Statement Block Rule Case Assignment IncrAssignOp Value TypeConstraint
       Catch Finally FunctionClosure VariableDeclaration Scope SingleVariableDeclaration
       Throws ThrowDeclaration FunctionDeclaration RuleDeclaration Upperbound
@@ -46,7 +46,6 @@ exports
     "[" Expression "]"                                -> Selector        {cons("sel-index")}
 
     QualName Selector*  ("?" Expression)?             -> Assignable      {cons("asg-select")}
-    {Assignable ","}+                                 -> Assignable      {cons("asg-tuple")}
 
     QualName                                          -> BasicExpression {cons("bexp-qname")}
     StandardOperator                                  -> BasicExpression {cons("bexp-std-op")}
@@ -104,8 +103,8 @@ exports
     Predicate "||" Predicate                          -> Predicate {left,cons("pred-or")}
 
   context-free syntax
-    Binder ":=" Expression                            -> Predicate {cons("pred-match")}
-    Binder "!:=" Expression                           -> Predicate {cons("pred-not-match")}
+    Pattern ":=" Expression                           -> Predicate {cons("pred-match")}
+    Pattern"!:=" Expression                           -> Predicate {cons("pred-not-match")}
     Expression                                        -> Predicate {cons("pred-exp")}
     "(" Predicate ")"                                 -> Predicate {bracket}
 
@@ -113,15 +112,12 @@ exports
 
   context-free syntax
 %% Generators
-    Pattern                                           -> Binder
-%%    NamedType                                         -> Binder
- %%   "<" {(NamedType | Name) ","}+ ">"                 -> Binder
 
     ("top-down"  | "top-down-break"  | 
      "bottom-up" | "bottom-up-break" |
      "outermost" | "innermost"       )?               -> Strategy    {cons("strategy")}
 
-    Strategy Binder ":" Expression                    -> SimpleGenerator {cons("generator")}
+    Strategy Pattern ":" Expression                   -> SimpleGenerator {cons("generator")}
 
     SimpleGenerator                                   -> Generator
     Predicate                                         -> Generator
@@ -172,8 +168,7 @@ exports
 
     "="  | "+=" | "-=" | "*=" | "/="  | "&=" | "|="   -> IncrAssignOp {cons("incr-assignop")}
 
-    {Assignable ","}+ "=" {Expression ","}+           -> Assignment   
-    Assignable IncrAssignOp Expression                -> Assignment  {cons("assign")}
+    {Assignable ","}+ IncrAssignOp {Expression ","}+  -> Assignment  {cons("assign")} 
     Assignable "@" Expression IncrAssignOp Expression -> Assignment  {cons("assign-anno")}
 
     Assignment  ";"                                   -> Statement   {cons("stat-assign")}

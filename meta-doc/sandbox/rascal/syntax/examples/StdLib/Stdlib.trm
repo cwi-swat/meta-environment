@@ -12,12 +12,16 @@ module RascalStandardLibrary
 %% Each type defines == and <. The following
 %% functions extend them.
 
+public bool !=(&T A, &T B){
+  return !(A == B);
+}
+
 public bool <=(&T A, &T B){
   return A < B || A == B;
 }
 
 public bool >(&T A, &T B){
-  return B < A && !(A == B);
+  return B < A && A != B;
 }
 
 public bool >=(&T A, &T B){
@@ -25,19 +29,11 @@ public bool >=(&T A, &T B){
 }
 
 public &T min(&T A, &T B){
-  if(A < B){
-    return A;
-  } else {
-    return B;
-  }
+  return (A < B) ? A : B;
 }
 
 public &T max(&T A, &T B){
-  if(A < B){
-    return B;
-  } else {
-    return A;
-  }
+  return (A < B) ? B : A;
 }
 
 %% --- Boolean (bool) ----------------------------------------
@@ -49,26 +45,27 @@ public bool ==(bool B1, bool B2)
 public bool <(bool B1, bool B2)
   @primitive{"Bool.less"}
  
-public bool +(bool B1, bool B2)
-  @primitive{"Bool.add"}
+public bool &&(bool B1, bool B2)
+  @primitive{"Bool.and"}
 
-public bool -(bool B1, bool B2)
-  @primitive{"Bool.sub"}
+public bool ||(bool B1, bool B2)
+  @primitive{"Bool.or"}
 
-public bool *(bool B1, bool B2)
-  @primitive{"Bool.mul"}
+public bool !(bool B){
+  return B ? false : true;
+}
 
 public int arb()
   @primitive{"Bool.arb"}
 
-public str toString(bool B)
-  @primitive{"Bool.toString"}
-
 public int toInt(bool B)
   @primitive{"Bool.toInt"}
-  
+
 public double toDouble(bool B)
   @primitive{"Bool.toDouble"}
+
+public str toString(bool B)
+  @primitive{"Bool.toString"}
 
 %% --- Integer (int)------------------------------------------
 
@@ -83,10 +80,9 @@ public int +(int I1, int I2)
 
 public int -(int I1, int I2)  
   @primitive{"Int.sub"}
-  
 
+public int *(int I1, int I2)
 @primitive{"Int.mul}
-  public int *(int I1, int I2)
  
 public int /(int I1, int I2)
   throws divide_by_zero(str msg)
@@ -190,10 +186,18 @@ public bool <(str S1, str S2)
   @primitive{"String.less"}
 
 public str +(str S1, str S2)
+  @doc{Concatenate two strings}
   @primitive{"String.concat"}
 
 public int size(str S)
-  @primitive{"String.length"}
+  @primitive{"String.size"}
+
+public int get(str S, int N)
+  throws out_of_range(str msg){
+  return charAt(S, N);
+}
+
+%% get and charAt (as provided by java) are synonyms
 
 public int charAt(str S, int N)
   throws out_of_range(str msg)
@@ -274,7 +278,7 @@ public bool <(list[&T] L1, list[&T] L2)
   @primitive{"List.less"}
 
 public list[&T] +(list[&T] L1, list[&T] L2)
-  @primitive{"List.add"}
+  @primitive{"List.concat"}
 
 public list[&T] +(list[&T] L, &T E){
   return L + [E];
@@ -293,15 +297,12 @@ public &T get(list[&T] L, int N)
   @primitive{"List.get"}
 
 public &T arb(list[&T] L)
-throws empty_list(str msg)
+  throws empty_list(str msg)
   @primitive{"List.arb"}
 
 public str toString(list[&T] L)
   @primitive{"List.toString"}
 
-public str makeString(list[int] L)
-  throws cannot_convert_int_to_char(str msg)
-  @primitive{"List.makeString"}
 
 public set[&T] toSet(list[&T] L)
   @primitive{"List.toSet"}
@@ -380,6 +381,10 @@ public &T rest(list[&T] L)
   @doc{Remaining elements of list: rest}
   @primitive{"List.rest"}
 
+public str makeString(list[int] L)
+  throws cannot_convert_int_to_char(str msg)
+  @primitive{"List.makeString"}
+
 public list[&T] sort(list[&T] L, bool less(&T, &T))
   @doc{Sort elements of list: sort}
   @primitive{"list.sort"}
@@ -393,7 +398,7 @@ public bool <(tuple[&T] R, tuple[&T] S)
   @primitive{"Tuple.less"}
  
 public tuple[&T + &U] +(tuple[&T] R, tuple[&U] S)
-  @primitive{"Tuple.add"}
+  @primitive{"Tuple.conc"}
 
 public tuple[&T + &U] +(tuple[&T] R, &U E){
   return R + <E>;
@@ -421,21 +426,21 @@ public bool ==(set[&T] R, set[&T] S)
 public bool <(set[&T] R, set[&T] S)
   @primitive{"Set.less"}
 
-public set[&T] +(set[&T] R, set[&T] S)
-  @doc{Add two sets (set union): operator +}
-  @primitive{"Set.add"}
+public set[&T] |(set[&T] R, set[&T] S)
+  @doc{Union of two sets}
+  @primitive{"Set.union"}
   
-public set[&T] +(set[&T] S, &T E){
+public set[&T] |(set[&T] S, &T E){
   return S + {E};
 }
 
-public set[&T] +(&T E, set[&T] S){
+public set[&T] |(&T E, set[&T] S){
   return {E} + S;
 }
 
 public set[&T] -(set[&T] R, set[&T] S)
-  @doc{Substract two sets (set difference): operator -}
-  @primitive{"Set.sub"}
+  @doc{Difference of two sets}
+  @primitive{"Set.diff"}
 
 public set[&T] -(set[&T] S, &T E){
   return S - {E};
@@ -446,7 +451,7 @@ public set[&T] -(&T E, set[&T] S){
 }
 
 public set[&T] &(set[&T] R, set[&T] S)
-  @doc{Intersection of two sets: operator &}
+  @doc{Intersection of two sets}
   @primitive{"Set.intersection"}
 
 public set[&T] &(set[&T] S, &T E){
@@ -490,7 +495,7 @@ public set[&T] mapper(set[&T] S, &T F (&T,&T)){
 }
 
 public &T min(set[&T] S)
-  @doc{Minimum of a set: min}
+  @doc{Minimum of a set}
 {
   &T result = arb(S);
   for(&T E : S){
@@ -500,7 +505,7 @@ public &T min(set[&T] S)
 }
 
 public &T max(set[&T] R)
-  @doc{Maximum of a set: max}
+  @doc{Maximum of a set}
 {
   &T result = arb(R);
   for(&T E : R){
@@ -516,13 +521,13 @@ public &T sum(set[&T] S, &T zero)
 }
 
 public &T multiply(set[&T] S, &T unity)
-  @doc{Multiply elements of a Set: multiply}
+  @doc{Multiply elements of a Set}
 {
   return reducer(S, *, unity);
 }
 
 public &T average(set[&T] S, &T zero)
-  @doc{Average of elements of a set: average}
+  @doc{Average of elements of a set}
 {
   return sum(S, zero)/size(R);
 }
@@ -545,21 +550,21 @@ public bool ==(map[&T, &U] M1, map[&T, &U] M2)
 public bool <(map[&T, &U] M1, map[&T, &U] M2)
   @primitive{"Map.less"}
   
-public map[&T] +(map[&T] R, map[&T] S)
-  @primitive{"Map.add"}
+public map[&T] |(map[&T] R, map[&T] S)
+  @primitive{"Map.union"}
   
-public map[&T] +(map[&T] S, &T E){
-  return S + {E};
+public map[&T] |(map[&T] S, &T E){
+  return S | {E};
 }
 
-public map[&T] +(&T E, map[&T] S){
-  return {E} + S;
+public map[&T] |(&T E, map[&T] S){
+  return {E} | S;
 }
 
 public map[&T] -(map[&T] R, map[&T] S)
-  @primitive{"Map.sub"}
-  @doc{Substract two maps (set difference): operator -}
-
+  @doc{Difference of two maps}
+  @primitive{"Map.diff"}
+ 
 public map[&T] -(map[&T] S, &T E){
   return S - {E};
 }
@@ -593,20 +598,11 @@ public str toString(map[&T] R)
 public list[tuple[&T, &U]] toList(map[&T, &U] M)
   @primitive{"Map.toList"}
 
-public rel[tuple[&T, &U]] toSet(map[&T, &U] M)
+public set[tuple[&T, &U]] toSet(map[&T, &U] M)
   @primitive{"Map.toSet"}
 
 public rel[tuple[&T, &U]] toRel(map[&T, &U] M)
   @primitive{"Map.toRel"}
-
-%% Is this meaningfull?
-public &T reducer(map[&T] S, &T F (&T,&T), &T unit){
-  &T result = unit;
-  for(&T E : S){
-    result = F(result, E);
-  }
-  return result;
-}
 
 public map[&T] mapper(map[&T] M, &T F (&T,&T)){
   return {F(E) | &T E : M};
@@ -620,25 +616,25 @@ public bool ==(rel[&T] R, rel[&T] S)
 public bool <(rel[&T] R, rel[&T] S)
   @primitive{"Rel.less"}
   
-public rel[&T] +(rel[&T] R1, rel[&T] R2)
-  @doc{Add two relations (union): operator +}
-  @primitive{"Rel.add"}
+public rel[&T] |(rel[&T] R1, rel[&T] R2)
+  @doc{Union of two relations}
+  @primitive{"Rel.union"}
 
-public rel[&T] +(&T E, rel[&T] R){
-  return toRel({E}) + R;
+public rel[&T] |(&T E, rel[&T] R){
+  return toRel({E}) | R;
 }
 
-public rel[&T] +(rel[&T] R, &T E){
-  return R + toRel({E});
+public rel[&T] |(rel[&T] R, &T E){
+  return R | toRel({E});
 }
 
 public rel[&T] -(rel[&T] R1, rel[&T] R2)
-  @doc{Substract two relations (difference): operator -}
-  @primitive{"Rel.sub"}
+  @doc{Difference of two relations}
+  @primitive{"Rel.diff"}
   
 public rel[&T] &(rel[&T] R1, rel[&T] R1)
-  @doc{Intersection of two relations: operator &}
-  @primitive{"Rel.inter"}
+  @doc{Intersection of two relations}
+  @primitive{"Rel.intersection"}
 
 public int size(rel[&T] R)
   @primitive{"Rel.size"}
@@ -658,83 +654,99 @@ public list[&T] toList(rel[&T] R)
   
 public set[&T] toSet(rel[&T] R)
   @primitive{"Rel.toSet"}
-  
-public rel[&T] toRel(set[&T] S)
-  @primitive{"Set.toRel"}
-  
+
+public map[&T] toMap(rel[tuple[&T]] S)
+  throws non_unique_domain(str msg)
+  @primitive{"Ret.toMap"}
+
 public rel[&T] mapper(rel[&T] R, &T F (&T,&T)){
   return {F(E) | &T E : R};
 }
 
-%% Carthesian product of two sets: *
-public rel[&T1, &T2] *(rel[&T1] R, rel[&T2] S){
+public rel[&T1, &T2] *(set[&T1] R, set[&T2] S)
+  @doc{Carthesian product of two sets}
+{
   return {<X, Y> | &T1 X : R, &T2 Y : S};
 }
 
-%% Compose two relations: compose (was: o)
 public rel[&T1, &T3] compose(rel[&T1, &T2] R,
-                                 rel[&T2, &T3] S){
+                                 rel[&T2, &T3] S)
+  @doc{Compose two relations}
+{
    return {<X, Z> | <&T1 X, &T2 Y1>: R, 
                     <&T2 Y2, &T3 Z>: S, Y1 == Y2};
 }
 
-%% Identity relation: id
-public rel[&T, &T] id(set[&T] S){
+public rel[&T, &T] id(set[&T] S)
+  @doc{Identity relation}
+{
   return { <X, X> | &T X : S};
 }
 
-%% Inverse relation: invert (was: inv)
-public rel[&T2, &T1] invert (rel[&T1, &T2] R){
+public rel[&T2, &T1] invert (rel[&T1, &T2] R)
+  @doc{Inverse of relation}
+{
   return { <Y, X> | <&T1 X, &T2 Y> : R };
 }
 
-%% Complement of relation: complement (was: compl)
-public rel[&T1, &T2] complement(rel[&T1, &T2] R){
-  return product(domain(R), range(R)) - R;
+
+public rel[&T1, &T2] complement(rel[&T1, &T2] R)
+  @doc{Complement of relation}
+{
+  return (domain(R) * range(R)) - R;
 }
 
-%% Domain of relation: domain
-public set[&T1] domain (rel[&T1,&T2] R){
+public set[&T1] domain (rel[&T1,&T2] R)
+  @doc{Domain of relation}
+{
   return { X | <&T1 X, &T2 Y> : R };
 }
 
-%% Range of relation: range
-public set[&T1] range (rel[&T1,&T2] R){
+public set[&T1] range (rel[&T1,&T2] R)
+  @doc{Range of relation}
+{
   return { Y | <&T1 X, &T2 Y> : R };
 }
 
-%% Carrier of relation: carrier
-public set[&T]  carrier (rel[&T,&T] R) {
+public set[&T]  carrier (rel[&T,&T] R)
+  @doc{Carrier of relation}
+{
   return domain(R) + range(R);
 }
 
-%% Domain Restriction of a Relation: domainR
-public rel[&T1,&T2] domainR (rel[&T1,&T2] R, set[&T1] S){
+public rel[&T1,&T2] domainR (rel[&T1,&T2] R, set[&T1] S)
+  @doc{Domain Restriction of a relation}
+{
   return { <X, Y> | <&T1 X, &T2 Y> : R, X in S };
 }
 
-%% Range Restriction of a Relation: rangeR
-public rel[&T1,&T2] rangeR (rel[&T1,&T2] R, set[&T2] S){
+public rel[&T1,&T2] rangeR (rel[&T1,&T2] R, set[&T2] S)
+  @doc{range Restriction of a relation}
+{
   return { <X, Y> | <&T1 X, &T2 Y> : R, Y in S };
 }
 
-%% Carrier Restriction of a Relation: carrierR
-public rel[&T,&T] carrierR (rel[&T,&T] R, set[&T] S){
+public rel[&T,&T] carrierR (rel[&T,&T] R, set[&T] S)
+  @doc{Carrier restriction of a relation}
+{
   return { <X, Y> | <&T X, &T Y> : R, X in S, Y in S };
 }
 
-%% Domain Exclusion of a Relation: domainX
-public rel[&T1,&T2] domainX (rel[&T1,&T2] R, set[&T1] S){
-  return { <X, Y> | <&T1 X, &T2 Y> : R, !(X in S) };
+public rel[&T1,&T2] domainX (rel[&T1,&T2] R, set[&T1] S)
+  @doc{Domain exclusion of a relation}
+{
+  return { <X, Y> | <&T1 X, &T2 Y> : R, X notin S };
 }
 
-%% Range Exclusion of a Relation: rangeX
-public rel[&T1,&T2] rangeX (rel[&T1,&T2] R, set[&T2] S){
-  return { <X, Y> | <&T1 X, &T2 Y> : R, !(Y in S) };
+public rel[&T1,&T2] rangeX (rel[&T1,&T2] R, set[&T2] S)
+  @doc{Range exclusion of a relation}
+{
+  return { <X, Y> | <&T1 X, &T2 Y> : R, Y notin S };
 }
 
-%% Carrier Exclusion of a Relation: carrierX
-public rel[&T,&T] carrierX (rel[&T,&T] R, set[&T] S){
+public rel[&T,&T] carrierX (rel[&T,&T] R, set[&T] S)
+  @doc{Carrier exclusion of a relation}
+{
   return { <X, Y> | <&T1 X, &T2 Y> : R, 
                     !(X in S), !(Y in S) };
 }
@@ -743,26 +755,30 @@ public rel[&T,&T] carrierX (rel[&T,&T] R, set[&T] S){
 
 type rel[&T,&T] graph[&T];
 
-%% Top of a Graph: top
-public set[&T] top(graph[&T] G){
+public set[&T] top(graph[&T] G)
+  @doc{Top of a Graph}
+{
   return domain(G) - range(G);
 }
 
-%% Bottom of a Graph: bottom
-public set[&T] bottom(graph[&T] G){
+public set[&T] bottom(graph[&T] G)
+  @doc{Bottom of a Graph}
+{
   return range(G) - domain(G);
 }
 
-%% Reachability with Restriction: reachR
 public set[&T] reachR(set[&T] Start, set[&T] Restr,
-                          graph[&T] G){
+                          graph[&T] G)
+  @doc{Reachability with restriction}
+{
   return range(compose(domainR(G, Start), 
                        carrierR(G, Restr)+));
 }
 
-%% Reachability with Exclusion: reachX
 public set[&T] reachX(set[&T] Start, set[&T] Excl, 
-                          graph[&T] G){
+                          graph[&T] G)
+  @doc{Reachability with exclusion}
+{
   return range(compose(domainR(G, Start), 
                        carrierX(G, Excl)+));
 }
@@ -786,15 +802,15 @@ public rel[&T, &T] closure(rel[&T, &T])
 
 %% --- Annotations -------------------------------------------
 
-%% TODO: Sync this with new annotation operators!
-
 public bool has_annotation(&T Subject, str Name)
-  @doc{Test whether a named annotation exists}
+  @doc{Test whether a named annotation exists.
+       A synonym for the ? operator.}
   @primitive{"Annotation.has_annotation"}
 
 public value get_annotation(&T Subject, str Name)
   throws missing_annotation(str msg)
-  @doc{Get the value of a named annotation}
+  @doc{Get the value of a named annotation.
+       A synonym for the @ operator.}
   @primitive{"Annotation.get_annotation"}
 
 public map[str,value] get_annotations(&T Subject)
@@ -803,9 +819,9 @@ public map[str,value] get_annotations(&T Subject)
  
 public &T set_annotation(&T Subject, 
                              str Name, value AValue)
-  @doc{Set the value of a named annotation}
+  @doc{Set the value of a named annotation.
+       A synonym for: Var @ Anno = Exp}
   @primitive{"Annotation.set_annotation"}
-
 
 public &T set_annotations(&T Subject, 
                               map[str, value] Annos)

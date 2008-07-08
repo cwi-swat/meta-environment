@@ -5,7 +5,7 @@ module Bubble
 list[int] sort1(list[int] Numbers){
   for(int I : [0 .. size(Numbers) - 2 ]){
      if(Numbers[I] > Numbers[I+1]){
-       <Numbers[I], Numbers[I+1]> = <Numbers[I+1], Numbers[I]>;
+       Numbers[I], Numbers[I+1] = Numbers[I+1], Numbers[I];
        return sort(Numbers);
      }
   }

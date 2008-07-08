@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -810,9 +810,7 @@
                 corresponding function to construct a term of that datatype.
                 This eliminates the need to quote abstract terms in
                 statements.</para>
-              </note><caution>
-                <para>Constructors can also generate types.</para>
-              </caution></para>
+              </note></para>
 
             <note>
               <para>Constructor names of datatypes may be quoted in order to
@@ -1021,9 +1019,10 @@ type Graph DFGraph</programlisting></para>
         annotated and the type of these annotations can be declared precisely.
         For instance, the graph datatype introduced earlier, could be
         annotated with an indication which graph layout algorithm to apply to
-        a particular graph, e.g.,<programlisting>anno Graph LayoutStrategy "dot" | "tree" | "force" | "hierarchy" | "fisheye"</programlisting>In
-        a similar way, certain syntactic constructs of programs could be
-        annotated with location information:<programlisting>anno STATEMENT posinfo loc</programlisting>or
+        a particular graph, e.g.,<programlisting>anno Graph LayoutStrategy "dot" | "tree" | "force" | 
+                          "hierarchy" | "fisheye"</programlisting>In a similar
+        way, certain syntactic constructs of programs could be annotated with
+        location information:<programlisting>anno STATEMENT posinfo loc</programlisting>or
         location information could be added for all syntax
         trees:<programlisting>anno tree posinfo loc</programlisting></para>
 
@@ -1446,12 +1445,23 @@ int f(&amp;T y, double x)</programlisting></para>
         These terms, possibly including typed variables that play a similar
         role as pattern variables in syntax patterns, may be used as abstract
         patterns at the same position where concrete patterns are allowed.
-        Lists, sets and tuples may also occur in abstract patterns.</para>
+        Lists, sets and tuples may also occur in abstract patterns. Here are
+        some examples of abstract patterns:<programlisting>%% Assuming:
+%% data Bool band(Bool L, Bool R);
+%% Bool B2;
 
-        <para>An abstract pattern may not consist of a single variable.
-        <caution>
-            <para>Is this constraint still needed?</para>
-          </caution></para>
+band(btrue, B2)
+
+%% Assuming:
+%% data PICO_VALUE intval(int) | strval(str);
+
+intval(int n1)
+
+%% Assuming:
+%% int P, Q; 
+%% list[int] Nums1, Nums2;
+
+[Nums1, P, Q, Nums2]</programlisting></para>
 
         <para>An abstract pattern may be preceeded by the key word
         <literal>abs</literal>, in order to resolve ambiguities with syntax
@@ -1906,9 +1916,9 @@ default: ...
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
-              <entry align="center">bool </entry>
+              <entry align="center">bool&#160;</entry>
 
               <entry align="center">int</entry>
 
@@ -2860,16 +2870,6 @@ public void main(list[str] argv){
 }</programlisting><caution>
           <para>We need a mechanism to insert values in strings,
           e.g.<programlisting> println("Table of squares from 1 to &lt;N&gt;");</programlisting></para>
-        </caution><caution>
-          <para>What is the syntax of a map value: { x=&gt;y } or { x : y}
-          ??</para>
-        </caution><caution>
-          <para>Map comprehensions should also be possible as in { int x : int
-          y | x : {1,2,3}, y : {1,2,3} }</para>
-        </caution><caution>
-          <para>Maps should also be generators, but notice the overloading of
-          :. { &lt;int x, int y&gt; | x:y : { 1:2 } } or { &lt;int x, int
-          y&gt; | x=&gt;y : { 1=&gt;2 } }</para>
         </caution></para>
     </section>
 
@@ -3639,8 +3639,8 @@ PICO_VALUE evalExp(Exp exp, VEnv Env) {
            }
  
       case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
-           if(strval(&lt;str s1&gt;) := evalExp(exp1, Env) &amp;&amp;
-              strval(&lt;str s2&gt;) := evalExp(exp2, Env)){
+           if(strval(str s1) := evalExp(exp1, Env) &amp;&amp;
+              strval(str s2) := evalExp(exp2, Env)){
               return strval(s1 + s2);
            }
    } 
@@ -4169,7 +4169,7 @@ int innerProduct(list[int] V1, list[int] V2){
 list[int] sort1(list[int] Numbers){
   for(int I : [0 .. size(Numbers) - 2 ]){
      if(Numbers[I] &gt; Numbers[I+1]){
-       &lt;Numbers[I], Numbers[I+1]&gt; = &lt;Numbers[I+1], Numbers[I]&gt;;
+       Numbers[I], Numbers[I+1] = Numbers[I+1], Numbers[I];
        return sort(Numbers);
      }
   }
@@ -4205,7 +4205,9 @@ list[int] sort3(list[int] Numbers){
        }
      default: Numbers;
     };
-}</programlisting>
+}
+
+</programlisting>
     </section>
 
     <section>
@@ -4279,10 +4281,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
         <listitem>
           <para>There is a read functions that reads a text file into a
-          string.<caution>
-              <para>We need an io library that reads/writes strings and data
-              values. The current version is not yet ok.</para>
-            </caution></para>
+          string.</para>
         </listitem>
 
         <listitem>
@@ -4330,14 +4329,15 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
       table.</para>
 
       <table>
-        <title>Main functions and operators in Rascal Standard Library</title>
+        <title>Main functions in Rascal Standard Library (see Table <xref
+        linkend="table.operators-on-datatypes" /> for all operators)</title>
 
         <tgroup cols="11">
           <colspec align="center" />
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -4345,215 +4345,23 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
               <entry align="center">list</entry>
+
+              <entry align="center">tuple</entry>
 
               <entry align="center">set</entry>
 
               <entry align="center">map</entry>
 
               <entry align="center">rel</entry>
-
-              <entry align="center">tuple_</entry>
             </row>
           </thead>
 
           <tbody>
-            <row>
-              <entry>_==_</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-            </row>
-
-            <row>
-              <entry>_!=_</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-            </row>
-
-            <row>
-              <entry>_&lt;_</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-            </row>
-
-            <row>
-              <entry>_+_</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry></entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry>x</entry>
-            </row>
-
-            <row>
-              <entry>_-_</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry>x</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-            </row>
-
-            <row>
-              <entry>_*_</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-            </row>
-
-            <row>
-              <entry>_/_</entry>
-
-              <entry></entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-            </row>
-
-            <row>
-              <entry>_&amp;_</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry></entry>
-            </row>
-
             <row>
               <entry>size</entry>
 
@@ -4573,7 +4381,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry></entry>
+              <entry>x</entry>
 
               <entry>x</entry>
             </row>
@@ -4593,13 +4401,13 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
               <entry>x</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
             </row>
 
             <row>
@@ -4617,13 +4425,13 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
               <entry></entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
             </row>
 
             <row>
@@ -4683,7 +4491,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry>x</entry>
+              <entry>-</entry>
 
               <entry>x</entry>
 
@@ -4713,13 +4521,13 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>-</entry>
 
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
               <entry></entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
             </row>
 
             <row>
@@ -4737,13 +4545,13 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
+              <entry></entry>
+
               <entry>-</entry>
 
               <entry>x</entry>
 
               <entry>x</entry>
-
-              <entry></entry>
             </row>
 
             <row>
@@ -4761,13 +4569,13 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
+              <entry></entry>
+
               <entry>x</entry>
 
               <entry>-</entry>
 
               <entry>x</entry>
-
-              <entry></entry>
             </row>
 
             <row>
@@ -4785,13 +4593,13 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
+              <entry></entry>
+
               <entry>x</entry>
 
               <entry>x</entry>
 
               <entry>-</entry>
-
-              <entry></entry>
             </row>
 
             <row>
@@ -4819,6 +4627,126 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
             </row>
 
             <row>
+              <entry>split</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>x</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>startsWith</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>x</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>endsWith</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>x</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>toLowerCase</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>x</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>toUpperCase</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
               <entry>reducer</entry>
 
               <entry></entry>
@@ -4833,13 +4761,13 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
               <entry></entry>
+
+              <entry>x</entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
             </row>
 
             <row>
@@ -4857,13 +4785,13 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry>x</entry>
-
-              <entry>x</entry>
-
-              <entry>x</entry>
-
               <entry></entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
             </row>
 
             <row>
@@ -4881,9 +4809,9 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry>x</entry>
-
               <entry></entry>
+
+              <entry>x</entry>
 
               <entry></entry>
 
@@ -4905,9 +4833,9 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry>x</entry>
-
               <entry></entry>
+
+              <entry>x</entry>
 
               <entry></entry>
 
@@ -4929,9 +4857,9 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry>x</entry>
-
               <entry></entry>
+
+              <entry>x</entry>
 
               <entry></entry>
 
@@ -4953,9 +4881,9 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry>x</entry>
-
               <entry></entry>
+
+              <entry>x</entry>
 
               <entry></entry>
 
@@ -4977,9 +4905,9 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry>x</entry>
 
-              <entry>x</entry>
-
               <entry></entry>
+
+              <entry>x</entry>
 
               <entry></entry>
 
@@ -5133,7 +5061,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 
@@ -5228,20 +5156,6 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
                 <entry></entry>
 
                 <entry></entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>product</entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry>x</entry>
-
-                <entry>x</entry>
 
                 <entry></entry>
               </row>
@@ -5471,25 +5385,15 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
               </row>
             </tbody>
           </tgroup>
-        </table>Notes:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>These functions are borrowed from the Rscript library.</para>
-        </listitem>
-      </itemizedlist>
-
-      <caution>
-        <para>closure is missing</para>
-      </caution>
+        </table></para>
     </section>
 
     <section>
       <title>Other functions</title>
 
-      <para>The remaining functions take care of annotations, input/output and
-      communication with the global database with program facts, the Program
-      Database (PDB).</para>
+      <para>The remaining functions take care of annotations, the tree
+      datatype, input/output and communication with the global database with
+      program facts, the Program Database (PDB).</para>
     </section>
 
     <section>
@@ -5501,10 +5405,10 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
           :-( to this document, so be carefull with changes.</para>
         </caution><programlisting>module RascalStandardLibrary
 
-tag function primitive str;
-tag function memo void;
-tag function java CompilationUnit;
-tag all doc str;
+%%tag function primitive QualName;
+%%tag function memo void;
+%%tag function java CompilationUnit;
+%%tag all doc str;
 
 %% Here is a flat list of library functions that will
 %% structured in to coherent submodules.
@@ -5513,12 +5417,16 @@ tag all doc str;
 %% Each type defines == and &lt;. The following
 %% functions extend them.
 
+public bool !=(&amp;T A, &amp;T B){
+  return !(A == B);
+}
+
 public bool &lt;=(&amp;T A, &amp;T B){
-  return A &lt; B or A == B;
+  return A &lt; B || A == B;
 }
 
 public bool &gt;(&amp;T A, &amp;T B){
-  return B &lt; A and not A == B;
+  return B &lt; A &amp;&amp; A != B;
 }
 
 public bool &gt;=(&amp;T A, &amp;T B){
@@ -5526,87 +5434,79 @@ public bool &gt;=(&amp;T A, &amp;T B){
 }
 
 public &amp;T min(&amp;T A, &amp;T B){
-  if(A &lt; B){
-    return A;
-  } else {
-    return B;
-  }
+  return (A &lt; B) ? A : B;
 }
 
 public &amp;T max(&amp;T A, &amp;T B){
-  if(A &lt; B){
-    return B;
-  } else {
-    return A;
-  }
+  return (A &lt; B) ? B : A;
 }
 
 %% --- Boolean (bool) ----------------------------------------
 
 public bool ==(bool B1, bool B2)
   @doc{Equality on Booleans}
-  @primitive{Bool.equal}
+  @primitive{"Bool.equal"}
 
 public bool &lt;(bool B1, bool B2)
-  @primitive{Bool.less}
+  @primitive{"Bool.less"}
  
-public bool +(bool B1, bool B2)
-  @primitive{Bool.add}
+public bool &amp;&amp;(bool B1, bool B2)
+  @primitive{"Bool.and"}
 
-public bool -(bool B1, bool B2)
-  @primitive{Bool.sub}
+public bool ||(bool B1, bool B2)
+  @primitive{"Bool.or"}
 
-public bool *(bool B1, bool B2)
-  @primitive{Bool.mul}
+public bool !(bool B){
+  return B ? false : true;
+}
 
 public int arb()
-  @primitive{Bool.arb}
-
-public str toString(bool B)
-  @primitive{Bool.toString}
+  @primitive{"Bool.arb"}
 
 public int toInt(bool B)
-  @primitive{Bool.toInt}
-  
+  @primitive{"Bool.toInt"}
+
 public double toDouble(bool B)
-  @primitive{Bool.toDouble}
+  @primitive{"Bool.toDouble"}
+
+public str toString(bool B)
+  @primitive{"Bool.toString"}
 
 %% --- Integer (int)------------------------------------------
 
 public bool ==(int I1, int I2)
-  @primitive{Int.equal}
+  @primitive{"Int.equal"}
   
 public bool &lt;(int I1, int I2)
-  @primitive{Int.less}
+  @primitive{"Int.less"}
 
 public int +(int I1, int I2) 
-  @primitive{Int.add}
+  @primitive{"Int.add"}
 
 public int -(int I1, int I2)  
-  @primitive{Int.sub}
-  
+  @primitive{"Int.sub"}
 
-@primitive{Int.mul}
-  public int *(int I1, int I2)
+public int *(int I1, int I2)
+@primitive{"Int.mul}
  
 public int /(int I1, int I2)
   throws divide_by_zero(str msg)
-  @primitive{Int.div}
+  @primitive{"Int.div"}
 
 public int arb(int bgn, int end)
 throws illegal_argument(str msg) %% if(end - bgn &lt;= 0)
-  @primitive{Int.arb} 
+  @primitive{"Int.arb"} 
 
 public double toDouble(int I)
-  @primitive{Int.toDouble}
+  @primitive{"Int.toDouble"}
 
 public str toString(int I)  
-  @primitive{toStringInt}
+  @primitive{"toStringInt"}
 
 %% --- Double (double) ---------------------------------------
 
 public bool ==(double D1, double D2)
-  @primitive{Double.equal} 
+  @primitive{"Double.equal"} 
 
 public bool ==(double D, int I){
   return D == toDouble(I);
@@ -5617,7 +5517,7 @@ public bool ==(int I, double D){
 }
 
 public bool &lt;(double D1, double D2)
-  @primitive{Double.less}
+  @primitive{"Double.less"}
 
 public bool &lt;(double D, int I){
   return D &lt; toDouble(I);
@@ -5628,7 +5528,7 @@ public bool &lt;(int I, double D){
 }
 
 public double +(double D1, double D2)
-  @primitive{Double.add}
+  @primitive{"Double.add"}
   
 public bool +(double D, int I){
   return D + toDouble(I);
@@ -5639,7 +5539,7 @@ public bool +(int I, double D){
 }
 
 public double -(double D1, double D2)
-  @primitive{Double.sub}
+  @primitive{"Double.sub"}
  
 public bool -(double D, int I){
   return D - toDouble(I);
@@ -5650,7 +5550,7 @@ public bool -(int I, double D){
 }
 
 public double *(double D1, double D2)
-  @primitive{Double.mul} 
+  @primitive{"Double.mul"} 
 
 public bool *(double D, int I){
   return D * toDouble(I);
@@ -5662,8 +5562,8 @@ public bool *(int I, double D){
 
 public double /(double D1, double D2)
 throws divide_by_zero(str msg)
-  @primitive{Double.div}
- 
+  @primitive{"Double.div"}
+  
 public bool /(double D, int I){
   return D / toDouble(I);
 }
@@ -5674,51 +5574,76 @@ public bool /(int I, double D){
 
 public double arb(double bgn, double end)
 throws illegal_argument(str msg) %% if(end - bgn &lt;= 0)
-  @primitive{Double.arb}
+  @primitive{"Double.arb"}
 
 public int toInt(double D)
-  @primitive{Double.toInt}
+  @primitive{"Double.toInt"}
  
 public str toString(double D)
-  @primitive{Double.toString}
+  @primitive{"Double.toString"}
 
 %% --- Strings (str) -----------------------------------------
 
 public bool ==(str S1, str S2)
-  @primitive{String.equal}
+  @primitive{"String.equal"}
 
 public bool &lt;(str S1, str S2)
-  @primitive{String.less}
+  @primitive{"String.less"}
 
 public str +(str S1, str S2)
-  @primitive{String.add}
+  @doc{Concatenate two strings}
+  @primitive{"String.concat"}
 
 public int size(str S)
-  @primitive{String.size}
+  @primitive{"String.size"}
 
 public int get(str S, int N)
+  throws out_of_range(str msg){
+  return charAt(S, N);
+}
+
+%% get and charAt (as provided by java) are synonyms
+
+public int charAt(str S, int N)
   throws out_of_range(str msg)
-  @primitive{String.get}
+  @primitive{"String.charAt"}
 
 public int toInt(str S)
   throws cannot_convert_to_int(str msg)
-  @primitive{String.toInt}
+  @primitive{"String.toInt"}
 
 public int toDouble(str S)
   throws cannot_convert_to_double(str msg)
-  @primitive{String.toDouble}
+  @primitive{"String.toDouble"}
 
 public list[int] toList(str S)
   throws cannot_convert_int_to_char(str msg)
-  @primitive{String.toList}
+  @primitive{"String.toList"}
  
 public set[int] toSet(str S)
-  @primitive{String.toSet}
+  @primitive{"String.toSet"}
 
 public str reverse(str S)
-  @primitive{String.reverse}
+  @primitive{"String.reverse"}
 
-%% Add functions for other methods of Java's String class
+public list[str] split(str S, str Regex)
+  @primitive{"String.split"}
+
+public bool startsWith(str S, str Prefix)
+  @primitive{"String.startsWith"}
+
+public bool endsWith(str S, str Suffix)
+  @primitive{"String.endsWith"}
+
+public str toLowerCase(str S)
+  @primitive{"String.toLowerCase"}
+
+public str toUpperCase(str S)
+  @primitive{"String.toUpperCase"}
+
+
+%% The above is a selection of methods from Java's String class.
+%% Others will be added on demand.
 
 %% --- Locations ---------------------------------------------
    
@@ -5734,31 +5659,31 @@ data location location(str filename,
 anno tree posinfo loc;
 
 public bool ==(loc L1, loc L2)
-  @primitive{Location.equal} 
+  @primitive{"Location.equal"} 
 
 public bool &lt;(loc L1, loc L2)
-  @primitive{Location.less}
+  @primitive{"Location.less"}
 
 public str toString(loc L)
-  @primitive{Location.toString}
+  @primitive{"Location.toString"}
 
 public loc get_location(&amp;T Subject)
   throws location_missing(str msg)
-  @primitive{Location.get_location}
+  @primitive{"Location.get_location"}
 
 public &amp;T set_location(&amp;T Subject, loc L)
-  @primitive{Location.set_location}
+  @primitive{"Location.set_location"}
 
 %% --- Lists -------------------------------------------------
 
 public bool ==(list[&amp;T] L1, list[&amp;T] L2)
-  @primitive{List.equal}
+  @primitive{"List.equal"}
 
 public bool &lt;(list[&amp;T] L1, list[&amp;T] L2)
-  @primitive{List.less}
+  @primitive{"List.less"}
 
 public list[&amp;T] +(list[&amp;T] L1, list[&amp;T] L2)
-  @primitive{List.add}
+  @primitive{"List.concat"}
 
 public list[&amp;T] +(list[&amp;T] L, &amp;T E){
   return L + [E];
@@ -5769,36 +5694,33 @@ public list[&amp;T] +(&amp;T E, list[&amp;T] L){
 }
 
 public int size(list[&amp;T] L)
-  @primitive{List.size}
+  @primitive{"List.size"}
  
 public &amp;T get(list[&amp;T] L, int N)
   throws out_of_range(str msg)
   @doc{Get list element: get}
-  @primitive{List.get}
+  @primitive{"List.get"}
 
 public &amp;T arb(list[&amp;T] L)
-  @primitive{List.arb}
+  throws empty_list(str msg)
+  @primitive{"List.arb"}
 
 public str toString(list[&amp;T] L)
-  @primitive{List.toString}
+  @primitive{"List.toString"}
 
-public str makeString(list[int] L)
-  throws cannot_convert_int_to_char(str msg)
-  @primitive{List.makeString}
 
 public set[&amp;T] toSet(list[&amp;T] L)
-  @primitive{List.toSet}
-
+  @primitive{"List.toSet"}
 
 public map[&amp;T, &amp;U] toMap(list[tuple[&amp;T, &amp;U]] L)
   throws domain_not_unique(str msg)
-  @primitive{List.toMap}
+  @primitive{"List.toMap"}
  
 public rel[&amp;T] toRel(list[&amp;T] L)
-  @primitive{List.toRel}
+  @primitive{"List.toRel"}
 
 public list[&amp;T] reverse(list[&amp;T] L)
-  @primitive{List.reverse}
+  @primitive{"List.reverse"}
 
 public &amp;T reducer(list[&amp;T] L, &amp;T F (&amp;T,&amp;T), &amp;T unit){
   &amp;T result = unit;
@@ -5842,10 +5764,10 @@ public &amp;T sum(list[&amp;T] L, &amp;T zero)
   return reducer(L, +, zero);
 }
 
-public &amp;T multiply(set[&amp;T] R, &amp;T one)
+public &amp;T multiply(set[&amp;T] R, &amp;T unity)
 @doc{Multiply elements of a list: multiply}
 {
-  return reducer(L, *, one);
+  return reducer(L, *, unity);
 }
 
 public &amp;T average(list[&amp;T] L, &amp;T zero)
@@ -5857,27 +5779,31 @@ public &amp;T average(list[&amp;T] L, &amp;T zero)
 public &amp;T first(list[&amp;T] L)
   throws empty_list(str msg)
   @doc{First element of list: first}
-  @primitive{List.first}
+  @primitive{"List.first"}
 
-@primitive{List.rest}
-@doc{Remaining elements of list: rest}
-  public &amp;T rest(list[&amp;T] L)
+public &amp;T rest(list[&amp;T] L)
   throws empty_list(str msg)
+  @doc{Remaining elements of list: rest}
+  @primitive{"List.rest"}
+
+public str makeString(list[int] L)
+  throws cannot_convert_int_to_char(str msg)
+  @primitive{"List.makeString"}
 
 public list[&amp;T] sort(list[&amp;T] L, bool less(&amp;T, &amp;T))
   @doc{Sort elements of list: sort}
-  @primitive{list.sort}
+  @primitive{"list.sort"}
  
 %% --- Tuples ------------------------------------------------
 
 public bool ==(tuple[&amp;T] R, tuple[&amp;T] S)
-  @primitive{Tuple.equal}
+  @primitive{"Tuple.equal"}
  
 public bool &lt;(tuple[&amp;T] R, tuple[&amp;T] S)
-  @primitive{Tuple.less}
+  @primitive{"Tuple.less"}
  
 public tuple[&amp;T + &amp;U] +(tuple[&amp;T] R, tuple[&amp;U] S)
-  @primitive{Tuple.add}
+  @primitive{"Tuple.conc"}
 
 public tuple[&amp;T + &amp;U] +(tuple[&amp;T] R, &amp;U E){
   return R + &lt;E&gt;;
@@ -5888,38 +5814,38 @@ public tuple[&amp;T + &amp;U] +(&amp;T E, tuple[&amp;U] R){
 }
 
 public int size(tuple[&amp;T] R)
-  @primitive{Tuple.size}
+  @primitive{"Tuple.size"}
 
 public value get(tuple[&amp;T] R, int N)
   throws out_of_range(str msg)
-  @primitive{Tuple.get}
+  @primitive{"Tuple.get"}
 
 public str toString(tuple[&amp;T] R)
-  @primitive{Tuple.toString}
+  @primitive{"Tuple.toString"}
 
 %% --- Sets  -------------------------------------------------
 
 public bool ==(set[&amp;T] R, set[&amp;T] S)
-  @primitive{Set.equal}
+  @primitive{"Set.equal"}
 
 public bool &lt;(set[&amp;T] R, set[&amp;T] S)
-  @primitive{Set.less}
+  @primitive{"Set.less"}
 
-public set[&amp;T] +(set[&amp;T] R, set[&amp;T] S)
-  @doc{Add two sets (set union): operator +}
-  @primitive{Set.add}
+public set[&amp;T] |(set[&amp;T] R, set[&amp;T] S)
+  @doc{Union of two sets}
+  @primitive{"Set.union"}
   
-public set[&amp;T] +(set[&amp;T] S, &amp;T E){
+public set[&amp;T] |(set[&amp;T] S, &amp;T E){
   return S + {E};
 }
 
-public set[&amp;T] +(&amp;T E, set[&amp;T] S){
+public set[&amp;T] |(&amp;T E, set[&amp;T] S){
   return {E} + S;
 }
 
 public set[&amp;T] -(set[&amp;T] R, set[&amp;T] S)
-  @doc{Substract two sets (set difference): operator -}
-  @primitive{Set.sub}
+  @doc{Difference of two sets}
+  @primitive{"Set.diff"}
 
 public set[&amp;T] -(set[&amp;T] S, &amp;T E){
   return S - {E};
@@ -5930,8 +5856,8 @@ public set[&amp;T] -(&amp;T E, set[&amp;T] S){
 }
 
 public set[&amp;T] &amp;(set[&amp;T] R, set[&amp;T] S)
-  @doc{Intersection of two sets: operator &amp;}
-  @primitive{Set.intersection}
+  @doc{Intersection of two sets}
+  @primitive{"Set.intersection"}
 
 public set[&amp;T] &amp;(set[&amp;T] S, &amp;T E){
   return S &amp; {E};
@@ -5942,23 +5868,24 @@ public set[&amp;T] &amp;(&amp;T E, set[&amp;T] S){
 }
 
 public int size(set[&amp;T] S)
-  @primitive{Set.size}
+  @primitive{"Set.size"}
 
 public &amp;T arb(set[&amp;T] S)
-  @primitive{Set.arb}
+throws empty_set(str msg)
+  @primitive{"Set.arb"}
   
 public str toString(set[&amp;T] S)
-  @primitive{Set.toString}
+  @primitive{"Set.toString"}
 
 public list[&amp;T] toList(set[&amp;T] S)  
-  @primitive{List.toList}
+  @primitive{"List.toList"}
   
 public map[&amp;T, &amp;U] toMap(set[tuple[&amp;T, &amp;U]] S)
   throws non_unique_domain(str msg)
-  @primitive{Set.toMap}
+  @primitive{"Set.toMap"}
 
 public rel[&amp;T] toRel(set[&amp;T] S)
-   @primitive{Set.toRel}
+   @primitive{"Set.toRel"}
 
 public &amp;T reducer(set[&amp;T] S, &amp;T F (&amp;T,&amp;T), &amp;T unit){
   &amp;T result = unit;
@@ -5973,7 +5900,7 @@ public set[&amp;T] mapper(set[&amp;T] S, &amp;T F (&amp;T,&amp;T)){
 }
 
 public &amp;T min(set[&amp;T] S)
-  @doc{Minimum of a set: min}
+  @doc{Minimum of a set}
 {
   &amp;T result = arb(S);
   for(&amp;T E : S){
@@ -5983,7 +5910,7 @@ public &amp;T min(set[&amp;T] S)
 }
 
 public &amp;T max(set[&amp;T] R)
-  @doc{Maximum of a set: max}
+  @doc{Maximum of a set}
 {
   &amp;T result = arb(R);
   for(&amp;T E : R){
@@ -5998,14 +5925,14 @@ public &amp;T sum(set[&amp;T] S, &amp;T zero)
   return reducer(S, +, zero);
 }
 
-public &amp;T multiply(set[&amp;T] S, &amp;T one)
-  @doc{Multiply elements of a Set: multiply}
+public &amp;T multiply(set[&amp;T] S, &amp;T unity)
+  @doc{Multiply elements of a Set}
 {
-  return reducer(S, *, one);
+  return reducer(S, *, unity);
 }
 
 public &amp;T average(set[&amp;T] S, &amp;T zero)
-  @doc{Average of elements of a set: average}
+  @doc{Average of elements of a set}
 {
   return sum(S, zero)/size(R);
 }
@@ -6023,26 +5950,26 @@ public &amp;T average(set[&amp;T] S, &amp;T zero)
 %% --- Maps --------------------------------------------------
 
 public bool ==(map[&amp;T, &amp;U] M1, map[&amp;T, &amp;U] M2)
-  @primitive{Map.equal}
+  @primitive{"Map.equal"}
   
 public bool &lt;(map[&amp;T, &amp;U] M1, map[&amp;T, &amp;U] M2)
-  @primitive{Map.less}
+  @primitive{"Map.less"}
   
-public map[&amp;T] +(map[&amp;T] R, map[&amp;T] S)
-  @primitive{Map.add}
+public map[&amp;T] |(map[&amp;T] R, map[&amp;T] S)
+  @primitive{"Map.union"}
   
-public map[&amp;T] +(map[&amp;T] S, &amp;T E){
-  return S + {E};
+public map[&amp;T] |(map[&amp;T] S, &amp;T E){
+  return S | {E};
 }
 
-public map[&amp;T] +(&amp;T E, map[&amp;T] S){
-  return {E} + S;
+public map[&amp;T] |(&amp;T E, map[&amp;T] S){
+  return {E} | S;
 }
 
 public map[&amp;T] -(map[&amp;T] R, map[&amp;T] S)
-  @primitive{Map.sub}
-  @doc{Substract two maps (set difference): operator -}
-
+  @doc{Difference of two maps}
+  @primitive{"Map.diff"}
+ 
 public map[&amp;T] -(map[&amp;T] S, &amp;T E){
   return S - {E};
 }
@@ -6052,7 +5979,7 @@ public map[&amp;T] -(&amp;T E, map[&amp;T] S){
 }
 
 public map[&amp;T] &amp;(map[&amp;T] R, map[&amp;T] S)
-  @primitive{Map.mul}
+  @primitive{"Map.mul"}
   @doc{Intersection of two maps: operator &amp;}
 
 public map[&amp;T] &amp;(map[&amp;T] S, &amp;T E){
@@ -6064,31 +5991,23 @@ public map[&amp;T] &amp;(&amp;T E, map[&amp;T] S){
 }
 
 public int size(map[&amp;T] M)
-  @primitive{Map.size}
+  @primitive{"Map.size"}
 
 public &amp;T arb(map[&amp;T] M)
-  @primitive{Map.arb}
+throws empty_map(str msg)
+  @primitive{"Map.arb"}
   
 public str toString(map[&amp;T] R)
-  @primitive{Map.toString}
+  @primitive{"Map.toString"}
   
 public list[tuple[&amp;T, &amp;U]] toList(map[&amp;T, &amp;U] M)
-  @primitive{Map.toList}
+  @primitive{"Map.toList"}
 
-public rel[tuple[&amp;T, &amp;U]] toSet(map[&amp;T, &amp;U] M)
-  @primitive{Map.toSet}
+public set[tuple[&amp;T, &amp;U]] toSet(map[&amp;T, &amp;U] M)
+  @primitive{"Map.toSet"}
 
 public rel[tuple[&amp;T, &amp;U]] toRel(map[&amp;T, &amp;U] M)
-  @primitive{Map.toRel}
-
-%% Is this meaningfull?
-public &amp;T reducer(map[&amp;T] S, &amp;T F (&amp;T,&amp;T), &amp;T unit){
-  &amp;T result = unit;
-  for(&amp;T E : S){
-    result = F(result, E);
-  }
-  return result;
-}
+  @primitive{"Map.toRel"}
 
 public map[&amp;T] mapper(map[&amp;T] M, &amp;T F (&amp;T,&amp;T)){
   return {F(E) | &amp;T E : M};
@@ -6097,258 +6016,283 @@ public map[&amp;T] mapper(map[&amp;T] M, &amp;T F (&amp;T,&amp;T)){
 %% --- Relations ---------------------------------------------
 
 public bool ==(rel[&amp;T] R, rel[&amp;T] S)
-  @primitive{Rel.equal}
+  @primitive{"Rel.equal"}
   
 public bool &lt;(rel[&amp;T] R, rel[&amp;T] S)
-  @primitive{Rel.less}
+  @primitive{"Rel.less"}
   
-public rel[&amp;T] +(rel[&amp;T] R1, rel[&amp;T] R2)
-  @doc{Add two relations (union): operator +}
-  @primitive{Rel.add}
+public rel[&amp;T] |(rel[&amp;T] R1, rel[&amp;T] R2)
+  @doc{Union of two relations}
+  @primitive{"Rel.union"}
 
-public rel[&amp;T] +(&amp;T E, rel[&amp;T] R){
-  return toRel({E}) + R;
+public rel[&amp;T] |(&amp;T E, rel[&amp;T] R){
+  return toRel({E}) | R;
 }
 
-public rel[&amp;T] +(rel[&amp;T] R, &amp;T E){
-  return R + toRel({E});
+public rel[&amp;T] |(rel[&amp;T] R, &amp;T E){
+  return R | toRel({E});
 }
 
 public rel[&amp;T] -(rel[&amp;T] R1, rel[&amp;T] R2)
-  @doc{Substract two relations (difference): operator -}
-  @primitive{Rel.sub}
+  @doc{Difference of two relations}
+  @primitive{"Rel.diff"}
   
 public rel[&amp;T] &amp;(rel[&amp;T] R1, rel[&amp;T] R1)
-  @doc{Intersection of two relations: operator &amp;}
-  @primitive{Rel.inter}
+  @doc{Intersection of two relations}
+  @primitive{"Rel.intersection"}
 
 public int size(rel[&amp;T] R)
-  @primitive{Rel.size}
+  @primitive{"Rel.size"}
   
 public &amp;T arb(rel[&amp;T] R)
-  @primitive{Rel.arb}
+throws empty_relation(str msg)
+  @primitive{"Rel.arb"}
 
 public str toString(rel[&amp;T] R)
-  @primitive{Rel.toString}
+  @primitive{"Rel.toString"}
 
 %% Note: in rel[&amp;T], the type variable &amp;T refers 
 %% to the tuple type of the relation.
 
 public list[&amp;T] toList(rel[&amp;T] R)
-  @primitive{Rel.toList}
+  @primitive{"Rel.toList"}
   
 public set[&amp;T] toSet(rel[&amp;T] R)
-  @primitive{Rel.toSet}
-  
-public rel[&amp;T] toRel(set[&amp;T] S)
-  @primitive{Set.toRel}
-  
+  @primitive{"Rel.toSet"}
+
+public map[&amp;T] toMap(rel[tuple[&amp;T]] S)
+  throws non_unique_domain(str msg)
+  @primitive{"Ret.toMap"}
+
 public rel[&amp;T] mapper(rel[&amp;T] R, &amp;T F (&amp;T,&amp;T)){
   return {F(E) | &amp;T E : R};
 }
 
-%% Carthesian product of two sets: product (was: x)
-public rel[&amp;T1, &amp;T2] product(rel[&amp;T1] R, rel[&amp;T2] S){
+public rel[&amp;T1, &amp;T2] *(set[&amp;T1] R, set[&amp;T2] S)
+  @doc{Carthesian product of two sets}
+{
   return {&lt;X, Y&gt; | &amp;T1 X : R, &amp;T2 Y : S};
 }
 
-%% Compose two relations: compose (was: o)
 public rel[&amp;T1, &amp;T3] compose(rel[&amp;T1, &amp;T2] R,
-                                 rel[&amp;T2, &amp;T3] S){
-   return {&lt;X, Z&gt; | tuple[&amp;T1 X, &amp;T2 Y1]: R, 
-                    tuple[&amp;T2 Y2, &amp;T3 Z]: S, Y1 == Y2};
+                                 rel[&amp;T2, &amp;T3] S)
+  @doc{Compose two relations}
+{
+   return {&lt;X, Z&gt; | &lt;&amp;T1 X, &amp;T2 Y1&gt;: R, 
+                    &lt;&amp;T2 Y2, &amp;T3 Z&gt;: S, Y1 == Y2};
 }
 
-%% Identity relation: id
-public rel[&amp;T, &amp;T] id(set[&amp;T] S){
+public rel[&amp;T, &amp;T] id(set[&amp;T] S)
+  @doc{Identity relation}
+{
   return { &lt;X, X&gt; | &amp;T X : S};
 }
 
-%% Inverse relation: invert (was: inv)
-public rel[&amp;T2, &amp;T1] invert (rel[&amp;T1, &amp;T2] R){
-  return { &lt;Y, X&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R };
+public rel[&amp;T2, &amp;T1] invert (rel[&amp;T1, &amp;T2] R)
+  @doc{Inverse of relation}
+{
+  return { &lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R };
 }
 
-%% Complement of relation: complement (was: compl)
-public rel[&amp;T1, &amp;T2] complement(rel[&amp;T1, &amp;T2] R){
-  return product(domain(R), range(R)) - R;
+
+public rel[&amp;T1, &amp;T2] complement(rel[&amp;T1, &amp;T2] R)
+  @doc{Complement of relation}
+{
+  return (domain(R) * range(R)) - R;
 }
 
-%% Domain of relation: domain
-public set[&amp;T1] domain (rel[&amp;T1,&amp;T2] R){
-  return { X | tuple[&amp;T1 X, &amp;T2 Y] : R };
+public set[&amp;T1] domain (rel[&amp;T1,&amp;T2] R)
+  @doc{Domain of relation}
+{
+  return { X | &lt;&amp;T1 X, &amp;T2 Y&gt; : R };
 }
 
-%% Range of relation: range
-public set[&amp;T1] range (rel[&amp;T1,&amp;T2] R){
-  return { Y | tuple[&amp;T1 X, &amp;T2 Y] : R };
+public set[&amp;T1] range (rel[&amp;T1,&amp;T2] R)
+  @doc{Range of relation}
+{
+  return { Y | &lt;&amp;T1 X, &amp;T2 Y&gt; : R };
 }
 
-%% Carrier of relation: carrier
-public set[&amp;T]  carrier (rel[&amp;T,&amp;T] R) {
+public set[&amp;T]  carrier (rel[&amp;T,&amp;T] R)
+  @doc{Carrier of relation}
+{
   return domain(R) + range(R);
 }
 
-%% Domain Restriction of a Relation: domainR
-public rel[&amp;T1,&amp;T2] domainR (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S){
-  return { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, X in S };
+public rel[&amp;T1,&amp;T2] domainR (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S)
+  @doc{Domain Restriction of a relation}
+{
+  return { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, X in S };
 }
 
-%% Range Restriction of a Relation: rangeR
-public rel[&amp;T1,&amp;T2] rangeR (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S){
-  return { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, Y in S };
+public rel[&amp;T1,&amp;T2] rangeR (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S)
+  @doc{range Restriction of a relation}
+{
+  return { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, Y in S };
 }
 
-%% Carrier Restriction of a Relation: carrierR
-public rel[&amp;T,&amp;T] carrierR (rel[&amp;T,&amp;T] R, set[&amp;T] S){
-  return { &lt;X, Y&gt; | tuple[&amp;T X, &amp;T Y] : R, X in S, Y in S };
+public rel[&amp;T,&amp;T] carrierR (rel[&amp;T,&amp;T] R, set[&amp;T] S)
+  @doc{Carrier restriction of a relation}
+{
+  return { &lt;X, Y&gt; | &lt;&amp;T X, &amp;T Y&gt; : R, X in S, Y in S };
 }
 
-%% Domain Exclusion of a Relation: domainX
-public rel[&amp;T1,&amp;T2] domainX (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S){
-  return { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, X notin S };
+public rel[&amp;T1,&amp;T2] domainX (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S)
+  @doc{Domain exclusion of a relation}
+{
+  return { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, X notin S };
 }
 
-%% Range Exclusion of a Relation: rangeX
-public rel[&amp;T1,&amp;T2] rangeX (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S){
-  return { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, Y notin S };
+public rel[&amp;T1,&amp;T2] rangeX (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S)
+  @doc{Range exclusion of a relation}
+{
+  return { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, Y notin S };
 }
 
-%% Carrier Exclusion of a Relation: carrierX
-public rel[&amp;T,&amp;T] carrierX (rel[&amp;T,&amp;T] R, set[&amp;T] S){
-  return { &lt;X, Y&gt; | tuple[&amp;T1 X, &amp;T2 Y] : R, 
-                    X notin S, Y notin S };
+public rel[&amp;T,&amp;T] carrierX (rel[&amp;T,&amp;T] R, set[&amp;T] S)
+  @doc{Carrier exclusion of a relation}
+{
+  return { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, 
+                    !(X in S), !(Y in S) };
 }
 
 %% Relations viewed as graphs
 
 type rel[&amp;T,&amp;T] graph[&amp;T];
 
-%% Top of a Graph: top
-public set[&amp;T] top(graph[&amp;T] G){
+public set[&amp;T] top(graph[&amp;T] G)
+  @doc{Top of a Graph}
+{
   return domain(G) - range(G);
 }
 
-%% Bottom of a Graph: bottom
-public set[&amp;T] bottom(graph[&amp;T] G){
+public set[&amp;T] bottom(graph[&amp;T] G)
+  @doc{Bottom of a Graph}
+{
   return range(G) - domain(G);
 }
 
-%% Reachability with Restriction: reachR
 public set[&amp;T] reachR(set[&amp;T] Start, set[&amp;T] Restr,
-                          graph[&amp;T] G){
+                          graph[&amp;T] G)
+  @doc{Reachability with restriction}
+{
   return range(compose(domainR(G, Start), 
                        carrierR(G, Restr)+));
 }
 
-%% Reachability with Exclusion: reachX
 public set[&amp;T] reachX(set[&amp;T] Start, set[&amp;T] Excl, 
-                          graph[&amp;T] G){
+                          graph[&amp;T] G)
+  @doc{Reachability with exclusion}
+{
   return range(compose(domainR(G, Start), 
                        carrierX(G, Excl)+));
 }
 
 public list[&amp;T] shortestPathPair(&amp;T From, &amp;T To, graph[&amp;T] G)
   @doc{Shortest path between pair of nodes}
-  @primitive{Graph.shortestPathPair}
+  @primitive{"Graph.shortestPathPair"}
 
 public set[list[&amp;T]] shortestPathFrom(&amp;T From, graph[&amp;T] G)
   @doc{Shortest path between one node and all others}
-  @primitive{Graph.shortestPathFrom}
+  @primitive{"Graph.shortestPathFrom"}
 
 public set[list[&amp;T]] shortestPathAll(graph[&amp;T] G)
   @doc{Shortest path between all nodes}
-  @primitive{Graph.shortestPathAll}
+  @primitive{"Graph.shortestPathAll"}
 
 %% TO DO
 
 public rel[&amp;T, &amp;T] closure(rel[&amp;T, &amp;T])
-  @primitive{Rel.closure}
+  @primitive{"Rel.closure"}
 
 %% --- Annotations -------------------------------------------
 
-%% TODO: Sync this with new annotation operators!
-
 public bool has_annotation(&amp;T Subject, str Name)
-  @doc{Test whether a named annotation exists}
-  @primitive{Annotation.has_annotation}
+  @doc{Test whether a named annotation exists.
+       A synonym for the ? operator.}
+  @primitive{"Annotation.has_annotation"}
 
 public value get_annotation(&amp;T Subject, str Name)
   throws missing_annotation(str msg)
-  @doc{Get the value of a named annotation}
-  @primitive{Annotation.get_annotation}
+  @doc{Get the value of a named annotation.
+       A synonym for the @ operator.}
+  @primitive{"Annotation.get_annotation"}
 
 public map[str,value] get_annotations(&amp;T Subject)
   @doc{Get all annotations}
-  @primitive{Annotation.get_annotations}
+  @primitive{"Annotation.get_annotations"}
  
 public &amp;T set_annotation(&amp;T Subject, 
                              str Name, value AValue)
-  @doc{Set the value of a named annotation}
-  @primitive{Annotation.set_annotation}
-
+  @doc{Set the value of a named annotation.
+       A synonym for: Var @ Anno = Exp}
+  @primitive{"Annotation.set_annotation"}
 
 public &amp;T set_annotations(&amp;T Subject, 
                               map[str, value] Annos)
   @doc{Set all annotations}
-  @primitive{Annotation.set_annotations}
+  @primitive{"Annotation.set_annotations"}
 
 %% --- Parsing and Unparsing -------------------------------------
 
 public tree parseFile(str filename)
   throws file_does_not_exist(str msg)
-  @primitive{Parse.parseFile}
+  @primitive{"Parse.parseFile"}
 
 public tree parseString(str source)
-  @primitive{Parse.parseString}
+  @primitive{"Parse.parseString"}
   
 public str unparseToString(tree Subject)
-  @primitive{Parse.unparseToString}
+  @primitive{"Parse.unparseToString"}
   
 public str unparseToFile(tree Subject, str filename)
   throws cannot_create(str msg) 
   throws write_error(str msg) 
-  @primitive{Parse.unparseToFile}
+  @primitive{"Parse.unparseToFile"}
 
 %% --- trees -------------------------------------------------
 
 public int toInt(tree Subject)
   throws cannot_convert(str msg)
-  @primitive{Tree.toInt}
+  @primitive{"Tree.toInt"}
 
 public int toDouble(tree Subject)
   throws cannot_convert(str msg)
-  @primitive{Tree.toDouble}
+  @primitive{"Tree.toDouble"}
 
 public int toString(tree Subject)
   throws cannot_convert(str msg)
-  @primitive{Tree.toString}
+  @primitive{"Tree.toString"}
+
+public bool elementOf(tree S1, tree S2)
+  @primitive{"Tree.elementOf"}
+
 
 %% --- io ----------------------------------------------------
 
 public str readFile(str filename)
   throws does_not_exist(str msg)            
   throws read_error(str msg)
-  @primitive{IO.read}
+  @primitive{"IO.read"}
 
 
 public &amp;T readTerm(str filename) 
   throws does_not_exist(str msg)  
   throws read_error(str msg)
   throws term_error(str msg, loc l)
-  @primitive{IO.readTerm}
+  @primitive{"IO.readTerm"}
 
 
 public void write(str filename, &amp;T Subject) 
   throws cannot_create(str msg)  
   throws write_error(str msg)
-  @primitive{IO.write}
+  @primitive{"IO.write"}
 
 public void print(list[value] V...)
-  @primitive{IO.print}
+  @primitive{"IO.print"}
 
 public void println(list[value] V...)
-  @primitive{IO.println}
+  @primitive{"IO.println"}
  
 %% --- Interface with the Program Database -------------------
 %% The following function provide a bare minimum and will
@@ -6361,30 +6305,31 @@ public void println(list[value] V...)
 
 public void openPDB(str name) 
   throws cannot_open(str msg)
-  @primitive{PDB.open}
+  @primitive{"PDB.open"}
 
 public void closePDB()
   throws cannot_close(str msg)
-  @primitive{PDB.close}
+  @primitive{"PDB.close"}
 
 public void writePDB(str name, &amp;T val)
   throws cannot_write(str msg)
-  @primitive{PDB.write}
+  @primitive{"PDB.write"}
 
 public &amp;T readPDB(str name)
   throws cannot_read(str msg)
-  @primitive{PDB.readPDB}
+  @primitive{"PDB.readPDB"}
 
 %% If name is of type set[&amp;T], then the set incr
 %% is added to it. Similar for a rel[&amp;T]
 
 public void addSetPDB(str name, set[&amp;T] incr)
   throws does_not_exist(str msg)
-  @primitive{PDB.addSet}
+  @primitive{"PDB.addSet"}
 
 public void addRelPDB(str name, rel[&amp;T] incr)
   throws does_not_exist(str msg)
-  @primitive{PDB.addRel}</programlisting></para>
+  @primitive{"PDB.addRel"}
+</programlisting></para>
     </section>
   </section>
 
@@ -6905,7 +6850,7 @@ public void addRelPDB(str name, rel[&amp;T] incr)
 
           <thead>
             <row>
-              <entry align="center"> Characters</entry>
+              <entry align="center">&#160;Characters</entry>
 
               <entry align="center">Used in</entry>
             </row>
