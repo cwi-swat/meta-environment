@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1442,13 +1442,16 @@ int f(&amp;T y, double x)</programlisting></para>
       <section>
         <title>Abstract Patterns</title>
 
-        <para>Datatype declarations introduce a signature of abstract
-        terms.These terms (possibly including typed pattern variables as
-        introduced for syntax patterns) may be used as abstract patterns at
-        the same position where concrete patterns are allowed.</para>
+        <para>Datatype declarations introduce a signature of abstract terms.
+        These terms, possibly including typed variables that play a similar
+        role as pattern variables in syntax patterns, may be used as abstract
+        patterns at the same position where concrete patterns are allowed.
+        Lists, sets and tuples may also occur in abstract patterns.</para>
 
-        <para>An abstract pattern may not consist of a single pattern
-        variable.</para>
+        <para>An abstract pattern may not consist of a single variable.
+        <caution>
+            <para>Is this constraint still needed?</para>
+          </caution></para>
 
         <para>An abstract pattern may be preceeded by the key word
         <literal>abs</literal>, in order to resolve ambiguities with syntax
@@ -1903,9 +1906,9 @@ default: ...
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
-              <entry align="center">bool&#160;</entry>
+              <entry align="center">bool </entry>
 
               <entry align="center">int</entry>
 
@@ -2386,124 +2389,6 @@ default: ...
           </itemizedlist>
         </note></para>
 
-      <table>
-        <title>Usage of selected characters in Rascal Syntax</title>
-
-        <tgroup cols="2">
-          <colspec align="center" />
-
-          <thead>
-            <row>
-              <entry align="center">&#160;Characters</entry>
-
-              <entry align="center">Used in</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry>+</entry>
-
-              <entry>+ (add/conc), +=, + (closure)</entry>
-            </row>
-
-            <row>
-              <entry>-</entry>
-
-              <entry>- (sub/diff), -=, in names</entry>
-            </row>
-
-            <row>
-              <entry>*</entry>
-
-              <entry>* (prod), *=, * (closure)</entry>
-            </row>
-
-            <row>
-              <entry>/</entry>
-
-              <entry>/ (div)</entry>
-            </row>
-
-            <row>
-              <entry>=</entry>
-
-              <entry>:= (match), !:= (nomatch), == (equal), != (nequal), =&gt;
-              (case), +=, -=, *=, /=, &amp;=, |=, &lt;= (leq), &gt;=
-              (geq)</entry>
-            </row>
-
-            <row>
-              <entry>&amp;</entry>
-
-              <entry>&amp; (intersection), &amp;&amp; (and), &amp;=, &amp;
-              (type var)</entry>
-            </row>
-
-            <row>
-              <entry>@</entry>
-
-              <entry>@ (get annotation), _ @ _ = _ (modify annotation), @{...}
-              (declaration annotation)</entry>
-            </row>
-
-            <row>
-              <entry>|</entry>
-
-              <entry>| (union), || (or), [| _ |] (quotes), { _ | _ }
-              (comprehension), |=</entry>
-            </row>
-
-            <row>
-              <entry>!</entry>
-
-              <entry>! (not), != (neq), !:= (nomatch)</entry>
-            </row>
-
-            <row>
-              <entry>&gt;</entry>
-
-              <entry>&gt; (gt), &gt;= (geq), =&gt; (case), &lt; _ &gt;
-              (PatternVariable), &lt; _ &gt; (tuple)</entry>
-            </row>
-
-            <row>
-              <entry>&lt;</entry>
-
-              <entry>&lt; (lt), &lt;= (leq), &lt; _ &gt; (PatternVariable),
-              &lt; _ &gt; (tuple), &lt;: (subtype)</entry>
-            </row>
-
-            <row>
-              <entry>?</entry>
-
-              <entry>? (anno operator), _ ? _ : _ (cond expr)</entry>
-            </row>
-
-            <row>
-              <entry>:</entry>
-
-              <entry>:= (match), !:= (nomatch), case _ : (case), in generator,
-              &lt;: (subtype)</entry>
-            </row>
-
-            <row>
-              <entry>[ and ]</entry>
-
-              <entry>[| _ |] (quote), [ _ ] (projection), [ _ | _ ] (list
-              comprehension), [ _ ] (list), type decls</entry>
-            </row>
-
-            <row>
-              <entry>{ and }</entry>
-
-              <entry>{ _ } (statements), { _ } (set/rel), { _ | _ } (set/rel
-              comprehension)</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
       <section>
         <title>Basic values</title>
 
@@ -2602,7 +2487,7 @@ default: ...
         <title>Tree values</title>
 
         <para>Syntax trees are expressions and generators in comprehensions
-        may range over syntax trees. </para>
+        may range over syntax trees.</para>
 
         <para>Generators may have a strategy option to indicate:</para>
 
@@ -3034,8 +2919,8 @@ int wordCount2(str S){
 map[str,int] wordCountPerWord(str S){
   map[str,int] allCounts = {};
 
- for(/&lt;word:[a-zA-Z0-9]+&gt;/m: S){
-       allCounts[word] += 1;  %%%%%% Add ? operator
+ for(/&lt;word:^[a-zA-Z0-9]+&gt;/m: S){
+       allCounts[word] ? 0 += 1; 
   }
   return allCounts;
 }</programlisting></para>
@@ -3051,19 +2936,17 @@ map[str,int] wordCountPerWord(str S){
       <para><programlisting>module WordReplacement
 
 str capitalize1(str S){
-    visit S {
+    return visit (S) {
       %% \b matches a word boundary
       %% i turns on case-independent matching
       case /\brascal\b/i =&gt; "Rascal"
-    }
-    return S;
+    };
 }
 
 str capitalize2(str S, str Pat, str Repl){
-    visit S {
-      case /\b&lt;Pat&gt;\b/i =&gt; Repl
-    }
-    return S;
+    return visit (S) {
+      case /\b&lt;Pat&gt;\b/i =&gt; "&lt;Repl&gt;"
+    };
 }</programlisting>The function <literal>capitalize1</literal>, replaces all
       occurrences of <literal>rascal</literal> (in all possible cases) by the
       standard spelling <literal>Rascal</literal>. The function
@@ -3160,7 +3043,7 @@ data Bool bor(Bool L, Bool R);
 Bool reduce(Bool B) {
     Bool B1, B2;
     return bottom-up visit(B) {
-      case band(btrue, &lt;B2&gt;)    =&gt; &lt;B2&gt;   %% Use Variables
+      case band(btrue, B2)      =&gt; B2   %% Use Variables
       case band(bfalse, B2)     =&gt; bfalse
       case bor(btrue, btrue)    =&gt; btrue  %% Use a truth table
       case bor(btrue, bfalse)   =&gt; btrue
@@ -3190,13 +3073,13 @@ data Bool bfalse;
 data Bool band(Bool L, Bool R);
 data Bool bor(Bool L, Bool R);  
 
-rule a1 band(btrue, &lt;Bool B2&gt;)  =&gt; &lt;B2&gt; 
-rule a2 band(bfalse, &lt;Bool B2&gt;) =&gt; bfalse
+rule a1 band(btrue, Bool B2)  =&gt; B2 
+rule a2 band(bfalse, Bool B2) =&gt; bfalse
 
-rule o1 bor(btrue, btrue)       =&gt; btrue
-rule o2 bor(btrue, bfalse)      =&gt; btrue
-rule o3 bor(bfalse, btrue)      =&gt; btrue
-rule o4 bor(bfalse, bfalse)     =&gt; bfalse</programlisting>These rules are
+rule o1 bor(btrue, btrue)     =&gt; btrue
+rule o2 bor(btrue, bfalse)    =&gt; btrue
+rule o3 bor(bfalse, btrue)    =&gt; btrue
+rule o4 bor(bfalse, bfalse)   =&gt; bfalse</programlisting>These rules are
         applied on every Bool that is constructed. Like in ASF+SDF it is the
         responsibility of the programmer to make sure the rules are confluent
         and terminating. A rule definition has the same syntax and semantics
@@ -3378,7 +3261,7 @@ BTREE inc(BTREE T) {
 
 BTREE frepl(BTREE T) {
     return bottom-up visit (T) {
-      case g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) =&gt;
+      case [| g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) |] =&gt;
            i(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;)
     };
 }
@@ -3744,15 +3627,15 @@ PICO_VALUE evalExp(Exp exp, VEnv Env) {
            return Env[Id];
 
       case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
-           if(intval(&lt;int n1&gt;) := evalExp(exp1, Env) &amp;&amp;
-              intval(&lt;int n2&gt;) := evalExp(exp2, Env)){
+           if(intval(int n1) := evalExp(exp1, Env) &amp;&amp;
+              intval(int n2) := evalExp(exp2, Env)){
               return intval(n1 + n2);
            }
       
       case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
-            if(intval(&lt;int n1&gt;) := evalExp(exp1, Env) &amp;&amp;
-              intval(&lt;int n2&gt;) := evalExp(exp2, Env)){
-              return intval(n1 - n2);
+            if(intval(int n1) := evalExp(exp1, Env) &amp;&amp;
+               intval(int n2) := evalExp(exp2, Env)){
+               return intval(n1 - n2);
            }
  
       case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
@@ -3849,20 +3732,20 @@ PICO_VALUE evalExp(Exp exp) {
       case &lt;PICO-ID Id&gt;: return Env[Id];
 
       case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
-           if(intval(&lt;int n1&gt;) := evalExp(exp1) &amp;&amp;
-              intval(&lt;int n2&gt;) := evalExp(exp2)){
+           if(intval(int n1) := evalExp(exp1) &amp;&amp;
+              intval(int n2) := evalExp(exp2)){
               return intval(n1 + n2);
            }
 
       case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
-           if(intval(&lt;int n1&gt;) := evalExp(exp1) &amp;&amp;
-              intval(&lt;int n2&gt;) := evalExp(exp2)){
+           if(intval(int n1) := evalExp(exp1) &amp;&amp;
+              intval(int n2) := evalExp(exp2)){
               return intval(n1 - n2);
            }
    
       case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
-           if(strval(&lt;str s1&gt;) := evalExp(exp1) &amp;&amp;
-              strval(&lt;str s2&gt;) := evalExp(exp2)){
+           if(strval(str s1) := evalExp(exp1) &amp;&amp;
+              strval(str s2) := evalExp(exp2)){
               return strval(s1 + s2);
            }
    } 
@@ -4174,7 +4057,7 @@ lexical syntax
 }</programlisting></para>
 
       <para>A function that removes all newline from a string:<programlisting>String removeAllNL(String S){
-    return visit (S) {
+    return innermost visit (S) {
       case string("\"" &lt;NQChar* Chars1&gt; "\n" &lt;NQChar* Chars2&gt; "\"") =&gt;
            string("\"" &lt;Chars1&gt; &lt;Chars2&gt; "\"")
     };
@@ -4281,14 +4164,47 @@ int innerProduct(list[int] V1, list[int] V2){
 
       <programlisting>module Bubble
 
-list[int] sort(list[int] Numbers){
-  for(int I : [1 .. size(Numbers) - 1 ]){
+%% sort1: uses list indexing and for-loop
+
+list[int] sort1(list[int] Numbers){
+  for(int I : [0 .. size(Numbers) - 2 ]){
      if(Numbers[I] &gt; Numbers[I+1]){
        &lt;Numbers[I], Numbers[I+1]&gt; = &lt;Numbers[I+1], Numbers[I]&gt;;
        return sort(Numbers);
      }
   }
   return Numbers;
+}
+
+%% sort2: uses list matching and switch
+
+list[int] sort2(list[int] Numbers){
+  list[int] Nums1, Nums2;
+  int P, Q;
+
+  switch(Numbers){
+    case [Nums1, P, Q, Nums2]:
+       if(P &gt; Q){
+          return sort([Nums1, Q, P, Nums2]);
+       }
+     default: return Numbers;
+   }
+  
+}
+
+%% sort3: uses list matching and visit
+
+list[int] sort3(list[int] Numbers){
+  list[int] Nums1, Nums2;
+  int P, Q;
+
+  return innermost visit(Numbers){
+    case [Nums1, P, Q, Nums2]:
+       if(P &gt; Q){
+          insert [Nums1, Q, P, Nums2];
+       }
+     default: Numbers;
+    };
 }</programlisting>
     </section>
 
@@ -4299,7 +4215,7 @@ list[int] sort(list[int] Numbers){
       and a function parameter.<programlisting>module Bubble-Gen
 
 list[&amp;E] sort(list[&amp;E] Elements, bool GreaterThan(&amp;E, &amp;E)){
-  for(int I : [1 .. size(Elements) - 1 ]){
+  for(int I : [0 .. size(Elements) - 2]){
      if(GreaterThan(Elements[I],  Elements[I+1])){
        &lt;Elements[I], Elements[I+1]&gt; = &lt;Elements[I+1], Elements[I]&gt;;
        return sort(Elements);
@@ -4421,7 +4337,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
               <entry align="center">bool</entry>
 
@@ -4429,7 +4345,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry align="center">double</entry>
 
-              <entry align="center">str&#160;</entry>
+              <entry align="center">str </entry>
 
               <entry align="center">loc</entry>
 
@@ -4448,6 +4364,30 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
           <tbody>
             <row>
               <entry>_==_</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+
+              <entry>x</entry>
+            </row>
+
+            <row>
+              <entry>_!=_</entry>
 
               <entry>x</entry>
 
@@ -5193,7 +5133,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
             <thead>
               <row>
-                <entry align="center">&#160;</entry>
+                <entry align="center"> </entry>
 
                 <entry align="center">list</entry>
 
@@ -6952,6 +6892,128 @@ public void addRelPDB(str name, rel[&amp;T] incr)
     <para>Don't read the following sections; they are leftovers from earlier
     versions of this document but may still contain material that can be
     reused.</para>
+  </section>
+
+  <section>
+    <title>Expression operators</title>
+
+    <para><table>
+        <title>Usage of selected characters in Rascal Syntax</title>
+
+        <tgroup cols="2">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="center"> Characters</entry>
+
+              <entry align="center">Used in</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>+</entry>
+
+              <entry>+ (add/conc), +=, + (closure)</entry>
+            </row>
+
+            <row>
+              <entry>-</entry>
+
+              <entry>- (sub/diff), -=, in names</entry>
+            </row>
+
+            <row>
+              <entry>*</entry>
+
+              <entry>* (prod), *=, * (closure)</entry>
+            </row>
+
+            <row>
+              <entry>/</entry>
+
+              <entry>/ (div)</entry>
+            </row>
+
+            <row>
+              <entry>=</entry>
+
+              <entry>:= (match), !:= (nomatch), == (equal), != (nequal), =&gt;
+              (case), +=, -=, *=, /=, &amp;=, |=, &lt;= (leq), &gt;=
+              (geq)</entry>
+            </row>
+
+            <row>
+              <entry>&amp;</entry>
+
+              <entry>&amp; (intersection), &amp;&amp; (and), &amp;=, &amp;
+              (type var)</entry>
+            </row>
+
+            <row>
+              <entry>@</entry>
+
+              <entry>@ (get annotation), _ @ _ = _ (modify annotation), @{...}
+              (declaration annotation)</entry>
+            </row>
+
+            <row>
+              <entry>|</entry>
+
+              <entry>| (union), || (or), [| _ |] (quotes), { _ | _ }
+              (comprehension), |=</entry>
+            </row>
+
+            <row>
+              <entry>!</entry>
+
+              <entry>! (not), != (neq), !:= (nomatch)</entry>
+            </row>
+
+            <row>
+              <entry>&gt;</entry>
+
+              <entry>&gt; (gt), &gt;= (geq), =&gt; (case), &lt; _ &gt;
+              (PatternVariable), &lt; _ &gt; (tuple)</entry>
+            </row>
+
+            <row>
+              <entry>&lt;</entry>
+
+              <entry>&lt; (lt), &lt;= (leq), &lt; _ &gt; (PatternVariable),
+              &lt; _ &gt; (tuple), &lt;: (subtype)</entry>
+            </row>
+
+            <row>
+              <entry>?</entry>
+
+              <entry>? (anno operator), _ ? _ : _ (cond expr)</entry>
+            </row>
+
+            <row>
+              <entry>:</entry>
+
+              <entry>:= (match), !:= (nomatch), case _ : (case), in generator,
+              &lt;: (subtype)</entry>
+            </row>
+
+            <row>
+              <entry>[ and ]</entry>
+
+              <entry>[| _ |] (quote), [ _ ] (projection), [ _ | _ ] (list
+              comprehension), [ _ ] (list), type decls</entry>
+            </row>
+
+            <row>
+              <entry>{ and }</entry>
+
+              <entry>{ _ } (statements), { _ } (set/rel), { _ | _ } (set/rel
+              comprehension)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table></para>
   </section>
 
   <section>

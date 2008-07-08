@@ -293,6 +293,7 @@ public &T get(list[&T] L, int N)
   @primitive{"List.get"}
 
 public &T arb(list[&T] L)
+throws empty_list(str msg)
   @primitive{"List.arb"}
 
 public str toString(list[&T] L)
@@ -460,6 +461,7 @@ public int size(set[&T] S)
   @primitive{"Set.size"}
 
 public &T arb(set[&T] S)
+throws empty_set(str msg)
   @primitive{"Set.arb"}
   
 public str toString(set[&T] S)
@@ -582,6 +584,7 @@ public int size(map[&T] M)
   @primitive{"Map.size"}
 
 public &T arb(map[&T] M)
+throws empty_map(str msg)
   @primitive{"Map.arb"}
   
 public str toString(map[&T] R)
@@ -641,6 +644,7 @@ public int size(rel[&T] R)
   @primitive{"Rel.size"}
   
 public &T arb(rel[&T] R)
+throws empty_relation(str msg)
   @primitive{"Rel.arb"}
 
 public str toString(rel[&T] R)

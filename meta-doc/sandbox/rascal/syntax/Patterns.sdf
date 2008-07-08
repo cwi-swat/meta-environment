@@ -3,7 +3,7 @@ module Patterns
 imports Names Types Expressions RegExp
 
 exports
-  sorts Pattern AbstractPattern AbstractPatternName AbstractPatternArgument AbstractPatternArguments
+  sorts Pattern AbstractPattern AbstractPatternName AbstractPatterns
         SyntaxPattern SyntaxPatternChar SyntaxPatternSymbol PatternVariable QuotedSyntaxPattern
         RegExpPattern
 
@@ -28,18 +28,18 @@ exports
     QuotedSyntaxPattern                           -> SyntaxPattern
 
 %% AbstractPattern
-    Name | StringLiteral                          -> AbstractPatternName      {cons("abspat-name")}
-    AbstractPattern                               -> AbstractPatternArgument  {cons("abspat-arg1")}
-    PatternVariable                               -> AbstractPatternArgument  {cons("abspat-arg2")}
-    "(" {AbstractPatternArgument ","}* ")"        -> AbstractPatternArguments {cons("abspat-args")}
+    OptTypedName | StringLiteral                  -> AbstractPatternName  {cons("abspat-name")}
+    "(" {AbstractPattern ","}* ")"                -> AbstractPatterns     {cons("abspat-args")}
 
-    "abs"? AbstractPatternName 
-           AbstractPatternArguments?              -> AbstractPattern          {cons("abspat")}
+     AbstractPatternName AbstractPatterns?        -> AbstractPattern      {cons("abspat-arg2")}
+    "<" {AbstractPattern ","}+ ">"                -> AbstractPattern      {cons("abspat-tuple")}
+    "[" {AbstractPattern ","}* "]"                -> AbstractPattern      {cons("abspat-list")}
+    "{" {AbstractPattern ","}* "}"                -> AbstractPattern      {cons("abspat-set")}
 
 %% Pattern
     "!"? (RegExpPattern | 
           SyntaxPattern | 
-          AbstractPattern)                        -> Pattern                  {cons("pattern")}
+          AbstractPattern)                        -> Pattern              {cons("pattern")}
 
     "abs"                                         -> Reserved
 

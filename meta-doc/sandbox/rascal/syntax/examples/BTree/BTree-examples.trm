@@ -67,7 +67,7 @@ BTREE inc(BTREE T) {
 
 BTREE frepl(BTREE T) {
     return bottom-up visit (T) {
-      case g(<BTREE T1>, <BTREE T2>) =>
+      case [| g(<BTREE T1>, <BTREE T2>) |] =>
            i(<BTREE T1>, <BTREE T2>)
     };
 }

@@ -10,7 +10,8 @@ hiddens
         Type
 
 exports
-  sorts Type NamedType NamedTypes OptNamedType OptNamedTypes TypeVar StandardOperator
+  sorts Type NamedType NamedTypes OptNamedType OptNamedTypes OptTypedName OptTypedNames
+        TypeVar StandardOperator
         BasicType StructuredType FunctionType FunctionName AnonymousFunctionType 
         AbstractType AbstractTypeName AbstractTypeArguments AbstractTypeSelector
         ParameterizedType VarArgs TypeDeclaration DataDeclaration ViewDeclaration
@@ -30,6 +31,9 @@ exports
  
     Type Name?                                                -> OptNamedType  
     {OptNamedType ","}+                                       -> OptNamedTypes
+
+    Type? Name                                                -> OptTypedName
+    {OptTypedNames ","}+                                      -> OptTypedNames
 
     OptNamedTypes "+" OptNamedTypes                           -> OptNamedTypes
 
@@ -58,7 +62,7 @@ exports
     "(" {OptNamedType ","}* ")"                               -> AbstractTypeArguments  {cons("abstype-args")}
 
     NamedType                                                 -> AbstractType {cons("abstype-namedtype")}
-    TypeVar                                                   -> AbstractType {cons("abstype-typevat")}
+    TypeVar                                                   -> AbstractType {cons("abstype-typevat")}                                          
     AbstractTypeName AbstractTypeArguments?                   -> AbstractType {cons("abstype-call")}
 
     Type "." AbstractTypeName                                 -> AbstractTypeSelector

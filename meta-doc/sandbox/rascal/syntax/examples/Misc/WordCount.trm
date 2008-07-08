@@ -42,7 +42,7 @@ map[str,int] wordCountPerWord(str S){
   map[str,int] allCounts = {};
 
  for(/<word:^[a-zA-Z0-9]+>/m: S){
-       allCounts[word] += 1;  %% add ? operator here
+       allCounts[word] ? 0 += 1; 
   }
   return allCounts;
 }

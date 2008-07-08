@@ -45,7 +45,7 @@ exports
     "." Name                                          -> Selector        {cons("sel-field")}
     "[" Expression "]"                                -> Selector        {cons("sel-index")}
 
-    QualName Selector*                                -> Assignable      {cons("asg-select")}
+    QualName Selector*  ("?" Expression)?             -> Assignable      {cons("asg-select")}
     "<" {Assignable ","}+ ">"                         -> Assignable      {cons("asg-tuple")}
 
     QualName                                          -> BasicExpression {cons("bexp-qname")}
@@ -114,8 +114,8 @@ exports
   context-free syntax
 %% Generators
     Pattern                                           -> Binder
-    NamedType                                         -> Binder
-    "<" {(NamedType | Name) ","}+ ">"                 -> Binder
+%%    NamedType                                         -> Binder
+ %%   "<" {(NamedType | Name) ","}+ ">"                 -> Binder
 
     ("top-down"  | "top-down-break"  | 
      "bottom-up" | "bottom-up-break" |
