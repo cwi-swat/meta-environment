@@ -184,6 +184,15 @@ static void create_structure_editor(ATerm editorId, ATerm parseTreeTerm) {
   setEditor(editorId, editor);
 }
 
+void delete_structure_editor(ATerm editorId) {
+  ATerm editor;
+
+  editor = ATtableGet(editors, editorId);
+  if (editor != NULL) {
+    ATtableRemove(editors, editor);
+  }
+}
+
 void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm) {
   create_structure_editor(editorId, parseTreeTerm);
 }
@@ -193,12 +202,7 @@ void update_editor(int cid, ATerm editorId, ATerm parseTreeTerm) {
 }
 
 void delete_editor(int cid, ATerm editorId) {
-  ATerm editor;
-
-  editor = ATtableGet(editors, editorId);
-  if (editor != NULL) {
-    ATtableRemove(editors, editor);
-  }
+  delete_structure_editor(editorId);
 }
 
 ATerm get_parse_tree(int cid, ATerm editorId) {
@@ -371,6 +375,23 @@ ATerm slice_tree(int cid, ATerm tree)
   slices = tokenizeTree(PT_getParseTreeTop(parseTree));
 
   return ATmake("snd-value(sliced-tree(<term>))", (ATerm) ATreverse(slices));
+}
+
+ATerm get_sort_at_offset_in_tree(int cid, ATerm tree, int offset){
+  SE_StructureEditor editor;
+  
+  ATerm dummyId = ATmake("0");
+  create_structure_editor(dummyId, tree);
+  set_cursor_at_offset(cid, dummyId, offset);
+  
+  editor = getEditor(dummyId);
+  
+  SE_Tree cursor = SE_getStructureEditorCursor(editor);
+  char *sort = PT_yieldSymbol(getTreeSort(cursor));
+  
+  delete_structure_editor(dummyId);
+  
+  return ATmake("snd-value(sort(<str>))", sort);
 }
 
 void rec_terminate(int cid, ATerm message) {
