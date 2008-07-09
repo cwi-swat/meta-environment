@@ -14,7 +14,7 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<structure-editor>,get-sort-at-cursor(<term>))",
   "rec-do(<structure-editor>,delete-editor(<term>))",
   "rec-do(<structure-editor>,move-cursor(<term>,<term>))",
-  "rec-eval(<structure-editor>,get-sort-at-offset-in-tree(<term>,<int>))",
+  "rec-eval(<structure-editor>,get-selected-at-offset-in-tree(<term>,<int>))",
   "rec-eval(<structure-editor>,get-cursor(<term>))",
   "rec-eval(<structure-editor>,get-parse-tree(<term>))",
   "rec-do(<structure-editor>,set-cursor-at-line-column(<term>,<int>,<int>))",
@@ -35,8 +35,8 @@ ATerm structure_editor_handler(int conn, ATerm term)
   if(ATmatch(term, "rec-eval(get-cursor(<term>))", &t0)) {
     return get_cursor(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-sort-at-offset-in-tree(<term>,<int>))", &t0, &i0)) {
-    return get_sort_at_offset_in_tree(conn, t0, i0);
+  if(ATmatch(term, "rec-eval(get-selected-at-offset-in-tree(<term>,<int>))", &t0, &i0)) {
+    return get_selected_at_offset_in_tree(conn, t0, i0);
   }
   if(ATmatch(term, "rec-eval(get-parse-tree(<term>))", &t0)) {
     return get_parse_tree(conn, t0);

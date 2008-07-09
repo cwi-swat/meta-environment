@@ -377,8 +377,12 @@ ATerm slice_tree(int cid, ATerm tree)
   return ATmake("snd-value(sliced-tree(<term>))", (ATerm) ATreverse(slices));
 }
 
-ATerm get_sort_at_offset_in_tree(int cid, ATerm tree, int offset){
+ATerm get_selected_at_offset_in_tree(int cid, ATerm tree, int offset){
   SE_StructureEditor editor;
+  SE_Tree cursor;
+  char *sort;
+  ERR_Location location;
+  ERR_Area area;
   
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
   create_structure_editor(dummyId, tree);
@@ -386,12 +390,15 @@ ATerm get_sort_at_offset_in_tree(int cid, ATerm tree, int offset){
   
   editor = getEditor(dummyId);
   
-  SE_Tree cursor = SE_getStructureEditorCursor(editor);
-  char *sort = PT_yieldSymbol(getTreeSort(cursor));
+  cursor = SE_getStructureEditorCursor(editor);
+  sort = PT_yieldSymbol(getTreeSort(cursor));
+  
+  location = PT_getTreeLocation(cursor);
+  area = ERR_getLocationArea(location);
   
   delete_structure_editor(dummyId);
   
-  return ATmake("snd-value(sort(<str>))", sort);
+  return ATmake("snd-value(selected(sort(<str>), focus(<term>)))", sort, area);
 }
 
 void rec_terminate(int cid, ATerm message) {

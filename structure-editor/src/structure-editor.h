@@ -10,7 +10,7 @@
 
 /* Prototypes for functions called from the event handler */
 ATerm get_cursor(int conn, ATerm);
-ATerm get_sort_at_offset_in_tree(int conn, ATerm, int);
+ATerm get_selected_at_offset_in_tree(int conn, ATerm, int);
 ATerm get_parse_tree(int conn, ATerm);
 void move_cursor(int conn, ATerm, ATerm);
 void set_cursor_at_line_column(int conn, ATerm, int, int);

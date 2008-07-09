@@ -83,10 +83,10 @@ in
     . rec-value(SE, sliced-tree(Slices?))
     . snd-msg(se-sliced(Tree, Slices))
   +
-    rec-msg(se-get-sort-at-offset-in-tree(Tree?, Offset?))
-    . snd-eval(SE, get-sort-at-offset-in-tree(Tree, Offset))
-    . rec-value(SE, sort(Sort?))
-    . snd-msg(se-got-sort-at-offset-in-tree(Sort))
+    rec-msg(se-get-selected-at-offset-in-tree(Tree?, Offset?))
+    . snd-eval(SE, get-selected-at-offset-in-tree(Tree, Offset))
+    . rec-value(SE, selected(sort(Sort?), focus(Focus?)))
+    . snd-msg(se-got-selected-at-offset-in-tree(Sort, Focus))
   )
   * delta
 endlet
