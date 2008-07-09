@@ -103,8 +103,8 @@ exports
     Predicate "||" Predicate                          -> Predicate {left,cons("pred-or")}
 
   context-free syntax
-    Pattern ":=" Expression                           -> Predicate {cons("pred-match")}
-    Pattern"!:=" Expression                           -> Predicate {cons("pred-not-match")}
+    Pattern "~~" Expression                           -> Predicate {cons("pred-match")}
+    Pattern "!~" Expression                           -> Predicate {cons("pred-not-match")}
     Expression                                        -> Predicate {cons("pred-exp")}
     "(" Predicate ")"                                 -> Predicate {bracket}
 

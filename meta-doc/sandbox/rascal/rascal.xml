@@ -2403,11 +2403,11 @@ default: ...
             </listitem>
 
             <listitem>
-              <para><literal>:=</literal> match</para>
+              <para><literal>~~</literal> match</para>
             </listitem>
 
             <listitem>
-              <para><literal>!:=</literal> no match</para>
+              <para><literal>!~</literal> no match</para>
             </listitem>
 
             <listitem>
@@ -2559,11 +2559,11 @@ default: ...
           </listitem>
 
           <listitem>
-            <para><literal>:=</literal> match</para>
+            <para><literal>~~</literal> match</para>
           </listitem>
 
           <listitem>
-            <para><literal>!:=</literal> nomatch</para>
+            <para><literal>!~</literal> nomatch</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -3644,20 +3644,20 @@ PICO_VALUE evalExp(Exp exp, VEnv Env) {
            return Env[Id];
 
       case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
-           if(intval(int n1) := evalExp(exp1, Env) &amp;&amp;
-              intval(int n2) := evalExp(exp2, Env)){
+           if(intval(int n1) ~~ evalExp(exp1, Env) &amp;&amp;
+              intval(int n2) ~~ evalExp(exp2, Env)){
               return intval(n1 + n2);
            }
       
       case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
-            if(intval(int n1) := evalExp(exp1, Env) &amp;&amp;
-               intval(int n2) := evalExp(exp2, Env)){
+            if(intval(int n1) ~~ evalExp(exp1, Env) &amp;&amp;
+               intval(int n2) ~~ evalExp(exp2, Env)){
                return intval(n1 - n2);
            }
  
       case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
-           if(strval(str s1) := evalExp(exp1, Env) &amp;&amp;
-              strval(str s2) := evalExp(exp2, Env)){
+           if(strval(str s1) ~~ evalExp(exp1, Env) &amp;&amp;
+              strval(str s2) ~~ evalExp(exp2, Env)){
               return strval(s1 + s2);
            }
    } 
@@ -3749,20 +3749,20 @@ PICO_VALUE evalExp(Exp exp) {
       case &lt;PICO-ID Id&gt;: return Env[Id];
 
       case &lt;EXP exp1&gt; + &lt;EXP exp2&gt;:
-           if(intval(int n1) := evalExp(exp1) &amp;&amp;
-              intval(int n2) := evalExp(exp2)){
+           if(intval(int n1) ~~ evalExp(exp1) &amp;&amp;
+              intval(int n2) ~~ evalExp(exp2)){
               return intval(n1 + n2);
            }
 
       case &lt;EXP exp1&gt; - &lt;EXP exp2&gt;:
-           if(intval(int n1) := evalExp(exp1) &amp;&amp;
-              intval(int n2) := evalExp(exp2)){
+           if(intval(int n1) ~~ evalExp(exp1) &amp;&amp;
+              intval(int n2) ~~ evalExp(exp2)){
               return intval(n1 - n2);
            }
    
       case &lt;EXP exp1&gt; || &lt;EXP exp2&gt;:
-           if(strval(str s1) := evalExp(exp1) &amp;&amp;
-              strval(str s2) := evalExp(exp2)){
+           if(strval(str s1) ~~ evalExp(exp1) &amp;&amp;
+              strval(str s2) ~~ evalExp(exp2)){
               return strval(s1 + s2);
            }
    } 
@@ -3836,12 +3836,12 @@ CFSEGMENT cflow(STATEMENT Stat){
 import pico/syntax/Pico;
 
 rel[PICO-ID, EXP] uses(PROGRAM P) {
-  return {&lt;Id, E&gt; | EXP E : P, [| &lt;PICO-ID Id&gt; |] := E};
+  return {&lt;Id, E&gt; | EXP E : P, [| &lt;PICO-ID Id&gt; |] ~~ E};
 }
 
 rel[PICO-ID, STATEMENT] defs(PROGRAM P) { 
   return {&lt;Id, S&gt; | STATEMENT S : P, 
-                    [| &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; |] := S};
+                    [| &lt;PICO-ID Id&gt; := &lt;EXP Exp&gt; |] ~~ S};
 }</programlisting>
 
       <para>The above uses a "matching condition" to decompose
@@ -3890,13 +3890,13 @@ PROGRAM cse(PROGRAM P) {
     rel[CP,CP] Pred = cflow(P).graph;
     map[EXP, PICO-ID] replacements = 
        {&lt;E2 -&gt; Id&gt; | STATEMENT S : P,
-                   [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] := S,
+                   [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] ~~ S,
                    Id notin E,
                    EXP E2 : reachX({S}, Defs[Id], Pred)
        };
   
     return visit (P) {
-      case &lt;EXP E&gt;: if([| &lt;PICO-ID Id&gt; |] := replacements(E)){
+      case &lt;EXP E&gt;: if([| &lt;PICO-ID Id&gt; |] ~~ replacements(E)){
                        replace-by Id;
                     }
     };
@@ -3949,15 +3949,15 @@ PROGRAM cp(PROGRAM P) {
 
     map[PICO-ID, EXP] replacements = 
       {&lt;Id2 -&gt; E&gt; | STATEMENT S : P,
-                  [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] := S,
+                  [| &lt;PICO-ID Id&gt; := &lt;EXP E&gt; |] ~~ S,
                   is_constant(E),
                   PICO-ID Id2 : reachX({S},Defs[Id],Pred),
                   Id2 == Id 
       };  
  
     return visit (P) {
-     case &lt;PICO-ID Id&gt;: if(&lt;EXP E&gt; := replacements[Id]){
-                           replace-by E;
+     case &lt;PICO-ID Id&gt;: if(&lt;EXP E&gt; ~~ replacements[Id]){
+                           insert E;
                         }
     };
 }</programlisting></para>
@@ -4236,7 +4236,7 @@ list[int] sort3(list[int] Numbers){
 list[&amp;E] sort(list[&amp;E] Elements, bool GreaterThan(&amp;E, &amp;E)){
   for(int I : [0 .. size(Elements) - 2]){
      if(GreaterThan(Elements[I],  Elements[I+1])){
-       &lt;Elements[I], Elements[I+1]&gt; = &lt;Elements[I+1], Elements[I]&gt;;
+       Elements[I], Elements[I+1] = Elements[I+1], Elements[I];
        return sort(Elements);
      }
   }
@@ -4249,9 +4249,11 @@ list[&amp;E] sort(list[&amp;E] Elements, bool GreaterThan(&amp;E, &amp;E)){
     <section>
       <title>Read-Eval-Print Loop (REPL) [Needs further discussion]</title>
 
-      <para>For the scripting of application it is important to have a command
-      language and read-eval-print loop. Here is an attempt. The command
-      prompt is "&gt;".<programlisting>&gt; import lang.java.syntax.Main as Java
+      <para><caution>
+          <para>This section is a mess!</para>
+        </caution>For the scripting of application it is important to have a
+      command language and read-eval-print loop. Here is an attempt. The
+      command prompt is "&gt;".<programlisting>&gt; import lang.java.syntax.Main as Java
 &gt; str source = read("program.java");
 &gt; CU program = parseString(source);
 

@@ -44,7 +44,7 @@ exports
     "tuple" "[" OptNamedTypes "]"                             -> StructuredType {cons("tuple-type")}
 
     "+" | "-"  | "*" | "/"  | "&"  | "|"  | "==" | "!=" |
-    "<" | "<=" | ">" | ">=" | "&&" | "||" | "!"               -> StandardOperator
+    "<" | "<=" | ">" | ">=" | "&&" | "||" | "!"               -> StandardOperator {avoid}
 
     "..."                                                     -> VarArgs
     Name | StandardOperator                                   -> FunctionName   { avoid }
