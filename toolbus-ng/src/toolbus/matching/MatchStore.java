@@ -182,6 +182,8 @@ public class MatchStore{
 	 */
 	public void registerReceiveMessage(RecMsg receiveMessage){
 		List<ATerm> matches = messageLinks.get(receiveMessage.msg);
+		if(matches == null) return;
+		
 		Iterator<ATerm> matchesIterator = matches.iterator();
 		
 		synchronized(messageLock){
@@ -205,6 +207,8 @@ public class MatchStore{
 	 */
 	public void deregisterReceiveMessage(RecMsg receiveMessage){
 		List<ATerm> matches = messageLinks.get(receiveMessage.msg);
+		if(matches == null) return;
+		
 		Iterator<ATerm> matchesIterator = matches.iterator();
 		
 		synchronized(messageLock){
@@ -252,6 +256,8 @@ public class MatchStore{
 	 */
 	public void registerSubscribeNote(Subscribe subscribeNote){
 		List<ATerm> matches = noteLinks.get(subscribeNote.notePattern);
+		if(matches == null) return;
+		
 		Iterator<ATerm> matchesIterator = matches.iterator();
 		
 		synchronized(noteLock){
@@ -290,6 +296,8 @@ public class MatchStore{
 	 */
 	public void deregisterSubscribeNote(Subscribe subscribeNote){
 		List<ATerm> matches = noteLinks.get(subscribeNote.notePattern);
+		if(matches == null) return;
+		
 		Iterator<ATerm> matchesIterator = matches.iterator();
 		
 		synchronized(noteLock){
