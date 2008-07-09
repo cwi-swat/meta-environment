@@ -380,7 +380,7 @@ ATerm slice_tree(int cid, ATerm tree)
 ATerm get_sort_at_offset_in_tree(int cid, ATerm tree, int offset){
   SE_StructureEditor editor;
   
-  ATerm dummyId = ATmake("0");
+  ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
   create_structure_editor(dummyId, tree);
   set_cursor_at_offset(cid, dummyId, offset);
   
