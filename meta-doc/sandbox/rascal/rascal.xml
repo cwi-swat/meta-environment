@@ -1449,11 +1449,17 @@ int f(&amp;T y, double x)</programlisting></para>
         some examples of abstract patterns:<programlisting>%% Assuming:
 %% data Bool band(Bool L, Bool R);
 %% Bool B2;
+%% An abstract pattern matching a band node:
 
 band(btrue, B2)
 
+%% The variable B2 can also be declared inside the pattern:
+
+band(true, Bool B2)
+
 %% Assuming:
 %% data PICO_VALUE intval(int) | strval(str);
+%% An abstract pattern matching an intval:
 
 intval(int n1)
 
@@ -1461,14 +1467,25 @@ intval(int n1)
 %% int P, Q; 
 %% list[int] Nums1, Nums2;
 
-[Nums1, P, Q, Nums2]</programlisting></para>
+[Nums1, P, Q, Nums2]
+
+%% This can also be written as:
+[list[int Nums1], int P, int Q, list[int] Nums2]
+
+%% Mixtures of variables declared outside the pattern 
+%% and inside the pattern are also allowed:
+
+[Nums1, int P, int Q, Nums2]</programlisting></para>
 
         <para>An abstract pattern may be preceeded by the key word
         <literal>abs</literal>, in order to resolve ambiguities with syntax
         patterns.</para>
 
         <para>Type declarations define an inclusion relation between
-        types.</para>
+        types.<caution>
+            <para>Move the above sentence to a better place in the
+            text.</para>
+          </caution></para>
       </section>
 
       <section>
