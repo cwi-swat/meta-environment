@@ -21,6 +21,9 @@ public abstract class AbstractJavaTool extends AbstractTool{
 
 	/**
 	 * Connects to the ToolBus.
+	 * NOTE: For thread-safety reasons this method must NOT be called before the constructor of the
+	 * AbstractJavaTool completes. This means that implementing classes should not put the connect
+	 * call in their constructor.
 	 * 
 	 * @param args
 	 *            The arguments that contain the required information for running a tool (name + id
