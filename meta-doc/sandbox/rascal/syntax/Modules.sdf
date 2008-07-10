@@ -24,22 +24,22 @@ exports
 
   context-free syntax
 
-    "[" {TypeVar ","}+ "]"                         -> ModuleParameters
-    "[" {Type ","}+ "]"                            -> ModuleActuals
+    "[" {TypeVar ","}+ "]"                         -> ModuleParameters {cons("ModuleParameters")}
+    "[" {Type ","}+ "]"                            -> ModuleActuals    {cons("ModuleActuals")}
 
-    ModuleName ModuleActuals? Renamings?           -> ImportedModule
-    Name "=>" Name                                 -> Renaming
-    "{" {Renaming ","}+ "}"                        -> Renamings
+    ModuleName ModuleActuals? Renamings?           -> ImportedModule   {cons("ImportedModule")}
+    Name "=>" Name                                 -> Renaming         {cons("Renaming")}
+    "{" {Renaming ","}+ "}"                        -> Renamings        {cons("Renamings")}
 
-    "import" ImportedModule ";"?                   -> Import
-    "extend" ImportedModule ";"?                   -> Import
+    "import" ImportedModule ";"?                   -> Import           {cons("Import")}
+    "extend" ImportedModule ";"?                   -> Import           {cons("Extend")}
 
-    ("public" | "private")?                        -> Visibility  {cons("visibility")}
+    ("public" | "private")?                        -> Visibility       {cons("Visibility")}
 
     "module" ModuleName ModuleParameters? 
        DeclarationAnnotations
        Import* 
-       (Visibility Declaration ";"?)*              -> Module  
+       (Visibility Declaration ";"?)*              -> Module           {cons("Module")}
 
 %% Reserved words
      "public" | "private" | "import" | 

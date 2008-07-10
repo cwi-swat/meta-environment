@@ -15,7 +15,7 @@ exports
     ViewDeclaration  | VariableDeclaration |
     FunctionDeclaration | RuleDeclaration |
     AnnoDeclaration | TagDeclaration |
-    VisitorDeclaration                         -> Declaration
+    VisitorDeclaration                         -> Declaration {cons("Declaration")}
 
 
  

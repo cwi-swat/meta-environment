@@ -9,14 +9,14 @@ exports
   context-free syntax 
 
     "anno" Type Name 
-           DeclarationAnnotations { Type "|"}+      -> AnnoDeclaration {cons("anno-decl")}
+           DeclarationAnnotations { Type "|"}+      -> AnnoDeclaration {cons("AnnoDeclaration")}
 
     "module" | "function" | "variable" | "data" |
     "view" | "type" | "anno" | "tag" | "visitor" |
-    "all"                                            -> DeclarationKind
+    "all"                                            -> DeclarationKind {cons("DeclarationKind")}
  
     "tag" DeclarationKind Name 
-          DeclarationAnnotations {Type "|"}+         -> TagDeclaration {cons("tag-decl")}
+          DeclarationAnnotations {Type "|"}+         -> TagDeclaration {cons("TagDeclaration")}
 
 %% Reserved words
     "anno" | "tag"                                   -> Reserved

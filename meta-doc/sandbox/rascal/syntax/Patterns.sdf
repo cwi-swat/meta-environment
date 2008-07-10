@@ -18,28 +18,28 @@ exports
   context-free syntax
 
 %% Pattern Variable
-    "<" Type? Name  ">"                           -> PatternVariable
-    "<" Call ">"                                  -> PatternVariable  %% TODO: better naming
+    "<" Type? Name  ">"                           -> PatternVariable  {cons("NamePatternVariable")}
+    "<" Call ">"                                  -> PatternVariable  {cons("CallPatternVariable")}
 
 %% SyntaxPattern
-    SyntaxPatternChar                             -> SyntaxPatternSymbol
-    PatternVariable                               -> SyntaxPatternSymbol
-    Symbol? "[|" SyntaxPatternSymbol* "|]"        -> QuotedSyntaxPattern
-    QuotedSyntaxPattern                           -> SyntaxPattern
+    SyntaxPatternChar                             -> SyntaxPatternSymbol {cons("CharSyntaxPatternSymbol")}
+    PatternVariable                               -> SyntaxPatternSymbol {cons("PatternVariableSyntaxPatternSymbol")}
+    Symbol? "[|" SyntaxPatternSymbol* "|]"        -> QuotedSyntaxPattern {cons("QuotedSyntaxPattern")}
+    QuotedSyntaxPattern                           -> SyntaxPattern       {cons("SyntaxPattern")}
 
 %% AbstractPattern
-    OptTypedName | StringLiteral                  -> AbstractPatternName  {cons("abspat-name")}
-    "(" {AbstractPattern ","}* ")"                -> AbstractPatterns     {cons("abspat-args")}
+    OptTypedName | StringLiteral                  -> AbstractPatternName  {cons("AbstractPatternName")}
+    "(" {AbstractPattern ","}* ")"                -> AbstractPatterns     {cons("AbstractPatterns")}
 
-     AbstractPatternName AbstractPatterns?        -> AbstractPattern      {cons("abspat-arg2")}
-    "<" {AbstractPattern ","}+ ">"                -> AbstractPattern      {cons("abspat-tuple")}
-    "[" {AbstractPattern ","}* "]"                -> AbstractPattern      {cons("abspat-list")}
-    "{" {AbstractPattern ","}* "}"                -> AbstractPattern      {cons("abspat-set")}
+     AbstractPatternName AbstractPatterns?        -> AbstractPattern      {cons("CallAbstractPattern")}
+    "<" {AbstractPattern ","}+ ">"                -> AbstractPattern      {cons("TupleAbstractPattern")}
+    "[" {AbstractPattern ","}* "]"                -> AbstractPattern      {cons("ListAbstractPattern")}
+    "{" {AbstractPattern ","}* "}"                -> AbstractPattern      {cons("SetAbstractPattern")}
 
 %% Pattern
     "!"? (RegExpPattern | 
           SyntaxPattern | 
-          AbstractPattern)                        -> Pattern              {cons("pattern")}
+          AbstractPattern)                        -> Pattern              {cons("Pattern")}
 
     "abs"                                         -> Reserved
 

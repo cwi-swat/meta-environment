@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -831,6 +831,53 @@
           </listitem>
 
           <listitem>
+            <para><caution>
+                <para>Maybe, the following needs further discussion.</para>
+              </caution>Parse trees are implicitly defined by a data
+            declaration and we provide APIGEN-like functionality to access
+            their elements by automatically providing views for each SDF
+            rule:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Elements of an SDF syntax rule may be explicitly
+                labelled as in:<programlisting> lhs1:EXP "+" lhs2:EXP -&gt; EXP {left}</programlisting>In
+                this case the selectors <literal>lhs1</literal> and
+                <literal>lhs2</literal> are provided that can be used to
+                select (or replace) one of the subtrees of this rule.</para>
+              </listitem>
+
+              <listitem>
+                <para>If these labels are absent, an automatic naming scheme
+                is used:</para>
+
+                <itemizedlist>
+                  <listitem>
+                    <para>For each sort in the SDF rule, a selector with the
+                    same name is provided. </para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Syntactic lists get the name of the element sort,
+                    followed by "<literal>-list</literal>".</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Optionals get the name of the element sort, followed
+                    by "<literal>-opt</literal>".</para>
+                  </listitem>
+                </itemizedlist>
+
+                <para>In case there are more occurrences of the same syntactic
+                element, the provided selector names are consecutively
+                numbered, e.g., <literal>EXP1</literal>,
+                <literal>EXP2</literal> or <literal>STATEMENT-list1</literal>,
+                <literal>STATEMENT-list2</literal>.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
             <para>Types may include type variables like
             <literal>&amp;<replaceable>T</replaceable></literal> as in Rscript
             with the following refinement:</para>
@@ -1480,12 +1527,6 @@ intval(int n1)
         <para>An abstract pattern may be preceeded by the key word
         <literal>abs</literal>, in order to resolve ambiguities with syntax
         patterns.</para>
-
-        <para>Type declarations define an inclusion relation between
-        types.<caution>
-            <para>Move the above sentence to a better place in the
-            text.</para>
-          </caution></para>
       </section>
 
       <section>
@@ -1933,9 +1974,9 @@ default: ...
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
-              <entry align="center">bool&#160;</entry>
+              <entry align="center">bool </entry>
 
               <entry align="center">int</entry>
 
@@ -4247,6 +4288,56 @@ list[&amp;E] sort(list[&amp;E] Elements, bool GreaterThan(&amp;E, &amp;E)){
     </section>
 
     <section>
+      <title>Applying Rascal to Rascal</title>
+
+      <para>Here are some simple examples of applying Rascal to
+      itself:<programlisting>module SimpleExamples
+
+imports Rascal;
+
+int cntModules(Rascal program)
+@doc{Count the modules in a Rascal program}
+{
+    int cnt = 0;
+
+    visit (program){
+      case Module M: cnt += 1;
+    };
+    return cnt;
+}
+
+set[Name] extractNames(Rascal program)
+@doc{Extract all names from a Rascal program}
+{
+   set[Name] names = {};
+
+   visit (program){
+      case Name Nm: names += Name;
+    };
+    return names;
+}
+
+Rascal rename(Rascal program)
+@doc{Prefix all names in the program with "x"}
+{
+   set[Name] names = {};
+
+   return visit (program){
+      case Name Nm: insert parseString("x" + toString(Nm));
+    };
+}
+
+Rascal invertIf(Rascal program)
+@doc{Switch the branches of if statements}
+{
+  return visit (program){
+      case if (&lt;Expression E&gt;)  &lt;Block B1&gt; else &lt;Block B2&gt;: 
+           insert [| if (!&lt;E&gt;) &lt;B2&gt; else &lt;B1&gt; |];
+    };
+}</programlisting></para>
+    </section>
+
+    <section>
       <title>Read-Eval-Print Loop (REPL) [Needs further discussion]</title>
 
       <para><caution>
@@ -4356,7 +4447,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
               <entry align="center">bool</entry>
 
@@ -4364,7 +4455,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry align="center">double</entry>
 
-              <entry align="center">str&#160;</entry>
+              <entry align="center">str </entry>
 
               <entry align="center">loc</entry>
 
@@ -5080,7 +5171,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
             <thead>
               <row>
-                <entry align="center">&#160;</entry>
+                <entry align="center"> </entry>
 
                 <entry align="center">list</entry>
 
@@ -6869,7 +6960,7 @@ public void addRelPDB(str name, rel[&amp;T] incr)
 
           <thead>
             <row>
-              <entry align="center">&#160;Characters</entry>
+              <entry align="center"> Characters</entry>
 
               <entry align="center">Used in</entry>
             </row>

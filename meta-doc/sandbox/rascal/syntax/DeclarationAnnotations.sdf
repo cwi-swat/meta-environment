@@ -11,5 +11,5 @@ exports
     "\\}"                                        -> DeclarationAnnotationChar
 
   context-free syntax
-    DeclarationAnnotation*                       -> DeclarationAnnotations
+    DeclarationAnnotation*                       -> DeclarationAnnotations {cons("DeclarationAnotations")}
 
