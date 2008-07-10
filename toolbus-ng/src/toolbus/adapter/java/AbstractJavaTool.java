@@ -64,7 +64,9 @@ public abstract class AbstractJavaTool extends AbstractTool{
 	 * @param toolbus
 	 *            The toolbus to connect to.
 	 * @param toolClassLoader
-	 *            The classloader that will be used for the tool's classes.
+	 *            The class loader that will be used for the tool's classes. When in doubt, use the
+	 *            default class loader (ClassLoader.getSystemClassLoader()) or the context
+	 *            class loader on the current thread.
 	 * @param toolName
 	 *            The name of the tool.
 	 * @param toolID
@@ -74,7 +76,7 @@ public abstract class AbstractJavaTool extends AbstractTool{
 	 */
 	public void connectDirectly(ToolBus toolbus, ClassLoader toolClassLoader, String toolName, int toolID) throws Exception{
 		if(toolName == null) throw new RuntimeException("Missing tool identification.");
-
+		
 		toolBridge = new JavaToolBridge(termFactory, this, toolName, toolID, toolClassLoader, toolbus);
 		toolBridge.run();
 	}
