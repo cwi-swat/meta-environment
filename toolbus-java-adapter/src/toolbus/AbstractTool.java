@@ -596,7 +596,7 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 		 */
 		public synchronized void recResponse(ATermAppl response){
 			synchronized(current){
-				current.response = response.getArgument(0);
+				current.response = response;
 				current.notify();
 			}
 			
