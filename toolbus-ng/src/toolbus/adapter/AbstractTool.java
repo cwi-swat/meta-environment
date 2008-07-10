@@ -3,6 +3,7 @@ package toolbus.adapter;
 import toolbus.IOperations;
 import toolbus.TBTermFactory;
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.pure.PureFactory;
 
 /**
@@ -86,7 +87,7 @@ public abstract class AbstractTool implements IOperations{
 	 *            The term that contains the data about the request.
 	 * @return The response.
 	 */
-	public ATerm sendRequest(ATerm aTerm){
+	public ATermAppl sendRequest(ATerm aTerm){
 		return toolBridge.postRequest(aTerm);
 	}
 

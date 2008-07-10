@@ -270,7 +270,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * @param aTerm
 	 *            The request.
 	 */
-	public ATerm postRequest(ATerm aTerm){
+	public ATermAppl postRequest(ATerm aTerm){
 		long threadId = Thread.currentThread().getId();
 		ThreadLocalJobQueue threadLocalQueue;
 		synchronized(threadLocalQueues){
@@ -430,7 +430,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		public final byte operation;
 		public final ATerm term;
 		public final long threadId;
-		public ATerm response; // Optional field
+		public ATermAppl response; // Optional field
 		
 		/**
 		 * Constructor.
@@ -536,7 +536,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		 */
 		public synchronized void recResponse(ATermAppl response){
 			synchronized(current){
-				current.response = response.getArgument(0);
+				current.response = response;
 				current.notify();
 			}
 			
@@ -628,7 +628,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			return job;
 		}
 		
-		public ATerm waitForResponse(Job job){
+		public ATermAppl waitForResponse(Job job){
 			synchronized(job){
 				while(job.response == null){
 					try{
