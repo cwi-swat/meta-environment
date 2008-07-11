@@ -9,9 +9,9 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm compile_module(int conn, const char *, const char *, ATerm, ATerm);
 void rec_ack_event(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
+ATerm compile_module(int conn, const char *, const char *, ATerm, ATerm);
 extern ATerm asfc_handler(int conn, ATerm term);
 extern ATerm asfc_checker(int conn, ATerm sigs);
 

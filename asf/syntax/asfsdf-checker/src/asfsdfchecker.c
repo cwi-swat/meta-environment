@@ -8,8 +8,8 @@
 #define NR_SIG_ENTRIES	2
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<asfsdfchecker>,check-asfsdf(<term>,<str>))",
   "rec-terminate(<asfsdfchecker>,<term>)",
+  "rec-eval(<asfsdfchecker>,check-asfsdf(<term>,<str>))",
 };
 
 /* Event handler for tool 'asfsdfchecker' */
@@ -20,12 +20,12 @@ ATerm asfsdfchecker_handler(int conn, ATerm term)
   char *s0;
   ATerm t0;
 
-  if(ATmatch(term, "rec-eval(check-asfsdf(<term>,<str>))", &t0, &s0)) {
-    return check_asfsdf(conn, t0, s0);
-  }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
+  }
+  if(ATmatch(term, "rec-eval(check-asfsdf(<term>,<str>))", &t0, &s0)) {
+    return check_asfsdf(conn, t0, s0);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = asfsdfchecker_checker(conn, in);

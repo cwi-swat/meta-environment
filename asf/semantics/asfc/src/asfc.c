@@ -8,9 +8,9 @@
 #define NR_SIG_ENTRIES	3
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<asfc>,compile-module(<str>,<str>,<term>,<term>))",
-  "rec-ack-event(<asfc>,<term>)",
   "rec-terminate(<asfc>,<term>)",
+  "rec-ack-event(<asfc>,<term>)",
+  "rec-eval(<asfc>,compile-module(<str>,<str>,<term>,<term>))",
 };
 
 /* Event handler for tool 'asfc' */
@@ -21,9 +21,6 @@ ATerm asfc_handler(int conn, ATerm term)
   char *s0, *s1;
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-eval(compile-module(<str>,<str>,<term>,<term>))", &s0, &s1, &t0, &t1)) {
-    return compile_module(conn, s0, s1, t0, t1);
-  }
   if(ATmatch(term, "rec-ack-event(<term>)", &t0)) {
     rec_ack_event(conn, t0);
     return NULL;
@@ -31,6 +28,9 @@ ATerm asfc_handler(int conn, ATerm term)
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
+  }
+  if(ATmatch(term, "rec-eval(compile-module(<str>,<str>,<term>,<term>))", &s0, &s1, &t0, &t1)) {
+    return compile_module(conn, s0, s1, t0, t1);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = asfc_checker(conn, in);
