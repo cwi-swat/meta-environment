@@ -8,8 +8,8 @@
 #define NR_SIG_ENTRIES	2
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<removevarsyntax>,remove-var-syntax(<str>,<term>))",
   "rec-terminate(<removevarsyntax>,<term>)",
+  "rec-eval(<removevarsyntax>,remove-var-syntax(<str>,<term>))",
 };
 
 /* Event handler for tool 'removevarsyntax' */
@@ -20,12 +20,12 @@ ATerm removevarsyntax_handler(int conn, ATerm term)
   char *s0;
   ATerm t0;
 
-  if(ATmatch(term, "rec-eval(remove-var-syntax(<str>,<term>))", &s0, &t0)) {
-    return remove_var_syntax(conn, s0, t0);
-  }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
+  }
+  if(ATmatch(term, "rec-eval(remove-var-syntax(<str>,<term>))", &s0, &t0)) {
+    return remove_var_syntax(conn, s0, t0);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = removevarsyntax_checker(conn, in);

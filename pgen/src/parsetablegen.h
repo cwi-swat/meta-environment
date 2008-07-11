@@ -9,8 +9,8 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm generate_table(int conn, ATerm, const char *);
 void rec_terminate(int conn, ATerm);
+ATerm generate_table(int conn, ATerm, const char *);
 extern ATerm parsetablegen_handler(int conn, ATerm term);
 extern ATerm parsetablegen_checker(int conn, ATerm sigs);
 

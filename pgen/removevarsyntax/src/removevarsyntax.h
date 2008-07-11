@@ -9,8 +9,8 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm remove_var_syntax(int conn, const char *, ATerm);
 void rec_terminate(int conn, ATerm);
+ATerm remove_var_syntax(int conn, const char *, ATerm);
 extern ATerm removevarsyntax_handler(int conn, ATerm term);
 extern ATerm removevarsyntax_checker(int conn, ATerm sigs);
 

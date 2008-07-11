@@ -8,8 +8,8 @@
 #define NR_SIG_ENTRIES	2
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<parsetablegen>,generate-table(<term>,<str>))",
   "rec-terminate(<parsetablegen>,<term>)",
+  "rec-eval(<parsetablegen>,generate-table(<term>,<str>))",
 };
 
 /* Event handler for tool 'parsetablegen' */
@@ -20,12 +20,12 @@ ATerm parsetablegen_handler(int conn, ATerm term)
   char *s0;
   ATerm t0;
 
-  if(ATmatch(term, "rec-eval(generate-table(<term>,<str>))", &t0, &s0)) {
-    return generate_table(conn, t0, s0);
-  }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
+  }
+  if(ATmatch(term, "rec-eval(generate-table(<term>,<str>))", &t0, &s0)) {
+    return generate_table(conn, t0, s0);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = parsetablegen_checker(conn, in);
