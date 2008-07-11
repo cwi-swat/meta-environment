@@ -575,7 +575,7 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 			Job next = getNext();
 			current = next;
 			if(next != null){
-				sendTerm(EVENT, next.term);
+				sendTerm(next.operation, next.term);
 			}
 		}
 
