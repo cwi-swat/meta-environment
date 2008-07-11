@@ -8,8 +8,8 @@
 #define NR_SIG_ENTRIES	2
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<sglr>,parse(<str>,<term>,<str>,<term>))",
   "rec-terminate(<sglr>,<term>)",
+  "rec-eval(<sglr>,parse(<str>,<term>,<str>,<term>))",
 };
 
 /* Event handler for tool 'sglr' */
@@ -20,12 +20,12 @@ ATerm sglr_handler(int conn, ATerm term)
   char *s0, *s1;
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-eval(parse(<str>,<term>,<str>,<term>))", &s0, &t0, &s1, &t1)) {
-    return parse(conn, s0, t0, s1, t1);
-  }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
+  }
+  if(ATmatch(term, "rec-eval(parse(<str>,<term>,<str>,<term>))", &s0, &t0, &s1, &t1)) {
+    return parse(conn, s0, t0, s1, t1);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = sglr_checker(conn, in);
