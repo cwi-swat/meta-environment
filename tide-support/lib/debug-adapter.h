@@ -10,13 +10,13 @@
 
 /* Prototypes for functions called from the event handler */
 ATerm ta_create_rule(int conn, int, ATerm, ATerm, ATerm, ATerm, ATerm);
-ATerm ta_evaluate(int conn, int, ATerm);
-ATerm ta_delete_rule(int conn, int, int);
+ATerm ta_enable_rule(int conn, int, int);
 ATerm ta_disable_rule(int conn, int, int);
 ATerm ta_modify_rule(int conn, int, int, ATerm, ATerm, ATerm, ATerm);
+ATerm ta_delete_rule(int conn, int, int);
 void ta_rec_ack_event(int conn, ATerm);
 void ta_rec_terminate(int conn, ATerm);
-ATerm ta_enable_rule(int conn, int, int);
+ATerm ta_evaluate(int conn, int, ATerm);
 extern ATerm debug_adapter_handler(int conn, ATerm term);
 extern ATerm debug_adapter_checker(int conn, ATerm sigs);
 

@@ -10,12 +10,12 @@
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-terminate(<debug-adapter>,<term>)",
   "rec-ack-event(<debug-adapter>,<term>)",
-  "rec-eval(<debug-adapter>,modify-rule(<int>,<int>,<term>,<term>,<term>,<term>))",
   "rec-eval(<debug-adapter>,delete-rule(<int>,<int>))",
-  "rec-eval(<debug-adapter>,create-rule(<int>,<term>,<term>,<term>,<term>,<term>))",
-  "rec-eval(<debug-adapter>,evaluate(<int>,<term>))",
   "rec-eval(<debug-adapter>,disable-rule(<int>,<int>))",
+  "rec-eval(<debug-adapter>,create-rule(<int>,<term>,<term>,<term>,<term>,<term>))",
   "rec-eval(<debug-adapter>,enable-rule(<int>,<int>))",
+  "rec-eval(<debug-adapter>,modify-rule(<int>,<int>,<term>,<term>,<term>,<term>))",
+  "rec-eval(<debug-adapter>,evaluate(<int>,<term>))",
 };
 
 /* Event handler for tool 'debug-adapter' */
@@ -29,17 +29,17 @@ ATerm debug_adapter_handler(int conn, ATerm term)
   if(ATmatch(term, "rec-eval(create-rule(<int>,<term>,<term>,<term>,<term>,<term>))", &i0, &t0, &t1, &t2, &t3, &t4)) {
     return ta_create_rule(conn, i0, t0, t1, t2, t3, t4);
   }
-  if(ATmatch(term, "rec-eval(evaluate(<int>,<term>))", &i0, &t0)) {
-    return ta_evaluate(conn, i0, t0);
-  }
-  if(ATmatch(term, "rec-eval(delete-rule(<int>,<int>))", &i0, &i1)) {
-    return ta_delete_rule(conn, i0, i1);
+  if(ATmatch(term, "rec-eval(enable-rule(<int>,<int>))", &i0, &i1)) {
+    return ta_enable_rule(conn, i0, i1);
   }
   if(ATmatch(term, "rec-eval(disable-rule(<int>,<int>))", &i0, &i1)) {
     return ta_disable_rule(conn, i0, i1);
   }
   if(ATmatch(term, "rec-eval(modify-rule(<int>,<int>,<term>,<term>,<term>,<term>))", &i0, &i1, &t0, &t1, &t2, &t3)) {
     return ta_modify_rule(conn, i0, i1, t0, t1, t2, t3);
+  }
+  if(ATmatch(term, "rec-eval(delete-rule(<int>,<int>))", &i0, &i1)) {
+    return ta_delete_rule(conn, i0, i1);
   }
   if(ATmatch(term, "rec-ack-event(<term>)", &t0)) {
     ta_rec_ack_event(conn, t0);
@@ -49,8 +49,8 @@ ATerm debug_adapter_handler(int conn, ATerm term)
     ta_rec_terminate(conn, t0);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(enable-rule(<int>,<int>))", &i0, &i1)) {
-    return ta_enable_rule(conn, i0, i1);
+  if(ATmatch(term, "rec-eval(evaluate(<int>,<term>))", &i0, &t0)) {
+    return ta_evaluate(conn, i0, t0);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = debug_adapter_checker(conn, in);
