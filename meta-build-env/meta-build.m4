@@ -465,7 +465,6 @@ Eclipse-LazyStart: true
 Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
 Bundle-Version: $2
 Bundle-ClassPath: `echo "${BUNDLE_CLASSPATH}" | sed "s@,@,# @g" | tr '#' '\n'`
-Bundle-Localization: plugin
 Export-Package: `echo "$4" | sed "s@,@,# @g" | tr '#' '\n'`
 Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,# @g" | tr '#' '\n'`
 Bundle-Activator: $6
@@ -570,7 +569,6 @@ Eclipse-LazyStart: true
 Bundle-SymbolicName: `echo $1 | tr '-' '_'`;singleton:=true
 Bundle-Version: $2
 Bundle-ClassPath: .
-Bundle-Localization: plugin
 Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,# @g" | tr '#' '\n'`
 ENDCAT
 
