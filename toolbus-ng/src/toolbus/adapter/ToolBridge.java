@@ -515,7 +515,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			Job next = getNext();
 			current = next;
 			if(next != null){
-				ioHandler.send(EVENT, next.term);
+				ioHandler.send(next.operation, next.term);
 			}
 		}
 
