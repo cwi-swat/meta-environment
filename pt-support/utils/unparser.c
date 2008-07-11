@@ -8,8 +8,8 @@
 #define NR_SIG_ENTRIES	2
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<unparser>,unparse-asfix(<term>))",
   "rec-terminate(<unparser>,<term>)",
+  "rec-eval(<unparser>,unparse-asfix(<term>))",
 };
 
 /* Event handler for tool 'unparser' */
@@ -19,12 +19,12 @@ ATerm unparser_handler(int conn, ATerm term)
   /* We need some temporary variables during matching */
   ATerm t0;
 
-  if(ATmatch(term, "rec-eval(unparse-asfix(<term>))", &t0)) {
-    return unparse_asfix(conn, t0);
-  }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
+  }
+  if(ATmatch(term, "rec-eval(unparse-asfix(<term>))", &t0)) {
+    return unparse_asfix(conn, t0);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = unparser_checker(conn, in);

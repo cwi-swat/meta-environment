@@ -9,8 +9,8 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm report_ambiguities(int conn, ATerm, const char *);
 void rec_terminate(int conn, ATerm);
+ATerm report_ambiguities(int conn, ATerm, const char *);
 extern ATerm ambiguity_reporter_handler(int conn, ATerm term);
 extern ATerm ambiguity_reporter_checker(int conn, ATerm sigs);
 

@@ -8,10 +8,10 @@
 #define NR_SIG_ENTRIES	4
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<apply-function>,apply-function-to-args(<str>,<str>,<list>))",
+  "rec-terminate(<apply-function>,<term>)",
   "rec-eval(<apply-function>,get-argument-given-nr(<term>,<int>))",
   "rec-eval(<apply-function>,equal-trees(<term>,<term>))",
-  "rec-terminate(<apply-function>,<term>)",
+  "rec-eval(<apply-function>,apply-function-to-args(<str>,<str>,<list>))",
 };
 
 /* Event handler for tool 'apply-function' */
@@ -23,18 +23,18 @@ ATerm apply_function_handler(int conn, ATerm term)
   char *s0, *s1;
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-eval(get-argument-given-nr(<term>,<int>))", &t0, &i0)) {
-    return get_argument_given_nr(conn, t0, i0);
-  }
-  if(ATmatch(term, "rec-eval(apply-function-to-args(<str>,<str>,<term>))", &s0, &s1, &t0)) {
-    return apply_function_to_args(conn, s0, s1, t0);
-  }
   if(ATmatch(term, "rec-eval(equal-trees(<term>,<term>))", &t0, &t1)) {
     return equal_trees(conn, t0, t1);
+  }
+  if(ATmatch(term, "rec-eval(get-argument-given-nr(<term>,<int>))", &t0, &i0)) {
+    return get_argument_given_nr(conn, t0, i0);
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
+  }
+  if(ATmatch(term, "rec-eval(apply-function-to-args(<str>,<str>,<term>))", &s0, &s1, &t0)) {
+    return apply_function_to_args(conn, s0, s1, t0);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = apply_function_checker(conn, in);

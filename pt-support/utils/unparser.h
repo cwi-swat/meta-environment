@@ -9,8 +9,8 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm unparse_asfix(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
+ATerm unparse_asfix(int conn, ATerm);
 extern ATerm unparser_handler(int conn, ATerm term);
 extern ATerm unparser_checker(int conn, ATerm sigs);
 

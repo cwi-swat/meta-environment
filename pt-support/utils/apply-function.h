@@ -9,10 +9,10 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_argument_given_nr(int conn, ATerm, int);
-ATerm apply_function_to_args(int conn, const char *, const char *, ATerm);
 ATerm equal_trees(int conn, ATerm, ATerm);
+ATerm get_argument_given_nr(int conn, ATerm, int);
 void rec_terminate(int conn, ATerm);
+ATerm apply_function_to_args(int conn, const char *, const char *, ATerm);
 extern ATerm apply_function_handler(int conn, ATerm term);
 extern ATerm apply_function_checker(int conn, ATerm sigs);
 
