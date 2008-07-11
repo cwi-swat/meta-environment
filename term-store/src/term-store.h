@@ -9,24 +9,24 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm contains_key(int conn, const char *, ATerm);
-void remove_value(int conn, const char *, ATerm);
-ATerm get_all_keys(int conn, const char *);
-ATerm get_term_value(int conn, const char *, ATerm);
-ATerm get_key_value_pairs(int conn, const char *);
-ATerm get_str_value(int conn, const char *, ATerm);
 ATerm filter_keys(int conn, const char *, ATerm);
-void put_str_value(int conn, const char *, ATerm, const char *);
-ATerm get_all_values(int conn, const char *);
-void put_term_value(int conn, const char *, ATerm, ATerm);
-ATerm get_values(int conn, const char *, ATerm);
-void clear_table(int conn, const char *);
-ATerm remove_value_from_all_tables(int conn, ATerm);
-void remove_table(int conn, const char *);
-ATerm save_snapshot(int conn, const char *);
-void add_table(int conn, const char *, const char *);
 ATerm load_snapshot(int conn, const char *);
+ATerm save_snapshot(int conn, const char *);
+void remove_table(int conn, const char *);
+ATerm contains_key(int conn, const char *, ATerm);
+ATerm remove_value_from_all_tables(int conn, ATerm);
+ATerm get_key_value_pairs(int conn, const char *);
+ATerm get_values(int conn, const char *, ATerm);
+ATerm get_all_values(int conn, const char *);
+ATerm get_str_value(int conn, const char *, ATerm);
+ATerm get_term_value(int conn, const char *, ATerm);
+void put_term_value(int conn, const char *, ATerm, ATerm);
+void remove_value(int conn, const char *, ATerm);
+void add_table(int conn, const char *, const char *);
+void clear_table(int conn, const char *);
+void put_str_value(int conn, const char *, ATerm, const char *);
 void rec_terminate(int conn, ATerm);
+ATerm get_all_keys(int conn, const char *);
 extern ATerm term_store_handler(int conn, ATerm term);
 extern ATerm term_store_checker(int conn, ATerm sigs);
 
