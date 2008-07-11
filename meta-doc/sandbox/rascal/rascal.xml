@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -854,7 +854,7 @@
                 <itemizedlist>
                   <listitem>
                     <para>For each sort in the SDF rule, a selector with the
-                    same name is provided. </para>
+                    same name is provided.</para>
                   </listitem>
 
                   <listitem>
@@ -1540,7 +1540,7 @@ intval(int n1)
         parallels abstract and concrete syntax patterns as much as possible.
         This means that they can occur in cases of <literal>visit</literal>
         and <literal>switch</literal> statements, on the left-hand side of the
-        match operator (<literal>:=</literal>) and as declarator in
+        match operator (<literal>~~</literal>) and as declarator in
         generators.</para>
 
         <para>We use a regular expression language that extends the lexical
@@ -1974,9 +1974,9 @@ default: ...
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
-              <entry align="center">bool </entry>
+              <entry align="center">bool&#160;</entry>
 
               <entry align="center">int</entry>
 
@@ -2964,7 +2964,7 @@ int wordCount2(str S){
   %% \w matches any word character
   %% &lt;...&gt; are groups and should appear at the top level.
   %% m turns on multi-line matching
-  while (/^.*?&lt;word:\w+&gt;&lt;rest:.*$&gt;/m := S) { 
+  while (/^.*?&lt;word:\w+&gt;&lt;rest:.*$&gt;/m ~~ S) { 
     count += 1; 
     S = rest; 
   }
@@ -3027,7 +3027,7 @@ str capitalize2(str S, str Pat, str Repl){
 
 set[Var] getDateVars(Program P){
    return {V | Var V : P, 
-               /.*(date|dt|year|yr).*$/i := toString(V)};
+               /.*(date|dt|year|yr).*$/i ~~ toString(V)};
 }</programlisting></para>
     </section>
 
@@ -3349,7 +3349,7 @@ BTREE srepl(BTREE T) {
 set[BTREE] find_outer_gs(BTREE T) {
     return
     { S | top-down-break STATEMENT S : T, 
-          [| g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) |] := S };
+          [| g(&lt;BTREE T1&gt;, &lt;BTREE T2&gt;) |] ~~ S };
 }
  
 %% Ex8: accumulating transformer that increments leaves with 
@@ -4008,7 +4008,7 @@ PROGRAM cp(PROGRAM P) {
 
       <itemizedlist>
         <listitem>
-          <para>P contains a statement S of the form Id := E,</para>
+          <para>P contains a statement S of the form Id ~~ E,</para>
         </listitem>
 
         <listitem>
@@ -4447,7 +4447,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -4455,7 +4455,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
@@ -5171,7 +5171,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 
@@ -6960,7 +6960,7 @@ public void addRelPDB(str name, rel[&amp;T] incr)
 
           <thead>
             <row>
-              <entry align="center"> Characters</entry>
+              <entry align="center">&#160;Characters</entry>
 
               <entry align="center">Used in</entry>
             </row>
@@ -6994,9 +6994,8 @@ public void addRelPDB(str name, rel[&amp;T] incr)
             <row>
               <entry>=</entry>
 
-              <entry>:= (match), !:= (nomatch), == (equal), != (nequal), =&gt;
-              (case), +=, -=, *=, /=, &amp;=, |=, &lt;= (leq), &gt;=
-              (geq)</entry>
+              <entry>== (equal), != (nequal), =&gt; (case), +=, -=, *=, /=,
+              &amp;=, |=, &lt;= (leq), &gt;= (geq)</entry>
             </row>
 
             <row>
@@ -7023,7 +7022,7 @@ public void addRelPDB(str name, rel[&amp;T] incr)
             <row>
               <entry>!</entry>
 
-              <entry>! (not), != (neq), !:= (nomatch)</entry>
+              <entry>! (not), != (neq), !~ (nomatch)</entry>
             </row>
 
             <row>
@@ -7049,7 +7048,7 @@ public void addRelPDB(str name, rel[&amp;T] incr)
             <row>
               <entry>:</entry>
 
-              <entry>:= (match), !:= (nomatch), case _ : (case), in generator,
+              <entry>~~ (match), !~~ (nomatch), case _ : (case), in generator,
               &lt;: (subtype)</entry>
             </row>
 

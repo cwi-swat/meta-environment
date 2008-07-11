@@ -97,7 +97,7 @@ BTREE srepl(BTREE T) {
 set[BTREE] find_outer_gs(BTREE T) {
     return
     { S | top-down-break STATEMENT S : T, 
-          [| g(<BTREE T1>, <BTREE T2>) |] := S };
+          [| g(<BTREE T1>, <BTREE T2>) |] ~~ S };
 }
  
 %% Ex8: accumulating transformer that increments leaves with 

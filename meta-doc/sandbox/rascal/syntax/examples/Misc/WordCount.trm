@@ -28,7 +28,7 @@ int wordCount2(str S){
   %% \w matches any word character
   %% <...> are groups and should appear at the top level.
   %% m turns on multi-line matching
-  while (/^.*?<word:\w+><rest:.*$>/m := S) { 
+  while (/^.*?<word:\w+><rest:.*$>/m ~~ S) { 
     count += 1; 
     S = rest; 
   }
