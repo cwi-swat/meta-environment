@@ -9,8 +9,8 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm rename_module(int conn, ATerm, const char *, ATerm);
 void rec_terminate(int conn, ATerm);
+ATerm rename_module(int conn, ATerm, const char *, ATerm);
 extern ATerm sdf_renaming_handler(int conn, ATerm term);
 extern ATerm sdf_renaming_checker(int conn, ATerm sigs);
 

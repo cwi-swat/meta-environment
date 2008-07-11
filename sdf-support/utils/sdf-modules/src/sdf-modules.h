@@ -9,17 +9,17 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_imported_module_names(int conn, ATerm);
-ATerm make_sdf_definition(int conn, ATerm);
-ATerm get_all_needed_imports(int conn, ATerm, const char *);
-ATerm is_valid_modulename(int conn, const char *);
 ATerm get_new_module_name(int conn, ATerm, const char *, const char *);
-ATerm remove_import_from_module(int conn, ATerm, const char *);
 ATerm get_module_path(int conn, const char *, const char *);
 ATerm rename_modulename_in_module(int conn, ATerm, const char *);
-ATerm get_module_id(int conn, ATerm);
 ATerm add_import_to_module(int conn, ATerm, const char *);
+ATerm get_all_needed_imports(int conn, ATerm, const char *);
+ATerm remove_import_from_module(int conn, ATerm, const char *);
+ATerm get_imported_module_names(int conn, ATerm);
+ATerm get_module_id(int conn, ATerm);
+ATerm make_sdf_definition(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
+ATerm is_valid_modulename(int conn, const char *);
 extern ATerm sdf_modules_handler(int conn, ATerm term);
 extern ATerm sdf_modules_checker(int conn, ATerm sigs);
 
