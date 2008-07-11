@@ -9,20 +9,20 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_action(int conn, ATerm, ATerm);
-ATerm get_subtype_events(int conn, ATerm, ATerm);
-ATerm get_subtype_action(int conn, ATerm, ATerm, ATerm);
-ATerm get_events(int conn, ATerm);
-ATerm get_extension_editor(int conn, const char *);
+ATerm get_text_categories(int conn);
 void change_workspace(int conn, const char *);
 ATerm get_language_extension(int conn, const char *);
-void remove_system_property(int conn, ATerm);
-ATerm get_module_paths(int conn);
-void add_system_property(int conn, ATerm);
 ATerm get_library_paths(int conn);
+ATerm get_subtype_action(int conn, ATerm, ATerm, ATerm);
+void add_system_property(int conn, ATerm);
+ATerm get_action(int conn, ATerm, ATerm);
 void add_system_properties(int conn, const char *);
-ATerm get_text_categories(int conn);
+ATerm get_module_paths(int conn);
+void remove_system_property(int conn, ATerm);
+ATerm get_subtype_events(int conn, ATerm, ATerm);
+ATerm get_extension_editor(int conn, const char *);
 void rec_terminate(int conn, ATerm);
+ATerm get_events(int conn, ATerm);
 extern ATerm configuration_manager_handler(int conn, ATerm term);
 extern ATerm configuration_manager_checker(int conn, ATerm sigs);
 
