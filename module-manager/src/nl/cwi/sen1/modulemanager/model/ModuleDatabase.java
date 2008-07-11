@@ -155,7 +155,7 @@ public class ModuleDatabase {
 		ATerm oldValue = module.getAttribute(namespace, key);
 
 		ATerm formula = rule.getFormula();
-		Boolean result = innermostRuleEvaluation(formula, id);
+		boolean result = innermostRuleEvaluation(formula, id);
 
 		if (result) {
 			updatePredicate(id, namespace, key, newPredicate);
@@ -432,7 +432,7 @@ public class ModuleDatabase {
 		triggerAllAttributeUpdateRulesOnAllModules();
 	}
 
-	private Boolean checkRuleViolation(ATerm namespace, ATerm key,
+	private boolean checkRuleViolation(ATerm namespace, ATerm key,
 			ATerm predicate, ATerm rule) {
 		if (((ATermAppl) rule).getAFun().equals(modalSET)) {
 			return (rule.getChildAt(0).equals(namespace)
@@ -440,7 +440,7 @@ public class ModuleDatabase {
 					.equals(predicate));
 		}
 
-		Boolean violation = false;
+		boolean violation = false;
 		for (int i = 0; i < rule.getChildCount(); i++) {
 			violation = violation
 					|| checkRuleViolation(namespace, key, predicate,
@@ -449,7 +449,7 @@ public class ModuleDatabase {
 		return violation;
 	}
 
-	private Boolean innermostRuleEvaluation(ATerm rule, ModuleId id) {
+	private boolean innermostRuleEvaluation(ATerm rule, ModuleId id) {
 		if (((ATermAppl) rule).getAFun().equals(modalAND)) {
 			return evaluateAnd((ATerm) rule.getChildAt(0), (ATerm) rule
 					.getChildAt(1), id);
@@ -477,22 +477,22 @@ public class ModuleDatabase {
 		return false;
 	}
 
-	private Boolean evaluateAnd(ATerm op1, ATerm op2, ModuleId id) {
+	private boolean evaluateAnd(ATerm op1, ATerm op2, ModuleId id) {
 		return (innermostRuleEvaluation(op1, id) && innermostRuleEvaluation(
 				op2, id));
 	}
 
-	private Boolean evaluateOr(ATerm op1, ATerm op2, ModuleId id) {
+	private boolean evaluateOr(ATerm op1, ATerm op2, ModuleId id) {
 		return (innermostRuleEvaluation(op1, id) || innermostRuleEvaluation(
 				op2, id));
 	}
 
-	private Boolean evaluateNot(ATerm op, ModuleId id) {
+	private boolean evaluateNot(ATerm op, ModuleId id) {
 		return !(innermostRuleEvaluation(op, id));
 	}
 
-	private Boolean evaluateOne(ATerm op, ModuleId id) {
-		Boolean result = false;
+	private boolean evaluateOne(ATerm op, ModuleId id) {
+		boolean result = false;
 		Set<ModuleId> children = getAllChildren(id);
 		Iterator<ModuleId> iter = children.iterator();
 
@@ -504,8 +504,8 @@ public class ModuleDatabase {
 		return result;
 	}
 
-	private Boolean evaluateAll(ATerm op, ModuleId id) {
-		Boolean result = true;
+	private boolean evaluateAll(ATerm op, ModuleId id) {
+		boolean result = true;
 		Set<ModuleId> children = getAllChildren(id);
 		Iterator<ModuleId> iter = children.iterator();
 
@@ -517,7 +517,7 @@ public class ModuleDatabase {
 		return result;
 	}
 
-	private Boolean evaluateSet(ATerm op, ModuleId id, ATerm namespace,
+	private boolean evaluateSet(ATerm op, ModuleId id, ATerm namespace,
 			ATerm key) {
 		ATerm value = modules.get(id).getAttribute(namespace, key);
 
