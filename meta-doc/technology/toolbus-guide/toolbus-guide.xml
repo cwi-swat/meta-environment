@@ -3347,16 +3347,15 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
 ATerm my_tool_handler(int conn, ATerm input)
 { ... handle input and return a term or NULL ...  }
 
-int main(int argc, char *argv[]) 
-{ ATerm bottomOfStack;
+int main(int argc, char *argv[]){
+  ATerm bottomOfStack;
 
   ATBinit(argc, argv, &amp;bottomOfStack);
-  if(ATBconnect(NULL, NULL, -1,  my_tool_handler) &gt;= 0)
-  {
+  if(ATBconnect(NULL, NULL, -1,  my_tool_handler) &gt;= 0){
      ATBeventloop();
-  } else 
-     fprintf(stderr, 
-             "my_tool: Could not connect to the ToolBus\n");
+  }else{
+     fprintf(stderr, "my_tool: Could not connect to the ToolBus\n");
+  }
   ATBeventloop();
   return 0; 
 }</programlisting></para>
@@ -3372,6 +3371,18 @@ int main(int argc, char *argv[])
         sends <replaceable>term</replaceable> along the port
         <replaceable>conn</replaceable>. Failure is indicated by the return
         value <literal>-1</literal>. A typical usage is:<programlisting>ATBpostEvent(conn, ATmake(button("ok"))).</programlisting></para>
+      </section>
+
+      <section>
+        <title>ATBpostRequest</title>
+
+        <para>Tools can also send synchroneous requests to the ToolBus
+        with:</para>
+
+        <programlisting>ATerm ATBpostRequest(int conn, ATerm request)</programlisting>
+
+        <para>This call will send the given request to the ToolBus and return
+        the response as soon as it arrives.</para>
       </section>
 
       <section xml:id="section.advanced-control-flow">
