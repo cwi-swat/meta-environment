@@ -23,12 +23,8 @@ public class HelloTool extends AbstractJavaTool{
 		System.out.print("rec-terminate received: " + msg);
 	}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 		HelloTool helloTool = new HelloTool();
-		try{
-			helloTool.connect(args);
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
+		helloTool.connect(args);
 	}
 }
