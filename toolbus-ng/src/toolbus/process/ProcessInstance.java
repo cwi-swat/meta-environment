@@ -88,7 +88,7 @@ public class ProcessInstance{
 		return processName;
 	}
 	
-	public void terminate(ATerm msg){
+	public void terminate(){
 		running = false;
 		
 		deregisterCommunicationAtoms(elements);

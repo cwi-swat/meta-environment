@@ -438,7 +438,7 @@ public class ToolBus{
 		Iterator<ProcessInstance> processIterator = new ProcessInstanceIterator(processes);
 		while(processIterator.hasNext()){
 			ProcessInstance pi = processIterator.next();
-			pi.terminate(msg);
+			pi.terminate();
 		}
 		
 		toolInstanceManager.shutDown(msg);
@@ -594,7 +594,7 @@ public class ToolBus{
 						work |= pi.step();
 						if(pi.isTerminated()){
 							processesIterator.remove();
-							pi.terminate(tbfactory.EmptyList);
+							pi.terminate();
 							
 							// Shut down the ToolBus when there are no more running processes left.
 							if(processes.size() == 0) break PROCESSLOOP;

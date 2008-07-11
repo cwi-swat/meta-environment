@@ -267,7 +267,7 @@ public class DebugToolBus extends ToolBus{
 						
 						if(pi.isTerminated()){
 							processesIterator.remove();
-							pi.terminate(tbfactory.EmptyList);
+							pi.terminate();
 							
 							viewer.processInstanceTerminated(pi);
 							
