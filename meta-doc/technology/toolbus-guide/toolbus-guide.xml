@@ -13,7 +13,7 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>Guide to ToolBus Programming</title>
+    <title>docGuide to ToolBus Programming</title>
 
     <authorgroup>
       <author>
@@ -2343,17 +2343,11 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
       follows:</para>
 
       <para><informalequation>
-          <mathphrase><replaceable>y</replaceable><subscript>
-              <replaceable>i</replaceable>
-            </subscript>(<replaceable>t</replaceable>+<symbol
-          role="symbolfont">Δ</symbol><replaceable>t</replaceable>) =
-          <replaceable>F</replaceable>(<replaceable>y</replaceable><subscript>
-              <replaceable>i</replaceable>
-            </subscript>(<replaceable>t</replaceable>),
-          <replaceable>y</replaceable><subscript>
-              <replaceable>i</replaceable>
-            </subscript>(<replaceable>t</replaceable>-<symbol
-          role="symbolfont">Δ</symbol><replaceable>t</replaceable>) ,
+          <mathphrase><replaceable>y</replaceable><subscript><replaceable>i</replaceable></subscript>(<replaceable>t</replaceable>+Δ<replaceable>t</replaceable>)
+          =
+          <replaceable>F</replaceable>(<replaceable>y</replaceable><subscript><replaceable>i</replaceable></subscript>(<replaceable>t</replaceable>),
+          <replaceable>y</replaceable><subscript><replaceable>i</replaceable></subscript>(<replaceable>t</replaceable>-Δ<replaceable>t</replaceable>)
+          ,
           <replaceable>y</replaceable><subscript><replaceable>i</replaceable>-1</subscript>(<replaceable>t</replaceable>),
           <replaceable>y</replaceable><subscript><replaceable>i</replaceable>+1</subscript>(<replaceable>t</replaceable>))</mathphrase>
         </informalequation>In other words, the amplitude at point
@@ -2384,9 +2378,8 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
       <para><informalequation>
           <mathphrase><replaceable>F</replaceable>(<replaceable>z</replaceable><subscript>1</subscript>,<replaceable>z</replaceable><subscript>2</subscript>,<replaceable>z</replaceable><subscript>3</subscript>,<replaceable>z</replaceable><subscript>4</subscript>)
           = 2<replaceable>z</replaceable><subscript>1</subscript>-
-          <replaceable>z</replaceable><subscript>2</subscript> + (c <symbol
-          role="symbolfont">Δ</symbol><replaceable>t</replaceable>/<symbol
-          role="symbolfont">Δ</symbol><replaceable>x)<superscript>2</superscript>
+          <replaceable>z</replaceable><subscript>2</subscript> + (c
+          Δ<replaceable>t</replaceable>/Δ<replaceable>x)<superscript>2</superscript>
           (<replaceable>z</replaceable><subscript>3</subscript> -
           2<replaceable>z</replaceable><subscript>1</subscript>+
           <replaceable>z</replaceable><subscript>4</subscript>)</replaceable></mathphrase>
@@ -3881,15 +3874,15 @@ public PureFactory getFactory(){ ... } <co xml:id="co.AbstractTool.5" />
 public void sendEvent(ATerm aTerm){ ... }  <co xml:base=""
             xml:id="co.AbstractTool.6" />
 
-public ATerm sendRequest(ATerm request){ ... } <co xml:id="???" />
+public ATerm sendRequest(ATerm request){ ... } <co xml:id="co.AbstractTool.7" />
 
-public void disconnect(ATerm aTerm){ ... } <co xml:id="co.AbstractTool.7" />
+public void disconnect(ATerm aTerm){ ... } <co xml:id="co.AbstractTool.8" />
 
 public abstract void receiveAckEvent(ATerm aTerm); <co
-            xml:id="co.AbstractTool.8" />
+            xml:id="co.AbstractTool.9" />
 
 public abstract void receiveTerminate(ATerm aTerm); <co
-            xml:id="co.AbstractTool.9" />
+            xml:id="co.AbstractTool.10" />
 }</programlisting>Notes:</para>
 
       <calloutlist>
