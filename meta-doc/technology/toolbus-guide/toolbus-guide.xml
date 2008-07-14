@@ -2709,14 +2709,15 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
           defines the "well known socket" <replaceable>port_name</replaceable>
           to which all tools temporarily connect in order to set up their own
           private socket that connects them permanently to the ToolBus
-          interpreter. When omitted, socket 8998 will be used.<warning>
+          interpreter. When omitted, socket 8998 will be used in case of the C
+          ToolBus and a random free port in case of the ToolBus NG.<warning>
               <para>Not yet implemented.</para>
             </warning></para>
         </listitem>
       </itemizedlist>
 
       <para>Note that explicit arguments defining the sockets are
-      <emphasis>only</emphasis> needed when several ToolBus interpreters are
+      <emphasis>only</emphasis> needed when several C ToolBus interpreters are
       running simultaneously on the <emphasis>same</emphasis> host
       machine.</para>
     </section>
@@ -2869,7 +2870,7 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
       tool and ToolBus interpreter are both running on the same host (i.e.,
       <literal>host1.institute.nl</literal>). Starting the execution from
       <emphasis>another</emphasis> host is achieved by typing (on, say,
-      <literal>host2.institute.nl</literal>): <programlisting>hello -TB_HOST host1.institute.nl </programlisting></para>
+      <literal>host2.institute.nl</literal>): <programlisting>hello -P8998 -TB_HOST host1.institute.nl </programlisting></para>
     </section>
   </section>
 
