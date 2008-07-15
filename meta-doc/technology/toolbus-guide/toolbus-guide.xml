@@ -5875,10 +5875,6 @@ exports
         <para>Do we describe the global structure of the Java implementation
         (or partially refer to online docs)?</para>
       </listitem>
-
-      <listitem>
-        <para>Describe viewer interface.</para>
-      </listitem>
     </itemizedlist>
 
     <para></para>
