@@ -22,10 +22,9 @@ import javax.swing.table.TableCellRenderer;
  * 
  * revision 1.0
  */
-
-@SuppressWarnings("serial")
 public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
-
+	private static final long serialVersionUID = -1856670516526394234L;
+	
 	private static final ImageIcon ICONS_BREAKPOINT_SOURCE = new ImageIcon("resources/icons/breakpoint_source.png");
 	private static final ImageIcon ICON_BREAKPOINT_SOURCE_TRANSPARANT = new ImageIcon("resources/icons/breakpoint_source_transparant.png");
 	private JCheckBox m_checkBox;
@@ -49,20 +48,20 @@ public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCel
 	 * {@inheritDoc}
 	 */
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        return getComp(Boolean.valueOf(value.toString()));
+        return getComp(Boolean.parseBoolean(value.toString()));
     }
     
 	/**
 	 * {@inheritDoc}
 	 */
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        return getComp(Boolean.valueOf(value.toString()));
+        return getComp(Boolean.parseBoolean(value.toString()));
     }
 
 	/**
 	 * {@inheritDoc}
 	 */
-    private Component getComp(Boolean aBoolean) {
+    private Component getComp(boolean aBoolean) {
         m_checkBox.setSelected(aBoolean);
         return m_checkBox;
     }
@@ -71,6 +70,6 @@ public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCel
 	 * {@inheritDoc}
 	 */
     public Object getCellEditorValue() {
-        return m_checkBox.isSelected();
+        return Boolean.valueOf(m_checkBox.isSelected());
     }
 }

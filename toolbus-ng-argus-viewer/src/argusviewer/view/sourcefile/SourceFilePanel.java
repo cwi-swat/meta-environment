@@ -12,13 +12,14 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+
 import argusviewer.toolbus.DataComm;
 import argusviewer.view.IView;
 
@@ -34,9 +35,9 @@ import argusviewer.view.IView;
  * @author M. van Beest
  *
  */
-@SuppressWarnings("serial")
 public class SourceFilePanel extends JPanel implements TableModelListener, IView {
-
+	private static final long serialVersionUID = 5903220341851733896L;
+	
 	private JTable m_sourceCode; // is used to view the source code
 	private SourceFileTableModel m_sourceModel; // table model used to put objects in JTable  
 	private String m_source; // source code viewed on the current panel 
@@ -92,7 +93,7 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 	    
 	    TableColumn secondColumn = m_sourceCode.getColumnModel().getColumn(SECOND_COLUMN_INDEX);
 	    DefaultTableCellRenderer tcrColumn = new DefaultTableCellRenderer();
-	    tcrColumn.setHorizontalAlignment(JTextField.LEFT);
+	    tcrColumn.setHorizontalAlignment(SwingConstants.LEFT);
 	    secondColumn.setCellRenderer(tcrColumn);
 	    secondColumn.setMaxWidth(SECOND_COLUMN_WIDTH);
 	    
@@ -245,9 +246,8 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
         	
         	m_sourceCode.repaint();
         	return true;
-        } else {
-        	return false;
         }
+        return false;
     }
 
     /**

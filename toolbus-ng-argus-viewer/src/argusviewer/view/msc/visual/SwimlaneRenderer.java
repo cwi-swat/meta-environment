@@ -26,9 +26,7 @@ import argusviewer.view.msc.data.Statement;
  * @author Arne Timmerman
  * @author Roberto van der Linden
  */
-@SuppressWarnings("unchecked")
 public class SwimlaneRenderer extends AbstractMSCRenderer {
-
 	private static final String COLLAPSE_TEXT = "...";
 	private static final int HALF_SWIMLANE_WIDTH = 5;
 	private static final int HALF_SINK_WIDTH = 7;
@@ -134,7 +132,7 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 	 * @return the vertical coordinate of the creation of the entity
 	 */
 	private double getYPosBeginSwimlaneRectangle(VisualItem visualEntity) {
-		int beginTick = (Integer) visualEntity.get(Entity.STARTTICK_FIELDNAME);
+		int beginTick = ((Integer) visualEntity.get(Entity.STARTTICK_FIELDNAME)).intValue();
 
 		// Process are created one tick later than the executed statement
 		int actualBeginTick = beginTick + 1;
@@ -155,7 +153,7 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 	 * @return the vertical coordinate of the destroyement of the entity
 	 */
 	private double getYPosEndSwimlaneRectangle(VisualItem visualEntity) {
-		int endTick = (Integer) visualEntity.get(Entity.ENDTICK_FIELDNAME);
+		int endTick = ((Integer) visualEntity.get(Entity.ENDTICK_FIELDNAME)).intValue();
 
 		double endY;
 		if (endTick > -1) {
@@ -207,7 +205,6 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void render(Graphics2D g, VisualItem item) {
 		super.render(g, item);
 
@@ -251,9 +248,9 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 	 * @param lastTimestamp the timestamp of the previous executed statement
 	 * @return the timestamp that is drawed
 	 */
-	private Integer drawTimestamp(Graphics2D g, VisualItem visualSink, VisualItem statement, Integer lastTimestamp) {
-		Integer timestamp = (Integer) statement.get(Statement.TIMESTAMP_FIELDNAME);
-		String timestampText = timestamp.toString();
+	private int drawTimestamp(Graphics2D g, VisualItem visualSink, VisualItem statement, int lastTimestamp) {
+		int timestamp = ((Integer) statement.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
+		String timestampText = String.valueOf(timestamp);
 
 		float sinkX = (float) visualSink.getX();
 		float xPos;

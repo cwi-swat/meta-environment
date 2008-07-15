@@ -27,8 +27,6 @@ public class MessageLayout extends Layout {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public void run(double frac) {
 		Iterator<VisualItem> visualMessages = m_vis.items(m_group);
 		while (visualMessages.hasNext()) {
@@ -60,7 +58,7 @@ public class MessageLayout extends Layout {
 
 		Point2D sourcePos = null;
 
-		int sourceId = (Integer) item.get(Message.SOURCEID_FIELDNAME);
+		int sourceId = ((Integer) item.get(Message.SOURCEID_FIELDNAME)).intValue();
 
 		VisualItem matchingStatement = MSCVisualizationUtil.getStatement(m_vis, sourceId);
 		

@@ -25,7 +25,7 @@ public class MSCVisualizationUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static boolean isTargetEntityVisible(Visualization visualization, VisualItem currentStatement) {
-		int timestamp = (Integer) currentStatement.get(Statement.TIMESTAMP_FIELDNAME);
+		int timestamp = ((Integer) currentStatement.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
 
 		// Find all messages that are send on this timestamp
 		String searchText = Message.SOURCEID_FIELDNAME + " == " + timestamp;
@@ -62,15 +62,12 @@ public class MSCVisualizationUtil {
 	 * @param timestamp the timestamp of the execution of the statement
 	 * @return the visual representation of the Statement, null if there exists no Statement with the properties
 	 */
-	@SuppressWarnings("unchecked")
 	public static VisualItem getStatement(Visualization visualization, int timestamp) {
-		Iterator statementIterator;
-
-		statementIterator = visualization.items(Statement.TABLE_NAME);
+		Iterator<VisualItem> statementIterator = visualization.items(Statement.TABLE_NAME);
 
 		while (statementIterator.hasNext()) {
-			VisualItem currentStatement = (VisualItem) statementIterator.next();
-			int currentTimestamp = (Integer) currentStatement.get(Statement.TIMESTAMP_FIELDNAME);
+			VisualItem currentStatement = statementIterator.next();
+			int currentTimestamp = ((Integer) currentStatement.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
 
 			if (currentTimestamp == timestamp) {
 				return currentStatement;

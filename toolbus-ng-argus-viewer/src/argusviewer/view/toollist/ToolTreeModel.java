@@ -6,14 +6,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
-
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 
 import toolbus.tool.ToolInstance;
-
 import argusviewer.toolbus.DataComm;
-import argusviewer.util.ToolbusUtil;
+
 import com.sun.java.treetable.example.TreeTableModel;
 
 /**
@@ -22,9 +20,9 @@ import com.sun.java.treetable.example.TreeTableModel;
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-@SuppressWarnings("serial")
 public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
-
+	private static final long serialVersionUID = 966338890140366722L;
+	
 	private final String[] m_columns = { "Visible", "Tool Name", "ID" };
 	private final Class< ? >[] m_classTypes = { Boolean.class,
 			TreeTableModel.class, Integer.class };
@@ -97,11 +95,11 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 		ToolTreeNode node = (ToolTreeNode) o;
 		switch (column) {
 		case VISIBLE_COLUMN:
-			return node.isVisible();
+			return Boolean.valueOf(node.isVisible());
 		case TOOL_COLUMN:
 			return node;
 		case ID_COLUMN:
-			return node.getId();
+			return Integer.valueOf(node.getId());
 		default:
 			// not existing column
 			return null;
@@ -138,7 +136,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 		// FilterListener should be set.
 		if (column == VISIBLE_COLUMN && newValue instanceof Boolean) {
 			ToolTreeNode treeNode = (ToolTreeNode) node;
-			Boolean isVisible = (Boolean) newValue;
+			boolean isVisible = ((Boolean) newValue).booleanValue();
 			treeNode.setVisible(isVisible);
 
 			/**
@@ -289,17 +287,16 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 */
 	public ToolTreeNode findToolTreeNodeByToolInstanceId(ToolTreeNode parent,
 			int toolInstanceId) {
-		if (parent.getId() != null && parent.getId() == toolInstanceId) {
+		if (parent.getId() != -1 && parent.getId() == toolInstanceId) {
 			return parent;
-		} else {
-			Enumeration< ? > children = parent.children();
-			ToolTreeNode foundNode = null;
-			while (children.hasMoreElements() && foundNode == null) {
-				ToolTreeNode child = (ToolTreeNode) children.nextElement();
-				foundNode = findToolTreeNodeByToolInstanceId(child,
-						toolInstanceId);
-			}
-			return foundNode;
 		}
+		Enumeration< ? > children = parent.children();
+		ToolTreeNode foundNode = null;
+		while (children.hasMoreElements() && foundNode == null) {
+			ToolTreeNode child = (ToolTreeNode) children.nextElement();
+			foundNode = findToolTreeNodeByToolInstanceId(child,
+					toolInstanceId);
+		}
+		return foundNode;
 	}	
 }

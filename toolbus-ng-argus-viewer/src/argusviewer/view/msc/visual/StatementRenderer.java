@@ -8,11 +8,12 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-import argusviewer.view.msc.data.Statement;
 
+import prefuse.render.AbstractShapeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.visual.VisualItem;
 import toolbus.StateElement;
+import argusviewer.view.msc.data.Statement;
 
 /**
  * Renderer for Statements in the Message Sequence Chart.
@@ -52,11 +53,8 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected Shape getRawShape(VisualItem item) {
-
-		if (item.canGet(Statement.STATEMENT_FIELDNAME,
-				Statement.STATEMENT_FIELDTYPE)) {
+		if (item.canGet(Statement.STATEMENT_FIELDNAME, Statement.STATEMENT_FIELDTYPE)) {
 			double width;
 
 			String statement = (String) item.get(Statement.STATEMENT_FIELDNAME);
@@ -72,21 +70,15 @@ public class StatementRenderer extends AbstractMSCRenderer {
 
 			if (isASyncCommunication(statement)) {
 				return getParallelogram(position.getX(), position.getY(), width);
-
 			} else if (isSyncCommunication(statement)) {
 				return getSixCorneredShape(position.getX(), position.getY(), width);
-
 			} else if (isToolCommunication(statement)) {
 				return getRoundRectangle(position.getX(), position.getY());
-
 			} else {
 				return getRectangle(position.getX(), position.getY());
 			}
-
-		} else {
-			return null;
 		}
-
+		return null;
 	}
 
 	/**
@@ -220,7 +212,6 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected void drawShape(Graphics2D g, VisualItem item, Shape shape) {
 		super.drawShape(g, item, shape);
 		drawText(g, item, shape);
@@ -229,8 +220,8 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	/**
 	 * Draws the text on the entity
 	 *
-	 * @param g	 Graphics2D used to daw the entity and thus the entity text
-	 * @param item  Item beind drawn
+	 * @param g	 Graphics2D used to draw the entity and thus the entity text
+	 * @param item  Item being drawn
 	 * @param shape Shape
 	 */
 	private void drawText(Graphics2D g, VisualItem item, Shape shape) {
@@ -238,7 +229,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 
 		// Statement Text
 		m_labelRenderer.setMaxTextWidth(shapeWidth - TEXT_MARGIN);
-		m_labelRenderer.setRenderType(LabelRenderer.RENDER_TYPE_NONE);
+		m_labelRenderer.setRenderType(AbstractShapeRenderer.RENDER_TYPE_NONE);
 
 		// Set different size for text
 		double oldSize = item.getSize();

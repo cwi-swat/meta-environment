@@ -3,10 +3,6 @@
  */
 package argusviewer.view.msc.visual;
 
-import prefuse.Constants;
-import prefuse.render.LabelRenderer;
-import prefuse.visual.VisualItem;
-
 import java.awt.BasicStroke;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -14,6 +10,11 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+
+import prefuse.Constants;
+import prefuse.render.AbstractShapeRenderer;
+import prefuse.render.LabelRenderer;
+import prefuse.visual.VisualItem;
 import argusviewer.view.msc.data.Entity;
 
 /**
@@ -80,15 +81,13 @@ public class EntityRenderer extends AbstractMSCRenderer {
 				default:
 					throw new UnsupportedOperationException("Unknown entity type");
 			}
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected void drawShape(Graphics2D g, VisualItem item, Shape shape) {
 		super.drawShape(g, item, shape);
 
@@ -98,8 +97,8 @@ public class EntityRenderer extends AbstractMSCRenderer {
 	/**
 	 * Draws the text on the entity
 	 *
-	 * @param g Graphics2D used to daw the entity and thus the entity text
-	 * @param item Item beind drawn
+	 * @param g Graphics2D used to draw the entity and thus the entity text
+	 * @param item Item behind drawn
 	 * @param shape Shape
 	 */
 	private void drawText(Graphics2D g, VisualItem item, Shape shape) {
@@ -111,7 +110,7 @@ public class EntityRenderer extends AbstractMSCRenderer {
 
 		// Process Id Text
 		m_labelRendererProcessId.setMaxTextWidth(shapeWidth - (int) TEXT_MARGIN);
-		m_labelRendererProcessId.setRenderType(LabelRenderer.RENDER_TYPE_NONE);
+		m_labelRendererProcessId.setRenderType(AbstractShapeRenderer.RENDER_TYPE_NONE);
 		m_labelRendererProcessId.setVerticalAlignment(Constants.TOP);
 		m_labelRendererProcessId.setVerticalPadding(verticalPadding);
 
@@ -123,7 +122,7 @@ public class EntityRenderer extends AbstractMSCRenderer {
 
 		// Process Name Text
 		m_labelRendererProcessName.setMaxTextWidth(shapeWidth - (int) TEXT_MARGIN);
-		m_labelRendererProcessName.setRenderType(LabelRenderer.RENDER_TYPE_NONE);
+		m_labelRendererProcessName.setRenderType(AbstractShapeRenderer.RENDER_TYPE_NONE);
 		m_labelRendererProcessName.setVerticalAlignment(Constants.CENTER);
 
 		m_labelRendererProcessName.setVerticalPadding(verticalPadding);

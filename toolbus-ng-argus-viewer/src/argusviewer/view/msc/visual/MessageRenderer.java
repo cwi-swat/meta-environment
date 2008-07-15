@@ -24,7 +24,6 @@ import prefuse.visual.VisualItem;
  *         Renderer for messages passed between entities.
  *         Note that messages are not drawed if one of the entities is invisible.
  */
-@SuppressWarnings("unchecked")
 public class MessageRenderer extends AbstractShapeRenderer {
 
 	private static final int ARROW_WIDTH = 10;
@@ -40,9 +39,7 @@ public class MessageRenderer extends AbstractShapeRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected Shape getRawShape(VisualItem item) {
-
 		ArrayList<Double> targetXPositions = getTargetXPositions(item);
 		if (targetXPositions.size() == 0) {
 			return null;
@@ -97,9 +94,9 @@ public class MessageRenderer extends AbstractShapeRenderer {
 
 				// Only add target position if the Entity is visible
 				if (matchingEntity.isVisible()) {
-					targetXPositions.add(matchingEntity.getX());
+					targetXPositions.add(new Double(matchingEntity.getX()));
 				} else {
-					targetXPositions.add(EntityLayout.getOutgoingSinkX());
+					targetXPositions.add(new Double(EntityLayout.getOutgoingSinkX()));
 				}
 			}
 

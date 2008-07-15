@@ -15,10 +15,10 @@ import java.awt.Color;
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-@SuppressWarnings("serial")
 public class ToolListView extends JPanel {
+	private static final long serialVersionUID = 7849683181858113173L;
 
-    private ToolTreeTable m_toolTreeTable;
+	private ToolTreeTable m_toolTreeTable;
 
     private static final int VISIBLE_COLUMN_WIDTH = 50;
     private static final int TOOL_NAME_COLUMN_WIDTH = -1;

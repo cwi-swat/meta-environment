@@ -14,9 +14,9 @@ import javax.swing.table.AbstractTableModel;
  * @author Qais & Bas
  *
  */
-@SuppressWarnings("serial")
 public class SourceFileTableModel extends AbstractTableModel {
-
+	private static final long serialVersionUID = -7623082694279943410L;
+	
 	private static final int COLUMN_COUNT = 3;
 	private int m_lineNumbers; 
 	
@@ -49,8 +49,8 @@ public class SourceFileTableModel extends AbstractTableModel {
 				nextLine = firstEndLine;
 			}
 			String firstLine = sourceFile.substring(0, firstEndLine);
-			m_sourceLines[index][breakPointPosition] = false;
-			m_sourceLines[index][sourceCodeLineNumber] = index + 1;
+			m_sourceLines[index][breakPointPosition] = Boolean.FALSE;
+			m_sourceLines[index][sourceCodeLineNumber] = Integer.valueOf(index + 1);
 			firstLine = firstLine.replaceAll("\t", "    "); // object array ignores tab keys  
 			m_sourceLines[index][text] = firstLine;		
 			sourceFile = sourceFile.substring(nextLine, sourceFile.length());
@@ -120,7 +120,7 @@ public class SourceFileTableModel extends AbstractTableModel {
 	public boolean getBreakPoint(int lineNumber) {
 		boolean result = false;
 		if (lineNumber < m_lineNumbers && lineNumber >= 0) {
-			result = (Boolean) m_sourceLines[lineNumber][0];
+			result = ((Boolean) m_sourceLines[lineNumber][0]).booleanValue();
 		}
 		return result;
 	}
@@ -128,8 +128,7 @@ public class SourceFileTableModel extends AbstractTableModel {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	public Class getColumnClass(int c) {
+	public Class<?> getColumnClass(int c) {
 		return getValueAt(0, c).getClass();
 
 	}
@@ -167,7 +166,7 @@ public class SourceFileTableModel extends AbstractTableModel {
 	 */
 	public void setBreakPoint(boolean value, int row) {
 		if (row < m_lineNumbers && row >= 0) {
-			m_sourceLines[row][0] = value;
+			m_sourceLines[row][0] = Boolean.valueOf(value);
 			fireTableCellUpdated(row, 0);
 		}
 	}

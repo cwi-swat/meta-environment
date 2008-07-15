@@ -1,14 +1,14 @@
 package argusviewer.view.toollist;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 /**
  * MouseListener for ToolTree
  *
  * @author Roberto van der Linden
  */
-public class ToolTreeMouseListener implements MouseListener {
+public class ToolTreeMouseListener extends MouseAdapter {
 
 	private ToolTreeTable m_toolTreeTable;
 
@@ -28,29 +28,5 @@ public class ToolTreeMouseListener implements MouseListener {
 	 */
 	public void mouseClicked(MouseEvent e) {
 		m_toolTreeTable.sendClickEvent(e.getClickCount(), e.getX(), e.getY());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void mousePressed(MouseEvent e) {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void mouseExited(MouseEvent e) {
 	}
 }

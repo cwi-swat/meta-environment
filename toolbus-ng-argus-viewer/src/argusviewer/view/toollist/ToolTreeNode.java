@@ -1,7 +1,6 @@
 package argusviewer.view.toollist;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import argusviewer.util.ToolbusUtil;
 
 import toolbus.tool.ToolInstance;
 
@@ -9,11 +8,12 @@ import toolbus.tool.ToolInstance;
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-@SuppressWarnings("serial")
 public class ToolTreeNode extends DefaultMutableTreeNode {
+	private static final long serialVersionUID = 3234422961304199997L;
+	
 	private ToolInstance m_toolInstance;
-	private Boolean m_isVisible;
-	private Boolean m_isRemoved; // items aren't really removed anymore, instead they are set as 'removed' so the items can still be set as visible/invisible even when removed.
+	private boolean m_isVisible;
+	private boolean m_isRemoved; // items aren't really removed anymore, instead they are set as 'removed' so the items can still be set as visible/invisible even when removed.
 
 	/**
 	 * Default Constructor, used create rootNode
@@ -49,11 +49,11 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return the id of the Tool or null is the node is no tool
 	 */
-	public Integer getId() {
+	public int getId() {
 		if (hasToolInstance()) {
 			return m_toolInstance.getToolID();
 		}
-		return null;
+		return -1;
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 		
 		for (int index = 0; index < getChildCount(); index++) {
 			ToolTreeNode node = (ToolTreeNode) getChildAt(index);
-			assert (node.getId() != null); // node must have a tool
+			assert (node.getId() != -1); // node must have a tool
 			
 			if (!node.isRemoved()) {
 				return false;
@@ -110,7 +110,7 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return The visibility of the Tool.
 	 */
-	public Boolean isVisible() {
+	public boolean isVisible() {
 		return m_isVisible;
 	}
 
@@ -119,7 +119,7 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @param isVisible the visibility of the tool.
 	 */
-	public void setVisible(Boolean isVisible) {
+	public void setVisible(boolean isVisible) {
 		this.m_isVisible = isVisible;
 	}
 

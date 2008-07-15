@@ -196,7 +196,7 @@ public class MSCVisualization {
 		ColorAction entityFill = new ColorAction(Entity.TABLE_NAME,
 				VisualItem.FILLCOLOR, ColorLib.color(Color.WHITE));
 		ColorAction swimlaneColor = new ColorAction(ENTITY_SWIMLANE_NAME,
-				DecoratorItem.STROKECOLOR, ColorLib.color(Color.BLACK));
+				VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
 
 		entityFill.add(VisualItem.HIGHLIGHT, RGB_COLOR_ENTITY_HIGHLIGHTED);
 
@@ -320,7 +320,7 @@ public class MSCVisualization {
 	 */
 	private Predicate getTerminatedEntityComparePredicate(boolean terminated) {
 		ColumnExpression msgTypeColExpr = new ColumnExpression(Entity.RUNNING_FIELDNAME);
-		ObjectLiteral msgTypeObjLit = new ObjectLiteral(!terminated);
+		ObjectLiteral msgTypeObjLit = new ObjectLiteral(Boolean.valueOf(!terminated));
 
 		return new ComparisonPredicate(ComparisonPredicate.EQ, msgTypeColExpr, msgTypeObjLit);
 	}
@@ -349,8 +349,8 @@ public class MSCVisualization {
 		VisualItem entity = getEntity(entityType, entityId, false);
 
 		if (entity != null) {
-			entity.set(Entity.RUNNING_FIELDNAME, false);
-			entity.set(Entity.ENDTICK_FIELDNAME, tick);
+			entity.set(Entity.RUNNING_FIELDNAME, Boolean.FALSE);
+			entity.set(Entity.ENDTICK_FIELDNAME, Integer.valueOf(tick));
 			entity.setHighlighted(false);
 		}
 	}
@@ -382,9 +382,8 @@ public class MSCVisualization {
 	 * @param entityType the type of the Entity to highlight
 	 * @param entityName the name of the Entity to highlight
 	 */
-	@SuppressWarnings("unchecked")
 	public void setEntityHighlight(Entity.Type entityType, String entityName) {
-		Iterator entityIterator = m_visualization.visibleItems(Entity.TABLE_NAME);
+		Iterator<VisualItem> entityIterator = m_visualization.visibleItems(Entity.TABLE_NAME);
 
 		removeEntityHighlights();
 
@@ -402,19 +401,18 @@ public class MSCVisualization {
 	/**
 	 * Remove the highlights of all Entities.
 	 */
-	@SuppressWarnings("unchecked")
 	private void removeEntityHighlights() {
 		TupleSet entityTuples = m_visualization.getVisualGroup(Entity.TABLE_NAME);
-		Iterator entityIterator = entityTuples.tuples();
+		Iterator<VisualItem> entityIterator = entityTuples.tuples();
 		while (entityIterator.hasNext()) {
-			VisualItem entity = (VisualItem) entityIterator.next();
+			VisualItem entity = entityIterator.next();
 			entity.setHighlighted(false);
 		}
 	}
 
 	/**
 	 * Get the Visual representation of the visible Entity with
-	 * given properities: type and id.
+	 * given properties: type and id.
 	 *
 	 * @param entityType the type of the Entity, i.e. Entity.Type.TOOL
 	 * @param entityId   the unique identifies of the Entity (per type)
@@ -426,7 +424,7 @@ public class MSCVisualization {
 
 	/**
 	 * Get the Visual representation of the Entity with
-	 * given properities: type and id. By setting visibleEntity to
+	 * given properties: type and id. By setting visibleEntity to
 	 * true this method only searches for visible Entities.
 	 *
 	 * @param entityType	the type of the Entity, i.e. Entity.Type.TOOL
@@ -434,9 +432,8 @@ public class MSCVisualization {
 	 * @param visibleEntity the visibility of the Entity
 	 * @return the visual representation of the Entity, null if there exists no Entity with the properties
 	 */
-	@SuppressWarnings("unchecked")
 	private VisualItem getEntity(Entity.Type entityType, int entityId, boolean visibleEntity) {
-		Iterator entityIterator;
+		Iterator<VisualItem> entityIterator;
 
 		if (visibleEntity) {
 			entityIterator = m_visualization.visibleItems(Entity.TABLE_NAME);
@@ -445,9 +442,9 @@ public class MSCVisualization {
 		}
 
 		while (entityIterator.hasNext()) {
-			VisualItem currentEntity = (VisualItem) entityIterator.next();
+			VisualItem currentEntity = entityIterator.next();
 			Entity.Type currentEntityType = (Entity.Type) currentEntity.get(Entity.TYPE_FIELDNAME);
-			int currentEntityId = (Integer) currentEntity.get(Entity.ID_FIELDNAME);
+			int currentEntityId = ((Integer) currentEntity.get(Entity.ID_FIELDNAME)).intValue();
 
 			if ((currentEntityType == entityType) && (currentEntityId == entityId)) {
 				return currentEntity;

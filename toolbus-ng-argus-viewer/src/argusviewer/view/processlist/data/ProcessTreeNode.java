@@ -23,9 +23,9 @@ import toolbus.process.ProcessInstance;
  * @author R.Schuddeboom
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class ProcessTreeNode extends DefaultMutableTreeNode {
-
+	private static final long serialVersionUID = -1647785404014342231L;
+	
 	private boolean m_hasSourceCodeBreakpoint = false;
 
 	/**
@@ -40,6 +40,7 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * and is visible.
 	 */
 	public ProcessTreeNode() {
+		super();
 	}
 
 	/**
@@ -149,10 +150,9 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 			tree.setItem(null);
 			tree.addChild(item);
 			return tree;
-		} else {
-			parent.addChild(item);
-			return parent;
 		}
+		parent.addChild(item);
+		return parent;
 	}
 
 	/**
@@ -197,13 +197,11 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the name of the TreeNode
 	 */
-	@Override
 	public String toString() {
 		if (isRoot()) {
 			return "Processes";
-		} else {
-			return getProcessName();
 		}
+		return getProcessName();
 	}
 
 	/**
@@ -215,10 +213,9 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	public String getProcessName() {
 		if (m_item != null) {
 			return m_item.getProcessInstanceName();
-		} else {
-			assert (getChildCount() > 0);
-			return ((ProcessTreeNode) getChildAt(0)).getProcessName();
-		} 
+		}
+		assert (getChildCount() > 0);
+		return ((ProcessTreeNode) getChildAt(0)).getProcessName();
 	}
 
 	/**
@@ -409,7 +406,7 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	public void syncSourceCodeBreakpoints(Map<String, Integer> processes) {
 		for (int i = 0; i < this.getChildCount(); i++) {
 			ProcessTreeNode rootChild = (ProcessTreeNode) this.getChildAt(i);
-			int numBreakpoints = processes.get(rootChild.toString()) != null ? processes.get(rootChild.toString()) : 0;
+			int numBreakpoints = processes.get(rootChild.toString()) != null ? processes.get(rootChild.toString()).intValue() : 0;
 			if (numBreakpoints > 0) {
 				rootChild.setSourceCodeBreakpoint(true);
 			} else {

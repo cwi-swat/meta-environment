@@ -16,9 +16,9 @@ import com.sun.java.treetable.example.JTreeTable;
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-@SuppressWarnings("serial")
 public class ToolTreeTable extends JTreeTable {
-
+	private static final long serialVersionUID = 2789153921245474573L;
+	
 	private ToolListController m_toolListController;
 	private ToolTreeModel m_model;
 	
@@ -94,7 +94,7 @@ public class ToolTreeTable extends JTreeTable {
 		for (int i = 0; i < tree.getRowCount(); i++) {
 			ToolTreeNode node = getNodeAtRow(i);
 			if (node != null && !node.isLeaf()) {
-				isExpanded.put(node, tree.isExpanded(i));
+				isExpanded.put(node, Boolean.valueOf(tree.isExpanded(i)));
 			}
 		}
 		m_model.reload();
@@ -104,7 +104,7 @@ public class ToolTreeTable extends JTreeTable {
 			ToolTreeNode node = getNodeAtRow(i);
 			if (node != null && !node.isLeaf()) {
 				//if the node had no expanded state, it will not be expanded
-				boolean expanded = isExpanded.get(node) != null ? isExpanded.get(node) : false; 
+				boolean expanded = isExpanded.get(node) != null && isExpanded.get(node).booleanValue(); 
 				if (expanded) {
 					tree.expandRow(i);
 				}
@@ -146,8 +146,9 @@ public class ToolTreeTable extends JTreeTable {
  * @author Hidde Baggelaar
  *
  */
-@SuppressWarnings("serial")
 class ToolTreeCellRenderer extends DefaultTreeCellRenderer  {
+	private static final long serialVersionUID = -3084040025754474656L;
+	
 	private static final ImageIcon GROUP_ICON = new ImageIcon("resources/icons/group.png");
 	private static final ImageIcon TOOL_ICON = new ImageIcon("resources/icons/tool.png");
 	

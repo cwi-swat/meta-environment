@@ -18,8 +18,9 @@ import argusviewer.view.IView;
  * @author H. Baggelaar
  * @author J. Pol
  */
-@SuppressWarnings("serial")
 public class ProcessListView extends JScrollPane implements IView {
+	private static final long serialVersionUID = -65452864931452871L;
+	
 	private static final String PLUGINNAME = "Process List";
 	private static final String PREFEREDPOSITION = "TopLeft";
 

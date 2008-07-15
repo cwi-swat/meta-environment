@@ -36,8 +36,9 @@ import com.sun.java.treetable.example.TreeTableModel;
  * @author H.Baggelaar
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class ProcessTreeTable extends JTreeTable {
+	private static final long serialVersionUID = -5311053048872523305L;
+	
 	private ProcessTreeModel m_model;
 	private static final int MAXCOLUMNWIDTH = 50;
 	private Logger m_logger = Logger.getLogger(ProcessTreeTable.class);
@@ -135,7 +136,7 @@ public class ProcessTreeTable extends JTreeTable {
 		for (int i = 0; i < tree.getRowCount(); i++) {
 			ProcessTreeNode node = getNodeAtRow(i);
 			if (node != null && !node.isLeaf()) {
-				isExpanded.put(node, tree.isExpanded(i));
+				isExpanded.put(node, Boolean.valueOf(tree.isExpanded(i)));
 			}
 		}
 		m_model.reload();
@@ -145,8 +146,7 @@ public class ProcessTreeTable extends JTreeTable {
 			ProcessTreeNode node = getNodeAtRow(i);
 			if (node != null && !node.isLeaf()) {
 				// if the node had no expanded state, it will not be expanded
-				boolean expanded = isExpanded.get(node) != null ? isExpanded
-						.get(node) : false;
+				boolean expanded = isExpanded.get(node) != null && isExpanded.get(node).booleanValue();
 				if (expanded) {
 					tree.expandRow(i);
 				}
@@ -198,7 +198,6 @@ public class ProcessTreeTable extends JTreeTable {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object getValueAt(int row, int column) {
 		try {
 			return super.getValueAt(row, column);

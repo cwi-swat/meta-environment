@@ -13,13 +13,13 @@ import argusviewer.view.processlist.data.ProcessTreeNode;
  * @author Hidde Baggelaar
  *
  */
-@SuppressWarnings("serial")
 public class ProcessTreeCellRenderer extends DefaultTreeCellRenderer  {
+	private static final long serialVersionUID = -2763392586708582562L;
+	
 	private static final ImageIcon ICON_GROUP = new ImageIcon(
 	"resources/icons/group.png");
 	private static final ImageIcon ICON_PROCESS = new ImageIcon(
 	"resources/icons/process.png");
-
 	
 	/**
 	 * Creates a ProcessTreeCellRenderer

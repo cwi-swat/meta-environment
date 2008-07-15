@@ -27,10 +27,10 @@ import com.sun.java.treetable.example.TreeTableModel;
  * @author H.Baggelaar
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class ProcessTreeModel extends DefaultTreeModel implements
 		TreeTableModel, IProcessInstanceControlListener, IFileBreakPointListener, IProcessFilterListener  {
-
+	private static final long serialVersionUID = -5813021647911033239L;
+	
 	/**
 	 * column information, names and types
 	 */
@@ -119,7 +119,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements
 		case BREAKPOINT_COLUMN:
 			return tree.getBreakPointType();
 		case FILTER_COLUMN:
-			return tree.isVisible();
+			return Boolean.valueOf(tree.isVisible());
 		case INSTANCENAME_COLUMN:
 			return tree;
 		case ID_COLUMN:
@@ -309,7 +309,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements
 	private void breakProcess(ProcessTreeNode node) {
         m_logger.debug("breakProcess");
         boolean isBreaking = node.hasProcessBreakpoint();
-        m_logger.debug(isBreaking);
+        m_logger.debug(Boolean.valueOf(isBreaking));
         node.setProcessBreakpoint(!isBreaking);
 		reloadModel(node);
 	}
