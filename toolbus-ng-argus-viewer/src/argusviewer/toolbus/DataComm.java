@@ -70,23 +70,18 @@ public final class DataComm implements IViewer, IPerformanceMonitor {
 		
 		//intial state toolbus
 		m_debugToolbus.doStop();
-		CommandLine.createCommandLine(m_debugToolbus);
+		CommandLine.createCommandLine(m_debugToolbus, System.in, false);
 		
 		try {
+			m_debugToolbus.parsecup();
+			m_debugToolbus.prepare();
 			
-			if (m_debugToolbus.parsecup()) {		
-			
-				m_toolbusThread = new Thread(new Runnable() {
-					public void run() {					
-						m_debugToolbus.execute();
-					}			
-				});
-				m_toolbusThread.start();
-				
-			} else {				
-				m_debugToolbus = null;
-			}
-		
+			m_toolbusThread = new Thread(new Runnable() {
+				public void run() {					
+					m_debugToolbus.execute();
+				}			
+			});
+			m_toolbusThread.start();
 		} catch (Exception ex) {
 			throw new Exception("Error starting ToolBus.", ex);
 		}
