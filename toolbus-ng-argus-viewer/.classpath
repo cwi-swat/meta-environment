@@ -7,12 +7,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/aterm-java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/toolbus-ng"/>
 	<classpathentry kind="lib" path="lib/dockingwindows-1.5.0.jar"/>
-	<classpathentry kind="lib" path="lib/javahelp-2.0.0.5.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.4.jar"/>
 	<classpathentry kind="lib" path="lib/prefuse-20071021.jar"/>
-	<classpathentry kind="lib" path="lib/SieveGUI.jar"/>
-	<classpathentry kind="lib" path="lib/treetable-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/uispec4j-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/treetable-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/javahelp-2.0.0.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
