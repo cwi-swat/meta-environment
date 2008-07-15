@@ -42,7 +42,7 @@ import aterm.ATermList;
  * @author Jesper Wulffers
  */
 public class ProcessDetailPanel extends JPanel implements IView, IHighlightListener {
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 3494914345486450890L;
 
 	private JTable m_stateTable;
 
