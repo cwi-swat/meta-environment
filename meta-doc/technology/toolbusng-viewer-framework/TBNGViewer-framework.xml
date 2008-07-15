@@ -500,7 +500,7 @@
     Viewer viewer = new Viewer(args);
     DebugToolBus debugToolBus = viewer.getDebugToolBus();
     
-    CommandLine.createCommandLine(debugToolBus); // Enable command line handling for the ToolBus (this is an optional action).
+    CommandLine.createCommandLine(debugToolBus, System.in, false); // Enable command line handling for the ToolBus (this is an optional action).
     
     debugToolBus.doStop(); // Set the initial state to stopped (recommended but not required).
     
