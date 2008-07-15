@@ -357,14 +357,14 @@ public abstract class AbstractTuple implements Tuple {
 	 * {@inheritDoc}
 	 */
 	public void setBoolean(String field, boolean val) {
-		set(field, val);
+		set(field, Boolean.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setBoolean(int col, boolean val) {
-		set(col, boolean.class, val);
+		set(col, boolean.class, Boolean.valueOf(val));
 	}
 
 	/**
@@ -385,7 +385,7 @@ public abstract class AbstractTuple implements Tuple {
 	 * {@inheritDoc}
 	 */
 	public void setDouble(String field, double val) {
-		set(field, val);
+		set(field, new Double(val));
 
 	}
 
@@ -393,7 +393,7 @@ public abstract class AbstractTuple implements Tuple {
 	 * {@inheritDoc}
 	 */
 	public void setDouble(int col, double val) {
-		set(col, double.class, val);
+		set(col, double.class, new Double(val));
 
 	}
 

@@ -6,11 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import argusviewer.view.msc.action.EntityVisibilityFilter;
-import argusviewer.view.msc.data.Entity;
-import argusviewer.view.msc.data.MSCData;
-import argusviewer.view.msc.data.Message;
-import argusviewer.view.msc.data.Statement;
 
 import prefuse.Visualization;
 import prefuse.action.ActionList;
@@ -26,12 +21,16 @@ import prefuse.data.expression.parser.ExpressionParser;
 import prefuse.data.tuple.TupleSet;
 import prefuse.render.DefaultRendererFactory;
 import prefuse.util.ColorLib;
-import prefuse.visual.DecoratorItem;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import toolbus.StateElement;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
+import argusviewer.view.msc.action.EntityVisibilityFilter;
+import argusviewer.view.msc.data.Entity;
+import argusviewer.view.msc.data.MSCData;
+import argusviewer.view.msc.data.Message;
+import argusviewer.view.msc.data.Statement;
 
 /**
  * This class initializes and creates the visualization of
@@ -388,7 +387,7 @@ public class MSCVisualization {
 		removeEntityHighlights();
 
 		while (entityIterator.hasNext()) {
-			VisualItem currentEntity = (VisualItem) entityIterator.next();
+			VisualItem currentEntity = entityIterator.next();
 			Entity.Type currentEntityType = (Entity.Type) currentEntity.get(Entity.TYPE_FIELDNAME);
 			String currentEntityName = (String) currentEntity.get(Entity.NAME_FIELDNAME);
 

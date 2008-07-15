@@ -106,7 +106,7 @@ public class SyncedZoomControl extends AbstractZoomControl {
 	 * @return the scale factor
 	 */
 	protected static double calculateZoom(int verticalMovement) {
-		return 1 + ((double) verticalMovement) / ZOOM_DIVIDER;
+		return 1 + verticalMovement / ZOOM_DIVIDER;
 	}
 
 	/**
