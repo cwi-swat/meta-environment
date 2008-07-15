@@ -180,6 +180,18 @@ public class Functions{
 			}
 		});
 		
+		define(new FunctionDescriptor(tbfactory, "int-to-real", tbfactory.IntType, tbfactory.RealType){
+			public ATerm apply(ATerm args[], ProcessInstance pi){
+				return tbfactory.makeReal(((ATermInt) args[0]).getInt());
+			}
+		});
+		
+		define(new FunctionDescriptor(tbfactory, "real-to-to", tbfactory.RealType, tbfactory.IntType){
+			public ATerm apply(ATerm args[], ProcessInstance pi){
+				return tbfactory.makeInt((int) ((ATermReal) args[0]).getReal());
+			}
+		});
+		
 		// is-var, see method eval
 		// is-result-var, see method eval
 		// TODO: is-formal
