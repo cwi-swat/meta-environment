@@ -1,17 +1,15 @@
 package argusviewer.view.msc.action;
 
-import argusviewer.util.ToolbusUtil;
-import argusviewer.view.msc.data.Entity;
-import aterm.ATerm;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import prefuse.action.GroupAction;
 import prefuse.util.PrefuseLib;
 import prefuse.visual.VisualItem;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
+import argusviewer.view.msc.data.Entity;
 
 /**
  * @author: Arne Timmerman
@@ -39,7 +37,7 @@ public class EntityVisibilityFilter extends GroupAction {
 	public void setVisibleProcesses(List<ProcessInstance> visibleProcessInstances) {
 		m_visibleProcessInstances.clear();
 		for (ProcessInstance processInstance : visibleProcessInstances) {
-			m_visibleProcessInstances.add(processInstance.getProcessId());
+			m_visibleProcessInstances.add(Integer.valueOf(processInstance.getProcessId()));
 		}
 	}
 
@@ -51,29 +49,27 @@ public class EntityVisibilityFilter extends GroupAction {
 	public void setVisibleTools(List<ToolInstance> visibleToolInstances) {
 		m_visibleToolInstances.clear();
 		for (ToolInstance toolInstance : visibleToolInstances) {
-			ATerm toolKey = toolInstance.getToolKey();
-			m_visibleToolInstances.add(ToolbusUtil.getToolIdFromKey(toolKey));
+			int toolId = toolInstance.getToolID();
+			m_visibleToolInstances.add(Integer.valueOf(toolId));
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	@SuppressWarnings("unchecked")
 	public void run(double v) {
-		Iterator items = m_vis.items(Entity.TABLE_NAME);
+		Iterator<VisualItem> items = m_vis.items(Entity.TABLE_NAME);
 
 		while (items.hasNext()) {
-            VisualItem item = (VisualItem) items.next();
+            VisualItem item = items.next();
             Entity.Type entityType = (Entity.Type) item.get(Entity.TYPE_FIELDNAME);
-			int entityId = (Integer) item.get(Entity.ID_FIELDNAME);
+			int entityId = ((Integer) item.get(Entity.ID_FIELDNAME)).intValue();
 
 			boolean entityIsVisible = false;
 			if (entityType == Entity.Type.PROCESS) {
-				entityIsVisible = m_visibleProcessInstances.contains(entityId);
+				entityIsVisible = m_visibleProcessInstances.contains(Integer.valueOf(entityId));
 			} else if (entityType == Entity.Type.TOOL) {
-				entityIsVisible = m_visibleToolInstances.contains(entityId);
+				entityIsVisible = m_visibleToolInstances.contains(Integer.valueOf(entityId));
 			} else if (entityType == Entity.Type.SINK) {
 				entityIsVisible = true;
 			} else {

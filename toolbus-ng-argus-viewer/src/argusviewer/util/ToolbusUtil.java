@@ -33,9 +33,8 @@ public class ToolbusUtil {
 			} catch (NumberFormatException ex) {
 				return -1;
 			}
-		} else {
-			return -1;
 		}
+		return -1;
 	}
 
 	/**
@@ -97,8 +96,7 @@ public class ToolbusUtil {
 
 		if ((msgStartIndex != -1) && (msgEndIndex != -1)) {
 			return stateElement.substring(msgStartIndex + 1, msgEndIndex);
-		} else {
-			return stateElement;
 		}
+		return stateElement;
 	}
 }

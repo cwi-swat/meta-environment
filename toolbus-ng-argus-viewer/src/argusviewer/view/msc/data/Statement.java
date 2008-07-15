@@ -28,7 +28,6 @@ import toolbus.atom.tool.Terminate;
  * @author Johnny Eradus
  *
  */
-@SuppressWarnings("unchecked")
 /*
  * The Prefuse Tuple base class uses the raw 'Class' type,
  * which means this class needs to use it too. We do not want
@@ -39,17 +38,17 @@ public class Statement extends AbstractTuple {
 	private static final int HASH_CODE = 31;
 
 	public static final String STATEMENT_FIELDNAME = "statement";
-	public static final Class STATEMENT_FIELDTYPE = String.class;
+	public static final Class<?> STATEMENT_FIELDTYPE = String.class;
 	public static final String STATEMENT_DEFAULT_VALUE = "";
 	private String m_statement;
 	
 	public static final String PARENTID_FIELDNAME = "parentId";
-	public static final Class PARENTID_FIELDTYPE = String.class;
+	public static final Class<?> PARENTID_FIELDTYPE = String.class;
 	public static final String PARENTID_DEFAULT_VALUE = "";
 	private String m_parentId;
 	
 	public static final String TIMESTAMP_FIELDNAME = "timestamp";
-	public static final Class TIMESTAMP_FIELDTYPE = Integer.class;
+	public static final Class<?> TIMESTAMP_FIELDTYPE = Integer.class;
 	public static final int TIMESTAMP_DEFAULT_VALUE = -1;
 	private int m_timestamp;
 	
@@ -60,7 +59,7 @@ public class Statement extends AbstractTuple {
 		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(STATEMENT_FIELDNAME, STATEMENT_FIELDTYPE, STATEMENT_DEFAULT_VALUE);
 		TABLE_SCHEMA.addColumn(PARENTID_FIELDNAME, PARENTID_FIELDTYPE, PARENTID_DEFAULT_VALUE);
-		TABLE_SCHEMA.addColumn(TIMESTAMP_FIELDNAME, TIMESTAMP_FIELDTYPE, TIMESTAMP_DEFAULT_VALUE);
+		TABLE_SCHEMA.addColumn(TIMESTAMP_FIELDNAME, TIMESTAMP_FIELDTYPE, Integer.valueOf(TIMESTAMP_DEFAULT_VALUE));
 	}
 
 	public static final String[] COLUMNS =
@@ -131,7 +130,7 @@ public class Statement extends AbstractTuple {
 		} else if (field.equals(PARENTID_FIELDNAME)) {
 			return m_parentId;
 		} else if (field.equals(TIMESTAMP_FIELDNAME)) {
-			return m_timestamp;
+			return Integer.valueOf(m_timestamp);
 		}
 
 		return null;
@@ -151,7 +150,7 @@ public class Statement extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(String field) {
+	public Class<?> getColumnType(String field) {
 		if (field.equals(STATEMENT_FIELDNAME)) {
 			return STATEMENT_FIELDTYPE;
 		} else if (field.equals(PARENTID_FIELDNAME)) {
@@ -166,7 +165,7 @@ public class Statement extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(int col) {
+	public Class<?> getColumnType(int col) {
 		if ((0 <= col) && (col < COLUMNS.length)) {
 			return getColumnType(COLUMNS[col]);
 		}
@@ -183,7 +182,7 @@ public class Statement extends AbstractTuple {
 		} else if (field.equals(PARENTID_FIELDNAME)) {
 			return PARENTID_DEFAULT_VALUE;
 		} else if (field.equals(TIMESTAMP_FIELDNAME)) {
-			return TIMESTAMP_DEFAULT_VALUE;
+			return Integer.valueOf(TIMESTAMP_DEFAULT_VALUE);
 		} else {
 			// This shouldn't happen
 			assert false;
@@ -207,7 +206,7 @@ public class Statement extends AbstractTuple {
 		} else if (field.equals(PARENTID_FIELDNAME)) {
 			set(field, PARENTID_DEFAULT_VALUE);
 		} else if (field.equals(TIMESTAMP_FIELDNAME)) {
-			set(field, TIMESTAMP_DEFAULT_VALUE);
+			set(field, Integer.valueOf(TIMESTAMP_DEFAULT_VALUE));
 		}
 	}
 
@@ -223,7 +222,7 @@ public class Statement extends AbstractTuple {
 			} else if (field.equals(PARENTID_FIELDNAME)) {
 				m_parentId = (String) value;
 			} else if (field.equals(TIMESTAMP_FIELDNAME)) {
-				m_timestamp = (Integer) value;
+				m_timestamp = ((Integer) value).intValue();
 			}
 		}
 	}

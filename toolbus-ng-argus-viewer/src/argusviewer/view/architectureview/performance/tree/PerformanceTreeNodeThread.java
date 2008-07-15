@@ -12,8 +12,9 @@ import argusviewer.view.architectureview.performance.ThreadInfo;
  * 
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class PerformanceTreeNodeThread extends PerformanceTreeNode {
+	private static final long serialVersionUID = 5262837229886674693L;
+	
 	private ThreadInfo m_threadInfo;
 
 	/**
@@ -62,7 +63,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 * 
 	 * @return the processor time of the Tool.
 	 */
-	public Integer getProcessorTime() {
+	public int getProcessorTime() {
 		return m_threadInfo.getThreadSystemTime() + m_threadInfo.getThreadUserTime();
 	}
 

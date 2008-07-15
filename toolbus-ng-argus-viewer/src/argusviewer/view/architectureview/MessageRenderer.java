@@ -22,7 +22,6 @@ import prefuse.visual.VisualItem;
  * Renderer for messages passed between process and tools
  * Note that messages are not drawn if one of the processes or tools is invisible.
  */
-@SuppressWarnings("unchecked")
 public class MessageRenderer extends AbstractShapeRenderer {
 
     private final int m_initialArrowWidth  = 8;

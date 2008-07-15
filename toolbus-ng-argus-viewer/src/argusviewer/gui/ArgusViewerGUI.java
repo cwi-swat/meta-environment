@@ -25,6 +25,8 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
+
 import argusviewer.ExceptionReporter;
 import argusviewer.toolbus.DataComm;
 import argusviewer.util.ArgusSettings;
@@ -55,8 +57,8 @@ import net.infonode.util.Direction;
  * @author M. van Beest
  *
  */
-@SuppressWarnings("serial")
 public final class ArgusViewerGUI extends JFrame implements Observer {
+	private static final long serialVersionUID = -3759014389298557476L;
 
 	private static final String WINDOW_TITLE = "Argus Viewer";
 
@@ -120,7 +122,7 @@ public final class ArgusViewerGUI extends JFrame implements Observer {
 	}
 
 	private void initializeGUI() {
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {

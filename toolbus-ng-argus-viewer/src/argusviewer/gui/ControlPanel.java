@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import argusviewer.toolbus.DataComm;
@@ -30,9 +31,10 @@ import argusviewer.view.listeners.IStateControlListener;
  * @author J. van den Bos
  * @author M. van Beest
  */
-@SuppressWarnings("serial")
 public class ControlPanel extends JPanel implements ActionListener,
 		IStateControlListener, ChangeListener {
+	private static final long serialVersionUID = -4188073307544842081L;
+	
 	private JButton m_startButton;
 	private JButton m_stepButton;
 	private JButton m_stopButton;
@@ -82,8 +84,8 @@ public class ControlPanel extends JPanel implements ActionListener,
 		m_statusLabel = new JLabel("waiting");
 		Font f = m_statusLabel.getFont();
 		m_statusLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
-		statusInfoLabel.setVerticalTextPosition(JLabel.CENTER);
-		m_statusLabel.setVerticalTextPosition(JLabel.CENTER);
+		statusInfoLabel.setVerticalTextPosition(SwingConstants.CENTER);
+		m_statusLabel.setVerticalTextPosition(SwingConstants.CENTER);
 		statusPanel.add(statusInfoLabel);
 		statusPanel.add(m_statusLabel);
 
@@ -95,7 +97,7 @@ public class ControlPanel extends JPanel implements ActionListener,
 		m_sliderValueLabel = new JLabel();		
 		controlPanel.add(m_sliderValueLabel);
 
-		m_runSpeedSlider = new JSlider(JSlider.HORIZONTAL, RUN_SPEED_MAX,
+		m_runSpeedSlider = new JSlider(SwingConstants.HORIZONTAL, RUN_SPEED_MAX,
 				RUN_SPEED_MIN, RUN_SPEED_INIT);
 		m_runSpeedSlider.setMajorTickSpacing(RUN_SPEED_SPACING_MAJOR);
 		m_runSpeedSlider.setMinorTickSpacing(RUN_SPEED_SPACING_MINOR);

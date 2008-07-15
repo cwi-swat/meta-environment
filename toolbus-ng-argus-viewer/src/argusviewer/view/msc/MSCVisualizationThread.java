@@ -157,10 +157,9 @@ public class MSCVisualizationThread
 				if (m_receivedWork) {
 					m_state = thread_states.VISUALIZE;
 					break;
-				} else {
-					// Timer timed out but there is nothing to do.
-					m_timer.startTimeoutTimer();
 				}
+				// Timer timed out but there is nothing to do.
+				m_timer.startTimeoutTimer();
 			}
 		}
 		m_timer.stopTimer();
@@ -242,21 +241,21 @@ public class MSCVisualizationThread
 	 * tested.
 	 * @param a The activity to work on
 	 */
-	public void activityScheduled(Activity a) { }
+	public void activityScheduled(Activity a) { /* Left blank intentionally. */ }
 
 	/**
 	 * ActivityListener required function. Intentionally left blank. Thus not
 	 * tested.
 	 * @param a The activity to work on
 	 */
-	public void activityStarted(Activity a) { }
+	public void activityStarted(Activity a) { /* Left blank intentionally. */ }
 
 	/**
 	 * ActivityListener required function. Intentionally left blank. Thus not
 	 * tested.
 	 * @param a The activity to work on
 	 */
-	public void activityStepped(Activity a) { }
+	public void activityStepped(Activity a) { /* Left blank intentionally. */ }
 		
 	/**
 	 * Returns the actual thread which does the running. 

@@ -11,7 +11,7 @@ import prefuse.visual.VisualItem;
 
 /**
  * The layout used to align statements under their corresponding tool or tool.
- * Note that statements are set to invisible if the corresponding entity is invisble.
+ * Note that statements are set to invisible if the corresponding entity is invisible.
  *
  * @author Riccardo Lippolis
  * @author Johnny Eradus

@@ -27,9 +27,9 @@ import argusviewer.util.ArgusSettings;
  * @author Arne Timmerman
  * @author Roberto van der Linden
  */
-@SuppressWarnings("serial")
 final class SettingsDialog extends JDialog implements ActionListener {
-
+	private static final long serialVersionUID = -3076853652280392028L;
+	
 	private static final String FOCUSTITLE = "Message Sequence Chart";
 	private static final String HISTORYTITLE = "History";
 	private static final String TITLE = "Application Settings";

@@ -21,22 +21,22 @@ public class Message extends AbstractTuple {
 	private static final int HASH_CODE = 31;
 
 	public static final String MESSAGE_FIELDNAME = "message";
-	public static final Class MESSAGE_FIELDTYPE = String.class;
+	public static final Class<?> MESSAGE_FIELDTYPE = String.class;
 	public static final String MESSAGE_DEFAULT_VALUE = "";
 	private String m_message;
 
 	public static final String SOURCEID_FIELDNAME = "sourceId";
-	public static final Class SOURCEID_FIELDTYPE = Integer.class;
+	public static final Class<?> SOURCEID_FIELDTYPE = Integer.class;
 	public static final int SOURCEID_DEFAULT_VALUE = -1;
 	private int m_sourceId;
 
 	public static final String TARGETIDS_FIELDNAME = "targetIds";
-	public static final Class TARGETIDS_FIELDTYPE = ArrayList.class;
+	public static final Class<?> TARGETIDS_FIELDTYPE = ArrayList.class;
 	public static final ArrayList<String> TARGETIDS_DEFAULT_VALUE = new ArrayList<String>();
 	private ArrayList<String> m_targetIds;
 
 	public static final String TYPE_FIELDNAME = "type";
-	public static final Class TYPE_FIELDTYPE = Type.class;
+	public static final Class<?> TYPE_FIELDTYPE = Type.class;
 	public static final Type TYPE_DEFAULT_VALUE = Type.TOOLCOMM;
 	private Type m_type;
 
@@ -47,7 +47,7 @@ public class Message extends AbstractTuple {
 	static {
 		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(MESSAGE_FIELDNAME, MESSAGE_FIELDTYPE, MESSAGE_DEFAULT_VALUE);
-		TABLE_SCHEMA.addColumn(SOURCEID_FIELDNAME, SOURCEID_FIELDTYPE, SOURCEID_DEFAULT_VALUE);
+		TABLE_SCHEMA.addColumn(SOURCEID_FIELDNAME, SOURCEID_FIELDTYPE, Integer.valueOf(SOURCEID_DEFAULT_VALUE));
 		TABLE_SCHEMA.addColumn(TARGETIDS_FIELDNAME, TARGETIDS_FIELDTYPE, TARGETIDS_DEFAULT_VALUE);
 		TABLE_SCHEMA.addColumn(TYPE_FIELDNAME, TYPE_FIELDTYPE, TYPE_DEFAULT_VALUE);
 	}
@@ -122,7 +122,7 @@ public class Message extends AbstractTuple {
 		if (field.equals(MESSAGE_FIELDNAME)) {
 			return m_message;
 		} else if (field.equals(SOURCEID_FIELDNAME)) {
-			return m_sourceId;
+			return Integer.valueOf(m_sourceId);
 		} else if (field.equals(TARGETIDS_FIELDNAME)) {
 			return m_targetIds;
 		} else if (field.equals(TYPE_FIELDNAME)) {
@@ -142,7 +142,7 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(String field) {
+	public Class<?> getColumnType(String field) {
 		if (field.equals(MESSAGE_FIELDNAME)) {
 			return MESSAGE_FIELDTYPE;
 		} else if (field.equals(SOURCEID_FIELDNAME)) {
@@ -159,7 +159,7 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(int col) {
+	public Class<?> getColumnType(int col) {
 		return getColumnType(getColumns()[col]);
 	}
 
@@ -170,7 +170,7 @@ public class Message extends AbstractTuple {
 		if (field.equals(MESSAGE_FIELDNAME)) {
 			return MESSAGE_DEFAULT_VALUE;
 		} else if (field.equals(SOURCEID_FIELDNAME)) {
-			return SOURCEID_DEFAULT_VALUE;
+			return Integer.valueOf(SOURCEID_DEFAULT_VALUE);
 		} else if (field.equals(TARGETIDS_FIELDNAME)) {
 			return TARGETIDS_DEFAULT_VALUE;
 		} else if (field.equals(TYPE_FIELDNAME)) {
@@ -203,7 +203,7 @@ public class Message extends AbstractTuple {
 			if (field.equals(MESSAGE_FIELDNAME)) {
 				m_message = (String) value;
 			} else if (field.equals(SOURCEID_FIELDNAME)) {
-				m_sourceId = (Integer) value;
+				m_sourceId = ((Integer) value).intValue();
 			} else if (field.equals(TARGETIDS_FIELDNAME)) {
 				m_targetIds = (ArrayList<String>) value;
 			} else if (field.equals(TYPE_FIELDNAME)) {

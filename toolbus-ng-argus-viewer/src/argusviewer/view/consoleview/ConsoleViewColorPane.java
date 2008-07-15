@@ -19,8 +19,9 @@ import argusviewer.ExceptionReporter;
  * @author M. van Beest
  * 
  */
-@SuppressWarnings("serial")
 public class ConsoleViewColorPane extends JTextPane {
+	private static final long serialVersionUID = -5068136044947455516L;
+	
 	/**
 	 * Appends the text to the component in the given color
 	 * 

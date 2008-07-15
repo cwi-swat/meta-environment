@@ -21,7 +21,7 @@ import prefuse.data.Schema;
 public class Tool extends AbstractTuple {
 
 	public static final String TOOL_FIELDNAME = "tool";
-	public static final Class TOOL_FIELDTYPE = String.class;
+	public static final Class<?> TOOL_FIELDTYPE = String.class;
 	public static final String TOOL_DEFAULT_VALUE = "";
 	private static Logger log = Logger.getLogger(Tool.class);
 	private String m_tool;
@@ -80,7 +80,7 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(String field) {
+	public Class<?> getColumnType(String field) {
 		if (field.equals(TOOL_FIELDNAME)) {
 			return TOOL_FIELDTYPE;
 		}
@@ -91,7 +91,7 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(int col) {
+	public Class<?> getColumnType(int col) {
 		if ((0 <= col) && (col < COLUMNS.length)) {
 			return getColumnType(COLUMNS[col]);
 		}
@@ -105,11 +105,11 @@ public class Tool extends AbstractTuple {
 	public Object getDefault(String field) {
 		if (field.equals(TOOL_FIELDNAME)) {
 			return TOOL_DEFAULT_VALUE;
-		} else {
-			// This shouldn't happen
-			assert false;
-			return null;
 		}
+		
+		// This shouldn't happen
+		assert false;
+		return null;
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class Tool extends AbstractTuple {
 	 * {@inheritDoc}
 	 */
 	public void set(String field, Object value) {
-		Class valueType = value.getClass();
+		Class<?> valueType = value.getClass();
 
 		if ((canSet(field, valueType))
 			&&  (field.equals(TOOL_FIELDNAME))) {

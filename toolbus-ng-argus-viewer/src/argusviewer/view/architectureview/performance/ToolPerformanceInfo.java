@@ -9,12 +9,12 @@ import java.util.Hashtable;
  */
 public class ToolPerformanceInfo {
 
-	private Integer m_toolId;
+	private int m_toolId;
 	private String m_toolName;
 	private String m_toolType;
 	private String m_toolLanguage;
-	private Integer m_toolMemoryHeapUsage;
-	private Integer m_toolMemoryNonHeapUsage;
+	private int m_toolMemoryHeapUsage;
+	private int m_toolMemoryNonHeapUsage;
 
 	private Hashtable<String, ThreadInfo> m_threads = new Hashtable<String, ThreadInfo>();
 
@@ -22,6 +22,7 @@ public class ToolPerformanceInfo {
 	 * default constructor
 	 */
 	public ToolPerformanceInfo() {
+		super();
 	}
 
 	/**
@@ -30,7 +31,7 @@ public class ToolPerformanceInfo {
 	 * @param toolName
 	 *            The name of the tool
 	 */
-	public ToolPerformanceInfo(Integer toolId, String toolName) {
+	public ToolPerformanceInfo(int toolId, String toolName) {
 		this.m_toolId = toolId;
 		this.m_toolName = toolName;
 	}
@@ -40,7 +41,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool Id
 	 */
-	public Integer getToolId() {
+	public int getToolId() {
 		return m_toolId;
 	}
 
@@ -76,7 +77,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool memory heap usage
 	 */
-	public Integer getToolMemoryHeapUsage() {
+	public int getToolMemoryHeapUsage() {
 		return m_toolMemoryHeapUsage;
 	}
 
@@ -85,7 +86,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool memory non heap usage
 	 */
-	public Integer getToolMemoryNonHeapUsage() {
+	public int getToolMemoryNonHeapUsage() {
 		return m_toolMemoryNonHeapUsage;
 	}
 
@@ -104,7 +105,7 @@ public class ToolPerformanceInfo {
 	 * @param toolId
 	 *            Integer
 	 */
-	public void setToolId(Integer toolId) {
+	public void setToolId(int toolId) {
 		m_toolId = toolId;
 	}
 
@@ -144,7 +145,7 @@ public class ToolPerformanceInfo {
 	 * @param toolMemoryHeapUsage
 	 *            Integer
 	 */
-	public void setToolMemoryHeapUsage(Integer toolMemoryHeapUsage) {
+	public void setToolMemoryHeapUsage(int toolMemoryHeapUsage) {
 		m_toolMemoryHeapUsage = toolMemoryHeapUsage;
 	}
 
@@ -154,7 +155,7 @@ public class ToolPerformanceInfo {
 	 * @param toolMemoryNonHeapUsage
 	 *            Integer
 	 */
-	public void setToolMemoryNonHeapUsage(Integer toolMemoryNonHeapUsage) {
+	public void setToolMemoryNonHeapUsage(int toolMemoryNonHeapUsage) {
 		m_toolMemoryNonHeapUsage = toolMemoryNonHeapUsage;
 	}
 

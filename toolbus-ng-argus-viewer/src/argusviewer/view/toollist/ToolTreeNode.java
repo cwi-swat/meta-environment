@@ -51,10 +51,9 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 */
 	public Integer getId() {
 		if (hasToolInstance()) {
-			return ToolbusUtil.getToolIdFromKey(m_toolInstance.getToolKey());
-		} else {
-			return null;
+			return m_toolInstance.getToolID();
 		}
+		return null;
 	}
 
 	/**

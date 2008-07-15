@@ -35,12 +35,10 @@ public class MessageVisibility extends GroupAction {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	@SuppressWarnings("unchecked")
 	public void run(double v) {
-		Iterator items = m_vis.items(Message.TABLE_NAME);
+		Iterator<VisualItem> items = m_vis.items(Message.TABLE_NAME);
         while (items.hasNext()) {
-            VisualItem item = (VisualItem) items.next();
+            VisualItem item = items.next();
             
             String sourceName = (String) item.get(Message.SOURCENAME_FIELDNAME);
             String sourceType = (String) item.get(Message.SOURCETYPE_FIELDNAME);

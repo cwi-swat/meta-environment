@@ -12,9 +12,10 @@ import com.sun.java.treetable.example.TreeTableModel;
  * 
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class PerformanceTreeModel extends DefaultTreeModel implements
 		TreeTableModel {
+	private static final long serialVersionUID = 8705055700027908856L;
+
 	private static final int HUNDRED = 100;
 
 	private final String[] m_columnNames = { "Tool", "ID", "Processor Time",
@@ -75,9 +76,9 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 		case ID_COLUMN:
 			return performanceTreeNode.getToolId();
 		case PROCESSOR_PERCENTAGE_COLUMN:
-			return processorPercentage(performanceTreeNode.getProcessorTime());
+			return Integer.valueOf(processorPercentage(performanceTreeNode.getProcessorTime()));
 		case PROCESSOR_TIME_COLUMN:
-			return performanceTreeNode.getProcessorTime();
+			return Integer.valueOf(performanceTreeNode.getProcessorTime());
 		case MEMORY_HEAP_COLUMN:
 			return performanceTreeNode.getToolMemoryHeapUsage();
 		default:
@@ -96,7 +97,7 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 	 *            for.
 	 * @return the percentage of processor time, compared to all the tools.
 	 */
-	private Integer processorPercentage(Integer toolTime) {
+	private int processorPercentage(int toolTime) {
 		PerformanceTreeNode root = getPerformanceTree();
 		int total = 0;
 		for (int index = 0; index < root.getChildCount(); index++) {
@@ -105,12 +106,12 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 			total += child.getProcessorTime();
 		}
 
-		Float percentage = 0f;
+		float percentage = 0f;
 		if (total > 0) {
 			percentage = (float) toolTime / total;
 			percentage *= HUNDRED;
 		}
-		return percentage.intValue();
+		return (int) percentage;
 	}
 
 	/**
@@ -209,9 +210,8 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 				return !(child.getChildAt(0) instanceof PerformanceTreeNodeThread);
 			}
 			return false;
-		} else {
-			assert false;
-			return false;
 		}
+		assert false;
+		return false;
 	}
 }

@@ -53,8 +53,6 @@ public class ToolbusSingleton  extends AbstractTuple {
 	 * @param type not used
 	 * @return false
 	 */
-	@Override
-	@SuppressWarnings("unchecked")
 	protected boolean isValidNameTypePair(String field, Class type) {
 		return type.equals(TB_FIELDTYPE);
 	}
@@ -64,7 +62,6 @@ public class ToolbusSingleton  extends AbstractTuple {
 	 * @param field not used.
 	 * @param value not used.
 	 */
-	@Override
 	public void set(String field, Object value) {
 		assert false;
 	}

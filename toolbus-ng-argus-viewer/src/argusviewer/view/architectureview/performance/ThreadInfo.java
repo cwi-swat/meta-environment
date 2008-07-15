@@ -7,7 +7,6 @@ package argusviewer.view.architectureview.performance;
  * @author Tigran Kalaidjan
  */
 public class ThreadInfo {
-
 	private String m_threadName;
 	private int m_threadUserTime;
 	private int m_threadSystemTime;
@@ -16,6 +15,7 @@ public class ThreadInfo {
 	 * default constructor
 	 */
 	public ThreadInfo() {
+		super();
 	}
 
 	/**

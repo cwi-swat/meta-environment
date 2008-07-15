@@ -7,7 +7,6 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.apache.log4j.Logger;
 
 import toolbus.StateElement;
@@ -28,7 +27,6 @@ import toolbus.atom.tool.Terminate;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 import argusviewer.toolbus.DataComm;
-import argusviewer.util.ToolbusUtil;
 import argusviewer.view.architectureview.performance.ThreadInfo;
 import argusviewer.view.architectureview.performance.ToolPerformanceInfo;
 import argusviewer.view.architectureview.performance.tree.PerformanceTreeTable;
@@ -57,9 +55,9 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	private Hashtable<ToolInstance, ToolPerformanceInfo> m_toolPerformance = new Hashtable<ToolInstance, ToolPerformanceInfo>();
 	private PerformanceTreeTable m_performanceTreeTable;
 	
-	private static final HashMap< Class, String > SOURCE_OF_STATEMENT;
+	private static final HashMap<Class<?>, String> SOURCE_OF_STATEMENT;
 	static {
-		SOURCE_OF_STATEMENT = new HashMap< Class, String >();
+		SOURCE_OF_STATEMENT = new HashMap<Class<?>, String>();
 		SOURCE_OF_STATEMENT.put(Connect.class, "Tool");
 		SOURCE_OF_STATEMENT.put(DisConnect.class, "Tool");
 		SOURCE_OF_STATEMENT.put(RecVal.class, "Tool");
@@ -205,7 +203,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		// If a message has been sent, add it to the data model
 		Enumeration< String > enumerator = messageReceivers.keys();
 		while (enumerator.hasMoreElements()) {	
-			String targetName = (String) enumerator.nextElement();
+			String targetName = enumerator.nextElement();
 			m_archData.addMessage(new Message(getMessageFromStateElement(executedStatementString), 
 					sourceName, sourceType , targetName, messageReceivers.get(targetName), msgType));
 			m_archView.updateVisualization();
@@ -259,9 +257,8 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 
 		if ((msgStartIndex != -1) && (msgEndIndex != -1)) {
 			return stateElement.substring(msgStartIndex + 1, msgEndIndex);
-		} else {
-			return stateElement;
 		}
+		return stateElement;
 	}
 	
 	/**
@@ -322,7 +319,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 */
 	public void updatePerformance(ToolInstance toolInstance, ATerm term) {
 		if (!m_toolPerformance.containsKey(toolInstance)) {
-			m_toolPerformance.put(toolInstance, new ToolPerformanceInfo(ToolbusUtil.getToolIdFromKey(toolInstance.getToolKey()), toolInstance.getToolName()));
+			m_toolPerformance.put(toolInstance, new ToolPerformanceInfo(toolInstance.getToolID(), toolInstance.getToolName()));
 		} 
 
 		ToolPerformanceInfo info = m_toolPerformance.get(toolInstance);
@@ -336,16 +333,16 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		toolLanguage = (String) getValueFromATerm(toolLanguage, String.class, true);
 
 		String toolMemHeap = "0";
-		Integer toolMemoryHeapUsage = 0;
+		int toolMemoryHeapUsage = 0;
 		String toolMemNonHeap = "0";
-		Integer toolMemoryNonHeapUsage = 0;
+		int toolMemoryNonHeapUsage = 0;
 		
 		if (term.getChildAt(1).getChildCount() == 2) {
 			toolMemHeap = term.getChildAt(1).getChildAt(0).toString();
-			toolMemoryHeapUsage = (Integer) getValueFromATerm(toolMemHeap, Integer.class, false);
+			toolMemoryHeapUsage = ((Integer) getValueFromATerm(toolMemHeap, Integer.class, false)).intValue();
 	
 			toolMemNonHeap = term.getChildAt(1).getChildAt(1).toString();
-			toolMemoryNonHeapUsage = (Integer) getValueFromATerm(toolMemNonHeap, Integer.class, false);
+			toolMemoryNonHeapUsage = ((Integer) getValueFromATerm(toolMemNonHeap, Integer.class, false)).intValue();
 		}
 
 		info.setToolType(toolType);
@@ -365,18 +362,18 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
         	MatchResult result = matcher.toMatchResult();
         	String threadName = (String) getNameFromATerm(result.group());
         	
-        	Integer userTime = 0;
-    		Integer systemTime = 0;
+        	int userTime = 0;
+    		int systemTime = 0;
     		
         	String[] times = ((String) getValueFromATerm(result.group(), String.class, false)).split(",");
     		for (String time : times) {
         		String timeName = (String) getNameFromATerm(time);
 
         		if (timeName.equals("user-time")) {
-        			userTime = (Integer) getValueFromATerm(time, Integer.class, false);
+        			userTime = ((Integer) getValueFromATerm(time, Integer.class, false)).intValue();
         		} else {
         			assert (timeName.equals("system-time"));
-        			systemTime = (Integer) getValueFromATerm(time, Integer.class, false);
+        			systemTime = ((Integer) getValueFromATerm(time, Integer.class, false)).intValue();
         		}
         	}
         	
@@ -412,14 +409,13 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		
 		if (beginIndex == -1 || endIndex == -1) {
 			if (type.equals(Integer.class)) {
-				return 0;
-			} else {
-				return "";
+				return Integer.valueOf(0);
 			}
+			return "";
 		}
 		
 		if (type.equals(Integer.class)) {
-			return Integer.parseInt(aterm.substring(beginIndex + 1, endIndex));
+			return new Integer(aterm.substring(beginIndex + 1, endIndex));
 		} else if (type.equals(String.class)) {
 			return aterm.substring(beginIndex + 1, endIndex);
 		} else {
@@ -429,7 +425,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	
 	/**
 	 * Returns the name from an ATerm
-	 * @param aterm Entire Aterm
+	 * @param aterm Entire ATerm
 	 * @return name
 	 */
 	private Object getNameFromATerm(String aterm) {

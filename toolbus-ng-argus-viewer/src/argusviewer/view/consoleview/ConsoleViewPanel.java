@@ -20,8 +20,9 @@ import argusviewer.view.IView;
  * @author M. van Beest
  *
  */
-@SuppressWarnings("serial")
 public class ConsoleViewPanel extends JPanel implements IView {
+	private static final long serialVersionUID = -5391911104562410731L;
+	
 	public static final String CONSOLE_VIEW_NAME = "Console";
 	public static final String PREFERRED_POSITION = "DownLeft";
 	

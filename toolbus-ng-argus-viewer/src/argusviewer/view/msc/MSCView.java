@@ -31,9 +31,9 @@ import java.awt.geom.Point2D;
  * @author Alexander Bij
  * @author Roberto vd Linden
  */
-@SuppressWarnings("serial")
 public class MSCView extends JPanel {
-
+	private static final long serialVersionUID = -6417187615441155371L;
+	
 	protected static final int FOCUS_ANIMATE_MILLISECONDS = 100;
 	private static final int TOOLTIP_DELAY = 50;
 

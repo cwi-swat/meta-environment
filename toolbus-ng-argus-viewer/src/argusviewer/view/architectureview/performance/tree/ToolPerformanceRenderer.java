@@ -13,9 +13,9 @@ import org.apache.log4j.Logger;
  * 
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class ToolPerformanceRenderer extends DefaultTreeCellRenderer {
-
+	private static final long serialVersionUID = -7191130444201004897L;
+	
 	private static final ImageIcon ICON_GROUP = new ImageIcon(
 			"resources/icons/group.png");
 	private static final ImageIcon ICON_TOOL = new ImageIcon(

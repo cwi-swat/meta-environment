@@ -1,21 +1,9 @@
 package argusviewer.view.msc;
 
-import argusviewer.toolbus.DataComm;
-import argusviewer.util.ArgusSettings;
-import argusviewer.util.ToolbusUtil;
-import argusviewer.view.listeners.IControlListener;
-import argusviewer.view.listeners.IFocusListener;
-import argusviewer.view.listeners.IHighlightListener;
-import argusviewer.view.listeners.IProcessFilterListener;
-import argusviewer.view.listeners.IProcessInstanceControlListener;
-import argusviewer.view.listeners.IToolControlListener;
-import argusviewer.view.listeners.IToolFilterListener;
-import argusviewer.view.msc.data.Entity;
-import argusviewer.view.msc.data.MSCData;
-import argusviewer.view.msc.data.Message;
-import argusviewer.view.msc.data.Statement;
-import argusviewer.view.msc.visual.MSCVisualization;
-import aterm.ATerm;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import prefuse.activity.Activity;
 import prefuse.data.Tuple;
 import prefuse.visual.VisualItem;
@@ -35,10 +23,21 @@ import toolbus.atom.tool.SndKill;
 import toolbus.atom.tool.Terminate;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import argusviewer.toolbus.DataComm;
+import argusviewer.util.ArgusSettings;
+import argusviewer.util.ToolbusUtil;
+import argusviewer.view.listeners.IControlListener;
+import argusviewer.view.listeners.IFocusListener;
+import argusviewer.view.listeners.IHighlightListener;
+import argusviewer.view.listeners.IProcessFilterListener;
+import argusviewer.view.listeners.IProcessInstanceControlListener;
+import argusviewer.view.listeners.IToolControlListener;
+import argusviewer.view.listeners.IToolFilterListener;
+import argusviewer.view.msc.data.Entity;
+import argusviewer.view.msc.data.MSCData;
+import argusviewer.view.msc.data.Message;
+import argusviewer.view.msc.data.Statement;
+import argusviewer.view.msc.visual.MSCVisualization;
 
 /**
  * @author Johnny Eradus
@@ -337,8 +336,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 */
 	protected void addToolMessage(String processId,
 			StateElement executedStateElement) {
-		String toolId = ToolbusUtil
-				.getToolIdFromStateElement(executedStateElement);
+		String toolId = ToolbusUtil.getToolIdFromStateElement(executedStateElement);
 		if (toolId == null) {
 			return;
 		}
@@ -428,11 +426,10 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 *            The tool instance to be added to the MSC
 	 */
 	public void addToolInstance(ToolInstance toolInstance) {
-		int toolId = ToolbusUtil.getToolIdFromKey(toolInstance.getToolKey());
+		int toolId = toolInstance.getToolID();
 		String toolName = toolInstance.getToolName();
 		Entity.Type type = Entity.Type.TOOL;
-		Entity toolEntity = new Entity(toolId, toolName, type, true,
-				m_latestTick);
+		Entity toolEntity = new Entity(toolId, toolName, type, true, m_latestTick);
 
 		m_mscData.addEntity(toolEntity);
 		refreshVisualization();
@@ -474,10 +471,8 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 *            The processInstance to be 'removed'
 	 */
 	public void removeToolInstance(ToolInstance toolInstance) {
-		ATerm toolKey = toolInstance.getToolKey();
-		int toolId = ToolbusUtil.getToolIdFromKey(toolKey);
-		m_mscVisualization.setEntityTerminated(m_latestTick, Entity.Type.TOOL,
-				toolId);
+		int toolId = toolInstance.getToolID();
+		m_mscVisualization.setEntityTerminated(m_latestTick, Entity.Type.TOOL, toolId);
 		refreshVisualization();
 	}
 
@@ -493,8 +488,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * {@inheritDoc}
 	 */
 	public void setFocus(ToolInstance toolInstance) {
-		ATerm toolKey = toolInstance.getToolKey();
-		int toolId = ToolbusUtil.getToolIdFromKey(toolKey);
+		int toolId = toolInstance.getToolID();
 		setEntityFocus(Entity.Type.TOOL, toolId);
 	}
 
@@ -528,8 +522,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 */
 	public void setHighlight(ToolInstance toolInstance) {
 		if (toolInstance != null) {
-			ATerm toolKey = toolInstance.getToolKey();
-			int toolId = ToolbusUtil.getToolIdFromKey(toolKey);
+			int toolId = toolInstance.getToolID();
 			m_mscVisualization.setEntityHighlight(Entity.Type.TOOL, toolId);
 			refreshVisualization();
 		}

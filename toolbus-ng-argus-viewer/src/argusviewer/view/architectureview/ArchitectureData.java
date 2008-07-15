@@ -15,7 +15,6 @@ import prefuse.data.tuple.TupleSet;
  *
  */
 public class ArchitectureData {
-
 	private static Logger log = Logger.getLogger(ArchitectureData.class);
 	private Table m_toolbusSingleton;
 	private Table m_processes;
@@ -125,14 +124,13 @@ public class ArchitectureData {
 	 * already exists in the table
 	 * @param message The Message to be added
 	 */
-	@SuppressWarnings("unchecked")
 	public void addMessage(Message message) {
 		String searchPredicateText = Message.SOURCENAME_FIELDNAME 
 									+ " == '" + message.get(Message.SOURCENAME_FIELDNAME) 
 									+ "' && " + Message.SOURCETYPE_FIELDNAME 
 									+ " == '" + message.get(Message.SOURCETYPE_FIELDNAME) + "'";
 
-		Iterator< Tuple > sourceTuples = m_messages.tuples(ExpressionParser.predicate(searchPredicateText));
+		Iterator<Tuple> sourceTuples = m_messages.tuples(ExpressionParser.predicate(searchPredicateText));
 		boolean alreadyInList = false;
 		while (sourceTuples.hasNext()) {
 			Tuple tup = sourceTuples.next();

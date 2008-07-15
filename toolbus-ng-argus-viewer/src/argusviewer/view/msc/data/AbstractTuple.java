@@ -12,7 +12,6 @@ import prefuse.data.Tuple;
  * @author Riccardo Lippolis
  * 
  */
-@SuppressWarnings("unchecked")
 /*
  * The Prefuse Tuple base class uses the raw 'Class' type,
  * which means this class needs to use it too. We do not want
@@ -157,7 +156,7 @@ public abstract class AbstractTuple implements Tuple {
 	public boolean getBoolean(String field) {
 
 		if (canGetBoolean(field)) {
-			return (Boolean) get(field);
+			return ((Boolean) get(field)).booleanValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Boolean");
@@ -168,7 +167,7 @@ public abstract class AbstractTuple implements Tuple {
 	 */
 	public boolean getBoolean(int col) {
 		if (canGetBoolean(getColumnName(col))) {
-			return (Boolean) get(col);
+			return ((Boolean) get(col)).booleanValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Boolean");
@@ -201,7 +200,7 @@ public abstract class AbstractTuple implements Tuple {
 	 */
 	public double getDouble(String field) {
 		if (canGetDouble(field)) {
-			return (Double) get(field);
+			return ((Double) get(field)).doubleValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Double");
@@ -212,7 +211,7 @@ public abstract class AbstractTuple implements Tuple {
 	 */
 	public double getDouble(int col) {
 		if (canGetDouble(getColumnName(col))) {
-			return (Double) get(col);
+			return ((Double) get(col)).doubleValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Double");
@@ -223,7 +222,7 @@ public abstract class AbstractTuple implements Tuple {
 	 */
 	public float getFloat(String field) {
 		if (canGetFloat(field)) {
-			return (Float) get(field);
+			return ((Float) get(field)).floatValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Float");
@@ -234,7 +233,7 @@ public abstract class AbstractTuple implements Tuple {
 	 */
 	public float getFloat(int col) {
 		if (canGetFloat(getColumnName(col))) {
-			return (Float) get(col);
+			return ((Float) get(col)).floatValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Float");
@@ -245,7 +244,7 @@ public abstract class AbstractTuple implements Tuple {
 	 */
 	public int getInt(String field) {
 		if (canGetInt(field)) {
-			return (Integer) get(field);
+			return ((Integer) get(field)).intValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Integer");
@@ -256,7 +255,7 @@ public abstract class AbstractTuple implements Tuple {
 	 */
 	public int getInt(int col) {
 		if (canGetInt(getColumnName(col))) {
-			return (Integer) get(col);
+			return ((Integer) get(col)).intValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Int");
@@ -267,7 +266,7 @@ public abstract class AbstractTuple implements Tuple {
 	 */
 	public long getLong(String field) {
 		if (canGetLong(field)) {
-			return (Long) get(field);
+			return ((Long) get(field)).longValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Long");
@@ -278,7 +277,7 @@ public abstract class AbstractTuple implements Tuple {
 	 */
 	public long getLong(int col) {
 		if (canGetLong(getColumnName(col))) {
-			return (Long) get(col);
+			return ((Long) get(col)).longValue();
 		}
 
 		throw new ClassCastException("The requested field is not a Long");
@@ -402,42 +401,42 @@ public abstract class AbstractTuple implements Tuple {
 	 * {@inheritDoc}
 	 */
 	public void setFloat(String field, float val) {
-		set(field, val);
+		set(field, new Float(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setFloat(int col, float val) {
-		set(col, float.class, val);
+		set(col, float.class, new Float(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setInt(String field, int val) {
-		set(field, val);
+		set(field, Integer.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setInt(int col, int val) {
-		set(col, int.class, val);
+		set(col, int.class, Integer.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setLong(String field, long val) {
-		set(field, val);
+		set(field, Long.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setLong(int col, long val) {
-		set(col, long.class, val);
+		set(col, long.class, Long.valueOf(val));
 	}
 
 	/**

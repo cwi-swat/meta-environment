@@ -20,8 +20,9 @@ import com.sun.java.treetable.example.TreeTableModel;
  * 
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class PerformanceTreeTable extends JTreeTable {
+	private static final long serialVersionUID = 2898389345356146073L;
+	
 	private PerformanceTreeModel m_model;
 
 	/**

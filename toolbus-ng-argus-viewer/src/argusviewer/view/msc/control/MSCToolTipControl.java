@@ -56,11 +56,10 @@ public class MSCToolTipControl extends ControlAdapter {
 	 * @param message the VisualItem that represents the message
 	 * @return a String representation for a Message ToolTip
 	 */
-	@SuppressWarnings("unchecked")
 	protected String getMessageToolTip(VisualItem message) {
 		m_tooltipContents.delete(0, m_tooltipContents.length());
 
-		int sourceId = (Integer) message.get(Message.SOURCEID_FIELDNAME);
+		int sourceId = ((Integer) message.get(Message.SOURCEID_FIELDNAME)).intValue();
 		VisualItem sourceStatement = MSCVisualizationUtil.getStatement(message.getVisualization(), sourceId);
 
 		String sourceEntity = (String) sourceStatement.get(Statement.PARENTID_FIELDNAME);
@@ -113,7 +112,7 @@ public class MSCToolTipControl extends ControlAdapter {
 	protected String getEntityToolTip(VisualItem entity) {
 		m_tooltipContents.delete(0, m_tooltipContents.length());
 
-		int entityId = (Integer) entity.get(Entity.ID_FIELDNAME);
+		int entityId = ((Integer) entity.get(Entity.ID_FIELDNAME)).intValue();
 		String entityName = (String) entity.get(Entity.NAME_FIELDNAME);
 		Entity.Type entityType = (Entity.Type) entity.get(Entity.TYPE_FIELDNAME);
 

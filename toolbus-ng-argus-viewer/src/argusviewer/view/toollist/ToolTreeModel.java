@@ -253,8 +253,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 */
 	public void removeToolInstance(ToolInstance toolInstance) {
 		ToolTreeNode root = (ToolTreeNode) getRoot();
-		int toolInstanceId = ToolbusUtil.getToolIdFromKey(toolInstance
-				.getToolKey());
+		int toolInstanceId = toolInstance.getToolID();
 
 		ToolTreeNode node = findToolTreeNodeByToolInstanceId(root,
 				toolInstanceId);

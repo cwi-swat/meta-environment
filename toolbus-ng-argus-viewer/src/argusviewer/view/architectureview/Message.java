@@ -25,7 +25,6 @@ import toolbus.atom.tool.Terminate;
  * @author John Franse
  *
  */
-@SuppressWarnings("unchecked")
 /*
  * The Prefuse Tuple base class uses the raw 'Class' type,
  * which means this class needs to use it too. We do not want
@@ -34,32 +33,32 @@ import toolbus.atom.tool.Terminate;
 public class Message extends AbstractTuple {
 
 	public static final String MESSAGE_FIELDNAME = "message";
-	public static final Class MESSAGE_FIELDTYPE = String.class;
+	public static final Class<?> MESSAGE_FIELDTYPE = String.class;
 	public static final String MESSAGE_DEFAULT_VALUE = "";
 	private String m_message;
 	
 	public static final String SOURCENAME_FIELDNAME = "sourceName";
-	public static final Class SOURCENAME_FIELDTYPE = String.class;
+	public static final Class<?> SOURCENAME_FIELDTYPE = String.class;
 	public static final String SOURCENAME_DEFAULT_VALUE = "";
 	private String m_sourceName;
 	
 	public static final String SOURCETYPE_FIELDNAME = "sourceType";
-	public static final Class SOURCETYPE_FIELDTYPE = String.class;
+	public static final Class<?> SOURCETYPE_FIELDTYPE = String.class;
 	public static final String SOURCETYPE_DEFAULT_VALUE = "";
 	private String m_sourceType;
 	
 	public static final String TARGETNAME_FIELDNAME = "targetName";
-	public static final Class TARGETNAME_FIELDTYPE = String.class;
+	public static final Class<?> TARGETNAME_FIELDTYPE = String.class;
 	public static final String TARGETNAME_DEFAULT_VALUE = "";
 	private String m_targetName;
 	
 	public static final String TARGETTYPE_FIELDNAME = "targetType";
-	public static final Class TARGETTYPE_FIELDTYPE = String.class;
+	public static final Class<?> TARGETTYPE_FIELDTYPE = String.class;
 	public static final String TARGETTYPE_DEFAULT_VALUE = "";
 	private String m_targetType;
 	
 	public static final String TYPE_FIELDNAME = "type";
-	public static final Class TYPE_FIELDTYPE = Type.class;
+	public static final Class<?> TYPE_FIELDTYPE = Type.class;
 	public static final Type TYPE_DEFAULT_VALUE = Type.TOOLCOMM;
 	private Type m_type;
 	

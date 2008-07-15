@@ -9,8 +9,9 @@ import javax.swing.JSplitPane;
  * 
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class ArchitectureSplitPane extends JSplitPane {
+	private static final long serialVersionUID = 7067976447074964309L;
+	
 	private static final int INITIAL_DIVIDER_LOCATION = 300;
 
 	/**

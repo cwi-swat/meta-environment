@@ -1,13 +1,13 @@
 package argusviewer.view.msc.control;
 
-import prefuse.Display;
-import prefuse.visual.VisualItem;
-import prefuse.controls.AbstractZoomControl;
-import prefuse.controls.PanControl;
-import prefuse.util.ui.UILib;
-
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+
+import prefuse.Display;
+import prefuse.controls.AbstractZoomControl;
+import prefuse.controls.Control;
+import prefuse.util.ui.UILib;
+import prefuse.visual.VisualItem;
 
 /**
  * @author: Arne Timmerman
@@ -16,7 +16,7 @@ public class SyncedZoomControl extends AbstractZoomControl {
 
 	private Display m_synchronizedDisplay;
 
-	protected static final int MOUSE_ZOOM_BUTTON = PanControl.RIGHT_MOUSE_BUTTON;
+	protected static final int MOUSE_ZOOM_BUTTON = Control.RIGHT_MOUSE_BUTTON;
 	private static final double ZOOM_DIVIDER = 100.0;
 
 	protected Point2D m_zoomCenter = new Point2D.Float();

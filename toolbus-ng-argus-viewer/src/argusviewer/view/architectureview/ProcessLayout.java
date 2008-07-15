@@ -22,7 +22,6 @@ import prefuse.visual.VisualItem;
  *
  */
 public class ProcessLayout extends Layout {
-
 	private static final int MARGIN = 30;
 	private static final int HORIZONTAL_STEP = 90;
 	private static final int VERTICAL_STEP = 90;

@@ -37,6 +37,7 @@ public class ToolRenderer extends AbstractArchitectureRenderer {
 	 * Default Constructor ToolRenderer
 	 */
 	public ToolRenderer() {
+		super();
 	}
 
 	/**
@@ -87,7 +88,7 @@ public class ToolRenderer extends AbstractArchitectureRenderer {
 		Visualization vis = item.getVisualization();
 		
 		TupleSet toolbusSingleton = vis.getVisualGroup(ToolbusSingleton.TABLE_NAME);
-		Iterator< Tuple > toolbusSingletonIterator = toolbusSingleton.tuples();
+		Iterator<Tuple> toolbusSingletonIterator = toolbusSingleton.tuples();
 		if (toolbusSingletonIterator.hasNext()) {
 			VisualItem singleton = vis.getVisualItem(ToolbusSingleton.TABLE_NAME, toolbusSingletonIterator.next());
 			

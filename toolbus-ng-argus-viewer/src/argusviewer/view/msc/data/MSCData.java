@@ -144,8 +144,8 @@ public class MSCData {
 		}
 		
 		Tuple first = messagesList.getFirst();
-		int msgTimestamp = (Integer) first.get(Message.SOURCEID_FIELDNAME); 
-		int stmTimestamp = (Integer) stmTuple.get(Statement.TIMESTAMP_FIELDNAME);
+		int msgTimestamp = ((Integer) first.get(Message.SOURCEID_FIELDNAME)).intValue(); 
+		int stmTimestamp = ((Integer) stmTuple.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
  
 		if (msgTimestamp == stmTimestamp) {
 

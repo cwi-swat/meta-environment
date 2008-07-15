@@ -18,7 +18,7 @@ public class ProcessorRenderer implements TableCellRenderer {
 	 */
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
-		Integer processor = (Integer) value;
+		int processor = ((Integer) value).intValue();
 
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setValue(processor);

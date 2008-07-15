@@ -12,7 +12,6 @@ import prefuse.data.Schema;
  * @author Tigran Kalaidjan
  * 
  */
-@SuppressWarnings("unchecked")
 /*
  * The Prefuse Tuple base class uses the raw 'Class' type,
  * which means this class needs to use it too. We do not want
@@ -23,33 +22,33 @@ public class Entity extends AbstractTuple {
 	private static final int HASH_CODE = 31;
 
 	public static final String ID_FIELDNAME = "id";
-	public static final Class ID_FIELDTYPE = Integer.class;
+	public static final Class<?> ID_FIELDTYPE = Integer.class;
 	public static final int ID_DEFAULT_VALUE = -1;
 	private int m_id;
 	
 	public static final String NAME_FIELDNAME = "name";
-	public static final Class NAME_FIELDTYPE = String.class;
+	public static final Class<?> NAME_FIELDTYPE = String.class;
 	public static final String NAME_DEFAULT_VALUE = "";
 	private String m_name;
 	
 	public static final String TYPE_FIELDNAME = "type";
-	public static final Class TYPE_FIELDTYPE = Entity.Type.class;
+	public static final Class<?> TYPE_FIELDTYPE = Entity.Type.class;
 	public static final Entity.Type TYPE_DEFAULT_VALUE = Entity.Type.PROCESS;
 	private Type m_type;
 	
 	public static final String RUNNING_FIELDNAME = "running";
-	public static final Class RUNNING_FIELDTYPE = Boolean.class;
-	public static final Boolean RUNNING_DEFAULT_VALUE = true;
+	public static final Class<?> RUNNING_FIELDTYPE = Boolean.class;
+	public static final boolean RUNNING_DEFAULT_VALUE = true;
 	private boolean m_running;
 
 	public static final String STARTTICK_FIELDNAME = "starttick";
-	public static final Class STARTTICK_FIELDTYPE = Integer.class;
-	public static final Integer STARTTICK_DEFAULT_VALUE = -1;
+	public static final Class<?> STARTTICK_FIELDTYPE = Integer.class;
+	public static final int STARTTICK_DEFAULT_VALUE = -1;
 	private int m_startTick;
 
 	public static final String ENDTICK_FIELDNAME = "endtick";
-	public static final Class ENDTICK_FIELDTYPE = Integer.class;
-	public static final Integer ENDTICK_DEFAULT_VALUE = -1;
+	public static final Class<?> ENDTICK_FIELDTYPE = Integer.class;
+	public static final int ENDTICK_DEFAULT_VALUE = -1;
 	private int m_endTick;
 
 	public static final String TABLE_NAME = "entities";
@@ -57,12 +56,12 @@ public class Entity extends AbstractTuple {
 	public static final Schema TABLE_SCHEMA;
 	static {
 		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
-		TABLE_SCHEMA.addColumn(ID_FIELDNAME, ID_FIELDTYPE, ID_DEFAULT_VALUE);
+		TABLE_SCHEMA.addColumn(ID_FIELDNAME, ID_FIELDTYPE, Integer.valueOf(ID_DEFAULT_VALUE));
 		TABLE_SCHEMA.addColumn(NAME_FIELDNAME, NAME_FIELDTYPE, NAME_DEFAULT_VALUE);
 		TABLE_SCHEMA.addColumn(TYPE_FIELDNAME, TYPE_FIELDTYPE, TYPE_DEFAULT_VALUE);
-		TABLE_SCHEMA.addColumn(RUNNING_FIELDNAME, RUNNING_FIELDTYPE, RUNNING_DEFAULT_VALUE);
-		TABLE_SCHEMA.addColumn(STARTTICK_FIELDNAME, STARTTICK_FIELDTYPE, STARTTICK_DEFAULT_VALUE);
-		TABLE_SCHEMA.addColumn(ENDTICK_FIELDNAME, ENDTICK_FIELDTYPE, ENDTICK_DEFAULT_VALUE);
+		TABLE_SCHEMA.addColumn(RUNNING_FIELDNAME, RUNNING_FIELDTYPE, Boolean.valueOf(RUNNING_DEFAULT_VALUE));
+		TABLE_SCHEMA.addColumn(STARTTICK_FIELDNAME, STARTTICK_FIELDTYPE, Integer.valueOf(STARTTICK_DEFAULT_VALUE));
+		TABLE_SCHEMA.addColumn(ENDTICK_FIELDNAME, ENDTICK_FIELDTYPE, Integer.valueOf(ENDTICK_DEFAULT_VALUE));
 	}
 	
 	public static final String[] COLUMNS = {ID_FIELDNAME, NAME_FIELDNAME, TYPE_FIELDNAME, RUNNING_FIELDNAME, STARTTICK_FIELDNAME, ENDTICK_FIELDNAME};
@@ -120,17 +119,17 @@ public class Entity extends AbstractTuple {
 	 */
 	public Object get(String field) {
 		if (field.equals(ID_FIELDNAME)) {
-			return m_id;
+			return Integer.valueOf(m_id);
 		} else if (field.equals(NAME_FIELDNAME)) {
 			return m_name;
 		} else if (field.equals(TYPE_FIELDNAME)) {
 			return m_type;
 		} else if (field.equals(RUNNING_FIELDNAME)) {
-			return m_running;
+			return Boolean.valueOf(m_running);
 		} else if (field.equals(STARTTICK_FIELDNAME)) {
-			return m_startTick;
+			return Integer.valueOf(m_startTick);
 		} else if (field.equals(ENDTICK_FIELDNAME)) {
-			return m_endTick;
+			return Integer.valueOf(m_endTick);
 		}
 
 		return null;
@@ -150,7 +149,7 @@ public class Entity extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(String field) {
+	public Class<?> getColumnType(String field) {
 		if (field.equals(ID_FIELDNAME)) {
 			return ID_FIELDTYPE;
 		} else if (field.equals(NAME_FIELDNAME)) {
@@ -171,7 +170,7 @@ public class Entity extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(int col) {
+	public Class<?> getColumnType(int col) {
 		if ((0 <= col) && (col < COLUMNS.length)) {
 			return getColumnType(COLUMNS[col]);
 		}
@@ -184,17 +183,17 @@ public class Entity extends AbstractTuple {
 	 */
 	public Object getDefault(String field) {
 		if (field.equals(ID_FIELDNAME)) {
-			return ID_DEFAULT_VALUE;
+			return Integer.valueOf(ID_DEFAULT_VALUE);
 		} else if (field.equals(NAME_FIELDNAME)) {
 			return NAME_DEFAULT_VALUE;
 		} else if (field.equals(TYPE_FIELDNAME)) {
 			return TYPE_DEFAULT_VALUE;
 		} else if (field.equals(RUNNING_FIELDNAME)) {
-			return RUNNING_DEFAULT_VALUE;
+			return Boolean.valueOf(RUNNING_DEFAULT_VALUE);
 		} else if (field.equals(STARTTICK_FIELDNAME)) {
-			return STARTTICK_DEFAULT_VALUE;
+			return Integer.valueOf(STARTTICK_DEFAULT_VALUE);
 		} else if (field.equals(ENDTICK_FIELDNAME)) {
-			return ENDTICK_DEFAULT_VALUE;
+			return Integer.valueOf(ENDTICK_DEFAULT_VALUE);
 		}
 
 		return null;
@@ -212,17 +211,17 @@ public class Entity extends AbstractTuple {
 	 */
 	public void revertToDefault(String field) {
 		if (field.equals(ID_FIELDNAME)) {
-			set(field, ID_DEFAULT_VALUE);
+			set(field, Integer.valueOf(ID_DEFAULT_VALUE));
 		} else if (field.equals(NAME_FIELDNAME)) {
 			set(field, NAME_DEFAULT_VALUE);
 		} else if (field.equals(TYPE_FIELDNAME)) {
 			set(field, TYPE_DEFAULT_VALUE);
 		} else if (field.equals(RUNNING_FIELDNAME)) {
-			set(field, RUNNING_DEFAULT_VALUE);
+			set(field, Boolean.valueOf(RUNNING_DEFAULT_VALUE));
 		} else if (field.equals(STARTTICK_FIELDNAME)) {
-			set(field, STARTTICK_DEFAULT_VALUE);
+			set(field, Integer.valueOf(STARTTICK_DEFAULT_VALUE));
 		} else if (field.equals(ENDTICK_FIELDNAME)) {
-			set(field, ENDTICK_DEFAULT_VALUE);
+			set(field, Integer.valueOf(ENDTICK_DEFAULT_VALUE));
 		}
 	}
 
@@ -230,21 +229,21 @@ public class Entity extends AbstractTuple {
 	 * {@inheritDoc}
 	 */
 	public void set(String field, Object value) {
-		Class valueType = value.getClass();
+		Class<?> valueType = value.getClass();
 
 		if (canSet(field, valueType)) {
 			if (field.equals(ID_FIELDNAME)) {
-				m_id = (Integer) value;
+				m_id = ((Integer) value).intValue();
 			} else if (field.equals(NAME_FIELDNAME)) {
 				m_name = (String) value;
 			} else if (field.equals(TYPE_FIELDNAME)) {
 				m_type = (Entity.Type) value;
 			} else if (field.equals(RUNNING_FIELDNAME)) {
-				m_running = (Boolean) value;
+				m_running = ((Boolean) value).booleanValue();
 			} else if (field.equals(STARTTICK_FIELDNAME)) {
-				m_startTick = (Integer) value;
+				m_startTick = ((Integer) value).intValue();
 			} else if (field.equals(ENDTICK_FIELDNAME)) {
-				m_endTick = (Integer) value;
+				m_endTick = ((Integer) value).intValue();
 			}
 		}
 	}

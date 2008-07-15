@@ -35,9 +35,8 @@ import prefuse.visual.expression.InGroupPredicate;
  * @author John Franse
  * @author Tigran Kalaidjan
  */
-
-@SuppressWarnings({ "serial", "unchecked" })
 public class ArchitectureView extends JPanel {
+	private static final long serialVersionUID = 2560820747109793313L;
 
 	private ArchitectureData m_archData;
 	

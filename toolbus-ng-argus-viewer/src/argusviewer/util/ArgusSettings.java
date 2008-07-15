@@ -132,7 +132,6 @@ public final class ArgusSettings {
 	 * 
 	 * @param fileName the file to read the settings object from
 	 */
-	@SuppressWarnings("unchecked") //Unchecked casts are suppressed because of the casting of an Object to the HashMap
 	private void readFromFile(String fileName) {		
 		try {
 			FileInputStream input = new FileInputStream(fileName);

@@ -296,12 +296,12 @@ public class ControlSync {
 	public List<ProcessInstance> getProcesses() {
 		if (!isToolbusTerminated()) {
 			return m_debugToolBus.getProcesses();
-		} else {
-			// toolbus is not active, so we return an empty processlist.
-			// if we ask the toolbus for processes, we get the last active processes
-			// even when the toolbus is not active.
-			return new ArrayList<ProcessInstance>();
 		}
+		
+		// toolbus is not active, so we return an empty processlist.
+		// if we ask the toolbus for processes, we get the last active processes
+		// even when the toolbus is not active.
+		return new ArrayList<ProcessInstance>();
 	}
 
     /**

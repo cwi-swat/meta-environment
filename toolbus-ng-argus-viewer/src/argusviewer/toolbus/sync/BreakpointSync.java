@@ -22,7 +22,6 @@ import toolbus.viewer.DebugToolBus;
  * @author M. van Beest
  */
 public class BreakpointSync {
-
 	private List<ProcessInstance> m_breakPointsProcInst;
 	private Map<String, List<Integer>> m_breakPointsFileNameLineNum;
 
@@ -79,8 +78,7 @@ public class BreakpointSync {
      */
 	public void addBreakpoint(String fileName, int lineNumber) {
 		if (m_breakPointsFileNameLineNum.containsKey(fileName)
-				&& m_breakPointsFileNameLineNum.get(fileName).contains(
-						lineNumber)) {
+				&& m_breakPointsFileNameLineNum.get(fileName).contains(Integer.valueOf(lineNumber))) {
 			ExceptionReporter.report("Could not add breakpoint: already added.");
 		} else {
 			m_debugToolbus.addSourceCodeBreakPoint(fileName, lineNumber);
@@ -88,10 +86,10 @@ public class BreakpointSync {
 			addSourceCodeBreakpoint(processName);
 
 			if (m_breakPointsFileNameLineNum.containsKey(fileName)) {
-				m_breakPointsFileNameLineNum.get(fileName).add(lineNumber);
+				m_breakPointsFileNameLineNum.get(fileName).add(Integer.valueOf(lineNumber));
 			} else {
 				ArrayList<Integer> lineNumbers = new ArrayList<Integer>();
-				lineNumbers.add(lineNumber);
+				lineNumbers.add(Integer.valueOf(lineNumber));
 				m_breakPointsFileNameLineNum.put(fileName, lineNumbers);
 			}
 
@@ -129,19 +127,19 @@ public class BreakpointSync {
 		//How many breakpoints are there?
 		int numBreakpoints = 0;
 		if (m_breakpoints.containsKey(processname)) {
-			numBreakpoints += m_breakpoints.get(processname);
+			numBreakpoints += m_breakpoints.get(processname).intValue();
 		}
 		
 		//Add one breakpoint
 		numBreakpoints++;
 		
-		m_breakpoints.put(processname, numBreakpoints);		
+		m_breakpoints.put(processname, Integer.valueOf(numBreakpoints));		
 	}
 	
 	private void removeSourceCodeBreakpoint(String processname) {
 		//How many breakpoints are there?
 		assert (m_breakpoints.containsKey(processname));		
-		int numBreakpoints = m_breakpoints.get(processname);		
+		int numBreakpoints = m_breakpoints.get(processname).intValue();		
 		assert (numBreakpoints > 0);
 		
 		//Remove one breakpoint
@@ -150,7 +148,7 @@ public class BreakpointSync {
 		if (numBreakpoints == 0) {
 			m_breakpoints.remove(processname);
 		} else {
-			m_breakpoints.put(processname, numBreakpoints);
+			m_breakpoints.put(processname, Integer.valueOf(numBreakpoints));
 		}
 	}
 
@@ -188,8 +186,7 @@ public class BreakpointSync {
      */
 	public void removeBreakpoint(String fileName, int lineNumber) {
 		if (m_breakPointsFileNameLineNum.containsKey(fileName)
-				&& m_breakPointsFileNameLineNum.get(fileName).contains(
-						lineNumber)) {
+				&& m_breakPointsFileNameLineNum.get(fileName).contains(Integer.valueOf(lineNumber))) {
 			if (m_breakPointsFileNameLineNum.containsKey(fileName)) {
 
 				m_breakPointsFileNameLineNum.get(fileName).remove(

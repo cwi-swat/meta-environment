@@ -1,11 +1,12 @@
 package argusviewer.view.msc.control;
 
+import java.awt.event.MouseEvent;
+
 import prefuse.Display;
+import prefuse.controls.Control;
 import prefuse.controls.PanControl;
 import prefuse.util.ui.UILib;
 import prefuse.visual.VisualItem;
-
-import java.awt.event.MouseEvent;
 
 /**
  * Mouse Pan Control that optionally synchronizes Horizontal Panning to another Display.
@@ -20,7 +21,7 @@ public class HorizontalSyncedPanControl extends PanControl {
 	private int m_horizontalMouseDownPosition;
 	private int m_verticalMouseDownPosition;
 
-	protected static final int MOUSE_PANNING_BUTTON = PanControl.LEFT_MOUSE_BUTTON;
+	protected static final int MOUSE_PANNING_BUTTON = Control.LEFT_MOUSE_BUTTON;
 
 	/**
 	 * Create a Pan Control that allows Mouse Panning of the attached Display,

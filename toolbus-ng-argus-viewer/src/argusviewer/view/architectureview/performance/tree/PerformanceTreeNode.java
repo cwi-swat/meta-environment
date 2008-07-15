@@ -20,8 +20,9 @@ import argusviewer.view.architectureview.performance.ToolPerformanceInfo;
  * 
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class PerformanceTreeNode extends DefaultMutableTreeNode {
+	private static final long serialVersionUID = -3321070191695703729L;
+	
 	private ToolPerformanceInfo m_toolPerformanceInfo;
 
 	/**
@@ -29,6 +30,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * {@link ToolPerformanceInfo} attached.
 	 */
 	public PerformanceTreeNode() {
+		super();
 	}
 
 	/**
@@ -126,9 +128,8 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	public String getToolId() {
 		if (hasToolPerformanceInfo()) {
 			return "" + m_toolPerformanceInfo.getToolId();
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	/**
@@ -139,14 +140,13 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	public String getToolName() {
 		if (hasToolPerformanceInfo()) {
 			return m_toolPerformanceInfo.getToolName();
-		} else {
-			if (getChildCount() > 0) {
-				PerformanceTreeNode child = (PerformanceTreeNode) getFirstChild();
-				return child.getToolName();
-			}
-			// ever possible?;
-			return null;
 		}
+		if (getChildCount() > 0) {
+			PerformanceTreeNode child = (PerformanceTreeNode) getFirstChild();
+			return child.getToolName();
+		}
+		// ever possible?;
+		return null;
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 *            The amount of memory usage in KiloBytes.
 	 * @return readable representation of memory usage.
 	 */
-	private String formatMemory(Integer memory) {
+	private String formatMemory(int memory) {
 		String formatted = NumberFormat.getNumberInstance().format(memory);
 		formatted = formatted + " K";
 		return formatted;
@@ -227,7 +227,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the processor time of the Tool.
 	 */
-	public Integer getProcessorTime() {
+	public int getProcessorTime() {
 		int processorTime = 0;
 		if (hasToolPerformanceInfo()) {
 			for (ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads()
@@ -250,13 +250,11 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the name of the {@link PerformanceTreeNode}
 	 */
-	@Override
 	public String toString() {
 		if (isRoot()) {
 			return "Tools";
-		} else {
-			return getToolName();
 		}
+		return getToolName();
 	}
 
 	/**
