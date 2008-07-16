@@ -1,7 +1,7 @@
 package toolbus.exceptions;
 
 public class NoSuchProcessDefinitionException extends ToolBusError{
-	private static final long serialVersionUID = 7082887502132507643L;
+	private static final long serialVersionUID = 5089618197587460780L;
 	
 	private final String processName;
 	private final int actuals; 

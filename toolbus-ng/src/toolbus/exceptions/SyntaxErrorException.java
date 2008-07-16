@@ -1,7 +1,7 @@
 package toolbus.exceptions;
 
 public class SyntaxErrorException extends RuntimeException{
-	private static final long serialVersionUID = 2315538188275748342L;
+	private static final long serialVersionUID = 7761195368593480234L;
 	
 	public final int line;
 	public final int column;
@@ -21,7 +21,6 @@ public class SyntaxErrorException extends RuntimeException{
 		this.position = position;
 		this.sym = sym;
 	}
-	
 	
 	public String getMessage(){
 		return "Syntax error in "+filename+", at line: "+line+", column: "+column+", symbol id: "+sym;

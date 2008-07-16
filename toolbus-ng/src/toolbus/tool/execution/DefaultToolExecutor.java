@@ -56,8 +56,9 @@ public class DefaultToolExecutor implements IToolExecutor{
 			try{
 				toolClass = toolClassLoader.loadClass(toolClassName);
 			}catch(ClassNotFoundException cnfex){
-				LoggerFactory.log("Unable to load the main class of tool: " + toolClassName, cnfex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
-				throw new ToolBusException(cnfex);
+				String error = "Unable to load the main class of tool: " + toolClassName;
+				LoggerFactory.log(error, cnfex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
+				throw new ToolBusException(error, cnfex);
 			}
 			
 			// Instantiate the tool.

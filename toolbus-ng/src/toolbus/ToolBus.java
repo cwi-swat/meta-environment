@@ -256,10 +256,10 @@ public class ToolBus{
 			throw seex;
 		}catch(FileNotFoundException fnfex){
 			error(filename, fnfex.getMessage());
-			throw new ToolBusException(fnfex);
+			throw new ToolBusException(fnfex.getMessage(), fnfex);
 		}catch(Exception ex){
 			error(filename, ex.getMessage());
-			throw new ToolBusException(ex);
+			throw new ToolBusException(ex.getMessage(), ex);
 		}
 	}
 	
@@ -302,10 +302,10 @@ public class ToolBus{
 			throw tbex;
 		}catch(FileNotFoundException fnfex){
 			error(filename, fnfex.getMessage());
-			throw new ToolBusException(fnfex);
+			throw new ToolBusException(fnfex.getMessage(), fnfex);
 		}catch(Exception ex){
 			error(filename, ex.getMessage());
-			throw new ToolBusException(ex);
+			throw new ToolBusException(ex.getMessage(), ex);
 		}
 	}
 	

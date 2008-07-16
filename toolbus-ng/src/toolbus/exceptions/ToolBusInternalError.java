@@ -6,7 +6,7 @@ package toolbus.exceptions;
  */
 public class ToolBusInternalError extends Error{
 	private static final long serialVersionUID = 4764978742884396840L;
-	
+
 	public ToolBusInternalError(String arg0){
 		super("ToolBus Internal Error: " + arg0);
 	}
