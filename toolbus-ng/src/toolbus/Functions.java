@@ -186,7 +186,7 @@ public class Functions{
 			}
 		});
 		
-		define(new FunctionDescriptor(tbfactory, "real-to-to", tbfactory.RealType, tbfactory.IntType){
+		define(new FunctionDescriptor(tbfactory, "real-to-int", tbfactory.RealType, tbfactory.IntType){
 			public ATerm apply(ATerm args[], ProcessInstance pi){
 				return tbfactory.makeInt((int) ((ATermReal) args[0]).getReal());
 			}
