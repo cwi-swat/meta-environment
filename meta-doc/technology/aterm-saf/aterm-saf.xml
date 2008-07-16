@@ -541,11 +541,13 @@
     reconstruct the term. For this purpose we propose to emit a two byte
     unsigned integer value before every block, which specifies its size. This
     is, for example, the case for SAF file I/O; thus you will always need a
-    buffer of 2^16-1 (65535) bytes when reading from a 'standard' SAF file.
-    Custom ‘shielded’ I/O implementations for SAF are allowed to use their own
-    values and / or protocol (by shielded we mean implementations that are not
-    intended to interface with any implementations other then themselfs, since
-    compatibility can not be guaranteed in these cases).</para>
+    buffer of 2^16 (65536) bytes when reading from a 'standard' SAF file.
+    (Note that a 0 block length value indicates a block of 65536 bytes, since
+    0 length blocks can't exist). Custom ‘shielded’ I/O implementations for
+    SAF are allowed to use their own values and / or protocol (by shielded we
+    mean implementations that are not intended to interface with any
+    implementations other then themselfs, since compatibility can not be
+    guaranteed in these cases).</para>
 
     <para></para>
 
