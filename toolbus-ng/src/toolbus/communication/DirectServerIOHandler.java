@@ -30,7 +30,6 @@ public class DirectServerIOHandler implements IIOHandler{
 	}
 
 	private final IDataHandler dataHandler;
-	private final ClassLoader classloader;
 	private DirectClientIOHandler directClientIOHandler = null;
 
 	/**
@@ -38,15 +37,11 @@ public class DirectServerIOHandler implements IIOHandler{
 	 * 
 	 * @param dataHandler
 	 *            The data handler this I/O handler is associated with.
-	 * @param classLoader
-	 *            The classloader that is responsible for loading the classes associated with the
-	 *            client side of this direct I/O handler.
 	 */
-	public DirectServerIOHandler(IDataHandler dataHandler, ClassLoader classLoader){
+	public DirectServerIOHandler(IDataHandler dataHandler){
 		super();
 
 		this.dataHandler = dataHandler;
-		this.classloader = classLoader;
 	}
 
 	/**
@@ -88,10 +83,6 @@ public class DirectServerIOHandler implements IIOHandler{
 		 * The execution code of this request.
 		 */
 		public void run(){
-			// Use the proper classloader for the client we're adressing.
-			Thread currentThread = Thread.currentThread();
-			currentThread.setContextClassLoader(classloader);
-
 			directClientIOHandler.receive(operation, aTerm);
 		}
 	}

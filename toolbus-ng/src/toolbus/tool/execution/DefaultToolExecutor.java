@@ -67,7 +67,7 @@ public class DefaultToolExecutor implements IToolExecutor{
 				Constructor<?> toolConstructor = toolClass.getConstructor();
 				
 				tool = (AbstractJavaTool) toolConstructor.newInstance();
-				tool.connectDirectly(toolbus, toolClassLoader, toolDefinition.getName(), toolInstance.getToolID());
+				tool.connectDirectly(toolbus, toolDefinition.getName(), toolInstance.getToolID());
 			}catch(InstantiationException iex){
 				String error = "Unable to instantiate the tool. Classname: " + toolClass.getName();
 				LoggerFactory.log(error, iex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
@@ -94,7 +94,7 @@ public class DefaultToolExecutor implements IToolExecutor{
 				throw new ToolBusException(error);
 			}
 		}else if(toolDefinition.getClassName() != null){
-			String classpath = System.getProperty("java.class.path");
+			String classpath = toolDefinition.getClassPath();
 			// Use the -Xshare=off switch to conserve memory. We don't want to load the entire
 			// standard library in memory every time we start a tool. We're only using a tiny
 			// bit of that library. And do NOT listen to Sun, who says that it will reduce the

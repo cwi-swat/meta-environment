@@ -21,7 +21,7 @@ public class DirectConnectionHandler{
 		this.toolbus = toolbus;
 	}
 	
-	public void dock(ToolBridge toolBridge, ClassLoader classLoader) throws ToolBusError{
+	public void dock(ToolBridge toolBridge) throws ToolBusError{
 		String toolName = toolBridge.getToolName();
 		
 		ToolDefinition toolDef = toolbus.getToolDefinition(toolName);
@@ -58,14 +58,10 @@ public class DirectConnectionHandler{
 		DirectClientIOHandler toolDirectIOHandler = new DirectClientIOHandler(toolBridge);
 		toolBridge.setIOHandler(toolDirectIOHandler);
 		
-		DirectServerIOHandler toolBusDirectIOHandler = new DirectServerIOHandler(toolInstance, classLoader);
+		DirectServerIOHandler toolBusDirectIOHandler = new DirectServerIOHandler(toolInstance);
 		toolInstance.setIOHandler(toolBusDirectIOHandler);
 		
 		toolDirectIOHandler.setServerDirectIOHandler(toolBusDirectIOHandler);
 		toolBusDirectIOHandler.setClientDirectIOHandler(toolDirectIOHandler);
-	}
-	
-	public void dock(ToolBridge toolBridge) throws ToolBusError{
-		dock(toolBridge, Thread.currentThread().getContextClassLoader());
 	}
 }

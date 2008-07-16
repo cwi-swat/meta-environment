@@ -66,9 +66,16 @@ public class ToolDefinition{
 		return tbfactory.makePlaceholder(t);
 	}
 	
+	public String getClassPath(){
+		String path = toolbus.getProperty(toolName + ".classpath");
+		if(path == null) path = toolbus.getProperty("java.class.path");
+		
+		return path;
+	}
+	
 	public URL[] getLoadPath(){
 		// System.err.println("toolName = " + toolName);
-		String path = toolbus.getProperty(toolName + ".classpath");
+		String path = getClassPath();
 		if(path == null) return new URL[]{};
 		
 		// System.err.println("path = " + path);

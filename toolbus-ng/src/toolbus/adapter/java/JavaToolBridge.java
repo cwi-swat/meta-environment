@@ -79,8 +79,8 @@ public class JavaToolBridge extends ToolBridge{
 	 * @param toolbus
 	 *            The toolbus to link this bridge to.
 	 */
-	public JavaToolBridge(PureFactory termFactory, AbstractTool tool, String toolName, int toolID, ClassLoader classLoader, ToolBus toolbus){
-		super(termFactory, toolName, toolID, classLoader, toolbus);
+	public JavaToolBridge(PureFactory termFactory, AbstractTool tool, String toolName, int toolID, ToolBus toolbus){
+		super(termFactory, toolName, toolID, toolbus);
 		
 		this.termFactory = termFactory;
 		this.tool = tool;

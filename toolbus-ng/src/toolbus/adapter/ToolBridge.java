@@ -45,7 +45,6 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	private final InetAddress host;
 	private final int port;
 	
-	private final ClassLoader classLoader;
 	private final ToolBus toolbus;
 
 	/**
@@ -72,7 +71,6 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		this.host = host;
 		this.port = port;
 		
-		this.classLoader = null;
 		this.toolbus = null;
 
 		threadLocalQueues = new HashMap<Long, ThreadLocalJobQueue>();
@@ -90,19 +88,16 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 *            The name of the with this bridge associated tool.
 	 * @param toolID
 	 *            The id of the with this bridge associated tool.
-	 * @param classLoader
-	 *            The classLoader to use for loading classes.
 	 * @param toolbus
 	 *            The toolbus to connect to.
 	 */
-	public ToolBridge(PureFactory termFactory, String toolName, int toolID, ClassLoader classLoader, ToolBus toolbus){
+	public ToolBridge(PureFactory termFactory, String toolName, int toolID, ToolBus toolbus){
 		super();
 		
 		this.termFactory = termFactory;
 		this.type = AbstractTool.DIRECTTOOL;
 		this.toolName = toolName;
 		this.toolID = toolID;
-		this.classLoader = classLoader;
 		this.toolbus = toolbus;
 		
 		this.host = null;
@@ -408,7 +403,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		}else if(type.equals(AbstractTool.DIRECTTOOL)){
 			DirectConnectionHandler directConnectionHandler = toolbus.getDirectConnectionHandler();
 			try{
-				directConnectionHandler.dock(this, classLoader);
+				directConnectionHandler.dock(this);
 			}catch(ToolBusError tberr){
 				throw new RuntimeException(tberr);
 			}
