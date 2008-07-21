@@ -35,7 +35,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	
 	private final WorkerQueue workerQueue;
 
-	private IIOHandler ioHandler;
+	private volatile IIOHandler ioHandler;
 
 	private final String type;
 

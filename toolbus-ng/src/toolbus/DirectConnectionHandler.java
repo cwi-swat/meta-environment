@@ -1,8 +1,7 @@
 package toolbus;
 
 import toolbus.adapter.ToolBridge;
-import toolbus.communication.DirectClientIOHandler;
-import toolbus.communication.DirectServerIOHandler;
+import toolbus.communication.DirectIOHandler;
 import toolbus.exceptions.ToolBusError;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
@@ -54,14 +53,14 @@ public class DirectConnectionHandler{
 			LoggerFactory.log("Tool: " + toolInstance.getToolKey() + ", connected at its own initiative.", ILogger.INFO, IToolBusLoggerConstants.COMMUNICATION);
 		}
 		
-		// Connect the toolbridge with the tool instance.
-		DirectClientIOHandler toolDirectIOHandler = new DirectClientIOHandler(toolBridge);
+		// Connect the tool bridge with the tool instance.
+		DirectIOHandler toolDirectIOHandler = new DirectIOHandler(toolBridge);
 		toolBridge.setIOHandler(toolDirectIOHandler);
 		
-		DirectServerIOHandler toolBusDirectIOHandler = new DirectServerIOHandler(toolInstance);
+		DirectIOHandler toolBusDirectIOHandler = new DirectIOHandler(toolInstance);
 		toolInstance.setIOHandler(toolBusDirectIOHandler);
 		
-		toolDirectIOHandler.setServerDirectIOHandler(toolBusDirectIOHandler);
-		toolBusDirectIOHandler.setClientDirectIOHandler(toolDirectIOHandler);
+		toolDirectIOHandler.setDirectIOHandler(toolBusDirectIOHandler);
+		toolBusDirectIOHandler.setDirectIOHandler(toolDirectIOHandler);
 	}
 }

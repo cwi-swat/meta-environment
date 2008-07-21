@@ -5,14 +5,13 @@ import aterm.ATerm;
 /**
  * This class enables direct communication (through java method calls) between a client and a
  * server, under the condition that they are running the the same VM. This class does nothing fancy,
- * it just passes messages between the data handler and its I/O handler counter part on the server
- * side.
+ * it just passes messages between the data handler and its I/O handler counter part.
  * 
  * @author Arnold Lankamp
  */
-public class DirectClientIOHandler implements IIOHandler{
+public class DirectIOHandler implements IIOHandler{
 	private final IDataHandler dataHandler;
-	private DirectServerIOHandler directServerIOHandler = null;
+	private volatile DirectIOHandler directIOHandler = null;
 
 	/**
 	 * Constructor.
@@ -20,7 +19,7 @@ public class DirectClientIOHandler implements IIOHandler{
 	 * @param dataHandler
 	 *            The data handler this I/O handler is associated with.
 	 */
-	public DirectClientIOHandler(IDataHandler dataHandler){
+	public DirectIOHandler(IDataHandler dataHandler){
 		super();
 
 		this.dataHandler = dataHandler;
@@ -29,11 +28,11 @@ public class DirectClientIOHandler implements IIOHandler{
 	/**
 	 * Links this I/O handler with its counter part.
 	 * 
-	 * @param directServerIOHandler
-	 *            The server counter part of this I/O handler.
+	 * @param directIOHandler
+	 *            The counter part of this I/O handler.
 	 */
-	public void setServerDirectIOHandler(DirectServerIOHandler directServerIOHandler){
-		this.directServerIOHandler = directServerIOHandler;
+	public void setDirectIOHandler(DirectIOHandler directIOHandler){
+		this.directIOHandler = directIOHandler;
 	}
 
 	/**
@@ -47,14 +46,14 @@ public class DirectClientIOHandler implements IIOHandler{
 	 * @see IIOHandler#send(byte, ATerm)
 	 */
 	public void send(byte operation, ATerm aTerm){
-		directServerIOHandler.receive(operation, aTerm);
+		directIOHandler.receive(operation, aTerm);
 	}
 
 	/**
 	 * @see IIOHandler#terminate()
 	 */
 	public void terminate(){
-		directServerIOHandler.shutDown();
+		directIOHandler.shutDown();
 	}
 
 	/**
