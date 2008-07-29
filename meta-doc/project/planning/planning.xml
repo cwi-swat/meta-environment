@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="planning" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ns6="http://www.w3.org/1999/xhtml"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/2001/XInclude"
-         xmlns:ns="http://docbook.org/ns/docbook"
-	xml:id="planning">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>Planning Releases of The Meta-Environment</title>
 
@@ -246,166 +245,7 @@
     planning. It may change.</para>
 
     <section>
-      <title>ASF+SDF Meta-Environment 2.0 RC2 - Februari 1st 2007</title>
-
-      <para><table pgwide="1">
-          <title>Planning the work of the Meta-Environment</title>
-
-          <tgroup cols="5">
-            <colspec align="left" colwidth="25%" />
-
-            <colspec align="left" colwidth="10%" />
-
-            <thead>
-              <row>
-                <entry align="center">Activity&#160;</entry>
-
-                <entry>Category</entry>
-
-                <entry>Team</entry>
-
-                <entry>Deadline</entry>
-
-                <entry>Remark</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry>Writing user documentation</entry>
-
-                <entry>Documenting</entry>
-
-                <entry>Paul,Jurgenf</entry>
-
-                <entry>feb 1, 2007</entry>
-
-                <entry>A lot done, but still in progress</entry>
-              </row>
-
-              <row>
-                <entry>Documenting the architecture of The
-                Meta-Environment</entry>
-
-                <entry>Documenting</entry>
-
-                <entry>Paul,Jurgen</entry>
-
-                <entry>jan 1, 2007</entry>
-
-                <entry>In progress</entry>
-              </row>
-
-              <row>
-                <entry>SDF documentation of Martin and Eelco included in
-                meta-doc</entry>
-
-                <entry>Documenting</entry>
-
-                <entry>Martin,Paul,Jurgen</entry>
-
-                <entry>feb 1, 2007</entry>
-
-                <entry>Not done</entry>
-              </row>
-
-              <row>
-                <entry>Speed up the ASF normalizer</entry>
-
-                <entry>Refactoring</entry>
-
-                <entry>Jurgen</entry>
-
-                <entry>feb 1, 2007</entry>
-
-                <entry>3 times faster now</entry>
-              </row>
-
-              <row>
-                <entry>Implement replacement for 'meta.conf' expansion of the
-                search path for modules</entry>
-
-                <entry>Programming</entry>
-
-                <entry>Taeke</entry>
-
-                <entry>march 1, 2007</entry>
-
-                <entry>Done, but undocumented</entry>
-              </row>
-
-              <row>
-                <entry>Synchronization data in module-manager, to prevent race
-                conditions and unnecessary visualization of partially
-                collected data.</entry>
-
-                <entry>Refactoring</entry>
-
-                <entry>Taeke,Jurgen</entry>
-
-                <entry>jan 1, 2007</entry>
-
-                <entry>Done</entry>
-              </row>
-
-              <row>
-                <entry>Integration of user-defined pretty printing</entry>
-
-                <entry>Programming</entry>
-
-                <entry>Taeke</entry>
-
-                <entry>feb 1, 2007</entry>
-
-                <entry>Done, but still undocumented</entry>
-              </row>
-
-              <row>
-                <entry>Merging code-tuning-tue branch of the ATerm library in
-                the trunk, and putting the 'no-global-buffers' experiment on a
-                branch</entry>
-
-                <entry>Refactoring</entry>
-
-                <entry>Erik, Jurgen,Taeke</entry>
-
-                <entry>feb 1, 2007</entry>
-
-                <entry>Done</entry>
-              </row>
-
-              <row>
-                <entry>Optimization on recursive lists in ASF back
-                online</entry>
-
-                <entry>Refactoring</entry>
-
-                <entry>Jurgen</entry>
-
-                <entry>march 1, 2007</entry>
-
-                <entry>Postponed</entry>
-              </row>
-
-              <row>
-                <entry>partial implementation in the most important
-                tools.</entry>
-
-                <entry>Programming</entry>
-
-                <entry>Taeke</entry>
-
-                <entry>december, 2007</entry>
-
-                <entry></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
-    </section>
-
-    <section>
-      <title>ASF+SDF Meta-Environment 2.0 RC3</title>
+      <title>ASF+SDF Meta-Environment 2.0 - August 2008</title>
 
       <para><table pgwide="1">
           <title>Planning the work of the Meta-Environment</title>
@@ -417,168 +257,7 @@
 
             <thead>
               <row>
-                <entry align="center">Activity&#160;</entry>
-
-                <entry>Category</entry>
-
-                <entry>Team</entry>
-
-                <entry>Deadline</entry>
-
-                <entry>Remark</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry>Optimization of ATerm serialization in Java and
-                C</entry>
-
-                <entry>Refactoring</entry>
-
-                <entry>Arnold</entry>
-
-                <entry></entry>
-
-                <entry>done</entry>
-              </row>
-
-              <row>
-                <entry>Fixing known bugs from Bugzilla</entry>
-
-                <entry>Bug fixing</entry>
-
-                <entry>Paul,Arnold,Tijs,Taeke,Jurgen,Rob</entry>
-
-                <entry></entry>
-
-                <entry>done quite a lot</entry>
-              </row>
-
-              <row>
-                <entry>SDF manual rewrite</entry>
-
-                <entry>Documenting</entry>
-
-                <entry>Jurgen</entry>
-
-                <entry>june 15, 2007</entry>
-
-                <entry>done</entry>
-              </row>
-
-              <row>
-                <entry>Merging Rob's branches of SGLR into the trunk, exluding
-                RNGLR, but including the doxygen annotated code and the
-                refactored library interfaces.</entry>
-
-                <entry>Refactoring</entry>
-
-                <entry>Rob,Jurgen</entry>
-
-                <entry>feb 1, 2007</entry>
-
-                <entry>done</entry>
-              </row>
-
-              <row>
-                <entry>Bringing up more Sisyphus builders in the CWI build
-                farm: linux, MacOsX, cygwin</entry>
-
-                <entry>Building</entry>
-
-                <entry>Taeke,Tijs</entry>
-
-                <entry>june 30, 2007</entry>
-
-                <entry>in progress, macosx done, linux done, sunos
-                done.</entry>
-              </row>
-
-              <row>
-                <entry>Release it</entry>
-
-                <entry>Deployment</entry>
-
-                <entry>Tijs, Taeke</entry>
-
-                <entry>september 19, 2007</entry>
-
-                <entry></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
-    </section>
-
-    <section>
-      <title>RScript Environment 1.0 - September 2007</title>
-
-      <para><table pgwide="1">
-          <title>Planning the work of the Meta-Environment</title>
-
-          <tgroup cols="5">
-            <colspec align="left" colwidth="25%" />
-
-            <colspec align="left" />
-
-            <thead>
-              <row>
-                <entry align="center">Activity&#160;</entry>
-
-                <entry>Category</entry>
-
-                <entry>Team</entry>
-
-                <entry>Deadline</entry>
-
-                <entry>Remark</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry>Publish rscript documentation</entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>Release</entry>
-
-                <entry>Deployment</entry>
-
-                <entry>Tijs, Taeke</entry>
-
-                <entry>september 19, 2007</entry>
-
-                <entry></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
-    </section>
-
-    <section>
-      <title>ASF+SDF Meta-Environment 2.0</title>
-
-      <para><table pgwide="1">
-          <title>Planning the work of the Meta-Environment</title>
-
-          <tgroup cols="5">
-            <colspec align="left" colwidth="25%" />
-
-            <colspec align="left" />
-
-            <thead>
-              <row>
-                <entry align="center">Activity&#160;</entry>
+                <entry align="center">Activity </entry>
 
                 <entry>Category</entry>
 
@@ -600,31 +279,31 @@
 
                 <entry></entry>
 
-                <entry>in progress</entry>
+                <entry>done</entry>
               </row>
 
               <row>
-                <entry>Bring ASF+SDF Apigen online</entry>
+                <entry>Fix race condition in GUI</entry>
 
                 <entry>Programming</entry>
 
-                <entry>Tijs, Jurgen</entry>
+                <entry>Jurgen</entry>
 
-                <entry>november 2007</entry>
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry>august 2008</entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
 
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>ASF manual rewrite</entry>
-
-                <entry>Documenting</entry>
-
-                <entry>Jurgen,Paul</entry>
-
-                <entry>october, 2007</entry>
-
-                <entry></entry>
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry>in progress</entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
               </row>
 
               <row>
@@ -634,7 +313,7 @@
 
                 <entry>Tijs</entry>
 
-                <entry>october, 2007</entry>
+                <entry>august, 2008</entry>
 
                 <entry></entry>
               </row>
@@ -646,7 +325,7 @@
 
                 <entry>Paul</entry>
 
-                <entry>december, 2007</entry>
+                <entry>august, 2008</entry>
 
                 <entry></entry>
               </row>
@@ -658,31 +337,7 @@
 
                 <entry>Paul</entry>
 
-                <entry>december 2007</entry>
-
                 <entry></entry>
-              </row>
-
-              <row>
-                <entry>Convert ATerm manual</entry>
-
-                <entry>Documenting</entry>
-
-                <entry>Erik, Arnold, Paul</entry>
-
-                <entry>december 2007</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>Convert ToolBus manuals</entry>
-
-                <entry>Documenting</entry>
-
-                <entry>Arnold, Paul</entry>
-
-                <entry>december 2007</entry>
 
                 <entry></entry>
               </row>
@@ -692,9 +347,9 @@
 
                 <entry>Documenting</entry>
 
-                <entry>Taeke</entry>
+                <entry>Jurgen</entry>
 
-                <entry>october, 2007</entry>
+                <entry></entry>
 
                 <entry></entry>
               </row>
@@ -706,19 +361,7 @@
 
                 <entry>Everybody</entry>
 
-                <entry>december 2007</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>Include documentation browser</entry>
-
-                <entry>Programming</entry>
-
-                <entry>??</entry>
-
-                <entry>november 2007</entry>
+                <entry>august 2008</entry>
 
                 <entry></entry>
               </row>
@@ -730,7 +373,7 @@
 
                 <entry>Jurgen, Paul, Tijs</entry>
 
-                <entry>november 2007</entry>
+                <entry></entry>
 
                 <entry></entry>
               </row>
@@ -742,9 +385,45 @@
 
                 <entry>Jurgen, Paul, Tijs</entry>
 
-                <entry>november 2007</entry>
+                <entry></entry>
 
                 <entry></entry>
+              </row>
+
+              <row>
+                <entry>Release 2.0</entry>
+
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry>Project</entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
+
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry>Jurgen, Tijs</entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
+
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry>august 2008</entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
+
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry></entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
               </row>
             </tbody>
           </tgroup>
@@ -752,7 +431,7 @@
     </section>
 
     <section>
-      <title>ASF+SDF Meta-Environment 2.1 - Februari 2008</title>
+      <title>ASF+SDF Meta-Environment 3.0RC 1 - Januari 2009</title>
 
       <para><table pgwide="1">
           <title>Planning the work of the Meta-Environment</title>
@@ -764,7 +443,7 @@
 
             <thead>
               <row>
-                <entry align="center">Activity&#160;</entry>
+                <entry align="center">Activity </entry>
 
                 <entry>Category</entry>
 
@@ -784,21 +463,43 @@
 
                 <entry>Rob</entry>
 
-                <entry>februari 2008</entry>
+                <entry></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry>Unified configuration management in the same vain as
-                error management, including GUI, and partial implementation in
-                the most important tools.</entry>
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry>Migrate to Eclipse IMP platform</entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
 
-                <entry>Programming</entry>
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry>Programming</entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
 
-                <entry>Taeke</entry>
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry>Jurgen, Magiel, Tijs, Arnold, Bas</entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
 
-                <entry>december, 2007</entry>
+                <entrytbl cols="1">
+                  <tbody>
+                    <row>
+                      <entry></entry>
+                    </row>
+                  </tbody>
+                </entrytbl>
 
                 <entry></entry>
               </row>
@@ -829,66 +530,11 @@
               </row>
 
               <row>
-                <entry>Working prototype of Meta-Environment on ToolBus
-                NG</entry>
-
-                <entry>Programming</entry>
-
-                <entry>Paul, Arnold</entry>
-
-                <entry>june 1, 2007</entry>
-
-                <entry>done</entry>
-              </row>
-
-              <row>
-                <entry>Cross-compilation to native Windows in Sisyphus</entry>
+                <entry>Let Sisyphus generate Eclipse features</entry>
 
                 <entry>Building</entry>
 
-                <entry>Tijs, Jurgen, Taeke</entry>
-
-                <entry>january, 2008</entry>
-
-                <entry></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
-    </section>
-
-    <section>
-      <title>ASF+SDF Meta-Environment 2.2 - May 2008</title>
-
-      <para><table pgwide="1">
-          <title>Planning the work of the Meta-Environment</title>
-
-          <tgroup cols="5">
-            <colspec align="left" colwidth="25%" />
-
-            <colspec align="left" />
-
-            <thead>
-              <row>
-                <entry align="center">Activity&#160;</entry>
-
-                <entry>Category</entry>
-
-                <entry>Team</entry>
-
-                <entry>Deadline</entry>
-
-                <entry>Remark</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry>Replace old ToolBus by new ToolBus</entry>
-
-                <entry>Programming</entry>
-
-                <entry>Arnold, Paul</entry>
+                <entry>Tijs, Jurgen</entry>
 
                 <entry></entry>
 
@@ -896,23 +542,11 @@
               </row>
 
               <row>
-                <entry>Unit testing framework for SDF</entry>
+                <entry>Setup Eclipse Update Site</entry>
 
-                <entry>Design , Programming</entry>
+                <entry>Building</entry>
 
-                <entry>Erik Post?</entry>
-
-                <entry></entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>Labelled productions in SDF</entry>
-
-                <entry>Programming</entry>
-
-                <entry>Paul, Tijs, Jurgen</entry>
+                <entry>Tijs, Jurgen</entry>
 
                 <entry></entry>
 
@@ -930,13 +564,37 @@
 
                 <entry></entry>
               </row>
+
+              <row>
+                <entry>Include documentation browser</entry>
+
+                <entry>Programming</entry>
+
+                <entry>??</entry>
+
+                <entry></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>Implement all ASF+SDF actions</entry>
+
+                <entry>Programming</entry>
+
+                <entry>Tijs, Jurgen, Bas, Magiel</entry>
+
+                <entry></entry>
+
+                <entry></entry>
+              </row>
             </tbody>
           </tgroup>
         </table></para>
     </section>
 
     <section>
-      <title>ASF+SDF Meta-Environment 3.0 - December 2008</title>
+      <title>ASF+SDF Meta-Environment 3.0 - 2009</title>
 
       <para><table pgwide="1">
           <title>Planning the work of the Meta-Environment</title>
@@ -948,7 +606,7 @@
 
             <thead>
               <row>
-                <entry align="center">Activity&#160;</entry>
+                <entry align="center">Activity </entry>
 
                 <entry>Category</entry>
 
