@@ -8,14 +8,12 @@ import toolbus.process.ProcessExpression;
 /**
  * @author paulk, Jul 24, 2002
  */
-
 public class Delta extends Atom{
-	private final static State empty = new State();
 	
 	public Delta(TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 	}
-	
+
 	public ProcessExpression copy(){
 		Atom a = new Delta(tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
@@ -23,7 +21,9 @@ public class Delta extends Atom{
 	}
 	
 	public State getFirst(){
-		return empty;
+		State deltaState = new State();
+		deltaState.addElement(this);
+		return deltaState;
 	}
 	
 	public boolean execute(){
