@@ -6,15 +6,13 @@ bin_SCRIPTS = \
 	extract-relations \
 	merge-rstores \
 	rscript \
-	rstore2rviz \
-	init-rscript
+	rstore2rviz 
 
 CLEANFILES = \
 	extract-relations \
 	merge-rstores \
 	rscript \
-	rstore2rviz \
-	init-rscript
+	rstore2rviz 
 
 % : %.sh.src Makefile
 	sed "s@__PREFIX__@$(prefix)@g;\
