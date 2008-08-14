@@ -60,37 +60,28 @@ public class PluginLoader extends URLClassLoader {
 	 * Returns the name of the jar file main class, or null if no "Main-Class"
 	 * manifest attribute was defined.
 	 */
-	private String findPluginMain() {
-		String pluginMain = null;
-		try {
-			URL u = new URL("jar", "", pluginURL + "!/");
-			JarURLConnection uc = (JarURLConnection) u.openConnection();
-			Attributes attr = uc.getMainAttributes();
-			if (attr != null) {
-				pluginMain = attr.getValue(Attributes.Name.MAIN_CLASS);
-			} else {
-				System.err.println("Unable to find a Main-Class in plugin: " + pluginURL);
-			}
-		} catch (IOException e) {
-			System.err.println("Error trying to find Main-Class in plugin:" + pluginURL);
-			e.printStackTrace();
-		}
-		return pluginMain;
+	private String findPluginMain() throws IOException {
+	  String pluginMain = null;
+	  URL u = new URL("jar", "", pluginURL + "!/");
+	  JarURLConnection uc = (JarURLConnection) u.openConnection();
+	  Attributes attr = uc.getMainAttributes();
+	  if (attr != null) {
+	    pluginMain = attr.getValue(Attributes.Name.MAIN_CLASS);
+	  } else {
+	    System.err.println("Unable to find a Main-Class in plugin: " + pluginURL);
+	  }
+	  return pluginMain;
 	}
 
 	public StudioPlugin instantiatePlugin() {
-		String pluginMain = findPluginMain();
-		if (pluginMain == null) {
-			return null;
-		}
-		StudioPlugin plugin = null;
-		try {
-			Class<?> cl = loadClass(pluginMain);
-			plugin = (StudioPlugin) cl.newInstance();
-		} catch (Exception e) {
-			System.err.println("Failed to instantiate plugin:" + pluginMain);
-			e.printStackTrace();
-		}
-		return plugin;
+	  try {
+	    String pluginMain = findPluginMain();
+	    StudioPlugin plugin = null;
+	    Class<?> cl = loadClass(pluginMain);
+	    return (StudioPlugin) cl.newInstance();
+	  } catch (Exception e) {
+	    System.err.println("Failed to instantiate plugin:" + pluginURL + "\n"  + e.getMessage());
+	    return null;
+	  }
 	}
 }

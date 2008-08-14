@@ -546,16 +546,17 @@ public class StudioImpl implements Studio, GuiTif {
 	}
 
 	private void startPlugin(PluginLoader loader) {
-		final StudioPlugin plugin = loader.instantiatePlugin();
-		assert plugin != null;
-		registerPlugin(plugin);
-		Thread thread = new Thread(new Runnable() {
-			public void run() {
-				plugin.initStudioPlugin(StudioImpl.this);
-			}
-		});
-		thread.setName(plugin.getName() + "-starter");
-		thread.start();
+	  final StudioPlugin plugin = loader.instantiatePlugin();
+	  if (plugin != null) {
+	    registerPlugin(plugin);
+	    Thread thread = new Thread(new Runnable() {
+	      public void run() {
+		plugin.initStudioPlugin(StudioImpl.this);
+	      }
+	    });
+	    thread.setName(plugin.getName() + "-starter");
+	    thread.start();
+	  }
 	}
 
 	private void registerPlugin(StudioPlugin plugin) {
@@ -568,14 +569,17 @@ public class StudioImpl implements Studio, GuiTif {
 	}
 
 	public void loadJar(String pluginJar) {
+	  System.err.println("loadJar1" + pluginJar);
 		startPlugin(new PluginLoader(pluginJar));
 	}
 
 	public void loadJarUrls(String pluginJar, ATerm classPath) {
+	  System.err.println("loadJar2" + pluginJar);
 		startPlugin(new PluginLoader(pluginJar, (ATermList) classPath));
 	}
 
 	public void loadJarClasspath(String pluginJar, String classPath) {
+	  System.err.println("loadJar3" + pluginJar);
 		startPlugin(new PluginLoader(pluginJar, classPath));
 	}
 

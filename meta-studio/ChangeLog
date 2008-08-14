@@ -1,3 +1,10 @@
+
+
+Thu Aug 14 13:44:36 CEST 2008 <jurgenv@cwi.nl>
+ * src/**/StudioImpl.java, src/**/plugin/PluginLoader.java: improved
+   error handling for loading jars (checks and reports better when
+   Main-Class is not found in MANIFEST.MF)
+
 Mon Apr 28 17:15:15 2008    <bruntink@cwi.nl>
 
 	* Removed .classpath and .project from repository.
