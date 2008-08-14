@@ -1,3 +1,7 @@
+Thu Aug 14 13:30:27 CEST 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: added generation of Main-Class attribute in
+   MANIFEST.MF, such that Meta-Environment 2.0 can load its plugins again.
+
 Mon Jul 07 09:48:11 CEST 2008 <lankamp@cwi.nl>
  * The dist ant target is now retrieving the META-INF/MANIFEST.MF from the correct directory.
 
