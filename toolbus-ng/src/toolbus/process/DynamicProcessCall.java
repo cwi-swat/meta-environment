@@ -214,7 +214,7 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 			activated = false;
 			return;			
 		}catch(ToolBusException e){
-			e.printStackTrace();
+//			e.printStackTrace();
 			activated = false;
 			return;
 		}

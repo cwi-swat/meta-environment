@@ -124,7 +124,7 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 	}
 	
 	public void activate(){
-		state[LEFT].activate();
+		state[LEFT].activate();  
 		state[RIGHT].activate();
 	}
 	

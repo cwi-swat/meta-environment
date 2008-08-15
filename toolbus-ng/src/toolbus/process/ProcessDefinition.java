@@ -52,14 +52,20 @@ public class ProcessDefinition{
 	
 	public ProcessExpression getProcessExpression(ATermList actuals) throws ToolBusError{
 		// System.err.println("ProcessDefiniton:" + name + " formals = " + formals + "; actuals = " + actuals);
-		if(actuals.getLength() != formals.getLength()) throw new ToolBusError("process " + name + ": mismatch between formals " + formals + " and actuals " + actuals);
+		if(actuals.getLength() != formals.getLength()) {
+			throw new ToolBusError("process " + name + ": mismatch between formals " + formals + " and actuals " + actuals);
+		}
 		
 		for(int i = 0; i < actuals.getLength(); i++){
 			TBTermVar formal = (TBTermVar) formals.getChildAt(i);
 			ATerm actual = (ATerm) actuals.getChildAt(i);
-			if(tbfactory.isResultVar(formal) && !tbfactory.isResultVar(actual)) throw new ToolBusError("process " + name + ": mismatch between formal " + formal + " and actual " + actual);
+			if(tbfactory.isResultVar(formal) && !tbfactory.isResultVar(actual)) {
+				throw new ToolBusError("process " + name + ": mismatch between formal " + formal + " and actual " + actual);
+			}
 			
-			if(!Functions.compatibleTypes(formal, actual)) throw new ToolBusError("argument #" + (i + 1) + " of process " + name + " should have type " + formal.getVarType() + " instead of " + actual);
+			if(!Functions.compatibleTypes(formal, actual)) {
+				throw new ToolBusError("argument #" + (i + 1) + " of process " + name + " should have type " + formal.getVarType() + " instead of " + actual);
+			}
 		}
 		return PE.copy();
 	}
