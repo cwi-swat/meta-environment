@@ -1,5 +1,8 @@
 $Id$
 
+Mon Aug 18 22:31:51 CEST 2008 <jurgenv@cwi.nl>
+ * src/main.c: fixed buffer overrun.
+
 Fri Aug 17 13:56:37 CEST 2007 <kooiker@cwi.nl>
  * src/in-output.isrc: readded functionallity to write term as text (which was
    still implemented in main.c)

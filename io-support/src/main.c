@@ -372,7 +372,7 @@ ATerm list_files(int cid, const char *path, const char *extension) {
 }
 
 ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) {
-  char filename[PATH_LEN];
+  char *filename = NULL;
   CFG_PropertyList searchPaths = CFG_PropertyListFromTerm(paths);
   ATermList directories = ATempty;
  
@@ -380,12 +380,19 @@ ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) {
        searchPaths = CFG_getPropertyListTail(searchPaths)) {
     CFG_Property path = CFG_getPropertyListHead(searchPaths);
     const char *pathString = CFG_getPropertyPath(path);
-    sprintf(filename, "%s%c%s%s", pathString, PATH_SEPARATOR, name, extension);
+    filename = malloc(strlen(pathString) + 1 + strlen(name) + strlen(extension));
+    if (filename != NULL) {
+      sprintf(filename, "%s%c%s%s", pathString, PATH_SEPARATOR, name, extension);
 
-    if (fileExists(filename)) {
-      directories = ATinsert(directories, 
-			     (ATerm)
-			     ATmakeAppl(ATmakeAFun(pathString, 0, ATtrue)));
+      if (fileExists(filename)) {
+	directories = ATinsert(directories, 
+			       (ATerm)
+			       ATmakeAppl(ATmakeAFun(pathString, 0, ATtrue)));
+      }
+    }
+    else {
+      ATwarning("find_file: out of memory.");
+      return createFileNotFoundMessage();
     }
   }
 
