@@ -1,1 +1,0 @@
-/ufs/ali/meta-build/meta-autotools/../install/share/libtool/ltmain.sh
