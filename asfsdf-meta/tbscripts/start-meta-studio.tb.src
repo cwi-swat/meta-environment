@@ -18,6 +18,7 @@ process TODO(Msg : str) is printf("TODO: %s\n", Msg)
 #include <vis-plugin-charts.tb>
 #include <vis-plugin-graph.tb>
 #include <rstore-actions.tb>
+/* #include <vis-plugin-treemap.tb> */
 
 /**
  * This process is used to configure which plugins to load
@@ -32,6 +33,7 @@ process StartVisPlugin is
    StartVisGenericPlugins()
  . StartVisPluginCharts()
  . StartVisPluginGraph()
+/* . StartVisTreeMapPlugins() */
 
 toolbus(StartVisPlugin)
 
