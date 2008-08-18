@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import toolbus.AbstractTool;
+import toolbus.SwingTool;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -16,7 +16,7 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class GuiTool
-  extends AbstractTool
+  extends SwingTool
   implements GuiTif
 {
   // This table will hold the complete input signature
