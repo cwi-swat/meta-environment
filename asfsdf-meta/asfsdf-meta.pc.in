@@ -3,5 +3,5 @@ Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
 Name: asfsdf-meta
 Version: 2.0.1
 Description:
-Requires: toolbus-ng,aterm,asf,meta,sdf-meta,config-manager,sdf-pretty,console-grabber,vis-base,vis-plugin,rstore-container,vis-plugin-charts,vis-plugin-generic,vis-plugin-graph
+Requires: toolbus-ng,aterm,asf,meta,sdf-meta,config-manager,sdf-pretty,console-grabber,vis-base,vis-plugin,rstore-container,vis-plugin-charts,vis-plugin-generic,vis-plugin-graph,vis-plugin-treemap
 ToolBusFlags=${prefix}/share/asfsdf-meta
