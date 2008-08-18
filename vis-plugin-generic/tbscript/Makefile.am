@@ -1,5 +1,6 @@
 GENERATED_TBSCRIPTS = \
-	vis-plugin-treemap.tb
+	vis-plugin-generic.tb \
+	vis-plugin-text-unparsing.idef
 
 EXTRA_DIST = \
 	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) 

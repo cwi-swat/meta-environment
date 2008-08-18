@@ -1,0 +1,9 @@
+#ifndef StartVisGenericPlugins_INCLUDE
+#define StartVisGenericPlugins_INCLUDE
+
+#include <vis-plugin-text-unparsing.idef>
+
+process StartVisGenericPlugins is
+  snd-msg(load-jar("file://__PKGDATA__/vis-plugin-generic.jar", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
+
+#endif
