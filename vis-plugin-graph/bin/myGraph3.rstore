@@ -1,0 +1,96 @@
+
+rstore([
+	rtuple("treeStructure",relation([loc,set(loc),relation([loc,int]),relation([str,int])]),
+		set([
+		
+			tuple([
+				loc(area-in-file("/ufs/ali/test/ss/kk/a.java",area(0,0,82,0,0,0))),
+				set([
+					loc(area-in-file("/ufs/ali/test/dd/zz/b.java",area(0,0,30,0,0,0))),
+					loc(area-in-file("/ufs/ali/test/ff/c.java",area(0,0,20,0,0,0)))
+				]),
+				set([
+					tuple([loc(area-in-file("/ufs/ali/test/ss/kk/a.java",area(21,0,25,0,0,0))),int(nat-con(31))]),
+					tuple([loc(area-in-file("/ufs/ali/test/ss/kk/a.java",area(42,0,52,0,0,0))),int(nat-con(22))])
+				])													
+			]),
+			
+			tuple([
+				loc(area-in-file("/ufs/ali/test/ss/qq/m.java",area(0,0,32,0,0,0))),
+				set([
+					loc(area-in-file("/ufs/ali/test/ff/c.java",area(0,0,20,0,0,0)))
+				]),
+				set([
+					tuple([loc(area-in-file("/ufs/ali/test/ss/qq/m.java",area(11,0,20,0,0,0))),int(nat-con(12))])
+				])												
+			]),
+			
+			tuple([
+				loc(area-in-file("/ufs/ali/test/dd/zz/b.java",area(0,0,30,0,0,0))),
+				set([
+					loc(area-in-file("/ufs/ali/test/ff/c.java",area(0,0,20,0,0,0)))
+				]),
+				set([
+					tuple([loc(area-in-file("/ufs/ali/test/dd/zz/b.java",area(4,0,12,0,0,0))),int(nat-con(40))]),
+					tuple([loc(area-in-file("/ufs/ali/test/dd/zz/b.java",area(13,0,18,0,0,0))),int(nat-con(18))])
+				])												
+			]),
+			
+			tuple([
+				loc(area-in-file("/ufs/ali/test/ff/c.java",area(0,0,20,0,0,0))),
+				set([
+					loc(area-in-file("/ufs/ali/test/ss/kk/a.java",area(0,0,82,0,0,0)))
+				]),
+				set([
+					tuple([loc(area-in-file("/ufs/ali/test/ff/c.java",area(2,0,8,0,0,0))),int(nat-con(23))]),
+					tuple([loc(area-in-file("/ufs/ali/test/ff/c.java",area(9,0,17,0,0,0))),int(nat-con(32))])
+				]),				
+				set([
+					tuple([str("mccabe"),int(nat-con(25))]),
+					tuple([str("fanin"),int(nat-con(3))]),
+					tuple([str("fanout"),int(nat-con(4))])																
+				])												
+			]),
+			
+			tuple([
+				loc(area-in-file("/ufs/ali/test/ff/d.java",area(0,0,20,0,0,0))),
+				set([
+					loc(area-in-file("/ufs/ali/test/ss/kk/a.java",area(0,0,82,0,0,0))),
+					loc(area-in-file("/ufs/ali/test/ff/c.java",area(0,0,20,0,0,0)))					
+				]),
+
+				set([
+					tuple([loc(area-in-file("/ufs/ali/test/ff/d.java",area(2,0,8,0,0,0))),int(nat-con(20))]),
+					tuple([loc(area-in-file("/ufs/ali/test/ff/d.java",area(9,0,17,0,0,0))),int(nat-con(18))])
+				])										
+			]),
+			
+			tuple([
+				loc(area-in-file("/ufs/ali/test/ss/ww/f.java",area(0,0,8,0,0,0))),
+				set([
+					loc(area-in-file("/ufs/ali/test/dd/zz/b.java",area(0,0,30,0,0,0))),
+					loc(area-in-file("/ufs/ali/test/ff/c.java",area(0,0,20,0,0,0)))
+				]),
+				set([
+					tuple([loc(area-in-file("/test/ss/ww/f.java",area(3,0,7,0,0,0))),int(nat-con(53))])
+				]),					
+				set([
+					tuple([str("mccabe"),int(nat-con(53))]),
+					tuple([str("fanin"),int(nat-con(4))]),
+					tuple([str("fanout"),int(nat-con(12))])												
+				])													
+			]),
+			
+			tuple([
+				loc(area-in-file("/ufs/ali/test/ss/kk/h.java",area(0,0,21,0,0,0))),
+				set([
+					loc(area-in-file("/ufs/ali/test/dd/zz/b.java",area(0,0,30,0,0,0)))
+				]),
+				set([
+					tuple([loc(area-in-file("/ufs/ali/test/ss/kk/h.java",area(12,0,16,0,0,0))),int(nat-con(16))])
+				])												
+			])								
+																																
+		])
+	)	
+])
