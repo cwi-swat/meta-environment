@@ -18,7 +18,6 @@
 #include "in-output.h"
 
 #define EOS '\0'
-#define PATH_LEN (_POSIX_PATH_MAX)
 #define PATH_SEPARATOR '/'
 #define EXTENSION_SEPARATOR '.'
 #define TOOL_NAME "in-output"
@@ -44,6 +43,29 @@ static ATbool fileExists(const char *fname) {
 static size_t getFileSize(const char *s) {
   struct stat st;
   return (stat((char *)s, &st)!=EOF) ? st.st_size : -1L;
+}
+
+static char* tmpFile = NULL;
+static int tmpFileLen = 0;
+static char* tempFile(const char* path, const char* name, const char* ext) 
+{
+  int needed = strlen(path) + strlen(name) + strlen(ext) + 1 + 1;
+
+  if (tmpFileLen < needed) {
+    tmpFileLen = needed * 2;
+    char *tmp = (char*) realloc(tmpFile, tmpFileLen * sizeof(char));
+    if (tmp == NULL) {
+      ATerror("in-output: out of memory");
+      return NULL;
+    }
+    else {
+      tmpFile = tmp;
+    }
+  }
+
+  snprintf(tmpFile, needed, "%s%c%s%s", path, PATH_SEPARATOR, name, ext);
+
+  return tmpFile;
 }
 
 static char *readFileContents(const char *fnam, size_t *size) {
@@ -75,6 +97,28 @@ static char *readFileContents(const char *fnam, size_t *size) {
   return buf ;
 }
 
+static char* getCwd() {
+  int size = _POSIX_PATH_MAX + 1;
+  char *tmp = (char*) calloc(size, sizeof(char));
+
+  if (tmp != NULL) {
+    while (getcwd(tmp, size) == NULL && errno == ERANGE) {
+      size *= 2;
+      tmp = (char*) realloc(tmp, size * sizeof(char));
+
+      if (tmp == NULL) {
+	ATerror("in-output: out of memory");
+	return NULL;
+      }
+    }
+    return tmp;
+  }
+  else {
+    ATerror("in-output: out of memory");
+    return NULL;
+  }
+}
+
 /* Expand a relative path to its absolute equivalent
  *
  * - ATerror upon serious failure (no current directory, no memory)
@@ -82,46 +126,35 @@ static char *readFileContents(const char *fnam, size_t *size) {
  * - returns calloc(3)-ed pointer containing absolute path otherwise.
  */
 static char *expandPath(const char *relative_path) {
-  char *absolute_path = NULL;
-  char *trial_path = NULL;
-  char current_dir[PATH_LEN + 1];
+  char *absolute_dir = NULL;
+  char *current_dir = NULL;
 
-  /* Save current dir */
-  if (getcwd(current_dir, PATH_LEN) == NULL) {
-    ATerror("no current directory: %s\n", strerror(errno));
-  }
+  current_dir = getCwd();
 
-  /* Go to relative dir */
   if (chdir(relative_path) == -1) {
     return NULL;
   }
 
-  /* Allocate sufficient memory for worstcase expansion */
-  trial_path = (char *) calloc(PATH_LEN + 1, sizeof(char));
-  if (trial_path == NULL) {
-    ATerror("expandPath: out of memory.\n");
-    return NULL;
-  }
+  absolute_dir = getCwd();
 
-  /* Try to get absolute pathname */
-  absolute_path = getcwd(trial_path, PATH_LEN);
-
-  /* Restore current dir */
   if (chdir(current_dir) == -1) {
     ATerror("could not chdir(%s): %s\n", current_dir, strerror(errno));
   }
 
-  /* May have to cleanup allocated memory upon failure */
-  if (absolute_path == NULL) {
-    free(trial_path);
-  }
+  free(current_dir);
 
-  return absolute_path;
+  return absolute_dir;
 }
 
-static char *normalizePath(char *normalized, const char *path) {
+static char *normalizePath(const char *path) {
+  char *normalized = (char*) calloc(strlen(path) + 1, sizeof(char)); 
   const char *p;
   char *q; 
+
+  if (normalized == NULL) {
+    ATerror("in-output: out of memory");
+    return NULL;
+  }
 
   for(p = path, q = normalized; *p != '\0'; p++) {
     if (*p != PATH_SEPARATOR || *(p+1) != PATH_SEPARATOR) {
@@ -350,7 +383,7 @@ ATerm exists_file(int cid, const char *path) {
 }
 
 ATerm list_files(int cid, const char *path, const char *extension) {
-  char filename[PATH_LEN];
+  char *filename;
   DIR* dir;
   struct dirent* entry;
   ATermList files = ATempty;
@@ -360,7 +393,7 @@ ATerm list_files(int cid, const char *path, const char *extension) {
     while ((entry = readdir(dir))) {
       int length = strlen(entry->d_name) - strlen(extension);
       if (entry->d_name && strcmp(&(entry->d_name)[length], extension) == 0) {
-	sprintf(filename, "%s%c%s", path, PATH_SEPARATOR, entry->d_name);
+	filename = tempFile(path, entry->d_name, "");
 	files = ATinsert(files, 
 			 (ATerm) 
 			 ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)));
@@ -372,7 +405,6 @@ ATerm list_files(int cid, const char *path, const char *extension) {
 }
 
 ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) {
-  char *filename = NULL;
   CFG_PropertyList searchPaths = CFG_PropertyListFromTerm(paths);
   ATermList directories = ATempty;
  
@@ -380,19 +412,12 @@ ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) {
        searchPaths = CFG_getPropertyListTail(searchPaths)) {
     CFG_Property path = CFG_getPropertyListHead(searchPaths);
     const char *pathString = CFG_getPropertyPath(path);
-    filename = malloc(strlen(pathString) + 1 + strlen(name) + strlen(extension));
-    if (filename != NULL) {
-      sprintf(filename, "%s%c%s%s", pathString, PATH_SEPARATOR, name, extension);
-
-      if (fileExists(filename)) {
-	directories = ATinsert(directories, 
-			       (ATerm)
-			       ATmakeAppl(ATmakeAFun(pathString, 0, ATtrue)));
-      }
-    }
-    else {
-      ATwarning("find_file: out of memory.");
-      return createFileNotFoundMessage();
+    char *filename = tempFile(pathString, name, extension);
+      
+    if (fileExists(filename)) {
+      directories = ATinsert(directories, 
+			     (ATerm)
+			     ATmakeAppl(ATmakeAFun(pathString, 0, ATtrue)));
     }
   }
 
@@ -413,10 +438,9 @@ ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *
   while (!CFG_isPropertyListEmpty(searchPaths) && !result) {
     CFG_Property searchPath = CFG_getPropertyListHead(searchPaths);
     const char *pathString = CFG_getPropertyPath(searchPath);
-    char *normalizedSearchPath = (char *) calloc(PATH_LEN + 1, sizeof(char));
-    normalizedSearchPath = normalizePath(normalizedSearchPath, pathString);
-    char *normalizedPath = (char *) calloc(PATH_LEN + 1, sizeof(char));
-    normalizedPath = normalizePath(normalizedPath, path);
+    char *normalizedSearchPath = normalizePath(pathString);
+    char *normalizedPath = normalizePath(path);
+
     if (strncmp(normalizedSearchPath, normalizedPath, strlen(normalizedSearchPath)) == 0) {
       char *copy;
       char *extension;
@@ -431,6 +455,9 @@ ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *
       result = ATmake("filename(<str>,<str>)", normalizedSearchPath, copy);
       free(copy);
     }
+
+    free(normalizedSearchPath);
+    free(normalizedPath);
     searchPaths = CFG_getPropertyListTail(searchPaths);
   }
 
@@ -464,7 +491,6 @@ ATerm compare_files(int cid, const char *f1, const char *f2) {
 ATerm get_filename(int cid, const char *directory, const char *name, const char *extension) {
   ATerm result;
   char *buf;
-  char path[PATH_LEN];
   int directoryLen;
 
   buf = strdup(directory);
@@ -476,9 +502,7 @@ ATerm get_filename(int cid, const char *directory, const char *name, const char 
     buf[directoryLen-1] = '\0';
   }
 
-  sprintf(path, "%s%c%s%s", buf, PATH_SEPARATOR, name, extension);
-
-  result = ATmake("snd-value(filename(<str>))", path);
+  result = ATmake("snd-value(filename(<str>))", tempFile(buf, name, extension));
 
   free(buf);
 
@@ -607,21 +631,42 @@ ATerm make_file(int cid, const char *directory) {
 }
 
 ATerm get_file_path(int cid, ATerm file) {
-  char path[BUFSIZ];
+  int pathLen = _POSIX_PATH_MAX + 1;
+  char *path = (char*) calloc(pathLen, sizeof(char));
   IO_File io_file = IO_FileFromTerm(file);
   IO_Path io_path = IO_getFilePath(io_file);
   ATbool absolute = IO_isPathAbsolute(io_path);
   IO_SegmentList segments = IO_getPathList(io_path);
   ATerm result;
 
+  if (path == NULL) {
+    ATerror("in-output: out of memory");
+    return NULL;
+  }
+
   if (absolute) {
-    sprintf(path, "%c", PATH_SEPARATOR);
+    snprintf(path, 1, "%c", PATH_SEPARATOR);
   }
 
   while (!IO_isSegmentListEmpty(segments)) {
     IO_Segment segment = IO_getSegmentListHead(segments);
-    sprintf(path, "%s%s", path, IO_getSegmentName(segment));
-    sprintf(path, "%s%c", path, PATH_SEPARATOR);
+    const char* name = IO_getSegmentName(segment);
+    int needed = strlen(path) + strlen(name) + 1 + 1;
+
+    if (pathLen < needed) {
+      char *tmp = NULL;
+      pathLen = needed * 3;
+      tmp = (char*) realloc(path, pathLen * sizeof(char));
+      if (tmp == NULL) {
+	ATerror("in-output: out of memory");
+	return NULL;
+      }
+      else {
+	path = tmp;
+      }
+    }
+    
+    snprintf(path, needed, "%s%s%c", path, name, PATH_SEPARATOR);
     segments = IO_getSegmentListTail(segments);
   }
 

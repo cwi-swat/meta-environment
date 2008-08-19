@@ -1,5 +1,9 @@
 $Id$
 
+Tue Aug 19 10:06:44 CEST 2008 <jurgenv@cwi.nl>
+ * src/main.c: changed all static allocation of path buffers to
+   dynamic allocation to account for large paths.
+
 Mon Aug 18 22:31:51 CEST 2008 <jurgenv@cwi.nl>
  * src/main.c: fixed buffer overrun.
 
