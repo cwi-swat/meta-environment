@@ -2,7 +2,6 @@ package nl.cwi.sen1.visplugin.treemap;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import nl.cwi.sen1.relationstores.types.RTuple;
-import nl.cwi.sen1.relationstores.types.RType;
 import nl.cwi.sen1.visplugin.VisualizationPluginWindow;
 
 

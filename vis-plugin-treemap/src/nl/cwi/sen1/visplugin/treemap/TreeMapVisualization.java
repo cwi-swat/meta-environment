@@ -141,9 +141,9 @@ public class TreeMapVisualization extends Display {
 
         m_vis.run("layout");
 
-// to fit the visualization size to the windows size :(  not working
-//        MouseEvent event = new MouseEvent( this, MouseEvent.MOUSE_CLICKED, 0, MouseEvent.BUTTON2, 0, 0, 1, false );
-//        zoomToFitControl.mouseClicked(event);
+// to fit the visualization size to the windows size by simulating click event:(  not working
+ //       MouseEvent event = new MouseEvent( this, MouseEvent.MOUSE_CLICKED, 0, MouseEvent.BUTTON2, 0, 0, 1, false );
+ //       zoomToFitControl.mouseClicked(event);
 
     }
 

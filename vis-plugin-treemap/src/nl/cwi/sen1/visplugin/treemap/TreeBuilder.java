@@ -1,17 +1,13 @@
 package nl.cwi.sen1.visplugin.treemap;
-import java.io.InputStream;
-import java.math.BigDecimal;
+
 import java.util.Iterator;
 import nl.cwi.sen1.relationstores.Factory;
 import nl.cwi.sen1.relationstores.types.RElem;
 import nl.cwi.sen1.relationstores.types.RElemElements;
-import nl.cwi.sen1.relationstores.types.RStore;
 import nl.cwi.sen1.relationstores.types.RTuple;
-import nl.cwi.sen1.relationstores.types.RTupleRtuples;
 import nl.cwi.sen1.visplugin.VisualizationFactorySingleton;
 import prefuse.data.Node;
 import prefuse.data.Tree;
-import prefuse.util.io.IOLib;
 import java.util.HashMap;
 
 
@@ -46,16 +42,7 @@ public class TreeBuilder {
 	 * @return
 	 */
 	public Tree buildTreeFromRStore(RTuple fact){
-		Factory factory = VisualizationFactorySingleton.getFactoryInstance();
 		try {
-
-	    //    InputStream rstoreInputStream = IOLib.streamFromString(rstoreFile);
-	    //	RStore rfact = factory.RStoreFromFile(rstoreInputStream);
-	    //	RTupleRtuples rtuples = rfact.getRtuples();
-		//	RTuple rt = rtuples.getHead();
-
-
-
 			RElem set = fact.getValue();
 			RElemElements elements = set.getElements();
 	    	makeNewTree();
@@ -84,7 +71,6 @@ public class TreeBuilder {
 	 */
 	private void setTreeNodes(RElemElements elements){
 		while(elements.hasHead()){  // each rstore tuple
-			RElemElements optionalElements = null;
 			RElem tuple = elements.getHead();
 			RElemElements tupleElements = tuple.getElements();
 			if(tupleElements.getHead().hasLocation()){  // here we get the fist element of relation([Loc,set(Loc),relation([Loc,int]),relation([str,int])] namely Loc

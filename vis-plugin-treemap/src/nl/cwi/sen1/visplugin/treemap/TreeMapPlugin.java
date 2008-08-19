@@ -63,10 +63,9 @@ public class TreeMapPlugin {
     public static JPanel Treemap() {
 
     	Tree tree= null;
-    	Factory factory = VisualizationFactorySingleton.getFactoryInstance();
+
 		try {
     	TreeBuilder treeBuilder = new TreeBuilder();
-	    InputStream rstoreInputStream;
     	tree = treeBuilder.buildTreeFromRStore(m_fact);
 	    metricsMaxValues = treeBuilder.getMetricsMaxValues();
 		} catch (Exception e) {
@@ -79,7 +78,6 @@ public class TreeMapPlugin {
         final JPanel codeOverviewPanel = new JPanel(new BorderLayout());
         final JTextPane codeOverviewArea = new JTextPane();
         final JScrollPane scrollPane = new JScrollPane(codeOverviewArea);
-     //   scrollPane.setBorder(orangeLineBorder);
         codeOverviewArea.setEditable(false);
         codeOverviewPanel.add(scrollPane,BorderLayout.CENTER);
 
@@ -87,7 +85,6 @@ public class TreeMapPlugin {
         final JPanel metricViewPanel = new JPanel(new BorderLayout());
         final JTextArea metricArea = new JTextArea();
         final JScrollPane scrollmetricArea = new JScrollPane(metricArea);
-     //   metricViewPanel.setBorder(orangeLineBorder);
         metricArea.setEditable(false);
         metricArea.setFont(new Font("Tahoma", 0, 11));
         scrollmetricArea.setBorder(whiteLineBorder);
@@ -173,9 +170,6 @@ public class TreeMapPlugin {
         JPanel windowPanel = new JPanel(new BorderLayout());
         windowPanel.add(box, BorderLayout.EAST);
         windowPanel.add(treemap, BorderLayout.CENTER);
-//
-//        MouseEvent event = new MouseEvent( treemap, MouseEvent.MOUSE_CLICKED, 0, MouseEvent.BUTTON3, 0, 0, 1, false );
-//        treemap.getZoomToFitControl().mouseClicked(event);
 
         return windowPanel;
     }

@@ -27,7 +27,6 @@ import prefuse.Visualization;
      * @author Qais
      */
     public class TreeMapNodeRenderer extends AbstractShapeRenderer {
-        private static RoundRectangle2D  m_roundRect = new RoundRectangle2D.Double();
         private static Rectangle2D  m_Rect = new Rectangle2D.Double();
 		private static ColorMap m_cmap;
 		private static ColorMap m_leafmap;

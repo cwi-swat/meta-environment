@@ -183,9 +183,6 @@ public class TreeMapExample {
         windowPanel.add(box2, BorderLayout.EAST);
         windowPanel.add(treemap, BorderLayout.CENTER);
 
-//      MouseEvent event = new MouseEvent( treemap, MouseEvent.MOUSE_CLICKED, 0, MouseEvent.BUTTON3, 0, 0, 1, false );
-//      treemap.getZoomToFitControl().mouseClicked(event);
-
 
         return windowPanel;
     }
