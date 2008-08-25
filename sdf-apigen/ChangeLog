@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Aug 25 16:41:02 CEST 2008 <jurgenv@cwi.nl>
+ * test/PeanoTest.java: discovered a serious bug in the deserialization
+   code for builtins. Changed the test to trigger the bug.
+
 Fri Mar 10 11:38:23 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Maintainers use ATerm-dbg library

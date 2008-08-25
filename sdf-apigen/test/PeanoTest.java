@@ -43,6 +43,9 @@ public class PeanoTest {
       System.err.println("unexpected result of computation!");
       System.exit (1);
     }
+
+    ATerm term = e.toTerm();
+    OptLayout l = N.getPeanoFactory().OptLayoutFromTerm(term);
   }
 
   public final static void main(String[] args) {
