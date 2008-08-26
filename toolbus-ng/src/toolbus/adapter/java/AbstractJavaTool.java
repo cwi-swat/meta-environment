@@ -34,7 +34,7 @@ public abstract class AbstractJavaTool extends AbstractTool{
 	 *             establishing of the connection.
 	 */
 	public void connect(String[] args) throws Exception{
-		if(toolBridge != null) throw new RuntimeException("Already connected.");
+		if(toolBridge != null) throw new RuntimeException("ToolBridge has already been connected.");
 		
 		String toolName = null;
 		int toolID = -1;
@@ -75,6 +75,8 @@ public abstract class AbstractJavaTool extends AbstractTool{
 	 */
 	public void connectDirectly(ToolBus toolbus, String toolName, int toolID) throws Exception{
 		if(toolName == null) throw new RuntimeException("Missing tool identification.");
+		
+		if(toolBridge != null) throw new RuntimeException("ToolBridge has already been connected.");
 		
 		toolBridge = new JavaToolBridge(termFactory, this, toolName, toolID, toolbus);
 		toolBridge.run();
