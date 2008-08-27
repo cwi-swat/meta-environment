@@ -566,6 +566,9 @@ public class Functions{
 				
 			case ATerm.REAL:
 				return tbfactory.RealType;
+			
+			case ATerm.BLOB:
+				return tbfactory.BlobType;
 				
 			case TBTermFactory.VAR:
 				return ((TBTermVar) t).getVarType();
@@ -659,6 +662,8 @@ public class Functions{
 				return term2.equals(tbfactory.IntType);
 			case ATerm.REAL:
 				return term2.equals(tbfactory.RealType);
+			case ATerm.BLOB:
+				return term2.equals(tbfactory.BlobType);
 				
 			case ATerm.PLACEHOLDER:
 				return compatibleTypes(((ATermPlaceholder) term1).getPlaceholder(), term2);
