@@ -679,6 +679,8 @@ public class Functions{
 						return true;
 					else if(term2.getType() == ATerm.REAL && term1.equals(tbfactory.RealType))
 						return true;
+					else if(term2.getType() == ATerm.BLOB && term1.equals(tbfactory.BlobType))
+						return true;
 					else return false;
 				}
 				
