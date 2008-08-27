@@ -748,7 +748,7 @@ public class TBTermFactory extends PureFactory{
 				return Functions.compatibleTypes(((TBTermVar) terma).getVarType(), termb);
 			case ATerm.BLOB:
 				if(isAnyVar(termb)) return true;
-				return terma.isEqual(termb) || (termb == StrPlaceholder) || (termb == TermPlaceholder);
+				return terma.isEqual(termb) || (termb == BlobPlaceholder) || (termb == TermPlaceholder);
 				
 			case ATerm.INT:
 				if(isAnyVar(termb)) return true;
@@ -771,7 +771,7 @@ public class TBTermFactory extends PureFactory{
 					case ATerm.APPL:
 						return matchPlaceholder((ATermAppl) termb, (ATermPlaceholder) terma, true);
 					case ATerm.BLOB:
-						return (terma == StrPlaceholder);
+						return (terma == BlobPlaceholder);
 					case ATerm.LIST:
 						return matchListPlaceholder((ATermList) termb, (ATermPlaceholder) terma, true);
 				}
