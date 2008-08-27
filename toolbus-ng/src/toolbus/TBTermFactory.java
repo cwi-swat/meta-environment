@@ -31,6 +31,7 @@ public class TBTermFactory extends PureFactory{
 	public final ATerm StrType;
 	public final ATerm TermType;
 	public final ATerm ListType;
+	public final ATerm BlobType;
 	
 	public final ATerm Undefined;
 	
@@ -40,6 +41,7 @@ public class TBTermFactory extends PureFactory{
 	public final ATerm StrPlaceholder;
 	public final ATerm TermPlaceholder;
 	public final ATerm ListPlaceholder;
+	public final ATerm BlobPlaceholder;
 	
 	public final ATermList EmptyList;
 	
@@ -57,6 +59,7 @@ public class TBTermFactory extends PureFactory{
 		StrType = make("str");
 		TermType = make("term");
 		ListType = make("list");
+		BlobType = make("blob");
 		
 		Undefined = make("undefined");
 		
@@ -66,6 +69,7 @@ public class TBTermFactory extends PureFactory{
 		StrPlaceholder = makePlaceholder(StrType);
 		TermPlaceholder = makePlaceholder(TermType);
 		ListPlaceholder = makePlaceholder(ListType);
+		BlobPlaceholder = makePlaceholder(BlobType);
 		
 		EmptyList = makeList();
 		
@@ -147,6 +151,10 @@ public class TBTermFactory extends PureFactory{
 	
 	public boolean isList(ATerm t){
 		return t.getType() == ATerm.LIST;
+	}
+	
+	public boolean isBlob(ATerm t){
+		return t.getType() == ATerm.BLOB;
 	}
 	
 	public ATerm getArgs(ATerm t){
@@ -367,7 +375,7 @@ public class TBTermFactory extends PureFactory{
 		
 		switch(t.getType()){
 			case ATerm.BLOB:
-				throw new ToolBusInternalError("makePattern for BLOB not implemented");
+				return BlobPlaceholder;
 				
 			case ATerm.INT:
 				return IntPlaceholder;
