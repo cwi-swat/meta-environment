@@ -108,13 +108,13 @@ check_rstore_file_type(){
 # 
 set_output_style(){
   if [ "$OUTPUTFILE" == "-" ]; then
-	OUTPUT="$UNPARSEPT -o $OUTPUTFILE"
+	OUTPUT="$UNPARSEPT -o $OUTPUTFILE || exit 1"
   else
     if test -z "$OUTPUT_READABLE"
     then
-	OUTPUT="$LOWER -o $OUTPUTFILE"
+	OUTPUT="$LOWER -o $OUTPUTFILE || exit 1"
     else
-	OUTPUT="$UNPARSEPT -o $OUTPUTFILE"
+	OUTPUT="$UNPARSEPT -o $OUTPUTFILE || exit 1"
     fi
   fi
 }
