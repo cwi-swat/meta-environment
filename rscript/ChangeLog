@@ -1,5 +1,13 @@
 # $Id$
 
+Fri Aug 29 14:11:20 CEST 2008 <jurgenv@cwi.nl>
+ * utils/rscript.spec.sh,rscript.pc.in: added dependency on rstore-support.
+   More importantly, fixed the rscript command to properly deal with the
+   latest format in which rstores are currently represented. This is the
+   plain ATerm encoding of an rstore. Before the interpreter runs the
+   lift-rstore command is applied and after the lower rstore command is
+   applied.
+
 Thu May 22 18:36:54 CEST 2008 <basten@cwi.nl>
  * spec/languages/rscript/run/RscriptCalculator.sdf: fixed bug in Rscript
    interpreter where declaration of variables in rstores results in empty

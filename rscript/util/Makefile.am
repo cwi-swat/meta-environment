@@ -19,5 +19,6 @@ CLEANFILES = \
              s@__BINDIR__@$(bindir)@g;\
              s@__DATADIR__@$(pkgdatadir)@g;\
              s@__SGLR__@$(SGLR_PREFIX)@g;\
+             s@__RSTORE_SUPPORT__@$(RSTORE_SUPPORT_PREFIX)@g;\
              s@__PT_SUPPORT__@$(PT_SUPPORT_PREFIX)@g;\
              s@__ERROR_SUPPORT__@$(ERROR_SUPPORT_PREFIX)@g;" < $< > $@ && chmod +x $@

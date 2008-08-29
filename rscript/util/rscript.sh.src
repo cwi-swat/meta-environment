@@ -18,9 +18,12 @@ datadir=__DATADIR__
 PRG=`basename $0`
 VERBOSE=
 CHECK_ONLY=
+OUTPUT_READABLE=
+OUTPUTFILE="-"
 
 RSCRIPT_PARSE_TABLE=${datadir}/rscript.trm.tbl
-RSTORE_PARSE_TABLE=${datadir}/rstore.trm.tbl
+LIFT=__RSTORE_SUPPORT__/bin/lift-rstore
+LOWER=__RSTORE_SUPPORT__/bin/lower-rstore
 
 EVALUATOR=${bindir}/rscriptcalculator
 RSTORE_SORT=RStore
@@ -42,7 +45,6 @@ USE_TESTSUITES=no
 YIELD=
 
 THE_RSCRIPT=
-OUTPUT_AS_TREE=
 OUTPUT=
 DISPLAY_OUTPUT=__ERROR_SUPPORT__/bin/display-error
 RSTORE=
@@ -57,8 +59,10 @@ cat << ENDCAT >&2
 Usage: $PRG [options] [filename]
 
 Options:
+  -h (--help)                         print usage info
   -i (--input)              filename  input from file (default: stdin)
-  -o (--output-parse-tree)  filename  output as parse-tree to filename (default: text to stdout)
+  -o (--output)             filename  output to filename (default: stdout)
+  -r (--readable)                     output readable for human beings (default:aterm rstore)
   -s (--store)              filename  initial Rstore (default: none)
   -c (--check-only)                   only check the Rscript, do not evaluate it
   -t (--testsuite)                    execute as test suite (excludes -y option)
@@ -97,22 +101,21 @@ check_rscript_file_type(){
 check_rstore_file_type(){
   case "$1" in
   *.rstore) ;;
-  *.rstore.pt) ;;
   *) die "$1 is not an rstore"
   esac
-  if [ ! -r $1 ]
-  then
-     die "$1 is not readable"
-  fi
 }
 
 # 
 set_output_style(){
-  if test -z "$OUTPUT_AS_TREE"
-  then
-      OUTPUT=$UNPARSEPT
+  if [ "$OUTPUTFILE" == "-" ]; then
+	OUTPUT="$UNPARSEPT -o $OUTPUTFILE"
   else
-      OUTPUT="eval cat >"$OUTPUT_AS_TREE
+    if test -z "$OUTPUT_READABLE"
+    then
+	OUTPUT="$LOWER -o $OUTPUTFILE"
+    else
+	OUTPUT="$UNPARSEPT -o $OUTPUTFILE"
+    fi
   fi
 }
 # 
@@ -139,14 +142,9 @@ parse_rscript() {
 #   parse_rstore
 
 parse_rstore() {
-  case $RSTORE in
-      *.pt) PARSED_RSTORE=$RSTORE;;
-
-      *) $SGLR $VERBOSE -p $RSTORE_PARSE_TABLE -s $RSTORE_SORT -i $RSTORE -o $RSTORE.pt
-	 PARSED_RSTORE=$RSTORE.pt
-	 add_tmp_file  $RSTORE.pt
-	 ;;
-  esac
+  $LIFT -i $RSTORE -o $RSTORE.pt || exit 1
+  PARSED_RSTORE=$RSTORE.pt
+  add_tmp_file  $RSTORE.pt
 }
 
 # 
@@ -169,7 +167,7 @@ evaluate() {
     parse_rstore 
     $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT -i $THE_RSCRIPT.pt -i $PARSED_RSTORE | $THE_EVALUATOR | $OUTPUT
   else
-    $THE_EVALUATOR -r $EVALUATOR_RESULT -i $THE_RSCRIPT.pt | $OUTPUT
+    $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT -i $THE_RSCRIPT.pt | $THE_EVALUATOR | $OUTPUT
   fi
   echo ""
 }
@@ -185,8 +183,12 @@ fi
 while test $# -gt 0
 do
   case "$1" in
-    -o | --output-parse-tree)
-      shift; OUTPUT_AS_TREE=$1 ;;
+    -h | --help)
+      usage; exit 0;;
+    -o | --output)
+      shift; OUTPUTFILE=$1 ;;
+    -r | --readable)
+      OUTPUT_READABLE=1 ;; 
     -i | --input)
       shift; THE_RSCRIPT=$1 ; check_rscript_file_type ${THE_RSCRIPT};;
     -s | --store)
