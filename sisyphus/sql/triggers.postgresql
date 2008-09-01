@@ -1,0 +1,43 @@
+
+drop table toplevel;
+create table toplevel (
+       si_component_id integer references si_components,
+       si_host_id integer references si_hosts,
+       si_item_id integer references si_items,
+       primary key (si_component_id, si_host_id)
+);
+
+
+
+create or replace rule update_toplevel_on_insert as
+on insert to toplevel
+where (new.si_component_id, new.si_host_id) 
+    in (select si_component_id, si_host_id from toplevel)
+do instead
+update toplevel
+set 
+    si_item_id  = new.si_item_id
+where
+    si_component_id = new.si_component_id
+    and
+    si_host_id = new.si_host_id;
+			  
+
+create or replace function update_toplevel_function() 
+returns trigger as $update_toplevel$
+begin
+  insert into toplevel values(
+  	      (select si_component_id from si_revisions 
+	 	where id = new.si_revision_id limit 1),
+		new.si_host_id,
+		new.id);
+  return null;
+end;
+$update_toplevel$ language plpgsql;
+
+drop trigger update_toplevel;
+create trigger update_toplevel 
+after insert 
+on si_items 
+for each row
+execute procedure update_toplevel_function();
