@@ -1,22 +1,34 @@
 
-drop table toplevel;
-create table toplevel (
+drop table si_toplevel;
+create table si_toplevel (
        si_component_id integer references si_components,
        si_host_id integer references si_hosts,
+
        si_item_id integer references si_items,
+
+       time timestamp not null unique,
+       name varchar(32) not null,
+       host varchar(512) not null,
+       success boolean,
+       progress boolean,
+
        primary key (si_component_id, si_host_id)
 );
 
 
-
 create or replace rule update_toplevel_on_insert as
-on insert to toplevel
+on insert to si_toplevel
 where (new.si_component_id, new.si_host_id) 
     in (select si_component_id, si_host_id from toplevel)
 do instead
-update toplevel
+update si_toplevel
 set 
-    si_item_id  = new.si_item_id
+    si_item_id  = new.si_item_id,
+    time = new.time,
+    name = new.name,
+    host = new.host,
+    success = new.success,
+    progress = new.progress
 where
     si_component_id = new.si_component_id
     and
@@ -26,16 +38,31 @@ where
 create or replace function update_toplevel_function() 
 returns trigger as $update_toplevel$
 begin
-  insert into toplevel values(
+  insert into si_toplevel values(
   	      (select si_component_id from si_revisions 
 	 	where id = new.si_revision_id limit 1),
 		new.si_host_id,
-		new.id);
+		new.id,
+		/* Timestamp out of sessions: */
+		(select time from si_sessions, si_items 
+		where si_items.id = new.id and si_session_id = si_sessions.id),
+		
+		/* Name from components */
+		(select name from si_components, si_revisions 
+		 where si_revisions.id  = new.si_revision_id and
+		 si_component_id = si_components.id),
+
+		 /* hostname from si_hosts */
+		 (select uname from si_hosts where id = new.si_host_id),
+
+		 new.success,
+		 new.progress
+		);
   return null;
 end;
 $update_toplevel$ language plpgsql;
 
-drop trigger update_toplevel;
+drop trigger update_toplevel on si_items;
 create trigger update_toplevel 
 after insert 
 on si_items 
