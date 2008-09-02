@@ -1,7 +1,7 @@
 prefix=@prefix@
 
 Name: vis-plugin-generic
-Version: 1.0
+Version: 1.1
 Description: 
 Requires: aterm-java,config-support-java,toolbus-java-adapter,meta-studio,vis-plugin,tunit,rstore-support-java
 Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
