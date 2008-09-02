@@ -3,7 +3,7 @@ Maintainers=paulk@cwi.nl,jurgenv@cwi.nl
 
 Name: toolbuslib
 Description: ToolBus adapter library
-Version: 1.0
+Version: 1.1
 Libs: -L${prefix}/lib -lATB @SOCKETLIBS@
 Cflags: -I${prefix}/include
 #uninstalled Libs: -L@abs_top_builddir@/src -lATB @SOCKETLIBS@
