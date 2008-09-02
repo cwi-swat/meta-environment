@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
 
 Name: module-details-gui
-Version: 1.0.1
+Version: 1.1
 Description:
 Requires: aterm-java,meta-studio,module-support-java,toolbus-java-adapter
 JarFile=moduledetails.jar
