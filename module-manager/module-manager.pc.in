@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=lankamp@cwi.nl
 
 Name: module-manager
-Version: 1.1.2
+Version: 1.2
 Description:
 Requires: aterm-java,graph-support-java,module-support-java,toolbus-java-adapter
 JarFile=module-manager.jar
