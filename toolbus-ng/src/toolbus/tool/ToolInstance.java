@@ -326,17 +326,17 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * Attempts to find a value that matches the given signature. If this is the case the
 	 * environment will be updated.
 	 * 
-	 * @param aTerm
+	 * @param pattern
 	 *            The signature we need to match on.
 	 * @param env
 	 *            The enviroment in which we need to make updates, when a match have been made.
 	 * @return Indicates if the matches was successful.
 	 */
-	public boolean getValueFromTool(ATerm aTerm, Environment env){
+	public boolean getValueFromTool(ATerm pattern, Environment env){
 		synchronized(valuesFromTool){
 			Iterator<ATerm> valuesIterator = valuesFromTool.iterator();
 			while(valuesIterator.hasNext()){
-				boolean matches = tbfactory.matchPatternToValue(aTerm, env, valuesIterator.next());
+				boolean matches = tbfactory.matchPatternToValue(pattern, env, valuesIterator.next());
 				if(matches){
 					valuesIterator.remove();
 					return true;
@@ -350,17 +350,17 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * Attempts to find a event that matches the given signature. If one is found the environment
 	 * will be updated.
 	 * 
-	 * @param aTerm
+	 * @param pattern
 	 *            The signature we need to match on.
 	 * @param env
 	 *            The enviroment in which we need to make updates, when a match have been made.
 	 * @return Indicates if the matches was successful.
 	 */
-	public boolean getEventFromTool(ATerm aTerm, Environment env){
+	public boolean getEventFromTool(ATerm pattern, Environment env){
 		synchronized(eventsFromTool){
 			Iterator<ATerm> eventsIterator = eventsFromTool.iterator();
 			while(eventsIterator.hasNext()){
-				boolean matches = tbfactory.matchPatternToValue(aTerm, env, eventsIterator.next());
+				boolean matches = tbfactory.matchPatternToValue(pattern, env, eventsIterator.next());
 				if(matches){
 					eventsIterator.remove();
 					return true;
@@ -374,17 +374,17 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * Attempts to find a request that matches the given signature. If one is found the environment
 	 * will be updated.
 	 * 
-	 * @param aTerm
+	 * @param pattern
 	 *            The signature we need to match on.
 	 * @param env
 	 *            The enviroment in which we need to make updates, when a match have been made.
 	 * @return Indicates if the matches was successful.
 	 */
-	public boolean getRequestFromTool(ATerm aTerm, Environment env){
+	public boolean getRequestFromTool(ATerm pattern, Environment env){
 		synchronized(requestsFromTool){
 			Iterator<ATerm> requestsIterator = requestsFromTool.iterator();
 			while(requestsIterator.hasNext()){
-				boolean matches = tbfactory.matchPatternToValue(aTerm, env, requestsIterator.next());
+				boolean matches = tbfactory.matchPatternToValue(pattern, env, requestsIterator.next());
 				if(matches){
 					requestsIterator.remove();
 					return true;
