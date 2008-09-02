@@ -1,7 +1,7 @@
 prefix=@prefix@
 
 Name: vis-plugin
-Version: 1.1
+Version: 1.2
 Description: 
 Requires: aterm-java,config-support-java,toolbus-java-adapter,meta-studio,tunit,rstore-support-java,vis-base
 Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
