@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=bruntink@cwi.nl
 
 Name: config-support-java
-Version: 1.0
+Version: 1.1
 Description:
 Requires: aterm-java
 JarFile=config-support-java.jar 
