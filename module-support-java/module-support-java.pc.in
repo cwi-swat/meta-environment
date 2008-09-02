@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=bruntink@cwi.nl
 
 Name: module-support-java
-Version: 1.0
+Version: 1.1
 Description:
 Requires: aterm-java
 JarFile=module-support-java.jar 
