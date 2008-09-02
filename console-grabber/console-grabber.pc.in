@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
 Name: console-grabber
-Version: 1.1.1
+Version: 1.2
 Description:
 Requires: aterm-java,meta-studio,toolbus-java-adapter
 JarFile=console-grabber.jar
