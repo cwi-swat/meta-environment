@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
 
 Name: config-manager
-Version: 1.2
+Version: 1.3
 Description:
 Requires: aterm,config-support,error-support,toolbuslib
 ToolBusFlags=-I${prefix}/share/config-manager
