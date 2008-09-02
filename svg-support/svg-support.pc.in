@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
 Name: svg-support
-Version: 1.0
+Version: 1.1
 Description: A wrapper for batik in the Meta-Environment.
 Requires:
 JarFile=svg-support.jar
