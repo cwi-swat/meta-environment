@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=lankamp@cwi.nl
 Name: pandora
-Version: 1.5
+Version: 1.6
 Description:
 Requires: asc-support,aterm,pt-support,toolbuslib
 ToolBusFlags=-I${prefix}/share/pandora
