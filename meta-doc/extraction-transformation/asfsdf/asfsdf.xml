@@ -160,7 +160,7 @@
         </listitem>
 
         <listitem>
-          <para>In Term Rewriting the notions<emphasis>rewrite
+          <para>In Term Rewriting the notions <emphasis>rewrite
           rules</emphasis> and <emphasis>term rewriting</emphasis> are
           explained that play an important role when executing ASF+SDF
           specifications.</para>
@@ -195,7 +195,7 @@
       the signature of terms. An SDF production is an ASF term constructor. A
       non-terminal in SDF is an algebraic sort in ASF. ASF specification are
       collections of equations. The algebraic equations define which terms are
-      equal to which other terms. This is were the algebra stops, and term
+      equal to which other terms. This is where the algebra stops, and term
       rewriting begins. In fact the equations are interpreted as rewrite
       rules. Each pattern on the left-hand side is searched in the input term,
       and replaced by the right-hand side.</para>
@@ -1796,7 +1796,7 @@ exports
       datastructures that are being defined. Other function symbols, like add
       and mul, are reducible; the equations define how these symbols can be
       removed from a term. There are currently, two ways to indicate that a
-      function is a constructur:</para>
+      function is a constructor:</para>
 
       <itemizedlist>
         <listitem>
