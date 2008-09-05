@@ -29,6 +29,7 @@ ATCOMPARE="__ATERM__/bin/atdiff"
 COMPARE="__PT_SUPPORT__/bin/comparePT"
 ORDER="__PT_SUPPORT__/bin/orderPT"
 ERRORCOMPARE="__ERROR_SUPPORT__/bin/error-diff"
+SRCDIR="__TOP_SRCDIR__/test"
 
 GRAMMARS="__TOP_BUILDDIR__/test/grammars"
 TABLES="__TOP_BUILDDIR__/test/tables"
@@ -266,7 +267,7 @@ do
     fi
   fi
 
-done <termsCommandLines
+done < ${SRCDIR}/termsCommandLines
 
 while read commandLine 
 do
@@ -289,7 +290,7 @@ do
     fi
   fi
 
-done <erroneousCommandLines
+done < ${SRCDIR}/erroneousCommandLines
 
 
 if [ $verbose -gt 0 ] ; then

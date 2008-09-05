@@ -1,5 +1,12 @@
 $Id$
 
+Fri Sep  5 10:32:56 CEST 2008 <jurgenv@cwi.nl>
+ * src/Sdf2-Load.c: this file was empty for some reason, breaking the
+   module loading facilities. Fixed by regenerating.
+ * test/*: added special test for loading functionality which is also
+   a good test for the ASF parse_bytes builtin.
+ * pgen.pc.in: Bumped version to 2.8
+
 Mon Jun  9 13:30:33 CEST 2008 <jurgenv@cwi.nl>
  * pgen.pc.in: Bumped to version 2.6.1
 

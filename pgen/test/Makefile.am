@@ -1,12 +1,12 @@
 # $Id$
 
-SUBDIRS    = grammars tables terms erroneous
+SUBDIRS    = grammars tables terms erroneous modules
 
-EXTRA_DIST = regressionTests.sh.src
+EXTRA_DIST = regressionTests.sh.src loadTests.sh.src
 
-TESTS      = regressionTests
+TESTS      = regressionTests loadTests
 
-CLEANFILES = $(TESTS) 
+CLEANFILES = $(TESTS)  Load.tbl
 
 % : %.sh.src Makefile
 	sed "s@__TOP_BUILDDIR__@$(top_builddir)@g;\
