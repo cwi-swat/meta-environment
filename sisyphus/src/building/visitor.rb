@@ -150,7 +150,7 @@ module Building
 
     def build_revision_with_deps(revision, dep_items)
       target = @target_factory.target(revision, dep_items)
-      @log.info("dep_items in build_revision_with_deps: [#{dep_items.join(', ')}]")
+      @log.info("#{revision}: dep_items in build_revision_with_deps: [#{dep_items.join(', ')}]")
       item = @builder.build(target)
       return item
     end
@@ -171,6 +171,7 @@ module Building
       result = []                   
       @log.indented do
         result = revision.deps.collect do |dep|
+          @log.info("Building #{dep}")
           build_component(dep)
         end
       end

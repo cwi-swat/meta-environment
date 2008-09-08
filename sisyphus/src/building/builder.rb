@@ -1,3 +1,6 @@
+
+require 'net/smtp'
+
 module Building
 
   require 'model/db'
@@ -55,12 +58,13 @@ module Building
 
 
   class Builder
-    def initialize(store, forced, config, backtracking, log)
+    def initialize(store, forced, config, backtracking, log, mailer)
       @store = store
       @forced = forced
       @config = config
       @backtracking = backtracking
       @log = log
+      @mailer = mailer
     end
 
     def build(target)
@@ -92,10 +96,13 @@ where
    si_items.id < #{item.id} and
    si_items.si_revision_id = si_revisions.id and
    si_items.si_host_id = #{item.si_host.id} and
-   si_revisions.si_component_id = #{item.si_revision.si_component.id}  
+   si_revisions.si_component_id = #{item.si_revision.si_component.id} 
+   limit 1
 EOQ
+      @log.info(query)
       stale_items = Model::SiItem.find_by_sql(query)
       stale_items.each do |stale_item|
+        @log.info("found a stale_item: #{stale_item}")
         prefix = stale_item.prefix(@config.install_dir)
         if File.exist?(prefix) then
           @log.info("deleting stale build #{stale_item} at #{prefix}")
@@ -129,7 +136,7 @@ EOQ
       #  return true
       #end
 
-      ## ALWAYS remove stale buiild items.
+      ## ALWAYS remove stale build items.
       item = @store.last_item_for_target(target)
       if not item.nil? and item.in_progress? then
         @log.info("cleaning up stale build item: #{item}")
@@ -152,6 +159,27 @@ EOQ
      
       return false
     end
+
+    def email_maintainer(target)
+      target.revision.checkout.extract_emails.each do |addr|
+        msgstr = <<EOMSG
+Dear #{addr},
+
+Please bump the version number of this package, because an older revision of this package has been released with the current version.
+
+Package: #{target.revision.component}
+Version: #{target.revision.checkout.extract_version}
+Revision: #{target.revision.version}
+
+Thank you,
+
+The Sisyphus Continuous Integration System
+EOMSG
+        Net::SMTP.start(@mailer.smtp, @mailer.port) do |smtp|
+          smtp.send_message(msgstr, @mailer.from_address, addr)
+        end
+      end
+    end
     
     def new_build_for_target_if_not_released(target)
       component = target.revision.component
@@ -159,6 +187,7 @@ EOQ
       @log.info("**************##### Package: #{component}-#{version}")
       if @store.has_release_for_package_version(component, version) then
         @log.warn("Package #{component} has been released already as version #{version}!")      
+        email_maintainer(target)
         #item = @store.item_for_target(target, target.dep_items)
         #item.set_success(false)
         #item.set_progress(false)
