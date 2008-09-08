@@ -221,9 +221,8 @@ EOQ
       released_items_with_same_version = Model::SiItem.find_by_sql(query)
       if not released_items_with_same_version.empty? then
         puts "Yes."
-        print "Is this a problem? [NO|yes]"
-        if gets.chomp != 'yes' then
-        else
+        print "Is this a problem? [no|YES]"
+        unless gets.chomp.downcase == 'no' then
           errors = true
         end
       else
