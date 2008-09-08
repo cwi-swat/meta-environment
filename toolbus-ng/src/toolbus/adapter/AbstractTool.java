@@ -1,10 +1,19 @@
 package toolbus.adapter;
 
+import java.nio.ByteBuffer;
+
+import jjtraveler.VisitFailure;
 import toolbus.IOperations;
 import toolbus.TBTermFactory;
+import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
+import aterm.ATermBlob;
+import aterm.ATermList;
+import aterm.ATermPlaceholder;
 import aterm.pure.PureFactory;
+import aterm.pure.binary.BinaryReader;
+import aterm.pure.binary.BinaryWriter;
 
 /**
  * This class facilitates the functions a tool needs to be able to functions.
@@ -16,6 +25,9 @@ public abstract class AbstractTool implements IOperations{
 
 	public final static String DIRECTTOOL = "direct";
 	public final static String REMOTETOOL = "remote";
+	
+	private final static int PACKBUFFERSIZE = 65536;
+	private final static AFun SYMBOL_SAF = termFactory.makeAFun("saf-encoded", 1, false);
 
 	/**
 	 * This variable MUST be set before tool interaction can take place.
@@ -123,4 +135,115 @@ public abstract class AbstractTool implements IOperations{
 	 *            The term containing information about the termination.
 	 */
 	public abstract void receiveTerminate(ATerm aTerm);
+	
+	/**
+	 * Packs the given term.
+	 * 
+	 * @param termData
+	 *            The term that needs to be packed.
+	 * @return
+	 *            The packed version of the given term.
+	 */
+	public static ATerm pack(ATerm termData){
+		ByteBuffer packBuffer = ByteBuffer.allocate(PACKBUFFERSIZE);
+		ATermList chunkList = termFactory.getEmpty();
+		BinaryWriter binaryWriter = new BinaryWriter(termData);
+		do{
+			packBuffer.clear();
+			try{
+				binaryWriter.serialize(packBuffer);
+			}catch(VisitFailure vf){/*Intentionally ignore this useless exception.*/}
+			
+			int size = packBuffer.limit();
+			byte[] data = new byte[size];
+			packBuffer.get(data);
+			
+			ATermBlob chunk = termFactory.makeBlob(data);
+			chunkList = chunkList.insert(chunk);
+		}while(!binaryWriter.isFinished());
+		
+		return termFactory.makeAppl(SYMBOL_SAF, chunkList);
+	}
+	
+	/**
+	 * Unpacks the given term.
+	 * 
+	 * @param packedTerm
+	 *            The term that needs to be unpacked.
+	 * @return
+	 *            The unpacked version of the given term.
+	 */
+	public static ATerm unpack(ATerm packedTerm){
+		ATerm result;
+		
+		ATermList annos = packedTerm.getAnnotations();
+		switch(packedTerm.getType()){
+			case ATerm.INT:
+			case ATerm.REAL:
+			case ATerm.BLOB:
+				result = packedTerm;
+				break;
+			
+			case ATerm.PLACEHOLDER:
+				ATerm type = ((ATermPlaceholder) packedTerm).getPlaceholder();
+				ATerm unpacked_type = unpack(type);
+				if(unpacked_type.equals(type)){
+					result = packedTerm;
+				}else{
+					result = termFactory.makePlaceholder(unpacked_type);
+				}
+				break;
+			
+			case ATerm.APPL:
+				ATermAppl appl = (ATermAppl)packedTerm;
+				AFun fun = appl.getAFun();
+				if(fun == SYMBOL_SAF){
+					ATermList chunkList = (ATermList) appl.getArgument(0);
+					int nrOfChunks = chunkList.getLength();
+					BinaryReader binaryReader = new BinaryReader(termFactory);
+					do{
+						ATermBlob chunk = (ATermBlob) chunkList.elementAt(--nrOfChunks);
+						byte[] data = chunk.getBlobData();
+						ByteBuffer unpackBuffer = ByteBuffer.wrap(data);
+						
+						binaryReader.deserialize(unpackBuffer);
+					}while(nrOfChunks > 0);
+					
+					if(!binaryReader.isDone()) throw new RuntimeException("Unpacked term was incomplete.\n");
+					
+					result = binaryReader.getRoot();
+				}else{
+					ATermList unpacked_args = termFactory.getEmpty();
+					
+					for(int i = fun.getArity() - 1; i >= 0; i--) {
+						unpacked_args = unpacked_args.insert(unpack(appl.getArgument(i)));
+					}
+					
+					result = termFactory.makeApplList(fun, unpacked_args);
+				}
+				break;
+			
+			case ATerm.LIST:
+				ATermList list = (ATermList) packedTerm;
+				ATermList unpacked_list = termFactory.getEmpty();
+				
+				while(!list.isEmpty()){
+					unpacked_list = unpacked_list.insert(unpack(list.getFirst()));
+					list = list.getNext();
+				}
+				
+				result = unpacked_list.reverse();
+				break;
+			
+			default:
+				throw new RuntimeException("Unkown term type: "+packedTerm.getType());
+		}
+		
+		if(annos != null){
+			annos = (ATermList) unpack(annos);
+			result = result.setAnnotations(annos);
+		}
+		  
+		return result;
+	}
 }
