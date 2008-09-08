@@ -205,7 +205,8 @@ module Sisyphus
                                                          config.sources.properties['externals'],
                                                          @repo_factory, config.user, config.build_dir, time)  
       target_factory = Building::TargetFactory.new(session, config, @log)
-      @builder = Building::Builder.new(@store, @forced, config, @backtracking, @log)
+      @builder = Building::Builder.new(@store, @forced, config, @backtracking, @log,
+                                       @mailer)
       visitor = Building::Visitor.new(target_factory, revision_factory, @roots, @builder, @log, config, @store)
       visitor.build_roots
     end

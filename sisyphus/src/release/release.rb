@@ -125,6 +125,8 @@ def collect_bundle(bundle_name, temp_collect_url, trg_collect_url)
   Dir.chdir(bundle_name) do
     pkglistfile = 'pkg-list'
     in_place(pkglistfile) do |pkglist|
+      puts "SUBSTITUTING: #{temp_collect_url}"
+      gets
       pkglist.gsub(/,[^,]*$/, ',' + temp_collect_url)
     end
     system('./collect.sh')    
@@ -228,17 +230,37 @@ if __FILE__ == $0 then
   Dir.chdir(workdir) do 
     
     copy_src_dists(src_dist_location, packages)
+
+    puts "Copyied source dists to #{workdir}"
+    gets
+
     packages = rename_packages_and_archives(map, packages)
+
+    puts "Renamed packages and archives"
+    gets
+
     #rename_package_definitions_in_archives(map, packages, collect_url)
 
     bundle_name = create_bundle_for_build(root)
+
+    puts "Created bundle #{bundle_name} for #{root}"
+    gets
+    
+
     collect_bundle(bundle_name, 'file://' + workdir, collect_url)
+
+    puts "Collected bundle"
+    gets
+    
 
     if test then
       integrate_bundle(bundle_name)
     else
       just_archive_bundle(bundle_name)
     end
+
+    puts "Archived bundle #{bundle_name}"
+    gets
 
     bundle_archive = File.join(bundle_name, bundle_name + '.tar.gz')     
     #system("mv #{bundle_archive} ./#{bundle_name}-collected.tar.gz")

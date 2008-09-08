@@ -40,6 +40,7 @@ module Utils
   
 
   class SessionMailer
+    attr_reader :smtp, :port, :from_address
 
     def initialize(from_address, smtp, port = 25, 
                    build_url_pattern = "http://sisyphus.sen.cwi.nl:8080/si_items/show/%d")
