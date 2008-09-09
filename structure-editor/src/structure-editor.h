@@ -9,20 +9,24 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_cursor(int conn, ATerm);
-ATerm get_selected_at_offset_in_tree(int conn, ATerm, int);
-ATerm get_parse_tree(int conn, ATerm);
-void move_cursor(int conn, ATerm, ATerm);
-void set_cursor_at_line_column(int conn, ATerm, int, int);
-void delete_editor(int conn, ATerm);
-void set_cursor_at_offset(int conn, ATerm, int);
-ATerm get_sort_at_cursor(int conn, ATerm);
 ATerm slice_tree(int conn, ATerm);
+ATerm get_cursor(int conn, ATerm);
 ATerm get_focus_at_cursor(int conn, ATerm);
-void create_editor(int conn, ATerm, ATerm);
-void update_editor(int conn, ATerm, ATerm);
-void rec_terminate(int conn, ATerm);
+ATerm get_selected_at_offset_in_tree(int conn, ATerm, int);
+void delete_editor(int conn, ATerm);
 ATerm get_tree_slices(int conn, ATerm);
+ATerm move_selection_right(int conn, ATerm, int);
+void set_cursor_at_line_column(int conn, ATerm, int, int);
+ATerm move_selection_up(int conn, ATerm, int);
+void set_cursor_at_offset(int conn, ATerm, int);
+void move_cursor(int conn, ATerm, ATerm);
+ATerm move_selection_left(int conn, ATerm, int);
+ATerm get_parse_tree(int conn, ATerm);
+ATerm get_sort_at_cursor(int conn, ATerm);
+void create_editor(int conn, ATerm, ATerm);
+ATerm move_selection_down(int conn, ATerm, int);
+void rec_terminate(int conn, ATerm);
+void update_editor(int conn, ATerm, ATerm);
 extern ATerm structure_editor_handler(int conn, ATerm term);
 extern ATerm structure_editor_checker(int conn, ATerm sigs);
 

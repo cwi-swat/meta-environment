@@ -401,6 +401,110 @@ ATerm get_selected_at_offset_in_tree(int cid, ATerm tree, int offset){
   return ATmake("snd-value(selected(sort(<str>), focus(<term>)))", sort, area);
 }
 
+ATerm move_selection_up(int cid, ATerm tree, int offset){
+  SE_StructureEditor editor;
+  SE_Tree cursor;
+  char *sort;
+  ERR_Location location;
+  ERR_Area area;
+  
+  ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
+  create_structure_editor(dummyId, tree);
+  set_cursor_at_offset(cid, dummyId, offset);
+  
+  editor = getEditor(dummyId);
+  
+  editor = moveCursorUp(editor);
+  
+  cursor = SE_getStructureEditorCursor(editor);
+  sort = PT_yieldSymbol(getTreeSort(cursor));
+  
+  location = PT_getTreeLocation(cursor);
+  area = ERR_getLocationArea(location);
+  
+  delete_structure_editor(dummyId);
+  
+  return ATmake("snd-value(moved-selection-up(sort(<str>), focus(<term>)))", sort, area);
+}
+
+ATerm move_selection_down(int cid, ATerm tree, int offset){
+  SE_StructureEditor editor;
+  SE_Tree cursor;
+  char *sort;
+  ERR_Location location;
+  ERR_Area area;
+  
+  ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
+  create_structure_editor(dummyId, tree);
+  set_cursor_at_offset(cid, dummyId, offset);
+  
+  editor = getEditor(dummyId);
+  
+  editor = moveCursorDown(editor);
+  
+  cursor = SE_getStructureEditorCursor(editor);
+  sort = PT_yieldSymbol(getTreeSort(cursor));
+  
+  location = PT_getTreeLocation(cursor);
+  area = ERR_getLocationArea(location);
+  
+  delete_structure_editor(dummyId);
+  
+  return ATmake("snd-value(moved-selection-down(sort(<str>), focus(<term>)))", sort, area);
+}
+
+ATerm move_selection_left(int cid, ATerm tree, int offset){
+  SE_StructureEditor editor;
+  SE_Tree cursor;
+  char *sort;
+  ERR_Location location;
+  ERR_Area area;
+  
+  ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
+  create_structure_editor(dummyId, tree);
+  set_cursor_at_offset(cid, dummyId, offset);
+  
+  editor = getEditor(dummyId);
+  
+  editor = moveCursorLeft(editor);
+  
+  cursor = SE_getStructureEditorCursor(editor);
+  sort = PT_yieldSymbol(getTreeSort(cursor));
+  
+  location = PT_getTreeLocation(cursor);
+  area = ERR_getLocationArea(location);
+  
+  delete_structure_editor(dummyId);
+  
+  return ATmake("snd-value(moved-selection-left(sort(<str>), focus(<term>)))", sort, area);
+}
+
+ATerm move_selection_right(int cid, ATerm tree, int offset){
+  SE_StructureEditor editor;
+  SE_Tree cursor;
+  char *sort;
+  ERR_Location location;
+  ERR_Area area;
+  
+  ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
+  create_structure_editor(dummyId, tree);
+  set_cursor_at_offset(cid, dummyId, offset);
+  
+  editor = getEditor(dummyId);
+  
+  editor = moveCursorRight(editor);
+  
+  cursor = SE_getStructureEditorCursor(editor);
+  sort = PT_yieldSymbol(getTreeSort(cursor));
+  
+  location = PT_getTreeLocation(cursor);
+  area = ERR_getLocationArea(location);
+  
+  delete_structure_editor(dummyId);
+  
+  return ATmake("snd-value(moved-selection-right(sort(<str>), focus(<term>)))", sort, area);
+}
+
 void rec_terminate(int cid, ATerm message) {
   exit(0);
 }

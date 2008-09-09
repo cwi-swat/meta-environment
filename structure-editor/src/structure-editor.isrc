@@ -82,11 +82,32 @@ in
     . snd-eval(SE, slice-tree(Tree))
     . rec-value(SE, sliced-tree(Slices?))
     . snd-msg(se-sliced(Tree, Slices))
+  
   +
     rec-msg(se-get-selected-at-offset-in-tree(Tree?, Offset?))
     . snd-eval(SE, get-selected-at-offset-in-tree(Tree, Offset))
     . rec-value(SE, selected(sort(Sort?), focus(Focus?)))
     . snd-msg(se-got-selected-at-offset-in-tree(Sort, Focus))
+  +
+    rec-msg(se-move-selection-up(Tree?, Offset?))
+    . snd-eval(SE, move-selection-up(Tree, Offset))
+    . rec-value(SE, moved-selection-up(sort(Sort?), focus(Focus?)))
+    . snd-msg(se-moved-selection-up(Sort, Focus))
+  +
+    rec-msg(se-move-selection-down(Tree?, Offset?))
+    . snd-eval(SE, move-selection-down(Tree, Offset))
+    . rec-value(SE, moved-selection-down(sort(Sort?), focus(Focus?)))
+    . snd-msg(se-moved-selection-down(Sort, Focus))
+  +
+    rec-msg(se-move-selection-left(Tree?, Offset?))
+    . snd-eval(SE, move-selection-left(Tree, Offset))
+    . rec-value(SE, moved-selection-left(sort(Sort?), focus(Focus?)))
+    . snd-msg(se-moved-selection-left(Sort, Focus))
+  +
+    rec-msg(se-move-selection-right(Tree?, Offset?))
+    . snd-eval(SE, move-selection-right(Tree, Offset))
+    . rec-value(SE, moved-selection-right(sort(Sort?), focus(Focus?)))
+    . snd-msg(se-moved-selection-right(Sort, Focus))
   )
   * delta
 endlet
