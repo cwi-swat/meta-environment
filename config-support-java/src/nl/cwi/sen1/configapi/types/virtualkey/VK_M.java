@@ -1,7 +1,7 @@
-package nl.cwi.sen1.configapi.types.keymodifier;
+package nl.cwi.sen1.configapi.types.virtualkey;
 
-public class MUnderscoreCTRL extends nl.cwi.sen1.configapi.types.KeyModifier {
-  public MUnderscoreCTRL(nl.cwi.sen1.configapi.Factory factory, aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] args) {
+public class VK_M extends nl.cwi.sen1.configapi.types.VirtualKey {
+  public VK_M(nl.cwi.sen1.configapi.Factory factory, aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] args) {
     super(factory, annos, fun, args);
   }
 
@@ -10,14 +10,14 @@ public class MUnderscoreCTRL extends nl.cwi.sen1.configapi.types.KeyModifier {
   }
 
   public boolean equivalent(shared.SharedObject peer) {
-    if (peer instanceof MUnderscoreCTRL) {
+    if (peer instanceof VK_M) {
       return super.equivalent(peer);
     }
     return false;
   }
 
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return getConfigapiFactory().makeKeyModifier_MUnderscoreCTRL(fun, args, annos);
+    return getConfigapiFactory().makeVirtualKey_VK_M(fun, args, annos);
   }
 
   public aterm.ATerm toTerm() {
@@ -27,13 +27,13 @@ public class MUnderscoreCTRL extends nl.cwi.sen1.configapi.types.KeyModifier {
     return term;
   }
 
-  public boolean isMUnderscoreCTRL()
+  public boolean isVK_M()
   {
     return true;
   }
 
   public aterm.ATermAppl setArgument(aterm.ATerm arg, int i) {
-      throw new RuntimeException("MUnderscoreCTRL has no arguments");
+      throw new RuntimeException("VK_M has no arguments");
   }
 
   protected int hashFunction() {

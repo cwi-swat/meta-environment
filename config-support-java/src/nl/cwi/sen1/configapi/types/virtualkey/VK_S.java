@@ -1,7 +1,7 @@
-package nl.cwi.sen1.configapi.types.keymodifier;
+package nl.cwi.sen1.configapi.types.virtualkey;
 
-public class MUnderscoreSHIFT extends nl.cwi.sen1.configapi.types.KeyModifier {
-  public MUnderscoreSHIFT(nl.cwi.sen1.configapi.Factory factory, aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] args) {
+public class VK_S extends nl.cwi.sen1.configapi.types.VirtualKey {
+  public VK_S(nl.cwi.sen1.configapi.Factory factory, aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] args) {
     super(factory, annos, fun, args);
   }
 
@@ -10,14 +10,14 @@ public class MUnderscoreSHIFT extends nl.cwi.sen1.configapi.types.KeyModifier {
   }
 
   public boolean equivalent(shared.SharedObject peer) {
-    if (peer instanceof MUnderscoreSHIFT) {
+    if (peer instanceof VK_S) {
       return super.equivalent(peer);
     }
     return false;
   }
 
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return getConfigapiFactory().makeKeyModifier_MUnderscoreSHIFT(fun, args, annos);
+    return getConfigapiFactory().makeVirtualKey_VK_S(fun, args, annos);
   }
 
   public aterm.ATerm toTerm() {
@@ -27,13 +27,13 @@ public class MUnderscoreSHIFT extends nl.cwi.sen1.configapi.types.KeyModifier {
     return term;
   }
 
-  public boolean isMUnderscoreSHIFT()
+  public boolean isVK_S()
   {
     return true;
   }
 
   public aterm.ATermAppl setArgument(aterm.ATerm arg, int i) {
-      throw new RuntimeException("MUnderscoreSHIFT has no arguments");
+      throw new RuntimeException("VK_S has no arguments");
   }
 
   protected int hashFunction() {

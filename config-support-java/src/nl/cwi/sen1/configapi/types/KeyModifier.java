@@ -13,15 +13,15 @@ abstract public class KeyModifier extends nl.cwi.sen1.configapi.AbstractType {
     return true;
   }
 
-  public boolean isMUnderscoreALT() {
+  public boolean isM_ALT() {
     return false;
   }
 
-  public boolean isMUnderscoreCTRL() {
+  public boolean isM_CTRL() {
     return false;
   }
 
-  public boolean isMUnderscoreSHIFT() {
+  public boolean isM_SHIFT() {
     return false;
   }
 

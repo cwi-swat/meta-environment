@@ -13,209 +13,209 @@ public class Factory {
   private aterm.AFun fun_VirtualButton_BUTTON3;
   private aterm.ATerm pattern_VirtualButton_BUTTON3;
 
-  private aterm.AFun fun_KeyModifier_MUnderscoreALT;
-  private aterm.ATerm pattern_KeyModifier_MUnderscoreALT;
-  private aterm.AFun fun_KeyModifier_MUnderscoreCTRL;
-  private aterm.ATerm pattern_KeyModifier_MUnderscoreCTRL;
-  private aterm.AFun fun_KeyModifier_MUnderscoreSHIFT;
-  private aterm.ATerm pattern_KeyModifier_MUnderscoreSHIFT;
+  private aterm.AFun fun_KeyModifier_M_ALT;
+  private aterm.ATerm pattern_KeyModifier_M_ALT;
+  private aterm.AFun fun_KeyModifier_M_CTRL;
+  private aterm.ATerm pattern_KeyModifier_M_CTRL;
+  private aterm.AFun fun_KeyModifier_M_SHIFT;
+  private aterm.ATerm pattern_KeyModifier_M_SHIFT;
 
-  private aterm.AFun fun_VirtualKey_VKUnderscore0;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore0;
-  private aterm.AFun fun_VirtualKey_VKUnderscore1;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore1;
-  private aterm.AFun fun_VirtualKey_VKUnderscore2;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore2;
-  private aterm.AFun fun_VirtualKey_VKUnderscore3;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore3;
-  private aterm.AFun fun_VirtualKey_VKUnderscore4;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore4;
-  private aterm.AFun fun_VirtualKey_VKUnderscore5;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore5;
-  private aterm.AFun fun_VirtualKey_VKUnderscore6;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore6;
-  private aterm.AFun fun_VirtualKey_VKUnderscore7;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore7;
-  private aterm.AFun fun_VirtualKey_VKUnderscore8;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore8;
-  private aterm.AFun fun_VirtualKey_VKUnderscore9;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscore9;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreA;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreA;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreB;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreB;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreC;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreC;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreD;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreD;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreE;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreG;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreG;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreH;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreH;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreI;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreI;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreJ;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreJ;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreK;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreK;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreL;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreL;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreM;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreM;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreN;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreN;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreO;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreO;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreP;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreP;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreQ;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreQ;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreR;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreR;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreS;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreS;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreT;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreT;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreU;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreU;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreV;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreV;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreW;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreW;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreX;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreX;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreY;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreY;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreZ;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreZ;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreAMPERSAND;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreAMPERSAND;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreASTERISK;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreASTERISK;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreAT;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreAT;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreBACKUnderscoreQUOTE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreBACKUnderscoreQUOTE;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreBACKUnderscoreSLASH;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreBACKUnderscoreSLASH;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreBACKUnderscoreSPACE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreBACKUnderscoreSPACE;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreBEGIN;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreBEGIN;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreBRACEUnderscoreLEFT;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreBRACEUnderscoreLEFT;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreBRACEUnderscoreRIGHT;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreBRACEUnderscoreRIGHT;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreCIRCUMFLEX;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreCIRCUMFLEX;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreCLEAR;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreCLEAR;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreCOLON;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreCOLON;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreCOMMA;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreCOMMA;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreDECIMAL;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreDECIMAL;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreDELETE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreDELETE;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreDIVIDE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreDIVIDE;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreDOLLAR;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreDOLLAR;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreDOWN;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreDOWN;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreEND;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreEND;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreENTER;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreENTER;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreEQUALS;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreEQUALS;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreESCAPE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreESCAPE;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF1;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF1;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF2;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF2;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF3;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF3;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF4;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF4;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF5;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF5;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF6;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF6;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF7;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF7;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF8;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF8;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF9;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF9;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF10;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF10;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF11;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF11;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreF12;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreF12;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreGREATER;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreGREATER;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreHOME;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreHOME;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreINSERT;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreINSERT;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreLEFT;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreLEFT;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreMINUS;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreMINUS;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreMULTIPLY;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreMULTIPLY;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreNUMBERUnderscoreSIGN;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreNUMBERUnderscoreSIGN;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreOPENUnderscoreBRACKET;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreOPENUnderscoreBRACKET;
-  private aterm.AFun fun_VirtualKey_VKUnderscorePAGEUnderscoreDOWN;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscorePAGEUnderscoreDOWN;
-  private aterm.AFun fun_VirtualKey_VKUnderscorePAGEUnderscoreUP;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscorePAGEUnderscoreUP;
-  private aterm.AFun fun_VirtualKey_VKUnderscorePAUSE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscorePAUSE;
-  private aterm.AFun fun_VirtualKey_VKUnderscorePERIOD;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscorePERIOD;
-  private aterm.AFun fun_VirtualKey_VKUnderscorePLUS;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscorePLUS;
-  private aterm.AFun fun_VirtualKey_VKUnderscorePRINTSCREEN;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscorePRINTSCREEN;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreQUOTE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreQUOTE;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreQUOTEDBL;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreQUOTEDBL;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreRIGHT;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreRIGHT;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreSEMICOLON;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreSEMICOLON;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreSLASH;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreSLASH;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreSPACE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreSPACE;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreSUBTRACT;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreSUBTRACT;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreTAB;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreTAB;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreUNDERSCORE;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreUNDERSCORE;
-  private aterm.AFun fun_VirtualKey_VKUnderscoreUP;
-  private aterm.ATerm pattern_VirtualKey_VKUnderscoreUP;
+  private aterm.AFun fun_VirtualKey_VK_0;
+  private aterm.ATerm pattern_VirtualKey_VK_0;
+  private aterm.AFun fun_VirtualKey_VK_1;
+  private aterm.ATerm pattern_VirtualKey_VK_1;
+  private aterm.AFun fun_VirtualKey_VK_2;
+  private aterm.ATerm pattern_VirtualKey_VK_2;
+  private aterm.AFun fun_VirtualKey_VK_3;
+  private aterm.ATerm pattern_VirtualKey_VK_3;
+  private aterm.AFun fun_VirtualKey_VK_4;
+  private aterm.ATerm pattern_VirtualKey_VK_4;
+  private aterm.AFun fun_VirtualKey_VK_5;
+  private aterm.ATerm pattern_VirtualKey_VK_5;
+  private aterm.AFun fun_VirtualKey_VK_6;
+  private aterm.ATerm pattern_VirtualKey_VK_6;
+  private aterm.AFun fun_VirtualKey_VK_7;
+  private aterm.ATerm pattern_VirtualKey_VK_7;
+  private aterm.AFun fun_VirtualKey_VK_8;
+  private aterm.ATerm pattern_VirtualKey_VK_8;
+  private aterm.AFun fun_VirtualKey_VK_9;
+  private aterm.ATerm pattern_VirtualKey_VK_9;
+  private aterm.AFun fun_VirtualKey_VK_A;
+  private aterm.ATerm pattern_VirtualKey_VK_A;
+  private aterm.AFun fun_VirtualKey_VK_B;
+  private aterm.ATerm pattern_VirtualKey_VK_B;
+  private aterm.AFun fun_VirtualKey_VK_C;
+  private aterm.ATerm pattern_VirtualKey_VK_C;
+  private aterm.AFun fun_VirtualKey_VK_D;
+  private aterm.ATerm pattern_VirtualKey_VK_D;
+  private aterm.AFun fun_VirtualKey_VK_E;
+  private aterm.ATerm pattern_VirtualKey_VK_E;
+  private aterm.AFun fun_VirtualKey_VK_F;
+  private aterm.ATerm pattern_VirtualKey_VK_F;
+  private aterm.AFun fun_VirtualKey_VK_G;
+  private aterm.ATerm pattern_VirtualKey_VK_G;
+  private aterm.AFun fun_VirtualKey_VK_H;
+  private aterm.ATerm pattern_VirtualKey_VK_H;
+  private aterm.AFun fun_VirtualKey_VK_I;
+  private aterm.ATerm pattern_VirtualKey_VK_I;
+  private aterm.AFun fun_VirtualKey_VK_J;
+  private aterm.ATerm pattern_VirtualKey_VK_J;
+  private aterm.AFun fun_VirtualKey_VK_K;
+  private aterm.ATerm pattern_VirtualKey_VK_K;
+  private aterm.AFun fun_VirtualKey_VK_L;
+  private aterm.ATerm pattern_VirtualKey_VK_L;
+  private aterm.AFun fun_VirtualKey_VK_M;
+  private aterm.ATerm pattern_VirtualKey_VK_M;
+  private aterm.AFun fun_VirtualKey_VK_N;
+  private aterm.ATerm pattern_VirtualKey_VK_N;
+  private aterm.AFun fun_VirtualKey_VK_O;
+  private aterm.ATerm pattern_VirtualKey_VK_O;
+  private aterm.AFun fun_VirtualKey_VK_P;
+  private aterm.ATerm pattern_VirtualKey_VK_P;
+  private aterm.AFun fun_VirtualKey_VK_Q;
+  private aterm.ATerm pattern_VirtualKey_VK_Q;
+  private aterm.AFun fun_VirtualKey_VK_R;
+  private aterm.ATerm pattern_VirtualKey_VK_R;
+  private aterm.AFun fun_VirtualKey_VK_S;
+  private aterm.ATerm pattern_VirtualKey_VK_S;
+  private aterm.AFun fun_VirtualKey_VK_T;
+  private aterm.ATerm pattern_VirtualKey_VK_T;
+  private aterm.AFun fun_VirtualKey_VK_U;
+  private aterm.ATerm pattern_VirtualKey_VK_U;
+  private aterm.AFun fun_VirtualKey_VK_V;
+  private aterm.ATerm pattern_VirtualKey_VK_V;
+  private aterm.AFun fun_VirtualKey_VK_W;
+  private aterm.ATerm pattern_VirtualKey_VK_W;
+  private aterm.AFun fun_VirtualKey_VK_X;
+  private aterm.ATerm pattern_VirtualKey_VK_X;
+  private aterm.AFun fun_VirtualKey_VK_Y;
+  private aterm.ATerm pattern_VirtualKey_VK_Y;
+  private aterm.AFun fun_VirtualKey_VK_Z;
+  private aterm.ATerm pattern_VirtualKey_VK_Z;
+  private aterm.AFun fun_VirtualKey_VK_AMPERSAND;
+  private aterm.ATerm pattern_VirtualKey_VK_AMPERSAND;
+  private aterm.AFun fun_VirtualKey_VK_ASTERISK;
+  private aterm.ATerm pattern_VirtualKey_VK_ASTERISK;
+  private aterm.AFun fun_VirtualKey_VK_AT;
+  private aterm.ATerm pattern_VirtualKey_VK_AT;
+  private aterm.AFun fun_VirtualKey_VK_BACK_QUOTE;
+  private aterm.ATerm pattern_VirtualKey_VK_BACK_QUOTE;
+  private aterm.AFun fun_VirtualKey_VK_BACK_SLASH;
+  private aterm.ATerm pattern_VirtualKey_VK_BACK_SLASH;
+  private aterm.AFun fun_VirtualKey_VK_BACK_SPACE;
+  private aterm.ATerm pattern_VirtualKey_VK_BACK_SPACE;
+  private aterm.AFun fun_VirtualKey_VK_BEGIN;
+  private aterm.ATerm pattern_VirtualKey_VK_BEGIN;
+  private aterm.AFun fun_VirtualKey_VK_BRACE_LEFT;
+  private aterm.ATerm pattern_VirtualKey_VK_BRACE_LEFT;
+  private aterm.AFun fun_VirtualKey_VK_BRACE_RIGHT;
+  private aterm.ATerm pattern_VirtualKey_VK_BRACE_RIGHT;
+  private aterm.AFun fun_VirtualKey_VK_CIRCUMFLEX;
+  private aterm.ATerm pattern_VirtualKey_VK_CIRCUMFLEX;
+  private aterm.AFun fun_VirtualKey_VK_CLEAR;
+  private aterm.ATerm pattern_VirtualKey_VK_CLEAR;
+  private aterm.AFun fun_VirtualKey_VK_CLOSE_BRACKET;
+  private aterm.ATerm pattern_VirtualKey_VK_CLOSE_BRACKET;
+  private aterm.AFun fun_VirtualKey_VK_COLON;
+  private aterm.ATerm pattern_VirtualKey_VK_COLON;
+  private aterm.AFun fun_VirtualKey_VK_COMMA;
+  private aterm.ATerm pattern_VirtualKey_VK_COMMA;
+  private aterm.AFun fun_VirtualKey_VK_DECIMAL;
+  private aterm.ATerm pattern_VirtualKey_VK_DECIMAL;
+  private aterm.AFun fun_VirtualKey_VK_DELETE;
+  private aterm.ATerm pattern_VirtualKey_VK_DELETE;
+  private aterm.AFun fun_VirtualKey_VK_DIVIDE;
+  private aterm.ATerm pattern_VirtualKey_VK_DIVIDE;
+  private aterm.AFun fun_VirtualKey_VK_DOLLAR;
+  private aterm.ATerm pattern_VirtualKey_VK_DOLLAR;
+  private aterm.AFun fun_VirtualKey_VK_DOWN;
+  private aterm.ATerm pattern_VirtualKey_VK_DOWN;
+  private aterm.AFun fun_VirtualKey_VK_END;
+  private aterm.ATerm pattern_VirtualKey_VK_END;
+  private aterm.AFun fun_VirtualKey_VK_ENTER;
+  private aterm.ATerm pattern_VirtualKey_VK_ENTER;
+  private aterm.AFun fun_VirtualKey_VK_EQUALS;
+  private aterm.ATerm pattern_VirtualKey_VK_EQUALS;
+  private aterm.AFun fun_VirtualKey_VK_ESCAPE;
+  private aterm.ATerm pattern_VirtualKey_VK_ESCAPE;
+  private aterm.AFun fun_VirtualKey_VK_EXCLAMATION_MARK;
+  private aterm.ATerm pattern_VirtualKey_VK_EXCLAMATION_MARK;
+  private aterm.AFun fun_VirtualKey_VK_F1;
+  private aterm.ATerm pattern_VirtualKey_VK_F1;
+  private aterm.AFun fun_VirtualKey_VK_F2;
+  private aterm.ATerm pattern_VirtualKey_VK_F2;
+  private aterm.AFun fun_VirtualKey_VK_F3;
+  private aterm.ATerm pattern_VirtualKey_VK_F3;
+  private aterm.AFun fun_VirtualKey_VK_F4;
+  private aterm.ATerm pattern_VirtualKey_VK_F4;
+  private aterm.AFun fun_VirtualKey_VK_F5;
+  private aterm.ATerm pattern_VirtualKey_VK_F5;
+  private aterm.AFun fun_VirtualKey_VK_F6;
+  private aterm.ATerm pattern_VirtualKey_VK_F6;
+  private aterm.AFun fun_VirtualKey_VK_F7;
+  private aterm.ATerm pattern_VirtualKey_VK_F7;
+  private aterm.AFun fun_VirtualKey_VK_F8;
+  private aterm.ATerm pattern_VirtualKey_VK_F8;
+  private aterm.AFun fun_VirtualKey_VK_F9;
+  private aterm.ATerm pattern_VirtualKey_VK_F9;
+  private aterm.AFun fun_VirtualKey_VK_F10;
+  private aterm.ATerm pattern_VirtualKey_VK_F10;
+  private aterm.AFun fun_VirtualKey_VK_F11;
+  private aterm.ATerm pattern_VirtualKey_VK_F11;
+  private aterm.AFun fun_VirtualKey_VK_F12;
+  private aterm.ATerm pattern_VirtualKey_VK_F12;
+  private aterm.AFun fun_VirtualKey_VK_GREATER;
+  private aterm.ATerm pattern_VirtualKey_VK_GREATER;
+  private aterm.AFun fun_VirtualKey_VK_HOME;
+  private aterm.ATerm pattern_VirtualKey_VK_HOME;
+  private aterm.AFun fun_VirtualKey_VK_INSERT;
+  private aterm.ATerm pattern_VirtualKey_VK_INSERT;
+  private aterm.AFun fun_VirtualKey_VK_LEFT;
+  private aterm.ATerm pattern_VirtualKey_VK_LEFT;
+  private aterm.AFun fun_VirtualKey_VK_LEFT_PARENTHESIS;
+  private aterm.ATerm pattern_VirtualKey_VK_LEFT_PARENTHESIS;
+  private aterm.AFun fun_VirtualKey_VK_MINUS;
+  private aterm.ATerm pattern_VirtualKey_VK_MINUS;
+  private aterm.AFun fun_VirtualKey_VK_MULTIPLY;
+  private aterm.ATerm pattern_VirtualKey_VK_MULTIPLY;
+  private aterm.AFun fun_VirtualKey_VK_NUMBER_SIGN;
+  private aterm.ATerm pattern_VirtualKey_VK_NUMBER_SIGN;
+  private aterm.AFun fun_VirtualKey_VK_OPEN_BRACKET;
+  private aterm.ATerm pattern_VirtualKey_VK_OPEN_BRACKET;
+  private aterm.AFun fun_VirtualKey_VK_PAGE_DOWN;
+  private aterm.ATerm pattern_VirtualKey_VK_PAGE_DOWN;
+  private aterm.AFun fun_VirtualKey_VK_PAGE_UP;
+  private aterm.ATerm pattern_VirtualKey_VK_PAGE_UP;
+  private aterm.AFun fun_VirtualKey_VK_PAUSE;
+  private aterm.ATerm pattern_VirtualKey_VK_PAUSE;
+  private aterm.AFun fun_VirtualKey_VK_PERIOD;
+  private aterm.ATerm pattern_VirtualKey_VK_PERIOD;
+  private aterm.AFun fun_VirtualKey_VK_PLUS;
+  private aterm.ATerm pattern_VirtualKey_VK_PLUS;
+  private aterm.AFun fun_VirtualKey_VK_PRINTSCREEN;
+  private aterm.ATerm pattern_VirtualKey_VK_PRINTSCREEN;
+  private aterm.AFun fun_VirtualKey_VK_QUOTE;
+  private aterm.ATerm pattern_VirtualKey_VK_QUOTE;
+  private aterm.AFun fun_VirtualKey_VK_QUOTEDBL;
+  private aterm.ATerm pattern_VirtualKey_VK_QUOTEDBL;
+  private aterm.AFun fun_VirtualKey_VK_RIGHT;
+  private aterm.ATerm pattern_VirtualKey_VK_RIGHT;
+  private aterm.AFun fun_VirtualKey_VK_RIGHT_PARENTHESIS;
+  private aterm.ATerm pattern_VirtualKey_VK_RIGHT_PARENTHESIS;
+  private aterm.AFun fun_VirtualKey_VK_SEMICOLON;
+  private aterm.ATerm pattern_VirtualKey_VK_SEMICOLON;
+  private aterm.AFun fun_VirtualKey_VK_SLASH;
+  private aterm.ATerm pattern_VirtualKey_VK_SLASH;
+  private aterm.AFun fun_VirtualKey_VK_SPACE;
+  private aterm.ATerm pattern_VirtualKey_VK_SPACE;
+  private aterm.AFun fun_VirtualKey_VK_SUBTRACT;
+  private aterm.ATerm pattern_VirtualKey_VK_SUBTRACT;
+  private aterm.AFun fun_VirtualKey_VK_TAB;
+  private aterm.ATerm pattern_VirtualKey_VK_TAB;
+  private aterm.AFun fun_VirtualKey_VK_UNDERSCORE;
+  private aterm.ATerm pattern_VirtualKey_VK_UNDERSCORE;
+  private aterm.AFun fun_VirtualKey_VK_UP;
+  private aterm.ATerm pattern_VirtualKey_VK_UP;
 
   private aterm.AFun fun_Color_Rgb;
   private aterm.ATerm pattern_Color_Rgb;
@@ -333,308 +333,308 @@ public class Factory {
     pattern_VirtualButton_BUTTON3 = factory.parse("BUTTON3");
     fun_VirtualButton_BUTTON3 = factory.makeAFun("_VirtualButton_BUTTON3", 0, false);
 
-    pattern_KeyModifier_MUnderscoreALT = factory.parse("M_ALT");
-    fun_KeyModifier_MUnderscoreALT = factory.makeAFun("_KeyModifier_M_ALT", 0, false);
+    pattern_KeyModifier_M_ALT = factory.parse("M_ALT");
+    fun_KeyModifier_M_ALT = factory.makeAFun("_KeyModifier_M_ALT", 0, false);
 
-    pattern_KeyModifier_MUnderscoreCTRL = factory.parse("M_CTRL");
-    fun_KeyModifier_MUnderscoreCTRL = factory.makeAFun("_KeyModifier_M_CTRL", 0, false);
+    pattern_KeyModifier_M_CTRL = factory.parse("M_CTRL");
+    fun_KeyModifier_M_CTRL = factory.makeAFun("_KeyModifier_M_CTRL", 0, false);
 
-    pattern_KeyModifier_MUnderscoreSHIFT = factory.parse("M_SHIFT");
-    fun_KeyModifier_MUnderscoreSHIFT = factory.makeAFun("_KeyModifier_M_SHIFT", 0, false);
+    pattern_KeyModifier_M_SHIFT = factory.parse("M_SHIFT");
+    fun_KeyModifier_M_SHIFT = factory.makeAFun("_KeyModifier_M_SHIFT", 0, false);
 
-    pattern_VirtualKey_VKUnderscore0 = factory.parse("VK_0");
-    fun_VirtualKey_VKUnderscore0 = factory.makeAFun("_VirtualKey_VK_0", 0, false);
+    pattern_VirtualKey_VK_0 = factory.parse("VK_0");
+    fun_VirtualKey_VK_0 = factory.makeAFun("_VirtualKey_VK_0", 0, false);
 
-    pattern_VirtualKey_VKUnderscore1 = factory.parse("VK_1");
-    fun_VirtualKey_VKUnderscore1 = factory.makeAFun("_VirtualKey_VK_1", 0, false);
+    pattern_VirtualKey_VK_1 = factory.parse("VK_1");
+    fun_VirtualKey_VK_1 = factory.makeAFun("_VirtualKey_VK_1", 0, false);
 
-    pattern_VirtualKey_VKUnderscore2 = factory.parse("VK_2");
-    fun_VirtualKey_VKUnderscore2 = factory.makeAFun("_VirtualKey_VK_2", 0, false);
+    pattern_VirtualKey_VK_2 = factory.parse("VK_2");
+    fun_VirtualKey_VK_2 = factory.makeAFun("_VirtualKey_VK_2", 0, false);
 
-    pattern_VirtualKey_VKUnderscore3 = factory.parse("VK_3");
-    fun_VirtualKey_VKUnderscore3 = factory.makeAFun("_VirtualKey_VK_3", 0, false);
+    pattern_VirtualKey_VK_3 = factory.parse("VK_3");
+    fun_VirtualKey_VK_3 = factory.makeAFun("_VirtualKey_VK_3", 0, false);
 
-    pattern_VirtualKey_VKUnderscore4 = factory.parse("VK_4");
-    fun_VirtualKey_VKUnderscore4 = factory.makeAFun("_VirtualKey_VK_4", 0, false);
+    pattern_VirtualKey_VK_4 = factory.parse("VK_4");
+    fun_VirtualKey_VK_4 = factory.makeAFun("_VirtualKey_VK_4", 0, false);
 
-    pattern_VirtualKey_VKUnderscore5 = factory.parse("VK_5");
-    fun_VirtualKey_VKUnderscore5 = factory.makeAFun("_VirtualKey_VK_5", 0, false);
+    pattern_VirtualKey_VK_5 = factory.parse("VK_5");
+    fun_VirtualKey_VK_5 = factory.makeAFun("_VirtualKey_VK_5", 0, false);
 
-    pattern_VirtualKey_VKUnderscore6 = factory.parse("VK_6");
-    fun_VirtualKey_VKUnderscore6 = factory.makeAFun("_VirtualKey_VK_6", 0, false);
+    pattern_VirtualKey_VK_6 = factory.parse("VK_6");
+    fun_VirtualKey_VK_6 = factory.makeAFun("_VirtualKey_VK_6", 0, false);
 
-    pattern_VirtualKey_VKUnderscore7 = factory.parse("VK_7");
-    fun_VirtualKey_VKUnderscore7 = factory.makeAFun("_VirtualKey_VK_7", 0, false);
+    pattern_VirtualKey_VK_7 = factory.parse("VK_7");
+    fun_VirtualKey_VK_7 = factory.makeAFun("_VirtualKey_VK_7", 0, false);
 
-    pattern_VirtualKey_VKUnderscore8 = factory.parse("VK_8");
-    fun_VirtualKey_VKUnderscore8 = factory.makeAFun("_VirtualKey_VK_8", 0, false);
+    pattern_VirtualKey_VK_8 = factory.parse("VK_8");
+    fun_VirtualKey_VK_8 = factory.makeAFun("_VirtualKey_VK_8", 0, false);
 
-    pattern_VirtualKey_VKUnderscore9 = factory.parse("VK_9");
-    fun_VirtualKey_VKUnderscore9 = factory.makeAFun("_VirtualKey_VK_9", 0, false);
+    pattern_VirtualKey_VK_9 = factory.parse("VK_9");
+    fun_VirtualKey_VK_9 = factory.makeAFun("_VirtualKey_VK_9", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreA = factory.parse("VK_A");
-    fun_VirtualKey_VKUnderscoreA = factory.makeAFun("_VirtualKey_VK_A", 0, false);
+    pattern_VirtualKey_VK_A = factory.parse("VK_A");
+    fun_VirtualKey_VK_A = factory.makeAFun("_VirtualKey_VK_A", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreB = factory.parse("VK_B");
-    fun_VirtualKey_VKUnderscoreB = factory.makeAFun("_VirtualKey_VK_B", 0, false);
+    pattern_VirtualKey_VK_B = factory.parse("VK_B");
+    fun_VirtualKey_VK_B = factory.makeAFun("_VirtualKey_VK_B", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreC = factory.parse("VK_C");
-    fun_VirtualKey_VKUnderscoreC = factory.makeAFun("_VirtualKey_VK_C", 0, false);
+    pattern_VirtualKey_VK_C = factory.parse("VK_C");
+    fun_VirtualKey_VK_C = factory.makeAFun("_VirtualKey_VK_C", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreD = factory.parse("VK_D");
-    fun_VirtualKey_VKUnderscoreD = factory.makeAFun("_VirtualKey_VK_D", 0, false);
+    pattern_VirtualKey_VK_D = factory.parse("VK_D");
+    fun_VirtualKey_VK_D = factory.makeAFun("_VirtualKey_VK_D", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreE = factory.parse("VK_E");
-    fun_VirtualKey_VKUnderscoreE = factory.makeAFun("_VirtualKey_VK_E", 0, false);
+    pattern_VirtualKey_VK_E = factory.parse("VK_E");
+    fun_VirtualKey_VK_E = factory.makeAFun("_VirtualKey_VK_E", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF = factory.parse("VK_F");
-    fun_VirtualKey_VKUnderscoreF = factory.makeAFun("_VirtualKey_VK_F", 0, false);
+    pattern_VirtualKey_VK_F = factory.parse("VK_F");
+    fun_VirtualKey_VK_F = factory.makeAFun("_VirtualKey_VK_F", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreG = factory.parse("VK_G");
-    fun_VirtualKey_VKUnderscoreG = factory.makeAFun("_VirtualKey_VK_G", 0, false);
+    pattern_VirtualKey_VK_G = factory.parse("VK_G");
+    fun_VirtualKey_VK_G = factory.makeAFun("_VirtualKey_VK_G", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreH = factory.parse("VK_H");
-    fun_VirtualKey_VKUnderscoreH = factory.makeAFun("_VirtualKey_VK_H", 0, false);
+    pattern_VirtualKey_VK_H = factory.parse("VK_H");
+    fun_VirtualKey_VK_H = factory.makeAFun("_VirtualKey_VK_H", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreI = factory.parse("VK_I");
-    fun_VirtualKey_VKUnderscoreI = factory.makeAFun("_VirtualKey_VK_I", 0, false);
+    pattern_VirtualKey_VK_I = factory.parse("VK_I");
+    fun_VirtualKey_VK_I = factory.makeAFun("_VirtualKey_VK_I", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreJ = factory.parse("VK_J");
-    fun_VirtualKey_VKUnderscoreJ = factory.makeAFun("_VirtualKey_VK_J", 0, false);
+    pattern_VirtualKey_VK_J = factory.parse("VK_J");
+    fun_VirtualKey_VK_J = factory.makeAFun("_VirtualKey_VK_J", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreK = factory.parse("VK_K");
-    fun_VirtualKey_VKUnderscoreK = factory.makeAFun("_VirtualKey_VK_K", 0, false);
+    pattern_VirtualKey_VK_K = factory.parse("VK_K");
+    fun_VirtualKey_VK_K = factory.makeAFun("_VirtualKey_VK_K", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreL = factory.parse("VK_L");
-    fun_VirtualKey_VKUnderscoreL = factory.makeAFun("_VirtualKey_VK_L", 0, false);
+    pattern_VirtualKey_VK_L = factory.parse("VK_L");
+    fun_VirtualKey_VK_L = factory.makeAFun("_VirtualKey_VK_L", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreM = factory.parse("VK_M");
-    fun_VirtualKey_VKUnderscoreM = factory.makeAFun("_VirtualKey_VK_M", 0, false);
+    pattern_VirtualKey_VK_M = factory.parse("VK_M");
+    fun_VirtualKey_VK_M = factory.makeAFun("_VirtualKey_VK_M", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreN = factory.parse("VK_N");
-    fun_VirtualKey_VKUnderscoreN = factory.makeAFun("_VirtualKey_VK_N", 0, false);
+    pattern_VirtualKey_VK_N = factory.parse("VK_N");
+    fun_VirtualKey_VK_N = factory.makeAFun("_VirtualKey_VK_N", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreO = factory.parse("VK_O");
-    fun_VirtualKey_VKUnderscoreO = factory.makeAFun("_VirtualKey_VK_O", 0, false);
+    pattern_VirtualKey_VK_O = factory.parse("VK_O");
+    fun_VirtualKey_VK_O = factory.makeAFun("_VirtualKey_VK_O", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreP = factory.parse("VK_P");
-    fun_VirtualKey_VKUnderscoreP = factory.makeAFun("_VirtualKey_VK_P", 0, false);
+    pattern_VirtualKey_VK_P = factory.parse("VK_P");
+    fun_VirtualKey_VK_P = factory.makeAFun("_VirtualKey_VK_P", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreQ = factory.parse("VK_Q");
-    fun_VirtualKey_VKUnderscoreQ = factory.makeAFun("_VirtualKey_VK_Q", 0, false);
+    pattern_VirtualKey_VK_Q = factory.parse("VK_Q");
+    fun_VirtualKey_VK_Q = factory.makeAFun("_VirtualKey_VK_Q", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreR = factory.parse("VK_R");
-    fun_VirtualKey_VKUnderscoreR = factory.makeAFun("_VirtualKey_VK_R", 0, false);
+    pattern_VirtualKey_VK_R = factory.parse("VK_R");
+    fun_VirtualKey_VK_R = factory.makeAFun("_VirtualKey_VK_R", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreS = factory.parse("VK_S");
-    fun_VirtualKey_VKUnderscoreS = factory.makeAFun("_VirtualKey_VK_S", 0, false);
+    pattern_VirtualKey_VK_S = factory.parse("VK_S");
+    fun_VirtualKey_VK_S = factory.makeAFun("_VirtualKey_VK_S", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreT = factory.parse("VK_T");
-    fun_VirtualKey_VKUnderscoreT = factory.makeAFun("_VirtualKey_VK_T", 0, false);
+    pattern_VirtualKey_VK_T = factory.parse("VK_T");
+    fun_VirtualKey_VK_T = factory.makeAFun("_VirtualKey_VK_T", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreU = factory.parse("VK_U");
-    fun_VirtualKey_VKUnderscoreU = factory.makeAFun("_VirtualKey_VK_U", 0, false);
+    pattern_VirtualKey_VK_U = factory.parse("VK_U");
+    fun_VirtualKey_VK_U = factory.makeAFun("_VirtualKey_VK_U", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreV = factory.parse("VK_V");
-    fun_VirtualKey_VKUnderscoreV = factory.makeAFun("_VirtualKey_VK_V", 0, false);
+    pattern_VirtualKey_VK_V = factory.parse("VK_V");
+    fun_VirtualKey_VK_V = factory.makeAFun("_VirtualKey_VK_V", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreW = factory.parse("VK_W");
-    fun_VirtualKey_VKUnderscoreW = factory.makeAFun("_VirtualKey_VK_W", 0, false);
+    pattern_VirtualKey_VK_W = factory.parse("VK_W");
+    fun_VirtualKey_VK_W = factory.makeAFun("_VirtualKey_VK_W", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreX = factory.parse("VK_X");
-    fun_VirtualKey_VKUnderscoreX = factory.makeAFun("_VirtualKey_VK_X", 0, false);
+    pattern_VirtualKey_VK_X = factory.parse("VK_X");
+    fun_VirtualKey_VK_X = factory.makeAFun("_VirtualKey_VK_X", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreY = factory.parse("VK_Y");
-    fun_VirtualKey_VKUnderscoreY = factory.makeAFun("_VirtualKey_VK_Y", 0, false);
+    pattern_VirtualKey_VK_Y = factory.parse("VK_Y");
+    fun_VirtualKey_VK_Y = factory.makeAFun("_VirtualKey_VK_Y", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreZ = factory.parse("VK_Z");
-    fun_VirtualKey_VKUnderscoreZ = factory.makeAFun("_VirtualKey_VK_Z", 0, false);
+    pattern_VirtualKey_VK_Z = factory.parse("VK_Z");
+    fun_VirtualKey_VK_Z = factory.makeAFun("_VirtualKey_VK_Z", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreAMPERSAND = factory.parse("VK_AMPERSAND");
-    fun_VirtualKey_VKUnderscoreAMPERSAND = factory.makeAFun("_VirtualKey_VK_AMPERSAND", 0, false);
+    pattern_VirtualKey_VK_AMPERSAND = factory.parse("VK_AMPERSAND");
+    fun_VirtualKey_VK_AMPERSAND = factory.makeAFun("_VirtualKey_VK_AMPERSAND", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreASTERISK = factory.parse("VK_ASTERISK");
-    fun_VirtualKey_VKUnderscoreASTERISK = factory.makeAFun("_VirtualKey_VK_ASTERISK", 0, false);
+    pattern_VirtualKey_VK_ASTERISK = factory.parse("VK_ASTERISK");
+    fun_VirtualKey_VK_ASTERISK = factory.makeAFun("_VirtualKey_VK_ASTERISK", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreAT = factory.parse("VK_AT");
-    fun_VirtualKey_VKUnderscoreAT = factory.makeAFun("_VirtualKey_VK_AT", 0, false);
+    pattern_VirtualKey_VK_AT = factory.parse("VK_AT");
+    fun_VirtualKey_VK_AT = factory.makeAFun("_VirtualKey_VK_AT", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreBACKUnderscoreQUOTE = factory.parse("VK_BACK_QUOTE");
-    fun_VirtualKey_VKUnderscoreBACKUnderscoreQUOTE = factory.makeAFun("_VirtualKey_VK_BACK_QUOTE", 0, false);
+    pattern_VirtualKey_VK_BACK_QUOTE = factory.parse("VK_BACK_QUOTE");
+    fun_VirtualKey_VK_BACK_QUOTE = factory.makeAFun("_VirtualKey_VK_BACK_QUOTE", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreBACKUnderscoreSLASH = factory.parse("VK_BACK_SLASH");
-    fun_VirtualKey_VKUnderscoreBACKUnderscoreSLASH = factory.makeAFun("_VirtualKey_VK_BACK_SLASH", 0, false);
+    pattern_VirtualKey_VK_BACK_SLASH = factory.parse("VK_BACK_SLASH");
+    fun_VirtualKey_VK_BACK_SLASH = factory.makeAFun("_VirtualKey_VK_BACK_SLASH", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreBACKUnderscoreSPACE = factory.parse("VK_BACK_SPACE");
-    fun_VirtualKey_VKUnderscoreBACKUnderscoreSPACE = factory.makeAFun("_VirtualKey_VK_BACK_SPACE", 0, false);
+    pattern_VirtualKey_VK_BACK_SPACE = factory.parse("VK_BACK_SPACE");
+    fun_VirtualKey_VK_BACK_SPACE = factory.makeAFun("_VirtualKey_VK_BACK_SPACE", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreBEGIN = factory.parse("VK_BEGIN");
-    fun_VirtualKey_VKUnderscoreBEGIN = factory.makeAFun("_VirtualKey_VK_BEGIN", 0, false);
+    pattern_VirtualKey_VK_BEGIN = factory.parse("VK_BEGIN");
+    fun_VirtualKey_VK_BEGIN = factory.makeAFun("_VirtualKey_VK_BEGIN", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreBRACEUnderscoreLEFT = factory.parse("VK_BRACE_LEFT");
-    fun_VirtualKey_VKUnderscoreBRACEUnderscoreLEFT = factory.makeAFun("_VirtualKey_VK_BRACE_LEFT", 0, false);
+    pattern_VirtualKey_VK_BRACE_LEFT = factory.parse("VK_BRACE_LEFT");
+    fun_VirtualKey_VK_BRACE_LEFT = factory.makeAFun("_VirtualKey_VK_BRACE_LEFT", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreBRACEUnderscoreRIGHT = factory.parse("VK_BRACE_RIGHT");
-    fun_VirtualKey_VKUnderscoreBRACEUnderscoreRIGHT = factory.makeAFun("_VirtualKey_VK_BRACE_RIGHT", 0, false);
+    pattern_VirtualKey_VK_BRACE_RIGHT = factory.parse("VK_BRACE_RIGHT");
+    fun_VirtualKey_VK_BRACE_RIGHT = factory.makeAFun("_VirtualKey_VK_BRACE_RIGHT", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreCIRCUMFLEX = factory.parse("VK_CIRCUMFLEX");
-    fun_VirtualKey_VKUnderscoreCIRCUMFLEX = factory.makeAFun("_VirtualKey_VK_CIRCUMFLEX", 0, false);
+    pattern_VirtualKey_VK_CIRCUMFLEX = factory.parse("VK_CIRCUMFLEX");
+    fun_VirtualKey_VK_CIRCUMFLEX = factory.makeAFun("_VirtualKey_VK_CIRCUMFLEX", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreCLEAR = factory.parse("VK_CLEAR");
-    fun_VirtualKey_VKUnderscoreCLEAR = factory.makeAFun("_VirtualKey_VK_CLEAR", 0, false);
+    pattern_VirtualKey_VK_CLEAR = factory.parse("VK_CLEAR");
+    fun_VirtualKey_VK_CLEAR = factory.makeAFun("_VirtualKey_VK_CLEAR", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET = factory.parse("VK_CLOSE_BRACKET");
-    fun_VirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET = factory.makeAFun("_VirtualKey_VK_CLOSE_BRACKET", 0, false);
+    pattern_VirtualKey_VK_CLOSE_BRACKET = factory.parse("VK_CLOSE_BRACKET");
+    fun_VirtualKey_VK_CLOSE_BRACKET = factory.makeAFun("_VirtualKey_VK_CLOSE_BRACKET", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreCOLON = factory.parse("VK_COLON");
-    fun_VirtualKey_VKUnderscoreCOLON = factory.makeAFun("_VirtualKey_VK_COLON", 0, false);
+    pattern_VirtualKey_VK_COLON = factory.parse("VK_COLON");
+    fun_VirtualKey_VK_COLON = factory.makeAFun("_VirtualKey_VK_COLON", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreCOMMA = factory.parse("VK_COMMA");
-    fun_VirtualKey_VKUnderscoreCOMMA = factory.makeAFun("_VirtualKey_VK_COMMA", 0, false);
+    pattern_VirtualKey_VK_COMMA = factory.parse("VK_COMMA");
+    fun_VirtualKey_VK_COMMA = factory.makeAFun("_VirtualKey_VK_COMMA", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreDECIMAL = factory.parse("VK_DECIMAL");
-    fun_VirtualKey_VKUnderscoreDECIMAL = factory.makeAFun("_VirtualKey_VK_DECIMAL", 0, false);
+    pattern_VirtualKey_VK_DECIMAL = factory.parse("VK_DECIMAL");
+    fun_VirtualKey_VK_DECIMAL = factory.makeAFun("_VirtualKey_VK_DECIMAL", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreDELETE = factory.parse("VK_DELETE");
-    fun_VirtualKey_VKUnderscoreDELETE = factory.makeAFun("_VirtualKey_VK_DELETE", 0, false);
+    pattern_VirtualKey_VK_DELETE = factory.parse("VK_DELETE");
+    fun_VirtualKey_VK_DELETE = factory.makeAFun("_VirtualKey_VK_DELETE", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreDIVIDE = factory.parse("VK_DIVIDE");
-    fun_VirtualKey_VKUnderscoreDIVIDE = factory.makeAFun("_VirtualKey_VK_DIVIDE", 0, false);
+    pattern_VirtualKey_VK_DIVIDE = factory.parse("VK_DIVIDE");
+    fun_VirtualKey_VK_DIVIDE = factory.makeAFun("_VirtualKey_VK_DIVIDE", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreDOLLAR = factory.parse("VK_DOLLAR");
-    fun_VirtualKey_VKUnderscoreDOLLAR = factory.makeAFun("_VirtualKey_VK_DOLLAR", 0, false);
+    pattern_VirtualKey_VK_DOLLAR = factory.parse("VK_DOLLAR");
+    fun_VirtualKey_VK_DOLLAR = factory.makeAFun("_VirtualKey_VK_DOLLAR", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreDOWN = factory.parse("VK_DOWN");
-    fun_VirtualKey_VKUnderscoreDOWN = factory.makeAFun("_VirtualKey_VK_DOWN", 0, false);
+    pattern_VirtualKey_VK_DOWN = factory.parse("VK_DOWN");
+    fun_VirtualKey_VK_DOWN = factory.makeAFun("_VirtualKey_VK_DOWN", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreEND = factory.parse("VK_END");
-    fun_VirtualKey_VKUnderscoreEND = factory.makeAFun("_VirtualKey_VK_END", 0, false);
+    pattern_VirtualKey_VK_END = factory.parse("VK_END");
+    fun_VirtualKey_VK_END = factory.makeAFun("_VirtualKey_VK_END", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreENTER = factory.parse("VK_ENTER");
-    fun_VirtualKey_VKUnderscoreENTER = factory.makeAFun("_VirtualKey_VK_ENTER", 0, false);
+    pattern_VirtualKey_VK_ENTER = factory.parse("VK_ENTER");
+    fun_VirtualKey_VK_ENTER = factory.makeAFun("_VirtualKey_VK_ENTER", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreEQUALS = factory.parse("VK_EQUALS");
-    fun_VirtualKey_VKUnderscoreEQUALS = factory.makeAFun("_VirtualKey_VK_EQUALS", 0, false);
+    pattern_VirtualKey_VK_EQUALS = factory.parse("VK_EQUALS");
+    fun_VirtualKey_VK_EQUALS = factory.makeAFun("_VirtualKey_VK_EQUALS", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreESCAPE = factory.parse("VK_ESCAPE");
-    fun_VirtualKey_VKUnderscoreESCAPE = factory.makeAFun("_VirtualKey_VK_ESCAPE", 0, false);
+    pattern_VirtualKey_VK_ESCAPE = factory.parse("VK_ESCAPE");
+    fun_VirtualKey_VK_ESCAPE = factory.makeAFun("_VirtualKey_VK_ESCAPE", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK = factory.parse("VK_EXCLAMATION_MARK");
-    fun_VirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK = factory.makeAFun("_VirtualKey_VK_EXCLAMATION_MARK", 0, false);
+    pattern_VirtualKey_VK_EXCLAMATION_MARK = factory.parse("VK_EXCLAMATION_MARK");
+    fun_VirtualKey_VK_EXCLAMATION_MARK = factory.makeAFun("_VirtualKey_VK_EXCLAMATION_MARK", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF1 = factory.parse("VK_F1");
-    fun_VirtualKey_VKUnderscoreF1 = factory.makeAFun("_VirtualKey_VK_F1", 0, false);
+    pattern_VirtualKey_VK_F1 = factory.parse("VK_F1");
+    fun_VirtualKey_VK_F1 = factory.makeAFun("_VirtualKey_VK_F1", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF2 = factory.parse("VK_F2");
-    fun_VirtualKey_VKUnderscoreF2 = factory.makeAFun("_VirtualKey_VK_F2", 0, false);
+    pattern_VirtualKey_VK_F2 = factory.parse("VK_F2");
+    fun_VirtualKey_VK_F2 = factory.makeAFun("_VirtualKey_VK_F2", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF3 = factory.parse("VK_F3");
-    fun_VirtualKey_VKUnderscoreF3 = factory.makeAFun("_VirtualKey_VK_F3", 0, false);
+    pattern_VirtualKey_VK_F3 = factory.parse("VK_F3");
+    fun_VirtualKey_VK_F3 = factory.makeAFun("_VirtualKey_VK_F3", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF4 = factory.parse("VK_F4");
-    fun_VirtualKey_VKUnderscoreF4 = factory.makeAFun("_VirtualKey_VK_F4", 0, false);
+    pattern_VirtualKey_VK_F4 = factory.parse("VK_F4");
+    fun_VirtualKey_VK_F4 = factory.makeAFun("_VirtualKey_VK_F4", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF5 = factory.parse("VK_F5");
-    fun_VirtualKey_VKUnderscoreF5 = factory.makeAFun("_VirtualKey_VK_F5", 0, false);
+    pattern_VirtualKey_VK_F5 = factory.parse("VK_F5");
+    fun_VirtualKey_VK_F5 = factory.makeAFun("_VirtualKey_VK_F5", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF6 = factory.parse("VK_F6");
-    fun_VirtualKey_VKUnderscoreF6 = factory.makeAFun("_VirtualKey_VK_F6", 0, false);
+    pattern_VirtualKey_VK_F6 = factory.parse("VK_F6");
+    fun_VirtualKey_VK_F6 = factory.makeAFun("_VirtualKey_VK_F6", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF7 = factory.parse("VK_F7");
-    fun_VirtualKey_VKUnderscoreF7 = factory.makeAFun("_VirtualKey_VK_F7", 0, false);
+    pattern_VirtualKey_VK_F7 = factory.parse("VK_F7");
+    fun_VirtualKey_VK_F7 = factory.makeAFun("_VirtualKey_VK_F7", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF8 = factory.parse("VK_F8");
-    fun_VirtualKey_VKUnderscoreF8 = factory.makeAFun("_VirtualKey_VK_F8", 0, false);
+    pattern_VirtualKey_VK_F8 = factory.parse("VK_F8");
+    fun_VirtualKey_VK_F8 = factory.makeAFun("_VirtualKey_VK_F8", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF9 = factory.parse("VK_F9");
-    fun_VirtualKey_VKUnderscoreF9 = factory.makeAFun("_VirtualKey_VK_F9", 0, false);
+    pattern_VirtualKey_VK_F9 = factory.parse("VK_F9");
+    fun_VirtualKey_VK_F9 = factory.makeAFun("_VirtualKey_VK_F9", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF10 = factory.parse("VK_F10");
-    fun_VirtualKey_VKUnderscoreF10 = factory.makeAFun("_VirtualKey_VK_F10", 0, false);
+    pattern_VirtualKey_VK_F10 = factory.parse("VK_F10");
+    fun_VirtualKey_VK_F10 = factory.makeAFun("_VirtualKey_VK_F10", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF11 = factory.parse("VK_F11");
-    fun_VirtualKey_VKUnderscoreF11 = factory.makeAFun("_VirtualKey_VK_F11", 0, false);
+    pattern_VirtualKey_VK_F11 = factory.parse("VK_F11");
+    fun_VirtualKey_VK_F11 = factory.makeAFun("_VirtualKey_VK_F11", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreF12 = factory.parse("VK_F12");
-    fun_VirtualKey_VKUnderscoreF12 = factory.makeAFun("_VirtualKey_VK_F12", 0, false);
+    pattern_VirtualKey_VK_F12 = factory.parse("VK_F12");
+    fun_VirtualKey_VK_F12 = factory.makeAFun("_VirtualKey_VK_F12", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreGREATER = factory.parse("VK_GREATER");
-    fun_VirtualKey_VKUnderscoreGREATER = factory.makeAFun("_VirtualKey_VK_GREATER", 0, false);
+    pattern_VirtualKey_VK_GREATER = factory.parse("VK_GREATER");
+    fun_VirtualKey_VK_GREATER = factory.makeAFun("_VirtualKey_VK_GREATER", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreHOME = factory.parse("VK_HOME");
-    fun_VirtualKey_VKUnderscoreHOME = factory.makeAFun("_VirtualKey_VK_HOME", 0, false);
+    pattern_VirtualKey_VK_HOME = factory.parse("VK_HOME");
+    fun_VirtualKey_VK_HOME = factory.makeAFun("_VirtualKey_VK_HOME", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreINSERT = factory.parse("VK_INSERT");
-    fun_VirtualKey_VKUnderscoreINSERT = factory.makeAFun("_VirtualKey_VK_INSERT", 0, false);
+    pattern_VirtualKey_VK_INSERT = factory.parse("VK_INSERT");
+    fun_VirtualKey_VK_INSERT = factory.makeAFun("_VirtualKey_VK_INSERT", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreLEFT = factory.parse("VK_LEFT");
-    fun_VirtualKey_VKUnderscoreLEFT = factory.makeAFun("_VirtualKey_VK_LEFT", 0, false);
+    pattern_VirtualKey_VK_LEFT = factory.parse("VK_LEFT");
+    fun_VirtualKey_VK_LEFT = factory.makeAFun("_VirtualKey_VK_LEFT", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS = factory.parse("VK_LEFT_PARENTHESIS");
-    fun_VirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS = factory.makeAFun("_VirtualKey_VK_LEFT_PARENTHESIS", 0, false);
+    pattern_VirtualKey_VK_LEFT_PARENTHESIS = factory.parse("VK_LEFT_PARENTHESIS");
+    fun_VirtualKey_VK_LEFT_PARENTHESIS = factory.makeAFun("_VirtualKey_VK_LEFT_PARENTHESIS", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreMINUS = factory.parse("VK_MINUS");
-    fun_VirtualKey_VKUnderscoreMINUS = factory.makeAFun("_VirtualKey_VK_MINUS", 0, false);
+    pattern_VirtualKey_VK_MINUS = factory.parse("VK_MINUS");
+    fun_VirtualKey_VK_MINUS = factory.makeAFun("_VirtualKey_VK_MINUS", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreMULTIPLY = factory.parse("VK_MULTIPLY");
-    fun_VirtualKey_VKUnderscoreMULTIPLY = factory.makeAFun("_VirtualKey_VK_MULTIPLY", 0, false);
+    pattern_VirtualKey_VK_MULTIPLY = factory.parse("VK_MULTIPLY");
+    fun_VirtualKey_VK_MULTIPLY = factory.makeAFun("_VirtualKey_VK_MULTIPLY", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreNUMBERUnderscoreSIGN = factory.parse("VK_NUMBER_SIGN");
-    fun_VirtualKey_VKUnderscoreNUMBERUnderscoreSIGN = factory.makeAFun("_VirtualKey_VK_NUMBER_SIGN", 0, false);
+    pattern_VirtualKey_VK_NUMBER_SIGN = factory.parse("VK_NUMBER_SIGN");
+    fun_VirtualKey_VK_NUMBER_SIGN = factory.makeAFun("_VirtualKey_VK_NUMBER_SIGN", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreOPENUnderscoreBRACKET = factory.parse("VK_OPEN_BRACKET");
-    fun_VirtualKey_VKUnderscoreOPENUnderscoreBRACKET = factory.makeAFun("_VirtualKey_VK_OPEN_BRACKET", 0, false);
+    pattern_VirtualKey_VK_OPEN_BRACKET = factory.parse("VK_OPEN_BRACKET");
+    fun_VirtualKey_VK_OPEN_BRACKET = factory.makeAFun("_VirtualKey_VK_OPEN_BRACKET", 0, false);
 
-    pattern_VirtualKey_VKUnderscorePAGEUnderscoreDOWN = factory.parse("VK_PAGE_DOWN");
-    fun_VirtualKey_VKUnderscorePAGEUnderscoreDOWN = factory.makeAFun("_VirtualKey_VK_PAGE_DOWN", 0, false);
+    pattern_VirtualKey_VK_PAGE_DOWN = factory.parse("VK_PAGE_DOWN");
+    fun_VirtualKey_VK_PAGE_DOWN = factory.makeAFun("_VirtualKey_VK_PAGE_DOWN", 0, false);
 
-    pattern_VirtualKey_VKUnderscorePAGEUnderscoreUP = factory.parse("VK_PAGE_UP");
-    fun_VirtualKey_VKUnderscorePAGEUnderscoreUP = factory.makeAFun("_VirtualKey_VK_PAGE_UP", 0, false);
+    pattern_VirtualKey_VK_PAGE_UP = factory.parse("VK_PAGE_UP");
+    fun_VirtualKey_VK_PAGE_UP = factory.makeAFun("_VirtualKey_VK_PAGE_UP", 0, false);
 
-    pattern_VirtualKey_VKUnderscorePAUSE = factory.parse("VK_PAUSE");
-    fun_VirtualKey_VKUnderscorePAUSE = factory.makeAFun("_VirtualKey_VK_PAUSE", 0, false);
+    pattern_VirtualKey_VK_PAUSE = factory.parse("VK_PAUSE");
+    fun_VirtualKey_VK_PAUSE = factory.makeAFun("_VirtualKey_VK_PAUSE", 0, false);
 
-    pattern_VirtualKey_VKUnderscorePERIOD = factory.parse("VK_PERIOD");
-    fun_VirtualKey_VKUnderscorePERIOD = factory.makeAFun("_VirtualKey_VK_PERIOD", 0, false);
+    pattern_VirtualKey_VK_PERIOD = factory.parse("VK_PERIOD");
+    fun_VirtualKey_VK_PERIOD = factory.makeAFun("_VirtualKey_VK_PERIOD", 0, false);
 
-    pattern_VirtualKey_VKUnderscorePLUS = factory.parse("VK_PLUS");
-    fun_VirtualKey_VKUnderscorePLUS = factory.makeAFun("_VirtualKey_VK_PLUS", 0, false);
+    pattern_VirtualKey_VK_PLUS = factory.parse("VK_PLUS");
+    fun_VirtualKey_VK_PLUS = factory.makeAFun("_VirtualKey_VK_PLUS", 0, false);
 
-    pattern_VirtualKey_VKUnderscorePRINTSCREEN = factory.parse("VK_PRINTSCREEN");
-    fun_VirtualKey_VKUnderscorePRINTSCREEN = factory.makeAFun("_VirtualKey_VK_PRINTSCREEN", 0, false);
+    pattern_VirtualKey_VK_PRINTSCREEN = factory.parse("VK_PRINTSCREEN");
+    fun_VirtualKey_VK_PRINTSCREEN = factory.makeAFun("_VirtualKey_VK_PRINTSCREEN", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreQUOTE = factory.parse("VK_QUOTE");
-    fun_VirtualKey_VKUnderscoreQUOTE = factory.makeAFun("_VirtualKey_VK_QUOTE", 0, false);
+    pattern_VirtualKey_VK_QUOTE = factory.parse("VK_QUOTE");
+    fun_VirtualKey_VK_QUOTE = factory.makeAFun("_VirtualKey_VK_QUOTE", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreQUOTEDBL = factory.parse("VK_QUOTEDBL");
-    fun_VirtualKey_VKUnderscoreQUOTEDBL = factory.makeAFun("_VirtualKey_VK_QUOTEDBL", 0, false);
+    pattern_VirtualKey_VK_QUOTEDBL = factory.parse("VK_QUOTEDBL");
+    fun_VirtualKey_VK_QUOTEDBL = factory.makeAFun("_VirtualKey_VK_QUOTEDBL", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreRIGHT = factory.parse("VK_RIGHT");
-    fun_VirtualKey_VKUnderscoreRIGHT = factory.makeAFun("_VirtualKey_VK_RIGHT", 0, false);
+    pattern_VirtualKey_VK_RIGHT = factory.parse("VK_RIGHT");
+    fun_VirtualKey_VK_RIGHT = factory.makeAFun("_VirtualKey_VK_RIGHT", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS = factory.parse("VK_RIGHT_PARENTHESIS");
-    fun_VirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS = factory.makeAFun("_VirtualKey_VK_RIGHT_PARENTHESIS", 0, false);
+    pattern_VirtualKey_VK_RIGHT_PARENTHESIS = factory.parse("VK_RIGHT_PARENTHESIS");
+    fun_VirtualKey_VK_RIGHT_PARENTHESIS = factory.makeAFun("_VirtualKey_VK_RIGHT_PARENTHESIS", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreSEMICOLON = factory.parse("VK_SEMICOLON");
-    fun_VirtualKey_VKUnderscoreSEMICOLON = factory.makeAFun("_VirtualKey_VK_SEMICOLON", 0, false);
+    pattern_VirtualKey_VK_SEMICOLON = factory.parse("VK_SEMICOLON");
+    fun_VirtualKey_VK_SEMICOLON = factory.makeAFun("_VirtualKey_VK_SEMICOLON", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreSLASH = factory.parse("VK_SLASH");
-    fun_VirtualKey_VKUnderscoreSLASH = factory.makeAFun("_VirtualKey_VK_SLASH", 0, false);
+    pattern_VirtualKey_VK_SLASH = factory.parse("VK_SLASH");
+    fun_VirtualKey_VK_SLASH = factory.makeAFun("_VirtualKey_VK_SLASH", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreSPACE = factory.parse("VK_SPACE");
-    fun_VirtualKey_VKUnderscoreSPACE = factory.makeAFun("_VirtualKey_VK_SPACE", 0, false);
+    pattern_VirtualKey_VK_SPACE = factory.parse("VK_SPACE");
+    fun_VirtualKey_VK_SPACE = factory.makeAFun("_VirtualKey_VK_SPACE", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreSUBTRACT = factory.parse("VK_SUBTRACT");
-    fun_VirtualKey_VKUnderscoreSUBTRACT = factory.makeAFun("_VirtualKey_VK_SUBTRACT", 0, false);
+    pattern_VirtualKey_VK_SUBTRACT = factory.parse("VK_SUBTRACT");
+    fun_VirtualKey_VK_SUBTRACT = factory.makeAFun("_VirtualKey_VK_SUBTRACT", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreTAB = factory.parse("VK_TAB");
-    fun_VirtualKey_VKUnderscoreTAB = factory.makeAFun("_VirtualKey_VK_TAB", 0, false);
+    pattern_VirtualKey_VK_TAB = factory.parse("VK_TAB");
+    fun_VirtualKey_VK_TAB = factory.makeAFun("_VirtualKey_VK_TAB", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreUNDERSCORE = factory.parse("VK_UNDERSCORE");
-    fun_VirtualKey_VKUnderscoreUNDERSCORE = factory.makeAFun("_VirtualKey_VK_UNDERSCORE", 0, false);
+    pattern_VirtualKey_VK_UNDERSCORE = factory.parse("VK_UNDERSCORE");
+    fun_VirtualKey_VK_UNDERSCORE = factory.makeAFun("_VirtualKey_VK_UNDERSCORE", 0, false);
 
-    pattern_VirtualKey_VKUnderscoreUP = factory.parse("VK_UP");
-    fun_VirtualKey_VKUnderscoreUP = factory.makeAFun("_VirtualKey_VK_UP", 0, false);
+    pattern_VirtualKey_VK_UP = factory.parse("VK_UP");
+    fun_VirtualKey_VK_UP = factory.makeAFun("_VirtualKey_VK_UP", 0, false);
 
     pattern_Color_Rgb = factory.parse("rgb(<int>,<int>,<int>)");
     fun_Color_Rgb = factory.makeAFun("_Color_rgb", 3, false);
@@ -830,2428 +830,2428 @@ public class Factory {
     return factory.make(pattern_VirtualButton_BUTTON3, args);
   }
 
-  public nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreALT makeKeyModifier_MUnderscoreALT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreALT) factory.build( new nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreALT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.keymodifier.M_ALT makeKeyModifier_M_ALT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.keymodifier.M_ALT) factory.build( new nl.cwi.sen1.configapi.types.keymodifier.M_ALT(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreALT makeKeyModifier_MUnderscoreALT() {
+  public nl.cwi.sen1.configapi.types.keymodifier.M_ALT makeKeyModifier_M_ALT() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeKeyModifier_MUnderscoreALT(fun_KeyModifier_MUnderscoreALT, args, factory.getEmpty());
+    return makeKeyModifier_M_ALT(fun_KeyModifier_M_ALT, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.KeyModifier KeyModifier_MUnderscoreALTFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_KeyModifier_MUnderscoreALT);
+  protected nl.cwi.sen1.configapi.types.KeyModifier KeyModifier_M_ALTFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_KeyModifier_M_ALT);
 
     if (children != null) {
-      return makeKeyModifier_MUnderscoreALT(
+      return makeKeyModifier_M_ALT(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreALT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.keymodifier.M_ALT arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_KeyModifier_MUnderscoreALT, args);
+    return factory.make(pattern_KeyModifier_M_ALT, args);
   }
 
-  public nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreCTRL makeKeyModifier_MUnderscoreCTRL(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreCTRL) factory.build( new nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreCTRL(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.keymodifier.M_CTRL makeKeyModifier_M_CTRL(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.keymodifier.M_CTRL) factory.build( new nl.cwi.sen1.configapi.types.keymodifier.M_CTRL(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreCTRL makeKeyModifier_MUnderscoreCTRL() {
+  public nl.cwi.sen1.configapi.types.keymodifier.M_CTRL makeKeyModifier_M_CTRL() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeKeyModifier_MUnderscoreCTRL(fun_KeyModifier_MUnderscoreCTRL, args, factory.getEmpty());
+    return makeKeyModifier_M_CTRL(fun_KeyModifier_M_CTRL, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.KeyModifier KeyModifier_MUnderscoreCTRLFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_KeyModifier_MUnderscoreCTRL);
+  protected nl.cwi.sen1.configapi.types.KeyModifier KeyModifier_M_CTRLFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_KeyModifier_M_CTRL);
 
     if (children != null) {
-      return makeKeyModifier_MUnderscoreCTRL(
+      return makeKeyModifier_M_CTRL(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreCTRL arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.keymodifier.M_CTRL arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_KeyModifier_MUnderscoreCTRL, args);
+    return factory.make(pattern_KeyModifier_M_CTRL, args);
   }
 
-  public nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreSHIFT makeKeyModifier_MUnderscoreSHIFT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreSHIFT) factory.build( new nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreSHIFT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.keymodifier.M_SHIFT makeKeyModifier_M_SHIFT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.keymodifier.M_SHIFT) factory.build( new nl.cwi.sen1.configapi.types.keymodifier.M_SHIFT(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreSHIFT makeKeyModifier_MUnderscoreSHIFT() {
+  public nl.cwi.sen1.configapi.types.keymodifier.M_SHIFT makeKeyModifier_M_SHIFT() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeKeyModifier_MUnderscoreSHIFT(fun_KeyModifier_MUnderscoreSHIFT, args, factory.getEmpty());
+    return makeKeyModifier_M_SHIFT(fun_KeyModifier_M_SHIFT, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.KeyModifier KeyModifier_MUnderscoreSHIFTFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_KeyModifier_MUnderscoreSHIFT);
+  protected nl.cwi.sen1.configapi.types.KeyModifier KeyModifier_M_SHIFTFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_KeyModifier_M_SHIFT);
 
     if (children != null) {
-      return makeKeyModifier_MUnderscoreSHIFT(
+      return makeKeyModifier_M_SHIFT(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.keymodifier.MUnderscoreSHIFT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.keymodifier.M_SHIFT arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_KeyModifier_MUnderscoreSHIFT, args);
+    return factory.make(pattern_KeyModifier_M_SHIFT, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore0 makeVirtualKey_VKUnderscore0(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore0) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore0(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_0 makeVirtualKey_VK_0(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_0) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_0(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore0 makeVirtualKey_VKUnderscore0() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_0 makeVirtualKey_VK_0() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore0(fun_VirtualKey_VKUnderscore0, args, factory.getEmpty());
+    return makeVirtualKey_VK_0(fun_VirtualKey_VK_0, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore0FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore0);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_0FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_0);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore0(
+      return makeVirtualKey_VK_0(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore0 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_0 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore0, args);
+    return factory.make(pattern_VirtualKey_VK_0, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore1 makeVirtualKey_VKUnderscore1(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore1) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore1(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_1 makeVirtualKey_VK_1(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_1) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_1(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore1 makeVirtualKey_VKUnderscore1() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_1 makeVirtualKey_VK_1() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore1(fun_VirtualKey_VKUnderscore1, args, factory.getEmpty());
+    return makeVirtualKey_VK_1(fun_VirtualKey_VK_1, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore1FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore1);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_1FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_1);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore1(
+      return makeVirtualKey_VK_1(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore1 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_1 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore1, args);
+    return factory.make(pattern_VirtualKey_VK_1, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore2 makeVirtualKey_VKUnderscore2(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore2) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore2(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_2 makeVirtualKey_VK_2(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_2) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_2(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore2 makeVirtualKey_VKUnderscore2() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_2 makeVirtualKey_VK_2() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore2(fun_VirtualKey_VKUnderscore2, args, factory.getEmpty());
+    return makeVirtualKey_VK_2(fun_VirtualKey_VK_2, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore2FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore2);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_2FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_2);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore2(
+      return makeVirtualKey_VK_2(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore2 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_2 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore2, args);
+    return factory.make(pattern_VirtualKey_VK_2, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore3 makeVirtualKey_VKUnderscore3(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore3) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore3(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_3 makeVirtualKey_VK_3(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_3) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_3(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore3 makeVirtualKey_VKUnderscore3() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_3 makeVirtualKey_VK_3() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore3(fun_VirtualKey_VKUnderscore3, args, factory.getEmpty());
+    return makeVirtualKey_VK_3(fun_VirtualKey_VK_3, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore3FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore3);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_3FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_3);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore3(
+      return makeVirtualKey_VK_3(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore3 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_3 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore3, args);
+    return factory.make(pattern_VirtualKey_VK_3, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore4 makeVirtualKey_VKUnderscore4(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore4) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore4(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_4 makeVirtualKey_VK_4(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_4) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_4(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore4 makeVirtualKey_VKUnderscore4() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_4 makeVirtualKey_VK_4() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore4(fun_VirtualKey_VKUnderscore4, args, factory.getEmpty());
+    return makeVirtualKey_VK_4(fun_VirtualKey_VK_4, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore4FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore4);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_4FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_4);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore4(
+      return makeVirtualKey_VK_4(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore4 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_4 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore4, args);
+    return factory.make(pattern_VirtualKey_VK_4, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore5 makeVirtualKey_VKUnderscore5(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore5) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore5(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_5 makeVirtualKey_VK_5(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_5) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_5(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore5 makeVirtualKey_VKUnderscore5() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_5 makeVirtualKey_VK_5() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore5(fun_VirtualKey_VKUnderscore5, args, factory.getEmpty());
+    return makeVirtualKey_VK_5(fun_VirtualKey_VK_5, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore5FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore5);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_5FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_5);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore5(
+      return makeVirtualKey_VK_5(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore5 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_5 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore5, args);
+    return factory.make(pattern_VirtualKey_VK_5, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore6 makeVirtualKey_VKUnderscore6(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore6) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore6(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_6 makeVirtualKey_VK_6(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_6) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_6(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore6 makeVirtualKey_VKUnderscore6() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_6 makeVirtualKey_VK_6() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore6(fun_VirtualKey_VKUnderscore6, args, factory.getEmpty());
+    return makeVirtualKey_VK_6(fun_VirtualKey_VK_6, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore6FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore6);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_6FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_6);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore6(
+      return makeVirtualKey_VK_6(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore6 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_6 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore6, args);
+    return factory.make(pattern_VirtualKey_VK_6, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore7 makeVirtualKey_VKUnderscore7(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore7) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore7(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_7 makeVirtualKey_VK_7(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_7) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_7(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore7 makeVirtualKey_VKUnderscore7() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_7 makeVirtualKey_VK_7() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore7(fun_VirtualKey_VKUnderscore7, args, factory.getEmpty());
+    return makeVirtualKey_VK_7(fun_VirtualKey_VK_7, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore7FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore7);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_7FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_7);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore7(
+      return makeVirtualKey_VK_7(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore7 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_7 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore7, args);
+    return factory.make(pattern_VirtualKey_VK_7, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore8 makeVirtualKey_VKUnderscore8(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore8) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore8(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_8 makeVirtualKey_VK_8(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_8) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_8(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore8 makeVirtualKey_VKUnderscore8() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_8 makeVirtualKey_VK_8() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore8(fun_VirtualKey_VKUnderscore8, args, factory.getEmpty());
+    return makeVirtualKey_VK_8(fun_VirtualKey_VK_8, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore8FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore8);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_8FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_8);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore8(
+      return makeVirtualKey_VK_8(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore8 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_8 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore8, args);
+    return factory.make(pattern_VirtualKey_VK_8, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore9 makeVirtualKey_VKUnderscore9(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore9) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore9(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_9 makeVirtualKey_VK_9(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_9) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_9(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore9 makeVirtualKey_VKUnderscore9() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_9 makeVirtualKey_VK_9() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscore9(fun_VirtualKey_VKUnderscore9, args, factory.getEmpty());
+    return makeVirtualKey_VK_9(fun_VirtualKey_VK_9, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscore9FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscore9);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_9FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_9);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscore9(
+      return makeVirtualKey_VK_9(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscore9 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_9 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscore9, args);
+    return factory.make(pattern_VirtualKey_VK_9, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreA makeVirtualKey_VKUnderscoreA(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreA) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreA(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_A makeVirtualKey_VK_A(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_A) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_A(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreA makeVirtualKey_VKUnderscoreA() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_A makeVirtualKey_VK_A() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreA(fun_VirtualKey_VKUnderscoreA, args, factory.getEmpty());
+    return makeVirtualKey_VK_A(fun_VirtualKey_VK_A, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreAFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreA);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_AFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_A);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreA(
+      return makeVirtualKey_VK_A(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreA arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_A arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreA, args);
+    return factory.make(pattern_VirtualKey_VK_A, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreB makeVirtualKey_VKUnderscoreB(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreB) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreB(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_B makeVirtualKey_VK_B(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_B) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_B(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreB makeVirtualKey_VKUnderscoreB() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_B makeVirtualKey_VK_B() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreB(fun_VirtualKey_VKUnderscoreB, args, factory.getEmpty());
+    return makeVirtualKey_VK_B(fun_VirtualKey_VK_B, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreBFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreB);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_BFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_B);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreB(
+      return makeVirtualKey_VK_B(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreB arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_B arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreB, args);
+    return factory.make(pattern_VirtualKey_VK_B, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreC makeVirtualKey_VKUnderscoreC(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreC) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreC(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_C makeVirtualKey_VK_C(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_C) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_C(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreC makeVirtualKey_VKUnderscoreC() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_C makeVirtualKey_VK_C() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreC(fun_VirtualKey_VKUnderscoreC, args, factory.getEmpty());
+    return makeVirtualKey_VK_C(fun_VirtualKey_VK_C, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreCFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreC);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_CFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_C);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreC(
+      return makeVirtualKey_VK_C(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreC arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_C arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreC, args);
+    return factory.make(pattern_VirtualKey_VK_C, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreD makeVirtualKey_VKUnderscoreD(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreD) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreD(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_D makeVirtualKey_VK_D(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_D) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_D(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreD makeVirtualKey_VKUnderscoreD() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_D makeVirtualKey_VK_D() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreD(fun_VirtualKey_VKUnderscoreD, args, factory.getEmpty());
+    return makeVirtualKey_VK_D(fun_VirtualKey_VK_D, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreDFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreD);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_DFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_D);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreD(
+      return makeVirtualKey_VK_D(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreD arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_D arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreD, args);
+    return factory.make(pattern_VirtualKey_VK_D, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreE makeVirtualKey_VKUnderscoreE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_E makeVirtualKey_VK_E(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_E) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_E(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreE makeVirtualKey_VKUnderscoreE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_E makeVirtualKey_VK_E() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreE(fun_VirtualKey_VKUnderscoreE, args, factory.getEmpty());
+    return makeVirtualKey_VK_E(fun_VirtualKey_VK_E, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_EFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_E);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreE(
+      return makeVirtualKey_VK_E(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_E arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreE, args);
+    return factory.make(pattern_VirtualKey_VK_E, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF makeVirtualKey_VKUnderscoreF(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F makeVirtualKey_VK_F(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF makeVirtualKey_VKUnderscoreF() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F makeVirtualKey_VK_F() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF(fun_VirtualKey_VKUnderscoreF, args, factory.getEmpty());
+    return makeVirtualKey_VK_F(fun_VirtualKey_VK_F, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreFFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_FFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF(
+      return makeVirtualKey_VK_F(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF, args);
+    return factory.make(pattern_VirtualKey_VK_F, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreG makeVirtualKey_VKUnderscoreG(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreG) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreG(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_G makeVirtualKey_VK_G(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_G) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_G(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreG makeVirtualKey_VKUnderscoreG() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_G makeVirtualKey_VK_G() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreG(fun_VirtualKey_VKUnderscoreG, args, factory.getEmpty());
+    return makeVirtualKey_VK_G(fun_VirtualKey_VK_G, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreGFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreG);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_GFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_G);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreG(
+      return makeVirtualKey_VK_G(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreG arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_G arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreG, args);
+    return factory.make(pattern_VirtualKey_VK_G, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreH makeVirtualKey_VKUnderscoreH(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreH) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreH(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_H makeVirtualKey_VK_H(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_H) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_H(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreH makeVirtualKey_VKUnderscoreH() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_H makeVirtualKey_VK_H() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreH(fun_VirtualKey_VKUnderscoreH, args, factory.getEmpty());
+    return makeVirtualKey_VK_H(fun_VirtualKey_VK_H, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreHFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreH);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_HFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_H);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreH(
+      return makeVirtualKey_VK_H(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreH arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_H arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreH, args);
+    return factory.make(pattern_VirtualKey_VK_H, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreI makeVirtualKey_VKUnderscoreI(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreI) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreI(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_I makeVirtualKey_VK_I(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_I) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_I(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreI makeVirtualKey_VKUnderscoreI() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_I makeVirtualKey_VK_I() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreI(fun_VirtualKey_VKUnderscoreI, args, factory.getEmpty());
+    return makeVirtualKey_VK_I(fun_VirtualKey_VK_I, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreIFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreI);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_IFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_I);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreI(
+      return makeVirtualKey_VK_I(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreI arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_I arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreI, args);
+    return factory.make(pattern_VirtualKey_VK_I, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreJ makeVirtualKey_VKUnderscoreJ(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreJ) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreJ(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_J makeVirtualKey_VK_J(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_J) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_J(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreJ makeVirtualKey_VKUnderscoreJ() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_J makeVirtualKey_VK_J() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreJ(fun_VirtualKey_VKUnderscoreJ, args, factory.getEmpty());
+    return makeVirtualKey_VK_J(fun_VirtualKey_VK_J, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreJFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreJ);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_JFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_J);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreJ(
+      return makeVirtualKey_VK_J(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreJ arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_J arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreJ, args);
+    return factory.make(pattern_VirtualKey_VK_J, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreK makeVirtualKey_VKUnderscoreK(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreK) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreK(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_K makeVirtualKey_VK_K(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_K) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_K(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreK makeVirtualKey_VKUnderscoreK() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_K makeVirtualKey_VK_K() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreK(fun_VirtualKey_VKUnderscoreK, args, factory.getEmpty());
+    return makeVirtualKey_VK_K(fun_VirtualKey_VK_K, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreKFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreK);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_KFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_K);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreK(
+      return makeVirtualKey_VK_K(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreK arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_K arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreK, args);
+    return factory.make(pattern_VirtualKey_VK_K, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreL makeVirtualKey_VKUnderscoreL(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreL) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreL(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_L makeVirtualKey_VK_L(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_L) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_L(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreL makeVirtualKey_VKUnderscoreL() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_L makeVirtualKey_VK_L() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreL(fun_VirtualKey_VKUnderscoreL, args, factory.getEmpty());
+    return makeVirtualKey_VK_L(fun_VirtualKey_VK_L, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreLFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreL);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_LFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_L);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreL(
+      return makeVirtualKey_VK_L(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreL arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_L arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreL, args);
+    return factory.make(pattern_VirtualKey_VK_L, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreM makeVirtualKey_VKUnderscoreM(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreM) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreM(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_M makeVirtualKey_VK_M(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_M) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_M(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreM makeVirtualKey_VKUnderscoreM() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_M makeVirtualKey_VK_M() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreM(fun_VirtualKey_VKUnderscoreM, args, factory.getEmpty());
+    return makeVirtualKey_VK_M(fun_VirtualKey_VK_M, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreMFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreM);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_MFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_M);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreM(
+      return makeVirtualKey_VK_M(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreM arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_M arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreM, args);
+    return factory.make(pattern_VirtualKey_VK_M, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreN makeVirtualKey_VKUnderscoreN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreN(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_N makeVirtualKey_VK_N(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_N) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_N(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreN makeVirtualKey_VKUnderscoreN() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_N makeVirtualKey_VK_N() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreN(fun_VirtualKey_VKUnderscoreN, args, factory.getEmpty());
+    return makeVirtualKey_VK_N(fun_VirtualKey_VK_N, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreNFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreN);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_NFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_N);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreN(
+      return makeVirtualKey_VK_N(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreN arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_N arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreN, args);
+    return factory.make(pattern_VirtualKey_VK_N, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreO makeVirtualKey_VKUnderscoreO(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreO) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreO(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_O makeVirtualKey_VK_O(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_O) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_O(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreO makeVirtualKey_VKUnderscoreO() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_O makeVirtualKey_VK_O() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreO(fun_VirtualKey_VKUnderscoreO, args, factory.getEmpty());
+    return makeVirtualKey_VK_O(fun_VirtualKey_VK_O, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreOFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreO);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_OFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_O);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreO(
+      return makeVirtualKey_VK_O(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreO arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_O arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreO, args);
+    return factory.make(pattern_VirtualKey_VK_O, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreP makeVirtualKey_VKUnderscoreP(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreP) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreP(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_P makeVirtualKey_VK_P(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_P) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_P(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreP makeVirtualKey_VKUnderscoreP() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_P makeVirtualKey_VK_P() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreP(fun_VirtualKey_VKUnderscoreP, args, factory.getEmpty());
+    return makeVirtualKey_VK_P(fun_VirtualKey_VK_P, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscorePFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreP);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_PFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_P);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreP(
+      return makeVirtualKey_VK_P(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreP arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_P arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreP, args);
+    return factory.make(pattern_VirtualKey_VK_P, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQ makeVirtualKey_VKUnderscoreQ(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQ) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQ(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_Q makeVirtualKey_VK_Q(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_Q) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_Q(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQ makeVirtualKey_VKUnderscoreQ() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_Q makeVirtualKey_VK_Q() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreQ(fun_VirtualKey_VKUnderscoreQ, args, factory.getEmpty());
+    return makeVirtualKey_VK_Q(fun_VirtualKey_VK_Q, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreQFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreQ);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_QFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_Q);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreQ(
+      return makeVirtualKey_VK_Q(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQ arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_Q arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreQ, args);
+    return factory.make(pattern_VirtualKey_VK_Q, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreR makeVirtualKey_VKUnderscoreR(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreR) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreR(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_R makeVirtualKey_VK_R(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_R) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_R(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreR makeVirtualKey_VKUnderscoreR() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_R makeVirtualKey_VK_R() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreR(fun_VirtualKey_VKUnderscoreR, args, factory.getEmpty());
+    return makeVirtualKey_VK_R(fun_VirtualKey_VK_R, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreRFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreR);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_RFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_R);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreR(
+      return makeVirtualKey_VK_R(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreR arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_R arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreR, args);
+    return factory.make(pattern_VirtualKey_VK_R, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreS makeVirtualKey_VKUnderscoreS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreS(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_S makeVirtualKey_VK_S(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_S) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_S(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreS makeVirtualKey_VKUnderscoreS() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_S makeVirtualKey_VK_S() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreS(fun_VirtualKey_VKUnderscoreS, args, factory.getEmpty());
+    return makeVirtualKey_VK_S(fun_VirtualKey_VK_S, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreSFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreS);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_SFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_S);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreS(
+      return makeVirtualKey_VK_S(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreS arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_S arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreS, args);
+    return factory.make(pattern_VirtualKey_VK_S, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreT makeVirtualKey_VKUnderscoreT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_T makeVirtualKey_VK_T(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_T) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_T(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreT makeVirtualKey_VKUnderscoreT() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_T makeVirtualKey_VK_T() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreT(fun_VirtualKey_VKUnderscoreT, args, factory.getEmpty());
+    return makeVirtualKey_VK_T(fun_VirtualKey_VK_T, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreTFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreT);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_TFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_T);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreT(
+      return makeVirtualKey_VK_T(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_T arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreT, args);
+    return factory.make(pattern_VirtualKey_VK_T, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreU makeVirtualKey_VKUnderscoreU(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreU) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreU(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_U makeVirtualKey_VK_U(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_U) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_U(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreU makeVirtualKey_VKUnderscoreU() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_U makeVirtualKey_VK_U() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreU(fun_VirtualKey_VKUnderscoreU, args, factory.getEmpty());
+    return makeVirtualKey_VK_U(fun_VirtualKey_VK_U, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreUFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreU);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_UFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_U);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreU(
+      return makeVirtualKey_VK_U(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreU arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_U arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreU, args);
+    return factory.make(pattern_VirtualKey_VK_U, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreV makeVirtualKey_VKUnderscoreV(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreV) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreV(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_V makeVirtualKey_VK_V(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_V) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_V(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreV makeVirtualKey_VKUnderscoreV() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_V makeVirtualKey_VK_V() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreV(fun_VirtualKey_VKUnderscoreV, args, factory.getEmpty());
+    return makeVirtualKey_VK_V(fun_VirtualKey_VK_V, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreVFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreV);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_VFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_V);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreV(
+      return makeVirtualKey_VK_V(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreV arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_V arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreV, args);
+    return factory.make(pattern_VirtualKey_VK_V, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreW makeVirtualKey_VKUnderscoreW(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreW) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreW(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_W makeVirtualKey_VK_W(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_W) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_W(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreW makeVirtualKey_VKUnderscoreW() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_W makeVirtualKey_VK_W() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreW(fun_VirtualKey_VKUnderscoreW, args, factory.getEmpty());
+    return makeVirtualKey_VK_W(fun_VirtualKey_VK_W, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreWFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreW);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_WFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_W);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreW(
+      return makeVirtualKey_VK_W(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreW arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_W arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreW, args);
+    return factory.make(pattern_VirtualKey_VK_W, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreX makeVirtualKey_VKUnderscoreX(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreX) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreX(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_X makeVirtualKey_VK_X(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_X) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_X(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreX makeVirtualKey_VKUnderscoreX() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_X makeVirtualKey_VK_X() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreX(fun_VirtualKey_VKUnderscoreX, args, factory.getEmpty());
+    return makeVirtualKey_VK_X(fun_VirtualKey_VK_X, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreXFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreX);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_XFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_X);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreX(
+      return makeVirtualKey_VK_X(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreX arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_X arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreX, args);
+    return factory.make(pattern_VirtualKey_VK_X, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreY makeVirtualKey_VKUnderscoreY(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreY) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreY(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_Y makeVirtualKey_VK_Y(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_Y) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_Y(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreY makeVirtualKey_VKUnderscoreY() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_Y makeVirtualKey_VK_Y() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreY(fun_VirtualKey_VKUnderscoreY, args, factory.getEmpty());
+    return makeVirtualKey_VK_Y(fun_VirtualKey_VK_Y, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreYFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreY);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_YFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_Y);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreY(
+      return makeVirtualKey_VK_Y(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreY arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_Y arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreY, args);
+    return factory.make(pattern_VirtualKey_VK_Y, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreZ makeVirtualKey_VKUnderscoreZ(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreZ) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreZ(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_Z makeVirtualKey_VK_Z(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_Z) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_Z(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreZ makeVirtualKey_VKUnderscoreZ() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_Z makeVirtualKey_VK_Z() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreZ(fun_VirtualKey_VKUnderscoreZ, args, factory.getEmpty());
+    return makeVirtualKey_VK_Z(fun_VirtualKey_VK_Z, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreZFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreZ);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_ZFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_Z);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreZ(
+      return makeVirtualKey_VK_Z(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreZ arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_Z arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreZ, args);
+    return factory.make(pattern_VirtualKey_VK_Z, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAMPERSAND makeVirtualKey_VKUnderscoreAMPERSAND(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAMPERSAND) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAMPERSAND(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_AMPERSAND makeVirtualKey_VK_AMPERSAND(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_AMPERSAND) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_AMPERSAND(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAMPERSAND makeVirtualKey_VKUnderscoreAMPERSAND() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_AMPERSAND makeVirtualKey_VK_AMPERSAND() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreAMPERSAND(fun_VirtualKey_VKUnderscoreAMPERSAND, args, factory.getEmpty());
+    return makeVirtualKey_VK_AMPERSAND(fun_VirtualKey_VK_AMPERSAND, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreAMPERSANDFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreAMPERSAND);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_AMPERSANDFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_AMPERSAND);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreAMPERSAND(
+      return makeVirtualKey_VK_AMPERSAND(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAMPERSAND arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_AMPERSAND arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreAMPERSAND, args);
+    return factory.make(pattern_VirtualKey_VK_AMPERSAND, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreASTERISK makeVirtualKey_VKUnderscoreASTERISK(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreASTERISK) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreASTERISK(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_ASTERISK makeVirtualKey_VK_ASTERISK(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_ASTERISK) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_ASTERISK(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreASTERISK makeVirtualKey_VKUnderscoreASTERISK() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_ASTERISK makeVirtualKey_VK_ASTERISK() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreASTERISK(fun_VirtualKey_VKUnderscoreASTERISK, args, factory.getEmpty());
+    return makeVirtualKey_VK_ASTERISK(fun_VirtualKey_VK_ASTERISK, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreASTERISKFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreASTERISK);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_ASTERISKFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_ASTERISK);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreASTERISK(
+      return makeVirtualKey_VK_ASTERISK(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreASTERISK arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_ASTERISK arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreASTERISK, args);
+    return factory.make(pattern_VirtualKey_VK_ASTERISK, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAT makeVirtualKey_VKUnderscoreAT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_AT makeVirtualKey_VK_AT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_AT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_AT(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAT makeVirtualKey_VKUnderscoreAT() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_AT makeVirtualKey_VK_AT() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreAT(fun_VirtualKey_VKUnderscoreAT, args, factory.getEmpty());
+    return makeVirtualKey_VK_AT(fun_VirtualKey_VK_AT, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreATFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreAT);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_ATFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_AT);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreAT(
+      return makeVirtualKey_VK_AT(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreAT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_AT arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreAT, args);
+    return factory.make(pattern_VirtualKey_VK_AT, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreQUOTE makeVirtualKey_VKUnderscoreBACKUnderscoreQUOTE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreQUOTE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreQUOTE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_QUOTE makeVirtualKey_VK_BACK_QUOTE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_QUOTE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_QUOTE(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreQUOTE makeVirtualKey_VKUnderscoreBACKUnderscoreQUOTE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_QUOTE makeVirtualKey_VK_BACK_QUOTE() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreBACKUnderscoreQUOTE(fun_VirtualKey_VKUnderscoreBACKUnderscoreQUOTE, args, factory.getEmpty());
+    return makeVirtualKey_VK_BACK_QUOTE(fun_VirtualKey_VK_BACK_QUOTE, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreBACKUnderscoreQUOTEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreBACKUnderscoreQUOTE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_BACK_QUOTEFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_BACK_QUOTE);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreBACKUnderscoreQUOTE(
+      return makeVirtualKey_VK_BACK_QUOTE(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreQUOTE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_QUOTE arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreBACKUnderscoreQUOTE, args);
+    return factory.make(pattern_VirtualKey_VK_BACK_QUOTE, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSLASH makeVirtualKey_VKUnderscoreBACKUnderscoreSLASH(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSLASH) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSLASH(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SLASH makeVirtualKey_VK_BACK_SLASH(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SLASH) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SLASH(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSLASH makeVirtualKey_VKUnderscoreBACKUnderscoreSLASH() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SLASH makeVirtualKey_VK_BACK_SLASH() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreBACKUnderscoreSLASH(fun_VirtualKey_VKUnderscoreBACKUnderscoreSLASH, args, factory.getEmpty());
+    return makeVirtualKey_VK_BACK_SLASH(fun_VirtualKey_VK_BACK_SLASH, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreBACKUnderscoreSLASHFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreBACKUnderscoreSLASH);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_BACK_SLASHFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_BACK_SLASH);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreBACKUnderscoreSLASH(
+      return makeVirtualKey_VK_BACK_SLASH(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSLASH arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SLASH arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreBACKUnderscoreSLASH, args);
+    return factory.make(pattern_VirtualKey_VK_BACK_SLASH, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSPACE makeVirtualKey_VKUnderscoreBACKUnderscoreSPACE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSPACE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSPACE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SPACE makeVirtualKey_VK_BACK_SPACE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SPACE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SPACE(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSPACE makeVirtualKey_VKUnderscoreBACKUnderscoreSPACE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SPACE makeVirtualKey_VK_BACK_SPACE() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreBACKUnderscoreSPACE(fun_VirtualKey_VKUnderscoreBACKUnderscoreSPACE, args, factory.getEmpty());
+    return makeVirtualKey_VK_BACK_SPACE(fun_VirtualKey_VK_BACK_SPACE, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreBACKUnderscoreSPACEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreBACKUnderscoreSPACE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_BACK_SPACEFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_BACK_SPACE);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreBACKUnderscoreSPACE(
+      return makeVirtualKey_VK_BACK_SPACE(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBACKUnderscoreSPACE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_BACK_SPACE arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreBACKUnderscoreSPACE, args);
+    return factory.make(pattern_VirtualKey_VK_BACK_SPACE, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBEGIN makeVirtualKey_VKUnderscoreBEGIN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBEGIN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBEGIN(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BEGIN makeVirtualKey_VK_BEGIN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_BEGIN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_BEGIN(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBEGIN makeVirtualKey_VKUnderscoreBEGIN() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BEGIN makeVirtualKey_VK_BEGIN() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreBEGIN(fun_VirtualKey_VKUnderscoreBEGIN, args, factory.getEmpty());
+    return makeVirtualKey_VK_BEGIN(fun_VirtualKey_VK_BEGIN, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreBEGINFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreBEGIN);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_BEGINFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_BEGIN);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreBEGIN(
+      return makeVirtualKey_VK_BEGIN(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBEGIN arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_BEGIN arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreBEGIN, args);
+    return factory.make(pattern_VirtualKey_VK_BEGIN, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreLEFT makeVirtualKey_VKUnderscoreBRACEUnderscoreLEFT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreLEFT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreLEFT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_LEFT makeVirtualKey_VK_BRACE_LEFT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_LEFT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_LEFT(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreLEFT makeVirtualKey_VKUnderscoreBRACEUnderscoreLEFT() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_LEFT makeVirtualKey_VK_BRACE_LEFT() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreBRACEUnderscoreLEFT(fun_VirtualKey_VKUnderscoreBRACEUnderscoreLEFT, args, factory.getEmpty());
+    return makeVirtualKey_VK_BRACE_LEFT(fun_VirtualKey_VK_BRACE_LEFT, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreBRACEUnderscoreLEFTFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreBRACEUnderscoreLEFT);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_BRACE_LEFTFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_BRACE_LEFT);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreBRACEUnderscoreLEFT(
+      return makeVirtualKey_VK_BRACE_LEFT(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreLEFT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_LEFT arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreBRACEUnderscoreLEFT, args);
+    return factory.make(pattern_VirtualKey_VK_BRACE_LEFT, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreRIGHT makeVirtualKey_VKUnderscoreBRACEUnderscoreRIGHT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreRIGHT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreRIGHT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_RIGHT makeVirtualKey_VK_BRACE_RIGHT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_RIGHT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_RIGHT(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreRIGHT makeVirtualKey_VKUnderscoreBRACEUnderscoreRIGHT() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_RIGHT makeVirtualKey_VK_BRACE_RIGHT() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreBRACEUnderscoreRIGHT(fun_VirtualKey_VKUnderscoreBRACEUnderscoreRIGHT, args, factory.getEmpty());
+    return makeVirtualKey_VK_BRACE_RIGHT(fun_VirtualKey_VK_BRACE_RIGHT, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreBRACEUnderscoreRIGHTFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreBRACEUnderscoreRIGHT);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_BRACE_RIGHTFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_BRACE_RIGHT);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreBRACEUnderscoreRIGHT(
+      return makeVirtualKey_VK_BRACE_RIGHT(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreBRACEUnderscoreRIGHT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_BRACE_RIGHT arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreBRACEUnderscoreRIGHT, args);
+    return factory.make(pattern_VirtualKey_VK_BRACE_RIGHT, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCIRCUMFLEX makeVirtualKey_VKUnderscoreCIRCUMFLEX(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCIRCUMFLEX) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCIRCUMFLEX(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_CIRCUMFLEX makeVirtualKey_VK_CIRCUMFLEX(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_CIRCUMFLEX) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_CIRCUMFLEX(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCIRCUMFLEX makeVirtualKey_VKUnderscoreCIRCUMFLEX() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_CIRCUMFLEX makeVirtualKey_VK_CIRCUMFLEX() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreCIRCUMFLEX(fun_VirtualKey_VKUnderscoreCIRCUMFLEX, args, factory.getEmpty());
+    return makeVirtualKey_VK_CIRCUMFLEX(fun_VirtualKey_VK_CIRCUMFLEX, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreCIRCUMFLEXFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreCIRCUMFLEX);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_CIRCUMFLEXFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_CIRCUMFLEX);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreCIRCUMFLEX(
+      return makeVirtualKey_VK_CIRCUMFLEX(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCIRCUMFLEX arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_CIRCUMFLEX arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreCIRCUMFLEX, args);
+    return factory.make(pattern_VirtualKey_VK_CIRCUMFLEX, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLEAR makeVirtualKey_VKUnderscoreCLEAR(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLEAR) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLEAR(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_CLEAR makeVirtualKey_VK_CLEAR(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_CLEAR) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_CLEAR(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLEAR makeVirtualKey_VKUnderscoreCLEAR() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_CLEAR makeVirtualKey_VK_CLEAR() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreCLEAR(fun_VirtualKey_VKUnderscoreCLEAR, args, factory.getEmpty());
+    return makeVirtualKey_VK_CLEAR(fun_VirtualKey_VK_CLEAR, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreCLEARFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreCLEAR);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_CLEARFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_CLEAR);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreCLEAR(
+      return makeVirtualKey_VK_CLEAR(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLEAR arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_CLEAR arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreCLEAR, args);
+    return factory.make(pattern_VirtualKey_VK_CLEAR, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLOSEUnderscoreBRACKET makeVirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLOSEUnderscoreBRACKET) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLOSEUnderscoreBRACKET(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_CLOSE_BRACKET makeVirtualKey_VK_CLOSE_BRACKET(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_CLOSE_BRACKET) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_CLOSE_BRACKET(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLOSEUnderscoreBRACKET makeVirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_CLOSE_BRACKET makeVirtualKey_VK_CLOSE_BRACKET() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET(fun_VirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET, args, factory.getEmpty());
+    return makeVirtualKey_VK_CLOSE_BRACKET(fun_VirtualKey_VK_CLOSE_BRACKET, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreCLOSEUnderscoreBRACKETFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_CLOSE_BRACKETFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_CLOSE_BRACKET);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET(
+      return makeVirtualKey_VK_CLOSE_BRACKET(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCLOSEUnderscoreBRACKET arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_CLOSE_BRACKET arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreCLOSEUnderscoreBRACKET, args);
+    return factory.make(pattern_VirtualKey_VK_CLOSE_BRACKET, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOLON makeVirtualKey_VKUnderscoreCOLON(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOLON) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOLON(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_COLON makeVirtualKey_VK_COLON(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_COLON) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_COLON(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOLON makeVirtualKey_VKUnderscoreCOLON() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_COLON makeVirtualKey_VK_COLON() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreCOLON(fun_VirtualKey_VKUnderscoreCOLON, args, factory.getEmpty());
+    return makeVirtualKey_VK_COLON(fun_VirtualKey_VK_COLON, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreCOLONFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreCOLON);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_COLONFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_COLON);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreCOLON(
+      return makeVirtualKey_VK_COLON(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOLON arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_COLON arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreCOLON, args);
+    return factory.make(pattern_VirtualKey_VK_COLON, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOMMA makeVirtualKey_VKUnderscoreCOMMA(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOMMA) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOMMA(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_COMMA makeVirtualKey_VK_COMMA(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_COMMA) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_COMMA(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOMMA makeVirtualKey_VKUnderscoreCOMMA() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_COMMA makeVirtualKey_VK_COMMA() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreCOMMA(fun_VirtualKey_VKUnderscoreCOMMA, args, factory.getEmpty());
+    return makeVirtualKey_VK_COMMA(fun_VirtualKey_VK_COMMA, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreCOMMAFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreCOMMA);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_COMMAFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_COMMA);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreCOMMA(
+      return makeVirtualKey_VK_COMMA(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreCOMMA arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_COMMA arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreCOMMA, args);
+    return factory.make(pattern_VirtualKey_VK_COMMA, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDECIMAL makeVirtualKey_VKUnderscoreDECIMAL(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDECIMAL) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDECIMAL(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DECIMAL makeVirtualKey_VK_DECIMAL(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_DECIMAL) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_DECIMAL(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDECIMAL makeVirtualKey_VKUnderscoreDECIMAL() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DECIMAL makeVirtualKey_VK_DECIMAL() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreDECIMAL(fun_VirtualKey_VKUnderscoreDECIMAL, args, factory.getEmpty());
+    return makeVirtualKey_VK_DECIMAL(fun_VirtualKey_VK_DECIMAL, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreDECIMALFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreDECIMAL);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_DECIMALFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_DECIMAL);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreDECIMAL(
+      return makeVirtualKey_VK_DECIMAL(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDECIMAL arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_DECIMAL arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreDECIMAL, args);
+    return factory.make(pattern_VirtualKey_VK_DECIMAL, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDELETE makeVirtualKey_VKUnderscoreDELETE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDELETE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDELETE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DELETE makeVirtualKey_VK_DELETE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_DELETE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_DELETE(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDELETE makeVirtualKey_VKUnderscoreDELETE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DELETE makeVirtualKey_VK_DELETE() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreDELETE(fun_VirtualKey_VKUnderscoreDELETE, args, factory.getEmpty());
+    return makeVirtualKey_VK_DELETE(fun_VirtualKey_VK_DELETE, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreDELETEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreDELETE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_DELETEFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_DELETE);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreDELETE(
+      return makeVirtualKey_VK_DELETE(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDELETE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_DELETE arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreDELETE, args);
+    return factory.make(pattern_VirtualKey_VK_DELETE, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDIVIDE makeVirtualKey_VKUnderscoreDIVIDE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDIVIDE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDIVIDE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DIVIDE makeVirtualKey_VK_DIVIDE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_DIVIDE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_DIVIDE(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDIVIDE makeVirtualKey_VKUnderscoreDIVIDE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DIVIDE makeVirtualKey_VK_DIVIDE() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreDIVIDE(fun_VirtualKey_VKUnderscoreDIVIDE, args, factory.getEmpty());
+    return makeVirtualKey_VK_DIVIDE(fun_VirtualKey_VK_DIVIDE, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreDIVIDEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreDIVIDE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_DIVIDEFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_DIVIDE);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreDIVIDE(
+      return makeVirtualKey_VK_DIVIDE(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDIVIDE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_DIVIDE arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreDIVIDE, args);
+    return factory.make(pattern_VirtualKey_VK_DIVIDE, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOLLAR makeVirtualKey_VKUnderscoreDOLLAR(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOLLAR) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOLLAR(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DOLLAR makeVirtualKey_VK_DOLLAR(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_DOLLAR) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_DOLLAR(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOLLAR makeVirtualKey_VKUnderscoreDOLLAR() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DOLLAR makeVirtualKey_VK_DOLLAR() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreDOLLAR(fun_VirtualKey_VKUnderscoreDOLLAR, args, factory.getEmpty());
+    return makeVirtualKey_VK_DOLLAR(fun_VirtualKey_VK_DOLLAR, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreDOLLARFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreDOLLAR);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_DOLLARFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_DOLLAR);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreDOLLAR(
+      return makeVirtualKey_VK_DOLLAR(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOLLAR arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_DOLLAR arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreDOLLAR, args);
+    return factory.make(pattern_VirtualKey_VK_DOLLAR, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOWN makeVirtualKey_VKUnderscoreDOWN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOWN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOWN(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DOWN makeVirtualKey_VK_DOWN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_DOWN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_DOWN(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOWN makeVirtualKey_VKUnderscoreDOWN() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_DOWN makeVirtualKey_VK_DOWN() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreDOWN(fun_VirtualKey_VKUnderscoreDOWN, args, factory.getEmpty());
+    return makeVirtualKey_VK_DOWN(fun_VirtualKey_VK_DOWN, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreDOWNFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreDOWN);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_DOWNFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_DOWN);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreDOWN(
+      return makeVirtualKey_VK_DOWN(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreDOWN arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_DOWN arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreDOWN, args);
+    return factory.make(pattern_VirtualKey_VK_DOWN, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEND makeVirtualKey_VKUnderscoreEND(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEND) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEND(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_END makeVirtualKey_VK_END(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_END) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_END(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEND makeVirtualKey_VKUnderscoreEND() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_END makeVirtualKey_VK_END() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreEND(fun_VirtualKey_VKUnderscoreEND, args, factory.getEmpty());
+    return makeVirtualKey_VK_END(fun_VirtualKey_VK_END, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreENDFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreEND);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_ENDFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_END);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreEND(
+      return makeVirtualKey_VK_END(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEND arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_END arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreEND, args);
+    return factory.make(pattern_VirtualKey_VK_END, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreENTER makeVirtualKey_VKUnderscoreENTER(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreENTER) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreENTER(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_ENTER makeVirtualKey_VK_ENTER(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_ENTER) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_ENTER(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreENTER makeVirtualKey_VKUnderscoreENTER() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_ENTER makeVirtualKey_VK_ENTER() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreENTER(fun_VirtualKey_VKUnderscoreENTER, args, factory.getEmpty());
+    return makeVirtualKey_VK_ENTER(fun_VirtualKey_VK_ENTER, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreENTERFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreENTER);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_ENTERFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_ENTER);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreENTER(
+      return makeVirtualKey_VK_ENTER(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreENTER arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_ENTER arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreENTER, args);
+    return factory.make(pattern_VirtualKey_VK_ENTER, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEQUALS makeVirtualKey_VKUnderscoreEQUALS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEQUALS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEQUALS(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_EQUALS makeVirtualKey_VK_EQUALS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_EQUALS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_EQUALS(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEQUALS makeVirtualKey_VKUnderscoreEQUALS() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_EQUALS makeVirtualKey_VK_EQUALS() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreEQUALS(fun_VirtualKey_VKUnderscoreEQUALS, args, factory.getEmpty());
+    return makeVirtualKey_VK_EQUALS(fun_VirtualKey_VK_EQUALS, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreEQUALSFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreEQUALS);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_EQUALSFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_EQUALS);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreEQUALS(
+      return makeVirtualKey_VK_EQUALS(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEQUALS arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_EQUALS arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreEQUALS, args);
+    return factory.make(pattern_VirtualKey_VK_EQUALS, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreESCAPE makeVirtualKey_VKUnderscoreESCAPE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreESCAPE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreESCAPE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_ESCAPE makeVirtualKey_VK_ESCAPE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_ESCAPE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_ESCAPE(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreESCAPE makeVirtualKey_VKUnderscoreESCAPE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_ESCAPE makeVirtualKey_VK_ESCAPE() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreESCAPE(fun_VirtualKey_VKUnderscoreESCAPE, args, factory.getEmpty());
+    return makeVirtualKey_VK_ESCAPE(fun_VirtualKey_VK_ESCAPE, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreESCAPEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreESCAPE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_ESCAPEFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_ESCAPE);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreESCAPE(
+      return makeVirtualKey_VK_ESCAPE(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreESCAPE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_ESCAPE arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreESCAPE, args);
+    return factory.make(pattern_VirtualKey_VK_ESCAPE, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEXCLAMATIONUnderscoreMARK makeVirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEXCLAMATIONUnderscoreMARK) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEXCLAMATIONUnderscoreMARK(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_EXCLAMATION_MARK makeVirtualKey_VK_EXCLAMATION_MARK(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_EXCLAMATION_MARK) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_EXCLAMATION_MARK(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEXCLAMATIONUnderscoreMARK makeVirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_EXCLAMATION_MARK makeVirtualKey_VK_EXCLAMATION_MARK() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK(fun_VirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK, args, factory.getEmpty());
+    return makeVirtualKey_VK_EXCLAMATION_MARK(fun_VirtualKey_VK_EXCLAMATION_MARK, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARKFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_EXCLAMATION_MARKFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_EXCLAMATION_MARK);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK(
+      return makeVirtualKey_VK_EXCLAMATION_MARK(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreEXCLAMATIONUnderscoreMARK arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_EXCLAMATION_MARK arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARK, args);
+    return factory.make(pattern_VirtualKey_VK_EXCLAMATION_MARK, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF1 makeVirtualKey_VKUnderscoreF1(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF1) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF1(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F1 makeVirtualKey_VK_F1(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F1) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F1(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF1 makeVirtualKey_VKUnderscoreF1() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F1 makeVirtualKey_VK_F1() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF1(fun_VirtualKey_VKUnderscoreF1, args, factory.getEmpty());
+    return makeVirtualKey_VK_F1(fun_VirtualKey_VK_F1, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF1FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF1);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F1FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F1);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF1(
+      return makeVirtualKey_VK_F1(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF1 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F1 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF1, args);
+    return factory.make(pattern_VirtualKey_VK_F1, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF2 makeVirtualKey_VKUnderscoreF2(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF2) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF2(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F2 makeVirtualKey_VK_F2(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F2) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F2(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF2 makeVirtualKey_VKUnderscoreF2() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F2 makeVirtualKey_VK_F2() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF2(fun_VirtualKey_VKUnderscoreF2, args, factory.getEmpty());
+    return makeVirtualKey_VK_F2(fun_VirtualKey_VK_F2, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF2FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF2);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F2FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F2);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF2(
+      return makeVirtualKey_VK_F2(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF2 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F2 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF2, args);
+    return factory.make(pattern_VirtualKey_VK_F2, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF3 makeVirtualKey_VKUnderscoreF3(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF3) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF3(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F3 makeVirtualKey_VK_F3(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F3) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F3(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF3 makeVirtualKey_VKUnderscoreF3() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F3 makeVirtualKey_VK_F3() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF3(fun_VirtualKey_VKUnderscoreF3, args, factory.getEmpty());
+    return makeVirtualKey_VK_F3(fun_VirtualKey_VK_F3, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF3FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF3);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F3FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F3);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF3(
+      return makeVirtualKey_VK_F3(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF3 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F3 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF3, args);
+    return factory.make(pattern_VirtualKey_VK_F3, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF4 makeVirtualKey_VKUnderscoreF4(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF4) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF4(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F4 makeVirtualKey_VK_F4(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F4) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F4(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF4 makeVirtualKey_VKUnderscoreF4() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F4 makeVirtualKey_VK_F4() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF4(fun_VirtualKey_VKUnderscoreF4, args, factory.getEmpty());
+    return makeVirtualKey_VK_F4(fun_VirtualKey_VK_F4, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF4FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF4);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F4FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F4);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF4(
+      return makeVirtualKey_VK_F4(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF4 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F4 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF4, args);
+    return factory.make(pattern_VirtualKey_VK_F4, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF5 makeVirtualKey_VKUnderscoreF5(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF5) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF5(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F5 makeVirtualKey_VK_F5(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F5) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F5(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF5 makeVirtualKey_VKUnderscoreF5() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F5 makeVirtualKey_VK_F5() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF5(fun_VirtualKey_VKUnderscoreF5, args, factory.getEmpty());
+    return makeVirtualKey_VK_F5(fun_VirtualKey_VK_F5, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF5FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF5);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F5FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F5);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF5(
+      return makeVirtualKey_VK_F5(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF5 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F5 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF5, args);
+    return factory.make(pattern_VirtualKey_VK_F5, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF6 makeVirtualKey_VKUnderscoreF6(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF6) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF6(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F6 makeVirtualKey_VK_F6(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F6) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F6(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF6 makeVirtualKey_VKUnderscoreF6() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F6 makeVirtualKey_VK_F6() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF6(fun_VirtualKey_VKUnderscoreF6, args, factory.getEmpty());
+    return makeVirtualKey_VK_F6(fun_VirtualKey_VK_F6, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF6FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF6);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F6FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F6);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF6(
+      return makeVirtualKey_VK_F6(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF6 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F6 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF6, args);
+    return factory.make(pattern_VirtualKey_VK_F6, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF7 makeVirtualKey_VKUnderscoreF7(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF7) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF7(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F7 makeVirtualKey_VK_F7(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F7) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F7(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF7 makeVirtualKey_VKUnderscoreF7() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F7 makeVirtualKey_VK_F7() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF7(fun_VirtualKey_VKUnderscoreF7, args, factory.getEmpty());
+    return makeVirtualKey_VK_F7(fun_VirtualKey_VK_F7, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF7FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF7);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F7FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F7);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF7(
+      return makeVirtualKey_VK_F7(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF7 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F7 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF7, args);
+    return factory.make(pattern_VirtualKey_VK_F7, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF8 makeVirtualKey_VKUnderscoreF8(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF8) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF8(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F8 makeVirtualKey_VK_F8(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F8) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F8(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF8 makeVirtualKey_VKUnderscoreF8() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F8 makeVirtualKey_VK_F8() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF8(fun_VirtualKey_VKUnderscoreF8, args, factory.getEmpty());
+    return makeVirtualKey_VK_F8(fun_VirtualKey_VK_F8, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF8FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF8);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F8FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F8);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF8(
+      return makeVirtualKey_VK_F8(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF8 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F8 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF8, args);
+    return factory.make(pattern_VirtualKey_VK_F8, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF9 makeVirtualKey_VKUnderscoreF9(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF9) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF9(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F9 makeVirtualKey_VK_F9(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F9) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F9(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF9 makeVirtualKey_VKUnderscoreF9() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F9 makeVirtualKey_VK_F9() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF9(fun_VirtualKey_VKUnderscoreF9, args, factory.getEmpty());
+    return makeVirtualKey_VK_F9(fun_VirtualKey_VK_F9, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF9FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF9);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F9FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F9);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF9(
+      return makeVirtualKey_VK_F9(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF9 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F9 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF9, args);
+    return factory.make(pattern_VirtualKey_VK_F9, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF10 makeVirtualKey_VKUnderscoreF10(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF10) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF10(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F10 makeVirtualKey_VK_F10(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F10) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F10(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF10 makeVirtualKey_VKUnderscoreF10() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F10 makeVirtualKey_VK_F10() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF10(fun_VirtualKey_VKUnderscoreF10, args, factory.getEmpty());
+    return makeVirtualKey_VK_F10(fun_VirtualKey_VK_F10, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF10FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF10);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F10FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F10);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF10(
+      return makeVirtualKey_VK_F10(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF10 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F10 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF10, args);
+    return factory.make(pattern_VirtualKey_VK_F10, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF11 makeVirtualKey_VKUnderscoreF11(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF11) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF11(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F11 makeVirtualKey_VK_F11(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F11) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F11(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF11 makeVirtualKey_VKUnderscoreF11() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F11 makeVirtualKey_VK_F11() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF11(fun_VirtualKey_VKUnderscoreF11, args, factory.getEmpty());
+    return makeVirtualKey_VK_F11(fun_VirtualKey_VK_F11, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF11FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF11);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F11FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F11);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF11(
+      return makeVirtualKey_VK_F11(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF11 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F11 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF11, args);
+    return factory.make(pattern_VirtualKey_VK_F11, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF12 makeVirtualKey_VKUnderscoreF12(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF12) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF12(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F12 makeVirtualKey_VK_F12(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_F12) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_F12(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF12 makeVirtualKey_VKUnderscoreF12() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_F12 makeVirtualKey_VK_F12() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreF12(fun_VirtualKey_VKUnderscoreF12, args, factory.getEmpty());
+    return makeVirtualKey_VK_F12(fun_VirtualKey_VK_F12, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreF12FromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreF12);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_F12FromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_F12);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreF12(
+      return makeVirtualKey_VK_F12(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreF12 arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_F12 arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreF12, args);
+    return factory.make(pattern_VirtualKey_VK_F12, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreGREATER makeVirtualKey_VKUnderscoreGREATER(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreGREATER) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreGREATER(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_GREATER makeVirtualKey_VK_GREATER(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_GREATER) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_GREATER(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreGREATER makeVirtualKey_VKUnderscoreGREATER() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_GREATER makeVirtualKey_VK_GREATER() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreGREATER(fun_VirtualKey_VKUnderscoreGREATER, args, factory.getEmpty());
+    return makeVirtualKey_VK_GREATER(fun_VirtualKey_VK_GREATER, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreGREATERFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreGREATER);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_GREATERFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_GREATER);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreGREATER(
+      return makeVirtualKey_VK_GREATER(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreGREATER arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_GREATER arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreGREATER, args);
+    return factory.make(pattern_VirtualKey_VK_GREATER, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreHOME makeVirtualKey_VKUnderscoreHOME(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreHOME) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreHOME(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_HOME makeVirtualKey_VK_HOME(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_HOME) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_HOME(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreHOME makeVirtualKey_VKUnderscoreHOME() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_HOME makeVirtualKey_VK_HOME() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreHOME(fun_VirtualKey_VKUnderscoreHOME, args, factory.getEmpty());
+    return makeVirtualKey_VK_HOME(fun_VirtualKey_VK_HOME, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreHOMEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreHOME);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_HOMEFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_HOME);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreHOME(
+      return makeVirtualKey_VK_HOME(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreHOME arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_HOME arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreHOME, args);
+    return factory.make(pattern_VirtualKey_VK_HOME, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreINSERT makeVirtualKey_VKUnderscoreINSERT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreINSERT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreINSERT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_INSERT makeVirtualKey_VK_INSERT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_INSERT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_INSERT(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreINSERT makeVirtualKey_VKUnderscoreINSERT() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_INSERT makeVirtualKey_VK_INSERT() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreINSERT(fun_VirtualKey_VKUnderscoreINSERT, args, factory.getEmpty());
+    return makeVirtualKey_VK_INSERT(fun_VirtualKey_VK_INSERT, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreINSERTFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreINSERT);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_INSERTFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_INSERT);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreINSERT(
+      return makeVirtualKey_VK_INSERT(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreINSERT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_INSERT arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreINSERT, args);
+    return factory.make(pattern_VirtualKey_VK_INSERT, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFT makeVirtualKey_VKUnderscoreLEFT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT makeVirtualKey_VK_LEFT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFT makeVirtualKey_VKUnderscoreLEFT() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT makeVirtualKey_VK_LEFT() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreLEFT(fun_VirtualKey_VKUnderscoreLEFT, args, factory.getEmpty());
+    return makeVirtualKey_VK_LEFT(fun_VirtualKey_VK_LEFT, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreLEFTFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreLEFT);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_LEFTFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_LEFT);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreLEFT(
+      return makeVirtualKey_VK_LEFT(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreLEFT, args);
+    return factory.make(pattern_VirtualKey_VK_LEFT, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFTUnderscorePARENTHESIS makeVirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFTUnderscorePARENTHESIS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFTUnderscorePARENTHESIS(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT_PARENTHESIS makeVirtualKey_VK_LEFT_PARENTHESIS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT_PARENTHESIS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT_PARENTHESIS(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFTUnderscorePARENTHESIS makeVirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT_PARENTHESIS makeVirtualKey_VK_LEFT_PARENTHESIS() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS(fun_VirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS, args, factory.getEmpty());
+    return makeVirtualKey_VK_LEFT_PARENTHESIS(fun_VirtualKey_VK_LEFT_PARENTHESIS, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreLEFTUnderscorePARENTHESISFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_LEFT_PARENTHESISFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_LEFT_PARENTHESIS);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS(
+      return makeVirtualKey_VK_LEFT_PARENTHESIS(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreLEFTUnderscorePARENTHESIS arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_LEFT_PARENTHESIS arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreLEFTUnderscorePARENTHESIS, args);
+    return factory.make(pattern_VirtualKey_VK_LEFT_PARENTHESIS, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMINUS makeVirtualKey_VKUnderscoreMINUS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMINUS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMINUS(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_MINUS makeVirtualKey_VK_MINUS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_MINUS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_MINUS(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMINUS makeVirtualKey_VKUnderscoreMINUS() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_MINUS makeVirtualKey_VK_MINUS() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreMINUS(fun_VirtualKey_VKUnderscoreMINUS, args, factory.getEmpty());
+    return makeVirtualKey_VK_MINUS(fun_VirtualKey_VK_MINUS, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreMINUSFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreMINUS);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_MINUSFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_MINUS);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreMINUS(
+      return makeVirtualKey_VK_MINUS(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMINUS arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_MINUS arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreMINUS, args);
+    return factory.make(pattern_VirtualKey_VK_MINUS, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMULTIPLY makeVirtualKey_VKUnderscoreMULTIPLY(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMULTIPLY) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMULTIPLY(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_MULTIPLY makeVirtualKey_VK_MULTIPLY(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_MULTIPLY) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_MULTIPLY(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMULTIPLY makeVirtualKey_VKUnderscoreMULTIPLY() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_MULTIPLY makeVirtualKey_VK_MULTIPLY() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreMULTIPLY(fun_VirtualKey_VKUnderscoreMULTIPLY, args, factory.getEmpty());
+    return makeVirtualKey_VK_MULTIPLY(fun_VirtualKey_VK_MULTIPLY, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreMULTIPLYFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreMULTIPLY);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_MULTIPLYFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_MULTIPLY);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreMULTIPLY(
+      return makeVirtualKey_VK_MULTIPLY(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreMULTIPLY arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_MULTIPLY arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreMULTIPLY, args);
+    return factory.make(pattern_VirtualKey_VK_MULTIPLY, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreNUMBERUnderscoreSIGN makeVirtualKey_VKUnderscoreNUMBERUnderscoreSIGN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreNUMBERUnderscoreSIGN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreNUMBERUnderscoreSIGN(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_NUMBER_SIGN makeVirtualKey_VK_NUMBER_SIGN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_NUMBER_SIGN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_NUMBER_SIGN(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreNUMBERUnderscoreSIGN makeVirtualKey_VKUnderscoreNUMBERUnderscoreSIGN() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_NUMBER_SIGN makeVirtualKey_VK_NUMBER_SIGN() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreNUMBERUnderscoreSIGN(fun_VirtualKey_VKUnderscoreNUMBERUnderscoreSIGN, args, factory.getEmpty());
+    return makeVirtualKey_VK_NUMBER_SIGN(fun_VirtualKey_VK_NUMBER_SIGN, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreNUMBERUnderscoreSIGNFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreNUMBERUnderscoreSIGN);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_NUMBER_SIGNFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_NUMBER_SIGN);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreNUMBERUnderscoreSIGN(
+      return makeVirtualKey_VK_NUMBER_SIGN(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreNUMBERUnderscoreSIGN arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_NUMBER_SIGN arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreNUMBERUnderscoreSIGN, args);
+    return factory.make(pattern_VirtualKey_VK_NUMBER_SIGN, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreOPENUnderscoreBRACKET makeVirtualKey_VKUnderscoreOPENUnderscoreBRACKET(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreOPENUnderscoreBRACKET) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreOPENUnderscoreBRACKET(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_OPEN_BRACKET makeVirtualKey_VK_OPEN_BRACKET(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_OPEN_BRACKET) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_OPEN_BRACKET(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreOPENUnderscoreBRACKET makeVirtualKey_VKUnderscoreOPENUnderscoreBRACKET() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_OPEN_BRACKET makeVirtualKey_VK_OPEN_BRACKET() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreOPENUnderscoreBRACKET(fun_VirtualKey_VKUnderscoreOPENUnderscoreBRACKET, args, factory.getEmpty());
+    return makeVirtualKey_VK_OPEN_BRACKET(fun_VirtualKey_VK_OPEN_BRACKET, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreOPENUnderscoreBRACKETFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreOPENUnderscoreBRACKET);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_OPEN_BRACKETFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_OPEN_BRACKET);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreOPENUnderscoreBRACKET(
+      return makeVirtualKey_VK_OPEN_BRACKET(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreOPENUnderscoreBRACKET arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_OPEN_BRACKET arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreOPENUnderscoreBRACKET, args);
+    return factory.make(pattern_VirtualKey_VK_OPEN_BRACKET, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreDOWN makeVirtualKey_VKUnderscorePAGEUnderscoreDOWN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreDOWN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreDOWN(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_DOWN makeVirtualKey_VK_PAGE_DOWN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_DOWN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_DOWN(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreDOWN makeVirtualKey_VKUnderscorePAGEUnderscoreDOWN() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_DOWN makeVirtualKey_VK_PAGE_DOWN() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscorePAGEUnderscoreDOWN(fun_VirtualKey_VKUnderscorePAGEUnderscoreDOWN, args, factory.getEmpty());
+    return makeVirtualKey_VK_PAGE_DOWN(fun_VirtualKey_VK_PAGE_DOWN, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscorePAGEUnderscoreDOWNFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscorePAGEUnderscoreDOWN);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_PAGE_DOWNFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_PAGE_DOWN);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscorePAGEUnderscoreDOWN(
+      return makeVirtualKey_VK_PAGE_DOWN(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreDOWN arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_DOWN arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscorePAGEUnderscoreDOWN, args);
+    return factory.make(pattern_VirtualKey_VK_PAGE_DOWN, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreUP makeVirtualKey_VKUnderscorePAGEUnderscoreUP(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreUP) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreUP(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_UP makeVirtualKey_VK_PAGE_UP(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_UP) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_UP(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreUP makeVirtualKey_VKUnderscorePAGEUnderscoreUP() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_UP makeVirtualKey_VK_PAGE_UP() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscorePAGEUnderscoreUP(fun_VirtualKey_VKUnderscorePAGEUnderscoreUP, args, factory.getEmpty());
+    return makeVirtualKey_VK_PAGE_UP(fun_VirtualKey_VK_PAGE_UP, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscorePAGEUnderscoreUPFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscorePAGEUnderscoreUP);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_PAGE_UPFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_PAGE_UP);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscorePAGEUnderscoreUP(
+      return makeVirtualKey_VK_PAGE_UP(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAGEUnderscoreUP arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_PAGE_UP arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscorePAGEUnderscoreUP, args);
+    return factory.make(pattern_VirtualKey_VK_PAGE_UP, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAUSE makeVirtualKey_VKUnderscorePAUSE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAUSE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAUSE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PAUSE makeVirtualKey_VK_PAUSE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_PAUSE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_PAUSE(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAUSE makeVirtualKey_VKUnderscorePAUSE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PAUSE makeVirtualKey_VK_PAUSE() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscorePAUSE(fun_VirtualKey_VKUnderscorePAUSE, args, factory.getEmpty());
+    return makeVirtualKey_VK_PAUSE(fun_VirtualKey_VK_PAUSE, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscorePAUSEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscorePAUSE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_PAUSEFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_PAUSE);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscorePAUSE(
+      return makeVirtualKey_VK_PAUSE(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePAUSE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_PAUSE arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscorePAUSE, args);
+    return factory.make(pattern_VirtualKey_VK_PAUSE, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePERIOD makeVirtualKey_VKUnderscorePERIOD(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePERIOD) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePERIOD(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PERIOD makeVirtualKey_VK_PERIOD(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_PERIOD) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_PERIOD(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePERIOD makeVirtualKey_VKUnderscorePERIOD() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PERIOD makeVirtualKey_VK_PERIOD() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscorePERIOD(fun_VirtualKey_VKUnderscorePERIOD, args, factory.getEmpty());
+    return makeVirtualKey_VK_PERIOD(fun_VirtualKey_VK_PERIOD, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscorePERIODFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscorePERIOD);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_PERIODFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_PERIOD);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscorePERIOD(
+      return makeVirtualKey_VK_PERIOD(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePERIOD arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_PERIOD arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscorePERIOD, args);
+    return factory.make(pattern_VirtualKey_VK_PERIOD, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePLUS makeVirtualKey_VKUnderscorePLUS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePLUS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePLUS(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PLUS makeVirtualKey_VK_PLUS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_PLUS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_PLUS(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePLUS makeVirtualKey_VKUnderscorePLUS() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PLUS makeVirtualKey_VK_PLUS() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscorePLUS(fun_VirtualKey_VKUnderscorePLUS, args, factory.getEmpty());
+    return makeVirtualKey_VK_PLUS(fun_VirtualKey_VK_PLUS, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscorePLUSFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscorePLUS);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_PLUSFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_PLUS);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscorePLUS(
+      return makeVirtualKey_VK_PLUS(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePLUS arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_PLUS arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscorePLUS, args);
+    return factory.make(pattern_VirtualKey_VK_PLUS, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePRINTSCREEN makeVirtualKey_VKUnderscorePRINTSCREEN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePRINTSCREEN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePRINTSCREEN(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PRINTSCREEN makeVirtualKey_VK_PRINTSCREEN(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_PRINTSCREEN) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_PRINTSCREEN(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePRINTSCREEN makeVirtualKey_VKUnderscorePRINTSCREEN() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_PRINTSCREEN makeVirtualKey_VK_PRINTSCREEN() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscorePRINTSCREEN(fun_VirtualKey_VKUnderscorePRINTSCREEN, args, factory.getEmpty());
+    return makeVirtualKey_VK_PRINTSCREEN(fun_VirtualKey_VK_PRINTSCREEN, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscorePRINTSCREENFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscorePRINTSCREEN);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_PRINTSCREENFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_PRINTSCREEN);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscorePRINTSCREEN(
+      return makeVirtualKey_VK_PRINTSCREEN(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscorePRINTSCREEN arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_PRINTSCREEN arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscorePRINTSCREEN, args);
+    return factory.make(pattern_VirtualKey_VK_PRINTSCREEN, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTE makeVirtualKey_VKUnderscoreQUOTE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTE makeVirtualKey_VK_QUOTE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTE(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTE makeVirtualKey_VKUnderscoreQUOTE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTE makeVirtualKey_VK_QUOTE() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreQUOTE(fun_VirtualKey_VKUnderscoreQUOTE, args, factory.getEmpty());
+    return makeVirtualKey_VK_QUOTE(fun_VirtualKey_VK_QUOTE, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreQUOTEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreQUOTE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_QUOTEFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_QUOTE);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreQUOTE(
+      return makeVirtualKey_VK_QUOTE(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTE arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreQUOTE, args);
+    return factory.make(pattern_VirtualKey_VK_QUOTE, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTEDBL makeVirtualKey_VKUnderscoreQUOTEDBL(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTEDBL) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTEDBL(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTEDBL makeVirtualKey_VK_QUOTEDBL(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTEDBL) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTEDBL(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTEDBL makeVirtualKey_VKUnderscoreQUOTEDBL() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTEDBL makeVirtualKey_VK_QUOTEDBL() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreQUOTEDBL(fun_VirtualKey_VKUnderscoreQUOTEDBL, args, factory.getEmpty());
+    return makeVirtualKey_VK_QUOTEDBL(fun_VirtualKey_VK_QUOTEDBL, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreQUOTEDBLFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreQUOTEDBL);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_QUOTEDBLFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_QUOTEDBL);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreQUOTEDBL(
+      return makeVirtualKey_VK_QUOTEDBL(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreQUOTEDBL arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_QUOTEDBL arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreQUOTEDBL, args);
+    return factory.make(pattern_VirtualKey_VK_QUOTEDBL, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHT makeVirtualKey_VKUnderscoreRIGHT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT makeVirtualKey_VK_RIGHT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHT makeVirtualKey_VKUnderscoreRIGHT() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT makeVirtualKey_VK_RIGHT() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreRIGHT(fun_VirtualKey_VKUnderscoreRIGHT, args, factory.getEmpty());
+    return makeVirtualKey_VK_RIGHT(fun_VirtualKey_VK_RIGHT, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreRIGHTFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreRIGHT);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_RIGHTFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_RIGHT);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreRIGHT(
+      return makeVirtualKey_VK_RIGHT(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreRIGHT, args);
+    return factory.make(pattern_VirtualKey_VK_RIGHT, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHTUnderscorePARENTHESIS makeVirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHTUnderscorePARENTHESIS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHTUnderscorePARENTHESIS(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT_PARENTHESIS makeVirtualKey_VK_RIGHT_PARENTHESIS(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT_PARENTHESIS) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT_PARENTHESIS(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHTUnderscorePARENTHESIS makeVirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT_PARENTHESIS makeVirtualKey_VK_RIGHT_PARENTHESIS() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS(fun_VirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS, args, factory.getEmpty());
+    return makeVirtualKey_VK_RIGHT_PARENTHESIS(fun_VirtualKey_VK_RIGHT_PARENTHESIS, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESISFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_RIGHT_PARENTHESISFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_RIGHT_PARENTHESIS);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS(
+      return makeVirtualKey_VK_RIGHT_PARENTHESIS(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreRIGHTUnderscorePARENTHESIS arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_RIGHT_PARENTHESIS arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESIS, args);
+    return factory.make(pattern_VirtualKey_VK_RIGHT_PARENTHESIS, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSEMICOLON makeVirtualKey_VKUnderscoreSEMICOLON(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSEMICOLON) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSEMICOLON(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_SEMICOLON makeVirtualKey_VK_SEMICOLON(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_SEMICOLON) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_SEMICOLON(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSEMICOLON makeVirtualKey_VKUnderscoreSEMICOLON() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_SEMICOLON makeVirtualKey_VK_SEMICOLON() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreSEMICOLON(fun_VirtualKey_VKUnderscoreSEMICOLON, args, factory.getEmpty());
+    return makeVirtualKey_VK_SEMICOLON(fun_VirtualKey_VK_SEMICOLON, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreSEMICOLONFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreSEMICOLON);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_SEMICOLONFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_SEMICOLON);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreSEMICOLON(
+      return makeVirtualKey_VK_SEMICOLON(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSEMICOLON arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_SEMICOLON arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreSEMICOLON, args);
+    return factory.make(pattern_VirtualKey_VK_SEMICOLON, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSLASH makeVirtualKey_VKUnderscoreSLASH(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSLASH) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSLASH(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_SLASH makeVirtualKey_VK_SLASH(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_SLASH) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_SLASH(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSLASH makeVirtualKey_VKUnderscoreSLASH() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_SLASH makeVirtualKey_VK_SLASH() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreSLASH(fun_VirtualKey_VKUnderscoreSLASH, args, factory.getEmpty());
+    return makeVirtualKey_VK_SLASH(fun_VirtualKey_VK_SLASH, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreSLASHFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreSLASH);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_SLASHFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_SLASH);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreSLASH(
+      return makeVirtualKey_VK_SLASH(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSLASH arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_SLASH arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreSLASH, args);
+    return factory.make(pattern_VirtualKey_VK_SLASH, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSPACE makeVirtualKey_VKUnderscoreSPACE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSPACE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSPACE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_SPACE makeVirtualKey_VK_SPACE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_SPACE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_SPACE(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSPACE makeVirtualKey_VKUnderscoreSPACE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_SPACE makeVirtualKey_VK_SPACE() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreSPACE(fun_VirtualKey_VKUnderscoreSPACE, args, factory.getEmpty());
+    return makeVirtualKey_VK_SPACE(fun_VirtualKey_VK_SPACE, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreSPACEFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreSPACE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_SPACEFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_SPACE);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreSPACE(
+      return makeVirtualKey_VK_SPACE(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSPACE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_SPACE arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreSPACE, args);
+    return factory.make(pattern_VirtualKey_VK_SPACE, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSUBTRACT makeVirtualKey_VKUnderscoreSUBTRACT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSUBTRACT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSUBTRACT(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_SUBTRACT makeVirtualKey_VK_SUBTRACT(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_SUBTRACT) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_SUBTRACT(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSUBTRACT makeVirtualKey_VKUnderscoreSUBTRACT() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_SUBTRACT makeVirtualKey_VK_SUBTRACT() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreSUBTRACT(fun_VirtualKey_VKUnderscoreSUBTRACT, args, factory.getEmpty());
+    return makeVirtualKey_VK_SUBTRACT(fun_VirtualKey_VK_SUBTRACT, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreSUBTRACTFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreSUBTRACT);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_SUBTRACTFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_SUBTRACT);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreSUBTRACT(
+      return makeVirtualKey_VK_SUBTRACT(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreSUBTRACT arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_SUBTRACT arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreSUBTRACT, args);
+    return factory.make(pattern_VirtualKey_VK_SUBTRACT, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreTAB makeVirtualKey_VKUnderscoreTAB(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreTAB) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreTAB(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_TAB makeVirtualKey_VK_TAB(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_TAB) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_TAB(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreTAB makeVirtualKey_VKUnderscoreTAB() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_TAB makeVirtualKey_VK_TAB() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreTAB(fun_VirtualKey_VKUnderscoreTAB, args, factory.getEmpty());
+    return makeVirtualKey_VK_TAB(fun_VirtualKey_VK_TAB, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreTABFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreTAB);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_TABFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_TAB);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreTAB(
+      return makeVirtualKey_VK_TAB(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreTAB arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_TAB arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreTAB, args);
+    return factory.make(pattern_VirtualKey_VK_TAB, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUNDERSCORE makeVirtualKey_VKUnderscoreUNDERSCORE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUNDERSCORE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUNDERSCORE(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_UNDERSCORE makeVirtualKey_VK_UNDERSCORE(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_UNDERSCORE) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_UNDERSCORE(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUNDERSCORE makeVirtualKey_VKUnderscoreUNDERSCORE() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_UNDERSCORE makeVirtualKey_VK_UNDERSCORE() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreUNDERSCORE(fun_VirtualKey_VKUnderscoreUNDERSCORE, args, factory.getEmpty());
+    return makeVirtualKey_VK_UNDERSCORE(fun_VirtualKey_VK_UNDERSCORE, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreUNDERSCOREFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreUNDERSCORE);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_UNDERSCOREFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_UNDERSCORE);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreUNDERSCORE(
+      return makeVirtualKey_VK_UNDERSCORE(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUNDERSCORE arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_UNDERSCORE arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreUNDERSCORE, args);
+    return factory.make(pattern_VirtualKey_VK_UNDERSCORE, args);
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUP makeVirtualKey_VKUnderscoreUP(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    return (nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUP) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUP(this, annos, fun, args));
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_UP makeVirtualKey_VK_UP(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    return (nl.cwi.sen1.configapi.types.virtualkey.VK_UP) factory.build( new nl.cwi.sen1.configapi.types.virtualkey.VK_UP(this, annos, fun, args));
   }
 
-  public nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUP makeVirtualKey_VKUnderscoreUP() {
+  public nl.cwi.sen1.configapi.types.virtualkey.VK_UP makeVirtualKey_VK_UP() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeVirtualKey_VKUnderscoreUP(fun_VirtualKey_VKUnderscoreUP, args, factory.getEmpty());
+    return makeVirtualKey_VK_UP(fun_VirtualKey_VK_UP, args, factory.getEmpty());
   }
 
-  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VKUnderscoreUPFromTerm(aterm.ATerm trm) {
-    java.util.List<Object> children = trm.match(pattern_VirtualKey_VKUnderscoreUP);
+  protected nl.cwi.sen1.configapi.types.VirtualKey VirtualKey_VK_UPFromTerm(aterm.ATerm trm) {
+    java.util.List<Object> children = trm.match(pattern_VirtualKey_VK_UP);
 
     if (children != null) {
-      return makeVirtualKey_VKUnderscoreUP(
+      return makeVirtualKey_VK_UP(
       );
     }
     return null;
   }
 
-  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VKUnderscoreUP arg) {
+  public aterm.ATerm toTerm(nl.cwi.sen1.configapi.types.virtualkey.VK_UP arg) {
     java.util.List<Object> args = new java.util.LinkedList<Object>();
-    return factory.make(pattern_VirtualKey_VKUnderscoreUP, args);
+    return factory.make(pattern_VirtualKey_VK_UP, args);
   }
 
   public nl.cwi.sen1.configapi.types.color.Rgb makeColor_Rgb(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -4374,17 +4374,17 @@ public class Factory {
 
   public nl.cwi.sen1.configapi.types.KeyModifier KeyModifierFromTerm(aterm.ATerm trm) {
     nl.cwi.sen1.configapi.types.KeyModifier tmp;
-    tmp = KeyModifier_MUnderscoreALTFromTerm(trm);
+    tmp = KeyModifier_M_ALTFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = KeyModifier_MUnderscoreCTRLFromTerm(trm);
+    tmp = KeyModifier_M_CTRLFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = KeyModifier_MUnderscoreSHIFTFromTerm(trm);
+    tmp = KeyModifier_M_SHIFTFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
@@ -4394,492 +4394,492 @@ public class Factory {
 
   public nl.cwi.sen1.configapi.types.VirtualKey VirtualKeyFromTerm(aterm.ATerm trm) {
     nl.cwi.sen1.configapi.types.VirtualKey tmp;
-    tmp = VirtualKey_VKUnderscore0FromTerm(trm);
+    tmp = VirtualKey_VK_0FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscore1FromTerm(trm);
+    tmp = VirtualKey_VK_1FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscore2FromTerm(trm);
+    tmp = VirtualKey_VK_2FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscore3FromTerm(trm);
+    tmp = VirtualKey_VK_3FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscore4FromTerm(trm);
+    tmp = VirtualKey_VK_4FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscore5FromTerm(trm);
+    tmp = VirtualKey_VK_5FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscore6FromTerm(trm);
+    tmp = VirtualKey_VK_6FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscore7FromTerm(trm);
+    tmp = VirtualKey_VK_7FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscore8FromTerm(trm);
+    tmp = VirtualKey_VK_8FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscore9FromTerm(trm);
+    tmp = VirtualKey_VK_9FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreAFromTerm(trm);
+    tmp = VirtualKey_VK_AFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreBFromTerm(trm);
+    tmp = VirtualKey_VK_BFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreCFromTerm(trm);
+    tmp = VirtualKey_VK_CFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreDFromTerm(trm);
+    tmp = VirtualKey_VK_DFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreEFromTerm(trm);
+    tmp = VirtualKey_VK_EFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreFFromTerm(trm);
+    tmp = VirtualKey_VK_FFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreGFromTerm(trm);
+    tmp = VirtualKey_VK_GFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreHFromTerm(trm);
+    tmp = VirtualKey_VK_HFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreIFromTerm(trm);
+    tmp = VirtualKey_VK_IFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreJFromTerm(trm);
+    tmp = VirtualKey_VK_JFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreKFromTerm(trm);
+    tmp = VirtualKey_VK_KFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreLFromTerm(trm);
+    tmp = VirtualKey_VK_LFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreMFromTerm(trm);
+    tmp = VirtualKey_VK_MFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreNFromTerm(trm);
+    tmp = VirtualKey_VK_NFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreOFromTerm(trm);
+    tmp = VirtualKey_VK_OFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscorePFromTerm(trm);
+    tmp = VirtualKey_VK_PFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreQFromTerm(trm);
+    tmp = VirtualKey_VK_QFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreRFromTerm(trm);
+    tmp = VirtualKey_VK_RFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreSFromTerm(trm);
+    tmp = VirtualKey_VK_SFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreTFromTerm(trm);
+    tmp = VirtualKey_VK_TFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreUFromTerm(trm);
+    tmp = VirtualKey_VK_UFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreVFromTerm(trm);
+    tmp = VirtualKey_VK_VFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreWFromTerm(trm);
+    tmp = VirtualKey_VK_WFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreXFromTerm(trm);
+    tmp = VirtualKey_VK_XFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreYFromTerm(trm);
+    tmp = VirtualKey_VK_YFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreZFromTerm(trm);
+    tmp = VirtualKey_VK_ZFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreAMPERSANDFromTerm(trm);
+    tmp = VirtualKey_VK_AMPERSANDFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreASTERISKFromTerm(trm);
+    tmp = VirtualKey_VK_ASTERISKFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreATFromTerm(trm);
+    tmp = VirtualKey_VK_ATFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreBACKUnderscoreQUOTEFromTerm(trm);
+    tmp = VirtualKey_VK_BACK_QUOTEFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreBACKUnderscoreSLASHFromTerm(trm);
+    tmp = VirtualKey_VK_BACK_SLASHFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreBACKUnderscoreSPACEFromTerm(trm);
+    tmp = VirtualKey_VK_BACK_SPACEFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreBEGINFromTerm(trm);
+    tmp = VirtualKey_VK_BEGINFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreBRACEUnderscoreLEFTFromTerm(trm);
+    tmp = VirtualKey_VK_BRACE_LEFTFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreBRACEUnderscoreRIGHTFromTerm(trm);
+    tmp = VirtualKey_VK_BRACE_RIGHTFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreCIRCUMFLEXFromTerm(trm);
+    tmp = VirtualKey_VK_CIRCUMFLEXFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreCLEARFromTerm(trm);
+    tmp = VirtualKey_VK_CLEARFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreCLOSEUnderscoreBRACKETFromTerm(trm);
+    tmp = VirtualKey_VK_CLOSE_BRACKETFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreCOLONFromTerm(trm);
+    tmp = VirtualKey_VK_COLONFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreCOMMAFromTerm(trm);
+    tmp = VirtualKey_VK_COMMAFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreDECIMALFromTerm(trm);
+    tmp = VirtualKey_VK_DECIMALFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreDELETEFromTerm(trm);
+    tmp = VirtualKey_VK_DELETEFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreDIVIDEFromTerm(trm);
+    tmp = VirtualKey_VK_DIVIDEFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreDOLLARFromTerm(trm);
+    tmp = VirtualKey_VK_DOLLARFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreDOWNFromTerm(trm);
+    tmp = VirtualKey_VK_DOWNFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreENDFromTerm(trm);
+    tmp = VirtualKey_VK_ENDFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreENTERFromTerm(trm);
+    tmp = VirtualKey_VK_ENTERFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreEQUALSFromTerm(trm);
+    tmp = VirtualKey_VK_EQUALSFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreESCAPEFromTerm(trm);
+    tmp = VirtualKey_VK_ESCAPEFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreEXCLAMATIONUnderscoreMARKFromTerm(trm);
+    tmp = VirtualKey_VK_EXCLAMATION_MARKFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF1FromTerm(trm);
+    tmp = VirtualKey_VK_F1FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF2FromTerm(trm);
+    tmp = VirtualKey_VK_F2FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF3FromTerm(trm);
+    tmp = VirtualKey_VK_F3FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF4FromTerm(trm);
+    tmp = VirtualKey_VK_F4FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF5FromTerm(trm);
+    tmp = VirtualKey_VK_F5FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF6FromTerm(trm);
+    tmp = VirtualKey_VK_F6FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF7FromTerm(trm);
+    tmp = VirtualKey_VK_F7FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF8FromTerm(trm);
+    tmp = VirtualKey_VK_F8FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF9FromTerm(trm);
+    tmp = VirtualKey_VK_F9FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF10FromTerm(trm);
+    tmp = VirtualKey_VK_F10FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF11FromTerm(trm);
+    tmp = VirtualKey_VK_F11FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreF12FromTerm(trm);
+    tmp = VirtualKey_VK_F12FromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreGREATERFromTerm(trm);
+    tmp = VirtualKey_VK_GREATERFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreHOMEFromTerm(trm);
+    tmp = VirtualKey_VK_HOMEFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreINSERTFromTerm(trm);
+    tmp = VirtualKey_VK_INSERTFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreLEFTFromTerm(trm);
+    tmp = VirtualKey_VK_LEFTFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreLEFTUnderscorePARENTHESISFromTerm(trm);
+    tmp = VirtualKey_VK_LEFT_PARENTHESISFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreMINUSFromTerm(trm);
+    tmp = VirtualKey_VK_MINUSFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreMULTIPLYFromTerm(trm);
+    tmp = VirtualKey_VK_MULTIPLYFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreNUMBERUnderscoreSIGNFromTerm(trm);
+    tmp = VirtualKey_VK_NUMBER_SIGNFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreOPENUnderscoreBRACKETFromTerm(trm);
+    tmp = VirtualKey_VK_OPEN_BRACKETFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscorePAGEUnderscoreDOWNFromTerm(trm);
+    tmp = VirtualKey_VK_PAGE_DOWNFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscorePAGEUnderscoreUPFromTerm(trm);
+    tmp = VirtualKey_VK_PAGE_UPFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscorePAUSEFromTerm(trm);
+    tmp = VirtualKey_VK_PAUSEFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscorePERIODFromTerm(trm);
+    tmp = VirtualKey_VK_PERIODFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscorePLUSFromTerm(trm);
+    tmp = VirtualKey_VK_PLUSFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscorePRINTSCREENFromTerm(trm);
+    tmp = VirtualKey_VK_PRINTSCREENFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreQUOTEFromTerm(trm);
+    tmp = VirtualKey_VK_QUOTEFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreQUOTEDBLFromTerm(trm);
+    tmp = VirtualKey_VK_QUOTEDBLFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreRIGHTFromTerm(trm);
+    tmp = VirtualKey_VK_RIGHTFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreRIGHTUnderscorePARENTHESISFromTerm(trm);
+    tmp = VirtualKey_VK_RIGHT_PARENTHESISFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreSEMICOLONFromTerm(trm);
+    tmp = VirtualKey_VK_SEMICOLONFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreSLASHFromTerm(trm);
+    tmp = VirtualKey_VK_SLASHFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreSPACEFromTerm(trm);
+    tmp = VirtualKey_VK_SPACEFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreSUBTRACTFromTerm(trm);
+    tmp = VirtualKey_VK_SUBTRACTFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreTABFromTerm(trm);
+    tmp = VirtualKey_VK_TABFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreUNDERSCOREFromTerm(trm);
+    tmp = VirtualKey_VK_UNDERSCOREFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = VirtualKey_VKUnderscoreUPFromTerm(trm);
+    tmp = VirtualKey_VK_UPFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
@@ -5312,9 +5312,14 @@ public class Factory {
     return str.toString();
   }
 
-  public static char charToByte(aterm.ATerm arg) {
+  public static char charToByte(Integer arg) {
 
-      return((char) ((aterm.ATermInt) arg).getInt());
+      return((char) arg.intValue());
+  }
+
+  public static char charToByte(int arg) {
+
+      return((char) arg);
   }
 
   public aterm.ATerm stringToChars(String str) {
