@@ -172,11 +172,7 @@ public class JavaToolBridge extends ToolBridge{
 
 				if(parameters.length != cms.parameters.length) return false;
 				for(int i = 0; i < parameters.length; i++){
-					if(parameters[i] != cms.parameters[i] && 
-							!isImplementationOf(parameters[i], cms.parameters[i]) &&
-							cms.parameters[i] != ATerm.class) {
-						return false;
-					}
+					if(parameters[i] != cms.parameters[i] && !isImplementationOf(parameters[i], cms.parameters[i]) && cms.parameters[i] != ATerm.class) return false;
 				}
 
 				return true;
@@ -350,7 +346,7 @@ public class JavaToolBridge extends ToolBridge{
 	private ATerm invokeMethod(byte operation, ATerm aTerm) throws MethodInvokationException{
 		ATerm returnValue = null;
 		try{
-			// We will always get an appl, otherwise we wouldn't know what method to invoke.
+			// We will always get an appl.
 			ATermAppl methodTerm = (ATermAppl) aTerm;
 
 			String methodName = methodTerm.getName();
@@ -364,22 +360,22 @@ public class JavaToolBridge extends ToolBridge{
 			}
 
 			Method toolMethod = findMethod(operation, methodName, parameters);
-			Class<?>[] parameterTypes = toolMethod.getParameterTypes();
-			
-			for(int i = 0; i < parameters.length; i++){
-				if (parameterTypes[i] != ATerm.class) {
-				  convertedArguments[i] = convertArgument(arguments[i]);
-				}
-				else {
-					convertedArguments[i] = arguments[i];
-				}
-			}
 			
 			if(toolMethod == null){
 				String error = "No such method: " + methodName + ", with " + parameters.length + " arguments.";
 				LoggerFactory.log(error, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
 				throw new MethodInvokationException(error);
 			}
+
+			Class<?>[] parameterTypes = toolMethod.getParameterTypes();
+			for(int i = 0; i < parameters.length; i++){
+				convertedArguments[i] = arguments[i];
+				
+				if(parameterTypes[i] != ATerm.class){
+					convertedArguments[i] = convertArgument(arguments[i]);
+				}
+			}
+			
 			returnValue = (ATerm) toolMethod.invoke(tool, convertedArguments);
 		}catch(ClassCastException ccex){
 			LoggerFactory.log("A class cast exception occured during the invokation of a method. Discarding term ....", ccex, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
@@ -403,8 +399,8 @@ public class JavaToolBridge extends ToolBridge{
 			if(str.charAt(i) == '-'){
 				capNext = true;
 			}else if(capNext){
-					name.append(Character.toUpperCase(str.charAt(i)));
-					capNext = false;
+				name.append(Character.toUpperCase(str.charAt(i)));
+				capNext = false;
 			}else{
 				name.append(str.charAt(i));
 			}
@@ -453,7 +449,7 @@ public class JavaToolBridge extends ToolBridge{
 			if(typeName.equals("str")) return String.class;
 			if(typeName.equals("blob")) return byte[].class;
 			if(typeName.equals("int")) return int.class;
-			if(typeName.equals("real"))return double.class;
+			if(typeName.equals("real")) return double.class;
 			if(typeName.equals("list")) return ATermList.class;
 			if(typeName.equals("appl")) return ATermAppl.class;
 			if(typeName.equals("term")) return ATerm.class;

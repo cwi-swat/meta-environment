@@ -424,6 +424,7 @@ public class TBTermFactory extends PureFactory{
 		throw new ToolBusInternalError("illegal ATerm in getType: " + t);
 	}
 	
+	// TODO Optimize
 	/**
 	 * Replace all variables in an ATerm by their value.
 	 */
@@ -482,10 +483,11 @@ public class TBTermFactory extends PureFactory{
 		}
 		throw new ToolBusInternalError("Illegal ATerm in substitute: " + t);
 	}
-	
+
+	// TODO Optimize
 	/**
 	 * Replaces all variables in an ATerm by their value. If a variable result variable is present
-	 * the full substitue can not be completed and null will be returned instead.
+	 * the full substitute can not be completed and null will be returned instead.
 	 * @param t
 	 *            The term in which variables need to be substituted.
 	 * @param env
