@@ -441,20 +441,25 @@ fi
 REQUIRED_BUNDLES=""
 if test -n "$5"; then
   REQUIRED_BUNDLES=`echo "$5" | tr '-' '_' | tr ' ' ','`
-  ECLIPSE_REQUIRES=META_GET_PKG_USER_VAR_PLAIN([EclipseRequires])
+fi
 
-  if test -n "$ECLIPSE_REQUIRES"; then
+
+ECLIPSE_REQUIRES=META_GET_PKG_USER_VAR_PLAIN([EclipseRequires])
+if test -n "$ECLIPSE_REQUIRES"; then
+  if test -n "$REQUIRED_BUNDLES"; then
     REQUIRED_BUNDLES="${REQUIRED_BUNDLES},${ECLIPSE_REQUIRES}"
-
-	META_REQUIRE_SOFTWARE(eclipse,plugins)
-
-	ECLIPSE_BUNDLES=`ls ${ECLIPSE_PREFIX}/plugins | grep .jar`
-
-	for BUNDLE in ${ECLIPSE_BUNDLES}; do
-		  EXTERNAL_JARS+=:${ECLIPSE_PREFIX}/plugins/${BUNDLE}
-		  EXTERNAL_INSTALLED_JARS+=:${ECLIPSE_PREFIX}/plugins/${BUNDLE}
-	done
+  else
+    REQUIRED_BUNDLES="${ECLIPSE_REQUIRES}"
   fi
+
+  META_REQUIRE_SOFTWARE(eclipse,plugins)
+
+  ECLIPSE_BUNDLES=`ls ${ECLIPSE_PREFIX}/plugins | grep .jar`
+
+  for BUNDLE in ${ECLIPSE_BUNDLES}; do
+    EXTERNAL_JARS+=:${ECLIPSE_PREFIX}/plugins/${BUNDLE}
+    EXTERNAL_INSTALLED_JARS+=:${ECLIPSE_PREFIX}/plugins/${BUNDLE}
+  done
 fi
 
 cat > META-INF/MANIFEST.MF << ENDCAT
