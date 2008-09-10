@@ -378,8 +378,11 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 */
 	public void exceptionOccured(){
 		LoggerFactory.log("Lost connection with the ToolBus. Initiating ungraceful shutdown ....", ILogger.FATAL, IToolBusLoggerConstants.TOOL);
-		
-		System.exit(0);
+	
+// TODO: this is not good; we need to find a good way to deal with exceptions. Java
+// code that runs a ToolBus tool, such as Eclipse, should not suddenly die because a
+// connection is lost.
+//		System.exit(0);
 	}
 
 	/**
