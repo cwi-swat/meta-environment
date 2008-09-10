@@ -377,6 +377,27 @@ ATerm slice_tree(int cid, ATerm tree)
   return ATmake("snd-value(sliced-tree(<term>))", (ATerm) ATreverse(slices));
 }
 
+SE_StructureEditor cachedEditor = NULL;
+
+SE_StructureEditor updateEditor(ATerm parseTree){
+	if(cachedEditor != NULL){
+		SE_ParseTree cachedParseTree = SE_getStructureEditorParseTree(cachedEditor);
+		if(((ATerm) cachedParseTree) != ATBunpack(parseTree)){
+			ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
+  			delete_structure_editor(dummyId);
+  			
+  			create_structure_editor(dummyId, parseTree);
+			cachedEditor = getEditor(dummyId);
+		}
+		return cachedEditor;
+	}
+	ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
+  	create_structure_editor(dummyId, parseTree);
+	cachedEditor = getEditor(dummyId);
+	
+	return cachedEditor;
+}
+
 ATerm get_selected_at_offset_in_tree(int cid, ATerm tree, int offset){
   SE_StructureEditor editor;
   SE_Tree cursor;
@@ -384,8 +405,9 @@ ATerm get_selected_at_offset_in_tree(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
+  updateEditor(tree);
+  
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
-  create_structure_editor(dummyId, tree);
   set_cursor_at_offset(cid, dummyId, offset);
   
   editor = getEditor(dummyId);
@@ -395,8 +417,6 @@ ATerm get_selected_at_offset_in_tree(int cid, ATerm tree, int offset){
   
   location = PT_getTreeLocation(cursor);
   area = ERR_getLocationArea(location);
-  
-  delete_structure_editor(dummyId);
   
   return ATmake("snd-value(selected(sort(<str>), focus(<term>)))", sort, area);
 }
@@ -408,8 +428,9 @@ ATerm move_selection_up(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
+  updateEditor(tree);
+  
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
-  create_structure_editor(dummyId, tree);
   set_cursor_at_offset(cid, dummyId, offset);
   
   editor = getEditor(dummyId);
@@ -422,8 +443,6 @@ ATerm move_selection_up(int cid, ATerm tree, int offset){
   location = PT_getTreeLocation(cursor);
   area = ERR_getLocationArea(location);
   
-  delete_structure_editor(dummyId);
-  
   return ATmake("snd-value(moved-selection-up(sort(<str>), focus(<term>)))", sort, area);
 }
 
@@ -434,8 +453,9 @@ ATerm move_selection_down(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
+  updateEditor(tree);
+  
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
-  create_structure_editor(dummyId, tree);
   set_cursor_at_offset(cid, dummyId, offset);
   
   editor = getEditor(dummyId);
@@ -448,8 +468,6 @@ ATerm move_selection_down(int cid, ATerm tree, int offset){
   location = PT_getTreeLocation(cursor);
   area = ERR_getLocationArea(location);
   
-  delete_structure_editor(dummyId);
-  
   return ATmake("snd-value(moved-selection-down(sort(<str>), focus(<term>)))", sort, area);
 }
 
@@ -460,8 +478,9 @@ ATerm move_selection_left(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
+  updateEditor(tree);
+  
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
-  create_structure_editor(dummyId, tree);
   set_cursor_at_offset(cid, dummyId, offset);
   
   editor = getEditor(dummyId);
@@ -474,8 +493,6 @@ ATerm move_selection_left(int cid, ATerm tree, int offset){
   location = PT_getTreeLocation(cursor);
   area = ERR_getLocationArea(location);
   
-  delete_structure_editor(dummyId);
-  
   return ATmake("snd-value(moved-selection-left(sort(<str>), focus(<term>)))", sort, area);
 }
 
@@ -486,8 +503,9 @@ ATerm move_selection_right(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
+  updateEditor(tree);
+  
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
-  create_structure_editor(dummyId, tree);
   set_cursor_at_offset(cid, dummyId, offset);
   
   editor = getEditor(dummyId);
@@ -499,8 +517,6 @@ ATerm move_selection_right(int cid, ATerm tree, int offset){
   
   location = PT_getTreeLocation(cursor);
   area = ERR_getLocationArea(location);
-  
-  delete_structure_editor(dummyId);
   
   return ATmake("snd-value(moved-selection-right(sort(<str>), focus(<term>)))", sort, area);
 }
