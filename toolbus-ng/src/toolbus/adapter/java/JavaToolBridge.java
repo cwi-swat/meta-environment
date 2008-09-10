@@ -172,7 +172,9 @@ public class JavaToolBridge extends ToolBridge{
 
 				if(parameters.length != cms.parameters.length) return false;
 				for(int i = 0; i < parameters.length; i++){
-					if(parameters[i] != cms.parameters[i] && !isImplementationOf(parameters[i], cms.parameters[i])){
+					if(parameters[i] != cms.parameters[i] && 
+							!isImplementationOf(parameters[i], cms.parameters[i]) &&
+							cms.parameters[i] != ATerm.class) {
 						return false;
 					}
 				}
@@ -362,6 +364,17 @@ public class JavaToolBridge extends ToolBridge{
 			}
 
 			Method toolMethod = findMethod(operation, methodName, parameters);
+			Class<?>[] parameterTypes = toolMethod.getParameterTypes();
+			
+			for(int i = 0; i < parameters.length; i++){
+				if (parameterTypes[i] != ATerm.class) {
+				  convertedArguments[i] = convertArgument(arguments[i]);
+				}
+				else {
+					convertedArguments[i] = arguments[i];
+				}
+			}
+			
 			if(toolMethod == null){
 				String error = "No such method: " + methodName + ", with " + parameters.length + " arguments.";
 				LoggerFactory.log(error, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
