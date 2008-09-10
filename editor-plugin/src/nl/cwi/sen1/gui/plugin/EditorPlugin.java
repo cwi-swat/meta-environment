@@ -208,8 +208,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
 		Shortcut shortcut = factory.makeShortCut_Shortcut(
 				factory.makeKeyModifierList(factory
-						.makeKeyModifier_MUnderscoreCTRL()), factory
-						.makeVirtualKey_VKUnderscoreS());
+						.makeKeyModifier_M_CTRL()), factory
+						.makeVirtualKey_VK_S());
 		Event event = factory.makeEvent_MenuShortcut(items, shortcut,
 				"Save file");
 
@@ -272,9 +272,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				.makeItem_Label("Save All"));
 
 		shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(
-				factory.makeKeyModifier_MUnderscoreCTRL(), factory
-						.makeKeyModifier_MUnderscoreSHIFT()), factory
-				.makeVirtualKey_VKUnderscoreA());
+				factory.makeKeyModifier_M_CTRL(), factory
+						.makeKeyModifier_M_SHIFT()), factory
+				.makeVirtualKey_VK_A());
 
 		event = factory.makeEvent_MenuShortcut(items, shortcut,
 				"Save all files");
@@ -335,8 +335,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
 		shortcut = factory.makeShortCut_Shortcut(
 				factory.makeKeyModifierList(factory
-						.makeKeyModifier_MUnderscoreCTRL()), factory
-						.makeVirtualKey_VKUnderscoreW());
+						.makeKeyModifier_M_CTRL()), factory
+						.makeVirtualKey_VK_W());
 		event = factory.makeEvent_MenuShortcut(items, shortcut,
 				"Close this file");
 
@@ -351,9 +351,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				.makeItem_Label("Close All"));
 
 		shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(
-				factory.makeKeyModifier_MUnderscoreCTRL(), factory
-						.makeKeyModifier_MUnderscoreSHIFT()), factory
-				.makeVirtualKey_VKUnderscoreW());
+				factory.makeKeyModifier_M_CTRL(), factory
+						.makeKeyModifier_M_SHIFT()), factory
+				.makeVirtualKey_VK_W());
 		event = factory.makeEvent_MenuShortcut(items, shortcut,
 				"Close all files");
 
