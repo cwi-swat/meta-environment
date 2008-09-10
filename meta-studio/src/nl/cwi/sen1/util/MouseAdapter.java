@@ -77,13 +77,13 @@ public class MouseAdapter extends MouseInputAdapter {
 		KeyModifierList mods = factory.makeKeyModifierList();
 
 		if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0) {
-			mods.insert(factory.makeKeyModifier_MUnderscoreCTRL());
+			mods.insert(factory.makeKeyModifier_M_CTRL());
 		}
 		if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) {
-			mods.insert(factory.makeKeyModifier_MUnderscoreCTRL());
+			mods.insert(factory.makeKeyModifier_M_CTRL());
 		}
 		if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0) {
-			mods.insert(factory.makeKeyModifier_MUnderscoreCTRL());
+			mods.insert(factory.makeKeyModifier_M_CTRL());
 		}
 
 		return mods;

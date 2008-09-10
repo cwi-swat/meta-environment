@@ -110,9 +110,9 @@ public class MenuBuilder {
 			KeyModifier mod = modifiers.getHead();
 			modifiers = modifiers.getTail();
 
-			if (mod.isMUnderscoreALT()) {
+			if (mod.isM_ALT()) {
 				mask |= InputEvent.ALT_MASK;
-			} else if (mod.isMUnderscoreCTRL()) {
+			} else if (mod.isM_CTRL()) {
 				mask |= InputEvent.CTRL_MASK;
 			} else {
 				mask |= InputEvent.SHIFT_MASK;
