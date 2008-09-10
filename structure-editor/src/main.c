@@ -377,26 +377,25 @@ ATerm slice_tree(int cid, ATerm tree)
   return ATmake("snd-value(sliced-tree(<term>))", (ATerm) ATreverse(slices));
 }
 
-SE_StructureEditor cachedEditor = NULL;
-
 SE_StructureEditor updateEditor(ATerm parseTree, int offset){
-	if(cachedEditor != NULL){
-		SE_ParseTree cachedParseTree = SE_getStructureEditorParseTree(cachedEditor);
+	ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
+	SE_StructureEditor editor = getEditor(dummyId);
+	
+	if(editor != NULL){
+		SE_ParseTree cachedParseTree = SE_getStructureEditorParseTree(editor);
 		if(((ATerm) cachedParseTree) != ATBunpack(parseTree)){
-			ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
   			delete_structure_editor(dummyId);
   			
   			create_structure_editor(dummyId, parseTree);
-			cachedEditor = getEditor(dummyId);
+			editor = getEditor(dummyId);
   			set_cursor_at_offset(-1, dummyId, offset); /* Useing Cid = -1, since it doesn't matter. */
 		}
-		return cachedEditor;
+		return editor;
 	}
-	ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
   	create_structure_editor(dummyId, parseTree);
-	cachedEditor = getEditor(dummyId);
+	editor = getEditor(dummyId);
 	
-	return cachedEditor;
+	return editor;
 }
 
 ATerm get_selected_at_offset_in_tree(int cid, ATerm tree, int offset){
@@ -507,7 +506,6 @@ ATerm move_selection_right(int cid, ATerm tree, int offset){
   updateEditor(tree, offset);
   
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
-  set_cursor_at_offset(cid, dummyId, offset);
   
   editor = getEditor(dummyId);
   
