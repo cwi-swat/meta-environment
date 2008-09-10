@@ -379,7 +379,7 @@ ATerm slice_tree(int cid, ATerm tree)
 
 SE_StructureEditor cachedEditor = NULL;
 
-SE_StructureEditor updateEditor(ATerm parseTree){
+SE_StructureEditor updateEditor(ATerm parseTree, int offset){
 	if(cachedEditor != NULL){
 		SE_ParseTree cachedParseTree = SE_getStructureEditorParseTree(cachedEditor);
 		if(((ATerm) cachedParseTree) != ATBunpack(parseTree)){
@@ -388,6 +388,7 @@ SE_StructureEditor updateEditor(ATerm parseTree){
   			
   			create_structure_editor(dummyId, parseTree);
 			cachedEditor = getEditor(dummyId);
+  			set_cursor_at_offset(-1, dummyId, offset); /* Useing Cid = -1, since it doesn't matter. */
 		}
 		return cachedEditor;
 	}
@@ -405,7 +406,7 @@ ATerm get_selected_at_offset_in_tree(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
-  updateEditor(tree);
+  updateEditor(tree, offset);
   
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
   set_cursor_at_offset(cid, dummyId, offset);
@@ -428,14 +429,14 @@ ATerm move_selection_up(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
-  updateEditor(tree);
+  updateEditor(tree, offset);
   
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
-  set_cursor_at_offset(cid, dummyId, offset);
   
   editor = getEditor(dummyId);
   
   editor = moveCursorUp(editor);
+  setEditor(dummyId, editor);
   
   cursor = SE_getStructureEditorCursor(editor);
   sort = PT_yieldSymbol(getTreeSort(cursor));
@@ -453,14 +454,14 @@ ATerm move_selection_down(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
-  updateEditor(tree);
+  updateEditor(tree, offset);
   
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
-  set_cursor_at_offset(cid, dummyId, offset);
   
   editor = getEditor(dummyId);
   
   editor = moveCursorDown(editor);
+  setEditor(dummyId, editor);
   
   cursor = SE_getStructureEditorCursor(editor);
   sort = PT_yieldSymbol(getTreeSort(cursor));
@@ -478,14 +479,14 @@ ATerm move_selection_left(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
-  updateEditor(tree);
+  updateEditor(tree, offset);
   
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
-  set_cursor_at_offset(cid, dummyId, offset);
   
   editor = getEditor(dummyId);
   
   editor = moveCursorLeft(editor);
+  setEditor(dummyId, editor);
   
   cursor = SE_getStructureEditorCursor(editor);
   sort = PT_yieldSymbol(getTreeSort(cursor));
@@ -503,7 +504,7 @@ ATerm move_selection_right(int cid, ATerm tree, int offset){
   ERR_Location location;
   ERR_Area area;
   
-  updateEditor(tree);
+  updateEditor(tree, offset);
   
   ATerm dummyId = ATmake("UniqueDummyAnnotatedParseTreeId");
   set_cursor_at_offset(cid, dummyId, offset);
@@ -511,6 +512,7 @@ ATerm move_selection_right(int cid, ATerm tree, int offset){
   editor = getEditor(dummyId);
   
   editor = moveCursorRight(editor);
+  setEditor(dummyId, editor);
   
   cursor = SE_getStructureEditorCursor(editor);
   sort = PT_yieldSymbol(getTreeSort(cursor));
