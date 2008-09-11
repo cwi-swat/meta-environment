@@ -3,6 +3,7 @@
 # Don't know why; but this breaks
 #require 'gruff'
 
+
 # Uncomment below to force Rails into production mode when 
 # you don't control web/app server and can't set it the proper way
 ENV['RAILS_ENV'] ||= 'development'
@@ -42,6 +43,7 @@ Rails::Initializer.run do |config|
   # config.active_record.schema_format = :ruby
 
   # See Rails::Configuration for more options
+  config.action_controller.session = { :session_key => "_mysisyphus_session", :secret => "sisyphus is een doovermoeiend software systeem" }
 end
 
 # Add new inflection rules using the following format 
@@ -54,3 +56,5 @@ end
 # end
 
 # Include your application configuration below
+
+

@@ -2,13 +2,37 @@
 
 class BuildsController < ApplicationController
 
+  def toplevel
+    @toplevels = SiToplevel.find(:all)
+    @table = {}
+    @latest = nil
+    @hostnames = []
+    @components = []
+    @toplevels.each do |t|
+      @table[t.name] ||= {}
+      @table[t.name][t.host] = t
+      @components << t.name
+      @hostnames << t.host
+      if @latest then
+        if @latest < t.id then
+          @latest = t.id
+        end
+      end
+    end
+    @components.uniq!
+    @hostnames.uniq!
+    @components.sort!
+    @hostnames.sort!
+  end
+
+
   def index
     @movable_host_columns = true
     @components = SiComponent.find(:all)
     @table = {}
     @components.each do |c|
       @table[c] = {}
-      @hosts.each do |h|
+      SiHost.find(:all, :conditions => "active = 't'").each do |h|
         @table[c][h] = nil
       end
     end
@@ -27,7 +51,7 @@ class BuildsController < ApplicationController
         latest[h] = build
       end
     end
-    session[:latest] = latest
+    session[:latest] = {}
   end
     
   def changes
@@ -82,7 +106,7 @@ class BuildsController < ApplicationController
       global_changes += items
     end
 
-    render_partial 'items', global_changes.collect { |x| LinkLabel.new(x) }
+    render :partial => 'items', :locals => {:items => global_changes.collect { |x| LinkLabel.new(x) } }
   end
 
 

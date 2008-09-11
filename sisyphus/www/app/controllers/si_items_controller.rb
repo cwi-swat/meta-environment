@@ -45,6 +45,11 @@ END
   end
 
 
+  def latest_windows_binary
+    item = latest_dist_item_by_name(params[:pkg])
+    render_binary(windows_binary_file_path(item))
+  end
+
   def latest
     item = latest_dist_item_by_name(params[:pkg])
     upload_item(item)
@@ -220,8 +225,25 @@ EOQ
     return File.join(binary_download_path, file_name)
   end
 
+  def windows_binary_file_name(item)
+    return "#{item.name}-#{pkg_version(item)}.zip"
+  end
+
+
+  def windows_binary_file_path(item)
+    file_name = windows_binary_file_name(item)
+    return File.join(binary_download_path, file_name)
+  end
+
   def has_binary?(item)
     if File.exist?(binary_file_path(item))
+      return true
+    end
+    return false
+  end
+
+  def has_windows_binary?(item)
+    if File.exist?(windows_binary_file_path(item))
       return true
     end
     return false
