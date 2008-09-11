@@ -1,7 +1,7 @@
 prefix=@prefix@
 
 Name: meta-studio
-Version: 1.3
+Version: 1.3.1
 Description:
 Requires: aterm-java,config-support-java,toolbus-java-adapter,svg-support
 Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
