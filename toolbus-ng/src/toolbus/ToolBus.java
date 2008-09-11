@@ -276,7 +276,7 @@ public class ToolBus{
 			procdefs.iterate(new ReadOnlyHashMapEntryHandler<String, ProcessDefinition>(){
 				public int handle(String key, ProcessDefinition value){
 					ProcessExpression originalProcessExpression = value.getOriginalProcessExpression();
-					AtomSet atoms = originalProcessExpression.getAtoms();
+					AtomList atoms = originalProcessExpression.getAtoms();
 					Iterator<Atom> atomSetIterator = atoms.iterator();
 					while(atomSetIterator.hasNext()){
 						Atom a = atomSetIterator.next();

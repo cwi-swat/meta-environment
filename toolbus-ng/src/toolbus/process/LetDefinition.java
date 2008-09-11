@@ -5,7 +5,7 @@
 package toolbus.process;
 
 import java.util.Stack;
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
@@ -57,7 +57,7 @@ public class LetDefinition extends ProcessExpression{
 		return PE.getFollow();
 	}
 	
-	public AtomSet getAtoms(){
+	public AtomList getAtoms(){
 		return PE.getAtoms();
 	}
 	

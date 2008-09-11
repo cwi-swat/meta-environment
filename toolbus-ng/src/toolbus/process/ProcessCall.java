@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -135,12 +135,12 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		// System.err.println(name + " expanded as:\n" + PE);
 	}
 	
-	public AtomSet getAtoms(){
-		AtomSet r;
+	public AtomList getAtoms(){
+		AtomList r;
 		if(PE != null){
 			r = PE.getAtoms();
 		}else{
-			r = new AtomSet();
+			r = new AtomList();
 		}
 		// System.err.println(name + ".getAtoms => " + r);
 		return r;

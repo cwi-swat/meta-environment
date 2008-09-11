@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -74,7 +74,7 @@ public class Merge extends ProcessExpression implements StateElement{
 		return new Merge(expr[LEFT].copy(), expr[RIGHT].copy(), tbfactory, getPosInfo());
 	}
 	
-	public AtomSet getAtoms(){
+	public AtomList getAtoms(){
 		return expr[LEFT].getAtoms().union(expr[RIGHT].getAtoms());
 	}
 	

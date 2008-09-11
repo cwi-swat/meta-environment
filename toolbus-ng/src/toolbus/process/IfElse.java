@@ -5,7 +5,7 @@
 package toolbus.process;
 
 import java.util.Stack;
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
@@ -61,7 +61,7 @@ public class IfElse extends ProcessExpression{
 		// System.err.println("env = " + env);
 	}
 	
-	public AtomSet getAtoms(){
+	public AtomList getAtoms(){
 		return left.getAtoms().union(right.getAtoms());
 	}
 	

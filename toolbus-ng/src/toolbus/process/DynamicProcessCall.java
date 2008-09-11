@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -132,17 +132,17 @@ public class DynamicProcessCall extends ProcessExpression implements StateElemen
 	private void finishCall(){
 		activated = executing = false;
 		definition = null;
-		AtomSet callElements = PE.getAtoms();
+		AtomList callElements = PE.getAtoms();
 		PE = null;
 		processInstance.deregisterCommunicationAtoms(callElements);
 	}
 	
-	public AtomSet getAtoms(){
-		AtomSet r;
+	public AtomList getAtoms(){
+		AtomList r;
 		if(PE != null){
 			r = PE.getAtoms();
 		}else{
-			r = new AtomSet();
+			r = new AtomList();
 		}
 		// System.err.println(name + ".getAtoms => " + r);
 		return r;

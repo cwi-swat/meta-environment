@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.StateElement;
@@ -174,8 +174,8 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		return processInstance.getToolBus();
 	}
 	
-	public AtomSet getAtoms(){
-		return new AtomSet(this);
+	public AtomList getAtoms(){
+		return new AtomList(this);
 	}
 	
 	private String shortName(){

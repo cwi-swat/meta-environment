@@ -3,7 +3,7 @@ package toolbus.process;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -69,7 +69,7 @@ public class LeftBiasedAlternative extends ProcessExpression implements StateEle
 		return new LeftBiasedAlternative(expr[LEFT].copy(), expr[RIGHT].copy(), tbfactory, getPosInfo());
 	}
 	
-	public AtomSet getAtoms(){
+	public AtomList getAtoms(){
 		return expr[LEFT].getAtoms().union(expr[RIGHT].getAtoms());
 	}
 	

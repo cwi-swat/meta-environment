@@ -5,41 +5,37 @@ import java.util.Iterator;
 import java.util.Set;
 import toolbus.atom.Atom;
 
-public class AtomSet implements Iterable<Atom>{
+public class AtomList implements Iterable<Atom>{
 	private final Set<Atom> elements;
 	
-	public AtomSet(){
+	public AtomList(){
 		elements = new HashSet<Atom>();
 	}
 	
-	public AtomSet(Atom a){
+	public AtomList(Atom a){
 		elements = new HashSet<Atom>();
 		elements.add(a);
 	}
 	
-	public void addAtom(Atom a){
-		elements.add(a);
+	private void add(Atom atom){
+		elements.add(atom);
 	}
 	
-	public void delAtom(Atom a){
-		elements.remove(a);
-	}
-	
-	public AtomSet union(AtomSet as){
-		AtomSet r = new AtomSet();
+	public AtomList union(AtomList as){
+		AtomList r = new AtomList();
 		
 		Iterator<Atom> elementsIterator = elements.iterator();
 		while(elementsIterator.hasNext()){
 			Atom a = elementsIterator.next();
 			
-			r.addAtom(a);
+			r.add(a);
 		}
 		
 		Iterator<Atom> atomSetIterator = as.iterator();
 		while(atomSetIterator.hasNext()){
 			Atom a = atomSetIterator.next();
 			
-			r.addAtom(a);
+			r.add(a);
 		}
 		return r;
 	}

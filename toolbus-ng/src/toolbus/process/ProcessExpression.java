@@ -4,7 +4,7 @@
 package toolbus.process;
 
 import java.util.Stack;
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -81,5 +81,5 @@ abstract public class ProcessExpression{
 	
 	abstract protected ProcessExpression copy();
 	
-	abstract public AtomSet getAtoms();
+	abstract public AtomList getAtoms();
 }

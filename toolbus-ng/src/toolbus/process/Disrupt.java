@@ -2,7 +2,7 @@ package toolbus.process;
 
 import java.util.Iterator;
 import java.util.Stack;
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
@@ -55,7 +55,7 @@ public class Disrupt extends ProcessExpression{
 		}
 	}
 	
-	public AtomSet getAtoms(){
+	public AtomList getAtoms(){
 		return left.getAtoms().union(right.getAtoms());
 	}
 }

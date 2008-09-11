@@ -4,7 +4,7 @@ package toolbus.process;
  * @author paulk
  */
 import java.util.Stack;
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
@@ -55,7 +55,7 @@ public class Iteration extends ProcessExpression{
 		right.replaceFormals(env);
 	}
 	
-	public AtomSet getAtoms(){
+	public AtomList getAtoms(){
 		return left.getAtoms().union(right.getAtoms());
 	}
 }

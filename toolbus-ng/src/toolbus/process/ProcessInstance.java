@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
-import toolbus.AtomSet;
+import toolbus.AtomList;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -25,7 +25,7 @@ public class ProcessInstance{
 	private final String processName;
 	private final int processId;
 	
-	private final AtomSet elements;
+	private final AtomList elements;
 	
 	private final State initialState; // Needed for debugging purposes.
 	private State currentState;
@@ -94,7 +94,7 @@ public class ProcessInstance{
 		deregisterCommunicationAtoms(elements);
 	}
 	
-	public void deregisterCommunicationAtoms(AtomSet atoms){
+	public void deregisterCommunicationAtoms(AtomList atoms){
 		if(!deregistered){
 			Iterator<Atom> atomsIterator = atoms.iterator();
 			while(atomsIterator.hasNext()){
