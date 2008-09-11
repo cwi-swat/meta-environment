@@ -3,7 +3,7 @@ Maintainers=jurgenv@cwi.nl
 Name: graph-support
 Version: 1.1
 Description:
-Requires: aterm,error-support,pt-support,toolbuslib
+Requires: aterm,error-support,pt-support,toolbuslib,rstore-support
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -lGraph
 #uninstalled Libs: -L@abs_top_builddir@/lib -lGraph
