@@ -1,2 +1,2 @@
-SUBDIRS = tree2graph layoutgraph
+SUBDIRS = tree2graph tree2relation layoutgraph
 
