@@ -9,4 +9,4 @@ EclipseRequires=org.eclipse.osgi,org.eclipse.ui,org.eclipse.core.runtime,org.ecl
 JarFile=toolbus-ng-eclipse-imp.jar
 MainClass=toolbus.ToolBusEclipsePlugin
 Jars=${prefix}/share/${JarFile}
-Packages=toolbus
+Packages=toolbus,toolbus.adapter.eclipse
