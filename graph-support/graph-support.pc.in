@@ -1,5 +1,5 @@
 prefix=@prefix@
-Maintainers=jurgenv@cwi.nl
+Maintainers=jurgenv@cwi.nl,basten@cwi.nl
 Name: graph-support
 Version: 1.1
 Description:
