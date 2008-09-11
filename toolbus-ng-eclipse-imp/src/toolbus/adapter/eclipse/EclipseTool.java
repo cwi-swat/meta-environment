@@ -6,7 +6,6 @@ import java.nio.ByteBuffer;
 
 import toolbus.ToolBusEclipsePlugin;
 import toolbus.adapter.java.AbstractJavaTool;
-import toolbus.adapter.java.JavaToolBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermBlob;
