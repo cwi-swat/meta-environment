@@ -1,5 +1,9 @@
 $Id$
 
+Thu Sep 11 09:48:46 CEST 2008 <jurgenv@cwi.nl>
+ * Bumped version number.
+
+
 Mon Jun  9 13:19:57 CEST 2008 <jurgenv@cwi.nl>
  * config-support.pc.in: Bumped version to 1.2
 
