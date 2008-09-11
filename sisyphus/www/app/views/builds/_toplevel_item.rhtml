@@ -1,0 +1,23 @@
+
+
+<table>
+<tbody>
+<tr>
+
+     <% if not toplevel.nil? then %>
+
+ 	  <td>
+	  <%= toplevel.inspect %>
+	  <% if !toplevel.progress then %>
+	  	  <%= toplevel.success ? "success" : "failed" %>
+          <% else %>
+	     	  busy
+    	  <% end %>
+          <%= link_to toplevel.time, :action => 'show', 
+	      :controller => 'si_items', :id => toplevel.si_item_id %>
+          </td>
+    <% end %>
+
+ </tr>
+</tbody>
+</table>
