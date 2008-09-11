@@ -188,12 +188,11 @@ EOMSG
       if @store.has_release_for_package_version(component, version) then
         @log.warn("Package #{component} has been released already as version #{version}!")      
         email_maintainer(target)
-        #item = @store.item_for_target(target, target.dep_items)
-        #item.set_success(false)
-        #item.set_progress(false)
-        #item.save
-        #return item
-        #else
+        item = @store.item_for_target(target, target.dep_items)
+        item.set_success(false)
+        item.set_progress(false)
+        item.save
+        return item
       end
       item = target.obtain_item(@store)
       build_target(target, item)
