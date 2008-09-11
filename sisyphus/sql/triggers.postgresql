@@ -6,13 +6,12 @@ create table si_toplevel (
 
        si_item_id integer references si_items,
 
-       time timestamp not null unique,
+       time timestamp not null,
        name varchar(32) not null,
        host varchar(512) not null,
        success boolean,
-       progress boolean,
+       progress boolean
 
-       primary key (si_component_id, si_host_id)
 );
 
 
@@ -38,33 +37,68 @@ where
 create or replace function update_toplevel_function() 
 returns trigger as $update_toplevel$
 begin
-  insert into si_toplevel values(
-  	      (select si_component_id from si_revisions 
-	 	where id = new.si_revision_id limit 1),
-		new.si_host_id,
-		new.id,
-		/* Timestamp out of sessions: */
-		(select time from si_sessions, si_items 
-		where si_items.id = new.id and si_session_id = si_sessions.id),
-		
-		/* Name from components */
-		(select name from si_components, si_revisions 
+    declare 
+        new_component_id integer;
+	new_time timestamp;
+	new_name varchar(32);
+	new_host varchar(512);
+	new_busy boolean;
+	new_active boolean;
+    begin
+	new_component_id := (select si_component_id from si_revisions 
+	 	where id = new.si_revision_id limit 1);
+	new_time := (select time from si_sessions, si_items 
+		where si_items.id = new.id and si_session_id = si_sessions.id);
+	new_name := (select name from si_components, si_revisions 
 		 where si_revisions.id  = new.si_revision_id and
-		 si_component_id = si_components.id),
+		 si_component_id = si_components.id);
+	select uname, busy, active 
+	       into new_host, new_busy, new_active 
+	       from si_hosts where id = new.si_host_id;
 
-		 /* hostname from si_hosts */
-		 (select uname from si_hosts where id = new.si_host_id),
+    	loop
+		update si_toplevel
+		set 
+    	    	    si_item_id = new.id,
+    	    	    time = new_time,
+    	    	    name = new_name,
+    	    	    host = new_host,
+    	    	    success = new.success,
+    	    	    progress = new.progress
+		where
+			si_component_id = new_component_id
+    			and si_host_id = new.si_host_id;
+        	if found then
+            	   return null;
+        	end if;
 
-		 new.success,
-		 new.progress
-		);
-  return null;
+		begin
+			insert into si_toplevel 
+	    	   	values (
+		   	       new_component_id,
+			       new.si_host_id,
+		   	       new.id,
+		   	       new_time,
+		   	       new_name,
+		   	       new_host,
+		   	       new.success,
+		   	       new.progress
+		  	      );
+            		return null;
+        	exception when unique_violation then
+		        -- do nothing, and loop to try the update again
+        	end;
+    	end loop;
+    end; -- declare
+   return null;
 end;
 $update_toplevel$ language plpgsql;
 
 drop trigger update_toplevel on si_items;
 create trigger update_toplevel 
-after insert 
+after insert or update 
 on si_items 
 for each row
 execute procedure update_toplevel_function();
+
+

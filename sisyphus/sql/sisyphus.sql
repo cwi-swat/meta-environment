@@ -152,3 +152,5 @@ SELECT si_items.id
    FROM si_items
   WHERE (si_items.id IN ( SELECT si_results.si_item_id
            FROM si_results));
+
+create index si_item_id_index on si_results (si_item_id);
