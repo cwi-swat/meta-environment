@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Thu Sep 11 10:03:18 CEST 2008 <jurgenv@cwi.nl>
+ * Bumped version to 2.0.2 after fixing long path name issues.
+
 Mon Aug 27 16:04:58 CEST 2007 <kooiker@cwi.nl>
  * tbscripts/asf-listeners.tb: register ASF module when SDF module has been
    identified. This prevents ASF modules from using the wrong modulename,
