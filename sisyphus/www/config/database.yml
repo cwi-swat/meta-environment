@@ -14,7 +14,7 @@ development:
   dbfile: 
 
 production:
-  adapter: postgresql
+  adapter: jdbcpostgresql
   database: sisyphusdev
   host: verfrol.sen.cwi.nl
   username: sisyphusdev

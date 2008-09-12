@@ -1,6 +1,3 @@
-# -*- coding: undecided -*-
-
-
 class BuildsController < ApplicationController
 
   def toplevel
@@ -132,8 +129,8 @@ class BuildsController < ApplicationController
         @result_links[result] = url_for(:controller => 'si_results', :action => 'show', :id => result.id)
       end
     end
-    render :layout => false
-    response.headers[“Content-Type”] = “application/xml; charset=utf-8”
+    render :template => 'builds/rss', :layout => false
+    response.headers["Content-Type"]= "application/xml; charset=utf-8"
   end
   
 
