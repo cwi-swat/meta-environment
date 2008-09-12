@@ -75,11 +75,6 @@
 <% if @si_item.si_deps != [] then %>
   <h2>Dependencies</h2>
 
-  <ul>
-  <li><%= link_to "Dependency graph", :action => 'dep_graph', :id => @si_item.id %>
-  <li><%= link_to "Reduced dependency graph", :action => 'reduced_dep_graph', :id => @si_item.id %>
-  </ul>
-
   <table>
   <thead>
   <td><em>Component</em></td><td><em>Revision</em></td><td><em>Status</em><td><em>Session</em></td>

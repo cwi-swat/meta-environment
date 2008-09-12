@@ -19,8 +19,8 @@
     <link rel="alternate" type="application/rss+xml"  title="Sisyphus"  href="<%=@main_url%><%= url_for(:controller => 'builds', :action => "rss") %>" />
 
 
-	<link rel="icon" href="/images/favicon.ico" type="image/ico" />
-	<link rel="shortcut icon" href="/images/favicon.ico" type="image/ico" />
+	<link rel="icon" href="<%= image_path('favicon.ico')%>" type="image/ico" />
+	<link rel="shortcut icon" href="<%=image_path('favicon.ico')%>" type="image/ico" />
 
     <title>Web of Sisyphus</title>
   </head>

@@ -92,6 +92,8 @@ END
     render_bundle(bundle_file_path)
   end
 
+  private
+
   def dep_graph
     @si_item = SiItem.find(params[:id])
     @map = graph_map_cmapx(@si_item)
