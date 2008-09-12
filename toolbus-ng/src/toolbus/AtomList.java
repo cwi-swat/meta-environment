@@ -1,42 +1,33 @@
 package toolbus;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
+
 import toolbus.atom.Atom;
 
 public class AtomList implements Iterable<Atom>{
-	private final Set<Atom> elements;
+	private final List<Atom> elements;
 	
 	public AtomList(){
-		elements = new HashSet<Atom>();
+		elements = new LinkedList<Atom>();
 	}
 	
 	public AtomList(Atom a){
-		elements = new HashSet<Atom>();
+		elements = new LinkedList<Atom>();
 		elements.add(a);
 	}
 	
-	private void add(Atom atom){
-		elements.add(atom);
+	private void addAll(AtomList atomList){
+		elements.addAll(atomList.elements);
 	}
 	
-	public AtomList union(AtomList as){
+	public AtomList union(AtomList atomList){
 		AtomList r = new AtomList();
 		
-		Iterator<Atom> elementsIterator = elements.iterator();
-		while(elementsIterator.hasNext()){
-			Atom a = elementsIterator.next();
-			
-			r.add(a);
-		}
+		r.addAll(this);
+		r.addAll(atomList);
 		
-		Iterator<Atom> atomSetIterator = as.iterator();
-		while(atomSetIterator.hasNext()){
-			Atom a = atomSetIterator.next();
-			
-			r.add(a);
-		}
 		return r;
 	}
 	
