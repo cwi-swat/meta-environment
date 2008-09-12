@@ -2,7 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
   session :session_expires => 1.month.from_now
-  before_filter :side_bar, :except => [:changes]
+  before_filter :side_bar, :except => [:changes, :rss]
 
 
   private

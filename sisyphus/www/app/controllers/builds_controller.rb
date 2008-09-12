@@ -1,3 +1,4 @@
+# -*- coding: undecided -*-
 
 
 class BuildsController < ApplicationController
@@ -131,7 +132,8 @@ class BuildsController < ApplicationController
         @result_links[result] = url_for(:controller => 'si_results', :action => 'show', :id => result.id)
       end
     end
-    render_without_layout
+    render :layout => false
+    response.headers[“Content-Type”] = “application/xml; charset=utf-8”
   end
   
 
