@@ -27,23 +27,16 @@ public class Main {
 	 * @see argusviewer.toolbus.DataComm#DataComm(String[])
 	 * @see toolbus.viewer.DebugToolBus#DebugToolBus(String[], toolbus.viewer.IViewer, toolbus.viewer.IPerformanceMonitor)
 	 */
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws Exception{
+		final DataComm dataComm = new DataComm(args);
+		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				// The ConsoleViewPanel must be initialized before the DataComm
 				// is created, because the error and output streams are cached
 				// in the ToolBus and we want them redirected to the ConsoleView.
 				ArrayList<IView> views = new ArrayList<IView>();
-				views.add(new ConsoleViewPanel());
-				
-				//Do catch runtime exceptions, otherwise the Viewer will get started and remains
-				//inside an eternal loop.
-				DataComm dataComm;
-				try{
-					dataComm = new DataComm(args);
-				}catch(Exception e){
-					throw new RuntimeException(e);
-				}				
+				views.add(new ConsoleViewPanel());			
 				
 				// Views that have the same preferred position get ordered
 				// back to front in the order they are added here.				
@@ -57,6 +50,8 @@ public class Main {
 				new ArgusViewerGUI(dataComm, views.toArray(new IView[views.size()]));
 			}
 		});
+		
+		dataComm.startToolBus();
 	}
 
 }

@@ -30,8 +30,7 @@ import aterm.ATerm;
  * @author J. van den Bos  
  * @author M. van Beest
  */
-public final class DataComm implements IViewer, IPerformanceMonitor {
-	
+public final class DataComm implements IViewer, IPerformanceMonitor{
 	private final DebugToolBus m_debugToolbus;
     private final ScriptCodeStore m_scriptCodeStore;
 
@@ -58,30 +57,25 @@ public final class DataComm implements IViewer, IPerformanceMonitor {
 		m_controlSync = new ControlSync(m_debugToolbus);
 		m_filterSync = new FilterSync();
 		
-		m_scriptCodeStore = new ScriptCodeStore(m_debugToolbus);	
+		m_scriptCodeStore = new ScriptCodeStore(m_debugToolbus);
 		
-		// The toolbus will be initialized later to resolve threading issues.
-		initToolbus();
+		initToolBus();
     }
 
-	private void initToolbus() throws Exception {
-		//intial state toolbus
+	private void initToolBus() throws Exception{
 		m_debugToolbus.doStop();
 		CommandLine.createCommandLine(m_debugToolbus, System.in, false);
 		
 		try{
 			m_debugToolbus.parsecup();
 			m_debugToolbus.prepare();
-			
-			Thread toolbusThread = new Thread(new Runnable(){
-				public void run(){					
-					m_debugToolbus.execute();
-				}			
-			});
-			toolbusThread.start();
 		} catch (Exception ex) {
 			throw new Exception("Error starting ToolBus.", ex);
 		}
+	}
+	
+	public void startToolBus(){
+		m_debugToolbus.execute();
 	}
 	
     /**
