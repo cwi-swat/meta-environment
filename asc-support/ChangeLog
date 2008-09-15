@@ -1,5 +1,8 @@
 
 
+Mon Sep 15 16:54:32 CEST 2008 <jurgenv@cwi.nl>
+ * lib/builtin-io.c: added proper resetting of SGLR's error cache.
+
 Mon Jun  9 13:27:34 CEST 2008 <jurgenv@cwi.nl>
  * asc-support.pc.in: Bumped to version 2.5
 

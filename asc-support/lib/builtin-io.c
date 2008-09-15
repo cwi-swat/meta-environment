@@ -222,9 +222,11 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file, ATbool pos) {
     inputString = IS_createInputStringFromFile(filename);
     FLT_setSelectTopNonterminalFlag(ATtrue);
     FLT_setTopNonterminal(sort);
+    SGLR_resetErrorSummary();
     PT_ParseTree result = SGLR_parse(inputString, getParseTableID());
     return parse_result(sort, result, file, pos);
   }
+
 
   return (PT_Tree) CO_makeParsetreeXFailure((ATerm) PT_makeSymbolSort(sort), l,l,
 					     makeGeneralError(
@@ -270,6 +272,7 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes, PT_Tree file, ATbool p
     inputString = IS_createInputStringFromString((const unsigned char *)PT_yieldTreeToString(bytes, ATfalse));
     FLT_setSelectTopNonterminalFlag(ATtrue);
     FLT_setTopNonterminal(sort);
+    SGLR_resetErrorSummary();
   
     PT_ParseTree result = SGLR_parse(inputString, getParseTableID());
     return parse_result(sort, result, file, pos);
