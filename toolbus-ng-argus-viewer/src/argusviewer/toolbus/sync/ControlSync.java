@@ -41,7 +41,6 @@ public class ControlSync {
 	private volatile int m_stepRunningDelay = 0;	
 	private volatile boolean m_isToolbusTerminated = false;
 	
-	private static final int THREAD_WAIT_TIME = 100;
 	private final ArrayList<IControlListener> m_controlListeners;
 	private final ArrayList<IToolControlListener> m_toolListeners;
 	private final ArrayList<IProcessInstanceControlListener> m_processInstanceListeners;
@@ -74,7 +73,6 @@ public class ControlSync {
 	public void doRun() {
 		m_isToolbusStepRunning = false;
 		
-		waitTillToolbusIsStarted();
 		doSteppingRun(0);
 	}
 	
@@ -97,8 +95,7 @@ public class ControlSync {
 	/**
 	 * triggers one step at the toolbus.
 	 */
-	public void doStep() {
-		waitTillToolbusIsStarted();
+	public void doStep(){
 		m_debugToolBus.doStep();		
 	}
 	
@@ -106,8 +103,7 @@ public class ControlSync {
 	 * triggers steps at the toolbus
 	 * @param number number of steps triggered.
 	 */
-	public void doStep(int number) {
-		waitTillToolbusIsStarted();
+	public void doStep(int number){
 		for (int i = 0; i < number; i++) {
 			m_debugToolBus.doStep();
 		}
@@ -116,20 +112,18 @@ public class ControlSync {
 	/**
 	 * stop running or steprunning
 	 */
-	public void doStop() {
+	public void doStop(){
 		m_isToolbusStepRunning = false;
 		
-		waitTillToolbusIsStarted();
 		m_debugToolBus.doStop();
 	}
 
 	/**
 	 * terminate the toolbus.
 	 */
-	public void doTerminate() {
+	public void doTerminate(){
 		m_isToolbusStepRunning = false;
-		if (!isToolbusTerminated()) {
-			waitTillToolbusIsStarted();		
+		if (!isToolbusTerminated()){
 			m_debugToolBus.doTerminate();
 			//m_debugToolBus = null;
 		}
@@ -137,24 +131,10 @@ public class ControlSync {
 	}
 	
 	/**
-	 * check 'n wait 'till toolbus is started.
-	 */
-	private void waitTillToolbusIsStarted() {
-		while (!isToolbusRunning() && !isToolbusTerminated()) {
-            try {
-				Thread.sleep(THREAD_WAIT_TIME);
-            } catch (InterruptedException e) {
-                //interrupted
-                return;
-            }
-		}
-	}
-	
-	/**
 	 * tests if the toolbus is running.
 	 * @return true if toolbus is running
 	 */
-	public boolean isToolbusRunning() {
+	public boolean isToolbusRunning(){
 		return m_isToolbusRunning;        
     }
 	
@@ -162,9 +142,9 @@ public class ControlSync {
      * The state of the debugToolbus has changed.
      * @param state the current state of the debugToolbus.
      */
-	public void setState(int state) {
+	public void setState(int state){
 		m_toolbusState = state;
-		for (IStateControlListener stateLstr : m_stateListeners) {
+		for (IStateControlListener stateLstr : m_stateListeners){
 			stateLstr.setState(state);
 		}
 	}
@@ -185,8 +165,7 @@ public class ControlSync {
 	 * @param executedStateElement the executed state element
 	 * @param partners all related processInstances
 	 */
-	public void stepExecuted(int tick, ProcessInstance processInstance,
-			StateElement executedStateElement, ProcessInstance[] partners) {		
+	public void stepExecuted(int tick, ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners) {		
 						
 		//logic for the stepRun action
 		if (m_isToolbusStepRunning) {
@@ -224,7 +203,6 @@ public class ControlSync {
      */
 	public void addProcessInstance(ProcessInstance processInstance) {
 		m_currentProcesses.add(processInstance);
-		
 		
 		if (!processInstance.getStateElements().isEmpty()) {
 			int last = processInstance.getStateElements().size() - 1;

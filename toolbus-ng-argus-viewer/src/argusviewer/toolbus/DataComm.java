@@ -34,7 +34,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	private final DebugToolBus m_debugToolbus;
     private final ScriptCodeStore m_scriptCodeStore;
 
-	private boolean m_isToolbusRunning = false;
+	private volatile boolean m_isToolbusRunning = false;
 
 	private final BreakpointSync m_breakPointSync;
 	private final FocusSync m_focusSync;
@@ -159,15 +159,12 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	 * @param executedStateElement the executed state element
 	 * @param partners all related processInstances
 	 */
-	public void stepExecuted(ProcessInstance processInstance,
-			StateElement executedStateElement, ProcessInstance[] partners) {
-		
-		//very strange CWI state of the toolbus, ignore this and doStep.
-		if (executedStateElement.getPosInfo() == null) {
+	public void stepExecuted(ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners) {
+		if(executedStateElement.getPosInfo() == null){
 			/* If the posInfo was 'null', the stateElement isn't related directly
-			 * related to anything in the ToolBus script (it will be an atom that
-			 * was inserted during the creation of the statemachine, by the parser).
-			 * -- In this case do another step. */
+			   related to anything in the ToolBus script (it will be an atom that
+			   was inserted during the creation of the statemachine, by the parser).
+			   -- In this case do another step. */
 			m_controlSync.doStep();
 			return;
 		}
@@ -183,8 +180,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	public void updateState(int state) {
 		m_controlSync.setState(state);
 	}
-
-
+	
 	/**
 	 * get the toolbus instance itself. Actually only for debugging.
 	 * @return the running toolbus.
