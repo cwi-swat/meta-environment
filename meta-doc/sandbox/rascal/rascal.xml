@@ -36,8 +36,8 @@
 
     <para>We have identified the need for better language support for
     specifying and implementing software analysis and transformation tools. In
-    this document we embark on the design of a domain-specific language that
-    is intended to provide a comprehensive and easy to use set of concepts for
+    this document we embark on a design of a domain-specific language that is
+    intended to provide a comprehensive and easy to use set of concepts for
     that domain. The goals of the envisaged language (with working name
     Rascal) are:</para>
 
@@ -214,9 +214,11 @@
         </listitem>
 
         <listitem>
-          <para>Rascal rules read in the order of execution instead of first
-          the left-hand side, then the conditions, and then the right-hand
-          side of ASF+SDF equations</para>
+          <para>In ASF+SDF the execution order of the elements of equations is
+          left-hand side (for matching), conditions, and right-hand side (for
+          constructing a normal form). In Rascal the elements of rules read in
+          a more natural order that corresponds with the order of
+          execution.</para>
         </listitem>
 
         <listitem>
@@ -250,9 +252,11 @@
           <para>Rascal is an imperative language, which natively supports I/O
           and other side-effects without work-arounds. When backtracking
           occurs, for example during list matching, Rascal makes sure that
-          most side-effects are undone, and that I/O is delayed until no more
-          backtracking can occur. Even rewrite rules support side-effects in
-          Rascal.</para>
+          <emphasis role="bold">most</emphasis> side-effects are undone, and
+          that I/O is delayed until no more backtracking can occur. Even
+          rewrite rules support side-effects in Rascal.<caution>
+              <para>Clarify the above.</para>
+            </caution></para>
         </listitem>
 
         <listitem>
@@ -443,17 +447,17 @@
         </listitem>
 
         <listitem>
-          <para>R5: File I/O (contradicts R5).</para>
+          <para>R5: File I/O.</para>
         </listitem>
 
         <listitem>
           <para>R6: Easily accessible fact storage (similar to a heap, but
-          remember R5 and the details of backtracking).</para>
+          remember the details of backtracking, see R19).</para>
         </listitem>
 
         <listitem>
-          <para>R7: List matching (because of R2, influences R7, but also very
-          handy for manipulating lists in concrete syntax).</para>
+          <para>R7: List matching (because of R2, also very handy for
+          manipulating lists in concrete syntax).</para>
         </listitem>
 
         <listitem>
@@ -486,46 +490,46 @@
         </listitem>
 
         <listitem>
-          <para>R13: no 'null' values, preventing common programming
+          <para>R13: No 'null' values, preventing common programming
           errors</para>
         </listitem>
 
         <listitem>
-          <para>R14: all values immutable, preventing common programming
+          <para>R14: All values immutable, preventing common programming
           errors and allowing for certain kinds of optimizations</para>
         </listitem>
 
         <listitem>
-          <para>R15: should be able to match and construct strings using
+          <para>R15: Should be able to match and construct strings using
           regular expressions (for making the simpler things simple, if you
           can do without a grammar, why not?)</para>
         </listitem>
 
         <listitem>
-          <para>R16: can get/set data from databases, such as the pdb from
+          <para>R16: Can get/set data from databases, such as the pdb from
           Eclipse IMP, but possibly also from ODBC/JDBC data sources.</para>
         </listitem>
 
         <listitem>
-          <para>R17: type safe, but flexible. We want a type system that
+          <para>R17: Type safe, but flexible. We want a type system that
           prevents common programming errors, but still allows ample
           opportunity for reuse.</para>
         </listitem>
 
         <listitem>
-          <para>R18: syntax safe, programmers should not be allowed to
+          <para>R18: Syntax safe, programmers should not be allowed to
           construct programs that are syntactically incorrect w.r.t a certain
           context-free grammar.</para>
         </listitem>
 
         <listitem>
-          <para>R19: backtracking safe, programmers should not have to deal
+          <para>R19: Backtracking safe, programmers should not have to deal
           with the mind boggling feature interactions between side-effects and
           backtracking.</para>
         </listitem>
 
         <listitem>
-          <para>R20: traceable/debuggable, programmers should be able to
+          <para>R20: Traceable/debuggable, programmers should be able to
           easily trace through the execution of a Rascal program using the
           simplest of debugging tools, like printf statements, and the use of
           a simple debugging interface which allows to step through the source
@@ -533,7 +537,7 @@
         </listitem>
 
         <listitem>
-          <para>R21: minimize the use of type inference, such that the
+          <para>R21: Minimize the use of type inference, such that the
           programmer must always declare her intentions by providing types for
           functions, data-types and variables. This makes debugging easier and
           providing clear error messages too. When variables are implicitly
@@ -542,13 +546,13 @@
         </listitem>
 
         <listitem>
-          <para>R22: allow the implementation of reusable modules and
+          <para>R22: Allow the implementation of reusable modules and
           functions (i.e. parametric polymorphism and or functions as
           parameters).</para>
         </listitem>
 
         <listitem>
-          <para>R23: we need something like rewrite rules for implementing
+          <para>R23: We need something like rewrite rules for implementing
           data-types that are always canonicalized/normalized. For some
           analysis algorithms this allows the programmer to implement domain
           specific optimizations over plain relational calculus or tree
@@ -681,12 +685,13 @@
       <itemizedlist>
         <listitem>
           <para>A Rascal Name is identical to a Java Indentifier except that
-          we <emphasis>do</emphasis> allow dashes (<literal>-</literal>) but
-          do <emphasis>not</emphasis> allow the dollar sign
-          (<literal>$</literal>) in names. All reserved words in both Java and
-          Rascal cannot be used as a Name. <remark>For better syntax errors it
-          is probably better to warn for Java keywords later
-          on.</remark></para>
+          we <emphasis>do</emphasis> allow -- for reasons of compatibility
+          with names in SDF -- dashes (<literal>-</literal>) but do
+          <emphasis>not</emphasis> allow the dollar sign
+          (<literal>$</literal>) in names. In the initial implementation all
+          reserved words in both Java and Rascal cannot be used as a Name.
+          <remark>For better syntax errors it is probably better to warn for
+          Java keywords later on.</remark></para>
         </listitem>
 
         <listitem>
@@ -757,8 +762,9 @@
 
           <listitem>
             <para>All syntactic types are a subtype of the type
-            <literal>tree</literal> that corresponds to UPTR. Up casts from a
-            subtype to an enclosing type are automatic. The type
+            <literal>tree</literal> that corresponds to an Universal Parse
+            Tree Representation (UPTR). We will use AsFix as UPTR. Up casts
+            from a subtype to an enclosing type are automatic. The type
             <literal>tree</literal> is "special" in the following
             sense:</para>
 
@@ -779,7 +785,9 @@
           <listitem>
             <para>Types for sets, maps, relations and tuples can be formed
             from types; Maps, relations and tuples can have optional column
-            names.</para>
+            names. Note that a map resembles a function and differs from a
+            binary relation: for each domain value in a map only a single
+            range value is allowed.</para>
           </listitem>
 
           <listitem>
@@ -794,10 +802,10 @@
           </listitem>
 
           <listitem>
-            <para>The last argument of a function may be of the form
+            <para>The last parameter of a function may be of the form
             <literal>list[<replaceable>T</replaceable>]
             <replaceable>Name</replaceable>...</literal> and indicates a
-            variable list of remaining arguments of type
+            variable list of remaining parameters of type
             <replaceable>T</replaceable>.</para>
           </listitem>
 
@@ -805,7 +813,10 @@
             <para>Data declarations may introduce new structured types and
             have the form<programlisting>data N Pat1 | Pat2 | ...</programlisting>where
             N is the name of the datatype and Pat1, Pat2, are prefix patterns
-            describing the variants of the datatype.<note>
+            describing the variants of the datatype. For instance,
+            <programlisting>data Bool btrue | bfalse | band(Bool L, Bool R)  | bor(Bool L, Bool R);  </programlisting>defines
+            the datatype <literal>Bool</literal> that contains various
+            constants and constructor functions.<note>
                 <para>We assume that all constructors for a datatype lead to a
                 corresponding function to construct a term of that datatype.
                 This eliminates the need to quote abstract terms in
@@ -820,8 +831,13 @@
 
           <listitem>
             <para>We have <emphasis>views</emphasis> on data types that define
-            templates or overlays over an existing type. The form
-            is:<programlisting>view Bool &lt;: tree and appl(...) | or appl(...)</programlisting></para>
+            templates or overlays over an existing type. A view defines a
+            (possibly complex) pattern that matches the structure of another
+            datatype. A view provides an alternative (and possibly simplified)
+            access mechanism for existing data structures. A standard example
+            is to define a view on a parse tree that suppresses all auxiliary
+            information and better reflects the actual abstract tree that is
+            represented as in<programlisting>view Bool &lt;: tree and appl(...) | or appl(...)</programlisting></para>
 
             <para>This defines the type <literal>Bool</literal> as a view on
             trees with two alternatives named <literal>and</literal> and
@@ -895,7 +911,8 @@
               </listitem>
 
               <listitem>
-                <para>Composition is only allowed in the result type.</para>
+                <para>Composition of tuple types is only allowed in the result
+                type.</para>
               </listitem>
 
               <listitem>
@@ -977,7 +994,7 @@
 
         <para>Here T, T1, T2, T' etc represent types, and ONTs, ONTs' etc
         represented lists of OptionallyNamedTypes, e.g., a type that
-        optionally followed by a named. We omit the definition of &lt;= on
+        optionally followed by a name. We omit the definition of &lt;= on
         OptionallyNamedTypes. The above rules also describe certain
         equivalences between types, e.g., a map can be compared with a
         relation, a relation can be compared with a set of tuples, and the
@@ -989,7 +1006,7 @@
         result type and argument types differently. We have, for instance,
         that</para>
 
-        <para><programlisting>set[int] f(int i) &lt;: fun set[&amp;T] f(int i)  %% since int &lt; &amp;T
+        <para><programlisting>set[int] f(int i) &lt;: fun set[&amp;T] f(int i)  %% since int &lt;: &amp;T
 
 int f(number x) &lt;: fun number f (int x)    %% assuming int &lt;: number</programlisting>but
         <emphasis>not</emphasis> that</para>
@@ -1064,16 +1081,22 @@ type Graph DFGraph</programlisting></para>
         annotation names are strings and annotation values are values of a
         type that is explicitly declared. Any value of any named type can be
         annotated and the type of these annotations can be declared precisely.
-        For instance, the graph datatype introduced earlier, could be
-        annotated with an indication which graph layout algorithm to apply to
-        a particular graph, e.g.,<programlisting>anno Graph LayoutStrategy "dot" | "tree" | "force" | 
-                          "hierarchy" | "fisheye"</programlisting>In a similar
-        way, certain syntactic constructs of programs could be annotated with
-        location information:<programlisting>anno STATEMENT posinfo loc</programlisting>or
+        For instance, we can add to the graph datatype introduced earlier, the
+        annotation with name <literal>LayoutStrategy</literal> that defines
+        which graph layout algorithm to apply to a particular graph,
+        e.g.,<programlisting>anno Graph LayoutStrategy "dot" | "tree" | "force" | 
+                          "hierarchy" | "fisheye"</programlisting></para>
+
+        <para>Note that the type that can be used in annotation declaration is
+        identical to a type used in a data declaration. In a similar way, we
+        can add to certain syntactic constructs of programs (e.g.,
+        <literal>STATEMENT</literal>) an annotation with name
+        <literal>posinfo</literal> that contains location
+        information:<programlisting>anno STATEMENT posinfo loc</programlisting>or
         location information could be added for all syntax
         trees:<programlisting>anno tree posinfo loc</programlisting></para>
 
-        <para>. The folllowing three operators are provided for handling
+        <para>. The folllowing two operators are provided for handling
         annotations:</para>
 
         <itemizedlist>
@@ -1196,7 +1219,9 @@ public &amp;T max(set[&amp;T] R)
         <listitem>
           <para>Functions that use a global variable have to be explicitly
           declare it as well. The value of a global variable can be used and
-          replaced by all functions that have locally declared it.</para>
+          replaced by all functions that have locally declared it.<caution>
+              <para>Bas: Shadowing?</para>
+            </caution></para>
         </listitem>
       </itemizedlist>
 
@@ -1269,26 +1294,27 @@ public &amp;T max(set[&amp;T] R)
 
         <itemizedlist>
           <listitem>
-            <para>the number of arguments differs;</para>
+            <para>the number of parameters differs;</para>
           </listitem>
 
           <listitem>
-            <para>there is at least one argument position with incomparable
+            <para>there is at least one parameter position with incomparable
             types w.r.t. the type hierarchy, i.e., not (A &lt;: B) and not
             (B&lt;:A).</para>
           </listitem>
         </itemizedlist>
 
-        <para>Here are some examples.</para>
+        <para>The result type does not play a role in these conditions and
+        overloading on result types is thus forbidden.</para>
 
-        <para>Here are, after all the warnings, the original examples:</para>
+        <para>Here are some examples.</para>
 
         <para><programlisting>%% OK, since int and double are incomparable 
 
 int +(int a, int b) { ... }
 double +(double a, double b) { ... }
 
-%% KO, since int is comparable to value 
+%% NOT OK, since int is comparable to value 
 %% (int is -- like all types -- a subtype of value)
 
 int +(value a, value b) { ... }
@@ -1304,7 +1330,7 @@ double +(int a, double b)
 double +(double a, int b)
 double +(double a, double b)
 
-%% KO, since arguments cannot be resolved.
+%% NOT OK, since arguments cannot be resolved.
 
 int randomValue()
 str randomValue()</programlisting></para>
@@ -1325,13 +1351,13 @@ str randomValue()</programlisting></para>
 
         <para>Here are more examples:</para>
 
-        <para><programlisting>%% KO, because &amp;T might be any type (i.e. value),
+        <para><programlisting>%% NOT OK, because &amp;T might be any type (i.e. value),
 %% which is comparable to int
 
 str f(int x)
 str f(&amp;T x)
 
-%% KO, since both T's may bind to comparable types and
+%% NOT OK, since both T's may bind to comparable types and
 %% value and int are comparable
 
 int f(&amp;T x, value y)
@@ -1370,7 +1396,7 @@ int f(&amp;T y, double x)</programlisting></para>
         functions that are declared locally and can be passed as argument to
         another function, be returned as value of a function, or even be
         stored as value in a set or relation. <caution>
-            <para>Causes aliasing; How doe this interfere with backtracking?
+            <para>Causes aliasing; How does this interfere with backtracking?
             We may forbid write access to globals outside the current
             context.</para>
           </caution>When such functions are called they are called in the
@@ -1384,6 +1410,10 @@ int f(&amp;T y, double x)</programlisting></para>
 
         <programlisting>fun fun(int) -&gt; int makeAdder(int n)
     return fun int (int x) { return x + 1 }</programlisting>
+
+        <caution>
+          <para>The above needs further editing/explanation.</para>
+        </caution>
       </section>
     </section>
 
@@ -1488,12 +1518,14 @@ int f(&amp;T y, double x)</programlisting></para>
       <section>
         <title>Abstract Patterns</title>
 
-        <para>Datatype declarations introduce a signature of abstract terms.
-        These terms, possibly including typed variables that play a similar
-        role as pattern variables in syntax patterns, may be used as abstract
-        patterns at the same position where concrete patterns are allowed.
-        Lists, sets and tuples may also occur in abstract patterns. Here are
-        some examples of abstract patterns:<programlisting>%% Assuming:
+        <para>Data declarations introduce a signature of abstract terms and
+        abstract patterns can be used to perform matching on them. The same
+        terms that or in a data delcaration, possibly including typed
+        variables that play a similar role as pattern variables in syntax
+        patterns, may be used as abstract patterns at the same position where
+        concrete patterns are allowed. Lists, sets and tuples may also occur
+        in abstract patterns. Here are some examples of abstract
+        patterns:<programlisting>%% Assuming:
 %% data Bool band(Bool L, Bool R);
 %% Bool B2;
 %% An abstract pattern matching a band node:
@@ -1586,8 +1618,8 @@ intval(int n1)
           </listitem>
 
           <listitem>
-            <para>Named groups have to outermost, such that they can only bind
-            in one way.</para>
+            <para>Named groups have to be outermost, such that they can only
+            bind in one way.</para>
           </listitem>
 
           <listitem>
@@ -1806,10 +1838,10 @@ lexical syntax
         these. Assignments may be undone in the context of a failing case of a
         switch or visit statement.</para>
 
-        <para>An assignment may also contain one of the are assignment
-        operators <literal>+=</literal>, <literal>-=</literal>,
-        <literal>*=</literal>, <literal>/=</literal>,
-        <literal>&amp;=</literal>, and <literal>|=</literal>.</para>
+        <para>An assignment may also contain one of the assignment operators
+        <literal>+=</literal>, <literal>-=</literal>, <literal>*=</literal>,
+        <literal>/=</literal>, <literal>&amp;=</literal>, and
+        <literal>|=</literal>.</para>
       </section>
 
       <section>
@@ -1847,7 +1879,7 @@ lexical syntax
         <title>Solve statement</title>
 
         <para>Rascal provides a solve statement for the solution of sets of
-        simultations linear equations. The format is:<programlisting>solve (<replaceable>Expression</replaceable>) {
+        simultaneous linear equations. The format is:<programlisting>solve (<replaceable>Expression</replaceable>) {
   <replaceable>Assignable1</replaceable> = <replaceable>Expression1</replaceable>;
   <replaceable>Assignable2</replaceable> = <replaceable>Expression2</replaceable>;
   ...
@@ -1900,26 +1932,31 @@ default: ...
 
         <itemizedlist>
           <listitem>
-            <para><programlisting><replaceable>SyntaxPattern</replaceable>1 =&gt; <replaceable>SyntaxPattern2</replaceable></programlisting>When
-            the subject matches <replaceable>SyntaxPattern</replaceable>1,
-            <replaceable>SyntaxPattern</replaceable>2 is returned from the
-            enclosing function (after proper substitution).</para>
+            <para><programlisting><replaceable>SyntaxPattern</replaceable><replaceable>1</replaceable> =&gt; <replaceable>SyntaxPattern2</replaceable></programlisting>When
+            the subject matches
+            <replaceable>SyntaxPattern</replaceable><replaceable>1</replaceable>,
+            <replaceable>SyntaxPattern</replaceable><replaceable>2</replaceable>
+            is returned from the enclosing function (after proper
+            substitution).</para>
           </listitem>
 
           <listitem>
-            <para><programlisting><replaceable>AbstractPattern</replaceable>1 =&gt; <replaceable>AbstractPattern</replaceable>2 <emphasis
+            <para><programlisting><replaceable>AbstractPattern</replaceable><replaceable>1</replaceable> =&gt; <replaceable>AbstractPattern</replaceable><replaceable>2</replaceable> <emphasis
                   role="bold">or</emphasis> <replaceable>PatternVariable</replaceable></programlisting>When
-            the subject matches <replaceable>Abstractpattern</replaceable>1,
-            <replaceable>AbstractPattern</replaceable>2 (or the single
-            <replaceable>PatternVariable</replaceable>) is returned from the
-            enclosing function (after proper substitution).</para>
+            the subject matches
+            <replaceable>Abstractpattern</replaceable><replaceable>1</replaceable>,
+            <replaceable>AbstractPattern</replaceable><replaceable>2</replaceable>
+            is returned from the enclosing function (after proper
+            substitution). When the right-hand side consists of a single
+            <replaceable>PatternVariable</replaceable>, its value is
+            returned.</para>
           </listitem>
 
           <listitem>
             <para><programlisting><replaceable>RegExpPattern</replaceable> =&gt; <replaceable>StringLiteral</replaceable> <replaceable>or</replaceable> <replaceable>PatternVariable</replaceable></programlisting></para>
 
             <para>When the subject matches
-            <replaceable>RexExpPattern</replaceable>1,
+            <replaceable>RexExpPattern</replaceable><replaceable>1</replaceable>,
             <replaceable>StringLiteral</replaceable> (or the single
             <replaceable>PatternVariable</replaceable>) is returned from the
             enclosing function (after proper substitution).</para>
@@ -1974,9 +2011,9 @@ default: ...
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
-              <entry align="center">bool&#160;</entry>
+              <entry align="center">bool </entry>
 
               <entry align="center">int</entry>
 
@@ -2480,7 +2517,7 @@ default: ...
             <para>Lists are enclosed between [ and ] and the elements are
             separated by comma's, e.g.<literal> ["abc", "def"]</literal> or
             <literal>[true, false, false, true]</literal>. For lists of
-            integers, a special shorhand exists to describe ranges of
+            integers, a special shorthand exists to describe ranges of
             integers:</para>
 
             <itemizedlist>
@@ -2488,10 +2525,7 @@ default: ...
                 <para><literal>[<replaceable>F</replaceable>..<replaceable>L</replaceable>]</literal>
                 ranges from first element <replaceable>F</replaceable> to (and
                 including) last element <replaceable>L</replaceable> with
-                increments of 1.or where <replaceable>B</replaceable>
-                indicates the begin value, <replaceable>E</replaceable> the
-                end value, and <replaceable>I</replaceable> the optional
-                increment between values.</para>
+                increments of 1.</para>
               </listitem>
 
               <listitem>
@@ -2531,8 +2565,8 @@ default: ...
         <para>An index operator
         <literal><replaceable>R</replaceable>[<replaceable>N</replaceable>]</literal>
         can be applied to values of types list, tuple, string and returns the
-        <replaceable>N</replaceable>-th element. It thows the exception
-        <literal>out_of_range(str msg)</literal> when the index value if out
+        <replaceable>N</replaceable>-th element. It throws the exception
+        <literal>out_of_range(str msg)</literal> when the index value is out
         of range.</para>
 
         <para>For a map <replaceable>M</replaceable>,
@@ -2589,7 +2623,7 @@ default: ...
         include <literal>==</literal> (equal), <literal>!=</literal> (not
         equal), <literal>&lt;</literal> (less), <literal>&lt;=</literal> (less
         or equal), <literal>&gt;</literal> (greater), <literal>&gt;=</literal>
-        (greater or equal). Predicatesa are used in control statements and in
+        (greater or equal). Predicates are used in control statements and in
         conditional expressions written as<programlisting><replaceable>Predicate</replaceable> ? <replaceable>Expression1</replaceable> : <replaceable>Expression2</replaceable></programlisting>Other
         predicates are:</para>
 
@@ -2780,7 +2814,9 @@ default: ...
       </itemizedlist>
 
       <para>As with cases, the rule keyword may be immediately followed by a
-      type constraint to limit its applicability.</para>
+      type constraint to limit its applicability.<caution>
+          <para>Default rules?</para>
+        </caution></para>
     </section>
 
     <section>
@@ -2793,7 +2829,7 @@ default: ...
 
       <itemizedlist>
         <listitem>
-          <para>All control flow path through the right-hand side of the rule
+          <para>All control flow paths through the right-hand side of the rule
           end in a return statement. In this case, the rule can not fail and
           all side-effects caused by the execution of the right-hand side are
           committed.</para>
@@ -2802,8 +2838,9 @@ default: ...
         <listitem>
           <para>One or more control path can fail. This can be caused by an
           explicit fail statement or an if-then statement with missing
-          else-branch. In the case of failure all side-effects (of local and
-          global variables) are undone.</para>
+          else-branch (the missing else-branch acts as a fail). In the case of
+          failure all side-effects (of local and global variables) are
+          undone.</para>
         </listitem>
 
         <listitem>
@@ -2888,8 +2925,8 @@ default: ...
 
         <listitem>
           <para>Side effects caused by built-in functions (like file i/o,
-          sockhet communication, etc.) are <emphasis
-          role="bold">not</emphasis> undone.</para>
+          socket communication, etc.) are <emphasis role="bold">not</emphasis>
+          undone.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -4447,7 +4484,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
           <thead>
             <row>
-              <entry align="center">&#160;</entry>
+              <entry align="center"> </entry>
 
               <entry align="center">bool</entry>
 
@@ -4455,7 +4492,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry align="center">double</entry>
 
-              <entry align="center">str&#160;</entry>
+              <entry align="center">str </entry>
 
               <entry align="center">loc</entry>
 
@@ -5171,7 +5208,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
             <thead>
               <row>
-                <entry align="center">&#160;</entry>
+                <entry align="center"> </entry>
 
                 <entry align="center">list</entry>
 
@@ -6460,6 +6497,10 @@ public void addRelPDB(str name, rel[&amp;T] incr)
       </listitem>
 
       <listitem>
+        <para>Ambiguous parse trees.</para>
+      </listitem>
+
+      <listitem>
         <para>How to implement the relational operations.</para>
       </listitem>
 
@@ -6966,7 +7007,7 @@ public void addRelPDB(str name, rel[&amp;T] incr)
 
           <thead>
             <row>
-              <entry align="center">&#160;Characters</entry>
+              <entry align="center"> Characters</entry>
 
               <entry align="center">Used in</entry>
             </row>
