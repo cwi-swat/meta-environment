@@ -25,8 +25,8 @@ public class FocusSync {
 	private ToolInstance m_focusedToolInstance;
 	private ToolInstance m_highlightedToolInstance;
 	
-	private ArrayList<IFocusListener> m_focusListeners;
-	private ArrayList<IHighlightListener> m_highlightListeners;
+	private final ArrayList<IFocusListener> m_focusListeners;
+	private final ArrayList<IHighlightListener> m_highlightListeners;
 	
 	/**
 	 * constructor of the focus synchronizator

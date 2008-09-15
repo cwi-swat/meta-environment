@@ -22,15 +22,15 @@ import toolbus.viewer.DebugToolBus;
  * @author M. van Beest
  */
 public class BreakpointSync {
-	private List<ProcessInstance> m_breakPointsProcInst;
-	private Map<String, List<Integer>> m_breakPointsFileNameLineNum;
+	private final List<ProcessInstance> m_breakPointsProcInst;
+	private final Map<String, List<Integer>> m_breakPointsFileNameLineNum;
 
-	private DebugToolBus m_debugToolbus;
+	private final DebugToolBus m_debugToolbus;
 
-	private ArrayList<IFileBreakPointListener> m_fileListeners;
-	private ArrayList<IProcessInstanceBreakPointListener> m_processInstanceListeners;
-	private ArrayList<IBreakPointHitListener> m_hitListeners;
-	private Map<String, Integer> m_breakpoints;
+	private final ArrayList<IFileBreakPointListener> m_fileListeners;
+	private final ArrayList<IProcessInstanceBreakPointListener> m_processInstanceListeners;
+	private final ArrayList<IBreakPointHitListener> m_hitListeners;
+	private final Map<String, Integer> m_breakpoints;
 
 	/**
 	 * constructor of the breakpoint synchronizer
@@ -235,14 +235,6 @@ public class BreakpointSync {
 		for (IBreakPointHitListener breakPointHitLstr : m_hitListeners) {
 			breakPointHitLstr.hitBreakpoint(stateElement);
 		}
-	}
-
-	/**
-     * set the debugtoolbus
-     * @param toolbus the debugtoolbus
-     */
-	public void setToolbus(DebugToolBus toolbus) {
-		m_debugToolbus = toolbus;
 	}
 
 	/**

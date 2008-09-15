@@ -29,23 +29,20 @@ import aterm.ATerm;
  * @author J. Wulffers
  * @author J. van den Bos  
  * @author M. van Beest
- *
  */
 public final class DataComm implements IViewer, IPerformanceMonitor {
 	
-	private DebugToolBus m_debugToolbus;
-    private ScriptCodeStore m_scriptCodeStore;
-    private Thread m_toolbusThread;
+	private final DebugToolBus m_debugToolbus;
+    private final ScriptCodeStore m_scriptCodeStore;
 
 	private boolean m_isToolbusRunning = false;
 
-	private BreakpointSync m_breakPointSync;
-	private FocusSync m_focusSync;
-	private ControlSync m_controlSync;
-	private FilterSync m_filterSync;
+	private final BreakpointSync m_breakPointSync;
+	private final FocusSync m_focusSync;
+	private final ControlSync m_controlSync;
+	private final FilterSync m_filterSync;
 	
 	private int	m_tick = 0;
-
 
     /**
 	 * Constructor of the DataComm object. DataComm handles the connection
@@ -53,52 +50,40 @@ public final class DataComm implements IViewer, IPerformanceMonitor {
 	 * @param args The arguments to start the toolbus.
      * @throws Exception could not start the toolbus
 	 */	
-	public DataComm(String[] args) throws Exception {
+	public DataComm(String[] args) throws Exception{		
+		m_debugToolbus = new DebugToolBus(args, this, this);
+		
 		m_breakPointSync = new BreakpointSync(m_debugToolbus);
 		m_focusSync = new FocusSync();
 		m_controlSync = new ControlSync(m_debugToolbus);
 		m_filterSync = new FilterSync();
 		
-		// The toolbus will be initialized later to resolve threading issues.
-		initToolbus(args);
-		
 		m_scriptCodeStore = new ScriptCodeStore(m_debugToolbus);	
+		
+		// The toolbus will be initialized later to resolve threading issues.
+		initToolbus();
     }
 
-	private void initToolbus(String[] args) throws Exception {		
-		m_debugToolbus = new DebugToolBus(args, this, this);
-		
+	private void initToolbus() throws Exception {
 		//intial state toolbus
 		m_debugToolbus.doStop();
 		CommandLine.createCommandLine(m_debugToolbus, System.in, false);
 		
-		try {
+		try{
 			m_debugToolbus.parsecup();
 			m_debugToolbus.prepare();
 			
-			m_toolbusThread = new Thread(new Runnable() {
-				public void run() {					
+			Thread toolbusThread = new Thread(new Runnable(){
+				public void run(){					
 					m_debugToolbus.execute();
 				}			
 			});
-			m_toolbusThread.start();
+			toolbusThread.start();
 		} catch (Exception ex) {
 			throw new Exception("Error starting ToolBus.", ex);
 		}
-
-		m_controlSync.setToolbus(m_debugToolbus);
-		m_breakPointSync.setToolbus(m_debugToolbus);
-	}	
-	
-	/**
-	 * get the running thread of the toolbus.
-	 * @return The thread wherein the toolbus operates
-	 */
-	public Thread getToolbusThread() {
-		return m_toolbusThread;
 	}
-
-
+	
     /**
 	 * this method is triggered when the toolbus is started.
 	 */
@@ -292,14 +277,14 @@ public final class DataComm implements IViewer, IPerformanceMonitor {
      * get number of the last tick of the toolbus.
      * @return the tick number
      */
-    public int getLastTick() {
+    public synchronized int getLastTick() {
 		return m_tick;
 	}
     
     /**
      * Increment the tick counter
      */
-    private void incrementTick() {
+    private synchronized void incrementTick() {
     	m_tick++;
     }
 }

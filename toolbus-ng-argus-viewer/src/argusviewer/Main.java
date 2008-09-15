@@ -38,11 +38,11 @@ public class Main {
 				
 				//Do catch runtime exceptions, otherwise the Viewer will get started and remains
 				//inside an eternal loop.
-				DataComm dataComm = null;
-				try {
+				DataComm dataComm;
+				try{
 					dataComm = new DataComm(args);
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
+				}catch(Exception e){
+					throw new RuntimeException(e);
 				}				
 				
 				// Views that have the same preferred position get ordered

@@ -29,24 +29,24 @@ import aterm.ATerm;
  * @author M. van Beest
  */
 public class ControlSync {
-	private DebugToolBus m_debugToolBus;
+	private final DebugToolBus m_debugToolBus;
 	
-	private List<ProcessInstance> m_currentProcesses; //still useful??
-    private List<ToolInstance> m_currentTools;
-    private Map<ProcessInstance, String> m_processFileNames;
+	private final List<ProcessInstance> m_currentProcesses; //still useful??
+    private final List<ToolInstance> m_currentTools;
+    private final Map<ProcessInstance, String> m_processFileNames;
 	
-	private boolean m_isToolbusRunning = false;
-	private boolean m_isToolbusStepRunning = false;
-    private int m_toolbusState = IViewerConstants.UNKNOWN_STATE;
-	private int m_stepRunningDelay = 0;	
-	private boolean m_isToolbusTerminated = false;
+	private volatile boolean m_isToolbusRunning = false;
+	private volatile boolean m_isToolbusStepRunning = false;
+    private volatile int m_toolbusState = IViewerConstants.UNKNOWN_STATE;
+	private volatile int m_stepRunningDelay = 0;	
+	private volatile boolean m_isToolbusTerminated = false;
 	
 	private static final int THREAD_WAIT_TIME = 100;
-	private ArrayList<IControlListener> m_controlListeners;
-	private ArrayList<IToolControlListener> m_toolListeners;
-	private ArrayList<IProcessInstanceControlListener> m_processInstanceListeners;
-	private ArrayList<IPerformanceControlListener> m_performanceListeners;
-	private ArrayList<IStateControlListener> m_stateListeners;
+	private final ArrayList<IControlListener> m_controlListeners;
+	private final ArrayList<IToolControlListener> m_toolListeners;
+	private final ArrayList<IProcessInstanceControlListener> m_processInstanceListeners;
+	private final ArrayList<IPerformanceControlListener> m_performanceListeners;
+	private final ArrayList<IStateControlListener> m_stateListeners;
 	
 	/**
 	 * constructor for filter synchronizator
@@ -331,17 +331,6 @@ public class ControlSync {
     	m_stepRunningDelay = delay;
     }
     
-    
-    /**
-     * set the toolbus
-     * @param debugToolBus ref to debug toolbus
-     */
-    public void setToolbus(DebugToolBus debugToolBus) {
-    	m_debugToolBus = debugToolBus;
-    }
-    
-
-	
 	/**
 	 * checks if toolbus is terminated
 	 * @return true if toolbus is terminated

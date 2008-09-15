@@ -23,10 +23,10 @@ import toolbus.tool.ToolInstance;
  */
 public class FilterSync {
 
-	private ArrayList<IProcessFilterListener> m_processListeners;
-	private ArrayList<IToolFilterListener> m_toolListeners;
-	private ArrayList<ProcessInstance> m_processesFilter;
-	private ArrayList<ToolInstance> m_toolsFilter;
+	private final ArrayList<IProcessFilterListener> m_processListeners;
+	private final ArrayList<IToolFilterListener> m_toolListeners;
+	private final ArrayList<ProcessInstance> m_processesFilter;
+	private final ArrayList<ToolInstance> m_toolsFilter;
 
 	/**
 	 * Constructor for the filter synchronizer
