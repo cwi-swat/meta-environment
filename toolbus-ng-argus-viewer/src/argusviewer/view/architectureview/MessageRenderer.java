@@ -69,7 +69,6 @@ public class MessageRenderer extends AbstractShapeRenderer {
 			searchPredicateText = Process.PROCESS_FIELDNAME + " == '" + name + "'";
 			matchingStatements = item.getVisualization().items(Process.TABLE_NAME, ExpressionParser.predicate(searchPredicateText));
 		} else {
-			assert (type.equals("Tool"));
 			searchPredicateText = Tool.TOOL_FIELDNAME + " == '" + name + "'";
             m_logger.debug(searchPredicateText);
             matchingStatements = item.getVisualization().items(Tool.TABLE_NAME, ExpressionParser.predicate(searchPredicateText));

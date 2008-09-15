@@ -72,10 +72,10 @@ public class ToolPerformanceRenderer extends DefaultTreeCellRenderer {
 //				setOpenIcon(ICON_GROUP);
 //				setClosedIcon(ICON_GROUP);
 //			} else {
-//				assert false;
+//				// Error
 //			}
 		} else {
-			assert false;
+			// Error
 		}
 
 		return this;

@@ -1,11 +1,11 @@
 package argusviewer.view.msc;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.log4j.Logger;
 import prefuse.Visualization;
 import prefuse.activity.Activity;
 import prefuse.activity.ActivityListener;
-
-import java.util.Date;
 
 /**
  * The MSCVisualizationThread implements a thread which
@@ -90,21 +90,20 @@ public class MSCVisualizationThread
 		while (true) {
 			switch(m_state) {
 			case VISUALIZE:
-				m_log.debug(new Date().getTime() + " state VISUALIZE"); 
+				m_log.debug(System.currentTimeMillis() + " state VISUALIZE"); 
 				processVisualize();
 				break;
 			case HOLD:
-				m_log.debug(new Date().getTime() + " state HOLD"); 
+				m_log.debug(System.currentTimeMillis() + " state HOLD"); 
 				processHold();
 				break;
 			case IDLE:
-				m_log.debug(new Date().getTime() + " state IDLE"); 
+				m_log.debug(System.currentTimeMillis() + " state IDLE"); 
 				processIdle();
 				break;
 			default:
 				// This doesn't happen
 				m_log.debug("The " + getClass().getName() + " came into an unknown state.");
-				assert false;
 				break;
 			}
 		}
@@ -114,23 +113,26 @@ public class MSCVisualizationThread
 	 * Process the visualize state.
 	 */
 	private void processVisualize() {
-		assert m_receivedWork;
-		assert !getBusyRefreshingVisualization();
-		
 		m_receivedWork = false;
 		setBusyRefreshingVisualization(true);
 		
-		synchronized (m_visualization) {
-			m_parent.processVisualization();
+		// Temp
+		try{
+			SwingUtilities.invokeAndWait(new Runnable(){
+				public void run(){
+					m_parent.processVisualization();
+				}
+			});
+		}catch(Exception irex){
+			// This will never happen.
 		}
+		// End temp
 
 		do {
-		// PreFuse will notify us.
-		waitForNotification();
+			// PreFuse will notify us.
+			waitForNotification();
 		} while (getBusyRefreshingVisualization());
 
-		assert !getBusyRefreshingVisualization();
-		
 		if (m_timer.beenIdle()) {
 			m_state = thread_states.IDLE;
 		} else {
@@ -139,8 +141,6 @@ public class MSCVisualizationThread
 	}
 	
 	private void processHold() {
-		assert !getBusyRefreshingVisualization();
-		
 		m_timer.startTimeoutTimer();
 		
 		while (true) {
@@ -169,8 +169,6 @@ public class MSCVisualizationThread
 	 * Process the IDLE state.
 	 */
 	private void processIdle() {
-		assert !getBusyRefreshingVisualization();
-		
 		while (!m_receivedWork) {
 			waitForNotification();
 		}
@@ -203,7 +201,7 @@ public class MSCVisualizationThread
 	}
 	
 	/**
-	 * receivedWork notifies the MessageSequenceChartSyncronisationThread there
+	 * receivedWork notifies the MessageSequenceChartSynchronizationThread there
 	 * is work to be done.
 	 */
 	public void receivedWork() {
@@ -318,21 +316,16 @@ public class MSCVisualizationThread
 				try {
 					Thread.sleep(THREAD_SLEEP_TIME_MILLISECONDS);
 				} catch (InterruptedException e) {
-					// the whole point of this thread is that it doesn't get interrupted.
-					assert false;
+					// Ignore this.
 				}
 				m_workCallsPrevious = temp;
 				// check if you want to notify for timer timeout.
-				if (hasTimedOut()) {
-					m_mscThread.wake();
-				}
-				
-				if (beenIdle()) {
+				if(hasTimedOut() || beenIdle()){
 					m_mscThread.wake();					
 				}
 			}
 		}
-	
+		
 		public void addWork() {
 			m_workCalls++;
 		}
@@ -342,7 +335,7 @@ public class MSCVisualizationThread
 		}
 		
 		public boolean hasTimedOut() {
-			long now = new Date().getTime();
+			long now = System.currentTimeMillis();
 			long timeOutMoment = m_timerStart + REDRAW_WHILE_COMPUTING_TIMEOUT_MILLISECONDS;
 			
 			if (timeOutMoment <= now) {
@@ -352,7 +345,7 @@ public class MSCVisualizationThread
 		}
 		
 		public void startTimeoutTimer() {
-			m_timerStart = new Date().getTime();
+			m_timerStart = System.currentTimeMillis();
 		}
 
 		private void stopTimer() {

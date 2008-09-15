@@ -109,9 +109,6 @@ public class ProcessTreeModel extends DefaultTreeModel implements
 	 * @return The value of the column of the given node.
 	 */
 	public Object getValueAt(Object node, int column) {
-		assert (node != null);
-		assert (node instanceof ProcessTreeNode);
-
 		// "Break", "Visible", "ProcesName", "ID"
 		ProcessTreeNode tree = (ProcessTreeNode) node;
 		
@@ -209,7 +206,6 @@ public class ProcessTreeModel extends DefaultTreeModel implements
 		if (item != null) {
 			// Processinstance
 			item.setFilter(visible);
-			assert (node.getChildCount() == 0);
 		} else {
 			// Processgroup, clear all children
 			for (int i = 0; i < node.getChildCount(); i++) {

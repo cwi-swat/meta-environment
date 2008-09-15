@@ -78,9 +78,6 @@ public class StatementLayout extends Layout {
 				// A statement has no parent entity, hide it
 				PrefuseLib.updateVisible(currentStatement, false);
 			}
-
-			// A statement should have maximally one matching entity
-			assert (!matchingEntities.hasNext());
 		}
 	}
 

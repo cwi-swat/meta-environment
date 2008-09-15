@@ -172,7 +172,6 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 		if (tree == null) {
 			return null;
 		}
-		assert (tree.getItem() != null);
 
 		tree.getItem().remove();
 		return tree;
@@ -214,7 +213,6 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 		if (m_item != null) {
 			return m_item.getProcessInstanceName();
 		}
-		assert (getChildCount() > 0);
 		return ((ProcessTreeNode) getChildAt(0)).getProcessName();
 	}
 

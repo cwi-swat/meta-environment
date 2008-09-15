@@ -169,8 +169,7 @@ class ToolTreeCellRenderer extends DefaultTreeCellRenderer  {
 		Component temp =  super.getTreeCellRendererComponent(tree, value,
 				selected, expanded, leaf, row,
 				hasFocus);
-		
-		assert (value instanceof ToolTreeNode);		
+			
 		ToolTreeNode node = (ToolTreeNode) value;
 		
 		if (node.isRemoved()) { 

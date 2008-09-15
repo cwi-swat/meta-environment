@@ -26,7 +26,6 @@ public abstract class ApplicationSettings {
 	 *            history limit in steps
 	 */
 	public static void setHistoryLimit(int steps) {
-		assert (steps >= 0);
 		settings.setAttribute(APPLICATION, HISTORY, "" + steps);
 		historyLimit = steps;
 	}

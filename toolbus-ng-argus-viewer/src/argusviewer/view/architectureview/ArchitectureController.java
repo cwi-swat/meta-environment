@@ -371,7 +371,6 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
         		if (timeName.equals("user-time")) {
         			userTime = ((Integer) getValueFromATerm(time, Integer.class, false)).intValue();
         		} else {
-        			assert (timeName.equals("system-time"));
         			systemTime = ((Integer) getValueFromATerm(time, Integer.class, false)).intValue();
         		}
         	}

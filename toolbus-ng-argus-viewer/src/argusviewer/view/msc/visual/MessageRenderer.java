@@ -99,9 +99,6 @@ public class MessageRenderer extends AbstractShapeRenderer {
 					targetXPositions.add(new Double(EntityLayout.getOutgoingSinkX()));
 				}
 			}
-
-			// A single targetId should belong to only one process or tool
-			assert (!matchingEntities.hasNext());
 		}
 
 		return targetXPositions;

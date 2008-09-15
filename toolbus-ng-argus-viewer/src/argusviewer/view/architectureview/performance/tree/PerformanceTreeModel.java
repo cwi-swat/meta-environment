@@ -211,7 +211,6 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 			}
 			return false;
 		}
-		assert false;
 		return false;
 	}
 }

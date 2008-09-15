@@ -30,7 +30,7 @@ public class Main {
 	public static void main(final String[] args) throws Exception{
 		final DataComm dataComm = new DataComm(args);
 		
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
 				// The ConsoleViewPanel must be initialized before the DataComm
 				// is created, because the error and output streams are cached

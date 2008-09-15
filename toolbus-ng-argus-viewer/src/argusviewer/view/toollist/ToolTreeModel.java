@@ -7,7 +7,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
 
 import toolbus.tool.ToolInstance;
 import argusviewer.toolbus.DataComm;
@@ -255,10 +254,6 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 
 		ToolTreeNode node = findToolTreeNodeByToolInstanceId(root,
 				toolInstanceId);
-		Assert
-				.assertNotNull(
-						"The node found by the ToolInstanceId should not be Null",
-						node);
 
 		node.remove();
 		

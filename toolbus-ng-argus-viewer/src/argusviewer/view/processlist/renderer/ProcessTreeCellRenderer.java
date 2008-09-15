@@ -40,7 +40,6 @@ public class ProcessTreeCellRenderer extends DefaultTreeCellRenderer  {
 				selected, expanded, leaf, row,
 				hasFocus);
 		
-		assert (value instanceof ProcessTreeNode);		
 		ProcessTreeNode node = (ProcessTreeNode) value;
 		
 		if (node.isRemoved()) { 

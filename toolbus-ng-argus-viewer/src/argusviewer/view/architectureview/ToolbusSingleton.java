@@ -16,7 +16,7 @@ import prefuse.data.Schema;
 public class ToolbusSingleton  extends AbstractTuple {
 	public static final String TABLE_NAME = "toolbusSingleton";
 	public static final String TB_FIELDNAME = "toolbus";
-	private static final Class < ? > TB_FIELDTYPE = String.class;
+	private static final Class<?> TB_FIELDTYPE = String.class;
 	private static final String TB_DEFAULT_VALUE = "toolbus";
 	private static final String[] COLUMNS = { TB_FIELDNAME };
 	private static final int TABLE_COLUMNCOUNT = 1;
@@ -35,7 +35,6 @@ public class ToolbusSingleton  extends AbstractTuple {
 		log.debug("ToolbusSignleton created.");
 	}
 	
-	
 	/**
 	 * Columns are needed, so the columns are given. Only one column in this
 	 * class.
@@ -47,7 +46,7 @@ public class ToolbusSingleton  extends AbstractTuple {
 	}
 
 	/**
-	 * Assert false, returns false. Do not temper.
+	 * 
 	 * @param field not used
 	 * @param type not used
 	 * @return false
@@ -57,12 +56,12 @@ public class ToolbusSingleton  extends AbstractTuple {
 	}
 
 	/**
-	 * Assert false. Do not temper.
+	 * 
 	 * @param field not used.
 	 * @param value not used.
 	 */
 	public void set(String field, Object value) {
-		assert false;
+		// Error
 	}
 
 	/**
@@ -125,19 +124,17 @@ public class ToolbusSingleton  extends AbstractTuple {
 	}
 
 	/**
-	 * Assert false. Do not temper.
 	 * @param field not used
 	 */
 	public void revertToDefault(String field) {
-		assert false;
+		// Error
 	}
 
 	/**
-	 * Assert false. Do not temper.
 	 * @param col not used
 	 * @param value not used
 	 */
 	public void set(int col, Object value) {
-		assert false;
+		// Error
 	}
 }

@@ -53,9 +53,6 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 *            the {@link ToolPerformanceInfo} to add.
 	 */
 	public void add(ToolPerformanceInfo toolPerformanceInfo) {
-		// Should only be called if name of tool is the same.
-		assert (getToolName().equals(toolPerformanceInfo.getToolName()));
-
 		/**
 		 * The following situations are possible:
 		 * - Toolname exists

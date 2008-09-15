@@ -106,7 +106,6 @@ public class Tool extends AbstractTuple {
 		}
 		
 		// This shouldn't happen
-		assert false;
 		return null;
 	}
 

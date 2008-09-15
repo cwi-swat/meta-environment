@@ -87,7 +87,6 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 		
 		for (int index = 0; index < getChildCount(); index++) {
 			ToolTreeNode node = (ToolTreeNode) getChildAt(index);
-			assert (node.getId() != -1); // node must have a tool
 			
 			if (!node.isRemoved()) {
 				return false;

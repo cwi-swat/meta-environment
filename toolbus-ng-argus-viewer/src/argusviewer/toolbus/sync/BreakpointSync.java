@@ -66,8 +66,7 @@ public class BreakpointSync {
 				processInstanceBreakPointLstr.addBreakpoint(processInstance);
 			}
 		} else {
-			ExceptionReporter.report("Could not add breakpoint: already added.");
-			assert (false);			
+			ExceptionReporter.report("Could not add breakpoint: already added.");		
 		}
 	}
 
@@ -119,7 +118,6 @@ public class BreakpointSync {
 			}
 		}
 		
-		assert (nearest != null);
 		return nearest.getName();
 	}
 	
@@ -137,10 +135,8 @@ public class BreakpointSync {
 	}
 	
 	private void removeSourceCodeBreakpoint(String processname) {
-		//How many breakpoints are there?
-		assert (m_breakpoints.containsKey(processname));		
-		int numBreakpoints = m_breakpoints.get(processname).intValue();		
-		assert (numBreakpoints > 0);
+		//How many breakpoints are there?	
+		int numBreakpoints = m_breakpoints.get(processname).intValue();
 		
 		//Remove one breakpoint
 		numBreakpoints--;

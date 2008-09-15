@@ -73,7 +73,7 @@ public class EntityVisibilityFilter extends GroupAction {
 			} else if (entityType == Entity.Type.SINK) {
 				entityIsVisible = true;
 			} else {
-				assert false : "An unknown type of Entity encountered.";
+				// Error
 			}
 
 			PrefuseLib.updateVisible(item, entityIsVisible);

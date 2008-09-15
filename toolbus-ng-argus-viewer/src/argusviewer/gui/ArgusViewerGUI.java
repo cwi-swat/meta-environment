@@ -340,8 +340,6 @@ public final class ArgusViewerGUI extends JFrame implements Observer {
 	 * @param arg a String with the name of the actual view to focus to
 	 */
 	public void update(Observable o, Object arg) {
-		assert arg instanceof String;
-
 		View theView = ViewContainer.getViewFromName(m_viewContainers, (String) arg);
 		
 		if (!theView.isDisplayable()) {	

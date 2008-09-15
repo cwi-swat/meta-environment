@@ -184,7 +184,6 @@ public class Statement extends AbstractTuple {
 			return Integer.valueOf(TIMESTAMP_DEFAULT_VALUE);
 		} else {
 			// This shouldn't happen
-			assert false;
 			return null;
 		}
 	}

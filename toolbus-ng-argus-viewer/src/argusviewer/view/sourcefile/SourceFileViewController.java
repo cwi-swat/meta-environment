@@ -40,9 +40,6 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * @param dataComm	the DataComm object used for communication with the ToolBus. This value can't be null.
 	 */
 	public SourceFileViewController(DataComm dataComm) {
-		//the toolbus cant be null
-		assert (dataComm != null);
-		
 		registerWithDataComm(dataComm);
 
 		//create a new hastable for all the sourcecode panels
@@ -63,10 +60,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * {@inheritDoc}
 	 */
 	public void updateView() {		
-		List<String> scriptNames = m_dataComm.getScriptfiles(); 
-		
-		//there must be at least 1 script
-		assert (scriptNames.size() > 0);
+		List<String> scriptNames = m_dataComm.getScriptfiles();
 		
 		for (String scriptName : scriptNames) {			
 			if (!m_sourceCodeTabs.containsKey(scriptName)) {							
