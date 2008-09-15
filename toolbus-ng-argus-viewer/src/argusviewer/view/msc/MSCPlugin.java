@@ -40,7 +40,8 @@ public class MSCPlugin implements IView {
 		MSCData mscData = new MSCData();
 		MSCVisualization mscVisualisation = new MSCVisualization(mscData);
 		MSCView mscView = new MSCView(mscVisualisation);
-		new MSCController(dataCommunication, mscData, mscVisualisation, mscView);
+		MSCController mscController = new MSCController(dataCommunication, mscData, mscVisualisation, mscView);
+		mscController.initialize();
 
 		m_visualComponents = new HashMap<String, Container>();
 		m_visualComponents.put(PLUGIN_NAME, mscView);

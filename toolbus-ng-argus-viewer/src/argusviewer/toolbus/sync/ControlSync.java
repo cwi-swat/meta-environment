@@ -140,7 +140,7 @@ public class ControlSync {
 	 * check 'n wait 'till toolbus is started.
 	 */
 	private void waitTillToolbusIsStarted() {
-		while ((!isToolbusRunning() || m_debugToolBus == null) && !isToolbusTerminated()) {
+		while (!isToolbusRunning() && !isToolbusTerminated()) {
             try {
 				Thread.sleep(THREAD_WAIT_TIME);
             } catch (InterruptedException e) {

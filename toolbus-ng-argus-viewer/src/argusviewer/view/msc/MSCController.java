@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import prefuse.activity.Activity;
 import prefuse.data.Tuple;
 import prefuse.visual.VisualItem;
 import toolbus.StateElement;
@@ -58,7 +57,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	private MSCData m_mscData;
 	private MSCVisualization m_mscVisualization;
 	private MSCView m_mscView;
-	private MSCVisualizationThread m_mscVisualizationThread;
+	private MSCVisualizationScheduler m_mscVisualizationScheduler;
 
 	private int m_latestTick = -1;
 	private Tuple m_latestAddedStatement = null;
@@ -97,16 +96,13 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * @param mscView
 	 *            view on the visualization of the Message Sequence Chart
 	 */
-	public MSCController(DataComm dataCommunication, MSCData mscData,
-			MSCVisualization mscVisualisation, MSCView mscView) {
-
+	public MSCController(DataComm dataCommunication, MSCData mscData, MSCVisualization mscVisualisation, MSCView mscView) {
 		this.m_dataCommunication = dataCommunication;
 		this.m_mscData = mscData;
 		this.m_mscVisualization = mscVisualisation;
 		this.m_mscView = mscView;
 
-		this.m_mscVisualizationThread = new MSCVisualizationThread(this,
-				m_mscVisualization.getVisualization());
+		this.m_mscVisualizationScheduler = new MSCVisualizationScheduler(this);
 
 		m_dataCommunication.getControlSync().register((IControlListener) this);
 		m_dataCommunication.getControlSync().register(
@@ -122,29 +118,10 @@ public class MSCController implements IControlListener, IToolControlListener,
 
 		populateEntitiesList();
 	}
-
-	/**
-	 * Create a controller for the Message Sequence Chart for test purposes.
-	 * 
-	 * @param mscData
-	 *            data model for the Message Sequence Chart
-	 * @param mscVisualisation
-	 *            visualization of the data model
-	 * @param mscView
-	 *            view on the visualization of the Message Sequence Chart
-	 * @param startVisualization
-	 *            set this parameter to true to start the visualization thread
-	 */
-	protected MSCController(MSCData mscData, MSCVisualization mscVisualisation,
-			MSCView mscView, boolean startVisualization) {
-		this.m_mscData = mscData;
-		this.m_mscVisualization = mscVisualisation;
-		this.m_mscView = mscView;
-
-		if (startVisualization) {
-			this.m_mscVisualizationThread = new MSCVisualizationThread(this,
-					m_mscVisualization.getVisualization());
-		}
+	
+	public void initialize(){
+		Thread mscVisualizationSchedulerThread = new Thread(m_mscVisualizationScheduler);
+		mscVisualizationSchedulerThread.start();
 	}
 
 	/**
@@ -153,19 +130,19 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * 
 	 * @return the visualization thread of the Message Sequence Chart
 	 */
-	public MSCVisualizationThread getVisualizationThread() {
-		return m_mscVisualizationThread;
+	public MSCVisualizationScheduler getVisualizationThread() {
+		return m_mscVisualizationScheduler;
 	}
 
 	/**
-	 * Setter made for testing purposes. Sets the {@link MSCVisualizationThread}.
+	 * Setter made for testing purposes. Sets the {@link MSCVisualizationScheduler}.
 	 * 
 	 * @param visualisationThread
-	 *            The {@link MSCVisualizationThread}.
+	 *            The {@link MSCVisualizationScheduler}.
 	 */
 	protected void setSynchronizationThread(
-			MSCVisualizationThread visualisationThread) {
-		m_mscVisualizationThread = visualisationThread;
+			MSCVisualizationScheduler visualisationThread) {
+		m_mscVisualizationScheduler = visualisationThread;
 	}
 
 	/**
@@ -173,8 +150,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * actions that are attached to the visualization.
 	 */
 	public void processVisualization() {
-		Activity activity = m_mscVisualization.refreshVisualization();
-		activity.addActivityListener(m_mscVisualizationThread);
+		m_mscVisualization.refreshVisualization();
 	}
 
 	/**
@@ -200,7 +176,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * Refresh the visualization of the Message Sequence Chart.
 	 */
 	protected void refreshVisualization() {
-		m_mscVisualizationThread.receivedWork();
+		m_mscVisualizationScheduler.receivedWork();
 	}
 
 	/**
