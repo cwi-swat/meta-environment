@@ -46,7 +46,6 @@ public class Process extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected String[] getColumns() {
 		return COLUMNS;
 	}

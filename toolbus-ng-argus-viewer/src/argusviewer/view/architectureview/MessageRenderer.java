@@ -37,7 +37,6 @@ public class MessageRenderer extends AbstractShapeRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected Shape getRawShape(VisualItem item) {
 
 		String sourceName = (String) item.get(Message.SOURCENAME_FIELDNAME);

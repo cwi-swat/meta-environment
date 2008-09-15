@@ -46,8 +46,6 @@ public class ToolLayout extends Layout {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public void run(double frac) {
 		log.debug("ToolLayout run called");
 

@@ -39,8 +39,6 @@ public class ToolbusSingletonLayout extends Layout {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public void run(double frac) {
 		log.debug("run called");		
 		

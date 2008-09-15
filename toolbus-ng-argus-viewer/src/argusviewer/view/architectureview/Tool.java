@@ -12,7 +12,6 @@ import prefuse.data.Schema;
  * @author Frank Oppedijk
  *
  */
-@SuppressWarnings("unchecked")
 /*
  * The Prefuse Tuple base class uses the raw 'Class' type,
  * which means this class needs to use it too. We do not want
@@ -50,7 +49,6 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected String[] getColumns() {
 		return COLUMNS;
 	}

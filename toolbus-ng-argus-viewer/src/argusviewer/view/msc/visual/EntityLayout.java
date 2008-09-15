@@ -43,8 +43,6 @@ public class EntityLayout extends Layout {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public void run(double frac) {
 		double currentX = HORIZONTAL_MARGIN + EntityRenderer.ENTITY_BASESIZE;
 		double currentY = 0;

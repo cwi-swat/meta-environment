@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * @author Riccardo Lippolis
  * @author Johnny Eradus
  */
-@SuppressWarnings("unchecked")
 /*
  * The Prefuse Tuple base class uses the raw 'Class' type,
  * which means this class needs to use it too. We do not want
@@ -110,7 +109,6 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected String[] getColumns() {
 		return COLUMNS;
 	}
@@ -244,7 +242,6 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -274,7 +271,6 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int hashCode() {
 		int result;
 		result = (m_message != null ? m_message.hashCode() : 0);

@@ -51,7 +51,6 @@ public class SyncedZoomControl extends AbstractZoomControl {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
 
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_ZOOM_BUTTON)) {
@@ -74,7 +73,6 @@ public class SyncedZoomControl extends AbstractZoomControl {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
 
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_ZOOM_BUTTON)) {
@@ -112,7 +110,6 @@ public class SyncedZoomControl extends AbstractZoomControl {
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
 	public void itemPressed(VisualItem item, MouseEvent e) {
         mousePressed(e);
     }
@@ -120,7 +117,6 @@ public class SyncedZoomControl extends AbstractZoomControl {
     /**
 	 * {@inheritDoc}
 	 */
-    @Override
 	public void itemDragged(VisualItem item, MouseEvent e) {
     	mouseDragged(e);
     }

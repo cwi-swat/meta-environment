@@ -38,8 +38,6 @@ public class StatementLayout extends Layout {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public void run(double frac) {
 		double currentX;
 		double currentY = VERTICAL_OFFSET;

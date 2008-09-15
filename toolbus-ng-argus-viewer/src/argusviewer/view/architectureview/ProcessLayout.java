@@ -55,8 +55,6 @@ public class ProcessLayout extends Layout {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public void run(double frac) {
 		int xSlotsUsed = 0;
 		m_processesLines = 1;

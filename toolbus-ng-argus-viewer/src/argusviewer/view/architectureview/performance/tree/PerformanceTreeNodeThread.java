@@ -73,7 +73,6 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 * 
 	 * @return the name of the {@link PerformanceTreeNodeThread}
 	 */
-	@Override
 	public String toString() {
 		return getToolName();
 	}

@@ -52,7 +52,6 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected Shape getRawShape(VisualItem item) {
 		m_maxY = getYMaximum(item.getVisualization());
 		GeneralPath swimlane;

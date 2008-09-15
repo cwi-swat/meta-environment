@@ -116,7 +116,6 @@ public class Statement extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected String[] getColumns() {
 		return COLUMNS;
 	}
@@ -261,7 +260,6 @@ public class Statement extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -285,7 +283,6 @@ public class Statement extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int hashCode() {
 		int result;
 		result = (m_statement != null ? m_statement.hashCode() : 0);

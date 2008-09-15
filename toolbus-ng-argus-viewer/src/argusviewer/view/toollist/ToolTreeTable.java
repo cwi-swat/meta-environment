@@ -129,7 +129,6 @@ public class ToolTreeTable extends JTreeTable {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object getValueAt(int row, int column) {
 		try {
 			return super.getValueAt(row, column);

@@ -42,7 +42,6 @@ public class WheelScrollControl extends ControlAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void itemWheelMoved(VisualItem visualItem, MouseWheelEvent mouseEvent) {
 
 		mouseWheelMoved(mouseEvent);
@@ -51,7 +50,6 @@ public class WheelScrollControl extends ControlAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void mouseWheelMoved(MouseWheelEvent mouseEvent) {
 
 		Display display = (Display) mouseEvent.getComponent();

@@ -36,7 +36,6 @@ public class ConsoleViewOutputStream extends OutputStream {
 	 * @param b	The value to be printed. This is a byte value
 	 * @see java.io.OutputStream#write(int)
 	 */
-	@Override
 	public void write(int b) throws IOException {
 		m_outputBuffer += String.valueOf((char) b);
 		

@@ -41,7 +41,6 @@ public class ToolbusSingleton  extends AbstractTuple {
 	 * class.
 	 * @return COLUMNS
 	 */
-	@Override
 	protected String[] getColumns() {
 		log.debug("getColumns called");
 		return COLUMNS;

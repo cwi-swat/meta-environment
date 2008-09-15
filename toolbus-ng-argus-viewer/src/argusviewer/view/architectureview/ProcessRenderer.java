@@ -38,7 +38,6 @@ public class ProcessRenderer extends AbstractArchitectureRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected Shape getRawShape(VisualItem item) {
 		log.debug("getRawShape called");		
 

@@ -45,7 +45,6 @@ public class SyncedHorizontalPanControl extends PanControl {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
 
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
@@ -56,7 +55,6 @@ public class SyncedHorizontalPanControl extends PanControl {
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
 	public void mouseDragged(MouseEvent mouseEvent) {
 
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
@@ -80,7 +78,6 @@ public class SyncedHorizontalPanControl extends PanControl {
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
 	public void mouseReleased(MouseEvent mouseEvent) {
 
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
@@ -91,7 +88,6 @@ public class SyncedHorizontalPanControl extends PanControl {
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
 	public void itemPressed(VisualItem item, MouseEvent e) {
         mousePressed(e);
     }
@@ -99,7 +95,6 @@ public class SyncedHorizontalPanControl extends PanControl {
     /**
 	 * {@inheritDoc}
 	 */
-    @Override
 	public void itemDragged(VisualItem item, MouseEvent e) {
     	mouseDragged(e);
     }
@@ -107,7 +102,6 @@ public class SyncedHorizontalPanControl extends PanControl {
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
 	public void itemReleased(VisualItem item, MouseEvent e) {
     	mouseReleased(e);
     }

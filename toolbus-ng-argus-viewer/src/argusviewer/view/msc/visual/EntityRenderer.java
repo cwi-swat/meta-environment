@@ -55,7 +55,6 @@ public class EntityRenderer extends AbstractMSCRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected Shape getRawShape(VisualItem item) {
 
 		item.setStroke(STROKE);

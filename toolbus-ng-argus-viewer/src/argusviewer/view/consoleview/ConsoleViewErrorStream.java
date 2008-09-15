@@ -47,7 +47,6 @@ public class ConsoleViewErrorStream extends OutputStream {
 	 *            The value to be printed. This is a byte value
 	 * @see java.io.OutputStream#write(int)
 	 */
-	@Override
 	public void write(int b) throws IOException {		
 		//check the original stream and copy the output to there.
 		if (m_originalErrorStream != null) {

@@ -147,7 +147,6 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected String[] getColumns() {
 		return COLUMNS;
 	}

@@ -18,7 +18,6 @@ import argusviewer.view.processlist.data.ProcessTreeNode.BreakPointType;
  * @author H.Baggelaar
  * @author Jeldert Pol
  */
-@SuppressWarnings("serial")
 public class BreakPointCellRenderer implements TableCellRenderer {
 
 	public static final ImageIcon ICON_LINE = new ImageIcon(

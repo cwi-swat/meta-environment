@@ -23,7 +23,6 @@ public class MSCVisualizationUtil {
 	 * @param visualization the prefuse visualization to check
 	 * @return true if the target Entity is visible
 	 */
-	@SuppressWarnings("unchecked")
 	public static boolean isTargetEntityVisible(Visualization visualization, VisualItem currentStatement) {
 		int timestamp = ((Integer) currentStatement.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
 

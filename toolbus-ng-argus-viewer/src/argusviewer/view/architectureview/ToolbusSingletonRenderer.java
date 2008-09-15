@@ -33,7 +33,6 @@ public class ToolbusSingletonRenderer extends AbstractMSCRenderer {
 	 * @param item not used.
 	 * @return the square to be drawn.
 	 */
-	@Override
 	protected Shape getRawShape(VisualItem item) {
 		log.debug("getRawShape called");
 		

@@ -43,7 +43,6 @@ public class ToolRenderer extends AbstractArchitectureRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	protected Shape getRawShape(VisualItem item) {
 
 		item.setStroke(STROKE);
@@ -81,7 +80,6 @@ public class ToolRenderer extends AbstractArchitectureRenderer {
 		return rectangle;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private Line2D getLine(VisualItem item) {
 		
 		Line2D line = new Line2D.Double();

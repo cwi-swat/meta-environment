@@ -33,8 +33,6 @@ public class MSCToolTipControl extends ControlAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
-	@SuppressWarnings("unchecked")
 	public void itemEntered(VisualItem item, MouseEvent e) {
         Display display = (Display) e.getSource();
 
@@ -163,7 +161,6 @@ public class MSCToolTipControl extends ControlAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
     public void itemExited(VisualItem item, MouseEvent e) {
         Display display = (Display) e.getSource();
         display.setToolTipText(null);

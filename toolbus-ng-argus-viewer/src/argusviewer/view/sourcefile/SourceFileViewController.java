@@ -19,7 +19,6 @@ import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 
-
 /**
  * Controls different script-files with their panels used by the toolbus.
  * @author Qais & Bas
@@ -29,7 +28,6 @@ import toolbus.tool.ToolInstance;
  * @author Tigran Kalaidjan
  * 
  */
-@SuppressWarnings("serial")
 public class SourceFileViewController extends Observable implements IView, IControlListener, IFileBreakPointListener, IBreakPointHitListener, IFocusListener {
 
 	private Map<String, SourceFilePanel> m_sourceCodeTabs; 	//m_sourceCodeTabs contains a table scripts and panels

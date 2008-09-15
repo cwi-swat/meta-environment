@@ -45,7 +45,6 @@ import aterm.ATerm;
  * @author Tigran Kalaidjan
  * @author Jeldert Pol
  */
-@SuppressWarnings({ "serial", "unchecked" })
 public class ArchitectureController implements IControlListener, IProcessInstanceControlListener, IToolControlListener, IPerformanceControlListener {
 
 	private DataComm m_dataComm;
