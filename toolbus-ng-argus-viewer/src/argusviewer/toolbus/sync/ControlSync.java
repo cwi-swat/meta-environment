@@ -51,7 +51,7 @@ public class ControlSync {
 	 * constructor for filter synchronizator
 	 * @param debugToolbus the toolbus instance
 	 */
-	public ControlSync(DebugToolBus debugToolbus) {
+	public ControlSync(DebugToolBus debugToolbus){
 		m_debugToolBus = debugToolbus;
 		
 		m_currentProcesses = new ArrayList<ProcessInstance>();
