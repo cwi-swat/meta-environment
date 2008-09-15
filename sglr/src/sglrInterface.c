@@ -171,6 +171,10 @@ ERR_Summary SGLR_getErrorSummary() {
   return ERR_getManagerSummary();
 }
 
+void SGLR_resetErrorSummary() {
+  ERR_resetErrorManager();
+}
+
 /** \todo reimplement ambiguity as error flag */
 #if 0
 static ERR_Error createAmbiguityError(int numberOfAmbiguities, ATerm ambtrack) {

@@ -25,6 +25,7 @@ int SGLR_loadParseTable(const char *parseTableName, PTBL_ParseTable tbl);
 ATbool SGLR_isParseTableLoaded(const char *parseTableName);
 
 ERR_Summary SGLR_getErrorSummary();
+void SGLR_resetErrorSummary();
 PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName);
 
 #endif  /* _SGLR_INTERFACE_H_ */

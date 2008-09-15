@@ -1,5 +1,9 @@
 $Id$
 
+Mon Sep 15 16:50:44 CEST 2008 <jurgenv@cwi.nl>
+ * src/sglrInterface.[ch]: added function to reset parse error
+   summary (for API).
+
 Mon Jun  9 13:23:37 CEST 2008 <jurgenv@cwi.nl>
  * sglr.pc.in: Bumped version to 4.5.2 since SDF needs to be released.
 
