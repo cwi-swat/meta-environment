@@ -11,8 +11,7 @@ import argusviewer.util.ArgusSettings;
  */
 public abstract class ApplicationSettings {
 	private static ArgusSettings settings = ArgusSettings.getInstance();
-	private static final String APPLICATION = "Application";
-	private static final String HISTORY = "History";
+	private static final String APPLICATION_HISTORY = "application.history";
 	private static final int HISTORY_LIMIT_DEFAULT = 50;
 
 	private static int historyLimit = -1; // -1 set to be able to check if the
@@ -26,7 +25,7 @@ public abstract class ApplicationSettings {
 	 *            history limit in steps
 	 */
 	public static void setHistoryLimit(int steps) {
-		settings.setAttribute(APPLICATION, HISTORY, "" + steps);
+		settings.setAttribute(APPLICATION_HISTORY, String.valueOf(steps));
 		historyLimit = steps;
 	}
 
@@ -37,8 +36,7 @@ public abstract class ApplicationSettings {
 	 */
 	public static int getHistoryLimit() {
 		if (historyLimit == -1) {
-			String history = settings.getAttributeValue(APPLICATION, HISTORY,
-					String.valueOf(HISTORY_LIMIT_DEFAULT));
+			String history = settings.getAttribute(APPLICATION_HISTORY, String.valueOf(HISTORY_LIMIT_DEFAULT));
 			try {
 				historyLimit = Integer.parseInt(history);
 			} catch (NumberFormatException nfe) {

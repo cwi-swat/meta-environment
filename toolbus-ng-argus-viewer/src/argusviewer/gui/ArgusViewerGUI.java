@@ -27,11 +27,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
-import argusviewer.ExceptionReporter;
-import argusviewer.toolbus.DataComm;
-import argusviewer.util.ArgusSettings;
-import argusviewer.view.IView;
-
 import net.infonode.docking.RootWindow;
 import net.infonode.docking.SplitWindow;
 import net.infonode.docking.TabWindow;
@@ -42,6 +37,10 @@ import net.infonode.docking.util.DockingUtil;
 import net.infonode.docking.util.ViewMap;
 import net.infonode.gui.laf.InfoNodeLookAndFeel;
 import net.infonode.util.Direction;
+import argusviewer.ExceptionReporter;
+import argusviewer.toolbus.DataComm;
+import argusviewer.util.ArgusSettings;
+import argusviewer.view.IView;
 
 /**
  * Represents the main GUI window that organizes the other views and controllers using a BorderLayout.
@@ -138,8 +137,8 @@ public final class ArgusViewerGUI extends JFrame implements Observer {
 
 		int defaultWidth = (int) (Toolkit.getDefaultToolkit().getScreenSize().width * DEFAULT_SIZE_MULTIPLIER);
 		int defaultHeight = (int) (Toolkit.getDefaultToolkit().getScreenSize().height * DEFAULT_SIZE_MULTIPLIER);
-		int width = Integer.parseInt(ArgusSettings.getInstance().getAttributeValue("Application", "width", String.valueOf(defaultWidth)));
-		int height = Integer.parseInt(ArgusSettings.getInstance().getAttributeValue("Application", "height", String.valueOf(defaultHeight)));
+		int width = Integer.parseInt(ArgusSettings.getInstance().getAttribute("application.width", String.valueOf(defaultWidth)));
+		int height = Integer.parseInt(ArgusSettings.getInstance().getAttribute("application.height", String.valueOf(defaultHeight)));
 		this.setSize(new Dimension(width, height));
 		this.getContentPane().setLayout(new BorderLayout());
 		
@@ -311,12 +310,14 @@ public final class ArgusViewerGUI extends JFrame implements Observer {
 	 * Shutdown the ArgusViewer and save the settings to the file.
 	 */
 	public void shutdown() {
-		//storeWindowLocations();		
-		ArgusSettings.getInstance().setAttribute("Application", "height", String.valueOf(this.getHeight()));
-		ArgusSettings.getInstance().setAttribute("Application", "width", String.valueOf(this.getWidth()));
-		ArgusSettings.getInstance().storeToFile(ArgusSettings.SETTINGS_FILE);
-		this.dispose();
-		System.exit(0);
+		//storeWindowLocations();	
+		ArgusSettings settings = ArgusSettings.getInstance();
+		settings.setAttribute("application.height", String.valueOf(this.getHeight()));
+		settings.setAttribute("application.width", String.valueOf(this.getWidth()));
+		settings.save();
+		
+		dispose();
+		m_dataComm.shutdown();
 	}
 	
 	/*private void storeWindowLocations() {

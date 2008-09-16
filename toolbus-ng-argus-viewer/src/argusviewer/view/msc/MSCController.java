@@ -121,6 +121,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	
 	public void initialize(){
 		Thread mscVisualizationSchedulerThread = new Thread(m_mscVisualizationScheduler);
+		mscVisualizationSchedulerThread.setDaemon(true);
 		mscVisualizationSchedulerThread.start();
 	}
 
@@ -528,8 +529,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 */
 	protected boolean isStatementFocusEnabled() {
 		ArgusSettings settings = ArgusSettings.getInstance();
-		String focusSetting = settings.getAttributeValue("MSC",
-				"statementFocus", "false");
+		String focusSetting = settings.getAttribute("msc.statementfocus", "false");
 		return focusSetting.equals("true");
 	}
 

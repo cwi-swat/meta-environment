@@ -28,6 +28,7 @@ public class MSCVisualizationScheduler implements Runnable{
 		running = true;
 		while(running){
 			if(receivedWork){
+				receivedWork = false;
 				SwingUtilities.invokeLater(new Runnable(){
 					public void run(){
 						controller.processVisualization();

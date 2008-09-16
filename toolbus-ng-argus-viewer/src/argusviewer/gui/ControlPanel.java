@@ -71,8 +71,8 @@ public class ControlPanel extends JPanel implements ActionListener,
 		m_gui = gui;
 
 		// get the value from the settings or refer to standard settings
-		String runSpeedSlider = ArgusSettings.getInstance().getAttributeValue(
-				"ControlPanel", "RunSpeedSlider", String.valueOf(RUN_SPEED_INIT));
+		String runSpeedSlider = ArgusSettings.getInstance().getAttribute(
+				"controlpanel.runspeedslider", String.valueOf(RUN_SPEED_INIT));
 		
 		m_dataComm.getControlSync().setSteppingDelay(
 				Integer.parseInt(runSpeedSlider));
@@ -181,10 +181,8 @@ public class ControlPanel extends JPanel implements ActionListener,
 					m_runSpeedSlider.getValue());
 			setSliderValue();
 			ArgusSettings.getInstance().setAttribute(
-					"ControlPanel",
-					"RunSpeedSlider",
-					String.valueOf(m_dataComm.getControlSync()
-							.getSteppingDelay()));
+					"controlpanel.runspeedslider",
+					String.valueOf(m_dataComm.getControlSync().getSteppingDelay()));
 		} else {
 			// update the label and the slider.
 			m_runSpeedSlider.setValue(m_dataComm.getControlSync()

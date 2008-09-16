@@ -77,10 +77,10 @@ final class SettingsDialog extends JDialog implements ActionListener {
 		m_autoCollapseCheckBox = new JCheckBox("Collapse whitespace between statements");
 
 		ArgusSettings settings = ArgusSettings.getInstance();
-		boolean statementFocusEnabled = settings.getAttributeValue("MSC", "statementFocus", "false").equals("true");
+		boolean statementFocusEnabled = settings.getAttribute("msc.statementfocus", "false").equals("true");
 		m_focusCheckBox.setSelected(statementFocusEnabled);
 
-		boolean collapseEnabled = settings.getAttributeValue("MSC", "collapse", "true").equals("true");
+		boolean collapseEnabled = settings.getAttribute("msc.collapse", "true").equals("true");
 		m_autoCollapseCheckBox.setSelected(collapseEnabled);
 
 		mscPanel.setBorder(BorderFactory.createTitledBorder(FOCUSTITLE));
@@ -183,9 +183,9 @@ final class SettingsDialog extends JDialog implements ActionListener {
 	 */
 	private void saveFocusSettings(ArgusSettings settings) {
 		if (m_focusCheckBox.isSelected()) {
-			settings.setAttribute("MSC", "statementFocus", "true");
+			settings.setAttribute("msc.statementFocus", "true");
 		} else {
-			settings.setAttribute("MSC", "statementFocus", "false");
+			settings.setAttribute("msc.statementFocus", "false");
 		}
 	}
 
@@ -196,9 +196,9 @@ final class SettingsDialog extends JDialog implements ActionListener {
 	 */
 	private void saveCollapseSettings(ArgusSettings settings) {
 		if (m_autoCollapseCheckBox.isSelected()) {
-			settings.setAttribute("MSC", "collapse", "true");
+			settings.setAttribute("msc.collapse", "true");
 		} else {
-			settings.setAttribute("MSC", "collapse", "false");
+			settings.setAttribute("msc.collapse", "false");
 		}
 	}
 }

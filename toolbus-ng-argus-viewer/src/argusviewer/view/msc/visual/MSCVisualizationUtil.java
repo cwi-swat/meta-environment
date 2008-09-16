@@ -83,7 +83,7 @@ public class MSCVisualizationUtil {
 	 */
 	public static boolean isStatementCollapseEnabled() {
 		ArgusSettings settings = ArgusSettings.getInstance();
-		String collapseSetting = settings.getAttributeValue("MSC", "collapse", "true");
+		String collapseSetting = settings.getAttribute("msc.collapse", "true");
 		return collapseSetting.equals("true");
 	}
 

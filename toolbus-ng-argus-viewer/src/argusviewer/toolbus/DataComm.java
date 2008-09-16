@@ -277,4 +277,8 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
     private synchronized void incrementTick() {
     	m_tick++;
     }
+    
+    public void shutdown(){
+    	m_debugToolbus.shutdown(m_debugToolbus.getTBTermFactory().makeList());
+    }
 }
