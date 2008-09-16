@@ -1,6 +1,7 @@
 package argusviewer;
 
 import java.util.ArrayList;
+
 import argusviewer.gui.ArgusViewerGUI;
 import argusviewer.toolbus.DataComm;
 import argusviewer.view.IView;
