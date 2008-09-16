@@ -184,7 +184,6 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * Get all the processes and tools currently running from the toolbus.
 	 */
 	private void populateEntitiesList() {
-
 		for (ProcessInstance process : m_dataCommunication.getControlSync()
 				.getProcesses()) {
 			m_mscData.addEntity(new Entity(process.getProcessId(), process
@@ -216,9 +215,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 *            In case of a message, this shows the receiving process or tool
 	 *            instances
 	 */
-	public void stepExecuted(int tick, ProcessInstance processInstance,
-			StateElement executedStateElement, ProcessInstance[] partners) {
-
+	public void stepExecuted(int tick, ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners) {
 		m_latestTick = tick;
 
 		String executingProcessId = processInstance.getProcessName()
@@ -257,14 +254,14 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * @return The type of Message, or null if the stateElement does not
 	 *         represent a Message
 	 */
-	protected Message.Type getMessageType(StateElement statement) {
+	protected Message.Type getMessageType(StateElement statement){
 		Class< ? extends StateElement> statementClass = statement.getClass();
 
-		if (Statement.SYNC_COMMUNICATION.contains(statementClass)) {
+		if(Statement.SYNC_COMMUNICATION.contains(statementClass)){
 			return Message.Type.SYNC;
-		} else if (Statement.ASYNC_COMMUNICATION.contains(statementClass)) {
+		}else if(Statement.ASYNC_COMMUNICATION.contains(statementClass)){
 			return Message.Type.ASYNC;
-		} else if (Statement.TOOL_COMMUNICATION.contains(statementClass)) {
+		}else if(Statement.TOOL_COMMUNICATION.contains(statementClass)){
 			return Message.Type.TOOLCOMM;
 		}
 

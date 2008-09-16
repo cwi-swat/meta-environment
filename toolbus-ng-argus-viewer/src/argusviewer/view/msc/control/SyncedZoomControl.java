@@ -83,7 +83,7 @@ public class SyncedZoomControl extends AbstractZoomControl {
 			}
 
 			int currentVerticalMousePosition = mouseEvent.getY();
-			int verticalMovement = currentVerticalMousePosition - m_verticalMouseDownPosition;
+			int verticalMovement = m_verticalMouseDownPosition - currentVerticalMousePosition;
 			double zoomScale = calculateZoom(verticalMovement);
 
 			zoom(pannedDisplay, m_zoomCenter, zoomScale, false);
@@ -104,7 +104,7 @@ public class SyncedZoomControl extends AbstractZoomControl {
 	 * @return the scale factor
 	 */
 	protected static double calculateZoom(int verticalMovement) {
-		return 1 + verticalMovement / ZOOM_DIVIDER;
+		return (verticalMovement / ZOOM_DIVIDER) + 1;
 	}
 
 	/**
