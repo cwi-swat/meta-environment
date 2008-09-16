@@ -29,8 +29,7 @@ public class SourceFileTableModel extends AbstractTableModel {
 	 * @param source the source of an toolbus file. The constructor expects
 	 * source code to be displayed.
 	 */
-	public SourceFileTableModel(String source) {
-				
+	public SourceFileTableModel(String source){
 		String sourceFile = source;
 		m_lineNumbers = getTextLineNumber(sourceFile);
 		m_sourceLines = new Object [m_lineNumbers][COLUMN_COUNT];
@@ -51,7 +50,7 @@ public class SourceFileTableModel extends AbstractTableModel {
 			String firstLine = sourceFile.substring(0, firstEndLine);
 			m_sourceLines[index][breakPointPosition] = Boolean.FALSE;
 			m_sourceLines[index][sourceCodeLineNumber] = Integer.valueOf(index + 1);
-			firstLine = firstLine.replaceAll("\t", "    "); // object array ignores tab keys  
+			firstLine = firstLine.replaceAll("\t", "   "); // object array ignores tab keys  
 			m_sourceLines[index][text] = firstLine;		
 			sourceFile = sourceFile.substring(nextLine, sourceFile.length());
 			index++;

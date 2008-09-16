@@ -39,8 +39,7 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 	private static final long serialVersionUID = 5903220341851733896L;
 	
 	private JTable m_sourceCode; // is used to view the source code
-	private SourceFileTableModel m_sourceModel; // table model used to put objects in JTable  
-	private String m_source; // source code viewed on the current panel 
+	private SourceFileTableModel m_sourceModel; // table model used to put objects in JTable
 	private String m_scriptName; // the script name
 	private static final Color SELECTED_ROW_COLOR = new Color(255, 255, 215); // the color of a row if selected by user
 	private static final Color BREAKPOINT_ROW_COLOR = new Color(255, 112, 112); // the color of a row if a breakpoint is reached
@@ -64,8 +63,7 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 		m_dataComm = dataComm;
 		this.setLayout(new BorderLayout());
 		m_scriptName = scriptName;
-		m_source = source;
-		m_sourceModel = new SourceFileTableModel(m_source);
+		m_sourceModel = new SourceFileTableModel(source);
 		m_sourceCode = new JTable(m_sourceModel);
 		m_sourceCode.setSelectionBackground(SELECTED_ROW_COLOR);
 		m_sourceCode.setSelectionForeground(Color.BLACK);

@@ -12,7 +12,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -175,16 +174,12 @@ public class ProcessDetailPanel extends JPanel implements IView, IHighlightListe
 		public void valueChanged(ListSelectionEvent e){
 			clearVariablesTable();
 
-        	int row = getStateTable().getSelectedRow();
+        	int row = stateTable.getSelectedRow();
         	if(row != -1){
             	StateElement stateElement = (StateElement) stateTableModel.getValueAt(row, 0);
             	fillVariables(stateElement);
         	}
 		}
-	}
-	
-	public JTable getStateTable(){
-		return stateTable;
 	}
 	
 	private void fillProcessTables(ProcessInstance processInstance){
@@ -296,15 +291,11 @@ public class ProcessDetailPanel extends JPanel implements IView, IHighlightListe
 	}
 	
 	public void setHighlight(final ProcessInstance processInstance){
-		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				clearSubscriptionsTable();
-				clearNoteQueueTable();
-				clearStateTable();
-				clearVariablesTable();
-				fillProcessTables(processInstance);
-			}
-		});
+		clearSubscriptionsTable();
+		clearNoteQueueTable();
+		clearStateTable();
+		clearVariablesTable();
+		fillProcessTables(processInstance);
 	}
 	
     public Map<String, Container> getVisualComponents(){

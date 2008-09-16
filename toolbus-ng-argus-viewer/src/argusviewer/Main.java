@@ -13,14 +13,14 @@ import argusviewer.view.processlist.ProcessListView;
 import argusviewer.view.sourcefile.SourceFileViewController;
 import argusviewer.view.toollist.ToolListPlugin;
 
-
 /**
  * Application entry point class for the ArgusViewer.
  * 
  * @author J. van den Bos
  * @author M. van Beest
  */
-public class Main {
+public class Main{
+	
 	/**
 	 * Application entry point method for the ArgusViewer.
 	 * 
@@ -54,5 +54,4 @@ public class Main {
 		
 		dataComm.startToolBus();
 	}
-
 }

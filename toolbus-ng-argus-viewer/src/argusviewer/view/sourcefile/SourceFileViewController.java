@@ -261,7 +261,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	}
 	
 	/**
-	 * Clears all hightlights in the sourcecodetabs.
+	 * Clears all highlights in the sourcecodetabs.
 	 */
 	private void clearAllHighlights() {
 		for (SourceFilePanel panel : m_sourceCodeTabs.values()) {
