@@ -22,7 +22,6 @@ import prefuse.Visualization;
  */
 
 public class ArchitecturePlugin implements IView {
-
 	private static final String PLUGIN_NAME = "Architecture View";
 	private static final String PREFERRED_POSITION = "TopRight";
 

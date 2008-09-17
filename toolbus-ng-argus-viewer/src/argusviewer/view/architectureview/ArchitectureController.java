@@ -200,7 +200,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		}
 
 		// If a message has been sent, add it to the data model
-		Enumeration< String > enumerator = messageReceivers.keys();
+		Enumeration<String> enumerator = messageReceivers.keys();
 		while (enumerator.hasMoreElements()) {	
 			String targetName = enumerator.nextElement();
 			m_archData.addMessage(new Message(getMessageFromStateElement(executedStatementString), 

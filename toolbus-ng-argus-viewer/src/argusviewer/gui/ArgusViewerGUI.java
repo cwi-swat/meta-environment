@@ -137,8 +137,9 @@ public final class ArgusViewerGUI extends JFrame implements Observer {
 
 		int defaultWidth = (int) (Toolkit.getDefaultToolkit().getScreenSize().width * DEFAULT_SIZE_MULTIPLIER);
 		int defaultHeight = (int) (Toolkit.getDefaultToolkit().getScreenSize().height * DEFAULT_SIZE_MULTIPLIER);
-		int width = Integer.parseInt(ArgusSettings.getInstance().getAttribute("application.width", String.valueOf(defaultWidth)));
-		int height = Integer.parseInt(ArgusSettings.getInstance().getAttribute("application.height", String.valueOf(defaultHeight)));
+		ArgusSettings settings = ArgusSettings.getInstance();
+		int width = Integer.parseInt(settings.getAttribute("application.width", String.valueOf(defaultWidth)));
+		int height = Integer.parseInt(settings.getAttribute("application.height", String.valueOf(defaultHeight)));
 		this.setSize(new Dimension(width, height));
 		this.getContentPane().setLayout(new BorderLayout());
 		
