@@ -17,7 +17,7 @@ public class MSCVisualizationScheduler implements Runnable{
 		public volatile boolean notified = false;
 	}
 	
-	public MSCVisualizationScheduler(MSCController controller) {
+	public MSCVisualizationScheduler(MSCController controller){
 		this.controller = controller;
 
 		receivedWork = false;
