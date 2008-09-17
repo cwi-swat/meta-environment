@@ -898,8 +898,6 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 						long userTime = tmxb.getThreadUserTime(threadIds[i]);
 						long systemTime = tmxb.getThreadCpuTime(threadIds[i]) - userTime;
 						
-						if((userTime + systemTime) <= 0) continue;
-						
 						ATerm userTimeTerm = factory.makeAppl(factory.makeAFun("user-time", 1, false), factory.makeInt(((int) (userTime / 1000000))));
 						ATerm systemTimeTerm = factory.makeAppl(factory.makeAFun("system-time", 1, false), factory.makeInt(((int) (systemTime / 1000000))));
 						ATerm thread = factory.makeAppl(factory.makeAFun(threadName, 2, false), userTimeTerm, systemTimeTerm);
