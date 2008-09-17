@@ -394,12 +394,20 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 				});
 				break;
 			case PERFORMANCESTATS:
-				ATerm performaceStats = getPerformanceStats();
-				sendTerm(PERFORMANCESTATS, performaceStats);
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						ATerm performaceStats = getPerformanceStats();
+						sendTerm(PERFORMANCESTATS, performaceStats);
+					}
+				});
 				break;
 			case DEBUGPERFORMANCESTATS:
-				ATerm debugPerformaceStats = getPerformanceStats();
-				sendTerm(DEBUGPERFORMANCESTATS, debugPerformaceStats);
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						ATerm debugPerformaceStats = getPerformanceStats();
+						sendTerm(DEBUGPERFORMANCESTATS, debugPerformaceStats);
+					}
+				});
 				break;
 			case END:
 				connected = false;
