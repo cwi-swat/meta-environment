@@ -341,12 +341,20 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				});
 				break;
 			case PERFORMANCESTATS:
-				ATerm performanceStats = doGetPerformanceStats();
-				send(PERFORMANCESTATS, performanceStats);
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						ATerm performanceStats = doGetPerformanceStats();
+						send(PERFORMANCESTATS, performanceStats);
+					}
+				});
 				break;
 			case DEBUGPERFORMANCESTATS:
-				ATerm debugPerformanceStats = doGetPerformanceStats();
-				send(DEBUGPERFORMANCESTATS, debugPerformanceStats);
+				workerQueue.execute(new Runnable(){
+					public void run(){
+						ATerm debugPerformanceStats = doGetPerformanceStats();
+						send(DEBUGPERFORMANCESTATS, debugPerformanceStats);
+					}
+				});
 				break;
 			default:
 				LoggerFactory.log("Unkown operation id: " + operation, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
@@ -736,6 +744,7 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 			
 			/**
 			 * Default constructor.
+			 * 
 			 * @param threadGroup
 			 *            The thread group to join.
 			 */

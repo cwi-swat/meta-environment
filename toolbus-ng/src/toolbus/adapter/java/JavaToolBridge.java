@@ -559,8 +559,6 @@ public class JavaToolBridge extends ToolBridge{
 						long userTime = tmxb.getThreadUserTime(threadIds[i]);
 						long systemTime = tmxb.getThreadCpuTime(threadIds[i]) - userTime;
 						
-						if((userTime + systemTime) <= 0) continue;
-						
 						ATerm userTimeTerm = termFactory.makeAppl(termFactory.makeAFun("user-time", 1, false), termFactory.makeInt(((int) (userTime / 1000000))));
 						ATerm systemTimeTerm = termFactory.makeAppl(termFactory.makeAFun("system-time", 1, false), termFactory.makeInt(((int) (systemTime / 1000000))));
 						ATerm thread = termFactory.makeAppl(termFactory.makeAFun(threadName, 2, false), userTimeTerm, systemTimeTerm);
