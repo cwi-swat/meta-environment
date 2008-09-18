@@ -203,7 +203,11 @@ public class ToolBus{
 	 * Get the current list of processes.
 	 */
 	public List<ProcessInstance> getProcesses(){
-		return processes;
+		// TODO This method has some concurrency issues.
+		List<ProcessInstance> processInstances = new ArrayList<ProcessInstance>();
+		processInstances.addAll(processes);
+		
+		return processInstances;
 	}
 	
 	/**
