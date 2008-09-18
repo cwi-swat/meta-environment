@@ -193,7 +193,7 @@ EOMSG
       version = target.revision.checkout.extract_version
       @log.info("**************##### Package: #{component}-#{version}")
       if @store.has_release_for_package_version(component, version) &&
-          !@store.has_item_for_target?(target) then
+          !@store.has_item_for_target_modulo_config_and_host?(target) then
         @log.warn("Package #{component} has been released already as version #{version}!")      
         email_maintainer(target)
       end

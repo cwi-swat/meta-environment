@@ -363,6 +363,12 @@ module Model
       return item
     end
 
+    def has_item_for_target_modulo_config_and_host?(target)
+      h, c, r = host_config_revision(target.host, target.config, target.revision)
+      item = SiItem.find(:first, :conditions => ['si_revision_id = ?', r.id])
+      return !item.nil?
+    end
+
     ## Refactor the three below!!!
     def latest_item(host, config, revision)
       h, c, r = host_config_revision(host, config, revision)
