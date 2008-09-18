@@ -163,6 +163,13 @@ EOQ
     def email_maintainer(target)
       target.revision.checkout.extract_emails.each do |addr|
         msgstr = <<EOMSG
+From: Sisyphus <#{@mailer.from_address}>
+To: #{address}
+Subject: Version bump required in #{target.revision.component}
+Date: #{Time.now}
+Message-Id: <#{Time.now}@sisyphus.meta-environment.org>
+
+
 Dear #{addr},
 
 Please bump the version number of this package, because an older revision of this package has been released with the current version.
@@ -185,7 +192,8 @@ EOMSG
       component = target.revision.component
       version = target.revision.checkout.extract_version
       @log.info("**************##### Package: #{component}-#{version}")
-      if @store.has_release_for_package_version(component, version) then
+      if @store.has_release_for_package_version(component, version) &&
+          !@store.has_item_for_target?(target) then
         @log.warn("Package #{component} has been released already as version #{version}!")      
         email_maintainer(target)
       end

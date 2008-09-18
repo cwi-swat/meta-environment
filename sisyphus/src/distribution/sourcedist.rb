@@ -37,12 +37,18 @@ module Distribution
       `tar cf - #{newdir} | gzip > #{source_dist_path(@item)}`
       generate_package_file(@item)
 
+      s = source_dist_path(@item)
+      p = package_path(@item)
       if @source_dist_dir =~ /^ssh:\/\/(.*)$/ then
-        `scp #{source_dist_path(@item)} $1`
-        `scp #{package_path(@item)} $1`
+        path = $1
+        @log.info("Secure opying #{s} and #{p} to: #{path}...")
+        `scp #{s} #{path}`
+        `scp #{p} #{path}`
       else
-        `mv #{source_dist_path(@item)} #{@source_dist_dir}`
-        `mv #{package_path(@item)} #{@source_dist_dir}`        
+        path = @source_dist_dir
+        @log.info("Copying #{s} and #{p} to: #{path}...")
+        `mv #{s} #{path}`
+        `mv #{p} #{path}`        
       end
 
     end
