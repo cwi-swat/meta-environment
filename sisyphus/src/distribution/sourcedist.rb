@@ -44,11 +44,13 @@ module Distribution
         @log.info("Secure opying #{s} and #{p} to: #{path}...")
         `scp #{s} #{path}`
         `scp #{p} #{path}`
+        `scp #{p}.af #{path}`        
       else
         path = @source_dist_dir
         @log.info("Copying #{s} and #{p} to: #{path}...")
         `mv #{s} #{path}`
-        `mv #{p} #{path}`        
+        `mv #{p} #{path}`
+        `mv #{p}.af #{path}`
       end
 
     end
