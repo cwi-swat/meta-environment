@@ -36,6 +36,15 @@ module Distribution
       @log.info("Creating #{source_dist_path(@item)}")
       `tar cf - #{newdir} | gzip > #{source_dist_path(@item)}`
       generate_package_file(@item)
+
+      if @source_dist_dir =~ /^ssh:\/\/(.*)$/ then
+        `scp #{source_dist_path(@item)} $1`
+        `scp #{package_path(@item)} $1`
+      else
+        `mv #{source_dist_path(@item)} #{@source_dist_dir}`
+        `mv #{package_path(@item)} #{@source_dist_dir}`        
+      end
+
     end
 
     private
@@ -98,16 +107,20 @@ module Distribution
     end
 
     def source_dist_path(item)
-      return File.join(@source_dist_dir, dist_name(item))
+      return File.join(@checkout_root, dist_name(item))
     end
     
     def collect_url(item)
       return File.join(@collect_url, dist_name(item))
     end
 
+    def package_path(item)
+      File.join(@checkout_root, "#{item.name}-#{pkg_version(item)}.pkg")
+    end
+
     def generate_package_file(item)
-      `mkdir -p #{@source_dist_dir}`
-      path = File.join(@source_dist_dir, "#{item.name}-#{pkg_version(item)}.pkg")
+      #`mkdir -p #{@source_dist_dir}`
+      path = package_path(item)
       File.open(path, 'w') do |f|
         f.puts('package')
         f.puts('identification')
