@@ -765,7 +765,9 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 			super();
 			
 			this.queue = new LinkedList<Runnable>();
-			this.worker = new Worker();
+			
+			ThreadGroup toolGroup = new ThreadGroup("ToolGroup");
+			this.worker = new Worker(toolGroup);
 			worker.setDaemon(true);
 		}
 		
@@ -808,8 +810,8 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 			/**
 			 * Default constructor.
 			 */
-			public Worker(){
-				super();
+			public Worker(ThreadGroup threadGroup){
+				super(threadGroup, "Worker");
 				
 				running = true;
 			}
