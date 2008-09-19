@@ -29,11 +29,15 @@ public class MSCVisualizationScheduler implements Runnable{
 		while(running){
 			if(receivedWork){
 				receivedWork = false;
-				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
-						controller.processVisualization();
-					}
-				});
+				try{
+					SwingUtilities.invokeAndWait(new Runnable(){
+						public void run(){
+							controller.processVisualization();
+						}
+					});
+				}catch(Exception irex){
+					receivedWork = true; // Try again next iteration.
+				}
 			}
 			waitFor(MSC_REDRAW_TIMEOUT);
 		}

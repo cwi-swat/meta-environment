@@ -71,7 +71,6 @@ public class MSCVisualization {
 	 */
 	public MSCVisualization(MSCData mscData) {
 		this(mscData, new Visualization());
-
 	}
 
 	/**
@@ -95,8 +94,7 @@ public class MSCVisualization {
 	/**
 	 * Sets up the visualization information.
 	 */
-	private void createVisualization() {
-
+	private void createVisualization(){
 		m_mscData.setVisualization(m_visualization);
 
 		m_visualization.add(Entity.TABLE_NAME, m_mscData.getEntitiesTable());

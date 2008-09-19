@@ -224,12 +224,10 @@ public class MSCController implements IControlListener, IToolControlListener,
 		} else {
 			switch (msgType) {
 			case ASYNC:
-				addProcessMessage(executingProcessId, executedStatementContent,
-						partners, Message.Type.ASYNC);
+				addProcessMessage(executingProcessId, executedStatementContent, partners, Message.Type.ASYNC);
 				break;
 			case SYNC:
-				addProcessMessage(executingProcessId, executedStatementContent,
-						partners, Message.Type.SYNC);
+				addProcessMessage(executingProcessId, executedStatementContent, partners, Message.Type.SYNC);
 				break;
 			case TOOLCOMM:
 				addToolMessage(executingProcessId, executedStateElement);
@@ -276,22 +274,16 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * @param messageType
 	 *            the type of the message, i.e. Message.Type.SYNC
 	 */
-	protected void addProcessMessage(String executingProcessId,
-			String executedStatementContent,
-			ProcessInstance[] destinationProcesses, Message.Type messageType) {
-
+	protected void addProcessMessage(String executingProcessId, String executedStatementContent, ProcessInstance[] destinationProcesses, Message.Type messageType){
 		ArrayList<String> destinationProcessIds = new ArrayList<String>();
-		if (destinationProcesses != null) {
-			for (ProcessInstance destinationProcess : destinationProcesses) {
-				String destinationProcessId = destinationProcess
-						.getProcessName()
-						+ destinationProcess.getProcessId();
+		if(destinationProcesses != null){
+			for(ProcessInstance destinationProcess : destinationProcesses){
+				String destinationProcessId = destinationProcess.getProcessName() + destinationProcess.getProcessId();
 				destinationProcessIds.add(destinationProcessId);
 			}
 		}
 
-		addMessage(executingProcessId, executedStatementContent,
-				destinationProcessIds, messageType);
+		addMessage(executingProcessId, executedStatementContent, destinationProcessIds, messageType);
 	}
 
 	/**
@@ -342,15 +334,11 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * @param messageType
 	 *            the type of the message, i.e. Message.Type.TOOL
 	 */
-	protected void addMessage(String executingEntityId,
-			String executedStatementContent,
-			ArrayList<String> messageDestinationIds, Message.Type messageType) {
+	protected void addMessage(String executingEntityId, String executedStatementContent, ArrayList<String> messageDestinationIds, Message.Type messageType){
 
-		if (messageDestinationIds != null) {
-			String messageContents = ToolbusUtil
-					.getMessageFromStateElement(executedStatementContent);
-			Message message = new Message(messageContents, m_latestTick,
-					messageDestinationIds, messageType);
+		if(messageDestinationIds != null){
+			String messageContents = ToolbusUtil.getMessageFromStateElement(executedStatementContent);
+			Message message = new Message(messageContents, m_latestTick, messageDestinationIds, messageType);
 			m_mscData.addMessage(message);
 		}
 
@@ -365,10 +353,8 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * @param executedStatementContent
 	 *            the content of the executed statement
 	 */
-	protected void addStatement(String executingEntityId,
-			String executedStatementContent) {
-		Statement executedStatement = new Statement(executedStatementContent,
-				executingEntityId, m_latestTick);
+	protected void addStatement(String executingEntityId, String executedStatementContent) {
+		Statement executedStatement = new Statement(executedStatementContent, executingEntityId, m_latestTick);
 		m_latestAddedStatement = m_mscData.addStatement(executedStatement);
 
 		refreshVisualization();
@@ -380,10 +366,8 @@ public class MSCController implements IControlListener, IToolControlListener,
 	 * @param processInstance
 	 *            The process instance to be added to the MSC
 	 */
-	public void addProcessInstance(ProcessInstance processInstance) {
-		m_mscData.addEntity(new Entity(processInstance.getProcessId(),
-				processInstance.getProcessName(), Entity.Type.PROCESS, true,
-				m_latestTick));
+	public void addProcessInstance(ProcessInstance processInstance){
+		m_mscData.addEntity(new Entity(processInstance.getProcessId(), processInstance.getProcessName(), Entity.Type.PROCESS, true, m_latestTick));
 
 		refreshVisualization();
 	}

@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import argusviewer.ApplicationSettings;
 
+// TODO This class is broken and needs fixing.
 /**
  * The data tables for the Message Sequence Chart View. There are three tables:
  * - Entities: Contains a list of processes and tools;
@@ -20,27 +21,23 @@ import argusviewer.ApplicationSettings;
  * @author Hidde Baggelaar
  *
  */
-public class MSCData {
+public class MSCData{
+	private final Table m_entities;
+	private final Table m_statements;
+	private final Table m_messages;
 
-	private Table m_entities;
-	private Table m_statements;
-	private Table m_messages;
-
-	private static LinkedList<Tuple> statementList;
-	private static LinkedList<Tuple> messagesList;
+	private static LinkedList<Tuple> statementList = new LinkedList<Tuple>();
+	private static LinkedList<Tuple> messagesList = new LinkedList<Tuple>();
 	
-	private Visualization m_viz;
+	private volatile Visualization m_viz;
 	
 	/**
 	 * Default constructor.
 	 */
-	public MSCData() {
+	public MSCData(){
 		m_entities = Entity.TABLE_SCHEMA.instantiate();
 		m_statements = Statement.TABLE_SCHEMA.instantiate();
 		m_messages = Message.TABLE_SCHEMA.instantiate();
-
-		statementList = new LinkedList<Tuple>();
-		messagesList = new LinkedList<Tuple>();
 	}
 	
 	/**
@@ -48,7 +45,7 @@ public class MSCData {
 	 * 
 	 * @return The Entities table
 	 */
-	public Table getEntitiesTable() {
+	public Table getEntitiesTable(){
 		return m_entities;
 	}
 	
@@ -57,7 +54,7 @@ public class MSCData {
 	 * 
 	 * @return The Statements table
 	 */
-	public Table getStatementsTable() {
+	public Table getStatementsTable(){
 		return m_statements;
 	}
 	
@@ -66,7 +63,7 @@ public class MSCData {
 	 * 
 	 * @return The Messages table
 	 */
-	public Table getMessagesTable() {
+	public Table getMessagesTable(){
 		return m_messages;
 	}
 	
@@ -76,8 +73,10 @@ public class MSCData {
 	 * @param entity The entity to add
 	 * @return The Tuple that has been added to the Entities table
 	 */
-	public Tuple addEntity(Entity entity) {
-		return m_entities.addTuple(entity);
+	public Tuple addEntity(Entity entity){
+		synchronized(m_viz){
+			return m_entities.addTuple(entity);
+		}
 	}
 	
 	/**
@@ -89,28 +88,29 @@ public class MSCData {
 	 * @param statement The statement to add
 	 * @return The Tuple that has been added to the Statements table
 	 */
-	public Tuple addStatement(Statement statement) {
-		int historyLimit = ApplicationSettings.getHistoryLimit();
-		
-		if (historyLimit > 0) {
-			while (m_statements.getRowCount() >= historyLimit) {
-				removeStatement();
+	public Tuple addStatement(Statement statement){
+		synchronized(m_viz){
+			int historyLimit = ApplicationSettings.getHistoryLimit();
+			
+			if(historyLimit > 0){
+				while (m_statements.getRowCount() >= historyLimit){
+					removeStatement();
+				}
 			}
+	
+			Tuple stmTuple = m_statements.addTuple(statement); 
+	
+			statementList.add(stmTuple);
+			return stmTuple;
 		}
-
-		Tuple stmTuple = m_statements.addTuple(statement); 
-
-		statementList.add(stmTuple);
-		return stmTuple;
 	}
 
 	/**
 	 * Removes a statement from the MSD
 	 */
-	private void removeStatement() {
-		Tuple firstTuple = statementList.getFirst();
-
-		synchronized (m_viz) {
+	private void removeStatement(){
+		synchronized(m_viz){
+			Tuple firstTuple = statementList.getFirst();
 
 			// Remove action is synchronized to prevent PreFuse from drawing at the same time
 			removeMessage(firstTuple);
@@ -126,31 +126,30 @@ public class MSCData {
 	 * @param message The message to add
 	 * @return The Tuple that has been added to the Message table
 	 */
-	public Tuple addMessage(Message message) {
-		Tuple msgTuple = m_messages.addTuple(message); 
-		messagesList.add(msgTuple);
-		return msgTuple;
+	public Tuple addMessage(Message message){
+		synchronized(m_viz){
+			Tuple msgTuple = m_messages.addTuple(message);
+			messagesList.add(msgTuple);
+			return msgTuple;
+		}
 	}
 	
 	/**
 	 * Removes the message that originated from the given statement
 	 * @param stmTuple the message to remove
 	 */
-	protected void removeMessage(Tuple stmTuple) {
-
-		//no messages, so no need to remove any
-		if (messagesList.size() == 0) {
-			return;
-		}
-		
-		Tuple first = messagesList.getFirst();
-		int msgTimestamp = ((Integer) first.get(Message.SOURCEID_FIELDNAME)).intValue(); 
-		int stmTimestamp = ((Integer) stmTuple.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
- 
-		if (msgTimestamp == stmTimestamp) {
-
-			synchronized (m_viz) {
-				
+	protected void removeMessage(Tuple stmTuple){
+		synchronized(m_viz){
+			//no messages, so no need to remove any
+			if(messagesList.size() == 0){
+				return;
+			}
+			
+			Tuple first = messagesList.getFirst();
+			int msgTimestamp = ((Integer) first.get(Message.SOURCEID_FIELDNAME)).intValue(); 
+			int stmTimestamp = ((Integer) stmTuple.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
+	 
+			if(msgTimestamp == stmTimestamp){
 				// Remove action is synchronized to prevent PreFuse from drawing at the same time
 				m_messages.removeTuple(first);
 				messagesList.removeFirst();
@@ -179,7 +178,7 @@ public class MSCData {
 	 * Get the unmodifiable MessageList. Used for testing purposes.
 	 * @return the unmodifiable messageList
 	 */
-	public static List<Tuple> getMessagesList() {
+	public static List<Tuple> getMessagesList(){
 		return Collections.unmodifiableList(messagesList);
 	}
 }
