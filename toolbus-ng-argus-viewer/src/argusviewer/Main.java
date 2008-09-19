@@ -29,28 +29,25 @@ public class Main{
 	 * @see toolbus.viewer.DebugToolBus#DebugToolBus(String[], toolbus.viewer.IViewer, toolbus.viewer.IPerformanceMonitor)
 	 */
 	public static void main(final String[] args) throws Exception{
-		final DataComm dataComm = new DataComm(args);
+		// The ConsoleViewPanel must be initialized before the DataComm
+		// is created, because the error and output streams are cached
+		// in the ToolBus and we want them redirected to the ConsoleView.
+		ArrayList<IView> views = new ArrayList<IView>();
 		
-		javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
-			public void run() {
-				// The ConsoleViewPanel must be initialized before the DataComm
-				// is created, because the error and output streams are cached
-				// in the ToolBus and we want them redirected to the ConsoleView.
-				ArrayList<IView> views = new ArrayList<IView>();
-				views.add(new ConsoleViewPanel());			
-				
-				// Views that have the same preferred position get ordered
-				// back to front in the order they are added here.				
-				views.add(new ArchitecturePlugin(dataComm));
-				views.add(new ProcessDetailPanel(dataComm));
-				views.add(new MSCPlugin(dataComm));
-				views.add(new ProcessListView(dataComm));
-				views.add(new SourceFileViewController(dataComm));
-				views.add(new ToolListPlugin(dataComm));
-				
-				new ArgusViewerGUI(dataComm, views.toArray(new IView[views.size()]));
-			}
-		});
+		views.add(new ConsoleViewPanel());			
+		
+		DataComm dataComm = new DataComm(args);
+		
+		// Views that have the same preferred position get ordered
+		// back to front in the order they are added here.				
+		views.add(new ArchitecturePlugin(dataComm));
+		views.add(new ProcessDetailPanel(dataComm));
+		views.add(new MSCPlugin(dataComm));
+		views.add(new ProcessListView(dataComm));
+		views.add(new SourceFileViewController(dataComm));
+		views.add(new ToolListPlugin(dataComm));
+		
+		new ArgusViewerGUI(dataComm, views.toArray(new IView[views.size()]));
 		
 		dataComm.startToolBus();
 	}

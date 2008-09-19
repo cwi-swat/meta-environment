@@ -60,17 +60,6 @@ public class ControlSync{
         m_stateListeners = new ArrayList<IStateControlListener>();
 	}
 	
-
-	/**
-	 * This method triggers the run action at the toolbus. 
-	 * script will run without break and history information
-	 */
-	public void doRun(){
-		m_isToolbusStepRunning = false;
-		
-		doSteppingRun(0);
-	}
-	
 	/**
 	 * This method triggers the stepping run action. As soon as the step is executed at
 	 * the toolbus, a new doStep is triggered. 
@@ -78,10 +67,9 @@ public class ControlSync{
 	 * wait every cycle.
 	 * @param delay delay in milliseconds
 	 */
-	public void doSteppingRun(int delay){
+	public void doSteppingRun(){
 		if(!m_isToolbusStepRunning){
 			m_isToolbusStepRunning = true;
-			m_stepRunningDelay = delay;
 			
 			doStep();
 		}
@@ -92,16 +80,6 @@ public class ControlSync{
 	 */
 	public void doStep(){
 		m_debugToolBus.doStep();		
-	}
-	
-	/**
-	 * triggers steps at the toolbus
-	 * @param number number of steps triggered.
-	 */
-	public void doStep(int number){
-		for(int i = 0; i < number; i++){
-			m_debugToolBus.doStep();
-		}
 	}
 
 	/**

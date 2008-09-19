@@ -141,8 +141,7 @@ public class ControlPanel extends JPanel implements ActionListener,
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == m_startButton) {
 			// use the value set with the slider
-			m_dataComm.getControlSync().doSteppingRun(
-					m_dataComm.getControlSync().getSteppingDelay());
+			m_dataComm.getControlSync().doSteppingRun();
 		} else if (e.getSource() == m_stepButton) {
 			m_dataComm.getControlSync().doStep();
 		} else if (e.getSource() == m_stopButton) {
@@ -162,8 +161,7 @@ public class ControlPanel extends JPanel implements ActionListener,
 			
 		m_sliderValueLabel.setText(String.valueOf(value)
 				+ " sec");
-		m_runSpeedSlider.setValue(m_dataComm.getControlSync()
-				.getSteppingDelay());
+		m_runSpeedSlider.setValue(m_dataComm.getControlSync().getSteppingDelay());
 	}
 
 	/**
