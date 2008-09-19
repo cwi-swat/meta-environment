@@ -301,7 +301,7 @@ public final class ArgusViewerGUI extends JFrame implements Observer {
 			manualItem = new JMenuItem("Manual");
 			manualItem.addActionListener(new CSH.DisplayHelpFromSource(helpBroker));
 			helpMenu.add(manualItem);
-		} catch (Exception e) {
+		} catch (Exception e) { // TODO You should catch individual exceptions.
 			e.printStackTrace();
 		}
 		return helpMenu;

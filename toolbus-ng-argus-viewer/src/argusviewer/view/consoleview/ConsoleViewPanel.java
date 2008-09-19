@@ -1,6 +1,3 @@
-/**
- * 
- */
 package argusviewer.view.consoleview;
 
 import java.awt.BorderLayout;
@@ -13,12 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import argusviewer.view.IView;
 
-
 /**
  * This class implements the ConsoleView Panel for the Argus Viewer
  * 
  * @author M. van Beest
- *
  */
 public class ConsoleViewPanel extends JPanel implements IView {
 	private static final long serialVersionUID = -5391911104562410731L;

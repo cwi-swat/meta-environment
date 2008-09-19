@@ -50,7 +50,8 @@ public class SourceFileViewController extends Observable implements IView, ICont
 		
 		try {
 			updateView();
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
+			// TODO This should never occur; probably due to a concurrency problem.
 			ExceptionReporter.process(e, ExceptionReporter.ExceptionState.UNRECOVERABLE);
 		}
 	}

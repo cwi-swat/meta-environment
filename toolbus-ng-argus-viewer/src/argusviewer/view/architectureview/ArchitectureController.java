@@ -7,11 +7,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
 import toolbus.StateElement;
-import toolbus.TBTermVar;
-import toolbus.atom.Atom;
 import toolbus.atom.tool.AckEvent;
 import toolbus.atom.tool.Connect;
 import toolbus.atom.tool.DisConnect;
@@ -27,6 +23,7 @@ import toolbus.atom.tool.Terminate;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 import argusviewer.toolbus.DataComm;
+import argusviewer.util.ToolbusUtil;
 import argusviewer.view.architectureview.performance.ThreadInfo;
 import argusviewer.view.architectureview.performance.ToolPerformanceInfo;
 import argusviewer.view.architectureview.performance.tree.PerformanceTreeTable;
@@ -45,8 +42,7 @@ import aterm.ATerm;
  * @author Tigran Kalaidjan
  * @author Jeldert Pol
  */
-public class ArchitectureController implements IControlListener, IProcessInstanceControlListener, IToolControlListener, IPerformanceControlListener {
-
+public class ArchitectureController implements IControlListener, IProcessInstanceControlListener, IToolControlListener, IPerformanceControlListener{
 	private DataComm m_dataComm;
 	private ArchitectureData m_archData;
 	private ArchitectureView m_archView;
@@ -110,7 +106,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	/**
 	 * add a toolbus singleton instance
 	 */
-	public void addToolbusSingletonInstance() {
+	public void addToolbusSingletonInstance(){
 		m_archData.addToolbusSingleton(new ToolbusSingleton());
 		m_archView.updateVisualization();
 	}
@@ -118,12 +114,12 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	/**
 	 * Get all the processes and tools currently running from the toolbus.
 	 */
-	private void populateArchitectureList() {
-		for (ProcessInstance process : m_dataComm.getControlSync().getProcesses()) {
+	private void populateArchitectureList(){
+		for(ProcessInstance process : m_dataComm.getControlSync().getProcesses()){
 			addProcessInstance(process);	
 		}
 
-		for (ToolInstance tool : m_dataComm.getControlSync().getTools()) {
+		for(ToolInstance tool : m_dataComm.getControlSync().getTools()){
 			addToolInstance(tool);
 		}
 		
@@ -133,7 +129,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	/**
 	 * {@inheritDoc}
 	 */
-	public void removeProcessInstance(ProcessInstance processInstance) {
+	public void removeProcessInstance(ProcessInstance processInstance){
 		// In the architecture view, removals are not used to modify the view.
 	}
 
@@ -141,7 +137,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * {@inheritDoc}
 	 */
 	
-	public void removeToolInstance(ToolInstance toolInstance) {
+	public void removeToolInstance(ToolInstance toolInstance){
 		// In the architecture view, removals are not used to modify the view.
 	}
 
@@ -180,7 +176,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 				}
 				break;
 			case TOOLCOMM:
-				String toolName = getToolNameFromStateElement(executedStateElement);
+				String toolName = ToolbusUtil.getToolIdFromStateElement(executedStateElement);
 
 				String sendingType = SOURCE_OF_STATEMENT.get(executedStateElement.getClass());
 
@@ -260,55 +256,6 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		return stateElement;
 	}
 	
-	/**
-	 * Extract a tool id from a StateElement
-	 *
-	 * @param executedStateElement
-	 *            The StateElement to extract the tool id from
-	 * @return The tool id
-	 */
-	private String getToolNameFromStateElement(StateElement executedStateElement) {
-		// Retrieve tool id from the state element
- 		Atom executedAtom = (Atom) executedStateElement;
-		
-		/* We don't know at which array index the TBTermVar can be found. Neither don't we
-		 * know how many array elements there are. As the Atom class provides only the 
-		 * getAtomArgValue() getter, we cannot do any better than search from 0 upwards.
-		 */ 
-		ATerm aTerm;
-		try {
-			for (int i = 0; true; i++) {
-				aTerm = executedAtom.getAtomArgValue(i);
-				if (aTerm instanceof TBTermVar) {
-					break; // Found it!
-				}
-			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			Logger.getLogger(getClass().getName()).warn("No TBTermVar found!");
-			throw e; // Throw exception on
-		}
-		
-		ATerm toolIdATerm = executedAtom.getEnv().getValue((TBTermVar) aTerm);
-		String toolKey = toolIdATerm.toString();
-
-		// Convert the atom toolId to an MSC Entity Id
-		return getToolNameFromKey(toolKey);
-	}
-
-	/**
-	 * Get the tool name from a tool key. A tool key has the following format:
-	 * name(id)
-	 *
-	 * @param toolKey
-	 *            The tool key to parse
-	 * @return The tool name
-	 */
-	private String getToolNameFromKey(String toolKey) {
-		int nameEndIndex = toolKey.lastIndexOf('(');
-		return toolKey.substring(0, nameEndIndex);
-	}
-	
-	
 	// IPerformanceControlListener start
 	
 	/**
@@ -316,8 +263,8 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param toolInstance The associated Toolinstance
 	 * @param term The performancestats
 	 */
-	public void updatePerformance(ToolInstance toolInstance, ATerm term) {
-		if (!m_toolPerformance.containsKey(toolInstance)) {
+	public void updatePerformance(ToolInstance toolInstance, ATerm term){
+		if(!m_toolPerformance.containsKey(toolInstance)){
 			m_toolPerformance.put(toolInstance, new ToolPerformanceInfo(toolInstance.getToolID(), toolInstance.getToolName()));
 		} 
 
@@ -336,7 +283,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		String toolMemNonHeap = "0";
 		int toolMemoryNonHeapUsage = 0;
 		
-		if (term.getChildAt(1).getChildCount() == 2) {
+		if(term.getChildAt(1).getChildCount() == 2){
 			toolMemHeap = term.getChildAt(1).getChildAt(0).toString();
 			toolMemoryHeapUsage = ((Integer) getValueFromATerm(toolMemHeap, Integer.class, false)).intValue();
 	
@@ -357,7 +304,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 
 		Hashtable<String, ThreadInfo> threads = new Hashtable<String, ThreadInfo>();
 		
-		while (matcher.find()) {
+		while(matcher.find()){
         	MatchResult result = matcher.toMatchResult();
         	String threadName = (String) getNameFromATerm(result.group());
         	
@@ -365,12 +312,12 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
     		int systemTime = 0;
     		
         	String[] times = ((String) getValueFromATerm(result.group(), String.class, false)).split(",");
-    		for (String time : times) {
+    		for(String time : times){
         		String timeName = (String) getNameFromATerm(time);
 
-        		if (timeName.equals("user-time")) {
+        		if(timeName.equals("user-time")){
         			userTime = ((Integer) getValueFromATerm(time, Integer.class, false)).intValue();
-        		} else {
+        		}else{
         			systemTime = ((Integer) getValueFromATerm(time, Integer.class, false)).intValue();
         		}
         	}
@@ -386,7 +333,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
         }
 		
 		
-		for (ToolPerformanceInfo i : m_toolPerformance.values()) {
+		for(ToolPerformanceInfo i : m_toolPerformance.values()){
 			m_performanceTreeTable.add(i);
 		}
 	}
@@ -397,26 +344,26 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param type The class of the type that was sent in the ATerm
 	 * @return value
 	 */
-	private Object getValueFromATerm(String aterm, Class< ? > type, boolean encapsulated) {
+	private Object getValueFromATerm(String aterm, Class< ? > type, boolean encapsulated){
 		int beginIndex = aterm.indexOf("(");
 		int endIndex = aterm.lastIndexOf(")");
-		if (encapsulated) {
+		if(encapsulated){
 			beginIndex++;
 			endIndex--;
 		}
 		
-		if (beginIndex == -1 || endIndex == -1) {
-			if (type.equals(Integer.class)) {
+		if(beginIndex == -1 || endIndex == -1){
+			if(type.equals(Integer.class)){
 				return Integer.valueOf(0);
 			}
 			return "";
 		}
 		
-		if (type.equals(Integer.class)) {
+		if(type.equals(Integer.class)){
 			return new Integer(aterm.substring(beginIndex + 1, endIndex));
-		} else if (type.equals(String.class)) {
+		}else if (type.equals(String.class)){
 			return aterm.substring(beginIndex + 1, endIndex);
-		} else {
+		}else{
 			return aterm.substring(beginIndex, endIndex);
 		}
 	}
@@ -426,7 +373,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param aterm Entire ATerm
 	 * @return name
 	 */
-	private Object getNameFromATerm(String aterm) {
+	private Object getNameFromATerm(String aterm){
 		int endIndex = aterm.indexOf("(");
 		return aterm.substring(0, endIndex);
 	}

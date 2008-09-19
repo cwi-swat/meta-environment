@@ -133,7 +133,7 @@ public class ToolTreeTable extends JTreeTable {
 		try {
 			return super.getValueAt(row, column);
 		} catch (RuntimeException e) {
-			// there is a bug in the treetablemodel apparently
+			// TODO Fix this concurrency problem
 			return null;
 		}
 	}

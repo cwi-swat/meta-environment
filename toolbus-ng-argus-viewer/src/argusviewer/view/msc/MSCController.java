@@ -176,25 +176,20 @@ public class MSCController implements IControlListener, IToolControlListener,
 	/**
 	 * Refresh the visualization of the Message Sequence Chart.
 	 */
-	protected void refreshVisualization() {
+	protected void refreshVisualization(){
 		m_mscVisualizationScheduler.receivedWork();
 	}
 
 	/**
 	 * Get all the processes and tools currently running from the toolbus.
 	 */
-	private void populateEntitiesList() {
-		for (ProcessInstance process : m_dataCommunication.getControlSync()
-				.getProcesses()) {
-			m_mscData.addEntity(new Entity(process.getProcessId(), process
-					.getProcessName(), Entity.Type.PROCESS, true, FIRST_TICK));
+	private void populateEntitiesList(){
+		for(ProcessInstance process : m_dataCommunication.getControlSync().getProcesses()){
+			m_mscData.addEntity(new Entity(process.getProcessId(), process.getProcessName(), Entity.Type.PROCESS, true, FIRST_TICK));
 		}
 
-		for (ToolInstance tool : m_dataCommunication.getControlSync()
-				.getTools()) {
-			m_mscData.addEntity(new Entity(tool.getToolKey()
-					.getUniqueIdentifier(), tool.getToolName(),
-					Entity.Type.TOOL, true, FIRST_TICK));
+		for(ToolInstance tool : m_dataCommunication.getControlSync().getTools()){
+			m_mscData.addEntity(new Entity(tool.getToolKey().getUniqueIdentifier(), tool.getToolName(), Entity.Type.TOOL, true, FIRST_TICK));
 		}
 
 		m_mscData.addEntity(new Entity("Sink", Entity.Type.SINK));

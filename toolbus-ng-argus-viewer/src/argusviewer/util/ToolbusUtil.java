@@ -37,6 +37,7 @@ public class ToolbusUtil {
 		return -1;
 	}
 
+	// TODO This function is really 'weird' and needs fixing.
 	/**
 	 * Extract a tool id from a StateElement
 	 *

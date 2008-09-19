@@ -7,11 +7,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+
+import prefuse.Visualization;
 import argusviewer.toolbus.DataComm;
 import argusviewer.view.IView;
 import argusviewer.view.architectureview.performance.tree.PerformanceTreeTable;
-
-import prefuse.Visualization;
 
 /**
  * Plugin for the Architecture View.
@@ -24,6 +25,7 @@ import prefuse.Visualization;
 public class ArchitecturePlugin implements IView {
 	private static final String PLUGIN_NAME = "Architecture View";
 	private static final String PREFERRED_POSITION = "TopRight";
+	private static final int INITIAL_DIVIDER_LOCATION = 300;
 
 	private HashMap<String, Container> m_visualComponents;
 
@@ -49,7 +51,8 @@ public class ArchitecturePlugin implements IView {
 		m_archView = new ArchitectureView(dataCommunication, m_architectureData, m_archVisualization, m_performanceTreeTable);
 		m_architectureController = new ArchitectureController(dataCommunication, m_architectureData, m_archView, m_performanceTreeTable);
 		
-		ArchitectureSplitPane splitPane = new ArchitectureSplitPane(m_archView.getVisualComponent(), toolPane);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, m_archView.getVisualComponent(), toolPane);
+		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
 		m_visualComponents = new HashMap<String, Container>();
 		m_visualComponents.put(PLUGIN_NAME, splitPane);

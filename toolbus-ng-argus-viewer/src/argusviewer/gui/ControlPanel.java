@@ -148,9 +148,6 @@ public class ControlPanel extends JPanel implements ActionListener,
 		} else if (e.getSource() == m_stopButton) {
 			m_dataComm.getControlSync().doStop();
 		} else if (e.getSource() == m_terminateButton) {
-			// shutdown the toolbus
-			m_dataComm.getControlSync().doTerminate();
-
 			m_gui.shutdown();
 		} else {
 			throw new RuntimeException(

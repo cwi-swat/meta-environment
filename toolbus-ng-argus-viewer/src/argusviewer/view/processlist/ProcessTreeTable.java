@@ -36,12 +36,12 @@ import com.sun.java.treetable.example.TreeTableModel;
  * @author H.Baggelaar
  * @author Jeldert Pol
  */
-public class ProcessTreeTable extends JTreeTable {
-	private static final long serialVersionUID = -5311053048872523305L;
+public class ProcessTreeTable extends JTreeTable{
+	private final static long serialVersionUID = -5311053048872523305L;
 	
-	private ProcessTreeModel m_model;
-	private static final int MAXCOLUMNWIDTH = 50;
-	private Logger m_logger = Logger.getLogger(ProcessTreeTable.class);
+	private final ProcessTreeModel m_model;
+	private final static int MAXCOLUMNWIDTH = 50;
+	private final Logger m_logger = Logger.getLogger(ProcessTreeTable.class);
 
 	/**
 	 * The constructor of the ProcessTreeTable
@@ -49,7 +49,7 @@ public class ProcessTreeTable extends JTreeTable {
 	 * @param dataComm
 	 *            the DataComm
 	 */
-	public ProcessTreeTable(DataComm dataComm) {
+	public ProcessTreeTable(DataComm dataComm){
 		this(new ProcessTreeModel(dataComm));
 	}
 
@@ -61,7 +61,7 @@ public class ProcessTreeTable extends JTreeTable {
 	 * 
 	 * @param treeModel
 	 */
-	private ProcessTreeTable(ProcessTreeModel treeModel) {
+	private ProcessTreeTable(ProcessTreeModel treeModel){
 		super(treeModel);
 		m_model = treeModel;
 		m_model.setParent(this);
@@ -73,8 +73,8 @@ public class ProcessTreeTable extends JTreeTable {
 		 * add click event listener, nothing more. If clicked, send a clickEvent
 		 * to the model.
 		 */
-		addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
+		addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
 				sendClickEvent(e.getClickCount(), e.getX(), e.getY());
 			}
 		});
@@ -82,22 +82,21 @@ public class ProcessTreeTable extends JTreeTable {
 		setCellSelectionEnabled(true);
 	}
 
-	private void setRenderers() {
+	private void setRenderers(){
 		setDefaultRenderer(BreakPointType.class, new BreakPointCellRenderer());
 
 		// Right align ID column, to be consistent with other views and looks
 		// better.
 		DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
 		tableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-		getColumn(ProcessTreeModel.ID_COLUMN)
-				.setCellRenderer(tableCellRenderer);
+		getColumn(ProcessTreeModel.ID_COLUMN).setCellRenderer(tableCellRenderer);
 
 		// Add a new tree renderer that has the tree icons we want to display
 		DefaultTreeCellRenderer treeRenderer = new ProcessTreeCellRenderer();
 		getTree().setCellRenderer(treeRenderer);
 	}
 
-	private void alignColumns() {
+	private void alignColumns(){
 		// Set max width for all columns, expect for INSTANCENAME_COLUMN. This
 		// makes this column resizable.
 		setMaxWidth(ProcessTreeModel.BREAKPOINT_COLUMN, MAXCOLUMNWIDTH);
@@ -105,11 +104,11 @@ public class ProcessTreeTable extends JTreeTable {
 		setMaxWidth(ProcessTreeModel.ID_COLUMN, MAXCOLUMNWIDTH);
 	}
 
-	private void setMaxWidth(int column, int width) {
+	private void setMaxWidth(int column, int width){
 		getColumn(column).setMaxWidth(width);
 	}
 
-	private TableColumn getColumn(int column) {
+	private TableColumn getColumn(int column){
 		return getColumnModel().getColumn(column);
 	}
 
@@ -118,8 +117,8 @@ public class ProcessTreeTable extends JTreeTable {
 	 * 
 	 * @return JTree
 	 */
-	public JTree getTree() {
-		return (JTree) this.getDefaultRenderer(TreeTableModel.class);
+	public JTree getTree(){
+		return (JTree) getDefaultRenderer(TreeTableModel.class);
 	}
 
 	/**
@@ -128,26 +127,26 @@ public class ProcessTreeTable extends JTreeTable {
 	 * work. Besides that, nodeStructureChanged closes nodes when it shouldn't
 	 * 
 	 */
-	public void reloadModel() {
+	public void reloadModel(){
 		HashMap<ProcessTreeNode, Boolean> isExpanded = new HashMap<ProcessTreeNode, Boolean>(
 				tree.getRowCount());
 
 		// save expanded state
-		for (int i = 0; i < tree.getRowCount(); i++) {
+		for(int i = 0; i < tree.getRowCount(); i++){
 			ProcessTreeNode node = getNodeAtRow(i);
-			if (node != null && !node.isLeaf()) {
+			if(node != null && !node.isLeaf()){
 				isExpanded.put(node, Boolean.valueOf(tree.isExpanded(i)));
 			}
 		}
 		m_model.reload();
 
 		// restore expanded state
-		for (int i = 0; i < tree.getRowCount(); i++) {
+		for(int i = 0; i < tree.getRowCount(); i++){
 			ProcessTreeNode node = getNodeAtRow(i);
-			if (node != null && !node.isLeaf()) {
+			if (node != null && !node.isLeaf()){
 				// if the node had no expanded state, it will not be expanded
 				boolean expanded = isExpanded.get(node) != null && isExpanded.get(node).booleanValue();
-				if (expanded) {
+				if(expanded){
 					tree.expandRow(i);
 				}
 			}
@@ -169,7 +168,7 @@ public class ProcessTreeTable extends JTreeTable {
 	 * @param y
 	 *            The y position of the mouse cursor
 	 */
-	public void sendClickEvent(int count, int x, int y) {
+	public void sendClickEvent(int count, int x, int y){
 		m_logger.debug("instanceClicked");
 		Point clickPoint = new Point(x, y);
 		int column = columnAtPoint(clickPoint);
@@ -177,7 +176,7 @@ public class ProcessTreeTable extends JTreeTable {
 
 		getTree().setSelectionRow(row);
 		ProcessTreeNode node = getNodeAtRow(row);
-		if (node == null) {
+		if(node == null){
 			return;
 		}
 		m_model.clickEventAt(node, column, count);
@@ -190,19 +189,18 @@ public class ProcessTreeTable extends JTreeTable {
 	 *            the rowIndex
 	 * @return the node at the specified row
 	 */
-	private ProcessTreeNode getNodeAtRow(int row) {
-		return (ProcessTreeNode) getValueAt(row,
-				ProcessTreeModel.INSTANCENAME_COLUMN);
+	private ProcessTreeNode getNodeAtRow(int row){
+		return (ProcessTreeNode) getValueAt(row, ProcessTreeModel.INSTANCENAME_COLUMN);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object getValueAt(int row, int column) {
-		try {
+	public Object getValueAt(int row, int column){
+		try{
 			return super.getValueAt(row, column);
-		} catch (RuntimeException e) {
-			// there is a bug in the treetablemodel apparently
+		}catch(RuntimeException e){
+			// TODO Fix this concurrency problem.
 			return null;
 		}
 	}
