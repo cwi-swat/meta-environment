@@ -3,21 +3,20 @@ module languages/modula-3/syntax/Layout
 imports languages/modula-3/syntax/Pragma
 
 exports
+sorts CAsterisk Comment CommentContents NestedComment
 
 lexical syntax
-	[\ \t\n] -> LAYOUT
-	[\*] -> CAsterisk
-	"(*" CommentContents* "*)" -> Comment
-	"(*" | "*)" -> CommentContents {reject}
-	Comment -> NestedComment
-	Comment -> LAYOUT
-aliases
-	(~[\*]|CAsterisk|NestedComment) -> CommentContents
+  [\ \t\n]                          -> LAYOUT                   
+  [\*]                              -> CAsterisk                
+  "(*" CommentContents* "*)"        -> Comment                  
+  "(*" | "*)"                       -> CommentContents {reject} 
+  Comment                           -> NestedComment            
+  Comment                           -> LAYOUT                   
+  ~[\*] | CAsterisk | NestedComment -> CommentContents          
 
 lexical restrictions
-	CAsterisk -/- [\)]
+  CAsterisk -/- [\)]
 
 context-free restrictions
-	LAYOUT? -/- [\ \t\n]
-	LAYOUT? -/- [\(].[\*]
-
+  LAYOUT? -/- [\ \t\n]
+  LAYOUT? -/- [\(].[\*]

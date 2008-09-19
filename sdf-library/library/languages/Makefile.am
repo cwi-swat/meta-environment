@@ -1,5 +1,7 @@
 include $(top_srcdir)/library/make_rules
 
+
+
 SUBDIRS = \
 	asf \
 	asfix \
@@ -14,6 +16,7 @@ SUBDIRS = \
 	fortran \
 	fdl \
         logo \
+        modula-3 \
 	pico \
 	sdf2  \
 	generic-cpp \
