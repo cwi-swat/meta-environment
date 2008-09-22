@@ -125,19 +125,6 @@ public class ToolTreeTable extends JTreeTable {
 	private ToolTreeNode getNodeAtRow(int row) {
 		return (ToolTreeNode) getValueAt(row, ToolTreeModel.TOOL_COLUMN);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public Object getValueAt(int row, int column) {
-		try {
-			return super.getValueAt(row, column);
-		} catch (RuntimeException e) {
-			// TODO Fix this concurrency problem
-			return null;
-		}
-	}
-	
 }
 
 /**

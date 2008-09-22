@@ -12,48 +12,45 @@ import com.sun.java.treetable.example.TreeTableModel;
  * 
  * @author Jeldert Pol
  */
-public class PerformanceTreeModel extends DefaultTreeModel implements
-		TreeTableModel {
+public class PerformanceTreeModel extends DefaultTreeModel implements TreeTableModel{
 	private static final long serialVersionUID = 8705055700027908856L;
 
 	private static final int HUNDRED = 100;
 
-	private final String[] m_columnNames = { "Tool", "ID", "Processor Time",
-			"in ms", "Memory Heap" };
-	private final Class< ? >[] m_columnTypes = { TreeTableModel.class,
-			String.class, Integer.class, Integer.class, String.class };
+	private final String[] m_columnNames = {"Tool", "ID", "Processor Time", "in ms", "Memory Heap"};
+	private final Class<?>[] m_columnTypes = {TreeTableModel.class, String.class, Integer.class, Integer.class, String.class};
 
-	public static final int TOOL_COLUMN = 0;
-	public static final int ID_COLUMN = 1;
-	public static final int PROCESSOR_PERCENTAGE_COLUMN = 2;
-	public static final int PROCESSOR_TIME_COLUMN = 3;
-	public static final int MEMORY_HEAP_COLUMN = 4;
+	public final static int TOOL_COLUMN = 0;
+	public final static int ID_COLUMN = 1;
+	public final static int PROCESSOR_PERCENTAGE_COLUMN = 2;
+	public final static int PROCESSOR_TIME_COLUMN = 3;
+	public final static int MEMORY_HEAP_COLUMN = 4;
 
 	/**
 	 * Constructor for the {@link PerformanceTreeModel}.
 	 */
-	public PerformanceTreeModel() {
+	public PerformanceTreeModel(){
 		super(new PerformanceTreeNode());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class< ? > getColumnClass(int column) {
+	public Class<?> getColumnClass(int column){
 		return m_columnTypes[column];
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public int getColumnCount() {
+	public int getColumnCount(){
 		return m_columnNames.length;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getColumnName(int column) {
+	public String getColumnName(int column){
 		return m_columnNames[column];
 	}
 
@@ -64,29 +61,28 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 	 *            A {@link PerformanceTreeNode}, which value is to be
 	 *            requested.
 	 * @param column
-	 *            The column index, determing the kind of value to return.
+	 *            The column index, determining the kind of value to return.
 	 * @return The value of the column of the given node.
 	 */
-	public Object getValueAt(Object node, int column) {
+	public Object getValueAt(Object node, int column){
 		PerformanceTreeNode performanceTreeNode = (PerformanceTreeNode) node;
 
-		switch (column) {
-		case TOOL_COLUMN:
-			return performanceTreeNode;
-		case ID_COLUMN:
-			return performanceTreeNode.getToolId();
-		case PROCESSOR_PERCENTAGE_COLUMN:
-			return Integer.valueOf(processorPercentage(performanceTreeNode.getProcessorTime()));
-		case PROCESSOR_TIME_COLUMN:
-			return Integer.valueOf(performanceTreeNode.getProcessorTime());
-		case MEMORY_HEAP_COLUMN:
-			return performanceTreeNode.getToolMemoryHeapUsage();
-		default:
-			throw new RuntimeException(
-					"PerformanceTreeModel: invalid column requested.");
+		switch(column){
+			case TOOL_COLUMN:
+				return performanceTreeNode;
+			case ID_COLUMN:
+				return performanceTreeNode.getToolId();
+			case PROCESSOR_PERCENTAGE_COLUMN:
+				return Integer.valueOf(processorPercentage(performanceTreeNode.getProcessorTime()));
+			case PROCESSOR_TIME_COLUMN:
+				return Integer.valueOf(performanceTreeNode.getProcessorTime());
+			case MEMORY_HEAP_COLUMN:
+				return performanceTreeNode.getToolMemoryHeapUsage();
+			default:
+				throw new RuntimeException("PerformanceTreeModel: invalid column requested.");
 		}
 	}
-
+	
 	/**
 	 * Returns the percentage of processor use of a tool, compared to all the
 	 * tools. Example: Tool1 used 500ms, tool2 4500ms. This method returns 10
@@ -97,17 +93,16 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 	 *            for.
 	 * @return the percentage of processor time, compared to all the tools.
 	 */
-	private int processorPercentage(int toolTime) {
+	private int processorPercentage(int toolTime){
 		PerformanceTreeNode root = getPerformanceTree();
 		int total = 0;
-		for (int index = 0; index < root.getChildCount(); index++) {
-			PerformanceTreeNode child = (PerformanceTreeNode) root
-					.getChildAt(index);
+		for(int index = 0; index < root.getChildCount(); index++){
+			PerformanceTreeNode child = (PerformanceTreeNode) root.getChildAt(index);
 			total += child.getProcessorTime();
 		}
 
 		float percentage = 0f;
-		if (total > 0) {
+		if(total > 0){
 			percentage = (float) toolTime / total;
 			percentage *= HUNDRED;
 		}
@@ -123,7 +118,7 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 	 *            Which column
 	 * @return boolean true if cell is editable, false otherwise.
 	 */
-	public boolean isCellEditable(Object node, int column) {
+	public boolean isCellEditable(Object node, int column){
 		// Tool column must be editable, for a folder to be expandable by mouse
 		return (column == TOOL_COLUMN);
 	}
@@ -131,7 +126,7 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setValueAt(Object arg0, Object arg1, int arg2) {
+	public void setValueAt(Object arg0, Object arg1, int arg2){
 		// Nothing to do
 	}
 
@@ -140,7 +135,7 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 	 * 
 	 * @return PerformanceTreeNode
 	 */
-	public PerformanceTreeNode getPerformanceTree() {
+	public PerformanceTreeNode getPerformanceTree(){
 		return (PerformanceTreeNode) getRoot();
 	}
 
@@ -152,14 +147,14 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 	 * @param toolPerformanceInfo
 	 *            the ToolInstance
 	 */
-	public void add(ToolPerformanceInfo toolPerformanceInfo) {
+	public void add(ToolPerformanceInfo toolPerformanceInfo){
 		PerformanceTreeNode root = getPerformanceTree();
 
 		boolean found = false;
-		for (int i = 0; i < root.getChildCount(); i++) {
+		for(int i = 0; i < root.getChildCount(); i++){
 			PerformanceTreeNode node = (PerformanceTreeNode) root.getChildAt(i);
 			// Check if toolname exists.
-			if (node.getToolName().equals(toolPerformanceInfo.getToolName())) {
+			if(node.getToolName().equals(toolPerformanceInfo.getToolName())){
 				// Name same, add to group.
 				found = true;
 				node.add(toolPerformanceInfo);
@@ -167,9 +162,8 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 		}
 
 		// Toolname not found, add to root
-		if (!found) {
-			getPerformanceTree().add(
-					new PerformanceTreeNode(toolPerformanceInfo));
+		if(!found){
+			getPerformanceTree().add(new PerformanceTreeNode(toolPerformanceInfo));
 		}
 
 		nodeStructureChanged(getPerformanceTree());
@@ -183,12 +177,11 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 	 *            name of tool to focus on.
 	 * @return the row matching toolName.
 	 */
-	public int setFocus(String toolName) {
+	public int setFocus(String toolName){
 		PerformanceTreeNode root = getPerformanceTree();
-		for (int index = 0; index < root.getChildCount(); index++) {
-			PerformanceTreeNode child = (PerformanceTreeNode) root
-					.getChildAt(index);
-			if (child.getToolName().equals(toolName)) {
+		for(int index = 0; index < root.getChildCount(); index++){
+			PerformanceTreeNode child = (PerformanceTreeNode) root.getChildAt(index);
+			if(child.getToolName().equals(toolName)){
 				return index;
 			}
 		}
@@ -203,13 +196,12 @@ public class PerformanceTreeModel extends DefaultTreeModel implements
 	 * @param row the row where the focus is set on
 	 * @return true if it should be expanded, false otherwise.
 	 */
-	public boolean expandOnFocus(int row) {
-		if (row < getPerformanceTree().getChildCount()) {
+	public boolean expandOnFocus(int row){
+		if(row < getPerformanceTree().getChildCount()){
 			PerformanceTreeNode child = (PerformanceTreeNode) getPerformanceTree().getChildAt(row);
-			if (child.getChildCount() > 0) {
+			if(child.getChildCount() > 0){
 				return !(child.getChildAt(0) instanceof PerformanceTreeNodeThread);
 			}
-			return false;
 		}
 		return false;
 	}

@@ -95,7 +95,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements
 	 *            the column index
 	 * @return the type of the column
 	 */
-	public Class< ? > getColumnClass(int column) {
+	public Class<?> getColumnClass(int column) {
 		return COLUMN_TYPES[column];
 	}
 

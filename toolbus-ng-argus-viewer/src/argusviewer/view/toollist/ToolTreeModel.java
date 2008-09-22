@@ -92,16 +92,16 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 */
 	public Object getValueAt(Object o, int column) {
 		ToolTreeNode node = (ToolTreeNode) o;
-		switch (column) {
-		case VISIBLE_COLUMN:
-			return Boolean.valueOf(node.isVisible());
-		case TOOL_COLUMN:
-			return node;
-		case ID_COLUMN:
-			return Integer.valueOf(node.getId());
-		default:
-			// not existing column
-			return null;
+		switch(column){
+			case VISIBLE_COLUMN:
+				return Boolean.valueOf(node.isVisible());
+			case TOOL_COLUMN:
+				return node;
+			case ID_COLUMN:
+				return Integer.valueOf(node.getId());
+			default:
+				// not existing column
+				return null;
 		}
 	}
 
