@@ -16,12 +16,10 @@ import org.apache.log4j.Logger;
 public class ToolPerformanceRenderer extends DefaultTreeCellRenderer {
 	private static final long serialVersionUID = -7191130444201004897L;
 	
-	private static final ImageIcon ICON_GROUP = new ImageIcon(
-			"resources/icons/group.png");
-	private static final ImageIcon ICON_TOOL = new ImageIcon(
-			"resources/icons/tool.png");
-	private static final ImageIcon ICON_THREAD = new ImageIcon(
-			"resources/icons/thread.png");
+	private static final ImageIcon ICON_GROUP = new ImageIcon("resources/icons/group.png");
+	private static final ImageIcon ICON_TOOL = new ImageIcon("resources/icons/tool.png");
+	private static final ImageIcon ICON_THREAD = new ImageIcon("resources/icons/thread.png");
+	
 	private static Logger log = Logger.getLogger(ToolPerformanceRenderer.class);
 
 	/**

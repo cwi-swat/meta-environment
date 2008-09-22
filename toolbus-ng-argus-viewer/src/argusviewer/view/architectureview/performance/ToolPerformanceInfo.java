@@ -8,22 +8,14 @@ import java.util.Hashtable;
  * @author Tigran Kalaidjan
  */
 public class ToolPerformanceInfo {
-
-	private int m_toolId;
-	private String m_toolName;
+	private final int m_toolId;
+	private final String m_toolName;
 	private String m_toolType;
 	private String m_toolLanguage;
 	private int m_toolMemoryHeapUsage;
 	private int m_toolMemoryNonHeapUsage;
 
 	private Hashtable<String, ThreadInfo> m_threads = new Hashtable<String, ThreadInfo>();
-
-	/**
-	 * default constructor
-	 */
-	public ToolPerformanceInfo() {
-		super();
-	}
 
 	/**
 	 * @param toolId
@@ -100,26 +92,6 @@ public class ToolPerformanceInfo {
 	}
 
 	/**
-	 * set tool Id
-	 * 
-	 * @param toolId
-	 *            Integer
-	 */
-	public void setToolId(int toolId) {
-		m_toolId = toolId;
-	}
-
-	/**
-	 * set tool type
-	 * 
-	 * @param toolName
-	 *            String
-	 */
-	public void setToolName(String toolName) {
-		m_toolName = toolName;
-	}
-
-	/**
 	 * set tool type
 	 * 
 	 * @param toolType
@@ -175,7 +147,6 @@ public class ToolPerformanceInfo {
 	 * @return tool info String
 	 */
 	public String toString() {
-
 		String toolInfo = "getToolId: " + getToolId() + "\n"
 				+ "getToolType: " + getToolType() + "\n"
 				+ "getToolLanguage: " + getToolLanguage() + "\n"

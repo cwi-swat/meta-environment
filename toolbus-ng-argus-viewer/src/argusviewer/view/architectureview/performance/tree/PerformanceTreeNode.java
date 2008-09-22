@@ -124,7 +124,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 */
 	public String getToolId() {
 		if (hasToolPerformanceInfo()) {
-			return "" + m_toolPerformanceInfo.getToolId();
+			return String.valueOf(m_toolPerformanceInfo.getToolId());
 		}
 		return null;
 	}
@@ -227,8 +227,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	public int getProcessorTime() {
 		int processorTime = 0;
 		if (hasToolPerformanceInfo()) {
-			for (ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads()
-					.values()) {
+			for (ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads().values()) {
 				processorTime += threadInfo.getThreadSystemTime();
 				processorTime += threadInfo.getThreadUserTime();
 			}

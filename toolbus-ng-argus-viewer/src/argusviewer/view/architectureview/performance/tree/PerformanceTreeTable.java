@@ -24,7 +24,7 @@ import com.sun.java.treetable.example.TreeTableModel;
 public class PerformanceTreeTable extends JTreeTable {
 	private static final long serialVersionUID = 2898389345356146073L;
 	
-	private PerformanceTreeModel m_model;
+	private final PerformanceTreeModel m_model;
 
 	/**
 	 * Constructor for {@link PerformanceTreeTable}.
@@ -72,15 +72,6 @@ public class PerformanceTreeTable extends JTreeTable {
 	 */
 	private JTree getTree() {
 		return (JTree) this.getDefaultRenderer(TreeTableModel.class);
-	}
-
-	/**
-	 * Return the {@link PerformanceTreeModel} associated with this table.
-	 * 
-	 * @return the {@link PerformanceTreeModel} associated with this table.
-	 */
-	public PerformanceTreeModel getPerformanceTreeModel() {
-		return m_model;
 	}
 
 	/**

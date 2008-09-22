@@ -11,13 +11,12 @@ import javax.swing.table.TableCellRenderer;
  * 
  * @author Jeldert Pol
  */
-public class ProcessorRenderer implements TableCellRenderer {
+public class ProcessorRenderer implements TableCellRenderer{
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column){
 		int processor = ((Integer) value).intValue();
 
 		JProgressBar progressBar = new JProgressBar();
