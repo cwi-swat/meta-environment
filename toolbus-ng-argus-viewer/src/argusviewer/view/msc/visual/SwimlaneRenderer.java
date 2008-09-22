@@ -48,6 +48,15 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 	private GeneralPath m_sinkShape = new GeneralPath();
 
 	private double m_maxY = 0;
+	
+	private final MSCData mscData;
+	
+	public SwimlaneRenderer(MSCData mscData){
+		super();
+		
+		this.mscData = mscData;
+		
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -179,8 +188,8 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 	private double getYMaximum(Visualization visualization) {
 		double maxY = 0;
 
-		if (MSCData.getStatementList().size() != 0) {
-			Tuple latestStatementTuple = MSCData.getStatementList().getLast();
+		if (mscData.getStatementList().size() != 0) {
+			Tuple latestStatementTuple = mscData.getStatementList().getLast();
 			VisualItem latestStatement = visualization.getVisualItem(Statement.TABLE_NAME, latestStatementTuple);
 			maxY = latestStatement.getY();
 		}
@@ -223,7 +232,7 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 		Visualization visualization = visualSink.getVisualization();
 
 		// This should be cloned, because the list can be modified during executing of this action.
-		LinkedList<Tuple> statements = (LinkedList<Tuple>) MSCData.getStatementList().clone();
+		LinkedList<Tuple> statements = (LinkedList<Tuple>) mscData.getStatementList().clone();
 
 		int lastTimestamp = -1;
 		for (Tuple statementTuple : statements) {

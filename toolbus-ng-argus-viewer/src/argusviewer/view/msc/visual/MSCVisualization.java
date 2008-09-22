@@ -58,7 +58,7 @@ public class MSCVisualization {
 	private static final String ENTITY_SWIMLANE_NAME = "_swimlanes";
 	private static final String ACTIONS_ID = "actions";
 
-	private final MSCData m_mscData;
+	private final MSCData mscData;
 
 	private final Visualization m_visualization;
 	private EntityVisibilityFilter m_entityVisiblityFilter;
@@ -81,7 +81,7 @@ public class MSCVisualization {
 	 * @param visualization the Prefuse Visualization of the Message Sequence Chart Visualization
 	 */
 	private MSCVisualization(MSCData mscData, Visualization visualization) {
-		this.m_mscData = mscData;
+		this.mscData = mscData;
 		this.m_visualization = visualization;
 		
 		// Do not show Prefuse INFO messages, only warnings and worse
@@ -95,11 +95,11 @@ public class MSCVisualization {
 	 * Sets up the visualization information.
 	 */
 	private void createVisualization(){
-		m_mscData.setVisualization(m_visualization);
+		mscData.setVisualization(m_visualization);
 
-		m_visualization.add(Entity.TABLE_NAME, m_mscData.getEntitiesTable());
-		m_visualization.add(Statement.TABLE_NAME, m_mscData.getStatementsTable());
-		m_visualization.add(Message.TABLE_NAME, m_mscData.getMessagesTable());
+		m_visualization.add(Entity.TABLE_NAME, mscData.getEntitiesTable());
+		m_visualization.add(Statement.TABLE_NAME, mscData.getStatementsTable());
+		m_visualization.add(Message.TABLE_NAME, mscData.getMessagesTable());
 
 		// The visual statements and messages cannot be 'controlled' by the user
 		m_visualization.setInteractive(Statement.TABLE_NAME, null, false);
@@ -115,14 +115,13 @@ public class MSCVisualization {
 	/**
 	 * Sets up the renderers for the individual visual items.
 	 */
-	private void createRenderers() {
-
+	private void createRenderers(){
 		DefaultRendererFactory rendererFactory = new DefaultRendererFactory();
 
 		rendererFactory.add(new InGroupPredicate(Entity.TABLE_NAME), new EntityRenderer());
 		rendererFactory.add(new InGroupPredicate(Statement.TABLE_NAME), new StatementRenderer());
 		rendererFactory.add(new InGroupPredicate(Message.TABLE_NAME), new MessageRenderer());
-		rendererFactory.add(new InGroupPredicate(ENTITY_SWIMLANE_NAME), new SwimlaneRenderer());
+		rendererFactory.add(new InGroupPredicate(ENTITY_SWIMLANE_NAME), new SwimlaneRenderer(mscData));
 
 		m_visualization.setRendererFactory(rendererFactory);
 	}
@@ -154,7 +153,7 @@ public class MSCVisualization {
 		ActionList layout = new ActionList();
 
 		layout.add(new EntityLayout(Entity.TABLE_NAME, ENTITY_SWIMLANE_NAME));
-		layout.add(new StatementLayout(Statement.TABLE_NAME));
+		layout.add(new StatementLayout(mscData, Statement.TABLE_NAME));
 		layout.add(new MessageLayout(Message.TABLE_NAME));
 		layout.add(new RepaintAction());
 

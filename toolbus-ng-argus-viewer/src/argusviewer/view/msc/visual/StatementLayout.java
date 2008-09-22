@@ -21,18 +21,21 @@ import argusviewer.view.msc.data.Statement;
  * @author Roberto van der Linden
  * @author Arne Timmerman
  */
-public class StatementLayout extends Layout {
-
+public class StatementLayout extends Layout{
 	public static final int VERTICAL_OFFSET = 100;
 	public static final int VERTICAL_STEP = 40;
+	
+	private final MSCData mscData;
 
 	/**
 	 * Create a new Statement layout for the specified group.
 	 *
 	 * @param group The group of visual items on which the layout will be applied
 	 */
-	public StatementLayout(String group) {
+	public StatementLayout(MSCData mscData, String group) {
 		super(group);
+		
+		this.mscData = mscData;
 	}
 
 	/**
@@ -44,7 +47,7 @@ public class StatementLayout extends Layout {
 		boolean statementCollapseEnabled = MSCVisualizationUtil.isStatementCollapseEnabled();
 
 		// This should be cloned, because the list can be modified during executing of this action.
-		LinkedList<Tuple> statements = (LinkedList<Tuple>) MSCData.getStatementList().clone();
+		LinkedList<Tuple> statements = (LinkedList<Tuple>) mscData.getStatementList().clone();
 		for (Tuple statement : statements) {
 
 			VisualItem currentStatement = m_vis.getVisualItem(Statement.TABLE_NAME, statement);

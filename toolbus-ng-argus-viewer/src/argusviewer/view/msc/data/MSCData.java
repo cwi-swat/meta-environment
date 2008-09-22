@@ -26,8 +26,8 @@ public class MSCData{
 	private final Table m_statements;
 	private final Table m_messages;
 
-	private static LinkedList<Tuple> statementList = new LinkedList<Tuple>();
-	private static LinkedList<Tuple> messagesList = new LinkedList<Tuple>();
+	private final LinkedList<Tuple> statementList;
+	private final LinkedList<Tuple> messagesList;
 	
 	private volatile Visualization m_viz;
 	
@@ -38,6 +38,9 @@ public class MSCData{
 		m_entities = Entity.TABLE_SCHEMA.instantiate();
 		m_statements = Statement.TABLE_SCHEMA.instantiate();
 		m_messages = Message.TABLE_SCHEMA.instantiate();
+		
+		statementList = new LinkedList<Tuple>();
+		messagesList = new LinkedList<Tuple>();
 	}
 	
 	/**
@@ -162,7 +165,7 @@ public class MSCData{
 	 * Get the list of statements in the data model.
 	 * @return the statementList
 	 */
-	public static LinkedList<Tuple> getStatementList() {
+	public LinkedList<Tuple> getStatementList() {
 		return statementList;
 	}
 	
@@ -178,7 +181,7 @@ public class MSCData{
 	 * Get the unmodifiable MessageList. Used for testing purposes.
 	 * @return the unmodifiable messageList
 	 */
-	public static List<Tuple> getMessagesList(){
+	public List<Tuple> getMessagesList(){
 		return Collections.unmodifiableList(messagesList);
 	}
 }
