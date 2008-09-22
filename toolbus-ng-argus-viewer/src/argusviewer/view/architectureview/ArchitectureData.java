@@ -15,7 +15,7 @@ import prefuse.data.tuple.TupleSet;
  * @author Ivo Tamboer
  */
 public class ArchitectureData {
-	private static Logger log = Logger.getLogger(ArchitectureData.class);
+	private final static Logger log = Logger.getLogger(ArchitectureData.class);
 	private final Table toolbusSingleton;
 	private final Table processes;
 	private final Table tools;

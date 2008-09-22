@@ -22,11 +22,9 @@ import prefuse.visual.VisualItem;
  * 
  */
 public class ToolRenderer extends AbstractArchitectureRenderer {
-
 	public static final double TOOL_BASESIZE = BASESIZE * 0.5;
 	private static final float LINE_WIDTH = (float) 1.5;
 	private static final BasicStroke STROKE = new BasicStroke(LINE_WIDTH);
-	//private LabelRenderer m_labelRendererToolName;
 
 	protected static final int RECTANGLE_WIDTH_MODIFIER = 2;
 	protected static final int RECTANGLE_HEIGHT_MODIFIER = 4;

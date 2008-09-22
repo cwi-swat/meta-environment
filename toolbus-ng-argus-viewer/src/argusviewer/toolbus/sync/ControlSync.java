@@ -119,7 +119,7 @@ public class ControlSync{
 		}
 	}
     
-	// TODO This functionality should be in the debug ToolBus and not here.
+	// TODO This functionality is 'broken' and should be implemented in the debug ToolBus.
 	/**
 	 * this method is triggered by the toolbus when a step is executed
 	 * @param tick the currently executed tick at the toolbus
@@ -185,7 +185,7 @@ public class ControlSync{
 	public void removeProcessInstance(ProcessInstance processInstance){
 		m_processFileNames.remove(processInstance);
 		
-		for (IProcessInstanceControlListener processInstanceLstr : m_processInstanceListeners){
+		for(IProcessInstanceControlListener processInstanceLstr : m_processInstanceListeners){
 			processInstanceLstr.removeProcessInstance(processInstance);
 		}
 	}
@@ -197,7 +197,7 @@ public class ControlSync{
 	public void addToolInstance(ToolInstance toolInstance){
 		m_currentTools.add(toolInstance);
 		
-		for (IToolControlListener toolLstr : m_toolListeners){
+		for(IToolControlListener toolLstr : m_toolListeners){
 			toolLstr.addToolInstance(toolInstance);
 		}
 	}
@@ -208,7 +208,7 @@ public class ControlSync{
 	public void removeToolInstance(ToolInstance toolInstance){
 		m_currentTools.remove(toolInstance);
 		
-		for (IToolControlListener toolLstr : m_toolListeners){
+		for(IToolControlListener toolLstr : m_toolListeners){
 			toolLstr.removeToolInstance(toolInstance);
 		}
 	}

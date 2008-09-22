@@ -25,7 +25,6 @@ public abstract class AbstractArchitectureRenderer extends AbstractShapeRenderer
 	 * @return The x and y coordinate
 	 */
 	protected Point2D getShapePosition(VisualItem item) {
-
 		double xPos = item.getX();
 		if (Double.isNaN(xPos) || Double.isInfinite(xPos)) {
 			xPos = 0;

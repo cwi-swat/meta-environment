@@ -12,7 +12,6 @@ import prefuse.visual.sort.ItemSorter;
  *
  */
 public class ArchitectureItemSorter extends ItemSorter {
-
 	protected static final int TOOLBUSSINGLETON_SCORE = 1;
 	protected static final int DECORATOR_SCORE = 2;
 	protected static final int PROCESS_SCORE = 2;

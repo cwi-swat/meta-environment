@@ -31,32 +31,31 @@ import argusviewer.view.listeners.IStateControlListener;
  * @author J. van den Bos
  * @author M. van Beest
  */
-public class ControlPanel extends JPanel implements ActionListener,
-		IStateControlListener, ChangeListener {
+public class ControlPanel extends JPanel implements ActionListener, IStateControlListener, ChangeListener {
 	private static final long serialVersionUID = -4188073307544842081L;
-	
-	private JButton m_startButton;
-	private JButton m_stepButton;
-	private JButton m_stopButton;
-	private JButton m_terminateButton;
-	private JLabel m_statusLabel;
-	private JLabel m_sliderLabel;
-	private JLabel m_sliderValueLabel;
+
+	private final JSlider m_runSpeedSlider;
+	private final JButton m_startButton;
+	private final JButton m_stepButton;
+	private final JButton m_stopButton;
+	private final JButton m_terminateButton;
+	private final JLabel m_statusLabel;
+	private final JLabel m_sliderLabel;
+	private final JLabel m_sliderValueLabel;
 	
 	private static final int BUTTON_HORIZONTAL_PADDING = 7;
 	private static final int BUTTON_VERTICAL_PADDING = 4;	
 
-	private JSlider m_runSpeedSlider;
-	public static final int RUN_SPEED_MAX = 0; // 0 msec
-	public static final int RUN_SPEED_MIN = 5000; // 5 seconds
-	public static final int RUN_SPEED_INIT = RUN_SPEED_MAX;
-	private static final int RUN_SPEED_SPACING_MAJOR = 1000; // 1 seconds
-	private static final int RUN_SPEED_SPACING_MINOR = 100; // 10th second
-	private static final int SLIDER_HUNDRED_MSEC = 100;
-	private static final int SLIDER_DECIMAL_DIVIDER = 10;
+	public final static int RUN_SPEED_MAX = 0; // 0 msec
+	public final static int RUN_SPEED_MIN = 5000; // 5 seconds
+	public final static int RUN_SPEED_INIT = RUN_SPEED_MAX;
+	private final static int RUN_SPEED_SPACING_MAJOR = 1000; // 1 seconds
+	private final static int RUN_SPEED_SPACING_MINOR = 100; // 10th second
+	private final static int SLIDER_HUNDRED_MSEC = 100;
+	private final static int SLIDER_DECIMAL_DIVIDER = 10;
 	
-	private DataComm m_dataComm;
-	private ArgusViewerGUI m_gui;
+	private final DataComm m_dataComm;
+	private final ArgusViewerGUI m_gui;
 
 	/**
 	 * Creates a new ControlPanel with buttons to control the debugging.

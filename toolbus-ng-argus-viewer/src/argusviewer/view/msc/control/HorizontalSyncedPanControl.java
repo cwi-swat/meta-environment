@@ -142,7 +142,6 @@ public class HorizontalSyncedPanControl extends PanControl {
 	 * @param horizontalMovement the amount of horizontal pan that has to be scrolled
 	 */
 	private void panDisplay(Display pannedDisplay, int horizontalMovement, int verticalMovement) {
-
 		pannedDisplay.pan(horizontalMovement, verticalMovement);
 		pannedDisplay.repaint();
 

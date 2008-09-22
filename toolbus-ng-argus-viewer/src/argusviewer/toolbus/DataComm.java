@@ -22,7 +22,6 @@ import argusviewer.toolbus.sync.FocusSync;
 import aterm.ATerm;
 
 /**
- * 
  * DataComm handles connection between viewer and toolbus. 
  *
  * @author T. Van Laer
@@ -34,12 +33,12 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	private final DebugToolBus m_debugToolbus;
     private final ScriptCodeStore m_scriptCodeStore;
 
-	private volatile boolean m_isToolbusRunning = false;
-
 	private final BreakpointSync m_breakPointSync;
 	private final FocusSync m_focusSync;
 	private final ControlSync m_controlSync;
 	private final FilterSync m_filterSync;
+
+	private volatile boolean m_isToolbusRunning = false;
 	
 	private int	m_tick = 0;
 
@@ -69,7 +68,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 		try{
 			m_debugToolbus.parsecup();
 			m_debugToolbus.prepare();
-		} catch (Exception ex) {
+		}catch(Exception ex){
 			throw new Exception("Error starting ToolBus.", ex);
 		}
 	}
@@ -81,7 +80,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
     /**
 	 * this method is triggered when the toolbus is started.
 	 */
-	public void toolbusStarting() {
+	public void toolbusStarting(){
 		m_isToolbusRunning = true;
 		m_controlSync.setToolbusRunning(true);
 	}
@@ -89,7 +88,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	/**
 	 * this method is triggered when the toolbus is terminated.
 	 */
-	public void toolbusTerminating() {
+	public void toolbusTerminating(){
 		m_isToolbusRunning = false;
 		m_controlSync.setToolbusRunning(false);
 		updateState(IViewerConstants.READY_STATE);
@@ -99,7 +98,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	 * This method is triggered by the toolbus when a new process is started.
 	 * @param processInstance the processInstance that is started. 
 	 */	
-	public void processInstanceStarted(ProcessInstance processInstance) {
+	public void processInstanceStarted(ProcessInstance processInstance){
 		m_controlSync.addProcessInstance(processInstance);		
 	}
 
@@ -107,7 +106,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	 * This method is triggered by the toolbus when a process is terminated.
 	 * @param processInstance the processInstance that is terminated. 
 	 */
-	public void processInstanceTerminated(ProcessInstance processInstance) {
+	public void processInstanceTerminated(ProcessInstance processInstance){
 		m_controlSync.removeProcessInstance(processInstance);
 	}
 	
@@ -116,7 +115,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
      * This also starts the performance monitoring for this tool.
      * @param toolInstance the instance of the new tool
      */
-    public void toolConnected(ToolInstance toolInstance) {
+    public void toolConnected(ToolInstance toolInstance){
         m_controlSync.addToolInstance(toolInstance);
         m_debugToolbus.startMonitoringTool(toolInstance.getToolKey());
     }
@@ -126,7 +125,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
      * This also ends the performance monitoring for this tool.
      * @param toolInstance the instance of the disconnnected tool
      */
-    public void toolConnectionClosed(ToolInstance toolInstance) {
+    public void toolConnectionClosed(ToolInstance toolInstance){
         m_controlSync.removeToolInstance(toolInstance);
         m_debugToolbus.stopMonitoringTool(toolInstance.getToolKey());
     }
@@ -136,7 +135,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
      * @param toolInstance the toolinstance
      * @param aTerm the a-term
      */
-    public void performanceStatsArrived(ToolInstance toolInstance, ATerm aTerm) {
+    public void performanceStatsArrived(ToolInstance toolInstance, ATerm aTerm){
     	m_controlSync.updatePerformance(toolInstance, aTerm);
     }
 
@@ -145,10 +144,10 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	 * @param scriptName the relative path to the script
 	 * @return the t-script sourcecode.
 	 */
-	public String getSource(String scriptName) {
-        try {
+	public String getSource(String scriptName){
+        try{
             return new String(m_scriptCodeStore.getCode(scriptName));
-        } catch (IOException e) {
+        }catch(IOException e){
             throw new RuntimeException("An IO error occurred.", e);
         }
     }
@@ -159,7 +158,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	 * @param executedStateElement the executed state element
 	 * @param partners all related processInstances
 	 */
-	public void stepExecuted(ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners) {
+	public void stepExecuted(ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners){
 		if(executedStateElement.getPosInfo() == null){
 			/* If the posInfo was 'null', the stateElement isn't related directly
 			   related to anything in the ToolBus script (it will be an atom that
@@ -177,7 +176,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
 	 * this method is triggered when the state of the toolbus changes.
 	 * @param state the new state of the toolbus. check IViewerConstants for possible values.
 	 */
-	public void updateState(int state) {
+	public void updateState(int state){
 		m_controlSync.setState(state);
 	}
 	

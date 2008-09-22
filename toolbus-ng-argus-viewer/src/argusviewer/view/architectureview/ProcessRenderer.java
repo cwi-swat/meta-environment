@@ -15,7 +15,8 @@ import prefuse.visual.VisualItem;
  * @author Ivo Tamboer
  * @author Frank Oppedijk
  */
-public class ProcessRenderer extends AbstractArchitectureRenderer { 
+public class ProcessRenderer extends AbstractArchitectureRenderer {
+	private final static Logger log = Logger.getLogger(ProcessRenderer.class);
 
 	public static final double PROCESS_BASESIZE = BASESIZE * 0.5;
 	private static final float LINE_WIDTH = (float) 1.5;
@@ -25,22 +26,18 @@ public class ProcessRenderer extends AbstractArchitectureRenderer {
 	protected static final int RECTANGLE_HEIGHT_MODIFIER = 4;
 	protected static final double RECTANGLE_ASPECT_RATIO = 1.5;
 	protected static final double TEXT_MARGIN = LINE_WIDTH * 6;
-
-	private static Logger log = Logger.getLogger(ProcessRenderer.class);
 	
 	/**
 	 * Default Constructor ProcessRenderer
 	 */
 	public ProcessRenderer() {
-		log.debug("ProcessRenderer Constructor reached.");
+		super();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	protected Shape getRawShape(VisualItem item) {
-		log.debug("getRawShape called");		
-
 		item.setStroke(STROKE);
 
 		Point2D pos = getShapePosition(item);
@@ -59,7 +56,6 @@ public class ProcessRenderer extends AbstractArchitectureRenderer {
 	 * @return An Ellipse
 	 */
 	protected Ellipse2D getCircle(double x, double y, double width) {
-
 		Ellipse2D ellipse = new Ellipse2D.Double();
 
 		// Center the circle around the specified x and y

@@ -108,12 +108,7 @@ public class PerformanceTreeTable extends JTreeTable {
 	 * Resync the model and repaint
 	 */
 	public void refresh(){
-		// Call it from the UI thread, just to be sure.
-		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				invalidate();
-				repaint();
-			}
-		});
+		invalidate();
+		repaint();
 	}
 }

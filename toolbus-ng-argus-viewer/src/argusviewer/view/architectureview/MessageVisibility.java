@@ -12,9 +12,9 @@ import java.util.Iterator;
  * @author: Tigran Kalaidjan
  */
 public class MessageVisibility extends GroupAction {
-
-	private VisualItem m_selectedVisualItem = null;
-    private Logger m_logger = Logger.getLogger(MessageVisibility.class);
+    private final static Logger m_logger = Logger.getLogger(MessageVisibility.class);
+    
+	private volatile VisualItem m_selectedVisualItem = null;
 
     /**
 	 * Create a default MessageVisibility without extra parameters.

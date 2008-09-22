@@ -23,17 +23,20 @@ import prefuse.visual.VisualItem;
  * Note that messages are not drawn if one of the processes or tools is invisible.
  */
 public class MessageRenderer extends AbstractShapeRenderer {
-
+    private final static Logger m_logger = Logger.getLogger(MessageRenderer.class);
+    
     private final int m_initialArrowWidth  = 8;
     private final int m_initialArrowHeight = 12;
     private final int m_finalArrowSize = 3;
-    private Polygon m_arrowHead = updateArrowHead(m_initialArrowWidth, m_initialArrowHeight);
-    private AffineTransform m_arrowTrans = new AffineTransform();
-    private Shape m_curArrow;
+    private final Polygon m_arrowHead = new Polygon();
+    {
+    	m_arrowHead.addPoint(0, 0);
+        m_arrowHead.addPoint(-m_initialArrowWidth / 2, -m_initialArrowHeight);
+        m_arrowHead.addPoint(m_initialArrowWidth / 2, -m_initialArrowHeight);
+        m_arrowHead.addPoint(0, 0);
+    }
     private static final double HALF_PI = Math.PI / 2;
-
-    private Logger m_logger = Logger.getLogger(MessageRenderer.class);
-
+    
 	/**
 	 * {@inheritDoc}
 	 */
@@ -51,7 +54,7 @@ public class MessageRenderer extends AbstractShapeRenderer {
 		
 		// create the arrow head shape
         AffineTransform at = getArrowTrans(source, target, m_finalArrowSize);
-        m_curArrow = at.createTransformedShape(m_arrowHead);
+        Shape m_curArrow = at.createTransformedShape(m_arrowHead);
         
 		GeneralPath path = new GeneralPath();
 		path.append(m_curArrow, false);
@@ -88,6 +91,7 @@ public class MessageRenderer extends AbstractShapeRenderer {
      */
     private AffineTransform getArrowTrans(Point2D p1, Point2D p2, double width)
     {
+    	AffineTransform m_arrowTrans = new AffineTransform();
         m_arrowTrans.setToTranslation(p2.getX(), p2.getY());
         m_arrowTrans.rotate(-HALF_PI + Math.atan2(p2.getY() - p1.getY(), p2.getX() - p1.getX()));
         final int scaleFactor = 4; 
@@ -96,26 +100,5 @@ public class MessageRenderer extends AbstractShapeRenderer {
             m_arrowTrans.scale(scalar, scalar);
         }
         return m_arrowTrans;
-    }
-    
-    /**
-     * Update the dimensions of the arrow head, creating a new
-     * arrow head if necessary. The return value is also set
-     * as the member variable <code>m_arrowHead</code>
-     * @param w the width of the untransformed arrow head base, in pixels
-     * @param h the height of the untransformed arrow head, in pixels
-     * @return the untransformed arrow head shape
-     */
-    protected Polygon updateArrowHead(int w, int h) {
-        if (m_arrowHead == null) {
-            m_arrowHead = new Polygon();
-        } else {
-            m_arrowHead.reset();
-        }
-        m_arrowHead.addPoint(0, 0);
-        m_arrowHead.addPoint(-w / 2, -h);
-        m_arrowHead.addPoint(w / 2, -h);
-        m_arrowHead.addPoint(0, 0);
-        return m_arrowHead;
     }
 }

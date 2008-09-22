@@ -18,18 +18,17 @@ import prefuse.visual.VisualItem;
  * @author Frank Oppedijk
  * @author Ivo Tamboer
  */
-public class ToolLayout extends Layout {
+public class ToolLayout extends Layout{
+	private final static int HORIZONTAL_STEP = 100;
+	
+	private final static int HORIZONTAL_MARGIN = 50;
+	private final static int VERTICAL_MARGIN = 50;
+	
+	public final static double TOOL_LABEL_BASE = ToolRenderer.TOOL_BASESIZE * 0.7;
 
-	private static final int HORIZONTAL_STEP = 100;
+	private final static Logger log = Logger.getLogger(ToolLayout.class);
 	
-	private static final int HORIZONTAL_MARGIN = 50;
-	private static final int VERTICAL_MARGIN = 50;
-	
-	public static final double TOOL_LABEL_BASE = ToolRenderer.TOOL_BASESIZE * 0.7;
-
-	private static Logger log = Logger.getLogger(ToolLayout.class);
-	
-	private ProcessLayout m_processLayout;
+	private final ProcessLayout m_processLayout;
 	
 	/**
 	 * Create a new Tool layout for the specified group.

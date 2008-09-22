@@ -18,17 +18,17 @@ import prefuse.data.Schema;
  * warnings about this, so we suppress them. 
  */
 public class Tool extends AbstractTuple {
-
-	public static final String TOOL_FIELDNAME = "tool";
-	public static final Class<?> TOOL_FIELDTYPE = String.class;
-	public static final String TOOL_DEFAULT_VALUE = "";
-	private static Logger log = Logger.getLogger(Tool.class);
-	private String m_tool;
+	public final static String TOOL_FIELDNAME = "tool";
+	public final static Class<?> TOOL_FIELDTYPE = String.class;
+	public final static String TOOL_DEFAULT_VALUE = "";
 	
-		
 	public static final String TABLE_NAME = "tools";
 	private static final int TABLE_COLUMNCOUNT = 1;
 	public static final Schema TABLE_SCHEMA;
+	
+	private final static Logger log = Logger.getLogger(Tool.class);
+	
+	private volatile String m_tool;
 	static {
 		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(TOOL_FIELDNAME, TOOL_FIELDTYPE, TOOL_DEFAULT_VALUE);

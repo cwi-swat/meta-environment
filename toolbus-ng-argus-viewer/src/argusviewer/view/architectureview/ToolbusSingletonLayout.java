@@ -19,10 +19,9 @@ import prefuse.visual.VisualItem;
  * @author Ivo Tamboer
  */
 public class ToolbusSingletonLayout extends Layout {
-
-	private static Logger log = Logger.getLogger(ToolbusSingletonLayout.class);
+	private final static Logger log = Logger.getLogger(ToolbusSingletonLayout.class);
 	
-	private ProcessLayout m_processLayout;
+	private final ProcessLayout m_processLayout;
 	
 	/**
 	 * Create a new Tool layout for the specified group.

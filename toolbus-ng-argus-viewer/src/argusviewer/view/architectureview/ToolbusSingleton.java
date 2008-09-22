@@ -13,7 +13,7 @@ import prefuse.data.Schema;
  * @author Ivo Tamboer
  * @author Frank Oppedijk
  */
-public class ToolbusSingleton  extends AbstractTuple {
+public class ToolbusSingleton  extends AbstractTuple{
 	public static final String TABLE_NAME = "toolbusSingleton";
 	public static final String TB_FIELDNAME = "toolbus";
 	private static final Class<?> TB_FIELDTYPE = String.class;
@@ -22,9 +22,8 @@ public class ToolbusSingleton  extends AbstractTuple {
 	private static final int TABLE_COLUMNCOUNT = 1;
 	private static Logger log = Logger.getLogger(ToolbusSingleton.class);
 
-	public static final Schema TABLE_SCHEMA;
-	static {
-		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
+	public static final Schema TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
+	static{
 		TABLE_SCHEMA.addColumn(TB_FIELDNAME, TB_FIELDTYPE, TB_DEFAULT_VALUE);
 	}
 	

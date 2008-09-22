@@ -56,7 +56,6 @@ public class SyncedHorizontalPanControl extends PanControl {
 	 * {@inheritDoc}
 	 */
 	public void mouseDragged(MouseEvent mouseEvent) {
-
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
 			Display pannedDisplay = (Display) mouseEvent.getSource();
 
@@ -79,7 +78,6 @@ public class SyncedHorizontalPanControl extends PanControl {
 	 * {@inheritDoc}
 	 */
 	public void mouseReleased(MouseEvent mouseEvent) {
-
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
 			m_horizontalMouseDownPosition = -1;
 		}

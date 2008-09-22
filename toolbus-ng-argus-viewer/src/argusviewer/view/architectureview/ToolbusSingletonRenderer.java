@@ -13,10 +13,9 @@ import prefuse.visual.VisualItem;
  * Renders the square representing the toolbus around the processes.
  */
 public class ToolbusSingletonRenderer extends AbstractMSCRenderer {
-
-	private static Logger log = Logger.getLogger(ToolbusSingletonRenderer.class);
+	private final static Logger log = Logger.getLogger(ToolbusSingletonRenderer.class);
 	
-	private ProcessLayout m_processLayout;
+	private final ProcessLayout m_processLayout;
 	
 	/**
 	 * Constructor accepting a ProcessLayout to use to receive dimension

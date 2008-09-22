@@ -57,28 +57,29 @@ import argusviewer.view.IView;
  *
  */
 public final class ArgusViewerGUI extends JFrame implements Observer {
-	private static final long serialVersionUID = -3759014389298557476L;
+	private final static long serialVersionUID = -3759014389298557476L;
 
-	private static final String WINDOW_TITLE = "Argus Viewer";
+	private final static String WINDOW_TITLE = "Argus Viewer";
 
 	// Multiplier for the default width and height of the window with respect to the screen resolution.
-	private static final float DEFAULT_SIZE_MULTIPLIER = 0.9f;
+	private final static float DEFAULT_SIZE_MULTIPLIER = 0.9f;
 
 	// Split window relative sizes.
 	// The left pane takes up 27% of the initial window size.
-	private static final float SIZE_LEFT = 0.27f;
+	private final static float SIZE_LEFT = 0.27f;
 	
 	// The top pane of the right side of the vertical split window takes up 70%.
-	private static final float SIZE_RIGHT_VERTICAL = 0.7f;
+	private final static float SIZE_RIGHT_VERTICAL = 0.7f;
 	
 	// The top pane of the right side of the vertical split window takes up 40%.
-	private static final float SIZE_LEFT_VERTICAL = 0.4f;
+	private final static float SIZE_LEFT_VERTICAL = 0.4f;
 
+	private final ArrayList<ViewContainer> m_viewContainers;
+	private final TabWindow[] m_tabWindows;
+	private final DataComm m_dataComm;
+	
 	private RootWindow m_rootWindow;
-	private ArrayList<ViewContainer> m_viewContainers;
-	private TabWindow[] m_tabWindows;
 	private JMenuBar m_menuBar;
-	private DataComm m_dataComm;
 
 	/**
 	 * Enumeration to store window position indices and names.

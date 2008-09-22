@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
  * @author M. van Beest
  */
 public final class ExceptionReporter {
-	private static Logger log = Logger.getLogger(ExceptionReporter.class);
+	private final static Logger log = Logger.getLogger(ExceptionReporter.class);
 	
 	/**
 	 * The state of the exception
@@ -29,7 +29,7 @@ public final class ExceptionReporter {
 	 * @param exceptionState how the exception was handled.
 	 * @see argusviewer.ExceptionReporter#ExceptionState
 	 */
-	public static void process(Exception exception, ExceptionState exceptionState) {		
+	public static void process(Exception exception, ExceptionState exceptionState){		
 		log.error("Exception caught: " + exception.toString());
 		if (exception.getCause() != null) {
 			log.error("Exception cause type: " + exception.getCause().toString());

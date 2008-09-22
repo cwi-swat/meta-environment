@@ -92,7 +92,6 @@ public class WheelScrollControl extends ControlAdapter {
 	 * @param verticalMovement the amount of vertical pan that has te be scrolled
 	 */
 	private void scrollDisplay(Display display, int verticalMovement) {
-
 		display.pan(0, verticalMovement);
 		display.repaint();
 	}

@@ -10,13 +10,11 @@ import argusviewer.util.ArgusSettings;
  * 
  */
 public abstract class ApplicationSettings {
-	private static ArgusSettings settings = ArgusSettings.getInstance();
-	private static final String APPLICATION_HISTORY = "application.history";
-	private static final int HISTORY_LIMIT_DEFAULT = 50;
+	private final static ArgusSettings settings = ArgusSettings.getInstance();
+	private final static String APPLICATION_HISTORY = "application.history";
+	private final static int HISTORY_LIMIT_DEFAULT = 50;
 
-	private static int historyLimit = -1; // -1 set to be able to check if the
-											// historyValue has been retrieved
-											// or not
+	private static int historyLimit = -1; // -1 set to be able to check if the historyValue has been retrieved or not
 
 	/**
 	 * Sets the history limit

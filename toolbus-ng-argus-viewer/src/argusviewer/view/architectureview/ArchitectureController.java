@@ -3,6 +3,7 @@ package argusviewer.view.architectureview;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,16 +44,15 @@ import aterm.ATerm;
  * @author Jeldert Pol
  */
 public class ArchitectureController implements IControlListener, IProcessInstanceControlListener, IToolControlListener, IPerformanceControlListener{
-	private DataComm m_dataComm;
-	private ArchitectureData m_archData;
-	private ArchitectureView m_archView;
+	private final DataComm m_dataComm;
+	private final ArchitectureData m_archData;
+	private final ArchitectureView m_archView;
+	private final PerformanceTreeTable m_performanceTreeTable;
 	
-	private Hashtable<ToolInstance, ToolPerformanceInfo> m_toolPerformance = new Hashtable<ToolInstance, ToolPerformanceInfo>();
-	private PerformanceTreeTable m_performanceTreeTable;
+	private final Map<ToolInstance, ToolPerformanceInfo> m_toolPerformance;
 	
-	private static final HashMap<Class<?>, String> SOURCE_OF_STATEMENT;
-	static {
-		SOURCE_OF_STATEMENT = new HashMap<Class<?>, String>();
+	private static final HashMap<Class<?>, String> SOURCE_OF_STATEMENT = new HashMap<Class<?>, String>();
+	static{
 		SOURCE_OF_STATEMENT.put(Connect.class, "Tool");
 		SOURCE_OF_STATEMENT.put(DisConnect.class, "Tool");
 		SOURCE_OF_STATEMENT.put(RecVal.class, "Tool");
@@ -79,6 +79,8 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		m_archView = archView;
 		m_archData = archData;
 		m_performanceTreeTable = performanceTreeTable;
+		
+		m_toolPerformance = new HashMap<ToolInstance, ToolPerformanceInfo>();
 		
 		m_dataComm.getControlSync().register((IControlListener) this);
 		m_dataComm.getControlSync().register((IToolControlListener) this);
@@ -216,7 +218,6 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 *         represent a Message
 	 */
 	private Message.Type getMessageType(StateElement elem) {
-
 		for (int i = 0; i < Message.SYNC_COMMUNICATION.length; i++) {
 			if (elem.getClass() == Message.SYNC_COMMUNICATION[i]) {
 				return Message.Type.SYNC;

@@ -37,16 +37,8 @@ import prefuse.visual.expression.InGroupPredicate;
  */
 public class ArchitectureView extends JPanel {
 	private static final long serialVersionUID = 2560820747109793313L;
-
-	private ArchitectureData m_archData;
 	
-	private Display m_display;
-	private JPanel m_visualComponent;
-	private Visualization m_visualization;
-	private MessageVisibility m_messageFilter;
-	private PerformanceTreeTable m_performanceTreeTable;
-	
-	private static Logger log = Logger.getLogger(ArchitectureView.class);
+	private final static Logger log = Logger.getLogger(ArchitectureView.class);
 
 	private static final double HORIZONTAL_DISPLAY_OFFSET = 75;
 	private static final double VERTICAL_DISPLAY_OFFSET = 50;
@@ -57,6 +49,14 @@ public class ArchitectureView extends JPanel {
 	private static final int RGB_COLOR_PROCESS_HIGHLIGHTED = ColorLib.rgb(152, 251, 152);
 	
 	private static final String ACTIONS_ID = "actions";
+	
+	private final ArchitectureData m_archData;
+	private final Visualization m_visualization;
+	private final PerformanceTreeTable m_performanceTreeTable;
+	
+	private Display m_display;
+	private JPanel m_visualComponent;
+	private MessageVisibility m_messageFilter;
 	private ProcessLayout m_processLayout;
 	/*
 	 * The graphical components 
@@ -296,12 +296,6 @@ public class ArchitectureView extends JPanel {
 	 * are attached to the visualization.
 	 */
 	public void updateVisualization() {
-		
-//		Iterator iter = m_visualization.items();
-//		while (iter.hasNext()) {
-//			System.out.println("element: " + iter.next().toString());
-//		}
-		
 		m_visualization.run(ACTIONS_ID);
 	}
 }

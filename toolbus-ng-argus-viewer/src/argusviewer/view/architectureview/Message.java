@@ -31,7 +31,6 @@ import toolbus.atom.tool.Terminate;
  * warnings about this, so we suppress them. 
  */
 public class Message extends AbstractTuple {
-
 	public static final String MESSAGE_FIELDNAME = "message";
 	public static final Class<?> MESSAGE_FIELDTYPE = String.class;
 	public static final String MESSAGE_DEFAULT_VALUE = "";

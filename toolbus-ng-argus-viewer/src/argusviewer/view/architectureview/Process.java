@@ -21,18 +21,17 @@ public class Process extends AbstractTuple {
 	public static final String PROCESS_FIELDNAME = "process";
 	public static final Class<?> PROCESS_FIELDTYPE = String.class;
 	public static final String PROCESS_DEFAULT_VALUE = "";
-	private String m_process;
 	
-		
 	public static final String TABLE_NAME = "processes";
 	private static final int TABLE_COLUMNCOUNT = 1;
-	public static final Schema TABLE_SCHEMA;
-	static {
-		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
+	public static final Schema TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
+	static{
 		TABLE_SCHEMA.addColumn(PROCESS_FIELDNAME, PROCESS_FIELDTYPE, PROCESS_DEFAULT_VALUE);
 	}
 
 	private static final String[] COLUMNS = {PROCESS_FIELDNAME};
+	
+	private volatile String m_process;
 	
 	/**
 	 * Create a Process tuple with the given process name

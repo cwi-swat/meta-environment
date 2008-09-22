@@ -27,19 +27,19 @@ import argusviewer.util.ArgusSettings;
  * @author Arne Timmerman
  * @author Roberto van der Linden
  */
-final class SettingsDialog extends JDialog implements ActionListener {
+final class SettingsDialog extends JDialog implements ActionListener{
 	private static final long serialVersionUID = -3076853652280392028L;
 	
-	private static final String FOCUSTITLE = "Message Sequence Chart";
-	private static final String HISTORYTITLE = "History";
-	private static final String TITLE = "Application Settings";
-	private static final int INPUTFIELDCOLUMNS = 5;
+	private final static String FOCUSTITLE = "Message Sequence Chart";
+	private final static String HISTORYTITLE = "History";
+	private final static String TITLE = "Application Settings";
+	private final static int INPUTFIELDCOLUMNS = 5;
 	private JTextField m_limitField;
 	private JCheckBox m_focusCheckBox;
 	private JCheckBox m_autoCollapseCheckBox;
-	private static JFrame parent;
+	private static volatile JFrame parent;
 
-	public static void setParent(JFrame parentFrame) {
+	public static void setParent(JFrame parentFrame){
 		parent = parentFrame;
 	}
 

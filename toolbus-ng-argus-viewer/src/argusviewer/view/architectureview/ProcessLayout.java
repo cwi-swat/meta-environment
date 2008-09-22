@@ -28,10 +28,8 @@ public class ProcessLayout extends Layout {
 	private static final int PROCESSES_PER_LINE = 8;
 	
 	private static final double PROCESS_LABEL_BASE = ProcessRenderer.PROCESS_BASESIZE * 0.7;
-
-	private int m_processesLines = 1;
 	
-	private static Logger log = Logger.getLogger(ProcessLayout.class);
+	private final static Logger log = Logger.getLogger(ProcessLayout.class);
 		
 	/**
 	 * Create a new Process layout for the specified group.
@@ -40,7 +38,6 @@ public class ProcessLayout extends Layout {
 	 */
 	public ProcessLayout(String group) {
 		super(group);
-		log.debug("ProcessLayout constructer called.");
 	}
 
 
@@ -57,7 +54,7 @@ public class ProcessLayout extends Layout {
 	 */
 	public void run(double frac) {
 		int xSlotsUsed = 0;
-		m_processesLines = 1;
+		int m_processesLines = 1;
 		
 		double xPos = MARGIN;
 		double yPos = MARGIN;
@@ -85,7 +82,7 @@ public class ProcessLayout extends Layout {
 					
 				PrefuseLib.updateVisible(currentProcess, true);				
 		}
-		log.debug("end while loop");
+		
 		// Layout the labels
 		Iterator<DecoratorItem> labels = m_vis.items(ArchitectureView.PROCESS_LABEL);
 		while (labels.hasNext()) {
