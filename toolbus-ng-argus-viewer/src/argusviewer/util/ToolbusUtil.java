@@ -10,7 +10,11 @@ import toolbus.atom.Atom;
  * @author Alexander Bij
  * @author Arne Timmerman
  */
-public class ToolbusUtil {
+public class ToolbusUtil{
+	
+	private ToolbusUtil(){
+		super();
+	}
 
 	/**
 	 * Get the tool ID from a tool key. A tool key has the following format:

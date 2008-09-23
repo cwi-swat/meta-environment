@@ -40,7 +40,9 @@ public class FilterSync{
 	 * @param listener A listener to be informed about changes in the filter.
 	 */
 	public void register(IProcessFilterListener listener){
-		m_processListeners.add(listener);
+		synchronized(m_processListeners){
+			m_processListeners.add(listener);
+		}
 	}
 
 	/**
@@ -50,7 +52,9 @@ public class FilterSync{
 	 * @param listener A listener to be informed about changes in the filter.
 	 */
 	public void register(IToolFilterListener listener){
-		m_toolListeners.add(listener);
+		synchronized(m_toolListeners){
+			m_toolListeners.add(listener);
+		}
 	}
 
 	/**
@@ -62,8 +66,10 @@ public class FilterSync{
 	 */
 	public void addProcessInstance(List<ProcessInstance> processInstances){
 		for(ProcessInstance processInstance : processInstances){
-			if(!m_processesFilter.contains(processInstance)){
-				m_processesFilter.add(processInstance);
+			synchronized(m_processesFilter){
+				if(!m_processesFilter.contains(processInstance)){
+					m_processesFilter.add(processInstance);
+				}
 			}
 		}
 		
@@ -81,8 +87,10 @@ public class FilterSync{
 	 */
 	public void removeProcessInstance(List<ProcessInstance> processInstances){
 		for(ProcessInstance processInstance : processInstances){
-			if(m_processesFilter.contains(processInstance)){
-				m_processesFilter.remove(processInstance);
+			synchronized(m_processesFilter){
+				if(m_processesFilter.contains(processInstance)){
+					m_processesFilter.remove(processInstance);
+				}
 			}
 		}
 		
@@ -97,12 +105,14 @@ public class FilterSync{
 	 * @param toolInstance the toolInstance thats need to be added.
 	 */
 	public void addToolInstance(ToolInstance toolInstance){
-		if(!m_toolsFilter.contains(toolInstance)){
-			m_toolsFilter.add(toolInstance);
-
-			notifyToolListeners();
-		}else{
-			ExceptionReporter.report("Could not set the ToolInstance to visible.");
+		synchronized(m_toolsFilter){
+			if(!m_toolsFilter.contains(toolInstance)){
+				m_toolsFilter.add(toolInstance);
+	
+				notifyToolListeners();
+			}else{
+				ExceptionReporter.report("Could not set the ToolInstance to visible.");
+			}
 		}
 	}
 
@@ -114,12 +124,14 @@ public class FilterSync{
 	 * @param toolInstance the toolInstance thats need to be added.
 	 */
 	public void removeToolInstance(ToolInstance toolInstance){
-		if(m_toolsFilter.contains(toolInstance)){
-			m_toolsFilter.remove(toolInstance);
-
-			notifyToolListeners();
-		}else{
-			ExceptionReporter.report("Could not set the ToolInstance to non-visible.");
+		synchronized(m_toolsFilter){
+			if(m_toolsFilter.contains(toolInstance)){
+				m_toolsFilter.remove(toolInstance);
+	
+				notifyToolListeners();
+			}else{
+				ExceptionReporter.report("Could not set the ToolInstance to non-visible.");
+			}
 		}
 	}
 
@@ -127,8 +139,10 @@ public class FilterSync{
 	 * Inform {@link IProcessFilterListener}'s there is a new filter.
 	 */
 	private void notifyProcessListeners(){
-		for(IProcessFilterListener filterListener : m_processListeners){
-			filterListener.setProcessFilter(m_processesFilter);
+		synchronized(m_processListeners){
+			for(IProcessFilterListener filterListener : m_processListeners){
+				filterListener.setProcessFilter(m_processesFilter);
+			}
 		}
 	}
 
@@ -136,8 +150,10 @@ public class FilterSync{
 	 * Inform toolListeners there is a new filter
 	 */
 	private void notifyToolListeners(){
-		for(IToolFilterListener listener : m_toolListeners){
-			listener.setToolFilter(m_toolsFilter);
+		synchronized(m_toolListeners){
+			for(IToolFilterListener listener : m_toolListeners){
+				listener.setToolFilter(m_toolsFilter);
+			}
 		}
 	}
 }

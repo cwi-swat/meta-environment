@@ -114,8 +114,10 @@ public class ControlSync{
      * @param state the current state of the debugToolbus.
      */
 	public void setState(int state){
-		for(IStateControlListener stateLstr : m_stateListeners){
-			stateLstr.setState(state);
+		synchronized(m_stateListeners){
+			for(IStateControlListener stateLstr : m_stateListeners){
+				stateLstr.setState(state);
+			}
 		}
 	}
     
@@ -142,8 +144,10 @@ public class ControlSync{
 			m_debugToolBus.doStep();
 		}
 		
-		for(IControlListener controlLstr : m_controlListeners){
-			controlLstr.stepExecuted(tick, processInstance, executedStateElement, partners);
+		synchronized(m_controlListeners){
+			for(IControlListener controlLstr : m_controlListeners){
+				controlLstr.stepExecuted(tick, processInstance, executedStateElement, partners);
+			}
 		}
 	}
     
@@ -153,8 +157,10 @@ public class ControlSync{
      * @param aTerm the performance stats
      */
 	public void updatePerformance(ToolInstance toolInstance, ATerm aTerm){
-		for(IPerformanceControlListener performanceLstr : m_performanceListeners){
-			performanceLstr.updatePerformance(toolInstance, aTerm);
+		synchronized(m_performanceListeners){
+			for(IPerformanceControlListener performanceLstr : m_performanceListeners){
+				performanceLstr.updatePerformance(toolInstance, aTerm);
+			}
 		}
 	}
     
@@ -169,12 +175,16 @@ public class ControlSync{
 			PositionInformation pi = ((StateElement) processInstance.getStateElements().toArray()[last]).getPosInfo();
 			if(pi != null){
 				String filename = pi.getFileName();
-				m_processFileNames.put(processInstance, filename);
+				synchronized(m_processFileNames){
+					m_processFileNames.put(processInstance, filename);
+				}
 			}
 		}
 		
-		for(IProcessInstanceControlListener processInstanceLstr : m_processInstanceListeners){
-			processInstanceLstr.addProcessInstance(processInstance);
+		synchronized(m_processInstanceListeners){
+			for(IProcessInstanceControlListener processInstanceLstr : m_processInstanceListeners){
+				processInstanceLstr.addProcessInstance(processInstance);
+			}
 		}
 	}
 	
@@ -183,10 +193,14 @@ public class ControlSync{
      * @param processInstance the removed processInstance
      */
 	public void removeProcessInstance(ProcessInstance processInstance){
-		m_processFileNames.remove(processInstance);
+		synchronized(m_processFileNames){
+			m_processFileNames.remove(processInstance);
+		}
 		
-		for(IProcessInstanceControlListener processInstanceLstr : m_processInstanceListeners){
-			processInstanceLstr.removeProcessInstance(processInstance);
+		synchronized(m_processInstanceListeners){
+			for(IProcessInstanceControlListener processInstanceLstr : m_processInstanceListeners){
+				processInstanceLstr.removeProcessInstance(processInstance);
+			}
 		}
 	}
 
@@ -195,10 +209,14 @@ public class ControlSync{
      * @param toolInstance the new tool instance
      */
 	public void addToolInstance(ToolInstance toolInstance){
-		m_currentTools.add(toolInstance);
+		synchronized(m_currentTools){
+			m_currentTools.add(toolInstance);
+		}
 		
-		for(IToolControlListener toolLstr : m_toolListeners){
-			toolLstr.addToolInstance(toolInstance);
+		synchronized(m_toolListeners){
+			for(IToolControlListener toolLstr : m_toolListeners){
+				toolLstr.addToolInstance(toolInstance);
+			}
 		}
 	}
     /**
@@ -206,10 +224,14 @@ public class ControlSync{
      * @param toolInstance the removed tool instance
      */
 	public void removeToolInstance(ToolInstance toolInstance){
-		m_currentTools.remove(toolInstance);
+		synchronized(m_currentTools){
+			m_currentTools.remove(toolInstance);
+		}
 		
-		for(IToolControlListener toolLstr : m_toolListeners){
-			toolLstr.removeToolInstance(toolInstance);
+		synchronized(m_toolListeners){
+			for(IToolControlListener toolLstr : m_toolListeners){
+				toolLstr.removeToolInstance(toolInstance);
+			}
 		}
 	}
 	
@@ -238,7 +260,9 @@ public class ControlSync{
 	 */
 	public List<ToolInstance> getTools(){
 		List<ToolInstance> tools = new ArrayList<ToolInstance>();
-		tools.addAll(m_currentTools);
+		synchronized(m_currentTools){
+			tools.addAll(m_currentTools);
+		}
 		
         return tools;
     }
@@ -273,35 +297,45 @@ public class ControlSync{
 	 * @param listener register this listener
 	 */
 	public void register(IControlListener listener){
-		m_controlListeners.add(listener);
+		synchronized(m_controlListeners){
+			m_controlListeners.add(listener);
+		}
 	}
 
 	/**
 	 * @param listener register this listener
 	 */
 	public void register(IToolControlListener listener){
-		m_toolListeners.add(listener);
+		synchronized(m_toolListeners){
+			m_toolListeners.add(listener);
+		}
 	}
 
 	/**
 	 * @param listener register this listener
 	 */
 	public void register(IProcessInstanceControlListener listener){
-		m_processInstanceListeners.add(listener);
+		synchronized(m_processInstanceListeners){
+			m_processInstanceListeners.add(listener);
+		}
 	}
 
 	/**
 	 * @param listener register this listener
 	 */
 	public void register(IPerformanceControlListener listener){
-		m_performanceListeners.add(listener);
+		synchronized(m_performanceListeners){
+			m_performanceListeners.add(listener);
+		}
 	}
 
 	/**
 	 * @param listener register this listener
 	 */
 	public void register(IStateControlListener listener){
-		m_stateListeners.add(listener);
+		synchronized(m_stateListeners){
+			m_stateListeners.add(listener);
+		}
 	}
 
 	/**

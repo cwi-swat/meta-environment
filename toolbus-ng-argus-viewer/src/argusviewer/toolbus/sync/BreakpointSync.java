@@ -55,16 +55,20 @@ public class BreakpointSync{
      * @param processInstance the processinstance 
      */
 	public void addBreakpoint(ProcessInstance processInstance){
-		if(!m_breakPointsProcInst.contains(processInstance)){
-			m_debugToolbus.addProcessInstanceBreakPoint(processInstance.getProcessId());
-
-			m_breakPointsProcInst.add(processInstance);
-
-			for(IProcessInstanceBreakPointListener processInstanceBreakPointLstr : m_processInstanceListeners){
-				processInstanceBreakPointLstr.addBreakpoint(processInstance);
+		synchronized(m_breakPointsProcInst){
+			if(!m_breakPointsProcInst.contains(processInstance)){
+				m_debugToolbus.addProcessInstanceBreakPoint(processInstance.getProcessId());
+	
+				m_breakPointsProcInst.add(processInstance);
+				
+				synchronized(m_processInstanceListeners){
+					for(IProcessInstanceBreakPointListener processInstanceBreakPointLstr : m_processInstanceListeners){
+						processInstanceBreakPointLstr.addBreakpoint(processInstance);
+					}
+				}
+			}else{
+				ExceptionReporter.report("Could not add breakpoint: already added.");		
 			}
-		}else{
-			ExceptionReporter.report("Could not add breakpoint: already added.");		
 		}
 	}
 
@@ -74,24 +78,27 @@ public class BreakpointSync{
      * @param lineNumber the line number where the breakpoint should be placed.
      */
 	public void addBreakpoint(String fileName, int lineNumber){
-		if(m_breakPointsFileNameLineNum.containsKey(fileName)
-				&& m_breakPointsFileNameLineNum.get(fileName).contains(Integer.valueOf(lineNumber))){
-			ExceptionReporter.report("Could not add breakpoint: already added.");
-		}else{
-			m_debugToolbus.addSourceCodeBreakPoint(fileName, lineNumber);
-			String processName = getProcessName(fileName, lineNumber);
-			addSourceCodeBreakpoint(processName);
-
-			if(m_breakPointsFileNameLineNum.containsKey(fileName)){
-				m_breakPointsFileNameLineNum.get(fileName).add(Integer.valueOf(lineNumber));
+		synchronized(m_breakPointsFileNameLineNum){
+			if(m_breakPointsFileNameLineNum.containsKey(fileName) && m_breakPointsFileNameLineNum.get(fileName).contains(Integer.valueOf(lineNumber))){
+				ExceptionReporter.report("Could not add breakpoint: already added.");
 			}else{
-				ArrayList<Integer> lineNumbers = new ArrayList<Integer>();
-				lineNumbers.add(Integer.valueOf(lineNumber));
-				m_breakPointsFileNameLineNum.put(fileName, lineNumbers);
-			}
-
-			for(IFileBreakPointListener breakPointLstr : m_fileListeners){
-				breakPointLstr.addBreakpoint(fileName, lineNumber);
+				m_debugToolbus.addSourceCodeBreakPoint(fileName, lineNumber);
+				String processName = getProcessName(fileName, lineNumber);
+				addSourceCodeBreakpoint(processName);
+	
+				if(m_breakPointsFileNameLineNum.containsKey(fileName)){
+					m_breakPointsFileNameLineNum.get(fileName).add(Integer.valueOf(lineNumber));
+				}else{
+					ArrayList<Integer> lineNumbers = new ArrayList<Integer>();
+					lineNumbers.add(Integer.valueOf(lineNumber));
+					m_breakPointsFileNameLineNum.put(fileName, lineNumbers);
+				}
+	
+				synchronized(m_fileListeners){
+					for(IFileBreakPointListener breakPointLstr : m_fileListeners){
+						breakPointLstr.addBreakpoint(fileName, lineNumber);
+					}
+				}
 			}
 		}
 	}
@@ -117,29 +124,33 @@ public class BreakpointSync{
 	}
 	
 	private void addSourceCodeBreakpoint(String processname){
-		//How many breakpoints are there?
-		int numBreakpoints = 0;
-		if(m_breakpoints.containsKey(processname)){
-			numBreakpoints += m_breakpoints.get(processname).intValue();
+		synchronized(m_breakpoints){
+			//How many breakpoints are there?
+			int numBreakpoints = 0;
+			if(m_breakpoints.containsKey(processname)){
+				numBreakpoints = m_breakpoints.get(processname).intValue();
+			}
+			
+			//Add one breakpoint
+			numBreakpoints++;
+			
+			m_breakpoints.put(processname, Integer.valueOf(numBreakpoints));
 		}
-		
-		//Add one breakpoint
-		numBreakpoints++;
-		
-		m_breakpoints.put(processname, Integer.valueOf(numBreakpoints));		
 	}
 	
 	private void removeSourceCodeBreakpoint(String processname){
-		//How many breakpoints are there?	
-		int numBreakpoints = m_breakpoints.get(processname).intValue();
-		
-		//Remove one breakpoint
-		numBreakpoints--;
-		
-		if(numBreakpoints == 0){
-			m_breakpoints.remove(processname);
-		}else{
-			m_breakpoints.put(processname, Integer.valueOf(numBreakpoints));
+		synchronized(m_breakpoints){
+			//How many breakpoints are there?	
+			int numBreakpoints = m_breakpoints.get(processname).intValue();
+			
+			//Remove one breakpoint
+			numBreakpoints--;
+			
+			if(numBreakpoints == 0){
+				m_breakpoints.remove(processname);
+			}else{
+				m_breakpoints.put(processname, Integer.valueOf(numBreakpoints));
+			}
 		}
 	}
 
@@ -156,17 +167,20 @@ public class BreakpointSync{
      * @param processInstance the processintance
      */
 	public void removeBreakpoint(ProcessInstance processInstance){
-		if(m_breakPointsProcInst.contains(processInstance)){
-			m_debugToolbus.removeProcessInstanceBreakPoint(processInstance
-					.getProcessId());
-
-			m_breakPointsProcInst.remove(processInstance);
-
-			for(IProcessInstanceBreakPointListener processInstanceBreakPointLstr : m_processInstanceListeners){
-				processInstanceBreakPointLstr.removeBreakpoint(processInstance);
+		synchronized(m_breakPointsProcInst){
+			if(m_breakPointsProcInst.contains(processInstance)){
+				m_debugToolbus.removeProcessInstanceBreakPoint(processInstance.getProcessId());
+	
+				m_breakPointsProcInst.remove(processInstance);
+				
+				synchronized(m_processInstanceListeners){
+					for(IProcessInstanceBreakPointListener processInstanceBreakPointLstr : m_processInstanceListeners){
+						processInstanceBreakPointLstr.removeBreakpoint(processInstance);
+					}
+				}
+			}else{
+				ExceptionReporter.report("Could not remove breakpoint: not present.");
 			}
-		}else{
-			ExceptionReporter.report("Could not remove breakpoint: not present.");
 		}
 	}
 
@@ -176,27 +190,30 @@ public class BreakpointSync{
      * @param lineNumber the linenumber where the breakpoint should be removed.      * 
      */
 	public void removeBreakpoint(String fileName, int lineNumber){
-		if(m_breakPointsFileNameLineNum.containsKey(fileName)
-				&& m_breakPointsFileNameLineNum.get(fileName).contains(Integer.valueOf(lineNumber))){
-			if(m_breakPointsFileNameLineNum.containsKey(fileName)){
-
-				m_breakPointsFileNameLineNum.get(fileName).remove(
-						Integer.valueOf(lineNumber));
-
-				m_debugToolbus.removeSourceCodeBreakPoint(fileName, lineNumber);
-				String processName = getProcessName(fileName, lineNumber);
-				removeSourceCodeBreakpoint(processName);
-				
-				if(m_breakPointsFileNameLineNum.get(fileName).isEmpty()){
-					m_breakPointsFileNameLineNum.remove(fileName);
+		synchronized(m_breakPointsFileNameLineNum){
+			if(m_breakPointsFileNameLineNum.containsKey(fileName) && m_breakPointsFileNameLineNum.get(fileName).contains(Integer.valueOf(lineNumber))){
+				if(m_breakPointsFileNameLineNum.containsKey(fileName)){
+	
+					m_breakPointsFileNameLineNum.get(fileName).remove(
+							Integer.valueOf(lineNumber));
+	
+					m_debugToolbus.removeSourceCodeBreakPoint(fileName, lineNumber);
+					String processName = getProcessName(fileName, lineNumber);
+					removeSourceCodeBreakpoint(processName);
+					
+					if(m_breakPointsFileNameLineNum.get(fileName).isEmpty()){
+						m_breakPointsFileNameLineNum.remove(fileName);
+					}
+	
+					synchronized(m_fileListeners){
+						for(IFileBreakPointListener breakPointLstr : m_fileListeners){
+							breakPointLstr.removeBreakpoint(fileName, lineNumber);
+						}
+					}
 				}
-
-				for(IFileBreakPointListener breakPointLstr : m_fileListeners){
-					breakPointLstr.removeBreakpoint(fileName, lineNumber);
-				}
+			}else{
+				ExceptionReporter.report("Could not remove breakpoint: not present.");
 			}
-		}else{
-			ExceptionReporter.report("Could not remove breakpoint: not present.");
 		}
 	}
 
@@ -206,15 +223,19 @@ public class BreakpointSync{
      * @return List with breakpoints.
      */
 	public List<Integer> getBreakPoints(String fileName){
-		return m_breakPointsFileNameLineNum.get(fileName);
+		synchronized(m_breakPointsFileNameLineNum){
+			return m_breakPointsFileNameLineNum.get(fileName);
+		}
 	}
 
 	/** The toolbus has reached a set breakpoint.
      * @param processInstance The current processInstance with the breakpoint.
      */
 	public void hitBreakpoint(ProcessInstance processInstance){
-		for(IBreakPointHitListener breakPointHitLstr : m_hitListeners){
-			breakPointHitLstr.hitBreakpoint(processInstance);
+		synchronized(m_hitListeners){
+			for(IBreakPointHitListener breakPointHitLstr : m_hitListeners){
+				breakPointHitLstr.hitBreakpoint(processInstance);
+			}
 		}
 	}
 
@@ -223,8 +244,10 @@ public class BreakpointSync{
      * @param stateElement The current stateElement with the breakpoint.
      */
 	public void hitBreakpoint(StateElement stateElement){
-		for(IBreakPointHitListener breakPointHitLstr : m_hitListeners){
-			breakPointHitLstr.hitBreakpoint(stateElement);
+		synchronized(m_hitListeners){
+			for(IBreakPointHitListener breakPointHitLstr : m_hitListeners){
+				breakPointHitLstr.hitBreakpoint(stateElement);
+			}
 		}
 	}
 
@@ -234,7 +257,9 @@ public class BreakpointSync{
 	 * @param listener the IBreakPointListener
 	 */
 	public void register(IFileBreakPointListener listener){
-		m_fileListeners.add(listener);
+		synchronized(m_fileListeners){
+			m_fileListeners.add(listener);
+		}
 	}
 	
 	/**
@@ -243,7 +268,9 @@ public class BreakpointSync{
 	 * @param hitListener the IBreakPointHitListener
 	 */
 	public void register(IBreakPointHitListener hitListener){
-		m_hitListeners.add(hitListener);
+		synchronized(m_hitListeners){
+			m_hitListeners.add(hitListener);
+		}
 	}
 	
 	/**
@@ -252,6 +279,8 @@ public class BreakpointSync{
 	 * @param processInstanceListener the IProcessInstanceBreakPointListener
 	 */
 	public void register(IProcessInstanceBreakPointListener processInstanceListener){
-		m_processInstanceListeners.add(processInstanceListener);
+		synchronized(m_processInstanceListeners){
+			m_processInstanceListeners.add(processInstanceListener);
+		}
 	}
 }

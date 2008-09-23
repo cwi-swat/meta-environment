@@ -165,9 +165,10 @@ public final class ArgusViewerGUI extends JFrame implements Observer {
 	public void populate(IView[] views) {
 		for (IView view : views) {
 			Map<String, Container> visualComponents = view.getVisualComponents();
-			for (String s : visualComponents.keySet()) {
-				String name = s;
-				m_viewContainers.add(new ViewContainer(view.getPreferredPosition(), name, visualComponents.get(name)));
+			for (String name : visualComponents.keySet()){
+				synchronized(m_viewContainers){
+					m_viewContainers.add(new ViewContainer(view.getPreferredPosition(), name, visualComponents.get(name)));
+				}
 			}
 			if (view instanceof Observable) {
 				((Observable) view).addObserver(this);
@@ -244,28 +245,32 @@ public final class ArgusViewerGUI extends JFrame implements Observer {
 		// Application -> $viewName and Application -> Source -> $sourceName
 		JMenu sourceMenu = new JMenu("Source");
 		viewMenu.add(sourceMenu);
-		for (ViewContainer container : m_viewContainers) {
-			JMenuItem viewItem = new JMenuItem(container.getName());
-			viewItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					for (ViewContainer container : m_viewContainers) {
-						if (container.getName().equals(e.getActionCommand())) {
-							View view = container.getView();
-							if (!view.isShowing()) {
-								createSplitWindows();
-								container.getParent(m_tabWindows).addTab(view);
+		synchronized(m_viewContainers){
+			for (ViewContainer container : m_viewContainers) {
+				JMenuItem viewItem = new JMenuItem(container.getName());
+				viewItem.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						synchronized(m_viewContainers){
+							for (ViewContainer container : m_viewContainers) {
+								if (container.getName().equals(e.getActionCommand())) {
+									View view = container.getView();
+									if (!view.isShowing()) {
+										createSplitWindows();
+										container.getParent(m_tabWindows).addTab(view);
+									}
+									view.restoreFocus();
+									return;
+								}
 							}
-							view.restoreFocus();
-							return;
 						}
 					}
+				});
+				if (isSourceView(container)) {
+					sourceMenu.add(viewItem);
+				} else {
+					viewMenu.add(viewItem);
+					
 				}
-			});
-			if (isSourceView(container)) {
-				sourceMenu.add(viewItem);
-			} else {
-				viewMenu.add(viewItem);
-				
 			}
 		}
 		return viewMenu;
@@ -343,7 +348,10 @@ public final class ArgusViewerGUI extends JFrame implements Observer {
 	 * @param arg a String with the name of the actual view to focus to
 	 */
 	public void update(Observable o, Object arg) {
-		View theView = ViewContainer.getViewFromName(m_viewContainers, (String) arg);
+		View theView;
+		synchronized(m_viewContainers){
+			theView = ViewContainer.getViewFromName(m_viewContainers, (String) arg);
+		}
 		
 		if (!theView.isDisplayable()) {	
 			for (ViewContainer container : m_viewContainers) {

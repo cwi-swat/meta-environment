@@ -332,17 +332,20 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 */
 	public void addBreakpoint(String fileName, int lineNumber) {
 		Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
-		this.getProcessTree().syncSourceCodeBreakpoints(processes);
+		synchronized(processes){
+			this.getProcessTree().syncSourceCodeBreakpoints(processes);
+		}
 		this.reloadModel(null);
-		
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void removeBreakpoint(String fileName, int lineNumber) {
+	public void removeBreakpoint(String fileName, int lineNumber){
 		Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
-		this.getProcessTree().syncSourceCodeBreakpoints(processes);
+		synchronized(processes){
+			this.getProcessTree().syncSourceCodeBreakpoints(processes);
+		}
 		this.reloadModel(null);
 	}
 

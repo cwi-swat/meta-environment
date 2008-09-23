@@ -30,7 +30,9 @@ public class FocusSync{
 	 * @param listener the IFocusListener to add
 	 */
 	public void register(IFocusListener listener){
-		m_focusListeners.add(listener);
+		synchronized(m_focusListeners){
+			m_focusListeners.add(listener);
+		}
 	}
     
 	/**
@@ -38,7 +40,9 @@ public class FocusSync{
 	 * @param listener the IHighlightListener to add
 	 */
 	public void register(IHighlightListener listener){
-		m_highlightListeners.add(listener);
+		synchronized(m_highlightListeners){
+			m_highlightListeners.add(listener);
+		}
 	}
     
     /**
@@ -46,8 +50,10 @@ public class FocusSync{
 	 * @param processInstance the processInstance
 	 */
 	public void setFocus(ProcessInstance processInstance){
-		for(IFocusListener focusLstr : m_focusListeners){
-			focusLstr.setFocus(processInstance);
+		synchronized(m_focusListeners){
+			for(IFocusListener focusLstr : m_focusListeners){
+				focusLstr.setFocus(processInstance);
+			}
 		}
 	}
 
@@ -56,8 +62,10 @@ public class FocusSync{
 	 *@param processInstance the processInstance
 	 */
 	public void setHighlight(ProcessInstance processInstance){
-		for(IHighlightListener highlightLstr : m_highlightListeners){
-			highlightLstr.setHighlight(processInstance);
+		synchronized(m_highlightListeners){
+			for(IHighlightListener highlightLstr : m_highlightListeners){
+				highlightLstr.setHighlight(processInstance);
+			}
 		}
 	}
 
@@ -66,9 +74,11 @@ public class FocusSync{
 	 * @param toolInstance the toolInstance
 	 */
     public void setHighlight(ToolInstance toolInstance){
-		for(IHighlightListener highlightLstr : m_highlightListeners){
-			highlightLstr.setHighlight(toolInstance);
-		}
+    	synchronized(m_highlightListeners){
+			for(IHighlightListener highlightLstr : m_highlightListeners){
+				highlightLstr.setHighlight(toolInstance);
+			}
+    	}
 	}
 
     /**
@@ -76,9 +86,11 @@ public class FocusSync{
 	 * @param processName the name of the process
 	 */
     public void setHighlightByProcessName(String processName){
-		for(IHighlightListener highlightLstr : m_highlightListeners){
-			highlightLstr.setHighlightByProcessName(processName);
-		}
+    	synchronized(m_highlightListeners){
+			for(IHighlightListener highlightLstr : m_highlightListeners){
+				highlightLstr.setHighlightByProcessName(processName);
+			}
+    	}
 	}
 
     /**
@@ -86,9 +98,11 @@ public class FocusSync{
 	 * @param toolName the name of the tool
 	 */
     public void setHighlightByToolName(String toolName){
-		for(IHighlightListener highlightLstr : m_highlightListeners){
-			highlightLstr.setHighlightByToolName(toolName);
-		}
+    	synchronized(m_highlightListeners){
+			for(IHighlightListener highlightLstr : m_highlightListeners){
+				highlightLstr.setHighlightByToolName(toolName);
+			}
+    	}
 	}
 
     /**
@@ -96,8 +110,10 @@ public class FocusSync{
 	 * @param toolInstance the toolInstance
 	 */
     public void setFocus(ToolInstance toolInstance){
-		for(IFocusListener focusLstr : m_focusListeners){
-			focusLstr.setFocus(toolInstance);
-		}
+    	synchronized(m_focusListeners){
+			for(IFocusListener focusLstr : m_focusListeners){
+				focusLstr.setFocus(toolInstance);
+			}
+    	}
 	}
 }
