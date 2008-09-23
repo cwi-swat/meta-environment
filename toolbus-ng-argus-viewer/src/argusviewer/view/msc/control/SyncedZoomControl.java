@@ -13,30 +13,19 @@ import prefuse.visual.VisualItem;
  * @author: Arne Timmerman
  */
 public class SyncedZoomControl extends AbstractZoomControl {
-
-	private Display m_synchronizedDisplay;
-
 	protected static final int MOUSE_ZOOM_BUTTON = Control.RIGHT_MOUSE_BUTTON;
 	private static final double ZOOM_DIVIDER = 100.0;
-
-	protected Point2D m_zoomCenter = new Point2D.Float();
-	protected Point2D m_synchronizedZoomCenter = new Point2D.Float();
-
-	protected int m_verticalMouseDownPosition;
-
-	/**
-	 * Create a Zoom Control that allows zooming with the Right mouse button and
-	 * does not synchronise Zoom events to another Display.
-	 *
-	 * @param zoomCenter the position in the display to zoom to
-	 */
-	public SyncedZoomControl(Point2D zoomCenter) {
-		this(null, zoomCenter, null);
-	}
+	
+	private final Display m_synchronizedDisplay;
+	
+	private final Point2D m_zoomCenter;
+	private final Point2D m_synchronizedZoomCenter;
+	
+	private int m_verticalMouseDownPosition;
 
 	/**
 	 * Create a Zoom Control that allows zooming with the Right mouse button and
-	 * synchronises Zoom events to the given other Display.
+	 * synchronizes Zoom events to the given other Display.
 	 *
 	 * @param synchronizedDisplay synchronizedDisplay the display that must be synchronized with Zooming
 	 * @param zoomCenter the position in the display to zoom to

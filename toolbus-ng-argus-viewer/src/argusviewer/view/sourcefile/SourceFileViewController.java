@@ -2,10 +2,14 @@ package argusviewer.view.sourcefile;
 
 import java.awt.Container;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+
+import toolbus.StateElement;
+import toolbus.parsercup.PositionInformation;
+import toolbus.process.ProcessInstance;
+import toolbus.tool.ToolInstance;
 import argusviewer.ExceptionReporter;
 import argusviewer.toolbus.DataComm;
 import argusviewer.view.IView;
@@ -13,11 +17,6 @@ import argusviewer.view.listeners.IBreakPointHitListener;
 import argusviewer.view.listeners.IControlListener;
 import argusviewer.view.listeners.IFileBreakPointListener;
 import argusviewer.view.listeners.IFocusListener;
-
-import toolbus.StateElement;
-import toolbus.parsercup.PositionInformation;
-import toolbus.process.ProcessInstance;
-import toolbus.tool.ToolInstance;
 
 /**
  * Controls different script-files with their panels used by the toolbus.
@@ -29,21 +28,21 @@ import toolbus.tool.ToolInstance;
  * 
  */
 public class SourceFileViewController extends Observable implements IView, IControlListener, IFileBreakPointListener, IBreakPointHitListener, IFocusListener {
-
-	private Map<String, SourceFilePanel> m_sourceCodeTabs; 	//m_sourceCodeTabs contains a table scripts and panels
-	private boolean m_processBreakpointHit;
-	private boolean m_sourceBreakpointHit;
-	private DataComm m_dataComm;
+	private final Map<String, SourceFilePanel> m_sourceCodeTabs; 	//m_sourceCodeTabs contains a table scripts and panels
+	private final DataComm dataComm;
+	private volatile boolean m_processBreakpointHit;
+	private volatile boolean m_sourceBreakpointHit;
 
 	/**
 	 * Constructs the sourceViewController and initialize an table (m_sourceCodeTabs) of scripts and panels
 	 * @param dataComm	the DataComm object used for communication with the ToolBus. This value can't be null.
 	 */
 	public SourceFileViewController(DataComm dataComm) {
-		registerWithDataComm(dataComm);
-
-		//create a new hastable for all the sourcecode panels
-		m_sourceCodeTabs = new Hashtable<String, SourceFilePanel>();	
+		this.dataComm = dataComm;
+		
+		registerWithDataComm();
+		
+		m_sourceCodeTabs = new HashMap<String, SourceFilePanel>();	
 		
 		m_processBreakpointHit = false;
 		m_sourceBreakpointHit = false;
@@ -61,7 +60,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * {@inheritDoc}
 	 */
 	public void updateView() {		
-		List<String> scriptNames = m_dataComm.getScriptfiles();
+		List<String> scriptNames = dataComm.getScriptfiles();
 		
 		for (String scriptName : scriptNames) {			
 			if (!m_sourceCodeTabs.containsKey(scriptName)) {							
@@ -120,7 +119,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 						
 		clearAllHighlights();
 
-		if (!m_dataComm.getControlSync().isToolbusStepRunning()) {
+		if (!dataComm.getControlSync().isToolbusStepRunning()) {
 			String scriptName = executedStateElement.getPosInfo().getFileName();
 			
 			if (m_sourceCodeTabs.containsKey(scriptName)) {
@@ -151,7 +150,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 */
 	public void hitBreakpoint(ProcessInstance processInstance) {		
 		m_processBreakpointHit = true;
-		m_dataComm.getControlSync().doStop();
+		dataComm.getControlSync().doStop();
 	}
 
 	/**
@@ -176,7 +175,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 		}
 		
 		//halt the execution of the script and allow for manual stepping
-		m_dataComm.getControlSync().doStop();
+		dataComm.getControlSync().doStop();
 	}
 
 	/**
@@ -228,13 +227,11 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * get callbacks to the interface functions.
 	 * @param dataComm the DataComm object used for communication with the ToolBus
 	 */
-	private void registerWithDataComm(DataComm dataComm) {
-		m_dataComm = dataComm;
-		
-		m_dataComm.getBreakPointSync().register((IFileBreakPointListener) this);
-		m_dataComm.getBreakPointSync().register((IBreakPointHitListener) this);
-		m_dataComm.getControlSync().register(this);
-		m_dataComm.getFocusSync().register(this);
+	private void registerWithDataComm() {
+		dataComm.getBreakPointSync().register((IFileBreakPointListener) this);
+		dataComm.getBreakPointSync().register((IBreakPointHitListener) this);
+		dataComm.getControlSync().register(this);
+		dataComm.getFocusSync().register(this);
 	}
 	
 	/**
@@ -255,9 +252,9 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * @param scriptName
 	 */
 	private void createNewSourceTab(String scriptName) {
-		String sourceCode = m_dataComm.getSource(scriptName);
+		String sourceCode = dataComm.getSource(scriptName);
 		
-		SourceFilePanel newSourceFilePanel = new SourceFilePanel(m_dataComm, scriptName, sourceCode);
+		SourceFilePanel newSourceFilePanel = new SourceFilePanel(dataComm, scriptName, sourceCode);
 		m_sourceCodeTabs.put(scriptName, newSourceFilePanel);
 	}
 	

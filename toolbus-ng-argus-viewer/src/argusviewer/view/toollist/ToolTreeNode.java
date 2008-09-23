@@ -11,9 +11,9 @@ import toolbus.tool.ToolInstance;
 public class ToolTreeNode extends DefaultMutableTreeNode {
 	private static final long serialVersionUID = 3234422961304199997L;
 	
-	private ToolInstance m_toolInstance;
-	private boolean m_isVisible;
-	private boolean m_isRemoved; // items aren't really removed anymore, instead they are set as 'removed' so the items can still be set as visible/invisible even when removed.
+	private volatile ToolInstance m_toolInstance;
+	private volatile boolean m_isVisible;
+	private volatile boolean m_isRemoved; // items aren't really removed anymore, instead they are set as 'removed' so the items can still be set as visible/invisible even when removed.
 
 	/**
 	 * Default Constructor, used create rootNode
@@ -22,8 +22,7 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 		m_isVisible = false;
 		m_isRemoved = false;
 	}
-
-
+	
 	/**
 	 * Check if this node has a toolInstance
 	 *

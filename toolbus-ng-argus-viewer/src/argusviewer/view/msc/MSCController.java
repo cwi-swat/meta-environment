@@ -53,19 +53,19 @@ public class MSCController implements IControlListener, IToolControlListener,
 		IProcessInstanceControlListener, IProcessFilterListener,
 		IToolFilterListener, IFocusListener, IHighlightListener {
 
-	private DataComm m_dataCommunication;
-	private MSCData m_mscData;
-	private MSCVisualization m_mscVisualization;
-	private MSCView m_mscView;
-	private MSCVisualizationScheduler m_mscVisualizationScheduler;
+	private final DataComm m_dataCommunication;
+	private final MSCData m_mscData;
+	private final MSCVisualization m_mscVisualization;
+	private final MSCView m_mscView;
+	private final MSCVisualizationScheduler m_mscVisualizationScheduler;
 
-	private int m_latestTick = -1;
-	private Tuple m_latestAddedStatement = null;
+	private volatile int m_latestTick = -1;
+	private volatile Tuple m_latestAddedStatement = null;
 
 	private static final int FIRST_TICK = -2;
 	private static final HashMap<Class< ? extends Atom>, Entity.Type> SOURCE_OF_STATEMENT;
 
-	static {
+	static{
 		SOURCE_OF_STATEMENT = new HashMap<Class< ? extends Atom>, Entity.Type>();
 		SOURCE_OF_STATEMENT.put(Connect.class, Entity.Type.TOOL);
 		SOURCE_OF_STATEMENT.put(DisConnect.class, Entity.Type.TOOL);
@@ -123,27 +123,6 @@ public class MSCController implements IControlListener, IToolControlListener,
 		Thread mscVisualizationSchedulerThread = new Thread(m_mscVisualizationScheduler);
 		mscVisualizationSchedulerThread.setDaemon(true);
 		mscVisualizationSchedulerThread.start();
-	}
-
-	/**
-	 * Get the Thread that handles the visualization of the contents on the
-	 * Message Sequence Chart.
-	 * 
-	 * @return the visualization thread of the Message Sequence Chart
-	 */
-	public MSCVisualizationScheduler getVisualizationThread() {
-		return m_mscVisualizationScheduler;
-	}
-
-	/**
-	 * Setter made for testing purposes. Sets the {@link MSCVisualizationScheduler}.
-	 * 
-	 * @param visualisationThread
-	 *            The {@link MSCVisualizationScheduler}.
-	 */
-	protected void setSynchronizationThread(
-			MSCVisualizationScheduler visualisationThread) {
-		m_mscVisualizationScheduler = visualisationThread;
 	}
 
 	/**
@@ -213,8 +192,7 @@ public class MSCController implements IControlListener, IToolControlListener,
 	public void stepExecuted(int tick, ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners) {
 		m_latestTick = tick;
 
-		String executingProcessId = processInstance.getProcessName()
-				+ processInstance.getProcessId();
+		String executingProcessId = processInstance.getProcessName() + processInstance.getProcessId();
 		String executedStatementContent = executedStateElement.toString();
 
 		Message.Type msgType = getMessageType(executedStateElement);

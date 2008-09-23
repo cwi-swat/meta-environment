@@ -14,7 +14,6 @@ import prefuse.visual.VisualItem;
  * 
  */
 public abstract class AbstractMSCRenderer extends AbstractShapeRenderer {
-
 	public static final int BASESIZE = 100;
 
 	/**
@@ -26,7 +25,6 @@ public abstract class AbstractMSCRenderer extends AbstractShapeRenderer {
 	 * @return The x and y coordinate
 	 */
 	protected Point2D getShapePosition(VisualItem item) {
-
 		double xPos = item.getX();
 		if (Double.isNaN(xPos) || Double.isInfinite(xPos)) {
 			xPos = 0;

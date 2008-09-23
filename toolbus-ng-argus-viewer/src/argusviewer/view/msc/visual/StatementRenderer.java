@@ -26,7 +26,6 @@ import argusviewer.view.msc.data.Statement;
  * @author Arne Timmerman
  */
 public class StatementRenderer extends AbstractMSCRenderer {
-
 	private static final int ROUND_RECTANGLE_ARC = 10;
 
 	private static final int PARALLELOGRAM_MARGIN = 4;
@@ -36,18 +35,11 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	private static final int RECTANGLE_HEIGHT = 20;
 	private static final int RECTANGLE_WIDTH = 100;
 
-	private LabelRenderer m_labelRenderer;
-
-	private Rectangle2D m_rectangleShape = new Rectangle2D.Double();
-	private RoundRectangle2D m_roundRectangleShape = new RoundRectangle2D.Double();
-	private GeneralPath m_parallelogramShape = new GeneralPath();
-	private GeneralPath m_sixCorneredShape = new GeneralPath();
-
 	/**
 	 * Default Constructor
 	 */
 	public StatementRenderer() {
-		m_labelRenderer = new LabelRenderer(Statement.STATEMENT_FIELDNAME);
+		super();
 	}
 
 	/**
@@ -91,8 +83,9 @@ public class StatementRenderer extends AbstractMSCRenderer {
 		double xPos = x - RECTANGLE_WIDTH / 2;
 		double yPos = y - RECTANGLE_HEIGHT / 2;
 
-		m_rectangleShape.setFrame(xPos, yPos, RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
-		return m_rectangleShape;
+		Rectangle2D rectangleShape = new Rectangle2D.Double();
+		rectangleShape.setFrame(xPos, yPos, RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
+		return rectangleShape;
 	}
 
 	/**
@@ -105,9 +98,9 @@ public class StatementRenderer extends AbstractMSCRenderer {
 		double xPos = x - RECTANGLE_WIDTH / 2;
 		double yPos = y - RECTANGLE_HEIGHT / 2;
 
-		m_roundRectangleShape.setRoundRect(xPos, yPos, RECTANGLE_WIDTH, RECTANGLE_HEIGHT,
-				ROUND_RECTANGLE_ARC, ROUND_RECTANGLE_ARC);
-		return m_roundRectangleShape;
+		RoundRectangle2D roundRectangleShape = new RoundRectangle2D.Double();
+		roundRectangleShape.setRoundRect(xPos, yPos, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, ROUND_RECTANGLE_ARC, ROUND_RECTANGLE_ARC);
+		return roundRectangleShape;
 	}
 
 	/**
@@ -126,15 +119,14 @@ public class StatementRenderer extends AbstractMSCRenderer {
 		float fStartingX = fx - (fwidth / 2);
 		float fStartingY = fy - (RECTANGLE_HEIGHT / 2);
 
-		m_parallelogramShape.reset();
-		m_parallelogramShape.moveTo(fStartingX, fStartingY);
-		m_parallelogramShape.lineTo(fStartingX + fwidth + PARALLELOGRAM_MARGIN, fStartingY);
-		m_parallelogramShape.lineTo(fStartingX + fwidth, fStartingY + RECTANGLE_HEIGHT);
-		m_parallelogramShape.lineTo(fStartingX - PARALLELOGRAM_MARGIN, fStartingY
-				+ RECTANGLE_HEIGHT);
-		m_parallelogramShape.lineTo(fStartingX, fStartingY);
+		GeneralPath parallelogramShape = new GeneralPath();
+		parallelogramShape.moveTo(fStartingX, fStartingY);
+		parallelogramShape.lineTo(fStartingX + fwidth + PARALLELOGRAM_MARGIN, fStartingY);
+		parallelogramShape.lineTo(fStartingX + fwidth, fStartingY + RECTANGLE_HEIGHT);
+		parallelogramShape.lineTo(fStartingX - PARALLELOGRAM_MARGIN, fStartingY + RECTANGLE_HEIGHT);
+		parallelogramShape.lineTo(fStartingX, fStartingY);
 
-		return m_parallelogramShape;
+		return parallelogramShape;
 	}
 
 	/**
@@ -154,18 +146,18 @@ public class StatementRenderer extends AbstractMSCRenderer {
 		float fStartingY = fy - (RECTANGLE_HEIGHT / 2);
 		float fHalfHeigth = RECTANGLE_HEIGHT / 2;
 
-		m_sixCorneredShape.reset();
-		m_sixCorneredShape.moveTo(fStartingX, fStartingY);
-		m_sixCorneredShape.lineTo(fStartingX + fwidth, fStartingY);
-		m_sixCorneredShape.lineTo(fStartingX + fwidth + PARALLELOGRAM_MARGIN, fStartingY
+		GeneralPath sixCorneredShape = new GeneralPath();
+		sixCorneredShape.moveTo(fStartingX, fStartingY);
+		sixCorneredShape.lineTo(fStartingX + fwidth, fStartingY);
+		sixCorneredShape.lineTo(fStartingX + fwidth + PARALLELOGRAM_MARGIN, fStartingY
 				+ fHalfHeigth);
-		m_sixCorneredShape.lineTo(fStartingX + fwidth, fStartingY + RECTANGLE_HEIGHT);
-		m_sixCorneredShape.lineTo(fStartingX, fStartingY + RECTANGLE_HEIGHT);
-		m_sixCorneredShape.lineTo(fStartingX - PARALLELOGRAM_MARGIN, fStartingY
+		sixCorneredShape.lineTo(fStartingX + fwidth, fStartingY + RECTANGLE_HEIGHT);
+		sixCorneredShape.lineTo(fStartingX, fStartingY + RECTANGLE_HEIGHT);
+		sixCorneredShape.lineTo(fStartingX - PARALLELOGRAM_MARGIN, fStartingY
 				+ fHalfHeigth);
-		m_sixCorneredShape.lineTo(fStartingX, fStartingY);
+		sixCorneredShape.lineTo(fStartingX, fStartingY);
 
-		return m_sixCorneredShape;
+		return sixCorneredShape;
 	}
 
 	/**
@@ -228,14 +220,15 @@ public class StatementRenderer extends AbstractMSCRenderer {
 		int shapeWidth = (int) shape.getBounds().getWidth();
 
 		// Statement Text
-		m_labelRenderer.setMaxTextWidth(shapeWidth - TEXT_MARGIN);
-		m_labelRenderer.setRenderType(AbstractShapeRenderer.RENDER_TYPE_NONE);
+		LabelRenderer labelRenderer = new LabelRenderer(Statement.STATEMENT_FIELDNAME);
+		labelRenderer.setMaxTextWidth(shapeWidth - TEXT_MARGIN);
+		labelRenderer.setRenderType(AbstractShapeRenderer.RENDER_TYPE_NONE);
 
 		// Set different size for text
 		double oldSize = item.getSize();
 		item.setSize(TEXT_SIZE);
 
-		m_labelRenderer.render(g, item);
+		labelRenderer.render(g, item);
 
 		item.setSize(oldSize);
 	}

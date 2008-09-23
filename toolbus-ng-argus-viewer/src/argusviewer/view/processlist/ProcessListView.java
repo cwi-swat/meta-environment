@@ -9,7 +9,6 @@ import javax.swing.JScrollPane;
 import argusviewer.toolbus.DataComm;
 import argusviewer.view.IView;
 
-
 /**
  * This is the Process List View. It implements {@link IView}, so it can be
  * called. It also starts the other classes needed.
@@ -24,8 +23,8 @@ public class ProcessListView extends JScrollPane implements IView {
 	private static final String PLUGINNAME = "Process List";
 	private static final String PREFEREDPOSITION = "TopLeft";
 
-	private DataComm m_dataComm;
-	private ProcessTreeTable m_table;
+	private final DataComm m_dataComm;
+	private final ProcessTreeTable m_table;
 
 	/**
 	 * Constructor for ProcessListView.

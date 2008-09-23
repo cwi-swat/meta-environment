@@ -26,11 +26,10 @@ import argusviewer.view.msc.visual.MSCVisualization;
  * @author Roberto vd Linden
  */
 public class MSCPlugin implements IView {
-
 	private static final String PLUGIN_NAME = "Message Sequence Chart";
 	private static final String PREFERRED_POSITION = "TopRight";
 
-	private HashMap<String, Container> m_visualComponents;
+	private final HashMap<String, Container> m_visualComponents;
 
 	/**
 	 * Construct a Message Sequence Chart plugin.

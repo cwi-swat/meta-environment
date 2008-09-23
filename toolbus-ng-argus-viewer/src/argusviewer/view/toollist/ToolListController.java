@@ -17,15 +17,17 @@ import toolbus.tool.ToolInstance;
  * @author Roberto van der Linden
  */
 public class ToolListController implements IToolControlListener {
-	private ToolTreeModel m_toolTreeModel;
-	private ToolListView m_toolListView;
-	private FilterSync m_filterSync;
-	private FocusSync m_focusSync;
-	private DataComm m_dataComm;
+	private final DataComm m_dataComm;
+	
+	private final ToolTreeModel m_toolTreeModel;
+	private final ToolListView m_toolListView;
+	
+	private volatile FilterSync m_filterSync;
+	private volatile FocusSync m_focusSync;
 
 	/**
 	 * Constructor for ToolListController.
-	 * Registers all neccessary syncs.
+	 * Registers all necessary syncs.
 	 *
 	 * @param dataComm	 DataComm is needed for the interaction.
 	 * @param toolListView the ToolListView
@@ -142,29 +144,7 @@ public class ToolListController implements IToolControlListener {
 		m_toolTreeModel.removeToolInstance(toolInstance);
 		m_toolListView.refresh();
 	}
-
-	//-------------------------------------------------------------------------------
-	// Getters and Setters
-	//-------------------------------------------------------------------------------
-
-	/**
-	 * Sets the ToolTreeModel
-	 *
-	 * @param toolTreeModel toolTreeModel
-	 */
-	public void setToolTreeModel(ToolTreeModel toolTreeModel) {
-		this.m_toolTreeModel = toolTreeModel;
-	}
-
-	/**
-	 * Sets the ToolListView
-	 *
-	 * @param toolListView toolListView
-	 */
-	public void setToolListView(ToolListView toolListView) {
-		this.m_toolListView = toolListView;
-	}
-
+	
 	/**
 	 * Sets the filterSync.
 	 *

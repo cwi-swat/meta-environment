@@ -27,9 +27,10 @@ import com.sun.java.treetable.example.TreeTableModel;
  * @author H.Baggelaar
  * @author Jeldert Pol
  */
-public class ProcessTreeModel extends DefaultTreeModel implements
-		TreeTableModel, IProcessInstanceControlListener, IFileBreakPointListener, IProcessFilterListener  {
+public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel, IProcessInstanceControlListener, IFileBreakPointListener, IProcessFilterListener  {
 	private static final long serialVersionUID = -5813021647911033239L;
+	
+    private final static Logger m_logger = Logger.getLogger(ProcessTreeModel.class);
 	
 	/**
 	 * column information, names and types
@@ -42,10 +43,10 @@ public class ProcessTreeModel extends DefaultTreeModel implements
 	public static final int INSTANCENAME_COLUMN = 2;
 	public static final int ID_COLUMN = 3;
 	
-	private ProcessTreeTable m_table; // if the data changes, the table needs to be redrawn
-	private DataComm m_dataComm; 
+	private final DataComm m_dataComm; 
+	
+	private ProcessTreeTable m_table;
 
-    private Logger m_logger = Logger.getLogger(ProcessTreeModel.class);
 
     /**
 	 * The constructor for the ProcessTreeModel

@@ -19,20 +19,19 @@ import argusviewer.view.processlist.data.ProcessTreeNode.BreakPointType;
  * @author Jeldert Pol
  */
 public class BreakPointCellRenderer implements TableCellRenderer {
+	public static final ImageIcon ICON_LINE = new ImageIcon("resources/icons/breakpoint_source.png");
+	public static final ImageIcon ICON_PROCESS = new ImageIcon("resources/icons/breakpoint_process.png");
+	public static final ImageIcon ICON_BOTH = new ImageIcon("resources/icons/breakpoint_both.png");
 
-	public static final ImageIcon ICON_LINE = new ImageIcon(
-			"resources/icons/breakpoint_source.png");
-	public static final ImageIcon ICON_PROCESS = new ImageIcon(
-			"resources/icons/breakpoint_process.png");
-	public static final ImageIcon ICON_BOTH = new ImageIcon(
-			"resources/icons/breakpoint_both.png");
-
-	private JButton m_button = new JButton();
+	private final JButton m_button;
 
 	/**
 	 * The constructor of the BreakPointCellRenderer class
 	 */
 	public BreakPointCellRenderer() {
+		super();
+		
+		m_button = new JButton();
 		m_button.setOpaque(false);
 		m_button.setText("");
 		m_button.setBorderPainted(false);
@@ -82,9 +81,7 @@ public class BreakPointCellRenderer implements TableCellRenderer {
 				m_button.setIcon(null);
 				break;
 			default:
-				throw new RuntimeException(
-						"BreakPointCellRenderer: invalid BreakPointType: "
-								+ bpType);
+				throw new RuntimeException("BreakPointCellRenderer: invalid BreakPointType: " + bpType);
 			}
 		}
 		return m_button;

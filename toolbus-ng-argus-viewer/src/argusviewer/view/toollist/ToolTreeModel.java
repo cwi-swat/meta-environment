@@ -22,16 +22,17 @@ import com.sun.java.treetable.example.TreeTableModel;
 public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	private static final long serialVersionUID = 966338890140366722L;
 	
+	private final static Logger m_logger = Logger.getLogger(ToolTreeModel.class);
+	
 	private final String[] m_columns = { "Visible", "Tool Name", "ID" };
-	private final Class< ? >[] m_classTypes = { Boolean.class,
-			TreeTableModel.class, Integer.class };
+	private final Class<?>[] m_classTypes = { Boolean.class, TreeTableModel.class, Integer.class };
 
 	protected static final int VISIBLE_COLUMN = 0;
 	protected static final int TOOL_COLUMN = 1;
 	protected static final int ID_COLUMN = 2;
 
-	private Logger m_logger = Logger.getLogger(ToolTreeModel.class);
-	private ToolTreeTable m_table;
+	private volatile ToolTreeTable m_table;
+	
 	/**
 	 * Constructor
 	 * 

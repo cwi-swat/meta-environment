@@ -34,19 +34,6 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 	private static final float TIMESTAMP_MARGIN = 15.0f;
 	private static final int TIMESTAMP_VERTICAL_OFFSET = 5;
 
-	private Line2D m_beginLine = new Line2D.Double();
-	private Line2D m_endLine = new Line2D.Double();
-	private Rectangle2D m_rect = new Rectangle2D.Double();
-
-	private Point2D m_endPosBeginLine = new Point2D.Double();
-	private Point2D m_startPosRectangle = new Point2D.Double();
-	private Point2D m_endPosRectangle = new Point2D.Double();
-	private Point2D m_startPosEndLine = new Point2D.Double();
-	private Point2D m_endPosEndLine = new Point2D.Double();
-
-	private GeneralPath m_swimlaneShape = new GeneralPath();
-	private GeneralPath m_sinkShape = new GeneralPath();
-
 	private double m_maxY = 0;
 	
 	private final MSCData mscData;
@@ -84,17 +71,20 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 	 * @return the shape of the sink
 	 */
 	private GeneralPath getSinkShape(VisualItem visualEntity, double yMaximum) {
-		m_startPosRectangle.setLocation(visualEntity.getX() - HALF_SINK_WIDTH, 0);
-		m_endPosRectangle.setLocation(visualEntity.getX() + HALF_SINK_WIDTH, yMaximum);
+		Point2D startPosRectangle = new Point2D.Double();
+		startPosRectangle.setLocation(visualEntity.getX() - HALF_SINK_WIDTH, 0);
+		Point2D endPosRectangle = new Point2D.Double();
+		endPosRectangle.setLocation(visualEntity.getX() + HALF_SINK_WIDTH, yMaximum);
 
-		m_rect.setRect(m_startPosRectangle.getX(), m_startPosRectangle.getY(), m_endPosRectangle.getX() - m_startPosRectangle.getX(), m_endPosRectangle.getY() - m_startPosRectangle.getY());
+		Rectangle2D rect = new Rectangle2D.Double();
+		rect.setRect(startPosRectangle.getX(), startPosRectangle.getY(), endPosRectangle.getX() - startPosRectangle.getX(), endPosRectangle.getY() - startPosRectangle.getY());
 
 		// Refresh the bounding box values for this visual item so Prefuse knows when to invalidate it
-		visualEntity.setBounds(m_rect.getMinX(), m_rect.getMinY(), m_rect.getWidth(), m_rect.getHeight());
+		visualEntity.setBounds(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
 
-		m_sinkShape.reset();
-		m_sinkShape.append(m_rect, false);
-		return m_sinkShape;
+		GeneralPath sinkShape = new GeneralPath();
+		sinkShape.append(rect, false);
+		return sinkShape;
 	}
 
 	/**
@@ -109,26 +99,34 @@ public class SwimlaneRenderer extends AbstractMSCRenderer {
 		double endedEntity = getYPosEndSwimlaneRectangle(visualEntity);
 
 		Point2D startPosBeginLine = getShapePosition(visualEntity);
-		m_endPosBeginLine.setLocation(visualEntity.getX(), startedEntity);
+		Point2D endPosBeginLine = new Point2D.Double();
+		endPosBeginLine.setLocation(visualEntity.getX(), startedEntity);
 
-		m_startPosRectangle.setLocation(visualEntity.getX() - HALF_SWIMLANE_WIDTH, startedEntity);
-		m_endPosRectangle.setLocation(visualEntity.getX() + HALF_SWIMLANE_WIDTH, endedEntity);
+		Point2D startPosRectangle = new Point2D.Double();
+		startPosRectangle.setLocation(visualEntity.getX() - HALF_SWIMLANE_WIDTH, startedEntity);
+		Point2D endPosRectangle = new Point2D.Double();
+		endPosRectangle.setLocation(visualEntity.getX() + HALF_SWIMLANE_WIDTH, endedEntity);
 
-		m_startPosEndLine.setLocation(visualEntity.getX(), endedEntity);
-		m_endPosEndLine.setLocation(visualEntity.getX(), yMaximum);
+		Point2D startPosEndLine = new Point2D.Double();
+		startPosEndLine.setLocation(visualEntity.getX(), endedEntity);
+		Point2D endPosEndLine = new Point2D.Double();
+		endPosEndLine.setLocation(visualEntity.getX(), yMaximum);
 
-		m_beginLine.setLine(startPosBeginLine, m_endPosBeginLine);
-		m_endLine.setLine(m_startPosEndLine, m_endPosEndLine);
-		m_rect.setRect(m_startPosRectangle.getX(), m_startPosRectangle.getY(), m_endPosRectangle.getX() - m_startPosRectangle.getX(), m_endPosRectangle.getY() - m_startPosRectangle.getY());
+		Line2D beginLine = new Line2D.Double();
+		beginLine.setLine(startPosBeginLine, endPosBeginLine);
+		Line2D endLine = new Line2D.Double();
+		endLine.setLine(startPosEndLine, endPosEndLine);
+		Rectangle2D rect = new Rectangle2D.Double();
+		rect.setRect(startPosRectangle.getX(), startPosRectangle.getY(), endPosRectangle.getX() - startPosRectangle.getX(), endPosRectangle.getY() - startPosRectangle.getY());
 
 		// Refresh the bounding box values for this visual item so Prefuse knows when to invalidate it
 		visualEntity.setBounds(visualEntity.getX(), startPosBeginLine.getY(), 1, yMaximum - startPosBeginLine.getY());
 
-		m_swimlaneShape.reset();
-		m_swimlaneShape.append(m_beginLine, false);
-		m_swimlaneShape.append(m_rect, false);
-		m_swimlaneShape.append(m_endLine, false);
-		return m_swimlaneShape;
+		GeneralPath swimlaneShape = new GeneralPath();
+		swimlaneShape.append(beginLine, false);
+		swimlaneShape.append(rect, false);
+		swimlaneShape.append(endLine, false);
+		return swimlaneShape;
 	}
 
 	/**

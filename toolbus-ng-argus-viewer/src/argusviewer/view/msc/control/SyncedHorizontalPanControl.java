@@ -15,20 +15,11 @@ import prefuse.visual.VisualItem;
  * @author: Arne Timmerman
  */
 public class SyncedHorizontalPanControl extends PanControl {
-
-	private Display m_synchronizedDisplay;
+	protected static final int MOUSE_PANNING_BUTTON = Control.LEFT_MOUSE_BUTTON;
+	
+	private final Display m_synchronizedDisplay;
 
 	private int m_horizontalMouseDownPosition;
-	protected static final int MOUSE_PANNING_BUTTON = Control.LEFT_MOUSE_BUTTON;
-
-	/**
-	 * Create a Pan Control that only allow Horizontal Panning of the attached Display,
-	 * without synchronizing the Panning events to another Display.
-	 */
-	public SyncedHorizontalPanControl() {
-
-		this(null);
-	}
 
 	/**
 	 * Create a Horizontal Pan Control that only allows Horizontal Panning and
@@ -37,7 +28,6 @@ public class SyncedHorizontalPanControl extends PanControl {
 	 * @param synchronizedDisplay the display that must be synchronized with Horizontal Panning
 	 */
 	public SyncedHorizontalPanControl(Display synchronizedDisplay) {
-
 		super(MOUSE_PANNING_BUTTON);
 		this.m_synchronizedDisplay = synchronizedDisplay;
 	}
@@ -46,7 +36,6 @@ public class SyncedHorizontalPanControl extends PanControl {
 	 * {@inheritDoc}
 	 */
 	public void mousePressed(MouseEvent mouseEvent) {
-
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
 			m_horizontalMouseDownPosition = mouseEvent.getX();
 		}

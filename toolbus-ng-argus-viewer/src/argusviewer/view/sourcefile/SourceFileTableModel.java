@@ -1,9 +1,6 @@
 package argusviewer.view.sourcefile;
 
-
-
 import javax.swing.table.AbstractTableModel;
-
 
 /**
  * Classname SourceFileTableModel
@@ -12,16 +9,16 @@ import javax.swing.table.AbstractTableModel;
  * Date 13/2/2008
  *  
  * @author Qais & Bas
- *
  */
 public class SourceFileTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = -7623082694279943410L;
 	
 	private static final int COLUMN_COUNT = 3;
-	private int m_lineNumbers; 
 	
-	private String[] m_columnNames = {"", "", "" };
-	private Object[][] m_sourceLines;
+	private final static String[] m_columnNames = {"", "", "" }; 
+	
+	private final Object[][] m_sourceLines;
+	private final int m_lineNumbers;
 
 	/**
 	 * Constructs a new SourceFileTableModel. It is used to display the source

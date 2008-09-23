@@ -16,7 +16,6 @@ import java.util.ArrayList;
  * warnings about this, so we suppress them. 
  */
 public class Message extends AbstractTuple {
-
 	private static final int HASH_CODE = 31;
 
 	public static final String MESSAGE_FIELDNAME = "message";
@@ -43,7 +42,7 @@ public class Message extends AbstractTuple {
 	private static final int TABLE_COLUMNCOUNT = 4;
 	public static final Schema TABLE_SCHEMA;
 
-	static {
+	static{
 		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(MESSAGE_FIELDNAME, MESSAGE_FIELDTYPE, MESSAGE_DEFAULT_VALUE);
 		TABLE_SCHEMA.addColumn(SOURCEID_FIELDNAME, SOURCEID_FIELDTYPE, Integer.valueOf(SOURCEID_DEFAULT_VALUE));

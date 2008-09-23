@@ -28,7 +28,6 @@ import argusviewer.view.msc.data.Entity;
  * @author Roberto van der Linden
  */
 public class EntityRenderer extends AbstractMSCRenderer {
-
 	public static final double ENTITY_BASESIZE = BASESIZE * 0.7;
 	private static final double TEXT_SIZE = 1.1;
 	private static final float LINE_WIDTH = (float) 1.5;
@@ -39,44 +38,33 @@ public class EntityRenderer extends AbstractMSCRenderer {
 	protected static final double RECTANGLE_ASPECT_RATIO = 1.5;
 	protected static final double TEXT_MARGIN = LINE_WIDTH * 6;
 
-	private LabelRenderer m_labelRendererProcessId;
-	private LabelRenderer m_labelRendererProcessName;
-	private Rectangle2D m_rectangleShape = new Rectangle2D.Double();
-	private Ellipse2D m_ellipseShape = new Ellipse2D.Double();
-
 	/**
 	 * Default Constructor EntityRenderer
 	 */
 	public EntityRenderer() {
-		m_labelRendererProcessId = new LabelRenderer(Entity.ID_FIELDNAME);
-		m_labelRendererProcessName = new LabelRenderer(Entity.NAME_FIELDNAME);
+		super();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	protected Shape getRawShape(VisualItem item) {
-
+	protected Shape getRawShape(VisualItem item){
 		item.setStroke(STROKE);
 
 		Point2D pos = getShapePosition(item);
 
 		double width = ENTITY_BASESIZE * item.getSize();
 
-		if (item.canGet(Entity.TYPE_FIELDNAME, Entity.TYPE_FIELDTYPE)) {
-			Entity.Type itemType = (Entity.Type) item
-					.get(Entity.TYPE_FIELDNAME);
+		if(item.canGet(Entity.TYPE_FIELDNAME, Entity.TYPE_FIELDTYPE)){
+			Entity.Type itemType = (Entity.Type) item.get(Entity.TYPE_FIELDNAME);
 
-			switch (itemType) {
+			switch(itemType){
 				case TOOL:
 					return getRectangle(pos.getX(), pos.getY(), width);
-
 				case PROCESS:
 					return getCircle(pos.getX(), pos.getY(), width);
-
 				case SINK:
 					return null;
-
 				default:
 					throw new UnsupportedOperationException("Unknown entity type");
 			}
@@ -108,24 +96,26 @@ public class EntityRenderer extends AbstractMSCRenderer {
 		int verticalPadding = fm.getHeight();
 
 		// Process Id Text
-		m_labelRendererProcessId.setMaxTextWidth(shapeWidth - (int) TEXT_MARGIN);
-		m_labelRendererProcessId.setRenderType(AbstractShapeRenderer.RENDER_TYPE_NONE);
-		m_labelRendererProcessId.setVerticalAlignment(Constants.TOP);
-		m_labelRendererProcessId.setVerticalPadding(verticalPadding);
+		LabelRenderer labelRendererProcessId = new LabelRenderer(Entity.ID_FIELDNAME);
+		labelRendererProcessId.setMaxTextWidth(shapeWidth - (int) TEXT_MARGIN);
+		labelRendererProcessId.setRenderType(AbstractShapeRenderer.RENDER_TYPE_NONE);
+		labelRendererProcessId.setVerticalAlignment(Constants.TOP);
+		labelRendererProcessId.setVerticalPadding(verticalPadding);
 
 		// Set different size for text
 		double oldSize = item.getSize();
 		item.setSize(TEXT_SIZE);
 
-		m_labelRendererProcessId.render(g, item);
+		labelRendererProcessId.render(g, item);
 
 		// Process Name Text
-		m_labelRendererProcessName.setMaxTextWidth(shapeWidth - (int) TEXT_MARGIN);
-		m_labelRendererProcessName.setRenderType(AbstractShapeRenderer.RENDER_TYPE_NONE);
-		m_labelRendererProcessName.setVerticalAlignment(Constants.CENTER);
+		LabelRenderer labelRendererProcessName = new LabelRenderer(Entity.NAME_FIELDNAME);
+		labelRendererProcessName.setMaxTextWidth(shapeWidth - (int) TEXT_MARGIN);
+		labelRendererProcessName.setRenderType(AbstractShapeRenderer.RENDER_TYPE_NONE);
+		labelRendererProcessName.setVerticalAlignment(Constants.CENTER);
 
-		m_labelRendererProcessName.setVerticalPadding(verticalPadding);
-		m_labelRendererProcessName.render(g, item);
+		labelRendererProcessName.setVerticalPadding(verticalPadding);
+		labelRendererProcessName.render(g, item);
 
 		item.setSize(oldSize);
 	}
@@ -148,8 +138,9 @@ public class EntityRenderer extends AbstractMSCRenderer {
 			y -= height / RECTANGLE_HEIGHT_MODIFIER;
 		}
 
-		m_rectangleShape.setFrame(x, y, width, height);
-		return m_rectangleShape;
+		Rectangle2D rectangleShape = new Rectangle2D.Double();
+		rectangleShape.setFrame(x, y, width, height);
+		return rectangleShape;
 	}
 
 	/**
@@ -167,8 +158,9 @@ public class EntityRenderer extends AbstractMSCRenderer {
 			y -= width / 2;
 		}
 
-		m_ellipseShape.setFrame(x, y, width, width);
-		return m_ellipseShape;
+		Ellipse2D ellipseShape = new Ellipse2D.Double();
+		ellipseShape.setFrame(x, y, width, width);
+		return ellipseShape;
 	}
 
 }

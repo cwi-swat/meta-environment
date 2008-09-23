@@ -25,16 +25,9 @@ import prefuse.visual.VisualItem;
  *         Note that messages are not drawed if one of the entities is invisible.
  */
 public class MessageRenderer extends AbstractShapeRenderer {
-
 	private static final int ARROW_WIDTH = 10;
 	private static final int SOURCE_BLOCK_WIDTH = 10;
 	private static final int ARROW_HEIGHT = 5;
-
-	private GeneralPath m_messageShapes = new GeneralPath();
-	private Rectangle2D m_messageSourceBlock = new Rectangle2D.Double();
-	private Polygon m_messageArrowHead = new Polygon();
-	private GeneralPath m_messageShape = new GeneralPath();
-	private Line2D m_messageLine = new Line2D.Double();
 
 	/**
 	 * {@inheritDoc}
@@ -45,7 +38,7 @@ public class MessageRenderer extends AbstractShapeRenderer {
 			return null;
 		}
 
-		m_messageShapes.reset();
+		GeneralPath messageShapes = new GeneralPath();
 		for (double targetXPos : targetXPositions) {
 
 			// Only create an edge if source and target positions are
@@ -54,15 +47,15 @@ public class MessageRenderer extends AbstractShapeRenderer {
 					|| (targetXPos != EntityLayout.getOutgoingSinkX())) {
 
 				Shape messageShape = createEdge(item.getX(), item.getY(), targetXPos);
-				m_messageShapes.append(messageShape, false);
+				messageShapes.append(messageShape, false);
 			}
 		}
 
 		// Refresh the bounding box values for this visual item so Prefuse knows when to invalidate it
-		Rectangle edgesBounds = m_messageShapes.getBounds();
+		Rectangle edgesBounds = messageShapes.getBounds();
 		item.setBounds(edgesBounds.getMinX(), edgesBounds.getMinY(), edgesBounds.getWidth(), edgesBounds.getHeight());
 
-		return m_messageShapes;
+		return messageShapes;
 	}
 
 	/**
@@ -116,7 +109,8 @@ public class MessageRenderer extends AbstractShapeRenderer {
 	 */
 	private Shape createEdge(double startX, double yPos, double endX) {
 		double halfBlockWidth = SOURCE_BLOCK_WIDTH / 2.0;
-		m_messageLine.setLine(
+		Line2D messageLine = new Line2D.Double();
+		messageLine.setLine(
 				(endX > startX ? startX + halfBlockWidth : startX - halfBlockWidth),
 				yPos,
 				(endX > startX ? endX - ARROW_WIDTH - 1 : endX + ARROW_WIDTH + 1),
@@ -131,12 +125,12 @@ public class MessageRenderer extends AbstractShapeRenderer {
 
 		Rectangle2D edgeSourceBlock = createSourceBlock(startX, yPos);
 
-		m_messageShape.reset();
-		m_messageShape.append(edgeSourceBlock, false);
-		m_messageShape.append(m_messageLine, false);
-		m_messageShape.append(edgeArrowHead, false);
+		GeneralPath messageShape = new GeneralPath();
+		messageShape.append(edgeSourceBlock, false);
+		messageShape.append(messageLine, false);
+		messageShape.append(edgeArrowHead, false);
 
-		return m_messageShape;
+		return messageShape;
 	}
 
 
@@ -152,8 +146,9 @@ public class MessageRenderer extends AbstractShapeRenderer {
 		double startX = centerX - halfBlockWidth;
 		double startY = centerY - halfBlockWidth;
 
-		m_messageSourceBlock.setRect(startX, startY, SOURCE_BLOCK_WIDTH, SOURCE_BLOCK_WIDTH);
-		return m_messageSourceBlock;
+		Rectangle2D messageSourceBlock = new Rectangle2D.Double();
+		messageSourceBlock.setRect(startX, startY, SOURCE_BLOCK_WIDTH, SOURCE_BLOCK_WIDTH);
+		return messageSourceBlock;
 	}
 
 	/**
@@ -167,20 +162,20 @@ public class MessageRenderer extends AbstractShapeRenderer {
 	 * @return The created arrowhead
 	 */
 	private Polygon createArrowhead(int x, int y, boolean forward) {
-		m_messageArrowHead.reset();
+		Polygon messageArrowHead = new Polygon();
 		
 		if (forward) {
-			m_messageArrowHead.addPoint(x - 1, y);
-			m_messageArrowHead.addPoint(x - ARROW_WIDTH, y - ARROW_HEIGHT);
-			m_messageArrowHead.addPoint(x - ARROW_WIDTH, y + ARROW_HEIGHT);
-			m_messageArrowHead.addPoint(x - 1, y);
+			messageArrowHead.addPoint(x - 1, y);
+			messageArrowHead.addPoint(x - ARROW_WIDTH, y - ARROW_HEIGHT);
+			messageArrowHead.addPoint(x - ARROW_WIDTH, y + ARROW_HEIGHT);
+			messageArrowHead.addPoint(x - 1, y);
 		} else {
-			m_messageArrowHead.addPoint(x + 1, y);
-			m_messageArrowHead.addPoint(x + ARROW_WIDTH, y - ARROW_HEIGHT);
-			m_messageArrowHead.addPoint(x + ARROW_WIDTH, y + ARROW_HEIGHT);
-			m_messageArrowHead.addPoint(x + 1, y);
+			messageArrowHead.addPoint(x + 1, y);
+			messageArrowHead.addPoint(x + ARROW_WIDTH, y - ARROW_HEIGHT);
+			messageArrowHead.addPoint(x + ARROW_WIDTH, y + ARROW_HEIGHT);
+			messageArrowHead.addPoint(x + 1, y);
 		}
 
-		return m_messageArrowHead;
+		return messageArrowHead;
 	}
 }

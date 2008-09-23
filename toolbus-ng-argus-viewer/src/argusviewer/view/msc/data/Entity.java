@@ -18,7 +18,6 @@ import prefuse.data.Schema;
  * warnings about this, so we suppress them. 
  */
 public class Entity extends AbstractTuple {
-
 	private static final int HASH_CODE = 31;
 
 	public static final String ID_FIELDNAME = "id";
@@ -54,7 +53,7 @@ public class Entity extends AbstractTuple {
 	public static final String TABLE_NAME = "entities";
 	private static final int TABLE_COLUMNCOUNT = 6;
 	public static final Schema TABLE_SCHEMA;
-	static {
+	static{
 		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(ID_FIELDNAME, ID_FIELDTYPE, Integer.valueOf(ID_DEFAULT_VALUE));
 		TABLE_SCHEMA.addColumn(NAME_FIELDNAME, NAME_FIELDTYPE, NAME_DEFAULT_VALUE);
@@ -69,17 +68,10 @@ public class Entity extends AbstractTuple {
 	/**
 	 * The Type of the Entity
 	 */
-	public enum Type {
+	public enum Type{
 		PROCESS,
 		TOOL,
 		SINK
-	}
-
-	/**
-	 * Create a new Entity with default values.
-	 */
-	public Entity() {
-		this(ID_DEFAULT_VALUE, NAME_DEFAULT_VALUE, TYPE_DEFAULT_VALUE, RUNNING_DEFAULT_VALUE, STARTTICK_DEFAULT_VALUE);
 	}
 
 	/**

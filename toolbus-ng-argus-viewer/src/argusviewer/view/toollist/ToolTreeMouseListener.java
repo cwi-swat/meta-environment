@@ -9,8 +9,7 @@ import java.awt.event.MouseEvent;
  * @author Roberto van der Linden
  */
 public class ToolTreeMouseListener extends MouseAdapter {
-
-	private ToolTreeTable m_toolTreeTable;
+	private final ToolTreeTable m_toolTreeTable;
 
 	/**
 	 * Constructor

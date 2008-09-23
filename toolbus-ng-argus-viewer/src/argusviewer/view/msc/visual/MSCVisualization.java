@@ -47,8 +47,7 @@ import argusviewer.view.msc.data.Statement;
  * @author Alexander Bij
  * @author Roberto vd Linden
  */
-public class MSCVisualization {
-
+public class MSCVisualization{
 	private static final int RGB_COLOR_ASYNC_COMMUNICATION = ColorLib.rgb(216, 191, 216);
 	private static final int RGB_COLOR_SYNC_COMMUNICATION = ColorLib.rgb(255, 242, 72);
 	private static final int RGB_COLOR_TOOL_COMMUNICATION = ColorLib.rgb(179, 215, 143);
@@ -262,7 +261,6 @@ public class MSCVisualization {
 	 * @return an ActionList that contains all filter actions
 	 */
 	private ActionList createFilterActions() {
-
 		ActionList filterActions = new ActionList();
 		m_entityVisiblityFilter = new EntityVisibilityFilter();
 		filterActions.add(m_entityVisiblityFilter);

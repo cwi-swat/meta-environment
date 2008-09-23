@@ -33,14 +33,13 @@ import argusviewer.view.IView;
  *  
  * @author Qais & Bas
  * @author M. van Beest
- *
  */
 public class SourceFilePanel extends JPanel implements TableModelListener, IView {
 	private static final long serialVersionUID = 5903220341851733896L;
 	
-	private JTable m_sourceCode; // is used to view the source code
-	private SourceFileTableModel m_sourceModel; // table model used to put objects in JTable
-	private String m_scriptName; // the script name
+	private final JTable m_sourceCode;
+	private final SourceFileTableModel m_sourceModel;
+	private final String m_scriptName;
 	private static final Color SELECTED_ROW_COLOR = new Color(255, 255, 215); // the color of a row if selected by user
 	private static final Color BREAKPOINT_ROW_COLOR = new Color(255, 112, 112); // the color of a row if a breakpoint is reached
 	private static final Color STEP_ROW_COLOR = new Color(126, 192, 238); // the color of a row during steps
@@ -50,7 +49,7 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 	private static final int SECOND_COLUMN_INDEX = 1;
 	private static final int SECOND_COLUMN_WIDTH = 50;
 	
-	private DataComm m_dataComm;
+	private final DataComm m_dataComm;
 
 	/**
 	 * Constructs a Panel with a line-number, breakpoint, source-text
@@ -75,8 +74,7 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 					m_sourceCode.setSelectionBackground(SELECTED_ROW_COLOR);         
 			    }
 			}
-		} 
-		);
+		});
 		
 		m_sourceCode.getModel().addTableModelListener(this);
 		m_sourceCode.setShowGrid(false);

@@ -15,12 +15,13 @@ import toolbus.process.ProcessInstance;
  * @author Jeldert Pol
  */
 public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
-	private ProcessInstance m_processInstance;
-	private boolean m_breakPoint;
-	private boolean m_filter;
-	private boolean m_removed; // items aren't really removed anymore, instead they are set as 'removed' so the items can still be set as visible/invisible even when removed.
-	private DataComm m_dataComm; // if the status of this thing changes, the datacomm should be notified
+	private final ProcessInstance m_processInstance;
+	private final DataComm m_dataComm;
 
+	private volatile boolean m_breakPoint;
+	private volatile boolean m_filter;
+	private volatile boolean m_removed; // items aren't really removed anymore, instead they are set as 'removed' so the items can still be set as visible/invisible even when removed.
+	
 	/**
 	 * Constructor. Initiates itself, setting breakpoint to false, and filter to false.
 	 * 

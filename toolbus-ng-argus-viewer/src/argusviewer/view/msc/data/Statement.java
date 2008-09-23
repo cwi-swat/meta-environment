@@ -34,7 +34,6 @@ import toolbus.atom.tool.Terminate;
  * warnings about this, so we suppress them. 
  */
 public class Statement extends AbstractTuple {
-
 	private static final int HASH_CODE = 31;
 
 	public static final String STATEMENT_FIELDNAME = "statement";
@@ -55,21 +54,20 @@ public class Statement extends AbstractTuple {
 	public static final String TABLE_NAME = "statements";
 	private static final int TABLE_COLUMNCOUNT = 3;
 	public static final Schema TABLE_SCHEMA;
-	static {
+	static{
 		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(STATEMENT_FIELDNAME, STATEMENT_FIELDTYPE, STATEMENT_DEFAULT_VALUE);
 		TABLE_SCHEMA.addColumn(PARENTID_FIELDNAME, PARENTID_FIELDTYPE, PARENTID_DEFAULT_VALUE);
 		TABLE_SCHEMA.addColumn(TIMESTAMP_FIELDNAME, TIMESTAMP_FIELDTYPE, Integer.valueOf(TIMESTAMP_DEFAULT_VALUE));
 	}
 
-	public static final String[] COLUMNS =
-		{STATEMENT_FIELDNAME, PARENTID_FIELDNAME, TIMESTAMP_FIELDNAME};
+	public static final String[] COLUMNS = {STATEMENT_FIELDNAME, PARENTID_FIELDNAME, TIMESTAMP_FIELDNAME};
 
 	public static final ArrayList<Class< ? extends StateElement>> ASYNC_COMMUNICATION;
 	public static final ArrayList<Class< ? extends StateElement>> SYNC_COMMUNICATION;
 	public static final ArrayList<Class< ? extends StateElement>> TOOL_COMMUNICATION;
 
-	static {
+	static{
 		ASYNC_COMMUNICATION = new ArrayList<Class< ? extends StateElement>>();
 		ASYNC_COMMUNICATION.add(RecNote.class);
 		ASYNC_COMMUNICATION.add(SndNote.class);
@@ -91,13 +89,6 @@ public class Statement extends AbstractTuple {
 		TOOL_COMMUNICATION.add(RecVal.class);
 		TOOL_COMMUNICATION.add(SndKill.class);
 		TOOL_COMMUNICATION.add(Terminate.class);
-	}
-
-	/**
-	 * Create a Statement tuple with default values.
-	 */
-	public Statement() {
-		this(STATEMENT_DEFAULT_VALUE, PARENTID_DEFAULT_VALUE, TIMESTAMP_DEFAULT_VALUE);
 	}
 	
 	/**

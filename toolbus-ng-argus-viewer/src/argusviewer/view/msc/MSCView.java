@@ -48,18 +48,19 @@ public class MSCView extends JPanel {
 	protected static final int TOP_DISPLAY_HEIGHT;
 
 	// Calculate the initial panning values of the displays
-	static {
+	static{
 		double entityHalfSize = EntityRenderer.ENTITY_BASESIZE / 2.0;
 		HORIZONTAL_DISPLAY_PAN = entityHalfSize + HORIZONTAL_DISPLAY_OFFSET;
 		VERTICAL_TOP_DISPLAY_PAN = entityHalfSize + VERTICAL_TOP_DISPLAY_OFFSET;
 		VERTICAL_MAIN_DISPLAY_PAN = -entityHalfSize;
 		TOP_DISPLAY_HEIGHT = (int) (EntityRenderer.ENTITY_BASESIZE + VERTICAL_TOP_DISPLAY_OFFSET);
 	}
+	
+	private final MSCVisualization m_mscVisualization;
 
 	private Display m_topDisplay;
 	private Display m_mainDisplay;
 
-	private MSCVisualization m_mscVisualization;
 
 	/**
 	 * Create the View on the visualization of the Message Sequence Chart.

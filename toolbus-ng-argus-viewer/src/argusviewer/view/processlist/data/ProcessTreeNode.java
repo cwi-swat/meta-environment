@@ -25,16 +25,15 @@ import toolbus.process.ProcessInstance;
  */
 public class ProcessTreeNode extends DefaultMutableTreeNode {
 	private static final long serialVersionUID = -1647785404014342231L;
-	
-	private boolean m_hasSourceCodeBreakpoint = false;
 
 	/**
 	 * The different BreakPointTypes for the treenodes
 	 */
 	public static enum BreakPointType { NONE, PROCESS, LINE, BOTH }
 
-	private ProcessTreeListItem m_item;
-
+	private volatile ProcessTreeListItem m_item;
+	private volatile boolean m_hasSourceCodeBreakpoint = false;
+	
 	/**
 	 * The constructor creates a process tree. By default it has no breakpoint,
 	 * and is visible.

@@ -12,7 +12,6 @@ import prefuse.visual.sort.ItemSorter;
  *
  */
 public class MSCItemSorter extends ItemSorter {
-
 	protected static final int DECORATOR_SCORE = 1;
 	protected static final int MESSAGE_SCORE = 2;
 	protected static final int DEFAULT_SCORE = 3;
@@ -33,7 +32,6 @@ public class MSCItemSorter extends ItemSorter {
 	 * 
 	 */
 	public int score(VisualItem item) {
-    	
     	if (item instanceof DecoratorItem) {
     		return DECORATOR_SCORE;
     	} else if (item.getRenderer() instanceof MessageRenderer) {

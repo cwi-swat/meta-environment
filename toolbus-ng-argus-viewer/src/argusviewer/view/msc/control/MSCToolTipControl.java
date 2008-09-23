@@ -1,11 +1,11 @@
 package argusviewer.view.msc.control;
 
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import prefuse.Display;
 import prefuse.controls.ControlAdapter;
 import prefuse.visual.VisualItem;
-
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import argusviewer.view.msc.data.Entity;
 import argusviewer.view.msc.data.Message;
 import argusviewer.view.msc.data.Statement;
@@ -18,16 +18,14 @@ import argusviewer.view.msc.visual.MSCVisualizationUtil;
  * @author: Arne Timmerman
  * @author: Roberto van der Linden
  */
-public class MSCToolTipControl extends ControlAdapter {
-
-	private StringBuffer m_tooltipContents;
+public class MSCToolTipControl extends ControlAdapter{
 	protected static final int CHARACTERS_PER_LINE = 100;
 
 	/**
 	 * Create a new ToolTip control for message in the Message Sequence Chart.
 	 */
 	public MSCToolTipControl() {
-		m_tooltipContents = new StringBuffer();
+		super();
 	}
 
 	/**
@@ -54,8 +52,8 @@ public class MSCToolTipControl extends ControlAdapter {
 	 * @param message the VisualItem that represents the message
 	 * @return a String representation for a Message ToolTip
 	 */
-	protected String getMessageToolTip(VisualItem message) {
-		m_tooltipContents.delete(0, m_tooltipContents.length());
+	protected String getMessageToolTip(VisualItem message){
+		StringBuilder tooltipContents = new StringBuilder();
 
 		int sourceId = ((Integer) message.get(Message.SOURCEID_FIELDNAME)).intValue();
 		VisualItem sourceStatement = MSCVisualizationUtil.getStatement(message.getVisualization(), sourceId);
@@ -64,20 +62,20 @@ public class MSCToolTipControl extends ControlAdapter {
 		String messageContent = (String) message.get(Message.MESSAGE_FIELDNAME);
 		ArrayList<String> targetEntities = (ArrayList<String>) message.get(Message.TARGETIDS_FIELDNAME);
 
-		m_tooltipContents.append("<html>");
-		m_tooltipContents.append("<b>Source:</b><br>");
-		m_tooltipContents.append(sourceEntity);
-		m_tooltipContents.append("<br><br><b>Message:</b><br>");
-		m_tooltipContents.append(createMultilineString(messageContent));
-		m_tooltipContents.append("<br><br><b>Destination(s):</b>");
+		tooltipContents.append("<html>");
+		tooltipContents.append("<b>Source:</b><br>");
+		tooltipContents.append(sourceEntity);
+		tooltipContents.append("<br><br><b>Message:</b><br>");
+		tooltipContents.append(createMultilineString(messageContent));
+		tooltipContents.append("<br><br><b>Destination(s):</b>");
 
 		for (String targetEntity : targetEntities) {
-			m_tooltipContents.append("<br>");
-			m_tooltipContents.append(targetEntity);
+			tooltipContents.append("<br>");
+			tooltipContents.append(targetEntity);
 		}
 
-		m_tooltipContents.append("</html>");
-		return m_tooltipContents.toString();
+		tooltipContents.append("</html>");
+		return tooltipContents.toString();
 	}
 
 	/**
@@ -88,16 +86,16 @@ public class MSCToolTipControl extends ControlAdapter {
 	 * @return a String representation for a Statement ToolTip
 	 */
 	protected String getStatementToolTip(VisualItem statement) {
-		m_tooltipContents.delete(0, m_tooltipContents.length());
+		StringBuilder tooltipContents = new StringBuilder();
 
 		String statementContent = (String) statement.get(Statement.STATEMENT_FIELDNAME);
 
-		m_tooltipContents.append("<html>");
-		m_tooltipContents.append("<b>Statement:</b><br>");
-		m_tooltipContents.append(createMultilineString(statementContent));
-		m_tooltipContents.append("</html>");
+		tooltipContents.append("<html>");
+		tooltipContents.append("<b>Statement:</b><br>");
+		tooltipContents.append(createMultilineString(statementContent));
+		tooltipContents.append("</html>");
 
-		return m_tooltipContents.toString();
+		return tooltipContents.toString();
 	}
 
 	/**
@@ -108,22 +106,22 @@ public class MSCToolTipControl extends ControlAdapter {
 	 * @return a String representation for an Entity ToolTip
 	 */
 	protected String getEntityToolTip(VisualItem entity) {
-		m_tooltipContents.delete(0, m_tooltipContents.length());
+		StringBuilder tooltipContents = new StringBuilder();
 
 		int entityId = ((Integer) entity.get(Entity.ID_FIELDNAME)).intValue();
 		String entityName = (String) entity.get(Entity.NAME_FIELDNAME);
 		Entity.Type entityType = (Entity.Type) entity.get(Entity.TYPE_FIELDNAME);
 
-		m_tooltipContents.append("<html>");
-		m_tooltipContents.append("<b>");
-		m_tooltipContents.append(entityName);
-		m_tooltipContents.append(" ");
-		m_tooltipContents.append(entityId);
-		m_tooltipContents.append("<br><br>Type:</b><br>");
-		m_tooltipContents.append(entityType);
-		m_tooltipContents.append("</html>");
+		tooltipContents.append("<html>");
+		tooltipContents.append("<b>");
+		tooltipContents.append(entityName);
+		tooltipContents.append(" ");
+		tooltipContents.append(entityId);
+		tooltipContents.append("<br><br>Type:</b><br>");
+		tooltipContents.append(entityType);
+		tooltipContents.append("</html>");
 
-		return m_tooltipContents.toString();
+		return tooltipContents.toString();
 	}
 
 	/**

@@ -14,9 +14,8 @@ import prefuse.visual.VisualItem;
  * @author: Arne Timmerman
  */
 public class HorizontalSyncedPanControl extends PanControl {
-
-	private Display m_synchronizedDisplay;
-	private double m_initialVerticalPosition;
+	private final Display m_synchronizedDisplay;
+	private final double m_initialVerticalPosition;
 
 	private int m_horizontalMouseDownPosition;
 	private int m_verticalMouseDownPosition;
@@ -26,45 +25,23 @@ public class HorizontalSyncedPanControl extends PanControl {
 	/**
 	 * Create a Pan Control that allows Mouse Panning of the attached Display,
 	 * without synchronizing the Panning events to another Display.
-	 */
-	public HorizontalSyncedPanControl() {
-
-		this(null);
-	}
-
-	/**
-	 * Create a Pan Control that allows Mouse Panning of the attached Display and
-	 * synchronises Panning events to the given other Display.
-	 *
-	 * @param synchronizedDisplay the display that must be synchronized with Horizontal Panning
-	 */
-	public HorizontalSyncedPanControl(Display synchronizedDisplay) {
-
-		this(synchronizedDisplay, 0);
-	}
-
-	/**
-	 * Create a Pan Control that allows Mouse Panning of the attached Display,
-	 * without synchronizing the Panning events to another Display.
 	 * The vertical Panning will never exceed the initial pan.
 	 *
 	 * @param initialVerticalPan the amount of vertical pan of the display where this control is enabled on
 	 */
 	public HorizontalSyncedPanControl(double initialVerticalPan) {
-
 		this(null, initialVerticalPan);
 	}
 
 	/**
 	 * Create a Pan Control that allows Mouse Panning of the attached Display and
-	 * synchronises Panning events to the given other Display.
+	 * synchronizes Panning events to the given other Display.
 	 * The vertical Panning will never exceed the initial pan.
 	 *
 	 * @param synchronizedDisplay the display that must be synchronized with Horizontal Panning
 	 * @param initialVerticalPan the amount of vertical pan of the display where this control is enabled on
 	 */
 	public HorizontalSyncedPanControl(Display synchronizedDisplay, double initialVerticalPan) {
-
 		super(MOUSE_PANNING_BUTTON);
 
 		// Vertical panning of a Prefuse Display is negated compared to the vertical postion
@@ -76,7 +53,6 @@ public class HorizontalSyncedPanControl extends PanControl {
 	 * {@inheritDoc}
 	 */
 	public void mousePressed(MouseEvent mouseEvent) {
-
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
 			m_horizontalMouseDownPosition = mouseEvent.getX();
 			m_verticalMouseDownPosition = mouseEvent.getY();
@@ -87,7 +63,6 @@ public class HorizontalSyncedPanControl extends PanControl {
 	 * {@inheritDoc}
 	 */
 	public void mouseDragged(MouseEvent mouseEvent) {
-
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
 			Display pannedDisplay = (Display) mouseEvent.getSource();
 
@@ -126,7 +101,6 @@ public class HorizontalSyncedPanControl extends PanControl {
 	 * {@inheritDoc}
 	 */
 	public void mouseReleased(MouseEvent mouseEvent) {
-
 		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
 			m_horizontalMouseDownPosition = -1;
 			m_verticalMouseDownPosition = -1;
@@ -171,5 +145,4 @@ public class HorizontalSyncedPanControl extends PanControl {
 	public void itemReleased(VisualItem item, MouseEvent e) {
     	mouseReleased(e);
     }
-
 }

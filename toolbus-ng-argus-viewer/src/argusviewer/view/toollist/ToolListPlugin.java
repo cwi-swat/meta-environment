@@ -15,8 +15,8 @@ import argusviewer.view.IView;
  */
 public class ToolListPlugin implements IView {
 
-	private HashMap<String, Container> m_visualComponents;
-	private ToolListView m_toolListView;
+	private final HashMap<String, Container> m_visualComponents;
+	private final ToolListView m_toolListView;
 
 	public static final String PLUGIN_NAME = "Tool List";
 	private static final String PREFERRED_POSITION = "CenterLeft";
@@ -29,8 +29,7 @@ public class ToolListPlugin implements IView {
 	public ToolListPlugin(DataComm dataComm) {
 		m_toolListView = new ToolListView();
 		new ToolListController(dataComm, m_toolListView);
-
-
+		
 		m_visualComponents = new HashMap<String, Container>();
 		m_visualComponents.put(PLUGIN_NAME, m_toolListView);
 	}

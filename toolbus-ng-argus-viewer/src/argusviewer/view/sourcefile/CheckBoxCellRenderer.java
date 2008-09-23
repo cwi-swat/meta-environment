@@ -1,6 +1,5 @@
 package argusviewer.view.sourcefile;
 
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -12,7 +11,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-
 
 /**
  * class CheckBoxCellRenderer 
@@ -27,9 +25,9 @@ public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCel
 	
 	private static final ImageIcon ICONS_BREAKPOINT_SOURCE = new ImageIcon("resources/icons/breakpoint_source.png");
 	private static final ImageIcon ICON_BREAKPOINT_SOURCE_TRANSPARANT = new ImageIcon("resources/icons/breakpoint_source_transparant.png");
-	private JCheckBox m_checkBox;
 	
-
+	private final JCheckBox m_checkBox;
+	
     /**
      *  sets images and background of the checkbox
      */

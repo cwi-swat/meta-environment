@@ -13,11 +13,10 @@ import java.awt.event.MouseWheelEvent;
  * @author Arne Timmerman
  */
 public class WheelScrollControl extends ControlAdapter {
-
 	protected static final int BLOCK_SCROLL_AMOUNT = 50;
 	protected static final int SCROLL_SPEED = 8;
 
-	private double m_initialVerticalPosition;
+	private final double m_initialVerticalPosition;
 
 	/**
 	 * Create a WheelScrollControl object that accounts for the initial vertical pan while scrolling.
@@ -26,24 +25,14 @@ public class WheelScrollControl extends ControlAdapter {
 	 * @param initialVerticalPan the amount of vertical pan of the display where this control is enabled on
 	 */
 	public WheelScrollControl(double initialVerticalPan) {
-
 		// Vertical panning of a Prefuse Display is negated compared to the vertical postion
 		this.m_initialVerticalPosition = -initialVerticalPan;
-	}
-
-	/**
-	 * Create a WheelScrollControl object. The initial vertical pan is set to zero.
-	 */
-	public WheelScrollControl() {
-
-		this(0);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void itemWheelMoved(VisualItem visualItem, MouseWheelEvent mouseEvent) {
-
 		mouseWheelMoved(mouseEvent);
 	}
 
@@ -51,7 +40,6 @@ public class WheelScrollControl extends ControlAdapter {
 	 * {@inheritDoc}
 	 */
 	public void mouseWheelMoved(MouseWheelEvent mouseEvent) {
-
 		Display display = (Display) mouseEvent.getComponent();
 
 		// The vertical movement that is calculated from a Mouse Wheel Event

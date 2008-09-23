@@ -19,8 +19,8 @@ import com.sun.java.treetable.example.JTreeTable;
 public class ToolTreeTable extends JTreeTable {
 	private static final long serialVersionUID = 2789153921245474573L;
 	
-	private ToolListController m_toolListController;
-	private ToolTreeModel m_model;
+	private final ToolListController m_toolListController;
+	private final ToolTreeModel m_model;
 	
 	/**
 	 * Constructor which calls super with toolTreeModel
@@ -70,15 +70,6 @@ public class ToolTreeTable extends JTreeTable {
 			ToolTreeNode node = (ToolTreeNode) getValueAt(row, ToolTreeModel.TOOL_COLUMN);
 			m_toolListController.sendClickEvent(clickCount, column, node);
 		}
-	}
-
-	/**
-	 * Set the ToolListController
-	 *
-	 * @param toolListController toolListController
-	 */
-	public void setToolListController(ToolListController toolListController) {
-		this.m_toolListController = toolListController;
 	}
 
 	/**

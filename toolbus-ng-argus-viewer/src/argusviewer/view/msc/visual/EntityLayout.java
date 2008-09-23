@@ -20,14 +20,13 @@ import argusviewer.view.msc.data.Entity;
  * @author Roberto van der Linden
  *
  */
-public class EntityLayout extends Layout {
-
-	private static final int HORIZONTAL_MARGIN = 40;
+public class EntityLayout extends Layout{
+	private final static int HORIZONTAL_MARGIN = 40;
+	public final static double INCOMING_SINK_X = 0;
 	
-	private String m_swimlaneName;
-
-	public static final double INCOMING_SINK_X = 0;
-	private static double outgoingSinkX;
+	private volatile static double outgoingSinkX;
+	
+	private final String m_swimlaneName;
 	
 	/**
 	 * Create a new Entity Layout for the specified group.

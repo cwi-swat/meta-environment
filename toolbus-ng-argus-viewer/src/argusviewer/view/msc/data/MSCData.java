@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import argusviewer.ApplicationSettings;
 
-// TODO This class is broken and needs fixing.
+// TODO This class is 'broken' and needs fixing.
 /**
  * The data tables for the Message Sequence Chart View. There are three tables:
  * - Entities: Contains a list of processes and tools;

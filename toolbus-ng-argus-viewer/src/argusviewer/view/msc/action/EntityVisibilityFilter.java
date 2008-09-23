@@ -15,9 +15,8 @@ import argusviewer.view.msc.data.Entity;
  * @author: Arne Timmerman
  */
 public class EntityVisibilityFilter extends GroupAction {
-
-	private List<Integer> m_visibleProcessInstances;
-    private List<Integer> m_visibleToolInstances;
+	private final List<Integer> m_visibleProcessInstances;
+    private final List<Integer> m_visibleToolInstances;
 
 	/**
 	 * Create a default EntityVisibilityFilter without extra parameters.

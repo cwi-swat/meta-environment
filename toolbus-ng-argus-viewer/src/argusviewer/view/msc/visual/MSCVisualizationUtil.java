@@ -15,6 +15,10 @@ import argusviewer.view.msc.data.Statement;
  * @author: Arne Timmerman
  */
 public class MSCVisualizationUtil {
+	
+	private MSCVisualizationUtil(){
+		super();
+	}
 
 	/**
 	 * Check if the target entity of a statement is visible.
@@ -28,8 +32,7 @@ public class MSCVisualizationUtil {
 
 		// Find all messages that are send on this timestamp
 		String searchText = Message.SOURCEID_FIELDNAME + " == " + timestamp;
-		Iterator<VisualItem> matchingMessages = visualization.items(Message.TABLE_NAME,
-				ExpressionParser.predicate(searchText));
+		Iterator<VisualItem> matchingMessages = visualization.items(Message.TABLE_NAME, ExpressionParser.predicate(searchText));
 
 		if (matchingMessages.hasNext()) {
 			VisualItem message = matchingMessages.next();
@@ -37,8 +40,7 @@ public class MSCVisualizationUtil {
 			ArrayList<String> messageTargetIds = (ArrayList<String>) message.get(Message.TARGETIDS_FIELDNAME);
 
 			for (String targetId : messageTargetIds) {
-				String entitySearchText = "CONCAT(" + Entity.NAME_FIELDNAME + "," + Entity.ID_FIELDNAME
-						+ ")" + " == '" + targetId + "'";
+				String entitySearchText = "CONCAT(" + Entity.NAME_FIELDNAME + "," + Entity.ID_FIELDNAME + ")" + " == '" + targetId + "'";
 
 				Iterator<VisualItem> targetEntities = visualization.items(Entity.TABLE_NAME, ExpressionParser.predicate(entitySearchText));
 				if (targetEntities.hasNext()) {
