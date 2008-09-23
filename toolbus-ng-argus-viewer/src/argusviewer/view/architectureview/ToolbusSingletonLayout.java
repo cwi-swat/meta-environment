@@ -3,8 +3,6 @@ package argusviewer.view.architectureview;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import prefuse.action.layout.Layout;
 import prefuse.util.PrefuseLib;
 import prefuse.visual.VisualItem;
@@ -19,8 +17,6 @@ import prefuse.visual.VisualItem;
  * @author Ivo Tamboer
  */
 public class ToolbusSingletonLayout extends Layout {
-	private final static Logger log = Logger.getLogger(ToolbusSingletonLayout.class);
-	
 	private final ProcessLayout m_processLayout;
 	
 	/**
@@ -32,15 +28,12 @@ public class ToolbusSingletonLayout extends Layout {
 	public ToolbusSingletonLayout(String group, ProcessLayout processLayout) {
 		super(group);
 		m_processLayout = processLayout;
-		log.debug("ToolLayout constructer called.");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void run(double frac) {
-		log.debug("run called");		
-		
 		Iterator<VisualItem> visualStatements = m_vis.items(m_group);
 		while (visualStatements.hasNext()) {
 			VisualItem currentTool = visualStatements.next();

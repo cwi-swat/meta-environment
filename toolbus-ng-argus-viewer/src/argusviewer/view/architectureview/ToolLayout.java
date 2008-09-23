@@ -2,8 +2,6 @@ package argusviewer.view.architectureview;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import prefuse.action.layout.Layout;
 import prefuse.util.PrefuseLib;
 import prefuse.visual.DecoratorItem;
@@ -25,8 +23,6 @@ public class ToolLayout extends Layout{
 	private final static int VERTICAL_MARGIN = 50;
 	
 	public final static double TOOL_LABEL_BASE = ToolRenderer.TOOL_BASESIZE * 0.7;
-
-	private final static Logger log = Logger.getLogger(ToolLayout.class);
 	
 	private final ProcessLayout m_processLayout;
 	
@@ -39,15 +35,12 @@ public class ToolLayout extends Layout{
 	public ToolLayout(String group, ProcessLayout processLayout) {
 		super(group);
 		m_processLayout = processLayout;
-		log.debug("ToolLayout constructer called.");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void run(double frac) {
-		log.debug("ToolLayout run called");
-
 		// Coordinates of bottom left edge of rectangle around all processes
 		double xPos =  m_processLayout.getBounds().getMinX();
 		double yPos = m_processLayout.getBounds().getMaxY();
@@ -59,21 +52,18 @@ public class ToolLayout extends Layout{
 		Iterator<VisualItem> visualStatements = m_vis.items(m_group);
 		while (visualStatements.hasNext()) {
 			VisualItem currentTool = visualStatements.next();
-
-				log.debug(currentTool);
-				setX(currentTool, null, xPos);
-				setY(currentTool, null, yPos);					
-				PrefuseLib.updateVisible(currentTool, true);				
-
-				xPos += HORIZONTAL_STEP;
+			
+			setX(currentTool, null, xPos);
+			setY(currentTool, null, yPos);					
+			PrefuseLib.updateVisible(currentTool, true);				
+			
+			xPos += HORIZONTAL_STEP;
 		}
 		
 		// Layout the labels
 		Iterator<DecoratorItem> labels = m_vis.items(ArchitectureView.TOOL_LABEL);
 		while (labels.hasNext()) {
-			log.debug("tooling some label");	
 			DecoratorItem label = labels.next();
-			log.debug(label);
 			VisualItem parentEntity = label.getDecoratedItem();
 
 			// Position the label under the Entity it belongs to

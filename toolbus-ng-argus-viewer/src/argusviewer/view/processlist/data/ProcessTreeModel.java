@@ -6,17 +6,14 @@ import java.util.Map;
 
 import javax.swing.tree.DefaultTreeModel;
 
-
-import org.apache.log4j.Logger;
-
 import toolbus.process.ProcessInstance;
-
 import argusviewer.toolbus.DataComm;
 import argusviewer.view.listeners.IFileBreakPointListener;
 import argusviewer.view.listeners.IProcessFilterListener;
 import argusviewer.view.listeners.IProcessInstanceControlListener;
 import argusviewer.view.processlist.ProcessTreeTable;
 import argusviewer.view.processlist.data.ProcessTreeNode.BreakPointType;
+
 import com.sun.java.treetable.example.TreeTableModel;
 
 /**
@@ -29,8 +26,6 @@ import com.sun.java.treetable.example.TreeTableModel;
  */
 public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel, IProcessInstanceControlListener, IFileBreakPointListener, IProcessFilterListener  {
 	private static final long serialVersionUID = -5813021647911033239L;
-	
-    private final static Logger m_logger = Logger.getLogger(ProcessTreeModel.class);
 	
 	/**
 	 * column information, names and types
@@ -304,9 +299,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	}
 	
 	private void breakProcess(ProcessTreeNode node) {
-        m_logger.debug("breakProcess");
         boolean isBreaking = node.hasProcessBreakpoint();
-        m_logger.debug(Boolean.valueOf(isBreaking));
         node.setProcessBreakpoint(!isBreaking);
 		reloadModel(node);
 	}

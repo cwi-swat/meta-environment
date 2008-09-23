@@ -3,8 +3,6 @@ package argusviewer.toolbus.sync;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 import argusviewer.ExceptionReporter;
@@ -66,8 +64,6 @@ public class FilterSync{
 		for(ProcessInstance processInstance : processInstances){
 			if(!m_processesFilter.contains(processInstance)){
 				m_processesFilter.add(processInstance);
-			}else{
-				Logger.getLogger(FilterSync.class).debug("Could not set the ProcessInstance to visible.");
 			}
 		}
 		
@@ -87,8 +83,6 @@ public class FilterSync{
 		for(ProcessInstance processInstance : processInstances){
 			if(m_processesFilter.contains(processInstance)){
 				m_processesFilter.remove(processInstance);
-			}else{
-				Logger.getLogger(FilterSync.class).debug("Could not set the ProcessInstance to non-visible.");
 			}
 		}
 		

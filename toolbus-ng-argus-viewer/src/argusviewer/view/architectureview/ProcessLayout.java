@@ -3,8 +3,6 @@ package argusviewer.view.architectureview;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import prefuse.action.layout.Layout;
 import prefuse.util.PrefuseLib;
 import prefuse.util.display.DisplayLib;
@@ -28,8 +26,6 @@ public class ProcessLayout extends Layout {
 	private static final int PROCESSES_PER_LINE = 8;
 	
 	private static final double PROCESS_LABEL_BASE = ProcessRenderer.PROCESS_BASESIZE * 0.7;
-	
-	private final static Logger log = Logger.getLogger(ProcessLayout.class);
 		
 	/**
 	 * Create a new Process layout for the specified group.
@@ -59,16 +55,12 @@ public class ProcessLayout extends Layout {
 		double xPos = MARGIN;
 		double yPos = MARGIN;
 		
-		log.debug("run called");		
-
 		Iterator<VisualItem> visualStatements = m_vis.items(m_group);
-		log.debug("start while loop");
 		while (visualStatements.hasNext()) {
 			VisualItem currentProcess = visualStatements.next();
 
 				xSlotsUsed += 1;
 				if (xSlotsUsed > PROCESSES_PER_LINE) {
-					log.debug("adding a new line.");
 					yPos += VERTICAL_STEP;
 					xPos = MARGIN;
 					xSlotsUsed = 1;
@@ -76,7 +68,6 @@ public class ProcessLayout extends Layout {
 				}
 				xPos += HORIZONTAL_STEP;
 
-				log.debug("Now working on " + currentProcess);
 				setX(currentProcess, null, xPos);
 				setY(currentProcess, null, yPos);
 					
@@ -86,9 +77,7 @@ public class ProcessLayout extends Layout {
 		// Layout the labels
 		Iterator<DecoratorItem> labels = m_vis.items(ArchitectureView.PROCESS_LABEL);
 		while (labels.hasNext()) {
-			log.debug("processing some label");	
 			DecoratorItem label = labels.next();
-			log.debug(label);
 			VisualItem parentEntity = label.getDecoratedItem();
 
 			// Position the label above the Entity it belongs to

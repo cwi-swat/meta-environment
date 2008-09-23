@@ -6,8 +6,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
-import org.apache.log4j.Logger;
-
 import toolbus.tool.ToolInstance;
 import argusviewer.toolbus.DataComm;
 
@@ -21,8 +19,6 @@ import com.sun.java.treetable.example.TreeTableModel;
  */
 public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	private static final long serialVersionUID = 966338890140366722L;
-	
-	private final static Logger m_logger = Logger.getLogger(ToolTreeModel.class);
 	
 	private final String[] m_columns = { "Visible", "Tool Name", "ID" };
 	private final Class<?>[] m_classTypes = { Boolean.class, TreeTableModel.class, Integer.class };
@@ -157,9 +153,6 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 					
 				}
 			}
-
-		} else {
-			m_logger.debug("Could not set Value for Visible column");
 		}
 	}
 

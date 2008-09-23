@@ -2,8 +2,6 @@ package argusviewer.view.architectureview;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import prefuse.Visualization;
 import prefuse.data.Table;
 import prefuse.data.Tuple;
@@ -15,7 +13,6 @@ import prefuse.data.tuple.TupleSet;
  * @author Ivo Tamboer
  */
 public class ArchitectureData {
-	private final static Logger log = Logger.getLogger(ArchitectureData.class);
 	private final Table toolbusSingleton;
 	private final Table processes;
 	private final Table tools;
@@ -107,13 +104,10 @@ public class ArchitectureData {
 				Tuple tuple = tools.getTuple(i);
 				String name = tuple.getString(Tool.TOOL_FIELDNAME);
 				if (name.equals(toolName)) {
-					log.debug("addTool: Tool already exists");
 					return null; // Already exists
 				}
 			}
-			log.debug("addTool: Tool doesn't exists so it should be created");
 			Tuple toolTuple = tools.addTuple(tool);
-			log.debug(toolTuple);
 			
 			return toolTuple;
 		}

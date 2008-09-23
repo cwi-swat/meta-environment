@@ -7,11 +7,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-
-import org.apache.log4j.Logger;
-import argusviewer.toolbus.DataComm;
-import argusviewer.view.architectureview.performance.tree.PerformanceTreeTable;
-
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
@@ -26,6 +21,8 @@ import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
+import argusviewer.toolbus.DataComm;
+import argusviewer.view.architectureview.performance.tree.PerformanceTreeTable;
 
 /**
  * This class implements the PerformanceView for the Argus Viewer
@@ -38,8 +35,6 @@ import prefuse.visual.expression.InGroupPredicate;
 public class ArchitectureView extends JPanel {
 	private static final long serialVersionUID = 2560820747109793313L;
 	
-	private final static Logger log = Logger.getLogger(ArchitectureView.class);
-
 	private static final double HORIZONTAL_DISPLAY_OFFSET = 75;
 	private static final double VERTICAL_DISPLAY_OFFSET = 50;
 	
@@ -86,8 +81,6 @@ public class ArchitectureView extends JPanel {
 	 * Sets up the visualization information.
 	 */
 	private void setupVisualization() {
-		log.debug("setupvisualisation");
-
 		m_visualization.add(Process.TABLE_NAME, m_archData.getProcessesTable());
 		m_visualization.addDecorators(PROCESS_LABEL, Process.TABLE_NAME);
 
@@ -146,7 +139,6 @@ public class ArchitectureView extends JPanel {
      			// If item is a tool, ask Performance Tree Table to focus on it
      			if (item.getGroup().equals(Tool.TABLE_NAME)) {
      				String toolName = item.get(Tool.TOOL_FIELDNAME).toString();
-     				log.debug("Tool name is " + toolName);
      				m_performanceTreeTable.setFocus(toolName);
      			}
          		updateVisualization();

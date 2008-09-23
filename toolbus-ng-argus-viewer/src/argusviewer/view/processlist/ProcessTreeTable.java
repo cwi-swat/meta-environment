@@ -10,9 +10,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultTreeCellRenderer;
-
-
-import org.apache.log4j.Logger;
+import javax.swing.tree.DefaultTreeModel;
 
 import argusviewer.toolbus.DataComm;
 import argusviewer.view.processlist.data.ProcessTreeModel;
@@ -20,6 +18,7 @@ import argusviewer.view.processlist.data.ProcessTreeNode;
 import argusviewer.view.processlist.data.ProcessTreeNode.BreakPointType;
 import argusviewer.view.processlist.renderer.BreakPointCellRenderer;
 import argusviewer.view.processlist.renderer.ProcessTreeCellRenderer;
+
 import com.sun.java.treetable.example.JTreeTable;
 import com.sun.java.treetable.example.TreeTableModel;
 
@@ -41,8 +40,7 @@ public class ProcessTreeTable extends JTreeTable{
 	
 	private final ProcessTreeModel m_model;
 	private final static int MAXCOLUMNWIDTH = 50;
-	private final Logger m_logger = Logger.getLogger(ProcessTreeTable.class);
-
+	
 	/**
 	 * The constructor of the ProcessTreeTable
 	 * 
@@ -169,7 +167,6 @@ public class ProcessTreeTable extends JTreeTable{
 	 *            The y position of the mouse cursor
 	 */
 	public void sendClickEvent(int count, int x, int y){
-		m_logger.debug("instanceClicked");
 		Point clickPoint = new Point(x, y);
 		int column = columnAtPoint(clickPoint);
 		int row = rowAtPoint(clickPoint);

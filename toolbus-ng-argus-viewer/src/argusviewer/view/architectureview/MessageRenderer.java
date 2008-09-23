@@ -8,8 +8,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import prefuse.data.expression.parser.ExpressionParser;
 import prefuse.render.AbstractShapeRenderer;
 import prefuse.visual.VisualItem;
@@ -23,8 +21,6 @@ import prefuse.visual.VisualItem;
  * Note that messages are not drawn if one of the processes or tools is invisible.
  */
 public class MessageRenderer extends AbstractShapeRenderer {
-    private final static Logger m_logger = Logger.getLogger(MessageRenderer.class);
-    
     private final int m_initialArrowWidth  = 8;
     private final int m_initialArrowHeight = 12;
     private final int m_finalArrowSize = 3;
@@ -73,7 +69,6 @@ public class MessageRenderer extends AbstractShapeRenderer {
 			matchingStatements = item.getVisualization().items(Process.TABLE_NAME, ExpressionParser.predicate(searchPredicateText));
 		} else {
 			searchPredicateText = Tool.TOOL_FIELDNAME + " == '" + name + "'";
-            m_logger.debug(searchPredicateText);
             matchingStatements = item.getVisualization().items(Tool.TABLE_NAME, ExpressionParser.predicate(searchPredicateText));
 		}
 		if ((matchingStatements != null) 

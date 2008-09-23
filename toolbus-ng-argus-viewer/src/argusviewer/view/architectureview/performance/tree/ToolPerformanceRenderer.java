@@ -51,15 +51,12 @@ public class ToolPerformanceRenderer extends DefaultTreeCellRenderer {
 //			// No child, so must be tool
 //			if (node.getChildCount() == 0) {
 //				setLeafIcon(ICON_TOOL);				
-//				log.debug("leaf tool icon set");
 //				// Only threads as childs, so must be tool, but expandable
 //			} else if (node.getChildAt(0) instanceof PerformanceTreeNodeThread) {
-//				log.debug("open/closed tool icon 2 set");
 //				setOpenIcon(ICON_TOOL);
 //				setClosedIcon(ICON_TOOL);
 //				// Tool as child, so must be a group
 //			} else if (node.getChildAt(0) instanceof PerformanceTreeNode) {
-//				log.debug("open/closed group icon set");
 //				setOpenIcon(ICON_GROUP);
 //				setClosedIcon(ICON_GROUP);
 //			} else {
