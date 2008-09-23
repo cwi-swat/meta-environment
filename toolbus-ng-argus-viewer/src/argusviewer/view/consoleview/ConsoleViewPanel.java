@@ -21,10 +21,10 @@ public class ConsoleViewPanel extends JPanel implements IView {
 	public static final String CONSOLE_VIEW_NAME = "Console";
 	public static final String PREFERRED_POSITION = "DownLeft";
 	
-	private ConsoleViewOutputStream m_consoleViewOutputStream;
-	private ConsoleViewErrorStream m_consoleViewErrorStream;
+	private final ConsoleViewOutputStream m_consoleViewOutputStream;
+	private final ConsoleViewErrorStream m_consoleViewErrorStream;
 	
-	private PrintStream m_originalErrorStream; 
+	private final PrintStream m_originalErrorStream; 
 	
 	/*
 	 * The graphical components 
@@ -55,7 +55,7 @@ public class ConsoleViewPanel extends JPanel implements IView {
 	 * Gets the plugin name
 	 * @return the name of the plugin
 	 */
-	public String getPluginName() {
+	public String getPluginName(){
 		return CONSOLE_VIEW_NAME;
 	}
 
@@ -63,7 +63,7 @@ public class ConsoleViewPanel extends JPanel implements IView {
 	 * Gets the preferred position of the panel
 	 * @return the preferred position
 	 */
-	public String getPreferredPosition() {
+	public String getPreferredPosition(){
 		return PREFERRED_POSITION;
 	}
 
@@ -71,7 +71,7 @@ public class ConsoleViewPanel extends JPanel implements IView {
 	 * Returns the visual components that show the actual panelcontents
 	 * @return A map with the visual components and their names
 	 */
-	public Map<String, Container> getVisualComponents() {
+	public Map<String, Container> getVisualComponents(){
 		HashMap<String, Container> nameContainerHashMap = new HashMap<String, Container>(1);
 		nameContainerHashMap.put(CONSOLE_VIEW_NAME, this);
 		

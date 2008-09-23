@@ -2,12 +2,11 @@ package argusviewer.view.architectureview.performance.tree;
 
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-
 import argusviewer.view.architectureview.performance.ToolPerformanceInfo;
+
 import com.sun.java.treetable.example.JTreeTable;
 import com.sun.java.treetable.example.TreeTableModel;
 

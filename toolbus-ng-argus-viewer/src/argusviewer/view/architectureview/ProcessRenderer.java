@@ -5,8 +5,6 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
-import org.apache.log4j.Logger;
-
 import prefuse.visual.VisualItem;
 
 /**
@@ -16,8 +14,6 @@ import prefuse.visual.VisualItem;
  * @author Frank Oppedijk
  */
 public class ProcessRenderer extends AbstractArchitectureRenderer {
-	private final static Logger log = Logger.getLogger(ProcessRenderer.class);
-
 	public static final double PROCESS_BASESIZE = BASESIZE * 0.5;
 	private static final float LINE_WIDTH = (float) 1.5;
 	private static final BasicStroke STROKE = new BasicStroke(LINE_WIDTH);

@@ -323,12 +323,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
         		}
         	}
         	
-       		threads.put(threadName, new ThreadInfo());
-        	
-        	ThreadInfo threadInfo = threads.get(threadName);
-        	threadInfo.setThreadName(threadName);
-        	threadInfo.setThreadUserTime(userTime);
-        	threadInfo.setThreadSystemTime(systemTime);
+       		threads.put(threadName, new ThreadInfo(threadName, userTime, systemTime));
         	
         	info.setThreads(threads);
         }

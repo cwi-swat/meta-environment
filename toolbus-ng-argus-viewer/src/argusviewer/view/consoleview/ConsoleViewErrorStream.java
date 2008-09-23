@@ -7,19 +7,15 @@ import java.io.PrintStream;
 
 /**
  * @author M. van Beest
- * 
  */
 public class ConsoleViewErrorStream extends OutputStream {
 	public static final Color COLOR_RED = new Color(255, 0, 0);
 
-	private ConsoleViewColorPane m_textPane;
+	private final ConsoleViewColorPane textPane;
 
-	private PrintStream m_originalErrorStream;
-
-	// we use a string as a buffer, because strings are immutable and so it
-	// isn't
-	// possible to mix output streams
-	private String m_errorBuffer;
+	private final PrintStream originalErrorStream;
+	
+	private volatile StringBuilder errorBuffer;
 
 	/**
 	 * Constructs the object with the preferred output textarea
@@ -31,10 +27,10 @@ public class ConsoleViewErrorStream extends OutputStream {
 	 */
 	public ConsoleViewErrorStream(ConsoleViewColorPane textPane,
 			PrintStream originalErrorStream) {
-		m_textPane = textPane;
-		m_errorBuffer = "";
-
-		m_originalErrorStream = originalErrorStream;
+		this.textPane = textPane;
+		this.originalErrorStream = originalErrorStream;
+		
+		errorBuffer = new StringBuilder();
 	}
 
 	/**
@@ -47,19 +43,19 @@ public class ConsoleViewErrorStream extends OutputStream {
 	 *            The value to be printed. This is a byte value
 	 * @see java.io.OutputStream#write(int)
 	 */
-	public void write(int b) throws IOException {		
+	public synchronized void write(int b) throws IOException {		
 		//check the original stream and copy the output to there.
-		if (m_originalErrorStream != null) {
-			m_originalErrorStream.write(b);
+		if (originalErrorStream != null) {
+			originalErrorStream.write(b);
 		}
 		
-		m_errorBuffer += String.valueOf((char) b);
+		errorBuffer.append((char) b);
 
 		// check for an endline
 		if (((char) b) == '\n') {
 			// output the string buffer to the gui and clear the buffer			
-			m_textPane.append(m_errorBuffer, COLOR_RED);
-			m_errorBuffer = "";
+			textPane.append(errorBuffer.toString(), COLOR_RED);
+			errorBuffer = new StringBuilder();
 		}
 	}
 }

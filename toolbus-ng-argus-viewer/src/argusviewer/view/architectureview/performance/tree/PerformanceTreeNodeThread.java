@@ -15,7 +15,7 @@ import argusviewer.view.architectureview.performance.ThreadInfo;
 public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	private static final long serialVersionUID = 5262837229886674693L;
 	
-	private ThreadInfo m_threadInfo;
+	private final ThreadInfo m_threadInfo;
 
 	/**
 	 * The constructor creates a {@link PerformanceTreeNodeThread}, with a

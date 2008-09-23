@@ -9,24 +9,21 @@ import java.io.OutputStream;
 
 /**
  * @author M. van Beest
- *
  */
 public class ConsoleViewOutputStream extends OutputStream {
 	public static final Color COLOR_BLACK = new Color(0, 0, 0);
 	
-	private ConsoleViewColorPane m_textPane;
+	private final ConsoleViewColorPane textPane;
 	
-	//we use a string as a buffer, because strings are immutable and so it isn't
-	//possible to mix output streams
-	private String m_outputBuffer;
+	private volatile StringBuilder outputBuffer;
 	
 	/**
 	 * Constructs the object with the preferred output textarea
 	 * @param textPane The area to where the console output is projected
 	 */
 	public ConsoleViewOutputStream(ConsoleViewColorPane textPane) {
-		m_textPane = textPane;
-		m_outputBuffer = "";
+		this.textPane = textPane;
+		outputBuffer = new StringBuilder();
 	}
 	
 	/**
@@ -36,14 +33,14 @@ public class ConsoleViewOutputStream extends OutputStream {
 	 * @param b	The value to be printed. This is a byte value
 	 * @see java.io.OutputStream#write(int)
 	 */
-	public void write(int b) throws IOException {
-		m_outputBuffer += String.valueOf((char) b);
+	public synchronized void write(int b) throws IOException{
+		outputBuffer.append((char) b);
 		
 		//check for an endline
 		if (((char) b) == '\n') {
 			//output the string buffer to the gui and clear the buffer
-			m_textPane.append(m_outputBuffer, COLOR_BLACK);
-			m_outputBuffer = "";
+			textPane.append(outputBuffer.toString(), COLOR_BLACK);
+			outputBuffer = new StringBuilder();
 		}
 	}
 

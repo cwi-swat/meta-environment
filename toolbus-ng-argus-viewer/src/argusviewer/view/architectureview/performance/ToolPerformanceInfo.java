@@ -10,10 +10,10 @@ import java.util.Hashtable;
 public class ToolPerformanceInfo {
 	private final int m_toolId;
 	private final String m_toolName;
-	private String m_toolType;
-	private String m_toolLanguage;
-	private int m_toolMemoryHeapUsage;
-	private int m_toolMemoryNonHeapUsage;
+	private volatile String m_toolType;
+	private volatile String m_toolLanguage;
+	private volatile int m_toolMemoryHeapUsage;
+	private volatile int m_toolMemoryNonHeapUsage;
 
 	private Hashtable<String, ThreadInfo> m_threads = new Hashtable<String, ThreadInfo>();
 

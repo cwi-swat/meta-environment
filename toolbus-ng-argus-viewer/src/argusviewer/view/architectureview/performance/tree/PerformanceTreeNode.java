@@ -6,7 +6,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import argusviewer.view.architectureview.performance.ThreadInfo;
 import argusviewer.view.architectureview.performance.ToolPerformanceInfo;
 
-
 /**
  * The {@link PerformanceTreeNode} is a JTree Data Model that is used by the
  * JTreeTable component. The {@link PerformanceTreeNode} creates a tree model
@@ -23,7 +22,7 @@ import argusviewer.view.architectureview.performance.ToolPerformanceInfo;
 public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	private static final long serialVersionUID = -3321070191695703729L;
 	
-	private ToolPerformanceInfo m_toolPerformanceInfo;
+	private volatile ToolPerformanceInfo m_toolPerformanceInfo;
 
 	/**
 	 * The constructor creates a {@link PerformanceTreeNode}, with no

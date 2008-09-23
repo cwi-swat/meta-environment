@@ -12,7 +12,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import argusviewer.ExceptionReporter;
 
-
 /**
  * This class gives the ability to do colored output for the ConsoleView
  * 
