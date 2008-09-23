@@ -26,12 +26,6 @@ import toolbus.atom.tool.Terminate;
  * 
  * @author Riccardo Lippolis
  * @author Johnny Eradus
- *
- */
-/*
- * The Prefuse Tuple base class uses the raw 'Class' type,
- * which means this class needs to use it too. We do not want
- * warnings about this, so we suppress them. 
  */
 public class Statement extends AbstractTuple {
 	private static final int HASH_CODE = 31;
@@ -63,20 +57,20 @@ public class Statement extends AbstractTuple {
 
 	public static final String[] COLUMNS = {STATEMENT_FIELDNAME, PARENTID_FIELDNAME, TIMESTAMP_FIELDNAME};
 
-	public static final ArrayList<Class< ? extends StateElement>> ASYNC_COMMUNICATION;
-	public static final ArrayList<Class< ? extends StateElement>> SYNC_COMMUNICATION;
-	public static final ArrayList<Class< ? extends StateElement>> TOOL_COMMUNICATION;
+	public static final ArrayList<Class<? extends StateElement>> ASYNC_COMMUNICATION;
+	public static final ArrayList<Class<? extends StateElement>> SYNC_COMMUNICATION;
+	public static final ArrayList<Class<? extends StateElement>> TOOL_COMMUNICATION;
 
 	static{
-		ASYNC_COMMUNICATION = new ArrayList<Class< ? extends StateElement>>();
+		ASYNC_COMMUNICATION = new ArrayList<Class<? extends StateElement>>();
 		ASYNC_COMMUNICATION.add(RecNote.class);
 		ASYNC_COMMUNICATION.add(SndNote.class);
 
-		SYNC_COMMUNICATION = new ArrayList<Class< ? extends StateElement>>();
+		SYNC_COMMUNICATION = new ArrayList<Class<? extends StateElement>>();
 		SYNC_COMMUNICATION.add(RecMsg.class);
 		SYNC_COMMUNICATION.add(SndMsg.class);
 
-		TOOL_COMMUNICATION = new ArrayList<Class< ? extends StateElement>>();
+		TOOL_COMMUNICATION = new ArrayList<Class<? extends StateElement>>();
 		TOOL_COMMUNICATION.add(AckEvent.class);
 		TOOL_COMMUNICATION.add(Connect.class);
 		TOOL_COMMUNICATION.add(DisConnect.class);

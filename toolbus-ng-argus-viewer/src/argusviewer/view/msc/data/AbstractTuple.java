@@ -12,11 +12,6 @@ import prefuse.data.Tuple;
  * @author Riccardo Lippolis
  * 
  */
-/*
- * The Prefuse Tuple base class uses the raw 'Class' type,
- * which means this class needs to use it too. We do not want
- * warnings about this, so we suppress them. 
- */
 public abstract class AbstractTuple implements Tuple {
 
 	/**

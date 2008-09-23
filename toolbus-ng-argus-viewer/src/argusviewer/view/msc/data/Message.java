@@ -10,11 +10,6 @@ import java.util.ArrayList;
  * @author Riccardo Lippolis
  * @author Johnny Eradus
  */
-/*
- * The Prefuse Tuple base class uses the raw 'Class' type,
- * which means this class needs to use it too. We do not want
- * warnings about this, so we suppress them. 
- */
 public class Message extends AbstractTuple {
 	private static final int HASH_CODE = 31;
 

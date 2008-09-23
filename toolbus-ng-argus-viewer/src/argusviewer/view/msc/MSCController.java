@@ -49,10 +49,7 @@ import argusviewer.view.msc.visual.MSCVisualization;
  * @author Alexander Bij
  * @author Roberto vd Linden
  */
-public class MSCController implements IControlListener, IToolControlListener,
-		IProcessInstanceControlListener, IProcessFilterListener,
-		IToolFilterListener, IFocusListener, IHighlightListener {
-
+public class MSCController implements IControlListener, IToolControlListener, IProcessInstanceControlListener, IProcessFilterListener, IToolFilterListener, IFocusListener, IHighlightListener {
 	private final DataComm m_dataCommunication;
 	private final MSCData m_mscData;
 	private final MSCVisualization m_mscVisualization;
@@ -63,10 +60,9 @@ public class MSCController implements IControlListener, IToolControlListener,
 	private volatile Tuple m_latestAddedStatement = null;
 
 	private static final int FIRST_TICK = -2;
-	private static final HashMap<Class< ? extends Atom>, Entity.Type> SOURCE_OF_STATEMENT;
+	private static final HashMap<Class<? extends Atom>, Entity.Type> SOURCE_OF_STATEMENT = new HashMap<Class< ? extends Atom>, Entity.Type>();
 
 	static{
-		SOURCE_OF_STATEMENT = new HashMap<Class< ? extends Atom>, Entity.Type>();
 		SOURCE_OF_STATEMENT.put(Connect.class, Entity.Type.TOOL);
 		SOURCE_OF_STATEMENT.put(DisConnect.class, Entity.Type.TOOL);
 		SOURCE_OF_STATEMENT.put(RecVal.class, Entity.Type.TOOL);

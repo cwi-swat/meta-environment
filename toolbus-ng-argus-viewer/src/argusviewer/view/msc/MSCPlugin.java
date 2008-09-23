@@ -29,7 +29,7 @@ public class MSCPlugin implements IView {
 	private static final String PLUGIN_NAME = "Message Sequence Chart";
 	private static final String PREFERRED_POSITION = "TopRight";
 
-	private final HashMap<String, Container> m_visualComponents;
+	private final Map<String, Container> m_visualComponents;
 
 	/**
 	 * Construct a Message Sequence Chart plugin.
@@ -42,8 +42,9 @@ public class MSCPlugin implements IView {
 		MSCController mscController = new MSCController(dataCommunication, mscData, mscVisualisation, mscView);
 		mscController.initialize();
 
-		m_visualComponents = new HashMap<String, Container>();
-		m_visualComponents.put(PLUGIN_NAME, mscView);
+		Map<String, Container> visualComponents = new HashMap<String, Container>();
+		visualComponents.put(PLUGIN_NAME, mscView);
+		m_visualComponents = visualComponents;
 	}
 
 	/**
@@ -66,5 +67,4 @@ public class MSCPlugin implements IView {
 	public Map<String, Container> getVisualComponents() {
 		return m_visualComponents;
 	}
-
 }

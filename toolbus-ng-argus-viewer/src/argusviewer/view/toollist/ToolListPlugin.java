@@ -14,8 +14,7 @@ import argusviewer.view.IView;
  * @author Roberto van der Linden
  */
 public class ToolListPlugin implements IView {
-
-	private final HashMap<String, Container> m_visualComponents;
+	private final Map<String, Container> m_visualComponents;
 	private final ToolListView m_toolListView;
 
 	public static final String PLUGIN_NAME = "Tool List";
@@ -30,8 +29,9 @@ public class ToolListPlugin implements IView {
 		m_toolListView = new ToolListView();
 		new ToolListController(dataComm, m_toolListView);
 		
-		m_visualComponents = new HashMap<String, Container>();
-		m_visualComponents.put(PLUGIN_NAME, m_toolListView);
+		Map<String, Container> visualComponents = new HashMap<String, Container>();
+		visualComponents.put(PLUGIN_NAME, m_toolListView);
+		this.m_visualComponents = visualComponents;
 	}
 
 	/**

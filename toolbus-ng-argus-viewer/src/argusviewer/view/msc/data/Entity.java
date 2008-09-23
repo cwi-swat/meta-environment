@@ -12,11 +12,6 @@ import prefuse.data.Schema;
  * @author Tigran Kalaidjan
  * 
  */
-/*
- * The Prefuse Tuple base class uses the raw 'Class' type,
- * which means this class needs to use it too. We do not want
- * warnings about this, so we suppress them. 
- */
 public class Entity extends AbstractTuple {
 	private static final int HASH_CODE = 31;
 

@@ -33,10 +33,12 @@ public class EntityVisibilityFilter extends GroupAction {
 	 * where this filter is applied to.
 	 * @param visibleProcessInstances a list of ProcessInstances that should be visible
 	 */
-	public void setVisibleProcesses(List<ProcessInstance> visibleProcessInstances) {
-		m_visibleProcessInstances.clear();
-		for (ProcessInstance processInstance : visibleProcessInstances) {
-			m_visibleProcessInstances.add(Integer.valueOf(processInstance.getProcessId()));
+	public void setVisibleProcesses(List<ProcessInstance> visibleProcessInstances){
+		synchronized(m_visibleProcessInstances){
+			m_visibleProcessInstances.clear();
+			for(ProcessInstance processInstance : visibleProcessInstances){
+				m_visibleProcessInstances.add(Integer.valueOf(processInstance.getProcessId()));
+			}
 		}
 	}
 
@@ -45,11 +47,13 @@ public class EntityVisibilityFilter extends GroupAction {
 	 * where this filter is applied to.
 	 * @param visibleToolInstances a list of ToolInstances that should be visible
 	 */
-	public void setVisibleTools(List<ToolInstance> visibleToolInstances) {
-		m_visibleToolInstances.clear();
-		for (ToolInstance toolInstance : visibleToolInstances) {
-			int toolId = toolInstance.getToolID();
-			m_visibleToolInstances.add(Integer.valueOf(toolId));
+	public void setVisibleTools(List<ToolInstance> visibleToolInstances){
+		synchronized(m_visibleToolInstances){
+			m_visibleToolInstances.clear();
+			for (ToolInstance toolInstance : visibleToolInstances){
+				int toolId = toolInstance.getToolID();
+				m_visibleToolInstances.add(Integer.valueOf(toolId));
+			}
 		}
 	}
 
@@ -66,9 +70,13 @@ public class EntityVisibilityFilter extends GroupAction {
 
 			boolean entityIsVisible = false;
 			if (entityType == Entity.Type.PROCESS) {
-				entityIsVisible = m_visibleProcessInstances.contains(Integer.valueOf(entityId));
+				synchronized(m_visibleProcessInstances){
+					entityIsVisible = m_visibleProcessInstances.contains(Integer.valueOf(entityId));
+				}
 			} else if (entityType == Entity.Type.TOOL) {
-				entityIsVisible = m_visibleToolInstances.contains(Integer.valueOf(entityId));
+				synchronized(m_visibleToolInstances){
+					entityIsVisible = m_visibleToolInstances.contains(Integer.valueOf(entityId));
+				}
 			} else if (entityType == Entity.Type.SINK) {
 				entityIsVisible = true;
 			} else {

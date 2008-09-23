@@ -1,12 +1,11 @@
 package argusviewer.view.msc.data;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import prefuse.Visualization;
 import prefuse.data.Table;
 import prefuse.data.Tuple;
-
-import java.util.LinkedList;
-import java.util.Collections;
-import java.util.List;
 import argusviewer.ApplicationSettings;
 
 // TODO This class is 'broken' and needs fixing.
@@ -103,7 +102,9 @@ public class MSCData{
 	
 			Tuple stmTuple = m_statements.addTuple(statement); 
 	
-			statementList.add(stmTuple);
+			synchronized(statementList){
+				statementList.add(stmTuple);
+			}
 			return stmTuple;
 		}
 	}
@@ -113,7 +114,10 @@ public class MSCData{
 	 */
 	private void removeStatement(){
 		synchronized(m_viz){
-			Tuple firstTuple = statementList.getFirst();
+			Tuple firstTuple;
+			synchronized(statementList){
+				firstTuple = statementList.getFirst();
+			}
 
 			// Remove action is synchronized to prevent PreFuse from drawing at the same time
 			removeMessage(firstTuple);
@@ -132,7 +136,9 @@ public class MSCData{
 	public Tuple addMessage(Message message){
 		synchronized(m_viz){
 			Tuple msgTuple = m_messages.addTuple(message);
-			messagesList.add(msgTuple);
+			synchronized(messagesList){
+				messagesList.add(msgTuple);
+			}
 			return msgTuple;
 		}
 	}
@@ -143,19 +149,21 @@ public class MSCData{
 	 */
 	protected void removeMessage(Tuple stmTuple){
 		synchronized(m_viz){
-			//no messages, so no need to remove any
-			if(messagesList.size() == 0){
-				return;
-			}
-			
-			Tuple first = messagesList.getFirst();
-			int msgTimestamp = ((Integer) first.get(Message.SOURCEID_FIELDNAME)).intValue(); 
-			int stmTimestamp = ((Integer) stmTuple.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
-	 
-			if(msgTimestamp == stmTimestamp){
-				// Remove action is synchronized to prevent PreFuse from drawing at the same time
-				m_messages.removeTuple(first);
-				messagesList.removeFirst();
+			synchronized(messagesList){
+				//no messages, so no need to remove any
+				if(messagesList.size() == 0){
+					return;
+				}
+				
+				Tuple first = messagesList.getFirst();
+				int msgTimestamp = ((Integer) first.get(Message.SOURCEID_FIELDNAME)).intValue(); 
+				int stmTimestamp = ((Integer) stmTuple.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
+		 
+				if(msgTimestamp == stmTimestamp){
+					// Remove action is synchronized to prevent PreFuse from drawing at the same time
+					m_messages.removeTuple(first);
+					messagesList.removeFirst();
+				}
 			}
 		}
 		
@@ -165,8 +173,12 @@ public class MSCData{
 	 * Get the list of statements in the data model.
 	 * @return the statementList
 	 */
-	public LinkedList<Tuple> getStatementList() {
-		return statementList;
+	public LinkedList<Tuple> getStatementList(){
+		synchronized(statementList){
+			LinkedList<Tuple> statementsListCopy = new LinkedList<Tuple>();
+			statementsListCopy.addAll(statementList);
+			return statementsListCopy;
+		}
 	}
 	
 	/**
@@ -182,6 +194,10 @@ public class MSCData{
 	 * @return the unmodifiable messageList
 	 */
 	public List<Tuple> getMessagesList(){
-		return Collections.unmodifiableList(messagesList);
+		synchronized(messagesList){
+			LinkedList<Tuple> messagesListCopy = new LinkedList<Tuple>();
+			messagesListCopy.addAll(messagesList);
+			return messagesListCopy;
+		}
 	}
 }

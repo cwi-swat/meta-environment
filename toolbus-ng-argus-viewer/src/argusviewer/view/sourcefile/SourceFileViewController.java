@@ -59,13 +59,15 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * fills the m_sourceCodeTabs with all scriptfiles and creates appropriate panels 
 	 * {@inheritDoc}
 	 */
-	public void updateView() {		
+	public void updateView(){		
 		List<String> scriptNames = dataComm.getScriptfiles();
 		
-		for (String scriptName : scriptNames) {			
-			if (!m_sourceCodeTabs.containsKey(scriptName)) {							
-				createNewSourceTab(scriptName); 
-			} 
+		for(String scriptName : scriptNames){
+			synchronized(m_sourceCodeTabs){
+				if(!m_sourceCodeTabs.containsKey(scriptName)){							
+					createNewSourceTab(scriptName); 
+				}
+			}
 		}		
 	}	
 
@@ -77,69 +79,77 @@ public class SourceFileViewController extends Observable implements IView, ICont
 		PositionInformation posInfo = processInstance.getProcessDefinition().getPosInfo(); 
 		String scriptName = posInfo.getFileName();
 		int beginLine = posInfo.getBeginLine();
-		if (m_sourceCodeTabs.containsKey(scriptName)) {
-			m_sourceCodeTabs.get(scriptName).setVisible(true);
-			m_sourceCodeTabs.get(scriptName).scrollToLine(beginLine, true);
-			setChanged();
-			notifyObservers(getScriptNameFromFileName(scriptName));
-		}		
+		synchronized(m_sourceCodeTabs){
+			if(m_sourceCodeTabs.containsKey(scriptName)){
+				m_sourceCodeTabs.get(scriptName).setVisible(true);
+				m_sourceCodeTabs.get(scriptName).scrollToLine(beginLine, true);
+				setChanged();
+				notifyObservers(getScriptNameFromFileName(scriptName));
+			}
+		}
 	}
 
 	/**
 	 * add breakpoint to a script file
 	 * {@inheritDoc}
 	 */
-	public void addBreakpoint(String fileName, int lineNumber) {		
-		if (m_sourceCodeTabs.containsKey(fileName)) {
-			m_sourceCodeTabs.get(fileName).addBreakPoint(lineNumber);
-		}		
+	public void addBreakpoint(String fileName, int lineNumber) {
+		synchronized(m_sourceCodeTabs){
+			if (m_sourceCodeTabs.containsKey(fileName)) {
+				m_sourceCodeTabs.get(fileName).addBreakPoint(lineNumber);
+			}
+		}
 	}
 
 	/**
 	 * remove a breakpoint from scriptfile
 	 * {@inheritDoc}
 	 */
-	public void removeBreakpoint(String fileName, int lineNumber) {		
-		if (m_sourceCodeTabs.containsKey(fileName)) {
-			m_sourceCodeTabs.get(fileName).removeBreakPoint(lineNumber);
-			m_sourceCodeTabs.get(fileName).removeAllLineSelection();
-		}						
+	public void removeBreakpoint(String fileName, int lineNumber) {
+		synchronized(m_sourceCodeTabs){
+			if(m_sourceCodeTabs.containsKey(fileName)){
+				m_sourceCodeTabs.get(fileName).removeBreakPoint(lineNumber);
+				m_sourceCodeTabs.get(fileName).removeAllLineSelection();
+			}
+		}
 	}
 
 	/**
 	 * scroll to line where  step has been executed
 	 * {@inheritDoc}
 	 */
-	public void stepExecuted(int tick, ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners) {		
+	public void stepExecuted(int tick, ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners){		
 		// ignore this, line is already highlighted
-		if (m_sourceBreakpointHit) {
+		if(m_sourceBreakpointHit){
 			m_sourceBreakpointHit = false;
 			return;
 		} 
 						
 		clearAllHighlights();
 
-		if (!dataComm.getControlSync().isToolbusStepRunning()) {
+		if(!dataComm.getControlSync().isToolbusStepRunning()){
 			String scriptName = executedStateElement.getPosInfo().getFileName();
 			
-			if (m_sourceCodeTabs.containsKey(scriptName)) {
-				SourceFilePanel panel = m_sourceCodeTabs.get(scriptName);
-				
-				int beginLine = executedStateElement.getPosInfo().getBeginLine();
-				int endLine = executedStateElement.getPosInfo().getEndLine();
-				
-				// a step is executed at a reached process breakpoint
-				if (m_processBreakpointHit) {
-					panel.setBreakpointLineSelection(beginLine, endLine);
-					m_processBreakpointHit = false;
-				} else {
-					// a step is executed without a reached breakpoint
-					panel.setStepLineSelection(beginLine, endLine);
+			synchronized(m_sourceCodeTabs){
+				if(m_sourceCodeTabs.containsKey(scriptName)){
+					SourceFilePanel panel = m_sourceCodeTabs.get(scriptName);
+					
+					int beginLine = executedStateElement.getPosInfo().getBeginLine();
+					int endLine = executedStateElement.getPosInfo().getEndLine();
+					
+					// a step is executed at a reached process breakpoint
+					if (m_processBreakpointHit){
+						panel.setBreakpointLineSelection(beginLine, endLine);
+						m_processBreakpointHit = false;
+					}else{
+						// a step is executed without a reached breakpoint
+						panel.setStepLineSelection(beginLine, endLine);
+					}
+								
+					panel.scrollToLine(beginLine, false);
+					setChanged();
+					notifyObservers(getScriptNameFromFileName(scriptName));
 				}
-							
-				panel.scrollToLine(beginLine, false);
-				setChanged();
-				notifyObservers(getScriptNameFromFileName(scriptName));
 			}
 		}		
 	}
@@ -164,38 +174,34 @@ public class SourceFileViewController extends Observable implements IView, ICont
 		
 		String scriptName = stateElement.getPosInfo().getFileName();
 		
-		if (m_sourceCodeTabs.containsKey(scriptName)) {
-			int beginLine = stateElement.getPosInfo().getBeginLine();
-			int endLine = stateElement.getPosInfo().getEndLine();
-			
-			m_sourceCodeTabs.get(scriptName).setBreakpointLineSelection(beginLine, endLine);
-			m_sourceCodeTabs.get(scriptName).scrollToLine(beginLine, false);
-			setChanged();
-			notifyObservers(getScriptNameFromFileName(scriptName));
+		synchronized(m_sourceCodeTabs){
+			if(m_sourceCodeTabs.containsKey(scriptName)){
+				int beginLine = stateElement.getPosInfo().getBeginLine();
+				int endLine = stateElement.getPosInfo().getEndLine();
+				
+				m_sourceCodeTabs.get(scriptName).setBreakpointLineSelection(beginLine, endLine);
+				m_sourceCodeTabs.get(scriptName).scrollToLine(beginLine, false);
+				setChanged();
+				notifyObservers(getScriptNameFromFileName(scriptName));
+			}
 		}
 		
 		//halt the execution of the script and allow for manual stepping
 		dataComm.getControlSync().doStop();
 	}
-
-	/**
-	 * @return the m_sourceCodeTabs returns all scriptnames and panels
-	 * just for testing perpose
-	 */
-	protected Map<String, SourceFilePanel> getSourceCodeTabs() {
-		return m_sourceCodeTabs;
-	}
 	
 	/** 
 	 * {@inheritDoc}
 	 */
-	public HashMap<String, Container> getVisualComponents() {
+	public HashMap<String, Container> getVisualComponents(){
 		HashMap<String, Container> nameContainerHashMap = new HashMap<String, Container>();
-				
-		for (String fileNameKey : m_sourceCodeTabs.keySet()) {
-		   String scriptName = getScriptNameFromFileName(fileNameKey);
-		   Container sourceFilePanel = m_sourceCodeTabs.get(fileNameKey);
-		   nameContainerHashMap.put(scriptName, sourceFilePanel);
+		
+		synchronized(m_sourceCodeTabs){
+			for(String fileNameKey : m_sourceCodeTabs.keySet()){
+			   String scriptName = getScriptNameFromFileName(fileNameKey);
+			   Container sourceFilePanel = m_sourceCodeTabs.get(fileNameKey);
+			   nameContainerHashMap.put(scriptName, sourceFilePanel);
+			}
 		}
 		return nameContainerHashMap;		
 	}
@@ -255,15 +261,19 @@ public class SourceFileViewController extends Observable implements IView, ICont
 		String sourceCode = dataComm.getSource(scriptName);
 		
 		SourceFilePanel newSourceFilePanel = new SourceFilePanel(dataComm, scriptName, sourceCode);
-		m_sourceCodeTabs.put(scriptName, newSourceFilePanel);
+		synchronized(m_sourceCodeTabs){
+			m_sourceCodeTabs.put(scriptName, newSourceFilePanel);
+		}
 	}
 	
 	/**
 	 * Clears all highlights in the sourcecodetabs.
 	 */
-	private void clearAllHighlights() {
-		for (SourceFilePanel panel : m_sourceCodeTabs.values()) {
-			panel.removeAllLineSelection();
+	private void clearAllHighlights(){
+		synchronized(m_sourceCodeTabs){
+			for(SourceFilePanel panel : m_sourceCodeTabs.values()){
+				panel.removeAllLineSelection();
+			}
 		}
 	}
 }
