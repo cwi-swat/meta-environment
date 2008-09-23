@@ -17,7 +17,6 @@ import prefuse.data.Schema;
  * warnings about this, so we suppress them. 
  */
 public class Process extends AbstractTuple {
-
 	public static final String PROCESS_FIELDNAME = "process";
 	public static final Class<?> PROCESS_FIELDTYPE = String.class;
 	public static final String PROCESS_DEFAULT_VALUE = "";
@@ -38,7 +37,9 @@ public class Process extends AbstractTuple {
 	 * 
 	 * @param process The process
 	 */
-	public Process(String process) {
+	public Process(String process){
+		super();
+		
 		m_process = process;
 	}
 	

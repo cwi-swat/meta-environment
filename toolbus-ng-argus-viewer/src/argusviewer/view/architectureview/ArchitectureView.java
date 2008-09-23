@@ -53,10 +53,6 @@ public class ArchitectureView extends JPanel {
 	private JPanel m_visualComponent;
 	private MessageVisibility m_messageFilter;
 	private ProcessLayout m_processLayout;
-	/*
-	 * The graphical components 
-	 */
-	private JScrollPane m_scrollPane = new JScrollPane(null);
 	
 	/**
 	 * Constructs the Architecture View Panel
@@ -65,14 +61,13 @@ public class ArchitectureView extends JPanel {
 	 * @param archVisualization the visualization to use
 	 * @param performanceTreeTable an instance of the PerformanceTreeTable
 	 */
-	public ArchitectureView(DataComm dataComm, ArchitectureData archData, Visualization archVisualization,
-			PerformanceTreeTable performanceTreeTable) {
+	public ArchitectureView(DataComm dataComm, ArchitectureData archData, Visualization archVisualization, PerformanceTreeTable performanceTreeTable) {
 		m_archData = archData;
 		m_visualization = archVisualization;
 		m_performanceTreeTable = performanceTreeTable;
 		
 		this.setLayout(new BorderLayout());
-		this.add(m_scrollPane, BorderLayout.CENTER);
+		this.add(new JScrollPane(null), BorderLayout.CENTER);
 		
 		setupVisualization();
 	}

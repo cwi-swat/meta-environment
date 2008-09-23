@@ -64,7 +64,7 @@ public class Message extends AbstractTuple {
 	public static final String TABLE_NAME = "messages";
 	private static final int TABLE_COLUMNCOUNT = 6;
 	public static final Schema TABLE_SCHEMA;
-	static {
+	static{
 		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(MESSAGE_FIELDNAME, MESSAGE_FIELDTYPE, MESSAGE_DEFAULT_VALUE);
 		TABLE_SCHEMA.addColumn(SOURCENAME_FIELDNAME, SOURCENAME_FIELDTYPE, SOURCENAME_DEFAULT_VALUE);
@@ -80,7 +80,7 @@ public class Message extends AbstractTuple {
 	 * - ASYNC : Asynchronous communication (e.g. a broadcast message)
 	 * - SYNC : Synchronous communication (e.g. a normal message)
 	 */
-	public enum Type {
+	public enum Type{
 		TOOLCOMM,
 		ASYNC,
 		SYNC

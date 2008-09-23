@@ -21,6 +21,8 @@ import prefuse.visual.VisualItem;
  * Note that messages are not drawn if one of the processes or tools is invisible.
  */
 public class MessageRenderer extends AbstractShapeRenderer {
+    private static final double HALF_PI = Math.PI / 2;
+    
     private final int m_initialArrowWidth  = 8;
     private final int m_initialArrowHeight = 12;
     private final int m_finalArrowSize = 3;
@@ -31,7 +33,6 @@ public class MessageRenderer extends AbstractShapeRenderer {
         m_arrowHead.addPoint(m_initialArrowWidth / 2, -m_initialArrowHeight);
         m_arrowHead.addPoint(0, 0);
     }
-    private static final double HALF_PI = Math.PI / 2;
     
 	/**
 	 * {@inheritDoc}

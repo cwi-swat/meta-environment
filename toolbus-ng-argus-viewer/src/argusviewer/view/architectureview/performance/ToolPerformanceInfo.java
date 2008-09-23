@@ -1,6 +1,7 @@
 package argusviewer.view.architectureview.performance;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO better comments for class and methods
@@ -15,7 +16,7 @@ public class ToolPerformanceInfo {
 	private volatile int m_toolMemoryHeapUsage;
 	private volatile int m_toolMemoryNonHeapUsage;
 
-	private Hashtable<String, ThreadInfo> m_threads = new Hashtable<String, ThreadInfo>();
+	private volatile Map<String, ThreadInfo> m_threads;
 
 	/**
 	 * @param toolId
@@ -26,6 +27,8 @@ public class ToolPerformanceInfo {
 	public ToolPerformanceInfo(int toolId, String toolName) {
 		this.m_toolId = toolId;
 		this.m_toolName = toolName;
+		
+		m_threads = new HashMap<String, ThreadInfo>();
 	}
 
 	/**
@@ -87,7 +90,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool treads
 	 */
-	public Hashtable<String, ThreadInfo> getThreads() {
+	public Map<String, ThreadInfo> getThreads() {
 		return m_threads;
 	}
 
@@ -137,7 +140,7 @@ public class ToolPerformanceInfo {
 	 * @param threads
 	 *            Hashtable
 	 */
-	public void setThreads(Hashtable<String, ThreadInfo> threads) {
+	public void setThreads(Map<String, ThreadInfo> threads) {
 		m_threads = threads;
 	}
 

@@ -1,9 +1,7 @@
 package argusviewer.view.architectureview;
 
-import org.apache.log4j.Logger;
-import argusviewer.view.msc.data.AbstractTuple;
-
 import prefuse.data.Schema;
+import argusviewer.view.msc.data.AbstractTuple;
 
 /**
  * This class represents a tuple in the Statements table (a statement executed by a tool).
@@ -12,29 +10,23 @@ import prefuse.data.Schema;
  * @author Frank Oppedijk
  *
  */
-/*
- * The Prefuse Tuple base class uses the raw 'Class' type,
- * which means this class needs to use it too. We do not want
- * warnings about this, so we suppress them. 
- */
 public class Tool extends AbstractTuple {
 	public final static String TOOL_FIELDNAME = "tool";
 	public final static Class<?> TOOL_FIELDTYPE = String.class;
 	public final static String TOOL_DEFAULT_VALUE = "";
 	
-	public static final String TABLE_NAME = "tools";
-	private static final int TABLE_COLUMNCOUNT = 1;
-	public static final Schema TABLE_SCHEMA;
+	public final static String TABLE_NAME = "tools";
+	public final static Schema TABLE_SCHEMA;
+	private final static int TABLE_COLUMNCOUNT = 1;
 	
-	private final static Logger log = Logger.getLogger(Tool.class);
-	
-	private volatile String m_tool;
-	static {
+	static{
 		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(TOOL_FIELDNAME, TOOL_FIELDTYPE, TOOL_DEFAULT_VALUE);
 	}
-
+	
 	private static final String[] COLUMNS = {TOOL_FIELDNAME};
+	
+	private volatile String m_tool;
 	
 	/**
 	 * Create a Tool tuple with the given tool name
@@ -42,7 +34,6 @@ public class Tool extends AbstractTuple {
 	 * @param tool The tool
 	 */
 	public Tool(String tool) {
-		log.info("tool created");
 		m_tool = tool;
 	}
 	

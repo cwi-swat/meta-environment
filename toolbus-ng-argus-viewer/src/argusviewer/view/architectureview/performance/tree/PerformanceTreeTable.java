@@ -23,7 +23,7 @@ import com.sun.java.treetable.example.TreeTableModel;
 public class PerformanceTreeTable extends JTreeTable {
 	private static final long serialVersionUID = 2898389345356146073L;
 	
-	private final PerformanceTreeModel m_model;
+	private final PerformanceTreeModel model;
 
 	/**
 	 * Constructor for {@link PerformanceTreeTable}.
@@ -34,30 +34,25 @@ public class PerformanceTreeTable extends JTreeTable {
 
 	private PerformanceTreeTable(PerformanceTreeModel treeTableModel) {
 		super(treeTableModel);
-		m_model = treeTableModel;
+		this.model = treeTableModel;
 
 		DefaultTreeCellRenderer toolPerformanceRenderer = new ToolPerformanceRenderer();
 		this.getTree().setCellRenderer(toolPerformanceRenderer);
 
 		// Processor renderer
-		getColumnModel().getColumn(
-				PerformanceTreeModel.PROCESSOR_PERCENTAGE_COLUMN)
-				.setCellRenderer(new ProcessorRenderer());
+		getColumnModel().getColumn(PerformanceTreeModel.PROCESSOR_PERCENTAGE_COLUMN).setCellRenderer(new ProcessorRenderer());
 
 		// Left align processor ms column
 		DefaultTableCellRenderer leftAlignRenderer = new DefaultTableCellRenderer();
 		leftAlignRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-		getColumnModel().getColumn(PerformanceTreeModel.PROCESSOR_TIME_COLUMN)
-				.setCellRenderer(leftAlignRenderer);
+		getColumnModel().getColumn(PerformanceTreeModel.PROCESSOR_TIME_COLUMN).setCellRenderer(leftAlignRenderer);
 
 		// Right align memory columns, to be consistent with other views and
 		// looks better.
 		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
 		rightAlignRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-		getColumnModel().getColumn(PerformanceTreeModel.ID_COLUMN)
-				.setCellRenderer(rightAlignRenderer);
-		getColumnModel().getColumn(PerformanceTreeModel.MEMORY_HEAP_COLUMN)
-				.setCellRenderer(rightAlignRenderer);
+		getColumnModel().getColumn(PerformanceTreeModel.ID_COLUMN).setCellRenderer(rightAlignRenderer);
+		getColumnModel().getColumn(PerformanceTreeModel.MEMORY_HEAP_COLUMN).setCellRenderer(rightAlignRenderer);
 
 		tree.setRootVisible(false);
 		setCellSelectionEnabled(true);
@@ -80,7 +75,7 @@ public class PerformanceTreeTable extends JTreeTable {
 	 *            ToolPerformanceInfo
 	 */
 	public void add(ToolPerformanceInfo toolPerformanceInfo) {
-		m_model.add(toolPerformanceInfo);
+		model.add(toolPerformanceInfo);
 		refresh();
 	}
 
@@ -92,13 +87,13 @@ public class PerformanceTreeTable extends JTreeTable {
 	 *            name of tool to focus on.
 	 */
 	public void setFocus(String toolName) {
-		int row = m_model.setFocus(toolName);
-		if (row >= 0) {
+		int row = model.setFocus(toolName);
+		if(row >= 0){
 			changeSelection(row, PerformanceTreeModel.TOOL_COLUMN, false, false);
-			if (m_model.expandOnFocus(row)) {
+			if(model.expandOnFocus(row)){
 				tree.expandRow(row);
 			}
-		} else {
+		}else{
 			clearSelection();
 		}
 	}

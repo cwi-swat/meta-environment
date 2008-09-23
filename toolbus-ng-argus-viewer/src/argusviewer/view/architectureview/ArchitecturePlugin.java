@@ -26,7 +26,7 @@ public class ArchitecturePlugin implements IView {
 	private static final String PREFERRED_POSITION = "TopRight";
 	private static final int INITIAL_DIVIDER_LOCATION = 300;
 
-	private final HashMap<String, Container> m_visualComponents;
+	private final Map<String, Container> m_visualComponents;
 
 	private final ArchitectureData architectureData;
 	private final Visualization archVisualization;
@@ -49,8 +49,9 @@ public class ArchitecturePlugin implements IView {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, m_archView.getVisualComponent(), toolPane);
 		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
-		m_visualComponents = new HashMap<String, Container>();
-		m_visualComponents.put(PLUGIN_NAME, splitPane);
+		Map<String, Container> visualComponents = new HashMap<String, Container>();
+		visualComponents.put(PLUGIN_NAME, splitPane);
+		m_visualComponents = visualComponents;
 	}
 
 	/**

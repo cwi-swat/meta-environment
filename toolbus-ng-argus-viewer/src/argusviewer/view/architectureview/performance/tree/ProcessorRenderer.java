@@ -23,5 +23,4 @@ public class ProcessorRenderer implements TableCellRenderer{
 		progressBar.setValue(processor);
 		return progressBar;
 	}
-
 }

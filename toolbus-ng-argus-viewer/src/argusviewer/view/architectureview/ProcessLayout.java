@@ -35,9 +35,7 @@ public class ProcessLayout extends Layout {
 	public ProcessLayout(String group) {
 		super(group);
 	}
-
-
-
+	
 	/**
 	 * @return the bounds of the rectangle around all processes
 	 */

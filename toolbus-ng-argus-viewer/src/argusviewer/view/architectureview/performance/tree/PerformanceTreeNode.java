@@ -272,8 +272,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	private void updateThreads() {
 		this.removeAllChildren();
 
-		for (ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads()
-				.values()) {
+		for (ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads().values()) {
 			PerformanceTreeNodeThread thread = new PerformanceTreeNodeThread(threadInfo);
 			this.add(thread);
 //			PerformanceTreeNode newChild = new PerformanceTreeNode();

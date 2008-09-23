@@ -265,11 +265,14 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param term The performancestats
 	 */
 	public void updatePerformance(ToolInstance toolInstance, ATerm term){
-		if(!m_toolPerformance.containsKey(toolInstance)){
-			m_toolPerformance.put(toolInstance, new ToolPerformanceInfo(toolInstance.getToolID(), toolInstance.getToolName()));
-		} 
-
-		ToolPerformanceInfo info = m_toolPerformance.get(toolInstance);
+		ToolPerformanceInfo info;
+		synchronized(m_toolPerformance){
+			if(!m_toolPerformance.containsKey(toolInstance)){
+				m_toolPerformance.put(toolInstance, new ToolPerformanceInfo(toolInstance.getToolID(), toolInstance.getToolName()));
+			}
+			
+			info = m_toolPerformance.get(toolInstance);
+		}
 		
 		String toolType;
 		toolType = term.getChildAt(0).getChildAt(0).toString();
@@ -303,7 +306,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		Pattern pattern = Pattern.compile("[a-zA-Z0-9 \\-\\_]+\\(user-time\\(\\d+\\),system-time\\(\\d+\\)\\)");
 		Matcher matcher = pattern.matcher(toolThreads);
 
-		Hashtable<String, ThreadInfo> threads = new Hashtable<String, ThreadInfo>();
+		Map<String, ThreadInfo> threads = new HashMap<String, ThreadInfo>();
 		
 		while(matcher.find()){
         	MatchResult result = matcher.toMatchResult();

@@ -15,7 +15,7 @@ import argusviewer.view.architectureview.performance.ThreadInfo;
 public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	private static final long serialVersionUID = 5262837229886674693L;
 	
-	private final ThreadInfo m_threadInfo;
+	private final ThreadInfo threadInfo;
 
 	/**
 	 * The constructor creates a {@link PerformanceTreeNodeThread}, with a
@@ -26,7 +26,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 *            {@link PerformanceTreeNodeThread}.
 	 */
 	public PerformanceTreeNodeThread(ThreadInfo threadInfo) {
-		m_threadInfo = threadInfo;
+		this.threadInfo = threadInfo;
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 * @return the name of the tool or child.
 	 */
 	public String getToolName() {
-		return m_threadInfo.getThreadName();
+		return threadInfo.getThreadName();
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 * @return the processor time of the Tool.
 	 */
 	public int getProcessorTime() {
-		return m_threadInfo.getThreadSystemTime() + m_threadInfo.getThreadUserTime();
+		return threadInfo.getThreadSystemTime() + threadInfo.getThreadUserTime();
 	}
 
 	/**
