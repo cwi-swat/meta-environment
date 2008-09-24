@@ -8,8 +8,7 @@ import toolbus.tool.ToolInstance;
  * @author J. van den Bos
  * @author T. Van Laer
  */
-public interface IToolControlListener {
-
+public interface IToolControlListener{
 	/**
 	 * Tool instance is added on the toolbus
 	 * 

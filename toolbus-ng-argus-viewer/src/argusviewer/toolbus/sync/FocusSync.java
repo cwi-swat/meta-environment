@@ -21,6 +21,8 @@ public class FocusSync{
 	 * constructor of the focus synchronizator
 	 */
 	public FocusSync(){
+		super();
+		
 		m_focusListeners = new ArrayList<IFocusListener>();
 		m_highlightListeners = new ArrayList<IHighlightListener>();
 	}

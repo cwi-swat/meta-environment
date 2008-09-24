@@ -9,8 +9,7 @@ import toolbus.tool.ToolInstance;
  * @author J. van den Bos
  * @author T. Van Laer
  */
-public interface IHighlightListener {
-
+public interface IHighlightListener{
 	/**
 	 * The view is highlighting a process instance.
 	 * 

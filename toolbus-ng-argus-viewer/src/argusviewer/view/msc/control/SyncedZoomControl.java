@@ -12,7 +12,7 @@ import prefuse.visual.VisualItem;
 /**
  * @author: Arne Timmerman
  */
-public class SyncedZoomControl extends AbstractZoomControl {
+public class SyncedZoomControl extends AbstractZoomControl{
 	protected static final int MOUSE_ZOOM_BUTTON = Control.RIGHT_MOUSE_BUTTON;
 	private static final double ZOOM_DIVIDER = 100.0;
 	
@@ -31,7 +31,9 @@ public class SyncedZoomControl extends AbstractZoomControl {
 	 * @param zoomCenter the position in the display to zoom to
 	 * @param synchronizedZoomCenter the position in the synchronized display to zoom to
 	 */
-	public SyncedZoomControl(Display synchronizedDisplay, Point2D zoomCenter, Point2D synchronizedZoomCenter) {
+	public SyncedZoomControl(Display synchronizedDisplay, Point2D zoomCenter, Point2D synchronizedZoomCenter){
+		super();
+		
 		this.m_synchronizedDisplay = synchronizedDisplay;
 		this.m_zoomCenter = zoomCenter;
 		this.m_synchronizedZoomCenter = synchronizedZoomCenter;
@@ -40,11 +42,10 @@ public class SyncedZoomControl extends AbstractZoomControl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void mousePressed(MouseEvent mouseEvent) {
-
-		if (UILib.isButtonPressed(mouseEvent, MOUSE_ZOOM_BUTTON)) {
+	public void mousePressed(MouseEvent mouseEvent){
+		if(UILib.isButtonPressed(mouseEvent, MOUSE_ZOOM_BUTTON)){
 			Display pannedDisplay = (Display) mouseEvent.getSource();
-			if (pannedDisplay.isTranformInProgress()) {
+			if(pannedDisplay.isTranformInProgress()){
 				m_verticalMouseDownPosition = -1;
 				return;
 			}
@@ -53,7 +54,7 @@ public class SyncedZoomControl extends AbstractZoomControl {
 			double horizontalZoomCenter = mouseEvent.getX();
 			m_zoomCenter.setLocation(horizontalZoomCenter, m_zoomCenter.getY());
 
-			if (m_synchronizedDisplay != null) {
+			if(m_synchronizedDisplay != null){
 				m_synchronizedZoomCenter.setLocation(horizontalZoomCenter, m_synchronizedZoomCenter.getY());
 			}
 		}
@@ -62,11 +63,10 @@ public class SyncedZoomControl extends AbstractZoomControl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void mouseDragged(MouseEvent mouseEvent) {
-
-		if (UILib.isButtonPressed(mouseEvent, MOUSE_ZOOM_BUTTON)) {
+	public void mouseDragged(MouseEvent mouseEvent){
+		if(UILib.isButtonPressed(mouseEvent, MOUSE_ZOOM_BUTTON)){
 			Display pannedDisplay = (Display) mouseEvent.getSource();
-			if (pannedDisplay.isTranformInProgress() || m_verticalMouseDownPosition == -1) {
+			if(pannedDisplay.isTranformInProgress() || m_verticalMouseDownPosition == -1){
 				m_verticalMouseDownPosition = -1;
 				return;
 			}
@@ -77,7 +77,7 @@ public class SyncedZoomControl extends AbstractZoomControl {
 
 			zoom(pannedDisplay, m_zoomCenter, zoomScale, false);
 
-			if (m_synchronizedDisplay != null) {
+			if(m_synchronizedDisplay != null){
 				zoom(m_synchronizedDisplay, m_synchronizedZoomCenter, zoomScale, false);
 			}
 
@@ -92,22 +92,21 @@ public class SyncedZoomControl extends AbstractZoomControl {
 	 * @param verticalMovement the amount of pixel that the mouse vertically moved
 	 * @return the scale factor
 	 */
-	protected static double calculateZoom(int verticalMovement) {
+	protected static double calculateZoom(int verticalMovement){
 		return (verticalMovement / ZOOM_DIVIDER) + 1;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void itemPressed(VisualItem item, MouseEvent e) {
+	public void itemPressed(VisualItem item, MouseEvent e){
         mousePressed(e);
     }
 
     /**
 	 * {@inheritDoc}
 	 */
-	public void itemDragged(VisualItem item, MouseEvent e) {
+	public void itemDragged(VisualItem item, MouseEvent e){
     	mouseDragged(e);
     }
-
 }

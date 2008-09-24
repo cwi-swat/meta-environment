@@ -11,8 +11,7 @@ import toolbus.tool.ToolInstance;
  * @author J. Pol
  * @author J. van den Bos
  */
-public interface IToolFilterListener {
-
+public interface IToolFilterListener{
     /**
 	 * A filter has been set. The Tool in the list should be visible. All
 	 * other processes should be hidden.

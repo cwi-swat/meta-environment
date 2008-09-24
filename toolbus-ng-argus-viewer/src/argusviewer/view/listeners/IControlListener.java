@@ -8,8 +8,7 @@ import toolbus.process.ProcessInstance;
  * 
  * @author Tim Van Laer
  */
-public interface IControlListener {
-
+public interface IControlListener{
 	/**
 	 * one step is executed:
 	 * 

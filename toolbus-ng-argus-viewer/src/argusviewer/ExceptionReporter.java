@@ -9,13 +9,13 @@ import org.apache.log4j.Logger;
  * @author J. van den Bos
  * @author M. van Beest
  */
-public final class ExceptionReporter {
+public final class ExceptionReporter{
 	private final static Logger log = Logger.getLogger(ExceptionReporter.class);
 	
 	/**
 	 * The state of the exception
 	 */
-	public static enum ExceptionState {
+	public static enum ExceptionState{
 		IGNORED,
 		CONSUMED,
 		TRIED,

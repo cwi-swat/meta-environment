@@ -6,14 +6,12 @@ import prefuse.render.AbstractShapeRenderer;
 import prefuse.visual.VisualItem;
 
 /**
- * 
  * @author John Franse
  * @author Tigran Kalaidjan
  *
  * AbstractRenderer
- * 
  */
-public abstract class AbstractArchitectureRenderer extends AbstractShapeRenderer {
+public abstract class AbstractArchitectureRenderer extends AbstractShapeRenderer{
 	public static final int BASESIZE = 100;
 
 	/**

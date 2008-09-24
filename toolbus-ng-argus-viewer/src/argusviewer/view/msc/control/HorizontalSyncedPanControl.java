@@ -41,7 +41,7 @@ public class HorizontalSyncedPanControl extends PanControl {
 	 * @param synchronizedDisplay the display that must be synchronized with Horizontal Panning
 	 * @param initialVerticalPan the amount of vertical pan of the display where this control is enabled on
 	 */
-	public HorizontalSyncedPanControl(Display synchronizedDisplay, double initialVerticalPan) {
+	public HorizontalSyncedPanControl(Display synchronizedDisplay, double initialVerticalPan){
 		super(MOUSE_PANNING_BUTTON);
 
 		// Vertical panning of a Prefuse Display is negated compared to the vertical postion
@@ -52,8 +52,8 @@ public class HorizontalSyncedPanControl extends PanControl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void mousePressed(MouseEvent mouseEvent) {
-		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
+	public void mousePressed(MouseEvent mouseEvent){
+		if(UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)){
 			m_horizontalMouseDownPosition = mouseEvent.getX();
 			m_verticalMouseDownPosition = mouseEvent.getY();
 		}
@@ -62,8 +62,8 @@ public class HorizontalSyncedPanControl extends PanControl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void mouseDragged(MouseEvent mouseEvent) {
-		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
+	public void mouseDragged(MouseEvent mouseEvent){
+		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)){
 			Display pannedDisplay = (Display) mouseEvent.getSource();
 
 			int horizontalMousePosition = mouseEvent.getX();
@@ -79,16 +79,16 @@ public class HorizontalSyncedPanControl extends PanControl {
 			double maxVerticalPosition = m_initialVerticalPosition * pannedDisplay.getScale();
 
 			// Pan both directions if the new vertical position does not exceeds the initial position
-			if (newVerticalPosition >= maxVerticalPosition) {
+			if(newVerticalPosition >= maxVerticalPosition){
 				panDisplay(pannedDisplay, horizontalMovement, verticalMovement);
 
 			// Pan partial vertical if the new vertical position exceeds the initial position
-			} else if ((verticalMovement > 0) && (currentVerticalPosition != maxVerticalPosition)) {
+			}else if((verticalMovement > 0) && (currentVerticalPosition != maxVerticalPosition)){
 	   			int partialVerticalMovement = (int) (currentVerticalPosition - maxVerticalPosition);
 				panDisplay(pannedDisplay, horizontalMovement, partialVerticalMovement);
 
 			// Pan only horizontal
-			} else {
+			}else{
 				panDisplay(pannedDisplay, horizontalMovement, 0);
 			}
 
@@ -100,8 +100,8 @@ public class HorizontalSyncedPanControl extends PanControl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void mouseReleased(MouseEvent mouseEvent) {
-		if (UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)) {
+	public void mouseReleased(MouseEvent mouseEvent){
+		if(UILib.isButtonPressed(mouseEvent, MOUSE_PANNING_BUTTON)){
 			m_horizontalMouseDownPosition = -1;
 			m_verticalMouseDownPosition = -1;
 		}
@@ -115,11 +115,11 @@ public class HorizontalSyncedPanControl extends PanControl {
 	 * @param verticalMovement the amount of vertical pan that has to be scrolled
 	 * @param horizontalMovement the amount of horizontal pan that has to be scrolled
 	 */
-	private void panDisplay(Display pannedDisplay, int horizontalMovement, int verticalMovement) {
+	private void panDisplay(Display pannedDisplay, int horizontalMovement, int verticalMovement){
 		pannedDisplay.pan(horizontalMovement, verticalMovement);
 		pannedDisplay.repaint();
 
-		if (m_synchronizedDisplay != null) {
+		if(m_synchronizedDisplay != null){
 			m_synchronizedDisplay.pan(horizontalMovement, 0);
 			m_synchronizedDisplay.repaint();
 		}
@@ -128,21 +128,21 @@ public class HorizontalSyncedPanControl extends PanControl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void itemPressed(VisualItem item, MouseEvent e) {
+	public void itemPressed(VisualItem item, MouseEvent e){
         mousePressed(e);
     }
 
     /**
 	 * {@inheritDoc}
 	 */
-	public void itemDragged(VisualItem item, MouseEvent e) {
+	public void itemDragged(VisualItem item, MouseEvent e){
     	mouseDragged(e);
     }
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void itemReleased(VisualItem item, MouseEvent e) {
+	public void itemReleased(VisualItem item, MouseEvent e){
     	mouseReleased(e);
     }
 }

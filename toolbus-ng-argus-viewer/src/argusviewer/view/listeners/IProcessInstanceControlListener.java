@@ -8,8 +8,7 @@ import toolbus.process.ProcessInstance;
  * @author J. van den Bos
  * @author T. Van Laer
  */
-public interface IProcessInstanceControlListener {
-
+public interface IProcessInstanceControlListener{
 	/**
 	 * Process instance is added on the toolbus
 	 * 

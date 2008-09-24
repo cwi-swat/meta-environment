@@ -9,8 +9,7 @@ import aterm.ATerm;
  * @author J. van den Bos
  * @author T. Van Laer
  */
-public interface IPerformanceControlListener {
-
+public interface IPerformanceControlListener{
 	/**
 	 * a certain tool is updated:
 	 * 

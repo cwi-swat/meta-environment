@@ -11,12 +11,7 @@ import prefuse.data.Schema;
  * @author Frank Oppedijk
  * @author Ivo Tamboer
  */
-/*
- * The Prefuse Tuple base class uses the raw 'Class' type,
- * which means this class needs to use it too. We do not want
- * warnings about this, so we suppress them. 
- */
-public class Process extends AbstractTuple {
+public class Process extends AbstractTuple{
 	public static final String PROCESS_FIELDNAME = "process";
 	public static final Class<?> PROCESS_FIELDTYPE = String.class;
 	public static final String PROCESS_DEFAULT_VALUE = "";
@@ -46,15 +41,15 @@ public class Process extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected String[] getColumns() {
+	protected String[] getColumns(){
 		return COLUMNS;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object get(String field) {
-		if (field.equals(PROCESS_FIELDNAME)) {
+	public Object get(String field){
+		if(field.equals(PROCESS_FIELDNAME)){
 			return m_process;
 		}
 
@@ -64,8 +59,8 @@ public class Process extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object get(int col) {
-		if ((0 <= col) && (col < COLUMNS.length)) {
+	public Object get(int col){
+		if((0 <= col) && (col < COLUMNS.length)){
 			return get(COLUMNS[col]);
 		}
 
@@ -75,8 +70,8 @@ public class Process extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class<?> getColumnType(String field) {
-		if (field.equals(PROCESS_FIELDNAME)) {
+	public Class<?> getColumnType(String field){
+		if(field.equals(PROCESS_FIELDNAME)){
 			return PROCESS_FIELDTYPE;
 		}
 
@@ -86,8 +81,8 @@ public class Process extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class<?> getColumnType(int col) {
-		if ((0 <= col) && (col < COLUMNS.length)) {
+	public Class<?> getColumnType(int col){
+		if((0 <= col) && (col < COLUMNS.length)){
 			return getColumnType(COLUMNS[col]);
 		}
 		
@@ -97,8 +92,8 @@ public class Process extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object getDefault(String field) {
-		if (field.equals(PROCESS_FIELDNAME)) {
+	public Object getDefault(String field){
+		if(field.equals(PROCESS_FIELDNAME)){
 			return PROCESS_DEFAULT_VALUE;
 		}
 		
@@ -109,15 +104,15 @@ public class Process extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Schema getSchema() {
+	public Schema getSchema(){
 		return TABLE_SCHEMA;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void revertToDefault(String field) {
-		if (field.equals(PROCESS_FIELDNAME)) {
+	public void revertToDefault(String field){
+		if(field.equals(PROCESS_FIELDNAME)){
 			set(field, PROCESS_DEFAULT_VALUE);
 		}
 	}
@@ -125,11 +120,10 @@ public class Process extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void set(String field, Object value) {
+	public void set(String field, Object value){
 		Class<?> valueType = value.getClass();
 
-		if ((canSet(field, valueType)) 
-			&& (field.equals(PROCESS_FIELDNAME))) {
+		if((canSet(field, valueType)) && (field.equals(PROCESS_FIELDNAME))){
 			m_process = (String) value;			
 		}
 	}
@@ -137,8 +131,8 @@ public class Process extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void set(int col, Object value) {
-		if ((0 <= col) && (col < COLUMNS.length)) {
+	public void set(int col, Object value){
+		if((0 <= col) && (col < COLUMNS.length)){
 			set(COLUMNS[col], value);
 		}
 	}
@@ -153,7 +147,7 @@ public class Process extends AbstractTuple {
 	 *            The data type
 	 * @return Whether or not the pair is valid
 	 */
-	protected boolean isValidNameTypePair(String field, Class type) {
+	protected boolean isValidNameTypePair(String field, Class type){
 		return (field.equals(PROCESS_FIELDNAME)) && (type == PROCESS_FIELDTYPE);
 	}
 

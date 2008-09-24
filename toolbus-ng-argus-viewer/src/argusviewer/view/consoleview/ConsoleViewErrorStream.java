@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-/**
- * @author M. van Beest
- */
-public class ConsoleViewErrorStream extends OutputStream {
+public class ConsoleViewErrorStream extends OutputStream{
 	public static final Color COLOR_RED = new Color(255, 0, 0);
 
 	private final ConsoleViewColorPane textPane;
@@ -25,8 +22,9 @@ public class ConsoleViewErrorStream extends OutputStream {
 	 * @param originalErrorStream
 	 *            The original errorstream to copy the exceptions to.
 	 */
-	public ConsoleViewErrorStream(ConsoleViewColorPane textPane,
-			PrintStream originalErrorStream) {
+	public ConsoleViewErrorStream(ConsoleViewColorPane textPane, PrintStream originalErrorStream){
+		super();
+		
 		this.textPane = textPane;
 		this.originalErrorStream = originalErrorStream;
 		
@@ -43,16 +41,16 @@ public class ConsoleViewErrorStream extends OutputStream {
 	 *            The value to be printed. This is a byte value
 	 * @see java.io.OutputStream#write(int)
 	 */
-	public synchronized void write(int b) throws IOException {		
+	public synchronized void write(int b) throws IOException{		
 		//check the original stream and copy the output to there.
-		if (originalErrorStream != null) {
+		if(originalErrorStream != null){
 			originalErrorStream.write(b);
 		}
 		
 		errorBuffer.append((char) b);
 
 		// check for an endline
-		if (((char) b) == '\n') {
+		if(((char) b) == '\n'){
 			// output the string buffer to the gui and clear the buffer			
 			textPane.append(errorBuffer.toString(), COLOR_RED);
 			errorBuffer = new StringBuilder();

@@ -26,14 +26,14 @@ public class ProcessRenderer extends AbstractArchitectureRenderer {
 	/**
 	 * Default Constructor ProcessRenderer
 	 */
-	public ProcessRenderer() {
+	public ProcessRenderer(){
 		super();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	protected Shape getRawShape(VisualItem item) {
+	protected Shape getRawShape(VisualItem item){
 		item.setStroke(STROKE);
 
 		Point2D pos = getShapePosition(item);
@@ -51,11 +51,11 @@ public class ProcessRenderer extends AbstractArchitectureRenderer {
 	 * @param width The width (radius) of the rectangle
 	 * @return An Ellipse
 	 */
-	protected Ellipse2D getCircle(double x, double y, double width) {
+	protected static Ellipse2D getCircle(double x, double y, double width){
 		Ellipse2D ellipse = new Ellipse2D.Double();
 
 		// Center the circle around the specified x and y
-		if (width > 1) {
+		if(width > 1){
 			x -= width / 2;
 			y -= width / 2;
 		}
@@ -64,5 +64,4 @@ public class ProcessRenderer extends AbstractArchitectureRenderer {
 
 		return ellipse;
 	}
-
 }

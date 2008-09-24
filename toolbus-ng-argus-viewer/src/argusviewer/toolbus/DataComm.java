@@ -45,6 +45,7 @@ public final class DataComm implements IViewer, IPerformanceMonitor{
     /**
 	 * Constructor of the DataComm object. DataComm handles the connection
 	 * with the toolbus.
+	 * 
 	 * @param args The arguments to start the toolbus.
      * @throws Exception could not start the toolbus
 	 */	

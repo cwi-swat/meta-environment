@@ -16,7 +16,7 @@ import prefuse.visual.VisualItem;
  * @author Frank Oppedijk
  * @author Ivo Tamboer
  */
-public class ToolbusSingletonLayout extends Layout {
+public class ToolbusSingletonLayout extends Layout{
 	private final ProcessLayout m_processLayout;
 	
 	/**
@@ -25,7 +25,7 @@ public class ToolbusSingletonLayout extends Layout {
 	 * @param processLayout the ProcessLayout which lays out the processes above the Tools.
 	 * @param group The group of visual items on which the layout will be applied
 	 */
-	public ToolbusSingletonLayout(String group, ProcessLayout processLayout) {
+	public ToolbusSingletonLayout(String group, ProcessLayout processLayout){
 		super(group);
 		m_processLayout = processLayout;
 	}
@@ -33,9 +33,9 @@ public class ToolbusSingletonLayout extends Layout {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void run(double frac) {
+	public void run(double frac){
 		Iterator<VisualItem> visualStatements = m_vis.items(m_group);
-		while (visualStatements.hasNext()) {
+		while(visualStatements.hasNext()){
 			VisualItem currentTool = visualStatements.next();
 
 				Rectangle2D bounds = m_processLayout.getBounds();

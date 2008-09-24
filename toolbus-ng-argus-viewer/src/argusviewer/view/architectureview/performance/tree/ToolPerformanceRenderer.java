@@ -31,18 +31,17 @@ public class ToolPerformanceRenderer extends DefaultTreeCellRenderer {
 	 * {@inheritDoc}
 	 */
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-		super.getTreeCellRendererComponent(tree, value, selected, expanded,
-				leaf, row, hasFocus);
+		super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
-		if (value instanceof PerformanceTreeNodeThread) {
+		if(value instanceof PerformanceTreeNodeThread){
 			setLeafIcon(ICON_THREAD);
-		} else if (value instanceof PerformanceTreeNode) {
+		}else if (value instanceof PerformanceTreeNode){
 			PerformanceTreeNode node = (PerformanceTreeNode) value;
 			
-			if (node.getToolId() == null) {
+			if(node.getToolId() == null){
 				setOpenIcon(ICON_GROUP);
 				setClosedIcon(ICON_GROUP);
-			} else {
+			}else{
 				setOpenIcon(ICON_TOOL);
 				setClosedIcon(ICON_TOOL);				
 			}
@@ -62,7 +61,7 @@ public class ToolPerformanceRenderer extends DefaultTreeCellRenderer {
 //			} else {
 //				// Error
 //			}
-		} else {
+		}else{
 			// Error
 		}
 

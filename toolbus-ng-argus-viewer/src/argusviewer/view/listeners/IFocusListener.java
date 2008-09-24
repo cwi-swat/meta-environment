@@ -9,8 +9,7 @@ import toolbus.tool.ToolInstance;
  * @author T. Van Laer
  * @author J. van den Bos
  */
-public interface IFocusListener {
-
+public interface IFocusListener{
 	/**
 	 * The view is actively working with a process.
 	 * 

@@ -70,11 +70,9 @@ public class ControlPanel extends JPanel implements ActionListener, IStateContro
 		m_gui = gui;
 
 		// get the value from the settings or refer to standard settings
-		String runSpeedSlider = ArgusSettings.getInstance().getAttribute(
-				"controlpanel.runspeedslider", String.valueOf(RUN_SPEED_INIT));
+		String runSpeedSlider = ArgusSettings.getInstance().getAttribute("controlpanel.runspeedslider", String.valueOf(RUN_SPEED_INIT));
 		
-		m_dataComm.getControlSync().setSteppingDelay(
-				Integer.parseInt(runSpeedSlider));
+		m_dataComm.getControlSync().setSteppingDelay(Integer.parseInt(runSpeedSlider));
 
 		setLayout(new BorderLayout());
 
@@ -96,8 +94,7 @@ public class ControlPanel extends JPanel implements ActionListener, IStateContro
 		m_sliderValueLabel = new JLabel();		
 		controlPanel.add(m_sliderValueLabel);
 
-		m_runSpeedSlider = new JSlider(SwingConstants.HORIZONTAL, RUN_SPEED_MAX,
-				RUN_SPEED_MIN, RUN_SPEED_INIT);
+		m_runSpeedSlider = new JSlider(SwingConstants.HORIZONTAL, RUN_SPEED_MAX, RUN_SPEED_MIN, RUN_SPEED_INIT);
 		m_runSpeedSlider.setMajorTickSpacing(RUN_SPEED_SPACING_MAJOR);
 		m_runSpeedSlider.setMinorTickSpacing(RUN_SPEED_SPACING_MINOR);
 		m_runSpeedSlider.setPaintTicks(true);
@@ -154,12 +151,9 @@ public class ControlPanel extends JPanel implements ActionListener, IStateContro
 	}
 
 	private void setSliderValue() {
-		float value = (m_dataComm.getControlSync()
-				.getSteppingDelay() / SLIDER_HUNDRED_MSEC)
-				/ (float) SLIDER_DECIMAL_DIVIDER;
+		float value = (m_dataComm.getControlSync().getSteppingDelay() / SLIDER_HUNDRED_MSEC) / (float) SLIDER_DECIMAL_DIVIDER;
 			
-		m_sliderValueLabel.setText(String.valueOf(value)
-				+ " sec");
+		m_sliderValueLabel.setText(String.valueOf(value) + " sec");
 		m_runSpeedSlider.setValue(m_dataComm.getControlSync().getSteppingDelay());
 	}
 
@@ -171,16 +165,12 @@ public class ControlPanel extends JPanel implements ActionListener, IStateContro
 	 */
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource() == m_runSpeedSlider) {
-			m_dataComm.getControlSync().setSteppingDelay(
-					m_runSpeedSlider.getValue());
+			m_dataComm.getControlSync().setSteppingDelay(m_runSpeedSlider.getValue());
 			setSliderValue();
-			ArgusSettings.getInstance().setAttribute(
-					"controlpanel.runspeedslider",
-					String.valueOf(m_dataComm.getControlSync().getSteppingDelay()));
+			ArgusSettings.getInstance().setAttribute("controlpanel.runspeedslider", String.valueOf(m_dataComm.getControlSync().getSteppingDelay()));
 		} else {
 			// update the label and the slider.
-			m_runSpeedSlider.setValue(m_dataComm.getControlSync()
-					.getSteppingDelay());
+			m_runSpeedSlider.setValue(m_dataComm.getControlSync().getSteppingDelay());
 		}
 
 	}
@@ -189,8 +179,7 @@ public class ControlPanel extends JPanel implements ActionListener, IStateContro
 	 * {@inheritDoc}
 	 */
 	public void setState(int state) {
-		String[] states = new String[] { "unknown", "stopping", "waiting",
-				"ready", "running", "stepping" };
+		String[] states = new String[] { "unknown", "stopping", "waiting", "ready", "running", "stepping" };
 		m_statusLabel.setText(states[state + 1]);
 	}
 

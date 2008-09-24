@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Riccardo Lippolis
  * @author Johnny Eradus
  */
-public class Message extends AbstractTuple {
+public class Message extends AbstractTuple{
 	private static final int HASH_CODE = 31;
 
 	public static final String MESSAGE_FIELDNAME = "message";
@@ -35,10 +35,9 @@ public class Message extends AbstractTuple {
 
 	public static final String TABLE_NAME = "messages";
 	private static final int TABLE_COLUMNCOUNT = 4;
-	public static final Schema TABLE_SCHEMA;
+	public static final Schema TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 
 	static{
-		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(MESSAGE_FIELDNAME, MESSAGE_FIELDTYPE, MESSAGE_DEFAULT_VALUE);
 		TABLE_SCHEMA.addColumn(SOURCEID_FIELDNAME, SOURCEID_FIELDTYPE, Integer.valueOf(SOURCEID_DEFAULT_VALUE));
 		TABLE_SCHEMA.addColumn(TARGETIDS_FIELDNAME, TARGETIDS_FIELDTYPE, TARGETIDS_DEFAULT_VALUE);
@@ -51,14 +50,13 @@ public class Message extends AbstractTuple {
 	 * - ASYNC : Asynchronous communication (e.g. a broadcast message)
 	 * - SYNC : Synchronous communication (e.g. a normal message)
 	 */
-	public enum Type {
+	public enum Type{
 		TOOLCOMM,
 		ASYNC,
 		SYNC
 	}
 
-	public static final String[] COLUMNS = {MESSAGE_FIELDNAME,
-			SOURCEID_FIELDNAME, TARGETIDS_FIELDNAME, TYPE_FIELDNAME};
+	public static final String[] COLUMNS = {MESSAGE_FIELDNAME, SOURCEID_FIELDNAME, TARGETIDS_FIELDNAME, TYPE_FIELDNAME};
 
 	/**
 	 * Create a Message tuple with default values.
@@ -75,7 +73,9 @@ public class Message extends AbstractTuple {
 	 * @param targetIds The targets of the message
 	 * @param type The type of message
 	 */
-	public Message(String message, int sourceId, ArrayList<String> targetIds, Type type) {
+	public Message(String message, int sourceId, ArrayList<String> targetIds, Type type){
+		super();
+		
 		m_message = message;
 		m_sourceId = sourceId;
 		m_targetIds = targetIds;
@@ -90,13 +90,15 @@ public class Message extends AbstractTuple {
 	 * @param targetId The target of the message
 	 * @param type The type of message
 	 */
-	public Message(String message, int sourceId, String targetId, Type type) {
+	public Message(String message, int sourceId, String targetId, Type type){
+		super();
+		
 		ArrayList<String> targets = new ArrayList<String>();
 		targets.add(targetId);
-
+		
+		m_targetIds = targets;
 		m_message = message;
 		m_sourceId = sourceId;
-		m_targetIds = targets;
 		m_type = type;
 	}
 
@@ -110,14 +112,14 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object get(String field) {
-		if (field.equals(MESSAGE_FIELDNAME)) {
+	public Object get(String field){
+		if(field.equals(MESSAGE_FIELDNAME)){
 			return m_message;
-		} else if (field.equals(SOURCEID_FIELDNAME)) {
+		}else if(field.equals(SOURCEID_FIELDNAME)){
 			return Integer.valueOf(m_sourceId);
-		} else if (field.equals(TARGETIDS_FIELDNAME)) {
+		}else if(field.equals(TARGETIDS_FIELDNAME)){
 			return m_targetIds;
-		} else if (field.equals(TYPE_FIELDNAME)) {
+		}else if(field.equals(TYPE_FIELDNAME)){
 			return m_type;
 		}
 
@@ -127,21 +129,21 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object get(int col) {
+	public Object get(int col){
 		return get(getColumns()[col]);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class<?> getColumnType(String field) {
-		if (field.equals(MESSAGE_FIELDNAME)) {
+	public Class<?> getColumnType(String field){
+		if (field.equals(MESSAGE_FIELDNAME)){
 			return MESSAGE_FIELDTYPE;
-		} else if (field.equals(SOURCEID_FIELDNAME)) {
+		}else if(field.equals(SOURCEID_FIELDNAME)){
 			return SOURCEID_FIELDTYPE;
-		} else if (field.equals(TARGETIDS_FIELDNAME)) {
+		}else if(field.equals(TARGETIDS_FIELDNAME)){
 			return TARGETIDS_FIELDTYPE;
-		} else if (field.equals(TYPE_FIELDNAME)) {
+		}else if(field.equals(TYPE_FIELDNAME)){
 			return TYPE_FIELDTYPE;
 		}
 
@@ -151,21 +153,21 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class<?> getColumnType(int col) {
+	public Class<?> getColumnType(int col){
 		return getColumnType(getColumns()[col]);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object getDefault(String field) {
-		if (field.equals(MESSAGE_FIELDNAME)) {
+	public Object getDefault(String field){
+		if(field.equals(MESSAGE_FIELDNAME)){
 			return MESSAGE_DEFAULT_VALUE;
-		} else if (field.equals(SOURCEID_FIELDNAME)) {
+		}else if(field.equals(SOURCEID_FIELDNAME)){
 			return Integer.valueOf(SOURCEID_DEFAULT_VALUE);
-		} else if (field.equals(TARGETIDS_FIELDNAME)) {
+		}else if(field.equals(TARGETIDS_FIELDNAME)){
 			return TARGETIDS_DEFAULT_VALUE;
-		} else if (field.equals(TYPE_FIELDNAME)) {
+		}else if(field.equals(TYPE_FIELDNAME)){
 			return TYPE_DEFAULT_VALUE;
 		}
 
@@ -175,30 +177,29 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Schema getSchema() {
+	public Schema getSchema(){
 		return TABLE_SCHEMA;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void revertToDefault(String field) {
+	public void revertToDefault(String field){
 		set(field, getDefault(field));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void set(String field, Object value) {
-
-		if (canSet(field, value.getClass())) {
-			if (field.equals(MESSAGE_FIELDNAME)) {
+	public void set(String field, Object value){
+		if (canSet(field, value.getClass())){
+			if(field.equals(MESSAGE_FIELDNAME)){
 				m_message = (String) value;
-			} else if (field.equals(SOURCEID_FIELDNAME)) {
+			}else if(field.equals(SOURCEID_FIELDNAME)){
 				m_sourceId = ((Integer) value).intValue();
-			} else if (field.equals(TARGETIDS_FIELDNAME)) {
+			}else if(field.equals(TARGETIDS_FIELDNAME)){
 				m_targetIds = (ArrayList<String>) value;
-			} else if (field.equals(TYPE_FIELDNAME)) {
+			}else if(field.equals(TYPE_FIELDNAME)) {
 				m_type = (Message.Type) value;
 			}
 		}
@@ -207,7 +208,7 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void set(int col, Object value) {
+	public void set(int col, Object value){
 		set(getColumns()[col], value);
 	}
 
@@ -219,14 +220,14 @@ public class Message extends AbstractTuple {
 	 * @param type The data type
 	 * @return Whether or not the pair is valid
 	 */
-	protected boolean isValidNameTypePair(String field, Class type) {
-		if ((field.equals(MESSAGE_FIELDNAME)) && (type == MESSAGE_FIELDTYPE)) {
+	protected boolean isValidNameTypePair(String field, Class type){
+		if((field.equals(MESSAGE_FIELDNAME)) && (type == MESSAGE_FIELDTYPE)){
 			return true;
-		} else if ((field.equals(SOURCEID_FIELDNAME)) && (type == SOURCEID_FIELDTYPE)) {
+		}else if((field.equals(SOURCEID_FIELDNAME)) && (type == SOURCEID_FIELDTYPE)){
 			return true;
-		} else if ((field.equals(TARGETIDS_FIELDNAME)) && (type == TARGETIDS_FIELDTYPE)) {
+		}else if((field.equals(TARGETIDS_FIELDNAME)) && (type == TARGETIDS_FIELDTYPE)){
 			return true;
-		} else if ((field.equals(TYPE_FIELDNAME)) && (type == TYPE_FIELDTYPE)) {
+		}else if((field.equals(TYPE_FIELDNAME)) && (type == TYPE_FIELDTYPE)){
 			return true;
 		}
 
@@ -236,26 +237,26 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean equals(Object o) {
-		if (this == o) {
+	public boolean equals(Object o){
+		if(this == o){
 			return true;
 		}
-		if (o == null || getClass() != o.getClass()) {
+		if(o == null || getClass() != o.getClass()){
 			return false;
 		}
 
 		Message message = (Message) o;
 
-		if (m_sourceId != message.m_sourceId) {
+		if(m_sourceId != message.m_sourceId){
 			return false;
 		}
-		if (m_message != null ? !m_message.equals(message.m_message) : message.m_message != null) {
+		if(m_message != null ? !m_message.equals(message.m_message) : message.m_message != null){
 			return false;
 		}
-		if (m_targetIds != null ? !m_targetIds.equals(message.m_targetIds) : message.m_targetIds != null) {
+		if(m_targetIds != null ? !m_targetIds.equals(message.m_targetIds) : message.m_targetIds != null){
 			return false;
 		}
-		if (m_type != message.m_type) {
+		if(m_type != message.m_type){
 			return false;
 		}
 
@@ -265,9 +266,8 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public int hashCode() {
-		int result;
-		result = (m_message != null ? m_message.hashCode() : 0);
+	public int hashCode(){
+		int result = (m_message != null ? m_message.hashCode() : 0);
 		result = HASH_CODE * result + m_sourceId;
 		result = HASH_CODE * result + (m_targetIds != null ? m_targetIds.hashCode() : 0);
 		result = HASH_CODE * result + (m_type != null ? m_type.hashCode() : 0);

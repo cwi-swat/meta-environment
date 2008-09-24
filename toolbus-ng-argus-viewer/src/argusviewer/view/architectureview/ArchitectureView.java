@@ -32,7 +32,7 @@ import argusviewer.view.architectureview.performance.tree.PerformanceTreeTable;
  * @author John Franse
  * @author Tigran Kalaidjan
  */
-public class ArchitectureView extends JPanel {
+public class ArchitectureView extends JPanel{
 	private static final long serialVersionUID = 2560820747109793313L;
 	
 	private static final double HORIZONTAL_DISPLAY_OFFSET = 75;
@@ -56,18 +56,21 @@ public class ArchitectureView extends JPanel {
 	
 	/**
 	 * Constructs the Architecture View Panel
+	 * 
 	 * @param dataComm the dataComm this view will retrieve it's data from
 	 * @param archData the data model used in this view
 	 * @param archVisualization the visualization to use
 	 * @param performanceTreeTable an instance of the PerformanceTreeTable
 	 */
-	public ArchitectureView(DataComm dataComm, ArchitectureData archData, Visualization archVisualization, PerformanceTreeTable performanceTreeTable) {
+	public ArchitectureView(DataComm dataComm, ArchitectureData archData, Visualization archVisualization, PerformanceTreeTable performanceTreeTable){
+		super();
+		
 		m_archData = archData;
 		m_visualization = archVisualization;
 		m_performanceTreeTable = performanceTreeTable;
 		
-		this.setLayout(new BorderLayout());
-		this.add(new JScrollPane(null), BorderLayout.CENTER);
+		setLayout(new BorderLayout());
+		add(new JScrollPane(null), BorderLayout.CENTER);
 		
 		setupVisualization();
 	}
@@ -75,7 +78,7 @@ public class ArchitectureView extends JPanel {
 	/**
 	 * Sets up the visualization information.
 	 */
-	private void setupVisualization() {
+	private void setupVisualization(){
 		m_visualization.add(Process.TABLE_NAME, m_archData.getProcessesTable());
 		m_visualization.addDecorators(PROCESS_LABEL, Process.TABLE_NAME);
 
@@ -105,15 +108,15 @@ public class ArchitectureView extends JPanel {
 	 *
 	 * @return visual component of the Architecture View
 	 */
-	public JPanel getVisualComponent() {
-		if (m_visualComponent == null) {
+	public JPanel getVisualComponent(){
+		if(m_visualComponent == null){
 			createVisualComponent();
 		}
 
 		return m_visualComponent;
 	}
 
-	private void createVisualComponent() {
+	private void createVisualComponent(){
 		createDisplay();
 		createDisplayControls();
 
@@ -121,18 +124,18 @@ public class ArchitectureView extends JPanel {
 		m_visualComponent.add(m_display, BorderLayout.CENTER);
 	}
 	
-	private void createDisplay() {
+	private void createDisplay(){
 		m_display = new Display(m_visualization);
 		m_display.setDoubleBuffered(true);
 		m_display.panAbs(HORIZONTAL_DISPLAY_OFFSET, VERTICAL_DISPLAY_OFFSET);
 		m_display.setItemSorter(new ArchitectureItemSorter());
 
-		Control hoverc = new ControlAdapter() {
-            public void itemClicked(VisualItem item, MouseEvent evt) {
+		Control hoverc = new ControlAdapter(){
+            public void itemClicked(VisualItem item, MouseEvent evt){
      			m_messageFilter.setSelectedVisualItem(item);
      			
      			// If item is a tool, ask Performance Tree Table to focus on it
-     			if (item.getGroup().equals(Tool.TABLE_NAME)) {
+     			if(item.getGroup().equals(Tool.TABLE_NAME)){
      				String toolName = item.get(Tool.TOOL_FIELDNAME).toString();
      				m_performanceTreeTable.setFocus(toolName);
      			}
@@ -144,7 +147,7 @@ public class ArchitectureView extends JPanel {
 		updateVisualization();
 	}
 	
-	private void createDisplayControls() {
+	private void createDisplayControls(){
 		m_display.addControlListener(new PanControl(true)); // Pan over item also
 		m_display.addControlListener(new ZoomControl());
 	}
@@ -152,8 +155,7 @@ public class ArchitectureView extends JPanel {
 	/**
 	 * Sets up the actions for the visualization.
 	 */
-	private void createActions() {
-
+	private void createActions(){
 		ActionList colorActions = createColorActions();
 		ActionList filterActions = createFilterActions();
 		ActionList layoutActions = createLayoutActions();
@@ -170,6 +172,7 @@ public class ArchitectureView extends JPanel {
 
 	/**
 	 * Sets up the actions for the layout.
+	 * 
 	 * @return an ActionList that contains all layout actions
 	 */
 	private ActionList createLayoutActions() {
@@ -187,37 +190,28 @@ public class ArchitectureView extends JPanel {
 
 	/**
 	 * Sets up the actions for the colors of the items in the visualization.
+	 * 
 	 * @return an ActionList that contains all color actions
 	 */
-	private ActionList createColorActions() {
-
+	private ActionList createColorActions(){
 		// Color Actions for Process items
-		ColorAction processStroke = new ColorAction(Process.TABLE_NAME,
-				VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
-		ColorAction processFill = new ColorAction(Process.TABLE_NAME,
-				VisualItem.FILLCOLOR, ColorLib.color(Color.WHITE));
+		ColorAction processStroke = new ColorAction(Process.TABLE_NAME, VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
+		ColorAction processFill = new ColorAction(Process.TABLE_NAME, VisualItem.FILLCOLOR, ColorLib.color(Color.WHITE));
 
 		// Color Actions for Tool items
-		ColorAction toolStroke = new ColorAction(Tool.TABLE_NAME,
-				VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
-		ColorAction toolFill = new ColorAction(Process.TABLE_NAME,
-				VisualItem.FILLCOLOR, ColorLib.color(Color.WHITE));
+		ColorAction toolStroke = new ColorAction(Tool.TABLE_NAME, VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
+		ColorAction toolFill = new ColorAction(Process.TABLE_NAME, VisualItem.FILLCOLOR, ColorLib.color(Color.WHITE));
 		
 		// Color Actions for label items
-		ColorAction processLabelText = new ColorAction(PROCESS_LABEL,
-				VisualItem.TEXTCOLOR, ColorLib.color(Color.BLACK));
-		ColorAction toolLabelText = new ColorAction(TOOL_LABEL,
-				VisualItem.TEXTCOLOR, ColorLib.color(Color.BLACK));		
+		ColorAction processLabelText = new ColorAction(PROCESS_LABEL, VisualItem.TEXTCOLOR, ColorLib.color(Color.BLACK));
+		ColorAction toolLabelText = new ColorAction(TOOL_LABEL, VisualItem.TEXTCOLOR, ColorLib.color(Color.BLACK));		
 	
 		// Color Actions for Message items
-		ColorAction messageStroke = new ColorAction(Message.TABLE_NAME,
-				VisualItem.STROKECOLOR, ColorLib.color(Color.BLUE));
-		ColorAction messageFill = new ColorAction(Message.TABLE_NAME,
-				VisualItem.FILLCOLOR, ColorLib.color(Color.BLUE));
+		ColorAction messageStroke = new ColorAction(Message.TABLE_NAME, VisualItem.STROKECOLOR, ColorLib.color(Color.BLUE));
+		ColorAction messageFill = new ColorAction(Message.TABLE_NAME, VisualItem.FILLCOLOR, ColorLib.color(Color.BLUE));
 
 		// Color Actions for ToolbusSingleton item
-		ColorAction toolbusStroke = new ColorAction(ToolbusSingleton.TABLE_NAME,
-				VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
+		ColorAction toolbusStroke = new ColorAction(ToolbusSingleton.TABLE_NAME, VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
 
 		processFill.add(VisualItem.HIGHLIGHT, RGB_COLOR_PROCESS_HIGHLIGHTED);
 
@@ -246,8 +240,7 @@ public class ArchitectureView extends JPanel {
 	 * Create actions for filter functionality.
 	 * @return an ActionList that contains all filter actions
 	 */
-	private ActionList createFilterActions() {
-
+	private ActionList createFilterActions(){
 		ActionList filterActions = new ActionList();
 		m_messageFilter = new MessageVisibility();
 		filterActions.add(m_messageFilter);
@@ -257,23 +250,17 @@ public class ArchitectureView extends JPanel {
 	/**
 	 * Sets up the renderers for the individual visual items.
 	 */
-	private void createRenderers() {
+	private void createRenderers(){
 		DefaultRendererFactory rendererFactory = new DefaultRendererFactory();
 
-		rendererFactory.add(new InGroupPredicate(Process.TABLE_NAME),
-				new ProcessRenderer());
-		rendererFactory.add(new InGroupPredicate(Tool.TABLE_NAME),
-				new ToolRenderer());
+		rendererFactory.add(new InGroupPredicate(Process.TABLE_NAME), new ProcessRenderer());
+		rendererFactory.add(new InGroupPredicate(Tool.TABLE_NAME), new ToolRenderer());
 		
-		rendererFactory.add(new InGroupPredicate(ToolbusSingleton.TABLE_NAME),
-				new ToolbusSingletonRenderer(m_processLayout));
+		rendererFactory.add(new InGroupPredicate(ToolbusSingleton.TABLE_NAME), new ToolbusSingletonRenderer(m_processLayout));
 		rendererFactory.add(new InGroupPredicate(Message.TABLE_NAME), new MessageRenderer());
 		
-		rendererFactory.add(new InGroupPredicate(PROCESS_LABEL),
-				new LabelRenderer(Process.PROCESS_FIELDNAME));
-		rendererFactory.add(new InGroupPredicate(TOOL_LABEL),
-				new LabelRenderer(Tool.TOOL_FIELDNAME));
-
+		rendererFactory.add(new InGroupPredicate(PROCESS_LABEL), new LabelRenderer(Process.PROCESS_FIELDNAME));
+		rendererFactory.add(new InGroupPredicate(TOOL_LABEL), new LabelRenderer(Tool.TOOL_FIELDNAME));
 		
 		m_visualization.setRendererFactory(rendererFactory);
 	}
@@ -282,7 +269,7 @@ public class ArchitectureView extends JPanel {
 	 * This function processes the visualization redrawing, by running all the actions that 
 	 * are attached to the visualization.
 	 */
-	public void updateVisualization() {
+	public void updateVisualization(){
 		m_visualization.run(ACTIONS_ID);
 	}
 }

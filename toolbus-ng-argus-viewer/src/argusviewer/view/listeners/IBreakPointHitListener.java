@@ -9,7 +9,7 @@ import toolbus.process.ProcessInstance;
  * @author J. van den Bos
  * @author T. Van Laer
  */
-public interface IBreakPointHitListener {
+public interface IBreakPointHitListener{
 	/**
 	 * The toolbus has reached a set breakpoint.
 	 * 

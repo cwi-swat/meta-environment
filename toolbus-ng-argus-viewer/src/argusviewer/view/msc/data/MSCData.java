@@ -8,7 +8,6 @@ import prefuse.data.Table;
 import prefuse.data.Tuple;
 import argusviewer.ApplicationSettings;
 
-// TODO This class is 'broken' and needs fixing.
 /**
  * The data tables for the Message Sequence Chart View. There are three tables:
  * - Entities: Contains a list of processes and tools;
@@ -18,7 +17,6 @@ import argusviewer.ApplicationSettings;
  * @author Johnny Eradus
  * @author Riccardo Lippolis
  * @author Hidde Baggelaar
- *
  */
 public class MSCData{
 	private final Table m_entities;

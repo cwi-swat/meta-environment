@@ -32,15 +32,16 @@ public class ToolLayout extends Layout{
 	 * @param processLayout the ProcessLayout which lays out the processes above the Tools.
 	 * @param group The group of visual items on which the layout will be applied
 	 */
-	public ToolLayout(String group, ProcessLayout processLayout) {
+	public ToolLayout(String group, ProcessLayout processLayout){
 		super(group);
+		
 		m_processLayout = processLayout;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void run(double frac) {
+	public void run(double frac){
 		// Coordinates of bottom left edge of rectangle around all processes
 		double xPos =  m_processLayout.getBounds().getMinX();
 		double yPos = m_processLayout.getBounds().getMaxY();
@@ -50,7 +51,7 @@ public class ToolLayout extends Layout{
 		yPos += VERTICAL_MARGIN;
 		
 		Iterator<VisualItem> visualStatements = m_vis.items(m_group);
-		while (visualStatements.hasNext()) {
+		while(visualStatements.hasNext()){
 			VisualItem currentTool = visualStatements.next();
 			
 			setX(currentTool, null, xPos);
@@ -62,7 +63,7 @@ public class ToolLayout extends Layout{
 		
 		// Layout the labels
 		Iterator<DecoratorItem> labels = m_vis.items(ArchitectureView.TOOL_LABEL);
-		while (labels.hasNext()) {
+		while(labels.hasNext()){
 			DecoratorItem label = labels.next();
 			VisualItem parentEntity = label.getDecoratedItem();
 

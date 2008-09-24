@@ -60,26 +60,26 @@ public class EntityVisibilityFilter extends GroupAction {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void run(double v) {
+	public void run(double v){
 		Iterator<VisualItem> items = m_vis.items(Entity.TABLE_NAME);
 
-		while (items.hasNext()) {
+		while(items.hasNext()){
             VisualItem item = items.next();
             Entity.Type entityType = (Entity.Type) item.get(Entity.TYPE_FIELDNAME);
 			int entityId = ((Integer) item.get(Entity.ID_FIELDNAME)).intValue();
 
 			boolean entityIsVisible = false;
-			if (entityType == Entity.Type.PROCESS) {
+			if(entityType == Entity.Type.PROCESS){
 				synchronized(m_visibleProcessInstances){
 					entityIsVisible = m_visibleProcessInstances.contains(Integer.valueOf(entityId));
 				}
-			} else if (entityType == Entity.Type.TOOL) {
+			}else if(entityType == Entity.Type.TOOL){
 				synchronized(m_visibleToolInstances){
 					entityIsVisible = m_visibleToolInstances.contains(Integer.valueOf(entityId));
 				}
-			} else if (entityType == Entity.Type.SINK) {
+			}else if(entityType == Entity.Type.SINK){
 				entityIsVisible = true;
-			} else {
+			}else{
 				// Error
 			}
 

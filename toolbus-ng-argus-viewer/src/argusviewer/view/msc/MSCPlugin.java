@@ -25,7 +25,7 @@ import argusviewer.view.msc.visual.MSCVisualization;
  * @author Alexander Bij
  * @author Roberto vd Linden
  */
-public class MSCPlugin implements IView {
+public class MSCPlugin implements IView{
 	private static final String PLUGIN_NAME = "Message Sequence Chart";
 	private static final String PREFERRED_POSITION = "TopRight";
 
@@ -33,9 +33,10 @@ public class MSCPlugin implements IView {
 
 	/**
 	 * Construct a Message Sequence Chart plugin.
+	 * 
 	 * @param dataCommunication communication protocol for connection to ToolBus
 	 */
-	public MSCPlugin(DataComm dataCommunication) {
+	public MSCPlugin(DataComm dataCommunication){
 		MSCData mscData = new MSCData();
 		MSCVisualization mscVisualisation = new MSCVisualization(mscData);
 		MSCView mscView = new MSCView(mscVisualisation);
@@ -50,21 +51,21 @@ public class MSCPlugin implements IView {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getPluginName() {
+	public String getPluginName(){
 		return PLUGIN_NAME;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getPreferredPosition() {
+	public String getPreferredPosition(){
 		return PREFERRED_POSITION;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Map<String, Container> getVisualComponents() {
+	public Map<String, Container> getVisualComponents(){
 		return m_visualComponents;
 	}
 }

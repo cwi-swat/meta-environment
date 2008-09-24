@@ -8,19 +8,17 @@ import argusviewer.view.msc.data.AbstractTuple;
  * 
  * @author Ivo Tamboer
  * @author Frank Oppedijk
- *
  */
-public class Tool extends AbstractTuple {
+public class Tool extends AbstractTuple{
 	public final static String TOOL_FIELDNAME = "tool";
 	public final static Class<?> TOOL_FIELDTYPE = String.class;
 	public final static String TOOL_DEFAULT_VALUE = "";
 	
 	public final static String TABLE_NAME = "tools";
-	public final static Schema TABLE_SCHEMA;
 	private final static int TABLE_COLUMNCOUNT = 1;
 	
+	public final static Schema TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 	static{
-		TABLE_SCHEMA = new Schema(TABLE_COLUMNCOUNT);
 		TABLE_SCHEMA.addColumn(TOOL_FIELDNAME, TOOL_FIELDTYPE, TOOL_DEFAULT_VALUE);
 	}
 	
@@ -33,22 +31,22 @@ public class Tool extends AbstractTuple {
 	 * 
 	 * @param tool The tool
 	 */
-	public Tool(String tool) {
+	public Tool(String tool){
 		m_tool = tool;
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	protected String[] getColumns() {
+	protected String[] getColumns(){
 		return COLUMNS;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object get(String field) {
-		if (field.equals(TOOL_FIELDNAME)) {
+	public Object get(String field){
+		if (field.equals(TOOL_FIELDNAME)){
 			return m_tool;
 		}
 
@@ -58,8 +56,8 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object get(int col) {
-		if ((0 <= col) && (col < COLUMNS.length)) {
+	public Object get(int col){
+		if((0 <= col) && (col < COLUMNS.length)){
 			return get(COLUMNS[col]);
 		}
 
@@ -69,8 +67,8 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class<?> getColumnType(String field) {
-		if (field.equals(TOOL_FIELDNAME)) {
+	public Class<?> getColumnType(String field){
+		if(field.equals(TOOL_FIELDNAME)){
 			return TOOL_FIELDTYPE;
 		}
 
@@ -80,8 +78,8 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class<?> getColumnType(int col) {
-		if ((0 <= col) && (col < COLUMNS.length)) {
+	public Class<?> getColumnType(int col){
+		if((0 <= col) && (col < COLUMNS.length)){
 			return getColumnType(COLUMNS[col]);
 		}
 		
@@ -91,8 +89,8 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object getDefault(String field) {
-		if (field.equals(TOOL_FIELDNAME)) {
+	public Object getDefault(String field){
+		if(field.equals(TOOL_FIELDNAME)){
 			return TOOL_DEFAULT_VALUE;
 		}
 		
@@ -103,15 +101,15 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Schema getSchema() {
+	public Schema getSchema(){
 		return TABLE_SCHEMA;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void revertToDefault(String field) {
-		if (field.equals(TOOL_FIELDNAME)) {
+	public void revertToDefault(String field){
+		if(field.equals(TOOL_FIELDNAME)){
 			set(field, TOOL_DEFAULT_VALUE);
 		}
 	}
@@ -119,11 +117,10 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void set(String field, Object value) {
+	public void set(String field, Object value){
 		Class<?> valueType = value.getClass();
 
-		if ((canSet(field, valueType))
-			&&  (field.equals(TOOL_FIELDNAME))) {
+		if((canSet(field, valueType)) && (field.equals(TOOL_FIELDNAME))){
 			m_tool = (String) value;			
 		}
 	}
@@ -131,8 +128,8 @@ public class Tool extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void set(int col, Object value) {
-		if ((0 <= col) && (col < COLUMNS.length)) {
+	public void set(int col, Object value){
+		if((0 <= col) && (col < COLUMNS.length)){
 			set(COLUMNS[col], value);
 		}
 	}
@@ -147,8 +144,7 @@ public class Tool extends AbstractTuple {
 	 *            The data type
 	 * @return Whether or not the pair is valid
 	 */
-	protected boolean isValidNameTypePair(String field, Class type) {
+	protected boolean isValidNameTypePair(String field, Class type){
 		return (field.equals(TOOL_FIELDNAME)) && (type == TOOL_FIELDTYPE);
 	}
-
 }

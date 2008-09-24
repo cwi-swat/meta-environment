@@ -45,9 +45,12 @@ public class ControlSync{
 	
 	/**
 	 * constructor for filter synchronizator
+	 * 
 	 * @param debugToolbus the toolbus instance
 	 */
 	public ControlSync(DebugToolBus debugToolbus){
+		super();
+		
 		m_debugToolBus = debugToolbus;
 		
 		m_currentTools = new ArrayList<ToolInstance>();
@@ -65,6 +68,7 @@ public class ControlSync{
 	 * the toolbus, a new doStep is triggered. 
 	 * You can specify a delay. This is the time in milliseconds, the datacomm object will 
 	 * wait every cycle.
+	 * 
 	 * @param delay delay in milliseconds
 	 */
 	public void doSteppingRun(){
@@ -103,6 +107,7 @@ public class ControlSync{
 	
 	/**
 	 * tests if the toolbus is running.
+	 * 
 	 * @return true if toolbus is running
 	 */
 	public boolean isToolbusRunning(){
@@ -111,6 +116,7 @@ public class ControlSync{
 	
     /**
      * The state of the debugToolbus has changed.
+     * 
      * @param state the current state of the debugToolbus.
      */
 	public void setState(int state){
@@ -124,6 +130,7 @@ public class ControlSync{
 	// TODO This functionality is 'broken' and should be implemented in the debug ToolBus.
 	/**
 	 * this method is triggered by the toolbus when a step is executed
+	 * 
 	 * @param tick the currently executed tick at the toolbus
 	 * @param processInstance the current active processInstance
 	 * @param executedStateElement the executed state element
@@ -153,6 +160,7 @@ public class ControlSync{
     
     /**
      * a certain tool is updated:
+     * 
      * @param toolInstance the tool that is updated.
      * @param aTerm the performance stats
      */
@@ -166,6 +174,7 @@ public class ControlSync{
     
     /**
      * Process instance is added on the toolbus
+     * 
      * @param processInstance the new processInstance
      */
 	public void addProcessInstance(ProcessInstance processInstance){
@@ -190,6 +199,7 @@ public class ControlSync{
 	
     /**
      * Process instance is removed on the toolbus
+     * 
      * @param processInstance the removed processInstance
      */
 	public void removeProcessInstance(ProcessInstance processInstance){
@@ -206,6 +216,7 @@ public class ControlSync{
 
     /**
      * Tool instance is added on the toolbus
+     * 
      * @param toolInstance the new tool instance
      */
 	public void addToolInstance(ToolInstance toolInstance){
@@ -221,6 +232,7 @@ public class ControlSync{
 	}
     /**
      * Tool instance is removed on the toolbus
+     * 
      * @param toolInstance the removed tool instance
      */
 	public void removeToolInstance(ToolInstance toolInstance){
@@ -237,6 +249,7 @@ public class ControlSync{
 	
 	/**
 	 * set the toolbus state
+	 * 
 	 * @param isToolbusRunning true if toolbus is running
 	 */
 	public void setToolbusRunning(boolean isToolbusRunning){
@@ -248,6 +261,7 @@ public class ControlSync{
     
     /**
 	 * get a list of all active processes.
+	 * 
 	 * @return active processes.
 	 */
 	public List<ProcessInstance> getProcesses(){
@@ -256,6 +270,7 @@ public class ControlSync{
 
     /**
 	 * get all connected tools from the toolbus
+	 * 
 	 * @return connected tools.
 	 */
 	public List<ToolInstance> getTools(){
@@ -270,6 +285,7 @@ public class ControlSync{
     /**
      * get the delay in milliseconds for the toolbus step run action.
      * this delay is the time the toolbus waits before continue with next step.
+     * 
      * @return the delay in millisecs.
      */
     public int getSteppingDelay(){
@@ -279,6 +295,7 @@ public class ControlSync{
     /**
      * Sets the set run action delay in milliseconds. This delay is the time
      * the toolbus waits before it continues to the next step.
+     * 
      * @param delay The delay in millisecs.
      */
     public void setSteppingDelay(int delay){
@@ -287,6 +304,7 @@ public class ControlSync{
     
 	/**
 	 * checks if toolbus is terminated
+	 * 
 	 * @return true if toolbus is terminated
 	 */
 	public boolean isToolbusTerminated(){

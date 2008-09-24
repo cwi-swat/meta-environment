@@ -27,6 +27,8 @@ public class FilterSync{
 	 * Constructor for the filter synchronizer
 	 */
 	public FilterSync(){
+		super();
+		
 		m_processListeners = new ArrayList<IProcessFilterListener>();
 		m_toolListeners = new ArrayList<IToolFilterListener>();
 		m_processesFilter = new ArrayList<ProcessInstance>();
@@ -74,7 +76,6 @@ public class FilterSync{
 		}
 		
 		notifyProcessListeners();
-		
 	}
 
 	/**

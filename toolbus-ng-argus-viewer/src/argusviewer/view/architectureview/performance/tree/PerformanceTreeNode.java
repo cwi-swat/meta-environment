@@ -19,7 +19,7 @@ import argusviewer.view.architectureview.performance.ToolPerformanceInfo;
  * 
  * @author Jeldert Pol
  */
-public class PerformanceTreeNode extends DefaultMutableTreeNode {
+public class PerformanceTreeNode extends DefaultMutableTreeNode{
 	private static final long serialVersionUID = -3321070191695703729L;
 	
 	private volatile ToolPerformanceInfo m_toolPerformanceInfo;
@@ -28,8 +28,10 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * The constructor creates a {@link PerformanceTreeNode}, with no
 	 * {@link ToolPerformanceInfo} attached.
 	 */
-	public PerformanceTreeNode() {
+	public PerformanceTreeNode(){
 		super();
+		
+		m_toolPerformanceInfo = null;
 	}
 
 	/**
@@ -40,7 +42,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 *            The {@link ToolPerformanceInfo} to attach to this
 	 *            {@link PerformanceTreeNode}.
 	 */
-	public PerformanceTreeNode(ToolPerformanceInfo toolPerformanceInfo) {
+	public PerformanceTreeNode(ToolPerformanceInfo toolPerformanceInfo){
 		setToolPerformanceInfo(toolPerformanceInfo);
 	}
 
@@ -51,7 +53,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * @param toolPerformanceInfo
 	 *            the {@link ToolPerformanceInfo} to add.
 	 */
-	public void add(ToolPerformanceInfo toolPerformanceInfo) {
+	public void add(ToolPerformanceInfo toolPerformanceInfo){
 		/**
 		 * The following situations are possible:
 		 * - Toolname exists
@@ -64,33 +66,32 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 		 */
 
 		// No threads, Not a group
-		if (getChildCount() == 0 || getChildAt(0) instanceof PerformanceTreeNodeThread) {
+		if (getChildCount() == 0 || getChildAt(0) instanceof PerformanceTreeNodeThread){
 			// Update if same
-			if (getToolId().equals("" + toolPerformanceInfo.getToolId())) {
+			if(getToolId().equals(String.valueOf(toolPerformanceInfo.getToolId()))){
 				setToolPerformanceInfo(toolPerformanceInfo);
-			} else {
+			}else{
 				// Create group
-				ToolPerformanceInfo temp = getToolPerformanceInfo();
+				ToolPerformanceInfo temp = m_toolPerformanceInfo;
 				setToolPerformanceInfo(null);
 				removeAllChildren();
 				PerformanceTreeNode newThis = new PerformanceTreeNode(temp);
-				PerformanceTreeNode newNode = new PerformanceTreeNode(
-						toolPerformanceInfo);
-				this.add(newThis);
-				this.add(newNode);
+				PerformanceTreeNode newNode = new PerformanceTreeNode(toolPerformanceInfo);
+				add(newThis);
+				add(newNode);
 			}
-		} else {
+		}else{
 			boolean found = false;
 			// Update if same
-			for (int i = 0; i < getChildCount(); i++) {
+			for(int i = 0; i < getChildCount(); i++){
 				PerformanceTreeNode child = (PerformanceTreeNode) getChildAt(i);
-				if (child.getToolId().equals("" + toolPerformanceInfo.getToolId())) {
+				if(child.getToolId().equals(String.valueOf(toolPerformanceInfo.getToolId()))){
 					found = true;
 					child.setToolPerformanceInfo(toolPerformanceInfo);
 					break;
 				}
 			}
-			if (!found) {
+			if(!found){
 				// Add to group
 				add(new PerformanceTreeNode(toolPerformanceInfo));
 			}
@@ -103,17 +104,8 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return true is {@link ToolPerformanceInfo} is attached, false otherwise.
 	 */
-	public boolean hasToolPerformanceInfo() {
+	public boolean hasToolPerformanceInfo(){
 		return m_toolPerformanceInfo != null;
-	}
-
-	/**
-	 * Returns the attached {@link ToolPerformanceInfo}.
-	 * 
-	 * @return the {@link ToolPerformanceInfo}.
-	 */
-	public ToolPerformanceInfo getToolPerformanceInfo() {
-		return m_toolPerformanceInfo;
 	}
 
 	/**
@@ -121,8 +113,8 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the id of the Tool or null is the node is no tool.
 	 */
-	public String getToolId() {
-		if (hasToolPerformanceInfo()) {
+	public String getToolId(){
+		if(hasToolPerformanceInfo()){
 			return String.valueOf(m_toolPerformanceInfo.getToolId());
 		}
 		return null;
@@ -133,11 +125,11 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the name of the tool or child.
 	 */
-	public String getToolName() {
-		if (hasToolPerformanceInfo()) {
+	public String getToolName(){
+		if(hasToolPerformanceInfo()){
 			return m_toolPerformanceInfo.getToolName();
 		}
-		if (getChildCount() > 0) {
+		if(getChildCount() > 0){
 			PerformanceTreeNode child = (PerformanceTreeNode) getFirstChild();
 			return child.getToolName();
 		}
@@ -153,7 +145,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the memory heap usage of the Tool.
 	 */
-	public String getToolMemoryHeapUsage() {
+	public String getToolMemoryHeapUsage(){
 		return formatMemory(getToolMemoryHeapUsageRaw());
 	}
 	
@@ -163,31 +155,31 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the memory heap usage of the Tool.
 	 */
-	private int getToolMemoryHeapUsageRaw() {
-		if (hasToolPerformanceInfo()) {
+	private int getToolMemoryHeapUsageRaw(){
+		if(hasToolPerformanceInfo()){
 			return m_toolPerformanceInfo.getToolMemoryHeapUsage();
-		} else if (getChildCount() > 0) {
+		}else if(getChildCount() > 0){
 			int total = 0;
-			for (int index = 0; index < getChildCount(); index++) {
+			for(int index = 0; index < getChildCount(); index++){
 				PerformanceTreeNode child = (PerformanceTreeNode) getChildAt(index);
 				total += child.getToolMemoryHeapUsageRaw();
 			}
 			return total;
-		} else {
-			return 0;
 		}
+		
+		return 0;
 	}
 	
 	/**
-	 * Convert the memory usage from KiloBytes to a readable format. Eg,
+	 * Convert the memory usage from KiloBytes to a readable format. E.g.,
 	 * 123456789 to "123,456,789 K". It used the default locale for the
-	 * coversation.
+	 * conversation.
 	 * 
 	 * @param memory
 	 *            The amount of memory usage in KiloBytes.
 	 * @return readable representation of memory usage.
 	 */
-	private String formatMemory(int memory) {
+	private static String formatMemory(int memory) {
 		String formatted = NumberFormat.getNumberInstance().format(memory);
 		formatted = formatted + " K";
 		return formatted;
@@ -225,13 +217,13 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 */
 	public int getProcessorTime() {
 		int processorTime = 0;
-		if (hasToolPerformanceInfo()) {
-			for (ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads().values()) {
+		if(hasToolPerformanceInfo()){
+			for(ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads().values()){
 				processorTime += threadInfo.getThreadSystemTime();
 				processorTime += threadInfo.getThreadUserTime();
 			}
-		} else {
-			for (int index = 0; index < getChildCount(); index++) {
+		}else{
+			for(int index = 0; index < getChildCount(); index++){
 				PerformanceTreeNode child = (PerformanceTreeNode) getChildAt(index);
 				processorTime += child.getProcessorTime();
 			}
@@ -245,8 +237,8 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the name of the {@link PerformanceTreeNode}
 	 */
-	public String toString() {
-		if (isRoot()) {
+	public String toString(){
+		if(isRoot()){
 			return "Tools";
 		}
 		return getToolName();
@@ -259,9 +251,9 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	 * @param toolPerformanceInfo
 	 *            the {@link ToolPerformanceInfo} to attach.
 	 */
-	public void setToolPerformanceInfo(ToolPerformanceInfo toolPerformanceInfo) {
+	public void setToolPerformanceInfo(ToolPerformanceInfo toolPerformanceInfo){
 		m_toolPerformanceInfo = toolPerformanceInfo;
-		if (hasToolPerformanceInfo()) {
+		if(hasToolPerformanceInfo()){
 			updateThreads();
 		}
 	}
@@ -269,12 +261,12 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Updates the {@link ThreadInfo} from this node.
 	 */
-	private void updateThreads() {
+	private void updateThreads(){
 		this.removeAllChildren();
 
-		for (ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads().values()) {
+		for(ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads().values()){
 			PerformanceTreeNodeThread thread = new PerformanceTreeNodeThread(threadInfo);
-			this.add(thread);
+			add(thread);
 //			PerformanceTreeNode newChild = new PerformanceTreeNode();
 //			this.add(newChild);
 		}

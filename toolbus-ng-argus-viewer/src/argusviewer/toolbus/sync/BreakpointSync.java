@@ -38,6 +38,8 @@ public class BreakpointSync{
 	 *            the toolbus instance
 	 */
 	public BreakpointSync(DebugToolBus debugToolbus){
+		super();
+		
 		m_debugToolbus = debugToolbus;
 
 		m_breakPointsProcInst = new ArrayList<ProcessInstance>();
@@ -52,6 +54,7 @@ public class BreakpointSync{
 
 	/**
      * add breakpoint for a specific processInstance
+     * 
      * @param processInstance the processinstance 
      */
 	public void addBreakpoint(ProcessInstance processInstance){
@@ -74,6 +77,7 @@ public class BreakpointSync{
 
 	/**
      * add breakpoint at a specific line in a file
+     * 
      * @param fileName the relative filename
      * @param lineNumber the line number where the breakpoint should be placed.
      */

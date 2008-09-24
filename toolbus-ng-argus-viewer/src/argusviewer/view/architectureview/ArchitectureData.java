@@ -24,6 +24,8 @@ public class ArchitectureData {
 	 * Default constructor.
 	 */
 	public ArchitectureData(Visualization archVisualization){
+		super();
+		
 		this.archVisualization = archVisualization;
 		
 		processes = Process.TABLE_SCHEMA.instantiate();
@@ -37,23 +39,25 @@ public class ArchitectureData {
 	 * 
 	 * @return The Processes table
 	 */
-	public Table getProcessesTable() {
+	public Table getProcessesTable(){
 		return processes;
 	}
 	
 	/**
 	 * gets the toolbussingleton
+	 * 
 	 * @return the toolbus singleton table
 	 */
-	public Table getToolbusSingletonTable() {
+	public Table getToolbusSingletonTable(){
 		return toolbusSingleton;
 	}
 	
 	/**
 	 * Gets the Tools table.
+	 * 
 	 * @return The Tools Table
 	 */
-	public Table getToolsTable() {
+	public Table getToolsTable(){
 		return tools;
 	}
 
@@ -81,6 +85,7 @@ public class ArchitectureData {
 
 	/**
 	 * add function for the toolbus singleton. fastly hacked the same was the toolbussingleton has been hacked.
+	 * 
 	 * @param tb the toolbus singleton
 	 * @return null when it exists, the toolbus singleton tuple otherwise.
 	 */
@@ -94,6 +99,7 @@ public class ArchitectureData {
 	
 	/**
 	 * add a tool to the data
+	 * 
 	 * @param tool instance of a tool the tool to add.
 	 * @return the tuple the tool add created.
 	 */
@@ -116,6 +122,7 @@ public class ArchitectureData {
 	/**
 	 * Checks if a message with the same source and target
 	 * already exists in the table
+	 * 
 	 * @param message The Message to be added
 	 */
 	public void addMessage(Message message){
@@ -142,6 +149,7 @@ public class ArchitectureData {
 
 	/**
 	 * Returns the message table
+	 * 
 	 * @return TupleSet MessageTable
 	 */
 	public TupleSet getMessageTable() {

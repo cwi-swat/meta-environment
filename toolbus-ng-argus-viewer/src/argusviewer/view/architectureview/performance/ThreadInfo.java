@@ -6,7 +6,7 @@ package argusviewer.view.architectureview.performance;
  * 
  * @author Tigran Kalaidjan
  */
-public class ThreadInfo {
+public class ThreadInfo{
 	private final String m_threadName;
 	private final int m_threadUserTime;
 	private final int m_threadSystemTime;
@@ -21,7 +21,7 @@ public class ThreadInfo {
 	 * @param threadSystemTime
 	 *            int
 	 */
-	public ThreadInfo(String threadName, int threadUserTime, int threadSystemTime) {
+	public ThreadInfo(String threadName, int threadUserTime, int threadSystemTime){
 		this.m_threadName = threadName;
 		this.m_threadUserTime = threadUserTime;
 		this.m_threadSystemTime = threadSystemTime;
@@ -33,7 +33,7 @@ public class ThreadInfo {
 	 * 
 	 * @return thread name
 	 */
-	public String getThreadName() {
+	public String getThreadName(){
 		return m_threadName;
 	}
 
@@ -42,7 +42,7 @@ public class ThreadInfo {
 	 * 
 	 * @return tread user time
 	 */
-	public int getThreadUserTime() {
+	public int getThreadUserTime(){
 		return m_threadUserTime;
 	}
 
@@ -51,7 +51,7 @@ public class ThreadInfo {
 	 * 
 	 * @return thread system time
 	 */
-	public int getThreadSystemTime() {
+	public int getThreadSystemTime(){
 		return m_threadSystemTime;
 	}
 }

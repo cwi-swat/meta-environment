@@ -59,8 +59,8 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	private volatile int m_latestTick = -1;
 	private volatile Tuple m_latestAddedStatement = null;
 
-	private static final int FIRST_TICK = -2;
-	private static final HashMap<Class<? extends Atom>, Entity.Type> SOURCE_OF_STATEMENT = new HashMap<Class< ? extends Atom>, Entity.Type>();
+	private final static int FIRST_TICK = -2;
+	private final static HashMap<Class<? extends Atom>, Entity.Type> SOURCE_OF_STATEMENT = new HashMap<Class< ? extends Atom>, Entity.Type>();
 
 	static{
 		SOURCE_OF_STATEMENT.put(Connect.class, Entity.Type.TOOL);
@@ -92,7 +92,9 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 * @param mscView
 	 *            view on the visualization of the Message Sequence Chart
 	 */
-	public MSCController(DataComm dataCommunication, MSCData mscData, MSCVisualization mscVisualisation, MSCView mscView) {
+	public MSCController(DataComm dataCommunication, MSCData mscData, MSCVisualization mscVisualisation, MSCView mscView){
+		super();
+		
 		this.m_dataCommunication = dataCommunication;
 		this.m_mscData = mscData;
 		this.m_mscVisualization = mscVisualisation;
@@ -101,14 +103,10 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 		this.m_mscVisualizationScheduler = new MSCVisualizationScheduler(this);
 
 		m_dataCommunication.getControlSync().register((IControlListener) this);
-		m_dataCommunication.getControlSync().register(
-				(IToolControlListener) this);
-		m_dataCommunication.getControlSync().register(
-				(IProcessInstanceControlListener) this);
-		m_dataCommunication.getFilterSync().register(
-				(IProcessFilterListener) this);
-		m_dataCommunication.getFilterSync()
-				.register((IToolFilterListener) this);
+		m_dataCommunication.getControlSync().register((IToolControlListener) this);
+		m_dataCommunication.getControlSync().register((IProcessInstanceControlListener) this);
+		m_dataCommunication.getFilterSync().register((IProcessFilterListener) this);
+		m_dataCommunication.getFilterSync().register((IToolFilterListener) this);
 		m_dataCommunication.getFocusSync().register((IFocusListener) this);
 		m_dataCommunication.getFocusSync().register((IHighlightListener) this);
 
@@ -125,7 +123,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 * This function processes the visualization redrawing, by running all the
 	 * actions that are attached to the visualization.
 	 */
-	public void processVisualization() {
+	public void processVisualization(){
 		m_mscVisualization.refreshVisualization();
 	}
 
@@ -134,14 +132,13 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 * visualization is finished. The display in the MSCView should be
 	 * refreshed.
 	 */
-	public void visualizationFinished() {
+	public void visualizationFinished(){
 		m_mscView.refreshDisplays();
 
 		// Set focus to the latest statement added, if enabled
-		if (isStatementFocusEnabled() && (m_latestAddedStatement != null)) {
-			VisualItem visualStatement = m_mscVisualization
-					.getVisibleStatement(m_latestAddedStatement);
-			if (visualStatement != null) {
+		if(isStatementFocusEnabled() && (m_latestAddedStatement != null)){
+			VisualItem visualStatement = m_mscVisualization.getVisibleStatement(m_latestAddedStatement);
+			if(visualStatement != null){
 				m_mscView.setStatementFocus(visualStatement);
 				m_latestAddedStatement = null;
 			}
@@ -169,6 +166,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 
 		m_mscData.addEntity(new Entity("Sink", Entity.Type.SINK));
 		m_mscData.addEntity(new Entity("Sink", Entity.Type.SINK));
+		
 		refreshVisualization();
 	}
 
@@ -193,22 +191,22 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 
 		Message.Type msgType = getMessageType(executedStateElement);
 
-		if (msgType == null) {
+		if(msgType == null){
 			addStatement(executingProcessId, executedStatementContent);
-		} else {
-			switch (msgType) {
-			case ASYNC:
-				addProcessMessage(executingProcessId, executedStatementContent, partners, Message.Type.ASYNC);
-				break;
-			case SYNC:
-				addProcessMessage(executingProcessId, executedStatementContent, partners, Message.Type.SYNC);
-				break;
-			case TOOLCOMM:
-				addToolMessage(executingProcessId, executedStateElement);
-				break;
-			default:
-				addStatement(executingProcessId, executedStatementContent);
-				break;
+		}else{
+			switch(msgType){
+				case ASYNC:
+					addProcessMessage(executingProcessId, executedStatementContent, partners, Message.Type.ASYNC);
+					break;
+				case SYNC:
+					addProcessMessage(executingProcessId, executedStatementContent, partners, Message.Type.SYNC);
+					break;
+				case TOOLCOMM:
+					addToolMessage(executingProcessId, executedStateElement);
+					break;
+				default:
+					addStatement(executingProcessId, executedStatementContent);
+					break;
 			}
 		}
 	}
@@ -222,7 +220,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 *         represent a Message
 	 */
 	protected Message.Type getMessageType(StateElement statement){
-		Class< ? extends StateElement> statementClass = statement.getClass();
+		Class<? extends StateElement> statementClass = statement.getClass();
 
 		if(Statement.SYNC_COMMUNICATION.contains(statementClass)){
 			return Message.Type.SYNC;
@@ -269,30 +267,27 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 * @param executedStateElement
 	 *            the executed statement that send or received the message
 	 */
-	protected void addToolMessage(String processId,
-			StateElement executedStateElement) {
+	protected void addToolMessage(String processId, StateElement executedStateElement) {
 		String toolId = ToolbusUtil.getToolIdFromStateElement(executedStateElement);
-		if (toolId == null) {
+		if(toolId == null){
 			return;
 		}
 
 		// Determine the sender and receiver of the message
 		ArrayList<String> destinationId = new ArrayList<String>();
-		Entity.Type sourceType = SOURCE_OF_STATEMENT.get(executedStateElement
-				.getClass());
+		Entity.Type sourceType = SOURCE_OF_STATEMENT.get(executedStateElement.getClass());
 		String sourceId;
 
-		if (sourceType == Entity.Type.TOOL) {
+		if(sourceType == Entity.Type.TOOL){
 			sourceId = toolId;
 			destinationId.add(processId);
-		} else {
+		}else{
 			sourceId = processId;
 			destinationId.add(toolId);
 		}
 
 		String executedStatementContent = executedStateElement.toString();
-		addMessage(sourceId, executedStatementContent, destinationId,
-				Message.Type.TOOLCOMM);
+		addMessage(sourceId, executedStatementContent, destinationId, Message.Type.TOOLCOMM);
 	}
 
 	/**
@@ -309,7 +304,6 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 *            the type of the message, i.e. Message.Type.TOOL
 	 */
 	protected void addMessage(String executingEntityId, String executedStatementContent, ArrayList<String> messageDestinationIds, Message.Type messageType){
-
 		if(messageDestinationIds != null){
 			String messageContents = ToolbusUtil.getMessageFromStateElement(executedStatementContent);
 			Message message = new Message(messageContents, m_latestTick, messageDestinationIds, messageType);
@@ -352,7 +346,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 * @param toolInstance
 	 *            The tool instance to be added to the MSC
 	 */
-	public void addToolInstance(ToolInstance toolInstance) {
+	public void addToolInstance(ToolInstance toolInstance){
 		int toolId = toolInstance.getToolID();
 		String toolName = toolInstance.getToolName();
 		Entity.Type type = Entity.Type.TOOL;
@@ -365,7 +359,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setProcessFilter(List<ProcessInstance> filteredProcesses) {
+	public void setProcessFilter(List<ProcessInstance> filteredProcesses){
 		m_mscVisualization.setVisibleProcesses(filteredProcesses);
 		refreshVisualization();
 	}
@@ -373,7 +367,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setToolFilter(List<ToolInstance> filteredTools) {
+	public void setToolFilter(List<ToolInstance> filteredTools){
 		m_mscVisualization.setVisibleTools(filteredTools);
 		refreshVisualization();
 	}
@@ -384,10 +378,9 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 * @param processInstance
 	 *            The processInstance to be 'removed'
 	 */
-	public void removeProcessInstance(ProcessInstance processInstance) {
+	public void removeProcessInstance(ProcessInstance processInstance){
 		int processId = processInstance.getProcessId();
-		m_mscVisualization.setEntityTerminated(m_latestTick,
-				Entity.Type.PROCESS, processId);
+		m_mscVisualization.setEntityTerminated(m_latestTick, Entity.Type.PROCESS, processId);
 		refreshVisualization();
 	}
 
@@ -397,7 +390,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 * @param toolInstance
 	 *            The processInstance to be 'removed'
 	 */
-	public void removeToolInstance(ToolInstance toolInstance) {
+	public void removeToolInstance(ToolInstance toolInstance){
 		int toolId = toolInstance.getToolID();
 		m_mscVisualization.setEntityTerminated(m_latestTick, Entity.Type.TOOL, toolId);
 		refreshVisualization();
@@ -406,7 +399,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setFocus(ProcessInstance processInstance) {
+	public void setFocus(ProcessInstance processInstance){
 		int processId = processInstance.getProcessId();
 		setEntityFocus(Entity.Type.PROCESS, processId);
 	}
@@ -414,7 +407,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setFocus(ToolInstance toolInstance) {
+	public void setFocus(ToolInstance toolInstance){
 		int toolId = toolInstance.getToolID();
 		setEntityFocus(Entity.Type.TOOL, toolId);
 	}
@@ -427,10 +420,9 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 * @param entityId
 	 *            the unique identifies of the Entity (per type)
 	 */
-	protected void setEntityFocus(Entity.Type entityType, int entityId) {
-		VisualItem visualEntity = m_mscVisualization.getVisibleEntity(
-				entityType, entityId);
-		if (visualEntity != null) {
+	protected void setEntityFocus(Entity.Type entityType, int entityId){
+		VisualItem visualEntity = m_mscVisualization.getVisibleEntity(entityType, entityId);
+		if(visualEntity != null){
 			m_mscView.setEntityFocus(visualEntity);
 		}
 	}
@@ -438,7 +430,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setHighlight(ProcessInstance processInstance) {
+	public void setHighlight(ProcessInstance processInstance){
 		int processId = processInstance.getProcessId();
 		m_mscVisualization.setEntityHighlight(Entity.Type.PROCESS, processId);
 		refreshVisualization();
@@ -447,8 +439,8 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setHighlight(ToolInstance toolInstance) {
-		if (toolInstance != null) {
+	public void setHighlight(ToolInstance toolInstance){
+		if(toolInstance != null){
 			int toolId = toolInstance.getToolID();
 			m_mscVisualization.setEntityHighlight(Entity.Type.TOOL, toolId);
 			refreshVisualization();
@@ -458,7 +450,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setHighlightByProcessName(String processName) {
+	public void setHighlightByProcessName(String processName){
 		m_mscVisualization.setEntityHighlight(Entity.Type.PROCESS, processName);
 		refreshVisualization();
 	}
@@ -466,7 +458,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setHighlightByToolName(String toolName) {
+	public void setHighlightByToolName(String toolName){
 		m_mscVisualization.setEntityHighlight(Entity.Type.TOOL, toolName);
 		refreshVisualization();
 	}
@@ -477,10 +469,9 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 * 
 	 * @return true if automatic statement focus is enabled, else false
 	 */
-	protected boolean isStatementFocusEnabled() {
+	protected boolean isStatementFocusEnabled(){
 		ArgusSettings settings = ArgusSettings.getInstance();
 		String focusSetting = settings.getAttribute("msc.statementfocus", "false");
 		return focusSetting.equals("true");
 	}
-
 }

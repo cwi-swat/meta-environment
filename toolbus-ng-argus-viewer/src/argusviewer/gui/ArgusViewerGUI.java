@@ -54,9 +54,8 @@ import argusviewer.view.IView;
  * @author R. Schuddeboom
  * @author S. Preeker
  * @author M. van Beest
- *
  */
-public final class ArgusViewerGUI extends JFrame implements Observer {
+public final class ArgusViewerGUI extends JFrame implements Observer{
 	private final static long serialVersionUID = -3759014389298557476L;
 
 	private final static String WINDOW_TITLE = "Argus Viewer";

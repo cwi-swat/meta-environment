@@ -35,10 +35,10 @@ public class ConsoleViewPanel extends JPanel implements IView {
 	/**
 	 * Constructs the Console View Panel and prepares the outputbuffers
 	 */
-	public ConsoleViewPanel() {
-		this.setLayout(new BorderLayout());
+	public ConsoleViewPanel(){
+		setLayout(new BorderLayout());
 		
-		this.add(m_scrollPane, BorderLayout.CENTER);
+		add(m_scrollPane, BorderLayout.CENTER);
 		m_textPane.setEditable(false);
 		m_scrollPane.setAutoscrolls(true);
 
@@ -53,6 +53,7 @@ public class ConsoleViewPanel extends JPanel implements IView {
 	
 	/**
 	 * Gets the plugin name
+	 * 
 	 * @return the name of the plugin
 	 */
 	public String getPluginName(){
@@ -61,6 +62,7 @@ public class ConsoleViewPanel extends JPanel implements IView {
 
 	/**
 	 * Gets the preferred position of the panel
+	 * 
 	 * @return the preferred position
 	 */
 	public String getPreferredPosition(){
@@ -69,10 +71,11 @@ public class ConsoleViewPanel extends JPanel implements IView {
 
 	/**
 	 * Returns the visual components that show the actual panelcontents
+	 * 
 	 * @return A map with the visual components and their names
 	 */
 	public Map<String, Container> getVisualComponents(){
-		HashMap<String, Container> nameContainerHashMap = new HashMap<String, Container>(1);
+		Map<String, Container> nameContainerHashMap = new HashMap<String, Container>(1);
 		nameContainerHashMap.put(CONSOLE_VIEW_NAME, this);
 		
 		return nameContainerHashMap;

@@ -27,7 +27,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	/**
 	 * ToolbusSingleton constructor. Does nothing of significance. 
 	 */
-	public ToolbusSingleton() {
+	public ToolbusSingleton(){
 		super();
 	}
 	
@@ -36,7 +36,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * class.
 	 * @return COLUMNS
 	 */
-	protected String[] getColumns() {
+	protected String[] getColumns(){
 		return COLUMNS;
 	}
 
@@ -46,7 +46,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * @param type not used
 	 * @return false
 	 */
-	protected boolean isValidNameTypePair(String field, Class type) {
+	protected boolean isValidNameTypePair(String field, Class type){
 		return type.equals(TB_FIELDTYPE);
 	}
 
@@ -55,7 +55,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * @param field not used.
 	 * @param value not used.
 	 */
-	public void set(String field, Object value) {
+	public void set(String field, Object value){
 		// Error
 	}
 
@@ -64,7 +64,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * @param field not used
 	 * @return TB_DEFAULT_VALUE
 	 */
-	public Object get(String field) {
+	public Object get(String field){
 		return TB_DEFAULT_VALUE;
 	}
 	
@@ -73,7 +73,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * @param col not used.
 	 * @return TB_DEFAULT_VALUE
 	 */
-	public Object get(int col) {
+	public Object get(int col){
 		return TB_DEFAULT_VALUE;
 	}
 
@@ -82,7 +82,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * @param field not used
 	 * @return TB_FIELDTYPE
 	 */
-	public Class < ? > getColumnType(String field) {
+	public Class<?> getColumnType(String field){
 		return TB_FIELDTYPE;
 	}
 
@@ -91,7 +91,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * @param col not used
 	 * @return TB_FIELDTYPE
 	 */
-	public Class < ? > getColumnType(int col) {
+	public Class<?> getColumnType(int col){
 		return TB_FIELDTYPE;
 	}
 
@@ -100,7 +100,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * @param field not used
 	 * @return TB_DEFAULT_VALUE
 	 */
-	public Object getDefault(String field) {
+	public Object getDefault(String field){
 		return TB_DEFAULT_VALUE;
 	}
 
@@ -108,14 +108,14 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * returns the schema.
 	 * @return the schema
 	 */
-	public Schema getSchema() {
+	public Schema getSchema(){
 		return TABLE_SCHEMA;
 	}
 
 	/**
 	 * @param field not used
 	 */
-	public void revertToDefault(String field) {
+	public void revertToDefault(String field){
 		// Error
 	}
 
@@ -123,7 +123,7 @@ public class ToolbusSingleton  extends AbstractTuple{
 	 * @param col not used
 	 * @param value not used
 	 */
-	public void set(int col, Object value) {
+	public void set(int col, Object value){
 		// Error
 	}
 }

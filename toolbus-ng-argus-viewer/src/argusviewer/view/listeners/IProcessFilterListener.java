@@ -11,8 +11,7 @@ import toolbus.process.ProcessInstance;
  * @author J. Pol
  * @author J. van den Bos
  */
-public interface IProcessFilterListener {
-
+public interface IProcessFilterListener{
 	/**
 	 * A filter has been set. The processes in the list should be visible. All
 	 * other processes should be hidden.

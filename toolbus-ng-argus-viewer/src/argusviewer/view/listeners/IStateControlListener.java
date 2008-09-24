@@ -6,8 +6,7 @@ package argusviewer.view.listeners;
  * @author J. van den Bos
  * @author T. Van Laer
  */
-public interface IStateControlListener {
-
+public interface IStateControlListener{
 	/**
 	 * The state of the debugToolbus has changed.
 	 * 

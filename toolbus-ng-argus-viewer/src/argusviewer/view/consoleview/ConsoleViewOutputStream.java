@@ -7,9 +7,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * @author M. van Beest
- */
 public class ConsoleViewOutputStream extends OutputStream {
 	public static final Color COLOR_BLACK = new Color(0, 0, 0);
 	
@@ -19,6 +16,7 @@ public class ConsoleViewOutputStream extends OutputStream {
 	
 	/**
 	 * Constructs the object with the preferred output textarea
+	 * 
 	 * @param textPane The area to where the console output is projected
 	 */
 	public ConsoleViewOutputStream(ConsoleViewColorPane textPane) {

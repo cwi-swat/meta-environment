@@ -18,7 +18,7 @@ import argusviewer.ExceptionReporter;
  * @author M. van Beest
  * 
  */
-public class ConsoleViewColorPane extends JTextPane {
+public class ConsoleViewColorPane extends JTextPane{
 	private static final long serialVersionUID = -5068136044947455516L;
 	
 	/**
@@ -29,7 +29,7 @@ public class ConsoleViewColorPane extends JTextPane {
 	 * @param color
 	 *            The color to be used for the text
 	 */
-	public void append(String text, Color color) {
+	public void append(String text, Color color){
 		StyledDocument styleDocument = this.getStyledDocument();
 
 		/*
@@ -40,9 +40,9 @@ public class ConsoleViewColorPane extends JTextPane {
 		Style style = styleDocument.addStyle("Style", null);
 		StyleConstants.setForeground(style, color);
 		
-		try {
+		try{
 			styleDocument.insertString(styleDocument.getLength(), text, style);
-		} catch (BadLocationException e) {
+		}catch(BadLocationException e){
 			ExceptionReporter.report(e.getMessage());
 		}
 		

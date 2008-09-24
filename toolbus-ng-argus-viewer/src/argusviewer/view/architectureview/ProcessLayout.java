@@ -17,9 +17,8 @@ import prefuse.visual.VisualItem;
  * @author Johnny Eradus
  * @author Frank Oppedijk
  * @author Ivo Tamboer
- *
  */
-public class ProcessLayout extends Layout {
+public class ProcessLayout extends Layout{
 	private static final int MARGIN = 30;
 	private static final int HORIZONTAL_STEP = 90;
 	private static final int VERTICAL_STEP = 90;
@@ -32,21 +31,21 @@ public class ProcessLayout extends Layout {
 	 *
 	 * @param group The group of visual items on which the layout will be applied
 	 */
-	public ProcessLayout(String group) {
+	public ProcessLayout(String group){
 		super(group);
 	}
 	
 	/**
 	 * @return the bounds of the rectangle around all processes
 	 */
-	public Rectangle2D getBounds() {
+	public Rectangle2D getBounds(){
 		return DisplayLib.getBounds(m_vis.items(m_group), MARGIN);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void run(double frac) {
+	public void run(double frac){
 		int xSlotsUsed = 0;
 		int m_processesLines = 1;
 		
@@ -58,7 +57,7 @@ public class ProcessLayout extends Layout {
 			VisualItem currentProcess = visualStatements.next();
 
 				xSlotsUsed += 1;
-				if (xSlotsUsed > PROCESSES_PER_LINE) {
+				if (xSlotsUsed > PROCESSES_PER_LINE){
 					yPos += VERTICAL_STEP;
 					xPos = MARGIN;
 					xSlotsUsed = 1;
@@ -74,7 +73,7 @@ public class ProcessLayout extends Layout {
 		
 		// Layout the labels
 		Iterator<DecoratorItem> labels = m_vis.items(ArchitectureView.PROCESS_LABEL);
-		while (labels.hasNext()) {
+		while (labels.hasNext()){
 			DecoratorItem label = labels.next();
 			VisualItem parentEntity = label.getDecoratedItem();
 
@@ -91,7 +90,7 @@ public class ProcessLayout extends Layout {
 	 * lazy script giving the width of the process table. Could be way better.
 	 * @return width of the processes.
 	 */
-	public int getWidth() {
+	public int getWidth(){
 		return PROCESSES_PER_LINE * HORIZONTAL_STEP;
 	}
 }

@@ -5,8 +5,7 @@ package argusviewer.view.listeners;
  * 
  * @author Tim Van Laer
  */
-public interface IFileBreakPointListener {
-
+public interface IFileBreakPointListener{
 	/**
 	 * A breakpoint is added at the given position.
 	 * 

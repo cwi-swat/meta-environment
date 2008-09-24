@@ -31,7 +31,7 @@ import java.awt.geom.Point2D;
  * @author Alexander Bij
  * @author Roberto vd Linden
  */
-public class MSCView extends JPanel {
+public class MSCView extends JPanel{
 	private static final long serialVersionUID = -6417187615441155371L;
 	
 	protected static final int FOCUS_ANIMATE_MILLISECONDS = 100;
@@ -66,7 +66,9 @@ public class MSCView extends JPanel {
 	 * Create the View on the visualization of the Message Sequence Chart.
 	 * @param mscVisualization the visualization of the Message Sequence Chart
 	 */
-	public MSCView(MSCVisualization mscVisualization) {
+	public MSCView(MSCVisualization mscVisualization){
+		super();
+		
 		this.m_mscVisualization = mscVisualization;
 
 		createMainDisplay();
@@ -83,7 +85,7 @@ public class MSCView extends JPanel {
 	 * Sets up the main display component for the visualization.
 	 * The main display only shows the swimlanes and executed statements.
 	 */
-	private void createMainDisplay() {
+	private void createMainDisplay(){
 		m_mainDisplay = new Display(m_mscVisualization.getVisualization());
 		m_mainDisplay.setItemSorter(new MSCItemSorter());
 		m_mainDisplay.setDoubleBuffered(true);
@@ -94,7 +96,7 @@ public class MSCView extends JPanel {
 	 * Sets up the top display component for the visualization.
 	 * The top display only shows the processes and tools.
 	 */
-	private void createTopDisplay() {
+	private void createTopDisplay(){
 		m_topDisplay = new Display(m_mscVisualization.getVisualization());
 		m_topDisplay.setItemSorter(new MSCItemSorter());
 		m_topDisplay.setDoubleBuffered(true);
@@ -106,7 +108,7 @@ public class MSCView extends JPanel {
 	 * Create the control listeners for the display components.
 	 * The control listeners handles mouse, key and tooltip controls.
 	 */
-	private void createDisplayControls() {
+	private void createDisplayControls(){
 		m_mainDisplay.addControlListener(new WheelScrollControl(VERTICAL_MAIN_DISPLAY_PAN));
 		m_mainDisplay.addControlListener(new HorizontalSyncedPanControl(m_topDisplay, VERTICAL_MAIN_DISPLAY_PAN));
 		m_mainDisplay.addControlListener(new SyncedZoomControl(m_topDisplay,
@@ -124,13 +126,13 @@ public class MSCView extends JPanel {
 	/**
 	 * Refresh the view on the contents of the Message Sequence Chart.
 	 */
-	public void refreshDisplays() {
-		if (m_mainDisplay != null) {
+	public void refreshDisplays(){
+		if(m_mainDisplay != null){
 			m_mainDisplay.invalidate();
 			m_mainDisplay.repaint();
 		}
 
-		if (m_topDisplay != null) {
+		if(m_topDisplay != null){
 			m_topDisplay.invalidate();
 			m_topDisplay.repaint();
 		}
@@ -140,7 +142,7 @@ public class MSCView extends JPanel {
 	 * Set the horizontal focus to the given entity.
 	 * @param entity the entity to set focus on
 	 */
-	public void setEntityFocus(VisualItem entity) {
+	public void setEntityFocus(VisualItem entity){
 		double horizontalFocusPosition = entity.getX();
 
 		setHorizontalFocus(m_mainDisplay, horizontalFocusPosition);
@@ -151,7 +153,7 @@ public class MSCView extends JPanel {
 	 * Set the vertical focus to the given statement.
 	 * @param statement the statement to focus on
 	 */
-	public void setStatementFocus(VisualItem statement) {
+	public void setStatementFocus(VisualItem statement){
 		double verticalFocusPosition = statement.getY();
 
 		setVerticalFocus(m_mainDisplay, verticalFocusPosition, VERTICAL_MAIN_DISPLAY_PAN);	
@@ -164,8 +166,7 @@ public class MSCView extends JPanel {
 	 * @param display the display to set the focus to
 	 * @param horizontalFocusPosition the horizontal position to focus
 	 */
-	protected void setHorizontalFocus(Display display, double horizontalFocusPosition) {
-
+	protected void setHorizontalFocus(Display display, double horizontalFocusPosition){
 		// Determine the horizontal center of the display
 		double horizontalScreenCenter = display.getWidth() / 2.0;
 		Point2D.Double horizontalDisplayCenter = new Point2D.Double(horizontalScreenCenter, 0);
@@ -186,8 +187,7 @@ public class MSCView extends JPanel {
 	 * @param verticalFocusPosition the vertical position to focus
 	 * @param initialVerticalPan the amount of initial vertical pan of the display
 	 */
-	protected void setVerticalFocus(Display display, double verticalFocusPosition, double initialVerticalPan) {
-
+	protected void setVerticalFocus(Display display, double verticalFocusPosition, double initialVerticalPan){
 		// Determine the vertical center of the display
 		double verticalScreenCenter = display.getHeight() / 2.0;
 		Point2D.Double verticalDisplayCenter = new Point2D.Double(0, verticalScreenCenter);
@@ -206,19 +206,5 @@ public class MSCView extends JPanel {
 		if (newVerticalPosition >= maxVerticalPosition) {
 			display.animatePanAbs(0, verticalMovement, FOCUS_ANIMATE_MILLISECONDS);
 		}
-	}
-
-	/**
-	 * @return the main display camera
-	 */
-	protected Display getMainDisplay() {
-		return m_mainDisplay;
-	}
-
-	/**
-	 * @return the top display camera
-	 */
-	protected Display getTopDisplay() {
-		return m_topDisplay;
 	}
 }

@@ -11,7 +11,7 @@ import prefuse.visual.sort.ItemSorter;
  * @author Tigran Kalaidjan
  *
  */
-public class ArchitectureItemSorter extends ItemSorter {
+public class ArchitectureItemSorter extends ItemSorter{
 	protected static final int TOOLBUSSINGLETON_SCORE = 1;
 	protected static final int DECORATOR_SCORE = 2;
 	protected static final int PROCESS_SCORE = 2;
@@ -34,19 +34,18 @@ public class ArchitectureItemSorter extends ItemSorter {
 	 * @return The score for the given VisualItem
 	 * 
 	 */
-	public int score(VisualItem item) {
-    	
-    	if (item instanceof DecoratorItem) {
+	public int score(VisualItem item){
+    	if(item instanceof DecoratorItem){
     		return DECORATOR_SCORE;
-    	} else if (item.getRenderer() instanceof MessageRenderer) {
+    	}else if(item.getRenderer() instanceof MessageRenderer){
     		return MESSAGE_SCORE;
-    	} else if (item.getRenderer() instanceof ToolRenderer) {
+    	}else if(item.getRenderer() instanceof ToolRenderer){
     		return TOOL_SCORE;
-    	} else if (item.getRenderer() instanceof ProcessRenderer) {
+    	}else if(item.getRenderer() instanceof ProcessRenderer){
     		return PROCESS_SCORE;
-    	} else if (item.getRenderer() instanceof ToolbusSingletonRenderer) {
+    	}else if(item.getRenderer() instanceof ToolbusSingletonRenderer){
     		return TOOLBUSSINGLETON_SCORE;
-    	} else {
+    	}else{
     		return DEFAULT_SCORE;
     	}
     }

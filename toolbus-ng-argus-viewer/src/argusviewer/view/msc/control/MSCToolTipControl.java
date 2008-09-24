@@ -24,23 +24,23 @@ public class MSCToolTipControl extends ControlAdapter{
 	/**
 	 * Create a new ToolTip control for message in the Message Sequence Chart.
 	 */
-	public MSCToolTipControl() {
+	public MSCToolTipControl(){
 		super();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void itemEntered(VisualItem item, MouseEvent e) {
+	public void itemEntered(VisualItem item, MouseEvent e){
         Display display = (Display) e.getSource();
 
-		if (item.isInGroup(Message.TABLE_NAME)) {
+		if(item.isInGroup(Message.TABLE_NAME)){
 			display.setToolTipText(getMessageToolTip(item));
-		} else if (item.isInGroup(Statement.TABLE_NAME)) {
+		}else if(item.isInGroup(Statement.TABLE_NAME)){
 			display.setToolTipText(getStatementToolTip(item));
-		} else if (item.isInGroup(Entity.TABLE_NAME)) {
+		}else if(item.isInGroup(Entity.TABLE_NAME)){
 			display.setToolTipText(getEntityToolTip(item));
-		} else {
+		}else{
 			display.setToolTipText(null);
 		}
 	}
@@ -85,7 +85,7 @@ public class MSCToolTipControl extends ControlAdapter{
 	 * @param statement the VisualItem that represents the Statement
 	 * @return a String representation for a Statement ToolTip
 	 */
-	protected String getStatementToolTip(VisualItem statement) {
+	protected String getStatementToolTip(VisualItem statement){
 		StringBuilder tooltipContents = new StringBuilder();
 
 		String statementContent = (String) statement.get(Statement.STATEMENT_FIELDNAME);
@@ -105,7 +105,7 @@ public class MSCToolTipControl extends ControlAdapter{
 	 * @param entity the VisualItem that represents the Entity
 	 * @return a String representation for an Entity ToolTip
 	 */
-	protected String getEntityToolTip(VisualItem entity) {
+	protected String getEntityToolTip(VisualItem entity){
 		StringBuilder tooltipContents = new StringBuilder();
 
 		int entityId = ((Integer) entity.get(Entity.ID_FIELDNAME)).intValue();
@@ -132,14 +132,14 @@ public class MSCToolTipControl extends ControlAdapter{
 	 * @param text the single line text to convert to multiline text
 	 * @return a multiline representation of the text
 	 */
-	protected String createMultilineString(String text) {
-		if (text.length() <= CHARACTERS_PER_LINE) {
+	protected String createMultilineString(String text){
+		if(text.length() <= CHARACTERS_PER_LINE){
 			return text;
 		}
 
 		StringBuilder multilineText = new StringBuilder();
 		int linesCount = text.length() / CHARACTERS_PER_LINE;
-		for (int i = 0; i < linesCount; i++) {
+		for(int i = 0; i < linesCount; i++){
 			int beginIndex = i * CHARACTERS_PER_LINE;
 			int endIndex = beginIndex + CHARACTERS_PER_LINE;
 
@@ -159,9 +159,8 @@ public class MSCToolTipControl extends ControlAdapter{
 	/**
 	 * {@inheritDoc}
 	 */
-    public void itemExited(VisualItem item, MouseEvent e) {
+    public void itemExited(VisualItem item, MouseEvent e){
         Display display = (Display) e.getSource();
         display.setToolTipText(null);
     }
-
 }

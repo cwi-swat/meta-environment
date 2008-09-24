@@ -18,10 +18,8 @@ import prefuse.visual.VisualItem;
  * 
  * @author Ivo Tamboer
  * @author Frank Oppedijk
- * 
- * 
  */
-public class ToolRenderer extends AbstractArchitectureRenderer {
+public class ToolRenderer extends AbstractArchitectureRenderer{
 	public static final double TOOL_BASESIZE = BASESIZE * 0.5;
 	private static final float LINE_WIDTH = (float) 1.5;
 	private static final BasicStroke STROKE = new BasicStroke(LINE_WIDTH);
@@ -34,15 +32,14 @@ public class ToolRenderer extends AbstractArchitectureRenderer {
 	/**
 	 * Default Constructor ToolRenderer
 	 */
-	public ToolRenderer() {
+	public ToolRenderer(){
 		super();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	protected Shape getRawShape(VisualItem item) {
-
+	protected Shape getRawShape(VisualItem item){
 		item.setStroke(STROKE);
 
 		Point2D pos = getShapePosition(item);
@@ -63,12 +60,11 @@ public class ToolRenderer extends AbstractArchitectureRenderer {
 	 * @param width The width (radius) of the rectangle
 	 * @return An Ellipse
 	 */
-	protected Rectangle2D getRectangle(double x, double y, double width) {
-
+	protected Rectangle2D getRectangle(double x, double y, double width){
 		Rectangle2D rectangle = new Rectangle2D.Double();
 
 		// Center the circle around the specified x and y
-		if (width > 1) {
+		if(width > 1){
 			x -= width / 2;
 			y -= width / 2;
 		}
@@ -78,14 +74,13 @@ public class ToolRenderer extends AbstractArchitectureRenderer {
 		return rectangle;
 	}
 	
-	private Line2D getLine(VisualItem item) {
-		
+	private Line2D getLine(VisualItem item){
 		Line2D line = new Line2D.Double();
 		Visualization vis = item.getVisualization();
 		
 		TupleSet toolbusSingleton = vis.getVisualGroup(ToolbusSingleton.TABLE_NAME);
 		Iterator<Tuple> toolbusSingletonIterator = toolbusSingleton.tuples();
-		if (toolbusSingletonIterator.hasNext()) {
+		if(toolbusSingletonIterator.hasNext()){
 			VisualItem singleton = vis.getVisualItem(ToolbusSingleton.TABLE_NAME, toolbusSingletonIterator.next());
 			
 			double halfItemWidth = TOOL_BASESIZE * item.getSize() / 2;

@@ -11,6 +11,7 @@ import java.util.Map;
 public class ToolPerformanceInfo {
 	private final int m_toolId;
 	private final String m_toolName;
+	
 	private volatile String m_toolType;
 	private volatile String m_toolLanguage;
 	private volatile int m_toolMemoryHeapUsage;
@@ -24,7 +25,7 @@ public class ToolPerformanceInfo {
 	 * @param toolName
 	 *            The name of the tool
 	 */
-	public ToolPerformanceInfo(int toolId, String toolName) {
+	public ToolPerformanceInfo(int toolId, String toolName){
 		this.m_toolId = toolId;
 		this.m_toolName = toolName;
 		
@@ -36,7 +37,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool Id
 	 */
-	public int getToolId() {
+	public int getToolId(){
 		return m_toolId;
 	}
 
@@ -45,7 +46,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool name
 	 */
-	public String getToolName() {
+	public String getToolName(){
 		return m_toolName;
 	}
 
@@ -54,7 +55,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool type
 	 */
-	public String getToolType() {
+	public String getToolType(){
 		return m_toolType;
 	}
 
@@ -63,7 +64,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool language
 	 */
-	public String getToolLanguage() {
+	public String getToolLanguage(){
 		return m_toolLanguage;
 	}
 
@@ -72,7 +73,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool memory heap usage
 	 */
-	public int getToolMemoryHeapUsage() {
+	public int getToolMemoryHeapUsage(){
 		return m_toolMemoryHeapUsage;
 	}
 
@@ -81,7 +82,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool memory non heap usage
 	 */
-	public int getToolMemoryNonHeapUsage() {
+	public int getToolMemoryNonHeapUsage(){
 		return m_toolMemoryNonHeapUsage;
 	}
 
@@ -90,7 +91,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool treads
 	 */
-	public Map<String, ThreadInfo> getThreads() {
+	public Map<String, ThreadInfo> getThreads(){
 		return m_threads;
 	}
 
@@ -100,7 +101,7 @@ public class ToolPerformanceInfo {
 	 * @param toolType
 	 *            String
 	 */
-	public void setToolType(String toolType) {
+	public void setToolType(String toolType){
 		m_toolType = toolType;
 	}
 
@@ -110,7 +111,7 @@ public class ToolPerformanceInfo {
 	 * @param toolLanguage
 	 *            String
 	 */
-	public void setToolLanguage(String toolLanguage) {
+	public void setToolLanguage(String toolLanguage){
 		m_toolLanguage = toolLanguage;
 	}
 
@@ -120,7 +121,7 @@ public class ToolPerformanceInfo {
 	 * @param toolMemoryHeapUsage
 	 *            Integer
 	 */
-	public void setToolMemoryHeapUsage(int toolMemoryHeapUsage) {
+	public void setToolMemoryHeapUsage(int toolMemoryHeapUsage){
 		m_toolMemoryHeapUsage = toolMemoryHeapUsage;
 	}
 
@@ -130,7 +131,7 @@ public class ToolPerformanceInfo {
 	 * @param toolMemoryNonHeapUsage
 	 *            Integer
 	 */
-	public void setToolMemoryNonHeapUsage(int toolMemoryNonHeapUsage) {
+	public void setToolMemoryNonHeapUsage(int toolMemoryNonHeapUsage){
 		m_toolMemoryNonHeapUsage = toolMemoryNonHeapUsage;
 	}
 
@@ -140,7 +141,7 @@ public class ToolPerformanceInfo {
 	 * @param threads
 	 *            Hashtable
 	 */
-	public void setThreads(Map<String, ThreadInfo> threads) {
+	public void setThreads(Map<String, ThreadInfo> threads){
 		m_threads = threads;
 	}
 
@@ -149,7 +150,7 @@ public class ToolPerformanceInfo {
 	 * 
 	 * @return tool info String
 	 */
-	public String toString() {
+	public String toString(){
 		String toolInfo = "getToolId: " + getToolId() + "\n"
 				+ "getToolType: " + getToolType() + "\n"
 				+ "getToolLanguage: " + getToolLanguage() + "\n"
@@ -157,7 +158,7 @@ public class ToolPerformanceInfo {
 				+ "getToolMemoryNonHeapUsage: " + getToolMemoryNonHeapUsage()
 				+ "\n";
 
-		for (ThreadInfo t : getThreads().values()) {
+		for(ThreadInfo t : getThreads().values()){
 			toolInfo = toolInfo + "getThreadName: " + t.getThreadName() + "\n"
 					+ "getThreadUserTime: " + t.getThreadUserTime() + "\n"
 					+ "getThreadSystemTime: " + t.getThreadSystemTime() + "\n";

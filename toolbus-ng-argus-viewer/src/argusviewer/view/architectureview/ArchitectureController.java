@@ -1,9 +1,9 @@
 package argusviewer.view.architectureview;
 
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,6 +75,8 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param performanceTreeTable The table for the tool performance info
 	 */
 	public ArchitectureController(DataComm dataComm, ArchitectureData archData, ArchitectureView archView, PerformanceTreeTable performanceTreeTable) {
+		super();
+		
 		m_dataComm = dataComm;
 		m_archView = archView;
 		m_archData = archData;
@@ -138,7 +140,6 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	/**
 	 * {@inheritDoc}
 	 */
-	
 	public void removeToolInstance(ToolInstance toolInstance){
 		// In the architecture view, removals are not used to modify the view.
 	}
@@ -152,57 +153,55 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param executedStateElement The statement that was executed
 	 * @param partners In case of a message, this shows the receiving process instances
 	 */
-	public void stepExecuted(int tick, ProcessInstance processInstance,
-			StateElement executedStateElement, ProcessInstance[] partners) {
-
+	public void stepExecuted(int tick, ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners) {
 		String sourceName = "";
 		String sourceType = "";
 		
-		Hashtable<String, String> messageReceivers = new Hashtable<String, String>();
+		Map<String, String> messageReceivers = new HashMap<String, String>();
 
 		String processName = processInstance.getProcessName();
 		String executedStatementString = executedStateElement.toString();
 		
 		Message.Type msgType = getMessageType(executedStateElement);
-		if (msgType != null) {
-			switch (msgType) {
-			case ASYNC:
-				/* falls through, handle async and sync messages in the same way */
-			case SYNC:
-				sourceName = processName;
-				sourceType = "Process";
-				if ((partners != null) && (partners.length > 0)) {
-					for (ProcessInstance partner : partners) {
-						messageReceivers.put(partner.getProcessName(), "Process");
-					}
-				}
-				break;
-			case TOOLCOMM:
-				String toolName = ToolbusUtil.getToolIdFromStateElement(executedStateElement);
-
-				String sendingType = SOURCE_OF_STATEMENT.get(executedStateElement.getClass());
-
-				if (sendingType == "Process") {
+		if(msgType != null){
+			switch(msgType){
+				case ASYNC:
+					/* falls through, handle async and sync messages in the same way */
+				case SYNC:
 					sourceName = processName;
 					sourceType = "Process";
-					messageReceivers.put(toolName, "Tool");
-				} else {
-					sourceName = toolName;
-					sourceType = "Tool";
-					messageReceivers.put(processName, "Process");
-				}
-				break;
-			default:
-				//empty line
+					if((partners != null) && (partners.length > 0)){
+						for(ProcessInstance partner : partners){
+							messageReceivers.put(partner.getProcessName(), "Process");
+						}
+					}
+					break;
+				case TOOLCOMM:
+					String toolName = ToolbusUtil.getToolIdFromStateElement(executedStateElement);
+	
+					String sendingType = SOURCE_OF_STATEMENT.get(executedStateElement.getClass());
+	
+					if(sendingType == "Process"){
+						sourceName = processName;
+						sourceType = "Process";
+						messageReceivers.put(toolName, "Tool");
+					}else{
+						sourceName = toolName;
+						sourceType = "Tool";
+						messageReceivers.put(processName, "Process");
+					}
+					break;
+				default:
+					//empty line
 			}
 		}
 
 		// If a message has been sent, add it to the data model
-		Enumeration<String> enumerator = messageReceivers.keys();
-		while (enumerator.hasMoreElements()) {	
-			String targetName = enumerator.nextElement();
-			m_archData.addMessage(new Message(getMessageFromStateElement(executedStatementString), 
-					sourceName, sourceType , targetName, messageReceivers.get(targetName), msgType));
+		Set<String> keys = messageReceivers.keySet();
+		Iterator<String> keysIterator = keys.iterator();
+		while(keysIterator.hasNext()){	
+			String targetName = keysIterator.next();
+			m_archData.addMessage(new Message(getMessageFromStateElement(executedStatementString), sourceName, sourceType , targetName, messageReceivers.get(targetName), msgType));
 			m_archView.updateVisualization();
 		}
 	}
@@ -217,21 +216,21 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @return The type of Message, or null if the stateElement does not
 	 *         represent a Message
 	 */
-	private Message.Type getMessageType(StateElement elem) {
-		for (int i = 0; i < Message.SYNC_COMMUNICATION.length; i++) {
-			if (elem.getClass() == Message.SYNC_COMMUNICATION[i]) {
+	private static Message.Type getMessageType(StateElement elem){
+		for(int i = 0; i < Message.SYNC_COMMUNICATION.length; i++){
+			if(elem.getClass() == Message.SYNC_COMMUNICATION[i]){
 				return Message.Type.SYNC;
 			}
 		}
 
-		for (int i = 0; i < Message.ASYNC_COMMUNICATION.length; i++) {
-			if (elem.getClass() == Message.ASYNC_COMMUNICATION[i]) {
+		for(int i = 0; i < Message.ASYNC_COMMUNICATION.length; i++){
+			if(elem.getClass() == Message.ASYNC_COMMUNICATION[i]){
 				return Message.Type.ASYNC;
 			}
 		}
 
-		for (int i = 0; i < Message.TOOL_COMMUNICATION.length; i++) {
-			if (elem.getClass() == Message.TOOL_COMMUNICATION[i]) {
+		for(int i = 0; i < Message.TOOL_COMMUNICATION.length; i++){
+			if(elem.getClass() == Message.TOOL_COMMUNICATION[i]){
 				return Message.Type.TOOLCOMM;
 			}
 		}
@@ -246,12 +245,11 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 *            name of the state element to format
 	 * @return a formatted state element name
 	 */
-	private String getMessageFromStateElement(String stateElement) {
-
+	private static String getMessageFromStateElement(String stateElement){
 		int msgStartIndex = stateElement.indexOf('(');
 		int msgEndIndex = stateElement.lastIndexOf(')');
 
-		if ((msgStartIndex != -1) && (msgEndIndex != -1)) {
+		if((msgStartIndex != -1) && (msgEndIndex != -1)){
 			return stateElement.substring(msgStartIndex + 1, msgEndIndex);
 		}
 		return stateElement;
@@ -310,14 +308,14 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		
 		while(matcher.find()){
         	MatchResult result = matcher.toMatchResult();
-        	String threadName = (String) getNameFromATerm(result.group());
+        	String threadName = getNameFromATerm(result.group());
         	
         	int userTime = 0;
     		int systemTime = 0;
     		
         	String[] times = ((String) getValueFromATerm(result.group(), String.class, false)).split(",");
     		for(String time : times){
-        		String timeName = (String) getNameFromATerm(time);
+        		String timeName = getNameFromATerm(time);
 
         		if(timeName.equals("user-time")){
         			userTime = ((Integer) getValueFromATerm(time, Integer.class, false)).intValue();
@@ -343,7 +341,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param type The class of the type that was sent in the ATerm
 	 * @return value
 	 */
-	private Object getValueFromATerm(String aterm, Class< ? > type, boolean encapsulated){
+	private static Object getValueFromATerm(String aterm, Class<?> type, boolean encapsulated){
 		int beginIndex = aterm.indexOf("(");
 		int endIndex = aterm.lastIndexOf(")");
 		if(encapsulated){
@@ -372,7 +370,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param aterm Entire ATerm
 	 * @return name
 	 */
-	private Object getNameFromATerm(String aterm){
+	private static String getNameFromATerm(String aterm){
 		int endIndex = aterm.indexOf("(");
 		return aterm.substring(0, endIndex);
 	}

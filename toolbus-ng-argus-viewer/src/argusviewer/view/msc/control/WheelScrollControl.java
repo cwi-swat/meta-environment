@@ -12,7 +12,7 @@ import java.awt.event.MouseWheelEvent;
  *
  * @author Arne Timmerman
  */
-public class WheelScrollControl extends ControlAdapter {
+public class WheelScrollControl extends ControlAdapter{
 	protected static final int BLOCK_SCROLL_AMOUNT = 50;
 	protected static final int SCROLL_SPEED = 8;
 
@@ -24,7 +24,7 @@ public class WheelScrollControl extends ControlAdapter {
 	 *
 	 * @param initialVerticalPan the amount of vertical pan of the display where this control is enabled on
 	 */
-	public WheelScrollControl(double initialVerticalPan) {
+	public WheelScrollControl(double initialVerticalPan){
 		// Vertical panning of a Prefuse Display is negated compared to the vertical postion
 		this.m_initialVerticalPosition = -initialVerticalPan;
 	}
@@ -32,23 +32,23 @@ public class WheelScrollControl extends ControlAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void itemWheelMoved(VisualItem visualItem, MouseWheelEvent mouseEvent) {
+	public void itemWheelMoved(VisualItem visualItem, MouseWheelEvent mouseEvent){
 		mouseWheelMoved(mouseEvent);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void mouseWheelMoved(MouseWheelEvent mouseEvent) {
+	public void mouseWheelMoved(MouseWheelEvent mouseEvent){
 		Display display = (Display) mouseEvent.getComponent();
 
 		// The vertical movement that is calculated from a Mouse Wheel Event
 		// is negated compared to normal scrolling behavior
 		int negatedVerticalMovement = 0;
 
-		if (mouseEvent.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+		if(mouseEvent.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL){
 			negatedVerticalMovement = mouseEvent.getUnitsToScroll() * SCROLL_SPEED;
-		} else if (mouseEvent.getScrollType() == MouseWheelEvent.WHEEL_BLOCK_SCROLL) {
+		}else if(mouseEvent.getScrollType() == MouseWheelEvent.WHEEL_BLOCK_SCROLL){
 			int wheelRotation = mouseEvent.getWheelRotation();
 			negatedVerticalMovement = (BLOCK_SCROLL_AMOUNT * wheelRotation);
 		}
@@ -64,11 +64,11 @@ public class WheelScrollControl extends ControlAdapter {
 		double maxVerticalPosition = m_initialVerticalPosition * display.getScale();
 
 		// Scroll if the new vertical position does not exceeds the initial position
-		if (newVerticalPosition >= maxVerticalPosition) {
+		if(newVerticalPosition >= maxVerticalPosition){
 			scrollDisplay(display, verticalMovement);
 
 		// Scroll partial if the new vertical position exceeds the initial position
-		} else if ((verticalMovement > 0) && (currentVerticalPosition != maxVerticalPosition)) {
+		}else if ((verticalMovement > 0) && (currentVerticalPosition != maxVerticalPosition)){
 	   		int partialVerticalMovement = (int) (currentVerticalPosition - maxVerticalPosition);
 			scrollDisplay(display, partialVerticalMovement);
 		}
@@ -79,9 +79,8 @@ public class WheelScrollControl extends ControlAdapter {
 	 * @param display the display that has te be panned
 	 * @param verticalMovement the amount of vertical pan that has te be scrolled
 	 */
-	private void scrollDisplay(Display display, int verticalMovement) {
+	private static void scrollDisplay(Display display, int verticalMovement){
 		display.pan(0, verticalMovement);
 		display.repaint();
 	}
-
 }

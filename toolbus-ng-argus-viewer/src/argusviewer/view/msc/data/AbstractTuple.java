@@ -12,7 +12,7 @@ import prefuse.data.Tuple;
  * @author Riccardo Lippolis
  * 
  */
-public abstract class AbstractTuple implements Tuple {
+public abstract class AbstractTuple implements Tuple{
 
 	/**
 	 * Returns an array of the Columns
@@ -36,121 +36,120 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canGet(String field, Class type) {
+	public boolean canGet(String field, Class type){
 		return isValidNameTypePair(field, type);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canGetBoolean(String field) {
+	public boolean canGetBoolean(String field){
 		return canGet(field, boolean.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canGetDate(String field) {
+	public boolean canGetDate(String field){
 		return canGet(field, Date.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canGetDouble(String field) {
+	public boolean canGetDouble(String field){
 		return canGet(field, Double.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canGetFloat(String field) {
+	public boolean canGetFloat(String field){
 		return canGet(field, float.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canGetInt(String field) {
+	public boolean canGetInt(String field){
 		return canGet(field, int.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canGetLong(String field) {
+	public boolean canGetLong(String field){
 		return canGet(field, long.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canGetString(String field) {
+	public boolean canGetString(String field){
 		return canGet(field, String.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canSet(String field, Class type) {
+	public boolean canSet(String field, Class type){
 		return isValidNameTypePair(field, type);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canSetBoolean(String field) {
+	public boolean canSetBoolean(String field){
 		return canSet(field, boolean.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canSetDate(String field) {
+	public boolean canSetDate(String field){
 		return canSet(field, Date.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canSetDouble(String field) {
+	public boolean canSetDouble(String field){
 		return canSet(field, double.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canSetFloat(String field) {
+	public boolean canSetFloat(String field){
 		return canSet(field, float.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canSetInt(String field) {
+	public boolean canSetInt(String field){
 		return canSet(field, int.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canSetLong(String field) {
+	public boolean canSetLong(String field){
 		return canSet(field, long.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean canSetString(String field) {
+	public boolean canSetString(String field){
 		return canSet(field, String.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean getBoolean(String field) {
-
-		if (canGetBoolean(field)) {
+	public boolean getBoolean(String field){
+		if(canGetBoolean(field)){
 			return ((Boolean) get(field)).booleanValue();
 		}
 
@@ -160,8 +159,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean getBoolean(int col) {
-		if (canGetBoolean(getColumnName(col))) {
+	public boolean getBoolean(int col){
+		if(canGetBoolean(getColumnName(col))){
 			return ((Boolean) get(col)).booleanValue();
 		}
 
@@ -171,8 +170,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Date getDate(String field) {
-		if (canGetDate(field)) {
+	public Date getDate(String field){
+		if(canGetDate(field)){
 			return (Date) get(field);
 		}
 
@@ -182,8 +181,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Date getDate(int col) {
-		if (canGetDate(getColumnName(col))) {
+	public Date getDate(int col){
+		if(canGetDate(getColumnName(col))){
 			return (Date) get(col);
 		}
 
@@ -193,8 +192,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public double getDouble(String field) {
-		if (canGetDouble(field)) {
+	public double getDouble(String field){
+		if(canGetDouble(field)){
 			return ((Double) get(field)).doubleValue();
 		}
 
@@ -204,8 +203,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public double getDouble(int col) {
-		if (canGetDouble(getColumnName(col))) {
+	public double getDouble(int col){
+		if(canGetDouble(getColumnName(col))){
 			return ((Double) get(col)).doubleValue();
 		}
 
@@ -215,8 +214,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public float getFloat(String field) {
-		if (canGetFloat(field)) {
+	public float getFloat(String field){
+		if(canGetFloat(field)){
 			return ((Float) get(field)).floatValue();
 		}
 
@@ -226,8 +225,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public float getFloat(int col) {
-		if (canGetFloat(getColumnName(col))) {
+	public float getFloat(int col){
+		if(canGetFloat(getColumnName(col))){
 			return ((Float) get(col)).floatValue();
 		}
 
@@ -237,8 +236,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public int getInt(String field) {
-		if (canGetInt(field)) {
+	public int getInt(String field){
+		if(canGetInt(field)){
 			return ((Integer) get(field)).intValue();
 		}
 
@@ -248,8 +247,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public int getInt(int col) {
-		if (canGetInt(getColumnName(col))) {
+	public int getInt(int col){
+		if(canGetInt(getColumnName(col))){
 			return ((Integer) get(col)).intValue();
 		}
 
@@ -259,8 +258,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public long getLong(String field) {
-		if (canGetLong(field)) {
+	public long getLong(String field){
+		if(canGetLong(field)){
 			return ((Long) get(field)).longValue();
 		}
 
@@ -270,8 +269,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public long getLong(int col) {
-		if (canGetLong(getColumnName(col))) {
+	public long getLong(int col){
+		if(canGetLong(getColumnName(col))){
 			return ((Long) get(col)).longValue();
 		}
 
@@ -281,7 +280,7 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public int getRow() {
+	public int getRow(){
 		// no backing table exists
 		return -1;
 	}
@@ -289,8 +288,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getString(String field) {
-		if (canGetString(field)) {
+	public String getString(String field){
+		if(canGetString(field)){
 			return (String) get(field);
 		}
 
@@ -300,8 +299,8 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getString(int col) {
-		if (canGetString(getColumnName(col))) {
+	public String getString(int col){
+		if(canGetString(getColumnName(col))){
 			return (String) get(col);
 		}
 
@@ -311,7 +310,7 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Table getTable() {
+	public Table getTable(){
 		// no backing table exists
 		return null;
 	}
@@ -319,7 +318,7 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean isValid() {
+	public boolean isValid(){
 		// ignored
 		return true;
 	}
@@ -344,42 +343,42 @@ public abstract class AbstractTuple implements Tuple {
 	 * @param value
 	 *            Object value
 	 */
-	public void set(int col, Class type, Object value) {
+	public void set(int col, Class type, Object value){
 		set(getColumnName(col), value);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setBoolean(String field, boolean val) {
+	public void setBoolean(String field, boolean val){
 		set(field, Boolean.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setBoolean(int col, boolean val) {
+	public void setBoolean(int col, boolean val){
 		set(col, boolean.class, Boolean.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setDate(String field, Date val) {
+	public void setDate(String field, Date val){
 		set(field, val);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setDate(int col, Date val) {
+	public void setDate(int col, Date val){
 		set(col, Date.class, val);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setDouble(String field, double val) {
+	public void setDouble(String field, double val){
 		set(field, new Double(val));
 
 	}
@@ -387,7 +386,7 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setDouble(int col, double val) {
+	public void setDouble(int col, double val){
 		set(col, double.class, new Double(val));
 
 	}
@@ -395,66 +394,65 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setFloat(String field, float val) {
+	public void setFloat(String field, float val){
 		set(field, new Float(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setFloat(int col, float val) {
+	public void setFloat(int col, float val){
 		set(col, float.class, new Float(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setInt(String field, int val) {
+	public void setInt(String field, int val){
 		set(field, Integer.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setInt(int col, int val) {
+	public void setInt(int col, int val){
 		set(col, int.class, Integer.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setLong(String field, long val) {
+	public void setLong(String field, long val){
 		set(field, Long.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setLong(int col, long val) {
+	public void setLong(int col, long val){
 		set(col, long.class, Long.valueOf(val));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setString(String field, String val) {
+	public void setString(String field, String val){
 		set(field, val);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setString(int col, String val) {
+	public void setString(int col, String val){
 		set(col, String.class, val);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public int getColumnIndex(String field) {
-
-		for (int i = 0; i < getColumnCount(); i++) {
-			if (getColumns()[i].equals(field)) {
+	public int getColumnIndex(String field){
+		for(int i = 0; i < getColumnCount(); i++){
+			if(getColumns()[i].equals(field)){
 				return i;
 			}
 		}
@@ -465,15 +463,14 @@ public abstract class AbstractTuple implements Tuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getColumnName(int col) {
+	public String getColumnName(int col){
 		return getColumns()[col];
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public int getColumnCount() {
+	public int getColumnCount(){
 		return getColumns().length;
 	}
-
 }

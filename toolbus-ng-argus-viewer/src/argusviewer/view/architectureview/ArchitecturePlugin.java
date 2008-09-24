@@ -21,7 +21,7 @@ import argusviewer.view.architectureview.performance.tree.PerformanceTreeTable;
  *
  * @author Frank Oppedijk
  */
-public class ArchitecturePlugin implements IView {
+public class ArchitecturePlugin implements IView{
 	private static final String PLUGIN_NAME = "Architecture View";
 	private static final String PREFERRED_POSITION = "TopRight";
 	private static final int INITIAL_DIVIDER_LOCATION = 300;
@@ -36,6 +36,8 @@ public class ArchitecturePlugin implements IView {
 	 * @param dataCommunication communication protocol for connection to ToolBus
 	 */
 	public ArchitecturePlugin(DataComm dataCommunication){
+		super();
+		
 		PerformanceTreeTable m_performanceTreeTable = new PerformanceTreeTable();
 		JScrollPane toolPane = new JScrollPane(m_performanceTreeTable);
 		// Do not show Prefuse INFO messages, only severe errors

@@ -23,12 +23,6 @@ import toolbus.atom.tool.Terminate;
 /**
  * @author Tigran Kalaidjan
  * @author John Franse
- *
- */
-/*
- * The Prefuse Tuple base class uses the raw 'Class' type,
- * which means this class needs to use it too. We do not want
- * warnings about this, so we suppress them. 
  */
 public class Message extends AbstractTuple {
 	public static final String MESSAGE_FIELDNAME = "message";
@@ -86,18 +80,16 @@ public class Message extends AbstractTuple {
 		SYNC
 	}
 	
-	
-	// Static types for statements to see
-	// whether it's tool communication or sync communication etc.
-	public static final Class<Atom>[] ASYNC_COMMUNICATION = new Class[] {
+	// Static types for statements to see whether it's tool communication or sync communication etc.
+	public static final Class<Atom>[] ASYNC_COMMUNICATION = new Class[]{
 		RecNote.class,
 		SndNote.class
 	};
-	public static final Class<Atom>[] SYNC_COMMUNICATION = new Class[] {
+	public static final Class<Atom>[] SYNC_COMMUNICATION = new Class[]{
 		RecMsg.class,
 		SndMsg.class
 	};
-	public static final Class<Atom>[] TOOL_COMMUNICATION = new Class[] {
+	public static final Class<Atom>[] TOOL_COMMUNICATION = new Class[]{
 		AckEvent.class,
 		Connect.class,
 		DisConnect.class,
@@ -112,15 +104,13 @@ public class Message extends AbstractTuple {
 		Terminate.class
 	};
 	
-	public static final String[] COLUMNS = { MESSAGE_FIELDNAME,
-			SOURCENAME_FIELDNAME, SOURCETYPE_FIELDNAME, TARGETNAME_FIELDNAME, TARGETTYPE_FIELDNAME, TYPE_FIELDNAME };
+	public static final String[] COLUMNS = {MESSAGE_FIELDNAME, SOURCENAME_FIELDNAME, SOURCETYPE_FIELDNAME, TARGETNAME_FIELDNAME, TARGETTYPE_FIELDNAME, TYPE_FIELDNAME};
 	
 	/**
 	 * Create a Message tuple with default values.
 	 */
-	public Message() {
-		this(MESSAGE_DEFAULT_VALUE, SOURCENAME_DEFAULT_VALUE, SOURCETYPE_DEFAULT_VALUE, 
-				TARGETNAME_DEFAULT_VALUE, TARGETTYPE_DEFAULT_VALUE, TYPE_DEFAULT_VALUE);
+	public Message(){
+		this(MESSAGE_DEFAULT_VALUE, SOURCENAME_DEFAULT_VALUE, SOURCETYPE_DEFAULT_VALUE, TARGETNAME_DEFAULT_VALUE, TARGETTYPE_DEFAULT_VALUE, TYPE_DEFAULT_VALUE);
 	}
 	
 	/**
@@ -133,7 +123,8 @@ public class Message extends AbstractTuple {
 	 * @param targetType The targets type of the message
 	 * @param type The type of message
 	 */
-	public Message(String message, String sourceName, String sourceType, String targetName, String targetType, Type type) {
+	public Message(String message, String sourceName, String sourceType, String targetName, String targetType, Type type){
+		super();
 		m_message = message;
 		m_sourceName = sourceName;
 		m_sourceType = sourceType;
@@ -146,25 +137,25 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected String[] getColumns() {
+	protected String[] getColumns(){
 		return COLUMNS;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object get(String field) {
-		if (field.equals(MESSAGE_FIELDNAME)) {
+	public Object get(String field){
+		if(field.equals(MESSAGE_FIELDNAME)){
 			return m_message;
-		} else if (field.equals(SOURCENAME_FIELDNAME)) {
+		}else if(field.equals(SOURCENAME_FIELDNAME)){
 			return m_sourceName;
-		} else if (field.equals(SOURCETYPE_FIELDNAME)) {
+		}else if(field.equals(SOURCETYPE_FIELDNAME)){
 			return m_sourceType;
-		} else if (field.equals(TARGETNAME_FIELDNAME)) {
+		}else if(field.equals(TARGETNAME_FIELDNAME)){
 			return m_targetName;
-		} else if (field.equals(TARGETTYPE_FIELDNAME)) {
+		}else if(field.equals(TARGETTYPE_FIELDNAME)){
 			return m_targetType;
-		} else if (field.equals(TYPE_FIELDNAME)) {
+		}else if(field.equals(TYPE_FIELDNAME)){
 			return m_type;
 		}
 
@@ -174,25 +165,25 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object get(int col) {
+	public Object get(int col){
 		return get(getColumns()[col]);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(String field) {
-		if (field.equals(MESSAGE_FIELDNAME)) {
+	public Class getColumnType(String field){
+		if(field.equals(MESSAGE_FIELDNAME)){
 			return MESSAGE_FIELDTYPE;
-		} else if (field.equals(SOURCENAME_FIELDNAME)) {
+		}else if (field.equals(SOURCENAME_FIELDNAME)){
 			return SOURCENAME_FIELDTYPE;
-		} else if (field.equals(SOURCETYPE_FIELDNAME)) {
+		}else if (field.equals(SOURCETYPE_FIELDNAME)){
 			return SOURCETYPE_FIELDTYPE;
-		} else if (field.equals(TARGETNAME_FIELDNAME)) {
+		}else if (field.equals(TARGETNAME_FIELDNAME)){
 			return TARGETNAME_FIELDTYPE;
-		} else if (field.equals(TARGETTYPE_FIELDNAME)) {
+		}else if (field.equals(TARGETTYPE_FIELDNAME)){
 			return TARGETTYPE_FIELDTYPE;
-		} else if (field.equals(TYPE_FIELDNAME)) {
+		}else if (field.equals(TYPE_FIELDNAME)){
 			return TYPE_FIELDTYPE;
 		}
 
@@ -202,25 +193,25 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class getColumnType(int col) {
+	public Class getColumnType(int col){
 		return getColumnType(getColumns()[col]);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object getDefault(String field) {
-		if (field.equals(MESSAGE_FIELDNAME)) {
+	public Object getDefault(String field){
+		if(field.equals(MESSAGE_FIELDNAME)){
 			return MESSAGE_DEFAULT_VALUE;
-		} else if (field.equals(SOURCENAME_FIELDNAME)) {
+		}else if(field.equals(SOURCENAME_FIELDNAME)){
 			return SOURCENAME_DEFAULT_VALUE;
-		} else if (field.equals(SOURCETYPE_FIELDNAME)) {
+		}else if(field.equals(SOURCETYPE_FIELDNAME)){
 			return SOURCETYPE_DEFAULT_VALUE;
-		} else if (field.equals(TARGETNAME_FIELDNAME)) {
+		}else if(field.equals(TARGETNAME_FIELDNAME)){
 			return TARGETNAME_DEFAULT_VALUE;
-		} else if (field.equals(TARGETTYPE_FIELDNAME)) {
+		} else if(field.equals(TARGETTYPE_FIELDNAME)){
 			return TARGETTYPE_DEFAULT_VALUE;
-		} else if (field.equals(TYPE_FIELDNAME)) {
+		}else if(field.equals(TYPE_FIELDNAME)){
 			return TYPE_DEFAULT_VALUE;
 		}
 
@@ -230,34 +221,33 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Schema getSchema() {
+	public Schema getSchema(){
 		return TABLE_SCHEMA;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void revertToDefault(String field) {
+	public void revertToDefault(String field){
 		set(field, getDefault(field));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void set(String field, Object value) {
-		
-		if (canSet(field, value.getClass())) {
-			if (field.equals(MESSAGE_FIELDNAME)) {
+	public void set(String field, Object value){
+		if(canSet(field, value.getClass())){
+			if(field.equals(MESSAGE_FIELDNAME)){
 				m_message = (String) value;
-			} else if (field.equals(SOURCENAME_FIELDNAME)) {
+			}else if(field.equals(SOURCENAME_FIELDNAME)){
 				m_sourceName = (String) value;
-			} else if (field.equals(SOURCETYPE_FIELDNAME)) {
+			}else if(field.equals(SOURCETYPE_FIELDNAME)){
 				m_sourceType = (String) value;
-			} else if (field.equals(TARGETNAME_FIELDNAME)) {
+			}else if(field.equals(TARGETNAME_FIELDNAME)){
 				m_targetName = (String) value;
-			} else if (field.equals(TARGETTYPE_FIELDNAME)) {
+			}else if(field.equals(TARGETTYPE_FIELDNAME)){
 				m_targetType = (String) value;
-			} else if (field.equals(TYPE_FIELDNAME)) {
+			}else if(field.equals(TYPE_FIELDNAME)){
 				m_type = (Message.Type) value;
 			}
 		}
@@ -266,7 +256,7 @@ public class Message extends AbstractTuple {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void set(int col, Object value) {
+	public void set(int col, Object value){
 		set(getColumns()[col], value);
 	}
 	
@@ -280,18 +270,18 @@ public class Message extends AbstractTuple {
 	 *            The data type
 	 * @return Whether or not the pair is valid
 	 */
-	protected boolean isValidNameTypePair(String field, Class type) {
-		if (field.equals(MESSAGE_FIELDNAME)) {
+	protected boolean isValidNameTypePair(String field, Class type){
+		if(field.equals(MESSAGE_FIELDNAME)){
 			return (type == MESSAGE_FIELDTYPE);
-		} else if (field.equals(SOURCENAME_FIELDNAME)) {
+		}else if(field.equals(SOURCENAME_FIELDNAME)){
 			return (type == SOURCENAME_FIELDTYPE);
-		} else if (field.equals(SOURCETYPE_FIELDNAME)) {
+		}else if(field.equals(SOURCETYPE_FIELDNAME)){
 			return (type == SOURCETYPE_FIELDTYPE);
-		} else if (field.equals(TARGETNAME_FIELDNAME)) {
+		}else if(field.equals(TARGETNAME_FIELDNAME)){
 			return (type == TARGETNAME_FIELDTYPE);
-		} else if (field.equals(TARGETTYPE_FIELDNAME)) {
+		}else if(field.equals(TARGETTYPE_FIELDNAME)){
 			return (type == TARGETTYPE_FIELDTYPE);
-		} else if (field.equals(TYPE_FIELDNAME)) {
+		}else if(field.equals(TYPE_FIELDNAME)){
 			return (type == TYPE_FIELDTYPE);
 		}
 		return false;

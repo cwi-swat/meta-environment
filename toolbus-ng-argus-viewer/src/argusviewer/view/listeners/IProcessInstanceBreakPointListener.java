@@ -8,8 +8,7 @@ import toolbus.process.ProcessInstance;
  * @author J. van den Bos
  * @author T. van Laer
  */
-public interface IProcessInstanceBreakPointListener {
-
+public interface IProcessInstanceBreakPointListener{
 	/**
 	 * A breakpoint is added in the t-script of the processInstance.
 	 * 
