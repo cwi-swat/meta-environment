@@ -793,8 +793,10 @@ PTPT_ParseTree PTPT_liftParseTree(PT_ParseTree pt)
 				 PTPT_liftNatCon(ambCnt),
 				 e);
 
-  ATtableDestroy(liftCache);
-  liftCache = NULL;
+  if (liftCache) {
+    ATtableDestroy(liftCache);
+    liftCache = NULL;
+  }
 
   return result;
 
