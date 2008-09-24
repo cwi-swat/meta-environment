@@ -2,6 +2,7 @@ package argusviewer.view.architectureview.performance.tree;
 
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
@@ -67,15 +68,24 @@ public class PerformanceTreeTable extends JTreeTable {
 	private JTree getTree() {
 		return (JTree) this.getDefaultRenderer(TreeTableModel.class);
 	}
-
+	
 	/**
 	 * Add a {@link ToolPerformanceInfo} to the {@link PerformanceTreeModel}.
 	 * 
 	 * @param toolPerformanceInfo
 	 *            ToolPerformanceInfo
 	 */
-	public void add(ToolPerformanceInfo toolPerformanceInfo) {
-		model.add(toolPerformanceInfo);
+	public void add(final ToolPerformanceInfo toolPerformanceInfo){
+		try{
+			SwingUtilities.invokeAndWait(new Runnable(){
+				public void run(){
+					model.add(toolPerformanceInfo);
+				}
+			});
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
+		
 		refresh();
 	}
 
@@ -86,7 +96,7 @@ public class PerformanceTreeTable extends JTreeTable {
 	 * @param toolName
 	 *            name of tool to focus on.
 	 */
-	public void setFocus(String toolName) {
+	public void setFocus(String toolName){
 		int row = model.setFocus(toolName);
 		if(row >= 0){
 			changeSelection(row, PerformanceTreeModel.TOOL_COLUMN, false, false);
