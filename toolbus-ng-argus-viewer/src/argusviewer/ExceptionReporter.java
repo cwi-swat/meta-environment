@@ -31,7 +31,7 @@ public final class ExceptionReporter{
 	 */
 	public static void process(Exception exception, ExceptionState exceptionState){		
 		log.error("Exception caught: " + exception.toString());
-		if (exception.getCause() != null) {
+		if(exception.getCause() != null){
 			log.error("Exception cause type: " + exception.getCause().toString());
 		}
 		log.error("Exception handled state: " + exceptionState.toString());
@@ -42,7 +42,7 @@ public final class ExceptionReporter{
 	 * Outputs a custom error message on the standard error stream.
 	 * @param errorMessage The message to be displayed
 	 */
-	public static void report(String errorMessage) {
+	public static void report(String errorMessage){
 		log.error(errorMessage);
 	}
 }

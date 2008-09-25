@@ -2,7 +2,6 @@ package argusviewer.view.architectureview.performance.tree;
 
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
@@ -76,15 +75,7 @@ public class PerformanceTreeTable extends JTreeTable {
 	 *            ToolPerformanceInfo
 	 */
 	public synchronized void add(final ToolPerformanceInfo toolPerformanceInfo){
-		try{
-			SwingUtilities.invokeAndWait(new Runnable(){
-				public void run(){
-					model.add(toolPerformanceInfo);
-				}
-			});
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
+		model.add(toolPerformanceInfo);
 		
 		refresh();
 	}

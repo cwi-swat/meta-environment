@@ -1,7 +1,5 @@
 package argusviewer.view.msc;
 
-import javax.swing.SwingUtilities;
-
 public class MSCVisualizationScheduler implements Runnable{
 	private final static int MSC_REDRAW_TIMEOUT = 500;
 	
@@ -29,15 +27,7 @@ public class MSCVisualizationScheduler implements Runnable{
 		while(running){
 			if(receivedWork){
 				receivedWork = false;
-				try{
-					SwingUtilities.invokeAndWait(new Runnable(){
-						public void run(){
-							controller.processVisualization();
-						}
-					});
-				}catch(Exception irex){
-					receivedWork = true; // Try again next iteration.
-				}
+				controller.processVisualization();
 			}
 			waitFor(MSC_REDRAW_TIMEOUT);
 		}

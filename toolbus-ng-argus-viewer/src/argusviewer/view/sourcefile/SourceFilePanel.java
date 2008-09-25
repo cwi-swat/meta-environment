@@ -15,7 +15,6 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -210,33 +209,26 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
     	final int lineNumbers = m_sourceModel.getLineNumbers();
     	
         if((lineNumber >= 0) && (lineNumber < lineNumbers)){
-        	try{
-        		SwingUtilities.invokeAndWait(new Runnable(){
-        			public void run(){
-        				int viewColumnIndex = 0;
-        	        	
-        	        	Rectangle rect = m_sourceCode.getCellRect(lineNumber, viewColumnIndex, true);
-        	        	
-        	        	JViewport viewport = (JViewport) m_sourceCode.getParent();
+			int viewColumnIndex = 0;
         	
-        	        	if(toTop){
-        		        	Rectangle lastRect = m_sourceCode.getCellRect(lineNumbers - 1, viewColumnIndex, true);
-        		        	viewport.scrollRectToVisible(lastRect);
-        	        	}
-        	        	
-        	        	Point pt = viewport.getViewPosition();
-        	        	rect.setLocation(rect.x - pt.x, rect.y - pt.y);   
-        	        	
-        	        	// Scroll the area into view
-        	        	
-        	        	viewport.scrollRectToVisible(rect);
-        	        	
-        	        	m_sourceCode.repaint();
-        			}
-        		});
-        	}catch(Exception ex){
-        		throw new RuntimeException(ex);
+        	Rectangle rect = m_sourceCode.getCellRect(lineNumber, viewColumnIndex, true);
+        	
+        	JViewport viewport = (JViewport) m_sourceCode.getParent();
+
+        	if(toTop){
+	        	Rectangle lastRect = m_sourceCode.getCellRect(lineNumbers - 1, viewColumnIndex, true);
+	        	viewport.scrollRectToVisible(lastRect);
         	}
+        	
+        	Point pt = viewport.getViewPosition();
+        	rect.setLocation(rect.x - pt.x, rect.y - pt.y);   
+        	
+        	// Scroll the area into view
+        	
+        	viewport.scrollRectToVisible(rect);
+        	
+        	m_sourceCode.repaint();
+		
         	return true;
         }
         return false;
