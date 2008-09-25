@@ -10,7 +10,6 @@ import toolbus.StateElement;
 import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
-import argusviewer.ExceptionReporter;
 import argusviewer.toolbus.DataComm;
 import argusviewer.view.IView;
 import argusviewer.view.listeners.IBreakPointHitListener;
@@ -20,12 +19,12 @@ import argusviewer.view.listeners.IFocusListener;
 
 /**
  * Controls different script-files with their panels used by the toolbus.
+ * 
  * @author Qais & Bas
  * @author M. van Beest
  * @author J. van den Bos
  * @author John Franse
  * @author Tigran Kalaidjan
- * 
  */
 public class SourceFileViewController extends Observable implements IView, IControlListener, IFileBreakPointListener, IBreakPointHitListener, IFocusListener {
 	private final Map<String, SourceFilePanel> m_sourceCodeTabs; 	//m_sourceCodeTabs contains a table scripts and panels
@@ -35,9 +34,12 @@ public class SourceFileViewController extends Observable implements IView, ICont
 
 	/**
 	 * Constructs the sourceViewController and initialize an table (m_sourceCodeTabs) of scripts and panels
+	 * 
 	 * @param dataComm	the DataComm object used for communication with the ToolBus. This value can't be null.
 	 */
-	public SourceFileViewController(DataComm dataComm) {
+	public SourceFileViewController(DataComm dataComm){
+		super();
+		
 		this.dataComm = dataComm;
 		
 		registerWithDataComm();
@@ -47,19 +49,13 @@ public class SourceFileViewController extends Observable implements IView, ICont
 		m_processBreakpointHit = false;
 		m_sourceBreakpointHit = false;
 		
-		try {
-			updateView();
-		} catch (RuntimeException e) {
-			// TODO This should never occur; probably due to a concurrency problem.
-			ExceptionReporter.process(e, ExceptionReporter.ExceptionState.UNRECOVERABLE);
-		}
+		updateView();
 	}
 
 	/**
-	 * fills the m_sourceCodeTabs with all scriptfiles and creates appropriate panels 
-	 * {@inheritDoc}
+	 * fills the m_sourceCodeTabs with all scriptfiles and creates appropriate panels
 	 */
-	public void updateView(){		
+	private void updateView(){		
 		List<String> scriptNames = dataComm.getScriptfiles();
 		
 		for(String scriptName : scriptNames){
@@ -72,10 +68,9 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	}	
 
 	/**
-	 * show the script file with the line number where step has been executed 
-	 * {@inheritDoc}
+	 * show the script file with the line number where step has been executed
 	 */
-	public void setFocus(ProcessInstance processInstance) {		
+	public void setFocus(ProcessInstance processInstance){	
 		PositionInformation posInfo = processInstance.getProcessDefinition().getPosInfo(); 
 		String scriptName = posInfo.getFileName();
 		int beginLine = posInfo.getBeginLine();
@@ -93,9 +88,9 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * add breakpoint to a script file
 	 * {@inheritDoc}
 	 */
-	public void addBreakpoint(String fileName, int lineNumber) {
+	public void addBreakpoint(String fileName, int lineNumber){
 		synchronized(m_sourceCodeTabs){
-			if (m_sourceCodeTabs.containsKey(fileName)) {
+			if(m_sourceCodeTabs.containsKey(fileName)){
 				m_sourceCodeTabs.get(fileName).addBreakPoint(lineNumber);
 			}
 		}
@@ -105,7 +100,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * remove a breakpoint from scriptfile
 	 * {@inheritDoc}
 	 */
-	public void removeBreakpoint(String fileName, int lineNumber) {
+	public void removeBreakpoint(String fileName, int lineNumber){
 		synchronized(m_sourceCodeTabs){
 			if(m_sourceCodeTabs.containsKey(fileName)){
 				m_sourceCodeTabs.get(fileName).removeBreakPoint(lineNumber);
@@ -158,7 +153,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * Scroll to the line of the breakpoint, and set the selection 
 	 * {@inheritDoc}
 	 */
-	public void hitBreakpoint(ProcessInstance processInstance) {		
+	public void hitBreakpoint(ProcessInstance processInstance){		
 		m_processBreakpointHit = true;
 		dataComm.getControlSync().doStop();
 	}
@@ -167,7 +162,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * scroll to line number of the breakpoint 
 	 * {@inheritDoc}
 	 */
-	public void hitBreakpoint(StateElement stateElement) {	
+	public void hitBreakpoint(StateElement stateElement){	
 		m_sourceBreakpointHit = true;
 		
 		clearAllHighlights();
@@ -209,31 +204,30 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getPreferredPosition() {
+	public String getPreferredPosition(){
 		return "DownRight";
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setFocus(ToolInstance toolInstance) {
-		// TODO Auto-generated method stub
-		
+	public void setFocus(ToolInstance toolInstance){
+		// Unimplemented.
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getPluginName() {
+	public String getPluginName(){
 		return "Source File View";
 	}
 
 	/**
-	 * Register the SourceFileViewController with various datacomm syncronization systems to
+	 * Register the SourceFileViewController with various datacomm synchronization systems to
 	 * get callbacks to the interface functions.
 	 * @param dataComm the DataComm object used for communication with the ToolBus
 	 */
-	private void registerWithDataComm() {
+	private void registerWithDataComm(){
 		dataComm.getBreakPointSync().register((IFileBreakPointListener) this);
 		dataComm.getBreakPointSync().register((IBreakPointHitListener) this);
 		dataComm.getControlSync().register(this);
@@ -247,7 +241,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * @param fullScriptName the full name of the script, including its path information
 	 * @return the name of the script, including its extension.
 	 */
-	private String getScriptNameFromFileName(String fullScriptName) {
+	private static String getScriptNameFromFileName(String fullScriptName){
 		return fullScriptName.substring(fullScriptName.lastIndexOf("/") + 1, fullScriptName.length());
 	}
 	
@@ -257,7 +251,7 @@ public class SourceFileViewController extends Observable implements IView, ICont
 	 * 
 	 * @param scriptName
 	 */
-	private void createNewSourceTab(String scriptName) {
+	private void createNewSourceTab(String scriptName){
 		String sourceCode = dataComm.getSource(scriptName);
 		
 		SourceFilePanel newSourceFilePanel = new SourceFilePanel(dataComm, scriptName, sourceCode);

@@ -34,7 +34,7 @@ public class EntityLayout extends Layout{
 	 * @param group The group of visual items on which the layout will be applied
 	 * @param swimlaneName The field name used for the swimlane decorators
 	 */
-	public EntityLayout(String group, String swimlaneName) {
+	public EntityLayout(String group, String swimlaneName){
 		super(group);
 		m_swimlaneName = swimlaneName;
 	}
@@ -42,7 +42,7 @@ public class EntityLayout extends Layout{
 	/**
 	 * {@inheritDoc}
 	 */
-	public void run(double frac) {
+	public void run(double frac){
 		double currentX = HORIZONTAL_MARGIN + EntityRenderer.ENTITY_BASESIZE;
 		double currentY = 0;
 		
@@ -50,14 +50,14 @@ public class EntityLayout extends Layout{
 		Iterator<VisualItem> visualEntities = m_vis.visibleItems(m_group);
 		ArrayList<VisualItem> visualSinks = new ArrayList<VisualItem>();
 
-		while (visualEntities.hasNext()) {
+		while (visualEntities.hasNext()){
 			VisualItem currentEntity = visualEntities.next();
 			Entity.Type entityType = (Entity.Type) currentEntity.get(Entity.TYPE_FIELDNAME);
 
 			// Store the sinks in a list, they are drawn later
-			if (entityType == Entity.Type.SINK) {
+			if(entityType == Entity.Type.SINK){
 				visualSinks.add(currentEntity);
-			} else {
+			}else{
 				setX(currentEntity, null, currentX);
 				setY(currentEntity, null, currentY);
 			
@@ -66,7 +66,7 @@ public class EntityLayout extends Layout{
 		}
 
 		// Layout the sink items, there should be two
-		if (visualSinks.size() == 2) {
+		if(visualSinks.size() == 2){
 			VisualItem incomingSink = visualSinks.get(0);
 			setX(incomingSink, null, INCOMING_SINK_X);
 			setY(incomingSink, null, currentY);
@@ -79,7 +79,7 @@ public class EntityLayout extends Layout{
 
 		// Layout the swimlanes
 		Iterator<DecoratorItem> swimlanes = m_vis.items(m_swimlaneName);
-		while (swimlanes.hasNext()) {
+		while(swimlanes.hasNext()){
 			DecoratorItem swimlane = swimlanes.next();
 			
 			VisualItem parentEntity = swimlane.getDecoratedItem();
@@ -97,7 +97,7 @@ public class EntityLayout extends Layout{
 	 * Get the X coordinate of the outgoing Sink.
 	 * @return X coordinate of the outgoing Sink.
 	 */
-	public static double getOutgoingSinkX() {
+	public static double getOutgoingSinkX(){
 		return outgoingSinkX;
 	}
 }

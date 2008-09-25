@@ -27,7 +27,7 @@ import argusviewer.view.msc.data.Entity;
  * @author Arne Timmerman
  * @author Roberto van der Linden
  */
-public class EntityRenderer extends AbstractMSCRenderer {
+public class EntityRenderer extends AbstractMSCRenderer{
 	public static final double ENTITY_BASESIZE = BASESIZE * 0.7;
 	private static final double TEXT_SIZE = 1.1;
 	private static final float LINE_WIDTH = (float) 1.5;
@@ -41,7 +41,7 @@ public class EntityRenderer extends AbstractMSCRenderer {
 	/**
 	 * Default Constructor EntityRenderer
 	 */
-	public EntityRenderer() {
+	public EntityRenderer(){
 		super();
 	}
 
@@ -75,7 +75,7 @@ public class EntityRenderer extends AbstractMSCRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected void drawShape(Graphics2D g, VisualItem item, Shape shape) {
+	protected void drawShape(Graphics2D g, VisualItem item, Shape shape){
 		super.drawShape(g, item, shape);
 
 		drawText(g, item, shape);
@@ -88,8 +88,7 @@ public class EntityRenderer extends AbstractMSCRenderer {
 	 * @param item Item behind drawn
 	 * @param shape Shape
 	 */
-	private void drawText(Graphics2D g, VisualItem item, Shape shape) {
-
+	private void drawText(Graphics2D g, VisualItem item, Shape shape){
 		int shapeWidth = (int) shape.getBounds().getWidth();
 
 		FontMetrics fm = DEFAULT_GRAPHICS.getFontMetrics(item.getFont());
@@ -129,7 +128,7 @@ public class EntityRenderer extends AbstractMSCRenderer {
 	 * @param width The height of the rectangle
 	 * @return A Rectangle shape rounded around a certain x , y
 	 */
-	protected Rectangle2D getRectangle(double x, double y, double width) {
+	protected Rectangle2D getRectangle(double x, double y, double width){
 		double height = width / RECTANGLE_ASPECT_RATIO;
 
 		// Center the rectangle around the specified x and y
@@ -151,9 +150,9 @@ public class EntityRenderer extends AbstractMSCRenderer {
 	 * @param width The width (radius) of the rectangle
 	 * @return An Ellipse
 	 */
-	protected Ellipse2D getCircle(double x, double y, double width) {
+	protected Ellipse2D getCircle(double x, double y, double width){
 		// Center the circle around the specified x and y
-		if (width > 1) {
+		if(width > 1){
 			x -= width / 2;
 			y -= width / 2;
 		}
@@ -162,5 +161,4 @@ public class EntityRenderer extends AbstractMSCRenderer {
 		ellipseShape.setFrame(x, y, width, width);
 		return ellipseShape;
 	}
-
 }

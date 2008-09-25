@@ -16,7 +16,7 @@ import com.sun.java.treetable.example.JTreeTable;
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-public class ToolTreeTable extends JTreeTable {
+public class ToolTreeTable extends JTreeTable{
 	private static final long serialVersionUID = 2789153921245474573L;
 	
 	private final ToolListController m_toolListController;
@@ -28,8 +28,9 @@ public class ToolTreeTable extends JTreeTable {
 	 * @param toolTreeModel toolTreeModel
 	 * @param toolListController toolListController
 	 */
-	public ToolTreeTable(ToolTreeModel toolTreeModel, ToolListController toolListController) {
+	public ToolTreeTable(ToolTreeModel toolTreeModel, ToolListController toolListController){
 		super(toolTreeModel);
+		
 		m_toolListController = toolListController;
 		m_model = toolTreeModel;
 
@@ -38,7 +39,7 @@ public class ToolTreeTable extends JTreeTable {
 		setIcons();
 	}
 
-	private void setIcons() {
+	private void setIcons(){
 		DefaultTreeCellRenderer renderer = new ToolTreeCellRenderer();
 		tree.setCellRenderer(renderer);
 	}
@@ -46,12 +47,11 @@ public class ToolTreeTable extends JTreeTable {
 	/**
 	 * Calls the methods invalidate() and repaint() to refresh the table
 	 */
-	public void refresh() {
+	public synchronized void refresh(){
 		invalidate();
 		repaint();
 	}
-
-
+	
 	/**
 	 * Converts a x, y point to column and row and sends it to the
 	 * ProcessTreeModel.
@@ -66,7 +66,7 @@ public class ToolTreeTable extends JTreeTable {
 		int row = rowAtPoint(clickPoint);
 
 		// -1 is no row selected
-		if (getSelectedRow() != -1) {
+		if(getSelectedRow() != -1){
 			ToolTreeNode node = (ToolTreeNode) getValueAt(row, ToolTreeModel.TOOL_COLUMN);
 			m_toolListController.sendClickEvent(clickCount, column, node);
 		}
@@ -78,20 +78,20 @@ public class ToolTreeTable extends JTreeTable {
 	 * Besides that, nodeStructureChanged closes nodes when it shouldn't
 	 * 
 	 */
-	public void reloadModel() {
+	public synchronized void reloadModel(){
 		HashMap<ToolTreeNode, Boolean> isExpanded = new HashMap<ToolTreeNode, Boolean>(tree.getRowCount());
 		
 		//save expanded state
-		for (int i = 0; i < tree.getRowCount(); i++) {
+		for (int i = 0; i < tree.getRowCount(); i++){
 			ToolTreeNode node = getNodeAtRow(i);
-			if (node != null && !node.isLeaf()) {
+			if (node != null && !node.isLeaf()){
 				isExpanded.put(node, Boolean.valueOf(tree.isExpanded(i)));
 			}
 		}
 		m_model.reload();
 	
 		//restore expanded state
-		for (int i = 0; i < tree.getRowCount(); i++) {
+		for (int i = 0; i < tree.getRowCount(); i++){
 			ToolTreeNode node = getNodeAtRow(i);
 			if (node != null && !node.isLeaf()) {
 				//if the node had no expanded state, it will not be expanded
@@ -113,17 +113,17 @@ public class ToolTreeTable extends JTreeTable {
 	 * @param row the rowIndex
 	 * @return the node at the specified row
 	 */
-	private ToolTreeNode getNodeAtRow(int row) {
+	private ToolTreeNode getNodeAtRow(int row){
 		return (ToolTreeNode) getValueAt(row, ToolTreeModel.TOOL_COLUMN);
 	}
 }
 
 /**
  * Draws a Tool Tree Cell
+ * 
  * @author Hidde Baggelaar
- *
  */
-class ToolTreeCellRenderer extends DefaultTreeCellRenderer  {
+class ToolTreeCellRenderer extends DefaultTreeCellRenderer{
 	private static final long serialVersionUID = -3084040025754474656L;
 	
 	private static final ImageIcon GROUP_ICON = new ImageIcon("resources/icons/group.png");
@@ -132,7 +132,7 @@ class ToolTreeCellRenderer extends DefaultTreeCellRenderer  {
 	/**
 	 * Creates a ProcessTreeCellRenderer
 	 */
-	public ToolTreeCellRenderer() {
+	public ToolTreeCellRenderer(){
 		setLeafIcon(TOOL_ICON);
 		setOpenIcon(GROUP_ICON);
 		setClosedIcon(GROUP_ICON);
@@ -141,18 +141,14 @@ class ToolTreeCellRenderer extends DefaultTreeCellRenderer  {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean selected, boolean expanded, boolean leaf, int row,
-			boolean hasFocus) {
-		Component temp =  super.getTreeCellRendererComponent(tree, value,
-				selected, expanded, leaf, row,
-				hasFocus);
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+		Component temp =  super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 			
 		ToolTreeNode node = (ToolTreeNode) value;
 		
-		if (node.isRemoved()) { 
+		if(node.isRemoved()){ 
 			temp.setEnabled(false);
-		} else {
+		}else{
 			temp.setEnabled(true);
 		}
 			

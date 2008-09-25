@@ -13,7 +13,7 @@ import argusviewer.view.IView;
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-public class ToolListPlugin implements IView {
+public class ToolListPlugin implements IView{
 	private final Map<String, Container> m_visualComponents;
 	private final ToolListView m_toolListView;
 
@@ -25,33 +25,35 @@ public class ToolListPlugin implements IView {
 	 *
 	 * @param dataComm DataComm to get the required information
 	 */
-	public ToolListPlugin(DataComm dataComm) {
+	public ToolListPlugin(DataComm dataComm){
+		super();
+		
 		m_toolListView = new ToolListView();
 		new ToolListController(dataComm, m_toolListView);
 		
 		Map<String, Container> visualComponents = new HashMap<String, Container>();
 		visualComponents.put(PLUGIN_NAME, m_toolListView);
-		this.m_visualComponents = visualComponents;
+		m_visualComponents = visualComponents;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getPluginName() {
+	public String getPluginName(){
 		return PLUGIN_NAME;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getPreferredPosition() {
+	public String getPreferredPosition(){
 		return PREFERRED_POSITION;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Map<String, Container> getVisualComponents() {
+	public Map<String, Container> getVisualComponents(){
 		return m_visualComponents;
 	}
 }

@@ -33,12 +33,12 @@ public class ProcessListView extends JScrollPane implements IView {
 	 *            A {@link DataComm} instance needed to get required
 	 *            information.
 	 */
-	public ProcessListView(DataComm dataComm) {
+	public ProcessListView(DataComm dataComm){
 		m_dataComm = dataComm;
 		m_table = new ProcessTreeTable(m_dataComm);		
 		getViewport().add(m_table);
-		addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
+		addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
 				m_table.requestFocus();		
 			}
 		});
@@ -47,21 +47,21 @@ public class ProcessListView extends JScrollPane implements IView {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getPluginName() {
+	public String getPluginName(){
 		return PLUGINNAME;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getPreferredPosition() {
+	public String getPreferredPosition(){
 		return PREFEREDPOSITION;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public HashMap<String, Container> getVisualComponents() {
+	public HashMap<String, Container> getVisualComponents(){
 		HashMap<String, Container> hashMap = new HashMap<String, Container>();
 		hashMap.put(PLUGINNAME, this);
 		return hashMap;

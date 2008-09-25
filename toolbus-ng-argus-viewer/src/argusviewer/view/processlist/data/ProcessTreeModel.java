@@ -40,14 +40,14 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	
 	private final DataComm m_dataComm; 
 	
-	private ProcessTreeTable m_table;
+	private volatile ProcessTreeTable m_table;
 
 
     /**
 	 * The constructor for the ProcessTreeModel
 	 * @param dataComm the DataComm
 	 */
-	public ProcessTreeModel(DataComm dataComm) {
+	public ProcessTreeModel(DataComm dataComm){
 		super(new ProcessTreeNode());
 		
 		m_dataComm = dataComm;		
@@ -55,7 +55,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 		m_dataComm.getControlSync().register(this);
 		m_dataComm.getFilterSync().register(this);
 		
-		getProcesses();
+		loadProcesses();
 	}
 	
 	/**
@@ -63,17 +63,16 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * 
 	 * @param parent the parent
 	 */
-	public void setParent(ProcessTreeTable parent) {
+	public void setParent(ProcessTreeTable parent){
 		m_table = parent;
 	}
-
-
+	
 	/**
 	 * The Following methods come from the TreeTableNode interface
 	 * 
 	 * @return the number of columns
 	 */
-	public int getColumnCount() {
+	public int getColumnCount(){
 		return COLUMN_NAMES.length;
 	}
 
@@ -108,17 +107,17 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 		// "Break", "Visible", "ProcesName", "ID"
 		ProcessTreeNode tree = (ProcessTreeNode) node;
 		
-		switch (column) {
-		case BREAKPOINT_COLUMN:
-			return tree.getBreakPointType();
-		case FILTER_COLUMN:
-			return Boolean.valueOf(tree.isVisible());
-		case INSTANCENAME_COLUMN:
-			return tree;
-		case ID_COLUMN:
-			return tree.getID();
-		default:
-			throw new RuntimeException("ProcessTreeModel: invalid column requested.");
+		switch(column){
+			case BREAKPOINT_COLUMN:
+				return tree.getBreakPointType();
+			case FILTER_COLUMN:
+				return Boolean.valueOf(tree.isVisible());
+			case INSTANCENAME_COLUMN:
+				return tree;
+			case ID_COLUMN:
+				return tree.getID();
+			default:
+				throw new RuntimeException("ProcessTreeModel: invalid column requested.");
 		}
 		
 	}
@@ -132,7 +131,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 *            Which column
 	 * @return boolean
 	 */
-	public boolean isCellEditable(Object node, int column) {
+	public boolean isCellEditable(Object node, int column){
 		// Tree column must be editable, for a folder to be expandable by mouse
 		return (column == INSTANCENAME_COLUMN);
 	}
@@ -140,7 +139,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setValueAt(Object arg0, Object arg1, int arg2) {
+	public void setValueAt(Object arg0, Object arg1, int arg2){
 		//function not used to set values, but has to be implemented because of the interface
 	}
 
@@ -149,20 +148,8 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * 
 	 * @return ProcessTreeNode
 	 */
-	public ProcessTreeNode getProcessTree() {
+	public ProcessTreeNode getProcessTree(){
 		return (ProcessTreeNode) getRoot();
-	}
-
-	/**
-	 * Get a {@link ProcessTreeNode} by entering the ID of a
-	 * {@link ProcessInstance}.
-	 * 
-	 * @param processID
-	 *            ProcessID
-	 * @return ProcessTreeNode
-	 */
-	private ProcessTreeNode getProcessTree(int processID) {
-		return getProcessTree().getTree(processID);
 	}
 
 	/**
@@ -171,9 +158,9 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * @param processInstances
 	 *            {@link ProcessInstance}'s the filter is applied to.
 	 */
-	public void setProcessFilter(List<ProcessInstance> processInstances) {
+	public void setProcessFilter(List<ProcessInstance> processInstances){
 		clearFilter(getProcessTree());
-		for (ProcessInstance processInstance : processInstances) {
+		for(ProcessInstance processInstance : processInstances){
 			setProcessFilter(processInstance, true);
 		}
 	}
@@ -184,7 +171,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * @param node
 	 *            The node to clear. All children will also be cleared.
 	 */
-	private void clearFilter(ProcessTreeNode node) {
+	private void clearFilter(ProcessTreeNode node){
 		setFilter(node, false);
 	}
 
@@ -196,15 +183,15 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * @param visible
 	 *            Indicates the visibility of the process.
 	 */
-	private void setFilter(ProcessTreeNode node, boolean visible) {		
+	private static void setFilter(ProcessTreeNode node, boolean visible){		
 		ProcessTreeListItem item = node.getItem();
-
-		if (item != null) {
+		
+		if(item != null){
 			// Processinstance
 			item.setFilter(visible);
-		} else {
+		}else{
 			// Processgroup, clear all children
-			for (int i = 0; i < node.getChildCount(); i++) {
+			for(int i = 0; i < node.getChildCount(); i++){
 				setFilter((ProcessTreeNode) node.getChildAt(i), visible);
 			}
 		}
@@ -218,49 +205,23 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * @param filter
 	 *            True when visible, false when invisible.
 	 */
-	private void setProcessFilter(ProcessInstance processInstance,
-			boolean filter) {
-		ProcessTreeNode node = getProcessTree().getTree(
-				processInstance.getProcessId());
-		if (node == null) {
-			return;
-		}
+	private void setProcessFilter(ProcessInstance processInstance, boolean filter) {
+		ProcessTreeNode node = getProcessTree().getTree(processInstance.getProcessId());
+		if(node == null) return;
 		
 		ProcessTreeListItem item = node.getItem();
 
-		if (item != null) {
+		if(item != null){
 			item.setFilter(filter);
 		}
-	}
-
-	/**
-	 * Adds a process breakpoint
-	 * 
-	 * @param processInstance the instance to set the breakpoint on
-	 */
-	public void addProcessBreakpoint(ProcessInstance processInstance) {
-		ProcessTreeNode tree = getProcessTree(processInstance.getProcessId());
-		tree.getItem().setBreakPoint(true);
-		nodeChanged(tree);
-	}
-
-	/**
-	 * Removes a process breakpoint
-	 * 
-	 * @param processInstance the instance to remove the breakpoint from
-	 */
-	public void removeProcessBreakpoint(ProcessInstance processInstance) {
-		ProcessTreeNode tree = getProcessTree(processInstance.getProcessId());
-		tree.getItem().setBreakPoint(false);
-		nodeChanged(tree);
 	}
 	
 	/**
 	 * nodeStructureChanged doesn't always work. The table has a better model reloading algorithm.
 	 */
-	private void reloadModel(ProcessTreeNode node) {
+	private void reloadModel(ProcessTreeNode node){
 		//nodeStructureChanged(node);
-		if (m_table != null) {
+		if(m_table != null){
 			m_table.reloadModel();
 		}		
 	}
@@ -272,10 +233,9 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * @param column the column
 	 * @param clickCount the clickCount
 	 */
-	public void clickEventAt(ProcessTreeNode node, int column, int clickCount) {
-		
-		if (clickCount == 1) {
-			switch (column) {
+	public void clickEventAt(ProcessTreeNode node, int column, int clickCount){
+		if(clickCount == 1){
+			switch (column){
 			case BREAKPOINT_COLUMN:
 				breakProcess(node);
 				break;
@@ -283,7 +243,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 				filterProcess(node);
 				break;
 			case INSTANCENAME_COLUMN:
-				if (node.getItem() != null) {
+				if(node.getItem() != null){
 					m_dataComm.getFocusSync().setHighlight(node.getItem().getProcessInstance());
 				}
 				break;
@@ -291,27 +251,27 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 				// No need to do anything
 				break;
 			}
-		} else if (clickCount == 2 && column == INSTANCENAME_COLUMN) {
-			if (node.getItem() != null) {
+		} else if(clickCount == 2 && column == INSTANCENAME_COLUMN){
+			if(node.getItem() != null){
 				m_dataComm.getFocusSync().setFocus(node.getItem().getProcessInstance());
 			}
 		}
 	}
 	
-	private void breakProcess(ProcessTreeNode node) {
+	private void breakProcess(ProcessTreeNode node){
         boolean isBreaking = node.hasProcessBreakpoint();
         node.setProcessBreakpoint(!isBreaking);
 		reloadModel(node);
 	}
 
-	private void filterProcess(ProcessTreeNode node) {
+	private void filterProcess(ProcessTreeNode node){
 		boolean isVisible = node.isVisible();
 		boolean visible = !isVisible;
-		ArrayList<ProcessInstance> filteredInstances = new ArrayList<ProcessInstance>(node.getChildCount() + 1);
+		List<ProcessInstance> filteredInstances = new ArrayList<ProcessInstance>(node.getChildCount() + 1);
 		node.setVisible(visible, filteredInstances);
-		if (visible) {
+		if(visible){
 			m_dataComm.getFilterSync().addProcessInstance(filteredInstances);
-		} else {
+		}else{
 			m_dataComm.getFilterSync().removeProcessInstance(filteredInstances);
 		}
 		reloadModel(node);
@@ -320,9 +280,9 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	/**
 	 * Add current processes from {@link DataComm} to the table.
 	 */
-	private void getProcesses() {
+	private void loadProcesses(){
 		List<ProcessInstance> list = m_dataComm.getControlSync().getProcesses();
-		for (ProcessInstance processInstance : list) {
+		for(ProcessInstance processInstance : list){
 			addProcessInstance(processInstance);
 		}
 	}
@@ -330,12 +290,12 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	/**
 	 * {@inheritDoc}
 	 */
-	public void addBreakpoint(String fileName, int lineNumber) {
+	public void addBreakpoint(String fileName, int lineNumber){
 		Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
 		synchronized(processes){
 			this.getProcessTree().syncSourceCodeBreakpoints(processes);
 		}
-		this.reloadModel(null);
+		reloadModel(null);
 	}
 
 	/**
@@ -346,7 +306,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 		synchronized(processes){
 			this.getProcessTree().syncSourceCodeBreakpoints(processes);
 		}
-		this.reloadModel(null);
+		reloadModel(null);
 	}
 
 	/**
@@ -356,8 +316,8 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 *            {@link ProcessInstance} to be added.
 	 */
 	public void addProcessInstance(ProcessInstance processInstance) {
-		/*ProcessTreeNode newNode = */getProcessTree().add(processInstance, m_dataComm);
-		reloadModel(getProcessTree());
+		ProcessTreeNode newNode = getProcessTree().add(processInstance, m_dataComm);
+		reloadModel(newNode);
 	}
 	
 
@@ -371,6 +331,5 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 		ProcessTreeNode parentOfRemovedNode = getProcessTree().remove(processInstance);
 		reloadModel(parentOfRemovedNode);		
 	}
-
 }
 

@@ -17,11 +17,11 @@ import com.sun.java.treetable.example.TreeTableModel;
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
+public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel{
 	private static final long serialVersionUID = 966338890140366722L;
 	
-	private final String[] m_columns = { "Visible", "Tool Name", "ID" };
-	private final Class<?>[] m_classTypes = { Boolean.class, TreeTableModel.class, Integer.class };
+	private final String[] m_columns = {"Visible", "Tool Name", "ID"};
+	private final Class<?>[] m_classTypes = {Boolean.class, TreeTableModel.class, Integer.class};
 
 	protected static final int VISIBLE_COLUMN = 0;
 	protected static final int TOOL_COLUMN = 1;
@@ -35,7 +35,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 * @param root
 	 *            the TreeNode which represents the rootnode
 	 */
-	public ToolTreeModel(TreeNode root) {
+	public ToolTreeModel(TreeNode root){
 		super(root);
 	}
 	
@@ -43,7 +43,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 * Sets the parent of the tree table
 	 * @param table the new parent
 	 */
-	public void setParent(ToolTreeTable table) {
+	public void setParent(ToolTreeTable table){
 		this.m_table = table;
 	}
 
@@ -52,7 +52,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 * 
 	 * @return The index of columns
 	 */
-	public int getColumnCount() {
+	public int getColumnCount(){
 		return m_columns.length;
 	}
 
@@ -63,7 +63,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 *            the index of the specified column.
 	 * @return The name of the column
 	 */
-	public String getColumnName(int column) {
+	public String getColumnName(int column){
 		return m_columns[column];
 	}
 
@@ -74,7 +74,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 *            the index of the specified column.
 	 * @return The class of the column
 	 */
-	public Class< ? > getColumnClass(int column) {
+	public Class< ? > getColumnClass(int column){
 		return m_classTypes[column];
 	}
 
@@ -87,7 +87,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 *            the index of the specified column.
 	 * @return The object of the cell of the specified column/node
 	 */
-	public Object getValueAt(Object o, int column) {
+	public Object getValueAt(Object o, int column){
 		ToolTreeNode node = (ToolTreeNode) o;
 		switch(column){
 			case VISIBLE_COLUMN:
@@ -97,7 +97,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 			case ID_COLUMN:
 				return Integer.valueOf(node.getId());
 			default:
-				// not existing column
+				// non-existing column
 				return null;
 		}
 	}
@@ -113,7 +113,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 * @return false true if column type is Visible , else returns false because
 	 *         cells are not editable.
 	 */
-	public boolean isCellEditable(Object o, int column) {
+	public boolean isCellEditable(Object o, int column){
 		return column == VISIBLE_COLUMN || column == TOOL_COLUMN;
 	}
 
@@ -128,9 +128,9 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 * @param column
 	 *            the index of the specified column.
 	 */
-	public void setValueAt(Object newValue, Object node, int column) {
+	public void setValueAt(Object newValue, Object node, int column){
 		// FilterListener should be set.
-		if (column == VISIBLE_COLUMN && newValue instanceof Boolean) {
+		if(column == VISIBLE_COLUMN && newValue instanceof Boolean){
 			ToolTreeNode treeNode = (ToolTreeNode) node;
 			boolean isVisible = ((Boolean) newValue).booleanValue();
 			treeNode.setVisible(isVisible);
@@ -140,17 +140,16 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 			 * Should be recursive, but the whole code isn't set up to be recursive. 
 			 * Used a second while loop instead.
 			 */
-			Enumeration< ? > children = treeNode.children();
-			while (children.hasMoreElements()) {
+			Enumeration<?> children = treeNode.children();
+			while (children.hasMoreElements()){
 				ToolTreeNode child = (ToolTreeNode) children.nextElement();
 				child.setVisible(isVisible);
 				
 				
-				Enumeration< ? > childrenofChild = child.children();
-				while (childrenofChild.hasMoreElements()) {
+				Enumeration<?> childrenofChild = child.children();
+				while(childrenofChild.hasMoreElements()){
 					ToolTreeNode childofChild = (ToolTreeNode) childrenofChild.nextElement();
 					childofChild.setVisible(isVisible);
-					
 				}
 			}
 		}
@@ -164,32 +163,32 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 *            the ToolInstance
 	 * @param dataComm an instance of the DataComm
 	 */
-	public void addToolInstance(ToolInstance toolInstance, DataComm dataComm) {
+	public void addToolInstance(ToolInstance toolInstance, DataComm dataComm){
 		boolean isAdded = false;
 		ToolTreeNode root = (ToolTreeNode) getRoot();
 
 		String toolName = toolInstance.getToolName();
 
-		Enumeration< ? > children = root.children();
+		Enumeration<?> children = root.children();
 
-		while (children.hasMoreElements()) {
+		while(children.hasMoreElements()){
 			ToolTreeNode node = (ToolTreeNode) children.nextElement();
-			if (node.getName().equals(toolName)) {
+			if(node.getName().equals(toolName)){
 				addOrCreateParent(root, node, toolInstance, dataComm);
 				isAdded = true;
 				break;
 			}
 		}
-		if (!isAdded) {
+		if(!isAdded){
 			ToolTreeNode newChild = new ToolTreeNode(toolInstance);
 			root.add(newChild);
-			if (root.isVisible()) {
+			if(root.isVisible()){
 				dataComm.getFilterSync().addToolInstance(toolInstance);
 				newChild.setVisible(true);
 			}
 		}
 
-		if (m_table != null) {
+		if(m_table != null){
 			m_table.reloadModel();
 		}
 	}
@@ -207,19 +206,17 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 *            ToolInstance to add.
 	 * @param dataComm an instance of the DataComm
 	 */
-	protected void addOrCreateParent(DefaultMutableTreeNode root,
-			ToolTreeNode sameNameNode, ToolInstance toolInstance,
-			DataComm dataComm) {
+	protected void addOrCreateParent(DefaultMutableTreeNode root, ToolTreeNode sameNameNode, ToolInstance toolInstance, DataComm dataComm){
 		ToolTreeNode newNode = new ToolTreeNode(toolInstance);
 
-		if (!sameNameNode.hasToolInstance()) {
+		if(!sameNameNode.hasToolInstance()){
 			sameNameNode.add(newNode);
-			if (sameNameNode.isVisible()) {
+			if(sameNameNode.isVisible()){
 				dataComm.getFilterSync().addToolInstance(toolInstance);
 				newNode.setVisible(true);
 			}
 
-		} else {
+		}else{
 			sameNameNode.removeFromParent();
 
 			ToolTreeNode newParent = new ToolTreeNode();
@@ -227,7 +224,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 			sameNameNode.setParent(newParent);
 
 			newParent.add(newNode);
-			if (newParent.isVisible()) {
+			if(newParent.isVisible()){
 				dataComm.getFilterSync().addToolInstance(toolInstance);
 				newNode.setVisible(true);
 			}
@@ -242,16 +239,15 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 * @param toolInstance
 	 *            the ToolInstance that needs to be removed
 	 */
-	public void removeToolInstance(ToolInstance toolInstance) {
+	public void removeToolInstance(ToolInstance toolInstance){
 		ToolTreeNode root = (ToolTreeNode) getRoot();
 		int toolInstanceId = toolInstance.getToolID();
 
-		ToolTreeNode node = findToolTreeNodeByToolInstanceId(root,
-				toolInstanceId);
+		ToolTreeNode node = findToolTreeNodeByToolInstanceId(root, toolInstanceId);
 
 		node.remove();
 		
-		if (m_table != null) {
+		if(m_table != null){
 			m_table.reloadModel();
 		}
 		/*
@@ -274,17 +270,15 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel {
 	 *            the id of the ToolInstance thats needs to be found
 	 * @return the ToolInstance with the specified toolInstanceId
 	 */
-	public ToolTreeNode findToolTreeNodeByToolInstanceId(ToolTreeNode parent,
-			int toolInstanceId) {
-		if (parent.getId() != -1 && parent.getId() == toolInstanceId) {
+	public ToolTreeNode findToolTreeNodeByToolInstanceId(ToolTreeNode parent, int toolInstanceId) {
+		if(parent.getId() != -1 && parent.getId() == toolInstanceId){
 			return parent;
 		}
-		Enumeration< ? > children = parent.children();
+		Enumeration<?> children = parent.children();
 		ToolTreeNode foundNode = null;
-		while (children.hasMoreElements() && foundNode == null) {
+		while(children.hasMoreElements() && foundNode == null){
 			ToolTreeNode child = (ToolTreeNode) children.nextElement();
-			foundNode = findToolTreeNodeByToolInstanceId(child,
-					toolInstanceId);
+			foundNode = findToolTreeNodeByToolInstanceId(child, toolInstanceId);
 		}
 		return foundNode;
 	}	

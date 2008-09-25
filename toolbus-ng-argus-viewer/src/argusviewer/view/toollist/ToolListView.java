@@ -1,6 +1,5 @@
 package argusviewer.view.toollist;
 
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -8,14 +7,13 @@ import javax.swing.table.TableColumnModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-
 /**
  * The component that is returned by the plugin.
  *
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-public class ToolListView extends JPanel {
+public class ToolListView extends JPanel{
 	private static final long serialVersionUID = 7849683181858113173L;
 
 	private ToolTreeTable m_toolTreeTable;
@@ -24,16 +22,20 @@ public class ToolListView extends JPanel {
     private static final int TOOL_NAME_COLUMN_WIDTH = -1;
     private static final int ID_COLUMN_WIDTH = 50;
 
-    //Minimum width of a column is 15.
+    // Minimum width of a column is 15.
     private static final int MIN_COLUMN_WIDTH = 15;
-
+    
+    public ToolListView(){
+    	super();
+    }
+    
     /**
      * Creates the ToolTreeTable with the model and sets the column widths.
      *
      * @param toolTreeModel the Model for the table.
 	 * @param toolListController toolListController
      */
-    protected void createTable(ToolTreeModel toolTreeModel, ToolListController toolListController) {
+    protected void createTable(ToolTreeModel toolTreeModel, ToolListController toolListController){
         setLayout(new BorderLayout());
         m_toolTreeTable = new ToolTreeTable(toolTreeModel, toolListController);
         toolTreeModel.setParent(m_toolTreeTable);
@@ -54,18 +56,18 @@ public class ToolListView extends JPanel {
      * @param toolNameColumnWidth Max with of Column 2
      * @param idColumnWidth       Max with of Column 3
      */
-    protected void setColumnWidth(int visibleColumnWidth, int toolNameColumnWidth, int idColumnWidth) {
+    protected void setColumnWidth(int visibleColumnWidth, int toolNameColumnWidth, int idColumnWidth){
         TableColumnModel columnModel = m_toolTreeTable.getColumnModel();
 
-        if (visibleColumnWidth > MIN_COLUMN_WIDTH) {
+        if(visibleColumnWidth > MIN_COLUMN_WIDTH){
             columnModel.getColumn(ToolTreeModel.VISIBLE_COLUMN).setMaxWidth(visibleColumnWidth);
         }
 
-        if (toolNameColumnWidth > MIN_COLUMN_WIDTH) {
+        if(toolNameColumnWidth > MIN_COLUMN_WIDTH){
             columnModel.getColumn(ToolTreeModel.TOOL_COLUMN).setMaxWidth(toolNameColumnWidth);
         }
 
-        if (idColumnWidth > MIN_COLUMN_WIDTH) {
+        if(idColumnWidth > MIN_COLUMN_WIDTH){
             columnModel.getColumn(ToolTreeModel.ID_COLUMN).setMaxWidth(idColumnWidth);
         }
     }
@@ -73,17 +75,16 @@ public class ToolListView extends JPanel {
     /**
      * Test if the refresh method is called
      */
-    public void refresh() {
+    public void refresh(){
         m_toolTreeTable.refresh();
     }
-
 
     /**
      * Sets the table.
      *
      * @param toolTreeTable set the table
      */
-    protected void setToolTreeTable(ToolTreeTable toolTreeTable) {
+    protected void setToolTreeTable(ToolTreeTable toolTreeTable){
         this.m_toolTreeTable = toolTreeTable;
 	}
 }

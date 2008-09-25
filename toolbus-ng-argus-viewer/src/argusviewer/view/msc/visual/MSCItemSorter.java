@@ -9,9 +9,8 @@ import prefuse.visual.sort.ItemSorter;
  * 
  * @author Riccardo Lippolis
  * @author Johnny Eradus
- *
  */
-public class MSCItemSorter extends ItemSorter {
+public class MSCItemSorter extends ItemSorter{
 	protected static final int DECORATOR_SCORE = 1;
 	protected static final int MESSAGE_SCORE = 2;
 	protected static final int DEFAULT_SCORE = 3;
@@ -31,12 +30,12 @@ public class MSCItemSorter extends ItemSorter {
 	 * @return The score for the given VisualItem
 	 * 
 	 */
-	public int score(VisualItem item) {
-    	if (item instanceof DecoratorItem) {
+	public int score(VisualItem item){
+    	if(item instanceof DecoratorItem){
     		return DECORATOR_SCORE;
-    	} else if (item.getRenderer() instanceof MessageRenderer) {
+    	}else if(item.getRenderer() instanceof MessageRenderer){
     		return MESSAGE_SCORE;
-    	} else {
+    	}else{
     		return DEFAULT_SCORE;
     	}
     }

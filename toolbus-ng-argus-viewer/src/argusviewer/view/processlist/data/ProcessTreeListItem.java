@@ -29,7 +29,7 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 *            The ProcessInstance of this item.
 	 * @param dataComm The DataComm instance that will be used
 	 */
-	public ProcessTreeListItem(ProcessInstance processInstance, DataComm dataComm) {
+	public ProcessTreeListItem(ProcessInstance processInstance, DataComm dataComm){
 		this(processInstance, dataComm, false, false);
 	}
 
@@ -45,8 +45,7 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * @param filter
 	 *            Indicates if a filter is set on this instance.
 	 */
-	private ProcessTreeListItem(ProcessInstance processInstance,
-			DataComm dataComm, boolean breakPoint, boolean filter) {
+	private ProcessTreeListItem(ProcessInstance processInstance, DataComm dataComm, boolean breakPoint, boolean filter){
 		m_processInstance = processInstance;
 		m_breakPoint = breakPoint;
 		m_filter = filter;
@@ -60,7 +59,7 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * 
 	 * @return the {@link ProcessInstance} of this item.
 	 */
-	public ProcessInstance getProcessInstance() {
+	public ProcessInstance getProcessInstance(){
 		return m_processInstance;
 	}
 
@@ -69,7 +68,7 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * 
 	 * @return the name of the {@link ProcessInstance}.
 	 */
-	public String getProcessInstanceName() {
+	public String getProcessInstanceName(){
 		return m_processInstance.getProcessName();
 	}
 
@@ -78,7 +77,7 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * 
 	 * @return the ID of the {@link ProcessInstance} of this item.
 	 */
-	public int getProcessInstanceID() {
+	public int getProcessInstanceID(){
 		return m_processInstance.getProcessId();
 	}
 
@@ -87,7 +86,7 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * 
 	 * @return if the current item has a breakpoint set.
 	 */
-	public boolean hasBreakPoint() {
+	public boolean hasBreakPoint(){
 		return m_breakPoint;
 	}
 
@@ -97,11 +96,11 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * @param breakPoint
 	 *            indicates if a breakpoint is set or not.
 	 */
-	public void setBreakPoint(boolean breakPoint) {
-		if (m_breakPoint != breakPoint) {
-			if (breakPoint) {
+	public void setBreakPoint(boolean breakPoint){
+		if(m_breakPoint != breakPoint){
+			if(breakPoint){
 				m_dataComm.getBreakPointSync().addBreakpoint(m_processInstance);
-			} else {
+			}else{
 				m_dataComm.getBreakPointSync().removeBreakpoint(m_processInstance);
 			}
 		}
@@ -113,7 +112,7 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * 
 	 * @return if the current item has a filter set.
 	 */
-	public boolean hasFilter() {
+	public boolean hasFilter(){
 		return m_filter;
 	}
 
@@ -123,7 +122,7 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * @param filter
 	 *            indicates if a filter is set or not.
 	 */
-	public void setFilter(boolean filter) {		
+	public void setFilter(boolean filter){		
 		m_filter = filter;
 	}
 	
@@ -131,22 +130,22 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * Checks if the item has been removed
 	 * @return the removed status
 	 */
-	public boolean isRemoved() {
+	public boolean isRemoved(){
 		return m_removed;
 	}
 	
 	/**
 	 * remove the item
 	 */
-	public void remove() {
+	public void remove(){
 		m_removed = true;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void addBreakpoint(ProcessInstance processInstance) {
-		if (m_processInstance == processInstance) {
+	public void addBreakpoint(ProcessInstance processInstance){
+		if (m_processInstance == processInstance){
 			m_breakPoint = true;
 		}		
 	}
@@ -154,8 +153,8 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void removeBreakpoint(ProcessInstance processInstance) {
-		if (m_processInstance == processInstance) {
+	public void removeBreakpoint(ProcessInstance processInstance){
+		if(m_processInstance == processInstance){
 			m_breakPoint = false;
 		}	
 	}
@@ -165,13 +164,13 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * 
 	 * @param visible true if visible, false otherwise
 	 */
-	public void setFilterAndPropagate(boolean visible) {
+	public void setFilterAndPropagate(boolean visible){
 		ArrayList<ProcessInstance> list = new ArrayList<ProcessInstance>(1);
 		list.add(m_processInstance);
 		m_filter = visible;
-		if (visible) {
+		if(visible){
 			m_dataComm.getFilterSync().addProcessInstance(list);
-		} else {
+		}else{
 			m_dataComm.getFilterSync().removeProcessInstance(list);
 		}
 	}

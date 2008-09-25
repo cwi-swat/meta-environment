@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
  *
  * @author Roberto van der Linden
  */
-public class ToolTreeMouseListener extends MouseAdapter {
+public class ToolTreeMouseListener extends MouseAdapter{
 	private final ToolTreeTable m_toolTreeTable;
 
 	/**
@@ -16,7 +16,7 @@ public class ToolTreeMouseListener extends MouseAdapter {
 	 *
 	 * @param toolTreeTable toolTreeTable
 	 */
-	public ToolTreeMouseListener(ToolTreeTable toolTreeTable) {
+	public ToolTreeMouseListener(ToolTreeTable toolTreeTable){
 		m_toolTreeTable = toolTreeTable;
 	}
 
@@ -25,7 +25,7 @@ public class ToolTreeMouseListener extends MouseAdapter {
 	 *
 	 * @param e mouseEvent
 	 */
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e){
 		m_toolTreeTable.sendClickEvent(e.getClickCount(), e.getX(), e.getY());
 	}
 }

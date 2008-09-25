@@ -14,7 +14,7 @@ import argusviewer.view.msc.data.Statement;
 /**
  * @author: Arne Timmerman
  */
-public class MSCVisualizationUtil {
+public class MSCVisualizationUtil{
 	
 	private MSCVisualizationUtil(){
 		super();
@@ -27,26 +27,26 @@ public class MSCVisualizationUtil {
 	 * @param visualization the prefuse visualization to check
 	 * @return true if the target Entity is visible
 	 */
-	public static boolean isTargetEntityVisible(Visualization visualization, VisualItem currentStatement) {
+	public static boolean isTargetEntityVisible(Visualization visualization, VisualItem currentStatement){
 		int timestamp = ((Integer) currentStatement.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
 
 		// Find all messages that are send on this timestamp
 		String searchText = Message.SOURCEID_FIELDNAME + " == " + timestamp;
 		Iterator<VisualItem> matchingMessages = visualization.items(Message.TABLE_NAME, ExpressionParser.predicate(searchText));
 
-		if (matchingMessages.hasNext()) {
+		if(matchingMessages.hasNext()){
 			VisualItem message = matchingMessages.next();
 
 			ArrayList<String> messageTargetIds = (ArrayList<String>) message.get(Message.TARGETIDS_FIELDNAME);
 
-			for (String targetId : messageTargetIds) {
+			for(String targetId : messageTargetIds){
 				String entitySearchText = "CONCAT(" + Entity.NAME_FIELDNAME + "," + Entity.ID_FIELDNAME + ")" + " == '" + targetId + "'";
 
 				Iterator<VisualItem> targetEntities = visualization.items(Entity.TABLE_NAME, ExpressionParser.predicate(entitySearchText));
-				if (targetEntities.hasNext()) {
+				if(targetEntities.hasNext()){
 					VisualItem targetEntity = targetEntities.next();
 
-					if (targetEntity.isVisible()) {
+					if(targetEntity.isVisible()){
 						return true;
 					}
 				}
@@ -63,14 +63,14 @@ public class MSCVisualizationUtil {
 	 * @param timestamp the timestamp of the execution of the statement
 	 * @return the visual representation of the Statement, null if there exists no Statement with the properties
 	 */
-	public static VisualItem getStatement(Visualization visualization, int timestamp) {
+	public static VisualItem getStatement(Visualization visualization, int timestamp){
 		Iterator<VisualItem> statementIterator = visualization.items(Statement.TABLE_NAME);
 
-		while (statementIterator.hasNext()) {
+		while(statementIterator.hasNext()){
 			VisualItem currentStatement = statementIterator.next();
 			int currentTimestamp = ((Integer) currentStatement.get(Statement.TIMESTAMP_FIELDNAME)).intValue();
 
-			if (currentTimestamp == timestamp) {
+			if(currentTimestamp == timestamp){
 				return currentStatement;
 			}
 		}
@@ -83,7 +83,7 @@ public class MSCVisualizationUtil {
 	 * This setting is stored in the settings file.
 	 * @return true if automatic statement collapse is enabled, else false
 	 */
-	public static boolean isStatementCollapseEnabled() {
+	public static boolean isStatementCollapseEnabled(){
 		ArgusSettings settings = ArgusSettings.getInstance();
 		String collapseSetting = settings.getAttribute("msc.collapse", "true");
 		return collapseSetting.equals("true");

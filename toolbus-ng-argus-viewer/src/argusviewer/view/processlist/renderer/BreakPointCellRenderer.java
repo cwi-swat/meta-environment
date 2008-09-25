@@ -9,7 +9,6 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import argusviewer.view.processlist.data.ProcessTreeNode.BreakPointType;
 
-
 /**
  * The BreakPointCellRenderer makes sure the right icon is show for the
  * different BreakPointTypes.
@@ -18,7 +17,7 @@ import argusviewer.view.processlist.data.ProcessTreeNode.BreakPointType;
  * @author H.Baggelaar
  * @author Jeldert Pol
  */
-public class BreakPointCellRenderer implements TableCellRenderer {
+public class BreakPointCellRenderer implements TableCellRenderer{
 	public static final ImageIcon ICON_LINE = new ImageIcon("resources/icons/breakpoint_source.png");
 	public static final ImageIcon ICON_PROCESS = new ImageIcon("resources/icons/breakpoint_process.png");
 	public static final ImageIcon ICON_BOTH = new ImageIcon("resources/icons/breakpoint_both.png");
@@ -28,7 +27,7 @@ public class BreakPointCellRenderer implements TableCellRenderer {
 	/**
 	 * The constructor of the BreakPointCellRenderer class
 	 */
-	public BreakPointCellRenderer() {
+	public BreakPointCellRenderer(){
 		super();
 		
 		m_button = new JButton();
@@ -55,33 +54,32 @@ public class BreakPointCellRenderer implements TableCellRenderer {
 	 *            The column of the table
 	 * @return Component the same thing as received
 	 */
-	public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column) {
-		if (isSelected) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column){
+		if(isSelected){
 			m_button.setBackground(table.getSelectionBackground());
-		} else {
+		}else{
 			m_button.setBackground(table.getBackground());
 
-			if (!(value instanceof BreakPointType)) {
+			if(!(value instanceof BreakPointType)){
 				return new JLabel("");
 			}
 			
 			BreakPointType bpType = (BreakPointType) value;
-			switch (bpType) {
-			case LINE:
-				m_button.setIcon(ICON_LINE);
-				break;
-			case PROCESS:
-				m_button.setIcon(ICON_PROCESS);
-				break;
-			case BOTH:
-				m_button.setIcon(ICON_BOTH);
-				break;
-			case NONE:
-				m_button.setIcon(null);
-				break;
-			default:
-				throw new RuntimeException("BreakPointCellRenderer: invalid BreakPointType: " + bpType);
+			switch (bpType){
+				case LINE:
+					m_button.setIcon(ICON_LINE);
+					break;
+				case PROCESS:
+					m_button.setIcon(ICON_PROCESS);
+					break;
+				case BOTH:
+					m_button.setIcon(ICON_BOTH);
+					break;
+				case NONE:
+					m_button.setIcon(null);
+					break;
+				default:
+					throw new RuntimeException("BreakPointCellRenderer: invalid BreakPointType: " + bpType);
 			}
 		}
 		return m_button;

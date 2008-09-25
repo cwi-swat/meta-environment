@@ -10,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
  *  
  * @author Qais & Bas
  */
-public class SourceFileTableModel extends AbstractTableModel {
+public class SourceFileTableModel extends AbstractTableModel{
 	private static final long serialVersionUID = -7623082694279943410L;
 	
 	private static final int COLUMN_COUNT = 3;
@@ -23,12 +23,15 @@ public class SourceFileTableModel extends AbstractTableModel {
 	/**
 	 * Constructs a new SourceFileTableModel. It is used to display the source
 	 * code, break points, line numbers, etc.
+	 * 
 	 * @param source the source of an toolbus file. The constructor expects
 	 * source code to be displayed.
 	 */
 	public SourceFileTableModel(String source){
+		super();
+		
 		String sourceFile = source;
-		m_lineNumbers = getTextLineNumber(sourceFile);
+		m_lineNumbers = countTextLineNumbers(sourceFile);
 		m_sourceLines = new Object [m_lineNumbers][COLUMN_COUNT];
 		int index = 0;
 		final int breakPointPosition = 0;
@@ -36,11 +39,11 @@ public class SourceFileTableModel extends AbstractTableModel {
 		final int text = 2;
 		int firstEndLine = 0;
 		int nextLine = 0;
-		while (sourceFile.length() != 0) {
-			if (sourceFile.contains("\n")) {
+		while (sourceFile.length() != 0){
+			if(sourceFile.contains("\n")){
 				firstEndLine = sourceFile.indexOf("\n");
 				nextLine = firstEndLine + 1;
-			} else {
+			}else{
 				firstEndLine = sourceFile.length();
 				nextLine = firstEndLine;
 			}
@@ -56,20 +59,20 @@ public class SourceFileTableModel extends AbstractTableModel {
 
 	/**
 	 * Returns the total line numbers.
+	 * 
 	 * @param source the source of an toolbus file
 	 * @return total line numbers of the source 
 	 */
-	public int getTextLineNumber(String source) {
-		
+	private static int countTextLineNumbers(String source){
 		String sourceFile = source;
 		int lineNumbers = 0;
 		int firstEndLine = 0;
 		int nextLine = 0;
-		while (sourceFile.length() != 0) {
-			if (sourceFile.contains("\n")) {
+		while(sourceFile.length() != 0){
+			if(sourceFile.contains("\n")){
 				firstEndLine = sourceFile.indexOf("\n");
 				nextLine = firstEndLine + 1;
-			} else {
+			}else{
 				firstEndLine = sourceFile.length();
 				nextLine = firstEndLine;
 			}
@@ -82,40 +85,37 @@ public class SourceFileTableModel extends AbstractTableModel {
 	/**
 	 * {@inheritDoc}
 	 */
-	public int getColumnCount() {
+	public int getColumnCount(){
 		return m_columnNames.length;
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */
-	public int getRowCount() {
+	public int getRowCount(){
 		return m_sourceLines.length;
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getColumnName(int col) {
+	public String getColumnName(int col){
 		return m_columnNames[col];
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object getValueAt(int row, int col) {
+	public Object getValueAt(int row, int col){
 		return m_sourceLines[row][col];
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean getBreakPoint(int lineNumber) {
+	public boolean getBreakPoint(int lineNumber){
 		boolean result = false;
-		if (lineNumber < m_lineNumbers && lineNumber >= 0) {
+		if(lineNumber < m_lineNumbers && lineNumber >= 0){
 			result = ((Boolean) m_sourceLines[lineNumber][0]).booleanValue();
 		}
 		return result;
@@ -124,9 +124,8 @@ public class SourceFileTableModel extends AbstractTableModel {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class<?> getColumnClass(int c) {
+	public Class<?> getColumnClass(int c){
 		return getValueAt(0, c).getClass();
-
 	}
 
 
@@ -134,10 +133,10 @@ public class SourceFileTableModel extends AbstractTableModel {
 	 * {@inheritDoc}
 	 * Put the first column on editable, and the others on non-editable
 	 */
-	public boolean isCellEditable(int row, int col) {
+	public boolean isCellEditable(int row, int col){
 		boolean result = true;
 		int firstColumn = 0;
-		if (col != firstColumn) {
+		if(col != firstColumn){
 			result = false;
 		}
 		return result;
@@ -147,31 +146,32 @@ public class SourceFileTableModel extends AbstractTableModel {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setValueAt(Object value, int row, int col) {
-		if (row < m_lineNumbers && col < COLUMN_COUNT) {
+	public void setValueAt(Object value, int row, int col){
+		if(row < m_lineNumbers && col < COLUMN_COUNT){
 			m_sourceLines[row][col] = value;
 			fireTableCellUpdated(row, col);
 		}
 	}
 	
-
 	/**
-	 * Sets a Breackpoint on an given line.
+	 * Sets a breakpoint on an given line.
+	 * 
 	 * @param value represents: is the checkbox checked or unchecked
 	 * @param row represents: the position of the checkbox / breakpoint
 	 */
-	public void setBreakPoint(boolean value, int row) {
-		if (row < m_lineNumbers && row >= 0) {
+	public void setBreakPoint(boolean value, int row){
+		if(row < m_lineNumbers && row >= 0){
 			m_sourceLines[row][0] = Boolean.valueOf(value);
 			fireTableCellUpdated(row, 0);
 		}
 	}
 	
-	/** returns the total lineNumbers of the script
+	/** 
+	 * returns the total lineNumbers of the script
+	 * 
 	 * @return lineNumbers
 	 */
-	public int getLineNumbers() {
+	public int getLineNumbers(){
 		return m_lineNumbers;
 	}
-	
 }

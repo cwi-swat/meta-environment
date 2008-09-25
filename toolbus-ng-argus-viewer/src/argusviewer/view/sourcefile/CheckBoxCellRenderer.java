@@ -14,13 +14,14 @@ import javax.swing.table.TableCellRenderer;
 
 /**
  * class CheckBoxCellRenderer 
+ * 
  * @author Qais & Bas
  *
  * implements a render for breakpoints
  * 
  * revision 1.0
  */
-public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
+public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor{
 	private static final long serialVersionUID = -1856670516526394234L;
 	
 	private static final ImageIcon ICONS_BREAKPOINT_SOURCE = new ImageIcon("resources/icons/breakpoint_source.png");
@@ -29,14 +30,16 @@ public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCel
 	private final JCheckBox m_checkBox;
 	
     /**
-     *  sets images and background of the checkbox
+     * sets images and background of the checkbox
      */
-    public CheckBoxCellRenderer() {
+    public CheckBoxCellRenderer(){
+    	super();
+    	
         m_checkBox = new JCheckBox(ICON_BREAKPOINT_SOURCE_TRANSPARANT);
         m_checkBox.setSelectedIcon(ICONS_BREAKPOINT_SOURCE);
         m_checkBox.setBackground(Color.WHITE);
-        m_checkBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
+        m_checkBox.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent actionEvent){
                 fireEditingStopped();
             }
         });
@@ -45,21 +48,21 @@ public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCel
 	/**
 	 * {@inheritDoc}
 	 */
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column){
         return getComp(Boolean.parseBoolean(value.toString()));
     }
     
 	/**
 	 * {@inheritDoc}
 	 */
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column){
         return getComp(Boolean.parseBoolean(value.toString()));
     }
 
 	/**
 	 * {@inheritDoc}
 	 */
-    private Component getComp(boolean aBoolean) {
+    private Component getComp(boolean aBoolean){
         m_checkBox.setSelected(aBoolean);
         return m_checkBox;
     }
@@ -67,7 +70,7 @@ public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCel
 	/**
 	 * {@inheritDoc}
 	 */
-    public Object getCellEditorValue() {
+    public Object getCellEditorValue(){
         return Boolean.valueOf(m_checkBox.isSelected());
     }
 }

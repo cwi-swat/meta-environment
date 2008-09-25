@@ -6,14 +6,12 @@ import prefuse.render.AbstractShapeRenderer;
 import prefuse.visual.VisualItem;
 
 /**
- * 
  * @author Johnny Eradus
  * @author Riccardo Lippolis
  * 
  * Base Renderer with standard functionality for the MessageSequenceChart
- * 
  */
-public abstract class AbstractMSCRenderer extends AbstractShapeRenderer {
+public abstract class AbstractMSCRenderer extends AbstractShapeRenderer{
 	public static final int BASESIZE = 100;
 
 	/**
@@ -24,17 +22,16 @@ public abstract class AbstractMSCRenderer extends AbstractShapeRenderer {
 	 *            The VisualItem to be drawn
 	 * @return The x and y coordinate
 	 */
-	protected Point2D getShapePosition(VisualItem item) {
+	protected Point2D getShapePosition(VisualItem item){
 		double xPos = item.getX();
-		if (Double.isNaN(xPos) || Double.isInfinite(xPos)) {
+		if(Double.isNaN(xPos) || Double.isInfinite(xPos)){
 			xPos = 0;
 		}
 		double yPos = item.getY();
-		if (Double.isNaN(yPos) || Double.isInfinite(yPos)) {
+		if(Double.isNaN(yPos) || Double.isInfinite(yPos)){
 			yPos = 0;
 		}
 
 		return new Point2D.Double(xPos, yPos);
 	}
-
 }

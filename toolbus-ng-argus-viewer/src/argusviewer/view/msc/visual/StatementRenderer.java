@@ -45,28 +45,28 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected Shape getRawShape(VisualItem item) {
-		if (item.canGet(Statement.STATEMENT_FIELDNAME, Statement.STATEMENT_FIELDTYPE)) {
+	protected Shape getRawShape(VisualItem item){
+		if (item.canGet(Statement.STATEMENT_FIELDNAME, Statement.STATEMENT_FIELDTYPE)){
 			double width;
 
 			String statement = (String) item.get(Statement.STATEMENT_FIELDNAME);
 
 			Point2D position = getShapePosition(item);
-			try {
+			try{
 				width = BASESIZE * item.getSize();
-			} catch (ArrayIndexOutOfBoundsException e) {
+			}catch (ArrayIndexOutOfBoundsException e){
 				Logger.getLogger("StatementRenderer").fine("Prefuse nonfatal ArrayIndexOutOfBoundsException");
 				Logger.getLogger("StatementRenderer").fine(e.toString());
 				return null;
 			}
 
-			if (isASyncCommunication(statement)) {
+			if(isASyncCommunication(statement)){
 				return getParallelogram(position.getX(), position.getY(), width);
-			} else if (isSyncCommunication(statement)) {
+			}else if(isSyncCommunication(statement)){
 				return getSixCorneredShape(position.getX(), position.getY(), width);
-			} else if (isToolCommunication(statement)) {
+			}else if(isToolCommunication(statement)){
 				return getRoundRectangle(position.getX(), position.getY());
-			} else {
+			}else{
 				return getRectangle(position.getX(), position.getY());
 			}
 		}
@@ -79,7 +79,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	 * @param y the center vertical coordinate to draw the shape
 	 * @return a shape object at the given coordinates
 	 */
-	private Shape getRectangle(double x, double y) {
+	private Shape getRectangle(double x, double y){
 		double xPos = x - RECTANGLE_WIDTH / 2;
 		double yPos = y - RECTANGLE_HEIGHT / 2;
 
@@ -94,7 +94,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	 * @param y the center vertical coordinate to draw the shape
 	 * @return a shape object at the given coordinates
 	 */
-	private Shape getRoundRectangle(double x, double y) {
+	private Shape getRoundRectangle(double x, double y){
 		double xPos = x - RECTANGLE_WIDTH / 2;
 		double yPos = y - RECTANGLE_HEIGHT / 2;
 
@@ -110,7 +110,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	 * @param width the width of the shape
 	 * @return a shape object at the given coordinates
 	 */
-	private Shape getParallelogram(double x, double y, double width) {
+	private Shape getParallelogram(double x, double y, double width){
 		float fx = (float) x;
 		float fy = (float) y;
 		float fwidth = (float) width;
@@ -136,7 +136,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	 * @param width the width of the shape
 	 * @return a shape object at the given coordinates
 	 */
-	private Shape getSixCorneredShape(double x, double y, double width) {
+	private Shape getSixCorneredShape(double x, double y, double width){
 		float fx = (float) x;
 		float fy = (float) y;
 		float fwidth = (float) width;
@@ -164,7 +164,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	 * @param statement the statement to question if it belongs to tool communication
 	 * @return true if the statement belongs to tool communication, else false
 	 */
-	private boolean isToolCommunication(String statement) {
+	private boolean isToolCommunication(String statement){
 		return isStatementOfType(statement, Statement.TOOL_COMMUNICATION);
 	}
 
@@ -172,7 +172,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	 * @param statement the statement to question if it belongs to synchronized communication
 	 * @return true if the statement belongs to synchronized communication, else false
 	 */
-	private boolean isSyncCommunication(String statement) {
+	private boolean isSyncCommunication(String statement){
 		return isStatementOfType(statement, Statement.SYNC_COMMUNICATION);
 	}
 
@@ -180,7 +180,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	 * @param statement the statement to question if it belongs to asynchronuous communication
 	 * @return true if the statement belongs to asynchronuous communication, else false
 	 */
-	private boolean isASyncCommunication(String statement) {
+	private boolean isASyncCommunication(String statement){
 		return isStatementOfType(statement, Statement.ASYNC_COMMUNICATION);
 	}
 
@@ -192,9 +192,9 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	 * @param statementTypes the list of statement types
 	 * @return true if the statement belongs to the given type, else false
 	 */
-	private boolean isStatementOfType(String statement, ArrayList<Class< ? extends StateElement>> statementTypes) {
-		for (Class< ? extends StateElement> statementType : statementTypes) {
-			if (statement.toLowerCase().startsWith(statementType.getSimpleName().toLowerCase())) {
+	private boolean isStatementOfType(String statement, ArrayList<Class<? extends StateElement>> statementTypes){
+		for(Class<? extends StateElement> statementType : statementTypes){
+			if(statement.toLowerCase().startsWith(statementType.getSimpleName().toLowerCase())){
 				return true;
 			}
 		}
@@ -204,7 +204,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected void drawShape(Graphics2D g, VisualItem item, Shape shape) {
+	protected void drawShape(Graphics2D g, VisualItem item, Shape shape){
 		super.drawShape(g, item, shape);
 		drawText(g, item, shape);
 	}
@@ -216,7 +216,7 @@ public class StatementRenderer extends AbstractMSCRenderer {
 	 * @param item  Item being drawn
 	 * @param shape Shape
 	 */
-	private void drawText(Graphics2D g, VisualItem item, Shape shape) {
+	private void drawText(Graphics2D g, VisualItem item, Shape shape){
 		int shapeWidth = (int) shape.getBounds().getWidth();
 
 		// Statement Text

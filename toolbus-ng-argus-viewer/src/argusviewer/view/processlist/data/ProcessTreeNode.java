@@ -1,12 +1,12 @@
 package argusviewer.view.processlist.data;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import argusviewer.toolbus.DataComm;
 
 import toolbus.process.ProcessInstance;
+import argusviewer.toolbus.DataComm;
 
 /**
  * The ProcessTreeNode is a JTree Data Model that is used by the JTreeTable
@@ -43,25 +43,15 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	}
 
 	/**
-	 * The constructor creates a process tree. By default it has no breakpoint,
-	 * and is visible. It also sets a {@link ProcessTreeListItem} as item.
-	 * 
-	 * @param item
-	 *            {@link ProcessTreeListItem}
-	 */
-	public ProcessTreeNode(ProcessTreeListItem item) {
-		// this();
-		setItem(item);
-	}
-
-	/**
 	 * Add a new {@link ProcessTreeListItem} to the children of the tree.
 	 * 
 	 * @param item
 	 *            a new ProcessTreeListItem
 	 */
-	private void addChild(ProcessTreeListItem item) {
-		ProcessTreeNode child = new ProcessTreeNode(item);	
+	private void addChild(ProcessTreeListItem item){
+		ProcessTreeNode child = new ProcessTreeNode();
+		child.setItem(item);
+		
 		item.setFilterAndPropagate(this.isVisible());		
 		add(child);
 	}
@@ -74,15 +64,15 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 *            The ID of the {@link ProcessTreeNode} to get.
 	 * @return A {@link ProcessTreeNode} matching the instanceID, or null.
 	 */
-	public ProcessTreeNode getTree(int instanceID) {
-		if (m_item != null && m_item.getProcessInstanceID() == instanceID) {
+	public ProcessTreeNode getTree(int instanceID){
+		if(m_item != null && m_item.getProcessInstanceID() == instanceID){
 			return this;
 		}
 
-		for (int i = 0; i < getChildCount(); i++) {
+		for(int i = 0; i < getChildCount(); i++){
 			ProcessTreeNode child = (ProcessTreeNode) getChildAt(i);
 			ProcessTreeNode search = child.getTree(instanceID);
-			if (search != null) {
+			if(search != null){
 				return search;
 			}
 		}
@@ -98,16 +88,15 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 *            The name of the {@link ProcessTreeNode} to get.
 	 * @return A {@link ProcessTreeNode} matching the instanceID, or null.
 	 */
-	public ProcessTreeNode getTree(String instanceName) {
-		if (m_item != null
-				&& m_item.getProcessInstanceName().equals(instanceName)) {
+	public ProcessTreeNode getTree(String instanceName){
+		if(m_item != null && m_item.getProcessInstanceName().equals(instanceName)){
 			return this;
 		}
 
-		for (int i = 0; i < getChildCount(); i++) {
+		for(int i = 0; i < getChildCount(); i++){
 			ProcessTreeNode child = (ProcessTreeNode) getChildAt(i);
 			ProcessTreeNode search = child.getTree(instanceName);
-			if (search != null) {
+			if(search != null){
 				return search;
 			}
 		}
@@ -121,7 +110,7 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * @param item
 	 *            ProcessTreeListItem
 	 */
-	private void setItem(ProcessTreeListItem item) {
+	private void setItem(ProcessTreeListItem item){
 		m_item = item;
 	}
 
@@ -134,7 +123,7 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * @param item
 	 *            the ProcessTreeListItem that will be added to the Tree
 	 */
-	private ProcessTreeNode addProcessListItem(ProcessTreeListItem item) {
+	private ProcessTreeNode addProcessListItem(ProcessTreeListItem item){
 		ProcessTreeNode tree = getTree(item.getProcessInstanceName());
 		if (tree == null) {
 			addChild(item);
@@ -144,7 +133,7 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 		ProcessTreeNode parent = (ProcessTreeNode) tree.getParent();
 		ProcessTreeNode root = (ProcessTreeNode) getRoot();
 
-		if (parent == root) {
+		if(parent == root){
 			tree.addChild(tree.getItem());
 			tree.setItem(null);
 			tree.addChild(item);
@@ -165,12 +154,9 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * @param processInstance
 	 *            the ProcessTreeNode that will be removed from the tree
 	 */
-	private ProcessTreeNode removeProcessInstance(
-			ProcessInstance processInstance) {
+	private ProcessTreeNode removeProcessInstance(ProcessInstance processInstance){
 		ProcessTreeNode tree = getTree(processInstance.getProcessId());
-		if (tree == null) {
-			return null;
-		}
+		if(tree == null) return null;
 
 		tree.getItem().remove();
 		return tree;
@@ -195,8 +181,8 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the name of the TreeNode
 	 */
-	public String toString() {
-		if (isRoot()) {
+	public String toString(){
+		if(isRoot()){
 			return "Processes";
 		}
 		return getProcessName();
@@ -208,8 +194,8 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return The Process name
 	 */
-	public String getProcessName() {
-		if (m_item != null) {
+	public String getProcessName(){
+		if(m_item != null){
 			return m_item.getProcessInstanceName();
 		}
 		return ((ProcessTreeNode) getChildAt(0)).getProcessName();
@@ -220,16 +206,16 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return the BreakPointType
 	 */
-	public BreakPointType getBreakPointType() {		
-		if (this.isRoot()) {
+	public BreakPointType getBreakPointType(){		
+		if(this.isRoot()){
 			return BreakPointType.NONE;
 		}
 		
-		if (m_hasSourceCodeBreakpoint && hasProcessBreakpoint()) {
+		if(m_hasSourceCodeBreakpoint && hasProcessBreakpoint()){
 			return BreakPointType.BOTH;
-		} else if (m_hasSourceCodeBreakpoint) {
+		}else if (m_hasSourceCodeBreakpoint){
 			return BreakPointType.LINE;
-		} else if (hasProcessBreakpoint()) {
+		}else if (hasProcessBreakpoint()){
 			return BreakPointType.PROCESS;
 		}
 		return BreakPointType.NONE;
@@ -242,14 +228,14 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return isVisible
 	 */
-	public boolean isVisible() {
-		if (m_item != null) {
+	public boolean isVisible(){
+		if(m_item != null){
 			return m_item.hasFilter();
-		} else if (getChildCount() > 0) {
+		}else if (getChildCount() > 0){
 			// If all children of process group are visible this one is as well.
-			for (int index = 0; index < getChildCount(); index++) {
+			for(int index = 0; index < getChildCount(); index++){
 				ProcessTreeNode node = (ProcessTreeNode) getChildAt(index);
-				if (!node.isVisible()) {
+				if (!node.isVisible()){
 					return false;
 				}
 			}
@@ -264,7 +250,7 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return ProcessTreeListItem
 	 */
-	public ProcessTreeListItem getItem() {
+	public ProcessTreeListItem getItem(){
 		return m_item;
 	}
 
@@ -273,9 +259,9 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return ID from the treenode
 	 */
-	public String getID() {
-		if (isLeaf()) {
-			return "" + m_item.getProcessInstanceID();
+	public String getID(){
+		if(isLeaf()){
+			return String.valueOf(m_item.getProcessInstanceID());
 		}
 		return "";
 	}
@@ -289,7 +275,7 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * @return A {@link ProcessTreeNode}, containing the added
 	 *         {@link ProcessInstance}.
 	 */
-	public ProcessTreeNode add(ProcessInstance processInstance, DataComm dataComm) {
+	public ProcessTreeNode add(ProcessInstance processInstance, DataComm dataComm){
 		ProcessTreeListItem item = new ProcessTreeListItem(processInstance, dataComm);
 		return addProcessListItem(item);
 	}
@@ -312,14 +298,14 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return removed status
 	 */
-	public boolean isRemoved() {
-		if (getItem() != null) {
+	public boolean isRemoved(){
+		if(getItem() != null){
 			return getItem().isRemoved();
 		}
 
-		for (int index = 0; index < getChildCount(); index++) {
+		for(int index = 0; index < getChildCount(); index++){
 			ProcessTreeNode node = (ProcessTreeNode) getChildAt(index);
-			if (!node.isRemoved()) {
+			if(!node.isRemoved()){
 				return false;
 			}
 		}
@@ -328,32 +314,35 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	}
 
 	/**
-	 * Returns wether or not the source code has a breakpoint in it.
+	 * Returns whether or not the source code has a breakpoint in it.
+	 * 
 	 * @return true when the source has a breakpoint, false otherwise
 	 */
-	public boolean hasSourceCodeBreakpoint() {
+	public boolean hasSourceCodeBreakpoint(){
 		return m_hasSourceCodeBreakpoint;
 	}
 
 	/**
-	 * Sets the wether or not the source has a breakpoint
-	 * @param hasSourceCodeBreakpoint a boolean that sets wether or not the source has a breakpoint
+	 * Sets the whether or not the source has a breakpoint
+	 * 
+	 * @param hasSourceCodeBreakpoint a boolean that sets whether or not the source has a breakpoint
 	 */
-	public void setSourceCodeBreakpoint(boolean hasSourceCodeBreakpoint) {
+	public void setSourceCodeBreakpoint(boolean hasSourceCodeBreakpoint){
 		this.m_hasSourceCodeBreakpoint = hasSourceCodeBreakpoint;
 	}
 	
 	/**
-	 * Returns wether or not the process instance has a breakpoint
+	 * Returns whether or not the process instance has a breakpoint
+	 * 
 	 * @return True when the process has a breakpoint, false otherwise
 	 */
-	public boolean hasProcessBreakpoint() {
-		if (m_item != null && m_item.hasBreakPoint()) {
-			return true;
-		} else if (getChildCount() > 0 && !isRoot()) {
-			for (int i = 0; i < getChildCount(); i++) {
+	public boolean hasProcessBreakpoint(){
+		if(m_item != null && m_item.hasBreakPoint()) return true;
+		
+		if(getChildCount() > 0 && !isRoot()){
+			for(int i = 0; i < getChildCount(); i++){
 				ProcessTreeNode myChild = (ProcessTreeNode) getChildAt(i);
-				if (myChild.getItem().hasBreakPoint()) {
+				if(myChild.getItem().hasBreakPoint()){
 					return true;
 				}
 			}
@@ -363,14 +352,15 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	}
 	
 	/**
-	 * Sets wether or not the process has a breakpoint
+	 * Sets whether or not the process has a breakpoint
+	 * 
 	 * @param value true when the process has a breakpoint
 	 */
-	public void setProcessBreakpoint(boolean value) {
-		if (m_item != null) {
+	public void setProcessBreakpoint(boolean value){
+		if(m_item != null){
 			m_item.setBreakPoint(value);
-		} else if (getChildCount() > 0 && !isRoot()) {
-			for (int i = 0; i < getChildCount(); i++) {
+		}else if(getChildCount() > 0 && !isRoot()){
+			for(int i = 0; i < getChildCount(); i++){
 				ProcessTreeNode myChild = (ProcessTreeNode) getChildAt(i);
 				myChild.setProcessBreakpoint(value);
 			}
@@ -379,16 +369,17 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	}
 
 	/**
-	 * Sets wether or not the node is visible
+	 * Sets whether or not the node is visible
+	 * 
 	 * @param value true when it is visible
 	 * @param filteredInstances the instances the value applies to
 	 */
-	public void setVisible(boolean value, ArrayList<ProcessInstance> filteredInstances) {
-		if (m_item != null) {
+	public void setVisible(boolean value, List<ProcessInstance> filteredInstances){
+		if(m_item != null){
 			m_item.setFilter(value);
 			filteredInstances.add(m_item.getProcessInstance());
-		} else if (getChildCount() > 0) {
-			for (int i = 0; i < getChildCount(); i++) {
+		}else if(getChildCount() > 0){
+			for(int i = 0; i < getChildCount(); i++){
 				ProcessTreeNode myChild = (ProcessTreeNode) getChildAt(i);
 				myChild.setVisible(value, filteredInstances);
 			}
@@ -400,13 +391,13 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @param processes a map of processes with source code breakpoints
 	 */
-	public void syncSourceCodeBreakpoints(Map<String, Integer> processes) {
-		for (int i = 0; i < this.getChildCount(); i++) {
+	public void syncSourceCodeBreakpoints(Map<String, Integer> processes){
+		for(int i = 0; i < this.getChildCount(); i++){
 			ProcessTreeNode rootChild = (ProcessTreeNode) this.getChildAt(i);
 			int numBreakpoints = processes.get(rootChild.toString()) != null ? processes.get(rootChild.toString()).intValue() : 0;
-			if (numBreakpoints > 0) {
+			if(numBreakpoints > 0){
 				rootChild.setSourceCodeBreakpoint(true);
-			} else {
+			}else{
 				rootChild.setSourceCodeBreakpoint(false);
 			}
 		} 

@@ -24,7 +24,7 @@ import prefuse.visual.VisualItem;
  *         Renderer for messages passed between entities.
  *         Note that messages are not drawed if one of the entities is invisible.
  */
-public class MessageRenderer extends AbstractShapeRenderer {
+public class MessageRenderer extends AbstractShapeRenderer{
 	private static final int ARROW_WIDTH = 10;
 	private static final int SOURCE_BLOCK_WIDTH = 10;
 	private static final int ARROW_HEIGHT = 5;
@@ -32,20 +32,17 @@ public class MessageRenderer extends AbstractShapeRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected Shape getRawShape(VisualItem item) {
+	protected Shape getRawShape(VisualItem item){
 		ArrayList<Double> targetXPositions = getTargetXPositions(item);
-		if (targetXPositions.size() == 0) {
+		if(targetXPositions.size() == 0){
 			return null;
 		}
 
 		GeneralPath messageShapes = new GeneralPath();
-		for (double targetXPos : targetXPositions) {
-
+		for(double targetXPos : targetXPositions){
 			// Only create an edge if source and target positions are
 			// not located in the sinks
-			if ((item.getX() != EntityLayout.INCOMING_SINK_X)
-					|| (targetXPos != EntityLayout.getOutgoingSinkX())) {
-
+			if((item.getX() != EntityLayout.INCOMING_SINK_X) || (targetXPos != EntityLayout.getOutgoingSinkX())){
 				Shape messageShape = createEdge(item.getX(), item.getY(), targetXPos);
 				messageShapes.append(messageShape, false);
 			}
@@ -68,27 +65,23 @@ public class MessageRenderer extends AbstractShapeRenderer {
 	 * @param item The VisualItem representing the message
 	 * @return The horizontal position of the target process or tool
 	 */
-	private ArrayList<Double> getTargetXPositions(VisualItem item) {
-
+	private ArrayList<Double> getTargetXPositions(VisualItem item){
 		ArrayList<Double> targetXPositions = new ArrayList<Double>();
 		ArrayList<String> targetIds = (ArrayList<String>) item.get(Message.TARGETIDS_FIELDNAME);
 
 		// Determine the x coordinates of all the target processes and tools
-		for (String targetId : targetIds) {
+		for(String targetId : targetIds){
+			String searchPredicateText = "CONCAT(" + Entity.NAME_FIELDNAME + "," + Entity.ID_FIELDNAME + ")" + " == '" + targetId + "'";
 
-			String searchPredicateText = "CONCAT(" + Entity.NAME_FIELDNAME + ","
-					+ Entity.ID_FIELDNAME + ")" + " == '" + targetId + "'";
+			Iterator<VisualItem> matchingEntities = item.getVisualization().items(Entity.TABLE_NAME, ExpressionParser.predicate(searchPredicateText));
 
-			Iterator<VisualItem> matchingEntities = item.getVisualization().items(
-					Entity.TABLE_NAME, ExpressionParser.predicate(searchPredicateText));
-
-			if (matchingEntities.hasNext()) {
+			if(matchingEntities.hasNext()){
 				VisualItem matchingEntity = matchingEntities.next();
 
 				// Only add target position if the Entity is visible
-				if (matchingEntity.isVisible()) {
+				if(matchingEntity.isVisible()){
 					targetXPositions.add(new Double(matchingEntity.getX()));
-				} else {
+				}else{
 					targetXPositions.add(new Double(EntityLayout.getOutgoingSinkX()));
 				}
 			}
@@ -107,7 +100,7 @@ public class MessageRenderer extends AbstractShapeRenderer {
 	 * @param endX The ending x coordinate of the edge
 	 * @return The created edge
 	 */
-	private Shape createEdge(double startX, double yPos, double endX) {
+	private Shape createEdge(double startX, double yPos, double endX){
 		double halfBlockWidth = SOURCE_BLOCK_WIDTH / 2.0;
 		Line2D messageLine = new Line2D.Double();
 		messageLine.setLine(
@@ -132,8 +125,7 @@ public class MessageRenderer extends AbstractShapeRenderer {
 
 		return messageShape;
 	}
-
-
+	
 	/**
 	 * Create a source block to put at the begin of an edge.
 	 *
@@ -141,7 +133,7 @@ public class MessageRenderer extends AbstractShapeRenderer {
 	 * @param centerY the center Y coordinate of the rectangle.
 	 * @return The created source block.
 	 */
-	private Rectangle2D createSourceBlock(double centerX, double centerY) {
+	private Rectangle2D createSourceBlock(double centerX, double centerY){
 		double halfBlockWidth = SOURCE_BLOCK_WIDTH / 2.0;
 		double startX = centerX - halfBlockWidth;
 		double startY = centerY - halfBlockWidth;
@@ -161,15 +153,15 @@ public class MessageRenderer extends AbstractShapeRenderer {
 	 * @param forward Whether or not the arrowhead is aimed forward (left to right)
 	 * @return The created arrowhead
 	 */
-	private Polygon createArrowhead(int x, int y, boolean forward) {
+	private Polygon createArrowhead(int x, int y, boolean forward){
 		Polygon messageArrowHead = new Polygon();
 		
-		if (forward) {
+		if(forward){
 			messageArrowHead.addPoint(x - 1, y);
 			messageArrowHead.addPoint(x - ARROW_WIDTH, y - ARROW_HEIGHT);
 			messageArrowHead.addPoint(x - ARROW_WIDTH, y + ARROW_HEIGHT);
 			messageArrowHead.addPoint(x - 1, y);
-		} else {
+		}else{
 			messageArrowHead.addPoint(x + 1, y);
 			messageArrowHead.addPoint(x + ARROW_WIDTH, y - ARROW_HEIGHT);
 			messageArrowHead.addPoint(x + ARROW_WIDTH, y + ARROW_HEIGHT);

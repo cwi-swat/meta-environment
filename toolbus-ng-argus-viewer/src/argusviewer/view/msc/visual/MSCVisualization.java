@@ -68,7 +68,7 @@ public class MSCVisualization{
 	 *
 	 * @param mscData the data model of the Message Sequence Chart
 	 */
-	public MSCVisualization(MSCData mscData) {
+	public MSCVisualization(MSCData mscData){
 		this(mscData, new Visualization());
 	}
 
@@ -79,7 +79,7 @@ public class MSCVisualization{
 	 * @param mscData	   the data model of the Message Sequence Chart
 	 * @param visualization the Prefuse Visualization of the Message Sequence Chart Visualization
 	 */
-	private MSCVisualization(MSCData mscData, Visualization visualization) {
+	private MSCVisualization(MSCData mscData, Visualization visualization){
 		this.mscData = mscData;
 		this.m_visualization = visualization;
 		
@@ -128,7 +128,7 @@ public class MSCVisualization{
 	/**
 	 * Sets up the actions for the visualization.
 	 */
-	private void createActions() {
+	private void createActions(){
 		ActionList actions = new ActionList();
 
 		ActionList colorActions = createColorActions();
@@ -148,7 +148,7 @@ public class MSCVisualization{
 	 *
 	 * @return an ActionList that contains all layout actions
 	 */
-	private ActionList createLayoutActions() {
+	private ActionList createLayoutActions(){
 		ActionList layout = new ActionList();
 
 		layout.add(new EntityLayout(Entity.TABLE_NAME, ENTITY_SWIMLANE_NAME));
@@ -164,7 +164,7 @@ public class MSCVisualization{
 	 *
 	 * @return an ActionList that contains all color actions
 	 */
-	private ActionList createColorActions() {
+	private ActionList createColorActions(){
 		ActionList colorActions = new ActionList();
 
 		ActionList entityColorActions = createEntityColorActions();
@@ -183,15 +183,11 @@ public class MSCVisualization{
 	 *
 	 * @return an ActionList that contains entity color actions
 	 */
-	private ActionList createEntityColorActions() {
-		ColorAction entityStroke = new ColorAction(Entity.TABLE_NAME,
-				VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
-		ColorAction entityText = new ColorAction(Entity.TABLE_NAME,
-				VisualItem.TEXTCOLOR, ColorLib.color(Color.BLACK));
-		ColorAction entityFill = new ColorAction(Entity.TABLE_NAME,
-				VisualItem.FILLCOLOR, ColorLib.color(Color.WHITE));
-		ColorAction swimlaneColor = new ColorAction(ENTITY_SWIMLANE_NAME,
-				VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
+	private ActionList createEntityColorActions(){
+		ColorAction entityStroke = new ColorAction(Entity.TABLE_NAME, VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
+		ColorAction entityText = new ColorAction(Entity.TABLE_NAME, VisualItem.TEXTCOLOR, ColorLib.color(Color.BLACK));
+		ColorAction entityFill = new ColorAction(Entity.TABLE_NAME, VisualItem.FILLCOLOR, ColorLib.color(Color.WHITE));
+		ColorAction swimlaneColor = new ColorAction(ENTITY_SWIMLANE_NAME, VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
 
 		entityFill.add(VisualItem.HIGHLIGHT, RGB_COLOR_ENTITY_HIGHLIGHTED);
 
@@ -212,12 +208,9 @@ public class MSCVisualization{
 	 * @return an ActionList that contains statement color actions
 	 */
 	private ActionList createStatementColorAction() {
-		ColorAction statementStroke = new ColorAction(Statement.TABLE_NAME,
-				VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
-		ColorAction statementFill = new ColorAction(Statement.TABLE_NAME,
-				VisualItem.FILLCOLOR, ColorLib.color(Color.WHITE));
-		ColorAction statementText = new ColorAction(Statement.TABLE_NAME,
-				VisualItem.TEXTCOLOR, ColorLib.color(Color.BLACK));
+		ColorAction statementStroke = new ColorAction(Statement.TABLE_NAME, VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
+		ColorAction statementFill = new ColorAction(Statement.TABLE_NAME, VisualItem.FILLCOLOR, ColorLib.color(Color.WHITE));
+		ColorAction statementText = new ColorAction(Statement.TABLE_NAME, VisualItem.TEXTCOLOR, ColorLib.color(Color.BLACK));
 
 		Predicate toolCommPredicate = getStatementComparePredicate(Statement.TOOL_COMMUNICATION);
 		statementFill.add(toolCommPredicate, RGB_COLOR_TOOL_COMMUNICATION);
@@ -241,10 +234,8 @@ public class MSCVisualization{
 	 * @return an ActionList that contains message color actions
 	 */
 	private ActionList createMessageColorActions() {
-		ColorAction messageStroke = new ColorAction(Message.TABLE_NAME,
-				VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
-		ColorAction messageFill = new ColorAction(Message.TABLE_NAME,
-				VisualItem.FILLCOLOR, ColorLib.color(Color.BLACK));
+		ColorAction messageStroke = new ColorAction(Message.TABLE_NAME, VisualItem.STROKECOLOR, ColorLib.color(Color.BLACK));
+		ColorAction messageFill = new ColorAction(Message.TABLE_NAME, VisualItem.FILLCOLOR, ColorLib.color(Color.BLACK));
 		messageFill.add(getMessageComparePredicate(Message.Type.ASYNC), RGB_COLOR_ASYNC_COMMUNICATION);
 		messageFill.add(getMessageComparePredicate(Message.Type.SYNC), RGB_COLOR_SYNC_COMMUNICATION);
 		messageFill.add(getMessageComparePredicate(Message.Type.TOOLCOMM), RGB_COLOR_TOOL_COMMUNICATION);
@@ -275,11 +266,11 @@ public class MSCVisualization{
 	 *                       search for.
 	 * @return The predicate
 	 */
-	private Predicate getStatementComparePredicate(ArrayList<Class< ? extends StateElement>> statementTypes) {
+	private Predicate getStatementComparePredicate(ArrayList<Class< ? extends StateElement>> statementTypes){
 		StringBuffer statementCmpPredicateText = new StringBuffer();
 
-		for (int i = 0; i < statementTypes.size(); i++) {
-			if (i != 0) {
+		for(int i = 0; i < statementTypes.size(); i++){
+			if(i != 0){
 				statementCmpPredicateText.append(" OR ");
 			}
 
@@ -312,7 +303,7 @@ public class MSCVisualization{
 	 * @param terminated Is the Entity terminated
 	 * @return The predicate
 	 */
-	private Predicate getTerminatedEntityComparePredicate(boolean terminated) {
+	private Predicate getTerminatedEntityComparePredicate(boolean terminated){
 		ColumnExpression msgTypeColExpr = new ColumnExpression(Entity.RUNNING_FIELDNAME);
 		ObjectLiteral msgTypeObjLit = new ObjectLiteral(Boolean.valueOf(!terminated));
 
@@ -325,7 +316,7 @@ public class MSCVisualization{
 	 * @param msgType The Message Type
 	 * @return The predicate
 	 */
-	private Predicate getMessageComparePredicate(Message.Type msgType) {
+	private Predicate getMessageComparePredicate(Message.Type msgType){
 		ColumnExpression msgTypeColExpr = new ColumnExpression(Message.TYPE_FIELDNAME);
 		ObjectLiteral msgTypeObjLit = new ObjectLiteral(msgType);
 
@@ -339,10 +330,10 @@ public class MSCVisualization{
 	 * @param entityType the type of the Entity
 	 * @param entityId   the Id of the Entity
 	 */
-	public void setEntityTerminated(int tick, Entity.Type entityType, int entityId) {
+	public void setEntityTerminated(int tick, Entity.Type entityType, int entityId){
 		VisualItem entity = getEntity(entityType, entityId, false);
 
-		if (entity != null) {
+		if(entity != null){
 			entity.set(Entity.RUNNING_FIELDNAME, Boolean.FALSE);
 			entity.set(Entity.ENDTICK_FIELDNAME, Integer.valueOf(tick));
 			entity.setHighlighted(false);
@@ -356,10 +347,10 @@ public class MSCVisualization{
 	 * @param entityType the type of the Entity to highlight
 	 * @param entityId   the id of the Entity to highlight
 	 */
-	public void setEntityHighlight(Entity.Type entityType, int entityId) {
+	public void setEntityHighlight(Entity.Type entityType, int entityId){
 		VisualItem entity = getVisibleEntity(entityType, entityId);
 
-		if (entity != null) {
+		if(entity != null){
 			removeEntityHighlights();
 
 			entity.setHighlighted(true);
@@ -376,12 +367,12 @@ public class MSCVisualization{
 	 * @param entityType the type of the Entity to highlight
 	 * @param entityName the name of the Entity to highlight
 	 */
-	public void setEntityHighlight(Entity.Type entityType, String entityName) {
+	public void setEntityHighlight(Entity.Type entityType, String entityName){
 		Iterator<VisualItem> entityIterator = m_visualization.visibleItems(Entity.TABLE_NAME);
 
 		removeEntityHighlights();
 
-		while (entityIterator.hasNext()) {
+		while(entityIterator.hasNext()){
 			VisualItem currentEntity = entityIterator.next();
 			Entity.Type currentEntityType = (Entity.Type) currentEntity.get(Entity.TYPE_FIELDNAME);
 			String currentEntityName = (String) currentEntity.get(Entity.NAME_FIELDNAME);
@@ -395,10 +386,10 @@ public class MSCVisualization{
 	/**
 	 * Remove the highlights of all Entities.
 	 */
-	private void removeEntityHighlights() {
+	private void removeEntityHighlights(){
 		TupleSet entityTuples = m_visualization.getVisualGroup(Entity.TABLE_NAME);
 		Iterator<VisualItem> entityIterator = entityTuples.tuples();
-		while (entityIterator.hasNext()) {
+		while(entityIterator.hasNext()){
 			VisualItem entity = entityIterator.next();
 			entity.setHighlighted(false);
 		}
@@ -412,7 +403,7 @@ public class MSCVisualization{
 	 * @param entityId   the unique identifies of the Entity (per type)
 	 * @return the visual representation of the Entity, null if there exists no Entity with the properties
 	 */
-	public VisualItem getVisibleEntity(Entity.Type entityType, int entityId) {
+	public VisualItem getVisibleEntity(Entity.Type entityType, int entityId){
 		return getEntity(entityType, entityId, true);
 	}
 
@@ -426,21 +417,21 @@ public class MSCVisualization{
 	 * @param visibleEntity the visibility of the Entity
 	 * @return the visual representation of the Entity, null if there exists no Entity with the properties
 	 */
-	private VisualItem getEntity(Entity.Type entityType, int entityId, boolean visibleEntity) {
+	private VisualItem getEntity(Entity.Type entityType, int entityId, boolean visibleEntity){
 		Iterator<VisualItem> entityIterator;
 
-		if (visibleEntity) {
+		if(visibleEntity){
 			entityIterator = m_visualization.visibleItems(Entity.TABLE_NAME);
-		} else {
+		}else{
 			entityIterator = m_visualization.items(Entity.TABLE_NAME);
 		}
 
-		while (entityIterator.hasNext()) {
+		while(entityIterator.hasNext()){
 			VisualItem currentEntity = entityIterator.next();
 			Entity.Type currentEntityType = (Entity.Type) currentEntity.get(Entity.TYPE_FIELDNAME);
 			int currentEntityId = ((Integer) currentEntity.get(Entity.ID_FIELDNAME)).intValue();
 
-			if ((currentEntityType == entityType) && (currentEntityId == entityId)) {
+			if((currentEntityType == entityType) && (currentEntityId == entityId)){
 				return currentEntity;
 			}
 		}
@@ -454,7 +445,7 @@ public class MSCVisualization{
 	 *
 	 * @return the activity that represents the executing of all actions
 	 */
-	public Activity refreshVisualization() {
+	public Activity refreshVisualization(){
 		return m_visualization.run(ACTIONS_ID);
 	}
 
@@ -468,7 +459,7 @@ public class MSCVisualization{
 	 * @param statement the statement
 	 * @return the visual representation of the Statement, null if there exists no such statement
 	 */
-	public VisualItem getVisibleStatement(Tuple statement) {
+	public VisualItem getVisibleStatement(Tuple statement){
 		return m_visualization.getVisualItem(Statement.TABLE_NAME, statement);
 	}
 
@@ -478,7 +469,7 @@ public class MSCVisualization{
 	 *
 	 * @return the Prefuse Visualization of the Message Sequence Chart Visualization
 	 */
-	public Visualization getVisualization() {
+	public Visualization getVisualization(){
 		return m_visualization;
 	}
 
@@ -487,7 +478,7 @@ public class MSCVisualization{
 	 *
 	 * @param visibleProcesses a list of ProcessInstances that should be visible
 	 */
-	public void setVisibleProcesses(List<ProcessInstance> visibleProcesses) {
+	public void setVisibleProcesses(List<ProcessInstance> visibleProcesses){
 		m_entityVisiblityFilter.setVisibleProcesses(visibleProcesses);
 	}
 
@@ -496,9 +487,7 @@ public class MSCVisualization{
 	 *
 	 * @param visibleTools a list of ToolInstances that should be visible
 	 */
-	public void setVisibleTools(List<ToolInstance> visibleTools) {
+	public void setVisibleTools(List<ToolInstance> visibleTools){
 		m_entityVisiblityFilter.setVisibleTools(visibleTools);
 	}
-
-
 }

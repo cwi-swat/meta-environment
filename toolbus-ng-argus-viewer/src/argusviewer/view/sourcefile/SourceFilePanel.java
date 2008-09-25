@@ -15,6 +15,7 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -22,8 +23,6 @@ import javax.swing.table.TableColumn;
 
 import argusviewer.toolbus.DataComm;
 import argusviewer.view.IView;
-
-
 
 /**
  * Classname SourceFilePanel
@@ -34,7 +33,7 @@ import argusviewer.view.IView;
  * @author Qais & Bas
  * @author M. van Beest
  */
-public class SourceFilePanel extends JPanel implements TableModelListener, IView {
+public class SourceFilePanel extends JPanel implements TableModelListener, IView{
 	private static final long serialVersionUID = 5903220341851733896L;
 	
 	private final JTable m_sourceCode;
@@ -55,12 +54,14 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 	 * Constructs a Panel with a line-number, breakpoint, source-text
 	 * 
 	 * @param dataComm the datacomm object for interaction with the ToolBus
-	 * @param scriptName the name of the script that is used by the toolbus
+	 * @param scriptName the name of the script that is used by the ToolBus
 	 * @param source the source of an toolbus file
 	 */
-	public SourceFilePanel(DataComm dataComm, String scriptName, String source) {
+	public SourceFilePanel(DataComm dataComm, String scriptName, String source){
+		super();
+		
 		m_dataComm = dataComm;
-		this.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		m_scriptName = scriptName;
 		m_sourceModel = new SourceFileTableModel(source);
 		m_sourceCode = new JTable(m_sourceModel);
@@ -68,9 +69,9 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 		m_sourceCode.setSelectionForeground(Color.BLACK);
 		m_sourceCode.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		// to set the background color back to default
-		m_sourceCode.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.getClickCount() == MouseEvent.BUTTON1) {
+		m_sourceCode.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				if(e.getClickCount() == MouseEvent.BUTTON1){
 					m_sourceCode.setSelectionBackground(SELECTED_ROW_COLOR);         
 			    }
 			}
@@ -95,47 +96,46 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 	    
 	    JScrollPane sourceScrollPane = new JScrollPane(m_sourceCode);
 	    sourceScrollPane.getViewport().setBackground(Color.WHITE);
-	    this.add(sourceScrollPane, BorderLayout.CENTER);
+	    add(sourceScrollPane, BorderLayout.CENTER);
 		setVisible(true);
 	}
 	
 	/**
-	 * @param tableModelEvent change-events from table model 
+	 * @param tableModelEvent change-events from table model
 	 * handles the breakpoint-status changes 
-	 * 
 	 */
-	public void tableChanged(TableModelEvent tableModelEvent) {
+	public void tableChanged(TableModelEvent tableModelEvent){
 		int row = tableModelEvent.getFirstRow();
 		boolean isChecked = m_sourceModel.getBreakPoint(row);
-		if (isChecked) {
+		if(isChecked){
 			m_dataComm.getBreakPointSync().addBreakpoint(m_scriptName, row);				
-		} else {
+		}else{
 			m_dataComm.getBreakPointSync().removeBreakpoint(m_scriptName, row);	
 		}
 	}		
 	
-	
     /**
      * add a breakpoint to a line number of a code
+     * 
      * @param lineNumber line number of a breakpoint 
      */
-    public void addBreakPoint(int lineNumber) {
+    public void addBreakPoint(int lineNumber){
     	boolean isSet = m_sourceModel.getBreakPoint(lineNumber);
     	boolean isChecked = true;
-    	if (!isSet) {
+    	if(!isSet){
     		m_sourceModel.setBreakPoint(isChecked, lineNumber);
     	}
 	}
 
-
     /**
-     *  remove a breakpoint to a line number of a code
+     * remove a breakpoint to a line number of a code
+     * 
      * @param lineNumber line number of a breakpoint
      */
-    public void removeBreakPoint(int lineNumber) {
+    public void removeBreakPoint(int lineNumber){
     	boolean isSet = m_sourceModel.getBreakPoint(lineNumber);
     	boolean isChecked = false;
-    	if (isSet) {
+    	if(isSet){
     		m_sourceModel.setBreakPoint(isChecked, lineNumber);
     		m_sourceCode.removeRowSelectionInterval(lineNumber, lineNumber);
     	}
@@ -143,14 +143,14 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
     
     /**
      * Gets the breakpoint on the given line number
+     * 
      * @param lineNumber the lineNumber of the script
      * @return break point status
      */
-    public boolean getBreakPointStatus(int lineNumber) {
+    public boolean getBreakPointStatus(int lineNumber){
     	boolean result = false;
     	int lineNumbers = m_sourceModel.getLineNumbers();
-    	if ((lineNumber >= 0)
-    		&& (lineNumber < lineNumbers)) {
+    	if((lineNumber >= 0) && (lineNumber < lineNumbers)){
     		result = m_sourceModel.getBreakPoint(lineNumber);
     	}
     	return result;
@@ -162,7 +162,7 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
      * @param startLine start position of the line in the script
      * @param endLine end position of the line in the script
      */
-    public void setStepLineSelection(int startLine, int endLine) {
+    public void setStepLineSelection(int startLine, int endLine){
     	setLineSelectionHighlight(startLine, endLine, STEP_ROW_COLOR);
 	}
 
@@ -172,7 +172,7 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
      * @param startLine start position of the line in the script
      * @param endLine end position of the line in the script
      */
-    public void setBreakpointLineSelection(int startLine, int endLine) {
+    public void setBreakpointLineSelection(int startLine, int endLine){
     	setLineSelectionHighlight(startLine, endLine, BREAKPOINT_ROW_COLOR);
 	}
 
@@ -183,82 +183,70 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 	 * @param endLine the line to end the highlight
 	 * @param backgroundColor the background color to use for the highlight
 	 */
-	private void setLineSelectionHighlight(int startLine, int endLine, Color backgroundColor) {
+	private void setLineSelectionHighlight(int startLine, int endLine, Color backgroundColor){
 		int lineNumbers = m_sourceModel.getLineNumbers();
-    	if ((startLine >= 0)
-    		&& (endLine < lineNumbers)
-    		&& (startLine <= endLine)) {
+    	if((startLine >= 0) && (endLine < lineNumbers) && (startLine <= endLine)){
    			m_sourceCode.setSelectionBackground(backgroundColor);
     		m_sourceCode.addRowSelectionInterval(startLine, endLine);
     	}
-	}
-
-    /**
-     * removes highlight
-     * @param startLine start position of the line in the script
-     * @param endLine end position of the line in the script
-     * 
-     */
-    public void removeLineSelection(int startLine, int endLine) {
-    	m_sourceCode.removeRowSelectionInterval(startLine, endLine);
 	}
 	
     /**
      * Remove all line selections in the current file.
      */
-    public void removeAllLineSelection() {
+    public void removeAllLineSelection(){
     	int scriptLineNumbers = m_sourceModel.getLineNumbers() - 1;
     	m_sourceCode.removeRowSelectionInterval(0, scriptLineNumbers);
 	}    
     
     /**
-     * scrolls to selected line number 
+     * scrolls to selected line number
+     * 
      * @param lineNumber the line number to scroll to
      * @param toTop display on the top row 
      * @return true if .. , false if 
      */
-    public boolean scrollToLine(int lineNumber, boolean toTop) {
-    	int lineNumbers = m_sourceModel.getLineNumbers();
+    public boolean scrollToLine(final int lineNumber, final boolean toTop){
+    	final int lineNumbers = m_sourceModel.getLineNumbers();
     	
-        if ((lineNumber >= 0) 
-        		&& (lineNumber < lineNumbers)) {        
-        	int viewColumnIndex = 0;
+        if((lineNumber >= 0) && (lineNumber < lineNumbers)){
+        	try{
+        		SwingUtilities.invokeAndWait(new Runnable(){
+        			public void run(){
+        				int viewColumnIndex = 0;
+        	        	
+        	        	Rectangle rect = m_sourceCode.getCellRect(lineNumber, viewColumnIndex, true);
+        	        	
+        	        	JViewport viewport = (JViewport) m_sourceCode.getParent();
         	
-        	Rectangle rect = m_sourceCode.getCellRect(lineNumber, viewColumnIndex, true);
-        	
-        	JViewport viewport = (JViewport) m_sourceCode.getParent();
-
-        	if (toTop) {
-	        	Rectangle lastRect = m_sourceCode.getCellRect(lineNumbers - 1, viewColumnIndex, true);
-	        	viewport.scrollRectToVisible(lastRect);
+        	        	if(toTop){
+        		        	Rectangle lastRect = m_sourceCode.getCellRect(lineNumbers - 1, viewColumnIndex, true);
+        		        	viewport.scrollRectToVisible(lastRect);
+        	        	}
+        	        	
+        	        	Point pt = viewport.getViewPosition();
+        	        	rect.setLocation(rect.x - pt.x, rect.y - pt.y);   
+        	        	
+        	        	// Scroll the area into view
+        	        	
+        	        	viewport.scrollRectToVisible(rect);
+        	        	
+        	        	m_sourceCode.repaint();
+        			}
+        		});
+        	}catch(Exception ex){
+        		throw new RuntimeException(ex);
         	}
-        	
-        	Point pt = viewport.getViewPosition();
-        	rect.setLocation(rect.x - pt.x, rect.y - pt.y);   
-        	
-        	// Scroll the area into view
-        	
-        	viewport.scrollRectToVisible(rect);
-        	
-        	m_sourceCode.repaint();
         	return true;
         }
         return false;
     }
 
-    /**
-     *  just for testing
-     *  @return JTabel m_sourceCode of this panel 
-     */
-    public JTable getJTable() {
-    	return m_sourceCode;
-	}
-
 	/**
 	 * Gets the preferred position in the window
 	 * @return the string position
 	 */
-    public String getPreferredPosition() {
+    public String getPreferredPosition(){
 		return "TopRight";
 	}
 
@@ -266,14 +254,14 @@ public class SourceFilePanel extends JPanel implements TableModelListener, IView
 	 * Gets the name of the plugin
 	 * @return the name of this plugin
 	 */
-	public String getPluginName() {
+	public String getPluginName(){
 		return m_scriptName;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Map<String, Container> getVisualComponents() {		
+	public Map<String, Container> getVisualComponents(){		
 		return null;
 	}
 }

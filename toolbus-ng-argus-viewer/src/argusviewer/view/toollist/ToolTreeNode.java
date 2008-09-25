@@ -8,7 +8,7 @@ import toolbus.tool.ToolInstance;
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-public class ToolTreeNode extends DefaultMutableTreeNode {
+public class ToolTreeNode extends DefaultMutableTreeNode{
 	private static final long serialVersionUID = 3234422961304199997L;
 	
 	private volatile ToolInstance m_toolInstance;
@@ -18,7 +18,20 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Default Constructor, used create rootNode
 	 */
-	public ToolTreeNode() {
+	public ToolTreeNode(){
+		super();
+		
+		m_isVisible = false;
+		m_isRemoved = false;
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param toolInstance the ToolInstance which belongs to the node.
+	 */
+	public ToolTreeNode(ToolInstance toolInstance){
+		this.m_toolInstance = toolInstance;
 		m_isVisible = false;
 		m_isRemoved = false;
 	}
@@ -28,19 +41,8 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return true if this node has a ToolInstance
 	 */
-	public boolean hasToolInstance() {
+	public boolean hasToolInstance(){
 		return m_toolInstance != null;
-	}
-
-	/**
-	 * Constructor
-	 *
-	 * @param toolInstance the ToolInstance which belongs to the node.
-	 */
-	public ToolTreeNode(ToolInstance toolInstance) {
-		this.m_toolInstance = toolInstance;
-		m_isVisible = false;
-		m_isRemoved = false;
 	}
 
 	/**
@@ -48,8 +50,8 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return the id of the Tool or null is the node is no tool
 	 */
-	public int getId() {
-		if (hasToolInstance()) {
+	public int getId(){
+		if(hasToolInstance()){
 			return m_toolInstance.getToolID();
 		}
 		return -1;
@@ -60,13 +62,13 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return the name of the tool or child
 	 */
-	public String getName() {
-		if (hasToolInstance()) {
+	public String getName(){
+		if(hasToolInstance()){
 			return m_toolInstance.getToolName();
-		} else if (getChildCount() > 0) {
+		}else if(getChildCount() > 0){
 			ToolTreeNode child = (ToolTreeNode) getFirstChild();
 			return child.getName();
-		} else {
+		}else{
 			//Root
 			return "Tools";
 		}
@@ -79,15 +81,15 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 * 
 	 * @return removed status
 	 */
-	public boolean isRemoved() {
-		if (m_toolInstance != null) {
+	public boolean isRemoved(){
+		if(m_toolInstance != null){
 			return m_isRemoved;
 		}
 		
-		for (int index = 0; index < getChildCount(); index++) {
+		for(int index = 0; index < getChildCount(); index++){
 			ToolTreeNode node = (ToolTreeNode) getChildAt(index);
 			
-			if (!node.isRemoved()) {
+			if(!node.isRemoved()){
 				return false;
 			}
 		}
@@ -99,7 +101,7 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 * Remove the node
 	 * 
 	 */
-	public void remove() {
+	public void remove(){
 		m_isRemoved = true;
 	}
 
@@ -108,7 +110,7 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return The visibility of the Tool.
 	 */
-	public boolean isVisible() {
+	public boolean isVisible(){
 		return m_isVisible;
 	}
 
@@ -117,7 +119,7 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @param isVisible the visibility of the tool.
 	 */
-	public void setVisible(boolean isVisible) {
+	public void setVisible(boolean isVisible){
 		this.m_isVisible = isVisible;
 	}
 
@@ -126,7 +128,7 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return the name of the ToolInstance.
 	 */
-	public String toString() {
+	public String toString(){
 		return getName();
 	}
 
@@ -135,7 +137,7 @@ public class ToolTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return  the ToolInstance of this node
 	 */
-	public ToolInstance getToolInstance() {
+	public ToolInstance getToolInstance(){
 		return m_toolInstance;
 	}
 }

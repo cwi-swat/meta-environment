@@ -32,7 +32,7 @@ public class StatementLayout extends Layout{
 	 *
 	 * @param group The group of visual items on which the layout will be applied
 	 */
-	public StatementLayout(MSCData mscData, String group) {
+	public StatementLayout(MSCData mscData, String group){
 		super(group);
 		
 		this.mscData = mscData;
@@ -41,24 +41,22 @@ public class StatementLayout extends Layout{
 	/**
 	 * {@inheritDoc}
 	 */
-	public void run(double frac) {
+	public void run(double frac){
 		double currentX;
 		double currentY = VERTICAL_OFFSET;
 		boolean statementCollapseEnabled = MSCVisualizationUtil.isStatementCollapseEnabled();
 
 		// This should be cloned, because the list can be modified during executing of this action.
 		LinkedList<Tuple> statements = (LinkedList<Tuple>) mscData.getStatementList().clone();
-		for (Tuple statement : statements) {
-
+		for(Tuple statement : statements){
 			VisualItem currentStatement = m_vis.getVisualItem(Statement.TABLE_NAME, statement);
 
 			// Find all the entities this statement belongs to, should be only one
 			String parentId = currentStatement.getString(Statement.PARENTID_FIELDNAME);
-			String searchPredicateText = "CONCAT(" + Entity.NAME_FIELDNAME + "," + Entity.ID_FIELDNAME
-					+ ")" + " == '" + parentId + "'";
+			String searchPredicateText = "CONCAT(" + Entity.NAME_FIELDNAME + "," + Entity.ID_FIELDNAME + ")" + " == '" + parentId + "'";
 
 			Iterator<VisualItem> matchingEntities = m_vis.items(Entity.TABLE_NAME, ExpressionParser.predicate(searchPredicateText));
-			if (matchingEntities.hasNext()) {
+			if(matchingEntities.hasNext()){
 				VisualItem matchingEntity = matchingEntities.next();
 				currentX = matchingEntity.getX();
 
@@ -66,22 +64,21 @@ public class StatementLayout extends Layout{
 				setY(currentStatement, null, currentY);
 
 				// If collapsing is enabled, set correct positions only to visible statements or visible targets
-				if (statementCollapseEnabled) {
-					if (matchingEntity.isVisible() || MSCVisualizationUtil.isTargetEntityVisible(m_vis, currentStatement)) {
+				if(statementCollapseEnabled){
+					if(matchingEntity.isVisible() || MSCVisualizationUtil.isTargetEntityVisible(m_vis, currentStatement)){
 						currentY += VERTICAL_STEP;
 					}
 
 				// If collapsing is disabled, set correct positions to all statements
-				} else {
+				}else{
 					currentY += VERTICAL_STEP;
 				}
 
 				PrefuseLib.updateVisible(currentStatement, matchingEntity.isVisible());
-			} else {
+			}else{
 				// A statement has no parent entity, hide it
 				PrefuseLib.updateVisible(currentStatement, false);
 			}
 		}
 	}
-
 }

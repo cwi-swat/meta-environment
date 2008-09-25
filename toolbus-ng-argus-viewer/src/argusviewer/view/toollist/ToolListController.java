@@ -16,7 +16,7 @@ import toolbus.tool.ToolInstance;
  * @author Alexander Bij
  * @author Roberto van der Linden
  */
-public class ToolListController implements IToolControlListener {
+public class ToolListController implements IToolControlListener{
 	private final DataComm m_dataComm;
 	
 	private final ToolTreeModel m_toolTreeModel;
@@ -32,7 +32,9 @@ public class ToolListController implements IToolControlListener {
 	 * @param dataComm	 DataComm is needed for the interaction.
 	 * @param toolListView the ToolListView
 	 */
-	public ToolListController(DataComm dataComm, ToolListView toolListView) {
+	public ToolListController(DataComm dataComm, ToolListView toolListView){
+		super();
+		
 		m_toolListView = toolListView;
 		m_dataComm = dataComm;
 		
@@ -58,8 +60,8 @@ public class ToolListController implements IToolControlListener {
 	 * @param tools	a list of ToolInstances
 	 * @return rootNode with all tools as children
 	 */
-	protected ToolTreeNode loadTools(ToolTreeNode rootNode, List<ToolInstance> tools) {
-		for (ToolInstance instance : tools) {
+	protected ToolTreeNode loadTools(ToolTreeNode rootNode, List<ToolInstance> tools){
+		for(ToolInstance instance : tools){
 			ToolTreeNode node = new ToolTreeNode(instance);
 			rootNode.add(node);
 		}
@@ -74,23 +76,23 @@ public class ToolListController implements IToolControlListener {
 	 *
 	 * @param node The Node that has changed Visability
 	 */
-	protected void changedNodeFilter(ToolTreeNode node) {
+	protected void changedNodeFilter(ToolTreeNode node){
 		// If has a toolinstance (no children), add/remove this Node from filter
-		if (node.hasToolInstance()) {
-			if (node.isVisible()) {
+		if(node.hasToolInstance()){
+			if(node.isVisible()){
 				m_filterSync.addToolInstance(node.getToolInstance());
-			} else {
+			}else{
 				m_filterSync.removeToolInstance(node.getToolInstance());
 			}
 			// Else add/remove Children to filter.
-		} else {
+		}else{
 			Enumeration< ? > children = node.children();
-			while (children.hasMoreElements()) {
+			while(children.hasMoreElements()){
 				ToolTreeNode child = (ToolTreeNode) children.nextElement();
-				if (child.hasToolInstance()) {
-					if (child.isVisible()) {
+				if(child.hasToolInstance()){
+					if(child.isVisible()){
 						m_filterSync.addToolInstance(child.getToolInstance());
-					} else {
+					}else{
 						m_filterSync.removeToolInstance(child.getToolInstance());
 					}
 				}
@@ -106,16 +108,15 @@ public class ToolListController implements IToolControlListener {
 	 * @param column	 the column on which the click is executed
 	 * @param node	   the node on which the click is executed
 	 */
-	public void sendClickEvent(int clickCount, int column, ToolTreeNode node) {
-		switch (column) {
+	public void sendClickEvent(int clickCount, int column, ToolTreeNode node){
+		switch(column){
 			case ToolTreeModel.VISIBLE_COLUMN:
-					changedNodeFilter(node);
+				changedNodeFilter(node);
 				break;
 			case ToolTreeModel.TOOL_COLUMN:
-				if (clickCount == 1) {
+				if(clickCount == 1){
 					m_focusSync.setHighlight(node.getToolInstance());
-				}
-				if (clickCount == 2) {
+				}else if(clickCount == 2){
 					m_focusSync.setFocus(node.getToolInstance());
 				}
 				break;
@@ -132,7 +133,7 @@ public class ToolListController implements IToolControlListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void addToolInstance(ToolInstance toolInstance) {
+	public synchronized void addToolInstance(ToolInstance toolInstance){
 		m_toolTreeModel.addToolInstance(toolInstance, m_dataComm);
 		m_toolListView.refresh();
 	}
@@ -140,7 +141,7 @@ public class ToolListController implements IToolControlListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void removeToolInstance(ToolInstance toolInstance) {
+	public synchronized void removeToolInstance(ToolInstance toolInstance){
 		m_toolTreeModel.removeToolInstance(toolInstance);
 		m_toolListView.refresh();
 	}
@@ -150,7 +151,7 @@ public class ToolListController implements IToolControlListener {
 	 *
 	 * @param filterSync the new filterSync to set.
 	 */
-	protected void setFilterSync(FilterSync filterSync) {
+	protected void setFilterSync(FilterSync filterSync){
 		this.m_filterSync = filterSync;
 	}
 
@@ -159,8 +160,7 @@ public class ToolListController implements IToolControlListener {
 	 *
 	 * @param focusSync the new focusSync to set.
 	 */
-	protected void setFocusSync(FocusSync focusSync) {
+	protected void setFocusSync(FocusSync focusSync){
 		this.m_focusSync = focusSync;
 	}
-
 }

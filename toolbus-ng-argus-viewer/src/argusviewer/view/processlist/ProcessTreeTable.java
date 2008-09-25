@@ -4,9 +4,11 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -61,6 +63,7 @@ public class ProcessTreeTable extends JTreeTable{
 	 */
 	private ProcessTreeTable(ProcessTreeModel treeModel){
 		super(treeModel);
+		
 		m_model = treeModel;
 		m_model.setParent(this);
 
@@ -95,7 +98,7 @@ public class ProcessTreeTable extends JTreeTable{
 	}
 
 	private void alignColumns(){
-		// Set max width for all columns, expect for INSTANCENAME_COLUMN. This
+		// Set max width for all columns, except for INSTANCENAME_COLUMN. This
 		// makes this column resizable.
 		setMaxWidth(ProcessTreeModel.BREAKPOINT_COLUMN, MAXCOLUMNWIDTH);
 		setMaxWidth(ProcessTreeModel.FILTER_COLUMN, MAXCOLUMNWIDTH);
@@ -123,11 +126,9 @@ public class ProcessTreeTable extends JTreeTable{
 	 * Reloads the model, without changing which nodes are open.
 	 * nodeStructureChanged, the Swing method of doing this, doesn't always
 	 * work. Besides that, nodeStructureChanged closes nodes when it shouldn't
-	 * 
 	 */
-	public void reloadModel(){
-		HashMap<ProcessTreeNode, Boolean> isExpanded = new HashMap<ProcessTreeNode, Boolean>(
-				tree.getRowCount());
+	public synchronized void reloadModel(){
+		Map<ProcessTreeNode, Boolean> isExpanded = new HashMap<ProcessTreeNode, Boolean>(tree.getRowCount());
 
 		// save expanded state
 		for(int i = 0; i < tree.getRowCount(); i++){
@@ -141,7 +142,7 @@ public class ProcessTreeTable extends JTreeTable{
 		// restore expanded state
 		for(int i = 0; i < tree.getRowCount(); i++){
 			ProcessTreeNode node = getNodeAtRow(i);
-			if (node != null && !node.isLeaf()){
+			if(node != null && !node.isLeaf()){
 				// if the node had no expanded state, it will not be expanded
 				boolean expanded = isExpanded.get(node) != null && isExpanded.get(node).booleanValue();
 				if(expanded){
@@ -188,17 +189,5 @@ public class ProcessTreeTable extends JTreeTable{
 	 */
 	private ProcessTreeNode getNodeAtRow(int row){
 		return (ProcessTreeNode) getValueAt(row, ProcessTreeModel.INSTANCENAME_COLUMN);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Object getValueAt(int row, int column){
-		try{
-			return super.getValueAt(row, column);
-		}catch(RuntimeException e){
-			// TODO Fix this concurrency problem.
-			return null;
-		}
 	}
 }
