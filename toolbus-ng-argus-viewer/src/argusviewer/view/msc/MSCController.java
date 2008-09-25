@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import prefuse.data.Tuple;
 import prefuse.visual.VisualItem;
 import toolbus.StateElement;
 import toolbus.atom.Atom;
@@ -49,7 +48,7 @@ import argusviewer.view.msc.visual.MSCVisualization;
  * @author Alexander Bij
  * @author Roberto vd Linden
  */
-public class MSCController implements IControlListener, IToolControlListener, IProcessInstanceControlListener, IProcessFilterListener, IToolFilterListener, IFocusListener, IHighlightListener {
+public class MSCController implements IControlListener, IToolControlListener, IProcessInstanceControlListener, IProcessFilterListener, IToolFilterListener, IFocusListener, IHighlightListener{
 	private final DataComm m_dataCommunication;
 	private final MSCData m_mscData;
 	private final MSCVisualization m_mscVisualization;
@@ -57,7 +56,6 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	private final MSCVisualizationScheduler m_mscVisualizationScheduler;
 
 	private volatile int m_latestTick = -1;
-	private volatile Tuple m_latestAddedStatement = null;
 
 	private final static int FIRST_TICK = -2;
 	private final static HashMap<Class<? extends Atom>, Entity.Type> SOURCE_OF_STATEMENT = new HashMap<Class< ? extends Atom>, Entity.Type>();
@@ -125,24 +123,6 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 */
 	public void processVisualization(){
 		m_mscVisualization.refreshVisualization();
-	}
-
-	/**
-	 * This function is notified by the visualization thread that the
-	 * visualization is finished. The display in the MSCView should be
-	 * refreshed.
-	 */
-	public void visualizationFinished(){
-		m_mscView.refreshDisplays();
-
-		// Set focus to the latest statement added, if enabled
-		if(isStatementFocusEnabled() && (m_latestAddedStatement != null)){
-			VisualItem visualStatement = m_mscVisualization.getVisibleStatement(m_latestAddedStatement);
-			if(visualStatement != null){
-				m_mscView.setStatementFocus(visualStatement);
-				m_latestAddedStatement = null;
-			}
-		}
 	}
 
 	/**
@@ -323,7 +303,7 @@ public class MSCController implements IControlListener, IToolControlListener, IP
 	 */
 	protected void addStatement(String executingEntityId, String executedStatementContent) {
 		Statement executedStatement = new Statement(executedStatementContent, executingEntityId, m_latestTick);
-		m_latestAddedStatement = m_mscData.addStatement(executedStatement);
+		m_mscData.addStatement(executedStatement);
 
 		refreshVisualization();
 	}

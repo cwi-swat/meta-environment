@@ -75,7 +75,7 @@ public class PerformanceTreeTable extends JTreeTable {
 	 * @param toolPerformanceInfo
 	 *            ToolPerformanceInfo
 	 */
-	public void add(final ToolPerformanceInfo toolPerformanceInfo){
+	public synchronized void add(final ToolPerformanceInfo toolPerformanceInfo){
 		try{
 			SwingUtilities.invokeAndWait(new Runnable(){
 				public void run(){

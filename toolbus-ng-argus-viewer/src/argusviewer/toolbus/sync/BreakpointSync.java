@@ -112,8 +112,7 @@ public class BreakpointSync{
 		ProcessDefinition nearest = null;
 		
 		for(ProcessDefinition procDef : list){
-			if(!procDef.getPosInfo().getFileName().equals(fileName) ||
-					procDef.getPosInfo().getBeginLine() > lineNumber){
+			if(!procDef.getPosInfo().getFileName().equals(fileName) || procDef.getPosInfo().getBeginLine() > lineNumber){
 				continue;
 			}
 			

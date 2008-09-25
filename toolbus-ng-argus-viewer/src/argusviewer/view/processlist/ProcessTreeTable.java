@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultTreeCellRenderer;
