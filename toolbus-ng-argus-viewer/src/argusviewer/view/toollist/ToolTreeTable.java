@@ -47,7 +47,7 @@ public class ToolTreeTable extends JTreeTable{
 	/**
 	 * Calls the methods invalidate() and repaint() to refresh the table
 	 */
-	public synchronized void refresh(){
+	public void refresh(){
 		invalidate();
 		repaint();
 	}
@@ -60,7 +60,7 @@ public class ToolTreeTable extends JTreeTable{
 	 * @param x the x position of the mouse cursor
 	 * @param y the y position of the mouse cursor
 	 */
-	public void sendClickEvent(int clickCount, int x, int y) {
+	public void sendClickEvent(int clickCount, int x, int y){
 		Point clickPoint = new Point(x, y);
 		int column = columnAtPoint(clickPoint);
 		int row = rowAtPoint(clickPoint);
@@ -78,7 +78,7 @@ public class ToolTreeTable extends JTreeTable{
 	 * Besides that, nodeStructureChanged closes nodes when it shouldn't
 	 * 
 	 */
-	public synchronized void reloadModel(){
+	public void reloadModel(){
 		HashMap<ToolTreeNode, Boolean> isExpanded = new HashMap<ToolTreeNode, Boolean>(tree.getRowCount());
 		
 		//save expanded state
@@ -91,12 +91,12 @@ public class ToolTreeTable extends JTreeTable{
 		m_model.reload();
 	
 		//restore expanded state
-		for (int i = 0; i < tree.getRowCount(); i++){
+		for(int i = 0; i < tree.getRowCount(); i++){
 			ToolTreeNode node = getNodeAtRow(i);
-			if (node != null && !node.isLeaf()) {
+			if (node != null && !node.isLeaf()){
 				//if the node had no expanded state, it will not be expanded
 				boolean expanded = isExpanded.get(node) != null && isExpanded.get(node).booleanValue(); 
-				if (expanded) {
+				if(expanded){
 					tree.expandRow(i);
 				}
 			}

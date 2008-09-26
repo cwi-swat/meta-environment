@@ -2,6 +2,9 @@ package argusviewer.view.toollist;
 
 import java.util.Enumeration;
 import java.util.List;
+
+import javax.swing.SwingUtilities;
+
 import argusviewer.toolbus.DataComm;
 import argusviewer.toolbus.sync.ControlSync;
 import argusviewer.toolbus.sync.FilterSync;
@@ -22,8 +25,8 @@ public class ToolListController implements IToolControlListener{
 	private final ToolTreeModel m_toolTreeModel;
 	private final ToolListView m_toolListView;
 	
-	private volatile FilterSync m_filterSync;
-	private volatile FocusSync m_focusSync;
+	private final FilterSync m_filterSync;
+	private final FocusSync m_focusSync;
 
 	/**
 	 * Constructor for ToolListController.
@@ -40,8 +43,8 @@ public class ToolListController implements IToolControlListener{
 		
 		ToolTreeNode rootNode = new ToolTreeNode();
 
-		setFilterSync(dataComm.getFilterSync());
-		setFocusSync(dataComm.getFocusSync());
+		m_filterSync = dataComm.getFilterSync();
+		m_focusSync = dataComm.getFocusSync();
 		ControlSync controlSync = dataComm.getControlSync();
 
 		controlSync.register(this);
@@ -60,7 +63,7 @@ public class ToolListController implements IToolControlListener{
 	 * @param tools	a list of ToolInstances
 	 * @return rootNode with all tools as children
 	 */
-	protected ToolTreeNode loadTools(ToolTreeNode rootNode, List<ToolInstance> tools){
+	private ToolTreeNode loadTools(ToolTreeNode rootNode, List<ToolInstance> tools){
 		for(ToolInstance instance : tools){
 			ToolTreeNode node = new ToolTreeNode(instance);
 			rootNode.add(node);
@@ -76,7 +79,7 @@ public class ToolListController implements IToolControlListener{
 	 *
 	 * @param node The Node that has changed Visability
 	 */
-	protected void changedNodeFilter(ToolTreeNode node){
+	private void changedNodeFilter(ToolTreeNode node){
 		// If has a toolinstance (no children), add/remove this Node from filter
 		if(node.hasToolInstance()){
 			if(node.isVisible()){
@@ -133,34 +136,32 @@ public class ToolListController implements IToolControlListener{
 	/**
 	 * {@inheritDoc}
 	 */
-	public synchronized void addToolInstance(ToolInstance toolInstance){
-		m_toolTreeModel.addToolInstance(toolInstance, m_dataComm);
-		m_toolListView.refresh();
+	public void addToolInstance(final ToolInstance toolInstance){
+		try{
+			SwingUtilities.invokeAndWait(new Runnable(){
+				public void run(){
+					m_toolTreeModel.addToolInstance(toolInstance, m_dataComm);
+					m_toolListView.refresh();
+				}
+			});
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public synchronized void removeToolInstance(ToolInstance toolInstance){
-		m_toolTreeModel.removeToolInstance(toolInstance);
-		m_toolListView.refresh();
-	}
-	
-	/**
-	 * Sets the filterSync.
-	 *
-	 * @param filterSync the new filterSync to set.
-	 */
-	protected void setFilterSync(FilterSync filterSync){
-		this.m_filterSync = filterSync;
-	}
-
-	/**
-	 * Set the focusSync
-	 *
-	 * @param focusSync the new focusSync to set.
-	 */
-	protected void setFocusSync(FocusSync focusSync){
-		this.m_focusSync = focusSync;
+	public void removeToolInstance(final ToolInstance toolInstance){
+		try{
+			SwingUtilities.invokeAndWait(new Runnable(){
+				public void run(){
+					m_toolTreeModel.removeToolInstance(toolInstance);
+					m_toolListView.refresh();
+				}
+			});
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
 	}
 }
