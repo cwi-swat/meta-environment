@@ -164,7 +164,7 @@ EOQ
       target.revision.checkout.extract_emails.each do |addr|
         msgstr = <<EOMSG
 From: Sisyphus <#{@mailer.from_address}>
-To: #{address}
+To: #{addr}
 Subject: Version bump required in #{target.revision.component}
 Date: #{Time.now}
 Message-Id: <#{Time.now}@sisyphus.meta-environment.org>
