@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
 
 import toolbus.process.ProcessInstance;
@@ -24,7 +25,7 @@ import com.sun.java.treetable.example.TreeTableModel;
  * @author H.Baggelaar
  * @author Jeldert Pol
  */
-public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel, IProcessInstanceControlListener, IFileBreakPointListener, IProcessFilterListener  {
+public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel, IProcessInstanceControlListener, IFileBreakPointListener, IProcessFilterListener{
 	private static final long serialVersionUID = -5813021647911033239L;
 	
 	/**
@@ -41,8 +42,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	private final DataComm m_dataComm; 
 	
 	private volatile ProcessTreeTable m_table;
-
-
+	
     /**
 	 * The constructor for the ProcessTreeModel
 	 * @param dataComm the DataComm
@@ -205,7 +205,7 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * @param filter
 	 *            True when visible, false when invisible.
 	 */
-	private void setProcessFilter(ProcessInstance processInstance, boolean filter) {
+	private void setProcessFilter(ProcessInstance processInstance, boolean filter){
 		ProcessTreeNode node = getProcessTree().getTree(processInstance.getProcessId());
 		if(node == null) return;
 		
@@ -291,22 +291,38 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * {@inheritDoc}
 	 */
 	public void addBreakpoint(String fileName, int lineNumber){
-		Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
-		synchronized(processes){
-			this.getProcessTree().syncSourceCodeBreakpoints(processes);
+		try{
+			SwingUtilities.invokeAndWait(new Runnable(){
+				public void run(){
+					Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
+					synchronized(processes){
+						getProcessTree().syncSourceCodeBreakpoints(processes);
+					}
+					reloadModel(null);
+				}
+			});
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
 		}
-		reloadModel(null);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void removeBreakpoint(String fileName, int lineNumber){
-		Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
-		synchronized(processes){
-			this.getProcessTree().syncSourceCodeBreakpoints(processes);
+		try{
+			SwingUtilities.invokeAndWait(new Runnable(){
+				public void run(){
+					Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
+					synchronized(processes){
+						getProcessTree().syncSourceCodeBreakpoints(processes);
+					}
+					reloadModel(null);
+				}
+			});
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
 		}
-		reloadModel(null);
 	}
 
 	/**
@@ -315,9 +331,17 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * @param processInstance
 	 *            {@link ProcessInstance} to be added.
 	 */
-	public void addProcessInstance(ProcessInstance processInstance) {
-		ProcessTreeNode newNode = getProcessTree().add(processInstance, m_dataComm);
-		reloadModel(newNode);
+	public void addProcessInstance(final ProcessInstance processInstance){
+		try{
+			SwingUtilities.invokeAndWait(new Runnable(){
+				public void run(){
+					ProcessTreeNode newNode = getProcessTree().add(processInstance, m_dataComm);
+					reloadModel(newNode);
+				}
+			});
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
 	}
 	
 
@@ -327,9 +351,17 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * @param processInstance
 	 *            {@link ProcessInstance} to be removed.
 	 */
-	public void removeProcessInstance(ProcessInstance processInstance) {
-		ProcessTreeNode parentOfRemovedNode = getProcessTree().remove(processInstance);
-		reloadModel(parentOfRemovedNode);		
+	public void removeProcessInstance(final ProcessInstance processInstance){
+		try{
+			SwingUtilities.invokeAndWait(new Runnable(){
+				public void run(){
+					ProcessTreeNode parentOfRemovedNode = getProcessTree().remove(processInstance);
+					reloadModel(parentOfRemovedNode);		
+				}
+			});
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
 	}
 }
 

@@ -113,7 +113,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel{
 	 * @return false true if column type is Visible , else returns false because
 	 *         cells are not editable.
 	 */
-	public synchronized boolean isCellEditable(Object o, int column){
+	public boolean isCellEditable(Object o, int column){
 		return column == VISIBLE_COLUMN || column == TOOL_COLUMN;
 	}
 
@@ -128,7 +128,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel{
 	 * @param column
 	 *            the index of the specified column.
 	 */
-	public synchronized void setValueAt(Object newValue, Object node, int column){
+	public void setValueAt(Object newValue, Object node, int column){
 		// FilterListener should be set.
 		if(column == VISIBLE_COLUMN && newValue instanceof Boolean){
 			ToolTreeNode treeNode = (ToolTreeNode) node;
@@ -162,7 +162,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel{
 	 *            the ToolInstance
 	 * @param dataComm an instance of the DataComm
 	 */
-	public synchronized void addToolInstance(ToolInstance toolInstance, DataComm dataComm){
+	public void addToolInstance(ToolInstance toolInstance, DataComm dataComm){
 		boolean isAdded = false;
 		ToolTreeNode root = (ToolTreeNode) getRoot();
 
@@ -237,7 +237,7 @@ public class ToolTreeModel extends DefaultTreeModel implements TreeTableModel{
 	 * @param toolInstance
 	 *            the ToolInstance that needs to be removed
 	 */
-	public synchronized void removeToolInstance(ToolInstance toolInstance){
+	public void removeToolInstance(ToolInstance toolInstance){
 		ToolTreeNode root = (ToolTreeNode) getRoot();
 		int toolInstanceId = toolInstance.getToolID();
 

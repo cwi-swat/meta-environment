@@ -23,13 +23,13 @@ import argusviewer.toolbus.DataComm;
  * @author R.Schuddeboom
  * @author Jeldert Pol
  */
-public class ProcessTreeNode extends DefaultMutableTreeNode {
+public class ProcessTreeNode extends DefaultMutableTreeNode{
 	private static final long serialVersionUID = -1647785404014342231L;
 
 	/**
 	 * The different BreakPointTypes for the treenodes
 	 */
-	public static enum BreakPointType { NONE, PROCESS, LINE, BOTH }
+	public static enum BreakPointType {NONE, PROCESS, LINE, BOTH}
 
 	private volatile ProcessTreeListItem m_item;
 	private volatile boolean m_hasSourceCodeBreakpoint = false;
@@ -38,7 +38,7 @@ public class ProcessTreeNode extends DefaultMutableTreeNode {
 	 * The constructor creates a process tree. By default it has no breakpoint,
 	 * and is visible.
 	 */
-	public ProcessTreeNode() {
+	public ProcessTreeNode(){
 		super();
 	}
 

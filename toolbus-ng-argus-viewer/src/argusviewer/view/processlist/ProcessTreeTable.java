@@ -126,7 +126,7 @@ public class ProcessTreeTable extends JTreeTable{
 	 * nodeStructureChanged, the Swing method of doing this, doesn't always
 	 * work. Besides that, nodeStructureChanged closes nodes when it shouldn't
 	 */
-	public synchronized void reloadModel(){
+	public void reloadModel(){
 		Map<ProcessTreeNode, Boolean> isExpanded = new HashMap<ProcessTreeNode, Boolean>(tree.getRowCount());
 
 		// save expanded state

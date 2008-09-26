@@ -14,7 +14,7 @@ import toolbus.process.ProcessInstance;
  * @author H.Baggelaar
  * @author Jeldert Pol
  */
-public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
+public class ProcessTreeListItem implements IProcessInstanceBreakPointListener{
 	private final ProcessInstance m_processInstance;
 	private final DataComm m_dataComm;
 
@@ -30,25 +30,11 @@ public class ProcessTreeListItem implements IProcessInstanceBreakPointListener {
 	 * @param dataComm The DataComm instance that will be used
 	 */
 	public ProcessTreeListItem(ProcessInstance processInstance, DataComm dataComm){
-		this(processInstance, dataComm, false, false);
-	}
-
-	/**
-	 * Constructor. Initiates itself, setting breakpoint and filter to the given
-	 * value.
-	 * 
-	 * @param processInstance
-	 *            The ProcessInstance of this item.
-	 * @param dataComm 
-	 * @param breakPoint
-	 *            Indicates if a breakpoint is set on this instance.
-	 * @param filter
-	 *            Indicates if a filter is set on this instance.
-	 */
-	private ProcessTreeListItem(ProcessInstance processInstance, DataComm dataComm, boolean breakPoint, boolean filter){
+		super();
+		
 		m_processInstance = processInstance;
-		m_breakPoint = breakPoint;
-		m_filter = filter;
+		m_breakPoint = false;
+		m_filter = false;
 		m_removed = false;
 		m_dataComm = dataComm;
 		m_dataComm.getBreakPointSync().register(this);

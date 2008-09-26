@@ -20,5 +20,4 @@ public interface IProcessFilterListener{
 	 *            List of processes that should be visible.
 	 */
 	void setProcessFilter(List<ProcessInstance> filteredProcesses);
-
 }
