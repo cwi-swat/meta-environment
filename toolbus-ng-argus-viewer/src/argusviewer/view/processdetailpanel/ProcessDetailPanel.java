@@ -41,14 +41,14 @@ public class ProcessDetailPanel extends JPanel implements IView, IHighlightListe
 	private DefaultTableModel noteQueueTableModel;
 	private DefaultTableModel stateTableModel;
 
-	private static final TBTermFactory TBFACTORY = TBTermFactory.getInstance();
-	private static final ATerm EMPTYTERM = TBFACTORY.makeAppl(TBFACTORY.makeAFun("...", 0, false));
-	private static final int VERTICAL_DIVIDER_LOC = 350;
-	private static final int HORIZONTAL_DIVIDER_LOC = 200;
+	private final static TBTermFactory TBFACTORY = TBTermFactory.getInstance();
+	private final static ATerm EMPTYTERM = TBFACTORY.makeAppl(TBFACTORY.makeAFun("...", 0, false));
+	private final static int VERTICAL_DIVIDER_LOC = 350;
+	private final static int HORIZONTAL_DIVIDER_LOC = 200;
 	
-	private static final int SUB_SUBSCRIPTION = 3;
-	private static final int SUB_VARIABLE = 2;
-	private static final int SUB_NOTE = 3;
+	private final static int SUB_SUBSCRIPTION = 3;
+	private final static int SUB_VARIABLE = 2;
+	private final static int SUB_NOTE = 3;
 	
 	public ProcessDetailPanel(DataComm dataComm){
 		dataComm.getFocusSync().register(this);
@@ -144,22 +144,6 @@ public class ProcessDetailPanel extends JPanel implements IView, IHighlightListe
 		return subscriptionsPanel;
 	}
 	
-	private void clearSubscriptionsTable(){
-		clearTable(subscriptionsTableModel);
-	}
-
-	private void clearNoteQueueTable(){
-		clearTable(noteQueueTableModel);		
-	}
-
-	private void clearStateTable(){
-		clearTable(stateTableModel);
-	}
-
-	private void clearVariablesTable(){
-		clearTable(variablesTableModel);
-	}
-	
 	private void clearTable(DefaultTableModel tableModel){
 		for(int i = tableModel.getRowCount() - 1; i >= 0; i--){
 			tableModel.removeRow(i);
@@ -172,7 +156,7 @@ public class ProcessDetailPanel extends JPanel implements IView, IHighlightListe
 		}
 
 		public void valueChanged(ListSelectionEvent e){
-			clearVariablesTable();
+			clearTable(variablesTableModel);
 
         	int row = stateTable.getSelectedRow();
         	if(row != -1){
@@ -183,7 +167,7 @@ public class ProcessDetailPanel extends JPanel implements IView, IHighlightListe
 	}
 	
 	private void fillProcessTables(ProcessInstance processInstance){
-		clearSubscriptionsTable();
+		clearTable(subscriptionsTableModel);
 		
 		List<ATerm> subscriptions = processInstance.getSubscriptions();
         for(ATerm subscription1 : subscriptions){
@@ -192,7 +176,7 @@ public class ProcessDetailPanel extends JPanel implements IView, IHighlightListe
         }
 		
 		
-		clearNoteQueueTable();
+        clearTable(noteQueueTableModel);
 		
 		List<ATerm> noteQueue = processInstance.getNoteQueue();
         for(ATerm aNoteQueue : noteQueue){
@@ -201,12 +185,12 @@ public class ProcessDetailPanel extends JPanel implements IView, IHighlightListe
         }
 		
 		
-		clearStateTable();
+        clearTable(stateTableModel);
 		
 		List<StateElement> stateElements = processInstance.getCurrentState().getElementsAsList();
-        for (StateElement stateElement1 : stateElements){
-            StateElement stateElement = stateElement1;
-            stateTableModel.addRow(new Object[]{stateElement});
+		for(StateElement stateElement1 : stateElements){
+			StateElement stateElement = stateElement1;
+			stateTableModel.addRow(new Object[]{stateElement});
         }
 	}
 
@@ -291,15 +275,15 @@ public class ProcessDetailPanel extends JPanel implements IView, IHighlightListe
 	}
 	
 	public void setHighlight(final ProcessInstance processInstance){
-		clearSubscriptionsTable();
-		clearNoteQueueTable();
-		clearStateTable();
-		clearVariablesTable();
+		clearTable(subscriptionsTableModel);
+		clearTable(noteQueueTableModel);
+		clearTable(stateTableModel);
+		clearTable(variablesTableModel);
 		fillProcessTables(processInstance);
 	}
 	
     public Map<String, Container> getVisualComponents(){
-        HashMap< String, Container> nameContainerHashMap = new HashMap<String, Container>();
+        HashMap<String, Container> nameContainerHashMap = new HashMap<String, Container>();
         nameContainerHashMap.put("Process Details", this);
     	return nameContainerHashMap;
     }

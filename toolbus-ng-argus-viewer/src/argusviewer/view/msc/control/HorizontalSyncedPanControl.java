@@ -13,7 +13,7 @@ import prefuse.visual.VisualItem;
  *
  * @author: Arne Timmerman
  */
-public class HorizontalSyncedPanControl extends PanControl {
+public class HorizontalSyncedPanControl extends PanControl{
 	private final Display m_synchronizedDisplay;
 	private final double m_initialVerticalPosition;
 
@@ -29,7 +29,7 @@ public class HorizontalSyncedPanControl extends PanControl {
 	 *
 	 * @param initialVerticalPan the amount of vertical pan of the display where this control is enabled on
 	 */
-	public HorizontalSyncedPanControl(double initialVerticalPan) {
+	public HorizontalSyncedPanControl(double initialVerticalPan){
 		this(null, initialVerticalPan);
 	}
 

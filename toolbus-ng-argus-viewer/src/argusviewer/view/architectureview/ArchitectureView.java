@@ -118,7 +118,6 @@ public class ArchitectureView extends JPanel{
 
 	private void createVisualComponent(){
 		createDisplay();
-		createDisplayControls();
 
 		m_visualComponent = new JPanel(new BorderLayout());
 		m_visualComponent.add(m_display, BorderLayout.CENTER);
@@ -129,7 +128,7 @@ public class ArchitectureView extends JPanel{
 		m_display.setDoubleBuffered(true);
 		m_display.panAbs(HORIZONTAL_DISPLAY_OFFSET, VERTICAL_DISPLAY_OFFSET);
 		m_display.setItemSorter(new ArchitectureItemSorter());
-
+		
 		Control hoverc = new ControlAdapter(){
             public void itemClicked(VisualItem item, MouseEvent evt){
      			m_messageFilter.setSelectedVisualItem(item);
@@ -143,13 +142,10 @@ public class ArchitectureView extends JPanel{
             }
         };
 		m_display.addControlListener(hoverc);
-
-		updateVisualization();
-	}
-	
-	private void createDisplayControls(){
 		m_display.addControlListener(new PanControl(true)); // Pan over item also
 		m_display.addControlListener(new ZoomControl());
+
+		updateVisualization();
 	}
 	
 	/**

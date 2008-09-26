@@ -22,7 +22,7 @@ public class SyncedZoomControl extends AbstractZoomControl{
 	private final Point2D m_synchronizedZoomCenter;
 	
 	private int m_verticalMouseDownPosition;
-
+	
 	/**
 	 * Create a Zoom Control that allows zooming with the Right mouse button and
 	 * synchronizes Zoom events to the given other Display.
@@ -72,7 +72,7 @@ public class SyncedZoomControl extends AbstractZoomControl{
 			}
 
 			int currentVerticalMousePosition = mouseEvent.getY();
-			int verticalMovement = m_verticalMouseDownPosition - currentVerticalMousePosition;
+			int verticalMovement = currentVerticalMousePosition - m_verticalMouseDownPosition;
 			double zoomScale = calculateZoom(verticalMovement);
 
 			zoom(pannedDisplay, m_zoomCenter, zoomScale, false);

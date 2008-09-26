@@ -259,6 +259,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	
 	/**
 	 * Displays the performance stats for this Toolinstance
+	 * 
 	 * @param toolInstance The associated Toolinstance
 	 * @param term The performancestats
 	 */

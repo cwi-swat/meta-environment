@@ -111,13 +111,11 @@ public class MSCView extends JPanel{
 	private void createDisplayControls(){
 		m_mainDisplay.addControlListener(new WheelScrollControl(VERTICAL_MAIN_DISPLAY_PAN));
 		m_mainDisplay.addControlListener(new HorizontalSyncedPanControl(m_topDisplay, VERTICAL_MAIN_DISPLAY_PAN));
-		m_mainDisplay.addControlListener(new SyncedZoomControl(m_topDisplay,
-			new Point(0, 0), new Point(0, TOP_DISPLAY_HEIGHT)));
+		m_mainDisplay.addControlListener(new SyncedZoomControl(m_topDisplay, new Point(0, 0), new Point(0, TOP_DISPLAY_HEIGHT)));
 		m_mainDisplay.addControlListener(new MSCToolTipControl());
 
 		m_topDisplay.addControlListener(new SyncedHorizontalPanControl(m_mainDisplay));
-		m_topDisplay.addControlListener(new SyncedZoomControl(m_mainDisplay,
-			new Point(0, TOP_DISPLAY_HEIGHT), new Point(0, 0)));
+		m_topDisplay.addControlListener(new SyncedZoomControl(m_mainDisplay, new Point(0, TOP_DISPLAY_HEIGHT), new Point(0, 0)));
 		m_topDisplay.addControlListener(new MSCToolTipControl());
 
 		ToolTipManager.sharedInstance().setInitialDelay(TOOLTIP_DELAY);
