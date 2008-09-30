@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import toolbus.StateElement;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessInstance;
 import toolbus.viewer.DebugToolBus;
@@ -88,6 +89,7 @@ public class BreakpointSync{
 			}else{
 				m_debugToolbus.addSourceCodeBreakPoint(fileName, lineNumber);
 				String processName = getProcessName(fileName, lineNumber);
+				if(processName == null) return; // Not a valid breakpoint location.
 				addSourceCodeBreakpoint(processName);
 	
 				if(m_breakPointsFileNameLineNum.containsKey(fileName)){
@@ -122,6 +124,8 @@ public class BreakpointSync{
 				nearest = procDef;
 			}
 		}
+		
+		if(nearest == null) return null;
 		
 		return nearest.getName();
 	}
@@ -164,7 +168,7 @@ public class BreakpointSync{
 	public Map<String, Integer> getSourceCodeBreakpoints(){
 		return m_breakpoints;
 	}
-
+	
 	/**
      * remove breakpoint for a specific processInstance
      * @param processInstance the processintance
@@ -196,12 +200,11 @@ public class BreakpointSync{
 		synchronized(m_breakPointsFileNameLineNum){
 			if(m_breakPointsFileNameLineNum.containsKey(fileName) && m_breakPointsFileNameLineNum.get(fileName).contains(Integer.valueOf(lineNumber))){
 				if(m_breakPointsFileNameLineNum.containsKey(fileName)){
-	
-					m_breakPointsFileNameLineNum.get(fileName).remove(
-							Integer.valueOf(lineNumber));
+					m_breakPointsFileNameLineNum.get(fileName).remove(Integer.valueOf(lineNumber));
 	
 					m_debugToolbus.removeSourceCodeBreakPoint(fileName, lineNumber);
 					String processName = getProcessName(fileName, lineNumber);
+					if(processName == null) return; // Not a valid breakpoint location.
 					removeSourceCodeBreakpoint(processName);
 					
 					if(m_breakPointsFileNameLineNum.get(fileName).isEmpty()){
@@ -214,8 +217,6 @@ public class BreakpointSync{
 						}
 					}
 				}
-			}else{
-				ExceptionReporter.report("Could not remove breakpoint: not present.");
 			}
 		}
 	}
