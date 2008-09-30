@@ -126,8 +126,8 @@ public class ToolTreeTable extends JTreeTable{
 class ToolTreeCellRenderer extends DefaultTreeCellRenderer{
 	private static final long serialVersionUID = -3084040025754474656L;
 	
-	private static final ImageIcon GROUP_ICON = new ImageIcon("resources/icons/group.png");
-	private static final ImageIcon TOOL_ICON = new ImageIcon("resources/icons/tool.png");
+	private final static ImageIcon GROUP_ICON = new ImageIcon(ToolTreeCellRenderer.class.getResource("/resources/icons/group.png"));
+	private final static ImageIcon TOOL_ICON = new ImageIcon(ToolTreeCellRenderer.class.getResource("/resources/icons/tool.png"));
 	
 	/**
 	 * Creates a ProcessTreeCellRenderer

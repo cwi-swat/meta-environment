@@ -18,9 +18,9 @@ import argusviewer.view.processlist.data.ProcessTreeNode.BreakPointType;
  * @author Jeldert Pol
  */
 public class BreakPointCellRenderer implements TableCellRenderer{
-	public static final ImageIcon ICON_LINE = new ImageIcon("resources/icons/breakpoint_source.png");
-	public static final ImageIcon ICON_PROCESS = new ImageIcon("resources/icons/breakpoint_process.png");
-	public static final ImageIcon ICON_BOTH = new ImageIcon("resources/icons/breakpoint_both.png");
+	public static final ImageIcon ICON_LINE = new ImageIcon(BreakPointCellRenderer.class.getResource("/resources/icons/breakpoint_source.png"));
+	public static final ImageIcon ICON_PROCESS = new ImageIcon(BreakPointCellRenderer.class.getResource("/resources/icons/breakpoint_process.png"));
+	public static final ImageIcon ICON_BOTH = new ImageIcon(BreakPointCellRenderer.class.getResource("/resources/icons/breakpoint_both.png"));
 
 	private final JButton m_button;
 

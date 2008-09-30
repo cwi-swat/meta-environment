@@ -24,8 +24,8 @@ import javax.swing.table.TableCellRenderer;
 public class CheckBoxCellRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor{
 	private static final long serialVersionUID = -1856670516526394234L;
 	
-	private static final ImageIcon ICONS_BREAKPOINT_SOURCE = new ImageIcon("resources/icons/breakpoint_source.png");
-	private static final ImageIcon ICON_BREAKPOINT_SOURCE_TRANSPARANT = new ImageIcon("resources/icons/breakpoint_source_transparant.png");
+	private static final ImageIcon ICONS_BREAKPOINT_SOURCE = new ImageIcon(CheckBoxCellRenderer.class.getResource("/resources/icons/breakpoint_source.png"));
+	private static final ImageIcon ICON_BREAKPOINT_SOURCE_TRANSPARANT = new ImageIcon(CheckBoxCellRenderer.class.getResource("/resources/icons/breakpoint_source_transparant.png"));
 	
 	private final JCheckBox m_checkBox;
 	
