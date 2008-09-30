@@ -1,0 +1,11 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl
+
+Name: Argus-viewer
+Description: 
+Version: 1.0
+Requires: toolbus-ng
+JarFile=Argus-viewer.jar
+Jars=${prefix}/share/${JarFile}:${prefix}/share/dockingwindows-1.5.0.jar:${prefix}/share/javahelp-2.0.0.5.jar:${prefix}/share/log4j-1.2.15.jar:${prefix}/share/prefuse-20071021.jar:${prefix}/share/treetable-1.0.jar
+LocalJars=lib/dockingwindows-1.5.0.jar:lib/javahelp-2.0.0.5.jar:lib/junit-4.4.jar:lib/log4j-1.2.15.jar:lib/prefuse-20071021.jar:lib/treetable-1.0.jar
+Packages=argusviewer,argusviewer.gui,argusviewer.toolbus,argusviewer.toolbus.sync,argusviewer.util,argusviewer.view,argusviewer.view.architectureview,argusviewer.view.architectureview.performance,argusviewer.view.architectureview.performance.tree,argusviewer.view.consoleview,argusviewer.view.listeners,argusviewer.view.msc,argusviewer.view.msc.action,argusviewer.view.msc.control,argusviewer.view.msc.data,argusviewer.view.msc.visual,argusviewer.view.processdetailpanel,argusviewer.view.processlist,argusviewer.view.processlist.data,argusviewer.view.processlist.renderer,,argusviewer.view.sourcefile,argusviewer.view.toollist
