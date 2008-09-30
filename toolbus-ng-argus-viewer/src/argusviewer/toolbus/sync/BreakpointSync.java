@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import toolbus.StateElement;
-import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessInstance;
 import toolbus.viewer.DebugToolBus;

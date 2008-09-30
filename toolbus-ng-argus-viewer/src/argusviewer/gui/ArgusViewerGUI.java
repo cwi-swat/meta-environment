@@ -245,15 +245,15 @@ public final class ArgusViewerGUI extends JFrame implements Observer{
 		JMenu sourceMenu = new JMenu("Source");
 		viewMenu.add(sourceMenu);
 		synchronized(m_viewContainers){
-			for (ViewContainer container : m_viewContainers) {
-				JMenuItem viewItem = new JMenuItem(container.getName());
-				viewItem.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
+			for(ViewContainer viewContainer : m_viewContainers){
+				JMenuItem viewItem = new JMenuItem(viewContainer.getName());
+				viewItem.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
 						synchronized(m_viewContainers){
-							for (ViewContainer container : m_viewContainers) {
-								if (container.getName().equals(e.getActionCommand())) {
+							for(ViewContainer container : m_viewContainers){
+								if(container.getName().equals(e.getActionCommand())){
 									View view = container.getView();
-									if (!view.isShowing()) {
+									if(!view.isShowing()){
 										createSplitWindows();
 										container.getParent(m_tabWindows).addTab(view);
 									}
@@ -264,7 +264,7 @@ public final class ArgusViewerGUI extends JFrame implements Observer{
 						}
 					}
 				});
-				if (isSourceView(container)) {
+				if (isSourceView(viewContainer)) {
 					sourceMenu.add(viewItem);
 				} else {
 					viewMenu.add(viewItem);
