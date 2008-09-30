@@ -12,7 +12,7 @@ import argusviewer.view.architectureview.performance.ThreadInfo;
  * 
  * @author Jeldert Pol
  */
-public class PerformanceTreeNodeThread extends PerformanceTreeNode {
+public class PerformanceTreeNodeThread extends PerformanceTreeNode{
 	private static final long serialVersionUID = 5262837229886674693L;
 	
 	private final ThreadInfo threadInfo;
@@ -25,7 +25,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 *            The {@link ThreadInfo} to attach to this
 	 *            {@link PerformanceTreeNodeThread}.
 	 */
-	public PerformanceTreeNodeThread(ThreadInfo threadInfo) {
+	public PerformanceTreeNodeThread(ThreadInfo threadInfo){
 		this.threadInfo = threadInfo;
 	}
 
@@ -34,7 +34,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 * 
 	 * @return the id of the Tool or null is the node is no tool.
 	 */
-	public String getToolId() {
+	public String getToolId(){
 		return "";
 	}
 
@@ -43,7 +43,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 * 
 	 * @return the name of the tool or child.
 	 */
-	public String getToolName() {
+	public String getToolName(){
 		return threadInfo.getThreadName();
 	}
 
@@ -53,7 +53,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 * 
 	 * @return the memory heap usage of the Tool.
 	 */
-	public String getToolMemoryHeapUsage() {
+	public String getToolMemoryHeapUsage(){
 		return "";
 	}
 
@@ -63,7 +63,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 * 
 	 * @return the processor time of the Tool.
 	 */
-	public int getProcessorTime() {
+	public int getProcessorTime(){
 		return threadInfo.getThreadSystemTime() + threadInfo.getThreadUserTime();
 	}
 
@@ -73,7 +73,7 @@ public class PerformanceTreeNodeThread extends PerformanceTreeNode {
 	 * 
 	 * @return the name of the {@link PerformanceTreeNodeThread}
 	 */
-	public String toString() {
+	public String toString(){
 		return getToolName();
 	}
 }

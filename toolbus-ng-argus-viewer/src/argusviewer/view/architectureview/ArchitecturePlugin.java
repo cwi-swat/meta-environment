@@ -28,9 +28,6 @@ public class ArchitecturePlugin implements IView{
 
 	private final Map<String, Container> m_visualComponents;
 
-	private final ArchitectureData architectureData;
-	private final Visualization archVisualization;
-
 	/**
 	 * Construct a Architecture View plugin.
 	 * @param dataCommunication communication protocol for connection to ToolBus
@@ -43,8 +40,8 @@ public class ArchitecturePlugin implements IView{
 		// Do not show Prefuse INFO messages, only severe errors
 		Logger.getLogger("prefuse").setLevel(Level.SEVERE);
 		
-		archVisualization = new Visualization();
-		architectureData = new ArchitectureData(archVisualization);
+		Visualization archVisualization = new Visualization();
+		ArchitectureData architectureData = new ArchitectureData(archVisualization);
 		ArchitectureView m_archView = new ArchitectureView(dataCommunication, architectureData, archVisualization, m_performanceTreeTable);
 		new ArchitectureController(dataCommunication, architectureData, m_archView, m_performanceTreeTable);
 		

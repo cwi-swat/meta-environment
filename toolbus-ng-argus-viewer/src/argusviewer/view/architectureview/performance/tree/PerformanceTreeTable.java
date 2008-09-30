@@ -1,5 +1,7 @@
 package argusviewer.view.architectureview.performance.tree;
 
+import java.util.Collection;
+
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -20,7 +22,7 @@ import com.sun.java.treetable.example.TreeTableModel;
  * 
  * @author Jeldert Pol
  */
-public class PerformanceTreeTable extends JTreeTable {
+public class PerformanceTreeTable extends JTreeTable{
 	private static final long serialVersionUID = 2898389345356146073L;
 	
 	private final PerformanceTreeModel model;
@@ -28,11 +30,11 @@ public class PerformanceTreeTable extends JTreeTable {
 	/**
 	 * Constructor for {@link PerformanceTreeTable}.
 	 */
-	public PerformanceTreeTable() {
+	public PerformanceTreeTable(){
 		this(new PerformanceTreeModel());
 	}
 
-	private PerformanceTreeTable(PerformanceTreeModel treeTableModel) {
+	private PerformanceTreeTable(PerformanceTreeModel treeTableModel){
 		super(treeTableModel);
 		this.model = treeTableModel;
 
@@ -64,8 +66,8 @@ public class PerformanceTreeTable extends JTreeTable {
 	 * 
 	 * @return JTree
 	 */
-	private JTree getTree() {
-		return (JTree) this.getDefaultRenderer(TreeTableModel.class);
+	private JTree getTree(){
+		return (JTree) getDefaultRenderer(TreeTableModel.class);
 	}
 	
 	/**
@@ -74,8 +76,16 @@ public class PerformanceTreeTable extends JTreeTable {
 	 * @param toolPerformanceInfo
 	 *            ToolPerformanceInfo
 	 */
-	public synchronized void add(final ToolPerformanceInfo toolPerformanceInfo){
+	public void add(ToolPerformanceInfo toolPerformanceInfo){
 		model.add(toolPerformanceInfo);
+		
+		refresh();
+	}
+	
+	public void addAll(Collection<ToolPerformanceInfo> toolPerformanceInfos){
+		for(ToolPerformanceInfo i : toolPerformanceInfos){
+			model.add(i);
+		}
 		
 		refresh();
 	}

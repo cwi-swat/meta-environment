@@ -291,38 +291,30 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 * {@inheritDoc}
 	 */
 	public void addBreakpoint(String fileName, int lineNumber){
-		try{
-			SwingUtilities.invokeAndWait(new Runnable(){
-				public void run(){
-					Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
-					synchronized(processes){
-						getProcessTree().syncSourceCodeBreakpoints(processes);
-					}
-					reloadModel(null);
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
+				synchronized(processes){
+					getProcessTree().syncSourceCodeBreakpoints(processes);
 				}
-			});
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
+				reloadModel(null);
+			}
+		});
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void removeBreakpoint(String fileName, int lineNumber){
-		try{
-			SwingUtilities.invokeAndWait(new Runnable(){
-				public void run(){
-					Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
-					synchronized(processes){
-						getProcessTree().syncSourceCodeBreakpoints(processes);
-					}
-					reloadModel(null);
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				Map<String, Integer> processes = m_dataComm.getBreakPointSync().getSourceCodeBreakpoints();
+				synchronized(processes){
+					getProcessTree().syncSourceCodeBreakpoints(processes);
 				}
-			});
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
+				reloadModel(null);
+			}
+		});
 	}
 
 	/**
@@ -332,19 +324,14 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 *            {@link ProcessInstance} to be added.
 	 */
 	public void addProcessInstance(final ProcessInstance processInstance){
-		try{
-			SwingUtilities.invokeAndWait(new Runnable(){
-				public void run(){
-					ProcessTreeNode newNode = getProcessTree().add(processInstance, m_dataComm);
-					reloadModel(newNode);
-				}
-			});
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				ProcessTreeNode newNode = getProcessTree().add(processInstance, m_dataComm);
+				reloadModel(newNode);
+			}
+		});
 	}
 	
-
 	/**
 	 * Remove a {@link ProcessInstance} from the {@link ProcessTreeNode}.
 	 * 
@@ -352,16 +339,11 @@ public class ProcessTreeModel extends DefaultTreeModel implements TreeTableModel
 	 *            {@link ProcessInstance} to be removed.
 	 */
 	public void removeProcessInstance(final ProcessInstance processInstance){
-		try{
-			SwingUtilities.invokeAndWait(new Runnable(){
-				public void run(){
-					ProcessTreeNode parentOfRemovedNode = getProcessTree().remove(processInstance);
-					reloadModel(parentOfRemovedNode);		
-				}
-			});
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				ProcessTreeNode parentOfRemovedNode = getProcessTree().remove(processInstance);
+				reloadModel(parentOfRemovedNode);		
+			}
+		});
 	}
 }
-

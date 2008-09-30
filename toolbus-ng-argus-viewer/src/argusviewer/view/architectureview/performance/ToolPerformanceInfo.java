@@ -8,7 +8,7 @@ import java.util.Map;
  * 
  * @author Tigran Kalaidjan
  */
-public class ToolPerformanceInfo {
+public class ToolPerformanceInfo{
 	private final int m_toolId;
 	private final String m_toolName;
 	
@@ -85,7 +85,7 @@ public class ToolPerformanceInfo {
 	public int getToolMemoryNonHeapUsage(){
 		return m_toolMemoryNonHeapUsage;
 	}
-
+	
 	/**
 	 * get tool threads
 	 * 

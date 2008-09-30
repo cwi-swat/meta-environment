@@ -137,31 +137,23 @@ public class ToolListController implements IToolControlListener{
 	 * {@inheritDoc}
 	 */
 	public void addToolInstance(final ToolInstance toolInstance){
-		try{
-			SwingUtilities.invokeAndWait(new Runnable(){
-				public void run(){
-					m_toolTreeModel.addToolInstance(toolInstance, m_dataComm);
-					m_toolListView.refresh();
-				}
-			});
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				m_toolTreeModel.addToolInstance(toolInstance, m_dataComm);
+				m_toolListView.refresh();
+			}
+		});
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void removeToolInstance(final ToolInstance toolInstance){
-		try{
-			SwingUtilities.invokeAndWait(new Runnable(){
-				public void run(){
-					m_toolTreeModel.removeToolInstance(toolInstance);
-					m_toolListView.refresh();
-				}
-			});
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				m_toolTreeModel.removeToolInstance(toolInstance);
+				m_toolListView.refresh();
+			}
+		});
 	}
 }

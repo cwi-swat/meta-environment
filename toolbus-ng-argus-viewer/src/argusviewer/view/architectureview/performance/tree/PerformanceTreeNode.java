@@ -3,6 +3,7 @@ package argusviewer.view.architectureview.performance.tree;
 import java.text.NumberFormat;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+
 import argusviewer.view.architectureview.performance.ThreadInfo;
 import argusviewer.view.architectureview.performance.ToolPerformanceInfo;
 
@@ -262,7 +263,7 @@ public class PerformanceTreeNode extends DefaultMutableTreeNode{
 	 * Updates the {@link ThreadInfo} from this node.
 	 */
 	private void updateThreads(){
-		this.removeAllChildren();
+		removeAllChildren();
 
 		for(ThreadInfo threadInfo : m_toolPerformanceInfo.getThreads().values()){
 			PerformanceTreeNodeThread thread = new PerformanceTreeNodeThread(threadInfo);

@@ -8,6 +8,8 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.SwingUtilities;
+
 import toolbus.StateElement;
 import toolbus.atom.tool.AckEvent;
 import toolbus.atom.tool.Connect;
@@ -44,12 +46,12 @@ import aterm.ATerm;
  * @author Jeldert Pol
  */
 public class ArchitectureController implements IControlListener, IProcessInstanceControlListener, IToolControlListener, IPerformanceControlListener{
-	private final DataComm m_dataComm;
-	private final ArchitectureData m_archData;
-	private final ArchitectureView m_archView;
-	private final PerformanceTreeTable m_performanceTreeTable;
+	private final DataComm dataComm;
+	private final ArchitectureData archData;
+	private final ArchitectureView archView;
+	private final PerformanceTreeTable performanceTreeTable;
 	
-	private final Map<ToolInstance, ToolPerformanceInfo> m_toolPerformance;
+	private final Map<ToolInstance, ToolPerformanceInfo> toolPerformance;
 	
 	private static final HashMap<Class<?>, String> SOURCE_OF_STATEMENT = new HashMap<Class<?>, String>();
 	static{
@@ -74,56 +76,56 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param archView The Architecture View itself
 	 * @param performanceTreeTable The table for the tool performance info
 	 */
-	public ArchitectureController(DataComm dataComm, ArchitectureData archData, ArchitectureView archView, PerformanceTreeTable performanceTreeTable) {
+	public ArchitectureController(DataComm dataComm, ArchitectureData archData, ArchitectureView archView, PerformanceTreeTable performanceTreeTable){
 		super();
 		
-		m_dataComm = dataComm;
-		m_archView = archView;
-		m_archData = archData;
-		m_performanceTreeTable = performanceTreeTable;
+		this.dataComm = dataComm;
+		this.archView = archView;
+		this.archData = archData;
+		this.performanceTreeTable = performanceTreeTable;
 		
-		m_toolPerformance = new HashMap<ToolInstance, ToolPerformanceInfo>();
+		toolPerformance = new HashMap<ToolInstance, ToolPerformanceInfo>();
 		
-		m_dataComm.getControlSync().register((IControlListener) this);
-		m_dataComm.getControlSync().register((IToolControlListener) this);
-		m_dataComm.getControlSync().register((IProcessInstanceControlListener) this);
-		m_dataComm.getControlSync().register((IPerformanceControlListener) this);
+		dataComm.getControlSync().register((IControlListener) this);
+		dataComm.getControlSync().register((IToolControlListener) this);
+		dataComm.getControlSync().register((IProcessInstanceControlListener) this);
+		dataComm.getControlSync().register((IPerformanceControlListener) this);
 		populateArchitectureList(); // Setup initial filling of the data model
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public void addProcessInstance(ProcessInstance processInstance) {
-		m_archData.addProcess(new Process(processInstance.getProcessName()));
-		m_archView.updateVisualization();
+	public void addProcessInstance(ProcessInstance processInstance){
+		archData.addProcess(new Process(processInstance.getProcessName()));
+		archView.updateVisualization();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public void addToolInstance(ToolInstance toolInstance) {
-		m_archData.addTool(new Tool(toolInstance.getToolName()));
-		m_archView.updateVisualization();
+	public void addToolInstance(ToolInstance toolInstance){
+		archData.addTool(new Tool(toolInstance.getToolName()));
+		archView.updateVisualization();
 	}
 
 	/**
 	 * add a toolbus singleton instance
 	 */
 	public void addToolbusSingletonInstance(){
-		m_archData.addToolbusSingleton(new ToolbusSingleton());
-		m_archView.updateVisualization();
+		archData.addToolbusSingleton(new ToolbusSingleton());
+		archView.updateVisualization();
 	}
 
 	/**
 	 * Get all the processes and tools currently running from the toolbus.
 	 */
 	private void populateArchitectureList(){
-		for(ProcessInstance process : m_dataComm.getControlSync().getProcesses()){
+		for(ProcessInstance process : dataComm.getControlSync().getProcesses()){
 			addProcessInstance(process);	
 		}
 
-		for(ToolInstance tool : m_dataComm.getControlSync().getTools()){
+		for(ToolInstance tool : dataComm.getControlSync().getTools()){
 			addToolInstance(tool);
 		}
 		
@@ -153,7 +155,7 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 * @param executedStateElement The statement that was executed
 	 * @param partners In case of a message, this shows the receiving process instances
 	 */
-	public void stepExecuted(int tick, ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners) {
+	public void stepExecuted(int tick, ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners){
 		String sourceName = "";
 		String sourceType = "";
 		
@@ -201,8 +203,8 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 		Iterator<String> keysIterator = keys.iterator();
 		while(keysIterator.hasNext()){	
 			String targetName = keysIterator.next();
-			m_archData.addMessage(new Message(getMessageFromStateElement(executedStatementString), sourceName, sourceType , targetName, messageReceivers.get(targetName), msgType));
-			m_archView.updateVisualization();
+			archData.addMessage(new Message(getMessageFromStateElement(executedStatementString), sourceName, sourceType , targetName, messageReceivers.get(targetName), msgType));
+			archView.updateVisualization();
 		}
 	}
 
@@ -265,12 +267,12 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
 	 */
 	public void updatePerformance(ToolInstance toolInstance, ATerm term){
 		ToolPerformanceInfo info;
-		synchronized(m_toolPerformance){
-			if(!m_toolPerformance.containsKey(toolInstance)){
-				m_toolPerformance.put(toolInstance, new ToolPerformanceInfo(toolInstance.getToolID(), toolInstance.getToolName()));
+		synchronized(toolPerformance){
+			if(!toolPerformance.containsKey(toolInstance)){
+				toolPerformance.put(toolInstance, new ToolPerformanceInfo(toolInstance.getToolID(), toolInstance.getToolName()));
 			}
 			
-			info = m_toolPerformance.get(toolInstance);
+			info = toolPerformance.get(toolInstance);
 		}
 		
 		String toolType;
@@ -325,15 +327,18 @@ public class ArchitectureController implements IControlListener, IProcessInstanc
         		}
         	}
         	
-       		threads.put(threadName, new ThreadInfo(threadName, userTime, systemTime));
-        	
-        	info.setThreads(threads);
+    		threads.put(threadName, new ThreadInfo(threadName, userTime, systemTime));
         }
+    	
+    	info.setThreads(threads);
 		
-		
-		for(ToolPerformanceInfo i : m_toolPerformance.values()){
-			m_performanceTreeTable.add(i);
-		}
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				synchronized(toolPerformance){
+					performanceTreeTable.addAll(toolPerformance.values());
+				}
+			}
+		});
 	}
 	
 	/**
