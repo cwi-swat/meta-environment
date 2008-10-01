@@ -8,6 +8,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import argusviewer.util.IconLoader;
+
 import com.sun.java.treetable.example.JTreeTable;
 
 /**
@@ -126,8 +128,8 @@ public class ToolTreeTable extends JTreeTable{
 class ToolTreeCellRenderer extends DefaultTreeCellRenderer{
 	private static final long serialVersionUID = -3084040025754474656L;
 	
-	private final static ImageIcon GROUP_ICON = new ImageIcon(ToolTreeCellRenderer.class.getResource("/resources/icons/group.png"));
-	private final static ImageIcon TOOL_ICON = new ImageIcon(ToolTreeCellRenderer.class.getResource("/resources/icons/tool.png"));
+	private final static ImageIcon GROUP_ICON = IconLoader.loadIcon("group.png");
+	private final static ImageIcon TOOL_ICON = IconLoader.loadIcon("tool.png");
 	
 	/**
 	 * Creates a ProcessTreeCellRenderer

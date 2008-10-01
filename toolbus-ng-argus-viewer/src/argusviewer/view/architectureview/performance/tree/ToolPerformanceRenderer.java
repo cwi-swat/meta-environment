@@ -6,6 +6,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import argusviewer.util.IconLoader;
+
 /**
  * Draws a Performance Tree Cell
  * 
@@ -14,9 +16,9 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 public class ToolPerformanceRenderer extends DefaultTreeCellRenderer {
 	private static final long serialVersionUID = -7191130444201004897L;
 	
-	private static final ImageIcon ICON_GROUP = new ImageIcon(ToolPerformanceRenderer.class.getResource("/resources/icons/group.png"));
-	private static final ImageIcon ICON_TOOL = new ImageIcon(ToolPerformanceRenderer.class.getResource("/resources/icons/tool.png"));
-	private static final ImageIcon ICON_THREAD = new ImageIcon(ToolPerformanceRenderer.class.getResource("/resources/icons/thread.png"));
+	private static final ImageIcon ICON_GROUP = IconLoader.loadIcon("group.png");
+	private static final ImageIcon ICON_TOOL = IconLoader.loadIcon("tool.png");
+	private static final ImageIcon ICON_THREAD = IconLoader.loadIcon("thread.png");
 
 	/**
 	 * Creates a {@link ToolPerformanceRenderer}.

@@ -5,6 +5,8 @@ import java.awt.Component;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
+
+import argusviewer.util.IconLoader;
 import argusviewer.view.processlist.data.ProcessTreeNode;
 
 /**
@@ -15,8 +17,8 @@ import argusviewer.view.processlist.data.ProcessTreeNode;
 public class ProcessTreeCellRenderer extends DefaultTreeCellRenderer{
 	private static final long serialVersionUID = -2763392586708582562L;
 	
-	private static final ImageIcon ICON_GROUP = new ImageIcon(ProcessTreeCellRenderer.class.getResource("/resources/icons/group.png"));
-	private static final ImageIcon ICON_PROCESS = new ImageIcon(ProcessTreeCellRenderer.class.getResource("/resources/icons/process.png"));
+	private static final ImageIcon ICON_GROUP = IconLoader.loadIcon("group.png");
+	private static final ImageIcon ICON_PROCESS = IconLoader.loadIcon("process.png");
 	
 	/**
 	 * Creates a ProcessTreeCellRenderer

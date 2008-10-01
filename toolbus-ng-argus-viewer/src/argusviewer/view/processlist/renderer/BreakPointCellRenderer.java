@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
+
+import argusviewer.util.IconLoader;
 import argusviewer.view.processlist.data.ProcessTreeNode.BreakPointType;
 
 /**
@@ -18,9 +20,9 @@ import argusviewer.view.processlist.data.ProcessTreeNode.BreakPointType;
  * @author Jeldert Pol
  */
 public class BreakPointCellRenderer implements TableCellRenderer{
-	public static final ImageIcon ICON_LINE = new ImageIcon(BreakPointCellRenderer.class.getResource("/resources/icons/breakpoint_source.png"));
-	public static final ImageIcon ICON_PROCESS = new ImageIcon(BreakPointCellRenderer.class.getResource("/resources/icons/breakpoint_process.png"));
-	public static final ImageIcon ICON_BOTH = new ImageIcon(BreakPointCellRenderer.class.getResource("/resources/icons/breakpoint_both.png"));
+	public static final ImageIcon ICON_LINE = IconLoader.loadIcon("breakpoint_source.png");
+	public static final ImageIcon ICON_PROCESS = IconLoader.loadIcon("breakpoint_process.png");
+	public static final ImageIcon ICON_BOTH = IconLoader.loadIcon("breakpoint_both.png");
 
 	private final JButton m_button;
 
