@@ -46,6 +46,8 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	private final int port;
 	
 	private final ToolBus toolbus;
+	
+	private volatile Runnable exceptionHandler;
 
 	/**
 	 * Constructor.
@@ -72,6 +74,8 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 		this.port = port;
 		
 		this.toolbus = null;
+		
+		exceptionHandler = null;
 
 		threadLocalQueues = new HashMap<Long, ThreadLocalJobQueue>();
 		queues = new HashMap<String, JobQueue>();
@@ -385,9 +389,27 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * @see IDataHandler#exceptionOccured()
 	 */
 	public void exceptionOccured(){
-		LoggerFactory.log("Lost connection with the ToolBus. Initiating ungraceful shutdown ....", ILogger.FATAL, IToolBusLoggerConstants.TOOL);
-		
-		System.exit(0);
+		LoggerFactory.log("Lost connection with the ToolBus.", ILogger.FATAL, IToolBusLoggerConstants.TOOL);
+		if(exceptionHandler != null){
+			exceptionHandler.run();
+		}else{
+			LoggerFactory.log("Initiating ungraceful shutdown ....", ILogger.FATAL, IToolBusLoggerConstants.TOOL);
+			
+			System.exit(0);
+		}
+	}
+	
+	/**
+	 * Enables the user to specify an exception handler. This 'handler' will be executed in case a
+	 * fatal exception occurs, which results in the inability to further communicate with the
+	 * ToolBus. If no custom exception handler is specified, the default action will be to initiate
+	 * an ungraceful shutdown of the tool.
+	 * 
+	 * @param exceptionHandler
+	 *            The exception handler.
+	 */
+	public void setExceptionHandler(Runnable exceptionHandler){
+		this.exceptionHandler = exceptionHandler;
 	}
 
 	/**
