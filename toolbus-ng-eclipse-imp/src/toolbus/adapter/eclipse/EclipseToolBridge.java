@@ -20,7 +20,7 @@ public class EclipseToolBridge extends JavaToolBridge{
 	 * @see IDataHandler#exceptionOccured()
 	 */
 	public void exceptionOccured(){
-		LoggerFactory.log("Lost connection with the ToolBus. Initiating ungraceful shutdown ....", ILogger.FATAL, IToolBusLoggerConstants.TOOL);
+		LoggerFactory.log("Lost connection with the ToolBus.", ILogger.FATAL, IToolBusLoggerConstants.TOOL);
 		
 		// TODO What to do now?
 	}
