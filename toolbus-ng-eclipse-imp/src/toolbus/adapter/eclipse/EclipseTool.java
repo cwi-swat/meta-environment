@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 
 import toolbus.ToolBusEclipsePlugin;
 import toolbus.adapter.java.AbstractJavaTool;
+import toolbus.adapter.java.JavaToolBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermBlob;
@@ -31,6 +32,8 @@ public class EclipseTool extends AbstractJavaTool{
 	private final String name;
 
 	public EclipseTool(String name){
+		super();
+		
 		this.name = name;
 	}
 	
@@ -76,9 +79,20 @@ public class EclipseTool extends AbstractJavaTool{
 	}
 
 	public void connect(String[] args) throws Exception{
-		EclipseToolBridge bridge = new EclipseToolBridge(factory, this, name, -1, host, port);
-		setToolBridge(bridge);
-		bridge.run();	
+		toolBridge = new JavaToolBridge(factory, this, name, -1, host, port);
+		toolBridge.setExceptionHandler(new ToolBridgeExceptionHandler());
+		toolBridge.run();	
+	}
+	
+	private static class ToolBridgeExceptionHandler implements Runnable{
+		
+		public ToolBridgeExceptionHandler(){
+			super();
+		}
+		
+		public void run(){
+			// TODO What to do?
+		}
 	}
 
 	public void receiveTerminate(ATerm aTerm){
