@@ -239,7 +239,7 @@ public abstract class AbstractTool implements IOperations{
 				throw new RuntimeException("Unkown term type: "+packedTerm.getType());
 		}
 		
-		if(annos != null){
+		if(!annos.isEmpty()){
 			annos = (ATermList) unpack(annos);
 			result = result.setAnnotations(annos);
 		}
