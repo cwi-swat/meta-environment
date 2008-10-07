@@ -43,7 +43,7 @@ module Utils
     attr_reader :smtp, :port, :from_address
 
     def initialize(from_address, smtp, port = 25, 
-                   build_url_pattern = "http://sisyphus.sen.cwi.nl:8080/si_items/show/%d")
+                   build_url_pattern = "http://sisyphus.meta-environment.org/si_items/show/%d")
       @smtp = smtp
       @port = port
       @from_address = from_address
