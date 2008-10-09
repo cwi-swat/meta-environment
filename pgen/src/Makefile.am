@@ -115,7 +115,7 @@ Sdf2-Normalization.eqs:
 	eqs-dump -m languages/sdf2/normalization/Sdf2-Normalization -o $@
 
 asfc-load: Sdf2-Load.eqs
-	asfc -v -i Sdf2-Load.eqs -p ${top_builddir}/grammar/Sdf2.baf -o Sdf2-Load.c
+	asfc -v -i Sdf2-Load.eqs -p ${top_builddir}/grammar/Sdf2.saf -o Sdf2-Load.c
 
 Sdf2-Load.eqs:
 	eqs-dump -m languages/sdf2/load/Sdf2 -o $@

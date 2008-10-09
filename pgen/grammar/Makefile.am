@@ -1,7 +1,7 @@
-EXTRA_DIST = Sdf2.def Sdf2.baf
+EXTRA_DIST = Sdf2.def Sdf2.saf
 CLEANFILES = Sdf2.asfix
 
-pkgdata_DATA = Sdf2.baf
+pkgdata_DATA = Sdf2.saf
 
 LIBRARY_DIR = ../../sdf-library/library
 
@@ -27,5 +27,4 @@ bootstrap: Sdf2.def
 	sglr -p $(srcdir)/Sdf2-bootstrap.tbl \
 		-i $(srcdir)/Sdf2.def \
 		-o Sdf2.asfix
-	parsetablegen < Sdf2.asfix > Sdf2.baf
-#	~markvdb/glt/asf-sdf-meta/install/bin/parsetablegen < Sdf2.asfix > Sdf2.baf
+	parsetablegen < Sdf2.asfix > Sdf2.saf
