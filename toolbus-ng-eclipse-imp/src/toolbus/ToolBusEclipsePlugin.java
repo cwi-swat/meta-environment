@@ -28,10 +28,9 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			super();
 			String configFile = getConfigFile();
 			
-			if (configFile != null) {
-			  toolbus = new ToolBus(new String[]{"-properties", getConfigFile()});
-			}
-			else {
+			if(configFile != null){
+			  toolbus = new ToolBus(new String[]{"-properties", configFile});
+			}else{
 				throw new RuntimeException("There was no proper toolbus extension found, so the ToolBus will not function");
 			}
 		}
