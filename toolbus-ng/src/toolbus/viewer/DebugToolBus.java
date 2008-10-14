@@ -166,7 +166,6 @@ public class DebugToolBus extends ToolBus{
 		try{
 			boolean work = false;
 			boolean reset = false;
-			long currentNextTime = 0;
 			workHasArrived = true; // This is just to get things started.
 			
 			PROCESSLOOP: do{
@@ -174,30 +173,29 @@ public class DebugToolBus extends ToolBus{
 					while((!workHasArrived && running) || !(doStep || doRun)){
 						fireStateChange(IViewerConstants.WAITING_STATE);
 						
-						long blockTime = nextTime - getRunTime(); // Recalculate the delay before sleeping.
-						if(blockTime > 0){
-							try{
-								processLock.wait(blockTime);
-							}catch(InterruptedException irex){
-								// Just ignore this, it's not harmfull.
+						if(nextTime > 0){
+							long blockTime = nextTime - getRunTime(); // Recalculate the delay before sleeping.
+							if(blockTime > 0){ // Only block if we really don't have any work to do; the timer might have expired during the last iteration.
+								try{
+									processLock.wait(blockTime);
+								}catch(InterruptedException irex){
+									// Just ignore this, it's not harmful.
+								}
 							}
 							workHasArrived = true;
-						}else if(currentNextTime != nextTime){ // If the nextTime changed and the blockTime is zero or less, don't block as there might be work to do.
-							workHasArrived = true;
-							currentNextTime = nextTime;
 						}else{
 							try{
 								processLock.wait();
 							}catch(InterruptedException irex){
-								// Just ignore this, it's not harmfull.
+								// Just ignore this, it's not harmful.
 							}
 							
-							if(performanceInformationRetriever != null) performanceInformationRetriever.handleRetrievedData(); // Handle the arrived performance stats before continueing to execute the process logic.
+							if(performanceInformationRetriever != null) performanceInformationRetriever.handleRetrievedData(); // Handle the arrived performance stats before continuing to execute the process logic.
 						}
 						
 						if(shuttingDown) return; // Stop executing if a shutdown is triggered.
 					}
-					currentNextTime = nextTime;
+					nextTime = 0;
 					
 					if(doStep) fireStateChange(IViewerConstants.STEPPING_STATE);
 					else if(doRun) fireStateChange(IViewerConstants.RUNNING_STATE);

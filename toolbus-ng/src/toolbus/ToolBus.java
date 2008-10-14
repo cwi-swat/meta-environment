@@ -585,7 +585,7 @@ public class ToolBus{
 		running = true;
 		try{
 			PROCESSLOOP: do{
-				long currentNextTime = nextTime;
+				nextTime = 0;
 				boolean work;
 				do{
 					workHasArrived = false;
@@ -615,17 +615,17 @@ public class ToolBus{
 					// arrive.
 					while(!workHasArrived && running){
 						try{
-							long blockTime = nextTime - getRunTime(); // Recalculate the delay before sleeping.
-							if(blockTime > 0){
-								processLock.wait(blockTime);
-								workHasArrived = true;
-							}else if(currentNextTime != nextTime){ // If the nextTime changed and the blockTime is zero or less, don't block as there might be work to do.
+							if(nextTime > 0){
+								long blockTime = nextTime - getRunTime(); // Recalculate the delay before sleeping.
+								if(blockTime > 0){ // Only block if we really don't have any work to do; the timer might have expired during the last iteration.
+									processLock.wait(blockTime);
+								}
 								workHasArrived = true;
 							}else{
 								processLock.wait();
 							}
 						}catch(InterruptedException irex){
-							// Just ignore this, it's not harmfull.
+							// Just ignore this, it's not harmful.
 						}
 					}
 				}
