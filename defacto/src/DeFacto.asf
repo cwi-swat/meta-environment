@@ -1,0 +1,11 @@
+equations
+
+[main]
+  TreeTable := create-node-ids(Tree),
+  RStore0 := create-store(),
+  RStore1 := tree-to-rstore(Tree, RStore0, TreeTable),
+  RStore' := extract-roles(Tree, RStore1, TreeTable)
+  ===>
+  extract-facts(
+    parsetree(appl(prod( [Symbol*], sort("<START>"), Attributes ), [Tree', Tree, Tree''] ) {ATerm+}, 0)
+  ) = RStore'

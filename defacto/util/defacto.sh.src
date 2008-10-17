@@ -1,0 +1,253 @@
+#! /bin/sh
+
+# DeFacto -- fact extractor
+# This utility provides the following functionality
+# - Extract facts from a term (parsed from a grammar with fact annotations) (default)
+# - Weave fact annotations into a grammar and create a parse table (-w option)
+
+#set -e
+#set -x
+
+#   variables
+prefix=__PREFIX__
+bindir=__BINDIR__
+datadir=__DATADIR__
+
+PRG=`basename $0`
+VERBOSE=
+
+DEFACTO=${bindir}/DeFacto
+RSTORE_SORT=RStore
+SUMMARY_SORT=Summary
+EVALUATOR_RESULT=$RSTORE_SORT
+
+ADDPOSINFO=__PT_SUPPORT__/bin/addPosInfo
+APPLYFUNCTION=__PT_SUPPORT__/bin/apply-function
+SGLR=__SGLR__/bin/sglr
+UNPARSEPT=__PT_SUPPORT__/bin/unparsePT
+LIFTPT=__PT_SUPPORT__/bin/liftPT
+LIFT_RSTORE=__RSTORE_SUPPORT__/bin/lift-rstore
+LOWER_RSTORE=__RSTORE_SUPPORT__/bin/lower-rstore
+ASFE=__ASF__/bin/asfe
+SDF2TABLE=__PGEN__/bin/sdf2table
+
+SORTSTOIDS_PARSE_TABLE=${datadir}/SortsToIds.trm.tbl
+SORTSTOIDS_EQUATIONS=${datadir}/SortsToIds.eqs
+
+SORTSTOIDS_FUN=sorts-to-ids
+SORTSTOIDS_RESULT=SDF
+DEFACTO_FUN=extract-facts
+DEFACTO_RESULT=RStore
+
+TERM=
+ANNOTATIONS=
+PARSETABLE=
+OUTPUTFILE="-"
+MODULE=
+WEAVED_DEFINITION="weaved-definition.tmp"
+
+DO_EXTRACTION=
+DO_WEAVING=
+
+TMP_FILES=
+
+# 
+#   usage
+usage() {
+cat << ENDCAT >&2
+DeFacto -- Fact Extractor
+
+This utility provides the following functionality:
+ - Extract facts from a term (parsed from a grammar with fact annotations) (default)
+ - Weave fact annotations into a grammar and create a parse table (-w option)
+
+Usage: $PRG [options]
+
+Options:
+  -e (--extract)              extract facts from input term (default)
+  -i (--input)    filename    input term parse tree (needs to be parsed with weaved parse table)
+  -t (--table)    filename    parse table for term (with weaved annotations)
+  -o (--output)   filename    output file (rstore or parse table) (default: stdout)
+
+  -w (--weave)                weave fact annotations into module and create parse table
+  -a (--annos)    filename    fact annotations file
+  -m (--module)   modulename  module to weave fact annotations into
+
+  -h (--help)                 print usage info
+  -v (--verbose)              verbose output (default:not verbose)
+
+Examples:
+  $PRG -w -a javaCFG.defacto -m languages/java/syntax/Java -o java.anno.trm.tbl
+  $PRG -e -i term.java -t java.anno.trm.tbl -o result.rstore
+  $PRG -i term.java -t java.anno.trm.tbl -o result.rstore
+
+ENDCAT
+}
+
+# 
+# 
+die() {
+  echo $PRG: $1
+  exit 1
+}
+
+# ###########################
+# 
+check_rscript_file_type() {
+  case "$1" in
+  *.rscript) ;;
+  *) die "$1 is not an rscript"
+  esac
+  if [ ! -r $1 ]
+  then
+     die "$1 is not readable"
+  fi
+}
+
+# 
+check_rstore_file_type(){
+  case "$1" in
+  *.rstore) ;;
+  *) die "$1 is not an rstore"
+  esac
+}
+#############################
+
+#
+# check_input
+
+check_input() {
+  if test "$DO_WEAVING" = "yes"
+  then
+    if test "$DO_EXTRACTION" = "yes"
+    then
+      die "Options -e and -w are incompatible"
+    fi
+
+    if test -z "$MODULE"
+    then
+      die "No module specified for weaving"
+    fi
+
+    if test -z "$ANNOTATIONS"
+    then
+      die "No fact annotations specified for weaving"
+    fi
+
+  else
+    DO_EXTRACTION=yes
+
+    if test -z "$TERM"
+    then
+      die "No input term specified"
+    fi
+
+    if test -z "$PARSETABLE"
+    then
+      die "No parse table specified"
+    fi
+  fi
+}
+
+# 
+# add_tmp_file
+
+add_tmp_file() {
+  TMP_FILES="$TMP_FILES $1"
+}
+
+# 
+# cleanup
+
+cleanup() {
+  rm -f $TMP_FILES
+}
+
+#
+# parse_term
+
+parse_term() {
+  FILENAME="$TERM"
+  if [ "`dirname $FILENAME`" == "." ]
+  then
+    FILENAME="`pwd`/$FILENAME"
+  fi
+
+  $SGLR $VERBOSE -p $PARSETABLE -i $TERM | $ADDPOSINFO -p $FILENAME | $LIFTPT -o $TERM.lifted.pt
+  add_tmp_file $TERM.lifted.pt
+}
+
+#
+# extract
+
+extract() {
+  $DEFACTO -r $DEFACTO_RESULT -f $DEFACTO_FUN -i $TERM.lifted.pt | $LOWER_RSTORE -o "$OUTPUTFILE"
+  echo ""
+}
+
+#
+# weave
+
+weave() {
+
+#  $DEF_DUMP -m $MODULE -o $MODULE.def
+#  add_tmp_file $MODULE.def
+#  $SGLR $VERBOSE -p $SORTSTOIDS_PARSE_TABLE -i $MODULE.def -o $MODULE.def.pt
+#  add_tmp_file $MODULE.def.pt
+#  SdfWeaver -f weave-attributes -i $ATTRIBUTES.pt -i $MODULE.def.pt -r SDF |
+
+  sdfweaver -m $MODULE -a $ANNOTATIONS -d -o $WEAVED_DEFINITION
+  add_tmp_file $WEAVED_DEFINITION
+  $SGLR $VERBOSE -p $SORTSTOIDS_PARSE_TABLE -i $WEAVED_DEFINITION -o $WEAVED_DEFINITION.pt
+  add_tmp_file $WEAVED_DEFINITION.pt
+
+  $APPLYFUNCTION -f $SORTSTOIDS_FUN -s $SORTSTOIDS_RESULT -i $WEAVED_DEFINITION.pt | $ASFE -e $SORTSTOIDS_EQUATIONS | $SDF2TABLE -m $MODULE -o $OUTPUTFILE
+
+}
+
+# 
+# main
+
+if test $# -eq 0
+then
+  usage
+  exit 1
+fi
+
+while test $# -gt 0
+do
+  case "$1" in
+    -h | --help)
+      usage; exit 0 ;;
+    -e | --extract)
+      DO_EXTRACTION=yes ;;
+    -i | --input)
+      shift; TERM=$1 ;;
+    -o | --output)
+      shift; OUTPUTFILE=$1 ;;
+    -t | --table)
+      shift; PARSETABLE=$1 ;;
+    -w | --weave)
+      DO_WEAVING=yes ;;
+    -a | --annos)
+      shift; ANNOTATIONS=$1 ;;
+    -m | --module)
+      shift; MODULE=$1 ;;
+    -v | --verbose)
+      VERBOSE=-v ;;
+    *)
+      usage; exit 1 ;;
+  esac
+  shift
+done
+
+check_input
+if test "$DO_EXTRACTION" = "yes"
+then
+  parse_term
+  extract
+else
+  weave
+fi
+cleanup
+

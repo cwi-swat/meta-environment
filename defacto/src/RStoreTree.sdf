@@ -1,0 +1,78 @@
+module RStoreTree
+
+imports languages/asfix/syntax/Tree
+imports containers/Table[Tree Integer]
+imports ExtRStores
+imports TreeYield
+
+exports
+aliases
+Table[[Tree, Integer]] -> TreeTable
+
+sorts TreeTable
+
+context-free syntax
+
+create-node-ids(Tree) -> TreeTable
+tree-to-rstore(Tree, RStore, TreeTable) -> RStore
+find-subtrees({Tree ","}*, TreeTable) -> {Tree ","}*
+
+
+hiddens
+imports basic/Comments
+context-free syntax
+
+collect-nodes(Tree, TreeTable) -> TreeTable
+collect-child-nodes({Tree ","}*, TreeTable, parentid:Integer) -> TreeTable
+
+insert-child-relation(RStore, Integer, Integer) -> RStore
+node-to-rstore(Tree, parent:Integer, TreeTable, RStore) -> RStore
+traverse-children({Tree ","}*, parent:Integer, TreeTable, RStore) -> RStore
+
+extract-sort(Symbol) -> StrCon
+posinfo-to-location(ATerm) -> Location
+
+find-subtree(Tree, TreeTable) -> {Tree ","}*
+
+insert-natcon-value(RStore, StrCon, Integer, StrCon) -> RStore
+
+strchar-to-int(StrChar) -> Integer
+str-to-int(StrCon) -> Integer
+
+context-free syntax
+
+store-siblings(RElem, RStore) -> RStore { traversal(accu, top-down, continue) }
+build-sibling-rel(RElem, RStore) -> RStore { traversal(accu, top-down, continue) }
+build-sibling-rel(Integer, RStore) -> RStore { traversal(accu, top-down, continue) }
+build-sibling-info(RStore) -> RStore
+
+
+variables
+
+"Attr*"[0-9\']* -> {Attr ","}*
+"Attr+"[0-9\']* -> {Attr ","}+
+"Attributes"[0-9\']* -> Attributes
+"ATerm"[0-9\']* -> ATerm
+"ATerm*"[0-9\']* -> {ATerm ","}*
+"ATerm+"[0-9\']* -> {ATerm ","}+
+"Id"[0-9\']* -> IdCon
+"Int"[0-9\']* -> Integer
+"Location"[0-9\']* -> Location
+"N"[0-9\']* -> NatCon
+"Production"[0-9\']* -> Production
+"RElem"[0-9\']* -> RElem
+"RElem*"[0-9\']* -> {RElem ","}*
+"RStore"[0-9\']* -> RStore
+"StrCon"[0-9\']* -> StrCon
+"Symbols"[0-9\']* -> Symbols
+"Symbol"[0-9\']* -> Symbol
+"Symbol*"[0-9\']* -> {Symbol ","}*
+"Symbol+"[0-9\']* -> {Symbol ","}+
+"Tree"[0-9\']* -> Tree
+"Tree*"[0-9\']* -> {Tree ","}*
+"Tree+"[0-9\']* -> {Tree ","}+
+"TreeTable"[0-9\']* -> TreeTable
+
+lexical variables
+  "c"[\'0-9]* -> StrChar
+  "c*"[\'0-9]* -> StrChar*

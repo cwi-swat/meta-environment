@@ -1,0 +1,25 @@
+module DeFacto
+
+imports languages/asfix/syntax/Parsetree
+imports RStoreTree
+imports Roles
+
+exports
+context-free start-symbols
+RStore
+
+context-free syntax
+
+extract-facts(ParseTree) -> RStore
+
+
+hiddens
+variables
+
+"RStore"[0-9\']* -> RStore
+"Tree"[0-9\']* -> Tree
+"TreeTable"[0-9\']* -> TreeTable
+"Symbol*"[0-9\']* -> {Symbol ","}*
+"Attributes"[0-9\']* -> Attributes
+"ATerm+"[0-9\']* -> {ATerm ","}+
+"Tree*"[0-9\']* -> {Tree ","}*

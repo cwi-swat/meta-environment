@@ -1,0 +1,63 @@
+equations
+
+[]
+  insert-many(rstore([Tuple*1, <Var,rel[Type+], Set>, Tuple*2]), Var, {Value*}) =
+    rstore([<Var,rel[Type+], union(Set, {Value*})>, Tuple*1, Tuple*2])
+
+[]
+  insert-many(rstore([Tuple*1, <Var,set[Type], Set>, Tuple*2]), Var, {Value*}) =
+    rstore([<Var,set[Type], union(Set, {Value*})>, Tuple*1, Tuple*2])
+
+
+
+
+equations
+
+[]
+  keys(rstore([_Tuple*1, <Var,rel[_Type1,_Type2], Rel>, _Tuple*2]), Var) =
+  domain(Rel)
+
+
+
+
+
+
+equations
+
+[]
+  {RElem*3} := quicksort(RElem1),
+  {RElem*4} := quicksort(RElem2)
+  ===>
+  quickfilter({}, RElem, RElem1, RElem2) = {RElem*3, RElem, RElem*4}
+
+[]
+  Int0 := RElem0,
+  Int := RElem,
+  Int0 <= Int == true
+  ===>
+  quickfilter({RElem0, RElem*0}, RElem, {RElem*1}, {RElem*2}) =
+  quickfilter({RElem*0}, RElem, {RElem*1, RElem0}, {RElem*2})
+
+[]
+  Int0 := RElem0,
+  Int := RElem,
+  Int0 > Int == true
+  ===>
+  quickfilter({RElem0, RElem*0}, RElem, {RElem*1}, {RElem*2}) =
+  quickfilter({RElem*0}, RElem, {RElem*1}, {RElem*2, RElem0})
+
+[]
+  quicksort({}) = {}
+
+[]
+  quicksort({RElem}) = {RElem}
+
+[]
+  quicksort({RElem, RElem*}) = quickfilter({RElem*}, RElem, {}, {})
+
+
+
+
+tests
+[] quicksort({6,5,4,3,2,1}) == {1,2,3,4,5,6}
+[] quicksort({56,25,64,13,32,41}) == {13,25,32,41,56,64}

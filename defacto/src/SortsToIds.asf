@@ -1,0 +1,135 @@
+equations
+
+[]  sorts-to-ids($SDF) = sorts-to-ids-t($SDF)
+
+[]  sorts-to-ids-t($Symbol* -> $Symbol { $Attribute+ }) =
+      $Symbol* -> $Symbol { convert-attr-annos($Attribute+, $Symbol* $Symbol) }
+
+
+
+
+[]  convert-attr-annos($Attribute, $Attribute+, $Symbol*) = 
+      convert-attr-anno($Attribute, $Symbol*), convert-attr-annos($Attribute+, $Symbol*)
+[]  convert-attr-annos($Attribute, $Symbol*) = convert-attr-anno($Attribute, $Symbol*)
+
+
+[]  convert-attr-anno($ATerm, $Symbol*) = convert-term-anno($ATerm, $Symbol*)
+[default]
+    convert-attr-anno($Attribute, $Symbol*) = $Attribute
+
+
+[]  convert-term-annos($ATerm, $ATerm+, $Symbol*) = 
+      convert-term-anno($ATerm, $Symbol*), convert-term-annos($ATerm+, $Symbol*)
+[]  convert-term-annos($ATerm, $Symbol*) = convert-term-anno($ATerm, $Symbol*)
+
+
+[]  convert-term-anno(role($ATerm, $ATerm+), $Symbol*) = role($ATerm, convert-term-annos($ATerm+, $Symbol*))
+[]  convert-term-anno(fact($ATerm, $ATerm+), $Symbol*) = role($ATerm, convert-term-annos($ATerm+, $Symbol*))
+[]  convert-term-anno(if-empty($ATerm, $ATerm+), $Symbol*) = if-empty($ATerm, convert-term-annos($ATerm+, $Symbol*))
+[]  convert-term-anno(if-not-empty($ATerm, $ATerm+), $Symbol*) = if-not-empty($ATerm, convert-term-annos($ATerm+, $Symbol*))
+
+[]  $AFun != role,
+    $AFun != fact,
+    $AFun != if-empty,
+    $AFun != if-not-empty
+    ===>
+    convert-term-anno($AFun($ATerm+), $Symbol*) = $AFun(convert-term-annos($ATerm+, $Symbol*))
+
+[]  convert-term-anno(parent, $Symbol*) = parent
+
+[]  $Id != parent,
+    $Int := get-sort-id($Id, $Symbol*, 1),
+    $Int != -1,
+    $N := $Int
+    ===>
+    convert-term-anno($Id, $Symbol*) = $N
+
+[default]
+    $Str := unparse-to-string($Id),
+    $N := execute-command("xmessage " || $Str )
+    ===>
+    convert-term-anno($Id, $Symbol*) = $Id
+
+[default]
+    convert-term-anno($ATerm, $Symbol*) = $ATerm
+
+
+
+
+[]  idcon($a $n $d) := $Id,
+    $N := natcon($d)
+    ===>
+    get-sort-id($Id, $Symbol*, $Int) = get-sort-id(idcon($a $n), $N, $Symbol*, $Int)
+
+
+[default]
+    get-sort-id($Id, $Symbol*, $Int) = get-sort-id($Id, 1, $Symbol*, $Int)
+
+
+
+
+[]  equals($Id, $Symbol) == false
+    ===>
+    get-sort-id($Id, $Int1, $Symbol $Symbol+, $Int2) = get-sort-id($Id, $Int1, $Symbol+, $Int2 + 1)
+
+[]  equals($Id, $Symbol) == true
+    ===>
+    get-sort-id($Id, 1, $Symbol $Symbol+, $Int2) = $Int2
+
+[]  equals($Id, $Symbol) == true,
+    $Int1 != 1
+    ===>
+    get-sort-id($Id, $Int1, $Symbol $Symbol+, $Int2) = get-sort-id($Id, $Int1 - 1, $Symbol+, $Int2 + 1)
+
+[]  equals($Id, $Symbol) == true
+    ===>
+    get-sort-id($Id, $Int1, $Symbol, $Int2) = 0
+
+[default]
+    get-sort-id($Id, $Int1, $Symbol, $Int2) = -1
+
+[]  get-sort-id($Id, $Int1, , $Int) = -1
+
+
+
+
+[]  unparse-to-string($Id) == unparse-to-string($Sort)
+    ===>
+    equals($Id, $Sort) = true
+
+[]  $Str := unparse-to-string($Id),
+    strcon(\" c*1 strchar(\-) strchar(o) strchar(p) strchar(t) \") := $Str,
+    strcon(\" c*1 \") == unparse-to-string($Sort)
+    ===>
+    equals($Id, $Sort?) = true
+
+[]  $Str := unparse-to-string($Id),
+    strcon(\" c*1 strchar(\-) strchar(l) strchar(i) strchar(s) strchar(t) \") := $Str,
+    $Sort := get-list-sort($Symbol),
+    $Sort != symbol-is-not-a-list-symbol,
+    strcon(\" c*1 \") == unparse-to-string($Sort)
+    ===>
+    equals($Id, $Symbol) = true
+
+[default]
+    equals($Id, $Symbol) = false
+
+
+
+
+[]  get-list-sort($Sort*) = $Sort
+[]  get-list-sort($Sort+) = $Sort
+[]  get-list-sort({$Sort $Symbol}*) = $Sort
+[]  get-list-sort({$Sort $Symbol}+) = $Sort
+
+[default]
+    get-list-sort($Symbol) = symbol-is-not-a-list-symbol
+
+
+
+
+
+
+
+
+
