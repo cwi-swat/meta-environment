@@ -4,7 +4,7 @@ pkgdata_DATA =
 
 EXTRA_DIST += 
 
-bin_PROGRAMS = DeFacto
+bin_PROGRAMS = DeFacto SortsToIds
 
 AM_CPPFLAGS += \
 	$(ASC_SUPPORT_CFLAGS) \
@@ -14,6 +14,12 @@ AM_CPPFLAGS += \
 DeFacto_SOURCES = DeFacto.c
 
 DeFacto_LDADD = \
+	$(SDF_SUPPORT_LIBS) \
+	$(ASC_SUPPORT_LIBS)
+
+SortsToIds_SOURCES = SortsToIds.c
+
+SortsToIds_LDADD = \
 	$(SDF_SUPPORT_LIBS) \
 	$(ASC_SUPPORT_LIBS)
 

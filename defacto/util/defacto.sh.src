@@ -17,6 +17,7 @@ PRG=`basename $0`
 VERBOSE=
 
 DEFACTO=${bindir}/DeFacto
+SORTSTOIDS=${bindir}/SortsToIds
 RSTORE_SORT=RStore
 SUMMARY_SORT=Summary
 EVALUATOR_RESULT=$RSTORE_SORT
@@ -85,33 +86,26 @@ ENDCAT
 }
 
 # 
-# 
+# die
+
 die() {
   echo $PRG: $1
   exit 1
 }
 
-# ###########################
 # 
-check_rscript_file_type() {
-  case "$1" in
-  *.rscript) ;;
-  *) die "$1 is not an rscript"
-  esac
-  if [ ! -r $1 ]
-  then
-     die "$1 is not readable"
-  fi
+# add_tmp_file
+
+add_tmp_file() {
+  TMP_FILES="$TMP_FILES $1"
 }
 
 # 
-check_rstore_file_type(){
-  case "$1" in
-  *.rstore) ;;
-  *) die "$1 is not an rstore"
-  esac
+# cleanup
+
+cleanup() {
+  rm -f $TMP_FILES
 }
-#############################
 
 #
 # check_input
@@ -149,20 +143,6 @@ check_input() {
   fi
 }
 
-# 
-# add_tmp_file
-
-add_tmp_file() {
-  TMP_FILES="$TMP_FILES $1"
-}
-
-# 
-# cleanup
-
-cleanup() {
-  rm -f $TMP_FILES
-}
-
 #
 # parse_term
 
@@ -196,12 +176,16 @@ weave() {
 #  add_tmp_file $MODULE.def.pt
 #  SdfWeaver -f weave-attributes -i $ATTRIBUTES.pt -i $MODULE.def.pt -r SDF |
 
+  WEAVED_DEFINITION=${MODULE##*/}.def
+
   sdfweaver -m $MODULE -a $ANNOTATIONS -d -o $WEAVED_DEFINITION
   add_tmp_file $WEAVED_DEFINITION
   $SGLR $VERBOSE -p $SORTSTOIDS_PARSE_TABLE -i $WEAVED_DEFINITION -o $WEAVED_DEFINITION.pt
   add_tmp_file $WEAVED_DEFINITION.pt
 
-  $APPLYFUNCTION -f $SORTSTOIDS_FUN -s $SORTSTOIDS_RESULT -i $WEAVED_DEFINITION.pt | $ASFE -e $SORTSTOIDS_EQUATIONS | $SDF2TABLE -m $MODULE -o $OUTPUTFILE
+#  $APPLYFUNCTION -f $SORTSTOIDS_FUN -s $SORTSTOIDS_RESULT -i $WEAVED_DEFINITION.pt | $ASFE -e $SORTSTOIDS_EQUATIONS | $SDF2TABLE -m $MODULE -o $OUTPUTFILE
+
+  $SORTSTOIDS -r $SORTSTOIDS_RESULT -f $SORTSTOIDS_FUN -i $WEAVED_DEFINITION.pt | $SDF2TABLE -m $MODULE -o $OUTPUTFILE
 
 }
 
