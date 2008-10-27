@@ -1,0 +1,60 @@
+
+// Generate one permutation of a list
+// CORRECT THIS
+
+list[&T] permute1(list[&T] L){
+   list[&T] R = [];
+   &T E;
+
+   while(size(L) > 0){
+      <E, L> = arb(L);
+      R += E;
+   }
+   return R;
+}
+
+// Generate all permutations of a list
+
+
+list[list[&T]] permute(list[&T] L){
+  if(L == [])
+     return [];
+  else {
+     <&T E, L> = arb(L);
+     return [ [E] + P | list[int] P : permute(L) ]    
+  }
+}
+
+// Generate and accept all permutations of a list
+
+
+list[list[&T]] permute_and_filter(list[&T] L, bool accept(list[&T])){
+  if(L == [])
+     return [];
+  else {
+     <&T E, L> = arb(L);
+     return [ [E] + P | list[int] P : permute(L), accept(P) ]    
+  }
+
+}
+
+// Test that a configuration of queens is safe
+
+bool is_safe(list[int] rows, int x){
+  int y = size(rows);
+
+  for(int i : [1..y]){
+      if(rows[y-i] == x || rows[y-i] == x - i || rows[y-i] == x + i)
+        return false;
+  }
+  return true;
+}
+
+list[list[int]]  eight_queens1(int N){
+ return [L | list[int] L : permutations([1..N]), is_safe(L) ]
+}
+
+
+list[list[int]]  eight_queens2(int N){
+ return [L | list[int] L : permute_and_filter([1..N], is_safe) ]
+}
