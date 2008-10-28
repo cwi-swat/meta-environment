@@ -1,68 +1,50 @@
 
 
-
 ConstructorBody:"ExplicitConstructorInvocation-opt-BlockStatement-s" <= {
-  fact(SCOPE, ConstructorBody, each(ExplicitConstructorInvocation-opt, BlockStatement-list)) }
+    fact(SCOPE, ConstructorBody, each(ExplicitConstructorInvocation-opt, BlockStatement-list)) }
 
-
-
-
-Block:"BlockStatement-s" <= {
-  fact(SCOPE, Block, each(BlockStatement-list)) }
+Block:"BlockStatement-s"             <= { fact(SCOPE, Block, each(BlockStatement-list)) }
  
-LabeledStatement :"colon" <= {
-  fact(SUB-STAT, LabeledStatement, Statement) }
+LabeledStatement :"colon"            <= { fact(SUB-STAT, LabeledStatement, Statement) }
  
-LabeledStatementNoShortIf:"colon1" <= {
-  fact(SUB-STAT, LabeledStatementNoShortIf, StatementNoShortIf) }
+LabeledStatementNoShortIf:"colon1"   <= { fact(SUB-STAT, LabeledStatementNoShortIf, StatementNoShortIf) }
  
-IfThenStatement:"if" <= {
-  fact(SUB-STAT, IfThenStatement, each(Expression, Statement)) }
+IfThenStatement:"if"                 <= { fact(SUB-STAT, IfThenStatement, each(Expression, Statement)) }
 
 IfThenElseStatement:"if-else" <= {
-  fact(SUB-STAT, IfThenElseStatement, each(Expression, StatementNoShortIf, Statement)) }
+    fact(SUB-STAT, IfThenElseStatement, each(Expression, StatementNoShortIf, Statement)) }
 
-SwitchStatement:"switch" <= {
-  fact(SCOPE, SwitchStatement, each(Expression, SwitchBlock)) }
+SwitchStatement:"switch"             <= { fact(SCOPE, SwitchStatement, each(Expression, SwitchBlock)) }
 
 SwitchBlock:"SwitchBlockStatementGroup-s-SwitchLabel-s" <= {
-  fact(SCOPE, SwitchBlock, each(SwitchBlockStatementGroup-list, SwitchLabel-list)) }
+    fact(SCOPE, SwitchBlock, each(SwitchBlockStatementGroup-list, SwitchLabel-list)) }
 
 SwitchBlockStatementGroup:"SwitchLabel-p-BlockStatement-p" <= {
-  fact(SUB-STAT, SwitchBlockStatementGroup, each(BlockStatement-list)) }
+    fact(SUB-STAT, SwitchBlockStatementGroup, each(BlockStatement-list)) }
 
-WhileStatement :"while" <= {
-  fact(SCOPE, WhileStatement, Expression),
-  fact(SCOPE, WhileStatement, Statement) }
+WhileStatement :"while"              <= { fact(SCOPE, WhileStatement, Expression),
+                                          fact(SCOPE, WhileStatement, Statement) }
 
-WhileStatementNoShortIf:"while1" <= {
-  fact(SCOPE, WhileStatementNoShortIf, Expression),
-  fact(SCOPE, WhileStatementNoShortIf, StatementNoShortIf) }
+WhileStatementNoShortIf:"while1"     <= { fact(SCOPE, WhileStatementNoShortIf, Expression),
+                                          fact(SCOPE, WhileStatementNoShortIf, StatementNoShortIf) }
 
-DoStatement:"do-while-semicolon" <= {
-  fact(SCOPE, DoStatement, Statement),
-  fact(SCOPE, DoStatement, Expression) }
+DoStatement:"do-while-semicolon"     <= { fact(SCOPE, DoStatement, Statement),
+                                          fact(SCOPE, DoStatement, Expression) }
 
 ForStatement :"for-semicolon-semicolon" <= {
-  fact(SCOPE, ForStatement, each(ForInit-opt, Expression-opt, ForUpdate-opt, Statement)) }
+    fact(SCOPE, ForStatement, each(ForInit-opt, Expression-opt, ForUpdate-opt, Statement)) }
 
-StatementExpressionList:"comma1" <= {
-  fact(SUB-STAT, StatementExpressionList, each(StatementExpression-list)) }
+StatementExpressionList:"comma1"     <= { fact(SUB-STAT, StatementExpressionList, each(StatementExpression-list)) }
 
-SynchronizedStatement:"synchronized" <= {
-  fact(SUB-STAT, SynchronizedStatement, Block) }
+SynchronizedStatement:"synchronized" <= { fact(SUB-STAT, SynchronizedStatement, Block) }
 
-TryStatement :"try" <= {
-  fact(SUB-STAT, TryStatement, each(Block, CatchClause-list)) }
+TryStatement :"try"                  <= { fact(SUB-STAT, TryStatement, each(Block, CatchClause-list)) }
 
-TryStatement :"try1" <= {
-  fact(SUB-STAT, TryStatement, each(Block, CatchClause-list, Finally)) }
+TryStatement :"try1"                 <= { fact(SUB-STAT, TryStatement, each(Block, CatchClause-list, Finally)) }
  
-CatchClause:"catch" <= {
-  fact(SUB-STAT, CatchClause, Block) }
+CatchClause:"catch"                  <= { fact(SUB-STAT, CatchClause, Block) }
 
-Finally:"finally" <= {
-  fact(SUB-STAT, Finally, Block) }
+Finally:"finally"                    <= { fact(SUB-STAT, Finally, Block) }
 
 
 
