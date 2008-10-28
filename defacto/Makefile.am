@@ -2,6 +2,6 @@
 
 include $(top_srcdir)/Makefile.top.meta
 
-SUBDIRS	= src util bin grammar
+SUBDIRS	= src util bin
 
-ACLOCAL_FLAGS 	= -I .
+ACLOCAL_FLAGS = -I .

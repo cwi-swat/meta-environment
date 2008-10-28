@@ -1,0 +1,14 @@
+
+"begin" DECLS {STATEMENT ";"}* "end"                          -> PROGRAM   <= { fact(CF-SUCC, next(STATEMENT-list)) }
+
+"if" EXP "then" {STATEMENT ";"}* "else" {STATEMENT ";"}* "fi" -> STATEMENT <= { fact(CF-ENTRY, STATEMENT, EXP),
+                                                                                fact(CF-SUCC, EXP, first(STATEMENT-list1)),
+                                                                                fact(CF-SUCC, EXP, first(STATEMENT-list2)),
+                                                                                fact(CF-EXIT, STATEMENT, last(STATEMENT-list1)),
+                                                                                fact(CF-EXIT, STATEMENT, last(STATEMENT-list2)),
+                                                                                fact(CF-SUCC, next(STATEMENT-list1)),
+                                                                                fact(CF-SUCC, next(STATEMENT-list2)) }
+
+"while" EXP "do" {STATEMENT ";"}* "od"                        -> STATEMENT <= { fact(CF-ENTRY, STATEMENT, EXP),
+                                                                                fact(CF-SUCC, next(EXP, STATEMENT-list, EXP)),
+                                                                                fact(CF-EXIT, STATEMENT, EXP) }

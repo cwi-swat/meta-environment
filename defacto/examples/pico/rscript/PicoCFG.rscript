@@ -1,0 +1,153 @@
+
+
+%%%%%%%% defacto.h
+
+%%%%%% Tree structure
+type node = int
+type sort = str
+type graph = rel[node, node]
+
+rel[node, node] Child
+rel[node, sort] Sort
+rel[node, str] Syntax
+rel[node, loc] Location
+rel[node, int] IntValue
+
+%%yield Child
+%%yield Sibling
+%%yield Sort
+yield Syntax
+%%yield Location
+%%yield IntValue
+
+
+%%%%%% supporting functions
+
+type vgraph = rel[<str, loc>, <str,loc>]
+vgraph visualize-graph(rel[node, node] G) =
+  { <<S1, L1>, <S2 ,L2>> | <node N1, node N2> : G,
+    str S1 : Syntax[N1], loc L1 : Location[N1],
+    str S2 : Syntax[N2], loc L2 : Location[N2] }
+
+
+
+
+%% all bottom nodes of relation Rel, reachable from node Start
+%% TODO: take set as first parameter?
+set[node] reachBottom(node Start, graph Rel) = bottom(Rel) inter Rel*[Start]
+
+%% returns Start if not in Rel
+set[node] reachBottom2(node Start, graph Rel) = Result where
+    set[node] Bottom = reachBottom(Start, Rel)
+    set[node] Result = Bottom union { Start | Bottom == {} }
+  end where
+
+
+
+
+%% the shortest distance (+ initDist) of each node in Relation to StartNode
+rel[&N, int] distances(&N StartNode, rel[&N, &N] Relation, int initDist) = Dist where
+  equations
+    initial
+      rel[&N, int] Dist init {<StartNode, initDist>}
+    satisfy
+      Dist = Dist union { <Y, min({D+1} union Dist[Y])> | <&N X, int D> : Dist, &N Y : Relation[X] }
+  end equations
+end where
+
+
+
+
+%%set[int] dist(&N From, &N To, rel[&N, &N] Relat) = distances(From, Relat, 0)[To]
+
+
+
+
+%% the element(s) of the domain of R with the lowest value
+set[&N] minimal(rel[&N, int] R) = R[-,min(range(R))]
+
+
+
+
+%% the element(s) of Candidates closest to node Start in relation Rel
+%% TODO: maybe rename to closest?
+set[&N] firstReach(&N Start, set[&N] Candidates, rel[&N, &N] Rel) = minimal(domainR(distances(Start, Rel, 0), Candidates))
+
+
+
+
+%% contract graph of Rel, using only nodes from Restr.
+rel[&N, &N] contract(rel[&N, &N] Rel, set[&N] Restr) = Res where
+  equations
+    initial
+      rel[&N, &N] Temp init domainR(Rel, Restr)
+      rel[&N, &N] Res init {}
+    satisfy
+      Res = Res union Temp inter Restr x Restr
+      Temp = (Temp \ Restr x Restr) o Rel
+  end equations
+end where
+
+
+
+
+%% replaces every node in Rel according to mapping Map
+rel[&N, &N] map(rel[&N, &N] Rel, rel[&N, &N] Map) = inv(Map) o Rel o Map
+
+
+
+
+%% all edges of relation Rel that are on paths between Node1 and Node2
+rel[&N, &N] between(&N Node1, &N Node2, rel[&N, &N] Rel) = carrierR(Rel, Rel*[Node1] inter inv(Rel)*[Node2] union Rel*[Node2] inter inv(Rel)*[Node1] )
+
+
+
+
+%% replace in range
+rel[&N, &N] replaceR(&N Search, &N Replace, rel[&N, &N] Rel) = rangeX(Rel, {Search}) union Rel o {<Search, Replace>}
+    rel[&N, &N] replaceR2(&N Search, set[&N] Replace, rel[&N, &N] Rel) = rangeX(Rel, {Search}) union Rel o ({Search} x Replace)
+
+
+
+
+%% expand nodes
+rel[&N, &N] expand(rel[&N, &N] Rel, set[&N] Nodes, rel[&N, &N] Expansions) = carrierX(Rel, Nodes) union rangeR(Rel, Nodes) o Expansions union Expansions o domainR(Rel, Nodes)
+
+%% paths from top of Rel to nodes Nodes
+rel[&N, &N] branch(set[&N] Nodes, rel[&N, &N] Rel) = carrierR(Rel, Rel*[-,Nodes])
+
+
+
+
+%% build a Control Flow Graph
+
+graph buildCFG(graph IN, graph OUT, graph NEXT) =
+{ <N1, N4> | <node N2, node N3> : NEXT, node N1 : reachBottom2(N2, OUT), node N4 : reachBottom2(N3, IN) }
+
+
+
+
+graph buildCFG2(graph IN, graph OUT, graph NEXT) = ControlFlow
+  where
+    equations
+      initial
+        set[node] SUPER-STATS init domain(IN) union domain(OUT)
+        graph ControlFlow init NEXT
+      satisfy
+        ControlFlow = (ControlFlow o IN) union (inv(OUT) o ControlFlow) union carrierX(ControlFlow, SUPER-STATS)
+    end equations
+  end where
+
+
+%% PicoFacts.h
+
+%% Extracted roles
+
+rel[node, node] CF-SUCC
+rel[node, node] CF-ENTRY
+rel[node, node] CF-EXIT
+
+
+yield graph CFG = buildCFG(CF-ENTRY, CF-EXIT, CF-SUCC)
+
+yield vgraph visualCFG = visualize-graph(CFG)

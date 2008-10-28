@@ -1,0 +1,217 @@
+%%%%%%%% Java Call Graph Extraction
+
+#include "../../../include/defacto.h"
+
+#include "JavaCFG.h"
+
+#include "Scope.rscript"
+
+#include "Types.rscript"
+
+
+
+
+%%%%%% calculated facts
+
+%%%% basic CFG
+
+%% All statements
+set[node] Statements = carrier(CF-IN union CF-OUT union CF-NEXT)
+
+%% Non-atomic statements
+%%set[node] NAS = Statements inter Sort[-, {"Block", "LabeledStatement", "LabeledStatementNoShortIf", "SwitchBlock",
+%%  "SwitchBlockStatementGroup", "StatementExpressionList", "TryStatement", "CatchClause", "Finally", "ConstructorBody"}]
+
+graph CFG1 = buildCFG(CF-IN, CF-OUT, CF-NEXT)
+
+%% First and Last atomic statements of each block
+%% Atomic statements are their own First and Last
+graph First = { <S, F> | node S : Statements, node F : reachBottom2(S, CF-IN) }
+graph Last = { <S, L> | node S : Statements, node L : reachBottom2(S, CF-OUT) }
+
+yield CFG1
+yield First
+yield Last
+
+
+
+
+
+
+
+
+%%%% calculate intermediate relations between try, catch, finally
+
+graph TRY-END-CATCH = inv(Last) o TRY-CATCH
+yield TRY-END-CATCH
+
+%% all try and catch scopes that have a finally
+graph TRY-SCOPES-FINALLY = TRY-FINALLY union inv(TRY-CATCH o SUB-STAT) o TRY-FINALLY
+yield TRY-SCOPES-FINALLY
+
+
+
+
+%%%%%% grammar specific support functions
+
+%% return the CFG for a jump from statement From to outside a method. 
+%% It visits all finallies in upward scopes, and returns to From statement
+graph handleFinallyReturn(node From) = VAR6 where
+
+  %% 1. get path from top scope to From through intermediate scopes (downwards)
+  graph VAR1 = branch(STAT-SCOPE[-, From], SUB-SCOPE) union rangeR(STAT-SCOPE, {From}) union {From} x top(SUB-SCOPE)
+
+  %% 2. contract path to use only scopes that have finallies
+  graph VAR2 = contract(VAR1, domain(TRY-SCOPES-FINALLY) union { From } )
+
+  %% 3. map scopes to their finallies
+  graph VAR3 = map(VAR2, TRY-SCOPES-FINALLY union id({ From }))
+
+  %% 4. invert path to go from From upwards
+  graph VAR4 = inv(VAR3)
+
+  %% 5. expand finallies to their entry and exit statements
+  graph VAR5 = expand(VAR4, range(TRY-SCOPES-FINALLY), First union inv(Last))
+
+  %% 6. remove identity relation of From, in case no finallies are visited
+  graph VAR6 = VAR5 \ id({From})
+
+end where
+
+%% return the CFG for a jump from statement From to statement To, visiting intermediate finally blocks.
+%% TopScope is the smallest scope enclosing both From and To statements
+graph handleFinally(node From, node To, node TopScope) = VAR6 where
+
+  %% 1. get path from To to From through intermediate scopes (downwards)
+  graph VAR1 = between(To, From, SUB-SCOPE union rangeR(STAT-SCOPE, {From}) union {<To, TopScope>} )
+
+  %% 2. ignore top scope
+  graph VAR2 = contract(VAR1, carrier(VAR1) \ {TopScope} )
+
+  %% 3. contract path to use only scopes that have finallies
+  graph VAR3 = contract(VAR2, domain(TRY-SCOPES-FINALLY) union { From, To } )
+
+  %% 4. map scopes to their finallies
+  graph VAR4 = map(VAR3, TRY-SCOPES-FINALLY union id({ From, To }))
+
+  %% 5. invert path to go from From to To
+  graph VAR5 = inv(VAR4)
+
+  %% 6. expand finallies to their entry and exit statements
+  graph VAR6 = expand(VAR5, range(TRY-SCOPES-FINALLY), First union inv(Last))
+
+end where
+
+
+
+
+%%%%%% continuation of calculated facts
+
+%%%% return statements
+
+%% handle returns inside finallies
+graph RETURN-FINALLY-CFG = { <N1, N2> | node R : RETURN, <node N1, node N2> : handleFinallyReturn(R) }
+yield RETURN-FINALLY-CFG
+
+
+
+
+%%%% break and continue (goto)
+
+%% find enclosing loops (while, do, for, switch) for unlabeled break and continue
+
+%% unlabeled break goes to switch, while, do, or for
+%% unlabeled continue goes to while, do, or for
+
+graph UNLABELED-GOTO-TARGETS = { <GS, EL> | node GS : (BREAK union CONTINUE) \ domain(BREAK-LABEL union CONTINUE-LABEL),
+  node EL : firstReach(GS, domain(LOOP), inv(STAT-SCOPE union SUB-SCOPE)) }
+yield UNLABELED-GOTO-TARGETS
+
+
+%% find matching labeled statement for each break and continue
+
+%% labeled break targets can be any block, while, do, for, switch
+%% labeled continue targets must be a while, do or for.
+
+graph LABELED-GOTO-TARGETS = { <GS, LS> | <node GS, node L> : BREAK-LABEL union CONTINUE-LABEL, 
+  node LS : (LABEL o Syntax)[-,Syntax[L]], 
+  set[node] GScope <- STAT-SCOPE[-, GS], set[node] LScope <- STAT-SCOPE[-, LS], 
+  ((GScope >= SUB-SCOPE*[LScope]) or (LScope >= SUB-SCOPE*[GScope])) }
+yield LABELED-GOTO-TARGETS
+
+
+%% find next statements for break and continues
+
+graph BREAK-CFG = { <N1, N2> | node B : BREAK, node TS : (UNLABELED-GOTO-TARGETS union LABELED-GOTO-TARGETS)[B],
+  node T : First[TS], set[node] TNext <- CFG1[T] \ (CF-IN union CF-NEXT)*[TS], 
+  <node N1, node N2> : replaceR2(T, TNext, handleFinally(B, T, TS)) }
+yield BREAK-CFG
+
+graph CONTINUE-CFG = { <N1, N2> | node C : CONTINUE, node TS : (UNLABELED-GOTO-TARGETS union LABELED-GOTO-TARGETS)[C],
+  node LS : First[LOOP[TS]], <node N1, node N2> : handleFinally(C, LS, TS) }
+yield CONTINUE-CFG
+
+
+
+
+%%%% exception handling
+
+%% Intraprocedural does not look at exceptions thrown from called methods.
+
+%% find catch for each thrown exception
+graph EXCEPTION-CATCH = { <EO, C> | <node EO, str ET> : THROW-TYPE, 
+  node C : firstReach(EO, CATCH-TYPE[-,ET], CFG1 union TRY-END-CATCH) }
+yield EXCEPTION-CATCH
+
+%% add edge from throw to catch start, respecting finallies
+graph HANDLED-EXCEPTION-CFG = { <N1, N2> | <node EO, node C> : EXCEPTION-CATCH, node T : TRY-CATCH[-,C],
+  node TE : Last[T], <node N1, node N2> : replaceR2(TE, First[C], handleFinally(EO, TE, T)) }
+yield HANDLED-EXCEPTION-CFG
+
+%% deal with uncaught exceptions just like returns (respecting finallies)
+graph UNHANDLED-EXCEPTION-CFG = { <N1, N2> | node UE : domain(THROW-TYPE) \ domain(EXCEPTION-CATCH), 
+  <node N1, node N2> : handleFinallyReturn(UE) }
+yield UNHANDLED-EXCEPTION-CFG
+
+graph EXCEPTION-CFG = HANDLED-EXCEPTION-CFG union UNHANDLED-EXCEPTION-CFG
+yield EXCEPTION-CFG
+
+
+
+
+%%%%%% collect all CFG parts
+
+%%%% collect method entry points
+
+yield graph METHOD-ENTRY = METHOD-BODY o First
+
+%%%% collect method exit points
+
+yield graph METHOD-EXIT = (ME1 union { <M, E> | node E : RETURN union domain(THROW-TYPE) \ domain(EXCEPTION-CATCH),
+  node M : reachBottom(E, CFG1 union inv(ME1)) }) where graph ME1 = METHOD-BODY o Last end where
+
+%%%% collect final CFG
+
+graph CFG2 = domainX(CFG1, RETURN union BREAK union CONTINUE union domain(THROW-TYPE))
+yield CFG2
+
+yield graph CFG = 
+%%contract(
+CFG2 union RETURN-FINALLY-CFG union EXCEPTION-CFG union BREAK-CFG union CONTINUE-CFG
+%%, Statements \ NAS)
+
+
+
+
+%%%%%% visualize entire graph
+
+vgraph vCFG = visualize-graph(CFG union METHOD-ENTRY union METHOD-EXIT)
+yield vCFG
+
+vgraph vSCOPE = visualize-graph(SUB-SCOPE union inv(STAT-SCOPE))
+yield vSCOPE
+
+vgraph vAST = visualize-graph(Child)
+yield vAST
+
+yield METHOD

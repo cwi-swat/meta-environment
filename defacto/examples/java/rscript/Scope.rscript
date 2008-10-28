@@ -1,0 +1,23 @@
+%%%%%%%% Scopes.rscript
+
+%%%%%% Extracted facts
+
+rel[node, node] SUB-STAT  %% rel STAT -> STAT
+rel[node, node] SCOPE     %% rel STAT -> SCOPE
+
+yield SUB-STAT
+yield SCOPE
+
+%%%%%% Enriched facts
+
+set[node] SCOPES = domain(SCOPE)
+
+rel[node, node] SCOPE-RAW = SCOPE union SUB-STAT
+
+%% rel SCOPE -> STAT
+rel[node, node] STAT-SCOPE = { <SC, ST> | node SC : SCOPES, node ST : reachX({SC}, SCOPES \ {SC}, SCOPE-RAW) }
+yield STAT-SCOPE
+
+%% rel SCOPE -> SUB-SCOPE
+rel[node, node] SUB-SCOPE = contract(SCOPE-RAW, SCOPES)
+yield SUB-SCOPE

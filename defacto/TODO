@@ -1,2 +1,4 @@
 
 - extend documentation in README
+- allow recursive functions
+- enable generation of rscript include files with declarations of extracted facts
