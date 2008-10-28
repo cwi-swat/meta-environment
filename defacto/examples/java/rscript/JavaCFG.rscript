@@ -316,8 +316,6 @@ yield RETURN-FINALLY-CFG
 
 %%%% break and continue (goto)
 
-%% TODO CHECK: break and return in finally
-
 %% find enclosing loops (while, do, for, switch) for unlabeled break and continue
 
 %% unlabeled break goes to switch, while, do, or for
