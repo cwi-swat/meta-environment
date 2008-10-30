@@ -1,3 +1,10 @@
+
+
+Thu Oct 30 15:09:10 CET 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: added generation of Bundle-RequiredExecutionEnvironment
+   entry in MANIFEST.MF files for Java packages, such that we are all
+   required to use the same compatibility level.
+
 Thu Aug 14 13:30:27 CEST 2008 <jurgenv@cwi.nl>
  * meta-build.m4: added generation of Main-Class attribute in
    MANIFEST.MF, such that Meta-Environment 2.0 can load its plugins again.

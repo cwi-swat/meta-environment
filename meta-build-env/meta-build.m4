@@ -473,6 +473,7 @@ Bundle-ClassPath: `echo "${BUNDLE_CLASSPATH}" | sed "s@,@,# @g" | tr '#' '\n'`
 Export-Package: `echo "$4" | sed "s@,@,# @g" | tr '#' '\n'`
 Require-Bundle: `echo ${REQUIRED_BUNDLES} | sed "s@,@,# @g" | tr '#' '\n'`
 Bundle-Activator: $6
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Main-Class: $6
 ENDCAT
 
