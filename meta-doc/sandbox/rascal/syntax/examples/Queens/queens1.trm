@@ -40,11 +40,11 @@ list[list[&T]] permute_and_filter(list[&T] L, bool accept(list[&T])){
 
 // Test that a configuration of queens is safe
 
-bool is_safe(list[int] rows, int x){
-  int y = size(rows);
+bool is_safe(list[int] board, int x){
+  int y = size(board);
 
   for(int i : [1..y]){
-      if(rows[y-i] == x || rows[y-i] == x - i || rows[y-i] == x + i)
+      if(board[y-i] == x || board[y-i] == x - i || board[y-i] == x + i)
         return false;
   }
   return true;
@@ -58,3 +58,83 @@ list[list[int]]  eight_queens1(int N){
 list[list[int]]  eight_queens2(int N){
  return [L | list[int] L : permute_and_filter([1..N], is_safe) ]
 }
+
+list[list[int]]  eight_queens2(int N){
+}
+
+
+/* ----The Alma-0 solution
+
+CONST N = 8;
+TYPE board = ARRAY[1..N] OF [1..N];
+PROCEDURE Queens(VAR x : board);
+  VAR i, column, row: [1..N];
+BEGIN
+  FOR column := 1 TO N DO
+    SOME row := 1 TO N DO
+      FOR i := 1 TO column-1 DO
+        x[i] <> row;
+        x[i] <> row+column-i;
+        x[i] <> row+i-column;
+      END;
+      x[column] = row;
+    END
+  END
+END Queens;
+
+------------------------ */
+
+  for(int column : [1..N]){
+     some(int row : [1..N]){
+         if(forall(int i : [1..column-1] | board[i] != row, 
+                                           board[i] != row+column-i, 
+                                           board[i] != row+i-column)){
+           board[column] = row;
+         }
+     }
+  }
+
+--------------------------
+
+switch(E){
+
+case P1 => S1
+...
+case Pn => Sn
+
+default:
+     Sdef
+
+}
+
+===>
+E' = E;
+EITHER
+if (P1 := E') then S1; succeed else fail fi;
+ORELSE
+if (P2 := E') then S2; succeed else fail fi;
+ORELSE
+...
+ORELSE
+if (Pn := E') then Sn; succeed else fail fi;
+ORELSE
+   Sdef
+END
+
+-----------------------------
+
+some(x : E){
+	S
+}
+
+===>
+
+lst = [e | e : E];
+
+EITHER x = first(lst); S; succeed
+ORELSE
+     some(x : rest(lst){ S }
+END;
+
+  
+------------------------
