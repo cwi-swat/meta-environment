@@ -18760,7 +18760,7 @@ CONS_ENTRY ( lf_list_5sym , ATmakeAppl ( lf_list_5sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_list_5sym , arg0 ) ) ;
 }
 int Sdf2_Load_parsetable_size = 83493;
-char Sdf2_Load_parsetable_saf[83493] = {
+unsigned const char Sdf2_Load_parsetable_baf[83493] = {
 	0x00, 0x8B, 0xAF, 0x83, 0x00, 0x81, 0x11, 0xC0, 
 	0x59, 0x92, 0x05, 0x3C, 0x69, 0x6E, 0x74, 0x3E, 
 	0x00, 0x00, 0x84, 0x00, 0x05, 0x5B, 0x5F, 0x2C, 
@@ -29208,7 +29208,7 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_Sdf2_Load,                   
                           resolve_Sdf2_Load,                    
-                          init_Sdf2_Load, Sdf2_Load_parsetable_saf, Sdf2_Load_parsetable_size, ATfalse
+                          init_Sdf2_Load, Sdf2_Load_parsetable_baf, Sdf2_Load_parsetable_size, ATfalse
 , NULL);
 }
 #endif

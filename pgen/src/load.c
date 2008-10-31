@@ -12,14 +12,14 @@
 extern void register_Sdf2_Load();
 extern void resolve_Sdf2_Load();
 extern void init_Sdf2_Load();
-extern char Sdf2_Load_parsetable_saf[];
+extern unsigned const char Sdf2_Load_parsetable_baf[];
 extern int Sdf2_Load_parsetable_size;
 
 static void initialize() {
   ASC_initRunTime(INITIAL_TABLE_SIZE);
 
-  if (Sdf2_Load_parsetable_saf != NULL) {
-    ATerm parseTable = ATreadFromSAFString(Sdf2_Load_parsetable_saf, 
+  if (Sdf2_Load_parsetable_baf != NULL) {
+    ATerm parseTable = ATreadFromBinaryString(Sdf2_Load_parsetable_baf, 
 					      Sdf2_Load_parsetable_size);
 
     if (parseTable != NULL) {
