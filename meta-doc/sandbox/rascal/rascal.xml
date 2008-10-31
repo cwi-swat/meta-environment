@@ -2000,48 +2000,56 @@ default: ...
       </section>
 
       <section>
-        <title>Flow of control and local backtracking</title>
+        <title>Flow of control and local alternatives</title>
 
         <para>The flow of control in Rascal is more or less traditional,
-        except that in some situations local backtracking may occur. This is
+        except that in some situations local alternatives may exist. This is
         in particular the case when using patterns that contain list or set
-        patterns. In those case, more than one match may be possible and the
+        patterns. In those cases, more than one match may be possible and the
         flow of control is such that these matches can be handled
         appropriately. We have the following:</para>
 
         <itemizedlist>
           <listitem>
-            <para>The if-statement provides "ordinary" flow of control and its
-            condition may contain neither list or set patterns nor
+            <para>The "if" and "while" statement provide ordinary flow of control and their
+            condition may not contain list patterns, set patterns or
             generators.</para>
           </listitem>
 
           <listitem>
-            <para>The while and for-statement also provide "ordinary" flow of
-            control and their conditions may contain list or set patterns or
-            generators. They do, however, not undo side-effects. TO BE
-            DISCUSSED: do we have break and continue statements?</para>
+            <para>The for-statement also provides ordinary flow of
+            control and its condition is a generator. </para>
           </listitem>
 
           <listitem>
-            <para>The case and visit construct also introduce a choice point
-            before each case. Executing a fail in the code associated with a
-            case leads to undo of side-effects and continuation with the next
+            <para>We have break and continue statements.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>The "switch" and "visit" construct introduce a save/commit barrier
+            before and after each case. Executing a fail in the code associated with a
+            case leads to undoing side-effects and continuation with the next
             case.</para>
           </listitem>
 
           <listitem>
-            <para>TO BE DISCUSSED: The new constructs all/every and one/exists
-            do allow list or set patterns or generators in their condition.
-            They establish a "choice point" before each iteration. When an
+           <para> We already
+            have "forall" (suggestion: rename this to "all") and "exists" as predicates that test that all (or at least one
+            element) satisfies a predicate.
+           </para>
+
+          </listitem>
+
+          <listitem>
+            <para>TO BE DISCUSSED: The new statement constructs "all" and "exists"
+            have a list or set pattern as condition.
+            They establish a save/commit barrier around each iteration. When an
             iteration completes normally all its side-effects are made
             permanent and execution continues with the next iteration
-            (all/every) or the next statement (one/exists). When "fail" is
+            (all) or the next statement (exists). When "fail" is
             encountered during execution, all side-effects are undone and
-            execution continues with the next iteration.<remark>We already
-            have "all" and "exists" as predicates that test that all (or one
-            element) satisfies a predicate. How do they relate to the above
-            mentioned statements all/every and one/exists?</remark></para>
+            execution continues with the next iteration.</para>
           </listitem>
         </itemizedlist>
       </section>
