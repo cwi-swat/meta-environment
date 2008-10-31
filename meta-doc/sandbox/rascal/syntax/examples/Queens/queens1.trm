@@ -84,57 +84,17 @@ END Queens;
 
 ------------------------ */
 
+  list[list[int]] result = [];
+
   for(int column : [1..N]){
-     some(int row : [1..N]){
-         if(forall(int i : [1..column-1] | board[i] != row, 
-                                           board[i] != row+column-i, 
-                                           board[i] != row+i-column)){
+     for(int row : [1..N]){
+        if(all(int i : [1..column-1] | board[i] != row, 
+                                       board[i] != row+column-i, 
+                                       board[i] != row+i-column)){
            board[column] = row;
-         }
+           if(column == N){
+	   	     result += board;
+	   }
+        }
      }
   }
-
---------------------------
-
-switch(E){
-
-case P1 => S1
-...
-case Pn => Sn
-
-default:
-     Sdef
-
-}
-
-===>
-E' = E;
-EITHER
-if (P1 := E') then S1; succeed else fail fi;
-ORELSE
-if (P2 := E') then S2; succeed else fail fi;
-ORELSE
-...
-ORELSE
-if (Pn := E') then Sn; succeed else fail fi;
-ORELSE
-   Sdef
-END
-
------------------------------
-
-some(x : E){
-	S
-}
-
-===>
-
-lst = [e | e : E];
-
-EITHER x = first(lst); S; succeed
-ORELSE
-     some(x : rest(lst){ S }
-END;
-
-  
-------------------------

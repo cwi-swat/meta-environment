@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1998,6 +1998,53 @@ default: ...
           syntactic ambiguities.</para>
         </note>
       </section>
+
+      <section>
+        <title>Flow of control and local backtracking</title>
+
+        <para>The flow of control in Rascal is more or less traditional,
+        except that in some situations local backtracking may occur. This is
+        in particular the case when using patterns that contain list or set
+        patterns. In those case, more than one match may be possible and the
+        flow of control is such that these matches can be handled
+        appropriately. We have the following:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The if-statement provides "ordinary" flow of control and its
+            condition may contain neither list or set patterns nor
+            generators.</para>
+          </listitem>
+
+          <listitem>
+            <para>The while and for-statement also provide "ordinary" flow of
+            control and their conditions may contain list or set patterns or
+            generators. They do, however, not undo side-effects. TO BE
+            DISCUSSED: do we have break and continue statements?</para>
+          </listitem>
+
+          <listitem>
+            <para>The case and visit construct also introduce a choice point
+            before each case. Executing a fail in the code associated with a
+            case leads to undo of side-effects and continuation with the next
+            case.</para>
+          </listitem>
+
+          <listitem>
+            <para>TO BE DISCUSSED: The new constructs all/every and one/exists
+            do allow list or set patterns or generators in their condition.
+            They establish a "choice point" before each iteration. When an
+            iteration completes normally all its side-effects are made
+            permanent and execution continues with the next iteration
+            (all/every) or the next statement (one/exists). When "fail" is
+            encountered during execution, all side-effects are undone and
+            execution continues with the next iteration.<remark>We already
+            have "all" and "exists" as predicates that test that all (or one
+            element) satisfies a predicate. How do they relate to the above
+            mentioned statements all/every and one/exists?</remark></para>
+          </listitem>
+        </itemizedlist>
+      </section>
     </section>
 
     <section>
@@ -2011,9 +2058,9 @@ default: ...
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
-              <entry align="center">bool </entry>
+              <entry align="center">bool&#160;</entry>
 
               <entry align="center">int</entry>
 
@@ -4484,7 +4531,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
           <thead>
             <row>
-              <entry align="center"> </entry>
+              <entry align="center">&#160;</entry>
 
               <entry align="center">bool</entry>
 
@@ -4492,7 +4539,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
               <entry align="center">double</entry>
 
-              <entry align="center">str </entry>
+              <entry align="center">str&#160;</entry>
 
               <entry align="center">loc</entry>
 
@@ -5208,7 +5255,7 @@ Boolean . and &lt;= Boolean &lt;= tree &lt;= value
 
             <thead>
               <row>
-                <entry align="center"> </entry>
+                <entry align="center">&#160;</entry>
 
                 <entry align="center">list</entry>
 
@@ -7007,7 +7054,7 @@ public void addRelPDB(str name, rel[&amp;T] incr)
 
           <thead>
             <row>
-              <entry align="center"> Characters</entry>
+              <entry align="center">&#160;Characters</entry>
 
               <entry align="center">Used in</entry>
             </row>
