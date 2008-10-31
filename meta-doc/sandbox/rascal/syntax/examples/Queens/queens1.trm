@@ -1,90 +1,8 @@
+module Queens
 
-// Generate one permutation of a list
-// CORRECT THIS
+// n-Queens problem.
 
-list[&T] permute1(list[&T] L){
-   list[&T] R = [];
-   &T E;
-
-   while(size(L) > 0){
-      <E, L> = arb(L);
-      R += E;
-   }
-   return R;
-}
-
-// Generate all permutations of a list
-
-
-list[list[&T]] permute(list[&T] L){
-  if(L == [])
-     return [];
-  else {
-     <&T E, L> = arb(L);
-     return [ [E] + P | list[int] P : permute(L) ]    
-  }
-}
-
-// Generate and accept all permutations of a list
-
-
-list[list[&T]] permute_and_filter(list[&T] L, bool accept(list[&T])){
-  if(L == [])
-     return [];
-  else {
-     <&T E, L> = arb(L);
-     return [ [E] + P | list[int] P : permute(L), accept(P) ]    
-  }
-
-}
-
-// Test that a configuration of queens is safe
-
-bool is_safe(list[int] board, int x){
-  int y = size(board);
-
-  for(int i : [1..y]){
-      if(board[y-i] == x || board[y-i] == x - i || board[y-i] == x + i)
-        return false;
-  }
-  return true;
-}
-
-list[list[int]]  eight_queens1(int N){
- return [L | list[int] L : permutations([1..N]), is_safe(L) ]
-}
-
-
-list[list[int]]  eight_queens2(int N){
- return [L | list[int] L : permute_and_filter([1..N], is_safe) ]
-}
-
-list[list[int]]  eight_queens2(int N){
-}
-
-
-/* ----The Alma-0 solution
-
-CONST N = 8;
-TYPE board = ARRAY[1..N] OF [1..N];
-PROCEDURE Queens(VAR x : board);
-  VAR i, column, row: [1..N];
-BEGIN
-  FOR column := 1 TO N DO
-    SOME row := 1 TO N DO
-      FOR i := 1 TO column-1 DO
-        x[i] <> row;
-        x[i] <> row+column-i;
-        x[i] <> row+i-column;
-      END;
-      x[column] = row;
-    END
-  END
-END Queens;
-
------------------------- */
-
-  list[list[int]] result = [];
+void queens(int N){
 
   for(int column : [1..N]){
      for(int row : [1..N]){
@@ -93,8 +11,9 @@ END Queens;
                                        board[i] != row+i-column)){
            board[column] = row;
            if(column == N){
-	   	     result += board;
+	   	     print(board);
 	   }
         }
      }
   }
+}
