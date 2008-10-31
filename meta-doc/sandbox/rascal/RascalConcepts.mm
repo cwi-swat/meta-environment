@@ -1,23 +1,23 @@
-<map version="0.9.0_Beta_8">
+<map version="0.9.0">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node BACKGROUND_COLOR="#ffccff" COLOR="#000000" CREATED="1224188390423" ID="Freemind_Link_497092936" MODIFIED="1224512462155" TEXT="Rascal Concepts">
-<font BOLD="true" NAME="SansSerif" SIZE="20"/>
+<node BACKGROUND_COLOR="#ffccff" COLOR="#000000" CREATED="1224188390423" ID="Freemind_Link_497092936" MODIFIED="1225469668102" TEXT="Rascal Concepts">
+<font NAME="SansSerif" SIZE="20"/>
 <hook NAME="accessories/plugins/AutomaticLayout.properties"/>
-<node COLOR="#0033ff" CREATED="1224189119219" HGAP="-4" ID="Freemind_Link_547181326" MODIFIED="1224600774567" POSITION="right" TEXT="Declaration" VSHIFT="28">
+<node COLOR="#0033ff" CREATED="1224189119219" HGAP="-101" ID="Freemind_Link_547181326" MODIFIED="1225470394543" POSITION="right" TEXT="Declaration" VSHIFT="108">
 <edge STYLE="sharp_bezier" WIDTH="8"/>
 <cloud/>
 <font NAME="SansSerif" SIZE="18"/>
-<node COLOR="#00b439" CREATED="1224510102522" ID="ID_1546211528" MODIFIED="1224512462005" TEXT="Visibility">
+<node COLOR="#00b439" CREATED="1224510102522" FOLDED="true" ID="ID_1546211528" MODIFIED="1224512462005" TEXT="Visibility">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1224510442703" ID="ID_1260472666" MODIFIED="1224512462005" TEXT="public">
-<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<node COLOR="#990000" CREATED="1224510442703" ID="ID_1260472666" MODIFIED="1225464666187" TEXT="public">
+<font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#990000" CREATED="1224510451981" ID="ID_1573653467" MODIFIED="1224512462005" TEXT="private">
-<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<node COLOR="#990000" CREATED="1224510451981" ID="ID_1573653467" MODIFIED="1225464666187" TEXT="private">
+<font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1224510097051" ID="ID_185172763" MODIFIED="1224512462006" TEXT="Scope">
+<node COLOR="#00b439" CREATED="1224510097051" FOLDED="true" ID="ID_185172763" MODIFIED="1224512462006" TEXT="Scope">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224510468815" ID="ID_1074384378" MODIFIED="1224512462007" TEXT="local">
@@ -27,7 +27,7 @@
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1224510183628" ID="ID_1470000072" MODIFIED="1224601067560" TEXT="Declarared Entity">
+<node COLOR="#00b439" CREATED="1224510183628" ID="ID_1470000072" MODIFIED="1225469280397" TEXT="Declarared Entity">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224510210062" ID="ID_1996696510" MODIFIED="1224512462017" TEXT="Module">
@@ -46,6 +46,9 @@
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 <node COLOR="#990000" CREATED="1224510256810" ID="ID_1091550706" MODIFIED="1224512462031" TEXT="Data Type">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1225469283315" ID="ID_1007450034" MODIFIED="1225469286300" TEXT="Subtype">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 <node COLOR="#990000" CREATED="1224510280575" ID="ID_1716281828" MODIFIED="1224512462032" TEXT="View">
@@ -69,7 +72,7 @@
 <font NAME="SansSerif" SIZE="16"/>
 </node>
 </node>
-<node COLOR="#0033ff" CREATED="1224188475579" HGAP="70" ID="Freemind_Link_329036816" MODIFIED="1224600752015" POSITION="right" TEXT="Module" VSHIFT="91">
+<node COLOR="#0033ff" CREATED="1224188475579" HGAP="17" ID="Freemind_Link_329036816" MODIFIED="1225469601172" POSITION="right" TEXT="Module" VSHIFT="24">
 <edge STYLE="sharp_bezier" WIDTH="8"/>
 <cloud/>
 <font NAME="SansSerif" SIZE="18"/>
@@ -77,7 +80,7 @@
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
-<node COLOR="#00b439" CREATED="1224188493119" ID="Freemind_Link_492461275" MODIFIED="1224512462035" TEXT="Import">
+<node COLOR="#00b439" CREATED="1224188493119" FOLDED="true" ID="Freemind_Link_492461275" MODIFIED="1224512462035" TEXT="Import">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224189161642" ID="Freemind_Link_1146580190" MODIFIED="1224512462035" TEXT="Rascal">
@@ -95,7 +98,7 @@
 <font NAME="SansSerif" SIZE="16"/>
 </node>
 </node>
-<node COLOR="#0033ff" CREATED="1224188518992" HGAP="61" ID="Freemind_Link_1450926363" MODIFIED="1224600748743" POSITION="right" TEXT="Function" VSHIFT="136">
+<node COLOR="#0033ff" CREATED="1224188518992" HGAP="96" ID="Freemind_Link_1450926363" MODIFIED="1225469607757" POSITION="right" TEXT="Function" VSHIFT="1">
 <edge STYLE="sharp_bezier" WIDTH="8"/>
 <cloud/>
 <font NAME="SansSerif" SIZE="18"/>
@@ -115,8 +118,12 @@
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
+<node COLOR="#00b439" CREATED="1225464971072" ID="Freemind_Link_896127628" MODIFIED="1225469157699" TEXT="Body">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
 </node>
-<node COLOR="#0033ff" CREATED="1224188982964" HGAP="311" ID="Freemind_Link_1908275622" MODIFIED="1224600746559" POSITION="right" TEXT="Rule" VSHIFT="41">
+</node>
+<node COLOR="#0033ff" CREATED="1224188982964" HGAP="334" ID="Freemind_Link_1908275622" MODIFIED="1225469614885" POSITION="right" TEXT="Rule" VSHIFT="-6">
 <edge STYLE="sharp_bezier" WIDTH="8"/>
 <cloud/>
 <font NAME="SansSerif" SIZE="18"/>
@@ -130,13 +137,12 @@
       <b>rule</b> Name Rule
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
 </node>
-<node COLOR="#0033ff" CREATED="1224188529204" HGAP="45" ID="Freemind_Link_1730302846" MODIFIED="1224600743959" POSITION="right" TEXT="Statement" VSHIFT="145">
+<node COLOR="#0033ff" CREATED="1224188529204" HGAP="119" ID="Freemind_Link_1730302846" MODIFIED="1225469168319" POSITION="right" TEXT="Statement" VSHIFT="-15">
 <edge STYLE="sharp_bezier" WIDTH="8"/>
 <cloud/>
 <font NAME="SansSerif" SIZE="18"/>
@@ -144,7 +150,7 @@
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
-<node COLOR="#00b439" CREATED="1224256749124" ID="Freemind_Link_1509179467" MODIFIED="1224512462040" TEXT="Assignment">
+<node COLOR="#00b439" CREATED="1224256749124" FOLDED="true" ID="Freemind_Link_1509179467" MODIFIED="1224512462040" TEXT="Assignment">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224513113077" ID="ID_232745186" MODIFIED="1224514205516" TEXT="Var AssignOp Exp">
@@ -164,12 +170,11 @@
       Var <b>[</b> Exp <b>] </b>Assignop Exp
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1224189573889" ID="Freemind_Link_914605741" MODIFIED="1224512462041" TEXT="Control Flow">
+<node COLOR="#00b439" CREATED="1224189573889" FOLDED="true" ID="Freemind_Link_914605741" MODIFIED="1224512462041" TEXT="Control Flow">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224249435900" ID="Freemind_Link_1189579068" MODIFIED="1224512462041" TEXT="If Statement">
@@ -181,15 +186,16 @@
 <node COLOR="#990000" CREATED="1224249457247" ID="Freemind_Link_1970405392" MODIFIED="1224512462042" TEXT="For Statement">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
+<node COLOR="#990000" CREATED="1225465206640" ID="Freemind_Link_1496317671" MODIFIED="1225465214515" TEXT="All Statement">
+<font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#00b439" CREATED="1224189589893" ID="Freemind_Link_1039350381" MODIFIED="1224512462042" TEXT="Exception Handling">
-<edge STYLE="bezier" WIDTH="thin"/>
-<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1225465223735" ID="Freemind_Link_1906575552" MODIFIED="1225465229147" TEXT="One Statement">
+<font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#00b439" CREATED="1224189597777" ID="Freemind_Link_73881184" MODIFIED="1224512462043" TEXT="switch">
+<node COLOR="#990000" CREATED="1224189597777" ID="Freemind_Link_73881184" MODIFIED="1225468187067" TEXT="Switch Statement">
 <edge STYLE="bezier" WIDTH="thin"/>
-<font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1224513793701" ID="ID_428849064" MODIFIED="1224513856752">
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1224513793701" ID="ID_428849064" MODIFIED="1225468140756">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -199,12 +205,11 @@
       <b>switch (</b> Exp <b>) {</b> case1<b>;</b> ... <b>;</b> casen<b>;</b> default<b>}</b>
     </p>
   </body>
-</html>
-</richcontent>
-<font NAME="SansSerif" SIZE="14"/>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
 </node>
-<node COLOR="#990000" CREATED="1224513874509" ID="ID_1753119618" MODIFIED="1224513877040" TEXT="case">
-<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1224513874509" ID="ID_1753119618" MODIFIED="1225468140757" TEXT="case">
+<font NAME="SansSerif" SIZE="12"/>
 <node COLOR="#111111" CREATED="1224513881094" ID="ID_1058901025" MODIFIED="1224513909620">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -215,18 +220,17 @@
       <b>case</b> Rule
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224189644992" ID="Freemind_Link_1688794152" MODIFIED="1224512462043" TEXT="default">
-<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1224189644992" ID="Freemind_Link_1688794152" MODIFIED="1225468140757" TEXT="default">
+<font NAME="SansSerif" SIZE="12"/>
 </node>
-<node COLOR="#990000" CREATED="1224189633230" ID="Freemind_Link_567600505" MODIFIED="1224512462043" TEXT="fail">
-<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1224189633230" ID="Freemind_Link_567600505" MODIFIED="1225468140758" TEXT="fail">
+<font NAME="SansSerif" SIZE="12"/>
 </node>
-<node COLOR="#990000" CREATED="1224513933354" ID="ID_1614613968" MODIFIED="1224513937500" TEXT="Rule">
-<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1224513933354" ID="ID_1614613968" MODIFIED="1225468140758" TEXT="Rule">
+<font NAME="SansSerif" SIZE="12"/>
 <node COLOR="#111111" CREATED="1224513938801" ID="ID_282029447" MODIFIED="1224513971590">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -237,8 +241,7 @@
       Pat1 <b>=&gt;</b> Pat2
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#111111" CREATED="1224513957034" ID="ID_1615228537" MODIFIED="1224513986693">
 <richcontent TYPE="NODE"><html>
@@ -250,12 +253,16 @@
       Pat <b>:</b> Statement
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1224189580731" ID="Freemind_Link_1949317477" MODIFIED="1224512462046" TEXT="solve">
+</node>
+<node COLOR="#00b439" CREATED="1224189589893" ID="Freemind_Link_1039350381" MODIFIED="1224512462042" TEXT="Exception Handling">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+<node COLOR="#00b439" CREATED="1224189580731" ID="Freemind_Link_1949317477" MODIFIED="1225468154147" TEXT="Solve">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
@@ -268,15 +275,27 @@
 <edge STYLE="sharp_bezier" WIDTH="8"/>
 <cloud/>
 <font NAME="SansSerif" SIZE="18"/>
+<node COLOR="#00b439" CREATED="1225464748325" ID="Freemind_Link_1589904743" MODIFIED="1225469157702" TEXT="Why Rascal?">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
 <node COLOR="#00b439" CREATED="1224494759622" ID="ID_379988312" MODIFIED="1224512462047" TEXT="Domain: source code analysis and transformation">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1225469948241" ID="ID_1391870128" MODIFIED="1225469962947" TEXT="Parsing of source code">
+<font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#00b439" CREATED="1224494806335" ID="ID_1710165254" MODIFIED="1224512462048" TEXT="Type safe">
-<edge STYLE="bezier" WIDTH="thin"/>
-<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1225469966257" ID="ID_685434004" MODIFIED="1225469973389" TEXT="Extraction of facts and models">
+<font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#00b439" CREATED="1224494872248" ID="ID_582550821" MODIFIED="1224512462048" TEXT="Polymorphic types">
+<node COLOR="#990000" CREATED="1225469977127" ID="ID_1363828927" MODIFIED="1225469986254" TEXT="Computing with facts and models">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1225469988731" ID="ID_356407618" MODIFIED="1225469999532" TEXT="Transformation of source code">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+</node>
+<node COLOR="#00b439" CREATED="1224494954765" ID="ID_1045827752" MODIFIED="1224600890895" TEXT="Embedded Concrete Syntax (based on SDF)">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
@@ -288,7 +307,11 @@
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
-<node COLOR="#00b439" CREATED="1224494954765" ID="ID_1045827752" MODIFIED="1224600890895" TEXT="Embedded Concrete Syntax (based on SDF)">
+<node COLOR="#00b439" CREATED="1224494806335" ID="ID_1710165254" MODIFIED="1224512462048" TEXT="Type safe">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+<node COLOR="#00b439" CREATED="1224494872248" ID="ID_582550821" MODIFIED="1224512462048" TEXT="Polymorphic types">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
@@ -299,16 +322,12 @@
   </head>
   <body>
     <p>
-      Primitive data types: Boolean, Integer,&#160;&#160;Real, String, Souce Code Location, SDF Symbol
+      Primitive data types: Boolean, Integer,  Real, String, Souce Code Location, SDF Symbol
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1224600918771" HGAP="64" ID="ID_1228679874" MODIFIED="1224600936530" TEXT="" VSHIFT="-32">
-<font NAME="SansSerif" SIZE="14"/>
-</node>
 </node>
 <node COLOR="#00b439" CREATED="1224495548452" ID="ID_756014938" MODIFIED="1224512462061">
 <richcontent TYPE="NODE"><html>
@@ -317,31 +336,40 @@
   </head>
   <body>
     <p>
-      Structured datatypes: List, Set,&#160;Tuple, Map, Relation, Graph
+      Structured datatypes: List, Set, Tuple, Map, Relation, Graph
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
-<node COLOR="#00b439" CREATED="1224600963611" ID="ID_1147774216" MODIFIED="1224600963612" TEXT="">
+<node COLOR="#00b439" CREATED="1225467758793" ID="Freemind_Link_144013873" MODIFIED="1225469157703" TEXT="List and Set matching">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1225467777481" ID="Freemind_Link_808508825" MODIFIED="1225467783105" TEXT="Local alternatives">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1225467785542" ID="Freemind_Link_1697096925" MODIFIED="1225467805184" TEXT="Undoing side-effects">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+</node>
+<node COLOR="#00b439" CREATED="1225470261564" ID="ID_1148599398" MODIFIED="1225470273803" TEXT="Read-eval-print Loop (REPL)">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
 </node>
-<node COLOR="#0033ff" CREATED="1224188411911" HGAP="60" ID="Freemind_Link_903536405" MODIFIED="1224600725814" POSITION="left" TEXT="Types and Values" VSHIFT="27">
+<node COLOR="#0033ff" CREATED="1224188411911" HGAP="94" ID="Freemind_Link_903536405" MODIFIED="1225470400359" POSITION="left" TEXT="Types and Values" VSHIFT="-4">
 <edge STYLE="sharp_bezier" WIDTH="8"/>
 <cloud/>
 <font NAME="SansSerif" SIZE="18"/>
 <node COLOR="#00b439" CREATED="1224188624558" ID="Freemind_Link_1010173155" MODIFIED="1224512462064" TEXT="Primitive Types and Values">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1224188659807" ID="Freemind_Link_917708668" MODIFIED="1224512462064" TEXT="Boolean">
+<node COLOR="#990000" CREATED="1224188659807" FOLDED="true" ID="Freemind_Link_917708668" MODIFIED="1224512462064" TEXT="Boolean">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224190021438" ID="Freemind_Link_1559325817" MODIFIED="1224512462064" TEXT="Type">
-<node COLOR="#111111" CREATED="1224190051266" ID="Freemind_Link_1868091464" MODIFIED="1224512462069" TEXT="bool">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#111111" CREATED="1224190051266" ID="Freemind_Link_1868091464" MODIFIED="1225464666206" TEXT="bool">
+<font NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1224250160402" ID="Freemind_Link_411720878" MODIFIED="1224512462070" TEXT="Operations">
@@ -367,11 +395,11 @@
 <node COLOR="#111111" CREATED="1224249555245" ID="Freemind_Link_755565853" MODIFIED="1224512462070" TEXT="arb, min, max, toDouble, toInt, toString"/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224188708649" ID="Freemind_Link_1800838925" MODIFIED="1224512462070" TEXT="Integer">
+<node COLOR="#990000" CREATED="1224188708649" FOLDED="true" ID="Freemind_Link_1800838925" MODIFIED="1224512462070" TEXT="Integer">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224190100592" ID="Freemind_Link_798113037" MODIFIED="1224512462070" TEXT="Type">
-<node COLOR="#111111" CREATED="1224190106082" ID="Freemind_Link_1354552575" MODIFIED="1224512462070" TEXT="int">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#111111" CREATED="1224190106082" ID="Freemind_Link_1354552575" MODIFIED="1225464666208" TEXT="int">
+<font NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1224250205443" ID="Freemind_Link_595656273" MODIFIED="1224512462070" TEXT="Operations">
@@ -397,11 +425,11 @@
 <node COLOR="#111111" CREATED="1224249634655" ID="Freemind_Link_1105963418" MODIFIED="1224512462071" TEXT="arb, toDouble, toString"/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224188713106" ID="Freemind_Link_1766832725" MODIFIED="1224512462071" TEXT="Real Number">
+<node COLOR="#990000" CREATED="1224188713106" FOLDED="true" ID="Freemind_Link_1766832725" MODIFIED="1224512462071" TEXT="Real Number">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224190143007" ID="Freemind_Link_732014116" MODIFIED="1224512462071" TEXT="Type">
-<node COLOR="#111111" CREATED="1224190146932" ID="Freemind_Link_976350036" MODIFIED="1224512462071" TEXT="double">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#111111" CREATED="1224190146932" ID="Freemind_Link_976350036" MODIFIED="1225464666209" TEXT="double">
+<font NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1224250236039" ID="Freemind_Link_113620700" MODIFIED="1224512462071" TEXT="Operations">
@@ -427,11 +455,11 @@
 <node COLOR="#111111" CREATED="1224249657119" ID="Freemind_Link_1015945560" MODIFIED="1224512462072" TEXT="arb, toInt, toString"/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224188740260" ID="Freemind_Link_345025000" MODIFIED="1224512462072" TEXT="String">
+<node COLOR="#990000" CREATED="1224188740260" FOLDED="true" ID="Freemind_Link_345025000" MODIFIED="1224512462072" TEXT="String">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224190169464" ID="Freemind_Link_1429665421" MODIFIED="1224512462072" TEXT="Type">
-<node COLOR="#111111" CREATED="1224190172099" ID="Freemind_Link_1888193377" MODIFIED="1224512462072" TEXT="str">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#111111" CREATED="1224190172099" ID="Freemind_Link_1888193377" MODIFIED="1225464666211" TEXT="str">
+<font NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1224250269380" ID="Freemind_Link_1984432635" MODIFIED="1224512462072" TEXT="Operations">
@@ -447,7 +475,7 @@
   </head>
   <body>
     <p>
-      ==,&#160;&#160;!=,&#160;&#160;&lt;, &lt;=,&#160;&#160;&gt;, &gt;=,&#160;&#160;+,&#160;&#160;in,&#160;&#160;notin, [_]
+      ==,  !=,  &lt;, &lt;=,  &gt;, &gt;=,  +,  in,  notin, [_]
     </p>
   </body>
 </html></richcontent>
@@ -470,18 +498,18 @@
       charAt, endsWith, get, readFile, reverse, size, split, startsWith,
     </p>
     <p>
-      toDouble, toInt,&#160; toList, toLowerCase, toSet, toUpperCase
+      toDouble, toInt,  toList, toLowerCase, toSet, toUpperCase
     </p>
   </body>
 </html></richcontent>
 </node>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224188744925" ID="Freemind_Link_1059918283" MODIFIED="1224512462073" TEXT="Source Code Location">
+<node COLOR="#990000" CREATED="1224188744925" FOLDED="true" ID="Freemind_Link_1059918283" MODIFIED="1224512462073" TEXT="Source Code Location">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224190189689" ID="Freemind_Link_1656049106" MODIFIED="1224512462073" TEXT="type">
-<node COLOR="#111111" CREATED="1224190191616" ID="Freemind_Link_1853451172" MODIFIED="1224512462073" TEXT="loc">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#111111" CREATED="1224190191616" ID="Freemind_Link_1853451172" MODIFIED="1225464666233" TEXT="loc">
+<font NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1224250303794" ID="Freemind_Link_1594960364" MODIFIED="1224512462073" TEXT="Operations">
@@ -497,7 +525,7 @@
   </head>
   <body>
     <p>
-      ==,&#160;&#160;!=,&#160;&#160;&lt;, &lt;=, &gt;, &gt;=
+      ==,  !=,  &lt;, &lt;=, &gt;, &gt;=
     </p>
   </body>
 </html></richcontent>
@@ -507,7 +535,7 @@
 <node COLOR="#111111" CREATED="1224249856018" ID="Freemind_Link_1675249288" MODIFIED="1224512462074" TEXT="get_location, toString, set_location"/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224188808532" ID="Freemind_Link_1127076595" MODIFIED="1224512462074" TEXT="Symbol">
+<node COLOR="#990000" CREATED="1224188808532" FOLDED="true" ID="Freemind_Link_1127076595" MODIFIED="1224512462074" TEXT="Symbol">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224494570115" ID="ID_1982334609" MODIFIED="1224512462074" TEXT="Any SDF symbol is allowed in a type"/>
 </node>
@@ -515,11 +543,11 @@
 <node COLOR="#00b439" CREATED="1224188753699" ID="Freemind_Link_1882506716" MODIFIED="1224512462074" TEXT="Structured Types and Values">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1224188820713" ID="Freemind_Link_1773797644" MODIFIED="1224512462075" TEXT="List">
+<node COLOR="#990000" CREATED="1224188820713" FOLDED="true" ID="Freemind_Link_1773797644" MODIFIED="1224512462075" TEXT="List">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224190642882" ID="Freemind_Link_1114527921" MODIFIED="1224512462075" TEXT="Type">
-<node COLOR="#111111" CREATED="1224190648528" ID="Freemind_Link_128621104" MODIFIED="1224512462075" TEXT="list[ _ ]">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#111111" CREATED="1224190648528" ID="Freemind_Link_128621104" MODIFIED="1225464666235" TEXT="list[ _ ]">
+<font NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1224258109562" ID="Freemind_Link_765162817" MODIFIED="1224512462075" TEXT="Value">
@@ -538,7 +566,7 @@
   </head>
   <body>
     <p>
-      ==,&#160;&#160;!=,&#160;&#160;&lt;, &lt;=, &gt;, &gt;=,&#160;&#160;+,&#160;&#160;-,&#160;&#160;in, notin, [ _ ]
+      ==,  !=,  &lt;, &lt;=, &gt;, &gt;=,  +,  -,  in, notin, [ _ ]
     </p>
   </body>
 </html></richcontent>
@@ -570,11 +598,11 @@
 </node>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224188830336" ID="Freemind_Link_416939293" MODIFIED="1224512462076" TEXT="Set">
+<node COLOR="#990000" CREATED="1224188830336" FOLDED="true" ID="Freemind_Link_416939293" MODIFIED="1224512462076" TEXT="Set">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224190843676" ID="Freemind_Link_843875159" MODIFIED="1224512462076" TEXT="Type">
-<node COLOR="#111111" CREATED="1224190852842" ID="Freemind_Link_1172245624" MODIFIED="1224512462076" TEXT="set[ _ ]">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#111111" CREATED="1224190852842" ID="Freemind_Link_1172245624" MODIFIED="1225464666238" TEXT="set[ _ ]">
+<font NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1224258272193" ID="Freemind_Link_1168611399" MODIFIED="1224512462076" TEXT="Value">
@@ -593,7 +621,7 @@
   </head>
   <body>
     <p>
-      ==, !=, &lt;,&#160;&#160;&lt;=, &gt;,&#160;&#160;&gt;=, +, -, *, &amp;, in, notin
+      ==, !=, &lt;,  &lt;=, &gt;,  &gt;=, +, -, *, &amp;, in, notin
     </p>
   </body>
 </html></richcontent>
@@ -612,14 +640,14 @@
   </head>
   <body>
     <p>
-      arb, average, mapper, max, min, multiply, reducer, size,&#160;sum, toList, toMap, toRel, toString,
+      arb, average, mapper, max, min, multiply, reducer, size, sum, toList, toMap, toRel, toString,
     </p>
   </body>
 </html></richcontent>
 </node>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224188834087" ID="Freemind_Link_1894818599" MODIFIED="1224512462077" TEXT="Tuple">
+<node COLOR="#990000" CREATED="1224188834087" FOLDED="true" ID="Freemind_Link_1894818599" MODIFIED="1224512462077" TEXT="Tuple">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224191141931" ID="Freemind_Link_1277055555" MODIFIED="1224512462077" TEXT="Type">
 <node COLOR="#111111" CREATED="1224191145823" ID="Freemind_Link_686977673" MODIFIED="1224512462077">
@@ -667,7 +695,7 @@
 <node COLOR="#111111" CREATED="1224250569169" ID="Freemind_Link_136849730" MODIFIED="1224512462078" TEXT="get, size, toString "/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224188841659" ID="Freemind_Link_1658245810" MODIFIED="1224512462078" TEXT="Map">
+<node COLOR="#990000" CREATED="1224188841659" FOLDED="true" ID="Freemind_Link_1658245810" MODIFIED="1224512462078" TEXT="Map">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224250612545" ID="Freemind_Link_1802215833" MODIFIED="1224512462078" TEXT="Type">
 <node COLOR="#111111" CREATED="1224251877620" ID="Freemind_Link_1471010843" MODIFIED="1224512462078">
@@ -726,7 +754,7 @@
   </head>
   <body>
     <p>
-      arb, mapper, size,&#160;toList, toSet, toRel, toString,
+      arb, mapper, size, toList, toSet, toRel, toString,
     </p>
   </body>
 </html></richcontent>
@@ -844,7 +872,7 @@
 <node COLOR="#990000" CREATED="1224254944221" ID="Freemind_Link_157116928" MODIFIED="1224512462081" TEXT="Function Types and Values">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#990000" CREATED="1224256082432" FOLDED="true" ID="Freemind_Link_959880018" MODIFIED="1224512462081" TEXT="Program Data Base">
+<node COLOR="#990000" CREATED="1224256082432" FOLDED="true" ID="Freemind_Link_959880018" MODIFIED="1225469636173" TEXT="Program Data Base">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224256089312" ID="Freemind_Link_927348589" MODIFIED="1224512462081" TEXT="Functions">
 <node COLOR="#111111" CREATED="1224256094660" ID="Freemind_Link_600638654" MODIFIED="1224512462081">
@@ -867,7 +895,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1224188903597" ID="Freemind_Link_114786531" MODIFIED="1224512462084" TEXT="Data Type">
+<node COLOR="#00b439" CREATED="1224188903597" FOLDED="true" ID="Freemind_Link_114786531" MODIFIED="1225469642429" TEXT="Data Type">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224255055264" ID="Freemind_Link_1911361402" MODIFIED="1224512462087">
@@ -910,20 +938,20 @@
 </node>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1224188895144" ID="Freemind_Link_1262191543" MODIFIED="1224512462096" TEXT="Type Hierarchy">
+<node COLOR="#00b439" CREATED="1224188895144" FOLDED="true" ID="Freemind_Link_1262191543" MODIFIED="1225469644718" TEXT="Type Hierarchy">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1224188913290" ID="Freemind_Link_1739973792" MODIFIED="1224512462096" TEXT="void">
-<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<node COLOR="#990000" CREATED="1224188913290" ID="Freemind_Link_1739973792" MODIFIED="1225464666248" TEXT="void">
+<font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#990000" CREATED="1224254875332" ID="Freemind_Link_1670503785" MODIFIED="1224512462096" TEXT="value">
-<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<node COLOR="#990000" CREATED="1224254875332" ID="Freemind_Link_1670503785" MODIFIED="1225464666249" TEXT="value">
+<font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224255867379" ID="Freemind_Link_195884837" MODIFIED="1224512462096" TEXT="Functions">
 <node COLOR="#111111" CREATED="1224256022167" ID="Freemind_Link_532686920" MODIFIED="1224512462096" TEXT="print, println, write"/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1224188935010" ID="Freemind_Link_1362855959" MODIFIED="1224512462097" TEXT="tree">
-<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<node COLOR="#990000" CREATED="1224188935010" ID="Freemind_Link_1362855959" MODIFIED="1225464666249" TEXT="tree">
+<font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224255626503" ID="Freemind_Link_1466673682" MODIFIED="1224512462097">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -946,7 +974,7 @@
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1224189070832" ID="Freemind_Link_443892775" MODIFIED="1224512462105" TEXT="Type Variable">
+<node COLOR="#00b439" CREATED="1224189070832" FOLDED="true" ID="Freemind_Link_443892775" MODIFIED="1224512462105" TEXT="Type Variable">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224255142307" ID="Freemind_Link_1100810165" MODIFIED="1224512462108">
@@ -968,7 +996,7 @@
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1224189426695" ID="Freemind_Link_1461093759" MODIFIED="1224512462111" TEXT="Value Annotation">
+<node COLOR="#00b439" CREATED="1224189426695" FOLDED="true" ID="Freemind_Link_1461093759" MODIFIED="1224512462111" TEXT="Value Annotation">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224255395776" ID="Freemind_Link_1219643914" MODIFIED="1224512462114">
@@ -1000,14 +1028,14 @@
 </node>
 </node>
 </node>
-<node COLOR="#0033ff" CREATED="1224188550999" HGAP="93" ID="Freemind_Link_810963181" MODIFIED="1224512734704" POSITION="left" TEXT="Pattern" VSHIFT="-1125">
+<node COLOR="#0033ff" CREATED="1224188550999" HGAP="56" ID="Freemind_Link_810963181" MODIFIED="1225470386769" POSITION="left" TEXT="Pattern" VSHIFT="-1231">
 <edge STYLE="sharp_bezier" WIDTH="8"/>
 <cloud/>
 <font NAME="SansSerif" SIZE="18"/>
-<node COLOR="#00b439" CREATED="1224511572327" ID="ID_1428699357" MODIFIED="1224512462119" TEXT="position">
+<node COLOR="#00b439" CREATED="1224511572327" ID="ID_1428699357" MODIFIED="1225468500369" TEXT="Pattern Position">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1224511582913" ID="ID_1820868779" MODIFIED="1224512462119" TEXT="match">
+<node COLOR="#990000" CREATED="1224511582913" FOLDED="true" ID="ID_1820868779" MODIFIED="1225469628413" TEXT="match">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224511607283" ID="ID_1111009308" MODIFIED="1224512462119" TEXT="case">
 <node COLOR="#111111" CREATED="1224514600939" ID="ID_1369652349" MODIFIED="1224514607867" TEXT="switch"/>
@@ -1016,7 +1044,7 @@
 <node COLOR="#111111" CREATED="1224511628019" ID="ID_1116638108" MODIFIED="1224512462120" TEXT="left-hand side of a rule"/>
 <node COLOR="#111111" CREATED="1224511661623" ID="ID_557343254" MODIFIED="1224512462120" TEXT="generator"/>
 </node>
-<node COLOR="#990000" CREATED="1224511586708" ID="ID_1379341287" MODIFIED="1224512462120" TEXT="make">
+<node COLOR="#990000" CREATED="1224511586708" FOLDED="true" ID="ID_1379341287" MODIFIED="1225469629253" TEXT="make">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224511674877" ID="ID_400296263" MODIFIED="1224512462120" TEXT="right-hand side of case"/>
 <node COLOR="#111111" CREATED="1224511688313" ID="ID_1015472283" MODIFIED="1224512462120" TEXT="right-hand side of rule"/>
@@ -1035,8 +1063,7 @@
       <b>&lt;</b>Type Var<b>&gt;</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 <node COLOR="#990000" CREATED="1224511354551" ID="ID_1698542980" MODIFIED="1224512462129">
@@ -1049,8 +1076,7 @@
       <b>&lt;</b>Var<b>&gt;</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 <node COLOR="#990000" CREATED="1224511715946" ID="ID_69889354" MODIFIED="1224512462134">
@@ -1063,8 +1089,7 @@
       <b>&lt; </b>F (A1, ,,,, An) <b>&gt;</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
@@ -1085,15 +1110,14 @@
       <b>/</b> ... <b>/ </b>modifier
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
 <node COLOR="#00b439" CREATED="1224188563091" ID="Freemind_Link_1588441292" MODIFIED="1224512462143" TEXT="Syntax">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1224513055732" ID="ID_1584960786" MODIFIED="1224513059801" TEXT="Quoted">
+<node COLOR="#990000" CREATED="1224513055732" FOLDED="true" ID="ID_1584960786" MODIFIED="1225469632389" TEXT="Quoted">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1224511905595" ID="ID_1887524636" MODIFIED="1224513062874">
 <richcontent TYPE="NODE"><html>
@@ -1117,7 +1141,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#0033ff" CREATED="1224189024703" HGAP="-156" ID="Freemind_Link_1275539165" MODIFIED="1224600738055" POSITION="right" VSHIFT="-293">
+<node COLOR="#0033ff" CREATED="1224189024703" HGAP="10" ID="Freemind_Link_1275539165" MODIFIED="1225470317694" POSITION="right" VSHIFT="-377">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -1127,8 +1151,7 @@
       Expression
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge STYLE="sharp_bezier" WIDTH="8"/>
 <cloud/>
 <font NAME="SansSerif" SIZE="18"/>
@@ -1152,7 +1175,7 @@
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
-<node COLOR="#00b439" CREATED="1224189283383" ID="Freemind_Link_256115314" MODIFIED="1224512462155" TEXT="Comprehension">
+<node COLOR="#00b439" CREATED="1224189283383" FOLDED="true" ID="Freemind_Link_256115314" MODIFIED="1224512462155" TEXT="Comprehension">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224189348273" ID="Freemind_Link_1293710435" MODIFIED="1224512462155" TEXT="Generator">
@@ -1173,8 +1196,7 @@
       <b>[</b> Exp <b>|</b> G1, ..., Gn <b>]</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#990000" CREATED="1224514055527" ID="ID_1072506609" MODIFIED="1224514058469" TEXT="set comprehension">
@@ -1189,12 +1211,17 @@
       <b>{ </b>Exp<b> | </b>G1, ..., Gn <b>}</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
+<node COLOR="#990000" CREATED="1225465128169" ID="Freemind_Link_1942062871" MODIFIED="1225465314498" TEXT="forall(Gen | Pred)">
+<font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#00b439" CREATED="1224189733107" ID="Freemind_Link_873378348" MODIFIED="1224512462044" TEXT="visit">
+<node COLOR="#990000" CREATED="1225465180296" ID="Freemind_Link_32104265" MODIFIED="1225465316678" TEXT="exists(Gen | Pred)">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+</node>
+<node COLOR="#00b439" CREATED="1224189733107" FOLDED="true" ID="Freemind_Link_873378348" MODIFIED="1224512462044" TEXT="visit">
 <edge STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1224514376999" ID="ID_1355484684" MODIFIED="1224514427547">
@@ -1204,11 +1231,10 @@
   </head>
   <body>
     <p>
-      Strategy <b>visit (</b> Exp <b>) { </b>case1<b>;</b> ... <b>;</b> casen<b>;</b> default<b>}</b>&#160;
+      Strategy <b>visit (</b> Exp <b>) { </b>case1<b>;</b> ... <b>;</b> casen<b>;</b> default<b>}</b> 
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 <node COLOR="#990000" CREATED="1224189752747" ID="Freemind_Link_1014826202" MODIFIED="1224514439033" TEXT="Strategy">
