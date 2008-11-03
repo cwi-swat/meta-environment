@@ -11,26 +11,33 @@ equations
 
 %% ---- Evaluate test suite
 
-[ETS1]	$Stat* := $Rscript,
-         $REnv := eval-rstats($Stat*, test-environment),
-	$NatCon1 := value(NPASSED, $REnv),
-	$NatCon2 := value(NFAILED, $REnv),
-	[$Error*] := value(FAILED, $REnv)
-	===
-	eval-rscript-testsuite($Rscript) = summary("Rscript test runner", get-filename(get-location($Rscript)), [$Error*])
+%%[ETS1]	$Stat* := $Rscript,
+%%         $REnv := eval-rstats($Stat*, test-environment),
+%%	$NatCon1 := value(NPASSED, $REnv),
+%%	$NatCon2 := value(NFAILED, $REnv),
+%%	[$Error*] := value(FAILED, $REnv)
+%%	===
+%%	eval-rscript-testsuite($Rscript) = summary("Rscript test runner", get-filename(get-location($Rscript)), [$Error*])
+[] eval-rscript-testsuite($Rscript) = eval-rscript-testsuite-with-rstore($Rscript, test-environment)
 
 %% ---- Evaluate test suite with given Env
 
-%%[ETS1]	$REnv' := assign-variable(NPASSED, int, 0, $REnv),
-%%	$REnv'' := assign-variable(NFAILED, int, 0, $REnv'),
-%%	$REnv''' := assign-variable(FAILED, bag[str], {}, $REnv''),
-%%	$REnv'''' := eval-rstats($Stat*, $REnv'''),
-%%	$NatCon1 := value(NPASSED, $REnv''''),
-%%	$NatCon2 := value(NFAILED, $REnv''''),
-%%	$Val := value(FAILED, $REnv'''')
-%%	===
-%%	eval-rscript-testsuite-with-rstore($Stat*, $REnv) = testsuite-report($NatCon1, $NatCon2, $Val)
+[ETS2]	$Stat* := $Rscript,
+	$REnv1 := assign-variable(NPASSED, int, 0, $REnv),
+	$REnv2 := assign-variable(NFAILED, int, 0, $REnv1),
+	$REnv3 := assign-variable(FAILED, set[str], [], $REnv2),
+	$REnv4 := eval-rstats($Stat*, $REnv3),
+	$NatCon1 := value(NPASSED, $REnv4),
+	$NatCon2 := value(NFAILED, $REnv4),
+	[$Error*] := value(FAILED, $REnv4)
+	===
+	eval-rscript-testsuite-with-rstore($Rscript, $REnv) = summary("Rscript test runner", get-filename(get-location($Rscript)), [$Error*])
 
+%% ---- Evaluate test suite with given RStore
+
+[ETS3]   $REnv := rstore-to-renvironment($RStore)
+         ===
+         eval-rscript-testsuite-with-rstore($Rscript, $RStore) = eval-rscript-testsuite-with-rstore($Rscript, $REnv)
 
 %% ---- Increment a variable
 

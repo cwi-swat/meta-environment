@@ -99,13 +99,52 @@ equations
 %% ---- Eval one statement
 
 [S0]	eval-rstat(yield $Etype $Var, $REnv)	= eval-rstat($Etype $Var, yield($Var, $REnv))
-[S7]	eval-rstat($Etype $Var, $REnv)	= $REnv
+
+
+
+
+
+
+
+[S1]	value($Var, $REnv) == *undefined*,
+	$Etype == bool
+         ====
+	eval-rstat($Etype $Var, $REnv)	= assign-variable($Var, $Etype, false, $REnv)
+
+[S2]	value($Var, $REnv) == *undefined*,
+	$Etype == int
+         ====
+	eval-rstat($Etype $Var, $REnv)	= assign-variable($Var, $Etype, 0, $REnv)
+
+[S3]	value($Var, $REnv) == *undefined*,
+	$Etype == str
+         ====
+	eval-rstat($Etype $Var, $REnv)	= assign-variable($Var, $Etype, "", $REnv)
+
+[S4]	value($Var, $REnv) == *undefined*,
+	$Etype == loc
+         ====
+	eval-rstat($Etype $Var, $REnv)	= assign-variable($Var, $Etype, file(""), $REnv)
+
+[S5]	value($Var, $REnv) == *undefined*,
+	set[$Etype'] := $Etype
+         ====
+	eval-rstat($Etype $Var, $REnv)	= assign-variable($Var, $Etype, {}, $REnv)
+
+[S6]	value($Var, $REnv) == *undefined*,
+	rel[$Etype+] := $Etype
+         ====
+	eval-rstat($Etype $Var, $REnv)	= assign-variable($Var, $Etype, {}, $REnv)
+
+[S7]	value($Var, $REnv) != *undefined*
+	====
+         eval-rstat($Etype $Var, $REnv)	= $REnv
 
 [S8a]   	eval-rstat(yield $Etype $Var = $Exp, $REnv) = eval-rstat($Etype $Var = $Exp, yield($Var, $REnv))
 
 [S8a]	eval-rstat($Etype $Var = $Exp, $REnv) = assign-variable($Var, $Etype, evalx($Exp, $REnv), $REnv)
 
-[S8a]   eval-rstat(yield $Etype $Var += $Exp, $REnv) = 
+[S8a]    eval-rstat(yield $Etype $Var += $Exp, $REnv) = 
 						      eval-rstat($Etype $Var += $Exp, yield($Var, $REnv))
 
 [S8b]	eval-rstat(rel[$Etype+] $Var += $Exp, $REnv) = union-with-variable($Var, evalr($Exp, $REnv), $REnv)

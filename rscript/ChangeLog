@@ -1,5 +1,11 @@
 # $Id$
 
+2008-11-03    <basten@cwi.nl>
+ * spec/languages/rscript/run/RscriptCalculator.asf:
+     Added default values for facts that are not available in the rstore.
+ * spec/languages/rscript/test/Rscript.{sdf,asf}, util/rscript.sh.src:
+     Fixed eval-rscript-testsuite-with-rstore.
+	
 Fri Aug 29 14:11:20 CEST 2008 <jurgenv@cwi.nl>
  * utils/rscript.spec.sh,rscript.pc.in: added dependency on rstore-support.
    More importantly, fixed the rscript command to properly deal with the

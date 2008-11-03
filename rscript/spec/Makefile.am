@@ -2,6 +2,13 @@ EXTRA_DIST=make_rules
 
 SUBDIRS=languages
 
+dump_run : 
+	eqs-dump -m languages/rscript/run/Rscript -o ../bin/run/RScript-Calculator.eqs
+
+dump_test : 
+	eqs-dump -m languages/rscript/test/Rscript -o ../bin/test/RScript-Test-Suite.eqs
+
+
 #bin_PROGRAMS    = RscriptCalculator Rstore RscriptTestsuites RscriptChecker
 #
 #RscriptCalculator_SOURCES	= RscriptCalculator.c

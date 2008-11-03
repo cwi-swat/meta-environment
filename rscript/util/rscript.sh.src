@@ -40,9 +40,10 @@ EVALUATOR_FUN=eval-rscript-to-rstore
 EVALUATOR_WITH_STORE_FUN=eval-rscript-with-rstore
 CHECKER_FUN=check-rscript
 
-TESTSUITES=${bindir}/RscriptTestsuites
+TESTSUITES=${bindir}/rscripttestsuite
 USE_TESTSUITES=no
 YIELD=
+TESTREPORT=Summary
 
 THE_RSCRIPT=
 OUTPUT=
@@ -136,6 +137,12 @@ cleanup() {
 parse_rscript() {
   $SGLR $VERBOSE -p $RSCRIPT_PARSE_TABLE -s RSCRIPT -i $THE_RSCRIPT -o $THE_RSCRIPT.pt
   add_tmp_file  $THE_RSCRIPT.pt
+
+  if test $USE_TESTSUITES = "yes"
+  then
+    $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt -o $THE_RSCRIPT.pt.pos
+    mv $THE_RSCRIPT.pt.pos $THE_RSCRIPT.pt
+  fi
 }
 
 # 
@@ -194,7 +201,7 @@ do
     -s | --store)
       shift; RSTORE=$1;  check_rstore_file_type ${RSTORE};;
     -t | --testsuite)
-      USE_TESTSUITES=yes; THE_EVALUATOR=$TESTSUITES; EVALUATOR_FUN=eval-rscript-testsuite; EVALUATOR_RESULT=TESTREPORT;;
+      USE_TESTSUITES=yes; THE_EVALUATOR=$TESTSUITES; EVALUATOR_FUN=eval-rscript-testsuite; EVALUATOR_WITH_STORE_FUN=eval-rscript-testsuite-with-rstore; EVALUATOR_RESULT=$TESTREPORT;;
      -c | --check-only)
       CHECK_ONLY=yes ;;
      -y | --yield)
