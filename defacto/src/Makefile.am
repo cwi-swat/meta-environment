@@ -1,5 +1,3 @@
-EXTRA_DIST=make_rules
-
 dump_tbl : 
 	pt-dump -m SortsToIds -o ../grammar/SortsToIds.trm.tbl
 
