@@ -1,0 +1,85 @@
+#include "../../../include/defacto.h"
+
+#include "sudoku.h"
+
+%% Extracted relations:
+%%
+%% set[node] DIMENSION
+%% rel[int, node] ROWS
+%% rel[node, int, node] CELLS
+
+
+
+
+%%%% Convenience functions and constants
+
+int mod(int I1, int I2) = I1 - (I1 / I2) * I2
+
+set[int] ALL-VALUES = {0,1,2,3,4,5,6,7,8,9} %% 0 means an empty cell
+set[int] SOLVED-VALUES = {1,2,3,4,5,6,7,8,9}
+set[int] INDICES = {0,1,2,3,4,5,6,7,8}
+
+
+
+
+%%%% Enriched facts
+
+yield int size = sum(IntValue[DIMENSION])
+
+
+
+
+%%%% There are different ways of modelling the rows, cols and boxes:
+
+%% Way 1: collect cells of each row, col and box in sets
+
+yield set[set[node]] ROW-CELLS = { { C | <R, int CI, node C> : CELLS } | <int RI, node R> : ROWS }
+yield set[set[node]] COL-CELLS = { { C | <node R, CI, node C> : CELLS } | int CI : INDICES }
+yield set[set[node]] BOX-CELLS = 
+  { { C | <int RI, node R> : ROWS, <R, int CI, node C> : CELLS, BI == (RI / 3) * 3 + (CI / 3) } | int BI : INDICES }
+
+yield set[set[node]] FIELDS = ROW-CELLS union COL-CELLS union BOX-CELLS
+
+%% all or exists quantors would be handy here...
+bool isSolved = false notin { B | set[node] F : FIELDS, bool B <- IntValue[F] == SOLVED-VALUES }
+
+
+
+
+%% Way 2: create a two dimensional grid of integers
+
+%% currently not supported:
+%% yield rel[int, int, int] GRID = ROWS o CELLS o IntValue
+
+%% row, col, val
+yield rel[int, int, int] GRID = 
+  { <RI, CI, Val> | <int RI, node RN> : ROWS, <RN, int CI, node CN> : CELLS, int Val : IntValue[CN] }
+
+%% box, cell, val
+yield rel[int, int, int] BOXES = { <BI, CI, Val> | <int RI, int CI, int Val> : GRID,
+  int BI <- (RI / 3) * 3 + (CI / 3), int CI <- mod(RI, 3) * 3 + mod(CI, 3) }
+
+bool isSolved2 = false notin
+  { B | int I : INDICES, bool B <- { Val | <I, int C, int Val> : GRID } == SOLVED-VALUES } union %% rows
+  { B | int I : INDICES, bool B <- { Val | <int R, I, int Val> : GRID } == SOLVED-VALUES } union %% cols
+  { B | int I : INDICES, bool B <- { Val | <I, int C, int Val> : BOXES } == SOLVED-VALUES }      %% boxes
+
+
+
+
+%%%% Constraints
+
+assert "The puzzle dimension must be 9" : size == 9
+
+assert "The puzzle must have as many rows as the puzzle size" : #ROWS == size
+
+assert "All rows must have as many cells as the puzzle size" :
+  { S | <int I, node R> : ROWS, int S <- #{ C | <R, int J, node C> : CELLS } } == {size}
+
+assert "All cells must have a value from 0 to size" :
+  { Val | <node Row, node Col, node Cell> : CELLS, int Val : IntValue[Cell] } <= ALL-VALUES
+
+assert "Puzzle is not correctly solved" : isSolved
+
+
+
