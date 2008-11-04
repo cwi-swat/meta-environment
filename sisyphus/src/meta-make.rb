@@ -18,7 +18,7 @@ class GNUBuildActions
   attr_reader :prefix, :deps, :pkg
 
   def self.all_steps
-    return default_steps + [:uninstall, :maintainer_mode, :dist, :distcheck]
+    return default_steps + [:uninstall, :maintainer_mode]
   end
 
   def self.default_steps
@@ -54,18 +54,16 @@ class GNUBuildActions
 
   private
 
-  def with_options(deps)
-    deps.collect do |dep|
+  def configure(deps)
+    cmd = "./configure --prefix=#{prefix} "
+    cmd += deps.collect do |dep|
       "--with-#{dep}=#{prefix}"
     end.join(' ')
-  end
-
-  def configure(deps)
-    "./configure --prefix=#{prefix} #{with_options(deps)}"
+    return cmd
   end
 
   def maintainer_mode(deps)
-    "#{configure(deps)} --enable-maintainer-mode"
+    configure(deps) + " --enable-maintainer-mode"
   end
 
   def make(deps)
@@ -84,13 +82,6 @@ class GNUBuildActions
     './reconf'
   end
 
-  def dist(deps)
-    'make dist'
-  end
-
-  def distcheck(deps)
-    "DISTCHECK_CONFIGURE_FLAGS=\"#{with_options(deps)}\" make distcheck"
-  end
 
 end
 
@@ -110,8 +101,13 @@ class PKGConfigReader
   
   def requires
     File.open(pkgconfig(@dir)) do |f|
-      return parse_requires(f)
+      f.each_line do |line|
+        if line =~ /^Requires:(.*)$/ then
+          return $1.strip.split(',')
+        end
+      end
     end
+    return []
   end
 
   def can_read? 
@@ -119,19 +115,6 @@ class PKGConfigReader
   end
 
   private
-
-  def parse_requires(stream)
-    stream.inject([]) do |result, line|
-      match_requires(line)
-    end
-  end
-
-  def match_requires(str)
-    if str =~ /^Requires:(.*)$/ then
-      return $1.strip.split(',')
-    end
-    return []
-  end
 
   def pkgconfig(dir)
     Dir[File.join(dir, '*.pc.in')].first
@@ -148,64 +131,13 @@ class CheckoutCrawler
     extract_deps
   end
 
-  def each_dependency_of(pkg, &block)
-    each_from_list(ordered & transitive_dependencies_of(pkg), &block)
-  end
-
-  def each_depending_on(pkg, &block)
-    each_from_list(ordered & transitively_depending_on(pkg), &block)
-  end
-
-  def each_ordered(&block)
-    each_ordered_without([], &block)
-  end
-
-  def each_ordered_without(exclude, &block)
-    each_from_list(ordered - exclude, &block)
-  end
-
-  private
-
-  def each_from_list(list)
-    list.each do |pkg|
+  def each_ordered
+    deps.tsort.each do |pkg|
       yield subdir(pkg), deps[pkg]
     end
   end
 
-
-  def transitively_depending_on(pkg)
-    reachable_from(pkg, inverse(deps))
-  end
-
-  def transitive_dependencies_of(pkg)
-    reachable_from(pkg, deps)
-  end
-
-  def inverse(deps)
-    inv = {}
-    inv.default = []
-    deps.each_key do |pkg|
-      deps[pkg].each do |dep|
-        inv[dep] += [pkg]
-      end
-    end
-    return inv
-  end
-
-  def reachable_from(pkg, deps)
-    result = []
-    todo = [pkg]
-    while !todo.empty? do
-      pkg = todo.shift
-      result << pkg
-      todo |= deps[pkg]
-    end
-    return result
-  end
-
-  def ordered
-    deps.tsort
-  end
+  private
 
   def subdir(pkg)
     File.join(root, pkg)
@@ -213,15 +145,12 @@ class CheckoutCrawler
 
   def extract_deps
     Dir[File.join(root, '*')].each do |file|
-      extract_deps_if_dir(file)
+      if File.directory?(file) then
+        extract_package_deps(file)
+      end
     end
   end
 
-  def extract_deps_if_dir(file)
-    if File.directory?(file) then
-      extract_package_deps(file)
-    end
-  end
 
   def extract_package_deps(dir)
     reader = PKGConfigReader.new(dir)
@@ -261,7 +190,6 @@ class MetaMaker
       execute_for_each_package(@steps)
     rescue BuildStepFailure => detail
       $stderr << "#{detail.message}\n"
-      exit(1)
     end
   end
   
@@ -273,15 +201,16 @@ class MetaMaker
     end
   end
 
+
   def execute_steps(subdir, steps, deps)
     steps.each do |step|
-      cmd = with_binpath(actions.command(step, deps))
-      execute_step(subdir, cmd)
+      execute_step(subdir, actions.command(step, deps))
     end
-  end    
-
+  end
+    
   def execute_step(subdir, cmd)
     Dir.chdir(subdir) do
+      cmd = with_binpath(cmd)
       success = execute_command(cmd) 
       raise BuildStepFailure.new(subdir, cmd, $?.exitstatus) unless success
     end
@@ -305,15 +234,11 @@ end
 class CommandLineOptions
   attr_reader :options, :opts
 
-  META_PREFIX_VAR = 'META_PREFIX'
-
   def initialize(opts)
     @opts = opts # the parser
     @options = OpenStruct.new
-    @options.prefix = ENV[META_PREFIX_VAR]
+    @options.prefix = nil
     @options.root = Dir.getwd
-    @options.deps_of = nil
-    @options.depending_on = nil
     @options.help = false
     @options.steps = GNUBuildActions.default_steps
   end
@@ -323,8 +248,6 @@ class CommandLineOptions
     prefix_option
     root_option
     steps_option
-    clients_of_option
-    deps_of_option
     help_option
     parse_and_check(args)
   end
@@ -363,7 +286,7 @@ class CommandLineOptions
 
   def prefix_option
     opts.on("-p Prefix" , "--prefix Prefix", 
-            "Installation prefix for all packages (#{META_PREFIX_VAR})") do |prefix|
+              "Installation prefix for all packages (required)") do |prefix|
       options.prefix = prefix
     end
   end
@@ -383,20 +306,6 @@ class CommandLineOptions
         step.intern
       end
       check_steps(options.steps)
-    end
-  end
-
-  def clients_of_option
-    opts.on("-c Package", "--clients-of Package",
-            "Apply steps to packages (transitively) depending on package only") do |pkg| 
-      options.depending_on = pkg
-    end
-  end
-
-  def deps_of_option
-    opts.on("-d Package", "--deps-of Package",
-            "Apply steps to (transitive) package dependencies only") do |pkg| 
-      options.deps_of = pkg
     end
   end
 

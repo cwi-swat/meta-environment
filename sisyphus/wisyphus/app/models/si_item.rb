@@ -1,6 +1,6 @@
 
 class SiItem < ActiveRecord::Base
-  # Fields: success, progress
+  # fields: success, progress
   belongs_to :si_host
   belongs_to :si_revision
   belongs_to :si_config
