@@ -25,6 +25,11 @@ if [ `uname` = "SunOS" ]; then
 else
     SED=sed
 fi
+
+ON_DARWIN=
+if [ `uname` = "Darwin" ]; then
+    ON_DARWIN=1
+fi
     
 Usage() {
     echo >&2 "Usage: $0 [--help] --prefixes <list of (package-)prefixes> [--externals <list of (package-) external dependencies>]"
@@ -103,6 +108,27 @@ if [ ! -z "${errors}" ] ; then
     echo >&2 "can't continue due to errors."
     exit 1
 fi
+
+staging_area=/tmp/sisyphus_bin_dister_stage.$$
+rm -rf ${staging_area}
+mkdir -p ${staging_area}
+
+# Copy the contents of all prefixes to the staging area
+for prefix in ${prefixes}; do
+    # NB: bin, lib, share etc. dirs will merge
+    cp -r ${prefix}/* ${staging_area}
+done
+
+
+if [ ! -z ${ON_DARWIN} ]; then
+    MACHO_LIBS=
+    for file in ${staging_area}lib/*; do
+	if file ${file} | grep -q "Mach-O" ; then
+	    MACHO_LIBS="${MACHO_LIBS} ${file}"
+	fi
+    done
+fi # else do nothing
+
 
 # Add the contents of all prefixes to a tar archive
 archive=/tmp/sisyphus_bin_dister.$$.tar

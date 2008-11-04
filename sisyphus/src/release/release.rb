@@ -36,7 +36,7 @@ end
     end
 
     # Todo: from -u
-    location = 'http://sisyphus.sen.cwi.nl:8080/downloads'
+    location = 'http://sisyphus.meta-environment.org/downloads'
     # The list of packages must be in topological sort!
     bundle = Bundle.new(item.name, item.targz_version, deps.tsort, deps, location)
     gen = BundleGenerator.new(bundle, output_dir)

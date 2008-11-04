@@ -41,19 +41,32 @@ group by
 
 create view si_my_builds as
  SELECT
-  max(si_items.id) as id, 
+  max(si_web_items.id) as id, 
+  si_web_items.host as host,
+  si_web_items.name AS name,
+  max(si_web_items.id) as si_web_item_id
+   FROM si_web_items
+group by host, name
+
+
+create view si_web_items as
+ SELECT
+  si_items.id as id, 
   si_hosts.uname as host,
   si_components.name AS name,
-  max(si_items.id) as si_item_id
+  si_revisions.version as version,
+  si_sessions.time as time,
+  si_items.success as success,
+  si_items.progress as progress
 
-   FROM si_revisions, si_components, si_items, si_hosts
+   FROM si_revisions, si_components, si_items, si_hosts, si_sessions
 
   WHERE si_items.si_revision_id = si_revisions.id AND
    si_revisions.si_component_id = si_components.id AND 
    si_items.si_host_id = si_hosts.id and
-   si_hosts.active = 't'
-group by si_hosts.uname, si_components.name
-
+   si_hosts.active = 't' and
+   si_items.id in (select si_item_id from si_results) and
+   si_items.si_session_id = si_sessions.id;
 
 
 /* SiMyBuild.find(:all, :include => :si_item) */
