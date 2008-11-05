@@ -1,5 +1,9 @@
 $Id$
 
+Wed Nov  5 13:01:57 CET 2008 <jurgenv@cwi.nl>
+ * src/Sdf2-Load.c: added support for parameterized modules using
+   patch from Jeroen Arnoldus.
+
 Fri Oct 31 15:25:24 CET 2008 <jurgenv@cwi.nl>
  * src/Sdf2-Load.c: reverted previous change to SAF because embedded
    parse table in compiled spec is still BAF.
