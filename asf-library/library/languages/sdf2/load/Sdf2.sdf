@@ -15,11 +15,12 @@ context-free syntax
 hiddens
 
 context-free start-symbols
-  SDF | Summary
+  SDF | Summary  Foo
 
 imports basic/Whitespace
-
+sorts Foo
 context-free syntax
+  StrCon* -> Foo
   load(filename:StrCon, paths:ATerm) -> Module* | Error { }
   split(StrCon) -> ATerm
   load-all(StrCon*, ATerm, StrCon*) -> Module* | Error { }
@@ -54,7 +55,9 @@ variables
 "Contents"[0-9]* -> Bytes
 "Layout"[0-9]* -> Bytes
 "Ambs"[0-9]* -> NatCon
-"Modulename"[0-9]* -> ModuleName
+"ModuleName"[0-9]* -> ModuleName
+"ModuleId"[0-9]* -> ModuleId
+"Symbols"[0-9]* -> Symbol*
 "_Renamings"[0-9]* -> Renamings {wild}
 "Error*"[0-9]* -> {Error ","}* {strict}
 "_Error*"[0-9]* -> {Error ","}* {wild}

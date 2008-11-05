@@ -49,9 +49,11 @@ equations
 
 equations
 
-[] imports(Modulename, Filename*) = bytes-to-string(unparse(Modulename)) Filename*
-[] imports(Modulename _Renamings, Filename*) = imports(Modulename, Filename*)
- 
+[]imports(ModuleId, Filename*) = bytes-to-string(unparse(ModuleId)) Filename*
+[]imports(ModuleId [ Symbols ], Filename*) = imports(ModuleId, Filename*)
+[]imports(ModuleName _Renamings, Filename*) = imports(ModuleName, Filename*)
+
+
 equations
 
 [] Filename2 := compose("",Filename),
