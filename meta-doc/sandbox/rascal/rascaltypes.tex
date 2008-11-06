@@ -35,8 +35,8 @@
 \newcommand{\hasType}[2]{#1\,:\,#2}
 \newcommand{\scalar}[1]{<\negthickspace#1\negthickspace>}
 \newcommand{\produces}{::=}
-\newcommand{\termDef}[2]{[#1] & \;$T\,\produces\,#2$\\}
-\newcommand{\typeDef}[1]{$\tau\,\produces\,#1$\\}
+\newcommand{\expDef}[2]{[#1] & \;$E\,\produces\,#2$\\}
+\newcommand{\typeDef}[2]{$#1$ & $\produces\,#2$\\}
 
 \newcommand{\tupleOfVal}[1]{<#1>}
 \newcommand{\setOfVal}[1]{\{#1\}}
@@ -72,132 +72,187 @@
 
 
 \begin{figure*}
-\begin{tabular}{rl}
-\termDef{Scalars}{\scalar{bool} | \scalar{int} | \scalar{double} | \scalar{str} | \scalar{loc}}
-\termDef{Tuples}{\tupleOfVal{T*}}
-\termDef{Sets}{\setOfVal{T*}}
-\termDef{Relations}{\relOfVal{T*}}
-\termDef{Lists}{\listOfVal{T*}}
-\termDef{Maps}{\setOfVal{\tupleOfVal{T,T}*}}
-\termDef{Identifiers}{\ident}
-\termDef{Projection}{T[\ident*]}
+\begin{center}
+\begin{tabular}{|rl|} \hline
+\expDef{Scalar}{\scalar{bool} | \scalar{int} | \scalar{double} | \scalar{str}
+  | \scalar{loc}}
+\expDef{List}{\listOfVal{E*}}
+\expDef{Tuple}{\tupleOfVal{E*}}
+\expDef{Set}{\setOfVal{E*}}
+\expDef{Map}{\setOfVal{\tupleOfVal{E,E}*}}
+\expDef{Relation}{\relOfVal{E*}}
+\expDef{Identifier}{\ident}
+\expDef{Projection}{E[\ident*]} \hline
 \end{tabular}
-\caption{Basic Rascal Terms}
-\label{fig:basicTerms}
+\caption{Basic Rascal Expressions}
+\label{fig:basicExpressions}
+\end{center}
 \end{figure*}
 
+
 \begin{figure*}
-\typeDef{\kwbool \mid \kwint \mid \kwdouble \mid \kwstr \mid \kwloc \mid \kwvalue \mid \kwtree \mid \kwvoid}
-\typeDef{\kwtuple[\iota_1:\tau_1,\ldots,\iota_n:\tau_n]}
-\typeDef{\kwset[\tau] \mid \kwlist[\tau] \mid \kwmap[\tau_1,\tau_2] \mid \kwrel[\iota_1:\tau_1,\ldots,\iota_n:\tau_n]}
-\typeDef{\kwnamedtype[\iota,\tau]}
+\begin{center}
+\begin{tabular}{|rl|} \hline
+\typeDef{ScalarType}{\kwbool \mid \kwint \mid \kwdouble \mid \kwstr \mid
+  \kwloc}
+\typeDef{ListType}{\kwlist[\tau]}
+\typeDef{TupleType}{\kwtuple[\iota_1:\tau_1,\ldots,\iota_n:\tau_n]}
+\typeDef{SetType}{\kwset[\tau]}
+\typeDef{MapType}{\kwmap[\tau_1,\tau_2]}
+\typeDef{RelType}{\kwrel[\iota_1:\tau_1,\ldots,\iota_n:\tau_n]}
+\typeDef{StructType}{TupleType \mid SetType \mid ListType \mid
+MapType \mid RelType}
+\typeDef{NamedType}{\kwnamedtype[\iota,\tau]}
+\typeDef{MiscType}{\kwvalue \mid \kwtree \mid \kwvoid}
+\typeDef{FuncType}{\tau ( \tau_1,\ldots,\tau_n )}
+\typeDef{\tau}{ScalarType \mid StructType \mid NamedType \mid MiscType \mid FuncType}
+\hline
+\end{tabular}
 \caption{Basic Rascal Types}
 \label{fig:basicTypes}
+\end{center}
 \end{figure*}
 
+\newcommand{\wf}{\textrm{wf}}
+
 \begin{figure*}
-\begin{tabular}{rl}
+\begin{center}
+\begin{tabular}{|rl|} \hline
+
+\ifthenRule{WFScalarType}{\tau \in ScalarType \vee \tau \in MiscType}{\wf( \tau )}
+\ifthenRule{WFListType}{\wf(\tau)}{\wf( \kwlist[\tau] )}
+\ifthenRule{WFTupleType}{\wf(\tau_1) \wedge \ldots \wedge \wf(\tau_n)}
+    {\wf(\tupleOf{\iota_1:\tau_1,\ldots,\iota_n:\tau_n})}
+\ifthenRule{WFSetType}{\tau \notin TupleType \wedge \wf(\tau)}{\wf( \kwset[\tau] )}
+\ifthenRule{WFMapType}{\wf(\tau_1) \wedge \wf(\tau_2)}{\wf( \kwmap[\tau_1,
+  \tau_2] )}
+\ifthenRule{WFRelType}{\wf(\tau_1) \wedge \ldots \wedge \wf(\tau_n)}
+    {\wf(\relOf{\iota_1:\tau_1,\ldots,\iota_n:\tau_n})}
+\ifthenRule{WFNamedType}{\wf(\tau)}{\wf(\kwnamedtype[\iota,\tau])}
+\ifthenRule{WFFuncType}{\wf(\tau) \wedge \wf(\tau_1) \wedge \ldots \wedge \wf(\tau_n)}
+{\wf(\tau ( \tau_1,\ldots,\tau_n ))}
+\hline
 \end{tabular}
+\end{center}
+
+\caption{Wellformed types}
+\label{fig:wellformed-types}
 \end{figure*}
 
 \begin{figure*}
-\begin{tabular}{rl}
-\termDef{Field selection}{T.\ident}
-\termDef{Projection}{T[\ident*]}
-\termDef{Binary ops}{T (\cap,\cup,\setminus) T}
-\termDef{Composition}{T \circ T}
-\termDef{Closure}{T+}
-\termDef{Lookup}{T.get(T)}
-\termDef{Map update}{T.set(T,T)}
-\termDef{Sizeof}{\sharp T}
-\termDef{Product}{T \times T}
-\termDef{Inverse}{inv(T)}
-\termDef{Carrier}{carrier(T)}
-\termDef{Vardecl}{\tau \ident = T}
-\termDef{NamedType}{type \ident extends\; \tau}
+\begin{center}
+\begin{tabular}{|rl|} \hline
+\expDef{Field selection}{E.\ident}
+\expDef{Projection}{E[\ident*]}
+\expDef{Binary ops}{E (\cap,\cup,\setminus) E}
+\expDef{Composition}{E \circ E}
+\expDef{Closure}{E+}
+\expDef{Lookup}{E.get(E)}
+\expDef{Map update}{E.set(E,E)}
+\expDef{Sizeof}{\sharp E}
+\expDef{Product}{E \times E}
+\expDef{Inverse}{inv(E)}
+\expDef{Carrier}{carrier(E)}
+\expDef{Vardecl}{\tau \ident = E}
+\expDef{NamedType}{type \ident extends\; \tau} \hline
 \end{tabular}
-\caption{Rascal Operators}
-\label{fig:operators}
+\caption{Rascal Expressions}
+\label{fig:Expressions}
+\end{center}
 \end{figure*}
 
 \begin{figure*}
-\begin{tabular}{rl}
-\eqTypeRule{EQ1}{\setOf{\tupleOf{\tau_1,\ldots,\tau_n}}}{\relOf{\tau_1,\ldots,\tau_n}}
-\eqTypeRule{EQ2}{\tupleOf{\iota_1:\tau_1,\ldots,\iota_n:\tau_n}}{\tupleOf{\tau_1,\ldots,\tau_n}}
+\begin{center}
+\begin{tabular}{|rl|} \hline
+
+\eqTypeRule{EQ}{\tupleOf{\iota_1:\tau_1,\ldots,\iota_n:\tau_n}}{\tupleOf{\tau_1,\ldots,\tau_n}}
 \subTypeRule{VOID}{void}{\tau}
 \subTypeRule{VALUE}{\tau}{value}
 \subTypeRule{IDENT}{\tau}{\tau} 
 \subTypeRule{NAMEDTYPE1} {namedtype[\iota,\tau]}{\tau}
 \iffTypeRule{NAMEDSTYPE2}{namedtype[\iota_1,\tau_1] \leq namedtype[\iota_2,\tau_2]}
-{\tau_1 = \tau_2 \& \iota_1 = \iota_2}\\
-\ifthenRule{TUPLE}{\tau_1 \leq \tau_1' \& \ldots \& \tau_n \leq \tau_n'}{\tupleOf{\tau_1,\ldots,\tau_n} \leq \tupleOf{\tau_1',\ldots,\tau_n'}}\\
+{\tau_1 = \tau_2 \& \iota_1 = \iota_2}
+\ifthenRule{TUPLE}{\tau_1 \leq \tau_1' \& \ldots \& \tau_n \leq \tau_n'}{\tupleOf{\tau_1,\ldots,\tau_n} \leq \tupleOf{\tau_1',\ldots,\tau_n'}}
 
-\ifthenRule{SET}{\tau \leq \tau'}{\setOf{\tau} \leq \setOf{\tau'}}\\
+\ifthenRule{SET}{\tau \leq \tau'}{\setOf{\tau} \leq \setOf{\tau'}}
 \ifthenRule{LIST}{\tau \leq \tau'}
-{\listOf{\tau} \leq \listOf{\tau'}}\\
+{\listOf{\tau} \leq \listOf{\tau'}}
 
 \ifthenRule{MAPREL}{\tau_1 \leq \tau_1' \& \tau_2 \leq \tau_2'}
-{\mapOf{\tau_1,\tau_2} \leq \relOf{\tau_1',\tau_2'}} \\
+{\mapOf{\tau_1,\tau_2} \leq \relOf{\tau_1',\tau_2'}}
 
 
 \ifthenRule{MAPMAP}{\tau_1 \leq \tau_1' \& \tau_2 \leq \tau_2'}
-{\mapOf{\tau_1,\tau_2} \leq \mapOf{\tau_1',\tau_2'}}\\
+{\mapOf{\tau_1,\tau_2} \leq \mapOf{\tau_1',\tau_2'}}
 
 \ifthenRule{FUNCTION}{\tau \leq \tau' \& \tau_1 \leq \tau_1', \ldots ,\tau_n \leq \tau_n'}
-{\tau N (\tau_1, \ldots ,\tau_n ) \leq \tau' N ( \tau_1', \ldots ,\tau_n' )}\\
+{\tau (\tau_1, \ldots ,\tau_n ) \leq \tau' ( \tau_1', \ldots ,\tau_n' )} \hline
 \end{tabular}
+\end{center}
 
-\caption{Subtyping rules}
+\caption{Subtyping rules on wellformed types}
 \label{fig:subtyping}
 \end{figure*}
 
 \begin{figure*}
 \begin{tabular}{rl}
 
+\typeRule{LIST}{\judgment{\hasType{E_1}{\tau_1},\ldots,\hasType{E_n}{\tau_n} \& \tau = lub(\tau_1,\ldots,\tau_n)}}
+     {\judgment{\hasType{\listOfVal{E_1,\ldots,E_n}}{\tau}}}
+
+\typeRule{EMPTYLIST}{}
+                    {\judgment{\hasType{\listOfVal{}}}{\listOf{\kwvalue}}}\\
+
+\typeRule{TUPLE}{\judgment{\hasType{E_1}{\tau_1},\ldots,\hasType{E_n}{\tau_n}}}
+       {\judgment{\hasType{\tupleOfVal{E_1,\ldots,E_n}}{\tupleOf{\tau_1,\ldots,\tau_n}}}}\\
+
 \typeRule{SELECT}{\judgment{\hasType{v}{\tupleOf{\iota_1:\tau_1,\ldots,\iota_n:\tau_n},1\leq k\leq n}}}
        {\judgment{\hasType{v.\iota_k}{\tau_k}}}\\
 
-\typeRule{TUPLE}{\judgment{\hasType{T_1}{\tau_1},\ldots,\hasType{T_n}{\tau_n}}}
-       {\judgment{\hasType{\tupleOf{T_1,\ldots,T_n}}{\tupleOf{\tau_1,\ldots,\tau_n}}}}\\
+\typeRule{SET}{\judgment{\hasType{E_1}{\tau_1},\ldots,\hasType{E_n}{\tau_n} \& \tau = lub(\tau_1,\ldots,\tau_n)}}
+       {\judgment{\hasType{\setOfVal{E_1,\ldots,E_n}}{\tau}}}\\
 
-\typeRule{SET}{\judgment{\hasType{T_1}{\tau_1},\ldots,\hasType{T_n}{\tau_n} \& \tau = lub(\tau_1,\ldots,\tau_n)}}
-       {\judgment{\hasType{\setOf{T_1,\ldots,T_n}}{\tau}}}\\
+\typeRule{EMPTYSET}{}
+                    {\judgment{\hasType{\setOfVal{}}}{\setOf{\kwvalue}}}\\
+
+
+Typing of empty maps and relations???\\
 
 %%\rmf{The following two rules should use $\top$ rather than existential types}\\\\
-\typeRule{X}{}
-       {\judgment{\hasType{\mid \; \mid}{\exists \tau_1,\tau_2: \mapOf{\tau_1,\tau_2}}}}\\
+%%\typeRule{X}{}
+%%       {\judgment{\hasType{\mid \; \mid}{\exists \tau_1,\tau_2: \mapOf{\tau_1,\tau_2}}}}\\
 
-\typeRule{X}{}
-       {\judgment{\hasType{\{ \; \}}{\exists \tau: \setOf{\tau}}}}\\
+%%\typeRule{X}{}
+%%       {\judgment{\hasType{\{ \; \}}{\exists \tau: \setOf{\tau}}}}\\
 
-\typeRule{PRODUCT}{\judgment{\hasType{T_1}{\relOf{\tau_1,\ldots,\tau_n}}, \hasType{T_2}{\relOf{\tau_{n+1},\ldots,\tau_{n+m}}}}}
-       {\judgment{\hasType{T_1 \times T_2}{\relOf{\tau_1,\ldots,\tau_n,\tau_{n+1},\ldots,\tau_{n+m}}}}}\\
-
-
-\typeRule{UNION}{\judgment{\hasType{T_1}{\tau_1}, \hasType{T_2}{\tau_2}, \tau = lub(\tau_1,\tau_2)}}
-       {\judgment{\hasType{T_1 \cup T_2}{\tau}}}\\
-
-\typeRule{MAPGET}{\judgment{\hasType{T_1}{\mapOf{\tau_1,\tau_2}},\hasType{T_2}{\tau},\tau \leq \tau_1}}
-       {\judgment{\hasType{T_1.get(T_2)}{\tau_2}}}\\
+\typeRule{PRODUCT}{\judgment{\hasType{E_1}{\relOf{\tau_1,\ldots,\tau_n}}, \hasType{E_2}{\relOf{\tau_{n+1},\ldots,\tau_{n+m}}}}}
+       {\judgment{\hasType{E_1 \times E_2}{\relOf{\tau_1,\ldots,\tau_n,\tau_{n+1},\ldots,\tau_{n+m}}}}}\\
 
 
-\typeRule{MAPSET}{\judgment{\hasType{T}{\mapOf{\tau_1,\tau_2}},\hasType{T_1}{\tau_1'\leq\tau_1},\hasType{T_2}{\tau_2'\leq\tau_2}}}
-       {\judgment{\hasType{T.set(T_1,T_2)}{\mapOf{\tau_1,\tau_2}}}}\\
+\typeRule{UNION}{\judgment{\hasType{E_1}{\tau_1}, \hasType{E_2}{\tau_2}, \tau = lub(\tau_1,\tau_2)}}
+       {\judgment{\hasType{E_1 \cup E_2}{\tau}}}\\
 
-\typeRule{COMPOSE}{\judgment{\hasType{T_1}{\relOf{\tau_1,\tau_2}},\hasType{T_2}{\relOf{\tau_3,\tau_4}},(\tau_2\leq\tau_3\vee\tau_3\leq\tau_2)}}
-       {\judgment{\hasType{T_1 \circ T_2}{\relOf{\tau_1,\tau_4}}}}\\
+\typeRule{MAPGET}{\judgment{\hasType{E_1}{\mapOf{\tau_1,\tau_2}},\hasType{E_2}{\tau},\tau \leq \tau_1}}
+       {\judgment{\hasType{E_1.get(E_2)}{\tau_2}}}\\
 
-\typeRule{CLOSURE}{\judgment{\hasType{T}{\relOf{\tau_1,\tau_2}},(\tau_1\leq\tau_2\vee\tau_2\leq\tau_1)}}
-       {\judgment{\hasType{T+}{\relOf{lub(\tau_1,\tau_2)}}}}\\
 
-\typeRule{PROJECT}{\judgment{\hasType{T}{\setOf{\tupleOf{\iota_1:\tau_1,\ldots,\iota_n:\tau_n}}},
+\typeRule{MAPSET}{\judgment{\hasType{E}{\mapOf{\tau_1,\tau_2}},\hasType{E_1}{\tau_1'\leq\tau_1},\hasType{E_2}{\tau_2'\leq\tau_2}}}
+       {\judgment{\hasType{E.set(E_1,E_2)}{\mapOf{\tau_1,\tau_2}}}}\\
+
+\typeRule{COMPOSE}{\judgment{\hasType{E_1}{\relOf{\tau_1,\tau_2}},\hasType{E_2}{\relOf{\tau_3,\tau_4}},(\tau_2\leq\tau_3\vee\tau_3\leq\tau_2)}}
+       {\judgment{\hasType{E_1 \circ E_2}{\relOf{\tau_1,\tau_4}}}}\\
+
+\typeRule{CLOSURE}{\judgment{\hasType{E}{\relOf{\tau_1,\tau_2}},(\tau_1\leq\tau_2\vee\tau_2\leq\tau_1)}}
+       {\judgment{\hasType{E+}{\relOf{lub(\tau_1,\tau_2)}}}}\\
+
+\typeRule{PROJECT}{\judgment{\hasType{E}{\setOf{\tupleOf{\iota_1:\tau_1,\ldots,\iota_n:\tau_n}}},
                   1\leq i\leq k \leq n, \exists j_i: id_i = \iota_{j_i}}}
-       {\judgment{\hasType{T[id_1,\ldots,id_k]}{\setOf{\tupleOf{\iota_{j_1}:\tau_{j_1},\ldots,\iota_{j_k}:\tau_{j_k}}}}}}\\
+       {\judgment{\hasType{E[id_1,\ldots,id_k]}{\setOf{\tupleOf{\iota_{j_1}:\tau_{j_1},\ldots,\iota_{j_k}:\tau_{j_k}}}}}}\\
 
-\typeRule{VAR1}{P \textrm{ has declaration } \tau \ id \texttt{ = } T \ \wedge \ \judgment{\hasType{T}{\tau'},\tau'\leq\tau}}
+\typeRule{VAR1}{P \textrm{ has declaration } \tau \ id \texttt{ = } E \ \wedge \ \judgment{\hasType{E}{\tau'},\tau'\leq\tau}}
        {\judgment{\hasType{id}{\tau}}}\\
 \typeRule{VAR2}{P \textrm{ has declaration } \texttt{type } id \texttt{ extends } \tau}
-       {\judgment{id \leq \tau}}\\
+       {\judgment{id \leq \tau}}\\ \hline
 \end{tabular}
 \caption{Typing rules for Rascal Expressions}
 \label{fig:typingRules}
