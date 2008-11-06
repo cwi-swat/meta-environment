@@ -20,7 +20,7 @@ context-free start-symbols
 
 exports
   variables
-   "T" [0-9\']*  -> Type
-   "N" [0-9\']*  -> Name
+   "T" [0-9\']*    -> Type
+   "N" [0-9\']*    -> Name
    "ONT" [0-9\']*  -> OptNamedType
    "ONTs" [0-9\']* -> {OptNamedType ","}+

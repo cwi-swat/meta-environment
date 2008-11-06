@@ -42,7 +42,8 @@ equations
 [let14] T <: T' == true,        %% covariant
         ONTs' <: ONTs == true   %% contravariant
         =========================================
-        fun T (ONTs) <: fun T' (ONTs') = true
+       T N (ONTs) <: T'N (ONTs') = true
+
 [default-let]
         T <: T'                            = false
 
@@ -58,6 +59,6 @@ equations
 
 %% May-overload
 
-[mo-1] may-overload(fun T N (ONTs), fun T' N' (ONTs')) = 
+[mo-1] may-overload(T N (ONTs), T' N' (ONTs')) = 
        not(N == N') | incomparable(ONTs, ONTs')
 
