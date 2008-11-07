@@ -108,12 +108,20 @@ class BuildBundlePackage < BundlePackage
     return "#{@build.name}-#{version}.tar.gz"
   end
 
+  def cp_command(dist_path, dest_file)
+    cp = "cp"
+    if dist_path =~ /^ssh:\/\// then
+      cp = "scp"
+    end
+    "#{cp} #{dist_path} #{dest_file}"
+  end
+
   def copy_as_released(destination)
     dest_file = File.join(destination, release_dist)
     if File.exist?(dest_file) then
       puts "Archive #{release_dist} already created; reusing that one."
     else
-      cmd = "cp #{dist_path} #{dest_file}"
+      cmd = cp_command(dist_path, dest_file)
       puts "Transforming #{dist_path} to #{dest_file}."
       system(cmd)
       Dir.chdir(destination) do 
