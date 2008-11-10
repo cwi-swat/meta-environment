@@ -46,7 +46,7 @@ LIBRARY_LOCATION = ${SDF_LIBRARY_PREFIX}/share/sdf-library/library
 LIBRARY_LOCATION2 = ${ASF_LIBRARY_PREFIX}/share/asf-library/library
 
 %.tb: %.tb.src Makefile
-	sed "s@__SDF2TABLE__@$(PGEN_PREFIX)/share/pgen/Sdf2.baf@g; \
+	sed "s@__SDF2TABLE__@$(PGEN_PREFIX)/share/pgen/Sdf2.saf@g; \
              s@__SDF_META__@$(prefix)/share/sdf-meta@g;" \
 	    < $< > $@ 
 

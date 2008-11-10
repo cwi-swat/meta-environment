@@ -1,5 +1,8 @@
 $Id$
 
+Mon Nov 10 11:43:18 CET 2008 <jurgenv@cwi.nl>
+ * tbscripts/Makefile.am: renamed Sdf2.baf to Sdf2.saf.
+
 Wed Oct  3 15:34:04 CEST 2007 <kooiker@cwi.nl>
  * tbscripts/start-pt-dump.tb.src: Fix number of arguments in call to 
    DumpParseTable process
