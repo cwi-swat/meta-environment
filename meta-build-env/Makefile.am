@@ -1,7 +1,7 @@
 
 # Warning: the meta-build.m4 macro is NOT included in the local aclocal.m4
 
-bin_SCRIPTS 	= meta-build
+bin_SCRIPTS 	= meta-build generate-installer.sh
 pkgdata_DATA 	= \
 		  meta-build.m4 \
 		  Makefile.meta \
@@ -11,7 +11,7 @@ pkgdata_DATA 	= \
 		  Doxyfile.meta \
 		  doc-header.html
 
-EXTRA_DIST	= meta-build.src meta-projectSet.psf $(pkgdata_DATA)
+EXTRA_DIST	= meta-build.src meta-projectSet.psf generate-installer.sh $(pkgdata_DATA)
 
 CLEANFILES = meta-build
 
