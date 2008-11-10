@@ -110,8 +110,9 @@ class BuildBundlePackage < BundlePackage
 
   def cp_command(dist_path, dest_file)
     cp = "cp"
-    if dist_path =~ /^ssh:\/\// then
+    if dist_path =~ /^ssh:\/\/(.*)$/ then
       cp = "scp"
+      dist_path = $1
     end
     "#{cp} #{dist_path} #{dest_file}"
   end
