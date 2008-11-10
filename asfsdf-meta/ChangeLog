@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Mon Nov 10 11:46:56 CET 2008 <jurgenv@cwi.nl>
+ * Bumped to 2.0.3. 
+
 Thu Sep 11 10:03:18 CEST 2008 <jurgenv@cwi.nl>
  * Bumped version to 2.0.2 after fixing long path name issues.
 
