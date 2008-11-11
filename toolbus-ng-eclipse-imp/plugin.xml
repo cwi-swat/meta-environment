@@ -2,6 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="toolbus.config" name="toolbus.config" schema="schema/ToolBus.config.exsd"/>
+   <extension-point id="toolbus.binaryProvider" name="toolbus.binaryProvider" schema="schema/ToolBus.binaryProvider.exsd"/>
    <extension
          id="toolbus_ng"
          name="ToolBus"
