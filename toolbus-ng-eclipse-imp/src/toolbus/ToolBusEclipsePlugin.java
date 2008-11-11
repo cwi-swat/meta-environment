@@ -14,6 +14,8 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.ui.IStartup;
 import org.osgi.framework.Bundle;
 
+import toolbus.execution.EclipseToolExecutorFactory;
+
 import aterm.pure.PureFactory;
 
 public class ToolBusEclipsePlugin extends Plugin implements IStartup{
@@ -30,6 +32,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			
 			if(configFile != null){
 			  toolbus = new ToolBus(new String[]{"-properties", configFile});
+			  toolbus.setToolExecutorFactory(new EclipseToolExecutorFactory());
 			}else{
 				throw new RuntimeException("There was no proper toolbus extension found, so the ToolBus will not function");
 			}
