@@ -16,7 +16,7 @@ public class DebugConsole{
 	
 	private final ButtonListener buttonListener;
 	
-	private JFrame frame;
+	private final JFrame frame;
 	
 	private final JButton unhandledMessages;
 	private final JButton performanceStats;

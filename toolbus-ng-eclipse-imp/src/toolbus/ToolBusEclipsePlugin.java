@@ -3,6 +3,8 @@ package toolbus;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -15,13 +17,13 @@ import org.eclipse.ui.IStartup;
 import org.osgi.framework.Bundle;
 
 import toolbus.execution.EclipseToolExecutorFactory;
-
 import aterm.pure.PureFactory;
 
 public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	private static final String pluginId = "toolbus";
 
 	private static final String toolbusConfig = "config";
+	private static final String toolbusBinaryProvider = "binaryProvider";
 
 	private static class SingletonToolBus{
 		private final ToolBus toolbus;
@@ -32,7 +34,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			
 			if(configFile != null){
 			  toolbus = new ToolBus(new String[]{"-properties", configFile});
-			  toolbus.setToolExecutorFactory(new EclipseToolExecutorFactory());
+			  toolbus.setToolExecutorFactory(new EclipseToolExecutorFactory(getBinaryPaths()));
 			}else{
 				throw new RuntimeException("There was no proper toolbus extension found, so the ToolBus will not function");
 			}
@@ -45,8 +47,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 
 	private static class InstanceKeeper{
 		private static SingletonToolBus instance;
-		static{
-			instance = new SingletonToolBus();
+		static{instance = new SingletonToolBus();
 			runToolBus(instance.getToolBus());
 		}
 	}
@@ -139,6 +140,30 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 
 		return null;
 	}
+	
+	public static List<String> getBinaryPaths(){
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IExtensionPoint point = registry.getExtensionPoint(pluginId, toolbusBinaryProvider);
+
+		IExtension extensions[] = point.getExtensions();
+		int nrOfExtensions = extensions.length;
+		List<String> searchPaths = new ArrayList<String>(nrOfExtensions);
+		for(int i = nrOfExtensions - 1; i >= 0; i--){
+			IConfigurationElement[] binaryProviderElements = extensions[i].getConfigurationElements();
+			IConfigurationElement ce = binaryProviderElements[0];
+			String path = ce.getAttribute("path");
+
+			Bundle bundle = Platform.getBundle(ce.getContributor().getName());
+			
+			try{
+				searchPaths.add(FileLocator.resolve(bundle.getEntry(path)).getPath());
+			}catch(IOException ioex){
+				// TODO Handle this exception.
+			}
+		}
+		
+		return searchPaths;
+	}
 
 	/**
 	 * This method finds the file pointing to by resourcePath in bundle, and returns its file handle.
@@ -159,5 +184,4 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 
 		return file;
 	}
-
 }
