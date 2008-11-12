@@ -106,7 +106,7 @@ public class EclipseToolExecutor implements IToolExecutor{
 		while(searchPathIterator.hasNext()){
 			String path = searchPathIterator.next();
 			String possbileLocation = path+File.separatorChar+executable;
-			if(new File(path+File.separatorChar+executable).exists()){
+			if(new File(possbileLocation).exists()){
 				command[0] = possbileLocation;
 				ProcessBuilder processBuilder = new ProcessBuilder(command);
 				processBuilder.directory(new File(path));
