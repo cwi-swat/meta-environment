@@ -1,3 +1,8 @@
+
+
+Wed Nov 12 14:47:52 CET 2008 <jurgenv@cwi.nl>
+ * resources/**: added resources to EXTRA_DIST
+
 Wed May  7 11:42:28 2008    <bruntink@cwi.nl>
 
 	* vis-plugin-generic.pc.on: Changed relation-stores dependency to rstore-support-java.
