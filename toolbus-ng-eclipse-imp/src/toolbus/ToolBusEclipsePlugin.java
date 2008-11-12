@@ -158,7 +158,8 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			try{
 				searchPaths.add(FileLocator.resolve(bundle.getEntry(path)).getPath());
 			}catch(IOException ioex){
-				// TODO Handle this exception.
+				// TODO Handle this exception properly.
+				ioex.printStackTrace();
 			}
 		}
 		
