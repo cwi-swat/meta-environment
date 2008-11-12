@@ -1,3 +1,10 @@
+
+
+Wed Nov 12 14:32:12 CET 2008 <jurgenv@cwi.nl>
+ * resources/**: added Makefile.am files to make sure the resources
+   are distributed with  the source code.
+ * Bumped version
+
 Tue Apr 29 15:17:59 2008    <bruntink@cwi.nl>
 
 	* navigator-gui.pc.in: Changed dependency on graph-support to graph-support-java.

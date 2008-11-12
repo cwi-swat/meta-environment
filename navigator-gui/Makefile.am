@@ -2,6 +2,8 @@
 
 include $(top_srcdir)/Makefile.java.meta
 
+SUBDIRS=resources
+
 ACLOCAL_AMFLAGS = -I .
 
 TOOLNAME = navigator
