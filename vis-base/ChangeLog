@@ -1,3 +1,8 @@
+
+
+Wed Nov 12 14:40:21 CET 2008 <jurgenv@cwi.nl>
+ * resources/**: added resources to EXTRA_DIST
+
 Wed May  7 13:01:45 2008    <bruntink@cwi.nl>
 
 	* vis-base.pc.in: Removed dependency on meta package.
