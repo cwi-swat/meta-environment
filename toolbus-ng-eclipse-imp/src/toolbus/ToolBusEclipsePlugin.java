@@ -156,7 +156,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			Bundle bundle = Platform.getBundle(ce.getContributor().getName());
 			
 			try{
-				searchPaths.add(FileLocator.resolve(bundle.getEntry(path)).getPath());
+				searchPaths.add(FileLocator.toFileURL(bundle.getResource(path)).getPath());
 			}catch(IOException ioex){
 				// TODO Handle this exception properly.
 				ioex.printStackTrace();
@@ -174,7 +174,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	 * @return
 	 * @throws IOException
 	 */
-	public static File getFile(Bundle bundle, String resourcePath) throws IOException {
+	public static File getFile(Bundle bundle, String resourcePath) throws IOException{
 		URL url = bundle.getEntry(resourcePath);
 
 		File file = null;
