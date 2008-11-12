@@ -1,3 +1,9 @@
+
+
+Wed Nov 12 14:38:12 CET 2008 <jurgenv@cwi.nl>
+ * resources/**: added resources to EXTRA_DIST
+
+
 Tue May  6 11:17:56 2008    <bruntink@cwi.nl>
 
 	* configure.ac: Removed META_C_SETUP because there are no C sources in this package.
