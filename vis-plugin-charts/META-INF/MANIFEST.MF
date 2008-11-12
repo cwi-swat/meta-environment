@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: vis-plugin-charts
 Eclipse-LazyStart: true
 Bundle-SymbolicName: vis_plugin_charts;singleton:=true
-Bundle-Version: 1.0
+Bundle-Version: 1.1.1
 Bundle-ClassPath: vis-plugin-charts.jar,
  lib/jcommon-1.0.8.jar,
  lib/log4j-1.2.14.jar,
