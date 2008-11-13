@@ -1,9 +1,11 @@
 package toolbus;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -20,10 +22,11 @@ import toolbus.execution.EclipseToolExecutorFactory;
 import aterm.pure.PureFactory;
 
 public class ToolBusEclipsePlugin extends Plugin implements IStartup{
-	private static final String pluginId = "toolbus";
+	private static final String PLUGIN_ID = "toolbus";
 
-	private static final String toolbusConfig = "config";
-	private static final String toolbusBinaryProvider = "binaryProvider";
+	private static final String TOOLBUS_CONFIG = "config";
+	private static final String TOOLBUS_BINARY_PROVIDER = "binaryProvider";
+	private static final String TOOLBUS_INCLUDE_PATH = "includePath";
 
 	private static class SingletonToolBus{
 		private final ToolBus toolbus;
@@ -39,7 +42,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 				throw new RuntimeException("There was no proper toolbus extension found, so the ToolBus will not function");
 			}
 		}
-
+		
 		public ToolBus getToolBus(){
 			return toolbus;
 		}
@@ -97,7 +100,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 					toolbus.execute();
 				}
 			});
-			thread.setName(pluginId);
+			thread.setName(PLUGIN_ID);
 			thread.start();
 
 			DebugConsole debugConsole = new DebugConsole(toolbus);
@@ -110,7 +113,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 
 	private static String getConfigFile(){
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint point = registry.getExtensionPoint(pluginId, toolbusConfig);
+		IExtensionPoint point = registry.getExtensionPoint(PLUGIN_ID, TOOLBUS_CONFIG);
 
 		IExtension extensions[] = point.getExtensions();
 
@@ -143,7 +146,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	
 	public static List<String> getBinaryPaths(){
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint point = registry.getExtensionPoint(pluginId, toolbusBinaryProvider);
+		IExtensionPoint point = registry.getExtensionPoint(PLUGIN_ID, TOOLBUS_BINARY_PROVIDER);
 
 		IExtension extensions[] = point.getExtensions();
 		int nrOfExtensions = extensions.length;
@@ -164,6 +167,57 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		}
 		
 		return searchPaths;
+	}
+	
+	public static List<String> getIncludesPath(){
+		List<String> includePath = new ArrayList<String>();
+		
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IExtensionPoint point = registry.getExtensionPoint(PLUGIN_ID, TOOLBUS_INCLUDE_PATH);
+
+		IExtension extensions[] = point.getExtensions();
+		for(int i = extensions.length - 1; i >= 0; i--){
+			IConfigurationElement[] binaryProviderElements = extensions[i].getConfigurationElements();
+			IConfigurationElement ce = binaryProviderElements[0];
+			String path = ce.getAttribute("path");
+
+			Bundle bundle = Platform.getBundle(ce.getContributor().getName());
+			
+			try{
+				List<String> recursiveDirectoryList = listDirectoriesRecursively(FileLocator.toFileURL(bundle.getEntry(path)).getPath());
+				includePath.addAll(recursiveDirectoryList);
+			}catch(IOException ioex){
+				// TODO Handle this exception properly.
+				ioex.printStackTrace();
+			}
+		}
+		
+		return includePath;
+	}
+	
+	private static List<String> listDirectoriesRecursively(String path){
+		List<String> directories = new LinkedList<String>();
+		
+		if(!new File(path).isDirectory()) return directories;
+		
+		directories.add(path);
+		
+		int index = 0;
+		do{
+			String dir = directories.get(index++);
+			File directory = new File(dir);
+			File[] subDirectories = directory.listFiles(new FileFilter(){
+				public boolean accept(File pathname){
+					return pathname.isDirectory();
+				}
+			});
+			
+			for(int i = subDirectories.length - 1; i >= 0; i--){
+				directories.add(subDirectories[i].getAbsolutePath());
+			}
+		}while(index < directories.size());
+		
+		return directories;
 	}
 
 	/**
