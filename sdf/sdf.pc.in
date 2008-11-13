@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=economop@cwi.nl,jurgenv@cwi.nl
 Name: sdf
-Version: 2.6.3
+Version: 2.6.4
 Description:
 Requires: pgen,sglr,pandora
 ToolBusFlags=
