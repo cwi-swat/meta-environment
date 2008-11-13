@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>Releasing The Meta-Environment</title>
+
+  <section>
+    <title>Intro</title>
+
+    <para>To release The Meta-Environment is a matter of:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Waiting for a successful build from Sisyphus and selecting the
+        build number. In this document, we use 66663 as an example, which was
+        obtained from this url:
+        http://sisyphus.meta-environment.org/si_items/show/66663. To go this
+        URL in Sisyphus click on a successful build of the asfsdf-meta
+        package.</para>
+      </listitem>
+
+      <listitem>
+        <para>Make sure all the version warnings Sisyphus has emailed have
+        been resolved. You should not release a package again with a
+        previously released version if it was changed since. Sisyphus has
+        warned you before.</para>
+      </listitem>
+
+      <listitem>
+        <para>Using the Ophion tool, which queries Sisyphus' database and
+        stores the fact that packages have been released. Ophion also uses the
+        continuously released .tar.gz files that are stored on the webserver.
+        If some packages have not changed, Ophion will ask you if it's ok to
+        release them again. Answer yes to these questions.</para>
+      </listitem>
+
+      <listitem>
+        <para>Ophion produces files that need to be copied manually to the
+        release directory on the webserver.</para>
+      </listitem>
+
+      <listitem>
+        <para>Let the world know there is a new release</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The same procedure also holds for releasing ATerm, ToolBus or SDF
+    separately of course, except for SDF beware to update pages on
+    <uri>http://www.syntax-definition.org</uri></para>
+  </section>
+
+  <section>
+    <title>Using Ophion</title>
+
+    <para><code>#From bash:</code><programlisting>ssh -l daybuild thorstein.sen
+cd TEMP
+rm -rf *
+ophion -r 66663 -x meta-autotools,meta-javatools,meta-build-env -w /ufs/daybuild/TEMP -p ssh://www.meta-environment.org:/srv/www/vhosts/www.meta-environment.org/www/sisyphus-distributions -d /ufs/daybuild/dbconf.yml
+ssh -l root www.meta-environment.org
+cd www.meta-environment.org/www/releases
+su daybuild
+scp ssh.cwi.nl:/ufs/daybuild/TEMP/*.tar.gz .
+svn add *
+svn commit -m "Released!"</programlisting></para>
+  </section>
+
+  <section>
+    <title>Other steps</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Download the binary dist for the released build id from
+        Sisyphus; put it also in /root/www.meta-environment.org/www/releases
+        (don't forget to rename properly and add to SVN)</para>
+      </listitem>
+
+      <listitem>
+        <para>Edit the download page on the wiki
+        <uri>http://www.meta-environment.org/Download</uri></para>
+      </listitem>
+
+      <listitem>
+        <para>Add a blog entry on blog.meta-environment.org</para>
+      </listitem>
+
+      <listitem>
+        <para>Send email to meta-users-list@cwi.nl</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>
