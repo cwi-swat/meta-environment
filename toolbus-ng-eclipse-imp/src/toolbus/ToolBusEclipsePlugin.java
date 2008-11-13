@@ -3,7 +3,6 @@ package toolbus;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +23,7 @@ import aterm.pure.PureFactory;
 public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 	private static final String PLUGIN_ID = "toolbus";
 
-	private static final String TOOLBUS_CONFIG = "config";
+	private static final String TOOLBUS_MAIN_SCRIPT = "mainScript";
 	private static final String TOOLBUS_BINARY_PROVIDER = "binaryProvider";
 	private static final String TOOLBUS_INCLUDE_PATH = "includePath";
 
@@ -33,13 +32,20 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 
 		private SingletonToolBus(){
 			super();
-			String configFile = getConfigFile();
-			
-			if(configFile != null){
-			  toolbus = new ToolBus(new String[]{"-properties", configFile});
-			  toolbus.setToolExecutorFactory(new EclipseToolExecutorFactory(getBinaryPaths()));
+			try{
+			String mainScript = getMainScript();
+			if(mainScript != null){
+				List<String> includePath = getIncludesPath();
+				String[] toolBusCommand = buildToolBusCommand(mainScript, includePath);
+				
+				toolbus = new ToolBus(toolBusCommand);
+				toolbus.setToolExecutorFactory(new EclipseToolExecutorFactory(getBinaryPaths()));
 			}else{
 				throw new RuntimeException("There was no proper toolbus extension found, so the ToolBus will not function");
+			}
+			}catch(Exception ex){
+				ex.printStackTrace();
+				throw new RuntimeException(ex);
 			}
 		}
 		
@@ -110,41 +116,44 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			throw new RuntimeException(rex);
 		}
 	}
+	
+	private static String[] buildToolBusCommand(String mainScript, List<String> includePath){
+		int nrOfIncludes = includePath.size();
+		String[] toolBusCommand = new String[includePath.size() + 1];
+		for(int i = nrOfIncludes - 1; i >= 0; i--){
+			toolBusCommand[i + 1] = "-I"+includePath.get(i);
+		}
+		toolBusCommand[0] = "-S"+mainScript;
+		
+		return toolBusCommand;
+	}
 
-	private static String getConfigFile(){
+	private static String getMainScript(){
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint point = registry.getExtensionPoint(PLUGIN_ID, TOOLBUS_CONFIG);
+		IExtensionPoint point = registry.getExtensionPoint(PLUGIN_ID, TOOLBUS_MAIN_SCRIPT);
 
 		IExtension extensions[] = point.getExtensions();
 
 		if(extensions.length == 1){
 			IConfigurationElement[] configElements = extensions[0].getConfigurationElements();
-			for(int i = configElements.length - 1; i >= 0; i--){
-				IConfigurationElement ce = configElements[i];
-				if(ce.getName().equals("toolbus")){
-					String configPath = ce.getAttribute("config");
+			IConfigurationElement ce = configElements[0];
+			String path = ce.getAttribute("path");
 
-					Bundle bundle = Platform.getBundle(ce.getContributor().getName());
-					File file;
-
-					try{
-						file = getFile(bundle, configPath);
-
-						if (file != null) {
-							return file.getAbsolutePath();
-						}
-					}catch(IOException e){
-						System.err.println("Failed to get config file: " + configPath);
-						e.printStackTrace();
-					}
-				}
+			Bundle bundle = Platform.getBundle(ce.getContributor().getName());
+			
+			try{
+				return getFile(bundle, path);
+			}catch(IOException e){
+				// TODO Handle properly
 			}
+		}else{
+			throw new RuntimeException("Multiple main ToolBus scripts defined.");
 		}
 
 		return null;
 	}
 	
-	public static List<String> getBinaryPaths(){
+	private static List<String> getBinaryPaths(){
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IExtensionPoint point = registry.getExtensionPoint(PLUGIN_ID, TOOLBUS_BINARY_PROVIDER);
 
@@ -159,7 +168,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			Bundle bundle = Platform.getBundle(ce.getContributor().getName());
 			
 			try{
-				searchPaths.add(FileLocator.toFileURL(bundle.getResource(path)).getPath());
+				searchPaths.add(getFile(bundle, path));
 			}catch(IOException ioex){
 				// TODO Handle this exception properly.
 				ioex.printStackTrace();
@@ -169,7 +178,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		return searchPaths;
 	}
 	
-	public static List<String> getIncludesPath(){
+	private static List<String> getIncludesPath(){
 		List<String> includePath = new ArrayList<String>();
 		
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -184,7 +193,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			Bundle bundle = Platform.getBundle(ce.getContributor().getName());
 			
 			try{
-				List<String> recursiveDirectoryList = listDirectoriesRecursively(FileLocator.toFileURL(bundle.getEntry(path)).getPath());
+				List<String> recursiveDirectoryList = listDirectoriesRecursively(getFile(bundle, path));
 				includePath.addAll(recursiveDirectoryList);
 			}catch(IOException ioex){
 				// TODO Handle this exception properly.
@@ -219,24 +228,14 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		
 		return directories;
 	}
-
-	/**
-	 * This method finds the file pointing to by resourcePath in bundle, and returns its file handle.
-	 * 
-	 * @param bundle
-	 * @param resourcePath
-	 * @return
-	 * @throws IOException
-	 */
-	public static File getFile(Bundle bundle, String resourcePath) throws IOException{
-		URL url = bundle.getEntry(resourcePath);
-
-		File file = null;
-
-		if(url != null){
-			file = new File(FileLocator.toFileURL(url).getPath());
+	
+	private static String getFile(Bundle bundle, String path) throws IOException{
+		String fileURL;
+		try{
+			fileURL = FileLocator.toFileURL(bundle.getEntry(path)).getPath();
+		}catch(Exception ex){
+			fileURL = FileLocator.toFileURL(bundle.getResource(path)).getPath();
 		}
-
-		return file;
+		return fileURL;
 	}
 }
