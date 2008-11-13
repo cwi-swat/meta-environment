@@ -7,6 +7,7 @@ pkgdata_DATA 	= \
 		  Makefile.meta \
 		  Makefile.top.meta \
 		  Makefile.java.meta \
+		  Makefile.fragment.meta \
 		  meta-build.ant \
 		  Doxyfile.meta \
 		  doc-header.html

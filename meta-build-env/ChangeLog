@@ -1,5 +1,9 @@
 
 
+Mon Nov 10 16:58:44 CET 2008 <jurgenv@cwi.nl,storm@cwi.nl>
+ * meta-build.m4,Makefile.fragment.java: added support for Eclipse 
+   fragment packages.
+
 Thu Oct 30 15:09:10 CET 2008 <jurgenv@cwi.nl>
  * meta-build.m4: added generation of Bundle-RequiredExecutionEnvironment
    entry in MANIFEST.MF files for Java packages, such that we are all

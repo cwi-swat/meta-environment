@@ -378,6 +378,35 @@ AC_DEFUN([META_C_SETUP],[
   AC_PROG_MAKE_SET([])
 ])
 
+dnl META_FRAGMENT_SETUP()
+AC_DEFUN([META_FRAGMENT_SETUP],[
+  META_ECLIPSE_OS_ARCH
+
+JAVA_JAR="META_GET_PKG_VAR([Name])-${ECLIPSE_OS}_${ECLIPSE_ARCH}.jar"
+AC_SUBST([JAVA_JAR])
+
+  META_GENERATE_ECLIPSE_FRAGMENT_FILES(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]),META_GET_PKG_USER_VAR([FragmentHost]))
+
+  META_REQUIRE_PACKAGES(META_GET_PKG_VAR_LIST([Requires]))
+  AC_SUBST([PACKAGE_ALL_DEPS])
+
+  AC_SUBST([PKG_CONFIG_PATH])
+
+])
+
+AC_DEFUN([META_ECLIPSE_OS_ARCH],[
+ if test "a${target_alias}" = "ai386-mingw32"; then
+    ECLIPSE_OS=win32
+    ECLIPSE_ARCH=x86
+ elif test "a`uname -s`" = "aLinux"; then
+    ECLIPSE_OS=linux
+    ECLIPSE_ARCH=x86
+ elif test "a`uname -s`" = "aDarwin"; then
+    ECLIPSE_OS=macosx
+    ECLIPSE_ARCH=x86
+ fi
+])
+
 dnl META_GET_PKG_VAR(VARNAME)
 dnl -------------------------
 dnl Is substituted by the value of VARNAME from a pkg-config file at
@@ -603,6 +632,45 @@ cat > .project << ENDCAT
 </projectDescription>
 ENDCAT
 ])
+
+dnl META_GENERATE_ECLIPSE_FRAGMENT_FILES(BUNDLE_NAME,BUNDLE_VERSION,FRAGMENT_HOST)
+AC_DEFUN([META_GENERATE_ECLIPSE_FRAGMENT_FILES],[
+if ! test -d META-INF ; then
+  mkdir META-INF
+fi
+
+META_ECLIPSE_OS_ARCH
+
+cat > META-INF/MANIFEST.MF << ENDCAT
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: $1-${ECLIPSE_OS}-${ECLIPSE_ARCH} Fragment
+Bundle-SymbolicName: `echo $1 | tr '-' '_'`_${ECLIPSE_OS}_${ECLIPSE_ARCH}
+Bundle-Version: $2
+Fragment-Host: `echo $3 | tr '-' '_'`
+Eclipse-PlatformFilter: (& (osgi.os=${ECLIPSE_OS}) (osgi.arch=${ECLIPSE_ARCH}))
+ENDCAT
+cat > .project << ENDCAT
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>$1</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.pde.PluginNature</nature>
+	</natures>
+</projectDescription>
+ENDCAT
+])
+
 
 dnl META_IF_NOT_CONTAINS(STRING,SUBSTRING,CODE)
 dnl checks whether SUBSTRING is a part of STRING, and runs CODE if yes
