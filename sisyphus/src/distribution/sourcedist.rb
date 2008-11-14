@@ -41,7 +41,7 @@ module Distribution
       p = package_path(@item)
       if @source_dist_dir =~ /^ssh:\/\/(.*)$/ then
         path = $1
-        @log.info("Secure opying #{s} and #{p} to: #{path}...")
+        @log.info("Secure copying #{s} and #{p} to: #{path}...")
         `scp #{s} #{path}`
         `scp #{p} #{path}`
         `scp #{p}.af #{path}`        

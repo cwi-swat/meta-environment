@@ -52,7 +52,7 @@ module Versioning
           end 
           backup_path = File.join(Dir.tmpdir, dirname)
           `chmod -R 0700 #{dirname}`
-          `rm -r #{dirname}`
+          `rm -rf #{dirname}`
         end
         yield
       end
