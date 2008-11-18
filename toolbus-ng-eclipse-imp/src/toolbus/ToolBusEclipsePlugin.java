@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.ui.IStartup;
@@ -143,14 +144,13 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 			
 			try{
 				return getFile(bundle, path);
-			}catch(IOException e){
-				// TODO Handle properly
+			}catch(RuntimeException rex){
+				System.err.println("Unable to load main ToolBus script file: "+path+", from bundle: "+bundle);
+				throw rex;
 			}
-		}else{
-			throw new RuntimeException("Multiple main ToolBus scripts defined.");
 		}
-
-		return null;
+		
+		throw new RuntimeException(extensions.length+" main ToolBus scripts defined.");
 	}
 	
 	private static List<String> getBinaryPaths(){
@@ -167,12 +167,7 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 
 			Bundle bundle = Platform.getBundle(ce.getContributor().getName());
 			
-			try{
-				searchPaths.add(getFile(bundle, path));
-			}catch(IOException ioex){
-				// TODO Handle this exception properly.
-				ioex.printStackTrace();
-			}
+			searchPaths.add(getFile(bundle, path));
 		}
 		
 		return searchPaths;
@@ -192,13 +187,8 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 
 			Bundle bundle = Platform.getBundle(ce.getContributor().getName());
 			
-			try{
-				List<String> recursiveDirectoryList = listDirectoriesRecursively(getFile(bundle, path));
-				includePath.addAll(recursiveDirectoryList);
-			}catch(IOException ioex){
-				// TODO Handle this exception properly.
-				ioex.printStackTrace();
-			}
+			List<String> recursiveDirectoryList = listDirectoriesRecursively(getFile(bundle, path));
+			includePath.addAll(recursiveDirectoryList);
 		}
 		
 		return includePath;
@@ -229,12 +219,16 @@ public class ToolBusEclipsePlugin extends Plugin implements IStartup{
 		return directories;
 	}
 	
-	private static String getFile(Bundle bundle, String path) throws IOException{
+	private static String getFile(Bundle bundle, String path){
 		String fileURL;
 		try{
 			fileURL = FileLocator.toFileURL(bundle.getEntry(path)).getPath();
 		}catch(Exception ex){
-			fileURL = FileLocator.toFileURL(bundle.getResource(path)).getPath();
+			try{
+				fileURL = FileLocator.toFileURL(bundle.getResource(path)).getPath();
+			}catch(Exception ex2){
+				fileURL = FileLocator.find(bundle, new Path(path), null).getPath();
+			}
 		}
 		return fileURL;
 	}
