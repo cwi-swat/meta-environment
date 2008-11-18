@@ -529,9 +529,15 @@ eclipse.preferences.version=1
 internal.default.compliance=default
 ENDCAT
 
+if test -f plugin.xml; then
+  PLUGIN_XML=,plugin.xml
+else
+  PLUGIN_XML=
+fi
+
 cat > build.properties << ENDCAT
 source.$3 = src/
-bin.includes = META-INF/,.,`echo "${BUNDLE_CLASSPATH}" | sed "s@,@,\\\\\\ @g" | sed "s@ @# @g" | tr '#' '\n'`
+bin.includes = META-INF/,.,`echo "${BUNDLE_CLASSPATH}" | sed "s@,@,\\\\\\ @g" | sed "s@ @# @g" | tr '#' '\n'`${PLUGIN_XML}
 ENDCAT
 
 BUNDLE_LOCAL_JARS=`echo $7 | tr ':' ' '`
