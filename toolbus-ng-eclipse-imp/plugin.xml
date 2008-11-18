@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="toolbus.binaryProvider" name="toolbus.binaryProvider" schema="schema/ToolBus.binaryProvider.exsd"/>
+   <extension-point id="toolbus.binaryProvider" name="toolbus.binaryProvider" schema="schema/toolbus.binaryProvider.exsd"/>
    <extension-point id="toolbus.includePath" name="toolbus.includePath" schema="schema/toolbus.includePath.exsd"/>
    <extension-point id="toolbus.mainScript" name="toolbus.mainScript" schema="schema/toolbus.mainScript.exsd"/>
    <extension
