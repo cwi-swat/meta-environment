@@ -3,7 +3,7 @@ Maintainers=lankamp@cwi.nl,paulk@cwi.nl
 
 Name: toolbus-ng
 Description: 
-Version: 1.0.8
+Version: 1.0.9
 Requires: aterm-java
 JarFile=toolbus-ng.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/java-cup-11a.jar
