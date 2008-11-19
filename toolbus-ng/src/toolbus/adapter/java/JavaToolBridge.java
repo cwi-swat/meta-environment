@@ -139,9 +139,17 @@ public class JavaToolBridge extends ToolBridge{
 	 * @author Arnold Lankamp
 	 */
 	protected static class CallableMethodSignature{
-		public String methodName;
-		public Class<?> returnType;
-		public Class<?>[] parameters;
+		public final String methodName;
+		public final Class<?>[] parameters;
+		public final Class<?> returnType;
+		
+		public CallableMethodSignature(String methodName, Class<?>[] parameters, Class<?> returnType){
+			super();
+			
+			this.methodName = methodName;
+			this.returnType = returnType;
+			this.parameters = parameters;
+		}
 
 		/**
 		 * Custom hashcode function. This is needed because we use this object as a key in a
@@ -179,6 +187,29 @@ public class JavaToolBridge extends ToolBridge{
 			}
 
 			return false;
+		}
+		
+		/**
+		 * @see java.lang.Object#toString()
+		 */
+		public String toString(){
+			StringBuilder sb = new StringBuilder();
+			sb.append(returnType);
+			sb.append(' ');
+			sb.append(methodName);
+			sb.append('(');
+			int nrOfParameters = parameters.length;
+			if(nrOfParameters > 0){
+				sb.append(parameters[0]);
+				
+				for(int i = 1; i < nrOfParameters; i++){
+					sb.append(", ");
+					sb.append(parameters[i]);
+				}
+			}
+			sb.append(')');
+			
+			return sb.toString();
 		}
 	}
 
@@ -262,10 +293,7 @@ public class JavaToolBridge extends ToolBridge{
 				if(returnType == void.class || returnType == ATerm.class || isImplementationOf(returnType, ATerm.class)){
 					Class<?>[] parameters = toolMethod.getParameterTypes();
 					
-					CallableMethodSignature cms = new CallableMethodSignature();
-					cms.methodName = toolMethod.getName();
-					cms.returnType = returnType;
-					cms.parameters = parameters;
+					CallableMethodSignature cms = new CallableMethodSignature(toolMethod.getName(), parameters, returnType);
 					
 					callableFunctions.put(cms, toolMethod);
 				}
@@ -350,7 +378,7 @@ public class JavaToolBridge extends ToolBridge{
 			ATermAppl methodTerm = (ATermAppl) aTerm;
 
 			String methodName = methodTerm.getName();
-
+			
 			ATerm[] arguments = methodTerm.getArgumentArray();
 			Object[] convertedArguments = new Object[arguments.length];
 			Class<?>[] parameters = new Class[arguments.length];
@@ -362,7 +390,7 @@ public class JavaToolBridge extends ToolBridge{
 			Method toolMethod = findMethod(operation, methodName, parameters);
 			
 			if(toolMethod == null){
-				String error = "No such method: " + methodName + ", with " + parameters.length + " arguments.";
+				String error = "No such method: " + toMethodName(methodName) + ", with " + parameters.length + " arguments.";
 				LoggerFactory.log(error, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
 				throw new MethodInvokationException(error);
 			}
@@ -420,14 +448,16 @@ public class JavaToolBridge extends ToolBridge{
 	 * @return The method corresponding to the given term.
 	 */
 	private Method findMethod(byte operation, String methodName, Class<?>[] parameters){
-		CallableMethodSignature cms = new CallableMethodSignature();
-		cms.methodName = toMethodName(methodName);
-		cms.parameters = parameters;
+		CallableMethodSignature cms;
 
 		if(operation == EVAL){
-			cms.returnType = ATerm.class;
+			cms = new CallableMethodSignature(toMethodName(methodName), parameters, ATerm.class);
 		}else if(operation == DO){
-			cms.returnType = void.class;
+			cms = new CallableMethodSignature(toMethodName(methodName), parameters, void.class);
+		}else{
+			String error = "Unknown operation: "+operation;
+			LoggerFactory.log(error, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
+			throw new RuntimeException(error);
 		}
 
 		return callableFunctions.get(cms);
