@@ -16,7 +16,7 @@ datadir=__DATADIR__
 PRG=`basename $0`
 VERBOSE=
 
-DEFACTO=${bindir}/DeFacto
+DEFACTO=${bindir}/DeFactoSpec
 SORTSTOIDS=${bindir}/SortsToIds
 RSTORE_SORT=RStore
 SUMMARY_SORT=Summary
