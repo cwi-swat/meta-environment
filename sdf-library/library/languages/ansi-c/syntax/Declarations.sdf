@@ -63,13 +63,11 @@ Declarator                -> StructDeclarator
            ":" Expression -> StructDeclarator
 Declarator ":" Expression -> StructDeclarator
 
-
 context-free syntax
 Identifier 		-> Enumerator
 Identifier "=" Expression 	-> Enumerator
 
 context-free syntax
-
 ("*" Specifier*)+ -> Pointer
 
 context-free syntax

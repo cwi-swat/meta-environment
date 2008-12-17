@@ -1,0 +1,23 @@
+int a, b, c;
+int f,g;
+int abc = 1;
+int abcd[3];
+int e;
+function func()
+{
+	int a, b, c;
+	int f,g;
+	int abc = 1;
+	int abcd[3];
+	int e;
+}
+task main() 
+{
+	int a=1, b[9], c;
+	
+}
+task main2()
+{
+	int a, b, c;
+	
+}  

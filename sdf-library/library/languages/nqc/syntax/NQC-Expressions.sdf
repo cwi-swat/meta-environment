@@ -1,0 +1,108 @@
+module languages/nqc/syntax/NQC-Expressions
+
+imports languages/nqc/syntax/NQC-Lexicals
+
+exports
+  sorts Expression
+
+  context-free syntax
+    ConstantExpression       -> Expression
+    VarNameExpression        -> Expression
+
+  sorts ConstantExpression
+  context-free syntax
+    NUMBER -> ConstantExpression
+
+  sorts VarNameExpression
+  context-free syntax
+    VarName -> VarNameExpression
+
+  sorts VarName
+  context-free syntax
+    Identifier -> VarName
+
+  context-free syntax
+    VarName "++" -> Expression
+    VarName "--" -> Expression
+
+  context-free syntax
+    "abs" "(" Expression ")" -> Expression
+
+  context-free syntax
+    "sign" "(" Expression ")" -> Expression
+
+  context-free syntax
+    "-" Expression -> Expression
+    "!" Expression -> Expression
+
+  context-free syntax
+    Expression "+" Expression -> Expression {left} 
+    Expression "-" Expression -> Expression {left}
+    Expression "*" Expression -> Expression {left}
+    Expression "/" Expression -> Expression {left}
+    Expression "%" Expression -> Expression {left} 
+
+  context-free syntax
+    Expression "?" Expression ":" Expression -> Expression
+
+  context-free syntax 
+    "true" -> Expression
+    "false" -> Expression
+
+  context-free syntax
+    Expression "==" Expression -> Expression {left}
+    Expression "!=" Expression -> Expression {left}
+
+  context-free syntax
+    Expression "<" Expression  -> Expression {left}
+    Expression ">" Expression  -> Expression {left}
+    Expression "<=" Expression -> Expression {left}
+    Expression ">=" Expression -> Expression {left}
+
+  context-free syntax 
+    Expression "&&" Expression -> Expression {left}
+
+  context-free syntax 
+    Expression "||" Expression -> Expression {left}
+
+  context-free syntax
+    "(" Expression ")" -> Expression {bracket}
+
+  context-free syntax
+    FunctionName "(" ArgumentList ")" -> Expression
+
+  sorts FunctionName
+  context-free syntax
+    Identifier -> FunctionName
+
+  sorts ArgumentList
+  context-free syntax
+    {Expression ","}* -> ArgumentList
+
+  context-free syntax
+    ArrayName -> Expression
+
+  sorts ArrayName
+  context-free syntax
+    Identifier "[" ConstantExpression "]" -> ArrayName
+    Identifier "[" VarNameExpression "]"  -> ArrayName
+
+  context-free priorities
+    {"-" Expression -> Expression
+     "!" Expression -> Expression} >
+    {left: Expression "*" Expression -> Expression
+           Expression "/" Expression -> Expression
+           Expression "%" Expression -> Expression} >
+    {left: Expression "+" Expression -> Expression
+           Expression "-" Expression -> Expression} >
+    {left: 
+    Expression "<" Expression  -> Expression 
+    Expression ">" Expression  -> Expression
+    Expression "<=" Expression -> Expression
+    Expression ">=" Expression -> Expression} >
+    {left: 
+    Expression "==" Expression -> Expression
+    Expression "!=" Expression -> Expression} >
+    Expression "&&" Expression -> Expression >
+    Expression "||" Expression -> Expression >
+    Expression "?" Expression ":" Expression -> Expression

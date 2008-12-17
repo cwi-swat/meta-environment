@@ -1,0 +1,8 @@
+task main()
+{
+	int a;
+	a = sign(3);
+	a = sign(a);
+	sign((a+1));
+	sign(-3);
+}

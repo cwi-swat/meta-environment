@@ -1,0 +1,163 @@
+// Declarations of global variables
+int x;
+int y=1;
+int z[2];
+int h, j=2;
+
+// Declarations of functions
+void func(int speed, int x)
+{
+	h = x; //h is global, x is local
+	z[0] = speed;
+}
+
+function func2(int b) //key word 'function' and 'void' do the same
+{
+  //Comment:
+  //Fill in the body of the function here
+}
+
+// Declarations of tasks, a task with name 'main' is required
+task main()
+{
+	// Assignment
+	x = (y + 2) * j / 2 % 5;
+	x += 1;
+	x -= 1;
+	x *= 1;
+	x /= 1;
+	x %= 1;
+	
+	// If-else statement
+	if(x<10)
+	{
+	  // if condition is true
+	}
+	else
+	{
+	  // if condition is false
+	}
+	
+	// if statement with no 'else'
+	if(x == 1 && y != 1 || x >= 2)
+	{
+		//if condition is true
+	}
+	
+	// Declaration of variable local to the task
+	int count = 0;
+	
+	// While loop
+	while(count <= 10)
+	{
+	  count += 1;
+	}
+	
+	// Do-while loop
+	do
+	{
+	  // The body is done at least once
+	}while(count <= 11);
+		
+	// Repeat loop
+	repeat(10)
+	{
+		// Do this 10 times
+	}
+
+	// Until loop
+	until(count >= 12)
+	{
+		//body
+	}	
+	
+	//break and continue statement
+	while(true)
+	{
+	   	if(x == 1) break;
+	   	else if(x==2) continue;
+	   	count += 1;
+	}
+	
+	// In a switch default case is optional
+	switch(x)
+	{
+		case 1: y = x;
+				break;
+		case 2:			//No break so case 2 continous to do case 3 as well
+		case 3: h = x;
+				break;
+		default: y = 0;
+				 h = 0;	 
+	}
+	
+	// Increment and decrement variables by 1
+	x++;
+	x--;
+	
+	/* Schedule task with name 'checkLight' to start when current task ends
+	   If more task are started, all will start simultaneously when current task ends */
+	//NB! Consider as current task precedes checkLight, and that you schedule the tasks in this way
+	start checkLight;
+
+	// Call of the function with the name 'func'
+	func(2, 3);
+	
+	// Absolute value
+	abs(x-10);
+	
+	// Sign of an expression
+	sign(x-10);
+	
+	// Unary minus
+	x = 5*-y;
+	
+	// NOT operator
+	if(!(x==1 && y>0));
+
+	// Conditional expression;
+	x = 2 * (h <= j ? h : 0);
+	
+	//APIs available
+	OnFwd(OUT_A+OUT_B,75); //Turn on engine A and B at speed 75 forward
+	OnFwd(OUT_A+OUT_B);    //Turn on engine A and B at speed 100 (max.) forward
+	OnRev(OUT_A,75);       //Turn on engine A at speed 75 reverse. Same as OnFwd(OUT_A,-75);
+	Off(OUT_A+OUT_B);      //Turn off engine A and B
+	Float(OUT_A+OUT_B);    //Turn off engine A and B in a floating way
+	SetPower(OUT_A,50);    /*Change speed of engine A to 50 forward. Enginge A must be running already
+                             Alternatively just use onFwd/OnRev again.*/
+    
+    SetSensor(SENSOR_1,SENSOR_LIGHT_ACTIVE); /* Set sensor port 1 to have a specific combination of type and mode
+                             Available: SENSOR_TOUCH, SENSOR_LIGHT,SENSOR_LIGHT_ACTIVE,SENSOR_LIGHT_INACTIVE
+                                        SENSOR_CELSIUS, SENSOR_FAHRENHEIT, SENSOR_SOUND, SENSOR_ULTRA, SENSOR_ROTATION
+                            You can write IN_1 and IN_LIGHT_ACTIVE as well as SENSOR_1 and SENSOR_LIGHT_ACTIVE */
+                            
+    SetSensorType(SENSOR_1,SENSOR_TYPE_LIGHT); /* Set sensor port 1 to have a specific type
+                             Available: SENSOR_TYPE_NO_SENSOR, SENSOR_TYPE_SWITCH, SENSOR_TYPE_TEMPERATURE, SENSOR_TYPE_REFLECTION
+                                        SENSOR_TYPE_ANGLE, SENSOR_TYPE_LIGHT_ACTIVE, SENSOR_TYPE_LIGHT_INACTIVE,SENSOR_TYPE_SOUND_DB
+                                        SENSOR_TYPE_SOUND_DBA, SENSOR_TYPE_CUSTOM, SENSOR_TYPE_LOWSPEED, SENSOR_TYPE_LOWSPEED_9V, SENSOR_TYPE_HISPEED */
+                                        
+    SetSensorMode(SENSOR_1,SENSOR_MODE_RAW); /*Set sensor port 1 to have a specific mode
+                             Available: SENSOR_MODE_RAW, SENSOR_MODE_BOOLEAN, SENSOR_MODE_TRANSITIONCNT, SENSOR_MODE_PERIODCOUNTER
+                                        SENSOR_MODE_PCTFULLSCALE, SENSOR_MODE_CELSIUS, SENSOR_MODE_FAHRENHEIT, SENSOR_MODE_ANGLESTEP
+                                        SENSOR_MODE_SLOPEMASK, SENSOR_MODE_MODEMASK */
+                                        
+    SensorValue(SENSOR_1); //Read the value of sensor 1. E.g. if(SensorValue(SENSOR_1) < 50){...} or x = SensorValue(SENSOR_1);
+    
+    Wait(1000);            //Wait for 1000 milliseconds before continueing the code
+	Random(10);            //Random integer from 0 to 10
+    ClearTimer(0);         //Reset Timer_0. 4 timers available (0,1,2,3)
+    Timer(0);              //Get Value of Timer_0. E.g. if(Timer(0)>=2000){...} or x = Timer(0);
+	PlaySound(3);PlaySound(mySound); //Play predefined sounds 0-3 or user uploadet file (here 'mySound.rso')
+	PlayTone(523,1000);    //Play tone with frequency 523 and duration 1000 milliseconds
+	Display(x,1,2,0);      /*Display the value of x on the screen at coordinates (1,2), clearing the screen first (the last 0 does this, 1 instead
+	                         keeps what's on the screen, but it will overwrite if anything is written in the same place)*/
+	
+}
+
+task checkLight()
+{
+
+}
+
+

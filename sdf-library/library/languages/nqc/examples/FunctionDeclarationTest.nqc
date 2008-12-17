@@ -1,0 +1,28 @@
+int x, y, i;
+void func1()
+{
+	x++;
+}
+
+function func2()
+{
+	x++;
+}
+
+void func3(int y)
+{
+	x++;
+	y++;
+}
+
+
+void func4(int y,int z,int x)
+{
+	x++;
+	y++;
+}
+
+task main() 
+{
+	until(x>2){x++;}
+}

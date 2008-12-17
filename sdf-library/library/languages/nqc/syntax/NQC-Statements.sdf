@@ -1,0 +1,111 @@
+module languages/nqc/syntax/NQC-Statements
+
+imports languages/nqc/syntax/NQC-Declarations 
+        languages/nqc/syntax/NQC-Tasks
+
+exports
+  sorts BlockStatement
+  context-free syntax
+    "{" StatementList? "}" -> BlockStatement
+
+  sorts StatementList
+  context-free syntax
+    Statement+ -> StatementList
+
+  sorts Statement
+  context-free syntax
+    AssignmentStatement ";"     -> Statement
+    IfStatement                 -> Statement
+    WhileStatement              -> Statement
+    DoStatement ";"             -> Statement
+    VarDeclarationListStatement -> Statement
+    RepeatStatement             -> Statement
+    UntilStatement              -> Statement
+    ContinueStatement ";"       -> Statement
+    BreakStatement ";"          -> Statement
+    StartStatement ";"          -> Statement
+    SwitchStatement             -> Statement
+    ExpressionStatement ";"     -> Statement
+    BlockStatement              -> Statement
+    EmptyStatement              -> Statement
+
+  sorts EmptyStatement 
+  context-free syntax
+    ";" -> EmptyStatement
+
+  sorts AssignmentStatement
+  context-free syntax
+    VarName "=" Expression   -> AssignmentStatement
+    VarName "+=" Expression  -> AssignmentStatement
+    VarName "-=" Expression  -> AssignmentStatement
+    VarName "*=" Expression  -> AssignmentStatement
+    VarName "/=" Expression  -> AssignmentStatement
+    VarName "%=" Expression  -> AssignmentStatement
+    VarName "||=" Expression -> AssignmentStatement
+    VarName "+-=" Expression -> AssignmentStatement
+    ArrayName "=" Expression   -> AssignmentStatement
+    ArrayName "+=" Expression  -> AssignmentStatement
+    ArrayName "-=" Expression  -> AssignmentStatement
+    ArrayName "*=" Expression  -> AssignmentStatement
+    ArrayName "/=" Expression  -> AssignmentStatement
+    ArrayName "%=" Expression  -> AssignmentStatement
+    ArrayName "||=" Expression -> AssignmentStatement
+    ArrayName "+-=" Expression -> AssignmentStatement
+
+  sorts IfStatement
+  context-free syntax
+    "if" "(" Expression ")" Statement -> IfStatement
+    "if" "(" Expression ")" Statement "else" Statement -> IfStatement
+
+  sorts WhileStatement
+  context-free syntax
+    "while" "(" Expression ")" Statement -> WhileStatement
+
+  sorts DoStatement
+  context-free syntax
+    "do" Statement "while" "(" Expression ")" -> DoStatement
+
+  sorts VarDeclarationListStatement
+  context-free syntax
+    TypeDenoter VarMultipleDeclaration ";" -> VarDeclarationListStatement
+
+  sorts RepeatStatement
+  context-free syntax
+    "repeat" "(" Expression ")" Statement -> RepeatStatement
+
+  sorts UntilStatement
+  context-free syntax
+    "until" "(" Expression ")" Statement -> UntilStatement
+
+  sorts BreakStatement
+  context-free syntax
+    "break" -> BreakStatement
+ 
+  sorts ContinueStatement
+  context-free syntax
+    "continue" -> ContinueStatement
+
+  sorts StartStatement
+  context-free syntax
+    "start" TaskName -> StartStatement
+
+  sorts SwitchStatement
+  context-free syntax
+    "switch" "(" Expression ")" "{" CaseList DefaultCaseStatement? "}" -> SwitchStatement
+
+  sorts CaseList
+  context-free syntax
+    CaseStatement+ -> CaseList
+
+  sorts CaseStatement
+  context-free syntax
+    "case" ConstantExpression ":" StatementList? -> CaseStatement
+
+  sorts DefaultCaseStatement
+  context-free syntax
+    "default" ":" StatementList -> DefaultCaseStatement
+
+  sorts ExpressionStatement
+  context-free syntax
+    Expression -> ExpressionStatement
+

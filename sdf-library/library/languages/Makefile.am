@@ -17,6 +17,7 @@ SUBDIRS = \
 	fdl \
         logo \
         modula-3 \
+        nqc \
 	pico \
 	sdf2  \
 	generic-cpp \

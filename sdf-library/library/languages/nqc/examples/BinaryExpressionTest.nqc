@@ -1,0 +1,18 @@
+task main()
+{
+	int a,b,c;
+	a=1;
+	a=c+b;
+	a=c-b;
+	a=c*b;
+	a=c/b;
+	a=c%b;
+	
+	a=c+b-b*a/c%2;
+	a=c-b+2*24;
+	a=c*b/2;
+	a=c/b*-1;
+	a=c%b+8;
+
+		
+}

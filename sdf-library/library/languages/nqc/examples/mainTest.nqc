@@ -1,0 +1,13 @@
+int x = 1;
+
+function add() {
+	x++;
+}	
+
+task main() {	
+	while(x <= 10) {
+		OnFwd(OUT_A+OUT_B, 10*x);
+		Wait(1000);
+		add();
+	}
+}

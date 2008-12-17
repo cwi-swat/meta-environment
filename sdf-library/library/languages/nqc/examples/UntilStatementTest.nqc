@@ -1,0 +1,5 @@
+int x, y, i;
+task main() 
+{
+	until(x>2){x++;}
+}

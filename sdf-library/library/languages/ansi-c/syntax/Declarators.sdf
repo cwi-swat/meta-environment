@@ -1,4 +1,4 @@
-module languages/ansi-c/syntax/Declarators[Declarator Identifier]
+module languages/ansi-c/syntax/Declarators[D I]
 
 exports
 
@@ -6,15 +6,15 @@ sorts Pointer Expression Parameters
 
 context-free syntax
 
-Pointer Declarator 			-> Declarator {non-assoc}
-Identifier 				-> Declarator
-"(" Declarator ")" 			-> Declarator {bracket}
-Declarator "[" Expression? "]"		-> Declarator
-Declarator "(" Parameters? ")" 		-> Declarator
+Pointer D 			-> D {non-assoc}
+I 				-> D
+"(" D ")" 			-> D {bracket}
+D "[" Expression? "]"		-> D
+D "(" Parameters? ")" 		-> D
 
 context-free priorities
 {
-Declarator "(" Parameters? ")" 		-> Declarator
-Declarator "[" Expression? "]" 	-> Declarator
+D "(" Parameters? ")" 		-> D
+D "[" Expression? "]" 	-> D
 }
-> Pointer Declarator 			-> Declarator
+> Pointer D 			-> D

@@ -1,0 +1,30 @@
+int x, y, i;
+void func1()
+{
+	x++;
+}
+
+function func2()
+{
+	x++;
+}
+
+void func3(int y)
+{
+	x++;
+	y++;
+}
+
+
+void func4(int y,int z,int x)
+{
+	x++;
+	y++;
+}
+
+task main() 
+{
+	func2();
+	func3(3);
+	func4(1,2,3);
+}

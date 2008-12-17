@@ -1,0 +1,9 @@
+int x, y, i;
+task main() 
+{
+	do 
+	{
+		x++;
+	}	
+	while(true);
+}
