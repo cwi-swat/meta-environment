@@ -9,7 +9,7 @@ exports
 
   sorts Task
   context-free syntax
-    "task" TaskName "(" ")" BlockStatement -> Task
+    "task" TaskName "(" ")" BlockStatement -> Task {cons("task")}
 
   sorts TaskName
   context-free syntax

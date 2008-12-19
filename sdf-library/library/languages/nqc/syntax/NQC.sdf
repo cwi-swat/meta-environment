@@ -8,7 +8,7 @@ exports
 
   sorts Program
   context-free syntax
-    VarDeclarationList? FunctionList? TaskList -> Program
+    VarDeclarationList? FunctionList? TaskList -> Program {cons("program")}
 
 
 

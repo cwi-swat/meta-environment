@@ -12,7 +12,7 @@ exports
 
   sorts Identifier
   context-free syntax
-    IDENT -> Identifier
+    IDENT -> Identifier {cons("identifier")}
 
   sorts NUMBER
   lexical syntax

@@ -6,7 +6,7 @@ imports languages/nqc/syntax/NQC-Declarations
 exports
   sorts BlockStatement
   context-free syntax
-    "{" StatementList? "}" -> BlockStatement
+    "{" StatementList? "}" -> BlockStatement {cons("list")}
 
   sorts StatementList
   context-free syntax
@@ -14,20 +14,20 @@ exports
 
   sorts Statement
   context-free syntax
-    AssignmentStatement ";"     -> Statement
+    AssignmentStatement ";"     -> Statement {cons("assign")}
     IfStatement                 -> Statement
-    WhileStatement              -> Statement
-    DoStatement ";"             -> Statement
-    VarDeclarationListStatement -> Statement
-    RepeatStatement             -> Statement
-    UntilStatement              -> Statement
-    ContinueStatement ";"       -> Statement
-    BreakStatement ";"          -> Statement
-    StartStatement ";"          -> Statement
-    SwitchStatement             -> Statement
-    ExpressionStatement ";"     -> Statement
-    BlockStatement              -> Statement
-    EmptyStatement              -> Statement
+    WhileStatement              -> Statement {cons("while")}
+    DoStatement ";"             -> Statement {cons("do")}
+    VarDeclarationListStatement -> Statement {cons("vardecllist")}
+    RepeatStatement             -> Statement {cons("repeat")}
+    UntilStatement              -> Statement {cons("until")}
+    ContinueStatement ";"       -> Statement {cons("continue")}
+    BreakStatement ";"          -> Statement {cons("break")}
+    StartStatement ";"          -> Statement {cons("start")}
+    SwitchStatement             -> Statement {cons("switch")}
+    ExpressionStatement ";"     -> Statement {cons("expression")}
+    BlockStatement              -> Statement {cons("block")}
+    EmptyStatement              -> Statement {cons("empty")}
 
   sorts EmptyStatement 
   context-free syntax
@@ -35,27 +35,27 @@ exports
 
   sorts AssignmentStatement
   context-free syntax
-    VarName "=" Expression   -> AssignmentStatement
-    VarName "+=" Expression  -> AssignmentStatement
-    VarName "-=" Expression  -> AssignmentStatement
-    VarName "*=" Expression  -> AssignmentStatement
-    VarName "/=" Expression  -> AssignmentStatement
-    VarName "%=" Expression  -> AssignmentStatement
-    VarName "||=" Expression -> AssignmentStatement
-    VarName "+-=" Expression -> AssignmentStatement
-    ArrayName "=" Expression   -> AssignmentStatement
-    ArrayName "+=" Expression  -> AssignmentStatement
-    ArrayName "-=" Expression  -> AssignmentStatement
-    ArrayName "*=" Expression  -> AssignmentStatement
-    ArrayName "/=" Expression  -> AssignmentStatement
-    ArrayName "%=" Expression  -> AssignmentStatement
-    ArrayName "||=" Expression -> AssignmentStatement
-    ArrayName "+-=" Expression -> AssignmentStatement
+    VarName "=" Expression   -> AssignmentStatement {cons("varassign")} 
+    VarName "+=" Expression  -> AssignmentStatement {cons("varaddassign")}
+    VarName "-=" Expression  -> AssignmentStatement {cons("varsubassign")}
+    VarName "*=" Expression  -> AssignmentStatement {cons("varmulassign")}
+    VarName "/=" Expression  -> AssignmentStatement {cons("vardivassign")}
+    VarName "%=" Expression  -> AssignmentStatement {cons("varmodassign")}
+    VarName "||=" Expression -> AssignmentStatement {cons("varabsassign")}
+    VarName "+-=" Expression -> AssignmentStatement {cons("varsignassign")}
+    ArrayName "=" Expression   -> AssignmentStatement {cons("arrayassign")} 
+    ArrayName "+=" Expression  -> AssignmentStatement {cons("arrayaddassign")} 
+    ArrayName "-=" Expression  -> AssignmentStatement {cons("arraysubassign")} 
+    ArrayName "*=" Expression  -> AssignmentStatement {cons("arraymulassign")} 
+    ArrayName "/=" Expression  -> AssignmentStatement {cons("arraydivassign")} 
+    ArrayName "%=" Expression  -> AssignmentStatement {cons("arraymodassign")} 
+    ArrayName "||=" Expression -> AssignmentStatement {cons("arrayabsassign")} 
+    ArrayName "+-=" Expression -> AssignmentStatement {cons("arraysignassign")} 
 
   sorts IfStatement
   context-free syntax
-    "if" "(" Expression ")" Statement -> IfStatement
-    "if" "(" Expression ")" Statement "else" Statement -> IfStatement
+    "if" "(" Expression ")" Statement                  -> IfStatement {cons("if")}
+    "if" "(" Expression ")" Statement "else" Statement -> IfStatement {cons("ifelse")}
 
   sorts WhileStatement
   context-free syntax

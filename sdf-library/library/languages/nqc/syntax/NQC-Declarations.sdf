@@ -10,7 +10,7 @@ exports
 
   sorts TypeVarsDeclaration
   context-free syntax
-    TypeDenoter VarMultipleDeclaration -> TypeVarsDeclaration
+    TypeDenoter VarMultipleDeclaration -> TypeVarsDeclaration {cons("typevarsdecl")}
 
   sorts VarMultipleDeclaration
   context-free syntax
@@ -18,6 +18,6 @@ exports
 
   sorts VarDeclaration
   context-free syntax
-    VarName "=" Expression          -> VarDeclaration
-    VarName                         -> VarDeclaration
-    VarName "[" ConstantExpression "]" -> VarDeclaration
+    VarName "=" Expression             -> VarDeclaration {cons("assign")}
+    VarName                            -> VarDeclaration {cons("simple")}
+    VarName "[" ConstantExpression "]" -> VarDeclaration {cons("array")}

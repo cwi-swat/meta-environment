@@ -9,9 +9,9 @@ exports
 
   sorts Function
   context-free syntax
-    "void" FunctionName "(" ParameterList? ")" BlockStatement     -> Function
-    "function" FunctionName "(" ParameterList? ")" BlockStatement -> Function
-    "sub" FunctionName "(" ")" BlockStatement                     -> Function
+    "void" FunctionName "(" ParameterList? ")" BlockStatement     -> Function {cons("void")}
+    "function" FunctionName "(" ParameterList? ")" BlockStatement -> Function {cons("function")}
+    "sub" FunctionName "(" ")" BlockStatement                     -> Function {cons("subroutine")}
 
 
   sorts ParameterList
@@ -20,7 +20,7 @@ exports
 
   sorts Parameter
   context-free syntax
-    TypeDenoter ParameterName -> Parameter
+    TypeDenoter ParameterName -> Parameter {cons("param")}
 
   sorts ParameterName
   context-free syntax
