@@ -32,13 +32,16 @@ include_HEADERS= \
 	inputString-data.h \
 	mainOptions.h \
         parseForest/filterOptions.h \
-	parser/parserOptions.h 
+	parser/parserOptions.h \
+	parseForest/filters.h \
+        parseTable/parseTableDB.h \
+        parseTable/parseTable.h \
+        tokens.h
 
 noinst_HEADERS=\
 	inputString-api.h \
 	commandLineInterface.h \
 	toolbusInterface.h \
-	tokens.h \
 	sglr-termstore.h \
         gss/gssNodeList.h \
         gss/gssEdgeList.h \
@@ -50,12 +53,9 @@ noinst_HEADERS=\
         gss/gssGarbageCollector.h \
         gss/reductionPath.h \
         gss/shiftQueue.h \
-        parseForest/filters.h \
         parseForest/ambi-tables.h \
         parseForest/levels.h \
-        parseTable/parseTable.h \
         parseTable/parseTableBuilder.h \
-        parseTable/parseTableDB.h \
 	parser/parser.h \
 	parser/parserStatistics.h \
         utils/mem-alloc.h \
