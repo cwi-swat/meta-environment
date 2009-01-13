@@ -16,7 +16,7 @@
 int main(int argc, char *argv[]) {
   int result = 0;
   ATerm bottomOfStack;
-  char* atargs[5];
+  char* atargs[6];
   int useToolbus = 0;
   int i = 0;
 
