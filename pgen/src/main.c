@@ -100,7 +100,7 @@ static int handleOptions(int argc, char **argv) {
 
   while ((c = getopt(argc, argv, myarguments)) != -1) {
     switch (c) {
-      case 'b':  PGEN_setBafModeFlag(ATtrue);            break;
+      case 'b':  PGEN_setSafModeFlag(ATtrue);            break;
       case 'c':  PGEN_setCollectFlag(ATtrue);	         break;
       case 'd':  PGEN_setDefinitionModeFlag(ATtrue);     break;
       case 'g':  PGEN_setGenerationModeFlag(ATtrue);     break;
@@ -111,7 +111,7 @@ static int handleOptions(int argc, char **argv) {
       case 'n':  PGEN_setNormalizationModeFlag(ATtrue);  break;
       case 'o':  PGEN_setOutputFilename(optarg);         break;
       case 'p':  PGEN_setSearchPath(optarg);             break;
-      case 't':  PGEN_setBafModeFlag(ATfalse);           break;
+      case 't':  PGEN_setSafModeFlag(ATfalse);           break;
       case 'v':  PGEN_setVerboseModeFlag(ATtrue);        break;
       case 'V':  version(); return ATfalse;
       case 'h':
@@ -234,8 +234,8 @@ int main(int argc, char *argv[]) {
       exit (1);
     }
 
-    if (PGEN_getBafModeFlag()) {
-      ATwriteToNamedBinaryFile(pt, PGEN_getOutputFilename());
+    if (PGEN_getSafModeFlag()) {
+      ATwriteToNamedSAFFile(pt, PGEN_getOutputFilename());
     }
     else {
       ATwriteToNamedTextFile(pt, PGEN_getOutputFilename());

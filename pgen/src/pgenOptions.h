@@ -11,8 +11,8 @@ extern int PGEN_VERBOSE_MODE_FLAG;
 
 void PGEN_initializeDefaultOptions(void);
 
-void PGEN_setBafModeFlag(ATbool value);
-ATbool PGEN_getBafModeFlag(void);
+void PGEN_setSafModeFlag(ATbool value);
+ATbool PGEN_getSafModeFlag(void);
 void PGEN_setCollectFlag(ATbool value);
 ATbool PGEN_getCollectFlag(void);
 void PGEN_setGenerationModeFlag(ATbool value);

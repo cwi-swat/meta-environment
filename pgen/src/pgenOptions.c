@@ -7,7 +7,7 @@
 
 #include "pgenOptions.h"
 
-static int BAF_MODE_FLAG;
+static int SAF_MODE_FLAG;
 static int COLLECT_FLAG; 
 static int GENERATION_MODE_FLAG;
 static int INPUT_FILENAME_VALUE;
@@ -21,7 +21,7 @@ static int SEARCH_PATH_VALUE;
 int PGEN_VERBOSE_MODE_FLAG;
 
 void PGEN_initializeDefaultOptions(void) {
-  BAF_MODE_FLAG           = OPT_getFlagOptionId();
+  SAF_MODE_FLAG           = OPT_getFlagOptionId();
   COLLECT_FLAG            = OPT_getFlagOptionId(); 
   GENERATION_MODE_FLAG    = OPT_getFlagOptionId();
   INPUT_FILENAME_VALUE    = OPT_getStringOptionId();
@@ -34,7 +34,7 @@ void PGEN_initializeDefaultOptions(void) {
   PGEN_VERBOSE_MODE_FLAG  = OPT_getFlagOptionId();
   SEARCH_PATH_VALUE       = OPT_getStringOptionId();
 
-  PGEN_setBafModeFlag(ATtrue);
+  PGEN_setSafModeFlag(ATtrue);
   PGEN_setCollectFlag(ATfalse);
   PGEN_setGenerationModeFlag(ATfalse);
   PGEN_setInputFilename("-");
@@ -48,12 +48,12 @@ void PGEN_initializeDefaultOptions(void) {
   PGEN_setSearchPath(".");
 }
 
-void PGEN_setBafModeFlag(ATbool value) {
-  OPT_setFlag(BAF_MODE_FLAG, value);
+void PGEN_setSafModeFlag(ATbool value) {
+  OPT_setFlag(SAF_MODE_FLAG, value);
 }
 
-ATbool PGEN_getBafModeFlag(void) {
-  return OPT_getFlag(BAF_MODE_FLAG);
+ATbool PGEN_getSafModeFlag(void) {
+  return OPT_getFlag(SAF_MODE_FLAG);
 }
 
 void PGEN_setCollectFlag(ATbool value) {
