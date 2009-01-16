@@ -21,6 +21,7 @@ LDADD =
 
 SUFFIXES   =
 CLEANFILES = 
+DISTCLEANFILES = 
 EXTRA_DIST =
 
 pkgconfigdir  = $(libdir)/pkgconfig
