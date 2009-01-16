@@ -7,7 +7,9 @@ EXTRA_DIST += $(wildcard *.m4) \
              Makefile.meta \
              Makefile.top.meta
 
-CLEANFILES+= ${PACKAGE}-uninstalled.pc META-INF/MANIFEST.MF .project
+CLEANFILES += ${PACKAGE}-uninstalled.pc
+
+DISTCLEANFILES += .project META-INF/MANIFEST.MF
 
 pkgconfig_DATA = ${PACKAGE}.pc
 
