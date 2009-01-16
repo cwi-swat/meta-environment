@@ -9,7 +9,6 @@ docdatadir    = $(datadir)/doc/$(PACKAGE)
 
 EXTRA_DIST += $(wildcard *.m4) \
              reconf \
-             Makefile.meta \
              Makefile.java.meta \
 	     meta-build.ant \
 	     $(JAVA_JAR) \
