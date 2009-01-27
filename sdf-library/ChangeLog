@@ -1,5 +1,8 @@
 $Id$
 
+Tue Jan 27 16:36:60 EST 2009 <basten@cwi.nl>
+ * library/languages/aterm/syntax/IntCon.sdf: hid import of basic/Whitespace
+	
 Wed May  9 08:36:05 CEST 2007 <jurgenv@cwi.nl>
  * library/basic/Configuration.sdf: removed old language-extension
    configuration options and replaced by editor(process,language,extension)
