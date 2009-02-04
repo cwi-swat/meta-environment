@@ -1,5 +1,8 @@
 
 
+Wed Feb  4 11:19:36 CET 2009 <{lankamp,jurgenv}@cwi.nl>
+ * meta-build.m4: added JUNIT3 to build classpath of all Eclipse Java packages
+
 Mon Nov 10 16:58:44 CET 2008 <jurgenv@cwi.nl,storm@cwi.nl>
  * meta-build.m4,Makefile.fragment.java: added support for Eclipse 
    fragment packages.

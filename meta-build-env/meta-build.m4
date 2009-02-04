@@ -549,6 +549,7 @@ cat > .classpath << ENDCAT
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
   <classpathentry kind="output" path="bin"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 `for i in ${BUNDLE_LOCAL_JARS}; do \
    echo "<classpathentry exported=\"true\" kind=\"lib\" path=\"$[]i\"/>"; \
  done`
