@@ -30,6 +30,7 @@ include_HEADERS= \
 	sglrInterface.h \
 	inputStringBuilder.h \
 	inputString-data.h \
+	inputString-api.h \
 	mainOptions.h \
         parseForest/filterOptions.h \
 	parser/parserOptions.h \
@@ -39,7 +40,6 @@ include_HEADERS= \
         tokens.h
 
 noinst_HEADERS=\
-	inputString-api.h \
 	commandLineInterface.h \
 	toolbusInterface.h \
 	sglr-termstore.h \
