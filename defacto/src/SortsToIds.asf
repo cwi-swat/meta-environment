@@ -2,6 +2,8 @@ equations
 
 []  sorts-to-ids($SDF) = sorts-to-ids-t($SDF)
 
+[]  sorts-to-ids($Mod) = sorts-to-ids-t($Mod)
+
 []  sorts-to-ids-t($Symbol* -> $Symbol { $Attribute+ }) =
       $Symbol* -> $Symbol { convert-attr-annos($Attribute+, $Symbol* $Symbol) }
 
@@ -43,12 +45,6 @@ equations
     $N := $Int
     ===>
     convert-term-anno($Id, $Symbol*) = $N
-
-[default]
-    $Str := unparse-to-string($Id),
-    $N := execute-command("xmessage " || $Str )
-    ===>
-    convert-term-anno($Id, $Symbol*) = $Id
 
 [default]
     convert-term-anno($ATerm, $Symbol*) = $ATerm

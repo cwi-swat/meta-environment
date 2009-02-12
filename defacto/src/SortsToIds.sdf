@@ -4,7 +4,6 @@ imports languages/sdf2/syntax/Sdf2
 imports basic/Booleans
 imports basic/Integers
 imports basic/Strings
-imports utilities/Files
 imports utilities/Parsing[Sort]
 imports utilities/Parsing[IdCon]
 
@@ -14,6 +13,7 @@ context-free start-symbols
 
 context-free syntax
   sorts-to-ids(SDF)                             -> SDF                                                     
+  sorts-to-ids(Module)                          -> Module                                                  
   sorts-to-ids-t(SDF)                           -> SDF              {traversal(trafo, top-down, continue)} 
   sorts-to-ids-t(Module)                        -> Module           {traversal(trafo, top-down, continue)} 
   sorts-to-ids-t(Production)                    -> Production       {traversal(trafo, top-down, continue)} 
@@ -30,6 +30,7 @@ context-free syntax
 hiddens
 variables
   "$SDF" [\'0-9]*        -> SDF               
+  "$Mod" [\'0-9]*        -> Module
   "$Sort" [\'0-9]*       -> Sort              
   "$Symbol" [\'0-9]*     -> Symbol            
   "$Symbol*" [\'0-9]*    -> Symbol*           
