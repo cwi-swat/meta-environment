@@ -14,6 +14,8 @@ extract-facts(ParseTree) -> RStore
 
 
 hiddens
+imports basic/Whitespace
+
 variables
 
 "RStore"[0-9\']* -> RStore

@@ -12,6 +12,8 @@ extract-roles(Tree, RStore, TreeTable) -> RStore
 
 
 hiddens
+imports basic/Whitespace
+
 aliases
 Set[[RoleDef]] -> RoleDefSet
 

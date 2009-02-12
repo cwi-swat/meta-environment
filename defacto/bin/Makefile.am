@@ -24,4 +24,5 @@ SortsToIds_LDADD = \
 	$(ASC_SUPPORT_LIBS)
 
 asfc:
-	asfc -i ../grammar/DeFacto.eqs -o DeFacto.c -v
+	asfc -i ../src/DeFacto.eqs -o DeFacto.c -v
+	asfc -i ../src/SortsToIds.eqs -o SortsToIds.c -v
