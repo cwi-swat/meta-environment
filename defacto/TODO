@@ -1,4 +1,6 @@
 
 - extend documentation in README
 - allow recursive functions
-- enable generation of rscript include files with declarations of extracted facts
+- complete extract-sort to handle all possible asfix constructs
+- make convert-term-anno work only on fact annotation arguments (and ifs)
+

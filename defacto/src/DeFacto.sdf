@@ -3,6 +3,7 @@ module DeFacto
 imports languages/asfix/syntax/Parsetree
 imports RStoreTree
 imports Roles
+imports Injections
 
 exports
 context-free start-symbols
@@ -11,6 +12,7 @@ RStore
 context-free syntax
 
 extract-facts(ParseTree) -> RStore
+extract(Tree) -> RStore
 
 
 hiddens
@@ -25,3 +27,4 @@ variables
 "Attributes"[0-9\']* -> Attributes
 "ATerm+"[0-9\']* -> {ATerm ","}+
 "Tree*"[0-9\']* -> {Tree ","}*
+"N"[0-9\']* -> NatCon

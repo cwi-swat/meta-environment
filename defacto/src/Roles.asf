@@ -1,39 +1,6 @@
 equations
 
 []
-  role-param-type(N) = int
-
-[]
-  role-param-type(StrCon) = str
-
-[]
-  role-param-type(parent) = int
-
-[]
-  role-param-type(first(ATerm+)) = int
-
-[]
-  role-param-type(last(ATerm+)) = int
-
-[]
-  role-param-type(next(ATerm+)) = int, int
-
-[]
-  role-param-type(each(ATerm+)) = int
-
-[]
-  role-param-type(index(ATerm+)) = int, int
-
-[]
-  RType+1 := role-param-type(ATerm),
-  RType+2 := role-type(ATerm+)
-  ===>
-  role-type(ATerm, ATerm+) = RType+1, RType+2 
-
-[]
-  role-type(ATerm) = role-param-type(ATerm)
-
-[]
   role(Id, ATerm+) := ATerm,
   RType+ := role-type(ATerm+),
   RoleDefSet' := union({(Id, RType+)}, RoleDefSet0)
@@ -124,6 +91,19 @@ equations
 
 []
   get-list-sequence(Tree , TreeTable, RElem0) = RElem0
+
+[]
+  tree-is-layout(Tree) == false
+  ===>
+  get-list-length(Tree, Tree*) = 1 + get-list-length(Tree*)
+
+[]
+  tree-is-layout(Tree) == true
+  ===>
+  get-list-length(Tree, Tree*) = get-list-length(Tree*)
+
+[]
+  get-list-length() = 0
 
 
 
@@ -221,13 +201,15 @@ equations
 
 [first-of-list]
   Tree' := get-first-tree(Tree*0),
-  Int' := lookup(TreeTable, Tree')
+  Int' := lookup(TreeTable, Tree'),
+  Int' != not-in-table
   ===>
   extract-role-elem2(first, Tree0, TreeTable, Tree*0, RStore) = {Int'}
 
 [last-of-list]
   Tree' := get-last-tree(Tree*0),
-  Int' := lookup(TreeTable, Tree')
+  Int' := lookup(TreeTable, Tree'),
+  Int' != not-in-table
   ===>
   extract-role-elem2(last, Tree0, TreeTable, Tree*0, RStore) = {Int'}
 
@@ -246,8 +228,13 @@ equations
   ===>
   extract-role-elem2(index, Tree, TreeTable, Tree*0, RStore) = RElem'
 
+[size-of-list]
+  Int' := get-list-length(Tree*0)
+  ===>
+  extract-role-elem2(size, Tree, TreeTable, Tree*0, RStore) = {Int'}
 
-
+[default]
+  extract-role-elem2(ATerm, Tree, TreeTable, Tree*0, RStore) = {}
 
 
 
@@ -383,7 +370,8 @@ equations
   appl(prod( [Symbol*], Symbol, Attributes ),
        [Tree*]
       ){ATerm*1, [pos-info, ATerm], ATerm*2} := Tree,
-  RStore' := extract-role-data(Attributes, RStore0, Tree, TreeTable)
+  RStore1 := extract-role-data(Attributes, RStore0, Tree, TreeTable),
+  RStore' := extract-node-roles(Tree*, RStore1, TreeTable)
   ===>
   extract-node-roles(Tree, RStore0, TreeTable) = RStore'
 

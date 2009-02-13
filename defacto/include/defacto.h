@@ -138,3 +138,22 @@ graph buildCFG2(graph IN, graph OUT, graph NEXT) = ControlFlow
     end equations
   end where
 
+
+%% a direct connection between the top(s) of a tree and its leafs
+graph topbottom(graph R) = rangeR(domainR(R+, top(R)), bottom(R))
+
+
+%% pushdown a relation ANNO onto the children of the nodes in LIST
+%% TBD: improve comment and variable names :)
+graph pushdown(graph ANNO, set[node] LIST) = PUSHDOWN where
+  equations
+    initial
+      graph ANNO-LIST init domainR(ANNO, LIST)
+      graph PUSHDOWN init {}
+    satisfy
+      PUSHDOWN = PUSHDOWN union domainX(inv(Child) o ANNO-LIST, LIST)
+      ANNO-LIST = domainR(inv(Child) o ANNO-LIST, LIST)
+  end equations
+end where
+
+

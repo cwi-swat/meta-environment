@@ -19,9 +19,14 @@ equations
 
 [] extract-sort(cf(sort( StrCon ))) = StrCon
 [] extract-sort(cf(opt(sort( StrCon )))) = StrCon
+[] extract-sort(cf(opt(layout))) = ""
+[] extract-sort(cf(opt(lit( StrCon )))) = ""
+[] extract-sort(cf(seq( Symbols ))) = ""
 [] extract-sort(lex(sort( StrCon ))) = ""
 [] extract-sort(lit( StrCon )) = ""
-[] extract-sort(cf(opt(layout))) = ""
+[] StrCon' := StrCon || "*"
+   ===>
+   extract-sort(cf(iter-star(sort( StrCon )))) = StrCon'
 %%[] extract-sort(sort( StrCon )) = "" %%"<START>"
 %%cf(iter-star(sort()))
 

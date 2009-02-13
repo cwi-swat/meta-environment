@@ -6,6 +6,7 @@ imports basic/Integers
 imports basic/Strings
 imports utilities/Parsing[Sort]
 imports utilities/Parsing[IdCon]
+imports FactDeclarations
 
 exports
 context-free start-symbols

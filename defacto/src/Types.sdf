@@ -1,0 +1,21 @@
+module Types
+
+imports languages/aterm/syntax/ATerms
+imports basic/RStores
+
+exports
+context-free syntax
+
+role-type({ATerm ","}+) -> {RType ","}+
+role-param-type(ATerm) -> {RType ","}+
+
+
+hiddens
+imports basic/Whitespace
+
+variables
+"RType+"[0-9\']* -> {RType ","}+
+"ATerm"[0-9\']* -> ATerm
+"ATerm+"[0-9\']* -> {ATerm ","}+
+"StrCon"[0-9\']* -> StrCon
+"N"[0-9\']* -> NatCon

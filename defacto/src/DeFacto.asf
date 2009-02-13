@@ -1,11 +1,17 @@
 equations
 
 [main]
-  TreeTable := create-node-ids(Tree),
+  
+  extract-facts( parsetree(Tree, N) ) = extract(Tree)
+
+[]
   RStore0 := create-store(),
-  RStore1 := tree-to-rstore(Tree, RStore0, TreeTable),
-  RStore' := extract-roles(Tree, RStore1, TreeTable)
+  TreeTable0 := create-node-ids(Tree),
+  TreeTable1 := process-inject-annotations(Tree, TreeTable0),
+  RStore1 := tree-to-rstore(Tree, RStore0, TreeTable1),
+  RStore' := extract-roles(Tree, RStore1, TreeTable1)
   ===>
-  extract-facts(
-    parsetree(appl(prod( [Symbol*], sort("<START>"), Attributes ), [Tree', Tree, Tree''] ) {ATerm+}, 0)
-  ) = RStore'
+  extract(appl(prod( [Symbol*], sort("<START>"), Attributes ), [Tree', Tree, Tree''] )) = RStore'
+
+[]
+  extract(Tree {ATerm+}) = extract(Tree)

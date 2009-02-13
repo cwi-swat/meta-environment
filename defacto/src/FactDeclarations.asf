@@ -1,0 +1,19 @@
+equations
+[]
+  collect-fact-declarations(SDF) = collect-fact-decls(SDF, )
+
+[]
+  RType, RType+ := role-type(ATerm+)
+  ===>
+  collect-fact-decls(role(Id, ATerm+), FactDecl*) = FactDecl*
+rel[RType, RType+] Id ;
+
+[]
+  RType := role-type(ATerm+)
+  ===>
+  collect-fact-decls(role(Id, ATerm+), FactDecl*) = FactDecl*
+set[RType] Id ;
+
+[]
+  FactDecl*1 RType Id ; FactDecl*2 RType Id ; FactDecl*3 = FactDecl*1 RType Id ; FactDecl*2 FactDecl*3
+

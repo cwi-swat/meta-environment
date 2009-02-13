@@ -1,4 +1,10 @@
-# $Id: ChangeLog 26340 2008-08-29 12:27:54Z jurgenv $
+# $Id: ChangeLog 26340 2008-08-29 12:27:54Z basten $
+
+Fri Feb 13 11:00:00 EST 2009 <basten@cwi.nl>
+ * Added -d option: output rscript declarations of extracted facts
+ * Added size function
+ * Added injection annotations
+ * Modified SortsToIds to run on individual modules
 
 Fri Oct 17 14:59:61 CEST 2008 <basten@cwi.nl>
  * Import of DeFacto prototype

@@ -4,6 +4,7 @@ imports containers/Set[RoleDef]
 imports languages/asfix/syntax/Tree
 imports ExtRStores
 imports RStoreTree
+imports Types
 
 exports
 context-free syntax
@@ -23,9 +24,6 @@ context-free syntax
 
 "(" IdCon "," {RType ","} + ")" -> RoleDef
 
-role-param-type(ATerm) -> {RType ","}+
-role-type({ATerm ","}+) -> {RType ","}+
-
 collect-used-roles(Tree, RoleDefSet) -> RoleDefSet { traversal(accu, top-down, continue) }
 collect-used-roles(ATerm, RoleDefSet) -> RoleDefSet { traversal(accu, top-down, continue) }
 
@@ -34,7 +32,10 @@ declare-roles(RoleDef, RStore) -> RStore { traversal(accu, top-down, continue) }
 
 declare-used-roles(Tree, RStore) -> RStore
 
+extract-node-roles({Tree ","}*, RStore, TreeTable) -> RStore { traversal(accu, top-down, break) }
+extract-node-roles(Tree, RStore, TreeTable) -> RStore { traversal(accu, top-down, break) }
 
+exports
 context-free syntax
 
 tree-is-layout(Tree) -> Boolean
@@ -44,7 +45,11 @@ get-last-tree({Tree ","}*) -> Tree
 get-node-ids({Tree ","}*, TreeTable) -> RElem
 get-list-indexes({Tree ","}*, TreeTable, Integer, RElem) -> RElem
 get-list-sequence({Tree ","}*, TreeTable, RElem) -> RElem
+get-list-length({Tree ","}*) -> Integer
 has-children(Tree) -> Boolean
+
+hiddens
+context-free syntax
 
 set-to-relation(RElem) -> RElem
 unary-relation-to-set(RElem) -> RElem
@@ -63,8 +68,6 @@ store-next-rel(IdCon, {ATerm ","}+, Tree, TreeTable, {Tree ","}*, RStore) -> RSt
 extract-role-data(Attributes, RStore, Tree, TreeTable) -> RStore { traversal(accu, top-down, break) }
 extract-role-data({ATerm ","}*, RStore, Tree, TreeTable) -> RStore { traversal(accu, top-down, break) }
 extract-role-data(ATerm, RStore, Tree, TreeTable) -> RStore { traversal(accu, top-down, break) }
-
-extract-node-roles(Tree, RStore, TreeTable) -> RStore { traversal(accu, top-down, continue) }
 
 
 variables

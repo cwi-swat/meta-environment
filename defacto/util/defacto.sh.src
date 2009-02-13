@@ -5,7 +5,7 @@
 # - Extract facts from a term (parsed from a grammar with fact annotations) (default)
 # - Weave fact annotations into a grammar and create a parse table (-w option)
 
-#set -e
+set -e
 #set -x
 
 #   variables
@@ -31,6 +31,7 @@ LIFT_RSTORE=__RSTORE_SUPPORT__/bin/lift-rstore
 LOWER_RSTORE=__RSTORE_SUPPORT__/bin/lower-rstore
 ASFE=__ASF__/bin/asfe
 SDF2TABLE=__PGEN__/bin/sdf2table
+RESTOREBRACKETS=__SGLR__/bin/restorebrackets
 
 SORTSTOIDS_PARSE_TABLE=${datadir}/SortsToIds.trm.tbl
 SORTSTOIDS_EQUATIONS=${datadir}/SortsToIds.eqs
@@ -39,6 +40,9 @@ SORTSTOIDS_FUN=sorts-to-ids
 SORTSTOIDS_RESULT=SDF
 DEFACTO_FUN=extract-facts
 DEFACTO_RESULT=RStore
+DECLS_FUN=collect-fact-declarations
+DECLS_RESULT=FactDeclarations
+
 
 TERM=
 ANNOTATIONS=
@@ -46,6 +50,8 @@ PARSETABLE=
 OUTPUTFILE="-"
 MODULE=
 WEAVED_DEFINITION="weaved-definition.tmp"
+DECLARATIONS=
+
 
 DO_EXTRACTION=
 DO_WEAVING=
@@ -66,13 +72,14 @@ Usage: $PRG [options]
 
 Options:
   -e (--extract)              extract facts from input term (default)
-  -i (--input)    filename    input term parse tree (needs to be parsed with weaved parse table)
-  -t (--table)    filename    parse table for term (with weaved annotations)
+  -i (--input)    filename    input term (parsed or textual (use -t))
+  -t (--table)    filename    parse table to parse term (with weaved annotations)
   -o (--output)   filename    output file (rstore or parse table) (default: stdout)
 
   -w (--weave)                weave fact annotations into module and create parse table
   -a (--annos)    filename    fact annotations file
   -m (--module)   modulename  module to weave fact annotations into
+  -d (--decls)    filename    output rscript declarations of extracted facts (only with -w) (optional)
 
   -h (--help)                 print usage info
   -v (--verbose)              verbose output (default:not verbose)
@@ -136,9 +143,9 @@ check_input() {
       die "No input term specified"
     fi
 
-    if test -z "$PARSETABLE"
+    if test -n "$DECLARATIONS"
     then
-      die "No parse table specified"
+      die "-d only possible with -w"
     fi
   fi
 }
@@ -147,13 +154,25 @@ check_input() {
 # parse_term
 
 parse_term() {
-  FILENAME="$TERM"
-  if [ "`dirname $FILENAME`" == "." ]
+  if test -n "$PARSETABLE"
   then
-    FILENAME="`pwd`/$FILENAME"
-  fi
+    $SGLR $VERBOSE -p $PARSETABLE -i $TERM -o $TERM.pt
+    add_tmp_file $TERM.pt
 
-  $SGLR $VERBOSE -p $PARSETABLE -i $TERM | $ADDPOSINFO -p $FILENAME | $LIFTPT -o $TERM.lifted.pt
+    FILENAME="$TERM"
+    if [ "`dirname $FILENAME`" = "." ]
+    then
+      FILENAME="`pwd`/$FILENAME"
+    fi
+    $ADDPOSINFO -i $TERM.pt -p $FILENAME -o $TERM.pos.pt
+
+  else
+    cp $TERM $TERM.pos.pt
+  fi
+  add_tmp_file $TERM.pos.pt
+
+
+  $LIFTPT -i $TERM.pos.pt -o $TERM.lifted.pt
   add_tmp_file $TERM.lifted.pt
 }
 
@@ -161,7 +180,7 @@ parse_term() {
 # extract
 
 extract() {
-  $DEFACTO -r $DEFACTO_RESULT -f $DEFACTO_FUN -i $TERM.lifted.pt | $LOWER_RSTORE -o "$OUTPUTFILE"
+  $DEFACTO -r $DEFACTO_RESULT -f $DEFACTO_FUN -i $TERM.lifted.pt | $LOWER_RSTORE -o $OUTPUTFILE
   echo ""
 }
 
@@ -170,12 +189,6 @@ extract() {
 
 weave() {
 
-#  $DEF_DUMP -m $MODULE -o $MODULE.def
-#  add_tmp_file $MODULE.def
-#  $SGLR $VERBOSE -p $SORTSTOIDS_PARSE_TABLE -i $MODULE.def -o $MODULE.def.pt
-#  add_tmp_file $MODULE.def.pt
-#  SdfWeaver -f weave-attributes -i $ATTRIBUTES.pt -i $MODULE.def.pt -r SDF |
-
   WEAVED_DEFINITION=${MODULE##*/}.def
 
   sdfweaver -m $MODULE -a $ANNOTATIONS -d -o $WEAVED_DEFINITION
@@ -183,10 +196,20 @@ weave() {
   $SGLR $VERBOSE -p $SORTSTOIDS_PARSE_TABLE -i $WEAVED_DEFINITION -o $WEAVED_DEFINITION.pt
   add_tmp_file $WEAVED_DEFINITION.pt
 
-#  $APPLYFUNCTION -f $SORTSTOIDS_FUN -s $SORTSTOIDS_RESULT -i $WEAVED_DEFINITION.pt | $ASFE -e $SORTSTOIDS_EQUATIONS | $SDF2TABLE -m $MODULE -o $OUTPUTFILE
+  $APPLYFUNCTION -f $SORTSTOIDS_FUN -s $SORTSTOIDS_RESULT -i $WEAVED_DEFINITION.pt | $ASFE -e $SORTSTOIDS_EQUATIONS -o $WEAVED_DEFINITION.ids.pt
+#  $SORTSTOIDS -r $SORTSTOIDS_RESULT -f $SORTSTOIDS_FUN -i $WEAVED_DEFINITION.pt -o $WEAVED_DEFINITION.ids.pt
+  add_tmp_file $WEAVED_DEFINITION.ids.pt
 
-  $SORTSTOIDS -r $SORTSTOIDS_RESULT -f $SORTSTOIDS_FUN -i $WEAVED_DEFINITION.pt | $SDF2TABLE -m $MODULE -o $OUTPUTFILE
+  $RESTOREBRACKETS -i $WEAVED_DEFINITION.ids.pt -p $SORTSTOIDS_PARSE_TABLE | $UNPARSEPT -o $WEAVED_DEFINITION.def
+  add_tmp_file $WEAVED_DEFINITION.def
 
+  $SDF2TABLE -i $WEAVED_DEFINITION.def -m $MODULE -o $OUTPUTFILE
+
+  if test -n "$DECLARATIONS"
+  then
+    $SORTSTOIDS -r $DECLS_RESULT -f $DECLS_FUN -i $WEAVED_DEFINITION.ids.pt | $UNPARSEPT | tr \; \\n > $DECLARATIONS
+    echo >> $DECLARATIONS
+  fi
 }
 
 # 
@@ -217,10 +240,12 @@ do
       shift; ANNOTATIONS=$1 ;;
     -m | --module)
       shift; MODULE=$1 ;;
+    -d | --decls)
+      shift; DECLARATIONS=$1 ;;
     -v | --verbose)
       VERBOSE=-v ;;
     *)
-      usage; exit 1 ;;
+      echo "Unknown option $1\n"; usage; exit 1 ;;
   esac
   shift
 done
