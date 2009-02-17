@@ -143,17 +143,6 @@ graph buildCFG2(graph IN, graph OUT, graph NEXT) = ControlFlow
 graph topbottom(graph R) = rangeR(domainR(R+, top(R)), bottom(R))
 
 
-%% pushdown a relation ANNO onto the children of the nodes in LIST
-%% TBD: improve comment and variable names :)
-graph pushdown(graph ANNO, set[node] LIST) = PUSHDOWN where
-  equations
-    initial
-      graph ANNO-LIST init domainR(ANNO, LIST)
-      graph PUSHDOWN init {}
-    satisfy
-      PUSHDOWN = PUSHDOWN union domainX(inv(Child) o ANNO-LIST, LIST)
-      ANNO-LIST = domainR(inv(Child) o ANNO-LIST, LIST)
-  end equations
-end where
-
+%% pushdown a relation R onto the children of the nodes in C
+rel[node, &N] pushdown(rel[node, &N] R, set[node] C) = domainR(inv(inv(R) o Child+[C]), bottom(Child))
 
