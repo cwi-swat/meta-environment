@@ -117,9 +117,9 @@ static void version(void)
 
 /*}}}  */
 
-/*{{{  static char *basename(const char *source, const char *suffix) */
+/*{{{  static char *basename1(const char *source, const char *suffix) */
 
-static char *basename(const char *source)
+static char *basename1(const char *source)
 {
   char *duplicate = strdup(source);
   char *basename = NULL;
@@ -362,7 +362,7 @@ int main(int argc, char *argv[])
 	exit(1);
       }
       else {
-	name = basename(equations);
+	name = basename1(equations);
       }
     }
 

@@ -9,8 +9,8 @@
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-terminate(<asfe>,<term>)",
-  "rec-eval(<asfe>,run-tests(<term>,<term>,<term>,<term>))",
   "rec-eval(<asfe>,interpret(<str>,<term>,<term>,<term>,<term>))",
+  "rec-eval(<asfe>,run-tests(<term>,<term>,<term>,<term>))",
 };
 
 /* Event handler for tool 'asfe' */
@@ -21,15 +21,15 @@ ATerm asfe_handler(int conn, ATerm term)
   char *s0;
   ATerm t0, t1, t2, t3;
 
-  if(ATmatch(term, "rec-eval(run-tests(<term>,<term>,<term>,<term>))", &t0, &t1, &t2, &t3)) {
-    return run_tests(conn, t0, t1, t2, t3);
+  if(ATmatch(term, "rec-eval(interpret(<str>,<term>,<term>,<term>,<term>))", &s0, &t0, &t1, &t2, &t3)) {
+    return interpret(conn, s0, t0, t1, t2, t3);
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(interpret(<str>,<term>,<term>,<term>,<term>))", &s0, &t0, &t1, &t2, &t3)) {
-    return interpret(conn, s0, t0, t1, t2, t3);
+  if(ATmatch(term, "rec-eval(run-tests(<term>,<term>,<term>,<term>))", &t0, &t1, &t2, &t3)) {
+    return run_tests(conn, t0, t1, t2, t3);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = asfe_checker(conn, in);

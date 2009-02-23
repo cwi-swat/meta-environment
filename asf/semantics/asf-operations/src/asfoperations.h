@@ -9,10 +9,10 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm normalize_module(int conn, ATerm);
 ATerm extract_tests(int conn, ATerm);
-void rec_terminate(int conn, ATerm);
 ATerm extract_equations(int conn, ATerm);
+void rec_terminate(int conn, ATerm);
+ATerm normalize_module(int conn, ATerm);
 extern ATerm asfoperations_handler(int conn, ATerm term);
 extern ATerm asfoperations_checker(int conn, ATerm sigs);
 
