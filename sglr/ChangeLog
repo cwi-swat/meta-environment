@@ -1,5 +1,8 @@
 $Id$
 
+Mon Mar  9 13:11:00 GMT 2009 <gre@ecs.soton.ac.uk>
+ * sglr.pc.in: bumped version number.
+
 Mon Sep 15 16:50:44 CEST 2008 <jurgenv@cwi.nl>
  * src/sglrInterface.[ch]: added function to reset parse error
    summary (for API).
