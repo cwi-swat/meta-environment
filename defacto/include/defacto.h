@@ -144,5 +144,5 @@ graph topbottom(graph R) = rangeR(domainR(R+, top(R)), bottom(R))
 
 
 %% pushdown a relation R onto the children of the nodes in C
-rel[node, &N] pushdown(rel[node, &N] R, set[node] C) = domainR(inv(inv(R) o Child+[C]), bottom(Child))
+rel[node, &N] pushdown(rel[node, &N] R, set[node] C) = domainR(inv(inv(R) o domainR(Child+, C)), bottom(Child))
 
