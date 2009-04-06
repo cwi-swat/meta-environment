@@ -1,5 +1,3 @@
-
-
 Wed Feb  4 11:19:36 CET 2009 <{lankamp,jurgenv}@cwi.nl>
  * meta-build.m4: added JUNIT3 to build classpath of all Eclipse Java packages
 
