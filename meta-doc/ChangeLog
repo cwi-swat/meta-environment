@@ -1,5 +1,3 @@
-
-
 Sun Apr  5 13:50:54 CEST 2009 <jurgenv@cwi.nl>
  * triggering a build
 
@@ -7,8 +5,7 @@ Wed Aug 27 09:08:47 CEST 2008 <jurgenv@cwi.nl>
  * changed URL of newbie index to new website
 
 Wed May 14 11:25:56 2008    <bruntink@cwi.nl>
-
-	* Commit to trigger a Sisyphus build.
+ * Commit to trigger a Sisyphus build.
 
 Fri May  9 15:04:41 CEST 2008 <jurgenv@cwi.nl>
  * architecture-meta-environment.xml: added more detail and stories to
