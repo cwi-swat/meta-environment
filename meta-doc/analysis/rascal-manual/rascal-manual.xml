@@ -1097,10 +1097,11 @@ alias Frequency = int;</programlisting>
 
             <tbody>
               <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                [ <replaceable>name</replaceable> =
+                <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
+                [</literal> <replaceable>name</replaceable>
+                <literal>=</literal>
                 <replaceable>exp</replaceable><subscript>2</subscript>
-                ]</entry>
+                <literal>]</literal></entry>
 
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>should
                 evaluate to a datatype with a field
@@ -1110,7 +1111,7 @@ alias Frequency = int;</programlisting>
               </row>
 
               <row>
-                <entry><replaceable>exp</replaceable> .
+                <entry><replaceable>exp</replaceable> <literal>.</literal>
                 <replaceable>name</replaceable></entry>
 
                 <entry><replaceable>exp </replaceable>should evaluate to a
@@ -1119,16 +1120,18 @@ alias Frequency = int;</programlisting>
               </row>
 
               <row>
-                <entry><replaceable>exp</replaceable> &lt; field, ...
-                &gt;</entry>
+                <entry><replaceable>exp</replaceable> <literal>&lt;</literal>
+                <replaceable>field</replaceable>, ...<literal>
+                &gt;</literal></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                [ <replaceable>exp</replaceable><subscript>2</subscript>
-                ]</entry>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
+                [</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript>
+                <literal>]</literal></entry>
 
                 <entry>The value of
                 <replaceable>exp</replaceable><subscript>2</subscript> is used
@@ -1141,25 +1144,29 @@ alias Frequency = int;</programlisting>
               </row>
 
               <row>
-                <entry>- <replaceable>exp</replaceable></entry>
+                <entry><literal>-</literal>
+                <replaceable>exp</replaceable></entry>
 
                 <entry>negation on integer or real</entry>
               </row>
 
               <row>
-                <entry><replaceable>exp</replaceable> +</entry>
+                <entry><replaceable>exp</replaceable>
+                <literal>+</literal></entry>
 
                 <entry>transitive closure on relation</entry>
               </row>
 
               <row>
-                <entry><replaceable>exp</replaceable> *</entry>
+                <entry><replaceable>exp</replaceable>
+                <literal>*</literal></entry>
 
                 <entry>reflexive transitive closure on relation</entry>
               </row>
 
               <row>
-                <entry><replaceable>exp</replaceable> @ name</entry>
+                <entry><replaceable>exp</replaceable> <literal>@</literal>
+                name</entry>
 
                 <entry>value of attribute <replaceable>name</replaceable> of
                 <replaceable>exp</replaceable>'s value</entry>
@@ -1167,8 +1174,8 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                [@ name
-                =<replaceable>exp</replaceable><subscript>2</subscript>]</entry>
+                <literal>[@</literal> name <literal>=</literal><replaceable>
+                exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
 
                 <entry>assign value of<replaceable>
                 exp</replaceable><subscript>2</subscript> to attribute
@@ -1179,7 +1186,7 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                o
+                <literal>o</literal>
                 <replaceable>exp</replaceable><subscript>2</subscript></entry>
 
                 <entry>Composition on relations</entry>
@@ -1187,7 +1194,7 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                /
+                <literal>/</literal>
                 <replaceable>exp</replaceable><subscript>2</subscript></entry>
 
                 <entry>Division on integer and real</entry>
@@ -1195,7 +1202,7 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                %
+                <literal>%</literal>
                 <replaceable>exp</replaceable><subscript>2</subscript></entry>
 
                 <entry>Modulo on integer</entry>
@@ -1238,7 +1245,7 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
-                join
+                <literal>join</literal>
                 <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
 
                 <entry>Join on relation</entry>
@@ -1263,13 +1270,15 @@ alias Frequency = int;</programlisting>
 
             <tbody>
               <row>
-                <entry>! exp</entry>
+                <entry><literal>!</literal>
+                <replaceable>exp</replaceable></entry>
 
                 <entry>Negation</entry>
               </row>
 
               <row>
-                <entry>exp ?</entry>
+                <entry><replaceable>exp</replaceable>
+                <literal>?</literal></entry>
 
                 <entry>Isdefined: true is exp has a well-defined value</entry>
               </row>
@@ -1328,7 +1337,7 @@ alias Frequency = int;</programlisting>
               </row>
 
               <row>
-                <entry><replaceable>pat</replaceable> :=
+                <entry><replaceable>pat</replaceable> <literal>:=</literal>
                 <replaceable>exp</replaceable></entry>
 
                 <entry>Value of <replaceable>exp</replaceable> matches with
@@ -1336,7 +1345,7 @@ alias Frequency = int;</programlisting>
               </row>
 
               <row>
-                <entry><replaceable>pat</replaceable> !:=
+                <entry><replaceable>pat</replaceable> <literal>!:=</literal>
                 <replaceable>exp</replaceable></entry>
 
                 <entry>Value of <replaceable>exp</replaceable> does not match
@@ -1361,7 +1370,7 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                ?
+                <literal>?</literal>
                 <replaceable>exp</replaceable><subscript>2</subscript></entry>
 
                 <entry>Ifdefined Otherwise: the value of
@@ -1372,7 +1381,9 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                ? <replaceable>exp</replaceable><subscript>2</subscript> :
+                <literal>?</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript>
+                <literal>:</literal>
                 <replaceable>exp</replaceable><subscript>3</subscript></entry>
 
                 <entry>Conditional expression</entry>
@@ -1380,7 +1391,7 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                ==&gt;
+                <literal>==&gt;</literal>
                 <replaceable>exp</replaceable><subscript>2</subscript></entry>
 
                 <entry>Implication</entry>
@@ -1388,7 +1399,7 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                &lt;==&gt;
+                <literal>&lt;==&gt;</literal>
                 <replaceable>exp</replaceable><subscript>2</subscript></entry>
 
                 <entry>Equivalence</entry>
@@ -1404,7 +1415,7 @@ alias Frequency = int;</programlisting>
 
               <row>
                 <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                ||
+                <literal>||</literal>
                 <replaceable>exp</replaceable><subscript>2</subscript></entry>
 
                 <entry>Boolean or</entry>
@@ -3346,6 +3357,11 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
       </listitem>
 
       <listitem>
+        <para>Resource: functions to retrieve resources from an Eclipse
+        workspace, see <xref linkend="section.lib-Resource" />.</para>
+      </listitem>
+
+      <listitem>
         <para>RSF: function for reading files in Rigi Standard Format, see
         <xref linkend="section.lib-RSF" />.</para>
       </listitem>
@@ -3377,15 +3393,20 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
       </listitem>
 
       <listitem>
+        <para>View: functions for graphical display of values in Eclipse, see
+        <xref linkend="section.lib-View" />.</para>
+      </listitem>
+
+      <listitem>
         <para>Void: the type void, see </para>
       </listitem>
     </itemizedlist>
 
     <para>All operators are directly available for each program, but library
-    functions have to be imported in the modules that uses them.</para>
+    functions have to be imported in each module that uses them.</para>
 
-    <section>
-      <title xml:id="section.lib-Benchmark">Benchmark</title>
+    <section xml:id="section.lib-Benchmark">
+      <title xml:id="x">Benchmark</title>
 
       <para></para>
 
@@ -3393,7 +3414,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
         <title>Benchmark Functions</title>
 
         <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="1*" />
+          <colspec align="left" colname="col1" colwidth="2*" />
 
           <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -3407,7 +3428,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry>real currentTimeMillis()</entry>
+              <entry><literal>real currentTimeMillis()</literal></entry>
 
               <entry>current time in milliseconds since January 1, 1970
               GMT.</entry>
@@ -3567,7 +3588,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
         <title>Boolean Functions</title>
 
         <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="1*" />
+          <colspec align="left" colname="col1" colwidth="2*" />
 
           <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -3581,37 +3602,37 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry>bool arbBool()</entry>
+              <entry><literal>bool arbBool()</literal></entry>
 
               <entry>arbitrary boolean value</entry>
             </row>
 
             <row>
-              <entry>bool fromInt(int i)</entry>
+              <entry><literal>bool fromInt(int i)</literal></entry>
 
               <entry>convert an integer to a bool</entry>
             </row>
 
             <row>
-              <entry>bool fromString(str s)</entry>
+              <entry><literal>bool fromString(str s)</literal></entry>
 
               <entry>convert the strings "true" or "false" to a bool</entry>
             </row>
 
             <row>
-              <entry>int toInt(bool b)</entry>
+              <entry><literal>int toInt(bool b)</literal></entry>
 
               <entry>convert a boolean value to integer</entry>
             </row>
 
             <row>
-              <entry>real toReal(bool b)</entry>
+              <entry><literal>real toReal(bool b)</literal></entry>
 
               <entry>convert a boolean value to a real value</entry>
             </row>
 
             <row>
-              <entry>str toString(bool b)</entry>
+              <entry><literal>str toString(bool b)</literal></entry>
 
               <entry>convert a boolean value to a string</entry>
             </row>
@@ -3671,43 +3692,45 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry>set[&amp;T] bottom(graph[&amp;T] G)</entry>
+              <entry><literal>set[&amp;T] bottom(graph[&amp;T]
+              G)</literal></entry>
 
               <entry>bottom nodes of a graph</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] top(graph[&amp;T] G)</entry>
+              <entry><literal>set[&amp;T] top(graph[&amp;T]
+              G)</literal></entry>
 
               <entry>top nodes of a graph</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] reach(graph[&amp;T] G, set[&amp;T]
-              Start)</entry>
+              <entry><literal>set[&amp;T] reach(graph[&amp;T] G, set[&amp;T]
+              Start)</literal></entry>
 
               <entry>Reachability from set of start nodes.</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] reachR(graph[&amp;T] G, set[&amp;T] Start,
-              set[&amp;T] Restr)</entry>
+              <entry><literal>set[&amp;T] reachR(graph[&amp;T] G, set[&amp;T]
+              Start, set[&amp;T] Restr)</literal></entry>
 
               <entry>Reachability from set of start nodes with restriction to
               certain nodes.</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] reachX(graph[&amp;T] G, set[&amp;T] Start,
-              set[&amp;T] Excl)</entry>
+              <entry><literal>set[&amp;T] reachX(graph[&amp;T] G, set[&amp;T]
+              Start, set[&amp;T] Excl)</literal></entry>
 
               <entry>Reachability from set of start nodes with exclusion of
               certain nodes</entry>
             </row>
 
             <row>
-              <entry>list[&amp;T] shortestPathPair(graph[&amp;T] G, &amp;T
-              From, &amp;T To)</entry>
+              <entry><literal>list[&amp;T] shortestPathPair(graph[&amp;T] G,
+              &amp;T From, &amp;T To)</literal></entry>
 
               <entry>Shortest path between pair of nodes</entry>
             </row>
@@ -3886,7 +3909,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
         <title>Integer Functions</title>
 
         <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="1*" />
+          <colspec align="left" colname="col1" colwidth="2*" />
 
           <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -3900,44 +3923,44 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry>int abs(int N)</entry>
+              <entry><literal>int abs(int N)</literal></entry>
 
               <entry>absolute value of integer N</entry>
             </row>
 
             <row>
-              <entry>int arbInt()</entry>
+              <entry><literal>int arbInt()</literal></entry>
 
               <entry>arbitrary integer value</entry>
             </row>
 
             <row>
-              <entry>int arbInt(int limit)</entry>
+              <entry><literal>int arbInt(int limit)</literal></entry>
 
               <entry>arbitrary integer value in the interval [0,
               limit)</entry>
             </row>
 
             <row>
-              <entry>int max(int n, int m)</entry>
+              <entry><literal>int max(int n, int m)</literal></entry>
 
               <entry>largest of two integers</entry>
             </row>
 
             <row>
-              <entry>int min(int n, int m)</entry>
+              <entry><literal>int min(int n, int m)</literal></entry>
 
               <entry>smallest of two integers</entry>
             </row>
 
             <row>
-              <entry>real toReal(int n)</entry>
+              <entry><literal>real toReal(int n)</literal></entry>
 
               <entry>convert an integer value to a real value</entry>
             </row>
 
             <row>
-              <entry>str toString(int n)</entry>
+              <entry><literal>str toString(int n)</literal></entry>
 
               <entry>convert an integer value to a string</entry>
             </row>
@@ -3967,14 +3990,15 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
             <tbody>
               <row>
-                <entry> void java println(value V...)</entry>
+                <entry><literal>void java println(value
+                V...)</literal></entry>
 
                 <entry>print a list of values on the output stream</entry>
               </row>
 
               <row>
-                <entry>list[str] readFile(str filename) throws
-                NoSuchFileError(str msg), IOError(str msg)</entry>
+                <entry><literal>list[str] readFile(str filename) throws
+                NoSuchFileError(str msg), IOError(str msg)</literal></entry>
 
                 <entry>read a named file as list of strings</entry>
               </row>
@@ -3995,7 +4019,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
         <title>Labelled Graph Functions</title>
 
         <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="3*" />
+          <colspec align="left" colname="col1" colwidth="4*" />
 
           <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -4009,43 +4033,45 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry>set[&amp;T] bottom(lgraph[&amp;T] G)</entry>
+              <entry><literal>set[&amp;T] bottom(lgraph[&amp;T]
+              G)</literal></entry>
 
               <entry>bottom nodes of a labelled graph</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] top(lgraph[&amp;T] G)</entry>
+              <entry><literal>set[&amp;T] top(lgraph[&amp;T]
+              G)</literal></entry>
 
               <entry>top nodes of a labelled graph</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] reach(lgraph[&amp;T] G, set[&amp;T]
-              Start)</entry>
+              <entry><literal>set[&amp;T] reach(lgraph[&amp;T] G, set[&amp;T]
+              Start)</literal></entry>
 
               <entry>Reachability from set of start nodes.</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] reachR(lgraph[&amp;T] G, set[&amp;T] Start,
-              set[&amp;T] Restr)</entry>
+              <entry><literal>set[&amp;T] reachR(lgraph[&amp;T] G, set[&amp;T]
+              Start, set[&amp;T] Restr)</literal></entry>
 
               <entry>Reachability from set of start nodes with restriction to
               certain nodes.</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] reachX(lgraph[&amp;T] G, set[&amp;T] Start,
-              set[&amp;T] Excl)</entry>
+              <entry><literal>set[&amp;T] reachX(lgraph[&amp;T] G, set[&amp;T]
+              Start, set[&amp;T] Excl)</literal></entry>
 
               <entry>Reachability from set of start nodes with exclusion of
               certain nodes</entry>
             </row>
 
             <row>
-              <entry>list[&amp;T] shortestPathPair(lgraph[&amp;T] G, &amp;T
-              From, &amp;T To)</entry>
+              <entry><literal>list[&amp;T] shortestPathPair(lgraph[&amp;T] G,
+              &amp;T From, &amp;T To)</literal></entry>
 
               <entry>Shortest path between pair of nodes</entry>
             </row>
@@ -4212,7 +4238,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
           <title>List Functions</title>
 
           <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
+            <colspec align="left" colname="col1" colwidth="4*" />
 
             <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -4226,163 +4252,175 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
             <tbody>
               <row>
-                <entry>&amp;T average(list[&amp;T] lst, &amp;T zero)</entry>
+                <entry><literal>&amp;T average(list[&amp;T] lst, &amp;T
+                zero)</literal></entry>
 
                 <entry>average of elements of a list</entry>
               </row>
 
               <row>
-                <entry>list[&amp;T] delete(list[&amp;T] lst, int n)</entry>
+                <entry><literal>list[&amp;T] delete(list[&amp;T] lst, int
+                n)</literal></entry>
 
                 <entry>delete nth element from list</entry>
               </row>
 
               <row>
-                <entry>list[int] domain(list[&amp;T] lst)</entry>
+                <entry><literal>list[int] domain(list[&amp;T]
+                lst)</literal></entry>
 
                 <entry>a list of all legal index values for a list</entry>
               </row>
 
               <row>
-                <entry>&amp;T java head(list[&amp;T] lst) throws
-                EmptyListError</entry>
+                <entry><literal>&amp;T java head(list[&amp;T] lst) throws
+                EmptyListError</literal></entry>
 
                 <entry>get the first element of a list</entry>
               </row>
 
               <row>
-                <entry>list[&amp;T] head(list[&amp;T] lst, int n) throws
-                IndexOutOfBoundsError</entry>
+                <entry><literal>list[&amp;T] head(list[&amp;T] lst, int n)
+                throws IndexOutOfBoundsError</literal></entry>
 
                 <entry>get the first n elements of a list</entry>
               </row>
 
               <row>
-                <entry>&amp;T getOneFrom(list[&amp;T] lst)</entry>
+                <entry><literal>&amp;T getOneFrom(list[&amp;T]
+                lst)</literal></entry>
 
                 <entry>get an arbitrary element from a list</entry>
               </row>
 
               <row>
-                <entry>list[&amp;T] insertAt(list[&amp;T] lst, int n, &amp;T
-                elm) throws IndexOutOfBoundsError</entry>
+                <entry><literal>list[&amp;T] insertAt(list[&amp;T] lst, int n,
+                &amp;T elm) throws IndexOutOfBoundsError</literal></entry>
 
                 <entry>add an element at a specific position in a list</entry>
               </row>
 
               <row>
-                <entry>bool isEmpty(list[&amp;T] lst)</entry>
+                <entry><literal>bool isEmpty(list[&amp;T]
+                lst)</literal></entry>
 
                 <entry>is list empty?</entry>
               </row>
 
               <row>
-                <entry>list[&amp;T] mapper(list[&amp;T] lst, &amp;T (&amp;T)
-                fn)</entry>
+                <entry><literal>list[&amp;T] mapper(list[&amp;T] lst, &amp;T
+                (&amp;T) fn)</literal></entry>
 
                 <entry>apply a function to each element of a list</entry>
               </row>
 
               <row>
-                <entry>&amp;T max(list[&amp;T] lst)</entry>
+                <entry><literal>&amp;T max(list[&amp;T] lst)</literal></entry>
 
                 <entry>largest element of a list</entry>
               </row>
 
               <row>
-                <entry>&amp;T min(list[&amp;T] lst)</entry>
+                <entry><literal>&amp;T min(list[&amp;T] lst)</literal></entry>
 
                 <entry>smallest element of a list</entry>
               </row>
 
               <row>
-                <entry>&amp;T multiply(list[&amp;T] lst, &amp;T unity)</entry>
+                <entry><literal>&amp;T multiply(list[&amp;T] lst, &amp;T
+                unity)</literal></entry>
 
                 <entry>multiply the elements of a list</entry>
               </row>
 
               <row>
-                <entry>list[list[&amp;T]] permutations(list[&amp;T]
-                lst)</entry>
+                <entry><literal>list[list[&amp;T]] permutations(list[&amp;T]
+                lst)</literal></entry>
 
                 <entry>all permutations of a list</entry>
               </row>
 
               <row>
-                <entry>&amp;T reducer(list[&amp;T] lst, &amp;T (&amp;T,
-                &amp;T) fn, &amp;T unit)</entry>
+                <entry><literal>&amp;T reducer(list[&amp;T] lst, &amp;T
+                (&amp;T, &amp;T) fn, &amp;T unit)</literal></entry>
 
                 <entry>apply function F to successive elements of a
                 list</entry>
               </row>
 
               <row>
-                <entry>list[&amp;T] reverse(list[&amp;T] lst)</entry>
+                <entry><literal>list[&amp;T] reverse(list[&amp;T]
+                lst)</literal></entry>
 
                 <entry>elements of a list in reverse order</entry>
               </row>
 
               <row>
-                <entry>int size(list[&amp;T] lst)</entry>
+                <entry><literal>int size(list[&amp;T] lst)</literal></entry>
 
                 <entry>number of elements in a list</entry>
               </row>
 
               <row>
-                <entry>list[&amp;T] slice(list[&amp;T] lst, int start, int
-                len)</entry>
+                <entry><literal>list[&amp;T] slice(list[&amp;T] lst, int
+                start, int len)</literal></entry>
 
                 <entry>sublist from start of length len</entry>
               </row>
 
               <row>
-                <entry>list[&amp;T] sort(list[&amp;T] lst)</entry>
+                <entry><literal>list[&amp;T] sort(list[&amp;T]
+                lst)</literal></entry>
 
                 <entry>sort the elements of a list</entry>
               </row>
 
               <row>
-                <entry>&amp;T sum(list[&amp;T] lst, &amp;T zero)</entry>
+                <entry><literal>&amp;T sum(list[&amp;T] lst, &amp;T
+                zero)</literal></entry>
 
                 <entry>add elements of a List</entry>
               </row>
 
               <row>
-                <entry>list[&amp;T] tail(list[&amp;T] lst)</entry>
+                <entry><literal>list[&amp;T] tail(list[&amp;T]
+                lst)</literal></entry>
 
                 <entry>all but the first element of a list</entry>
               </row>
 
               <row>
-                <entry>list[&amp;T] tail(list[&amp;T] lst, int len) throws
-                IndexOutOfBoundsError</entry>
+                <entry><literal>list[&amp;T] tail(list[&amp;T] lst, int len)
+                throws IndexOutOfBoundsError</literal></entry>
 
                 <entry>last n elements of a list</entry>
               </row>
 
               <row>
-                <entry>tuple[&amp;T, list[&amp;T]] takeOneFrom(list[&amp;T]
-                lst)</entry>
+                <entry><literal>tuple[&amp;T, list[&amp;T]]
+                takeOneFrom(list[&amp;T] lst)</literal></entry>
 
                 <entry>remove an arbitrary element from a list, returns the
                 element and the modified list</entry>
               </row>
 
               <row>
-                <entry>map[&amp;A,&amp;B] toMap(list[tuple[&amp;A, &amp;B]]
-                lst)</entry>
+                <entry><literal>map[&amp;A,&amp;B] toMap(list[tuple[&amp;A,
+                &amp;B]] lst)</literal></entry>
 
                 <entry>convert a list of tuples to a map</entry>
               </row>
 
               <row>
-                <entry>set[&amp;T] toSet(list[&amp;T] lst)</entry>
+                <entry><literal>set[&amp;T] toSet(list[&amp;T]
+                lst)</literal></entry>
 
                 <entry>convert a list to a set</entry>
               </row>
 
               <row>
-                <entry>str toString(list[&amp;T] lst)</entry>
+                <entry><literal>str toString(list[&amp;T]
+                lst)</literal></entry>
 
                 <entry>convert a list to a string</entry>
               </row>
@@ -4394,214 +4432,124 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
     <section xml:id="section.lib-Location">
       <title>Location</title>
 
-      <para></para>
+      <table>
+        <title>Operations on Locations</title>
 
-      <section xml:id="section.builtin-operator-loc">
-        <title>Location Operators</title>
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="1*" />
 
-        <table>
-          <title>Operations on Locations</title>
+          <colspec align="left" colname="col2" colwidth="3*" />
 
-          <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="1*" />
+          <thead>
+            <row>
+              <entry>Operator</entry>
 
-            <colspec align="left" colname="col2" colwidth="3*" />
+              <entry>Description</entry>
+            </row>
+          </thead>
 
-            <thead>
-              <row>
-                <entry>Operator</entry>
+          <tbody>
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
 
-                <entry>Description</entry>
-              </row>
-            </thead>
+              <entry><literal>true</literal> if both arguments are identical
+              and <literal>false</literal> otherwise</entry>
+            </row>
 
-            <tbody>
-              <row>
-                <entry><replaceable>loc</replaceable><subscript>1</subscript>
-                <literal>==</literal>
-                <replaceable>loc</replaceable><subscript>2</subscript></entry>
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
 
-                <entry>yields <literal>true</literal> if both arguments are
-                identical and <literal>false</literal> otherwise</entry>
-              </row>
+              <entry><literal>true</literal> if both arguments are not
+              identical and <literal>false</literal> otherwise</entry>
+            </row>
 
-              <row>
-                <entry><replaceable>loc</replaceable><subscript>1</subscript>
-                <literal>!=</literal>
-                <replaceable>loc</replaceable><subscript>2</subscript></entry>
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
 
-                <entry>yields <literal>true</literal> if both arguments are
-                not identical and <literal>false</literal> otherwise</entry>
-              </row>
+              <entry><literal>true</literal> if
+              <replaceable>loc</replaceable><subscript>1</subscript> is
+              textually contained in or equal to
+              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
 
-              <row>
-                <entry><replaceable>loc</replaceable><subscript>1</subscript>
-                <literal>&lt;=</literal>
-                <replaceable>loc</replaceable><subscript>2</subscript></entry>
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
 
-                <entry>yields <literal>true</literal> if
-                <replaceable>loc</replaceable><subscript>1</subscript> is
-                textually contained in or equal to
-                <replaceable>loc</replaceable><subscript>2</subscript> and
-                <literal>false</literal> otherwise</entry>
-              </row>
+              <entry><literal>true</literal> if
+              <replaceable>loc</replaceable><subscript>1</subscript> is
+              strictly textually contained in
+              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
 
-              <row>
-                <entry><replaceable>loc</replaceable><subscript>1</subscript>
-                <literal>&lt;</literal>
-                <replaceable>loc</replaceable><subscript>2</subscript></entry>
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
 
-                <entry>yields <literal>true</literal> if
-                <replaceable>loc</replaceable><subscript>1</subscript> is
-                strictly textually contained in
-                <replaceable>loc</replaceable><subscript>2</subscript> and
-                <literal>false</literal> otherwise</entry>
-              </row>
+              <entry><literal>true</literal> if
+              <replaceable>loc</replaceable><subscript>1</subscript> is
+              textually encloses or is equal to
+              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
 
-              <row>
-                <entry><replaceable>loc</replaceable><subscript>1</subscript>
-                <literal>&gt;=</literal>
-                <replaceable>loc</replaceable><subscript>2</subscript></entry>
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
 
-                <entry>yields <literal>true</literal> if
-                <replaceable>loc</replaceable><subscript>1</subscript> is
-                textually encloses or is equal to
-                <replaceable>loc</replaceable><subscript>2</subscript> and
-                <literal>false</literal> otherwise</entry>
-              </row>
+              <entry><literal>true</literal> if
+              <replaceable>loc</replaceable><subscript>1</subscript> is
+              textually encloses
+              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
 
-              <row>
-                <entry><replaceable>loc</replaceable><subscript>1</subscript>
-                <literal>&gt;=</literal>
-                <replaceable>loc</replaceable><subscript>2</subscript></entry>
+            <row>
+              <entry><replaceable>loc</replaceable> <literal>.</literal>
+              <replaceable>field</replaceable></entry>
 
-                <entry>yields <literal>true</literal> if
-                <replaceable>loc</replaceable><subscript>1</subscript> is
-                textually encloses
-                <replaceable>loc</replaceable><subscript>2</subscript> and
-                <literal>false</literal> otherwise</entry>
-              </row>
+              <entry>retrieve one of the fields of location value</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
 
-              <row>
-                <entry><replaceable>loc</replaceable> <literal>.</literal>
-                <replaceable>field</replaceable></entry>
+      <para>The field names for locations are:</para>
 
-                <entry></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table>
+      <itemizedlist>
+        <listitem>
+          <para><literal>url</literal></para>
+        </listitem>
 
-        <formalpara>
-          <title>Examples</title>
+        <listitem>
+          <para><literal>offset</literal></para>
+        </listitem>
 
-          <para>In the following examples the offset and length part of a
-          location are set to <literal>0</literal>; they are not used when
-          determining the outcome of the comparison operators.</para>
-        </formalpara>
+        <listitem>
+          <para><literal>length</literal></para>
+        </listitem>
 
-        <itemizedlist>
-          <listitem>
-            <para><literal>area-in-file("f", area(11, 1, 11, 9, 0, 0)) &lt;
-            area-in-file("f", area(10, 2, 12, 8, 0, 0))</literal> yields
-            <literal>true</literal>.</para>
-          </listitem>
+        <listitem>
+          <para><literal>beginLine</literal>,
+          <literal>beginColumn</literal></para>
+        </listitem>
 
-          <listitem>
-            <para><literal>area-in-file("f", area(10, 3, 11, 7, 0,0)) &lt;
-            area-in-file("f", area(10, 2, 11, 8, 0, 0))</literal> yields
-            <literal>true</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>area-in-file("f", area(10, 3, 11, 7, 0, 0)) &lt;
-            area-in-file("g", area(10, 3, 11, 7, 0, 0))</literal> yields
-            <literal>false</literal>.</para>
-          </listitem>
-        </itemizedlist>
-      </section>
-
-      <section xml:id="section.locations">
-        <title>Location Functions</title>
-
-        <section xml:id="section.builtin-function-filename">
-          <title>File Name of a Location: <literal>filename</literal></title>
-
-          <para>Definition:<programlisting>str filename(loc A) = 
-    primitive</programlisting>Yields the file name of location
-          <literal>A</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>filename(area-in-file("pico1.trm",area(5,2,6,8,0,0)))</literal>
-              yields <literal>"pico1.trm"</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-beginline">
-          <title>Beginning Line of a Location:
-          <literal>beginline</literal></title>
-
-          <para>Definition:<programlisting>int beginline(loc A) = 
-    primitive</programlisting>Yields the first line of location
-          <literal>A</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>beginline(area-in-file("pico1.trm",area(5,2,6,8,0,0)))</literal>
-              yields <literal>5</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-begincol">
-          <title>First Column of a Location:
-          <literal>begincol</literal></title>
-
-          <para>Definition:<programlisting>int begincol(loc A) = 
-    primitive</programlisting>Yields the first column of location
-          <literal>A</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>begincol(area-in-file("pico1.trm",area(5,2,6,8,0,0)))</literal>
-              yields <literal>2</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-endline">
-          <title>Ending Line of a Location: <literal>endline</literal></title>
-
-          <para>Definition:<programlisting>int endline(loc A) = 
-    primitive</programlisting>Yields the last line of location
-          <literal>A</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>endline(area-in-file("pico1.trm",area(5,2,6,8,0,0)))</literal>
-              yields <literal>6</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-endcol">
-          <title>Ending Column of a Location:
-          <literal>endcol</literal></title>
-
-          <para>Definition:<programlisting>int endcol(loc A) = 
-    primitive</programlisting>Yields the last column of location
-          <literal>A</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>endcol(area-in-file("pico1.trm",area(5,2,6,8,0,0)))</literal>
-              yields <literal>8</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-      </section>
+        <listitem>
+          <para><literal>endLine</literal>,
+          <literal>endColumn</literal>.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section xml:id="section.lib-Map">
@@ -4756,7 +4704,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
           <title>Map Functions</title>
 
           <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
+            <colspec align="left" colname="col1" colwidth="4*" />
 
             <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -4770,66 +4718,72 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
             <tbody>
               <row>
-                <entry>set[&amp;K] domain(map[&amp;K, &amp;V] M)</entry>
+                <entry><literal>set[&amp;K] domain(map[&amp;K, &amp;V]
+                M)</literal></entry>
 
                 <entry>the domain (keys) of a map</entry>
               </row>
 
               <row>
-                <entry>&amp;K getOneFrom(map[&amp;K, &amp;V] M) </entry>
+                <entry><literal>&amp;K getOneFrom(map[&amp;K, &amp;V] M)
+                </literal></entry>
 
                 <entry>arbitrary key of a map</entry>
               </row>
 
               <row>
-                <entry>map[&amp;V, &amp;K] invert(map[&amp;K, &amp;V]
-                M)</entry>
+                <entry><literal>map[&amp;V, &amp;K] invert(map[&amp;K, &amp;V]
+                M)</literal></entry>
 
                 <entry>map with key and value inverted</entry>
               </row>
 
               <row>
-                <entry>bool isEmpty(map[&amp;K, &amp;V] M)</entry>
+                <entry><literal>bool isEmpty(map[&amp;K, &amp;V]
+                M)</literal></entry>
 
                 <entry> is map empty?</entry>
               </row>
 
               <row>
-                <entry>map[&amp;K, &amp;V] mapper(map[&amp;K, &amp;V] M,
-                &amp;K (&amp;K) F, &amp;V (&amp;V) G)</entry>
+                <entry><literal>map[&amp;K, &amp;V] mapper(map[&amp;K, &amp;V]
+                M, &amp;K (&amp;K) F, &amp;V (&amp;V) G)</literal></entry>
 
                 <entry>apply two functions to each key/value pair in a
                 map.</entry>
               </row>
 
               <row>
-                <entry>set[&amp;V] range(map[&amp;K, &amp;V] M)</entry>
+                <entry><literal>set[&amp;V] range(map[&amp;K, &amp;V]
+                M)</literal></entry>
 
                 <entry>the range (values) of a map</entry>
               </row>
 
               <row>
-                <entry>int size(map[&amp;K, &amp;V] M)</entry>
+                <entry><literal>int size(map[&amp;K, &amp;V]
+                M)</literal></entry>
 
                 <entry>number of elements in a map.</entry>
               </row>
 
               <row>
-                <entry>list[tuple[&amp;K, &amp;V]] toList(map[&amp;K, &amp;V]
-                M)</entry>
+                <entry><literal>list[tuple[&amp;K, &amp;V]] toList(map[&amp;K,
+                &amp;V] M)</literal></entry>
 
                 <entry>convert a map to a list</entry>
               </row>
 
               <row>
-                <entry>rel[&amp;K, &amp;V] toRel(map[&amp;K, &amp;V]
-                M)</entry>
+                <entry><literal>rel[&amp;K, &amp;V] toRel(map[&amp;K, &amp;V]
+                M)</literal></entry>
 
                 <entry>convert a map to a relation</entry>
               </row>
 
               <row>
-                <entry>str toString(map[&amp;K, &amp;V] M)</entry>
+                <entry><literal>str toString(map[&amp;K, &amp;V]
+                M)</literal></entry>
 
                 <entry>convert a map to a string.</entry>
               </row>
@@ -4945,25 +4899,27 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
             <tbody>
               <row>
-                <entry>int arity(node T)</entry>
+                <entry><literal>int arity(node T)</literal></entry>
 
                 <entry>number of children of a node</entry>
               </row>
 
               <row>
-                <entry>list[value] getChildren(node T)</entry>
+                <entry><literal>list[value] getChildren(node
+                T)</literal></entry>
 
                 <entry>get the children of a node</entry>
               </row>
 
               <row>
-                <entry>str getName(node T)</entry>
+                <entry><literal>str getName(node T)</literal></entry>
 
                 <entry>get the function name of a node</entry>
               </row>
 
               <row>
-                <entry>node makeNode(str N, value V...)</entry>
+                <entry><literal>node makeNode(str N, value
+                V...)</literal></entry>
 
                 <entry>create a node given its function name and
                 arguments</entry>
@@ -5122,7 +5078,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
         <title>Real Functions</title>
 
         <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="1*" />
+          <colspec align="left" colname="col1" colwidth="2*" />
 
           <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -5136,26 +5092,26 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry>real arbReal()</entry>
+              <entry><literal>real arbReal()</literal></entry>
 
               <entry>an arbitrary real value in the interval
               [0.0,1.0).</entry>
             </row>
 
             <row>
-              <entry>real max(real n, real m)</entry>
+              <entry><literal>real max(real n, real m)</literal></entry>
 
               <entry>largest of two reals</entry>
             </row>
 
             <row>
-              <entry>int toInteger(real d)</entry>
+              <entry><literal>int toInteger(real d)</literal></entry>
 
               <entry>convert a real to integer.</entry>
             </row>
 
             <row>
-              <entry>str toString(real d)</entry>
+              <entry><literal>str toString(real d)</literal></entry>
 
               <entry>convert a real to a string.</entry>
             </row>
@@ -5269,7 +5225,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
           <title>Relation Functions</title>
 
           <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
+            <colspec align="left" colname="col1" colwidth="4*" />
 
             <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -5283,50 +5239,52 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
             <tbody>
               <row>
-                <entry>set[&amp;T] carrier (rel[&amp;T,&amp;T] R)</entry>
+                <entry><literal>set[&amp;T] carrier (rel[&amp;T,&amp;T]
+                R)</literal></entry>
 
                 <entry>all elements in any tuple in a relation</entry>
               </row>
 
               <row>
-                <entry>rel[&amp;T,&amp;T] carrierR (rel[&amp;T,&amp;T] R,
-                set[&amp;T] S)</entry>
+                <entry><literal>rel[&amp;T,&amp;T] carrierR
+                (rel[&amp;T,&amp;T] R, set[&amp;T] S)</literal></entry>
 
                 <entry>relation restricted to tuples with elements in a set
                 S</entry>
               </row>
 
               <row>
-                <entry>rel[&amp;T,&amp;T] carrierX (rel[&amp;T,&amp;T] R,
-                set[&amp;T] S)</entry>
+                <entry><literal>rel[&amp;T,&amp;T] carrierX
+                (rel[&amp;T,&amp;T] R, set[&amp;T] S)</literal></entry>
 
                 <entry>relation excluded tuples with some element in S</entry>
               </row>
 
               <row>
-                <entry>rel[&amp;T0, &amp;T1] complement(rel[&amp;T0, &amp;T1]
-                R)</entry>
+                <entry><literal>rel[&amp;T0, &amp;T1] complement(rel[&amp;T0,
+                &amp;T1] R)</literal></entry>
 
                 <entry>complement of relation</entry>
               </row>
 
               <row>
-                <entry>set[&amp;T0] domain (rel[&amp;T0,&amp;T1] R)</entry>
+                <entry><literal>set[&amp;T0] domain (rel[&amp;T0,&amp;T1]
+                R)</literal></entry>
 
                 <entry>first element of each tuple in binary relation</entry>
               </row>
 
               <row>
-                <entry>rel[&amp;T0,&amp;T1] domainR (rel[&amp;T0,&amp;T1] R,
-                set[&amp;T0] S)</entry>
+                <entry><literal>rel[&amp;T0,&amp;T1] domainR
+                (rel[&amp;T0,&amp;T1] R, set[&amp;T0] S)</literal></entry>
 
                 <entry>restriction of a relation to tuples with first element
                 in S}</entry>
               </row>
 
               <row>
-                <entry>rel[&amp;T0,&amp;T1] domainX (rel[&amp;T0,&amp;T1] R,
-                set[&amp;T0] S)</entry>
+                <entry><literal>rel[&amp;T0,&amp;T1] domainX
+                (rel[&amp;T0,&amp;T1] R, set[&amp;T0] S)</literal></entry>
 
                 <entry>relation excluded tuples with first element in
                 S</entry>
@@ -5339,23 +5297,23 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               </row>
 
               <row>
-                <entry>rel[&amp;T1, &amp;T0] invert (rel[&amp;T0, &amp;T1]
-                R)</entry>
+                <entry><literal>rel[&amp;T1, &amp;T0] invert (rel[&amp;T0,
+                &amp;T1] R)</literal></entry>
 
                 <entry>inverse the tuples in a relation</entry>
               </row>
 
               <row>
-                <entry>rel[&amp;T2, &amp;T1, &amp;T0] invert (rel[&amp;T0,
-                &amp;T1, &amp;T2] R)</entry>
+                <entry><literal>rel[&amp;T2, &amp;T1, &amp;T0] invert
+                (rel[&amp;T0, &amp;T1, &amp;T2] R)</literal></entry>
 
                 <entry>all but the first element of each tuples in binary
                 relation</entry>
               </row>
 
               <row>
-                <entry>rel[&amp;T0,&amp;T1] rangeR (rel[&amp;T0,&amp;T1] R,
-                set[&amp;T2] S)</entry>
+                <entry><literal>rel[&amp;T0,&amp;T1] rangeR
+                (rel[&amp;T0,&amp;T1] R, set[&amp;T2] S)</literal></entry>
 
                 <entry>restriction of a binary relation to tuples with second
                 element in set S</entry>
@@ -5414,7 +5372,8 @@ domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});
 
           <tbody>
             <row>
-              <entry>map[str, rel[str,str]] readRSF(str nameRSFFile)</entry>
+              <entry><literal>map[str, rel[str,str]] readRSF(str
+              nameRSFFile)</literal></entry>
 
               <entry>read a file in Rigi Standard Format (RSF).</entry>
             </row>
@@ -5423,21 +5382,66 @@ domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});
       </table>
     </section>
 
-    <section>
-      <title>Resources</title>
+    <section xml:id="section.lib-Resource">
+      <title>Resource (Eclipse only)</title>
 
-      <para>data Resource = root(set[Resource] projects) | project(str name,
-      set[Resource] contents) | folder(str name, set[Resource] contents) |
-      file(str name, str extension); public Resource java root()
-      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ; public
-      set[str] java projects()
-      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ; public
-      set[str] java references(str project)
-      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ; public
-      loc java location(str project)
-      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ; public
-      set[loc] java files(str project)
-      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ;</para>
+      <para><programlisting>data Resource = root(set[Resource] projects) 
+              | project(str name, set[Resource] contents) 
+              | folder(str name, set[Resource] contents) 
+              | file(str name, str extension); </programlisting></para>
+
+      <para><table>
+          <title>Resource Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="3*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>Resource java root() </literal></entry>
+
+                <entry>The root of the Eclipse workspace</entry>
+              </row>
+
+              <row>
+                <entry><literal>set[str] java projects()</literal></entry>
+
+                <entry>The projects in the Eclipse workspace</entry>
+              </row>
+
+              <row>
+                <entry><literal>set[str] java references(str
+                project)</literal></entry>
+
+                <entry>The project references of a given project</entry>
+              </row>
+
+              <row>
+                <entry><literal>loc java location(str
+                project)</literal></entry>
+
+                <entry>Source location of given project</entry>
+              </row>
+
+              <row>
+                <entry><literal>set[loc] java files(str
+                project)</literal></entry>
+
+                <entry>The files contained in a project</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
     </section>
 
     <section xml:id="section.lib-Set">
@@ -5582,14 +5586,17 @@ domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable> join
+              <entry><replaceable>set</replaceable> <literal>join</literal>
               <replaceable>set</replaceable></entry>
 
               <entry></entry>
             </row>
 
             <row>
-              <entry>bool ? set1 : set2</entry>
+              <entry><replaceable>bool</replaceable> <literal>?</literal>
+              <replaceable>set</replaceable><subscript>1</subscript>
+              <literal>:</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
 
               <entry></entry>
             </row>
@@ -5654,101 +5661,109 @@ rascal&gt; <literal>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;
 
           <tbody>
             <row>
-              <entry>&amp;T average(set[&amp;T] st, &amp;T zero)</entry>
+              <entry><literal>&amp;T average(set[&amp;T] st, &amp;T
+              zero)</literal></entry>
 
               <entry>average of the elements of a set</entry>
             </row>
 
             <row>
-              <entry>&amp;T getOneFrom(set[&amp;T] st)</entry>
+              <entry><literal>&amp;T getOneFrom(set[&amp;T]
+              st)</literal></entry>
 
               <entry>pick a random element from a set</entry>
             </row>
 
             <row>
-              <entry>bool isEmpty(set[&amp;T] st)</entry>
+              <entry><literal>bool isEmpty(set[&amp;T] st)</literal></entry>
 
               <entry>Is set empty?</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] mapper(set[&amp;T] st, &amp;T (&amp;T,&amp;T)
-              fn)</entry>
+              <entry><literal>set[&amp;T] mapper(set[&amp;T] st, &amp;T
+              (&amp;T,&amp;T) fn)</literal></entry>
 
               <entry>apply a function to each element of a setacter</entry>
             </row>
 
             <row>
-              <entry>&amp;T max(set[&amp;T] st)</entry>
+              <entry><literal>&amp;T max(set[&amp;T] st)</literal></entry>
 
               <entry>largest element of a set</entry>
             </row>
 
             <row>
-              <entry>&amp;T min(set[&amp;T] st)</entry>
+              <entry><literal>&amp;T min(set[&amp;T] st)</literal></entry>
 
               <entry>smallest element of a set</entry>
             </row>
 
             <row>
-              <entry>&amp;T multiply(set[&amp;T] st, &amp;T unity)</entry>
+              <entry><literal>&amp;T multiply(set[&amp;T] st, &amp;T
+              unity)</literal></entry>
 
               <entry>multiply the elements of a set</entry>
             </row>
 
             <row>
-              <entry>set[set[&amp;T]] power(set[&amp;T] st)</entry>
+              <entry><literal>set[set[&amp;T]] power(set[&amp;T]
+              st)</literal></entry>
 
               <entry>all subsets of a set</entry>
             </row>
 
             <row>
-              <entry>set[set[&amp;T]] power1(set[&amp;T] st)</entry>
+              <entry><literal>set[set[&amp;T]] power1(set[&amp;T]
+              st)</literal></entry>
 
               <entry>all subsets (excluding empty set) of a set</entry>
             </row>
 
             <row>
-              <entry>&amp;T reducer(set[&amp;T] st, &amp;T (&amp;T,&amp;T) fn,
-              &amp;T unit)</entry>
+              <entry><literal>&amp;T reducer(set[&amp;T] st, &amp;T
+              (&amp;T,&amp;T) fn, &amp;T unit)</literal></entry>
 
               <entry>apply function F to successive elements of a set</entry>
             </row>
 
             <row>
-              <entry>int size(set[&amp;T] st)</entry>
+              <entry><literal>int size(set[&amp;T] st)</literal></entry>
 
               <entry>number of elements in a set</entry>
             </row>
 
             <row>
-              <entry>&amp;T sum(set[&amp;T] st, &amp;T zero)</entry>
+              <entry><literal>&amp;T sum(set[&amp;T] st, &amp;T
+              zero)</literal></entry>
 
               <entry>add the elements of a set</entry>
             </row>
 
             <row>
-              <entry>tuple[&amp;T, set[&amp;T]] takeOneFrom(set[&amp;T]
-              st)</entry>
+              <entry><literal>tuple[&amp;T, set[&amp;T]]
+              takeOneFrom(set[&amp;T] st)</literal></entry>
 
               <entry>remove an arbitrary element from a set, returns the
               element and the modified set</entry>
             </row>
 
             <row>
-              <entry>list[&amp;T] toList(set[&amp;T] st)</entry>
+              <entry><literal>list[&amp;T] toList(set[&amp;T]
+              st)</literal></entry>
 
               <entry>convert a set to a list</entry>
             </row>
 
             <row>
-              <entry>map[&amp;A,&amp;B] toMap(rel[&amp;A, &amp;B] st)</entry>
+              <entry><literal>map[&amp;A,&amp;B] toMap(rel[&amp;A, &amp;B]
+              st)</literal></entry>
 
               <entry>convert a set of tuples to a map</entry>
             </row>
 
             <row>
-              <entry>str toString(set[&amp;T] st)</entry>
+              <entry><literal>str toString(set[&amp;T] st)</literal></entry>
 
               <entry>convert a set to a string</entry>
             </row>
@@ -5776,7 +5791,7 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
     </section>
 
     <section xml:id="section.lib-String">
-      <title>String Operators</title>
+      <title>String</title>
 
       <table>
         <title>Operations on Strings</title>
@@ -5878,7 +5893,7 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
           <title>String Functions</title>
 
           <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
+            <colspec align="left" colname="col1" colwidth="4*" />
 
             <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -5892,84 +5907,88 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
 
             <tbody>
               <row>
-                <entry>int charAt(str s, int i) throws out_of_range(str
-                msg)</entry>
+                <entry><literal>int charAt(str s, int i) throws
+                out_of_range(str msg)</literal></entry>
 
                 <entry>character at position i in string s.</entry>
               </row>
 
               <row>
-                <entry>bool endsWith(str s, str suffix)</entry>
+                <entry><literal>bool endsWith(str s, str
+                suffix)</literal></entry>
 
                 <entry>true if string s ends with given string suffix.</entry>
               </row>
 
               <row>
-                <entry>str center(str s, int n)</entry>
+                <entry><literal>str center(str s, int n)</literal></entry>
 
                 <entry>center s in string of length n using spaces</entry>
               </row>
 
               <row>
-                <entry>str center(str s, int n, str pad)</entry>
+                <entry><literal>str center(str s, int n, str
+                pad)</literal></entry>
 
                 <entry>center s in string of length n using a pad
                 character</entry>
               </row>
 
               <row>
-                <entry>bool isEmpty(str s)</entry>
+                <entry><literal>bool isEmpty(str s)</literal></entry>
 
                 <entry>is string empty?</entry>
               </row>
 
               <row>
-                <entry>str left(str s, int n)</entry>
+                <entry><literal>str left(str s, int n)</literal></entry>
 
                 <entry>left align s in string of length n using spaces</entry>
               </row>
 
               <row>
-                <entry>str left(str s, int n, str pad)</entry>
+                <entry><literal>str left(str s, int n, str
+                pad)</literal></entry>
 
                 <entry>left align s in string of length n using pad
                 character</entry>
               </row>
 
               <row>
-                <entry>str right(str s, int n)</entry>
+                <entry><literal>str right(str s, int n)</literal></entry>
 
                 <entry>right align s in string of length n using
                 spaces</entry>
               </row>
 
               <row>
-                <entry>str reverse(str s)</entry>
+                <entry><literal>str reverse(str s)</literal></entry>
 
                 <entry>string with all characters in reverse order.</entry>
               </row>
 
               <row>
-                <entry>int size(str s)</entry>
+                <entry><literal>int size(str s)</literal></entry>
 
                 <entry>the length of string s.</entry>
               </row>
 
               <row>
-                <entry>bool startsWith(str s, str prefix)</entry>
+                <entry><literal>bool startsWith(str s, str
+                prefix)</literal></entry>
 
                 <entry>true if string s starts with the string prefix.</entry>
               </row>
 
               <row>
-                <entry>str toLowerCase(str s)</entry>
+                <entry><literal>str toLowerCase(str s)</literal></entry>
 
                 <entry>convert all characters in string s to
                 lowercase.</entry>
               </row>
 
               <row>
-                <entry>str toUpperCase(str s)</entry>
+                <entry><literal>str toUpperCase(str s)</literal></entry>
 
                 <entry>convert all characters in string s to
                 uppercase.</entry>
@@ -6123,7 +6142,7 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
         <title>UnitTest Functions</title>
 
         <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="3*" />
+          <colspec align="left" colname="col1" colwidth="4*" />
 
           <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -6137,25 +6156,26 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
 
           <tbody>
             <row>
-              <entry>void assertTrue(bool outcome)</entry>
+              <entry><literal>void assertTrue(bool outcome)</literal></entry>
 
               <entry>check that outcome is true</entry>
             </row>
 
             <row>
-              <entry>void assertEqual(value V1, value V2)</entry>
+              <entry><literal>void assertEqual(value V1, value
+              V2)</literal></entry>
 
               <entry>check that two values are equal</entry>
             </row>
 
             <row>
-              <entry>bool report()</entry>
+              <entry><literal>bool report()</literal></entry>
 
               <entry>print unit test summary</entry>
             </row>
 
             <row>
-              <entry>bool report(str msg)</entry>
+              <entry><literal>bool report(str msg)</literal></entry>
 
               <entry>print unit test summary, including msg</entry>
             </row>
@@ -6255,7 +6275,7 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
           <title>ValueIO Functions</title>
 
           <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
+            <colspec align="left" colname="col1" colwidth="4*" />
 
             <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -6269,27 +6289,29 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
 
             <tbody>
               <row>
-                <entry>value readValueFromBinaryFile(str namePBFFile)</entry>
+                <entry><literal>value readValueFromBinaryFile(str
+                namePBFFile)</literal></entry>
 
                 <entry>read a value from a binary file in PBF format</entry>
               </row>
 
               <row>
-                <entry>value readValueFromTextFile(str namePBFFile)</entry>
+                <entry><literal>value readValueFromTextFile(str
+                namePBFFile)</literal></entry>
 
                 <entry>read a value from a text file</entry>
               </row>
 
               <row>
-                <entry>void writeValueToBinaryFile(str namePBFFile, value
-                val)</entry>
+                <entry><literal>void writeValueToBinaryFile(str namePBFFile,
+                value val)</literal></entry>
 
                 <entry>write a value to a binary file in PBF format</entry>
               </row>
 
               <row>
-                <entry>void writeValueToTextFile(str namePBFFile, value
-                val)</entry>
+                <entry><literal>void writeValueToTextFile(str namePBFFile,
+                value val)</literal></entry>
 
                 <entry>write a value to a binary file in PBF format</entry>
               </row>
@@ -6298,13 +6320,40 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
         </table></para>
     </section>
 
-    <section>
-      <title>View</title>
+    <section xml:id="section.lib-View">
+      <title>View (Eclipse only)</title>
 
-      <para>module View public void java show(value v)
-      @javaClass{org.meta_environment.rascal.eclipse.lib.View} ; public void
-      java browse(value v)
-      @javaClass{org.meta_environment.rascal.eclipse.lib.View} ;</para>
+      <table>
+        <title>View Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="3*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>void show(value v)</literal></entry>
+
+              <entry>Show value v in a graphical viewer</entry>
+            </row>
+
+            <row>
+              <entry><literal>void browse(value v) </literal></entry>
+
+              <entry>Show value v a graphical browser</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
 
     <section>
@@ -6846,6 +6895,363 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
     <para></para>
 
+    <table xml:id="table.all-operators">
+      <title>All Operators</title>
+
+      <tgroup cols="3">
+        <colspec align="left" colname="col1" colwidth="2*" />
+
+        <colspec align="left" colname="col2" colwidth="2*" />
+
+        <colspec align="left" colname="col3" colwidth="3*" />
+
+        <thead>
+          <row>
+            <entry>Operator</entry>
+
+            <entry>Description</entry>
+
+            <entry>See</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
+            [</literal> <replaceable>name</replaceable> <literal>=</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript>
+            <literal>]</literal></entry>
+
+            <entry>Field assignment</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable> <literal>.</literal>
+            <replaceable>name</replaceable></entry>
+
+            <entry>Field selection</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable> <literal>&lt;</literal>
+            <replaceable>field</replaceable>, ...<literal>
+            &gt;</literal></entry>
+
+            <entry>Field projection</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
+            [</literal> <replaceable>exp</replaceable><subscript>2</subscript>
+            <literal>]</literal></entry>
+
+            <entry>Index</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable> <literal>?</literal></entry>
+
+            <entry>Isdefined: true is exp has a well-defined value</entry>
+          </row>
+
+          <row>
+            <entry><literal>!</literal> <replaceable>exp</replaceable></entry>
+
+            <entry>Negation</entry>
+          </row>
+
+          <row>
+            <entry><literal>-</literal> <replaceable>exp</replaceable></entry>
+
+            <entry>Negation</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable> <literal>+</literal></entry>
+
+            <entry>Transitive closure</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable> <literal>*</literal></entry>
+
+            <entry>Reflexive transitive</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable> <literal>@</literal>
+            name</entry>
+
+            <entry>Attribute value</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>[@</literal> name <literal>=</literal><replaceable>
+            exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
+
+            <entry>Assign attribute value</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>o</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Composition</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>/</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Division</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>%</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Modulo</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>*</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Multiplication/product</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>&amp;</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Intersection</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>+</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Addition/concatenation/union</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>-</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Subtraction/difference</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+            <literal>join</literal>
+            <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+
+            <entry>Join</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+            <literal>in</literal>
+            <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+
+            <entry>Element of</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+            <literal>notin</literal>
+            <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+
+            <entry>Not element of</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>&lt;=</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Less than/sublist /subset</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>&lt;</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Less than/strict sublist/strict subset</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>&gt;=</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Greater than/superlist/superset</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>&gt;</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Greater than/strict superlist/ strict superset</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>pat</replaceable> <literal>:=</literal>
+            <replaceable>exp</replaceable></entry>
+
+            <entry>Match</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>pat</replaceable> <literal>!:=</literal>
+            <replaceable>exp</replaceable></entry>
+
+            <entry>No Match</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>==</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Equality</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>!=</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Inequality</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>?</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Ifdefined Otherwise</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>?</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript>
+            <literal>:</literal>
+            <replaceable>exp</replaceable><subscript>3</subscript></entry>
+
+            <entry>Conditional expression</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>==&gt;</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Implication</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>&lt;==&gt;</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Equivalence</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>&amp;&amp;</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Boolean and</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <literal>||</literal>
+            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Boolean or</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
     <para></para>
 
     <para></para>
@@ -6854,7 +7260,671 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
   <section xml:id="section.table-builtin-functions">
     <title>Table of Built-in Functions</title>
 
-    <para></para>
+    <para><table xml:id="table.all-functions">
+        <title>All Functions</title>
+
+        <?target dbfo keep-tohether="auto"?>
+
+        <tgroup cols="3">
+          <colspec align="left" colname="col1" colwidth="3*" />
+
+          <colspec align="left" colname="col2" colwidth="1*" />
+
+          <colspec align="left" colname="col3" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Operator</entry>
+
+              <entry>Module</entry>
+
+              <entry>See</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>abs</literal></entry>
+
+              <entry>Integer</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>arbBool</literal></entry>
+
+              <entry>Boolean</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>arbInt</literal></entry>
+
+              <entry>Integer</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>arbReal</literal></entry>
+
+              <entry>Real</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>arity</literal></entry>
+
+              <entry>Node</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>assertEqual</literal></entry>
+
+              <entry>UnitTest</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>assertTrue</literal></entry>
+
+              <entry>UnitTest</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>average</literal></entry>
+
+              <entry>List, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>bottom</literal></entry>
+
+              <entry>Graph, LabelledGraph</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>browse</literal></entry>
+
+              <entry>View</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>carrier</literal></entry>
+
+              <entry>Relation</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>carrierR</literal></entry>
+
+              <entry>Relation</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>carrierX</literal></entry>
+
+              <entry>Relation</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>center</literal></entry>
+
+              <entry>String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>charAt</literal> ? remove</entry>
+
+              <entry>String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>complement</literal></entry>
+
+              <entry>Relation</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>currentTimeMillis</literal></entry>
+
+              <entry>Benchmark</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>delete</literal></entry>
+
+              <entry>List</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>domain</literal></entry>
+
+              <entry>List, Map, Relation</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>domainR</literal></entry>
+
+              <entry>Relation</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>domainX</literal></entry>
+
+              <entry>Relation</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>endsWith</literal></entry>
+
+              <entry>String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>files</literal></entry>
+
+              <entry>Resource</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>fromInt</literal></entry>
+
+              <entry>Boolean</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>fromString</literal></entry>
+
+              <entry>Boolean</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>getChildren</literal></entry>
+
+              <entry>Node</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>getName</literal></entry>
+
+              <entry>Node</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>getOneFrom</literal></entry>
+
+              <entry>List, Map, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>head</literal></entry>
+
+              <entry>List</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>insertAt</literal></entry>
+
+              <entry>List</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>invert</literal></entry>
+
+              <entry>Map, Relation</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>isEmpty</literal></entry>
+
+              <entry>List, Map, Set, String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>left</literal></entry>
+
+              <entry>String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>location ?name</entry>
+
+              <entry>Resource</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>makeNode</literal></entry>
+
+              <entry>Node</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>mapper</literal>?</entry>
+
+              <entry>Map, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>max</literal></entry>
+
+              <entry>Integer, List, Real, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>min</literal></entry>
+
+              <entry>Integer, List, Real?, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>multiply</literal></entry>
+
+              <entry>List, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>permutations</literal></entry>
+
+              <entry>List</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>power</literal></entry>
+
+              <entry>Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>power1</literal></entry>
+
+              <entry>Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>println</literal></entry>
+
+              <entry>IO</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>projects</literal></entry>
+
+              <entry>Resource</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>range</literal></entry>
+
+              <entry>Map</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>reach</literal></entry>
+
+              <entry>Graph, LabelledGraph</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>reachR</literal></entry>
+
+              <entry>Graph, LabelledGraph</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>reachX</literal></entry>
+
+              <entry>Graph, LabelledGraph</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>readFile</literal></entry>
+
+              <entry>IO</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>readRSF</literal></entry>
+
+              <entry>RSF</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>readValueFromBinaryFile</literal></entry>
+
+              <entry>ValueIO</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>readValueFromTextFile</literal></entry>
+
+              <entry>ValueIO</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>reducer</literal></entry>
+
+              <entry>List, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>references</literal></entry>
+
+              <entry>Resource</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>report</literal></entry>
+
+              <entry>UnitTest</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>reverse</literal></entry>
+
+              <entry>List, String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>right</literal></entry>
+
+              <entry>String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>root</literal></entry>
+
+              <entry>Resource</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>shortestPathPair</literal></entry>
+
+              <entry>Graph, LabelledGraph</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>show</literal></entry>
+
+              <entry>View</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>size</literal></entry>
+
+              <entry>List?, Map, Set, String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>slice</literal></entry>
+
+              <entry>List</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>sort</literal></entry>
+
+              <entry>List</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>startsWith</literal></entry>
+
+              <entry>String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>sum</literal></entry>
+
+              <entry>List, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>tail</literal></entry>
+
+              <entry>List</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>takeOneFrom</literal></entry>
+
+              <entry>List, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toInt</literal></entry>
+
+              <entry>Boolean</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toInteger</literal>!</entry>
+
+              <entry>Real</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toList</literal></entry>
+
+              <entry>Map, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toLowerCase</literal></entry>
+
+              <entry>String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toMap</literal></entry>
+
+              <entry>List, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>top</literal></entry>
+
+              <entry>Graph, LabelledGraph</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toReal</literal></entry>
+
+              <entry>Boolean, Integer</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toRel</literal></entry>
+
+              <entry>Map</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toSet</literal></entry>
+
+              <entry>List</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toString</literal></entry>
+
+              <entry>Boolean, Integer, List, Map, Real, Set</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>toUpperCase</literal></entry>
+
+              <entry>String</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>writeValueToBinaryFile</literal></entry>
+
+              <entry>ValueIO</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry><literal>writeValueToTextFile</literal></entry>
+
+              <entry>ValueIO</entry>
+
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table></para>
 
     <para></para>
   </section>
