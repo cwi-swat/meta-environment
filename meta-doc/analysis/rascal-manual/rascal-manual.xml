@@ -70,18 +70,18 @@
           synthesized by listing the most frequently used login names and IP
           addresses.</para>
         </example><example>
-          <title>A DSL compiler</title>
+          <title>A Forensic DSL compiler</title>
 
-          <para>Bernd is a senior software engineer at a German forensic
-          investigation lab. His daily work is to find common patterns in
-          files stored on digital media that have been confiscated during
-          criminal investigations. Text, audio and video files are stored in
-          zillions of different data formats and each data format requires its
-          own analysis technique. For each new investigation ad hoc
-          combinations of tools are used. This makes the process very
-          labour-intensive and error-prone. Bernd convinces his manager that
-          designing a new domain-specific language (DSL) for forensic
-          investigations may relieve the pressure on their lab. After
+          <para>Bernd is a senior software engineer working at the Berlin
+          headquarters of a German forensic investigation lab. His daily work
+          is to find common patterns in files stored on digital media that
+          have been confiscated during criminal investigations. Text, audio
+          and video files are stored in zillions of different data formats and
+          each data format requires its own analysis technique. For each new
+          investigation ad hoc combinations of tools are used. This makes the
+          process very labour-intensive and error-prone. Bernd convinces his
+          manager that designing a new domain-specific language (DSL) for
+          forensic investigations may relieve the pressure on their lab. After
           designing the DSL---let's call it DERRICK---he makes an EASY
           implementation for it. Given a DERRICK program for a specific case
           under investigation, he first extracts relevant information from it
@@ -90,7 +90,7 @@
           information, Java code is generated that uses the various existing
           tools and combines their results.</para>
         </example><example>
-          <title>Source code analysis</title>
+          <title> Renovation Financial Software</title>
 
           <para>Charlotte is software engineer at a large financial
           institution in Paris and she is looking for options to connect an
@@ -124,10 +124,40 @@
                          scale="50"></imagedata>
             </imageobject>
           </mediaobject>
-        </figure></para>
+        </figure><example>
+          <title>Finding Concurrency Errors</title>
 
-      <para>The Rascal language you are about to learn is designed for EASY
-      programming.</para>
+          <para>Daniel is concurrency researcher at one of the largests
+          hardware manufacturers worldwide. He is working from an office in
+          the Bay Area. Concurrency is the big issue for his company: it is
+          becoming harder and harder to make CPUs faster, therefore more and
+          of them are bundled on a single chip. Programming these multi-core
+          chips is difficult and many programs that worked fine on a single
+          CPU contain hard to detect concurrency errors due to subtle
+          differences in the order of execution that results from executing
+          the code on more than one CPU. Here is where Daniel enters the
+          picture. He is working on tools for finding concurrency errors.
+          First he extracts facts from the code that are relevant for
+          concurrency problems and have to do with calls, threads, shared
+          variables and locks. Next, he analyzes these facts and synthesizes
+          an abstract model that captures the essentials of the concurrency
+          behaviour of the program. Finally he runs a third-party verification
+          tool with this model as input to do the actual verification.</para>
+        </example></para>
+
+      <para>With these examples in mind, you have a pretty good picture how
+      EASY applies in different use cases. All these cases involve a form of
+      <emphasis>meta-programming</emphasis>: software programs are the
+      objects-of-interest that are being analyzed and transformed. The Rascal
+      language you are about to learn is designed for meta-programming
+      following the EASY paradigm. It can be applied in domains ranging from
+      compiler construction to constraint solving.</para>
+
+      <para>Since representation of data is central to the approach, Rascal
+      provides a rich set of built-in data types. To support extraction and
+      analysis, parsing and advanced pattern matching are provided. High-level
+      control structures make analysis and synthesis of complex datastructures
+      simple.</para>
     </section>
 
     <section>
@@ -325,181 +355,6 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
         pattern matching; side effects are undone in case of
         backtracking.</para>
       </section>
-    </section>
-
-    <section xml:id="section.xxx">
-      <title>TODO</title>
-
-      <formalpara>
-        <title>Application of Relations to Program Analysis</title>
-
-        <para>Many algorithms for program analysis are usually presented as
-        <emphasis>graph</emphasis> algorithms and this seems to be at odds
-        with the extensive experience of using <emphasis>term</emphasis>
-        rewriting for tasks as type checking, fact extraction, analysis and
-        transformation. The major obstacle is that graphs can and terms cannot
-        contain cycles. Fortunately, every graph can be represented as a
-        relation and it is therefore natural to have a look at the combination
-        of relations and term rewriting. Once you start considering problems
-        from a relational perspective, elegant and concise solutions start to
-        appear. Some examples are:</para>
-      </formalpara>
-
-      <itemizedlist>
-        <listitem>
-          <para>Analysis of call graphs and the structure of software
-          architectures.</para>
-        </listitem>
-
-        <listitem>
-          <para>Detailed analysis of the control flow or dataflow of
-          programs.</para>
-        </listitem>
-
-        <listitem>
-          <para>Program slicing.</para>
-        </listitem>
-
-        <listitem>
-          <para>Type checking.</para>
-        </listitem>
-
-        <listitem>
-          <para>Constraint problems.</para>
-        </listitem>
-      </itemizedlist>
-
-      <formalpara>
-        <title>What's new in Rscript?</title>
-
-        <para>Given the considerable amount of related work to be discussed
-        below, it is necessary to clearly establish what is and what is not
-        new in our approach:</para>
-      </formalpara>
-
-      <itemizedlist>
-        <listitem>
-          <para>We use sets and relations like Rigi <biblioref
-          linkend="Mueller88" /> and GROK <biblioref linkend="Holt96" /> do.
-          After extensive experimentation we have decided
-          <emphasis>not</emphasis> to use bags and multi-relations like in RPA
-          <biblioref linkend="FeijsKrikhaarOmmering98" />.</para>
-        </listitem>
-
-        <listitem>
-          <para>Unlike several other systems we allow
-          <emphasis>nested</emphasis> sets and relations and also support
-          <replaceable>n</replaceable>-ary relations as opposed to just binary
-          relations but don't support the complete repertoire of
-          <replaceable>n</replaceable>-ary relations as in SQL.</para>
-        </listitem>
-
-        <listitem>
-          <para>We offer a strongly typed language with user-defined
-          types.</para>
-        </listitem>
-
-        <listitem>
-          <para>Unlike Rigi <biblioref linkend="Mueller88" />, GROK <biblioref
-          linkend="Holt96" /> and RPA <biblioref
-          linkend="FeijsKrikhaarOmmering98" />we provide a relational
-          <emphasis>calculus</emphasis> as opposed to a relational algebra.
-          Although the two have the same expressive power, a calculus
-          increases, in our opinion, the readability of relational expressions
-          because they allow the introduction of variables to express
-          intermediate results.</para>
-        </listitem>
-
-        <listitem>
-          <para>We integrate an equation solver in a relational language. In
-          this way dataflow problems can be expressed.</para>
-        </listitem>
-
-        <listitem>
-          <para>We introduce an <emphasis>location</emphasis> datatype with
-          associated operations to easily manipulate references to source
-          code.</para>
-        </listitem>
-
-        <listitem>
-          <para>There is some innovation in syntactic notation and specific
-          built-in functions.</para>
-        </listitem>
-
-        <listitem>
-          <para>We introduce the notion of an Rstore that generalizes the RSF
-          tuple format of Rigi. An Rstore consists of name/value pairs, where
-          the values may be arbitrary nested bags or relations. An Rstore is a
-          language-independent exchange format and can be used to exchange
-          complex relational data between programs written in different
-          languages.</para>
-
-          <para></para>
-
-          <!--\section{Background}
-
-
-\paragraph{Relation-oriented Languages}
-There is a long tradition in Computer Science to organize languages around one
-a more prominent data types such as lists (Lisp), strings (SNOBOL), arrays
-(APL) or sets (SETL).  We use sets and relations as primary datatypes and the
-sets and set formers in SETL~\cite{SETL} are the best historic reference for
-them. Set formers have later on be popularized in various functional languages
-since they were introduced in KRC~\cite{Turner82}.  An overview of languages
-centered around collection types such as sets and bags is given in
-~\cite{Tannen94}.  Database languages in general and SQL in particular are
-described in~\cite{Ullman82}.  The connection between comprehensions and
-relational algebra is described in~\cite{WadlerLists87,Trinder89}. A further
-analysis of this topic is given in~\cite{Buneman94}.
-
-Systems supporting relational programming include RELVIEW~\cite{RELVIEW98}
-(intended for the interactive creation and visualization of relations
-and the prototyping of graph algorithms), ...
-
-\paragraph{Relations and Program Analysis}
-
-The idea to represent relational views of programs is already quite old.  For
-instance, in~\cite{Linton84} all syntactic as well as semantic aspects of a
-program were represented by relations and SQL was used to query them. Due to
-the lack of expressiveness of SQL (notably the lack of transitive closures)
-and the performance problems encountered, this approach has not seen wider
-use.  In Rigi~\cite{Mueller88}, a tuple format (RSF) is introduced to
-represent relations and a language (RCL) to manipulate them.
-In~\cite{PaulPrakash94} a \emph{source code algebra} is described that can be
-used to express relational queries on source text.  In~\cite{BKV96b} a
-\emph{query algebra} is formulated to express direct queries on the syntax
-tree. It also allows the querying of information that is attached to the
-syntax tree via annotations.  Relational algebra is used in GROK~\cite{Holt96}
-and Relation Partition Algebra
-(RPA)~\cite{FeijsKrikhaarOmmering98,Feijs99,Krikhaar99} to represent basic
-facts about software systems and to query them.  In GUPRO~\cite{GUPRO98}
-graphs are used to represent programs and to query them. In
-F(p) $\ell$~\cite{CanforRaEtAl99} a Prolog database and a special-purpose
-language are used to represent and query program facts.
-
-The requirements for a query language for reverse engineering are discussed
-in~\cite{holt-towards}.
-
-
-
-\section{Plan for this Tutorial}
-
-In Chapter~\ref{SEC:motivating-example} we first provide a motivating example
-of our relational approach.
-In Chapter~\ref{SEC:rscript-language} follows a complete description
-of all the features in \rscript.
-In the following Chapters~\ref{SEC:operators} and \ref{SEC:functions}
-all built-in operators and functions are described.
-The most interesting part of this tutorial is probably
-Chapter~\ref{SEC:larger-examples} where we present a menagerie of larger
-examples ranging from computing the McCabe complexity of code, analyzing the
-component structure of systems, to program slicing.
-Chapter~\ref{SEC:running-rscript} describes how to run an \rscript.
-Two appendices complete this tutorial:
-Appendix~\ref{AP:operators} summarizes all built-in operators
-and Appendix~\ref{AP:functions} summarizes all built-in functions.-->
-        </listitem>
-      </itemizedlist>
     </section>
   </section>
 
@@ -1117,46 +972,327 @@ alias Frequency = int;</programlisting>
       describing the variants of the datatype. For instance, <programlisting>data Bool = btrue | bfalse | band(Bool L, Bool R)  | bor(Bool L, Bool R);  </programlisting>defines
       the datatype <literal>Bool</literal> that contains various constants and
       constructor functions.</para>
+    </section>
 
-      <formalpara>
-        <title>Type Equivalence</title>
+    <section>
+      <title>Typing</title>
 
-        <para>An Rscript should be <emphasis>well-typed</emphasis>, this means
-        above all that identifiers that are used in expressions have been
-        declared, and that operations and functions should have operands of
-        the required type. We use <emphasis>structural equivalence</emphasis>
-        between types as criterion for type equality. The equivalence of two
-        types <replaceable>T</replaceable><subscript>1</subscript> and
-        <replaceable>T</replaceable><subscript>2</subscript> can be determined
-        as follows:</para>
-      </formalpara>
+      <para>Rascal is based on static typing, this means that as many errors
+      and inconsistencies as possible are spotted before the program is
+      executed. TODO</para>
+    </section>
 
-      <itemizedlist>
-        <listitem>
-          <para>Replace in both
-          <replaceable>T</replaceable><subscript>1</subscript> and
-          <replaceable>T</replaceable><subscript>2</subscript> all
-          user-defined types by their definition until all user-defined types
-          have been eliminated. This may require repeated replacements. This
-          gives, respectively,
-          <replaceable>T</replaceable><subscript>1</subscript>' and
-          <replaceable>T</replaceable><subscript>2</subscript>'.</para>
-        </listitem>
+    <section>
+      <title>Expressions</title>
 
-        <listitem>
-          <para>If <replaceable>T</replaceable><subscript>1</subscript>' and
-          <replaceable>T</replaceable><subscript>2</subscript>' are identical,
-          then <replaceable>T</replaceable><subscript>1</subscript> and
-          <replaceable>T</replaceable><subscript>2</subscript> are
-          equal.</para>
-        </listitem>
+      <para><table xml:id="table.set-operators">
+          <title>Non-Boolean Operators</title>
 
-        <listitem>
-          <para>Otherwise <replaceable>T</replaceable><subscript>1</subscript>
-          and <replaceable>T</replaceable><subscript>2</subscript> are not
-          equal.</para>
-        </listitem>
-      </itemizedlist>
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="1*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Operator</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                [ <replaceable>name</replaceable> =
+                <replaceable>exp</replaceable><subscript>2</subscript>
+                ]</entry>
+
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>should
+                evaluate to a datatype with a field
+                <replaceable>name</replaceable>; assign value
+                <replaceable>exp</replaceable><subscript>2</subscript> to that
+                field</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable> .
+                <replaceable>name</replaceable></entry>
+
+                <entry><replaceable>exp </replaceable>should evaluate to a
+                datatype with field <replaceable>name</replaceable>; return
+                the value of that field</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable> &lt; field, ...
+                &gt;</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>exp [ exp, ... ]</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>- <replaceable>exp</replaceable></entry>
+
+                <entry>negation on integer or real</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable> +</entry>
+
+                <entry>transitive closure on relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable> *</entry>
+
+                <entry>reflexive transitive closure on relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable> @ name</entry>
+
+                <entry>value of attribute <replaceable>name</replaceable> of
+                <replaceable>exp</replaceable>'s value</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                [@ name
+                =<replaceable>exp</replaceable><subscript>2</subscript>]</entry>
+
+                <entry>assign value of<replaceable>
+                exp</replaceable><subscript>2</subscript> to attribute
+                <replaceable>name</replaceable> of
+                <replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>'s
+                value</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                o
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Composition on relations</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                /
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Division on integer and real</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                %
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Modulo on integer</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>*</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Multiplication on integer and real; product on list,
+                set, relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>&amp;</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Intersection on list, set, map and relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>+</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Addition on integer and real; concatenation on string,
+                list and tuple; union on set, map, and relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>-</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Subtraction on integer and real; difference on list,
+                set, map, and relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+                join
+                <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+
+                <entry>Join on relation</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table><table xml:id="table.set-operators">
+          <title>Boolean Operators</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="1*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Operator</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>! exp</entry>
+
+                <entry>Negation</entry>
+              </row>
+
+              <row>
+                <entry>exp ?</entry>
+
+                <entry>Isdefined: true is exp has a well-defined value</entry>
+              </row>
+
+              <row>
+                <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+                <literal>in</literal>
+                <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+
+                <entry>Element of</entry>
+              </row>
+
+              <row>
+                <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+                <literal>notin</literal>
+                <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+
+                <entry>Not element of</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>&lt;=</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Less than or equal on bool, int, real or string;
+                sublist on list; subset on set, map or relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>&lt;</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Less than on bool, int, real or string; strict sublist
+                on list; strict subset on set, map or relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>&gt;=</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Greater than or equal on bool, int, real or string;
+                superlist on list; superset on set, map or relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>&gt;</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Greater than on bool, int, real or string; strict
+                superlist on list; strict superset on set, map or
+                relation</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>==</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Equality</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                <literal>!=</literal>
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Inequality</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                ?
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Ifdefined Otherwise: the value of
+                <replaceable>exp</replaceable><subscript>1</subscript> is it
+                is well-defined, otherwise the value of
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                ? <replaceable>exp</replaceable><subscript>2</subscript> :
+                <replaceable>exp</replaceable><subscript>3</subscript></entry>
+
+                <entry>Conditional expression</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                ==&gt;
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Implication</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                &lt;==&gt;
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Equivalence</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                &amp;&amp;
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Boolean and</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                ||
+                <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                <entry>Boolean or</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
     </section>
 
     <section>
@@ -1168,141 +1304,133 @@ alias Frequency = int;</programlisting>
     <section>
       <title>Comprehensions</title>
 
-      <para>We will use the familiar notation<programlisting>{<replaceable>E</replaceable><subscript>1</subscript>, ..., <replaceable>E</replaceable><subscript><replaceable>m</replaceable></subscript> | <replaceable>G</replaceable><subscript>1</subscript>, ..., <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>}</programlisting></para>
+      <para>We will use the familiar notation for <emphasis>list
+      comprehension</emphasis><programlisting>[<replaceable>E</replaceable> | <replaceable>G</replaceable><subscript>1</subscript>, ..., <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>]</programlisting></para>
 
-      <para>to denote the construction of a set consisting of the union of
-      successive values of the expressions
-      <replaceable>E</replaceable><subscript>1</subscript> ,...,
-      <replaceable>E</replaceable><subscript><replaceable>m</replaceable></subscript>.
-      The values and the generated set are determined by
-      <replaceable>E</replaceable><subscript>1</subscript> ,...,
-      <replaceable>E</replaceable><subscript><replaceable>m</replaceable></subscript>
-      and the <emphasis>generators</emphasis>
+      <para>to denote the construction of a list consisting of the successive
+      values of the <emphasis>contributing expression</emphasis>
+      <replaceable>E</replaceable>. The values and the resulting list are
+      determined by <replaceable>E</replaceable> and the
+      <emphasis>generators</emphasis>
       <replaceable>G</replaceable><subscript>1</subscript> ,...,
       <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>.
       <replaceable>E</replaceable> is computed for all possible combinations
       of values produced by the generators. Each generator may introduce new
       variables that can be used in subsequent generators as well as in the
-      expressions <replaceable>E</replaceable><subscript>1</subscript> ,...,
-      <replaceable>E</replaceable><subscript><replaceable>m</replaceable></subscript>.
-      A generator can use the variables introduced by preceding generators.
-      Generators may enumerate all the values in a set or relation, they may
-      perform a test, or they may assign a value to variables.</para>
+      expressions <replaceable>E</replaceable>. A generator can use the
+      variables introduced by preceding generators. Generators may enumerate
+      all the values in a set or relation, or they may perform an arbitrary
+      test.</para>
+
+      <para>In addition to list comprehensions, Rascal also support
+      <emphasis>set comprehension</emphasis><programlisting>{<replaceable>E</replaceable> | <replaceable>G</replaceable><subscript>1</subscript>, ..., <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>}</programlisting>and
+      <replaceable>map comprehension</replaceable>:</para>
+
+      <programlisting>(<replaceable>E</replaceable><subscript>1</subscript> : <replaceable>E</replaceable><subscript>2</subscript> | <replaceable>G</replaceable><subscript>1</subscript>, ..., <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>)</programlisting>
+
+      <para>Since the entries in a map require both a key and a value for each
+      entry, two expressions are needed in this case.</para>
 
       <section>
-        <title>Generators</title>
+        <title>Enumerator</title>
 
-        <formalpara>
-          <title>Enumerator</title>
+        <para>An enumerator generates all the values in a given list, set,
+        map, tuple, relation or abstract datatype. They have the following
+        form:<programlisting><replaceable>P</replaceable> &lt;- <replaceable>E</replaceable></programlisting></para>
 
-          <para>Enumerators generate all the values in a given set or
-          relation. They come in two flavors:</para>
-        </formalpara>
+        <para>where <replaceable>P</replaceable> is a pattern and
+        <replaceable>E</replaceable> is an expression. An enumerator is
+        evaluated as follows:</para>
 
         <itemizedlist>
           <listitem>
-            <para><replaceable>T</replaceable> <replaceable>V</replaceable>
-            <literal>:</literal> <replaceable>E</replaceable>: the elements of
-            the set <replaceable>S</replaceable> (of type
-            <literal>set[<replaceable>T</replaceable>]</literal>) that results
-            from the evaluation of expression <replaceable>E</replaceable> are
-            enumerated and subsequently assigned to the new variable
-            <replaceable>V</replaceable> of type <replaceable>T</replaceable>.
-            Examples are:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><literal>int N : {1, 2, 3, 4, 5}</literal>,</para>
-              </listitem>
-
-              <listitem>
-                <para><literal>str K : KEYWORDS</literal>, where
-                <literal>KEYWORDS</literal> should evaluate to a value of
-                <literal>set[str]</literal>.</para>
-              </listitem>
-            </itemizedlist>
+            <para>Expression <replaceable>E</replaceable> is evaluated and may
+            have an arbitrary value <replaceable>V</replaceable>.</para>
           </listitem>
 
           <listitem>
-            <para><literal>&lt;<replaceable>D</replaceable><subscript>1</subscript>,
-            ...,
-            <replaceable>D</replaceable><subscript><replaceable>n</replaceable></subscript>&gt;
-            : <replaceable>E</replaceable></literal>: the elements of the
-            relation <replaceable>R</replaceable> (of type
-            <literal>rel</literal>[<replaceable>T</replaceable>'<subscript>1</subscript>,...,<replaceable>T</replaceable>'<subscript><replaceable>n</replaceable></subscript>],
-            where
-            <replaceable>T</replaceable>'<subscript><replaceable>i</replaceable></subscript>
-            is determined by the type of each target
-            <replaceable>D</replaceable><subscript><replaceable>i</replaceable></subscript>,
-            see below) that results from the evaluation of expression
-            <replaceable>E</replaceable> are enumerated. The
-            <replaceable>i</replaceable>-the element
-            (<replaceable>i</replaceable>=1,...,<replaceable>n</replaceable>)
-            of the resulting <replaceable>n</replaceable>-tuple is
-            subsequently combined with each target
-            <replaceable>D</replaceable><subscript><replaceable>i</replaceable></subscript>
-            as follows:</para>
+            <para>The elements of <replaceable>V</replaceable> are enumerated
+            one by one.</para>
+          </listitem>
+
+          <listitem>
+            <para>Each element value is matched against the pattern
+            <replaceable>P</replaceable>. There are two cases:</para>
 
             <itemizedlist>
               <listitem>
-                <para>If
-                <replaceable>D</replaceable><subscript><replaceable>i</replaceable></subscript>
-                is a variable declaration of the form
-                <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
-                <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>,
-                then the <replaceable>i</replaceable>-th element is assigned
-                to
-                <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>.</para>
+                <para>The match succeeds, any variables in
+                <replaceable>P</replaceable> are bound, and the next generator
+                in the comprehension is evaluated. The variables that are
+                introduced by an enumartor are only available to generators
+                that appear later (i.e., to the right) in the comprehension.
+                When this enumerator is the last generator in the
+                comprehension its contributing expression is evaluated.</para>
               </listitem>
 
               <listitem>
-                <para>If
-                <replaceable>D</replaceable><subscript><replaceable>i</replaceable></subscript>
-                is an arbitrary expression
-                <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
-                then the value of the <replaceable>i</replaceable>-th element
-                should be equal to the value of
-                <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>.
-                If they are unequal, computation continues with enumerating
-                the next tuple in the relation
-                <replaceable>R</replaceable>.</para>
-              </listitem>
-            </itemizedlist>
-
-            <para>Examples are:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><literal>&lt;str K, int N&gt; : {&lt;"a",10&gt;,
-                &lt;"b",20&gt;, &lt;"c",30&gt;}</literal>.</para>
-              </listitem>
-
-              <listitem>
-                <para><literal>&lt;str K, int N&gt; : FREQUENCIES</literal>,
-                where <literal>FREQUENCIES</literal> should evaluate to a
-                value of type <literal>rel[str,int]</literal>.</para>
-              </listitem>
-
-              <listitem>
-                <para><literal>&lt;str K, 10&gt; : FREQUENCIES</literal>, will
-                only generate pairs with <literal>10</literal> as second
-                element.</para>
+                <para>The match fails, no variables are bound. If V has more
+                elements, a next element is tried. Otherwise, a previous
+                generator (i.e., to the left) is tried. If this enumerator is
+                the first generator in the comprehension, the evaluation of
+                the comprehension is complete.</para>
               </listitem>
             </itemizedlist>
           </listitem>
         </itemizedlist>
 
-        <formalpara>
-          <title>Test</title>
+        <para>This are examples of enumerators:</para>
 
-          <para>A test is a boolean-valued expression. If the evaluation
-          yields <literal>true</literal> this indicates that the current
-          combination of generated values up to this test is still as desired
-          and execution continues with subsequent generators. If the
-          evaluation yields <literal>false</literal> this indicates that the
-          current combination of values is undesired, and that another
-          combination should be tried. Examples:</para>
-        </formalpara>
+        <itemizedlist>
+          <listitem>
+            <para><literal>int N &lt;- {1, 2, 3, 4, 5}</literal>,</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>str K &lt;- KEYWORDS</literal>, where
+            <literal>KEYWORDS</literal> should evaluate to a value of
+            <literal>set[str]</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;str K, int N&gt; &lt;- {&lt;"a",10&gt;,
+            &lt;"b",20&gt;, &lt;"c",30&gt;}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;str K, int N&gt; &lt;- FREQUENCIES</literal>,
+            where <literal>FREQUENCIES</literal> should evaluate to a value of
+            type <literal>rel[str,int]</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;str K, 10&gt; &lt;- FREQUENCIES</literal>, will
+            only generate pairs with <literal>10</literal> as second
+            element.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para><note>
+            <para>Type information will be used to check the plausibity of an
+            enumerator and guard you against mistakes. An impossible
+            enumerator like <literal>int N &lt;- {"apples",
+            "oranges"}</literal> will be flagged as an error since the pattern
+            can never match.</para>
+          </note></para>
+      </section>
+
+      <section>
+        <title>Test</title>
+
+        <para>A test is a boolean-valued expression. If the evaluation yields
+        <literal>true</literal> this indicates that the current combination of
+        generated values up to this test is still as desired and execution
+        continues with subsequent generators. If the evaluation yields
+        <literal>false</literal> this indicates that the current combination
+        of values is undesired, and that another combination should be tried
+        by going back to a previous generator.</para>
+
+        <para>Examples:</para>
 
         <itemizedlist>
           <listitem>
@@ -1320,90 +1448,7 @@ alias Frequency = int;</programlisting>
 
         <para>In both examples, the variable (<literal>N</literal>,
         respectively, <literal>S</literal>) should have been introduced by a
-        generator that occurs earlier in the enclosing comprehension.</para>
-
-        <formalpara>
-          <title>Assignment</title>
-
-          <para>Assignments assign a value to one or more variables and also
-          come in two flavors:</para>
-        </formalpara>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal><replaceable>T</replaceable>
-            <replaceable>V</replaceable> &lt;-
-            <replaceable>E</replaceable></literal>: assigns the value of
-            expression <replaceable>E</replaceable> to the new variable
-            <replaceable>V</replaceable> of type
-            <replaceable>T</replaceable>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>&lt;<replaceable>R</replaceable><subscript>1</subscript>,
-            ...,
-            <replaceable>R</replaceable><subscript><replaceable>n</replaceable></subscript>&gt;
-            &lt;- <replaceable>E</replaceable></literal>: combines the
-            elements of the <replaceable>n</replaceable>-tuple resulting from
-            the evaluation of expression <replaceable>E</replaceable> with
-            each
-            <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
-            as follows:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>If
-                <replaceable>R</replaceable><subscript><replaceable>i</replaceable></subscript>
-                is a variable declaration of the form
-                <literal><replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
-                <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript></literal>,
-                then the <replaceable>i</replaceable>-th element is assigned
-                to
-                <literal><replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript></literal>.</para>
-              </listitem>
-
-              <listitem>
-                <para>If
-                <replaceable>R</replaceable><subscript><replaceable>i</replaceable></subscript>
-                is an arbitrary expression
-                <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
-                then the value of the <replaceable>i</replaceable>-th element
-                should be equal to the value of
-                <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>.
-                If they are unequal, the assignment acts as a test that fails
-                (see above).</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
-
-        <para>Examples of assignments are:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>rel[str,str] ALLCALLS &lt;- CALLS+</literal>
-            assigns the transitive closure of the relation
-            <literal>CALLS</literal> to the variable
-            <literal>ALLCALLS</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>bool Smaller &lt;- A &lt;= B</literal> assigns the
-            result of the test <literal>A &lt;= B</literal> to the Boolean
-            variable <literal>Smaller</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>&lt;int N, str S, 10&gt; &lt;- E</literal>
-            evaluates expression <literal>E</literal> (which should yield a
-            tuple of type <literal>&lt;int, str, int&gt;</literal>) and
-            performs a tuple-wise assignment to the new variables
-            <literal>N</literal> and <literal>S</literal>
-            <emphasis>provided</emphasis> that the third element of the result
-            is equal to <literal>10</literal>. Otherwise the assignment acts
-            as a test that fails.</para>
-          </listitem>
-        </itemizedlist>
+        generator that occurs earlier in the comprehension.</para>
       </section>
 
       <section>
@@ -1447,6 +1492,111 @@ alias Frequency = int;</programlisting>
       <title>Other control flow</title>
 
       <para></para>
+
+      <section>
+        <title>While</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Do</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>For</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>One</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>All</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Solve</title>
+
+        <para>It is also possible to define mutually dependent sets of
+        equations:<programlisting>equations
+       initial
+          <literal><replaceable>T</replaceable></literal><subscript>1</subscript> <replaceable>V</replaceable><subscript>1</subscript> init <replaceable>I</replaceable><subscript>1</subscript>
+          ...
+          <literal><replaceable>T</replaceable></literal><subscript><replaceable>n</replaceable></subscript> <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript> init <replaceable>I</replaceable><subscript><replaceable>n</replaceable></subscript>
+       satisfy
+          <replaceable>V</replaceable><subscript>1</subscript> = <replaceable>E</replaceable><subscript>1</subscript>
+          ...
+          <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript> = <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
+end equations</programlisting></para>
+
+        <para>In the <literal>initial</literal> section, the variables
+        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>
+        are declared and initialized. In the <literal>satisfy</literal>
+        section, the actual set of equations is given. The expressions
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
+        may refer to any of the variables
+        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>
+        (and to any variables declared earlier). This set of equations is
+        solved by evaluating the expressions
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
+        assigning their value to the corresponding variables
+        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>,
+        and repeating this as long as the value of one of the variables was
+        changed. This is typically used for solving a set of dataflow
+        equations. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Although transitive closure is provided as a built-in
+            operator, we can use equations to define the transitive closure of
+            a relation. Recall that \[R+ = R \cup (R \circ R) \cup (R \circ R
+            \circ R) \cup ... .\] This can be expressed as follows.<warning>
+                <para>Fix expression.</para>
+              </warning></para>
+
+            <para><programlisting>rel[int,int] R =  {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}
+
+equations
+  initial
+     rel[int,int] T init R
+  satisfy
+     T = T union (T o R)
+end equations</programlisting></para>
+
+            <para>The resulting value of <literal>T</literal> is as
+            expected:<programlisting>{&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;1, 3&gt;, &lt;2, 4&gt;, &lt;1, 4&gt;}</programlisting></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Assertions</title>
+
+      <para>An assert statement may occur everywhere where a declaration is
+      allowed. It has the form<programlisting>assert <replaceable>L</replaceable>: <replaceable>E</replaceable></programlisting>where
+      <replaceable>L</replaceable> is a string that serves as a label for this
+      assertion, and <replaceable>E</replaceable> is a boolean-value
+      expression. During execution, a list of true and false assertions is
+      maintained. When the script is executed as a <emphasis>test
+      suite</emphasis> a summary of this information is shown to the user.
+      When the script is executed in the standard fashion, the assert
+      statement has no affect. Example:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><programlisting>assert "Equality on Sets 1": {1, 2, 3, 1} == {3, 2, 1, 1}</programlisting></para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section xml:id="section.declarations">
@@ -1569,80 +1719,124 @@ alias Frequency = int;</programlisting>
           </listitem>
         </itemizedlist>
       </section>
+    </section>
+
+    <section>
+      <title>Attributes</title>
+
+      <para>Attributes are adornments of data and programs and come in two
+      flavours:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>node annotations</emphasis> that allow associating
+          one or more named values with nodes in a tree.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>declaration tags</emphasis> that allow associating
+          one or more named values to a declaration in a Rascal
+          program.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The former are intended to attach application data to values, like
+      adding position information or control flow information to source code
+      or adding visualization information to a relation. The latter are
+      intended to add metadata to a Rascal program and allow to influence the
+      execution of the Rascal program, for instance, by adding memoization
+      hints or database mappings for relations.</para>
 
       <section>
-        <title>Assertions</title>
+        <title>Node annotations</title>
 
-        <para>An assert statement may occur everywhere where a declaration is
-        allowed. It has the form<programlisting>assert <replaceable>L</replaceable>: <replaceable>E</replaceable></programlisting>where
-        <replaceable>L</replaceable> is a string that serves as a label for
-        this assertion, and <replaceable>E</replaceable> is a boolean-value
-        expression. During execution, a list of true and false assertions is
-        maintained. When the script is executed as a <emphasis>test
-        suite</emphasis> a summary of this information is shown to the user.
-        When the script is executed in the standard fashion, the assert
-        statement has no affect. Example:</para>
+        <para>An annotation may be associated with any node value. An
+        annotation has a name and the type of its value is explicitly
+        declared. Any value of any named type can be annotated and the type of
+        these annotations can be declared precisely.</para>
+
+        <para>For instance, we can add to certain syntactic constructs of
+        programs (e.g., <literal>EXPRESSION</literal>) an annotation with name
+        <literal>posinfo</literal> that contains location
+        information:<programlisting>anno loc EXPRESSION @ posinfo;</programlisting>or
+        location information could be added for all syntax
+        trees:<programlisting>anno loc node @ posinfo;</programlisting></para>
+
+        <para>We can add to the graph datatype introduced earlier, the
+        annotation with name <literal>LayoutStrategy</literal> that defines
+        which graph layout algorithm to apply to a particular graph,
+        e.g.,<programlisting>data LayoutStrategy = "dot" | "tree" | "force" | 
+                      "hierarchy" | "fisheye";
+
+anno LayoutStrategy Graph @ strategy;</programlisting></para>
+
+        <para>The folllowing constructs are provided for handling
+        annotations:</para>
 
         <itemizedlist>
           <listitem>
-            <para><programlisting>assert "Equality on Sets 1": {1, 2, 3, 1} == {3, 2, 1, 1}</programlisting></para>
+            <para><literal><replaceable>Val</replaceable> @
+            <replaceable>Anno</replaceable></literal>: get the value of
+            annotation <replaceable>Anno</replaceable> of value
+            <replaceable>Val</replaceable> (may be undefined!).</para>
+          </listitem>
+
+          <listitem>
+            <para><literal><replaceable>Val1</replaceable>[@<replaceable>Anno</replaceable>
+            = <replaceable>Val2]</replaceable></literal>: set the value of
+            annotation <replaceable>Anno</replaceable> of the value
+            <replaceable>Val</replaceable><replaceable>1</replaceable> to
+            <replaceable>Val2</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal><replaceable>Var</replaceable> @
+            <replaceable>Anno</replaceable> =
+            <replaceable>Val</replaceable></literal>: set the value of
+            annotation <replaceable>Anno</replaceable> of the value of
+            variable <replaceable>Var</replaceable> to
+            <replaceable>Val</replaceable>.</para>
           </listitem>
         </itemizedlist>
       </section>
 
       <section>
-        <title>Equations</title>
+        <title>Declaration tags</title>
 
-        <para>It is also possible to define mutually dependent sets of
-        equations:<programlisting>equations
-       initial
-          <literal><replaceable>T</replaceable></literal><subscript>1</subscript> <replaceable>V</replaceable><subscript>1</subscript> init <replaceable>I</replaceable><subscript>1</subscript>
-          ...
-          <literal><replaceable>T</replaceable></literal><subscript><replaceable>n</replaceable></subscript> <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript> init <replaceable>I</replaceable><subscript><replaceable>n</replaceable></subscript>
-       satisfy
-          <replaceable>V</replaceable><subscript>1</subscript> = <replaceable>E</replaceable><subscript>1</subscript>
-          ...
-          <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript> = <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
-end equations</programlisting></para>
-
-        <para>In the <literal>initial</literal> section, the variables
-        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>
-        are declared and initialized. In the <literal>satisfy</literal>
-        section, the actual set of equations is given. The expressions
-        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
-        may refer to any of the variables
-        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>
-        (and to any variables declared earlier). This set of equations is
-        solved by evaluating the expressions
-        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
-        assigning their value to the corresponding variables
-        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>,
-        and repeating this as long as the value of one of the variables was
-        changed. This is typically used for solving a set of dataflow
-        equations. Example:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Although transitive closure is provided as a built-in
-            operator, we can use equations to define the transitive closure of
-            a relation. Recall that \[R+ = R \cup (R \circ R) \cup (R \circ R
-            \circ R) \cup ... .\] This can be expressed as follows.<warning>
-                <para>Fix expression.</para>
-              </warning></para>
-
-            <para><programlisting>rel[int,int] R =  {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}
-
-equations
-  initial
-     rel[int,int] T init R
-  satisfy
-     T = T union (T o R)
-end equations</programlisting></para>
-
-            <para>The resulting value of <literal>T</literal> is as
-            expected:<programlisting>{&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;1, 3&gt;, &lt;2, 4&gt;, &lt;1, 4&gt;}</programlisting></para>
-          </listitem>
-        </itemizedlist>
+        <para><warning>
+            <para>Tags are not yet implemented.</para>
+          </warning><warning>
+            <para>The syntax of tags has to be aligned with the syntax of
+            annotations. This is done in the examples below but not yet in the
+            synyax.</para>
+          </warning>All declarations in a Rascal program may contain (in fixed
+        positions depending on the declaration type) one or more declaration
+        tags (<literal>tag</literal>). A tag is defined by declaring its name,
+        the declaration type to which it can be attached, and the name and
+        type of the annotation. The declaration type <literal>all</literal>,
+        makes the declaration tag applicable for all possible declaration
+        types. All declaration tags have the generic format
+        <literal>@<replaceable>Name</replaceable>{ ... }</literal>, with
+        arbitrary text between the brackets that is further constrained by the
+        declared type. Here is an example of a license tag:<programlisting>tag str license on module;</programlisting>This
+        will allow to write things like:<programlisting>module Booleans
+@license{This module is distributed under the GPL}
+...</programlisting>Other examples of declaration tags are:<programlisting>tag str todo on all             %% a todo note for all declaration types
+tag void deprecated on function %% marks a deprecated function
+tag int memo on function        %% bounded memoization of 
+                                %% function calls
+tag str doc on all              %% documentation string
+tag str primitive on function   %% a primitive, built-in, function</programlisting>Here
+        is an example of a documentation string as used in the Rascal standard
+        library:<programlisting>public &amp;T max(set[&amp;T] R)
+  @doc{Maximum of a set: max}
+{
+  &amp;T result = arb(R);
+  for(&amp;T E : R){
+    result = max(result, E);
+  }
+  return result;
+}</programlisting></para>
       </section>
     </section>
   </section>
@@ -1676,8 +1870,8 @@ end equations</programlisting></para>
       </listitem>
 
       <listitem>
-        <para>Integer: operators and functions on the integer datatype, see
-        <xref linkend="section.lib-Integer" />.</para>
+        <para>Integer: operators and functions on integers, see <xref
+        linkend="section.lib-Integer" />.</para>
       </listitem>
 
       <listitem>
@@ -1691,22 +1885,22 @@ end equations</programlisting></para>
       </listitem>
 
       <listitem>
-        <para>List: operators and functions on the list datatype, see <xref
+        <para>List: operators and functions on lists, see <xref
         linkend="section.lib-List" />.</para>
       </listitem>
 
       <listitem>
-        <para>Location: operators and functions on the source location
-        datatype, see <xref linkend="section.lib-Location" />.</para>
+        <para>Location: operators and functions on source locations, see <xref
+        linkend="section.lib-Location" />.</para>
       </listitem>
 
       <listitem>
-        <para>Map: operators and functions on the map datatype, see <xref
+        <para>Map: operators and functions on maps, see <xref
         linkend="section.lib-Map" />.</para>
       </listitem>
 
       <listitem>
-        <para>Node: operators and functions on maps, see <xref
+        <para>Node: operators and functions on nodes, see <xref
         linkend="section.lib-Map" />.</para>
       </listitem>
 
@@ -1747,8 +1941,12 @@ end equations</programlisting></para>
 
       <listitem>
         <para>ValueIO: functions for reading and writing Rascal values, both
-        in textual and in binary form. See <xref
+        in textual and in binary form, see <xref
         linkend="section.lib-ValueIO" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>Void: the type void, see </para>
       </listitem>
     </itemizedlist>
 
@@ -1760,23 +1958,39 @@ end equations</programlisting></para>
 
       <para></para>
 
-      <itemizedlist>
-        <listitem>
-          <para>currentTimeMillis -- current time in milliseconds since
-          January 1, 1970 GMT.</para>
-        </listitem>
+      <table>
+        <title>Benchmark Functions</title>
 
-        <listitem>
-          <para>benchmark -- measure and report the execution time of
-          name:void-closure pairs.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="1*" />
 
-    <section xml:id="section.lib-Boolean">
-      <title xml:id="section.Boolean">Boolean</title>
+          <colspec align="left" colname="col2" colwidth="3*" />
 
-      <para></para>
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>real currentTimeMillis()</entry>
+
+              <entry>current time in milliseconds since January 1, 1970
+              GMT.</entry>
+            </row>
+
+            <row>
+              <entry>p.m. benchmark</entry>
+
+              <entry>measure and report the execution time of
+              name:void-closure pairs.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
 
     <section xml:id="section.builtin-operator-bool">
@@ -1786,9 +2000,9 @@ end equations</programlisting></para>
         <title> Boolean Operators</title>
 
         <tgroup cols="2">
-          <colspec align="left" colname="col1" colnum="1" colwidth="1*" />
+          <colspec align="left" colname="col1" colwidth="1*" />
 
-          <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
+          <colspec align="left" colname="col2" colwidth="3*" />
 
           <thead>
             <row>
@@ -1799,6 +2013,72 @@ end equations</programlisting></para>
           </thead>
 
           <tbody>
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are
+              identical<literal></literal></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are not
+              identical</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are identical
+              or <replaceable>bool</replaceable><subscript>1</subscript> is
+              <literal>false</literal> and
+              <replaceable>bool</replaceable><subscript>2</subscript> is
+              <literal>true</literal> </entry>
+            </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>bool</replaceable><subscript>1</subscript> is
+              <literal>false</literal> and
+              <replaceable>bool</replaceable><subscript>2</subscript> is
+              <literal>true</literal> </entry>
+            </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are identical
+              or <replaceable>bool</replaceable><subscript>1</subscript> is
+              <literal>true</literal> and
+              <replaceable>bool</replaceable><subscript>2</subscript> is
+              <literal>false</literal> </entry>
+            </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <literal>&gt;</literal>
+              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>bool</replaceable><subscript>1</subscript> is
+              <literal>true</literal> and
+              <replaceable>bool</replaceable><subscript>2</subscript> is
+              <literal>false</literal> </entry>
+            </row>
+
             <row>
               <entry><replaceable>bool</replaceable><subscript>1</subscript>
               <literal>&amp;&amp;</literal>
@@ -1836,6 +2116,18 @@ end equations</programlisting></para>
 
               <entry>yields true if bool is false and true otherwise</entry>
             </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript> ?
+              <replaceable>bool</replaceable><subscript>2</subscript> :
+              <replaceable>bool</replaceable><subscript>3</subscript></entry>
+
+              <entry>if
+              <replaceable>bool</replaceable><subscript>1</subscript> is true
+              then <replaceable>bool</replaceable><subscript>2</subscript>
+              else
+              <replaceable>bool</replaceable><subscript>3</subscript></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -1850,7 +2142,7 @@ end equations</programlisting></para>
 
           <thead>
             <row>
-              <entry>Operator</entry>
+              <entry>Function</entry>
 
               <entry>Description</entry>
             </row>
@@ -1940,7 +2232,7 @@ end equations</programlisting></para>
 
           <thead>
             <row>
-              <entry>Operator</entry>
+              <entry>Function</entry>
 
               <entry>Description</entry>
             </row>
@@ -1983,8 +2275,8 @@ end equations</programlisting></para>
             </row>
 
             <row>
-              <entry>list[&amp;T] java shortestPathPair(graph[&amp;T] G,
-              &amp;T From, &amp;T To)</entry>
+              <entry>list[&amp;T] shortestPathPair(graph[&amp;T] G, &amp;T
+              From, &amp;T To)</entry>
 
               <entry>Shortest path between pair of nodes</entry>
             </row>
@@ -2139,6 +2431,22 @@ end equations</programlisting></para>
               <replaceable>int</replaceable><subscript>1</subscript> by
               <replaceable>int</replaceable><subscript>2</subscript></entry>
             </row>
+
+            <row>
+              <entry>- <replaceable>int</replaceable></entry>
+
+              <entry>negate sign of <replaceable>int</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable> ?
+              <replaceable>int</replaceable><subscript>1</subscript> :
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>if <replaceable>bool</replaceable> is true then
+              <replaceable>int</replaceable><subscript>1</subscript> else
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -2234,7 +2542,7 @@ end equations</programlisting></para>
               </row>
 
               <row>
-                <entry>list[str] java readFile(str filename) throws
+                <entry>list[str] readFile(str filename) throws
                 NoSuchFileError(str msg), IOError(str msg)</entry>
 
                 <entry>read a named file as list of strings</entry>
@@ -2262,7 +2570,7 @@ end equations</programlisting></para>
 
           <thead>
             <row>
-              <entry>Operator</entry>
+              <entry>Function</entry>
 
               <entry>Description</entry>
             </row>
@@ -2305,8 +2613,8 @@ end equations</programlisting></para>
             </row>
 
             <row>
-              <entry>list[&amp;T] java shortestPathPair(lgraph[&amp;T] G,
-              &amp;T From, &amp;T To)</entry>
+              <entry>list[&amp;T] shortestPathPair(lgraph[&amp;T] G, &amp;T
+              From, &amp;T To)</entry>
 
               <entry>Shortest path between pair of nodes</entry>
             </row>
@@ -2323,6 +2631,153 @@ end equations</programlisting></para>
       <title>List</title>
 
       <para><table>
+          <title>List Operators</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="1*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Operator</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <literal>==</literal>
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both arguments have the same
+                elements in the same order</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <literal>!=</literal>
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both arguments have
+                different elements</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <literal>&lt;=</literal>
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both lists are equal or
+                <replaceable>list</replaceable><subscript>1</subscript> is a
+                sublist of
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <literal>&lt;</literal>
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if
+                <replaceable>list</replaceable><subscript>1</subscript> is a
+                sublist of
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <literal>&gt;=</literal>
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both lists are equal or
+                <replaceable>list</replaceable><subscript>2</subscript> is a
+                sublist of
+                <replaceable>list</replaceable><subscript>1</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <literal>&gt;</literal>
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if
+                <replaceable>list</replaceable><subscript>2</subscript> is a
+                sublist of
+                <replaceable>list</replaceable><subscript>1</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <literal>+</literal>
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry>concatenation of
+                <replaceable>list</replaceable><subscript>1</subscript> and
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <literal>-</literal>
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry>list consisting of all elements in
+                <replaceable>list</replaceable><subscript>1</subscript> that
+                do not occur in
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <literal>*</literal>
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                multiplied by
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>elm</replaceable> <literal>in</literal>
+                <replaceable>list</replaceable></entry>
+
+                <entry><literal>true</literal> if
+                <replaceable>elm</replaceable> occurs as element in
+                <replaceable>list</replaceable></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>elm</replaceable> <literal>notin</literal>
+                <replaceable>list</replaceable></entry>
+
+                <entry><literal>true</literal> if
+                <replaceable>elm</replaceable> does not occur as element in
+                <replaceable>list</replaceable></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>bool</replaceable> ?
+                <replaceable>list</replaceable><subscript>1</subscript> :
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+
+                <entry>if <replaceable>bool</replaceable> is true then
+                <replaceable>list</replaceable><subscript>1</subscript> else
+                <replaceable>list</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>list</replaceable><literal> [</literal>
+                <replaceable>int</replaceable> <literal>]</literal></entry>
+
+                <entry>element at position <replaceable>int</replaceable> in
+                <replaceable>list</replaceable></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table><table>
           <title>List Functions</title>
 
           <tgroup cols="2">
@@ -2332,7 +2787,7 @@ end equations</programlisting></para>
 
             <thead>
               <row>
-                <entry>Operator</entry>
+                <entry>Function</entry>
 
                 <entry>Description</entry>
               </row>
@@ -2517,9 +2972,9 @@ end equations</programlisting></para>
           <title>Operations on Locations</title>
 
           <tgroup cols="2">
-            <colspec align="left" colname="col1" colnum="1" colwidth="1*" />
+            <colspec align="left" colname="col1" colwidth="1*" />
 
-            <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
+            <colspec align="left" colname="col2" colwidth="3*" />
 
             <thead>
               <row>
@@ -2594,6 +3049,13 @@ end equations</programlisting></para>
                 textually encloses
                 <replaceable>loc</replaceable><subscript>2</subscript> and
                 <literal>false</literal> otherwise</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>loc</replaceable> <literal>.</literal>
+                <replaceable>field</replaceable></entry>
+
+                <entry></entry>
               </row>
             </tbody>
           </tgroup>
@@ -2715,10 +3177,10 @@ end equations</programlisting></para>
       <title>Map</title>
 
       <para><table>
-          <title>Map Functions</title>
+          <title>Map Operators</title>
 
           <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
+            <colspec align="left" colname="col1" colwidth="1*" />
 
             <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -2732,26 +3194,171 @@ end equations</programlisting></para>
 
             <tbody>
               <row>
-                <entry>set[&amp;K] java domain(map[&amp;K, &amp;V] M)</entry>
+                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <literal>==</literal>
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both arguments consist of
+                the same pairs</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <literal>!=</literal>
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both arguments have
+                different pairs</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <literal>&lt;=</literal>
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if all pairs in
+                <replaceable>map</replaceable><subscript>1</subscript> occur
+                in <replaceable>map</replaceable><subscript>2</subscript> or
+                <replaceable>map</replaceable><subscript>1</subscript> and
+                <replaceable>map</replaceable><subscript>2</subscript> are
+                equal</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <literal>&lt;</literal>
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if all pairs in
+                <replaceable>map</replaceable><subscript>1</subscript> occur
+                in <replaceable>map</replaceable><subscript>2</subscript> but
+                <replaceable>map</replaceable><subscript>1</subscript> and
+                <replaceable>map</replaceable><subscript>2</subscript> are not
+                equal</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <literal>&gt;=</literal>
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if all pairs in
+                <replaceable>map</replaceable><subscript>2</subscript> occur
+                in <replaceable>map</replaceable><subscript>1</subscript> or
+                <replaceable>map</replaceable><subscript>1</subscript> and
+                <replaceable>map</replaceable><subscript>2</subscript> are
+                equal</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <literal>&gt;</literal>
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if all pairs in
+                <replaceable>map</replaceable><subscript>2</subscript> occur
+                in <replaceable>map</replaceable><subscript>1</subscript>but
+                <replaceable>map</replaceable><subscript>1</subscript> and
+                <replaceable>map</replaceable><subscript>2</subscript> are not
+                equal</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <literal>+</literal>
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry>union of
+                <replaceable>map</replaceable><subscript>1</subscript> and
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <literal>-</literal>
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry>difference of
+                <replaceable>map</replaceable><subscript>1</subscript> and
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>key</replaceable> <literal>in</literal>
+                <replaceable>map</replaceable></entry>
+
+                <entry>true if <replaceable>key</replaceable> occurs in a
+                key:value pair in map</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>key</replaceable><subscript>1</subscript>
+                <literal>notin</literal>
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry>true if <replaceable>key</replaceable> does not occur
+                in a key:value pair in map</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>bool</replaceable> ?
+                <replaceable>map</replaceable><subscript>1</subscript> :
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+
+                <entry>if <replaceable>bool</replaceable> is true then
+                <replaceable>map</replaceable><subscript>1</subscript> else
+                <replaceable>map</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>map</replaceable> <literal>[</literal>
+                <replaceable>key</replaceable> <literal>]</literal></entry>
+
+                <entry>the value associated with
+                <replaceable>key</replaceable> in
+                <replaceable>map</replaceable> if that exists, undefined
+                otherwise</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table><table>
+          <title>Map Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="3*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>set[&amp;K] domain(map[&amp;K, &amp;V] M)</entry>
 
                 <entry>the domain (keys) of a map</entry>
               </row>
 
               <row>
-                <entry>&amp;K java getOneFrom(map[&amp;K, &amp;V] M) </entry>
+                <entry>&amp;K getOneFrom(map[&amp;K, &amp;V] M) </entry>
 
                 <entry>arbitrary key of a map</entry>
               </row>
 
               <row>
-                <entry> map[&amp;V, &amp;K] java invert(map[&amp;K, &amp;V]
+                <entry>map[&amp;V, &amp;K] invert(map[&amp;K, &amp;V]
                 M)</entry>
 
                 <entry>map with key and value inverted</entry>
               </row>
 
               <row>
-                <entry>bool java isEmpty(map[&amp;K, &amp;V] M)</entry>
+                <entry>bool isEmpty(map[&amp;K, &amp;V] M)</entry>
 
                 <entry> is map empty?</entry>
               </row>
@@ -2765,33 +3372,33 @@ end equations</programlisting></para>
               </row>
 
               <row>
-                <entry>set[&amp;V] java range(map[&amp;K, &amp;V] M)</entry>
+                <entry>set[&amp;V] range(map[&amp;K, &amp;V] M)</entry>
 
                 <entry>the range (values) of a map</entry>
               </row>
 
               <row>
-                <entry>int java size(map[&amp;K, &amp;V] M)</entry>
+                <entry>int size(map[&amp;K, &amp;V] M)</entry>
 
                 <entry>number of elements in a map.</entry>
               </row>
 
               <row>
-                <entry>list[tuple[&amp;K, &amp;V]] java toList(map[&amp;K,
-                &amp;V] M)</entry>
+                <entry>list[tuple[&amp;K, &amp;V]] toList(map[&amp;K, &amp;V]
+                M)</entry>
 
                 <entry>convert a map to a list</entry>
               </row>
 
               <row>
-                <entry>rel[&amp;K, &amp;V] java toRel(map[&amp;K, &amp;V]
+                <entry>rel[&amp;K, &amp;V] toRel(map[&amp;K, &amp;V]
                 M)</entry>
 
                 <entry>convert a map to a relation</entry>
               </row>
 
               <row>
-                <entry>str java toString(map[&amp;K, &amp;V] M)</entry>
+                <entry>str toString(map[&amp;K, &amp;V] M)</entry>
 
                 <entry>convert a map to a string.</entry>
               </row>
@@ -2804,10 +3411,10 @@ end equations</programlisting></para>
       <title>Node</title>
 
       <para><table>
-          <title>Map Functions</title>
+          <title>Node Operators</title>
 
           <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
+            <colspec align="left" colname="col1" colwidth="1*" />
 
             <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -2821,25 +3428,111 @@ end equations</programlisting></para>
 
             <tbody>
               <row>
-                <entry>int java arity(node T)</entry>
+                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <literal>==</literal>
+                <replaceable>node</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both arguments are
+                identical</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <literal>!=</literal>
+                <replaceable>node</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both arguments are not
+                identical</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <literal>&lt;=</literal>
+                <replaceable>node</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <literal>&lt;</literal>
+                <replaceable>node</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <literal>&gt;=</literal>
+                <replaceable>node</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <literal>&gt;</literal>
+                <replaceable>node</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>bool</replaceable> ?
+                <replaceable>node</replaceable><subscript>1</subscript> :
+                <replaceable>node</replaceable><subscript>2</subscript></entry>
+
+                <entry>if <replaceable>bool</replaceable> is true then
+                <replaceable>node</replaceable><subscript>1</subscript> else
+                <replaceable>node</replaceable><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>node</replaceable> <literal>[</literal>
+                <replaceable>int</replaceable> <literal>]</literal></entry>
+
+                <entry>child of <replaceable>node</replaceable> at position
+                <replaceable>int</replaceable></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table><table>
+          <title>Node Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="3*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>int arity(node T)</entry>
 
                 <entry>number of children of a node</entry>
               </row>
 
               <row>
-                <entry>list[value] java getChildren(node T)</entry>
+                <entry>list[value] getChildren(node T)</entry>
 
                 <entry>get the children of a node</entry>
               </row>
 
               <row>
-                <entry> str java getName(node T)</entry>
+                <entry>str getName(node T)</entry>
 
                 <entry>get the function name of a node</entry>
               </row>
 
               <row>
-                <entry>node java makeNode(str N, value V...)</entry>
+                <entry>node makeNode(str N, value V...)</entry>
 
                 <entry>create a node given its function name and
                 arguments</entry>
@@ -2853,10 +3546,10 @@ end equations</programlisting></para>
       <title>Real</title>
 
       <table>
-        <title>Map Functions</title>
+        <title>Real Operators</title>
 
         <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="3*" />
+          <colspec align="left" colname="col1" colwidth="1*" />
 
           <colspec align="left" colname="col2" colwidth="3*" />
 
@@ -2870,7 +3563,149 @@ end equations</programlisting></para>
 
           <tbody>
             <row>
-              <entry>real java arbReal()</entry>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are numerically
+              equal and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are numerically
+              unequal and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>real</replaceable><subscript>1</subscript> is
+              numerically less than or equal to
+              <replaceable>real</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>real</replaceable><subscript>1</subscript> is
+              numerically less than
+              <replaceable>real</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>real</replaceable><subscript>1</subscript> is
+              numerically greater than or equal than
+              <replaceable>real</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>&gt;</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>real</replaceable><subscript>1</subscript> is
+              numerically greater than
+              <replaceable>real</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>+</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry>sum of
+              <replaceable>real</replaceable><subscript>1</subscript> and
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>-</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry>difference of
+              <replaceable>real</replaceable><subscript>1</subscript> and
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>*</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              multiplied by
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>/</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              divided by
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry>- <replaceable>real</replaceable></entry>
+
+              <entry>negate sign of <replaceable>real</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <literal>%</literal>
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+
+              <entry>remainder of dividing
+              <replaceable>real</replaceable><subscript>1</subscript> by
+              <replaceable>real</replaceable><subscript>2</subscript></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Real Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="1*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>real arbReal()</entry>
 
               <entry>an arbitrary real value in the interval
               [0.0,1.0).</entry>
@@ -2883,13 +3718,13 @@ end equations</programlisting></para>
             </row>
 
             <row>
-              <entry>int java toInteger(real d)</entry>
+              <entry>int toInteger(real d)</entry>
 
               <entry>convert a real to integer.</entry>
             </row>
 
             <row>
-              <entry>str java toString(real d)</entry>
+              <entry>str toString(real d)</entry>
 
               <entry>convert a real to a string.</entry>
             </row>
@@ -2898,74 +3733,118 @@ end equations</programlisting></para>
       </table>
     </section>
 
-    <section xml:id="section.lib-Relation">
+    <section xml:id="section.builtin-operator-relations">
       <title>Relation</title>
 
-      <para><itemizedlist>
-          <listitem>
-            <para>carrier -- all elements in any tuple in a relation</para>
-          </listitem>
+      <para>Relation are sets of tuples, therefore all set operators (see,
+      <xref linkend="table.set-operators" />) apply to relations as
+      well</para>
 
-          <listitem>
-            <para>carrierR -- relation restricted to tuples with elements in a
-            set S</para>
-          </listitem>
+      <table>
+        <title>Operations on Relations</title>
 
-          <listitem>
-            <para>carrierX -- relation excluded tuples with some element in
-            S</para>
-          </listitem>
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="1*" />
 
-          <listitem>
-            <para>complement -- complement of relation</para>
-          </listitem>
+          <colspec align="left" colname="col2" colwidth="3*" />
 
-          <listitem>
-            <para>domain -- first element of each tuple in binary
-            relation</para>
-          </listitem>
+          <thead>
+            <row>
+              <entry>Operator</entry>
 
-          <listitem>
-            <para>domainR -- restriction of a relation to tuples with first
-            element in S}</para>
-          </listitem>
+              <entry>Description</entry>
+            </row>
+          </thead>
 
-          <listitem>
-            <para>domainX -- relation excluded tuples with first element in
-            S</para>
-          </listitem>
+          <tbody>
+            <row>
+              <entry><replaceable>rel</replaceable><subscript>1</subscript>
+              <literal>o</literal>
+              <replaceable>rel</replaceable><subscript>2</subscript></entry>
 
-          <listitem>
-            <para>invert -- inverse the tuples in a relation</para>
-          </listitem>
+              <entry>yields the relation resulting from the composition of the
+              two arguments</entry>
+            </row>
 
-          <listitem>
-            <para>range -- all but the first element of each tuples in binary
-            relation</para>
-          </listitem>
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>x</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
 
-          <listitem>
-            <para>rangeR -- restriction of a binary relation to tuples with
-            second element in set S</para>
-          </listitem>
-        </itemizedlist></para>
+              <entry>yields the relation resulting from the Cartesian product
+              of the two arguments</entry>
+            </row>
 
-      <section xml:id="section.builtin-operator-relations">
-        <title>Relation Operators</title>
+            <row>
+              <entry><replaceable>rel</replaceable>
+              <literal>+</literal></entry>
 
-        <para></para>
+              <entry>yields the relation resulting from the transitive closure
+              of <replaceable>rel</replaceable></entry>
+            </row>
 
-        <table>
-          <title>Operations on Relations</title>
+            <row>
+              <entry><replaceable>rel</replaceable>
+              <literal>*</literal></entry>
+
+              <entry>yields the relation resulting from the reflexive
+              transitive closure of <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable> <literal>[</literal>
+              <replaceable>elem</replaceable> <literal>]</literal></entry>
+
+              <entry>yields the right image of
+              <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable> <literal>[</literal>
+              <replaceable>set</replaceable> <literal>]</literal></entry>
+
+              <entry>yields the right image of
+              <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable> <literal>&lt;</literal>
+              <replaceable>index</replaceable><subscript>1</subscript><literal>,</literal>
+              <replaceable>index</replaceable><subscript>2</subscript>, ...
+              <literal>&gt;</literal></entry>
+
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Examples:</para>
+
+      <para><screen><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,15&gt;} o {&lt;10,100&gt;, &lt;20,200&gt;}</literal> yields <literal>{&lt;1,100&gt;, &lt;2,200&gt;}</literal>.
+
+
+<literal>{1, 2, 3} x {9}</literal> yields <literal>{&lt;1, 9&gt;, &lt;2, 9&gt;, &lt;3, 9&gt;}</literal>.
+
+
+
+<literal>Rel</literal> has value <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;, &lt;2,21&gt;}</literal> in the following examples.
+
+<literal>Rel[1]</literal> yields <literal>{10, 11}</literal>.
+
+<literal>Rel[{1}]</literal> yields {10, 11}.
+
+<literal>Rel[{1, 2}]</literal> yields <literal>{10, 11, 20, 21}</literal>.</screen><table>
+          <title>Relation Functions</title>
 
           <tgroup cols="2">
-            <colspec align="left" colname="col1" colnum="1" colwidth="1*" />
+            <colspec align="left" colname="col1" colwidth="3*" />
 
-            <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
+            <colspec align="left" colname="col2" colwidth="3*" />
 
             <thead>
               <row>
-                <entry>Operator</entry>
+                <entry>Function</entry>
 
                 <entry>Description</entry>
               </row>
@@ -2973,410 +3852,114 @@ end equations</programlisting></para>
 
             <tbody>
               <row>
-                <entry><replaceable>rel</replaceable><subscript>1</subscript>
-                <literal>o</literal>
-                <replaceable>rel</replaceable><subscript>2</subscript></entry>
+                <entry>set[&amp;T] carrier (rel[&amp;T,&amp;T] R)</entry>
 
-                <entry>yields the relation resulting from the composition of
-                the two arguments</entry>
+                <entry>all elements in any tuple in a relation</entry>
               </row>
 
               <row>
-                <entry><replaceable>set</replaceable><subscript>1</subscript>
-                <literal>x</literal>
-                <replaceable>set</replaceable><subscript>2</subscript></entry>
+                <entry>rel[&amp;T,&amp;T] carrierR (rel[&amp;T,&amp;T] R,
+                set[&amp;T] S)</entry>
 
-                <entry>yields the relation resulting from the Cartesian
-                product of the two arguments</entry>
+                <entry>relation restricted to tuples with elements in a set
+                S</entry>
               </row>
 
               <row>
-                <entry><replaceable>rel</replaceable> <literal>[-,</literal>
-                <replaceable>set</replaceable> <literal>]</literal></entry>
+                <entry>rel[&amp;T,&amp;T] carrierX (rel[&amp;T,&amp;T] R,
+                set[&amp;T] S)</entry>
 
-                <entry>yields the left image of
-                <replaceable>rel</replaceable></entry>
+                <entry>relation excluded tuples with some element in S</entry>
               </row>
 
               <row>
-                <entry><replaceable>rel</replaceable> <literal>[-,</literal>
-                <replaceable>elem</replaceable> <literal>]</literal></entry>
+                <entry>rel[&amp;T0, &amp;T1] complement(rel[&amp;T0, &amp;T1]
+                R)</entry>
 
-                <entry>yields the left image of
-                <replaceable>rel</replaceable></entry>
+                <entry>complement of relation</entry>
               </row>
 
               <row>
-                <entry><replaceable>rel</replaceable> <literal>[</literal>
-                <replaceable>set</replaceable> <literal>, -]</literal></entry>
+                <entry>set[&amp;T0] domain (rel[&amp;T0,&amp;T1] R)</entry>
 
-                <entry>yields the right image of
-                <replaceable>rel</replaceable></entry>
+                <entry>first element of each tuple in binary relation</entry>
               </row>
 
               <row>
-                <entry><replaceable>rel</replaceable> <literal>[</literal>
-                <replaceable>elem</replaceable> <literal>,
-                -]</literal></entry>
+                <entry>rel[&amp;T0,&amp;T1] domainR (rel[&amp;T0,&amp;T1] R,
+                set[&amp;T0] S)</entry>
 
-                <entry>yields the right image of
-                <replaceable>rel</replaceable></entry>
+                <entry>restriction of a relation to tuples with first element
+                in S}</entry>
               </row>
 
               <row>
-                <entry><replaceable>rel</replaceable> <literal>[</literal>
-                <replaceable>elem</replaceable> <literal>]</literal></entry>
+                <entry>rel[&amp;T0,&amp;T1] domainX (rel[&amp;T0,&amp;T1] R,
+                set[&amp;T0] S)</entry>
 
-                <entry>yields the right image of
-                <replaceable>rel</replaceable></entry>
+                <entry>relation excluded tuples with first element in
+                S</entry>
               </row>
 
               <row>
-                <entry><replaceable>rel</replaceable> <literal>[</literal>
-                <replaceable>set</replaceable> <literal>]</literal></entry>
+                <entry>ident?</entry>
 
-                <entry>yields the right image of
-                <replaceable>rel</replaceable></entry>
+                <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>rel</replaceable>
-                <literal>+</literal></entry>
+                <entry>rel[&amp;T1, &amp;T0] invert (rel[&amp;T0, &amp;T1]
+                R)</entry>
 
-                <entry>yields the relation resulting from the transitive
-                closure of <replaceable>rel</replaceable></entry>
+                <entry>inverse the tuples in a relation</entry>
               </row>
 
               <row>
-                <entry><replaceable>rel</replaceable>
-                <literal>*</literal></entry>
+                <entry>rel[&amp;T2, &amp;T1, &amp;T0] invert (rel[&amp;T0,
+                &amp;T1, &amp;T2] R)</entry>
 
-                <entry>yields the relation resulting from the reflexive
-                transitive closure of <replaceable>rel</replaceable></entry>
+                <entry>all but the first element of each tuples in binary
+                relation</entry>
+              </row>
+
+              <row>
+                <entry>rel[&amp;T0,&amp;T1] rangeR (rel[&amp;T0,&amp;T1] R,
+                set[&amp;T2] S)</entry>
+
+                <entry>restriction of a binary relation to tuples with second
+                element in set S</entry>
               </row>
             </tbody>
           </tgroup>
-        </table>
+        </table>Examples:<screen><literal>id({1,2,3})</literal> yields <literal>{&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;}</literal>.
 
-        <formalpara>
-          <title>Composition: <literal>o</literal></title>
+<literal>id({"mon", "tue", "wed"})</literal> yields <literal>{&lt;"mon","mon"&gt;, &lt;"tue","tue"&gt;, &lt;"wed","wed"&gt;}</literal>.
+<literal>inv({&lt;1,10&gt;, &lt;2,20&gt;})</literal> yields <literal>{&lt;10,1&gt;,&lt;20,2&gt;}</literal>.
 
-          <para>The composition operator combines two relations and can be
-          defined as follows:</para>
-        </formalpara>
+<literal>compl({&lt;1,10&gt;}</literal> yields <literal>{&lt;1, 1&gt;, &lt;10, 1&gt;, &lt;10, 10&gt;}</literal>.
 
-        <programlisting>rel[&amp;T1,&amp;T3] compose(rel[&amp;T1,&amp;T2] R1, rel[&amp;T2,&amp;T3] R2) =
-   {&lt;V, Y&gt; | &lt;&amp;T1 V, &amp;T2 W&gt; : R1, &lt;&amp;T2 X, &amp;T3 Y&gt; : R2, W == X }</programlisting>
+<literal>domain({&lt;1,10&gt;, &lt;2,20&gt;})</literal> yields <literal>{1, 2}</literal>.
 
-        <formalpara>
-          <title>Example</title>
+<literal>domain({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;})</literal> yields <literal>{"mon", "tue"}</literal>.
 
-          <para></para>
-        </formalpara>
+<literal>range({&lt;1,10&gt;, &lt;2,20&gt;})</literal> yields <literal>{10, 20}</literal>.
 
-        <itemizedlist>
-          <listitem>
-            <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,15&gt;} o
-            {&lt;10,100&gt;, &lt;20,200&gt;}</literal> yields
-            <literal>{&lt;1,100&gt;, &lt;2,200&gt;}</literal>.</para>
-          </listitem>
-        </itemizedlist>
+<literal>range({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;})</literal> yields <literal>{1, 2}</literal>.
 
-        <formalpara>
-          <title>Carthesian product: <literal>x</literal></title>
+<literal>carrier({&lt;1,10&gt;, &lt;2,20&gt;})</literal> yields <literal>{1, 10, 2, 20}
 
-          <para>The product operator combines two sets into a relation and can
-          be defined as follows:<programlisting>rel[&amp;T1,&amp;T2] product(set[&amp;T1] S1, set[&amp;T2] S2) = 
-   {&lt;V, W&gt; | &amp;T1 V : S1, &amp;T2 W : S2 }</programlisting></para>
-        </formalpara>
+domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});
+</literal><literal>{&lt;1,10&gt;, &lt;3,30&gt;}</literal>.
 
-        <formalpara>
-          <title>Example</title>
 
-          <para></para>
-        </formalpara>
+<literal>rangeR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {30, 10})</literal> yields <literal>{&lt;1,10&gt;, &lt;3,30&gt;}</literal>.
 
-        <itemizedlist>
-          <listitem>
-            <para><literal>{1, 2, 3} x {9}</literal> yields <literal>{&lt;1,
-            9&gt;, &lt;2, 9&gt;, &lt;3, 9&gt;}</literal>.</para>
-          </listitem>
-        </itemizedlist>
+<literal>carrierR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {10, 1, 20})</literal> yields <literal>{&lt;1,10&gt;}</literal>.
 
-        <formalpara>
-          <title>Left image: <literal>[-, ]</literal></title>
+<literal>domainX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1})</literal> yields <literal>{&lt;2, 20&gt;}</literal>.
+<literal>rangeX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {30, 10})</literal> yields <literal>{&lt;2, 20&gt;}</literal>.
 
-          <para>Taking the left image of a relation amounts to selecting some
-          elements from the domain of a relation. The
-          <emphasis>left</emphasis> image operator takes a relation and an
-          element <replaceable>E</replaceable> and produces a set consisting
-          of all elements
-          <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
-          in the domain of the relation that occur in tuples of the form
-          <literal>&lt;<replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
-          <replaceable>E</replaceable>&gt;</literal>. It can be defined as
-          follows:<programlisting>set[&amp;T1] left-image(rel[&amp;T1,&amp;T2] R, &amp;T2 E) = 
-   { V | &lt;&amp;T1 V, &amp;T2 W&gt; : R, W == E }</programlisting></para>
-        </formalpara>
-
-        <para>The left image operator can be extended to take a set of
-        elements as second element instead of a single
-        element:<programlisting>set[&amp;T1] left-image(rel[&amp;T1,&amp;T2] R, set[&amp;T2] S) = 
-   { V | &lt;&amp;T1 V, &amp;T2 W&gt; : R, W in S }</programlisting></para>
-
-        <formalpara>
-          <title>Examples</title>
-
-          <para>Assume that <literal>Rel</literal> has value
-          <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;,
-          &lt;2,21&gt;}</literal> in the following examples.</para>
-        </formalpara>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>Rel[-,10]</literal> yields
-            <literal>{1}</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>Rel[-,{10}]</literal> yields
-            <literal>{1}</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>Rel[-,{10, 20}]</literal> yields <literal>{1,
-            2}</literal>.</para>
-          </listitem>
-        </itemizedlist>
-
-        <formalpara>
-          <title>Right image: <literal>[ ]</literal> and <literal>[
-          ,-]</literal></title>
-
-          <para>Taking the right image of a relation amounts to selecting some
-          elements from the range of a relation. The
-          <emphasis>right</emphasis> image operator takes a relation and an
-          element <replaceable>E</replaceable> and produces a set consisting
-          of all elements
-          <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
-          in the range of the relation that occur in tuples of the form
-          <literal>&lt;<replaceable>E</replaceable>,
-          <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
-          &gt;</literal>. It can be defined as follows:<programlisting>set[&amp;T2] right-image(rel[&amp;T1,&amp;T2] R, &amp;T1 E) = 
-   { W | &lt;&amp;T1 V, &amp;T2 W&gt; : R, V == E }</programlisting></para>
-        </formalpara>
-
-        <para>The right image operator can be extended to take a set of
-        elements as second element instead of a single element:</para>
-
-        <programlisting>set[&amp;T2] right-image(rel[&amp;T1,&amp;T2] R, set[&amp;T1] S) = 
-   { W | &lt;&amp;T1 V, &amp;T2 W&gt; : R, V in S}</programlisting>
-
-        <formalpara>
-          <title>Examples</title>
-
-          <para>Assume that <literal>Rel</literal> has value
-          <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;,
-          &lt;2,21&gt;}</literal> in the following examples.</para>
-        </formalpara>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>Rel[1]</literal> yields <literal>{10,
-            11}</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>Rel[{1}]</literal> yields {10, 11}.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>Rel[{1, 2}]</literal> yields <literal>{10, 11, 20,
-            21}</literal>.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>These expressions are abbreviations for, respectively
-        <literal>Rel[1,-]</literal>, <literal>Rel[{1},-]</literal>, and
-        <literal>Rel[{1, 2},-]</literal>.</para>
-      </section>
-
-      <section>
-        <title>Relation Functions</title>
-
-        <section xml:id="section.builtin-function-domain">
-          <title>Domain of a Relation: <literal>domain</literal></title>
-
-          <para>Definition:<programlisting>set[&amp;T1] domain (rel[&amp;T1,&amp;T2] R) = 
-   { X | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>Yields the set
-          that results from taking the first element of each tuple in relation
-          <literal>R</literal>. Examples:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>domain({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
-              yields <literal>{1, 2}</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>domain({&lt;"mon", 1&gt;, &lt;"tue",
-              2&gt;})</literal> yields <literal>{"mon",
-              "tue"}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-range">
-          <title>Range of a Relation: <literal>range</literal></title>
-
-          <para>Definition:<programlisting>set[&amp;T2] range (rel[&amp;T1,&amp;T2] R) = 
-   { Y | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>Yields the set
-          that results from taking the second element of each tuple in
-          relation <literal>R</literal>. Examples:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>range({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
-              yields <literal>{10, 20}</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>range({&lt;"mon", 1&gt;, &lt;"tue",
-              2&gt;})</literal> yields <literal>{1, 2}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-carrier">
-          <title>Carrier of a Relation: <literal>carrier</literal></title>
-
-          <para>Definition:<programlisting>set[&amp;T]  carrier (rel[&amp;T,&amp;T] R) = 
-   domain(R) union range(R)</programlisting>Yields the set that results from
-          taking the first and second element of each tuple in the relation
-          <literal>R</literal>. Note that the domain and range type of
-          <literal>R</literal> should be the same. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>carrier({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
-              yields <literal>{1, 10, 2, 20}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-domainR">
-          <title>Domain Restriction of a Relation:
-          <literal>domainR</literal></title>
-
-          <para>Definition:<programlisting>rel[&amp;T1,&amp;T2] domainR (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S) =
-   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, X in S }</programlisting>Yields
-          a relation identical to the relation <literal>R</literal> but only
-          containing tuples whose first element occurs in set
-          <literal>S</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>domainR({&lt;1,10&gt;, &lt;2,20&gt;,
-              &lt;3,30&gt;}, {3, 1})</literal> yields <literal>{&lt;1,10&gt;,
-              &lt;3,30&gt;}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-rangeR">
-          <title>Range Restriction of a Relation:
-          <literal>rangeR</literal></title>
-
-          <para>Definition:<programlisting>rel[&amp;T1,&amp;T2] rangeR (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S) =
-   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, Y in S }</programlisting>Yields
-          a relation identical to relation <literal>R</literal> but only
-          containing tuples whose second element occurs in set
-          <literal>S</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>rangeR({&lt;1,10&gt;, &lt;2,20&gt;,
-              &lt;3,30&gt;}, {30, 10})</literal> yields
-              <literal>{&lt;1,10&gt;, &lt;3,30&gt;}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-carrierR">
-          <title>Carrier Restriction of a Relation:
-          <literal>carrierR</literal></title>
-
-          <para>Definition:<programlisting>rel[&amp;T,&amp;T] carrierR (rel[&amp;T,&amp;T] R, set[&amp;T] S) = 
-   { &lt;X, Y&gt; | &lt;&amp;T X, &amp;T Y&gt; : R, X in S, Y in S }</programlisting>Yields
-          a relation identical to relation <literal>R</literal> but only
-          containing tuples whose first and second element occur in set
-          <literal>S</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>carrierR({&lt;1,10&gt;, &lt;2,20&gt;,
-              &lt;3,30&gt;}, {10, 1, 20})</literal> yields
-              <literal>{&lt;1,10&gt;}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-domainX">
-          <title>Domain Exclusion of a Relation:
-          <literal>domainX</literal></title>
-
-          <para>Definition:<programlisting>rel[&amp;T1,&amp;T2] domainX (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S) =
-   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, X notin S }</programlisting>Yields
-          a relation identical to relation <literal>R</literal> but with all
-          tuples removed whose first element occurs in set
-          <literal>S</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>domainX({&lt;1,10&gt;, &lt;2,20&gt;,
-              &lt;3,30&gt;}, {3, 1})</literal> yields <literal>{&lt;2,
-              20&gt;}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-rangeX">
-          <title>Range Exclusion of a Relation:
-          <literal>rangeX</literal></title>
-
-          <para>Definition:<programlisting>rel[&amp;T1,&amp;T2] rangeX (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S) =
-   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, Y notin S }</programlisting>Yields
-          a relation identical to relation <literal>R</literal> but with all
-          tuples removed whose second element occurs in set
-          <literal>S</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>rangeX({&lt;1,10&gt;, &lt;2,20&gt;,
-              &lt;3,30&gt;}, {30, 10})</literal> yields <literal>{&lt;2,
-              20&gt;}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-function-carrierX">
-          <title>Carrier Exclusion of a Relation: carrierX</title>
-
-          <para>Definition:<programlisting>rel[&amp;T,&amp;T] carrierX (rel[&amp;T,&amp;T] R, set[&amp;T] S) =
-   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, X notin S, Y notin S }</programlisting>Yields
-          a relation identical to relation <literal>R</literal> but with all
-          tuples removed whose first or second element occurs in set
-          <literal>S</literal>. Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>carrierX({&lt;1,10&gt;, &lt;2,20&gt;,
-              &lt;3,30&gt;}, {10, 1, 20})</literal> yields
-              <literal>{&lt;3,30&gt;}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-      </section>
+<literal>carrierX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {10, 1, 20})</literal> yields <literal>{&lt;3,30&gt;}</literal>.</screen></para>
     </section>
 
     <section xml:id="section.lib-RSF">
@@ -3409,588 +3992,356 @@ end equations</programlisting></para>
       </table>
     </section>
 
+    <section>
+      <title>Resources</title>
+
+      <para>data Resource = root(set[Resource] projects) | project(str name,
+      set[Resource] contents) | folder(str name, set[Resource] contents) |
+      file(str name, str extension); public Resource java root()
+      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ; public
+      set[str] java projects()
+      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ; public
+      set[str] java references(str project)
+      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ; public
+      loc java location(str project)
+      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ; public
+      set[loc] java files(str project)
+      @javaClass{org.meta_environment.rascal.eclipse.lib.Resources} ;</para>
+    </section>
+
     <section xml:id="section.lib-Set">
       <title>Set</title>
 
-      <para><table>
-          <title>Set Functions</title>
+      <para></para>
 
-          <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
-
-            <colspec align="left" colname="col2" colwidth="3*" />
-
-            <thead>
-              <row>
-                <entry>Function</entry>
-
-                <entry>Description</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry>&amp;T average(set[&amp;T] st, &amp;T zero)</entry>
-
-                <entry>average of the elements of a set</entry>
-              </row>
-
-              <row>
-                <entry>&amp;T getOneFrom(set[&amp;T] st)</entry>
-
-                <entry>pick a random element from a set</entry>
-              </row>
-
-              <row>
-                <entry>bool isEmpty(set[&amp;T] st)</entry>
-
-                <entry>Is set empty?</entry>
-              </row>
-
-              <row>
-                <entry>set[&amp;T] mapper(set[&amp;T] st, &amp;T
-                (&amp;T,&amp;T) fn)</entry>
-
-                <entry>apply a function to each element of a setacter</entry>
-              </row>
-
-              <row>
-                <entry>&amp;T max(set[&amp;T] st)</entry>
-
-                <entry>largest element of a set</entry>
-              </row>
-
-              <row>
-                <entry>&amp;T min(set[&amp;T] st)</entry>
-
-                <entry>smallest element of a set</entry>
-              </row>
-
-              <row>
-                <entry>&amp;T multiply(set[&amp;T] st, &amp;T unity)</entry>
-
-                <entry>multiply the elements of a set</entry>
-              </row>
-
-              <row>
-                <entry>set[set[&amp;T]] power(set[&amp;T] st)</entry>
-
-                <entry>all subsets of a set</entry>
-              </row>
-
-              <row>
-                <entry>set[set[&amp;T]] power1(set[&amp;T] st)</entry>
-
-                <entry>all subsets (excluding empty set) of a set</entry>
-              </row>
-
-              <row>
-                <entry>&amp;T reducer(set[&amp;T] st, &amp;T (&amp;T,&amp;T)
-                fn, &amp;T unit)</entry>
-
-                <entry>apply function F to successive elements of a
-                set</entry>
-              </row>
-
-              <row>
-                <entry>int size(set[&amp;T] st)</entry>
-
-                <entry>number of elements in a set</entry>
-              </row>
-
-              <row>
-                <entry>&amp;T sum(set[&amp;T] st, &amp;T zero)</entry>
-
-                <entry>add the elements of a set</entry>
-              </row>
-
-              <row>
-                <entry>tuple[&amp;T, set[&amp;T]] takeOneFrom(set[&amp;T]
-                st)</entry>
-
-                <entry>remove an arbitrary element from a set, returns the
-                element and the modified set</entry>
-              </row>
-
-              <row>
-                <entry>list[&amp;T] toList(set[&amp;T] st)</entry>
-
-                <entry>convert a set to a list</entry>
-              </row>
-
-              <row>
-                <entry>map[&amp;A,&amp;B] toMap(rel[&amp;A, &amp;B]
-                st)</entry>
-
-                <entry>convert a set of tuples to a map</entry>
-              </row>
-
-              <row>
-                <entry>str toString(set[&amp;T] st)</entry>
-
-                <entry>convert a set to a string</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
-
-      <section xml:id="section.builtin-operator-set-or-rel">
+      <table xml:id="table.set-operators">
         <title>Set Operators</title>
 
-        <section xml:id="section.builtin-operator-member">
-          <title>Membership Tests</title>
-
-          <table>
-            <title>Membership Tests</title>
-
-            <tgroup cols="2">
-              <colspec align="left" colname="col1" colnum="1" colwidth="1*" />
-
-              <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
-
-              <thead>
-                <row>
-                  <entry>Operator</entry>
-
-                  <entry>Description</entry>
-                </row>
-              </thead>
-
-              <tbody>
-                <row>
-                  <entry><replaceable>any</replaceable> <literal>in</literal>
-                  <replaceable>set</replaceable></entry>
-
-                  <entry>yields <literal>true</literal> if
-                  <replaceable>any</replaceable> occurs as element in
-                  <replaceable>set</replaceable> and <literal>false</literal>
-                  otherwise</entry>
-                </row>
-
-                <row>
-                  <entry><replaceable>any</replaceable>
-                  <literal>notin</literal>
-                  <replaceable>set</replaceable></entry>
-
-                  <entry>yields <literal>false</literal> if
-                  <replaceable>any</replaceable> occurs as element in
-                  <replaceable>set</replaceable> and <literal>false</literal>
-                  otherwise</entry>
-                </row>
-
-                <row>
-                  <entry><replaceable>tuple</replaceable>
-                  <literal>in</literal> <replaceable>rel</replaceable></entry>
-
-                  <entry>yields <literal>true</literal> if
-                  <replaceable>tuple</replaceable> occurs as element in
-                  <replaceable>rel</replaceable> and <literal>false</literal>
-                  otherwise</entry>
-                </row>
-
-                <row>
-                  <entry><replaceable>tuple</replaceable>
-                  <literal>notin</literal>
-                  <replaceable>rel</replaceable></entry>
-
-                  <entry>yields <literal>false</literal> if
-                  <replaceable>tuple</replaceable> occurs as element in
-                  <replaceable>rel</replaceable> and <literal>false</literal>
-                  otherwise</entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </table>
-
-          <formalpara>
-            <title>Examples</title>
-
-            <para></para>
-          </formalpara>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>3 in {1, 2, 3}</literal> yields
-              <literal>true</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para>4 in {1, 2, 3} yields <literal>false</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>3 notin {1, 2, 3}</literal> yields
-              <literal>false</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>4 notin {1, 2, 3}</literal> yields
-              <literal>true</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>&lt;2,20&gt; in {&lt;1,10&gt;, &lt;2,20&gt;,
-              &lt;3,30&gt;}</literal> yields <literal>true</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;,
-              &lt;3,30&gt;}</literal> yields <literal>true</literal>.</para>
-            </listitem>
-          </itemizedlist>
-
-          <formalpara>
-            <title>Note</title>
-
-            <para>If the first argument of these operators has type
-            <replaceable>T</replaceable>, then the second argument should have
-            type <literal>set[<replaceable>T</replaceable>]</literal>.</para>
-          </formalpara>
-        </section>
-
-        <section xml:id="section.builtin-operator-set-comp">
-          <title>Comparisons</title>
-
-          <para><table>
-              <title>Comparisons</title>
-
-              <tgroup cols="2">
-                <colspec align="left" colname="col1" colnum="1" colwidth="1*" />
-
-                <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
-
-                <thead>
-                  <row>
-                    <entry>Operator</entry>
-
-                    <entry>Description</entry>
-                  </row>
-                </thead>
-
-                <tbody>
-                  <row>
-                    <entry><replaceable>set</replaceable><subscript>1</subscript>
-                    <literal>==</literal>
-                    <replaceable>set</replaceable><subscript>2</subscript></entry>
-
-                    <entry>yields <literal>true</literal> if both arguments
-                    are equal sets and <literal>false</literal>
-                    otherwise</entry>
-                  </row>
-
-                  <row>
-                    <entry><replaceable>set</replaceable><subscript>1</subscript>
-                    <literal>!=</literal>
-                    <replaceable>set</replaceable><subscript>2</subscript></entry>
-
-                    <entry>yields <literal>true</literal> if both arguments
-                    are unequal sets and <literal>false</literal>
-                    otherwise</entry>
-                  </row>
-
-                  <row>
-                    <entry><replaceable>set</replaceable><subscript>1</subscript>
-                    <literal>&lt;=</literal>
-                    <replaceable>set</replaceable><subscript>2</subscript></entry>
-
-                    <entry>yields <literal>true</literal> if
-                    <replaceable>set</replaceable><subscript>1</subscript> is
-                    a subset of
-                    <replaceable>set</replaceable><subscript>2</subscript> and
-                    <literal>false</literal> otherwise</entry>
-                  </row>
-
-                  <row>
-                    <entry><replaceable>set</replaceable><subscript>1</subscript>
-                    <literal>&lt;</literal>
-                    <replaceable>set</replaceable><subscript>2</subscript></entry>
-
-                    <entry>yields <literal>true</literal> if
-                    <replaceable>set</replaceable><subscript>1</subscript> is
-                    a strict subset of
-                    <replaceable>set</replaceable><subscript>2</subscript> and
-                    <literal>false</literal> otherwise</entry>
-                  </row>
-
-                  <row>
-                    <entry><replaceable>set</replaceable><subscript>1</subscript>
-                    <literal>&gt;=</literal>
-                    <replaceable>set</replaceable><subscript>2</subscript></entry>
-
-                    <entry>yields <literal>true</literal> if
-                    <replaceable>set</replaceable><subscript>1</subscript> is
-                    a superset of
-                    <replaceable>set</replaceable><subscript>2</subscript> and
-                    <literal>false</literal> otherwise</entry>
-                  </row>
-
-                  <row>
-                    <entry><replaceable>set</replaceable><subscript>1</subscript>
-                    <literal>&gt;</literal>
-                    <replaceable>set</replaceable><subscript>2</subscript></entry>
-
-                    <entry>Yields <literal>true</literal> if
-                    <replaceable>set</replaceable><subscript>1</subscript> is
-                    a strict superset of
-                    <replaceable>set</replaceable><subscript>2</subscript> and
-                    <literal>false</literal> otherwise</entry>
-                  </row>
-                </tbody>
-              </tgroup>
-            </table></para>
-        </section>
-
-        <section xml:id="section.builtin-operator-set-cons">
-          <title>Construction</title>
-
-          <table>
-            <title>Construction</title>
-
-            <tgroup cols="2">
-              <colspec align="left" colname="col1" colnum="1" colwidth="1*" />
-
-              <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
-
-              <thead>
-                <row>
-                  <entry>Operator</entry>
-
-                  <entry>Description</entry>
-                </row>
-              </thead>
-
-              <tbody>
-                <row>
-                  <entry><replaceable>set</replaceable><subscript>1</subscript>
-                  <literal>+</literal>
-                  <replaceable>set</replaceable><subscript>2</subscript></entry>
-
-                  <entry>yields the set resulting from the union of the two
-                  arguments</entry>
-                </row>
-
-                <row>
-                  <entry><replaceable>set</replaceable><subscript>1</subscript>
-                  <literal>&amp;</literal>
-                  <replaceable>set</replaceable><subscript>2</subscript></entry>
-
-                  <entry>yields the set resulting from the intersection of the
-                  two arguments</entry>
-                </row>
-
-                <row>
-                  <entry><replaceable>set</replaceable><subscript>1</subscript>
-                  <literal>-</literal>
-                  <replaceable>set</replaceable><subscript>2</subscript></entry>
-
-                  <entry>yields the set resulting from the difference of the
-                  two arguments</entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </table>
-
-          <formalpara>
-            <title>Examples</title>
-
-            <para></para>
-          </formalpara>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>{1, 2, 3} + {4, 5, 6}</literal> yields
-              <literal>{1, 2, 3, 4, 5, 6}</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>{1, 2, 3} + {1, 2, 3}</literal> yields
-              <literal>{1, 2, 3}</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>{1, 2, 3} + {4, 5, 6}</literal> yields
-              <literal>{1, 2, 3, 4, 5, 6}</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>{1, 2, 3} &amp; {4, 5, 6}</literal> yields
-              <literal>{ }</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>{1, 2, 3} &amp; {1, 2, 3}</literal> yields
-              <literal>{1, 2, 3}</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>{1, 2, 3, 4} - {1, 2, 3}</literal> yields
-              <literal>{4}</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>{1, 2, 3} - {4, 5, 6}</literal> yields
-              <literal>{1, 2, 3}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-
-        <section xml:id="section.builtin-operator-misc">
-          <title>Miscellaneous</title>
-
-          <table>
-            <title>Miscellaneous</title>
-
-            <tgroup cols="2">
-              <colspec align="left" colname="col1" colnum="1" colwidth="1*" />
-
-              <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
-
-              <thead>
-                <row>
-                  <entry>Operator</entry>
-
-                  <entry>Description</entry>
-                </row>
-              </thead>
-
-              <tbody>
-                <row>
-                  <entry><literal>#</literal>
-                  <replaceable>set</replaceable></entry>
-
-                  <entry>yields the number of elements in
-                  <replaceable>set</replaceable></entry>
-                </row>
-
-                <row>
-                  <entry><literal>#</literal>
-                  <replaceable>rel</replaceable></entry>
-
-                  <entry>yields the number of elements in
-                  <replaceable>rel</replaceable></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </table>
-
-          <formalpara>
-            <title>Examples</title>
-
-            <para></para>
-          </formalpara>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>#{1, 2, 3}</literal> yields
-              <literal>3</literal>.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>#{&lt;1,10&gt;, &lt;2,20&gt;,
-              &lt;3,30&gt;}</literal> yields <literal>3</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
-      </section>
-
-      <section xml:id="section.elementary-functions-and-relations">
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="1*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Operator</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are equal sets
+              and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are unequal
+              sets and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>set</replaceable><subscript>1</subscript> is a
+              subset of <replaceable>set</replaceable><subscript>2</subscript>
+              and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>set</replaceable><subscript>1</subscript> is a
+              strict subset of
+              <replaceable>set</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>set</replaceable><subscript>1</subscript> is a
+              superset of
+              <replaceable>set</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>&gt;</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if
+              <replaceable>set</replaceable><subscript>1</subscript> is a
+              strict superset of
+              <replaceable>set</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>+</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry>set resulting from the union of the two arguments</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>-</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry>the set resulting from the difference of the two
+              arguments</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>*</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry>set resulting from the product of the two
+              arguments</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>&amp;</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry>set resulting from the intersection of the two
+              arguments</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>elm</replaceable> <literal>in</literal>
+              <replaceable>set</replaceable></entry>
+
+              <entry><literal>true</literal> if <replaceable>elm</replaceable>
+              occurs as element in <replaceable>set</replaceable> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>elm</replaceable> <literal>notin</literal>
+              <replaceable>set</replaceable></entry>
+
+              <entry><literal>false</literal> if
+              <replaceable>elm</replaceable> occurs as element in
+              <replaceable>set</replaceable> and <literal>false</literal>
+              otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable> join
+              <replaceable>set</replaceable></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>bool ? set1 : set2</entry>
+
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Examples:</para>
+
+      <screen>rascal&gt; <literal>{1, 2, 3} + {4, 5, 6}</literal>;
+<literal>{1, 2, 3, 4, 5, 6}</literal>
+
+rascal&gt; <literal>{1, 2, 3} + {1, 2, 3}</literal><literal>;
+{1, 2, 3}</literal>
+
+rascal&gt; <literal>{1, 2, 3, 4} - {1, 2, 3}</literal><literal>;
+{4}</literal>
+
+rascal&gt; <literal>{1, 2, 3} - {4, 5, 6}</literal><literal>;
+{1, 2, 3}</literal>
+
+rascal&gt; <literal>{1, 2, 3} &amp; {4, 5, 6};
+</literal><literal>{ }</literal>
+
+rascal&gt; <literal>{1, 2, 3} &amp; {1, 2, 3};
+</literal><literal>{1, 2, 3}</literal>
+
+rascal&gt; <literal>3 in {1, 2, 3}</literal><literal>;
+true</literal>
+
+rascal&gt; 4 in {1, 2, 3}<literal>;
+false</literal>
+
+rascal&gt; <literal>3 notin {1, 2, 3};
+</literal><literal>false</literal>
+
+racsal&gt; <literal>4 notin {1, 2, 3};
+</literal><literal>true</literal>
+
+rascal&gt; <literal>&lt;2,20&gt; in {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;};
+</literal><literal>true</literal>
+
+rascal&gt; <literal>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;};
+</literal><literal>true</literal>
+</screen>
+
+      <table>
         <title>Set Functions</title>
 
-        <section xml:id="section.builtin-function-id">
-          <title>Identity Relation: <literal>id</literal></title>
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="3*" />
 
-          <para>Definition:<programlisting>rel[&amp;T, &amp;T] id(set[&amp;T] S) = 
-   { &lt;X, X&gt; | &amp;T X : S}</programlisting>Yields the relation that
-          results from transforming each element in <literal>S</literal> into
-          a pair with that element as first and second element.
-          Examples:</para>
+          <colspec align="left" colname="col2" colwidth="3*" />
 
-          <itemizedlist>
-            <listitem>
-              <para><literal>id({1,2,3})</literal> yields
-              <literal>{&lt;1,1&gt;, &lt;2,2&gt;,
-              &lt;3,3&gt;}</literal>.</para>
-            </listitem>
+          <thead>
+            <row>
+              <entry>Function</entry>
 
-            <listitem>
-              <para><literal>id({"mon", "tue", "wed"})</literal> yields
-              <literal>{&lt;"mon","mon"&gt;, &lt;"tue","tue"&gt;,
-              &lt;"wed","wed"&gt;}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
+              <entry>Description</entry>
+            </row>
+          </thead>
 
-        <section xml:id="section.builtin-function-inv">
-          <title>Inverse of Relation: <literal>inv</literal></title>
+          <tbody>
+            <row>
+              <entry>&amp;T average(set[&amp;T] st, &amp;T zero)</entry>
 
-          <para>Definition:<programlisting>rel[&amp;T2, &amp;T1] inv (rel[&amp;T1, &amp;T2] R) = 
-   { &lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>Yields
-          the relation that is the inverse of the argument relation
-          <literal>R</literal>, i.e. the relation in which the elements of all
-          tuples in <literal>R</literal> have been interchanged.
-          Example:</para>
+              <entry>average of the elements of a set</entry>
+            </row>
 
-          <itemizedlist>
-            <listitem>
-              <para><literal>inv({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
-              yields <literal>{&lt;10,1&gt;,&lt;20,2&gt;}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
+            <row>
+              <entry>&amp;T getOneFrom(set[&amp;T] st)</entry>
 
-        <section xml:id="section.builtin-function-compl">
-          <title>Complement of a Relation: <literal>compl</literal></title>
+              <entry>pick a random element from a set</entry>
+            </row>
 
-          <para>Definition:</para>
+            <row>
+              <entry>bool isEmpty(set[&amp;T] st)</entry>
 
-          <para><programlisting>rel[&amp;T1, &amp;T2] compl(rel[&amp;T1, &amp;T2] R) = 
-   (domain(R) x range(R)) \ R}</programlisting>Yields the relation that is the
-          complement of the argument relation <literal>R</literal>, using the
-          carrier set of <literal>R</literal> as universe. Example:</para>
+              <entry>Is set empty?</entry>
+            </row>
 
-          <itemizedlist>
-            <listitem>
-              <para><literal>compl({&lt;1,10&gt;}</literal> yields
-              <literal>{&lt;1, 1&gt;, &lt;10, 1&gt;, &lt;10,
-              10&gt;}</literal>.</para>
-            </listitem>
-          </itemizedlist>
-        </section>
+            <row>
+              <entry>set[&amp;T] mapper(set[&amp;T] st, &amp;T (&amp;T,&amp;T)
+              fn)</entry>
 
-        <section xml:id="section.builtin-function-power0">
-          <title>Powerset of a Set: <literal>power0</literal></title>
+              <entry>apply a function to each element of a setacter</entry>
+            </row>
 
-          <para>Definition:<programlisting>set[set[&amp;T]] power0(set[&amp;T] S) = 
-   primitive</programlisting>Yields the powerset of set <literal>S</literal>
-          (including the empty set). Example:</para>
+            <row>
+              <entry>&amp;T max(set[&amp;T] st)</entry>
 
-          <itemizedlist>
-            <listitem>
-              <para><literal>power0({1, 2, 3, 4})</literal>
-              yields<programlisting>{ {}, {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, {2,4}, 
+              <entry>largest element of a set</entry>
+            </row>
+
+            <row>
+              <entry>&amp;T min(set[&amp;T] st)</entry>
+
+              <entry>smallest element of a set</entry>
+            </row>
+
+            <row>
+              <entry>&amp;T multiply(set[&amp;T] st, &amp;T unity)</entry>
+
+              <entry>multiply the elements of a set</entry>
+            </row>
+
+            <row>
+              <entry>set[set[&amp;T]] power(set[&amp;T] st)</entry>
+
+              <entry>all subsets of a set</entry>
+            </row>
+
+            <row>
+              <entry>set[set[&amp;T]] power1(set[&amp;T] st)</entry>
+
+              <entry>all subsets (excluding empty set) of a set</entry>
+            </row>
+
+            <row>
+              <entry>&amp;T reducer(set[&amp;T] st, &amp;T (&amp;T,&amp;T) fn,
+              &amp;T unit)</entry>
+
+              <entry>apply function F to successive elements of a set</entry>
+            </row>
+
+            <row>
+              <entry>int size(set[&amp;T] st)</entry>
+
+              <entry>number of elements in a set</entry>
+            </row>
+
+            <row>
+              <entry>&amp;T sum(set[&amp;T] st, &amp;T zero)</entry>
+
+              <entry>add the elements of a set</entry>
+            </row>
+
+            <row>
+              <entry>tuple[&amp;T, set[&amp;T]] takeOneFrom(set[&amp;T]
+              st)</entry>
+
+              <entry>remove an arbitrary element from a set, returns the
+              element and the modified set</entry>
+            </row>
+
+            <row>
+              <entry>list[&amp;T] toList(set[&amp;T] st)</entry>
+
+              <entry>convert a set to a list</entry>
+            </row>
+
+            <row>
+              <entry>map[&amp;A,&amp;B] toMap(rel[&amp;A, &amp;B] st)</entry>
+
+              <entry>convert a set of tuples to a map</entry>
+            </row>
+
+            <row>
+              <entry>str toString(set[&amp;T] st)</entry>
+
+              <entry>convert a set to a string</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Examples:</para>
+
+      <screen><literal>rascal&gt; power({1, 2, 3, 4})</literal>;
+{ {}, {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, {2,4}, 
   {3,4}, {1,2,3}, {1,2,4}, {1,3,4}, {2,3,4}, {1,2,3,4}
-}</programlisting></para>
-            </listitem>
-          </itemizedlist>
-        </section>
+}
 
-        <section xml:id="section.builtin-function-power1">
-          <title>Powerset of a Set: <literal>power1</literal></title>
-
-          <para>Definition:<programlisting>set[set[&amp;T]] power1(set[&amp;T] S) = 
-   primitive</programlisting>Yields the powerset of set <literal>S</literal>
-          (excluding the empty set).} Example:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>power1({1, 2, 3, 4})</literal>
-              yields<programlisting>{ {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, {2,4}, 
+rascal&gt; <literal>power1({1, 2, 3, 4})</literal>;
+{ {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, {2,4}, 
   {3,4}, {1,2,3}, {1,2,4}, {1,3,4}, {2,3,4}, {1,2,3,4}
-}</programlisting></para>
-            </listitem>
-          </itemizedlist>
-        </section>
-      </section>
+}
+
+rascal&gt; size({1,2,3});
+3
+
+rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
+3</literal></screen>
     </section>
 
     <section xml:id="section.lib-String">
@@ -4000,9 +4351,9 @@ end equations</programlisting></para>
         <title>Operations on Strings</title>
 
         <tgroup cols="2">
-          <colspec align="left" colname="col1" colnum="1" colwidth="1*" />
+          <colspec align="left" colname="col1" colwidth="1*" />
 
-          <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
+          <colspec align="left" colname="col2" colwidth="3*" />
 
           <thead>
             <row>
@@ -4078,6 +4429,16 @@ end equations</programlisting></para>
               <replaceable>str</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
+
+            <row>
+              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <literal>+</literal>
+              <replaceable>str</replaceable><subscript>2</subscript></entry>
+
+              <entry>concatenates
+              <replaceable>str</replaceable><subscript>1</subscript> and
+              <replaceable>str</replaceable><subscript>2</subscript></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -4100,14 +4461,14 @@ end equations</programlisting></para>
 
             <tbody>
               <row>
-                <entry>int java charAt(str s, int i) throws out_of_range(str
+                <entry>int charAt(str s, int i) throws out_of_range(str
                 msg)</entry>
 
                 <entry>character at position i in string s.</entry>
               </row>
 
               <row>
-                <entry>bool java endsWith(str s, str suffix)</entry>
+                <entry>bool endsWith(str s, str suffix)</entry>
 
                 <entry>true if string s ends with given string suffix.</entry>
               </row>
@@ -4126,7 +4487,7 @@ end equations</programlisting></para>
               </row>
 
               <row>
-                <entry>bool java isEmpty(str s)</entry>
+                <entry>bool isEmpty(str s)</entry>
 
                 <entry>is string empty?</entry>
               </row>
@@ -4145,39 +4506,39 @@ end equations</programlisting></para>
               </row>
 
               <row>
-                <entry> str right(str s, int n)</entry>
+                <entry>str right(str s, int n)</entry>
 
                 <entry>right align s in string of length n using
                 spaces</entry>
               </row>
 
               <row>
-                <entry>str java reverse(str s)</entry>
+                <entry>str reverse(str s)</entry>
 
                 <entry>string with all characters in reverse order.</entry>
               </row>
 
               <row>
-                <entry>int java size(str s)</entry>
+                <entry>int size(str s)</entry>
 
                 <entry>the length of string s.</entry>
               </row>
 
               <row>
-                <entry> bool java startsWith(str s, str prefix)</entry>
+                <entry>bool startsWith(str s, str prefix)</entry>
 
                 <entry>true if string s starts with the string prefix.</entry>
               </row>
 
               <row>
-                <entry>str java toLowerCase(str s)</entry>
+                <entry>str toLowerCase(str s)</entry>
 
                 <entry>convert all characters in string s to
                 lowercase.</entry>
               </row>
 
               <row>
-                <entry>str java toUpperCase(str s)</entry>
+                <entry>str toUpperCase(str s)</entry>
 
                 <entry>convert all characters in string s to
                 uppercase.</entry>
@@ -4190,45 +4551,135 @@ end equations</programlisting></para>
     <section xml:id="section.lib-Tuple">
       <title>Tuple</title>
 
-      <section xml:id="section.builtin-function-first">
-        <title>First Element of a Tuple: <literal>first</literal></title>
+      <table>
+        <title>Tuple Operators</title>
 
-        <para>Definition:<programlisting>&amp;T1 first(&lt;&amp;T1, &amp;T2&gt; P) = 
-   primitive</programlisting>Yields the first element of the tuple
-        <literal>P</literal>. Examples:</para>
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="1*" />
 
-        <itemizedlist>
-          <listitem>
-            <para><literal>first(&lt;1, 10&gt;)</literal> yields
-            <literal>1</literal>.</para>
-          </listitem>
+          <colspec align="left" colname="col2" colwidth="3*" />
 
-          <listitem>
-            <para><literal>first(&lt;"mon", 1&gt;)</literal> yields
-            <literal>"mon"</literal>.</para>
-          </listitem>
-        </itemizedlist>
-      </section>
+          <thead>
+            <row>
+              <entry>Operator</entry>
 
-      <section xml:id="section.builtin-function-second">
-        <title>Second Element of a Tuple: <literal>second</literal></title>
+              <entry>Description</entry>
+            </row>
+          </thead>
 
-        <para>Definition:<programlisting>&amp;T2 second(&lt;&amp;T1, &amp;T2&gt; P) = 
-   primitive</programlisting>Yields the second element of the tuple
-        <literal>P</literal>. Examples:</para>
+          <tbody>
+            <row>
+              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
 
-        <itemizedlist>
-          <listitem>
-            <para><literal>second(&lt;1, 10&gt;)</literal> yields
-            <literal>10</literal>.</para>
-          </listitem>
+              <entry><literal>true</literal> if both arguments are
+              identical</entry>
+            </row>
 
-          <listitem>
-            <para><literal>second(&lt;"mon", 1&gt;)</literal> yields
-            <literal>1</literal>.</para>
-          </listitem>
-        </itemizedlist>
-      </section>
+            <row>
+              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are not
+              identical</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are identical
+              or if the leftmost element in
+              <replaceable>tuple</replaceable><subscript>1</subscript> that
+              differs from the corresponding in
+              <replaceable>tuple</replaceable><subscript>2</subscript> is
+              smaller than that element in
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are not
+              identical and the leftmost element in
+              <replaceable>tuple</replaceable><subscript>1</subscript> that
+              differs from the corresponding in
+              <replaceable>tuple</replaceable><subscript>2</subscript> is
+              smaller than that element in
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are identical
+              or if the leftmost element in
+              <replaceable>tuple</replaceable><subscript>1</subscript> that
+              differs from the corresponding in
+              <replaceable>tuple</replaceable><subscript>2</subscript> is
+              greater than that element in
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <literal>&gt;</literal>
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+
+              <entry><literal>true</literal> if both arguments are not
+              identical and the leftmost element in
+              <replaceable>tuple</replaceable><subscript>1</subscript> that
+              differs from the corresponding in
+              <replaceable>tuple</replaceable><subscript>2</subscript> is
+              greater than that element in
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <literal>+</literal>
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+
+              <entry>concatenates
+              <replaceable>tuple</replaceable><subscript>1</subscript> and
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable> ?
+              <replaceable>tuple</replaceable><subscript>1</subscript> :
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+
+              <entry>if <replaceable>bool</replaceable> is true then
+              <replaceable>tuple</replaceable><subscript>1</subscript> else
+              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>tuple</replaceable> <literal>.</literal>
+              name</entry>
+
+              <entry>select field <replaceable>name</replaceable> from
+              <replaceable>tuple</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>tuple</replaceable> <literal>[</literal>
+              <replaceable>int</replaceable> <literal>]</literal></entry>
+
+              <entry>select field at position <replaceable>int</replaceable>
+              from <replaceable>tuple</replaceable></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
 
     <section xml:id="section.lib-UnitTest">
@@ -4247,7 +4698,7 @@ end equations</programlisting></para>
 
           <thead>
             <row>
-              <entry>Operator</entry>
+              <entry>Function</entry>
 
               <entry>Description</entry>
             </row>
@@ -4282,6 +4733,90 @@ end equations</programlisting></para>
       </table>
     </section>
 
+    <section>
+      <title>Value</title>
+
+      <para><table>
+          <title>Value Operators</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="1*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Operator</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <literal>==</literal>
+                <replaceable>value</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both arguments are
+                identical</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <literal>!=</literal>
+                <replaceable>value</replaceable><subscript>2</subscript></entry>
+
+                <entry><literal>true</literal> if both arguments are not
+                identical</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <literal>&lt;=</literal>
+                <replaceable>value</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <literal>&lt;</literal>
+                <replaceable>value</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <literal>&gt;=</literal>
+                <replaceable>value</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <literal>&gt;</literal>
+                <replaceable>value</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>bool</replaceable> ?
+                <replaceable>value</replaceable><subscript>1</subscript> :
+                <replaceable>value</replaceable><subscript>2</subscript></entry>
+
+                <entry>if <replaceable>bool</replaceable> is true then
+                <replaceable>value</replaceable><subscript>1</subscript> else
+                <replaceable>value</replaceable><subscript>2</subscript></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+    </section>
+
     <section xml:id="section.lib-ValueIO">
       <title>ValueIO</title>
 
@@ -4295,7 +4830,7 @@ end equations</programlisting></para>
 
             <thead>
               <row>
-                <entry>Operator</entry>
+                <entry>Function</entry>
 
                 <entry>Description</entry>
               </row>
@@ -4331,157 +4866,26 @@ end equations</programlisting></para>
           </tgroup>
         </table></para>
     </section>
-  </section>
 
-  <section xml:id="section.sets-of-integers">
-    <title>TODO: Functions on Sets of Integers</title>
+    <section>
+      <title>View</title>
 
-    <para>The functions in this section operate on sets of integers. Some
-    functions (i.e., <literal>sum-domain</literal>,
-    <literal>sum-range</literal>, <literal>average-domain</literal>,
-    <literal>average-range</literal>) exist to solve the problem that we can
-    only provide sets of integers and cannot model bags that may contain
-    repeated occurrences of the same integer. For some calculations it is
-    important to include these repetitions in the calculation (e.g., computing
-    the average length of class methods given a relation from methods names to
-    number of lines in the method.)</para>
-
-    <section xml:id="section.builtin-function-sum">
-      <title>Sum of a Set of Integers: <literal>sum</literal></title>
-
-      <para>Definition:<programlisting>int sum(set[int] S) = 
-    primitive</programlisting>Yields the sum of the integers in set
-      <literal>S</literal>. Example:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>sum({1, 2, 3})</literal> yields
-          <literal>6</literal>.</para>
-        </listitem>
-      </itemizedlist>
+      <para>module View public void java show(value v)
+      @javaClass{org.meta_environment.rascal.eclipse.lib.View} ; public void
+      java browse(value v)
+      @javaClass{org.meta_environment.rascal.eclipse.lib.View} ;</para>
     </section>
 
-    <section xml:id="section.builtin-function-sum-domain">
-      <title>Sum of First Elements of Tuples in a Relation:
-      <literal>sum-domain</literal></title>
+    <section>
+      <title>Void</title>
 
-      <para>Definition:<programlisting>int sum-domain(rel[int,&amp;T] R) = 
-    primitive</programlisting>Yields the sum of the integers that appear in
-      the first element of the tuples of <literal>R</literal>. Example:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>sum-domain({&lt;1,"a"&gt;, &lt;2,"b"&gt;,
-          &lt;1,"c"&gt;})</literal> yields <literal>4</literal>.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Be aware that <literal>sum(domain({&lt;1,"a"&gt;, &lt;2,"b""&gt;,
-      &lt;1, "c"&gt;}))</literal> would be equal to <literal>3</literal>
-      because the function <literal>domain</literal> creates a
-      <emphasis>set</emphasis> (as opposed to a bag) and its result would thus
-      contain only one occurrence of <literal>1</literal>.</para>
-    </section>
-
-    <section xml:id="section.builtin-function-sum-range">
-      <title>Sum of Second Elements of Tuples in a Relation:
-      <literal>sum-range</literal></title>
-
-      <para>Definition:<programlisting>int sum-range(set[int] S) = 
-    primitive</programlisting>Yields the sum of the integers that appear in
-      the second element of the tuples of <literal>R</literal>.
-      Example:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>sum-range({&lt;"a",1&gt;, &lt;"b",2&gt;,
-          &lt;"c",1&gt;})</literal> yields <literal>4</literal>.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section xml:id="section.builtin-function-average">
-      <title>Average of a Set of Integers: <literal>average</literal></title>
-
-      <para>Definition:<programlisting>int average(set[int] S) = 
-    sum(S)/(#S)</programlisting>Yields the average of the integers in set
-      <literal>S</literal>. Example:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>average({1, 2, 3})</literal> yields
-          <literal>3</literal>.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section xml:id="section.builtin-function-average-domain">
-      <title>Average of First Elements of Tuples in a Relation:
-      <literal>average-domain</literal></title>
-
-      <para>Definition:<programlisting>int average-domain(rel[int,&amp;T] R) = 
-    sum-domain(R)/(#R)</programlisting>Yields the average of the integers that
-      appear in the first element of the tuples of <literal>R</literal>.
-      Example:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>average-domain({&lt;1,"a"&gt;, &lt;2,"b"&gt;,
-          &lt;3,"c"&gt;})</literal> yields <literal>2</literal>.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section xml:id="section.builtin-function-average-range">
-      <title>Average of Second Elements of Tuples in a Relation:
-      <literal>average-range</literal></title>
-
-      <para>Definition:<programlisting>int average-range(rel[int,&amp;T] R) = 
-    sum-range(R)/(#R)</programlisting>Yields the average of the integers that
-      appear in the second element of the tuples of <literal>R</literal>.
-      Example:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>average-range({&lt;"a",1&gt;, &lt;"b",2&gt;,
-          &lt;"c",3&gt;})</literal> yields <literal>2</literal>.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section xml:id="section.builtin-function-max">
-      <title>Maximum of a Set of Integers: <literal>max</literal></title>
-
-      <para>Definition:<programlisting>int max(set[int] S) = 
-    primitive</programlisting>Yields the largest integer in set
-      <literal>S</literal>. Example:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>max({1, 2, 3})</literal> yields
-          <literal>3</literal>.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section xml:id="section.builtin-function-min">
-      <title>Minimum of a Set of Integers: <literal>min</literal></title>
-
-      <para>Definition: <programlisting>int min(set[int] S) = 
-    primitive</programlisting>Yields the largest integer in set
-      <literal>S</literal>. Example:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>min({1, 2, 3})</literal> yields
-          <literal>31</literal>.</para>
-        </listitem>
-      </itemizedlist>
+      <para>There are no operators or functions defined on the type
+      <literal>void</literal>.</para>
     </section>
   </section>
 
   <section xml:id="section.larger-examples">
-    <title>Larger Examples</title>
+    <title>Larger Examples (TODO)</title>
 
     <para>Now we will have a closer look at some larger applications of
     Rscript. We start by analyzing the global structure of a software system.
