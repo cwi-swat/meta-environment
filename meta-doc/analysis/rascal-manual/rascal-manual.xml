@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -11,7 +11,10 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>Rascal User Manual</title>
+    <title>EASY Programming with Rascal</title>
+
+    <subtitle>Leveraging the Extract-Analyze-SYthesize Paradigm for
+    Meta-Programming</subtitle>
 
     <authorgroup>
       <author>
@@ -40,11 +43,13 @@
       is extracted from it and stored in an internal representation. This
       internal representation is then analyzed and used to synthesize results.
       If the synthesis indicates this, these steps can be repeated over and
-      over again. They are shown in <xref
+      over again. These steps are shown in <xref
       linkend="figure.extract-analyze-synthesize-paradigm" /> (yes some people
-      do like old radios!).<figure
-          xml:id="figure.extract-analyze-synthesize-paradigm">
-          <title>EASY: the Extract-Analyze-Synthesize Workflow</title>
+      do like old radios!).<note>
+          <para>Find better images to illustrate this, e.g. in go a bicyle and
+          a motor, and synthesize a motorbike.</para>
+        </note><figure xml:id="figure.extract-analyze-synthesize-paradigm">
+          <title>EASY: the Extract-Analyze-Synthesize Paradigm</title>
 
           <mediaobject>
             <imageobject>
@@ -59,38 +64,39 @@
       <para><example>
           <title>Finding security breaches</title>
 
-          <para>Alice is a system administrator is looking for security
-          breaches in her system. The object-of-interest are the system's log
-          files. First relevant entries are extracted. This will include, for
-          instance, messages from the SecureShell demon that reports failed
-          login attempts. From each entry login name and originating IP
-          address are extracted and put in a table (the internal
-          representation in this example). These data are analysed by
-          detecting duplicates and counting frequencies. Finally results are
-          synthesized by listing the most frequently used login names and IP
-          addresses.</para>
+          <para>Alice is system administrator of a large online marketplace
+          and she is looking for security breaches in her system. The
+          object-of-interest are the system's log files. First relevant
+          entries are extracted. This will include, for instance, messages
+          from the SecureShell demon that reports failed login attempts. From
+          each entry login name and originating IP address are extracted and
+          put in a table (the internal representation in this example). These
+          data are analysed by detecting duplicates and counting frequencies.
+          Finally results are synthesized by listing the most frequently used
+          login names and IP addresses.</para>
         </example><example>
           <title>A Forensic DSL compiler</title>
 
           <para>Bernd is a senior software engineer working at the Berlin
-          headquarters of a German forensic investigation lab. His daily work
-          is to find common patterns in files stored on digital media that
-          have been confiscated during criminal investigations. Text, audio
-          and video files are stored in zillions of different data formats and
-          each data format requires its own analysis technique. For each new
-          investigation ad hoc combinations of tools are used. This makes the
-          process very labour-intensive and error-prone. Bernd convinces his
-          manager that designing a new domain-specific language (DSL) for
-          forensic investigations may relieve the pressure on their lab. After
-          designing the DSL---let's call it DERRICK---he makes an EASY
-          implementation for it. Given a DERRICK program for a specific case
-          under investigation, he first extracts relevant information from it
-          and analyzes it: which media formats are relevant? Which patterns to
-          look for? How should search results be combined? Given this new
-          information, Java code is generated that uses the various existing
-          tools and combines their results.</para>
+          headquarters of a forensic investigation lab of the German
+          government. His daily work is to find common patterns in files
+          stored on digital media that have been confiscated during criminal
+          investigations. Text, audio and video files are stored in zillions
+          of different data formats and each data format requires its own
+          analysis technique. For each new investigation ad hoc combinations
+          of tools are used. This makes the process very labour-intensive and
+          error-prone. Bernd convinces his manager that designing a new
+          domain-specific language (DSL) for forensic investigations may
+          relieve the pressure on their lab. After designing the DSL---let's
+          call it DERRICK---he makes an EASY implementation for it. Given a
+          DERRICK program for a specific case under investigation, he first
+          extracts relevant information from it and analyzes it: which media
+          formats are relevant? Which patterns to look for? How should search
+          results be combined? Given this new information, Java code is
+          synthesized that uses the various existing tools and combines their
+          results.</para>
         </example><example>
-          <title> Renovation Financial Software</title>
+          <title>Renovation Financial Software</title>
 
           <para>Charlotte is software engineer at a large financial
           institution in Paris and she is looking for options to connect an
@@ -144,6 +150,10 @@
           behaviour of the program. Finally he runs a third-party verification
           tool with this model as input to do the actual verification.</para>
         </example></para>
+    </section>
+
+    <section>
+      <title>Rascal</title>
 
       <para>With these examples in mind, you have a pretty good picture how
       EASY applies in different use cases. All these cases involve a form of
@@ -161,7 +171,13 @@
     </section>
 
     <section>
-      <title>Concepts</title>
+      <title>Aim and Scope of this Book</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Rascal Concepts</title>
 
       <para>Before explaining the Rascal language in more detail, it is good
       to have a general understanding of the concepts on which the language is
@@ -183,13 +199,13 @@
 
         <para>Rascal provides a rich set of datatypes. From booleans, infinite
         precision integers and reals to strings and source code locations.
-        From lists, (optionally labelled) tuples and sets to maps and
-        relations. From untyped tree structures to fully typed abstract
-        datatypes. Syntax trees that are the result of parsing source files
-        are represented as ADTs. There is a wealth of built-in operators and
-        library functions available on the standard datatypes. A fragment of
-        the abstract syntax for statements in a programming language would
-        look as follows:<programlisting>data STAT = asgStat(Id name, EXP exp) 
+        From lists, (optionally labelled) tuples and sets to (optionally
+        labelled) maps and relations. From untyped tree structures to fully
+        typed abstract datatypes. Syntax trees that are the result of parsing
+        source files are represented as ADTs. There is a wealth of built-in
+        operators and library functions available on the standard datatypes. A
+        fragment of the abstract syntax for statements in a programming
+        language would look as follows:<programlisting>data STAT = asgStat(Id name, EXP exp) 
           | ifStat(EXP exp, list[STAT] thenpart, list[STAT] elsepart) 
           | whileStat(EXP exp, list[STAT] body) 
           ;</programlisting></para>
@@ -400,29 +416,26 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
 
     <para>There are now two possibilities. Either you have this superb
     programming environment or tool suite that can immediately answer all
-    these questions for you or you can use Rscript.</para>
+    these questions for you or you can use Rascal.</para>
 
     <section>
       <title>Preparations</title>
 
       <para>To illustrate this process consider the workflow in <xref
       linkend="figure.calls-workflow" />. First we have to extract the calls
-      from the source code. <note>
-          <para>Change here.</para>
-        </note>Recall that Rscript does not consider fact extraction
-      <emphasis>per se</emphasis> so we assume that this call graph has been
-      extracted from the software by some other tool. Also keep in mind that a
-      real call graph of a real application will contain thousands and
-      thousands of calls. Drawing it in the way we do later on in <xref
-      linkend="figure.calls" /> makes no sense since we get a uniformly black
-      picture due to all the call dependencies. After the extraction phase, we
-      try to understand the extracted facts by writing queries to explore
-      their properties. For instance, we may want to know <emphasis>how many
-      calls</emphasis> there are, or <emphasis>how many procedures</emphasis>.
-      We may also want to enrich these facts, for instance, by computing who
-      calls who in more than one step. Finally, we produce a simple textual
-      report giving answers to the questions we are interested in.<figure
-          xml:id="figure.calls-workflow">
+      from the source code. Rascal is very at this, but to simplify this
+      examples we assume that this call graph has already been extracted. Also
+      keep in mind that a real call graph of a real application will contain
+      thousands and thousands of calls. Drawing it in the way we do later on
+      in <xref linkend="figure.calls" /> makes no sense since we get a
+      uniformly black picture due to all the call dependencies. After the
+      extraction phase, we try to understand the extracted facts by writing
+      queries to explore their properties. For instance, we may want to know
+      <emphasis>how many calls</emphasis> there are, or <emphasis>how many
+      procedures</emphasis>. We may also want to enrich these facts, for
+      instance, by computing who calls who in more than one step. Finally, we
+      produce a simple textual report giving answers to the questions we are
+      interested in.<figure xml:id="figure.calls-workflow">
           <title>Workflow for analyzing mystery box</title>
 
           <mediaobject>
@@ -433,9 +446,9 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
 
           <para>Now consider the call graph shown in <xref
           linkend="figure.calls" />. This section is intended to give you a
-          first impression what can be done with Rscript. Please return to
-          this example when you have digested the detailed description of
-          Rascal in <xref linkend="section.rascal-language" /> and <xref
+          first impression what can be done with Rascal. Please return to this
+          example when you have digested the detailed description of Rascal in
+          <xref linkend="section.rascal-language" /> and <xref
           linkend="section.builtin" />.</para>
         </figure><figure xml:id="figure.calls">
           <title>Graphical representation of the <literal>calls</literal>
@@ -479,7 +492,8 @@ done</screen>
 
         <para>To determine the numbers of calls, we simply determine the
         number of tuples in the <literal>Calls</literal> relation, as follows.
-        First, we need the Relation library so we import it:<screen>rascal&gt; import Relation;
+        First, we need the Relation library (described in <xref
+        linkend="section.lib-Relation" />) so we import it:<screen>rascal&gt; import Relation;
 done.</screen>next we describe a new variable and calculate the number of
         tuples:</para>
 
@@ -614,7 +628,9 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         calls relation as shown in <xref linkend="figure.calls" />. Such a
         visual inspection does <emphasis>not</emphasis> scale very well to
         large graphs and this makes the above form of analysis particularly
-        suited for studying large systems.</para>
+        suited for studying large systems.<note>
+            <para>Add a screen dump here of the Eclipse browser.</para>
+          </note></para>
       </section>
     </section>
   </section>
@@ -682,9 +698,10 @@ rascal&gt; set[proc] entryPoints = top(Calls);
 
           <para>Location values are represented by the type
           <literal>loc</literal> and serve as text coordinates in a specific
-          source file. They should <emphasis>always</emphasis> be generated
-          automatically but for the curious here is an example how they look
-          like:
+          source file. It is very handy to associate a source code location
+          which extracted facts. Locations should <emphasis>always</emphasis>
+          be generated automatically but for the curious here is an example
+          how they look like:
           <literal>loc(file:/home/paulk/pico.trm?offset=0&amp;length=1&amp;begin=2,3&amp;end=4,5)</literal></para>
         </formalpara>
 
@@ -803,18 +820,20 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <para>For lists of integers, a special shorthand exists to describe
         ranges of integers:<itemizedlist>
             <listitem>
-              <para><literal>[<replaceable>F</replaceable>..<replaceable>L</replaceable>]</literal>
-              ranges from first element <replaceable>F</replaceable> to (and
-              including) last element <replaceable>L</replaceable> with
-              increments of 1.</para>
+              <para><literal>[<replaceable>F</replaceable> ..
+              <replaceable>L</replaceable>]</literal> ranges from first
+              element <replaceable>F</replaceable> to (and including) last
+              element <replaceable>L</replaceable> with increments of
+              1.</para>
             </listitem>
 
             <listitem>
-              <para><literal>[<replaceable>F</replaceable>,<replaceable>S</replaceable>,..<replaceable>E</replaceable>]</literal>,
-              ranges from first element <replaceable>F</replaceable>, second
-              element S to (and including) last element
-              <replaceable>L</replaceable> with increments of
-              <literal>S</literal> - <replaceable>F</replaceable>.</para>
+              <para><literal>[<replaceable>F</replaceable>,<replaceable>S</replaceable>,..<replaceable>
+              E</replaceable>]</literal>, ranges from first element
+              <replaceable>F</replaceable>, second element S to (and
+              including) last element <replaceable>L</replaceable> with
+              increments of <literal>S</literal> -
+              <replaceable>F</replaceable>.</para>
             </listitem>
           </itemizedlist></para>
       </formalpara>
@@ -1017,7 +1036,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <title>Alias type</title>
 
         <para>Everything can be expressed using the elementary types and
-        values that are provided by Rscript. However, for the purpose of
+        values that are provided by Rascal. However, for the purpose of
         documentation and readability it is sometimes better to use a
         descriptive name as type indication, rather than an elementary type.
         The alias declaration</para>
@@ -2216,7 +2235,7 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
     <title>Larger Examples (TODO)</title>
 
     <para>Now we will have a closer look at some larger applications of
-    Rscript. We start by analyzing the global structure of a software system.
+    Rascal. We start by analyzing the global structure of a software system.
     You may now want to reread the example of call graph analysis given
     earlier in <xref linkend="section.motivating-example" /> as a reminder.
     The component structure of an application is analyzed in <xref
@@ -2542,8 +2561,8 @@ rel[expr,varname] USES = { &lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"
         </listitem>
       </itemizedlist>
 
-      <para>When we execute the resulting Rscript (i.e., the declarations of
-      <literal>ROOT</literal>, <literal>PRED</literal>,
+      <para>When we execute the resulting Rascal code (i.e., the declarations
+      of <literal>ROOT</literal>, <literal>PRED</literal>,
       <literal>DEFS</literal>, <literal>USES</literal> and
       <literal>UNINIT</literal>), we get as value for
       <literal>UNINIT</literal>:<programlisting>{&lt;5, "q"&gt;, &lt;6, "y"&gt;, &lt;10, "z"&gt;}</programlisting>and
@@ -2682,7 +2701,7 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
       by counting all if statement, case branches in switch statements and the
       number of conditional loops. Given a control flow in the form of a
       predecessor relation <literal>rel[stat,stat] PRED</literal> between
-      statements, the cyclomatic complexity can be computed in an Rscript as
+      statements, the cyclomatic complexity can be computed in an Rascal as
       follows: <programlisting>int cyclomatic-complexity(rel[stat,stat] PRED) = 
     #PRED - #carrier(PRED) + 2</programlisting> The number of edges
       <replaceable>e</replaceable> is equal to the number of tuples in
@@ -2911,7 +2930,7 @@ set[stat] successor(stat S) = PRED[S,-]</programlisting></para>
 
         <para></para>
 
-        <para>This idea can be expressed in Rscript quite
+        <para>This idea can be expressed in Rascal quite
         literally:<programlisting>equations
   initial
         rel[stat,def] IN init {}
@@ -3056,7 +3075,7 @@ end where</programlisting></para>
         statement if and only if it is live coming into one of its
         successors.</para>
 
-        <para>This can be expressed in Rscript as follows:<programlisting>equations
+        <para>This can be expressed in Rascal as follows:<programlisting>equations
   initial
       rel[stat,def] LIN init {}
       rel[stat,def] LOUT init DEF
@@ -3216,7 +3235,7 @@ end equations</programlisting>The results of live variable analysis for our
       </itemizedlist>
 
       <para>This informal description of backward slicing can now be expressed
-      in Rscript:</para>
+      in Rascal:</para>
 
       <para><programlisting>set[use] BackwardSlice(
     set[stat] CONTROL-STATEMENT, 
@@ -3398,7 +3417,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
       </listitem>
 
       <listitem>
-        <para>Void: the type void, see </para>
+        <para>Void: the type void, see</para>
       </listitem>
     </itemizedlist>
 
@@ -3449,7 +3468,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
       <title>Boolean</title>
 
       <table>
-        <title> Boolean Operators</title>
+        <title>Boolean Operators</title>
 
         <tgroup cols="2">
           <colspec align="left" colname="col1" colwidth="1*" />
@@ -3492,7 +3511,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               or <replaceable>bool</replaceable><subscript>1</subscript> is
               <literal>false</literal> and
               <replaceable>bool</replaceable><subscript>2</subscript> is
-              <literal>true</literal> </entry>
+              <literal>true</literal></entry>
             </row>
 
             <row>
@@ -3504,7 +3523,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               <replaceable>bool</replaceable><subscript>1</subscript> is
               <literal>false</literal> and
               <replaceable>bool</replaceable><subscript>2</subscript> is
-              <literal>true</literal> </entry>
+              <literal>true</literal></entry>
             </row>
 
             <row>
@@ -3516,7 +3535,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               or <replaceable>bool</replaceable><subscript>1</subscript> is
               <literal>true</literal> and
               <replaceable>bool</replaceable><subscript>2</subscript> is
-              <literal>false</literal> </entry>
+              <literal>false</literal></entry>
             </row>
 
             <row>
@@ -3528,7 +3547,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               <replaceable>bool</replaceable><subscript>1</subscript> is
               <literal>true</literal> and
               <replaceable>bool</replaceable><subscript>2</subscript> is
-              <literal>false</literal> </entry>
+              <literal>false</literal></entry>
             </row>
 
             <row>
@@ -3881,7 +3900,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               <literal>%</literal>
               <replaceable>int</replaceable><subscript>2</subscript></entry>
 
-              <entry> remainder of dividing
+              <entry>remainder of dividing
               <replaceable>int</replaceable><subscript>1</subscript> by
               <replaceable>int</replaceable><subscript>2</subscript></entry>
             </row>
@@ -4742,7 +4761,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
                 <entry><literal>bool isEmpty(map[&amp;K, &amp;V]
                 M)</literal></entry>
 
-                <entry> is map empty?</entry>
+                <entry>is map empty?</entry>
               </row>
 
               <row>
@@ -6365,12 +6384,12 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
   </section>
 
   <section xml:id="section-extracting-facts">
-    <title>Extracting Facts from Source Code</title>
+    <title>Extracting Facts from Source Code (TODO)</title>
 
     <para>In this tutorial we have, so far, concentrated on querying and
     enriching facts that have been extracted from source code. As we have seen
-    from the examples, once these facts are available, a concise Rscript
-    suffices to do the required processing. But how is fact extraction
+    from the examples, once these facts are available, a concise Rascal
+    program suffices to do the required processing. But how is fact extraction
     achieved and how difficult is it? To answer these questions we first
     describe the workflow of the fact extraction process (<xref
     linkend="section.workflow-fact-extraction" />) and give strategies for
@@ -6458,7 +6477,7 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
 
       <itemizedlist>
         <listitem>
-          <para>Postprocess the extracted facts (using Rscript, of course) to
+          <para>Postprocess the extracted facts (using Rascal, of course) to
           obtain trivial facts about the source code such as total lines of
           source code and number of procedures, classes, interfaces and the
           like. Next validate these trivial facts with tools like
@@ -6851,7 +6870,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
       <title>Concluding remarks</title>
 
       <para>It is not unusual that the effort that is needed to write a fact
-      extractor is much larger than the few lines of Rscript that are
+      extractor is much larger than the few lines of Rascal that are
       sufficient for the further processing of these facts. What can we learn
       from this observation? First, that even in simple cases fact extraction
       is more complicated than the processing of these facts. This may be due
@@ -7263,7 +7282,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
     <para><table xml:id="table.all-functions">
         <title>All Functions</title>
 
-        <?target dbfo keep-tohether="auto"?>
+        <info>
+          <?target dbfo keep-tohether="auto"?>
+        </info>
 
         <tgroup cols="3">
           <colspec align="left" colname="col1" colwidth="3*" />
