@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -7281,10 +7281,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
     <para><table xml:id="table.all-functions">
         <title>All Functions</title>
+        <?dbfo keep-together="auto" ?>
+        <titleabbrev></titleabbrev>
 
-        <info>
-          <?target dbfo keep-tohether="auto"?>
-        </info>
 
         <tgroup cols="3">
           <colspec align="left" colname="col1" colwidth="3*" />

@@ -20,6 +20,11 @@
 <xsl:param name="insert.xref.page.number" select="'yes'" />
 <xsl:param name="header.column.widths"    select="'1 4 1'" />
 
+<!-- tables -->
+<xsl:attribute-set name="table.properties">
+ <xsl:attribute name="keep-together">auto</xsl:attribute>
+</xsl:attribute-set>
+
 
 <!-- Chapter titles are printed as just the title -->
 
