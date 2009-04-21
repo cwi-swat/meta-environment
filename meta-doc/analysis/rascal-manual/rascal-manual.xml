@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -45,10 +45,8 @@
       If the synthesis indicates this, these steps can be repeated over and
       over again. These steps are shown in <xref
       linkend="figure.extract-analyze-synthesize-paradigm" /> (yes some people
-      do like old radios!).<note>
-          <para>Find better images to illustrate this, e.g. in go a bicyle and
-          a motor, and synthesize a motorbike.</para>
-        </note><figure xml:id="figure.extract-analyze-synthesize-paradigm">
+      do like old radios!).<figure
+          xml:id="figure.extract-analyze-synthesize-paradigm">
           <title>EASY: the Extract-Analyze-Synthesize Paradigm</title>
 
           <mediaobject>
@@ -59,7 +57,18 @@
         </figure></para>
 
       <para>This is an abstract view on solving programming problems, but is
-      it uncommon? No, so let's illustrate it with a few examples.</para>
+      it uncommon? No, so let's illustrate it with a few examples.<note>
+          <para>Find better images to illustrate this, e.g. in go a bicyle and
+          a motor, and synthesize a motorbike.</para>
+        </note><note>
+          <para>These examples should come back in the larger examples later
+          on.</para>
+        </note></para>
+
+      <note>
+        <para>Parsing and constaint solving are not yet well-represented
+        here</para>
+      </note>
 
       <para><example>
           <title>Finding security breaches</title>
@@ -234,6 +243,12 @@
       </section>
 
       <section>
+        <title>Parsing</title>
+
+        <para></para>
+      </section>
+
+      <section>
         <title>Generators</title>
 
         <para>Generators enumerate the values in a given (finite) domain, be
@@ -283,6 +298,12 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
 
         <para>prints all identifiers in assignment statements that consist of
         more than 10 characters.</para>
+      </section>
+
+      <section>
+        <title>Constraint solving</title>
+
+        <para></para>
       </section>
 
       <section>
@@ -651,6 +672,22 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <title>Elementary Types and Values</title>
 
         <formalpara>
+          <title>Void</title>
+
+          <para>Void stands for <emphasis>nothing</emphasis> and is
+          represented by the type <literal>void</literal>. It is a type
+          without any values.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Value</title>
+
+          <para>Value stands for all possible Rascal values and is represented
+          by the type <literal>value</literal>. This type is a container for
+          all other types and does not have any values itself.</para>
+        </formalpara>
+
+        <formalpara>
           <title>Boolean</title>
 
           <para>The Booleans are represented by the type
@@ -688,10 +725,11 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <para>String literals permit <emphasis>interpolation</emphasis> of
         variable values: when
         <literal>&lt;<replaceable>X</replaceable>&gt;</literal> occurs inside
-        a string literal, the value of the variable X is converted to string
-        and replaces &lt;<replaceable>X</replaceable>&gt;. As a consequence,
-        the character <literal>&lt; </literal>has to be escaped
-        as<literal>\&lt;</literal> in string literals.</para>
+        a string literal, the value of the variable
+        <replaceable>X</replaceable> is converted to string that replaces
+        &lt;<replaceable>X</replaceable>&gt;. As a consequence, the character
+        <literal>&lt; </literal>has to be escaped as<literal>\&lt;</literal>
+        in string literals.</para>
 
         <formalpara>
           <title>Location</title>
@@ -770,22 +808,38 @@ rascal&gt; set[proc] entryPoints = top(Calls);
       <formalpara>
         <title>List</title>
 
-        <para>Lists are represented by the type
-        <literal>list[</literal><replaceable>T</replaceable><literal>]</literal>,
-        where <replaceable>T</replaceable> is an arbitrary type. Examples are
-        <literal>list[int]</literal>, <literal>list[tuple[int,int]]</literal>
-        and <literal>list[list[str]]</literal>. Lists are denoted by a list of
-        elements, separated by comma's and enclosed in bracket as in
-        <literal>[</literal><replaceable>E</replaceable><subscript>1</subscript><literal>,</literal>
-        <replaceable>E</replaceable><subscript>2</subscript><literal>,
-        ...,</literal>
-        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript><literal>]</literal>,
-        where the
-        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
-        (1 &lt;= <replaceable>i</replaceable>&lt;=
-        <replaceable>n</replaceable>) are expressions that yield the desired
-        element type. For example,</para>
+        <para>A list is an ordered sequence of values and has the following
+        properties: </para>
       </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para>All elements have the same type.</para>
+        </listitem>
+
+        <listitem>
+          <para>The order of the elements matters.</para>
+        </listitem>
+
+        <listitem>
+          <para>The list may contain the same element more than once.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Lists are represented by the type
+      <literal>list[</literal><replaceable>T</replaceable><literal>]</literal>,
+      where <replaceable>T</replaceable> is an arbitrary type. Examples are
+      <literal>list[int]</literal>, <literal>list[tuple[int,int]]</literal>
+      and <literal>list[list[str]]</literal>. Lists are denoted by a list of
+      elements, separated by comma's and enclosed in bracket as in
+      <literal>[</literal><replaceable>E</replaceable><subscript>1</subscript><literal>,</literal>
+      <replaceable>E</replaceable><subscript>2</subscript><literal>,
+      ...,</literal>
+      <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript><literal>]</literal>,
+      where the
+      <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
+      (1 &lt;= <replaceable>i</replaceable>&lt;= <replaceable>n</replaceable>)
+      are expressions that yield the desired element type. For example,</para>
 
       <itemizedlist>
         <listitem>
@@ -799,6 +853,11 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         </listitem>
 
         <listitem>
+          <para><literal>[1, "b", 3]</literal> is of type
+          <literal>list[value]</literal>,</para>
+        </listitem>
+
+        <listitem>
           <para><literal>[&lt;"a",10&gt;, &lt;"b",20&gt;,
           &lt;"c",30&gt;]</literal> is of type
           <literal>list[tuple[str,int]]</literal>, and</para>
@@ -809,6 +868,14 @@ rascal&gt; set[proc] entryPoints = top(Calls);
           <literal>list[list[str]]</literal>.</para>
         </listitem>
       </itemizedlist>
+
+      <para><note>
+          <para><literal>[1, 2, 3]</literal> and <literal>[3, 2, 1]</literal>
+          are different lists.</para>
+        </note><note>
+          <para><literal>[1, 2, 3]</literal> and <literal>[1, 2, 3,
+          1]</literal> are also different lists.</para>
+        </note></para>
 
       <para>When variables of type list occur inside a list, their elements
       are automatically spliced into the surrounding list. This can be
@@ -841,22 +908,39 @@ rascal&gt; set[proc] entryPoints = top(Calls);
       <formalpara>
         <title>Set</title>
 
-        <para>Sets are represented by the type
-        <literal>set[</literal><replaceable>T</replaceable><literal>]</literal>,
-        where <replaceable>T</replaceable> is an arbitrary type. Examples are
-        <literal>set[int]</literal>, <literal>set[tuple[int,int]]</literal>
-        and <literal>set[set[str]]</literal>. Sets are denoted by a list of
-        elements, separated by comma's and enclosed in braces as in
-        <literal>{</literal><replaceable>E</replaceable><subscript>1</subscript><literal>,</literal>
-        <replaceable>E</replaceable><subscript>2</subscript><literal>,
-        ...,</literal>
-        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript><literal>}</literal>,
-        where the
-        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
-        (1 &lt;= <replaceable>i </replaceable>&lt;=
-        <replaceable>n</replaceable>) are expressions that yield the desired
-        element type. For example,</para>
+        <para>A set is an unordered sequence of values and has the following
+        properties: </para>
       </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para>All elements have the same type.</para>
+        </listitem>
+
+        <listitem>
+          <para>The order of the elements does not matter.</para>
+        </listitem>
+
+        <listitem>
+          <para>A set contains an element only once, no matter how many times
+          it has been added to it.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Sets are represented by the type
+      <literal>set[</literal><replaceable>T</replaceable><literal>]</literal>,
+      where <replaceable>T</replaceable> is an arbitrary type. Examples are
+      <literal>set[int]</literal>, <literal>set[tuple[int,int]]</literal> and
+      <literal>set[set[str]]</literal>. Sets are denoted by a list of
+      elements, separated by comma's and enclosed in braces as in
+      <literal>{</literal><replaceable>E</replaceable><subscript>1</subscript><literal>,</literal>
+      <replaceable>E</replaceable><subscript>2</subscript><literal>,
+      ...,</literal>
+      <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript><literal>}</literal>,
+      where the
+      <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
+      (1 &lt;= <replaceable>i</replaceable>&lt;= <replaceable>n</replaceable>)
+      are expressions that yield the desired element type. For example,</para>
 
       <itemizedlist>
         <listitem>
@@ -867,6 +951,11 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <listitem>
           <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}</literal>
           is of type <literal>set[tuple[int,int]]</literal>,</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{1, "b", 3}</literal> is of type
+          <literal>set[value]</literal>,</para>
         </listitem>
 
         <listitem>
@@ -881,39 +970,55 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         </listitem>
       </itemizedlist>
 
-      <para>In a similar fashion as with lists, sets variables are
+      <para><note>
+          <para><literal>{1, 2, 3}</literal> and <literal>{3, 2, 1}</literal>
+          are identical sets.</para>
+        </note><note>
+          <para><literal>{1, 2, 3]</literal> and <literal>{1, 2, 3,
+          1}</literal> are also identical sets.</para>
+        </note>In a similar fashion as with lists, sets variables are
       automatically spliced into a surrounding set. This can be prevented by
       surrounding them with extra { and } brackets.</para>
 
       <formalpara>
         <title>Map</title>
 
-        <para>Maps are represented by the type
-        <literal>map[</literal><replaceable>T</replaceable><literal><subscript>1</subscript>,
-        <replaceable>T</replaceable><subscript>2</subscript>]</literal>, where
-        <replaceable>
-        </replaceable><replaceable>T</replaceable><literal><subscript>1</subscript>
-        and <replaceable>T</replaceable><subscript>2</subscript></literal> are
-        arbitrary types. Examples are <literal>map[int,int]</literal>, and
-        <literal>map[str,int]</literal>. Sets are denoted by a list of pairs,
-        separated by comma's and enclosed in parentheses as in
-        <literal>(</literal><replaceable>K</replaceable><subscript>1</subscript><literal>:</literal>
-        <replaceable>V</replaceable><subscript>1</subscript><literal>,
-        ...,</literal>
-        <replaceable>K</replaceable><subscript>n</subscript><literal>:</literal>
-        <replaceable>V</replaceable><subscript>n</subscript><literal>})</literal>,
-        where the
-        <replaceable>K</replaceable><subscript><replaceable>n</replaceable></subscript>
-        (1 &lt;= <replaceable>i</replaceable>&lt;=
-        <replaceable>n</replaceable>) are expressions that yield the keys of
-        the map and
-        <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript>
-        (1 &lt;= <replaceable>i</replaceable>&lt;=
-        <replaceable>n</replaceable>) are expressions that yield the values
-        for each key. Map resemble functions rather than relations in the
-        sense that only a single value can be associated with each key. For
-        example,</para>
+        <para>A map is a set of key : value pairs and has the following
+        properties:</para>
       </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para>Key and value (may) have different types.</para>
+        </listitem>
+
+        <listitem>
+          <para>A key can only occur once.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Maps are represented by the type
+      <literal>map[</literal><replaceable>T</replaceable><literal><subscript>1</subscript>,
+      <replaceable>T</replaceable><subscript>2</subscript>]</literal>, where
+      <replaceable>T</replaceable><literal><subscript>1</subscript> and
+      <replaceable>T</replaceable><subscript>2</subscript></literal> are
+      arbitrary types. Examples are <literal>map[int,int]</literal>, and
+      <literal>map[str,int]</literal>. Sets are denoted by a list of pairs,
+      separated by comma's and enclosed in parentheses as in
+      <literal>(</literal><replaceable>K</replaceable><subscript>1</subscript><literal>:</literal>
+      <replaceable>V</replaceable><subscript>1</subscript><literal>,
+      ...,</literal>
+      <replaceable>K</replaceable><subscript>n</subscript><literal>:</literal>
+      <replaceable>V</replaceable><subscript>n</subscript><literal>})</literal>,
+      where the
+      <replaceable>K</replaceable><subscript><replaceable>n</replaceable></subscript>
+      (1 &lt;= <replaceable>i</replaceable>&lt;= <replaceable>n</replaceable>)
+      are expressions that yield the keys of the map and
+      <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript>
+      (1 &lt;= <replaceable>i</replaceable>&lt;= <replaceable>n</replaceable>)
+      are expressions that yield the values for each key. Map resemble
+      functions rather than relations in the sense that only a single value
+      can be associated with each key. For example,</para>
 
       <itemizedlist>
         <listitem>
@@ -925,24 +1030,37 @@ rascal&gt; set[proc] entryPoints = top(Calls);
       <formalpara>
         <title>Tuple</title>
 
-        <para>Tuples are represented by the type
-        <literal>tuple[</literal><replaceable>T</replaceable><subscript>1</subscript><literal>
-        <replaceable>L</replaceable><subscript>1</subscript>,</literal>
-        <replaceable>T</replaceable><subscript>2</subscript><literal>
-        <replaceable>L<subscript>2</subscript></replaceable>, ...,</literal>
-        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-        <replaceable>L</replaceable><subscript>n</subscript> ], where
-        <replaceable>T</replaceable><subscript>1</subscript><literal>,</literal>
-        <replaceable>T</replaceable><subscript>2</subscript><literal>,
-        ...,</literal>
-        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-        are arbitrary types and
-        <replaceable>L<subscript>1</subscript></replaceable><literal>,</literal>
-        <replaceable>L</replaceable><subscript>2</subscript><literal>,
-        ...,</literal> <replaceable>L</replaceable><subscript>n</subscript>
-        are optional labels. An example of a tuple type is <literal>tuple[str
-        name, int freq&gt;]</literal>. Examples are:</para>
+        <para>A tuple is a sequence of elements with the following
+        properties:</para>
       </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para>Each element in a tuple (may) have a different type.</para>
+        </listitem>
+
+        <listitem>
+          <para>Each element of a tuple may have a label that can be used to
+          select that element of the tuple.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Tuples are represented by the type
+      <literal>tuple[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>,</literal>
+      <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
+      ...,</literal>
+      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+      <replaceable>L</replaceable><subscript>n</subscript> ], where
+      <replaceable>T</replaceable><subscript>1</subscript><literal>,</literal>
+      <replaceable>T</replaceable><subscript>2</subscript><literal>,
+      ...,</literal>
+      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+      are arbitrary types and
+      <replaceable>L<subscript>1</subscript></replaceable><literal>,</literal>
+      <replaceable>L</replaceable><subscript>2</subscript><literal>,
+      ...,</literal> <replaceable>L</replaceable><subscript>n</subscript> are
+      optional labels. An example of a tuple type is <literal>tuple[str name,
+      int freq&gt;]</literal>. Examples are:</para>
 
       <itemizedlist>
         <listitem>
@@ -964,48 +1082,55 @@ rascal&gt; set[proc] entryPoints = top(Calls);
       <formalpara>
         <title>Relation</title>
 
-        <para>Relations are nothing more than sets of tuples, but since they
-        are used so often we provide a shorthand notation for them. Relations
-        are represented by the type
-        <literal>rel[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>,</literal>
-        <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
-        ...,</literal>
-        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-        <replaceable>L</replaceable><subscript>n</subscript> ], where
-        <replaceable>T</replaceable><subscript>1</subscript><literal>,</literal>
-        <replaceable>T</replaceable><subscript>2</subscript><literal>,
-        ...,</literal>
-        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-        are arbitrary types and
-        <replaceable>L<subscript>1</subscript></replaceable><literal>,</literal>
-        <replaceable>L</replaceable><subscript>2</subscript><literal>,
-        ...,</literal> <replaceable>L</replaceable><subscript>n</subscript>
-        are optional labels. It is a shorthand for
-        <literal>set[tuple[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>
-        ,</literal>
-        <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
-        ...,</literal>
-        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-        <replaceable>L</replaceable><subscript>n</subscript>
-        ]<literal>]</literal>. Examples are <literal>rel[int,str]</literal>
-        and <literal>rel[int,set[str]]</literal>. An n-ary relations with m
-        tuples is denoted by
-        <literal>{&lt;</literal><replaceable>E</replaceable><subscript>11</subscript><literal>,</literal>
-        <replaceable>E</replaceable><subscript>12</subscript><literal>, ...,
-        <replaceable>E</replaceable><subscript>1n</subscript>&gt;,
-        </literal><literal>&lt;</literal><replaceable>E</replaceable><subscript>21</subscript><literal>,</literal>
-        <replaceable>E</replaceable><subscript>22</subscript><literal>, ...,
-        <replaceable>E</replaceable><subscript>2n</subscript>&gt;</literal><literal>,
-        ...,
-        </literal><literal>&lt;</literal><replaceable>E</replaceable><subscript>m1</subscript><literal>,</literal>
-        <replaceable>E</replaceable><subscript>m2</subscript><literal>, ...,
-        <replaceable>E</replaceable><subscript>mn</subscript>&gt;</literal><literal>}</literal>,
-        where the
-        <replaceable>E</replaceable><subscript><replaceable>i</replaceable><replaceable>j</replaceable></subscript>
-        are expressions that yield the desired element type. For example,
-        <literal>{&lt;1, "a"&gt;, &lt;2, "b"&gt;, &lt;3,"c"&gt;}</literal> is
-        of type <literal>rel[int, str]</literal>. Examples are:</para>
+        <para>A relation is a set of elements with the following
+        property:</para>
       </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para>All elements have the same tuple type.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Relations are thus nothing more than sets of tuples, but since
+      they are used so often we provide a shorthand notation for them.
+      Relations are represented by the type
+      <literal>rel[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>,</literal>
+      <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
+      ...,</literal>
+      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+      <replaceable>L</replaceable><subscript>n</subscript> ], where
+      <replaceable>T</replaceable><subscript>1</subscript><literal>,</literal>
+      <replaceable>T</replaceable><subscript>2</subscript><literal>,
+      ...,</literal>
+      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+      are arbitrary types and
+      <replaceable>L<subscript>1</subscript></replaceable><literal>,</literal>
+      <replaceable>L</replaceable><subscript>2</subscript><literal>,
+      ...,</literal> <replaceable>L</replaceable><subscript>n</subscript> are
+      optional labels. It is a shorthand for
+      <literal>set[tuple[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>
+      ,</literal>
+      <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
+      ...,</literal>
+      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+      <replaceable>L</replaceable><subscript>n</subscript>
+      ]<literal>]</literal>. Examples are <literal>rel[int,str]</literal> and
+      <literal>rel[int,set[str]]</literal>. An n-ary relations with m tuples
+      is denoted by
+      <literal>{&lt;</literal><replaceable>E</replaceable><subscript>11</subscript><literal>,</literal>
+      <replaceable>E</replaceable><subscript>12</subscript><literal>, ...,
+      <replaceable>E</replaceable><subscript>1n</subscript>&gt;,</literal><literal>&lt;</literal><replaceable>E</replaceable><subscript>21</subscript><literal>,</literal>
+      <replaceable>E</replaceable><subscript>22</subscript><literal>, ...,
+      <replaceable>E</replaceable><subscript>2n</subscript>&gt;</literal><literal>,
+      ...,</literal><literal>&lt;</literal><replaceable>E</replaceable><subscript>m1</subscript><literal>,</literal>
+      <replaceable>E</replaceable><subscript>m2</subscript><literal>, ...,
+      <replaceable>E</replaceable><subscript>mn</subscript>&gt;</literal><literal>}</literal>,
+      where the
+      <replaceable>E</replaceable><subscript><replaceable>i</replaceable><replaceable>j</replaceable></subscript>
+      are expressions that yield the desired element type. For example,
+      <literal>{&lt;1, "a"&gt;, &lt;2, "b"&gt;, &lt;3,"c"&gt;}</literal> is of
+      type <literal>rel[int, str]</literal>. Examples are:</para>
 
       <itemizedlist>
         <listitem>
@@ -1050,7 +1175,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
       <replaceable>T</replaceable><subscript>2</subscript>. For
       instance,</para>
 
-      <programlisting>alias ModuleId = str;
+      <programlisting audience="" role="check">alias ModuleId = str;
 alias Frequency = int;</programlisting>
 
       <para>introduces two new type names <literal>ModuleId</literal> and
@@ -1090,361 +1215,682 @@ alias Frequency = int;</programlisting>
     <section>
       <title>Typing</title>
 
-      <para>Rascal is based on static typing, this means that as many errors
-      and inconsistencies as possible are spotted before the program is
-      executed. TODO</para>
+      <para xml:id="figure.type-lattice">Rascal is based on static typing,
+      this means that as many errors and inconsistencies as possible are
+      spotted before the program is executed. The types introduced earlier are
+      ordered in a so-called <emphasis>type lattice</emphasis> shown in <xref
+      linkend="figure.type-lattice" />. The arrows describe a
+      <emphasis>subtype-of</emphasis> relation between types. The type void is
+      the <emphasis>smallests</emphasis> type and is included in all other
+      types and the type value is the <emphasis>largests</emphasis> type that
+      includes all other types. We also see that <literal>rel</literal> is a
+      subtype of <literal>set</literal> and that each ADT is a subtype of
+      <literal>node</literal>. Finally, each alias is a subtype of one
+      specific type.<figure>
+          <title>The Rascal Type Lattice</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="type-lattice.png" scale="50"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
     </section>
 
     <section>
       <title>Expressions</title>
 
-      <para><table xml:id="table.non-boolean-operators">
-          <title>Non-Boolean Operators</title>
-
-          <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="1*" />
-
-            <colspec align="left" colname="col2" colwidth="3*" />
-
-            <thead>
-              <row>
-                <entry>Operator</entry>
-
-                <entry>Description</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
-                [</literal> <replaceable>name</replaceable>
-                <literal>=</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript>
-                <literal>]</literal></entry>
-
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>should
-                evaluate to a datatype with a field
-                <replaceable>name</replaceable>; assign value
-                <replaceable>exp</replaceable><subscript>2</subscript> to that
-                field</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable> <literal>.</literal>
-                <replaceable>name</replaceable></entry>
-
-                <entry><replaceable>exp </replaceable>should evaluate to a
-                datatype with field <replaceable>name</replaceable>; return
-                the value of that field</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable> <literal>&lt;</literal>
-                <replaceable>field</replaceable>, ...<literal>
-                &gt;</literal></entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
-                [</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript>
-                <literal>]</literal></entry>
-
-                <entry>The value of
-                <replaceable>exp</replaceable><subscript>2</subscript> is used
-                as index in
-                <replaceable>exp</replaceable><subscript>1</subscript>'s
-                value. On string, list, tuple return the element with given
-                index; for map return the value associated with
-                <replaceable><replaceable>exp</replaceable><subscript>2</subscript>
-                </replaceable>'s value</entry>
-              </row>
-
-              <row>
-                <entry><literal>-</literal>
-                <replaceable>exp</replaceable></entry>
-
-                <entry>negation on integer or real</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable>
-                <literal>+</literal></entry>
-
-                <entry>transitive closure on relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable>
-                <literal>*</literal></entry>
-
-                <entry>reflexive transitive closure on relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable> <literal>@</literal>
-                name</entry>
-
-                <entry>value of attribute <replaceable>name</replaceable> of
-                <replaceable>exp</replaceable>'s value</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>[@</literal> name <literal>=</literal><replaceable>
-                exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
-
-                <entry>assign value of<replaceable>
-                exp</replaceable><subscript>2</subscript> to attribute
-                <replaceable>name</replaceable> of
-                <replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>'s
-                value</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>o</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Composition on relations</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>/</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Division on integer and real</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>%</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Modulo on integer</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>*</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Multiplication on integer and real; product on list,
-                set, relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>&amp;</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Intersection on list, set, map and relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>+</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Addition on integer and real; concatenation on string,
-                list and tuple; union on set, map, and relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>-</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Subtraction on integer and real; difference on list,
-                set, map, and relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
-                <literal>join</literal>
-                <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
-
-                <entry>Join on relation</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table><table xml:id="table.boolean-operators">
-          <title>Boolean Operators</title>
-
-          <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="1*" />
-
-            <colspec align="left" colname="col2" colwidth="3*" />
-
-            <thead>
-              <row>
-                <entry>Operator</entry>
-
-                <entry>Description</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry><literal>!</literal>
-                <replaceable>exp</replaceable></entry>
-
-                <entry>Negation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable>
-                <literal>?</literal></entry>
-
-                <entry>Isdefined: true is exp has a well-defined value</entry>
-              </row>
-
-              <row>
-                <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
-                <literal>in</literal>
-                <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
-
-                <entry>Element of</entry>
-              </row>
-
-              <row>
-                <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
-                <literal>notin</literal>
-                <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
-
-                <entry>Not element of</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>&lt;=</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Less than or equal on bool, int, real or string;
-                sublist on list; subset on set, map or relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>&lt;</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Less than on bool, int, real or string; strict sublist
-                on list; strict subset on set, map or relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>&gt;=</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Greater than or equal on bool, int, real or string;
-                superlist on list; superset on set, map or relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>&gt;</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Greater than on bool, int, real or string; strict
-                superlist on list; strict superset on set, map or
-                relation</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>pat</replaceable> <literal>:=</literal>
-                <replaceable>exp</replaceable></entry>
-
-                <entry>Value of <replaceable>exp</replaceable> matches with
-                pattern <replaceable>pat</replaceable></entry>
-              </row>
-
-              <row>
-                <entry><replaceable>pat</replaceable> <literal>!:=</literal>
-                <replaceable>exp</replaceable></entry>
-
-                <entry>Value of <replaceable>exp</replaceable> does not match
-                with pattern <replaceable>pat</replaceable></entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>==</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Equality</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>!=</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Inequality</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>?</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Ifdefined Otherwise: the value of
-                <replaceable>exp</replaceable><subscript>1</subscript> is it
-                is well-defined, otherwise the value of
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>?</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript>
-                <literal>:</literal>
-                <replaceable>exp</replaceable><subscript>3</subscript></entry>
-
-                <entry>Conditional expression</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>==&gt;</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Implication</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>&lt;==&gt;</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Equivalence</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                &amp;&amp;
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Boolean and</entry>
-              </row>
-
-              <row>
-                <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                <literal>||</literal>
-                <replaceable>exp</replaceable><subscript>2</subscript></entry>
-
-                <entry>Boolean or</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
+      <para>The Expression is the basic unit of evaluation and may consist
+      of:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>An <emphasis>elementary literal value</emphasis>, e.g.
+          constants of type <literal>bool</literal>, <literal>int</literal>,
+          <literal>real</literal>, <literal>str</literal> or
+          <literal>loc</literal>. Elementary literals evaluate to
+          themselves.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>structured literal value</emphasis> for
+          <literal>list</literal>, <literal>set</literal>,
+          <literal>map</literal>, <literal>tuple</literal>, or
+          <literal>rel</literal>. The elements are first evaluated before the
+          structured value is built.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>variable</emphasis>, evaluates to its current
+          value.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>function call</emphasis>. First the arguments are
+          evaluated and the corresponding function is called. The value
+          returned by the function is used as value of the function
+          call.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>constructor</emphasis>. First the arguments are
+          evaluated and then a data value is constructed for the corresponding
+          type. This data value is used as value of the constructor.</para>
+        </listitem>
+
+        <listitem>
+          <para>An <emphasis>operator expression</emphasis>. The operator is
+          applied to the arguments; the evaluation order of the arguments
+          depends on the operator. The result returned by the operator is used
+          as value of the operator expression.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We explain the various operator expressions in more detail.
+      Non-Boolean and Boolean operator expressions behave somewhat differently
+      and therefore we describe separately.</para>
+
+      <section>
+        <title>Non-Boolean Operator Expressions</title>
+
+        <para>The non-Boolean operators are summarized in <xref
+        linkend="table.non-boolean-operators" />. All operators are higly
+        overloaded and we refer to <xref linkend="section.builtin" /> for a
+        description of their meaning for each specific type. The following
+        rules apply:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>All <replaceable>name</replaceable> arguments stand for
+            themselves and are not evaulated.</para>
+          </listitem>
+
+          <listitem>
+            <para>For all operators, except, IfThenElse, the argument
+            expressions are first evaluated before the operator is
+            applied.</para>
+          </listitem>
+
+          <listitem>
+            <para>The operators in <xref
+            linkend="table.non-boolean-operators" /> are listed from high
+            precedence to low precedence. In other words, operators listed
+            higher in the table bind stronger.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para><table xml:id="table.non-boolean-operators">
+            <title>Non-Boolean Operators</title>
+
+            <tgroup cols="3">
+              <colspec align="left" colname="col1" colwidth="2*" />
+
+              <colspec align="left" colname="col2" colwidth="2*" />
+
+              <colspec align="left" colname="col3" colwidth="3*" />
+
+              <thead>
+                <row>
+                  <entry>Operator</entry>
+
+                  <entry>Name</entry>
+
+                  <entry>Description</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
+                  [</literal> <replaceable>name</replaceable>
+                  <literal>=</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript>
+                  <literal>]</literal></entry>
+
+                  <entry>Field assignment</entry>
+
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>should
+                  evaluate to a datatype with a field
+                  <replaceable>name</replaceable>; assign value
+                  <replaceable>exp</replaceable><subscript>2</subscript> to
+                  that field</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable> <literal>.</literal>
+                  <replaceable>name</replaceable></entry>
+
+                  <entry>Field selection</entry>
+
+                  <entry><replaceable>exp </replaceable>should evaluate to a
+                  datatype with field <replaceable>name</replaceable>; return
+                  the value of that field</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable>
+                  <literal>&lt;</literal> <replaceable>field</replaceable>,
+                  ...<literal> &gt;</literal></entry>
+
+                  <entry>Field projection</entry>
+
+                  <entry>exp should evaluate to a tuple or relation, and field
+                  should be a field name or an integer constant. A new tuple
+                  or relation is retruned that only contains the listed
+                  fields.</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
+                  [</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript>
+                  <literal>]</literal></entry>
+
+                  <entry>Subscription</entry>
+
+                  <entry>The value of
+                  <replaceable>exp</replaceable><subscript>2</subscript> is
+                  used as index in
+                  <replaceable>exp</replaceable><subscript>1</subscript>'s
+                  value. On string, list, tuple return the element with given
+                  index; for map return the value associated with
+                  <replaceable><replaceable>exp</replaceable><subscript>2</subscript>
+                  </replaceable>'s value</entry>
+                </row>
+
+                <row>
+                  <entry><literal>-</literal>
+                  <replaceable>exp</replaceable></entry>
+
+                  <entry>Negation</entry>
+
+                  <entry>Negative of <replaceable>exp</replaceable>'s integer
+                  or real value</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable>
+                  <literal>+</literal></entry>
+
+                  <entry>Transitive closure</entry>
+
+                  <entry>Transitive closure on relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable>
+                  <literal>*</literal></entry>
+
+                  <entry>Reflexive transitive closure</entry>
+
+                  <entry>Reflexive transitive closure on relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable> <literal>@</literal>
+                  name</entry>
+
+                  <entry>Attribute selection</entry>
+
+                  <entry>value of attribute <replaceable>name</replaceable> of
+                  <replaceable>exp</replaceable>'s value</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>[@</literal> name <literal>=</literal><replaceable>
+                  exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
+
+                  <entry>Attribute replacement</entry>
+
+                  <entry>Assign value of<replaceable>
+                  exp</replaceable><subscript>2</subscript> to attribute
+                  <replaceable>name</replaceable> of
+                  <replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>'s
+                  value</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>o</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Composition</entry>
+
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  and <replaceable>exp</replaceable><subscript>2</subscript>
+                  should evaluate to a relation; return their
+                  composition</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>/</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Division</entry>
+
+                  <entry>Divide two integers and reals</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>%</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Modulo</entry>
+
+                  <entry>Modulo on integer</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>*</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Multiplication / Product</entry>
+
+                  <entry>Multiply integers or real; product of list, set,
+                  relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>&amp;</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Intersection</entry>
+
+                  <entry>Intersection of list, set, map or relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>+</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Addition / concatenation / union</entry>
+
+                  <entry>Add integer and real; concatenate string, list or
+                  tuple; union on set, map, or relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>-</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Subtraction / difference</entry>
+
+                  <entry>Subtract integer or real; difference of list, set,
+                  map, or relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+                  <literal>join</literal>
+                  <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+
+                  <entry>Join</entry>
+
+                  <entry>Join on relation</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+      </section>
+
+      <section>
+        <title>Boolean Operator Expressions</title>
+
+        <para>The Boolean operators are summarized in <xref
+        linkend="table.boolean-operators" />. All operators are higly
+        overloaded and we refer to <xref linkend="section.builtin" /> for a
+        description of their meaning for each specific type. Most operator are
+        self-explanatory except the Match and NoMatch operators that are also
+        the main reason to treat Boolean operator expressions separately.
+        Although we describe patterns in full detail in <xref
+        linkend="section.patterns" />, a preview is usefull here. A pattern
+        can</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>match (or not match) any arbitrary value (that we will call
+            the <emphasis>subject value</emphasis>);</para>
+          </listitem>
+
+          <listitem>
+            <para>during the match variables may be bound to subvalues of the
+            subject value.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The match operator <programlisting><replaceable>pat</replaceable> <literal>:=</literal> <replaceable>exp</replaceable></programlisting></para>
+
+        <para>is evaluated as follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>exp</emphasis> is evaluated, the result is a
+            subject value;</para>
+          </listitem>
+
+          <listitem>
+            <para>the subject value is matched against the pattern
+            <emphasis>pat</emphasis>;</para>
+          </listitem>
+
+          <listitem>
+            <para>if the match succeeds, any variables in the pattern are
+            bound to subvalues of the subject value and the match expression
+            yield <literal>true</literal>;</para>
+          </listitem>
+
+          <listitem>
+            <para>if the match fails, no variables are bound and the match
+            expression yields <literal>false</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>This looks and <emphasis>is</emphasis> nice and dandy, so why
+        all this fuss about Boolean operators? The catch is that--as we will
+        see in detail in <xref linkend="section.patterns" />--a match need not
+        be unique. This means that there may be more than one way of matching
+        the subject value resulting in different variable bindings. A quick
+        example. Consider the following match of a list<programlisting>[1, list[int] <replaceable>L</replaceable>, 2, list[int] <replaceable>M</replaceable>] := [1,2,3,2,4]</programlisting></para>
+
+        <para>There are two solutions for this match:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>L = []</literal> and <literal>M = [2, 3, 2,
+            4]</literal>; and</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>L = [2,3]</literal> and <literal>M =
+            [4]</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Depending on the context, only the first solution of a match
+        expression is used, respectively all solutions are used. If a match
+        expression occurs in a larger Boolean expression, a subsequent
+        subexpression may yield fals and -- depending on the actual operator
+        -- evaluation <emphasis>backtracks</emphasis> to a previously
+        evaluated match operator to try a next solution. Let's illustrate this
+        by extending the above example:<programlisting>[1, list[int] <replaceable>L</replaceable>, 2, list[int] <replaceable>M</replaceable>] := [1,2,3,2,4] &amp;&amp; size(L) &gt; 0</programlisting>where
+        we are looking for a solution in which <literal>L</literal> has a
+        non-empty list as value. Evaluation proceeds as follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The left argument of the <literal>&amp;&amp;</literal>
+            operator is evaluated: the match expression is evaluated resulting
+            in the bindings <literal>L = []</literal> and <literal>M = [2, 3,
+            2, 4]</literal>;</para>
+          </listitem>
+
+          <listitem>
+            <para>The right argument of the <literal>&amp;&amp;</literal>
+            operator is evaluated: <literal>size(L) &gt; 0</literal> yields
+            false;</para>
+          </listitem>
+
+          <listitem>
+            <para>Backtrack to the left argument of the &amp;&amp; operator to
+            check for more solutions: indeed there are more solutions
+            resulting in the bindings <literal>L = [2,3]</literal> and
+            <literal>M = [4]</literal>;</para>
+          </listitem>
+
+          <listitem>
+            <para>Proceed to thr right operator of
+            <literal>&amp;&amp;</literal>: this time <literal>size(L) &gt;
+            0</literal> yields <literal>true</literal>;</para>
+          </listitem>
+
+          <listitem>
+            <para>The result of evaluating the complete expression is
+            <literal>true</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para><note>
+            <para>List the syntactic positions where all solutions are
+            generated.</para>
+          </note></para>
+
+        <para><table xml:id="table.boolean-operators">
+            <title>Boolean Operators</title>
+
+            <tgroup cols="3">
+              <colspec align="left" colname="col1" colwidth="2*" />
+
+              <colspec align="left" colname="col2" colwidth="2*" />
+
+              <colspec align="left" colname="col3" colwidth="3*" />
+
+              <thead>
+                <row>
+                  <entry>Operator</entry>
+
+                  <entry>Name</entry>
+
+                  <entry>Description</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry><literal>!</literal>
+                  <replaceable>exp</replaceable></entry>
+
+                  <entry>Negation</entry>
+
+                  <entry>Negate <replaceable>exp</replaceable>'s boolean
+                  value</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable>
+                  <literal>?</literal></entry>
+
+                  <entry>IsDefined</entry>
+
+                  <entry>true is exp has a well-defined value</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+                  <literal>in</literal>
+                  <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+
+                  <entry>ElementOf</entry>
+
+                  <entry>Element of</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+                  <literal>notin</literal>
+                  <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+
+                  <entry>NotElementOf</entry>
+
+                  <entry>Not element of</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>&lt;=</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>LessThanOrEqual</entry>
+
+                  <entry>Less than or equal on bool, int, real or string;
+                  sublist on list; subset on set, map or relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>&lt;</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>LessThan</entry>
+
+                  <entry>Less than on bool, int, real or string; strict
+                  sublist on list; strict subset on set, map or
+                  relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>&gt;=</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>GreaterThanOrEqual</entry>
+
+                  <entry>Greater than or equal on bool, int, real or string;
+                  superlist on list; superset on set, map or relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>&gt;</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>GreaterThan</entry>
+
+                  <entry>Greater than on bool, int, real or string; strict
+                  superlist on list; strict superset on set, map or
+                  relation</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>pat</replaceable> <literal>:=</literal>
+                  <replaceable>exp</replaceable></entry>
+
+                  <entry>Match</entry>
+
+                  <entry>Value of <replaceable>exp</replaceable> matches with
+                  pattern <replaceable>pat</replaceable></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>pat</replaceable> <literal>!:=</literal>
+                  <replaceable>exp</replaceable></entry>
+
+                  <entry>NoMatch</entry>
+
+                  <entry>Value of <replaceable>exp</replaceable> does not
+                  match with pattern <replaceable>pat</replaceable></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>==</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Equal</entry>
+
+                  <entry>Equality</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>!=</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>NotEqual</entry>
+
+                  <entry>Inequality</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>?</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>IfDefinedElse</entry>
+
+                  <entry>the value of
+                  <replaceable>exp</replaceable><subscript>1</subscript> is it
+                  is well-defined, otherwise the value of
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>?</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript>
+                  <literal>:</literal>
+                  <replaceable>exp</replaceable><subscript>3</subscript></entry>
+
+                  <entry>IfThenElse</entry>
+
+                  <entry>Conditional expression</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>==&gt;</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Implication</entry>
+
+                  <entry><literal>true</literal>, unless the value of
+                  <replaceable>exp</replaceable><subscript>1</subscript> is
+                  <literal>true</literal> and that of
+                  <replaceable>exp</replaceable><subscript>2</subscript> is
+                  <literal>false</literal></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>&lt;==&gt;</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Equivalence</entry>
+
+                  <entry>true if
+                  <replaceable>exp</replaceable><subscript>1</subscript> and
+                  <replaceable>exp</replaceable><subscript>2</subscript> have
+                  the same value</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  &amp;&amp;
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>And</entry>
+
+                  <entry><literal>true</literal> if the value of both
+                  <replaceable>exp</replaceable><subscript>1</subscript> and
+                  <replaceable>exp</replaceable><subscript>2</subscript> is
+                  <literal>true</literal></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <literal>||</literal>
+                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Or</entry>
+
+                  <entry><literal>true</literal> if the value of either
+                  <replaceable>exp</replaceable><subscript>1</subscript> or
+                  <replaceable>exp</replaceable><subscript>2</subscript> is
+                  <literal>true</literal></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+      </section>
     </section>
 
-    <section>
+    <section xml:id="section.patterns">
       <title>Patterns</title>
 
       <para>Patterns come in three flavours:</para>
@@ -7279,11 +7725,10 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
   <section xml:id="section.table-builtin-functions">
     <title>Table of Built-in Functions</title>
 
-    <para><table xml:id="table.all-functions">
-        <title>All Functions</title>
-        <?dbfo keep-together="auto" ?>
-        <titleabbrev></titleabbrev>
+    <para><table xml:id="table.all-functions-1">
+        <title>All Functions (part I)</title>
 
+        <titleabbrev></titleabbrev>
 
         <tgroup cols="3">
           <colspec align="left" colname="col1" colwidth="3*" />
@@ -7502,7 +7947,31 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry></entry>
             </row>
+          </tbody>
+        </tgroup>
+      </table><table xml:id="table.all-functions-2">
+        <title>All Functions (part II)</title>
 
+        <titleabbrev></titleabbrev>
+
+        <tgroup cols="3">
+          <colspec align="left" colname="col1" colwidth="3*" />
+
+          <colspec align="left" colname="col2" colwidth="1*" />
+
+          <colspec align="left" colname="col3" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Operator</entry>
+
+              <entry>Module</entry>
+
+              <entry>See</entry>
+            </row>
+          </thead>
+
+          <tbody>
             <row>
               <entry><literal>getChildren</literal></entry>
 
@@ -7702,7 +8171,31 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry></entry>
             </row>
+          </tbody>
+        </tgroup>
+      </table><table xml:id="table.all-functions-3">
+        <title>All Functions (part III)</title>
 
+        <titleabbrev></titleabbrev>
+
+        <tgroup cols="3">
+          <colspec align="left" colname="col1" colwidth="3*" />
+
+          <colspec align="left" colname="col2" colwidth="1*" />
+
+          <colspec align="left" colname="col3" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Operator</entry>
+
+              <entry>Module</entry>
+
+              <entry>See</entry>
+            </row>
+          </thead>
+
+          <tbody>
             <row>
               <entry><literal>readValueFromBinaryFile</literal></entry>
 
