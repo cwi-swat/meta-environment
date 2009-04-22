@@ -809,7 +809,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <title>List</title>
 
         <para>A list is an ordered sequence of values and has the following
-        properties: </para>
+        properties:</para>
       </formalpara>
 
       <itemizedlist>
@@ -909,7 +909,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <title>Set</title>
 
         <para>A set is an unordered sequence of values and has the following
-        properties: </para>
+        properties:</para>
       </formalpara>
 
       <itemizedlist>
@@ -1167,12 +1167,10 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         The alias declaration</para>
       </formalpara>
 
-      <programlisting>alias <replaceable>T</replaceable><subscript>1</subscript> = <replaceable>T</replaceable><subscript>2</subscript>;</programlisting>
+      <programlisting>alias <replaceable>Name</replaceable>  = <replaceable>Type</replaceable><subscript></subscript>;</programlisting>
 
-      <para>states that the new type name
-      <replaceable>T</replaceable><subscript>1</subscript> can be used
-      everywhere instead of the already defined type name
-      <replaceable>T</replaceable><subscript>2</subscript>. For
+      <para>states that <replaceable>Name</replaceable> can be used everywhere
+      instead of the already defined type <replaceable>Type</replaceable>. For
       instance,</para>
 
       <programlisting audience="" role="check">alias ModuleId = str;
@@ -1204,10 +1202,13 @@ alias Frequency = int;</programlisting>
         facility. The type declaration</para>
       </formalpara>
 
-      <programlisting>data N = Pat1 | Pat2 | ...</programlisting>
+      <programlisting><literal>data <replaceable>Name</replaceable> = <replaceable>Pat</replaceable><subscript>1</subscript> | <replaceable>Pat</replaceable><subscript>1</subscript> | ...</literal></programlisting>
 
-      <para>introduces a new codatatype N and Pat1, Pat2, are prefix patterns
-      describing the variants of the datatype. For instance, <programlisting>data Bool = btrue | bfalse | band(Bool L, Bool R)  | bor(Bool L, Bool R);  </programlisting>defines
+      <para>introduces a new datatype <replaceable>Name</replaceable> and
+      <replaceable>Pat</replaceable><subscript>1</subscript>,
+      <replaceable>Pat</replaceable><subscript>2</subscript>, ... are prefix
+      patterns describing the variants of the datatype. For instance,
+      <programlisting>data Bool = btrue | bfalse | band(Bool L, Bool R)  | bor(Bool L, Bool R);  </programlisting>defines
       the datatype <literal>Bool</literal> that contains various constants and
       constructor functions.</para>
     </section>
@@ -1342,74 +1343,74 @@ alias Frequency = int;</programlisting>
               <tbody>
                 <row>
                   <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
-                  [</literal> <replaceable>name</replaceable>
+                  [</literal> <replaceable>Name</replaceable>
                   <literal>=</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript>
+                  <replaceable>Exp</replaceable><subscript>2</subscript>
                   <literal>]</literal></entry>
 
                   <entry>Field assignment</entry>
 
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>should
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>should
                   evaluate to a datatype with a field
-                  <replaceable>name</replaceable>; assign value
-                  <replaceable>exp</replaceable><subscript>2</subscript> to
+                  <replaceable>Name</replaceable>; assign value
+                  <replaceable>Exp</replaceable><subscript>2</subscript> to
                   that field</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable> <literal>.</literal>
-                  <replaceable>name</replaceable></entry>
+                  <entry><replaceable>Exp</replaceable> <literal>.</literal>
+                  <replaceable>Name</replaceable></entry>
 
                   <entry>Field selection</entry>
 
-                  <entry><replaceable>exp </replaceable>should evaluate to a
-                  datatype with field <replaceable>name</replaceable>; return
+                  <entry><replaceable>Exp </replaceable>should evaluate to a
+                  datatype with field <replaceable>Name</replaceable>; return
                   the value of that field</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable>
+                  <entry><replaceable>Exp</replaceable>
                   <literal>&lt;</literal> <replaceable>field</replaceable>,
                   ...<literal> &gt;</literal></entry>
 
                   <entry>Field projection</entry>
 
-                  <entry>exp should evaluate to a tuple or relation, and field
+                  <entry>Exp should evaluate to a tuple or relation, and field
                   should be a field name or an integer constant. A new tuple
                   or relation is retruned that only contains the listed
                   fields.</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript><literal>
                   [</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript>
+                  <replaceable>Exp</replaceable><subscript>2</subscript>
                   <literal>]</literal></entry>
 
                   <entry>Subscription</entry>
 
                   <entry>The value of
-                  <replaceable>exp</replaceable><subscript>2</subscript> is
+                  <replaceable>Exp</replaceable><subscript>2</subscript> is
                   used as index in
-                  <replaceable>exp</replaceable><subscript>1</subscript>'s
+                  <replaceable>Exp</replaceable><subscript>1</subscript>'s
                   value. On string, list, tuple return the element with given
                   index; for map return the value associated with
-                  <replaceable><replaceable>exp</replaceable><subscript>2</subscript>
+                  <replaceable><replaceable>Exp</replaceable><subscript>2</subscript>
                   </replaceable>'s value</entry>
                 </row>
 
                 <row>
                   <entry><literal>-</literal>
-                  <replaceable>exp</replaceable></entry>
+                  <replaceable>Exp</replaceable></entry>
 
                   <entry>Negation</entry>
 
-                  <entry>Negative of <replaceable>exp</replaceable>'s integer
+                  <entry>Negative of <replaceable>Exp</replaceable>'s integer
                   or real value</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable>
+                  <entry><replaceable>Exp</replaceable>
                   <literal>+</literal></entry>
 
                   <entry>Transitive closure</entry>
@@ -1418,7 +1419,7 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable>
+                  <entry><replaceable>Exp</replaceable>
                   <literal>*</literal></entry>
 
                   <entry>Reflexive transitive closure</entry>
@@ -1427,46 +1428,46 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable> <literal>@</literal>
-                  name</entry>
+                  <entry><replaceable>Exp</replaceable> <literal>@</literal>
+                  Name</entry>
 
                   <entry>Attribute selection</entry>
 
-                  <entry>value of attribute <replaceable>name</replaceable> of
-                  <replaceable>exp</replaceable>'s value</entry>
+                  <entry>value of attribute <replaceable>Name</replaceable> of
+                  <replaceable>Exp</replaceable>'s value</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                  <literal>[@</literal> name <literal>=</literal><replaceable>
-                  exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
+                  <literal>[@</literal> Name <literal>=</literal><replaceable>
+                  Exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
 
                   <entry>Attribute replacement</entry>
 
                   <entry>Assign value of<replaceable>
-                  exp</replaceable><subscript>2</subscript> to attribute
-                  <replaceable>name</replaceable> of
-                  <replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>'s
+                  Exp</replaceable><subscript>2</subscript> to attribute
+                  <replaceable>Name</replaceable> of
+                  <replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable>'s
                   value</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>o</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Composition</entry>
 
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
-                  and <replaceable>exp</replaceable><subscript>2</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
+                  and <replaceable>Exp</replaceable><subscript>2</subscript>
                   should evaluate to a relation; return their
                   composition</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>/</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Division</entry>
 
@@ -1474,9 +1475,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>%</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Modulo</entry>
 
@@ -1484,9 +1485,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>*</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Multiplication / Product</entry>
 
@@ -1495,9 +1496,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>&amp;</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Intersection</entry>
 
@@ -1505,9 +1506,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>+</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Addition / concatenation / union</entry>
 
@@ -1516,9 +1517,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>-</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Subtraction / difference</entry>
 
@@ -1527,9 +1528,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+                  <entry><replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable>
                   <literal>join</literal>
-                  <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+                  <replaceable><replaceable>Exp</replaceable><subscript>2</subscript></replaceable></entry>
 
                   <entry>Join</entry>
 
@@ -1565,13 +1566,13 @@ alias Frequency = int;</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para>The match operator <programlisting><replaceable>pat</replaceable> <literal>:=</literal> <replaceable>exp</replaceable></programlisting></para>
+        <para>The match operator <programlisting><replaceable>pat</replaceable> <literal>:=</literal> <replaceable>Exp</replaceable></programlisting></para>
 
         <para>is evaluated as follows:</para>
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>exp</emphasis> is evaluated, the result is a
+            <para><emphasis>Exp</emphasis> is evaluated, the result is a
             subject value;</para>
           </listitem>
 
@@ -1656,10 +1657,22 @@ alias Frequency = int;</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para><note>
-            <para>List the syntactic positions where all solutions are
-            generated.</para>
-          </note></para>
+        <para>This behaviour is applicable in the context of the following
+        Rascal constructs:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Comprehensions</para>
+          </listitem>
+
+          <listitem>
+            <para>Tests in while, do, for, one, all statements.</para>
+          </listitem>
+        </itemizedlist>
+
+        <note>
+          <para>Make the above more specific.</para>
+        </note>
 
         <para><table xml:id="table.boolean-operators">
             <title>Boolean Operators</title>
@@ -1684,27 +1697,27 @@ alias Frequency = int;</programlisting>
               <tbody>
                 <row>
                   <entry><literal>!</literal>
-                  <replaceable>exp</replaceable></entry>
+                  <replaceable>Exp</replaceable></entry>
 
                   <entry>Negation</entry>
 
-                  <entry>Negate <replaceable>exp</replaceable>'s boolean
+                  <entry>Negate <replaceable>Exp</replaceable>'s boolean
                   value</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable>
+                  <entry><replaceable>Exp</replaceable>
                   <literal>?</literal></entry>
 
                   <entry>IsDefined</entry>
 
-                  <entry>true is exp has a well-defined value</entry>
+                  <entry>true is Exp has a well-defined value</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+                  <entry><replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable>
                   <literal>in</literal>
-                  <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+                  <replaceable><replaceable>Exp</replaceable><subscript>2</subscript></replaceable></entry>
 
                   <entry>ElementOf</entry>
 
@@ -1712,9 +1725,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+                  <entry><replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable>
                   <literal>notin</literal>
-                  <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+                  <replaceable><replaceable>Exp</replaceable><subscript>2</subscript></replaceable></entry>
 
                   <entry>NotElementOf</entry>
 
@@ -1722,9 +1735,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>&lt;=</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>LessThanOrEqual</entry>
 
@@ -1733,9 +1746,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>&lt;</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>LessThan</entry>
 
@@ -1745,9 +1758,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>&gt;=</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>GreaterThanOrEqual</entry>
 
@@ -1756,9 +1769,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>&gt;</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>GreaterThan</entry>
 
@@ -1769,28 +1782,28 @@ alias Frequency = int;</programlisting>
 
                 <row>
                   <entry><replaceable>pat</replaceable> <literal>:=</literal>
-                  <replaceable>exp</replaceable></entry>
+                  <replaceable>Exp</replaceable></entry>
 
                   <entry>Match</entry>
 
-                  <entry>Value of <replaceable>exp</replaceable> matches with
+                  <entry>Value of <replaceable>Exp</replaceable> matches with
                   pattern <replaceable>pat</replaceable></entry>
                 </row>
 
                 <row>
                   <entry><replaceable>pat</replaceable> <literal>!:=</literal>
-                  <replaceable>exp</replaceable></entry>
+                  <replaceable>Exp</replaceable></entry>
 
                   <entry>NoMatch</entry>
 
-                  <entry>Value of <replaceable>exp</replaceable> does not
+                  <entry>Value of <replaceable>Exp</replaceable> does not
                   match with pattern <replaceable>pat</replaceable></entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>==</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Equal</entry>
 
@@ -1798,9 +1811,9 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>!=</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>NotEqual</entry>
 
@@ -1808,24 +1821,24 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>?</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>IfDefinedElse</entry>
 
                   <entry>the value of
-                  <replaceable>exp</replaceable><subscript>1</subscript> is it
+                  <replaceable>Exp</replaceable><subscript>1</subscript> is it
                   is well-defined, otherwise the value of
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>?</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript>
+                  <replaceable>Exp</replaceable><subscript>2</subscript>
                   <literal>:</literal>
-                  <replaceable>exp</replaceable><subscript>3</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>3</subscript></entry>
 
                   <entry>IfThenElse</entry>
 
@@ -1833,56 +1846,83 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>==&gt;</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Implication</entry>
 
                   <entry><literal>true</literal>, unless the value of
-                  <replaceable>exp</replaceable><subscript>1</subscript> is
+                  <replaceable>Exp</replaceable><subscript>1</subscript> is
                   <literal>true</literal> and that of
-                  <replaceable>exp</replaceable><subscript>2</subscript> is
+                  <replaceable>Exp</replaceable><subscript>2</subscript> is
                   <literal>false</literal></entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>&lt;==&gt;</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Equivalence</entry>
 
                   <entry>true if
-                  <replaceable>exp</replaceable><subscript>1</subscript> and
-                  <replaceable>exp</replaceable><subscript>2</subscript> have
+                  <replaceable>Exp</replaceable><subscript>1</subscript> and
+                  <replaceable>Exp</replaceable><subscript>2</subscript> have
                   the same value</entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   &amp;&amp;
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>And</entry>
 
                   <entry><literal>true</literal> if the value of both
-                  <replaceable>exp</replaceable><subscript>1</subscript> and
-                  <replaceable>exp</replaceable><subscript>2</subscript> is
+                  <replaceable>Exp</replaceable><subscript>1</subscript> and
+                  <replaceable>Exp</replaceable><subscript>2</subscript> is
                   <literal>true</literal></entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript>
+                  <entry><literal><replaceable>Exp</replaceable><subscript>1</subscript>
+                  , <replaceable>Exp</replaceable><subscript>2</subscript>
+                  ,</literal> ... <literal>,
+                  <replaceable>Exp</replaceable><subscript>n</subscript></literal></entry>
+
+                  <entry>MultiCondition</entry>
+
+                  <entry><literal>Equivalent to:
+                  <replaceable>Exp</replaceable><subscript>1</subscript>
+                  &amp;&amp;
+                  <replaceable>Exp</replaceable><subscript>2</subscript>
+                  &amp;&amp;</literal> ... <literal>&amp;&amp;
+                  <replaceable>Exp</replaceable><subscript>n</subscript></literal></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   <literal>||</literal>
-                  <replaceable>exp</replaceable><subscript>2</subscript></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>Or</entry>
 
                   <entry><literal>true</literal> if the value of either
-                  <replaceable>exp</replaceable><subscript>1</subscript> or
-                  <replaceable>exp</replaceable><subscript>2</subscript> is
+                  <replaceable>Exp</replaceable><subscript>1</subscript> or
+                  <replaceable>Exp</replaceable><subscript>2</subscript> is
                   <literal>true</literal></entry>
+                </row>
+
+                <row>
+                  <entry><literal><replaceable>Pat</replaceable> &lt;-
+                  <replaceable>Exp</replaceable></literal></entry>
+
+                  <entry>Enumerator</entry>
+
+                  <entry><literal>true</literal> for every element in
+                  <replaceable>Exp</replaceable>'s value that matches
+                  <replaceable>pat</replaceable></entry>
                 </row>
               </tbody>
             </tgroup>
@@ -2045,7 +2085,7 @@ alias Frequency = int;</programlisting>
 
         <itemizedlist>
           <listitem>
-            <para>A <emphasis>variable declaration</emphasis>
+            <para>A <emphasis>typed variable</emphasis>
             <emphasis>pattern</emphasis><programlisting><replaceable>&lt;Type</replaceable> <replaceable>Var&gt;</replaceable></programlisting></para>
           </listitem>
 
@@ -2120,33 +2160,33 @@ alias Frequency = int;</programlisting>
       <title>Comprehensions</title>
 
       <para>We will use the familiar notation for <emphasis>list
-      comprehension</emphasis><programlisting>[<replaceable>E</replaceable> | <replaceable>G</replaceable><subscript>1</subscript>, ..., <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>]</programlisting></para>
+      comprehension</emphasis><programlisting>[<replaceable>E</replaceable>xp | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>]</programlisting></para>
 
       <para>to denote the construction of a list consisting of the successive
       values of the <emphasis>contributing expression</emphasis>
       <replaceable>E</replaceable>. The values and the resulting list are
-      determined by <replaceable>E</replaceable> and the
+      determined by <replaceable>Exp</replaceable> and the
       <emphasis>generators</emphasis>
-      <replaceable>G</replaceable><subscript>1</subscript> ,...,
-      <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>.
-      <replaceable>E</replaceable> is computed for all possible combinations
+      <replaceable>Gen</replaceable><subscript>1</subscript> ,...,
+      <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>.
+      <replaceable>E</replaceable>xp is computed for all possible combinations
       of values produced by the generators. Each generator may introduce new
       variables that can be used in subsequent generators as well as in the
-      expressions <replaceable>E</replaceable>. A generator can use the
+      expressions <replaceable>Exp</replaceable>. A generator can use the
       variables introduced by preceding generators. Generators may enumerate
       all the values in a set or relation, or they may perform an arbitrary
       test.</para>
 
       <para>In addition to list comprehensions, Rascal also supports
-      <emphasis>set comprehension</emphasis><programlisting>{<replaceable>E</replaceable> | <replaceable>G</replaceable><subscript>1</subscript>, ..., <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>}</programlisting></para>
+      <emphasis>set comprehension</emphasis><programlisting>{<replaceable>Exp</replaceable> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>}</programlisting></para>
 
       <para>that also serve as relation comprehension, provided that
-      <replaceable>E</replaceable> is of a tuple type.</para>
+      <replaceable>Exp</replaceable> is of a tuple type.</para>
 
       <para>Finally, <replaceable>map comprehension</replaceable>s are written
       as:</para>
 
-      <programlisting>(<replaceable>E</replaceable><subscript>1</subscript> : <replaceable>E</replaceable><subscript>2</subscript> | <replaceable>G</replaceable><subscript>1</subscript>, ..., <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>)</programlisting>
+      <programlisting>(<replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>)</programlisting>
 
       <para>Since the entries in a map require both a key and a value for each
       entry, two expressions are needed in this case.</para>
@@ -2156,16 +2196,16 @@ alias Frequency = int;</programlisting>
 
         <para>An enumerator generates all the values in a given list, set,
         map, tuple, relation or abstract datatype. They have the following
-        form:<programlisting><replaceable>P</replaceable> &lt;- <replaceable>E</replaceable></programlisting></para>
+        form:<programlisting><replaceable>P</replaceable>at &lt;- <replaceable>Exp</replaceable></programlisting></para>
 
-        <para>where <replaceable>P</replaceable> is a pattern and
-        <replaceable>E</replaceable> is an expression. An enumerator is
+        <para>where <replaceable>Pat</replaceable> is a pattern and
+        <replaceable>Exp</replaceable> is an expression. An enumerator is
         evaluated as follows:</para>
 
         <itemizedlist>
           <listitem>
-            <para>Expression <replaceable>E</replaceable> is evaluated and may
-            have an arbitrary value <replaceable>V</replaceable>.</para>
+            <para>Expression <replaceable>Exp</replaceable> is evaluated and
+            may have an arbitrary value <replaceable>V</replaceable>.</para>
           </listitem>
 
           <listitem>
@@ -2175,17 +2215,18 @@ alias Frequency = int;</programlisting>
 
           <listitem>
             <para>Each element value is matched against the pattern
-            <replaceable>P</replaceable>. There are two cases:</para>
+            <replaceable>Pat</replaceable>. There are two cases:</para>
 
             <itemizedlist>
               <listitem>
                 <para>The match succeeds, any variables in
-                <replaceable>P</replaceable> are bound, and the next generator
-                in the comprehension is evaluated. The variables that are
-                introduced by an enumartor are only available to generators
-                that appear later (i.e., to the right) in the comprehension.
-                When this enumerator is the last generator in the
-                comprehension its contributing expression is evaluated.</para>
+                <replaceable>P</replaceable>at are bound, and the next
+                generator in the comprehension is evaluated. The variables
+                that are introduced by an enumartor are only available to
+                generators that appear later (i.e., to the right) in the
+                comprehension. When this enumerator is the last generator in
+                the comprehension its contributing expression is
+                evaluated.</para>
               </listitem>
 
               <listitem>
@@ -2321,7 +2362,194 @@ alias Frequency = int;</programlisting>
     <section>
       <title>Switch and Visit</title>
 
-      <para></para>
+      <section>
+        <title>Switch statement</title>
+
+        <para>A <literal>switch</literal> statement is similar to a switch
+        statement in C or Java and has the form:<programlisting>switch ( <replaceable>Exp</replaceable> ) {
+case <replaceable>Rule</replaceable>1;
+case <replaceable>Rule</replaceable>2;
+...
+default: ...
+}</programlisting></para>
+
+        <para>The value of the expression <replaceable>Exp</replaceable> is
+        the subject term that will be matched by the successive cases in the
+        switch statement. This corresponds to the matching provided by the
+        left-hand sides of a set of rewrite rules. However, the switch
+        statement provides <emphasis role="bold">only</emphasis> matching at
+        the top level of the subject term and does not traverse it. The type
+        of the pattern in each case must be identical to the type of the
+        subject term (or be a subtype of it). If no case matches, the switch
+        acts as a dummy statement. There is no fall through from one case to
+        the next.</para>
+
+        <para>Each case contains a Rule that can have one of the following
+        forms:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><programlisting><literal><replaceable>Pat</replaceable> =&gt; <replaceable>Exp</replaceable></literal></programlisting>When
+            the subject matches <replaceable>Pat</replaceable>,the value of
+            Exp is returned from the enclosing function.</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>Pat</replaceable> : <replaceable>Statement</replaceable></programlisting></para>
+
+            <para>This is the most general case. When the subject matches
+            <replaceable>Pat</replaceable>, the
+            <replaceable>Statement</replaceable> is executed. The execution of
+            <replaceable>Statement</replaceable> should lead to one of the
+            following:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Execution of a <literal>return</literal> statement that
+                returns a value from the enclosing function.</para>
+              </listitem>
+
+              <listitem>
+                <para>Execution of a <literal>fail</literal> statement: all
+                side effects of <replaceable>Statement</replaceable> are
+                undone and the next case is tried.</para>
+              </listitem>
+
+              <listitem>
+                <para>None of the above: execution continues with the
+                statement following the switch.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Visit expression</title>
+
+        <para>A <literal>visit</literal> expression corresponds to a traversal
+        function in ASF+SDF and has the form:<programlisting><replaceable>Strategy</replaceable> visit ( <replaceable>Exp</replaceable> ) {
+case <replaceable>Rule</replaceable>1;
+case <replaceable>Rule</replaceable>2;
+...
+default: ...
+}</programlisting>Given a subject term (the current value of
+        <replaceable>Exp</replaceable>) and a list of cases (resembling cases
+        in a case statement or rewrite rules) it traverses the term. Depending
+        on the precise rules it may perform replacement (mimicking a
+        transformer), update local variables (mimicking an accumulator) or a
+        combination of these two. If <emphasis role="bold">any</emphasis> of
+        the cases contains an <literal>insert</literal> statement, the value
+        of the visit expression is a new value that is obtained by successive
+        insertions in the subject term by executing one or more cases.
+        Otherwise, the original value of the subject term is returned.</para>
+
+        <para>The visit expression is optionally preceeded by one of the
+        following strategy indications that determine the traversal order of
+        the subject:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>top-down</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>top-down-break</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>bottom-up</literal> (this is the default)</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>bottom-up-break</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>innermost</literal> = compute a fixed-point: repeat
+            a bottom-up traversal as long as the traversal function changes
+            values.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>outermost</literal> = compute a fixed-point: repeat
+            a traversal traversal as long as the traversal function changes
+            values.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The execution of the cases is similar to the cases in a switch
+        statement with the following exceptions:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Rules of the form ... =&gt; ... <emphasis
+            role="bold">insert</emphasis> their result in the subject (instead
+            of returning a value).</para>
+          </listitem>
+
+          <listitem>
+            <para>For rules of the form
+            <literal><replaceable>Pat</replaceable> :
+            <replaceable>Statement</replaceable></literal>, executing
+            <replaceable>Statement</replaceable> should lead to one of the
+            following:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Execution of an <literal>insert</literal> statement of
+                the form <literal>insert
+                <replaceable>Expression</replaceable></literal>. The value of
+                <replaceable>Expression</replaceable> replaces the subtree of
+                the subject that is currently being visited. Note that a copy
+                of the subject is created at the start of the visit statement
+                and all insertions are made in this copy. As a consequence,
+                insertions cannot influence matches later on.<note>
+                    <para>An <literal>insert</literal> statement may only
+                    occur inside a <literal>visit</literal> expression.</para>
+                  </note></para>
+              </listitem>
+
+              <listitem>
+                <para>Execution of a <literal>fail</literal> statement: all
+                side effects of <replaceable>Statement</replaceable> are
+                undone, no insertion is made, and the next case is
+                tried.</para>
+              </listitem>
+
+              <listitem>
+                <para>Execution of a <literal>return</literal> statement that
+                returns a value from the enclosing function.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+        <para>Each case keyword may be followed by a type constraint of the
+        form <literal>[<replaceable>Type</replaceable>]</literal> that limits
+        the type of the values to which the case applies.</para>
+
+        <para>The precise behaviour of the visit statement depends on the type
+        of the subject:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>For type <literal>nodeor ADT</literal>, all nodes of the
+            tree are visited (in the order determined by the strategy).
+            SyntaxPatterns and AbstractPatterns directly match tree nodes.
+            RexExpPatterns match only values of type string.</para>
+          </listitem>
+
+          <listitem>
+            <para>For structured types (list, set, map, tuple, rel), the
+            elements of the structured type are visited and matched against
+            the cases. When inserts are made, a new structured value is
+            created.<caution>
+                <para>Have strategies any effect for non-tree subjects?</para>
+              </caution></para>
+          </listitem>
+        </itemizedlist>
+      </section>
     </section>
 
     <section>
@@ -2362,56 +2590,46 @@ alias Frequency = int;</programlisting>
       <section>
         <title>Solve</title>
 
-        <para>It is also possible to define mutually dependent sets of
-        equations:<programlisting>equations
-       initial
-          <literal><replaceable>T</replaceable></literal><subscript>1</subscript> <replaceable>V</replaceable><subscript>1</subscript> init <replaceable>I</replaceable><subscript>1</subscript>
-          ...
-          <literal><replaceable>T</replaceable></literal><subscript><replaceable>n</replaceable></subscript> <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript> init <replaceable>I</replaceable><subscript><replaceable>n</replaceable></subscript>
-       satisfy
-          <replaceable>V</replaceable><subscript>1</subscript> = <replaceable>E</replaceable><subscript>1</subscript>
-          ...
-          <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript> = <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
-end equations</programlisting></para>
+        <para>Rascal provides a solve statement for performing arbitrary
+        fixed-point computations. This means, repeating a certain computation
+        as long as it causes changes. This can, for instance, be used for the
+        solution of sets of simultaneous linear equations but has much wider
+        applicability. The format is:<programlisting><literal>with {
+  <replaceable>Type</replaceable><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript> = <replaceable>Exp</replaceable><subscript>1</subscript>;
+  <replaceable>Type</replaceable><subscript>2</subscript> <replaceable>Var</replaceable><subscript>2</subscript> = <replaceable>Exp</replaceable><subscript>2</subscript>;
+  ...
+} solve
+  <replaceable>Statement</replaceable></literal></programlisting></para>
+
+        <para>The solve statement consists of an initialization section and a
+        statement. Optionally, an expression directly following the
+        <literal>solve</literal> keyword, gives an upperbound on the number of
+        iterations.</para>
 
         <para>In the <literal>initial</literal> section, the variables
-        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>
-        are declared and initialized. In the <literal>satisfy</literal>
-        section, the actual set of equations is given. The expressions
-        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
-        may refer to any of the variables
-        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>
-        (and to any variables declared earlier). This set of equations is
-        solved by evaluating the expressions
-        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
-        assigning their value to the corresponding variables
-        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>,
-        and repeating this as long as the value of one of the variables was
-        changed. This is typically used for solving a set of dataflow
-        equations. Example:</para>
+        <replaceable>Var</replaceable><subscript><replaceable>i</replaceable></subscript>
+        are declared and initialized. In the <literal>solve</literal> section,
+        the statement can use and modify these variables. The statement is
+        executed, assigning new values to the variables
+        <replaceable>Var</replaceable><subscript><replaceable>i</replaceable></subscript>,
+        and this is repeated as long as the value of any of the variables was
+        changed compared to the previous repetition. </para>
 
-        <itemizedlist>
-          <listitem>
-            <para>Although transitive closure is provided as a built-in
-            operator, we can use equations to define the transitive closure of
-            a relation. Recall that \[R+ = R \cup (R \circ R) \cup (R \circ R
-            \circ R) \cup ... .\] This can be expressed as follows.<warning>
-                <para>Fix expression.</para>
-              </warning></para>
+        <para>Let's consider transitve closure as an example (transitive
+        closure is already available as built-in operator, we use it here just
+        as a simple illustration). Transitive closure of a relation is usually
+        defined as:<programlisting>R+ = R + (R o R) + (R o R o R) + ...</programlisting>This
+        can be expressed as follows:</para>
 
-            <para><programlisting>rel[int,int] R =  {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}
+        <screen>rascal&gt; rel[int,int] R = {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;};
+{&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}
+rascal&gt;
+  with
+     rel[int,int] T = R;
+  solve
+     T = T + (T o R1);
 
-equations
-  initial
-     rel[int,int] T init R
-  satisfy
-     T = T union (T o R)
-end equations</programlisting></para>
-
-            <para>The resulting value of <literal>T</literal> is as
-            expected:<programlisting>{&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;1, 3&gt;, &lt;2, 4&gt;, &lt;1, 4&gt;}</programlisting></para>
-          </listitem>
-        </itemizedlist>
+{&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</screen>
       </section>
     </section>
 
@@ -2419,20 +2637,26 @@ end equations</programlisting></para>
       <title>Assertions</title>
 
       <para>An assert statement may occur everywhere where a declaration is
-      allowed. It has the form<programlisting>assert <replaceable>L</replaceable>: <replaceable>E</replaceable></programlisting>where
-      <replaceable>L</replaceable> is a string that serves as a label for this
-      assertion, and <replaceable>E</replaceable> is a boolean-value
-      expression. During execution, a list of true and false assertions is
+      allowed. It has two forms:</para>
+
+      <para><programlisting><literal>assert <replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable></literal></programlisting></para>
+
+      <para>and <programlisting><literal>assert <replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript></literal></programlisting>where
+      <replaceable>Exp</replaceable><subscript>1</subscript> is a
+      boolean-value expression and
+      <replaceable>Exp</replaceable><subscript>2</subscript> is a
+      string-valued expression that serves as a identifying message for this
+      assertion. During execution, a list of true and false assertions is
       maintained. When the script is executed as a <emphasis>test
       suite</emphasis> a summary of this information is shown to the user.
       When the script is executed in the standard fashion, the assert
-      statement has no affect. Example:</para>
+      statement has no affect. <note>
+          <para>Update the above description.</para>
+        </note></para>
 
-      <itemizedlist>
-        <listitem>
-          <para><programlisting>assert "Equality on Sets 1": {1, 2, 3, 1} == {3, 2, 1, 1}</programlisting></para>
-        </listitem>
-      </itemizedlist>
+      <para>Example:</para>
+
+      <screen>rascal&gt; assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";</screen>
     </section>
 
     <section xml:id="section.declarations">
@@ -2441,17 +2665,17 @@ end equations</programlisting></para>
       <section>
         <title>Variable Declarations</title>
 
-        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable> <replaceable>V</replaceable> = <replaceable>E</replaceable></programlisting>
-        where <replaceable>T</replaceable> is a type,
-        <replaceable>V</replaceable> is a variable name, and
-        <replaceable>E</replaceable> is an expression that should have type
-        <replaceable>T</replaceable>. The effect is that the value of
-        expression <replaceable>E</replaceable> is assigned to
-        <replaceable>V</replaceable> and can be used later on as
-        <replaceable>V</replaceable>'s value. Double declarations are not
+        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>
+        where <replaceable>T</replaceable>ype is a type,
+        <replaceable>V</replaceable>ar is a variable name, and
+        <replaceable>E</replaceable>xp is an expression that should have type
+        <replaceable>Type</replaceable>. The effect is that the value of
+        expression <replaceable>Exp</replaceable> is assigned to
+        <replaceable>V</replaceable>ar and can be used later on as
+        <replaceable>Var</replaceable>'s value. Double declarations are not
         allowed. As a convenience, also declarations without an initialization
-        expression are permitted and have the form <programlisting><replaceable>T</replaceable> <replaceable>V</replaceable> </programlisting>and
-        only introduce the variable <replaceable>V</replaceable>.
+        expression are permitted and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
+        only introduce the variable <replaceable>Var</replaceable>.
         Examples:</para>
 
         <itemizedlist>
@@ -3931,119 +4155,119 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
               <literal>==</literal>
-              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are
               identical<literal></literal></entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
               <literal>!=</literal>
-              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are not
               identical</entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
               <literal>&lt;=</literal>
-              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are identical
-              or <replaceable>bool</replaceable><subscript>1</subscript> is
+              or <replaceable>Bool</replaceable><subscript>1</subscript> is
               <literal>false</literal> and
-              <replaceable>bool</replaceable><subscript>2</subscript> is
+              <replaceable>Bool</replaceable><subscript>2</subscript> is
               <literal>true</literal></entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
               <literal>&lt;</literal>
-              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>bool</replaceable><subscript>1</subscript> is
+              <replaceable>Bool</replaceable><subscript>1</subscript> is
               <literal>false</literal> and
-              <replaceable>bool</replaceable><subscript>2</subscript> is
+              <replaceable>Bool</replaceable><subscript>2</subscript> is
               <literal>true</literal></entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
               <literal>&gt;=</literal>
-              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are identical
-              or <replaceable>bool</replaceable><subscript>1</subscript> is
+              or <replaceable>Bool</replaceable><subscript>1</subscript> is
               <literal>true</literal> and
-              <replaceable>bool</replaceable><subscript>2</subscript> is
+              <replaceable>Bool</replaceable><subscript>2</subscript> is
               <literal>false</literal></entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
               <literal>&gt;</literal>
-              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>bool</replaceable><subscript>1</subscript> is
+              <replaceable>Bool</replaceable><subscript>1</subscript> is
               <literal>true</literal> and
-              <replaceable>bool</replaceable><subscript>2</subscript> is
+              <replaceable>Bool</replaceable><subscript>2</subscript> is
               <literal>false</literal></entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
               <literal>&amp;&amp;</literal>
-              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
               <entry>yields <literal>true</literal> if both arguments have the
               value true and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
               <literal>||</literal>
-              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
               <entry>yields <literal>true</literal> if either argument has the
               value true and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
               <literal>==&gt;</literal>
-              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
               <entry>yields <literal>false</literal> if
-              <replaceable>bool</replaceable><subscript>1</subscript> has the
+              <replaceable>Bool</replaceable><subscript>1</subscript> has the
               value <literal>true</literal> and
-              <replaceable>bool</replaceable><subscript>2</subscript> has
+              <replaceable>Bool</replaceable><subscript>2</subscript> has
               value <literal>false</literal>, and <literal>true</literal>
               otherwise</entry>
             </row>
 
             <row>
               <entry><literal>!</literal>
-              <replaceable>bool</replaceable></entry>
+              <replaceable>Bool</replaceable></entry>
 
-              <entry>yields true if bool is false and true otherwise</entry>
+              <entry>yields true if Bool is false and true otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable><subscript>1</subscript> ?
-              <replaceable>bool</replaceable><subscript>2</subscript> :
-              <replaceable>bool</replaceable><subscript>3</subscript></entry>
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript> ?
+              <replaceable>Bool</replaceable><subscript>2</subscript> :
+              <replaceable>Bool</replaceable><subscript>3</subscript></entry>
 
               <entry>if
-              <replaceable>bool</replaceable><subscript>1</subscript> is true
-              then <replaceable>bool</replaceable><subscript>2</subscript>
+              <replaceable>Bool</replaceable><subscript>1</subscript> is true
+              then <replaceable>Bool</replaceable><subscript>2</subscript>
               else
-              <replaceable>bool</replaceable><subscript>3</subscript></entry>
+              <replaceable>Bool</replaceable><subscript>3</subscript></entry>
             </row>
           </tbody>
         </tgroup>
@@ -4236,135 +4460,135 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>==</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are numerically
               equal and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>!=</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are numerically
               unequal and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>&lt;=</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>int</replaceable><subscript>1</subscript> is
+              <replaceable>Int</replaceable><subscript>1</subscript> is
               numerically less than or equal to
-              <replaceable>int</replaceable><subscript>2</subscript> and
+              <replaceable>Int</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>&lt;</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>int</replaceable><subscript>1</subscript> is
+              <replaceable>Int</replaceable><subscript>1</subscript> is
               numerically less than
-              <replaceable>int</replaceable><subscript>2</subscript> and
+              <replaceable>Int</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>&gt;=</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>int</replaceable><subscript>1</subscript> is
+              <replaceable>Int</replaceable><subscript>1</subscript> is
               numerically greater than or equal than
-              <replaceable>int</replaceable><subscript>2</subscript> and
+              <replaceable>Int</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>&gt;</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>int</replaceable><subscript>1</subscript> is
+              <replaceable>Int</replaceable><subscript>1</subscript> is
               numerically greater than
-              <replaceable>int</replaceable><subscript>2</subscript> and
+              <replaceable>Int</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>+</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry>sum of
-              <replaceable>int</replaceable><subscript>1</subscript> and
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>1</subscript> and
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>-</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry>difference of
-              <replaceable>int</replaceable><subscript>1</subscript> and
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>1</subscript> and
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>*</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               multiplied by
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>/</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               divided by
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <entry><replaceable>Int</replaceable><subscript>1</subscript>
               <literal>%</literal>
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry>remainder of dividing
-              <replaceable>int</replaceable><subscript>1</subscript> by
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <replaceable>Int</replaceable><subscript>1</subscript> by
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry>- <replaceable>int</replaceable></entry>
+              <entry>- <replaceable>Int</replaceable></entry>
 
-              <entry>negate sign of <replaceable>int</replaceable></entry>
+              <entry>negate sign of <replaceable>Int</replaceable></entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable> ?
-              <replaceable>int</replaceable><subscript>1</subscript> :
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <entry><replaceable>Bool</replaceable> ?
+              <replaceable>Int</replaceable><subscript>1</subscript> :
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry>if <replaceable>bool</replaceable> is true then
-              <replaceable>int</replaceable><subscript>1</subscript> else
-              <replaceable>int</replaceable><subscript>2</subscript></entry>
+              <entry>if <replaceable>Bool</replaceable> is true then
+              <replaceable>Int</replaceable><subscript>1</subscript> else
+              <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
           </tbody>
         </tgroup>
@@ -4570,132 +4794,132 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
             <tbody>
               <row>
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 <literal>==</literal>
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if both arguments have the same
                 elements in the same order</entry>
               </row>
 
               <row>
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 <literal>!=</literal>
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if both arguments have
                 different elements</entry>
               </row>
 
               <row>
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 <literal>&lt;=</literal>
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if both lists are equal or
-                <replaceable>list</replaceable><subscript>1</subscript> is a
+                <entry><literal>true</literal> if both sists are equal or
+                <replaceable>List</replaceable><subscript>1</subscript> is a
                 sublist of
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 <literal>&lt;</literal>
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if
-                <replaceable>list</replaceable><subscript>1</subscript> is a
+                <replaceable>List</replaceable><subscript>1</subscript> is a
                 sublist of
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 <literal>&gt;=</literal>
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if both lists are equal or
-                <replaceable>list</replaceable><subscript>2</subscript> is a
+                <replaceable>List</replaceable><subscript>2</subscript> is a
                 sublist of
-                <replaceable>list</replaceable><subscript>1</subscript></entry>
+                <replaceable>List</replaceable><subscript>1</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 <literal>&gt;</literal>
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if
-                <replaceable>list</replaceable><subscript>2</subscript> is a
+                <replaceable>List</replaceable><subscript>2</subscript> is a
                 sublist of
-                <replaceable>list</replaceable><subscript>1</subscript></entry>
+                <replaceable>List</replaceable><subscript>1</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 <literal>+</literal>
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
                 <entry>concatenation of
-                <replaceable>list</replaceable><subscript>1</subscript> and
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>1</subscript> and
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 <literal>-</literal>
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
                 <entry>list consisting of all elements in
-                <replaceable>list</replaceable><subscript>1</subscript> that
+                <replaceable>List</replaceable><subscript>1</subscript> that
                 do not occur in
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 <literal>*</literal>
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry><replaceable>list</replaceable><subscript>1</subscript>
+                <entry><replaceable>List</replaceable><subscript>1</subscript>
                 multiplied by
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>elm</replaceable> <literal>in</literal>
-                <replaceable>list</replaceable></entry>
+                <entry><replaceable>Elm</replaceable> <literal>in</literal>
+                <replaceable>List</replaceable></entry>
 
                 <entry><literal>true</literal> if
-                <replaceable>elm</replaceable> occurs as element in
-                <replaceable>list</replaceable></entry>
+                <replaceable>Elm</replaceable> occurs as element in
+                <replaceable>List</replaceable></entry>
               </row>
 
               <row>
-                <entry><replaceable>elm</replaceable> <literal>notin</literal>
-                <replaceable>list</replaceable></entry>
+                <entry><replaceable>Elm</replaceable> <literal>notin</literal>
+                <replaceable>List</replaceable></entry>
 
                 <entry><literal>true</literal> if
-                <replaceable>elm</replaceable> does not occur as element in
-                <replaceable>list</replaceable></entry>
+                <replaceable>Elm</replaceable> does not occur as element in
+                <replaceable>List</replaceable></entry>
               </row>
 
               <row>
-                <entry><replaceable>bool</replaceable> ?
-                <replaceable>list</replaceable><subscript>1</subscript> :
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <entry><replaceable>Bool</replaceable> ?
+                <replaceable>List</replaceable><subscript>1</subscript> :
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
 
                 <entry>if <replaceable>bool</replaceable> is true then
-                <replaceable>list</replaceable><subscript>1</subscript> else
-                <replaceable>list</replaceable><subscript>2</subscript></entry>
+                <replaceable>List</replaceable><subscript>1</subscript> else
+                <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>list</replaceable><literal> [</literal>
+                <entry><replaceable>List</replaceable><literal> [</literal>
                 <replaceable>int</replaceable> <literal>]</literal></entry>
 
                 <entry>element at position <replaceable>int</replaceable> in
-                <replaceable>list</replaceable></entry>
+                <replaceable>List</replaceable></entry>
               </row>
             </tbody>
           </tgroup>
@@ -4915,74 +5139,74 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <entry><replaceable>Loc</replaceable><subscript>1</subscript>
               <literal>==</literal>
-              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+              <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are identical
               and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <entry><replaceable>Loc</replaceable><subscript>1</subscript>
               <literal>!=</literal>
-              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+              <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are not
               identical and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <entry><replaceable>Loc</replaceable><subscript>1</subscript>
               <literal>&lt;=</literal>
-              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+              <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>loc</replaceable><subscript>1</subscript> is
+              <replaceable>Loc</replaceable><subscript>1</subscript> is
               textually contained in or equal to
-              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <replaceable>Loc</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <entry><replaceable>Loc</replaceable><subscript>1</subscript>
               <literal>&lt;</literal>
-              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+              <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>loc</replaceable><subscript>1</subscript> is
+              <replaceable>Loc</replaceable><subscript>1</subscript> is
               strictly textually contained in
-              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <replaceable>Loc</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <entry><replaceable>Loc</replaceable><subscript>1</subscript>
               <literal>&gt;=</literal>
-              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+              <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>loc</replaceable><subscript>1</subscript> is
+              <replaceable>Loc</replaceable><subscript>1</subscript> is
               textually encloses or is equal to
-              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <replaceable>Loc</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <entry><replaceable>Loc</replaceable><subscript>1</subscript>
               <literal>&gt;=</literal>
-              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+              <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>loc</replaceable><subscript>1</subscript> is
+              <replaceable>Loc</replaceable><subscript>1</subscript> is
               textually encloses
-              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <replaceable>Loc</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>loc</replaceable> <literal>.</literal>
-              <replaceable>field</replaceable></entry>
+              <entry><replaceable>Loc</replaceable> <literal>.</literal>
+              <replaceable>Field</replaceable></entry>
 
               <entry>retrieve one of the fields of location value</entry>
             </row>
@@ -5038,129 +5262,129 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
             <tbody>
               <row>
-                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <entry><replaceable>Map</replaceable><subscript>1</subscript>
                 <literal>==</literal>
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if both arguments consist of
                 the same pairs</entry>
               </row>
 
               <row>
-                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <entry><replaceable>Map</replaceable><subscript>1</subscript>
                 <literal>!=</literal>
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if both arguments have
                 different pairs</entry>
               </row>
 
               <row>
-                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <entry><replaceable>Map</replaceable><subscript>1</subscript>
                 <literal>&lt;=</literal>
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if all pairs in
-                <replaceable>map</replaceable><subscript>1</subscript> occur
-                in <replaceable>map</replaceable><subscript>2</subscript> or
-                <replaceable>map</replaceable><subscript>1</subscript> and
-                <replaceable>map</replaceable><subscript>2</subscript> are
+                <replaceable>Map</replaceable><subscript>1</subscript> occur
+                in <replaceable>Map</replaceable><subscript>2</subscript> or
+                <replaceable>Map</replaceable><subscript>1</subscript> and
+                <replaceable>Map</replaceable><subscript>2</subscript> are
                 equal</entry>
               </row>
 
               <row>
-                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <entry><replaceable>Map</replaceable><subscript>1</subscript>
                 <literal>&lt;</literal>
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if all pairs in
-                <replaceable>map</replaceable><subscript>1</subscript> occur
-                in <replaceable>map</replaceable><subscript>2</subscript> but
-                <replaceable>map</replaceable><subscript>1</subscript> and
-                <replaceable>map</replaceable><subscript>2</subscript> are not
+                <replaceable>Map</replaceable><subscript>1</subscript> occur
+                in <replaceable>Map</replaceable><subscript>2</subscript> but
+                <replaceable>Map</replaceable><subscript>1</subscript> and
+                <replaceable>Map</replaceable><subscript>2</subscript> are not
                 equal</entry>
               </row>
 
               <row>
-                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <entry><replaceable>Map</replaceable><subscript>1</subscript>
                 <literal>&gt;=</literal>
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if all pairs in
-                <replaceable>map</replaceable><subscript>2</subscript> occur
-                in <replaceable>map</replaceable><subscript>1</subscript> or
-                <replaceable>map</replaceable><subscript>1</subscript> and
-                <replaceable>map</replaceable><subscript>2</subscript> are
+                <replaceable>Map</replaceable><subscript>2</subscript> occur
+                in <replaceable>Map</replaceable><subscript>1</subscript> or
+                <replaceable>Map</replaceable><subscript>1</subscript> and
+                <replaceable>Map</replaceable><subscript>2</subscript> are
                 equal</entry>
               </row>
 
               <row>
-                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <entry><replaceable>Map</replaceable><subscript>1</subscript>
                 <literal>&gt;</literal>
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if all pairs in
-                <replaceable>map</replaceable><subscript>2</subscript> occur
-                in <replaceable>map</replaceable><subscript>1</subscript>but
-                <replaceable>map</replaceable><subscript>1</subscript> and
-                <replaceable>map</replaceable><subscript>2</subscript> are not
+                <replaceable>Map</replaceable><subscript>2</subscript> occur
+                in <replaceable>Map</replaceable><subscript>1</subscript>but
+                <replaceable>Map</replaceable><subscript>1</subscript> and
+                <replaceable>Map</replaceable><subscript>2</subscript> are not
                 equal</entry>
               </row>
 
               <row>
-                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <entry><replaceable>Map</replaceable><subscript>1</subscript>
                 <literal>+</literal>
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
                 <entry>union of
-                <replaceable>map</replaceable><subscript>1</subscript> and
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>1</subscript> and
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>map</replaceable><subscript>1</subscript>
+                <entry><replaceable>Map</replaceable><subscript>1</subscript>
                 <literal>-</literal>
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
                 <entry>difference of
-                <replaceable>map</replaceable><subscript>1</subscript> and
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>1</subscript> and
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>key</replaceable> <literal>in</literal>
-                <replaceable>map</replaceable></entry>
+                <entry><replaceable>Key</replaceable> <literal>in</literal>
+                <replaceable>Map</replaceable></entry>
 
-                <entry>true if <replaceable>key</replaceable> occurs in a
-                key:value pair in map</entry>
+                <entry>true if <replaceable>Key</replaceable> occurs in a
+                key:value pair in <replaceable>Map</replaceable></entry>
               </row>
 
               <row>
-                <entry><replaceable>key</replaceable><subscript>1</subscript>
+                <entry><replaceable>Key</replaceable><subscript>1</subscript>
                 <literal>notin</literal>
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry>true if <replaceable>key</replaceable> does not occur
+                <entry>true if <replaceable>Key</replaceable> does not occur
                 in a key:value pair in map</entry>
               </row>
 
               <row>
-                <entry><replaceable>bool</replaceable> ?
-                <replaceable>map</replaceable><subscript>1</subscript> :
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <entry><replaceable>Bool</replaceable> ?
+                <replaceable>Map</replaceable><subscript>1</subscript> :
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry>if <replaceable>bool</replaceable> is true then
-                <replaceable>map</replaceable><subscript>1</subscript> else
-                <replaceable>map</replaceable><subscript>2</subscript></entry>
+                <entry>if <replaceable>Bool</replaceable> is true then
+                <replaceable>Map</replaceable><subscript>1</subscript> else
+                <replaceable>Map</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>map</replaceable> <literal>[</literal>
-                <replaceable>key</replaceable> <literal>]</literal></entry>
+                <entry><replaceable>Map</replaceable> <literal>[</literal>
+                <replaceable>Key</replaceable> <literal>]</literal></entry>
 
                 <entry>the value associated with
-                <replaceable>key</replaceable> in
-                <replaceable>map</replaceable> if that exists, undefined
+                <replaceable>Key</replaceable> in
+                <replaceable>Map</replaceable> if that exists, undefined
                 otherwise</entry>
               </row>
             </tbody>
@@ -5278,71 +5502,71 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
             <tbody>
               <row>
-                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <entry><replaceable>Node</replaceable><subscript>1</subscript>
                 <literal>==</literal>
-                <replaceable>node</replaceable><subscript>2</subscript></entry>
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if both arguments are
                 identical</entry>
               </row>
 
               <row>
-                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <entry><replaceable>Node</replaceable><subscript>1</subscript>
                 <literal>!=</literal>
-                <replaceable>node</replaceable><subscript>2</subscript></entry>
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if both arguments are not
                 identical</entry>
               </row>
 
               <row>
-                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <entry><replaceable>Node</replaceable><subscript>1</subscript>
                 <literal>&lt;=</literal>
-                <replaceable>node</replaceable><subscript>2</subscript></entry>
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <entry><replaceable>Node</replaceable><subscript>1</subscript>
                 <literal>&lt;</literal>
-                <replaceable>node</replaceable><subscript>2</subscript></entry>
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <entry><replaceable>Node</replaceable><subscript>1</subscript>
                 <literal>&gt;=</literal>
-                <replaceable>node</replaceable><subscript>2</subscript></entry>
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>node</replaceable><subscript>1</subscript>
+                <entry><replaceable>Node</replaceable><subscript>1</subscript>
                 <literal>&gt;</literal>
-                <replaceable>node</replaceable><subscript>2</subscript></entry>
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>bool</replaceable> ?
-                <replaceable>node</replaceable><subscript>1</subscript> :
-                <replaceable>node</replaceable><subscript>2</subscript></entry>
+                <entry><replaceable>Bool</replaceable> ?
+                <replaceable>Node</replaceable><subscript>1</subscript> :
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
-                <entry>if <replaceable>bool</replaceable> is true then
-                <replaceable>node</replaceable><subscript>1</subscript> else
-                <replaceable>node</replaceable><subscript>2</subscript></entry>
+                <entry>if <replaceable>Bool</replaceable> is true then
+                <replaceable>Node</replaceable><subscript>1</subscript> else
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
-                <entry><replaceable>node</replaceable> <literal>[</literal>
-                <replaceable>int</replaceable> <literal>]</literal></entry>
+                <entry><replaceable>Node</replaceable> <literal>[</literal>
+                <replaceable>Int</replaceable> <literal>]</literal></entry>
 
-                <entry>child of <replaceable>node</replaceable> at position
-                <replaceable>int</replaceable></entry>
+                <entry>child of <replaceable>Node</replaceable> at position
+                <replaceable>Int</replaceable></entry>
               </row>
             </tbody>
           </tgroup>
@@ -5415,125 +5639,125 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>==</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are numerically
               equal and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>!=</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are numerically
               unequal and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>&lt;=</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>real</replaceable><subscript>1</subscript> is
+              <replaceable>Real</replaceable><subscript>1</subscript> is
               numerically less than or equal to
-              <replaceable>real</replaceable><subscript>2</subscript> and
+              <replaceable>Real</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>&lt;</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>real</replaceable><subscript>1</subscript> is
+              <replaceable>Real</replaceable><subscript>1</subscript> is
               numerically less than
-              <replaceable>real</replaceable><subscript>2</subscript> and
+              <replaceable>Real</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>&gt;=</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>real</replaceable><subscript>1</subscript> is
+              <replaceable>Real</replaceable><subscript>1</subscript> is
               numerically greater than or equal than
-              <replaceable>real</replaceable><subscript>2</subscript> and
+              <replaceable>Real</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>&gt;</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>real</replaceable><subscript>1</subscript> is
+              <replaceable>Real</replaceable><subscript>1</subscript> is
               numerically greater than
-              <replaceable>real</replaceable><subscript>2</subscript> and
+              <replaceable>Real</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>+</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
               <entry>sum of
-              <replaceable>real</replaceable><subscript>1</subscript> and
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>1</subscript> and
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>-</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
               <entry>difference of
-              <replaceable>real</replaceable><subscript>1</subscript> and
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>1</subscript> and
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>*</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               multiplied by
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>/</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               divided by
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry>- <replaceable>real</replaceable></entry>
+              <entry>- <replaceable>Real</replaceable></entry>
 
-              <entry>negate sign of <replaceable>real</replaceable></entry>
+              <entry>negate sign of <replaceable>Real</replaceable></entry>
             </row>
 
             <row>
-              <entry><replaceable>real</replaceable><subscript>1</subscript>
+              <entry><replaceable>Real</replaceable><subscript>1</subscript>
               <literal>%</literal>
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
               <entry>remainder of dividing
-              <replaceable>real</replaceable><subscript>1</subscript> by
-              <replaceable>real</replaceable><subscript>2</subscript></entry>
+              <replaceable>Real</replaceable><subscript>1</subscript> by
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
           </tbody>
         </tgroup>
@@ -5610,59 +5834,59 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
           <tbody>
             <row>
-              <entry><replaceable>rel</replaceable><subscript>1</subscript>
+              <entry><replaceable>Rel</replaceable><subscript>1</subscript>
               <literal>o</literal>
-              <replaceable>rel</replaceable><subscript>2</subscript></entry>
+              <replaceable>Rel</replaceable><subscript>2</subscript></entry>
 
               <entry>yields the relation resulting from the composition of the
               two arguments</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>x</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry>yields the relation resulting from the Cartesian product
               of the two arguments</entry>
             </row>
 
             <row>
-              <entry><replaceable>rel</replaceable>
+              <entry><replaceable>Rel</replaceable>
               <literal>+</literal></entry>
 
               <entry>yields the relation resulting from the transitive closure
-              of <replaceable>rel</replaceable></entry>
+              of <replaceable>Rel</replaceable></entry>
             </row>
 
             <row>
-              <entry><replaceable>rel</replaceable>
+              <entry><replaceable>Rel</replaceable>
               <literal>*</literal></entry>
 
               <entry>yields the relation resulting from the reflexive
-              transitive closure of <replaceable>rel</replaceable></entry>
+              transitive closure of <replaceable>Rel</replaceable></entry>
             </row>
 
             <row>
-              <entry><replaceable>rel</replaceable> <literal>[</literal>
+              <entry><replaceable>Rel</replaceable> <literal>[</literal>
               <replaceable>elem</replaceable> <literal>]</literal></entry>
 
               <entry>yields the right image of
-              <replaceable>rel</replaceable></entry>
+              <replaceable>Rel</replaceable></entry>
             </row>
 
             <row>
-              <entry><replaceable>rel</replaceable> <literal>[</literal>
+              <entry><replaceable>Rel</replaceable> <literal>[</literal>
               <replaceable>set</replaceable> <literal>]</literal></entry>
 
               <entry>yields the right image of
-              <replaceable>rel</replaceable></entry>
+              <replaceable>Rel</replaceable></entry>
             </row>
 
             <row>
-              <entry><replaceable>rel</replaceable> <literal>&lt;</literal>
-              <replaceable>index</replaceable><subscript>1</subscript><literal>,</literal>
-              <replaceable>index</replaceable><subscript>2</subscript>, ...
+              <entry><replaceable>Rel</replaceable> <literal>&lt;</literal>
+              <replaceable>Index</replaceable><subscript>1</subscript><literal>,</literal>
+              <replaceable>Index</replaceable><subscript>2</subscript>, ...
               <literal>&gt;</literal></entry>
 
               <entry></entry>
@@ -5932,136 +6156,137 @@ domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});
 
           <tbody>
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>==</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are equal sets
               and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>!=</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are unequal
               sets and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>&lt;=</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>set</replaceable><subscript>1</subscript> is a
-              subset of <replaceable>set</replaceable><subscript>2</subscript>
+              <replaceable>Set</replaceable><subscript>1</subscript> is a
+              subset of <replaceable>Set</replaceable><subscript>2</subscript>
               and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>&lt;</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>set</replaceable><subscript>1</subscript> is a
+              <replaceable>Set</replaceable><subscript>1</subscript> is a
               strict subset of
-              <replaceable>set</replaceable><subscript>2</subscript> and
+              <replaceable>Set</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>&gt;=</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>set</replaceable><subscript>1</subscript> is a
+              <replaceable>Set</replaceable><subscript>1</subscript> is a
               superset of
-              <replaceable>set</replaceable><subscript>2</subscript> and
+              <replaceable>Set</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>&gt;</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if
-              <replaceable>set</replaceable><subscript>1</subscript> is a
+              <replaceable>Set</replaceable><subscript>1</subscript> is a
               strict superset of
-              <replaceable>set</replaceable><subscript>2</subscript> and
+              <replaceable>Set</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>+</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry>set resulting from the union of the two arguments</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>-</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry>the set resulting from the difference of the two
               arguments</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>*</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry>set resulting from the product of the two
               arguments</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Set</replaceable><subscript>1</subscript>
               <literal>&amp;</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry>set resulting from the intersection of the two
               arguments</entry>
             </row>
 
             <row>
-              <entry><replaceable>elm</replaceable> <literal>in</literal>
-              <replaceable>set</replaceable></entry>
+              <entry><replaceable>Elm</replaceable> <literal>in</literal>
+              <replaceable>Set</replaceable></entry>
 
-              <entry><literal>true</literal> if <replaceable>elm</replaceable>
-              occurs as element in <replaceable>set</replaceable> and
+              <entry><literal>true</literal> if <replaceable>Elm</replaceable>
+              occurs as element in <replaceable>Set</replaceable> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>elm</replaceable> <literal>notin</literal>
-              <replaceable>set</replaceable></entry>
+              <entry><replaceable>Elm</replaceable> <literal>notin</literal>
+              <replaceable>Set</replaceable></entry>
 
               <entry><literal>false</literal> if
-              <replaceable>elm</replaceable> occurs as element in
-              <replaceable>set</replaceable> and <literal>false</literal>
+              <replaceable>Elm</replaceable> occurs as element in
+              <replaceable>Set</replaceable> and <literal>false</literal>
               otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>set</replaceable> <literal>join</literal>
-              <replaceable>set</replaceable></entry>
+              <entry><replaceable><replaceable>Set</replaceable><subscript>1</subscript></replaceable>
+              <literal>join</literal>
+              <replaceable><replaceable>Set</replaceable><subscript>2</subscript></replaceable></entry>
 
               <entry></entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable> <literal>?</literal>
-              <replaceable>set</replaceable><subscript>1</subscript>
+              <entry><replaceable>Bool</replaceable> <literal>?</literal>
+              <replaceable>Set</replaceable><subscript>1</subscript>
               <literal>:</literal>
-              <replaceable>set</replaceable><subscript>2</subscript></entry>
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
               <entry></entry>
             </row>
@@ -6276,79 +6501,79 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
 
           <tbody>
             <row>
-              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <entry><replaceable>Str</replaceable><subscript>1</subscript>
               <literal>==</literal>
-              <replaceable>str</replaceable><subscript>2</subscript></entry>
+              <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
               <entry>yields <literal>true</literal> if both arguments are
               equal and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <entry><replaceable>Str</replaceable><subscript>1</subscript>
               <literal>!=</literal>
-              <replaceable>str</replaceable><subscript>2</subscript></entry>
+              <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
               <entry>yields <literal>true</literal> if both arguments are
               unequal and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <entry><replaceable>Str</replaceable><subscript>1</subscript>
               <literal>&lt;=</literal>
-              <replaceable>str</replaceable><subscript>2</subscript></entry>
+              <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
               <entry>yields <literal>true</literal> if
-              <replaceable>str</replaceable><subscript>1</subscript> is
+              <replaceable>Str</replaceable><subscript>1</subscript> is
               lexicographically less than or equal to
-              <replaceable>str</replaceable><subscript>2</subscript> and
+              <replaceable>Str</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <entry><replaceable>Str</replaceable><subscript>1</subscript>
               <literal>&lt;</literal>
-              <replaceable>str</replaceable><subscript>2</subscript></entry>
+              <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
               <entry>yields <literal>true</literal> if
-              <replaceable>str</replaceable><subscript>1</subscript> is
+              <replaceable>Str</replaceable><subscript>1</subscript> is
               lexicographically less than
-              <replaceable>str</replaceable><subscript>2</subscript> and
+              <replaceable>Str</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <entry><replaceable>Str</replaceable><subscript>1</subscript>
               <literal>&gt;=</literal>
-              <replaceable>str</replaceable><subscript>2</subscript></entry>
+              <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
               <entry>yields <literal>true</literal> if
-              <replaceable>str</replaceable><subscript>1</subscript> is
+              <replaceable>Str</replaceable><subscript>1</subscript> is
               lexicographically greater than or equal to
-              <replaceable>str</replaceable><subscript>2</subscript> and
+              <replaceable>Str</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <entry><replaceable>Str</replaceable><subscript>1</subscript>
               <literal>&gt;</literal>
-              <replaceable>str</replaceable><subscript>2</subscript></entry>
+              <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
               <entry>yields <literal>true</literal> if
-              <replaceable>str</replaceable><subscript>1</subscript> is
+              <replaceable>Str</replaceable><subscript>1</subscript> is
               lexicographically greater than
-              <replaceable>str</replaceable><subscript>2</subscript> and
+              <replaceable>Str</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
-              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <entry><replaceable>Str</replaceable><subscript>1</subscript>
               <literal>+</literal>
-              <replaceable>str</replaceable><subscript>2</subscript></entry>
+              <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
               <entry>concatenates
-              <replaceable>str</replaceable><subscript>1</subscript> and
-              <replaceable>str</replaceable><subscript>2</subscript></entry>
+              <replaceable>Str</replaceable><subscript>1</subscript> and
+              <replaceable>Str</replaceable><subscript>2</subscript></entry>
             </row>
           </tbody>
         </tgroup>
@@ -6484,113 +6709,113 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
 
           <tbody>
             <row>
-              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <entry><replaceable>Tuple</replaceable><subscript>1</subscript>
               <literal>==</literal>
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are
               identical</entry>
             </row>
 
             <row>
-              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <entry><replaceable>Tuple</replaceable><subscript>1</subscript>
               <literal>!=</literal>
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are not
               identical</entry>
             </row>
 
             <row>
-              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <entry><replaceable>Tuple</replaceable><subscript>1</subscript>
               <literal>&lt;=</literal>
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are identical
               or if the leftmost element in
-              <replaceable>tuple</replaceable><subscript>1</subscript> that
+              <replaceable>Tuple</replaceable><subscript>1</subscript> that
               differs from the corresponding in
-              <replaceable>tuple</replaceable><subscript>2</subscript> is
+              <replaceable>Tuple</replaceable><subscript>2</subscript> is
               smaller than that element in
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <entry><replaceable>Tuple</replaceable><subscript>1</subscript>
               <literal>&lt;</literal>
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are not
               identical and the leftmost element in
-              <replaceable>tuple</replaceable><subscript>1</subscript> that
+              <replaceable>Tuple</replaceable><subscript>1</subscript> that
               differs from the corresponding in
-              <replaceable>tuple</replaceable><subscript>2</subscript> is
+              <replaceable>Tuple</replaceable><subscript>2</subscript> is
               smaller than that element in
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <entry><replaceable>Tuple</replaceable><subscript>1</subscript>
               <literal>&gt;=</literal>
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are identical
               or if the leftmost element in
-              <replaceable>tuple</replaceable><subscript>1</subscript> that
+              <replaceable>Tuple</replaceable><subscript>1</subscript> that
               differs from the corresponding in
-              <replaceable>tuple</replaceable><subscript>2</subscript> is
+              <replaceable>Tuple</replaceable><subscript>2</subscript> is
               greater than that element in
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <entry><replaceable>Tuple</replaceable><subscript>1</subscript>
               <literal>&gt;</literal>
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
               <entry><literal>true</literal> if both arguments are not
               identical and the leftmost element in
-              <replaceable>tuple</replaceable><subscript>1</subscript> that
+              <replaceable>Tuple</replaceable><subscript>1</subscript> that
               differs from the corresponding in
-              <replaceable>tuple</replaceable><subscript>2</subscript> is
+              <replaceable>Tuple</replaceable><subscript>2</subscript> is
               greater than that element in
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>tuple</replaceable><subscript>1</subscript>
+              <entry><replaceable>Tuple</replaceable><subscript>1</subscript>
               <literal>+</literal>
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
               <entry>concatenates
-              <replaceable>tuple</replaceable><subscript>1</subscript> and
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <replaceable>Tuple</replaceable><subscript>1</subscript> and
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>bool</replaceable> ?
-              <replaceable>tuple</replaceable><subscript>1</subscript> :
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <entry><replaceable>Bool</replaceable> ?
+              <replaceable>Tuple</replaceable><subscript>1</subscript> :
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
-              <entry>if <replaceable>bool</replaceable> is true then
-              <replaceable>tuple</replaceable><subscript>1</subscript> else
-              <replaceable>tuple</replaceable><subscript>2</subscript></entry>
+              <entry>if <replaceable>Bool</replaceable> is true then
+              <replaceable>Tuple</replaceable><subscript>1</subscript> else
+              <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry><replaceable>tuple</replaceable> <literal>.</literal>
+              <entry><replaceable>Tuple</replaceable> <literal>.</literal>
               name</entry>
 
               <entry>select field <replaceable>name</replaceable> from
-              <replaceable>tuple</replaceable></entry>
+              <replaceable>Tuple</replaceable></entry>
             </row>
 
             <row>
-              <entry><replaceable>tuple</replaceable> <literal>[</literal>
+              <entry><replaceable>Tuple</replaceable> <literal>[</literal>
               <replaceable>int</replaceable> <literal>]</literal></entry>
 
               <entry>select field at position <replaceable>int</replaceable>
-              from <replaceable>tuple</replaceable></entry>
+              from <replaceable>Tuple</replaceable></entry>
             </row>
           </tbody>
         </tgroup>
@@ -6670,63 +6895,63 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
 
             <tbody>
               <row>
-                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <entry><replaceable>Value</replaceable><subscript>1</subscript>
                 <literal>==</literal>
-                <replaceable>value</replaceable><subscript>2</subscript></entry>
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if both arguments are
                 identical</entry>
               </row>
 
               <row>
-                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <entry><replaceable>Value</replaceable><subscript>1</subscript>
                 <literal>!=</literal>
-                <replaceable>value</replaceable><subscript>2</subscript></entry>
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
                 <entry><literal>true</literal> if both arguments are not
                 identical</entry>
               </row>
 
               <row>
-                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <entry><replaceable>Value</replaceable><subscript>1</subscript>
                 <literal>&lt;=</literal>
-                <replaceable>value</replaceable><subscript>2</subscript></entry>
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <entry><replaceable>Value</replaceable><subscript>1</subscript>
                 <literal>&lt;</literal>
-                <replaceable>value</replaceable><subscript>2</subscript></entry>
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <entry><replaceable>Value</replaceable><subscript>1</subscript>
                 <literal>&gt;=</literal>
-                <replaceable>value</replaceable><subscript>2</subscript></entry>
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>value</replaceable><subscript>1</subscript>
+                <entry><replaceable>Value</replaceable><subscript>1</subscript>
                 <literal>&gt;</literal>
-                <replaceable>value</replaceable><subscript>2</subscript></entry>
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
                 <entry></entry>
               </row>
 
               <row>
-                <entry><replaceable>bool</replaceable> ?
-                <replaceable>value</replaceable><subscript>1</subscript> :
-                <replaceable>value</replaceable><subscript>2</subscript></entry>
+                <entry><replaceable>Bool</replaceable> ?
+                <replaceable>Value</replaceable><subscript>1</subscript> :
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
-                <entry>if <replaceable>bool</replaceable> is true then
-                <replaceable>value</replaceable><subscript>1</subscript> else
-                <replaceable>value</replaceable><subscript>2</subscript></entry>
+                <entry>if <replaceable>Bool</replaceable> is true then
+                <replaceable>Value</replaceable><subscript>1</subscript> else
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
               </row>
             </tbody>
           </tgroup>
@@ -7382,9 +7607,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
         <tbody>
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
-            [</literal> <replaceable>name</replaceable> <literal>=</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript><literal>
+            [</literal> <replaceable>Name</replaceable> <literal>=</literal>
+            <replaceable>Exp</replaceable><subscript>2</subscript>
             <literal>]</literal></entry>
 
             <entry>Field assignment</entry>
@@ -7393,8 +7618,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable> <literal>.</literal>
-            <replaceable>name</replaceable></entry>
+            <entry><replaceable>Exp</replaceable> <literal>.</literal>
+            <replaceable>Name</replaceable></entry>
 
             <entry>Field selection</entry>
 
@@ -7402,7 +7627,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable> <literal>&lt;</literal>
+            <entry><replaceable>Exp</replaceable> <literal>&lt;</literal>
             <replaceable>field</replaceable>, ...<literal>
             &gt;</literal></entry>
 
@@ -7412,8 +7637,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
-            [</literal> <replaceable>exp</replaceable><subscript>2</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript><literal>
+            [</literal> <replaceable>Exp</replaceable><subscript>2</subscript>
             <literal>]</literal></entry>
 
             <entry>Index</entry>
@@ -7422,19 +7647,19 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable> <literal>?</literal></entry>
+            <entry><replaceable>Exp</replaceable> <literal>?</literal></entry>
 
-            <entry>Isdefined: true is exp has a well-defined value</entry>
+            <entry>Isdefined: true is Exp has a well-defined value</entry>
           </row>
 
           <row>
-            <entry><literal>!</literal> <replaceable>exp</replaceable></entry>
+            <entry><literal>!</literal> <replaceable>Exp</replaceable></entry>
 
             <entry>Negation</entry>
           </row>
 
           <row>
-            <entry><literal>-</literal> <replaceable>exp</replaceable></entry>
+            <entry><literal>-</literal> <replaceable>Exp</replaceable></entry>
 
             <entry>Negation</entry>
 
@@ -7442,7 +7667,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable> <literal>+</literal></entry>
+            <entry><replaceable>Exp</replaceable> <literal>+</literal></entry>
 
             <entry>Transitive closure</entry>
 
@@ -7450,7 +7675,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable> <literal>*</literal></entry>
+            <entry><replaceable>Exp</replaceable> <literal>*</literal></entry>
 
             <entry>Reflexive transitive</entry>
 
@@ -7458,8 +7683,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable> <literal>@</literal>
-            name</entry>
+            <entry><replaceable>Exp</replaceable> <literal>@</literal>
+            Name</entry>
 
             <entry>Attribute value</entry>
 
@@ -7467,9 +7692,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
-            <literal>[@</literal> name <literal>=</literal><replaceable>
-            exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
+            <literal>[@</literal> Name <literal>=</literal><replaceable>
+            Exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
 
             <entry>Assign attribute value</entry>
 
@@ -7477,9 +7702,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>o</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Composition</entry>
 
@@ -7487,9 +7712,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>/</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Division</entry>
 
@@ -7497,9 +7722,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>%</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Modulo</entry>
 
@@ -7507,9 +7732,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>*</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Multiplication/product</entry>
 
@@ -7517,9 +7742,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>&amp;</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Intersection</entry>
 
@@ -7527,9 +7752,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>+</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Addition/concatenation/union</entry>
 
@@ -7537,9 +7762,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>-</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Subtraction/difference</entry>
 
@@ -7547,9 +7772,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+            <entry><replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable>
             <literal>join</literal>
-            <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+            <replaceable><replaceable>Exp</replaceable><subscript>2</subscript></replaceable></entry>
 
             <entry>Join</entry>
 
@@ -7557,9 +7782,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+            <entry><replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable>
             <literal>in</literal>
-            <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+            <replaceable><replaceable>Exp</replaceable><subscript>2</subscript></replaceable></entry>
 
             <entry>Element of</entry>
 
@@ -7567,9 +7792,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable><replaceable>exp</replaceable><subscript>1</subscript></replaceable>
+            <entry><replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable>
             <literal>notin</literal>
-            <replaceable><replaceable>exp</replaceable><subscript>2</subscript></replaceable></entry>
+            <replaceable><replaceable>Exp</replaceable><subscript>2</subscript></replaceable></entry>
 
             <entry>Not element of</entry>
 
@@ -7577,9 +7802,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>&lt;=</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Less than/sublist /subset</entry>
 
@@ -7587,9 +7812,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>&lt;</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Less than/strict sublist/strict subset</entry>
 
@@ -7597,9 +7822,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>&gt;=</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Greater than/superlist/superset</entry>
 
@@ -7607,9 +7832,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>&gt;</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Greater than/strict superlist/ strict superset</entry>
 
@@ -7617,8 +7842,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>pat</replaceable> <literal>:=</literal>
-            <replaceable>exp</replaceable></entry>
+            <entry><replaceable>Pat</replaceable> <literal>:=</literal>
+            <replaceable>Exp</replaceable></entry>
 
             <entry>Match</entry>
 
@@ -7626,8 +7851,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>pat</replaceable> <literal>!:=</literal>
-            <replaceable>exp</replaceable></entry>
+            <entry><replaceable>Pat</replaceable> <literal>!:=</literal>
+            <replaceable>Exp</replaceable></entry>
 
             <entry>No Match</entry>
 
@@ -7635,9 +7860,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>==</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Equality</entry>
 
@@ -7645,9 +7870,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>!=</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Inequality</entry>
 
@@ -7655,9 +7880,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>?</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Ifdefined Otherwise</entry>
 
@@ -7665,21 +7890,21 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>?</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript>
+            <replaceable>Exp</replaceable><subscript>2</subscript>
             <literal>:</literal>
-            <replaceable>exp</replaceable><subscript>3</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>3</subscript></entry>
 
-            <entry>Conditional expression</entry>
+            <entry>Conditional Expression</entry>
 
             <entry></entry>
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>==&gt;</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Implication</entry>
 
@@ -7687,9 +7912,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>&lt;==&gt;</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Equivalence</entry>
 
@@ -7697,9 +7922,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>&amp;&amp;</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Boolean and</entry>
 
@@ -7707,9 +7932,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
           </row>
 
           <row>
-            <entry><replaceable>exp</replaceable><subscript>1</subscript>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
             <literal>||</literal>
-            <replaceable>exp</replaceable><subscript>2</subscript></entry>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Boolean or</entry>
           </row>
