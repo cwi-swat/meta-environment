@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -57,18 +57,18 @@
         </figure></para>
 
       <para>This is an abstract view on solving programming problems, but is
-      it uncommon? No, so let's illustrate it with a few examples.<note>
+      it uncommon? No, so let's illustrate it with a few examples.<warning>
           <para>Find better images to illustrate this, e.g. in go a bicyle and
           a motor, and synthesize a motorbike.</para>
-        </note><note>
+        </warning><warning>
           <para>These examples should come back in the larger examples later
           on.</para>
-        </note></para>
+        </warning></para>
 
-      <note>
+      <warning>
         <para>Parsing and constaint solving are not yet well-represented
         here</para>
-      </note>
+      </warning>
 
       <para><example>
           <title>Finding security breaches</title>
@@ -649,9 +649,9 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         calls relation as shown in <xref linkend="figure.calls" />. Such a
         visual inspection does <emphasis>not</emphasis> scale very well to
         large graphs and this makes the above form of analysis particularly
-        suited for studying large systems.<note>
+        suited for studying large systems.<warning>
             <para>Add a screen dump here of the Eclipse browser.</para>
-          </note></para>
+          </warning></para>
       </section>
     </section>
   </section>
@@ -800,445 +800,451 @@ rascal&gt; set[proc] entryPoints = top(Calls);
           </listitem>
         </itemizedlist>
       </section>
-    </section>
 
-    <section>
-      <title>List, Set, Map, Tuple, and Relation</title>
+      <section>
+        <title>List, Set, Map, Tuple, and Relation</title>
 
-      <formalpara>
-        <title>List</title>
+        <formalpara>
+          <title>List</title>
 
-        <para>A list is an ordered sequence of values and has the following
-        properties:</para>
-      </formalpara>
+          <para>A list is an ordered sequence of values and has the following
+          properties:</para>
+        </formalpara>
 
-      <itemizedlist>
-        <listitem>
-          <para>All elements have the same type.</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>All elements have the same type.</para>
+          </listitem>
 
-        <listitem>
-          <para>The order of the elements matters.</para>
-        </listitem>
+          <listitem>
+            <para>The order of the elements matters.</para>
+          </listitem>
 
-        <listitem>
-          <para>The list may contain the same element more than once.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>The list may contain the same element more than once.</para>
+          </listitem>
+        </itemizedlist>
 
-      <para>Lists are represented by the type
-      <literal>list[</literal><replaceable>T</replaceable><literal>]</literal>,
-      where <replaceable>T</replaceable> is an arbitrary type. Examples are
-      <literal>list[int]</literal>, <literal>list[tuple[int,int]]</literal>
-      and <literal>list[list[str]]</literal>. Lists are denoted by a list of
-      elements, separated by comma's and enclosed in bracket as in
-      <literal>[</literal><replaceable>E</replaceable><subscript>1</subscript><literal>,</literal>
-      <replaceable>E</replaceable><subscript>2</subscript><literal>,
-      ...,</literal>
-      <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript><literal>]</literal>,
-      where the
-      <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
-      (1 &lt;= <replaceable>i</replaceable>&lt;= <replaceable>n</replaceable>)
-      are expressions that yield the desired element type. For example,</para>
+        <para>Lists are represented by the type
+        <literal>list[</literal><replaceable>T</replaceable><literal>]</literal>,
+        where <replaceable>T</replaceable> is an arbitrary type. Examples are
+        <literal>list[int]</literal>, <literal>list[tuple[int,int]]</literal>
+        and <literal>list[list[str]]</literal>. Lists are denoted by a list of
+        elements, separated by comma's and enclosed in bracket as in
+        <literal>[</literal><replaceable>E</replaceable><subscript>1</subscript><literal>,</literal>
+        <replaceable>E</replaceable><subscript>2</subscript><literal>,
+        ...,</literal>
+        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript><literal>]</literal>,
+        where the
+        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
+        (1 &lt;= <replaceable>i</replaceable>&lt;=
+        <replaceable>n</replaceable>) are expressions that yield the desired
+        element type. For example,</para>
 
-      <itemizedlist>
-        <listitem>
-          <para><literal>[1, 2, 3]</literal> is of type
-          <literal>list[int]</literal>,</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para><literal>[1, 2, 3]</literal> is of type
+            <literal>list[int]</literal>,</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}</literal>
-          is of type <literal>set[tuple[int,int]]</literal>,</para>
-        </listitem>
+          <listitem>
+            <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;,
+            &lt;3,30&gt;}</literal> is of type
+            <literal>set[tuple[int,int]]</literal>,</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>[1, "b", 3]</literal> is of type
-          <literal>list[value]</literal>,</para>
-        </listitem>
+          <listitem>
+            <para><literal>[1, "b", 3]</literal> is of type
+            <literal>list[value]</literal>,</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>[&lt;"a",10&gt;, &lt;"b",20&gt;,
-          &lt;"c",30&gt;]</literal> is of type
-          <literal>list[tuple[str,int]]</literal>, and</para>
-        </listitem>
+          <listitem>
+            <para><literal>[&lt;"a",10&gt;, &lt;"b",20&gt;,
+            &lt;"c",30&gt;]</literal> is of type
+            <literal>list[tuple[str,int]]</literal>, and</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>[["a", "b"], ["c", "d", "e"]]</literal> is of type
-          <literal>list[list[str]]</literal>.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para><literal>[["a", "b"], ["c", "d", "e"]]</literal> is of type
+            <literal>list[list[str]]</literal>.</para>
+          </listitem>
+        </itemizedlist>
 
-      <para><note>
-          <para><literal>[1, 2, 3]</literal> and <literal>[3, 2, 1]</literal>
-          are different lists.</para>
-        </note><note>
-          <para><literal>[1, 2, 3]</literal> and <literal>[1, 2, 3,
-          1]</literal> are also different lists.</para>
-        </note></para>
+        <para><note>
+            <para><literal>[1, 2, 3]</literal> and <literal>[3, 2,
+            1]</literal> are different lists.</para>
+          </note><note>
+            <para><literal>[1, 2, 3]</literal> and <literal>[1, 2, 3,
+            1]</literal> are also different lists.</para>
+          </note></para>
 
-      <para>When variables of type list occur inside a list, their elements
-      are automatically spliced into the surrounding list. This can be
-      prevented by surrounding them with extra [ and ] brackets.</para>
+        <para>When variables of type list occur inside a list, their elements
+        are automatically spliced into the surrounding list. This can be
+        prevented by surrounding them with extra [ and ] brackets.</para>
 
-      <formalpara>
-        <title>Range</title>
+        <formalpara>
+          <title>Range</title>
 
-        <para>For lists of integers, a special shorthand exists to describe
-        ranges of integers:<itemizedlist>
-            <listitem>
-              <para><literal>[<replaceable>F</replaceable> ..
-              <replaceable>L</replaceable>]</literal> ranges from first
-              element <replaceable>F</replaceable> to (and including) last
-              element <replaceable>L</replaceable> with increments of
-              1.</para>
-            </listitem>
+          <para>For lists of integers, a special shorthand exists to describe
+          ranges of integers:<itemizedlist>
+              <listitem>
+                <para><literal>[<replaceable>F</replaceable> ..
+                <replaceable>L</replaceable>]</literal> ranges from first
+                element <replaceable>F</replaceable> to (and including) last
+                element <replaceable>L</replaceable> with increments of
+                1.</para>
+              </listitem>
 
-            <listitem>
-              <para><literal>[<replaceable>F</replaceable>,<replaceable>S</replaceable>,..<replaceable>
-              E</replaceable>]</literal>, ranges from first element
-              <replaceable>F</replaceable>, second element S to (and
-              including) last element <replaceable>L</replaceable> with
-              increments of <literal>S</literal> -
-              <replaceable>F</replaceable>.</para>
-            </listitem>
-          </itemizedlist></para>
-      </formalpara>
+              <listitem>
+                <para><literal>[<replaceable>F</replaceable>,<replaceable>S</replaceable>,..<replaceable>
+                E</replaceable>]</literal>, ranges from first element
+                <replaceable>F</replaceable>, second element S to (and
+                including) last element <replaceable>L</replaceable> with
+                increments of <literal>S</literal> -
+                <replaceable>F</replaceable>.</para>
+              </listitem>
+            </itemizedlist></para>
+        </formalpara>
 
-      <formalpara>
-        <title>Set</title>
+        <formalpara>
+          <title>Set</title>
 
-        <para>A set is an unordered sequence of values and has the following
-        properties:</para>
-      </formalpara>
+          <para>A set is an unordered sequence of values and has the following
+          properties:</para>
+        </formalpara>
 
-      <itemizedlist>
-        <listitem>
-          <para>All elements have the same type.</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>All elements have the same type.</para>
+          </listitem>
 
-        <listitem>
-          <para>The order of the elements does not matter.</para>
-        </listitem>
+          <listitem>
+            <para>The order of the elements does not matter.</para>
+          </listitem>
 
-        <listitem>
-          <para>A set contains an element only once, no matter how many times
-          it has been added to it.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>A set contains an element only once, no matter how many
+            times it has been added to it.</para>
+          </listitem>
+        </itemizedlist>
 
-      <para>Sets are represented by the type
-      <literal>set[</literal><replaceable>T</replaceable><literal>]</literal>,
-      where <replaceable>T</replaceable> is an arbitrary type. Examples are
-      <literal>set[int]</literal>, <literal>set[tuple[int,int]]</literal> and
-      <literal>set[set[str]]</literal>. Sets are denoted by a list of
-      elements, separated by comma's and enclosed in braces as in
-      <literal>{</literal><replaceable>E</replaceable><subscript>1</subscript><literal>,</literal>
-      <replaceable>E</replaceable><subscript>2</subscript><literal>,
-      ...,</literal>
-      <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript><literal>}</literal>,
-      where the
-      <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
-      (1 &lt;= <replaceable>i</replaceable>&lt;= <replaceable>n</replaceable>)
-      are expressions that yield the desired element type. For example,</para>
+        <para>Sets are represented by the type
+        <literal>set[</literal><replaceable>T</replaceable><literal>]</literal>,
+        where <replaceable>T</replaceable> is an arbitrary type. Examples are
+        <literal>set[int]</literal>, <literal>set[tuple[int,int]]</literal>
+        and <literal>set[set[str]]</literal>. Sets are denoted by a list of
+        elements, separated by comma's and enclosed in braces as in
+        <literal>{</literal><replaceable>E</replaceable><subscript>1</subscript><literal>,</literal>
+        <replaceable>E</replaceable><subscript>2</subscript><literal>,
+        ...,</literal>
+        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript><literal>}</literal>,
+        where the
+        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
+        (1 &lt;= <replaceable>i</replaceable>&lt;=
+        <replaceable>n</replaceable>) are expressions that yield the desired
+        element type. For example,</para>
 
-      <itemizedlist>
-        <listitem>
-          <para><literal>{1, 2, 3}</literal> is of type
-          <literal>set[int]</literal>,</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para><literal>{1, 2, 3}</literal> is of type
+            <literal>set[int]</literal>,</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}</literal>
-          is of type <literal>set[tuple[int,int]]</literal>,</para>
-        </listitem>
+          <listitem>
+            <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;,
+            &lt;3,30&gt;}</literal> is of type
+            <literal>set[tuple[int,int]]</literal>,</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>{1, "b", 3}</literal> is of type
-          <literal>set[value]</literal>,</para>
-        </listitem>
+          <listitem>
+            <para><literal>{1, "b", 3}</literal> is of type
+            <literal>set[value]</literal>,</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>{&lt;"a",10&gt;, &lt;"b",20&gt;,
-          &lt;"c",30&gt;}</literal> is of type
-          <literal>set[tuple[str,int]]</literal>, and</para>
-        </listitem>
+          <listitem>
+            <para><literal>{&lt;"a",10&gt;, &lt;"b",20&gt;,
+            &lt;"c",30&gt;}</literal> is of type
+            <literal>set[tuple[str,int]]</literal>, and</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>{{"a", "b"}, {"c", "d", "e"}}</literal> is of type
-          <literal>set[set[str]]</literal>.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para><literal>{{"a", "b"}, {"c", "d", "e"}}</literal> is of type
+            <literal>set[set[str]]</literal>.</para>
+          </listitem>
+        </itemizedlist>
 
-      <para><note>
-          <para><literal>{1, 2, 3}</literal> and <literal>{3, 2, 1}</literal>
-          are identical sets.</para>
-        </note><note>
-          <para><literal>{1, 2, 3]</literal> and <literal>{1, 2, 3,
-          1}</literal> are also identical sets.</para>
-        </note>In a similar fashion as with lists, sets variables are
-      automatically spliced into a surrounding set. This can be prevented by
-      surrounding them with extra { and } brackets.</para>
+        <para><note>
+            <para><literal>{1, 2, 3}</literal> and <literal>{3, 2,
+            1}</literal> are identical sets.</para>
+          </note><note>
+            <para><literal>{1, 2, 3]</literal> and <literal>{1, 2, 3,
+            1}</literal> are also identical sets.</para>
+          </note>In a similar fashion as with lists, sets variables are
+        automatically spliced into a surrounding set. This can be prevented by
+        surrounding them with extra { and } brackets.</para>
 
-      <formalpara>
-        <title>Map</title>
+        <formalpara>
+          <title>Map</title>
 
-        <para>A map is a set of key : value pairs and has the following
-        properties:</para>
-      </formalpara>
+          <para>A map is a set of key : value pairs and has the following
+          properties:</para>
+        </formalpara>
 
-      <itemizedlist>
-        <listitem>
-          <para>Key and value (may) have different types.</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>Key and value (may) have different types.</para>
+          </listitem>
 
-        <listitem>
-          <para>A key can only occur once.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>A key can only occur once.</para>
+          </listitem>
+        </itemizedlist>
 
-      <para>Maps are represented by the type
-      <literal>map[</literal><replaceable>T</replaceable><literal><subscript>1</subscript>,
-      <replaceable>T</replaceable><subscript>2</subscript>]</literal>, where
-      <replaceable>T</replaceable><literal><subscript>1</subscript> and
-      <replaceable>T</replaceable><subscript>2</subscript></literal> are
-      arbitrary types. Examples are <literal>map[int,int]</literal>, and
-      <literal>map[str,int]</literal>. Sets are denoted by a list of pairs,
-      separated by comma's and enclosed in parentheses as in
-      <literal>(</literal><replaceable>K</replaceable><subscript>1</subscript><literal>:</literal>
-      <replaceable>V</replaceable><subscript>1</subscript><literal>,
-      ...,</literal>
-      <replaceable>K</replaceable><subscript>n</subscript><literal>:</literal>
-      <replaceable>V</replaceable><subscript>n</subscript><literal>})</literal>,
-      where the
-      <replaceable>K</replaceable><subscript><replaceable>n</replaceable></subscript>
-      (1 &lt;= <replaceable>i</replaceable>&lt;= <replaceable>n</replaceable>)
-      are expressions that yield the keys of the map and
-      <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript>
-      (1 &lt;= <replaceable>i</replaceable>&lt;= <replaceable>n</replaceable>)
-      are expressions that yield the values for each key. Map resemble
-      functions rather than relations in the sense that only a single value
-      can be associated with each key. For example,</para>
+        <para>Maps are represented by the type
+        <literal>map[</literal><replaceable>T</replaceable><literal><subscript>1</subscript>,
+        <replaceable>T</replaceable><subscript>2</subscript>]</literal>, where
+        <replaceable>T</replaceable><literal><subscript>1</subscript> and
+        <replaceable>T</replaceable><subscript>2</subscript></literal> are
+        arbitrary types. Examples are <literal>map[int,int]</literal>, and
+        <literal>map[str,int]</literal>. Sets are denoted by a list of pairs,
+        separated by comma's and enclosed in parentheses as in
+        <literal>(</literal><replaceable>K</replaceable><subscript>1</subscript><literal>:</literal>
+        <replaceable>V</replaceable><subscript>1</subscript><literal>,
+        ...,</literal>
+        <replaceable>K</replaceable><subscript>n</subscript><literal>:</literal>
+        <replaceable>V</replaceable><subscript>n</subscript><literal>})</literal>,
+        where the
+        <replaceable>K</replaceable><subscript><replaceable>n</replaceable></subscript>
+        (1 &lt;= <replaceable>i</replaceable>&lt;=
+        <replaceable>n</replaceable>) are expressions that yield the keys of
+        the map and
+        <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript>
+        (1 &lt;= <replaceable>i</replaceable>&lt;=
+        <replaceable>n</replaceable>) are expressions that yield the values
+        for each key. Map resemble functions rather than relations in the
+        sense that only a single value can be associated with each key. For
+        example,</para>
 
-      <itemizedlist>
-        <listitem>
-          <para><literal>("pear" : 1, "apple" : 3, "banana" : 0)</literal> is
-          of type <literal>map[str,int]</literal>.</para>
-        </listitem>
-      </itemizedlist>
+        <itemizedlist>
+          <listitem>
+            <para><literal>("pear" : 1, "apple" : 3, "banana" : 0)</literal>
+            is of type <literal>map[str,int]</literal>.</para>
+          </listitem>
+        </itemizedlist>
 
-      <formalpara>
-        <title>Tuple</title>
+        <formalpara>
+          <title>Tuple</title>
 
-        <para>A tuple is a sequence of elements with the following
-        properties:</para>
-      </formalpara>
+          <para>A tuple is a sequence of elements with the following
+          properties:</para>
+        </formalpara>
 
-      <itemizedlist>
-        <listitem>
-          <para>Each element in a tuple (may) have a different type.</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>Each element in a tuple (may) have a different type.</para>
+          </listitem>
 
-        <listitem>
-          <para>Each element of a tuple may have a label that can be used to
-          select that element of the tuple.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>Each element of a tuple may have a label that can be used to
+            select that element of the tuple.</para>
+          </listitem>
+        </itemizedlist>
 
-      <para>Tuples are represented by the type
-      <literal>tuple[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>,</literal>
-      <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
-      ...,</literal>
-      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-      <replaceable>L</replaceable><subscript>n</subscript> ], where
-      <replaceable>T</replaceable><subscript>1</subscript><literal>,</literal>
-      <replaceable>T</replaceable><subscript>2</subscript><literal>,
-      ...,</literal>
-      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-      are arbitrary types and
-      <replaceable>L<subscript>1</subscript></replaceable><literal>,</literal>
-      <replaceable>L</replaceable><subscript>2</subscript><literal>,
-      ...,</literal> <replaceable>L</replaceable><subscript>n</subscript> are
-      optional labels. An example of a tuple type is <literal>tuple[str name,
-      int freq&gt;]</literal>. Examples are:</para>
+        <para>Tuples are represented by the type
+        <literal>tuple[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>,</literal>
+        <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
+        ...,</literal>
+        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+        <replaceable>L</replaceable><subscript>n</subscript> ], where
+        <replaceable>T</replaceable><subscript>1</subscript><literal>,</literal>
+        <replaceable>T</replaceable><subscript>2</subscript><literal>,
+        ...,</literal>
+        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+        are arbitrary types and
+        <replaceable>L<subscript>1</subscript></replaceable><literal>,</literal>
+        <replaceable>L</replaceable><subscript>2</subscript><literal>,
+        ...,</literal> <replaceable>L</replaceable><subscript>n</subscript>
+        are optional labels. An example of a tuple type is <literal>tuple[str
+        name, int freq&gt;]</literal>. Examples are:</para>
 
-      <itemizedlist>
-        <listitem>
-          <para><literal>&lt;1, 2&gt;</literal> is of type <literal>tuple[int,
-          int&gt;]</literal>,</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para><literal>&lt;1, 2&gt;</literal> is of type
+            <literal>tuple[int, int&gt;]</literal>,</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>&lt;1, 2, 3&gt;</literal> is of type
-          <literal>tuple[int, int, int&gt;]</literal>,</para>
-        </listitem>
+          <listitem>
+            <para><literal>&lt;1, 2, 3&gt;</literal> is of type
+            <literal>tuple[int, int, int&gt;]</literal>,</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>&lt;"a", 3&gt;</literal> is of type
-          <literal>tuple[str name, int freq].</literal></para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para><literal>&lt;"a", 3&gt;</literal> is of type
+            <literal>tuple[str name, int freq].</literal></para>
+          </listitem>
+        </itemizedlist>
 
-      <formalpara>
-        <title>Relation</title>
+        <formalpara>
+          <title>Relation</title>
 
-        <para>A relation is a set of elements with the following
-        property:</para>
-      </formalpara>
+          <para>A relation is a set of elements with the following
+          property:</para>
+        </formalpara>
 
-      <itemizedlist>
-        <listitem>
-          <para>All elements have the same tuple type.</para>
-        </listitem>
-      </itemizedlist>
+        <itemizedlist>
+          <listitem>
+            <para>All elements have the same tuple type.</para>
+          </listitem>
+        </itemizedlist>
 
-      <para>Relations are thus nothing more than sets of tuples, but since
-      they are used so often we provide a shorthand notation for them.
-      Relations are represented by the type
-      <literal>rel[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>,</literal>
-      <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
-      ...,</literal>
-      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-      <replaceable>L</replaceable><subscript>n</subscript> ], where
-      <replaceable>T</replaceable><subscript>1</subscript><literal>,</literal>
-      <replaceable>T</replaceable><subscript>2</subscript><literal>,
-      ...,</literal>
-      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-      are arbitrary types and
-      <replaceable>L<subscript>1</subscript></replaceable><literal>,</literal>
-      <replaceable>L</replaceable><subscript>2</subscript><literal>,
-      ...,</literal> <replaceable>L</replaceable><subscript>n</subscript> are
-      optional labels. It is a shorthand for
-      <literal>set[tuple[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>
-      ,</literal>
-      <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
-      ...,</literal>
-      <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
-      <replaceable>L</replaceable><subscript>n</subscript>
-      ]<literal>]</literal>. Examples are <literal>rel[int,str]</literal> and
-      <literal>rel[int,set[str]]</literal>. An n-ary relations with m tuples
-      is denoted by
-      <literal>{&lt;</literal><replaceable>E</replaceable><subscript>11</subscript><literal>,</literal>
-      <replaceable>E</replaceable><subscript>12</subscript><literal>, ...,
-      <replaceable>E</replaceable><subscript>1n</subscript>&gt;,</literal><literal>&lt;</literal><replaceable>E</replaceable><subscript>21</subscript><literal>,</literal>
-      <replaceable>E</replaceable><subscript>22</subscript><literal>, ...,
-      <replaceable>E</replaceable><subscript>2n</subscript>&gt;</literal><literal>,
-      ...,</literal><literal>&lt;</literal><replaceable>E</replaceable><subscript>m1</subscript><literal>,</literal>
-      <replaceable>E</replaceable><subscript>m2</subscript><literal>, ...,
-      <replaceable>E</replaceable><subscript>mn</subscript>&gt;</literal><literal>}</literal>,
-      where the
-      <replaceable>E</replaceable><subscript><replaceable>i</replaceable><replaceable>j</replaceable></subscript>
-      are expressions that yield the desired element type. For example,
-      <literal>{&lt;1, "a"&gt;, &lt;2, "b"&gt;, &lt;3,"c"&gt;}</literal> is of
-      type <literal>rel[int, str]</literal>. Examples are:</para>
+        <para>Relations are thus nothing more than sets of tuples, but since
+        they are used so often we provide a shorthand notation for them.
+        Relations are represented by the type
+        <literal>rel[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>,</literal>
+        <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
+        ...,</literal>
+        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+        <replaceable>L</replaceable><subscript>n</subscript> ], where
+        <replaceable>T</replaceable><subscript>1</subscript><literal>,</literal>
+        <replaceable>T</replaceable><subscript>2</subscript><literal>,
+        ...,</literal>
+        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+        are arbitrary types and
+        <replaceable>L<subscript>1</subscript></replaceable><literal>,</literal>
+        <replaceable>L</replaceable><subscript>2</subscript><literal>,
+        ...,</literal> <replaceable>L</replaceable><subscript>n</subscript>
+        are optional labels. It is a shorthand for
+        <literal>set[tuple[</literal><replaceable>T</replaceable><subscript>1</subscript><literal><replaceable>L</replaceable><subscript>1</subscript>
+        ,</literal>
+        <replaceable>T</replaceable><subscript>2</subscript><literal><replaceable>L<subscript>2</subscript></replaceable>,
+        ...,</literal>
+        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>
+        <replaceable>L</replaceable><subscript>n</subscript>
+        ]<literal>]</literal>. Examples are <literal>rel[int,str]</literal>
+        and <literal>rel[int,set[str]]</literal>. An n-ary relations with m
+        tuples is denoted by
+        <literal>{&lt;</literal><replaceable>E</replaceable><subscript>11</subscript><literal>,</literal>
+        <replaceable>E</replaceable><subscript>12</subscript><literal>, ...,
+        <replaceable>E</replaceable><subscript>1n</subscript>&gt;,</literal><literal>&lt;</literal><replaceable>E</replaceable><subscript>21</subscript><literal>,</literal>
+        <replaceable>E</replaceable><subscript>22</subscript><literal>, ...,
+        <replaceable>E</replaceable><subscript>2n</subscript>&gt;</literal><literal>,
+        ...,</literal><literal>&lt;</literal><replaceable>E</replaceable><subscript>m1</subscript><literal>,</literal>
+        <replaceable>E</replaceable><subscript>m2</subscript><literal>, ...,
+        <replaceable>E</replaceable><subscript>mn</subscript>&gt;</literal><literal>}</literal>,
+        where the
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable><replaceable>j</replaceable></subscript>
+        are expressions that yield the desired element type. For example,
+        <literal>{&lt;1, "a"&gt;, &lt;2, "b"&gt;, &lt;3,"c"&gt;}</literal> is
+        of type <literal>rel[int, str]</literal>. Examples are:</para>
 
-      <itemizedlist>
-        <listitem>
-          <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}</literal>
-          is of type <literal>rel[int,int]</literal> (yes indeed, you saw this
-          same example before and then we gave
-          <literal>set[tuple[int,int]]</literal> as its type; remember that
-          these types are interchangeable.),</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;,
+            &lt;3,30&gt;}</literal> is of type <literal>rel[int,int]</literal>
+            (yes indeed, you saw this same example before and then we gave
+            <literal>set[tuple[int,int]]</literal> as its type; remember that
+            these types are interchangeable.),</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>{&lt;"a",10&gt;, &lt;"b",20&gt;,
-          &lt;"c",30&gt;}</literal> is of type
-          <literal>rel[str,int]</literal>, and</para>
-        </listitem>
+          <listitem>
+            <para><literal>{&lt;"a",10&gt;, &lt;"b",20&gt;,
+            &lt;"c",30&gt;}</literal> is of type
+            <literal>rel[str,int]</literal>, and</para>
+          </listitem>
 
-        <listitem>
-          <para><literal>{{"a", 1, "b"}, {"c", 2, "d"}}</literal> is of type
-          <literal>rel[str,int,str]</literal>.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
+          <listitem>
+            <para><literal>{{"a", 1, "b"}, {"c", 2, "d"}}</literal> is of type
+            <literal>rel[str,int,str]</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
 
-    <section>
-      <title>User-defined Types</title>
+      <section>
+        <title>User-defined Types</title>
 
-      <formalpara>
-        <title>Alias type</title>
+        <formalpara>
+          <title>Alias type</title>
 
-        <para>Everything can be expressed using the elementary types and
-        values that are provided by Rascal. However, for the purpose of
-        documentation and readability it is sometimes better to use a
-        descriptive name as type indication, rather than an elementary type.
-        The alias declaration</para>
-      </formalpara>
+          <para>Everything can be expressed using the elementary types and
+          values that are provided by Rascal. However, for the purpose of
+          documentation and readability it is sometimes better to use a
+          descriptive name as type indication, rather than an elementary type.
+          The alias declaration</para>
+        </formalpara>
 
-      <programlisting>alias <replaceable>Name</replaceable>  = <replaceable>Type</replaceable><subscript></subscript>;</programlisting>
+        <programlisting>alias <replaceable>Name</replaceable>  = <replaceable>Type</replaceable>;</programlisting>
 
-      <para>states that <replaceable>Name</replaceable> can be used everywhere
-      instead of the already defined type <replaceable>Type</replaceable>. For
-      instance,</para>
+        <para>states that <replaceable>Name</replaceable> can be used
+        everywhere instead of the already defined type
+        <replaceable>Type</replaceable>. For instance,</para>
 
-      <programlisting audience="" role="check">alias ModuleId = str;
+        <programlisting audience="" role="check">alias ModuleId = str;
 alias Frequency = int;</programlisting>
 
-      <para>introduces two new type names <literal>ModuleId</literal> and
-      <literal>Frequency</literal>, both an alias for the type
-      <literal>str</literal>. The use of type aliases is a good way to
-      docuement your intentions. Another example is an alias definition for a
-      graph containing integer nodes:</para>
+        <para>introduces two new type names <literal>ModuleId</literal> and
+        <literal>Frequency</literal>, both an alias for the type
+        <literal>str</literal>. The use of type aliases is a good way to
+        docuement your intentions. Another example is an alias definition for
+        a graph containing integer nodes:</para>
 
-      <para><programlisting>alias Graph = rel[int,int];</programlisting></para>
+        <para><programlisting>alias Graph = rel[int,int];</programlisting></para>
 
-      <para>An alias definition may be parameterized. So we can generalize
-      graphs as follows:</para>
+        <para>An alias definition may be parameterized. So we can generalize
+        graphs as follows:</para>
 
-      <para><programlisting>alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];</programlisting>Of
-      course, the type variables that are used in the type in the left part
-      should occur as parameters in the right part of the definition and vice
-      versa.</para>
+        <para><programlisting>alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];</programlisting>Of
+        course, the type variables that are used in the type in the left part
+        should occur as parameters in the right part of the definition and
+        vice versa.</para>
 
-      <formalpara>
-        <title>Abstract Data Type</title>
+        <formalpara>
+          <title>Abstract Data Type</title>
 
-        <para>In ordinary programming languages record types or classes exist
-        to introduce a new type name for a collection of related, named,
-        values and to provide access to the elements of such a collection
-        through their name. In Rascal, data declarations provide this
-        facility. The type declaration</para>
-      </formalpara>
+          <para>In ordinary programming languages record types or classes
+          exist to introduce a new type name for a collection of related,
+          named, values and to provide access to the elements of such a
+          collection through their name. In Rascal, data declarations provide
+          this facility. The type declaration</para>
+        </formalpara>
 
-      <programlisting><literal>data <replaceable>Name</replaceable> = <replaceable>Pat</replaceable><subscript>1</subscript> | <replaceable>Pat</replaceable><subscript>1</subscript> | ...</literal></programlisting>
+        <programlisting><literal>data <replaceable>Name</replaceable> = <replaceable>Pat</replaceable><subscript>1</subscript> | <replaceable>Pat</replaceable><subscript>1</subscript> | ...</literal></programlisting>
 
-      <para>introduces a new datatype <replaceable>Name</replaceable> and
-      <replaceable>Pat</replaceable><subscript>1</subscript>,
-      <replaceable>Pat</replaceable><subscript>2</subscript>, ... are prefix
-      patterns describing the variants of the datatype. For instance,
-      <programlisting>data Bool = btrue | bfalse | band(Bool L, Bool R)  | bor(Bool L, Bool R);  </programlisting>defines
-      the datatype <literal>Bool</literal> that contains various constants and
-      constructor functions.</para>
+        <para>introduces a new datatype <replaceable>Name</replaceable> and
+        <replaceable>Pat</replaceable><subscript>1</subscript>,
+        <replaceable>Pat</replaceable><subscript>2</subscript>, ... are prefix
+        patterns describing the variants of the datatype. For instance,
+        <programlisting>data Bool = btrue | bfalse | band(Bool L, Bool R)  | bor(Bool L, Bool R);  </programlisting>defines
+        the datatype <literal>Bool</literal> that contains various constants
+        and constructor functions.</para>
+      </section>
+
+      <section>
+        <title>Typing</title>
+
+        <para xml:id="figure.type-lattice">Rascal is based on static typing,
+        this means that as many errors and inconsistencies as possible are
+        spotted before the program is executed. The types introduced earlier
+        are ordered in a so-called <emphasis>type lattice</emphasis> shown in
+        <xref linkend="figure.type-lattice" />. The arrows describe a
+        <emphasis>subtype-of</emphasis> relation between types. The type void
+        is the <emphasis>smallests</emphasis> type and is included in all
+        other types and the type value is the <emphasis>largests</emphasis>
+        type that includes all other types. We also see that
+        <literal>rel</literal> is a subtype of <literal>set</literal> and that
+        each ADT is a subtype of <literal>node</literal>. Finally, each alias
+        is a subtype of one specific type.<figure>
+            <title>The Rascal Type Lattice</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="type-lattice.png" scale="50"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+      </section>
     </section>
 
-    <section>
-      <title>Typing</title>
-
-      <para xml:id="figure.type-lattice">Rascal is based on static typing,
-      this means that as many errors and inconsistencies as possible are
-      spotted before the program is executed. The types introduced earlier are
-      ordered in a so-called <emphasis>type lattice</emphasis> shown in <xref
-      linkend="figure.type-lattice" />. The arrows describe a
-      <emphasis>subtype-of</emphasis> relation between types. The type void is
-      the <emphasis>smallests</emphasis> type and is included in all other
-      types and the type value is the <emphasis>largests</emphasis> type that
-      includes all other types. We also see that <literal>rel</literal> is a
-      subtype of <literal>set</literal> and that each ADT is a subtype of
-      <literal>node</literal>. Finally, each alias is a subtype of one
-      specific type.<figure>
-          <title>The Rascal Type Lattice</title>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="type-lattice.png" scale="50"></imagedata>
-            </imageobject>
-          </mediaobject>
-        </figure></para>
-    </section>
-
-    <section>
+    <section xml:id="section.expressions">
       <title>Expressions</title>
 
       <para>The Expression is the basic unit of evaluation and may consist
@@ -1291,7 +1297,7 @@ alias Frequency = int;</programlisting>
       Non-Boolean and Boolean operator expressions behave somewhat differently
       and therefore we describe separately.</para>
 
-      <section>
+      <section xml:id="section.expressions-non-boolean">
         <title>Non-Boolean Operator Expressions</title>
 
         <para>The non-Boolean operators are summarized in <xref
@@ -1541,7 +1547,7 @@ alias Frequency = int;</programlisting>
           </table></para>
       </section>
 
-      <section>
+      <section xml:id="section.expressions-boolean">
         <title>Boolean Operator Expressions</title>
 
         <para>The Boolean operators are summarized in <xref
@@ -1566,7 +1572,7 @@ alias Frequency = int;</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para>The match operator <programlisting><replaceable>pat</replaceable> <literal>:=</literal> <replaceable>Exp</replaceable></programlisting></para>
+        <para>The match operator <programlisting><replaceable>Pat</replaceable> <literal>:=</literal> <replaceable>Exp</replaceable></programlisting></para>
 
         <para>is evaluated as follows:</para>
 
@@ -1670,9 +1676,9 @@ alias Frequency = int;</programlisting>
           </listitem>
         </itemizedlist>
 
-        <note>
+        <caution>
           <para>Make the above more specific.</para>
-        </note>
+        </caution>
 
         <para><table xml:id="table.boolean-operators">
             <title>Boolean Operators</title>
@@ -1781,23 +1787,23 @@ alias Frequency = int;</programlisting>
                 </row>
 
                 <row>
-                  <entry><replaceable>pat</replaceable> <literal>:=</literal>
+                  <entry><replaceable>Pat</replaceable> <literal>:=</literal>
                   <replaceable>Exp</replaceable></entry>
 
                   <entry>Match</entry>
 
                   <entry>Value of <replaceable>Exp</replaceable> matches with
-                  pattern <replaceable>pat</replaceable></entry>
+                  pattern <replaceable>Pat</replaceable></entry>
                 </row>
 
                 <row>
-                  <entry><replaceable>pat</replaceable> <literal>!:=</literal>
+                  <entry><replaceable>Pat</replaceable> <literal>!:=</literal>
                   <replaceable>Exp</replaceable></entry>
 
                   <entry>NoMatch</entry>
 
                   <entry>Value of <replaceable>Exp</replaceable> does not
-                  match with pattern <replaceable>pat</replaceable></entry>
+                  match with pattern <replaceable>Pat</replaceable></entry>
                 </row>
 
                 <row>
@@ -1928,447 +1934,569 @@ alias Frequency = int;</programlisting>
             </tgroup>
           </table></para>
       </section>
-    </section>
 
-    <section xml:id="section.patterns">
-      <title>Patterns</title>
+      <section xml:id="section.patterns">
+        <title>Patterns</title>
 
-      <para>Patterns come in three flavours:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><emphasis>Regulars patterns</emphasis> to do string matching
-          with regular expressions, see <xref
-          linkend="section.regular-patterns" />.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Abstract patterns</emphasis> to matching on
-          arbitrary values, see <xref
-          linkend="section.abstract-patterns" />.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Concrete patterns</emphasis> to match syntax trees
-          that are the result of parsing, see <xref
-          linkend="section.concrete-patterns" />.</para>
-        </listitem>
-      </itemizedlist>
-
-      <section xml:id="section.regular-patterns">
-        <title>Regular Patterns</title>
-
-        <para>Regular expression patterns are ordinary regular expressions
-        that are used to match a string value and to decompose it in parts and
-        also to compose new strings. Regular expression patterns bind
-        variables of type <literal>str</literal> when the match succeeds,
-        otherwise they do not bind anything. Their syntax and semantics
-        parallels abstract and concrete syntax patterns as much as possible.
-        This means that they can occur in cases of <literal>visit</literal>
-        and <literal>switch</literal> statements, on the left-hand side of the
-        match operator (<literal>:= or !:=</literal>) and as declarator in
-        generators.</para>
-
-        <para>We use a regular expression language that slightly extends the
-        Java Regex language with the following exceptions:</para>
+        <para>Patterns come in three flavours:</para>
 
         <itemizedlist>
           <listitem>
-            <para>Regular expression are delimited by / and / optionally
-            followed by a modifier (see below).</para>
+            <para><emphasis>Regulars patterns</emphasis> to do string matching
+            with regular expressions, see <xref
+            linkend="section.regular-patterns" />.</para>
           </listitem>
 
           <listitem>
-            <para>We allow named groups, syntax
-            <literal>&lt;<replaceable>Name</replaceable>:<replaceable>Regex</replaceable>&gt;</literal>,
-            which introduce a variable of type <literal>str</literal> named
-            <replaceable>Name</replaceable>. Currently, these names have to be
-            unique in the pattern.</para>
+            <para><emphasis>Abstract patterns</emphasis> to matching on
+            arbitrary values, see <xref
+            linkend="section.abstract-patterns" />.</para>
           </listitem>
 
           <listitem>
-            <para>Java regular expressions might have optional groups, which
-            may introduce null bindings. Since unitialized variables are not
-            allowed in Rascal, we limit the kinds of expressions one can write
-            here by not allowing nesting of named groups.</para>
-          </listitem>
-
-          <listitem>
-            <para>Named groups have to be outermost, such that they can only
-            bind in one way.</para>
-          </listitem>
-
-          <listitem>
-            <para>Unlike Perl, Java uses the notation
-            <literal>(?<replaceable>Option</replaceable>)</literal> inside the
-            regular expression to set options like multi-line matching
-            <literal>(?m)</literal>, case-insensitive matching
-            <literal>(?i)</literal> etc. We let these options follow the
-            regular expression.</para>
-          </listitem>
-
-          <listitem>
-            <para>We allow name use in a regular expression:
-            <literal>&lt;<replaceable>Name</replaceable>&gt;</literal> which
-            inserts the string value of <replaceable>Name</replaceable> in the
-            pattern.</para>
+            <para><emphasis>Concrete patterns</emphasis> to match syntax trees
+            that are the result of parsing, see <xref
+            linkend="section.concrete-patterns" />.</para>
           </listitem>
         </itemizedlist>
 
-        <para>Here are some examples of regular patterns.<programlisting>/\brascal\b/i</programlisting>does
-        a case-insensitive match (<literal>i</literal>) of the word rascal
-        between word boundaries (<literal>\b</literal>). And<programlisting>/^.*?&lt;word:\w+&gt;&lt;rest:.*$&gt;/m</programlisting>does
-        a multi-line match (<literal>m</literal>), matches the first
-        consecutive word characters (<literal>\w</literal>) and assigns them
-        to the variable <literal>word</literal>. The remainder of the string
-        is assigned to the variable <literal>rest</literal>.</para>
+        <section xml:id="section.regular-patterns">
+          <title>Regular Patterns</title>
+
+          <para>Regular expression patterns are ordinary regular expressions
+          that are used to match a string value and to decompose it in parts
+          and also to compose new strings. Regular expression patterns bind
+          variables of type <literal>str</literal> when the match succeeds,
+          otherwise they do not bind anything. Their syntax and semantics
+          parallels abstract and concrete syntax patterns as much as possible.
+          This means that they can occur in cases of <literal>visit</literal>
+          and <literal>switch</literal> statements, on the left-hand side of
+          the match operator (<literal>:= or !:=</literal>) and as declarator
+          in generators.</para>
+
+          <para>We use a regular expression language that slightly extends the
+          Java Regex language with the following exceptions:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Regular expression are delimited by / and / optionally
+              followed by a modifier (see below).</para>
+            </listitem>
+
+            <listitem>
+              <para>We allow named groups, syntax
+              <literal>&lt;<replaceable>Name</replaceable>:<replaceable>Regex</replaceable>&gt;</literal>,
+              which introduce a variable of type <literal>str</literal> named
+              <replaceable>Name</replaceable>. Currently, these names have to
+              be unique in the pattern.</para>
+            </listitem>
+
+            <listitem>
+              <para>Java regular expressions might have optional groups, which
+              may introduce null bindings. Since unitialized variables are not
+              allowed in Rascal, we limit the kinds of expressions one can
+              write here by not allowing nesting of named groups.</para>
+            </listitem>
+
+            <listitem>
+              <para>Named groups have to be outermost, such that they can only
+              bind in one way.</para>
+            </listitem>
+
+            <listitem>
+              <para>Unlike Perl, Java uses the notation
+              <literal>(?<replaceable>Option</replaceable>)</literal> inside
+              the regular expression to set options like multi-line matching
+              <literal>(?m)</literal>, case-insensitive matching
+              <literal>(?i)</literal> etc. We let these options follow the
+              regular expression.</para>
+            </listitem>
+
+            <listitem>
+              <para>We allow name use in a regular expression:
+              <literal>&lt;<replaceable>Name</replaceable>&gt;</literal> which
+              inserts the string value of <replaceable>Name</replaceable> in
+              the pattern.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Here are some examples of regular patterns.<programlisting>/\brascal\b/i</programlisting>does
+          a case-insensitive match (<literal>i</literal>) of the word rascal
+          between word boundaries (<literal>\b</literal>). And<programlisting>/^.*?&lt;word:\w+&gt;&lt;rest:.*$&gt;/m</programlisting>does
+          a multi-line match (<literal>m</literal>), matches the first
+          consecutive word characters (<literal>\w</literal>) and assigns them
+          to the variable <literal>word</literal>. The remainder of the string
+          is assigned to the variable <literal>rest</literal>.</para>
+        </section>
+
+        <section xml:id="section.abstract-patterns">
+          <title>Abstract Patterns</title>
+
+          <para>An abstract pattern is recursively defined and may contain the
+          following elements:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>Literal</emphasis> of one of the basic types
+              <literal>bool</literal>, <literal>int</literal>,
+              <literal>real</literal>, <literal>str</literal>, or
+              <literal>loc</literal>. A literal pattern matches with a value
+              that is identical to the literal.</para>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>variable declaration
+              pattern</emphasis><programlisting><replaceable>Type</replaceable> <replaceable>Var</replaceable></programlisting></para>
+
+              <para>A variable declaration introduces a new variable that
+              matches any value of the given type. That value is assigned to
+              <replaceable>Var</replaceable> when the whole match
+              succeeds.</para>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>variable pattern</emphasis><programlisting><replaceable>Var</replaceable></programlisting></para>
+
+              <para>A variable pattern can act in two roles:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>If <replaceable>Var</replaceable> has already a
+                  defined value then it matches with that value.</para>
+                </listitem>
+
+                <listitem>
+                  <para>If Var has not been defined before (or it has been
+                  declared but not initalized) then it matches any value. That
+                  value is assigned to <replaceable>Var</replaceable>.
+                  <warning>
+                      <para>Explain scope.</para>
+                    </warning></para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>list pattern</emphasis><programlisting>[ <replaceable>Pat</replaceable><subscript>1</subscript>, <replaceable>Pat</replaceable><subscript>2</subscript>, ..., <replaceable>Pat</replaceable><subscript>n</subscript> ]</programlisting></para>
+
+              <para>A list pattern matches a list value, provided that
+              <replaceable>Pat</replaceable><subscript>1</subscript>,
+              <replaceable>Pat</replaceable><subscript>2</subscript>, ...,
+              <replaceable>Pat</replaceable><subscript>n</subscript> match the
+              elements of that list in order. Two special cases exist when one
+              of the patterns
+              <replaceable>Pat</replaceable><subscript>i</subscript> is
+              </para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>a variable declaration pattern with a list type that
+                  is identical to the type of the list that is being
+                  matched.</para>
+                </listitem>
+
+                <listitem>
+                  <para>a variable pattern, where the variable has been
+                  declared, but not initalized, outside the pattern with a
+                  list type that is identical to the type of the list that is
+                  being matched.</para>
+                </listitem>
+              </itemizedlist>
+
+              <para>In both cases list matching is applied and the variable
+              can match an arbitrary number of elements of the subject
+              list.</para>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>set pattern</emphasis><programlisting>{ <replaceable>Pat</replaceable><subscript>1</subscript>, <replaceable>Pat</replaceable><subscript>2</subscript>, ..., <replaceable>Pat</replaceable><subscript>n</subscript> }</programlisting></para>
+
+              <para>A set pattern matches a set value, provided that
+              <replaceable>Pat</replaceable><subscript>1</subscript>,
+              <replaceable>Pat</replaceable><subscript>2</subscript>, ...,
+              <replaceable>Pat</replaceable><subscript>n</subscript> match the
+              elements of that set in any order. Completely analogous to list
+              patterns, there are two special cases when one of the patterns
+              <replaceable>Pat</replaceable><subscript>i</subscript> is</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>a variable declaration pattern with a set type that is
+                  identical to the type of the set that is being
+                  matched.</para>
+                </listitem>
+
+                <listitem>
+                  <para>a variable pattern, where the variable has been
+                  declared, but not initalized, outside the pattern with a set
+                  type that is identical to the type of the set that is being
+                  matched.</para>
+                </listitem>
+              </itemizedlist>
+
+              <para>In both cases set matching is applied and the variable can
+              match an arbitrary number (in arbitrary order!) of elements of
+              the subject set.</para>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>tuple pattern</emphasis><programlisting>&lt; <replaceable>Pat</replaceable><subscript>1</subscript>, <replaceable>Pat</replaceable><subscript>2</subscript>, ..., <replaceable>Pat</replaceable><subscript>n</subscript> &gt;</programlisting></para>
+
+              <para>A tuple pattern matches a tuple value, provided that
+              <replaceable>Pat</replaceable><subscript>1</subscript>,
+              <replaceable>Pat</replaceable><subscript>2</subscript>, ...,
+              <replaceable>Pat</replaceable><subscript>n</subscript> match the
+              elements of that tuple in order. </para>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>node pattern</emphasis><programlisting><replaceable>Name</replaceable> ( <replaceable>Pat</replaceable><subscript>1</subscript>, <replaceable>Pat</replaceable><subscript>2</subscript>, ..., <replaceable>Pat</replaceable><subscript>n</subscript> )</programlisting></para>
+
+              <para>A node pattern matches a node value or an abstract
+              datatype value, provided that <replaceable>Name</replaceable>
+              matches with the constructor symbol of that value and
+              <replaceable>Pat</replaceable><subscript>1</subscript>,
+              <replaceable>Pat</replaceable><subscript>2</subscript>, ...,
+              <replaceable>Pat</replaceable><subscript>n</subscript> match the
+              children of that value in order.</para>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>labelled pattern</emphasis><programlisting><replaceable>Var</replaceable> <literal>:</literal> <replaceable>Pat</replaceable></programlisting></para>
+
+              <para>A labelled pattern matches the same values as
+              <replaceable>Pat</replaceable>, but has as side-effect that the
+              matched value is assigned to
+              <replaceable>Var</replaceable>.</para>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>typed, labelled,
+              pattern</emphasis><programlisting><replaceable>Type Var</replaceable> <literal>:</literal> <replaceable>Pat</replaceable></programlisting></para>
+
+              <para>A typed, labelled, pattern matches when the subject value
+              has type <replaceable>Type</replaceable> and
+              <replaceable>Pat</replaceable> matches. The matched value is
+              assigned to <replaceable>Var</replaceable>.</para>
+            </listitem>
+          </itemizedlist>
+
+          <note>
+            <para>Map patterns are currently not supported.</para>
+          </note>
+        </section>
+
+        <section xml:id="section.concrete-patterns">
+          <title>Concrete patterns</title>
+
+          <note>
+            <para>Concrete patterns are not yet implemented.</para>
+          </note>
+
+          <para>A <emphasis>concrete pattern</emphasis> is a (possibly quoted)
+          concrete syntax fragment that may contain variables. We want to
+          cover the whole spectrum from maximally quoted patterns that can
+          unambiguously describe <emphasis role="bold">any</emphasis> syntax
+          fragment to minimally quoted patterns as we are used to in ASF+SDF.
+          A concrete pattern may have the following forms:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>A <emphasis>typed variable</emphasis>
+              <emphasis>pattern</emphasis><programlisting><replaceable>&lt;Type</replaceable> <replaceable>Var&gt;</replaceable></programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>variable pattern</emphasis><programlisting><replaceable>&lt;Var&gt;</replaceable></programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>Quoted pattern</emphasis><programlisting>[| <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> |]</programlisting></para>
+
+              <para>Inside a quoted pattern arbitrary lexical tokens may
+              occur, but the characters <literal>&lt;</literal>,
+              <literal>&gt;</literal> and <literal>|</literal> have to be
+              escaped as <literal>\&lt;</literal>, <literal>\&gt;</literal>,
+              <literal>\|</literal>. Quoted patterns may contain variable
+              declaration patterbs and variable patterns.</para>
+            </listitem>
+
+            <listitem>
+              <para>A <emphasis>typed quoted pattern</emphasis>
+              <programlisting><replaceable>Symbol</replaceable> [| <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> |]</programlisting>is
+              a quoted pattern that is preceeded by an SDF symbol to define
+              its desired syntactic type.</para>
+            </listitem>
+
+            <listitem>
+              <para>An <emphasis>unquoted pattern</emphasis><programlisting><replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript></programlisting></para>
+
+              <para>is a quoted pattern without the surrounding quotes.</para>
+            </listitem>
+
+            <listitem>
+              <para>Inside syntax patterns, layout is ignored.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Examples:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Quoted syntax pattern with two pattern variable
+              declarations:<programlisting>[| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od |]</programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para>Quoted syntax pattern with two pattern variable
+              uses:<programlisting>[| while &lt;Exp&gt; do &lt;Stats&gt; od |]</programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para>Identical to the previous example, but with a declaration
+              of the desired syntactic type:<programlisting>STATEMENT [| while &lt;Exp&gt; do &lt;Stats&gt; od |]</programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para>Unquoted syntax pattern with two pattern variable
+              declarations:<programlisting>while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od</programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para>Unquoted syntax pattern with two pattern variable
+              uses:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Obviously, with less quoting and type information, the
+          probability of ambiguities increases. Our assumption is that a type
+          checker can resolve most of them.</para>
+        </section>
       </section>
 
-      <section xml:id="section.abstract-patterns">
-        <title>Abstract Patterns</title>
+      <section>
+        <title>Comprehensions</title>
 
-        <para>An abstract pattern is recursively defined and may contain the
-        following elements:</para>
+        <para>We will use the familiar notation for <emphasis>list
+        comprehension</emphasis><programlisting>[<replaceable>E</replaceable>xp | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>]</programlisting></para>
 
-        <itemizedlist>
-          <listitem>
-            <para><emphasis>Literal</emphasis> of one of the basic types
-            <literal>bool</literal>, <literal>int</literal>,
-            <literal>real</literal>, <literal>str</literal>, or
-            <literal>loc</literal>.</para>
-          </listitem>
+        <para>to denote the construction of a list consisting of the
+        successive values of the <emphasis>contributing expression</emphasis>
+        <replaceable>Exp</replaceable>. The values and the resulting list are
+        determined by <replaceable>Exp</replaceable> and the
+        <emphasis>generators</emphasis>
+        <replaceable>Gen</replaceable><subscript>1</subscript> ,...,
+        <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>.
+        <replaceable>E</replaceable>xp is computed for all possible
+        combinations of values produced by the generators. Each generator may
+        introduce new variables that can be used in subsequent generators as
+        well as in the expressions <replaceable>Exp</replaceable>. A generator
+        can use the variables introduced by preceeding generators. Generators
+        may enumerate all the values in a set or relation, or they may perform
+        an arbitrary test.</para>
 
-          <listitem>
-            <para>A <emphasis>variable declaration
-            pattern</emphasis><programlisting><replaceable>Type</replaceable> <replaceable>Var</replaceable></programlisting></para>
-          </listitem>
+        <para>In addition to list comprehensions, Rascal also supports
+        <emphasis>set comprehension</emphasis><programlisting>{<replaceable>Exp</replaceable> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>}</programlisting></para>
 
-          <listitem>
-            <para>A <emphasis>variable pattern</emphasis><programlisting><replaceable>Var</replaceable></programlisting></para>
-          </listitem>
+        <para>that also serve as relation comprehension in the case that
+        <replaceable>Exp</replaceable> is of a tuple type.</para>
 
-          <listitem>
-            <para>A <emphasis>list pattern</emphasis><programlisting>[ <replaceable>Pat</replaceable><subscript>1</subscript>, <replaceable>Pat</replaceable><subscript>2</subscript>, ..., <replaceable>Pat</replaceable><subscript>n</subscript> ]</programlisting></para>
-          </listitem>
+        <para>Finally, <replaceable>map comprehension</replaceable>s are
+        written as:</para>
 
-          <listitem>
-            <para>A <emphasis>set pattern</emphasis><programlisting>{ <replaceable>Pat</replaceable><subscript>1</subscript>, <replaceable>Pat</replaceable><subscript>2</subscript>, ..., <replaceable>Pat</replaceable><subscript>n</subscript> }</programlisting></para>
-          </listitem>
+        <programlisting>(<replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>)</programlisting>
 
-          <listitem>
-            <para>A <emphasis>tuple pattern</emphasis><programlisting>&lt; <replaceable>Pat</replaceable><subscript>1</subscript>, <replaceable>Pat</replaceable><subscript>2</subscript>, ..., <replaceable>Pat</replaceable><subscript>n</subscript> &gt;</programlisting></para>
-          </listitem>
+        <para>Since the entries in a map require both a key and a value for
+        each entry, two expressions are needed in this case.</para>
 
-          <listitem>
-            <para>A <emphasis>node pattern</emphasis><programlisting><replaceable>name</replaceable> ( <replaceable>Pat</replaceable><subscript>1</subscript>, <replaceable>Pat</replaceable><subscript>2</subscript>, ..., <replaceable>Pat</replaceable><subscript>n</subscript> )</programlisting></para>
-          </listitem>
-        </itemizedlist>
+        <section>
+          <title>Enumerator</title>
 
-        <caution>
-          <para>Map patterns are currently not supported.</para>
-        </caution>
-      </section>
+          <para>An enumerator generates all the values in a given list, set,
+          map, tuple, relation or abstract datatype. It has the following
+          form:<programlisting><replaceable>P</replaceable>at &lt;- <replaceable>Exp</replaceable></programlisting></para>
 
-      <section xml:id="section.concrete-patterns">
-        <title>Concrete patterns</title>
+          <para>where <replaceable>Pat</replaceable> is a pattern and
+          <replaceable>Exp</replaceable> is an expression. An enumerator is
+          evaluated as follows:</para>
 
-        <caution>
-          <para>Concrete patterns are not yet implemented.</para>
-        </caution>
+          <itemizedlist>
+            <listitem>
+              <para>Expression <replaceable>Exp</replaceable> is evaluated and
+              may have an arbitrary value <replaceable>V</replaceable>.</para>
+            </listitem>
 
-        <para>A <emphasis>concrete pattern</emphasis> is a (possibly quoted)
-        concrete syntax fragment that may contain variables. We want to cover
-        the whole spectrum from maximally quoted patterns that can
-        unambiguously describe <emphasis role="bold">any</emphasis> syntax
-        fragment to minimally quoted patterns as we are used to in ASF+SDF. A
-        concrete pattern may have the following forms:</para>
+            <listitem>
+              <para>The elements of <replaceable>V</replaceable> are
+              enumerated one by one.</para>
+            </listitem>
 
-        <itemizedlist>
-          <listitem>
-            <para>A <emphasis>typed variable</emphasis>
-            <emphasis>pattern</emphasis><programlisting><replaceable>&lt;Type</replaceable> <replaceable>Var&gt;</replaceable></programlisting></para>
-          </listitem>
+            <listitem>
+              <para>Each element value is matched against the pattern
+              <replaceable>Pat</replaceable>. There are two cases:</para>
 
-          <listitem>
-            <para>A <emphasis>variable pattern</emphasis><programlisting><replaceable>&lt;Var&gt;</replaceable></programlisting></para>
-          </listitem>
+              <itemizedlist>
+                <listitem>
+                  <para>The match succeeds, any variables in
+                  <replaceable>Pat</replaceable> are bound, and the next
+                  generator in the comprehension is evaluated. The variables
+                  that are introduced by an enumartor are only available to
+                  generators that appear later (i.e., to the right) in the
+                  comprehension. When this enumerator is the last generator in
+                  the comprehension its contributing expression is
+                  evaluated.</para>
+                </listitem>
 
-          <listitem>
-            <para><emphasis>Quoted pattern</emphasis><programlisting>[| <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> |]</programlisting></para>
+                <listitem>
+                  <para>The match fails, no variables are bound. If V has more
+                  elements, a next element is tried. Otherwise, a previous
+                  generator (i.e., to the left) is tried. If this enumerator
+                  is the first generator in the comprehension, the evaluation
+                  of the comprehension is complete.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
 
-            <para>Inside a quoted pattern arbitrary lexical tokens may occur,
-            but the characters <literal>&lt;</literal>,
-            <literal>&gt;</literal> and <literal>|</literal> have to be
-            escaped as <literal>\&lt;</literal>, <literal>\&gt;</literal>,
-            <literal>\|</literal>. Quoted patterns may contain variable
-            declaration patterbs and variable patterns.</para>
-          </listitem>
+          <para>This are examples of enumerators:</para>
 
-          <listitem>
-            <para>A <emphasis>typed quoted pattern</emphasis> <programlisting><replaceable>Symbol</replaceable> [| <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> |]</programlisting>is
-            a quoted pattern that is preceeded by an SDF symbol to define its
-            desired syntactic type.</para>
-          </listitem>
+          <itemizedlist>
+            <listitem>
+              <para><literal>int N &lt;- {1, 2, 3, 4, 5}</literal>,</para>
+            </listitem>
 
-          <listitem>
-            <para>An <emphasis>unquoted pattern</emphasis><programlisting><replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript></programlisting></para>
+            <listitem>
+              <para><literal>str K &lt;- KEYWORDS</literal>, where
+              <literal>KEYWORDS</literal> should evaluate to a value of
+              <literal>set[str]</literal>.</para>
+            </listitem>
 
-            <para>is a quoted pattern without the surrounding quotes.</para>
-          </listitem>
+            <listitem>
+              <para><literal>&lt;str K, int N&gt; &lt;- {&lt;"a",10&gt;,
+              &lt;"b",20&gt;, &lt;"c",30&gt;}</literal>.</para>
+            </listitem>
 
-          <listitem>
-            <para>Inside syntax patterns, layout is ignored.</para>
-          </listitem>
-        </itemizedlist>
+            <listitem>
+              <para><literal>&lt;str K, int N&gt; &lt;- FREQUENCIES</literal>,
+              where <literal>FREQUENCIES</literal> should evaluate to a value
+              of type <literal>rel[str,int]</literal>.</para>
+            </listitem>
 
-        <para>Examples:</para>
+            <listitem>
+              <para><literal>&lt;str K, 10&gt; &lt;- FREQUENCIES</literal>,
+              will only generate pairs with <literal>10</literal> as second
+              element.</para>
+            </listitem>
+          </itemizedlist>
 
-        <itemizedlist>
-          <listitem>
-            <para>Quoted syntax pattern with two pattern variable
-            declarations:<programlisting>[| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od |]</programlisting></para>
-          </listitem>
+          <para><note>
+              <para>Type information will be used to check the plausibity of
+              an enumerator and guard you against mistakes. An impossible
+              enumerator like <literal>int N &lt;- {"apples",
+              "oranges"}</literal> will be flagged as an error since the
+              pattern can never match.</para>
+            </note><note>
+              <para>An enumerator may be preceeded by a <emphasis>strategy
+              indication</emphasis>:<itemizedlist>
+                  <listitem>
+                    <para><literal>top-down</literal></para>
+                  </listitem>
 
-          <listitem>
-            <para>Quoted syntax pattern with two pattern variable
-            uses:<programlisting>[| while &lt;Exp&gt; do &lt;Stats&gt; od |]</programlisting></para>
-          </listitem>
+                  <listitem>
+                    <para><literal>bottom-up</literal> (this is the
+                    default)</para>
+                  </listitem>
+                </itemizedlist></para>
 
-          <listitem>
-            <para>Identical to the previous example, but with a declaration of
-            the desired syntactic type:<programlisting>STATEMENT [| while &lt;Exp&gt; do &lt;Stats&gt; od |]</programlisting></para>
-          </listitem>
+              <para>These take only effect for enumerators that produce the
+              elements of an abstract data type and determine the order in
+              which the elements are enumerated.</para>
+            </note></para>
+        </section>
 
-          <listitem>
-            <para>Unquoted syntax pattern with two pattern variable
-            declarations:<programlisting>while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od</programlisting></para>
-          </listitem>
+        <section>
+          <title>Test</title>
 
-          <listitem>
-            <para>Unquoted syntax pattern with two pattern variable
-            uses:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
-          </listitem>
-        </itemizedlist>
+          <para>A test is a boolean-valued expression. If the evaluation
+          yields <literal>true</literal> this indicates that the current
+          combination of generated values up to this test is still as desired
+          and execution continues with subsequent generators. If the
+          evaluation yields <literal>false</literal> this indicates that the
+          current combination of values is undesired, and that another
+          combination should be tried by going back to the previous
+          generator.</para>
 
-        <para>Obviously, with less quoting and type information, the
-        probability of ambiguities increases. Our assumption is that a type
-        checker can resolve most of them.</para>
+          <para>Examples:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>N &gt;= 3</literal> tests whether
+              <literal>N</literal> has a value greater than or equal
+              <literal>3</literal>.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>S == "coffee"</literal> tests whether
+              <literal>S</literal> is equal to the string
+              <literal>"coffee"</literal>.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>In both examples, the variable (<literal>N</literal>,
+          respectively, <literal>S</literal>) should have been introduced by a
+          generator that occurs earlier in the comprehension.</para>
+        </section>
+
+        <section>
+          <title>Examples of Comprehensions</title>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>{X | int X : {1, 2, 3, 4, 5}, X &gt;=
+              3}</literal> yields the set <literal>{3,4,5}</literal>.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{&lt;X, Y&gt; | int X : {1, 2, 3}, int Y : {2, 3,
+              4}, X &gt;= Y}</literal> yields the relation <literal>{&lt;2,
+              2&gt;, &lt;3, 2&gt;, &lt;3, 3&gt;}</literal>.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{&lt;Y, X&gt; | &lt;int X, int Y&gt; :
+              {&lt;1,10&gt;, &lt;2,20&gt;}}</literal> yields the inverse of
+              the given relation: <literal>{&lt;10,1&gt;,
+              &lt;20,2&gt;}</literal>.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{X, X * X | X : {1, 2, 3, 4, 5}, X &gt;=
+              3}</literal> yields the set
+              <literal>{3,4,5,9,16,25}</literal>.</para>
+            </listitem>
+          </itemizedlist>
+        </section>
       </section>
     </section>
 
     <section>
-      <title>Comprehensions</title>
+      <title>Statements</title>
 
-      <para>We will use the familiar notation for <emphasis>list
-      comprehension</emphasis><programlisting>[<replaceable>E</replaceable>xp | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>]</programlisting></para>
-
-      <para>to denote the construction of a list consisting of the successive
-      values of the <emphasis>contributing expression</emphasis>
-      <replaceable>E</replaceable>. The values and the resulting list are
-      determined by <replaceable>Exp</replaceable> and the
-      <emphasis>generators</emphasis>
-      <replaceable>Gen</replaceable><subscript>1</subscript> ,...,
-      <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>.
-      <replaceable>E</replaceable>xp is computed for all possible combinations
-      of values produced by the generators. Each generator may introduce new
-      variables that can be used in subsequent generators as well as in the
-      expressions <replaceable>Exp</replaceable>. A generator can use the
-      variables introduced by preceding generators. Generators may enumerate
-      all the values in a set or relation, or they may perform an arbitrary
-      test.</para>
-
-      <para>In addition to list comprehensions, Rascal also supports
-      <emphasis>set comprehension</emphasis><programlisting>{<replaceable>Exp</replaceable> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>}</programlisting></para>
-
-      <para>that also serve as relation comprehension, provided that
-      <replaceable>Exp</replaceable> is of a tuple type.</para>
-
-      <para>Finally, <replaceable>map comprehension</replaceable>s are written
-      as:</para>
-
-      <programlisting>(<replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>)</programlisting>
-
-      <para>Since the entries in a map require both a key and a value for each
-      entry, two expressions are needed in this case.</para>
+      <para></para>
 
       <section>
-        <title>Enumerator</title>
+        <title>Assignment</title>
 
-        <para>An enumerator generates all the values in a given list, set,
-        map, tuple, relation or abstract datatype. They have the following
-        form:<programlisting><replaceable>P</replaceable>at &lt;- <replaceable>Exp</replaceable></programlisting></para>
-
-        <para>where <replaceable>Pat</replaceable> is a pattern and
-        <replaceable>Exp</replaceable> is an expression. An enumerator is
-        evaluated as follows:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Expression <replaceable>Exp</replaceable> is evaluated and
-            may have an arbitrary value <replaceable>V</replaceable>.</para>
-          </listitem>
-
-          <listitem>
-            <para>The elements of <replaceable>V</replaceable> are enumerated
-            one by one.</para>
-          </listitem>
-
-          <listitem>
-            <para>Each element value is matched against the pattern
-            <replaceable>Pat</replaceable>. There are two cases:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>The match succeeds, any variables in
-                <replaceable>P</replaceable>at are bound, and the next
-                generator in the comprehension is evaluated. The variables
-                that are introduced by an enumartor are only available to
-                generators that appear later (i.e., to the right) in the
-                comprehension. When this enumerator is the last generator in
-                the comprehension its contributing expression is
-                evaluated.</para>
-              </listitem>
-
-              <listitem>
-                <para>The match fails, no variables are bound. If V has more
-                elements, a next element is tried. Otherwise, a previous
-                generator (i.e., to the left) is tried. If this enumerator is
-                the first generator in the comprehension, the evaluation of
-                the comprehension is complete.</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
-
-        <para>This are examples of enumerators:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>int N &lt;- {1, 2, 3, 4, 5}</literal>,</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>str K &lt;- KEYWORDS</literal>, where
-            <literal>KEYWORDS</literal> should evaluate to a value of
-            <literal>set[str]</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>&lt;str K, int N&gt; &lt;- {&lt;"a",10&gt;,
-            &lt;"b",20&gt;, &lt;"c",30&gt;}</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>&lt;str K, int N&gt; &lt;- FREQUENCIES</literal>,
-            where <literal>FREQUENCIES</literal> should evaluate to a value of
-            type <literal>rel[str,int]</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>&lt;str K, 10&gt; &lt;- FREQUENCIES</literal>, will
-            only generate pairs with <literal>10</literal> as second
-            element.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para><note>
-            <para>Type information will be used to check the plausibity of an
-            enumerator and guard you against mistakes. An impossible
-            enumerator like <literal>int N &lt;- {"apples",
-            "oranges"}</literal> will be flagged as an error since the pattern
-            can never match.</para>
-          </note><note>
-            <para>An enumerator may be preceeded by a <emphasis>strategy
-            indication</emphasis>:<itemizedlist>
-                <listitem>
-                  <para><literal>top-down</literal></para>
-                </listitem>
-
-                <listitem>
-                  <para><literal>bottom-up</literal> (this is the
-                  default)</para>
-                </listitem>
-              </itemizedlist></para>
-
-            <para>These take only effect for enumerators that produce the
-            elements of an abstract data type and determine the order in which
-            the elements are enumerated.</para>
-          </note></para>
+        <para></para>
       </section>
-
-      <section>
-        <title>Test</title>
-
-        <para>A test is a boolean-valued expression. If the evaluation yields
-        <literal>true</literal> this indicates that the current combination of
-        generated values up to this test is still as desired and execution
-        continues with subsequent generators. If the evaluation yields
-        <literal>false</literal> this indicates that the current combination
-        of values is undesired, and that another combination should be tried
-        by going back to a previous generator.</para>
-
-        <para>Examples:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>N &gt;= 3</literal> tests whether
-            <literal>N</literal> has a value greater than or equal
-            <literal>3</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>S == "coffee"</literal> tests whether
-            <literal>S</literal> is equal to the string
-            <literal>"coffee"</literal>.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>In both examples, the variable (<literal>N</literal>,
-        respectively, <literal>S</literal>) should have been introduced by a
-        generator that occurs earlier in the comprehension.</para>
-      </section>
-
-      <section>
-        <title>Examples of Comprehensions</title>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>{X | int X : {1, 2, 3, 4, 5}, X &gt;= 3}</literal>
-            yields the set <literal>{3,4,5}</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>{&lt;X, Y&gt; | int X : {1, 2, 3}, int Y : {2, 3,
-            4}, X &gt;= Y}</literal> yields the relation <literal>{&lt;2,
-            2&gt;, &lt;3, 2&gt;, &lt;3, 3&gt;}</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>{&lt;Y, X&gt; | &lt;int X, int Y&gt; :
-            {&lt;1,10&gt;, &lt;2,20&gt;}}</literal> yields the inverse of the
-            given relation: <literal>{&lt;10,1&gt;,
-            &lt;20,2&gt;}</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>{X, X * X | X : {1, 2, 3, 4, 5}, X &gt;=
-            3}</literal> yields the set
-            <literal>{3,4,5,9,16,25}</literal>.</para>
-          </listitem>
-        </itemizedlist>
-      </section>
-    </section>
-
-    <section>
-      <title>Switch and Visit</title>
 
       <section>
         <title>Switch statement</title>
 
         <para>A <literal>switch</literal> statement is similar to a switch
         statement in C or Java and has the form:<programlisting>switch ( <replaceable>Exp</replaceable> ) {
-case <replaceable>Rule</replaceable>1;
-case <replaceable>Rule</replaceable>2;
+case <replaceable>Rule</replaceable><subscript>1</subscript>;
+case <replaceable>Rule</replaceable><subscript>2</subscript>;
 ...
 default: ...
 }</programlisting></para>
@@ -2384,14 +2512,16 @@ default: ...
         acts as a dummy statement. There is no fall through from one case to
         the next.</para>
 
-        <para>Each case contains a Rule that can have one of the following
-        forms:</para>
+        <para>Each case contains a <replaceable>Rule</replaceable> that can
+        have one of the following forms:</para>
 
         <itemizedlist>
           <listitem>
             <para><programlisting><literal><replaceable>Pat</replaceable> =&gt; <replaceable>Exp</replaceable></literal></programlisting>When
             the subject matches <replaceable>Pat</replaceable>,the value of
-            Exp is returned from the enclosing function.</para>
+            Exp is returned from the enclosing function.<warning>
+                <para>Check this; how is this implemented?</para>
+              </warning></para>
           </listitem>
 
           <listitem>
@@ -2427,22 +2557,53 @@ default: ...
       <section>
         <title>Visit expression</title>
 
-        <para>A <literal>visit</literal> expression corresponds to a traversal
-        function in ASF+SDF and has the form:<programlisting><replaceable>Strategy</replaceable> visit ( <replaceable>Exp</replaceable> ) {
-case <replaceable>Rule</replaceable>1;
-case <replaceable>Rule</replaceable>2;
+        <para><caution>
+            <para>Technically, visit is an expression and not a statement;
+            Move it from here?</para>
+          </caution>Visiting the nodes in a tree is a very common task in the
+        EASY domain. In many cases (but certainly not all) the tree is a
+        syntax tree of some source code file and the nodes correspond to
+        expressions or statements. Computing metrics or refactoring are
+        examples of tasks that require a tree visit. In object-oriented
+        programming, the <emphasis>visitor pattern</emphasis> is in common use
+        for this. There are three frequently occurring scenarios:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Accumulator: traverse the tree and collect
+            information.</para>
+          </listitem>
+
+          <listitem>
+            <para>Transformer: traverse the tree and transform it into another
+            tree.</para>
+          </listitem>
+
+          <listitem>
+            <para>Accumulating Transformer: traverse the tree, collect
+            information and also transform the tree.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The <literal>visit</literal> expression in Rascal can
+        accommodate all these (and more) use cases and has the form:</para>
+
+        <para><programlisting><replaceable>Strategy</replaceable> <keysym>visit</keysym> ( <replaceable>Exp</replaceable> ) {
+<keysym>case</keysym> <replaceable>Rule</replaceable><subscript>1</subscript>;
+<keysym>case</keysym> <replaceable>Rule</replaceable><subscript>2</subscript>;
 ...
-default: ...
+<keysym>default</keysym>: ...
 }</programlisting>Given a subject term (the current value of
         <replaceable>Exp</replaceable>) and a list of cases (resembling cases
         in a case statement or rewrite rules) it traverses the term. Depending
         on the precise rules it may perform replacement (mimicking a
         transformer), update local variables (mimicking an accumulator) or a
-        combination of these two. If <emphasis role="bold">any</emphasis> of
-        the cases contains an <literal>insert</literal> statement, the value
-        of the visit expression is a new value that is obtained by successive
-        insertions in the subject term by executing one or more cases.
-        Otherwise, the original value of the subject term is returned.</para>
+        combination of these two (accumulating transformer). If <emphasis
+        role="bold">any</emphasis> of the cases contains an
+        <literal>insert</literal> statement, the value of the visit expression
+        is a new value that is obtained by successive insertions in the
+        subject term by executing one or more cases. Otherwise, the original
+        value of the subject term is returned.</para>
 
         <para>The visit expression is optionally preceeded by one of the
         following strategy indications that determine the traversal order of
@@ -2450,31 +2611,36 @@ default: ...
 
         <itemizedlist>
           <listitem>
-            <para><literal>top-down</literal></para>
+            <para>top-down: visit the subject from root to leaves.</para>
           </listitem>
 
           <listitem>
-            <para><literal>top-down-break</literal></para>
+            <para><literal>top-down-break</literal>: visit the subject from
+            root to leaves, but stop at the current path when a case
+            matches.</para>
           </listitem>
 
           <listitem>
-            <para><literal>bottom-up</literal> (this is the default)</para>
+            <para><literal>bottom-up</literal>: visit the subject from leaves
+            to root (this is the default).</para>
           </listitem>
 
           <listitem>
-            <para><literal>bottom-up-break</literal></para>
+            <para><literal>bottom-up-break</literal>: visit the subject from
+            leaves to root, but stop at the current path when a case
+            matches.</para>
           </listitem>
 
           <listitem>
-            <para><literal>innermost</literal> = compute a fixed-point: repeat
-            a bottom-up traversal as long as the traversal function changes
-            values.</para>
+            <para><literal>innermost</literal>: repeat a bottom-up traversal
+            as long as the traversal changes the resulting value (compute a
+            fixed-point).</para>
           </listitem>
 
           <listitem>
-            <para><literal>outermost</literal> = compute a fixed-point: repeat
-            a traversal traversal as long as the traversal function changes
-            values.</para>
+            <para><literal>outermost</literal>: repeat a top-down traversal as
+            long as the traversal changes the resulting value (compute a
+            fixed-point).</para>
           </listitem>
         </itemizedlist>
 
@@ -2483,9 +2649,9 @@ default: ...
 
         <itemizedlist>
           <listitem>
-            <para>Rules of the form ... =&gt; ... <emphasis
-            role="bold">insert</emphasis> their result in the subject (instead
-            of returning a value).</para>
+            <para>Rules of the form <replaceable>Pat</replaceable> =&gt;
+            <replaceable>Exp</replaceable> insert their result in the subject
+            (instead of returning a value).</para>
           </listitem>
 
           <listitem>
@@ -2534,10 +2700,11 @@ default: ...
 
         <itemizedlist>
           <listitem>
-            <para>For type <literal>nodeor ADT</literal>, all nodes of the
+            <para>For type <literal>node or ADT</literal>, all nodes of the
             tree are visited (in the order determined by the strategy).
-            SyntaxPatterns and AbstractPatterns directly match tree nodes.
-            RexExpPatterns match only values of type string.</para>
+            concrete patterns and abstract patterns directly match tree nodes.
+            Regular expression patterns match only values of type
+            string.</para>
           </listitem>
 
           <listitem>
@@ -2550,41 +2717,94 @@ default: ...
           </listitem>
         </itemizedlist>
       </section>
-    </section>
 
-    <section>
-      <title>Other control flow</title>
+      <section>
+        <title>Exception</title>
 
-      <para></para>
+        <para></para>
+      </section>
+
+      <section>
+        <title>Block</title>
+
+        <para>A block consists of a sequence of statements separated by
+        semi-colons:<programlisting><literal>{ <replaceable>Statement</replaceable><subscript>1</subscript>; ... <replaceable>Statement</replaceable><subscript>n</subscript> }</literal></programlisting>Since
+        a block is itself a statement, it may be used in all places where a
+        statement is required.</para>
+      </section>
+
+      <section>
+        <title>If</title>
+
+        <para>The if-statement is completely standard and comes in an if-then
+        and an if-then-else variant:<programlisting><keysym>if</keysym> <literal>( <replaceable>Bool</replaceable> ) <replaceable>Statement</replaceable></literal></programlisting><programlisting><keysym>if</keysym><literal> ( <replaceable>Bool</replaceable> ) <replaceable>Statement</replaceable><subscript>1</subscript> </literal><keysym>else</keysym><literal> <replaceable>Statement</replaceable><subscript>2</subscript></literal></programlisting></para>
+
+        <para>In both cases the test <replaceable>Bool</replaceable> is
+        evaluated and its outcome determines the statement to be executed.
+        Recall from <xref linkend="section.expressions-boolean" /> that
+        boolean expression maybe multi-valued. In this case only the first
+        true value (if any) is used.</para>
+      </section>
 
       <section>
         <title>While</title>
 
-        <para></para>
+        <para>The while-statement is completely standard:<programlisting><keysym>while</keysym><literal> ( <replaceable>Bool</replaceable> ) <replaceable>Statement</replaceable></literal></programlisting>The
+        test <replaceable>Bool</replaceable> is evaluated repeatedly and
+        <replaceable>Statement</replaceable> is executed when the test is
+        true. Execution ends the first time that the test yields false. The
+        test <replaceable>Bool</replaceable> is executed anew in each
+        repetition and only the first true value (if any) is used.</para>
       </section>
 
       <section>
         <title>Do</title>
 
-        <para></para>
+        <para>The do-while-statement is completely standard:<programlisting><keysym>do</keysym> <replaceable>Statement</replaceable> <keysym>while</keysym> <literal>( <replaceable>Bool</replaceable> ) </literal></programlisting>Statement
+        is executed repeatedly, as long as the test Bool yields true. The test
+        <replaceable>Bool</replaceable> is executed anew in each repetition
+        and only the first true value (if any) is used.</para>
       </section>
 
       <section>
         <title>For</title>
 
-        <para></para>
+        <para>The for-statement is more exciting:<programlisting><keysym>for</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> <replaceable>Statement</replaceable></programlisting>It
+        generates executes Statement for all possible combinations of values
+        of the expressions
+        <replaceable>Exp</replaceable><subscript>i</subscript>. Note that is
+        one of the expressions is a boolean expression, we do try all its
+        possible values.</para>
       </section>
 
       <section>
         <title>One</title>
 
-        <para></para>
+        <para><programlisting><keysym>one</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal></programlisting>The
+        <keysym>one</keysym> expression yields true when one combination of
+        values of <replaceable>Exp</replaceable><subscript>i</subscript> is
+        true.<caution>
+            <para>The status of one is under discussion.</para>
+          </caution><caution>
+            <para>Technically, one is an expression.</para>
+          </caution></para>
       </section>
 
       <section>
         <title>All</title>
 
-        <para></para>
+        <para><programlisting><keysym>all</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> </programlisting>The
+        all expression yields true when all combinations of values of
+        <replaceable>Exp</replaceable><subscript>i</subscript> are
+        true.</para>
+
+        <caution>
+          <para>The status of all is under discussion.</para>
+        </caution>
+
+        <caution>
+          <para>Technically, one is an expression.</para>
+        </caution>
       </section>
 
       <section>
@@ -2613,7 +2833,7 @@ default: ...
         executed, assigning new values to the variables
         <replaceable>Var</replaceable><subscript><replaceable>i</replaceable></subscript>,
         and this is repeated as long as the value of any of the variables was
-        changed compared to the previous repetition. </para>
+        changed compared to the previous repetition.</para>
 
         <para>Let's consider transitve closure as an example (transitive
         closure is already available as built-in operator, we use it here just
@@ -2631,42 +2851,105 @@ rascal&gt;
 
 {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</screen>
       </section>
-    </section>
 
-    <section>
-      <title>Assertions</title>
+      <section>
+        <title>Assertions</title>
 
-      <para>An assert statement may occur everywhere where a declaration is
-      allowed. It has two forms:</para>
+        <para>An assert statement may occur everywhere where a declaration is
+        allowed. It has two forms:</para>
 
-      <para><programlisting><literal>assert <replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable></literal></programlisting></para>
+        <para><programlisting><keysym>assert</keysym> <literal><replaceable>Exp</replaceable><subscript>1</subscript></literal></programlisting></para>
 
-      <para>and <programlisting><literal>assert <replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript></literal></programlisting>where
-      <replaceable>Exp</replaceable><subscript>1</subscript> is a
-      boolean-value expression and
-      <replaceable>Exp</replaceable><subscript>2</subscript> is a
-      string-valued expression that serves as a identifying message for this
-      assertion. During execution, a list of true and false assertions is
-      maintained. When the script is executed as a <emphasis>test
-      suite</emphasis> a summary of this information is shown to the user.
-      When the script is executed in the standard fashion, the assert
-      statement has no affect. <note>
-          <para>Update the above description.</para>
-        </note></para>
+        <para>and <programlisting><keysym>assert</keysym><literal> <replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript></literal></programlisting>where
+        <replaceable>Exp</replaceable><subscript>1</subscript> is a
+        boolean-value expression and
+        <replaceable>Exp</replaceable><subscript>2</subscript> is a
+        string-valued expression that serves as a identifying message for this
+        assertion. During execution, a list of true and false assertions is
+        maintained. When the script is executed as a <emphasis>test
+        suite</emphasis> a summary of this information is shown to the user.
+        When the script is executed in the standard fashion, the assert
+        statement has no affect. <note>
+            <para>Update the above description.</para>
+          </note></para>
 
-      <para>Example:</para>
+        <para>Example:</para>
 
-      <screen>rascal&gt; assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";</screen>
+        <screen>rascal&gt; assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";</screen>
+      </section>
     </section>
 
     <section xml:id="section.declarations">
       <title>Declarations</title>
 
-      <section>
-        <title>Variable Declarations</title>
+      <para>Rascal has a type system that strikes a balance between
+      convenience and type-safety. Most entities should be declared, these
+      include:</para>
 
-        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>
-        where <replaceable>T</replaceable>ype is a type,
+      <itemizedlist>
+        <listitem>
+          <para>module</para>
+        </listitem>
+
+        <listitem>
+          <para>data definition</para>
+        </listitem>
+
+        <listitem>
+          <para>alias definition</para>
+        </listitem>
+
+        <listitem>
+          <para>module variable</para>
+        </listitem>
+
+        <listitem>
+          <para>annotation</para>
+        </listitem>
+
+        <listitem>
+          <para>function</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This allows strict typing inside modules and between modules.
+      However, inside functions we allow declared variables as well as
+      undeclared variables whose type is inferred from their use.</para>
+
+      <section>
+        <title>Module Declaration</title>
+
+        <para>A module declaration has the following form:</para>
+
+        <para><programlisting><keysym>module</keysym> <replaceable>Name</replaceable>
+<literal><replaceable>Imports;
+Declaration</replaceable><subscript>1</subscript>;
+...
+<replaceable>Declaration</replaceable><subscript>n</subscript>;</literal></programlisting>and
+        consists of zero or more imports and declarations. An import has the
+        form:<programlisting><keysym>import</keysym> <literal><replaceable>Name</replaceable>;</literal></programlisting>and
+        has as result that all public entities declared in module
+        <replaceable>Name</replaceable> are made available to the importing
+        module.</para>
+      </section>
+
+      <section>
+        <title>Data Declaration</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Alias Declaration</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Variable Declaration</title>
+
+        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>where
+        <replaceable>T</replaceable>ype is a type,
         <replaceable>V</replaceable>ar is a variable name, and
         <replaceable>E</replaceable>xp is an expression that should have type
         <replaceable>Type</replaceable>. The effect is that the value of
@@ -2686,7 +2969,7 @@ rascal&gt;
           </listitem>
 
           <listitem>
-            <para>The definition<programlisting>rel[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+            <para>The definition<programlisting><keysym>rel</keysym>[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
                     &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</programlisting>declares
             the variable <literal>day</literal>, a relation that maps strings
             to integers.</para>
@@ -2695,21 +2978,9 @@ rascal&gt;
       </section>
 
       <section>
-        <title>Local Variable Declarations</title>
+        <title>Function Declaration</title>
 
-        <para>Local variables can be introduced as follows:<programlisting><replaceable>E</replaceable> where <literal><replaceable>T</replaceable></literal><subscript>1</subscript> <replaceable>V</replaceable><subscript>1</subscript> = <replaceable>E</replaceable><subscript>1</subscript>, ..., <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>V</replaceable><replaceable><subscript>n</subscript></replaceable> = <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript> end where</programlisting>First
-        the local variables
-        <replaceable>V</replaceable><replaceable><subscript>i</subscript></replaceable>
-        are bound to their respective values
-        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
-        and then the value of expression <replaceable>E </replaceable>is
-        yielded.</para>
-      </section>
-
-      <section>
-        <title>Function Declarations</title>
-
-        <para>A function declaration has the form<programlisting><replaceable>T</replaceable> <replaceable>F</replaceable>(<literal><replaceable>T</replaceable></literal><subscript>1</subscript> <replaceable>V</replaceable><subscript>1</subscript>, ..., <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>V</replaceable><replaceable><subscript>n</subscript></replaceable>) = <replaceable>E</replaceable></programlisting>Here
+        <para>A function declaration has the form<programlisting><replaceable>Type</replaceable> <replaceable>Name</replaceable>(<literal><replaceable>Type</replaceable></literal><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript>, ..., <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>Var</replaceable><replaceable><subscript>n</subscript></replaceable>) <replaceable>Statement</replaceable></programlisting>Here
         <replaceable>T</replaceable> is the result type of the function and
         this should be equal to the type of the associated expression
         <replaceable>E</replaceable>. Each
@@ -2731,7 +3002,7 @@ rascal&gt;
         </itemizedlist>
 
         <formalpara>
-          <title>Parameterized types in function declarations</title>
+          <title>Parameterized types in function declaration</title>
 
           <para>The types that occur in function declarations may also contain
           <emphasis>type variables</emphasis> that are written as
@@ -2779,41 +3050,17 @@ rascal&gt;
           </listitem>
         </itemizedlist>
       </section>
-    </section>
-
-    <section>
-      <title>Attributes</title>
-
-      <para>Attributes are adornments of data and programs and come in two
-      flavours:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><emphasis>node annotations</emphasis> that allow associating
-          one or more named values with nodes in a tree.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>declaration tags</emphasis> that allow associating
-          one or more named values to a declaration in a Rascal
-          program.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>The former are intended to attach application data to values, like
-      adding position information or control flow information to source code
-      or adding visualization information to a relation. The latter are
-      intended to add metadata to a Rascal program and allow to influence the
-      execution of the Rascal program, for instance, by adding memoization
-      hints or database mappings for relations.</para>
 
       <section>
-        <title>Node annotations</title>
+        <title>Node annotation declaration</title>
 
-        <para>An annotation may be associated with any node value. An
-        annotation has a name and the type of its value is explicitly
-        declared. Any value of any named type can be annotated and the type of
-        these annotations can be declared precisely.</para>
+        <para>An annotation may be associated with any node value. Annotations
+        are intended to attach application data to values, like adding
+        position information or control flow information to source code or
+        adding visualization information to a relation. An annotation has a
+        name and the type of its value is explicitly declared. Any value of
+        any named type can be annotated and the type of these annotations can
+        be declared precisely.</para>
 
         <para>For instance, we can add to certain syntactic constructs of
         programs (e.g., <literal>EXPRESSION</literal>) an annotation with name
@@ -2858,28 +3105,33 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
             <replaceable>Val</replaceable>.</para>
           </listitem>
         </itemizedlist>
-      </section>
 
-      <section>
-        <title>Declaration tags</title>
+        <section>
+          <title>Tag Declaration</title>
 
-        <para><warning>
-            <para>Tags are not yet implemented.</para>
-          </warning><warning>
-            <para>The syntax of tags has to be aligned with the syntax of
-            annotations. This is done in the examples below but not yet in the
-            synyax.</para>
-          </warning>All declarations in a Rascal program may contain (in fixed
-        positions depending on the declaration type) one or more declaration
-        tags (<literal>tag</literal>). A tag is defined by declaring its name,
-        the declaration type to which it can be attached, and the name and
-        type of the annotation. The declaration type <literal>all</literal>,
-        makes the declaration tag applicable for all possible declaration
-        types. All declaration tags have the generic format
-        <literal>@<replaceable>Name</replaceable>{ ... }</literal>, with
-        arbitrary text between the brackets that is further constrained by the
-        declared type. Here is an example of a license tag:<programlisting>tag str license on module;</programlisting>This
-        will allow to write things like:<programlisting>module Booleans
+          <para><warning>
+              <para>Tags are not yet implemented.</para>
+            </warning><warning>
+              <para>The syntax of tags has to be aligned with the syntax of
+              annotations. This is done in the examples below but not yet in
+              the synyax.</para>
+            </warning>Tags are intended to add metadata to a Rascal program
+          and allow to influence the execution of the Rascal program, for
+          instance, by adding memoization hints or database mappings for
+          relations.</para>
+
+          <para>All declarations in a Rascal program may contain (in fixed
+          positions depending on the declaration type) one or more declaration
+          tags (<literal>tag</literal>). A tag is defined by declaring its
+          name, the declaration type to which it can be attached, and the name
+          and type of the annotation. The declaration type
+          <literal>all</literal>, makes the declaration tag applicable for all
+          possible declaration types. All declaration tags have the generic
+          format <literal>@<replaceable>Name</replaceable>{ ... }</literal>,
+          with arbitrary text between the brackets that is further constrained
+          by the declared type. Here is an example of a license
+          tag:<programlisting>tag str license on module;</programlisting>This
+          will allow to write things like:<programlisting>module Booleans
 @license{This module is distributed under the GPL}
 ...</programlisting>Other examples of declaration tags are:<programlisting>tag str todo on all             %% a todo note for all declaration types
 tag void deprecated on function %% marks a deprecated function
@@ -2887,8 +3139,8 @@ tag int memo on function        %% bounded memoization of
                                 %% function calls
 tag str doc on all              %% documentation string
 tag str primitive on function   %% a primitive, built-in, function</programlisting>Here
-        is an example of a documentation string as used in the Rascal standard
-        library:<programlisting>public &amp;T max(set[&amp;T] R)
+          is an example of a documentation string as used in the Rascal
+          standard library:<programlisting>public &amp;T max(set[&amp;T] R)
   @doc{Maximum of a set: max}
 {
   &amp;T result = arb(R);
@@ -2897,6 +3149,7 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
   }
   return result;
 }</programlisting></para>
+        </section>
       </section>
     </section>
   </section>
