@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -13,7 +13,7 @@
   <info>
     <title>EASY Programming with Rascal</title>
 
-    <subtitle>Leveraging the Extract-Analyze-SYthesize Paradigm for
+    <subtitle>Leveraging the Extract-Analyze-SYnthesize Paradigm for
     Meta-Programming</subtitle>
 
     <authorgroup>
@@ -659,11 +659,30 @@ rascal&gt; set[proc] entryPoints = top(Calls);
   <section xml:id="section.rascal-language">
     <title>The Rascal Language</title>
 
-    <para>An Rascal program consists of one or more modules. Each module may
-    import other modules and declare data types, variables and/or functions.
-    The visibility of each declared entity may be <literal>private</literal>
-    (only visible inside the module) or <literal>public</literal> (visible
-    outside the module).</para>
+    <para>A Rascal program consists of one or more modules. Each module may
+    import other modules and declare data types, variables, functions or
+    rewrite rules. We now describe the basic ingredients of Rascal in more
+    detail:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Types and values, see <xref
+        linkend="section.types-and-values" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>Declarations, see <xref
+        linkend="section.declarations" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>Expressions, see <xref linkend="section.expressions" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>Statements, see <xref linkend="section.statements" />.</para>
+      </listitem>
+    </itemizedlist>
 
     <section xml:id="section.types-and-values">
       <title>Types and Values</title>
@@ -1159,18 +1178,14 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         </itemizedlist>
       </section>
 
-      <section>
-        <title>User-defined Types</title>
+      <section xml:id="section.alias">
+        <title>Alias Type</title>
 
-        <formalpara>
-          <title>Alias type</title>
-
-          <para>Everything can be expressed using the elementary types and
-          values that are provided by Rascal. However, for the purpose of
-          documentation and readability it is sometimes better to use a
-          descriptive name as type indication, rather than an elementary type.
-          The alias declaration</para>
-        </formalpara>
+        <para>Everything can be expressed using the elementary types and
+        values that are provided by Rascal. However, for the purpose of
+        documentation and readability it is sometimes better to use a
+        descriptive name as type indication, rather than an elementary type.
+        The alias declaration</para>
 
         <programlisting>alias <replaceable>Name</replaceable>  = <replaceable>Type</replaceable>;</programlisting>
 
@@ -1196,16 +1211,16 @@ alias Frequency = int;</programlisting>
         course, the type variables that are used in the type in the left part
         should occur as parameters in the right part of the definition and
         vice versa.</para>
+      </section>
 
-        <formalpara>
-          <title>Abstract Data Type</title>
+      <section xml:id="section.abstract-data-type">
+        <title>Abstract Data Type</title>
 
-          <para>In ordinary programming languages record types or classes
-          exist to introduce a new type name for a collection of related,
-          named, values and to provide access to the elements of such a
-          collection through their name. In Rascal, data declarations provide
-          this facility. The type declaration</para>
-        </formalpara>
+        <para>In ordinary programming languages record types or classes exist
+        to introduce a new type name for a collection of related, named,
+        values and to provide access to the elements of such a collection
+        through their name. In Rascal, data declarations provide this
+        facility. The type declaration</para>
 
         <programlisting><literal>data <replaceable>Name</replaceable> = <replaceable>Pat</replaceable><subscript>1</subscript> | <replaceable>Pat</replaceable><subscript>1</subscript> | ...</literal></programlisting>
 
@@ -1216,6 +1231,12 @@ alias Frequency = int;</programlisting>
         <programlisting>data Bool = btrue | bfalse | band(Bool L, Bool R)  | bor(Bool L, Bool R);  </programlisting>defines
         the datatype <literal>Bool</literal> that contains various constants
         and constructor functions.</para>
+      </section>
+
+      <section>
+        <title>Parameterized types</title>
+
+        <para></para>
       </section>
 
       <section>
@@ -1241,6 +1262,304 @@ alias Frequency = int;</programlisting>
               </imageobject>
             </mediaobject>
           </figure></para>
+      </section>
+    </section>
+
+    <section xml:id="section.declarations">
+      <title>Declarations</title>
+
+      <section>
+        <title>Rascal Program</title>
+
+        <para>A Rascal program consists of a number of modules that may import
+        each other.</para>
+      </section>
+
+      <section>
+        <title>Module</title>
+
+        <para>A module declaration has the following form:</para>
+
+        <para><programlisting><keysym>module</keysym> <replaceable>Name</replaceable>
+<literal><replaceable>Imports;
+Declaration</replaceable><subscript>1</subscript>;
+...
+<replaceable>Declaration</replaceable><subscript>n</subscript>;</literal></programlisting>and
+        consists of zero or more imports of other modules (<xref
+        linkend="section.import" />) and declarations for</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Bbstract data type, see <xref
+            linkend="section.abstract-data-type" />.</para>
+          </listitem>
+
+          <listitem>
+            <para>Alias, see <xref linkend="section.alias" />.</para>
+          </listitem>
+
+          <listitem>
+            <para>Variable, see <xref linkend="section.variable" />.</para>
+          </listitem>
+
+          <listitem>
+            <para>Function, see <xref linkend="section.function" />.</para>
+          </listitem>
+
+          <listitem>
+            <para>Rewrite rule, see <xref
+            linkend="section.rewrite-rule" />.</para>
+          </listitem>
+
+          <listitem>
+            <para>Node annotation, see <xref
+            linkend="section.node-annotation" />.</para>
+          </listitem>
+
+          <listitem>
+            <para>Declaration tag, see <xref
+            linkend="section.declaration-tag" />.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The entities that are <emphasis>visible</emphasis> inside a
+        module are</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The private or public entities declared in the module
+            itself.</para>
+          </listitem>
+
+          <listitem>
+            <para>The public entities declared in any imported module.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The only entities that are visible outside the module, are the
+        public entities declared in the module itself.<caution>
+            <para>Describe qualified names.</para>
+          </caution></para>
+      </section>
+
+      <section xml:id="section.import">
+        <title>Import</title>
+
+        <para>An import has the form:<programlisting><keysym>import</keysym> <literal><replaceable>Name</replaceable>;</literal></programlisting>and
+        has as result that all public entities declared in module
+        <replaceable>Name</replaceable> are made available to the importing
+        module.</para>
+      </section>
+
+      <section xml:id="section.variable">
+        <title>Variable</title>
+
+        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>where
+        <replaceable>T</replaceable>ype is a type,
+        <replaceable>V</replaceable>ar is a variable name, and
+        <replaceable>E</replaceable>xp is an expression that should have type
+        <replaceable>Type</replaceable>. The effect is that the value of
+        expression <replaceable>Exp</replaceable> is assigned to
+        <replaceable>V</replaceable>ar and can be used later on as
+        <replaceable>Var</replaceable>'s value. Double declarations are not
+        allowed. As a convenience, also declarations without an initialization
+        expression are permitted and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
+        only introduce the variable <replaceable>Var</replaceable>.
+        Examples:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>int max = 100</literal> declares the integer
+            variable <literal>max</literal> with value
+            <literal>100</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The definition<programlisting><keysym>rel</keysym>[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+                    &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</programlisting>declares
+            the variable <literal>day</literal>, a relation that maps strings
+            to integers.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="section.function">
+        <title>Function</title>
+
+        <para>A function declaration has the form<programlisting><replaceable>Type</replaceable> <replaceable>Name</replaceable>(<literal><replaceable>Type</replaceable></literal><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript>, ..., <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>Var</replaceable><replaceable><subscript>n</subscript></replaceable>) <replaceable>Statement</replaceable></programlisting>Here
+        <replaceable>T</replaceable> is the result type of the function and
+        this should be equal to the type of the associated expression
+        <replaceable>E</replaceable>. Each
+        <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
+        <replaceable>V</replaceable><replaceable><subscript>i</subscript></replaceable>
+        represents a typed formal parameter of the function. The formal
+        parameters may occur in <replaceable>E</replaceable> and get their
+        value when <replaceable>F</replaceable> is invoked from another
+        expression. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The function declaration<programlisting>rel[int, int] invert(rel[int,int] R) = 
+   {&lt;Y, X&gt; | &lt;int X, int Y&gt; : R }</programlisting>yields the
+            inverse of the argument relation R. For instance,
+            <literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal> yields
+            <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <formalpara>
+          <title>Parameterized types in function declaration</title>
+
+          <para>The types that occur in function declarations may also contain
+          <emphasis>type variables</emphasis> that are written as
+          <literal>&amp;</literal> followed by an identifier. In this way
+          functions can be defined for arbitrary types. Examples:</para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para>The declaration<programlisting>rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R) = 
+   {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>yields
+            an inversion function that is applicable to any binary relation.
+            For instance,</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
+                yields <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>,</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>invert2({&lt;"mon", 1&gt;, &lt;"tue",
+                2&gt;})</literal> yields <literal>{&lt;1, "mon"&gt;, &lt;2,
+                "tue"&gt;}</literal>.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>The function<programlisting>&lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) = &lt;B, A&gt;</programlisting>can
+            be used to swap the elements of pairs of arbitrary types. For
+            instance,</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><literal>swap(&lt;1, 2&gt;)</literal> yields
+                <literal>&lt;2,1&gt;</literal> and</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>swap(&lt;"wed", 3&gt;)</literal> yields
+                <literal>&lt;3, "wed"&gt;</literal>.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="section.rewrite-rule">
+        <title>Rewrite Rule</title>
+
+        <para></para>
+      </section>
+
+      <section xml:id="section.node-annotation">
+        <title>Node annotation</title>
+
+        <para>An annotation may be associated with any node value. Annotations
+        are intended to attach application data to values, like adding
+        position information or control flow information to source code or
+        adding visualization information to a relation. An annotation has a
+        name and the type of its value is explicitly declared. Any value of
+        any named type can be annotated and the type of these annotations can
+        be declared precisely.</para>
+
+        <para>For instance, we can add to certain syntactic constructs of
+        programs (e.g., <literal>EXPRESSION</literal>) an annotation with name
+        <literal>posinfo</literal> that contains location
+        information:<programlisting>anno loc EXPRESSION @ posinfo;</programlisting>or
+        location information could be added for all syntax
+        trees:<programlisting>anno loc node @ posinfo;</programlisting></para>
+
+        <para>We can add to the graph datatype introduced earlier, the
+        annotation with name <literal>LayoutStrategy</literal> that defines
+        which graph layout algorithm to apply to a particular graph,
+        e.g.,<programlisting>data LayoutStrategy = "dot" | "tree" | "force" | 
+                      "hierarchy" | "fisheye";
+
+anno LayoutStrategy Graph @ strategy;</programlisting></para>
+
+        <para>The folllowing constructs are provided for handling
+        annotations:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal><replaceable>Val</replaceable> @
+            <replaceable>Anno</replaceable></literal>: get the value of
+            annotation <replaceable>Anno</replaceable> of value
+            <replaceable>Val</replaceable> (may be undefined!).</para>
+          </listitem>
+
+          <listitem>
+            <para><literal><replaceable>Val1</replaceable>[@<replaceable>Anno</replaceable>
+            = <replaceable>Val2]</replaceable></literal>: set the value of
+            annotation <replaceable>Anno</replaceable> of the value
+            <replaceable>Val</replaceable><replaceable>1</replaceable> to
+            <replaceable>Val2</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal><replaceable>Var</replaceable> @
+            <replaceable>Anno</replaceable> =
+            <replaceable>Val</replaceable></literal>: set the value of
+            annotation <replaceable>Anno</replaceable> of the value of
+            variable <replaceable>Var</replaceable> to
+            <replaceable>Val</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="section.declaration-tag">
+        <title>Declaration Tag</title>
+
+        <para><warning>
+            <para>Tags are not yet implemented.</para>
+          </warning><warning>
+            <para>The syntax of tags has to be aligned with the syntax of
+            annotations. This is done in the examples below but not yet in the
+            synyax.</para>
+          </warning>Tags are intended to add metadata to a Rascal program and
+        allow to influence the execution of the Rascal program, for instance,
+        by adding memoization hints or database mappings for relations.</para>
+
+        <para>All declarations in a Rascal program may contain (in fixed
+        positions depending on the declaration type) one or more declaration
+        tags (<literal>tag</literal>). A tag is defined by declaring its name,
+        the declaration type to which it can be attached, and the name and
+        type of the annotation. The declaration type <literal>all</literal>,
+        makes the declaration tag applicable for all possible declaration
+        types. All declaration tags have the generic format
+        <literal>@<replaceable>Name</replaceable>{ ... }</literal>, with
+        arbitrary text between the brackets that is further constrained by the
+        declared type. Here is an example of a license tag:<programlisting>tag str license on module;</programlisting>This
+        will allow to write things like:<programlisting>module Booleans
+@license{This module is distributed under the GPL}
+...</programlisting>Other examples of declaration tags are:<programlisting>tag str todo on all             %% a todo note for all declaration types
+tag void deprecated on function %% marks a deprecated function
+tag int memo on function        %% bounded memoization of 
+                                %% function calls
+tag str doc on all              %% documentation string
+tag str primitive on function   %% a primitive, built-in, function</programlisting>Here
+        is an example of a documentation string as used in the Rascal standard
+        library:<programlisting>public &amp;T max(set[&amp;T] R)
+  @doc{Maximum of a set: max}
+{
+  &amp;T result = arb(R);
+  for(&amp;T E : R){
+    result = max(result, E);
+  }
+  return result;
+}</programlisting></para>
       </section>
     </section>
 
@@ -2085,8 +2404,7 @@ alias Frequency = int;</programlisting>
               <replaceable>Pat</replaceable><subscript>n</subscript> match the
               elements of that list in order. Two special cases exist when one
               of the patterns
-              <replaceable>Pat</replaceable><subscript>i</subscript> is
-              </para>
+              <replaceable>Pat</replaceable><subscript>i</subscript> is</para>
 
               <itemizedlist>
                 <listitem>
@@ -2146,7 +2464,7 @@ alias Frequency = int;</programlisting>
               <replaceable>Pat</replaceable><subscript>1</subscript>,
               <replaceable>Pat</replaceable><subscript>2</subscript>, ...,
               <replaceable>Pat</replaceable><subscript>n</subscript> match the
-              elements of that tuple in order. </para>
+              elements of that tuple in order.</para>
             </listitem>
 
             <listitem>
@@ -2479,7 +2797,7 @@ alias Frequency = int;</programlisting>
       </section>
     </section>
 
-    <section>
+    <section xml:id="section.statements">
       <title>Statements</title>
 
       <para></para>
@@ -2876,280 +3194,6 @@ rascal&gt;
         <para>Example:</para>
 
         <screen>rascal&gt; assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";</screen>
-      </section>
-    </section>
-
-    <section xml:id="section.declarations">
-      <title>Declarations</title>
-
-      <para>Rascal has a type system that strikes a balance between
-      convenience and type-safety. Most entities should be declared, these
-      include:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>module</para>
-        </listitem>
-
-        <listitem>
-          <para>data definition</para>
-        </listitem>
-
-        <listitem>
-          <para>alias definition</para>
-        </listitem>
-
-        <listitem>
-          <para>module variable</para>
-        </listitem>
-
-        <listitem>
-          <para>annotation</para>
-        </listitem>
-
-        <listitem>
-          <para>function</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>This allows strict typing inside modules and between modules.
-      However, inside functions we allow declared variables as well as
-      undeclared variables whose type is inferred from their use.</para>
-
-      <section>
-        <title>Module Declaration</title>
-
-        <para>A module declaration has the following form:</para>
-
-        <para><programlisting><keysym>module</keysym> <replaceable>Name</replaceable>
-<literal><replaceable>Imports;
-Declaration</replaceable><subscript>1</subscript>;
-...
-<replaceable>Declaration</replaceable><subscript>n</subscript>;</literal></programlisting>and
-        consists of zero or more imports and declarations. An import has the
-        form:<programlisting><keysym>import</keysym> <literal><replaceable>Name</replaceable>;</literal></programlisting>and
-        has as result that all public entities declared in module
-        <replaceable>Name</replaceable> are made available to the importing
-        module.</para>
-      </section>
-
-      <section>
-        <title>Data Declaration</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Alias Declaration</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Variable Declaration</title>
-
-        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>where
-        <replaceable>T</replaceable>ype is a type,
-        <replaceable>V</replaceable>ar is a variable name, and
-        <replaceable>E</replaceable>xp is an expression that should have type
-        <replaceable>Type</replaceable>. The effect is that the value of
-        expression <replaceable>Exp</replaceable> is assigned to
-        <replaceable>V</replaceable>ar and can be used later on as
-        <replaceable>Var</replaceable>'s value. Double declarations are not
-        allowed. As a convenience, also declarations without an initialization
-        expression are permitted and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
-        only introduce the variable <replaceable>Var</replaceable>.
-        Examples:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>int max = 100</literal> declares the integer
-            variable <literal>max</literal> with value
-            <literal>100</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para>The definition<programlisting><keysym>rel</keysym>[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
-                    &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</programlisting>declares
-            the variable <literal>day</literal>, a relation that maps strings
-            to integers.</para>
-          </listitem>
-        </itemizedlist>
-      </section>
-
-      <section>
-        <title>Function Declaration</title>
-
-        <para>A function declaration has the form<programlisting><replaceable>Type</replaceable> <replaceable>Name</replaceable>(<literal><replaceable>Type</replaceable></literal><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript>, ..., <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>Var</replaceable><replaceable><subscript>n</subscript></replaceable>) <replaceable>Statement</replaceable></programlisting>Here
-        <replaceable>T</replaceable> is the result type of the function and
-        this should be equal to the type of the associated expression
-        <replaceable>E</replaceable>. Each
-        <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
-        <replaceable>V</replaceable><replaceable><subscript>i</subscript></replaceable>
-        represents a typed formal parameter of the function. The formal
-        parameters may occur in <replaceable>E</replaceable> and get their
-        value when <replaceable>F</replaceable> is invoked from another
-        expression. Example:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>The function declaration<programlisting>rel[int, int] invert(rel[int,int] R) = 
-   {&lt;Y, X&gt; | &lt;int X, int Y&gt; : R }</programlisting>yields the
-            inverse of the argument relation R. For instance,
-            <literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal> yields
-            <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>.</para>
-          </listitem>
-        </itemizedlist>
-
-        <formalpara>
-          <title>Parameterized types in function declaration</title>
-
-          <para>The types that occur in function declarations may also contain
-          <emphasis>type variables</emphasis> that are written as
-          <literal>&amp;</literal> followed by an identifier. In this way
-          functions can be defined for arbitrary types. Examples:</para>
-        </formalpara>
-
-        <itemizedlist>
-          <listitem>
-            <para>The declaration<programlisting>rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R) = 
-   {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>yields
-            an inversion function that is applicable to any binary relation.
-            For instance,</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
-                yields <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>,</para>
-              </listitem>
-
-              <listitem>
-                <para><literal>invert2({&lt;"mon", 1&gt;, &lt;"tue",
-                2&gt;})</literal> yields <literal>{&lt;1, "mon"&gt;, &lt;2,
-                "tue"&gt;}</literal>.</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-
-          <listitem>
-            <para>The function<programlisting>&lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) = &lt;B, A&gt;</programlisting>can
-            be used to swap the elements of pairs of arbitrary types. For
-            instance,</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><literal>swap(&lt;1, 2&gt;)</literal> yields
-                <literal>&lt;2,1&gt;</literal> and</para>
-              </listitem>
-
-              <listitem>
-                <para><literal>swap(&lt;"wed", 3&gt;)</literal> yields
-                <literal>&lt;3, "wed"&gt;</literal>.</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
-      </section>
-
-      <section>
-        <title>Node annotation declaration</title>
-
-        <para>An annotation may be associated with any node value. Annotations
-        are intended to attach application data to values, like adding
-        position information or control flow information to source code or
-        adding visualization information to a relation. An annotation has a
-        name and the type of its value is explicitly declared. Any value of
-        any named type can be annotated and the type of these annotations can
-        be declared precisely.</para>
-
-        <para>For instance, we can add to certain syntactic constructs of
-        programs (e.g., <literal>EXPRESSION</literal>) an annotation with name
-        <literal>posinfo</literal> that contains location
-        information:<programlisting>anno loc EXPRESSION @ posinfo;</programlisting>or
-        location information could be added for all syntax
-        trees:<programlisting>anno loc node @ posinfo;</programlisting></para>
-
-        <para>We can add to the graph datatype introduced earlier, the
-        annotation with name <literal>LayoutStrategy</literal> that defines
-        which graph layout algorithm to apply to a particular graph,
-        e.g.,<programlisting>data LayoutStrategy = "dot" | "tree" | "force" | 
-                      "hierarchy" | "fisheye";
-
-anno LayoutStrategy Graph @ strategy;</programlisting></para>
-
-        <para>The folllowing constructs are provided for handling
-        annotations:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal><replaceable>Val</replaceable> @
-            <replaceable>Anno</replaceable></literal>: get the value of
-            annotation <replaceable>Anno</replaceable> of value
-            <replaceable>Val</replaceable> (may be undefined!).</para>
-          </listitem>
-
-          <listitem>
-            <para><literal><replaceable>Val1</replaceable>[@<replaceable>Anno</replaceable>
-            = <replaceable>Val2]</replaceable></literal>: set the value of
-            annotation <replaceable>Anno</replaceable> of the value
-            <replaceable>Val</replaceable><replaceable>1</replaceable> to
-            <replaceable>Val2</replaceable>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal><replaceable>Var</replaceable> @
-            <replaceable>Anno</replaceable> =
-            <replaceable>Val</replaceable></literal>: set the value of
-            annotation <replaceable>Anno</replaceable> of the value of
-            variable <replaceable>Var</replaceable> to
-            <replaceable>Val</replaceable>.</para>
-          </listitem>
-        </itemizedlist>
-
-        <section>
-          <title>Tag Declaration</title>
-
-          <para><warning>
-              <para>Tags are not yet implemented.</para>
-            </warning><warning>
-              <para>The syntax of tags has to be aligned with the syntax of
-              annotations. This is done in the examples below but not yet in
-              the synyax.</para>
-            </warning>Tags are intended to add metadata to a Rascal program
-          and allow to influence the execution of the Rascal program, for
-          instance, by adding memoization hints or database mappings for
-          relations.</para>
-
-          <para>All declarations in a Rascal program may contain (in fixed
-          positions depending on the declaration type) one or more declaration
-          tags (<literal>tag</literal>). A tag is defined by declaring its
-          name, the declaration type to which it can be attached, and the name
-          and type of the annotation. The declaration type
-          <literal>all</literal>, makes the declaration tag applicable for all
-          possible declaration types. All declaration tags have the generic
-          format <literal>@<replaceable>Name</replaceable>{ ... }</literal>,
-          with arbitrary text between the brackets that is further constrained
-          by the declared type. Here is an example of a license
-          tag:<programlisting>tag str license on module;</programlisting>This
-          will allow to write things like:<programlisting>module Booleans
-@license{This module is distributed under the GPL}
-...</programlisting>Other examples of declaration tags are:<programlisting>tag str todo on all             %% a todo note for all declaration types
-tag void deprecated on function %% marks a deprecated function
-tag int memo on function        %% bounded memoization of 
-                                %% function calls
-tag str doc on all              %% documentation string
-tag str primitive on function   %% a primitive, built-in, function</programlisting>Here
-          is an example of a documentation string as used in the Rascal
-          standard library:<programlisting>public &amp;T max(set[&amp;T] R)
-  @doc{Maximum of a set: max}
-{
-  &amp;T result = arb(R);
-  for(&amp;T E : R){
-    result = max(result, E);
-  }
-  return result;
-}</programlisting></para>
-        </section>
       </section>
     </section>
   </section>
@@ -4226,10 +4270,10 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
   </section>
 
   <section xml:id="section.builtin">
-    <title>Built-in Operators and Functions</title>
+    <title>Built-in Operators and Library Functions</title>
 
-    <para>The built-in operators and functions can be subdivided in the
-    following categories:</para>
+    <para>The built-in operators and library functions can be subdivided in
+    the following categories:</para>
 
     <itemizedlist>
       <listitem>
@@ -4346,6 +4390,108 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
     <para>All operators are directly available for each program, but library
     functions have to be imported in each module that uses them.</para>
+
+    <para>We use some notational conventions to describe the argument of
+    operators, as shown in <xref linkend="table.notational-conventions" />.
+    When an operator has more than one argument of the same type, they are
+    distinguished by subscripts.<table xml:id="table.notational-conventions">
+        <title>Notational conventions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="2*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Argument</entry>
+
+              <entry>Describes expression of type</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal><replaceable>Bool</replaceable></literal></entry>
+
+              <entry><keysym>bool</keysym></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Int</replaceable></entry>
+
+              <entry><keysym>int</keysym></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Real</replaceable></entry>
+
+              <entry><keysym>real</keysym></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Str</replaceable></entry>
+
+              <entry><keysym>str</keysym></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Loc</replaceable></entry>
+
+              <entry><keysym>loc</keysym></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Node</replaceable></entry>
+
+              <entry><keysym>node</keysym></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>List</replaceable></entry>
+
+              <entry>Any <keysym>list</keysym> type</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Set</replaceable></entry>
+
+              <entry>Any <keysym>set</keysym> type</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Map</replaceable></entry>
+
+              <entry>Any <keysym>map</keysym> type</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Tuple</replaceable></entry>
+
+              <entry>Any <keysym>tuple</keysym> type</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Rel</replaceable></entry>
+
+              <entry>Any <keysym>rel</keysym> type</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Value</replaceable></entry>
+
+              <entry><keysym>value</keysym></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Elm</replaceable></entry>
+
+              <entry>Compatible with element type of list, set, map,
+              relation</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table></para>
 
     <section xml:id="section.lib-Benchmark">
       <title xml:id="x">Benchmark</title>
@@ -4512,8 +4658,10 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
             </row>
 
             <row>
-              <entry><replaceable>Bool</replaceable><subscript>1</subscript> ?
-              <replaceable>Bool</replaceable><subscript>2</subscript> :
+              <entry><replaceable>Bool</replaceable><subscript>1</subscript>
+              <literal>?</literal>
+              <replaceable>Bool</replaceable><subscript>2</subscript>
+              <literal>:</literal>
               <replaceable>Bool</replaceable><subscript>3</subscript></entry>
 
               <entry>if
@@ -4835,8 +4983,9 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
             </row>
 
             <row>
-              <entry><replaceable>Bool</replaceable> ?
-              <replaceable>Int</replaceable><subscript>1</subscript> :
+              <entry><replaceable>Bool</replaceable> <literal>?</literal>
+              <replaceable>Int</replaceable><subscript>1</subscript>
+              <literal>:</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
               <entry>if <replaceable>Bool</replaceable> is true then
@@ -5158,8 +5307,9 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               </row>
 
               <row>
-                <entry><replaceable>Bool</replaceable> ?
-                <replaceable>List</replaceable><subscript>1</subscript> :
+                <entry><replaceable>Bool</replaceable> <literal>?</literal>
+                <replaceable>List</replaceable><subscript>1</subscript>
+                <literal>:</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
                 <entry>if <replaceable>bool</replaceable> is true then
@@ -5622,8 +5772,9 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               </row>
 
               <row>
-                <entry><replaceable>Bool</replaceable> ?
-                <replaceable>Map</replaceable><subscript>1</subscript> :
+                <entry><replaceable>Bool</replaceable> <literal>?</literal>
+                <replaceable>Map</replaceable><subscript>1</subscript>
+                <literal>:</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
                 <entry>if <replaceable>Bool</replaceable> is true then
@@ -5805,8 +5956,9 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               </row>
 
               <row>
-                <entry><replaceable>Bool</replaceable> ?
-                <replaceable>Node</replaceable><subscript>1</subscript> :
+                <entry><replaceable>Bool</replaceable> <literal>?</literal>
+                <replaceable>Node</replaceable><subscript>1</subscript>
+                <literal>:</literal>
                 <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
                 <entry>if <replaceable>Bool</replaceable> is true then
@@ -6010,6 +6162,17 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
 
               <entry>remainder of dividing
               <replaceable>Real</replaceable><subscript>1</subscript> by
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Bool</replaceable> <literal>?</literal>
+              <replaceable>Real</replaceable><subscript>1</subscript>
+              <literal>:</literal>
+              <replaceable>Real</replaceable><subscript>2</subscript></entry>
+
+              <entry>if <replaceable>Bool</replaceable> is true then
+              <replaceable>Real</replaceable><subscript>1</subscript> else
               <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
           </tbody>
@@ -6828,6 +6991,17 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
               <replaceable>Str</replaceable><subscript>1</subscript> and
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
             </row>
+
+            <row>
+              <entry><replaceable>Bool</replaceable> <literal>?</literal>
+              <replaceable>Str</replaceable><subscript>1</subscript>
+              <literal>:</literal>
+              <replaceable>Str</replaceable><subscript>2</subscript></entry>
+
+              <entry>if <replaceable>Bool</replaceable> is true then
+              <replaceable>Str</replaceable><subscript>1</subscript> else
+              <replaceable>Str<subscript>2</subscript></replaceable></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -7046,8 +7220,9 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
             </row>
 
             <row>
-              <entry><replaceable>Bool</replaceable> ?
-              <replaceable>Tuple</replaceable><subscript>1</subscript> :
+              <entry><replaceable>Bool</replaceable> <literal>?</literal>
+              <replaceable>Tuple</replaceable><subscript>1</subscript>
+              <literal>:</literal>
               <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
               <entry>if <replaceable>Bool</replaceable> is true then
@@ -7057,15 +7232,15 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
 
             <row>
               <entry><replaceable>Tuple</replaceable> <literal>.</literal>
-              name</entry>
+              <replaceable>Name</replaceable></entry>
 
-              <entry>select field <replaceable>name</replaceable> from
+              <entry>select field <replaceable>Name</replaceable> from
               <replaceable>Tuple</replaceable></entry>
             </row>
 
             <row>
               <entry><replaceable>Tuple</replaceable> <literal>[</literal>
-              <replaceable>int</replaceable> <literal>]</literal></entry>
+              <replaceable>Int</replaceable> <literal>]</literal></entry>
 
               <entry>select field at position <replaceable>int</replaceable>
               from <replaceable>Tuple</replaceable></entry>
@@ -7198,9 +7373,10 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
               </row>
 
               <row>
-                <entry><replaceable>Bool</replaceable> ?
-                <replaceable>Value</replaceable><subscript>1</subscript> :
-                <replaceable>Value</replaceable><subscript>2</subscript></entry>
+                <entry><replaceable>Bool</replaceable> <literal>?</literal>
+                <replaceable>Value</replaceable><subscript>1</subscript>
+                <literal>:
+                </literal><replaceable>Value</replaceable><subscript>2</subscript></entry>
 
                 <entry>if <replaceable>Bool</replaceable> is true then
                 <replaceable>Value</replaceable><subscript>1</subscript> else
