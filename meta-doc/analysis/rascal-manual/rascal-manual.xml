@@ -245,7 +245,29 @@
       <section>
         <title>Parsing</title>
 
-        <para></para>
+        <para>All source code analysis projects need to extract information
+        directly from the source code. There are two main approaches to
+        this:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Use regular expression to extract useful, but somewhat
+            superficial, information. This can be achieved using regular
+            expression patterns.</para>
+          </listitem>
+
+          <listitem>
+            <para>Use syntax analysis to extract the complete, nested,
+            structure of the source code in the form of a syntax tree.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>In Rascal, we reuse the Syntax Definition Formalism (SDF) and
+        its tooling. SDF modules define grammars and these modules can be
+        imported in a Rascal module. These grammar rules can be applied in
+        writing concrete patterns to match parts of parsed source code. Here
+        is an example of the same pattern we saw above, but now in concrete
+        form:<programlisting>while &lt;EXP Exp&gt; do &lt;list[STAT] Stats&gt; od</programlisting></para>
       </section>
 
       <section>
@@ -1285,12 +1307,13 @@ alias Frequency = int;</programlisting>
 Declaration</replaceable><subscript>1</subscript>;
 ...
 <replaceable>Declaration</replaceable><subscript>n</subscript>;</literal></programlisting>and
-        consists of zero or more imports of other modules (<xref
-        linkend="section.import" />) and declarations for</para>
+        consists of a <replaceable>Name</replaceable> and zero or more imports
+        of other modules (<xref linkend="section.import" />) and declarations
+        for</para>
 
         <itemizedlist>
           <listitem>
-            <para>Bbstract data type, see <xref
+            <para>Abstract data type, see <xref
             linkend="section.abstract-data-type" />.</para>
           </listitem>
 
@@ -1322,6 +1345,9 @@ Declaration</replaceable><subscript>1</subscript>;
           </listitem>
         </itemizedlist>
 
+        <para>The module name <replaceable>Name</replaceable> will be used
+        when the current module is imported in another module.</para>
+
         <para>The entities that are <emphasis>visible</emphasis> inside a
         module are</para>
 
@@ -1346,7 +1372,7 @@ Declaration</replaceable><subscript>1</subscript>;
         <title>Import</title>
 
         <para>An import has the form:<programlisting><keysym>import</keysym> <literal><replaceable>Name</replaceable>;</literal></programlisting>and
-        has as result that all public entities declared in module
+        has as effect that all public entities declared in module
         <replaceable>Name</replaceable> are made available to the importing
         module.</para>
       </section>
@@ -1361,51 +1387,99 @@ Declaration</replaceable><subscript>1</subscript>;
         <replaceable>Type</replaceable>. The effect is that the value of
         expression <replaceable>Exp</replaceable> is assigned to
         <replaceable>V</replaceable>ar and can be used later on as
-        <replaceable>Var</replaceable>'s value. Double declarations are not
-        allowed. As a convenience, also declarations without an initialization
-        expression are permitted and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
-        only introduce the variable <replaceable>Var</replaceable>.
-        Examples:</para>
+        <replaceable>Var</replaceable>'s value. The folowing rules
+        apply:</para>
 
         <itemizedlist>
           <listitem>
-            <para><literal>int max = 100</literal> declares the integer
-            variable <literal>max</literal> with value
-            <literal>100</literal>.</para>
+            <para>Double declarations in the same scope are not allowed.
+            </para>
           </listitem>
 
           <listitem>
-            <para>The definition<programlisting><keysym>rel</keysym>[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
-                    &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</programlisting>declares
-            the variable <literal>day</literal>, a relation that maps strings
-            to integers.</para>
+            <para>The type of <replaceable>Exp</replaceable> should be
+            compatible with <replaceable>Type</replaceable>.</para>
           </listitem>
         </itemizedlist>
+
+        <para> As a convenience, also declarations without an initialization
+        expression are permitted and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
+        only introduce the variable <replaceable>Var</replaceable>. When a
+        variable is declared, it has as scope the nearest enclosing block (see
+        <xref linkend="section.block" />).</para>
+
+        <para>Rascal provides <emphasis>convenience typing</emphasis>, which
+        allows the implicit declaration for variables that are used locally in
+        functions. The following rules apply:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>An implicitly declared variable is declared at the level of
+            the function body.</para>
+          </listitem>
+
+          <listitem>
+            <para>An implicitly declared variable gets as type the type of the
+            first value that is assignment to it.</para>
+          </listitem>
+
+          <listitem>
+            <para>All uses of an implicitly declared variable must be type
+            compatible.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Examples.<screen>rascal&gt;int max = 100;
+int: 100
+rascal&gt;<keysym>rel</keysym>[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+                           &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}
+rel[str,int]: {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+               &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</screen></para>
       </section>
 
       <section xml:id="section.function">
         <title>Function</title>
 
         <para>A function declaration has the form<programlisting><replaceable>Type</replaceable> <replaceable>Name</replaceable>(<literal><replaceable>Type</replaceable></literal><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript>, ..., <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>Var</replaceable><replaceable><subscript>n</subscript></replaceable>) <replaceable>Statement</replaceable></programlisting>Here
-        <replaceable>T</replaceable> is the result type of the function and
-        this should be equal to the type of the associated expression
-        <replaceable>E</replaceable>. Each
-        <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
-        <replaceable>V</replaceable><replaceable><subscript>i</subscript></replaceable>
+        <replaceable>Type</replaceable> is the result type of the function and
+        this should be equal to the type of the result of Statement (using the
+        return statement, see <xref linkend="section.return" />). Each
+        <replaceable>Type</replaceable><subscript><replaceable>i</replaceable></subscript>
+        <replaceable>Var</replaceable><replaceable><subscript>i</subscript></replaceable>
         represents a typed formal parameter of the function. The formal
-        parameters may occur in <replaceable>E</replaceable> and get their
-        value when <replaceable>F</replaceable> is invoked from another
-        expression. Example:</para>
+        parameters may be used in <replaceable>Statement</replaceable> and get
+        their value when function <replaceable>Name</replaceable> is invoked.
+        Example:<screen>rascal&gt; rel[int, int] invert(rel[int,int] R)
+        return {&lt;Y, X&gt; | &lt;int X, int Y&gt; &lt;- R }
+done.
+rascal&gt; <literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
+<literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal></screen></para>
 
-        <itemizedlist>
-          <listitem>
-            <para>The function declaration<programlisting>rel[int, int] invert(rel[int,int] R) = 
-   {&lt;Y, X&gt; | &lt;int X, int Y&gt; : R }</programlisting>yields the
-            inverse of the argument relation R. For instance,
-            <literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal> yields
-            <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>.</para>
-          </listitem>
-        </itemizedlist>
+        <formalpara>
+          <title>Variable argument lists</title>
+
+          <para>A function may have a variable list of arguments, this has the
+          form:<programlisting><replaceable>Type</replaceable> <replaceable>Name</replaceable>(<emphasis>ordinary parameters</emphasis>, <replaceable>Type</replaceable> <replaceable>Var</replaceable>...) <replaceable>Statement</replaceable></programlisting></para>
+        </formalpara>
+
+        <para>The last parameter of a function may be followed by
+        <literal>...</literal> and this has as effect that all remaining
+        actual parameters that occur in a call to this function are collected
+        as list value of the last formal parameter. Inside the function body,
+        the type of this parameter will therefore be
+        <literal>list[</literal><replaceable>Type</replaceable><literal>]</literal>.</para>
+
+        <formalpara>
+          <title>Exceptions</title>
+
+          <para>The exceptions that can be thrown by a function can be
+          (optionally) declared as follows:<programlisting><replaceable>Type</replaceable> <replaceable>Name</replaceable>(<literal><replaceable>Type</replaceable></literal><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript>, ..., <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>Var</replaceable><replaceable><subscript>n</subscript></replaceable>) throws <replaceable>Exception</replaceable><subscript>1</subscript>, <replaceable>Exception</replaceable><subscript>2</subscript>, ...<replaceable> </replaceable></programlisting>See
+          for details.</para>
+        </formalpara>
+
+        <caution>
+          <para>Add ref.</para>
+        </caution>
 
         <formalpara>
           <title>Parameterized types in function declaration</title>
@@ -1413,54 +1487,136 @@ Declaration</replaceable><subscript>1</subscript>;
           <para>The types that occur in function declarations may also contain
           <emphasis>type variables</emphasis> that are written as
           <literal>&amp;</literal> followed by an identifier. In this way
-          functions can be defined for arbitrary types. Examples:</para>
+          functions can be defined for arbitrary types. In the following
+          example, we declare an inversion function that is applicable to any
+          binary relation. :<screen>rascal&gt; rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R)  
+        return {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; &lt;- R };
+done.
+
+rascal&gt;<literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
+<literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>
+
+rascal&gt;<literal>invert2({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;})</literal>;
+<literal>{&lt;1, "mon"&gt;, &lt;2, "tue"&gt;}</literal></screen>Here we
+          declare a function that can be used to swap the elements of pairs of
+          arbitrary types:<screen>rascal&gt; &lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) return &lt;B, A&gt;;
+done.
+
+rascal&gt; <literal>swap(&lt;1, 2&gt;)</literal>;
+<literal>&lt;2,1&gt;</literal>
+
+rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
+</literal><literal>&lt;3, "wed"&gt;</literal></screen></para>
         </formalpara>
-
-        <itemizedlist>
-          <listitem>
-            <para>The declaration<programlisting>rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R) = 
-   {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>yields
-            an inversion function that is applicable to any binary relation.
-            For instance,</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
-                yields <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>,</para>
-              </listitem>
-
-              <listitem>
-                <para><literal>invert2({&lt;"mon", 1&gt;, &lt;"tue",
-                2&gt;})</literal> yields <literal>{&lt;1, "mon"&gt;, &lt;2,
-                "tue"&gt;}</literal>.</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-
-          <listitem>
-            <para>The function<programlisting>&lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) = &lt;B, A&gt;</programlisting>can
-            be used to swap the elements of pairs of arbitrary types. For
-            instance,</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><literal>swap(&lt;1, 2&gt;)</literal> yields
-                <literal>&lt;2,1&gt;</literal> and</para>
-              </listitem>
-
-              <listitem>
-                <para><literal>swap(&lt;"wed", 3&gt;)</literal> yields
-                <literal>&lt;3, "wed"&gt;</literal>.</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
       </section>
 
       <section xml:id="section.rewrite-rule">
         <title>Rewrite Rule</title>
 
-        <para></para>
+        <para>Functions are the workhorses of Rascal. They can have any value
+        as parameter or result and are explicitly called by the user. Also,
+        functions are declared inside modules and their visibility can be
+        controlled.</para>
+
+        <para>Rewrite rules, on the other hand, operate only on nodes and
+        abstract datatypes, they are implicitly applied when a new value (we
+        refer to this as the <emphasis>subject value</emphasis>) is
+        constructed and their scope is the whole Rascal program. Rewrite rules
+        are applied to the subject value in a bottom-up fashion. As a result,
+        the subject value may be changed. This process is repeated as long as
+        there are rules that can be applied to the current subject value. When
+        done, the result of rewriting the original subject value is used
+        instead of that original value.<caution>
+            <para>There is some overlap with the description of switch and
+            visit here.</para>
+          </caution></para>
+
+        <para>Rules have the general form:<programlisting><keysym>rule</keysym> <replaceable>Name</replaceable> <replaceable>Rule</replaceable></programlisting></para>
+
+        <para>where <replaceable>Name</replaceable> is the name of the rule
+        and <replaceable>Rule</replaceable> is the actual rewrite rule itself.
+        A rule can have one of the following forms:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><programlisting><replaceable>Pat</replaceable> <literal>=&gt;</literal> <replaceable>Exp</replaceable></programlisting>When
+            a subtree of the subject matches <replaceable>Pat</replaceable>,
+            it is replaced by the value of
+            <replaceable>Exp</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>Pat</replaceable> <literal>=&gt;</literal> <replaceable>Exp</replaceable> <keysym>when</keysym> <replaceable>Exp</replaceable><subscript>1</subscript>, <replaceable>Exp</replaceable><subscript>2</subscript>, ...</programlisting>When
+            a subtree of the subject matches <replaceable>Pat</replaceable>,
+            and all expressions
+            <replaceable>Exp</replaceable><subscript>i</subscript> are true,
+            the subtree is replaced by the value of
+            <replaceable>Exp</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>Pat</replaceable> : <replaceable>Statement</replaceable></programlisting></para>
+
+            <para>This is the most general case. When a subtree of the subject
+            matches <replaceable>Pat</replaceable>, the
+            <replaceable>Statement</replaceable> is executed. The execution of
+            <replaceable>Statement</replaceable> should lead to one of the
+            following:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Execution of an <literal>insert</literal> statement (see
+                <xref linkend="section.insert" />) that replaces the current
+                subtree.</para>
+              </listitem>
+
+              <listitem>
+                <para>Execution of a <literal>fail</literal> statement (see
+                <xref linkend="section.fail" />): all side effects of
+                <replaceable>Statement</replaceable> are undone and the next
+                rule is tried.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+        <para>Here is an example for user-defined type Booleans:<screen>rascal&gt;
+data Bool = btrue;
+data Bool = bfalse;
+data Bool = band(Bool left, Bool right);
+data Bool = bor(Bool left, Bool right);  
+
+rule a1 band(btrue, Bool B)    =&gt; B;
+rule a2 band(bfalse, Bool B)   =&gt; bfalse;
+done.
+rascal&gt;band(band(btrue,btrue),band(btrue, bfalse));
+bfalse</screen></para>
+
+        <para>During execution of rules the following applies:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Rules are applied non-deterministically, and in any order of
+            matching.</para>
+          </listitem>
+
+          <listitem>
+            <para>The right hand side of rules can contain fail statements,
+            which cause backtracking over the alternative matches or
+            alternative rules for a certain constructor.</para>
+          </listitem>
+
+          <listitem>
+            <para>When the right-hand side is a statement, an
+            <literal>insert</literal> statement determines the value of the
+            actual replacement.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The rule keyword may be immediately followed by a type
+        constraint to limit its applicability.<caution>
+            <para>Is this implemented?</para>
+          </caution></para>
       </section>
 
       <section xml:id="section.node-annotation">
@@ -1754,7 +1910,7 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
 
                 <row>
                   <entry><replaceable>Exp</replaceable> <literal>@</literal>
-                  Name</entry>
+                  <replaceable>Name</replaceable></entry>
 
                   <entry>Attribute selection</entry>
 
@@ -1764,7 +1920,8 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
 
                 <row>
                   <entry><replaceable>Exp</replaceable><subscript>1</subscript>
-                  <literal>[@</literal> Name <literal>=</literal><replaceable>
+                  <literal>[@</literal> <replaceable>Name</replaceable>
+                  <literal>=</literal><replaceable>
                   Exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
 
                   <entry>Attribute replacement</entry>
@@ -2199,7 +2356,7 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
 
                 <row>
                   <entry><replaceable>Exp</replaceable><subscript>1</subscript>
-                  &amp;&amp;
+                  <literal>&amp;&amp;</literal>
                   <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
                   <entry>And</entry>
@@ -2211,9 +2368,9 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
                 </row>
 
                 <row>
-                  <entry><literal><replaceable>Exp</replaceable><subscript>1</subscript>
-                  , <replaceable>Exp</replaceable><subscript>2</subscript>
-                  ,</literal> ... <literal>,
+                  <entry><literal><replaceable>Exp</replaceable><subscript>1</subscript>,
+                  <replaceable>Exp</replaceable><subscript>2</subscript>,</literal>
+                  ...<literal>,
                   <replaceable>Exp</replaceable><subscript>n</subscript></literal></entry>
 
                   <entry>MultiCondition</entry>
@@ -3036,19 +3193,45 @@ default: ...
         </itemizedlist>
       </section>
 
-      <section>
-        <title>Exception</title>
+      <section xml:id="section.try-catch">
+        <title>Try Catch</title>
 
         <para></para>
       </section>
 
-      <section>
+      <section xml:id="section.throw">
+        <title>Throw</title>
+
+        <para></para>
+      </section>
+
+      <section xml:id="section.return">
+        <title>Return</title>
+
+        <para></para>
+      </section>
+
+      <section xml:id="section.insert">
+        <title>Insert</title>
+
+        <para></para>
+      </section>
+
+      <section xml:id="section.fail">
+        <title>Fail</title>
+
+        <para></para>
+      </section>
+
+      <section xml:id="section.block">
         <title>Block</title>
 
         <para>A block consists of a sequence of statements separated by
         semi-colons:<programlisting><literal>{ <replaceable>Statement</replaceable><subscript>1</subscript>; ... <replaceable>Statement</replaceable><subscript>n</subscript> }</literal></programlisting>Since
         a block is itself a statement, it may be used in all places where a
-        statement is required.</para>
+        statement is required. A block also introduces a new scope and
+        variables that are declarated in the block are local to that
+        block.</para>
       </section>
 
       <section>
@@ -5358,10 +5541,10 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
               </row>
 
               <row>
-                <entry><literal>list[int] domain(list[&amp;T]
+                <entry><literal>set[int] domain(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>a list of all legal index values for a list</entry>
+                <entry>a set of all legal index values for a list</entry>
               </row>
 
               <row>
