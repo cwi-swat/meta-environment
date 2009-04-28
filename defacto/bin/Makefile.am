@@ -11,6 +11,8 @@ AM_CPPFLAGS += \
 	$(SDF_SUPPORT_CFLAGS) \
 	-DASF_MAIN
 
+CFLAGS=-g -O2 -Wall
+
 DeFactoSpec_SOURCES = DeFacto.c
 
 DeFactoSpec_LDADD = \

@@ -69,6 +69,7 @@ extract-role-data(Attributes, RStore, Tree, TreeTable) -> RStore { traversal(acc
 extract-role-data({ATerm ","}*, RStore, Tree, TreeTable) -> RStore { traversal(accu, top-down, break) }
 extract-role-data(ATerm, RStore, Tree, TreeTable) -> RStore { traversal(accu, top-down, break) }
 
+extract-fact-data(Attributes, RStore, Tree, TreeTable) -> RStore
 
 variables
 

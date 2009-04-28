@@ -66,6 +66,7 @@ equations
       ){ATerm+} := Tree,
   StrCon1 := extract-sort(Symbol),
   StrCon1 != "",
+  attrs([Attr*1, term(no-facts), Attr*2]) !:= Attributes,
   Int0 := lookup(TreeTable0, 0), %% running id
   Int1 := Int0 + 1,
   TreeTable1 := store(TreeTable0, 0, Int1),

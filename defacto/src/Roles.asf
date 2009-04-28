@@ -365,12 +365,18 @@ equations
   extract-role-data(if(N, [ATerm*1]), RStore0, Tree, TreeTable) = RStore0
 
 []
+  extract-fact-data(attrs([Attr*1, term(no-facts), Attr*2]), RStore, Tree, TreeTable) = RStore
+
+[default]
+  extract-fact-data(Attributes, RStore, Tree, TreeTable) = extract-role-data(Attributes, RStore, Tree, TreeTable)
+
+[]
   Int0 := lookup(TreeTable, Tree),
   Int0 != not-in-table,
   appl(prod( [Symbol*], Symbol, Attributes ),
        [Tree*]
       ){ATerm*1, [pos-info, ATerm], ATerm*2} := Tree,
-  RStore1 := extract-role-data(Attributes, RStore0, Tree, TreeTable),
+  RStore1 := extract-fact-data(Attributes, RStore0, Tree, TreeTable),
   RStore' := extract-node-roles(Tree*, RStore1, TreeTable)
   ===>
   extract-node-roles(Tree, RStore0, TreeTable) = RStore'

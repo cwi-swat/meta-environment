@@ -2,6 +2,6 @@
 
 include $(top_srcdir)/Makefile.top.meta
 
-SUBDIRS	= src util bin
+SUBDIRS	= src util bin include
 
 ACLOCAL_FLAGS = -I .
