@@ -5,10 +5,12 @@ static Symbol lf_matchfailedsym ;
 static ATerm lf_matchfailed ( ) ;
 static Symbol lf_matchsucceededsym ;
 static ATerm lf_matchsucceeded ( ) ;
+static Symbol lf_match_4sym ;
+static ATerm lf_match_4 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 , ATerm arg7 , ATerm arg8 , ATerm arg9 ) ;
 static Symbol lf_match_3sym ;
 static ATerm lf_match_3 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 , ATerm arg7 , ATerm arg8 , ATerm arg9 ) ;
 static Symbol lf_match_2sym ;
-static ATerm lf_match_2 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 , ATerm arg7 , ATerm arg8 , ATerm arg9 ) ;
+static ATerm lf_match_2 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 , ATerm arg7 , ATerm arg8 ) ;
 static Symbol lf_match_1sym ;
 static ATerm lf_match_1 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_match_0sym ;
@@ -693,9 +695,11 @@ lf_matchfailedsym = ATmakeSymbol ( "matchfailed"
 ATprotectSymbol ( lf_matchfailedsym ) ;
 lf_matchsucceededsym = ATmakeSymbol ( "matchsucceeded" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_matchsucceededsym ) ;
+lf_match_4sym = ATmakeSymbol ( "lf-match-4" , 9 , ATtrue ) ;
+ATprotectSymbol ( lf_match_4sym ) ;
 lf_match_3sym = ATmakeSymbol ( "lf-match-3" , 9 , ATtrue ) ;
 ATprotectSymbol ( lf_match_3sym ) ;
-lf_match_2sym = ATmakeSymbol ( "lf-match-2" , 9 , ATtrue ) ;
+lf_match_2sym = ATmakeSymbol ( "lf-match-2" , 8 , ATtrue ) ;
 ATprotectSymbol ( lf_match_2sym ) ;
 lf_match_1sym = ATmakeSymbol ( "lf-match-1" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_match_1sym ) ;
@@ -1381,6 +1385,7 @@ register_prod ( ATparse ( "lf-match-0" ) , lf_match_0 , lf_match_0sym ) ;
 register_prod ( ATparse ( "lf-match-1" ) , lf_match_1 , lf_match_1sym ) ;
 register_prod ( ATparse ( "lf-match-2" ) , lf_match_2 , lf_match_2sym ) ;
 register_prod ( ATparse ( "lf-match-3" ) , lf_match_3 , lf_match_3sym ) ;
+register_prod ( ATparse ( "lf-match-4" ) , lf_match_4 , lf_match_4sym ) ;
 register_prod ( ATparse ( "prod([lit(\"true\")],cf(sort(\"BoolCon\")),attrs([term(cons(\"true\"))]))" ) , lf_337 , lf_337sym ) ;
 register_prod ( ATparse ( "prod([cf(sort(\"BoolCon\"))],cf(sort(\"Boolean\")),attrs([term(cons(\"constant\"))]))" ) , lf_336 , lf_336sym ) ;
 register_prod ( ATparse ( "prod([lit(\"not\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Boolean\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([term(cons(\"not\"))]))" ) , lf_335 , lf_335sym ) ;
@@ -1882,6 +1887,7 @@ ATermTable table_lf_139 ;
 ATermTable table_lf_39 ;
 ATermTable table_lf_23 ;
 ATermTable table_lf_1 ;
+ATermTable table_lf_match_4 ;
 ATermTable table_lf_match_3 ;
 ATermTable table_lf_match_2 ;
 ATermTable table_lf_match_1 ;
@@ -2406,6 +2412,7 @@ create_table ( table_lf_139 , 0 ) ;
 create_table ( table_lf_39 , 0 ) ;
 create_table ( table_lf_23 , 0 ) ;
 create_table ( table_lf_1 , 0 ) ;
+create_table ( table_lf_match_4 , 0 ) ;
 create_table ( table_lf_match_3 , 0 ) ;
 create_table ( table_lf_match_2 , 0 ) ;
 create_table ( table_lf_match_1 , 0 ) ;
@@ -2839,9 +2846,73 @@ FUNC_EXIT ( constant1 ) ;
 FUNC_EXIT ( make_nf2 ( lf_match_1sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_match_2 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 , ATerm arg7 , ATerm arg8 ) {
+ATerm lf_match_2 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 , ATerm arg7 ) {
+ATerm tmp [ 6 ] ;
+FUNC_ENTRY ( lf_match_2sym , ATmakeAppl ( lf_match_2sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 ) ) ;
+{
+if ( check_sym ( arg3 , lf_262sym ) ) {
+{
+tmp [ 0 ] = arg_0 ( arg3 ) ;
+}
+{
+if ( check_sym ( tmp [ 0 ] , lf_263sym ) ) {
+{
+tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+}
+{
+if ( check_sym ( tmp [ 1 ] , lf_list_264sym ) ) {
+{
+tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+}
+{
+tmp [ 3 ] = tmp [ 2 ] ;
+}
+{
+tmp [ 4 ] = tmp [ 2 ] ;
+}
+{
+while ( not_empty_list ( tmp [ 2 ] ) ) {
+{
+tmp [ 5 ] = list_head ( tmp [ 2 ] ) ;
+}
+{
+tmp [ 2 ] = list_tail ( tmp [ 2 ] ) ;
+}
+{
+if ( term_equal ( tmp [ 5 ] , make_nf1 ( lf_265sym , make_nf1 ( lf_257sym , make_nf1 ( lf_270sym , make_nf1 ( lf_271sym , make_nf2 ( lf_272sym , make_char ( 110 ) , make_nf1 ( lf_list_273sym , ( ATerm ) ATmakeList ( 7 , char_table [ 111 ] , char_table [ 45 ] , char_table [ 102 ] , char_table [ 97 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 115 ] ) ) ) ) ) ) ) ) ) {
+if ( ! constant0 ) {
+constant0 = make_nf0 ( lf_matchsucceededsym ) ;
+}
+FUNC_EXIT ( constant0 ) ;
+}
+}
+{
+tmp [ 4 ] = list_tail ( tmp [ 4 ] ) ;
+}
+{
+tmp [ 2 ] = tmp [ 4 ] ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+{
+if ( ! constant1 ) {
+constant1 = make_nf0 ( lf_matchfailedsym ) ;
+}
+FUNC_EXIT ( constant1 ) ;
+}
+{
+FUNC_EXIT ( make_nf8 ( lf_match_2sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 ) ) ;
+}
+}
+ATerm lf_match_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 , ATerm arg7 , ATerm arg8 ) {
 ATerm tmp [ 3 ] ;
-FUNC_ENTRY ( lf_match_2sym , ATmakeAppl ( lf_match_2sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 , arg8 ) ) ;
+FUNC_ENTRY ( lf_match_3sym , ATmakeAppl ( lf_match_3sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 , arg8 ) ) ;
 {
 if ( check_sym ( arg5 , lf_173sym ) ) {
 {
@@ -2876,12 +2947,12 @@ constant1 = make_nf0 ( lf_matchfailedsym ) ;
 FUNC_EXIT ( constant1 ) ;
 }
 {
-FUNC_EXIT ( make_nf9 ( lf_match_2sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 , arg8 ) ) ;
+FUNC_EXIT ( make_nf9 ( lf_match_3sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 , arg8 ) ) ;
 }
 }
-ATerm lf_match_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 , ATerm arg7 , ATerm arg8 ) {
+ATerm lf_match_4 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 , ATerm arg7 , ATerm arg8 ) {
 ATerm tmp [ 3 ] ;
-FUNC_ENTRY ( lf_match_3sym , ATmakeAppl ( lf_match_3sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 , arg8 ) ) ;
+FUNC_ENTRY ( lf_match_4sym , ATmakeAppl ( lf_match_4sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 , arg8 ) ) ;
 {
 if ( check_sym ( arg5 , lf_173sym ) ) {
 {
@@ -2912,7 +2983,7 @@ constant1 = make_nf0 ( lf_matchfailedsym ) ;
 FUNC_EXIT ( constant1 ) ;
 }
 {
-FUNC_EXIT ( make_nf9 ( lf_match_3sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 , arg8 ) ) ;
+FUNC_EXIT ( make_nf9 ( lf_match_4sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 , arg7 , arg8 ) ) ;
 }
 }
 ATerm lf_30 ( ATerm arg0 , ATerm arg1 ) {
@@ -7174,11 +7245,11 @@ if ( term_equal ( tmp [ 18 ] , make_nf1 ( lf_257sym , make_nf1 ( lf_270sym , mak
 if ( ! constant1 ) {
 constant1 = make_nf0 ( lf_matchfailedsym ) ;
 }
-if ( term_equal ( constant1 , lf_match_2 ( tmp [ 12 ] , tmp [ 20 ] , slice ( tmp [ 13 ] , tmp [ 14 ] ) , tmp [ 10 ] , tmp [ 6 ] , tmp [ 5 ] , tmp [ 8 ] , arg1 , arg0 ) ) ) {
+if ( term_equal ( constant1 , lf_match_3 ( tmp [ 12 ] , tmp [ 20 ] , slice ( tmp [ 13 ] , tmp [ 14 ] ) , tmp [ 10 ] , tmp [ 6 ] , tmp [ 5 ] , tmp [ 8 ] , arg1 , arg0 ) ) ) {
 if ( ! constant1 ) {
 constant1 = make_nf0 ( lf_matchfailedsym ) ;
 }
-if ( term_equal ( constant1 , lf_match_3 ( tmp [ 12 ] , tmp [ 20 ] , slice ( tmp [ 13 ] , tmp [ 14 ] ) , tmp [ 10 ] , tmp [ 6 ] , tmp [ 5 ] , tmp [ 8 ] , arg1 , arg0 ) ) ) {
+if ( term_equal ( constant1 , lf_match_4 ( tmp [ 12 ] , tmp [ 20 ] , slice ( tmp [ 13 ] , tmp [ 14 ] ) , tmp [ 10 ] , tmp [ 6 ] , tmp [ 5 ] , tmp [ 8 ] , arg1 , arg0 ) ) ) {
 {
 tmp [ 21 ] = lf_252 ( arg1 , arg0 ) ;
 }
@@ -7883,6 +7954,10 @@ tmp [ 13 ] = lf_74 ( tmp [ 5 ] ) ;
 }
 {
 if ( ! term_equal ( tmp [ 13 ] , make_nf1 ( lf_236sym , make_nf3 ( lf_237sym , make_char ( 34 ) , make_nf1 ( lf_list_238sym , make_list ( null ( ) ) ) , make_char ( 34 ) ) ) ) ) {
+if ( ! constant1 ) {
+constant1 = make_nf0 ( lf_matchfailedsym ) ;
+}
+if ( term_equal ( constant1 , lf_match_2 ( tmp [ 13 ] , tmp [ 12 ] , tmp [ 10 ] , tmp [ 6 ] , tmp [ 5 ] , tmp [ 8 ] , arg1 , arg0 ) ) ) {
 {
 if ( ! constant21 ) {
 constant21 = make_nf1 ( lf_95sym , make_nf1 ( lf_327sym , make_nf1 ( lf_328sym , make_nf1 ( lf_list_329sym , make_list ( make_char ( 48 ) ) ) ) ) ) ;
@@ -7909,6 +7984,7 @@ tmp [ 18 ] = lf_75 ( make_nf1 ( lf_list_260sym , tmp [ 10 ] ) , tmp [ 17 ] , tmp
 }
 {
 FUNC_EXIT ( tmp [ 18 ] ) ;
+}
 }
 }
 }
