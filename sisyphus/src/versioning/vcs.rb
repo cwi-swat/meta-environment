@@ -83,8 +83,7 @@ module Versioning
       if @protocol == 'file' then 
         return File.join("#{@protocol}://#{@location}", path)
       end
-
-      if @protocol ~= /^svn\+/ or @protocol == 'svn' then
+      if @protocol =~ /^svn\+/ or @protocol == 'svn' then
         if user then
           return File.join("#{@protocol}://#{user}@#{@location}", path)
         else
