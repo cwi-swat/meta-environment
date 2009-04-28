@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -1348,6 +1348,10 @@ Declaration</replaceable><subscript>1</subscript>;
         <para>The module name <replaceable>Name</replaceable> will be used
         when the current module is imported in another module.</para>
 
+        <para>The constituents of a module are also shown in <xref
+        linkend="figure.parts-module" />. The more advanced features are shown
+        in a separate color.</para>
+
         <para>The entities that are <emphasis>visible</emphasis> inside a
         module are</para>
 
@@ -1363,7 +1367,16 @@ Declaration</replaceable><subscript>1</subscript>;
         </itemizedlist>
 
         <para>The only entities that are visible outside the module, are the
-        public entities declared in the module itself.<caution>
+        public entities declared in the module itself.<figure
+            xml:id="figure.parts-module">
+            <title>Constituents of a Module</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="module-parts.png" scale="50"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </figure><caution>
             <para>Describe qualified names.</para>
           </caution></para>
       </section>
@@ -1375,66 +1388,6 @@ Declaration</replaceable><subscript>1</subscript>;
         has as effect that all public entities declared in module
         <replaceable>Name</replaceable> are made available to the importing
         module.</para>
-      </section>
-
-      <section xml:id="section.variable">
-        <title>Variable</title>
-
-        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>where
-        <replaceable>T</replaceable>ype is a type,
-        <replaceable>V</replaceable>ar is a variable name, and
-        <replaceable>E</replaceable>xp is an expression that should have type
-        <replaceable>Type</replaceable>. The effect is that the value of
-        expression <replaceable>Exp</replaceable> is assigned to
-        <replaceable>V</replaceable>ar and can be used later on as
-        <replaceable>Var</replaceable>'s value. The folowing rules
-        apply:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Double declarations in the same scope are not allowed.
-            </para>
-          </listitem>
-
-          <listitem>
-            <para>The type of <replaceable>Exp</replaceable> should be
-            compatible with <replaceable>Type</replaceable>.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para> As a convenience, also declarations without an initialization
-        expression are permitted and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
-        only introduce the variable <replaceable>Var</replaceable>. When a
-        variable is declared, it has as scope the nearest enclosing block (see
-        <xref linkend="section.block" />).</para>
-
-        <para>Rascal provides <emphasis>convenience typing</emphasis>, which
-        allows the implicit declaration for variables that are used locally in
-        functions. The following rules apply:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>An implicitly declared variable is declared at the level of
-            the function body.</para>
-          </listitem>
-
-          <listitem>
-            <para>An implicitly declared variable gets as type the type of the
-            first value that is assignment to it.</para>
-          </listitem>
-
-          <listitem>
-            <para>All uses of an implicitly declared variable must be type
-            compatible.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>Examples.<screen>rascal&gt;int max = 100;
-int: 100
-rascal&gt;<keysym>rel</keysym>[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
-                           &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}
-rel[str,int]: {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
-               &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</screen></para>
       </section>
 
       <section xml:id="section.function">
@@ -1510,6 +1463,165 @@ rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
         </formalpara>
       </section>
 
+      <section xml:id="section.variable">
+        <title>Variable</title>
+
+        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>where
+        <replaceable>T</replaceable>ype is a type,
+        <replaceable>V</replaceable>ar is a variable name, and
+        <replaceable>E</replaceable>xp is an expression that should have type
+        <replaceable>Type</replaceable>. The effect is that the value of
+        expression <replaceable>Exp</replaceable> is assigned to
+        <replaceable>V</replaceable>ar and can be used later on as
+        <replaceable>Var</replaceable>'s value. The folowing rules
+        apply:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Double declarations in the same scope are not
+            allowed.</para>
+          </listitem>
+
+          <listitem>
+            <para>The type of <replaceable>Exp</replaceable> should be
+            compatible with <replaceable>Type</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>As a convenience, also declarations without an initialization
+        expression are permitted and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
+        only introduce the variable <replaceable>Var</replaceable>. When a
+        variable is declared, it has as scope the nearest enclosing block (see
+        <xref linkend="section.block" />).</para>
+
+        <para>Rascal provides <emphasis>convenience typing</emphasis>, which
+        allows the implicit declaration for variables that are used locally in
+        functions. The following rules apply:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>An implicitly declared variable is declared at the level of
+            the function body.</para>
+          </listitem>
+
+          <listitem>
+            <para>An implicitly declared variable gets as type the type of the
+            first value that is assignment to it.</para>
+          </listitem>
+
+          <listitem>
+            <para>All uses of an implicitly declared variable must be type
+            compatible.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Examples.<screen>rascal&gt;int max = 100;
+int: 100
+rascal&gt;<keysym>rel</keysym>[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+                           &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}
+rel[str,int]: {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+               &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</screen></para>
+      </section>
+
+      <section xml:id="section.declaration-tag">
+        <title>Declaration Tag</title>
+
+        <para><warning>
+            <para>Tags are not yet implemented.</para>
+          </warning><warning>
+            <para>The syntax of tags has to be aligned with the syntax of
+            annotations. This is done in the examples below but not yet in the
+            synyax.</para>
+          </warning>Tags are intended to add metadata to a Rascal program and
+        allow to influence the execution of the Rascal program, for instance,
+        by adding memoization hints or database mappings for relations.</para>
+
+        <para>All declarations in a Rascal program may contain (in fixed
+        positions depending on the declaration type) one or more declaration
+        tags (<literal>tag</literal>). A tag is defined by declaring its name,
+        the declaration type to which it can be attached, and the name and
+        type of the annotation. The declaration type <literal>all</literal>,
+        makes the declaration tag applicable for all possible declaration
+        types. All declaration tags have the generic format
+        <literal>@<replaceable>Name</replaceable>{ ... }</literal>, with
+        arbitrary text between the brackets that is further constrained by the
+        declared type. Here is an example of a license tag:<programlisting>tag str license on module;</programlisting>This
+        will allow to write things like:<programlisting>module Booleans
+@license{This module is distributed under the GPL}
+...</programlisting>Other examples of declaration tags are:<programlisting>tag str todo on all             %% a todo note for all declaration types
+tag void deprecated on function %% marks a deprecated function
+tag int memo on function        %% bounded memoization of 
+                                %% function calls
+tag str doc on all              %% documentation string
+tag str primitive on function   %% a primitive, built-in, function</programlisting>Here
+        is an example of a documentation string as used in the Rascal standard
+        library:<programlisting>public &amp;T max(set[&amp;T] R)
+  @doc{Maximum of a set: max}
+{
+  &amp;T result = arb(R);
+  for(&amp;T E : R){
+    result = max(result, E);
+  }
+  return result;
+}</programlisting></para>
+      </section>
+
+      <section xml:id="section.node-annotation">
+        <title>Node annotation</title>
+
+        <para>An annotation may be associated with any node value. Annotations
+        are intended to attach application data to values, like adding
+        position information or control flow information to source code or
+        adding visualization information to a relation. An annotation has a
+        name and the type of its value is explicitly declared. Any value of
+        any named type can be annotated and the type of these annotations can
+        be declared precisely.</para>
+
+        <para>For instance, we can add to certain syntactic constructs of
+        programs (e.g., <literal>EXPRESSION</literal>) an annotation with name
+        <literal>posinfo</literal> that contains location
+        information:<programlisting>anno loc EXPRESSION @ posinfo;</programlisting>or
+        location information could be added for all syntax
+        trees:<programlisting>anno loc node @ posinfo;</programlisting></para>
+
+        <para>We can add to the graph datatype introduced earlier, the
+        annotation with name <literal>LayoutStrategy</literal> that defines
+        which graph layout algorithm to apply to a particular graph,
+        e.g.,<programlisting>data LayoutStrategy = "dot" | "tree" | "force" | 
+                      "hierarchy" | "fisheye";
+
+anno LayoutStrategy Graph @ strategy;</programlisting></para>
+
+        <para>The folllowing constructs are provided for handling
+        annotations:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal><replaceable>Val</replaceable> @
+            <replaceable>Anno</replaceable></literal>: get the value of
+            annotation <replaceable>Anno</replaceable> of value
+            <replaceable>Val</replaceable> (may be undefined!).</para>
+          </listitem>
+
+          <listitem>
+            <para><literal><replaceable>Val1</replaceable>[@<replaceable>Anno</replaceable>
+            = <replaceable>Val2]</replaceable></literal>: set the value of
+            annotation <replaceable>Anno</replaceable> of the value
+            <replaceable>Val</replaceable><replaceable>1</replaceable> to
+            <replaceable>Val2</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal><replaceable>Var</replaceable> @
+            <replaceable>Anno</replaceable> =
+            <replaceable>Val</replaceable></literal>: set the value of
+            annotation <replaceable>Anno</replaceable> of the value of
+            variable <replaceable>Var</replaceable> to
+            <replaceable>Val</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
       <section xml:id="section.rewrite-rule">
         <title>Rewrite Rule</title>
 
@@ -1524,18 +1636,32 @@ rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
         constructed and their scope is the whole Rascal program. Rewrite rules
         are applied to the subject value in a bottom-up fashion. As a result,
         the subject value may be changed. This process is repeated as long as
-        there are rules that can be applied to the current subject value. When
-        done, the result of rewriting the original subject value is used
+        there are rules that can be applied to the current subject value.
+        Technically, this is called <emphasis>innermost rewriting</emphasis>.
+        When done, the result of rewriting the original subject value is used
         instead of that original value.<caution>
             <para>There is some overlap with the description of switch and
             visit here.</para>
           </caution></para>
 
-        <para>Rules have the general form:<programlisting><keysym>rule</keysym> <replaceable>Name</replaceable> <replaceable>Rule</replaceable></programlisting></para>
+        <para>Rules have the general form:<programlisting><keysym>rule</keysym> <replaceable>Name</replaceable> <replaceable>PatternActionPair</replaceable></programlisting></para>
 
         <para>where <replaceable>Name</replaceable> is the name of the rule
-        and <replaceable>Rule</replaceable> is the actual rewrite rule itself.
-        A rule can have one of the following forms:</para>
+        and <replaceable>PatternActionPair</replaceable> is the body of the
+        rule consisting of a pattern and an associated action (see <xref
+        linkend="section.pattern-action-pair" />). In addition to this, a rule
+        can be <emphasis>conditional</emphasis> and have the following
+        form:<programlisting><replaceable>rule Name Pat</replaceable> <literal>=&gt;</literal> <replaceable>Exp</replaceable> <keysym>when</keysym> <replaceable>Exp</replaceable><subscript>1</subscript>, <replaceable>Exp</replaceable><subscript>2</subscript>, ...</programlisting></para>
+
+        <para>When a subtree of the subject matches
+        <replaceable>Pat</replaceable>, and all expressions
+        <replaceable>Exp</replaceable><subscript>i</subscript> are true, the
+        subtree is replaced by the value of
+        <replaceable>Exp</replaceable>.</para>
+
+        <para></para>
+
+        <para>A rule can have one of the following forms:</para>
 
         <itemizedlist>
           <listitem>
@@ -1546,12 +1672,7 @@ rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
           </listitem>
 
           <listitem>
-            <para><programlisting><replaceable>Pat</replaceable> <literal>=&gt;</literal> <replaceable>Exp</replaceable> <keysym>when</keysym> <replaceable>Exp</replaceable><subscript>1</subscript>, <replaceable>Exp</replaceable><subscript>2</subscript>, ...</programlisting>When
-            a subtree of the subject matches <replaceable>Pat</replaceable>,
-            and all expressions
-            <replaceable>Exp</replaceable><subscript>i</subscript> are true,
-            the subtree is replaced by the value of
-            <replaceable>Exp</replaceable>.</para>
+            <para><programlisting><replaceable>Pat</replaceable> <literal>=&gt;</literal> <replaceable>Exp</replaceable> <keysym>when</keysym> <replaceable>Exp</replaceable><subscript>1</subscript>, <replaceable>Exp</replaceable><subscript>2</subscript>, ...</programlisting></para>
           </listitem>
 
           <listitem>
@@ -1618,112 +1739,13 @@ bfalse</screen></para>
             <para>Is this implemented?</para>
           </caution></para>
       </section>
-
-      <section xml:id="section.node-annotation">
-        <title>Node annotation</title>
-
-        <para>An annotation may be associated with any node value. Annotations
-        are intended to attach application data to values, like adding
-        position information or control flow information to source code or
-        adding visualization information to a relation. An annotation has a
-        name and the type of its value is explicitly declared. Any value of
-        any named type can be annotated and the type of these annotations can
-        be declared precisely.</para>
-
-        <para>For instance, we can add to certain syntactic constructs of
-        programs (e.g., <literal>EXPRESSION</literal>) an annotation with name
-        <literal>posinfo</literal> that contains location
-        information:<programlisting>anno loc EXPRESSION @ posinfo;</programlisting>or
-        location information could be added for all syntax
-        trees:<programlisting>anno loc node @ posinfo;</programlisting></para>
-
-        <para>We can add to the graph datatype introduced earlier, the
-        annotation with name <literal>LayoutStrategy</literal> that defines
-        which graph layout algorithm to apply to a particular graph,
-        e.g.,<programlisting>data LayoutStrategy = "dot" | "tree" | "force" | 
-                      "hierarchy" | "fisheye";
-
-anno LayoutStrategy Graph @ strategy;</programlisting></para>
-
-        <para>The folllowing constructs are provided for handling
-        annotations:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal><replaceable>Val</replaceable> @
-            <replaceable>Anno</replaceable></literal>: get the value of
-            annotation <replaceable>Anno</replaceable> of value
-            <replaceable>Val</replaceable> (may be undefined!).</para>
-          </listitem>
-
-          <listitem>
-            <para><literal><replaceable>Val1</replaceable>[@<replaceable>Anno</replaceable>
-            = <replaceable>Val2]</replaceable></literal>: set the value of
-            annotation <replaceable>Anno</replaceable> of the value
-            <replaceable>Val</replaceable><replaceable>1</replaceable> to
-            <replaceable>Val2</replaceable>.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal><replaceable>Var</replaceable> @
-            <replaceable>Anno</replaceable> =
-            <replaceable>Val</replaceable></literal>: set the value of
-            annotation <replaceable>Anno</replaceable> of the value of
-            variable <replaceable>Var</replaceable> to
-            <replaceable>Val</replaceable>.</para>
-          </listitem>
-        </itemizedlist>
-      </section>
-
-      <section xml:id="section.declaration-tag">
-        <title>Declaration Tag</title>
-
-        <para><warning>
-            <para>Tags are not yet implemented.</para>
-          </warning><warning>
-            <para>The syntax of tags has to be aligned with the syntax of
-            annotations. This is done in the examples below but not yet in the
-            synyax.</para>
-          </warning>Tags are intended to add metadata to a Rascal program and
-        allow to influence the execution of the Rascal program, for instance,
-        by adding memoization hints or database mappings for relations.</para>
-
-        <para>All declarations in a Rascal program may contain (in fixed
-        positions depending on the declaration type) one or more declaration
-        tags (<literal>tag</literal>). A tag is defined by declaring its name,
-        the declaration type to which it can be attached, and the name and
-        type of the annotation. The declaration type <literal>all</literal>,
-        makes the declaration tag applicable for all possible declaration
-        types. All declaration tags have the generic format
-        <literal>@<replaceable>Name</replaceable>{ ... }</literal>, with
-        arbitrary text between the brackets that is further constrained by the
-        declared type. Here is an example of a license tag:<programlisting>tag str license on module;</programlisting>This
-        will allow to write things like:<programlisting>module Booleans
-@license{This module is distributed under the GPL}
-...</programlisting>Other examples of declaration tags are:<programlisting>tag str todo on all             %% a todo note for all declaration types
-tag void deprecated on function %% marks a deprecated function
-tag int memo on function        %% bounded memoization of 
-                                %% function calls
-tag str doc on all              %% documentation string
-tag str primitive on function   %% a primitive, built-in, function</programlisting>Here
-        is an example of a documentation string as used in the Rascal standard
-        library:<programlisting>public &amp;T max(set[&amp;T] R)
-  @doc{Maximum of a set: max}
-{
-  &amp;T result = arb(R);
-  for(&amp;T E : R){
-    result = max(result, E);
-  }
-  return result;
-}</programlisting></para>
-      </section>
     </section>
 
     <section xml:id="section.expressions">
       <title>Expressions</title>
 
-      <para>The Expression is the basic unit of evaluation and may consist
-      of:</para>
+      <para>The Expression is the basic unit of evaluation and may consist of
+      (see <xref linkend="figure.exp-parts" />):</para>
 
       <itemizedlist>
         <listitem>
@@ -1770,7 +1792,15 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
 
       <para>We explain the various operator expressions in more detail.
       Non-Boolean and Boolean operator expressions behave somewhat differently
-      and therefore we describe separately.</para>
+      and therefore we describe separately.<figure xml:id="figure.exp-parts">
+          <title>Expressions Forms</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="exp-parts.png" scale="50"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
 
       <section xml:id="section.expressions-non-boolean">
         <title>Non-Boolean Operator Expressions</title>
@@ -2021,6 +2051,34 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
               </tbody>
             </tgroup>
           </table></para>
+
+        <para>Most of these operators are described in detail in <xref
+        linkend="section.builtin" /> for specific types. Here we describe the
+        remaining generic operators.</para>
+
+        <formalpara>
+          <title>Field Assignment</title>
+
+          <para></para>
+        </formalpara>
+
+        <formalpara>
+          <title>Field selection</title>
+
+          <para></para>
+        </formalpara>
+
+        <formalpara>
+          <title>Field projection</title>
+
+          <para></para>
+        </formalpara>
+
+        <formalpara>
+          <title>Subscription</title>
+
+          <para></para>
+        </formalpara>
       </section>
 
       <section xml:id="section.expressions-boolean">
@@ -2750,6 +2808,57 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
       </section>
 
       <section>
+        <title>PatternActionPair</title>
+
+        <para>Patterns can be used in various contexts, but a common context
+        is a <replaceable>PatternActionPair</replaceable>, which in its turn,
+        may be used in a visit expression (<xref linkend="section.visit" />),
+        a switch statement (<xref linkend="section.switch" />), or a rewrite
+        rule (<xref linkend="section.rewrite-rule" />).</para>
+
+        <para>A <replaceable>PatternActionPair</replaceable> can have one of
+        the following forms:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><programlisting><literal><replaceable>Pat</replaceable> =&gt; <replaceable>Exp</replaceable></literal></programlisting>When
+            the subject matches <replaceable>Pat</replaceable>, the expression
+            <replaceable>Exp</replaceable> is evaluated. The use of the
+            resulting value depends on the context and is described in the
+            relevant section.</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>Pat</replaceable> : <replaceable>Statement</replaceable></programlisting></para>
+
+            <para>This is the most general case. When the subject matches
+            <replaceable>Pat</replaceable>, the
+            <replaceable>Statement</replaceable> is executed. The execution of
+            <replaceable>Statement</replaceable> should, depending on the
+            context, lead to one of the following:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Execution of a <literal>return</literal> statement that
+                returns a value from the enclosing function.</para>
+              </listitem>
+
+              <listitem>
+                <para>Execution of a <literal>fail</literal> statement: all
+                side effects of <replaceable>Statement</replaceable> are
+                undone and the PatternActionopair as a whole fails.</para>
+              </listitem>
+
+              <listitem>
+                <para>None of the above: execution continues with the
+                statement following the switch.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
         <title>Comprehensions</title>
 
         <para>We will use the familiar notation for <emphasis>list
@@ -2952,82 +3061,6 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
           </itemizedlist>
         </section>
       </section>
-    </section>
-
-    <section xml:id="section.statements">
-      <title>Statements</title>
-
-      <para></para>
-
-      <section>
-        <title>Assignment</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Switch statement</title>
-
-        <para>A <literal>switch</literal> statement is similar to a switch
-        statement in C or Java and has the form:<programlisting>switch ( <replaceable>Exp</replaceable> ) {
-case <replaceable>Rule</replaceable><subscript>1</subscript>;
-case <replaceable>Rule</replaceable><subscript>2</subscript>;
-...
-default: ...
-}</programlisting></para>
-
-        <para>The value of the expression <replaceable>Exp</replaceable> is
-        the subject term that will be matched by the successive cases in the
-        switch statement. This corresponds to the matching provided by the
-        left-hand sides of a set of rewrite rules. However, the switch
-        statement provides <emphasis role="bold">only</emphasis> matching at
-        the top level of the subject term and does not traverse it. The type
-        of the pattern in each case must be identical to the type of the
-        subject term (or be a subtype of it). If no case matches, the switch
-        acts as a dummy statement. There is no fall through from one case to
-        the next.</para>
-
-        <para>Each case contains a <replaceable>Rule</replaceable> that can
-        have one of the following forms:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><programlisting><literal><replaceable>Pat</replaceable> =&gt; <replaceable>Exp</replaceable></literal></programlisting>When
-            the subject matches <replaceable>Pat</replaceable>,the value of
-            Exp is returned from the enclosing function.<warning>
-                <para>Check this; how is this implemented?</para>
-              </warning></para>
-          </listitem>
-
-          <listitem>
-            <para><programlisting><replaceable>Pat</replaceable> : <replaceable>Statement</replaceable></programlisting></para>
-
-            <para>This is the most general case. When the subject matches
-            <replaceable>Pat</replaceable>, the
-            <replaceable>Statement</replaceable> is executed. The execution of
-            <replaceable>Statement</replaceable> should lead to one of the
-            following:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>Execution of a <literal>return</literal> statement that
-                returns a value from the enclosing function.</para>
-              </listitem>
-
-              <listitem>
-                <para>Execution of a <literal>fail</literal> statement: all
-                side effects of <replaceable>Statement</replaceable> are
-                undone and the next case is tried.</para>
-              </listitem>
-
-              <listitem>
-                <para>None of the above: execution continues with the
-                statement following the switch.</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
-      </section>
 
       <section>
         <title>Visit expression</title>
@@ -3064,17 +3097,23 @@ default: ...
         accommodate all these (and more) use cases and has the form:</para>
 
         <para><programlisting><replaceable>Strategy</replaceable> <keysym>visit</keysym> ( <replaceable>Exp</replaceable> ) {
-<keysym>case</keysym> <replaceable>Rule</replaceable><subscript>1</subscript>;
-<keysym>case</keysym> <replaceable>Rule</replaceable><subscript>2</subscript>;
+<keysym>case</keysym> <replaceable>PatternActionPair</replaceable><subscript>1</subscript>;
+<keysym>case</keysym> <replaceable>PatternActionPair</replaceable><subscript>2</subscript>;
 ...
 <keysym>default</keysym>: ...
-}</programlisting>Given a subject term (the current value of
-        <replaceable>Exp</replaceable>) and a list of cases (resembling cases
-        in a case statement or rewrite rules) it traverses the term. Depending
-        on the precise rules it may perform replacement (mimicking a
-        transformer), update local variables (mimicking an accumulator) or a
-        combination of these two (accumulating transformer). If <emphasis
-        role="bold">any</emphasis> of the cases contains an
+}</programlisting></para>
+
+        <para>Each case keyword may be followed by a type constraint of the
+        form <literal>[<replaceable>Type</replaceable>]</literal> that limits
+        the type of the values to which the case applies.</para>
+
+        <para>Given a subject term (the current value of
+        <replaceable>Exp</replaceable>) and a list of cases (consisting of
+        PatternActionPairs) it traverses the term. Depending on the precise
+        actions it may perform replacement (mimicking a transformer), update
+        local variables (mimicking an accumulator) or a combination of these
+        two (accumulating transformer). If <emphasis
+        role="bold">any</emphasis> of the actions contains an
         <literal>insert</literal> statement, the value of the visit expression
         is a new value that is obtained by successive insertions in the
         subject term by executing one or more cases. Otherwise, the original
@@ -3119,18 +3158,18 @@ default: ...
           </listitem>
         </itemizedlist>
 
-        <para>The execution of the cases is similar to the cases in a switch
-        statement with the following exceptions:</para>
+        <para>The execution of the cases has the following effect:</para>
 
         <itemizedlist>
           <listitem>
-            <para>Rules of the form <replaceable>Pat</replaceable> =&gt;
-            <replaceable>Exp</replaceable> insert their result in the subject
-            (instead of returning a value).</para>
+            <para>PatternActionPairs of the form
+            <replaceable>Pat</replaceable> =&gt;
+            <replaceable>Exp</replaceable> insert their result in the
+            subject.</para>
           </listitem>
 
           <listitem>
-            <para>For rules of the form
+            <para>For PatternActionPairs of the form
             <literal><replaceable>Pat</replaceable> :
             <replaceable>Statement</replaceable></literal>, executing
             <replaceable>Statement</replaceable> should lead to one of the
@@ -3139,13 +3178,13 @@ default: ...
             <itemizedlist>
               <listitem>
                 <para>Execution of an <literal>insert</literal> statement of
-                the form <literal>insert
-                <replaceable>Expression</replaceable></literal>. The value of
-                <replaceable>Expression</replaceable> replaces the subtree of
-                the subject that is currently being visited. Note that a copy
-                of the subject is created at the start of the visit statement
-                and all insertions are made in this copy. As a consequence,
-                insertions cannot influence matches later on.<note>
+                the form<programlisting><keysym>insert</keysym> <replaceable>Expr</replaceable></programlisting>The
+                value of <replaceable>Exp</replaceable> replaces the subtree
+                of the subject that is currently being visited. Note that a
+                copy of the subject is created at the start of the visit
+                statement and all insertions are made in this copy. As a
+                consequence, insertions cannot influence matches later
+                on.<note>
                     <para>An <literal>insert</literal> statement may only
                     occur inside a <literal>visit</literal> expression.</para>
                   </note></para>
@@ -3166,18 +3205,14 @@ default: ...
           </listitem>
         </itemizedlist>
 
-        <para>Each case keyword may be followed by a type constraint of the
-        form <literal>[<replaceable>Type</replaceable>]</literal> that limits
-        the type of the values to which the case applies.</para>
-
-        <para>The precise behaviour of the visit statement depends on the type
-        of the subject:</para>
+        <para>The precise behaviour of the visit expression depends on the
+        type of the subject:</para>
 
         <itemizedlist>
           <listitem>
             <para>For type <literal>node or ADT</literal>, all nodes of the
             tree are visited (in the order determined by the strategy).
-            concrete patterns and abstract patterns directly match tree nodes.
+            Concrete patterns and abstract patterns directly match tree nodes.
             Regular expression patterns match only values of type
             string.</para>
           </listitem>
@@ -3191,6 +3226,200 @@ default: ...
               </caution></para>
           </listitem>
         </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="section.statements">
+      <title>Statements</title>
+
+      <para><figure xml:id="figure.statement-parts">
+          <title>Various Statement Forms</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="statement-parts.png" scale="50"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>The various statements forms are summarized in <xref
+      linkend="figure.statement-parts" />. The more advanced statements are
+      show in a different color.</para>
+
+      <section>
+        <title>Assignment</title>
+
+        <para>The purpose of an assignment is to assign a new value to a
+        simple variable or to an element of a more complex data structure. The
+        general form is:<programlisting><replaceable>Assignable</replaceable> = <replaceable>Exp</replaceable></programlisting>An
+        assignable is either a single variable, (the <emphasis>base
+        variable</emphasis>), optionally followed by subscriptions or
+        projections. The assignment statement always results in assigning a
+        completely new value to the base variable. We have thus the following
+        three forms of assignment:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><programlisting><replaceable>Var</replaceable> = <replaceable>Exp</replaceable></programlisting>The
+            expression <replaceable>Exp</replaceable> is evaluated and its
+            value is assigned to the base
+            variable<replaceable>Var</replaceable>. </para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>Assignable</replaceable> <literal>[</literal> <replaceable>Exp</replaceable><subscript>1</subscript><literal>] =</literal> <replaceable>Exp</replaceable><subscript>2</subscript></programlisting>First
+            the value V of <replaceable>Assignable</replaceable> is
+            determined. Next the value of
+            <replaceable>Exp</replaceable><subscript>1</subscript>is used as
+            index in <replaceable>V</replaceable> and the value of
+            <replaceable><replaceable>Exp</replaceable><subscript>2</subscript></replaceable>
+            replaces the original value at that index position. The result is
+            a new value <replaceable>V</replaceable>' that is assigned to the
+            <replaceable>Assignable</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>Assignable</replaceable> <literal>.</literal> <replaceable>Name</replaceable> = <replaceable>Exp</replaceable></programlisting>The
+            value V of <replaceable>Assignable</replaceable> is determined and
+            should be of a type that has a field Name. The value of that field
+            is replaced in <replaceable>V</replaceable> by the value of
+            <replaceable>Exp</replaceable> resulting in a new value V' that is
+            assigned to Assignable.</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><literal>&lt;</literal> <replaceable>Assignable</replaceable><subscript>1</subscript><literal>,</literal> <replaceable>Assignable</replaceable><subscript>2</subscript><literal>,</literal> ..., <replaceable>Assignable</replaceable><subscript>n</subscript> <literal>&gt; =</literal> <replaceable>Exp</replaceable></programlisting></para>
+
+            <para>First the value <replaceable>Exp</replaceable> is determined
+            and should be a tuple of the form
+            <literal>&lt;</literal><replaceable>V</replaceable><subscript>1</subscript>,
+            <replaceable>V</replaceable><subscript>2</subscript>,
+            ...,<replaceable>
+            V</replaceable><subscript>n</subscript><literal>&gt;</literal>.
+            Next the assignments
+            <replaceable>Assignable</replaceable><subscript>i</subscript> =
+            <replaceable>V</replaceable><subscript>i </subscript>are performed
+            for 1 &lt;= i &lt;= n.</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>Assignable</replaceable> <literal>?</literal> <replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable> = <replaceable><replaceable>Exp</replaceable><subscript>2</subscript></replaceable></programlisting>First
+            the value of
+            <replaceable>Exp</replaceable><subscript>2</subscript> is
+            determined and if that is defined it is assigned to Assignable.
+            Otherwise, the value of
+            <replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable>is
+            assigned to <replaceable>Assignable</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><replaceable>Assignable</replaceable> <literal>@</literal> <replaceable>Name</replaceable> = <replaceable>Exp</replaceable></programlisting>The
+            value V of <replaceable>Assignable</replaceable> is determined and
+            should be of a type that has an annotation
+            <replaceable>Name</replaceable>. The value of that annotation is
+            replaced in <replaceable>V</replaceable> by the value of
+            <replaceable>Exp</replaceable> resulting in a new value V' that is
+            assigned to <replaceable>Assignable</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting><literal><replaceable>Name</replaceable> (</literal> <replaceable>Assignable</replaceable><subscript>1</subscript><literal>,</literal> <replaceable>Assignable</replaceable><subscript>2</subscript><literal>,</literal> ... <literal>) =</literal> <replaceable>Exp</replaceable></programlisting>First
+            the value <replaceable>Exp</replaceable> is determined and should
+            be a data value of the form
+            <literal><replaceable>Name</replaceable>(</literal><replaceable>V</replaceable><subscript>1</subscript>,
+            <replaceable>V</replaceable><subscript>2</subscript>,
+            ...,<replaceable>V</replaceable><subscript>n</subscript><literal>)</literal>.
+            Next the assignments
+            <replaceable>Assignable</replaceable><subscript>i</subscript> =
+            <replaceable>V</replaceable><subscript>i</subscript>are performed
+            for 1 &lt;= i &lt;= n.<note>
+                <para>Constructor assignable is not yet implemented.</para>
+              </note></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Here are some examples:<screen>rascal&gt; N = 3;
+3
+
+rascal&gt; N;
+3
+
+rascal&gt; L = [10,20,30];
+[10,20,30]
+
+rascal&gt; L[1] = 200;
+[10,200,30];
+
+rascal&gt; M = ("abc": 1, "def" : 2);
+("abc": 1, "def" : 2)
+
+rascal&gt; M["def"] = 3;
+("abc": 1, "def" : 3)
+
+rascal&gt; T = &lt;1, "abc", true&gt;;
+&lt;1, "abc", true&gt;
+
+rascal&gt; T[1] = "def";
+&lt;1, "def", true&gt;
+
+rascal&gt; data FREQ = wf(str word, int freq);
+done.
+
+rascal&gt; W = wf("rascal", 1000);
+wf("rascal", 1000)
+
+rascal&gt; W.freq = 100000;
+wf("rascal",100000)
+
+rascal&gt; &lt;A, B, C&gt; = &lt;"abc", 2.5, [1,2,3]&gt;;
+&lt;"abc", 2.5, [1,2,3]&gt;
+
+rascal&gt; A;
+"abc"
+
+rascal&gt; B;
+2.5
+
+rascal&gt;C;
+[1,2,3]
+
+rascal&gt; ** good V ? E1 = E2 example here **
+
+rascal&gt; anno str FREQ@color;
+done.
+
+rascal&gt; W @ color = "red";
+wf("rascal",100000)[@color="red"]
+
+rascal wf(S, I) = W;
+done.
+
+rascal&gt; S;
+"rascal"
+
+rascal&gt; I;
+100000</screen></para>
+      </section>
+
+      <section>
+        <title>Switch statement</title>
+
+        <para>A <literal>switch</literal> statement is similar to a switch
+        statement in C or Java and has the form:<programlisting>switch ( <replaceable>Exp</replaceable> ) {
+case <replaceable>PatternActionPair</replaceable><subscript>1</subscript>;
+case <replaceable>PatternActionPair</replaceable><subscript>2</subscript>;
+...
+default: ...
+}</programlisting></para>
+
+        <para>The value of the expression <replaceable>Exp</replaceable> is
+        the subject term that will be matched by the successive
+        PatternActionPairs (see <xref
+        linkend="section.pattern-action-pair" />) in the switch statement. The
+        switch statement provides <emphasis role="bold">only</emphasis>
+        matching at the top level of the subject term and does not traverse
+        it. The type of the pattern in each case must be identical to the type
+        of the subject term (or be a subtype of it). If no case matches, the
+        switch acts as a dummy statement. There is no fall through from one
+        case to the next.</para>
       </section>
 
       <section xml:id="section.try-catch">
