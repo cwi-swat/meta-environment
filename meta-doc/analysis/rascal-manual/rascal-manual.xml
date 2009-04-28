@@ -271,36 +271,35 @@
       </section>
 
       <section>
-        <title>Generators</title>
+        <title>Enumerators</title>
 
-        <para>Generators enumerate the values in a given (finite) domain, be
+        <para>Enumerators enumerate the values in a given (finite) domain, be
         it the elements in a list, the substrings of a string, or all the
         nodes in a tree. Each value that is enumerated is first matched
         against a pattern before it can possibly contribute to the result of
-        the generator. Examples are:</para>
+        the enumerator. Examples are:</para>
 
         <para><programlisting>int x &lt;- { 1, 3, 5, 7, 11 }
 int x &lt;- [ 1 .. 10 ]
 asgStat(Id name, _) &lt;- P</programlisting></para>
 
-        <para>The first two generate the integer elements of a set of
-        integers, respectively, a range of integers. The third generator
-        traverses the complete program <literal>P</literal> (that is assumed
-        to have a <literal>PROGRAM</literal> as value) and only yields
-        statements that match the assignment pattern. Note the use of an
-        anonymous variable at the <literal>EXP</literal> position in the
-        pattern.</para>
+        <para>The first two produce the integer elements of a set of integers,
+        respectively, a range of integers. The third enumerator traverses the
+        complete program <literal>P</literal> (that is assumed to have a
+        <literal>PROGRAM</literal> as value) and only yields statements that
+        match the assignment pattern. Note the use of an anonymous variable at
+        the <literal>EXP</literal> position in the pattern.</para>
       </section>
 
       <section>
-        <title>Comprehensions and Control Structures</title>
+        <title>Comprehensions</title>
 
         <para>Rascal generalizes comprehensions in various ways.
         Comprehensions exist for lists, sets and maps. A comprehension
         consists of an expression that determines the successive elements to
-        be included in the result and a list of generators and boolean
-        expressions. The generators enumerate values and the boolean
-        expressions filter them. A standard example is</para>
+        be included in the result and a list of enumerators and tests (boolean
+        expressions). The enumerators produce values and the tests filter
+        them. A standard example is</para>
 
         <para><programlisting>{ x * x | int x &lt;- [1 .. 10], x % 3 == 0 }</programlisting></para>
 
@@ -312,9 +311,14 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
 
         <para>which returns a list of all identifiers that occur on the
         lefthand side of assignment statements in program
-        <literal>P</literal>. Combinations of generators and boolean
-        expressions also drive the control structures. For instance,
-        <programlisting>for(asgStat(Id name, _) &lt;- P, size(Id) &gt; 10){
+        <literal>P</literal>.</para>
+      </section>
+
+      <section>
+        <title>Control structures</title>
+
+        <para>Combinations of generators and boolean expressions also drive
+        the control structures. For instance, <programlisting>for(asgStat(Id name, _) &lt;- P, size(Id) &gt; 10){
     println(Id);
 }</programlisting></para>
 
@@ -323,26 +327,25 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
       </section>
 
       <section>
-        <title>Constraint solving</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Switching and Visiting</title>
+        <title>Switching</title>
 
         <para>The switch statement as known from C and Java is generalized:
         the subject value to switch on may be an arbitrary value and the cases
         are arbitrary patterns. When a match fails, all its side-effects are
         undone and when it succeeds the statements associated with that case
-        are executed. Visiting the elements of a datastructure is one of the
-        most common operations in our domain and we give it first class
-        support by way of visit expressions that resemble the switch
-        statement. A visit expression consists of an expression that may yield
-        an arbitrarily complex subject value and a number of cases. All the
-        elements of the subject are visited and when one of the cases matches
-        the statements associated with that case are executed. These cases
-        may:</para>
+        are executed.</para>
+      </section>
+
+      <section>
+        <title>Visiting</title>
+
+        <para>Visiting the elements of a datastructure is one of the most
+        common operations in our domain and we give it first class support by
+        way of visit expressions that resemble the switch statement. A visit
+        expression consists of an expression that may yield an arbitrarily
+        complex subject value and a number of cases. All the elements of the
+        subject are visited and when one of the cases matches the statements
+        associated with that case are executed. These cases may:</para>
 
         <itemizedlist>
           <listitem>
@@ -369,7 +372,7 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
       </section>
 
       <section>
-        <title>Functions and Rewrite Rules</title>
+        <title>Functions</title>
 
         <para>Functions are explicitly declared and are fully typed. Here is
         an example of a function that counts the number of assignment
@@ -383,10 +386,22 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
     }
     return n;
 }</programlisting></para>
+      </section>
+
+      <section>
+        <title>Rewrite Rules</title>
 
         <para>Rewrite rules are the only implicit control mechanism in the
         language and are used to maintain invariants during
-        computations.</para>
+        computations.<caution>
+            <para>Add example</para>
+          </caution></para>
+      </section>
+
+      <section>
+        <title>Constraint solving</title>
+
+        <para></para>
       </section>
 
       <section>
@@ -397,10 +412,9 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
         type casts as in Java and there are therefore less opportunities for
         run-time errors. The language provides higher-order, parametric,
         polymorphism. A type aliasing mechanism allows documenting specific
-        uses of a type. Builtin operators are heavily overloaded: <literal>1 +
-        [2,3]</literal> , <literal>[1, 2] + 3</literal>, and <literal>[1, 2] +
-        [3]</literal> all give the same result <literal>[1,2,3]</literal>, but
-        <literal>1 + ["1"]</literal> leads to a type error.</para>
+        uses of a type. Builtin operators are heavily overloaded. For
+        instance, the operator + is used for addition on integers and reals
+        but also for list conctatenation, set union etc.</para>
       </section>
 
       <section>
@@ -466,7 +480,7 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
 
       <para>To illustrate this process consider the workflow in <xref
       linkend="figure.calls-workflow" />. First we have to extract the calls
-      from the source code. Rascal is very at this, but to simplify this
+      from the source code. Rascal is very good at this, but to simplify this
       examples we assume that this call graph has already been extracted. Also
       keep in mind that a real call graph of a real application will contain
       thousands and thousands of calls. Drawing it in the way we do later on
@@ -549,7 +563,7 @@ done.</screen>next we describe a new variable and calculate the number of
       </section>
 
       <section>
-        <title>How many procedures contains it?</title>
+        <title>How many procedures are contained in it?</title>
 
         <para>We get the number of procedures by determining which names occur
         in the tuples in the relation <literal>Calls</literal> and then
@@ -732,8 +746,8 @@ rascal&gt; set[proc] entryPoints = top(Calls);
           <title>Boolean</title>
 
           <para>The Booleans are represented by the type
-          <literal>bool</literal> and have two values: <literal>true</literal>
-          and <literal>false</literal>.</para>
+          <literal>bool</literal> whuch has two values:
+          <literal>true</literal> and <literal>false</literal>.</para>
         </formalpara>
 
         <formalpara>
@@ -759,8 +773,8 @@ rascal&gt; set[proc] entryPoints = top(Calls);
 
           <para>The string values are represented by the type
           <literal>str</literal> and consist of character sequences surrounded
-          by double quotes. e.g., <literal>"a"</literal> or <literal>"a\ long\
-          string"</literal>.</para>
+          by double quotes. e.g., <literal>"a"</literal> or
+          <literal>"a\nlong\tstring"</literal>.</para>
         </formalpara>
 
         <para>String literals permit <emphasis>interpolation</emphasis> of
@@ -779,9 +793,8 @@ rascal&gt; set[proc] entryPoints = top(Calls);
           <literal>loc</literal> and serve as text coordinates in a specific
           source file. It is very handy to associate a source code location
           which extracted facts. Locations should <emphasis>always</emphasis>
-          be generated automatically but for the curious here is an example
-          how they look like:
-          <literal>loc(file:/home/paulk/pico.trm?offset=0&amp;length=1&amp;begin=2,3&amp;end=4,5)</literal></para>
+          be generated automatically but for the curious here is an example:
+          <literal>loc(file:///home/paulk/pico.trm?offset=0&amp;length=1&amp;begin=2,3&amp;end=4,5)</literal></para>
         </formalpara>
 
         <para>Source locations have the following syntax:</para>
@@ -854,7 +867,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
 
         <itemizedlist>
           <listitem>
-            <para>All elements have the same type.</para>
+            <para>All elements have the same static type.</para>
           </listitem>
 
           <listitem>
@@ -956,7 +969,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
 
         <itemizedlist>
           <listitem>
-            <para>All elements have the same type.</para>
+            <para>All elements have the same static type.</para>
           </listitem>
 
           <listitem>
@@ -1033,7 +1046,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
 
         <itemizedlist>
           <listitem>
-            <para>Key and value (may) have different types.</para>
+            <para>Key and value may have different static types.</para>
           </listitem>
 
           <listitem>
@@ -1047,13 +1060,13 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <replaceable>T</replaceable><literal><subscript>1</subscript> and
         <replaceable>T</replaceable><subscript>2</subscript></literal> are
         arbitrary types. Examples are <literal>map[int,int]</literal>, and
-        <literal>map[str,int]</literal>. Sets are denoted by a list of pairs,
+        <literal>map[str,int]</literal>. Maps are denoted by a list of pairs,
         separated by comma's and enclosed in parentheses as in
         <literal>(</literal><replaceable>K</replaceable><subscript>1</subscript><literal>:</literal>
         <replaceable>V</replaceable><subscript>1</subscript><literal>,
         ...,</literal>
         <replaceable>K</replaceable><subscript>n</subscript><literal>:</literal>
-        <replaceable>V</replaceable><subscript>n</subscript><literal>})</literal>,
+        <replaceable>V</replaceable><subscript>n</subscript><literal>)</literal>,
         where the
         <replaceable>K</replaceable><subscript><replaceable>n</replaceable></subscript>
         (1 &lt;= <replaceable>i</replaceable>&lt;=
@@ -1111,12 +1124,12 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <itemizedlist>
           <listitem>
             <para><literal>&lt;1, 2&gt;</literal> is of type
-            <literal>tuple[int, int&gt;]</literal>,</para>
+            <literal>tuple[int, int]</literal>,</para>
           </listitem>
 
           <listitem>
             <para><literal>&lt;1, 2, 3&gt;</literal> is of type
-            <literal>tuple[int, int, int&gt;]</literal>,</para>
+            <literal>tuple[int, int, int]</literal>,</para>
           </listitem>
 
           <listitem>
@@ -1134,7 +1147,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
 
         <itemizedlist>
           <listitem>
-            <para>All elements have the same tuple type.</para>
+            <para>All elements have the same static tuple type.</para>
           </listitem>
         </itemizedlist>
 
@@ -1194,7 +1207,8 @@ rascal&gt; set[proc] entryPoints = top(Calls);
           </listitem>
 
           <listitem>
-            <para><literal>{{"a", 1, "b"}, {"c", 2, "d"}}</literal> is of type
+            <para><literal>{&lt;"a", 1, "b"&gt;, &lt;"c", 2,
+            "d"&gt;}</literal> is of type
             <literal>rel[str,int,str]</literal>.</para>
           </listitem>
         </itemizedlist>
@@ -1236,7 +1250,7 @@ alias Frequency = int;</programlisting>
       </section>
 
       <section xml:id="section.abstract-data-type">
-        <title>Abstract Data Type</title>
+        <title>Abstract Data Type (ADT)</title>
 
         <para>In ordinary programming languages record types or classes exist
         to introduce a new type name for a collection of related, named,
@@ -1250,9 +1264,10 @@ alias Frequency = int;</programlisting>
         <replaceable>Pat</replaceable><subscript>1</subscript>,
         <replaceable>Pat</replaceable><subscript>2</subscript>, ... are prefix
         patterns describing the variants of the datatype. For instance,
-        <programlisting>data Bool = btrue | bfalse | band(Bool L, Bool R)  | bor(Bool L, Bool R);  </programlisting>defines
+        <programlisting>data Bool = T | F | conj(Bool L, Bool R)  | disj(Bool L, Bool R);  </programlisting>defines
         the datatype <literal>Bool</literal> that contains various constants
-        and constructor functions.</para>
+        (<literal>T</literal> and <literal>F</literal>) and constructor
+        functions <literal>conj</literal> and <literal>disj</literal>.</para>
       </section>
 
       <section>
@@ -1346,7 +1361,13 @@ Declaration</replaceable><subscript>1</subscript>;
         </itemizedlist>
 
         <para>The module name <replaceable>Name</replaceable> will be used
-        when the current module is imported in another module.</para>
+        when the current module is imported in another module. A module is
+        usually a qualified name of the form:<programlisting><replaceable>Name</replaceable><subscript>1</subscript><literal>::</literal><replaceable>Name</replaceable><subscript>2</subscript><literal>::</literal> ... <literal>::</literal><replaceable>Name</replaceable><subscript>n</subscript></programlisting></para>
+
+        <para>which corresponds to a path relative to the root of the current
+        workspace.<caution>
+            <para>Explain this better.</para>
+          </caution></para>
 
         <para>The constituents of a module are also shown in <xref
         linkend="figure.parts-module" />. The more advanced features are shown
@@ -1367,7 +1388,9 @@ Declaration</replaceable><subscript>1</subscript>;
         </itemizedlist>
 
         <para>The only entities that are visible outside the module, are the
-        public entities declared in the module itself.<figure
+        public entities declared in the module itself. The visible entities of
+        an imported may be explicitly qualified with their module
+        name:<programlisting><replaceable>Module</replaceable><literal>::</literal><replaceable>Name</replaceable></programlisting><figure
             xml:id="figure.parts-module">
             <title>Constituents of a Module</title>
 
@@ -1376,18 +1399,16 @@ Declaration</replaceable><subscript>1</subscript>;
                 <imagedata fileref="module-parts.png" scale="50"></imagedata>
               </imageobject>
             </mediaobject>
-          </figure><caution>
-            <para>Describe qualified names.</para>
-          </caution></para>
+          </figure></para>
       </section>
 
       <section xml:id="section.import">
         <title>Import</title>
 
-        <para>An import has the form:<programlisting><keysym>import</keysym> <literal><replaceable>Name</replaceable>;</literal></programlisting>and
+        <para>An import has the form:<programlisting><keysym>import</keysym> <literal><replaceable>QualifiedName</replaceable>;</literal></programlisting>and
         has as effect that all public entities declared in module
-        <replaceable>Name</replaceable> are made available to the importing
-        module.</para>
+        <replaceable>QualifiedName</replaceable> are made available to the
+        importing module.</para>
       </section>
 
       <section xml:id="section.function">
@@ -1489,12 +1510,13 @@ rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
         </itemizedlist>
 
         <para>As a convenience, also declarations without an initialization
-        expression are permitted and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
+        expression are permitted inside functions (but not at the module
+        level) and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
         only introduce the variable <replaceable>Var</replaceable>. When a
         variable is declared, it has as scope the nearest enclosing block (see
         <xref linkend="section.block" />).</para>
 
-        <para>Rascal provides <emphasis>convenience typing</emphasis>, which
+        <para>Rascal provides <emphasis>local type inference</emphasis>, which
         allows the implicit declaration for variables that are used locally in
         functions. The following rules apply:</para>
 
@@ -1510,13 +1532,21 @@ rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
           </listitem>
 
           <listitem>
-            <para>All uses of an implicitly declared variable must be type
-            compatible.</para>
+            <para>If a variable is implicitly declared in different execution
+            path of a function, all these implicit declarations should result
+            in the same type.</para>
+          </listitem>
+
+          <listitem>
+            <para>All uses of an implicitly declared variable must be
+            compatible with its implicit type.</para>
           </listitem>
         </itemizedlist>
 
         <para>Examples.<screen>rascal&gt;int max = 100;
 int: 100
+rascal&gt; min = 0;
+int : 0
 rascal&gt;<keysym>rel</keysym>[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
                            &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}
 rel[str,int]: {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
@@ -1633,13 +1663,13 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
         <para>Rewrite rules, on the other hand, operate only on nodes and
         abstract datatypes, they are implicitly applied when a new value (we
         refer to this as the <emphasis>subject value</emphasis>) is
-        constructed and their scope is the whole Rascal program. Rewrite rules
-        are applied to the subject value in a bottom-up fashion. As a result,
-        the subject value may be changed. This process is repeated as long as
-        there are rules that can be applied to the current subject value.
-        Technically, this is called <emphasis>innermost rewriting</emphasis>.
-        When done, the result of rewriting the original subject value is used
-        instead of that original value.<caution>
+        constructed. The scope of rewrite rules is the whole Rascal program.
+        Rewrite rules are applied to the subject value in a bottom-up fashion.
+        As a result, the subject value may be changed. This process is
+        repeated as long as there are rules that can be applied to the current
+        subject value. Technically, this is called <emphasis>innermost
+        rewriting</emphasis>. When done, the result of rewriting the original
+        subject value is used instead of that original value.<caution>
             <para>There is some overlap with the description of switch and
             visit here.</para>
           </caution></para>
@@ -1649,8 +1679,8 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
         <para>where <replaceable>Name</replaceable> is the name of the rule
         and <replaceable>PatternActionPair</replaceable> is the body of the
         rule consisting of a pattern and an associated action (see <xref
-        linkend="section.pattern-action-pair" />). In addition to this, a rule
-        can be <emphasis>conditional</emphasis> and have the following
+        linkend="section.pattern-action" />). In addition to this, a rule can
+        be <emphasis>conditional</emphasis> and have the following
         form:<programlisting><replaceable>rule Name Pat</replaceable> <literal>=&gt;</literal> <replaceable>Exp</replaceable> <keysym>when</keysym> <replaceable>Exp</replaceable><subscript>1</subscript>, <replaceable>Exp</replaceable><subscript>2</subscript>, ...</programlisting></para>
 
         <para>When a subtree of the subject matches
@@ -1688,7 +1718,8 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
               <listitem>
                 <para>Execution of an <literal>insert</literal> statement (see
                 <xref linkend="section.insert" />) that replaces the current
-                subtree.</para>
+                subtree and essentially producing the same effect as
+                PatternReplacement.</para>
               </listitem>
 
               <listitem>
@@ -1787,6 +1818,11 @@ bfalse</screen></para>
           applied to the arguments; the evaluation order of the arguments
           depends on the operator. The result returned by the operator is used
           as value of the operator expression.</para>
+        </listitem>
+
+        <listitem>
+          <para>A visit expression, see <xref
+          linkend="section.visit" />.</para>
         </listitem>
       </itemizedlist>
 
@@ -1907,7 +1943,7 @@ bfalse</screen></para>
                   value. On string, list, tuple return the element with given
                   index; for map return the value associated with
                   <replaceable><replaceable>Exp</replaceable><subscript>2</subscript>
-                  </replaceable>'s value</entry>
+                  </replaceable>'s value. On relation ...</entry>
                 </row>
 
                 <row>
@@ -1942,10 +1978,10 @@ bfalse</screen></para>
                   <entry><replaceable>Exp</replaceable> <literal>@</literal>
                   <replaceable>Name</replaceable></entry>
 
-                  <entry>Attribute selection</entry>
+                  <entry>Annotation selection</entry>
 
-                  <entry>value of attribute <replaceable>Name</replaceable> of
-                  <replaceable>Exp</replaceable>'s value</entry>
+                  <entry>Value of annotation <replaceable>Name</replaceable>
+                  of <replaceable>Exp</replaceable>'s value</entry>
                 </row>
 
                 <row>
@@ -1954,10 +1990,10 @@ bfalse</screen></para>
                   <literal>=</literal><replaceable>
                   Exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
 
-                  <entry>Attribute replacement</entry>
+                  <entry>Annotation replacement</entry>
 
                   <entry>Assign value of<replaceable>
-                  Exp</replaceable><subscript>2</subscript> to attribute
+                  Exp</replaceable><subscript>2</subscript> to annotation
                   <replaceable>Name</replaceable> of
                   <replaceable><replaceable>Exp</replaceable><subscript>1</subscript></replaceable>'s
                   value</entry>
@@ -2206,7 +2242,7 @@ bfalse</screen></para>
           </listitem>
 
           <listitem>
-            <para>Tests in while, do, for, one, all statements.</para>
+            <para>Tests in if, while, do, for, one, all statements.</para>
           </listitem>
         </itemizedlist>
 
@@ -2476,8 +2512,8 @@ bfalse</screen></para>
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>Regulars patterns</emphasis> to do string matching
-            with regular expressions, see <xref
+            <para><emphasis>Regular expression patterns</emphasis> to do
+            string matching with regular expressions, see <xref
             linkend="section.regular-patterns" />.</para>
           </listitem>
 
@@ -2488,14 +2524,14 @@ bfalse</screen></para>
           </listitem>
 
           <listitem>
-            <para><emphasis>Concrete patterns</emphasis> to match syntax trees
-            that are the result of parsing, see <xref
+            <para><emphasis>Concrete syntax patterns</emphasis> to match
+            syntax trees that are the result of parsing, see <xref
             linkend="section.concrete-patterns" />.</para>
           </listitem>
         </itemizedlist>
 
         <section xml:id="section.regular-patterns">
-          <title>Regular Patterns</title>
+          <title>Regular Expression Patterns</title>
 
           <para>Regular expression patterns are ordinary regular expressions
           that are used to match a string value and to decompose it in parts
@@ -2712,6 +2748,16 @@ bfalse</screen></para>
               <replaceable>Pat</replaceable> matches. The matched value is
               assigned to <replaceable>Var</replaceable>.</para>
             </listitem>
+
+            <listitem>
+              <para>A type constrained pattern<programlisting><literal>[</literal><replaceable>Type</replaceable><literal>]</literal> <replaceable>Pat</replaceable></programlisting></para>
+
+              <para>matches provided that the subject has type
+              <replaceable>Type</replaceable> and
+              <replaceable>Pat</replaceable> matches.<caution>
+                  <para>Not yet implemented.</para>
+                </caution></para>
+            </listitem>
           </itemizedlist>
 
           <note>
@@ -2720,7 +2766,7 @@ bfalse</screen></para>
         </section>
 
         <section xml:id="section.concrete-patterns">
-          <title>Concrete patterns</title>
+          <title>Concrete Syntax Patterns</title>
 
           <note>
             <para>Concrete patterns are not yet implemented.</para>
@@ -2807,17 +2853,17 @@ bfalse</screen></para>
         </section>
       </section>
 
-      <section>
-        <title>PatternActionPair</title>
+      <section xml:id="section.pattern-action">
+        <title>Pattern-Action</title>
 
         <para>Patterns can be used in various contexts, but a common context
-        is a <replaceable>PatternActionPair</replaceable>, which in its turn,
-        may be used in a visit expression (<xref linkend="section.visit" />),
-        a switch statement (<xref linkend="section.switch" />), or a rewrite
+        is a <replaceable>Pattern-Action</replaceable>, which in its turn, may
+        be used in a visit expression (<xref linkend="section.visit" />), a
+        switch statement (<xref linkend="section.switch" />), or a rewrite
         rule (<xref linkend="section.rewrite-rule" />).</para>
 
-        <para>A <replaceable>PatternActionPair</replaceable> can have one of
-        the following forms:</para>
+        <para>A <replaceable>Pattern-Action </replaceable>can have one of the
+        following forms:</para>
 
         <itemizedlist>
           <listitem>
@@ -3062,19 +3108,16 @@ bfalse</screen></para>
         </section>
       </section>
 
-      <section>
+      <section xml:id="section.visit">
         <title>Visit expression</title>
 
-        <para><caution>
-            <para>Technically, visit is an expression and not a statement;
-            Move it from here?</para>
-          </caution>Visiting the nodes in a tree is a very common task in the
-        EASY domain. In many cases (but certainly not all) the tree is a
-        syntax tree of some source code file and the nodes correspond to
-        expressions or statements. Computing metrics or refactoring are
-        examples of tasks that require a tree visit. In object-oriented
-        programming, the <emphasis>visitor pattern</emphasis> is in common use
-        for this. There are three frequently occurring scenarios:</para>
+        <para>Visiting the nodes in a tree is a very common task in the EASY
+        domain. In many cases (but certainly not all) the tree is a syntax
+        tree of some source code file and the nodes correspond to expressions
+        or statements. Computing metrics or refactoring are examples of tasks
+        that require a tree visit. In object-oriented programming, the
+        <emphasis>visitor pattern</emphasis> is in common use for this. There
+        are three frequently occurring scenarios:</para>
 
         <itemizedlist>
           <listitem>
@@ -3097,27 +3140,23 @@ bfalse</screen></para>
         accommodate all these (and more) use cases and has the form:</para>
 
         <para><programlisting><replaceable>Strategy</replaceable> <keysym>visit</keysym> ( <replaceable>Exp</replaceable> ) {
-<keysym>case</keysym> <replaceable>PatternActionPair</replaceable><subscript>1</subscript>;
-<keysym>case</keysym> <replaceable>PatternActionPair</replaceable><subscript>2</subscript>;
+<keysym>case</keysym> <replaceable>Pattern-Action</replaceable><subscript>1</subscript>;
+<keysym>case</keysym> <replaceable>Pattern-Action</replaceable><subscript>2</subscript>;
 ...
 <keysym>default</keysym>: ...
 }</programlisting></para>
 
-        <para>Each case keyword may be followed by a type constraint of the
-        form <literal>[<replaceable>Type</replaceable>]</literal> that limits
-        the type of the values to which the case applies.</para>
-
         <para>Given a subject term (the current value of
         <replaceable>Exp</replaceable>) and a list of cases (consisting of
-        PatternActionPairs) it traverses the term. Depending on the precise
-        actions it may perform replacement (mimicking a transformer), update
-        local variables (mimicking an accumulator) or a combination of these
-        two (accumulating transformer). If <emphasis
-        role="bold">any</emphasis> of the actions contains an
-        <literal>insert</literal> statement, the value of the visit expression
-        is a new value that is obtained by successive insertions in the
-        subject term by executing one or more cases. Otherwise, the original
-        value of the subject term is returned.</para>
+        Pattern-Actions, see <xref linkend="section.pattern-action" />) it
+        traverses the term. Depending on the precise actions it may perform
+        replacement (mimicking a transformer), update local variables
+        (mimicking an accumulator) or a combination of these two (accumulating
+        transformer). If <emphasis role="bold">any</emphasis> of the actions
+        contains an <literal>insert</literal> statement, the value of the
+        visit expression is a new value that is obtained by successive
+        insertions in the subject term by executing one or more cases.
+        Otherwise, the original value of the subject term is returned.</para>
 
         <para>The visit expression is optionally preceeded by one of the
         following strategy indications that determine the traversal order of
@@ -3162,14 +3201,13 @@ bfalse</screen></para>
 
         <itemizedlist>
           <listitem>
-            <para>PatternActionPairs of the form
-            <replaceable>Pat</replaceable> =&gt;
-            <replaceable>Exp</replaceable> insert their result in the
+            <para>Pattern-Actions of the form <replaceable>Pat</replaceable>
+            =&gt; <replaceable>Exp</replaceable> insert their result in the
             subject.</para>
           </listitem>
 
           <listitem>
-            <para>For PatternActionPairs of the form
+            <para>For Pattern-Actions of the form
             <literal><replaceable>Pat</replaceable> :
             <replaceable>Statement</replaceable></literal>, executing
             <replaceable>Statement</replaceable> should lead to one of the
@@ -3227,6 +3265,30 @@ bfalse</screen></para>
           </listitem>
         </itemizedlist>
       </section>
+
+      <section>
+        <title>One</title>
+
+        <para><programlisting><keysym>one</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal></programlisting>The
+        <keysym>one</keysym> expression yields true when one combination of
+        values of <replaceable>Exp</replaceable><subscript>i</subscript> is
+        true.<caution>
+            <para>The status of one is under discussion.</para>
+          </caution></para>
+      </section>
+
+      <section>
+        <title>All</title>
+
+        <para><programlisting><keysym>all</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> </programlisting>The
+        all expression yields true when all combinations of values of
+        <replaceable>Exp</replaceable><subscript>i</subscript> are
+        true.</para>
+
+        <caution>
+          <para>The status of all is under discussion.</para>
+        </caution>
+      </section>
     </section>
 
     <section xml:id="section.statements">
@@ -3245,7 +3307,73 @@ bfalse</screen></para>
       show in a different color.</para>
 
       <section>
-        <title>Assignment</title>
+        <title>If Statement</title>
+
+        <para>The if-statement is completely standard and comes in an if-then
+        and an if-then-else variant:<programlisting><keysym>if</keysym> <literal>( <replaceable>Bool</replaceable> ) <replaceable>Statement</replaceable></literal></programlisting><programlisting><keysym>if</keysym><literal> ( <replaceable>Bool</replaceable> ) <replaceable>Statement</replaceable><subscript>1</subscript> </literal><keysym>else</keysym><literal> <replaceable>Statement</replaceable><subscript>2</subscript></literal></programlisting></para>
+
+        <para>In both cases the test <replaceable>Bool</replaceable> is
+        evaluated and its outcome determines the statement to be executed.
+        Recall from <xref linkend="section.expressions-boolean" /> that
+        boolean expression maybe multi-valued. In this case only the first
+        true value (if any) is used.</para>
+      </section>
+
+      <section>
+        <title>While Statement</title>
+
+        <para>The while-statement is completely standard:<programlisting><keysym>while</keysym><literal> ( <replaceable>Bool</replaceable> ) <replaceable>Statement</replaceable></literal></programlisting>The
+        test <replaceable>Bool</replaceable> is evaluated repeatedly and
+        <replaceable>Statement</replaceable> is executed when the test is
+        true. Execution ends the first time that the test yields false. The
+        test <replaceable>Bool</replaceable> is executed anew in each
+        repetition and only the first true value (if any) is used.</para>
+      </section>
+
+      <section>
+        <title>Do Statement</title>
+
+        <para>The do-while-statement is completely standard:<programlisting><keysym>do</keysym> <replaceable>Statement</replaceable> <keysym>while</keysym> <literal>( <replaceable>Bool</replaceable> ) </literal></programlisting>Statement
+        is executed repeatedly, as long as the test Bool yields true. The test
+        <replaceable>Bool</replaceable> is executed anew in each repetition
+        and only the first true value (if any) is used.</para>
+      </section>
+
+      <section>
+        <title>For Statement</title>
+
+        <para>The for-statement is more exciting:<programlisting><keysym>for</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> <replaceable>Statement</replaceable></programlisting>It
+        generates executes Statement for all possible combinations of values
+        of the expressions
+        <replaceable>Exp</replaceable><subscript>i</subscript>. Note that is
+        one of the expressions is a boolean expression, we do try all its
+        possible values.</para>
+      </section>
+
+      <section xml:id="section.switch">
+        <title>Switch Statement</title>
+
+        <para>A <literal>switch</literal> statement is similar to a switch
+        statement in C or Java and has the form:<programlisting>switch ( <replaceable>Exp</replaceable> ) {
+case <replaceable>Pattern-Action</replaceable><subscript>1</subscript>;
+case <replaceable>Pattern-Action</replaceable><subscript>2</subscript>;
+...
+default: ...
+}</programlisting></para>
+
+        <para>The value of the expression <replaceable>Exp</replaceable> is
+        the subject term that will be matched by the successive
+        Pattern-Actions (see <xref linkend="section.pattern-action" />) in the
+        switch statement. The switch statement provides <emphasis
+        role="bold">only</emphasis> matching at the top level of the subject
+        term and does not traverse it. The type of the pattern in each case
+        must be identical to the type of the subject term (or be a subtype of
+        it). If no case matches, the switch acts as a dummy statement. There
+        is no fall through from one case to the next.</para>
+      </section>
+
+      <section>
+        <title>Assignment Statement</title>
 
         <para>The purpose of an assignment is to assign a new value to a
         simple variable or to an element of a more complex data structure. The
@@ -3261,7 +3389,7 @@ bfalse</screen></para>
             <para><programlisting><replaceable>Var</replaceable> = <replaceable>Exp</replaceable></programlisting>The
             expression <replaceable>Exp</replaceable> is evaluated and its
             value is assigned to the base
-            variable<replaceable>Var</replaceable>. </para>
+            variable<replaceable>Var</replaceable>.</para>
           </listitem>
 
           <listitem>
@@ -3399,61 +3527,189 @@ rascal&gt; I;
 100000</screen></para>
       </section>
 
-      <section>
-        <title>Switch statement</title>
+      <section xml:id="section.return">
+        <title>Return Statement</title>
 
-        <para>A <literal>switch</literal> statement is similar to a switch
-        statement in C or Java and has the form:<programlisting>switch ( <replaceable>Exp</replaceable> ) {
-case <replaceable>PatternActionPair</replaceable><subscript>1</subscript>;
-case <replaceable>PatternActionPair</replaceable><subscript>2</subscript>;
-...
-default: ...
-}</programlisting></para>
+        <para>A return statement has either the form<programlisting><keysym>return</keysym>;</programlisting>or<programlisting><keysym>return</keysym> <replaceable>Exp</replaceable>;</programlisting></para>
 
-        <para>The value of the expression <replaceable>Exp</replaceable> is
-        the subject term that will be matched by the successive
-        PatternActionPairs (see <xref
-        linkend="section.pattern-action-pair" />) in the switch statement. The
-        switch statement provides <emphasis role="bold">only</emphasis>
-        matching at the top level of the subject term and does not traverse
-        it. The type of the pattern in each case must be identical to the type
-        of the subject term (or be a subtype of it). If no case matches, the
-        switch acts as a dummy statement. There is no fall through from one
-        case to the next.</para>
+        <para>both end the execution of the current function. The first form
+        applies to functions with <literal>void</literal> as return type. The
+        second form applies to non-void functions and returns the value of
+        <replaceable>Exp</replaceable> as result of the function. The
+        following rules apply:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The static type of <replaceable>Exp</replaceable> should be
+            compatible with the declared return type of the function in which
+            the return statement occurs.</para>
+          </listitem>
+
+          <listitem>
+            <para>In each function with a return type that is not
+            <literal>void</literal>, every possible execution path through the
+            body of the function end in a return statement.</para>
+          </listitem>
+
+          <listitem>
+            <para>In each function with a return type that is
+            <literal>void</literal>, a return statement is implicitly assumed
+            at the end of each execution path through the function
+            body.</para>
+          </listitem>
+        </itemizedlist>
       </section>
 
       <section xml:id="section.try-catch">
-        <title>Try Catch</title>
+        <title>Try Catch Statement</title>
 
-        <para></para>
+        <para>A try catch statement has the form<programlisting>try
+   Statement<subscript>1</subscript>;
+catch <replaceable>Pattern-Action</replaceable><subscript>1</subscript>;
+catch <replaceable>Pattern-Action</replaceable><subscript>2</subscript>;
+...
+catch: <replaceable>Statement</replaceable><subscript>2</subscript>;
+finally: <replaceable>Statement</replaceable><subscript>3</subscript>;</programlisting>and
+        has as purpose to catch any exceptions that are raised during the
+        execution of
+        <replaceable>Statement</replaceable><subscript>1</subscript>. These
+        exceptions may caused by:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The execution of an explicit throw statement, see <xref
+            linkend="section.throw" />.</para>
+          </listitem>
+
+          <listitem>
+            <para>The Rascal system that discover an abnormal condition, e.g.,
+            an out of bounds error when accessing a list element.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Note that all elements of the try catch statement are optional
+        but that at least one has to be present. Their meaning is as
+        follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>If a pattern of some
+            <replaceable>Pattern-Action</replaceable><subscript>i</subscript>
+            matches, the corresponding action is executed.</para>
+          </listitem>
+
+          <listitem>
+            <para>Otherwise,
+            <replaceable>Statement</replaceable><subscript>2</subscript> is
+            executed (when present).</para>
+          </listitem>
+
+          <listitem>
+            <para>Before leaving the try catch statement
+            <replaceable>Statement</replaceable><subscript>3</subscript> is
+            always executed (when present).</para>
+          </listitem>
+        </itemizedlist>
       </section>
 
       <section xml:id="section.throw">
-        <title>Throw</title>
+        <title>Throw Statement</title>
 
-        <para></para>
+        <para>A throw statement has the form<programlisting><keysym>throw</keysym> <replaceable>Exp</replaceable>;</programlisting>and
+        causes the immediate abortion of the execution of the current function
+        with <replaceable>Exp</replaceable>'s value as exception value. The
+        exception can be caught by a try catch statement (<xref
+        linkend="section.try-catch" />) in the current function or in one of
+        its callers. If the exception is not caught, the execution of the
+        Rascal program is terminated. The following rules apply:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The static type of <replaceable>Exp</replaceable> should be
+            <literal>RuntimeException</literal>, see <xref
+            linkend="section.lib-Exception" />.</para>
+          </listitem>
+
+          <listitem>
+            <para>The Rascal program may contain data declarations that extend
+            the type RuntimeException.</para>
+          </listitem>
+        </itemizedlist>
       </section>
 
-      <section xml:id="section.return">
-        <title>Return</title>
+      <section>
+        <title>Assert Statement</title>
 
-        <para></para>
+        <para>An assert statement may occur everywhere where a declaration is
+        allowed. It has two forms:</para>
+
+        <para><programlisting><keysym>assert</keysym> <literal><replaceable>Exp</replaceable><subscript>1</subscript></literal></programlisting></para>
+
+        <para>and <programlisting><keysym>assert</keysym><literal> <replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript></literal></programlisting>where
+        <replaceable>Exp</replaceable><subscript>1</subscript> is a
+        boolean-value expression and
+        <replaceable>Exp</replaceable><subscript>2</subscript> is a
+        string-valued expression that serves as a identifying message for this
+        assertion. During execution, a list of true and false assertions is
+        maintained. When the script is executed as a <emphasis>test
+        suite</emphasis> a summary of this information is shown to the user.
+        When the script is executed in the standard fashion, the assert
+        statement has no affect. <note>
+            <para>Update the above description.</para>
+          </note></para>
+
+        <para>Example:</para>
+
+        <screen>rascal&gt; assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";
+true</screen>
       </section>
 
       <section xml:id="section.insert">
-        <title>Insert</title>
+        <title>Insert Statement</title>
 
-        <para></para>
+        <para>An insert statement has the form<programlisting><keysym>insert</keysym> <replaceable>Exp</replaceable>;</programlisting>and
+        replaces the value of the <emphasis>current subject</emphasis> (see
+        below) by the value of <replaceable>Exp</replaceable>. An insert
+        statement may only occur in the action part of a Pattern-Action (see
+        <xref linkend="section.pattern-action" />), more precisely in</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A case in a visit expression, see <xref
+            linkend="section.visit" />. The current subject is the value
+            matched by the pattern of this case.</para>
+          </listitem>
+
+          <listitem>
+            <para>An action of a rewrite rule, see <xref
+            linkend="section.rewrite-rule" />. The current subject is the
+            value matched by the pattern of the rewrite rule.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following rule applies:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The static type of Exp and of the current subject should be
+            comparable.</para>
+          </listitem>
+        </itemizedlist>
       </section>
 
       <section xml:id="section.fail">
-        <title>Fail</title>
+        <title>Fail Statement</title>
 
-        <para></para>
+        <para>A fail statement has the form<programlisting><keysym>fail</keysym>;</programlisting></para>
+
+        <para>and may only occur in the action of Pattern-Action (see <xref
+        linkend="section.pattern-action" />). The fail statement forces the
+        failure of that action. Any bindings caused by the pattern or
+        side-effects caused by the action are undone.</para>
       </section>
 
       <section xml:id="section.block">
-        <title>Block</title>
+        <title>Block Statement</title>
 
         <para>A block consists of a sequence of statements separated by
         semi-colons:<programlisting><literal>{ <replaceable>Statement</replaceable><subscript>1</subscript>; ... <replaceable>Statement</replaceable><subscript>n</subscript> }</literal></programlisting>Since
@@ -3464,81 +3720,7 @@ default: ...
       </section>
 
       <section>
-        <title>If</title>
-
-        <para>The if-statement is completely standard and comes in an if-then
-        and an if-then-else variant:<programlisting><keysym>if</keysym> <literal>( <replaceable>Bool</replaceable> ) <replaceable>Statement</replaceable></literal></programlisting><programlisting><keysym>if</keysym><literal> ( <replaceable>Bool</replaceable> ) <replaceable>Statement</replaceable><subscript>1</subscript> </literal><keysym>else</keysym><literal> <replaceable>Statement</replaceable><subscript>2</subscript></literal></programlisting></para>
-
-        <para>In both cases the test <replaceable>Bool</replaceable> is
-        evaluated and its outcome determines the statement to be executed.
-        Recall from <xref linkend="section.expressions-boolean" /> that
-        boolean expression maybe multi-valued. In this case only the first
-        true value (if any) is used.</para>
-      </section>
-
-      <section>
-        <title>While</title>
-
-        <para>The while-statement is completely standard:<programlisting><keysym>while</keysym><literal> ( <replaceable>Bool</replaceable> ) <replaceable>Statement</replaceable></literal></programlisting>The
-        test <replaceable>Bool</replaceable> is evaluated repeatedly and
-        <replaceable>Statement</replaceable> is executed when the test is
-        true. Execution ends the first time that the test yields false. The
-        test <replaceable>Bool</replaceable> is executed anew in each
-        repetition and only the first true value (if any) is used.</para>
-      </section>
-
-      <section>
-        <title>Do</title>
-
-        <para>The do-while-statement is completely standard:<programlisting><keysym>do</keysym> <replaceable>Statement</replaceable> <keysym>while</keysym> <literal>( <replaceable>Bool</replaceable> ) </literal></programlisting>Statement
-        is executed repeatedly, as long as the test Bool yields true. The test
-        <replaceable>Bool</replaceable> is executed anew in each repetition
-        and only the first true value (if any) is used.</para>
-      </section>
-
-      <section>
-        <title>For</title>
-
-        <para>The for-statement is more exciting:<programlisting><keysym>for</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> <replaceable>Statement</replaceable></programlisting>It
-        generates executes Statement for all possible combinations of values
-        of the expressions
-        <replaceable>Exp</replaceable><subscript>i</subscript>. Note that is
-        one of the expressions is a boolean expression, we do try all its
-        possible values.</para>
-      </section>
-
-      <section>
-        <title>One</title>
-
-        <para><programlisting><keysym>one</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal></programlisting>The
-        <keysym>one</keysym> expression yields true when one combination of
-        values of <replaceable>Exp</replaceable><subscript>i</subscript> is
-        true.<caution>
-            <para>The status of one is under discussion.</para>
-          </caution><caution>
-            <para>Technically, one is an expression.</para>
-          </caution></para>
-      </section>
-
-      <section>
-        <title>All</title>
-
-        <para><programlisting><keysym>all</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> </programlisting>The
-        all expression yields true when all combinations of values of
-        <replaceable>Exp</replaceable><subscript>i</subscript> are
-        true.</para>
-
-        <caution>
-          <para>The status of all is under discussion.</para>
-        </caution>
-
-        <caution>
-          <para>Technically, one is an expression.</para>
-        </caution>
-      </section>
-
-      <section>
-        <title>Solve</title>
+        <title>Solve Statement</title>
 
         <para>Rascal provides a solve statement for performing arbitrary
         fixed-point computations. This means, repeating a certain computation
@@ -3580,32 +3762,6 @@ rascal&gt;
      T = T + (T o R1);
 
 {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</screen>
-      </section>
-
-      <section>
-        <title>Assertions</title>
-
-        <para>An assert statement may occur everywhere where a declaration is
-        allowed. It has two forms:</para>
-
-        <para><programlisting><keysym>assert</keysym> <literal><replaceable>Exp</replaceable><subscript>1</subscript></literal></programlisting></para>
-
-        <para>and <programlisting><keysym>assert</keysym><literal> <replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript></literal></programlisting>where
-        <replaceable>Exp</replaceable><subscript>1</subscript> is a
-        boolean-value expression and
-        <replaceable>Exp</replaceable><subscript>2</subscript> is a
-        string-valued expression that serves as a identifying message for this
-        assertion. During execution, a list of true and false assertions is
-        maintained. When the script is executed as a <emphasis>test
-        suite</emphasis> a summary of this information is shown to the user.
-        When the script is executed in the standard fashion, the assert
-        statement has no affect. <note>
-            <para>Update the above description.</para>
-          </note></para>
-
-        <para>Example:</para>
-
-        <screen>rascal&gt; assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";</screen>
       </section>
     </section>
   </section>
