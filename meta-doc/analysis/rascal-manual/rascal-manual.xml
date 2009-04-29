@@ -1239,14 +1239,6 @@ alias Frequency = int;</programlisting>
         a graph containing integer nodes:</para>
 
         <para><programlisting>alias Graph = rel[int,int];</programlisting></para>
-
-        <para>An alias definition may be parameterized. So we can generalize
-        graphs as follows:</para>
-
-        <para><programlisting>alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];</programlisting>Of
-        course, the type variables that are used in the type in the left part
-        should occur as parameters in the right part of the definition and
-        vice versa.</para>
       </section>
 
       <section xml:id="section.abstract-data-type">
@@ -1271,9 +1263,70 @@ alias Frequency = int;</programlisting>
       </section>
 
       <section>
-        <title>Parameterized types</title>
+        <title>Type Parameters and Parameterized types</title>
 
-        <para></para>
+        <para>In addition to the types that we have already discussed, a type
+        may also be a <emphasis>type parameter</emphasis> of the
+        form<programlisting><literal>&amp;</literal><replaceable>Name</replaceable></programlisting>A
+        type parameter may occur at every syntactic position where a type is
+        required and turns an ordinary type into a parameterized type.
+        Parameterized types are used to define polymorphic functions and data
+        types, i.e., functions and data types that are applicable for more
+        than one type. Type parameters are bound to an actual type when the
+        function or data type is applied and further uses of the type
+        parameter are consistently replaced by the actual type.</para>
+
+        <para>The following syntactic positions are <emphasis>binding
+        occurrences</emphasis> for type parameters:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Type parameters in the type declaration of a function are
+            bound to the types of the actual parameters in the call of that
+            function. Type parameters that occur in the body of the function
+            are replaced by the corresponding actual type.</para>
+          </listitem>
+
+          <listitem>
+            <para>The left-hand side of an alias. The type parameters are
+            bound when the alias is used and occurrences of type parameters in
+            the right hand side are replaced by corresponding actual
+            types.</para>
+          </listitem>
+
+          <listitem>
+            <para>The alternatives of an abstract data type. Binding and
+            replacement is identical to that of rfunction declarations.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>All other occurrences of type parameters are <emphasis>using
+        occurrences</emphasis>. The following rules apply:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>When the same type parameter is used at different binding
+            occurrences it should be bound to the same actual type.</para>
+          </listitem>
+
+          <listitem>
+            <para>For every using occurrence of a type parameter there should
+            be a binding occurrence of a type parameter with the same
+            name.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para><caution>
+            <para>Add examples.</para>
+          </caution></para>
+
+        <para>An alias definition may be parameterized. So we can generalize
+        graphs as follows:</para>
+
+        <para><programlisting>alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];</programlisting>Of
+        course, the type variables that are used in the type in the left part
+        should occur as parameters in the right part of the definition and
+        vice versa.</para>
       </section>
 
       <section>
