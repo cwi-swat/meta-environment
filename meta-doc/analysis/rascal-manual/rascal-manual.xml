@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -182,7 +182,45 @@
     <section>
       <title>Aim and Scope of this Book</title>
 
-      <para></para>
+      <para>The aim of this book is to give an easy to understand but
+      comprehensive overview of the Rascal language and to explain how to
+      solve various meta-programming problems using the language. The book
+      aims at students and researchers with a background in computer science,
+      software engineering or programming languages. The scope of the book is
+      limited to the Rascal language and its applications but does not address
+      implementation aspects of the language.<caution>
+          <para>Some topics that are not yet described:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Where to obtain a copy of Rascal.</para>
+            </listitem>
+
+            <listitem>
+              <para>How to install it.</para>
+            </listitem>
+
+            <listitem>
+              <para>How to run from the command line.</para>
+            </listitem>
+
+            <listitem>
+              <para>Command line options</para>
+            </listitem>
+
+            <listitem>
+              <para>How to run from Eclipse.</para>
+            </listitem>
+
+            <listitem>
+              <para>Setting the search path.</para>
+            </listitem>
+
+            <listitem>
+              <para>How to set up a Rascal project.</para>
+            </listitem>
+          </itemizedlist>
+        </caution></para>
     </section>
 
     <section>
@@ -349,7 +387,8 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
 
         <itemizedlist>
           <listitem>
-            <para>cause some side effect;</para>
+            <para>cause some side effect, i.e., assign a value to local or
+            global variables;</para>
           </listitem>
 
           <listitem>
@@ -792,9 +831,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
           <para>Location values are represented by the type
           <literal>loc</literal> and serve as text coordinates in a specific
           source file. It is very handy to associate a source code location
-          which extracted facts. Locations should <emphasis>always</emphasis>
-          be generated automatically but for the curious here is an example:
-          <literal>loc(file:///home/paulk/pico.trm?offset=0&amp;length=1&amp;begin=2,3&amp;end=4,5)</literal></para>
+          which extracted facts. </para>
         </formalpara>
 
         <para>Source locations have the following syntax:</para>
@@ -826,7 +863,10 @@ rascal&gt; set[proc] entryPoints = top(Calls);
           </listitem>
         </itemizedlist>
 
-        <para>This element of a location value can be accessed and modified
+        <para>Locations should <emphasis>always</emphasis> be generated
+        automatically but for the curious here is an example: <programlisting>loc(file:///home/paulk/pico.trm?offset=0&amp;length=1&amp;begin=2,3&amp;end=4,5)</programlisting></para>
+
+        <para>The elements of a location value can be accessed and modified
         using the standard mechanism of field selection and field assignment.
         The corresponding field names are:</para>
 
@@ -1227,7 +1267,8 @@ rascal&gt; set[proc] entryPoints = top(Calls);
 
         <para>states that <replaceable>Name</replaceable> can be used
         everywhere instead of the already defined type
-        <replaceable>Type</replaceable>. For instance,</para>
+        <replaceable>Type</replaceable>. Both types are thus structurally
+        equivalent. For instance,</para>
 
         <programlisting audience="" role="check">alias ModuleId = str;
 alias Frequency = int;</programlisting>
@@ -1343,7 +1384,8 @@ alias Frequency = int;</programlisting>
         type that includes all other types. We also see that
         <literal>rel</literal> is a subtype of <literal>set</literal> and that
         each ADT is a subtype of <literal>node</literal>. Finally, each alias
-        is a subtype of one specific type.<figure>
+        is structurally equivalent with one or more specific other
+        types.<figure>
             <title>The Rascal Type Lattice</title>
 
             <mediaobject>
@@ -1681,25 +1723,28 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
         <itemizedlist>
           <listitem>
             <para><literal><replaceable>Val</replaceable> @
-            <replaceable>Anno</replaceable></literal>: get the value of
-            annotation <replaceable>Anno</replaceable> of value
-            <replaceable>Val</replaceable> (may be undefined!).</para>
+            <replaceable>Anno</replaceable></literal>: is an expression that
+            retrieves the value of annotation <replaceable>Anno</replaceable>
+            of value <replaceable>Val</replaceable> (may be
+            undefined!).</para>
           </listitem>
 
           <listitem>
             <para><literal><replaceable>Val1</replaceable>[@<replaceable>Anno</replaceable>
-            = <replaceable>Val2]</replaceable></literal>: set the value of
-            annotation <replaceable>Anno</replaceable> of the value
+            = <replaceable>Val2]</replaceable></literal>: is an expression
+            that set the value of annotation <replaceable>Anno</replaceable>
+            of the value
             <replaceable>Val</replaceable><replaceable>1</replaceable> to
-            <replaceable>Val2</replaceable>.</para>
+            <replaceable>Val2</replaceable> and return XXX as result.</para>
           </listitem>
 
           <listitem>
             <para><literal><replaceable>Var</replaceable> @
             <replaceable>Anno</replaceable> =
-            <replaceable>Val</replaceable></literal>: set the value of
-            annotation <replaceable>Anno</replaceable> of the value of
-            variable <replaceable>Var</replaceable> to
+            <replaceable>Val</replaceable></literal>: is an assignment
+            statement that sets the value of annotation
+            <replaceable>Anno</replaceable> of the value of variable
+            <replaceable>Var</replaceable> to
             <replaceable>Val</replaceable>.</para>
           </listitem>
         </itemizedlist>
@@ -1727,65 +1772,15 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
             visit here.</para>
           </caution></para>
 
-        <para>Rules have the general form:<programlisting><keysym>rule</keysym> <replaceable>Name</replaceable> <replaceable>PatternActionPair</replaceable></programlisting></para>
+        <para>Rules have the general form:<programlisting><keysym>rule</keysym> <replaceable>Name</replaceable> <replaceable>PatternWithAction</replaceable></programlisting></para>
 
         <para>where <replaceable>Name</replaceable> is the name of the rule
-        and <replaceable>PatternActionPair</replaceable> is the body of the
+        and <replaceable>PatternWithAction</replaceable> is the body of the
         rule consisting of a pattern and an associated action (see <xref
-        linkend="section.pattern-action" />). In addition to this, a rule can
-        be <emphasis>conditional</emphasis> and have the following
-        form:<programlisting><replaceable>rule Name Pat</replaceable> <literal>=&gt;</literal> <replaceable>Exp</replaceable> <keysym>when</keysym> <replaceable>Exp</replaceable><subscript>1</subscript>, <replaceable>Exp</replaceable><subscript>2</subscript>, ...</programlisting></para>
+        linkend="section.pattern-with-action" /> for a detailed
+        description).</para>
 
-        <para>When a subtree of the subject matches
-        <replaceable>Pat</replaceable>, and all expressions
-        <replaceable>Exp</replaceable><subscript>i</subscript> are true, the
-        subtree is replaced by the value of
-        <replaceable>Exp</replaceable>.</para>
-
-        <para></para>
-
-        <para>A rule can have one of the following forms:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><programlisting><replaceable>Pat</replaceable> <literal>=&gt;</literal> <replaceable>Exp</replaceable></programlisting>When
-            a subtree of the subject matches <replaceable>Pat</replaceable>,
-            it is replaced by the value of
-            <replaceable>Exp</replaceable>.</para>
-          </listitem>
-
-          <listitem>
-            <para><programlisting><replaceable>Pat</replaceable> <literal>=&gt;</literal> <replaceable>Exp</replaceable> <keysym>when</keysym> <replaceable>Exp</replaceable><subscript>1</subscript>, <replaceable>Exp</replaceable><subscript>2</subscript>, ...</programlisting></para>
-          </listitem>
-
-          <listitem>
-            <para><programlisting><replaceable>Pat</replaceable> : <replaceable>Statement</replaceable></programlisting></para>
-
-            <para>This is the most general case. When a subtree of the subject
-            matches <replaceable>Pat</replaceable>, the
-            <replaceable>Statement</replaceable> is executed. The execution of
-            <replaceable>Statement</replaceable> should lead to one of the
-            following:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>Execution of an <literal>insert</literal> statement (see
-                <xref linkend="section.insert" />) that replaces the current
-                subtree and essentially producing the same effect as
-                PatternReplacement.</para>
-              </listitem>
-
-              <listitem>
-                <para>Execution of a <literal>fail</literal> statement (see
-                <xref linkend="section.fail" />): all side effects of
-                <replaceable>Statement</replaceable> are undone and the next
-                rule is tried.</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
-
-        <para>Here is an example for user-defined type Booleans:<screen>rascal&gt;
+        <para>Here is an example for a user-defined type Booleans:<screen>rascal&gt;
 data Bool = btrue;
 data Bool = bfalse;
 data Bool = band(Bool left, Bool right);
@@ -1817,11 +1812,6 @@ bfalse</screen></para>
             actual replacement.</para>
           </listitem>
         </itemizedlist>
-
-        <para>The rule keyword may be immediately followed by a type
-        constraint to limit its applicability.<caution>
-            <para>Is this implemented?</para>
-          </caution></para>
       </section>
     </section>
 
@@ -1876,6 +1866,28 @@ bfalse</screen></para>
         <listitem>
           <para>A visit expression, see <xref
           linkend="section.visit" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>A pattern, see <xref linkend="section.pattern" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>A pattern with associated action, see <xref
+          linkend="section.pattern-with-action" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>A comprehension, see <xref
+          linkend="section.comprehension" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>A one expression, see <xref linkend="section.one" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>An all expression, see <xref linkend="section.all" />.</para>
         </listitem>
       </itemizedlist>
 
@@ -2180,7 +2192,7 @@ bfalse</screen></para>
         self-explanatory except the Match and NoMatch operators that are also
         the main reason to treat Boolean operator expressions separately.
         Although we describe patterns in full detail in <xref
-        linkend="section.patterns" />, a preview is usefull here. A pattern
+        linkend="section.pattern" />, a preview is usefull here. A pattern
         can</para>
 
         <itemizedlist>
@@ -2224,7 +2236,7 @@ bfalse</screen></para>
 
         <para>This looks and <emphasis>is</emphasis> nice and dandy, so why
         all this fuss about Boolean operators? The catch is that--as we will
-        see in detail in <xref linkend="section.patterns" />--a match need not
+        see in detail in <xref linkend="section.pattern" />--a match need not
         be unique. This means that there may be more than one way of matching
         the subject value resulting in different variable bindings. A quick
         example. Consider the following match of a list<programlisting>[1, list[int] <replaceable>L</replaceable>, 2, list[int] <replaceable>M</replaceable>] := [1,2,3,2,4]</programlisting></para>
@@ -2558,7 +2570,7 @@ bfalse</screen></para>
           </table></para>
       </section>
 
-      <section xml:id="section.patterns">
+      <section xml:id="section.pattern">
         <title>Patterns</title>
 
         <para>Patterns come in three flavours:</para>
@@ -2655,8 +2667,11 @@ bfalse</screen></para>
         <section xml:id="section.abstract-patterns">
           <title>Abstract Patterns</title>
 
-          <para>An abstract pattern is recursively defined and may contain the
-          following elements:</para>
+          <para><caution>
+              <para>Change this name. E.g., "General pattern", "Value
+              Pattern"???</para>
+            </caution>An abstract pattern is recursively defined and may
+          contain the following elements:</para>
 
           <itemizedlist>
             <listitem>
@@ -2906,17 +2921,17 @@ bfalse</screen></para>
         </section>
       </section>
 
-      <section xml:id="section.pattern-action">
-        <title>Pattern-Action</title>
+      <section xml:id="section.pattern-with-action">
+        <title>PatternWithAction</title>
 
         <para>Patterns can be used in various contexts, but a common context
-        is a <replaceable>Pattern-Action</replaceable>, which in its turn, may
-        be used in a visit expression (<xref linkend="section.visit" />), a
-        switch statement (<xref linkend="section.switch" />), or a rewrite
+        is a <replaceable>PatternWithAction</replaceable>, which in its turn,
+        may be used in a visit expression (<xref linkend="section.visit" />),
+        a switch statement (<xref linkend="section.switch" />), or a rewrite
         rule (<xref linkend="section.rewrite-rule" />).</para>
 
-        <para>A <replaceable>Pattern-Action </replaceable>can have one of the
-        following forms:</para>
+        <para>A <replaceable>PatternWithAction </replaceable>can have one of
+        the following forms:</para>
 
         <itemizedlist>
           <listitem>
@@ -2945,7 +2960,7 @@ bfalse</screen></para>
               <listitem>
                 <para>Execution of a <literal>fail</literal> statement: all
                 side effects of <replaceable>Statement</replaceable> are
-                undone and the PatternActionopair as a whole fails.</para>
+                undone and the PatternWithAction as a whole fails.</para>
               </listitem>
 
               <listitem>
@@ -2957,8 +2972,8 @@ bfalse</screen></para>
         </itemizedlist>
       </section>
 
-      <section>
-        <title>Comprehensions</title>
+      <section xml:id="section.comprehension">
+        <title>Comprehension Expression</title>
 
         <para>We will use the familiar notation for <emphasis>list
         comprehension</emphasis><programlisting>[<replaceable>E</replaceable>xp | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>]</programlisting></para>
@@ -3193,23 +3208,24 @@ bfalse</screen></para>
         accommodate all these (and more) use cases and has the form:</para>
 
         <para><programlisting><replaceable>Strategy</replaceable> <keysym>visit</keysym> ( <replaceable>Exp</replaceable> ) {
-<keysym>case</keysym> <replaceable>Pattern-Action</replaceable><subscript>1</subscript>;
-<keysym>case</keysym> <replaceable>Pattern-Action</replaceable><subscript>2</subscript>;
+<keysym>case</keysym> <replaceable>PatternWithAction</replaceable><subscript>1</subscript>;
+<keysym>case</keysym> <replaceable>PatternWithAction</replaceable><subscript>2</subscript>;
 ...
 <keysym>default</keysym>: ...
 }</programlisting></para>
 
         <para>Given a subject term (the current value of
         <replaceable>Exp</replaceable>) and a list of cases (consisting of
-        Pattern-Actions, see <xref linkend="section.pattern-action" />) it
-        traverses the term. Depending on the precise actions it may perform
-        replacement (mimicking a transformer), update local variables
-        (mimicking an accumulator) or a combination of these two (accumulating
-        transformer). If <emphasis role="bold">any</emphasis> of the actions
-        contains an <literal>insert</literal> statement, the value of the
-        visit expression is a new value that is obtained by successive
-        insertions in the subject term by executing one or more cases.
-        Otherwise, the original value of the subject term is returned.</para>
+        PatternWithActions, see <xref
+        linkend="section.pattern-with-action" />) it traverses the term.
+        Depending on the precise actions it may perform replacement (mimicking
+        a transformer), update local variables (mimicking an accumulator) or a
+        combination of these two (accumulating transformer). If <emphasis
+        role="bold">any</emphasis> of the actions contains an
+        <literal>insert</literal> statement, the value of the visit expression
+        is a new value that is obtained by successive insertions in the
+        subject term by executing one or more cases. Otherwise, the original
+        value of the subject term is returned.</para>
 
         <para>The visit expression is optionally preceeded by one of the
         following strategy indications that determine the traversal order of
@@ -3254,13 +3270,14 @@ bfalse</screen></para>
 
         <itemizedlist>
           <listitem>
-            <para>Pattern-Actions of the form <replaceable>Pat</replaceable>
-            =&gt; <replaceable>Exp</replaceable> insert their result in the
+            <para>PatternWithActions of the form
+            <replaceable>Pat</replaceable> =&gt;
+            <replaceable>Exp</replaceable> insert their result in the
             subject.</para>
           </listitem>
 
           <listitem>
-            <para>For Pattern-Actions of the form
+            <para>For PatternWithActions of the form
             <literal><replaceable>Pat</replaceable> :
             <replaceable>Statement</replaceable></literal>, executing
             <replaceable>Statement</replaceable> should lead to one of the
@@ -3319,8 +3336,8 @@ bfalse</screen></para>
         </itemizedlist>
       </section>
 
-      <section>
-        <title>One</title>
+      <section xml:id="section.one">
+        <title>One Expression</title>
 
         <para><programlisting><keysym>one</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal></programlisting>The
         <keysym>one</keysym> expression yields true when one combination of
@@ -3330,8 +3347,8 @@ bfalse</screen></para>
           </caution></para>
       </section>
 
-      <section>
-        <title>All</title>
+      <section xml:id="section.all">
+        <title>All Expression</title>
 
         <para><programlisting><keysym>all</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> </programlisting>The
         all expression yields true when all combinations of values of
@@ -3408,21 +3425,22 @@ bfalse</screen></para>
 
         <para>A <literal>switch</literal> statement is similar to a switch
         statement in C or Java and has the form:<programlisting>switch ( <replaceable>Exp</replaceable> ) {
-case <replaceable>Pattern-Action</replaceable><subscript>1</subscript>;
-case <replaceable>Pattern-Action</replaceable><subscript>2</subscript>;
+case <replaceable>PatternWithAction</replaceable><subscript>1</subscript>;
+case <replaceable>PatternWithAction</replaceable><subscript>2</subscript>;
 ...
 default: ...
 }</programlisting></para>
 
         <para>The value of the expression <replaceable>Exp</replaceable> is
         the subject term that will be matched by the successive
-        Pattern-Actions (see <xref linkend="section.pattern-action" />) in the
-        switch statement. The switch statement provides <emphasis
-        role="bold">only</emphasis> matching at the top level of the subject
-        term and does not traverse it. The type of the pattern in each case
-        must be identical to the type of the subject term (or be a subtype of
-        it). If no case matches, the switch acts as a dummy statement. There
-        is no fall through from one case to the next.</para>
+        PatternWithActions (see <xref
+        linkend="section.pattern-with-action" />) in the switch statement. The
+        switch statement provides <emphasis role="bold">only</emphasis>
+        matching at the top level of the subject term and does not traverse
+        it. The type of the pattern in each case must be identical to the type
+        of the subject term (or be a subtype of it). If no case matches, the
+        switch acts as a dummy statement. There is no fall through from one
+        case to the next.</para>
       </section>
 
       <section>
@@ -3618,8 +3636,8 @@ rascal&gt; I;
 
         <para>A try catch statement has the form<programlisting>try
    Statement<subscript>1</subscript>;
-catch <replaceable>Pattern-Action</replaceable><subscript>1</subscript>;
-catch <replaceable>Pattern-Action</replaceable><subscript>2</subscript>;
+catch <replaceable>PatternWithAction</replaceable><subscript>1</subscript>;
+catch <replaceable>PatternWithAction</replaceable><subscript>2</subscript>;
 ...
 catch: <replaceable>Statement</replaceable><subscript>2</subscript>;
 finally: <replaceable>Statement</replaceable><subscript>3</subscript>;</programlisting>and
@@ -3647,7 +3665,7 @@ finally: <replaceable>Statement</replaceable><subscript>3</subscript>;</programl
         <itemizedlist>
           <listitem>
             <para>If a pattern of some
-            <replaceable>Pattern-Action</replaceable><subscript>i</subscript>
+            <replaceable>PatternWithAction</replaceable><subscript>i</subscript>
             matches, the corresponding action is executed.</para>
           </listitem>
 
@@ -3723,8 +3741,9 @@ true</screen>
         <para>An insert statement has the form<programlisting><keysym>insert</keysym> <replaceable>Exp</replaceable>;</programlisting>and
         replaces the value of the <emphasis>current subject</emphasis> (see
         below) by the value of <replaceable>Exp</replaceable>. An insert
-        statement may only occur in the action part of a Pattern-Action (see
-        <xref linkend="section.pattern-action" />), more precisely in</para>
+        statement may only occur in the action part of a PatternWithAction
+        (see <xref linkend="section.pattern-with-action" />), more precisely
+        in</para>
 
         <itemizedlist>
           <listitem>
@@ -3755,9 +3774,9 @@ true</screen>
 
         <para>A fail statement has the form<programlisting><keysym>fail</keysym>;</programlisting></para>
 
-        <para>and may only occur in the action of Pattern-Action (see <xref
-        linkend="section.pattern-action" />). The fail statement forces the
-        failure of that action. Any bindings caused by the pattern or
+        <para>and may only occur in the action of PatternWithAction (see <xref
+        linkend="section.pattern-with-action" />). The fail statement forces
+        the failure of that action. Any bindings caused by the pattern or
         side-effects caused by the action are undone.</para>
       </section>
 
