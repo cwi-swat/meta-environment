@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -170,13 +170,79 @@
       objects-of-interest that are being analyzed and transformed. The Rascal
       language you are about to learn is designed for meta-programming
       following the EASY paradigm. It can be applied in domains ranging from
-      compiler construction to constraint solving.</para>
+      compiler construction and implementing domain-specific languages to
+      constraint solving and software renovation.</para>
 
       <para>Since representation of data is central to the approach, Rascal
       provides a rich set of built-in data types. To support extraction and
       analysis, parsing and advanced pattern matching are provided. High-level
       control structures make analysis and synthesis of complex datastructures
       simple.</para>
+    </section>
+
+    <section>
+      <title>Benefits of Rascal</title>
+
+      <para>Before you spend your time on studying the Rascal language it may
+      help to first hear our elevator pitch about the main benefits offered by
+      the language:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis role="bold">Sophisticated built-in data
+          types</emphasis> provide standard solutions for many programming
+          problems.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Safety</emphasis> is achieved by finding
+          most errors even before the program is executed and by making common
+          errors like missing initializations or wrong pointers
+          impossible.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Pattern matching</emphasis> is used to
+          analyze even the most complex datastructures.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Syntax definitions</emphasis> make it
+          possible to define new and existing languages and to write tools for
+          them.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Visiting</emphasis> makes it easy to
+          traverse datastructures and to extract information from them or to
+          synthesize results.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Functions as values </emphasis>permit
+          programming styles with high re-use.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Generic types</emphasis> allow writing
+          functions that are applicable for many different types.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Local type inference</emphasis> makes
+          local variable declarations redundant.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Familiar</emphasis> <emphasis
+          role="bold">syntax</emphasis> in a <emphasis>what-you-see
+          is-what-you-get style</emphasis> is used even for sophisticated
+          concepts and this makes the language easy to learn and easy to
+          use.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Interested? Read on!</para>
     </section>
 
     <section>
@@ -226,9 +292,9 @@
     <section>
       <title>Rascal Concepts</title>
 
-      <para>Before explaining the Rascal language in more detail, it is good
-      to have a general understanding of the concepts on which the language is
-      built.</para>
+      <para>Before explaining the Rascal language in more detail, we detail
+      our elevator pitch a bit and give you a general understanding of the
+      concepts on which the language is based.</para>
 
       <section>
         <title>Values</title>
@@ -431,16 +497,33 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
         <title>Rewrite Rules</title>
 
         <para>Rewrite rules are the only implicit control mechanism in the
-        language and are used to maintain invariants during
-        computations.<caution>
-            <para>Add example</para>
-          </caution></para>
+        language and are used to maintain invariants during computations. For
+        example, in a package for symbolic differentiation it is desirable to
+        keep expressions in simplified form in order to avoid intermediate
+        results like <literal>sum(product(1, x), product(0, y))</literal> that
+        can be simplified to <literal>x</literal>. The following rules achieve
+        this:<programlisting>rule simplify1 product(1, Expression e) =&gt; e;
+rule simplify2 product(Expression e, 1) =&gt; e;
+rule simplify3 product(0, Expression e) =&gt; 0;
+rule simplify4 product(Expression e, 0) =&gt; 0;
+rule simplify5 sum(0, Expression e)     =&gt; e;
+rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
+        new expression is constructed during symbolic differentiation, these
+        rules are applied to that expression and all its subexpressions and
+        when a pattern at the left-hand side of a rule applies the matching
+        subexpression is replaced by the right-hand side of the rule. This is
+        repeated as long as any rule can be applied. </para>
+
+        <para>Since rewrite rules are activated automatically, one may always
+        assume that expressions are in simplified form.</para>
       </section>
 
       <section>
         <title>Constraint solving</title>
 
-        <para></para>
+        <para>Many problems can be solved by forms of constraint solving.
+        Rascal provides a <literal>solve</literal> statement that helps
+        writing constraint solvers.</para>
       </section>
 
       <section>
@@ -520,7 +603,7 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
       <para>To illustrate this process consider the workflow in <xref
       linkend="figure.calls-workflow" />. First we have to extract the calls
       from the source code. Rascal is very good at this, but to simplify this
-      examples we assume that this call graph has already been extracted. Also
+      example we assume that this call graph has already been extracted. Also
       keep in mind that a real call graph of a real application will contain
       thousands and thousands of calls. Drawing it in the way we do later on
       in <xref linkend="figure.calls" /> makes no sense since we get a
@@ -545,7 +628,7 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
           first impression what can be done with Rascal. Please return to this
           example when you have digested the detailed description of Rascal in
           <xref linkend="section.rascal-language" /> and <xref
-          linkend="section.builtin" />.</para>
+          linkend="section.lib" />.</para>
         </figure><figure xml:id="figure.calls">
           <title>Graphical representation of the <literal>calls</literal>
           relation</title>
@@ -564,17 +647,19 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
       <literal>proc</literal> (an alias for strings) to denote
       procedures:</para>
 
-      <screen>rascal&gt; alias proc = str
+      <screen>rascal&gt; alias proc = str;
 done</screen>
 
       <para>Suppose that the following facts have been extracted from the
       source code and are represented by the relation
       <literal>Calls</literal>:</para>
 
-      <screen>rascal&gt; rel[proc , proc] Calls = 
+      <screen>rascal&gt; rel[proc, proc] Calls = 
    { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, &lt;"d","e"&gt;, 
      &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;
-   }</screen>
+   };
+rel[proc,proc] : { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
+                   &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;}</screen>
 
       <para>This concludes the preparatory steps and now we move on to answer
       the questions.</para>
@@ -593,9 +678,9 @@ done</screen>
 done.</screen>next we describe a new variable and calculate the number of
         tuples:</para>
 
-        <para><screen>rascal&gt; int nCalls = size(Calls)</screen>The library
-        function <literal>size</literal> determines the number of elements in
-        a set or relation and is explained in <xref
+        <para><screen>rascal&gt; nCalls = size(Calls);
+int : 8</screen>The library function <literal>size</literal> determines the
+        number of elements in a set or relation and is explained in <xref
         linkend="section.lib-Relation" />. In this example,
         <literal>nCalls</literal> will get the value
         <literal>8</literal>.</para>
@@ -608,10 +693,10 @@ done.</screen>next we describe a new variable and calculate the number of
         in the tuples in the relation <literal>Calls</literal> and then
         determining the number of names:</para>
 
-        <screen>rascal&gt; set[proc] procs = carrier(Calls);
-<literal>{"a", "b", "c", "d", "e", "f", "g"}</literal>
-&gt; int nprocs = size(procs);
-<literal>7</literal></screen>
+        <screen>rascal&gt; procs = carrier(Calls);
+<literal>set[proc] : {"a", "b", "c", "d", "e", "f", "g"}</literal>
+rascal&gt; nprocs = size(procs);
+<literal>int : 7</literal></screen>
 
         <para>The built-in function <literal>carrier</literal> determines all
         the values that occur in the tuples of a relation. In this case,
@@ -620,8 +705,8 @@ done.</screen>next we describe a new variable and calculate the number of
         get value <literal>7</literal>. A more concise way of expressing this
         would be to combine both steps:</para>
 
-        <screen>rascal&gt; int nprocs = size(carrier(Calls));
-7</screen>
+        <screen>rascal&gt; nprocs = size(carrier(Calls));
+int : 7</screen>
       </section>
 
       <section>
@@ -643,8 +728,8 @@ done.</screen>next we describe a new variable and calculate the number of
 
         <screen>rascal&gt; import Graph;
 done.
-rascal&gt; set[proc] entryPoints = top(Calls);
-<literal>{"a", "f"}</literal></screen>
+rascal&gt; entryPoints = top(Calls);
+<literal>set[proc] : {"a", "f"}</literal></screen>
 
         <para>In this case, <literal>entryPoints</literal> is equal to
         <literal>{"a", "f"}</literal>. In other words, procedures
@@ -659,8 +744,8 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <emphasis>leaves</emphasis> of this application, i.e., procedures that
         are being called but do not make any calls themselves:</para>
 
-        <screen>rascal&gt; set[proc] bottomCalls = bottom(Calls);
-<literal>{"c", "e"}</literal></screen>
+        <screen>rascal&gt; bottomCalls = bottom(Calls);
+<literal>set[proc] : {"c", "e"}</literal></screen>
 
         <para>In this case, <literal>bottomCalls</literal> is equal to
         <literal>{"c", "e"}</literal>.</para>
@@ -673,11 +758,10 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         between procedures, by taking the transitive closure of the
         <literal>Calls</literal> relation:</para>
 
-        <screen>rascal&gt; rel[proc, proc] closureCalls = Calls+;
-{&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, &lt;"d","e"&gt;, 
- &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;, &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, 
- &lt;"b", "e"&gt;, &lt;"a", "e"&gt;
-}</screen>
+        <screen>rascal&gt; closureCalls = Calls+;
+rel[proc, proc] : {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
+                   &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;, 
+                   &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "e"&gt;, &lt;"a", "e"&gt;}</screen>
       </section>
 
       <section>
@@ -692,13 +776,13 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         index operator yields all right-hand sides of tuples that have a given
         value as left-hand side. This gives the following:</para>
 
-        <screen>rascal&gt; set[proc] calledFromA = closureCalls["a"];
-<literal>{"b", "c", "d", "e"}</literal></screen>
+        <screen>rascal&gt; calledFromA = closureCalls["a"];
+<literal>set[proc] : {"b", "c", "d", "e"}</literal></screen>
 
         <para>and</para>
 
-        <screen>rascal&gt; set[proc] calledFromF = closureCalls["f"];
-<literal>{"e", "g"}</literal></screen>
+        <screen>rascal&gt; calledFromF = closureCalls["f"];
+<literal>set[proc] : {"e", "g"}</literal></screen>
       </section>
 
       <section>
@@ -709,8 +793,8 @@ rascal&gt; set[proc] entryPoints = top(Calls);
         <literal>calledFromA</literal> and
         <literal>calledFromF:</literal></para>
 
-        <para><screen>rascal&gt; set[proc] commonProcs = calledFromA &amp; calledFromF;
-<literal>{"e"}</literal></screen></para>
+        <para><screen>rascal&gt; commonProcs = calledFromA &amp; calledFromF;
+<literal>set[proc] : {"e"}</literal></screen></para>
 
         <para>In other words, the procedures called from both entry points are
         mostly disjoint except for the common procedure
@@ -831,7 +915,7 @@ rascal&gt; set[proc] entryPoints = top(Calls);
           <para>Location values are represented by the type
           <literal>loc</literal> and serve as text coordinates in a specific
           source file. It is very handy to associate a source code location
-          which extracted facts. </para>
+          which extracted facts.</para>
         </formalpara>
 
         <para>Source locations have the following syntax:</para>
@@ -1357,17 +1441,36 @@ alias Frequency = int;</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para><caution>
-            <para>Add examples.</para>
-          </caution></para>
+        <para>We refer to <xref linkend="section.function" /> for a full
+        description of function declaration, but here</para>
+
+        <para>The following function <literal>swap</literal> returns a tuple
+        in which its arguments are swapped and can be applied to arbitrary
+        values in a type safe manner:<screen>&gt; tuple[&amp;B, &amp;A] swap(&amp;A a, &amp;B b) { return &lt;b, a&gt;; }
+done.
+
+&gt; swap(1,2);
+tuple[int,int]: &lt;2,1&gt;
+
+&gt; swap("abc", 3);
+tuple[int,str]: &lt;3, "abc"&gt;</screen>Observe that the type parameters that
+        occur in the return type should occur in the formal parameter types of
+        the function.</para>
 
         <para>An alias definition may be parameterized. So we can generalize
         graphs as follows:</para>
 
-        <para><programlisting>alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];</programlisting>Of
+        <para><screen>&gt; alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];
+done.
+
+&gt; Graph[int] GI = {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;};
+Graph[int] :  {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;}
+
+&gt; Graph[str] GS = {&lt;"a", "b"&gt;, &lt;"c","d"&gt;, &lt;"d", "a"&gt;};
+Graph[str] : {&lt;"a", "b"&gt;, &lt;"c","d"&gt;, &lt;"d", "a"&gt;}</screen>Of
         course, the type variables that are used in the type in the left part
-        should occur as parameters in the right part of the definition and
-        vice versa.</para>
+        of the alias declaration should occur as parameters in the right part
+        of the definition and vice versa.</para>
       </section>
 
       <section>
@@ -1384,8 +1487,7 @@ alias Frequency = int;</programlisting>
         type that includes all other types. We also see that
         <literal>rel</literal> is a subtype of <literal>set</literal> and that
         each ADT is a subtype of <literal>node</literal>. Finally, each alias
-        is structurally equivalent with one or more specific other
-        types.<figure>
+        is structurally equivalent to one or more specific other types.<figure>
             <title>The Rascal Type Lattice</title>
 
             <mediaobject>
@@ -1465,8 +1567,8 @@ Declaration</replaceable><subscript>1</subscript>;
           </caution></para>
 
         <para>The constituents of a module are also shown in <xref
-        linkend="figure.parts-module" />. The more advanced features are shown
-        in a separate color.</para>
+        linkend="figure.parts-module" />. The more sophisticated features are
+        shown in a separate color.</para>
 
         <para>The entities that are <emphasis>visible</emphasis> inside a
         module are</para>
@@ -1507,7 +1609,7 @@ Declaration</replaceable><subscript>1</subscript>;
       </section>
 
       <section xml:id="section.function">
-        <title>Function</title>
+        <title>Function Declaration</title>
 
         <para>A function declaration has the form<programlisting><replaceable>Type</replaceable> <replaceable>Name</replaceable>(<literal><replaceable>Type</replaceable></literal><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript>, ..., <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>Var</replaceable><replaceable><subscript>n</subscript></replaceable>) <replaceable>Statement</replaceable></programlisting>Here
         <replaceable>Type</replaceable> is the result type of the function and
@@ -1543,12 +1645,9 @@ rascal&gt; <literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
 
           <para>The exceptions that can be thrown by a function can be
           (optionally) declared as follows:<programlisting><replaceable>Type</replaceable> <replaceable>Name</replaceable>(<literal><replaceable>Type</replaceable></literal><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript>, ..., <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>Var</replaceable><replaceable><subscript>n</subscript></replaceable>) throws <replaceable>Exception</replaceable><subscript>1</subscript>, <replaceable>Exception</replaceable><subscript>2</subscript>, ...<replaceable> </replaceable></programlisting>See
-          for details.</para>
+          <xref linkend="section.try-catch" /> and <xref
+          linkend="section.throw" /> for details.</para>
         </formalpara>
-
-        <caution>
-          <para>Add ref.</para>
-        </caution>
 
         <formalpara>
           <title>Parameterized types in function declaration</title>
@@ -1563,24 +1662,24 @@ rascal&gt; <literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
 done.
 
 rascal&gt;<literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
-<literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>
+<literal>rel[int,int] : {&lt;10,1&gt;, &lt;20,2&gt;}</literal>
 
 rascal&gt;<literal>invert2({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;})</literal>;
-<literal>{&lt;1, "mon"&gt;, &lt;2, "tue"&gt;}</literal></screen>Here we
-          declare a function that can be used to swap the elements of pairs of
-          arbitrary types:<screen>rascal&gt; &lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) return &lt;B, A&gt;;
+<literal>rel[int,str] : {&lt;1, "mon"&gt;, &lt;2, "tue"&gt;}</literal></screen>Here
+          we declare a function that can be used to swap the elements of pairs
+          of arbitrary types:<screen>rascal&gt; &lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) return &lt;B, A&gt;;
 done.
 
 rascal&gt; <literal>swap(&lt;1, 2&gt;)</literal>;
-<literal>&lt;2,1&gt;</literal>
+<literal>tuple[int,int] : &lt;2,1&gt;</literal>
 
 rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
-</literal><literal>&lt;3, "wed"&gt;</literal></screen></para>
+</literal><literal>tuple[int,str] : &lt;3, "wed"&gt;</literal></screen></para>
         </formalpara>
       </section>
 
       <section xml:id="section.variable">
-        <title>Variable</title>
+        <title>Variable Declaration</title>
 
         <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>where
         <replaceable>T</replaceable>ype is a type,
@@ -1640,10 +1739,12 @@ rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
 
         <para>Examples.<screen>rascal&gt;int max = 100;
 int: 100
+
 rascal&gt; min = 0;
 int : 0
-rascal&gt;<keysym>rel</keysym>[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
-                           &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}
+
+rascal&gt;day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+              &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}
 rel[str,int]: {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
                &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</screen></para>
       </section>
@@ -1673,7 +1774,7 @@ rel[str,int]: {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;,
         declared type. Here is an example of a license tag:<programlisting>tag str license on module;</programlisting>This
         will allow to write things like:<programlisting>module Booleans
 @license{This module is distributed under the GPL}
-...</programlisting>Other examples of declaration tags are:<programlisting>tag str todo on all             %% a todo note for all declaration types
+...</programlisting>Other examples of declaration tags are:<programlisting>tag str todo on all             %% todo note for all types
 tag void deprecated on function %% marks a deprecated function
 tag int memo on function        %% bounded memoization of 
                                 %% function calls
@@ -1692,7 +1793,7 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
       </section>
 
       <section xml:id="section.node-annotation">
-        <title>Node annotation</title>
+        <title>Node Annotation Declaration</title>
 
         <para>An annotation may be associated with any node value. Annotations
         are intended to attach application data to values, like adding
@@ -1751,7 +1852,7 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
       </section>
 
       <section xml:id="section.rewrite-rule">
-        <title>Rewrite Rule</title>
+        <title>Rewrite Rule Declaration</title>
 
         <para>Functions are the workhorses of Rascal. They can have any value
         as parameter or result and are explicitly called by the user. Also,
@@ -1767,10 +1868,7 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
         repeated as long as there are rules that can be applied to the current
         subject value. Technically, this is called <emphasis>innermost
         rewriting</emphasis>. When done, the result of rewriting the original
-        subject value is used instead of that original value.<caution>
-            <para>There is some overlap with the description of switch and
-            visit here.</para>
-          </caution></para>
+        subject value is used instead of that original value.</para>
 
         <para>Rules have the general form:<programlisting><keysym>rule</keysym> <replaceable>Name</replaceable> <replaceable>PatternWithAction</replaceable></programlisting></para>
 
@@ -1789,8 +1887,8 @@ data Bool = bor(Bool left, Bool right);
 rule a1 band(btrue, Bool B)    =&gt; B;
 rule a2 band(bfalse, Bool B)   =&gt; bfalse;
 done.
-rascal&gt;band(band(btrue,btrue),band(btrue, bfalse));
-bfalse</screen></para>
+rascal&gt; band(band(btrue,btrue),band(btrue, bfalse));
+Bool: bfalse</screen></para>
 
         <para>During execution of rules the following applies:</para>
 
@@ -1801,7 +1899,7 @@ bfalse</screen></para>
           </listitem>
 
           <listitem>
-            <para>The right hand side of rules can contain fail statements,
+            <para>The right-hand side of rules can contain fail statements,
             which cause backtracking over the alternative matches or
             alternative rules for a certain constructor.</para>
           </listitem>
@@ -1908,7 +2006,7 @@ bfalse</screen></para>
 
         <para>The non-Boolean operators are summarized in <xref
         linkend="table.non-boolean-operators" />. All operators are higly
-        overloaded and we refer to <xref linkend="section.builtin" /> for a
+        overloaded and we refer to <xref linkend="section.lib" /> for a
         description of their meaning for each specific type. The following
         rules apply:</para>
 
@@ -1954,6 +2052,18 @@ bfalse</screen></para>
 
               <tbody>
                 <row>
+                  <entry><replaceable>Exp</replaceable> <literal>.</literal>
+                  <replaceable>Name</replaceable></entry>
+
+                  <entry>Field selection</entry>
+
+                  <entry><replaceable>Exp </replaceable>should evaluate to a
+                  tuple or datatype with field
+                  <replaceable>Name</replaceable>; return the value of that
+                  field</entry>
+                </row>
+
+                <row>
                   <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
                   [</literal> <replaceable>Name</replaceable>
                   <literal>=</literal>
@@ -1963,21 +2073,10 @@ bfalse</screen></para>
                   <entry>Field assignment</entry>
 
                   <entry><replaceable>Exp</replaceable><subscript>1</subscript>should
-                  evaluate to a datatype with a field
+                  evaluate to a tuple or datatype with a field
                   <replaceable>Name</replaceable>; assign value
                   <replaceable>Exp</replaceable><subscript>2</subscript> to
                   that field</entry>
-                </row>
-
-                <row>
-                  <entry><replaceable>Exp</replaceable> <literal>.</literal>
-                  <replaceable>Name</replaceable></entry>
-
-                  <entry>Field selection</entry>
-
-                  <entry><replaceable>Exp </replaceable>should evaluate to a
-                  datatype with field <replaceable>Name</replaceable>; return
-                  the value of that field</entry>
                 </row>
 
                 <row>
@@ -2005,8 +2104,8 @@ bfalse</screen></para>
                   <replaceable>Exp</replaceable><subscript>2</subscript> is
                   used as index in
                   <replaceable>Exp</replaceable><subscript>1</subscript>'s
-                  value. On string, list, tuple return the element with given
-                  index; for map return the value associated with
+                  value. On list, tuple return the element with given index;
+                  for map return the value associated with
                   <replaceable><replaceable>Exp</replaceable><subscript>2</subscript>
                   </replaceable>'s value. On relation ...</entry>
                 </row>
@@ -2137,7 +2236,7 @@ bfalse</screen></para>
                   <entry>Subtraction / difference</entry>
 
                   <entry>Subtract integer or real; difference of list, set,
-                  map, or relation</entry>
+                  map, or relationT</entry>
                 </row>
 
                 <row>
@@ -2154,31 +2253,121 @@ bfalse</screen></para>
           </table></para>
 
         <para>Most of these operators are described in detail in <xref
-        linkend="section.builtin" /> for specific types. Here we describe the
+        linkend="section.lib" /> for specific types. Here we describe the
         remaining generic operators.</para>
 
         <formalpara>
-          <title>Field Assignment</title>
+          <title>Field Selection and Field Assignment</title>
 
-          <para></para>
+          <para>Field selection and field assignment apply to all values that
+          have named components like tuples and relations with named elements,
+          abstract data types, and locations. Field selection returns the
+          value of the named component and Field assignment returns a new
+          value in which the named component has been replaced by a new value.
+          We illustrate this for tuples:<screen>rascal&gt; tuple[int key, str val] T = &lt;1, "abc"&gt;;
+tuple[int, str] : &lt;1, "abc"&gt;
+
+rascal&gt; T.val;
+str : "abc"
+
+rascal&gt; T[val = "def"];
+tuple[int, str] : &lt;1, "def"&gt;
+
+rascal&gt; T;
+tuple[int, str] : &lt;1, "abc"&gt;</screen></para>
         </formalpara>
 
-        <formalpara>
-          <title>Field selection</title>
-
-          <para></para>
-        </formalpara>
+        <para>Observe that field assignment creates a <emphasis>new</emphasis>
+        value with an updated field. The old value remains unchanged as can be
+        seen from the unchanged value of <literal>T</literal> in the above
+        example. In<xref linkend="section.assignment" /> we explain how to
+        change a field of variable value.</para>
 
         <formalpara>
           <title>Field projection</title>
 
-          <para></para>
+          <para>Field projection applies to tuples and relations and may
+          contain element names or integer constants that refer to elements in
+          the order in which they occur in the original value (counting from
+          0). A field projection returns a new value that consists of the
+          selected elements. Suppose we have a relation with traffic
+          information that records the name of the day, the day number, and
+          the length of the traffic jams at that day.</para>
         </formalpara>
+
+        <screen>rascal&gt; rel[str day, int daynum, int length] Traffic = 
+        {&lt;"mon", 1, 100&gt;, &lt;"tue", 2, 150&gt;, &lt;"wed", 3, 125&gt;, 
+         &lt;"thur", 4, 110&gt;, &lt;"fri", 5, 90&gt;};
+rel[str, int, int]: {&lt;"thur",4,110&gt;,&lt;"tue",2,150&gt;,&lt;"wed",3,125&gt;,
+         &lt;"fri",5,90&gt;,&lt;"mon",1,100&gt;}
+
+rascal&gt; Traffic&lt;length,daynum&gt;;
+rel[int, int]: {&lt;110,4&gt;,&lt;150,2&gt;,&lt;90,5&gt;,&lt;100,1&gt;,&lt;125,3&gt;}
+
+rascal&gt; Traffic&lt;2,day&gt;;
+rel[int, str]: {&lt;125,"wed"&gt;,&lt;110,"thur"&gt;,&lt;100,"mon"&gt;,&lt;90,"fri"&gt;,
+                &lt;150,"tue"&gt;}</screen>
+
+        <para>Field projection thus selects parts from a larger value that has
+        a fixed number of parts. The selection is based on position and not on
+        value and can be used to completely reorder or remove the parts of a
+        larger value.</para>
 
         <formalpara>
           <title>Subscription</title>
 
-          <para></para>
+          <para>Subscription selects values with a given computed index from a
+          larger value that has a variable number of elements. For lists and
+          tuples a single integer expression is allowed as index and the
+          returned value is the element with that index (counting from 0). For
+          maps, the index type should correspond to the key type of the map
+          and the value associated with the index is returned. For relations,
+          more than one index expression is allowed and as value a new,
+          reduced, relation is returned with all elements that contained the
+          index values at the corresponding tuples positions (but these values
+          are removed, hence a reduced relation). Some examples illustrate
+          this:<screen>rascal&gt; L = [10, 20, 30];
+list[int] : [10,20,30]
+
+rascal&gt; L[1];
+int : 20
+
+rascal&gt; T = &lt;"mon", 1&gt;;
+tuple[str,int] : &lt;"mon", 1&gt;;
+
+rascal&gt; T[0];
+str : "mon"
+
+rascal&gt; colors = ("hearts":"red", "clover":"black", 
+                  "trumps":"black", "clubs":"red");
+map[str,str] : ("hearts":"red", "clover":"black", 
+                "trumps":"black", "clubs":"red")
+
+rascal&gt; colors["trumps"];
+str: "black"
+
+rascal&gt; rel[str country, int year, int amount] GDP =
+           {&lt;"US", 2008, 14264600&gt;, &lt;"EU", 2008, 18394115&gt;,
+            &lt;"Japan", 2008, 4923761&gt;, &lt;"US", 2007, 13811200&gt;, 
+            &lt;"EU", 2007, 13811200&gt;, &lt;"Japan", 2007, 4376705&gt;};
+rel[str,int,int] : 
+           {&lt;"US", 2008, 14264600&gt;, &lt;"EU", 2008, 18394115&gt;, 
+            &lt;"Japan", 2008, 4923761&gt;, &lt;"US", 2007, 13811200&gt;, 
+            &lt;"EU", 2007, 13811200&gt;, &lt;"Japan", 2007, 4376705&gt;}
+
+rascal&gt; GDP["Japan"];
+rel[int,int] : {&lt;2008, 4923761&gt;, &lt;2007, 4376705&gt;}
+
+rascal&gt; GDP["Japan", 2008];
+set[int] : {4923761}</screen></para>
+        </formalpara>
+
+        <formalpara>
+          <title>Other Non-Boolean Operator Expressions</title>
+
+          <para>The other non-Boolean operator expressions are explained in
+          more detail for each datatype, see <xref
+          linkend="section.lib" />.</para>
         </formalpara>
       </section>
 
@@ -2187,7 +2376,7 @@ bfalse</screen></para>
 
         <para>The Boolean operators are summarized in <xref
         linkend="table.boolean-operators" />. All operators are higly
-        overloaded and we refer to <xref linkend="section.builtin" /> for a
+        overloaded and we refer to <xref linkend="section.lib" /> for a
         description of their meaning for each specific type. Most operator are
         self-explanatory except the Match and NoMatch operators that are also
         the main reason to treat Boolean operator expressions separately.
@@ -2207,7 +2396,13 @@ bfalse</screen></para>
           </listitem>
         </itemizedlist>
 
-        <para>The match operator <programlisting><replaceable>Pat</replaceable> <literal>:=</literal> <replaceable>Exp</replaceable></programlisting></para>
+        <formalpara>
+          <title>Match Operator</title>
+
+          <para>The match operator </para>
+        </formalpara>
+
+        <para><programlisting><replaceable>Pat</replaceable> <literal>:=</literal> <replaceable>Exp</replaceable></programlisting></para>
 
         <para>is evaluated as follows:</para>
 
@@ -2303,11 +2498,13 @@ bfalse</screen></para>
 
         <itemizedlist>
           <listitem>
-            <para>Comprehensions</para>
+            <para>Comprehensions, see <xref
+            linkend="section.comprehension" />.</para>
           </listitem>
 
           <listitem>
-            <para>Tests in if, while, do, for, one, all statements.</para>
+            <para>Tests in for, one, all statements, see <xref
+            linkend="section.statements" />.</para>
           </listitem>
         </itemizedlist>
 
@@ -2926,9 +3123,10 @@ bfalse</screen></para>
 
         <para>Patterns can be used in various contexts, but a common context
         is a <replaceable>PatternWithAction</replaceable>, which in its turn,
-        may be used in a visit expression (<xref linkend="section.visit" />),
-        a switch statement (<xref linkend="section.switch" />), or a rewrite
-        rule (<xref linkend="section.rewrite-rule" />).</para>
+        may be used in a visit expression (see <xref
+        linkend="section.visit" />), a switch statement (see <xref
+        linkend="section.switch" />), or a rewrite rule (see <xref
+        linkend="section.rewrite-rule" />).</para>
 
         <para>A <replaceable>PatternWithAction </replaceable>can have one of
         the following forms:</para>
@@ -3148,31 +3346,19 @@ bfalse</screen></para>
         <section>
           <title>Examples of Comprehensions</title>
 
-          <itemizedlist>
-            <listitem>
-              <para><literal>{X | int X : {1, 2, 3, 4, 5}, X &gt;=
-              3}</literal> yields the set <literal>{3,4,5}</literal>.</para>
-            </listitem>
+          <para>Here are som examples of comprehensions:</para>
 
-            <listitem>
-              <para><literal>{&lt;X, Y&gt; | int X : {1, 2, 3}, int Y : {2, 3,
-              4}, X &gt;= Y}</literal> yields the relation <literal>{&lt;2,
-              2&gt;, &lt;3, 2&gt;, &lt;3, 3&gt;}</literal>.</para>
-            </listitem>
+          <screen><literal>rascal&gt; {X | int X : {1, 2, 3, 4, 5}, X &gt;= 3}</literal>;
+set[int] : <literal>{3,4,5}</literal>
 
-            <listitem>
-              <para><literal>{&lt;Y, X&gt; | &lt;int X, int Y&gt; :
-              {&lt;1,10&gt;, &lt;2,20&gt;}}</literal> yields the inverse of
-              the given relation: <literal>{&lt;10,1&gt;,
-              &lt;20,2&gt;}</literal>.</para>
-            </listitem>
+<literal>rascal&gt; {&lt;X, Y&gt; | int X : {1, 2, 3}, int Y : {2, 3, 4}, X &gt;= Y}</literal>;
+<literal>rel[int,int] : {&lt;2, 2&gt;, &lt;3, 2&gt;, &lt;3, 3&gt;}</literal>
 
-            <listitem>
-              <para><literal>{X, X * X | X : {1, 2, 3, 4, 5}, X &gt;=
-              3}</literal> yields the set
-              <literal>{3,4,5,9,16,25}</literal>.</para>
-            </listitem>
-          </itemizedlist>
+<literal>rascal&gt; {&lt;Y, X&gt; | &lt;int X, int Y&gt; : {&lt;1,10&gt;, &lt;2,20&gt;}}</literal>
+rel[int,int] : <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>
+
+<literal>rascal&gt; {X, X * X | X : {1, 2, 3, 4, 5}, X &gt;= 3}</literal>;     &lt;==== Not implemented!
+set[int] : <literal>{3,4,5,9,16,25}</literal></screen>
         </section>
       </section>
 
@@ -3443,17 +3629,89 @@ default: ...
         case to the next.</para>
       </section>
 
-      <section>
+      <section xml:id="section.assignment">
         <title>Assignment Statement</title>
 
         <para>The purpose of an assignment is to assign a new value to a
         simple variable or to an element of a more complex data structure. The
-        general form is:<programlisting><replaceable>Assignable</replaceable> = <replaceable>Exp</replaceable></programlisting>An
-        assignable is either a single variable, (the <emphasis>base
-        variable</emphasis>), optionally followed by subscriptions or
-        projections. The assignment statement always results in assigning a
-        completely new value to the base variable. We have thus the following
-        three forms of assignment:</para>
+        most general form of an assignment statement is</para>
+
+        <para><programlisting><replaceable>Assignable</replaceable> <replaceable>AssignmentOp</replaceable> <replaceable>Exp</replaceable></programlisting>where
+        <replaceable>AssignmentOp</replaceable> may be <literal>=</literal>,
+        <literal>+=</literal>, <literal>-=</literal>, <literal>*=</literal>,
+        <literal>/=</literal>, or <literal>?=</literal>. Here = is the
+        ordinary assignment operators and the other forms can be derived from
+        it according to <xref linkend="table.assignment-operators" />.<table
+            xml:id="table.assignment-operators">
+            <title>Assignment Operators</title>
+
+            <tgroup cols="2">
+              <colspec align="left" colname="col1" colwidth="2*" />
+
+              <colspec align="left" colname="col2" colwidth="2*" />
+
+              <thead>
+                <row>
+                  <entry>Assignment Operator</entry>
+
+                  <entry>Equivalent to</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>+=</literal> <replaceable>Exp</replaceable></entry>
+
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>=</literal> <replaceable>Assignable</replaceable>
+                  <literal>+</literal> <replaceable>Exp</replaceable></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>-=</literal> <replaceable>Exp</replaceable></entry>
+
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>=</literal> <replaceable>Assignable</replaceable>
+                  <literal>-</literal> <replaceable>Exp</replaceable></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>*=</literal> <replaceable>Exp</replaceable></entry>
+
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>=</literal> <replaceable>Assignable</replaceable>
+                  <literal>*</literal> <replaceable>Exp</replaceable></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>/=</literal> <replaceable>Exp</replaceable></entry>
+
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>=</literal> <replaceable>Assignable</replaceable>
+                  <literal>/</literal> <replaceable>Exp</replaceable></entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>?=</literal> <replaceable>Exp</replaceable></entry>
+
+                  <entry><replaceable>Assignable</replaceable>
+                  <literal>=</literal> <replaceable>Assignable</replaceable>
+                  <literal>?</literal> <replaceable>Exp</replaceable></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+
+        <para>An assignable is either a single variable, (the <emphasis>base
+        variable</emphasis>), optionally followed by subscriptions or field
+        selections. The assignment statement always results in assigning a
+        completely new value to the base variable. We distinguish the
+        following forms of assignment:</para>
 
         <itemizedlist>
           <listitem>
@@ -3581,6 +3839,7 @@ rascal&gt;C;
 [1,2,3]
 
 rascal&gt; ** good V ? E1 = E2 example here **
+
 
 rascal&gt; anno str FREQ@color;
 done.
@@ -3833,13 +4092,13 @@ rascal&gt;
   solve
      T = T + (T o R1);
 
-{&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</screen>
+rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</screen>
       </section>
     </section>
   </section>
 
   <section xml:id="section.larger-examples">
-    <title>Larger Examples (TODO)</title>
+    <title>Larger Examples</title>
 
     <para>Now we will have a closer look at some larger applications of
     Rascal. We start by analyzing the global structure of a software system.
@@ -3866,33 +4125,43 @@ rascal&gt;
       rather than at the procedure level. If it is known to which component
       each procedure belongs, it is possible to <emphasis>lift</emphasis> the
       call relation to the component level as proposed in <biblioref
-      linkend="Krikhaar99" />. First, introduce new types to denote procedure
-      calls as well as components of a system:<programlisting>type proc = str
-type comp = str</programlisting>Given a calls relation
-      <literal>Calls2</literal>, the next step is to define the components of
-      the system and to define a <literal>PartOf</literal> relation between
-      procedures and components.<programlisting>rel[proc,proc] Calls = {&lt;"main", "a"&gt;, &lt;"main", "b"&gt;, &lt;"a", "b"&gt;, 
+      linkend="Krikhaar99" />. Actual lifting, amounts to translating each
+      call between procedures by a call between components. This described in
+      the following module:<programlisting>module demo::Lift
+
+alias proc = str;
+alias comp = str;
+
+public rel[comp,comp] lift(rel[proc,proc] aCalls, rel[proc,comp] aPartOf){
+   return { &lt;C1, C2&gt; | &lt;proc P1, proc P2&gt; &lt;- aCalls, 
+                       &lt;comp C1, comp C2&gt; &lt;- aPartOf[P1] * aPartOf[P2]};
+}</programlisting>Let's now apply this. First import the above module, and
+      define a call relation and a partof relation:</para>
+
+      <para><screen>rascal&gt; import demo::Lift;
+done.
+
+rascal&gt; Calls = {&lt;"main", "a"&gt;, &lt;"main", "b"&gt;, &lt;"a", "b"&gt;, 
+                         &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "d"&gt;
+                       };
+rel[str,str] : {&lt;"main", "a"&gt;, &lt;"main", "b"&gt;, &lt;"a", "b"&gt;, 
                          &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "d"&gt;
                        }
 
-set[comp] Components = {"Appl", "DB", "Lib"}
+rascal&gt; Components = {"Appl", "DB", "Lib"};
+set[str] : {"Appl", "DB", "Lib"}
 
-rel[proc, comp] PartOf = {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;, 
-                          &lt;"b", "DB"&gt;, &lt;"c", "Lib"&gt;, &lt;"d", "Lib"&gt;
-                         }</programlisting>Actual lifting, amounts to
-      translating each call between procedures by a call between components.
-      This is achieved by the following function
-      <literal>lift</literal>:<programlisting>rel[comp,comp] lift(rel[proc,proc] aCalls, rel[proc,comp] aPartOf)=
-   { &lt;C1, C2&gt; | &lt;proc P1, proc P2&gt; : aCalls, 
-                &lt;comp C1, comp C2&gt; : aPartOf[P1] x aPartOf[P2]
-   }</programlisting>In our example, the lifted call relation between
-      components is obtained by<programlisting>rel[comp,comp] ComponentCalls = lift(Calls2, PartOf)</programlisting>and
-      has as value:<programlisting>{&lt;"DB", "Lib"&gt;, &lt;"Appl", "Lib"&gt;, &lt;"Appl", "DB"&gt;, &lt;"Appl", "Appl"&gt;}</programlisting>The
+rascal&gt; PartOf = {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;, 
+                  &lt;"b", "DB"&gt;, &lt;"c", "Lib"&gt;, &lt;"d", "Lib"&gt;};
+rel[str,str] : {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;, 
+                  &lt;"b", "DB"&gt;, &lt;"c", "Lib"&gt;, &lt;"d", "Lib"&gt;}</screen>The
+      lifted call relation between components is now obtained by:<screen>rascal&gt; ComponentCalls = lift(Calls, PartOf);
+rel[str,str] : {&lt;"DB", "Lib"&gt;, &lt;"Appl", "Lib"&gt;, &lt;"Appl", "DB"&gt;, &lt;"Appl", "Appl"&gt;}</screen>The
       relevant relations for this example are shown in <xref
       linkend="figure.parts" />.</para>
 
       <figure xml:id="figure.parts">
-        <title>(a) <literal>Calls2</literal>; (b) <literal>PartOf</literal>;
+        <title>(a) <literal>Calls</literal>; (b) <literal>PartOf</literal>;
         (c) <literal>ComponentCalls</literal>.</title>
 
         <mediaobject>
@@ -3904,10 +4173,10 @@ rel[proc, comp] PartOf = {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;,
     </section>
 
     <section xml:id="section.analyzing-java">
-      <title>Analyzing the Structure of Java Systems</title>
+      <title>Analyzing the Structure of Java Systems (TODO)</title>
 
       <para>Now we consider the analysis of Java systems (inspired by
-      <biblioref linkend="BNL03" />. Suppose that the type
+      <biblioref linkend="BNL03" />). Suppose that the type
       <literal>class</literal> is defined as follows<programlisting>type class = str</programlisting>and
       that the following relations are available about a Java
       application:</para>
@@ -4056,7 +4325,7 @@ rel[class,set[class]] ClassCycles =
       <literal>y</literal> (line 6), and <literal>z</literal> (line 10). It is
       also clear that variable <literal>p</literal> is initialized (line 4),
       but is never used. How can we automate these kinds of analysis? Recall
-      from <xref linkend="section.EASY-programming" /> that we follow
+      from <xref linkend="section.EASY-programming" /> that we follow the
       Extract-Analyze-SYnthesize paradigm to approach such a problem. The
       first step is to determine which elementary facts we need about the
       program. For this and many other kinds of program analysis, we need at
@@ -4909,7 +5178,7 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
     </section>
   </section>
 
-  <section xml:id="section.builtin">
+  <section xml:id="section.lib">
     <title>Built-in Operators and Library Functions</title>
 
     <para>The built-in operators and library functions can be subdivided in
