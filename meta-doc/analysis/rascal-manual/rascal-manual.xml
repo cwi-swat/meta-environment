@@ -553,6 +553,85 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
     </section>
   </section>
 
+  <section>
+    <title>Some Classical Examples</title>
+
+    <para>The following simple examples will help you to grasp the main
+    features of Rascal quickly. You can also look ahead and consult <xref
+    linkend="section.rascal-language" /> for details of the language or <xref
+    linkend="section.lib" /> for specific operators or functions.</para>
+
+    <section>
+      <title>Hello</title>
+
+      <para>The ubiquitous hello world program looks in Rascal as
+      follows:<screen>rascal&gt; import IO;
+done.
+
+rascal&gt; println("Hello, this is my first Rascal program");
+Hello, this is my first Rascal program
+done.
+</screen>First, the library module IO (see <xref linkend="section.lib-IO" />)
+      is imported since hello world requires printing. Next, we call
+      <literal>println</literal> and poudly observe our first Rascal
+      output!</para>
+
+      <para>A slightly more audacious approach is to wrap the print statement
+      in a function and call it:</para>
+
+      <para><screen>rascal&gt; void hello() {
+   println("Hello, this is my first Rascal program");
+}
+Rascal.Function::=Rascal.Function.Closure(): void hello() {  println("Hello, this is my first Rascal  ...
+
+rascal&gt; hello();
+Hello, this is my first Rascal program
+done.</screen>The summit of hello-engineering can be reached by placing all
+      the above in a separate module:<programlisting>module Hello
+
+public void hello() {
+   println("Hello, this is my first Rascal program");
+}</programlisting>Note that we added a public modifier to the definition of
+      hello, since we want it to be visible outside the Hello module. Using
+      this hello module is now simple:<screen>rascal&gt; import Hello;
+done.
+
+rascal&gt; hello();
+Hello, this is my first Rascal program
+done.</screen></para>
+    </section>
+
+    <section>
+      <title>Factorial</title>
+
+      <para>Here is another classical example, computing the factorial
+      function:<programlisting>module Factorial
+
+public int fac(int N)
+{
+  return N &lt;= 0 ? 1 : N * fac(N - 1);
+}</programlisting></para>
+
+      <para>It uses a conditional expression of the form
+      <literal><replaceable>Exp</replaceable><subscript>1</subscript> ?
+      <replaceable>Exp</replaceable><subscript>2</subscript> :
+      <replaceable>Exp</replaceable><subscript>3</subscript></literal> to
+      distinguish cases and here is how to use it:<screen>rascal&gt; import Factorial;
+done.
+
+rascal&gt; fac(50);
+int: 30414093201713378043612608166064768844377641568960512000000000000</screen></para>
+
+      <para>Indeed, Rascal has infinite length integers.</para>
+    </section>
+
+    <section>
+      <title>Word Count</title>
+
+      <para></para>
+    </section>
+  </section>
+
   <section xml:id="section.motivating-example">
     <title>A Motivating Example</title>
 
@@ -648,7 +727,7 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
       procedures:</para>
 
       <screen>rascal&gt; alias proc = str;
-done</screen>
+done.</screen>
 
       <para>Suppose that the following facts have been extracted from the
       source code and are represented by the relation
@@ -7422,9 +7501,17 @@ domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});
 
             <tbody>
               <row>
-                <entry><literal>Resource java root() </literal></entry>
+                <entry><literal>set[loc] java files(str
+                project)</literal></entry>
 
-                <entry>The root of the Eclipse workspace</entry>
+                <entry>The files contained in a project</entry>
+              </row>
+
+              <row>
+                <entry><literal>loc java location(str
+                project)</literal></entry>
+
+                <entry>Source location of given project</entry>
               </row>
 
               <row>
@@ -7441,17 +7528,9 @@ domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});
               </row>
 
               <row>
-                <entry><literal>loc java location(str
-                project)</literal></entry>
+                <entry><literal>Resource java root() </literal></entry>
 
-                <entry>Source location of given project</entry>
-              </row>
-
-              <row>
-                <entry><literal>set[loc] java files(str
-                project)</literal></entry>
-
-                <entry>The files contained in a project</entry>
+                <entry>The root of the Eclipse workspace</entry>
               </row>
             </tbody>
           </tgroup>
@@ -8211,7 +8290,7 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
       </table>
     </section>
 
-    <section>
+    <section xml:id="section.lib-Value">
       <title>Value</title>
 
       <para><table>
@@ -8384,7 +8463,7 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
       </table>
     </section>
 
-    <section>
+    <section xml:id="section.lib-Void">
       <title>Void</title>
 
       <para>There are no operators or functions defined on the type
@@ -8582,299 +8661,6 @@ rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
       </figure>
     </section>
 
-    <section xml:id="section.fact-extraction-asf-sdf">
-      <title>Fact Extraction using ASF+SDF</title>
-
-      <para>Although facts can be extracted in many ways, ASF+SDF is the tool
-      of preference to do this. Examples are given In XXX.<warning>
-          <para>Fix reference</para>
-        </warning></para>
-
-      <para><!--\section{Fact Extraction using ASF+SDF} \label{SEC:ASF+SDF-extraction}
-
-
-
-\subsection{Extracting Facts for Pico}
-
-
-\begin{figure}[tb]
-{\small
-\begin{verbatim}
-module PicoFactExtraction
-imports Pico-syntax
-imports basic/Integers
-imports Rstore
-imports utilities/PosInfo[PROGRAM] utilities/PosInfo[STATEMENT]
-        utilities/PosInfo[EXP] utilities/PosInfo[PICO-ID]
-exports
-  context-free syntax
-    cflow({ STATEMENT ";"}*)     -> <Set[[Elem]], Rel[[Elem]], Set[[Elem]]>
-
-    uses(PROGRAM, Rel[[Elem]])   -> Rel[[Elem]] {traversal(accu,top-down,continue)}
-    uses(EXP, Rel[[Elem]])       -> Rel[[Elem]] {traversal(accu,top-down,continue)}
-
-    defs(PROGRAM, Rel[[Elem]])   -> Rel[[Elem]] {traversal(accu,top-down,break)}
-    defs(STATEMENT, Rel[[Elem]]) -> Rel[[Elem]] {traversal(accu,top-down,break)}
-
-    id2str(PICO-ID)              -> String
-\end{verbatim}
-}
-\hrulefill
-\caption{\label{FIG:PicoFactExtraction.sdf}Syntax of functions for Pico fact extraction}
-\end{figure}
-
-After all these mental preparations, we are now ready to delve into the details
-of a Pico fact extractor. Figure~\ref{FIG:PicoFactExtraction.sdf} shows the
-syntax of the functions that we will need for Pico fact extraction. There are
-some things to observe:
-\begin{itemize}
-\item Module {\tt Pico-syntax} is imported to make available the Pico
-  grammar.
-\item Module {\tt Rstore} is imported to get access to all functions on
-  Rstores.
-\item The module {\tt PosInfo} is imported with various sort names as
-  parameter. For all these sorts, the function {\tt get-location} will be
-  defined that extracts the source text location from a given language
-  construct.
-\item The function {\tt cflow} will extract the control flow from Pico
-  programs.
-\item The functions {\tt uses} and {\tt defs} extracts the uses and
-  definitions of variables from the source text.
-\item {\tt id2str} is an auxiliary function that converts Pico identifiers to
-  strings that can be included in an Rstore.
-\item We have omitted all declarations for ASF+SDF variables to be used in the
-  specification. The convention is that such variables all start with a dollar
-  sign ({\tt \$}).
-\end{itemize}
-
-\begin{figure}[tb]
-{\small 
-\begin{verbatim}
-%%  control flow of statement lists
-[cf1] <$Entry1, $Rel1, $Exit1> := cflow($Stat),
-      <$Entry2, $Rel2, $Exit2> := cflow($Stat+)
-       ==========================================================
-       cflow($Stat ; $Stat+) =
-       < $Entry1,
-         $Rel1 union $Rel2 union ($Exit1 x $Entry2),
-         $Exit2
-       >
-[cf2] cflow() = <{}, {}, {}>
-
-%%  control flow of individual statements
-[cf3]  <$Entry, $Rel, $Exit> := cflow($Stat*),
-       $Control := get-location($Exp)
-       =========================================================
-       cflow(while $Exp do $Stat* od) =
-       < {$Control},
-         ({$Control} x $Entry) union $Rel union ($Exit x {$Control}),
-         {$Control}
-       >
-
-[cf4]  <$Entry1, $Rel1, $Exit1> := cflow($Stat*1),
-       <$Entry2, $Rel2, $Exit2> := cflow($Stat*2),
-       $Control := get-location($Exp)
-       =========================================================
-       cflow(if $Exp then $Stat*1 else $Stat*2 fi) =
-       < {$Control},
-         ({$Control} x $Entry1) union ({$Control} x $Entry2) 
-                                union  $Rel1 union $Rel2,
-         $Exit1 union $Exit2
-       >
-[default-cf]
-        $Loc := get-location($Stat)
-       =========================================================
-        cflow($Stat) = < {$Loc}, {}, {$Loc} >
-\end{verbatim}
-}
-\hrulefill
-\caption{\label{FIG:PicoFactExtraction-cflow}Equations for {\tt cflow}: computing control flow}
-\end{figure}
-
-\begin{figure}[tb]
-{\small
-\begin{verbatim}
-
-%%  Variable definitions: <expression-location, var-name>
-
-[vd1]  $Id := $Exp := $Stat
-       ==========================================================
-       defs($Stat, $Rel) = $Rel union {<get-location($Stat), id2str($Id)>}
-
-%%  Variable uses <var-location, var-name>
-
-[vu1]  $Id := $Exp
-       ==========================================================
-       uses($Exp, $Rel) = $Rel union  {<get-location($Id), id2str($Id)>}
-
-%%  utilities
-
-[i2s] id2str(pico-id($Char*)) = strcon(""" $Char* """)
-
-\end{verbatim}
-}
-\hrulefill
-\caption{\label{FIG:PicoFactExtraction-defs-uses}Equations for {\tt defs}, {\tt uses} and
-  {\tt id2str}}
-\end{figure}
-
-
-\begin{figure}[tb]
-{\small
-\begin{verbatim}
-module PicoQuery
-imports RscriptCalculator
-imports PicoFactExtraction
-imports basic/Errors
-
-exports
-  start-symbols Summary
-  context-free syntax
-     extractRelations(PROGRAM)                   -> RSTORE
-     pico-query(RSCRIPT, RSTORE, StrCon, StrCon) -> Summary
-     uninit(PROGRAM)                             -> Summary
-\end{verbatim}
-}
-\hrulefill
-\caption{\label{FIG:PicoQuery.sdf}Syntax of function for two styles of querying}
-\end{figure}
-
-\begin{figure}[tb]
-{\small
-\begin{verbatim}
-%%  extractRelations
-
-[er-1] begin $Decls $Stat+ end := $Program,
-       $Start := get-location($Program),
-       <$Entry, $Rel, $Exit> := cflow($Stat+),
-
-       $Loc :=  get-location($Program),
-       $Rstore1 := assign(ROOT, expr, $Loc, rstore()),
-       $Rstore2 := assign(PRED, rel[expr,expr],
-                                $Rel union ({$Start} x $Entry), $Rstore1),
-       $Rstore3 := assign(DEFS, rel[expr,varname], defs($Program, {}), $Rstore2),
-       $Rstore4 := assign(USES, rel[var,varname], uses($Program, {}), $Rstore3)
-       ==========================================================================
-       extractRelations($Program) = $Rstore4
-
-%%  pico-query
-
-[pq1]  pico-query($Script, $Rstore, $StrCon1, $StrCon2) =
-       convert2summary(
-          $StrCon2,
-          eval-rscript-with-rstore-and-yield($Script, $Rstore, $StrCon1)
-       )
-\end{verbatim}
-}
-\hrulefill
-\caption{\label{FIG:PicoFactExtraction-extractRelations}Build an Rstore with
-  {\tt extractRelations} and apply it using {\tt pico-query}}
-\end{figure}
-
-\begin{figure}[tb]
-{\small
-\begin{verbatim}
-[ui-1] begin $Decls $Stat+ end := $Program,
-       $Start := get-location($Program),
-       <$Entry, $Rel, $Exit> := cflow($Stat+),
-       $Rel1 := $Rel union ({$Start} x $Entry),
-       $Rval := [| type expr = loc
-                   type var  = loc
-                   type varname = str
-
-                   expr ROOT = $Start
-
-                   rel[expr,expr] PRED = $Rel1
-                   rel[expr,varname] DEFS  = defs($Program, {})
-                   rel[var,varname] USES  = uses($Program, {})
-                   set[varname] VARNAMES  = range(DEFS) union range(USES)
-
-                   rel[var, varname] UNINIT =
-                   { <V, VN>| var-name VN : VARNAMES,
-                              var V : USES[-,VN],
-                              expr E : reachX({ROOT}, DEFS[-,VN], PRED),
-                              V <= E
-                   }
-
-                |] yield UNINIT
-       ===================================================================
-       uninit($Program) = convert2summary("Uninitialized variable", $Rval)            
-\end{verbatim}
-}
-\hrulefill
-\caption{\label{FIG:PicoFactExtraction-uninit}Combined fact extraction and
-  query processing}
-\end{figure}
-
-\paragraph{Extracting control flow}
-The function {\tt cflow} extracts the control flow from Pico programs. It
-takes a list of statements as input and returns a triple as output:
-\begin{itemize}
-\item A set of program elements that may enter a construct.
-\item A relation between the entries and exits of a construct.
-\item A set of program elements that form the exits from the construct.
-\end{itemize}
-For instance, the test in an if-then-else statement forms the entry of the
-statement, it is connected to the entry of the first statement of the then and
-the else branch. The exits of the if-then-else statement are the exits of the
-last statement in the then and the else branch. The purpose of {\tt cflow} is
-to determine this information for individual statements and to combine this
-information for compound statements. Its definition is shown in
-Figure~\ref{FIG:PicoFactExtraction-cflow}.
-
-\paragraph{Extracting uses and defs}
-The functions {\tt defs} and {\tt uses} are shown in
-Figure~\ref{FIG:PicoFactExtraction-defs-uses}.  They extract the definition,
-respectively, the use of variables from the source code. Both functions are
-defined by means of an ASF+SDF \emph{traversal function} which silently visits
-all constructs in a tree, and only performs an action for the constructs for
-which the specification contains an equation. In the case of {\tt defs},
-equation {\tt [vd1]} operations on assignment statements and extracts a pair
-that relates the location of the complete statement to the name of the
-variable on the left-hand side. For the function {\tt uses}, equation {\tt
-[vu1]} acts on all uses of variables. For completeness sake, the figure also
-show the definition of utility function {\tt id2str}.
-
-\paragraph{Queries}
-Figure~\ref{FIG:PicoQuery.sdf} shows the syntax of the functions we will use
-for querying. In fact, we will demonstrate two styles of definition.  In the
-first style, the function {\tt extractRelation} extracts facts from a Pico
-program and yields an Rstore. This can be used by {\tt pico-query} to run an
-arbitrary \rscript on that Rstore. In the second style, fact extraction and
-running an \rscript are done in a single function.
-
-Figure~\ref{FIG:PicoFactExtraction-extractRelations} shows the first
-definition style. In equation {\tt [er1]}, we see a step-by-step construction
-of an Rstore that contains all the information gathered by the extraction
-functions. An Rstore that contains all this information is returned as result
-of {\tt extractRelations}. The function {\tt pico-query} can then be used to
-run an \rscript for a given Rstore.
-
-The second definition style is shown in
-Figure~\ref{FIG:PicoFactExtraction-uninit}.  In this case, we see that all
-work is done in a single (indeed large) equation. The construct {\tt [| ... |]
-yield UNINIT} is particularly noteworthy since it allows the embedding of a
-complete \rscript in an ASF+SDF equation. Also pay attention to the following:
-
-\begin{itemize}
-
-\item The \rscript is first simplified as much as possible according to
-  ordinary ASF+SDF simplification rules. This implies that variables like {\tt
-  \$Start}, {\tt \$Rel1}, and {\tt \$Program} are replaced by their respective
-  values. This is also the case for the functions {\tt defs} and {\tt uses}
-  that occur in the \rscript.
-
-\item The  effect of the {\tt [| ... |] yield UNINIT} construct is that the
-  \rscript is evaluated and that the value of {\tt UNINIT} is returned as
-  result.
-
-\item The definition of the function {\tt convert2summary} is not shown: it
-  performs a straightforward conversion of {\tt UNINIT}'s value to the message
-  format ({\tt Summary}) that is used by the Meta-Environment.
-
-\end{itemize}--></para>
-    </section>
-
     <section>
       <title>Concluding remarks</title>
 
@@ -8952,7 +8738,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Field assignment</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-non-boolean" /></entry>
           </row>
 
           <row>
@@ -8961,7 +8747,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Field selection</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-non-boolean" />, <xref
+            linkend="section.lib-Location" />, <xref
+            linkend="section.lib-Tuple" /></entry>
           </row>
 
           <row>
@@ -8971,7 +8759,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Field projection</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-non-boolean" />, <xref
+            linkend="section.lib-Relation" /></entry>
           </row>
 
           <row>
@@ -8981,19 +8770,28 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Index</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-non-boolean" />, <xref
+            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
+            <xref linkend="section.lib-Node" />, <xref
+            linkend="section.lib-Relation" />, <xref
+            linkend="section.lib-Tuple" /></entry>
           </row>
 
           <row>
             <entry><replaceable>Exp</replaceable> <literal>?</literal></entry>
 
             <entry>Isdefined: true is Exp has a well-defined value</entry>
+
+            <entry><xref linkend="section.expressions-boolean" /></entry>
           </row>
 
           <row>
             <entry><literal>!</literal> <replaceable>Exp</replaceable></entry>
 
             <entry>Negation</entry>
+
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" /></entry>
           </row>
 
           <row>
@@ -9001,7 +8799,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Negation</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-Real" /></entry>
           </row>
 
           <row>
@@ -9009,7 +8808,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Transitive closure</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
           </row>
 
           <row>
@@ -9017,7 +8816,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Reflexive transitive</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
           </row>
 
           <row>
@@ -9046,7 +8845,17 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Composition</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
+          </row>
+
+          <row>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript>
+            <literal>x</literal>
+            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
+
+            <entry>Carthesian product</entry>
+
+            <entry><xref linkend="section.lib-Relation" /></entry>
           </row>
 
           <row>
@@ -9056,7 +8865,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Division</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-Real" /></entry>
           </row>
 
           <row>
@@ -9066,7 +8876,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Modulo</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-Real" /></entry>
           </row>
 
           <row>
@@ -9076,7 +8887,10 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Multiplication/product</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref
+            linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" /></entry>
           </row>
 
           <row>
@@ -9086,7 +8900,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Intersection</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Set" /></entry>
           </row>
 
           <row>
@@ -9096,7 +8910,12 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Addition/concatenation/union</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
+            <xref linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" />, <xref
+            linkend="section.lib-String" />, <xref
+            linkend="section.lib-Tuple" /></entry>
           </row>
 
           <row>
@@ -9106,7 +8925,10 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Subtraction/difference</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
+            <xref linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" /></entry>
           </row>
 
           <row>
@@ -9116,7 +8938,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Join</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.lib-Set" /></entry>
           </row>
 
           <row>
@@ -9126,7 +8948,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Element of</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
+            <xref linkend="section.lib-Set" /></entry>
           </row>
 
           <row>
@@ -9136,7 +8960,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Not element of</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
+            <xref linkend="section.lib-Set" /></entry>
           </row>
 
           <row>
@@ -9146,7 +8972,17 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Less than/sublist /subset</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" />, <xref
+            linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref
+            linkend="section.lib-Location" />, <xref
+            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
+            <xref linkend="section.lib-Real" /><xref
+            linkend="section.lib-Set" />, <xref
+            linkend="section.lib-String" />, <xref
+            linkend="section.lib-Tuple" />, <xref
+            linkend="section.lib-Value" /></entry>
           </row>
 
           <row>
@@ -9156,7 +8992,17 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Less than/strict sublist/strict subset</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" />, <xref
+            linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref
+            linkend="section.lib-Location" />, <xref
+            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
+            <xref linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" />, <xref
+            linkend="section.lib-String" />, <xref
+            linkend="section.lib-Tuple" />, <xref
+            linkend="section.lib-Value" /></entry>
           </row>
 
           <row>
@@ -9166,7 +9012,17 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Greater than/superlist/superset</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" />, <xref
+            linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref
+            linkend="section.lib-Location" />, <xref
+            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
+            <xref linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" />, <xref
+            linkend="section.lib-String" />, <xref
+            linkend="section.lib-Tuple" />, <xref
+            linkend="section.lib-Value" /></entry>
           </row>
 
           <row>
@@ -9176,7 +9032,17 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Greater than/strict superlist/ strict superset</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" />, <xref
+            linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref
+            linkend="section.lib-Location" />, <xref
+            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
+            <xref linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" />, <xref
+            linkend="section.lib-String" />, <xref
+            linkend="section.lib-Tuple" />, <xref
+            linkend="section.lib-Value" /></entry>
           </row>
 
           <row>
@@ -9185,7 +9051,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Match</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" /></entry>
           </row>
 
           <row>
@@ -9194,7 +9060,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>No Match</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" /></entry>
           </row>
 
           <row>
@@ -9204,7 +9070,17 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Equality</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" />, <xref
+            linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref
+            linkend="section.lib-Location" />, <xref
+            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
+            <xref linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" />, <xref
+            linkend="section.lib-String" />, <xref
+            linkend="section.lib-Tuple" />, <xref
+            linkend="section.lib-Value" /></entry>
           </row>
 
           <row>
@@ -9214,7 +9090,17 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Inequality</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" />, <xref
+            linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref
+            linkend="section.lib-Location" />, <xref
+            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
+            <xref linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" />, <xref
+            linkend="section.lib-String" />,<xref
+            linkend="section.lib-Tuple" />, <xref
+            linkend="section.lib-Value" /></entry>
           </row>
 
           <row>
@@ -9224,7 +9110,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Ifdefined Otherwise</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" /></entry>
           </row>
 
           <row>
@@ -9236,7 +9122,15 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Conditional Expression</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" />, <xref
+            linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
+            <xref linkend="section.lib-Node" />, <xref
+            linkend="section.lib-Real" />, <xref linkend="section.lib-Set" />,
+            <xref linkend="section.lib-String" />, <xref
+            linkend="section.lib-Tuple" />, <xref
+            linkend="section.lib-Value" /></entry>
           </row>
 
           <row>
@@ -9246,7 +9140,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Implication</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" /></entry>
           </row>
 
           <row>
@@ -9256,7 +9151,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Equivalence</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" /></entry>
           </row>
 
           <row>
@@ -9266,7 +9162,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
             <entry>Boolean and</entry>
 
-            <entry></entry>
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" /></entry>
           </row>
 
           <row>
@@ -9275,6 +9172,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
             <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Boolean or</entry>
+
+            <entry><xref linkend="section.expressions-boolean" />, <xref
+            linkend="section.lib-Boolean" /></entry>
           </row>
         </tbody>
       </tgroup>
@@ -9316,7 +9216,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Integer</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Integer" /></entry>
             </row>
 
             <row>
@@ -9324,7 +9224,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Boolean</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Boolean" /></entry>
             </row>
 
             <row>
@@ -9332,7 +9232,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Integer</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Integer" /></entry>
             </row>
 
             <row>
@@ -9340,7 +9240,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Real</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Real" /></entry>
             </row>
 
             <row>
@@ -9348,7 +9248,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Node</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Node" /></entry>
             </row>
 
             <row>
@@ -9356,7 +9256,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>UnitTest</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-UnitTest" /></entry>
             </row>
 
             <row>
@@ -9364,7 +9264,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>UnitTest</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-UnitTest" /></entry>
             </row>
 
             <row>
@@ -9372,7 +9272,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9380,7 +9281,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Graph, LabelledGraph</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Graph" />, <xref
+              linkend="section.lib-LabelledGraph" /></entry>
             </row>
 
             <row>
@@ -9388,7 +9290,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>View</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-View" /></entry>
             </row>
 
             <row>
@@ -9396,7 +9298,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Relation</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Relation" /></entry>
             </row>
 
             <row>
@@ -9404,7 +9306,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Relation</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Relation" /></entry>
             </row>
 
             <row>
@@ -9412,7 +9314,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Relation</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Relation" /></entry>
             </row>
 
             <row>
@@ -9420,7 +9322,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9428,7 +9330,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9436,7 +9338,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Relation</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Relation" /></entry>
             </row>
 
             <row>
@@ -9444,7 +9346,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Benchmark</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Benchmark" /></entry>
             </row>
 
             <row>
@@ -9452,7 +9354,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" /></entry>
             </row>
 
             <row>
@@ -9460,7 +9362,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, Map, Relation</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Map" />, <xref
+              linkend="section.lib-Relation" /></entry>
             </row>
 
             <row>
@@ -9468,7 +9372,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Relation</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Relation" /></entry>
             </row>
 
             <row>
@@ -9476,7 +9380,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Relation</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Relation" /></entry>
             </row>
 
             <row>
@@ -9484,7 +9388,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9492,7 +9396,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Resource</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Resource" /></entry>
             </row>
 
             <row>
@@ -9500,7 +9404,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Boolean</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Boolean" /></entry>
             </row>
 
             <row>
@@ -9508,7 +9412,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Boolean</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Boolean" /></entry>
             </row>
           </tbody>
         </tgroup>
@@ -9540,7 +9444,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Node</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Node" /></entry>
             </row>
 
             <row>
@@ -9548,7 +9452,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Node</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Node" /></entry>
             </row>
 
             <row>
@@ -9556,7 +9460,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, Map, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Map" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9564,7 +9470,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" /></entry>
             </row>
 
             <row>
@@ -9572,7 +9478,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" /></entry>
             </row>
 
             <row>
@@ -9580,7 +9486,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Map, Relation</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Map" />, <xref
+              linkend="section.lib-Relation" /></entry>
             </row>
 
             <row>
@@ -9588,7 +9495,10 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, Map, Set, String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Map" />, <xref
+              linkend="section.lib-Set" />, <xref
+              linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9596,7 +9506,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9604,7 +9514,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Resource</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Resource" /></entry>
             </row>
 
             <row>
@@ -9612,7 +9522,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Node</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Node" /></entry>
             </row>
 
             <row>
@@ -9620,7 +9530,9 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Map, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Map" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9628,7 +9540,10 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Integer, List, Real, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Integer" />, <xref
+              linkend="section.lib-List" />, <xref
+              linkend="section.lib-Real" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9636,7 +9551,10 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Integer, List, Real?, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Integer" />, <xref
+              linkend="section.lib-List" />, <xref
+              linkend="section.lib-Real" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9644,7 +9562,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9652,7 +9571,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" /></entry>
             </row>
 
             <row>
@@ -9660,7 +9579,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9668,7 +9587,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9676,7 +9595,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>IO</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-IO" /></entry>
             </row>
 
             <row>
@@ -9684,7 +9603,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Resource</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Resource" /></entry>
             </row>
 
             <row>
@@ -9692,7 +9611,15 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Map</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Map" /></entry>
+            </row>
+
+            <row>
+              <entry>rangeR</entry>
+
+              <entry>Relation</entry>
+
+              <entry><xref linkend="section.lib-Relation" /></entry>
             </row>
 
             <row>
@@ -9700,7 +9627,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Graph, LabelledGraph</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Graph" />, <xref
+              linkend="section.lib-LabelledGraph" /></entry>
             </row>
 
             <row>
@@ -9708,7 +9636,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Graph, LabelledGraph</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Graph" />, <xref
+              linkend="section.lib-LabelledGraph" /></entry>
             </row>
 
             <row>
@@ -9716,7 +9645,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Graph, LabelledGraph</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Graph" />, <xref
+              linkend="section.lib-LabelledGraph" /></entry>
             </row>
 
             <row>
@@ -9724,7 +9654,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>IO</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-IO" /></entry>
             </row>
 
             <row>
@@ -9732,7 +9662,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>RSF</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-RSF" /></entry>
             </row>
           </tbody>
         </tgroup>
@@ -9764,7 +9694,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>ValueIO</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-ValueIO" /></entry>
             </row>
 
             <row>
@@ -9772,7 +9702,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>ValueIO</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-ValueIO" /></entry>
             </row>
 
             <row>
@@ -9780,7 +9710,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9788,7 +9719,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Resource</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Resource" /></entry>
             </row>
 
             <row>
@@ -9796,7 +9727,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>UnitTest</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-UnitTest" /></entry>
             </row>
 
             <row>
@@ -9804,7 +9735,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9812,7 +9744,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9820,7 +9752,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Resource</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Resource" /></entry>
             </row>
 
             <row>
@@ -9828,7 +9760,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Graph, LabelledGraph</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Graph" />, <xref
+              linkend="section.lib-LabelledGraph" /></entry>
             </row>
 
             <row>
@@ -9836,7 +9769,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>View</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-View" /></entry>
             </row>
 
             <row>
@@ -9844,7 +9777,10 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List?, Map, Set, String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Map" />, <xref
+              linkend="section.lib-Set" />, <xref
+              linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9852,7 +9788,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" /></entry>
             </row>
 
             <row>
@@ -9860,7 +9796,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" /></entry>
             </row>
 
             <row>
@@ -9868,7 +9804,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9876,7 +9812,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" /></entry>
             </row>
 
             <row>
@@ -9884,7 +9820,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" /></entry>
             </row>
 
             <row>
@@ -9892,7 +9828,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9900,7 +9837,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Boolean</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Boolean" /></entry>
             </row>
 
             <row>
@@ -9908,7 +9845,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Real</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Real" /></entry>
             </row>
 
             <row>
@@ -9916,7 +9853,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Map, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Map" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9924,7 +9862,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9932,7 +9870,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9940,7 +9879,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Graph, LabelledGraph</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Graph" />, <xref
+              linkend="section.lib-LabelledGraph" /></entry>
             </row>
 
             <row>
@@ -9948,7 +9888,8 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Boolean, Integer</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Boolean" />, <xref
+              linkend="section.lib-Integer" /></entry>
             </row>
 
             <row>
@@ -9956,7 +9897,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Map</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Map" /></entry>
             </row>
 
             <row>
@@ -9964,7 +9905,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>List</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-List" /></entry>
             </row>
 
             <row>
@@ -9972,7 +9913,12 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>Boolean, Integer, List, Map, Real, Set</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-Boolean" />, <xref
+              linkend="section.lib-Integer" />, <xref
+              linkend="section.lib-List" />, <xref
+              linkend="section.lib-Map" />, <xref
+              linkend="section.lib-Real" />, <xref
+              linkend="section.lib-Set" /></entry>
             </row>
 
             <row>
@@ -9980,7 +9926,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>String</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-String" /></entry>
             </row>
 
             <row>
@@ -9988,7 +9934,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>ValueIO</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-ValueIO" /></entry>
             </row>
 
             <row>
@@ -9996,7 +9942,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
               <entry>ValueIO</entry>
 
-              <entry></entry>
+              <entry><xref linkend="section.lib-ValueIO" /></entry>
             </row>
           </tbody>
         </tgroup>
@@ -10037,527 +9983,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 
   <!--
 
-
-
-
-\chapter{Installing and Running \rscript} \label{SEC:running-rscript}
-
-\begin{figure}[h]
-\begin{center}
-\epsfig{figure=figs/ruhmkorff.ps,width=15cm} \label{FIG:ruhmkorff}
-\end{center}
-\end{figure}
-
-\section{Warning}
-The information in the current chapter is outdated. As of august 2007, the
-most convenient way to use \rscript is to use \texttt{rscript-meta}, an
-instance of The Meta-Environment specialized for \rscript. It can be
-downloaded (in binary and source form) from
-\url{http://www.meta-environment.org}.
-
-\section{Installing \rscript}
-\rscript is available\footnote{\url{www.cwi.nl/projects/MetaEnv/...}}
-as \texttt{relation-calculus-0.4.tar.gz} (or a newer version).  It
-requires a recent version (e.g. at least 1.5.3) of the ASF+SDF
-Meta-Environment to run.  A typical installation session on a typical
-Unix/Linux system consists of the following steps:
-
-\begin{itemize}
-
-\item Extract all files from the distribution:
-  \texttt{tar zxvf relation-calculus-0.4.tar.gz}
-This command uncompresses the distribution file, creates a subdirectory
-\texttt{relation-calculus-0.4} and places all directories and files
-from the distribution in it.
-
-\item Change to the new directory:
-  \texttt{cd relation-calculus-0.4}
-\item Configure the sources: \texttt{./configure}
-
-\item Build and install application: \texttt{make install}
-
-\end{itemize}
-
-See the files \texttt{INSTALL} and \texttt{README} for more specific
-installation instructions.
-
-
-\section{Running \rscript from the command line} \label{SEC:running-commandline}
-
-\subsection{File extensions}
-The following file extensions are used by the command line tools:
-
-\begin{itemize}
-
-\item \texttt{.rscript} is the required file name extension for files that contain an \rscript.
-
-\item \texttt{.rstore} is the required file name extension for files
-that contain an rstore.  As intermediate result rstores also occur in
-parsed form and then have the extension \texttt{.rstore.pt}. The tools
-transparently accept rstores in both forms.
-
-\item \texttt{.rviz} is the required file name extension for files that
-contain relational data that are to be visualized (see
-Chapter~\ref{SEC:Visualization}).
-
-\end{itemize}
-
-\subsection{\texttt{rscript}: check and execute an rscript}
-The command \texttt{rscript} takes care of parsing, typechecking, and
-executing an \rscript. Optionally, the script can only be checked, can
-use a given rstore, be executed as test suite, or yield the value of a
-given variable from the resulting rstore.
-
-\begin{itemize}
-
-\item \texttt{-c} or \texttt{-check-only}:
-Only check the rscript for syntactic errors or typechecking errors
-but do not execute it.
-
-\item \texttt{-h} or \texttt{-help}; print help information.
-
-\item \texttt{-i} \emph{name} or \texttt{-input} \emph{name}:
-The \rscript to be processed is on file \emph{name}.
-By default, the script is assumed to be on standard input.
-
-\item \texttt{-o} \emph{name} or \texttt{-output-parse-tree} \emph{name}:
-The result of the execution of the \rscript is an rstore and is written to file \emph{name}.
-Note that this rstore is in the form of a parse tree.
-By default, the resulting rstore is printed in textual form to standard output.
-
-\item \texttt{-s} \emph{name} or \texttt{-store} \emph{name}:
-The \rscript is executed using an initial rstore taken from file \emph{name}.
-By default, the initial rstore is empty.
-
-
-\item \texttt{-t} or \texttt{-testsuite}:
-Execute the \rscript as a testsuite, i.e., execute all \texttt{assert} statements and report
-which ones failed.
-
-\item \texttt{-v} or \texttt{-verbose}: give verbose output.
-
-\item \texttt{-y} \emph{name} or \texttt{-yield} \emph{name}:
-Instead of producing a complete rstore as the result of executing the rscript,
-only return the value of the variable \emph{name}.r
-\end{itemize}
-
-The following examples illustrate the use of the \texttt{rscript} command:
-
-\begin{itemize}
-
-\item  \texttt{rscript query.rscript} executes the script \texttt{query.rscript}
-and prints the resulting rstore on standard output.
-
-\item \texttt{rscript -i query.rscript -s previous.rstore -o result.rstore.pt}:
-executes the same script, but uses \texttt{previous.rstore} as initial rstore
-and writes the resulting store to \texttt{result.rstore.pt}>
-
-\item \texttt{rscript -y nCalls calls.rscript}:
-executes the script \texttt{calls.rscript} and prints the value of the variable \texttt{nCalls}
-in the resulting rstore.
-
-\item \texttt{rscript -t tests1.rscript}:
-executes \texttt{tests2.rscript} as test suite and reports which assert
-statements failed (if any).
-\end{itemize}
-
-\subsection{\texttt{extract-relations}: extract relations from source files} \label{SEC:extract-relations}
-
-The command \texttt{extract-relations} provides a common framework for
-\asfsdf-based fact extraction and has the following form:
-
-\begin{exam}
-\texttt{extract-relations [options] <input-files>}
-\end{exam}
-
-\noindent The following optional arguments are supported:
-
-\begin{itemize}
-
-\item \texttt{-h} or \texttt{-help}; print help information.
-
-\item \texttt{-o} \emph{file} or \texttt{-output} \emph{file}: the name of
-  the resulting rstore 
-(default: \texttt{result.rstore.pt}).
-
-\item \texttt{-e} \emph{program} or \texttt{-executable} \emph{program}: the
-executable \emph{program} for performing extraction (default: none). This is most
-likely to be a compiled \asfsdf specification.
-
-\item \texttt{-s} \emph{sort} or \texttt{-sort} \emph{sort}:
-\emph{sort} is the sort used for parsing each input file (default:
-none). In other words, each input file should conform to the syntax of \emph{sort}.
-Example: \texttt{CompilationUnit}.
-
-\item \texttt{-f} \emph{name} or \texttt{-function} \emph{name}: the extraction function to be applied 
-to each source file (default: \texttt{extractRelations}). The definition of
-this function should conform to:
-\begin{exam}
-\texttt{extractRelations(}\emph{sort}\texttt{) -> RSTORE}
-\end{exam}
-where \emph{sort} is the sort of each input file as defined above.
-
-\item \texttt{-p} \emph{file} or \texttt{-parse-table} \emph{file}: the parse table \emph{file} used for parsing input files (default: none).
-
-\end{itemize}
-
-\noindent The following examples illustrate the use of the \texttt{extract-relations} command:
-
-\begin{itemize}
-
-\item \texttt{extract-relations -e JavaAnalysis -s CompilationUnit -o
-  jhotdraw.rstore.pt -p Java.trm.tbl dir/*.java}: extract relations from Java source
-  code in the files \texttt{dir/*.java}. Use executable \texttt{JavaAnalysis}, each input file is of sort
-  \texttt{CompilationUnit}, use parse table  \texttt{Java.trm.tbl}, and
-  produce as output an rstore \texttt{jhotdraw.rstore.pt}.
-
-\item
-  \texttt{extract-relations -e TBExtr -s Tscript -p Tscript.trm.tbl *.tb}:
-  extract relations from \TB source files. Use executable \texttt{TBExtr}, each input file is of
-  sort \texttt{Tscript}, use parse table \texttt{Tscript.trm.tbl} and extract
-  from the source files \texttt{*.tb}.
-
-\end{itemize}
-
-
-\subsection{\texttt{merge-rstores}: combine several rstores}
-
-The command \texttt{merge-rstores} merges several rstores into a new
-rstore.  This command is used in a scenario where an extraction tool
-extracts facts from each source file in a software portfolio to be
-analyzed and deposits these facts in a separate rstore per source
-file.  When the complete portfolio is to be analyzed, the separate
-rstores have to be merged into a single one. This merged rstore is then
-used as initial rstore for the execution of some rscript.
-
-The command has as arguments, a list of names of rstores to be merged.
-
-The following optional arguments are supported:
-
-\begin{itemize}
-\item \texttt{-h} or \texttt{-help}: print help information.
-
-\item \texttt{-o} \emph{name} or \texttt{-output} \emph{name}:
-the name of the merged rstore is \emph{name}.
-By default, the output is \texttt{result.rstore.pt}.
-\note{tool should check for right output form}
-
-\item \texttt{-v} or \texttt{-verbose}: give verbose output.
-
-\end{itemize}
-
-\section{Running \rscript Interactively} \label{SEC:running-interactive}
-You can also edit and run Rscripts interactively:
-\begin{itemize}
-\item Change directory to your checked out copy of the directory {\tt relation-calculus/spec}.
-\item Start the ASF+SDF Meta-Environment with the command {\tt meta}.
-\item Open the module {\tt Rscript.sdf}.
-\item Open your own term, using the {\tt Rscript} module.
-\item Observe that a new menu with the name {\tt Rscript} appears in the menu bar.
-\item Click the parse button in the {\tt Actions} menu of the editor:
-now we know whether there are syntax errors. If so, correct them.
-
-\item Click the {\tt Check} button in the {\tt Rscript} menu: this will
-  perform a type check of your script. If there are type errors, correct them.
-
-\item Click the {\tt Run} button in the {\tt Rscript} menu to execute your script: a new
-editor pops up which shows all the variables at the end of the execution.
-{\tt Run} also performs a type of your script so you may skip the previous step.
-
-\item Click the {\tt Run with Rstore} button if you want to execute your
-  \rscript with an existing ``Rstore'': a collection of relations that are the
-  result of previous extraction phase. Currently, a fixed name is used for
-  this Rstore: {\tt RSTORE.rstore}.
-
-\end{itemize}
-
-\paragraph{Running a Test suite} \label{running}
-Same as above but use {\tt Testsuite} button instead of the {\tt Execute}
-button in the {\tt Rscript} menu.  The effect is that the script is executed
-and that a summary is printed of {\tt assert} statement that succeeded or
-failed.
-
-\section{Other Tools and Demos}
-
-\subsection{Examples}
-
-The subdirectory {\tt rscripts} contains several sample scripts.  See, for instance, {\tt
-tests1.rscript} and {\tt tests2.rscript} for examples of the use of built-in
-operators and functions.
-
-\subsection{The Pico Demo}
-
-The subdirectory {\tt demo/pico} contains in a single directory the
-Pico syntax, Pico fact extraction (discussed in
-Section~\ref{SEC:ASF+SDF-extraction}) and the test on uninitialized
-variables presented in Section~\ref{SEC:uninit}.
-
-\begin{itemize}
-
-\item Change directory to \texttt{demo/pico}: \texttt{cd demo/pico}.
-
-\item Start the \asfsdf Meta-Environment: \texttt{meta -m Pico-syntax.sdf}.
-
-\item Open the term \texttt{exam.pico} over module \texttt{Pico-syntax.sdf}.
-
-\item Under the \texttt{Pico} menu two styles of checking are available:
-  \begin{itemize}
-  \item Extract Relations: this extracts relations from the current Pico program.
-  \item Uninitialized Vars (Style 1): uses the extracted facts and
-  executes the \rscript \texttt{uninit.rscript}, see
-  Figure~\ref{FIG:PicoFactExtraction-extractRelations}.
-  \item Uninitialized Vars (Style 2): performs combined facts extraction and 
-   query processing, see Figure~\ref{FIG:PicoFactExtraction-uninit}.
-  \end{itemize}
-  See Figure~\ref{FIG:meta-pico} for a screen dump.
-
-\end{itemize}
-
-\subsection{The Java Demo}
-
-The Java demo consists of the following parts:
-
-\begin{itemize}
-
-\item \texttt{java/grammar}: Contains a SDF grammar for Java.
-
-\item 
-\begin{sloppypar}
-\texttt{java/extraction}: defines \texttt{JavaAnalysis}, that
-performs basic fact extraction from Java source code. It also defines the
-command \texttt{extract-java}, a specialized version of
-\texttt{extract-relations} (see Section~\ref{SEC:extract-relations}):
-\end{sloppypar}
-
-\item \texttt{java/rscripts}: defines a script \texttt{Enrich.rscript} enrich
-  the facts extracted by JavaAnalysis. It also defines some sample scripts
-that operate on the enriched rstores.
-
-\item \texttt{java/example-hotdraw}: gives data for the JhotDraw example.
-
-\end{itemize}
-
-The command \texttt{extract-java} provides a common framework for
-\asfsdf-based fact extraction from Java programs and has the following form:
-
-\begin{exam}
-\texttt{extract-java [options]}
-\end{exam}
-
-\noindent The following optional arguments are supported:
-
-\begin{itemize}
-
-\item \texttt{-h} or \texttt{-help}; print help information.
-
-\item \texttt{-i} \emph{dir} or \texttt{-input} \emph{dir}: the name a
-  directory \emph{dir} that contains the Java source code. All Java source
-  files appearing in (subdirectories of) \emph{dir} will be used as input.
-  (default: current directory).
-
-\item \texttt{-o} \emph{file} or \texttt{-output} \emph{file}: the name of
-  the resulting rstore 
-(default: \texttt{result.rstore.pt}).
-
-\item \texttt{-e} \emph{program} or \texttt{-executable} \emph{program}: the
-executable \emph{program} for performing extraction (default: \texttt{JavaAnalysis}). This is most
-likely to be a compiled \asfsdf specification.
-
-\item \texttt{-f} \emph{name} or \texttt{-function} \emph{name}: the extraction function to be applied 
-to each source file (default: \texttt{extractRelations}). The definition of
-this function should conform to:
-\begin{exam}
-\texttt{extractRelations(CompilationUnit) -> RSTORE}
-\end{exam}
-
-\end{itemize}
-
-\noindent The following examples illustrate the use of the
-\texttt{extract-relations} command:
-\begin{exam}
-\texttt{extract-java -i JHotDraw5.2-sources -o jhotdraw.rstore.pt}
-\end{exam}
-
-Here is a scenario to go all the way from Java source code to the
-visualization of the extracted and enriched facts:
-{\footnotesize
-\begin{verbatim}
-cd example-hotdraw
-extract-java -i /ufs/paulk/software/source/JHotDraw -o jhotdraw.rstore.pt
-rscript -i ../rscripts/Enrich.rscript -s jhotdraw.rstore.pt -o enr.jhotdraw.rstore.pt
-rscript -i validate.rscript -s enr.jhotdraw.rstore.pt
-rstore2rviz -i enr.jhotdraw.rstore.pt -o jhotdraw.rviz
-rviz jhotdraw.rviz
-\end{verbatim}
-}
-
-\noindent In the next chapter, we will further explain this scenario.
-
-\chapter{Visualization of Rstores} \label{SEC:Visualization}
-
-\fbox{\epsfig{figure=figs/camera-obscura.ps,width=8cm}} \label{FIG:camera-obscura}
-\hspace*{0.5cm}\parbox[b]{6cm}{ The sets and relations constructed for all but
-the most trivial problems are voluminous and their textual representation is
-hard to grasp for the human eye. This is where information visualization
-techniques (**) come to our rescue.  In this chapter we present some initial
-experiments to visualize the contents of an Rstore. This is a multi-stage
-process described in Section~\ref{SEC:visualize-workflow}.
-First facts are extracted from the source
-(Section~\ref{SEC:ExtractingFactsAgain})
-and are further enriched (Section~\ref{SEC:EnrichingFacts}).
-Next the Rstore is converted to the \texttt{.rviz} format that is more
-amenable as input for a visualization tool. This format is described in
-Section~\ref{SEC:rvizformat} and the conversion from Rstore to this format is
-discussed in Section~\ref{SEC:rstore2rviz}. Next, the \texttt{.rviz} file can
-be visualized and explored. This is the topic of Section~\ref{SEC:rviz} }
-
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/visualize-workflow.eps,width=10cm}
-\vspace*{-0cm}
-\end{center}
-\hrulefill
-\caption{\label{FIG:visualize-workflow}Workflow for visualization of System Under Investigation}
-\end{figure}
-
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/rviz1.ps,width=15cm}
-\end{center}
-\hrulefill
-\caption{\label{FIG:rviz1}File view}
-\end{figure}
-
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/rviz2.ps,width=15cm}
-\end{center}
-\hrulefill
-\caption{\label{FIG:rviz2}Tree map view}
-\end{figure}
-
-
-\section{Warning}
-The ideas described here remain relevant but their specific implementation is
- outdated. The interactive \rscript environment (\texttt{rscript-meta}) contains
-built-in visualization techniques for Rstores.
-
-\section{The visualization workflow} \label{SEC:visualize-workflow}
-
-The process of achieving a visualization of a System under Investigation (SUI) is shown in
-Figure~\ref{FIG:visualize-workflow} and consists of the following steps:
-\begin{itemize}
-\item Extract facts from a source code directory \texttt{SUISrcDir} and
-  produce an Rstore \texttt{SUI.rstore.pt}.
-\item \begin{sloppypar} Enrich this Rstore by running an rscript \texttt{enr.rscript} on it,
-  with resulting enriched Rstore \texttt{enr.rstore.pt}. \end{sloppypar}
-\item Convert the enriched Rstore to the the visualization format
-  \texttt{.rviz}.
-\item Run the visualization tool \texttt{rviz} on these data.
-\end{itemize}
-\noindent The details of this process are now further explained.
-
-\section{Extracting Facts} \label{SEC:ExtractingFactsAgain}
-In Chapter~\ref{SEC:ExtractingFacts} we have already seen how fact extraction can
-be organized and implemented. For the current presentation it is sufficient to
-assume that there exists an \texttt{extract} tool that can be used:
-\begin{exam}
-\texttt{extract -i SUISrcDir -o SUI.rstore.pt}
-\end{exam}
-where \texttt{SUISrcDir} is the source directory where the source of the SUI
-can be found. In the distribution a tool \texttt{extract-java} is available with precisely
-this behavior for Java programs.
-
-\section{Enriching Facts} \label{SEC:EnrichingFacts}
-Given the Rstore  \texttt{SUI.rstore.pt} we enrich it by writing and executing
-an \rscript
-\texttt{enr.rscript} that extends the extracted facts as required by the goal
-we want to achieve:
-\begin{exam}
-\texttt{rscript enr.rscript -s SUI.rstore.pt -o enr.SUI.rstore.pt}
-\end{exam}
-
-\section{The \texttt{.rviz} Format} \label{SEC:rvizformat}
-
-Before explaining the conversion to the rviz format, it is helpful to
-understand this format first.
-Only two forms of data definitions can currently appear in an rviz file.
-\emph{Elements} are values that can occur in relations and are defined by the
-keyword \texttt{elm}.  \emph{Tuples} are defined by the keyword
-\texttt{tup}. The definition of an \emph{element} has the following form:
-
-\begin{exam}
-\texttt{elm} \emph{Type} \emph{Name} \emph{File} \emph{BeginLine} \emph{BeginCol} \emph{EndLine} \emph{EndCol}
-\end{exam}
-
-\noindent \emph{Type} is the type as declared in the \rscript, \emph{Name} is
-the textual name of the element, and the subsequent file and location
-information characterize the precise coordinates of the element in the source
-text. An example of an element definition is:
-
-\begin{exam}
-\texttt{elm "ClassName" "PolyLineFigure" ".../PolyLineFigure.java" 21 0 339 1}
-\end{exam}
-
-The definition of a \emph{tuple} has the following form:
-\begin{exam}
-\texttt{tup} \emph{RelName} \emph{Type1} \emph{Value1} \emph{Type2} \emph{Value2}
-\end{exam}
-\noindent \emph{RelName} is the name of the relation to which the tuple belongs.
-It is followed two type/value pairs that define the two items in the tuple.
-An example of a tuple definition is:
-
-\begin{exam}
-\texttt{tup IMPLEMENTS "ClassName" "AbstractHandle" "InterfaceName" "Handle"}
-\end{exam}
-
-\paragraph{Discussion} Observe that the current visualization format is very simple and does not 
-allow the representation of all data that may be present in an Rstore. In particular, sets and
-$n$-ary relations ($n > 2$) are not represented. Clearly, this format will further evolve.
-
-\section{\texttt{rstore2rviz}: Convert Rstore to Visualization Format} \label{SEC:rstore2rviz}
-The command \texttt{rstore2rviz} takes an rstore as input and converts it
-to the \texttt{.rviz} format that is accepted by the visualization tool \texttt{rviz}.
-
-\begin{itemize}
-
-\item \texttt{-h} or \texttt{-help}: print help information.
-
-\item \texttt{-i} \emph{name} or \texttt{-input} \emph{name}:
-rstore comes from file \emph{name}. By default: standard input.
-
-\item \texttt{-o} \emph{name} or \texttt{-output} \emph{name}:
-the result is written to file \emph{name}. By default, this is
-a file named \texttt{result.rviz}.
-
-\item \texttt{-v} or \texttt{-verbose}: give verbose output.
-
-\end{itemize}
-Example:
-   \texttt{rstore2rviz -i enr.SUI.rstore.pt -o SUI.rviz}
-
-\section{\texttt{rviz}: Visualize an Rstore} \label{SEC:rviz}
-
-
-Visualization is simply started by the command \texttt{rviz} with the
-given visualization data as input, as in:
-
-\begin{exam}
-\texttt{rviz SUI.rviz}
-\end{exam}
-
-\noindent The result is a window as shown in Figure~\ref{FIG:rviz1} which
-consists of several panes.  On the left-hand side three panes occur. On top is
-the \emph{Relations} pane that lists the relations that are available.  One of
-these relations can be selected and its elements will be displayed.  In the
-middle appears an \emph{Element Type} pane that shows the element types that
-are available for the selected relation.  Selecting one of these types lists
-in the the bottom all \emph{Elements} that occur in the selected relation and
-are of the selected type. By selecting one element from the \emph{Elements}
-pane, that element (and all elements it is associated with by the selected
-relation) will be highlighted in the large graphical pane on the right.
-
-There are two visualization methods available that can be selected by the button
+n methods available that can be selected by the button
 at the bottom left that is alternatively labeled as \texttt{View as Files} or
 \texttt{View as TreeMap}. In the former case, files are shown as rectangles
 with a a pattern of horizontal lines inside that reflect their textual
