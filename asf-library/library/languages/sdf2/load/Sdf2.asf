@@ -11,6 +11,17 @@ equations
 
 equations
 
+[] 
+  Error := load-all(Filename*, split(Path), )
+  ===>
+  load(Filename*, Path) = summary("sdf-load", "files", [Error])
+
+[] Module* := load-all(Filename*, split(Path), )
+   ===>
+   load(Filename*, Path) = definition Module*
+
+equations
+
 [] load(Filename, Paths) = load-all(Filename, Paths, )
 
 equations

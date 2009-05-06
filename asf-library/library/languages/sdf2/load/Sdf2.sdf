@@ -9,6 +9,7 @@ exports
 
 context-free syntax
   load(filename:StrCon, path:StrCon) -> SDF | Summary { }
+  load(filenames:StrCon*, path:StrCon) -> SDF | Summary { }
   failed(SDF | Summary)              -> Boolean       { }
   
 
