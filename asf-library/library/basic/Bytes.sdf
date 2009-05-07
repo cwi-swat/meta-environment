@@ -59,10 +59,14 @@ context-free syntax
   decimal-to-byte(Integer) -> Byte    {memo} 
   byte-to-decimal(Byte)    -> Integer {memo} 
 
+context-free syntax
+  split(subject:Bytes,sep:Bytes) -> Bytes*
+
 lexical variables
   "char" [0-9]*   -> StrChar           {strict} 
   "char*" [0-9]*  -> StrChar*          {strict} 
   "byte*" [0-9]*  -> Byte*             {strict} 
+  "byte+" [0-9]*  -> Byte*             {strict} 
   "byte" [0-9\']* -> Byte              {strict} 
   "normal" [0-9]* -> ~[\0-\31\n\t\"\\] {strict} 
   "digit" [0-9]*  -> [0-9]             {strict} 
