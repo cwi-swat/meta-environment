@@ -67,8 +67,9 @@ sdf2table_SOURCES = \
 	Sdf2-Load.c \
 	Sdf2-Normalization.c 
 
-test_chars_SOURCES	= test-chars.c characters.c pgen-symbol.c
+test_chars_SOURCES	= test-chars.c 
 test_chars_LDADD	= \
+	-L. -lsdftablegen \			  	
 	$(ATERM_LIBS) \
 	$(PT_SUPPORT_LIBS)
 
