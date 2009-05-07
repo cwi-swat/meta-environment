@@ -101,7 +101,7 @@ tests
 equations
 
 [split-0] split(bytes(byte+1 byte+ byte+2), bytes(byte+)) = split(bytes(byte+1), bytes(byte+) ) split(bytes(byte+2),bytes(byte+))
-[default] split(bytes1, bytes2) = bytes1
+[default] split(bytes1, _bytes) = bytes1
 
 equations
 

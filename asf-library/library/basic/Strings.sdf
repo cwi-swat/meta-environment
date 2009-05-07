@@ -28,7 +28,7 @@ context-free syntax
   length(String)                                       -> Integer        
   subst(pattern:String, replacement:String, in:String) -> String         
   split(String, splitter:String)                       -> {String ";"}+  
-  split2(String, splitter:String)                      -> String+
+  split2(String, splitter:String)                      -> StrCon+
 
 hiddens
 imports basic/Whitespace
