@@ -28,6 +28,14 @@ equations
 
 [default]
    split(Str1,Str2) = Str1
+
+equations
+
+[] split2(strcon(\" char*1 match char*2 \"), strcon(\" match \")) =
+   strcon(\" char*1 \") split2(strcon(\" char*2 \"), strcon(\" match \"))
+
+[default]
+   split2(Str1,Str2) = Str1
  
 equations
 
