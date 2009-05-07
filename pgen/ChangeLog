@@ -1,5 +1,9 @@
 $Id$
 
+Thu May  7 15:24:57 CEST 2009 <jurgenv@cwi.nl>
+ * src/Makefile.am: added libsdftablegen which includes the generator
+   without the normalizer.
+
 Wed Nov  5 13:01:57 CET 2008 <jurgenv@cwi.nl>
  * src/Sdf2-Load.c: added support for parameterized modules using
    patch from Jeroen Arnoldus.

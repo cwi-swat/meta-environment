@@ -16,6 +16,7 @@ AM_CPPFLAGS += \
 TESTS		= $(check_PROGRAMS)
 check_PROGRAMS	= test-chars
 bin_PROGRAMS	= sdf2table
+lib_LTLIBRARIES = libsdftablegen.la
 pkgdata_DATA	= parsetablegen.idef
 
 noinst_HEADERS = \
@@ -39,12 +40,8 @@ noinst_HEADERS = \
 	parseTable-data.h \
 	parseTable-stats.h
 
-sdf2table_SOURCES = \
-	parsetablegen.isrc \
-	normalize.c \
+libsdftablegen_la_SOURCES =  \
 	generate.c \
-	load.c \
-	main.c \
 	ksdf2table.c \
 	atsets.c \
 	flatten.c \
@@ -54,8 +51,6 @@ sdf2table_SOURCES = \
 	goto.c \
 	predicted.c \
 	priorities.c \
-	Sdf2-Load.c \
-	Sdf2-Normalization.c \
 	intset.c \
 	item.c \
 	itemset.c \
@@ -64,12 +59,34 @@ sdf2table_SOURCES = \
 	parseTable-data.c \
 	parseTable-stats.c
 
+sdf2table_SOURCES = \
+	parsetablegen.isrc \
+	normalize.c \
+	load.c \
+	main.c \
+	Sdf2-Load.c \
+	Sdf2-Normalization.c 
+
 test_chars_SOURCES	= test-chars.c characters.c pgen-symbol.c
 test_chars_LDADD	= \
 	$(ATERM_LIBS) \
 	$(PT_SUPPORT_LIBS)
 
-sdf2table_LDADD = \
+sdf2table_LDADD = \ 
+	-L. -lsdftablegen \
+	$(ASC_SUPPORT_LIBS) \
+	$(SDF_SUPPORT_LIBS) \
+	$(PT_SUPPORT_LIBS) \
+	$(ASF_SUPPORT_LIBS) \
+	$(ERROR_SUPPORT_LIBS) \
+	$(TOOLBUSLIB_LIBS) \
+	$(ATERM_LIBS) \
+	$(PTABLE_SUPPORT_LIBS) \
+	$(CONFIG_SUPPORT_LIBS) \
+	$(C_LIBRARY_LIBS)
+
+libsdftablegen_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libsdftablegen_la_LIBADD   = \
 	$(ASC_SUPPORT_LIBS) \
 	$(SDF_SUPPORT_LIBS) \
 	$(PT_SUPPORT_LIBS) \
