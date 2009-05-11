@@ -6517,7 +6517,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               </row>
 
               <row>
-                <entry><literal>list[list[&amp;T]] permutations(list[&amp;T]
+                <entry><literal>set[list[&amp;T]] permutations(list[&amp;T]
                 lst)</literal></entry>
 
                 <entry>all permutations of a list</entry>
