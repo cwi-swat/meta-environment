@@ -17,7 +17,7 @@
 #include <logging.h>
 
 #include "pgenOptions.h"
-#include "generate.h"
+#include "sdf-generate.h"
 #include "load.h"
 #include "parsetablegen.h"
 

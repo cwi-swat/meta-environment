@@ -1,4 +1,4 @@
-#include "generate.h"
+#include "sdf-generate.h"
 #include "normalize.h"
 #include "ksdf2table.h"
 #include "characters.h"

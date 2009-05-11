@@ -21,7 +21,6 @@ pkgdata_DATA	= parsetablegen.idef
 
 noinst_HEADERS = \
 	normalize.h \
-	generate.h \
 	load.h \
 	atsets.h \
 	flatten.h \
@@ -39,6 +38,7 @@ noinst_HEADERS = \
 	parseTable-stats.h
 
 include_HEADERS=\
+	sdf-generate.h \
 	ksdf2table.h \
 	parseTable-data.h 
 
