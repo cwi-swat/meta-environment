@@ -71,7 +71,7 @@ sdf2table_SOURCES = \
 
 test_chars_SOURCES	= test-chars.c 
 test_chars_LDADD	= \
-	-L. -lsdftablegen \			  	
+	-L. -lsdftablegen \
 	$(ATERM_LIBS) \
 	$(PT_SUPPORT_LIBS)
 
