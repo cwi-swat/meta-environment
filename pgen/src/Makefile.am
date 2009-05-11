@@ -59,15 +59,15 @@ libsdftablegen_la_SOURCES =  \
 	pgen-symbol.c \
 	pgenOptions.c \
 	parseTable-data.c \
+	normalize.c \
+	Sdf2-Normalization.c  \
 	parseTable-stats.c
 
 sdf2table_SOURCES = \
 	parsetablegen.isrc \
-	normalize.c \
 	load.c \
 	main.c \
-	Sdf2-Load.c \
-	Sdf2-Normalization.c 
+	Sdf2-Load.c 
 
 test_chars_SOURCES	= test-chars.c 
 test_chars_LDADD	= \
