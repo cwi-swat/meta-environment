@@ -1,5 +1,9 @@
 $Id$
 
+Mon May 11 11:21:23 CEST 2009 <jurgenv@cwi.nl>
+ * src/Makefile.am,generate.c,etc: added generator functions to library
+   interface. Made some headers files install into prefix/include.
+
 Thu May  7 15:24:57 CEST 2009 <jurgenv@cwi.nl>
  * src/Makefile.am: added libsdftablegen which includes the generator
    without the normalizer.
