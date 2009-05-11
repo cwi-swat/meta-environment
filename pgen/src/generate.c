@@ -55,8 +55,22 @@ static PTBL_ParseTable generateParseTable() {
   return PTBL_makeParseTableParseTable(PTBL_makeVersionDefault(), PGEN_getInitialStateNumber(), PGEN_getLabelSection(), statelist, PGEN_getPrioSection());
 }
 
+ATerm sdf_generate_table(PT_Tree ksdf) 
+{
+  ATerm pt;
+
+  PGEN_initTableGen();
+  PGEN_processGrammar(ksdf);
+
+  pt = (ATerm) generateParseTable();
+
+  PGEN_destroyTableGen();       
+
+  return pt;
+}
+
 ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2term) {
-  PTBL_ParseTable pt = NULL;
+  ATerm pt = NULL;
   PT_Tree ksdf;
 
   if (PGEN_getStatsFlag) { STATS_Timer(); } 
@@ -74,12 +88,7 @@ ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2term) {
   }
 
   if (ksdf)  {
-    PGEN_initTableGen();
-    PGEN_processGrammar(ksdf);
-    
-    pt = generateParseTable();
-    
-    PGEN_destroyTableGen();       
+    pt = sdf_generate_table(ksdf);
   }
 
   PGEN_STATS_setCount(PGEN_STATS_generationTime, STATS_Timer());

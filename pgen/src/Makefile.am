@@ -24,7 +24,6 @@ noinst_HEADERS = \
 	generate.h \
 	load.h \
 	atsets.h \
-	ksdf2table.h \
 	flatten.h \
 	predicted.h \
 	goto.h \
@@ -37,8 +36,11 @@ noinst_HEADERS = \
 	itemset.h \
 	pgen-symbol.h \
 	pgenOptions.h \
-	parseTable-data.h \
 	parseTable-stats.h
+
+include_HEADERS=\
+	ksdf2table.h \
+	parseTable-data.h 
 
 libsdftablegen_la_SOURCES =  \
 	generate.c \

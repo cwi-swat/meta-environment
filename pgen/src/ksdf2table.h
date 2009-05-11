@@ -11,7 +11,6 @@
 #include <SDFME-utils.h>
 #include <SDF2PT.h>
 
-#include "atsets.h"
 #include <atb-tool.h>
 #include "parsetablegen.h"
 
