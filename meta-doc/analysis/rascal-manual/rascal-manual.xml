@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -426,22 +426,32 @@
       <title>Pattern Matching</title>
 
       <para>Pattern matching is <emphasis>the</emphasis> mechanism for case
-      distinction in Rascal. We provide string matching based on regular
-      expressions, list (associative) and set (associative, commutative,
-      identity) matching, matching of abstract datatypes, and matching of
-      concrete syntax patterns. All these forms of matching can be used in a
-      single pattern. Patterns may contain variables that are bound when the
-      match is successful. Anonymous (don't care) positions are indicated by
-      an underscore (<literal>_</literal>). The following abstract pattern
-      matches the while statement defined above: <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
+      distinction and search in Rascal and a very rich pattern language is
+      provided that includes string matching based on regular expressions,
+      list (associative) and set (associative, commutative, identity)
+      matching, matching of abstract datatypes, and matching of concrete
+      syntax patterns. All these forms of matching can be used in a single
+      pattern and be nested. Patterns may contain variables that are bound
+      when the match is successful. Anonymous (don't care) positions are
+      indicated by an underscore (<literal>_</literal>). The following
+      abstract pattern matches the while statement defined above:
+      <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
 
       <para>Variables in a pattern are either explicitly declared in the
       pattern itself---as done in this example---or they may be declared in
-      the context in which the pattern occurs. Patterns can also be used in an
-      explicit match operator <literal>:=</literal> and can then be part of
-      larger boolean expressions. Since a pattern match may have more than one
-      solution, local backtracking over the alternatives of a match is
-      provided.</para>
+      the context in which the pattern occurs. So-called multi-variables in
+      list and set patterns are declared by a <literal>*</literal> suffix. The
+      above pattern can then be written as</para>
+
+      <para><programlisting>whileStat(EXP Exp, Stats*)</programlisting>or, if
+      you are not interested in the actual value of the statements as</para>
+
+      <para><programlisting>whileStat(EXP Exp, _*)</programlisting></para>
+
+      <para>Patterns can also be used in an explicit match operator
+      <literal>:=</literal> and can then be part of larger boolean
+      expressions. Since a pattern match may have more than one solution,
+      local backtracking over the alternatives of a match is provided.</para>
     </section>
 
     <section>
@@ -4153,6 +4163,14 @@ set[int] : {4923761}</screen></para>
             </listitem>
 
             <listitem>
+              <para>A <emphasis>multi-variable
+              pattern</emphasis><programlisting><replaceable>Var*</replaceable></programlisting>A
+              multi-variable is an abbreviation for a variable declaration
+              pattern. It can occur in a list pattern or set pattern and can
+              match zero or more list or set elements.</para>
+            </listitem>
+
+            <listitem>
               <para>A <emphasis>variable pattern</emphasis><programlisting><replaceable>Var</replaceable></programlisting></para>
 
               <para>A variable pattern can act in two roles:</para>
@@ -4259,6 +4277,15 @@ set[int] : {4923761}</screen></para>
             </listitem>
 
             <listitem>
+              <para>A <emphasis>descendant pattern</emphasis><programlisting><replaceable>/ Pat</replaceable></programlisting>performs
+              a deep match of the pattern <replaceable>Pat</replaceable>. In
+              other words, it matches when any element of the subject at any
+              depth matches <replaceable>Pat</replaceable> and is used to
+              match, for instance, tree nodes at an arbitrary distance from
+              the root.</para>
+            </listitem>
+
+            <listitem>
               <para>A <emphasis>labelled pattern</emphasis><programlisting><replaceable>Var</replaceable> <literal>:</literal> <replaceable>Pat</replaceable></programlisting></para>
 
               <para>A labelled pattern matches the same values as
@@ -4278,7 +4305,8 @@ set[int] : {4923761}</screen></para>
             </listitem>
 
             <listitem>
-              <para>A type constrained pattern<programlisting><literal>[</literal><replaceable>Type</replaceable><literal>]</literal> <replaceable>Pat</replaceable></programlisting></para>
+              <para>A <emphasis>type constrained
+              pattern</emphasis><programlisting><literal>[</literal><replaceable>Type</replaceable><literal>]</literal> <replaceable>Pat</replaceable></programlisting></para>
 
               <para>matches provided that the subject has type
               <replaceable>Type</replaceable> and
