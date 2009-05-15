@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -429,18 +429,18 @@
       distinction and search in Rascal and a very rich pattern language is
       provided that includes string matching based on regular expressions,
       list (associative) and set (associative, commutative, identity)
-      matching, matching of abstract datatypes, and matching of concrete
-      syntax patterns. All these forms of matching can be used in a single
-      pattern and be nested. Patterns may contain variables that are bound
-      when the match is successful. Anonymous (don't care) positions are
-      indicated by an underscore (<literal>_</literal>). The following
+      matching, matching of abstract datatype pattern, and matching of
+      concrete syntax patterns. All these forms of matching can be used in a
+      single pattern and can be nested. Patterns may contain variables that
+      are bound when the match is successful. Anonymous (don't care) positions
+      are indicated by an underscore (<literal>_</literal>). The following
       abstract pattern matches the while statement defined above:
       <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
 
       <para>Variables in a pattern are either explicitly declared in the
-      pattern itself---as done in this example---or they may be declared in
-      the context in which the pattern occurs. So-called multi-variables in
-      list and set patterns are declared by a <literal>*</literal> suffix. The
+      pattern itself---as done in the example---or they may be declared in the
+      context in which the pattern occurs. So-called multi-variables in list
+      and set patterns are declared by a <literal>*</literal> suffix. The
       above pattern can then be written as</para>
 
       <para><programlisting>whileStat(EXP Exp, Stats*)</programlisting>or, if
@@ -733,14 +733,188 @@ int: 258623241511168180642964355153611979969197632389120000000000</screen></para
     </section>
 
     <section>
-      <title>Word Count</title>
+      <title>Colored Trees</title>
 
-      <para></para>
+      <para>Suppose we have binary trees---trees with exactly two
+      children--that have integers as their leaves. Also suppose that our
+      trees can have red and black nodes. Such trees can be defined as
+      follows:<programlisting>module Trees
+
+data Tree = leaf(int N) 
+          | red(Tree left, Tree right) 
+          | black(Tree left, tree right);</programlisting></para>
+
+      <para>We can use them as follows:</para>
+
+      <para><screen>rascal&gt; import Trees;
+done.
+rascal&gt; rb = red(black(leaf(1), red(leaf(2),leaf(3))));
+Tree: red(black(leaf(1), red(leaf(2),leaf(3))))</screen>We define two
+      operations on Trees, one to count the red nodes, and one to add all
+      leaves:<programlisting>// continuing module Tree
+
+public int cntRed(Tree t){
+   int c = 0;
+   visit(t) {
+     case red(_,_): c = c + 1;<co xml:id="co.cntRed" />
+   };
+   return c;
+}
+
+public int addLeaves(Tree t){
+   int c = 0;
+   visit(t) {
+     case leaf(int N): c = c + N;<co xml:id="co.cntLeaves" />
+   };
+   return C;
+}</programlisting><calloutlist>
+          <callout arearefs="co.cntRed">
+            <para>Visit all the nodes of the tree and increment the counter
+            <literal>c</literal> for each red node.</para>
+          </callout>
+
+          <callout arearefs="co.cntLeaves">
+            <para>Visit all nodes of the tree and add the integers in the leaf
+            nodes.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para>This can be used as follows:</para>
+
+      <para><screen>rascal&gt; cntRed(rb);
+int: 2
+rascal&gt; addLeaves(rb);
+int : 6</screen></para>
+
+      <para>A final touch to this example is to introduce green nodes and to
+      replace all red nodes by green ones:<programlisting>// continuing module Tree
+
+data Tree = green(Tree left, Tree right);<co xml:id="co.Tree-green" />
+
+public Tree makeGreen(Tree t){
+   return visit(t) {
+     case red(l, r) =&gt; green(l, r);      <co xml:id="co.makeGreen" />
+   };
+}</programlisting><calloutlist>
+          <callout arearefs="co.Tree-green">
+            <para>Extend the Tree datatype with a new green
+            constructor.</para>
+          </callout>
+
+          <callout arearefs="co.makeGreen">
+            <para>Visit all nodes in the tree and replace red nodes by green
+            ones. Note that the variables <literal>l</literal> and
+            <literal>r</literal> are introduced here without a
+            declaration.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para>This is used as follows:<screen>rascal&gt; makeGreen(rb);
+Tree : green(black(leaf(1), green(leaf(2),leaf(3))))</screen></para>
+    </section>
+
+    <section>
+      <title>Word Replacement</title>
+
+      <para>Suppose you are in the publishing business and are responsible for
+      the systematic layout of publications. Authors do not systematically
+      capitalize words in titles---"Word replacement" instead of Word
+      Replacement"--- and you want to correct this. Here is one way to solve
+      this problem:<programlisting>module WordReplacement
+import String;
+
+public str capitalize(str word)
+{
+   if(/^&lt;letter:[a-z]&gt;&lt;rest:.*$&gt;/ := word) <co
+            xml:id="co.capitalize-regexp" />
+      return toUpperCase(letter) + rest;<co
+            xml:id="co.capitalize-regexp-return1" />
+   else
+     return word;<co xml:id="co.capitalize-regexp-return2" />
+}</programlisting><calloutlist>
+          <callout arearefs="co.capitalize-regexp">
+            <para>The function capitalize takes a string as input and
+            capitalizes its first character if that is a letter. This is done
+            using a regular expression match that anchors the match at the
+            beginning (<literal>^</literal>), expects a single letter and
+            assigns it to the variable letter
+            (<literal>letter:[a-z]</literal>) followed by an arbitrary
+            sequence of letters untilk the end of the string that is assigned
+            to the variable rest (<literal>&lt;rest:.*$&gt;</literal>).</para>
+          </callout>
+
+          <callout arearefs="co.capitalize-regexp-return1">
+            <para>If the regular expression matches we return a new string
+            with the first letter capitalized.</para>
+          </callout>
+
+          <callout arearefs="co.capitalize-regexp-return2">
+            <para>Otherwise we return the word unmodified.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para>The next challenge is how to capitalize all the words in a string.
+      Here are two solutions:<programlisting>// continuing module WordReplacement
+
+public str capAll1(str S)
+{
+ result = "";
+ while (/^&lt;before:\W*&gt;&lt;word:\w+&gt;&lt;after:.*$&gt;/ := S) { <co
+            xml:id="co.capAll1-regexp" />
+    result = result + before + capitalize(word);
+    S = after;
+  }
+  return result;
+}
+
+public str capAll2(str S)
+{
+   return visit(S){<co xml:id="co.capAll2-visit" />
+     case /&lt;word:\w+&gt;/i <co xml:id="co.capAll2-match" /> =&gt; capitalize(word)<co
+            xml:id="co.capAll1-insert" />
+   };
+}</programlisting><calloutlist>
+          <callout arearefs="co.capAll1-regexp">
+            <para>In the first solution <literal>capAll1</literal> we just
+            loop over all the words in the string and capitalize each word.
+            The variable <literal>result</literal> is used to collect the
+            successive capitalized words.</para>
+          </callout>
+
+          <callout arearefs="co.capAll2-visit">
+            <para>In the second solution we use a visit expression to visit
+            all the substrings of S. Each matching case advances the substring
+            by the length of the pattern it matches and replaces that pattern
+            by another string. If no case matches the next substring is
+            tried.</para>
+          </callout>
+
+          <callout arearefs="co.capAll2-match">
+            <para>The single case matches a word (note that
+            <literal>\w</literal> matches a word character).</para>
+          </callout>
+
+          <callout arearefs="co.capAll1-insert">
+            <para>When the case matches a word, it is replaced by a
+            capitalized version.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para>We can apply this all as follows:</para>
+
+      <para><screen>rascal&gt; import WordReplacement;
+done.
+
+rascal&gt; capitalize("rascal");
+str: "rascal"
+
+rascal&gt;capAll1("rascal is great");
+str: "Rascal Is Great"</screen></para>
     </section>
   </section>
 
   <section xml:id="section.motivating-example">
-    <title>A Motivating Example</title>
+    <title>An Analysis Example</title>
 
     <para>Suppose a mystery box ends up on your desk. When you open it, it
     contains a huge software system with several questions attached to
@@ -1002,7 +1176,7 @@ rel[proc, proc] : {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d"
   </section>
 
   <section xml:id="section.more-examples">
-    <title>More Examples</title>
+    <title>More Advanced Examples</title>
 
     <para>Now we will have a closer look at some larger applications of
     Rascal. We start by analyzing the global structure of a software system.
@@ -4310,9 +4484,7 @@ set[int] : {4923761}</screen></para>
 
               <para>matches provided that the subject has type
               <replaceable>Type</replaceable> and
-              <replaceable>Pat</replaceable> matches.<warning>
-                  <para>Not yet implemented.</para>
-                </warning></para>
+              <replaceable>Pat</replaceable> matches.</para>
             </listitem>
           </itemizedlist>
 
