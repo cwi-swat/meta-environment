@@ -22,7 +22,7 @@ typedef struct _ptdb {
   ParseTable *table;
 } PTDB;
 
-static PTDB tables[MAX_TABLES];
+static PTDB tables[MAX_TABLES] = { { "", NULL}  };
 static double timeTakeToAllocateTable = 0.0;
 
 /* Read a parse table term, build a parse table, and add it to the
@@ -87,7 +87,7 @@ ParseTable *SG_LookupParseTable(const char *parseTableName) {
   if (parseTableName == NULL) {
     return NULL;
   }
-  if (ATisEqual(parseTableName, tables[0].name)) {
+  if (strcmp(parseTableName, tables[0].name) == 0) {
     if (PARSER_getDebugFlag == ATtrue) {
       /*ATfprintf(LOG_log(), "Table for language %s available\n", parseTableName);*/
     }
