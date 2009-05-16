@@ -110,7 +110,7 @@
           synthesized that uses the various existing tools and combines their
           results.</para>
         </example><example>
-          <title>Renovation Financial Software</title>
+          <title>Renovating Financial Software</title>
 
           <para>Charlotte is software engineer at a large financial
           institution in Paris and she is looking for options to connect an
@@ -253,21 +253,49 @@
     <section>
       <title>Aim and Scope of this Book</title>
 
-      <para>The aim of this book is to give an easy to understand but
-      comprehensive overview of the Rascal language and to explain how to
-      solve various meta-programming problems using the language.</para>
+      <formalpara>
+        <title>Aim</title>
 
-      <para>The book aims at students, practitioners and researchers with a
-      background in computer science, software engineering or programming
-      languages. Familiarity with several main stream programming languages
-      and experience with larger software projects will make it easier to
-      appreciate the relevance of the meta-programming domain that Rascal is
-      addressing. Some familiarity with concepts like sets and relations is
-      assumed.</para>
+        <para>The aim of this book is to give an easy to understand but
+        comprehensive overview of the Rascal language and to offer problem
+        solving strategies to handle realistic, large, problems that require
+        meta-programming. Problems may range from security analysis and model
+        extraction to software renovation, domain-specific languages and code
+        generation.</para>
+      </formalpara>
 
-      <para>The scope of the book is limited to the Rascal language and its
-      applications but does not address implementation aspects of the
-      language.<warning>
+      <formalpara>
+        <title>Audience</title>
+
+        <para>The book is intended for students, practitioners and researchers
+        who want to solve meta-programming problems.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Background</title>
+
+        <para>Readers should have some background in computer science,
+        software engineering or programming languages. Familiarity with
+        several main stream programming languages and experience with larger
+        software projects will make it easier to appreciate the relevance of
+        the meta-programming domain that Rascal is addressing. Some
+        familiarity with concepts like sets, relations and pattern matching is
+        assumed.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Scope</title>
+
+        <para>The scope of the book is limited to the Rascal language and its
+        applications but does not address implementation aspects of the
+        language.</para>
+      </formalpara>
+    </section>
+
+    <section>
+      <title>Installing and Running Rascal</title>
+
+      <para><warning>
           <para>Some topics that are not yet described:</para>
 
           <itemizedlist>
@@ -314,7 +342,7 @@
             </imageobject>
           </mediaobject>
         </figure>The structure of this book is shown in <xref
-      linkend="figure.structure-manual" />. It consists of four parts:</para>
+      linkend="figure.structure-manual" />. It consists of five parts:</para>
 
       <itemizedlist>
         <listitem>
@@ -368,7 +396,10 @@
       <itemizedlist>
         <listitem>
           <para><literal>rascal&gt;</literal> is the prompt of the Rascal
-          system.</para>
+          system. <note>
+              <para>The prompt is not yet fixed. Currently, only
+              <literal>&gt;</literal> is displayed as prompt.</para>
+            </note></para>
         </listitem>
 
         <listitem>
@@ -383,7 +414,10 @@
 
         <listitem>
           <para><replaceable>Value</replaceable> is the value of that
-          answer.</para>
+          answer.<note>
+              <para>For typographic reasons the output is abbreviated or
+              slightly edited in some examples.</para>
+            </note></para>
         </listitem>
       </itemizedlist>
 
