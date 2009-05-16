@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -314,21 +314,27 @@
             </imageobject>
           </mediaobject>
         </figure>The structure of this book is shown in <xref
-      linkend="figure.structure-manual" />. It consists of three parts:</para>
+      linkend="figure.structure-manual" />. It consists of four parts:</para>
 
       <itemizedlist>
         <listitem>
           <para><emphasis role="bold">Introduction</emphasis>: gives a
           high-level overview of Rascal and consists of<xref
           linkend="section.why-a-new-language" /> and <xref
-          linkend="section.rascal-concepts" />.</para>
+          linkend="section.rascal-concepts" />. It also presents some simple
+          examples <xref linkend="section.classical-examples" />.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Problem Solving</emphasis>: describes
+          the major problem solving strategies in Rascal's application
+          domain.</para>
         </listitem>
 
         <listitem>
           <para><emphasis role="bold">Examples</emphasis>: gives a collection
-          of examples (<xref linkend="section.classical-examples" />, <xref
-          linkend="section.motivating-example" />, <xref
-          linkend="section.more-examples" /></para>
+          of larger examples, see <xref
+          linkend="section.more-examples" />.</para>
         </listitem>
 
         <listitem>
@@ -913,287 +919,643 @@ str: "Rascal Is Great"</screen></para>
     </section>
   </section>
 
-  <section xml:id="section.motivating-example">
-    <title>An Analysis Example</title>
+  <section>
+    <title>Problem Solving Strategies</title>
 
-    <para>Suppose a mystery box ends up on your desk. When you open it, it
-    contains a huge software system with several questions attached to
-    it:</para>
+    <para>Before we study more complicated examples, it is usefull to discuss
+    some general problem solving strategies that are relevant in Rascal's
+    application domain. The overall workflow is shown in <xref
+    linkend="figure.problem-solving" /> and consists of three optional
+    phases:</para>
 
     <itemizedlist>
       <listitem>
-        <para>How many procedure calls occur in this system?</para>
+        <para>Is extraction needed to solve the problem, then define the
+        extraction phase, see <xref
+        linkend="section.defining-extraction" />.</para>
       </listitem>
 
       <listitem>
-        <para>How many procedures does it contains?</para>
+        <para>Is analysis needed, then define the analysis phase, see <xref
+        linkend="section.defining-analysis" />.</para>
       </listitem>
 
       <listitem>
-        <para>What are the entry points for this system, i.e., procedures that
-        call others but are not called themselves?</para>
-      </listitem>
-
-      <listitem>
-        <para>What are the leaves of this application, i.e., procedures that
-        are called but do not make any calls themselves?</para>
-      </listitem>
-
-      <listitem>
-        <para>Which procedures call each other indirectly?</para>
-      </listitem>
-
-      <listitem>
-        <para>Which procedures are called directly or indirectly from each
-        entry point?</para>
-      </listitem>
-
-      <listitem>
-        <para>Which procedures are called from all entry points?</para>
+        <para>Is synthesis needed, then define the synthesis phase, see <xref
+        linkend="section.defining-synthesis" />.</para>
       </listitem>
     </itemizedlist>
 
-    <para>There are now two possibilities. Either you have this superb
-    programming environment or tool suite that can immediately answer all
-    these questions for you or you can use Rascal.</para>
+    <para><figure xml:id="figure.problem-solving">
+        <title>General 3-Phased Problem Solving Workflow</title>
 
-    <section>
-      <title>Preparations</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="problem-solving.png" scale="50"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure></para>
 
-      <para>To illustrate this process consider the workflow in <xref
-      linkend="figure.calls-workflow" />. First we have to extract the calls
-      from the source code. Rascal is very good at this, but to simplify this
-      example we assume that this call graph has already been extracted. Also
-      keep in mind that a real call graph of a real application will contain
-      thousands and thousands of calls. Drawing it in the way we do later on
-      in <xref linkend="figure.calls" /> makes no sense since we get a
-      uniformly black picture due to all the call dependencies. After the
-      extraction phase, we try to understand the extracted facts by writing
-      queries to explore their properties. For instance, we may want to know
-      <emphasis>how many calls</emphasis> there are, or <emphasis>how many
-      procedures</emphasis>. We may also want to enrich these facts, for
-      instance, by computing who calls who in more than one step. Finally, we
-      produce a simple textual report giving answers to the questions we are
-      interested in.<figure xml:id="figure.calls-workflow">
-          <title>Workflow for analyzing mystery box</title>
+    <para>Each phase is subject to a validation and improvement workflow as
+    shown in <xref linkend="figure.validation" />. Each individual phase as
+    well as the combination of phases may introduce errors and has thus to be
+    carefully validated. In combination with the detailed strategies for each
+    phase, this forms a complete approach for problem solving and validation
+    using Rascal.<figure xml:id="figure.validation">
+        <title>Validation and Improvement Workflow</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="validation.png" scale="50"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>A major question in every problem solving situation is how to
+    determine the requirements for each phase of the solution. For instance,
+    how do we know what to extract from the source code if we do not know what
+    the desired end results of the project are? The standard solution is to
+    use a workflow for requirements gathering that is the inverse of the
+    phases needed to solve the complete problem. This is shown in <xref
+    linkend="figure.requirements" /> and amounts to the phases:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Determine the requirements of the synthesis phase. This amounts
+        to making an inventory of the desired results of the whole project and
+        may include generated source code, abstract models, or visualizations.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>Determine the requirements of the analysis phase. Once these
+        results of the synthesis phase are known, it is possible to list the
+        analysis results that are needed to synthesize desired results.
+        Possible results of the analysis phase include type information,
+        structural information of the orginal source.</para>
+      </listitem>
+
+      <listitem>
+        <para>Determine the requirements of the extraction phase. As a last
+        step, one can make an inventory of the facts that have to be extracted
+        to form the starting point for the analysis phase. Typical facts
+        include method calls, inheritance relations, control flow graphs,
+        usage patterns of specific library functions or language
+        constructs.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para><figure xml:id="figure.requirements">
+        <title>Requirements Workflow</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="requirements.png" scale="50"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>When these requirements have been established, it becomes much
+    easier to actually carry out the project using the three phases of <xref
+    linkend="figure.problem-solving" />. </para>
+
+    <section xml:id="section.defining-extraction">
+      <title>Defining Extraction</title>
+
+      <para>How can we extract facts from the <emphasis>System under
+      Investigation</emphasis> (SUI) that we are interested in? The extraction
+      workflow is shown in <xref linkend="figure.define-extraction" />and
+      consists of the following steps:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>First and foremost we have to determine which facts we need.
+          This sounds trivial, but it is not. The problem is that we have to
+          aniticipate which facts will be needed in the next---not yet
+          defined---analysis phase. A common approach is to use look-ahead and
+          to sketch the queries that are likely to be used in the analysis
+          phase and to determine which facts are needed for them. Start with
+          extracting these facts and refine the extraction phase when the
+          analysis phase is completely defined.</para>
+        </listitem>
+
+        <listitem>
+          <para>If relevant facts are already available (and they are
+          reliable!) then we are done. This may happen when you are working on
+          a system that has already been analyzed by others. </para>
+        </listitem>
+
+        <listitem>
+          <para>Otherwise you need the source code of the SUI. This
+          requires:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Checking that all sources are available (and can be
+              compiled by the host system on which they are usually compiled
+              and executed). Due to missing or unreliable configuration
+              management on the original system this may be a labour-intensive
+              step that requires many iterations.</para>
+            </listitem>
+
+            <listitem>
+              <para>Determining in which languages the sources are written. In
+              larger systems it is common that three or more different
+              languages are being used.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>If there are reliable third-party extraction tools available
+          for this language mix, then we only have to apply them and we are
+          done. Here again, validation is needed that the extracted facts are
+          as expected.</para>
+        </listitem>
+
+        <listitem>
+          <para>The extraction may require syntax analysis. This is the case
+          when more structural properties of the source code are needed such
+          as the flow-of-control, nesting of declarations, and the like. There
+          two approaches here:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Use a third-party parser, convert the source code to parse
+              trees and do the further processing of these parse trees in
+              Rascal. The advantage is that the parser can be re-used, the
+              disadvantage is that data conversion is needed to adapt the
+              generated parse tree to Rascal. Validate that the parser indeed
+              accepts the language the SUI is written in, since you will not
+              be the first who is bitting by the language dialect monster when
+              it turns out that the SUI uses a local variant that slightly
+              deviates from a mainstream language.</para>
+            </listitem>
+
+            <listitem>
+              <para>Use an existing SDF definition of the source language or
+              write your own definition. In both cases you can profit from
+              Rascal's seamless integration with SDF. Be aware, however, that
+              writing a grammar for a non-trivial language is a major
+              undertaking and may require weeks to month of work. Whatever
+              approach you choose, validate that the result.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>The extraction phase may only require lexical analysis. This
+          happens when more superfical, textual, facts have to be extracted
+          like procedure calls, counts of certain statement statement and the
+          like. Use Rascal's full regular expression facilities to do the
+          lexical analysis.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>It may happen that the facts extracted from the source code are
+      <emphasis>wrong</emphasis>. Typical error classes are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Extracted facts are <emphasis>wrong</emphasis>: the extracted
+          facts incorrectly state that procedure <literal>P</literal> calls
+          procedure <literal>Q</literal> but this is contradicted by a source
+          code inspection.</para>
+        </listitem>
+
+        <listitem>
+          <para>Extracted facts are <emphasis>incomplete</emphasis>: the
+          inheritance between certain classes in Java code is missing.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The strategy to validate extracted facts differ per case but here
+      are three strategies:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Postprocess the extracted facts (using Rascal, of course) to
+          obtain trivial facts about the source code such as total lines of
+          source code and number of procedures, classes, interfaces and the
+          like. Next validate these trivial facts with tools like
+          <literal>wc</literal> (word and line count), <literal>grep</literal>
+          (regular expression matching) and others.</para>
+        </listitem>
+
+        <listitem>
+          <para>Do a manual fact extraction on a small subset of the code and
+          compare this with the automatically extracted facts.</para>
+        </listitem>
+
+        <listitem>
+          <para>Use another tool on the same source and compare results
+          whenever possible. A typical example is a comparison of a call
+          relation extracted with different tools.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><figure xml:id="figure.define-extraction">
+          <title>Extraction Workflow</title>
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="calls-workflow.png" scale="50"></imagedata>
-            </imageobject>
-          </mediaobject>
-
-          <para>Now consider the call graph shown in <xref
-          linkend="figure.calls" />. This section is intended to give you a
-          first impression what can be done with Rascal. Please return to this
-          example when you have digested the detailed description of Rascal in
-          <xref linkend="section.rascal-language" /> and <xref
-          linkend="section.lib" />.</para>
-        </figure><figure xml:id="figure.calls">
-          <title>Graphical representation of the <literal>calls</literal>
-          relation</title>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="calls.png" scale="50"></imagedata>
+              <imagedata fileref="define-extraction.png" scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
+    </section>
 
-      <para>Rascal supports basic data types like integers and strings which
-      are sufficient to formulate and answer the questions at hand. However,
-      we can gain readability by introducing separately named types for the
-      items we are describing. First, we introduce therefore a new type
-      <literal>proc</literal> (an alias for strings) to denote
-      procedures:</para>
+    <section xml:id="section.defining-analysis">
+      <title>Defining Analysis</title>
 
-      <screen>rascal&gt; alias proc = str;
+      <para>The analysis workflow is shown in <xref
+      linkend="figure.define-analysis" /> and consists of two steps:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Determine the results that are needed for the synthesis
+          phase.</para>
+        </listitem>
+
+        <listitem>
+          <para>Write the Rascal code to perform the analysis. This may amount
+          to:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Reordering extracted facts to make them more suitable for
+              the synthesis phase.</para>
+            </listitem>
+
+            <listitem>
+              <para>Enriching extracted facts. Examples are computing
+              transitive closures of extracted facts (e.g., A may call B in
+              one or more calls), or performing data reduction by abstracting
+              aways details (i.e., reducing a program to a finite
+              automaton).</para>
+            </listitem>
+
+            <listitem>
+              <para>Combining enriched, extracted, facts to create new
+              facts.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>As before, validate, validate and validate the results of
+      analysis. Essentially the same approach can be used as for validating
+      the facts. Manual checking of answers on random samples of the SUI may
+      be mandatory. It also happens frequently that answers inspire new
+      queries that lead to new answers, and so on.</para>
+
+      <para><figure xml:id="figure.define-analysis">
+          <title>Analysis Workflow</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="define-analysis.png" scale="50"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+    </section>
+
+    <section xml:id="section.defining-synthesis">
+      <title>Defining Synthesis</title>
+
+      <para>Results are synthesized as shown in <xref
+      linkend="figure.define-synthesis" />. This consists of the following
+      steps:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Determine the results of the synthesis phase. Wide range of
+          results is possible including:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Generated source code.</para>
+            </listitem>
+
+            <listitem>
+              <para>Generated abstract representations, like finite automata
+              or other formals models that capture properties of the
+              SUI.</para>
+            </listitem>
+
+            <listitem>
+              <para>Generated data for visualizations that will be used by
+              visualization tools.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>If source is to be generated, we need a grammar of the target
+          source language. Note that this approach guarantees the generation
+          of syntactically correct source code as opposed to code generation
+          using print statements</para>
+        </listitem>
+
+        <listitem>
+          <para>If other output is needed (e.g., an automaton or other formal
+          structure) write data declarations to represent that output.</para>
+        </listitem>
+
+        <listitem>
+          <para>Finally, write functions and rewrite rules that generate the
+          desired results.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><figure xml:id="figure.define-synthesis">
+          <title>Synthesis Workflow</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="define-synthesis.png" scale="50"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+    </section>
+  </section>
+
+  <section xml:id="section.more-examples">
+    <title>Larger Examples</title>
+
+    <para>Now we will have a closer look at some larger applications of
+    Rascal. We start with a call graph analysis in <xref
+    linkend="section.motivating-example" /> an then continue with the analysis
+    of the component structure of an application in <xref
+    linkend="section.analyzing-components" /> and of Java systems in <xref
+    linkend="section.analyzing-java" />. Next we move on to the detection of
+    initialized variables in <xref linkend="section.unitialized-variables" />.
+    As an example of computing code metrics, we describe the calculation of
+    McCabe's cyclomatic complexity in <biblioref linkend="section.McCabe" />.
+    Several examples of dataflow analysis follow in <xref
+    linkend="section.dataflow" />. A description of program slicing concludes
+    the chapter (<xref linkend="section.program-slicing" />).</para>
+
+    <section xml:id="section.motivating-example">
+      <title>Call Graph Analysis</title>
+
+      <para>Suppose a mystery box ends up on your desk. When you open it, it
+      contains a huge software system with several questions attached to
+      it:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>How many procedure calls occur in this system?</para>
+        </listitem>
+
+        <listitem>
+          <para>How many procedures does it contains?</para>
+        </listitem>
+
+        <listitem>
+          <para>What are the entry points for this system, i.e., procedures
+          that call others but are not called themselves?</para>
+        </listitem>
+
+        <listitem>
+          <para>What are the leaves of this application, i.e., procedures that
+          are called but do not make any calls themselves?</para>
+        </listitem>
+
+        <listitem>
+          <para>Which procedures call each other indirectly?</para>
+        </listitem>
+
+        <listitem>
+          <para>Which procedures are called directly or indirectly from each
+          entry point?</para>
+        </listitem>
+
+        <listitem>
+          <para>Which procedures are called from all entry points?</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>There are now two possibilities. Either you have this superb
+      programming environment or tool suite that can immediately answer all
+      these questions for you or you can use Rascal.</para>
+
+      <section>
+        <title>Preparations</title>
+
+        <para>To illustrate this process consider the workflow in <xref
+        linkend="figure.calls-workflow" />. First we have to extract the calls
+        from the source code. Rascal is very good at this, but to simplify
+        this example we assume that this call graph has already been
+        extracted. Also keep in mind that a real call graph of a real
+        application will contain thousands and thousands of calls. Drawing it
+        in the way we do later on in <xref linkend="figure.calls" /> makes no
+        sense since we get a uniformly black picture due to all the call
+        dependencies. After the extraction phase, we try to understand the
+        extracted facts by writing queries to explore their properties. For
+        instance, we may want to know <emphasis>how many calls</emphasis>
+        there are, or <emphasis>how many procedures</emphasis>. We may also
+        want to enrich these facts, for instance, by computing who calls who
+        in more than one step. Finally, we produce a simple textual report
+        giving answers to the questions we are interested in.<figure
+            xml:id="figure.calls-workflow">
+            <title>Workflow for analyzing mystery box</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="calls-workflow.png" scale="50"></imagedata>
+              </imageobject>
+            </mediaobject>
+
+            <para>Now consider the call graph shown in <xref
+            linkend="figure.calls" />. This section is intended to give you a
+            first impression what can be done with Rascal. Please return to
+            this example when you have digested the detailed description of
+            Rascal in <xref linkend="section.rascal-language" /> and <xref
+            linkend="section.lib" />.</para>
+          </figure><figure xml:id="figure.calls">
+            <title>Graphical representation of the <literal>calls</literal>
+            relation</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="calls.png" scale="50"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+
+        <para>Rascal supports basic data types like integers and strings which
+        are sufficient to formulate and answer the questions at hand. However,
+        we can gain readability by introducing separately named types for the
+        items we are describing. First, we introduce therefore a new type
+        <literal>proc</literal> (an alias for strings) to denote
+        procedures:</para>
+
+        <screen>rascal&gt; alias proc = str;
 done.</screen>
 
-      <para>Suppose that the following facts have been extracted from the
-      source code and are represented by the relation
-      <literal>Calls</literal>:</para>
+        <para>Suppose that the following facts have been extracted from the
+        source code and are represented by the relation
+        <literal>Calls</literal>:</para>
 
-      <screen>rascal&gt; rel[proc, proc] Calls = 
+        <screen>rascal&gt; rel[proc, proc] Calls = 
    { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, &lt;"d","e"&gt;, 
      &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;
    };
 rel[proc,proc] : { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
                    &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;}</screen>
 
-      <para>This concludes the preparatory steps and now we move on to answer
-      the questions.</para>
-    </section>
-
-    <section>
-      <title>Questions</title>
-
-      <section>
-        <title>How many procedure calls occur in this system?</title>
-
-        <para>To determine the numbers of calls, we simply determine the
-        number of tuples in the <literal>Calls</literal> relation, as follows.
-        First, we need the Relation library (described in <xref
-        linkend="section.lib-Relation" />) so we import it:<screen>rascal&gt; import Relation;
-done.</screen>next we describe a new variable and calculate the number of
-        tuples:</para>
-
-        <para><screen>rascal&gt; nCalls = size(Calls);
-int : 8</screen>The library function <literal>size</literal> determines the
-        number of elements in a set or relation and is explained in <xref
-        linkend="section.lib-Relation" />. In this example,
-        <literal>nCalls</literal> will get the value
-        <literal>8</literal>.</para>
+        <para>This concludes the preparatory steps and now we move on to
+        answer the questions.</para>
       </section>
 
       <section>
-        <title>How many procedures are contained in it?</title>
+        <title>Questions</title>
 
-        <para>We get the number of procedures by determining which names occur
-        in the tuples in the relation <literal>Calls</literal> and then
-        determining the number of names:</para>
+        <section>
+          <title>How many procedure calls occur in this system?</title>
 
-        <screen>rascal&gt; procs = carrier(Calls);
+          <para>To determine the numbers of calls, we simply determine the
+          number of tuples in the <literal>Calls</literal> relation, as
+          follows. First, we need the Relation library (described in <xref
+          linkend="section.lib-Relation" />) so we import it:<screen>rascal&gt; import Relation;
+done.</screen>next we describe a new variable and calculate the number of
+          tuples:</para>
+
+          <para><screen>rascal&gt; nCalls = size(Calls);
+int : 8</screen>The library function <literal>size</literal> determines the
+          number of elements in a set or relation and is explained in <xref
+          linkend="section.lib-Relation" />. In this example,
+          <literal>nCalls</literal> will get the value
+          <literal>8</literal>.</para>
+        </section>
+
+        <section>
+          <title>How many procedures are contained in it?</title>
+
+          <para>We get the number of procedures by determining which names
+          occur in the tuples in the relation <literal>Calls</literal> and
+          then determining the number of names:</para>
+
+          <screen>rascal&gt; procs = carrier(Calls);
 <literal>set[proc] : {"a", "b", "c", "d", "e", "f", "g"}</literal>
 rascal&gt; nprocs = size(procs);
 <literal>int : 7</literal></screen>
 
-        <para>The built-in function <literal>carrier</literal> determines all
-        the values that occur in the tuples of a relation. In this case,
-        <literal>procs</literal> will get the value <literal>{"a", "b", "c",
-        "d", "e", "f", "g"}</literal> and <literal>nprocs</literal> will thus
-        get value <literal>7</literal>. A more concise way of expressing this
-        would be to combine both steps:</para>
+          <para>The built-in function <literal>carrier</literal> determines
+          all the values that occur in the tuples of a relation. In this case,
+          <literal>procs</literal> will get the value <literal>{"a", "b", "c",
+          "d", "e", "f", "g"}</literal> and <literal>nprocs</literal> will
+          thus get value <literal>7</literal>. A more concise way of
+          expressing this would be to combine both steps:</para>
 
-        <screen>rascal&gt; nprocs = size(carrier(Calls));
+          <screen>rascal&gt; nprocs = size(carrier(Calls));
 int : 7</screen>
-      </section>
+        </section>
 
-      <section>
-        <title>What are the entry points for this system?</title>
+        <section>
+          <title>What are the entry points for this system?</title>
 
-        <para>The next step in the analysis is to determine which
-        <emphasis>entry points</emphasis> this application has, i.e.,
-        procedures which call others but are not called themselves. Entry
-        points are useful since they define the external interface of a system
-        and may also be used as guidance to split a system in parts. The
-        <literal>top</literal> of a relation contains those left-hand sides of
-        tuples in a relation that do not occur in any right-hand side. When a
-        relation is viewed as a graph, its top corresponds to the root nodes
-        of that graph. Similarly, the <literal>bottom</literal> of a relation
-        corresponds to the leaf nodes of the graph. See <xref
-        linkend="section.lib-Graph" /> for more details. Using this knowledge,
-        the entry points can be computed by determining the top of the
-        <literal>Calls</literal> relation:</para>
+          <para>The next step in the analysis is to determine which
+          <emphasis>entry points</emphasis> this application has, i.e.,
+          procedures which call others but are not called themselves. Entry
+          points are useful since they define the external interface of a
+          system and may also be used as guidance to split a system in parts.
+          The <literal>top</literal> of a relation contains those left-hand
+          sides of tuples in a relation that do not occur in any right-hand
+          side. When a relation is viewed as a graph, its top corresponds to
+          the root nodes of that graph. Similarly, the
+          <literal>bottom</literal> of a relation corresponds to the leaf
+          nodes of the graph. See <xref linkend="section.lib-Graph" /> for
+          more details. Using this knowledge, the entry points can be computed
+          by determining the top of the <literal>Calls</literal>
+          relation:</para>
 
-        <screen>rascal&gt; import Graph;
+          <screen>rascal&gt; import Graph;
 done.
 rascal&gt; entryPoints = top(Calls);
 <literal>set[proc] : {"a", "f"}</literal></screen>
 
-        <para>In this case, <literal>entryPoints</literal> is equal to
-        <literal>{"a", "f"}</literal>. In other words, procedures
-        <literal>"a"</literal> and <literal>"f"</literal> are the entry points
-        of this application.</para>
-      </section>
+          <para>In this case, <literal>entryPoints</literal> is equal to
+          <literal>{"a", "f"}</literal>. In other words, procedures
+          <literal>"a"</literal> and <literal>"f"</literal> are the entry
+          points of this application.</para>
+        </section>
 
-      <section>
-        <title>What are the leaves of this application?</title>
+        <section>
+          <title>What are the leaves of this application?</title>
 
-        <para>In a similar spirit, we can determine the
-        <emphasis>leaves</emphasis> of this application, i.e., procedures that
-        are being called but do not make any calls themselves:</para>
+          <para>In a similar spirit, we can determine the
+          <emphasis>leaves</emphasis> of this application, i.e., procedures
+          that are being called but do not make any calls themselves:</para>
 
-        <screen>rascal&gt; bottomCalls = bottom(Calls);
+          <screen>rascal&gt; bottomCalls = bottom(Calls);
 <literal>set[proc] : {"c", "e"}</literal></screen>
 
-        <para>In this case, <literal>bottomCalls</literal> is equal to
-        <literal>{"c", "e"}</literal>.</para>
-      </section>
+          <para>In this case, <literal>bottomCalls</literal> is equal to
+          <literal>{"c", "e"}</literal>.</para>
+        </section>
 
-      <section>
-        <title>Which procedures call each other indirectly?</title>
+        <section>
+          <title>Which procedures call each other indirectly?</title>
 
-        <para>We can also determine the <emphasis>indirect calls</emphasis>
-        between procedures, by taking the transitive closure of the
-        <literal>Calls</literal> relation:</para>
+          <para>We can also determine the <emphasis>indirect calls</emphasis>
+          between procedures, by taking the transitive closure of the
+          <literal>Calls</literal> relation:</para>
 
-        <screen>rascal&gt; closureCalls = Calls+;
+          <screen>rascal&gt; closureCalls = Calls+;
 rel[proc, proc] : {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
                    &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;, 
                    &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "e"&gt;, &lt;"a", "e"&gt;}</screen>
-      </section>
+        </section>
 
-      <section>
-        <title>Which procedures are called directly or indirectly from each
-        entry point?</title>
+        <section>
+          <title>Which procedures are called directly or indirectly from each
+          entry point?</title>
 
-        <para>We now know the entry points for this application (<literal>"a"
-        </literal>and <literal>"f"</literal>) and the indirect call relations.
-        Combining this information, we can determine which procedures are
-        called from each entry point. This is done by indexing
-        <literal>closureCalls</literal> with appropriate procedure name. The
-        index operator yields all right-hand sides of tuples that have a given
-        value as left-hand side. This gives the following:</para>
+          <para>We now know the entry points for this application
+          (<literal>"a" </literal>and <literal>"f"</literal>) and the indirect
+          call relations. Combining this information, we can determine which
+          procedures are called from each entry point. This is done by
+          indexing <literal>closureCalls</literal> with appropriate procedure
+          name. The index operator yields all right-hand sides of tuples that
+          have a given value as left-hand side. This gives the
+          following:</para>
 
-        <screen>rascal&gt; calledFromA = closureCalls["a"];
+          <screen>rascal&gt; calledFromA = closureCalls["a"];
 <literal>set[proc] : {"b", "c", "d", "e"}</literal></screen>
 
-        <para>and</para>
+          <para>and</para>
 
-        <screen>rascal&gt; calledFromF = closureCalls["f"];
+          <screen>rascal&gt; calledFromF = closureCalls["f"];
 <literal>set[proc] : {"e", "g"}</literal></screen>
-      </section>
+        </section>
 
-      <section>
-        <title>Which procedures are called from all entry points?</title>
+        <section>
+          <title>Which procedures are called from all entry points?</title>
 
-        <para>Finally, we can determine which procedures are called from both
-        entry points by taking the intersection of the two sets
-        <literal>calledFromA</literal> and
-        <literal>calledFromF:</literal></para>
+          <para>Finally, we can determine which procedures are called from
+          both entry points by taking the intersection of the two sets
+          <literal>calledFromA</literal> and
+          <literal>calledFromF:</literal></para>
 
-        <para><screen>rascal&gt; commonProcs = calledFromA &amp; calledFromF;
+          <para><screen>rascal&gt; commonProcs = calledFromA &amp; calledFromF;
 <literal>set[proc] : {"e"}</literal></screen></para>
 
-        <para>In other words, the procedures called from both entry points are
-        mostly disjoint except for the common procedure
-        <literal>"e"</literal>.</para>
-      </section>
+          <para>In other words, the procedures called from both entry points
+          are mostly disjoint except for the common procedure
+          <literal>"e"</literal>.</para>
+        </section>
 
-      <section>
-        <title>Wrap-up</title>
+        <section>
+          <title>Wrap-up</title>
 
-        <para>These findings can be verified by inspecting a graph view of the
-        calls relation as shown in <xref linkend="figure.calls" />. Such a
-        visual inspection does <emphasis>not</emphasis> scale very well to
-        large graphs and this makes the above form of analysis particularly
-        suited for studying large systems.<warning>
-            <para>Add a screen dump here of the Eclipse browser.</para>
-          </warning></para>
+          <para>These findings can be verified by inspecting a graph view of
+          the calls relation as shown in <xref linkend="figure.calls" />. Such
+          a visual inspection does <emphasis>not</emphasis> scale very well to
+          large graphs and this makes the above form of analysis particularly
+          suited for studying large systems.<warning>
+              <para>Add a screen dump here of the Eclipse browser.</para>
+            </warning></para>
+        </section>
       </section>
     </section>
-  </section>
-
-  <section xml:id="section.more-examples">
-    <title>More Advanced Examples</title>
-
-    <para>Now we will have a closer look at some larger applications of
-    Rascal. We start by analyzing the global structure of a software system.
-    You may now want to reread the example of call graph analysis given
-    earlier in <xref linkend="section.motivating-example" /> as a reminder.
-    The component structure of an application is analyzed in <xref
-    linkend="section.analyzing-components" /> and Java systems are analyzed in
-    <xref linkend="section.analyzing-java" />. Next we move on to the
-    detection of initialized variables in <xref
-    linkend="section.unitialized-variables" /> and we explain how source code
-    locations can be included in a such an analysis (<xref
-    linkend="section.using-locations" />). As an example of computing code
-    metrics, we describe the calculation of McCabe's cyclomatic complexity in
-    <biblioref linkend="section.McCabe" />. Several examples of dataflow
-    analysis follow in <xref linkend="section.dataflow" />. A description of
-    program slicing concludes the chapter (<xref
-    linkend="section.program-slicing" />).</para>
 
     <section xml:id="section.analyzing-components">
       <title>Analyzing the Component Structure of an Application</title>
@@ -1434,11 +1796,9 @@ rel[class,set[class]] ClassCycles =
       </itemizedlist>
 
       <para>In this example, we will use line numbers to identify the
-      statements in the program. (In <xref
-      linkend="section.using-locations" />, we will use locations to represent
-      statements.) Assuming that there is a tool to extract the above
-      information from a program text, we get the following for the above
-      example:<programlisting>type expr = int
+      statements in the program. Assuming that there is a tool to extract the
+      above information from a program text, we get the following for the
+      above example:<programlisting>type expr = int
 type varname = str
 expr ROOT = 1
 rel[expr,expr] PRED = { &lt;1,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, &lt;5,8&gt;, 
@@ -1537,113 +1897,8 @@ rel[expr,varname] USES = { &lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"
       <literal>{"p"}</literal>.</para>
     </section>
 
-    <section xml:id="section.using-locations">
-      <title>Using Locations to Represent Program Fragments (TODO)</title>
-
-      <para><warning>
-          <para>Fix the following</para>
-        </warning>\begin{figure}[tb] \begin{center}
-      \epsfig{figure=figs/meta-pico.eps,width=6cm} \hspace*{0.5cm}
-      \epsfig{figure=figs/pico-example.eps,width=6cm} \end{center} \hrulefill
-      \caption{\label{FIG:meta-pico}Checking undefined variables in Pico
-      programs using the ASF+SDF Meta-Environment. On the left, main window of
-      Meta-Environment with error messages related to Pico program shown on
-      the right.{\bf THIS FIGURE IS OUTDATED}} \end{figure}</para>
-
-      <para>One aspect of the example we have just seen is artificial: where
-      do these line numbers come from that we used to indicate expressions in
-      the program? One solution is to let the extraction phase generate
-      <emphasis>locations</emphasis> to precisely indicate relevant places in
-      the program text. Recall from <xref
-      linkend="section.elementary-types" />, that a location consists of a
-      file name, a begin line, a begin position, an end line, and an end
-      position. Also recall that locations can be compared: a location
-      <replaceable>A</replaceable><subscript>1</subscript> is smaller than
-      another location <replaceable>A</replaceable><subscript>2</subscript>,
-      if <replaceable>A</replaceable><subscript>1</subscript> is textually
-      contained in <replaceable>A</replaceable><subscript>2</subscript>. By
-      including locations in the final answer of a relational expression,
-      external tools will be able to highlight places of interest in the
-      source text.</para>
-
-      <para>The first step, is to define the type <literal>expr</literal> as
-      aliases for <literal>loc</literal> (instead of
-      <literal>int</literal>):</para>
-
-      <para><programlisting>type expr = loc
-type varname = str </programlisting></para>
-
-      <para>Of course, the actual relations are now represented differently.
-      For instance, the <literal>USES</literal> relation may now look
-      like</para>
-
-      <para><programlisting>{ &lt;area-in-file("/home/paulk/example.pico", 
-                area(5,5,5,6,106,1)), "q"&gt;, 
-  &lt;area-in-file("/home/paulk/example.pico", 
-                area(6,13,6,14,127,1)), "y"&gt;, 
-  &lt;area-in-file("/home/paulk/example.pico", 
-                area(6,17,6,18,131,1)), "x"&gt;, 
-  &lt;area-in-file("/home/paulk/example.pico", 
-                area(10,7,10,8,168,1)), "z"&gt; 
-} </programlisting></para>
-
-      <para>The definition of <literal>UNINIT</literal> can be nearly reused
-      as is. The only thing that remains to be changed is to map the
-      (expression, variable-name) tuples to (variable-name,
-      variable-occurrence) tuples, for the benefit of the precise highlighting
-      of the relevant variables. We define a new type <literal>var</literal>
-      to represent variable occurrences and an auxiliary set that
-      <literal>VARNAMES</literal> that contains all variable names:</para>
-
-      <para><programlisting>type var = loc
-set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
-
-      <para>Remains the new definition of <literal>UNINIT</literal>:</para>
-
-      <para><programlisting>rel[var, varname] UNINIT = 
-   { &lt;V, VN&gt;| var-name VN : VARNAMES, 
-              var V : USES[-,VN], 
-              expr E : reachX({ROOT}, DEFS[-,VN], PRED), 
-              V &lt;= E 
-   }</programlisting></para>
-
-      <para>This definition can be understood as follows:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>var-name VN : VARNAMES</literal> generates all
-          variable names.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>var V : USES[-,VN]</literal> generates all variable
-          uses <literal>V</literal> for variables with name
-          <literal>VN</literal>.</para>
-        </listitem>
-
-        <listitem>
-          <para>As before, <literal>expr E : reachX({ROOT}, DEFS[-,VN],
-          PRED)</literal> generates all expressions <literal>E</literal> that
-          can be reached from the start of the program without encountering a
-          definition for variables named <literal>VN</literal>.</para>
-        </listitem>
-
-        <listitem>
-          <para>V<literal> &lt;= E</literal> tests whether variable use
-          <literal>V</literal> is enclosed in that expression (using a
-          comparison on locations). If so, we have found an uninitialized
-          occurrence of the variable named <literal>VN</literal>.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para><warning>
-          <para>Fix reference</para>
-        </warning>In Figure~\ref{FIG:meta-pico} it is shown how checking of
-      Pico programs in the ASF+SDF Meta-Environment looks like.</para>
-    </section>
-
     <section xml:id="section.McCabe">
-      <title>McCabe Cyclomatic Complexity (TODO)</title>
+      <title>McCabe Cyclomatic Complexity</title>
 
       <para>The <emphasis>cyclomatic complexity</emphasis> of a program is
       defined as <replaceable>e</replaceable> - <replaceable>n</replaceable> +
@@ -1659,11 +1914,13 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
       by counting all if statement, case branches in switch statements and the
       number of conditional loops. Given a control flow in the form of a
       predecessor relation <literal>rel[stat,stat] PRED</literal> between
-      statements, the cyclomatic complexity can be computed in an Rascal as
-      follows: <programlisting>int cyclomatic-complexity(rel[stat,stat] PRED) = 
-    #PRED - #carrier(PRED) + 2</programlisting> The number of edges
-      <replaceable>e</replaceable> is equal to the number of tuples in
-      <literal>PRED</literal>. The number of nodes
+      statements, the cyclomatic complexity can be computed in Rascal as
+      follows: <programlisting>module demo::McCabe
+import Relation;
+public int cyclomatic-complexity(rel[stat,stat] PRED){
+    return size(PRED) - size(carrier(PRED)) + 2
+}</programlisting>The number of edges <replaceable>e</replaceable> is equal to
+      the number of tuples in <literal>PRED</literal>. The number of nodes
       <replaceable>n</replaceable> is equal to the number of elements in the
       carrier of PRED, i.e., all elements that occur in a tuple in
       <literal>PRED</literal>.</para>
@@ -1717,15 +1974,16 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
         for a given flow graph <literal>PRED</literal> and an entry node
         <literal>ROOT</literal> is defined as follows:</para>
 
-        <para><programlisting>rel[stat,stat] dominators(rel[stat,stat] PRED, int ROOT) = 
-   DOMINATES
-where
-    set[int] VERTICES = carrier(PRED)
+        <para><programlisting>module demo::Dominators
+import Set;
+import Relation;
+import Graph;
 
-    rel[int,set[int]] DOMINATES =
-    { &lt;V,  VERTICES \ {V, ROOT} \ reachX({ROOT}, {V}, PRED)&gt; |  
-      int V : VERTICES }
-endwhere</programlisting></para>
+public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED, &amp;T ROOT)
+{
+  set[&amp;T] VERTICES = carrier(PRED);
+  return  { &lt;V,  (VERTICES - {V, ROOT}) - reachX(PRED, {ROOT}, {V})&gt; |  &amp;T V &lt;- VERTICES};
+}</programlisting></para>
 
         <para>First, the auxiliary set <literal>VERTICES</literal> (all the
         statements) is computed. The relation <literal>DOMINATES</literal>
@@ -1747,7 +2005,11 @@ endwhere</programlisting></para>
           </listitem>
         </itemizedlist>
 
-        <para>Consider the flow graph<programlisting>rel[int,int] PRED = {
+        <para>First import the above module and consider the sample flow graph
+        PRED:<screen>rascal&gt; import demo::Dominators;
+done.
+
+rascal&gt; rel[int,int] PRED = {
 &lt;1,2&gt;, &lt;1,3&gt;,
 &lt;2,3&gt;,
 &lt;3,4&gt;,
@@ -1758,7 +2020,9 @@ endwhere</programlisting></para>
 &lt;8,9&gt;,&lt;8,10&gt;,&lt;8,3&gt;,
 &lt;9,1&gt;,
 &lt;10,7&gt;
-}</programlisting>It is illustrated in<xref
+};
+
+rel[int,int] { &lt;1,2&gt;, &lt;1,3&gt;, ...</screen>It is illustrated in<xref
         linkend="figure.flow-graph" /><figure xml:id="figure.flow-graph">
             <title>Flow graph</title>
 
@@ -1768,7 +2032,8 @@ endwhere</programlisting></para>
               </imageobject>
             </mediaobject>
           </figure>The result of applying <literal>dominators</literal> to it
-        is as follows:<programlisting>{&lt;1, {2, 3, 4, 5, 6, 7, 8, 9, 10}&gt;, 
+        is as follows:<screen>rascal&gt; dominators(PRED);
+rel[int,int] {&lt;1, {2, 3, 4, 5, 6, 7, 8, 9, 10}&gt;, 
 &lt;2, {}&gt;, 
 &lt;3, {4, 5, 6, 7, 8, 9, 10}&gt;, 
 &lt;4, {5, 6, 7, 8, 9, 10}&gt;, 
@@ -1777,9 +2042,9 @@ endwhere</programlisting></para>
 &lt;7, {8, 9, 10}&gt;, 
 &lt;8, {9, 10}&gt;, 
 &lt;9, {}&gt;, 
-&lt;10, {}&gt;}</programlisting>The resulting <emphasis>dominator
-        tree</emphasis> is shown in <xref linkend="figure.dominator-tree" />.
-        The dominator tree has the initial node as root and each node
+&lt;10, {}&gt;}</screen>The resulting <emphasis>dominator tree</emphasis> is
+        shown in <xref linkend="figure.dominator-tree" />. The dominator tree
+        has the initial node as root and each node
         <replaceable>d</replaceable> in the tree only dominates its
         descendants in the tree.</para>
 
@@ -1813,26 +2078,39 @@ endwhere</programlisting></para>
 
         <para>As before, we assume the following basic relations
         <literal>PRED</literal>, <literal>DEFS</literal> and
-        <literal>USES</literal> about the program:<programlisting>type stat = int
-type var = str
+        <literal>USES</literal> about the program:<programlisting>module demo::ReachingDefs
+
+import Relation;
+import IO;
+
+public alias stat = int;
+public alias var = str;
+public alias def  = tuple[stat, var];
+public alias use = tuple[stat,var];
+
+public rel[stat,def] definition(rel[stat,var] DEFS){
+  return {&lt;S,&lt;S,V&gt;&gt; | &lt;stat S, var V&gt; &lt;- DEFS};
+}
+
+public rel[stat,def] use(rel[stat, var] USES){
+  return {&lt;S, &lt;S, V&gt;&gt; | &lt;stat S, var V&gt; &lt;- USES};
+}
+
 rel[stat,stat] PRED = { &lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, 
                         &lt;5,7&gt;, &lt;6,7&gt;, &lt;7,4&gt;
-                      }
+                      };
 rel[stat, var] DEFS = { &lt;1, "i"&gt;, &lt;2, "j"&gt;, &lt;3, "a"&gt;, &lt;4, "i"&gt;, 
                        &lt;5, "j"&gt;, &lt;6, "a"&gt;, &lt;7, "i"&gt;
-                      }
+                      };
 rel[stat, var] USES = { &lt;1, "m"&gt;, &lt;2, "n"&gt;, &lt;3, "u1"&gt;, &lt;4, "i"&gt;, 
                         &lt;5, "j"&gt;, &lt;6, "u2"&gt;, &lt;7, "u3"&gt;
-                      }</programlisting></para>
+                      };</programlisting></para>
 
         <para>For convenience, we introduce a notion <literal>def</literal>
         that describes that a certain statement defines some variable and we
         revamp the basic relations into a more convenient format using this
-        new type:<programlisting>type def  = &lt;stat theStat, var theVar&gt;
-
-rel[stat, def] DEF = {&lt;S, &lt;S, V&gt;&gt; | &lt;stat S, var V&gt; : DEFS}
-rel[stat, def] USE = {&lt;S, &lt;S, V&gt;&gt; | &lt;stat S, var V&gt; : USES}</programlisting>The
-        new <literal>DEF</literal> relation gets as value:<programlisting>{ &lt;1, &lt;1, "i"&gt;&gt;, &lt;2, &lt;2, "j"&gt;&gt;, &lt;3, &lt;3, "a"&gt;&gt;, &lt;4, &lt;4, "i"&gt;&gt;, 
+        new type:<programlisting></programlisting>The new
+        <literal>DEF</literal> relation gets as value:<programlisting>{ &lt;1, &lt;1, "i"&gt;&gt;, &lt;2, &lt;2, "j"&gt;&gt;, &lt;3, &lt;3, "a"&gt;&gt;, &lt;4, &lt;4, "i"&gt;&gt;, 
   &lt;5, &lt;5, "j"&gt;&gt;, &lt;6, &lt;6, "a"&gt;&gt;, &lt;7, &lt;7, "i"&gt;&gt;
 }</programlisting>and <literal>USE</literal> gets as value:<programlisting>{ &lt;1, &lt;1, "m"&gt;&gt;, &lt;2, &lt;2, "n"&gt;&gt;, &lt;3, &lt;3, "u1"&gt;&gt;, &lt;4, &lt;4, "i"&gt;&gt;, 
   &lt;5, &lt;5, "j"&gt;&gt;, &lt;6, &lt;6, "u2"&gt;&gt;, &lt;7, &lt;7, "u3"&gt;&gt;
@@ -6080,10 +6358,17 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] top(graph[&amp;T]
-              G)</literal></entry>
+              <entry>set[&amp;T] predecessors(grap[&amp;T], &amp;T
+              From)</entry>
 
-              <entry>top nodes of a graph</entry>
+              <entry>Direct predecessors of node From</entry>
+            </row>
+
+            <row>
+              <entry>set[&amp;T] predecessors(grap[&amp;T], set[&amp;T]
+              FromSet)</entry>
+
+              <entry>Direct predecessors of all nodes in FromSet</entry>
             </row>
 
             <row>
@@ -6114,6 +6399,26 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               &amp;T From, &amp;T To)</literal></entry>
 
               <entry>Shortest path between pair of nodes</entry>
+            </row>
+
+            <row>
+              <entry>set[&amp;T] successors(grap[&amp;T], &amp;T From)</entry>
+
+              <entry>Direct successors of node From</entry>
+            </row>
+
+            <row>
+              <entry>set[&amp;T] successors(grap[&amp;T], set[&amp;T]
+              FromSet)</entry>
+
+              <entry>Direct successors of all nodes in FromSet</entry>
+            </row>
+
+            <row>
+              <entry><literal>set[&amp;T] top(graph[&amp;T]
+              G)</literal></entry>
+
+              <entry>top nodes of a graph</entry>
             </row>
           </tbody>
         </tgroup>
@@ -6422,10 +6727,17 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] top(lgraph[&amp;T]
-              G)</literal></entry>
+              <entry>set[&amp;T] predecessors(grap[&amp;T], &amp;T
+              From)</entry>
 
-              <entry>top nodes of a labelled graph</entry>
+              <entry>Direct predecessors of node From</entry>
+            </row>
+
+            <row>
+              <entry>set[&amp;T] predecessors(grap[&amp;T], set[&amp;T]
+              FromSet)</entry>
+
+              <entry>Direct predecessors of all nodes in FromSet</entry>
             </row>
 
             <row>
@@ -6456,6 +6768,26 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               &amp;T From, &amp;T To)</literal></entry>
 
               <entry>Shortest path between pair of nodes</entry>
+            </row>
+
+            <row>
+              <entry>set[&amp;T] successors(grap[&amp;T], &amp;T From)</entry>
+
+              <entry>Direct successors of node From</entry>
+            </row>
+
+            <row>
+              <entry>set[&amp;T] successors(grap[&amp;T], set[&amp;T]
+              FromSet)</entry>
+
+              <entry>Direct successors of all nodes in FromSet</entry>
+            </row>
+
+            <row>
+              <entry><literal>set[&amp;T] top(lgraph[&amp;T]
+              G)</literal></entry>
+
+              <entry>top nodes of a labelled graph</entry>
             </row>
           </tbody>
         </tgroup>
@@ -8795,243 +9127,8 @@ int : 3</literal></screen>
     </section>
   </section>
 
-  <section xml:id="section-extracting-facts">
-    <title>Extracting Facts from Source Code (TODO)</title>
-
-    <para>In this tutorial we have, so far, concentrated on querying and
-    enriching facts that have been extracted from source code. As we have seen
-    from the examples, once these facts are available, a concise Rascal
-    program suffices to do the required processing. But how is fact extraction
-    achieved and how difficult is it? To answer these questions we first
-    describe the workflow of the fact extraction process (<xref
-    linkend="section.workflow-fact-extraction" />) and give strategies for
-    fact extraction (<xref
-    linkend="section.strategies-fact-extraction" />).</para>
-
-    <para><figure xml:id="figure.extract-workflow">
-        <title>Workflow for fact extraction</title>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="extract-workflow.png" scale="50"></imagedata>
-          </imageobject>
-        </mediaobject>
-      </figure></para>
-
-    <section xml:id="section.workflow-fact-extraction">
-      <title>Workflow for Fact Extraction</title>
-
-      <para><xref linkend="figure.extract-workflow" /> shows a typical
-      workflow for fact extraction for a <emphasis>System Under
-      Investigation</emphasis> (SUI). It assumes that the SUI uses only
-      <emphasis>one</emphasis> programming language and that you need only one
-      grammar. In realistic cases, however, several such grammars may be
-      needed. The workflow consists of three main phases:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Grammar: Obtain and improve the grammar for the source
-          language of the SUI.</para>
-        </listitem>
-
-        <listitem>
-          <para>Facts: Obtain and improve facts extracted from the SUI.</para>
-        </listitem>
-
-        <listitem>
-          <para>Queries: Write and improve queries that give the desired
-          answers.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Of course, it may happen that you have a lucky day and that
-      extracted facts are readily available or that you can reuse a good
-      quality fact extractor that you can apply to the SUI. On ordinary days
-      you have the above workflow as fall-back. It may come as a surprise that
-      there is such a strong emphasis on validation in this workflow. The
-      reason is that the SUI is usually a huge system that defeats manual
-      inspection. Therefore we must be very careful that we validate the
-      outcome of each phase.</para>
-
-      <formalpara>
-        <title>Grammar</title>
-
-        <para>In many cases there is no canned grammar available that can be
-        used to parse the programming language dialect used in the SUI.
-        Usually an existing grammar can be adjusted to that dialect, but then
-        it is then mandatory to validate that the adjusted grammar can be used
-        to parse the sources of the SUI.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Facts</title>
-
-        <para>It may happen that the facts extracted from the source code are
-        <emphasis>wrong</emphasis>. Typical error classes are:</para>
-      </formalpara>
-
-      <itemizedlist>
-        <listitem>
-          <para>Extracted facts are <emphasis>wrong</emphasis>: the extracted
-          facts incorrectly state that procedure <literal>P</literal> calls
-          procedure <literal>Q</literal> but this is contradicted by a source
-          code inspection.</para>
-        </listitem>
-
-        <listitem>
-          <para>Extracted facts are <emphasis>incomplete</emphasis>: the
-          inheritance between certain classes in Java code is missing.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>The strategy to validate extracted facts differ per case but here
-      are three strategies:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Postprocess the extracted facts (using Rascal, of course) to
-          obtain trivial facts about the source code such as total lines of
-          source code and number of procedures, classes, interfaces and the
-          like. Next validate these trivial facts with tools like
-          <literal>wc</literal> (word and line count), <literal>grep</literal>
-          (regular expression matching) and others.</para>
-        </listitem>
-
-        <listitem>
-          <para>Do a manual fact extraction on a small subset of the code and
-          compare this with the automatically extracted facts.</para>
-        </listitem>
-
-        <listitem>
-          <para>Use another tool on the same source and compare results
-          whenever possible. A typical example is a comparison of a call
-          relation extracted with different tools.</para>
-        </listitem>
-      </itemizedlist>
-
-      <formalpara>
-        <title>Queries</title>
-
-        <para>For the validation of the answers to the queries essentially the
-        same approach can be used as for validating the facts. Manual checking
-        of answers on random samples of the SUI may be mandatory. It also
-        happens frequently that answers inspire new queries that lead to new
-        answers, and so on.</para>
-      </formalpara>
-    </section>
-
-    <section xml:id="section.strategies-fact-extraction">
-      <title>Strategies for Fact Extraction</title>
-
-      <para>The following global scenario's are available when writing a fact
-      extractor:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><emphasis>Dump-and-Merge</emphasis>: Parse each source file,
-          extract the relevant facts, and return the resulting (partial)
-          Rstore. In a separate phase, merge all the partial Rstores into a
-          complete Rstore for the whole SUI. The tool {\tt merge-rstores} is
-          available for this.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Extract-and-Update</emphasis>: Parse each source
-          file, extract the relevant facts, and add these directly to the
-          partial Rstore that has been constructed for previous source
-          files.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>The experience is that the <emphasis>Extract-and-Update</emphasis>
-      is more efficient. A second consideration is the scenario used for the
-      fact extraction per file. Here there are again two possibilities:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><emphasis>All-in-One</emphasis>: Write one function that
-          extracts all facts in one traversal of the source file. Typically,
-          this function has an Rstore as argument and returns an Rstore as
-          well. During the visit of specific language constructs additions are
-          made to named sets or relations in the Rstore.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Separation-of-Concerns</emphasis>: Write a separate
-          function for each fact you want to extract. Typically, each function
-          takes a set or relation as argument and returns an updated version
-          of it. At the top level all these functions are called and their
-          results are put into an Rstore. This strategy is illustrated in
-          <xref linkend="figure.separation-of-concerns" />.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>The experience here is that everybody starts with the
-      <emphasis>All-in-One</emphasis> strategy but that the complexities of
-      the interactions between the various fact extraction concerns soon start
-      to hurt. The advice is therefore to use the
-      <emphasis>Separation-of-Concerns</emphasis> strategy even if it may be
-      seem to be less efficient since it requires a traversal of the source
-      program for each extracted set or relation.</para>
-
-      <figure xml:id="figure.separation-of-concerns">
-        <title>Separation-of-Concerns strategy for fact extraction</title>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="sep-of-concerns.png" scale="50"></imagedata>
-          </imageobject>
-        </mediaobject>
-      </figure>
-    </section>
-
-    <section>
-      <title>Concluding remarks</title>
-
-      <para>It is not unusual that the effort that is needed to write a fact
-      extractor is much larger than the few lines of Rascal that are
-      sufficient for the further processing of these facts. What can we learn
-      from this observation? First, that even in simple cases fact extraction
-      is more complicated than the processing of these facts. This may be due
-      to the following:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>The facts we are interested in may be scattered over different
-          language constructs. This implies that the fact extractor has to
-          cover all these cases.</para>
-        </listitem>
-
-        <listitem>
-          <para>The extracted facts are completely optimized for relational
-          processing but places a burden on the fact extractor to perform this
-          optimization.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Second, that several research questions remain unanswered:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Is it possible to solve (parts of) the fact extraction in a
-          language-parametric way. In other words, is it possible to define
-          generic extraction methods that apply to multiple languages?</para>
-        </listitem>
-
-        <listitem>
-          <para>Is a further integration of fact extraction with relational
-          processing desirable? Is it, for instance, useful to bring some of
-          the syntactic program domains like expressions and statements to the
-          relational domain?</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-  </section>
-
   <section xml:id="section.table-builtin-operators">
     <title>Table of Built-in Operators</title>
-
-    <para></para>
 
     <table xml:id="table.all-operators">
       <title>All Operators</title>
@@ -9526,7 +9623,7 @@ int : 3</literal></screen>
 
           <thead>
             <row>
-              <entry>Operator</entry>
+              <entry>Function</entry>
 
               <entry>Module</entry>
 
@@ -9754,7 +9851,7 @@ int : 3</literal></screen>
 
           <thead>
             <row>
-              <entry>Operator</entry>
+              <entry>Function</entry>
 
               <entry>Module</entry>
 
@@ -9915,6 +10012,15 @@ int : 3</literal></screen>
             </row>
 
             <row>
+              <entry>predecessors</entry>
+
+              <entry>Graph, LabelledGraph</entry>
+
+              <entry><xref linkend="section.lib-Graph" />, <xref
+              linkend="section.lib-LabelledGraph" /></entry>
+            </row>
+
+            <row>
               <entry><literal>println</literal></entry>
 
               <entry>IO</entry>
@@ -10004,7 +10110,7 @@ int : 3</literal></screen>
 
           <thead>
             <row>
-              <entry>Operator</entry>
+              <entry>Function</entry>
 
               <entry>Module</entry>
 
@@ -10129,6 +10235,15 @@ int : 3</literal></screen>
               <entry>String</entry>
 
               <entry><xref linkend="section.lib-String" /></entry>
+            </row>
+
+            <row>
+              <entry>successors</entry>
+
+              <entry>Graph, LabelledGraph</entry>
+
+              <entry><xref linkend="section.lib-Graph" />, <xref
+              linkend="section.lib-LabelledGraph" /></entry>
             </row>
 
             <row>
