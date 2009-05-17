@@ -29,7 +29,8 @@
   <warning>
     <para>This document is in the process of being written. Don't read
     sections marked with "TODO"; they are outdated and/or under construction.
-    Remarks labelled "Warning" (like this one) are temporary notes that will
+    Comments labelled "Warning" (like this one) or other
+    <remark>remarks</remark> (like this one) are temporary notes that will
     disappear in the final version.</para>
   </warning>
 
@@ -390,12 +391,12 @@
 
       <para>Rascal code fragments are always shown as a listing like
       this:<programlisting>  .. here is some Rascal code ...</programlisting>Interactive
-      sessions are show as a screen like this:<screen>rascal&gt; <replaceable>Command</replaceable>;
-<replaceable>Type</replaceable> : <replaceable>Value</replaceable></screen>where:</para>
+      sessions are show as a screen like this:<screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
+<computeroutput><replaceable>Type</replaceable> : <replaceable>Value</replaceable></computeroutput></screen>where:</para>
 
       <itemizedlist>
         <listitem>
-          <para><literal>rascal&gt;</literal> is the prompt of the Rascal
+          <para><prompt>rascal&gt;</prompt> is the prompt of the Rascal
           system. <note>
               <para>The prompt is not yet fixed. Currently, only
               <literal>&gt;</literal> is displayed as prompt.</para>
@@ -403,17 +404,17 @@
         </listitem>
 
         <listitem>
-          <para><replaceable>Command</replaceable> is an arbitrary Rascal
+          <para><userinput>Command</userinput> is an arbitrary Rascal
           statement or declaration typed in by the user.</para>
         </listitem>
 
         <listitem>
-          <para><replaceable>Type</replaceable> is the type of the answer
-          computed by Rascal.</para>
+          <para><computeroutput>Type</computeroutput> is the type of the
+          answer computed by Rascal.</para>
         </listitem>
 
         <listitem>
-          <para><replaceable>Value</replaceable> is the value of that
+          <para><computeroutput>Value</computeroutput> is the value of that
           answer.<note>
               <para>For typographic reasons the output is abbreviated or
               slightly edited in some examples.</para>
@@ -451,12 +452,12 @@
       <para>Rascal provides a rich set of datatypes. From booleans, infinite
       precision integers and reals to strings and source code locations. From
       lists, (optionally labelled) tuples and sets to (optionally labelled)
-      maps and relations. From untyped tree structures to fully typed abstract
-      datatypes. Syntax trees that are the result of parsing source files are
-      represented as ADTs. There is a wealth of built-in operators and library
-      functions available on the standard datatypes. A fragment of the
-      abstract syntax for statements in a programming language would look as
-      follows:<programlisting>data STAT = asgStat(Id name, EXP exp) 
+      maps and relations. From untyped tree structures to fully typed
+      datastructures. Syntax trees that are the result of parsing source files
+      are represented as datatypes. There is a wealth of built-in operators
+      and library functions available on the standard datatypes. A fragment of
+      the abstract syntax for statements in a programming language would look
+      as follows:<programlisting>data STAT = asgStat(Id name, EXP exp) 
           | ifStat(EXP exp,list[STAT] thenpart,list[STAT] elsepart) 
           | whileStat(EXP exp, list[STAT] body) 
           ;</programlisting></para>
@@ -469,13 +470,12 @@
       distinction and search in Rascal and a very rich pattern language is
       provided that includes string matching based on regular expressions,
       list (associative) and set (associative, commutative, identity)
-      matching, matching of abstract datatype pattern, and matching of
-      concrete syntax patterns. All these forms of matching can be used in a
-      single pattern and can be nested. Patterns may contain variables that
-      are bound when the match is successful. Anonymous (don't care) positions
-      are indicated by an underscore (<literal>_</literal>). The following
-      abstract pattern matches the while statement defined above:
-      <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
+      matching, matching of abstract pattern, and matching of concrete syntax
+      patterns. All these forms of matching can be used in a single pattern
+      and can be nested. Patterns may contain variables that are bound when
+      the match is successful. Anonymous (don't care) positions are indicated
+      by an underscore (<literal>_</literal>). The following abstract pattern
+      matches the while statement defined above: <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
 
       <para>Variables in a pattern are either explicitly declared in the
       pattern itself---as done in the example---or they may be declared in the
@@ -712,12 +712,12 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
       <title>Hello</title>
 
       <para>The ubiquitous hello world program looks in Rascal as
-      follows:<screen>rascal&gt; import IO;
-done.
+      follows:<screen><prompt>rascal&gt;</prompt> <userinput>import IO;</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; println("Hello, this is my first Rascal program");
-Hello, this is my first Rascal program
-done.
+<prompt>rascal&gt;</prompt> <userinput>println("Hello, this is my first Rascal program");</userinput>
+<computeroutput>Hello, this is my first Rascal program
+done.</computeroutput>
 </screen>First, the library module IO (see <xref linkend="section.lib-IO" />)
       is imported since hello world requires printing. Next, we call
       <literal>println</literal> and poudly observe our first Rascal
@@ -726,26 +726,26 @@ done.
       <para>A slightly more audacious approach is to wrap the print statement
       in a function and call it:</para>
 
-      <para><screen>rascal&gt; void hello() {
+      <para><screen><prompt>rascal&gt; </prompt><userinput>void hello() {
    println("Hello, this is my first Rascal program");
-}
-Rascal.Function::=Rascal.Function.Closure(): void hello() { ...
+}</userinput>
+<computeroutput>Rascal.Function::=Rascal.Function.Closure(): void hello() { ...</computeroutput>
 
-rascal&gt; hello();
-Hello, this is my first Rascal program
-done.</screen>The summit of hello-engineering can be reached by placing all
-      the above in a separate module:<programlisting>module Hello
+<prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
+<computeroutput>Hello, this is my first Rascal program
+done.</computeroutput></screen>The summit of hello-engineering can be reached
+      by placing all the above in a separate module:<programlisting>module Hello
 
 public void hello() {
    println("Hello, this is my first Rascal program");
 }</programlisting>Note that we added a public modifier to the definition of
       hello, since we want it to be visible outside the Hello module. Using
-      this Hello module is now simple:<screen>rascal&gt; import Hello;
-done.
+      this Hello module is now simple:<screen><prompt>rascal&gt;</prompt> <userinput>import Hello;</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; hello();
-Hello, this is my first Rascal program
-done.</screen></para>
+<prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
+<computeroutput>Hello, this is my first Rascal program
+done.</computeroutput></screen></para>
     </section>
 
     <section>
@@ -763,11 +763,11 @@ public int fac(int N)
       <literal><replaceable>Exp</replaceable><subscript>1</subscript> ?
       <replaceable>Exp</replaceable><subscript>2</subscript> :
       <replaceable>Exp</replaceable><subscript>3</subscript></literal> to
-      distinguish cases and here is how to use it:<screen>rascal&gt; import Factorial;
-done.
+      distinguish cases and here is how to use it:<screen><prompt>rascal&gt;</prompt> <userinput>import Factorial;</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; fac(47);
-int: 258623241511168180642964355153611979969197632389120000000000</screen></para>
+<prompt>rascal&gt;</prompt> <userinput>fac(47);</userinput>
+<computeroutput>int: 258623241511168180642964355153611979969197632389120000000000</computeroutput></screen></para>
 
       <para>Indeed, Rascal has infinite length integers.</para>
     </section>
@@ -786,12 +786,12 @@ data Tree = leaf(int N)
 
       <para>We can use them as follows:</para>
 
-      <para><screen>rascal&gt; import Trees;
-done.
-rascal&gt; rb = red(black(leaf(1), red(leaf(2),leaf(3))));
-Tree: red(black(leaf(1), red(leaf(2),leaf(3))))</screen>We define two
-      operations on Trees, one to count the red nodes, and one to add all
-      leaves:<programlisting>// continuing module Tree
+      <para><screen><prompt>rascal&gt;</prompt> <userinput>import Trees;</userinput>
+<computeroutput>done.</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>rb = red(black(leaf(1), red(leaf(2),leaf(3))));</userinput>
+<computeroutput>Tree: red(black(leaf(1), red(leaf(2),leaf(3))))</computeroutput></screen>We
+      define two operations on Trees, one to count the red nodes, and one to
+      add all leaves:<programlisting>// continuing module Tree
 
 public int cntRed(Tree t){
    int c = 0;
@@ -821,10 +821,10 @@ public int addLeaves(Tree t){
 
       <para>This can be used as follows:</para>
 
-      <para><screen>rascal&gt; cntRed(rb);
-int: 2
-rascal&gt; addLeaves(rb);
-int : 6</screen></para>
+      <para><screen><prompt>rascal&gt;</prompt> <userinput>cntRed(rb);</userinput>
+<computeroutput>int: 2</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>addLeaves(rb);</userinput>
+<computeroutput>int : 6</computeroutput></screen></para>
 
       <para>A final touch to this example is to introduce green nodes and to
       replace all red nodes by green ones:<programlisting>// continuing module Tree
@@ -849,8 +849,8 @@ public Tree makeGreen(Tree t){
           </callout>
         </calloutlist></para>
 
-      <para>This is used as follows:<screen>rascal&gt; makeGreen(rb);
-Tree : green(black(leaf(1), green(leaf(2),leaf(3))))</screen></para>
+      <para>This is used as follows:<screen><prompt>rascal&gt;</prompt> <userinput>makeGreen(rb);</userinput>
+<computeroutput>Tree : green(black(leaf(1), green(leaf(2),leaf(3))))</computeroutput></screen></para>
     </section>
 
     <section>
@@ -942,14 +942,14 @@ public str capAll2(str S)
 
       <para>We can apply this all as follows:</para>
 
-      <para><screen>rascal&gt; import WordReplacement;
-done.
+      <para><screen><prompt>rascal&gt;</prompt> <userinput>import WordReplacement;</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; capitalize("rascal");
-str: "rascal"
+<prompt>rascal&gt;</prompt> <userinput>capitalize("rascal");</userinput>
+<computeroutput>str: "rascal"</computeroutput>
 
-rascal&gt;capAll1("rascal is great");
-str: "Rascal Is Great"</screen></para>
+<prompt>rascal&gt;</prompt> <userinput>capAll1("rascal is great");</userinput>
+<computeroutput>str: "Rascal Is Great"</computeroutput></screen></para>
     </section>
   </section>
 
@@ -1015,8 +1015,8 @@ str: "Rascal Is Great"</screen></para>
       <listitem>
         <para>Determine the requirements of the synthesis phase. This amounts
         to making an inventory of the desired results of the whole project and
-        may include generated source code, abstract models, or visualizations.
-        </para>
+        may include generated source code, abstract models, or
+        visualizations.</para>
       </listitem>
 
       <listitem>
@@ -1047,7 +1047,7 @@ str: "Rascal Is Great"</screen></para>
         </mediaobject>
       </figure>When these requirements have been established, it becomes much
     easier to actually carry out the project using the three phases of <xref
-    linkend="figure.problem-solving" />. </para>
+    linkend="figure.problem-solving" />.</para>
 
     <section xml:id="section.defining-extraction">
       <title>Defining Extraction</title>
@@ -1072,7 +1072,7 @@ str: "Rascal Is Great"</screen></para>
         <listitem>
           <para>If relevant facts are already available (and they are
           reliable!) then we are done. This may happen when you are working on
-          a system that has already been analyzed by others. </para>
+          a system that has already been analyzed by others.</para>
         </listitem>
 
         <listitem>
@@ -1421,19 +1421,19 @@ str: "Rascal Is Great"</screen></para>
         <literal>proc</literal> (an alias for strings) to denote
         procedures:</para>
 
-        <screen>rascal&gt; alias proc = str;
-done.</screen>
+        <screen>rascal&gt; <userinput>alias proc = str;</userinput>
+<computeroutput>done.</computeroutput></screen>
 
         <para>Suppose that the following facts have been extracted from the
         source code and are represented by the relation
         <literal>Calls</literal>:</para>
 
-        <screen>rascal&gt; rel[proc, proc] Calls = 
+        <screen><prompt>rascal&gt;</prompt> <userinput>rel[proc, proc] Calls = 
    { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, &lt;"d","e"&gt;, 
      &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;
-   };
-rel[proc,proc] : { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
-                   &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;}</screen>
+   };</userinput>
+<computeroutput>rel[proc,proc] : { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
+                   &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;}</computeroutput></screen>
 
         <para>This concludes the preparatory steps and now we move on to
         answer the questions.</para>
@@ -1448,13 +1448,14 @@ rel[proc,proc] : { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d"
           <para>To determine the numbers of calls, we simply determine the
           number of tuples in the <literal>Calls</literal> relation, as
           follows. First, we need the Relation library (described in <xref
-          linkend="section.lib-Relation" />) so we import it:<screen>rascal&gt; import Relation;
-done.</screen>next we describe a new variable and calculate the number of
-          tuples:</para>
+          linkend="section.lib-Relation" />) so we import it:<screen><prompt>rascal&gt;</prompt> <userinput>import Relation;</userinput>
+<computeroutput>done.</computeroutput></screen>next we describe a new variable
+          and calculate the number of tuples:</para>
 
-          <para><screen>rascal&gt; nCalls = size(Calls);
-int : 8</screen>The library function <literal>size</literal> determines the
-          number of elements in a set or relation and is explained in <xref
+          <para><screen><prompt>rascal&gt;</prompt> <userinput>nCalls = size(Calls);</userinput>
+<computeroutput>int : 8</computeroutput></screen>The library function
+          <literal>size</literal> determines the number of elements in a set
+          or relation and is explained in <xref
           linkend="section.lib-Relation" />. In this example,
           <literal>nCalls</literal> will get the value
           <literal>8</literal>.</para>
@@ -1467,10 +1468,11 @@ int : 8</screen>The library function <literal>size</literal> determines the
           occur in the tuples in the relation <literal>Calls</literal> and
           then determining the number of names:</para>
 
-          <screen>rascal&gt; procs = carrier(Calls);
-<literal>set[proc] : {"a", "b", "c", "d", "e", "f", "g"}</literal>
-rascal&gt; nprocs = size(procs);
-<literal>int : 7</literal></screen>
+          <screen><prompt>rascal&gt;</prompt> <userinput>procs = carrier(Calls);</userinput>
+<computeroutput><literal>set[proc] : {"a", "b", "c", "d", "e", "f", "g"}</literal></computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>nprocs = size(procs);</userinput>
+<computeroutput>int : 7</computeroutput></screen>
 
           <para>The built-in function <literal>carrier</literal> determines
           all the values that occur in the tuples of a relation. In this case,
@@ -1479,8 +1481,8 @@ rascal&gt; nprocs = size(procs);
           thus get value <literal>7</literal>. A more concise way of
           expressing this would be to combine both steps:</para>
 
-          <screen>rascal&gt; nprocs = size(carrier(Calls));
-int : 7</screen>
+          <screen><prompt>rascal&gt;</prompt> <userinput>nprocs = size(carrier(Calls));</userinput>
+<computeroutput>int : 7</computeroutput></screen>
         </section>
 
         <section>
@@ -1501,10 +1503,11 @@ int : 7</screen>
           by determining the top of the <literal>Calls</literal>
           relation:</para>
 
-          <screen>rascal&gt; import Graph;
-done.
-rascal&gt; entryPoints = top(Calls);
-<literal>set[proc] : {"a", "f"}</literal></screen>
+          <screen><prompt>rascal&gt;</prompt> <userinput>import Graph;</userinput>
+<computeroutput>done.</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>entryPoints = top(Calls);</userinput>
+<computeroutput>set[proc] : {"a", "f"}</computeroutput></screen>
 
           <para>In this case, <literal>entryPoints</literal> is equal to
           <literal>{"a", "f"}</literal>. In other words, procedures
@@ -1519,8 +1522,8 @@ rascal&gt; entryPoints = top(Calls);
           <emphasis>leaves</emphasis> of this application, i.e., procedures
           that are being called but do not make any calls themselves:</para>
 
-          <screen>rascal&gt; bottomCalls = bottom(Calls);
-<literal>set[proc] : {"c", "e"}</literal></screen>
+          <screen><prompt>rascal&gt;</prompt> <userinput>bottomCalls = bottom(Calls);</userinput>
+<computeroutput>set[proc] : {"c", "e"}</computeroutput></screen>
 
           <para>In this case, <literal>bottomCalls</literal> is equal to
           <literal>{"c", "e"}</literal>.</para>
@@ -1533,10 +1536,10 @@ rascal&gt; entryPoints = top(Calls);
           between procedures, by taking the transitive closure of the
           <literal>Calls</literal> relation:</para>
 
-          <screen>rascal&gt; closureCalls = Calls+;
-rel[proc, proc] : {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
+          <screen><prompt>rascal&gt;</prompt> <userinput>closureCalls = Calls+;</userinput>
+<computeroutput>rel[proc, proc] : {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
                    &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;, 
-                   &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "e"&gt;, &lt;"a", "e"&gt;}</screen>
+                   &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "e"&gt;, &lt;"a", "e"&gt;}</computeroutput></screen>
         </section>
 
         <section>
@@ -1552,13 +1555,13 @@ rel[proc, proc] : {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d"
           have a given value as left-hand side. This gives the
           following:</para>
 
-          <screen>rascal&gt; calledFromA = closureCalls["a"];
-<literal>set[proc] : {"b", "c", "d", "e"}</literal></screen>
+          <screen><prompt>rascal&gt;</prompt> <userinput>calledFromA = closureCalls["a"];</userinput>
+<computeroutput>set[proc] : {"b", "c", "d", "e"}</computeroutput></screen>
 
           <para>and</para>
 
-          <screen>rascal&gt; calledFromF = closureCalls["f"];
-<literal>set[proc] : {"e", "g"}</literal></screen>
+          <screen><prompt>rascal&gt;</prompt> <userinput>calledFromF = closureCalls["f"];</userinput>
+<computeroutput>set[proc] : {"e", "g"}</computeroutput></screen>
         </section>
 
         <section>
@@ -1569,8 +1572,8 @@ rel[proc, proc] : {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d"
           <literal>calledFromA</literal> and
           <literal>calledFromF:</literal></para>
 
-          <para><screen>rascal&gt; commonProcs = calledFromA &amp; calledFromF;
-<literal>set[proc] : {"e"}</literal></screen></para>
+          <para><screen><prompt>rascal&gt;</prompt> <userinput>commonProcs = calledFromA &amp; calledFromF;</userinput>
+<computeroutput>set[proc] : {"e"}</computeroutput></screen></para>
 
           <para>In other words, the procedures called from both entry points
           are mostly disjoint except for the common procedure
@@ -1615,27 +1618,28 @@ public rel[comp,comp] lift(rel[proc,proc] aCalls,
 }</programlisting>Let's now apply this. First import the above module, and
       define a call relation and a partof relation:</para>
 
-      <para><screen>rascal&gt; import demo::Lift;
-done.
+      <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::Lift;</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; Calls = {&lt;"main", "a"&gt;, &lt;"main", "b"&gt;, &lt;"a", "b"&gt;, 
+<prompt>rascal&gt;</prompt> <userinput>Calls = {&lt;"main", "a"&gt;, &lt;"main", "b"&gt;, &lt;"a", "b"&gt;, 
                          &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "d"&gt;
-                       };
-rel[str,str] : {&lt;"main", "a"&gt;, &lt;"main", "b"&gt;, &lt;"a", "b"&gt;, 
+                       };</userinput>
+<computeroutput>rel[str,str] : {&lt;"main", "a"&gt;, &lt;"main", "b"&gt;, &lt;"a", "b"&gt;, 
                          &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "d"&gt;
-                       }
+                       }</computeroutput>
 
-rascal&gt; Components = {"Appl", "DB", "Lib"};
-set[str] : {"Appl", "DB", "Lib"}
+<prompt>rascal&gt;</prompt> <userinput>Components = {"Appl", "DB", "Lib"};</userinput>
+<computeroutput>set[str] : {"Appl", "DB", "Lib"}</computeroutput>
 
-rascal&gt; PartOf = {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;, 
-                  &lt;"b", "DB"&gt;, &lt;"c", "Lib"&gt;, &lt;"d", "Lib"&gt;};
-rel[str,str] : {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;, 
-                  &lt;"b", "DB"&gt;, &lt;"c", "Lib"&gt;, &lt;"d", "Lib"&gt;}</screen>The
-      lifted call relation between components is now obtained by:<screen>rascal&gt; ComponentCalls = lift(Calls, PartOf);
-rel[str,str] : {&lt;"DB", "Lib"&gt;, &lt;"Appl", "Lib"&gt;, &lt;"Appl", "DB"&gt;, 
-                &lt;"Appl", "Appl"&gt;}</screen>The relevant relations for
-      this example are shown in <xref linkend="figure.parts" />.</para>
+<prompt>rascal&gt;</prompt> <userinput>PartOf = {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;, 
+                  &lt;"b", "DB"&gt;, &lt;"c", "Lib"&gt;, &lt;"d", "Lib"&gt;};</userinput>
+<computeroutput>rel[str,str] : {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;, 
+                  &lt;"b", "DB"&gt;, &lt;"c", "Lib"&gt;, &lt;"d", "Lib"&gt;}</computeroutput></screen>The
+      lifted call relation between components is now obtained by:<screen><prompt>rascal&gt; </prompt><userinput>ComponentCalls = lift(Calls, PartOf);</userinput>
+<computeroutput>rel[str,str] : {&lt;"DB", "Lib"&gt;, &lt;"Appl", "Lib"&gt;, &lt;"Appl", "DB"&gt;, 
+                &lt;"Appl", "Appl"&gt;}</computeroutput></screen>The relevant
+      relations for this example are shown in <xref
+      linkend="figure.parts" />.</para>
 
       <figure xml:id="figure.parts">
         <title>(a) <literal>Calls</literal>; (b) <literal>PartOf</literal>;
@@ -2040,10 +2044,10 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED, &amp;T ROOT)
         </itemizedlist>
 
         <para>First import the above module and consider the sample flow graph
-        PRED:<screen>rascal&gt; import demo::Dominators;
-done.
+        PRED:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Dominators;</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; rel[int,int] PRED = {
+<prompt>rascal&gt;</prompt> <userinput>rel[int,int] PRED = {
 &lt;1,2&gt;, &lt;1,3&gt;,
 &lt;2,3&gt;,
 &lt;3,4&gt;,
@@ -2054,10 +2058,11 @@ rascal&gt; rel[int,int] PRED = {
 &lt;8,9&gt;,&lt;8,10&gt;,&lt;8,3&gt;,
 &lt;9,1&gt;,
 &lt;10,7&gt;
-};
+};</userinput>
 
-rel[int,int] { &lt;1,2&gt;, &lt;1,3&gt;, ...</screen>It is illustrated in<xref
-        linkend="figure.flow-graph" /><figure xml:id="figure.flow-graph">
+<computeroutput>rel[int,int] { &lt;1,2&gt;, &lt;1,3&gt;, ...</computeroutput></screen>It
+        is illustrated in<xref linkend="figure.flow-graph" /><figure
+            xml:id="figure.flow-graph">
             <title>Flow graph</title>
 
             <mediaobject>
@@ -2066,8 +2071,8 @@ rel[int,int] { &lt;1,2&gt;, &lt;1,3&gt;, ...</screen>It is illustrated in<xref
               </imageobject>
             </mediaobject>
           </figure>The result of applying <literal>dominators</literal> to it
-        is as follows:<screen>rascal&gt; dominators(PRED);
-rel[int,int] {&lt;1, {2, 3, 4, 5, 6, 7, 8, 9, 10}&gt;, 
+        is as follows:<screen><prompt>rascal&gt;</prompt> <userinput>dominators(PRED);</userinput>
+<computeroutput>rel[int,int] {&lt;1, {2, 3, 4, 5, 6, 7, 8, 9, 10}&gt;, 
 &lt;2, {}&gt;, 
 &lt;3, {4, 5, 6, 7, 8, 9, 10}&gt;, 
 &lt;4, {5, 6, 7, 8, 9, 10}&gt;, 
@@ -2076,9 +2081,9 @@ rel[int,int] {&lt;1, {2, 3, 4, 5, 6, 7, 8, 9, 10}&gt;,
 &lt;7, {8, 9, 10}&gt;, 
 &lt;8, {9, 10}&gt;, 
 &lt;9, {}&gt;, 
-&lt;10, {}&gt;}</screen>The resulting <emphasis>dominator tree</emphasis> is
-        shown in <xref linkend="figure.dominator-tree" />. The dominator tree
-        has the initial node as root and each node
+&lt;10, {}&gt;}</computeroutput></screen>The resulting <emphasis>dominator
+        tree</emphasis> is shown in <xref linkend="figure.dominator-tree" />.
+        The dominator tree has the initial node as root and each node
         <replaceable>d</replaceable> in the tree only dominates its
         descendants in the tree.</para>
 
@@ -3125,7 +3130,7 @@ alias Frequency = int;</programlisting>
       </section>
 
       <section xml:id="section.abstract-data-type">
-        <title>Abstract Data Type (ADT)</title>
+        <title>Data Type</title>
 
         <para>In ordinary programming languages record types or classes exist
         to introduce a new type name for a collection of related, named,
@@ -3178,8 +3183,8 @@ alias Frequency = int;</programlisting>
           </listitem>
 
           <listitem>
-            <para>The alternatives of an abstract data type. Binding and
-            replacement is identical to that of rfunction declarations.</para>
+            <para>The alternatives of a data type. Binding and replacement is
+            identical to that of function declarations.</para>
           </listitem>
         </itemizedlist>
 
@@ -3204,28 +3209,28 @@ alias Frequency = int;</programlisting>
 
         <para>The following function <literal>swap</literal> returns a tuple
         in which its arguments are swapped and can be applied to arbitrary
-        values in a type safe manner:<screen>&gt; tuple[&amp;B, &amp;A] swap(&amp;A a, &amp;B b) { return &lt;b, a&gt;; }
-done.
+        values in a type safe manner:<screen><prompt>rascal&gt;</prompt> <userinput>tuple[&amp;B, &amp;A] swap(&amp;A a, &amp;B b) { return &lt;b, a&gt;; }</userinput>
+<computeroutput>done.</computeroutput>
 
-&gt; swap(1,2);
-tuple[int,int]: &lt;2,1&gt;
-
-&gt; swap("abc", 3);
-tuple[int,str]: &lt;3, "abc"&gt;</screen>Observe that the type parameters that
-        occur in the return type should occur in the formal parameter types of
-        the function.</para>
+<prompt>rascal&gt;</prompt> <userinput>swap(1,2);</userinput>
+<computeroutput>tuple[int,int]: &lt;2,1&gt;
+</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>swap("abc", 3);</userinput>
+<computeroutput>tuple[int,str]: &lt;3, "abc"&gt;</computeroutput></screen>Observe
+        that the type parameters that occur in the return type should occur in
+        the formal parameter types of the function.</para>
 
         <para>An alias definition may be parameterized. So we can generalize
         graphs as follows:</para>
 
-        <para><screen>&gt; alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];
-done.
+        <para><screen><prompt>rascal&gt;</prompt> <userinput>alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];</userinput>
+<computeroutput>done.</computeroutput>
 
-&gt; Graph[int] GI = {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;};
-Graph[int] :  {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;}
-
-&gt; Graph[str] GS = {&lt;"a", "b"&gt;, &lt;"c","d"&gt;, &lt;"d", "a"&gt;};
-Graph[str] : {&lt;"a", "b"&gt;, &lt;"c","d"&gt;, &lt;"d", "a"&gt;}</screen>Of
+<prompt>rascal&gt;</prompt> <userinput>Graph[int] GI = {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;};</userinput>
+<computeroutput>Graph[int] :  {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;}
+</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>Graph[str] GS = {&lt;"a", "b"&gt;, &lt;"c","d"&gt;, &lt;"d", "a"&gt;};</userinput>
+<computeroutput>Graph[str] : {&lt;"a", "b"&gt;, &lt;"c","d"&gt;, &lt;"d", "a"&gt;}</computeroutput></screen>Of
         course, the type variables that are used in the type in the left part
         of the alias declaration should occur as parameters in the right part
         of the definition and vice versa.</para>
@@ -3283,7 +3288,7 @@ Declaration</replaceable><subscript>1</subscript>;
 
         <itemizedlist>
           <listitem>
-            <para>Abstract data type, see <xref
+            <para>Data type, see <xref
             linkend="section.abstract-data-type" />.</para>
           </listitem>
 
@@ -3378,11 +3383,13 @@ Declaration</replaceable><subscript>1</subscript>;
         represents a typed formal parameter of the function. The formal
         parameters may be used in <replaceable>Statement</replaceable> and get
         their value when function <replaceable>Name</replaceable> is invoked.
-        Example:<screen>rascal&gt; rel[int, int] invert(rel[int,int] R)
-        return {&lt;Y, X&gt; | &lt;int X, int Y&gt; &lt;- R }
-done.
-rascal&gt; <literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
-<literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal></screen></para>
+        Example:<screen><prompt>rascal&gt;</prompt> <userinput>rel[int, int] invert(rel[int,int] R){
+            return {&lt;Y, X&gt; | &lt;int X, int Y&gt; &lt;- R }
+        }</userinput>
+<computeroutput>done.</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput><literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;</userinput>
+<computeroutput>rel[int,int] : {&lt;10,1&gt;, &lt;20,2&gt;}</computeroutput></screen></para>
 
         <formalpara>
           <title>Variable argument lists</title>
@@ -3416,24 +3423,25 @@ rascal&gt; <literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
           <literal>&amp;</literal> followed by an identifier. In this way
           functions can be defined for arbitrary types. In the following
           example, we declare an inversion function that is applicable to any
-          binary relation. :<screen>rascal&gt; rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R)  
-        return {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; &lt;- R };
-done.
+          binary relation. :<screen><prompt>rascal&gt;</prompt> <userinput>rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R){  
+            return {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; &lt;- R };
+        }</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt;<literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
-<literal>rel[int,int] : {&lt;10,1&gt;, &lt;20,2&gt;}</literal>
-
-rascal&gt;<literal>invert2({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;})</literal>;
-<literal>rel[int,str] : {&lt;1, "mon"&gt;, &lt;2, "tue"&gt;}</literal></screen>Here
+<prompt>rascal&gt;</prompt><literal> </literal><userinput><literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;</userinput>
+<computeroutput>rel[int,int] : {&lt;10,1&gt;, &lt;20,2&gt;}
+</computeroutput>
+<prompt>rascal&gt;</prompt><literal> </literal><userinput><literal>invert2({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;})</literal>;</userinput>
+<computeroutput>rel[int,str] : {&lt;1, "mon"&gt;, &lt;2, "tue"&gt;}</computeroutput></screen>Here
           we declare a function that can be used to swap the elements of pairs
-          of arbitrary types:<screen>rascal&gt; &lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) return &lt;B, A&gt;;
-done.
+          of arbitrary types:<screen><prompt>rascal&gt;</prompt> <userinput>&lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) { return &lt;B, A&gt;;;}</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; <literal>swap(&lt;1, 2&gt;)</literal>;
-<literal>tuple[int,int] : &lt;2,1&gt;</literal>
+<prompt>rascal&gt;</prompt> <userinput><literal>swap(&lt;1, 2&gt;)</literal>;</userinput>
+<computeroutput><literal>tuple[int,int] : &lt;2,1&gt;</literal></computeroutput>
 
-rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
-</literal><literal>tuple[int,str] : &lt;3, "wed"&gt;</literal></screen></para>
+<prompt>rascal&gt;</prompt> <userinput>swap(&lt;"wed", 3&gt;);</userinput>
+<computeroutput>tuple[int,str] : &lt;3, "wed"&gt;</computeroutput></screen></para>
         </formalpara>
       </section>
 
@@ -3496,16 +3504,16 @@ rascal&gt; <literal>swap(&lt;"wed", 3&gt;);
           </listitem>
         </itemizedlist>
 
-        <para>Examples.<screen>rascal&gt;int max = 100;
-int: 100
+        <para>Examples.<screen><prompt>rascal&gt;</prompt> <userinput>int max = 100;</userinput>
+<computeroutput>int: 100</computeroutput>
 
-rascal&gt; min = 0;
-int : 0
+<prompt>rascal&gt;</prompt> <userinput>min = 0</userinput>;
+<computeroutput>int : 0</computeroutput>
 
-rascal&gt;day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
-              &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}
-rel[str,int]: {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
-               &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</screen></para>
+<prompt>rascal&gt;</prompt> <userinput>day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+              &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</userinput>
+<computeroutput>rel[str,int]: {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+               &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</computeroutput></screen></para>
       </section>
 
       <section xml:id="section.declaration-tag">
@@ -3619,7 +3627,7 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
         controlled.</para>
 
         <para>Rewrite rules, on the other hand, operate only on nodes and
-        abstract datatypes, they are implicitly applied when a new value (we
+        defined datatypes, they are implicitly applied when a new value (we
         refer to this as the <emphasis>subject value</emphasis>) is
         constructed. The scope of rewrite rules is the whole Rascal program.
         Rewrite rules are applied to the subject value in a bottom-up fashion.
@@ -3637,17 +3645,17 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
         linkend="section.pattern-with-action" /> for a detailed
         description).</para>
 
-        <para>Here is an example for a user-defined type Booleans:<screen>rascal&gt;
-data Bool = btrue;
+        <para>Here is an example for a user-defined type Booleans:<screen><prompt>rascal&gt;</prompt>
+<userinput>data Bool = btrue;
 data Bool = bfalse;
 data Bool = band(Bool left, Bool right);
 data Bool = bor(Bool left, Bool right);  
 
 rule a1 band(btrue, Bool B)    =&gt; B;
-rule a2 band(bfalse, Bool B)   =&gt; bfalse;
-done.
-rascal&gt; band(band(btrue,btrue),band(btrue, bfalse));
-Bool: bfalse</screen></para>
+rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
+<computeroutput>done.</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>band(band(btrue,btrue),band(btrue, bfalse));</userinput>
+<computeroutput>Bool: bfalse</computeroutput></screen></para>
 
         <para>During execution of rules the following applies:</para>
 
@@ -4020,20 +4028,20 @@ Bool: bfalse</screen></para>
 
           <para>Field selection and field assignment apply to all values that
           have named components like tuples and relations with named elements,
-          abstract data types, and locations. Field selection returns the
-          value of the named component and Field assignment returns a new
-          value in which the named component has been replaced by a new value.
-          We illustrate this for tuples:<screen>rascal&gt; tuple[int key, str val] T = &lt;1, "abc"&gt;;
-tuple[int, str] : &lt;1, "abc"&gt;
+          data types, and locations. Field selection returns the value of the
+          named component and Field assignment returns a new value in which
+          the named component has been replaced by a new value. We illustrate
+          this for tuples:<screen><prompt>rascal&gt;</prompt> <userinput>tuple[int key, str val] T = &lt;1, "abc"&gt;;</userinput>
+<computeroutput>tuple[int, str] : &lt;1, "abc"&gt;</computeroutput>
 
-rascal&gt; T.val;
-str : "abc"
+<prompt>rascal&gt;</prompt> <userinput>T.val;</userinput>
+<computeroutput>str : "abc"</computeroutput>
 
-rascal&gt; T[val = "def"];
-tuple[int, str] : &lt;1, "def"&gt;
+<prompt>rascal&gt;</prompt> <userinput>T[val = "def"];</userinput>
+<computeroutput>tuple[int, str] : &lt;1, "def"&gt;</computeroutput>
 
-rascal&gt; T;
-tuple[int, str] : &lt;1, "abc"&gt;</screen></para>
+<prompt>rascal&gt;</prompt> <userinput>T;</userinput>
+<computeroutput>tuple[int, str] : &lt;1, "abc"&gt;</computeroutput></screen></para>
         </formalpara>
 
         <para>Observe that field assignment creates a <emphasis>new</emphasis>
@@ -4054,18 +4062,18 @@ tuple[int, str] : &lt;1, "abc"&gt;</screen></para>
           the length of the traffic jams at that day.</para>
         </formalpara>
 
-        <screen>rascal&gt; rel[str day, int daynum, int length] Traffic = 
+        <screen><prompt>rascal&gt;</prompt> <userinput>rel[str day, int daynum, int length] Traffic = 
         {&lt;"mon", 1, 100&gt;, &lt;"tue", 2, 150&gt;, &lt;"wed", 3, 125&gt;, 
-         &lt;"thur", 4, 110&gt;, &lt;"fri", 5, 90&gt;};
-rel[str, int, int]: {&lt;"thur",4,110&gt;,&lt;"tue",2,150&gt;,&lt;"wed",3,125&gt;,
-         &lt;"fri",5,90&gt;,&lt;"mon",1,100&gt;}
+         &lt;"thur", 4, 110&gt;, &lt;"fri", 5, 90&gt;};</userinput>
+<computeroutput>rel[str, int, int]: {&lt;"thur",4,110&gt;,&lt;"tue",2,150&gt;,&lt;"wed",3,125&gt;,
+         &lt;"fri",5,90&gt;,&lt;"mon",1,100&gt;}</computeroutput>
 
-rascal&gt; Traffic&lt;length,daynum&gt;;
-rel[int, int]: {&lt;110,4&gt;,&lt;150,2&gt;,&lt;90,5&gt;,&lt;100,1&gt;,&lt;125,3&gt;}
-
-rascal&gt; Traffic&lt;2,day&gt;;
-rel[int, str]: {&lt;125,"wed"&gt;,&lt;110,"thur"&gt;,&lt;100,"mon"&gt;,&lt;90,"fri"&gt;,
-                &lt;150,"tue"&gt;}</screen>
+<userinput><prompt>rascal&gt;</prompt> </userinput>Traffic&lt;length,daynum&gt;;
+<computeroutput>rel[int, int]: {&lt;110,4&gt;,&lt;150,2&gt;,&lt;90,5&gt;,&lt;100,1&gt;,&lt;125,3&gt;}
+</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>Traffic&lt;2,day&gt;;</userinput>
+<computeroutput>rel[int, str]: {&lt;125,"wed"&gt;,&lt;110,"thur"&gt;,&lt;100,"mon"&gt;,&lt;90,"fri"&gt;,
+                &lt;150,"tue"&gt;}</computeroutput></screen>
 
         <para>Field projection thus selects parts from a larger value that has
         a fixed number of parts. The selection is based on position and not on
@@ -4085,40 +4093,40 @@ rel[int, str]: {&lt;125,"wed"&gt;,&lt;110,"thur"&gt;,&lt;100,"mon"&gt;,&lt;90,"f
           reduced, relation is returned with all elements that contained the
           index values at the corresponding tuples positions (but these values
           are removed, hence a reduced relation). Some examples illustrate
-          this:<screen>rascal&gt; L = [10, 20, 30];
-list[int] : [10,20,30]
+          this:<screen><prompt>rascal&gt;</prompt> <userinput>L = [10, 20, 30];</userinput>
+<computeroutput>list[int] : [10,20,30]
+</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>L[1];</userinput>
+<computeroutput>int : 20</computeroutput>
 
-rascal&gt; L[1];
-int : 20
+<prompt>rascal&gt;</prompt> <userinput>T = &lt;"mon", 1&gt;;</userinput>
+<computeroutput>tuple[str,int] : &lt;"mon", 1&gt;;</computeroutput>
 
-rascal&gt; T = &lt;"mon", 1&gt;;
-tuple[str,int] : &lt;"mon", 1&gt;;
+<prompt>rascal&gt;</prompt> <userinput>T[0];</userinput>
+<computeroutput>str : "mon"</computeroutput>
 
-rascal&gt; T[0];
-str : "mon"
-
-rascal&gt; colors = ("hearts":"red", "clover":"black", 
-                  "trumps":"black", "clubs":"red");
-map[str,str] : ("hearts":"red", "clover":"black", 
+<prompt>rascal&gt;</prompt> <userinput>colors = ("hearts":"red", "clover":"black", 
+                  "trumps":"black", "clubs":"red");</userinput>
+<computeroutput>map[str,str] : ("hearts":"red", "clover":"black", 
                 "trumps":"black", "clubs":"red")
+</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>colors["trumps"];</userinput>
+<computeroutput>str: "black"</computeroutput>
 
-rascal&gt; colors["trumps"];
-str: "black"
-
-rascal&gt; rel[str country, int year, int amount] GDP =
+<prompt>rascal&gt;</prompt> <userinput>rel[str country, int year, int amount] GDP =
            {&lt;"US", 2008, 14264600&gt;, &lt;"EU", 2008, 18394115&gt;,
             &lt;"Japan", 2008, 4923761&gt;, &lt;"US", 2007, 13811200&gt;, 
-            &lt;"EU", 2007, 13811200&gt;, &lt;"Japan", 2007, 4376705&gt;};
-rel[str,int,int] : 
+            &lt;"EU", 2007, 13811200&gt;, &lt;"Japan", 2007, 4376705&gt;};</userinput>
+<computeroutput>rel[str,int,int] : 
            {&lt;"US", 2008, 14264600&gt;, &lt;"EU", 2008, 18394115&gt;, 
             &lt;"Japan", 2008, 4923761&gt;, &lt;"US", 2007, 13811200&gt;, 
-            &lt;"EU", 2007, 13811200&gt;, &lt;"Japan", 2007, 4376705&gt;}
+            &lt;"EU", 2007, 13811200&gt;, &lt;"Japan", 2007, 4376705&gt;}</computeroutput>
 
-rascal&gt; GDP["Japan"];
-rel[int,int] : {&lt;2008, 4923761&gt;, &lt;2007, 4376705&gt;}
+<prompt>rascal&gt;</prompt> <userinput>GDP["Japan"];</userinput>
+<computeroutput>rel[int,int] : {&lt;2008, 4923761&gt;, &lt;2007, 4376705&gt;}</computeroutput>
 
-rascal&gt; GDP["Japan", 2008];
-set[int] : {4923761}</screen></para>
+<prompt>rascal&gt;</prompt> <userinput>GDP["Japan", 2008];</userinput>
+<computeroutput>set[int] : {4923761}</computeroutput></screen></para>
         </formalpara>
 
         <formalpara>
@@ -4753,9 +4761,9 @@ set[int] : {4923761}</screen></para>
             <listitem>
               <para>A <emphasis>node pattern</emphasis><programlisting><replaceable>Name</replaceable> ( <replaceable>Pat</replaceable><subscript>1</subscript>, <replaceable>Pat</replaceable><subscript>2</subscript>, ..., <replaceable>Pat</replaceable><subscript>n</subscript> )</programlisting></para>
 
-              <para>A node pattern matches a node value or an abstract
-              datatype value, provided that <replaceable>Name</replaceable>
-              matches with the constructor symbol of that value and
+              <para>A node pattern matches a node value or a datatype value,
+              provided that <replaceable>Name</replaceable> matches with the
+              constructor symbol of that value and
               <replaceable>Pat</replaceable><subscript>1</subscript>,
               <replaceable>Pat</replaceable><subscript>2</subscript>, ...,
               <replaceable>Pat</replaceable><subscript>n</subscript> match the
@@ -4984,7 +4992,7 @@ set[int] : {4923761}</screen></para>
           <title>Enumerator</title>
 
           <para>An enumerator generates all the values in a given list, set,
-          map, tuple, relation or abstract datatype. It has the following
+          map, tuple, relation or datatype. It has the following
           form:<programlisting><replaceable>P</replaceable>at &lt;- <replaceable>Exp</replaceable></programlisting></para>
 
           <para>where <replaceable>Pat</replaceable> is a pattern and
@@ -5080,8 +5088,8 @@ set[int] : {4923761}</screen></para>
                 </itemizedlist></para>
 
               <para>These take only effect for enumerators that produce the
-              elements of an abstract data type and determine the order in
-              which the elements are enumerated.</para>
+              elements of a data type and determine the order in which the
+              elements are enumerated.</para>
             </note></para>
         </section>
 
@@ -5123,17 +5131,17 @@ set[int] : {4923761}</screen></para>
 
           <para>Here are som examples of comprehensions:</para>
 
-          <screen><literal>rascal&gt; {X | int X : {1, 2, 3, 4, 5}, X &gt;= 3}</literal>;
-set[int] : <literal>{3,4,5}</literal>
+          <screen><literal>rascal&gt; </literal><userinput><literal>{X | int X : {1, 2, 3, 4, 5}, X &gt;= 3}</literal>;</userinput>
+<computeroutput>set[int] : <literal>{3,4,5}</literal></computeroutput>
 
-<literal>rascal&gt; {&lt;X, Y&gt; | int X : {1, 2, 3}, int Y : {2, 3, 4}, X &gt;= Y}</literal>;
-<literal>rel[int,int] : {&lt;2, 2&gt;, &lt;3, 2&gt;, &lt;3, 3&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>{&lt;X, Y&gt; | int X : {1, 2, 3}, int Y : {2, 3, 4}, X &gt;= Y};</userinput>
+<computeroutput><literal>rel[int,int] : {&lt;2, 2&gt;, &lt;3, 2&gt;, &lt;3, 3&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; {&lt;Y, X&gt; | &lt;int X, int Y&gt; : {&lt;1,10&gt;, &lt;2,20&gt;}}</literal>
-rel[int,int] : <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>{&lt;Y, X&gt; | &lt;int X, int Y&gt; : {&lt;1,10&gt;, &lt;2,20&gt;}};</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; {X, X * X | X : {1, 2, 3, 4, 5}, X &gt;= 3}</literal>;     &lt;==== Not implemented!
-set[int] : <literal>{3,4,5,9,16,25}</literal></screen>
+<prompt>rascal&gt;</prompt> <userinput>{X, X * X | X : {1, 2, 3, 4, 5}, X &gt;= 3};</userinput>     &lt;==== Not implemented!
+<computeroutput>set[int] : <literal>{3,4,5,9,16,25}</literal></computeroutput></screen>
         </section>
       </section>
 
@@ -5568,68 +5576,68 @@ default: ...
           </listitem>
         </itemizedlist>
 
-        <para>Here are some examples:<screen>rascal&gt; N = 3;
-int : 3
+        <para>Here are some examples:<screen><prompt>rascal&gt;</prompt> <userinput>N = 3;</userinput>
+<computeroutput>int : 3</computeroutput>
 
-rascal&gt; N;
-int : 3
+<prompt>rascal&gt;</prompt> <userinput>N;</userinput>
+<computeroutput>int : 3</computeroutput>
 
-rascal&gt; L = [10,20,30];
-list[int] : [10,20,30]
+<prompt>rascal&gt;</prompt> <userinput>L = [10,20,30];</userinput>
+<computeroutput>list[int] : [10,20,30]</computeroutput>
 
-rascal&gt; L[1] = 200;
-list[int] : [10,200,30]
+<prompt>rascal&gt;</prompt> <userinput>L[1] = 200;</userinput>
+<computeroutput>list[int] : [10,200,30]</computeroutput>
 
-rascal&gt; M = ("abc": 1, "def" : 2);
-map[str,int] : ("abc": 1, "def" : 2)
+<prompt>rascal&gt;</prompt> <userinput>M = ("abc": 1, "def" : 2);</userinput>
+<computeroutput>map[str,int] : ("abc": 1, "def" : 2)</computeroutput>
 
-rascal&gt; M["def"] = 3;
-map[str,int] : ("abc": 1, "def" : 3)
+<prompt>rascal&gt;</prompt> <userinput>M["def"] = 3;</userinput>
+<computeroutput>map[str,int] : ("abc": 1, "def" : 3)
+</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>T = &lt;1, "abc", true&gt;;</userinput>
+<computeroutput>tuple[int,str,bool] : &lt;1, "abc", true&gt;</computeroutput>
 
-rascal&gt; T = &lt;1, "abc", true&gt;;
-tuple[int,str,bool] : &lt;1, "abc", true&gt;
+<prompt>rascal&gt;</prompt> <userinput>T[1] = "def";</userinput>
+<computeroutput>tuple[int,str,bool] : &lt;1, "def", true&gt;</computeroutput>
 
-rascal&gt; T[1] = "def";
-tuple[int,str,bool] : &lt;1, "def", true&gt;
+<prompt>rascal&gt;</prompt> <userinput>data FREQ = wf(str word, int freq);</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; data FREQ = wf(str word, int freq);
-done.
+<prompt>rascal&gt;</prompt> <userinput>W = wf("rascal", 1000);</userinput>
+<computeroutput>FREQ : wf("rascal", 1000)
+</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>W.freq = 100000;</userinput>
+<computeroutput>FREQ : wf("rascal",100000)</computeroutput>
 
-rascal&gt; W = wf("rascal", 1000);
-FREQ : wf("rascal", 1000)
+<prompt>rascal&gt;</prompt> <userinput>&lt;A, B, C&gt; = &lt;"abc", 2.5, [1,2,3]&gt;;</userinput>
+<computeroutput>tuple[str,real,list[int]] : &lt;"abc", 2.5, [1,2,3]&gt;</computeroutput>
 
-rascal&gt; W.freq = 100000;
-FREQ : wf("rascal",100000)
+<prompt>rascal&gt;</prompt> <userinput>A;</userinput>
+<computeroutput>str : "abc"</computeroutput>
 
-rascal&gt; &lt;A, B, C&gt; = &lt;"abc", 2.5, [1,2,3]&gt;;
-tuple[str,real,list[int]] : &lt;"abc", 2.5, [1,2,3]&gt;
+<prompt>rascal&gt;</prompt> <userinput>B;</userinput>
+<computeroutput>real : 2.5</computeroutput>
 
-rascal&gt; A;
-str : "abc"
+<prompt>rascal&gt;</prompt> <userinput>C;</userinput>
+<computeroutput>list[int] : [1,2,3]</computeroutput>
 
-rascal&gt; B;
-real : 2.5
-
-rascal&gt;C;
-list[int] : [1,2,3]
-
-rascal&gt; ** good V ? E1 = E2 example here **
+<prompt>rascal&gt;</prompt> <userinput>** good V ? E1 = E2 example here **</userinput>
 
 
-rascal&gt; anno str FREQ@color;
-done.
+<prompt>rascal&gt;</prompt> <userinput>anno str FREQ@color;</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; W @ color = "red";
-FREQ: wf("rascal",100000)[@color="red"]
+<prompt>rascal&gt;</prompt> <userinput>W @ color = "red";</userinput>
+<computeroutput>FREQ: wf("rascal",100000)[@color="red"]</computeroutput>
 
-rascal wf(S, I) = W;
-done.
+<prompt>rascal&gt;</prompt> <userinput>wf(S, I) = W;</userinput>
+<computeroutput>done.</computeroutput>
 
-rascal&gt; S;
-str : "rascal"
+<prompt>rascal&gt;</prompt> <userinput>S;</userinput>
+<computeroutput>str : "rascal"</computeroutput>
 
-rascal&gt; I;
-int : 100000</screen></para>
+<prompt>rascal&gt;</prompt> <userinput>I;</userinput>
+<computeroutput>int : 100000</computeroutput></screen></para>
       </section>
 
       <section xml:id="section.return">
@@ -5765,8 +5773,8 @@ finally: <replaceable>Statement</replaceable><subscript>3</subscript>;</programl
 
         <para>Example:</para>
 
-        <screen>rascal&gt; assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";
-true</screen>
+        <screen><prompt>rascal&gt;</prompt> <userinput>assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";</userinput>
+true?????</screen>
       </section>
 
       <section xml:id="section.insert">
@@ -5859,15 +5867,15 @@ true</screen>
         defined as:<programlisting>R+ = R + (R o R) + (R o R o R) + ...</programlisting>This
         can be expressed as follows:</para>
 
-        <screen>rascal&gt; rel[int,int] R = {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;};
-{&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}
-rascal&gt;
-  with
+        <screen><prompt>rascal&gt;</prompt> <userinput>rel[int,int] R = {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;};</userinput>
+<computeroutput>rel[int,int] : {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}</computeroutput>
+<prompt>rascal&gt;</prompt>
+  <userinput>with
      rel[int,int] T = R;
   solve
-     T = T + (T o R1);
+     T = T + (T o R1);</userinput>
 
-rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</screen>
+<computeroutput>rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</computeroutput></screen>
       </section>
     </section>
   </section>
@@ -6121,14 +6129,14 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
             <row>
               <entry><literal>real currentTimeMillis()</literal></entry>
 
-              <entry>current time in milliseconds since January 1, 1970
+              <entry>Current time in milliseconds since January 1, 1970
               GMT.</entry>
             </row>
 
             <row>
               <entry>p.m. benchmark</entry>
 
-              <entry>measure and report the execution time of
+              <entry>Measure and report the execution time of
               name:void-closure pairs.</entry>
             </row>
           </tbody>
@@ -6161,7 +6169,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>==</literal>
               <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if both arguments are
+              <entry>Yields <literal>true</literal> if both arguments are
               identical<literal></literal></entry>
             </row>
 
@@ -6170,7 +6178,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>!=</literal>
               <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if both arguments are not
+              <entry>Yields <literal>true</literal> if both arguments are not
               identical</entry>
             </row>
 
@@ -6179,8 +6187,9 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&lt;=</literal>
               <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if both arguments are identical
-              or <replaceable>Bool</replaceable><subscript>1</subscript> is
+              <entry>Yields <literal>true</literal> if both arguments are
+              identical or
+              <replaceable>Bool</replaceable><subscript>1</subscript> is
               <literal>false</literal> and
               <replaceable>Bool</replaceable><subscript>2</subscript> is
               <literal>true</literal></entry>
@@ -6191,7 +6200,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&lt;</literal>
               <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Bool</replaceable><subscript>1</subscript> is
               <literal>false</literal> and
               <replaceable>Bool</replaceable><subscript>2</subscript> is
@@ -6203,8 +6212,9 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&gt;=</literal>
               <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if both arguments are identical
-              or <replaceable>Bool</replaceable><subscript>1</subscript> is
+              <entry>Yields <literal>true</literal> if both arguments are
+              identical or
+              <replaceable>Bool</replaceable><subscript>1</subscript> is
               <literal>true</literal> and
               <replaceable>Bool</replaceable><subscript>2</subscript> is
               <literal>false</literal></entry>
@@ -6215,7 +6225,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&gt;</literal>
               <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Bool</replaceable><subscript>1</subscript> is
               <literal>true</literal> and
               <replaceable>Bool</replaceable><subscript>2</subscript> is
@@ -6227,7 +6237,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&amp;&amp;</literal>
               <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields <literal>true</literal> if both arguments have the
+              <entry>Yields <literal>true</literal> if both arguments have the
               value true and <literal>false</literal> otherwise</entry>
             </row>
 
@@ -6236,7 +6246,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>||</literal>
               <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields <literal>true</literal> if either argument has the
+              <entry>Yields <literal>true</literal> if either argument has the
               value true and <literal>false</literal> otherwise</entry>
             </row>
 
@@ -6245,7 +6255,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>==&gt;</literal>
               <replaceable>Bool</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields <literal>false</literal> if
+              <entry>Yields <literal>false</literal> if
               <replaceable>Bool</replaceable><subscript>1</subscript> has the
               value <literal>true</literal> and
               <replaceable>Bool</replaceable><subscript>2</subscript> has
@@ -6257,7 +6267,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <entry><literal>!</literal>
               <replaceable>Bool</replaceable></entry>
 
-              <entry>yields true if Bool is false and true otherwise</entry>
+              <entry>Yields true if Bool is false and true otherwise</entry>
             </row>
 
             <row>
@@ -6267,7 +6277,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>:</literal>
               <replaceable>Bool</replaceable><subscript>3</subscript></entry>
 
-              <entry>if
+              <entry>If
               <replaceable>Bool</replaceable><subscript>1</subscript> is true
               then <replaceable>Bool</replaceable><subscript>2</subscript>
               else
@@ -6297,37 +6307,37 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
             <row>
               <entry><literal>bool arbBool()</literal></entry>
 
-              <entry>arbitrary boolean value</entry>
+              <entry>Arbitrary boolean value</entry>
             </row>
 
             <row>
               <entry><literal>bool fromInt(int i)</literal></entry>
 
-              <entry>convert an integer to a bool</entry>
+              <entry>Convert an integer to a bool</entry>
             </row>
 
             <row>
               <entry><literal>bool fromString(str s)</literal></entry>
 
-              <entry>convert the strings "true" or "false" to a bool</entry>
+              <entry>Convert the strings "true" or "false" to a bool</entry>
             </row>
 
             <row>
               <entry><literal>int toInt(bool b)</literal></entry>
 
-              <entry>convert a boolean value to integer</entry>
+              <entry>Convert a boolean value to integer</entry>
             </row>
 
             <row>
               <entry><literal>real toReal(bool b)</literal></entry>
 
-              <entry>convert a boolean value to a real value</entry>
+              <entry>Convert a boolean value to a real value</entry>
             </row>
 
             <row>
               <entry><literal>str toString(bool b)</literal></entry>
 
-              <entry>convert a boolean value to a string</entry>
+              <entry>Convert a boolean value to a string</entry>
             </row>
           </tbody>
         </tgroup>
@@ -6388,7 +6398,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <entry><literal>set[&amp;T] bottom(graph[&amp;T]
               G)</literal></entry>
 
-              <entry>bottom nodes of a graph</entry>
+              <entry>Bottom nodes of a graph</entry>
             </row>
 
             <row>
@@ -6452,20 +6462,23 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <entry><literal>set[&amp;T] top(graph[&amp;T]
               G)</literal></entry>
 
-              <entry>top nodes of a graph</entry>
+              <entry>Top nodes of a graph</entry>
             </row>
           </tbody>
         </tgroup>
       </table>
 
-      <para>The following examples illustrate these functions:<screen><literal>rascal&gt; top({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;});
-</literal><literal>{1}
-</literal><literal>rascal&gt; bottom({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;})</literal>;
-<literal>{4}
-</literal><literal>rascal&gt; reachR({1}, {1, 2, 3}, {&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;})</literal>;
-<literal>{2, 3}
-</literal><literal>rascal&gt; reachX({1}, {2}, {&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;})</literal>;
-<literal>{3, 4}</literal></screen></para>
+      <para>The following examples illustrate these functions:<screen><prompt>rascal&gt;</prompt> <userinput>top({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;});</userinput>
+<computeroutput>set[int] : {1}</computeroutput>
+
+<literal>rascal&gt; </literal><userinput><literal>bottom({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;})</literal>;</userinput>
+<computeroutput>set[int] : {4}</computeroutput>
+
+<literal>rascal&gt; </literal><userinput><literal>reachR({1}, {1, 2, 3}, {&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;})</literal>;</userinput>
+<computeroutput>set[int] : {2, 3}</computeroutput>
+
+<literal>rascal&gt; </literal><userinput><literal>reachX({1}, {2}, {&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;})</literal>;</userinput>
+<computeroutput>set[int,int] : {3, 4}</computeroutput></screen></para>
     </section>
 
     <section xml:id="section.lib-Integer">
@@ -6495,8 +6508,8 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>==</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if both arguments are numerically
-              equal and <literal>false</literal> otherwise</entry>
+              <entry>Yields <literal>true</literal> if both arguments are
+              numerically equal and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
@@ -6504,8 +6517,9 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>!=</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if both arguments are numerically
-              unequal and <literal>false</literal> otherwise</entry>
+              <entry>Yields <literal>true</literal> if both arguments are
+              numerically unequal and <literal>false</literal>
+              otherwise</entry>
             </row>
 
             <row>
@@ -6513,7 +6527,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&lt;=</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Int</replaceable><subscript>1</subscript> is
               numerically less than or equal to
               <replaceable>Int</replaceable><subscript>2</subscript> and
@@ -6525,7 +6539,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&lt;</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Int</replaceable><subscript>1</subscript> is
               numerically less than
               <replaceable>Int</replaceable><subscript>2</subscript> and
@@ -6537,7 +6551,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&gt;=</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Int</replaceable><subscript>1</subscript> is
               numerically greater than or equal than
               <replaceable>Int</replaceable><subscript>2</subscript> and
@@ -6549,7 +6563,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&gt;</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Int</replaceable><subscript>1</subscript> is
               numerically greater than
               <replaceable>Int</replaceable><subscript>2</subscript> and
@@ -6561,7 +6575,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>+</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry>sum of
+              <entry>Sum of
               <replaceable>Int</replaceable><subscript>1</subscript> and
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
@@ -6571,7 +6585,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>-</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry>difference of
+              <entry>Difference of
               <replaceable>Int</replaceable><subscript>1</subscript> and
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
@@ -6601,7 +6615,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>%</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry>remainder of dividing
+              <entry>Remainder of dividing
               <replaceable>Int</replaceable><subscript>1</subscript> by
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
@@ -6609,7 +6623,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
             <row>
               <entry>- <replaceable>Int</replaceable></entry>
 
-              <entry>negate sign of <replaceable>Int</replaceable></entry>
+              <entry>Negate sign of <replaceable>Int</replaceable></entry>
             </row>
 
             <row>
@@ -6618,7 +6632,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>:</literal>
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
 
-              <entry>if <replaceable>Bool</replaceable> is true then
+              <entry>If <replaceable>Bool</replaceable> is true then
               <replaceable>Int</replaceable><subscript>1</subscript> else
               <replaceable>Int</replaceable><subscript>2</subscript></entry>
             </row>
@@ -6646,44 +6660,44 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
             <row>
               <entry><literal>int abs(int N)</literal></entry>
 
-              <entry>absolute value of integer N</entry>
+              <entry>Absolute value of integer N</entry>
             </row>
 
             <row>
               <entry><literal>int arbInt()</literal></entry>
 
-              <entry>arbitrary integer value</entry>
+              <entry>Arbitrary integer value</entry>
             </row>
 
             <row>
               <entry><literal>int arbInt(int limit)</literal></entry>
 
-              <entry>arbitrary integer value in the interval [0,
+              <entry>Arbitrary integer value in the interval [0,
               limit)</entry>
             </row>
 
             <row>
               <entry><literal>int max(int n, int m)</literal></entry>
 
-              <entry>largest of two integers</entry>
+              <entry>Largest of two integers</entry>
             </row>
 
             <row>
               <entry><literal>int min(int n, int m)</literal></entry>
 
-              <entry>smallest of two integers</entry>
+              <entry>Smallest of two integers</entry>
             </row>
 
             <row>
               <entry><literal>real toReal(int n)</literal></entry>
 
-              <entry>convert an integer value to a real value</entry>
+              <entry>Convert an integer value to a real value</entry>
             </row>
 
             <row>
               <entry><literal>str toString(int n)</literal></entry>
 
-              <entry>convert an integer value to a string</entry>
+              <entry>Convert an integer value to a string</entry>
             </row>
           </tbody>
         </tgroup>
@@ -6714,14 +6728,14 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><literal>void java println(value
                 V...)</literal></entry>
 
-                <entry>print a list of values on the output stream</entry>
+                <entry>Print a list of values on the output stream</entry>
               </row>
 
               <row>
                 <entry><literal>list[str] readFile(str filename) throws
                 NoSuchFileError(str msg), IOError(str msg)</literal></entry>
 
-                <entry>read a named file as list of strings</entry>
+                <entry>Read a named file as list of strings</entry>
               </row>
             </tbody>
           </tgroup>
@@ -6757,7 +6771,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <entry><literal>set[&amp;T] bottom(lgraph[&amp;T]
               G)</literal></entry>
 
-              <entry>bottom nodes of a labelled graph</entry>
+              <entry>Bottom nodes of a labelled graph</entry>
             </row>
 
             <row>
@@ -6821,7 +6835,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <entry><literal>set[&amp;T] top(lgraph[&amp;T]
               G)</literal></entry>
 
-              <entry>top nodes of a labelled graph</entry>
+              <entry>Top nodes of a labelled graph</entry>
             </row>
           </tbody>
         </tgroup>
@@ -6857,8 +6871,8 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>==</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if both arguments have the same
-                elements in the same order</entry>
+                <entry>Yields <literal>true</literal> if both arguments have
+                the same elements in the same order</entry>
               </row>
 
               <row>
@@ -6866,7 +6880,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>!=</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if both arguments have
+                <entry>Yields <literal>true</literal> if both arguments have
                 different elements</entry>
               </row>
 
@@ -6875,9 +6889,9 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>&lt;=</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if both sists are equal or
-                <replaceable>List</replaceable><subscript>1</subscript> is a
-                sublist of
+                <entry>Yields <literal>true</literal> if both sists are equal
+                or <replaceable>List</replaceable><subscript>1</subscript> is
+                a sublist of
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
 
@@ -6886,7 +6900,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>&lt;</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if
+                <entry>Yields <literal>true</literal> if
                 <replaceable>List</replaceable><subscript>1</subscript> is a
                 sublist of
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
@@ -6897,9 +6911,9 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>&gt;=</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if both lists are equal or
-                <replaceable>List</replaceable><subscript>2</subscript> is a
-                sublist of
+                <entry>Yields <literal>true</literal> if both lists are equal
+                or <replaceable>List</replaceable><subscript>2</subscript> is
+                a sublist of
                 <replaceable>List</replaceable><subscript>1</subscript></entry>
               </row>
 
@@ -6908,7 +6922,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>&gt;</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if
+                <entry>Yields <literal>true</literal> if
                 <replaceable>List</replaceable><subscript>2</subscript> is a
                 sublist of
                 <replaceable>List</replaceable><subscript>1</subscript></entry>
@@ -6919,7 +6933,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>+</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry>concatenation of
+                <entry>Concatenation of
                 <replaceable>List</replaceable><subscript>1</subscript> and
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
@@ -6929,7 +6943,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>-</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry>list consisting of all elements in
+                <entry>List consisting of all elements in
                 <replaceable>List</replaceable><subscript>1</subscript> that
                 do not occur in
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
@@ -6949,7 +6963,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><replaceable>Elm</replaceable> <literal>in</literal>
                 <replaceable>List</replaceable></entry>
 
-                <entry><literal>true</literal> if
+                <entry>Yields <literal>true</literal> if
                 <replaceable>Elm</replaceable> occurs as element in
                 <replaceable>List</replaceable></entry>
               </row>
@@ -6958,7 +6972,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><replaceable>Elm</replaceable> <literal>notin</literal>
                 <replaceable>List</replaceable></entry>
 
-                <entry><literal>true</literal> if
+                <entry>Yields <literal>true</literal> if
                 <replaceable>Elm</replaceable> does not occur as element in
                 <replaceable>List</replaceable></entry>
               </row>
@@ -6969,7 +6983,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>:</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry>if <replaceable>bool</replaceable> is true then
+                <entry>If <replaceable>bool</replaceable> is true then
                 <replaceable>List</replaceable><subscript>1</subscript> else
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
@@ -6978,7 +6992,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><replaceable>List</replaceable><literal> [</literal>
                 <replaceable>int</replaceable> <literal>]</literal></entry>
 
-                <entry>element at position <replaceable>int</replaceable> in
+                <entry>Element at position <replaceable>int</replaceable> in
                 <replaceable>List</replaceable></entry>
               </row>
             </tbody>
@@ -7004,96 +7018,96 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><literal>&amp;T average(list[&amp;T] lst, &amp;T
                 zero)</literal></entry>
 
-                <entry>average of elements of a list</entry>
+                <entry>Average of elements of a list</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] delete(list[&amp;T] lst, int
                 n)</literal></entry>
 
-                <entry>delete nth element from list</entry>
+                <entry>Delete nth element from list</entry>
               </row>
 
               <row>
                 <entry><literal>set[int] domain(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>a set of all legal index values for a list</entry>
+                <entry>Set of all legal index values for a list</entry>
               </row>
 
               <row>
                 <entry><literal>&amp;T java head(list[&amp;T] lst) throws
                 EmptyListError</literal></entry>
 
-                <entry>get the first element of a list</entry>
+                <entry>Get the first element of a list</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] head(list[&amp;T] lst, int n)
                 throws IndexOutOfBoundsError</literal></entry>
 
-                <entry>get the first n elements of a list</entry>
+                <entry>Get the first n elements of a list</entry>
               </row>
 
               <row>
                 <entry><literal>&amp;T getOneFrom(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>get an arbitrary element from a list</entry>
+                <entry>Get an arbitrary element from a list</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] insertAt(list[&amp;T] lst, int n,
                 &amp;T elm) throws IndexOutOfBoundsError</literal></entry>
 
-                <entry>add an element at a specific position in a list</entry>
+                <entry>Add an element at a specific position in a list</entry>
               </row>
 
               <row>
                 <entry><literal>bool isEmpty(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>is list empty?</entry>
+                <entry>Is list empty?</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] mapper(list[&amp;T] lst, &amp;T
                 (&amp;T) fn)</literal></entry>
 
-                <entry>apply a function to each element of a list</entry>
+                <entry>Apply a function to each element of a list</entry>
               </row>
 
               <row>
                 <entry><literal>&amp;T max(list[&amp;T] lst)</literal></entry>
 
-                <entry>largest element of a list</entry>
+                <entry>Largest element of a list</entry>
               </row>
 
               <row>
                 <entry><literal>&amp;T min(list[&amp;T] lst)</literal></entry>
 
-                <entry>smallest element of a list</entry>
+                <entry>Smallest element of a list</entry>
               </row>
 
               <row>
                 <entry><literal>&amp;T multiply(list[&amp;T] lst, &amp;T
                 unity)</literal></entry>
 
-                <entry>multiply the elements of a list</entry>
+                <entry>Multiply the elements of a list</entry>
               </row>
 
               <row>
                 <entry><literal>set[list[&amp;T]] permutations(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>all permutations of a list</entry>
+                <entry>All permutations of a list</entry>
               </row>
 
               <row>
                 <entry><literal>&amp;T reducer(list[&amp;T] lst, &amp;T
                 (&amp;T, &amp;T) fn, &amp;T unit)</literal></entry>
 
-                <entry>apply function F to successive elements of a
+                <entry>Apply function F to successive elements of a
                 list</entry>
               </row>
 
@@ -7101,55 +7115,55 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><literal>list[&amp;T] reverse(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>elements of a list in reverse order</entry>
+                <entry>Elements of a list in reverse order</entry>
               </row>
 
               <row>
                 <entry><literal>int size(list[&amp;T] lst)</literal></entry>
 
-                <entry>number of elements in a list</entry>
+                <entry>Number of elements in a list</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] slice(list[&amp;T] lst, int
                 start, int len)</literal></entry>
 
-                <entry>sublist from start of length len</entry>
+                <entry>Sublist from start of length len</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] sort(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>sort the elements of a list</entry>
+                <entry>Sort the elements of a list</entry>
               </row>
 
               <row>
                 <entry><literal>&amp;T sum(list[&amp;T] lst, &amp;T
                 zero)</literal></entry>
 
-                <entry>add elements of a List</entry>
+                <entry>Add elements of a List</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] tail(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>all but the first element of a list</entry>
+                <entry>All but the first element of a list</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] tail(list[&amp;T] lst, int len)
                 throws IndexOutOfBoundsError</literal></entry>
 
-                <entry>last n elements of a list</entry>
+                <entry>Last n elements of a list</entry>
               </row>
 
               <row>
                 <entry><literal>tuple[&amp;T, list[&amp;T]]
                 takeOneFrom(list[&amp;T] lst)</literal></entry>
 
-                <entry>remove an arbitrary element from a list, returns the
+                <entry>Remove an arbitrary element from a list, returns the
                 element and the modified list</entry>
               </row>
 
@@ -7157,21 +7171,21 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><literal>map[&amp;A,&amp;B] toMap(list[tuple[&amp;A,
                 &amp;B]] lst)</literal></entry>
 
-                <entry>convert a list of tuples to a map</entry>
+                <entry>Convert a list of tuples to a map</entry>
               </row>
 
               <row>
                 <entry><literal>set[&amp;T] toSet(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>convert a list to a set</entry>
+                <entry>Convert a list to a set</entry>
               </row>
 
               <row>
                 <entry><literal>str toString(list[&amp;T]
                 lst)</literal></entry>
 
-                <entry>convert a list to a string</entry>
+                <entry>Convert a list to a string</entry>
               </row>
             </tbody>
           </tgroup>
@@ -7203,8 +7217,8 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>==</literal>
               <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if both arguments are identical
-              and <literal>false</literal> otherwise</entry>
+              <entry>Yield <literal>true</literal> if both arguments are
+              identical and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
@@ -7212,7 +7226,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>!=</literal>
               <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if both arguments are not
+              <entry>Yield <literal>true</literal> if both arguments are not
               identical and <literal>false</literal> otherwise</entry>
             </row>
 
@@ -7221,7 +7235,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&lt;=</literal>
               <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yield <literal>true</literal> if
               <replaceable>Loc</replaceable><subscript>1</subscript> is
               textually contained in or equal to
               <replaceable>Loc</replaceable><subscript>2</subscript> and
@@ -7233,7 +7247,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&lt;</literal>
               <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yield <literal>true</literal> if
               <replaceable>Loc</replaceable><subscript>1</subscript> is
               strictly textually contained in
               <replaceable>Loc</replaceable><subscript>2</subscript> and
@@ -7245,7 +7259,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&gt;=</literal>
               <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yield <literal>true</literal> if
               <replaceable>Loc</replaceable><subscript>1</subscript> is
               textually encloses or is equal to
               <replaceable>Loc</replaceable><subscript>2</subscript> and
@@ -7257,7 +7271,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>&gt;=</literal>
               <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
-              <entry><literal>true</literal> if
+              <entry>Yield <literal>true</literal> if
               <replaceable>Loc</replaceable><subscript>1</subscript> is
               textually encloses
               <replaceable>Loc</replaceable><subscript>2</subscript> and
@@ -7268,7 +7282,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <entry><replaceable>Loc</replaceable> <literal>.</literal>
               <replaceable>Field</replaceable></entry>
 
-              <entry>retrieve one of the fields of location value</entry>
+              <entry>Retrieve one of the fields of location value</entry>
             </row>
           </tbody>
         </tgroup>
@@ -7326,8 +7340,8 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>==</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if both arguments consist of
-                the same pairs</entry>
+                <entry>Yield <literal>true</literal> if both arguments consist
+                of the same pairs</entry>
               </row>
 
               <row>
@@ -7335,7 +7349,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>!=</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if both arguments have
+                <entry>Yield <literal>true</literal> if both arguments have
                 different pairs</entry>
               </row>
 
@@ -7344,7 +7358,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>&lt;=</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if all pairs in
+                <entry>Yield <literal>true</literal> if all pairs in
                 <replaceable>Map</replaceable><subscript>1</subscript> occur
                 in <replaceable>Map</replaceable><subscript>2</subscript> or
                 <replaceable>Map</replaceable><subscript>1</subscript> and
@@ -7357,7 +7371,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>&lt;</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if all pairs in
+                <entry>Yield <literal>true</literal> if all pairs in
                 <replaceable>Map</replaceable><subscript>1</subscript> occur
                 in <replaceable>Map</replaceable><subscript>2</subscript> but
                 <replaceable>Map</replaceable><subscript>1</subscript> and
@@ -7370,7 +7384,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>&gt;=</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if all pairs in
+                <entry>Yield <literal>true</literal> if all pairs in
                 <replaceable>Map</replaceable><subscript>2</subscript> occur
                 in <replaceable>Map</replaceable><subscript>1</subscript> or
                 <replaceable>Map</replaceable><subscript>1</subscript> and
@@ -7383,7 +7397,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>&gt;</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry><literal>true</literal> if all pairs in
+                <entry>Yield <literal>true</literal> if all pairs in
                 <replaceable>Map</replaceable><subscript>2</subscript> occur
                 in <replaceable>Map</replaceable><subscript>1</subscript>but
                 <replaceable>Map</replaceable><subscript>1</subscript> and
@@ -7396,7 +7410,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>+</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry>union of
+                <entry>Union of
                 <replaceable>Map</replaceable><subscript>1</subscript> and
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
               </row>
@@ -7406,7 +7420,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>-</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry>difference of
+                <entry>Difference of
                 <replaceable>Map</replaceable><subscript>1</subscript> and
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
               </row>
@@ -7415,8 +7429,9 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><replaceable>Key</replaceable> <literal>in</literal>
                 <replaceable>Map</replaceable></entry>
 
-                <entry>true if <replaceable>Key</replaceable> occurs in a
-                key:value pair in <replaceable>Map</replaceable></entry>
+                <entry>Yield <literal>true</literal> if
+                <replaceable>Key</replaceable> occurs in a key:value pair in
+                <replaceable>Map</replaceable></entry>
               </row>
 
               <row>
@@ -7424,8 +7439,9 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>notin</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry>true if <replaceable>Key</replaceable> does not occur
-                in a key:value pair in map</entry>
+                <entry>Yield <literal>true</literal> if
+                <replaceable>Key</replaceable> does not occur in a key:value
+                pair in map</entry>
               </row>
 
               <row>
@@ -7434,7 +7450,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <literal>:</literal>
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
 
-                <entry>if <replaceable>Bool</replaceable> is true then
+                <entry>If <replaceable>Bool</replaceable> is true then
                 <replaceable>Map</replaceable><subscript>1</subscript> else
                 <replaceable>Map</replaceable><subscript>2</subscript></entry>
               </row>
@@ -7443,7 +7459,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><replaceable>Map</replaceable> <literal>[</literal>
                 <replaceable>Key</replaceable> <literal>]</literal></entry>
 
-                <entry>the value associated with
+                <entry>The value associated with
                 <replaceable>Key</replaceable> in
                 <replaceable>Map</replaceable> if that exists, undefined
                 otherwise</entry>
@@ -7471,35 +7487,35 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><literal>set[&amp;K] domain(map[&amp;K, &amp;V]
                 M)</literal></entry>
 
-                <entry>the domain (keys) of a map</entry>
+                <entry>The domain (keys) of a map</entry>
               </row>
 
               <row>
                 <entry><literal>&amp;K getOneFrom(map[&amp;K, &amp;V] M)
                 </literal></entry>
 
-                <entry>arbitrary key of a map</entry>
+                <entry>Arbitrary key of a map</entry>
               </row>
 
               <row>
                 <entry><literal>map[&amp;V, &amp;K] invert(map[&amp;K, &amp;V]
                 M)</literal></entry>
 
-                <entry>map with key and value inverted</entry>
+                <entry>Map with key and value inverted</entry>
               </row>
 
               <row>
                 <entry><literal>bool isEmpty(map[&amp;K, &amp;V]
                 M)</literal></entry>
 
-                <entry>is map empty?</entry>
+                <entry>Is map empty?</entry>
               </row>
 
               <row>
                 <entry><literal>map[&amp;K, &amp;V] mapper(map[&amp;K, &amp;V]
                 M, &amp;K (&amp;K) F, &amp;V (&amp;V) G)</literal></entry>
 
-                <entry>apply two functions to each key/value pair in a
+                <entry>Apply two functions to each key/value pair in a
                 map.</entry>
               </row>
 
@@ -7507,35 +7523,35 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
                 <entry><literal>set[&amp;V] range(map[&amp;K, &amp;V]
                 M)</literal></entry>
 
-                <entry>the range (values) of a map</entry>
+                <entry>The range (values) of a map</entry>
               </row>
 
               <row>
                 <entry><literal>int size(map[&amp;K, &amp;V]
                 M)</literal></entry>
 
-                <entry>number of elements in a map.</entry>
+                <entry>Number of elements in a map.</entry>
               </row>
 
               <row>
                 <entry><literal>list[tuple[&amp;K, &amp;V]] toList(map[&amp;K,
                 &amp;V] M)</literal></entry>
 
-                <entry>convert a map to a list</entry>
+                <entry>Convert a map to a list</entry>
               </row>
 
               <row>
                 <entry><literal>rel[&amp;K, &amp;V] toRel(map[&amp;K, &amp;V]
                 M)</literal></entry>
 
-                <entry>convert a map to a relation</entry>
+                <entry>Convert a map to a relation</entry>
               </row>
 
               <row>
                 <entry><literal>str toString(map[&amp;K, &amp;V]
                 M)</literal></entry>
 
-                <entry>convert a map to a string.</entry>
+                <entry>Convert a map to a string.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -7652,27 +7668,27 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <row>
                 <entry><literal>int arity(node T)</literal></entry>
 
-                <entry>number of children of a node</entry>
+                <entry>Number of children of a node</entry>
               </row>
 
               <row>
                 <entry><literal>list[value] getChildren(node
                 T)</literal></entry>
 
-                <entry>get the children of a node</entry>
+                <entry>The children of a node</entry>
               </row>
 
               <row>
                 <entry><literal>str getName(node T)</literal></entry>
 
-                <entry>get the function name of a node</entry>
+                <entry>The function name of a node</entry>
               </row>
 
               <row>
                 <entry><literal>node makeNode(str N, value
                 V...)</literal></entry>
 
-                <entry>create a node given its function name and
+                <entry>Create a node given its function name and
                 arguments</entry>
               </row>
             </tbody>
@@ -7771,7 +7787,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>+</literal>
               <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
-              <entry>sum of
+              <entry>Sum of
               <replaceable>Real</replaceable><subscript>1</subscript> and
               <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
@@ -7781,7 +7797,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>-</literal>
               <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
-              <entry>difference of
+              <entry>Difference of
               <replaceable>Real</replaceable><subscript>1</subscript> and
               <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
@@ -7809,7 +7825,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
             <row>
               <entry>- <replaceable>Real</replaceable></entry>
 
-              <entry>negate sign of <replaceable>Real</replaceable></entry>
+              <entry>Negate sign of <replaceable>Real</replaceable></entry>
             </row>
 
             <row>
@@ -7817,7 +7833,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>%</literal>
               <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
-              <entry>remainder of dividing
+              <entry>Remainder of dividing
               <replaceable>Real</replaceable><subscript>1</subscript> by
               <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
@@ -7828,7 +7844,7 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>:</literal>
               <replaceable>Real</replaceable><subscript>2</subscript></entry>
 
-              <entry>if <replaceable>Bool</replaceable> is true then
+              <entry>If <replaceable>Bool</replaceable> is true then
               <replaceable>Real</replaceable><subscript>1</subscript> else
               <replaceable>Real</replaceable><subscript>2</subscript></entry>
             </row>
@@ -7856,26 +7872,25 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
             <row>
               <entry><literal>real arbReal()</literal></entry>
 
-              <entry>an arbitrary real value in the interval
-              [0.0,1.0).</entry>
+              <entry>Arbitrary real value in the interval [0.0,1.0).</entry>
             </row>
 
             <row>
               <entry><literal>real max(real n, real m)</literal></entry>
 
-              <entry>largest of two reals</entry>
+              <entry>Largest of two reals</entry>
             </row>
 
             <row>
               <entry><literal>int toInteger(real d)</literal></entry>
 
-              <entry>convert a real to integer.</entry>
+              <entry>Convert a real to integer.</entry>
             </row>
 
             <row>
               <entry><literal>str toString(real d)</literal></entry>
 
-              <entry>convert a real to a string.</entry>
+              <entry>Convert a real to a string.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -7911,8 +7926,8 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>o</literal>
               <replaceable>Rel</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields the relation resulting from the composition of the
-              two arguments</entry>
+              <entry>Relation resulting from the composition of the two
+              arguments</entry>
             </row>
 
             <row>
@@ -7920,40 +7935,41 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <literal>x</literal>
               <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields the relation resulting from the Cartesian product
-              of the two arguments</entry>
+              <entry>Relation resulting from the Cartesian product of the two
+              arguments</entry>
             </row>
 
             <row>
               <entry><replaceable>Rel</replaceable>
               <literal>+</literal></entry>
 
-              <entry>yields the relation resulting from the transitive closure
-              of <replaceable>Rel</replaceable></entry>
+              <entry>Relation resulting from the transitive closure of
+              <replaceable>Rel</replaceable></entry>
             </row>
 
             <row>
               <entry><replaceable>Rel</replaceable>
               <literal>*</literal></entry>
 
-              <entry>yields the relation resulting from the reflexive
-              transitive closure of <replaceable>Rel</replaceable></entry>
+              <entry>Relation resulting from the reflexive transitive closure
+              of <replaceable>Rel</replaceable></entry>
             </row>
 
             <row>
               <entry><replaceable>Rel</replaceable> <literal>[</literal>
               <replaceable>elem</replaceable> <literal>]</literal></entry>
 
-              <entry>yields the right image of
-              <replaceable>Rel</replaceable></entry>
+              <entry>Relation resulting from subscription of
+              <replaceable>Rel</replaceable> with</entry>
             </row>
 
             <row>
               <entry><replaceable>Rel</replaceable> <literal>[</literal>
-              <replaceable>set</replaceable> <literal>]</literal></entry>
+              <replaceable>Set</replaceable> <literal>]</literal></entry>
 
-              <entry>yields the right image of
-              <replaceable>Rel</replaceable></entry>
+              <entry>Relation resulting from subscription of
+              <replaceable>Rel</replaceable> with all elements of
+              <replaceable>Set</replaceable>.</entry>
             </row>
 
             <row>
@@ -7962,7 +7978,11 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
               <replaceable>Index</replaceable><subscript>2</subscript>, ...
               <literal>&gt;</literal></entry>
 
-              <entry></entry>
+              <entry>Relation resulting from restricting
+              <replaceable>Rel</replaceable> to the columns described by
+              <replaceable>Index</replaceable><subscript>1</subscript><literal>,</literal>
+              <replaceable>Index</replaceable><subscript>2</subscript>, ...
+              </entry>
             </row>
           </tbody>
         </tgroup>
@@ -7970,24 +7990,23 @@ rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt
 
       <para>Examples:</para>
 
-      <para><screen><literal>rascal&gt; {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,15&gt;} o {&lt;10,100&gt;, &lt;20,200&gt;}</literal>;
-rel[int,int] : <literal>{&lt;1,100&gt;, &lt;2,200&gt;}</literal>
+      <para><screen><literal>rascal&gt; </literal><userinput><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,15&gt;} o {&lt;10,100&gt;, &lt;20,200&gt;}</literal>;</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;1,100&gt;, &lt;2,200&gt;}</literal></computeroutput>
 
+<prompt>rascal&gt;</prompt> <userinput><literal>{1, 2, 3} x {9}</literal>;</userinput>
+<computeroutput>rel[int,int] :  <literal>{&lt;1, 9&gt;, &lt;2, 9&gt;, &lt;3, 9&gt;}</literal></computeroutput>
 
-rascal&gt; <literal>{1, 2, 3} x {9}</literal>;
-rel[int,int] :  <literal>{&lt;1, 9&gt;, &lt;2, 9&gt;, &lt;3, 9&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>Rel = <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;, &lt;2,21&gt;}</literal>;</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;, &lt;2,21&gt;}</literal></computeroutput>
 
-rascal&gt; Rel = <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;, &lt;2,21&gt;}</literal>;
-rel[int,int] : <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;, &lt;2,21&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>Rel[1];</userinput>
+<computeroutput>set[int] : <literal>{10, 11}</literal></computeroutput>
 
-<literal>rascal&gt; Rel[1]</literal>;
-set[int] : <literal>{10, 11}</literal>
+<literal>rascal&gt; </literal><userinput><literal>Rel[{1}]</literal>;</userinput>
+<computeroutput>set[int] : {10, 11}</computeroutput>
 
-<literal>rascal&gt; Rel[{1}]</literal>;
-set[int] : {10, 11}
-
-<literal>rascal&gt; Rel[{1, 2}]</literal>;
-set[int] : <literal>{10, 11, 20, 21}</literal></screen><table>
+<literal>rascal&gt; </literal><userinput><literal>Rel[{1, 2}]</literal>;</userinput>
+<computeroutput>set[int] : <literal>{10, 11, 20, 21}</literal></computeroutput></screen><table>
           <title>Relation Functions</title>
 
           <tgroup cols="2">
@@ -8008,14 +8027,14 @@ set[int] : <literal>{10, 11, 20, 21}</literal></screen><table>
                 <entry><literal>set[&amp;T] carrier (rel[&amp;T,&amp;T]
                 R)</literal></entry>
 
-                <entry>all elements in any tuple in a relation</entry>
+                <entry>All elements in any tuple in a relation</entry>
               </row>
 
               <row>
                 <entry><literal>rel[&amp;T,&amp;T] carrierR
                 (rel[&amp;T,&amp;T] R, set[&amp;T] S)</literal></entry>
 
-                <entry>relation restricted to tuples with elements in a set
+                <entry>Relation restricted to tuples with elements in a set
                 S</entry>
               </row>
 
@@ -8023,28 +8042,28 @@ set[int] : <literal>{10, 11, 20, 21}</literal></screen><table>
                 <entry><literal>rel[&amp;T,&amp;T] carrierX
                 (rel[&amp;T,&amp;T] R, set[&amp;T] S)</literal></entry>
 
-                <entry>relation excluded tuples with some element in S</entry>
+                <entry>Relation excluded tuples with some element in S</entry>
               </row>
 
               <row>
                 <entry><literal>rel[&amp;T0, &amp;T1] complement(rel[&amp;T0,
                 &amp;T1] R)</literal></entry>
 
-                <entry>complement of relation</entry>
+                <entry>Complement of relation</entry>
               </row>
 
               <row>
                 <entry><literal>set[&amp;T0] domain (rel[&amp;T0,&amp;T1]
                 R)</literal></entry>
 
-                <entry>first element of each tuple in binary relation</entry>
+                <entry>First element of each tuple in binary relation</entry>
               </row>
 
               <row>
                 <entry><literal>rel[&amp;T0,&amp;T1] domainR
                 (rel[&amp;T0,&amp;T1] R, set[&amp;T0] S)</literal></entry>
 
-                <entry>restriction of a relation to tuples with first element
+                <entry>Restriction of a relation to tuples with first element
                 in S}</entry>
               </row>
 
@@ -8052,28 +8071,28 @@ set[int] : <literal>{10, 11, 20, 21}</literal></screen><table>
                 <entry><literal>rel[&amp;T0,&amp;T1] domainX
                 (rel[&amp;T0,&amp;T1] R, set[&amp;T0] S)</literal></entry>
 
-                <entry>relation excluded tuples with first element in
+                <entry>Relation excluded tuples with first element in
                 S</entry>
               </row>
 
               <row>
                 <entry>ident?</entry>
 
-                <entry></entry>
+                <entry><remark>status?</remark></entry>
               </row>
 
               <row>
                 <entry><literal>rel[&amp;T1, &amp;T0] invert (rel[&amp;T0,
                 &amp;T1] R)</literal></entry>
 
-                <entry>inverse the tuples in a relation</entry>
+                <entry>Inverse the tuples in a relation</entry>
               </row>
 
               <row>
                 <entry><literal>rel[&amp;T2, &amp;T1, &amp;T0] invert
                 (rel[&amp;T0, &amp;T1, &amp;T2] R)</literal></entry>
 
-                <entry>all but the first element of each tuples in binary
+                <entry>All but the first element of each tuples in binary
                 relation</entry>
               </row>
 
@@ -8081,55 +8100,55 @@ set[int] : <literal>{10, 11, 20, 21}</literal></screen><table>
                 <entry><literal>rel[&amp;T0,&amp;T1] rangeR
                 (rel[&amp;T0,&amp;T1] R, set[&amp;T2] S)</literal></entry>
 
-                <entry>restriction of a binary relation to tuples with second
+                <entry>Restriction of a binary relation to tuples with second
                 element in set S</entry>
               </row>
             </tbody>
           </tgroup>
-        </table>Examples:<screen><literal>rascal&gt; id({1,2,3})</literal>;
-rel[int,int] : <literal>{&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;}</literal>
+        </table>Examples:<screen><literal>rascal&gt; </literal><userinput><literal>id({1,2,3})</literal>;</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; id({"mon", "tue", "wed"})</literal>;
-rel[str,str] : <literal>{&lt;"mon","mon"&gt;, &lt;"tue","tue"&gt;, &lt;"wed","wed"&gt;}</literal>
+<literal>rascal&gt; </literal><userinput><literal>id({"mon", "tue", "wed"})</literal>;</userinput>
+<computeroutput>rel[str,str] : <literal>{&lt;"mon","mon"&gt;, &lt;"tue","tue"&gt;, &lt;"wed","wed"&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; inv({&lt;1,10&gt;, &lt;2,20&gt;});
-rel[int,int] :</literal> <literal>{&lt;10,1&gt;,&lt;20,2&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>invert({&lt;1,10&gt;, &lt;2,20&gt;});</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;10,1&gt;,&lt;20,2&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; compl({&lt;1,10&gt;}</literal>;
-rel[int,int] : <literal>{&lt;1, 1&gt;, &lt;10, 1&gt;, &lt;10, 10&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>compl({&lt;1,10&gt;});</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;1, 1&gt;, &lt;10, 1&gt;, &lt;10, 10&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; domain({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
-set[int] : <literal>{1, 2}</literal>
+<prompt>rascal&gt;</prompt> <userinput>domain({&lt;1,10&gt;, &lt;2,20&gt;});</userinput>
+<computeroutput>set[int] : <literal>{1, 2}</literal></computeroutput>
 
-<literal>rascal&gt; domain({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;})</literal>;
-set[str] : <literal>{"mon", "tue"}</literal>.
+<prompt>rascal&gt;</prompt> <userinput>domain({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;});</userinput>
+<computeroutput>set[str] : <literal>{"mon", "tue"}</literal></computeroutput>
 
-<literal>rascal&gt; range({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;
-set[int] : <literal>{10, 20}</literal>
+<prompt>rascal&gt;</prompt> <userinput>range({&lt;1,10&gt;, &lt;2,20&gt;});</userinput>
+<computeroutput>set[int] : <literal>{10, 20}</literal></computeroutput>
 
-<literal>rascal&gt; range({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;})</literal>;
-set[int] : <literal>{1, 2}</literal>
+<prompt>rascal&gt;</prompt> <userinput>range({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;});</userinput>
+<computeroutput>set[int] : <literal>{1, 2}</literal></computeroutput>
 
-<literal>rascal&gt; carrier({&lt;1,10&gt;, &lt;2,20&gt;});
-set[int] : </literal><literal>{1, 10, 2, 20}
+<prompt>rascal&gt;</prompt> <userinput>carrier({&lt;1,10&gt;, &lt;2,20&gt;});</userinput>
+<computeroutput>set[int] : <literal>{1, 10, 2, 20}</literal></computeroutput>
 
-rascal&gt; domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});
-rel[int,int] : </literal><literal>{&lt;1,10&gt;, &lt;3,30&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;1,10&gt;, &lt;3,30&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; rangeR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {30, 10})</literal>;
-rel[int,int] : <literal>{&lt;1,10&gt;, &lt;3,30&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>rangeR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {30, 10});</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;1,10&gt;, &lt;3,30&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; carrierR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {10, 1, 20})</literal>;
-rel[int,int] : <literal>{&lt;1,10&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>carrierR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {10, 1, 20});</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;1,10&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; domainX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1})</literal>;
-rel[int,int] : <literal>{&lt;2, 20&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>domainX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {3, 1});</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;2, 20&gt;}</literal></computeroutput>
 
-<literal>rascal&gt; rangeX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {30, 10})</literal>;
-<literal>rel[int,int] : {&lt;2, 20&gt;}</literal>
+<prompt>rascal&gt;</prompt> <userinput>rangeX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {30, 10});
+</userinput><computeroutput>rel[int,int] : {&lt;2, 20&gt;}</computeroutput>
 
-<literal>rascal&gt; carrierX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {10, 1, 20})</literal>;
-rel[int,int] : <literal>{&lt;3,30&gt;}</literal></screen></para>
+<prompt>rascal&gt;</prompt> <userinput>carrierX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {10, 1, 20});</userinput>
+<computeroutput>rel[int,int] : <literal>{&lt;3,30&gt;}</literal></computeroutput></screen></para>
     </section>
 
     <section xml:id="section.lib-RSF">
@@ -8156,7 +8175,7 @@ rel[int,int] : <literal>{&lt;3,30&gt;}</literal></screen></para>
               <entry><literal>map[str, rel[str,str]] readRSF(str
               nameRSFFile)</literal></entry>
 
-              <entry>read a file in Rigi Standard Format (RSF).</entry>
+              <entry>Read a file in Rigi Standard Format (RSF).</entry>
             </row>
           </tbody>
         </tgroup>
@@ -8317,7 +8336,7 @@ rel[int,int] : <literal>{&lt;3,30&gt;}</literal></screen></para>
               <literal>+</literal>
               <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
-              <entry>set resulting from the union of the two arguments</entry>
+              <entry>Set resulting from the union of the two arguments</entry>
             </row>
 
             <row>
@@ -8325,7 +8344,7 @@ rel[int,int] : <literal>{&lt;3,30&gt;}</literal></screen></para>
               <literal>-</literal>
               <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
-              <entry>the set resulting from the difference of the two
+              <entry>Set resulting from the difference of the two
               arguments</entry>
             </row>
 
@@ -8334,7 +8353,7 @@ rel[int,int] : <literal>{&lt;3,30&gt;}</literal></screen></para>
               <literal>*</literal>
               <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
-              <entry>set resulting from the product of the two
+              <entry>Set resulting from the product of the two
               arguments</entry>
             </row>
 
@@ -8343,7 +8362,7 @@ rel[int,int] : <literal>{&lt;3,30&gt;}</literal></screen></para>
               <literal>&amp;</literal>
               <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
-              <entry>set resulting from the intersection of the two
+              <entry>Set resulting from the intersection of the two
               arguments</entry>
             </row>
 
@@ -8388,41 +8407,41 @@ rel[int,int] : <literal>{&lt;3,30&gt;}</literal></screen></para>
 
       <para>Examples:</para>
 
-      <screen>rascal&gt; <literal>{1, 2, 3} + {4, 5, 6}</literal>;
-<literal>set[int] : {1, 2, 3, 4, 5, 6}</literal>
+      <screen><prompt>rascal&gt;</prompt> <userinput><literal>{1, 2, 3} + {4, 5, 6}</literal>;</userinput>
+<computeroutput><literal>set[int] : {1, 2, 3, 4, 5, 6}</literal></computeroutput>
 
-rascal&gt; <literal>{1, 2, 3} + {1, 2, 3}</literal><literal>;
-set[int] : {1, 2, 3}</literal>
+<prompt>rascal&gt;</prompt> <userinput><literal>{1, 2, 3} + {1, 2, 3}</literal>;</userinput>
+<computeroutput>set[int] : {1, 2, 3}</computeroutput>
 
-rascal&gt; <literal>{1, 2, 3, 4} - {1, 2, 3}</literal><literal>;
-set[int] : {4}</literal>
+<prompt>rascal&gt;</prompt> <userinput>{1, 2, 3, 4} - {1, 2, 3}<literal>;</literal></userinput><literal>
+</literal><computeroutput><literal>set[int] : {4}</literal></computeroutput>
 
-rascal&gt; <literal>{1, 2, 3} - {4, 5, 6}</literal><literal>;
-set[int] : {1, 2, 3}</literal>
+<prompt>rascal&gt;</prompt> <userinput><literal>{1, 2, 3} - {4, 5, 6}</literal>;</userinput>
+<computeroutput>set[int] : {1, 2, 3}</computeroutput>
 
-rascal&gt; <literal>{1, 2, 3} &amp; {4, 5, 6};
-</literal><literal>set[int] : { }</literal>
+<prompt>rascal&gt;</prompt> <userinput>{1, 2, 3} &amp; {4, 5, 6};</userinput>
+<computeroutput><literal>set[int] : { }</literal>
+</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>{1, 2, 3} &amp; {1, 2, 3};</userinput>
+<computeroutput><literal>set[int] : {1, 2, 3}</literal></computeroutput>
 
-rascal&gt; <literal>{1, 2, 3} &amp; {1, 2, 3};
-</literal><literal>set[int] : {1, 2, 3}</literal>
+<prompt>rascal&gt;</prompt> <userinput><literal>3 in {1, 2, 3}</literal><literal>;</literal></userinput><literal>
+</literal><computeroutput><literal>bool : true</literal></computeroutput>
 
-rascal&gt; <literal>3 in {1, 2, 3}</literal><literal>;
-bool : true</literal>
+<prompt>rascal&gt;</prompt> <userinput>4 in {1, 2, 3};</userinput>
+<computeroutput>bool : false</computeroutput>
 
-rascal&gt; 4 in {1, 2, 3}<literal>;
-bool : false</literal>
+<prompt>rascal&gt;</prompt> <userinput>3 notin {1, 2, 3};</userinput>
+<computeroutput>bool : false</computeroutput>
 
-rascal&gt; <literal>3 notin {1, 2, 3};
-</literal><literal>bool : false</literal>
+<prompt>rascal&gt;</prompt> <userinput>4 notin {1, 2, 3};</userinput>
+<computeroutput><literal>bool : true</literal></computeroutput>
 
-racsal&gt; <literal>4 notin {1, 2, 3};
-</literal><literal>bool : true</literal>
+<prompt>rascal&gt;</prompt> <userinput>&lt;2,20&gt; in {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;};</userinput>
+<computeroutput>bool : true</computeroutput>
 
-rascal&gt; <literal>&lt;2,20&gt; in {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;};
-</literal><literal>bool : true</literal>
-
-rascal&gt; <literal>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;};
-</literal><literal>bool : true</literal>
+<prompt>rascal&gt;</prompt> <userinput>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;};</userinput>
+<computeroutput>bool : true</computeroutput>
 </screen>
 
       <table>
@@ -8446,14 +8465,14 @@ rascal&gt; <literal>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;
               <entry><literal>&amp;T average(set[&amp;T] st, &amp;T
               zero)</literal></entry>
 
-              <entry>average of the elements of a set</entry>
+              <entry>Average of the elements of a set</entry>
             </row>
 
             <row>
               <entry><literal>&amp;T getOneFrom(set[&amp;T]
               st)</literal></entry>
 
-              <entry>pick a random element from a set</entry>
+              <entry>Pick a random element from a set</entry>
             </row>
 
             <row>
@@ -8466,67 +8485,67 @@ rascal&gt; <literal>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;
               <entry><literal>set[&amp;T] mapper(set[&amp;T] st, &amp;T
               (&amp;T,&amp;T) fn)</literal></entry>
 
-              <entry>apply a function to each element of a setacter</entry>
+              <entry>Apply a function to each element of a set</entry>
             </row>
 
             <row>
               <entry><literal>&amp;T max(set[&amp;T] st)</literal></entry>
 
-              <entry>largest element of a set</entry>
+              <entry>Largest element of a set</entry>
             </row>
 
             <row>
               <entry><literal>&amp;T min(set[&amp;T] st)</literal></entry>
 
-              <entry>smallest element of a set</entry>
+              <entry>Smallest element of a set</entry>
             </row>
 
             <row>
               <entry><literal>&amp;T multiply(set[&amp;T] st, &amp;T
               unity)</literal></entry>
 
-              <entry>multiply the elements of a set</entry>
+              <entry>Multiply the elements of a set</entry>
             </row>
 
             <row>
               <entry><literal>set[set[&amp;T]] power(set[&amp;T]
               st)</literal></entry>
 
-              <entry>all subsets of a set</entry>
+              <entry>All subsets of a set</entry>
             </row>
 
             <row>
               <entry><literal>set[set[&amp;T]] power1(set[&amp;T]
               st)</literal></entry>
 
-              <entry>all subsets (excluding empty set) of a set</entry>
+              <entry>All subsets (excluding empty set) of a set</entry>
             </row>
 
             <row>
               <entry><literal>&amp;T reducer(set[&amp;T] st, &amp;T
               (&amp;T,&amp;T) fn, &amp;T unit)</literal></entry>
 
-              <entry>apply function F to successive elements of a set</entry>
+              <entry>Apply function F to successive elements of a set</entry>
             </row>
 
             <row>
               <entry><literal>int size(set[&amp;T] st)</literal></entry>
 
-              <entry>number of elements in a set</entry>
+              <entry>Number of elements in a set</entry>
             </row>
 
             <row>
               <entry><literal>&amp;T sum(set[&amp;T] st, &amp;T
               zero)</literal></entry>
 
-              <entry>add the elements of a set</entry>
+              <entry>Add the elements of a set</entry>
             </row>
 
             <row>
               <entry><literal>tuple[&amp;T, set[&amp;T]]
               takeOneFrom(set[&amp;T] st)</literal></entry>
 
-              <entry>remove an arbitrary element from a set, returns the
+              <entry>Remove an arbitrary element from a set, returns the
               element and the modified set</entry>
             </row>
 
@@ -8534,20 +8553,20 @@ rascal&gt; <literal>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;
               <entry><literal>list[&amp;T] toList(set[&amp;T]
               st)</literal></entry>
 
-              <entry>convert a set to a list</entry>
+              <entry>Convert a set to a list</entry>
             </row>
 
             <row>
               <entry><literal>map[&amp;A,&amp;B] toMap(rel[&amp;A, &amp;B]
               st)</literal></entry>
 
-              <entry>convert a set of tuples to a map</entry>
+              <entry>Convert a set of tuples to a map</entry>
             </row>
 
             <row>
               <entry><literal>str toString(set[&amp;T] st)</literal></entry>
 
-              <entry>convert a set to a string</entry>
+              <entry>Convert a set to a string</entry>
             </row>
           </tbody>
         </tgroup>
@@ -8555,23 +8574,23 @@ rascal&gt; <literal>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;
 
       <para>Examples:</para>
 
-      <screen><literal>rascal&gt; power({1, 2, 3, 4})</literal>;
-set[set[int]] : { {}, {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, 
+      <screen><prompt>rascal&gt;</prompt> <userinput>power({1, 2, 3, 4});</userinput>
+<computeroutput>set[set[int]] : { {}, {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, 
                   {2,3}, {2,4}, {3,4}, {1,2,3}, {1,2,4}, 
                   {1,3,4}, {2,3,4}, {1,2,3,4}
-                }
+                }</computeroutput>
 
-rascal&gt; <literal>power1({1, 2, 3, 4})</literal>;
-set[set[int]] : { {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, 
+<prompt>rascal&gt;</prompt> <userinput>power1({1, 2, 3, 4});</userinput>
+<computeroutput>set[set[int]] : { {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, 
                   {2,4}, {3,4}, {1,2,3}, {1,2,4}, {1,3,4}, 
                   {2,3,4}, {1,2,3,4}
-                }
+                }</computeroutput>
 
-rascal&gt; size({1,2,3});
-int : 3
+<prompt>rascal&gt;</prompt> <userinput>size({1,2,3});</userinput>
+<computeroutput>int : 3</computeroutput>
 
-rascal&gt; <literal>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});
-int : 3</literal></screen>
+<prompt>rascal&gt;</prompt> <userinput>size({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;});</userinput>
+<computeroutput>int : 3</computeroutput></screen>
     </section>
 
     <section xml:id="section.lib-String">
@@ -8599,7 +8618,7 @@ int : 3</literal></screen>
               <literal>==</literal>
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields <literal>true</literal> if both arguments are
+              <entry>Yields <literal>true</literal> if both arguments are
               equal and <literal>false</literal> otherwise</entry>
             </row>
 
@@ -8608,7 +8627,7 @@ int : 3</literal></screen>
               <literal>!=</literal>
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields <literal>true</literal> if both arguments are
+              <entry>Yields <literal>true</literal> if both arguments are
               unequal and <literal>false</literal> otherwise</entry>
             </row>
 
@@ -8617,7 +8636,7 @@ int : 3</literal></screen>
               <literal>&lt;=</literal>
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields <literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Str</replaceable><subscript>1</subscript> is
               lexicographically less than or equal to
               <replaceable>Str</replaceable><subscript>2</subscript> and
@@ -8629,7 +8648,7 @@ int : 3</literal></screen>
               <literal>&lt;</literal>
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields <literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Str</replaceable><subscript>1</subscript> is
               lexicographically less than
               <replaceable>Str</replaceable><subscript>2</subscript> and
@@ -8641,7 +8660,7 @@ int : 3</literal></screen>
               <literal>&gt;=</literal>
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields <literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Str</replaceable><subscript>1</subscript> is
               lexicographically greater than or equal to
               <replaceable>Str</replaceable><subscript>2</subscript> and
@@ -8653,7 +8672,7 @@ int : 3</literal></screen>
               <literal>&gt;</literal>
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
-              <entry>yields <literal>true</literal> if
+              <entry>Yields <literal>true</literal> if
               <replaceable>Str</replaceable><subscript>1</subscript> is
               lexicographically greater than
               <replaceable>Str</replaceable><subscript>2</subscript> and
@@ -8665,7 +8684,7 @@ int : 3</literal></screen>
               <literal>+</literal>
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
-              <entry>concatenates
+              <entry>Concatenates
               <replaceable>Str</replaceable><subscript>1</subscript> and
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
             </row>
@@ -8676,7 +8695,7 @@ int : 3</literal></screen>
               <literal>:</literal>
               <replaceable>Str</replaceable><subscript>2</subscript></entry>
 
-              <entry>if <replaceable>Bool</replaceable> is true then
+              <entry>If <replaceable>Bool</replaceable> is true then
               <replaceable>Str</replaceable><subscript>1</subscript> else
               <replaceable>Str<subscript>2</subscript></replaceable></entry>
             </row>
@@ -8705,87 +8724,89 @@ int : 3</literal></screen>
                 <entry><literal>int charAt(str s, int i) throws
                 out_of_range(str msg)</literal></entry>
 
-                <entry>character at position i in string s.</entry>
+                <entry>Character at position i in string s.</entry>
               </row>
 
               <row>
                 <entry><literal>bool endsWith(str s, str
                 suffix)</literal></entry>
 
-                <entry>true if string s ends with given string suffix.</entry>
+                <entry>Yields <literal>true</literal> if string s ends with
+                given string suffix.</entry>
               </row>
 
               <row>
                 <entry><literal>str center(str s, int n)</literal></entry>
 
-                <entry>center s in string of length n using spaces</entry>
+                <entry>Center s in string of length n using spaces</entry>
               </row>
 
               <row>
                 <entry><literal>str center(str s, int n, str
                 pad)</literal></entry>
 
-                <entry>center s in string of length n using a pad
+                <entry>Center s in string of length n using a pad
                 character</entry>
               </row>
 
               <row>
                 <entry><literal>bool isEmpty(str s)</literal></entry>
 
-                <entry>is string empty?</entry>
+                <entry>Is string empty?</entry>
               </row>
 
               <row>
                 <entry><literal>str left(str s, int n)</literal></entry>
 
-                <entry>left align s in string of length n using spaces</entry>
+                <entry>Left align s in string of length n using spaces</entry>
               </row>
 
               <row>
                 <entry><literal>str left(str s, int n, str
                 pad)</literal></entry>
 
-                <entry>left align s in string of length n using pad
+                <entry>Left align s in string of length n using pad
                 character</entry>
               </row>
 
               <row>
                 <entry><literal>str right(str s, int n)</literal></entry>
 
-                <entry>right align s in string of length n using
+                <entry>Right align s in string of length n using
                 spaces</entry>
               </row>
 
               <row>
                 <entry><literal>str reverse(str s)</literal></entry>
 
-                <entry>string with all characters in reverse order.</entry>
+                <entry>String with all characters in reverse order.</entry>
               </row>
 
               <row>
                 <entry><literal>int size(str s)</literal></entry>
 
-                <entry>the length of string s.</entry>
+                <entry>Length of string s.</entry>
               </row>
 
               <row>
                 <entry><literal>bool startsWith(str s, str
                 prefix)</literal></entry>
 
-                <entry>true if string s starts with the string prefix.</entry>
+                <entry>Yields <literal>true</literal> if string s starts with
+                the string prefix.</entry>
               </row>
 
               <row>
                 <entry><literal>str toLowerCase(str s)</literal></entry>
 
-                <entry>convert all characters in string s to
+                <entry>Convert all characters in string s to
                 lowercase.</entry>
               </row>
 
               <row>
                 <entry><literal>str toUpperCase(str s)</literal></entry>
 
-                <entry>convert all characters in string s to
+                <entry>Convert all characters in string s to
                 uppercase.</entry>
               </row>
             </tbody>
@@ -8892,7 +8913,7 @@ int : 3</literal></screen>
               <literal>+</literal>
               <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
-              <entry>concatenates
+              <entry>Concatenates
               <replaceable>Tuple</replaceable><subscript>1</subscript> and
               <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
             </row>
@@ -8903,7 +8924,7 @@ int : 3</literal></screen>
               <literal>:</literal>
               <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
 
-              <entry>if <replaceable>Bool</replaceable> is true then
+              <entry>If <replaceable>Bool</replaceable> is true then
               <replaceable>Tuple</replaceable><subscript>1</subscript> else
               <replaceable>Tuple</replaceable><subscript>2</subscript></entry>
             </row>
@@ -8912,7 +8933,7 @@ int : 3</literal></screen>
               <entry><replaceable>Tuple</replaceable> <literal>.</literal>
               <replaceable>Name</replaceable></entry>
 
-              <entry>select field <replaceable>Name</replaceable> from
+              <entry>Select field <replaceable>Name</replaceable> from
               <replaceable>Tuple</replaceable></entry>
             </row>
 
@@ -8920,7 +8941,7 @@ int : 3</literal></screen>
               <entry><replaceable>Tuple</replaceable> <literal>[</literal>
               <replaceable>Int</replaceable> <literal>]</literal></entry>
 
-              <entry>select field at position <replaceable>int</replaceable>
+              <entry>Select field at position <replaceable>int</replaceable>
               from <replaceable>Tuple</replaceable></entry>
             </row>
           </tbody>
@@ -8954,26 +8975,26 @@ int : 3</literal></screen>
             <row>
               <entry><literal>void assertTrue(bool outcome)</literal></entry>
 
-              <entry>check that outcome is true</entry>
+              <entry>Check that outcome is true</entry>
             </row>
 
             <row>
               <entry><literal>void assertEqual(value V1, value
               V2)</literal></entry>
 
-              <entry>check that two values are equal</entry>
+              <entry>Check that two values are equal</entry>
             </row>
 
             <row>
               <entry><literal>bool report()</literal></entry>
 
-              <entry>print unit test summary</entry>
+              <entry>Print unit test summary</entry>
             </row>
 
             <row>
               <entry><literal>bool report(str msg)</literal></entry>
 
-              <entry>print unit test summary, including msg</entry>
+              <entry>Print unit test summary, including msg</entry>
             </row>
           </tbody>
         </tgroup>
@@ -9089,28 +9110,28 @@ int : 3</literal></screen>
                 <entry><literal>value readValueFromBinaryFile(str
                 namePBFFile)</literal></entry>
 
-                <entry>read a value from a binary file in PBF format</entry>
+                <entry>Read a value from a binary file in PBF format</entry>
               </row>
 
               <row>
                 <entry><literal>value readValueFromTextFile(str
                 namePBFFile)</literal></entry>
 
-                <entry>read a value from a text file</entry>
+                <entry>Read a value from a text file</entry>
               </row>
 
               <row>
                 <entry><literal>void writeValueToBinaryFile(str namePBFFile,
                 value val)</literal></entry>
 
-                <entry>write a value to a binary file in PBF format</entry>
+                <entry>Write a value to a binary file in PBF format</entry>
               </row>
 
               <row>
                 <entry><literal>void writeValueToTextFile(str namePBFFile,
                 value val)</literal></entry>
 
-                <entry>write a value to a binary file in PBF format</entry>
+                <entry>Write a value to a binary file in PBF format</entry>
               </row>
             </tbody>
           </tgroup>
@@ -10454,25 +10475,35 @@ int : 3</literal></screen>
       </bibliolist></para>
   </section>
 
+  <section>
+    <title>TODO</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Check all screens.</para>
+      </listitem>
+
+      <listitem>
+        <para>Finish larger examples</para>
+      </listitem>
+
+      <listitem>
+        <para>Solve formatting issues in summary tables.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
   <glossary version="5.0">
     <glossdiv xml:id="section.glossary">
       <title>Glossary of Terminology (TODO)</title>
 
       <glossentry>
-        <glossterm>Abstract Data Type (ADT)</glossterm>
-
-        <glossdef>
-          <para>Structural description of the interface of a component. Used
-          by APIGEN to generate an Application Programmer's Interface (API)
-          for the component.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
         <glossterm>Annotation</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>An annotation is a (name, value) pair that can be attached to
+          a datatype value. The value can be retrieved and changed via the
+          name. One datatype value can have more than one annotation.</para>
         </glossdef>
       </glossentry>
 
@@ -10482,7 +10513,8 @@ int : 3</literal></screen>
         <glossdef>
           <para>Algebraic Specification Formalism. This a notation for
           describing rewrite rules and is mostly used for defining software
-          analysis, fact extraction, and software transformation.</para>
+          analysis, fact extraction, and software transformation. It is the
+          predecessor of Rascal.</para>
         </glossdef>
       </glossentry>
 
@@ -10492,7 +10524,8 @@ int : 3</literal></screen>
         <glossdef>
           <para>The combination of the formalisms ASF and SDF. ASF+SDF can
           describe both the syntax of a language and the operations on that
-          language (checking, execution, analysis, transformation).</para>
+          language (checking, execution, analysis, transformation). It is the
+          predecessor of Rascal.</para>
         </glossdef>
       </glossentry>
 
@@ -10500,13 +10533,13 @@ int : 3</literal></screen>
         <glossterm>AsFix</glossterm>
 
         <glossdef>
-          <para>ASF+SDF Fixed format. The dataformat used to represent parse
+          <para>ASF+SDF Fixed format. A dataformat used to represent parse
           trees. AsFix is a specialized view on ATerms. Important features
           are:</para>
 
           <itemizedlist>
             <listitem>
-              <para>The AsFix format is a full parse trees that contains all
+              <para>The AsFix format is a full parse tree that contains all
               the original layout and comments from the original source code
               program that was parsed.</para>
             </listitem>
@@ -10520,11 +10553,14 @@ int : 3</literal></screen>
 
             <listitem>
               <para>The AsFix format does not contain source code coordinates
-              per se, but a separate tool (<command>addPosInfo</command>) can
-              easily compute these coordinates and add them to the parse tree
-              in the form of annotations.</para>
+              per se, but a separate tool can easily compute these coordinates
+              and add them to the parse tree in the form of
+              annotations.</para>
             </listitem>
           </itemizedlist>
+
+          <para>AsFix is the predecessor of the UPTR format used by
+          Rascal</para>
         </glossdef>
       </glossentry>
 
@@ -10553,6 +10589,9 @@ int : 3</literal></screen>
               size-reduction of the data.</para>
             </listitem>
           </itemizedlist>
+
+          <para>ATerms are the predecessors of the shared PDB implementation
+          used in Rascal.</para>
         </glossdef>
       </glossentry>
 
@@ -10560,7 +10599,12 @@ int : 3</literal></screen>
         <glossterm>Backtracking</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>Backtracking is a general algorithmic method for finding all
+          (or some) solutions to some computational problem, in the case of
+          Rascal for pattern matching. It incrementally builds candidate
+          matches, and abandons each partial match ("backtracks") as soon as
+          it determines that it cannot possibly be completed to a valid
+          match.</para>
         </glossdef>
       </glossentry>
 
@@ -10568,19 +10612,10 @@ int : 3</literal></screen>
         <glossterm>Bag</glossterm>
 
         <glossdef>
-          <para></para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Box</glossterm>
-
-        <glossdef>
-          <para>Intermediate representation of the prettyprinter. A parse tree
-          is first converted to a box term that includes all desired
-          formatting directives (alignment, font and color directives, and the
-          like). Next, the box term is converted to various output formats
-          (plain text, HTML, etc.).</para>
+          <para>A bag can contain arbitrary values, without any particular
+          order, and possibly repeated elements. All elements of a bag have
+          the same type. <remark>Rascal does not (yet?) support
+          bags.</remark></para>
         </glossdef>
       </glossentry>
 
@@ -10588,7 +10623,8 @@ int : 3</literal></screen>
         <glossterm>Comprehension</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>An algorithmic schema for computing lists, sets or
+          relations.</para>
         </glossdef>
       </glossentry>
 
@@ -10596,7 +10632,9 @@ int : 3</literal></screen>
         <glossterm>Constraint solving</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>The process of finding solutions to a problem that is only
+          specified by the boundary conditions (constraints) that a solution
+          should satisfy.</para>
         </glossdef>
       </glossentry>
 
@@ -10604,7 +10642,8 @@ int : 3</literal></screen>
         <glossterm>Control flow</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>The order in which the statements in a program can be
+          executed. Usually represented as a control flow graph.</para>
         </glossdef>
       </glossentry>
 
@@ -10612,8 +10651,8 @@ int : 3</literal></screen>
         <glossterm>Debugger</glossterm>
 
         <glossdef>
-          <para>The debugger allows a step-by-step execution of the rewrite
-          rules defined in ASF+SDF specifications.</para>
+          <para>A debugger allows the step-by-step execution of a
+          program.</para>
         </glossdef>
       </glossentry>
 
@@ -10621,7 +10660,17 @@ int : 3</literal></screen>
         <glossterm>Dataflow</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>The order in which values may be assigned to variables during
+          program execution. Usually represented as a data flow graph.</para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
+        <glossterm>Eclipse</glossterm>
+
+        <glossdef>
+          <para>Interactive Development Environment (IDE) for Java and other
+          languages. The Rascal IDE is built on top of Eclipse and IMP.</para>
         </glossdef>
       </glossentry>
 
@@ -10629,7 +10678,8 @@ int : 3</literal></screen>
         <glossterm>Enumerator</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>A Rascal construct that enumerates all the elements of a given
+          value.</para>
         </glossdef>
       </glossentry>
 
@@ -10637,7 +10687,11 @@ int : 3</literal></screen>
         <glossterm>Function (higher order)</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>A function is a computational entity with typed formal
+          parameters and a typed result. When applied to actual parameters,
+          the function is applied and the result replaces the function call. A
+          higher-order function is a function that has one or more functions
+          as parameter.</para>
         </glossdef>
       </glossentry>
 
@@ -10645,7 +10699,30 @@ int : 3</literal></screen>
         <glossterm>Graph</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>In mathematics a graph is a set of objects (nodes) that may be
+          pairwise connected with links (edges). In Rascal, a graph is a
+          binary relation in which each tuple represents an edge in the
+          corresponding (mathematical) graph.</para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
+        <glossterm>Interactive Development Environment (IDE)</glossterm>
+
+        <glossdef>
+          <para>A programming environment for the interactive design,
+          development, debugging and testing of programs. Eclipse is an
+          example of an IDE.</para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
+        <glossterm>IDE Meta Platform (IMP)</glossterm>
+
+        <glossdef>
+          <para>IMP is an extension of Eclipse and is intended to make it
+          easier to add support for new languages to Eclipse. The Rascal
+          implementation is part of IMP.</para>
         </glossdef>
       </glossentry>
 
@@ -10661,7 +10738,9 @@ int : 3</literal></screen>
         <glossterm>List</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>A list can contain arbitrary values, with a particular order,
+          and possibly repeated elements. All elements of a list have the same
+          type.</para>
         </glossdef>
       </glossentry>
 
@@ -10669,15 +10748,18 @@ int : 3</literal></screen>
         <glossterm>Map</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>A map is a binary relation consisting of 2-tuples (pairs) of
+          the form (key, value) that associate each key with a unique
+          value.</para>
         </glossdef>
       </glossentry>
 
       <glossentry>
-        <glossterm>Matching</glossterm>
+        <glossterm>Meta-Environment</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>The ASF+SDF Meta-Environment is the IDE for writing ASF+SDF
+          specifications.</para>
         </glossdef>
       </glossentry>
 
@@ -10685,7 +10767,8 @@ int : 3</literal></screen>
         <glossterm>Meta-programming</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>The activity of writing programs that manipulate other
+          programs as data.</para>
         </glossdef>
       </glossentry>
 
@@ -10693,10 +10776,8 @@ int : 3</literal></screen>
         <glossterm>Parser</glossterm>
 
         <glossdef>
-          <para>The parser takes a parse table (as produced by the parse table
-          generator) and text (as provided by a text editor) as input and
-          produces a parse tree as output. Any errors are shown in the error
-          display of the GUI.</para>
+          <para>A program that performs syntactic analysis on a given input
+          text and builds a parse tree.</para>
         </glossdef>
       </glossentry>
 
@@ -10704,9 +10785,9 @@ int : 3</literal></screen>
         <glossterm>Parse table</glossterm>
 
         <glossdef>
-          <para>A parse table is an efficient representation (ATerm) of the
-          base language as defined by the ASF+SDF modules and enables
-          efficient parsing.</para>
+          <para>A parse table is produced by a parse table generator and is an
+          efficient representation of grammar that can be used by a
+          parser.</para>
         </glossdef>
       </glossentry>
 
@@ -10714,9 +10795,8 @@ int : 3</literal></screen>
         <glossterm>Parse table generator</glossterm>
 
         <glossdef>
-          <para>The parse table generator takes syntax sections from the
-          ASF+SDF specification and converts them to a parse table to be used
-          for the parsing of terms.</para>
+          <para>A parse table generator takes a grammar as input and converts
+          it to a parse table to be used by a parser.</para>
         </glossdef>
       </glossentry>
 
@@ -10724,8 +10804,8 @@ int : 3</literal></screen>
         <glossterm>Parse tree</glossterm>
 
         <glossdef>
-          <para>Tree-structured representation (in AsFix) of a text that has
-          been analyzed by a parser.</para>
+          <para>Tree-structured representation of a text that has been
+          analyzed by a parser.</para>
         </glossdef>
       </glossentry>
 
@@ -10733,7 +10813,8 @@ int : 3</literal></screen>
         <glossterm>Pattern</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>A structural description of values that is used for
+          matching.</para>
         </glossdef>
       </glossentry>
 
@@ -10741,7 +10822,19 @@ int : 3</literal></screen>
         <glossterm>Pattern matching</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>Matching is an algorithmic method for determining the
+          structural similarity of a pattern and a subject value. The pattern
+          may contain variables that are bound to corresponding parts of the
+          subject value when the match succeeds.</para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
+        <glossterm>Program Data Base (PDB)</glossterm>
+
+        <glossdef>
+          <para>Subsystem of IMP that is responsible for implementating
+          Rascal's datatypes.</para>
         </glossdef>
       </glossentry>
 
@@ -10749,7 +10842,8 @@ int : 3</literal></screen>
         <glossterm>Polymorphism</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>Functions and datatypes that can handle values of different
+          types in a uniform manner.</para>
         </glossdef>
       </glossentry>
 
@@ -10757,11 +10851,11 @@ int : 3</literal></screen>
         <glossterm>Prettyprinter</glossterm>
 
         <glossdef>
-          <para>The prettyprinter converts parse trees to text. The
+          <para>A prettyprinter converts parse trees to text. The
           prettyprinter uses default rules to insert layout in a parse tree so
           that its corresponding text is presented in a uniform way.
-          Optionally, the ASF+SDF specification may contain formatting rules
-          that can replace this default behaviour.</para>
+          Optionally, user-defined formatting rules can replace this default
+          behaviour.</para>
         </glossdef>
       </glossentry>
 
@@ -10769,7 +10863,8 @@ int : 3</literal></screen>
         <glossterm>Relation</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>A relation is a set of tuples. All tuples of a relation have
+          the same type.</para>
         </glossdef>
       </glossentry>
 
@@ -10778,8 +10873,8 @@ int : 3</literal></screen>
 
         <glossdef>
           <para>A small scripting language for defining relational
-          expressions. Used for the analysis of facts extracted from
-          software.</para>
+          expressions. Used for the analysis of facts extracted from software.
+          Predecessor of Rascal.</para>
         </glossdef>
       </glossentry>
 
@@ -10787,7 +10882,9 @@ int : 3</literal></screen>
         <glossterm>Relational Algebra</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>An algebra on relations that provides operators on relations
+          that yield new relations. Relational algebra uses no variables and
+          provides an operational view on relations.</para>
         </glossdef>
       </glossentry>
 
@@ -10795,7 +10892,18 @@ int : 3</literal></screen>
         <glossterm>Relational calculus</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>Relational calculus provides a more declarative and
+          descriptive way to formulate operations on relations and depends on
+          the use of variables.</para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
+        <glossterm>Read-Eval-Print-Loop (REPL)</glossterm>
+
+        <glossdef>
+          <para>Command-line loop that reads user input, evaluates it and
+          prints the result.</para>
         </glossdef>
       </glossentry>
 
@@ -10803,7 +10911,12 @@ int : 3</literal></screen>
         <glossterm>Rewrite rule</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>A rewrite rule consists of a pattern and a replacement. A
+          rewrite rule is applied to all subparts of a datastructure and when
+          the pattern matches the matching subpart is replaced. Pattern and
+          replacement may contain variables and variables in the replacement
+          are first replaced by their value before the replacement is
+          applied.</para>
         </glossdef>
       </glossentry>
 
@@ -10812,7 +10925,8 @@ int : 3</literal></screen>
 
         <glossdef>
           <para>Syntax Definition Formalism. A notation for describing the
-          grammar of programming and application languages.</para>
+          grammar of programming and application languages. SDF definitions
+          can be imported in Rascal.</para>
         </glossdef>
       </glossentry>
 
@@ -10820,7 +10934,9 @@ int : 3</literal></screen>
         <glossterm>Set</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>A set can contain arbitrary values, without any particular
+          order, and no repeated elements. All elements of a set have the same
+          type.</para>
         </glossdef>
       </glossentry>
 
@@ -10828,15 +10944,9 @@ int : 3</literal></screen>
         <glossterm>Side-effect</glossterm>
 
         <glossdef>
-          <para></para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Substitution</glossterm>
-
-        <glossdef>
-          <para></para>
+          <para>In imperative programming languages like C and Java,
+          assignments cause changes in a global state that are visible for
+          other statements and procedures.</para>
         </glossdef>
       </glossentry>
 
@@ -10844,7 +10954,8 @@ int : 3</literal></screen>
         <glossterm>Syntax tree</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>Tree-structured representation of a text that has been
+          analyzed by a parser.</para>
         </glossdef>
       </glossentry>
 
@@ -10859,48 +10970,13 @@ int : 3</literal></screen>
       </glossentry>
 
       <glossentry>
-        <glossterm>The Meta-Environment</glossterm>
-
-        <glossdef>
-          <para>The architecture of The Meta-Environment (or just "the
-          system") is the primary object of study of this document.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
         <glossterm>Term rewriting</glossterm>
 
         <glossdef>
-          <para></para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>ToolBus</glossterm>
-
-        <glossdef>
-          <para><package>The ToolBus coordination architecture enables the
-          flexible and controlled combination and orchestration of software
-          components. It is used as backbone for The Meta-Environment. The
-          ToolBus has the following characteristics:</package><itemizedlist>
-              <listitem>
-                <para>Components (or <emphasis>tools</emphasis> in ToolBus
-                parlance) can be written in different programming
-                languages.</para>
-              </listitem>
-
-              <listitem>
-                <para>Components can be running on different machines.</para>
-              </listitem>
-
-              <listitem>
-                <para>All interactions between components are regulated by a
-                ToolBus script (or Tscript for short) that is executing in the
-                ToolBus. Tscript is a concurrent language that allows the
-                definition of parallel processes, messaging between these
-                processes and interaction between processes and tools.</para>
-              </listitem>
-            </itemizedlist></para>
+          <para>Term rewriting is the act of applying a set of rewrite rules
+          to a subject value. The rules are applied as long as any pattern in
+          some rule matches. The result is the subject value with replacements
+          made as prescribed by the matching rules.</para>
         </glossdef>
       </glossentry>
 
@@ -10908,24 +10984,29 @@ int : 3</literal></screen>
         <glossterm>Traversal</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>The process of visiting all the sub-elements of a larger
+          datastructure. The <literal>visit</literal> expression and
+          enumerators provide traversal functionality in Rascal.</para>
         </glossdef>
       </glossentry>
 
       <glossentry>
-        <glossterm>Tscript</glossterm>
+        <glossterm>Tuple</glossterm>
 
         <glossdef>
-          <para>The script that describes the cooperation between components
-          in a ToolBus-based application.</para>
+          <para>A tuple is an ordered list of values of possibly different
+          type. An element of a tuple may have a label by which that element
+          can be selected or modified.</para>
         </glossdef>
       </glossentry>
 
       <glossentry>
-        <glossterm>Typechecking</glossterm>
+        <glossterm>Type checking</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>The activity to check that all entities in a program are
+          declared and are used in a way that is consistent with their
+          declared type.</para>
         </glossdef>
       </glossentry>
 
@@ -10933,7 +11014,17 @@ int : 3</literal></screen>
         <glossterm>Type inference</glossterm>
 
         <glossdef>
-          <para></para>
+          <para>The activity to infer the type of program entities from their
+          use.</para>
+        </glossdef>
+      </glossentry>
+
+      <glossentry>
+        <glossterm>UPTR</glossterm>
+
+        <glossdef>
+          <para>Universal Parse Tree Representation is the parse tree format
+          used in Rascal. It is the successor of AsFix.</para>
         </glossdef>
       </glossentry>
     </glossdiv>
