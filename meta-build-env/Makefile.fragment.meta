@@ -14,7 +14,7 @@ EXTRA_DIST += $(wildcard *.m4) \
 CLEANFILES += $(PACKAGE)-uninstalled.pc \
 			.project \
 			.classpath \
-	    META-INF/MANIFEST.MF \
+			META-INF/MANIFEST.MF \
 			build.properties \
 			.settings/org.eclipse.jdt.ui.prefs \
 			.settings/org.eclipse.jdt.core.prefs
@@ -57,8 +57,25 @@ installDir: dummy
 	  sed $${SEDCMD} < $${file} > $${file}.tmp ;\
 	  mv $${file}.tmp $${file} ; \
 	done
-
-
+	ALLARCHIVES=""; \
+	for dep in ${PACKAGE_ALL_DEPS}; do \
+		prefix=`pkg-config --variable prefix $${dep}`; \
+		for library in `find $${prefix}/lib/lib*.a`; do \
+			if [ "`echo '$${ALLARCHIVES}' | grep $${library}`" == "" ]; then \
+				ALLARCHIVES="$${ALLARCHIVES} $${library}"; \
+			fi; \
+		done; \
+	done; \
+	mkdir -p ${top_builddir}/temp; \
+	cd ${top_builddir}/temp; \
+	for archive in $${ALLARCHIVES}; do \
+		ar -x $${archive}; \
+	done; \
+	ALLOBJECTS="`find *.o`"; \
+	gcc -m32 -shared $${ALLOBJECTS} -Wl,-soname -Wl,../install/lib/completeLib -o ../install/lib/completeLib; \
+	cd -; \
+	rm -Rf temp
+	
 ${JAVA_JAR}: installDir
 	jar -cMf ${JAVA_JAR} META-INF/MANIFEST.MF install
 
