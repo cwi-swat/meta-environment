@@ -30,11 +30,11 @@ dummy:
 
 copyDir=\
 	if [ -d $1/$2 ]; then \
-	   cp -rf $1/$2 ${top_builddir}/install; \
+	   cp -rf $1/$2 ${top_builddir}/installed; \
 	fi
 
 installDir: dummy
-	mkdir -p ${top_builddir}/install
+	mkdir -p ${top_builddir}/installed
 	for dep in ${PACKAGE_ALL_DEPS}; do \
 	        prefix=`pkg-config --variable prefix $${dep}`; \
 		if [ ! -z $${prefix} ]; then \
@@ -53,7 +53,7 @@ installDir: dummy
 	        newpath=`printf "%-$${#prefix}s" ".." | tr " " "/"` ; \
 	        SEDCMD="$${SEDCMD} -e s@$${prefix}@$${newpath}@g"  ; \
 	done ; \
-	for file in `find install -type f`; do \
+	for file in `find installed -type f`; do \
 	  sed $${SEDCMD} < $${file} > $${file}.tmp ;\
 	  mv $${file}.tmp $${file} ; \
 	done
@@ -72,13 +72,13 @@ installDir: dummy
 		ar -x $${archive}; \
 	done; \
 	ALLOBJECTS="`find *.o`"; \
-	gcc -m32 -shared $${ALLOBJECTS} -Wl,-soname -Wl,../install/lib/completeLib -o ../install/lib/completeLib; \
+	gcc -m32 -shared $${ALLOBJECTS} -Wl,-soname -Wl,../installed/lib/completeLib -o ../installed/lib/completeLib; \
 	cd -; \
 	rm -Rf temp
 	
 ${JAVA_JAR}: installDir
-	jar -cMf ${JAVA_JAR} META-INF/MANIFEST.MF install
+	jar -cMf ${JAVA_JAR} META-INF/MANIFEST.MF installed
 
 clean-local:
 	rm -f ${JARFILE}
-	rm -rf install
+	rm -rf installed
