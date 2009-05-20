@@ -1,5 +1,8 @@
 $Id$
 
+Wed May 20 17:19:37 CEST 2009 <jurgenv@cwi.nl>
+ * src/parseTable/*.c: fixed memory issues in parse table caching.
+
 Mon Mar  9 13:11:00 GMT 2009 <gre@ecs.soton.ac.uk>
  * sglr.pc.in: bumped version number.
 
