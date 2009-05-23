@@ -63,18 +63,7 @@
         </figure></para>
 
       <para>This is an abstract view on solving programming problems, but is
-      it uncommon? No, so let's illustrate it with a few examples.<warning>
-          <para>Find better images to illustrate this, e.g. in go a bicyle and
-          a motor, and synthesize a motorbike.</para>
-        </warning><warning>
-          <para>These examples should come back in the larger examples later
-          on.</para>
-        </warning></para>
-
-      <warning>
-        <para>Parsing and constaint solving are not yet well-represented
-        here</para>
-      </warning>
+      it uncommon? No, so let's illustrate it with a few examples.</para>
 
       <para><example>
           <title>Finding security breaches</title>
@@ -246,6 +235,12 @@
           concepts and this makes the language easy to learn and easy to
           use.</para>
         </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Eclipse integration</emphasis> makes
+          Rascal programming a breeze. All familiar tools are at your
+          fingertips.</para>
+        </listitem>
       </itemizedlist>
 
       <para>Interested? Read on!</para>
@@ -328,7 +323,12 @@
               <para>How to set up a Rascal project.</para>
             </listitem>
           </itemizedlist>
+
+          <para>For the moment see http://www.meta-environment.org for
+          information.</para>
         </warning></para>
+
+      <para></para>
     </section>
 
     <section>
@@ -391,7 +391,8 @@
 
       <para>Rascal code fragments are always shown as a listing like
       this:<programlisting>  .. here is some Rascal code ...</programlisting>Interactive
-      sessions are show as a screen like this:<screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
+      sessions are show as a screen like this (<remark>make a more clear
+      typographic distinction between listings and screens</remark>):<screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
 <computeroutput><replaceable>Type</replaceable> : <replaceable>Value</replaceable></computeroutput></screen>where:</para>
 
       <itemizedlist>
@@ -421,11 +422,6 @@
             </note></para>
         </listitem>
       </itemizedlist>
-
-      <warning>
-        <para>Make a more clear typographic distinction between listings and
-        screens.</para>
-      </warning>
     </section>
   </section>
 
@@ -670,9 +666,10 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
 
       <para>Many problems can be solved by forms of constraint solving. Rascal
       provides a <literal>solve</literal> statement that helps writing
-      constraint solvers. <warning>
-          <para>Add example.</para>
-        </warning></para>
+      constraint solvers. A typical example is dataflow analysis where the
+      propagation of values through a program can be described by a set
+      equations. Their solution can be found with the <literal>solve</literal>
+      statement.</para>
     </section>
 
     <section>
@@ -713,11 +710,11 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
 
       <para>The ubiquitous hello world program looks in Rascal as
       follows:<screen><prompt>rascal&gt;</prompt> <userinput>import IO;</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>println("Hello, this is my first Rascal program");</userinput>
 <computeroutput>Hello, this is my first Rascal program
-done.</computeroutput>
+void: null</computeroutput>
 </screen>First, the library module IO (see <xref linkend="section.lib-IO" />)
       is imported since hello world requires printing. Next, we call
       <literal>println</literal> and poudly observe our first Rascal
@@ -733,26 +730,31 @@ done.</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
 <computeroutput>Hello, this is my first Rascal program
-done.</computeroutput></screen>The summit of hello-engineering can be reached
-      by placing all the above in a separate module:<programlisting>module Hello
+void: null</computeroutput></screen>The summit of hello-engineering can be
+      reached by placing all the above in a separate module:<programlisting>module demo::Hello
 
 public void hello() {
    println("Hello, this is my first Rascal program");
 }</programlisting>Note that we added a public modifier to the definition of
       hello, since we want it to be visible outside the Hello module. Using
-      this Hello module is now simple:<screen><prompt>rascal&gt;</prompt> <userinput>import Hello;</userinput>
-<computeroutput>done.</computeroutput>
+      this Hello module is now simple:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Hello;</userinput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
 <computeroutput>Hello, this is my first Rascal program
-done.</computeroutput></screen></para>
+void: null</computeroutput></screen><note>
+          <para>All examples in this book can be found in the
+          <literal>demo</literal> directory of the Rascal distribution. That
+          is why we prefix all names of examples modules with
+          <literal>demo::</literal>.</para>
+        </note></para>
     </section>
 
     <section>
       <title>Factorial</title>
 
       <para>Here is another classical example, computing the factorial
-      function:<programlisting>module Factorial
+      function:<programlisting>module demo::Factorial
 
 public int fac(int N)
 {
@@ -763,8 +765,8 @@ public int fac(int N)
       <literal><replaceable>Exp</replaceable><subscript>1</subscript> ?
       <replaceable>Exp</replaceable><subscript>2</subscript> :
       <replaceable>Exp</replaceable><subscript>3</subscript></literal> to
-      distinguish cases and here is how to use it:<screen><prompt>rascal&gt;</prompt> <userinput>import Factorial;</userinput>
-<computeroutput>done.</computeroutput>
+      distinguish cases and here is how to use it:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Factorial;</userinput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>fac(47);</userinput>
 <computeroutput>int: 258623241511168180642964355153611979969197632389120000000000</computeroutput></screen></para>
@@ -778,22 +780,23 @@ public int fac(int N)
       <para>Suppose we have binary trees---trees with exactly two
       children--that have integers as their leaves. Also suppose that our
       trees can have red and black nodes. Such trees can be defined as
-      follows:<programlisting>module Trees
+      follows:<programlisting>module demo::ColoredTrees
 
-data Tree = leaf(int N) 
-          | red(Tree left, Tree right) 
-          | black(Tree left, tree right);</programlisting></para>
+data ColoredTree = 
+            leaf(int N) 
+          | red(ColoredTree left, ColoredTree right) 
+          | black(ColoredTree left, ColoredTree right);</programlisting></para>
 
       <para>We can use them as follows:</para>
 
-      <para><screen><prompt>rascal&gt;</prompt> <userinput>import Trees;</userinput>
-<computeroutput>done.</computeroutput>
+      <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::ColoredTrees;</userinput>
+<computeroutput>void: null</computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>rb = red(black(leaf(1), red(leaf(2),leaf(3))));</userinput>
-<computeroutput>Tree: red(black(leaf(1), red(leaf(2),leaf(3))))</computeroutput></screen>We
-      define two operations on Trees, one to count the red nodes, and one to
-      add all leaves:<programlisting>// continuing module Tree
+<computeroutput>ColoredTree: red(black(leaf(1), red(leaf(2),leaf(3))))</computeroutput></screen>We
+      define two operations on ColoredTrees, one to count the red nodes, and
+      one to add all leaves:<programlisting>// continuing module demo::ColoredTrees
 
-public int cntRed(Tree t){
+public int cntRed(ColoredTree t){
    int c = 0;
    visit(t) {
      case red(_,_): c = c + 1;<co xml:id="co.cntRed" />
@@ -801,7 +804,7 @@ public int cntRed(Tree t){
    return c;
 }
 
-public int addLeaves(Tree t){
+public int addLeaves(ColoredTree t){
    int c = 0;
    visit(t) {
      case leaf(int N): c = c + N;<co xml:id="co.cntLeaves" />
@@ -824,20 +827,21 @@ public int addLeaves(Tree t){
       <para><screen><prompt>rascal&gt;</prompt> <userinput>cntRed(rb);</userinput>
 <computeroutput>int: 2</computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>addLeaves(rb);</userinput>
-<computeroutput>int : 6</computeroutput></screen></para>
+<computeroutput>int: 6</computeroutput></screen></para>
 
       <para>A final touch to this example is to introduce green nodes and to
-      replace all red nodes by green ones:<programlisting>// continuing module Tree
+      replace all red nodes by green ones:<programlisting>// continuing module demo::ColoredTrees
 
-data Tree = green(Tree left, Tree right);<co xml:id="co.Tree-green" />
+data ColoredTree = green(ColoredTree left, ColoredTree right);<co
+            xml:id="co.Tree-green" />
 
-public Tree makeGreen(Tree t){
+public ColoredTree makeGreen(ColoredTree t){
    return visit(t) {
      case red(l, r) =&gt; green(l, r);      <co xml:id="co.makeGreen" />
    };
 }</programlisting><calloutlist>
           <callout arearefs="co.Tree-green">
-            <para>Extend the Tree datatype with a new green
+            <para>Extend the ColoredTree datatype with a new green
             constructor.</para>
           </callout>
 
@@ -850,7 +854,7 @@ public Tree makeGreen(Tree t){
         </calloutlist></para>
 
       <para>This is used as follows:<screen><prompt>rascal&gt;</prompt> <userinput>makeGreen(rb);</userinput>
-<computeroutput>Tree : green(black(leaf(1), green(leaf(2),leaf(3))))</computeroutput></screen></para>
+<computeroutput>ColoredTree: green(black(leaf(1), green(leaf(2),leaf(3))))</computeroutput></screen></para>
     </section>
 
     <section>
@@ -860,7 +864,7 @@ public Tree makeGreen(Tree t){
       the systematic layout of publications. Authors do not systematically
       capitalize words in titles---"Word replacement" instead of Word
       Replacement"--- and you want to correct this. Here is one way to solve
-      this problem:<programlisting>module WordReplacement
+      this problem:<programlisting>module demo::WordReplacement
 import String;
 
 public str capitalize(str word)
@@ -894,7 +898,7 @@ public str capitalize(str word)
         </calloutlist></para>
 
       <para>The next challenge is how to capitalize all the words in a string.
-      Here are two solutions:<programlisting>// continuing module WordReplacement
+      Here are two solutions:<programlisting>// continuing module demo::WordReplacement
 
 public str capAll1(str S)
 {
@@ -942,8 +946,8 @@ public str capAll2(str S)
 
       <para>We can apply this all as follows:</para>
 
-      <para><screen><prompt>rascal&gt;</prompt> <userinput>import WordReplacement;</userinput>
-<computeroutput>done.</computeroutput>
+      <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::WordReplacement;</userinput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>capitalize("rascal");</userinput>
 <computeroutput>str: "rascal"</computeroutput>
@@ -1422,7 +1426,7 @@ public str capAll2(str S)
         procedures:</para>
 
         <screen>rascal&gt; <userinput>alias proc = str;</userinput>
-<computeroutput>done.</computeroutput></screen>
+<computeroutput>void: null</computeroutput></screen>
 
         <para>Suppose that the following facts have been extracted from the
         source code and are represented by the relation
@@ -1432,8 +1436,8 @@ public str capAll2(str S)
    { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, &lt;"d","e"&gt;, 
      &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;
    };</userinput>
-<computeroutput>rel[proc,proc] : { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
-                   &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;}</computeroutput></screen>
+<computeroutput>rel[proc,proc]: { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
+                  &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;}</computeroutput></screen>
 
         <para>This concludes the preparatory steps and now we move on to
         answer the questions.</para>
@@ -1449,11 +1453,11 @@ public str capAll2(str S)
           number of tuples in the <literal>Calls</literal> relation, as
           follows. First, we need the Relation library (described in <xref
           linkend="section.lib-Relation" />) so we import it:<screen><prompt>rascal&gt;</prompt> <userinput>import Relation;</userinput>
-<computeroutput>done.</computeroutput></screen>next we describe a new variable
-          and calculate the number of tuples:</para>
+<computeroutput>void: null</computeroutput></screen>next we describe a new
+          variable and calculate the number of tuples:</para>
 
           <para><screen><prompt>rascal&gt;</prompt> <userinput>nCalls = size(Calls);</userinput>
-<computeroutput>int : 8</computeroutput></screen>The library function
+<computeroutput>int: 8</computeroutput></screen>The library function
           <literal>size</literal> determines the number of elements in a set
           or relation and is explained in <xref
           linkend="section.lib-Relation" />. In this example,
@@ -1469,10 +1473,10 @@ public str capAll2(str S)
           then determining the number of names:</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>procs = carrier(Calls);</userinput>
-<computeroutput><literal>set[proc] : {"a", "b", "c", "d", "e", "f", "g"}</literal></computeroutput>
+<computeroutput><literal>set[proc]: {"a", "b", "c", "d", "e", "f", "g"}</literal></computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>nprocs = size(procs);</userinput>
-<computeroutput>int : 7</computeroutput></screen>
+<computeroutput>int: 7</computeroutput></screen>
 
           <para>The built-in function <literal>carrier</literal> determines
           all the values that occur in the tuples of a relation. In this case,
@@ -1482,7 +1486,7 @@ public str capAll2(str S)
           expressing this would be to combine both steps:</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>nprocs = size(carrier(Calls));</userinput>
-<computeroutput>int : 7</computeroutput></screen>
+<computeroutput>int: 7</computeroutput></screen>
         </section>
 
         <section>
@@ -1504,10 +1508,10 @@ public str capAll2(str S)
           relation:</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>import Graph;</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>entryPoints = top(Calls);</userinput>
-<computeroutput>set[proc] : {"a", "f"}</computeroutput></screen>
+<computeroutput>set[proc]: {"a", "f"}</computeroutput></screen>
 
           <para>In this case, <literal>entryPoints</literal> is equal to
           <literal>{"a", "f"}</literal>. In other words, procedures
@@ -1523,7 +1527,7 @@ public str capAll2(str S)
           that are being called but do not make any calls themselves:</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>bottomCalls = bottom(Calls);</userinput>
-<computeroutput>set[proc] : {"c", "e"}</computeroutput></screen>
+<computeroutput>set[proc]: {"c", "e"}</computeroutput></screen>
 
           <para>In this case, <literal>bottomCalls</literal> is equal to
           <literal>{"c", "e"}</literal>.</para>
@@ -1537,9 +1541,9 @@ public str capAll2(str S)
           <literal>Calls</literal> relation:</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>closureCalls = Calls+;</userinput>
-<computeroutput>rel[proc, proc] : {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
-                   &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;, 
-                   &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "e"&gt;, &lt;"a", "e"&gt;}</computeroutput></screen>
+<computeroutput>rel[proc, proc]: {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
+                  &lt;"d","e"&gt;, &lt;"f", "e"&gt;, &lt;"f", "g"&gt;, &lt;"g", "e"&gt;, 
+                  &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "e"&gt;, &lt;"a", "e"&gt;}</computeroutput></screen>
         </section>
 
         <section>
@@ -1556,12 +1560,12 @@ public str capAll2(str S)
           following:</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>calledFromA = closureCalls["a"];</userinput>
-<computeroutput>set[proc] : {"b", "c", "d", "e"}</computeroutput></screen>
+<computeroutput>set[proc]: {"b", "c", "d", "e"}</computeroutput></screen>
 
           <para>and</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>calledFromF = closureCalls["f"];</userinput>
-<computeroutput>set[proc] : {"e", "g"}</computeroutput></screen>
+<computeroutput>set[proc]: {"e", "g"}</computeroutput></screen>
         </section>
 
         <section>
@@ -1573,7 +1577,7 @@ public str capAll2(str S)
           <literal>calledFromF:</literal></para>
 
           <para><screen><prompt>rascal&gt;</prompt> <userinput>commonProcs = calledFromA &amp; calledFromF;</userinput>
-<computeroutput>set[proc] : {"e"}</computeroutput></screen></para>
+<computeroutput>set[proc]: {"e"}</computeroutput></screen></para>
 
           <para>In other words, the procedures called from both entry points
           are mostly disjoint except for the common procedure
@@ -1619,7 +1623,7 @@ public rel[comp,comp] lift(rel[proc,proc] aCalls,
       define a call relation and a partof relation:</para>
 
       <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::Lift;</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>Calls = {&lt;"main", "a"&gt;, &lt;"main", "b"&gt;, &lt;"a", "b"&gt;, 
                          &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "d"&gt;
@@ -1654,11 +1658,11 @@ public rel[comp,comp] lift(rel[proc,proc] aCalls,
     </section>
 
     <section xml:id="section.analyzing-java">
-      <title>Analyzing the Structure of Java Systems (TODO)</title>
+      <title>Analyzing the Structure of Java Systems</title>
 
       <para>Now we consider the analysis of Java systems (inspired by
       <biblioref linkend="BNL03" />). Suppose that the type
-      <literal>class</literal> is defined as follows<programlisting>type class = str</programlisting>and
+      <literal>class</literal> is defined as follows<programlisting>alias class = str;</programlisting>and
       that the following relations are available about a Java
       application:</para>
 
@@ -1753,9 +1757,9 @@ public class LocatorHandle extends AbstractHandle {
       hard. Therefore it is interesting to spot classes that occur as part of
       a cyclic dependency. Here we determine cyclic uses of classes that
       include calls, inheritance and containment. This is achieved as
-      follows:<programlisting>rel[class,class] USE = CALL union CONTAINMENT union INHERITANCE
+      follows:<programlisting>rel[class,class] USE = CALL + CONTAINMENT + INHERITANCE;
 set[str] ClassesInCycle =
-   {C1 | &lt;class C1, class C2&gt; : USE+, C1 == C2}</programlisting>First,
+   {C1 | &lt;class C1, class C2&gt; &lt;- USE+, C1 == C2};</programlisting>First,
       we define the <literal>USE</literal> relation as the union of the three
       available relations <literal>CALL</literal>,
       <literal>CONTAINMENT</literal> and <literal>INHERITANCE</literal>. Next,
@@ -1770,11 +1774,11 @@ set[str] ClassesInCycle =
       dependency, but we also want to know which classes are involved in such
       a cycle. In other words, we want to associate with each class a set of
       classes that are responsible for the cyclic dependency. This can be done
-      as follows.<programlisting>rel[class,class] USE = CALL union CONTAINMENT union INHERITANCE
-set[class] CLASSES = carrier(USE)
-rel[class,class] USETRANS = USE+
+      as follows.<programlisting>rel[class,class] USE = CALL + CONTAINMENT + INHERITANCE;
+set[class] CLASSES = carrier(USE);
+rel[class,class] USETRANS = USE+;
 rel[class,set[class]] ClassCycles = 
-   {&lt;C, USETRANS[C]&gt; | class C : CLASSES, &lt;C, C&gt; in USETRANS }</programlisting>First,
+   {&lt;C, USETRANS[C]&gt; | class C &lt;- CLASSES, &lt;C, C&gt; in USETRANS };</programlisting>First,
       we introduce two new shorthands: <literal>CLASSES</literal> and
       <literal>USETRANS</literal>. Next, we consider all classes
       <literal>C</literal> with a cyclic dependency and add the pair
@@ -1786,8 +1790,7 @@ rel[class,set[class]] ClassCycles =
     </section>
 
     <section xml:id="section.unitialized-variables">
-      <title>Finding Uninitialized and Unused Variables in a Program
-      (TODO)</title>
+      <title>Finding Uninitialized and Unused Variables in a Program</title>
 
       <para>Consider the following program in the toy language Pico: (This is
       an extended version of the example presented earlier in <biblioref
@@ -1816,7 +1819,7 @@ rel[class,set[class]] ClassCycles =
       <itemizedlist>
         <listitem>
           <para>The <emphasis>control flow graph</emphasis> of the program. We
-          represent it by a relation <literal>PRED</literal> (for predecessor)
+          represent it by a graph <literal>PRED</literal> (for predecessor)
           which relates each statement with each predecessors.</para>
         </listitem>
 
@@ -1836,19 +1839,25 @@ rel[class,set[class]] ClassCycles =
       <para>In this example, we will use line numbers to identify the
       statements in the program. Assuming that there is a tool to extract the
       above information from a program text, we get the following for the
-      above example:<programlisting>type expr = int
-type varname = str
-expr ROOT = 1
-rel[expr,expr] PRED = { &lt;1,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, &lt;5,8&gt;, 
-                        &lt;6,10&gt;, &lt;8,10&gt; 
-                      }
-rel[expr,varname] DEFS = { &lt;3,"x"&gt;, &lt;4,"p"&gt;, &lt;6,"z"&gt;, 
-                           &lt;8,"x"&gt;, &lt;10,"y"&gt;
-                         }
-rel[expr,varname] USES = { &lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"z"&gt; }</programlisting>This
-      concludes the extraction phase. Next, we have to enrich these basic
-      facts to obtain the initialized variables in the program. So, when is a
-      variable <replaceable>V</replaceable> in some statement
+      above example:<programlisting>module demo::Uninit
+import Graph;
+
+alias expr = int;
+alias varname = str;
+
+public expr ROOT = 1;
+
+public graph[expr] PRED = { &lt;1,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, &lt;5,8&gt;, 
+                            &lt;6,10&gt;, &lt;8,10&gt; };
+
+public rel[varname,expr] DEFS = { &lt;"x", 3&gt;, &lt;"p", 4&gt;, &lt;"z", 6&gt;, 
+                                  &lt;"x", 8&gt;, &lt;"y", 10&gt; };
+
+public rel[varname, expr] USES = { &lt;"q", 5&gt;, &lt;"y", 6&gt;, &lt;"x", 6&gt;, 
+                                   &lt;"z", 10&gt; };
+</programlisting>This concludes the extraction phase. Next, we have to enrich
+      these basic facts to obtain the initialized variables in the program.
+      So, when is a variable <replaceable>V</replaceable> in some statement
       <replaceable>S</replaceable> initialized? If we execute the program
       (starting in <literal>ROOT</literal>), there may be several possible
       execution path that can reach statement <replaceable>S</replaceable>.
@@ -1857,22 +1866,23 @@ rel[expr,varname] USES = { &lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"
       these path do <emphasis>not</emphasis> contain a definition of
       <replaceable>V</replaceable>, then <replaceable>V</replaceable> may be
       uninitialized in statement <replaceable>S</replaceable>. This can be
-      formalized as follows:<programlisting>rel[expr,varname] UNINIT = 
-   { &lt;E, V&gt; | &lt;expr E, varname V&gt;: USES, 
-              E in reachX({ROOT}, DEFS[-,V], PRED)
-   }</programlisting></para>
+      formalized as follows:<programlisting>// module demo::Unit continued
+public rel[varname,expr] UNINIT = 
+   { &lt;V,E&gt; | &lt;varname V, expr E&gt; &lt;- USES, 
+              E in reachX({ROOT}, DEFS[V], PRED)
+   };</programlisting></para>
 
       <para>We analyze this definition in detail:</para>
 
       <itemizedlist>
         <listitem>
-          <para><literal>&lt;expr E, varname V&gt; : USES</literal> enumerates
+          <para><literal>&lt;varname V, expr E&gt; : USES</literal> enumerates
           all tuples in the <literal>USES</literal> relation. In other words,
           we consider the use of each variable in turn.</para>
         </listitem>
 
         <listitem>
-          <para><literal>E in reachX({ROOT}, DEFS[-,V], PRED) </literal>is a
+          <para><literal>E in reachX({ROOT}, DEFS[V], PRED) </literal>is a
           test that determines whether statement <replaceable>S</replaceable>
           is reachable from the <literal>ROOT</literal> without encountering a
           definition of variable <replaceable>V</replaceable>.</para>
@@ -1884,7 +1894,7 @@ rel[expr,varname] USES = { &lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"
             </listitem>
 
             <listitem>
-              <para><literal>DEFS[-,V]</literal> yields the set of all
+              <para><literal>DEFS[V]</literal> yields the set of all
               statements in which a definition of variable
               <literal>V</literal> occurs. These nodes form the exclusion set
               for <literal>reachX</literal>: no path will be extended beyond
@@ -1897,14 +1907,14 @@ rel[expr,varname] USES = { &lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"
             </listitem>
 
             <listitem>
-              <para>The result of <literal>reachX({ROOT}, DEFS[-,V], PRED)
+              <para>The result of <literal>reachX({ROOT}, DEFS[V], PRED)
               </literal>is a set that contains all nodes that are reachable
               from the <literal>ROOT</literal> (as well as all intermediate
               nodes on each path).</para>
             </listitem>
 
             <listitem>
-              <para>Finally, <literal>E in reachX({ROOT}, DEFS[-,V], PRED)
+              <para>Finally, <literal>E in reachX({ROOT}, DEFS[V], PRED)
               </literal>tests whether expression <literal>E</literal> can be
               reached from the <literal>ROOT</literal>.</para>
             </listitem>
@@ -1921,14 +1931,20 @@ rel[expr,varname] USES = { &lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"
       of <literal>ROOT</literal>, <literal>PRED</literal>,
       <literal>DEFS</literal>, <literal>USES</literal> and
       <literal>UNINIT</literal>), we get as value for
-      <literal>UNINIT</literal>:<programlisting>{&lt;5, "q"&gt;, &lt;6, "y"&gt;, &lt;10, "z"&gt;}</programlisting>and
+      <literal>UNINIT</literal>:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Uninit;</userinput>
+<computeroutput>void: null</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>UNINIT;</userinput>
+<computeroutput>rel[varname,expr]: {&lt;"q", 5&gt;, &lt;"y", 6&gt;, &lt;"z", 10&gt;}</computeroutput></screen>and
       this is in concordance with the informal analysis given at the beginning
       of this example.</para>
 
       <para>As a bonus, we can also determine the <emphasis>unused</emphasis>
       variables in a program, i.e., variables that are defined but are used
-      nowhere. This is done as follows:<programlisting>set[var] UNUSED = range(DEFS) \ range(USES)</programlisting>Taking
-      the range of the relations <literal>DEFS</literal> and
+      nowhere. This is done as follows:<programlisting>// module demo::Unit continued
+
+public set[varname] UNUSED = domain(DEFS) - domain(USES)</programlisting>Taking
+      the domain of the relations <literal>DEFS</literal> and
       <literal>USES</literal> yields the variables that are defined,
       respectively, used in the program. The difference of these two sets
       yields the unused variables, in this case
@@ -1951,12 +1967,13 @@ rel[expr,varname] USES = { &lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"
       measures the number of decision points in a program and can be computed
       by counting all if statement, case branches in switch statements and the
       number of conditional loops. Given a control flow in the form of a
-      predecessor relation <literal>rel[stat,stat] PRED</literal> between
-      statements, the cyclomatic complexity can be computed in Rascal as
-      follows: <programlisting>module demo::McCabe
-import Relation;
-public int cyclomatic-complexity(rel[stat,stat] PRED){
-    return size(PRED) - size(carrier(PRED)) + 2
+      predecessor graph <literal>graph[&amp;T] PRED</literal> between elements
+      of arbitrary type <literal>&amp;T</literal>, the cyclomatic complexity
+      can be computed in Rascal as follows: <programlisting>module demo::McCabe
+import Graph;
+
+public int cyclomaticComplexity(graph[&amp;T] PRED){
+    return size(PRED) - size(carrier(PRED)) + 2;
 }</programlisting>The number of edges <replaceable>e</replaceable> is equal to
       the number of tuples in <literal>PRED</literal>. The number of nodes
       <replaceable>n</replaceable> is equal to the number of elements in the
@@ -1965,7 +1982,7 @@ public int cyclomatic-complexity(rel[stat,stat] PRED){
     </section>
 
     <section xml:id="section.dataflow">
-      <title>Dataflow Analysis (TODO)</title>
+      <title>Dataflow Analysis</title>
 
       <para><emphasis>Dataflow analysis</emphasis> is a program analysis
       technique that forms the basis for many compiler optimizations. It is
@@ -2020,7 +2037,9 @@ import Graph;
 public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED, &amp;T ROOT)
 {
   set[&amp;T] VERTICES = carrier(PRED);
-  return  { &lt;V,  (VERTICES - {V, ROOT}) - reachX(PRED, {ROOT}, {V})&gt; |  &amp;T V &lt;- VERTICES};
+  return  { &lt;V,  (VERTICES - {V, ROOT}) - reachX(PRED,{ROOT},{V})&gt; 
+            |  &amp;T V &lt;- VERTICES
+          };
 }</programlisting></para>
 
         <para>First, the auxiliary set <literal>VERTICES</literal> (all the
@@ -2045,7 +2064,7 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED, &amp;T ROOT)
 
         <para>First import the above module and consider the sample flow graph
         PRED:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Dominators;</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>rel[int,int] PRED = {
 &lt;1,2&gt;, &lt;1,3&gt;,
@@ -2060,7 +2079,7 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED, &amp;T ROOT)
 &lt;10,7&gt;
 };</userinput>
 
-<computeroutput>rel[int,int] { &lt;1,2&gt;, &lt;1,3&gt;, ...</computeroutput></screen>It
+<computeroutput>rel[int,int]: { &lt;1,2&gt;, &lt;1,3&gt;, ...</computeroutput></screen>It
         is illustrated in<xref linkend="figure.flow-graph" /><figure
             xml:id="figure.flow-graph">
             <title>Flow graph</title>
@@ -2072,7 +2091,7 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED, &amp;T ROOT)
             </mediaobject>
           </figure>The result of applying <literal>dominators</literal> to it
         is as follows:<screen><prompt>rascal&gt;</prompt> <userinput>dominators(PRED);</userinput>
-<computeroutput>rel[int,int] {&lt;1, {2, 3, 4, 5, 6, 7, 8, 9, 10}&gt;, 
+<computeroutput>rel[int,int]: {&lt;1, {2, 3, 4, 5, 6, 7, 8, 9, 10}&gt;, 
 &lt;2, {}&gt;, 
 &lt;3, {4, 5, 6, 7, 8, 9, 10}&gt;, 
 &lt;4, {5, 6, 7, 8, 9, 10}&gt;, 
@@ -2115,9 +2134,8 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED, &amp;T ROOT)
             </mediaobject>
           </figure></para>
 
-        <para>As before, we assume the following basic relations
-        <literal>PRED</literal>, <literal>DEFS</literal> and
-        <literal>USES</literal> about the program:<programlisting>module demo::ReachingDefs
+        <para>We assume the following basicdefinitions to represent
+        information about the program:<programlisting>module demo::ReachingDefs
 
 import Relation;
 import IO;
@@ -2134,52 +2152,66 @@ public rel[stat,def] definition(rel[stat,var] DEFS){
 public rel[stat,def] use(rel[stat, var] USES){
   return {&lt;S, &lt;S, V&gt;&gt; | &lt;stat S, var V&gt; &lt;- USES};
 }
+</programlisting></para>
 
-rel[stat,stat] PRED = { &lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, 
+        <para>Let's use the following values to represent our example:</para>
+
+        <para><screen><prompt>rascal&gt;</prompt> <userinput>rel[stat,stat] PRED = { &lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, 
                         &lt;5,7&gt;, &lt;6,7&gt;, &lt;7,4&gt;
-                      };
-rel[stat, var] DEFS = { &lt;1, "i"&gt;, &lt;2, "j"&gt;, &lt;3, "a"&gt;, &lt;4, "i"&gt;, 
-                       &lt;5, "j"&gt;, &lt;6, "a"&gt;, &lt;7, "i"&gt;
-                      };
-rel[stat, var] USES = { &lt;1, "m"&gt;, &lt;2, "n"&gt;, &lt;3, "u1"&gt;, &lt;4, "i"&gt;, 
-                        &lt;5, "j"&gt;, &lt;6, "u2"&gt;, &lt;7, "u3"&gt;
-                      };</programlisting></para>
+                      };</userinput>
+<computeroutput>rel[stat,stat]: { &lt;1,2&gt;, &lt;2,3&gt;, ...</computeroutput>
 
-        <para>For convenience, we introduce a notion <literal>def</literal>
-        that describes that a certain statement defines some variable and we
-        revamp the basic relations into a more convenient format using this
-        new type:<programlisting></programlisting>The new
-        <literal>DEF</literal> relation gets as value:<programlisting>{ &lt;1, &lt;1, "i"&gt;&gt;, &lt;2, &lt;2, "j"&gt;&gt;, &lt;3, &lt;3, "a"&gt;&gt;, &lt;4, &lt;4, "i"&gt;&gt;, 
-  &lt;5, &lt;5, "j"&gt;&gt;, &lt;6, &lt;6, "a"&gt;&gt;, &lt;7, &lt;7, "i"&gt;&gt;
-}</programlisting>and <literal>USE</literal> gets as value:<programlisting>{ &lt;1, &lt;1, "m"&gt;&gt;, &lt;2, &lt;2, "n"&gt;&gt;, &lt;3, &lt;3, "u1"&gt;&gt;, &lt;4, &lt;4, "i"&gt;&gt;, 
-  &lt;5, &lt;5, "j"&gt;&gt;, &lt;6, &lt;6, "u2"&gt;&gt;, &lt;7, &lt;7, "u3"&gt;&gt;
-}</programlisting></para>
+<prompt>rascal&gt;</prompt> <userinput>rel[stat, var] DEFS = { &lt;1, "i"&gt;, &lt;2, "j"&gt;, &lt;3, "a"&gt;, 
+                                &lt;4, "i"&gt;, &lt;5, "j"&gt;, &lt;6, "a"&gt;, 
+                                &lt;7, "i"&gt;
+                              };</userinput>
+<computeroutput>rel[stat,var]: { &lt;1, "i"&gt;, &lt;2, "j"&gt;, ...</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>rel[stat,var] USES = { &lt;1, "m"&gt;, &lt;2, "n"&gt;, &lt;3, "u1"&gt;, 
+                               &lt;4, "i"&gt;, &lt;5, "j"&gt;, &lt;6, "u2"&gt;, 
+                               &lt;7, "u3"&gt;
+                             };</userinput>
+<computeroutput>rel[stat,var]: { &lt;1, "m"&gt;, &lt;2, "n"&gt;,...</computeroutput></screen></para>
+
+        <para>For convenience, we have introduced above a notion
+        <literal>def</literal> that describes that a certain statement defines
+        some variable and we revamp the basic relations into a more convenient
+        format using this new type and the auxiliary functions
+        <literal>definition</literal> and <literal>use</literal>:<screen><prompt>rascal&gt;</prompt> <userinput>definition(DEFS);</userinput>
+<computeroutput>rel[stat,def]: { &lt;1, &lt;1, "i"&gt;&gt;, &lt;2, &lt;2, "j"&gt;&gt;, &lt;3, &lt;3, "a"&gt;&gt;, 
+                 &lt;4, &lt;4, "i"&gt;&gt;, &lt;5, &lt;5, "j"&gt;&gt;, &lt;6, &lt;6, "a"&gt;&gt;, 
+                 &lt;7, &lt;7, "i"&gt;&gt;
+               }</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>use(USES);</userinput>
+<computeroutput>rel[stat,def]: { &lt;1, &lt;1, "m"&gt;&gt;, &lt;2, &lt;2, "n"&gt;&gt;, &lt;3, &lt;3, "u1"&gt;&gt;, 
+                 &lt;4, &lt;4, "i"&gt;&gt;, &lt;5, &lt;5, "j"&gt;&gt;, &lt;6, &lt;6, "u2"&gt;&gt;, 
+                 &lt;7, &lt;7, "u3"&gt;&gt;
+               }</computeroutput></screen></para>
 
         <para>Now we are ready to define an important new relation
         <literal>KILL</literal>. <literal>KILL</literal> defines which
         variable definitions are undone (killed) at each statement and is
-        defined as follows:<programlisting>rel[stat, def] KILL = 
-   {&lt;S1, &lt;S2, V&gt;&gt; | &lt;stat S1, var V&gt; : DEFS, 
-                    &lt;stat S2, V&gt; : DEFS, 
-                    S1 != S2
-   }</programlisting>In this definition, all variable definitions are compared
+        defined by the following function
+        <literal>kill</literal>:<programlisting>// continuing module demo::ReachingDefs
+
+public rel[stat,def] kill(rel[stat,var] DEFS) { 
+  return {&lt;S1, &lt;S2, V&gt;&gt; | &lt;stat S1, var V&gt; &lt;- DEFS, 
+                          &lt;stat S2, V&gt; &lt;- DEFS, 
+                          S1 != S2};
+}</programlisting>In this definition, all variable definitions are compared
         with each other, and for each variable definition all
         <emphasis>other</emphasis> definitions of the same variable are placed
         in its kill set. In the example, <literal>KILL</literal> gets the
-        value <programlisting>{ &lt;1, &lt;4, "i"&gt;&gt;, &lt;1, &lt;7, "i"&gt;&gt;, &lt;2, &lt;5, "j"&gt;&gt;, &lt;3, &lt;6, "a"&gt;&gt;, 
+        value <screen><prompt>rascal&gt;</prompt> <userinput>kill(DEFS);</userinput>
+<computeroutput>rel[stat,def]: 
+{ &lt;1, &lt;4, "i"&gt;&gt;, &lt;1, &lt;7, "i"&gt;&gt;, &lt;2, &lt;5, "j"&gt;&gt;, &lt;3, &lt;6, "a"&gt;&gt;, 
   &lt;4, &lt;1, "i"&gt;&gt;, &lt;4, &lt;7, "i"&gt;&gt;, &lt;5, &lt;2, "j"&gt;&gt;, &lt;6, &lt;3, "a"&gt;&gt;, 
   &lt;7, &lt;1, "i"&gt;&gt;, &lt;7, &lt;4, "i"&gt;&gt;
-}</programlisting>and, for instance, the definition of variable
+}</computeroutput></screen>and, for instance, the definition of variable
         <literal>i</literal> in statement <literal>1</literal> kills the
         definitions of <literal>i</literal> in statements <literal>4</literal>
-        and <literal>7</literal>. Next, we introduce the collection of
-        statements<programlisting>set[stat] STATEMENTS = carrier(PRED)</programlisting>which
-        gets as value <literal>{1, 2, 3, 4, 5, 6, 7}</literal> and two
-        convenience functions to obtain the predecessor, respectively, the
-        successor of a statement:</para>
-
-        <para><programlisting>set[stat] predecessor(stat S) = PRED[-,S] 
-set[stat] successor(stat S) = PRED[S,-]</programlisting></para>
+        and <literal>7</literal>. </para>
 
         <para>After these preparations, we are ready to formulate the reaching
         definitions problem in terms of two relations <literal>IN</literal>
@@ -2195,31 +2227,37 @@ set[stat] successor(stat S) = PRED[S,-]</programlisting></para>
         <literal>S</literal>. Mathematically, the following set of equations
         captures this idea for each statement:</para>
 
-        <para><warning>
-            <para>Fix expression</para>
-          </warning></para>
+        <para>IN[S] = UNION<subscript>P in predecessor of S</subscript>
+        OUT[P]</para>
 
-        <para>[ IN[S] = \bigcup_{P \in predecessor of S} OUT[P] \]</para>
-
-        <para>\[ OUT[S] = DEF[S] \cup (IN[S] - KILL[S]) \]</para>
-
-        <para></para>
+        <para>OUT[S] = DEF[S] + (IN[S] - KILL[S])</para>
 
         <para>This idea can be expressed in Rascal quite
-        literally:<programlisting>equations
-  initial
-        rel[stat,def] IN init {}
-        rel[stat,def] OUT init DEF
-  satisfy
-        IN  = {&lt;S, D&gt; | stat S : STATEMENTS, 
-                        stat P : predecessor(S), 
-                        def D : OUT[P]}
-        OUT = {&lt;S, D&gt; | stat S : STATEMENTS, 
-                        def D : DEF[S] union (IN[S] \ KILL[S])}
-end equations</programlisting>First, the relations <literal>IN</literal> and
+        literally:<programlisting>public rel[stat, def] reachingDefinitions(rel[stat,var] DEFS, 
+                                          rel[stat,stat] PRED){
+  set[stat] STATEMENT = carrier(PRED);
+  rel[stat,def] DEF  = definition(DEFS);
+  rel[stat,def] KILL = kill(DEFS);
+
+  // The set of mutually recursive dataflow equations that has 
+  // to be solved:
+
+  with
+    rel[stat,def] IN = {};
+    rel[stat,def] OUT = DEF;
+  solve {
+    IN  = {&lt;S, D&gt; | int S &lt;- STATEMENT, 
+                    stat P &lt;- predecessor(PRED,S), 
+                    def D &lt;- OUT[P]};
+    OUT = {&lt;S, D&gt; | int S &lt;- STATEMENT, 
+                    def D &lt;- DEF[S] + (IN[S] - KILL[S])};
+  };
+  return IN;
+}</programlisting>First, the relations <literal>IN</literal> and
         <literal>OUT</literal> are declared and initialized. Next, two
-        equations are given that very much resemble the ones given
-        above.</para>
+        equations are given that resemble the mathematical equations given
+        above. Note the use of the library function predecessor to obtain the
+        predecessor of a statement for a given control flow graph.</para>
 
         <para><figure xml:id="figure.reaching-definitions">
             <title>Reaching definitions for flow graph in <xref
@@ -2287,47 +2325,10 @@ end equations</programlisting>First, the relations <literal>IN</literal> and
         Definitions for <literal>a</literal> and <literal>j</literal> are,
         however, contained in <literal>OUT[4]</literal>. The result of
         reaching definitions computation is illustrated in <xref
-        linkend="figure.reaching-definitions" />. The above definitions are
-        used to formulate the function
-        <literal>reaching-definitions</literal>. It assumes appropriate
-        definitions for the types <literal>stat</literal> and
-        <literal>var</literal>. It also assumes more general versions of
-        <literal>predecessor</literal> and <literal>successor</literal>. We
-        will use it later on in <xref linkend="section.program-slicing" />
-        when defining program slicing. Here is the definition of
-        <literal>reaching-definitions</literal>:<programlisting>type def  = &lt;stat theStat, var theVar&gt;
-type use  = &lt;stat theStat, var theVar&gt;
-
-set[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
-
-set[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
-
-rel[stat, def] reaching-definitions(rel[stat,var] DEFS, 
-                                    rel[stat,stat] PRED) = 
-   IN
-where
-    set[stat] STATEMENT = carrier(PRED)
-
-    rel[stat,def] DEF  = {&lt;S,&lt;S,V&gt;&gt; | &lt;stat S, var V&gt; : DEFS}
-
-    rel[stat,def] KILL = 
-        {&lt;S1, &lt;S2, V&gt;&gt; | &lt;stat S1, var V&gt; : DEFS, 
-                         &lt;stat S2, V&gt; : DEFS, 
-                         S1 != S2
-        }
-
-    equations 
-       initial
-           rel[stat,def] IN init {}
-           rel[stat,def] OUT init DEF
-       satisfy
-           IN  =  {&lt;S, D&gt; | int S : STATEMENT, 
-                            stat P : predecessor(PRED,S), 
-                            def D : OUT[P]}
-           OUT = {&lt;S, D&gt; |  int S : STATEMENT, 
-                            def D : DEF[S] union (IN[S] \ KILL[S])}
-    end equations
-end where</programlisting></para>
+        linkend="figure.reaching-definitions" />. We will use the function
+        <literal>reachingDefinitions</literal> later on in <xref
+        linkend="section.program-slicing" /> when defining program
+        slicing.</para>
       </section>
 
       <section xml:id="section.live-variables">
@@ -2335,13 +2336,12 @@ end where</programlisting></para>
 
         <para>The live variables of a statement are those variables whose
         value will be used by the current statement or some successor of it.
-        The mathematical formulation of this problem is as follows:<warning>
-            <para>Fix expression</para>
-          </warning></para>
+        The mathematical formulation of this problem is as follows:</para>
 
-        <para>\[ IN[S] =USE[S] \cup (OUT[S] - DEF[S]) \]</para>
+        <para>IN[S] =USE[S] + (OUT[S] - DEF[S])</para>
 
-        <para>\[ OUT[S] = \bigcup_{S' \in successor of S} IN[S'] \]</para>
+        <para>OUT[S] = UNION<subscript>S' in successor of S</subscript>
+        IN[S']</para>
 
         <para>The first equation says that a variable is live coming into a
         statement if either it is used before redefinition in that statement
@@ -2350,20 +2350,25 @@ end where</programlisting></para>
         statement if and only if it is live coming into one of its
         successors.</para>
 
-        <para>This can be expressed in Rascal as follows:<programlisting>equations
-  initial
-      rel[stat,def] LIN init {}
-      rel[stat,def] LOUT init DEF
-  satisfy
-      LIN = { &lt; S, D&gt; | stat S : STATEMENTS,  
-                        def D : USE[S] union (LOUT[S] \ (DEF[S]))
-            }
-      LOUT= { &lt; S, D&gt; | stat S : STATEMENTS,  
-                        stat Succ : successor(S), 
-                        def D : LIN[Succ] 
-            }
-end equations</programlisting>The results of live variable analysis for our
-        running example are illustrated in <xref
+        <para>This can be expressed in Rascal as follows:<programlisting>public rel[stat,def] liveVariables(rel[stat,var] DEFS, 
+                                   rel[stat, var] USES, 
+                                   rel[stat,stat] PRED){
+  set[stat] STATEMENT = carrier(PRED);
+  rel[stat,def] DEF  = definition(DEFS);
+  rel[stat,def] USE = use(USES);
+  with
+    rel[stat,def] LIN = {};
+    rel[stat,def] LOUT = DEF;
+  solve {
+    LIN  = { &lt;S, D&gt; | stat S &lt;- STATEMENT,  
+                      def D &lt;- USE[S] + (LOUT[S] - (DEF[S]))};
+    LOUT = { &lt;S, D&gt; | stat S &lt;- STATEMENT,  
+                      stat Succ &lt;- successor(PRED,S), 
+                      def D &lt;- LIN[Succ] };
+  }
+  return LIN;
+}</programlisting>The results of live variable analysis for our running
+        example are illustrated in <xref
         linkend="figure.live-variables" />.</para>
 
         <para><figure xml:id="figure.live-variables">
@@ -2380,7 +2385,7 @@ end equations</programlisting>The results of live variable analysis for our
     </section>
 
     <section xml:id="section.program-slicing">
-      <title>Program Slicing (TODO)</title>
+      <title>Program Slicing</title>
 
       <para>Program slicing is a technique proposed by Weiser <biblioref
       linkend="Weiser84" /> for automatically decomposing programs in parts by
@@ -2407,7 +2412,7 @@ end equations</programlisting>The results of live variable analysis for our
 
 <emphasis role="bold">(a)</emphasis> Sample program     <emphasis role="bold"> (b)</emphasis> Slice for          <emphasis
             role="bold">(c)</emphasis> Slice for
-                           statement [9]           statement [10]</programlisting></para>
+                            statement [9]          statement [10]</programlisting></para>
 
       <para>The initial program is given as (a). The slice with statement [9]
       as slicing criterion is shown in (b): statements <literal>[4]</literal>
@@ -2512,68 +2517,90 @@ end equations</programlisting>The results of live variable analysis for our
       <para>This informal description of backward slicing can now be expressed
       in Rascal:</para>
 
-      <para><programlisting>set[use] BackwardSlice(
-    set[stat] CONTROL-STATEMENT, 
-    rel[stat,stat] PRED,
-    rel[stat,var] USES,
-    rel[stat,var] DEFS,    
-    use Criterion) 
-= USE-USE[Criterion]
+      <para><programlisting>module demo::Slicing
 
-where
-    rel[stat, def] REACH = reaching-definitions(DEFS, PRED)
+import Set;
+import Relation;
+import demo::ReachingDefs;
+import demo::Dominators;
+import UnitTest;
 
-    rel[use,def] use-def = 
-       { &lt;&lt;S1,V&gt;, &lt;S2,V&gt;&gt; | &lt;stat S1, var V&gt; : USES, 
-                            &lt;stat S2, V&gt; : REACH[S1]
-       }
+set[use] BackwardSlice(set[stat] CONTROLSTATEMENT, 
+                       rel[stat,stat] PRED,
+                       rel[stat,var] USES,
+                       rel[stat,var] DEFS,	
+                       use Criterion) {
 
-    rel[def,use] def-use-per-stat  = 
-       {&lt;&lt;S,V1&gt;, &lt;S,V2&gt;&gt; | &lt;stat S, var V1&gt; : DEFS, 
-                           &lt;S, var V2&gt; : USES
-       }
-             union
-       {&lt;&lt;S,V&gt;, &lt;S,"EXEC"&gt;&gt; | &lt;stat S, var V&gt; : DEFS}
-             union
-       {&lt;&lt;S,"TEST"&gt;,&lt;S,V&gt;&gt; | stat S : CONTROL-STATEMENT, 
-                             &lt;S, var V&gt; : domainR(USES, {S})
-       }
+  rel[stat, def] REACH = reachingDefinitions(DEFS, PRED);
 
-    rel[stat, stat] CONTROL-DOMINATOR = 
-       domainR(dominators(PRED), CONTROL-STATEMENT)
+  // Compute the relation between each use and corresponding 
+  // definitions: use_def
 
-    rel[def,use] control-dependence  =
-       { &lt;&lt;S2, "EXEC"&gt;,&lt;S1,"TEST"&gt;&gt; | 
-         &lt;stat S1, stat S2&gt; : CONTROL-DOMINATOR
-       }
+  rel[use,def] use_def =
+  {&lt;&lt;S1,V&gt;, &lt;S2,V&gt;&gt; | &lt;stat S1, var V&gt; &lt;- USES, 
+                      &lt;stat S2, V&gt; &lt;- REACH[S1]};
 
-    rel[use,def] use-control-def = use-def union control-dependence
+  // Internal dependencies per statement
 
-    rel[use,use] USE-USE = (use-control-def o def-use-per-stat)*
+  rel[def,use] def_use_per_stat  = 
+       {&lt;&lt;S,V1&gt;, &lt;S,V2&gt;&gt; | &lt;stat S, var V1&gt; &lt;- DEFS, 
+                           &lt;S, var V2&gt; &lt;- USES}
+       +
+       {&lt;&lt;S,V&gt;, &lt;S,"EXEC"&gt;&gt; | &lt;stat S, var V&gt; &lt;- DEFS}
+       +
+       {&lt;&lt;S,"TEST"&gt;,&lt;S,V&gt;&gt; | stat S &lt;- CONTROLSTATEMENT, 
+                             &lt;S, var V&gt; &lt;- domainR(USES, {S})};
 
-endwhere</programlisting></para>
+  // Control dependence: control-dependence
+
+  rel[stat, set[stat]] CONTROLDOMINATOR = 
+  domainR(dominators(PRED, 1), CONTROLSTATEMENT);
+
+  rel[def,use] control_dependence  =
+  { &lt;&lt;S2, "EXEC"&gt;,&lt;S1,"TEST"&gt;&gt; 
+    | &lt;stat S1, stat S2&gt; &lt;- CONTROLDOMINATOR};
+
+  // Control and data dependence: use-control-def
+
+  rel[use,def] use_control_def = use_def + control_dependence;
+  rel[use,use] USE_USE = (use_control_def o def_use_per_stat)*;
+
+  return USE_USE[Criterion];
+}</programlisting></para>
 
       <para>Let's apply this to the example from the start of this section and
-      assume the following:<programlisting>rel[stat,stat] PRED = { &lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, &lt;5,9&gt;, 
-                        &lt;6,7&gt;, &lt;7,8&gt;,&lt;8,5&gt;, &lt;8,9&gt;, &lt;9,10&gt;
-                      }
+      assume the following:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Slicing;</userinput>
+<computeroutput>void: null</computeroutput>
 
-rel[stat,var] DEFS  = { &lt;1, "n"&gt;, &lt;2, "i"&gt;, &lt;3, "sum"&gt;, 
-                        &lt;4,"product"&gt;, &lt;6, "sum"&gt;, &lt;7, "product"&gt;, 
-                        &lt;8, "i"&gt;
-                      }
+<prompt>rascal&gt;</prompt> <userinput>rel[stat,stat] PRED = { &lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, 
+                                &lt;5,9&gt;, &lt;6,7&gt;, &lt;7,8&gt;,&lt;8,5&gt;, &lt;8,9&gt;, 
+                                &lt;9,10&gt;
+                              };</userinput>
+<computeroutput>rel[stat,stat]: {&lt;1,2&gt;, ...</computeroutput>
 
-rel[stat,var] USES  = { &lt;5, "i"&gt;, &lt;5, "n"&gt;, &lt;6, "sum"&gt;, &lt;6,"i"&gt;,
-                        &lt;7, "product"&gt;, &lt;7, "i"&gt;, &lt;8, "i"&gt;, 
-                        &lt;9, "sum"&gt;, &lt;10, "product"&gt;
-                      }
+<prompt>rascal&gt;</prompt> <userinput>rel[stat,var] DEFS  = { &lt;1, "n"&gt;, &lt;2, "i"&gt;, &lt;3, "sum"&gt;, 
+                                &lt;4,"product"&gt;, &lt;6, "sum"&gt;, 
+                                &lt;7, "product"&gt;, &lt;8, "i"&gt;
+                              };</userinput>
+<computeroutput>rel[stat,var]: {&lt;1, "n"&gt;, ...</computeroutput>
 
-set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
-      slice<programlisting>BackwardSlice(CONTROL-STATEMENT, PRED, USES, DEFS, &lt;9, "sum"&gt;)</programlisting>will
-      then be<programlisting> { &lt;1, "EXEC"&gt;, &lt;2, "EXEC"&gt;,  &lt;3, "EXEC"&gt;, &lt;5, "i"&gt;, &lt;5, "n"&gt;,  
-   &lt;6, "sum"&gt;, &lt;6, "i"&gt;, &lt;6, "EXEC"&gt;, &lt;8, "i"&gt;, &lt;8, "EXEC"&gt;, 
-   &lt;9, "sum"&gt; }</programlisting> Take the domain of this result and we
-      get exactly the statements in (b) of the example.</para>
+<prompt>rascal&gt;</prompt> <userinput>rel[stat,var] USES  = { &lt;5, "i"&gt;, &lt;5, "n"&gt;, &lt;6, "sum"&gt;, 
+                                &lt;6,"i"&gt;, &lt;7, "product"&gt;, &lt;7, "i"&gt;, 
+                                &lt;8, "i"&gt;, &lt;9, "sum"&gt;, 
+                                &lt;10, "product"&gt;
+                              };</userinput>
+<computeroutput>rel[stat,var]; { &lt;5, "i"&gt; ...</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>set[int] CONTROL-STATEMENT = { 5 };</userinput>
+<computeroutput>set[int]: {5}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>BackwardSlice(CONTROL-STATEMENT, 
+                      PRED, USES, DEFS, &lt;9, "sum"&gt;);</userinput>
+<computeroutput>set[use]: { &lt;1, "EXEC"&gt;, &lt;2, "EXEC"&gt;,  &lt;3, "EXEC"&gt;, &lt;5, "i"&gt;, 
+            &lt;5, "n"&gt;, &lt;6, "sum"&gt;, &lt;6, "i"&gt;, &lt;6, "EXEC"&gt;, 
+            &lt;8, "i"&gt;, &lt;8, "EXEC"&gt;, &lt;9, "sum"&gt; }</computeroutput></screen>Take
+      the domain of this result and we get exactly the statements in (b) of
+      the example.</para>
     </section>
   </section>
 
@@ -3210,7 +3237,7 @@ alias Frequency = int;</programlisting>
         <para>The following function <literal>swap</literal> returns a tuple
         in which its arguments are swapped and can be applied to arbitrary
         values in a type safe manner:<screen><prompt>rascal&gt;</prompt> <userinput>tuple[&amp;B, &amp;A] swap(&amp;A a, &amp;B b) { return &lt;b, a&gt;; }</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>swap(1,2);</userinput>
 <computeroutput>tuple[int,int]: &lt;2,1&gt;
@@ -3224,7 +3251,7 @@ alias Frequency = int;</programlisting>
         graphs as follows:</para>
 
         <para><screen><prompt>rascal&gt;</prompt> <userinput>alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>Graph[int] GI = {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;};</userinput>
 <computeroutput>Graph[int] :  {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;}
@@ -3386,7 +3413,7 @@ Declaration</replaceable><subscript>1</subscript>;
         Example:<screen><prompt>rascal&gt;</prompt> <userinput>rel[int, int] invert(rel[int,int] R){
             return {&lt;Y, X&gt; | &lt;int X, int Y&gt; &lt;- R }
         }</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput><literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;</userinput>
 <computeroutput>rel[int,int] : {&lt;10,1&gt;, &lt;20,2&gt;}</computeroutput></screen></para>
@@ -3426,7 +3453,7 @@ Declaration</replaceable><subscript>1</subscript>;
           binary relation. :<screen><prompt>rascal&gt;</prompt> <userinput>rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R){  
             return {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; &lt;- R };
         }</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt><literal> </literal><userinput><literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;</userinput>
 <computeroutput>rel[int,int] : {&lt;10,1&gt;, &lt;20,2&gt;}
@@ -3435,7 +3462,7 @@ Declaration</replaceable><subscript>1</subscript>;
 <computeroutput>rel[int,str] : {&lt;1, "mon"&gt;, &lt;2, "tue"&gt;}</computeroutput></screen>Here
           we declare a function that can be used to swap the elements of pairs
           of arbitrary types:<screen><prompt>rascal&gt;</prompt> <userinput>&lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) { return &lt;B, A&gt;;;}</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput><literal>swap(&lt;1, 2&gt;)</literal>;</userinput>
 <computeroutput><literal>tuple[int,int] : &lt;2,1&gt;</literal></computeroutput>
@@ -3653,7 +3680,7 @@ data Bool = bor(Bool left, Bool right);
 
 rule a1 band(btrue, Bool B)    =&gt; B;
 rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>band(band(btrue,btrue),band(btrue, bfalse));</userinput>
 <computeroutput>Bool: bfalse</computeroutput></screen></para>
 
@@ -5601,7 +5628,7 @@ default: ...
 <computeroutput>tuple[int,str,bool] : &lt;1, "def", true&gt;</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>data FREQ = wf(str word, int freq);</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>W = wf("rascal", 1000);</userinput>
 <computeroutput>FREQ : wf("rascal", 1000)
@@ -5625,13 +5652,13 @@ default: ...
 
 
 <prompt>rascal&gt;</prompt> <userinput>anno str FREQ@color;</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>W @ color = "red";</userinput>
 <computeroutput>FREQ: wf("rascal",100000)[@color="red"]</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>wf(S, I) = W;</userinput>
-<computeroutput>done.</computeroutput>
+<computeroutput>void: null</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>S;</userinput>
 <computeroutput>str : "rascal"</computeroutput>
@@ -7981,8 +8008,8 @@ true?????</screen>
               <entry>Relation resulting from restricting
               <replaceable>Rel</replaceable> to the columns described by
               <replaceable>Index</replaceable><subscript>1</subscript><literal>,</literal>
-              <replaceable>Index</replaceable><subscript>2</subscript>, ...
-              </entry>
+              <replaceable>Index</replaceable><subscript>2</subscript>,
+              ...</entry>
             </row>
           </tbody>
         </tgroup>
@@ -10495,7 +10522,7 @@ true?????</screen>
 
   <glossary version="5.0">
     <glossdiv xml:id="section.glossary">
-      <title>Glossary of Terminology (TODO)</title>
+      <title>Glossary of Terminology</title>
 
       <glossentry>
         <glossterm>Annotation</glossterm>
