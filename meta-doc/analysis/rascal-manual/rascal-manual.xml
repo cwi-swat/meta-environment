@@ -9246,7 +9246,8 @@ true?????</screen>
 
             <entry>Field assignment</entry>
 
-            <entry><xref linkend="section.expressions-non-boolean" /></entry>
+            <entry><xref linkend="section.expressions-non-boolean"
+            xrefstyle="template:%t (%p)" /></entry>
           </row>
 
           <row>
