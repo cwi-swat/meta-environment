@@ -11,7 +11,7 @@
 <xsl:import href="common-customizations.xsl" />
 
 <!-- graphics -->
-<xsl:param name="callout.graphics.path"   select="'../../images/callouts/'" />
+<!-- <xsl:param name="callout.graphics.path"   select="'../../images/callouts/'" /> -->
 
 <xsl:param name="collect.xref.target"     select="'no'" />
 
@@ -22,6 +22,10 @@
 
 <!-- tables -->
 <xsl:attribute-set name="table.properties">
+ <xsl:attribute name="keep-together">auto</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="informaltable.properties">
  <xsl:attribute name="keep-together">auto</xsl:attribute>
 </xsl:attribute-set>
 
@@ -63,5 +67,8 @@
   </fo:inline>
 </xsl:template>
 
+<xsl:attribute-set name="verbatim.screen">
+  <xsl:attribute name="border">0.5pt solid blue</xsl:attribute>
+</xsl:attribute-set>
 
 </xsl:stylesheet>

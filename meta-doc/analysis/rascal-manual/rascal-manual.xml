@@ -3,7 +3,8 @@
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
 ]>
-<chapter version="5.0" xml:id="rscript" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="EASY-Meta-Programming-with-Rascal"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ns6="http://www.w3.org/1999/xhtml"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -376,9 +377,7 @@
         <listitem>
           <para><emphasis role="bold">Support</emphasis>: gives tables with
           operators (<xref linkend="table.all-operators" />) and functions
-          (<xref linkend="table.all-functions-1" />, <xref
-          linkend="table.all-functions-2" />, <xref
-          linkend="table.all-functions-3" />), a bibliography (<xref
+          (<xref linkend="table.all-functions" />), a bibliography (<xref
           linkend="section.bibliography" />) and a glossary (<xref
           linkend="section.glossary" />) that explains many concepts that are
           used in this book and tries to make the book self-contained.</para>
@@ -4984,25 +4983,31 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <title>Comprehension Expression</title>
 
         <para>We will use the familiar notation for <emphasis>list
-        comprehension</emphasis><programlisting>[<replaceable>E</replaceable>xp | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>]</programlisting></para>
+        comprehension</emphasis><programlisting>[<replaceable>Exp</replaceable><subscript>1</subscript>, ..., <replaceable>Exp</replaceable><subscript><replaceable>n</replaceable></subscript> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>m</replaceable></subscript>]</programlisting></para>
 
         <para>to denote the construction of a list consisting of the
-        successive values of the <emphasis>contributing expression</emphasis>
-        <replaceable>Exp</replaceable>. The values and the resulting list are
-        determined by <replaceable>Exp</replaceable> and the
-        <emphasis>generators</emphasis>
+        successive values of the <emphasis>contributing expressions</emphasis>
+        <replaceable><replaceable>Exp</replaceable><subscript>1</subscript>,
+        ...,
+        <replaceable>Exp</replaceable><subscript><replaceable>n</replaceable></subscript></replaceable>.
+        The values and the resulting list are determined by
+        <replaceable><replaceable>Exp</replaceable><subscript>1</subscript>,
+        ...,
+        <replaceable>Exp</replaceable><subscript><replaceable>n</replaceable></subscript></replaceable>
+        and the <emphasis>generators</emphasis>
         <replaceable>Gen</replaceable><subscript>1</subscript> ,...,
-        <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>.
-        <replaceable>E</replaceable>xp is computed for all possible
-        combinations of values produced by the generators. Each generator may
-        introduce new variables that can be used in subsequent generators as
-        well as in the expressions <replaceable>Exp</replaceable>. A generator
-        can use the variables introduced by preceeding generators. Generators
-        may enumerate all the values in a set or relation, or they may perform
-        an arbitrary test.</para>
+        <replaceable>Gen</replaceable><subscript><replaceable>m</replaceable></subscript>.
+        <replaceable>Exp</replaceable><subscript>1</subscript>, ...,
+        <replaceable>Exp</replaceable><subscript><replaceable>n</replaceable></subscript>
+        are computed for all possible combinations of values produced by the
+        generators. Each generator may introduce new variables that can be
+        used in subsequent generators as well as in the expressions. A
+        generator can use the variables introduced by preceeding generators.
+        Generators may enumerate all the values in a set or relation, or they
+        may perform an arbitrary test.</para>
 
         <para>In addition to list comprehensions, Rascal also supports
-        <emphasis>set comprehension</emphasis><programlisting>{<replaceable>Exp</replaceable> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>}</programlisting></para>
+        <emphasis>set comprehension</emphasis><programlisting>{<replaceable><replaceable>Exp</replaceable><subscript>1</subscript>, ..., <replaceable>Exp</replaceable><subscript><replaceable>n</replaceable></subscript></replaceable> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>m</replaceable></subscript>}</programlisting></para>
 
         <para>that also serve as relation comprehension in the case that
         <replaceable>Exp</replaceable> is of a tuple type.</para>
@@ -5010,7 +5015,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <para>Finally, <replaceable>map comprehension</replaceable>s are
         written as:</para>
 
-        <programlisting>(<replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>n</replaceable></subscript>)</programlisting>
+        <programlisting>(<replaceable>Exp</replaceable><subscript>1</subscript> : <replaceable>Exp</replaceable><subscript>2</subscript> | <replaceable>Gen</replaceable><subscript>1</subscript>, ..., <replaceable>Gen</replaceable><subscript><replaceable>m</replaceable></subscript>)</programlisting>
 
         <para>Since the entries in a map require both a key and a value for
         each entry, two expressions are needed in this case.</para>
@@ -5167,7 +5172,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 <prompt>rascal&gt;</prompt> <userinput>{&lt;Y, X&gt; | &lt;int X, int Y&gt; : {&lt;1,10&gt;, &lt;2,20&gt;}};</userinput>
 <computeroutput>rel[int,int] : <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal></computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>{X, X * X | X : {1, 2, 3, 4, 5}, X &gt;= 3};</userinput>     &lt;==== Not implemented!
+<prompt>rascal&gt;</prompt> <userinput>{X, X * X | X : {1, 2, 3, 4, 5}, X &gt;= 3};</userinput>
 <computeroutput>set[int] : <literal>{3,4,5,9,16,25}</literal></computeroutput></screen>
         </section>
       </section>
@@ -9682,794 +9687,735 @@ true?????</screen>
         </tbody>
       </tgroup>
     </table>
-
-    <para></para>
-
-    <para></para>
   </section>
 
   <section xml:id="section.table-builtin-functions">
     <title>Table of Built-in Functions</title>
 
-    <para><table xml:id="table.all-functions-1">
-        <title>All Functions (part I)</title>
+    <table xml:id="table.all-functions">
+      <title>All Functions</title>
 
-        <titleabbrev></titleabbrev>
+      <tgroup cols="3">
+        <colspec align="left" colname="col1" colwidth="3*" />
 
-        <tgroup cols="3">
-          <colspec align="left" colname="col1" colwidth="3*" />
+        <colspec align="left" colname="col2" colwidth="1*" />
 
-          <colspec align="left" colname="col2" colwidth="1*" />
+        <colspec align="left" colname="col3" colwidth="3*" />
 
-          <colspec align="left" colname="col3" colwidth="3*" />
+        <thead>
+          <row>
+            <entry>Function</entry>
 
-          <thead>
-            <row>
-              <entry>Function</entry>
+            <entry>Module</entry>
 
-              <entry>Module</entry>
+            <entry>See</entry>
+          </row>
+        </thead>
 
-              <entry>See</entry>
-            </row>
-          </thead>
+        <tbody>
+          <row>
+            <entry><literal>abs</literal></entry>
 
-          <tbody>
-            <row>
-              <entry><literal>abs</literal></entry>
+            <entry>Integer</entry>
 
-              <entry>Integer</entry>
+            <entry><xref linkend="section.lib-Integer" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Integer" /></entry>
-            </row>
+          <row>
+            <entry><literal>arbBool</literal></entry>
 
-            <row>
-              <entry><literal>arbBool</literal></entry>
+            <entry>Boolean</entry>
 
-              <entry>Boolean</entry>
+            <entry><xref linkend="section.lib-Boolean" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Boolean" /></entry>
-            </row>
+          <row>
+            <entry><literal>arbInt</literal></entry>
 
-            <row>
-              <entry><literal>arbInt</literal></entry>
+            <entry>Integer</entry>
 
-              <entry>Integer</entry>
+            <entry><xref linkend="section.lib-Integer" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Integer" /></entry>
-            </row>
+          <row>
+            <entry><literal>arbReal</literal></entry>
 
-            <row>
-              <entry><literal>arbReal</literal></entry>
+            <entry>Real</entry>
 
-              <entry>Real</entry>
+            <entry><xref linkend="section.lib-Real" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Real" /></entry>
-            </row>
+          <row>
+            <entry><literal>arity</literal></entry>
 
-            <row>
-              <entry><literal>arity</literal></entry>
+            <entry>Node</entry>
 
-              <entry>Node</entry>
+            <entry><xref linkend="section.lib-Node" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Node" /></entry>
-            </row>
+          <row>
+            <entry><literal>assertEqual</literal></entry>
 
-            <row>
-              <entry><literal>assertEqual</literal></entry>
+            <entry>UnitTest</entry>
 
-              <entry>UnitTest</entry>
+            <entry><xref linkend="section.lib-UnitTest" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-UnitTest" /></entry>
-            </row>
+          <row>
+            <entry><literal>assertTrue</literal></entry>
 
-            <row>
-              <entry><literal>assertTrue</literal></entry>
+            <entry>UnitTest</entry>
 
-              <entry>UnitTest</entry>
+            <entry><xref linkend="section.lib-UnitTest" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-UnitTest" /></entry>
-            </row>
+          <row>
+            <entry><literal>average</literal></entry>
 
-            <row>
-              <entry><literal>average</literal></entry>
+            <entry>List, Set</entry>
 
-              <entry>List, Set</entry>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+          <row>
+            <entry><literal>bottom</literal></entry>
 
-            <row>
-              <entry><literal>bottom</literal></entry>
+            <entry>Graph, LabelledGraph</entry>
 
-              <entry>Graph, LabelledGraph</entry>
+            <entry><xref linkend="section.lib-Graph" />, <xref
+            linkend="section.lib-LabelledGraph" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Graph" />, <xref
-              linkend="section.lib-LabelledGraph" /></entry>
-            </row>
+          <row>
+            <entry><literal>browse</literal></entry>
 
-            <row>
-              <entry><literal>browse</literal></entry>
+            <entry>View</entry>
 
-              <entry>View</entry>
+            <entry><xref linkend="section.lib-View" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-View" /></entry>
-            </row>
+          <row>
+            <entry><literal>carrier</literal></entry>
 
-            <row>
-              <entry><literal>carrier</literal></entry>
+            <entry>Relation</entry>
 
-              <entry>Relation</entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Relation" /></entry>
-            </row>
+          <row>
+            <entry><literal>carrierR</literal></entry>
 
-            <row>
-              <entry><literal>carrierR</literal></entry>
+            <entry>Relation</entry>
 
-              <entry>Relation</entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Relation" /></entry>
-            </row>
+          <row>
+            <entry><literal>carrierX</literal></entry>
 
-            <row>
-              <entry><literal>carrierX</literal></entry>
+            <entry>Relation</entry>
 
-              <entry>Relation</entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Relation" /></entry>
-            </row>
+          <row>
+            <entry><literal>center</literal></entry>
 
-            <row>
-              <entry><literal>center</literal></entry>
+            <entry>String</entry>
 
-              <entry>String</entry>
+            <entry><xref linkend="section.lib-String" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-String" /></entry>
-            </row>
+          <row>
+            <entry><literal>charAt</literal> ? remove</entry>
 
-            <row>
-              <entry><literal>charAt</literal> ? remove</entry>
+            <entry>String</entry>
 
-              <entry>String</entry>
+            <entry><xref linkend="section.lib-String" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-String" /></entry>
-            </row>
+          <row>
+            <entry><literal>complement</literal></entry>
 
-            <row>
-              <entry><literal>complement</literal></entry>
+            <entry>Relation</entry>
 
-              <entry>Relation</entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Relation" /></entry>
-            </row>
+          <row>
+            <entry><literal>currentTimeMillis</literal></entry>
 
-            <row>
-              <entry><literal>currentTimeMillis</literal></entry>
+            <entry>Benchmark</entry>
 
-              <entry>Benchmark</entry>
+            <entry><xref linkend="section.lib-Benchmark" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Benchmark" /></entry>
-            </row>
+          <row>
+            <entry><literal>delete</literal></entry>
 
-            <row>
-              <entry><literal>delete</literal></entry>
+            <entry>List</entry>
 
-              <entry>List</entry>
+            <entry><xref linkend="section.lib-List" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-List" /></entry>
-            </row>
+          <row>
+            <entry><literal>domain</literal></entry>
 
-            <row>
-              <entry><literal>domain</literal></entry>
+            <entry>List, Map, Relation</entry>
 
-              <entry>List, Map, Relation</entry>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Map" />, <xref
+            linkend="section.lib-Relation" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Map" />, <xref
-              linkend="section.lib-Relation" /></entry>
-            </row>
+          <row>
+            <entry><literal>domainR</literal></entry>
 
-            <row>
-              <entry><literal>domainR</literal></entry>
+            <entry>Relation</entry>
 
-              <entry>Relation</entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Relation" /></entry>
-            </row>
+          <row>
+            <entry><literal>domainX</literal></entry>
 
-            <row>
-              <entry><literal>domainX</literal></entry>
+            <entry>Relation</entry>
 
-              <entry>Relation</entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Relation" /></entry>
-            </row>
+          <row>
+            <entry><literal>endsWith</literal></entry>
 
-            <row>
-              <entry><literal>endsWith</literal></entry>
+            <entry>String</entry>
 
-              <entry>String</entry>
+            <entry><xref linkend="section.lib-String" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-String" /></entry>
-            </row>
+          <row>
+            <entry><literal>files</literal></entry>
 
-            <row>
-              <entry><literal>files</literal></entry>
+            <entry>Resource</entry>
 
-              <entry>Resource</entry>
+            <entry><xref linkend="section.lib-Resource" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Resource" /></entry>
-            </row>
+          <row>
+            <entry><literal>fromInt</literal></entry>
 
-            <row>
-              <entry><literal>fromInt</literal></entry>
+            <entry>Boolean</entry>
 
-              <entry>Boolean</entry>
+            <entry><xref linkend="section.lib-Boolean" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Boolean" /></entry>
-            </row>
+          <row>
+            <entry><literal>fromString</literal></entry>
 
-            <row>
-              <entry><literal>fromString</literal></entry>
+            <entry>Boolean</entry>
 
-              <entry>Boolean</entry>
+            <entry><xref linkend="section.lib-Boolean" /></entry>
+          </row>
 
-              <entry><xref linkend="section.lib-Boolean" /></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table><table xml:id="table.all-functions-2">
-        <title>All Functions (part II)</title>
+          <row>
+            <entry><literal>getChildren</literal></entry>
 
-        <titleabbrev></titleabbrev>
+            <entry>Node</entry>
 
-        <tgroup cols="3">
-          <colspec align="left" colname="col1" colwidth="3*" />
+            <entry><xref linkend="section.lib-Node" /></entry>
+          </row>
 
-          <colspec align="left" colname="col2" colwidth="1*" />
+          <row>
+            <entry><literal>getName</literal></entry>
 
-          <colspec align="left" colname="col3" colwidth="3*" />
+            <entry>Node</entry>
 
-          <thead>
-            <row>
-              <entry>Function</entry>
+            <entry><xref linkend="section.lib-Node" /></entry>
+          </row>
 
-              <entry>Module</entry>
+          <row>
+            <entry><literal>getOneFrom</literal></entry>
 
-              <entry>See</entry>
-            </row>
-          </thead>
+            <entry>List, Map, Set</entry>
 
-          <tbody>
-            <row>
-              <entry><literal>getChildren</literal></entry>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Map" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-              <entry>Node</entry>
+          <row>
+            <entry><literal>head</literal></entry>
 
-              <entry><xref linkend="section.lib-Node" /></entry>
-            </row>
+            <entry>List</entry>
 
-            <row>
-              <entry><literal>getName</literal></entry>
+            <entry><xref linkend="section.lib-List" /></entry>
+          </row>
 
-              <entry>Node</entry>
+          <row>
+            <entry><literal>insertAt</literal></entry>
 
-              <entry><xref linkend="section.lib-Node" /></entry>
-            </row>
+            <entry>List</entry>
 
-            <row>
-              <entry><literal>getOneFrom</literal></entry>
+            <entry><xref linkend="section.lib-List" /></entry>
+          </row>
 
-              <entry>List, Map, Set</entry>
+          <row>
+            <entry><literal>invert</literal></entry>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Map" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+            <entry>Map, Relation</entry>
 
-            <row>
-              <entry><literal>head</literal></entry>
+            <entry><xref linkend="section.lib-Map" />, <xref
+            linkend="section.lib-Relation" /></entry>
+          </row>
 
-              <entry>List</entry>
+          <row>
+            <entry><literal>isEmpty</literal></entry>
 
-              <entry><xref linkend="section.lib-List" /></entry>
-            </row>
+            <entry>List, Map, Set, String</entry>
 
-            <row>
-              <entry><literal>insertAt</literal></entry>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Map" />, <xref linkend="section.lib-Set" />,
+            <xref linkend="section.lib-String" /></entry>
+          </row>
 
-              <entry>List</entry>
+          <row>
+            <entry><literal>left</literal></entry>
 
-              <entry><xref linkend="section.lib-List" /></entry>
-            </row>
+            <entry>String</entry>
 
-            <row>
-              <entry><literal>invert</literal></entry>
+            <entry><xref linkend="section.lib-String" /></entry>
+          </row>
 
-              <entry>Map, Relation</entry>
+          <row>
+            <entry>location ?name</entry>
 
-              <entry><xref linkend="section.lib-Map" />, <xref
-              linkend="section.lib-Relation" /></entry>
-            </row>
+            <entry>Resource</entry>
 
-            <row>
-              <entry><literal>isEmpty</literal></entry>
+            <entry><xref linkend="section.lib-Resource" /></entry>
+          </row>
 
-              <entry>List, Map, Set, String</entry>
+          <row>
+            <entry><literal>makeNode</literal></entry>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Map" />, <xref
-              linkend="section.lib-Set" />, <xref
-              linkend="section.lib-String" /></entry>
-            </row>
+            <entry>Node</entry>
 
-            <row>
-              <entry><literal>left</literal></entry>
+            <entry><xref linkend="section.lib-Node" /></entry>
+          </row>
 
-              <entry>String</entry>
+          <row>
+            <entry><literal>mapper</literal>?</entry>
 
-              <entry><xref linkend="section.lib-String" /></entry>
-            </row>
+            <entry>Map, Set</entry>
 
-            <row>
-              <entry>location ?name</entry>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Map" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-              <entry>Resource</entry>
+          <row>
+            <entry><literal>max</literal></entry>
 
-              <entry><xref linkend="section.lib-Resource" /></entry>
-            </row>
+            <entry>Integer, List, Real, Set</entry>
 
-            <row>
-              <entry><literal>makeNode</literal></entry>
+            <entry><xref linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref
+            linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-              <entry>Node</entry>
+          <row>
+            <entry><literal>min</literal></entry>
 
-              <entry><xref linkend="section.lib-Node" /></entry>
-            </row>
+            <entry>Integer, List, Real?, Set</entry>
 
-            <row>
-              <entry><literal>mapper</literal>?</entry>
+            <entry><xref linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref
+            linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-              <entry>Map, Set</entry>
+          <row>
+            <entry><literal>multiply</literal></entry>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Map" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+            <entry>List, Set</entry>
 
-            <row>
-              <entry><literal>max</literal></entry>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-              <entry>Integer, List, Real, Set</entry>
+          <row>
+            <entry><literal>permutations</literal></entry>
 
-              <entry><xref linkend="section.lib-Integer" />, <xref
-              linkend="section.lib-List" />, <xref
-              linkend="section.lib-Real" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+            <entry>List</entry>
 
-            <row>
-              <entry><literal>min</literal></entry>
+            <entry><xref linkend="section.lib-List" /></entry>
+          </row>
 
-              <entry>Integer, List, Real?, Set</entry>
+          <row>
+            <entry><literal>power</literal></entry>
 
-              <entry><xref linkend="section.lib-Integer" />, <xref
-              linkend="section.lib-List" />, <xref
-              linkend="section.lib-Real" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+            <entry>Set</entry>
 
-            <row>
-              <entry><literal>multiply</literal></entry>
+            <entry><xref linkend="section.lib-Set" /></entry>
+          </row>
 
-              <entry>List, Set</entry>
+          <row>
+            <entry><literal>power1</literal></entry>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+            <entry>Set</entry>
 
-            <row>
-              <entry><literal>permutations</literal></entry>
+            <entry><xref linkend="section.lib-Set" /></entry>
+          </row>
 
-              <entry>List</entry>
+          <row>
+            <entry>predecessors</entry>
 
-              <entry><xref linkend="section.lib-List" /></entry>
-            </row>
+            <entry>Graph, LabelledGraph</entry>
 
-            <row>
-              <entry><literal>power</literal></entry>
+            <entry><xref linkend="section.lib-Graph" />, <xref
+            linkend="section.lib-LabelledGraph" /></entry>
+          </row>
 
-              <entry>Set</entry>
+          <row>
+            <entry><literal>println</literal></entry>
 
-              <entry><xref linkend="section.lib-Set" /></entry>
-            </row>
+            <entry>IO</entry>
 
-            <row>
-              <entry><literal>power1</literal></entry>
+            <entry><xref linkend="section.lib-IO" /></entry>
+          </row>
 
-              <entry>Set</entry>
+          <row>
+            <entry><literal>projects</literal></entry>
 
-              <entry><xref linkend="section.lib-Set" /></entry>
-            </row>
+            <entry>Resource</entry>
 
-            <row>
-              <entry>predecessors</entry>
+            <entry><xref linkend="section.lib-Resource" /></entry>
+          </row>
 
-              <entry>Graph, LabelledGraph</entry>
+          <row>
+            <entry><literal>range</literal></entry>
 
-              <entry><xref linkend="section.lib-Graph" />, <xref
-              linkend="section.lib-LabelledGraph" /></entry>
-            </row>
+            <entry>Map</entry>
 
-            <row>
-              <entry><literal>println</literal></entry>
+            <entry><xref linkend="section.lib-Map" /></entry>
+          </row>
 
-              <entry>IO</entry>
+          <row>
+            <entry>rangeR</entry>
 
-              <entry><xref linkend="section.lib-IO" /></entry>
-            </row>
+            <entry>Relation</entry>
 
-            <row>
-              <entry><literal>projects</literal></entry>
+            <entry><xref linkend="section.lib-Relation" /></entry>
+          </row>
 
-              <entry>Resource</entry>
+          <row>
+            <entry><literal>reach</literal></entry>
 
-              <entry><xref linkend="section.lib-Resource" /></entry>
-            </row>
+            <entry>Graph, LabelledGraph</entry>
 
-            <row>
-              <entry><literal>range</literal></entry>
+            <entry><xref linkend="section.lib-Graph" />, <xref
+            linkend="section.lib-LabelledGraph" /></entry>
+          </row>
 
-              <entry>Map</entry>
+          <row>
+            <entry><literal>reachR</literal></entry>
 
-              <entry><xref linkend="section.lib-Map" /></entry>
-            </row>
+            <entry>Graph, LabelledGraph</entry>
 
-            <row>
-              <entry>rangeR</entry>
+            <entry><xref linkend="section.lib-Graph" />, <xref
+            linkend="section.lib-LabelledGraph" /></entry>
+          </row>
 
-              <entry>Relation</entry>
+          <row>
+            <entry><literal>reachX</literal></entry>
 
-              <entry><xref linkend="section.lib-Relation" /></entry>
-            </row>
+            <entry>Graph, LabelledGraph</entry>
 
-            <row>
-              <entry><literal>reach</literal></entry>
+            <entry><xref linkend="section.lib-Graph" />, <xref
+            linkend="section.lib-LabelledGraph" /></entry>
+          </row>
 
-              <entry>Graph, LabelledGraph</entry>
+          <row>
+            <entry><literal>readFile</literal></entry>
 
-              <entry><xref linkend="section.lib-Graph" />, <xref
-              linkend="section.lib-LabelledGraph" /></entry>
-            </row>
+            <entry>IO</entry>
 
-            <row>
-              <entry><literal>reachR</literal></entry>
+            <entry><xref linkend="section.lib-IO" /></entry>
+          </row>
 
-              <entry>Graph, LabelledGraph</entry>
+          <row>
+            <entry><literal>readRSF</literal></entry>
 
-              <entry><xref linkend="section.lib-Graph" />, <xref
-              linkend="section.lib-LabelledGraph" /></entry>
-            </row>
+            <entry>RSF</entry>
 
-            <row>
-              <entry><literal>reachX</literal></entry>
+            <entry><xref linkend="section.lib-RSF" /></entry>
+          </row>
 
-              <entry>Graph, LabelledGraph</entry>
+          <row>
+            <entry><literal>readValueFromBinaryFile</literal></entry>
 
-              <entry><xref linkend="section.lib-Graph" />, <xref
-              linkend="section.lib-LabelledGraph" /></entry>
-            </row>
+            <entry>ValueIO</entry>
 
-            <row>
-              <entry><literal>readFile</literal></entry>
+            <entry><xref linkend="section.lib-ValueIO" /></entry>
+          </row>
 
-              <entry>IO</entry>
+          <row>
+            <entry><literal>readValueFromTextFile</literal></entry>
 
-              <entry><xref linkend="section.lib-IO" /></entry>
-            </row>
+            <entry>ValueIO</entry>
 
-            <row>
-              <entry><literal>readRSF</literal></entry>
+            <entry><xref linkend="section.lib-ValueIO" /></entry>
+          </row>
 
-              <entry>RSF</entry>
+          <row>
+            <entry><literal>reducer</literal></entry>
 
-              <entry><xref linkend="section.lib-RSF" /></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table><table xml:id="table.all-functions-3">
-        <title>All Functions (part III)</title>
+            <entry>List, Set</entry>
 
-        <titleabbrev></titleabbrev>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-        <tgroup cols="3">
-          <colspec align="left" colname="col1" colwidth="3*" />
+          <row>
+            <entry><literal>references</literal></entry>
 
-          <colspec align="left" colname="col2" colwidth="1*" />
+            <entry>Resource</entry>
 
-          <colspec align="left" colname="col3" colwidth="3*" />
+            <entry><xref linkend="section.lib-Resource" /></entry>
+          </row>
 
-          <thead>
-            <row>
-              <entry>Function</entry>
+          <row>
+            <entry><literal>report</literal></entry>
 
-              <entry>Module</entry>
+            <entry>UnitTest</entry>
 
-              <entry>See</entry>
-            </row>
-          </thead>
+            <entry><xref linkend="section.lib-UnitTest" /></entry>
+          </row>
 
-          <tbody>
-            <row>
-              <entry><literal>readValueFromBinaryFile</literal></entry>
+          <row>
+            <entry><literal>reverse</literal></entry>
 
-              <entry>ValueIO</entry>
+            <entry>List, String</entry>
 
-              <entry><xref linkend="section.lib-ValueIO" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-String" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>readValueFromTextFile</literal></entry>
+          <row>
+            <entry><literal>right</literal></entry>
 
-              <entry>ValueIO</entry>
+            <entry>String</entry>
 
-              <entry><xref linkend="section.lib-ValueIO" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-String" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>reducer</literal></entry>
+          <row>
+            <entry><literal>root</literal></entry>
 
-              <entry>List, Set</entry>
+            <entry>Resource</entry>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Resource" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>references</literal></entry>
+          <row>
+            <entry><literal>shortestPathPair</literal></entry>
 
-              <entry>Resource</entry>
+            <entry>Graph, LabelledGraph</entry>
 
-              <entry><xref linkend="section.lib-Resource" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Graph" />, <xref
+            linkend="section.lib-LabelledGraph" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>report</literal></entry>
+          <row>
+            <entry><literal>show</literal></entry>
 
-              <entry>UnitTest</entry>
+            <entry>View</entry>
 
-              <entry><xref linkend="section.lib-UnitTest" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-View" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>reverse</literal></entry>
+          <row>
+            <entry><literal>size</literal></entry>
 
-              <entry>List, String</entry>
+            <entry>List?, Map, Set, String</entry>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-String" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Map" />, <xref linkend="section.lib-Set" />,
+            <xref linkend="section.lib-String" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>right</literal></entry>
+          <row>
+            <entry><literal>slice</literal></entry>
 
-              <entry>String</entry>
+            <entry>List</entry>
 
-              <entry><xref linkend="section.lib-String" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-List" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>root</literal></entry>
+          <row>
+            <entry><literal>sort</literal></entry>
 
-              <entry>Resource</entry>
+            <entry>List</entry>
 
-              <entry><xref linkend="section.lib-Resource" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-List" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>shortestPathPair</literal></entry>
+          <row>
+            <entry><literal>startsWith</literal></entry>
 
-              <entry>Graph, LabelledGraph</entry>
+            <entry>String</entry>
 
-              <entry><xref linkend="section.lib-Graph" />, <xref
-              linkend="section.lib-LabelledGraph" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-String" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>show</literal></entry>
+          <row>
+            <entry>successors</entry>
 
-              <entry>View</entry>
+            <entry>Graph, LabelledGraph</entry>
 
-              <entry><xref linkend="section.lib-View" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Graph" />, <xref
+            linkend="section.lib-LabelledGraph" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>size</literal></entry>
+          <row>
+            <entry><literal>sum</literal></entry>
 
-              <entry>List?, Map, Set, String</entry>
+            <entry>List, Set</entry>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Map" />, <xref
-              linkend="section.lib-Set" />, <xref
-              linkend="section.lib-String" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-List" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>slice</literal></entry>
+          <row>
+            <entry><literal>tail</literal></entry>
 
-              <entry>List</entry>
+            <entry>List</entry>
 
-              <entry><xref linkend="section.lib-List" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-List" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>sort</literal></entry>
+          <row>
+            <entry><literal>takeOneFrom</literal></entry>
 
-              <entry>List</entry>
+            <entry>List, Set</entry>
 
-              <entry><xref linkend="section.lib-List" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>startsWith</literal></entry>
+          <row>
+            <entry><literal>toInt</literal></entry>
 
-              <entry>String</entry>
+            <entry>Boolean</entry>
 
-              <entry><xref linkend="section.lib-String" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Boolean" /></entry>
+          </row>
 
-            <row>
-              <entry>successors</entry>
+          <row>
+            <entry><literal>toInteger</literal>!</entry>
 
-              <entry>Graph, LabelledGraph</entry>
+            <entry>Real</entry>
 
-              <entry><xref linkend="section.lib-Graph" />, <xref
-              linkend="section.lib-LabelledGraph" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Real" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>sum</literal></entry>
+          <row>
+            <entry><literal>toList</literal></entry>
 
-              <entry>List, Set</entry>
+            <entry>Map, Set</entry>
 
-              <entry><xref linkend="section.lib-List" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Map" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>tail</literal></entry>
+          <row>
+            <entry><literal>toLowerCase</literal></entry>
 
-              <entry>List</entry>
+            <entry>String</entry>
 
-              <entry><xref linkend="section.lib-List" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-String" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>takeOneFrom</literal></entry>
+          <row>
+            <entry><literal>toMap</literal></entry>
 
-              <entry>List, Set</entry>
+            <entry>List, Set</entry>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-List" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>toInt</literal></entry>
+          <row>
+            <entry><literal>top</literal></entry>
 
-              <entry>Boolean</entry>
+            <entry>Graph, LabelledGraph</entry>
 
-              <entry><xref linkend="section.lib-Boolean" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Graph" />, <xref
+            linkend="section.lib-LabelledGraph" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>toInteger</literal>!</entry>
+          <row>
+            <entry><literal>toReal</literal></entry>
 
-              <entry>Real</entry>
+            <entry>Boolean, Integer</entry>
 
-              <entry><xref linkend="section.lib-Real" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Boolean" />, <xref
+            linkend="section.lib-Integer" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>toList</literal></entry>
+          <row>
+            <entry><literal>toRel</literal></entry>
 
-              <entry>Map, Set</entry>
+            <entry>Map</entry>
 
-              <entry><xref linkend="section.lib-Map" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Map" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>toLowerCase</literal></entry>
+          <row>
+            <entry><literal>toSet</literal></entry>
 
-              <entry>String</entry>
+            <entry>List</entry>
 
-              <entry><xref linkend="section.lib-String" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-List" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>toMap</literal></entry>
+          <row>
+            <entry><literal>toString</literal></entry>
 
-              <entry>List, Set</entry>
+            <entry>Boolean, Integer, List, Map, Real, Set</entry>
 
-              <entry><xref linkend="section.lib-List" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-Boolean" />, <xref
+            linkend="section.lib-Integer" />, <xref
+            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
+            <xref linkend="section.lib-Real" />, <xref
+            linkend="section.lib-Set" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>top</literal></entry>
+          <row>
+            <entry><literal>toUpperCase</literal></entry>
 
-              <entry>Graph, LabelledGraph</entry>
+            <entry>String</entry>
 
-              <entry><xref linkend="section.lib-Graph" />, <xref
-              linkend="section.lib-LabelledGraph" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-String" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>toReal</literal></entry>
+          <row>
+            <entry><literal>writeValueToBinaryFile</literal></entry>
 
-              <entry>Boolean, Integer</entry>
+            <entry>ValueIO</entry>
 
-              <entry><xref linkend="section.lib-Boolean" />, <xref
-              linkend="section.lib-Integer" /></entry>
-            </row>
+            <entry><xref linkend="section.lib-ValueIO" /></entry>
+          </row>
 
-            <row>
-              <entry><literal>toRel</literal></entry>
+          <row>
+            <entry><literal>writeValueToTextFile</literal></entry>
 
-              <entry>Map</entry>
+            <entry>ValueIO</entry>
 
-              <entry><xref linkend="section.lib-Map" /></entry>
-            </row>
-
-            <row>
-              <entry><literal>toSet</literal></entry>
-
-              <entry>List</entry>
-
-              <entry><xref linkend="section.lib-List" /></entry>
-            </row>
-
-            <row>
-              <entry><literal>toString</literal></entry>
-
-              <entry>Boolean, Integer, List, Map, Real, Set</entry>
-
-              <entry><xref linkend="section.lib-Boolean" />, <xref
-              linkend="section.lib-Integer" />, <xref
-              linkend="section.lib-List" />, <xref
-              linkend="section.lib-Map" />, <xref
-              linkend="section.lib-Real" />, <xref
-              linkend="section.lib-Set" /></entry>
-            </row>
-
-            <row>
-              <entry><literal>toUpperCase</literal></entry>
-
-              <entry>String</entry>
-
-              <entry><xref linkend="section.lib-String" /></entry>
-            </row>
-
-            <row>
-              <entry><literal>writeValueToBinaryFile</literal></entry>
-
-              <entry>ValueIO</entry>
-
-              <entry><xref linkend="section.lib-ValueIO" /></entry>
-            </row>
-
-            <row>
-              <entry><literal>writeValueToTextFile</literal></entry>
-
-              <entry>ValueIO</entry>
-
-              <entry><xref linkend="section.lib-ValueIO" /></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table></para>
-
-    <para></para>
+            <entry><xref linkend="section.lib-ValueIO" /></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
   </section>
 
   <section xml:id="section.bibliography">
@@ -10500,24 +10446,6 @@ true?????</screen>
 
         <bibliomixed xml:id="Weiser84"></bibliomixed>
       </bibliolist></para>
-  </section>
-
-  <section>
-    <title>TODO</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Check all screens.</para>
-      </listitem>
-
-      <listitem>
-        <para>Finish larger examples</para>
-      </listitem>
-
-      <listitem>
-        <para>Solve formatting issues in summary tables.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <glossary version="5.0">

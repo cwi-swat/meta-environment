@@ -44,7 +44,9 @@ complete-book:	Makefile ${ALL_XSL_FILES} ${ALL_XML_FILES}
 	     s@__DOCBOOKXSLPREFIX__@${DOCBOOK_XSL_PREFIX}@g" \
 	     < $< > $@
 
-# convenience shortcut for creating pdf documents
+# convenience shortcut for creating pdf documentsp
+#                    --stringparam admon.graphics 1 
+#                    --stringparam admon.textlabel 0 
 %.pdf: %.xml Makefile
 	(xsltproc  --xinclude --stringparam now "`date`" ./pubdate.xsl $< | \
           xsltproc  --output $*.fo \
