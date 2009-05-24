@@ -29,8 +29,8 @@
  <xsl:attribute name="keep-together">auto</xsl:attribute>
 </xsl:attribute-set>
 
-
 <!-- Chapter titles are printed as just the title -->
+<!-- Page references are changed -->
 
 <xsl:param name="local.l10n.xml" select="document('')"/>
 <l:i18n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0">
@@ -38,10 +38,25 @@
     <l:context name="title">
       <l:template name="chapter" text="%t"/>
     </l:context>
+
+    <l:context name="xref">
+      <l:template name="page.citation" text="&#xa0; (page %p)"/>
+    </l:context>
+
   </l:l10n>
 </l:i18n>  
-
-<xsl:template  match="sect1|sect2|sect3|sect4|sect5|section"  
+<!--
+<xsl:param name="local.l10n.xml" select="document('')"/>
+<l:i18n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0">
+  <l:l10n language="en">
+      <l:context name="xref">
+             <l:template name="page.citation" text="&#xa0; (page %p)"/>
+                 </l:context>
+                   </l:l10n>
+                   </l:i18n>
+-->
+<!--
+<xsl:template  match="sect1|sect2|sect3|sect4|sect5|section|table|informaltable"  
                mode="insert.title.markup">
   <xsl:param name="purpose"/>
   <xsl:param name="xrefstyle"/>
@@ -57,6 +72,11 @@
       <xsl:copy-of select="$title"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+-->
+
+<xsl:template match="processing-instruction('hard-pagebreak')">
+  <fo:block break-before='page'/>
 </xsl:template>
 
 <!-- Force character entities like &le; into the Symbol font -->

@@ -28,11 +28,9 @@
   </info>
 
   <warning>
-    <para>This document is in the process of being written. Don't read
-    sections marked with "TODO"; they are outdated and/or under construction.
-    Comments labelled "Warning" (like this one) or other
-    <remark>remarks</remark> (like this one) are temporary notes that will
-    disappear in the final version.</para>
+    <para>This document is in the process of being written. Comments labelled
+    "Warning" (like this one) or other <remark>remarks</remark> (like this
+    one) are temporary notes that will disappear in the final version.</para>
   </warning>
 
   <section xml:id="section.why-a-new-language">
@@ -349,16 +347,16 @@
       <itemizedlist>
         <listitem>
           <para><emphasis role="bold">Introduction</emphasis>: gives a
-          high-level overview of Rascal and consists of<xref
+          high-level overview of Rascal and consists of <xref
           linkend="section.why-a-new-language" /> and <xref
-          linkend="section.rascal-concepts" />. It also presents some simple
-          examples <xref linkend="section.classical-examples" />.</para>
+          linkend="section.rascal-concepts" /> . It also presents some simple
+          examples in <xref linkend="section.classical-examples" />.</para>
         </listitem>
 
         <listitem>
           <para><emphasis role="bold">Problem Solving</emphasis>: describes
-          the major problem solving strategies in Rascal's application
-          domain.</para>
+          the major problem solving strategies in Rascal's application domain,
+          see <xref linkend="section.problem-solving-strategies" />.</para>
         </listitem>
 
         <listitem>
@@ -369,18 +367,19 @@
 
         <listitem>
           <para><emphasis role="bold">Reference</emphasis>: gives a detailed
-          description of the Rascal language (<xref
-          linkend="section.rascal-language" />) and all built-in operators and
-          library functions (<xref linkend="section.lib" />).</para>
+          description of the Rascal language, see <xref
+          linkend="section.rascal-language" />, and all built-in operators and
+          library functions, see <xref linkend="section.lib" />.</para>
         </listitem>
 
         <listitem>
           <para><emphasis role="bold">Support</emphasis>: gives tables with
-          operators (<xref linkend="table.all-operators" />) and functions
-          (<xref linkend="table.all-functions" />), a bibliography (<xref
-          linkend="section.bibliography" />) and a glossary (<xref
-          linkend="section.glossary" />) that explains many concepts that are
-          used in this book and tries to make the book self-contained.</para>
+          operators, see <xref linkend="table.all-operators" />, and
+          functions, see <xref linkend="table.all-functions" />, a
+          bibliography, see<xref linkend="section.bibliography" />, and a
+          glossary, see <xref linkend="section.glossary" /> that explains many
+          concepts that are used in this book and tries to make the book
+          self-contained.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -956,7 +955,7 @@ public str capAll2(str S)
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.problem-solving-strategies">
     <title>Problem Solving Strategies</title>
 
     <para>Before we study more complicated examples, it is usefull to discuss
@@ -2210,7 +2209,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
 }</computeroutput></screen>and, for instance, the definition of variable
         <literal>i</literal> in statement <literal>1</literal> kills the
         definitions of <literal>i</literal> in statements <literal>4</literal>
-        and <literal>7</literal>. </para>
+        and <literal>7</literal>.</para>
 
         <para>After these preparations, we are ready to formulate the reaching
         definitions problem in terms of two relations <literal>IN</literal>
@@ -5799,14 +5798,14 @@ finally: <replaceable>Statement</replaceable><subscript>3</subscript>;</programl
         maintained. When the script is executed as a <emphasis>test
         suite</emphasis> a summary of this information is shown to the user.
         When the script is executed in the standard fashion, the assert
-        statement has no affect. <note>
+        statement has no affect. <caution>
             <para>Update the above description.</para>
-          </note></para>
+          </caution></para>
 
         <para>Example:</para>
 
         <screen><prompt>rascal&gt;</prompt> <userinput>assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";</userinput>
-true?????</screen>
+bool: true</screen>
       </section>
 
       <section xml:id="section.insert">
@@ -9214,6 +9213,8 @@ true?????</screen>
     </section>
   </section>
 
+  <?hard-pagebreak ?>
+
   <section xml:id="section.table-builtin-operators">
     <title>Table of Built-in Operators</title>
 
@@ -9225,7 +9226,7 @@ true?????</screen>
 
         <colspec align="left" colname="col2" colwidth="2*" />
 
-        <colspec align="left" colname="col3" colwidth="3*" />
+        <colspec align="left" colname="col3" colwidth="4*" />
 
         <thead>
           <row>
@@ -9233,21 +9234,20 @@ true?????</screen>
 
             <entry>Description</entry>
 
-            <entry>See</entry>
+            <entry>See Library Module/Section</entry>
           </row>
         </thead>
 
         <tbody>
           <row>
-            <entry><replaceable>Exp</replaceable><subscript>1</subscript><literal>
-            [</literal> <replaceable>Name</replaceable> <literal>=</literal>
-            <replaceable>Exp</replaceable><subscript>2</subscript>
-            <literal>]</literal></entry>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript><literal>[</literal><replaceable>Name</replaceable>
+            <literal>=</literal>
+            <replaceable>Exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
 
             <entry>Field assignment</entry>
 
             <entry><xref linkend="section.expressions-non-boolean"
-            xrefstyle="template:%t (%p)" /></entry>
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9256,9 +9256,10 @@ true?????</screen>
 
             <entry>Field selection</entry>
 
-            <entry><xref linkend="section.expressions-non-boolean" />, <xref
-            linkend="section.lib-Location" />, <xref
-            linkend="section.lib-Tuple" /></entry>
+            <entry><xref linkend="section.expressions-non-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9268,8 +9269,9 @@ true?????</screen>
 
             <entry>Field projection</entry>
 
-            <entry><xref linkend="section.expressions-non-boolean" />, <xref
-            linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.expressions-non-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9279,11 +9281,13 @@ true?????</screen>
 
             <entry>Index</entry>
 
-            <entry><xref linkend="section.expressions-non-boolean" />, <xref
-            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
-            <xref linkend="section.lib-Node" />, <xref
-            linkend="section.lib-Relation" />, <xref
-            linkend="section.lib-Tuple" /></entry>
+            <entry><xref linkend="section.expressions-non-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9291,7 +9295,8 @@ true?????</screen>
 
             <entry>Isdefined: true is Exp has a well-defined value</entry>
 
-            <entry><xref linkend="section.expressions-boolean" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9299,8 +9304,9 @@ true?????</screen>
 
             <entry>Negation</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9308,8 +9314,9 @@ true?????</screen>
 
             <entry>Negation</entry>
 
-            <entry><xref linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-Real" /></entry>
+            <entry><xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9317,7 +9324,8 @@ true?????</screen>
 
             <entry>Transitive closure</entry>
 
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9325,12 +9333,13 @@ true?????</screen>
 
             <entry>Reflexive transitive</entry>
 
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><replaceable>Exp</replaceable> <literal>@</literal>
-            Name</entry>
+            <replaceable>Name</replaceable></entry>
 
             <entry>Attribute value</entry>
 
@@ -9339,7 +9348,8 @@ true?????</screen>
 
           <row>
             <entry><replaceable>Exp</replaceable><subscript>1</subscript>
-            <literal>[@</literal> Name <literal>=</literal><replaceable>
+            <literal>[@</literal> <replaceable>Name</replaceable>
+            <literal>=</literal><replaceable>
             Exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
 
             <entry>Assign attribute value</entry>
@@ -9354,7 +9364,8 @@ true?????</screen>
 
             <entry>Composition</entry>
 
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9364,7 +9375,8 @@ true?????</screen>
 
             <entry>Carthesian product</entry>
 
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9374,8 +9386,9 @@ true?????</screen>
 
             <entry>Division</entry>
 
-            <entry><xref linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-Real" /></entry>
+            <entry><xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9385,8 +9398,9 @@ true?????</screen>
 
             <entry>Modulo</entry>
 
-            <entry><xref linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-Real" /></entry>
+            <entry><xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9396,10 +9410,11 @@ true?????</screen>
 
             <entry>Multiplication/product</entry>
 
-            <entry><xref linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref
-            linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9409,7 +9424,8 @@ true?????</screen>
 
             <entry>Intersection</entry>
 
-            <entry><xref linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9419,12 +9435,14 @@ true?????</screen>
 
             <entry>Addition/concatenation/union</entry>
 
-            <entry><xref linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
-            <xref linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" />, <xref
-            linkend="section.lib-String" />, <xref
-            linkend="section.lib-Tuple" /></entry>
+            <entry><xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9434,10 +9452,12 @@ true?????</screen>
 
             <entry>Subtraction/difference</entry>
 
-            <entry><xref linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
-            <xref linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9447,7 +9467,8 @@ true?????</screen>
 
             <entry>Join</entry>
 
-            <entry><xref linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9457,9 +9478,11 @@ true?????</screen>
 
             <entry>Element of</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
-            <xref linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9469,9 +9492,11 @@ true?????</screen>
 
             <entry>Not element of</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
-            <xref linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9481,17 +9506,19 @@ true?????</screen>
 
             <entry>Less than/sublist /subset</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" />, <xref
-            linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref
-            linkend="section.lib-Location" />, <xref
-            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
-            <xref linkend="section.lib-Real" /><xref
-            linkend="section.lib-Set" />, <xref
-            linkend="section.lib-String" />, <xref
-            linkend="section.lib-Tuple" />, <xref
-            linkend="section.lib-Value" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />,<xref linkend="section.lib-Set"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Value"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9501,17 +9528,19 @@ true?????</screen>
 
             <entry>Less than/strict sublist/strict subset</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" />, <xref
-            linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref
-            linkend="section.lib-Location" />, <xref
-            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
-            <xref linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" />, <xref
-            linkend="section.lib-String" />, <xref
-            linkend="section.lib-Tuple" />, <xref
-            linkend="section.lib-Value" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Value"
+            xreflabel="" xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9521,17 +9550,19 @@ true?????</screen>
 
             <entry>Greater than/superlist/superset</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" />, <xref
-            linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref
-            linkend="section.lib-Location" />, <xref
-            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
-            <xref linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" />, <xref
-            linkend="section.lib-String" />, <xref
-            linkend="section.lib-Tuple" />, <xref
-            linkend="section.lib-Value" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Value"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9541,17 +9572,19 @@ true?????</screen>
 
             <entry>Greater than/strict superlist/ strict superset</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" />, <xref
-            linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref
-            linkend="section.lib-Location" />, <xref
-            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
-            <xref linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" />, <xref
-            linkend="section.lib-String" />, <xref
-            linkend="section.lib-Tuple" />, <xref
-            linkend="section.lib-Value" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xreflabel="" xrefstyle="template:%t" />, <xref
+            linkend="section.lib-Set" xrefstyle="template:%t" />, <xref
+            linkend="section.lib-String" xrefstyle="template:%t" />, <xref
+            linkend="section.lib-Tuple" xrefstyle="template:%t" />, <xref
+            linkend="section.lib-Value" xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9560,7 +9593,8 @@ true?????</screen>
 
             <entry>Match</entry>
 
-            <entry><xref linkend="section.expressions-boolean" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9569,7 +9603,8 @@ true?????</screen>
 
             <entry>No Match</entry>
 
-            <entry><xref linkend="section.expressions-boolean" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9579,17 +9614,19 @@ true?????</screen>
 
             <entry>Equality</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" />, <xref
-            linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref
-            linkend="section.lib-Location" />, <xref
-            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
-            <xref linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" />, <xref
-            linkend="section.lib-String" />, <xref
-            linkend="section.lib-Tuple" />, <xref
-            linkend="section.lib-Value" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Value"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9599,17 +9636,19 @@ true?????</screen>
 
             <entry>Inequality</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" />, <xref
-            linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref
-            linkend="section.lib-Location" />, <xref
-            linkend="section.lib-Map" />, <xref linkend="section.lib-Node" />,
-            <xref linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" />, <xref
-            linkend="section.lib-String" />,<xref
-            linkend="section.lib-Tuple" />, <xref
-            linkend="section.lib-Value" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xreflabel="" xrefstyle="template:%t" />, <xref
+            linkend="section.lib-Set" xrefstyle="template:%t" />, <xref
+            linkend="section.lib-String" xrefstyle="template:%t" />,<xref
+            linkend="section.lib-Tuple" xrefstyle="template:%t" />, <xref
+            linkend="section.lib-Value" xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9619,7 +9658,8 @@ true?????</screen>
 
             <entry>Ifdefined Otherwise</entry>
 
-            <entry><xref linkend="section.expressions-boolean" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9631,15 +9671,18 @@ true?????</screen>
 
             <entry>Conditional Expression</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" />, <xref
-            linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
-            <xref linkend="section.lib-Node" />, <xref
-            linkend="section.lib-Real" />, <xref linkend="section.lib-Set" />,
-            <xref linkend="section.lib-String" />, <xref
-            linkend="section.lib-Tuple" />, <xref
-            linkend="section.lib-Value" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Value"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9649,8 +9692,9 @@ true?????</screen>
 
             <entry>Implication</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9660,8 +9704,9 @@ true?????</screen>
 
             <entry>Equivalence</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9671,8 +9716,9 @@ true?????</screen>
 
             <entry>Boolean and</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -9682,13 +9728,16 @@ true?????</screen>
 
             <entry>Boolean or</entry>
 
-            <entry><xref linkend="section.expressions-boolean" />, <xref
-            linkend="section.lib-Boolean" /></entry>
+            <entry><xref linkend="section.expressions-boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
         </tbody>
       </tgroup>
     </table>
   </section>
+
+  <?hard-pagebreak ?>
 
   <section xml:id="section.table-builtin-functions">
     <title>Table of Built-in Functions</title>
@@ -9696,10 +9745,8 @@ true?????</screen>
     <table xml:id="table.all-functions">
       <title>All Functions</title>
 
-      <tgroup cols="3">
-        <colspec align="left" colname="col1" colwidth="3*" />
-
-        <colspec align="left" colname="col2" colwidth="1*" />
+      <tgroup cols="2">
+        <colspec align="left" colname="col1" colwidth="2*" />
 
         <colspec align="left" colname="col3" colwidth="3*" />
 
@@ -9707,9 +9754,7 @@ true?????</screen>
           <row>
             <entry>Function</entry>
 
-            <entry>Module</entry>
-
-            <entry>See</entry>
+            <entry>See Library Module</entry>
           </row>
         </thead>
 
@@ -9717,707 +9762,636 @@ true?????</screen>
           <row>
             <entry><literal>abs</literal></entry>
 
-            <entry>Integer</entry>
-
-            <entry><xref linkend="section.lib-Integer" /></entry>
+            <entry><xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>arbBool</literal></entry>
 
-            <entry>Boolean</entry>
-
-            <entry><xref linkend="section.lib-Boolean" /></entry>
+            <entry><xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>arbInt</literal></entry>
 
-            <entry>Integer</entry>
-
-            <entry><xref linkend="section.lib-Integer" /></entry>
+            <entry><xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>arbReal</literal></entry>
 
-            <entry>Real</entry>
-
-            <entry><xref linkend="section.lib-Real" /></entry>
+            <entry><xref linkend="section.lib-Real"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>arity</literal></entry>
 
-            <entry>Node</entry>
-
-            <entry><xref linkend="section.lib-Node" /></entry>
+            <entry><xref linkend="section.lib-Node"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>assertEqual</literal></entry>
 
-            <entry>UnitTest</entry>
-
-            <entry><xref linkend="section.lib-UnitTest" /></entry>
+            <entry><xref linkend="section.lib-UnitTest"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>assertTrue</literal></entry>
 
-            <entry>UnitTest</entry>
-
-            <entry><xref linkend="section.lib-UnitTest" /></entry>
+            <entry><xref linkend="section.lib-UnitTest"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>average</literal></entry>
 
-            <entry>List, Set</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>bottom</literal></entry>
 
-            <entry>Graph, LabelledGraph</entry>
-
-            <entry><xref linkend="section.lib-Graph" />, <xref
-            linkend="section.lib-LabelledGraph" /></entry>
+            <entry><xref linkend="section.lib-Graph"
+            xrefstyle="template:%t" />, <xref
+            linkend="section.lib-LabelledGraph"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>browse</literal></entry>
 
-            <entry>View</entry>
-
-            <entry><xref linkend="section.lib-View" /></entry>
+            <entry><xref linkend="section.lib-View"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>carrier</literal></entry>
 
-            <entry>Relation</entry>
-
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>carrierR</literal></entry>
 
-            <entry>Relation</entry>
-
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>carrierX</literal></entry>
 
-            <entry>Relation</entry>
-
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>center</literal></entry>
 
-            <entry>String</entry>
-
-            <entry><xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>charAt</literal> ? remove</entry>
 
-            <entry>String</entry>
-
-            <entry><xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>complement</literal></entry>
 
-            <entry>Relation</entry>
-
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>currentTimeMillis</literal></entry>
 
-            <entry>Benchmark</entry>
-
-            <entry><xref linkend="section.lib-Benchmark" /></entry>
+            <entry><xref linkend="section.lib-Benchmark"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>delete</literal></entry>
 
-            <entry>List</entry>
-
-            <entry><xref linkend="section.lib-List" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>domain</literal></entry>
 
-            <entry>List, Map, Relation</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Map" />, <xref
-            linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>domainR</literal></entry>
 
-            <entry>Relation</entry>
-
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>domainX</literal></entry>
 
-            <entry>Relation</entry>
-
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>endsWith</literal></entry>
 
-            <entry>String</entry>
-
-            <entry><xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>files</literal></entry>
 
-            <entry>Resource</entry>
-
-            <entry><xref linkend="section.lib-Resource" /></entry>
+            <entry><xref linkend="section.lib-Resource"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>fromInt</literal></entry>
 
-            <entry>Boolean</entry>
-
-            <entry><xref linkend="section.lib-Boolean" /></entry>
+            <entry><xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>fromString</literal></entry>
 
-            <entry>Boolean</entry>
-
-            <entry><xref linkend="section.lib-Boolean" /></entry>
+            <entry><xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>getChildren</literal></entry>
 
-            <entry>Node</entry>
-
-            <entry><xref linkend="section.lib-Node" /></entry>
+            <entry><xref linkend="section.lib-Node"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>getName</literal></entry>
 
-            <entry>Node</entry>
-
-            <entry><xref linkend="section.lib-Node" /></entry>
+            <entry><xref linkend="section.lib-Node"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>getOneFrom</literal></entry>
 
-            <entry>List, Map, Set</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Map" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>head</literal></entry>
 
-            <entry>List</entry>
-
-            <entry><xref linkend="section.lib-List" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>insertAt</literal></entry>
 
-            <entry>List</entry>
-
-            <entry><xref linkend="section.lib-List" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>invert</literal></entry>
 
-            <entry>Map, Relation</entry>
-
-            <entry><xref linkend="section.lib-Map" />, <xref
-            linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Map" xrefstyle="template:%t" />,
+            <xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>isEmpty</literal></entry>
 
-            <entry>List, Map, Set, String</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Map" />, <xref linkend="section.lib-Set" />,
-            <xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>left</literal></entry>
 
-            <entry>String</entry>
-
-            <entry><xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry>location ?name</entry>
 
-            <entry>Resource</entry>
-
-            <entry><xref linkend="section.lib-Resource" /></entry>
+            <entry><xref linkend="section.lib-Resource"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>makeNode</literal></entry>
 
-            <entry>Node</entry>
-
-            <entry><xref linkend="section.lib-Node" /></entry>
+            <entry><xref linkend="section.lib-Node"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>mapper</literal>?</entry>
 
-            <entry>Map, Set</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Map" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>max</literal></entry>
 
-            <entry>Integer, List, Real, Set</entry>
-
-            <entry><xref linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref
-            linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>min</literal></entry>
 
-            <entry>Integer, List, Real?, Set</entry>
-
-            <entry><xref linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref
-            linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Integer" xreflabel=""
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>multiply</literal></entry>
 
-            <entry>List, Set</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>permutations</literal></entry>
 
-            <entry>List</entry>
-
-            <entry><xref linkend="section.lib-List" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>power</literal></entry>
 
-            <entry>Set</entry>
-
-            <entry><xref linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>power1</literal></entry>
 
-            <entry>Set</entry>
-
-            <entry><xref linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
-            <entry>predecessors</entry>
+            <entry><literal>predecessors</literal></entry>
 
-            <entry>Graph, LabelledGraph</entry>
-
-            <entry><xref linkend="section.lib-Graph" />, <xref
-            linkend="section.lib-LabelledGraph" /></entry>
+            <entry><xref linkend="section.lib-Graph"
+            xrefstyle="template:%t" />, <xref
+            linkend="section.lib-LabelledGraph"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>println</literal></entry>
 
-            <entry>IO</entry>
-
-            <entry><xref linkend="section.lib-IO" /></entry>
+            <entry><xref linkend="section.lib-IO"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>projects</literal></entry>
 
-            <entry>Resource</entry>
-
-            <entry><xref linkend="section.lib-Resource" /></entry>
+            <entry><xref linkend="section.lib-Resource"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>range</literal></entry>
 
-            <entry>Map</entry>
-
-            <entry><xref linkend="section.lib-Map" /></entry>
+            <entry><xref linkend="section.lib-Map"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
-            <entry>rangeR</entry>
+            <entry><literal>rangeR</literal></entry>
 
-            <entry>Relation</entry>
-
-            <entry><xref linkend="section.lib-Relation" /></entry>
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>reach</literal></entry>
 
-            <entry>Graph, LabelledGraph</entry>
-
-            <entry><xref linkend="section.lib-Graph" />, <xref
-            linkend="section.lib-LabelledGraph" /></entry>
+            <entry><xref linkend="section.lib-Graph"
+            xrefstyle="template:%t" />, <xref
+            linkend="section.lib-LabelledGraph"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>reachR</literal></entry>
 
-            <entry>Graph, LabelledGraph</entry>
-
-            <entry><xref linkend="section.lib-Graph" />, <xref
-            linkend="section.lib-LabelledGraph" /></entry>
+            <entry><xref linkend="section.lib-Graph"
+            xrefstyle="template:%t" />, <xref
+            linkend="section.lib-LabelledGraph"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>reachX</literal></entry>
 
-            <entry>Graph, LabelledGraph</entry>
-
-            <entry><xref linkend="section.lib-Graph" />, <xref
-            linkend="section.lib-LabelledGraph" /></entry>
+            <entry><xref linkend="section.lib-Graph"
+            xrefstyle="template:%t" />, <xref
+            linkend="section.lib-LabelledGraph"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>readFile</literal></entry>
 
-            <entry>IO</entry>
-
-            <entry><xref linkend="section.lib-IO" /></entry>
+            <entry><xref linkend="section.lib-IO"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>readRSF</literal></entry>
 
-            <entry>RSF</entry>
-
-            <entry><xref linkend="section.lib-RSF" /></entry>
+            <entry><xref linkend="section.lib-RSF"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>readValueFromBinaryFile</literal></entry>
 
-            <entry>ValueIO</entry>
-
-            <entry><xref linkend="section.lib-ValueIO" /></entry>
+            <entry><xref linkend="section.lib-ValueIO"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>readValueFromTextFile</literal></entry>
 
-            <entry>ValueIO</entry>
-
-            <entry><xref linkend="section.lib-ValueIO" /></entry>
+            <entry><xref linkend="section.lib-ValueIO"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>reducer</literal></entry>
 
-            <entry>List, Set</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>references</literal></entry>
 
-            <entry>Resource</entry>
-
-            <entry><xref linkend="section.lib-Resource" /></entry>
+            <entry><xref linkend="section.lib-Resource"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>report</literal></entry>
 
-            <entry>UnitTest</entry>
-
-            <entry><xref linkend="section.lib-UnitTest" /></entry>
+            <entry><xref linkend="section.lib-UnitTest"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>reverse</literal></entry>
 
-            <entry>List, String</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>right</literal></entry>
 
-            <entry>String</entry>
-
-            <entry><xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>root</literal></entry>
 
-            <entry>Resource</entry>
-
-            <entry><xref linkend="section.lib-Resource" /></entry>
+            <entry><xref linkend="section.lib-Resource"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>shortestPathPair</literal></entry>
 
-            <entry>Graph, LabelledGraph</entry>
-
-            <entry><xref linkend="section.lib-Graph" />, <xref
-            linkend="section.lib-LabelledGraph" /></entry>
+            <entry><xref linkend="section.lib-Graph"
+            xrefstyle="template:%t" />, <xref
+            linkend="section.lib-LabelledGraph"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>show</literal></entry>
 
-            <entry>View</entry>
-
-            <entry><xref linkend="section.lib-View" /></entry>
+            <entry><xref linkend="section.lib-View"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>size</literal></entry>
 
-            <entry>List?, Map, Set, String</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Map" />, <xref linkend="section.lib-Set" />,
-            <xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>slice</literal></entry>
 
-            <entry>List</entry>
-
-            <entry><xref linkend="section.lib-List" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>sort</literal></entry>
 
-            <entry>List</entry>
-
-            <entry><xref linkend="section.lib-List" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>startsWith</literal></entry>
 
-            <entry>String</entry>
-
-            <entry><xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
-            <entry>successors</entry>
+            <entry><literal>successors</literal></entry>
 
-            <entry>Graph, LabelledGraph</entry>
-
-            <entry><xref linkend="section.lib-Graph" />, <xref
-            linkend="section.lib-LabelledGraph" /></entry>
+            <entry><xref linkend="section.lib-Graph"
+            xrefstyle="template:%t" />, <xref
+            linkend="section.lib-LabelledGraph"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>sum</literal></entry>
 
-            <entry>List, Set</entry>
-
-            <entry><xref linkend="section.lib-List" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>tail</literal></entry>
 
-            <entry>List</entry>
-
-            <entry><xref linkend="section.lib-List" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>takeOneFrom</literal></entry>
 
-            <entry>List, Set</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toInt</literal></entry>
 
-            <entry>Boolean</entry>
-
-            <entry><xref linkend="section.lib-Boolean" /></entry>
+            <entry><xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toInteger</literal>!</entry>
 
-            <entry>Real</entry>
-
-            <entry><xref linkend="section.lib-Real" /></entry>
+            <entry><xref linkend="section.lib-Real"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toList</literal></entry>
 
-            <entry>Map, Set</entry>
-
-            <entry><xref linkend="section.lib-Map" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Map" xrefstyle="template:%t" />,
+            <xref linkend="section.lib-Set" xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toLowerCase</literal></entry>
 
-            <entry>String</entry>
-
-            <entry><xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toMap</literal></entry>
 
-            <entry>List, Set</entry>
-
-            <entry><xref linkend="section.lib-List" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>top</literal></entry>
 
-            <entry>Graph, LabelledGraph</entry>
-
-            <entry><xref linkend="section.lib-Graph" />, <xref
-            linkend="section.lib-LabelledGraph" /></entry>
+            <entry><xref linkend="section.lib-Graph"
+            xrefstyle="template:%t" />, <xref
+            linkend="section.lib-LabelledGraph"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toReal</literal></entry>
 
-            <entry>Boolean, Integer</entry>
-
-            <entry><xref linkend="section.lib-Boolean" />, <xref
-            linkend="section.lib-Integer" /></entry>
+            <entry><xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toRel</literal></entry>
 
-            <entry>Map</entry>
-
-            <entry><xref linkend="section.lib-Map" /></entry>
+            <entry><xref linkend="section.lib-Map"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toSet</literal></entry>
 
-            <entry>List</entry>
-
-            <entry><xref linkend="section.lib-List" /></entry>
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toString</literal></entry>
 
-            <entry>Boolean, Integer, List, Map, Real, Set</entry>
-
-            <entry><xref linkend="section.lib-Boolean" />, <xref
-            linkend="section.lib-Integer" />, <xref
-            linkend="section.lib-List" />, <xref linkend="section.lib-Map" />,
-            <xref linkend="section.lib-Real" />, <xref
-            linkend="section.lib-Set" /></entry>
+            <entry><xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>toUpperCase</literal></entry>
 
-            <entry>String</entry>
-
-            <entry><xref linkend="section.lib-String" /></entry>
+            <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>writeValueToBinaryFile</literal></entry>
 
-            <entry>ValueIO</entry>
-
-            <entry><xref linkend="section.lib-ValueIO" /></entry>
+            <entry><xref linkend="section.lib-ValueIO"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>writeValueToTextFile</literal></entry>
 
-            <entry>ValueIO</entry>
-
-            <entry><xref linkend="section.lib-ValueIO" /></entry>
+            <entry><xref linkend="section.lib-ValueIO"
+            xrefstyle="template:%t" /></entry>
           </row>
         </tbody>
       </tgroup>
     </table>
   </section>
+
+  <?hard-pagebreak ?>
 
   <section xml:id="section.bibliography">
     <title>Bibliography</title>
@@ -10449,541 +10423,537 @@ true?????</screen>
       </bibliolist></para>
   </section>
 
-  <glossary version="5.0">
-    <glossdiv xml:id="section.glossary">
-      <title>Glossary of Terminology</title>
-
-      <glossentry>
-        <glossterm>Annotation</glossterm>
-
-        <glossdef>
-          <para>An annotation is a (name, value) pair that can be attached to
-          a datatype value. The value can be retrieved and changed via the
-          name. One datatype value can have more than one annotation.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>ASF</glossterm>
-
-        <glossdef>
-          <para>Algebraic Specification Formalism. This a notation for
-          describing rewrite rules and is mostly used for defining software
-          analysis, fact extraction, and software transformation. It is the
-          predecessor of Rascal.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>ASF+SDF</glossterm>
-
-        <glossdef>
-          <para>The combination of the formalisms ASF and SDF. ASF+SDF can
-          describe both the syntax of a language and the operations on that
-          language (checking, execution, analysis, transformation). It is the
-          predecessor of Rascal.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>AsFix</glossterm>
-
-        <glossdef>
-          <para>ASF+SDF Fixed format. A dataformat used to represent parse
-          trees. AsFix is a specialized view on ATerms. Important features
-          are:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>The AsFix format is a full parse tree that contains all
-              the original layout and comments from the original source code
-              program that was parsed.</para>
-            </listitem>
-
-            <listitem>
-              <para>The AsFix format is self-descriptive: each subtree
-              contains information about the exact grammar production that has
-              been used to parse the text that has resulted in that parse
-              tree.</para>
-            </listitem>
-
-            <listitem>
-              <para>The AsFix format does not contain source code coordinates
-              per se, but a separate tool can easily compute these coordinates
-              and add them to the parse tree in the form of
-              annotations.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>AsFix is the predecessor of the UPTR format used by
-          Rascal</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>ATerm</glossterm>
-
-        <glossdef>
-          <para>Annotated terms. A dataformat used for the internal
-          representation of all data. Distinguishing features are:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>ATerms are language-independent and can be processed by
-              programs in any language.</para>
-            </listitem>
-
-            <listitem>
-              <para>ATerms can be annotated with auxiliary information that
-              does not affect the tree structure.</para>
-            </listitem>
-
-            <listitem>
-              <para>ATerms preserve <emphasis>maximal subterm
-              sharing</emphasis>. This means that common parts of the data are
-              not duplicated but shared. This leads to considerable
-              size-reduction of the data.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>ATerms are the predecessors of the shared PDB implementation
-          used in Rascal.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Backtracking</glossterm>
-
-        <glossdef>
-          <para>Backtracking is a general algorithmic method for finding all
-          (or some) solutions to some computational problem, in the case of
-          Rascal for pattern matching. It incrementally builds candidate
-          matches, and abandons each partial match ("backtracks") as soon as
-          it determines that it cannot possibly be completed to a valid
-          match.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Bag</glossterm>
-
-        <glossdef>
-          <para>A bag can contain arbitrary values, without any particular
-          order, and possibly repeated elements. All elements of a bag have
-          the same type. <remark>Rascal does not (yet?) support
-          bags.</remark></para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Comprehension</glossterm>
-
-        <glossdef>
-          <para>An algorithmic schema for computing lists, sets or
-          relations.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Constraint solving</glossterm>
-
-        <glossdef>
-          <para>The process of finding solutions to a problem that is only
-          specified by the boundary conditions (constraints) that a solution
-          should satisfy.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Control flow</glossterm>
-
-        <glossdef>
-          <para>The order in which the statements in a program can be
-          executed. Usually represented as a control flow graph.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Debugger</glossterm>
-
-        <glossdef>
-          <para>A debugger allows the step-by-step execution of a
-          program.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Dataflow</glossterm>
-
-        <glossdef>
-          <para>The order in which values may be assigned to variables during
-          program execution. Usually represented as a data flow graph.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Eclipse</glossterm>
-
-        <glossdef>
-          <para>Interactive Development Environment (IDE) for Java and other
-          languages. The Rascal IDE is built on top of Eclipse and IMP.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Enumerator</glossterm>
-
-        <glossdef>
-          <para>A Rascal construct that enumerates all the elements of a given
-          value.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Function (higher order)</glossterm>
-
-        <glossdef>
-          <para>A function is a computational entity with typed formal
-          parameters and a typed result. When applied to actual parameters,
-          the function is applied and the result replaces the function call. A
-          higher-order function is a function that has one or more functions
-          as parameter.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Graph</glossterm>
-
-        <glossdef>
-          <para>In mathematics a graph is a set of objects (nodes) that may be
-          pairwise connected with links (edges). In Rascal, a graph is a
-          binary relation in which each tuple represents an edge in the
-          corresponding (mathematical) graph.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Interactive Development Environment (IDE)</glossterm>
-
-        <glossdef>
-          <para>A programming environment for the interactive design,
-          development, debugging and testing of programs. Eclipse is an
-          example of an IDE.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>IDE Meta Platform (IMP)</glossterm>
-
-        <glossdef>
-          <para>IMP is an extension of Eclipse and is intended to make it
-          easier to add support for new languages to Eclipse. The Rascal
-          implementation is part of IMP.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Location</glossterm>
-
-        <glossdef>
-          <para>Data format to describe locations in source code.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>List</glossterm>
-
-        <glossdef>
-          <para>A list can contain arbitrary values, with a particular order,
-          and possibly repeated elements. All elements of a list have the same
-          type.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Map</glossterm>
-
-        <glossdef>
-          <para>A map is a binary relation consisting of 2-tuples (pairs) of
-          the form (key, value) that associate each key with a unique
-          value.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Meta-Environment</glossterm>
-
-        <glossdef>
-          <para>The ASF+SDF Meta-Environment is the IDE for writing ASF+SDF
-          specifications.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Meta-programming</glossterm>
-
-        <glossdef>
-          <para>The activity of writing programs that manipulate other
-          programs as data.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Parser</glossterm>
-
-        <glossdef>
-          <para>A program that performs syntactic analysis on a given input
-          text and builds a parse tree.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Parse table</glossterm>
-
-        <glossdef>
-          <para>A parse table is produced by a parse table generator and is an
-          efficient representation of grammar that can be used by a
-          parser.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Parse table generator</glossterm>
-
-        <glossdef>
-          <para>A parse table generator takes a grammar as input and converts
-          it to a parse table to be used by a parser.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Parse tree</glossterm>
-
-        <glossdef>
-          <para>Tree-structured representation of a text that has been
-          analyzed by a parser.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Pattern</glossterm>
-
-        <glossdef>
-          <para>A structural description of values that is used for
-          matching.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Pattern matching</glossterm>
-
-        <glossdef>
-          <para>Matching is an algorithmic method for determining the
-          structural similarity of a pattern and a subject value. The pattern
-          may contain variables that are bound to corresponding parts of the
-          subject value when the match succeeds.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Program Data Base (PDB)</glossterm>
-
-        <glossdef>
-          <para>Subsystem of IMP that is responsible for implementating
-          Rascal's datatypes.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Polymorphism</glossterm>
-
-        <glossdef>
-          <para>Functions and datatypes that can handle values of different
-          types in a uniform manner.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Prettyprinter</glossterm>
-
-        <glossdef>
-          <para>A prettyprinter converts parse trees to text. The
-          prettyprinter uses default rules to insert layout in a parse tree so
-          that its corresponding text is presented in a uniform way.
-          Optionally, user-defined formatting rules can replace this default
-          behaviour.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Relation</glossterm>
-
-        <glossdef>
-          <para>A relation is a set of tuples. All tuples of a relation have
-          the same type.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Rscript</glossterm>
-
-        <glossdef>
-          <para>A small scripting language for defining relational
-          expressions. Used for the analysis of facts extracted from software.
-          Predecessor of Rascal.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Relational Algebra</glossterm>
-
-        <glossdef>
-          <para>An algebra on relations that provides operators on relations
-          that yield new relations. Relational algebra uses no variables and
-          provides an operational view on relations.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Relational calculus</glossterm>
-
-        <glossdef>
-          <para>Relational calculus provides a more declarative and
-          descriptive way to formulate operations on relations and depends on
-          the use of variables.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Read-Eval-Print-Loop (REPL)</glossterm>
-
-        <glossdef>
-          <para>Command-line loop that reads user input, evaluates it and
-          prints the result.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Rewrite rule</glossterm>
-
-        <glossdef>
-          <para>A rewrite rule consists of a pattern and a replacement. A
-          rewrite rule is applied to all subparts of a datastructure and when
-          the pattern matches the matching subpart is replaced. Pattern and
-          replacement may contain variables and variables in the replacement
-          are first replaced by their value before the replacement is
-          applied.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>SDF</glossterm>
-
-        <glossdef>
-          <para>Syntax Definition Formalism. A notation for describing the
-          grammar of programming and application languages. SDF definitions
-          can be imported in Rascal.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Set</glossterm>
-
-        <glossdef>
-          <para>A set can contain arbitrary values, without any particular
-          order, and no repeated elements. All elements of a set have the same
-          type.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Side-effect</glossterm>
-
-        <glossdef>
-          <para>In imperative programming languages like C and Java,
-          assignments cause changes in a global state that are visible for
-          other statements and procedures.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Syntax tree</glossterm>
-
-        <glossdef>
-          <para>Tree-structured representation of a text that has been
-          analyzed by a parser.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Summary</glossterm>
-
-        <glossdef>
-          <para>An error or message summary. A dataformat for the internal
-          representation of errors and messages. Summaries are produced by
-          checker and compilers and are used by the GUI.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Term rewriting</glossterm>
-
-        <glossdef>
-          <para>Term rewriting is the act of applying a set of rewrite rules
-          to a subject value. The rules are applied as long as any pattern in
-          some rule matches. The result is the subject value with replacements
-          made as prescribed by the matching rules.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Traversal</glossterm>
-
-        <glossdef>
-          <para>The process of visiting all the sub-elements of a larger
-          datastructure. The <literal>visit</literal> expression and
-          enumerators provide traversal functionality in Rascal.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Tuple</glossterm>
-
-        <glossdef>
-          <para>A tuple is an ordered list of values of possibly different
-          type. An element of a tuple may have a label by which that element
-          can be selected or modified.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Type checking</glossterm>
-
-        <glossdef>
-          <para>The activity to check that all entities in a program are
-          declared and are used in a way that is consistent with their
-          declared type.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>Type inference</glossterm>
-
-        <glossdef>
-          <para>The activity to infer the type of program entities from their
-          use.</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>UPTR</glossterm>
-
-        <glossdef>
-          <para>Universal Parse Tree Representation is the parse tree format
-          used in Rascal. It is the successor of AsFix.</para>
-        </glossdef>
-      </glossentry>
-    </glossdiv>
+  <?hard-pagebreak ?>
+
+  <glossary version="5.0" xml:id="section.glossary">
+    <title>Glossary of Terminology</title>
+
+    <glossentry>
+      <glossterm>Annotation</glossterm>
+
+      <glossdef>
+        <para>An annotation is a (name, value) pair that can be attached to a
+        datatype value. The value can be retrieved and changed via the name.
+        One datatype value can have more than one annotation.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF</glossterm>
+
+      <glossdef>
+        <para>Algebraic Specification Formalism. This a notation for
+        describing rewrite rules and is mostly used for defining software
+        analysis, fact extraction, and software transformation. It is the
+        predecessor of Rascal.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF+SDF</glossterm>
+
+      <glossdef>
+        <para>The combination of the formalisms ASF and SDF. ASF+SDF can
+        describe both the syntax of a language and the operations on that
+        language (checking, execution, analysis, transformation). It is the
+        predecessor of Rascal.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>AsFix</glossterm>
+
+      <glossdef>
+        <para>ASF+SDF Fixed format. A dataformat used to represent parse
+        trees. AsFix is a specialized view on ATerms. Important features
+        are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The AsFix format is a full parse tree that contains all the
+            original layout and comments from the original source code program
+            that was parsed.</para>
+          </listitem>
+
+          <listitem>
+            <para>The AsFix format is self-descriptive: each subtree contains
+            information about the exact grammar production that has been used
+            to parse the text that has resulted in that parse tree.</para>
+          </listitem>
+
+          <listitem>
+            <para>The AsFix format does not contain source code coordinates
+            per se, but a separate tool can easily compute these coordinates
+            and add them to the parse tree in the form of annotations.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>AsFix is the predecessor of the UPTR format used by
+        Rascal</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ATerm</glossterm>
+
+      <glossdef>
+        <para>Annotated terms. A dataformat used for the internal
+        representation of all data. Distinguishing features are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>ATerms are language-independent and can be processed by
+            programs in any language.</para>
+          </listitem>
+
+          <listitem>
+            <para>ATerms can be annotated with auxiliary information that does
+            not affect the tree structure.</para>
+          </listitem>
+
+          <listitem>
+            <para>ATerms preserve <emphasis>maximal subterm
+            sharing</emphasis>. This means that common parts of the data are
+            not duplicated but shared. This leads to considerable
+            size-reduction of the data.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>ATerms are the predecessors of the shared PDB implementation
+        used in Rascal.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Backtracking</glossterm>
+
+      <glossdef>
+        <para>Backtracking is a general algorithmic method for finding all (or
+        some) solutions to some computational problem, in the case of Rascal
+        for pattern matching. It incrementally builds candidate matches, and
+        abandons each partial match ("backtracks") as soon as it determines
+        that it cannot possibly be completed to a valid match.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Bag</glossterm>
+
+      <glossdef>
+        <para>A bag can contain arbitrary values, without any particular
+        order, and possibly repeated elements. All elements of a bag have the
+        same type. <remark>Rascal does not (yet?) support
+        bags.</remark></para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Comprehension</glossterm>
+
+      <glossdef>
+        <para>An algorithmic schema for computing lists, sets or
+        relations.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Constraint solving</glossterm>
+
+      <glossdef>
+        <para>The process of finding solutions to a problem that is only
+        specified by the boundary conditions (constraints) that a solution
+        should satisfy.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Control flow</glossterm>
+
+      <glossdef>
+        <para>The order in which the statements in a program can be executed.
+        Usually represented as a control flow graph.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Debugger</glossterm>
+
+      <glossdef>
+        <para>A debugger allows the step-by-step execution of a
+        program.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Dataflow</glossterm>
+
+      <glossdef>
+        <para>The order in which values may be assigned to variables during
+        program execution. Usually represented as a data flow graph.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Eclipse</glossterm>
+
+      <glossdef>
+        <para>Interactive Development Environment (IDE) for Java and other
+        languages. The Rascal IDE is built on top of Eclipse and IMP.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Enumerator</glossterm>
+
+      <glossdef>
+        <para>A Rascal construct that enumerates all the elements of a given
+        value.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Function (higher order)</glossterm>
+
+      <glossdef>
+        <para>A function is a computational entity with typed formal
+        parameters and a typed result. When applied to actual parameters, the
+        function is applied and the result replaces the function call. A
+        higher-order function is a function that has one or more functions as
+        parameter.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Graph</glossterm>
+
+      <glossdef>
+        <para>In mathematics a graph is a set of objects (nodes) that may be
+        pairwise connected with links (edges). In Rascal, a graph is a binary
+        relation in which each tuple represents an edge in the corresponding
+        (mathematical) graph.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Interactive Development Environment (IDE)</glossterm>
+
+      <glossdef>
+        <para>A programming environment for the interactive design,
+        development, debugging and testing of programs. Eclipse is an example
+        of an IDE.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>IDE Meta Platform (IMP)</glossterm>
+
+      <glossdef>
+        <para>IMP is an extension of Eclipse and is intended to make it easier
+        to add support for new languages to Eclipse. The Rascal implementation
+        is part of IMP.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Location</glossterm>
+
+      <glossdef>
+        <para>Data format to describe locations in source code.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>List</glossterm>
+
+      <glossdef>
+        <para>A list can contain arbitrary values, with a particular order,
+        and possibly repeated elements. All elements of a list have the same
+        type.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Map</glossterm>
+
+      <glossdef>
+        <para>A map is a binary relation consisting of 2-tuples (pairs) of the
+        form (key, value) that associate each key with a unique value.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Meta-Environment</glossterm>
+
+      <glossdef>
+        <para>The ASF+SDF Meta-Environment is the IDE for writing ASF+SDF
+        specifications.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Meta-programming</glossterm>
+
+      <glossdef>
+        <para>The activity of writing programs that manipulate other programs
+        as data.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Parser</glossterm>
+
+      <glossdef>
+        <para>A program that performs syntactic analysis on a given input text
+        and builds a parse tree.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Parse table</glossterm>
+
+      <glossdef>
+        <para>A parse table is produced by a parse table generator and is an
+        efficient representation of grammar that can be used by a
+        parser.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Parse table generator</glossterm>
+
+      <glossdef>
+        <para>A parse table generator takes a grammar as input and converts it
+        to a parse table to be used by a parser.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Parse tree</glossterm>
+
+      <glossdef>
+        <para>Tree-structured representation of a text that has been analyzed
+        by a parser.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Pattern</glossterm>
+
+      <glossdef>
+        <para>A structural description of values that is used for
+        matching.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Pattern matching</glossterm>
+
+      <glossdef>
+        <para>Matching is an algorithmic method for determining the structural
+        similarity of a pattern and a subject value. The pattern may contain
+        variables that are bound to corresponding parts of the subject value
+        when the match succeeds.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Program Data Base (PDB)</glossterm>
+
+      <glossdef>
+        <para>Subsystem of IMP that is responsible for implementating Rascal's
+        datatypes.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Polymorphism</glossterm>
+
+      <glossdef>
+        <para>Functions and datatypes that can handle values of different
+        types in a uniform manner.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Prettyprinter</glossterm>
+
+      <glossdef>
+        <para>A prettyprinter converts parse trees to text. The prettyprinter
+        uses default rules to insert layout in a parse tree so that its
+        corresponding text is presented in a uniform way. Optionally,
+        user-defined formatting rules can replace this default
+        behaviour.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Relation</glossterm>
+
+      <glossdef>
+        <para>A relation is a set of tuples. All tuples of a relation have the
+        same type.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Rscript</glossterm>
+
+      <glossdef>
+        <para>A small scripting language for defining relational expressions.
+        Used for the analysis of facts extracted from software. Predecessor of
+        Rascal.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Relational Algebra</glossterm>
+
+      <glossdef>
+        <para>An algebra on relations that provides operators on relations
+        that yield new relations. Relational algebra uses no variables and
+        provides an operational view on relations.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Relational calculus</glossterm>
+
+      <glossdef>
+        <para>Relational calculus provides a more declarative and descriptive
+        way to formulate operations on relations and depends on the use of
+        variables.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Read-Eval-Print-Loop (REPL)</glossterm>
+
+      <glossdef>
+        <para>Command-line loop that reads user input, evaluates it and prints
+        the result.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Rewrite rule</glossterm>
+
+      <glossdef>
+        <para>A rewrite rule consists of a pattern and a replacement. A
+        rewrite rule is applied to all subparts of a datastructure and when
+        the pattern matches the matching subpart is replaced. Pattern and
+        replacement may contain variables and variables in the replacement are
+        first replaced by their value before the replacement is
+        applied.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>SDF</glossterm>
+
+      <glossdef>
+        <para>Syntax Definition Formalism. A notation for describing the
+        grammar of programming and application languages. SDF definitions can
+        be imported in Rascal.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Set</glossterm>
+
+      <glossdef>
+        <para>A set can contain arbitrary values, without any particular
+        order, and no repeated elements. All elements of a set have the same
+        type.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Side-effect</glossterm>
+
+      <glossdef>
+        <para>In imperative programming languages like C and Java, assignments
+        cause changes in a global state that are visible for other statements
+        and procedures.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Syntax tree</glossterm>
+
+      <glossdef>
+        <para>Tree-structured representation of a text that has been analyzed
+        by a parser.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Summary</glossterm>
+
+      <glossdef>
+        <para>An error or message summary. A dataformat for the internal
+        representation of errors and messages. Summaries are produced by
+        checker and compilers and are used by the GUI.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Term rewriting</glossterm>
+
+      <glossdef>
+        <para>Term rewriting is the act of applying a set of rewrite rules to
+        a subject value. The rules are applied as long as any pattern in some
+        rule matches. The result is the subject value with replacements made
+        as prescribed by the matching rules.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Traversal</glossterm>
+
+      <glossdef>
+        <para>The process of visiting all the sub-elements of a larger
+        datastructure. The <literal>visit</literal> expression and enumerators
+        provide traversal functionality in Rascal.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Tuple</glossterm>
+
+      <glossdef>
+        <para>A tuple is an ordered list of values of possibly different type.
+        An element of a tuple may have a label by which that element can be
+        selected or modified.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Type checking</glossterm>
+
+      <glossdef>
+        <para>The activity to check that all entities in a program are
+        declared and are used in a way that is consistent with their declared
+        type.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Type inference</glossterm>
+
+      <glossdef>
+        <para>The activity to infer the type of program entities from their
+        use.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>UPTR</glossterm>
+
+      <glossdef>
+        <para>Universal Parse Tree Representation is the parse tree format
+        used in Rascal. It is the successor of AsFix.</para>
+      </glossdef>
+    </glossentry>
   </glossary>
 
   <!--
