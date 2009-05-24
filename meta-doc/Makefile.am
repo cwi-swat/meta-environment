@@ -45,11 +45,11 @@ complete-book:	Makefile ${ALL_XSL_FILES} ${ALL_XML_FILES}
 	     < $< > $@
 
 # convenience shortcut for creating pdf documentsp
-#                    --stringparam admon.graphics 1 
-#                    --stringparam admon.textlabel 0 
 %.pdf: %.xml Makefile
 	(xsltproc  --xinclude --stringparam now "`date`" ./pubdate.xsl $< | \
           xsltproc  --output $*.fo \
+                    --stringparam admon.graphics 1  \
+                    --stringparam admon.textlabel 0  \
                     --xinclude --stringparam current.docid $* \
 		                    ./fo-customization.xsl -)
 	${FOP_PREFIX}/fop -fo $*.fo -pdf $@
