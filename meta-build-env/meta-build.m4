@@ -492,6 +492,8 @@ if test -n "$ECLIPSE_REQUIRES"; then
   done
 fi
 
+if ! test -z "META-INF/MANIFEST.MF"; then
+
 cat > META-INF/MANIFEST.MF << ENDCAT
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
@@ -581,6 +583,8 @@ cat > .project << ENDCAT
 	</natures>
 </projectDescription>
 ENDCAT
+
+fi
 ])
 
 dnl META_GENERATE_ECLIPSE_PLUGIN_FILES(PKGNAME,VERSION,JARFILE,PACKAGES,DEPS,MAINCLASS,LOCALJARS)
