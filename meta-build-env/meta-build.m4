@@ -492,7 +492,7 @@ if test -n "$ECLIPSE_REQUIRES"; then
   done
 fi
 
-if ! test -z "META-INF/MANIFEST.MF"; then
+if ! test -f META-INF/MANIFEST.MF; then
 
 cat > META-INF/MANIFEST.MF << ENDCAT
 Manifest-Version: 1.0
@@ -608,6 +608,8 @@ if test -n "$5"; then
   fi
 fi
 
+if ! test -f META-INF/MANIFEST.MF; then
+
 cat > META-INF/MANIFEST.MF << ENDCAT
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
@@ -642,6 +644,8 @@ cat > .project << ENDCAT
 	</natures>
 </projectDescription>
 ENDCAT
+
+fi
 ])
 
 dnl META_GENERATE_ECLIPSE_FRAGMENT_FILES(BUNDLE_NAME,BUNDLE_VERSION,FRAGMENT_HOST)
@@ -651,6 +655,8 @@ if ! test -d META-INF ; then
 fi
 
 META_ECLIPSE_OS_ARCH
+
+if ! test -f META-INF/MANIFEST.MF; then
 
 cat > META-INF/MANIFEST.MF << ENDCAT
 Manifest-Version: 1.0
@@ -680,6 +686,8 @@ cat > .project << ENDCAT
 	</natures>
 </projectDescription>
 ENDCAT
+
+fi
 ])
 
 
