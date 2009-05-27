@@ -1,13 +1,30 @@
 Index: src/main.c
 ===================================================================
---- src/main.c	(revision 24286)
+--- src/main.c	(revision 29361)
 +++ src/main.c	(working copy)
-@@ -18,7 +18,7 @@
- #include "in-output.h"
- 
- #define EOS '\0'
--#define PATH_LEN (_POSIX_PATH_MAX)
-+#define PATH_LEN (256)
+@@ -21,6 +21,7 @@
  #define PATH_SEPARATOR '/'
  #define EXTENSION_SEPARATOR '.'
  #define TOOL_NAME "in-output"
++#define PATH_MAX 256
+ 
+ typedef ATbool (*Writer)(ATerm, FILE *);
+ 
+@@ -98,7 +99,7 @@
+ }
+ 
+ static char* getCwd() {
+-  int size = _POSIX_PATH_MAX + 1;
++  int size = PATH_MAX + 1;
+   char *tmp = (char*) calloc(size, sizeof(char));
+ 
+   if (tmp != NULL) {
+@@ -631,7 +632,7 @@
+ }
+ 
+ ATerm get_file_path(int cid, ATerm file) {
+-  int pathLen = _POSIX_PATH_MAX + 1;
++  int pathLen = PATH_MAX + 1;
+   char *path = (char*) calloc(pathLen, sizeof(char));
+   IO_File io_file = IO_FileFromTerm(file);
+   IO_Path io_path = IO_getFilePath(io_file);
