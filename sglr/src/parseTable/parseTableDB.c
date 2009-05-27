@@ -22,7 +22,7 @@ typedef struct _ptdb {
   ParseTable *table;
 } PTDB;
 
-static PTDB* cachedTable = NULL;
+static PTDB cachedTable = { "", NULL};
 static double timeTakeToAllocateTable = 0.0;
 
 /* Read a parse table term, build a parse table, and add it to the
@@ -68,23 +68,13 @@ ParseTable *SG_AddParseTable(const char *filename) {
  * full, ditch its first entry to make room.
  */
 void SG_CacheParseTable(const char *parseTableName, ParseTable *pt) {
-  if (cachedTable == NULL) {
-    cachedTable = malloc(sizeof(PTDB));
-    if (cachedTable == NULL) {
-      ATerror("Out of memory");
-    }
-    cachedTable->name = "";
-    cachedTable->table = NULL;
+  if (cachedTable.table) {
+    free(cachedTable.name);
+    
+    SGLR_PTBL_discardParseTable(cachedTable.table);
   }
-
-  if (cachedTable->table != NULL) {
-    SGLR_PTBL_discardParseTable(cachedTable->table);
-    free(cachedTable->name);
-  }
-
-  cachedTable->name  = strdup(parseTableName);
-  cachedTable->table = pt;
-
+  cachedTable.name  = strdup(parseTableName);
+  cachedTable.table = pt;
   if (PARSER_getDebugFlag == ATtrue) {
     /*ATfprintf(LOG_log(), "Table for %s added to parse table database\n", parseTableName);*/
   }
@@ -98,12 +88,11 @@ ParseTable *SG_LookupParseTable(const char *parseTableName) {
   if (parseTableName == NULL || cachedTable == NULL) {
     return NULL;
   }
-
-  if (strcmp(parseTableName, cachedTable->name) == 0) {
+  if (strcmp(parseTableName, cachedTable.name) == 0) {
     if (PARSER_getDebugFlag == ATtrue) {
       /*ATfprintf(LOG_log(), "Table for language %s available\n", parseTableName);*/
     }
-    return cachedTable->table;
+    return cachedTable.table;
   }
 
   /*sprintf(contentDescription, "Table for %s not stored", 
