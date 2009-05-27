@@ -1,8 +1,8 @@
 Index: aterm/gc.c
 ===================================================================
---- aterm/gc.c	(revision 24286)
+--- aterm/gc.c	(revision 29360)
 +++ aterm/gc.c	(working copy)
-@@ -260,58 +260,6 @@
+@@ -230,58 +230,6 @@
    AFun oddSym;
  #endif
  
@@ -61,15 +61,15 @@ Index: aterm/gc.c
    jmp_buf env;
  
    /* Traverse possible register variables */
-@@ -320,7 +268,6 @@
+@@ -290,7 +238,6 @@
    start = (ATerm *)((char *)env);
    stop  = ((ATerm *)(((char *)env) + sizeof(jmp_buf)));
-   mark_memory(start, stop);
+   mark_memory(start, stop, ATtrue);
 -#endif
  
    stackTop = stack_top();
  
-@@ -385,58 +332,6 @@
+@@ -355,58 +302,6 @@
    AFun oddSym;
  #endif
  
@@ -128,17 +128,17 @@ Index: aterm/gc.c
    jmp_buf env;
  
      /* Traverse possible register variables */
-@@ -445,7 +340,6 @@
+@@ -415,7 +310,6 @@
    start = (ATerm *)((char *)env);
    stop  = ((ATerm *)(((char *)env) + sizeof(jmp_buf)));
-   mark_memory_young(start, stop);
+   mark_memory_young(start, stop, ATtrue);
 -#endif
  
    stackTop = stack_top();
    start = MIN(stackTop, stackBot);
 Index: Makefile.am
 ===================================================================
---- Makefile.am	(revision 24286)
+--- Makefile.am	(revision 29360)
 +++ Makefile.am	(working copy)
 @@ -1,6 +1,6 @@
  include $(top_srcdir)/Makefile.top.meta
