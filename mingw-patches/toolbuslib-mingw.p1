@@ -1,6 +1,6 @@
 Index: configure.ac
 ===================================================================
---- configure.ac	(revision 24289)
+--- configure.ac	(revision 29361)
 +++ configure.ac	(working copy)
 @@ -6,13 +6,8 @@
  
@@ -18,7 +18,7 @@ Index: configure.ac
  AC_CHECK_FUNCS([strerror])
 Index: src/atb-tool.c
 ===================================================================
---- src/atb-tool.c	(revision 24289)
+--- src/atb-tool.c	(revision 29361)
 +++ src/atb-tool.c	(working copy)
 @@ -6,18 +6,12 @@
  #include <stdlib.h> 
@@ -49,7 +49,7 @@ Index: src/atb-tool.c
  /* Operation codes. */
  /* From Tool to ToolBus. */
  #define CONNECT 1
-@@ -153,8 +149,6 @@
+@@ -144,8 +140,6 @@
   * Gathers performance stats. 
   */
  static ATerm getPerformanceStats(){
@@ -58,7 +58,7 @@ Index: src/atb-tool.c
  	// Type stuff
  	ATerm remote = (ATerm) ATmakeAppl0(ATmakeAFun("remote", 0, ATtrue));
  	ATerm toolType = (ATerm) ATmakeAppl1(ATmakeAFun("type", 1, ATfalse), remote);
-@@ -170,11 +164,9 @@
+@@ -161,11 +155,9 @@
  	// Thread stuff
  	ATerm threads;
  	
@@ -67,14 +67,14 @@ Index: src/atb-tool.c
  	{
 -		int userTime = (int) (resourceUsage.ru_utime.tv_sec * 1000) + (resourceUsage.ru_utime.tv_usec / 1000);
 -		int systemTime = (int) (resourceUsage.ru_stime.tv_sec * 1000) + (resourceUsage.ru_stime.tv_usec / 1000);
-+		int userTime = 0; 
++		int userTime = 0;
 +		int systemTime = 0;
  		
  		ATerm userTimeTerm = (ATerm) ATmakeAppl1(ATmakeAFun("user-time", 1, ATfalse), (ATerm) ATmakeInt(userTime));
  		ATerm systemTimeTerm = (ATerm) ATmakeAppl1(ATmakeAFun("system-time", 1, ATfalse), (ATerm) ATmakeInt(systemTime));
-@@ -304,16 +296,6 @@
-   for (lcv=0; lcv<MAX_NR_QUEUES; lcv++)
-     event_queues[lcv].afun = -1;
+@@ -349,16 +341,6 @@
+   
+   otp = (OperationTermPair) malloc(sizeof(struct _OperationTermPair));
  
 -  /* Initialize handlers for OS signals */
 -  {
@@ -91,9 +91,9 @@ Index: src/atb-tool.c
  }
 Index: src/Makefile.am
 ===================================================================
---- src/Makefile.am	(revision 24289)
+--- src/Makefile.am	(revision 29361)
 +++ src/Makefile.am	(working copy)
-@@ -10,9 +10,9 @@
+@@ -10,7 +10,7 @@
  libATB_la_SOURCES  = atb-tool.c
  libATB_la_CPPFLAGS = $(ATERM_CFLAGS)
  libATB_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
@@ -101,7 +101,3 @@ Index: src/Makefile.am
 +libATB_la_LIBADD   = $(ATERM_LIBS) $(SOCKETLIBS) -lwsock32
  
  bin_PROGRAMS = tbunpack
- 
- tbunpack_SOURCES = tbunpack.c atb-tool.c
--tbunpack_LDADD = $(ATERM_LIBS)
-+tbunpack_LDADD = $(ATERM_LIBS) -lwsock32
