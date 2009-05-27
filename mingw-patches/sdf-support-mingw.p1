@@ -1,6 +1,6 @@
 Index: utils/sdf-modules/src/main.c
 ===================================================================
---- utils/sdf-modules/src/main.c	(revision 24286)
+--- utils/sdf-modules/src/main.c	(revision 29361)
 +++ utils/sdf-modules/src/main.c	(working copy)
 @@ -19,7 +19,7 @@
  /*{{{  defines */
