@@ -1,6 +1,6 @@
 Index: semantics/asfc/src/main.c
 ===================================================================
---- semantics/asfc/src/main.c	(revision 24286)
+--- semantics/asfc/src/main.c	(revision 29361)
 +++ semantics/asfc/src/main.c	(working copy)
 @@ -7,7 +7,6 @@
  #include <ctype.h>
@@ -21,9 +21,17 @@ Index: semantics/asfc/src/main.c
        if (!output) {
 Index: semantics/asfe/src/main.c
 ===================================================================
---- semantics/asfe/src/main.c	(revision 24286)
+--- semantics/asfe/src/main.c	(revision 29361)
 +++ semantics/asfe/src/main.c	(working copy)
-@@ -210,8 +210,6 @@
+@@ -5,7 +5,6 @@
+ #include <unistd.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <signal.h>
+ 
+ #include <aterm2.h>
+ 
+@@ -210,8 +209,6 @@
      toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
    }
  
