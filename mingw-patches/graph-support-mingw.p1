@@ -1,6 +1,6 @@
 Index: utils/layoutgraph/layout.c
 ===================================================================
---- utils/layoutgraph/layout.c	(revision 24286)
+--- utils/layoutgraph/layout.c	(revision 29361)
 +++ utils/layoutgraph/layout.c	(working copy)
 @@ -6,7 +6,6 @@
  #include <unistd.h>
@@ -10,13 +10,14 @@ Index: utils/layoutgraph/layout.c
  #include <assert.h>
  #include "dot.h"
  #include "Graph.h"
-@@ -278,20 +277,14 @@
+@@ -278,20 +277,15 @@
  
  Graph layoutGraph(Graph graph)
  {
 -  char dot_input[] = "/tmp/dotto-XXXXXX";
 -  char dot_output[] = "/tmp/dotfrom-XXXXXX";
-+  char *dot_input, *dot_output;
++  char *dot_input;
++  char *dot_output;
    int fd;
    FILE *f;
    char invoke_dot[BUFSIZ];
@@ -34,10 +35,11 @@ Index: utils/layoutgraph/layout.c
    if (f == NULL) {
      perror("fdopen:dot_input");
      return NULL;
-@@ -308,13 +301,8 @@
+@@ -307,14 +301,9 @@
+     perror("fclose:dot_input");
      return NULL;
    }
- 
+-
 -  fd = mkstemp(dot_output);
 -  if (fd < 0) {
 -    perror("mkstemp:dot_output");
@@ -45,12 +47,13 @@ Index: utils/layoutgraph/layout.c
 -  }
 -
 -  yyin = fdopen(fd, "r");
++  
 +  dot_output = tempnam(".", "dotfrom");
 +  yyin = fopen(dot_output, "r");
    if (yyin == NULL) {
      perror("fdopen:dot_output");
      return NULL;
-@@ -327,7 +315,7 @@
+@@ -327,7 +316,7 @@
  	    perror("could not exec dot");
  	    return NULL;
      }
