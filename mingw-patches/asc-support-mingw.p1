@@ -1,6 +1,6 @@
 Index: lib/asc-main.c
 ===================================================================
---- lib/asc-main.c	(revision 24286)
+--- lib/asc-main.c	(revision 29361)
 +++ lib/asc-main.c	(working copy)
 @@ -7,7 +7,6 @@
  #include <ctype.h>
