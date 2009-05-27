@@ -1,11 +1,12 @@
 Index: statistics/rsrc-usage.c
 ===================================================================
---- statistics/rsrc-usage.c	(revision 24286)
+--- statistics/rsrc-usage.c	(revision 29361)
 +++ statistics/rsrc-usage.c	(working copy)
-@@ -3,62 +3,20 @@
+@@ -2,80 +2,28 @@
+ 
  #include <unistd.h>
  #include <stdio.h>
- #include <sys/time.h>
+-#include <sys/time.h>
 -#include <sys/resource.h>
  #include "rsrc-usage.h"
  
@@ -45,7 +46,7 @@ Index: statistics/rsrc-usage.c
 -
 -  prev = cur - prev;
 -  return prev > 0 ? prev: 0;
-+  return 0;
++   return 0;
  }
  
  void STATS_PageFlt(long *maj, long *min) {
@@ -68,7 +69,15 @@ Index: statistics/rsrc-usage.c
  }
  
  long STATS_Allocated(void) {
-@@ -73,9 +31,7 @@
+-  static long allocated = 0L;
+-  long tmp;
+-
+-  tmp = allocated;
+-  /** \todo: AT_calcAllocatedSize() is unreachable. Fix. */
+-  /*allocated = AT_calcAllocatedSize();*/
+-
+-  return allocated - tmp;
++  return 0;
  }
  
  long STATS_ResidentSetSize(void) {
@@ -77,5 +86,4 @@ Index: statistics/rsrc-usage.c
 -  return rsrc_usage.ru_maxrss;
 +  return 0;
  }
- 
  
