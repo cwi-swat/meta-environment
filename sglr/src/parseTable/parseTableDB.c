@@ -85,7 +85,7 @@ ParseTable *SG_LookupParseTable(const char *parseTableName) {
 
   SGLR_PTBL_initErrorList();
 
-  if (parseTableName == NULL || cachedTable == NULL) {
+  if (parseTableName == NULL || cachedTable.table == NULL) {
     return NULL;
   }
   if (strcmp(parseTableName, cachedTable.name) == 0) {
