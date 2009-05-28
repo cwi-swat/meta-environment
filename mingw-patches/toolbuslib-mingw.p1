@@ -1,6 +1,6 @@
 Index: configure.ac
 ===================================================================
---- configure.ac	(revision 29361)
+--- configure.ac	(revision 29376)
 +++ configure.ac	(working copy)
 @@ -6,13 +6,8 @@
  
@@ -18,7 +18,7 @@ Index: configure.ac
  AC_CHECK_FUNCS([strerror])
 Index: src/atb-tool.c
 ===================================================================
---- src/atb-tool.c	(revision 29361)
+--- src/atb-tool.c	(revision 29376)
 +++ src/atb-tool.c	(working copy)
 @@ -6,18 +6,12 @@
  #include <stdlib.h> 
@@ -91,9 +91,9 @@ Index: src/atb-tool.c
  }
 Index: src/Makefile.am
 ===================================================================
---- src/Makefile.am	(revision 29361)
+--- src/Makefile.am	(revision 29376)
 +++ src/Makefile.am	(working copy)
-@@ -10,7 +10,7 @@
+@@ -10,9 +10,9 @@
  libATB_la_SOURCES  = atb-tool.c
  libATB_la_CPPFLAGS = $(ATERM_CFLAGS)
  libATB_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
@@ -101,3 +101,7 @@ Index: src/Makefile.am
 +libATB_la_LIBADD   = $(ATERM_LIBS) $(SOCKETLIBS) -lwsock32
  
  bin_PROGRAMS = tbunpack
+ 
+ tbunpack_SOURCES = tbunpack.c atb-tool.c
+-tbunpack_LDADD = $(ATERM_LIBS)
++tbunpack_LDADD = $(ATERM_LIBS) -lwsock32
