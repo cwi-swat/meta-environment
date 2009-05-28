@@ -1,5 +1,4 @@
 
-
 Mon Sep 15 16:54:32 CEST 2008 <jurgenv@cwi.nl>
  * lib/builtin-io.c: added proper resetting of SGLR's error cache.
 
