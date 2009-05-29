@@ -29,11 +29,11 @@ AC_DEFUN([META_SETUP],
   AM_CONDITIONAL([DISABLE], [false])
 
   AC_MSG_CHECKING([whether CFLAGS is set])
-  if test "${CFLAGS+set}" == set; then
+  if test ! "${CFLAGS}set" == set; then
     AC_MSG_RESULT([yes])
   else
     if  test "$USE_MAINTAINER_MODE" = "yes"; then
-      CFLAGS="-Wall -Werror -g -O2"
+      CFLAGS="-Wall -Werror -g -O2 -m32"
       AC_MSG_RESULT([no, setting to maintainer default ($CFLAGS)])
     else
       AC_MSG_RESULT([no])
