@@ -24,33 +24,43 @@
       </author>
     </authorgroup>
 
-    <pubdate>to be filled in</pubdate>
+    <pubdate>June 1, 2009 (Version 0.1)</pubdate>
   </info>
 
   <warning>
-    <para>This document is in the process of being written. Comments labelled
-    "Warning" (like this one) or other <remark>remarks</remark> (like this
-    one) are temporary notes that will disappear in the final version.</para>
+    <para>Rascal is a work in progress both regarding implementation and
+    documentation. The current version of this document is a preview version
+    only. Comments labelled "Warning" (like this one) or other
+    <remark>remarks</remark> (like this one) are temporary notes that will
+    disappear in the final version.</para>
   </warning>
 
   <section xml:id="section.why-a-new-language">
-    <title>Why a new Language?</title>
+    <title>A New Language for Meta-Programming</title>
 
-    <para>Rascal is a new language for <emphasis>meta-programming</emphasis>
-    and is intended for writing programs that analyze or transform or generate
-    other programs. Why do we need such a new language?</para>
+    <para><emphasis>Meta-programs</emphasis> are programs that analyze,
+    transform or generate other programs. Ordinary programs work on data;
+    meta-programs work on programs. The range of programs to which
+    meta-programming can be applied is large: from programs in standard
+    languages like C and Java to domain-specific languages for describing
+    high-level system models or applications in specialized areas like gaming
+    or finance. In some cases, even test results or performance data are used
+    as input for meta-programs.</para>
+
+    <para>Rascal is a new language for <emphasis>meta-programming</emphasis>,
+    this is the activity of writing meta-programs.</para>
 
     <section xml:id="section.EASY-programming">
       <title>EASY Programming</title>
 
-      <para>Many programming problems follow a fixed pattern. Starting with
-      some <emphasis>object-of-interest</emphasis>, first relevant information
-      is extracted from it and stored in an internal representation. This
+      <para>Many meta-programming problems follow a fixed pattern. Starting
+      with some input system (a black box that we usually call
+      <emphasis>system-of-interest</emphasis>), first relevant information is
+      extracted from it and stored in an internal representation. This
       internal representation is then analyzed and used to synthesize results.
       If the synthesis indicates this, these steps can be repeated over and
       over again. These steps are shown in <xref
-      linkend="figure.extract-analyze-synthesize-paradigm" /> (yes some people
-      do like old radios!).<figure
+      linkend="figure.extract-analyze-synthesize-paradigm" />.<figure
           xml:id="figure.extract-analyze-synthesize-paradigm">
           <title>EASY: the Extract-Analyze-Synthesize Paradigm</title>
 
@@ -61,64 +71,64 @@
           </mediaobject>
         </figure></para>
 
-      <para>This is an abstract view on solving programming problems, but is
-      it uncommon? No, so let's illustrate it with a few examples.</para>
+      <para>This is an abstract view on solving meta-programming problems, but
+      is it uncommon? No, so let's illustrate it with a few examples.</para>
 
       <para><example>
           <title>Finding security breaches</title>
 
-          <para>Alice is system administrator of a large online marketplace
-          and she is looking for security breaches in her system. The
-          objects-of-interest are the system's log files. First relevant
-          entries are extracted. This will include, for instance, messages
-          from the SecureShell demon that reports failed login attempts. From
-          each entry login name and originating IP address are extracted and
-          put in a table (the internal representation in this example). These
-          data are analysed by detecting duplicates and counting frequencies.
-          Finally results are synthesized by listing the most frequently used
-          login names and IP addresses.</para>
+          <para><emphasis>Alice</emphasis> is system administrator of a large
+          online marketplace and she is looking for security breaches in her
+          system. The objects-of-interest are the system's log files. First
+          relevant entries are extracted. This will include, for instance,
+          messages from the SecureShell demon that reports failed login
+          attempts. From each entry login name and originating IP address are
+          extracted and put in a table (the internal representation in this
+          example). These data are analysed by detecting duplicates and
+          counting frequencies. Finally results are synthesized by listing the
+          most frequently used login names and IP addresses.</para>
         </example><example>
           <title>A Forensic DSL compiler</title>
 
-          <para>Bernd is a senior software engineer working at the Berlin
-          headquarters of a forensic investigation lab of the German
-          government. His daily work is to find common patterns in files
-          stored on digital media that have been confiscated during criminal
-          investigations. Text, audio and video files are stored in zillions
-          of different data formats and each data format requires its own
-          analysis technique. For each new investigation ad hoc combinations
-          of tools are used. This makes the process very labour-intensive and
-          error-prone. Bernd convinces his manager that designing a new
-          domain-specific language (DSL) for forensic investigations may
-          relieve the pressure on their lab. After designing the DSL---let's
-          call it DERRICK---he makes an EASY implementation for it. Given a
-          DERRICK program for a specific case under investigation, he first
-          extracts relevant information from it and analyzes it: which media
-          formats are relevant? Which patterns to look for? How should search
-          results be combined? Given this new information, Java code is
-          synthesized that uses the various existing tools and combines their
-          results.</para>
+          <para><emphasis>Bernd</emphasis> is a senior software engineer
+          working at the Berlin headquarters of a forensic investigation lab
+          of the German government. His daily work is to find common patterns
+          in files stored on digital media that have been confiscated during
+          criminal investigations. Text, audio and video files are stored in
+          zillions of different data formats and each data format requires its
+          own analysis technique. For each new investigation ad hoc
+          combinations of tools are used. This makes the process very
+          labour-intensive and error-prone. Bernd convinces his manager that
+          designing a new domain-specific language (DSL) for forensic
+          investigations may relieve the pressure on their lab. After
+          designing the DSL---let's call it DERRICK---he makes an EASY
+          implementation for it. Given a DERRICK program for a specific case
+          under investigation, he first extracts relevant information from it
+          and analyzes it: which media formats are relevant? Which patterns to
+          look for? How should search results be combined? Given this new
+          information, Java code is synthesized that uses the various existing
+          tools and combines their results.</para>
         </example><example>
           <title>Renovating Financial Software</title>
 
-          <para>Charlotte is software engineer at a large financial
-          institution in Paris and she is looking for options to connect an
-          old and dusty software system to a web interface. She will need to
-          analyze the sources of that system to understand how it can be
-          changed to meet the new requirements. The objects-of-interest are in
-          this case the source files, documentation, test scripts and any
-          other available information. They have to be parsed in some way in
-          order to extract relevant information, say the calls between various
-          parts of the system. The call information can be represented as a
-          binary relation between caller and callee (the internal
+          <para><emphasis>Charlotte</emphasis> is software engineer at a large
+          financial institution in Paris and she is looking for options to
+          connect an old and dusty software system to a web interface. She
+          will need to analyze the sources of that system to understand how it
+          can be changed to meet the new requirements. The objects-of-interest
+          are in this case the source files, documentation, test scripts and
+          any other available information. They have to be parsed in some way
+          in order to extract relevant information, say the calls between
+          various parts of the system. The call information can be represented
+          as a binary relation between caller and callee (the internal
           representation in this example). This relation with 1-step calls is
           analyzed and further extended with 2-step calls, 3-step calls and so
           on. In this way call chains of arbitrary length become available.
           With this new information, we can synthesize results by determining
-          the entry points of the software system, i.e. the points where calls
-          from the outside world enter the system. Having completed this first
-          cycle, Charlotte may be interested in which procedures can be called
-          from the entry points and so on and so forth. Results will be
+          the entry points of the software system, i.e., the points where
+          calls from the outside world enter the system. Having completed this
+          first cycle, Charlotte may be interested in which procedures can be
+          called from the entry points and so on and so forth. Results will be
           typically represented as pictures that display the relationships
           that were found. In the case of source code analysis, a variation of
           our workflow scheme is quite common. It is then called the
@@ -136,22 +146,36 @@
         </figure><example>
           <title>Finding Concurrency Errors</title>
 
-          <para>Daniel is concurrency researcher at one of the largests
-          hardware manufacturers worldwide. He is working from an office in
-          the Bay Area. Concurrency is the big issue for his company: it is
-          becoming harder and harder to make CPUs faster, therefore more and
-          of them are bundled on a single chip. Programming these multi-core
-          chips is difficult and many programs that worked fine on a single
-          CPU contain hard to detect concurrency errors due to subtle
-          differences in the order of execution that results from executing
-          the code on more than one CPU. Here is where Daniel enters the
-          picture. He is working on tools for finding concurrency errors.
-          First he extracts facts from the code that are relevant for
-          concurrency problems and have to do with calls, threads, shared
-          variables and locks. Next, he analyzes these facts and synthesizes
-          an abstract model that captures the essentials of the concurrency
-          behaviour of the program. Finally he runs a third-party verification
-          tool with this model as input to do the actual verification.</para>
+          <para><emphasis>Daniel</emphasis> is concurrency researcher at one
+          of the largest hardware manufacturers worldwide. He is working from
+          an office in the Bay Area. Concurrency is the big issue for his
+          company: it is becoming harder and harder to make CPUs faster,
+          therefore more and more of them are bundled on a single chip.
+          Programming these multi-core chips is difficult and many programs
+          that worked fine on a single CPU contain hard to detect concurrency
+          errors due to subtle differences in the order of execution that
+          results from executing the code on more than one CPU. Here is where
+          Daniel enters the picture. He is working on tools for finding
+          concurrency errors. First he extracts facts from the code that are
+          relevant for concurrency problems and have to do with calls,
+          threads, shared variables and locks. Next, he analyzes these facts
+          and synthesizes an abstract model that captures the essentials of
+          the concurrency behaviour of the program. Finally he runs a
+          third-party verification tool with this model as input to do the
+          actual verification.</para>
+        </example><example>
+          <title>Model driven engineering</title>
+
+          <para><emphasis>Elisabeth</emphasis> is a software architect at a
+          large airplane manufacturer and her concern is reliability and
+          dependability of airplane control software. She and her team have
+          designed a UML model of the control software and have extended it
+          with annotations that describe the reliability of individual
+          components. She will use this annotated model in two ways: (a) to
+          extract relevant information from it to synthesize input for a
+          statistical tool that will compute overall system reliability from
+          the reliability of individual components; (b) to generate executable
+          code that takes the reliability issues into account.</para>
         </example></para>
     </section>
 
@@ -160,12 +184,13 @@
 
       <para>With these examples in mind, you have a pretty good picture how
       EASY applies in different use cases. All these cases involve a form of
-      <emphasis>meta-programming</emphasis>: software programs are the
-      objects-of-interest that are being analyzed and transformed. The Rascal
-      language you are about to learn is designed for meta-programming
-      following the EASY paradigm. It can be applied in domains ranging from
-      compiler construction and implementing domain-specific languages to
-      constraint solving and software renovation.</para>
+      <emphasis>meta-programming</emphasis>: software programs (in a wide
+      sense) are the objects-of-interest that are being analyzed and
+      transformed. The Rascal language you are about to learn is designed for
+      meta-programming following the EASY paradigm. It can be applied in
+      domains ranging from compiler construction and implementing
+      domain-specific languages to constraint solving and software
+      renovation.</para>
 
       <para>Since representation of data is central to the approach, Rascal
       provides a rich set of built-in data types. To support extraction and
@@ -184,15 +209,16 @@
       <itemizedlist>
         <listitem>
           <para><emphasis role="bold">Sophisticated built-in data
-          types</emphasis> provide standard solutions for many programming
-          problems.</para>
+          types</emphasis> provide standard solutions for many
+          meta-programming problems.</para>
         </listitem>
 
         <listitem>
           <para><emphasis role="bold">Safety</emphasis> is achieved by finding
           most errors even before the program is executed and by making common
           errors like missing initializations or wrong pointers
-          impossible.</para>
+          impossible.<remark> At the time of writing, this checking is done
+          during execution.</remark></para>
         </listitem>
 
         <listitem>
@@ -253,7 +279,7 @@
 
         <para>The aim of this book is to give an easy to understand but
         comprehensive overview of the Rascal language and to offer problem
-        solving strategies to handle realistic, large, problems that require
+        solving strategies to handle realistic problems that require
         meta-programming. Problems may range from security analysis and model
         extraction to software renovation, domain-specific languages and code
         generation.</para>
@@ -290,44 +316,8 @@
     <section>
       <title>Installing and Running Rascal</title>
 
-      <para><warning>
-          <para>Some topics that are not yet described:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>Where to obtain a copy of Rascal.</para>
-            </listitem>
-
-            <listitem>
-              <para>How to install it.</para>
-            </listitem>
-
-            <listitem>
-              <para>How to run from the command line.</para>
-            </listitem>
-
-            <listitem>
-              <para>Command line options</para>
-            </listitem>
-
-            <listitem>
-              <para>How to run from Eclipse.</para>
-            </listitem>
-
-            <listitem>
-              <para>Setting the search path.</para>
-            </listitem>
-
-            <listitem>
-              <para>How to set up a Rascal project.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>For the moment see http://www.meta-environment.org for
-          information.</para>
-        </warning></para>
-
-      <para></para>
+      <para>See http://www.meta-environment.org/Meta-Environment/Rascal for
+      information.</para>
     </section>
 
     <section>
@@ -374,9 +364,9 @@
 
         <listitem>
           <para><emphasis role="bold">Support</emphasis>: gives tables with
-          operators, see <xref linkend="table.all-operators" />, and
+          operators, see <xref linkend="table.all-operators" />, and library
           functions, see <xref linkend="table.all-functions" />, a
-          bibliography, see<xref linkend="section.bibliography" />, and a
+          bibliography, see <xref linkend="section.bibliography" />, and a
           glossary, see <xref linkend="section.glossary" /> that explains many
           concepts that are used in this book and tries to make the book
           self-contained.</para>
@@ -391,15 +381,12 @@
       this:<programlisting>  .. here is some Rascal code ...</programlisting>Interactive
       sessions are show as a screen like this (<remark>make a more clear
       typographic distinction between listings and screens</remark>):<screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
-<computeroutput><replaceable>Type</replaceable> : <replaceable>Value</replaceable></computeroutput></screen>where:</para>
+<computeroutput><replaceable>Type</replaceable>: <replaceable>Value</replaceable></computeroutput></screen>where:</para>
 
       <itemizedlist>
         <listitem>
           <para><prompt>rascal&gt;</prompt> is the prompt of the Rascal
-          system. <note>
-              <para>The prompt is not yet fixed. Currently, only
-              <literal>&gt;</literal> is displayed as prompt.</para>
-            </note></para>
+          system.</para>
         </listitem>
 
         <listitem>
@@ -408,16 +395,16 @@
         </listitem>
 
         <listitem>
-          <para><computeroutput>Type</computeroutput> is the type of the
-          answer computed by Rascal.</para>
-        </listitem>
+          <para><computeroutput>Type: Value</computeroutput> is the type of
+          the answer followed by the value of the answer as computed by
+          Rascal. In some cases, the response will simply be
+          <computeroutput>ok</computeroutput> when there is no other
+          meaningful answer to give.</para>
 
-        <listitem>
-          <para><computeroutput>Value</computeroutput> is the value of that
-          answer.<note>
-              <para>For typographic reasons the output is abbreviated or
-              slightly edited in some examples.</para>
-            </note></para>
+          <note>
+            <para>For typographic reasons the output is abbreviated or
+            slightly edited in some examples.</para>
+          </note>
         </listitem>
       </itemizedlist>
     </section>
@@ -432,6 +419,9 @@
 
     <section>
       <title>Values</title>
+
+      <para>Values are the basic building blocks of a language and the type of
+      values determines how they may be used.</para>
 
       <para>Rascal is a value-oriented language. This means that values are
       immutable and are always freshly constructed from existing parts and
@@ -449,9 +439,11 @@
       maps and relations. From untyped tree structures to fully typed
       datastructures. Syntax trees that are the result of parsing source files
       are represented as datatypes. There is a wealth of built-in operators
-      and library functions available on the standard datatypes. A fragment of
-      the abstract syntax for statements in a programming language would look
-      as follows:<programlisting>data STAT = asgStat(Id name, EXP exp) 
+      and library functions available on the standard datatypes.</para>
+
+      <para>User-defined datatypes allow the introduction of problem-specific
+      types. A fragment of the abstract syntax for statements in a programming
+      language would look as follows:<programlisting>data STAT = asgStat(Id name, EXP exp) 
           | ifStat(EXP exp,list[STAT] thenpart,list[STAT] elsepart) 
           | whileStat(EXP exp, list[STAT] body) 
           ;</programlisting></para>
@@ -460,16 +452,27 @@
     <section>
       <title>Pattern Matching</title>
 
+      <para>Pattern matching determines whether a given pattern matches a
+      given value. The outcome can be false (no match) or true (a
+      match).</para>
+
       <para>Pattern matching is <emphasis>the</emphasis> mechanism for case
       distinction and search in Rascal and a very rich pattern language is
       provided that includes string matching based on regular expressions,
       list (associative) and set (associative, commutative, identity)
-      matching, matching of abstract pattern, and matching of concrete syntax
-      patterns. All these forms of matching can be used in a single pattern
-      and can be nested. Patterns may contain variables that are bound when
-      the match is successful. Anonymous (don't care) positions are indicated
-      by an underscore (<literal>_</literal>). The following abstract pattern
-      matches the while statement defined above: <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
+      matching, matching of abstract patterns, matching of concrete syntax
+      patterns, and matching of descendant (nested) patterns. All these forms
+      of matching can be used in a single pattern and can be nested. Patterns
+      may contain variables that are bound when the match is successful.
+      Anonymous (don't care) positions are indicated by an underscore
+      (<literal>_</literal>). Here is a regular expression that matches a line
+      of text, finds the first alphanumeric word in it, and extracts the word
+      itself as well as the before and after it:</para>
+
+      <para><programlisting>/^&lt;before:\W*&gt;&lt;word:\w+&gt;&lt;after:.*$&gt;/</programlisting></para>
+
+      <para>The following abstract pattern matches the while statement defined
+      above: <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
 
       <para>Variables in a pattern are either explicitly declared in the
       pattern itself---as done in the example---or they may be declared in the
@@ -482,14 +485,20 @@
 
       <para><programlisting>whileStat(EXP Exp, _*)</programlisting></para>
 
+      <para>When there is a grammar for this example language (in the form of
+      an imported SDF definition), we can also write concrete patterns as we
+      will see below.</para>
+
       <para>Patterns can also be used in an explicit match operator
       <literal>:=</literal> and can then be part of larger boolean
       expressions. Since a pattern match may have more than one solution,
-      local backtracking over the alternatives of a match is provided.</para>
+      local backtracking over the alternatives of a match is provided.
+      Patterns can also be used in control structures, enumerators and
+      visits.</para>
     </section>
 
     <section>
-      <title>Parsing</title>
+      <title>Syntax Definition and Parsing</title>
 
       <para>All source code analysis projects need to extract information
       directly from the source code. There are two main approaches to
@@ -513,7 +522,7 @@
       in a Rascal module. These grammar rules can be applied in writing
       concrete patterns to match parts of parsed source code. Here is an
       example of the same pattern we saw above, but now in concrete
-      form:<programlisting>while &lt;EXP Exp&gt; do &lt;list[STAT] Stats&gt; od</programlisting></para>
+      form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
     </section>
 
     <section>
@@ -540,6 +549,10 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
     <section>
       <title>Comprehensions</title>
 
+      <para>A comprehension is a notation inspired by mathematical set-builder
+      notation that helps to write succinct definitions of lists and
+      sets.</para>
+
       <para>Rascal generalizes comprehensions in various ways. Comprehensions
       exist for lists, sets and maps. A comprehension consists of an
       expression that determines the successive elements to be included in the
@@ -555,15 +568,25 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
 
       <para><programlisting>{name | asgStat(Id name, _) &lt;- P}</programlisting></para>
 
-      <para>which returns a list of all identifiers that occur on the lefthand
-      side of assignment statements in program <literal>P</literal>.</para>
+      <para>which returns a list of all identifiers that occur on the left
+      hand side of assignment statements in program
+      <literal>P</literal>.</para>
     </section>
 
     <section>
       <title>Control structures</title>
 
-      <para>Combinations of generators and boolean expressions also drive the
-      control structures. For instance, <programlisting>for(asgStat(Id name, _) &lt;- P, size(Id) &gt; 10){
+      <para>Control structures like <literal>if</literal> and
+      <literal>while</literal> statement are driven by Boolean expressions,
+      for instance<programlisting>if(N &lt;= 0)
+     return 1; 
+  else
+     return N * fac(N - 1);</programlisting>Actually, combinations of
+      generators and boolean expressions can be used to drive the control
+      structures. For instance,</para>
+
+      <para><programlisting>
+for(asgStat(Id name, _) &lt;- P, size(Id) &gt; 10){
     println(Id);
 }</programlisting></para>
 
@@ -578,19 +601,32 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
       subject value to switch on may be an arbitrary value and the cases are
       arbitrary patterns. When a match fails, all its side-effects are undone
       and when it succeeds the statements associated with that case are
-      executed.</para>
+      executed. Here is an example where we take a program P and distinguish
+      two cases for while and if statement:<programlisting>switch (P){
+case whileStat(EXP Exp, Stats*):
+     println("A while statement");
+case ifStat(Exp, Stats1*, Stat2*):
+     println("An if statement");
+}</programlisting></para>
     </section>
 
     <section>
       <title>Visiting</title>
 
       <para>Visiting the elements of a datastructure is one of the most common
-      operations in our domain and we give it first class support by way of
-      visit expressions that resemble the switch statement. A visit expression
-      consists of an expression that may yield an arbitrarily complex subject
-      value and a number of cases. All the elements of the subject are visited
-      and when one of the cases matches the statements associated with that
-      case are executed. These cases may:</para>
+      operations in our domain and the visitor design pattern is a solution
+      known to every software engineer. Given a tree-like datastructure we
+      want to perform an operation on some (or all) nodes of the tree. The
+      purpose of the visitor design pattern is to decouple the logistics of
+      visiting each node from the actual operation. In Rascal the logistics of
+      visiting is completely automated.</para>
+
+      <para>Visiting is achieved by way of visit expressions that resemble the
+      switch statement. A visit expression consists of an expression that may
+      yield an arbitrarily complex subject value and a number of cases. All
+      the elements of the subject are visited and when one of the cases
+      matches the statements associated with that case are executed. These
+      cases may:</para>
 
       <itemizedlist>
         <listitem>
@@ -606,8 +642,8 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
         <listitem>
           <para>execute a <literal>fail</literal> statement that causes the
           match for the current case to fail (and undoing all side-effects due
-          to the successfull match itself and the execution of the statements
-          sofar).</para>
+          to the successful match itself and the execution of the statements
+          so far).</para>
         </listitem>
       </itemizedlist>
 
@@ -620,9 +656,10 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
     <section>
       <title>Functions</title>
 
-      <para>Functions are explicitly declared and are fully typed. Here is an
-      example of a function that counts the number of assignment statements in
-      a program:</para>
+      <para>Functions allow the definition of frequently used operations. They
+      have a name and formal parameters. They are explicitly declared and are
+      fully typed. Here is an example of a function that counts the number of
+      assignment statements in a program:</para>
 
       <para><programlisting>int countAssignments(PROGRAM P){
     int n = 0;
@@ -636,6 +673,18 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
 
     <section>
       <title>Rewrite Rules</title>
+
+      <para>A <emphasis>rewrite rule</emphasis> is a recipe how to simplify
+      values. Remember: <literal>(a + b)<superscript>2</superscript> =
+      a<superscript>2</superscript> + 2ab +
+      b<superscript>2</superscript></literal>? A rewrite rule has a pattern as
+      left-hand side (here: <literal>(a +
+      b)<superscript>2</superscript></literal>) and a replacement as
+      right-hand side (here: <literal>a<superscript>2</superscript> + 2ab +
+      b<superscript>2</superscript></literal>). Given a value and a set of
+      rewrite rules the patterns are tried on every subpart of the value and
+      replacements are made on the way. This is repeated as long as some
+      pattern matches.</para>
 
       <para>Rewrite rules are the only implicit control mechanism in the
       language and are used to maintain invariants during computations. For
@@ -662,36 +711,67 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
     <section>
       <title>Constraint solving</title>
 
-      <para>Many problems can be solved by forms of constraint solving. Rascal
-      provides a <literal>solve</literal> statement that helps writing
-      constraint solvers. A typical example is dataflow analysis where the
-      propagation of values through a program can be described by a set
+      <para>Many problems can be solved by forms of <emphasis>constraint
+      solving</emphasis>. This is a declarative way of programming: specify
+      the constraints that a problem solution should satisfy and how potential
+      solutions can be generated. The actual solution (if any) is found by
+      enumerating solutions and testing their compliance with the
+      constraints.</para>
+
+      <para>Rascal provides a <literal>solve</literal> statement that helps
+      writing constraint solvers. A typical example is dataflow analysis where
+      the propagation of values through a program can be described by a set of
       equations. Their solution can be found with the <literal>solve</literal>
-      statement.</para>
+      statement. See <xref linkend="section.dataflow" /> for examples.</para>
     </section>
 
     <section>
-      <title>Typechecking</title>
+      <title>Other features</title>
+
+      <para>All language features (including the ones just mentioned) are
+      described in more detail later on in this book. Some features we have
+      not yet mentioned are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Rascal programs consist of modules that are organized in
+          packages.</para>
+        </listitem>
+
+        <listitem>
+          <para>Modules can import other modules.</para>
+        </listitem>
+
+        <listitem>
+          <para>The visibility of entities declared in modules can be
+          controlled by a public/private mechanism.</para>
+        </listitem>
+
+        <listitem>
+          <para>Datastructures may have annotations that can be explicitly
+          used and modified.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Typechecking and Execution</title>
 
       <para>Rascal has a statically checked type system that prevents type
       errors and uninitialized variables at runtime. There are no runtime type
       casts as in Java and there are therefore less opportunities for run-time
       errors. The language provides <emphasis>higher-order, parametric,
       polymorphism</emphasis>. A type aliasing mechanism allows documenting
-      specific uses of a type. Builtin operators are heavily overloaded. For
+      specific uses of a type. Built-in operators are heavily overloaded. For
       instance, the operator + is used for addition on integers and reals but
-      also for list conctatenation, set union etc.</para>
-    </section>
+      also for list concatenation, set union etc.</para>
 
-    <section>
-      <title>Execution</title>
-
-      <para>Following the what-you-see-is-what-you-get paradigm, control flow
-      is completely explicit. Boolean expression determine choices that drive
-      the control structures. Rewrite rules form the only exception to the
-      explicit control flow principle. Only local backtracking is provided (no
-      suprise) in the context of boolean expressions and pattern matching;
-      side effects are undone in case of backtracking.</para>
+      <para>The flow of Rascal program execution is completely explicit.
+      Boolean expression determine choices that drive the control structures.
+      Rewrite rules form the only exception to the explicit control flow
+      principle. Only local backtracking is provided (no surprise) in the
+      context of boolean expressions and pattern matching; side effects are
+      undone in case of backtracking.</para>
     </section>
   </section>
 
@@ -708,14 +788,14 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
 
       <para>The ubiquitous hello world program looks in Rascal as
       follows:<screen><prompt>rascal&gt;</prompt> <userinput>import IO;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>println("Hello, this is my first Rascal program");</userinput>
 <computeroutput>Hello, this is my first Rascal program
-void: null</computeroutput>
+ok</computeroutput>
 </screen>First, the library module IO (see <xref linkend="section.lib-IO" />)
       is imported since hello world requires printing. Next, we call
-      <literal>println</literal> and poudly observe our first Rascal
+      <literal>println</literal> and proudly observe our first Rascal
       output!</para>
 
       <para>A slightly more audacious approach is to wrap the print statement
@@ -724,23 +804,23 @@ void: null</computeroutput>
       <para><screen><prompt>rascal&gt; </prompt><userinput>void hello() {
    println("Hello, this is my first Rascal program");
 }</userinput>
-<computeroutput>Rascal.Function::=Rascal.Function.Closure(): void hello() { ...</computeroutput>
+<computeroutput>Rascal.Function ...</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
 <computeroutput>Hello, this is my first Rascal program
-void: null</computeroutput></screen>The summit of hello-engineering can be
-      reached by placing all the above in a separate module:<programlisting>module demo::Hello
+ok</computeroutput></screen>The summit of hello-engineering can be reached by
+      placing all the above in a separate module:<programlisting>module demo::Hello
 
 public void hello() {
    println("Hello, this is my first Rascal program");
 }</programlisting>Note that we added a public modifier to the definition of
       hello, since we want it to be visible outside the Hello module. Using
       this Hello module is now simple:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Hello;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
 <computeroutput>Hello, this is my first Rascal program
-void: null</computeroutput></screen><note>
+ok</computeroutput></screen><note>
           <para>All examples in this book can be found in the
           <literal>demo</literal> directory of the Rascal distribution. That
           is why we prefix all names of examples modules with
@@ -756,15 +836,15 @@ void: null</computeroutput></screen><note>
 
 public int fac(int N)
 {
-  return N &lt;= 0 ? 1 : N * fac(N - 1);
+  if(N &lt;= 0)
+     return 1; 
+  else
+     return N * fac(N - 1);
 }</programlisting></para>
 
-      <para>It uses a conditional expression of the form
-      <literal><replaceable>Exp</replaceable><subscript>1</subscript> ?
-      <replaceable>Exp</replaceable><subscript>2</subscript> :
-      <replaceable>Exp</replaceable><subscript>3</subscript></literal> to
-      distinguish cases and here is how to use it:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Factorial;</userinput>
-<computeroutput>void: null</computeroutput>
+      <para>It uses a conditional statement to distinguish cases and here is
+      how to use it:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Factorial;</userinput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>fac(47);</userinput>
 <computeroutput>int: 258623241511168180642964355153611979969197632389120000000000</computeroutput></screen></para>
@@ -788,7 +868,8 @@ data ColoredTree =
       <para>We can use them as follows:</para>
 
       <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::ColoredTrees;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok
+</computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>rb = red(black(leaf(1), red(leaf(2),leaf(3))));</userinput>
 <computeroutput>ColoredTree: red(black(leaf(1), red(leaf(2),leaf(3))))</computeroutput></screen>We
       define two operations on ColoredTrees, one to count the red nodes, and
@@ -881,7 +962,7 @@ public str capitalize(str word)
             beginning (<literal>^</literal>), expects a single letter and
             assigns it to the variable letter
             (<literal>letter:[a-z]</literal>) followed by an arbitrary
-            sequence of letters untilk the end of the string that is assigned
+            sequence of letters until the end of the string that is assigned
             to the variable rest (<literal>&lt;rest:.*$&gt;</literal>).</para>
           </callout>
 
@@ -903,7 +984,7 @@ public str capAll1(str S)
  result = "";
  while (/^&lt;before:\W*&gt;&lt;word:\w+&gt;&lt;after:.*$&gt;/ := S) { <co
             xml:id="co.capAll1-regexp" />
-    result = result + before + capitalize(word);
+    result += before + capitalize(word);
     S = after;
   }
   return result;
@@ -945,7 +1026,7 @@ public str capAll2(str S)
       <para>We can apply this all as follows:</para>
 
       <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::WordReplacement;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>capitalize("rascal");</userinput>
 <computeroutput>str: "rascal"</computeroutput>
@@ -958,26 +1039,78 @@ public str capAll2(str S)
   <section xml:id="section.problem-solving-strategies">
     <title>Problem Solving Strategies</title>
 
-    <para>Before we study more complicated examples, it is usefull to discuss
+    <para>Before we study more complicated examples, it is useful to discuss
     some general problem solving strategies that are relevant in Rascal's
-    application domain. The overall workflow is shown in <xref
-    linkend="figure.problem-solving" /> and consists of three optional
-    phases:</para>
+    application domain.</para>
+
+    <para>To appreciate these general strategies, it is good to keep some
+    specific problem areas in mind:</para>
 
     <itemizedlist>
       <listitem>
-        <para>Is extraction needed to solve the problem, then define the
-        extraction phase, see <xref
+        <para><emphasis role="bold">Documentation generation</emphasis>:
+        extract facts from source code and use them to generate textual
+        documentation. A typical example is generating web-based documentation
+        for legacy languages like Cobol and PL/I.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">Metrics calculation</emphasis>: extract
+        facts from source code (and possibly other sources like test runs) and
+        use them to calculate code metrics. Examples are cohesion and coupling
+        of modules and test coverage.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">Model extraction</emphasis>: extract facts
+        from source code and use them to build an abstract model of the source
+        code. An example is extracting lock and unlock calls from source code
+        and to build an automaton that guarantees that lock/unlock occurs in
+        pairs along every control flow path.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">Model-based code generation</emphasis>:
+        given a high-level model of a software system, described in UML or
+        some other modelling language, transform this model into executable
+        code. UML-to-Java code generation falls in this category.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">Source-to-source
+        transformation</emphasis>: large-scale, fully automated, source code
+        transformation with certain objectives like removing deprecated
+        language features, upgrading to newer APIs and the like.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">Interactive refactoring</emphasis>: given
+        known "code smells" a user can interactively indicate how these smells
+        should be removed. The refactoring features in Eclipse and Visual
+        Studio are examples.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>With these examples in mind, we can study the overall problem
+    solving workflow as shown in <xref linkend="figure.problem-solving" />. It
+    consists of three optional phases:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Is <emphasis role="bold">extraction needed</emphasis> to solve
+        the problem, then define the extraction phase, see <xref
         linkend="section.defining-extraction" />.</para>
       </listitem>
 
       <listitem>
-        <para>Is analysis needed, then define the analysis phase, see <xref
+        <para>Is <emphasis role="bold">analysis needed</emphasis>, then define
+        the analysis phase, see <xref
         linkend="section.defining-analysis" />.</para>
       </listitem>
 
       <listitem>
-        <para>Is synthesis needed, then define the synthesis phase, see <xref
+        <para>Is <emphasis role="bold">synthesis needed</emphasis>, then
+        define the synthesis phase, see <xref
         linkend="section.defining-synthesis" />.</para>
       </listitem>
     </itemizedlist>
@@ -1015,27 +1148,28 @@ public str capAll2(str S)
 
     <itemizedlist>
       <listitem>
-        <para>Determine the requirements of the synthesis phase. This amounts
-        to making an inventory of the desired results of the whole project and
-        may include generated source code, abstract models, or
-        visualizations.</para>
+        <para><emphasis role="bold">Requirements of the synthesis
+        phase</emphasis>. This amounts to making an inventory of the desired
+        results of the whole project and may include generated source code,
+        abstract models, or visualizations.</para>
       </listitem>
 
       <listitem>
-        <para>Determine the requirements of the analysis phase. Once these
-        results of the synthesis phase are known, it is possible to list the
-        analysis results that are needed to synthesize desired results.
-        Possible results of the analysis phase include type information,
-        structural information of the orginal source.</para>
+        <para><emphasis role="bold">Requirements of the analysis
+        phase</emphasis>. Once these results of the synthesis phase are known,
+        it is possible to list the analysis results that are needed to
+        synthesize desired results. Possible results of the analysis phase
+        include type information, structural information of the original
+        source.</para>
       </listitem>
 
       <listitem>
-        <para>Determine the requirements of the extraction phase. As a last
-        step, one can make an inventory of the facts that have to be extracted
-        to form the starting point for the analysis phase. Typical facts
-        include method calls, inheritance relations, control flow graphs,
-        usage patterns of specific library functions or language
-        constructs.</para>
+        <para><emphasis role="bold">Requirements of the extraction
+        phase</emphasis>. As a last step, one can make an inventory of the
+        facts that have to be extracted to form the starting point for the
+        analysis phase. Typical facts include method calls, inheritance
+        relations, control flow graphs, usage patterns of specific library
+        functions or language constructs.</para>
       </listitem>
     </itemizedlist>
 
@@ -1047,7 +1181,13 @@ public str capAll2(str S)
             <imagedata fileref="requirements.png" scale="50"></imagedata>
           </imageobject>
         </mediaobject>
-      </figure>When these requirements have been established, it becomes much
+      </figure></para>
+
+    <para>You will have no problem in identifying requirements for each phase
+    when you apply them to a specific example from the list given
+    earlier.</para>
+
+    <para>When these requirements have been established, it becomes much
     easier to actually carry out the project using the three phases of <xref
     linkend="figure.problem-solving" />.</para>
 
@@ -1063,7 +1203,7 @@ public str capAll2(str S)
         <listitem>
           <para>First and foremost we have to determine which facts we need.
           This sounds trivial, but it is not. The problem is that we have to
-          aniticipate which facts will be needed in the next---not yet
+          anticipate which facts will be needed in the next---not yet
           defined---analysis phase. A common approach is to use look-ahead and
           to sketch the queries that are likely to be used in the analysis
           phase and to determine which facts are needed for them. Start with
@@ -1137,10 +1277,10 @@ public str capAll2(str S)
 
         <listitem>
           <para>The extraction phase may only require lexical analysis. This
-          happens when more superfical, textual, facts have to be extracted
-          like procedure calls, counts of certain statement statement and the
-          like. Use Rascal's full regular expression facilities to do the
-          lexical analysis.</para>
+          happens when more superficial, textual, facts have to be extracted
+          like procedure calls, counts of certain statements and the like. Use
+          Rascal's full regular expression facilities to do the lexical
+          analysis.</para>
         </listitem>
       </itemizedlist>
 
@@ -1166,7 +1306,7 @@ public str capAll2(str S)
 
       <itemizedlist>
         <listitem>
-          <para>Postprocess the extracted facts (using Rascal, of course) to
+          <para>Post process the extracted facts (using Rascal, of course) to
           obtain trivial facts about the source code such as total lines of
           source code and number of procedures, classes, interfaces and the
           like. Next validate these trivial facts with tools like
@@ -1195,6 +1335,35 @@ public str capAll2(str S)
             </imageobject>
           </mediaobject>
         </figure></para>
+
+      <para>The Rascal features that are most frequently used for extraction
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Regular expression patterns to extract textual facts from
+          source code.</para>
+        </listitem>
+
+        <listitem>
+          <para>Syntax definitions and concrete patterns to match syntactic
+          structures in source code.</para>
+        </listitem>
+
+        <listitem>
+          <para>Pattern matching (used in many Rascal statements).</para>
+        </listitem>
+
+        <listitem>
+          <para>Visits to traverse syntax trees and to locally extract
+          information.</para>
+        </listitem>
+
+        <listitem>
+          <para>The repertoire of built-in datatypes (like lists, maps, sets
+          and relations) to represent the extracted facts.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section xml:id="section.defining-analysis">
@@ -1250,6 +1419,37 @@ public str capAll2(str S)
             </imageobject>
           </mediaobject>
         </figure></para>
+
+      <para>The Rascal features that are frequently used for analysis
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>List, set and map comprehensions.</para>
+        </listitem>
+
+        <listitem>
+          <para>The built-in operators and library functions, in particular
+          for lists, maps, sets and relations.</para>
+        </listitem>
+
+        <listitem>
+          <para>Pattern matching (used in many Rascal statements).</para>
+        </listitem>
+
+        <listitem>
+          <para>Visits and switches to further process extracted facts.</para>
+        </listitem>
+
+        <listitem>
+          <para>The solve statement for constraint solving.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rewrite rules to simplify results and to enforce
+          constraints.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section xml:id="section.defining-synthesis">
@@ -1283,10 +1483,26 @@ public str capAll2(str S)
         </listitem>
 
         <listitem>
-          <para>If source is to be generated, we need a grammar of the target
-          source language. Note that this approach guarantees the generation
-          of syntactically correct source code as opposed to code generation
-          using print statements</para>
+          <para>If source code is to be generated, there are various
+          options.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Print strings with embedded variables.</para>
+            </listitem>
+
+            <listitem>
+              <para>Convert abstract syntax trees to strings (perhaps using
+              forms of pretty printing).</para>
+            </listitem>
+
+            <listitem>
+              <para>Use a grammar of the target source language, also for code
+              generation. Note that this approach guarantees the generation of
+              syntactically correct source code as opposed to code generation
+              using print statements</para>
+            </listitem>
+          </itemizedlist>
         </listitem>
 
         <listitem>
@@ -1309,6 +1525,29 @@ public str capAll2(str S)
             </imageobject>
           </mediaobject>
         </figure></para>
+
+      <para>The Rascal features that are frequently used for synthesis
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Syntax definitions or data declarations to define output
+          formats.</para>
+        </listitem>
+
+        <listitem>
+          <para>Pattern matching (used in many Rascal statements).</para>
+        </listitem>
+
+        <listitem>
+          <para>Visits of datastructures and on-the-fly code
+          generation.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rewrite rules.</para>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
@@ -1317,16 +1556,20 @@ public str capAll2(str S)
 
     <para>Now we will have a closer look at some larger applications of
     Rascal. We start with a call graph analysis in <xref
-    linkend="section.motivating-example" /> an then continue with the analysis
-    of the component structure of an application in <xref
+    linkend="section.motivating-example" /> and then continue with the
+    analysis of the component structure of an application in <xref
     linkend="section.analyzing-components" /> and of Java systems in <xref
     linkend="section.analyzing-java" />. Next we move on to the detection of
-    initialized variables in <xref linkend="section.unitialized-variables" />.
-    As an example of computing code metrics, we describe the calculation of
-    McCabe's cyclomatic complexity in <biblioref linkend="section.McCabe" />.
-    Several examples of dataflow analysis follow in <xref
-    linkend="section.dataflow" />. A description of program slicing concludes
-    the chapter (<xref linkend="section.program-slicing" />).</para>
+    uninitialized variables in <xref
+    linkend="section.unitialized-variables" />. As an example of computing
+    code metrics, we describe the calculation of McCabe's cyclomatic
+    complexity in <biblioref linkend="section.McCabe" />. Several examples of
+    dataflow analysis follow in <xref linkend="section.dataflow" />. A
+    description of program slicing concludes the chapter, see <xref
+    linkend="section.program-slicing" />.<warning>
+        <para>The examples in this section are biased towards pure analysis.
+        We intend to add more extraction and synthesis examples.</para>
+      </warning></para>
 
     <section xml:id="section.motivating-example">
       <title>Call Graph Analysis</title>
@@ -1424,11 +1667,13 @@ public str capAll2(str S)
         procedures:</para>
 
         <screen>rascal&gt; <userinput>alias proc = str;</userinput>
-<computeroutput>void: null</computeroutput></screen>
+<computeroutput>ok</computeroutput></screen>
 
         <para>Suppose that the following facts have been extracted from the
         source code and are represented by the relation
-        <literal>Calls</literal>:</para>
+        <literal>Calls</literal>:<caution>
+            <para>Here we should illustrate how to do this.</para>
+          </caution></para>
 
         <screen><prompt>rascal&gt;</prompt> <userinput>rel[proc, proc] Calls = 
    { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, &lt;"d","e"&gt;, 
@@ -1451,8 +1696,8 @@ public str capAll2(str S)
           number of tuples in the <literal>Calls</literal> relation, as
           follows. First, we need the Relation library (described in <xref
           linkend="section.lib-Relation" />) so we import it:<screen><prompt>rascal&gt;</prompt> <userinput>import Relation;</userinput>
-<computeroutput>void: null</computeroutput></screen>next we describe a new
-          variable and calculate the number of tuples:</para>
+<computeroutput>ok</computeroutput></screen>next we describe a new variable
+          and calculate the number of tuples:</para>
 
           <para><screen><prompt>rascal&gt;</prompt> <userinput>nCalls = size(Calls);</userinput>
 <computeroutput>int: 8</computeroutput></screen>The library function
@@ -1506,7 +1751,7 @@ public str capAll2(str S)
           relation:</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>import Graph;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>entryPoints = top(Calls);</userinput>
 <computeroutput>set[proc]: {"a", "f"}</computeroutput></screen>
@@ -1536,7 +1781,8 @@ public str capAll2(str S)
 
           <para>We can also determine the <emphasis>indirect calls</emphasis>
           between procedures, by taking the transitive closure of the
-          <literal>Calls</literal> relation:</para>
+          <literal>Calls</literal> relation. Observe that the transitive
+          closure will contain both the direct and the indirect calls.</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>closureCalls = Calls+;</userinput>
 <computeroutput>rel[proc, proc]: {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
@@ -1589,9 +1835,7 @@ public str capAll2(str S)
           the calls relation as shown in <xref linkend="figure.calls" />. Such
           a visual inspection does <emphasis>not</emphasis> scale very well to
           large graphs and this makes the above form of analysis particularly
-          suited for studying large systems.<warning>
-              <para>Add a screen dump here of the Eclipse browser.</para>
-            </warning></para>
+          suited for studying large systems.</para>
         </section>
       </section>
     </section>
@@ -1621,7 +1865,7 @@ public rel[comp,comp] lift(rel[proc,proc] aCalls,
       define a call relation and a partof relation:</para>
 
       <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::Lift;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>Calls = {&lt;"main", "a"&gt;, &lt;"main", "b"&gt;, &lt;"a", "b"&gt;, 
                          &lt;"a", "c"&gt;, &lt;"a", "d"&gt;, &lt;"b", "d"&gt;
@@ -1881,7 +2125,7 @@ public rel[varname,expr] UNINIT =
 
         <listitem>
           <para><literal>E in reachX({ROOT}, DEFS[V], PRED) </literal>is a
-          test that determines whether statement <replaceable>S</replaceable>
+          test that determines whether expression <replaceable>E</replaceable>
           is reachable from the <literal>ROOT</literal> without encountering a
           definition of variable <replaceable>V</replaceable>.</para>
 
@@ -1930,7 +2174,7 @@ public rel[varname,expr] UNINIT =
       <literal>DEFS</literal>, <literal>USES</literal> and
       <literal>UNINIT</literal>), we get as value for
       <literal>UNINIT</literal>:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Uninit;</userinput>
-<computeroutput>void: null</computeroutput>
+ok
 
 <prompt>rascal&gt;</prompt> <userinput>UNINIT;</userinput>
 <computeroutput>rel[varname,expr]: {&lt;"q", 5&gt;, &lt;"y", 6&gt;, &lt;"z", 10&gt;}</computeroutput></screen>and
@@ -2062,7 +2306,7 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED, &amp;T ROOT)
 
         <para>First import the above module and consider the sample flow graph
         PRED:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Dominators;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>rel[int,int] PRED = {
 &lt;1,2&gt;, &lt;1,3&gt;,
@@ -2132,7 +2376,7 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED, &amp;T ROOT)
             </mediaobject>
           </figure></para>
 
-        <para>We assume the following basicdefinitions to represent
+        <para>We assume the following basic definitions to represent
         information about the program:<programlisting>module demo::ReachingDefs
 
 import Relation;
@@ -2392,7 +2636,8 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
       and the original program is reduced to an independent subprogram, called
       a <emphasis>slice</emphasis>, that is guaranteed to represent faithfully
       the behavior of the original program at the slicing criterion. An
-      example will illustrate this:</para>
+      example will illustrate this (we use line numbers for later
+      reference):</para>
 
       <para><programlisting xml:id="programlisting.slice-example">[ 1] read(n)            [ 1] read(n)           [ 1] read(n)
 [ 2] i := 1             [ 2] i := 1            [ 2] i := 1
@@ -2422,7 +2667,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
       understanding, optimization and more. An overview of slicing techniques
       and applications can be found in <biblioref linkend="Tip95" />. Here we
       will explore a relational formulation of slicing adapted from a proposal
-      in <biblioref linkend="JacksonRollins94" />J. The basic ingredients of
+      in <biblioref linkend="JacksonRollins94" />. The basic ingredients of
       the approach are as follows:</para>
 
       <itemizedlist>
@@ -2568,7 +2813,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
       <para>Let's apply this to the example from the start of this section and
       assume the following:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Slicing;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>rel[stat,stat] PRED = { &lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, 
                                 &lt;5,9&gt;, &lt;6,7&gt;, &lt;7,8&gt;,&lt;8,5&gt;, &lt;8,9&gt;, 
@@ -2656,7 +2901,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           <title>Boolean</title>
 
           <para>The Booleans are represented by the type
-          <literal>bool</literal> whuch has two values:
+          <literal>bool</literal> which has two values:
           <literal>true</literal> and <literal>false</literal>.</para>
         </formalpara>
 
@@ -2855,15 +3100,15 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
               <listitem>
                 <para><literal>[<replaceable>F</replaceable> ..
                 <replaceable>L</replaceable>]</literal> ranges from first
-                element <replaceable>F</replaceable> upto (and including) last
-                element <replaceable>L</replaceable> with increments of
+                element <replaceable>F</replaceable> up to (and including)
+                last element <replaceable>L</replaceable> with increments of
                 1.</para>
               </listitem>
 
               <listitem>
                 <para><literal>[<replaceable>F</replaceable>,<replaceable>S</replaceable>,..<replaceable>
                 E</replaceable>]</literal>, ranges from first element
-                <replaceable>F</replaceable>, second element S upto (and
+                <replaceable>F</replaceable>, second element S up to (and
                 including) last element <replaceable>L</replaceable> with
                 increments of <literal>S</literal> -
                 <replaceable>F</replaceable>.</para>
@@ -3031,7 +3276,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         <replaceable>L</replaceable><subscript>2</subscript><literal>,
         ...,</literal> <replaceable>L</replaceable><subscript>n</subscript>
         are optional labels. An example of a tuple type is <literal>tuple[str
-        name, int freq&gt;]</literal>. Examples are:</para>
+        name, int freq]</literal>. Examples are:</para>
 
         <itemizedlist>
           <listitem>
@@ -3148,8 +3393,8 @@ alias Frequency = int;</programlisting>
         <para>introduces two new type names <literal>ModuleId</literal> and
         <literal>Frequency</literal>, both an alias for the type
         <literal>str</literal>. The use of type aliases is a good way to
-        docuement your intentions. Another example is an alias definition for
-        a graph containing integer nodes:</para>
+        document your intentions. Another example is an alias definition for a
+        graph containing integer nodes:</para>
 
         <para><programlisting>alias Graph = rel[int,int];</programlisting></para>
       </section>
@@ -3235,7 +3480,7 @@ alias Frequency = int;</programlisting>
         <para>The following function <literal>swap</literal> returns a tuple
         in which its arguments are swapped and can be applied to arbitrary
         values in a type safe manner:<screen><prompt>rascal&gt;</prompt> <userinput>tuple[&amp;B, &amp;A] swap(&amp;A a, &amp;B b) { return &lt;b, a&gt;; }</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>swap(1,2);</userinput>
 <computeroutput>tuple[int,int]: &lt;2,1&gt;
@@ -3249,7 +3494,7 @@ alias Frequency = int;</programlisting>
         graphs as follows:</para>
 
         <para><screen><prompt>rascal&gt;</prompt> <userinput>alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>Graph[int] GI = {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;};</userinput>
 <computeroutput>Graph[int] :  {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;}
@@ -3270,12 +3515,12 @@ alias Frequency = int;</programlisting>
         are ordered in a so-called <emphasis>type lattice</emphasis> shown in
         <xref linkend="figure.type-lattice" />. The arrows describe a
         <emphasis>subtype-of</emphasis> relation between types. The type void
-        is the <emphasis>smallests</emphasis> type and is included in all
-        other types and the type value is the <emphasis>largests</emphasis>
-        type that includes all other types. We also see that
-        <literal>rel</literal> is a subtype of <literal>set</literal> and that
-        each ADT is a subtype of <literal>node</literal>. Finally, each alias
-        is structurally equivalent to one or more specific other types.<figure>
+        is the <emphasis>smallest</emphasis> type and is included in all other
+        types and the type value is the <emphasis>largest</emphasis> type that
+        includes all other types. We also see that <literal>rel</literal> is a
+        subtype of <literal>set</literal> and that each ADT is a subtype of
+        <literal>node</literal>. Finally, each alias is structurally
+        equivalent to one or more specific other types.<figure>
             <title>The Rascal Type Lattice</title>
 
             <mediaobject>
@@ -3411,7 +3656,7 @@ Declaration</replaceable><subscript>1</subscript>;
         Example:<screen><prompt>rascal&gt;</prompt> <userinput>rel[int, int] invert(rel[int,int] R){
             return {&lt;Y, X&gt; | &lt;int X, int Y&gt; &lt;- R }
         }</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput><literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;</userinput>
 <computeroutput>rel[int,int] : {&lt;10,1&gt;, &lt;20,2&gt;}</computeroutput></screen></para>
@@ -3451,7 +3696,7 @@ Declaration</replaceable><subscript>1</subscript>;
           binary relation. :<screen><prompt>rascal&gt;</prompt> <userinput>rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R){  
             return {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; &lt;- R };
         }</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt><literal> </literal><userinput><literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>;</userinput>
 <computeroutput>rel[int,int] : {&lt;10,1&gt;, &lt;20,2&gt;}
@@ -3460,7 +3705,7 @@ Declaration</replaceable><subscript>1</subscript>;
 <computeroutput>rel[int,str] : {&lt;1, "mon"&gt;, &lt;2, "tue"&gt;}</computeroutput></screen>Here
           we declare a function that can be used to swap the elements of pairs
           of arbitrary types:<screen><prompt>rascal&gt;</prompt> <userinput>&lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) { return &lt;B, A&gt;;;}</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput><literal>swap(&lt;1, 2&gt;)</literal>;</userinput>
 <computeroutput><literal>tuple[int,int] : &lt;2,1&gt;</literal></computeroutput>
@@ -3474,13 +3719,13 @@ Declaration</replaceable><subscript>1</subscript>;
         <title>Variable Declaration</title>
 
         <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>where
-        <replaceable>T</replaceable>ype is a type,
-        <replaceable>V</replaceable>ar is a variable name, and
-        <replaceable>E</replaceable>xp is an expression that should have type
+        <replaceable>Type</replaceable> is a type,
+        <replaceable>Var</replaceable> is a variable name, and
+        <replaceable>Exp</replaceable> is an expression that should have type
         <replaceable>Type</replaceable>. The effect is that the value of
         expression <replaceable>Exp</replaceable> is assigned to
-        <replaceable>V</replaceable>ar and can be used later on as
-        <replaceable>Var</replaceable>'s value. The folowing rules
+        <replaceable>Var</replaceable> and can be used later on as
+        <replaceable>Var</replaceable>'s value. The following rules
         apply:</para>
 
         <itemizedlist>
@@ -3549,8 +3794,8 @@ Declaration</replaceable><subscript>1</subscript>;
           </warning><warning>
             <para>The syntax of tags has to be aligned with the syntax of
             annotations. This is done in the examples below but not yet in the
-            synyax.</para>
-          </warning>Tags are intended to add metadata to a Rascal program and
+            syntax.</para>
+          </warning>Tags are intended to add meta data to a Rascal program and
         allow to influence the execution of the Rascal program, for instance,
         by adding memoization hints or database mappings for relations.</para>
 
@@ -3610,7 +3855,7 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
 
 anno LayoutStrategy Graph @ strategy;</programlisting></para>
 
-        <para>The folllowing constructs are provided for handling
+        <para>The following constructs are provided for handling
         annotations:</para>
 
         <itemizedlist>
@@ -3678,7 +3923,8 @@ data Bool = bor(Bool left, Bool right);
 
 rule a1 band(btrue, Bool B)    =&gt; B;
 rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
+
 <prompt>rascal&gt;</prompt> <userinput>band(band(btrue,btrue),band(btrue, bfalse));</userinput>
 <computeroutput>Bool: bfalse</computeroutput></screen></para>
 
@@ -3713,7 +3959,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
       <itemizedlist>
         <listitem>
-          <para>An <emphasis>elementary literal value</emphasis>, e.g.
+          <para>An <emphasis>elementary literal value</emphasis>, e.g.,
           constants of type <literal>bool</literal>, <literal>int</literal>,
           <literal>real</literal>, <literal>str</literal> or
           <literal>loc</literal>. Elementary literals evaluate to
@@ -3797,7 +4043,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <title>Non-Boolean Operator Expressions</title>
 
         <para>The non-Boolean operators are summarized in <xref
-        linkend="table.non-boolean-operators" />. All operators are higly
+        linkend="table.non-boolean-operators" />. All operators are highly
         overloaded and we refer to <xref linkend="section.lib" /> for a
         description of their meaning for each specific type. The following
         rules apply:</para>
@@ -3805,7 +4051,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <itemizedlist>
           <listitem>
             <para>All <replaceable>name</replaceable> arguments stand for
-            themselves and are not evaulated.</para>
+            themselves and are not evaluated.</para>
           </listitem>
 
           <listitem>
@@ -3856,7 +4102,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
                 </row>
 
                 <row>
-                  <entry><replaceable>exp</replaceable><subscript>1</subscript><literal>
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript><literal>
                   [</literal> <replaceable>Name</replaceable>
                   <literal>=</literal>
                   <replaceable>Exp</replaceable><subscript>2</subscript>
@@ -3864,8 +4110,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                   <entry>Field assignment</entry>
 
-                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>should
-                  evaluate to a tuple or datatype with a field
+                  <entry><replaceable>Exp</replaceable><subscript>1</subscript>
+                  should evaluate to a tuple or datatype with a field
                   <replaceable>Name</replaceable>; assign value
                   <replaceable>Exp</replaceable><subscript>2</subscript> to
                   that field</entry>
@@ -3878,10 +4124,10 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                   <entry>Field projection</entry>
 
-                  <entry>Exp should evaluate to a tuple or relation, and field
-                  should be a field name or an integer constant. A new tuple
-                  or relation is retruned that only contains the listed
-                  fields.</entry>
+                  <entry><replaceable>Exp</replaceable> should evaluate to a
+                  tuple or relation, and field should be a field name or an
+                  integer constant. A new tuple or relation is returned that
+                  only contains the listed fields.</entry>
                 </row>
 
                 <row>
@@ -4028,7 +4274,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
                   <entry>Subtraction / difference</entry>
 
                   <entry>Subtract integer or real; difference of list, set,
-                  map, or relationT</entry>
+                  map, or relation</entry>
                 </row>
 
                 <row>
@@ -4167,13 +4413,13 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <title>Boolean Operator Expressions</title>
 
         <para>The Boolean operators are summarized in <xref
-        linkend="table.boolean-operators" />. All operators are higly
+        linkend="table.boolean-operators" />. All operators are highly
         overloaded and we refer to <xref linkend="section.lib" /> for a
         description of their meaning for each specific type. Most operator are
         self-explanatory except the Match and NoMatch operators that are also
         the main reason to treat Boolean operator expressions separately.
         Although we describe patterns in full detail in <xref
-        linkend="section.pattern" />, a preview is usefull here. A pattern
+        linkend="section.pattern" />, a preview is useful here. A pattern
         can</para>
 
         <itemizedlist>
@@ -4212,7 +4458,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           <listitem>
             <para>if the match succeeds, any variables in the pattern are
             bound to subvalues of the subject value and the match expression
-            yield <literal>true</literal>;</para>
+            yields <literal>true</literal>;</para>
           </listitem>
 
           <listitem>
@@ -4228,7 +4474,12 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         the subject value resulting in different variable bindings. A quick
         example. Consider the following match of a list<programlisting>[1, list[int] <replaceable>L</replaceable>, 2, list[int] <replaceable>M</replaceable>] := [1,2,3,2,4]</programlisting></para>
 
-        <para>There are two solutions for this match:</para>
+        <para>By definition <literal>list[int] L </literal>and
+        <literal>list[int] M</literal> match list elements that are part of
+        the enclosing list in which they occur. If they should match a nested
+        list each should be enclosed in list brackets.</para>
+
+        <para>There are two solutions for the above match:</para>
 
         <itemizedlist>
           <listitem>
@@ -4245,7 +4496,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <para>Depending on the context, only the first solution of a match
         expression is used, respectively all solutions are used. If a match
         expression occurs in a larger Boolean expression, a subsequent
-        subexpression may yield fals and -- depending on the actual operator
+        subexpression may yield false and -- depending on the actual operator
         -- evaluation <emphasis>backtracks</emphasis> to a previously
         evaluated match operator to try a next solution. Let's illustrate this
         by extending the above example:<programlisting>[1, list[int] <replaceable>L</replaceable>, 2, list[int] <replaceable>M</replaceable>] := [1,2,3,2,4] &amp;&amp; size(L) &gt; 0</programlisting>where
@@ -4274,7 +4525,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           </listitem>
 
           <listitem>
-            <para>Proceed to thr right operator of
+            <para>Proceed to the right operator of
             <literal>&amp;&amp;</literal>: this time <literal>size(L) &gt;
             0</literal> yields <literal>true</literal>;</para>
           </listitem>
@@ -4457,9 +4708,10 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                   <entry>IfDefinedElse</entry>
 
-                  <entry>the value of
-                  <replaceable>Exp</replaceable><subscript>1</subscript> is it
-                  is well-defined, otherwise the value of
+                  <entry>The value of
+                  <replaceable>Exp</replaceable><subscript>1</subscript> if
+                  that is defined (e.g., excluding uninitialized variables and
+                  undefined map elements) otherwise the value of
                   <replaceable>Exp</replaceable><subscript>2</subscript></entry>
                 </row>
 
@@ -4551,8 +4803,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
                   <entry>Enumerator</entry>
 
                   <entry><literal>true</literal> for every element in
-                  <replaceable>Exp</replaceable>'s value that matches
-                  <replaceable>pat</replaceable></entry>
+                  <replaceable>Exp</replaceable>'s value (set/list element,
+                  subtree) that matches <replaceable>Pat</replaceable></entry>
                 </row>
               </tbody>
             </tgroup>
@@ -4617,8 +4869,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
             <listitem>
               <para>Java regular expressions might have optional groups, which
-              may introduce null bindings. Since unitialized variables are not
-              allowed in Rascal, we limit the kinds of expressions one can
+              may introduce null bindings. Since uninitialized variables are
+              not allowed in Rascal, we limit the kinds of expressions one can
               write here by not allowing nesting of named groups.</para>
             </listitem>
 
@@ -4656,11 +4908,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <section xml:id="section.abstract-patterns">
           <title>Abstract Patterns</title>
 
-          <para><warning>
-              <para>Change this name. E.g., "General pattern", "Value
-              Pattern"???</para>
-            </warning>An abstract pattern is recursively defined and may
-          contain the following elements:</para>
+          <para>An abstract pattern is recursively defined and may contain the
+          following elements:</para>
 
           <itemizedlist>
             <listitem>
@@ -4702,11 +4951,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                 <listitem>
                   <para>If Var has not been defined before (or it has been
-                  declared but not initalized) then it matches any value. That
-                  value is assigned to <replaceable>Var</replaceable>.
-                  <warning>
-                      <para>Explain scope.</para>
-                    </warning></para>
+                  declared but not initialized) then it matches any value.
+                  That value is assigned to <replaceable>Var</replaceable>.
+                  <remark>Explain scope.</remark></para>
                 </listitem>
               </itemizedlist>
             </listitem>
@@ -4731,7 +4978,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                 <listitem>
                   <para>a variable pattern, where the variable has been
-                  declared, but not initalized, outside the pattern with a
+                  declared, but not initialized, outside the pattern with a
                   list type that is identical to the type of the list that is
                   being matched.</para>
                 </listitem>
@@ -4762,9 +5009,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                 <listitem>
                   <para>a variable pattern, where the variable has been
-                  declared, but not initalized, outside the pattern with a set
-                  type that is identical to the type of the set that is being
-                  matched.</para>
+                  declared, but not initialized, outside the pattern with a
+                  set type that is identical to the type of the set that is
+                  being matched.</para>
                 </listitem>
               </itemizedlist>
 
@@ -4842,7 +5089,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           <title>Concrete Syntax Patterns</title>
 
           <note>
-            <para>Concrete patterns are not yet implemented.</para>
+            <para>Concrete patterns are currently being implemented.</para>
           </note>
 
           <para>A <emphasis>concrete pattern</emphasis> is a (possibly quoted)
@@ -4870,14 +5117,14 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
               <literal>&gt;</literal> and <literal>|</literal> have to be
               escaped as <literal>\&lt;</literal>, <literal>\&gt;</literal>,
               <literal>\|</literal>. Quoted patterns may contain variable
-              declaration patterbs and variable patterns.</para>
+              declaration patterns and variable patterns.</para>
             </listitem>
 
             <listitem>
               <para>A <emphasis>typed quoted pattern</emphasis>
               <programlisting><replaceable>Symbol</replaceable> [| <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> |]</programlisting>is
-              a quoted pattern that is preceeded by an SDF symbol to define
-              its desired syntactic type.</para>
+              a quoted pattern that is preceded by an SDF symbol to define its
+              desired syntactic type.</para>
             </listitem>
 
             <listitem>
@@ -5001,7 +5248,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         are computed for all possible combinations of values produced by the
         generators. Each generator may introduce new variables that can be
         used in subsequent generators as well as in the expressions. A
-        generator can use the variables introduced by preceeding generators.
+        generator can use the variables introduced by preceding generators.
         Generators may enumerate all the values in a set or relation, or they
         may perform an arbitrary test.</para>
 
@@ -5024,7 +5271,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
           <para>An enumerator generates all the values in a given list, set,
           map, tuple, relation or datatype. It has the following
-          form:<programlisting><replaceable>P</replaceable>at &lt;- <replaceable>Exp</replaceable></programlisting></para>
+          form:<programlisting><replaceable>Pat</replaceable> &lt;- <replaceable>Exp</replaceable></programlisting></para>
 
           <para>where <replaceable>Pat</replaceable> is a pattern and
           <replaceable>Exp</replaceable> is an expression. An enumerator is
@@ -5050,7 +5297,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
                   <para>The match succeeds, any variables in
                   <replaceable>Pat</replaceable> are bound, and the next
                   generator in the comprehension is evaluated. The variables
-                  that are introduced by an enumartor are only available to
+                  that are introduced by an enumerator are only available to
                   generators that appear later (i.e., to the right) in the
                   comprehension. When this enumerator is the last generator in
                   the comprehension its contributing expression is
@@ -5100,13 +5347,13 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           </itemizedlist>
 
           <para><note>
-              <para>Type information will be used to check the plausibity of
+              <para>Type information will be used to check the plausibility of
               an enumerator and guard you against mistakes. An impossible
               enumerator like <literal>int N &lt;- {"apples",
               "oranges"}</literal> will be flagged as an error since the
               pattern can never match.</para>
             </note><note>
-              <para>An enumerator may be preceeded by a <emphasis>strategy
+              <para>An enumerator may be preceded by a <emphasis>strategy
               indication</emphasis>:<itemizedlist>
                   <listitem>
                     <para><literal>top-down</literal></para>
@@ -5160,18 +5407,18 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <section>
           <title>Examples of Comprehensions</title>
 
-          <para>Here are som examples of comprehensions:</para>
+          <para>Here are some examples of comprehensions:</para>
 
-          <screen><literal>rascal&gt; </literal><userinput><literal>{X | int X : {1, 2, 3, 4, 5}, X &gt;= 3}</literal>;</userinput>
+          <screen><literal>rascal&gt; </literal><userinput><literal>{X | int X &lt;- {1, 2, 3, 4, 5}, X &gt;= 3}</literal>;</userinput>
 <computeroutput>set[int] : <literal>{3,4,5}</literal></computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>{&lt;X, Y&gt; | int X : {1, 2, 3}, int Y : {2, 3, 4}, X &gt;= Y};</userinput>
+<prompt>rascal&gt;</prompt> <userinput>{&lt;X, Y&gt; | int X &lt;- {1, 2, 3}, int Y : {2, 3, 4}, X &gt;= Y};</userinput>
 <computeroutput><literal>rel[int,int] : {&lt;2, 2&gt;, &lt;3, 2&gt;, &lt;3, 3&gt;}</literal></computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>{&lt;Y, X&gt; | &lt;int X, int Y&gt; : {&lt;1,10&gt;, &lt;2,20&gt;}};</userinput>
+<prompt>rascal&gt;</prompt> <userinput>{&lt;Y, X&gt; | &lt;int X, int Y&gt; &lt;- {&lt;1,10&gt;, &lt;2,20&gt;}};</userinput>
 <computeroutput>rel[int,int] : <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal></computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>{X, X * X | X : {1, 2, 3, 4, 5}, X &gt;= 3};</userinput>
+<prompt>rascal&gt;</prompt> <userinput>{X, X * X | int X &lt;- {1, 2, 3, 4, 5}, X &gt;= 3};</userinput>
 <computeroutput>set[int] : <literal>{3,4,5,9,16,25}</literal></computeroutput></screen>
         </section>
       </section>
@@ -5227,7 +5474,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         subject term by executing one or more cases. Otherwise, the original
         value of the subject term is returned.</para>
 
-        <para>The visit expression is optionally preceeded by one of the
+        <para>The visit expression is optionally preceded by one of the
         following strategy indications that determine the traversal order of
         the subject:</para>
 
@@ -5342,9 +5589,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <para><programlisting><keysym>one</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal></programlisting>The
         <keysym>one</keysym> expression yields true when one combination of
         values of <replaceable>Exp</replaceable><subscript>i</subscript> is
-        true.<warning>
-            <para>The status of one is under discussion.</para>
-          </warning></para>
+        true. <remark>The status of one is under discussion.</remark></para>
       </section>
 
       <section xml:id="section.all">
@@ -5352,12 +5597,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
         <para><programlisting><keysym>all</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> </programlisting>The
         all expression yields true when all combinations of values of
-        <replaceable>Exp</replaceable><subscript>i</subscript> are
-        true.</para>
-
-        <warning>
-          <para>The status of all is under discussion.</para>
-        </warning>
+        <replaceable>Exp</replaceable><subscript>i</subscript> are true.
+        <remark>The status of one is under discussion.</remark></para>
       </section>
     </section>
 
@@ -5413,9 +5654,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <title>For Statement</title>
 
         <para>The for-statement is more exciting:<programlisting><keysym>for</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> <replaceable>Statement</replaceable></programlisting>It
-        generates executes Statement for all possible combinations of values
-        of the expressions
-        <replaceable>Exp</replaceable><subscript>i</subscript>. Note that is
+        executes <replaceable>Statement</replaceable> for all possible
+        combinations of values of the expressions
+        <replaceable>Exp</replaceable><subscript>i</subscript>. Note that if
         one of the expressions is a boolean expression, we do try all its
         possible values.</para>
       </section>
@@ -5531,8 +5772,8 @@ default: ...
           <listitem>
             <para><programlisting><replaceable>Var</replaceable> = <replaceable>Exp</replaceable></programlisting>The
             expression <replaceable>Exp</replaceable> is evaluated and its
-            value is assigned to the base
-            variable<replaceable>Var</replaceable>.</para>
+            value is assigned to the base variable<replaceable>
+            Var</replaceable>.</para>
           </listitem>
 
           <listitem>
@@ -5632,7 +5873,7 @@ default: ...
 <computeroutput>tuple[int,str,bool] : &lt;1, "def", true&gt;</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>data FREQ = wf(str word, int freq);</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>W = wf("rascal", 1000);</userinput>
 <computeroutput>FREQ : wf("rascal", 1000)
@@ -5656,13 +5897,13 @@ default: ...
 
 
 <prompt>rascal&gt;</prompt> <userinput>anno str FREQ@color;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>W @ color = "red";</userinput>
 <computeroutput>FREQ: wf("rascal",100000)[@color="red"]</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>wf(S, I) = W;</userinput>
-<computeroutput>void: null</computeroutput>
+<computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>S;</userinput>
 <computeroutput>str : "rascal"</computeroutput>
@@ -5860,7 +6101,7 @@ bool: true</screen>
         semi-colons:<programlisting><literal>{ <replaceable>Statement</replaceable><subscript>1</subscript>; ... <replaceable>Statement</replaceable><subscript>n</subscript> }</literal></programlisting>Since
         a block is itself a statement, it may be used in all places where a
         statement is required. A block also introduces a new scope and
-        variables that are declarated in the block are local to that
+        variables that are declared in the block are local to that
         block.</para>
       </section>
 
@@ -5880,8 +6121,8 @@ bool: true</screen>
 
         <para>The solve statement consists of an initialization section and a
         statement. Optionally, an expression directly following the
-        <literal>solve</literal> keyword, gives an upperbound on the number of
-        iterations.</para>
+        <literal>solve</literal> keyword, gives an upper bound on the number
+        of iterations.</para>
 
         <para>In the <literal>initial</literal> section, the variables
         <replaceable>Var</replaceable><subscript><replaceable>i</replaceable></subscript>
@@ -5892,7 +6133,7 @@ bool: true</screen>
         and this is repeated as long as the value of any of the variables was
         changed compared to the previous repetition.</para>
 
-        <para>Let's consider transitve closure as an example (transitive
+        <para>Let's consider transitive closure as an example (transitive
         closure is already available as built-in operator, we use it here just
         as a simple illustration). Transitive closure of a relation is usually
         defined as:<programlisting>R+ = R + (R o R) + (R o R o R) + ...</programlisting>This
@@ -5904,7 +6145,7 @@ bool: true</screen>
   <userinput>with
      rel[int,int] T = R;
   solve
-     T = T + (T o R1);</userinput>
+     T = T + (T o R);</userinput>
 
 <computeroutput>rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</computeroutput></screen>
       </section>
@@ -5971,7 +6212,7 @@ bool: true</screen>
 
       <listitem>
         <para>Node: operators and functions on nodes, see <xref
-        linkend="section.lib-Map" />.</para>
+        linkend="section.lib-Node" />.</para>
       </listitem>
 
       <listitem>
@@ -5980,7 +6221,7 @@ bool: true</screen>
       </listitem>
 
       <listitem>
-        <para>Relation: operators and funcions on relations, see <xref
+        <para>Relation: operators and functions on relations, see <xref
         linkend="section.lib-Relation" />.</para>
       </listitem>
 
@@ -6026,7 +6267,8 @@ bool: true</screen>
       </listitem>
 
       <listitem>
-        <para>Void: the type void, see</para>
+        <para>Void: the type void, see <xref
+        linkend="section.lib-Void" />.</para>
       </listitem>
     </itemizedlist>
 
@@ -6433,14 +6675,14 @@ bool: true</screen>
             </row>
 
             <row>
-              <entry>set[&amp;T] predecessors(grap[&amp;T], &amp;T
+              <entry>set[&amp;T] predecessors(graph[&amp;T], &amp;T
               From)</entry>
 
               <entry>Direct predecessors of node From</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] predecessors(grap[&amp;T], set[&amp;T]
+              <entry>set[&amp;T] predecessors(graph[&amp;T], set[&amp;T]
               FromSet)</entry>
 
               <entry>Direct predecessors of all nodes in FromSet</entry>
@@ -6477,13 +6719,14 @@ bool: true</screen>
             </row>
 
             <row>
-              <entry>set[&amp;T] successors(grap[&amp;T], &amp;T From)</entry>
+              <entry>set[&amp;T] successors(graph[&amp;T], &amp;T
+              From)</entry>
 
               <entry>Direct successors of node From</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] successors(grap[&amp;T], set[&amp;T]
+              <entry>set[&amp;T] successors(graph[&amp;T], set[&amp;T]
               FromSet)</entry>
 
               <entry>Direct successors of all nodes in FromSet</entry>
@@ -6505,10 +6748,10 @@ bool: true</screen>
 <literal>rascal&gt; </literal><userinput><literal>bottom({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;})</literal>;</userinput>
 <computeroutput>set[int] : {4}</computeroutput>
 
-<literal>rascal&gt; </literal><userinput><literal>reachR({1}, {1, 2, 3}, {&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;})</literal>;</userinput>
+<literal>rascal&gt; </literal><userinput><literal>reachR({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;}, {1}, {1, 2, 3})</literal>;</userinput>
 <computeroutput>set[int] : {2, 3}</computeroutput>
 
-<literal>rascal&gt; </literal><userinput><literal>reachX({1}, {2}, {&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;})</literal>;</userinput>
+<literal>rascal&gt; </literal><userinput><literal>reachX({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;}, {1}, {2})</literal>;</userinput>
 <computeroutput>set[int,int] : {3, 4}</computeroutput></screen></para>
     </section>
 
@@ -6756,8 +6999,7 @@ bool: true</screen>
 
             <tbody>
               <row>
-                <entry><literal>void java println(value
-                V...)</literal></entry>
+                <entry><literal>void println(value V...)</literal></entry>
 
                 <entry>Print a list of values on the output stream</entry>
               </row>
@@ -6806,14 +7048,14 @@ bool: true</screen>
             </row>
 
             <row>
-              <entry>set[&amp;T] predecessors(grap[&amp;T], &amp;T
+              <entry>set[&amp;T] predecessors(graph[&amp;T], &amp;T
               From)</entry>
 
               <entry>Direct predecessors of node From</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] predecessors(grap[&amp;T], set[&amp;T]
+              <entry>set[&amp;T] predecessors(graph[&amp;T], set[&amp;T]
               FromSet)</entry>
 
               <entry>Direct predecessors of all nodes in FromSet</entry>
@@ -6850,13 +7092,14 @@ bool: true</screen>
             </row>
 
             <row>
-              <entry>set[&amp;T] successors(grap[&amp;T], &amp;T From)</entry>
+              <entry>set[&amp;T] successors(graph[&amp;T], &amp;T
+              From)</entry>
 
               <entry>Direct successors of node From</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] successors(grap[&amp;T], set[&amp;T]
+              <entry>set[&amp;T] successors(graph[&amp;T], set[&amp;T]
               FromSet)</entry>
 
               <entry>Direct successors of all nodes in FromSet</entry>
@@ -6920,7 +7163,7 @@ bool: true</screen>
                 <literal>&lt;=</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry>Yields <literal>true</literal> if both sists are equal
+                <entry>Yields <literal>true</literal> if both lists are equal
                 or <replaceable>List</replaceable><subscript>1</subscript> is
                 a sublist of
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
@@ -7067,7 +7310,7 @@ bool: true</screen>
               </row>
 
               <row>
-                <entry><literal>&amp;T java head(list[&amp;T] lst) throws
+                <entry><literal>&amp;T head(list[&amp;T] lst) throws
                 EmptyListError</literal></entry>
 
                 <entry>Get the first element of a list</entry>
@@ -7122,9 +7365,10 @@ bool: true</screen>
 
               <row>
                 <entry><literal>&amp;T multiply(list[&amp;T] lst, &amp;T
-                unity)</literal></entry>
+                unit)</literal></entry>
 
-                <entry>Multiply the elements of a list</entry>
+                <entry>Multiply the elements of a list using given unit
+                element</entry>
               </row>
 
               <row>
@@ -7138,8 +7382,8 @@ bool: true</screen>
                 <entry><literal>&amp;T reducer(list[&amp;T] lst, &amp;T
                 (&amp;T, &amp;T) fn, &amp;T unit)</literal></entry>
 
-                <entry>Apply function F to successive elements of a
-                list</entry>
+                <entry>Apply function <literal>fn</literal> to successive
+                elements of a list</entry>
               </row>
 
               <row>
@@ -7291,8 +7535,8 @@ bool: true</screen>
               <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
               <entry>Yield <literal>true</literal> if
-              <replaceable>Loc</replaceable><subscript>1</subscript> is
-              textually encloses or is equal to
+              <replaceable>Loc</replaceable><subscript>1</subscript> textually
+              encloses or is equal to
               <replaceable>Loc</replaceable><subscript>2</subscript> and
               <literal>false</literal> otherwise</entry>
             </row>
@@ -7303,17 +7547,17 @@ bool: true</screen>
               <replaceable>Loc</replaceable><subscript>2</subscript></entry>
 
               <entry>Yield <literal>true</literal> if
-              <replaceable>Loc</replaceable><subscript>1</subscript> is
-              textually encloses
-              <replaceable>Loc</replaceable><subscript>2</subscript> and
-              <literal>false</literal> otherwise</entry>
+              <replaceable>Loc</replaceable><subscript>1</subscript> textually
+              encloses <replaceable>Loc</replaceable><subscript>2</subscript>
+              and <literal>false</literal> otherwise</entry>
             </row>
 
             <row>
               <entry><replaceable>Loc</replaceable> <literal>.</literal>
               <replaceable>Field</replaceable></entry>
 
-              <entry>Retrieve one of the fields of location value</entry>
+              <entry>Retrieve one of the fields of location value
+              <replaceable>Loc</replaceable></entry>
             </row>
           </tbody>
         </tgroup>
@@ -7532,7 +7776,8 @@ bool: true</screen>
                 <entry><literal>map[&amp;V, &amp;K] invert(map[&amp;K, &amp;V]
                 M)</literal></entry>
 
-                <entry>Map with key and value inverted</entry>
+                <entry>Map with key and value inverted; result should be a
+                map</entry>
               </row>
 
               <row>
@@ -7632,7 +7877,7 @@ bool: true</screen>
                 <literal>&lt;=</literal>
                 <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
-                <entry></entry>
+                <entry><remark>Explain</remark></entry>
               </row>
 
               <row>
@@ -7915,7 +8160,8 @@ bool: true</screen>
             <row>
               <entry><literal>int toInteger(real d)</literal></entry>
 
-              <entry>Convert a real to integer.</entry>
+              <entry>Convert a real to integer.
+              <remark>Explain</remark></entry>
             </row>
 
             <row>
@@ -7975,7 +8221,8 @@ bool: true</screen>
               <literal>+</literal></entry>
 
               <entry>Relation resulting from the transitive closure of
-              <replaceable>Rel</replaceable></entry>
+              <replaceable>Rel</replaceable>. Explain type
+              constraints.</entry>
             </row>
 
             <row>
@@ -8239,34 +8486,32 @@ bool: true</screen>
 
             <tbody>
               <row>
-                <entry><literal>set[loc] java files(str
-                project)</literal></entry>
+                <entry><literal>set[loc] files(str project)</literal></entry>
 
                 <entry>The files contained in a project</entry>
               </row>
 
               <row>
-                <entry><literal>loc java location(str
-                project)</literal></entry>
+                <entry><literal>loc location(str project)</literal></entry>
 
                 <entry>Source location of given project</entry>
               </row>
 
               <row>
-                <entry><literal>set[str] java projects()</literal></entry>
+                <entry><literal>set[str] projects()</literal></entry>
 
                 <entry>The projects in the Eclipse workspace</entry>
               </row>
 
               <row>
-                <entry><literal>set[str] java references(str
+                <entry><literal>set[str] references(str
                 project)</literal></entry>
 
                 <entry>The project references of a given project</entry>
               </row>
 
               <row>
-                <entry><literal>Resource java root() </literal></entry>
+                <entry><literal>Resource root() </literal></entry>
 
                 <entry>The root of the Eclipse workspace</entry>
               </row>
@@ -8384,7 +8629,8 @@ bool: true</screen>
               <literal>*</literal>
               <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
-              <entry>Set resulting from the product of the two
+              <entry>Relation resulting from the product of the two arguments.
+              It contains a tuple for each combination of values from both
               arguments</entry>
             </row>
 
@@ -8421,7 +8667,9 @@ bool: true</screen>
               <literal>join</literal>
               <replaceable><replaceable>Set</replaceable><subscript>2</subscript></replaceable></entry>
 
-              <entry></entry>
+              <entry>Relation resulting from the natural join of the two
+              arguments. It contains tuples that are the result from
+              concatenating the elements from both arguments</entry>
             </row>
 
             <row>
@@ -8430,7 +8678,9 @@ bool: true</screen>
               <literal>:</literal>
               <replaceable>Set</replaceable><subscript>2</subscript></entry>
 
-              <entry></entry>
+              <entry>If <replaceable>Bool</replaceable> is true then
+              <replaceable>Set</replaceable><subscript>1</subscript> else
+              <replaceable>Set</replaceable><subscript>2</subscript></entry>
             </row>
           </tbody>
         </tgroup>
@@ -8449,6 +8699,10 @@ bool: true</screen>
 
 <prompt>rascal&gt;</prompt> <userinput><literal>{1, 2, 3} - {4, 5, 6}</literal>;</userinput>
 <computeroutput>set[int] : {1, 2, 3}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>{1,2,3} * {4,5,6};</userinput>
+<computeroutput>rel[int,int]: {&lt;1,4&gt;,&lt;1,5&gt;,&lt;1,6&gt;,&lt;3,4&gt;,&lt;3,5&gt;,
+               &lt;3,6&gt;,&lt;2,4&gt;,&lt;2,5&gt;,&lt;2,6&gt;}</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>{1, 2, 3} &amp; {4, 5, 6};</userinput>
 <computeroutput><literal>set[int] : { }</literal>
@@ -8473,7 +8727,12 @@ bool: true</screen>
 
 <prompt>rascal&gt;</prompt> <userinput>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;};</userinput>
 <computeroutput>bool : true</computeroutput>
-</screen>
+
+<prompt>rascal&gt;</prompt> <userinput>{&lt;1,2&gt;, &lt;10,20&gt;} join {&lt;2,3&gt;};</userinput>
+<computeroutput>rel[int, int, int, int]: {&lt;1,2,2,3&gt;,&lt;10,20,2,3&gt;}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>{&lt;1,2&gt;} join {3, 4};</userinput>
+<computeroutput>rel[int, int, int]: {&lt;1,2,3&gt;,&lt;1,2,4&gt;}</computeroutput></screen>
 
       <table>
         <title>Set Functions</title>
@@ -9075,7 +9334,7 @@ bool: true</screen>
                 <literal>&lt;=</literal>
                 <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
-                <entry></entry>
+                <entry><remark>Explain</remark></entry>
               </row>
 
               <row>
@@ -9293,7 +9552,7 @@ bool: true</screen>
           <row>
             <entry><replaceable>Exp</replaceable> <literal>?</literal></entry>
 
-            <entry>Isdefined: true is Exp has a well-defined value</entry>
+            <entry>Isdefined: true if Exp has a defined value</entry>
 
             <entry><xref linkend="section.expressions-boolean"
             xrefstyle="template:%t" /></entry>
@@ -9373,7 +9632,7 @@ bool: true</screen>
             <literal>x</literal>
             <replaceable>Exp</replaceable><subscript>2</subscript></entry>
 
-            <entry>Carthesian product</entry>
+            <entry>Cartesian product</entry>
 
             <entry><xref linkend="section.lib-Relation"
             xrefstyle="template:%t" /></entry>
@@ -10423,6 +10682,36 @@ bool: true</screen>
       </bibliolist></para>
   </section>
 
+  <section>
+    <title>Acknowledgements</title>
+
+    <para>Rascal has been designed and implemented by the authors but they
+    have received strong support, encouragement, and help from the following
+    individuals. We are very grateful to them.</para>
+
+    <para>Emilie Balland implemented the Rascal debugger in the Eclipse
+    version of Rascal during her visit to CWI in the summer of 2009.</para>
+
+    <para>Bas Basten provided useful feedback on the design and is developing
+    a Rascal/JDT interface that makes it easy to extract facts from Java
+    source code.</para>
+
+    <para>Bob Fuhrer's inspiring IMP project motivated us to build Rascal on
+    top of IMP. The PDB was designed and implemented during Jurgen's visit to
+    IBM Research in 2007-2008.</para>
+
+    <para>Arnold Lankamp implemented a very efficient version of the Program
+    Data Base (PDB), added a binary streaming format, implemented the SGLR
+    invoker, and takes care of deployment issues.</para>
+
+    <para>Karel Pieterson used Rascal as topic for a usability study in his
+    Master's thesis. The results will be included in the final version of this
+    document.</para>
+
+    <para>Yaroslav Usenko provided feedback on this manual and suggested
+    several improvements.</para>
+  </section>
+
   <?hard-pagebreak ?>
 
   <glossary version="5.0" xml:id="section.glossary">
@@ -10488,7 +10777,7 @@ bool: true</screen>
           </listitem>
         </itemizedlist>
 
-        <para>AsFix is the predecessor of the UPTR format used by
+        <para>AsFix is the predecessor of the ParseTree format used by
         Rascal</para>
       </glossdef>
     </glossentry>
@@ -10737,6 +11026,15 @@ bool: true</screen>
     </glossentry>
 
     <glossentry>
+      <glossterm>ParseTree</glossterm>
+
+      <glossdef>
+        <para>The ParseTree datatype is the parse tree format used in Rascal.
+        It is the successor of AsFix.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
       <glossterm>Pattern</glossterm>
 
       <glossdef>
@@ -10760,7 +11058,7 @@ bool: true</screen>
       <glossterm>Program Data Base (PDB)</glossterm>
 
       <glossdef>
-        <para>Subsystem of IMP that is responsible for implementating Rascal's
+        <para>Subsystem of IMP that is responsible for implementing Rascal's
         datatypes.</para>
       </glossdef>
     </glossentry>
@@ -10943,15 +11241,6 @@ bool: true</screen>
       <glossdef>
         <para>The activity to infer the type of program entities from their
         use.</para>
-      </glossdef>
-    </glossentry>
-
-    <glossentry>
-      <glossterm>UPTR</glossterm>
-
-      <glossdef>
-        <para>Universal Parse Tree Representation is the parse tree format
-        used in Rascal. It is the successor of AsFix.</para>
       </glossdef>
     </glossentry>
   </glossary>
