@@ -1,5 +1,5 @@
 prefix=@prefix@
-Maintainers=kooiker@cwi.nl,storm@cwi.nl,jurgenv@cwi.nl
+Maintainers=kooiker@cwi.nl,storm@cwi.nl,jurgenv@cwi.nl,lankamp@cwi.nl
 Name: mingw-patches
 Description: Patches for MinGW build
 Version: 0.1
