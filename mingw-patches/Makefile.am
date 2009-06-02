@@ -7,6 +7,7 @@ pkgdata_DATA = \
 	io-support-mingw.p1 \
 	sdf-support-mingw.p1 \
 	toolbuslib-mingw.p1 \
-	sglr-invoker-mingw.p1
+	sglr-invoker-mingw.p1 \
+	rascal-grammar-mingw.p1
 
 EXTRA_DIST = $(pkgdata_DATA)
