@@ -532,6 +532,10 @@ eclipse.preferences.version=1
 internal.default.compliance=default
 ENDCAT
 
+fi
+
+if ! test -f build.properties; then
+
 if test -f plugin.xml; then
   PLUGIN_XML=,plugin.xml
 else
@@ -542,6 +546,10 @@ cat > build.properties << ENDCAT
 source.$3 = src/
 bin.includes = META-INF/,.,`echo "${BUNDLE_CLASSPATH}" | sed "s@,@,\\\\\\ @g" | sed "s@ @# @g" | tr '#' '\n'`${PLUGIN_XML}
 ENDCAT
+
+fi
+
+if ! test -f .classpath; then
 
 BUNDLE_LOCAL_JARS=`echo $7 | tr ':' ' '`
 
@@ -558,6 +566,10 @@ cat > .classpath << ENDCAT
  done`
 </classpath>
 ENDCAT
+
+fi
+
+if ! test -f .project; then
 
 cat > .project << ENDCAT
 <?xml version="1.0" encoding="UTF-8"?>
@@ -626,6 +638,10 @@ ENDCAT
 MANIFEST=`cat META-INF/MANIFEST.MF | sed '/.*:[ \t]*$/d'`
 echo "${MANIFEST}" > META-INF/MANIFEST.MF
 
+fi
+
+if ! test -f .project; then
+
 cat > .project << ENDCAT
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
@@ -668,6 +684,11 @@ Bundle-Version: $2
 Fragment-Host: `echo $3 | tr '-' '_'`
 Eclipse-PlatformFilter: (& (osgi.os=${ECLIPSE_OS}) (osgi.arch=${ECLIPSE_ARCH}))
 ENDCAT
+
+fi
+
+if ! test -f .project; then
+
 cat > .project << ENDCAT
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
