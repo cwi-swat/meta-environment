@@ -1,13 +1,17 @@
-Index: Makefile.am
+Index: rascal.sh.src
 ===================================================================
---- Makefile.am	(revision 29450)
-+++ Makefile.am	(working copy)
-@@ -17,7 +17,7 @@
- RASCAL_LOCAL_JARS=`echo $(JAVA_LOCAL_JARS) | sed "s@lib/@$(prefix)/share/@g;"`
- RASCAL_CLASS_PATH=$(prefix)/share/$(JAVA_JAR):$(RASCAL_LOCAL_JARS):$(EXTERNAL_JARS)
- 
--% : %.sh.src Makefile
-+%.bat : %.sh.src Makefile
- 	sed "s@__RASCAL_LIBRARY_PATH__@$(RASCAL_LIBRARY_PATH)@g;\
- 	s@__RASCAL_CLASS_PATH__@$(RASCAL_CLASS_PATH)@g;\
- 	s@__SDF_LIBRARY__@$(SDF_LIBRARY_PREFIX)@g;\
+--- rascal.sh.src	(revision 29461)
++++ rascal.sh.src	(working copy)
+@@ -1,11 +1,9 @@
+-#! /bin/sh
+-
+ java -cp .:__RASCAL_CLASS_PATH__ \
+     -Djava.library.path=__RASCAL_LIBRARY_PATH__ \
+     -Drascal.parsetable.default.file=__RASCAL_GRAMMAR__/share/rascal-grammar/rascal.tbl \
+     -Drascal.parsetable.header.file=__RASCAL_GRAMMAR__/share/rascal-grammar/rascal-header.tbl \
+     -Drascal.parsetable.cache.dir=/tmp \
+-    -Drascal.rascal2table.command=__RASCAL_GRAMMAR__/bin/rascal2table \
++    -Drascal.rascal2table.command=__RASCAL_GRAMMAR__/bin/rascal2table.exe \
+     -Drascal.rascal2table.dir=__RASCAL_GRAMMAR__/bin \
+     -Drascal.sdf.library.dir=__SDF_LIBRARY__/share/sdf-library/library \
+     org.meta_environment.rascal.interpreter.RascalShell
