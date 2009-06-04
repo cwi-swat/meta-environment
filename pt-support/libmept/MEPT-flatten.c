@@ -210,22 +210,22 @@ static void init_asfix_patterns()
 
   ATprotect(&asfix2_plus_plus_to_plus);
   asfix2_plus_plus_to_plus =
-    ATparse("prod([cf(iter(<term>)),cf(opt(layout)),cf(iter(<term>))]," \
+    ATparse("prod([cf(iter(<term>)),<term>,cf(iter(<term>))]," \
             "cf(iter(<term>)),<term>)");
 
   ATprotect(&asfix2_star_star_to_star);
   asfix2_star_star_to_star =
-    ATparse("prod([cf(iter-star(<term>)),cf(opt(layout))," \
+    ATparse("prod([cf(iter-star(<term>)),<term>," \
             "cf(iter-star(<term>))],cf(iter-star(<term>)),<term>)"); 
 
   ATprotect(&asfix2_star_plus_to_plus);
   asfix2_star_plus_to_plus =
-    ATparse("prod([cf(iter-star(<term>)),cf(opt(layout)),cf(iter(<term>))]," \
+    ATparse("prod([cf(iter-star(<term>)),<term>,cf(iter(<term>))]," \
             "cf(iter(<term>)),<term>)"); 
 
   ATprotect(&asfix2_plus_star_to_plus);
   asfix2_plus_star_to_plus =
-    ATparse("prod([cf(iter(<term>)),cf(opt(layout)),cf(iter-star(<term>))]," \
+    ATparse("prod([cf(iter(<term>)),<term>,cf(iter-star(<term>))]," \
             "cf(iter(<term>)),<term>)");
 
   ATprotect(&asfix2_empty_to_star_sep);
@@ -242,25 +242,25 @@ static void init_asfix_patterns()
 
   ATprotect(&asfix2_plus_sep_plus_sep_to_plus_sep);
   asfix2_plus_sep_plus_sep_to_plus_sep =
-    ATparse("prod([cf(iter-sep(<term>,<term>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-sep(<term>,<term>))],"
+    ATparse("prod([cf(iter-sep(<term>,<term>)),<term>,<term>," \
+            "<term>,cf(iter-sep(<term>,<term>))],"
 	    "cf(iter-sep(<term>,<term>)),<term>)");
 
   ATprotect(&asfix2_star_sep_star_sep_to_star_sep);
   asfix2_star_sep_star_sep_to_star_sep =
-    ATparse("prod([cf(iter-star-sep(<term>,<term>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-star-sep(<term>,<term>))]," \
+    ATparse("prod([cf(iter-star-sep(<term>,<term>)),<term>,<term>," \
+            "<term>,cf(iter-star-sep(<term>,<term>))]," \
             "cf(iter-star-sep(<term>,<term>)),<term>)");    
 
   ATprotect(&asfix2_star_sep_plus_sep_to_plus_sep);
   asfix2_star_sep_plus_sep_to_plus_sep =
-    ATparse("prod([cf(iter-star-sep(<term>,<term>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-sep(<term>,<term>))],"
+    ATparse("prod([cf(iter-star-sep(<term>,<term>)),<term>,<term>," \
+            "<term>,cf(iter-sep(<term>,<term>))],"
 	    "cf(iter-sep(<term>,<term>)),<term>)");                             
   ATprotect(&asfix2_plus_sep_star_sep_to_plus_sep);
   asfix2_plus_sep_star_sep_to_plus_sep =
-    ATparse("prod([cf(iter-sep(<term>,<term>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-star-sep(<term>,<term>))],"
+    ATparse("prod([cf(iter-sep(<term>,<term>)),<term>,<term>," \
+            "<term>,cf(iter-star-sep(<term>,<term>))],"
 	    "cf(iter-sep(<term>,<term>)),<term>)"); 
 
   /* lexical separated lists */
@@ -346,16 +346,16 @@ ATbool isListProd(PT_Production prod)
   }
 
   if (ATmatchTerm((ATerm)prod, asfix2_plus_plus_to_plus,
-                  &sort1, &sort2, &sort3, NULL)
+                  &sort1, NULL, &sort2, &sort3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_star_to_star,
-                  &sort1, &sort2, &sort3, NULL)
+                  &sort1, NULL, &sort2, &sort3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_plus_to_plus,
-                  &sort1, &sort2, &sort3, NULL)
+                  &sort1, NULL, &sort2, &sort3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_plus_star_to_plus,
-                  &sort1, &sort2, &sort3, NULL)) {
+                  &sort1, NULL, &sort2, &sort3, NULL)) {
     return ATisEqual(sort1, sort2) && ATisEqual(sort1, sort3);
   }
 
@@ -398,27 +398,27 @@ ATbool isListProd(PT_Production prod)
   }
 
   if (ATmatchTerm((ATerm)prod, asfix2_plus_sep_plus_sep_to_plus_sep,
-                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
+                  &sort1, &sep1, NULL, &sep4, NULL, &sort2, &sep2, &sort3, &sep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_sep_star_sep_to_star_sep,
-                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
+                  &sort1, &sep1, NULL, &sep4, NULL,  &sort2, &sep2, &sort3, &sep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_sep_plus_sep_to_plus_sep,
-                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
+                  &sort1, &sep1, NULL, &sep4, NULL, &sort2, &sep2, &sort3, &sep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_plus_sep_star_sep_to_plus_sep,
-                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
+                  &sort1, &sep1, NULL, &sep4, NULL, &sort2, &sep2, &sort3, &sep3, NULL)
       || ATmatchTerm((ATerm)prod, asfix2_plus_sep_plus_sep_to_plus_sep_lex,
-                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
+                  &sort1, &sep1, NULL, &sep4, NULL, &sort2, &sep2, &sort3, &sep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_sep_star_sep_to_star_sep_lex,
-                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
+                  &sort1, &sep1, NULL, &sep4, NULL, &sort2, &sep2, &sort3, &sep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_sep_plus_sep_to_plus_sep_lex,
-                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
+                  &sort1, &sep1, NULL, &sep4, NULL, &sort2, &sep2, &sort3, &sep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_plus_sep_star_sep_to_plus_sep_lex,
-                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)) {
+                  &sort1, &sep1, NULL, &sep4, NULL, &sort2, &sep2, &sort3, &sep3, NULL)) {
     return ATisEqual(sort1, sort2) && ATisEqual(sort2, sort3) &&
       ATisEqual(sep1, sep2) && ATisEqual(sep2, sep3) && ATisEqual(sep3, sep4);
   }

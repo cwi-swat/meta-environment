@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jun  4 17:46:46 CEST 2009 <jurgenv@cwi.nl>
+ * libmept: libmept/MEPT-flatten.c: matching of list patterns now
+   ignores which kind of layout symbol is distributed between the
+   non-terminals. 
+
 Mon Jun  9 13:19:26 CEST 2008 <jurgenv@cwi.nl>
  * pt-support.pc.in: Bumped version to 2.3
 
