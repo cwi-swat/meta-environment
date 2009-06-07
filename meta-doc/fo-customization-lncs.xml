@@ -1,0 +1,66 @@
+<?xml version='1.0'?>
+<xsl:stylesheet  
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+    xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    version="1.0">
+
+<!-- FO-specific customizations are defined here -->
+
+<xsl:import href="/home/paulk/software/source/docbook-xsl-1.75.0/fo/docbook.xsl"/>
+
+<xsl:import href="common-customizations.xsl" />
+
+<xsl:import href="fo-customization.xsl" />
+
+<!-- new sizes for Braga/LNCS proceedings -->
+
+<xsl:param name ="page.height.portrait">29.5cm</xsl:param>
+<xsl:param name ="page.width.portrait">21cm</xsl:param>
+<xsl:param name ="page.margin.inner">4.70cm</xsl:param>
+<xsl:param name ="page.margin.outer">4.1cm</xsl:param>
+<xsl:param name ="page.margin.top">4cm</xsl:param>
+<xsl:param name ="page.margin.bottom">6.1cm</xsl:param>
+
+<xsl:param name="body.margin.top">0cm</xsl:param>
+<xsl:param name="body.margin.bottom">0cm</xsl:param>
+
+<!-- Remove header and footer content and rules -->
+<xsl:template name="header.content"></xsl:template>
+<xsl:template name="footer.content"></xsl:template>
+
+
+<xsl:param name="region.before.extent" select="0"></xsl:param>
+<xsl:param name="region.after.extent" select="0"></xsl:param>
+
+<xsl:param name="header.rule" select="0"></xsl:param>
+<xsl:param name="footer.rule" select="0"></xsl:param>
+
+<!-- No table of contents -->
+<xsl:param name="generate.toc"></xsl:param>
+
+<!-- Sections -->
+
+<!-- Turn numbering on -->
+
+<xsl:param name="section.autolabel" select="1"></xsl:param>
+
+<!-- Size of titles -->
+<xsl:attribute-set name="section.title.level1.properties">
+  <xsl:attribute name="font-size">11pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="section.title.level2.properties">
+  <xsl:attribute name="font-size">10pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="section.title.level3.properties">
+  <xsl:attribute name="font-size">10pt</xsl:attribute>
+</xsl:attribute-set>
+<!-- No indent for body text -->
+
+<xsl:param name="body.start.indent">0pt</xsl:param>
+
+<!-- turn page numbers in xref off -->
+<xsl:param name="insert.xref.page.number" select="'no'" />
+
+</xsl:stylesheet>
