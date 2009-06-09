@@ -507,7 +507,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>Use regular expression to extract useful, but somewhat
+          <para>Use regular expressions to extract useful, but somewhat
           superficial, information. This can be achieved using regular
           expression patterns.</para>
         </listitem>
@@ -524,6 +524,35 @@
       concrete patterns to match parts of parsed source code. Here is an
       example of the same pattern we saw above, but now in concrete
       form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
+
+      <para>Importing an SDF module has the following effects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>All non-terminals (<emphasis>sorts</emphasis> in SDF jargon)
+          that are used in the imported grammar are implicitly declared as
+          Rascal types. This makes it possible to handle parse trees and parse
+          tree fragments as fully typed values and assign them to variables,
+          store them in larger datastructures or pass them as arguments to
+          functions.</para>
+        </listitem>
+
+        <listitem>
+          <para>For all <emphasis>start symbols</emphasis> of the grammar
+          <emphasis>parse functions</emphasis> are implicitly declared that
+          can parse source files according to a specific start symbol.</para>
+        </listitem>
+
+        <listitem>
+          <para>Concrete syntax patterns for that specific grammar can be
+          used.</para>
+        </listitem>
+
+        <listitem>
+          <para>Concrete syntax constructors can be used that allow the
+          construction of new parse trees.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
