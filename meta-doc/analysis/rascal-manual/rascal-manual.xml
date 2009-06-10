@@ -439,7 +439,9 @@
       maps and relations. From untyped tree structures to fully typed
       datastructures. Syntax trees that are the result of parsing source files
       are represented as datatypes. There is a wealth of built-in operators
-      and library functions available on the standard datatypes.</para>
+      and library functions available on the standard datatypes. The basic
+      Rascal datatypes are illustrated in <xref
+      linkend="table.types" />.</para>
 
       <para>User-defined datatypes allow the introduction of problem-specific
       types. A fragment of the abstract syntax for statements in a programming
@@ -447,7 +449,106 @@
           | ifStat(EXP exp,list[STAT] thenpart,
                            list[STAT] elsepart) 
           | whileStat(EXP exp, list[STAT] body) 
-          ;</programlisting></para>
+          ;</programlisting><table xml:id="table.types">
+          <title>Basic Rascal Types</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colwidth="2*" />
+
+            <colspec align="left" colwidth="5*" />
+
+            <thead>
+              <row>
+                <entry align="left">Type&#160;</entry>
+
+                <entry align="left">Examples&#160;</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>bool</literal></entry>
+
+                <entry><literal>true</literal>,
+                <literal>false</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>int</literal></entry>
+
+                <entry><literal>1</literal>, <literal>0</literal>,
+                <literal>-1</literal>, <literal>123456789</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>real</literal></entry>
+
+                <entry><literal>1.0</literal>,
+                <literal>1.0232e20</literal>,<literal> -25.5</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>str</literal></entry>
+
+                <entry><literal>"abc"</literal>,
+                <literal>"first\nnext"</literal>, <literal>"result:
+                &lt;X&gt;"</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>loc</literal></entry>
+
+                <entry><literal>!file:///etc/passwd</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>tuple[<replaceable>T</replaceable><subscript>1</subscript>,...,<replaceable>T</replaceable><subscript>n</subscript>]</literal></entry>
+
+                <entry><literal>&lt;1,2&gt;</literal>, <literal>&lt;"john",
+                43, true&gt;</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>list[<replaceable>T</replaceable>]</literal></entry>
+
+                <entry><literal>[]</literal>, <literal>[1]</literal>,
+                <literal>[1,2,3]</literal>, <literal>[true, 2,
+                "abc"]</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>set[<replaceable>T</replaceable>]</literal></entry>
+
+                <entry><literal>{}</literal>,
+                <literal>{1,2,3,5,7}</literal>,<literal> {"john",
+                4.0}</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>rel[</literal><replaceable>T</replaceable><subscript>1</subscript><literal>,...,</literal><replaceable>T</replaceable><subscript>n</subscript>]</entry>
+
+                <entry><literal>{&lt;1,2&gt;,&lt;2,3&gt;,&lt;1,3&gt;}</literal>,
+                <literal>{&lt;1,10,100&gt;,
+                &lt;2,20,200&gt;}</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>map[<replaceable>T</replaceable>,
+                <replaceable>U</replaceable>]</literal></entry>
+
+                <entry><literal>()</literal>, <literal>(1:true,
+                2:false)</literal>, <literal>("a":1, "b":2)</literal></entry>
+              </row>
+
+              <row>
+                <entry>node</entry>
+
+                <entry><literal>f</literal>, <literal>add(x,y)</literal>,
+                <literal>g("abc", [2,3,4])</literal></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
     </section>
 
     <section>
@@ -496,63 +597,6 @@
       local backtracking over the alternatives of a match is provided.
       Patterns can also be used in control structures, enumerators and
       visits.</para>
-    </section>
-
-    <section>
-      <title>Syntax Definition and Parsing</title>
-
-      <para>All source code analysis projects need to extract information
-      directly from the source code. There are two main approaches to
-      this:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Use regular expressions to extract useful, but somewhat
-          superficial, information. This can be achieved using regular
-          expression patterns.</para>
-        </listitem>
-
-        <listitem>
-          <para>Use syntax analysis to extract the complete, nested, structure
-          of the source code in the form of a syntax tree.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>In Rascal, we reuse the Syntax Definition Formalism (SDF) and its
-      tooling. SDF modules define grammars and these modules can be imported
-      in a Rascal module. These grammar rules can be applied in writing
-      concrete patterns to match parts of parsed source code. Here is an
-      example of the same pattern we saw above, but now in concrete
-      form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
-
-      <para>Importing an SDF module has the following effects:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>All non-terminals (<emphasis>sorts</emphasis> in SDF jargon)
-          that are used in the imported grammar are implicitly declared as
-          Rascal types. This makes it possible to handle parse trees and parse
-          tree fragments as fully typed values and assign them to variables,
-          store them in larger datastructures or pass them as arguments to
-          functions.</para>
-        </listitem>
-
-        <listitem>
-          <para>For all <emphasis>start symbols</emphasis> of the grammar
-          <emphasis>parse functions</emphasis> are implicitly declared that
-          can parse source files according to a specific start symbol.</para>
-        </listitem>
-
-        <listitem>
-          <para>Concrete syntax patterns for that specific grammar can be
-          used.</para>
-        </listitem>
-
-        <listitem>
-          <para>Concrete syntax constructors can be used that allow the
-          construction of new parse trees.</para>
-        </listitem>
-      </itemizedlist>
     </section>
 
     <section>
@@ -699,6 +743,83 @@ case ifStat(Exp, Stats1*, Stat2*):
     }
     return n;
 }</programlisting></para>
+    </section>
+
+    <section>
+      <title>Syntax Definition and Parsing</title>
+
+      <para>All source code analysis projects need to extract information
+      directly from the source code. There are two main approaches to
+      this:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Use regular expressions to extract useful, but somewhat
+          superficial, information. This can be achieved using regular
+          expression patterns.</para>
+        </listitem>
+
+        <listitem>
+          <para>Use syntax analysis to extract the complete, nested, structure
+          of the source code in the form of a syntax tree.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In Rascal, we reuse the Syntax Definition Formalism (SDF) and its
+      tooling. SDF modules define grammars and these modules can be imported
+      in a Rascal module. These grammar rules can be applied in writing
+      concrete patterns to match parts of parsed source code. Here is an
+      example of the same pattern we saw above, but now in concrete
+      form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
+
+      <para>Importing an SDF module has the following effects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>All non-terminals (<emphasis>sorts</emphasis> in SDF jargon)
+          that are used in the imported grammar are implicitly declared as
+          Rascal types. This makes it possible to handle parse trees and parse
+          tree fragments as fully typed values and assign them to variables,
+          store them in larger datastructures or pass them as arguments to
+          functions.</para>
+        </listitem>
+
+        <listitem>
+          <para>For all <emphasis>start symbols</emphasis> of the grammar
+          <emphasis>parse functions</emphasis> are implicitly declared that
+          can parse source files according to a specific start symbol.</para>
+        </listitem>
+
+        <listitem>
+          <para>Concrete syntax patterns for that specific grammar can be
+          used.</para>
+        </listitem>
+
+        <listitem>
+          <para>Concrete syntax constructors can be used that allow the
+          construction of new parse trees.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The following example parses a Java compilation unit from a text
+      file and counts the number of method declarations:</para>
+
+      <programlisting>module Count
+import languages::syntax::Java;
+
+public int countMethods(str file){
+  int n = 0;
+  for(MethodDeclaration md &lt;- parseCompilationUnit(file))
+      n += 1;
+  return n;
+}</programlisting>
+
+      <para>The function <literal>parseCompilationUnit</literal> is implicitly
+      defined as a result of importing the Java grammar and
+      <literal>MethodDeclaration</literal> is a non-terminal from the Java
+      grammar that becomes available as type. This example ignores many
+      potential error issues but does illustrate some of Rascal's syntax and
+      parsing features.</para>
     </section>
 
     <section>

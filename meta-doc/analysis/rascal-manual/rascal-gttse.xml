@@ -314,27 +314,28 @@
     </section>
 
     <section>
-      <title>Installing and Running Rascal</title>
+      <title>Downloading, Installing and Running Rascal</title>
 
       <para>See <link
       xlink:href="http://www.meta-environment.org/Meta-Environment/Rascal">the
-      installation instructions</link> for details.</para>
+      online instructions</link> for details about downloading, installing and
+      running Rascal.</para>
     </section>
 
     <section>
       <title>Reading Guide</title>
 
       <para><figure xml:id="figure.structure-manual">
-          <title>Structure of Rascal Description</title>
+          <title>Structure of the Rascal Description</title>
 
           <mediaobject>
             <imageobject>
               <imagedata fileref="manual-structure.png" scale="30"></imagedata>
             </imageobject>
           </mediaobject>
-        </figure>The structure of the information about Rascal is shown in
-      <xref linkend="figure.structure-manual" />. This article provides the
-      first three parts:</para>
+        </figure>The structure of the description of Rascal is shown in <xref
+      linkend="figure.structure-manual" />. This article provides the first
+      three parts:</para>
 
       <itemizedlist>
         <listitem>
@@ -382,8 +383,7 @@
 
       <para>Rascal code fragments are always shown as a listing like
       this:<programlisting>  .. here is some Rascal code ...</programlisting>Interactive
-      sessions are show as a screen like this (<remark>make a more clear
-      typographic distinction between listings and screens</remark>):<screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
+      sessions are show as a screen like this:<screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
 <computeroutput><replaceable>Type</replaceable>: <replaceable>Value</replaceable></computeroutput></screen>where:</para>
 
       <itemizedlist>
@@ -403,11 +403,6 @@
           Rascal. In some cases, the response will simply be
           <computeroutput>ok</computeroutput> when there is no other
           meaningful answer to give.</para>
-
-          <note>
-            <para>For typographic reasons the output is abbreviated or
-            slightly edited in some examples.</para>
-          </note>
         </listitem>
       </itemizedlist>
     </section>
@@ -416,9 +411,8 @@
   <section xml:id="section.rascal-concepts">
     <title>Rascal Concepts</title>
 
-    <para>Before explaining the Rascal language in more detail, we detail our
-    elevator pitch a bit and give you a general understanding of the concepts
-    on which the language is based.</para>
+    <para>We give now an overview of the concepts on which Rascal is
+    based.</para>
 
     <section>
       <title>Values</title>
@@ -442,7 +436,9 @@
       maps and relations. From untyped tree structures to fully typed
       datastructures. Syntax trees that are the result of parsing source files
       are represented as datatypes. There is a wealth of built-in operators
-      and library functions available on the standard datatypes.</para>
+      and library functions available on the standard datatypes. The basic
+      Rascal datatypes are illustrated in <xref
+      linkend="table.types" />.</para>
 
       <para>User-defined datatypes allow the introduction of problem-specific
       types. A fragment of the abstract syntax for statements in a programming
@@ -450,7 +446,106 @@
           | ifStat(EXP exp,list[STAT] thenpart,
                            list[STAT] elsepart) 
           | whileStat(EXP exp, list[STAT] body) 
-          ;</programlisting></para>
+          ;</programlisting><table xml:id="table.types">
+          <title>Basic Rascal Types</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colwidth="2*" />
+
+            <colspec align="left" colwidth="5*" />
+
+            <thead>
+              <row>
+                <entry align="left">Type&#160;</entry>
+
+                <entry align="left">Examples&#160;</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>bool</literal></entry>
+
+                <entry><literal>true</literal>,
+                <literal>false</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>int</literal></entry>
+
+                <entry><literal>1</literal>, <literal>0</literal>,
+                <literal>-1</literal>, <literal>123456789</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>real</literal></entry>
+
+                <entry><literal>1.0</literal>,
+                <literal>1.0232e20</literal>,<literal> -25.5</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>str</literal></entry>
+
+                <entry><literal>"abc"</literal>,
+                <literal>"first\nnext"</literal>, <literal>"result:
+                &lt;X&gt;"</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>loc</literal></entry>
+
+                <entry><literal>!file:///etc/passwd</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>tuple[<replaceable>T</replaceable><subscript>1</subscript>,...,<replaceable>T</replaceable><subscript>n</subscript>]</literal></entry>
+
+                <entry><literal>&lt;1,2&gt;</literal>, <literal>&lt;"john",
+                43, true&gt;</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>list[<replaceable>T</replaceable>]</literal></entry>
+
+                <entry><literal>[]</literal>, <literal>[1]</literal>,
+                <literal>[1,2,3]</literal>, <literal>[true, 2,
+                "abc"]</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>set[<replaceable>T</replaceable>]</literal></entry>
+
+                <entry><literal>{}</literal>,
+                <literal>{1,2,3,5,7}</literal>,<literal> {"john",
+                4.0}</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>rel[</literal><replaceable>T</replaceable><subscript>1</subscript><literal>,...,</literal><replaceable>T</replaceable><subscript>n</subscript>]</entry>
+
+                <entry><literal>{&lt;1,2&gt;,&lt;2,3&gt;,&lt;1,3&gt;}</literal>,
+                <literal>{&lt;1,10,100&gt;,
+                &lt;2,20,200&gt;}</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>map[<replaceable>T</replaceable>,
+                <replaceable>U</replaceable>]</literal></entry>
+
+                <entry><literal>()</literal>, <literal>(1:true,
+                2:false)</literal>, <literal>("a":1, "b":2)</literal></entry>
+              </row>
+
+              <row>
+                <entry>node</entry>
+
+                <entry><literal>f</literal>, <literal>add(x,y)</literal>,
+                <literal>g("abc", [2,3,4])</literal></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
     </section>
 
     <section>
@@ -499,63 +594,6 @@
       local backtracking over the alternatives of a match is provided.
       Patterns can also be used in control structures, enumerators and
       visits.</para>
-    </section>
-
-    <section>
-      <title>Syntax Definition and Parsing</title>
-
-      <para>All source code analysis projects need to extract information
-      directly from the source code. There are two main approaches to
-      this:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Use regular expressions to extract useful, but somewhat
-          superficial, information. This can be achieved using regular
-          expression patterns.</para>
-        </listitem>
-
-        <listitem>
-          <para>Use syntax analysis to extract the complete, nested, structure
-          of the source code in the form of a syntax tree.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>In Rascal, we reuse the Syntax Definition Formalism (SDF) and its
-      tooling. SDF modules define grammars and these modules can be imported
-      in a Rascal module. These grammar rules can be applied in writing
-      concrete patterns to match parts of parsed source code. Here is an
-      example of the same pattern we saw above, but now in concrete
-      form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
-
-      <para>Importing an SDF module has the following effects:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>All non-terminals (<emphasis>sorts</emphasis> in SDF jargon)
-          that are used in the imported grammar are implicitly declared as
-          Rascal types. This makes it possible to handle parse trees and parse
-          tree fragments as fully typed values and assign them to variables,
-          store them in larger datastructures or pass them as arguments to
-          functions.</para>
-        </listitem>
-
-        <listitem>
-          <para>For all <emphasis>start symbols</emphasis> of the grammar
-          <emphasis>parse functions</emphasis> are implicitly declared that
-          can parse source files according to a specific start symbol.</para>
-        </listitem>
-
-        <listitem>
-          <para>Concrete syntax patterns for that specific grammar can be
-          used.</para>
-        </listitem>
-
-        <listitem>
-          <para>Concrete syntax constructors can be used that allow the
-          construction of new parse trees.</para>
-        </listitem>
-      </itemizedlist>
     </section>
 
     <section>
@@ -704,6 +742,83 @@ case ifStat(Exp, Stats1*, Stat2*):
 }</programlisting></para>
     </section>
 
+    <section xml:id="section.syntax-defintion-and-parsing">
+      <title>Syntax Definition and Parsing</title>
+
+      <para>All source code analysis projects need to extract information
+      directly from the source code. There are two main approaches to
+      this:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Use regular expressions to extract useful, but somewhat
+          superficial, information. This can be achieved using regular
+          expression patterns.</para>
+        </listitem>
+
+        <listitem>
+          <para>Use syntax analysis to extract the complete, nested, structure
+          of the source code in the form of a syntax tree.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In Rascal, we reuse the Syntax Definition Formalism (SDF) and its
+      tooling. SDF modules define grammars and these modules can be imported
+      in a Rascal module. These grammar rules can be applied in writing
+      concrete patterns to match parts of parsed source code. Here is an
+      example of the same pattern we saw above, but now in concrete
+      form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
+
+      <para>Importing an SDF module has the following effects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>All non-terminals (<emphasis>sorts</emphasis> in SDF jargon)
+          that are used in the imported grammar are implicitly declared as
+          Rascal types. This makes it possible to handle parse trees and parse
+          tree fragments as fully typed values and assign them to variables,
+          store them in larger datastructures or pass them as arguments to
+          functions.</para>
+        </listitem>
+
+        <listitem>
+          <para>For all <emphasis>start symbols</emphasis> of the grammar
+          <emphasis>parse functions</emphasis> are implicitly declared that
+          can parse source files according to a specific start symbol.</para>
+        </listitem>
+
+        <listitem>
+          <para>Concrete syntax patterns for that specific grammar can be
+          used.</para>
+        </listitem>
+
+        <listitem>
+          <para>Concrete syntax constructors can be used that allow the
+          construction of new parse trees.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The following example parses a Java compilation unit from a text
+      file and counts the number of method declarations:</para>
+
+      <programlisting>module Count
+import languages::syntax::Java;
+
+public int countMethods(str file){
+  int n = 0;
+  for(MethodDeclaration md &lt;- parseCompilationUnit(file))
+      n += 1;
+  return n;
+}</programlisting>
+
+      <para>The function <literal>parseCompilationUnit</literal> is implicitly
+      defined as a result of importing the Java grammar and
+      <literal>MethodDeclaration</literal> is a non-terminal from the Java
+      grammar that becomes available as type. This example ignores many
+      potential error issues but does illustrate some of Rascal's syntax and
+      parsing features.</para>
+    </section>
+
     <section>
       <title>Rewrite Rules</title>
 
@@ -770,7 +885,9 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
         </listitem>
 
         <listitem>
-          <para>Modules can import other modules.</para>
+          <para>Modules can import other modules. These can be Rascal modules
+          or SDF modules (as shown above in <xref
+          linkend="section.syntax-defintion-and-parsing" />).</para>
         </listitem>
 
         <listitem>
@@ -813,7 +930,7 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
     features of Rascal quickly. You can also consult the <link
     xlink:href="http://www.meta-environment.org/doc/books//analysis/rascal-manual/rascal-manual.pdf">online
     documentation </link> for details of the language or specific operators or
-    functions. </para>
+    functions.</para>
 
     <section>
       <title>Hello</title>
@@ -2902,8 +3019,9 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     <title>Concluding Remarks</title>
 
     <para>Rascal and its IDE are in full development at the time of writing
-    and we have given here only a sketch of the language and its applications.
-    The following topics are underrepresented in the current version of this
+    and a first prototype implementation is available for download. We have
+    given here only a sketch of the language and its applications. The
+    following topics have not been covered in the current version of this
     document:</para>
 
     <itemizedlist>
@@ -2918,12 +3036,14 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
       </listitem>
 
       <listitem>
-        <para>The Rascal JDT library that provides direct access to facts that
-        have been extracted from Java source code.</para>
+        <para>The Rascal Eclipse JDT library that provides direct access to
+        facts that have been extracted from Java source code.</para>
       </listitem>
 
       <listitem>
-        <para>Applications that illustrate these features.</para>
+        <para>The Rascal IDE that is based on Eclipse and that provides, for
+        instance, very good interactive debugging facilities and basic
+        visualization tools.</para>
       </listitem>
     </itemizedlist>
 
