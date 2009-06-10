@@ -12,7 +12,7 @@
 
 <xsl:import href="fo-customization.xsl" />
 
-<!-- new sizes for Braga/LNCS proceedings -->
+<!-- LNCS specific settings -->
 
 <xsl:param name ="page.height.portrait">29.5cm</xsl:param>
 <xsl:param name ="page.width.portrait">21cm</xsl:param>
@@ -40,11 +40,11 @@
 
 <!-- Sections -->
 
-<!-- Turn numbering on -->
+<!-- Turn section numbering on -->
 
 <xsl:param name="section.autolabel" select="1"></xsl:param>
 
-<!-- Size of titles -->
+<!-- Size of section titles -->
 <xsl:attribute-set name="section.title.level1.properties">
   <xsl:attribute name="font-size">11pt</xsl:attribute>
 </xsl:attribute-set>
@@ -56,8 +56,8 @@
 <xsl:attribute-set name="section.title.level3.properties">
   <xsl:attribute name="font-size">10pt</xsl:attribute>
 </xsl:attribute-set>
-<!-- No indent for body text -->
 
+<!-- No indent for body text -->
 <xsl:param name="body.start.indent">0pt</xsl:param>
 
 <!-- turn page numbers in xref off -->
