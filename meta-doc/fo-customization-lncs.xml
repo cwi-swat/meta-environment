@@ -16,10 +16,10 @@
 
 <xsl:param name ="page.height.portrait">29.5cm</xsl:param>
 <xsl:param name ="page.width.portrait">21cm</xsl:param>
-<xsl:param name ="page.margin.inner">4.70cm</xsl:param>
-<xsl:param name ="page.margin.outer">4.1cm</xsl:param>
-<xsl:param name ="page.margin.top">4cm</xsl:param>
-<xsl:param name ="page.margin.bottom">6.1cm</xsl:param>
+<xsl:param name ="page.margin.inner">3.70cm</xsl:param>
+<xsl:param name ="page.margin.outer">5.1cm</xsl:param>
+<xsl:param name ="page.margin.top">2.2cm</xsl:param>
+<xsl:param name ="page.margin.bottom">7.9cm</xsl:param>
 
 <xsl:param name="body.margin.top">0cm</xsl:param>
 <xsl:param name="body.margin.bottom">0cm</xsl:param>

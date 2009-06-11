@@ -4310,19 +4310,27 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
                 <row>
                   <entry><replaceable>Exp</replaceable><subscript>1</subscript><literal>
                   [</literal>
-                  <replaceable>Exp</replaceable><subscript>2</subscript>
-                  <literal>]</literal></entry>
+                  <replaceable>Exp</replaceable><subscript>2</subscript> ,
+                  <literal><replaceable>Exp</replaceable><subscript>3</subscript>,
+                  .... ]</literal></entry>
 
                   <entry>Subscription</entry>
 
                   <entry>The value of
-                  <replaceable>Exp</replaceable><subscript>2</subscript> is
-                  used as index in
+                  <replaceable>Exp</replaceable><subscript>2</subscript> ,
+                  <replaceable>Exp</replaceable><subscript>3</subscript>, ...
+                  are used as index in
                   <replaceable>Exp</replaceable><subscript>1</subscript>'s
-                  value. On list, tuple return the element with given index;
-                  for map return the value associated with
+                  value. On list, tuple return the element with given
+                  (single!) index value; for map return the value associated
+                  with
                   <replaceable><replaceable>Exp</replaceable><subscript>2</subscript>
-                  </replaceable>'s value. On relation ...</entry>
+                  </replaceable>'s value. On relations more than one index is
+                  allowed. All tuples are returned that have the values of
+                  <replaceable>Exp</replaceable><subscript>2</subscript>,
+                  <replaceable>Exp</replaceable><subscript>3</subscript>, ...
+                  as first elements. These values are removed from each
+                  tuple.</entry>
                 </row>
 
                 <row>
@@ -6816,6 +6824,7 @@ bool: true</screen>
     | NoSuchKey(value key)
     | NoSuchAnnotation(str label)
     | Java(str message)
+    | ParseError(loc location)
     ;</programlisting></para>
     </section>
 
@@ -7183,7 +7192,7 @@ bool: true</screen>
 
               <row>
                 <entry><literal>list[str] readFile(str filename) throws
-                NoSuchFileError(str msg), IOError(str msg)</literal></entry>
+                NoSuchFileError(str msg), IO(str msg)</literal></entry>
 
                 <entry>Read a named file as list of strings</entry>
               </row>
@@ -7473,8 +7482,8 @@ bool: true</screen>
               </row>
 
               <row>
-                <entry><literal>list[&amp;T] delete(list[&amp;T] lst, int
-                n)</literal></entry>
+                <entry><literal>list[&amp;T] delete(list[&amp;T] lst, int n)
+                throws IndexOutOfBounds(int index)</literal></entry>
 
                 <entry>Delete nth element from list</entry>
               </row>
@@ -7488,28 +7497,29 @@ bool: true</screen>
 
               <row>
                 <entry><literal>&amp;T head(list[&amp;T] lst) throws
-                EmptyListError</literal></entry>
+                EmptyList</literal></entry>
 
                 <entry>Get the first element of a list</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] head(list[&amp;T] lst, int n)
-                throws IndexOutOfBoundsError</literal></entry>
+                throws IndexOutOfBounds(int index)</literal></entry>
 
                 <entry>Get the first n elements of a list</entry>
               </row>
 
               <row>
-                <entry><literal>&amp;T getOneFrom(list[&amp;T]
-                lst)</literal></entry>
+                <entry><literal>&amp;T getOneFrom(list[&amp;T] lst) throws
+                EmptyList</literal></entry>
 
                 <entry>Get an arbitrary element from a list</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] insertAt(list[&amp;T] lst, int n,
-                &amp;T elm) throws IndexOutOfBoundsError</literal></entry>
+                &amp;T elm) throws IndexOutOfBounds(int
+                index)</literal></entry>
 
                 <entry>Add an element at a specific position in a list</entry>
               </row>
@@ -7578,7 +7588,8 @@ bool: true</screen>
 
               <row>
                 <entry><literal>list[&amp;T] slice(list[&amp;T] lst, int
-                start, int len)</literal></entry>
+                start, int len) throws IndexOutOfBounds(int
+                index)</literal></entry>
 
                 <entry>Sublist from start of length len</entry>
               </row>
@@ -7598,22 +7609,23 @@ bool: true</screen>
               </row>
 
               <row>
-                <entry><literal>list[&amp;T] tail(list[&amp;T]
-                lst)</literal></entry>
+                <entry><literal>list[&amp;T] tail(list[&amp;T] lst) throws
+                EmptyList</literal></entry>
 
                 <entry>All but the first element of a list</entry>
               </row>
 
               <row>
                 <entry><literal>list[&amp;T] tail(list[&amp;T] lst, int len)
-                throws IndexOutOfBoundsError</literal></entry>
+                throws IndexOutOfBounds(in index)</literal></entry>
 
                 <entry>Last n elements of a list</entry>
               </row>
 
               <row>
                 <entry><literal>tuple[&amp;T, list[&amp;T]]
-                takeOneFrom(list[&amp;T] lst)</literal></entry>
+                takeOneFrom(list[&amp;T] lst) throws
+                EmptyList</literal></entry>
 
                 <entry>Remove an arbitrary element from a list, returns the
                 element and the modified list</entry>
@@ -7944,7 +7956,7 @@ bool: true</screen>
 
               <row>
                 <entry><literal>&amp;K getOneFrom(map[&amp;K, &amp;V] M)
-                </literal></entry>
+                throws emptyMap</literal></entry>
 
                 <entry>Arbitrary key of a map</entry>
               </row>
@@ -8144,6 +8156,13 @@ bool: true</screen>
                 <entry>Create a node given its function name and
                 arguments</entry>
               </row>
+
+              <row>
+                <entry>node readAtermFromFile(str Name) throws IO(str
+                msg)</entry>
+
+                <entry><remark>under discussion</remark></entry>
+              </row>
             </tbody>
           </tgroup>
         </table></para>
@@ -8335,7 +8354,7 @@ bool: true</screen>
             </row>
 
             <row>
-              <entry><literal>int toInteger(real d)</literal></entry>
+              <entry><literal>int toInt(real d)</literal></entry>
 
               <entry>Convert a real to integer.
               <remark>Explain</remark></entry>
@@ -8411,11 +8430,21 @@ bool: true</screen>
             </row>
 
             <row>
-              <entry><replaceable>Rel</replaceable> <literal>[</literal>
-              <replaceable>elem</replaceable> <literal>]</literal></entry>
+              <entry><literal><replaceable>Rel</replaceable>
+              [<replaceable>Exp</replaceable><subscript>1</subscript>,
+              <replaceable>Exp</replaceable><subscript>2</subscript>, ...
+              ]</literal></entry>
 
               <entry>Relation resulting from subscription of
-              <replaceable>Rel</replaceable> with</entry>
+              <replaceable>Rel</replaceable> with the index values of
+              <replaceable>Exp</replaceable><subscript>1</subscript>,
+              <replaceable>Exp</replaceable><subscript>2</subscript>, .... The
+              result is a relation with all tuples that have these index
+              values as first elements with the index values removed from the
+              tuple. If the resulting tuple has only a single element, a set
+              is returned instead of a relation. A wildcard
+              <literal>_</literal> as index value matches all possible values
+              at that index position.</entry>
             </row>
 
             <row>
@@ -8451,17 +8480,41 @@ bool: true</screen>
 <prompt>rascal&gt;</prompt> <userinput><literal>{1, 2, 3} x {9}</literal>;</userinput>
 <computeroutput>rel[int,int] :  <literal>{&lt;1, 9&gt;, &lt;2, 9&gt;, &lt;3, 9&gt;}</literal></computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>Rel = <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;, &lt;2,21&gt;}</literal>;</userinput>
+<prompt>rascal&gt;</prompt> <userinput>{&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}+;</userinput>
+<computeroutput>rel[int,int]: {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;1, 3&gt;, &lt;2, 4&gt;, &lt;1, 4&gt;}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>{&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}*;</userinput>
+<computeroutput>rel[int,int]: {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;1, 3&gt;, &lt;2, 4&gt;, &lt;1, 4&gt;, 
+               &lt;1, 1&gt;, &lt;2, 2&gt;, &lt;3, 3&gt;, &lt;4, 4&gt;}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>R = <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;, &lt;2,21&gt;}</literal>;</userinput>
 <computeroutput>rel[int,int] : <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;, &lt;2,21&gt;}</literal></computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>Rel[1];</userinput>
+<prompt>rascal&gt;</prompt> <userinput>R[1];</userinput>
 <computeroutput>set[int] : <literal>{10, 11}</literal></computeroutput>
 
-<literal>rascal&gt; </literal><userinput><literal>Rel[{1}]</literal>;</userinput>
+<prompt>rascal&gt; </prompt><userinput><literal>R[{1}]</literal>;</userinput>
 <computeroutput>set[int] : {10, 11}</computeroutput>
 
-<literal>rascal&gt; </literal><userinput><literal>Rel[{1, 2}]</literal>;</userinput>
-<computeroutput>set[int] : <literal>{10, 11, 20, 21}</literal></computeroutput></screen><table>
+<prompt>rascal&gt; </prompt><userinput><literal>R[{1, 2}]</literal>;</userinput>
+<computeroutput>set[int] : {10, 11, 20, 21}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>RR = {&lt;1,10,100&gt;,&lt;1,11,101&gt;,&lt;2,20,200&gt;,&lt;2,22,202&gt;,
+              &lt;3,30,300&gt;};</userinput>
+<computeroutput>rel[int,int,int]:{&lt;1,10,100&gt;,&lt;1,11,101&gt;,&lt;2,20,200&gt;,&lt;2,22,202&gt;,
+                  &lt;3,30,300&gt;}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>RR[1];</userinput>
+<computeroutput>rel[int,int]: {&lt;10,100&gt;,&lt;11,101&gt;};</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>RR[1,_];</userinput>
+<computeroutput>set[int]: {100,101}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>RR&lt;2,0,1&gt;;</userinput>
+<computeroutput>rel[int,int,int]: {&lt;100,1,10&gt;,&lt;101,1,11&gt;,&lt;200,2,20&gt;,&lt;300,3,30&gt;};</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>RR&lt;2.0,1&gt;[100];</userinput>
+<computeroutput>rel[int,int]: {&lt;1,10&gt;}</computeroutput></screen><table>
           <title>Relation Functions</title>
 
           <tgroup cols="2">
@@ -8531,9 +8584,10 @@ bool: true</screen>
               </row>
 
               <row>
-                <entry>ident?</entry>
+                <entry><literal>rel[&amp;T,&amp;T] ident(set[&amp;T]
+                S)</literal></entry>
 
-                <entry><remark>status?</remark></entry>
+                <entry>The identity relation for set S.</entry>
               </row>
 
               <row>
@@ -8547,7 +8601,7 @@ bool: true</screen>
                 <entry><literal>rel[&amp;T2, &amp;T1, &amp;T0] invert
                 (rel[&amp;T0, &amp;T1, &amp;T2] R)</literal></entry>
 
-                <entry>All but the first element of each tuples in binary
+                <entry>All but the first element of each tuple in binary
                 relation</entry>
               </row>
 
@@ -8627,8 +8681,8 @@ bool: true</screen>
 
           <tbody>
             <row>
-              <entry><literal>map[str, rel[str,str]] readRSF(str
-              nameRSFFile)</literal></entry>
+              <entry><literal>map[str, rel[str,str]] readRSF(str nameRSFFile)
+              throws IO(str msg)</literal></entry>
 
               <entry>Read a file in Rigi Standard Format (RSF).</entry>
             </row>
@@ -8936,8 +8990,8 @@ bool: true</screen>
             </row>
 
             <row>
-              <entry><literal>&amp;T getOneFrom(set[&amp;T]
-              st)</literal></entry>
+              <entry><literal>&amp;T getOneFrom(set[&amp;T] st) throws
+              emptySet</literal></entry>
 
               <entry>Pick a random element from a set</entry>
             </row>
@@ -9010,7 +9064,7 @@ bool: true</screen>
 
             <row>
               <entry><literal>tuple[&amp;T, set[&amp;T]]
-              takeOneFrom(set[&amp;T] st)</literal></entry>
+              takeOneFrom(set[&amp;T] st) throws emptySet</literal></entry>
 
               <entry>Remove an arbitrary element from a set, returns the
               element and the modified set</entry>
@@ -9189,7 +9243,7 @@ bool: true</screen>
             <tbody>
               <row>
                 <entry><literal>int charAt(str s, int i) throws
-                out_of_range(str msg)</literal></entry>
+                IndexOutOfBounds(int index)</literal></entry>
 
                 <entry>Character at position i in string s.</entry>
               </row>
@@ -9264,10 +9318,26 @@ bool: true</screen>
               </row>
 
               <row>
+                <entry><literal>int toInt(str s) throws IllegalArgument(value
+                v)</literal></entry>
+
+                <entry>Convert string s to integer. Throws IllegalArgument
+                when s cannot be converted.</entry>
+              </row>
+
+              <row>
                 <entry><literal>str toLowerCase(str s)</literal></entry>
 
                 <entry>Convert all characters in string s to
                 lowercase.</entry>
+              </row>
+
+              <row>
+                <entry><literal>double toReal(str s) throws
+                IllegalArgument(value v)</literal></entry>
+
+                <entry>Convert s to a real. Throws IllegalArgument when s
+                cannot be converted.</entry>
               </row>
 
               <row>
@@ -9574,29 +9644,29 @@ bool: true</screen>
 
             <tbody>
               <row>
-                <entry><literal>value readValueFromBinaryFile(str
-                namePBFFile)</literal></entry>
+                <entry><literal>value readValueFromBinaryFile(str namePBFFile)
+                throws IO(str msg)</literal></entry>
 
                 <entry>Read a value from a binary file in PBF format</entry>
               </row>
 
               <row>
-                <entry><literal>value readValueFromTextFile(str
-                namePBFFile)</literal></entry>
+                <entry><literal>value readValueFromTextFile(str namePBFFile)
+                throws IO(str msg)</literal></entry>
 
                 <entry>Read a value from a text file</entry>
               </row>
 
               <row>
                 <entry><literal>void writeValueToBinaryFile(str namePBFFile,
-                value val)</literal></entry>
+                value val) throws IO(str msg)</literal></entry>
 
                 <entry>Write a value to a binary file in PBF format</entry>
               </row>
 
               <row>
                 <entry><literal>void writeValueToTextFile(str namePBFFile,
-                value val)</literal></entry>
+                value val) throws IO(str msg)</literal></entry>
 
                 <entry>Write a value to a binary file in PBF format</entry>
               </row>
@@ -9711,9 +9781,10 @@ bool: true</screen>
           </row>
 
           <row>
-            <entry><replaceable>Exp</replaceable><subscript>1</subscript><literal>
-            [</literal> <replaceable>Exp</replaceable><subscript>2</subscript>
-            <literal>]</literal></entry>
+            <entry><replaceable>Exp</replaceable><subscript>1</subscript><literal>[</literal>
+            <replaceable>Exp</replaceable><subscript>2</subscript> ,
+            <literal><replaceable>Exp</replaceable><subscript>3</subscript>,
+            .... ]</literal></entry>
 
             <entry>Index</entry>
 
@@ -10406,6 +10477,13 @@ bool: true</screen>
           </row>
 
           <row>
+            <entry><literal>ident</literal></entry>
+
+            <entry><xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
             <entry><literal>insertAt</literal></entry>
 
             <entry><xref linkend="section.lib-List"
@@ -10724,16 +10802,18 @@ bool: true</screen>
           </row>
 
           <row>
-            <entry><literal>toInt</literal></entry>
+            <entry><literal>toReal</literal></entry>
 
-            <entry><xref linkend="section.lib-Boolean"
+            <entry><xref linkend="section.lib-String"
             xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
-            <entry><literal>toInteger</literal>!</entry>
+            <entry><literal>toInt</literal></entry>
 
-            <entry><xref linkend="section.lib-Real"
+            <entry><xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />,<xref linkend="section.lib-String"
             xrefstyle="template:%t" /></entry>
           </row>
 

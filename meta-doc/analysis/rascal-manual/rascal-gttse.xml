@@ -66,7 +66,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="easy-workflow.png" scale="30"></imagedata>
+              <imagedata fileref="easy-workflow.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -140,7 +140,7 @@
           <mediaobject>
             <imageobject>
               <imagedata fileref="extract-analyze-view-paradigm.png"
-                         scale="30"></imagedata>
+                         scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure><example>
@@ -330,7 +330,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="manual-structure.png" scale="30"></imagedata>
+              <imagedata fileref="manual-structure.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>The structure of the description of Rascal is shown in <xref
@@ -538,7 +538,7 @@
               </row>
 
               <row>
-                <entry>node</entry>
+                <entry><literal>node</literal></entry>
 
                 <entry><literal>f</literal>, <literal>add(x,y)</literal>,
                 <literal>g("abc", [2,3,4])</literal></entry>
@@ -1269,7 +1269,7 @@ public str capAll2(str S)
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="problem-solving.png" scale="30"></imagedata>
+            <imagedata fileref="problem-solving.png" scale="40"></imagedata>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -1284,7 +1284,7 @@ public str capAll2(str S)
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="validation.png" scale="30"></imagedata>
+            <imagedata fileref="validation.png" scale="40"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>A major question in every problem solving situation is how to
@@ -1327,7 +1327,7 @@ public str capAll2(str S)
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="requirements.png" scale="30"></imagedata>
+            <imagedata fileref="requirements.png" scale="40"></imagedata>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -1480,7 +1480,7 @@ public str capAll2(str S)
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="define-extraction.png" scale="30"></imagedata>
+              <imagedata fileref="define-extraction.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -1564,7 +1564,7 @@ public str capAll2(str S)
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="define-analysis.png" scale="30"></imagedata>
+              <imagedata fileref="define-analysis.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -1670,7 +1670,7 @@ public str capAll2(str S)
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="define-synthesis.png" scale="30"></imagedata>
+              <imagedata fileref="define-synthesis.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -1787,7 +1787,7 @@ public str capAll2(str S)
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="calls-workflow.png" scale="30"></imagedata>
+                <imagedata fileref="calls-workflow.png" scale="40"></imagedata>
               </imageobject>
             </mediaobject>
 
@@ -3022,7 +3022,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     and a first prototype implementation is available for download. We have
     given here only a sketch of the language and its applications. The
     following topics have not been covered in the current version of this
-    document:</para>
+    article:</para>
 
     <itemizedlist>
       <listitem>
@@ -3063,8 +3063,8 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     version of Rascal during her visit to CWI in the summer of 2009.</para>
 
     <para>Bas Basten provided useful feedback on the design and is developing
-    a Rascal/JDT interface that makes it easy to extract facts from Java
-    source code.</para>
+    a Rascal/Eclipse JDT interface that makes it easy to extract facts from
+    Java source code.</para>
 
     <para>Bob Fuhrer's inspiring IMP project motivated us to build Rascal on
     top of IMP. The PDB was designed and implemented during Jurgen's visit to
