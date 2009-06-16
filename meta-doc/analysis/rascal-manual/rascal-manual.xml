@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -459,9 +459,9 @@
 
             <thead>
               <row>
-                <entry align="left">Type&#160;</entry>
+                <entry align="left">Type </entry>
 
-                <entry align="left">Examples&#160;</entry>
+                <entry align="left">Examples </entry>
               </row>
             </thead>
 
@@ -1022,10 +1022,12 @@ data ColoredTree =
       <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::ColoredTrees;</userinput>
 <computeroutput>ok
 </computeroutput>
-<prompt>rascal&gt;</prompt> <userinput>rb = red(black(leaf(1), red(leaf(2),leaf(3))));</userinput>
-<computeroutput>ColoredTree: red(black(leaf(1), red(leaf(2),leaf(3))))</computeroutput></screen>We
-      define two operations on ColoredTrees, one to count the red nodes, and
-      one to add all leaves:<programlisting>// continuing module demo::ColoredTrees
+<prompt>rascal&gt;</prompt> <userinput>rb = red(black(leaf(1), red(leaf(2),leaf(3))), 
+                 black(leaf(3), leaf(4)));</userinput>
+<computeroutput>ColoredTree: red(black(leaf(1),red(leaf(2),leaf(3))),
+                 black(leaf(3),leaf(4)))</computeroutput></screen>We define
+      two operations on ColoredTrees, one to count the red nodes, and one to
+      add all leaves:<programlisting>// continuing module demo::ColoredTrees
 
 public int cntRed(ColoredTree t){
    int c = 0;
@@ -1040,7 +1042,7 @@ public int addLeaves(ColoredTree t){
    visit(t) {
      case leaf(int N): c = c + N;<co xml:id="co.cntLeaves" />
    };
-   return C;
+   return c;
 }</programlisting><calloutlist>
           <callout arearefs="co.cntRed">
             <para>Visit all the nodes of the tree and increment the counter
@@ -1058,7 +1060,7 @@ public int addLeaves(ColoredTree t){
       <para><screen><prompt>rascal&gt;</prompt> <userinput>cntRed(rb);</userinput>
 <computeroutput>int: 2</computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>addLeaves(rb);</userinput>
-<computeroutput>int: 6</computeroutput></screen></para>
+<computeroutput>int: 13</computeroutput></screen></para>
 
       <para>A final touch to this example is to introduce green nodes and to
       replace all red nodes by green ones:<programlisting>// continuing module demo::ColoredTrees
@@ -1068,7 +1070,7 @@ data ColoredTree = green(ColoredTree left,
 
 public ColoredTree makeGreen(ColoredTree t){
    return visit(t) {
-     case red(l, r) =&gt; green(l, r);      <co xml:id="co.makeGreen" />
+     case red(l, r) =&gt; green(l, r)      <co xml:id="co.makeGreen" />
    };
 }</programlisting><calloutlist>
           <callout arearefs="co.Tree-green">
@@ -1085,7 +1087,8 @@ public ColoredTree makeGreen(ColoredTree t){
         </calloutlist></para>
 
       <para>This is used as follows:<screen><prompt>rascal&gt;</prompt> <userinput>makeGreen(rb);</userinput>
-<computeroutput>ColoredTree: green(black(leaf(1), green(leaf(2),leaf(3))))</computeroutput></screen></para>
+<computeroutput>ColoredTree: green(black(leaf(1),green(leaf(2),leaf(3))),
+                   black(leaf(3),leaf(4)))</computeroutput></screen></para>
     </section>
 
     <section>
@@ -2240,6 +2243,7 @@ rel[class,set[class]] ClassCycles =
       statements in the program. Assuming that there is a tool to extract the
       above information from a program text, we get the following for the
       above example:<programlisting>module demo::Uninit
+import Relation;
 import Graph;
 
 alias expr = int;
@@ -2270,7 +2274,7 @@ public rel[varname, expr] USES = { &lt;"q", 5&gt;, &lt;"y", 6&gt;,
       formalized as follows:<programlisting>// module demo::Unit continued
 public rel[varname,expr] UNINIT = 
    { &lt;V,E&gt; | &lt;varname V, expr E&gt; &lt;- USES, 
-              E in reachX({ROOT}, DEFS[V], PRED)
+              E in reachX(PRED, {ROOT}, DEFS[V])
    };</programlisting></para>
 
       <para>We analyze this definition in detail:</para>
@@ -2283,7 +2287,7 @@ public rel[varname,expr] UNINIT =
         </listitem>
 
         <listitem>
-          <para><literal>E in reachX({ROOT}, DEFS[V], PRED) </literal>is a
+          <para><literal>E in reachX(PRED, {ROOT}, DEFS[V]) </literal>is a
           test that determines whether expression <replaceable>E</replaceable>
           is reachable from the <literal>ROOT</literal> without encountering a
           definition of variable <replaceable>V</replaceable>.</para>
@@ -2308,14 +2312,14 @@ public rel[varname,expr] UNINIT =
             </listitem>
 
             <listitem>
-              <para>The result of <literal>reachX({ROOT}, DEFS[V], PRED)
+              <para>The result of <literal>reachX(PRED, {ROOT}, DEFS[V])
               </literal>is a set that contains all nodes that are reachable
               from the <literal>ROOT</literal> (as well as all intermediate
               nodes on each path).</para>
             </listitem>
 
             <listitem>
-              <para>Finally, <literal>E in reachX({ROOT}, DEFS[V], PRED)
+              <para>Finally, <literal>E in reachX(PRED, {ROOT}, DEFS[V])
               </literal>tests whether expression <literal>E</literal> can be
               reached from the <literal>ROOT</literal>.</para>
             </listitem>
@@ -2344,7 +2348,7 @@ ok
       variables in a program, i.e., variables that are defined but are used
       nowhere. This is done as follows:<programlisting>// module demo::Unit continued
 
-public set[varname] UNUSED = domain(DEFS) - domain(USES)</programlisting>Taking
+public set[varname] UNUSED = domain(DEFS) - domain(USES);</programlisting>Taking
       the domain of the relations <literal>DEFS</literal> and
       <literal>USES</literal> yields the variables that are defined,
       respectively, used in the program. The difference of these two sets
@@ -2541,6 +2545,7 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
         information about the program:<programlisting>module demo::ReachingDefs
 
 import Relation;
+import Graph;
 import IO;
 
 public alias stat = int;
@@ -2631,7 +2636,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
         <literal>S</literal>. Mathematically, the following set of equations
         captures this idea for each statement:</para>
 
-        <para>IN[S] = UNION<subscript>P in predecessor of S</subscript>
+        <para>IN[S] = UNION<subscript>P in predecessors of S</subscript>
         OUT[P]</para>
 
         <para>OUT[S] = DEF[S] + (IN[S] - KILL[S])</para>
@@ -2652,7 +2657,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
     rel[stat,def] OUT = DEF;
   solve {
     IN  = {&lt;S, D&gt; | int S &lt;- STATEMENT, 
-                    stat P &lt;- predecessor(PRED,S), 
+                    stat P &lt;- predecessors(PRED,S), 
                     def D &lt;- OUT[P]};
     OUT = {&lt;S, D&gt; | int S &lt;- STATEMENT, 
                     def D &lt;- DEF[S] + (IN[S] - KILL[S])};
@@ -2661,8 +2666,9 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
 }</programlisting>First, the relations <literal>IN</literal> and
         <literal>OUT</literal> are declared and initialized. Next, two
         equations are given that resemble the mathematical equations given
-        above. Note the use of the library function predecessor to obtain the
-        predecessor of a statement for a given control flow graph.</para>
+        above. Note the use of the library function
+        <literal>predecessors</literal> to obtain the predecessors of a
+        statement for a given control flow graph.</para>
 
         <para><figure xml:id="figure.reaching-definitions">
             <title>Reaching definitions for flow graph in <xref
@@ -2749,7 +2755,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
 
         <para>IN[S] =USE[S] + (OUT[S] - DEF[S])</para>
 
-        <para>OUT[S] = UNION<subscript>S' in successor of S</subscript>
+        <para>OUT[S] = UNION<subscript>S' in successors of S</subscript>
         IN[S']</para>
 
         <para>The first equation says that a variable is live coming into a
@@ -2773,7 +2779,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
                       def D &lt;- USE[S] + 
                                (LOUT[S] - (DEF[S]))};
     LOUT = { &lt;S, D&gt; | stat S &lt;- STATEMENT,  
-                      stat Succ &lt;- successor(PRED,S), 
+                      stat Succ &lt;- successors(PRED,S), 
                       def D &lt;- LIN[Succ] };
   }
   return LIN;
@@ -7962,11 +7968,19 @@ bool: true</screen>
               </row>
 
               <row>
-                <entry><literal>map[&amp;V, &amp;K] invert(map[&amp;K, &amp;V]
-                M)</literal></entry>
+                <entry><literal>map[&amp;V, &amp;K] invertUnique(map[&amp;K,
+                &amp;V] M) throws MultipleKey</literal></entry>
 
                 <entry>Map with key and value inverted; result should be a
                 map</entry>
+              </row>
+
+              <row>
+                <entry>map[&amp;V, set[&amp;K]] invert(map[&amp;K, &amp;V]
+                M)</entry>
+
+                <entry>Inverted map in which each value in the old map is
+                associated with a set of key values from the old map</entry>
               </row>
 
               <row>
@@ -10495,6 +10509,13 @@ bool: true</screen>
 
             <entry><xref linkend="section.lib-Map" xrefstyle="template:%t" />,
             <xref linkend="section.lib-Relation"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>invertUnique</literal></entry>
+
+            <entry><xref linkend="section.lib-Map"
             xrefstyle="template:%t" /></entry>
           </row>
 
