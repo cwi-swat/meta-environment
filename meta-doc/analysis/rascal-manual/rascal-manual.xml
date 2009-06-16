@@ -7639,9 +7639,19 @@ bool: true</screen>
 
               <row>
                 <entry><literal>map[&amp;A,&amp;B] toMap(list[tuple[&amp;A,
-                &amp;B]] lst)</literal></entry>
+                &amp;B]] lst) throws DuplicateKey</literal></entry>
 
-                <entry>Convert a list of tuples to a map</entry>
+                <entry>Convert a list of tuples to a map; result must be a
+                map</entry>
+              </row>
+
+              <row>
+                <entry>map[&amp;A,set[&amp;B]] toMap(list[tuple[&amp;A,
+                &amp;B]] lst)</entry>
+
+                <entry>Convert a list of tuples to a map in which the first
+                element of each tuple is associated with the set of second
+                elements from all tuples with the same first element</entry>
               </row>
 
               <row>
@@ -9092,10 +9102,20 @@ bool: true</screen>
             </row>
 
             <row>
-              <entry><literal>map[&amp;A,&amp;B] toMap(rel[&amp;A, &amp;B]
-              st)</literal></entry>
+              <entry>map[&amp;A,set[&amp;B]] toMap(rel[&amp;A, &amp;B]
+              st)</entry>
 
-              <entry>Convert a set of tuples to a map</entry>
+              <entry>Convert a set of tuples to a map in which the first
+              element of each tuple is associated with the set of second
+              elements from all tuples with the same first element</entry>
+            </row>
+
+            <row>
+              <entry><literal>map[&amp;A,&amp;B] toMapUnique(rel[&amp;A,
+              &amp;B] st) throws DuplicateKey</literal></entry>
+
+              <entry>Convert a set of tuples to a map; the result should be a
+              legal map</entry>
             </row>
 
             <row>
@@ -10857,6 +10877,14 @@ bool: true</screen>
 
             <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry>toMapUnique</entry>
+
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />,<xref linkend="section.lib-Set"
             xrefstyle="template:%t" /></entry>
           </row>
 
