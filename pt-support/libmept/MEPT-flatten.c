@@ -180,11 +180,15 @@ static void init_asfix_patterns()
   asfix2_layout_layout_to_layout = 
     ATparse("prod([cf(layout),cf(layout)],cf(layout),<term>)");
 
+
+
   /* do not remove the above no-attrs, because this pattern is used for
    * generation: */
   ATprotect(&asfix2_layout_to_opt_layout);
   asfix2_layout_to_opt_layout = 
     ATparse("prod([cf(layout)],cf(opt(layout)),no-attrs)");
+
+
 
   ATprotect(&asfix2_lex_layout_to_cf_layout);
   asfix2_lex_layout_to_cf_layout = 
@@ -419,6 +423,19 @@ ATbool isListProd(PT_Production prod)
       ||
       ATmatchTerm((ATerm)prod, asfix2_plus_sep_star_sep_to_plus_sep_lex,
                   &sort1, &sep1, NULL, &sep4, NULL, &sort2, &sep2, &sort3, &sep3, NULL)) {
+
+    ATerm lit = NULL;
+    /*
+     * The normalizer apparently does not produce {X Y}+ Y {X Y}+ -> {X Y}+ correctly
+     * (and probably the other rules; I haven't checked). The middle separator will 
+     * produce a cf symbol in the production whereas separators in the iter-sep
+     * symbols are non-cf. As a result the equality check below fails where it should succeed.
+     * NB: this is Rascal specific code; normally there is no problem.
+     */
+    if (ATmatch(sep4, "cf(parameterized-sort(\"_Literal\",<term>))", &lit)) {
+      sep4 = ATmake("parameterized-sort(\"_Literal\", <term>))", lit);
+    }
+
     return ATisEqual(sort1, sort2) && ATisEqual(sort2, sort3) &&
       ATisEqual(sep1, sep2) && ATisEqual(sep2, sep3) && ATisEqual(sep3, sep4);
   }
@@ -627,7 +644,6 @@ static PT_Tree flattenList(PT_Tree tree)
   prod = PT_getTreeProd(tree);
   symbol = PT_getProductionRhs(prod);
 
-
   if (isListProd(prod)) {
     prepareListSymbols(symbol, &plus, &star);
 
@@ -696,11 +712,53 @@ static PT_Tree flatEmptyLayout() {
 	return layout;
 }
 
+/*
+ * Convert special Rascal layout symbols to ordinary layout symbols.
+ */
+static PT_Symbol convertRascalLayoutSymbol(PT_Symbol symbol) {
+  if (ATmatch((ATerm)symbol, "cf(sort(\"_Layout\"))")) {
+    return (PT_Symbol)ATmake("cf(layout)");
+  }
+  if (ATmatch((ATerm)symbol, "cf(opt(sort(\"_Layout\")))")) {
+    return (PT_Symbol)ATmake("cf(opt(layout))");
+  }
+  if (ATmatch((ATerm)symbol, "lex(sort(\"_Layout\"))")) {
+    return (PT_Symbol)ATmake("lex(layout)");
+  }
+  return symbol;
+}
+
+static PT_Tree convertRascalLayoutSymbolsInTree(PT_Tree tree) {
+  PT_Production prod;
+  PT_Args args;
+
+  assert(PT_isTreeAppl(tree) && "unsupported tree format");
+
+  prod = PT_getTreeProd(tree);
+  args = PT_getTreeArgs(tree);
+
+  PT_Symbols lhsSymbols = PT_getProductionLhs(prod);
+  PT_Symbols newLhs = PT_makeSymbolsEmpty();
+  while (!PT_isSymbolsEmpty(lhsSymbols)) {
+    PT_Symbol symbol = PT_getSymbolsHead(lhsSymbols);
+    PT_Symbol newSymbol = convertRascalLayoutSymbol(symbol);
+    newLhs = PT_makeSymbolsMany(newSymbol, newLhs);
+    lhsSymbols = PT_getSymbolsTail(lhsSymbols);
+  }
+
+  PT_Symbol newRhs = convertRascalLayoutSymbol(PT_getProductionRhs(prod));
+  prod = PT_makeProductionDefault(newLhs, newRhs, PT_getProductionAttributes(prod));
+  tree = PT_makeTreeAppl(prod, args);
+
+  return tree;
+}
+
 
 static PT_Tree flattenTreeRec(PT_Tree tree)
 {
   PT_Production prod;
   PT_Args args;
+
   PT_Tree result = PT_TreeFromTerm(ATtableGet(memotable, PT_TreeToTerm(tree)));
 
   if (result != NULL) {
@@ -716,6 +774,8 @@ static PT_Tree flattenTreeRec(PT_Tree tree)
   }
   else {
     assert(PT_isTreeAppl(tree) && "unsupported tree format");
+
+    tree = convertRascalLayoutSymbolsInTree(tree);
 
     prod = PT_getTreeProd(tree);
     args = PT_getTreeArgs(tree);
@@ -739,7 +799,6 @@ static PT_Tree flattenTreeRec(PT_Tree tree)
   }
 
   ATtablePut(memotable, PT_TreeToTerm(tree), PT_TreeToTerm(result));
-
   return result;
 }
 
