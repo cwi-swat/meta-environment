@@ -410,6 +410,8 @@
     </section>
   </section>
 
+  <?hard-pagebreak ?>
+
   <section xml:id="section.rascal-concepts">
     <title>Rascal Concepts</title>
 
@@ -442,6 +444,42 @@
       and library functions available on the standard datatypes. The basic
       Rascal datatypes are illustrated in <xref
       linkend="table.types" />.</para>
+
+      <para>These builtin datatypes are closely related to ech other:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>In a <emphasis role="bold">list</emphasis> all elements have
+          the same static type and the order of elements matters. A list may
+          contain the same value more than once.</para>
+        </listitem>
+
+        <listitem>
+          <para>In a <emphasis role="bold">set</emphasis> all elements have
+          the same static type and the order of elements does not matter. A
+          set contains an element only once. In other words, duplicate
+          elements are eliminated and no matter how many times an element is
+          added to a set, it will occur in it only once.</para>
+        </listitem>
+
+        <listitem>
+          <para>In a <emphasis role="bold">tuple</emphasis> alle elements
+          (may) have a different static type. Each element of a tuple may have
+          a label that can be used to select that element of the tuple.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis role="bold">relation</emphasis> is a set of tuples
+          which all have the same static tuple type.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis role="bold">map</emphasis> is a binary relation
+          consisting of (key, value) pairs. Key and value (may) have different
+          static type and a key can only be associated with a value
+          once</para>
+        </listitem>
+      </itemizedlist>
 
       <para>User-defined datatypes allow the introduction of problem-specific
       types. A fragment of the abstract syntax for statements in a programming
@@ -572,6 +610,16 @@
       itself as well as the before and after it:</para>
 
       <para><programlisting>/^&lt;before:\W*&gt;&lt;word:\w+&gt;&lt;after:.*$&gt;/</programlisting></para>
+
+      <para>Regular expressions follow the Java regular expression syntax with
+      one exception: instead of using <literal>$1</literal>,
+      <literal>$2</literal> as names for parts of the subject string that have
+      been matched by a part of the regular expression we use the
+      notation:<programlisting><literal>&lt;<replaceable>Name</replaceable>:<replaceable>RegularExpression</replaceable>&gt;</literal></programlisting></para>
+
+      <para>If <replaceable>RegularExpression</replaceable> matches, the
+      matched substring is assigned to string variable
+      <replaceable>Name</replaceable>.</para>
 
       <para>The following abstract pattern matches the while statement defined
       above: <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
@@ -721,10 +769,15 @@ case ifStat(Exp, Stats1*, Stat2*):
         </listitem>
       </itemizedlist>
 
+      <para>Side-effects including assignments to local and global variables
+      in the Rascal program are undone on failure. External side-effects like
+      I/O and side-effects in user-defined Java code are not undone.</para>
+
       <para>The value of a visit expression is the original subject value with
       all replacements made as dictated by matching cases. The traversal order
-      in a visit expressions can be explicitly defined by the
-      programmer.</para>
+      in a visit expressions can be explicitly defined by the programmer. An
+      example of visiting is given in <xref
+      linkend="section.colored-trees" />.</para>
     </section>
 
     <section>
@@ -857,6 +910,11 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
 
       <para>Since rewrite rules are activated automatically, one may always
       assume that expressions are in simplified form.</para>
+
+      <para>Rewrite rules are <emphasis>computationally complete</emphasis>,
+      in other words any computable function can be defined using rewrite
+      rules, including functions that do not terminate. This is a point of
+      attention when using rewrite rules.</para>
     </section>
 
     <section>
@@ -918,13 +976,15 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
       also for list concatenation, set union etc.</para>
 
       <para>The flow of Rascal program execution is completely explicit.
-      Boolean expression determine choices that drive the control structures.
+      Boolean expressions determine choices that drive the control structures.
       Rewrite rules form the only exception to the explicit control flow
       principle. Only local backtracking is provided (no surprise) in the
       context of boolean expressions and pattern matching; side effects are
       undone in case of backtracking.</para>
     </section>
   </section>
+
+  <?hard-pagebreak ?>
 
   <section xml:id="section.classical-examples">
     <title>Some Classical Examples</title>
@@ -1004,7 +1064,7 @@ public int fac(int N)
       <para>Indeed, Rascal has infinite length integers.</para>
     </section>
 
-    <section>
+    <section xml:id="section.colored-trees">
       <title>Colored Trees</title>
 
       <para>Suppose we have binary trees---trees with exactly two
@@ -1027,7 +1087,7 @@ data ColoredTree =
 <computeroutput>ColoredTree: red(black(leaf(1),red(leaf(2),leaf(3))),
                  black(leaf(3),leaf(4)))</computeroutput></screen>We define
       two operations on ColoredTrees, one to count the red nodes, and one to
-      add all leaves:<programlisting>// continuing module demo::ColoredTrees
+      add the values contained in all leaves:<programlisting>// continuing module demo::ColoredTrees
 
 public int cntRed(ColoredTree t){
    int c = 0;
@@ -1190,6 +1250,8 @@ public str capAll2(str S)
 <computeroutput>str: "Rascal Is Great"</computeroutput></screen></para>
     </section>
   </section>
+
+  <?hard-pagebreak ?>
 
   <section xml:id="section.problem-solving-strategies">
     <title>Problem Solving Strategies</title>
@@ -1414,9 +1476,9 @@ public str capAll2(str S)
               disadvantage is that data conversion is needed to adapt the
               generated parse tree to Rascal. Validate that the parser indeed
               accepts the language the SUI is written in, since you will not
-              be the first who is bitting by the language dialect monster when
-              it turns out that the SUI uses a local variant that slightly
-              deviates from a mainstream language.</para>
+              be the first who has been bitten by the language dialect monster
+              when it turns out that the SUI uses a local variant that
+              slightly deviates from a mainstream language.</para>
             </listitem>
 
             <listitem>
@@ -1447,7 +1509,11 @@ public str capAll2(str S)
           <para>Extracted facts are <emphasis>wrong</emphasis>: the extracted
           facts incorrectly state that procedure <literal>P</literal> calls
           procedure <literal>Q</literal> but this is contradicted by a source
-          code inspection.</para>
+          code inspection. This may happen when the fact extractor uses a
+          conservative approximation when precise information is not
+          statically available. In the language C, when procedure P performs
+          an indirect call via a pointer variable, the approximation may be
+          that P calls all procedures in the procedures.</para>
         </listitem>
 
         <listitem>
@@ -1705,6 +1771,8 @@ public str capAll2(str S)
       </itemizedlist>
     </section>
   </section>
+
+  <?hard-pagebreak ?>
 
   <section xml:id="section.more-examples">
     <title>Larger Examples</title>
@@ -2093,10 +2161,9 @@ public rel[comp,comp] lift(rel[proc,proc] aCalls,
           <para><literal>rel[class,class] CONTAINMENT</literal>: If
           &lt;<replaceable>C</replaceable><subscript>1</subscript>,
           <replaceable>C</replaceable><subscript>2</subscript>&gt; is an
-          element of <literal>CONTAINMENT</literal>, then one of the
-          attributes of class
-          <replaceable>C</replaceable><subscript>1</subscript> is of type
-          <replaceable>C</replaceable><subscript>2</subscript>.</para>
+          element of <literal>CONTAINMENT</literal>, then one of the fields of
+          class <replaceable>C</replaceable><subscript>1</subscript> is of
+          type <replaceable>C</replaceable><subscript>2</subscript>.</para>
         </listitem>
       </itemizedlist>
 
@@ -2265,7 +2332,7 @@ public rel[varname, expr] USES = { &lt;"q", 5&gt;, &lt;"y", 6&gt;,
       So, when is a variable <replaceable>V</replaceable> in some statement
       <replaceable>S</replaceable> initialized? If we execute the program
       (starting in <literal>ROOT</literal>), there may be several possible
-      execution path that can reach statement <replaceable>S</replaceable>.
+      execution paths that can reach statement <replaceable>S</replaceable>.
       All is well if <emphasis>all</emphasis> these execution path contain a
       definition of <replaceable>V</replaceable>. However, if one or more of
       these path do <emphasis>not</emphasis> contain a definition of
@@ -3030,6 +3097,8 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     </section>
   </section>
 
+  <?hard-pagebreak ?>
+
   <section xml:id="section.rascal-language">
     <title>The Rascal Language</title>
 
@@ -3272,8 +3341,16 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           </note></para>
 
         <para>When variables of type list occur inside a list, their elements
-        are automatically spliced into the surrounding list. This can be
-        prevented by surrounding them with extra [ and ] brackets.</para>
+        are automatically <emphasis>spliced</emphasis> into the surrounding
+        list. This can be prevented by surrounding them with extra [ and ]
+        brackets.<screen><prompt>rascal&gt;</prompt> <userinput>L = [1, 2, 3];</userinput>
+<computeroutput>list[int]: [1,2,3]</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>[10, L, 20];</userinput>
+<computeroutput>list[int]: [10, 1, 2, 3, 20]</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>[10, [L], 20];</userinput>
+<computeroutput>list[value]: [10, [1,2,3], 20]</computeroutput></screen></para>
 
         <formalpara>
           <title>Range</title>
@@ -3371,11 +3448,18 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
             <para><literal>{1, 2, 3}</literal> and <literal>{3, 2,
             1}</literal> are identical sets.</para>
           </note><note>
-            <para><literal>{1, 2, 3]</literal> and <literal>{1, 2, 3,
+            <para><literal>{1, 2, 3}</literal> and <literal>{1, 2, 3,
             1}</literal> are also identical sets.</para>
           </note>In a similar fashion as with lists, sets variables are
         automatically spliced into a surrounding set. This can be prevented by
-        surrounding them with extra { and } brackets.</para>
+        surrounding them with extra { and } brackets.<screen><prompt>rascal&gt;</prompt> <userinput>S = {1, 2, 3};</userinput>
+<computeroutput>set[int]: {1,2,3]}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>{10, S, 20};</userinput>
+<computeroutput>set[int]: {10, 1, 2, 3, 20]}</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>{10, {L}, 20};</userinput>
+<computeroutput>lsetist[value]: {10, {1,2,3}, 20}</computeroutput></screen></para>
 
         <formalpara>
           <title>Map</title>
@@ -6343,6 +6427,8 @@ bool: true</screen>
     </section>
   </section>
 
+  <?hard-pagebreak ?>
+
   <section xml:id="section.lib">
     <title>Built-in Operators and Library Functions</title>
 
@@ -6379,6 +6465,11 @@ bool: true</screen>
       <listitem>
         <para>IO: simple print functions, see <xref
         linkend="section.lib-IO" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>JDT: Java fact extraction functions, see <xref
+        linkend="section.lib-JDT" />.</para>
       </listitem>
 
       <listitem>
@@ -7207,8 +7298,271 @@ bool: true</screen>
         </table></para>
     </section>
 
+    <section xml:id="section.lib-JDT">
+      <title>JDT (Eclipse only)</title>
+
+      <para>Detailed information can be extracted from Java projects in the
+      current Eclipse workspace. This proceeds in two steps:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>First all facts are extracted from given projects or files.
+          The result is a <literal>FactMap</literal> that contains all data. A
+          FactMap is a datatype only used by the JDT functions and is not
+          further described here. The project/file extraction functions are
+          shown in <xref linkend="table.JDT-project-functions" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>Next, specific facts about the Java source code can be
+          retrieved from the <literal>FactMap</literal>. These functions are
+          shown in <xref linkend="table.JDT-fact-retrieval-functions" />. They
+          return values of type <literal>BindingRel</literal> or
+          <literal>TypeInfoRel</literal> that are explained below.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The Java constructs that may occur in extracted facts are
+      represented by the datatype Entity that is defined in the library module
+      <literal>Java</literal> (not further described here). Entity is defined
+      as follows:</para>
+
+      <para><programlisting>data Entity = entity(list[Id] id);
+
+data Id = package(str name)
+        | class(str name)
+        | class(str name, list[Entity] params)
+        | interface(str name)
+        | interface(str name, list[Entity] params)
+        | anonymousClass(int nr)
+        | enum(str name)
+        
+        | method(str name, list[Entity] params, Entity returnType)
+        | constructor(list[Entity] params)
+        | initializer
+        | initializer(int nr)
+
+        | field(str name)
+        | parameter(str name)
+        | variable(str name)
+        | enumConstant(str name)
+        
+        | primitive(PrimitiveType type)
+        | array(Entity elementType)
+        
+        | typeParameter(str name)
+        | wildcard
+        | wildcard(Bound bound)
+;
+
+
+data PrimitiveType = byte
+                   | short
+                   | \int
+                   | long
+                   | float
+                   | double
+                   | char
+                   | boolean
+                   | \void
+                   | null
+;
+
+data Bound = extends(Entity type)
+           | super(Entity type);
+</programlisting>The extraction functions use the following additional
+      types:</para>
+
+      <para><programlisting>public alias JDTlocation = tuple[str fileName, int offset, int length];
+public alias BindingRel = rel[JDTlocation, Entity];
+public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
+
+      <para><literal>JDTLocation</literal> describes a text area in a given
+      file. <literal>BindingRel</literal> associates JDTLocations with
+      Entities. <literal>TypeInfoRel</literal> associates Entities with each
+      other.</para>
+
+      <para><table xml:id="table.JDT-project-functions">
+          <title> JDT Project/File Extraction Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="3*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>FactMap java extractFacts(str project, str
+                file)</literal></entry>
+
+                <entry>Import JDT facts from file (path relative to project
+                root)</entry>
+              </row>
+
+              <row>
+                <entry><literal>FactMap extractFacts(str project, loc
+                file)</literal></entry>
+
+                <entry>Import JDT facts from file (absolute file system
+                path)</entry>
+              </row>
+
+              <row>
+                <entry>FactMap unionFacts(FactMap m1, FactMap m2)</entry>
+
+                <entry>Union fact maps, union values for facts that appear in
+                both maps (if possible)</entry>
+              </row>
+
+              <row>
+                <entry><literal>FactMap extractFacts(set[str]
+                projects)</literal></entry>
+
+                <entry>Extract facts from projects</entry>
+              </row>
+
+              <row>
+                <entry><literal>FactMap extractFactsTransitive(set[str]
+                projects)</literal></entry>
+
+                <entry>Extracts facts from projects and all projects they
+                depends on (transitively)</entry>
+              </row>
+
+              <row>
+                <entry><literal>FactMap extractFacts(str
+                projectName)</literal></entry>
+
+                <entry>Extract facts from a single project</entry>
+              </row>
+
+              <row>
+                <entry><literal>tuple[rel[&amp;T1, &amp;T2] found,
+                rel[JDTlocation, &amp;T2] notfound]
+                matchLocations(rel[&amp;T1, loc] RSClocs, rel[JDTlocation,
+                &amp;T2] JDTlocs)</literal></entry>
+
+                <entry>Compose two relations by matching JDT locations with
+                Rascal locations and return a tuple with the composition
+                result and the locations that could not be matched</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+
+      <para><table xml:id="table.JDT-fact-retrieval-functions">
+          <title>JDT Fact Retrieval Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="3*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>BindingRel getTypeBindings(FactMap
+                fm)</literal></entry>
+
+                <entry>Get the fully-qualified types of all expressions and
+                identifiers</entry>
+              </row>
+
+              <row>
+                <entry><literal>BindingRel getMethodBindings(FactMap
+                fm)</literal></entry>
+
+                <entry>Get all fully-qualified method names that occur in
+                declarations or calls</entry>
+              </row>
+
+              <row>
+                <entry><literal>BindingRel getConstructorBindings(FactMap
+                fm)</literal></entry>
+
+                <entry>Get all fully-qualified constructor name that occur in
+                declarations or calls</entry>
+              </row>
+
+              <row>
+                <entry><literal>BindingRel getFieldBindings(FactMap
+                fm)</literal></entry>
+
+                <entry>Get all fully-qualified field names</entry>
+              </row>
+
+              <row>
+                <entry><literal>BindingRel getVariableBindings (FactMap
+                fm)</literal></entry>
+
+                <entry>Get all fully-qualified variable names of all local
+                variables and method parameters</entry>
+              </row>
+
+              <row>
+                <entry><literal>TypeInfoRel getImplements(FactMap
+                fm)</literal></entry>
+
+                <entry>Get the interface implementation (implements)
+                relation</entry>
+              </row>
+
+              <row>
+                <entry><literal>TypeInfoRel getExtends(FactMap
+                fm)</literal></entry>
+
+                <entry>Get the subclass (extends) relation</entry>
+              </row>
+
+              <row>
+                <entry><literal>TypeInfoRel getDeclaredTypes(FactMap
+                fm)</literal></entry>
+
+                <entry>Get the relation between each class and its inner
+                classes</entry>
+              </row>
+
+              <row>
+                <entry><literal>TypeInfoRel getDeclaredMethods(FactMap
+                fm)</literal></entry>
+
+                <entry>Get all declared methods in each class</entry>
+              </row>
+
+              <row>
+                <entry><literal>TypeInfoRel getDeclaredFields(FactMap
+                fm)</literal></entry>
+
+                <entry>Get all declared fields in each class</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+
+      <para>Here is an example function that extracts the inheritance
+      hierarchy from a given project:<programlisting>TypeInfoRel getInheritance(str projectName){
+  fm = extractFacts(projectName);
+  return getExtends(fm) + getImplements(fm);
+}</programlisting></para>
+    </section>
+
     <section xml:id="section.lib-LabelledGraph">
-      <title>Labelled Graph</title>
+      <title> Labelled Graph</title>
 
       <para>The labelled graph datatype is a special form of binary relation
       with labelled edges and is defined as follows:</para>
