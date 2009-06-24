@@ -742,7 +742,7 @@ static PT_Tree convertRascalLayoutSymbolsInTree(PT_Tree tree) {
   while (!PT_isSymbolsEmpty(lhsSymbols)) {
     PT_Symbol symbol = PT_getSymbolsHead(lhsSymbols);
     PT_Symbol newSymbol = convertRascalLayoutSymbol(symbol);
-    newLhs = PT_makeSymbolsMany(newSymbol, newLhs);
+    newLhs = PT_appendSymbols(newLhs, newSymbol);
     lhsSymbols = PT_getSymbolsTail(lhsSymbols);
   }
 

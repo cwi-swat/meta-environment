@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jun 24 10:59:46 CEST 2009 <storm@cwi.nl>
+	* libmept: libmept/MEPT-flatten.c: small bug in conversion of
+	symbols.
+
 Wed Jun 24 10:27:46 CEST 2009 <storm@cwi.nl>
 	* libmept: libmept/MEPT-flatten.c: the flattener still had some
 	dependencies on built-in layout; the special Rascal Layout symbol
