@@ -2648,6 +2648,11 @@ public rel[stat,def] use(rel[stat, var] USES){
                                &lt;7, "u3"&gt; };</userinput>
 <computeroutput>rel[stat,var]: { &lt;1, "m"&gt;, &lt;2, "n"&gt;,...</computeroutput></screen></para>
 
+        <!--leg uit waarom het handig is om voor relaties zoals 
+DEFS elementen van de
+       vorm <X,<X,Y>> te gebruiken in plaats van het voor de hand liggende 
+<X,Y>-->
+
         <para>For convenience, we have introduced above a notion
         <literal>def</literal> that describes that a certain statement defines
         some variable and we revamp the basic relations into a more convenient
@@ -2663,6 +2668,13 @@ public rel[stat,def] use(rel[stat, var] USES){
                  &lt;3, &lt;3, "u1"&gt;&gt;, &lt;4, &lt;4, "i"&gt;&gt;, 
                  &lt;5, &lt;5, "j"&gt;&gt;, &lt;6, &lt;6, "u2"&gt;&gt;, 
                  &lt;7, &lt;7, "u3"&gt;&gt; }</computeroutput></screen></para>
+
+        <!--de definitie van "kill" komt niet overeen met wat ik zou 
+verwachten. Ik zou nl. verwachten
+    dat een definitie D1 een definitie D2 alleen "killt" als D1 een 
+dominator is van D2.  Het is
+    anders ook niet zo duidelijk waarom je eerst een definitie geeft van 
+dominators.-->
 
         <para>Now we are ready to define an important new relation
         <literal>KILL</literal>. <literal>KILL</literal> defines which
@@ -3562,6 +3574,18 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           </listitem>
         </itemizedlist>
 
+        <para>The elements of a tuple can also be labelled and can then be
+        accessed using the field selection operator (<literal>.</literal>).
+        Fields can be changed (yielding a new tuple value) by a combination of
+        field selection and assignment. For instance,<screen><prompt>rascal&gt;</prompt> <userinput>tuple[str first, str last, int age] P = &lt;"Jo", "Jones", 35&gt;;</userinput>
+<computeroutput>tuple[str first, str last, int age] P = &lt;"Jo", "Jones", 35&gt;;
+</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>P.first;</userinput>
+<computeroutput>str: "Jo"</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>P.first = "Bo";</userinput>
+<computeroutput>tuple[str first,str last,int age]: &lt;"Bo","Jones",35&gt;</computeroutput></screen></para>
+
         <formalpara>
           <title>Relation</title>
 
@@ -3663,7 +3687,15 @@ alias Frequency = int;</programlisting>
         document your intentions. Another example is an alias definition for a
         graph containing integer nodes:</para>
 
-        <para><programlisting>alias Graph = rel[int,int];</programlisting></para>
+        <para><programlisting>alias IntGraph = rel[int,int];</programlisting></para>
+
+        <para>Note that Rascal Standard Library provides a graph data type
+        that is defined as follows:</para>
+
+        <para><programlisting>alias Graph[&amp;T] = rel[&amp;T, &amp;T];</programlisting>In
+        other words the standard graph datatype can be parameterized with any
+        element type. See <xref linkend="section.lib-Graph" /> for
+        details.</para>
       </section>
 
       <section xml:id="section.abstract-data-type">
@@ -4140,7 +4172,8 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
             that set the value of annotation <replaceable>Anno</replaceable>
             of the value
             <replaceable>Val</replaceable><replaceable>1</replaceable> to
-            <replaceable>Val2</replaceable> and return XXX as result.</para>
+            <replaceable>Val2</replaceable> and return <remark>XXX</remark> as
+            result.</para>
           </listitem>
 
           <listitem>
@@ -4659,6 +4692,12 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 <prompt>rascal&gt;</prompt> <userinput>colors["trumps"];</userinput>
 <computeroutput>str: "black"</computeroutput>
 
+<prompt>rascal&gt;</prompt> <userinput>colors[0];</userinput>
+<computeroutput>Static Error: -:1,0: Expected str, but got int</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>colors["square"];</userinput>
+<computeroutput>Uncaught Rascal Exception: -:1,0: NoSuchKey("square")</computeroutput>
+
 <prompt>rascal&gt;</prompt> <userinput>rel[str country, int year, int amount] GDP =
            {&lt;"US", 2008, 14264600&gt;, &lt;"EU", 2008, 18394115&gt;,
             &lt;"Japan", 2008, 4923761&gt;, &lt;"US", 2007, 13811200&gt;, 
@@ -5113,6 +5152,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
         <section xml:id="section.regular-patterns">
           <title>Regular Expression Patterns</title>
+
+          <!--We need a better explanation here. Give first more examples and explain the differences
+with Java at the end.-->
 
           <para>Regular expression patterns are ordinary regular expressions
           that are used to match a string value and to decompose it in parts
@@ -6040,8 +6082,8 @@ default: ...
         <para>An assignable is either a single variable, (the <emphasis>base
         variable</emphasis>), optionally followed by subscriptions or field
         selections. The assignment statement always results in assigning a
-        completely new value to the base variable. We distinguish the
-        following forms of assignment:</para>
+        <emphasis>completely new value</emphasis> to the base variable. We
+        distinguish the following forms of assignment:</para>
 
         <itemizedlist>
           <listitem>
@@ -6132,8 +6174,14 @@ default: ...
 <prompt>rascal&gt;</prompt> <userinput>L = [10,20,30];</userinput>
 <computeroutput>list[int] : [10,20,30]</computeroutput>
 
+<prompt>rascal&gt;</prompt> <userinput>P = L;</userinput>
+<computeroutput>list[int] : [10,20,30]</computeroutput>
+
 <prompt>rascal&gt;</prompt> <userinput>L[1] = 200;</userinput>
 <computeroutput>list[int] : [10,200,30]</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>P;</userinput>  // Value of P is unchanged!
+<computeroutput>list[int] : [10,20,30]</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>M = ("abc": 1, "def" : 2);</userinput>
 <computeroutput>map[str,int] : ("abc": 1, "def" : 2)</computeroutput>
@@ -6954,7 +7002,7 @@ bool: true</screen>
               <entry><literal>set[&amp;T] bottom(graph[&amp;T]
               G)</literal></entry>
 
-              <entry>Bottom nodes of a graph</entry>
+              <entry>Leaf nodes of a graph</entry>
             </row>
 
             <row>
@@ -7019,7 +7067,7 @@ bool: true</screen>
               <entry><literal>set[&amp;T] top(graph[&amp;T]
               G)</literal></entry>
 
-              <entry>Top nodes of a graph</entry>
+              <entry>Root nodes of a graph</entry>
             </row>
           </tbody>
         </tgroup>
@@ -7383,7 +7431,7 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
       other.</para>
 
       <para><table xml:id="table.JDT-project-functions">
-          <title> JDT Project/File Extraction Functions</title>
+          <title>JDT Project/File Extraction Functions</title>
 
           <tgroup cols="2">
             <colspec align="left" colname="col1" colwidth="3*" />
@@ -7416,17 +7464,17 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
               </row>
 
               <row>
-                <entry>FactMap unionFacts(FactMap m1, FactMap m2)</entry>
-
-                <entry>Union fact maps, union values for facts that appear in
-                both maps (if possible)</entry>
-              </row>
-
-              <row>
                 <entry><literal>FactMap extractFacts(set[str]
                 projects)</literal></entry>
 
                 <entry>Extract facts from projects</entry>
+              </row>
+
+              <row>
+                <entry><literal>FactMap extractFacts(str
+                projectName)</literal></entry>
+
+                <entry>Extract facts from a single project</entry>
               </row>
 
               <row>
@@ -7438,13 +7486,6 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
               </row>
 
               <row>
-                <entry><literal>FactMap extractFacts(str
-                projectName)</literal></entry>
-
-                <entry>Extract facts from a single project</entry>
-              </row>
-
-              <row>
                 <entry><literal>tuple[rel[&amp;T1, &amp;T2] found,
                 rel[JDTlocation, &amp;T2] notfound]
                 matchLocations(rel[&amp;T1, loc] RSClocs, rel[JDTlocation,
@@ -7453,6 +7494,13 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
                 <entry>Compose two relations by matching JDT locations with
                 Rascal locations and return a tuple with the composition
                 result and the locations that could not be matched</entry>
+              </row>
+
+              <row>
+                <entry>FactMap unionFacts(FactMap m1, FactMap m2)</entry>
+
+                <entry>Union fact maps, union values for facts that appear in
+                both maps (if possible)</entry>
               </row>
             </tbody>
           </tgroup>
@@ -7476,22 +7524,6 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
 
             <tbody>
               <row>
-                <entry><literal>BindingRel getTypeBindings(FactMap
-                fm)</literal></entry>
-
-                <entry>Get the fully-qualified types of all expressions and
-                identifiers</entry>
-              </row>
-
-              <row>
-                <entry><literal>BindingRel getMethodBindings(FactMap
-                fm)</literal></entry>
-
-                <entry>Get all fully-qualified method names that occur in
-                declarations or calls</entry>
-              </row>
-
-              <row>
                 <entry><literal>BindingRel getConstructorBindings(FactMap
                 fm)</literal></entry>
 
@@ -7500,33 +7532,17 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
               </row>
 
               <row>
-                <entry><literal>BindingRel getFieldBindings(FactMap
+                <entry><literal>TypeInfoRel getDeclaredFields(FactMap
                 fm)</literal></entry>
 
-                <entry>Get all fully-qualified field names</entry>
+                <entry>Get all declared fields in each class</entry>
               </row>
 
               <row>
-                <entry><literal>BindingRel getVariableBindings (FactMap
+                <entry><literal>TypeInfoRel getDeclaredMethods(FactMap
                 fm)</literal></entry>
 
-                <entry>Get all fully-qualified variable names of all local
-                variables and method parameters</entry>
-              </row>
-
-              <row>
-                <entry><literal>TypeInfoRel getImplements(FactMap
-                fm)</literal></entry>
-
-                <entry>Get the interface implementation (implements)
-                relation</entry>
-              </row>
-
-              <row>
-                <entry><literal>TypeInfoRel getExtends(FactMap
-                fm)</literal></entry>
-
-                <entry>Get the subclass (extends) relation</entry>
+                <entry>Get all declared methods in each class</entry>
               </row>
 
               <row>
@@ -7538,17 +7554,49 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
               </row>
 
               <row>
-                <entry><literal>TypeInfoRel getDeclaredMethods(FactMap
+                <entry><literal>TypeInfoRel getExtends(FactMap
                 fm)</literal></entry>
 
-                <entry>Get all declared methods in each class</entry>
+                <entry>Get the subclass (extends) relation</entry>
               </row>
 
               <row>
-                <entry><literal>TypeInfoRel getDeclaredFields(FactMap
+                <entry><literal>BindingRel getFieldBindings(FactMap
                 fm)</literal></entry>
 
-                <entry>Get all declared fields in each class</entry>
+                <entry>Get all fully-qualified field names</entry>
+              </row>
+
+              <row>
+                <entry><literal>TypeInfoRel getImplements(FactMap
+                fm)</literal></entry>
+
+                <entry>Get the interface implementation (implements)
+                relation</entry>
+              </row>
+
+              <row>
+                <entry><literal>BindingRel getMethodBindings(FactMap
+                fm)</literal></entry>
+
+                <entry>Get all fully-qualified method names that occur in
+                declarations or calls</entry>
+              </row>
+
+              <row>
+                <entry><literal>BindingRel getTypeBindings(FactMap
+                fm)</literal></entry>
+
+                <entry>Get the fully-qualified types of all expressions and
+                identifiers</entry>
+              </row>
+
+              <row>
+                <entry><literal>BindingRel getVariableBindings (FactMap
+                fm)</literal></entry>
+
+                <entry>Get all fully-qualified variable names of all local
+                variables and method parameters</entry>
               </row>
             </tbody>
           </tgroup>
@@ -7562,7 +7610,7 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
     </section>
 
     <section xml:id="section.lib-LabelledGraph">
-      <title> Labelled Graph</title>
+      <title>Labelled Graph</title>
 
       <para>The labelled graph datatype is a special form of binary relation
       with labelled edges and is defined as follows:</para>
@@ -11352,8 +11400,8 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
     <para>Emilie Balland implemented the Rascal debugger in the Eclipse
     version of Rascal during her visit to CWI in the summer of 2009.</para>
 
-    <para>Bas Basten provided useful feedback on the design and is developing
-    a Rascal/JDT interface that makes it easy to extract facts from Java
+    <para>Bas Basten provided useful feedback on the design and contributed
+    the Rascal/JDT interface that makes it easy to extract facts from Java
     source code.</para>
 
     <para>Bob Fuhrer's inspiring IMP project motivated us to build Rascal on
@@ -11368,8 +11416,8 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
     Master's thesis. The results will be included in the final version of this
     document.</para>
 
-    <para>Yaroslav Usenko provided feedback on this manual and suggested
-    several improvements.</para>
+    <para>Frank Tip and Yaroslav Usenko provided feedback on this manual and
+    suggested several improvements.</para>
   </section>
 
   <?hard-pagebreak ?>
