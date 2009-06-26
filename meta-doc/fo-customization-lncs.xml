@@ -13,16 +13,22 @@
 <xsl:import href="fo-customization.xsl" />
 
 <!-- LNCS specific settings -->
+<!-- 
+vertical dimensions (in cm):
+  top margin 4.1 body text 19.2 bottom margin 6.4
+horizontal dimensions (in cm):
+  leftmargin 4.7 body text 12.2 right marging 4.1 
+-->
 
-<xsl:param name ="page.height.portrait">29.5cm</xsl:param>
-<xsl:param name ="page.width.portrait">21cm</xsl:param>
-<xsl:param name ="page.margin.inner">3.70cm</xsl:param>
-<xsl:param name ="page.margin.outer">5.1cm</xsl:param>
-<xsl:param name ="page.margin.top">2.2cm</xsl:param>
-<xsl:param name ="page.margin.bottom">7.9cm</xsl:param>
+<!-- <xsl:param name ="page.height.portrait">29.7cm</xsl:param> -->
+<!-- <xsl:param name ="page.width.portrait">21cm</xsl:param> -->
+<xsl:param name ="page.margin.inner">47mm</xsl:param>
+<xsl:param name ="page.margin.outer">41mm</xsl:param>
+<xsl:param name ="page.margin.top">41mm</xsl:param>
+<xsl:param name ="page.margin.bottom">63mm</xsl:param>
 
-<xsl:param name="body.margin.top">0cm</xsl:param>
-<xsl:param name="body.margin.bottom">0cm</xsl:param>
+<xsl:param name="body.margin.top">0mm</xsl:param>
+<xsl:param name="body.margin.bottom">0mm</xsl:param>
 
 <!-- Remove header and footer content and rules -->
 <xsl:template name="header.content"></xsl:template>

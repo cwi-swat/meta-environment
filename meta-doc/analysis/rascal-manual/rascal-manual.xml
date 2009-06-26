@@ -24,7 +24,7 @@
       </author>
     </authorgroup>
 
-    <pubdate>June 1, 2009 (Version 0.1)</pubdate>
+    <pubdate>June 26, 2009 (Version 0.2)</pubdate>
   </info>
 
   <warning>
@@ -7493,7 +7493,13 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
 
                 <entry>Compose two relations by matching JDT locations with
                 Rascal locations and return a tuple with the composition
-                result and the locations that could not be matched</entry>
+                result and the locations that could not be matched. The source
+                code locations of the JDT AST nodes might not always be the
+                same as the ones in your own parse tree. This function picks
+                the 'best fitting' user provided locations for JDT locations
+                that don't have a direct match. It works correctly for the
+                Java 1.4 grammar in the sdf-library, but other grammars might
+                need a specific implementation.</entry>
               </row>
 
               <row>
@@ -7602,11 +7608,36 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
           </tgroup>
         </table></para>
 
+      <para>This is the implementation of <literal>extractFacts(set[str]
+      projects)</literal>, showing how to use the unionFacts() function
+      :</para>
+
+      <para><programlisting>public FactMap extractFacts(set[str] projects) {
+  FactMap result = ();
+
+  for (p &lt;- projects) {
+    result = unionFacts(result, extractFacts(p));
+  }
+  return result;
+}
+</programlisting></para>
+
       <para>Here is an example function that extracts the inheritance
       hierarchy from a given project:<programlisting>TypeInfoRel getInheritance(str projectName){
   fm = extractFacts(projectName);
   return getExtends(fm) + getImplements(fm);
 }</programlisting></para>
+
+      <para>The following example shows how to link the JDT type bindings to
+      your own parse tree nodes. Suppose you have a relation
+      <literal>nodeLocations</literal> that links your parse tree nodes to
+      their location, you can get the type information of each node (if any)
+      as follows:<programlisting>FactMap fm = extractFacts(myProject, myJavaFile);
+BindingRel jdtTypeBindings = getTypeBindings(fm);
+
+rel[node, Entity] myTypeBindings;
+BindingRel unmatchedBindings;
+&lt;myTypeBindings, unmatchedBindings&gt; = matchLocations(nodeLocations, jdtTypeBindings);</programlisting></para>
     </section>
 
     <section xml:id="section.lib-LabelledGraph">
