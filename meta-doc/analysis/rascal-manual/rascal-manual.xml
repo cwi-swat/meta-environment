@@ -7401,27 +7401,36 @@ data Id = package(str name)
         | typeParameter(str name)
         | wildcard
         | wildcard(Bound bound)
-;
+        ;
 
 
-data PrimitiveType = byte
-                   | short
-                   | \int
-                   | long
-                   | float
-                   | double
-                   | char
-                   | boolean
-                   | \void
-                   | null
-;
+data PrimitiveType = 
+          byte
+        | short
+        | \int
+        | long
+        | float
+        | double
+        | char
+        | boolean
+        | \void
+        | null
+        ;
 
-data Bound = extends(Entity type)
-           | super(Entity type);
-</programlisting>The extraction functions use the following additional
+data Bound = 
+          extends(Entity type)
+        | super(Entity type)
+        ;
+</programlisting><note>
+          <para>Observe how the Rascal keywords <literal>int</literal> and
+          <literal>void</literal> are used constructo symbols in the above
+          data definition by escaping them as <literal>\int</literal> and
+          <literal>\void</literal>.</para>
+        </note>The extraction functions use the following additional
       types:</para>
 
-      <para><programlisting>public alias JDTlocation = tuple[str fileName, int offset, int length];
+      <para><programlisting>public alias JDTlocation = 
+             tuple[str fileName, int offset, int length];
 public alias BindingRel = rel[JDTlocation, Entity];
 public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
 
@@ -7503,7 +7512,8 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
               </row>
 
               <row>
-                <entry>FactMap unionFacts(FactMap m1, FactMap m2)</entry>
+                <entry><literal>FactMap unionFacts(FactMap m1, FactMap
+                m2)</literal></entry>
 
                 <entry>Union fact maps, union values for facts that appear in
                 both maps (if possible)</entry>
@@ -7637,7 +7647,8 @@ BindingRel jdtTypeBindings = getTypeBindings(fm);
 
 rel[node, Entity] myTypeBindings;
 BindingRel unmatchedBindings;
-&lt;myTypeBindings, unmatchedBindings&gt; = matchLocations(nodeLocations, jdtTypeBindings);</programlisting></para>
+&lt;myTypeBindings, unmatchedBindings&gt; = 
+      matchLocations(nodeLocations, jdtTypeBindings);</programlisting></para>
     </section>
 
     <section xml:id="section.lib-LabelledGraph">
