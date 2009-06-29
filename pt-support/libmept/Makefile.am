@@ -25,7 +25,6 @@ include_HEADERS = \
 	MEPT-start.h \
 	MEPT-symbols.h \
 	MEPT-tree.h \
-	MEPT-utils.h \
 	MEPT-visitors.h \
 	MEPT-yield.h \
 	MEPT-yieldprod.h
