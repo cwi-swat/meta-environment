@@ -33,6 +33,9 @@
     <copy todir="${env.BUILDDIR}/${dist}/src">
       <fileset dir="${env.SRCDIR}/${src}" includes="**/*.java"/>
     </copy>
+    <copy todir="${env.BUILDDIR}/${dist}">
+      <fileset dir="${env.SRCDIR}/${src}" excludes="**/*.java"/>
+    </copy>
     <jar destfile="${env.BUILDDIR}/${env.JAVA_JAR}" manifest="${env.SRCDIR}/META-INF/MANIFEST.MF" >
       <fileset dir="${env.BUILDDIR}/${dist}"/>
     </jar>
