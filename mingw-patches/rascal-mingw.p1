@@ -1,6 +1,6 @@
 Index: rascal.sh.src
 ===================================================================
---- rascal.sh.src	(revision 29461)
+--- rascal.sh.src	(revision 29659)
 +++ rascal.sh.src	(working copy)
 @@ -1,11 +1,9 @@
 -#! /bin/sh
@@ -14,4 +14,4 @@ Index: rascal.sh.src
 +    -Drascal.rascal2table.command=__RASCAL_GRAMMAR__/bin/rascal2table.exe \
      -Drascal.rascal2table.dir=__RASCAL_GRAMMAR__/bin \
      -Drascal.sdf.library.dir=__SDF_LIBRARY__/share/sdf-library/library \
-     org.meta_environment.rascal.interpreter.RascalShell
+     -Xss8m \

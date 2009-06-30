@@ -1,6 +1,6 @@
 Index: buildCompleteLib.sh
 ===================================================================
---- buildCompleteLib.sh	(revision 29429)
+--- buildCompleteLib.sh	(revision 29658)
 +++ buildCompleteLib.sh	(working copy)
 @@ -1,23 +0,0 @@
 -#!/bin/sh
@@ -28,7 +28,7 @@ Index: buildCompleteLib.sh
 -echo $ALL_OBJECTS
 Index: lib/Makefile.am
 ===================================================================
---- lib/Makefile.am	(revision 29429)
+--- lib/Makefile.am	(revision 29658)
 +++ lib/Makefile.am	(working copy)
 @@ -1,6 +1,6 @@
  include $(top_srcdir)/Makefile.meta
