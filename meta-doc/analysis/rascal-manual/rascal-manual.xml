@@ -7366,7 +7366,7 @@ bool: true</screen>
           retrieved from the <literal>FactMap</literal>. These functions are
           shown in <xref linkend="table.JDT-fact-retrieval-functions" />. They
           return values of type <literal>BindingRel</literal> or
-          <literal>TypeInfoRel</literal> that are explained below.</para>
+          <literal>EntityRel</literal> that are explained below.</para>
         </listitem>
       </itemizedlist>
 
@@ -7403,7 +7403,6 @@ data Id = package(str name)
         | wildcard(Bound bound)
         ;
 
-
 data PrimitiveType = 
           byte
         | short
@@ -7432,11 +7431,11 @@ data Bound =
       <para><programlisting>public alias JDTlocation = 
              tuple[str fileName, int offset, int length];
 public alias BindingRel = rel[JDTlocation, Entity];
-public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
+public alias EntityRel = rel[Entity, Entity];</programlisting></para>
 
       <para><literal>JDTLocation</literal> describes a text area in a given
       file. <literal>BindingRel</literal> associates JDTLocations with
-      Entities. <literal>TypeInfoRel</literal> associates Entities with each
+      Entities. <literal>EntityRel</literal> associates Entities with each
       other.</para>
 
       <para><table xml:id="table.JDT-project-functions">
@@ -7457,7 +7456,7 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
 
             <tbody>
               <row>
-                <entry><literal>FactMap java extractFacts(str project, str
+                <entry><literal>FactMap extractFacts(str project, str
                 file)</literal></entry>
 
                 <entry>Import JDT facts from file (path relative to project
@@ -7548,21 +7547,21 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
               </row>
 
               <row>
-                <entry><literal>TypeInfoRel getDeclaredFields(FactMap
+                <entry><literal>EntityRel getDeclaredFields(FactMap
                 fm)</literal></entry>
 
                 <entry>Get all declared fields in each class</entry>
               </row>
 
               <row>
-                <entry><literal>TypeInfoRel getDeclaredMethods(FactMap
+                <entry><literal>EntityRel getDeclaredMethods(FactMap
                 fm)</literal></entry>
 
                 <entry>Get all declared methods in each class</entry>
               </row>
 
               <row>
-                <entry><literal>TypeInfoRel getDeclaredTypes(FactMap
+                <entry><literal>EntityRel getDeclaredTypes(FactMap
                 fm)</literal></entry>
 
                 <entry>Get the relation between each class and its inner
@@ -7570,7 +7569,7 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
               </row>
 
               <row>
-                <entry><literal>TypeInfoRel getExtends(FactMap
+                <entry><literal>EntityRel getExtends(FactMap
                 fm)</literal></entry>
 
                 <entry>Get the subclass (extends) relation</entry>
@@ -7584,7 +7583,7 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
               </row>
 
               <row>
-                <entry><literal>TypeInfoRel getImplements(FactMap
+                <entry><literal>EntityRel getImplements(FactMap
                 fm)</literal></entry>
 
                 <entry>Get the interface implementation (implements)
@@ -7633,7 +7632,7 @@ public alias TypeInfoRel = rel[Entity, Entity];</programlisting></para>
 </programlisting></para>
 
       <para>Here is an example function that extracts the inheritance
-      hierarchy from a given project:<programlisting>TypeInfoRel getInheritance(str projectName){
+      hierarchy from a given project:<programlisting>EntityRel getInheritance(str projectName){
   fm = extractFacts(projectName);
   return getExtends(fm) + getImplements(fm);
 }</programlisting></para>
