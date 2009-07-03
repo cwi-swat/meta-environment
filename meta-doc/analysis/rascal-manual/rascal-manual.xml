@@ -7683,15 +7683,15 @@ BindingRel unmatchedBindings;
             </row>
 
             <row>
-              <entry>set[&amp;T] predecessors(graph[&amp;T], &amp;T
-              From)</entry>
+              <entry><literal>set[&amp;T] predecessors(graph[&amp;T], &amp;T
+              From)</literal></entry>
 
               <entry>Direct predecessors of node From</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] predecessors(graph[&amp;T], set[&amp;T]
-              FromSet)</entry>
+              <entry><literal>set[&amp;T] predecessors(graph[&amp;T],
+              set[&amp;T] FromSet)</literal></entry>
 
               <entry>Direct predecessors of all nodes in FromSet</entry>
             </row>
@@ -7727,15 +7727,15 @@ BindingRel unmatchedBindings;
             </row>
 
             <row>
-              <entry>set[&amp;T] successors(graph[&amp;T], &amp;T
-              From)</entry>
+              <entry><literal>set[&amp;T] successors(graph[&amp;T], &amp;T
+              From)</literal></entry>
 
               <entry>Direct successors of node From</entry>
             </row>
 
             <row>
-              <entry>set[&amp;T] successors(graph[&amp;T], set[&amp;T]
-              FromSet)</entry>
+              <entry><literal>set[&amp;T] successors(graph[&amp;T],
+              set[&amp;T] FromSet)</literal></entry>
 
               <entry>Direct successors of all nodes in FromSet</entry>
             </row>
