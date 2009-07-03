@@ -23,7 +23,13 @@ class SiItemsController < ApplicationController
       @bundle_file_name = bundle_file_name(@si_item)
       @binary_file_name = binary_file_name(@si_item)
       @binary_path = File.join(binary_download_path, @binary_file_name)
-      if File.exist?(@binary_path) then
+      extname = File.extname(@binary_path);
+      if @binary_path =~ /^(.*)#{extname}$/ then
+        stem =  $1
+      end
+      if File.exist?(stem + ".zip") then
+        @has_binary = true
+      elsif File.exist?(@binary_path) then
         @has_binary = true
       else
         @has_binary = false
