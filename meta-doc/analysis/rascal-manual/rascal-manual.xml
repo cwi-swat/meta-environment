@@ -1021,6 +1021,7 @@ ok</computeroutput>
 <computeroutput>Hello, this is my first Rascal program
 ok</computeroutput></screen>The summit of hello-engineering can be reached by
       placing all the above in a separate module:<programlisting>module demo::Hello
+	import IO;
 
 public void hello() {
    println("Hello, this is my first Rascal program");
