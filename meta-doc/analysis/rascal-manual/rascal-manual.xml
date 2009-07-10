@@ -708,7 +708,7 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
       structures. For instance,</para>
 
       <para><programlisting>
-for(asgStat(Id name, _) &lt;- P, size(Id) &gt; 10){
+for(asgStat(Id name, _) &lt;- P, size(name) &gt; 10){
     println(Id);
 }</programlisting></para>
 
