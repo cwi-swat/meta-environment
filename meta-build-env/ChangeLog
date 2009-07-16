@@ -1,3 +1,9 @@
+
+
+Thu Jul 16 13:58:23 CEST 2009 <{jurgenv,lankamp}@cwi.nl>
+ * Makefile.fragment.meta: fixed problems with using sed (it's a text based
+   tool that might add newlines.
+
 Wed Feb  4 11:19:36 CET 2009 <{lankamp,jurgenv}@cwi.nl>
  * meta-build.m4: added JUNIT3 to build classpath of all Eclipse Java packages
 
