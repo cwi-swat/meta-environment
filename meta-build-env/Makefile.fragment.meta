@@ -11,13 +11,15 @@ EXTRA_DIST += $(wildcard *.m4) \
 	     Makefile.fragment.meta \
 	     meta-build.ant 
 
-CLEANFILES += $(PACKAGE)-uninstalled.pc \
+CLEANFILES += $(PACKAGE)-uninstalled.pc 
+
+DISTCLEANFILES+= \
 			.project \
 			.classpath \
-			META-INF/MANIFEST.MF \
 			build.properties \
 			.settings/org.eclipse.jdt.ui.prefs \
-			.settings/org.eclipse.jdt.core.prefs
+			.settings/org.eclipse.jdt.core.prefs \
+			META-INF/MANIFEST.MF 
 
 pkgconfig_DATA = $(PACKAGE).pc
 
