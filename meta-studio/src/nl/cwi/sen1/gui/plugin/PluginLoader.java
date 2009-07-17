@@ -65,22 +65,27 @@ public class PluginLoader extends URLClassLoader {
 	  URL u = new URL("jar", "", pluginURL + "!/");
 	  JarURLConnection uc = (JarURLConnection) u.openConnection();
 	  Attributes attr = uc.getMainAttributes();
-	  if (attr != null) {
-	    pluginMain = attr.getValue(Attributes.Name.MAIN_CLASS);
-	  } else {
-	    System.err.println("Unable to find a Main-Class in plugin: " + pluginURL);
+	  if (attr == null) {
+	      System.err.println("Unable to find a Main-Class attribute in plugin: " + pluginURL);
+	      return null;
+	  }
+	  pluginMain = attr.getValue(Attributes.Name.MAIN_CLASS);
+	  if (pluginMain == null) {
+	      System.err.println("Unable to find a Main-Class in plugin: " + pluginURL);
+	      return null;
 	  }
 	  return pluginMain;
 	}
 
 	public StudioPlugin instantiatePlugin() {
 	  try {
-	    String pluginMain = findPluginMain();
+	    String pluginMain = null;
+	    pluginMain = findPluginMain();
 	    StudioPlugin plugin = null;
 	    Class<?> cl = loadClass(pluginMain);
 	    return (StudioPlugin) cl.newInstance();
 	  } catch (Exception e) {
-	    System.err.println("Failed to instantiate plugin:" + pluginURL + "\n"  + e.getMessage());
+	      System.err.println("Failed to instantiate plugin: " + pluginURL + "\n"  + e.getMessage());
 	    return null;
 	  }
 	}
