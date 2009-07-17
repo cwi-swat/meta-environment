@@ -1,5 +1,8 @@
 
 
+Fri Jul 17 23:16:54 CEST 2009 <jurgenv@cwi.nl>
+ * Bumped version after minor change by Tijs.
+
 Mon Aug 18 13:00:19 CEST 2008 <jurgenv@cwi.nl>
  * src/DefaultPopupImpl.java: fixed race condition in showing popup
    by using SwingUtilities.invokelater();
