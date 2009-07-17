@@ -51,9 +51,6 @@ AC_DEFUN([META_SETUP],
   AC_SUBST([PACKAGE_ALL_DEPS])
   AC_SUBST([PKG_CONFIG_PATH])
 
-  if test -z "$JAVA" ; then
-     META_GENERATE_ECLIPSE_PLUGIN_FILES(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]),[],[],[],[$PACKAGE_ALL_DEPS],[])
-  fi
  ])
 
 ])
