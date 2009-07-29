@@ -8001,14 +8001,6 @@ BindingRel unmatchedBindings;
               </row>
 
               <row>
-                <entry><literal>&amp;T multiply(list[&amp;T] lst, &amp;T
-                unit)</literal></entry>
-
-                <entry>Multiply the elements of a list using given unit
-                element</entry>
-              </row>
-
-              <row>
                 <entry><literal>set[list[&amp;T]] permutations(list[&amp;T]
                 lst)</literal></entry>
 
@@ -8049,13 +8041,6 @@ BindingRel unmatchedBindings;
                 lst)</literal></entry>
 
                 <entry>Sort the elements of a list</entry>
-              </row>
-
-              <row>
-                <entry><literal>&amp;T sum(list[&amp;T] lst, &amp;T
-                zero)</literal></entry>
-
-                <entry>Add elements of a List</entry>
               </row>
 
               <row>
@@ -9490,13 +9475,6 @@ BindingRel unmatchedBindings;
             </row>
 
             <row>
-              <entry><literal>&amp;T multiply(set[&amp;T] st, &amp;T
-              unity)</literal></entry>
-
-              <entry>Multiply the elements of a set</entry>
-            </row>
-
-            <row>
               <entry><literal>set[set[&amp;T]] power(set[&amp;T]
               st)</literal></entry>
 
@@ -9521,13 +9499,6 @@ BindingRel unmatchedBindings;
               <entry><literal>int size(set[&amp;T] st)</literal></entry>
 
               <entry>Number of elements in a set</entry>
-            </row>
-
-            <row>
-              <entry><literal>&amp;T sum(set[&amp;T] st, &amp;T
-              zero)</literal></entry>
-
-              <entry>Add the elements of a set</entry>
             </row>
 
             <row>
@@ -11044,14 +11015,6 @@ BindingRel unmatchedBindings;
           </row>
 
           <row>
-            <entry><literal>multiply</literal></entry>
-
-            <entry><xref linkend="section.lib-List"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
-            xrefstyle="template:%t" /></entry>
-          </row>
-
-          <row>
             <entry><literal>permutations</literal></entry>
 
             <entry><xref linkend="section.lib-List"
@@ -11261,13 +11224,6 @@ BindingRel unmatchedBindings;
             <entry><xref linkend="section.lib-Graph"
             xrefstyle="template:%t" />, <xref
             linkend="section.lib-LabelledGraph"
-            xrefstyle="template:%t" /></entry>
-          </row>
-
-          <row>
-            <entry><literal>sum</literal></entry>
-
-            <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" /></entry>
           </row>
 
