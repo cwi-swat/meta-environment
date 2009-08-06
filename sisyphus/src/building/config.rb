@@ -10,6 +10,7 @@ module Building
     include FileUtils
 
     def initialize(svn_host, svn_url, svn_user, svn_password, 
+                   protocol = 'svn',
                    svn_port = 3960, tunnel_host = nil, 
                    tunnel_port = svn_port, 
                    tunnel_user = ENV['USER'])
@@ -22,6 +23,7 @@ module Building
       @tunnel_host = tunnel_host
       @tunnel_port = tunnel_port
       @path = checkout_path
+      @protocol = protocol
       @shell = Utils::CommandSpecificShell.new('subversion')
     end
 
@@ -85,7 +87,7 @@ module Building
         # File url.
         return @svn_url
       end
-      url = "svn://"
+      url = "#{@protocol}://"
       if tunnel_needed? then
         url += 'localhost'
       else

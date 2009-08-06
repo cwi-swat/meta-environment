@@ -165,15 +165,18 @@ Note: the tunnel section is optional.
                                                           s['url'],
                                                           s['user'],
                                                           s['password'],
+                                                          s['protocol'],
                                                           s['port'],
                                                           s['tunnel']['host'],
                                                           s['tunnel']['port'],
-                                                          s['tunnel']['user'])
+                                                          s['tunnel']['user'],
+                                                          s['protocol'])
     else
       config_manager = Building::ConfigurationManager.new(s['host'],
                                                           s['url'],
                                                           s['user'],
                                                           s['password'],
+                                                          s['protocol'],
                                                           s['port'])
     end
     log = Logger.new(STDERR)
@@ -234,9 +237,10 @@ Note: the tunnel section is optional.
       exit(1)
     end
 
-    if boot_conf['sisyphus']['protocol'] != 'svn' then
-      $stderr << "Protocol not supported: #{protocol} (only svn)\n"
-      exit(1)
+    if boot_conf['sisyphus']['protocol'] == nil then
+      #$stderr << "Protocol not supported: #{protocol} (only svn+*)\n"
+      #exit(1)
+      boot_conf['sisyphus']['protocol'] = 'svn'
     end
 
 
