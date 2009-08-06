@@ -1,0 +1,7 @@
+user: kooiker
+build_dir: /Volumes/Sisyphus/builds
+install_dir: /Volumes/Sisyphus/install
+distributes: false
+environment: |
+ export LIBTOOLIZE=glibtoolize
+world-version: 4

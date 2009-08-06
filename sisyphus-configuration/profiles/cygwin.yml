@@ -1,0 +1,9 @@
+user: daybuild
+build_dir: /home/daybuild/sisyphus-builds/cygwin/build
+install_dir: /home/daybuild/sisyphus-builds/cygwin/install
+distributes: false
+build-env: [meta-autotools, meta-build-env]
+environment: |
+ PATH=/home/daybuild/bin/sh:/usr/local/bin:/usr/bin:/cygdrive/c/ant/bin
+ export PATH 
+world-version: 7

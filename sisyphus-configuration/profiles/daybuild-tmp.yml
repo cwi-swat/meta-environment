@@ -1,0 +1,11 @@
+user: daybuild
+build_dir: /tmp/build
+install_dir: /tmp/install
+distributes: true
+binary_dist_dir: /tmp/bindist
+source_dist_dir: /ufs/daybuild/sisyphus-www/wo-sisyphus/public/downloads
+collect_url: http://sisyphus.sen.cwi.nl:8080/downloads
+environment: |
+ PATH=/ufs/sen1/software/installed/gcc-3.4.4/linux/i386/bin:/ufs/sen1/software/installed/autoconf-2.59/linux/i386/bin:/ufs/sen1/software/installed/automake-1.7.9/linux/i386/bin:/ufs/sen1/software/installed/xfig-3.2.3d/linux/i386/bin:/ufs/sen1/software/installed/libtool-1.5.2/linux/i386/bin:/ufs/sen1/software/installed/java/linux/i386/j2sdk1.5-LATEST/bin:/ufs/sen1/software/installed/graphviz-1.12/linux/i386/bin:/usr/bin:/bin
+ export PATH
+world-version: 7

@@ -1,0 +1,5 @@
+user: daybuild
+build_dir: /tmp/daybuild/sisyphus-builds/single-20/build
+install_dir: /tmp/daybuild/sisyphus-builds/single-20/install
+environment:
+world-version: 1

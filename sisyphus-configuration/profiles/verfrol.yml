@@ -1,0 +1,108 @@
+user: storm
+build_dir: /tmp/sisyphus/build
+install_dir: /tmp/sisyphus/install
+distributes: false
+binary_dist_dir: /tmp/sisyphus/binaries
+source_dist_dir: /tmp/sisyphus/archives
+collect_url: http://this.is.not.a.valid.url
+build-env: [meta-autotools, meta-build-env]
+environment: |
+ PATH=/ufs/sen1/software/installed/ruby-1.8.4/linux/i386/bin:/ufs/sen1/software/installed/doxygen-1.4.6/linux/i386/bin:/ufs/sen1/software/installed/gcc-3.4.4/linux/i386/bin:/ufs/sen1/software/installed/autoconf-2.59/linux/i386/bin:/ufs/sen1/software/installed/automake-1.7.9/linux/i386/bin:/ufs/sen1/software/installed/xfig-3.2.3d/linux/i386/bin:/ufs/sen1/software/installed/libtool-1.5.2/linux/i386/bin:/ufs/sen1/software/installed/java/linux/i386/j2sdk1.5-LATEST/bin:/ufs/sen1/software/installed/graphviz-1.12/linux/i386/bin:/usr/bin:/bin
+ export PATH
+ BINARY_DIST_HOST=storm@verfrol.sen.cwi.nl
+ BINARY_DIST_SITE=/ufs/storm/Desktop/binaries
+ BINARY_DIST_PKGS="shared-objects asfsdf-meta sdf toolbus"
+world-version: 22
+script: 
+ order:
+  - reconf
+  - configure
+  - install
+  - bindist
+  - tag
+ templates:
+  tag: |
+    PKG=<%=name%>
+    TAG_ID=<%=item.id%>
+    REPO=svn://svn.cwi.nl
+    TAGS=${REPO}/${PKG}/tags
+    TAG=${TAGS}/${TAG_ID}
+    svn mkdir ${TAGS} -m "Created tags directory for ${PKG}" || true
+    svn mkdir ${TAG} -m "Created a release tag for ${PKG}, build ${TAG_ID}" || true
+    <% tr_deps_all.each do |dep| %>
+      svn copy -r <%=dep.item.version %> ${REPO}/<%=dep.name%>/trunk ${TAG}/<%=dep.name%> -m "Adding <%=dep.name%> version <%=dep.item.version%> to tag ${TAG}."
+    <% end %>
+  reconf: ./reconf
+  configure: ./configure --prefix=<%= prefix%> <%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%> --enable-maintainer-mode --with-cflags="-Wall -Werror -g -O2"
+  make: make
+  install: make install
+  check: make check
+  distcheck: DISTCHECK_CONFIGURE_FLAGS="<%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%>" make distcheck
+  pathcheck: |
+   set -x
+   DIST=`ls <%=name%>-*.tar.gz`
+
+   gunzip -c $DIST | tar xf -
+
+   DIR=`basename $DIST .tar.gz`
+   INSTDIR=`dirname <%=prefix%>`
+   FILES=`find $DIR -type f`
+
+   ERRORS=`grep -l $INSTDIR $FILES || true`
+   if [ $ERRORS ] ; then
+     echo "Error: prefix found in distribution. Affected files:" ;
+     echo $ERRORS ;
+     exit 1 ;
+   fi
+   echo "Errors: \"$ERRORS\""
+   echo "Pathcheck okee."
+  overlapcheck: |
+   set -x
+   prefixes="<%tr_deps.each do |d|%> <%=d.prefix%><%end%>"
+   for prefix in ${prefixes}
+   do
+     pushd .
+     cd ${prefix}
+     for file in `find . -type f`
+     do
+       if echo ${files} | grep -q "\<${file}\>"
+       then
+         overlap="${overlap}${file} "
+       else
+         files="${files}${file} "
+       fi
+     done
+     popd
+   done
+   if [ ${overlap} ] 
+   then
+     echo "Error: overlapping files in merged prefixes:" 
+     echo ${overlap}
+     exit 1
+   fi
+   echo "Overlap check okay."
+  bindist: |
+   prefixes="<%tr_deps.each do |d|%> <%=d.prefix%><%end%>"
+   current=<%= name %>
+   dot=`which dot`
+   java=`which java`
+   dister=/ufs/sen1/software/installed/generate-installer/bin/generate-installer.sh
+   installer=<%= binary_dist_name %>
+   for pkg in ${BINARY_DIST_PKGS} ; do
+     if [ ${current} == ${pkg} ] ; then
+       ${dister} --prefixes ${prefixes} --externals ${dot} ${java} > ${installer}
+       scp ${installer} ${BINARY_DIST_HOST}:${BINARY_DIST_SITE}
+     fi
+   done
+  doc: |
+   set -x
+   if [ $BUILDS_DOCUMENTATION ]
+   then
+     make doc || true
+     DOCDIR=doc/html
+     if [ -d $DOCDIR ]
+     then
+        ssh $DOCUMENTATION_HOST rm -rf $DOCUMENTATION_DIR/<%= name%>
+        scp -r $DOCDIR $DOCUMENTATION_HOST:$DOCUMENTATION_DIR/<%= name%>   
+     fi
+   fi

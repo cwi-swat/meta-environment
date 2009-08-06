@@ -1,0 +1,93 @@
+order:
+ - reconf
+ - configure
+ - make
+ - install
+ - check
+ - doc
+ - distcheck
+ - pathcheck
+ - overlapcheck
+ - bindist
+templates:
+ reconf: time ./reconf
+ configure: time ./configure --prefix=<%= prefix%> <%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%> --enable-maintainer-mode ${EXTRA_CONFIGURE_FLAGS} --with-cflags="-Wall -Werror -g -O2"
+ make: time make
+ install: time make install
+ check: time make check
+ distcheck: DISTCHECK_CONFIGURE_FLAGS="<%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%> ${EXTRA_CONFIGURE_FLAGS}" time make distcheck 
+ pathcheck: |
+  set -x
+  DIST=`ls <%=name%>-*.tar.gz`
+  gunzip -c $DIST | tar xf -
+  DIR=`basename $DIST .tar.gz`
+  INSTDIR=`dirname <%=prefix%>`
+  FILES=`find $DIR -type f`
+  ERRORS=`grep -l $INSTDIR $FILES || true`
+  if [ $ERRORS ] ; then
+    echo "Error: prefix found in distribution. Affected files:" ;
+    echo $ERRORS ;
+    exit 1 ;
+  fi
+  echo "Errors: \"$ERRORS\""
+  echo "Pathcheck okee."
+ overlapcheck: |
+   set -x
+   prefixes="<%tr_deps.each do |d|%> <%=d.prefix%><%end%>"
+   wd=`pwd`
+   for prefix in ${prefixes}
+   do
+     cd ${prefix}
+     for file in `find . -type f`
+     do
+       if echo ${files} | grep -q "\<${file}\>"
+       then
+         overlap="${overlap}${file} "
+       else
+         files="${files}${file} "
+       fi
+     done
+   done
+   cd ${wd}
+   if [ ${overlap} ] 
+   then
+     echo "Error: overlapping files in merged prefixes:" 
+     echo ${overlap}
+     exit 1
+   fi
+   echo "Overlap check okay."
+ doc: |
+   set -x
+   if [ $BUILDS_DOCUMENTATION ]
+   then
+     time make doc || true
+     # DO NOT REMOVE THE TRAILING SLASH!
+     DOCDIR=doc/html/
+     if [ -d $DOCDIR ]
+     then
+        if [ "<%= name%>" == "meta-doc" ]
+        then
+           DOCPATH="${DOCUMENTATION_SITE}/daily-books"
+        else 
+           DOCPATH="${DOCUMENTATION_SITE}/daily-docs/<%= name%>"
+        fi
+        rsync --compress --verbose --recursive ${DOCDIR} ${DOCUMENTATION_HOST}:${DOCPATH} 
+        wget -q ${DOCUMENTATION_REFRESH_CACHE_URL} > /dev/null
+     fi
+   fi
+ bindist: |
+   if [ $MAKES_BINARY_DISTS ] ; then
+     prefixes="<%tr_deps.each do |d|%> <%=d.prefix%><%end%>"
+     current=<%= name %>
+     dot=`which dot`
+     java=`which java`
+     gcc=`which gcc`
+     dister=/ufs/sen1/software/installed/generate-installer/bin/generate-installer.sh
+     installer=<%= binary_dist_name %>
+     for pkg in ${BINARY_DIST_PKGS} ; do
+       if [ ${current} == ${pkg} ] ; then
+         ${dister} --prefixes ${prefixes} --externals ${dot} ${java} ${gcc} > ${installer}
+         scp ${installer} ${BINARY_DIST_HOST}:${BINARY_DIST_SITE}
+       fi
+     done
+   fi

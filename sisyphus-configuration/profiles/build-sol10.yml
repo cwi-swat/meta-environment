@@ -1,0 +1,12 @@
+user: daybuild
+build_dir: /ufs/daybuild/sisyphus/sunos-sparc/build
+install_dir: /ufs/daybuild/sisyphus/sunos-sparc/install
+distributes: false
+build-env: [meta-autotools, meta-build-env, meta-javatools]
+environment: |
+ PREFIX=${HOME}/software/installed
+ PF=sunos/sparc
+ CLASSPATH=${PREFIX}/meta-javatools-0.1/share/meta-javatools/junit.jar
+ PATH=${PREFIX}/apache-ant-1.7.0/bin:${PREFIX}/ruby-1.8.6/${PF}/bin:${PREFIX}/meta-autotools-0.1/${PF}/bin:${PREFIX}/meta-build-env-0.1/${PF}/bin:${PREFIX}/graphviz-2.12/${PF}/bin:/cwi/local/bin:/cwi/local/sbin:/opt/csw/bin:/usr/sfw/bin:/sbin/:/bin/:/usr/sbin/:/usr/bin/:/usr/ucb/:/usr/ccs/bin
+ export PATH
+world-version: 2

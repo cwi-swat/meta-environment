@@ -1,0 +1,54 @@
+user: daybuild
+build_dir: /export/scratch1/daybuild/sisyphus-build/12345678901234567890123456701234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012333456788890123456789012345678901235678901246891234567890/build/
+install_dir: /export/scratch1/daybuild/sisyphus-build/12345678901234567890123456701234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012333456788890123456789012345678901235678901246891234567890/install
+distributes: true
+source_dist_dir: ssh://www.meta-environment.org:/srv/www/vhosts/www.meta-environment.org/www/sisyphus-distributions
+collect_url:  http://sisyphus.meta-environment.org/downloads
+build-env: [meta-build-env, meta-javatools, mingw-patches]
+environment: |
+ CLASSPATH=/ufs/sen1/software/installed/ant/lib/junit.jar:/ufs/sen1/software/installed/ant/lib/ant-junit.jar
+ export CLASSPATH
+ PATH=/ufs/sen1/software/installed/mingw-tools/linux/i386:/ufs/sen1/software/installed/meta-autotools-0.1/linux/i386/bin:/ufs/sen1/software/installed/ruby-1.8.7/linux/i386/gems/bin/:/ufs/sen1/software/installed/ant/bin/:/ufs/sen1/software/installed/ruby-1.8.7/linux/i386/bin/:/ufs/sen1/software/installed/doxygen-1.4.6/linux/i386/bin/:/ufs/sen1/software/installed/gcc-3.4.4/linux/x86_64/bin/:/ufs/sen1/software/installed/xfig-3.2.3d/linux/i386/bin/:/ufs/sen1/software/installed/java/linux/i386/jdk1.6-LATEST/bin/:/ufs/sen1/software/installed/graphviz-2.22.2/linux/x86_64/bin/:/usr/bin/:/bin/
+ export PATH
+ ANT_HOME=/ufs/sen1/software/installed/ant/
+ export ANT_HOME
+ MAKES_WINDOWS_BINARY_DISTS=1
+ BINARY_DIST_HOST=daybuild@www.meta-environment.org
+ BINARY_DIST_SITE=/srv/www/vhosts/www.meta-environment.org/www/sisyphus-distributions/binaries
+ WINDOWS_BINARY_DIST_PKGS="sdf asf rascal"
+ ECLIPSE="/ufs/sen1/software/installed/eclipse-daybuild"
+ JDK="/ufs/sen1/software/installed/java/linux/i386/jdk1.6-LATEST/"
+ EXTRA_CONFIGURE_FLAGS="--with-eclipse=${ECLIPSE} --with-jdk=${JDK}"
+world-version: 15
+script: 
+ order:
+  - patch
+  - reconf
+  - configure
+  - install
+  - bindist
+ templates:
+  patch: |
+      patch="<%= x = build_env_deps.select {|d| d.name == 'mingw-patches' }; if not x.empty? then x.first.prefix else "no-patch" end%>/share/mingw-patches/<%= name%>-mingw.p1"
+      if [ -f $patch ] ; then patch -p0 < $patch; fi
+  reconf: ./reconf
+  configure: cross-configure ac_cv_c_bigendian=no ax_cv_c_float_word_order_big=no --prefix=<%= prefix%> <%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%> ${EXTRA_CONFIGURE_FLAGS}
+  make: cross-make
+  install: cross-make install
+  bindist: |
+   if [ $MAKES_WINDOWS_BINARY_DISTS ] ; then
+     current="<%= name %>"
+     installer=`echo "<%= binary_dist_name %>" | sed 's@\.bin\.sh@\.zip@'`
+     tmpdir=`echo "<%= binary_dist_name %>" | sed 's@\.bin\.sh@@'`
+     for pkg in ${WINDOWS_BINARY_DIST_PKGS} ; do
+       if [ ${current} == ${pkg} ] ; then
+         mkdir /tmp/${tmpdir}
+         cp -r <%tr_deps.each do |d| %> <%= d.prefix%>/* <%end%> /tmp/${tmpdir}
+         cd /tmp
+         zip -r ${installer} ${tmpdir} 
+         scp ${installer} ${BINARY_DIST_HOST}:${BINARY_DIST_SITE}
+         rm -Rf /tmp/${tmpdir}
+         rm ${installer}
+       fi
+     done
+   fi

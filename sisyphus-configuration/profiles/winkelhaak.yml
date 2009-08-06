@@ -1,0 +1,11 @@
+user: daybuild
+build_dir: /ufs/daybuild/sisyphus-builds/winkelhaak/build
+install_dir: /ufs/daybuild/sisyphus-builds/winkelhaak/install
+distributes: false
+build-env: [meta-autotools, meta-build-env]
+environment: |
+ PATH=/ufs/sen1/software/installed/gcc-3.4.4/linux/x86_64/bin:/ufs/sen1/software/installed/xfig-3.2.3d/linux/x86_64/bin:/ufs/sen1/software/installed/java/linux/x86_64/j2sdk1.5-LATEST/bin:/ufs/sen1/software/installed/graphviz-1.12/linux/i386/bin:/usr/bin:/bin
+ export PATH
+ CC='gcc -m32'
+ export CC
+world-version: 3

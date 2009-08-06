@@ -1,0 +1,135 @@
+user: daybuild
+build_dir: /export/scratch1/daybuild/sisyphus-builds/build
+install_dir: /export/scratch1/daybuild/sisyphus-builds/install/12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+distributes: true
+source_dist_dir: ssh://www.meta-environment.org:/srv/www/vhosts/www.meta-environment.org/www/sisyphus-distributions
+collect_url: http://sisyphus.meta-environment.org/downloads
+build-env: [meta-autotools, meta-build-env, meta-javatools]
+environment: |
+ CLASSPATH=/ufs/sen1/software/installed/ant/lib/junit.jar:/ufs/sen1/software/installed/ant/lib/ant-junit.jar
+ export CLASSPATH
+ PATH=/ufs/sen1/software/installed/ruby-1.8.7/linux/i386/gems/bin/:/ufs/sen1/software/installed/ant/bin/:/ufs/sen1/software/installed/ruby-1.8.7/linux/i386/bin/:/ufs/sen1/software/installed/doxygen-1.4.6/linux/i386/bin/:/ufs/sen1/software/installed/gcc-3.4.4/linux/x86_64/bin/:/ufs/sen1/software/installed/xfig-3.2.3d/linux/i386/bin/:/ufs/sen1/software/installed/java/linux/i386/jdk1.6-LATEST/bin/:/ufs/sen1/software/installed/graphviz-2.22.2/linux/x86_64/bin/:/usr/bin/:/bin/
+ export PATH
+ ANT_HOME=/ufs/sen1/software/installed/ant/
+ export ANT_HOME
+ BUILDS_DOCUMENTATION=1
+ export BUILDS_DOCUMENTATION
+ DOCUMENTATION_HOST=daybuild@www.meta-environment.org
+ DOCUMENTATION_SITE=/srv/www/vhosts/www.meta-environment.org/www/doc
+ MAKES_BINARY_DISTS=1
+ BINARY_DIST_HOST=daybuild@www.meta-environment.org
+ BINARY_DIST_SITE=/srv/www/vhosts/www.meta-environment.org/www/sisyphus-distributions/binaries
+ BINARY_DIST_PKGS="asfsdf-meta rscript-meta sdf sdf-apigen aterm-xml rascal"
+ DOCBOOK_XSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0"
+ FOP="/ufs/sen1/software/installed/fop-0.95"
+ ECLIPSE="/ufs/sen1/software/installed/eclipse-daybuild"
+ JDK="/ufs/sen1/software/installed/java/linux/i386/jdk1.6-LATEST/"
+ EXTRA_CONFIGURE_FLAGS="--with-docbook-xsl=${DOCBOOK_XSL} --with-fop=${FOP} --with-eclipse=${ECLIPSE} --with-jdk=${JDK}"
+ CC='gcc -m32'
+ export CC
+world-version: 37
+script:
+ order:
+  - reconf
+  - configure
+  - make
+  - install
+  - check
+  - doc
+  - distcheck
+  - pathcheck
+  - overlapcheck
+  - bindist
+ templates:
+  tag: |
+    PKG=<%=name%>
+    TAG_ID=<%=item.id%>
+    REPO=svn+ssh://svn.cwi.nl
+    TAGS=${REPO}/${PKG}/tags
+    TAG=${TAGS}/${TAG_ID}
+    svn mkdir ${TAGS} -m "Created tags directory for ${PKG}" || true
+    svn mkdir ${TAG} -m "Created a release tag for ${PKG}, build ${TAG_ID}"
+    <% tr_deps_all.each do |dep| %>
+      svn copy -r <%=dep.item.version %> ${REPO}/<%=dep.name%>/trunk ${TAG}/<%=dep.name%> -m "Adding <%=dep.name%> version <%=dep.item.version%> to tag ${TAG}."
+    <% end %>
+  reconf: time ./reconf
+  configure: time ./configure --prefix=<%= prefix%> <%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%> --enable-maintainer-mode ${EXTRA_CONFIGURE_FLAGS} --with-cflags="-Wall -Werror -g -O2"
+  make: time make
+  install: time make install
+  check: time make check
+  distcheck: DISTCHECK_CONFIGURE_FLAGS="<%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%> ${EXTRA_CONFIGURE_FLAGS}" time make distcheck 
+  pathcheck: |
+   set -x
+   DIST=`ls <%=name%>-*.tar.gz`
+   gunzip -c $DIST | tar xf -
+   DIR=`basename $DIST .tar.gz`
+   INSTDIR=`dirname <%=prefix%>`
+   FILES=`find $DIR -type f`
+   ERRORS=`grep -l $INSTDIR $FILES || true`
+   if [ $ERRORS ] ; then
+     echo "Error: prefix found in distribution. Affected files:" ;
+     echo $ERRORS ;
+     exit 1 ;
+   fi
+   echo "Errors: \"$ERRORS\""
+   echo "Pathcheck okee."
+  overlapcheck: |
+    set -x
+    prefixes="<%tr_deps.each do |d|%> <%=d.prefix%><%end%>"
+    wd=`pwd`
+    for prefix in ${prefixes}
+    do
+      cd ${prefix}
+      for file in `find . -type f`
+      do
+        if echo ${files} | grep -q "\<${file}\>"
+        then
+          overlap="${overlap}${file} "
+        else
+          files="${files}${file} "
+        fi
+      done
+    done
+    cd ${wd}
+    if [ ${overlap} ] 
+    then
+      echo "Error: overlapping files in merged prefixes:" 
+      echo ${overlap}
+      exit 1
+    fi
+    echo "Overlap check okay."
+  doc: |
+    set -x
+    if [ $BUILDS_DOCUMENTATION ]
+    then
+      #export JAVA_HOME=/ufs/sen1/software/installed/java/linux/i386/jdk1.6-LATEST
+      time make doc || true
+      # DO NOT REMOVE THE TRAILING SLASH!
+      DOCDIR=doc/html/
+      if [ -d $DOCDIR ]
+      then
+         if [ "<%= name%>" == "meta-doc" ]
+         then
+            DOCPATH="${DOCUMENTATION_SITE}/books"
+         else 
+            DOCPATH="${DOCUMENTATION_SITE}/api/<%= name%>"
+         fi
+         rsync --compress --verbose --recursive ${DOCDIR} ${DOCUMENTATION_HOST}:${DOCPATH} 
+      fi
+    fi
+  bindist: |
+    if [ $MAKES_BINARY_DISTS ] ; then
+      prefixes="<%tr_deps.each do |d|%> <%=d.prefix%><%end%>"
+      current=<%= name %>
+      dot=`which dot`
+      java=`which java`
+      gcc=`which gcc`
+      dister=/ufs/sen1/software/installed/generate-installer/bin/generate-installer.sh
+      installer=<%= binary_dist_name %>
+      for pkg in ${BINARY_DIST_PKGS} ; do
+        if [ ${current} == ${pkg} ] ; then
+          ${dister} --prefixes ${prefixes} --externals ${dot} ${java} ${gcc} > ${installer}
+          scp ${installer} ${BINARY_DIST_HOST}:${BINARY_DIST_SITE}
+        fi
+      done
+    fi

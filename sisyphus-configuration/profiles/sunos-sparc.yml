@@ -1,0 +1,10 @@
+user: daybuild
+build_dir: /ufs/daybuild/sisyphus-builds/sunos-sparc/build
+install_dir: /ufs/daybuild/sisyphus-builds/sunos-sparc/install
+distributes: false
+build-env: [meta-autotools, meta-build-env]
+environment: |
+ PATH=/ufs/sen1/software/installed/java/sunos/sparc/j2sdk1.5.0_06/bin:/ufs/sen1/software/installed/make-3.80/sunos/sparc/bin:/ufs/sen1/software/installed/subversion-1.3.2/sunos/sparc/bin:/ufs/sen1/software/installed/ssh-links/sunos/sparc/bin:/cwi/sw/pkg/gcc-3.2.2/bin:/ufs/daybuild/utils:/ufs/sen1/software/installed/vim-6.1/sunos/sparc/bin:/ufs/sen1/software/installed/xfig-3.2.3d/sunos/sparc/bin:/ufs/sen1/software/installed/softpkg/sunos/sparc/bin:/usr/local/gnu/bin:/usr/local/teTeX/bin:/ufs/sen1/software/installed/tcltk8.3.1/sunos/sparc/bin:/ufs/sen1/software/installed/perl-links/sunos/sparc/bin:/cwi/bin:/ufs/daybuild/bin/sh:/ufs/daybuild/bin/sunos/sparc:/ufs/daybuild/bin:/usr/ccs/bin:/opt/SUNWspro/bin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/dt/bin:/usr/openwin/bin:/usr/ucb:.:/ufs/sen1/software/installed/wget/sunos/sparc/bin:/ufs/sen1/software/installed/ant/bin:/ufs/sen1/software/installed/ruby-1.8.3/sunos/sparc/bin:/ufs/sen1/software/installed/graphviz-2.12/sunos/sparc/bin
+ export PATH
+ DOCBOOK_XSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0"
+world-version: 16
