@@ -54,9 +54,8 @@ installDir: dummy
 	        newpath=`printf "%-$${#prefix}s" ".." | tr " " "/"` ; \
 	        SEDCMD="$${SEDCMD} -e s@$${prefix}@$${newpath}@g"  ; \
 	done ; \
-	set -x ; \
 	for file in `find installed -type f`; do \
-          size=`wc -c $${file}` ; \
+          size=`wc -c $${file} | awk '{ print $$1 }'` ; \
 	  sed $${SEDCMD} < $${file} > $${file}.tmp ;\
 	  dd bs=1 count="$${size}" if=$${file}.tmp of=$${file} ; \
           rm $${file}.tmp ; \
