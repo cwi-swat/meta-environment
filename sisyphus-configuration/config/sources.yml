@@ -32,6 +32,7 @@ repositories:
     - error-gui
     - error-support
     - error-support-java
+    - graph-browser
     - graph-gui
     - graph-support
     - graph-support-java
