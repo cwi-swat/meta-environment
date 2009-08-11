@@ -52,7 +52,6 @@
          </action>
          <action
                class="org.dancingbear.graphbrowser.editor.ui.delegates.ShowNodeActionDelegate"
-               icon="icons/rascal3D_2-16px.gif"
                id="org.dancingbear.graphbrowser.action.show"
                label="Show"
                menubarPath="org.eclipse.gef.group.view"
@@ -60,7 +59,6 @@
          </action>
             <action
                class="org.dancingbear.graphbrowser.editor.ui.delegates.FisheyeActionDelegate"
-               icon="icons/rascal3D_2-16px.gif"
                id="org.dancingbear.graphbrowser.action.hyperbolicroot"
                label="Fisheye"
                menubarPath="org.eclipse.gef.group.view"
