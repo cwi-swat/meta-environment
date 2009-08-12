@@ -51,6 +51,7 @@ void SGLR_initialize() {
 
     OPT_initialize();
     PARSER_initializeDefaultOptions();
+    FLT_initialize();
     FLT_initializeDefaultOptions();
     MAIN_initializeDefaultOptions();
     SGLR_TS_create();

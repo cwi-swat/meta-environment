@@ -9,8 +9,8 @@
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-terminate(<restorebrackets>,<term>)",
-  "rec-eval(<restorebrackets>,add-brackets(<term>,<term>))",
   "rec-eval(<restorebrackets>,restore-brackets(<term>,<term>))",
+  "rec-eval(<restorebrackets>,add-brackets(<term>,<term>))",
 };
 
 /* Event handler for tool 'restorebrackets' */
@@ -20,15 +20,15 @@ ATerm restorebrackets_handler(int conn, ATerm term)
   /* We need some temporary variables during matching */
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-eval(add-brackets(<term>,<term>))", &t0, &t1)) {
-    return add_brackets(conn, t0, t1);
+  if(ATmatch(term, "rec-eval(restore-brackets(<term>,<term>))", &t0, &t1)) {
+    return restore_brackets(conn, t0, t1);
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(restore-brackets(<term>,<term>))", &t0, &t1)) {
-    return restore_brackets(conn, t0, t1);
+  if(ATmatch(term, "rec-eval(add-brackets(<term>,<term>))", &t0, &t1)) {
+    return add_brackets(conn, t0, t1);
   }
   if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     ATerm result = restorebrackets_checker(conn, in);

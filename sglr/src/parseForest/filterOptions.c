@@ -18,7 +18,7 @@ static int SELECTTOPNONTERMINAL_FLAG;
 static int SELECTTOPNONTERMINAL_VALUE;
 static int REMOVECYCLES_FLAG;
 
-void FLT_initalize(){
+void FLT_initialize(){
   FILTER_FLAG = OPT_getFlagOptionId();
   DIRECT_PREFERENCE_FLAG = OPT_getFlagOptionId();
   INDIRECT_PREFERENCE_FLAG = OPT_getFlagOptionId();
