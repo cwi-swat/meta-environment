@@ -18,8 +18,7 @@ static int SELECTTOPNONTERMINAL_FLAG;
 static int SELECTTOPNONTERMINAL_VALUE;
 static int REMOVECYCLES_FLAG;
 
-
-void FLT_initializeDefaultOptions() {
+void FLT_initalize(){
   FILTER_FLAG = OPT_getFlagOptionId();
   DIRECT_PREFERENCE_FLAG = OPT_getFlagOptionId();
   INDIRECT_PREFERENCE_FLAG = OPT_getFlagOptionId();
@@ -30,6 +29,9 @@ void FLT_initializeDefaultOptions() {
   SELECTTOPNONTERMINAL_FLAG = OPT_getFlagOptionId();
   SELECTTOPNONTERMINAL_VALUE = OPT_getStringOptionId();
   REMOVECYCLES_FLAG = OPT_getFlagOptionId();
+}
+
+void FLT_initializeDefaultOptions() {
   FLT_setFilterFlag(ATtrue);
   FLT_setIndirectPreferenceFlag(ATtrue);
   FLT_setPreferenceCountFlag(ATfalse);

@@ -9,6 +9,7 @@
 
 #include <aterm2.h>
 
+void   FLT_initalize();
 void   FLT_initializeDefaultOptions();
 void   FLT_setFilterFlag(ATbool value);
 ATbool FLT_getFilterFlag();
