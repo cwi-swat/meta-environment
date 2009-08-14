@@ -43,7 +43,7 @@ installDir: dummy
 	          $(call copyDir,$${prefix},lib); \
 	          $(call copyDir,$${prefix},share); \
 	          $(call copyDir,$${prefix},libexec); \
-		else \
+		else  \
 		  echo "prefix is empty" ; \
 	          exit 1 ; \
 	        fi ; \
@@ -56,13 +56,8 @@ installDir: dummy
 	done ; \
 	for file in `find installed -type f`; do \
           size=`wc -c $${file} | awk '{ print $$1 }'` ; \
-          sed $${SEDCMD} < $${file} > $${file}.tmp ; \
-          last_char=`tail -c 1 $${file}`; \
-          if [ "$${last_char}" == "\n" ]; then \
-            dd bs=1 count="$${size}" if=$${file}.tmp of=$${file} ; \
-          else \
-            cp $${file}.tmp $${file} ; \
-          fi ; \
+	  sed $${SEDCMD} < $${file} > $${file}.tmp ;\
+	  dd bs=1 count="$${size}" if=$${file}.tmp of=$${file} ; \
           rm $${file}.tmp ; \
 	done
 	
