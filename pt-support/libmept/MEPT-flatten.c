@@ -432,8 +432,8 @@ ATbool isListProd(PT_Production prod)
      * symbols are non-cf. As a result the equality check below fails where it should succeed.
      * NB: this is Rascal specific code; normally there is no problem.
      */
-    if (ATmatch(sep4, "cf(parameterized-sort(\"_Literal\",<term>))", &lit)) {
-      sep4 = ATmake("parameterized-sort(\"_Literal\", <term>))", lit);
+    if (ATmatch(sep4, "cf(parameterized-sort(\"_WrappedLiteral\",<term>))", &lit)) {
+      sep4 = ATmake("parameterized-sort(\"_WrappedLiteral\", <term>))", lit);
     }
 
     return ATisEqual(sort1, sort2) && ATisEqual(sort2, sort3) &&
