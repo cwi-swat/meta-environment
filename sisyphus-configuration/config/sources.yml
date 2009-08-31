@@ -16,6 +16,7 @@ repositories:
     - asfsdf-fragment
     - asf-support
     - aterm
+    - aterm-to-pbf
     - aterm-java
     - aterm-xml
     - balanced-binary-aterms
