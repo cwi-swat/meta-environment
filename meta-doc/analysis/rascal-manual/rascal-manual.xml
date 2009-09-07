@@ -2291,7 +2291,7 @@ rel[class,set[class]] ClassCycles =
         <listitem>
           <para>The <emphasis>control flow graph</emphasis> of the program. We
           represent it by a graph <literal>PRED</literal> (for predecessor)
-          which relates each statement with each predecessors.</para>
+          which relates each statement with its predecessors.</para>
         </listitem>
 
         <listitem>
@@ -7014,13 +7014,6 @@ bool: true</screen>
             </row>
 
             <row>
-              <entry>set[&amp;T] predecessors(graph[&amp;T], set[&amp;T]
-              FromSet)</entry>
-
-              <entry>Direct predecessors of all nodes in FromSet</entry>
-            </row>
-
-            <row>
               <entry><literal>set[&amp;T] reach(graph[&amp;T] G, set[&amp;T]
               Start)</literal></entry>
 
@@ -7055,13 +7048,6 @@ bool: true</screen>
               From)</entry>
 
               <entry>Direct successors of node From</entry>
-            </row>
-
-            <row>
-              <entry>set[&amp;T] successors(graph[&amp;T], set[&amp;T]
-              FromSet)</entry>
-
-              <entry>Direct successors of all nodes in FromSet</entry>
             </row>
 
             <row>
@@ -7691,13 +7677,6 @@ BindingRel unmatchedBindings;
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] predecessors(graph[&amp;T],
-              set[&amp;T] FromSet)</literal></entry>
-
-              <entry>Direct predecessors of all nodes in FromSet</entry>
-            </row>
-
-            <row>
               <entry><literal>set[&amp;T] reach(lgraph[&amp;T] G, set[&amp;T]
               Start)</literal></entry>
 
@@ -7732,13 +7711,6 @@ BindingRel unmatchedBindings;
               From)</literal></entry>
 
               <entry>Direct successors of node From</entry>
-            </row>
-
-            <row>
-              <entry><literal>set[&amp;T] successors(graph[&amp;T],
-              set[&amp;T] FromSet)</literal></entry>
-
-              <entry>Direct successors of all nodes in FromSet</entry>
             </row>
 
             <row>
