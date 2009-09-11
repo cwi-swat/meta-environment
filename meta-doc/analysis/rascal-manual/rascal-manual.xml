@@ -5154,9 +5154,6 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <section xml:id="section.regular-patterns">
           <title>Regular Expression Patterns</title>
 
-          <!--We need a better explanation here. Give first more examples and explain the differences
-with Java at the end.-->
-
           <para>Regular expression patterns are ordinary regular expressions
           that are used to match a string value and to decompose it in parts
           and also to compose new strings. Regular expression patterns bind
@@ -5166,61 +5163,351 @@ with Java at the end.-->
           This means that they can occur in cases of <literal>visit</literal>
           and <literal>switch</literal> statements, on the left-hand side of
           the match operator (<literal>:= or !:=</literal>) and as declarator
-          in generators.</para>
+          in enumerators. </para>
 
-          <para>We use a regular expression language that slightly extends the
-          Java Regex language with the following exceptions:</para>
+          <para>Here are some examples of regular expression
+          patterns.<programlisting>/\brascal\b/i</programlisting>does a
+          case-insensitive match (<literal>i</literal>) of the word rascal
+          between word boundaries (<literal>\b</literal>). And<programlisting>/^.*?&lt;word:\w+&gt;&lt;rest:.*$&gt;/m</programlisting>does
+          a multi-line match (<literal>m</literal>), matches the first
+          consecutive word characters (<literal>\w</literal>) and assigns them
+          to the variable <literal>word</literal>. The remainder of the string
+          is assigned to the variable <literal>rest</literal>. Constructs of
+          the form
+          <literal>&lt;<replaceable>Name</replaceable>:<replaceable>Regex</replaceable>&gt;</literal>
+          are called variable <emphasis role="bold">introductions</emphasis>.
+          They introduce a new variable for the duration of the regular
+          expression match.</para>
+
+          <para>Regular expressions may also contain <emphasis
+          role="bold">references</emphasis> to variables: their string value
+          is used at the position of the variable reference. This can be used
+          to define so-called <emphasis role="bold">non-linear</emphasis>
+          patterns. This example</para>
+
+          <para><programlisting>/&lt;x:[a-z]+&gt;---&lt;x&gt;/</programlisting>matches
+          strings like <literal>abc---abc</literal> that consist of two
+          identical sequences of letters separated by three dashes. Variables
+          that are referenced in a regular expression may also come from the
+          context in which the regular expression occurs. For instance,</para>
+
+          <para><programlisting>/&lt;x&gt;&lt;n&gt;/</programlisting>will use
+          the current values of <literal>x</literal> and <literal>n</literal>
+          as regular expression. For values <literal>"abc"</literal>,
+          respectively, <literal>3</literal> this would be equivalent to the
+          regular expression:</para>
+
+          <para><programlisting>/abc3/</programlisting>Observe that context
+          variables may be of arbitrary type and that their value is first
+          converted to a string before it is inserted in the regular
+          expression. This can be used in many ways. For instance, regular
+          expressions may contain restrictions on the number of repetitions of
+          an element: <literal>/a{3}/</literal> will match exactly three
+          letters <literal>a</literal>. Also minimum and maximum number of
+          occurrences can be defined. Here is how the repetition count can be
+          inserted by a variable reference (where n is assumed to have an
+          integer value):</para>
+
+          <para><programlisting>/a{&lt;n&gt;}/</programlisting>Taking this
+          example one step further, we can even write</para>
+
+          <para><programlisting>/&lt;x:a{&lt;n&gt;}&gt;/</programlisting>in
+          other words, we introduce variable <literal>x</literal> and its
+          defining regular expression contains a reference to a context
+          variable.</para>
+
+          <para>We use a regular expression language that slightly
+          extends/modifies the Java Regex language:</para>
 
           <itemizedlist>
             <listitem>
-              <para>Regular expression are delimited by / and / optionally
-              followed by a modifier (see below).</para>
+              <para>Regular expression are delimited by <literal>/</literal>
+              and <literal>/</literal> optionally followed by modifiers (see
+              below).</para>
             </listitem>
 
             <listitem>
-              <para>We allow named groups, syntax
+              <para>We allow variable introductions, syntax
               <literal>&lt;<replaceable>Name</replaceable>:<replaceable>Regex</replaceable>&gt;</literal>,
               which introduce a variable of type <literal>str</literal> named
-              <replaceable>Name</replaceable>. Currently, these names have to
-              be unique in the pattern.</para>
+              <replaceable>Name</replaceable>. A variable introduction
+              corresponds to a group in a Java regexp. Each variable that is
+              introduced should be unique, but may be referenced more than
+              once later in the regular expression.</para>
             </listitem>
 
             <listitem>
-              <para>Java regular expressions might have optional groups, which
-              may introduce null bindings. Since uninitialized variables are
-              not allowed in Rascal, we limit the kinds of expressions one can
-              write here by not allowing nesting of named groups.</para>
+              <para>Java regular expressions allow optional groups, which may
+              introduce null bindings. Since uninitialized variables are not
+              allowed in Rascal, we limit the kinds of expressions one can
+              write here by not allowing nesting of variable
+              introductions.</para>
             </listitem>
 
             <listitem>
-              <para>Named groups have to be outermost, such that they can only
-              bind in one way.</para>
+              <para>We allow variable references in a regular expression of
+              the form:
+              <literal>&lt;<replaceable>Name</replaceable>&gt;</literal> which
+              inserts the string value of <replaceable>Name</replaceable> in
+              the pattern. Name should have been introduced in the regular
+              experession itself or in the context in which the regular
+              expression occurs.</para>
             </listitem>
 
             <listitem>
               <para>Unlike Perl, Java uses the notation
               <literal>(?<replaceable>Option</replaceable>)</literal> inside
-              the regular expression to set options like multi-line matching
-              <literal>(?m)</literal>, case-insensitive matching
-              <literal>(?i)</literal> etc. We let these options follow the
-              regular expression.</para>
-            </listitem>
+              the regular expression to set matching options. We let these
+              options follow the regular expression as a modifiers. The
+              following modifiers are supported:</para>
 
-            <listitem>
-              <para>We allow name use in a regular expression:
-              <literal>&lt;<replaceable>Name</replaceable>&gt;</literal> which
-              inserts the string value of <replaceable>Name</replaceable> in
-              the pattern.</para>
+              <itemizedlist>
+                <listitem>
+                  <para>multi-line matching (<literal>?m</literal>): the
+                  anchors <literal>^</literal> and <literal>$</literal>
+                  usually only match at the beginning and end of the subject
+                  string. When this option is set they also match any begin or
+                  end of line that is embedded in the subject string.</para>
+                </listitem>
+
+                <listitem>
+                  <para>case-insensitive matching (<literal>?i</literal>):
+                  match characters irrespective of their case.</para>
+                </listitem>
+
+                <listitem>
+                  <para>single-line mode (<literal>?s</literal>): the .
+                  expression does usually not match line terminators. When
+                  single-line mode is set, it will match any character
+                  including line terminators.</para>
+                </listitem>
+
+                <listitem>
+                  <para>unix lines (<literal>?d</literal>): usually newlines
+                  (<literal>\n</literal>), carriage return
+                  (<literal>\r</literal>) and new line carriage return
+                  (<literal>\n\r</literal>) sequences are all considered line
+                  terminators. When this option is set, only newline is
+                  considered to be a line terminator.</para>
+                </listitem>
+              </itemizedlist>
             </listitem>
           </itemizedlist>
 
-          <para>Here are some examples of regular patterns.<programlisting>/\brascal\b/i</programlisting>does
-          a case-insensitive match (<literal>i</literal>) of the word rascal
-          between word boundaries (<literal>\b</literal>). And<programlisting>/^.*?&lt;word:\w+&gt;&lt;rest:.*$&gt;/m</programlisting>does
-          a multi-line match (<literal>m</literal>), matches the first
-          consecutive word characters (<literal>\w</literal>) and assigns them
-          to the variable <literal>word</literal>. The remainder of the string
-          is assigned to the variable <literal>rest</literal>.</para>
+          <para><warning>
+              <para>Further discuss here:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>grouping versus variable introduction.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Quoting issues.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Multiple matches.</para>
+                </listitem>
+              </itemizedlist>
+            </warning>For convenience, we summarize the most frequently used
+          constructs in regular expressions in <xref
+          linkend="table.regexp-syntax" />.</para>
+
+          <para><table xml:id="table.regexp-syntax">
+              <title>Frequently used elements of Regular Expression
+              Syntax</title>
+
+              <tgroup cols="2">
+                <colspec align="left" colname="col1" colwidth="1*" />
+
+                <colspec align="left" colname="col2" colwidth="5*" />
+
+                <thead>
+                  <row>
+                    <entry>Operator</entry>
+
+                    <entry>Description</entry>
+                  </row>
+                </thead>
+
+                <tbody>
+                  <row>
+                    <entry><replaceable>x</replaceable></entry>
+
+                    <entry>The single character <replaceable>x</replaceable>
+                    as long as it is not a punctuation character with a
+                    special meaning in the regular expression syntax</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\<replaceable>p</replaceable></literal></entry>
+
+                    <entry>The punctuation character
+                    <replaceable>p</replaceable></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\\</literal></entry>
+
+                    <entry>The backslah character</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\n</literal></entry>
+
+                    <entry>Newline character</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\t</literal></entry>
+
+                    <entry>Tab character</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>[...]</literal></entry>
+
+                    <entry>One of the characters between the brackets (also
+                    known as <emphasis role="bold">character
+                    class</emphasis>). Character ranges and set operations on
+                    character classes may be used.</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>[^...]</literal></entry>
+
+                    <entry>Any one character not between the brackets.</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>[a-z0-9]</literal></entry>
+
+                    <entry>Character range: character between a and z or 0 and
+                    9.</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\d</literal></entry>
+
+                    <entry>Digit: <literal>[0-9]</literal></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\D</literal></entry>
+
+                    <entry>Non-digit: <literal>[^0-9]</literal></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\s</literal></entry>
+
+                    <entry>Whitespace</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\S</literal></entry>
+
+                    <entry>Anything but whitespace.</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\w</literal></entry>
+
+                    <entry>A word: <literal>[a-zA-Z0-9_]</literal></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\W</literal></entry>
+
+                    <entry>A non-word: <literal>[^\w]</literal></entry>
+                  </row>
+
+                  <row>
+                    <entry><replaceable>xy</replaceable></entry>
+
+                    <entry>Match <replaceable>x</replaceable> followed by
+                    <replaceable>y</replaceable></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal><replaceable>x</replaceable>|<replaceable>y</replaceable></literal></entry>
+
+                    <entry>Match <replaceable>x</replaceable> or
+                    <replaceable>y</replaceable></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal><replaceable>x</replaceable>?</literal></entry>
+
+                    <entry>Optional occurrence of
+                    <replaceable>x</replaceable></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal><replaceable>x</replaceable>*</literal></entry>
+
+                    <entry>Zero or more occurrences of<replaceable>
+                    x</replaceable></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal><replaceable>x</replaceable>+</literal></entry>
+
+                    <entry>One or more occurrences of
+                    <replaceable>x</replaceable></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal><replaceable>x</replaceable>{<replaceable>n</replaceable>}</literal></entry>
+
+                    <entry>Exactly <replaceable>n</replaceable> occurrences of
+                    <replaceable>x</replaceable></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal><replaceable>x</replaceable>{<replaceable>n</replaceable>,}</literal></entry>
+
+                    <entry><replaceable>n</replaceable> or more occurrences of
+                    <replaceable>x</replaceable></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal><replaceable>x</replaceable>{<replaceable>n</replaceable>,<replaceable>m</replaceable>}</literal></entry>
+
+                    <entry>At least <replaceable>n</replaceable>, at most
+                    <replaceable>m</replaceable> occurrences of
+                    <replaceable>x</replaceable></entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>^</literal></entry>
+
+                    <entry>The beginning of the subject string</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>$</literal></entry>
+
+                    <entry>The end of the input string</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\b</literal></entry>
+
+                    <entry>Word boundary: position between a word and a
+                    non-word character</entry>
+                  </row>
+
+                  <row>
+                    <entry><literal>\B</literal></entry>
+
+                    <entry>Non-word boundary: position that is a not a word
+                    boundary</entry>
+                  </row>
+                </tbody>
+              </tgroup>
+            </table></para>
         </section>
 
         <section xml:id="section.abstract-patterns">
