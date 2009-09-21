@@ -1,6 +1,6 @@
 Index: buildCompleteLib.sh
 ===================================================================
---- buildCompleteLib.sh	(revision 29658)
+--- buildCompleteLib.sh	(revision 30780)
 +++ buildCompleteLib.sh	(working copy)
 @@ -1,23 +0,0 @@
 -#!/bin/sh
@@ -23,12 +23,12 @@ Index: buildCompleteLib.sh
 -   ar -x ${archive}
 -done
 -cd -
--ALL_OBJECTS="`find ../libbuild/*.o | grep -v SGLRInvoker`"
+-ALL_OBJECTS="`find ../libbuild/*.o | grep -v SGLRInvoker | grep -v 'parsetree-spec'`"
 -
 -echo $ALL_OBJECTS
 Index: lib/Makefile.am
 ===================================================================
---- lib/Makefile.am	(revision 29658)
+--- lib/Makefile.am	(revision 30780)
 +++ lib/Makefile.am	(working copy)
 @@ -1,6 +1,6 @@
  include $(top_srcdir)/Makefile.meta
@@ -38,18 +38,17 @@ Index: lib/Makefile.am
  
  AM_CPPFLAGS = -I$(srcdir)
  
-@@ -28,14 +28,3 @@
-         $(PTABLE_SUPPORT_LIBS) \
+@@ -31,13 +31,3 @@
          $(SGLR_LIBS) \
          $(C_LIBRARY_LIBS)
--
+ 
 -libCompleteSGLR_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
 -libCompleteSGLR_la_LIBADD = $(shell \
 -                        export TOP_DIR="$(top_srcdir)"; \
 -                        export ALL_DEPS="$(PACKAGE_ALL_DEPS)"; \
 -                        export PREFIX="$(prefix)"; \
--			export PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"; \
+-                        export PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"; \
 -                        . $(top_srcdir)/buildCompleteLib.sh)
--libCompleteSGLR_la_SOURCES = SGLRInvoker.c
+-libCompleteSGLR_la_SOURCES = SGLRInvoker.c parsetree-spec.c
 -
 -CLEANFILES += ../libbuild/*.o
