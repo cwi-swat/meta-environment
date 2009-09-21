@@ -67,6 +67,7 @@ installDir: dummy
 	done
 
 ${JAVA_JAR}: installDir
+	jar -cMf ${JAVA_JAR} META-INF/MANIFEST.MF
 
 clean-local:
 	rm -rf installed
