@@ -536,7 +536,7 @@
               <row>
                 <entry><literal>loc</literal></entry>
 
-                <entry><literal>!file:///etc/passwd</literal></entry>
+                <entry><literal>|file:///etc/passwd|</literal></entry>
               </row>
 
               <row>
@@ -615,7 +615,7 @@
       one exception: instead of using <literal>$1</literal>,
       <literal>$2</literal> as names for parts of the subject string that have
       been matched by a part of the regular expression we use the
-      notation:<programlisting><literal>&lt;<replaceable>Name</replaceable>:<replaceable>RegularExpression</replaceable>&gt;</literal></programlisting></para>
+      notation:<programlisting>&lt;<replaceable>Name</replaceable>:<replaceable>RegularExpression</replaceable>&gt;</programlisting></para>
 
       <para>If <replaceable>RegularExpression</replaceable> matches, the
       matched substring is assigned to string variable
@@ -2946,7 +2946,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
           <itemizedlist>
             <listitem>
               <para>The variable <literal>TEST</literal> represents the
-              outcome of a specific test of a conditional statement. The
+              outcome of a specific test of some conditional statement. The
               conditional statement defines <literal>TEST</literal> and all
               statements that are control dependent on this conditional
               statement will use <literal>TEST</literal>.</para>
@@ -2964,6 +2964,8 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
             <listitem>
               <para>The variable <literal>CONST</literal> represents an
               arbitrary constant.</para>
+
+              <!--where is CONST used?-->
             </listitem>
           </itemizedlist>
         </listitem>
@@ -4907,7 +4909,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                   <entry>IsDefined</entry>
 
-                  <entry>true is Exp has a well-defined value</entry>
+                  <entry>true if <replaceable>Exp</replaceable> has a
+                  well-defined value, i.e., is the result of expression
+                  evaluation that ended without raising an exception</entry>
                 </row>
 
                 <row>
@@ -5025,7 +5029,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                   <entry>The value of
                   <replaceable>Exp</replaceable><subscript>1</subscript> if
-                  that is defined (e.g., excluding uninitialized variables and
+                  that is defined (i.e., is the result of expression
+                  evaluation that ended without raising an exception thus
+                  excluding, for instance, uninitialized variables and
                   undefined map elements) otherwise the value of
                   <replaceable>Exp</replaceable><subscript>2</subscript></entry>
                 </row>
@@ -5119,7 +5125,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                   <entry><literal>true</literal> for every element in
                   <replaceable>Exp</replaceable>'s value (set/list element,
-                  subtree) that matches <replaceable>Pat</replaceable></entry>
+                  direct subtree) that matches
+                  <replaceable>Pat</replaceable></entry>
                 </row>
               </tbody>
             </tgroup>
@@ -5163,7 +5170,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           This means that they can occur in cases of <literal>visit</literal>
           and <literal>switch</literal> statements, on the left-hand side of
           the match operator (<literal>:= or !:=</literal>) and as declarator
-          in enumerators. </para>
+          in enumerators.</para>
 
           <para>Here are some examples of regular expression
           patterns.<programlisting>/\brascal\b/i</programlisting>does a
@@ -5692,10 +5699,6 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
         <section xml:id="section.concrete-patterns">
           <title>Concrete Syntax Patterns</title>
-
-          <note>
-            <para>Concrete patterns are currently being implemented.</para>
-          </note>
 
           <para>A <emphasis>concrete pattern</emphasis> is a (possibly quoted)
           concrete syntax fragment that may contain variables. We want to
@@ -9129,8 +9132,8 @@ BindingRel unmatchedBindings;
               <literal>+</literal></entry>
 
               <entry>Relation resulting from the transitive closure of
-              <replaceable>Rel</replaceable>. Explain type
-              constraints.</entry>
+              <replaceable>Rel</replaceable>. <remark>Explain type
+              constraints</remark>.</entry>
             </row>
 
             <row>
@@ -9698,7 +9701,8 @@ BindingRel unmatchedBindings;
               <entry><literal>&amp;T average(set[&amp;T] st, &amp;T
               zero)</literal></entry>
 
-              <entry>Average of the elements of a set</entry>
+              <entry>Average of the elements of a set. <remark>Where is the
+              comparison function?</remark></entry>
             </row>
 
             <row>
@@ -10412,7 +10416,7 @@ BindingRel unmatchedBindings;
             <row>
               <entry><literal>void browse(value v) </literal></entry>
 
-              <entry>Show value v a graphical browser</entry>
+              <entry>Show value v in a graphical browser</entry>
             </row>
           </tbody>
         </tgroup>
