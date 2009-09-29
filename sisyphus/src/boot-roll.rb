@@ -169,8 +169,7 @@ Note: the tunnel section is optional.
                                                           s['port'],
                                                           s['tunnel']['host'],
                                                           s['tunnel']['port'],
-                                                          s['tunnel']['user'],
-                                                          s['protocol'])
+                                                          s['tunnel']['user'])
     else
       config_manager = Building::ConfigurationManager.new(s['host'],
                                                           s['url'],
