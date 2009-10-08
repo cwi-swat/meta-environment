@@ -6786,6 +6786,11 @@ bool: true</screen>
       </listitem>
 
       <listitem>
+        <para>Chart: functions to draw various charts, see <xref
+        linkend="section.lib-Chart" />.</para>
+      </listitem>
+
+      <listitem>
         <para>Exception: data definition of all soft exceptions that can be
         caught by Rascal programs, see <xref
         linkend="section.lib-Exception" />.</para>
@@ -6917,7 +6922,7 @@ bool: true</screen>
 
           <tbody>
             <row>
-              <entry><literal><replaceable>Bool</replaceable></literal></entry>
+              <entry><replaceable>Bool</replaceable></entry>
 
               <entry><keysym>bool</keysym></entry>
             </row>
@@ -6932,6 +6937,12 @@ bool: true</screen>
               <entry><replaceable>Real</replaceable></entry>
 
               <entry><keysym>real</keysym></entry>
+            </row>
+
+            <row>
+              <entry>Number</entry>
+
+              <entry><keysym>int</keysym> or <keysym>real</keysym></entry>
             </row>
 
             <row>
@@ -7236,6 +7247,250 @@ bool: true</screen>
           </tbody>
         </tgroup>
       </table>
+    </section>
+
+    <section xml:id="section.lib-Chart">
+      <title>Chart</title>
+
+      <para>These functions provide simple chart drawing facilities and are
+      based on JFreeChart. All chart drawing functions take as
+      arguments:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A title string.</para>
+        </listitem>
+
+        <listitem>
+          <para>A single value that is to be displayed as a chart. This value
+          may have various formats described in the table below.</para>
+        </listitem>
+
+        <listitem>
+          <para>Zero or more settings that give control over the way in which
+          the chart is drawn.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><table>
+          <title>Chart Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="2*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>public void barChart(str title, value v,
+                chartSetting settings...)</literal></entry>
+
+                <entry>Draw a bar chart. Supported types for
+                <replaceable>v</replaceable> are map[str,number], rel[str,
+                number, number, ...] (for arbitrary arities) and
+                list[tuple[str, number, number]] (also for arbitrary
+                arities)</entry>
+              </row>
+
+              <row>
+                <entry><literal>public void pieChart(str title, value v,
+                chartSetting settings...)</literal></entry>
+
+                <entry>Draw a pieChart. Supported typesfor
+                <replaceable>v</replaceable> are map[str,number],
+                rel[str,number], and list[tuple[str,number]].</entry>
+              </row>
+
+              <row>
+                <entry><literal>public void xyChart(str title, value v,
+                chartSetting settings...)</literal></entry>
+
+                <entry>Draw an XY Chart. Supported types for
+                <replaceable>v</replaceable> are: rel[str,number,number], and
+                list[tuple[str,number,number]].</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+
+      <para>PieCharts essentially take maps, lists or sets of (string, number)
+      tuples as input. The strings are used to label each sector of the
+      pieChart and the number determines the relative size of the
+      sector.</para>
+
+      <para>In their simplest form barCharts have the same input as a
+      pieChart, they only display it differently. However, the input of a
+      barChart may be more complex: instead of one number a <emphasis
+      role="bold">series</emphasis> of numbers may be associated with each
+      string. Each series is grouped together in the bar chart and
+      corresponding elements in different series get the same color.</para>
+
+      <para>An xyChart plots the values of one or more functions on the same
+      grid. Each (fun, number, number) tuple in its input defines an (x,y)
+      value for function fun.</para>
+
+      <para>All chart functions can have zero or more chartSettings that give
+      control over the way in which the chart is drawn. A chartSetting can be
+      one of the following:</para>
+
+      <para><programlisting>data chartSetting =       
+     area()
+   | dim3()                       
+   | domainLabel(str txt)
+   | horizontal() 
+   | noLegend()     
+   | noSectionLabels()
+   | noToolTips()       
+   | rangeLabel(str txt)
+   | ring()       
+   | seriesLabels(list[str] s)
+   | stacked()               
+   | subtitle(str txt)
+   | vertical()
+   ;</programlisting>The applicability and meaning of these settings is as
+      follows.<table>
+          <title>Chart Settings</title>
+
+          <tgroup cols="3">
+            <colspec align="left" colname="col1" colwidth="2*" />
+
+            <colspec />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Applicable for</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>area()</literal></entry>
+
+                <entry>xyChart</entry>
+
+                <entry>Changes an xyChart from a line graph into an area
+                graph, i.e., all surface below the line graph is
+                colored.</entry>
+              </row>
+
+              <row>
+                <entry><literal>dim3()</literal></entry>
+
+                <entry>barChart, pieChart</entry>
+
+                <entry>Draw a 3D version of the chart.</entry>
+              </row>
+
+              <row>
+                <entry>domainLabel(str txt)</entry>
+
+                <entry>barChart, pieChart</entry>
+
+                <entry>Draw a label at the bottom (domain, x-axis) of the
+                chart</entry>
+              </row>
+
+              <row>
+                <entry>horizontal()</entry>
+
+                <entry>barChart, pieChart</entry>
+
+                <entry>Default, horizontal, drawing mode</entry>
+              </row>
+
+              <row>
+                <entry>noLegend()</entry>
+
+                <entry>barChart, pieChart, xyChart</entry>
+
+                <entry>Do not a legend for the chart.</entry>
+              </row>
+
+              <row>
+                <entry>noSectionLabels()</entry>
+
+                <entry>pieChart</entry>
+
+                <entry>Do not draw labels for the sections of a
+                pieChart</entry>
+              </row>
+
+              <row>
+                <entry>noToolTips()</entry>
+
+                <entry>barChart, pieChart, xyChart</entry>
+
+                <entry>Do not draw tooltips when the cursor hovers of a part
+                of the chart</entry>
+              </row>
+
+              <row>
+                <entry>rangeLabel(str txt)</entry>
+
+                <entry>barChart, xyChart</entry>
+
+                <entry>Draw a label at the left (range, y-axis) of the
+                chart</entry>
+              </row>
+
+              <row>
+                <entry>ring()</entry>
+
+                <entry>pieChart</entry>
+
+                <entry>Draw pieChart as a ring</entry>
+              </row>
+
+              <row>
+                <entry>seriesLabels(list[str] s)</entry>
+
+                <entry>barChart</entry>
+
+                <entry>User-defined labels for each series in a
+                barChart.</entry>
+              </row>
+
+              <row>
+                <entry>stacked()</entry>
+
+                <entry>barChart</entry>
+
+                <entry>Draw barChart in stacked fashion</entry>
+              </row>
+
+              <row>
+                <entry>subtitle(str txt)</entry>
+
+                <entry>barChart, pieChart, xyChart</entry>
+
+                <entry>At the top of the chart, draw a subtitle below the
+                title</entry>
+              </row>
+
+              <row>
+                <entry>vertical()</entry>
+
+                <entry>barChart, xyChart</entry>
+
+                <entry>Vertical drawing mode.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
     </section>
 
     <section xml:id="section.lib-Exception">
@@ -10421,6 +10676,58 @@ BindingRel unmatchedBindings;
           </tbody>
         </tgroup>
       </table>
+
+      <para>At the moment, this module also provides Eclipse-versions of the
+      Chart functions, which we repaet here for conveneince. See <xref
+      linkend="section.lib-Chart" /> for further details.</para>
+
+      <table>
+        <title>Eclipse-version of Chart Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="2*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>public void barChart(str title, value v,
+              chartSetting settings...)</literal></entry>
+
+              <entry>Draw a bar chart. Supported types for
+              <replaceable>v</replaceable> are map[str,number], rel[str,
+              number, number, ...] (for arbitrary arities) and list[tuple[str,
+              number, number]] (also for arbitrary arities)</entry>
+            </row>
+
+            <row>
+              <entry><literal>public void pieChart(str title, value v,
+              chartSetting settings...)</literal></entry>
+
+              <entry>Draw a pieChart. Supported typesfor
+              <replaceable>v</replaceable> are map[str,number],
+              rel[str,number], and list[tuple[str,number]].</entry>
+            </row>
+
+            <row>
+              <entry><literal>public void xyChart(str title, value v,
+              chartSetting settings...)</literal></entry>
+
+              <entry>Draw an XY Chart. Supported types for
+              <replaceable>v</replaceable> are: rel[str,number,number], and
+              list[tuple[str,number,number]].</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
 
     <section xml:id="section.lib-Void">
@@ -11007,6 +11314,12 @@ BindingRel unmatchedBindings;
           </row>
 
           <row>
+            <entry><literal>area</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
+          </row>
+
+          <row>
             <entry><literal>arity</literal></entry>
 
             <entry><xref linkend="section.lib-Node"
@@ -11033,6 +11346,13 @@ BindingRel unmatchedBindings;
             <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>barChart</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" />, <xref
+            linkend="section.lib-View" /></entry>
           </row>
 
           <row>
@@ -11108,12 +11428,24 @@ BindingRel unmatchedBindings;
           </row>
 
           <row>
+            <entry><literal>dim3</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
+          </row>
+
+          <row>
             <entry><literal>domain</literal></entry>
 
             <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Relation"
             xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>domainLabel</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
           </row>
 
           <row>
@@ -11186,6 +11518,12 @@ BindingRel unmatchedBindings;
 
             <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>horizontal</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
           </row>
 
           <row>
@@ -11278,10 +11616,35 @@ BindingRel unmatchedBindings;
           </row>
 
           <row>
+            <entry><literal>noLegend</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>noSectionLabels</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>noToolTips</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
+          </row>
+
+          <row>
             <entry><literal>permutations</literal></entry>
 
             <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>pieChart</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" />, <xref
+            linkend="section.lib-View" /></entry>
           </row>
 
           <row>
@@ -11326,6 +11689,12 @@ BindingRel unmatchedBindings;
 
             <entry><xref linkend="section.lib-Map"
             xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>rangeLabel</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
           </row>
 
           <row>
@@ -11428,10 +11797,22 @@ BindingRel unmatchedBindings;
           </row>
 
           <row>
+            <entry><literal>ring</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
+          </row>
+
+          <row>
             <entry><literal>root</literal></entry>
 
             <entry><xref linkend="section.lib-Resource"
             xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>seriesLabels</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
           </row>
 
           <row>
@@ -11475,10 +11856,22 @@ BindingRel unmatchedBindings;
           </row>
 
           <row>
+            <entry><literal>stacked</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
+          </row>
+
+          <row>
             <entry><literal>startsWith</literal></entry>
 
             <entry><xref linkend="section.lib-String"
             xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>subtitle</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
           </row>
 
           <row>
@@ -11602,6 +11995,12 @@ BindingRel unmatchedBindings;
           </row>
 
           <row>
+            <entry><literal>vertical</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" /></entry>
+          </row>
+
+          <row>
             <entry><literal>writeValueToBinaryFile</literal></entry>
 
             <entry><xref linkend="section.lib-ValueIO"
@@ -11613,6 +12012,13 @@ BindingRel unmatchedBindings;
 
             <entry><xref linkend="section.lib-ValueIO"
             xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>xyChart</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart" />, <xref
+            linkend="section.lib-View" /></entry>
           </row>
         </tbody>
       </tgroup>
