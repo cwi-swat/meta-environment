@@ -208,6 +208,14 @@
 
       <itemizedlist>
         <listitem>
+          <para><emphasis role="bold">Familiar</emphasis> <emphasis
+          role="bold">syntax</emphasis> in a <emphasis>what-you-see
+          is-what-you-get style</emphasis> is used even for sophisticated
+          concepts and this makes the language easy to learn and easy to
+          use.</para>
+        </listitem>
+
+        <listitem>
           <para><emphasis role="bold">Sophisticated built-in data
           types</emphasis> provide standard solutions for many
           meta-programming problems.</para>
@@ -219,6 +227,11 @@
           errors like missing initializations or wrong pointers
           impossible.<remark> At the time of writing, this checking is done
           during execution.</remark></para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Local type inference</emphasis> makes
+          local variable declarations redundant.</para>
         </listitem>
 
         <listitem>
@@ -239,6 +252,11 @@
         </listitem>
 
         <listitem>
+          <para><emphasis role="bold">Templates</emphasis> enable easy code
+          generation.</para>
+        </listitem>
+
+        <listitem>
           <para><emphasis role="bold">Functions as values </emphasis>permit
           programming styles with high re-use.</para>
         </listitem>
@@ -246,19 +264,6 @@
         <listitem>
           <para><emphasis role="bold">Generic types</emphasis> allow writing
           functions that are applicable for many different types.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis role="bold">Local type inference</emphasis> makes
-          local variable declarations redundant.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis role="bold">Familiar</emphasis> <emphasis
-          role="bold">syntax</emphasis> in a <emphasis>what-you-see
-          is-what-you-get style</emphasis> is used even for sophisticated
-          concepts and this makes the language easy to learn and easy to
-          use.</para>
         </listitem>
 
         <listitem>
@@ -379,8 +384,7 @@
 
       <para>Rascal code fragments are always shown as a listing like
       this:<programlisting>  .. here is some Rascal code ...</programlisting>Interactive
-      sessions are show as a screen like this (<remark>make a more clear
-      typographic distinction between listings and screens</remark>):<screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
+      sessions are show as a screen like this:<!--Make a more clear typographic distinction between lsitings and screens--><screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
 <computeroutput><replaceable>Type</replaceable>: <replaceable>Value</replaceable></computeroutput></screen>where:</para>
 
       <itemizedlist>
@@ -435,55 +439,64 @@
     <section>
       <title>Data structures</title>
 
-      <para>Rascal provides a rich set of datatypes. From booleans, infinite
-      precision integers and reals to strings and source code locations. From
-      lists, (optionally labelled) tuples and sets to (optionally labelled)
-      maps and relations. From untyped tree structures to fully typed
-      datastructures. Syntax trees that are the result of parsing source files
-      are represented as datatypes. There is a wealth of built-in operators
-      and library functions available on the standard datatypes. The basic
-      Rascal datatypes are illustrated in <xref
-      linkend="table.types" />.</para>
+      <para>Rascal provides a rich set of datatypes. From Booleans
+      (<keysym>bool</keysym>), infinite precision integers
+      (<keysym>int</keysym>) and reals (<keysym>real</keysym>) to strings
+      (<keysym>str</keysym>) that can act as templates with embedded
+      expressions and statements. From source code locations
+      (<keysym>loc</keysym>) based on an extension of Universal Resource
+      Identifiers (URI) that allow precise description of text areas in local
+      and remote files to lists (<keysym>list</keysym>), optionally labelled
+      tuples (<keysym>tuple</keysym>), sets (<keysym>set</keysym>), and
+      optionally labelled maps (<keysym>map</keysym>) and relations
+      (<keysym>rel</keysym>). From untyped tree structures
+      (<keysym>node</keysym>) to fully typed datastructures. Syntax trees that
+      are the result of parsing source files are represented as datatypes
+      (<keysym>Tree</keysym>). There is a wealth of built-in operators and
+      library functions available on the standard datatypes. The basic Rascal
+      datatypes are illustrated in <xref linkend="table.types" />.</para>
 
       <para>These builtin datatypes are closely related to ech other:</para>
 
       <itemizedlist>
         <listitem>
-          <para>In a <emphasis role="bold">list</emphasis> all elements have
-          the same static type and the order of elements matters. A list may
-          contain the same value more than once.</para>
+          <para>In a list all elements have the same static type and the order
+          of elements matters. A list may contain the same value more than
+          once.</para>
         </listitem>
 
         <listitem>
-          <para>In a <emphasis role="bold">set</emphasis> all elements have
-          the same static type and the order of elements does not matter. A
-          set contains an element only once. In other words, duplicate
-          elements are eliminated and no matter how many times an element is
-          added to a set, it will occur in it only once.</para>
+          <para>In a set all elements have the same static type and the order
+          of elements does not matter. A set contains an element only once. In
+          other words, duplicate elements are eliminated and no matter how
+          many times an element is added to a set, it will occur in it only
+          once.</para>
         </listitem>
 
         <listitem>
-          <para>In a <emphasis role="bold">tuple</emphasis> alle elements
-          (may) have a different static type. Each element of a tuple may have
-          a label that can be used to select that element of the tuple.</para>
+          <para>In a tuple alle elements (may) have a different static type.
+          Each element of a tuple may have a label that can be used to select
+          that element of the tuple.</para>
         </listitem>
 
         <listitem>
-          <para>A <emphasis role="bold">relation</emphasis> is a set of tuples
-          which all have the same static tuple type.</para>
+          <para>A relation is a set of tuples which all have the same static
+          tuple type.</para>
         </listitem>
 
         <listitem>
-          <para>A <emphasis role="bold">map</emphasis> is a binary relation
-          consisting of (key, value) pairs. Key and value (may) have different
-          static type and a key can only be associated with a value
-          once</para>
+          <para>A map is a binary relation consisting of (key, value) pairs.
+          Key and value (may) have different static type and a key can only be
+          associated with a value once</para>
         </listitem>
       </itemizedlist>
 
-      <para>User-defined datatypes allow the introduction of problem-specific
-      types. A fragment of the abstract syntax for statements in a programming
-      language would look as follows:<programlisting>data STAT = asgStat(Id name, EXP exp) 
+      <para>Untyped trees can be constructed with the builtin type <emphasis
+      role="bold">node</emphasis>. User-defined datatypes allow the
+      introduction of problem-specific types and are a subtype of <emphasis
+      role="bold">node</emphasis>. A fragment of the abstract syntax for
+      statements in a programming language would look as
+      follows:<programlisting>data STAT = asgStat(Id name, EXP exp) 
           | ifStat(EXP exp,list[STAT] thenpart,
                            list[STAT] elsepart) 
           | whileStat(EXP exp, list[STAT] body) 
@@ -563,7 +576,7 @@
               </row>
 
               <row>
-                <entry><literal>rel[</literal><replaceable>T</replaceable><subscript>1</subscript><literal>,...,</literal><replaceable>T</replaceable><subscript>n</subscript>]</entry>
+                <entry><literal>rel[</literal><literal><replaceable>T</replaceable></literal><subscript>1</subscript><literal>,...,</literal><replaceable>T</replaceable><subscript>n</subscript>]</entry>
 
                 <entry><literal>{&lt;1,2&gt;,&lt;2,3&gt;,&lt;1,3&gt;}</literal>,
                 <literal>{&lt;1,10,100&gt;,
@@ -579,9 +592,9 @@
               </row>
 
               <row>
-                <entry>node</entry>
+                <entry><literal>node</literal></entry>
 
-                <entry><literal>f</literal>, <literal>add(x,y)</literal>,
+                <entry><literal>f()</literal>, <literal>add(x,y)</literal>,
                 <literal>g("abc", [2,3,4])</literal></entry>
               </row>
             </tbody>
@@ -593,21 +606,34 @@
       <title>Pattern Matching</title>
 
       <para>Pattern matching determines whether a given pattern matches a
-      given value. The outcome can be false (no match) or true (a
-      match).</para>
+      given value. The outcome can be false (no match) or true (a match). A
+      pattern match that succeeds may assign values to variables.</para>
 
       <para>Pattern matching is <emphasis>the</emphasis> mechanism for case
-      distinction and search in Rascal and a very rich pattern language is
-      provided that includes string matching based on regular expressions,
-      list (associative) and set (associative, commutative, identity)
-      matching, matching of abstract patterns, matching of concrete syntax
-      patterns, and matching of descendant (nested) patterns. All these forms
-      of matching can be used in a single pattern and can be nested. Patterns
-      may contain variables that are bound when the match is successful.
-      Anonymous (don't care) positions are indicated by an underscore
-      (<literal>_</literal>). Here is a regular expression that matches a line
-      of text, finds the first alphanumeric word in it, and extracts the word
-      itself as well as the before and after it:</para>
+      distinction (<keysym>switch</keysym> statement) and search
+      (<keysym>visit</keysym> statement) in Rascal. Patterns can also be used
+      in an explicit match operator <literal>:=</literal> and can then be part
+      of larger boolean expressions. Since a pattern match may have more than
+      one solution, local backtracking over the alternatives of a match is
+      provided. Patterns can thus also be used in enumerators and control
+      structures like <keysym>for</keysym> and <keysym>while</keysym>
+      statement. </para>
+
+      <para>A very rich pattern language is provided that includes string
+      matching based on regular expressions, matching of abstract patterns,
+      and matching of concrete syntax patterns. Some of the features that are
+      provided are list (associative) matching, set (associative, commutative,
+      identity) matching, and deep matching of descendant (nested) patterns.
+      All these forms of matching can be used in a single pattern and can be
+      nested. Patterns may contain variables that are bound when the match is
+      successful. Anonymous (don't care) positions are indicated by an
+      underscore (<literal>_</literal>).</para>
+
+      <para>Here is a <emphasis>regular expression</emphasis> that matches a
+      line of text, finds the first alphanumeric word in it, and extracts the
+      word itself as well as the before and after it (<literal>\W</literal>
+      matches all non-word characters; <literal>\w</literal> matches all word
+      characters):</para>
 
       <para><programlisting>/^&lt;before:\W*&gt;&lt;word:\w+&gt;&lt;after:.*$&gt;/</programlisting></para>
 
@@ -621,14 +647,15 @@
       matched substring is assigned to string variable
       <replaceable>Name</replaceable>.</para>
 
-      <para>The following abstract pattern matches the while statement defined
-      above: <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
+      <para>The following <emphasis>abstract pattern</emphasis> matches the
+      abstract syntax of a while statement defined earlier: <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
 
       <para>Variables in a pattern are either explicitly declared in the
       pattern itself---as done in the example---or they may be declared in the
-      context in which the pattern occurs. So-called multi-variables in list
-      and set patterns are declared by a <literal>*</literal> suffix. The
-      above pattern can then be written as</para>
+      context in which the pattern occurs. So-called
+      <emphasis>multi-variables</emphasis> in list and set patterns are
+      declared by a <literal>*</literal> suffix. The above pattern can then be
+      written as</para>
 
       <para><programlisting>whileStat(EXP Exp, Stats*)</programlisting>or, if
       you are not interested in the actual value of the statements as</para>
@@ -636,15 +663,8 @@
       <para><programlisting>whileStat(EXP Exp, _*)</programlisting></para>
 
       <para>When there is a grammar for this example language (in the form of
-      an imported SDF definition), we can also write concrete patterns as we
-      will see below.</para>
-
-      <para>Patterns can also be used in an explicit match operator
-      <literal>:=</literal> and can then be part of larger boolean
-      expressions. Since a pattern match may have more than one solution,
-      local backtracking over the alternatives of a match is provided.
-      Patterns can also be used in control structures, enumerators and
-      visits.</para>
+      an imported SDF definition), we can also write <emphasis>concrete
+      patterns</emphasis> as we will see below.</para>
     </section>
 
     <section>
@@ -658,11 +678,12 @@
 
       <para><programlisting>int x &lt;- { 1, 3, 5, 7, 11 }
 int x &lt;- [ 1 .. 10 ]
-asgStat(Id name, _) &lt;- P</programlisting></para>
+/asgStat(Id name, _) &lt;- P</programlisting></para>
 
       <para>The first two produce the integer elements of a set of integers,
-      respectively, a range of integers. The third enumerator traverses the
-      complete program <literal>P</literal> (that is assumed to have a
+      respectively, a range of integers. The third enumerator does a deep
+      traversal (as denoted by the descendant operator <literal>/</literal>)
+      of the complete program <literal>P</literal> (that is assumed to have a
       <literal>PROGRAM</literal> as value) and only yields statements that
       match the assignment pattern. Note the use of an anonymous variable at
       the <literal>EXP</literal> position in the pattern.</para>
@@ -688,7 +709,7 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
       squares of the integers in the range <literal>[ 1 .. 10 ]</literal> that
       are divisible by 3. A more intriguing example is</para>
 
-      <para><programlisting>{name | asgStat(Id name, _) &lt;- P}</programlisting></para>
+      <para><programlisting>{name | /asgStat(Id name, _) &lt;- P}</programlisting></para>
 
       <para>which returns a list of all identifiers that occur on the left
       hand side of assignment statements in program
@@ -704,11 +725,11 @@ asgStat(Id name, _) &lt;- P</programlisting></para>
      return 1; 
   else
      return N * fac(N - 1);</programlisting>Actually, combinations of
-      generators and boolean expressions can be used to drive the control
+      generators and Boolean expressions can be used to drive the control
       structures. For instance,</para>
 
       <para><programlisting>
-for(asgStat(Id name, _) &lt;- P, size(name) &gt; 10){
+for(/asgStat(Id name, _) &lt;- P, size(name) &gt; 10){
     println(Id);
 }</programlisting></para>
 
@@ -791,19 +812,40 @@ case ifStat(Exp, Stats1*, Stat2*):
       <para><programlisting>int countAssignments(PROGRAM P){
     int n = 0;
     visit (P){
-    case asgStat(Id name, _):
+    case asgStat(_, _):
          n += 1;
     }
     return n;
-}</programlisting></para>
+}</programlisting>Functions can also be used as values thus enabling
+      higher-order functions. Consider the following
+      declarations:<programlisting>int double(int x) { return 2 * x; }
+
+int triple(int x) { return 3 * x; }
+
+int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
+
+      <para>The functions double and triple simply multiply their argument
+      with a constant. Function f is, however, more interesting. It takes an
+      integer <literal>x</literal> and a function <literal>multi</literal>
+      (with integer argument and integer result) as argument and applies
+      <literal>multi</literal> to its own argument. <literal>f(5,
+      triple)</literal> will hence return <literal>15</literal>. Function
+      values can also be created anonymously as illustrated by the following,
+      alternative, manner of writing this same call to f:</para>
+
+      <para><programlisting>f(5, int (int y){return 3 * y;});</programlisting>Here
+      the second argument of f is an anonymous function that is declared her
+      on the spot.</para>
     </section>
 
     <section>
       <title>Syntax Definition and Parsing</title>
 
-      <para>All source code analysis projects need to extract information
-      directly from the source code. There are two main approaches to
-      this:</para>
+      <para><warning>
+          <para>Verify this section.</para>
+        </warning>All source code analysis projects need to extract
+      information directly from the source code. There are two main approaches
+      to this:</para>
 
       <itemizedlist>
         <listitem>
@@ -819,11 +861,14 @@ case ifStat(Exp, Stats1*, Stat2*):
       </itemizedlist>
 
       <para>In Rascal, we reuse the Syntax Definition Formalism (SDF) and its
-      tooling. SDF modules define grammars and these modules can be imported
-      in a Rascal module. These grammar rules can be applied in writing
-      concrete patterns to match parts of parsed source code. Here is an
-      example of the same pattern we saw above, but now in concrete
-      form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
+      tooling. See <link
+      xlink:href="http://www.meta-environment.org/Meta-Environment/Documentation">http://www.meta-environment.org/Meta-Environment/Documentation</link>
+      for tutorials and manuals for SDF.</para>
+
+      <para>SDF modules define grammars and these modules can be imported in a
+      Rascal module. These grammar rules can be applied in writing concrete
+      patterns to match parts of parsed source code. Here is an example of the
+      same pattern we saw above, but now in concrete form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
 
       <para>Importing an SDF module has the following effects:</para>
 
@@ -859,20 +904,27 @@ case ifStat(Exp, Stats1*, Stat2*):
 
       <programlisting>module Count
 import languages::syntax::Java;
+import ParseTree;
 
-public int countMethods(str file){
+public int countMethods(loc file){
   int n = 0;
-  for(MethodDeclaration md &lt;- parseCompilationUnit(file))
+  for(/MethodDeclaration md &lt;- parse(CompilationUnit, file))
       n += 1;
   return n;
 }</programlisting>
 
-      <para>The function <literal>parseCompilationUnit</literal> is implicitly
-      defined as a result of importing the Java grammar and
-      <literal>MethodDeclaration</literal> is a non-terminal from the Java
-      grammar that becomes available as type. This example ignores many
-      potential error issues but does illustrate some of Rascal's syntax and
-      parsing features.</para>
+      <para>First observe that importing the Java grammar has as effect that
+      non-terminals like <literal>MethodDeclaration</literal> and
+      <literal>CompilationUnit</literal> become available as type in the
+      Rascal program.</para>
+
+      <para>The library function <literal>parse</literal> takes a non-terminal
+      (CompilationUnit) and a location as arguments and parses the contents of
+      the location according to the given non-terminal. Next a match for
+      embedded <literal>MethodDeclaration</literal>s is done in the
+      enumetrator of the <keysym>for</keysym> statement. This example ignores
+      many potential error issues but does illustrate some of Rascal's syntax
+      and parsing features.</para>
     </section>
 
     <section>
@@ -960,6 +1012,12 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
           <para>Datastructures may have annotations that can be explicitly
           used and modified.</para>
         </listitem>
+
+        <listitem>
+          <para>There is an extensive library for builtin datatypes,
+          input/output, fact extraction from Java source code, visualization,
+          and more.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -1015,12 +1073,20 @@ ok</computeroutput>
       <para><screen><prompt>rascal&gt; </prompt><userinput>void hello() {
    println("Hello, this is my first Rascal program");
 }</userinput>
-<computeroutput>Rascal.Function ...</computeroutput>
+<computeroutput>void (): void hello();</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
 <computeroutput>Hello, this is my first Rascal program
-ok</computeroutput></screen>The summit of hello-engineering can be reached by
-      placing all the above in a separate module:<programlisting>module demo::Hello
+ok</computeroutput></screen>Don't get scared by the <computeroutput>void ():
+      void hello();</computeroutput> that you get back when typing in the
+      <literal>hello</literal> function. The first <computeroutput>void
+      ()</computeroutput> part says the result is a function that returns
+      nothing, and the second part <computeroutput>void
+      hello()</computeroutput> summarizes its value (or would you prefer a hex
+      dump?).</para>
+
+      <para>The summit of hello-engineering can be reached by placing all the
+      above in a separate module:<programlisting>module demo::Hello
 	import IO;
 
 public void hello() {
@@ -1249,6 +1315,83 @@ public str capAll2(str S)
 
 <prompt>rascal&gt;</prompt> <userinput>capAll1("rascal is great");</userinput>
 <computeroutput>str: "Rascal Is Great"</computeroutput></screen></para>
+    </section>
+
+    <section>
+      <title>Template Programming</title>
+
+      <para>Many websites and code generators use template-based code
+      generation. They start from a text template that contains embedded
+      variables and code. The template is "executed" by replacing the embedded
+      variables and code by their string value. A language like PHP is popular
+      for this feature. Let's see how we can do this in Rascal. Given a
+      mapping from field names to their type, the task at hand is to generate
+      a Java class that contains those fields and corresponding getters and
+      setters. Given a mapping</para>
+
+      <para><programlisting>public map[str, str] fields = (
+   "name" : "String",
+   "age" : "Integer",
+   "address" : "String"
+);</programlisting>we expect the call<programlisting>genClass("Foo", fields)</programlisting>to
+      produce the following output:<programlisting>    public class Foo {
+
+        private Integer age;
+        public void setAge(Integer age) {
+          this.age = age;
+        }
+        public Integer getAge() {
+          return age;
+        }
+
+        private String name;
+        public void setName(String name) {
+          this.name = name;
+        }
+        public String getName() {
+          return name;
+        }
+
+        private String address;
+        public void setAddress(String address) {
+          this.address = address;
+        }
+        public String getAddress() {
+          return address;
+        }
+
+    }</programlisting>This is achieved by the following definition of
+      <literal>genClass</literal>:</para>
+
+      <para><programlisting>module experiments::StringTemplate
+
+import String;
+
+public str capitalize(str s) {
+  return toUpperCase(substring(s, 0, 1)) + substring(s, 1);
+}
+
+public str genClass(str name, map[str,str] fields) {
+  return "
+    public class &lt;name&gt; {
+      &lt;for (x &lt;- fields) {&gt;
+        private &lt;fields[x]&gt; &lt;x&gt;;
+        public void set&lt;capitalize(x)&gt;(&lt;fields[x]&gt; &lt;x&gt;) {
+          this.&lt;x&gt; = &lt;x&gt;;
+        }
+        public &lt;fields[x]&gt; get&lt;capitalize(x)&gt;() {
+          return &lt;x&gt;;
+        }
+      &lt;}&gt;
+    }
+  ";
+
+}
+</programlisting>Observe how the <keysym>for</keysym> statement and
+      expressions that access the map fields that are embedded in the string
+      constant customize the given template for a Java class. The details of
+      string interpolation are explained in <xref
+      linkend="section.elementary-types" />.</para>
     </section>
   </section>
 
@@ -3197,33 +3340,69 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           <literal>str</literal> and consist of character sequences surrounded
           by double quotes. e.g., <literal>"a"</literal> or
           <literal>"a\nlong\tstring"</literal>.</para>
+
+          <!--Escape sequences!-->
         </formalpara>
 
-        <para>String literals permit <emphasis>interpolation</emphasis> of
-        variable values: when
-        <literal>&lt;<replaceable>X</replaceable>&gt;</literal> occurs inside
-        a string literal, the value of the variable
-        <replaceable>X</replaceable> is converted to a string that replaces
-        &lt;<replaceable>X</replaceable>&gt;. As a consequence, the character
-        <literal>&lt; </literal>has to be escaped as<literal>\&lt;</literal>
-        in string literals.</para>
+        <para>String literals support so-called <emphasis>string
+        interpolation</emphasis>: inside string constants text between angle
+        brackets (<literal>&lt;</literal> and <literal>&gt;</literal>) is
+        first executed and then replaced by its string value. Let's try
+        this:<screen><prompt>rascal&gt;</prompt> <userinput>N = 13;</userinput>
+<computeroutput>int : 13</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>"The value of N is &lt;N&gt;";</userinput>
+<computeroutput>str: "The value of N is 13"</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>"The value of N*N is &lt;N*N&gt;";</userinput>
+<userinput>str: "The value of N*N is 169"</userinput>
+
+<prompt>rascal&gt;</prompt> <userinput>"The value is &lt;(N &lt; 10) ? 10 : N*N&gt;";</userinput>
+<computeroutput>str: "The value of 169"</computeroutput>
+</screen></para>
+
+        <para>As you can see the string value of variables and expressions is
+        interpolated in the result as expected. As we will see later on,
+        various statements (<keysym>if</keysym>, <keysym>for</keysym>,
+        <keysym>while</keysym>, <keysym>do</keysym>) also return a value and
+        can be used in this way. In the interpolation variant of these
+        statements the block or blocks that are part of the statement become
+        arbitrary text (that may itself contain interpolations). Their forms
+        are:<programlisting>&lt;if(<replaceable>Expression</replaceable>){&gt; ... arbitrary text with optional interpolations ... &lt;}&gt;
+&lt;if(<replaceable>Expression</replaceable>){&gt; ... arbitrary text then case &lt;} else {&gt;  ... arbitrary text else case... &lt;}&gt;
+&lt;for(<replaceable>Expression</replaceable>){&gt;... arbitrary text with optional interpolations ... &lt;}&gt;
+&lt;while(<replaceable>Expression</replaceable>){&gt; ... arbitrary text with optional interpolations ... &lt;}&gt;
+&lt;do {&gt;... arbitrary text with optional interpolations ... &lt;} while (<replaceable>Expression</replaceable>)&gt;
+</programlisting></para>
+
+        <para>Let's apply this to some examples:<screen><prompt>rascal&gt;</prompt> <userinput>"The value is &lt;if(N &lt; 10){&gt; smaller &lt;} else {&gt; larger &lt;}&gt;";</userinput>
+<computeroutput>str: "The value is larger "</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>"The value is &lt;if(N &lt; 10){&gt; smaller (e.g., &lt;N&gt;) &lt;} else {&gt; larger (e.g., &lt;N&gt;)&lt;}&gt;";</userinput>
+<computeroutput>str: "The value is  larger (e.g., 13)"</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>"before &lt;for(x&lt;-[1..5]){&gt;a &lt;x&gt; b &lt;}&gt;after";</userinput>
+<computeroutput>str: "before a 1 b a 2 b a 3 b a 4 b a 5 b after"</computeroutput>
+</screen>String interpolation enables very flexible template-based text
+        generation.</para>
 
         <formalpara>
           <title>Location</title>
 
           <para>Location values are represented by the type
           <literal>loc</literal> and serve as text coordinates in a specific
-          source file. It is very handy to associate a source code location
-          which extracted facts.</para>
+          local or remote source file. It is very handy to associate a source
+          code location which extracted facts.</para>
         </formalpara>
 
         <para>Source locations have the following syntax:</para>
 
-        <para><programlisting>loc(<replaceable>Url</replaceable>?offset=<replaceable>O</replaceable>&amp;length=<replaceable>L</replaceable>&amp;begin=<replaceable>BL</replaceable>,<replaceable>BC</replaceable>&amp;end=<replaceable>EL</replaceable>,<replaceable>EC)</replaceable></programlisting>where:</para>
+        <para><programlisting>|<replaceable>Uri</replaceable>|(<replaceable>O</replaceable>,<replaceable>L</replaceable>,&lt;<replaceable>BL</replaceable>,<replaceable>BC</replaceable>&gt;,&lt;<replaceable>EL</replaceable>,<replaceable>EC&gt;)</replaceable></programlisting>where:</para>
 
         <itemizedlist>
           <listitem>
-            <para><replaceable>Url</replaceable> is an arbitrary URL.</para>
+            <para><replaceable>Url</replaceable> is an arbitrary Uniform
+            Resource Identifier (URI).</para>
           </listitem>
 
           <listitem>
@@ -3247,7 +3426,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         </itemizedlist>
 
         <para>Locations should <emphasis>always</emphasis> be generated
-        automatically but for the curious here is an example: <programlisting>loc(file:///home/paulk/pico.trm?offset=0&amp;length=1&amp;begin=2,3&amp;end=4,5)</programlisting></para>
+        automatically but for the curious here is an example: <programlisting>|file:///home/paulk/pico.trm|(0,1,&lt;2,3&gt;,&lt;4,5&gt;)</programlisting></para>
 
         <para>The elements of a location value can be accessed and modified
         using the standard mechanism of field selection and field assignment.
@@ -3255,7 +3434,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
         <itemizedlist>
           <listitem>
-            <para><literal>url</literal></para>
+            <para><literal>uri</literal></para>
           </listitem>
 
           <listitem>
@@ -3267,13 +3446,13 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           </listitem>
 
           <listitem>
-            <para><literal>beginLine</literal>,
-            <literal>beginColumn</literal></para>
+            <para><literal>begin.line</literal>,
+            <literal>begin.column</literal></para>
           </listitem>
 
           <listitem>
-            <para><literal>endLine</literal>,
-            <literal>endColumn</literal>.</para>
+            <para><literal>end.line</literal>,
+            <literal>end.column</literal>.</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -3710,20 +3889,24 @@ alias Frequency = int;</programlisting>
         through their name. In Rascal, data declarations provide this
         facility. The type declaration</para>
 
-        <programlisting><literal>data <replaceable>Name</replaceable> = <replaceable>Pat</replaceable><subscript>1</subscript> | <replaceable>Pat</replaceable><subscript>1</subscript> | ...</literal></programlisting>
+        <programlisting><literal>data <replaceable>Name</replaceable> = <replaceable>Alt</replaceable><subscript>1</subscript> | <replaceable>Alt</replaceable><subscript>1</subscript> | ...</literal></programlisting>
 
         <para>introduces a new datatype <replaceable>Name</replaceable> and
-        <replaceable>Pat</replaceable><subscript>1</subscript>,
-        <replaceable>Pat</replaceable><subscript>2</subscript>, ... are prefix
-        patterns describing the variants of the datatype. For instance,
-        <programlisting>data Bool = T | F | conj(Bool L, Bool R)  | disj(Bool L, Bool R);  </programlisting>defines
+        its alternative forms
+        <replaceable>Alt</replaceable><subscript>1</subscript>,
+        <replaceable>Alt</replaceable><subscript>2</subscript>, ... . The
+        description of an alternative is identical in form to the type
+        declaration of a function. For instance, <programlisting>data Bool = tt() | ff() | conj(Bool L, Bool R)  | disj(Bool L, Bool R);  </programlisting>defines
         the datatype <literal>Bool</literal> that contains various constants
-        (<literal>T</literal> and <literal>F</literal>) and constructor
+        (<literal>Ttt()</literal> and <literal>F</literal>ff() and constructor
         functions <literal>conj</literal> and <literal>disj</literal>.</para>
+
+        <!--Exception: data constructor do allow variable arguments.-->
       </section>
 
       <section>
-        <title>Type Parameters and Parameterized types</title>
+        <title>Type Parameters, Type Constaints and Parameterized Types and
+        Aliases</title>
 
         <para>In addition to the types that we have already discussed, a type
         may also be a <emphasis>type parameter</emphasis> of the
@@ -3744,7 +3927,7 @@ alias Frequency = int;</programlisting>
             <para>Type parameters in the type declaration of a function are
             bound to the types of the actual parameters in the call of that
             function. Type parameters that occur in the body of the function
-            are replaced by the corresponding actual type.</para>
+            are replaced by the corresponding actual types.</para>
           </listitem>
 
           <listitem>
@@ -3776,12 +3959,21 @@ alias Frequency = int;</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para>We refer to <xref linkend="section.function" /> for a full
-        description of function declaration, but here</para>
+        <para>As a final refinement, constraints can be imposed on the actual
+        types to which a type parameter may be bound. This is expressed by a
+        subtype constraint of the form:</para>
 
-        <para>The following function <literal>swap</literal> returns a tuple
-        in which its arguments are swapped and can be applied to arbitrary
-        values in a type safe manner:<screen><prompt>rascal&gt;</prompt> <userinput>tuple[&amp;B, &amp;A] swap(&amp;A a, &amp;B b) { return &lt;b, a&gt;; }</userinput>
+        <para><programlisting><literal>&amp;</literal><replaceable>Name &lt;: Type</replaceable></programlisting>which
+        expresses that actual types bound to <replaceable>Name</replaceable>
+        should be a subtype of <replaceable>Type</replaceable>. More on
+        subtyping in <xref linkend="section.typing" />.</para>
+
+        <para>Let's consider a small example of the use of function parameters
+        in a function declaration, we refer to <xref
+        linkend="section.function" /> for a full description of function
+        declarations. The following function <literal>swap</literal> returns a
+        tuple in which its arguments are swapped and can be applied to
+        arbitrary values in a type safe manner:<screen><prompt>rascal&gt;</prompt> <userinput>tuple[&amp;B, &amp;A] swap(&amp;A a, &amp;B b) { return &lt;b, a&gt;; }</userinput>
 <computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>swap(1,2);</userinput>
@@ -3789,11 +3981,12 @@ alias Frequency = int;</programlisting>
 </computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>swap("abc", 3);</userinput>
 <computeroutput>tuple[int,str]: &lt;3, "abc"&gt;</computeroutput></screen>Observe
-        that the type parameters that occur in the return type should occur in
-        the formal parameter types of the function.</para>
+        that the type parameters that are used in the return type should be
+        defined in the declarations of the formal parameter of the
+        function.</para>
 
-        <para>An alias definition may be parameterized. So we can generalize
-        graphs as follows:</para>
+        <para>An alias definition may also be parameterized. So we can
+        generalize graphs as follows:</para>
 
         <para><screen><prompt>rascal&gt;</prompt> <userinput>alias Graph[&amp;Node] = rel[&amp;Node, &amp;Node];</userinput>
 <computeroutput>ok</computeroutput>
@@ -3802,13 +3995,45 @@ alias Frequency = int;</programlisting>
 <computeroutput>Graph[int] :  {&lt;1,2&gt;, &lt;3,4&gt;, &lt;4,1&gt;}
 </computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>Graph[str] GS = {&lt;"a", "b"&gt;, &lt;"c","d"&gt;, &lt;"d", "a"&gt;};</userinput>
-<computeroutput>Graph[str] : {&lt;"a", "b"&gt;, &lt;"c","d"&gt;, &lt;"d", "a"&gt;}</computeroutput></screen>Of
-        course, the type variables that are used in the type in the left part
-        of the alias declaration should occur as parameters in the right part
-        of the definition and vice versa.</para>
+<computeroutput>Graph[str] : {&lt;"a", "b"&gt;, &lt;"c","d"&gt;, &lt;"d", "a"&gt;}</computeroutput></screen>The
+        type parameters that are used in the type in the right part of the
+        alias declaration should be defined in the left part of the alias
+        definition.</para>
       </section>
 
       <section>
+        <title>Reified Types</title>
+
+        <para>Usually one declares functions that have arguments that have a
+        type that corresponds to one of the many forms of values in Rascal. In
+        exceptional circumstances it is desirable to define functions that
+        have a type itself as argument. The prototypical example is a parse
+        function: how to write a type safe parse function that expresses the
+        type of the result we expect? Suppose we want to parse a language that
+        has the non-terminals <literal>EXP</literal>, <literal>STAT</literal>
+        and <literal>PROGRAM</literal>. A first, naive, solution introduces a
+        parse function for each non-terminal:</para>
+
+        <para><programlisting>EXP parseEXP(str s){ ... }
+STAT parsePROGRAM(str s) { ... }
+PROGRAM parsePROGRAM(str s) { ... }</programlisting>Unfortunately this
+        solution does not scale well to large languages with many
+        non-terminals and it breaks down completely when we do not know the
+        non-terminals before hand.</para>
+
+        <para>To solve this problem in a more general manner something special
+        has to be done. Types are not values and without an additional
+        mechanism they cannot be passed as arguments to functions. To achieve
+        this effect we introduce <emphasis>reified types</emphasis> that are
+        denoted by the type <keysym>type</keysym>. Now we can
+        write:<programlisting>&amp;T parse(type[&amp;T] start, str s) { ... }</programlisting>and
+        use the parse by giving it a type as argument:<programlisting>parse(EXP, "1+3");</programlisting><!--Er zijn vele vragen hier:
+(1) Is het mogelijk een dergelijk functie in Rascal zelf te schrijven?
+(2) Kunne reified types ook in aliasen gebruikt worden? Zo ja hoe?
+(3) Idem voor data declaraties.--></para>
+      </section>
+
+      <section xml:id="section.typing">
         <title>Typing</title>
 
         <para xml:id="figure.type-lattice">Rascal is based on static typing,
@@ -3821,7 +4046,12 @@ alias Frequency = int;</programlisting>
         types and the type value is the <emphasis>largest</emphasis> type that
         includes all other types. We also see that <literal>rel</literal> is a
         subtype of <literal>set</literal> and that each ADT is a subtype of
-        <literal>node</literal>. Finally, each alias is structurally
+        <literal>node</literal>. A special role is played by the datatype
+        <literal>Tree</literal> that is the generic type of syntax trees.
+        Syntax trees for specific languages are all subtypes of Tree. As a
+        result, syntax trees can be addressed at two levels: in a generic
+        fashion as <literal>Tree</literal> and in a specific fashion as a more
+        precisely typed syntax tree. Finally, each alias is structurally
         equivalent to one or more specific other types.<figure>
             <title>The Rascal Type Lattice</title>
 
@@ -3855,8 +4085,8 @@ Declaration</replaceable><subscript>1</subscript>;
 ...
 <replaceable>Declaration</replaceable><subscript>n</subscript>;</literal></programlisting>and
         consists of a <replaceable>Name</replaceable> and zero or more imports
-        of other modules (<xref linkend="section.import" />) and declarations
-        for</para>
+        of other modules, see<xref linkend="section.import" />, and
+        declarations for</para>
 
         <itemizedlist>
           <listitem>
@@ -3897,13 +4127,13 @@ Declaration</replaceable><subscript>1</subscript>;
         usually a qualified name of the form:<programlisting><replaceable>Name</replaceable><subscript>1</subscript><literal>::</literal><replaceable>Name</replaceable><subscript>2</subscript><literal>::</literal> ... <literal>::</literal><replaceable>Name</replaceable><subscript>n</subscript></programlisting></para>
 
         <para>which corresponds to a path relative to the root of the current
-        workspace.<warning>
-            <para>Explain this better.</para>
-          </warning></para>
+        workspace.</para>
+
+        <!--Explain this better.-->
 
         <para>The constituents of a module are also shown in <xref
-        linkend="figure.parts-module" />. The more sophisticated features are
-        shown in a separate color.</para>
+        linkend="figure.parts-module" />. The less familiar features are shown
+        in a separate color.</para>
 
         <para>The entities that are <emphasis>visible</emphasis> inside a
         module are</para>
@@ -3940,7 +4170,27 @@ Declaration</replaceable><subscript>1</subscript>;
         <para>An import has the form:<programlisting><keysym>import</keysym> <literal><replaceable>QualifiedName</replaceable>;</literal></programlisting>and
         has as effect that all public entities declared in module
         <replaceable>QualifiedName</replaceable> are made available to the
-        importing module. Circular imports are allowed.</para>
+        importing module. Circular imports are allowed. Two kinds of imported
+        modules are supported:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Another Rascal module.</para>
+          </listitem>
+
+          <listitem>
+            <para>An SDF module that defines the syntax of some language,
+            say<replaceable> L</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>In the former case, all publicly visible entities in the
+        imported module become available in the importing module. In the
+        latter case, all non-terminals (symbols in SDF parlance) that are
+        declared in <replaceable>L</replaceable> become available as types in
+        the importing module. In addition, concrete syntax patterns and parse
+        functions can be used for any non-terminal that is defined in
+        <replaceable>L</replaceable>.</para>
       </section>
 
       <section xml:id="section.function">
@@ -3948,8 +4198,9 @@ Declaration</replaceable><subscript>1</subscript>;
 
         <para>A function declaration has the form<programlisting><replaceable>Type</replaceable> <replaceable>Name</replaceable>(<literal><replaceable>Type</replaceable></literal><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript>, ..., <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>Var</replaceable><replaceable><subscript>n</subscript></replaceable>) <replaceable>Statement</replaceable></programlisting>Here
         <replaceable>Type</replaceable> is the result type of the function and
-        this should be equal to the type of the result of Statement (using the
-        return statement, see <xref linkend="section.return" />). Each
+        this should be equal to the type of the result of
+        <replaceable>Statement</replaceable> (using the return statement, see
+        <xref linkend="section.return" />). Each
         <replaceable>Type</replaceable><subscript><replaceable>i</replaceable></subscript>
         <replaceable>Var</replaceable><replaceable><subscript>i</subscript></replaceable>
         represents a typed formal parameter of the function. The formal
@@ -4006,7 +4257,7 @@ Declaration</replaceable><subscript>1</subscript>;
 <prompt>rascal&gt;</prompt><literal> </literal><userinput><literal>invert2({&lt;"mon", 1&gt;, &lt;"tue", 2&gt;})</literal>;</userinput>
 <computeroutput>rel[int,str] : {&lt;1, "mon"&gt;, &lt;2, "tue"&gt;}</computeroutput></screen>Here
           we declare a function that can be used to swap the elements of pairs
-          of arbitrary types:<screen><prompt>rascal&gt;</prompt> <userinput>&lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) { return &lt;B, A&gt;;;}</userinput>
+          of arbitrary types:<screen><prompt>rascal&gt;</prompt> <userinput>tuple[&amp;T2, &amp;T1] swap(&amp;T1 A, &amp;T2 B) { return &lt;B, A&gt;;;}</userinput>
 <computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput><literal>swap(&lt;1, 2&gt;)</literal>;</userinput>
@@ -4020,7 +4271,7 @@ Declaration</replaceable><subscript>1</subscript>;
       <section xml:id="section.variable">
         <title>Variable Declaration</title>
 
-        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar = <replaceable>Exp</replaceable></programlisting>where
+        <para>A variable declaration has the form<programlisting><replaceable>Type</replaceable> <replaceable>Var</replaceable> = <replaceable>Exp</replaceable></programlisting>where
         <replaceable>Type</replaceable> is a type,
         <replaceable>Var</replaceable> is a variable name, and
         <replaceable>Exp</replaceable> is an expression that should have type
@@ -4038,25 +4289,27 @@ Declaration</replaceable><subscript>1</subscript>;
 
           <listitem>
             <para>The type of <replaceable>Exp</replaceable> should be
-            compatible with <replaceable>Type</replaceable>.</para>
+            compatible with <replaceable>Type</replaceable>, i.e., it should
+            be a subtype of <replaceable>Type</replaceable>.</para>
           </listitem>
         </itemizedlist>
 
         <para>As a convenience, also declarations without an initialization
         expression are permitted inside functions (but not at the module
-        level) and have the form <programlisting><replaceable>T</replaceable>ype <replaceable>V</replaceable>ar </programlisting>and
+        level) and have the form <programlisting><replaceable>Type</replaceable> <replaceable>Var</replaceable> </programlisting>and
         only introduce the variable <replaceable>Var</replaceable>. When a
-        variable is declared, it has as scope the nearest enclosing block (see
-        <xref linkend="section.block" />).</para>
+        variable is declared, it has as scope the nearest enclosing block, see
+        <xref linkend="section.block" />.</para>
 
         <para>Rascal provides <emphasis>local type inference</emphasis>, which
-        allows the implicit declaration for variables that are used locally in
+        allows the implicit declaration of variables that are used locally in
         functions. The following rules apply:</para>
 
         <itemizedlist>
           <listitem>
             <para>An implicitly declared variable is declared at the level of
-            the function body.</para>
+            the current scope, this may the whole function body or a block
+            nested in it.</para>
           </listitem>
 
           <listitem>
@@ -4092,11 +4345,10 @@ Declaration</replaceable><subscript>1</subscript>;
         <title>Declaration Tag</title>
 
         <para><warning>
-            <para>Tags are not yet implemented.</para>
+            <para>Tags declarations are not yet implemented.</para>
           </warning><warning>
             <para>The syntax of tags has to be aligned with the syntax of
-            annotations. This is done in the examples below but not yet in the
-            syntax.</para>
+            annotations.</para>
           </warning>Tags are intended to add meta data to a Rascal program and
         allow to influence the execution of the Rascal program, for instance,
         by adding memoization hints or database mappings for relations.</para>
@@ -4111,17 +4363,16 @@ Declaration</replaceable><subscript>1</subscript>;
         <literal>@<replaceable>Name</replaceable>{ ... }</literal>, with
         arbitrary text between the brackets that is further constrained by the
         declared type. Here is an example of a license tag:<programlisting>tag str license on module;</programlisting>This
-        will allow to write things like:<programlisting>module Booleans
-@license{This module is distributed under the GPL}
+        will allow to write things like:<programlisting>@license{This module is distributed under the BSD license}
+module Booleans
 ...</programlisting>Other examples of declaration tags are:<programlisting>tag str todo on all             %% todo note for all types
 tag void deprecated on function %% marks a deprecated function
 tag int memo on function        %% bounded memoization of 
                                 %% function calls
-tag str doc on all              %% documentation string
-tag str primitive on function   %% a primitive, built-in, function</programlisting>Here
+tag str doc on all              %% documentation string</programlisting>Here
         is an example of a documentation string as used in the Rascal standard
-        library:<programlisting>public &amp;T max(set[&amp;T] R)
-  @doc{Maximum of a set: max}
+        library:<programlisting>@doc{Maximum of a set: max}
+public &amp;T max(set[&amp;T] R)
 {
   &amp;T result = arb(R);
   for(&amp;T E : R){
@@ -4129,6 +4380,12 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
   }
   return result;
 }</programlisting></para>
+
+        <para>Although user-defined tags are not yet available, the following
+        tags are currently provided:<programlisting>tag str doc on function         %% documentation string
+tag str javaClass on function   %% implementation class of library function
+tag void reflective on function %% library function with access to interpreter state
+tag str javaImports on function %% imports needed by a Rascal function with Java body</programlisting></para>
       </section>
 
       <section xml:id="section.node-annotation">
@@ -4147,13 +4404,13 @@ tag str primitive on function   %% a primitive, built-in, function</programlisti
         <literal>posinfo</literal> that contains location
         information:<programlisting>anno loc EXPRESSION @ posinfo;</programlisting>or
         location information could be added for all syntax
-        trees:<programlisting>anno loc node @ posinfo;</programlisting></para>
+        trees:<programlisting>anno loc Tree @ posinfo;</programlisting></para>
 
         <para>We can add to the graph datatype introduced earlier, the
         annotation with name <literal>LayoutStrategy</literal> that defines
         which graph layout algorithm to apply to a particular graph,
-        e.g.,<programlisting>data LayoutStrategy = "dot" | "tree" | "force" | 
-                      "hierarchy" | "fisheye";
+        e.g.,<programlisting>data LayoutStrategy = dot() | tree() | force() | 
+                      hierarchy() | fisheye();
 
 anno LayoutStrategy Graph @ strategy;</programlisting></para>
 
@@ -4172,10 +4429,11 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
           <listitem>
             <para><literal><replaceable>Val1</replaceable>[@<replaceable>Anno</replaceable>
             = <replaceable>Val2]</replaceable></literal>: is an expression
-            that set the value of annotation <replaceable>Anno</replaceable>
+            that sets the value of annotation <replaceable>Anno</replaceable>
             of the value
             <replaceable>Val</replaceable><replaceable>1</replaceable> to
-            <replaceable>Val2</replaceable> and return <remark>XXX</remark> as
+            <replaceable>Val2</replaceable> and returns
+            <replaceable>Val1</replaceable> with the new annotation value as
             result.</para>
           </listitem>
 
@@ -4200,8 +4458,8 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
         controlled.</para>
 
         <para>Rewrite rules, on the other hand, operate only on nodes and
-        defined datatypes, they are implicitly applied when a new value (we
-        refer to this as the <emphasis>subject value</emphasis>) is
+        user-defined datatypes, they are implicitly applied when a new value
+        (we refer to this as the <emphasis>subject value</emphasis>) is
         constructed. The scope of rewrite rules is the whole Rascal program.
         Rewrite rules are applied to the subject value in a bottom-up fashion.
         As a result, the subject value may be changed. This process is
@@ -4214,9 +4472,9 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
 
         <para>where <replaceable>Name</replaceable> is the name of the rule
         and <replaceable>PatternWithAction</replaceable> is the body of the
-        rule consisting of a pattern and an associated action (see <xref
+        rule consisting of a pattern and an associated action, see <xref
         linkend="section.pattern-with-action" /> for a detailed
-        description).</para>
+        description.</para>
 
         <para>Here is an example for a user-defined type Booleans:<screen><prompt>rascal&gt;</prompt>
 <userinput>data Bool = btrue;
@@ -4248,7 +4506,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           <listitem>
             <para>When the right-hand side is a statement, an
             <literal>insert</literal> statement determines the value of the
-            actual replacement.</para>
+            actual replacement. The insert statement is explained in <xref
+            linkend="section.visit" />.</para>
           </listitem>
         </itemizedlist>
       </section>
