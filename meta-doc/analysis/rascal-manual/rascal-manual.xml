@@ -4000,7 +4000,7 @@ alias Frequency = int;</programlisting>
         definition.</para>
       </section>
 
-      <section>
+      <section xml:id="section.reified-types">
         <title>Reified Types</title>
 
         <para>Usually one declares functions that have arguments that have a
@@ -7304,11 +7304,8 @@ ok
       </listitem>
 
       <listitem>
-        <para>ParseTree</para>
-      </listitem>
-
-      <listitem>
-        <para>PriorityQueu</para>
+        <para>PriorityQueu: functions on priority queues, see <xref
+        linkend="section.lib-PriorityQueue" />.</para>
       </listitem>
 
       <listitem>
@@ -7339,6 +7336,11 @@ ok
       <listitem>
         <para>String: operators and functions on strings, see <xref
         linkend="section.lib-String" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>Tree: functions on parse trees, see <xref
+        linkend="section.lib-Tree" />.</para>
       </listitem>
 
       <listitem>
@@ -8011,7 +8013,8 @@ public alias realSeriesMultipleData =
    | horizontal()   
    | noSectionLabels() 
    | rangeLabel(str txt)
-   | ring()       
+   | ring()     
+   | scatter()  
    | stacked()               
    | subtitle(str txt)
    | vertical()
@@ -8099,6 +8102,14 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
+                <entry><literal>scatter()</literal></entry>
+
+                <entry>xyChart</entry>
+
+                <entry>Draw xyChart as a scatter plot</entry>
+              </row>
+
+              <row>
                 <entry>stacked()</entry>
 
                 <entry>barChart</entry>
@@ -8130,8 +8141,8 @@ public alias realSeriesMultipleData =
     <section xml:id="section.lib-Exception">
       <title>Exception</title>
 
-      <para>The following "soft" exceptions that can be caught by the Rascal
-      program are defined:<programlisting>ddata RuntimeException = 
+      <para>The following "soft" exceptions can be caught by the Rascal
+      program:<programlisting>ddata RuntimeException = 
       EmptyList()
     | EmptyMap() 
     | EmptySet()
@@ -9888,12 +9899,18 @@ BindingRel unmatchedBindings;
             </tbody>
           </tgroup>
         </table></para>
+    </section>
+
+    <section xml:id="section.lib-PriorityQueue">
+      <title>PriorityQueue</title>
 
       <para></para>
     </section>
 
     <section xml:id="section.lib-Real">
       <title>Real</title>
+
+      <para>Rascal real are unbounded in size and precision.</para>
 
       <table>
         <title>Real Operators</title>
@@ -10078,10 +10095,21 @@ BindingRel unmatchedBindings;
             </row>
 
             <row>
+              <entry><literal>real min(real n, real m)</literal></entry>
+
+              <entry>Smallest of two reals</entry>
+            </row>
+
+            <row>
               <entry><literal>int toInt(real d)</literal></entry>
 
-              <entry>Convert a real to integer.
-              <remark>Explain</remark></entry>
+              <entry>Converts this real (implemented as BigDecimal) to an
+              integer (implemented as BigInteger). This conversion is
+              analogous to a narrowing primitive conversion from double to
+              long as defined in the Java Language Specification: any
+              fractional part of this BigDecimal will be discarded. Note that
+              this conversion can lose information about the precision of the
+              BigDecimal value. </entry>
             </row>
 
             <row>
@@ -10322,11 +10350,9 @@ BindingRel unmatchedBindings;
               </row>
 
               <row>
-                <entry><literal>rel[&amp;T2, &amp;T1, &amp;T0] invert
-                (rel[&amp;T0, &amp;T1, &amp;T2] R)</literal></entry>
+                <entry>set[&amp;T1] range (rel[&amp;T0,&amp;T1] R)</entry>
 
-                <entry>All but the first element of each tuple in binary
-                relation</entry>
+                <entry>The range of a binary relation</entry>
               </row>
 
               <row>
@@ -10335,6 +10361,14 @@ BindingRel unmatchedBindings;
 
                 <entry>Restriction of a binary relation to tuples with second
                 element in set S</entry>
+              </row>
+
+              <row>
+                <entry><literal>rel[&amp;T0,&amp;T1] rangeX
+                (rel[&amp;T0,&amp;T1] R, set[&amp;T2] S)</literal></entry>
+
+                <entry>Restriction of a binary relation to tuples with second
+                element not in set S</entry>
               </row>
             </tbody>
           </tgroup>
@@ -10386,6 +10420,10 @@ BindingRel unmatchedBindings;
 
     <section xml:id="section.lib-RSF">
       <title>RSF</title>
+
+      <para>Rigi Standard Format (RSF) is a textual format to represent binary
+      relations and is used to exchange relaional facts between different
+      tools. The following functions allows reading in RSF data.</para>
 
       <table>
         <title>RSF Functions</title>
@@ -10477,8 +10515,6 @@ BindingRel unmatchedBindings;
 
     <section xml:id="section.lib-Set">
       <title>Set</title>
-
-      <para></para>
 
       <table xml:id="table.set-operators">
         <title>Set Operators</title>
@@ -10707,14 +10743,6 @@ BindingRel unmatchedBindings;
 
           <tbody>
             <row>
-              <entry><literal>&amp;T average(set[&amp;T] st, &amp;T
-              zero)</literal></entry>
-
-              <entry>Average of the elements of a set. <remark>Where is the
-              comparison function?</remark></entry>
-            </row>
-
-            <row>
               <entry><literal>&amp;T getOneFrom(set[&amp;T] st) throws
               emptySet</literal></entry>
 
@@ -10789,8 +10817,8 @@ BindingRel unmatchedBindings;
             </row>
 
             <row>
-              <entry>map[&amp;A,set[&amp;B]] toMap(rel[&amp;A, &amp;B]
-              st)</entry>
+              <entry><literal>map[&amp;A,set[&amp;B]] toMap(rel[&amp;A,
+              &amp;B] st)</literal></entry>
 
               <entry>Convert a set of tuples to a map in which the first
               element of each tuple is associated with the set of second
@@ -11012,6 +11040,30 @@ BindingRel unmatchedBindings;
               </row>
 
               <row>
+                <entry><literal>str replaceAll(str input, str find, str
+                replacement)</literal></entry>
+
+                <entry>Replace all occurences of (regex) find in input by
+                replacement</entry>
+              </row>
+
+              <row>
+                <entry><literal>str replaceFirst(str input, str find, str
+                replacement) </literal></entry>
+
+                <entry>Replace the first occurence of (regex) find in input by
+                replacement</entry>
+              </row>
+
+              <row>
+                <entry><literal>str replaceLast(str input, str find, str
+                replacement)</literal></entry>
+
+                <entry>Replace the last occurence of (regex) find in input by
+                replacement</entry>
+              </row>
+
+              <row>
                 <entry><literal>str right(str s, int n)</literal></entry>
 
                 <entry>Right align s in string of length n using
@@ -11070,6 +11122,75 @@ BindingRel unmatchedBindings;
             </tbody>
           </tgroup>
         </table></para>
+    </section>
+
+    <section xml:id="section.lib-Tree">
+      <title>Tree</title>
+
+      <para>Tree is the universal parse tree data type and can be used to
+      parse text in any language. We do not give its full declaration here
+      since internal details are never needed by Rascal users. The following
+      is noteworthy:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>Tree</literal> is a subtype of the type node.</para>
+        </listitem>
+
+        <listitem>
+          <para>All parse trees for a specific language are a subtype of
+          <literal>Tree</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Trees are annotated with location annotations defined as
+          follows: <programlisting>anno loc Tree@\loc;</programlisting><note>
+              <para>For historical reasons the name of the annotation is "loc"
+              and this interferes with the Rascal keyword
+              <keysym>loc</keysym>. Therefore the annotation name has to be
+              escaped as <literal>\loc</literal> when it is declared or
+              used.</para>
+            </note></para>
+        </listitem>
+      </itemizedlist>
+
+      <para><table>
+          <title>Tree Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="3*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>&amp;T&lt;:Tree java
+                parse(type[&amp;T&lt;:Tree] start, loc
+                input);</literal></entry>
+
+                <entry>Parse the contents of a resource pointed to by the
+                input parameter and return a parse tree</entry>
+              </row>
+
+              <row>
+                <entry><literal>&amp;T&lt;:Tree java
+                parse(type[&amp;T&lt;:Tree] start, str
+                input)</literal></entry>
+
+                <entry>Parse a string and return a parse tree.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>These declarations use type reification as explained in <xref
+      linkend="section.reified-types" />.</para>
     </section>
 
     <section xml:id="section.lib-Tuple">
@@ -11210,8 +11331,9 @@ BindingRel unmatchedBindings;
     <section xml:id="section.lib-UnitTest">
       <title>UnitTest</title>
 
-      <para>We provided a very rudimentary library for unit testing that will
-      certainly evolve over time:</para>
+      <para>We provided a rudimentary library for unit testing that is
+      currently used. This will soon be replaced by the use of test statements
+      and test suites, see <xref linkend="section.test" />.</para>
 
       <table>
         <title>UnitTest Functions</title>
@@ -11302,7 +11424,9 @@ BindingRel unmatchedBindings;
                 <literal>&lt;=</literal>
                 <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
-                <entry><remark>Explain</remark></entry>
+                <entry><replaceable>Value</replaceable><subscript>1</subscript>
+                is less than or equal to
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
@@ -11310,7 +11434,9 @@ BindingRel unmatchedBindings;
                 <literal>&lt;</literal>
                 <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
-                <entry></entry>
+                <entry><replaceable>Value</replaceable><subscript>1</subscript>
+                is less than
+                <replaceable>Value</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
@@ -11318,7 +11444,9 @@ BindingRel unmatchedBindings;
                 <literal>&gt;=</literal>
                 <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
-                <entry></entry>
+                <entry><replaceable>Value</replaceable><subscript>2</subscript>
+                is less than or equal to
+                <replaceable>Value</replaceable><subscript>1</subscript></entry>
               </row>
 
               <row>
@@ -11326,7 +11454,9 @@ BindingRel unmatchedBindings;
                 <literal>&gt;</literal>
                 <replaceable>Value</replaceable><subscript>2</subscript></entry>
 
-                <entry></entry>
+                <entry><replaceable>Value</replaceable><subscript>2</subscript>
+                is less than
+                <replaceable>Value</replaceable><subscript>1</subscript></entry>
               </row>
 
               <row>
@@ -11341,7 +11471,21 @@ BindingRel unmatchedBindings;
               </row>
             </tbody>
           </tgroup>
-        </table></para>
+        </table>By brute force, a total less than operator between two values
+      V1 and V2 of arbitrary types T1 and T2 is defined:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>If the types T1 and T2 can be compared then V1 less than V2 is
+          used.</para>
+        </listitem>
+
+        <listitem>
+          <para>Otherwise values are ordered according their type name, i.e.,
+          <keysym>int</keysym> is smaller than <keysym>list</keysym>, and
+          <keysym>map</keysym> is smaller than <keysym>rel</keysym>.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section xml:id="section.lib-ValueIO">
@@ -11365,31 +11509,54 @@ BindingRel unmatchedBindings;
 
             <tbody>
               <row>
-                <entry><literal>value readValueFromBinaryFile(str namePBFFile)
-                throws IO(str msg)</literal></entry>
+                <entry><literal>value readValueFile(loc file) throws IO(str
+                msg)</literal></entry>
 
                 <entry>Read a value from a binary file in PBF format</entry>
               </row>
 
               <row>
-                <entry><literal>value readValueFromTextFile(str namePBFFile)
-                throws IO(str msg)</literal></entry>
+                <entry><literal>&amp;T readBinaryValueFile(type[&amp;T]
+                result, loc file) throws IO(str msg)</literal></entry>
+
+                <entry>Read a typed value from a binary file.</entry>
+              </row>
+
+              <row>
+                <entry><literal>value readBinaryValueFile(loc file) throws
+                IO(str msg)</literal></entry>
+
+                <entry>Read a value from a binary file.</entry>
+              </row>
+
+              <row>
+                <entry><literal>&amp;T readTextValueFile(type[&amp;T] result,
+                loc file) throws IO(str msg)</literal></entry>
+
+                <entry>Read a typed value from a text file</entry>
+              </row>
+
+              <row>
+                <entry><literal>value readTextValueFile(loc file) throws
+                IO(str msg)</literal></entry>
 
                 <entry>Read a value from a text file</entry>
               </row>
 
               <row>
-                <entry><literal>void writeValueToBinaryFile(str namePBFFile,
-                value val) throws IO(str msg)</literal></entry>
+                <entry><literal>void writeBinaryValueFile(loc file, value
+                val)</literal></entry>
 
-                <entry>Write a value to a binary file in PBF format</entry>
+                <entry>Write a value to a file using an efficient binary file
+                format (PBF)</entry>
               </row>
 
               <row>
-                <entry><literal>void writeValueToTextFile(str namePBFFile,
-                value val) throws IO(str msg)</literal></entry>
+                <entry><literal>void writeTextValueFile(loc file, value
+                val)</literal></entry>
 
-                <entry>Write a value to a binary file in PBF format</entry>
+                <entry>Write a value to a file using a textual file
+                format</entry>
               </row>
             </tbody>
           </tgroup>
