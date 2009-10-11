@@ -617,7 +617,7 @@
       one solution, local backtracking over the alternatives of a match is
       provided. Patterns can thus also be used in enumerators and control
       structures like <keysym>for</keysym> and <keysym>while</keysym>
-      statement. </para>
+      statement.</para>
 
       <para>A very rich pattern language is provided that includes string
       matching based on regular expressions, matching of abstract patterns,
@@ -4382,9 +4382,12 @@ public &amp;T max(set[&amp;T] R)
 
         <para>Although user-defined tags are not yet available, the following
         tags are currently provided:<programlisting>tag str doc on function         %% documentation string
-tag str javaClass on function   %% implementation class of library function
-tag void reflective on function %% library function with access to interpreter state
-tag str javaImports on function %% imports needed by a Rascal function with Java body
+tag str javaClass on function   %% implementation class of library 
+                                %% function
+tag void reflective on function %% library function with access to 
+                                %% interpreter state
+tag str javaImports on function %% imports needed by a Rascal 
+                                %% function with Java body
 tag str deprecated on function  %% deprecated function</programlisting></para>
       </section>
 
@@ -6382,7 +6385,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
       </section>
 
       <section xml:id="section.visit">
-        <title>Visit expression</title>
+        <title>Visit Expression</title>
 
         <para>Visiting the nodes in a tree is a very common task in the EASY
         domain. In many cases (but certainly not all) the tree is a syntax
@@ -6549,7 +6552,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <para><programlisting><keysym>one</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal></programlisting>The
         <keysym>one</keysym> expression yields true when one combination of
         values of <replaceable>Exp</replaceable><subscript>i</subscript> is
-        true. </para>
+        true.</para>
       </section>
 
       <section xml:id="section.all">
@@ -6557,8 +6560,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
         <para><programlisting><keysym>all</keysym> <literal>(</literal> <literal><replaceable>Exp</replaceable><subscript>1</subscript> , <replaceable>Exp</replaceable><subscript>2</subscript> ,</literal> ... <literal>, <replaceable>Exp</replaceable><subscript>n</subscript></literal><literal> )</literal> </programlisting>The
         all expression yields true when all combinations of values of
-        <replaceable>Exp</replaceable><subscript>i</subscript> are true.
-        </para>
+        <replaceable>Exp</replaceable><subscript>i</subscript> are
+        true.</para>
       </section>
 
       <section xml:id="section.statement-as-expression">
@@ -6895,7 +6898,7 @@ default: ...
         <replaceable>Statement</replaceable> is executed when the test is
         true. Execution ends the first time that the test yields false. The
         test <replaceable>Bool</replaceable> is executed from scratch in each
-        repetition and only the first true value (if any) is used. </para>
+        repetition and only the first true value (if any) is used.</para>
 
         <para>By default, the value of a while statement is the empty list. In
         general, the value of a while statement consists of all values
@@ -7796,14 +7799,18 @@ public alias intSeries  =
 public alias realSeries = 
        tuple[str name,list[real] values];
 
-// Some charts need multiple values instead of a single one and include
-// a category name for each subseries.
+// Some charts need multiple values instead of a single one and
+// include a category name for each subseries.
 
 public alias intSeriesMultipleData  = 
-       tuple[str name,list[tuple[str category, list[int] values]] allvalues];
+       tuple[str name,
+             list[tuple[str category, 
+                        list[int] values]] allvalues];
        
 public alias realSeriesMultipleData = 
-       tuple[str name,list[tuple[str category, list[real] values2]] allvalues];
+       tuple[str name,
+             list[tuple[str category, 
+                        list[real] values2]] allvalues];
 </programlisting></para>
 
       <para>All chart drawing functions take as arguments:</para>
@@ -9910,7 +9917,7 @@ BindingRel unmatchedBindings;
     <section xml:id="section.lib-Real">
       <title>Real</title>
 
-      <para>Rascal real are unbounded in size and precision.</para>
+      <para>Rascal reals are unbounded in size and precision.</para>
 
       <table>
         <title>Real Operators</title>
@@ -10109,7 +10116,7 @@ BindingRel unmatchedBindings;
               long as defined in the Java Language Specification: any
               fractional part of this BigDecimal will be discarded. Note that
               this conversion can lose information about the precision of the
-              BigDecimal value. </entry>
+              BigDecimal value.</entry>
             </row>
 
             <row>
@@ -11644,21 +11651,27 @@ BindingRel unmatchedBindings;
 Shell commands:
 :help                      Prints this message
 :quit or EOF               Quits the shell
-:list                      Lists all visible rules, functions and variables
+:list                      Lists all visible rules, functions and 
+                           variables
 :set &lt;option&gt; &lt;expression&gt; Sets an option
 :edit &lt;modulename&gt;         Opens an editor for that module
 :modules                   Lists all imported modules
 :test                      Runs all unit tests currently loaded
 :unimport &lt;modulename&gt;     Undo an import
-:undeclare &lt;name&gt;          Undeclares a variable or function introduced in the shell
+:undeclare &lt;name&gt;          Undeclares a variable or function 
+                           introduced in the shell
 :history                   Print the command history
 
 Example rascal statements and declarations:
-1 + 1;                     Expressions simply print their output and (static) type
-int a;                     Declarations allocate a name in the current scope
-a = 1;                     Assignments store a value in a (optionally previously declared) variable
+1 + 1;                     Expressions simply print their output 
+                           and (static) type
+int a;                     Declarations allocate a name in the 
+                           current scope
+a = 1;                     Assignments store a value in a 
+                           (optionally previously declared) variable
 int a = 1;                 Declaration with initialization
-import IO;                 Importing a module makes its public members available
+import IO;                 Importing a module makes its public 
+                           members available
 println("Hello World")     Function calling
 
 Please read the manual for further information
