@@ -4384,7 +4384,8 @@ public &amp;T max(set[&amp;T] R)
         tags are currently provided:<programlisting>tag str doc on function         %% documentation string
 tag str javaClass on function   %% implementation class of library function
 tag void reflective on function %% library function with access to interpreter state
-tag str javaImports on function %% imports needed by a Rascal function with Java body</programlisting></para>
+tag str javaImports on function %% imports needed by a Rascal function with Java body
+tag str deprecated on function  %% deprecated function</programlisting></para>
       </section>
 
       <section xml:id="section.node-annotation">
@@ -7232,8 +7233,8 @@ ok
 
     <itemizedlist>
       <listitem>
-        <para>ATermIO: read and writing data in the ATerm format, see <xref
-        linkend="section.lib-ATermIO" />.</para>
+        <para>ATermIO: reading and writing values in the ATerm format, see
+        <xref linkend="section.lib-ATermIO" />.</para>
       </listitem>
 
       <listitem>
@@ -7481,13 +7482,64 @@ ok
     <section xml:id="section.lib-ATermIO">
       <title>ATermIO</title>
 
-      <para></para>
+      <para>ATerms are a general data format for exchanging tree structured
+      data between programs. ATerms are language and computer architecture
+      neutral and can thus be used to exchange data between programs that are
+      written in different programming languages and that run on different,
+      incompatible, computers. ATerms are extensively used in the ToolBus, the
+      ASF+SDF Meta-Environment, Stratego, TOM, and other systems. The ATermIO
+      library provides functions to convert a Rascal value to an ATerm and to
+      write that ATerm to a text file and also to read an ATerm from a text
+      file and to convert that ATerm to a Rascal value.<table>
+          <title>ATermIO Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="2*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>public &amp;T readTextATermFile(type[&amp;T]
+                start, loc location)</literal></entry>
+
+                <entry>Read a value in ATerm format from a text file and
+                convert it to a specific type</entry>
+              </row>
+
+              <row>
+                <entry><literal>public value readTextATermFile(loc
+                location)</literal></entry>
+
+                <entry>Read a value in ATerm format from a text file</entry>
+              </row>
+
+              <row>
+                <entry><literal>public void java writeTextATermFile(loc
+                location, value v)</literal></entry>
+
+                <entry>Convert a value to ATerm format and write it to a text
+                file</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
     </section>
 
     <section xml:id="section.lib-Benchmark">
       <title xml:id="x">Benchmark</title>
 
-      <para></para>
+      <para>Benchmark provides a rudimentary benchmarking framework.<warning>
+          <para>Check benchmark function</para>
+        </warning></para>
 
       <table>
         <title>Benchmark Functions</title>
@@ -7514,7 +7566,7 @@ ok
             </row>
 
             <row>
-              <entry>p.m. benchmark</entry>
+              <entry>public void benchmark(map[str, void()] Cases)</entry>
 
               <entry>Measure and report the execution time of
               name:void-closure pairs.</entry>
@@ -7727,9 +7779,12 @@ ok
     <section xml:id="section.lib-Chart">
       <title>Chart</title>
 
-      <para>These functions provide chart drawing facilities and are based on
-      JFreeChart. Different charts need their input data in different formats
-      that can be summarized as follows:</para>
+      <para><warning>
+          <para>A copy of the chart functions also exists in the View module
+          for use in Eclipse. Unify this.</para>
+        </warning>These functions provide chart drawing facilities and are
+      based on JFreeChart. Different charts need their input data in different
+      formats that can be summarized as follows:</para>
 
       <para><programlisting>// A named series of int or real values
 
@@ -8075,26 +8130,30 @@ public alias realSeriesMultipleData =
     <section xml:id="section.lib-Exception">
       <title>Exception</title>
 
-      <para>The following "soft" exceptions are defined:<programlisting>data RuntimeException = 
-      EmptyList
-    | EmptyMap 
-    | EmptySet
+      <para>The following "soft" exceptions that can be caught by the Rascal
+      program are defined:<programlisting>ddata RuntimeException = 
+      EmptyList()
+    | EmptyMap() 
+    | EmptySet()
     | IndexOutOfBounds(int index)
-    | AssertionFailed 
+    | AssertionFailed() 
     | AssertionFailed(str label)
     | NoSuchElement(value v)
     | IllegalArgument(value v)
-    | IllegalArgument
+    | IllegalArgument()
     | IO(str message)
-    | FileNotFound(str filename)
-    | LocationNotFound(loc location)
-    | PermissionDenied
+    | PathNotFound(loc l)
+    | SchemeNotSupported(loc l)
+    | HostNotFound(loc l)
+    | AccessDenied(loc l)
+    | PermissionDenied()
     | PermissionDenied(str message)
     | ModuleNotFound(str name)
     | NoSuchKey(value key)
     | NoSuchAnnotation(str label)
     | Java(str message)
     | ParseError(loc location)
+    | IllegalIdentifier(str name)
     ;</programlisting></para>
     </section>
 
@@ -8447,10 +8506,52 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
+                <entry>bool print(value V...)</entry>
+
+                <entry>Print a list of values on the output stream and return
+                true (used for debugging).</entry>
+              </row>
+
+              <row>
+                <entry><literal>void rawPrintln(value V...)</literal></entry>
+
+                <entry>Print a list of values on the output stream, but do not
+                convert parse trees or remove quotes from strings (used for
+                debugging)</entry>
+              </row>
+
+              <row>
                 <entry><literal>list[str] readFile(str filename) throws
                 NoSuchFileError(str msg), IO(str msg)</literal></entry>
 
                 <entry>Read a named file as list of strings</entry>
+              </row>
+
+              <row>
+                <entry><literal>str readFile(loc file) throws
+                UnsupportedScheme(loc file), PathNotFound(loc file),
+                IOError(str msg)</literal></entry>
+
+                <entry>Read the contents of a file location as single
+                string</entry>
+              </row>
+
+              <row>
+                <entry><literal>list[str] readFileLines(loc file) throws
+                UnsupportedScheme(loc file), PathNotFound(loc file),
+                IOError(str msg)</literal></entry>
+
+                <entry>Read the contents of a file location as a list of
+                lines</entry>
+              </row>
+
+              <row>
+                <entry><literal>void writeFile(loc file, value V...) throws
+                UnsupportedScheme(loc file), PathNotFound(loc file),
+                IOError(str msg)</literal></entry>
+
+                <entry>Write a textual representation of some values to a
+                file</entry>
               </row>
             </tbody>
           </tgroup>
@@ -8848,7 +8949,7 @@ BindingRel unmatchedBindings;
       </table>
 
       <para><warning>
-          <para>shortestPath not yet implemented for lgraph.</para>
+          <para>shortestPathPair not yet implemented for lgraph.</para>
         </warning></para>
     </section>
 
@@ -9108,7 +9209,7 @@ BindingRel unmatchedBindings;
                 (&amp;T, &amp;T) fn, &amp;T unit)</literal></entry>
 
                 <entry>Apply function <literal>fn</literal> to successive
-                elements of a list</entry>
+                elements of a list, with given unit element.</entry>
               </row>
 
               <row>
@@ -9163,20 +9264,23 @@ BindingRel unmatchedBindings;
               </row>
 
               <row>
-                <entry><literal>map[&amp;A,&amp;B] toMap(list[tuple[&amp;A,
-                &amp;B]] lst) throws DuplicateKey</literal></entry>
-
-                <entry>Convert a list of tuples to a map; result must be a
-                map</entry>
-              </row>
-
-              <row>
-                <entry>map[&amp;A,set[&amp;B]] toMap(list[tuple[&amp;A,
-                &amp;B]] lst)</entry>
+                <entry><literal>map[&amp;A,set[&amp;B]]
+                toMap(list[tuple[&amp;A, &amp;B]] lst) throws
+                DuplicateKey</literal></entry>
 
                 <entry>Convert a list of tuples to a map in which the first
                 element of each tuple is associated with the set of second
-                elements from all tuples with the same first element</entry>
+                elements from all tuples with the same first element Keys
+                should be unique.</entry>
+              </row>
+
+              <row>
+                <entry><literal>map[&amp;A,&amp;B]
+                toMapUnique(list[tuple[&amp;A, &amp;B]] lst) throws
+                DuplicateKey</literal></entry>
+
+                <entry>Convert a list of tuples to a map; result must be a
+                map</entry>
               </row>
 
               <row>
@@ -9297,7 +9401,7 @@ BindingRel unmatchedBindings;
 
       <itemizedlist>
         <listitem>
-          <para><literal>url</literal></para>
+          <para><literal>uri</literal></para>
         </listitem>
 
         <listitem>
@@ -9309,13 +9413,13 @@ BindingRel unmatchedBindings;
         </listitem>
 
         <listitem>
-          <para><literal>beginLine</literal>,
-          <literal>beginColumn</literal></para>
+          <para><literal>begin.line</literal>,
+          <literal>begin.olumn</literal></para>
         </listitem>
 
         <listitem>
-          <para><literal>endLine</literal>,
-          <literal>endColumn</literal>.</para>
+          <para><literal>end.line</literal>,
+          <literal>end.column</literal>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -9496,18 +9600,24 @@ BindingRel unmatchedBindings;
               </row>
 
               <row>
+                <entry><literal>map[&amp;K, &amp;V] domainR(map[&amp;K,
+                &amp;V] M, set[&amp;K] S)</literal></entry>
+
+                <entry>Restrict the map to elements with keys in S</entry>
+              </row>
+
+              <row>
+                <entry><literal>map[&amp;K, &amp;V] domainX(map[&amp;K,
+                &amp;V] M, set[&amp;K] S)</literal></entry>
+
+                <entry>Restrict the map to elements with keys not in S</entry>
+              </row>
+
+              <row>
                 <entry><literal>&amp;K getOneFrom(map[&amp;K, &amp;V] M)
                 throws emptyMap</literal></entry>
 
                 <entry>Arbitrary key of a map</entry>
-              </row>
-
-              <row>
-                <entry><literal>map[&amp;V, &amp;K] invertUnique(map[&amp;K,
-                &amp;V] M) throws MultipleKey</literal></entry>
-
-                <entry>Map with key and value inverted; result should be a
-                map</entry>
               </row>
 
               <row>
@@ -9516,6 +9626,14 @@ BindingRel unmatchedBindings;
 
                 <entry>Inverted map in which each value in the old map is
                 associated with a set of key values from the old map</entry>
+              </row>
+
+              <row>
+                <entry><literal>map[&amp;V, &amp;K] invertUnique(map[&amp;K,
+                &amp;V] M) throws MultipleKey</literal></entry>
+
+                <entry>Map with key and value inverted; result should be a
+                map</entry>
               </row>
 
               <row>
@@ -9538,6 +9656,21 @@ BindingRel unmatchedBindings;
                 M)</literal></entry>
 
                 <entry>The range (values) of a map</entry>
+              </row>
+
+              <row>
+                <entry><literal>map[&amp;K, &amp;V] rangeR(map[&amp;K, &amp;V]
+                M, set[&amp;V] S)</literal></entry>
+
+                <entry>Restrict the map to elements with value in S</entry>
+              </row>
+
+              <row>
+                <entry><literal>map[&amp;K, &amp;V] rangeX(map[&amp;K, &amp;V]
+                M, set[&amp;V] S)</literal></entry>
+
+                <entry>Restrict the map to elements with value not in
+                S</entry>
               </row>
 
               <row>
@@ -9615,7 +9748,9 @@ BindingRel unmatchedBindings;
                 <literal>&lt;=</literal>
                 <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
-                <entry><remark>Explain</remark></entry>
+                <entry><replaceable>Node</replaceable><subscript>1</subscript>
+                is less than or equal to
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
@@ -9623,7 +9758,9 @@ BindingRel unmatchedBindings;
                 <literal>&lt;</literal>
                 <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
-                <entry></entry>
+                <entry><replaceable>Node</replaceable><subscript>1</subscript>
+                is less than
+                <replaceable>Node</replaceable><subscript>2</subscript></entry>
               </row>
 
               <row>
@@ -9631,7 +9768,9 @@ BindingRel unmatchedBindings;
                 <literal>&gt;=</literal>
                 <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
-                <entry></entry>
+                <entry><replaceable>Node</replaceable><subscript>2</subscript>
+                is less than or equal to
+                <replaceable>Node</replaceable><subscript>1</subscript></entry>
               </row>
 
               <row>
@@ -9639,7 +9778,9 @@ BindingRel unmatchedBindings;
                 <literal>&gt;</literal>
                 <replaceable>Node</replaceable><subscript>2</subscript></entry>
 
-                <entry></entry>
+                <entry><replaceable>Node</replaceable><subscript>2</subscript>
+                is less than
+                <replaceable>Node</replaceable><subscript>1</subscript></entry>
               </row>
 
               <row>
@@ -9662,7 +9803,31 @@ BindingRel unmatchedBindings;
               </row>
             </tbody>
           </tgroup>
-        </table><table>
+        </table>Comparison of nodes is defined by a lexicograpic ordering.
+      Node <replaceable>N</replaceable> =
+      <replaceable>F</replaceable>(<replaceable>N</replaceable><subscript>1</subscript>,
+      ...,
+      <replaceable>N</replaceable><replaceable><subscript>k</subscript></replaceable>)
+      is less than node <replaceable>M</replaceable> =
+      <replaceable>G</replaceable>(<replaceable>M</replaceable><subscript>1</subscript>,
+      ...,
+      <replaceable>M</replaceable><subscript><replaceable>l</replaceable></subscript>)
+      when:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><replaceable>N</replaceable> is not equal to
+          <replaceable>M</replaceable>, and</para>
+        </listitem>
+
+        <listitem>
+          <para><replaceable>F</replaceable> is lexicographically less than
+          <replaceable>G</replaceable>, or F is equal to G and <replaceable>k
+          </replaceable> &lt; <replaceable>l.</replaceable></para>
+        </listitem>
+      </itemizedlist>
+
+      <para><table>
           <title>Node Functions</title>
 
           <tgroup cols="2">
@@ -9683,6 +9848,14 @@ BindingRel unmatchedBindings;
                 <entry><literal>int arity(node T)</literal></entry>
 
                 <entry>Number of children of a node</entry>
+              </row>
+
+              <row>
+                <entry><literal>map[str,value] getAnnotations(node
+                x)</literal></entry>
+
+                <entry>Retrieve the annnotations of a node value as a
+                map</entry>
               </row>
 
               <row>
@@ -9707,14 +9880,16 @@ BindingRel unmatchedBindings;
               </row>
 
               <row>
-                <entry>node readAtermFromFile(str Name) throws IO(str
-                msg)</entry>
+                <entry><literal>&amp;T &lt;: node java setAnnotations(&amp;T
+                &lt;: node x, map[str, value] annotations)</literal></entry>
 
-                <entry><remark>under discussion</remark></entry>
+                <entry>Set a map of annotations on a value.</entry>
               </row>
             </tbody>
           </tgroup>
         </table></para>
+
+      <para></para>
     </section>
 
     <section xml:id="section.lib-Real">
