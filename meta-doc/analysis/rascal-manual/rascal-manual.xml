@@ -8653,7 +8653,7 @@ data Bound =
         ;
 </programlisting><note>
           <para>Observe how the Rascal keywords <literal>int</literal> and
-          <literal>void</literal> are used constructo symbols in the above
+          <literal>void</literal> are used to construct symbols in the above
           data definition by escaping them as <literal>\int</literal> and
           <literal>\void</literal>.</para>
         </note>The extraction functions use the following additional
@@ -9080,8 +9080,9 @@ BindingRel unmatchedBindings;
                 <literal>*</literal>
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
 
-                <entry><replaceable>List</replaceable><subscript>1</subscript>
-                multiplied by
+                <entry>List consisting of tuples with first element from
+                <replaceable>List</replaceable><subscript>1</subscript> and
+                second element from
                 <replaceable>List</replaceable><subscript>2</subscript></entry>
               </row>
 
