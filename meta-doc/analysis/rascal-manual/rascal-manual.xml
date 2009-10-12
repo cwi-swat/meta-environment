@@ -3380,8 +3380,8 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         <para>Let's apply this to some examples:<screen><prompt>rascal&gt;</prompt> <userinput>"N is &lt;if(N &lt; 10){&gt; small &lt;} else {&gt; large &lt;}&gt;";</userinput>
 <computeroutput>str: "N is large "</computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>"N is &lt;if(N &lt; 10){&gt; small (e.g., &lt;N&gt;) &lt;} else {&gt; large (e.g., &lt;N&gt;)&lt;}&gt;";</userinput>
-<computeroutput>str: "N is  large (e.g., 13)"</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>"N is &lt;if(N &lt; 10){&gt; small &lt;} else {&gt; large (&lt;N&gt;)&lt;}&gt;";</userinput>
+<computeroutput>str: "N is  large (13)"</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>"before &lt;for(x&lt;-[1..5]){&gt;a &lt;x&gt; b &lt;}&gt;after";</userinput>
 <computeroutput>str: "before a 1 b a 2 b a 3 b a 4 b a 5 b after"</computeroutput>
