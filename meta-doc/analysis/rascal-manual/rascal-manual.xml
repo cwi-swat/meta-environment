@@ -3401,7 +3401,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         <itemizedlist>
           <listitem>
             <para><replaceable>Url</replaceable> is an arbitrary Uniform
-            Resource Identifier (URI).</para>
+            Resource Identifier (URI). See for details about URIs.</para>
           </listitem>
 
           <listitem>
@@ -3424,6 +3424,17 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           </listitem>
         </itemizedlist>
 
+        <para>URI are explained in <link
+        xlink:href="http://en.wikipedia.org/wiki/Uniform_Resource_Identifier">http://en.wikipedia.org/wiki/Uniform_Resource_Identifier</link>.
+        From their original definition in RFC3986 we cite the following useful
+        overview:<programlisting>         foo://example.com:8042/over/there?name=ferret#nose
+         \_/   \______________/\_________/ \_________/ \__/
+          |           |            |            |        |
+       scheme     authority       path        query   fragment
+          |   _____________________|__
+         / \ /                        \
+         urn:example:animal:ferret:nose</programlisting></para>
+
         <para>Locations should <emphasis>always</emphasis> be generated
         automatically but for the curious here is an example: <programlisting>|file:///home/paulk/pico.trm|(0,1,&lt;2,3&gt;,&lt;4,5&gt;)</programlisting></para>
 
@@ -3433,25 +3444,76 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
         <itemizedlist>
           <listitem>
-            <para><literal>uri</literal></para>
+            <para><literal>uri</literal>: the URI of the location. Also
+            subfields of the URI can be accessed:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><literal>scheme</literal>: the scheme (or protocol) like
+                <literal>http</literal> or <literal>file</literal>. Also
+                supported is <literal>cwd:</literal> for current working
+                directory (the directory from which Rascal was
+                started).</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>authority</literal>: the domain where the data
+                are located.</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>host</literal>: the host where the URI is
+                hosted (part of auhtority).</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>port</literal>: port on host (part
+                ofauthority).</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>path</literal>: path name of file on
+                host.</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>extension</literal>: file name
+                extension.</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>query</literal>: query data</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>fragment</literal>: the fragment name following
+                the path name and query data.</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>user</literal>: user info (only present in
+                schemes like mailto).</para>
+              </listitem>
+            </itemizedlist>
           </listitem>
 
           <listitem>
-            <para><literal>offset</literal></para>
+            <para>offset: start of text area.</para>
           </listitem>
 
           <listitem>
-            <para><literal>length</literal></para>
+            <para><literal>length</literal>: length of text area</para>
           </listitem>
 
           <listitem>
             <para><literal>begin.line</literal>,
-            <literal>begin.column</literal></para>
+            <literal>begin.column</literal>: begin line and column of text
+            area.</para>
           </listitem>
 
           <listitem>
-            <para><literal>end.line</literal>,
-            <literal>end.column</literal>.</para>
+            <para><literal>end.line</literal>, <literal>end.column</literal>
+            end line and column of text area.</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -9421,25 +9483,73 @@ BindingRel unmatchedBindings;
 
       <itemizedlist>
         <listitem>
-          <para><literal>uri</literal></para>
+          <para><literal>uri</literal>: the URI of the location. Also
+          subfields of the URI can be accessed:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>scheme</literal>: the scheme (or protocol) like
+              <literal>http</literal> or <literal>file</literal>. Also
+              supported is <literal>cwd:</literal> for current working
+              directory (the directory from which Rascal was started).</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>authority</literal>: the domain where the data
+              are located.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>host</literal>: the host where the URI is hosted
+              (part of auhtority).</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>port</literal>: port on host (part
+              ofauthority).</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>path</literal>: path name of file on host.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>extension</literal>: file name extension.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>query</literal>: query data</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>fragment</literal>: the fragment name following
+              the path name and query data.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>user</literal>: user info (only present in
+              schemes like mailto).</para>
+            </listitem>
+          </itemizedlist>
         </listitem>
 
         <listitem>
-          <para><literal>offset</literal></para>
+          <para>offset: start of text area.</para>
         </listitem>
 
         <listitem>
-          <para><literal>length</literal></para>
+          <para><literal>length</literal>: length of text area</para>
         </listitem>
 
         <listitem>
           <para><literal>begin.line</literal>,
-          <literal>begin.olumn</literal></para>
+          <literal>begin.column</literal>: begin line and column of text
+          area.</para>
         </listitem>
 
         <listitem>
-          <para><literal>end.line</literal>,
-          <literal>end.column</literal>.</para>
+          <para><literal>end.line</literal>, <literal>end.column</literal> end
+          line and column of text area.</para>
         </listitem>
       </itemizedlist>
     </section>
