@@ -3377,11 +3377,11 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         <para>Here <replaceable>Text </replaceable>is arbitrary text that may
         itself contain again contain interpolations.</para>
 
-        <para>Let's apply this to some examples:<screen><prompt>rascal&gt;</prompt> <userinput>"The value is &lt;if(N &lt; 10){&gt; smaller &lt;} else {&gt; larger &lt;}&gt;";</userinput>
-<computeroutput>str: "The value is larger "</computeroutput>
+        <para>Let's apply this to some examples:<screen><prompt>rascal&gt;</prompt> <userinput>"N is &lt;if(N &lt; 10){&gt; small &lt;} else {&gt; large &lt;}&gt;";</userinput>
+<computeroutput>str: "N is large "</computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>"The value is &lt;if(N &lt; 10){&gt; smaller (e.g., &lt;N&gt;) &lt;} else {&gt; larger (e.g., &lt;N&gt;)&lt;}&gt;";</userinput>
-<computeroutput>str: "The value is  larger (e.g., 13)"</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>"N is &lt;if(N &lt; 10){&gt; small (e.g., &lt;N&gt;) &lt;} else {&gt; large (e.g., &lt;N&gt;)&lt;}&gt;";</userinput>
+<computeroutput>str: "N is  large (e.g., 13)"</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>"before &lt;for(x&lt;-[1..5]){&gt;a &lt;x&gt; b &lt;}&gt;after";</userinput>
 <computeroutput>str: "before a 1 b a 2 b a 3 b a 4 b a 5 b after"</computeroutput>
@@ -10450,7 +10450,8 @@ BindingRel unmatchedBindings;
 <computeroutput>set[int]: {100,101}</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>RR&lt;2,0,1&gt;;</userinput>
-<computeroutput>rel[int,int,int]: {&lt;101,1,11&gt;,&lt;200,2,20&gt;,&lt;100,1,10&gt;,&lt;300,3,30&gt;,&lt;202,2,22&gt;} ;</computeroutput>
+<computeroutput>rel[int,int,int]: {&lt;101,1,11&gt;,&lt;200,2,20&gt;,&lt;100,1,10&gt;,
+                   &lt;300,3,30&gt;,&lt;202,2,22&gt;} ;</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>RR&lt;2.0,1&gt;[100];</userinput>
 <computeroutput>rel[int,int]: {&lt;1,10&gt;}</computeroutput></screen><table>
@@ -11851,7 +11852,8 @@ Example rascal statements and declarations:
 int a;                     Declarations allocate a name in the 
                            current scope
 a = 1;                     Assignments store a value in a 
-                           (optionally previously declared) variable
+                           (optionally previously declared) 
+                           variable
 int a = 1;                 Declaration with initialization
 import IO;                 Importing a module makes its public 
                            members available
@@ -12449,7 +12451,8 @@ ok</computeroutput>
           <row>
             <entry><literal>area</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12484,8 +12487,9 @@ ok</computeroutput>
           <row>
             <entry><literal>barChart</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" />, <xref
-            linkend="section.lib-View" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-View"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12500,8 +12504,9 @@ ok</computeroutput>
           <row>
             <entry><literal>boxPlot</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" />, <xref
-            linkend="section.lib-View" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-View"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12563,7 +12568,8 @@ ok</computeroutput>
           <row>
             <entry><literal>dim3</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12578,7 +12584,8 @@ ok</computeroutput>
           <row>
             <entry><literal>domainLabel</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12663,14 +12670,16 @@ ok</computeroutput>
           <row>
             <entry><literal>histogram</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" />, <xref
-            linkend="section.lib-View" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-View"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>horizontal</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12765,7 +12774,8 @@ ok</computeroutput>
           <row>
             <entry><literal>noSectionLabels</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12778,8 +12788,9 @@ ok</computeroutput>
           <row>
             <entry><literal>pieChart</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" />, <xref
-            linkend="section.lib-View" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-View"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12829,7 +12840,8 @@ ok</computeroutput>
           <row>
             <entry><literal>rangeLabel</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12934,7 +12946,8 @@ ok</computeroutput>
           <row>
             <entry><literal>ring</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12942,12 +12955,6 @@ ok</computeroutput>
 
             <entry><xref linkend="section.lib-Resource"
             xrefstyle="template:%t" /></entry>
-          </row>
-
-          <row>
-            <entry><literal>seriesLabels</literal></entry>
-
-            <entry><xref linkend="section.lib-Chart" /></entry>
           </row>
 
           <row>
@@ -12984,9 +12991,17 @@ ok</computeroutput>
           </row>
 
           <row>
+            <entry><literal>scatter</literal></entry>
+
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
             <entry><literal>stacked</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12999,7 +13014,8 @@ ok</computeroutput>
           <row>
             <entry><literal>subtitle</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -13139,7 +13155,8 @@ ok</computeroutput>
           <row>
             <entry><literal>vertical</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -13159,8 +13176,9 @@ ok</computeroutput>
           <row>
             <entry><literal>xyChart</literal></entry>
 
-            <entry><xref linkend="section.lib-Chart" />, <xref
-            linkend="section.lib-View" /></entry>
+            <entry><xref linkend="section.lib-Chart"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-View"
+            xrefstyle="template:%t" /></entry>
           </row>
         </tbody>
       </tgroup>
