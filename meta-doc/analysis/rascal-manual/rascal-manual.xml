@@ -8866,6 +8866,13 @@ anno EntityRel  Resource@calls;            // defines which methods call which o
 
             <tbody>
               <row>
+                <entry>str readable(Entity entity)</entry>
+
+                <entry>Will compute a readable representation of a string for
+                use in debugging output or visualizations</entry>
+              </row>
+
+              <row>
                 <entry><literal>Resource extractClass(loc
                 javaFile)</literal></entry>
 
