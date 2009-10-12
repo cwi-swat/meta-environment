@@ -8643,34 +8643,130 @@ public alias realSeriesMultipleData =
         </table></para>
     </section>
 
+    <section>
+      <title>Resources (Eclipse only)</title>
+
+      <para>The Resources library provides direct access to Eclipse projects
+      and the resources they contain. A Resource is the Rascal representation
+      of an Eclipse project, or a folder or a file in an Eclipse project. In
+      combination with the IO library module, users of the Resources library
+      gain access to the contents of any file that is in an Eclipse
+      project.</para>
+
+      <programlisting>data Resource = root(set[Resource] projects) 
+              | project(loc id, set[Resource] contents)
+              | folder(loc id, set[Resource] contents)
+              | file(loc id);</programlisting>
+
+      <para>Resource is a recursive data-type, where recursion indicates
+      "containment". I.e. a folder contains many other resources, a project
+      also contains other resources. The root of an Eclipse workspace also
+      contains other resources, in particular "projects".</para>
+
+      <para>Each Resource, but the root, has an 'id' field that explains the
+      exact location of the resource. Examples of Eclipse Resource locations
+      are:</para>
+
+      <programlisting>|project://myProject| // a location that points to a project in the Eclipse workspace named "myProject"
+|project://myProject/src/Main.java| // a location that points to a file named Main.java in the src folder of the myProject project in the workspace|
+|project://myProject/src/Main.java|(0,10,1,0,1,10) // a location that points to a part of the previous file, namely the first 10 characters on the first line.</programlisting>
+
+      <para>Using the IO library, one can easily read the contents of a such
+      an Eclipse project location:</para>
+
+      <programlisting>import IO;
+str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
+
+      <para>Other library functions in the Resource library provide more
+      information about resources:<table>
+          <title>Resources Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="3*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>Resource root()</literal></entry>
+
+                <entry>Retrieve a full hierarchical representation of all
+                resources in the Eclipse workspace</entry>
+              </row>
+
+              <row>
+                <entry>set[loc] projects()</entry>
+
+                <entry>Convenience function to retrieve a set of project
+                locations of the Eclipse workspace</entry>
+              </row>
+
+              <row>
+                <entry>set[loc] references(loc project);</entry>
+
+                <entry>Find out which other projects this project references
+                (depends on)</entry>
+              </row>
+
+              <row>
+                <entry>set[loc] dependencies(loc project);</entry>
+
+                <entry>Computes referenced projects transitively</entry>
+              </row>
+
+              <row>
+                <entry>public Resource getProject(loc project);</entry>
+
+                <entry>Retrieves the hierarchical representation of a single
+                named project</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+    </section>
+
     <section xml:id="section.lib-JDT">
       <title>JDT (Eclipse only)</title>
 
       <para>Detailed information can be extracted from Java projects in the
-      current Eclipse workspace. This proceeds in two steps:</para>
+      current Eclipse workspace. The JDT library module depends heavily on the
+      Resources library module.</para>
+
+      <para>The access to facts about Java files proceeds in two steps:</para>
 
       <itemizedlist>
         <listitem>
           <para>First all facts are extracted from given projects or files.
-          The result is a <literal>FactMap</literal> that contains all data. A
-          FactMap is a datatype only used by the JDT functions and is not
-          further described here. The project/file extraction functions are
-          shown in <xref linkend="table.JDT-project-functions" />.</para>
+          The result is a <literal>Resource</literal> that is annotated with
+          all kinds of interesting information about that specific Resource,
+          and usually also about Resources that are contained inside that
+          resource. The project/file annotation declarations are shown
+          below.</para>
         </listitem>
 
         <listitem>
           <para>Next, specific facts about the Java source code can be
-          retrieved from the <literal>FactMap</literal>. These functions are
-          shown in <xref linkend="table.JDT-fact-retrieval-functions" />. They
-          return values of type <literal>BindingRel</literal> or
+          retrieved fromthe annotations.. These annotations are shown in <xref
+          linkend="table.JDT-fact-retrieval-functions" />. They all represent
+          values of type <literal>BindingRel</literal> or
           <literal>EntityRel</literal> that are explained below.</para>
         </listitem>
       </itemizedlist>
 
       <para>The Java constructs that may occur in extracted facts are
       represented by the datatype Entity that is defined in the library module
-      <literal>Java</literal> (not further described here). Entity is defined
-      as follows:</para>
+      <literal>Java</literal> (not further described here). An "Entity"
+      represents a fully qualified identifier pointing to a very specific part
+      of a Java source code file. Entity is therefore a nested data-type,
+      defined as follows:</para>
 
       <para><programlisting>data Entity = entity(list[Id] id);
 
@@ -8722,18 +8818,35 @@ data Bound =
           <literal>void</literal> are used to construct symbols in the above
           data definition by escaping them as <literal>\int</literal> and
           <literal>\void</literal>.</para>
-        </note>The extraction functions use the following additional
-      types:</para>
+        </note><programlisting>public alias BindingRel = rel[loc, Entity];                        // maps locations to qualified names in the form of Entities
+public alias EntityRel = rel[Entity, Entity];                      // a short-hand for any relation between two Entities
+public alias ModifierRel = rel[Entity entity, Modifier modifier];  // a short-hand for mappings from Entities to their declared Modifiers</programlisting></para>
 
-      <para><programlisting>public alias JDTlocation = 
-             tuple[str fileName, int offset, int length];
-public alias BindingRel = rel[JDTlocation, Entity];
-public alias EntityRel = rel[Entity, Entity];</programlisting></para>
+      <para>A BindingRel is thus always used to map a source code location to
+      a fully qualified Entity label of that part of the source code.
+      EntityRel is simply a short hand for any kind of relation between
+      entities.</para>
 
-      <para><literal>JDTLocation</literal> describes a text area in a given
-      file. <literal>BindingRel</literal> associates JDTLocations with
-      Entities. <literal>EntityRel</literal> associates Entities with each
-      other.</para>
+      <para>The following annotations declare the kind of information that the
+      JDT library module provides after retrieving it from an Eclipse Java
+      project:<programlisting>anno BindingRel Resource@types;        // contains all type declarations
+anno BindingRel Resource@methods;      // contains all method declarations
+anno BindingRel Resource@constructors; // contains all constructor declarations
+anno BindingRel Resource@fields;       // contains all field declarations
+anno BindingRel Resource@variables;    // contains all local variable and method parameter declarations
+anno BindingRel Resource@packages;     // contains all package declarations
+
+anno ModifierRel Resource@modifiers;   // maps Entities to the modifiers that have {been declared for it
+
+anno EntityRel  Resource@implements;   // defines which types implement which interfaces
+anno EntityRel  Resource@extends;      // defines which classes extends which other classes
+anno EntitySet  Resource@declaredTopTypes; // defines which top-level classes are declared
+anno EntityRel  Resource@declaredSubTypes; // defines which inner classes are declared
+anno EntityRel  Resource@declaredMethods;  // defines which class defines which methods
+anno EntityRel  Resource@declaredFields;   // defines which class defines which fields
+anno EntityRel  Resource@calls;            // defines which methods call which other methods, and which class initialization code calls which methods</programlisting>To
+      get access to all this information, please use the following
+      functions:</para>
 
       <para><table xml:id="table.JDT-project-functions">
           <title>JDT Project/File Extraction Functions</title>
@@ -8753,41 +8866,25 @@ public alias EntityRel = rel[Entity, Entity];</programlisting></para>
 
             <tbody>
               <row>
-                <entry><literal>FactMap extractFacts(str project, str
-                file)</literal></entry>
+                <entry><literal>Resource extractClass(loc
+                javaFile)</literal></entry>
 
-                <entry>Import JDT facts from file (path relative to project
-                root)</entry>
+                <entry>Import JDT facts from file </entry>
               </row>
 
               <row>
-                <entry><literal>FactMap extractFacts(str project, loc
-                file)</literal></entry>
+                <entry><literal>Resource extractProject(loc
+                project)</literal></entry>
 
-                <entry>Import JDT facts from file (absolute file system
-                path)</entry>
+                <entry>Import JDT facts from a project </entry>
               </row>
 
               <row>
-                <entry><literal>FactMap extractFacts(set[str]
-                projects)</literal></entry>
+                <entry><literal>FactMap extractFactsTransitive(loc
+                project)</literal></entry>
 
-                <entry>Extract facts from projects</entry>
-              </row>
-
-              <row>
-                <entry><literal>FactMap extractFacts(str
-                projectName)</literal></entry>
-
-                <entry>Extract facts from a single project</entry>
-              </row>
-
-              <row>
-                <entry><literal>FactMap extractFactsTransitive(set[str]
-                projects)</literal></entry>
-
-                <entry>Extracts facts from projects and all projects they
-                depends on (transitively)</entry>
+                <entry>Extracts facts from a project and all projects it
+                depends on</entry>
               </row>
 
               <row>
@@ -8808,107 +8905,11 @@ public alias EntityRel = rel[Entity, Entity];</programlisting></para>
               </row>
 
               <row>
-                <entry><literal>FactMap unionFacts(FactMap m1, FactMap
+                <entry><literal>Resource unionFacts(Resource m1, Resource
                 m2)</literal></entry>
 
-                <entry>Union fact maps, union values for facts that appear in
-                both maps (if possible)</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
-
-      <para><table xml:id="table.JDT-fact-retrieval-functions">
-          <title>JDT Fact Retrieval Functions</title>
-
-          <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
-
-            <colspec align="left" colname="col2" colwidth="3*" />
-
-            <thead>
-              <row>
-                <entry>Function</entry>
-
-                <entry>Description</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry><literal>BindingRel getConstructorBindings(FactMap
-                fm)</literal></entry>
-
-                <entry>Get all fully-qualified constructor name that occur in
-                declarations or calls</entry>
-              </row>
-
-              <row>
-                <entry><literal>EntityRel getDeclaredFields(FactMap
-                fm)</literal></entry>
-
-                <entry>Get all declared fields in each class</entry>
-              </row>
-
-              <row>
-                <entry><literal>EntityRel getDeclaredMethods(FactMap
-                fm)</literal></entry>
-
-                <entry>Get all declared methods in each class</entry>
-              </row>
-
-              <row>
-                <entry><literal>EntityRel getDeclaredTypes(FactMap
-                fm)</literal></entry>
-
-                <entry>Get the relation between each class and its inner
-                classes</entry>
-              </row>
-
-              <row>
-                <entry><literal>EntityRel getExtends(FactMap
-                fm)</literal></entry>
-
-                <entry>Get the subclass (extends) relation</entry>
-              </row>
-
-              <row>
-                <entry><literal>BindingRel getFieldBindings(FactMap
-                fm)</literal></entry>
-
-                <entry>Get all fully-qualified field names</entry>
-              </row>
-
-              <row>
-                <entry><literal>EntityRel getImplements(FactMap
-                fm)</literal></entry>
-
-                <entry>Get the interface implementation (implements)
-                relation</entry>
-              </row>
-
-              <row>
-                <entry><literal>BindingRel getMethodBindings(FactMap
-                fm)</literal></entry>
-
-                <entry>Get all fully-qualified method names that occur in
-                declarations or calls</entry>
-              </row>
-
-              <row>
-                <entry><literal>BindingRel getTypeBindings(FactMap
-                fm)</literal></entry>
-
-                <entry>Get the fully-qualified types of all expressions and
-                identifiers</entry>
-              </row>
-
-              <row>
-                <entry><literal>BindingRel getVariableBindings (FactMap
-                fm)</literal></entry>
-
-                <entry>Get all fully-qualified variable names of all local
-                variables and method parameters</entry>
+                <entry>Take all facts annotated on m1 and m2, merge them and
+                return m1 annotated with the unified results</entry>
               </row>
             </tbody>
           </tgroup>
@@ -8918,33 +8919,22 @@ public alias EntityRel = rel[Entity, Entity];</programlisting></para>
       projects)</literal>, showing how to use the unionFacts() function
       :</para>
 
-      <para><programlisting>public FactMap extractFacts(set[str] projects) {
-  FactMap result = ();
-
-  for (p &lt;- projects) {
-    result = unionFacts(result, extractFacts(p));
-  }
-  return result;
-}
-</programlisting></para>
-
-      <para>Here is an example function that extracts the inheritance
-      hierarchy from a given project:<programlisting>EntityRel getInheritance(str projectName){
-  fm = extractFacts(projectName);
-  return getExtends(fm) + getImplements(fm);
+      <para>Here is an example function that extracts the sub-type relation
+      from a given project:<programlisting>EntityRel getSubTypeInformation(loc project){
+  fm = extractProject(project);
+  return fm@extends + fm@implements + {class("Object") x top(fm@extends + fm@implements);
 }</programlisting></para>
 
       <para>The following example shows how to link the JDT type bindings to
       your own parse tree nodes. Suppose you have a relation
       <literal>nodeLocations</literal> that links your parse tree nodes to
       their location, you can get the type information of each node (if any)
-      as follows:<programlisting>FactMap fm = extractFacts(myProject, myJavaFile);
-BindingRel jdtTypeBindings = getTypeBindings(fm);
+      as follows:<programlisting>Resource fm = extractProject(myProject);
+BindingRel jdtTypeBindings = fm@types;
 
 rel[node, Entity] myTypeBindings;
 BindingRel unmatchedBindings;
-&lt;myTypeBindings, unmatchedBindings&gt; = 
-      matchLocations(nodeLocations, jdtTypeBindings);</programlisting></para>
+&lt;myTypeBindings, unmatchedBindings&gt; = matchLocations(nodeLocations, jdtTypeBindings);</programlisting></para>
     </section>
 
     <section xml:id="section.lib-LabelledGraph">
