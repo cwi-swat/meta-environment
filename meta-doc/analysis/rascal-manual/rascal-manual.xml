@@ -7415,7 +7415,7 @@ ok
             </row>
 
             <row>
-              <entry>Number</entry>
+              <entry><replaceable>Number</replaceable></entry>
 
               <entry><keysym>int</keysym> or <keysym>real</keysym></entry>
             </row>
@@ -7571,7 +7571,8 @@ ok
             </row>
 
             <row>
-              <entry>public void benchmark(map[str, void()] Cases)</entry>
+              <entry><literal>public void benchmark(map[str, void()]
+              Cases)</literal></entry>
 
               <entry>Measure and report the execution time of
               name:void-closure pairs.</entry>
@@ -8032,7 +8033,7 @@ public alias realSeriesMultipleData =
           <tgroup cols="3">
             <colspec align="left" colname="col1" colwidth="1*" />
 
-            <colspec align="left" colname="col2" colwidth="2*" />
+            <colspec align="left" colname="col2" colwidth="1*" />
 
             <colspec align="left" colname="col3" colwidth="2*" />
 
@@ -8066,7 +8067,7 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
-                <entry>domainLabel(str txt)</entry>
+                <entry><literal>domainLabel(str txt)</literal></entry>
 
                 <entry>barChart, boxPlot, histogram, xyPlot</entry>
 
@@ -8075,7 +8076,7 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
-                <entry>horizontal()</entry>
+                <entry><literal>horizontal()</literal></entry>
 
                 <entry>barChart, boxPlot, histogram, xyChart</entry>
 
@@ -8083,7 +8084,7 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
-                <entry>noSectionLabels()</entry>
+                <entry><literal>noSectionLabels()</literal></entry>
 
                 <entry>pieChart</entry>
 
@@ -8092,7 +8093,7 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
-                <entry>rangeLabel(str txt)</entry>
+                <entry><literal>rangeLabel(str txt)</literal></entry>
 
                 <entry>barChart, boxPlot, histogram, xyPlot</entry>
 
@@ -8101,7 +8102,7 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
-                <entry>ring()</entry>
+                <entry><literal>ring()</literal></entry>
 
                 <entry>pieChart</entry>
 
@@ -8117,7 +8118,7 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
-                <entry>stacked()</entry>
+                <entry><literal>stacked()</literal></entry>
 
                 <entry>barChart</entry>
 
@@ -8125,7 +8126,7 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
-                <entry>subtitle(str txt)</entry>
+                <entry><literal>subtitle(str txt)</literal></entry>
 
                 <entry>barChart, boxPlot, histogram, peiChart xyChart</entry>
 
@@ -8134,7 +8135,7 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
-                <entry>vertical()</entry>
+                <entry><literal>vertical()</literal></entry>
 
                 <entry>barChart, boxPlot, histogram, xyChart</entry>
 
@@ -8208,8 +8209,8 @@ public alias realSeriesMultipleData =
             </row>
 
             <row>
-              <entry>set[&amp;T] predecessors(graph[&amp;T], &amp;T
-              From)</entry>
+              <entry><literal>set[&amp;T] predecessors(graph[&amp;T], &amp;T
+              From)</literal></entry>
 
               <entry>Direct predecessors of node From</entry>
             </row>
@@ -8245,8 +8246,8 @@ public alias realSeriesMultipleData =
             </row>
 
             <row>
-              <entry>set[&amp;T] successors(graph[&amp;T], &amp;T
-              From)</entry>
+              <entry><literal>set[&amp;T] successors(graph[&amp;T], &amp;T
+              From)</literal></entry>
 
               <entry>Direct successors of node From</entry>
             </row>
@@ -8524,7 +8525,7 @@ public alias realSeriesMultipleData =
               </row>
 
               <row>
-                <entry>bool print(value V...)</entry>
+                <entry><literal>bool print(value V...)</literal></entry>
 
                 <entry>Print a list of values on the output stream and return
                 true (used for debugging).</entry>
@@ -9639,8 +9640,8 @@ BindingRel unmatchedBindings;
               </row>
 
               <row>
-                <entry>map[&amp;V, set[&amp;K]] invert(map[&amp;K, &amp;V]
-                M)</entry>
+                <entry><literal>map[&amp;V, set[&amp;K]] invert(map[&amp;K,
+                &amp;V] M)</literal></entry>
 
                 <entry>Inverted map in which each value in the old map is
                 associated with a set of key values from the old map</entry>
@@ -9911,7 +9912,71 @@ BindingRel unmatchedBindings;
     <section xml:id="section.lib-PriorityQueue">
       <title>PriorityQueue</title>
 
-      <para></para>
+      <para>Priority queues maintain (value, priority) pairs in sorted order.
+      They are implemented using a binomial heap, see <link
+      xlink:href="http://en.wikipedia.org/wiki/Binomial_heap">http://en.wikipedia.org/wiki/Binomial_heap</link>.
+      Priority queue are, for instance, used to implement shortest path
+      algorithms.<table>
+          <title>PriorityQueue Functions</title>
+
+          <tgroup cols="2">
+            <colspec align="left" colname="col1" colwidth="3*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <thead>
+              <row>
+                <entry>Function</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>tuple[int, int, PriorityQueue]
+                extractMinimum(PriorityQueue Q):</literal></entry>
+
+                <entry>Find the (value, priority) pair with minimum priority
+                and delete it</entry>
+              </row>
+
+              <row>
+                <entry>int findMinimum(PriorityQueue Q)</entry>
+
+                <entry>Find the minimum priority.</entry>
+              </row>
+
+              <row>
+                <entry><literal>PriorityQueue insertElement(PriorityQueue Q,
+                int priority, int val):</literal></entry>
+
+                <entry>Insert a (value, priority) pair</entry>
+              </row>
+
+              <row>
+                <entry><literal>bool isEmpty(PriorityQueue
+                Q):</literal></entry>
+
+                <entry>Is queue empty?</entry>
+              </row>
+
+              <row>
+                <entry><literal>PriorityQueue
+                priorityQueue():</literal></entry>
+
+                <entry>Create an empty queue.</entry>
+              </row>
+
+              <row>
+                <entry><literal>PriorityeQueue priorityQueue(int priority, int
+                val):</literal></entry>
+
+                <entry>Create queue with one (value, priority) pair.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
     </section>
 
     <section xml:id="section.lib-Real">
@@ -10357,7 +10422,8 @@ BindingRel unmatchedBindings;
               </row>
 
               <row>
-                <entry>set[&amp;T1] range (rel[&amp;T0,&amp;T1] R)</entry>
+                <entry><literal>set[&amp;T1] range (rel[&amp;T0,&amp;T1]
+                R)</literal></entry>
 
                 <entry>The range of a binary relation</entry>
               </row>
@@ -11128,7 +11194,9 @@ BindingRel unmatchedBindings;
               </row>
             </tbody>
           </tgroup>
-        </table></para>
+        </table><warning>
+          <para>Remove charAt when string subscriptis implemented.</para>
+        </warning></para>
     </section>
 
     <section xml:id="section.lib-Tree">
@@ -12350,7 +12418,7 @@ ok</computeroutput>
           </row>
 
           <row>
-            <entry><literal>charAt</literal> ? remove</entry>
+            <entry><literal>charAt</literal></entry>
 
             <entry><xref linkend="section.lib-String"
             xrefstyle="template:%t" /></entry>
@@ -12537,7 +12605,7 @@ ok</computeroutput>
           </row>
 
           <row>
-            <entry>location ?name</entry>
+            <entry>location</entry>
 
             <entry><xref linkend="section.lib-Resource"
             xrefstyle="template:%t" /></entry>
@@ -12551,7 +12619,7 @@ ok</computeroutput>
           </row>
 
           <row>
-            <entry><literal>mapper</literal>?</entry>
+            <entry><literal>mapper</literal></entry>
 
             <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
@@ -12896,7 +12964,7 @@ ok</computeroutput>
           </row>
 
           <row>
-            <entry>toMapUnique</entry>
+            <entry><literal>toMapUnique</literal></entry>
 
             <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" />,<xref linkend="section.lib-Set"
