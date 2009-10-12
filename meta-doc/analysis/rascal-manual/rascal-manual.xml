@@ -3367,12 +3367,15 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         can be used in this way. In the interpolation variant of these
         statements the block or blocks that are part of the statement become
         arbitrary text (that may itself contain interpolations). Their forms
-        are:<programlisting>&lt;if(<replaceable>Expression</replaceable>){&gt; ... arbitrary text with optional interpolations ... &lt;}&gt;
-&lt;if(<replaceable>Expression</replaceable>){&gt; ... arbitrary text then case &lt;} else {&gt;  ... arbitrary text else case... &lt;}&gt;
-&lt;for(<replaceable>Expression</replaceable>){&gt;... arbitrary text with optional interpolations ... &lt;}&gt;
-&lt;while(<replaceable>Expression</replaceable>){&gt; ... arbitrary text with optional interpolations ... &lt;}&gt;
-&lt;do {&gt;... arbitrary text with optional interpolations ... &lt;} while (<replaceable>Expression</replaceable>)&gt;
+        are:<programlisting>&lt;if(<replaceable>Exp</replaceable>){&gt; ... <replaceable>Text</replaceable> ... &lt;}&gt;
+&lt;if(<replaceable>Exp</replaceable>){&gt; ... <replaceable>Text</replaceable> ... &lt;} else {&gt;  ... <replaceable>Text</replaceable> ... &lt;}&gt;
+&lt;for(<replaceable>Exp</replaceable>){&gt;... <replaceable>Text</replaceable> ... &lt;}&gt;
+&lt;while(<replaceable>Exp</replaceable>){&gt; ... <replaceable>Text</replaceable> ... &lt;}&gt;
+&lt;do {&gt;... <replaceable>Text</replaceable> ... &lt;} while (<replaceable>Exp</replaceable>)&gt;
 </programlisting></para>
+
+        <para>Here <replaceable>Text </replaceable>is arbitrary text that may
+        itself contain again contain interpolations.</para>
 
         <para>Let's apply this to some examples:<screen><prompt>rascal&gt;</prompt> <userinput>"The value is &lt;if(N &lt; 10){&gt; smaller &lt;} else {&gt; larger &lt;}&gt;";</userinput>
 <computeroutput>str: "The value is larger "</computeroutput>
@@ -3401,7 +3404,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         <itemizedlist>
           <listitem>
             <para><replaceable>Url</replaceable> is an arbitrary Uniform
-            Resource Identifier (URI). See for details about URIs.</para>
+            Resource Identifier (URI).</para>
           </listitem>
 
           <listitem>
@@ -3424,10 +3427,10 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           </listitem>
         </itemizedlist>
 
-        <para>URI are explained in <link
+        <para>URIs are explained in <link
         xlink:href="http://en.wikipedia.org/wiki/Uniform_Resource_Identifier">http://en.wikipedia.org/wiki/Uniform_Resource_Identifier</link>.
         From their original definition in RFC3986 we cite the following useful
-        overview:<programlisting>         foo://example.com:8042/over/there?name=ferret#nose
+        overview of an URI:<programlisting>         foo://example.com:8042/over/there?name=ferret#nose
          \_/   \______________/\_________/ \_________/ \__/
           |           |            |            |        |
        scheme     authority       path        query   fragment
@@ -3498,7 +3501,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           </listitem>
 
           <listitem>
-            <para>offset: start of text area.</para>
+            <para><literal>offset</literal>: start of text area.</para>
           </listitem>
 
           <listitem>
@@ -3820,7 +3823,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         <para>The elements of a tuple can also be labelled and can then be
         accessed using the field selection operator (<literal>.</literal>).
         Fields can be changed (yielding a new tuple value) by a combination of
-        field selection and assignment. For instance,<screen><prompt>rascal&gt;</prompt> <userinput>tuple[str first, str last, int age] P = &lt;"Jo", "Jones", 35&gt;;</userinput>
+        field selection and assignment. For instance,<screen><prompt>rascal&gt;</prompt> <userinput>tuple[str first, str last, int age] P = &lt;"Jo","Jones",35&gt;;</userinput>
 <computeroutput>tuple[str first, str last, int age] P = &lt;"Jo", "Jones", 35&gt;;
 </computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>P.first;</userinput>
@@ -3957,7 +3960,8 @@ alias Frequency = int;</programlisting>
         <replaceable>Alt</replaceable><subscript>1</subscript>,
         <replaceable>Alt</replaceable><subscript>2</subscript>, ... . The
         description of an alternative is identical in form to the type
-        declaration of a function. For instance, <programlisting>data Bool = tt() | ff() | conj(Bool L, Bool R)  | disj(Bool L, Bool R);  </programlisting>defines
+        declaration of a function. For instance, <programlisting>data Bool = 
+     tt() | ff() | conj(Bool L, Bool R)  | disj(Bool L, Bool R);  </programlisting>defines
         the datatype <literal>Bool</literal> that contains various constants
         (<literal>Ttt()</literal> and <literal>F</literal>ff() and constructor
         functions <literal>conj</literal> and <literal>disj</literal>.</para>
@@ -9534,7 +9538,7 @@ BindingRel unmatchedBindings;
         </listitem>
 
         <listitem>
-          <para>offset: start of text area.</para>
+          <para><literal>offset</literal>: start of text area.</para>
         </listitem>
 
         <listitem>
