@@ -456,7 +456,7 @@
       library functions available on the standard datatypes. The basic Rascal
       datatypes are illustrated in <xref linkend="table.types" />.</para>
 
-      <para>These builtin datatypes are closely related to ech other:</para>
+      <para>These builtin datatypes are closely related to each other:</para>
 
       <itemizedlist>
         <listitem>
@@ -495,11 +495,11 @@
       role="bold">node</emphasis>. User-defined datatypes allow the
       introduction of problem-specific types and are a subtype of <emphasis
       role="bold">node</emphasis>. A fragment of the abstract syntax for
-      statements in a programming language would look as
-      follows:<programlisting>data STAT = asgStat(Id name, EXP exp) 
+      statements (assignment, if, while) in a programming language would look
+      as follows:<programlisting>data STAT = asgStat(Id name, EXP exp)
           | ifStat(EXP exp,list[STAT] thenpart,
                            list[STAT] elsepart) 
-          | whileStat(EXP exp, list[STAT] body) 
+          | whileStat(EXP exp, list[STAT] body)
           ;</programlisting><table xml:id="table.types">
           <title>Basic Rascal Types</title>
 
@@ -685,8 +685,9 @@ int x &lt;- [ 1 .. 10 ]
       traversal (as denoted by the descendant operator <literal>/</literal>)
       of the complete program <literal>P</literal> (that is assumed to have a
       <literal>PROGRAM</literal> as value) and only yields statements that
-      match the assignment pattern. Note the use of an anonymous variable at
-      the <literal>EXP</literal> position in the pattern.</para>
+      match the assignment pattern (<literal>asgStat</literal>) we have seen
+      earlier. Note the use of an anonymous variable at the
+      <literal>EXP</literal> position in the pattern.</para>
     </section>
 
     <section>
@@ -711,9 +712,9 @@ int x &lt;- [ 1 .. 10 ]
 
       <para><programlisting>{name | /asgStat(Id name, _) &lt;- P}</programlisting></para>
 
-      <para>which returns a list of all identifiers that occur on the left
-      hand side of assignment statements in program
-      <literal>P</literal>.</para>
+      <para>which traverses program <literal>P</literal> and constructs a list
+      of all identifiers that occur on the left hand side of assignment
+      statements in <literal>P</literal>.</para>
     </section>
 
     <section>
@@ -730,11 +731,12 @@ int x &lt;- [ 1 .. 10 ]
 
       <para><programlisting>
 for(/asgStat(Id name, _) &lt;- P, size(name) &gt; 10){
-    println(Id);
+    println(name);
 }</programlisting></para>
 
-      <para>prints all identifiers in assignment statements that consist of
-      more than 10 characters.</para>
+      <para>prints all identifiers in assignment statements
+      (<literal>asgStat</literal>) that consist of more than 10
+      characters.</para>
     </section>
 
     <section>
@@ -742,13 +744,20 @@ for(/asgStat(Id name, _) &lt;- P, size(name) &gt; 10){
 
       <para>The switch statement as known from C and Java is generalized: the
       subject value to switch on may be an arbitrary value and the cases are
-      arbitrary patterns. When a match fails, all its side-effects are undone
-      and when it succeeds the statements associated with that case are
-      executed. Here is an example where we take a program P and distinguish
-      two cases for while and if statement:<programlisting>switch (P){
-case whileStat(EXP Exp, Stats*):
+      arbitrary patterns followed by a statement. Each case is comparable to a
+      <emphasis>transaction</emphasis>: when the pattern succeeds and the
+      following statement is executed successfully, all changes to variables
+      made by the statement are <emphasis>committed</emphasis> and thus become
+      permanent. The variables bound by the pattern are always local to the
+      statement associated with the case. When a match fails or when the
+      associated statement fails, a <emphasis>rollback</emphasis> takes place
+      and all side-effects are undone. External side-effects like I/O and
+      side-effects in user-defined Java code are not undone. Here is an
+      example where we take a program P and distinguish two cases for while
+      and if statement:<programlisting>switch (P){
+case whileStat(_, _):
      println("A while statement");
-case ifStat(Exp, Stats1*, Stat2*):
+case ifStat(_, _, _):
      println("An if statement");
 }</programlisting></para>
     </section>
@@ -761,15 +770,15 @@ case ifStat(Exp, Stats1*, Stat2*):
       known to every software engineer. Given a tree-like datastructure we
       want to perform an operation on some (or all) nodes of the tree. The
       purpose of the visitor design pattern is to decouple the logistics of
-      visiting each node from the actual operation. In Rascal the logistics of
-      visiting is completely automated.</para>
+      visiting each node from the actual operation on each node. In Rascal the
+      logistics of visiting is completely automated.</para>
 
       <para>Visiting is achieved by way of visit expressions that resemble the
-      switch statement. A visit expression consists of an expression that may
-      yield an arbitrarily complex subject value and a number of cases. All
-      the elements of the subject are visited and when one of the cases
-      matches the statements associated with that case are executed. These
-      cases may:</para>
+      switch statement. A visit expressions traverses an arbitrarily complex
+      subject value and applies a number of cases to all its subtrees. All the
+      elements of the subject are visited and when one of the cases matches
+      the statements associated with that case are executed. These cases
+      may:</para>
 
       <itemizedlist>
         <listitem>
@@ -790,14 +799,10 @@ case ifStat(Exp, Stats1*, Stat2*):
         </listitem>
       </itemizedlist>
 
-      <para>Side-effects including assignments to local and global variables
-      in the Rascal program are undone on failure. External side-effects like
-      I/O and side-effects in user-defined Java code are not undone.</para>
-
       <para>The value of a visit expression is the original subject value with
       all replacements made as dictated by matching cases. The traversal order
       in a visit expressions can be explicitly defined by the programmer. An
-      example of visiting is given in <xref
+      example of visiting is given below and in <xref
       linkend="section.colored-trees" />.</para>
     </section>
 
@@ -849,14 +854,15 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
 
       <itemizedlist>
         <listitem>
-          <para>Use regular expressions to extract useful, but somewhat
-          superficial, information. This can be achieved using regular
-          expression patterns.</para>
+          <para><emphasis>Flat information</emphasis>: Use regular expressions
+          to extract useful, but somewhat superficial, flat, information. This
+          can be achieved using regular expression patterns.</para>
         </listitem>
 
         <listitem>
-          <para>Use syntax analysis to extract the complete, nested, structure
-          of the source code in the form of a syntax tree.</para>
+          <para><emphasis>Structured information</emphasis>: Use syntax
+          analysis to extract the complete, nested, structure of the source
+          code in the form of a syntax tree.</para>
         </listitem>
       </itemizedlist>
 
@@ -930,7 +936,7 @@ public int countMethods(loc file){
     <section>
       <title>Rewrite Rules</title>
 
-      <para>A <emphasis>rewrite rule</emphasis> is a recipe how to simplify
+      <para>A <emphasis>rewrite rule</emphasis> is a recipe on how to simplify
       values. Remember: <literal>(a + b)<superscript>2</superscript> =
       a<superscript>2</superscript> + 2ab +
       b<superscript>2</superscript></literal>? A rewrite rule has a pattern as
@@ -955,18 +961,19 @@ rule simplify4 product(Expression e, 0) =&gt; 0;
 rule simplify5 sum(0, Expression e)     =&gt; e;
 rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
       new expression is constructed during symbolic differentiation, these
-      rules are applied to that expression and all its subexpressions and when
-      a pattern at the left-hand side of a rule applies the matching
-      subexpression is replaced by the right-hand side of the rule. This is
-      repeated as long as any rule can be applied.</para>
+      rules are <emphasis>implicitly</emphasis> applied to that expression and
+      all its subexpressions and when a pattern at the left-hand side of a
+      rule applies the matching subexpression is replaced by the right-hand
+      side of the rule. This is repeated as long as any rule can be
+      applied.</para>
 
       <para>Since rewrite rules are activated automatically, one may always
       assume that expressions are in simplified form.</para>
 
-      <para>Rewrite rules are <emphasis>computationally complete</emphasis>,
-      in other words any computable function can be defined using rewrite
-      rules, including functions that do not terminate. This is a point of
-      attention when using rewrite rules.</para>
+      <para>Rewrite rules are <emphasis>Turing complete</emphasis>, in other
+      words any computable function can be defined using rewrite rules,
+      including functions that do not terminate. This is a point of attention
+      when using rewrite rules.</para>
     </section>
 
     <section>
@@ -1087,7 +1094,7 @@ ok</computeroutput></screen>Don't get scared by the <computeroutput>void ():
 
       <para>The summit of hello-engineering can be reached by placing all the
       above in a separate module:<programlisting>module demo::Hello
-	import IO;
+import IO;
 
 public void hello() {
    println("Hello, this is my first Rascal program");
@@ -1128,7 +1135,7 @@ public int fac(int N)
 <computeroutput>int: 2586232415111681806429643551536119799691976323891200
 00000000</computeroutput></screen></para>
 
-      <para>Indeed, Rascal has infinite length integers.</para>
+      <para>Indeed, Rascal has arbitrary length integers.</para>
     </section>
 
     <section xml:id="section.colored-trees">
@@ -1152,9 +1159,13 @@ data ColoredTree =
 <prompt>rascal&gt;</prompt> <userinput>rb = red(black(leaf(1), red(leaf(2),leaf(3))), 
                  black(leaf(3), leaf(4)));</userinput>
 <computeroutput>ColoredTree: red(black(leaf(1),red(leaf(2),leaf(3))),
-                 black(leaf(3),leaf(4)))</computeroutput></screen>We define
-      two operations on ColoredTrees, one to count the red nodes, and one to
-      add the values contained in all leaves:<programlisting>// continuing module demo::ColoredTrees
+                 black(leaf(3),leaf(4)))</computeroutput></screen>Observe that
+      the type of variable <literal>rb</literal> was autimatically inferred to
+      be <literal>ColoredTree</literal>.</para>
+
+      <para>We define two operations on ColoredTrees, one to count the red
+      nodes, and one to add the values contained in all
+      leaves:<programlisting>// continuing module demo::ColoredTrees
 
 public int cntRed(ColoredTree t){
    int c = 0;
@@ -1201,8 +1212,8 @@ public ColoredTree makeGreen(ColoredTree t){
    };
 }</programlisting><calloutlist>
           <callout arearefs="co.Tree-green">
-            <para>Extend the ColoredTree datatype with a new green
-            constructor.</para>
+            <para>Extend the ColoredTree datatype with a new
+            <literal>green</literal> constructor.</para>
           </callout>
 
           <callout arearefs="co.makeGreen">
@@ -1283,7 +1294,9 @@ public str capAll2(str S)
             <para>In the first solution <literal>capAll1</literal> we just
             loop over all the words in the string and capitalize each word.
             The variable <literal>result</literal> is used to collect the
-            successive capitalized words.</para>
+            successive capitalized words. Here we use <literal>\W</literal> do
+            denote non-word characters and<literal>\w</literal> for word
+            characters.</para>
           </callout>
 
           <callout arearefs="co.capAll2-visit">
@@ -1390,7 +1403,7 @@ public str genClass(str name, map[str,str] fields) {
       expressions that access the map fields that are embedded in the string
       constant customize the given template for a Java class. The details of
       string interpolation are explained in <xref
-      linkend="section.elementary-types" />.</para>
+      linkend="section.string" />.</para>
     </section>
   </section>
 
@@ -2148,8 +2161,9 @@ public str genClass(str name, map[str,str] fields) {
 
           <para>We can also determine the <emphasis>indirect calls</emphasis>
           between procedures, by taking the transitive closure of the
-          <literal>Calls</literal> relation. Observe that the transitive
-          closure will contain both the direct and the indirect calls.</para>
+          <literal>Calls</literal> relation, written as
+          <literal>Calls+</literal>. Observe that the transitive closure will
+          contain both the direct and the indirect calls.</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>closureCalls = Calls+;</userinput>
 <computeroutput>rel[proc, proc]: {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, 
@@ -2216,9 +2230,9 @@ public str genClass(str name, map[str,str] fields) {
       rather than at the procedure level. If it is known to which component
       each procedure belongs, it is possible to <emphasis>lift</emphasis> the
       call relation to the component level as proposed in <biblioref
-      linkend="Krikhaar99" />. Actual lifting, amounts to translating each
-      call between procedures by a call between components. This described in
-      the following module:<programlisting>module demo::Lift
+      linkend="Krikhaar99" />. Actual lifting amounts to translating each call
+      between procedures by a call between components. This described in the
+      following module:<programlisting>module demo::Lift
 
 alias proc = str;
 alias comp = str;
@@ -2229,8 +2243,16 @@ public rel[comp,comp] lift(rel[proc,proc] aCalls,
                        &lt;comp C1, comp C2&gt; &lt;- aPartOf[P1] * 
                                              aPartOf[P2]
           };
-}</programlisting>Let's now apply this. First import the above module, and
-      define a call relation and a partof relation:</para>
+}</programlisting></para>
+
+      <para>For each pair <literal>&lt;P1,P2&gt;</literal> in the Calls
+      relation we compose the corresponding parts
+      <literal>aPartOf[P1]</literal> and <literal>aPartOf[P2]</literal> (each
+      yielding a set of components) into a new relation of calls between
+      components. This relation is added pair by pair to the result.</para>
+
+      <para>Let's now apply this. First import the above module, and define a
+      call relation and a partof relation:</para>
 
       <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::Lift;</userinput>
 <computeroutput>ok</computeroutput>
@@ -2885,7 +2907,9 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
                     def D &lt;- DEF[S] + (IN[S] - KILL[S])};
   };
   return IN;
-}</programlisting>First, the relations <literal>IN</literal> and
+}</programlisting><warning>
+            <para>Adjust solve syntax.</para>
+          </warning>First, the relations <literal>IN</literal> and
         <literal>OUT</literal> are declared and initialized. Next, two
         equations are given that resemble the mathematical equations given
         above. Note the use of the library function
@@ -2987,7 +3011,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
         statement if and only if it is live coming into one of its
         successors.</para>
 
-        <para>This can be expressed in Rascal as follows:<programlisting>public rel[stat,def] liveVariables(rel[stat,var] DEFS, 
+        <para>This can be expressed in Rascal as follows:<programlisting>public rel[stat,def] liveVariables(rel[stat, var] DEFS, 
                                    rel[stat, var] USES, 
                                    rel[stat,stat] PRED){
   set[stat] STATEMENT = carrier(PRED);
@@ -3005,7 +3029,9 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
                       def D &lt;- LIN[Succ] };
   }
   return LIN;
-}</programlisting>The results of live variable analysis for our running
+}</programlisting><warning>
+            <para>Adjust solve syntax.</para>
+          </warning>The results of live variable analysis for our running
         example are illustrated in <xref
         linkend="figure.live-variables" />.</para>
 
@@ -3287,61 +3313,89 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     <section xml:id="section.types-and-values">
       <title>Types and Values</title>
 
-      <section xml:id="section.elementary-types">
-        <title>Elementary Types and Values</title>
+      <section xml:id="section.typing">
+        <title>Typing</title>
 
-        <formalpara>
-          <title>Void</title>
+        <para>Rascal is based on static typing, this means that as many errors
+        and inconsistencies as possible are spotted before the program is
+        executed. The types (to be explained in more detail later) are ordered
+        in a so-called <emphasis>type lattice</emphasis> shown in <xref
+        linkend="figure.type-lattice" />. The arrows describe a
+        <emphasis>subtype-of</emphasis> relation between types. The type void
+        is the <emphasis>smallest</emphasis> type and is included in all other
+        types and the type value is the <emphasis>largest</emphasis> type that
+        includes all other types. We also see that <literal>rel</literal> is a
+        subtype of <literal>set</literal> and that each ADT is a subtype of
+        <literal>node</literal>. A special role is played by the datatype
+        <literal>Tree</literal> that is the generic type of syntax trees.
+        Syntax trees for specific languages are all subtypes of Tree. As a
+        result, syntax trees can be addressed at two levels: in a generic
+        fashion as <literal>Tree</literal> and in a specific fashion as a more
+        precisely typed syntax tree. Finally, each alias is structurally
+        equivalent to one or more specific other types.</para>
 
-          <para>Void stands for <emphasis>nothing</emphasis> and is
-          represented by the type <literal>void</literal>. It is a type
-          without any values.</para>
-        </formalpara>
+        <figure xml:id="figure.type-lattice">
+          <title>The Rascal Type Lattice</title>
 
-        <formalpara>
-          <title>Value</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="type-lattice.png" scale="50"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
 
-          <para>Value stands for all possible Rascal values and is represented
-          by the type <literal>value</literal>. This type is a container for
-          all other types and does not have any values itself.</para>
-        </formalpara>
+      <section>
+        <title>Void</title>
 
-        <formalpara>
-          <title>Boolean</title>
+        <para>Void stands for <emphasis>nothing</emphasis> and is represented
+        by the type <literal>void</literal>. It is a type without any
+        values.</para>
+      </section>
 
-          <para>The Booleans are represented by the type
-          <literal>bool</literal> which has two values:
-          <literal>true</literal> and <literal>false</literal>.</para>
-        </formalpara>
+      <section>
+        <title>Value</title>
 
-        <formalpara>
-          <title>Integer</title>
+        <para>Value stands for all possible Rascal values and is represented
+        by the type <literal>value</literal>. This type is a container for all
+        other types and does not have any values itself.</para>
+      </section>
 
-          <para>The integer values are represented by the type
-          <literal>int</literal> and are written as usual, e.g.,
-          <literal>0</literal>, <literal>1</literal>, or
-          <literal>123</literal>. They can be arbitrarily large.</para>
-        </formalpara>
+      <section>
+        <title>Boolean</title>
 
-        <formalpara>
-          <title>Real</title>
+        <para>The Booleans are represented by the type <literal>bool</literal>
+        which has two values: <literal>true</literal> and
+        <literal>false</literal>.</para>
+      </section>
 
-          <para>The real values are represented by the type
-          <literal>real</literal> and are written as usual, e.g.,
-          <literal>1.5</literal>, or <literal>3.14e-123.</literal> They can
-          have arbitrary size and precision.</para>
-        </formalpara>
+      <section>
+        <title>Integer</title>
 
-        <formalpara>
-          <title>String</title>
+        <para>The integer values are represented by the type
+        <literal>int</literal> and are written as usual, e.g.,
+        <literal>0</literal>, <literal>1</literal>, or <literal>123</literal>.
+        They can be arbitrarily large.</para>
+      </section>
 
-          <para>The string values are represented by the type
-          <literal>str</literal> and consist of character sequences surrounded
-          by double quotes. e.g., <literal>"a"</literal> or
-          <literal>"a\nlong\tstring"</literal>.</para>
+      <section>
+        <title>Real</title>
 
-          <!--Escape sequences!-->
-        </formalpara>
+        <para>The real values are represented by the type
+        <literal>real</literal> and are written as usual, e.g.,
+        <literal>1.5</literal>, or <literal>3.14e-123.</literal> They can have
+        arbitrary size and precision.</para>
+      </section>
+
+      <section xml:id="section.string">
+        <title>String</title>
+
+        <para>The string values are represented by the type
+        <literal>str</literal> and consist of character sequences surrounded
+        by double quotes. e.g., <literal>"a"</literal> or
+        <literal>"a\nlong\tstring"</literal>.</para>
+
+        <!--Escape sequences!-->
 
         <para>String literals support so-called <emphasis>string
         interpolation</emphasis>: inside string constants text between angle
@@ -3387,15 +3441,15 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 <computeroutput>str: "before a 1 b a 2 b a 3 b a 4 b a 5 b after"</computeroutput>
 </screen>String interpolation enables very flexible template-based text
         generation.</para>
+      </section>
 
-        <formalpara>
-          <title>Location</title>
+      <section>
+        <title>Location</title>
 
-          <para>Location values are represented by the type
-          <literal>loc</literal> and serve as text coordinates in a specific
-          local or remote source file. It is very handy to associate a source
-          code location which extracted facts.</para>
-        </formalpara>
+        <para>Location values are represented by the type
+        <literal>loc</literal> and serve as text coordinates in a specific
+        local or remote source file. It is very handy to associate a source
+        code location which extracted facts.</para>
 
         <para>Source locations have the following syntax:</para>
 
@@ -3522,14 +3576,10 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
       </section>
 
       <section>
-        <title>List, Set, Map, Tuple, and Relation</title>
+        <title>List</title>
 
-        <formalpara>
-          <title>List</title>
-
-          <para>A list is an ordered sequence of values and has the following
-          properties:</para>
-        </formalpara>
+        <para>A list is an ordered sequence of values and has the following
+        properties:</para>
 
         <itemizedlist>
           <listitem>
@@ -3609,37 +3659,37 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
 <prompt>rascal&gt;</prompt> <userinput>[10, [L], 20];</userinput>
 <computeroutput>list[value]: [10, [1,2,3], 20]</computeroutput></screen></para>
+      </section>
 
-        <formalpara>
-          <title>Range</title>
+      <section>
+        <title>Range</title>
 
-          <para>For lists of integers, a special shorthand exists to describe
-          ranges of integers:<itemizedlist>
-              <listitem>
-                <para><literal>[<replaceable>F</replaceable> ..
-                <replaceable>L</replaceable>]</literal> ranges from first
-                element <replaceable>F</replaceable> up to (and including)
-                last element <replaceable>L</replaceable> with increments of
-                1.</para>
-              </listitem>
+        <para>For lists of integers, a special shorthand exists to describe
+        ranges of integers:<itemizedlist>
+            <listitem>
+              <para><literal>[<replaceable>F</replaceable> ..
+              <replaceable>L</replaceable>]</literal> ranges from first
+              element <replaceable>F</replaceable> up to (and including) last
+              element <replaceable>L</replaceable> with increments of
+              1.</para>
+            </listitem>
 
-              <listitem>
-                <para><literal>[<replaceable>F</replaceable>,<replaceable>S</replaceable>,..<replaceable>
-                E</replaceable>]</literal>, ranges from first element
-                <replaceable>F</replaceable>, second element S up to (and
-                including) last element <replaceable>L</replaceable> with
-                increments of <literal>S</literal> -
-                <replaceable>F</replaceable>.</para>
-              </listitem>
-            </itemizedlist></para>
-        </formalpara>
+            <listitem>
+              <para><literal>[<replaceable>F</replaceable>,<replaceable>S</replaceable>,..<replaceable>
+              E</replaceable>]</literal>, ranges from first element
+              <replaceable>F</replaceable>, second element S up to (and
+              including) last element <replaceable>L</replaceable> with
+              increments of <literal>S</literal> -
+              <replaceable>F</replaceable>.</para>
+            </listitem>
+          </itemizedlist></para>
+      </section>
 
-        <formalpara>
-          <title>Set</title>
+      <section>
+        <title>Set</title>
 
-          <para>A set is an unordered sequence of values and has the following
-          properties:</para>
-        </formalpara>
+        <para>A set is an unordered sequence of values and has the following
+        properties:</para>
 
         <itemizedlist>
           <listitem>
@@ -3717,14 +3767,14 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 <computeroutput>set[int]: {10, 1, 2, 3, 20]}</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>{10, {L}, 20};</userinput>
-<computeroutput>lsetist[value]: {10, {1,2,3}, 20}</computeroutput></screen></para>
+<computeroutput>set[value]: {10, {1,2,3}, 20}</computeroutput></screen></para>
+      </section>
 
-        <formalpara>
-          <title>Map</title>
+      <section>
+        <title>Map</title>
 
-          <para>A map is a set of key : value pairs and has the following
-          properties:</para>
-        </formalpara>
+        <para>A map is a set of key : value pairs and has the following
+        properties:</para>
 
         <itemizedlist>
           <listitem>
@@ -3767,13 +3817,13 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
             is of type <literal>map[str,int]</literal>.</para>
           </listitem>
         </itemizedlist>
+      </section>
 
-        <formalpara>
-          <title>Tuple</title>
+      <section>
+        <title>Tuple</title>
 
-          <para>A tuple is a sequence of elements with the following
-          properties:</para>
-        </formalpara>
+        <para>A tuple is a sequence of elements with the following
+        properties:</para>
 
         <itemizedlist>
           <listitem>
@@ -3831,13 +3881,13 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
 <prompt>rascal&gt;</prompt> <userinput>P.first = "Bo";</userinput>
 <computeroutput>tuple[str first,str last,int age]: &lt;"Bo","Jones",35&gt;</computeroutput></screen></para>
+      </section>
 
-        <formalpara>
-          <title>Relation</title>
+      <section>
+        <title>Relation</title>
 
-          <para>A relation is a set of elements with the following
-          property:</para>
-        </formalpara>
+        <para>A relation is a set of elements with the following
+        property:</para>
 
         <itemizedlist>
           <listitem>
@@ -4097,36 +4147,6 @@ PROGRAM parsePROGRAM(str s) { ... }</programlisting>Unfortunately this
 (2) Kunne reified types ook in aliasen gebruikt worden? Zo ja hoe?
 (3) Idem voor data declaraties.--></para>
       </section>
-
-      <section xml:id="section.typing">
-        <title>Typing</title>
-
-        <para xml:id="figure.type-lattice">Rascal is based on static typing,
-        this means that as many errors and inconsistencies as possible are
-        spotted before the program is executed. The types introduced earlier
-        are ordered in a so-called <emphasis>type lattice</emphasis> shown in
-        <xref linkend="figure.type-lattice" />. The arrows describe a
-        <emphasis>subtype-of</emphasis> relation between types. The type void
-        is the <emphasis>smallest</emphasis> type and is included in all other
-        types and the type value is the <emphasis>largest</emphasis> type that
-        includes all other types. We also see that <literal>rel</literal> is a
-        subtype of <literal>set</literal> and that each ADT is a subtype of
-        <literal>node</literal>. A special role is played by the datatype
-        <literal>Tree</literal> that is the generic type of syntax trees.
-        Syntax trees for specific languages are all subtypes of Tree. As a
-        result, syntax trees can be addressed at two levels: in a generic
-        fashion as <literal>Tree</literal> and in a specific fashion as a more
-        precisely typed syntax tree. Finally, each alias is structurally
-        equivalent to one or more specific other types.<figure>
-            <title>The Rascal Type Lattice</title>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="type-lattice.png" scale="50"></imagedata>
-              </imageobject>
-            </mediaobject>
-          </figure></para>
-      </section>
     </section>
 
     <section xml:id="section.declarations">
@@ -4308,8 +4328,8 @@ Declaration</replaceable><subscript>1</subscript>;
 
           <para>The types that occur in function declarations may also contain
           <emphasis>type variables</emphasis> that are written as
-          <literal>&amp;</literal> followed by an identifier. In this way
-          functions can be defined for arbitrary types. In the following
+          <literal>&amp;</literal><replaceable>TypeVar</replaceable>. In this
+          way functions can be defined for arbitrary types. In the following
           example, we declare an inversion function that is applicable to any
           binary relation. :<screen><prompt>rascal&gt;</prompt> <userinput>rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R){  
             return {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; &lt;- R };
@@ -4872,8 +4892,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
                   <entry><replaceable>Exp</replaceable><subscript>1</subscript>
                   and <replaceable>Exp</replaceable><subscript>2</subscript>
-                  should evaluate to a relation; return their
-                  composition</entry>
+                  should evaluate to a relation; return their composition.
+                  Note: the letter "<literal>o</literal>" is thus a
+                  keyword!</entry>
                 </row>
 
                 <row>
@@ -6067,11 +6088,21 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <section xml:id="section.concrete-patterns">
           <title>Concrete Syntax Patterns</title>
 
+          <para>Suppose we want to manipulate text written in some
+          hypothetical language LANG. Then first the concrete syntax of LANG
+          has to be defined by importing an SDF module that declares the
+          non-terminals and syntax rules for LANG. Next LANG programs have to
+          be parsed. LANG programs made come from text files or they may be
+          included in the Rascal program as literals. In both cases the text
+          is parsed according to the defined syntax and the result is a parse
+          tree in the form of a value of type <literal>Tree</literal>.
+          Concrete patterns operate on these trees.</para>
+
           <para>A <emphasis>concrete pattern</emphasis> is a (possibly quoted)
           concrete syntax fragment that may contain variables. The syntax that
           is used to parse the concrete pattern may come from any SDF module
           that has been imported in the module in which the concrete pattern
-          occurs.</para>
+          occurs. The </para>
 
           <para>We want to cover the whole spectrum from maximally quoted
           patterns that can unambiguously describe <emphasis
@@ -6081,7 +6112,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
           <itemizedlist>
             <listitem>
-              <para><emphasis>Quoted pattern</emphasis><programlisting>[| <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> |]</programlisting></para>
+              <para><emphasis>Quoted pattern</emphasis><programlisting>` <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> `</programlisting></para>
 
               <para>Inside a quoted pattern arbitrary lexical tokens may
               occur, but the characters <literal>&lt;</literal>,
@@ -6093,7 +6124,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
             <listitem>
               <para>A <emphasis>typed quoted pattern</emphasis>
-              <programlisting><replaceable>Symbol</replaceable> [| <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> |]</programlisting>is
+              <programlisting><replaceable>Symbol</replaceable> ` <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> `</programlisting>is
               a quoted pattern that is preceded by an SDF symbol to define its
               desired syntactic type.</para>
             </listitem>
@@ -6124,7 +6155,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           <itemizedlist>
             <listitem>
               <para>Quoted syntax pattern with two pattern variable
-              declarations:<programlisting>[| while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od |]</programlisting>Two
+              declarations:<programlisting>` while &lt;EXP Exp&gt; do &lt;{STATEMENT ";"}* Stats&gt; od `</programlisting>Two
               observations can be made about this example:</para>
 
               <itemizedlist>
@@ -6145,12 +6176,12 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
             <listitem>
               <para>Quoted syntax pattern with two pattern variable
-              uses:<programlisting>[| while &lt;Exp&gt; do &lt;Stats&gt; od |]</programlisting></para>
+              uses:<programlisting>` while &lt;Exp&gt; do &lt;Stats&gt; od `</programlisting></para>
             </listitem>
 
             <listitem>
               <para>Identical to the previous example, but with a declaration
-              of the desired syntactic type:<programlisting>STATEMENT [| while &lt;Exp&gt; do &lt;Stats&gt; od |]</programlisting></para>
+              of the desired syntactic type:<programlisting>STATEMENT ` while &lt;Exp&gt; do &lt;Stats&gt; od `</programlisting></para>
             </listitem>
 
             <listitem>
@@ -6193,8 +6224,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
         <para>Patterns can be used in various contexts, but a common context
         is a <replaceable>PatternWithAction</replaceable>, which in its turn,
-        may be used in a <keysym>visit</keysym> expression a
-        <keysym>switch</keysym> statement or a rewrite
+        may be used in a<keysym> switch</keysym> statement,
+        <keysym>visit</keysym> expression or rewrite
         <keysym>rule</keysym>.</para>
 
         <para>A <replaceable>PatternWithAction </replaceable>can have one of
@@ -6204,54 +6235,50 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           <listitem>
             <para><programlisting><literal><replaceable>Pat</replaceable> =&gt; <replaceable>Exp</replaceable></literal></programlisting>When
             the subject matches <replaceable>Pat</replaceable>, the expression
-            <replaceable>Exp</replaceable> is evaluated. The use of the
-            resulting value depends on the context and is described in <xref
-            linkend="section.visit" />, <xref
-            linkend="section.rewrite-rule" />. This forms is not usable in
-            switch statements.</para>
+            <replaceable>Exp</replaceable> is evaluated.</para>
           </listitem>
 
           <listitem>
             <para><programlisting><replaceable>Pat</replaceable> : <replaceable>Statement</replaceable></programlisting></para>
 
-            <para>This is the most general case and can be used in
-            <keysym>visit</keysym>, <keysym>switch</keysym> and
-            <keysym>rule</keysym>. When the subject matches
-            <replaceable>Pat</replaceable>, the
-            <replaceable>Statement</replaceable> is executed. The execution of
-            <replaceable>Statement</replaceable> should, depending on the
-            context, lead to one of the following:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>Execution of a <literal>return</literal> statement that
-                returns a value from the enclosing function.</para>
-              </listitem>
-
-              <listitem>
-                <para>Execution of a <keysym>fail</keysym> statement: all side
-                effects of <replaceable>Statement</replaceable> are undone and
-                further alternatives of <replaceable>Pat</replaceable> are
-                tried. If no alternatives remain,
-                <replaceable>PatternWithAction</replaceable> as a whole
-                fails.</para>
-              </listitem>
-
-              <listitem>
-                <para>Execution of an <keysym>insert</keysym> statement (only
-                <keysym>visit</keysym> expressions).</para>
-              </listitem>
-
-              <listitem>
-                <para>None of the above: execution continues dependeing on the
-                context in which the PatternWithAction occurs: the enclosing
-                construct ends successfully (<keysym>switch</keysym>,
-                <keysym>rule</keysym>) or the traversal continues
-                (<keysym>visit</keysym>).</para>
-              </listitem>
-            </itemizedlist>
+            <para>When the subject matches <replaceable>Pat</replaceable>, the
+            <replaceable>Statement</replaceable> is executed.</para>
           </listitem>
         </itemizedlist>
+
+        <para>In <keysym>switch</keysym> statements, only the form
+        <replaceable>Pat</replaceable> : <replaceable>Statement</replaceable>
+        is allowed. When the subject matches <replaceable>Pat</replaceable>,
+        the <replaceable>Statement</replaceable> is executed and the execution
+        of the switch statement is complete. However, when a
+        <keysym>fail</keysym> statement is executed in
+        <replaceable>Statement</replaceable> all its side effects are undone
+        and further alternatives of <replaceable>Pat</replaceable> are tried.
+        If no alternatives remain,
+        <replaceable>PatternWithAction</replaceable> as a whole fails and
+        subsequent cases of the switch statement are tried. Also see <xref
+        linkend="section.switch" />.</para>
+
+        <para>In <keysym>visit</keysym> expressions, the form
+        <replaceable>Pat</replaceable> =&gt; <replaceable>Exp</replaceable>
+        describes subtree replacement: the current subtree of the subject of
+        the visit expression is replaced by the value of
+        <replaceable>Exp</replaceable>. The form
+        <replaceable>Pat</replaceable> : <replaceable>Statement</replaceable>
+        is as described for switch statements, with the addition that
+        execution of an <keysym>insert</keysym> statement will replace the
+        current subtree. After both succes or failure of the
+        <replaceable>PatternWithAction</replaceable>, the traversal of the
+        subject continues. Also see <xref linkend="section.visit" />.</para>
+
+        <para>In rewrite <keysym>rule</keysym>s, both forms are allowed. The
+        form <replaceable>Pat</replaceable> =&gt;
+        <replaceable>Exp</replaceable> behaves as described for visit
+        expressions. The form <replaceable>Pat</replaceable> :
+        <replaceable>Statement</replaceable> is as described for switch
+        statement. If the <replaceable>PatternWithAction</replaceable> fails
+        another rule will be tried. Also see <xref
+        linkend="section.rewrite-rule" />.</para>
       </section>
 
       <section xml:id="section.comprehension">
@@ -6389,7 +6416,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           </itemizedlist>
 
           <para><note>
-              <para>Type information is used to check the plausibility of an
+              <para>Type information is used to check the validity of an
               enumerator and guard you against mistakes. An impossible
               enumerator like <literal>int N &lt;- {"apples",
               "oranges"}</literal> will be flagged as an error since the
@@ -7248,46 +7275,46 @@ ok
       <section>
         <title>Solve Statement</title>
 
-        <para>Rascal provides a solve statement for performing arbitrary
-        fixed-point computations. This means, repeating a certain computation
-        as long as it causes changes. This can, for instance, be used for the
-        solution of sets of simultaneous linear equations but has much wider
-        applicability. The format is:<programlisting><literal>with {
-  <replaceable>Type</replaceable><subscript>1</subscript> <replaceable>Var</replaceable><subscript>1</subscript> = <replaceable>Exp</replaceable><subscript>1</subscript>;
-  <replaceable>Type</replaceable><subscript>2</subscript> <replaceable>Var</replaceable><subscript>2</subscript> = <replaceable>Exp</replaceable><subscript>2</subscript>;
-  ...
-} solve
+        <para>Rascal provides a <keysym>solve</keysym> statement for
+        performing arbitrary fixed-point computations. This means, repeating a
+        certain computation as long as it causes changes. This can, for
+        instance, be used for the solution of sets of simultaneous linear
+        equations but has much wider applicability. The format
+        is:<programlisting><literal>solve(<replaceable>Var</replaceable><subscript>1</subscript>, <replaceable>Var</replaceable><subscript>2</subscript>, ..., <replaceable>Var</replaceable><subscript>n</subscript>)
   <replaceable>Statement</replaceable></literal></programlisting></para>
 
-        <para>The solve statement consists of an initialization section and a
-        statement. Optionally, an expression directly following the
-        <literal>solve</literal> keyword, gives an upper bound on the number
-        of iterations.</para>
+        <para>The solve statement consists of the variables for which a fixed
+        point will be computed and a statement. Optionally, an expression
+        directly following the list of variables gives an upper bound on the
+        number of iterations. The format then becomes:<programlisting><literal>solve(<replaceable>Var</replaceable><subscript>1</subscript>, <replaceable>Var</replaceable><subscript>2</subscript>, ..., <replaceable>Var</replaceable><subscript>n</subscript>; Exp)
+  <replaceable>Statement</replaceable></literal></programlisting></para>
 
-        <para>In the <literal>initial</literal> section, the variables
-        <replaceable>Var</replaceable><subscript><replaceable>i</replaceable></subscript>
-        are declared and initialized. In the <literal>solve</literal> section,
-        the statement can use and modify these variables. The statement is
-        executed, assigning new values to the variables
+        <para><replaceable>Statement</replaceable> can use and modify the
+        listed variables
+        <replaceable>Var</replaceable><subscript><replaceable>i</replaceable></subscript>.
+        The statement is executed, assigning new values to the variables
         <replaceable>Var</replaceable><subscript><replaceable>i</replaceable></subscript>,
         and this is repeated as long as the value of any of the variables was
-        changed compared to the previous repetition.</para>
+        changed compared to the previous repetition. Note that this
+        computation will only terminate if the variables range over a
+        so-called bounded monotonic lattice, in which values can only become
+        larger until a fixed upperbound or become smaller until a fixed lower
+        bound.</para>
 
         <para>Let's consider transitive closure as an example (transitive
         closure is already available as built-in operator, we use it here just
         as a simple illustration). Transitive closure of a relation is usually
-        defined as:<programlisting>R+ = R + (R o R) + (R o R o R) + ...</programlisting>This
-        can be expressed as follows:</para>
+        defined as:<programlisting>R+ = R + (R o R) + (R o R o R) + ...</programlisting>In
+        other words, it is the union of succesive compositions of the relation
+        <literal>R</literal> with itself. This can be expressed as
+        follows:</para>
 
         <screen><prompt>rascal&gt;</prompt> <userinput>rel[int,int] R = {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;};</userinput>
 <computeroutput>rel[int,int] : {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}</computeroutput>
-<prompt>rascal&gt;</prompt>
-  <userinput>with
-     rel[int,int] T = R;
-  solve
-     T = T + (T o R);</userinput>
-
-<computeroutput>rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</computeroutput></screen>
+<prompt>rascal&gt;</prompt> <userinput>solve (T) {
+          T = T + (T o R);
+        }
+</userinput><computeroutput>rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</computeroutput></screen>
       </section>
     </section>
   </section>
@@ -7349,7 +7376,7 @@ ok
 
       <listitem>
         <para>Labelled Graph: labelled graphs with addition edge information,
-        see <xref linkend="section.lib-LabelledGraph" />.</para>
+        see <xref linkend="section.lib-LabeledGraph" />.</para>
       </listitem>
 
       <listitem>
@@ -8248,7 +8275,10 @@ public alias realSeriesMultipleData =
       <para>The graph datatype is a special form of binary relation defined as
       follows:</para>
 
-      <para><programlisting>alias graph[&amp;T] = rel[&amp;T from, &amp;T to];</programlisting></para>
+      <para><programlisting>alias graph[&amp;T] = rel[&amp;T from, &amp;T to];</programlisting>All
+      operators and functions on relations are applicable to graphs, see <xref
+      linkend="section.lib-Relation" />. Also see <xref
+      linkend="section.lib-LabeledGraph" />.</para>
 
       <table>
         <title>Graph Functions</title>
@@ -8643,96 +8673,6 @@ public alias realSeriesMultipleData =
         </table></para>
     </section>
 
-    <section>
-      <title>Resources (Eclipse only)</title>
-
-      <para>The Resources library provides direct access to Eclipse projects
-      and the resources they contain. A Resource is the Rascal representation
-      of an Eclipse project, or a folder or a file in an Eclipse project. In
-      combination with the IO library module, users of the Resources library
-      gain access to the contents of any file that is in an Eclipse
-      project.</para>
-
-      <programlisting>data Resource = root(set[Resource] projects) 
-              | project(loc id, set[Resource] contents)
-              | folder(loc id, set[Resource] contents)
-              | file(loc id);</programlisting>
-
-      <para>Resource is a recursive data-type, where recursion indicates
-      "containment". I.e. a folder contains many other resources, a project
-      also contains other resources. The root of an Eclipse workspace also
-      contains other resources, in particular "projects".</para>
-
-      <para>Each Resource, but the root, has an 'id' field that explains the
-      exact location of the resource. Examples of Eclipse Resource locations
-      are:</para>
-
-      <programlisting>|project://myProject| // a location that points to a project in the Eclipse workspace named "myProject"
-|project://myProject/src/Main.java| // a location that points to a file named Main.java in the src folder of the myProject project in the workspace|
-|project://myProject/src/Main.java|(0,10,1,0,1,10) // a location that points to a part of the previous file, namely the first 10 characters on the first line.</programlisting>
-
-      <para>Using the IO library, one can easily read the contents of a such
-      an Eclipse project location:</para>
-
-      <programlisting>import IO;
-str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
-
-      <para>Other library functions in the Resource library provide more
-      information about resources:<table>
-          <title>Resources Functions</title>
-
-          <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="3*" />
-
-            <colspec align="left" colname="col2" colwidth="3*" />
-
-            <thead>
-              <row>
-                <entry>Function</entry>
-
-                <entry>Description</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry><literal>Resource root()</literal></entry>
-
-                <entry>Retrieve a full hierarchical representation of all
-                resources in the Eclipse workspace</entry>
-              </row>
-
-              <row>
-                <entry>set[loc] projects()</entry>
-
-                <entry>Convenience function to retrieve a set of project
-                locations of the Eclipse workspace</entry>
-              </row>
-
-              <row>
-                <entry>set[loc] references(loc project);</entry>
-
-                <entry>Find out which other projects this project references
-                (depends on)</entry>
-              </row>
-
-              <row>
-                <entry>set[loc] dependencies(loc project);</entry>
-
-                <entry>Computes referenced projects transitively</entry>
-              </row>
-
-              <row>
-                <entry>public Resource getProject(loc project);</entry>
-
-                <entry>Retrieves the hierarchical representation of a single
-                named project</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
-    </section>
-
     <section xml:id="section.lib-JDT">
       <title>JDT (Eclipse only)</title>
 
@@ -8829,26 +8769,53 @@ public alias ModifierRel = rel[Entity entity, Modifier modifier];  // a short-ha
 
       <para>The following annotations declare the kind of information that the
       JDT library module provides after retrieving it from an Eclipse Java
-      project:<programlisting>anno BindingRel Resource@types;        // contains all type declarations
-anno BindingRel Resource@methods;      // contains all method declarations
-anno BindingRel Resource@constructors; // contains all constructor declarations
-anno BindingRel Resource@fields;       // contains all field declarations
-anno BindingRel Resource@variables;    // contains all local variable and method parameter declarations
-anno BindingRel Resource@packages;     // contains all package declarations
+      project:<programlisting>// All type declarations
+anno BindingRel Resource@types;
 
-anno ModifierRel Resource@modifiers;   // maps Entities to the modifiers that have {been declared for it
+// All method declarations
+anno BindingRel Resource@methods; 
 
-anno EntityRel  Resource@implements;   // defines which types implement which interfaces
-anno EntityRel  Resource@extends;      // defines which classes extends which other classes
-anno EntitySet  Resource@declaredTopTypes; // defines which top-level classes are declared
-anno EntityRel  Resource@declaredSubTypes; // defines which inner classes are declared
-anno EntityRel  Resource@declaredMethods;  // defines which class defines which methods
-anno EntityRel  Resource@declaredFields;   // defines which class defines which fields
-anno EntityRel  Resource@calls;            // defines which methods call which other methods, and which class initialization code calls which methods</programlisting>To
-      get access to all this information, please use the following
-      functions:</para>
+// All constructor declarations     
+anno BindingRel Resource@constructors; 
 
-      <para><table xml:id="table.JDT-project-functions">
+// All field declarations
+anno BindingRel Resource@fields;   
+
+// All declarations for local variables and method parameters
+
+anno BindingRel Resource@variables;
+
+// All Package declarations
+anno BindingRel Resource@packages; 
+
+// All the modifiers that have been declared for each entity
+anno ModifierRel Resource@modifiers;   
+
+// Which type implements which interfaces
+anno EntityRel  Resource@implements; 
+
+// Which class extends which other classes
+anno EntityRel  Resource@extends;
+
+// All declarations of top-level classes
+anno EntitySet  Resource@declaredTopTypes; 
+
+// All declarations of inner classes
+
+anno EntityRel  Resource@declaredSubTypes; 
+
+// Which class defines which methods
+anno EntityRel  Resource@declaredMethods;  
+
+// Which class defines which fields
+anno EntityRel  Resource@declaredFields;   
+
+// Which methods call which other methods, and which 
+// class initialization code calls which methods
+anno EntityRel  Resource@calls;         </programlisting>To get access to all
+      this information, please use the following functions:</para>
+
+      <para><table xml:id="table.JDT-fact-retrieval-functions">
           <title>JDT Project/File Extraction Functions</title>
 
           <tgroup cols="2">
@@ -8866,24 +8833,17 @@ anno EntityRel  Resource@calls;            // defines which methods call which o
 
             <tbody>
               <row>
-                <entry>str readable(Entity entity)</entry>
-
-                <entry>Will compute a readable representation of a string for
-                use in debugging output or visualizations</entry>
-              </row>
-
-              <row>
                 <entry><literal>Resource extractClass(loc
                 javaFile)</literal></entry>
 
-                <entry>Import JDT facts from file </entry>
+                <entry>Import JDT facts from file</entry>
               </row>
 
               <row>
                 <entry><literal>Resource extractProject(loc
                 project)</literal></entry>
 
-                <entry>Import JDT facts from a project </entry>
+                <entry>Import JDT facts from a project</entry>
               </row>
 
               <row>
@@ -8912,6 +8872,13 @@ anno EntityRel  Resource@calls;            // defines which methods call which o
               </row>
 
               <row>
+                <entry><literal>str readable(Entity entity)</literal></entry>
+
+                <entry>Will compute a readable representation of a string for
+                use in debugging output or visualizations</entry>
+              </row>
+
+              <row>
                 <entry><literal>Resource unionFacts(Resource m1, Resource
                 m2)</literal></entry>
 
@@ -8929,7 +8896,8 @@ anno EntityRel  Resource@calls;            // defines which methods call which o
       <para>Here is an example function that extracts the sub-type relation
       from a given project:<programlisting>EntityRel getSubTypeInformation(loc project){
   fm = extractProject(project);
-  return fm@extends + fm@implements + {class("Object") x top(fm@extends + fm@implements);
+  return fm@extends + fm@implements + 
+         {class("Object") x top(fm@extends + fm@implements);
 }</programlisting></para>
 
       <para>The following example shows how to link the JDT type bindings to
@@ -8941,19 +8909,23 @@ BindingRel jdtTypeBindings = fm@types;
 
 rel[node, Entity] myTypeBindings;
 BindingRel unmatchedBindings;
-&lt;myTypeBindings, unmatchedBindings&gt; = matchLocations(nodeLocations, jdtTypeBindings);</programlisting></para>
+&lt;myTypeBindings, unmatchedBindings&gt; = 
+    matchLocations(nodeLocations, jdtTypeBindings);</programlisting></para>
     </section>
 
-    <section xml:id="section.lib-LabelledGraph">
-      <title>Labelled Graph</title>
+    <section xml:id="section.lib-LabeledGraph">
+      <title>Labeled Graph</title>
 
-      <para>The labelled graph datatype is a special form of binary relation
+      <para>The labeled graph datatype is a special form of binary relation
       with labelled edges and is defined as follows:</para>
 
       <para><programlisting>alias lgraph[&amp;T,&amp;L] = rel[&amp;T from, &amp;L label, &amp;T to];</programlisting></para>
 
+      <para>All operators and functions on relations are applicable to labeled
+      graphs, see <xref linkend="section.lib-Relation" />.</para>
+
       <table>
-        <title>Labelled Graph Functions</title>
+        <title>Labeled Graph Functions</title>
 
         <tgroup cols="2">
           <colspec align="left" colname="col1" colwidth="4*" />
@@ -10309,9 +10281,11 @@ BindingRel unmatchedBindings;
     <section xml:id="section.lib-Relation">
       <title>Relation</title>
 
-      <para>Relation are sets of tuples, therefore all set operators (see,
-      <xref linkend="table.set-operators" />) apply to relations as
-      well</para>
+      <para>Relation are sets of tuples, therefore all set operators apply to
+      relations as well, see, <xref linkend="table.set-operators" />. Graph
+      and labeled graph are a special forms of relation, see <xref
+      linkend="section.lib-Graph" /> and <xref
+      linkend="section.lib-LabeledGraph" />.</para>
 
       <table>
         <title>Operations on Relations</title>
@@ -10601,7 +10575,10 @@ BindingRel unmatchedBindings;
 </userinput><computeroutput>rel[int,int] : {&lt;2, 20&gt;}</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>carrierX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}, {10, 1, 20});</userinput>
-<computeroutput>rel[int,int] : <literal>{&lt;3,30&gt;}</literal></computeroutput></screen></para>
+<computeroutput>rel[int,int] : <literal>{&lt;3,30&gt;}</literal></computeroutput></screen><note>
+          <para>Further support for n-ary relations is being
+          considered.</para>
+        </note></para>
     </section>
 
     <section xml:id="section.lib-RSF">
@@ -10640,15 +10617,50 @@ BindingRel unmatchedBindings;
     </section>
 
     <section xml:id="section.lib-Resource">
-      <title>Resource (Eclipse only)</title>
+      <title>Resources (Eclipse only)</title>
 
-      <para><programlisting>data Resource = root(set[Resource] projects) 
-              | project(str name, set[Resource] contents) 
-              | folder(str name, set[Resource] contents) 
-              | file(str name, str extension); </programlisting></para>
+      <para>The Resources library provides direct access to Eclipse projects
+      and the resources they contain. A Resource is the Rascal representation
+      of an Eclipse project, or a folder or a file in an Eclipse project. In
+      combination with the IO library module, users of the Resources library
+      gain access to the contents of any file that is in an Eclipse
+      project.</para>
 
-      <para><table>
-          <title>Resource Functions</title>
+      <programlisting>data Resource = root(set[Resource] projects) 
+              | project(loc id, set[Resource] contents)
+              | folder(loc id, set[Resource] contents)
+              | file(loc id);</programlisting>
+
+      <para>Resource is a recursive data-type, where recursion indicates
+      "containment". I.e. a folder contains many other resources, a project
+      also contains other resources. The root of an Eclipse workspace also
+      contains other resources, in particular "projects".</para>
+
+      <para>Each Resource, but the root, has an 'id' field that explains the
+      exact location of the resource. Examples of Eclipse Resource locations
+      are:</para>
+
+      <programlisting>// A location that points to a project in the Eclipse workspace 
+// named "myProject"
+|project://myProject| 
+
+// A location that points to a file named Main.java in the src 
+// folder of the myProject project in the workspace
+|project://myProject/src/Main.java| 
+
+// A location that points to a part of the previous file, 
+// namely the first 10 characters on the first line.
+|project://myProject/src/Main.java|(0,10,1,0,1,10) </programlisting>
+
+      <para>Using the IO library, one can easily read the contents of a such
+      an Eclipse project location:</para>
+
+      <programlisting>import IO;
+str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
+
+      <para>Other library functions in the Resource library provide more
+      information about resources:<table>
+          <title>Resources Functions</title>
 
           <tgroup cols="2">
             <colspec align="left" colname="col1" colwidth="3*" />
@@ -10665,34 +10677,37 @@ BindingRel unmatchedBindings;
 
             <tbody>
               <row>
-                <entry><literal>set[loc] files(str project)</literal></entry>
+                <entry>set[loc] dependencies(loc project);</entry>
 
-                <entry>The files contained in a project</entry>
+                <entry>Computes referenced projects transitively</entry>
               </row>
 
               <row>
-                <entry><literal>loc location(str project)</literal></entry>
+                <entry>public Resource getProject(loc project);</entry>
 
-                <entry>Source location of given project</entry>
+                <entry>Retrieves the hierarchical representation of a single
+                named project</entry>
               </row>
 
               <row>
-                <entry><literal>set[str] projects()</literal></entry>
+                <entry>set[loc] projects()</entry>
 
-                <entry>The projects in the Eclipse workspace</entry>
+                <entry>Convenience function to retrieve a set of project
+                locations of the Eclipse workspace</entry>
               </row>
 
               <row>
-                <entry><literal>set[str] references(str
-                project)</literal></entry>
+                <entry>set[loc] references(loc project);</entry>
 
-                <entry>The project references of a given project</entry>
+                <entry>Find out which other projects this project references
+                (depends on)</entry>
               </row>
 
               <row>
-                <entry><literal>Resource root() </literal></entry>
+                <entry><literal>Resource root()</literal></entry>
 
-                <entry>The root of the Eclipse workspace</entry>
+                <entry>Retrieve a full hierarchical representation of all
+                resources in the Eclipse workspace</entry>
               </row>
             </tbody>
           </tgroup>
@@ -11999,7 +12014,7 @@ ok</computeroutput>
             <entry><replaceable>Exp</replaceable> <literal>@</literal>
             <replaceable>Name</replaceable></entry>
 
-            <entry>Attribute value</entry>
+            <entry>Annotation value</entry>
 
             <entry></entry>
           </row>
@@ -12010,7 +12025,7 @@ ok</computeroutput>
             <literal>=</literal><replaceable>
             Exp</replaceable><subscript>2</subscript><literal>]</literal></entry>
 
-            <entry>Assign attribute value</entry>
+            <entry>Assign annotation value</entry>
 
             <entry></entry>
           </row>
@@ -12494,7 +12509,7 @@ ok</computeroutput>
 
             <entry><xref linkend="section.lib-Graph"
             xrefstyle="template:%t" />, <xref
-            linkend="section.lib-LabelledGraph"
+            linkend="section.lib-LabeledGraph"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -12563,6 +12578,13 @@ ok</computeroutput>
           </row>
 
           <row>
+            <entry><literal>dependencies</literal></entry>
+
+            <entry><xref linkend="section.lib-Resource"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
             <entry><literal>dim3</literal></entry>
 
             <entry><xref linkend="section.lib-Chart"
@@ -12607,9 +12629,23 @@ ok</computeroutput>
           </row>
 
           <row>
-            <entry><literal>files</literal></entry>
+            <entry><literal>extractClass</literal></entry>
 
-            <entry><xref linkend="section.lib-Resource"
+            <entry><xref linkend="section.lib-JDT"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>extractFactsTransitive</literal></entry>
+
+            <entry><xref linkend="section.lib-JDT"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>extractProject</literal></entry>
+
+            <entry><xref linkend="section.lib-JDT"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -12726,13 +12762,6 @@ ok</computeroutput>
           </row>
 
           <row>
-            <entry>location</entry>
-
-            <entry><xref linkend="section.lib-Resource"
-            xrefstyle="template:%t" /></entry>
-          </row>
-
-          <row>
             <entry><literal>makeNode</literal></entry>
 
             <entry><xref linkend="section.lib-Node"
@@ -12745,6 +12774,13 @@ ok</computeroutput>
             <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>matchLocations</literal></entry>
+
+            <entry><xref linkend="section.lib-JDT"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -12809,7 +12845,7 @@ ok</computeroutput>
 
             <entry><xref linkend="section.lib-Graph"
             xrefstyle="template:%t" />, <xref
-            linkend="section.lib-LabelledGraph"
+            linkend="section.lib-LabeledGraph"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -12853,7 +12889,7 @@ ok</computeroutput>
 
             <entry><xref linkend="section.lib-Graph"
             xrefstyle="template:%t" />, <xref
-            linkend="section.lib-LabelledGraph"
+            linkend="section.lib-LabeledGraph"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -12862,7 +12898,7 @@ ok</computeroutput>
 
             <entry><xref linkend="section.lib-Graph"
             xrefstyle="template:%t" />, <xref
-            linkend="section.lib-LabelledGraph"
+            linkend="section.lib-LabeledGraph"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -12871,7 +12907,14 @@ ok</computeroutput>
 
             <entry><xref linkend="section.lib-Graph"
             xrefstyle="template:%t" />, <xref
-            linkend="section.lib-LabelledGraph"
+            linkend="section.lib-LabeledGraph"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry>readable</entry>
+
+            <entry><xref linkend="section.lib-JDT"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -12959,7 +13002,7 @@ ok</computeroutput>
 
             <entry><xref linkend="section.lib-Graph"
             xrefstyle="template:%t" />, <xref
-            linkend="section.lib-LabelledGraph"
+            linkend="section.lib-LabeledGraph"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -13020,7 +13063,7 @@ ok</computeroutput>
 
             <entry><xref linkend="section.lib-Graph"
             xrefstyle="template:%t" />, <xref
-            linkend="section.lib-LabelledGraph"
+            linkend="section.lib-LabeledGraph"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -13104,7 +13147,7 @@ ok</computeroutput>
 
             <entry><xref linkend="section.lib-Graph"
             xrefstyle="template:%t" />, <xref
-            linkend="section.lib-LabelledGraph"
+            linkend="section.lib-LabeledGraph"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -13146,6 +13189,13 @@ ok</computeroutput>
             <entry><literal>toUpperCase</literal></entry>
 
             <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>unionFacts</literal></entry>
+
+            <entry><xref linkend="section.lib-JDT"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -13226,7 +13276,7 @@ ok</computeroutput>
 
     <para>Bas Basten provided useful feedback on the design and contributed
     the Rascal/JDT interface that makes it easy to extract facts from Java
-    source code.</para>
+    source code. Joppe Kroon further improved the JDT interface.</para>
 
     <para>Bob Fuhrer's inspiring IMP project motivated us to build Rascal on
     top of IMP. The PDB was designed and implemented during Jurgen's visit to
@@ -13240,8 +13290,8 @@ ok</computeroutput>
     Master's thesis. The results will be included in the final version of this
     document.</para>
 
-    <para>Frank Tip and Yaroslav Usenko provided feedback on this manual and
-    suggested several improvements.</para>
+    <para>Claus Brabrand, Frank Tip and Yaroslav Usenko provided feedback on
+    this manual and suggested several improvements.</para>
   </section>
 
   <?hard-pagebreak ?>
