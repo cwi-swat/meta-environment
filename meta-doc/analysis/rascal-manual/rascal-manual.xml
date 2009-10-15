@@ -66,7 +66,8 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="easy-workflow.png" scale="50"></imagedata>
+              <imagedata fileref="easy-workflow.png"
+                         scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -333,7 +334,8 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="manual-structure.png" scale="50"></imagedata>
+              <imagedata fileref="manual-structure.png"
+                         scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>The structure of this book is shown in <xref
@@ -1405,6 +1407,173 @@ public str genClass(str name, map[str,str] fields) {
       string interpolation are explained in <xref
       linkend="section.string" />.</para>
     </section>
+
+    <section>
+      <title>A Domain-Specific Language for Finite State Machines</title>
+
+      <para>Finite State Machines (FSMs) are a universal device in Computer
+      Science and are used to model problems ranging from lexical tokens to
+      concurent processes. An FSM consists of named states and labeled
+      transitions between states. An example is shown in <xref
+      linkend="figure.fsm-example" />.<figure xml:id="figure.fsm-example">
+          <title>Examples of a Finite State Machine</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="fsm.png"
+                         scale="50"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>This same information can be represented in textual form as
+      follows:<programlisting>finite-state machine
+    state S1;
+    state S2;
+    state S3;
+    trans a: S1 -&gt; S2;
+    trans b: S2 -&gt; S1;
+    trans a: S1 -&gt; S3</programlisting>and here is where the idea is born to
+      design a Domain-Specific Language for finite state machines (aptly
+      called FSM). This always proceeds in three steps:</para>
+
+      <orderedlist>
+        <listitem>
+          <para><emphasis role="bold">Do domain analysis</emphasis>. Explore
+          the domain and make an inventory of the relevant concepts and their
+          interactions.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Define syntax</emphasis>. Design a
+          textual syntax to represent these concepts and interactions.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Define operations</emphasis>. Define
+          operations on DSL programs. This maybe, for example, be
+          typechecking, validation, or execution.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>We will now apply these steps to the FSM domain.</para>
+
+      <formalpara>
+        <title>Do domain analysis.</title>
+
+        <para>We assume that the FSM domain is sufficiently known. The
+        concepts are states and labeled transitions.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Define syntax.</title>
+
+        <para>We define a textual syntax for FSMs. This syntax is written in
+        the Syntax Definition Formalism SDF, see <remark>XXX</remark>. The
+        syntax definition looks as follows:</para>
+      </formalpara>
+
+      <para><programlisting>module demo/StateMachine/Syntax
+
+
+%% Concrete syntax for a simple state machine as suggested by Gorel Hedin at GTTSE09
+%% A State machine consists of a series of declarations for states and transitions
+
+imports basic/Whitespace
+imports basic/IdentifierCon
+
+exports
+  context-free start-symbols
+    FSM
+  
+  sorts FSM Decl Trans State IdCon
+
+  context-free syntax
+    "state" IdCon                         -&gt; State
+    "trans" IdCon ":" IdCon  "-&gt;" IdCon   -&gt; Trans
+    State                                 -&gt; Decl
+    Trans                                 -&gt; Decl
+    "finite-state" "machine" {Decl ";"}+  -&gt; FSM
+</programlisting></para>
+
+      <formalpara>
+        <title><emphasis role="bold">Define Operations</emphasis>.</title>
+
+        <para>There are various operations one could define on a FSM:
+        executing it for given input tokens, reducing a non-deterministic
+        automaton to a deterministic one, and so on. Here we select a
+        reachability check on FSMs as example. <warning>
+            <para>Not yet complete or checked.</para>
+          </warning></para>
+      </formalpara>
+
+      <para>We start with the usual imports and define a function
+      getTransitions that extracts all transitions from an FSM:</para>
+
+      <para><programlisting>module demo::StateMachine::CanReach
+
+// A simple state machine FSM as suggested by Gorel Hedin at GTTSE09
+
+import demo::StateMachine::Syntax;
+import Relation;
+import Map;
+import IO;
+
+// Extract from a give FSM all transitions as a relation
+
+public rel[str, str] getTransitions(FSM fsm){
+   return { &lt;"&lt;from&gt;", "&lt;to&gt;"&gt; | /`trans &lt;IdCon a&gt;: &lt;IdCon from&gt; -&gt; &lt;IdCon to&gt;` &lt;- fsm };
+}</programlisting>The function <literal>getTransitions</literal> illustrates
+      several of issues. Given a concrete fsm, a deep pattern match (/) is
+      done searching for <literal>trans</literal> constructs. For each match
+      three <literal>IdCon</literal>s are extracted from it and assigned to
+      the variables<literal>a</literal>, <literal>from</literal>,
+      respectively, <literal>to</literal>. Next from and to are converted to a
+      string (using the string interpolations "&lt;from&gt;" and "&lt;to&gt;")
+      and finally they are placed in a tuple in the resulting relation. The
+      net effect is that transitions encoded in the syntaxt tree of fsm are
+      collected in a relation for further processing.</para>
+
+      <para>Next, we compute all reachable states in the function
+      <literal>canReach</literal>:<programlisting>// continuing module demo::StateMachine::CanReach
+
+public map[str, set[str]] canReach(FSM fsm){
+  transitions = getTransitions(fsm);
+  return ( s: (transitions+)[s] | str s &lt;- carrier(transitions) );
+}</programlisting>Here <literal>str s &lt;- carrier(transitions)</literal>
+      enumerates all elements that occur in the relations that is extracted
+      from <literal>fsm</literal>. A map comprehension is used to construct a
+      map from each state to all states that can be reached it. Here
+      <literal>transitions+</literal> is the transitive closure of the
+      transition relation and <literal>(transitions+)[s]</literal> gives the
+      image of that closure for a given state; in other words all states that
+      can be reached from it.</para>
+
+      <para>Finally, we declare an example FSM (observe that it uses FSM
+      syntax in Rascal code!):</para>
+
+      <para><programlisting>// continuing module demo::StateMachine::CanReach
+
+public FSM example = 
+       finite-state machine
+          state S1;
+          state S2;
+          state S3;
+          trans a: S1 -&gt; S2;
+          trans b: S2 -&gt; S1;
+          trans a: S1 -&gt; S3;</programlisting>Testing the above functions
+      gives the following results:</para>
+
+      <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::StateMachine::CanReach;</userinput>
+<computeroutput>ok</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>getTransitions(example);</userinput>
+
+<computeroutput>rel[IdCon,IdCon]: {&lt;"S1", "S2"&gt;, &lt;"S2", "S1"&gt;, &lt;"S1", "S3"&gt;}</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>canReach(example);</userinput>
+
+<computeroutput>map[IdCon: set[IdCon]: ("S1" : {"S1", "S2", "S3"}, 
+                        "S2" : {"S1", "S2", "S3"},
+                        "S3" : {})</computeroutput></screen></para>
+    </section>
   </section>
 
   <?hard-pagebreak ?>
@@ -1493,7 +1662,8 @@ public str genClass(str name, map[str,str] fields) {
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="problem-solving.png" scale="50"></imagedata>
+            <imagedata fileref="problem-solving.png"
+                       scale="50"></imagedata>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -1508,7 +1678,8 @@ public str genClass(str name, map[str,str] fields) {
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="validation.png" scale="50"></imagedata>
+            <imagedata fileref="validation.png"
+                       scale="50"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>A major question in every problem solving situation is how to
@@ -1551,7 +1722,8 @@ public str genClass(str name, map[str,str] fields) {
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="requirements.png" scale="50"></imagedata>
+            <imagedata fileref="requirements.png"
+                       scale="50"></imagedata>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -1708,7 +1880,8 @@ public str genClass(str name, map[str,str] fields) {
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="define-extraction.png" scale="50"></imagedata>
+              <imagedata fileref="define-extraction.png"
+                         scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -1792,7 +1965,8 @@ public str genClass(str name, map[str,str] fields) {
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="define-analysis.png" scale="50"></imagedata>
+              <imagedata fileref="define-analysis.png"
+                         scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -1898,7 +2072,8 @@ public str genClass(str name, map[str,str] fields) {
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="define-synthesis.png" scale="50"></imagedata>
+              <imagedata fileref="define-synthesis.png"
+                         scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -2017,7 +2192,8 @@ public str genClass(str name, map[str,str] fields) {
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="calls-workflow.png" scale="50"></imagedata>
+                <imagedata fileref="calls-workflow.png"
+                           scale="50"></imagedata>
               </imageobject>
             </mediaobject>
 
@@ -2033,7 +2209,8 @@ public str genClass(str name, map[str,str] fields) {
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="calls.png" scale="50"></imagedata>
+                <imagedata fileref="calls.png"
+                           scale="50"></imagedata>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -2285,7 +2462,8 @@ public rel[comp,comp] lift(rel[proc,proc] aCalls,
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="parts.png" scale="50"></imagedata>
+            <imagedata fileref="parts.png"
+                       scale="50"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2725,7 +2903,8 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="dominators.png" scale="50"></imagedata>
+                <imagedata fileref="dominators.png"
+                           scale="50"></imagedata>
               </imageobject>
             </mediaobject>
           </figure>The result of applying <literal>dominators</literal> to it
@@ -2750,7 +2929,8 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="dominator-tree.png" scale="50"></imagedata>
+                <imagedata fileref="dominator-tree.png"
+                           scale="50"></imagedata>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -2768,7 +2948,8 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="df-graph.png" scale="50"></imagedata>
+                <imagedata fileref="df-graph.png"
+                           scale="50"></imagedata>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -2922,7 +3103,8 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="reach.png" scale="50"></imagedata>
+                <imagedata fileref="reach.png"
+                           scale="50"></imagedata>
               </imageobject>
             </mediaobject>
           </figure> For our running example (<xref
@@ -3041,7 +3223,8 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="live.png" scale="50"></imagedata>
+                <imagedata fileref="live.png"
+                           scale="50"></imagedata>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -3339,7 +3522,8 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="type-lattice.png" scale="50"></imagedata>
+              <imagedata fileref="type-lattice.png"
+                         scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -4243,7 +4427,8 @@ Declaration</replaceable><subscript>1</subscript>;
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="module-parts.png" scale="50"></imagedata>
+                <imagedata fileref="module-parts.png"
+                           scale="50"></imagedata>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -4708,7 +4893,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="exp-parts.png" scale="50"></imagedata>
+              <imagedata fileref="exp-parts.png"
+                         scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -6102,7 +6288,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           concrete syntax fragment that may contain variables. The syntax that
           is used to parse the concrete pattern may come from any SDF module
           that has been imported in the module in which the concrete pattern
-          occurs. The </para>
+          occurs. The</para>
 
           <para>We want to cover the whole spectrum from maximally quoted
           patterns that can unambiguously describe <emphasis
@@ -6676,7 +6862,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="statement-parts.png" scale="50"></imagedata>
+              <imagedata fileref="statement-parts.png"
+                         scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>The various statements forms are summarized in <xref
