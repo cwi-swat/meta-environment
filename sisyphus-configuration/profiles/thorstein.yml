@@ -27,7 +27,7 @@ environment: |
  EXTRA_CONFIGURE_FLAGS="--with-docbook-xsl=${DOCBOOK_XSL} --with-fop=${FOP} --with-eclipse=${ECLIPSE} --with-jdk=${JDK}"
  CC='gcc -m32'
  export CC
-world-version: 37
+world-version: 38
 script:
  order:
   - reconf

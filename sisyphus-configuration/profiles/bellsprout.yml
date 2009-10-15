@@ -19,7 +19,7 @@ environment: |
  ECLIPSE="/ufs/sen1/software/installed/eclipse-daybuild"
  JDK="/ufs/sen1/software/installed/java/linux/i386/jdk1.6-LATEST/"
  EXTRA_CONFIGURE_FLAGS="--with-eclipse=${ECLIPSE} --with-jdk=${JDK}"
-world-version: 15
+world-version: 16
 script: 
  order:
   - patch
