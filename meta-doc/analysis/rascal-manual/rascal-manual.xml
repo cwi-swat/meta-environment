@@ -1467,7 +1467,9 @@ public str genClass(str name, map[str,str] fields) {
         <title>Define syntax</title>
 
         <para>We define a textual syntax for FSMs. This syntax is written in
-        the Syntax Definition Formalism SDF. The syntax definition looks as
+        the Syntax Definition Formalism SDF. See <link
+        xlink:href="http://www.meta-environment.org/Meta-Environment/Documentation">http://www.meta-environment.org/Meta-Environment/Documentation</link>
+        for tutorials and manuals for SDF. The syntax definition looks as
         follows:</para>
       </formalpara>
 
@@ -1517,7 +1519,8 @@ import IO;
 // Extract from a give FSM all transitions as a relation
 
 public rel[str, str] getTransitions(FSM fsm){
-   return { &lt;"&lt;from&gt;", "&lt;to&gt;"&gt; | /`trans &lt;IdCon a&gt;: &lt;IdCon from&gt; -&gt; &lt;IdCon to&gt;` &lt;- fsm };
+   return { &lt;"&lt;from&gt;", "&lt;to&gt;"&gt; | 
+            /`trans &lt;IdCon a&gt;: &lt;IdCon from&gt; -&gt; &lt;IdCon to&gt;` &lt;- fsm };
 }</programlisting>The function <literal>getTransitions</literal> illustrates
       several issues. Given a concrete fsm, a deep pattern match (/) is done
       searching for <literal>trans</literal> constructs. For each match three
@@ -11958,7 +11961,7 @@ public alias realSeriesMultipleData =
               <row>
                 <entry><literal>subtitle(str txt)</literal></entry>
 
-                <entry>barChart, boxPlot, histogram, peiChart xyChart</entry>
+                <entry>barChart, boxPlot, histogram, pieChart xyChart</entry>
 
                 <entry>At the top of the chart, draw a subtitle below the
                 title</entry>
@@ -12663,7 +12666,7 @@ ok</computeroutput>
             <entry><literal>barChart</literal></entry>
 
             <entry><xref linkend="section.lib-vizChart"
-            xrefstyle="template:%t" /> </entry>
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -12982,7 +12985,7 @@ ok</computeroutput>
             <entry><literal>pieChart</literal></entry>
 
             <entry><xref linkend="section.lib-vizChart"
-            xrefstyle="template:%t" /> </entry>
+            xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
@@ -13383,7 +13386,7 @@ ok</computeroutput>
             <entry><literal>xyChart</literal></entry>
 
             <entry><xref linkend="section.lib-vizChart"
-            xrefstyle="template:%t" /> </entry>
+            xrefstyle="template:%t" /></entry>
           </row>
         </tbody>
       </tgroup>
