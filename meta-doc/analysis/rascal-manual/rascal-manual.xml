@@ -1415,7 +1415,8 @@ public str genClass(str name, map[str,str] fields) {
       Computer Science and are used to model problems ranging from lexical
       tokens to concurent processes. An FSM consists of named states and
       labeled transitions between states. An example is shown in <xref
-      linkend="figure.fsm-example" />.<figure xml:id="figure.fsm-example">
+      linkend="figure.fsm-example" />. This example was suggested by Gorel
+      Hedin at GTTSE09.<figure xml:id="figure.fsm-example">
           <title>Example of a Finite State Machine</title>
 
           <mediaobject>
@@ -1500,15 +1501,13 @@ exports
         <para>There are various operations one could define on a FSM:
         executing it for given input tokens, reducing a non-deterministic
         automaton to a deterministic one, and so on. Here we select a
-        reachability check on FSMs as example. </para>
+        reachability check on FSMs as example.</para>
       </formalpara>
 
       <para>We start with the usual imports and define a function
       getTransitions that extracts all transitions from an FSM:</para>
 
       <para><programlisting>module demo::StateMachine::CanReach
-
-// A simple state machine FSM as suggested by Gorel Hedin at GTTSE09
 
 import demo::StateMachine::Syntax;
 import Relation;
