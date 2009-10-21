@@ -3065,11 +3065,11 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
 
   // The set of mutually recursive dataflow equations 
   // that has to be solved:
+  
+  rel[stat,def] IN = {};
+  rel[stat,def] OUT = DEF;
 
-  with
-    rel[stat,def] IN = {};
-    rel[stat,def] OUT = DEF;
-  solve {
+  solve (IN, OUT) {
     IN  = {&lt;S, D&gt; | int S &lt;- STATEMENT, 
                     stat P &lt;- predecessors(PRED,S), 
                     def D &lt;- OUT[P]};
@@ -3077,14 +3077,13 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
                     def D &lt;- DEF[S] + (IN[S] - KILL[S])};
   };
   return IN;
-}</programlisting><warning>
-            <para>Adjust solve syntax.</para>
-          </warning>First, the relations <literal>IN</literal> and
-        <literal>OUT</literal> are declared and initialized. Next, two
-        equations are given that resemble the mathematical equations given
-        above. Note the use of the library function
-        <literal>predecessors</literal> to obtain the predecessors of a
-        statement for a given control flow graph.</para>
+}</programlisting>First, the relations <literal>IN</literal> and
+        <literal>OUT</literal> are declared and initialized. Next follows a
+        <keysym>solve</keysym> statement that uses <literal>IN</literal> and
+        <literal>OUT</literal> as variables and contains two equations that
+        resemble the mathematical equations given above. Note the use of the
+        library function <literal>predecessors</literal> to obtain the
+        predecessors of a statement for a given control flow graph.</para>
 
         <para><figure xml:id="figure.reaching-definitions">
             <title>Reaching definitions for flow graph in <xref
@@ -3187,10 +3186,11 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
   set[stat] STATEMENT = carrier(PRED);
   rel[stat,def] DEF  = definition(DEFS);
   rel[stat,def] USE = use(USES);
-  with
-    rel[stat,def] LIN = {};
-    rel[stat,def] LOUT = DEF;
-  solve {
+ 
+  rel[stat,def] LIN = {};
+  rel[stat,def] LOUT = DEF;
+
+  solve(LIN, LOUT) {
     LIN  = { &lt;S, D&gt; | stat S &lt;- STATEMENT,  
                       def D &lt;- USE[S] + 
                                (LOUT[S] - (DEF[S]))};
@@ -3199,9 +3199,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
                       def D &lt;- LIN[Succ] };
   }
   return LIN;
-}</programlisting><warning>
-            <para>Adjust solve syntax.</para>
-          </warning>The results of live variable analysis for our running
+}</programlisting>The results of live variable analysis for our running
         example are illustrated in <xref
         linkend="figure.live-variables" />.</para>
 
@@ -9833,7 +9831,8 @@ BindingRel unmatchedBindings;
               </row>
 
               <row>
-                <entry>int findMinimum(PriorityQueue Q)</entry>
+                <entry><literal>int findMinimum(PriorityQueue
+                Q)</literal></entry>
 
                 <entry>Find the minimum priority.</entry>
               </row>
@@ -11576,6 +11575,26 @@ str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
     <section xml:id="section.lib-vizBasic">
       <title>viz::Basic (Eclipse only)</title>
 
+      <para>The Eclipse version of the Rascal provides various view on
+      values:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A graph view displays a value as graph (when
+          applicable).</para>
+        </listitem>
+
+        <listitem>
+          <para>A text view displays a value in its textual
+          representation.</para>
+        </listitem>
+
+        <listitem>
+          <para>A tree view displays a value in a tree-structured, expandable
+          and collapsible, textual representation.</para>
+        </listitem>
+      </itemizedlist>
+
       <table>
         <title>viz::Basic Functions</title>
 
@@ -11596,20 +11615,20 @@ str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
             <row>
               <entry><literal>void graphView(value v)</literal></entry>
 
-              <entry>Show value <literal>v</literal> as a graph</entry>
+              <entry>Display value <literal>v</literal> as a graph</entry>
             </row>
 
             <row>
               <entry><literal>void textView(value v) </literal></entry>
 
-              <entry>Show value <literal>v</literal> as text</entry>
+              <entry>Display value <literal>v</literal> as text</entry>
             </row>
 
             <row>
               <entry><literal>void treeView(value v) </literal></entry>
 
-              <entry>Show value <literal>v</literal> as a collapsible
-              tree</entry>
+              <entry>Display value <literal>v</literal> as a
+              expandable/collapsible tree</entry>
             </row>
           </tbody>
         </tgroup>
