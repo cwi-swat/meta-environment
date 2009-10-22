@@ -84,7 +84,7 @@
           messages from the SecureShell demon that reports failed login
           attempts. From each entry login name and originating IP address are
           extracted and put in a table (the internal representation in this
-          example). These data are analysed by detecting duplicates and
+          example). These data are analyzed by detecting duplicates and
           counting frequencies. Finally results are synthesized by listing the
           most frequently used login names and IP addresses.</para>
         </example><example>
@@ -185,18 +185,18 @@
       <para>With these examples in mind, you have a pretty good picture how
       EASY applies in different use cases. All these cases involve a form of
       <emphasis>meta-programming</emphasis>: software programs (in a wide
-      sense) are the objects-of-interest that are being analyzed and
-      transformed. The Rascal language you are about to learn is designed for
+      sense) are the objects-of-interest that are being analyzed, transformed
+      or generated. The Rascal language you are about to learn is designed for
       meta-programming following the EASY paradigm. It can be applied in
       domains ranging from compiler construction and implementing
       domain-specific languages to constraint solving and software
       renovation.</para>
 
-      <para>Since representation of data is central to the approach, Rascal
-      provides a rich set of built-in data types. To support extraction and
-      analysis, parsing and advanced pattern matching are provided. High-level
-      control structures make analysis and synthesis of complex datastructures
-      simple.</para>
+      <para>Since representation of information is central to the approach,
+      Rascal provides a rich set of built-in data types. To support extraction
+      and analysis, parsing and advanced pattern matching are provided.
+      High-level control structures make analysis and synthesis of complex
+      datastructures simple.</para>
     </section>
 
     <section>
@@ -223,8 +223,8 @@
 
         <listitem>
           <para><emphasis role="bold">Safety</emphasis> is achieved by finding
-          most errors even before the program is executed and by making common
-          errors like missing initializations or wrong pointers
+          most errors before the program is executed and by making common
+          errors like missing initializations or invalid pointers
           impossible.<remark> At the time of writing, this checking is done
           during execution.</remark></para>
         </listitem>
@@ -235,8 +235,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">Pattern matching</emphasis> is used to
-          analyze even the most complex datastructures.</para>
+          <para><emphasis role="bold">Pattern matching</emphasis> can be used
+          to analyze all complex datastructures.</para>
         </listitem>
 
         <listitem>
@@ -411,6 +411,10 @@
           </note>
         </listitem>
       </itemizedlist>
+
+      <!--Introduce coding conventions. Ik stel voor: variabelen Java-case, types capitalized
+(ook Graph[&t]), package namen lower-case. Dat maakt veel van de
+coding voorbeelden leesbaarder (en de library consistenter).-->
     </section>
   </section>
 
@@ -432,12 +436,18 @@
       <para>Rascal is a value-oriented language. This means that values are
       immutable and are always freshly constructed from existing parts and
       that sharing and aliasing problems are completely avoided. The language
-      does provide assignment to variables either as the result of an explicit
-      assignment statement or as the result of a successful match.</para>
+      also provides variables. A value can be associated with a variable as
+      the result of an explicit assignment statement: during the lifetime of a
+      variable different (immutable) values may be assignment to it. Other
+      ways to associate a value with a variable is by way of function calls
+      (binding of formal parameters to actual values) and as the result of a
+      successful pattern match.</para>
     </section>
 
     <section>
       <title>Data structures</title>
+
+      <!--Kan dit nog iets beter?-->
 
       <para>Rascal provides a rich set of datatypes. From Booleans
       (<keysym>bool</keysym>), infinite precision integers
@@ -485,14 +495,14 @@
         </listitem>
 
         <listitem>
-          <para>A map is a binary relation consisting of (key, value) pairs.
-          Key and value (may) have different static type and a key can only be
+          <para>A map is an asosciative table of (key, value) pairs. Key and
+          value (may) have different static type and a key can only be
           associated with a value once</para>
         </listitem>
       </itemizedlist>
 
       <para>Untyped trees can be constructed with the builtin type <emphasis
-      role="bold">node</emphasis>. User-defined datatypes allow the
+      role="bold">node</emphasis>. User-defined algebraic datatypes allow the
       introduction of problem-specific types and are a subtype of <emphasis
       role="bold">node</emphasis>. A fragment of the abstract syntax for
       statements (assignment, if, while) in a programming language would look
@@ -607,7 +617,7 @@
 
       <para>Pattern matching determines whether a given pattern matches a
       given value. The outcome can be false (no match) or true (a match). A
-      pattern match that succeeds may assign values to variables.</para>
+      pattern match that succeeds may bind values to variables.</para>
 
       <para>Pattern matching is <emphasis>the</emphasis> mechanism for case
       distinction (<keysym>switch</keysym> statement) and search
@@ -615,7 +625,7 @@
       in an explicit match operator <literal>:=</literal> and can then be part
       of larger boolean expressions. Since a pattern match may have more than
       one solution, local backtracking over the alternatives of a match is
-      provided. Patterns can thus also be used in enumerators and control
+      provided. Patterns can also be used in enumerators and control
       structures like <keysym>for</keysym> and <keysym>while</keysym>
       statement.</para>
 
@@ -623,10 +633,10 @@
       matching based on regular expressions, matching of abstract patterns,
       and matching of concrete syntax patterns. Some of the features that are
       provided are list (associative) matching, set (associative, commutative,
-      identity) matching, and deep matching of descendant (nested) patterns.
-      All these forms of matching can be used in a single pattern and can be
+      idempotent) matching, and deep matching of descendant patterns. All
+      these forms of matching can be used in a single pattern and can be
       nested. Patterns may contain variables that are bound when the match is
-      successful. Anonymous (don't care) positions are indicated by an
+      successful. Anonymous (don't care) positions are indicated by the
       underscore (<literal>_</literal>).</para>
 
       <para>Here is a <emphasis>regular expression</emphasis> that matches a
@@ -638,14 +648,15 @@
       <para><programlisting>/^&lt;before:\W*&gt;&lt;word:\w+&gt;&lt;after:.*$&gt;/</programlisting></para>
 
       <para>Regular expressions follow the Java regular expression syntax with
-      one exception: instead of using <literal>$1</literal>,
-      <literal>$2</literal> as names for parts of the subject string that have
-      been matched by a part of the regular expression we use the
-      notation:<programlisting>&lt;<replaceable>Name</replaceable>:<replaceable>RegularExpression</replaceable>&gt;</programlisting></para>
+      one exception: instead of using numbered groups to refer to parts of the
+      subject string that have been matched by a part of the regular
+      expression we use the notation:<programlisting>&lt;<replaceable>Name</replaceable>:<replaceable>RegularExpression</replaceable>&gt;</programlisting></para>
 
       <para>If <replaceable>RegularExpression</replaceable> matches, the
       matched substring is assigned to string variable
       <replaceable>Name</replaceable>.</para>
+
+      <!--Alternative names for abstract pattern: algebraic pattern, term pattern, ...-->
 
       <para>The following <emphasis>abstract pattern</emphasis> matches the
       abstract syntax of a while statement defined earlier: <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
@@ -654,8 +665,10 @@
       pattern itself---as done in the example---or they may be declared in the
       context in which the pattern occurs. So-called
       <emphasis>multi-variables</emphasis> in list and set patterns are
-      declared by a <literal>*</literal> suffix. The above pattern can then be
-      written as</para>
+      declared by a <literal>*</literal> suffix: <literal>X*</literal> is thus
+      an abbreviation for <literal>list[...] X</literal> or <literal>set[...]
+      X</literal>, where the precise element type depends on the context. The
+      above pattern can then be written as</para>
 
       <para><programlisting>whileStat(EXP Exp, Stats*)</programlisting>or, if
       you are not interested in the actual value of the statements as</para>
@@ -681,21 +694,25 @@ int x &lt;- [ 1 .. 10 ]
 /asgStat(Id name, _) &lt;- P</programlisting></para>
 
       <para>The first two produce the integer elements of a set of integers,
-      respectively, a range of integers. The third enumerator does a deep
-      traversal (as denoted by the descendant operator <literal>/</literal>)
-      of the complete program <literal>P</literal> (that is assumed to have a
+      respectively, a range of integers. Observe that the left-hand side of an
+      enumerator is a pattern, of which <literal>int x</literal> is a specific
+      instance. The use of more general patterns is illustrated by the third
+      enumerator that does a deep traversal (as denoted by the descendant
+      operator <literal>/</literal>) of the complete program
+      <literal>P</literal> (that is assumed to have a
       <literal>PROGRAM</literal> as value) and only yields statements that
       match the assignment pattern (<literal>asgStat</literal>) we have seen
       earlier. Note the use of an anonymous variable at the
-      <literal>EXP</literal> position in the pattern.</para>
+      <literal>EXP</literal> position in the pattern. </para>
     </section>
 
     <section>
       <title>Comprehensions</title>
 
-      <para>A comprehension is a notation inspired by mathematical set-builder
-      notation that helps to write succinct definitions of lists and
-      sets.</para>
+      <para>Comprehensions are a notation inspired by mathematical set-builder
+      notation that helps to write succinct definitions of lists and sets.
+      They are also inspired by queries as found in a language like
+      SQL.</para>
 
       <para>Rascal generalizes comprehensions in various ways. Comprehensions
       exist for lists, sets and maps. A comprehension consists of an
@@ -712,7 +729,7 @@ int x &lt;- [ 1 .. 10 ]
 
       <para><programlisting>{name | /asgStat(Id name, _) &lt;- P}</programlisting></para>
 
-      <para>which traverses program <literal>P</literal> and constructs a list
+      <para>which traverses program <literal>P</literal> and constructs a set
       of all identifiers that occur on the left hand side of assignment
       statements in <literal>P</literal>.</para>
     </section>
@@ -740,7 +757,9 @@ for(/asgStat(Id name, _) &lt;- P, size(name) &gt; 10){
     </section>
 
     <section>
-      <title>Switching</title>
+      <title>Case Distinction</title>
+
+      <!--Improve the analogy with transaction.-->
 
       <para>The switch statement as known from C and Java is generalized: the
       subject value to switch on may be an arbitrary value and the cases are
@@ -839,8 +858,10 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
       alternative, manner of writing this same call to f:</para>
 
       <para><programlisting>f(5, int (int y){return 3 * y;});</programlisting>Here
-      the second argument of f is an anonymous function that is declared her
-      on the spot.</para>
+      the second argument of f is an anonymous function.</para>
+
+      <para>Rascal is a higher-order language in which functions are
+      first-class values.</para>
     </section>
 
     <section>
@@ -854,9 +875,10 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Flat information</emphasis>: Use regular expressions
-          to extract useful, but somewhat superficial, flat, information. This
-          can be achieved using regular expression patterns.</para>
+          <para><emphasis>Lexical information</emphasis>: Use regular
+          expressions to extract useful, but somewhat superficial, flat,
+          information. This can be achieved using regular expression
+          patterns.</para>
         </listitem>
 
         <listitem>
@@ -882,10 +904,14 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
         <listitem>
           <para>All non-terminals (<emphasis>sorts</emphasis> in SDF jargon)
           that are used in the imported grammar are implicitly declared as
-          Rascal types. This makes it possible to handle parse trees and parse
-          tree fragments as fully typed values and assign them to variables,
-          store them in larger datastructures or pass them as arguments to
-          functions.</para>
+          Rascal types. For each SDF sort <replaceable>S</replaceable> also
+          composite symbols like
+          <literal><replaceable>S</replaceable>*</literal>,
+          <literal>{<replaceable>S</replaceable> ","}+</literal> also become
+          available as type. This makes it possible to handle parse trees and
+          parse tree fragments as fully typed values and assign them to
+          variables, store them in larger datastructures or pass them as
+          arguments to functions and use them in pattern matching.</para>
         </listitem>
 
         <listitem>
@@ -909,12 +935,12 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
       file and counts the number of method declarations:</para>
 
       <programlisting>module Count
-import languages::syntax::Java;
+import languages::java::syntax::Java;
 import ParseTree;
 
 public int countMethods(loc file){
   int n = 0;
-  for(/MethodDeclaration md &lt;- parse(CompilationUnit, file))
+  for(/MethodDeclaration md &lt;- parse(#CompilationUnit, file))
       n += 1;
   return n;
 }</programlisting>
@@ -924,13 +950,14 @@ public int countMethods(loc file){
       <literal>CompilationUnit</literal> become available as type in the
       Rascal program.</para>
 
-      <para>The library function <literal>parse</literal> takes a non-terminal
-      (CompilationUnit) and a location as arguments and parses the contents of
-      the location according to the given non-terminal. Next a match for
-      embedded <literal>MethodDeclaration</literal>s is done in the
-      enumetrator of the <keysym>for</keysym> statement. This example ignores
-      many potential error issues but does illustrate some of Rascal's syntax
-      and parsing features.</para>
+      <para>The implicitly declared function <literal>parse</literal> takes a
+      reified type (<literal>#CompilationUnit</literal>) and a location as
+      arguments and parses the contents of the location according to the given
+      non-terminal. Next, a match for embedded
+      <literal>MethodDeclaration</literal>s is done in the enumetrator of the
+      <keysym>for</keysym> statement. This example ignores many potential
+      error conditions but does illustrate some of Rascal's syntax and parsing
+      features.</para>
     </section>
 
     <section>
@@ -945,22 +972,22 @@ public int countMethods(loc file){
       right-hand side (here: <literal>a<superscript>2</superscript> + 2ab +
       b<superscript>2</superscript></literal>). Given a value and a set of
       rewrite rules the patterns are tried on every subpart of the value and
-      replacements are made on the way. This is repeated as long as some
-      pattern matches.</para>
+      replacements are made if a match is successful. This is repeated as long
+      as some pattern matches.</para>
 
       <para>Rewrite rules are the only implicit control mechanism in the
       language and are used to maintain invariants during computations. For
       example, in a package for symbolic differentiation it is desirable to
       keep expressions in simplified form in order to avoid intermediate
-      results like <literal>sum(product(1, x), product(0, y))</literal> that
-      can be simplified to <literal>x</literal>. The following rules achieve
-      this:<programlisting>rule simplify1 product(1, Expression e) =&gt; e;
-rule simplify2 product(Expression e, 1) =&gt; e;
-rule simplify3 product(0, Expression e) =&gt; 0;
-rule simplify4 product(Expression e, 0) =&gt; 0;
-rule simplify5 sum(0, Expression e)     =&gt; e;
-rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
-      new expression is constructed during symbolic differentiation, these
+      results like <literal>sum(product(num(1), x), product(num(0),
+      y))</literal> that can be simplified to <literal>x</literal>. The
+      following rules achieve this:<programlisting>rule simplify1 product(num(1), Expression e) =&gt; e;
+rule simplify2 product(Expression e, num(1)) =&gt; e;
+rule simplify3 product(num(0), Expression e) =&gt; num(0);
+rule simplify4 product(Expression e, num(0)) =&gt; num(0);
+rule simplify5 sum(num(0), Expression e)     =&gt; e;
+rule simplify6 sum(Expression e, num(0))     =&gt; e;</programlisting>Whenever
+      a new expression is constructed during symbolic differentiation, these
       rules are <emphasis>implicitly</emphasis> applied to that expression and
       all its subexpressions and when a pattern at the left-hand side of a
       rule applies the matching subexpression is replaced by the right-hand
@@ -977,7 +1004,7 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
     </section>
 
     <section>
-      <title>Constraint solving</title>
+      <title>Equation Solving</title>
 
       <para>Many problems can be solved by forms of <emphasis>constraint
       solving</emphasis>. This is a declarative way of programming: specify
@@ -1012,7 +1039,8 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
 
         <listitem>
           <para>The visibility of entities declared in modules can be
-          controlled by a public/private mechanism.</para>
+          controlled using <keysym>public</keysym>/<keysym>private</keysym>
+          modifiers.</para>
         </listitem>
 
         <listitem>
@@ -1034,7 +1062,7 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
       <para>Rascal has a statically checked type system that prevents type
       errors and uninitialized variables at runtime. There are no runtime type
       casts as in Java and there are therefore less opportunities for run-time
-      errors. The language provides <emphasis>higher-order, parametric,
+      errors. The language provides <emphasis>higher-order, parametric
       polymorphism</emphasis>. A type aliasing mechanism allows documenting
       specific uses of a type. Built-in operators are heavily overloaded. For
       instance, the operator + is used for addition on integers and reals but
@@ -1043,9 +1071,9 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
       <para>The flow of Rascal program execution is completely explicit.
       Boolean expressions determine choices that drive the control structures.
       Rewrite rules form the only exception to the explicit control flow
-      principle. Only local backtracking is provided (no surprise) in the
-      context of boolean expressions and pattern matching; side effects are
-      undone in case of backtracking.</para>
+      principle. Only local backtracking is provided in the context of boolean
+      expressions and pattern matching; side effects are undone in case of
+      backtracking.</para>
     </section>
   </section>
 
@@ -1066,8 +1094,8 @@ rule simplify6 sum(Expression e, 0)     =&gt; e;</programlisting>Whenever a
       follows:<screen><prompt>rascal&gt;</prompt> <userinput>import IO;</userinput>
 <computeroutput>ok</computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>println("Hello, this is my first Rascal program");</userinput>
-<computeroutput>Hello, this is my first Rascal program
+<prompt>rascal&gt;</prompt> <userinput>println("Hello world, this is my first Rascal program");</userinput>
+<computeroutput>Hello world, this is my first Rascal program
 ok</computeroutput>
 </screen>First, the library module IO (see <xref linkend="section.lib-IO" />)
       is imported since hello world requires printing. Next, we call
@@ -1078,12 +1106,12 @@ ok</computeroutput>
       in a function and call it:</para>
 
       <para><screen><prompt>rascal&gt; </prompt><userinput>void hello() {
-   println("Hello, this is my first Rascal program");
+   println("Hello world, this is my first Rascal program");
 }</userinput>
 <computeroutput>void (): void hello();</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
-<computeroutput>Hello, this is my first Rascal program
+<computeroutput>Hello world, this is my first Rascal program
 ok</computeroutput></screen>Don't get scared by the <computeroutput>void ():
       void hello();</computeroutput> that you get back when typing in the
       <literal>hello</literal> function. The first <computeroutput>void
@@ -1092,23 +1120,40 @@ ok</computeroutput></screen>Don't get scared by the <computeroutput>void ():
       hello()</computeroutput> summarizes its value (or would you prefer a hex
       dump?).</para>
 
+      <!--[TODO item: de print out suggereert dat closures vergelijkbaar zijn
+
+rascal>a = (int x) { x + 1; };
+void (int): void (int);
+rascal>b = (int x) { x + 1; };
+void (int): void (int);
+rascal>a == b;
+bool: false
+
+De waardes zijn verschillend, maar de print-out is gelijk; dat is niet
+wysiwyg, ik denk dat we zoiets moeten doen als in Ruby/Common-Lisp:
+
+#<void(int): 3423>
+
+(dus een identity value erbij)
+]-->
+
       <para>The summit of hello-engineering can be reached by placing all the
       above in a separate module:<programlisting>module demo::Hello
 import IO;
 
 public void hello() {
-   println("Hello, this is my first Rascal program");
+   println("Hello world, this is my first Rascal program");
 }</programlisting>Note that we added a public modifier to the definition of
       hello, since we want it to be visible outside the Hello module. Using
       this Hello module is now simple:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Hello;</userinput>
 <computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
-<computeroutput>Hello, this is my first Rascal program
+<computeroutput>Hello world, this is my first Rascal program
 ok</computeroutput></screen><note>
           <para>All examples in this book can be found in the
           <literal>demo</literal> directory of the Rascal distribution. That
-          is why we prefix all names of examples modules with
+          is why we must prefix all names of examples modules with
           <literal>demo::</literal>.</para>
         </note></para>
     </section>
@@ -1164,7 +1209,7 @@ data ColoredTree =
       be <literal>ColoredTree</literal>.</para>
 
       <para>We define two operations on ColoredTrees, one to count the red
-      nodes, and one to add the values contained in all
+      nodes, and one to sum the values contained in all
       leaves:<programlisting>// continuing module demo::ColoredTrees
 
 public int cntRed(ColoredTree t){
@@ -1223,6 +1268,14 @@ public ColoredTree makeGreen(ColoredTree t){
             declaration.</para>
           </callout>
         </calloutlist></para>
+
+      <!--[To be discussed: ik weet dat jullie het graag willen, maar leidt dit
+niet tot modulariteits issues? Hoe zit het switch statements die de
+uitbreiding niet zien?]
+[To be discussed: red(l, r) pattern matching zonder decl voor de
+variabelen; erg handig, maar gevaarlijk; als er ook maar ergens een l
+of r in de scope wordt geintroduceerd van een ColoredTree type, zul je
+rare fouten krijgen (i.e. zonder melding)]-->
 
       <para>This is used as follows:<screen><prompt>rascal&gt;</prompt> <userinput>makeGreen(rb);</userinput>
 <computeroutput>ColoredTree: green(black(leaf(1),green(leaf(2),leaf(3))),
@@ -1314,7 +1367,9 @@ public str capAll2(str S)
 
           <callout arearefs="co.capAll1-insert">
             <para>When the case matches a word, it is replaced by a
-            capitalized version.</para>
+            capitalized version. The modifier <literal>i</literal> at the end
+            of the regular expressions denotes case-insensitive
+            matching.</para>
           </callout>
         </calloutlist></para>
 
@@ -1385,21 +1440,22 @@ public str capitalize(str s) {
 }
 
 public str genClass(str name, map[str,str] fields) {
-  return "
-    public class &lt;name&gt; {
-      &lt;for (x &lt;- fields) {&gt;
-        private &lt;fields[x]&gt; &lt;x&gt;;
-        public void set&lt;capitalize(x)&gt;(&lt;fields[x]&gt; &lt;x&gt;) {
-          this.&lt;x&gt; = &lt;x&gt;;
-        }
-        public &lt;fields[x]&gt; get&lt;capitalize(x)&gt;() {
-          return &lt;x&gt;;
-        }
-      &lt;}&gt;
-    }
-  ";
-}
-</programlisting>Observe how the <keysym>for</keysym> statement and
+ return "
+   public class &lt;name &gt; {
+     &lt;for (x &lt;- fields) {
+       str t = fields[x];
+       str n = capitalize(x);&gt;
+       private &lt;t&gt; &lt;x&gt;;
+       public void set&lt;n&gt;(&lt;t&gt; &lt;x&gt;) {
+         this.&lt;x&gt; = &lt;x&gt;;
+       }
+       public &lt;t&gt; get&lt;n&gt;() {
+         return &lt;x&gt;;
+       }
+     &lt;}&gt;
+   }
+";
+}</programlisting>Observe how the <keysym>for</keysym> statement and
       expressions that access the map fields that are embedded in the string
       constant customize the given template for a Java class. The details of
       string interpolation are explained in <xref
@@ -1415,8 +1471,8 @@ public str genClass(str name, map[str,str] fields) {
       Computer Science and are used to model problems ranging from lexical
       tokens to concurent processes. An FSM consists of named states and
       labeled transitions between states. An example is shown in <xref
-      linkend="figure.fsm-example" />. This example was suggested by Gorel
-      Hedin at GTTSE09.<figure xml:id="figure.fsm-example">
+      linkend="figure.fsm-example" />. This example was suggested by Goerel
+      Hedin at GTTSE09.<!--Umlaut!--><figure xml:id="figure.fsm-example">
           <title>Example of a Finite State Machine</title>
 
           <mediaobject>
@@ -1519,8 +1575,8 @@ import IO;
 // Extract from a give FSM all transitions as a relation
 
 public rel[str, str] getTransitions(FSM fsm){
-   return { &lt;"&lt;from&gt;", "&lt;to&gt;"&gt; | 
-            /`trans &lt;IdCon a&gt;: &lt;IdCon from&gt; -&gt; &lt;IdCon to&gt;` &lt;- fsm };
+   return {&lt;"&lt;from&gt;", "&lt;to&gt;"&gt; | 
+           /`trans &lt;IdCon a&gt;: &lt;IdCon from&gt; -&gt; &lt;IdCon to&gt;` &lt;- fsm };
 }</programlisting>The function <literal>getTransitions</literal> illustrates
       several issues. Given a concrete fsm, a deep pattern match (/) is done
       searching for <literal>trans</literal> constructs. For each match three
@@ -2047,7 +2103,7 @@ public FSM example =
               <para>Use a grammar of the target source language, also for code
               generation. Note that this approach guarantees the generation of
               syntactically correct source code as opposed to code generation
-              using print statements</para>
+              using print statements or string templates.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -2160,9 +2216,7 @@ public FSM example =
         </listitem>
       </itemizedlist>
 
-      <para>There are now two possibilities. Either you have this superb
-      programming environment or tool suite that can immediately answer all
-      these questions for you or you can use Rascal.</para>
+      <para>Let's see how these questions can be answered using Rascal.</para>
 
       <section>
         <title>Preparations</title>
@@ -2774,12 +2828,12 @@ public set[varname] UNUSED = domain(DEFS) - domain(USES);</programlisting>Taking
       measures the number of decision points in a program and can be computed
       by counting all if statement, case branches in switch statements and the
       number of conditional loops. Given a control flow in the form of a
-      predecessor graph <literal>graph[&amp;T] PRED</literal> between elements
+      predecessor graph <literal>Graph[&amp;T] PRED</literal> between elements
       of arbitrary type <literal>&amp;T</literal>, the cyclomatic complexity
       can be computed in Rascal as follows: <programlisting>module demo::McCabe
 import Graph;
 
-public int cyclomaticComplexity(graph[&amp;T] PRED){
+public int cyclomaticComplexity(Graph[&amp;T] PRED){
     return size(PRED) - size(carrier(PRED)) + 2;
 }</programlisting>The number of edges <replaceable>e</replaceable> is equal to
       the number of tuples in <literal>PRED</literal>. The number of nodes
@@ -3625,7 +3679,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
         <itemizedlist>
           <listitem>
-            <para><replaceable>Url</replaceable> is an arbitrary Uniform
+            <para><replaceable>Uri</replaceable> is an arbitrary Uniform
             Resource Identifier (URI).</para>
           </listitem>
 
@@ -3688,7 +3742,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
               <listitem>
                 <para><literal>host</literal>: the host where the URI is
-                hosted (part of auhtority).</para>
+                hosted (part of authority).</para>
               </listitem>
 
               <listitem>
@@ -3819,7 +3873,9 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         <para>When variables of type list occur inside a list, their elements
         are automatically <emphasis>spliced</emphasis> into the surrounding
         list. This can be prevented by surrounding them with extra [ and ]
-        brackets.<screen><prompt>rascal&gt;</prompt> <userinput>L = [1, 2, 3];</userinput>
+        brackets. Note that this approach is atypical: in Rascal splicing is
+        implicit while in other languages it has to be indicated explicitly by
+        the programmer.<screen><prompt>rascal&gt;</prompt> <userinput>L = [1, 2, 3];</userinput>
 <computeroutput>list[int]: [1,2,3]</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>[10, L, 20];</userinput>
@@ -3926,7 +3982,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           </note><note>
             <para><literal>{1, 2, 3}</literal> and <literal>{1, 2, 3,
             1}</literal> are also identical sets.</para>
-          </note>In a similar fashion as with lists, sets variables are
+          </note>In a similar fashion as with lists, set variables are
         automatically spliced into a surrounding set. This can be prevented by
         surrounding them with extra { and } brackets.<screen><prompt>rascal&gt;</prompt> <userinput>S = {1, 2, 3};</userinput>
 <computeroutput>set[int]: {1,2,3]}</computeroutput>
@@ -4001,6 +4057,11 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
           <listitem>
             <para>Each element of a tuple may have a label that can be used to
             select that element of the tuple.</para>
+          </listitem>
+
+          <listitem>
+            <para>Each tuple is <emphasis>fixed-width</emphasis>, i.e., has
+            the same number of elements.</para>
           </listitem>
         </itemizedlist>
 
@@ -4127,7 +4188,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
       </section>
 
       <section xml:id="section.alias">
-        <title>Alias Type</title>
+        <title>Type Aliases</title>
 
         <para>Everything can be expressed using the elementary types and
         values that are provided by Rascal. However, for the purpose of
@@ -4163,7 +4224,7 @@ alias Frequency = int;</programlisting>
       </section>
 
       <section xml:id="section.abstract-data-type">
-        <title>Data Type</title>
+        <title>Algebraic Data Type (ADT)</title>
 
         <para>In ordinary programming languages record types or classes exist
         to introduce a new type name for a collection of related, named,
@@ -4181,15 +4242,15 @@ alias Frequency = int;</programlisting>
         declaration of a function. For instance, <programlisting>data Bool = 
      tt() | ff() | conj(Bool L, Bool R)  | disj(Bool L, Bool R);  </programlisting>defines
         the datatype <literal>Bool</literal> that contains various constants
-        (<literal>Ttt()</literal> and <literal>F</literal>ff() and constructor
-        functions <literal>conj</literal> and <literal>disj</literal>.</para>
+        (<literal>tt()</literal> and ff() and constructor functions
+        <literal>conj</literal> and <literal>disj</literal>.</para>
 
         <!--Exception: data constructors do not allow variable arguments.-->
       </section>
 
       <section>
         <title>Type Parameters, Type Constaints and Parameterized Types and
-        Aliases</title>
+        Type Aliases</title>
 
         <para>In addition to the types that we have already discussed, a type
         may also be a <emphasis>type parameter</emphasis> of the
@@ -4310,10 +4371,13 @@ PROGRAM parsePROGRAM(str s) { ... }</programlisting>Unfortunately this
         this effect we introduce <emphasis>reified types</emphasis> that are
         denoted by the type <keysym>type</keysym>. Now we can
         write:<programlisting>&amp;T parse(type[&amp;T] start, str s) { ... }</programlisting>and
-        use the parse by giving it a type as argument:<programlisting>parse(EXP, "1+3");</programlisting><!--Er zijn vele vragen hier:
+        use the parse by giving it a type as argument:<programlisting>parse(#EXP, "1+3");</programlisting><!--Er zijn vele vragen hier:
 (1) Is het mogelijk een dergelijk functie in Rascal zelf te schrijven?
 (2) Kunne reified types ook in aliasen gebruikt worden? Zo ja hoe?
 (3) Idem voor data declaraties.--></para>
+
+        <para>In other words, reified types make it possible to use vaues as
+        types.</para>
       </section>
     </section>
 
@@ -4403,9 +4467,9 @@ Declaration</replaceable><subscript>1</subscript>;
         </itemizedlist>
 
         <para>The only entities that are visible outside the module, are the
-        public entities declared in the module itself. The visible entities of
-        an imported may be explicitly qualified with their module
-        name:<programlisting><replaceable>Module</replaceable><literal>::</literal><replaceable>Name</replaceable></programlisting><figure
+        public entities declared in the module itself. If different imported
+        modules declare the same visible name, it can be disambiguated by
+        explicitly qualifying it with its module name:<programlisting><replaceable>Module</replaceable><literal>::</literal><replaceable>Name</replaceable></programlisting><figure
             xml:id="figure.parts-module">
             <title>Constituents of a Module</title>
 
@@ -4444,6 +4508,10 @@ Declaration</replaceable><subscript>1</subscript>;
         the importing module. In addition, concrete syntax patterns and parse
         functions can be used for any non-terminal that is defined in
         <replaceable>L</replaceable>.</para>
+
+        <para>Import is <emphasis>non-transitive</emphasis>, i.e., the visible
+        entities from an imported module are not re-exported by the importing
+        module.</para>
       </section>
 
       <section xml:id="section.function">
@@ -4597,6 +4665,11 @@ Declaration</replaceable><subscript>1</subscript>;
       <section xml:id="section.declaration-tag">
         <title>Declaration Tag</title>
 
+        <!--General to be discussed: hebben we niet tags nodig op expressies
+(bijvoorbeeld voor optimalizatie hints)?]
+
+[TODO: tags without value: @deprecated]-->
+
         <para><warning>
             <para>Tags declarations are not yet implemented.</para>
           </warning><warning>
@@ -4715,8 +4788,8 @@ anno LayoutStrategy Graph @ strategy;</programlisting></para>
         controlled.</para>
 
         <para>Rewrite rules, on the other hand, operate only on nodes and
-        user-defined datatypes, they are implicitly applied when a new value
-        (we refer to this as the <emphasis>subject value</emphasis>) is
+        abstract datatypes (ADTs), they are implicitly applied when a new
+        value (we refer to this as the <emphasis>subject value</emphasis>) is
         constructed. The scope of rewrite rules is the whole Rascal program.
         Rewrite rules are applied to the subject value in a bottom-up fashion.
         As a result, the subject value may be changed. This process is
@@ -4767,6 +4840,16 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
             linkend="section.visit" />.</para>
           </listitem>
         </itemizedlist>
+
+        <para>You may wonder why we write <literal>btrue</literal> and
+        <literal>bfalse</literal> instead of <keysym>true</keysym> and
+        <keysym>false</keysym>. The explanation is that the latter are
+        reserved words that cannot be used as ordinary names. Reserved words
+        can, however, be used as ordinary names by escaping them; this is done
+        by prefixing them with a backslash (<literal>\</literal>), e.g.
+        <literal>\true</literal> and <literal>\false</literal>.</para>
+
+        <!--Voeg rule met statement body toe.-->
       </section>
     </section>
 
@@ -4813,7 +4896,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
               <para>A <emphasis>constructor</emphasis>. First the arguments
               are evaluated and then a data value is constructed for the
               corresponding type. This data value is used as value of the
-              constructor.</para>
+              constructor. Constructors are functions that can be used in all
+              contexts where functions can be used.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -4867,7 +4951,10 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <listitem>
           <para>Some statements like if, for, while and do can also be used in
           expressions, see <xref
-          linkend="section.statement-as-expression" />.</para>
+          linkend="section.statement-as-expression" />.<warning>
+              <para>Only the for statement is currently implemented in this
+              way.</para>
+            </warning></para>
         </listitem>
       </itemizedlist>
 
@@ -5272,12 +5359,13 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <para>The Boolean operators are summarized in <xref
         linkend="table.boolean-operators" />. All operators are highly
         overloaded and we refer to <xref linkend="section.lib" /> for a
-        description of their meaning for each specific type. Most operator are
-        self-explanatory except the Match and NoMatch operators that are also
-        the main reason to treat Boolean operator expressions separately.
-        Although we describe patterns in full detail in <xref
-        linkend="section.pattern" />, a preview is useful here. A pattern
-        can</para>
+        description of their meaning for each specific type. The Boolean
+        operators have short-circuit semantics. Most operator are
+        self-explanatory except the match (<literal>:=</literal>) and no match
+        (<literal>!:=</literal>) operators that are also the main reason to
+        treat Boolean operator expressions separately. Although we describe
+        patterns in full detail in <xref linkend="section.pattern" />, a
+        preview is useful here. A pattern can</para>
 
         <itemizedlist>
           <listitem>
@@ -6283,16 +6371,13 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
               <para><emphasis>Quoted pattern</emphasis><programlisting>` <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> `</programlisting></para>
 
               <para>Inside a quoted pattern arbitrary lexical tokens may
-              occur, but the characters <literal>&lt;</literal>,
-              <literal>&gt;</literal> and <literal>|</literal> have to be
-              escaped as <literal>\&lt;</literal>, <literal>\&gt;</literal>,
-              <literal>\|</literal>. Quoted patterns may contain variable
-              declaration patterns and variable patterns (see below).</para>
+              occur. Quoted patterns may contain variable declaration patterns
+              and variable patterns (see below).</para>
             </listitem>
 
             <listitem>
               <para>A <emphasis>typed quoted pattern</emphasis>
-              <programlisting><replaceable>Symbol</replaceable> ` <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> `</programlisting>is
+              <programlisting><replaceable>(Symbol)</replaceable> ` <replaceable>Token</replaceable><subscript>1</subscript><replaceable> Token</replaceable><subscript>2</subscript> ... <replaceable>Token</replaceable><subscript>n</subscript> `</programlisting>is
               a quoted pattern that is preceded by an SDF symbol to define its
               desired syntactic type.</para>
             </listitem>
@@ -6343,8 +6428,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
             </listitem>
 
             <listitem>
-              <para>Quoted syntax pattern with two pattern variable
-              uses:<programlisting>` while &lt;Exp&gt; do &lt;Stats&gt; od `</programlisting></para>
+              <para>Quoted syntax pattern with two pattern variable uses
+              (<literal>Exp</literal> and <literal>Stats</literal> should
+              already have a value):<programlisting>` while &lt;Exp&gt; do &lt;Stats&gt; od `</programlisting></para>
             </listitem>
 
             <listitem>
@@ -6358,8 +6444,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
             </listitem>
 
             <listitem>
-              <para>Unquoted syntax pattern with two pattern variable
-              uses:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
+              <para>Unquoted syntax pattern with two pattern variable uses
+              (<literal>Exp</literal> and <literal>Stats</literal> should
+              already have a value):<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
             </listitem>
           </itemizedlist>
 
@@ -6380,7 +6467,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
             <listitem>
               <para>The imported SDF module defines an ambiguous language. In
               this case the only possible approach is to remove the
-              ambiguities from that SDF definition. This is an art form and
+              ambiguities from that SDF definition. This is a black art and
               may require advanced skills in grammar engineering.</para>
             </listitem>
           </itemizedlist>
@@ -6403,7 +6490,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
           <listitem>
             <para><programlisting><literal><replaceable>Pat</replaceable> =&gt; <replaceable>Exp</replaceable></literal></programlisting>When
             the subject matches <replaceable>Pat</replaceable>, the expression
-            <replaceable>Exp</replaceable> is evaluated.</para>
+            <replaceable>Exp</replaceable> is evaluated and the subject is
+            replaced with the result.</para>
           </listitem>
 
           <listitem>
@@ -6547,7 +6635,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
             </listitem>
           </itemizedlist>
 
-          <para>This are examples of enumerators:</para>
+          <para>These are examples of enumerators:</para>
 
           <itemizedlist>
             <listitem>
@@ -6595,12 +6683,12 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <section>
           <title>Test</title>
 
-          <para>The first of the two possible forms of a generator is a
+          <para>The second of the two possible forms of a generator is a
           <emphasis>test, </emphasis>a boolean-valued expression. If the
           evaluation of the test gives <literal>true</literal> this indicates
           that the current combination of generated values up to this test is
-          still as desired and execution continues with subsequent generators.
-          If the evaluation gives <literal>false</literal> this indicates that
+          still desired and execution continues with subsequent generators. If
+          the evaluation gives <literal>false</literal> this indicates that
           the current combination of values is undesired, and that another
           combination should be tried by going back to the previous
           generator.</para>
@@ -6702,7 +6790,8 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 
         <itemizedlist>
           <listitem>
-            <para>top-down: visit the subject from root to leaves.</para>
+            <para><literal>top-down</literal>: visit the subject from root to
+            leaves.</para>
           </listitem>
 
           <listitem>
@@ -6767,7 +6856,13 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
                 subject (see above).<note>
                     <para>An <literal>insert</literal> statement may only
                     occur in a <replaceable>PatternWithAction</replaceable> in
-                    a <keysym>visit</keysym> expression.</para>
+                    a <keysym>visit</keysym> expression or a
+                    <keysym>rule</keysym>.</para>
+                  </note><note>
+                    <para><replaceable>Pat</replaceable> =&gt;
+                    <replaceable>Exp</replaceable> is equivalent with
+                    <literal><replaceable>Pat</replaceable> : insert
+                    <replaceable>Exp</replaceable>;</literal>.</para>
                   </note></para>
               </listitem>
 
@@ -6801,7 +6896,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
             <para>For other structured types (list, set, map, tuple, rel), the
             elements of the structured type are visited and matched against
             the cases. When inserts are made, a new structured value is
-            created. In thises cases a stragegy does not have any
+            created. In these cases a stragegy does not have any
             effect.</para>
           </listitem>
         </itemizedlist>
@@ -6855,7 +6950,7 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
         <title>Block Statement</title>
 
         <para>A block consists of a sequence of statements separated by
-        semi-colons:<programlisting><literal>{ <replaceable>Statement</replaceable><subscript>1</subscript>; ... <replaceable>Statement</replaceable><subscript>n</subscript> }</literal></programlisting>Since
+        semi-colons:<programlisting><literal>{ <replaceable>Statement</replaceable><subscript>1</subscript> ... <replaceable>Statement</replaceable><subscript>n</subscript> }</literal></programlisting>Since
         a block is itself a statement, it may be used in all places where a
         statement is required. A block also introduces a new scope and
         variables that are declared in the block are local to that block. The
@@ -7143,7 +7238,7 @@ default: ...
         switch statement provides <emphasis role="bold">only</emphasis>
         matching at the top level of the subject term and does not traverse
         it. The type of the pattern in each case must be identical to the type
-        of the subject term (or be a subtype of it). If no case matches, the
+        of the subject term (or be a supertype of it). If no case matches, the
         switch acts as a dummy statement. There is no fall through from one
         case to the next.<warning>
             <para>The switch statement does not yet return a value, this will
@@ -7168,6 +7263,8 @@ default: ...
         <replaceable>Statement</replaceable>.<warning>
             <para>Append is not yet implemented for this statement.</para>
           </warning></para>
+
+        <!--Allow list of conditions/generators at the position of the test.-->
       </section>
 
       <section xml:id="section.do">
@@ -7189,6 +7286,8 @@ default: ...
           <para>Append is not yet implemented for this statement.</para>
         </warning>
       </section>
+
+      <!--Allow list of conditions/generators at the position of the test.-->
 
       <section xml:id="section.for">
         <title>For Statement</title>
@@ -7248,8 +7347,8 @@ default: ...
         <para>An append statement may only occur in the body of a
         <keysym>while</keysym>, <keysym>do</keysym> or <keysym>for</keysym>
         statement. It has the form<programlisting><keysym>append</keysym> <replaceable>Exp</replaceable>;</programlisting>and
-        appends the value of <replaceable>Exp</replaceable> to the result
-        value of the loop construct in which it occurs.</para>
+        appends the value of <replaceable>Exp</replaceable> to the resulting
+        list value of the loop construct in which it occurs.</para>
       </section>
 
       <section xml:id="section.insert">
@@ -7280,8 +7379,8 @@ default: ...
 
         <itemizedlist>
           <listitem>
-            <para>The static type of <replaceable>Exp</replaceable> and of the
-            current subject should be comparable.</para>
+            <para>The static type of <replaceable>Exp</replaceable> should be
+            a subtype of the type of the current subject.</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -7393,11 +7492,18 @@ finally: <replaceable>Statement</replaceable><subscript>3</subscript>;</programl
 
         <para>Example:</para>
 
-        <screen><prompt>rascal&gt;</prompt> <userinput>assert {1, 2, 3, 1} == {3, 2, 1, 1} : "Equality on Sets";</userinput>
-bool: true
+        <screen><prompt>rascal&gt;</prompt> <userinput>assert 1==2 : "is never true";</userinput>
+<computeroutput>Uncaught Rascal Exception: -:1,0: AssertionFailed("is never true")</computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>assert 1==2 : "is never true";</userinput>
-<computeroutput>Uncaught Rascal Exception: -:1,0: AssertionFailed("is never true")</computeroutput></screen>
+<prompt>rascal&gt;</prompt> <userinput>int div(int x, int y) {
+  assert y != 0 : "y must be non-zero";
+  return x / y;
+}</userinput>
+<computeroutput>int (int, int): int div(int, int);</computeroutput>
+
+<prompt>rascal&gt;</prompt> <userinput>div(4,0);</userinput>
+<computeroutput>Uncaught Rascal Exception: -:2,2: AssertionFailed("y must be non-zero")
+    :1,0: div</computeroutput></screen>
       </section>
 
       <section xml:id="section.test">
@@ -7416,11 +7522,11 @@ bool: true
         string-valued expression that serves as a identifying message for this
         test.</para>
 
-        <para>During normal execution tests are ignored. When the script is
-        executed as a <emphasis>test suite</emphasis> a summary of this
-        information is shown to the user. When the script is executed in the
-        standard fashion, the test statement has no affect. <screen>rascal&gt;test 1==2;      <co
-              xml:id="co.test1" />
+        <para>During normal execution tests are ignored and the test statement
+        has no affect. When the script is executed as a <emphasis>test
+        suite</emphasis> all tests in the current module and all its imported
+        modules are executed and a summary of succeeded/failed tests is shown
+        to the user.<screen>rascal&gt;test 1==2;      <co xml:id="co.test1" />
 ok
 rascal&gt;:test           <co xml:id="co.test2" />
 failed  : test 1==2
@@ -7437,7 +7543,7 @@ ok
               <literal>rascal.options.testsuite</literal> (<remark>not yet
               implemented</remark>).</para>
             </callout>
-          </calloutlist></para>
+          </calloutlist><!--Add @ignore and @expected tags as in JUnit.--></para>
       </section>
 
       <section>
@@ -7608,11 +7714,6 @@ ok
       </listitem>
 
       <listitem>
-        <para>UnitTest: functions for unit testing, see <xref
-        linkend="section.lib-UnitTest" />.</para>
-      </listitem>
-
-      <listitem>
         <para>ValueIO: functions for reading and writing Rascal values, both
         in textual and in binary form, see <xref
         linkend="section.lib-ValueIO" />.</para>
@@ -7627,11 +7728,6 @@ ok
       <listitem>
         <para>viz::Chart: functions to draw various charts, see <xref
         linkend="section.lib-vizChart" />.</para>
-      </listitem>
-
-      <listitem>
-        <para>Void: the type void, see <xref
-        linkend="section.lib-Void" />.</para>
       </listitem>
     </itemizedlist>
 
@@ -8048,7 +8144,7 @@ ok
       <title>Exception</title>
 
       <para>The following "soft" exceptions can be caught by the Rascal
-      program:<programlisting>ddata RuntimeException = 
+      program:<programlisting>data RuntimeException = 
       EmptyList()
     | EmptyMap() 
     | EmptySet()
@@ -8080,7 +8176,7 @@ ok
       <para>The graph datatype is a special form of binary relation defined as
       follows:</para>
 
-      <para><programlisting>alias graph[&amp;T] = rel[&amp;T from, &amp;T to];</programlisting>All
+      <para><programlisting>alias Graph[&amp;T] = rel[&amp;T from, &amp;T to];</programlisting>All
       operators and functions on relations are applicable to graphs, see <xref
       linkend="section.lib-Relation" />. Also see <xref
       linkend="section.lib-LabeledGraph" />.</para>
@@ -8103,28 +8199,28 @@ ok
 
           <tbody>
             <row>
-              <entry><literal>set[&amp;T] bottom(graph[&amp;T]
+              <entry><literal>set[&amp;T] bottom(Graph[&amp;T]
               G)</literal></entry>
 
               <entry>Leaf nodes of a graph</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] predecessors(graph[&amp;T], &amp;T
+              <entry><literal>set[&amp;T] predecessors(Graph[&amp;T], &amp;T
               From)</literal></entry>
 
               <entry>Direct predecessors of node From</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] reach(graph[&amp;T] G, set[&amp;T]
+              <entry><literal>set[&amp;T] reach(Graph[&amp;T] G, set[&amp;T]
               Start)</literal></entry>
 
               <entry>Reachability from set of start nodes.</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] reachR(graph[&amp;T] G, set[&amp;T]
+              <entry><literal>set[&amp;T] reachR(Graph[&amp;T] G, set[&amp;T]
               Start, set[&amp;T] Restr)</literal></entry>
 
               <entry>Reachability from set of start nodes with restriction to
@@ -8132,7 +8228,7 @@ ok
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] reachX(graph[&amp;T] G, set[&amp;T]
+              <entry><literal>set[&amp;T] reachX(Graph[&amp;T] G, set[&amp;T]
               Start, set[&amp;T] Excl)</literal></entry>
 
               <entry>Reachability from set of start nodes with exclusion of
@@ -8140,21 +8236,21 @@ ok
             </row>
 
             <row>
-              <entry><literal>list[&amp;T] shortestPathPair(graph[&amp;T] G,
+              <entry><literal>list[&amp;T] shortestPathPair(Graph[&amp;T] G,
               &amp;T From, &amp;T To)</literal></entry>
 
               <entry>Shortest path between pair of nodes</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] successors(graph[&amp;T], &amp;T
+              <entry><literal>set[&amp;T] successors(Graph[&amp;T], &amp;T
               From)</literal></entry>
 
               <entry>Direct successors of node From</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] top(graph[&amp;T]
+              <entry><literal>set[&amp;T] top(Graph[&amp;T]
               G)</literal></entry>
 
               <entry>Root nodes of a graph</entry>
@@ -8499,7 +8595,7 @@ ok
 
         <listitem>
           <para>Next, specific facts about the Java source code can be
-          retrieved fromthe annotations.. These annotations are shown in <xref
+          retrieved from the annotations. These annotations are shown in <xref
           linkend="table.JDT-fact-retrieval-functions" />. They all represent
           values of type <literal>BindingRel</literal> or
           <literal>EntityRel</literal> that are explained below.</para>
@@ -8724,7 +8820,7 @@ BindingRel unmatchedBindings;
       <para>The labeled graph datatype is a special form of binary relation
       with labelled edges and is defined as follows:</para>
 
-      <para><programlisting>alias lgraph[&amp;T,&amp;L] = rel[&amp;T from, &amp;L label, &amp;T to];</programlisting></para>
+      <para><programlisting>alias LGraph[&amp;T,&amp;L] = rel[&amp;T from, &amp;L label, &amp;T to];</programlisting></para>
 
       <para>All operators and functions on relations are applicable to labeled
       graphs, see <xref linkend="section.lib-Relation" />.</para>
@@ -8747,28 +8843,28 @@ BindingRel unmatchedBindings;
 
           <tbody>
             <row>
-              <entry><literal>set[&amp;T] bottom(lgraph[&amp;T]
+              <entry><literal>set[&amp;T] bottom(LGraph[&amp;T]
               G)</literal></entry>
 
               <entry>Bottom nodes of a labelled graph</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] predecessors(graph[&amp;T], &amp;T
+              <entry><literal>set[&amp;T] predecessors(LGraph[&amp;T], &amp;T
               From)</literal></entry>
 
               <entry>Direct predecessors of node From</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] reach(lgraph[&amp;T] G, set[&amp;T]
+              <entry><literal>set[&amp;T] reach(LGraph[&amp;T] G, set[&amp;T]
               Start)</literal></entry>
 
               <entry>Reachability from set of start nodes.</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] reachR(lgraph[&amp;T] G, set[&amp;T]
+              <entry><literal>set[&amp;T] reachR(LGraph[&amp;T] G, set[&amp;T]
               Start, set[&amp;T] Restr)</literal></entry>
 
               <entry>Reachability from set of start nodes with restriction to
@@ -8776,7 +8872,7 @@ BindingRel unmatchedBindings;
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] reachX(lgraph[&amp;T] G, set[&amp;T]
+              <entry><literal>set[&amp;T] reachX(LGraph[&amp;T] G, set[&amp;T]
               Start, set[&amp;T] Excl)</literal></entry>
 
               <entry>Reachability from set of start nodes with exclusion of
@@ -8784,21 +8880,21 @@ BindingRel unmatchedBindings;
             </row>
 
             <row>
-              <entry><literal>list[&amp;T] shortestPathPair(lgraph[&amp;T] G,
+              <entry><literal>list[&amp;T] shortestPathPair(LGraph[&amp;T] G,
               &amp;T From, &amp;T To)</literal></entry>
 
               <entry>Shortest path between pair of nodes</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] successors(graph[&amp;T], &amp;T
+              <entry><literal>set[&amp;T] successors(LGraph[&amp;T], &amp;T
               From)</literal></entry>
 
               <entry>Direct successors of node From</entry>
             </row>
 
             <row>
-              <entry><literal>set[&amp;T] top(lgraph[&amp;T]
+              <entry><literal>set[&amp;T] top(LGraph[&amp;T]
               G)</literal></entry>
 
               <entry>Top nodes of a labelled graph</entry>
@@ -8808,7 +8904,7 @@ BindingRel unmatchedBindings;
       </table>
 
       <para><warning>
-          <para>shortestPathPair not yet implemented for lgraph.</para>
+          <para>shortestPathPair not yet implemented for LGraph.</para>
         </warning></para>
     </section>
 
@@ -10133,8 +10229,9 @@ BindingRel unmatchedBindings;
               <literal>+</literal></entry>
 
               <entry>Relation resulting from the transitive closure of
-              <replaceable>Rel</replaceable>. <remark>Explain type
-              constraints</remark>.</entry>
+              <replaceable>Rel</replaceable>. <replaceable>Rel</replaceable>
+              should be a binary relation of type
+              <literal>rel[&amp;T,&amp;T]</literal>.</entry>
             </row>
 
             <row>
@@ -10142,7 +10239,9 @@ BindingRel unmatchedBindings;
               <literal>*</literal></entry>
 
               <entry>Relation resulting from the reflexive transitive closure
-              of <replaceable>Rel</replaceable></entry>
+              of <replaceable>Rel. </replaceable>
+              <replaceable>Rel</replaceable> should be a binary relation of
+              type <literal>rel[&amp;T,&amp;T]</literal>.</entry>
             </row>
 
             <row>
@@ -11113,7 +11212,7 @@ str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
               </row>
 
               <row>
-                <entry><literal>double toReal(str s) throws
+                <entry><literal>real toReal(str s) throws
                 IllegalArgument(value v)</literal></entry>
 
                 <entry>Convert s to a real. Throws IllegalArgument when s
@@ -11331,59 +11430,6 @@ str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
 
               <entry>Select field at position <replaceable>int</replaceable>
               from <replaceable>Tuple</replaceable></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
-
-    <section xml:id="section.lib-UnitTest">
-      <title>UnitTest</title>
-
-      <para>We provided a rudimentary library for unit testing that is
-      currently used. This will soon be replaced by the use of test statements
-      and test suites, see <xref linkend="section.test" />.</para>
-
-      <table>
-        <title>UnitTest Functions</title>
-
-        <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="4*" />
-
-          <colspec align="left" colname="col2" colwidth="3*" />
-
-          <thead>
-            <row>
-              <entry>Function</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><literal>void assertTrue(bool outcome)</literal></entry>
-
-              <entry>Check that outcome is true</entry>
-            </row>
-
-            <row>
-              <entry><literal>void assertEqual(value V1, value
-              V2)</literal></entry>
-
-              <entry>Check that two values are equal</entry>
-            </row>
-
-            <row>
-              <entry><literal>bool report()</literal></entry>
-
-              <entry>Print unit test summary</entry>
-            </row>
-
-            <row>
-              <entry><literal>bool report(str msg)</literal></entry>
-
-              <entry>Print unit test summary, including msg</entry>
             </row>
           </tbody>
         </tgroup>
@@ -11706,21 +11752,21 @@ public alias realSeriesMultipleData =
             <tbody>
               <row>
                 <entry><literal>public void barChart(str title, map[str,int]
-                facts, chartSetting settings...)</literal></entry>
+                facts, ChartSetting settings...)</literal></entry>
 
                 <entry>Draw a bar chart for integers</entry>
               </row>
 
               <row>
                 <entry><literal>public void barChart(str title, map[str,real]
-                facts, chartSetting settings...)</literal></entry>
+                facts, ChartSetting settings...)</literal></entry>
 
                 <entry>Draw a bar chart for reals</entry>
               </row>
 
               <row>
                 <entry><literal>public void barChart(str title, list[str]
-                categories, list[intSeries] facts, chartSetting
+                categories, list[intSeries] facts, ChartSetting
                 settings...)</literal></entry>
 
                 <entry>Draw a bar chart for multiples series of
@@ -11729,7 +11775,7 @@ public alias realSeriesMultipleData =
 
               <row>
                 <entry><literal>public void barChart(str title, list[str]
-                categories, list[realSeries] facts, chartSetting
+                categories, list[realSeries] facts, ChartSetting
                 settings...)</literal></entry>
 
                 <entry>Draw a bar chart for multiple series of reals</entry>
@@ -11737,7 +11783,7 @@ public alias realSeriesMultipleData =
 
               <row>
                 <entry><literal>public void boxplot(str title,
-                list[intSeriesMultipleData] facts, chartSetting
+                list[intSeriesMultipleData] facts, ChartSetting
                 settings...)</literal></entry>
 
                 <entry>Draw a boxplot for integers</entry>
@@ -11745,7 +11791,7 @@ public alias realSeriesMultipleData =
 
               <row>
                 <entry><literal>public void boxplot(str title,
-                list[realSeriesMultipleData] facts, chartSetting
+                list[realSeriesMultipleData] facts, ChartSetting
                 settings...)</literal></entry>
 
                 <entry>Draw a boxplot for reals</entry>
@@ -11753,7 +11799,7 @@ public alias realSeriesMultipleData =
 
               <row>
                 <entry><literal>public void histogram(str title,
-                list[intSeries] facts, int nbins, chartSetting
+                list[intSeries] facts, int nbins, ChartSetting
                 settings...)</literal></entry>
 
                 <entry>Draw a histogram for integers</entry>
@@ -11761,7 +11807,7 @@ public alias realSeriesMultipleData =
 
               <row>
                 <entry><literal>public void histogram(str title,
-                list[realSeries] facts, int nbins, chartSetting
+                list[realSeries] facts, int nbins, ChartSetting
                 settings...)</literal></entry>
 
                 <entry>Draw a histogram for reals</entry>
@@ -11769,28 +11815,28 @@ public alias realSeriesMultipleData =
 
               <row>
                 <entry><literal>public void pieChart(str title, map[str, int]
-                facts, chartSetting settings...)</literal></entry>
+                facts, ChartSetting settings...)</literal></entry>
 
                 <entry>Draw a pieChart for integers</entry>
               </row>
 
               <row>
                 <entry><literal>public void pieChart(str title, map[str, real]
-                facts, chartSetting settings...)</literal></entry>
+                facts, ChartSetting settings...)</literal></entry>
 
                 <entry>Draw a pieChart for reals</entry>
               </row>
 
               <row>
                 <entry><literal>public void xyChart(str title,
-                list[intSeries], chartSetting settings...)</literal></entry>
+                list[intSeries], ChartSetting settings...)</literal></entry>
 
                 <entry>Draw an xyChart for integers</entry>
               </row>
 
               <row>
                 <entry><literal>public void xyChart(str title,
-                list[realSeries], chartSetting settings...)</literal></entry>
+                list[realSeries], ChartSetting settings...)</literal></entry>
 
                 <entry>Draw an xyChart for reals</entry>
               </row>
@@ -11862,11 +11908,11 @@ public alias realSeriesMultipleData =
       grid. Each series is interpreted as a list of (x,y) values; the name of
       the series acts as function name.</para>
 
-      <para>All chart functions can have zero or more chartSettings that give
-      control over the way in which the chart is drawn. A chartSetting can be
+      <para>All chart functions can have zero or more ChartSettings that give
+      control over the way in which the chart is drawn. A ChartSetting can be
       one of the following:</para>
 
-      <para><programlisting>data chartSetting =       
+      <para><programlisting>data ChartSetting =       
      area()
    | dim3()                       
    | domainLabel(str txt)
@@ -11996,13 +12042,6 @@ public alias realSeriesMultipleData =
             </tbody>
           </tgroup>
         </table></para>
-    </section>
-
-    <section xml:id="section.lib-Void">
-      <title>Void</title>
-
-      <para>There are no operators or functions defined on the type
-      <literal>void</literal>.</para>
     </section>
   </section>
 
@@ -12660,20 +12699,6 @@ ok</computeroutput>
           </row>
 
           <row>
-            <entry><literal>assertEqual</literal></entry>
-
-            <entry><xref linkend="section.lib-UnitTest"
-            xrefstyle="template:%t" /></entry>
-          </row>
-
-          <row>
-            <entry><literal>assertTrue</literal></entry>
-
-            <entry><xref linkend="section.lib-UnitTest"
-            xrefstyle="template:%t" /></entry>
-          </row>
-
-          <row>
             <entry><literal>average</literal></entry>
 
             <entry><xref linkend="section.lib-List"
@@ -13139,13 +13164,6 @@ ok</computeroutput>
             <entry><literal>references</literal></entry>
 
             <entry><xref linkend="section.lib-Resource"
-            xrefstyle="template:%t" /></entry>
-          </row>
-
-          <row>
-            <entry><literal>report</literal></entry>
-
-            <entry><xref linkend="section.lib-UnitTest"
             xrefstyle="template:%t" /></entry>
           </row>
 
