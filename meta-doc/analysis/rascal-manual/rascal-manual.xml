@@ -703,7 +703,7 @@ int x &lt;- [ 1 .. 10 ]
       <literal>PROGRAM</literal> as value) and only yields statements that
       match the assignment pattern (<literal>asgStat</literal>) we have seen
       earlier. Note the use of an anonymous variable at the
-      <literal>EXP</literal> position in the pattern. </para>
+      <literal>EXP</literal> position in the pattern.</para>
     </section>
 
     <section>
@@ -867,11 +867,9 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
     <section>
       <title>Syntax Definition and Parsing</title>
 
-      <para><warning>
-          <para>Verify this section.</para>
-        </warning>All source code analysis projects need to extract
-      information directly from the source code. There are two main approaches
-      to this:</para>
+      <para>All source code analysis projects need to extract information
+      directly from the source code. There are two main approaches to
+      this:</para>
 
       <itemizedlist>
         <listitem>
@@ -1177,8 +1175,7 @@ public int fac(int N)
 <computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>fac(47);</userinput>
-<computeroutput>int: 2586232415111681806429643551536119799691976323891200
-00000000</computeroutput></screen></para>
+<computeroutput>int: 258623241511168180642964355153611979969197632389120000000000</computeroutput></screen></para>
 
       <para>Indeed, Rascal has arbitrary length integers.</para>
     </section>
@@ -1465,12 +1462,10 @@ public str genClass(str name, map[str,str] fields) {
     <section>
       <title>A Domain-Specific Language for Finite State Machines</title>
 
-      <para><warning>
-          <para>Not yet checked.</para>
-        </warning>Finite State Machines (FSMs) are a universal device in
-      Computer Science and are used to model problems ranging from lexical
-      tokens to concurent processes. An FSM consists of named states and
-      labeled transitions between states. An example is shown in <xref
+      <para>Finite State Machines (FSMs) are a universal device in Computer
+      Science and are used to model problems ranging from lexical tokens to
+      concurent processes. An FSM consists of named states and labeled
+      transitions between states. An example is shown in <xref
       linkend="figure.fsm-example" />. This example was suggested by Goerel
       Hedin at GTTSE09.<!--Umlaut!--><figure xml:id="figure.fsm-example">
           <title>Example of a Finite State Machine</title>
@@ -7186,8 +7181,11 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
 <prompt>rascal&gt;</prompt> <userinput>C;</userinput>
 <computeroutput>list[int] : [1,2,3]</computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>** good V ? E1 = E2 example here **</userinput>
+<prompt>rascal&gt;</prompt> <userinput>T = ("a" : 1);</userinput>
+<computeroutput>map[str, int]: ("a":1)</computeroutput>
 
+<prompt>rascal&gt;</prompt> <userinput>T["b"] ? 1 += 5;</userinput>
+<computeroutput>map[str, int]: ("b":6,"a":1)</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>anno str FREQ@color;</userinput>
 <computeroutput>ok</computeroutput>
@@ -8659,9 +8657,14 @@ data Bound =
           <literal>void</literal> are used to construct symbols in the above
           data definition by escaping them as <literal>\int</literal> and
           <literal>\void</literal>.</para>
-        </note><programlisting>public alias BindingRel = rel[loc, Entity];                        // maps locations to qualified names in the form of Entities
-public alias EntityRel = rel[Entity, Entity];                      // a short-hand for any relation between two Entities
-public alias ModifierRel = rel[Entity entity, Modifier modifier];  // a short-hand for mappings from Entities to their declared Modifiers</programlisting></para>
+        </note><programlisting>// mMps locations to qualified names in the form of Entities
+public alias BindingRel = rel[loc, Entity];     
+
+// A short-hand for any relation between two Entities
+public alias EntityRel = rel[Entity, Entity];  
+
+// A short-hand for mappings from Entities to their declared Modifiers     
+public alias ModifierRel = rel[Entity entity, Modifier modifier];  </programlisting></para>
 
       <para>A BindingRel is thus always used to map a source code location to
       a fully qualified Entity label of that part of the source code.
