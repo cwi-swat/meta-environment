@@ -308,6 +308,11 @@ UL  {
         list-style: url("images/tux-bullet.png") disc;
     }
 
+DIV.MEDIAOBJECT {
+	width: 50%;
+        height: 50%;
+}
+
 
 body:after { content: url(../../logos/ome4.png);
              float: left;
