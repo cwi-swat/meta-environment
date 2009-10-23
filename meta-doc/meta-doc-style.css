@@ -303,7 +303,12 @@ DIV.TOC {
         margin-right: 20px;
         width: 95%;
 }
-
+/*
+DIV.mediaobject {
+	height: 50%;
+	width: auto; 
+}
+*/
 UL  {
         list-style: url("images/tux-bullet.png") disc;
     }
