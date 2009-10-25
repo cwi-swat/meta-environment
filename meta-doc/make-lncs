@@ -1,5 +1,6 @@
-(xsltproc  --xinclude --stringparam now "`date`" ./pubdate.xsl analysis/rascal-manual/rascal-gttse.xml | \
-          xsltproc  --output analysis/rascal-manual/rascal-gttse.fo \
-                    --xinclude --stringparam current.docid analysis/rascal-manual/rascal-manual \
+FILE=analysis/rascal-manual/rascal-gttse-final
+(xsltproc  --xinclude --stringparam now "`date`" ./pubdate.xsl $FILE.xml | \
+          xsltproc  --output $FILE.fo \
+                    --xinclude --stringparam current.docid $FILE \
 		                    ./fo-customization-lncs.xml -)
-/home/paulk/software/source/fop-0.95/fop -fo analysis/rascal-manual/rascal-gttse.fo -pdf analysis/rascal-manual/rascal-gttse.pdf
+/home/paulk/software/source/fop-0.95/fop -fo $FILE.fo -pdf $FILE.pdf

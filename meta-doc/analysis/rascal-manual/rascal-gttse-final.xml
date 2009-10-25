@@ -14,27 +14,23 @@
   <info>
     <title>EASY Meta-Programming with Rascal</title>
 
-    <subtitle>Leveraging the Extract-Analyze-SYnthesize Paradigm for
-    Meta-Programming</subtitle>
-
     <authorgroup>
       <author>
         <personname><firstname>Paul</firstname><surname>Klint, Jurgen Vinju,
         Tijs van der Storm</surname></personname>
       </author>
     </authorgroup>
-
-    <pubdate>October 2009 (Version 0.3)</pubdate>
   </info>
 
-  <note>
-    <para>Rascal is a work in progress both regarding implementation and
-    documentation. The current version of this article is a preview version
-    only. The <link
-    xlink:href="http://www.meta-environment.org/doc/books//analysis/rascal-manual/rascal-manual.pdf">online
-    documentation</link> is always up-to-date and provides much more
-    information.</para>
-  </note>
+  <blockquote>
+    <para>Rascal is a new language for meta-programming and is intended to
+    solve problems in the domain of source code analysis and transformation.
+    In this article we give a high-level overview of the language and
+    illustrate its use by many examples. Rascal is a work in progress both
+    regarding implementation and documentation. More information is available
+    at <link
+    xlink:href="http://www.meta-environment.org/Meta-Environment/Rascal">http://www.meta-environment.org/Meta-Environment/Rascal</link>.</para>
+  </blockquote>
 
   <section xml:id="section.why-a-new-language">
     <title>A New Language for Meta-Programming</title>
@@ -67,7 +63,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="easy-workflow.png" scale="50"></imagedata>
+              <imagedata fileref="easy-workflow.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -141,7 +137,7 @@
           <mediaobject>
             <imageobject>
               <imagedata fileref="extract-analyze-view-paradigm.png"
-                         scale="50"></imagedata>
+                         scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure><example>
@@ -334,7 +330,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="manual-structure.png" scale="50"></imagedata>
+              <imagedata fileref="manual-structure.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>The structure of the description of Rascal is shown in <xref
@@ -407,11 +403,6 @@
           Rascal. In some cases, the response will simply be
           <computeroutput>ok</computeroutput> when there is no other
           meaningful answer to give.</para>
-
-          <note>
-            <para>For typographic reasons the output is abbreviated or
-            slightly edited in some examples.</para>
-          </note>
         </listitem>
       </itemizedlist>
     </section>
@@ -935,7 +926,8 @@ import ParseTree;
 
 public int countMethods(loc file){
   int n = 0;
-  for(/MethodDeclaration md &lt;- parse(#CompilationUnit, file))
+  for(/MethodDeclaration md &lt;- parse(#CompilationUnit, 
+                                     file))
       n += 1;
   return n;
 }</programlisting>
@@ -1078,10 +1070,10 @@ rule simplify6 sum(Expression e, num(0))     =&gt; e;</programlisting>Whenever
     <title>Some Classical Examples</title>
 
     <para>The following simple examples will help you to grasp the main
-    features of Rascal quickly. You can also consult the <link
-    xlink:href="http://www.meta-environment.org/doc/books//analysis/rascal-manual/rascal-manual.pdf">online
-    documentation </link> for details of the language or specific operators or
-    functions.</para>
+    features of Rascal quickly. You can also consult the online documentation
+    at <link
+    xlink:href="http://www.meta-environment.org/Meta-Environment/Rascal">http://www.meta-environment.org/Meta-Environment/Rascal</link>
+    for details of the language or specific operators or functions.</para>
 
     <section>
       <title>Hello</title>
@@ -1090,8 +1082,8 @@ rule simplify6 sum(Expression e, num(0))     =&gt; e;</programlisting>Whenever
       follows:<screen><prompt>rascal&gt;</prompt> <userinput>import IO;</userinput>
 <computeroutput>ok</computeroutput>
 
-<prompt>rascal&gt;</prompt> <userinput>println("Hello world, this is my first Rascal program");</userinput>
-<computeroutput>Hello world, this is my first Rascal program
+<prompt>rascal&gt;</prompt> <userinput>println("Hello world, my first Rascal program");</userinput>
+<computeroutput>Hello world, my first Rascal program
 ok</computeroutput>
 </screen>First, the library module IO is imported since hello world requires
       printing. Next, we call <literal>println</literal> and proudly observe
@@ -1101,12 +1093,12 @@ ok</computeroutput>
       in a function and call it:</para>
 
       <para><screen><prompt>rascal&gt; </prompt><userinput>void hello() {
-   println("Hello world, this is my first Rascal program");
+   println("Hello world, my first Rascal program");
 }</userinput>
 <computeroutput>void (): void hello();</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
-<computeroutput>Hello world, this is my first Rascal program
+<computeroutput>Hello world, my first Rascal program
 ok</computeroutput></screen>Don't get scared by the <computeroutput>void ():
       void hello();</computeroutput> that you get back when typing in the
       <literal>hello</literal> function. The first <computeroutput>void
@@ -1137,20 +1129,15 @@ wysiwyg, ik denk dat we zoiets moeten doen als in Ruby/Common-Lisp:
 import IO;
 
 public void hello() {
-   println("Hello world, this is my first Rascal program");
+   println("Hello world, my first Rascal program");
 }</programlisting>Note that we added a public modifier to the definition of
       hello, since we want it to be visible outside the Hello module. Using
       this Hello module is now simple:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Hello;</userinput>
 <computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>hello();</userinput>
-<computeroutput>Hello world, this is my first Rascal program
-ok</computeroutput></screen><note>
-          <para>All examples in this article can be found in the
-          <literal>demo</literal> directory of the Rascal distribution. That
-          is why we must prefix all names of examples modules with
-          <literal>demo::</literal>.</para>
-        </note></para>
+<computeroutput>Hello world, my first Rascal program
+ok</computeroutput></screen></para>
     </section>
 
     <section>
@@ -1172,7 +1159,8 @@ public int fac(int N)
 <computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>fac(47);</userinput>
-<computeroutput>int: 258623241511168180642964355153611979969197632389120000000000</computeroutput></screen></para>
+<computeroutput>int: 25862324151116818064296435515361197996919763238912000
+0000000</computeroutput></screen></para>
 
       <para>Indeed, Rascal has arbitrary length integers.</para>
     </section>
@@ -1422,7 +1410,8 @@ public str capAll2(str S)
 import String;
 
 public str capitalize(str s) {
-  return toUpperCase(substring(s, 0, 1)) + substring(s, 1);
+  return toUpperCase(substring(s, 0, 1)) + 
+         substring(s, 1);
 }
 
 public str genClass(str name, map[str,str] fields) {
@@ -1459,7 +1448,7 @@ public str genClass(str name, map[str,str] fields) {
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="fsm.png" scale="50"></imagedata>
+              <imagedata fileref="fsm.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>This same information can be represented in textual form as
@@ -1557,8 +1546,10 @@ import IO;
 // Extract from a give FSM all transitions as a relation
 
 public rel[str, str] getTransitions(FSM fsm){
-   return {&lt;"&lt;from&gt;", "&lt;to&gt;"&gt; | 
-           /`trans &lt;IdCon a&gt;: &lt;IdCon from&gt; -&gt; &lt;IdCon to&gt;` &lt;- fsm };
+   return
+    {&lt;"&lt;from&gt;", "&lt;to&gt;"&gt; | 
+     /`trans &lt;IdCon a&gt;: &lt;IdCon from&gt; -&gt; &lt;IdCon to&gt;` &lt;- fsm 
+    };
 }</programlisting>The function <literal>getTransitions</literal> illustrates
       several issues. Given a concrete fsm, a deep pattern match (/) is done
       searching for <literal>trans</literal> constructs. For each match three
@@ -1576,7 +1567,10 @@ public rel[str, str] getTransitions(FSM fsm){
 
 public map[str, set[str]] canReach(FSM fsm){
   transitions = getTransitions(fsm);
-  return ( s: (transitions+)[s] | str s &lt;- carrier(transitions) );
+  return
+    ( s: (transitions+)[s] | 
+      str s &lt;- carrier(transitions) 
+    );
 }</programlisting>Here <literal>str s &lt;- carrier(transitions)</literal>
       enumerates all elements that occur in the relations that is extracted
       from <literal>fsm</literal>. A map comprehension is used to construct a
@@ -1606,12 +1600,12 @@ public FSM example =
 
 <prompt>rascal&gt;</prompt> <userinput>getTransitions(example);</userinput>
 
-<computeroutput>rel[IdCon,IdCon]: {&lt;"S1", "S2"&gt;, &lt;"S2", "S1"&gt;, &lt;"S1", "S3"&gt;}</computeroutput>
+<computeroutput>rel[str,str]: {&lt;"S1", "S2"&gt;, &lt;"S2", "S1"&gt;, &lt;"S1", "S3"&gt;}</computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>canReach(example);</userinput>
 
-<computeroutput>map[IdCon: set[IdCon]: ("S1" : {"S1", "S2", "S3"}, 
-                        "S2" : {"S1", "S2", "S3"},
-                        "S3" : {})</computeroutput></screen></para>
+<computeroutput>map[str: set[str]: ("S1" : {"S1", "S2", "S3"}, 
+                    "S2" : {"S1", "S2", "S3"},
+                    "S3" : {})</computeroutput></screen></para>
     </section>
   </section>
 
@@ -1699,7 +1693,7 @@ public FSM example =
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="problem-solving.png" scale="50"></imagedata>
+            <imagedata fileref="problem-solving.png" scale="40"></imagedata>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -1714,7 +1708,7 @@ public FSM example =
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="validation.png" scale="50"></imagedata>
+            <imagedata fileref="validation.png" scale="40"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>A major question in every problem solving situation is how to
@@ -1757,7 +1751,7 @@ public FSM example =
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="requirements.png" scale="50"></imagedata>
+            <imagedata fileref="requirements.png" scale="40"></imagedata>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -1914,7 +1908,7 @@ public FSM example =
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="define-extraction.png" scale="50"></imagedata>
+              <imagedata fileref="define-extraction.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -1998,7 +1992,7 @@ public FSM example =
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="define-analysis.png" scale="50"></imagedata>
+              <imagedata fileref="define-analysis.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -2104,7 +2098,7 @@ public FSM example =
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="define-synthesis.png" scale="50"></imagedata>
+              <imagedata fileref="define-synthesis.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -2149,10 +2143,7 @@ public FSM example =
     complexity in <biblioref linkend="section.McCabe" />. Several examples of
     dataflow analysis follow in <xref linkend="section.dataflow" />. A
     description of program slicing concludes the chapter, see <xref
-    linkend="section.program-slicing" />.<warning>
-        <para>The examples in this section are biased towards pure analysis.
-        We intend to add more extraction and synthesis examples.</para>
-      </warning></para>
+    linkend="section.program-slicing" />.</para>
 
     <section xml:id="section.motivating-example">
       <title>Call Graph Analysis</title>
@@ -2219,7 +2210,7 @@ public FSM example =
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="calls-workflow.png" scale="50"></imagedata>
+                <imagedata fileref="calls-workflow.png" scale="40"></imagedata>
               </imageobject>
             </mediaobject>
 
@@ -2232,7 +2223,7 @@ public FSM example =
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="calls.png" scale="50"></imagedata>
+                <imagedata fileref="calls.png" scale="40"></imagedata>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -2249,9 +2240,7 @@ public FSM example =
 
         <para>Suppose that the following facts have been extracted from the
         source code and are represented by the relation
-        <literal>Calls</literal>:<caution>
-            <para>Here we should illustrate how to do this.</para>
-          </caution></para>
+        <literal>Calls</literal>:</para>
 
         <screen><prompt>rascal&gt;</prompt> <userinput>rel[proc, proc] Calls = 
    { &lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, &lt;"d", "c"&gt;, 
@@ -2435,10 +2424,11 @@ alias comp = str;
 
 public rel[comp,comp] lift(rel[proc,proc] aCalls, 
                            rel[proc,comp] aPartOf){
-   return { &lt;C1, C2&gt; | &lt;proc P1, proc P2&gt; &lt;- aCalls, 
-                       &lt;comp C1, comp C2&gt; &lt;- aPartOf[P1] * 
-                                             aPartOf[P2]
-          };
+   return 
+      { &lt;C1, C2&gt; | &lt;proc P1, proc P2&gt; &lt;- aCalls, 
+                   &lt;comp C1, comp C2&gt; &lt;- aPartOf[P1] * 
+                                         aPartOf[P2]
+      };
 }</programlisting></para>
 
       <para>For each pair <literal>&lt;P1,P2&gt;</literal> in the Calls
@@ -2481,7 +2471,7 @@ public rel[comp,comp] lift(rel[proc,proc] aCalls,
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="parts.png" scale="50"></imagedata>
+            <imagedata fileref="parts.png" scale="40"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2921,7 +2911,7 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="dominators.png" scale="50"></imagedata>
+                <imagedata fileref="dominators.png" scale="40"></imagedata>
               </imageobject>
             </mediaobject>
           </figure>The result of applying <literal>dominators</literal> to it
@@ -2946,7 +2936,7 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="dominator-tree.png" scale="50"></imagedata>
+                <imagedata fileref="dominator-tree.png" scale="40"></imagedata>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -2964,7 +2954,7 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="df-graph.png" scale="50"></imagedata>
+                <imagedata fileref="df-graph.png" scale="40"></imagedata>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -3105,7 +3095,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="reach.png" scale="50"></imagedata>
+                <imagedata fileref="reach.png" scale="40"></imagedata>
               </imageobject>
             </mediaobject>
           </figure> For our running example (<xref
@@ -3223,7 +3213,7 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="live.png" scale="50"></imagedata>
+                <imagedata fileref="live.png" scale="40"></imagedata>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -3466,8 +3456,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     <para>Rascal and its IDE are in full development at the time of writing
     and a first prototype implementation is available for download. We have
     given here only a sketch of the language and its applications. The
-    following topics have not been covered in the current version of this
-    article:</para>
+    following topics have not been covered in this article:</para>
 
     <itemizedlist>
       <listitem>
@@ -3477,7 +3466,9 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
       <listitem>
         <para>The extensive Rascal library that supports many operations on
         the basic datatypes including shortest path, reachability and
-        bisimulation on graphs.</para>
+        bisimulation on graphs. It also provides tools for drawing graphs and
+        charts, for extracting data from Subversion repositories and
+        more.</para>
       </listitem>
 
       <listitem>
@@ -3492,9 +3483,10 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
       </listitem>
     </itemizedlist>
 
-    <para>We refer the interested reader to the <link
-    xlink:href="http://www.meta-environment.org/doc/books//analysis/rascal-manual/rascal-manual.pdf">online
-    documentation </link> for a more complete and up-to-date overview.</para>
+    <para>We refer the interested reader to <link
+    xlink:href="http://www.meta-environment.org/Meta-Environment/Rascal">http://www.meta-environment.org/Meta-Environment/Rascal</link>
+    for a more complete and up-to-date overview and for downloading the latest
+    version of Rascal.</para>
   </section>
 
   <section>

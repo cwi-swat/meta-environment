@@ -312,12 +312,10 @@ DIV.mediaobject {
 UL  {
         list-style: url("images/tux-bullet.png") disc;
     }
-/*
 DIV.MEDIAOBJECT {
-	width: 50%;
-        height: 50%;
+	max-width: auto;
+        max-height: 500px;
 }
-*/
 
 body:after { content: url(../../logos/ome4.png);
              float: left;
