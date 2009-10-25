@@ -48,7 +48,7 @@
     this is the activity of writing meta-programs.</para>
 
     <section xml:id="section.EASY-programming">
-      <title>EASY Programming</title>
+      <title>The EASY Paradigm</title>
 
       <para>Many meta-programming problems follow a fixed pattern. Starting
       with some input system (a black box that we usually call
@@ -2416,8 +2416,8 @@ public FSM example =
       each procedure belongs, it is possible to <emphasis>lift</emphasis> the
       call relation to the component level as proposed in <biblioref
       linkend="Krikhaar99" />. Actual lifting amounts to translating each call
-      between procedures by a call between components. This described in the
-      following module:<programlisting>module demo::Lift
+      between procedures by a call between components. This is described in
+      the following module:<programlisting>module demo::Lift
 
 alias proc = str;
 alias comp = str;

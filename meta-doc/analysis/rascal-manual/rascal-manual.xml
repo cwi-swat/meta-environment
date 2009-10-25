@@ -24,7 +24,7 @@
       </author>
     </authorgroup>
 
-    <pubdate>June 26, 2009 (Version 0.2)</pubdate>
+    <pubdate>October, 2009 (Version 0.3)</pubdate>
   </info>
 
   <warning>
@@ -51,7 +51,7 @@
     this is the activity of writing meta-programs.</para>
 
     <section xml:id="section.EASY-programming">
-      <title>EASY Programming</title>
+      <title>The EASY Paradigm</title>
 
       <para>Many meta-programming problems follow a fixed pattern. Starting
       with some input system (a black box that we usually call
@@ -1619,12 +1619,12 @@ public FSM example =
 
 <prompt>rascal&gt;</prompt> <userinput>getTransitions(example);</userinput>
 
-<computeroutput>rel[IdCon,IdCon]: {&lt;"S1", "S2"&gt;, &lt;"S2", "S1"&gt;, &lt;"S1", "S3"&gt;}</computeroutput>
+<computeroutput>rel[str,str]: {&lt;"S1", "S2"&gt;, &lt;"S2", "S1"&gt;, &lt;"S1", "S3"&gt;}</computeroutput>
 <prompt>rascal&gt;</prompt> <userinput>canReach(example);</userinput>
 
-<computeroutput>map[IdCon: set[IdCon]: ("S1" : {"S1", "S2", "S3"}, 
-                        "S2" : {"S1", "S2", "S3"},
-                        "S3" : {})</computeroutput></screen></para>
+<computeroutput>map[str: set[str]: ("S1" : {"S1", "S2", "S3"}, 
+                    "S2" : {"S1", "S2", "S3"},
+                    "S3" : {})</computeroutput></screen></para>
     </section>
   </section>
 
@@ -2450,8 +2450,8 @@ public FSM example =
       each procedure belongs, it is possible to <emphasis>lift</emphasis> the
       call relation to the component level as proposed in <biblioref
       linkend="Krikhaar99" />. Actual lifting amounts to translating each call
-      between procedures by a call between components. This described in the
-      following module:<programlisting>module demo::Lift
+      between procedures by a call between components. This is described in
+      the following module:<programlisting>module demo::Lift
 
 alias proc = str;
 alias comp = str;
