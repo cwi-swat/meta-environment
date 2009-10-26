@@ -303,20 +303,16 @@ DIV.TOC {
         margin-right: 20px;
         width: 95%;
 }
-/*
-DIV.mediaobject {
-	height: 50%;
-	width: auto; 
-}
-*/
+
 UL  {
         list-style: url("images/tux-bullet.png") disc;
     }
+/*
 DIV.MEDIAOBJECT {
-	max-width: auto;
-        max-height: 500px;
+	max-width: 700px;
+	max-height: 700px;
 }
-
+*/
 body:after { content: url(../../logos/ome4.png);
              float: left;
              
