@@ -42,10 +42,9 @@
     languages like C and Java to domain-specific languages for describing
     high-level system models or applications in specialized areas like gaming
     or finance. In some cases, even test results or performance data are used
-    as input for meta-programs.</para>
-
-    <para>Rascal is a new language for <emphasis>meta-programming</emphasis>,
-    this is the activity of writing meta-programs.</para>
+    as input for meta-programs. Rascal is a new language for
+    <emphasis>meta-programming</emphasis>, this is the activity of writing
+    meta-programs.</para>
 
     <section xml:id="section.EASY-programming">
       <title>The EASY Paradigm</title>
@@ -57,8 +56,26 @@
       internal representation is then analyzed and used to synthesize results.
       If the synthesis indicates this, these steps can be repeated over and
       over again. These steps are shown in <xref
-      linkend="figure.extract-analyze-synthesize-paradigm" />.<figure
-          xml:id="figure.extract-analyze-synthesize-paradigm">
+      linkend="figure.extract-analyze-synthesize-paradigm" />.</para>
+
+      <para>This is an abstract view on solving meta-programming problems, but
+      is it uncommon? No, so let's illustrate it with a few examples.</para>
+
+      <section>
+        <title>Finding security breaches</title>
+
+        <para><emphasis>Alice</emphasis> is system administrator of a large
+        online marketplace and she is looking for security breaches in her
+        system. The objects-of-interest are the system's log files. First
+        relevant entries are extracted. This will include, for instance,
+        messages from the SecureShell demon that reports failed login
+        attempts. From each entry login name and originating IP address are
+        extracted and put in a table (the internal representation in this
+        example). These data are analyzed by detecting duplicates and counting
+        frequencies. Finally results are synthesized by listing the most
+        frequently used login names and IP addresses.</para>
+
+        <figure xml:id="figure.extract-analyze-synthesize-paradigm">
           <title>EASY: the Extract-Analyze-Synthesize Paradigm</title>
 
           <mediaobject>
@@ -66,72 +83,59 @@
               <imagedata fileref="easy-workflow.png" scale="40"></imagedata>
             </imageobject>
           </mediaobject>
-        </figure></para>
+        </figure>
+      </section>
 
-      <para>This is an abstract view on solving meta-programming problems, but
-      is it uncommon? No, so let's illustrate it with a few examples.</para>
+      <section>
+        <title>A Forensic DSL compiler</title>
 
-      <para><example>
-          <title>Finding security breaches</title>
+        <para><emphasis>Bernd</emphasis> is a senior software engineer working
+        at the Berlin headquarters of a forensic investigation lab of the
+        German government. His daily work is to find common patterns in files
+        stored on digital media that have been confiscated during criminal
+        investigations. Text, audio and video files are stored in zillions of
+        different data formats and each data format requires its own analysis
+        technique. For each new investigation ad hoc combinations of tools are
+        used. This makes the process very labour-intensive and error-prone.
+        Bernd convinces his manager that designing a new domain-specific
+        language (DSL) for forensic investigations may relieve the pressure on
+        their lab. After designing the DSL---let's call it DERRICK---he makes
+        an EASY implementation for it. Given a DERRICK program for a specific
+        case under investigation, he first extracts relevant information from
+        it and analyzes it: which media formats are relevant? Which patterns
+        to look for? How should search results be combined? Given this new
+        information, Java code is synthesized that uses the various existing
+        tools and combines their results.</para>
+      </section>
 
-          <para><emphasis>Alice</emphasis> is system administrator of a large
-          online marketplace and she is looking for security breaches in her
-          system. The objects-of-interest are the system's log files. First
-          relevant entries are extracted. This will include, for instance,
-          messages from the SecureShell demon that reports failed login
-          attempts. From each entry login name and originating IP address are
-          extracted and put in a table (the internal representation in this
-          example). These data are analyzed by detecting duplicates and
-          counting frequencies. Finally results are synthesized by listing the
-          most frequently used login names and IP addresses.</para>
-        </example><example>
-          <title>A Forensic DSL compiler</title>
+      <section>
+        <title>Renovating Financial Software</title>
 
-          <para><emphasis>Bernd</emphasis> is a senior software engineer
-          working at the Berlin headquarters of a forensic investigation lab
-          of the German government. His daily work is to find common patterns
-          in files stored on digital media that have been confiscated during
-          criminal investigations. Text, audio and video files are stored in
-          zillions of different data formats and each data format requires its
-          own analysis technique. For each new investigation ad hoc
-          combinations of tools are used. This makes the process very
-          labour-intensive and error-prone. Bernd convinces his manager that
-          designing a new domain-specific language (DSL) for forensic
-          investigations may relieve the pressure on their lab. After
-          designing the DSL---let's call it DERRICK---he makes an EASY
-          implementation for it. Given a DERRICK program for a specific case
-          under investigation, he first extracts relevant information from it
-          and analyzes it: which media formats are relevant? Which patterns to
-          look for? How should search results be combined? Given this new
-          information, Java code is synthesized that uses the various existing
-          tools and combines their results.</para>
-        </example><example>
-          <title>Renovating Financial Software</title>
+        <para><emphasis>Charlotte</emphasis> is software engineer at a large
+        financial institution in Paris and she is looking for options to
+        connect an old and dusty software system to a web interface. She will
+        need to analyze the sources of that system to understand how it can be
+        changed to meet the new requirements. The objects-of-interest are in
+        this case the source files, documentation, test scripts and any other
+        available information. They have to be parsed in some way in order to
+        extract relevant information, say the calls between various parts of
+        the system. The call information can be represented as a binary
+        relation between caller and callee (the internal representation in
+        this example). This relation with 1-step calls is analyzed and further
+        extended with 2-step calls, 3-step calls and so on. In this way call
+        chains of arbitrary length become available. With this new
+        information, we can synthesize results by determining the entry points
+        of the software system, i.e., the points where calls from the outside
+        world enter the system. Having completed this first cycle, Charlotte
+        may be interested in which procedures can be called from the entry
+        points and so on and so forth. Results will be typically represented
+        as pictures that display the relationships that were found. In the
+        case of source code analysis, a variation of our workflow scheme is
+        quite common. It is then called the extract-analyze-view paradigm and
+        is shown in <xref
+        linkend="figure.extract-analyze-view-paradigm" />.</para>
 
-          <para><emphasis>Charlotte</emphasis> is software engineer at a large
-          financial institution in Paris and she is looking for options to
-          connect an old and dusty software system to a web interface. She
-          will need to analyze the sources of that system to understand how it
-          can be changed to meet the new requirements. The objects-of-interest
-          are in this case the source files, documentation, test scripts and
-          any other available information. They have to be parsed in some way
-          in order to extract relevant information, say the calls between
-          various parts of the system. The call information can be represented
-          as a binary relation between caller and callee (the internal
-          representation in this example). This relation with 1-step calls is
-          analyzed and further extended with 2-step calls, 3-step calls and so
-          on. In this way call chains of arbitrary length become available.
-          With this new information, we can synthesize results by determining
-          the entry points of the software system, i.e., the points where
-          calls from the outside world enter the system. Having completed this
-          first cycle, Charlotte may be interested in which procedures can be
-          called from the entry points and so on and so forth. Results will be
-          typically represented as pictures that display the relationships
-          that were found. In the case of source code analysis, a variation of
-          our workflow scheme is quite common. It is then called the
-          extract-analyze-view paradigm and is shown in <xref
-          linkend="figure.extract-analyze-view-paradigm" />.</para>
-        </example><figure xml:id="figure.extract-analyze-view-paradigm">
+        <figure xml:id="figure.extract-analyze-view-paradigm">
           <title>The extract-analyze-view paradigm</title>
 
           <mediaobject>
@@ -140,40 +144,44 @@
                          scale="40"></imagedata>
             </imageobject>
           </mediaobject>
-        </figure><example>
-          <title>Finding Concurrency Errors</title>
+        </figure>
+      </section>
 
-          <para><emphasis>Daniel</emphasis> is concurrency researcher at one
-          of the largest hardware manufacturers worldwide. He is working from
-          an office in the Bay Area. Concurrency is the big issue for his
-          company: it is becoming harder and harder to make CPUs faster,
-          therefore more and more of them are bundled on a single chip.
-          Programming these multi-core chips is difficult and many programs
-          that worked fine on a single CPU contain hard to detect concurrency
-          errors due to subtle differences in the order of execution that
-          results from executing the code on more than one CPU. Here is where
-          Daniel enters the picture. He is working on tools for finding
-          concurrency errors. First he extracts facts from the code that are
-          relevant for concurrency problems and have to do with calls,
-          threads, shared variables and locks. Next, he analyzes these facts
-          and synthesizes an abstract model that captures the essentials of
-          the concurrency behaviour of the program. Finally he runs a
-          third-party verification tool with this model as input to do the
-          actual verification.</para>
-        </example><example>
-          <title>Model driven engineering</title>
+      <section>
+        <title>Finding Concurrency Errors</title>
 
-          <para><emphasis>Elisabeth</emphasis> is a software architect at a
-          large airplane manufacturer and her concern is reliability and
-          dependability of airplane control software. She and her team have
-          designed a UML model of the control software and have extended it
-          with annotations that describe the reliability of individual
-          components. She will use this annotated model in two ways: (a) to
-          extract relevant information from it to synthesize input for a
-          statistical tool that will compute overall system reliability from
-          the reliability of individual components; (b) to generate executable
-          code that takes the reliability issues into account.</para>
-        </example></para>
+        <para><emphasis>Daniel</emphasis> is concurrency researcher at one of
+        the largest hardware manufacturers worldwide. He is working from an
+        office in the Bay Area. Concurrency is the big issue for his company:
+        it is becoming harder and harder to make CPUs faster, therefore more
+        and more of them are bundled on a single chip. Programming these
+        multi-core chips is difficult and many programs that worked fine on a
+        single CPU contain hard to detect concurrency errors due to subtle
+        differences in the order of execution that results from executing the
+        code on more than one CPU. Here is where Daniel enters the picture. He
+        is working on tools for finding concurrency errors. First he extracts
+        facts from the code that are relevant for concurrency problems and
+        have to do with calls, threads, shared variables and locks. Next, he
+        analyzes these facts and synthesizes an abstract model that captures
+        the essentials of the concurrency behaviour of the program. Finally he
+        runs a third-party verification tool with this model as input to do
+        the actual verification.</para>
+      </section>
+
+      <section>
+        <title>Model-driven Engineering</title>
+
+        <para><emphasis>Elisabeth</emphasis> is a software architect at a
+        large airplane manufacturer and her concern is reliability and
+        dependability of airplane control software. She and her team have
+        designed a UML model of the control software and have extended it with
+        annotations that describe the reliability of individual components.
+        She will use this annotated model in two ways: (a) to extract relevant
+        information from it to synthesize input for a statistical tool that
+        will compute overall system reliability from the reliability of
+        individual components; (b) to generate executable code that takes the
+        reliability issues into account.</para>
+      </section>
     </section>
 
     <section>
@@ -312,6 +320,27 @@
         <para>The scope of this article is limited to the Rascal language and
         its applications but does not address implementation aspects of the
         language.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Related Work</title>
+
+        <para>Rascal owes a lot to other languages that aim at
+        meta-programming, in particular the user-defined, modular, syntax and
+        term rewriting of ASF+SDF <biblioref linkend="Klint93" />, <biblioref
+        linkend="BDHJJKKMOSVVV01" />, the relational calculus as used in
+        Rscript <biblioref linkend="KlintRscript" /> and pioneered by GROK
+        <biblioref linkend="Grok" />, traversal functions as introduced in
+        <biblioref linkend="BKV03" />, strategies as introduced in ELAN
+        <biblioref linkend="ElanBKKMR-wrla98" /> and Stratego <biblioref
+        linkend="BKVV08" />, and integration of term rewriting in Java as done
+        in TOM <biblioref linkend="BallandBKMR-RTA2007" />. We also
+        acknowledge less specific influences by systems like TXL <biblioref
+        linkend="CordyTXL06" />, ANTLR <biblioref linkend="ANTLRBook" />,
+        JastAdd <biblioref linkend="HedinMagnusson03" />, Semmle <biblioref
+        linkend="Semmle.QL" />, DMS <biblioref linkend="DMS" />, and various
+        others. A first application of Rascal in the domain of refactoring is
+        described in <biblioref linkend="KSV-SCAM09" />.</para>
       </formalpara>
     </section>
 
@@ -2255,155 +2284,148 @@ public FSM example =
       </section>
 
       <section>
-        <title>Questions</title>
+        <title>How many procedure calls occur in this system?</title>
 
-        <section>
-          <title>How many procedure calls occur in this system?</title>
-
-          <para>To determine the numbers of calls, we simply determine the
-          number of tuples in the <literal>Calls</literal> relation, as
-          follows. First, we need the Relation library so we import
-          it:<screen><prompt>rascal&gt;</prompt> <userinput>import Relation;</userinput>
+        <para>To determine the numbers of calls, we simply determine the
+        number of tuples in the <literal>Calls</literal> relation, as follows.
+        First, we need the Relation library so we import it:<screen><prompt>rascal&gt;</prompt> <userinput>import Relation;</userinput>
 <computeroutput>ok</computeroutput></screen>next we describe a new variable
-          and calculate the number of tuples:</para>
+        and calculate the number of tuples:</para>
 
-          <para><screen><prompt>rascal&gt;</prompt> <userinput>nCalls = size(Calls);</userinput>
+        <para><screen><prompt>rascal&gt;</prompt> <userinput>nCalls = size(Calls);</userinput>
 <computeroutput>int: 8</computeroutput></screen>The library function
-          <literal>size</literal> determines the number of elements in a set
-          or relation. In this example, <literal>nCalls</literal> will get the
-          value <literal>8</literal>.</para>
-        </section>
+        <literal>size</literal> determines the number of elements in a set or
+        relation. In this example, <literal>nCalls</literal> will get the
+        value <literal>8</literal>.</para>
+      </section>
 
-        <section>
-          <title>How many procedures are contained in it?</title>
+      <section>
+        <title>How many procedures are contained in it?</title>
 
-          <para>We get the number of procedures by determining which names
-          occur in the tuples in the relation <literal>Calls</literal> and
-          then determining the number of names:</para>
+        <para>We get the number of procedures by determining which names occur
+        in the tuples in the relation <literal>Calls</literal> and then
+        determining the number of names:</para>
 
-          <screen><prompt>rascal&gt;</prompt> <userinput>procs = carrier(Calls);</userinput>
+        <screen><prompt>rascal&gt;</prompt> <userinput>procs = carrier(Calls);</userinput>
 <computeroutput><literal>set[proc]: {"a", "b", "c", "d", "e", "f", "g"}</literal></computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>nprocs = size(procs);</userinput>
 <computeroutput>int: 7</computeroutput></screen>
 
-          <para>The built-in function <literal>carrier</literal> determines
-          all the values that occur in the tuples of a relation. In this case,
-          <literal>procs</literal> will get the value <literal>{"a", "b", "c",
-          "d", "e", "f", "g"}</literal> and <literal>nprocs</literal> will
-          thus get value <literal>7</literal>. A more concise way of
-          expressing this would be to combine both steps:</para>
+        <para>The built-in function <literal>carrier</literal> determines all
+        the values that occur in the tuples of a relation. In this case,
+        <literal>procs</literal> will get the value <literal>{"a", "b", "c",
+        "d", "e", "f", "g"}</literal> and <literal>nprocs</literal> will thus
+        get value <literal>7</literal>. A more concise way of expressing this
+        would be to combine both steps:</para>
 
-          <screen><prompt>rascal&gt;</prompt> <userinput>nprocs = size(carrier(Calls));</userinput>
+        <screen><prompt>rascal&gt;</prompt> <userinput>nprocs = size(carrier(Calls));</userinput>
 <computeroutput>int: 7</computeroutput></screen>
-        </section>
+      </section>
 
-        <section>
-          <title>What are the entry points for this system?</title>
+      <section>
+        <title>What are the entry points for this system?</title>
 
-          <para>The next step in the analysis is to determine which
-          <emphasis>entry points</emphasis> this application has, i.e.,
-          procedures which call others but are not called themselves. Entry
-          points are useful since they define the external interface of a
-          system and may also be used as guidance to split a system in parts.
-          The <literal>top</literal> of a relation contains those left-hand
-          sides of tuples in a relation that do not occur in any right-hand
-          side. When a relation is viewed as a graph, its top corresponds to
-          the root nodes of that graph. Similarly, the
-          <literal>bottom</literal> of a relation corresponds to the leaf
-          nodes of the graph. Using this knowledge, the entry points can be
-          computed by determining the top of the <literal>Calls</literal>
-          relation:</para>
+        <para>The next step in the analysis is to determine which
+        <emphasis>entry points</emphasis> this application has, i.e.,
+        procedures which call others but are not called themselves. Entry
+        points are useful since they define the external interface of a system
+        and may also be used as guidance to split a system in parts. The
+        <literal>top</literal> of a relation contains those left-hand sides of
+        tuples in a relation that do not occur in any right-hand side. When a
+        relation is viewed as a graph, its top corresponds to the root nodes
+        of that graph. Similarly, the <literal>bottom</literal> of a relation
+        corresponds to the leaf nodes of the graph. Using this knowledge, the
+        entry points can be computed by determining the top of the
+        <literal>Calls</literal> relation:</para>
 
-          <screen><prompt>rascal&gt;</prompt> <userinput>import Graph;</userinput>
+        <screen><prompt>rascal&gt;</prompt> <userinput>import Graph;</userinput>
 <computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>entryPoints = top(Calls);</userinput>
 <computeroutput>set[proc]: {"a", "f"}</computeroutput></screen>
 
-          <para>In this case, <literal>entryPoints</literal> is equal to
-          <literal>{"a", "f"}</literal>. In other words, procedures
-          <literal>"a"</literal> and <literal>"f"</literal> are the entry
-          points of this application.</para>
-        </section>
+        <para>In this case, <literal>entryPoints</literal> is equal to
+        <literal>{"a", "f"}</literal>. In other words, procedures
+        <literal>"a"</literal> and <literal>"f"</literal> are the entry points
+        of this application.</para>
+      </section>
 
-        <section>
-          <title>What are the leaves of this application?</title>
+      <section>
+        <title>What are the leaves of this application?</title>
 
-          <para>In a similar spirit, we can determine the
-          <emphasis>leaves</emphasis> of this application, i.e., procedures
-          that are being called but do not make any calls themselves:</para>
+        <para>In a similar spirit, we can determine the
+        <emphasis>leaves</emphasis> of this application, i.e., procedures that
+        are being called but do not make any calls themselves:</para>
 
-          <screen><prompt>rascal&gt;</prompt> <userinput>bottomCalls = bottom(Calls);</userinput>
+        <screen><prompt>rascal&gt;</prompt> <userinput>bottomCalls = bottom(Calls);</userinput>
 <computeroutput>set[proc]: {"c", "e"}</computeroutput></screen>
 
-          <para>In this case, <literal>bottomCalls</literal> is equal to
-          <literal>{"c", "e"}</literal>.</para>
-        </section>
+        <para>In this case, <literal>bottomCalls</literal> is equal to
+        <literal>{"c", "e"}</literal>.</para>
+      </section>
 
-        <section>
-          <title>Which procedures call each other indirectly?</title>
+      <section>
+        <title>Which procedures call each other indirectly?</title>
 
-          <para>We can also determine the <emphasis>indirect calls</emphasis>
-          between procedures, by taking the transitive closure of the
-          <literal>Calls</literal> relation, written as
-          <literal>Calls+</literal>. Observe that the transitive closure will
-          contain both the direct and the indirect calls.</para>
+        <para>We can also determine the <emphasis>indirect calls</emphasis>
+        between procedures, by taking the transitive closure of the
+        <literal>Calls</literal> relation, written as
+        <literal>Calls+</literal>. Observe that the transitive closure will
+        contain both the direct and the indirect calls.</para>
 
-          <screen><prompt>rascal&gt;</prompt> <userinput>closureCalls = Calls+;</userinput>
+        <screen><prompt>rascal&gt;</prompt> <userinput>closureCalls = Calls+;</userinput>
 <computeroutput>rel[proc, proc]: {&lt;"a", "b"&gt;, &lt;"b", "c"&gt;, &lt;"b", "d"&gt;, 
                   &lt;"d", "c"&gt;, &lt;"d","e"&gt;, &lt;"f", "e"&gt;, 
                   &lt;"f", "g"&gt;, &lt;"g", "e"&gt;, &lt;"a", "c"&gt;, 
                   &lt;"a", "d"&gt;, &lt;"b", "e"&gt;, &lt;"a", "e"&gt;}</computeroutput></screen>
-        </section>
+      </section>
 
-        <section>
-          <title>Which procedures are called directly or indirectly from each
-          entry point?</title>
+      <section>
+        <title>Which procedures are called directly or indirectly from each
+        entry point?</title>
 
-          <para>We now know the entry points for this application
-          (<literal>"a" </literal>and <literal>"f"</literal>) and the indirect
-          call relations. Combining this information, we can determine which
-          procedures are called from each entry point. This is done by
-          indexing <literal>closureCalls</literal> with appropriate procedure
-          name. The index operator yields all right-hand sides of tuples that
-          have a given value as left-hand side. This gives the
-          following:</para>
+        <para>We now know the entry points for this application (<literal>"a"
+        </literal>and <literal>"f"</literal>) and the indirect call relations.
+        Combining this information, we can determine which procedures are
+        called from each entry point. This is done by indexing
+        <literal>closureCalls</literal> with appropriate procedure name. The
+        index operator yields all right-hand sides of tuples that have a given
+        value as left-hand side. This gives the following:</para>
 
-          <screen><prompt>rascal&gt;</prompt> <userinput>calledFromA = closureCalls["a"];</userinput>
+        <screen><prompt>rascal&gt;</prompt> <userinput>calledFromA = closureCalls["a"];</userinput>
 <computeroutput>set[proc]: {"b", "c", "d", "e"}</computeroutput></screen>
 
-          <para>and</para>
+        <para>and</para>
 
-          <screen><prompt>rascal&gt;</prompt> <userinput>calledFromF = closureCalls["f"];</userinput>
+        <screen><prompt>rascal&gt;</prompt> <userinput>calledFromF = closureCalls["f"];</userinput>
 <computeroutput>set[proc]: {"e", "g"}</computeroutput></screen>
-        </section>
+      </section>
 
-        <section>
-          <title>Which procedures are called from all entry points?</title>
+      <section>
+        <title>Which procedures are called from all entry points?</title>
 
-          <para>Finally, we can determine which procedures are called from
-          both entry points by taking the intersection of the two sets
-          <literal>calledFromA</literal> and
-          <literal>calledFromF:</literal></para>
+        <para>Finally, we can determine which procedures are called from both
+        entry points by taking the intersection of the two sets
+        <literal>calledFromA</literal> and
+        <literal>calledFromF:</literal></para>
 
-          <para><screen><prompt>rascal&gt;</prompt> <userinput>commonProcs = calledFromA &amp; calledFromF;</userinput>
+        <para><screen><prompt>rascal&gt;</prompt> <userinput>commonProcs = calledFromA &amp; calledFromF;</userinput>
 <computeroutput>set[proc]: {"e"}</computeroutput></screen></para>
 
-          <para>In other words, the procedures called from both entry points
-          are mostly disjoint except for the common procedure
-          <literal>"e"</literal>.</para>
-        </section>
+        <para>In other words, the procedures called from both entry points are
+        mostly disjoint except for the common procedure
+        <literal>"e"</literal>.</para>
+      </section>
 
-        <section>
-          <title>Wrap-up</title>
+      <section>
+        <title>Wrap-up</title>
 
-          <para>These findings can be verified by inspecting a graph view of
-          the calls relation as shown in <xref linkend="figure.calls" />. Such
-          a visual inspection does <emphasis>not</emphasis> scale very well to
-          large graphs and this makes the above form of analysis particularly
-          suited for studying large systems.</para>
-        </section>
+        <para>These findings can be verified by inspecting a graph view of the
+        calls relation as shown in <xref linkend="figure.calls" />. Such a
+        visual inspection does <emphasis>not</emphasis> scale very well to
+        large graphs and this makes the above form of analysis particularly
+        suited for studying large systems.</para>
       </section>
     </section>
 
@@ -3525,23 +3547,49 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     <para><bibliolist>
         <bibliomixed xml:id="AhoSethiUllman86"></bibliomixed>
 
+        <bibliomixed xml:id="ElanBKKMR-wrla98"></bibliomixed>
+
+        <bibliomixed xml:id="BallandBKMR-RTA2007"></bibliomixed>
+
+        <bibliomixed xml:id="DMS"></bibliomixed>
+
         <bibliomixed xml:id="BNL05"></bibliomixed>
+
+        <bibliomixed xml:id="BDHJJKKMOSVVV01"></bibliomixed>
+
+        <bibliomixed xml:id="BKV03"></bibliomixed>
+
+        <bibliomixed xml:id="BKVV08"></bibliomixed>
+
+        <bibliomixed xml:id="CordyTXL06"></bibliomixed>
 
         <bibliomixed xml:id="Dot96"></bibliomixed>
 
         <bibliomixed xml:id="FeijsKrikhaarOmmering98"></bibliomixed>
 
-        <bibliomixed xml:id="Holt96"></bibliomixed>
+        <bibliomixed xml:id="Grok"></bibliomixed>
+
+        <bibliomixed xml:id="HedinMagnusson03"></bibliomixed>
 
         <bibliomixed xml:id="JacksonRollins94"></bibliomixed>
 
+        <bibliomixed xml:id="Klint93"></bibliomixed>
+
         <bibliomixed xml:id="KlintIWPC03"></bibliomixed>
+
+        <bibliomixed xml:id="KlintRscript"></bibliomixed>
+
+        <bibliomixed xml:id="KSV-SCAM09"></bibliomixed>
 
         <bibliomixed xml:id="Krikhaar99"></bibliomixed>
 
         <bibliomixed xml:id="McCabe76"></bibliomixed>
 
+        <bibliomixed xml:id="Semmle.QL"></bibliomixed>
+
         <bibliomixed xml:id="Mueller88"></bibliomixed>
+
+        <bibliomixed xml:id="ANTLRBook"></bibliomixed>
 
         <bibliomixed xml:id="Tip95"></bibliomixed>
 

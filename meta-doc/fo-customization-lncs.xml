@@ -6,7 +6,7 @@
 
 <!-- FO-specific customizations are defined here -->
 
-<xsl:import href="/home/paulk/software/source/docbook-xsl-1.75.0/fo/docbook.xsl"/>
+<xsl:import href="/ufs/paulk/software/source/docbook-xsl-1.75.0/fo/docbook.xsl"/>
 
 <xsl:import href="common-customizations.xsl" />
 
