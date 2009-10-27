@@ -1,0 +1,8 @@
+Howto regenerate the bibliography:
+
+(1) Run: bibdb bibliography.bib >tmp.xml
+(2) In tmp.xml: add the line <title>Bibliography</title>
+    immediately after <bibliography>
+(3) In tmp.xml: replace all occurrences of
+    "seriesvolnum" by "seriesvolnums".
+(4) Move tmp.xml to bibliography.xml
