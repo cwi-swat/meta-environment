@@ -588,6 +588,20 @@
     </biblioset>
   </biblioentry>
 
+  <biblioentry role="article" id="HedinMagnusson03">
+    <abbrev id="HedinMagnusson03.abbrev">HM03</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>G.</firstname><surname>Hedin</surname></authorname></author><author><authorname><firstname>E.</firstname><surname>Magnusson</surname></authorname></author></authorgroup>
+      <title>The JastAdd system - an aspect-oriented compiler construction
+  system</title>
+      <pagenums>37--58</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>Science of Computer Programming</title>
+      <pubdate>2003</pubdate>
+    </biblioset>
+  </biblioentry>
+
   <biblioentry role="techreport" id="Holt96">
     <abbrev id="Holt96.abbrev">Hol96</abbrev>
   <author><authorname><firstname>R.C.</firstname><surname>Holt</surname></authorname></author>
@@ -777,6 +791,15 @@
     <bibliomisc role="type">PhD thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
     <pubdate>2000</pubdate>
+  </biblioentry>
+
+  <biblioentry role="book" id="ANTLRBook">
+    <abbrev id="ANTLRBook.abbrev">Par07</abbrev>
+  <author><authorname><firstname>Terence</firstname><surname>Parr</surname></authorname></author>
+    <title>The Definitive ANTLR Reference: Building Domain-Specific
+  Languages</title>
+    <publisher><publishername>Pragmatic Bookshelf</publishername></publisher>
+    <pubdate>2007</pubdate>
   </biblioentry>
 
   <biblioentry role="phdthesis" id="Rekers92">
