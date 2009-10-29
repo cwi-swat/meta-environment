@@ -41,6 +41,21 @@ horizontal dimensions (in cm):
 <xsl:param name="header.rule" select="0"></xsl:param>
 <xsl:param name="footer.rule" select="0"></xsl:param>
 
+<!-- Customize author iafter title -->
+
+<xsl:template match="author">
+  <xsl:apply-templates select="firstname"/>
+  <xsl:apply-templates select="surname"/>
+  <xsl:apply-templates select="affiliation"/>
+</xsl:template>
+
+<xsl:template match="affiliation" mode="titlepage.mode">
+  <fo:block>
+      <xsl:apply-templates select="." mode="titlepage.mode"/>
+        </fo:block>
+</xsl:template>
+
+
 <!-- No table of contents -->
 <xsl:param name="generate.toc"></xsl:param>
 

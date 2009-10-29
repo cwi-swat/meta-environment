@@ -154,8 +154,8 @@ FUNCTION {format.names}
   if$
 
   { namesleft #0 > }
-    { "<authorname>" * "<firstname>" * s nameptr "{ff}{ jj}" format.name$ * "</firstname>" *
-      "<surname>" * s nameptr "{vv~}{ll}" format.name$ * "</surname>" * "</authorname>" *
+    { "<firstname>" * s nameptr "{ff}{ jj}" format.name$ * "</firstname>" *
+      "<surname>" * s nameptr "{vv~}{ll}" format.name$ * "</surname>" *
       "</" * t * ">" *
       namesleft #1 >
         { "<" * t * ">" * }
@@ -279,7 +279,7 @@ FUNCTION {format.chapter}
 FUNCTION {format.publisher}
 { publisher empty$
     { "" }
-    { "<publisher><publishername>" publisher * "</publishername></publisher>" * }
+    { "<publisher>" publisher * "</publisher>" * }
   if$
 }
 
@@ -341,7 +341,7 @@ FUNCTION {format.bvolume}
     { series empty$
 	{ "<volumenum>" volume * "</volumenum>" * }
 	{ "<subtitle role=''series''>" series * "</subtitle>" * 
-          "<seriesvolnum>" * volume * "</seriesvolnum>" *
+          "<seriesvolnums>" * volume * "</seriesvolnums>" *
         }
       if$
       "volume and number" number either.or.check
@@ -357,7 +357,7 @@ FUNCTION {format.number.series}
             { "<subtitle role=''series''>" series * "</subtitle>" * }
           if$
         }
-	{ "<seriesvolnum>" number * "</seriesvolnum>" *
+	{ "<seriesvolnums>" number * "</seriesvolnums>" *
 	  series empty$
 	    { "there's a number but no series in " cite$ * warning$ }
 	    { " in " * series * }
@@ -544,7 +544,6 @@ FUNCTION {article}
   "article" biblioset.begin
   format.authors "author" output.check
   format.title "title" output.check
-  format.pages output
   format.url output
   format.doi output
   biblioset.end
@@ -558,6 +557,7 @@ FUNCTION {article}
     { format.article.crossref output.nonnull }
   if$
   biblioset.end
+  format.pages output
   format.note output
   bibentry.end
 }
@@ -670,9 +670,8 @@ FUNCTION {inproceedings}
   "article" biblioset.begin
   format.authors "author" output.check
   format.title "title" output.check
-  format.pages output
-  format.url output
-  format.doi output
+%  format.url output
+%  format.doi output
   biblioset.end
 
   "proceedings" biblioset.begin
@@ -682,6 +681,7 @@ FUNCTION {inproceedings}
       format.bvolume output
       format.number.series output
       format.date "year" output.check
+      format.pages output
       format.publisher output
     }
     { format.incoll.inproc.crossref output.nonnull }

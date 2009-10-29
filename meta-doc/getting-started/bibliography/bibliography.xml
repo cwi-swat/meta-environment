@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <bibliography>
-  <title>Bibliography</title>
+
   <biblioentry role="book" id="AhoSethiUllman86">
     <abbrev id="AhoSethiUllman86.abbrev">ASU86</abbrev>
-  <authorgroup><author><authorname><firstname>A.V.</firstname><surname>Aho</surname></authorname></author><author><authorname><firstname>R.</firstname><surname>Sethi</surname></authorname></author><author><authorname><firstname>J.D.</firstname><surname>Ullman</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>A.V.</firstname><surname>Aho</surname></author><author><firstname>R.</firstname><surname>Sethi</surname></author><author><firstname>J.D.</firstname><surname>Ullman</surname></author></authorgroup>
     <title>Compilers: Principles, Techniques and Tools</title>
-    <publisher><publishername>Addison-Wesley</publishername></publisher>
+    <publisher>Addison-Wesley</publisher>
     <pubdate>1986</pubdate>
   </biblioentry>
 
   <biblioentry role="book" id="AhoUllman72">
     <abbrev id="AhoUllman72.abbrev">AU73</abbrev>
-  <authorgroup><author><authorname><firstname>A.V.</firstname><surname>Aho</surname></authorname></author><author><authorname><firstname>J.D.</firstname><surname>Ullman</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>A.V.</firstname><surname>Aho</surname></author><author><firstname>J.D.</firstname><surname>Ullman</surname></author></authorgroup>
     <title>The theory of parsing, translation, and compiling</title>
-    <publisher><publishername>Prentice-Hall, Englewood Cliffs
-  (NJ)</publishername></publisher>
+    <publisher>Prentice-Hall, Englewood Cliffs (NJ)</publisher>
     <pubdate>1972--73</pubdate>
     <bibliomisc role="note">Vol. I. Parsing. Vol II. Compiling</bibliomisc>
   </biblioentry>
@@ -22,76 +21,72 @@
   <biblioentry role="inproceedings" id="Codesurfer">
     <abbrev id="Codesurfer.abbrev">AZ05</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>Paul</firstname><surname>Anderson</surname></authorname></author><author><authorname><firstname>Mark</firstname><surname>Zarins</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>P.</firstname><surname>Anderson</surname></author><author><firstname>M.</firstname><surname>Zarins</surname></author></authorgroup>
       <title>The CodeSurfer software understanding platform</title>
-      <pagenums>147--148</pagenums>
-      <bibliosource
-  class="doi">http://dx.doi.org/10.1109/WPC.2005.37</bibliosource>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 13th International Workshop on
   Program Comprehension (IWPC'05)</conftitle></confgroup>
       <pubdate>2005</pubdate>
-      <publisher><publishername>IEEE</publishername></publisher>
+      <pagenums>147--148</pagenums>
+      <publisher>IEEE</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="BallandBKMR-RTA2007">
     <abbrev id="BallandBKMR-RTA2007.abbrev">BBK+07</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>Emilie</firstname><surname>Balland</surname></authorname></author><author><authorname><firstname>Paul</firstname><surname>Brauner</surname></authorname></author><author><authorname><firstname>Radu</firstname><surname>Kopetz</surname></authorname></author><author><authorname><firstname>Pierre-Etienne</firstname><surname>Moreau</surname></authorname></author><author><authorname><firstname>Antoine</firstname><surname>Reilles</surname></authorname></author></authorgroup>
-      <title>Tom: Piggybacking rewriting on java</title>
-      <pagenums>36--47</pagenums>
+  <authorgroup><author><firstname>E.</firstname><surname>Balland</surname></author><author><firstname>P.</firstname><surname>Brauner</surname></author><author><firstname>R.</firstname><surname>Kopetz</surname></author><author><firstname>P.-E.</firstname><surname>Moreau</surname></author><author><firstname>A.</firstname><surname>Reilles</surname></author></authorgroup>
+      <title>Tom: Piggybacking rewriting on Java</title>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 18th Conference on Rewriting
   Techniques and Applications (RTA'07)</conftitle></confgroup>
-      <subtitle role="series">Lecture Notes in Computer
-  Science</subtitle><seriesvolnums>4533</seriesvolnums>
+      <subtitle
+  role="series">LNCS</subtitle><seriesvolnums>4533</seriesvolnums>
       <pubdate>2007</pubdate>
-      <publisher><publishername>Springer-Verlag</publishername></publisher>
+      <pagenums>36--47</pagenums>
+      <publisher>Springer-Verlag</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="BDHJJKKMOSVVV01">
     <abbrev id="BDHJJKKMOSVVV01.abbrev">BDH+01</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>A.
-  van</firstname><surname>Deursen</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>H.A.
-  de</firstname><surname>Jong</surname></authorname></author><author><authorname><firstname>M.
-  de</firstname><surname>Jonge</surname></authorname></author><author><authorname><firstname>T.</firstname><surname>Kuipers</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>L.</firstname><surname>Moonen</surname></authorname></author><author><authorname><firstname>P.A.</firstname><surname>Olivier</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Scheerder</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author><author><authorname><firstname>E.</firstname><surname>Visser</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Visser</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>A.
+  van</firstname><surname>Deursen</surname></author><author><firstname>J.</firstname><surname>Heering</surname></author><author><firstname>H.A.
+  de</firstname><surname>Jong</surname></author><author><firstname>M.
+  de</firstname><surname>Jonge</surname></author><author><firstname>T.</firstname><surname>Kuipers</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author><author><firstname>L.</firstname><surname>Moonen</surname></author><author><firstname>P.A.</firstname><surname>Olivier</surname></author><author><firstname>J.</firstname><surname>Scheerder</surname></author><author><firstname>J.J.</firstname><surname>Vinju</surname></author><author><firstname>E.</firstname><surname>Visser</surname></author><author><firstname>J.</firstname><surname>Visser</surname></author></authorgroup>
       <title>The ASF+SDF Meta-Environment: a Component-Based
   Language Development Environment</title>
-      <pagenums>365--370</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Compiler Construction (CC
   '01)</conftitle></confgroup>
-  <editor><authorname><firstname>R.</firstname><surname>Wilhelm</surname></authorname></editor>
-      <subtitle role="series">Lecture Notes in Computer
-  Science</subtitle><seriesvolnums>2027</seriesvolnums>
+      <editor><firstname>R.</firstname><surname>Wilhelm</surname></editor>
+      <subtitle
+  role="series">LNCS</subtitle><seriesvolnums>2027</seriesvolnums>
       <pubdate>2001</pubdate>
-      <publisher><publishername>Springer-Verlag</publishername></publisher>
+      <pagenums>365--370</pagenums>
+      <publisher>Springer-Verlag</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="book" id="BHK89">
     <abbrev id="BHK89.abbrev">BHK89</abbrev>
-  <authorgroup><editor><authorname><firstname>J. A.</firstname><surname>Bergstra</surname></authorname></editor><editor><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></editor><editor><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></editor></authorgroup>
+  <authorgroup><editor><firstname>J. A.</firstname><surname>Bergstra</surname></editor><editor><firstname>J.</firstname><surname>Heering</surname></editor><editor><firstname>P.</firstname><surname>Klint</surname></editor></authorgroup>
     <title>Algebraic Specification</title>
-    <publisher><publishername>ACM
-  Press/Addison-Wesley</publishername></publisher>
+    <publisher>ACM Press/Addison-Wesley</publisher>
     <pubdate>1989</pubdate>
   </biblioentry>
 
   <biblioentry role="article" id="vdBHKO02">
     <abbrev id="vdBHKO02.abbrev">BHKO02</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>P.A.</firstname><surname>Olivier</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>J.</firstname><surname>Heering</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author><author><firstname>P.A.</firstname><surname>Olivier</surname></author></authorgroup>
       <title>Compiling language definitions: The asf+sdf compiler</title>
-      <pagenums>334--368</pagenums>
       <bibliosource
   class="doi">http://doi.acm.org/10.1145/567097.567099</bibliosource>
     </biblioset>
@@ -100,27 +95,28 @@
       <volumenum>24</volumenum><issuenum>4</issuenum>
       <pubdate>2002</pubdate>
     </biblioset>
+    <pagenums>334--368</pagenums>
   </biblioentry>
 
   <biblioentry role="article" id="BJKO00">
     <abbrev id="BJKO00.abbrev">BJKO00</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>H.A.
-  de</firstname><surname>Jong</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Olivier</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>H.A.
+  de</firstname><surname>Jong</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author><author><firstname>P.</firstname><surname>Olivier</surname></author></authorgroup>
       <title>Efficient Annotated Terms</title>
-      <pagenums>259--291</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>Software, Practice &amp; Experience</title>
       <volumenum>30</volumenum>
       <pubdate>2000</pubdate>
     </biblioset>
+    <pagenums>259--291</pagenums>
   </biblioentry>
 
   <biblioentry role="techreport" id="BergstraKlint94">
     <abbrev id="BergstraKlint94.abbrev">BK94</abbrev>
-  <authorgroup><author><authorname><firstname>J.A.</firstname><surname>Bergstra</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>J.A.</firstname><surname>Bergstra</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author></authorgroup>
     <title>The toolbus: a component interconnection architecture</title>
     <bibliomisc role="type">Technical ReportP9408</bibliomisc>
     <orgname>University of Amsterdam, Programming Research Group</orgname>
@@ -129,7 +125,7 @@
 
   <biblioentry role="techreport" id="BergstraKlint95">
     <abbrev id="BergstraKlint95.abbrev">BK95</abbrev>
-  <authorgroup><author><authorname><firstname>J.A.</firstname><surname>Bergstra</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>J.A.</firstname><surname>Bergstra</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author></authorgroup>
     <title>The discrete time toolbus</title>
     <bibliomisc role="type">Technical ReportP9502</bibliomisc>
     <orgname>University of Amsterdam, Programming Research Group</orgname>
@@ -139,275 +135,267 @@
   <biblioentry role="article" id="BergstraKlint98">
     <abbrev id="BergstraKlint98.abbrev">BK98</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>J.A.</firstname><surname>Bergstra</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>J.A.</firstname><surname>Bergstra</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author></authorgroup>
       <title>The discrete time ToolBus -- a software coordination
   architecture</title>
-      <pagenums>205--229</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>Science of Computer Programming</title>
       <volumenum>31</volumenum><issuenum>2-3</issuenum>
       <pubdate>July 1998</pubdate>
     </biblioset>
+    <pagenums>205--229</pagenums>
   </biblioentry>
 
   <biblioentry role="article" id="vdBrandKlint07">
     <abbrev id="vdBrandKlint07.abbrev">BK07</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author></authorgroup>
       <title>Aterms for manipulation and exchange of structured data: It's all
   about sharing</title>
-      <pagenums>55--64</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>Information and Software Technology</title>
       <volumenum>49</volumenum><issuenum>1</issuenum>
       <pubdate>2007</pubdate>
     </biblioset>
+    <pagenums>55--64</pagenums>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="ElanBKKMR-wrla98">
     <abbrev id="ElanBKKMR-wrla98.abbrev">BKK+98</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>P.</firstname><surname>Borovansky</surname></authorname></author><author><authorname><firstname>C.</firstname><surname>Kirchner</surname></authorname></author><author><authorname><firstname>H.</firstname><surname>Kirchner</surname></authorname></author><author><authorname><firstname>P.-E.</firstname><surname>Moreau</surname></authorname></author><author><authorname><firstname>C.</firstname><surname>Ringeissen</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>P.</firstname><surname>Borovansky</surname></author><author><firstname>C.</firstname><surname>Kirchner</surname></author><author><firstname>H.</firstname><surname>Kirchner</surname></author><author><firstname>P.-E.</firstname><surname>Moreau</surname></author><author><firstname>C.</firstname><surname>Ringeissen</surname></author></authorgroup>
       <title>An overview of ELAN</title>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 2nd International Workshop on
-  Rewriting Logic and its Applications, WRLA'98 (Pont-à-Mousson,
-  France)</conftitle><address>Pont-à-Mousson (France)</address></confgroup>
-  <authorgroup><editor><authorname><firstname>Claude</firstname><surname>Kirchner</surname></authorname></editor><editor><authorname><firstname>Hélène</firstname><surname>Kirchner</surname></authorname></editor></authorgroup>
+  Rewriting Logic and its Applications (WRLA'98)</conftitle></confgroup>
+  <authorgroup><editor><firstname>C.</firstname><surname>Kirchner</surname></editor><editor><firstname>H.</firstname><surname>Kirchner</surname></editor></authorgroup>
       <volumenum>15</volumenum>
-      <pubdate>September 1998</pubdate>
-      <publisher><publishername>Electronic Notes in Theoretical Computer
-  Science</publishername></publisher>
+      <pubdate>1998</pubdate>
+      <pagenums>55--70</pagenums>
+      <publisher>Electronic Notes in Theoretical Computer Science</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="BrandKlusenerMoonenVinju03">
     <abbrev id="BrandKlusenerMoonenVinju03.abbrev">BKMV03</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>A.S.</firstname><surname>Klusener</surname></authorname></author><author><authorname><firstname>L.</firstname><surname>Moonen</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>A.S.</firstname><surname>Klusener</surname></author><author><firstname>L.</firstname><surname>Moonen</surname></author><author><firstname>J.J.</firstname><surname>Vinju</surname></author></authorgroup>
       <title>Generalized parsing and term rewriting: Semantics driven
   disambiguation</title>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the Third Workshop on Language
   Descriptions</conftitle></confgroup>
-  <authorgroup><editor><authorname><firstname>B.</firstname><surname>Bryant</surname></authorname></editor><editor><authorname><firstname>J.</firstname><surname>Saraiva</surname></authorname></editor></authorgroup>
+  <authorgroup><editor><firstname>B.</firstname><surname>Bryant</surname></editor><editor><firstname>J.</firstname><surname>Saraiva</surname></editor></authorgroup>
       <subtitle role="series">Electronic Notes in Theoretical Computer
   Science</subtitle><seriesvolnums>82</seriesvolnums>
       <pubdate>2003</pubdate>
-      <publisher><publishername>Elsevier</publishername></publisher>
+      <publisher>Elsevier</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="article" id="BKV03">
     <abbrev id="BKV03.abbrev">BKV03</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author><author><firstname>J.J.</firstname><surname>Vinju</surname></author></authorgroup>
       <title>Term rewriting with traversal functions</title>
-      <pagenums>152--190</pagenums>
-      <bibliosource
-  class="doi">http://doi.acm.org/10.1145/941566.941568</bibliosource>
     </biblioset>
     <biblioset role="journal">
-      <title>ACM Trans. Softw. Eng. Methodol.</title>
+      <title>ACM Transactions on Software Engineering Methodology</title>
       <volumenum>12</volumenum><issuenum>2</issuenum>
       <pubdate>2003</pubdate>
     </biblioset>
+    <pagenums>152--190</pagenums>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="BrandKooikerEtAl05">
     <abbrev id="BrandKooikerEtAl05.abbrev">BKVV05</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>A.T.</firstname><surname>Kooiker</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author><author><authorname><firstname>N.P.</firstname><surname>Veerman</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>A.T.</firstname><surname>Kooiker</surname></author><author><firstname>J.J.</firstname><surname>Vinju</surname></author><author><firstname>N.P.</firstname><surname>Veerman</surname></author></authorgroup>
       <title>An Architecture for Context-Sensitive Formatting</title>
-      <pagenums>631--634</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>ICSM '05: Proceedings of the 21st IEEE
   International Conference on Software Maintenance</conftitle></confgroup>
       <pubdate>2005</pubdate>
-      <publisher><publishername>IEEE Computer
-  Society</publishername></publisher>
+      <pagenums>631--634</pagenums>
+      <publisher>IEEE Computer Society</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="BrandKooikerEtAl06">
     <abbrev id="BrandKooikerEtAl06.abbrev">BKVV06</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>M.G.J. van den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>A.T.</firstname><surname>Kooiker</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author><author><authorname><firstname>N.P.</firstname><surname>Veerman</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>M.G.J. van den</firstname><surname>Brand</surname></author><author><firstname>A.T.</firstname><surname>Kooiker</surname></author><author><firstname>J.J.</firstname><surname>Vinju</surname></author><author><firstname>N.P.</firstname><surname>Veerman</surname></author></authorgroup>
       <title>A Language Independent Framework for Context-sensitive
   Formatting</title>
-      <pagenums>103--112</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>CSMR '06: Proceedings of the Conference on Software
   Maintenance and Reengineering</conftitle><address>Washington, DC,
   USA</address></confgroup>
       <pubdate>2006</pubdate>
-      <publisher><publishername>IEEE Computer Society
-  Press</publishername></publisher>
+      <pagenums>103--112</pagenums>
+      <publisher>IEEE Computer Society Press</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="article" id="BKVV08">
     <abbrev id="BKVV08.abbrev">BKVV08</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>Martin</firstname><surname>Bravenboer</surname></authorname></author><author><authorname><firstname>Karl Trygve</firstname><surname>Kalleberg</surname></authorname></author><author><authorname><firstname>Rob</firstname><surname>Vermaas</surname></authorname></author><author><authorname><firstname>Eelco</firstname><surname>Visser</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>M.</firstname><surname>Bravenboer</surname></author><author><firstname>K. Trygve</firstname><surname>Kalleberg</surname></author><author><firstname>R.</firstname><surname>Vermaas</surname></author><author><firstname>E.</firstname><surname>Visser</surname></author></authorgroup>
       <title>Stratego/XT 0.17. A language and toolset for program
   transformation</title>
-      <pagenums>52--70</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>Science of Computer Programming</title>
       <volumenum>72</volumenum><issuenum>1-2</issuenum>
       <pubdate>June 2008</pubdate>
     </biblioset>
-    <bibliomisc role="note">Special issue on experimental software and
-  toolkits</bibliomisc>
+    <pagenums>52--70</pagenums>
   </biblioentry>
 
   <biblioentry role="article" id="VdBrandMoreauVinju05">
     <abbrev id="VdBrandMoreauVinju05.abbrev">BMV05</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>P.E.</firstname><surname>Moreau</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>P.E.</firstname><surname>Moreau</surname></author><author><firstname>J.J.</firstname><surname>Vinju</surname></author></authorgroup>
       <title>A generator of efficient strongly typed abstract syntax trees in
   java</title>
-      <pagenums>70--78</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>IEE Proceedings-Software</title>
       <volumenum>152</volumenum><issuenum>2</issuenum>
       <pubdate>2005</pubdate>
     </biblioset>
+    <pagenums>70--78</pagenums>
   </biblioentry>
 
   <biblioentry role="book" id="BaaderNipkow98">
     <abbrev id="BaaderNipkow98.abbrev">BN98</abbrev>
-  <authorgroup><author><authorname><firstname>F.</firstname><surname>Baader</surname></authorname></author><author><authorname><firstname>T.</firstname><surname>Nipkow</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>F.</firstname><surname>Baader</surname></author><author><firstname>T.</firstname><surname>Nipkow</surname></author></authorgroup>
     <title>Term Rewriting and All That</title>
-    <publisher><publishername>Cambridge University
-  Press</publishername></publisher>
+    <publisher>Cambridge University Press</publisher>
     <pubdate>1998</pubdate>
   </biblioentry>
 
   <biblioentry role="article" id="BNL05">
     <abbrev id="BNL05.abbrev">BNL05</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>D.</firstname><surname>Beyer</surname></authorname></author><author><authorname><firstname>A</firstname><surname>Noack</surname></authorname></author><author><authorname><firstname>C.</firstname><surname>Lewerentz</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>D.</firstname><surname>Beyer</surname></author><author><firstname>A</firstname><surname>Noack</surname></author><author><firstname>C.</firstname><surname>Lewerentz</surname></author></authorgroup>
       <title>Efficient relational calculation for software analysis</title>
-      <pagenums>137--149</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>IEEE Trans Software Engineering</title>
       <volumenum>31</volumenum><issuenum>2</issuenum>
       <pubdate>2005</pubdate>
     </biblioset>
+    <pagenums>137--149</pagenums>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="DMS">
     <abbrev id="DMS.abbrev">BPM04</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>I.</firstname><surname>Baxter</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Pidgeon</surname></authorname></author><author><authorname><firstname>M.</firstname><surname>Mehlich</surname></authorname></author></authorgroup>
-      <title>DMS\textregistered: Program transformations
-  for practical scalable software evolution</title>
-      <pagenums>625--634</pagenums>
+  <authorgroup><author><firstname>I.</firstname><surname>Baxter</surname></author><author><firstname>P.</firstname><surname>Pidgeon</surname></author><author><firstname>M.</firstname><surname>Mehlich</surname></author></authorgroup>
+      <title>DMS: Program transformations for practical scalable software
+  evolution</title>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the International Conference on
   Software Engineering (ICSE'04)</conftitle></confgroup>
       <pubdate>2004</pubdate>
-      <publisher><publishername>IEEE</publishername></publisher>
+      <pagenums>625--634</pagenums>
+      <publisher>IEEE</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="article" id="BrandVisser96">
     <abbrev id="BrandVisser96.abbrev">BV96</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>E.</firstname><surname>Visser</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>E.</firstname><surname>Visser</surname></author></authorgroup>
       <title>Generation of formatters for context-free languages</title>
-      <pagenums>1--41</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>ACM Transactions on Software Engineering and Methodology</title>
       <volumenum>5</volumenum>
       <pubdate>1996</pubdate>
     </biblioset>
+    <pagenums>1--41</pagenums>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="BSVE02">
     <abbrev id="BSVE02.abbrev">BVSV02</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>M.G.J. van
-  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Scheerder</surname></authorname></author><author><authorname><firstname>E.</firstname><surname>Visser</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></author><author><firstname>J.J.</firstname><surname>Vinju</surname></author><author><firstname>J.</firstname><surname>Scheerder</surname></author><author><firstname>E.</firstname><surname>Visser</surname></author></authorgroup>
       <title>Disambiguation filters for scannerless generalized lr
   parsers</title>
-      <pagenums>143--158</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 11th International Conference on
   Compiler Construction (CC'02)</conftitle></confgroup>
       <pubdate>2002</pubdate>
+      <pagenums>143--158</pagenums>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="IMP">
     <abbrev id="IMP.abbrev">CFS07</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>Philippe</firstname><surname>Charles</surname></authorname></author><author><authorname><firstname>Robert M.</firstname><surname>Fuhrer</surname></authorname></author><author><authorname><firstname>Stanley M.</firstname><surname>Sutton
-  Jr.</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>Philippe</firstname><surname>Charles</surname></author><author><firstname>Robert M.</firstname><surname>Fuhrer</surname></author><author><firstname>Stanley M.</firstname><surname>Sutton
+  Jr.</surname></author></authorgroup>
       <title>IMP: a meta-tooling platform for creating language-specific
   IDEs in eclipse</title>
-      <pagenums>485--488</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 22nd IEEE/ACM International
   Conference on Automated Software Engineering (ASE'07)</conftitle></confgroup>
-  <authorgroup><editor><authorname><firstname>R. E. Kurt</firstname><surname>Stirewalt</surname></authorname></editor><editor><authorname><firstname>Alexander</firstname><surname>Egyed</surname></authorname></editor><editor><authorname><firstname>Bernd</firstname><surname>Fischer</surname></authorname></editor></authorgroup>
+  <authorgroup><editor><firstname>R. E. Kurt</firstname><surname>Stirewalt</surname></editor><editor><firstname>Alexander</firstname><surname>Egyed</surname></editor><editor><firstname>Bernd</firstname><surname>Fischer</surname></editor></authorgroup>
       <pubdate>2007</pubdate>
-      <publisher><publishername>ACM</publishername></publisher>
+      <pagenums>485--488</pagenums>
+      <publisher>ACM</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="article" id="Chomsky56">
     <abbrev id="Chomsky56.abbrev">Cho56</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>N.</firstname><surname>Chomsky</surname></authorname></author>
+      <author><firstname>N.</firstname><surname>Chomsky</surname></author>
       <title>Three models for the description of language</title>
-      <pagenums>113--124</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>IRE Transactions on Information Theory</title>
       <volumenum>IT-2:3</volumenum>
       <pubdate>1956</pubdate>
     </biblioset>
+    <pagenums>113--124</pagenums>
   </biblioentry>
 
   <biblioentry role="article" id="CordyTXL06">
     <abbrev id="CordyTXL06.abbrev">Cor06</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>J. R.</firstname><surname>Cordy</surname></authorname></author>
+      <author><firstname>J. R.</firstname><surname>Cordy</surname></author>
       <title>The TXL source transformation language</title>
-      <pagenums>190--210</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>Science of Computer Programming</title>
       <volumenum>61</volumenum><issuenum>3</issuenum>
       <pubdate>August 2006</pubdate>
     </biblioset>
+    <pagenums>190--210</pagenums>
   </biblioentry>
 
   <biblioentry role="techreport" id="Coutaz84">
     <abbrev id="Coutaz84.abbrev">Cou84</abbrev>
-  <author><authorname><firstname>J.</firstname><surname>Coutaz</surname></authorname></author>
+    <author><firstname>J.</firstname><surname>Coutaz</surname></author>
     <title>The box, a layout abstraction for user interface toolkits</title>
     <bibliomisc role="type">Technical ReportCMU-CS-84-167</bibliomisc>
     <orgname>Carnegie Mellon University</orgname>
@@ -416,49 +404,48 @@
 
   <biblioentry role="book" id="DHK96">
     <abbrev id="DHK96.abbrev">DHK96</abbrev>
-  <authorgroup><editor><authorname><firstname>A. van</firstname><surname>Deursen</surname></authorname></editor><editor><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></editor><editor><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></editor></authorgroup>
+  <authorgroup><editor><firstname>A. van</firstname><surname>Deursen</surname></editor><editor><firstname>J.</firstname><surname>Heering</surname></editor><editor><firstname>P.</firstname><surname>Klint</surname></editor></authorgroup>
     <title>Language Prototyping: An Algebraic Specification Approach</title>
     <subtitle role="series">AMAST Series in
   Computing</subtitle><seriesvolnums>5</seriesvolnums>
-    <publisher><publishername>World Scientific Publishing
-  Co.</publishername></publisher>
+    <publisher>World Scientific Publishing Co.</publisher>
     <pubdate>1996</pubdate>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="DeJonge00">
     <abbrev id="DeJonge00.abbrev">dJ00</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>M.</firstname><surname>de Jonge</surname></authorname></author>
+      <author><firstname>M.</firstname><surname>de Jonge</surname></author>
       <title>A pretty-printer for every occasion</title>
-      <pagenums>68--77</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 2nd International Symposium on
   Constructing Software Engineering Tools
   (CoSET2000)</conftitle><address>Wollongong, Australia</address></confgroup>
-  <authorgroup><editor><authorname><firstname>I.</firstname><surname>Ferguson</surname></authorname></editor><editor><authorname><firstname>Gray</firstname><surname>J</surname></authorname></editor><editor><authorname><firstname>L.</firstname><surname>Scott</surname></authorname></editor></authorgroup>
+  <authorgroup><editor><firstname>I.</firstname><surname>Ferguson</surname></editor><editor><firstname>Gray</firstname><surname>J</surname></editor><editor><firstname>L.</firstname><surname>Scott</surname></editor></authorgroup>
       <pubdate>June 2000</pubdate>
+      <pagenums>68--77</pagenums>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="DeJonge02">
     <abbrev id="DeJonge02.abbrev">dJ02</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>M.</firstname><surname>de Jonge</surname></authorname></author>
+      <author><firstname>M.</firstname><surname>de Jonge</surname></author>
       <title>Pretty-printing for software engineering</title>
-      <pagenums>550--559</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings International Conference on Software
   Maintenance (ICSM
   2002)</conftitle><confsponsor>IEEE</confsponsor></confgroup>
       <pubdate>October 2002</pubdate>
+      <pagenums>550--559</pagenums>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="phdthesis" id="deJong07">
     <abbrev id="deJong07.abbrev">dJ07</abbrev>
-  <author><authorname><firstname>H.A.</firstname><surname>de Jong</surname></authorname></author>
+    <author><firstname>H.A.</firstname><surname>de Jong</surname></author>
     <title>Flexible Heterogeneous Software Systems</title>
     <bibliomisc role="type">PhD thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
@@ -468,66 +455,66 @@
   <biblioentry role="inproceedings" id="deJongKlint03">
     <abbrev id="deJongKlint03.abbrev">dJK03</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>H.A.</firstname><surname>de Jong</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>H.A.</firstname><surname>de Jong</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author></authorgroup>
       <title>Toolbus: the next generation</title>
-      <pagenums>220--241</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Formal Methods for Components and
   Objects</conftitle></confgroup>
-  <authorgroup><editor><authorname><firstname>F.S.</firstname><surname>de Boer</surname></authorname></editor><editor><authorname><firstname>M.</firstname><surname>Bonsangue</surname></authorname></editor><editor><authorname><firstname>S.</firstname><surname>Graf</surname></authorname></editor><editor><authorname><firstname>W.P</firstname><surname>de Roever</surname></authorname></editor></authorgroup>
-      <subtitle role="series">Lecture Notes in Computer
-  Science</subtitle><seriesvolnums>2852</seriesvolnums>
+  <authorgroup><editor><firstname>F.S.</firstname><surname>de Boer</surname></editor><editor><firstname>M.</firstname><surname>Bonsangue</surname></editor><editor><firstname>S.</firstname><surname>Graf</surname></editor><editor><firstname>W.P</firstname><surname>de Roever</surname></editor></authorgroup>
+      <subtitle
+  role="series">LNCS</subtitle><seriesvolnums>2852</seriesvolnums>
       <pubdate>2003</pubdate>
-      <publisher><publishername>Springer</publishername></publisher>
+      <pagenums>220--241</pagenums>
+      <publisher>Springer</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="Semmle.QL">
     <abbrev id="Semmle.QL.abbrev">dMSV+08</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>Oege</firstname><surname>de Moor</surname></authorname></author><author><authorname><firstname>Damien</firstname><surname>Sereni</surname></authorname></author><author><authorname><firstname>Mathieu</firstname><surname>Verbaere</surname></authorname></author><author><authorname><firstname>Elnar</firstname><surname>Hajiyev</surname></authorname></author><author><authorname><firstname>Pavel</firstname><surname>Avgustinov</surname></authorname></author><author><authorname><firstname>Torbjörn</firstname><surname>Ekman</surname></authorname></author><author><authorname><firstname>Neil</firstname><surname>Ongkingco</surname></authorname></author><author><authorname><firstname>Julian</firstname><surname>Tibble</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>O.</firstname><surname>de Moor</surname></author><author><firstname>D.</firstname><surname>Sereni</surname></author><author><firstname>M.</firstname><surname>Verbaere</surname></author><author><firstname>E.</firstname><surname>Hajiyev</surname></author><author><firstname>P.</firstname><surname>Avgustinov</surname></author><author><firstname>T.</firstname><surname>Ekman</surname></author><author><firstname>N.</firstname><surname>Ongkingco</surname></author><author><firstname>J.</firstname><surname>Tibble</surname></author></authorgroup>
       <title>.QL: Object-oriented queries made easy</title>
-      <pagenums>78--133</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Generative and Transformational Techniques in
   Software Engineering II, International Summer School, GTTSE 2007, Braga,
   Portugal, July 2-7, 2007. Revised Papers</conftitle></confgroup>
-  <authorgroup><editor><authorname><firstname>Ralf</firstname><surname>Lämmel</surname></authorname></editor><editor><authorname><firstname>Joost</firstname><surname>Visser</surname></authorname></editor><editor><authorname><firstname>Joao</firstname><surname>Saraiva</surname></authorname></editor></authorgroup>
-      <subtitle role="series">Lecture Notes in Computer
-  Science</subtitle><seriesvolnums>5235</seriesvolnums>
+  <authorgroup><editor><firstname>R.</firstname><surname>Lämmel</surname></editor><editor><firstname>J.</firstname><surname>Visser</surname></editor><editor><firstname>J.</firstname><surname>Saraiva</surname></editor></authorgroup>
+      <subtitle
+  role="series">LNCS</subtitle><seriesvolnums>5235</seriesvolnums>
       <pubdate>2008</pubdate>
-      <publisher><publishername>Springer</publishername></publisher>
+      <pagenums>78--133</pagenums>
+      <publisher>Springer</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="article" id="FeijsKrikhaarOmmering98">
     <abbrev id="FeijsKrikhaarOmmering98.abbrev">FKO98</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>L.M.G.</firstname><surname>Feijs</surname></authorname></author><author><authorname><firstname>R.</firstname><surname>Krikhaar</surname></authorname></author><author><authorname><firstname>R.C.</firstname><surname>Ommering</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>L.M.G.</firstname><surname>Feijs</surname></author><author><firstname>R.</firstname><surname>Krikhaar</surname></author><author><firstname>R.C.</firstname><surname>Ommering</surname></author></authorgroup>
       <title>A relational approach to support software architecture
   analysis</title>
-      <pagenums>371--400</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>Software Practice and Experience</title>
       <volumenum>28</volumenum><issuenum>4</issuenum>
       <pubdate>april 1998</pubdate>
     </biblioset>
+    <pagenums>371--400</pagenums>
   </biblioentry>
 
   <biblioentry role="book" id="GruneJacobs90">
     <abbrev id="GruneJacobs90.abbrev">GJ90</abbrev>
-  <authorgroup><author><authorname><firstname>D.</firstname><surname>Grune</surname></authorname></author><author><authorname><firstname>C.J.H</firstname><surname>Jacobs</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>D.</firstname><surname>Grune</surname></author><author><firstname>C.J.H</firstname><surname>Jacobs</surname></author></authorgroup>
     <title>Parsing Techniques -- A Practical Guide</title>
-    <publisher><publishername>Ellis Horwood</publishername></publisher>
+    <publisher>Ellis Horwood</publisher>
     <pubdate>1990</pubdate>
   </biblioentry>
 
   <biblioentry role="phdthesis" id="Hendriks91">
     <abbrev id="Hendriks91.abbrev">Hen91</abbrev>
-  <author><authorname><firstname>P.R.H.</firstname><surname>Hendriks</surname></authorname></author>
+    <author><firstname>P.R.H.</firstname><surname>Hendriks</surname></author>
     <title>Implementation of Modular Algebraic Specifications</title>
     <bibliomisc role="type">PhD thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
@@ -537,47 +524,46 @@
   <biblioentry role="article" id="HHKR89">
     <abbrev id="HHKR89.abbrev">HHKR89</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.R.H.</firstname><surname>Hendriks</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Rekers</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>J.</firstname><surname>Heering</surname></author><author><firstname>P.R.H.</firstname><surname>Hendriks</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author><author><firstname>J.</firstname><surname>Rekers</surname></author></authorgroup>
       <title>The syntax definition formalism SDF - reference manual</title>
-      <pagenums>43--75</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>SIGPLAN Notices</title>
       <volumenum>24</volumenum><issuenum>11</issuenum>
       <pubdate>1989</pubdate>
     </biblioset>
+    <pagenums>43--75</pagenums>
   </biblioentry>
 
   <biblioentry role="inbook" id="HeeringKlint86">
     <abbrev id="HeeringKlint86.abbrev">HK86</abbrev>
-  <authorgroup><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>J.</firstname><surname>Heering</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author></authorgroup>
     <bibliomisc role=">chapter">A Syntax Definition Formalism</bibliomisc>
     <pagenums>619--630</pagenums>
     <title>ESPRIT'86: Results and Achievements</title>
-    <publisher><publishername>North-Holland</publishername></publisher>
+    <publisher>North-Holland</publisher>
     <pubdate>1986</pubdate>
   </biblioentry>
 
   <biblioentry role="article" id="HKR90">
     <abbrev id="HKR90.abbrev">HKR90</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Rekers</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>J.</firstname><surname>Heering</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author><author><firstname>J.</firstname><surname>Rekers</surname></author></authorgroup>
       <title>Incremental generation of parsers</title>
-      <pagenums>1344--1350</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>IEEE Transactions on Software Engineering</title>
       <volumenum>16</volumenum><issuenum>12</issuenum>
       <pubdate>1990</pubdate>
     </biblioset>
+    <pagenums>1344--1350</pagenums>
   </biblioentry>
 
   <biblioentry role="article" id="HKR92">
     <abbrev id="HKR92.abbrev">HKR92</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Rekers</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>J.</firstname><surname>Heering</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author><author><firstname>J.</firstname><surname>Rekers</surname></author></authorgroup>
       <title>Incremental generation of lexical scanners</title>
-      <pagenums>490--520</pagenums>
       <bibliosource
   class="doi">http://doi.acm.org/10.1145/133233.133240</bibliosource>
     </biblioset>
@@ -586,25 +572,26 @@
       <volumenum>14</volumenum><issuenum>4</issuenum>
       <pubdate>1992</pubdate>
     </biblioset>
+    <pagenums>490--520</pagenums>
   </biblioentry>
 
   <biblioentry role="article" id="HedinMagnusson03">
     <abbrev id="HedinMagnusson03.abbrev">HM03</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>G.</firstname><surname>Hedin</surname></authorname></author><author><authorname><firstname>E.</firstname><surname>Magnusson</surname></authorname></author></authorgroup>
-      <title>The JastAdd system - an aspect-oriented compiler construction
+  <authorgroup><author><firstname>G.</firstname><surname>Hedin</surname></author><author><firstname>E.</firstname><surname>Magnusson</surname></author></authorgroup>
+      <title>The JastAdd system -- an aspect-oriented compiler construction
   system</title>
-      <pagenums>37--58</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>Science of Computer Programming</title>
       <pubdate>2003</pubdate>
     </biblioset>
+    <pagenums>37--58</pagenums>
   </biblioentry>
 
   <biblioentry role="techreport" id="Holt96">
     <abbrev id="Holt96.abbrev">Hol96</abbrev>
-  <author><authorname><firstname>R.C.</firstname><surname>Holt</surname></authorname></author>
+    <author><firstname>R.C.</firstname><surname>Holt</surname></author>
     <title>Binary relational algebra applied to software architecture</title>
     <bibliomisc role="type">CSRI345</bibliomisc>
     <orgname>University of Toronto</orgname>
@@ -614,41 +601,39 @@
   <biblioentry role="inproceedings" id="Grok">
     <abbrev id="Grok.abbrev">Hol08</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>Richard C.</firstname><surname>Holt</surname></authorname></author>
+      <author><firstname>R. C.</firstname><surname>Holt</surname></author>
       <title>Grokking software architecture</title>
-      <pagenums>5--14</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 15th Working Conference on
   Reverse Engineering (WCRE'08)</conftitle></confgroup>
       <pubdate>2008</pubdate>
-      <publisher><publishername>IEEE</publishername></publisher>
+      <pagenums>5--14</pagenums>
+      <publisher>IEEE</publisher>
     </biblioset>
-    <bibliomisc role="note">Most influential paper</bibliomisc>
   </biblioentry>
 
   <biblioentry role="article" id="deJongOlivier04">
     <abbrev id="deJongOlivier04.abbrev">JO04</abbrev>
     <biblioset role="article">
-      <authorgroup><author><authorname><firstname>H.A.
-  de</firstname><surname>Jong</surname></authorname></author><author><authorname><firstname>P.A.</firstname><surname>Olivier</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>H.A.
+  de</firstname><surname>Jong</surname></author><author><firstname>P.A.</firstname><surname>Olivier</surname></author></authorgroup>
       <title>Generation of abstract programming interfaces from syntax
   definitions</title>
-      <pagenums>35--61</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>Journal of Logic and Algebraic Programming</title>
       <volumenum>50</volumenum><issuenum>4</issuenum>
       <pubdate>2004</pubdate>
     </biblioset>
+    <pagenums>35--61</pagenums>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="JacksonRollins94">
     <abbrev id="JacksonRollins94.abbrev">JR94</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>D.J.</firstname><surname>Jackson</surname></authorname></author><author><authorname><firstname>E.J.</firstname><surname>Rollins</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>D.J.</firstname><surname>Jackson</surname></author><author><firstname>E.J.</firstname><surname>Rollins</surname></author></authorgroup>
       <title>A new model of program dependences for reverse engineering</title>
-      <pagenums>2--10</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 2nd ACM SIGSOFT symposium on
@@ -656,44 +641,44 @@
       <subtitle role="series">ACM SIGSOFT Software Engineering
   Notes</subtitle><seriesvolnums>19</seriesvolnums>
       <pubdate>1994</pubdate>
+      <pagenums>2--10</pagenums>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="article" id="Klint93">
     <abbrev id="Klint93.abbrev">Kli93</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author>
+      <author><firstname>P.</firstname><surname>Klint</surname></author>
       <title>A meta-environment for generating programming environments</title>
-      <pagenums>176--201</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>ACM Transactions on Software Engineering and Methodology</title>
       <volumenum>2</volumenum><issuenum>2</issuenum>
       <pubdate>April 1993</pubdate>
     </biblioset>
+    <pagenums>176--201</pagenums>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="KlintIWPC03">
     <abbrev id="KlintIWPC03.abbrev">Kli03</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author>
+      <author><firstname>P.</firstname><surname>Klint</surname></author>
       <title>How understanding and restructuring differ from compiling---a
   rewriting perspective</title>
-      <pagenums>2--12</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 11th International Workshop on
   Program Comprehension (IWPC03)</conftitle></confgroup>
       <pubdate>2003</pubdate>
-      <publisher><publishername>IEEE Computer
-  Society</publishername></publisher>
+      <pagenums>2--12</pagenums>
+      <publisher>IEEE Computer Society</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="KlintRscript">
     <abbrev id="KlintRscript.abbrev">Kli08</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>Paul</firstname><surname>Klint</surname></authorname></author>
+      <author><firstname>P.</firstname><surname>Klint</surname></author>
       <title>Using Rscript for software analysis</title>
     </biblioset>
     <biblioset role="proceedings">
@@ -705,7 +690,7 @@
 
   <biblioentry role="techreport" id="Dot96">
     <abbrev id="Dot96.abbrev">KN96</abbrev>
-  <authorgroup><author><authorname><firstname>E.</firstname><surname>Koutsofios</surname></authorname></author><author><authorname><firstname>S.C.</firstname><surname>North</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>E.</firstname><surname>Koutsofios</surname></author><author><firstname>S.C.</firstname><surname>North</surname></author></authorgroup>
     <title>Drawing graphs with dot</title>
     <bibliomisc role="type">Technical report</bibliomisc>
     <orgname>AT&amp;T Bell Laboratories</orgname>
@@ -716,56 +701,55 @@
 
   <biblioentry role="phdthesis" id="Krikhaar99">
     <abbrev id="Krikhaar99.abbrev">Kri99</abbrev>
-  <author><authorname><firstname>R.L.</firstname><surname>Krikhaar</surname></authorname></author>
+    <author><firstname>R.L.</firstname><surname>Krikhaar</surname></author>
     <title>Software Architecture Reconstruction</title>
     <bibliomisc role="type">PhD thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
     <pubdate>1999</pubdate>
   </biblioentry>
 
-  <biblioentry role="article" id="KSV-SCAM09">
+  <biblioentry role="inproceedings" id="KSV-SCAM09">
     <abbrev id="KSV-SCAM09.abbrev">KvdSV09</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>T.</firstname><surname>van der
-  Storm</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author></authorgroup>
-      <title>Rascal: A domain specific language for source code analysis and
+  <authorgroup><author><firstname>P.</firstname><surname>Klint</surname></author><author><firstname>T.</firstname><surname>van der
+  Storm</surname></author><author><firstname>J.J.</firstname><surname>Vinju</surname></author></authorgroup>
+      <title>RASCAL: A domain specific language for source code analysis and
   manipulation</title>
-      <pagenums>168--177</pagenums>
-      <bibliosource
-  class="doi">http://doi.ieeecomputersociety.org/10.1109/SCAM.2009.28</bibliosource>
     </biblioset>
-    <biblioset role="journal">
-      <title>Source Code Analysis and Manipulation, IEEE International Workshop
-  on</title>
-      <volumenum>0</volumenum>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>IEEE International Workshop on Source Code Analysis
+  and Manipulation (SCAM'09)</conftitle><address>Los Alamitos, CA,
+  USA</address></confgroup>
       <pubdate>2009</pubdate>
+      <pagenums>168--177</pagenums>
+      <publisher>IEEE Computer Society</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="article" id="McCabe76">
     <abbrev id="McCabe76.abbrev">McC76</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>T.J.</firstname><surname>McCabe</surname></authorname></author>
+      <author><firstname>T.J.</firstname><surname>McCabe</surname></author>
       <title>A complexity measure</title>
-      <pagenums>308--320</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>IEEE Transactions on Software Engineering</title>
       <volumenum>SE-12</volumenum><issuenum>3</issuenum>
       <pubdate>1976</pubdate>
     </biblioset>
+    <pagenums>308--320</pagenums>
   </biblioentry>
 
   <biblioentry role="incollection" id="MorcosConchon86">
     <abbrev id="MorcosConchon86.abbrev">MCC86</abbrev>
     <biblioset role="chapter">
-  <authorgroup><author><authorname><firstname>E.</firstname><surname>Morcos-Chounet</surname></authorname></author><author><authorname><firstname>A.</firstname><surname>Conchon</surname></authorname></author></authorgroup>
+  <authorgroup><author><firstname>E.</firstname><surname>Morcos-Chounet</surname></author><author><firstname>A.</firstname><surname>Conchon</surname></author></authorgroup>
       <title>PPML: a general formalism to specify pretty printing</title>
     </biblioset>
     <biblioset role="collection">
       <title>Information Processing 86</title>
-  <editor><authorname><firstname>H.-J.</firstname><surname>Kugler</surname></authorname></editor>
-      <publisher><publishername>Elsevier</publishername></publisher>
+      <editor><firstname>H.-J.</firstname><surname>Kugler</surname></editor>
+      <publisher>Elsevier</publisher>
       <pubdate>1986</pubdate>
     </biblioset>
   </biblioentry>
@@ -773,20 +757,20 @@
   <biblioentry role="inproceedings" id="Mueller88">
     <abbrev id="Mueller88.abbrev">MK88</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>H.</firstname><surname>Müller</surname></authorname></author><author><authorname><firstname>K.</firstname><surname>Klashinsky</surname></authorname></author></authorgroup>
-      <title>Rigi -- a system for programming-in-the-large.</title>
-      <pagenums>80--86,</pagenums>
+  <authorgroup><author><firstname>H.</firstname><surname>Müller</surname></author><author><firstname>K.</firstname><surname>Klashinsky</surname></author></authorgroup>
+      <title>Rigi -- a system for programming-in-the-large</title>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 10th International Conference on
-  Software Engineering (ICSE 10),</conftitle></confgroup>
+  Software Engineering (ICSE 10)</conftitle></confgroup>
       <pubdate>April 1988</pubdate>
+      <pagenums>80--86</pagenums>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="phdthesis" id="Olivier00">
     <abbrev id="Olivier00.abbrev">Oli00</abbrev>
-  <author><authorname><firstname>P.A.</firstname><surname>Olivier</surname></authorname></author>
+    <author><firstname>P.A.</firstname><surname>Olivier</surname></author>
     <title>A Framework for Debugging Heterogeneous Applications</title>
     <bibliomisc role="type">PhD thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
@@ -795,16 +779,16 @@
 
   <biblioentry role="book" id="ANTLRBook">
     <abbrev id="ANTLRBook.abbrev">Par07</abbrev>
-  <author><authorname><firstname>Terence</firstname><surname>Parr</surname></authorname></author>
+    <author><firstname>T.</firstname><surname>Parr</surname></author>
     <title>The Definitive ANTLR Reference: Building Domain-Specific
   Languages</title>
-    <publisher><publishername>Pragmatic Bookshelf</publishername></publisher>
+    <publisher>Pragmatic Bookshelf,</publisher>
     <pubdate>2007</pubdate>
   </biblioentry>
 
   <biblioentry role="phdthesis" id="Rekers92">
     <abbrev id="Rekers92.abbrev">Rek92</abbrev>
-  <author><authorname><firstname>J.</firstname><surname>Rekers</surname></authorname></author>
+    <author><firstname>J.</firstname><surname>Rekers</surname></author>
     <title>Parser Generation for Interactive Environments</title>
     <bibliomisc role="type">PhD thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
@@ -817,48 +801,47 @@
 
   <biblioentry role="book" id="Terese03">
     <abbrev id="Terese03.abbrev">Ter03</abbrev>
-  <author><authorname><firstname></firstname><surname>Terese</surname></authorname></author>
+    <author><firstname></firstname><surname>Terese</surname></author>
     <title>Term Rewriting Systems</title>
-    <publisher><publishername>Cambridge University
-  Press</publishername></publisher>
+    <publisher>Cambridge University Press</publisher>
     <pubdate>2003</pubdate>
   </biblioentry>
 
   <biblioentry role="article" id="Tip95">
     <abbrev id="Tip95.abbrev">Tip95</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>F.</firstname><surname>Tip</surname></authorname></author>
+      <author><firstname>F.</firstname><surname>Tip</surname></author>
       <title>A survey of program slicing techniques</title>
-      <pagenums>121--189</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>Journal of Programming Languages</title>
       <volumenum>3</volumenum><issuenum>3</issuenum>
       <pubdate>1995</pubdate>
     </biblioset>
+    <pagenums>121--189</pagenums>
   </biblioentry>
 
   <biblioentry role="inproceedings" id="MetaEnv07">
     <abbrev id="MetaEnv07.abbrev">vdBBE+07</abbrev>
     <biblioset role="article">
-  <authorgroup><author><authorname><firstname>M.G.J.</firstname><surname>van den Brand</surname></authorname></author><author><authorname><firstname>M.</firstname><surname>Bruntink</surname></authorname></author><author><authorname><firstname>G.R.</firstname><surname>Economopoulos</surname></authorname></author><author><authorname><firstname>H.A.</firstname><surname>de Jong</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>T.</firstname><surname>Kooiker</surname></authorname></author><author><authorname><firstname>T.</firstname><surname>van der
-  Storm</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author></authorgroup>
+      <authorgroup><author><firstname>M.G.J.</firstname><surname>van den
+  Brand</surname></author><author><firstname>M.</firstname><surname>Bruntink</surname></author><author><firstname>G.R.</firstname><surname>Economopoulos</surname></author><author><firstname>H.A.</firstname><surname>de Jong</surname></author><author><firstname>P.</firstname><surname>Klint</surname></author><author><firstname>T.</firstname><surname>Kooiker</surname></author><author><firstname>T.</firstname><surname>van der
+  Storm</surname></author><author><firstname>J.J.</firstname><surname>Vinju</surname></author></authorgroup>
       <title>Using The Meta-environment for Maintenance and
   Renovation</title>
-      <pagenums>331--332</pagenums>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the 11th European Conference on
   Software Maintenance and Reengineering (CSMR'07)</conftitle></confgroup>
       <pubdate>2007</pubdate>
-      <publisher><publishername>IEEE Computer Society
-  Press</publishername></publisher>
+      <pagenums>331--332</pagenums>
+      <publisher>IEEE Computer Society Press</publisher>
     </biblioset>
   </biblioentry>
 
   <biblioentry role="phdthesis" id="Vinju05">
     <abbrev id="Vinju05.abbrev">Vin05</abbrev>
-  <author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author>
+    <author><firstname>J.J.</firstname><surname>Vinju</surname></author>
     <title>Analysis and Transformation of Source Code by Parsing and
   Rewriting</title>
     <bibliomisc role="type">PhD thesis</bibliomisc>
@@ -868,7 +851,7 @@
 
   <biblioentry role="phdthesis" id="Vis97-thesis">
     <abbrev id="Vis97-thesis.abbrev">Vis97</abbrev>
-  <author><authorname><firstname>E.</firstname><surname>Visser</surname></authorname></author>
+    <author><firstname>E.</firstname><surname>Visser</surname></author>
     <title>Syntax Definition for Language Prototyping</title>
     <bibliomisc role="type">PhD thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
@@ -877,7 +860,7 @@
 
   <biblioentry role="mastersthesis" id="Vos90">
     <abbrev id="Vos90.abbrev">Vos90</abbrev>
-  <author><authorname><firstname>K.</firstname><surname>Vos</surname></authorname></author>
+    <author><firstname>K.</firstname><surname>Vos</surname></author>
     <title>For an easy touch of beauty</title>
     <bibliomisc role="type">Master's thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
@@ -886,7 +869,7 @@
 
   <biblioentry role="phdthesis" id="Walters91">
     <abbrev id="Walters91.abbrev">Wal91</abbrev>
-  <author><authorname><firstname>H.R.</firstname><surname>Walters</surname></authorname></author>
+    <author><firstname>H.R.</firstname><surname>Walters</surname></author>
     <title>On Equal Terms --- Implementing Algebraic Specifications</title>
     <bibliomisc role="type">PhD thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
@@ -896,15 +879,15 @@
   <biblioentry role="article" id="Weiser84">
     <abbrev id="Weiser84.abbrev">Wei84</abbrev>
     <biblioset role="article">
-  <author><authorname><firstname>M.</firstname><surname>Weiser</surname></authorname></author>
+      <author><firstname>M.</firstname><surname>Weiser</surname></author>
       <title>Program slicing</title>
-      <pagenums>352--357</pagenums>
     </biblioset>
     <biblioset role="journal">
       <title>IEEE Transactions on Software Engineering</title>
       <volumenum>SE-10</volumenum><issuenum>4</issuenum>
       <pubdate>July 1984</pubdate>
     </biblioset>
+    <pagenums>352--357</pagenums>
   </biblioentry>
 
 </bibliography>

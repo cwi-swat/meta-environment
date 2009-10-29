@@ -16,20 +16,37 @@
 
     <authorgroup>
       <author>
-        <personname><firstname>Paul</firstname><surname>Klint, Jurgen Vinju,
-        Tijs van der Storm</surname></personname>
+        <personname><firstname>Paul Klint, Tijs van der Storm, Jurgen Vinju
+        </firstname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Centrum Wiskunde &amp; Informatica
+        </firstname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>and</firstname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Universiteit van
+        Amsterdam</firstname></personname>
       </author>
     </authorgroup>
   </info>
 
   <blockquote>
-    <para>Rascal is a new language for meta-programming and is intended to
-    solve problems in the domain of source code analysis and transformation.
-    In this article we give a high-level overview of the language and
-    illustrate its use by many examples. Rascal is a work in progress both
-    regarding implementation and documentation. More information is available
-    at <link
+    <para><emphasis role="bold">Abstract.</emphasis> Rascal is a new language
+    for meta-programming and is intended to solve problems in the domain of
+    source code analysis and transformation. In this article we give a
+    high-level overview of the language and illustrate its use by many
+    examples. Rascal is a work in progress both regarding implementation and
+    documentation. More information is available at <link
     xlink:href="http://www.meta-environment.org/Meta-Environment/Rascal">http://www.meta-environment.org/Meta-Environment/Rascal</link>.</para>
+
+    <para><emphasis role="bold">Key words:</emphasis> source code analysis,
+    source code transformation, meta-programming.</para>
   </blockquote>
 
   <section xml:id="section.why-a-new-language">
@@ -3533,12 +3550,9 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     Data Base (PDB), added a binary streaming format, implemented the SGLR
     invoker, and takes care of deployment issues.</para>
 
-    <para>Karel Pieterson used Rascal as topic for a usability study in his
-    Master's thesis. The results will be included in the final version of this
-    document.</para>
-
-    <para>Claus Brabrand, Frank Tip and Yaroslav Usenko provided feedback on
-    this manual and suggested several improvements.</para>
+    <para>Claus Brabrand, Karel Pieterson, Frank Tip and Yaroslav Usenko
+    provided feedback on this manual and suggested several
+    improvements.</para>
   </section>
 
   <section xml:id="section.bibliography">
@@ -3562,8 +3576,6 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         <bibliomixed xml:id="BKVV08"></bibliomixed>
 
         <bibliomixed xml:id="CordyTXL06"></bibliomixed>
-
-        <bibliomixed xml:id="Dot96"></bibliomixed>
 
         <bibliomixed xml:id="FeijsKrikhaarOmmering98"></bibliomixed>
 

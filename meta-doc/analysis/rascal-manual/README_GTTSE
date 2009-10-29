@@ -1,0 +1,17 @@
+------------------
+Change at title:
+
+<fo:block text-align="center" font-size="12pt">Paul Klint, Jurgen Vinju, Tijs van der Storm</fo:block>
+      <fo:block> </fo:block>
+      <fo:block text-align="center" font-size="10pt">Centrum Wiskunde &amp; Informatica </fo:block>
+<fo:block text-align="center" font-size="10pt">and</fo:block>
+<fo:block text-align="center" font-size="10pt">University of Amsterdam</fo:block>
+
+---------------------------
+Remove "Chapter 1"nd change text-align from "start" to "center"
+
+-------------------------------
+
+Remove redundant "."s in ~10 Bib entries.
+
+------------------------------
