@@ -5901,35 +5901,58 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
             </listitem>
 
             <listitem>
-              <para>Unlike Perl, Java uses the notation
-              <literal>(?<replaceable>Option</replaceable>)</literal> inside
-              the regular expression to set matching options. We let these
-              options follow the regular expression as a modifiers. The
-              following modifiers are supported:</para>
+              <para>In Perl matching options <emphasis>follow</emphasis> the
+              regular expression, but Java uses the notation
+              <literal>(?<replaceable>Option</replaceable>)</literal> at the
+              <emphasis>beginning</emphasis> of the regular expression to set
+              matching options. We support both styles. The following
+              modifiers are supported:</para>
 
               <itemizedlist>
                 <listitem>
-                  <para>multi-line matching (<literal>?m</literal>): the
-                  anchors <literal>^</literal> and <literal>$</literal>
+                  <para>multi-line matching: (<literal>?m</literal>) at the
+                  start of the regular expression or the modifier
+                  <literal>m</literal> at the end of the regular expression.
+                  The anchors <literal>^</literal> and <literal>$</literal>
                   usually only match at the beginning and end of the subject
                   string. When this option is set they also match any begin or
-                  end of line that is embedded in the subject string.</para>
+                  end of line that is embedded in the subject string.
+                  Examples:<screen><prompt>rascal&gt;</prompt> <userinput>/XX$/ := "lineoneXX\nlinetwo";</userinput>
+<computeroutput>bool: false</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>/XX$/m := "lineoneXX\nlinetwo";</userinput>
+<computeroutput>bool: true</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>/(?m)XX$/ := "lineoneXX\nlinetwo";</userinput>
+<computeroutput>bool: true</computeroutput></screen></para>
                 </listitem>
 
                 <listitem>
-                  <para>case-insensitive matching (<literal>?i</literal>):
-                  match characters irrespective of their case.</para>
+                  <para>case-insensitive matching: (<literal>?i</literal>) or
+                  modifier <literal>i</literal>. Match characters irrespective
+                  of their case. Examples:<screen><prompt>rascal&gt;</prompt> <userinput>/XX/ := "some xx";</userinput>
+<computeroutput>bool: false</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>/XX/i := "some xx";</userinput>
+<computeroutput>bool: true</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>/(?i)XX/ := "some xx";</userinput>
+<computeroutput>bool: true</computeroutput></screen></para>
                 </listitem>
 
                 <listitem>
-                  <para>single-line mode (<literal>?s</literal>): the .
-                  expression does usually not match line terminators. When
-                  single-line mode is set, it will match any character
-                  including line terminators.</para>
+                  <para>single-line mode: (<literal>?s</literal>) or modifer
+                  s. The . expression does usually not match line terminators.
+                  When single-line mode is set, it will match any character
+                  including line terminators.<screen><prompt>rascal&gt;</prompt> <userinput>/a.c/ := "abc";</userinput>
+<computeroutput>bool: true</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>/a.c/ := "a\nc";</userinput>
+<computeroutput>bool: false</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>/a.c/s := "a\nc";</userinput>
+<computeroutput>bool: true</computeroutput>
+<prompt>rascal&gt;</prompt> <userinput>/(?s)a.c/ := "a\nc";</userinput>
+<computeroutput>bool: true</computeroutput></screen></para>
                 </listitem>
 
                 <listitem>
-                  <para>unix lines (<literal>?d</literal>): usually newlines
+                  <para>unix lines: (<literal>?d</literal>) or modifier
+                  <literal>d</literal>. Usually newlines
                   (<literal>\n</literal>), carriage return
                   (<literal>\r</literal>) and new line carriage return
                   (<literal>\n\r</literal>) sequences are all considered line
@@ -5956,7 +5979,9 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
                   <para>Multiple matches.</para>
                 </listitem>
               </itemizedlist>
-            </warning>For convenience, we summarize the most frequently used
+            </warning></para>
+
+          <para>For convenience, we summarize the most frequently used
           constructs in regular expressions in <xref
           linkend="table.regexp-syntax" />.</para>
 
