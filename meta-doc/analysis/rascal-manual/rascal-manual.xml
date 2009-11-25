@@ -11225,6 +11225,23 @@ str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
               </row>
 
               <row>
+                <entry><literal>str substring(str s, int begin) throws
+                IndexOutOfBounds(int index)</literal></entry>
+
+                <entry>Yields substring of <literal>s</literal> from index
+                <literal>begin</literal> to the end of the string</entry>
+              </row>
+
+              <row>
+                <entry><literal>str substring(str s, int begin, int end)
+                throws IndexOutOfBounds(int index)</literal></entry>
+
+                <entry>Yields substring of <literal>s</literal> from index
+                <literal>begin</literal> to (but not including) index
+                <literal>end</literal></entry>
+              </row>
+
+              <row>
                 <entry><literal>int toInt(str s) throws IllegalArgument(value
                 v)</literal></entry>
 
@@ -13273,6 +13290,13 @@ ok</computeroutput>
 
           <row>
             <entry><literal>startsWith</literal></entry>
+
+            <entry><xref linkend="section.lib-String"
+            xrefstyle="template:%t" /></entry>
+          </row>
+
+          <row>
+            <entry><literal>substring</literal></entry>
 
             <entry><xref linkend="section.lib-String"
             xrefstyle="template:%t" /></entry>
