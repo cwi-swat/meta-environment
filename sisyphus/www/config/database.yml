@@ -1,7 +1,7 @@
 development:
   adapter: jdbcpostgresql
   database: sisyphusdev
-  host: verfrol.sen.cwi.nl
+  host: www.syntax-definition.org
   username: sisyphusdev
   password: tantalu5
   port: 
@@ -16,7 +16,7 @@ development:
 production:
   adapter: jdbcpostgresql
   database: sisyphusdev
-  host: verfrol.sen.cwi.nl
+  host: www.syntax-definition.org
   username: sisyphusdev
   password: tantalu5
   port: 
