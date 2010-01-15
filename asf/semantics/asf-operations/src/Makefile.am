@@ -12,7 +12,7 @@ noinst_HEADERS 	= \
 
 AM_CPPFLAGS += $(ASC_SUPPORT_CFLAGS)
 asfoperations_LDADD = \
-     -L${top_builddir}/semantics/asf-operations/src -lasfnormalization \
+     -L${top_builddir}/semantics/asf-operations/src \
      $(ASC_SUPPORT_LIBS) 
 asfoperations_SOURCES = \
 	asfoperations.isrc \
