@@ -1,5 +1,8 @@
 $Id$
 
+Fri Feb 12 12:52:29 CET 2010 <jurgenv@cwi.nl>
+ * Bumped version to 2.5.1 after bug fix in Makefile.am
+
 Thu Mar 27 10:34:47 EDT 2008 <jurgenv@cwi.nl>
  *
  semantics/asfc/src/{asf2muasf.c,builtins.c},semantics/asfe/src/traversalfunctions.c:
