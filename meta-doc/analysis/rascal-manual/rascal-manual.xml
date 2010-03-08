@@ -5960,26 +5960,26 @@ rule a2 band(bfalse, Bool B)   =&gt; bfalse;</userinput>
                   considered to be a line terminator.</para>
                 </listitem>
               </itemizedlist>
+
+              <warning>
+                <para>Further discuss here:</para>
+
+                <itemizedlist>
+                  <listitem>
+                    <para>grouping versus variable introduction.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Quoting issues.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Multiple matches.</para>
+                  </listitem>
+                </itemizedlist>
+              </warning>
             </listitem>
           </itemizedlist>
-
-          <para><warning>
-              <para>Further discuss here:</para>
-
-              <itemizedlist>
-                <listitem>
-                  <para>grouping versus variable introduction.</para>
-                </listitem>
-
-                <listitem>
-                  <para>Quoting issues.</para>
-                </listitem>
-
-                <listitem>
-                  <para>Multiple matches.</para>
-                </listitem>
-              </itemizedlist>
-            </warning></para>
 
           <para>For convenience, we summarize the most frequently used
           constructs in regular expressions in <xref
@@ -7581,7 +7581,8 @@ ok
   <replaceable>Statement</replaceable></literal></programlisting></para>
 
         <para>The solve statement consists of the variables for which a fixed
-        point will be computed and a statement. Optionally, an expression
+        point will be computed and a statement. These variables should already
+        exist in the context of the solve statement. Optionally, an expression
         directly following the list of variables gives an upper bound on the
         number of iterations. The format then becomes:<programlisting><literal>solve(<replaceable>Var</replaceable><subscript>1</subscript>, <replaceable>Var</replaceable><subscript>2</subscript>, ..., <replaceable>Var</replaceable><subscript>n</subscript>; Exp)
   <replaceable>Statement</replaceable></literal></programlisting></para>
@@ -7608,7 +7609,9 @@ ok
 
         <screen><prompt>rascal&gt;</prompt> <userinput>rel[int,int] R = {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;};</userinput>
 <computeroutput>rel[int,int] : {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}</computeroutput>
-<prompt>rascal&gt;</prompt> <userinput>solve (T) {
+<prompt>rascal&gt;</prompt> <userinput>T = R;</userinput>
+<computeroutput><computeroutput>rel[int,int] : {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}</computeroutput></computeroutput><prompt>
+rascal&gt;</prompt> <userinput>solve (T) {
           T = T + (T o R);
         }
 </userinput><computeroutput>rel[int,int] : {&lt;1,2&gt;, &lt;1,3&gt;,&lt;1,4&gt;,&lt;2,3&gt;,&lt;2,4&gt;,&lt;3,4&gt;}</computeroutput></screen>
@@ -11686,6 +11689,11 @@ str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
         </listitem>
       </itemizedlist>
 
+      <note>
+        <para>There is an overlap between the viz::Basic functions and the
+        viz::Figure functions that will be eliminated in the future.</para>
+      </note>
+
       <table>
         <title>viz::Basic Functions</title>
 
@@ -11726,367 +11734,636 @@ str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
       </table>
     </section>
 
-    <section xml:id="section.lib-vizChart">
-      <title>viz::Chart</title>
+    <section>
+      <title>viz::Figure</title>
 
-      <para>These functions provide chart drawing facilities and are based on
-      JFreeChart. In the Eclipse context the module embeds the charts in an
-      Eclipse window, while the commandline version will show a popup window.
-      Different charts need their input data in different formats that can be
-      summarized as follows:</para>
+      <para>The viz::Figure library is a general visualization library. A
+      visualisation is described by creating a value of the data type Figure.
+      A Figure can be primitive (rectangular box, ellipse, text) or composite
+      (horizontal/vertical composition, placement on grid, tree or graph). The
+      visual appearance of a Figure may be influenced by setting properties
+      like color, size and the like. The actually display of a Figure is done
+      by a render function.</para>
 
-      <para><programlisting>// A named series of int or real values
+      <section>
+        <title>viz::Figure::Core</title>
 
-public alias intSeries  = 
-       tuple[str name,list[int]  values];
-       
-public alias realSeries = 
-       tuple[str name,list[real] values];
+        <para>The core of the viz::Figure library consists of two
+        parts:</para>
 
-// Some charts need multiple values instead of a single one and
-// include a category name for each subseries.
+        <itemizedlist>
+          <listitem>
+            <para>Figure properties (FProperty), and</para>
+          </listitem>
 
-public alias intSeriesMultipleData  = 
-       tuple[str name,
-             list[tuple[str category, 
-                        list[int] values]] allvalues];
-       
-public alias realSeriesMultipleData = 
-       tuple[str name,
-             list[tuple[str category, 
-                        list[real] values2]] allvalues];
+          <listitem>
+            <para>the Figure data type itself.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Figure properties are defined as follows:</para>
+
+        <para><programlisting>alias FProperties = list[FProperty];
+
+data FProperty =
+/* sizes */
+     width(real width)          // sets width of element
+   | width(int iwidth)
+   | height(real height)        // sets height of element
+   | height(int iheight)
+   | size(real size)            // sets width and height to same value
+   | size(int isize)
+   | size(real hor, real vert)  // sets width and height to separate values
+   | size(int ihor, int ivert)
+   | gap(real amount)           // sets hor and vert gap between elements in composition to same value
+   | gap(int iamount)
+   | gap(real hor, real vert)   // sets hor and vert gap between elements in composition to separate values
+   | gap(int ihor, int ivert)
+   
+/* alignment */
+   | anchor(real h, real v)     // horizontal (0=left; 1=right) &amp; vertical anchor (0=top,1=bottom)
+   | hanchor(real h)
+   | vanchor(real v)
+   
+/* line and border properties */
+   | lineWidth(int lineWidth)   // line width
+   | lineColor(Color lineColor) // line color
+   | lineColor(str colorName)   // named line color
+   
+   | fillColor(Color fillColor) // fill color of shapes and text
+   | fillColor(str colorName)   // named fill color
+   
+/* wedge properties */
+   | fromAngle(real angle)
+   | fromAngle(int iangle)
+   | toAngle(real angle)
+   | toAngle(int iangle)
+   | innerRadius(real radius)
+   | innerRadius(int iradius)
+
+   
+/* font and text properties */
+   | font(str fontName)         // named font
+   | fontSize(int isize)        // font size
+   | fontColor(Color textColor) // font color
+   | fontColor(str colorName)
+   | textAngle(real angle)      // text rotation
+   | textAngle(int iangle) 
+   
+/* interaction properties */
+   | mouseOver(FProperties props)
+                                // switch to new properties when mouse is over element
+   | mouseOver(FProperties props, Figure inner)
+                                // display new inner element when mouse is over current element
+   
+/* other properties */
+   | id(str name)               // name of elem (used in edges and various layouts)
+   | connected()                // shapes consist of connected points
+   | closed()                   // closed shapes
+   | curved()                   // use curves instead of straight lines
+   ;
 </programlisting></para>
 
-      <para>All chart drawing functions take as arguments:</para>
+        <para>The Figure data type itself is defined as
+        follows:<programlisting>alias Figures = list[Figure];
+ 
+data Figure = 
+/* atomic primitives */
 
-      <itemizedlist>
-        <listitem>
-          <para>A title string.</para>
-        </listitem>
+     text(FProperties props, str s)           // text label
+   | text(str s)                              // text label
+   
+/* primitives/containers */
 
-        <listitem>
-          <para>A single value that is to be displayed as a chart.</para>
-        </listitem>
+   | box(FProperties props)                   // rectangular box
+   | box(FProperties props, Figure inner)     // rectangular box with inner element
+   
+   | ellipse(FProperties props)               // ellipse
+   | ellipse(FProperties props, Figure inner) // ellipse with inner element
+   
+   | wedge(FProperties props)                 // wedge
+   | wedge(FProperties props, Figure inner)   // wedge with inner element
+   
+   | space(FProperties props)                 // invisible box (used for spacing)
+   | space(FProperties props, Figure inner)   // invisible box with visible inner element
+ 
+/* composition */
+   
+   | use(Figure elem)                         // use another elem
+   | use(FProperties props, Figure elem)
+ 
+   | hcat(Figures elems)                      // horizontal concatenation
+   | hcat(FProperties props, Figures elems)
+   
+   | vcat(Figures elems)                      // vertical concatenation
+   | vcat(FProperties props, Figures elems)
+   
+   | align(Figures elems)                     // horizontal and vertical composition
+   | align(FProperties props, Figures elems)
+   
+   | overlay(Figures elems)                   // overlay (stacked) composition
+   | overlay(FProperties props, Figures elems)
+   
+   | shape(list[Vertex] points)               // shape of to be connected vertices
+   | shape(FProperties props,list[Vertex] points)
+   
+   | grid(Figures elems)                      // placement on fixed grid
+   | grid(FProperties props, Figures elems)
+   
+   | pack(Figures elems)                      // composition by 2D packing
+   | pack(FProperties props, Figures elems)
+   
+   | pie(Figures elems)                       // composition as pie chart
+   | pie(FProperties props, Figures elems)
+   
+   | graph(Figures nodes, list[Edge] edges)   // composition of nodes and edges as graph
+   | graph(FProperties, Figures nodes, list[Edge] edges)
+   
+                                              // composition of nodes and edges as tree
+   | tree(Figures nodes, list[Edge] edges, str root) 
+   | tree(FProperties, Figures nodes, list[Edge] edges, str root)
+   
+/* transformation */
 
-        <listitem>
-          <para>Some functions have one or two additonal arguments.</para>
-        </listitem>
+   | rotate(real angle, Figure elem)         // Rotate element around its anchor point
+   | scale(real perc, Figure)                // Scale element (same for h and v)
+   | scale(real xperc, real yperc, Figure elem)
+                                             // Scale element (different for h and v)
+   ;
+</programlisting><table>
+            <title>viz::Figure::Core Functions</title>
 
-        <listitem>
-          <para>Finally, zero or more settings that give control over the way
-          in which the chart is drawn.</para>
-        </listitem>
-      </itemizedlist>
+            <tgroup cols="2">
+              <colspec align="left" colname="col1" colwidth="6*" />
 
-      <para><table>
-          <title>viz::Chart Functions</title>
+              <colspec align="left" colname="col2" colwidth="3*" />
 
-          <tgroup cols="2">
-            <colspec align="left" colname="col1" colwidth="6*" />
+              <thead>
+                <row>
+                  <entry>Function</entry>
 
-            <colspec align="left" colname="col2" colwidth="3*" />
+                  <entry>Description</entry>
+                </row>
+              </thead>
 
-            <thead>
-              <row>
-                <entry>Function</entry>
+              <tbody>
+                <row>
+                  <entry><literal>public Color gray(int
+                  gray)</literal></entry>
 
-                <entry>Description</entry>
-              </row>
-            </thead>
+                  <entry>Gray value (0-255) </entry>
+                </row>
 
-            <tbody>
-              <row>
-                <entry><literal>public void barChart(str title, map[str,int]
-                facts, ChartSetting settings...)</literal></entry>
+                <row>
+                  <entry><literal>public Color gray(int gray, real
+                  alpha)</literal></entry>
 
-                <entry>Draw a bar chart for integers</entry>
-              </row>
+                  <entry>Gray value (0-255) with transparency (0-100%)</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void barChart(str title, map[str,real]
-                facts, ChartSetting settings...)</literal></entry>
+                <row>
+                  <entry><literal>public Color gray(real
+                  perc)</literal></entry>
 
-                <entry>Draw a bar chart for reals</entry>
-              </row>
+                  <entry>Gray value (0-100%)</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void barChart(str title, list[str]
-                categories, list[intSeries] facts, ChartSetting
-                settings...)</literal></entry>
+                <row>
+                  <entry><literal>public Color gray(real perc, real
+                  alpha)</literal></entry>
 
-                <entry>Draw a bar chart for multiples series of
-                integere</entry>
-              </row>
+                  <entry>Gray value (0-100%) with transparency
+                  (0-100%)</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void barChart(str title, list[str]
-                categories, list[realSeries] facts, ChartSetting
-                settings...)</literal></entry>
+                <row>
+                  <entry><literal>public Color color(str
+                  colorName)</literal></entry>
 
-                <entry>Draw a bar chart for multiple series of reals</entry>
-              </row>
+                  <entry>Named color (from SVG standard)
+                  http://www.w3.org/TR/SVG/ types.html#ColorKeywords</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void boxplot(str title,
-                list[intSeriesMultipleData] facts, ChartSetting
-                settings...)</literal></entry>
+                <row>
+                  <entry><literal>public Color color(str colorName, real
+                  alpha)</literal></entry>
 
-                <entry>Draw a boxplot for integers</entry>
-              </row>
+                  <entry>Named color with transparency (0-100%)</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void boxplot(str title,
-                list[realSeriesMultipleData] facts, ChartSetting
-                settings...)</literal></entry>
+                <row>
+                  <entry><literal>public Color rgb(int r, int g, int
+                  b)</literal></entry>
 
-                <entry>Draw a boxplot for reals</entry>
-              </row>
+                  <entry>Color based on red (r), green (g) and blue
+                  (b)</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void histogram(str title,
-                list[intSeries] facts, int nbins, ChartSetting
-                settings...)</literal></entry>
+                <row>
+                  <entry><literal>public Color rgb(int r, int g, int b, real
+                  alpha)</literal></entry>
 
-                <entry>Draw a histogram for integers</entry>
-              </row>
+                  <entry>RGB color with transparency</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void histogram(str title,
-                list[realSeries] facts, int nbins, ChartSetting
-                settings...)</literal></entry>
+                <row>
+                  <entry><literal>public list[Color] interpolateColor(Color
+                  from, Color to, real percentage)</literal></entry>
 
-                <entry>Draw a histogram for reals</entry>
-              </row>
+                  <entry>Interpolate between two colors (in RGB space)</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void pieChart(str title, map[str, int]
-                facts, ChartSetting settings...)</literal></entry>
+                <row>
+                  <entry><literal>public list[Color] colorSteps(Color from,
+                  Color to, int steps)</literal></entry>
 
-                <entry>Draw a pieChart for integers</entry>
-              </row>
+                  <entry>Interpolate between two colors (in RGB space)</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void pieChart(str title, map[str, real]
-                facts, ChartSetting settings...)</literal></entry>
+                <row>
+                  <entry><literal>public Color(int) colorScale(list[int]
+                  values, Color from, Color to)</literal></entry>
 
-                <entry>Draw a pieChart for reals</entry>
-              </row>
+                  <entry>Interpolate between two colors (in RGB space)</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void xyChart(str title,
-                list[intSeries], ChartSetting settings...)</literal></entry>
+                <row>
+                  <entry><literal>public Color(real) colorScale(list[real]
+                  values, Color from, Color to)</literal></entry>
 
-                <entry>Draw an xyChart for integers</entry>
-              </row>
+                  <entry>Interpolate between two colors (in RGB space)</entry>
+                </row>
 
-              <row>
-                <entry><literal>public void xyChart(str title,
-                list[realSeries], ChartSetting settings...)</literal></entry>
+                <row>
+                  <entry><literal>public str palette(int n)</literal></entry>
 
-                <entry>Draw an xyChart for reals</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
+                  <entry>Pick color from 12-color palette</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+      </section>
 
-      <para>In its simplest form, a <emphasis>barChart</emphasis> displays a
-      map of integer or real values. Vertical bars are drawn with length
-      according to the values and the associated keys in the map acts as
-      labels. A barChart may also display several series of integer or real
-      values. In this case a list of category names and a list of int or real
-      series are needed. The <replaceable>n</replaceable>-th category name
-      corresponds with the <replaceable>n</replaceable>-th element in each
-      series. Names of series act thus as row names and category names act as
-      column names. Each series is grouped together in the bar chart and
-      corresponding category elements in different series get the same color.
-      See <link
-      xlink:href="http://en.wikipedia.org/wiki/Bar_chart">http://en.wikipedia.org/wiki/Bar_chart</link>
-      for further details</para>
+      <section>
+        <title>viz::Figure::Render</title>
 
-      <para>BoxPlots are also known as box-and-whisker diagrams and are
-      usefull to display statistical data. One of the most famous box plots
-      stems from the Michelson-Morley Experiment in 1887, see <link
-      xlink:href="http://en.wikipedia.org/wiki/Box_plot">http://en.wikipedia.org/wiki/Box_plot</link>
-      for further details. For each named subseries of data, the following
-      characteristics are shown:</para>
+        <para><parameter>The render function displays a figure depending on
+        the context. When called from the REPL, a top-level window is created
+        to display the figure. When called from Eclipse, a graphics pane is
+        created as part of the Eclipse GUI.</parameter><table>
+            <title>viz::Figure::Render Function</title>
 
-      <itemizedlist>
-        <listitem>
-          <para>The sample minimum.</para>
-        </listitem>
+            <tgroup cols="2">
+              <colspec align="left" colname="col1" colwidth="6*" />
 
-        <listitem>
-          <para>The lower quartile (Q1).</para>
-        </listitem>
+              <colspec align="left" colname="col2" colwidth="3*" />
 
-        <listitem>
-          <para>The median (Q2).</para>
-        </listitem>
+              <thead>
+                <row>
+                  <entry>Function</entry>
 
-        <listitem>
-          <para>The upper quartile (Q3).</para>
-        </listitem>
+                  <entry>Description</entry>
+                </row>
+              </thead>
 
-        <listitem>
-          <para>The sample maximum.</para>
-        </listitem>
-      </itemizedlist>
+              <tbody>
+                <row>
+                  <entry><literal>public void render(Figure
+                  fig)</literal></entry>
 
-      <para>The values from minimum to maximum are indicated by a vertical
-      line. Values between Q1 and Q3 are indicated by a small box superimposed
-      on this vertical line. A horizontal line inside the box indicates the
-      medium. Outliers are explicitly indicated in the plot.</para>
+                  <entry>Render a figure</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+      </section>
 
-      <para>A histogram displays observations in a fixed number of bins, see
-      <link
-      xlink:href="http://en.wikipedia.org/wiki/Histogram">http://en.wikipedia.org/wiki/Histogram</link>
-      for details.</para>
+      <section xml:id="section.lib-vizChart">
+        <title>viz::Figure::Chart</title>
 
-      <para><replaceable>PieCharts</replaceable> essentially take maps of
-      integers or reals as input. The strings are used to label each sector of
-      the pieChart and the number determines the relative size of the sector.
-      See <link
-      xlink:href="http://en.wikipedia.org/wiki/Pie_chart">http://en.wikipedia.org/wiki/Pie_chart</link>
-      for further details.</para>
+        <para>These functions provide chart drawing facilities and are based
+        on JFreeChart. In the Eclipse context the module embeds the charts in
+        an Eclipse window, while the commandline version will show a popup
+        window. Different charts need their input data in different formats
+        that can be summarized as follows:</para>
 
-      <para>An xyChart plots the graph of one or more functions on the same
-      grid. Each series is interpreted as a list of (x,y) values; the name of
-      the series acts as function name.</para>
+        <para><programlisting>// A named series of int or real values
 
-      <para>All chart functions can have zero or more ChartSettings that give
-      control over the way in which the chart is drawn. A ChartSetting can be
-      one of the following:</para>
+public alias intTuples  = 
+       tuple[str name,list[tuple[int, int]]  values];
 
-      <para><programlisting>data ChartSetting =       
-     area()
-   | dim3()                       
-   | domainLabel(str txt)
-   | horizontal()   
-   | noSectionLabels() 
-   | rangeLabel(str txt)
-   | ring()     
-   | scatter()  
-   | stacked()               
+public alias intSeries  = 
+       tuple[str name,list[int]  values];</programlisting></para>
+
+        <para>All chart drawing functions take as arguments:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A title string.</para>
+          </listitem>
+
+          <listitem>
+            <para>A single value that is to be displayed as a chart.</para>
+          </listitem>
+
+          <listitem>
+            <para>Some functions may have one or two additonal
+            arguments.</para>
+          </listitem>
+
+          <listitem>
+            <para>Finally, zero or more ChartSettings that give control over
+            the way in which the chart is drawn.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para><table>
+            <title>viz::Chart Functions</title>
+
+            <tgroup cols="2">
+              <colspec align="left" colname="col1" colwidth="6*" />
+
+              <colspec align="left" colname="col2" colwidth="3*" />
+
+              <thead>
+                <row>
+                  <entry>Function</entry>
+
+                  <entry>Description</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry><literal>public void barChart(str title, map[str,int]
+                  facts, ChartSetting settings...)</literal></entry>
+
+                  <entry>Draw a bar chart for integers</entry>
+                </row>
+
+                <row>
+                  <entry><literal>public void barChart(str title,
+                  map[str,real] facts, ChartSetting
+                  settings...)</literal></entry>
+
+                  <entry>Draw a bar chart for reals (not yet
+                  implemented)</entry>
+                </row>
+
+                <row>
+                  <entry><literal>public void barChart(str title, list[str]
+                  categories, list[intSeries] facts, ChartSetting
+                  settings...)</literal></entry>
+
+                  <entry>Draw a bar chart for multiple series of
+                  integers</entry>
+                </row>
+
+                <row>
+                  <entry><literal>public void barChart(str title, list[str]
+                  categories, list[realSeries] facts, ChartSetting
+                  settings...)</literal></entry>
+
+                  <entry>Draw a bar chart for multiple series of reals (not
+                  yet implemented)</entry>
+                </row>
+
+                <row>
+                  <entry><literal>public void pieChart(str title, map[str,
+                  int] facts, ChartSetting settings...)</literal></entry>
+
+                  <entry>Draw a pieChart for integers</entry>
+                </row>
+
+                <row>
+                  <entry><literal>public void pieChart(str title, map[str,
+                  real] facts, ChartSetting settings...)</literal></entry>
+
+                  <entry>Draw a pieChart for reals (not yet
+                  implemented)</entry>
+                </row>
+
+                <row>
+                  <entry><literal>public void xyChart(str title,
+                  list[intSeries], ChartSetting settings...)</literal></entry>
+
+                  <entry>Draw an xyChart for integers</entry>
+                </row>
+
+                <row>
+                  <entry><literal>public void xyChart(str title,
+                  list[realSeries], ChartSetting
+                  settings...)</literal></entry>
+
+                  <entry>Draw an xyChart for reals</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+
+        <para>In its simplest form, a <emphasis>barChart</emphasis> displays a
+        map of integer or real values. Vertical bars are drawn with length
+        according to the values and the associated keys in the map acts as
+        labels. A barChart may also display several series of integer or real
+        values. In this case a list of category names and a list of int or
+        real series are needed. The <replaceable>n</replaceable>-th category
+        name corresponds with the <replaceable>n</replaceable>-th element in
+        each series. Names of series act thus as row names and category names
+        act as column names. Each series is grouped together in the bar chart
+        and corresponding category elements in different series get the same
+        color. See <link
+        xlink:href="http://en.wikipedia.org/wiki/Bar_chart">http://en.wikipedia.org/wiki/Bar_chart</link>
+        for further details</para>
+
+        <para><warning>
+            <para>BoxPlots and Histograms are not yet available.</para>
+          </warning></para>
+
+        <para>BoxPlots are also known as box-and-whisker diagrams and are
+        usefull to display statistical data. One of the most famous box plots
+        stems from the Michelson-Morley Experiment in 1887, see <link
+        xlink:href="http://en.wikipedia.org/wiki/Box_plot">http://en.wikipedia.org/wiki/Box_plot</link>
+        for further details. For each named subseries of data, the following
+        characteristics are shown:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The sample minimum.</para>
+          </listitem>
+
+          <listitem>
+            <para>The lower quartile (Q1).</para>
+          </listitem>
+
+          <listitem>
+            <para>The median (Q2).</para>
+          </listitem>
+
+          <listitem>
+            <para>The upper quartile (Q3).</para>
+          </listitem>
+
+          <listitem>
+            <para>The sample maximum.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The values from minimum to maximum are indicated by a vertical
+        line. Values between Q1 and Q3 are indicated by a small box
+        superimposed on this vertical line. A horizontal line inside the box
+        indicates the medium. Outliers are explicitly indicated in the
+        plot.</para>
+
+        <para>A histogram displays observations in a fixed number of bins, see
+        <link
+        xlink:href="http://en.wikipedia.org/wiki/Histogram">http://en.wikipedia.org/wiki/Histogram</link>
+        for details.</para>
+
+        <para><replaceable>PieCharts</replaceable> essentially take maps of
+        integers or reals as input. The strings are used to label each sector
+        of the pieChart and the number determines the relative size of the
+        sector. See <link
+        xlink:href="http://en.wikipedia.org/wiki/Pie_chart">http://en.wikipedia.org/wiki/Pie_chart</link>
+        for further details.</para>
+
+        <para>An xyChart plots the graph of one or more functions on the same
+        grid. Each series is interpreted as a list of (x,y) values; the name
+        of the series acts as function name.</para>
+
+        <para>All chart functions can have zero or more ChartSettings that
+        give control over the way in which the chart is drawn. A ChartSetting
+        can be one of the following:</para>
+
+        <para><programlisting>data ChartSetting =       
+   | areaPlot()              
+   | chartSize(int w, int h)
+   | curvePlot ()
+   | horizontal()
+   | linePlot()
+   | ring(int h)
+   | stackedBars()
    | subtitle(str txt)
-   | vertical()
+   | vertical() 
+   | xLabel(str txt)
+   | yLabel(str txt)
    ;</programlisting>The applicability and meaning of these settings is as
-      follows.<table>
-          <title>Chart Settings</title>
+        follows.<table>
+            <title>Chart Settings</title>
 
-          <tgroup cols="3">
-            <colspec align="left" colname="col1" colwidth="1*" />
+            <tgroup cols="3">
+              <colspec align="left" colname="col1" colwidth="1*" />
 
-            <colspec align="left" colname="col2" colwidth="1*" />
+              <colspec align="left" colname="col2" colwidth="1*" />
 
-            <colspec align="left" colname="col3" colwidth="2*" />
+              <colspec align="left" colname="col3" colwidth="2*" />
 
-            <thead>
-              <row>
-                <entry>Function</entry>
+              <thead>
+                <row>
+                  <entry>Function</entry>
 
-                <entry>Applicable for</entry>
+                  <entry>Applicable for</entry>
 
-                <entry>Description</entry>
-              </row>
-            </thead>
+                  <entry>Description</entry>
+                </row>
+              </thead>
 
-            <tbody>
-              <row>
-                <entry><literal>area()</literal></entry>
+              <tbody>
+                <row>
+                  <entry><literal>areaPlot()</literal></entry>
 
-                <entry>xyChart</entry>
+                  <entry>xyChart</entry>
 
-                <entry>Changes an xyChart from a line graph into an area
-                graph, i.e., all surface below the line graph is
-                colored.</entry>
-              </row>
+                  <entry>Changes an xyChart from a line graph into an area
+                  graph, i.e., all surface below the line graph is
+                  colored.</entry>
+                </row>
 
-              <row>
-                <entry><literal>dim3()</literal></entry>
+                <row>
+                  <entry>chartSize(int w, int h)</entry>
 
-                <entry>barChart, pieChart</entry>
+                  <entry>barChart, pieChart, xyChart</entry>
 
-                <entry>Draw a 3D version of the chart.</entry>
-              </row>
+                  <entry>Width and height of chart</entry>
+                </row>
 
-              <row>
-                <entry><literal>domainLabel(str txt)</literal></entry>
+                <row>
+                  <entry>curvePlot()</entry>
 
-                <entry>barChart, boxPlot, histogram, xyPlot</entry>
+                  <entry>xyChart</entry>
 
-                <entry>Draw a label at the bottom (domain, x-axis) of the
-                chart</entry>
-              </row>
+                  <entry>Connect the points in an xyChart with a curve</entry>
+                </row>
 
-              <row>
-                <entry><literal>horizontal()</literal></entry>
+                <row>
+                  <entry><literal>horizontal()</literal></entry>
 
-                <entry>barChart, boxPlot, histogram, xyChart</entry>
+                  <entry>barChart, xyChart</entry>
 
-                <entry>Default, horizontal, drawing mode</entry>
-              </row>
+                  <entry>Default, horizontal, drawing mode</entry>
+                </row>
 
-              <row>
-                <entry><literal>noSectionLabels()</literal></entry>
+                <row>
+                  <entry>linePlot()</entry>
 
-                <entry>pieChart</entry>
+                  <entry>xyChart</entry>
 
-                <entry>Do not draw labels for the sections of a
-                pieChart</entry>
-              </row>
+                  <entry>Connect the points in an xyChart with lines</entry>
+                </row>
 
-              <row>
-                <entry><literal>rangeLabel(str txt)</literal></entry>
+                <row>
+                  <entry><literal>ring(int h)</literal></entry>
 
-                <entry>barChart, boxPlot, histogram, xyPlot</entry>
+                  <entry>pieChart</entry>
 
-                <entry>Draw a label at the left (range, y-axis) of the
-                chart</entry>
-              </row>
+                  <entry>Draw pieChart as a ring with inner radius n</entry>
+                </row>
 
-              <row>
-                <entry><literal>ring()</literal></entry>
+                <row>
+                  <entry><literal>stackedBars()</literal></entry>
 
-                <entry>pieChart</entry>
+                  <entry>barChart</entry>
 
-                <entry>Draw pieChart as a ring</entry>
-              </row>
+                  <entry>Draw barChart in stacked fashion</entry>
+                </row>
 
-              <row>
-                <entry><literal>scatter()</literal></entry>
+                <row>
+                  <entry><literal>subtitle(str txt)</literal></entry>
 
-                <entry>xyChart</entry>
+                  <entry>barChart, pieChart xyChart</entry>
 
-                <entry>Draw xyChart as a scatter plot</entry>
-              </row>
+                  <entry>At the top of the chart, draw a subtitle below the
+                  title</entry>
+                </row>
 
-              <row>
-                <entry><literal>stacked()</literal></entry>
+                <row>
+                  <entry><literal>vertical()</literal></entry>
 
-                <entry>barChart</entry>
+                  <entry>barChart, xyChart</entry>
 
-                <entry>Draw barChart in stacked fashion</entry>
-              </row>
+                  <entry>Vertical drawing mode.</entry>
+                </row>
 
-              <row>
-                <entry><literal>subtitle(str txt)</literal></entry>
+                <row>
+                  <entry><literal>xLabel(str txt)</literal></entry>
 
-                <entry>barChart, boxPlot, histogram, pieChart xyChart</entry>
+                  <entry>barChart, xyPlot</entry>
 
-                <entry>At the top of the chart, draw a subtitle below the
-                title</entry>
-              </row>
+                  <entry>Draw a label at the bottom (domain, x-axis) of the
+                  chart</entry>
+                </row>
 
-              <row>
-                <entry><literal>vertical()</literal></entry>
+                <row>
+                  <entry><literal>yLabel(str txt)</literal></entry>
 
-                <entry>barChart, boxPlot, histogram, xyChart</entry>
+                  <entry>barChart, xyPlot</entry>
 
-                <entry>Vertical drawing mode.</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
+                  <entry>Draw a label at the left (range, y-axis) of the
+                  chart</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+      </section>
     </section>
   </section>
 
@@ -13290,13 +13567,6 @@ ok</computeroutput>
 
           <row>
             <entry><literal>startsWith</literal></entry>
-
-            <entry><xref linkend="section.lib-String"
-            xrefstyle="template:%t" /></entry>
-          </row>
-
-          <row>
-            <entry><literal>substring</literal></entry>
 
             <entry><xref linkend="section.lib-String"
             xrefstyle="template:%t" /></entry>
