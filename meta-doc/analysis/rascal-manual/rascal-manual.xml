@@ -11816,7 +11816,7 @@ data FProperty =
    | textAngle(real angle)      // text rotation
    | textAngle(int iangle) 
    
-/* interaction properties */
+/* (Still experimental) interaction properties */
    | mouseOver(FProperties props)
                                 // switch to new properties when 
                                 // mouse is over element
@@ -11966,8 +11966,9 @@ data Figure =
                   <entry><literal>public Color color(str
                   colorName)</literal></entry>
 
-                  <entry>Named color (from SVG standard)
-                  http://www.w3.org/TR/SVG/ types.html#ColorKeywords</entry>
+                  <entry>Named color from SVG standard, see <link
+                  linkend="???">http://www.w3.org/TR/SVG/
+                  types.html#ColorKeywords</link></entry>
                 </row>
 
                 <row>
