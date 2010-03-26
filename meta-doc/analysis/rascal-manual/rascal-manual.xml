@@ -453,7 +453,8 @@ coding voorbeelden leesbaarder (en de library consistenter).-->
       (<keysym>bool</keysym>), infinite precision integers
       (<keysym>int</keysym>) and reals (<keysym>real</keysym>) to strings
       (<keysym>str</keysym>) that can act as templates with embedded
-      expressions and statements. From source code locations
+      expressions and statements. Reals and strings included in a number type
+      (<keysym>num</keysym>). From source code locations
       (<keysym>loc</keysym>) based on an extension of Universal Resource
       Identifiers (URI) that allow precise description of text areas in local
       and remote files to lists (<keysym>list</keysym>), optionally labelled
@@ -546,6 +547,12 @@ coding voorbeelden leesbaarder (en de library consistenter).-->
 
                 <entry><literal>1.0</literal>,
                 <literal>1.0232e20</literal>,<literal> -25.5</literal></entry>
+              </row>
+
+              <row>
+                <entry><literal>num</literal></entry>
+
+                <entry>integers or reals</entry>
               </row>
 
               <row>
@@ -3602,6 +3609,14 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
         <literal>real</literal> and are written as usual, e.g.,
         <literal>1.5</literal>, or <literal>3.14e-123.</literal> They can have
         arbitrary size and precision.</para>
+      </section>
+
+      <section>
+        <title>Number</title>
+
+        <para>The number values are represented by the type
+        <literal>num</literal>. A number value is either an integer or a real
+        value.</para>
       </section>
 
       <section xml:id="section.string">
@@ -7655,11 +7670,6 @@ rascal&gt;</prompt> <userinput>solve (T) {
       </listitem>
 
       <listitem>
-        <para>Integer: operators and functions on integers, see <xref
-        linkend="section.lib-Integer" />.</para>
-      </listitem>
-
-      <listitem>
         <para>IO: simple print functions, see <xref
         linkend="section.lib-IO" />.</para>
       </listitem>
@@ -7695,13 +7705,13 @@ rascal&gt;</prompt> <userinput>solve (T) {
       </listitem>
 
       <listitem>
-        <para>PriorityQueu: functions on priority queues, see <xref
-        linkend="section.lib-PriorityQueue" />.</para>
+        <para>Number: operators and functions on numbers, including integers
+        and reals, <xref linkend="section.lib-Number" />.</para>
       </listitem>
 
       <listitem>
-        <para>Real: operators and functions on reals, see <xref
-        linkend="section.lib-Real" />.</para>
+        <para>PriorityQueu: functions on priority queues, see <xref
+        linkend="section.lib-PriorityQueue" />.</para>
       </listitem>
 
       <listitem>
@@ -8296,229 +8306,6 @@ rascal&gt;</prompt> <userinput>solve (T) {
 
 <literal>rascal&gt; </literal><userinput><literal>reachX({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;, &lt;3,4&gt;}, {1}, {2})</literal>;</userinput>
 <computeroutput>set[int,int] : {3, 4}</computeroutput></screen></para>
-    </section>
-
-    <section xml:id="section.lib-Integer">
-      <title>Integer</title>
-
-      <para>Rascal integers are unbounded in size.</para>
-
-      <table>
-        <title>Integer Operators</title>
-
-        <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="1*" />
-
-          <colspec align="left" colname="col2" colwidth="3*" />
-
-          <thead>
-            <row>
-              <entry>Operator</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>==</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>Yields <literal>true</literal> if both arguments are
-              numerically equal and <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>!=</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>Yields <literal>true</literal> if both arguments are
-              numerically unequal and <literal>false</literal>
-              otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>&lt;=</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>Yields <literal>true</literal> if
-              <replaceable>Int</replaceable><subscript>1</subscript> is
-              numerically less than or equal to
-              <replaceable>Int</replaceable><subscript>2</subscript> and
-              <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>&lt;</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>Yields <literal>true</literal> if
-              <replaceable>Int</replaceable><subscript>1</subscript> is
-              numerically less than
-              <replaceable>Int</replaceable><subscript>2</subscript> and
-              <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>&gt;=</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>Yields <literal>true</literal> if
-              <replaceable>Int</replaceable><subscript>1</subscript> is
-              numerically greater than or equal than
-              <replaceable>Int</replaceable><subscript>2</subscript> and
-              <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>&gt;</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>Yields <literal>true</literal> if
-              <replaceable>Int</replaceable><subscript>1</subscript> is
-              numerically greater than
-              <replaceable>Int</replaceable><subscript>2</subscript> and
-              <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>+</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>Sum of
-              <replaceable>Int</replaceable><subscript>1</subscript> and
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>-</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>Difference of
-              <replaceable>Int</replaceable><subscript>1</subscript> and
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>*</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              multiplied by
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>/</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              divided by
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>%</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>Remainder of dividing
-              <replaceable>Int</replaceable><subscript>1</subscript> by
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry>- <replaceable>Int</replaceable></entry>
-
-              <entry>Negate sign of <replaceable>Int</replaceable></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Bool</replaceable> <literal>?</literal>
-              <replaceable>Int</replaceable><subscript>1</subscript>
-              <literal>:</literal>
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-
-              <entry>If <replaceable>Bool</replaceable> is true then
-              <replaceable>Int</replaceable><subscript>1</subscript> else
-              <replaceable>Int</replaceable><subscript>2</subscript></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      <table>
-        <title>Integer Functions</title>
-
-        <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="2*" />
-
-          <colspec align="left" colname="col2" colwidth="3*" />
-
-          <thead>
-            <row>
-              <entry>Function</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><literal>int abs(int N)</literal></entry>
-
-              <entry>Absolute value of integer N</entry>
-            </row>
-
-            <row>
-              <entry><literal>int arbInt()</literal></entry>
-
-              <entry>Arbitrary integer value</entry>
-            </row>
-
-            <row>
-              <entry><literal>int arbInt(int limit)</literal></entry>
-
-              <entry>Arbitrary integer value in the interval [0,
-              limit)</entry>
-            </row>
-
-            <row>
-              <entry><literal>int max(int n, int m)</literal></entry>
-
-              <entry>Largest of two integers</entry>
-            </row>
-
-            <row>
-              <entry><literal>int min(int n, int m)</literal></entry>
-
-              <entry>Smallest of two integers</entry>
-            </row>
-
-            <row>
-              <entry><literal>real toReal(int n)</literal></entry>
-
-              <entry>Convert an integer value to a real value</entry>
-            </row>
-
-            <row>
-              <entry><literal>str toString(int n)</literal></entry>
-
-              <entry>Convert an integer value to a string</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
     </section>
 
     <section xml:id="section.lib-IO">
@@ -9925,6 +9712,258 @@ BindingRel unmatchedBindings;
         </table></para>
     </section>
 
+    <section xml:id="section.lib-Number">
+      <title>Number</title>
+
+      <para>Rascal numbers include integers and reals. The operators on number
+      are described below. If both operands have the same type (integer or
+      real) then the operator is the corresponding operator on integers or
+      reals. Otherwise, integer arguments are first converted to real and the
+      real operator is applied.</para>
+
+      <table>
+        <title>Number Operators</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="1*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Operator</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if both arguments are
+              numerically equal and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if both arguments are
+              numerically unequal and <literal>false</literal>
+              otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if
+              <replaceable>Num</replaceable><subscript>1</subscript> is
+              numerically less than or equal to
+              <replaceable>Num</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if
+              <replaceable>Num</replaceable><subscript>1</subscript> is
+              numerically less than
+              <replaceable>Num</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if
+              <replaceable>Num</replaceable><subscript>1</subscript> is
+              numerically greater than or equal than
+              <replaceable>Num</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>&gt;</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if
+              <replaceable>Num</replaceable><subscript>1</subscript> is
+              numerically greater than
+              <replaceable>Num</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>+</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>Sum of
+              <replaceable>Num</replaceable><subscript>1</subscript> and
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>-</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>Difference of
+              <replaceable>Num</replaceable><subscript>1</subscript> and
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>*</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              multiplied by
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>/</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              divided by
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>%</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>Remainder of dividing
+              <replaceable>Num</replaceable><subscript>1</subscript> by
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry>- <replaceable>Num</replaceable></entry>
+
+              <entry>Negate sign of <replaceable>Num</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Bool</replaceable> <literal>?</literal>
+              <replaceable>Num</replaceable><subscript>1</subscript>
+              <literal>:</literal>
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+
+              <entry>If <replaceable>Bool</replaceable> is true then
+              <replaceable>Num</replaceable><subscript>1</subscript> else
+              <replaceable>Num</replaceable><subscript>2</subscript></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Number Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="2*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>&amp;T &lt;: num abs(&amp;T &lt;: num
+              N)</literal></entry>
+
+              <entry>Absolute value of number N, result type is type of
+              argument</entry>
+            </row>
+
+            <row>
+              <entry><literal>int arbInt()</literal></entry>
+
+              <entry>Arbitrary integer value</entry>
+            </row>
+
+            <row>
+              <entry><literal>int arbInt(int limit)</literal></entry>
+
+              <entry>Arbitrary integer value in the interval [0,
+              limit)</entry>
+            </row>
+
+            <row>
+              <entry><literal>real arbReal()</literal></entry>
+
+              <entry>Arbitrary real value in the interval [0.0,1.0)</entry>
+            </row>
+
+            <row>
+              <entry><literal>&amp;T &lt;: num max(&amp;T &lt;: num n, &amp;T
+              &lt;: num m)</literal></entry>
+
+              <entry>Largest of two numbers, result type is type of
+              argument</entry>
+            </row>
+
+            <row>
+              <entry><literal>&amp;T &lt;: num min(&amp;T &lt;: num n, &amp;T
+              &lt;: num m)</literal></entry>
+
+              <entry>Smallest of two numbers, , result type is type of
+              argument</entry>
+            </row>
+
+            <row>
+              <entry><literal>int toInt(num N)</literal></entry>
+
+              <entry>Convert a number to an integer. If N is an integer, this
+              is the identity. If N is a real value (implemented as
+              BigDecimal) to an integer (implemented as BigInteger). This
+              conversion is analogous to a narrowing primitive conversion from
+              double to long as defined in the Java Language Specification:
+              any fractional part of this BigDecimal will be discarded. Note
+              that this conversion can loose information about the precision
+              of the BigDecimal value.</entry>
+            </row>
+
+            <row>
+              <entry><literal>real toReal(num N)</literal></entry>
+
+              <entry>Convert a number to a real</entry>
+            </row>
+
+            <row>
+              <entry><literal>str toString(num N)</literal></entry>
+
+              <entry>Convert a number to a string</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
     <section xml:id="section.lib-PriorityQueue">
       <title>PriorityQueue</title>
 
@@ -9994,221 +10033,6 @@ BindingRel unmatchedBindings;
             </tbody>
           </tgroup>
         </table></para>
-    </section>
-
-    <section xml:id="section.lib-Real">
-      <title>Real</title>
-
-      <para>Rascal reals are unbounded in size and precision.</para>
-
-      <table>
-        <title>Real Operators</title>
-
-        <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="1*" />
-
-          <colspec align="left" colname="col2" colwidth="3*" />
-
-          <thead>
-            <row>
-              <entry>Operator</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>==</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry><literal>true</literal> if both arguments are numerically
-              equal and <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>!=</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry><literal>true</literal> if both arguments are numerically
-              unequal and <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>&lt;=</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry><literal>true</literal> if
-              <replaceable>Real</replaceable><subscript>1</subscript> is
-              numerically less than or equal to
-              <replaceable>Real</replaceable><subscript>2</subscript> and
-              <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>&lt;</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry><literal>true</literal> if
-              <replaceable>Real</replaceable><subscript>1</subscript> is
-              numerically less than
-              <replaceable>Real</replaceable><subscript>2</subscript> and
-              <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>&gt;=</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry><literal>true</literal> if
-              <replaceable>Real</replaceable><subscript>1</subscript> is
-              numerically greater than or equal than
-              <replaceable>Real</replaceable><subscript>2</subscript> and
-              <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>&gt;</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry><literal>true</literal> if
-              <replaceable>Real</replaceable><subscript>1</subscript> is
-              numerically greater than
-              <replaceable>Real</replaceable><subscript>2</subscript> and
-              <literal>false</literal> otherwise</entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>+</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry>Sum of
-              <replaceable>Real</replaceable><subscript>1</subscript> and
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>-</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry>Difference of
-              <replaceable>Real</replaceable><subscript>1</subscript> and
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>*</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              multiplied by
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>/</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              divided by
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry>- <replaceable>Real</replaceable></entry>
-
-              <entry>Negate sign of <replaceable>Real</replaceable></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>%</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry>Remainder of dividing
-              <replaceable>Real</replaceable><subscript>1</subscript> by
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry><replaceable>Bool</replaceable> <literal>?</literal>
-              <replaceable>Real</replaceable><subscript>1</subscript>
-              <literal>:</literal>
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-
-              <entry>If <replaceable>Bool</replaceable> is true then
-              <replaceable>Real</replaceable><subscript>1</subscript> else
-              <replaceable>Real</replaceable><subscript>2</subscript></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      <table>
-        <title>Real Functions</title>
-
-        <tgroup cols="2">
-          <colspec align="left" colname="col1" colwidth="2*" />
-
-          <colspec align="left" colname="col2" colwidth="3*" />
-
-          <thead>
-            <row>
-              <entry>Function</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><literal>real arbReal()</literal></entry>
-
-              <entry>Arbitrary real value in the interval [0.0,1.0).</entry>
-            </row>
-
-            <row>
-              <entry><literal>real max(real n, real m)</literal></entry>
-
-              <entry>Largest of two reals</entry>
-            </row>
-
-            <row>
-              <entry><literal>real min(real n, real m)</literal></entry>
-
-              <entry>Smallest of two reals</entry>
-            </row>
-
-            <row>
-              <entry><literal>int toInt(real d)</literal></entry>
-
-              <entry>Converts this real (implemented as BigDecimal) to an
-              integer (implemented as BigInteger). This conversion is
-              analogous to a narrowing primitive conversion from double to
-              long as defined in the Java Language Specification: any
-              fractional part of this BigDecimal will be discarded. Note that
-              this conversion can lose information about the precision of the
-              BigDecimal value.</entry>
-            </row>
-
-            <row>
-              <entry><literal>str toString(real d)</literal></entry>
-
-              <entry>Convert a real to a string.</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
     </section>
 
     <section xml:id="section.lib-Relation">
@@ -11767,29 +11591,23 @@ str contents = readFile(|project://myProject/src/Main.java|);</programlisting>
 
 data FProperty =
 /* sizes */
-     width(real width)          // set width of element
-   | width(int iwidth)
+     width(num width)           // set width of element
    | height(real height)        // set height of element
-   | height(int iheight)
-   | size(real size)            // set width/height to same value
-   | size(int isize)
-   | size(real hor, real vert)  // set width and height to separate 
+   | size(num size)             // set width/height to same value
+   | size(num hor, num vert)    // set width and height to separate 
                                 // values
-   | size(int ihor, int ivert)
-   | gap(real amount)           // set hor/vert gap between 
+   | gap(num amount)            // set hor/vert gap between 
                                 // elements in composition to 
                                 // same value
-   | gap(int iamount)
-   | gap(real hor, real vert)   // set hor/vert gap between 
+   | gap(num hor, num vert)     // set hor/vert gap between 
                                 // elements in composition to 
                                 // separate values
-   | gap(int ihor, int ivert)
    
 /* alignment */
-   | anchor(real h, real v)     // horizontal (0=left; 1=right) &amp; 
+   | anchor(num h, num v)       // horizontal (0=left; 1=right) &amp; 
                                 // vertical anchor (0=top,1=bottom)
-   | hanchor(real h)
-   | vanchor(real v)
+   | hanchor(num h)
+   | vanchor(num v)
    
 /* line and border properties */
    | lineWidth(int lineWidth)   // line width
@@ -11800,21 +11618,16 @@ data FProperty =
    | fillColor(str colorName)   // named fill color
    
 /* wedge properties */
-   | fromAngle(real angle)
-   | fromAngle(int iangle)
-   | toAngle(real angle)
-   | toAngle(int iangle)
-   | innerRadius(real radius)
-   | innerRadius(int iradius)
-
+   | fromAngle(num angle)
+   | toAngle(num angle)
+   | innerRadius(num radius)
    
 /* font and text properties */
    | font(str fontName)         // named font
    | fontSize(int isize)        // font size
    | fontColor(Color textColor) // font color
    | fontColor(str colorName)
-   | textAngle(real angle)      // text rotation
-   | textAngle(int iangle) 
+   | textAngle(num angle)       // text rotation 
    
 /* (Still experimental) interaction properties */
    | mouseOver(FProperties props)
@@ -11907,14 +11720,14 @@ data Figure =
    
 /* transformation */
 
-   | rotate(real angle, Figure elem)         // Rotate element 
-                                             // around anchor point
-   | scale(real perc, Figure)                // Scale element 
-                                             // (same for h and v)
-   | scale(real xperc, real yperc, Figure elem)
-                                             // Scale element 
-                                             // (different for 
-                                             // h and v)
+   | rotate(num angle, Figure elem)           // Rotate element 
+                                              // around anchor point
+   | scale(num perc, Figure)                  // Scale element 
+                                              // (same for h and v)
+   | scale(num xperc, num yperc, Figure elem)
+                                              // Scale element 
+                                              // (different for 
+                                              // h and v)
    ;
 </programlisting><table>
             <title>viz::Figure::Core Functions</title>
@@ -11941,21 +11754,21 @@ data Figure =
                 </row>
 
                 <row>
-                  <entry><literal>public Color gray(int gray, real
+                  <entry><literal>public Color gray(int gray, num
                   alpha)</literal></entry>
 
                   <entry>Gray value (0-255) with transparency (0-100%)</entry>
                 </row>
 
                 <row>
-                  <entry><literal>public Color gray(real
+                  <entry><literal>public Color gray(num
                   perc)</literal></entry>
 
                   <entry>Gray value (0-100%)</entry>
                 </row>
 
                 <row>
-                  <entry><literal>public Color gray(real perc, real
+                  <entry><literal>public Color gray(num perc, num
                   alpha)</literal></entry>
 
                   <entry>Gray value (0-100%) with transparency
@@ -11972,7 +11785,7 @@ data Figure =
                 </row>
 
                 <row>
-                  <entry><literal>public Color color(str colorName, real
+                  <entry><literal>public Color color(str colorName, num
                   alpha)</literal></entry>
 
                   <entry>Named color with transparency (0-100%)</entry>
@@ -11987,7 +11800,7 @@ data Figure =
                 </row>
 
                 <row>
-                  <entry><literal>public Color rgb(int r, int g, int b, real
+                  <entry><literal>public Color rgb(int r, int g, int b, num
                   alpha)</literal></entry>
 
                   <entry>RGB color with transparency</entry>
@@ -11995,7 +11808,7 @@ data Figure =
 
                 <row>
                   <entry><literal>public list[Color] interpolateColor(Color
-                  from, Color to, real percentage)</literal></entry>
+                  from, Color to, num percentage)</literal></entry>
 
                   <entry>Interpolate between two colors (in RGB space)</entry>
                 </row>
@@ -12015,7 +11828,7 @@ data Figure =
                 </row>
 
                 <row>
-                  <entry><literal>public Color(real) colorScale(list[real]
+                  <entry><literal>public Color(num) colorScale(list[num]
                   values, Color from, Color to)</literal></entry>
 
                   <entry>Interpolate between two colors (in RGB space)</entry>
@@ -12068,19 +11881,17 @@ data Figure =
       <section xml:id="section.lib-vizChart">
         <title>viz::Figure::Chart</title>
 
-        <para>These functions provide chart drawing facilities and are based
-        on JFreeChart. In the Eclipse context the module embeds the charts in
-        an Eclipse window, while the commandline version will show a popup
-        window. Different charts need their input data in different formats
-        that can be summarized as follows:</para>
+        <para>These functions provide chart drawing facilities. In the Eclipse
+        context the module embeds the charts in an Eclipse window, while the
+        commandline version will show a popup window. Different charts need
+        their input data in different formats that can be summarized as
+        follows:</para>
 
-        <para><programlisting>// A named series of int or real values
+        <para><programlisting>// A named series of numbers
 
-public alias intTuples  = 
-       tuple[str name,list[tuple[int, int]]  values];
-
-public alias intSeries  = 
-       tuple[str name,list[int]  values];</programlisting></para>
+public alias numTuples  = 
+       tuple[str name,list[tuple[num, num]]  values];
+</programlisting></para>
 
         <para>All chart drawing functions take as arguments:</para>
 
@@ -12122,67 +11933,42 @@ public alias intSeries  =
 
               <tbody>
                 <row>
-                  <entry><literal>public void barChart(str title, map[str,int]
+                  <entry><literal>public void barChart(str title, map[str,num]
                   facts, ChartSetting settings...)</literal></entry>
 
-                  <entry>Draw a bar chart for integers</entry>
-                </row>
-
-                <row>
-                  <entry><literal>public void barChart(str title,
-                  map[str,real] facts, ChartSetting
-                  settings...)</literal></entry>
-
-                  <entry>Draw a bar chart for reals (not yet
-                  implemented)</entry>
+                  <entry>Draw a bar chart for numbers</entry>
                 </row>
 
                 <row>
                   <entry><literal>public void barChart(str title, list[str]
-                  categories, list[intSeries] facts, ChartSetting
+                  categories, list[numSeries] facts, ChartSetting
                   settings...)</literal></entry>
 
                   <entry>Draw a bar chart for multiple series of
-                  integers</entry>
+                  numbers</entry>
                 </row>
 
                 <row>
                   <entry><literal>public void barChart(str title, list[str]
-                  categories, list[realSeries] facts, ChartSetting
+                  categories, list[numSeries] facts, ChartSetting
                   settings...)</literal></entry>
 
-                  <entry>Draw a bar chart for multiple series of reals (not
-                  yet implemented)</entry>
-                </row>
-
-                <row>
-                  <entry><literal>public void pieChart(str title, map[str,
-                  int] facts, ChartSetting settings...)</literal></entry>
-
-                  <entry>Draw a pieChart for integers</entry>
-                </row>
-
-                <row>
-                  <entry><literal>public void pieChart(str title, map[str,
-                  real] facts, ChartSetting settings...)</literal></entry>
-
-                  <entry>Draw a pieChart for reals (not yet
+                  <entry>Draw a bar chart for multiple series of nums (not yet
                   implemented)</entry>
                 </row>
 
                 <row>
-                  <entry><literal>public void xyChart(str title,
-                  list[intSeries], ChartSetting settings...)</literal></entry>
+                  <entry><literal>public void pieChart(str title, map[str,
+                  number] facts, ChartSetting settings...)</literal></entry>
 
-                  <entry>Draw an xyChart for integers</entry>
+                  <entry>Draw a pieChart for numbers</entry>
                 </row>
 
                 <row>
                   <entry><literal>public void xyChart(str title,
-                  list[realSeries], ChartSetting
-                  settings...)</literal></entry>
+                  list[numSeries], ChartSetting settings...)</literal></entry>
 
-                  <entry>Draw an xyChart for reals</entry>
+                  <entry>Draw an xyChart for numbers</entry>
                 </row>
               </tbody>
             </tgroup>
@@ -12263,7 +12049,7 @@ public alias intSeries  =
 
         <para><programlisting>data ChartSetting =       
    | areaPlot()              
-   | chartSize(int w, int h)
+   | chartSize(num w, num h)
    | curvePlot ()
    | horizontal()
    | linePlot()
@@ -12560,9 +12346,8 @@ ok</computeroutput>
 
             <entry>Negation</entry>
 
-            <entry><xref linkend="section.lib-Integer"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
-            xrefstyle="template:%t" /></entry>
+            <entry><xref linkend="section.lib-Number"
+            xrefstyle="template:%t" />, </entry>
           </row>
 
           <row>
@@ -12632,8 +12417,7 @@ ok</computeroutput>
 
             <entry>Division</entry>
 
-            <entry><xref linkend="section.lib-Integer"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            <entry><xref linkend="section.lib-Number"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -12644,8 +12428,7 @@ ok</computeroutput>
 
             <entry>Modulo</entry>
 
-            <entry><xref linkend="section.lib-Integer"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            <entry><xref linkend="section.lib-Number"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -12656,9 +12439,8 @@ ok</computeroutput>
 
             <entry>Multiplication/product</entry>
 
-            <entry><xref linkend="section.lib-Integer"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" /></entry>
           </row>
@@ -12681,10 +12463,9 @@ ok</computeroutput>
 
             <entry>Addition/concatenation/union</entry>
 
-            <entry><xref linkend="section.lib-Integer"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" />, <xref linkend="section.lib-String"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
@@ -12698,10 +12479,9 @@ ok</computeroutput>
 
             <entry>Subtraction/difference</entry>
 
-            <entry><xref linkend="section.lib-Integer"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            <entry><xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" /></entry>
           </row>
@@ -12754,12 +12534,11 @@ ok</computeroutput>
 
             <entry><xref linkend="section.expressions-boolean"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
             xrefstyle="template:%t" />, <xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />,<xref linkend="section.lib-Set"
             xrefstyle="template:%t" />, <xref linkend="section.lib-String"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
@@ -12776,12 +12555,11 @@ ok</computeroutput>
 
             <entry><xref linkend="section.expressions-boolean"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
             xrefstyle="template:%t" />, <xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" />, <xref linkend="section.lib-String"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
@@ -12798,12 +12576,11 @@ ok</computeroutput>
 
             <entry><xref linkend="section.expressions-boolean"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
             xrefstyle="template:%t" />, <xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" />, <xref linkend="section.lib-String"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
@@ -12820,12 +12597,11 @@ ok</computeroutput>
 
             <entry><xref linkend="section.expressions-boolean"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
+            xrefstyle="template:%t" />,<xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xreflabel="" xrefstyle="template:%t" />, <xref
             linkend="section.lib-Set" xrefstyle="template:%t" />, <xref
             linkend="section.lib-String" xrefstyle="template:%t" />, <xref
@@ -12862,12 +12638,11 @@ ok</computeroutput>
 
             <entry><xref linkend="section.expressions-boolean"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
             xrefstyle="template:%t" />, <xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" />, <xref linkend="section.lib-String"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
@@ -12884,15 +12659,14 @@ ok</computeroutput>
 
             <entry><xref linkend="section.expressions-boolean"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
             xrefstyle="template:%t" />, <xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Location"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xreflabel="" xrefstyle="template:%t" />, <xref
             linkend="section.lib-Set" xrefstyle="template:%t" />, <xref
-            linkend="section.lib-String" xrefstyle="template:%t" />,<xref
+            linkend="section.lib-String" xrefstyle="template:%t" />, <xref
             linkend="section.lib-Tuple" xrefstyle="template:%t" />, <xref
             linkend="section.lib-Value" xrefstyle="template:%t" /></entry>
           </row>
@@ -12919,11 +12693,10 @@ ok</computeroutput>
 
             <entry><xref linkend="section.expressions-boolean"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
             xrefstyle="template:%t" />, <xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Node"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" />, <xref linkend="section.lib-String"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Tuple"
@@ -13008,7 +12781,7 @@ ok</computeroutput>
           <row>
             <entry><literal>abs</literal></entry>
 
-            <entry><xref linkend="section.lib-Integer"
+            <entry><xref linkend="section.lib-Number"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -13022,14 +12795,14 @@ ok</computeroutput>
           <row>
             <entry><literal>arbInt</literal></entry>
 
-            <entry><xref linkend="section.lib-Integer"
+            <entry><xref linkend="section.lib-Number"
             xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
             <entry><literal>arbReal</literal></entry>
 
-            <entry><xref linkend="section.lib-Real"
+            <entry><xref linkend="section.lib-Number"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -13343,9 +13116,8 @@ ok</computeroutput>
           <row>
             <entry><literal>max</literal></entry>
 
-            <entry><xref linkend="section.lib-Integer"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" /></entry>
           </row>
@@ -13353,9 +13125,8 @@ ok</computeroutput>
           <row>
             <entry><literal>min</literal></entry>
 
-            <entry><xref linkend="section.lib-Integer" xreflabel=""
-            xrefstyle="template:%t" />, <xref linkend="section.lib-List"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            <entry><xref linkend="section.lib-List"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" /></entry>
           </row>
@@ -13645,18 +13416,19 @@ ok</computeroutput>
           </row>
 
           <row>
-            <entry><literal>toReal</literal></entry>
+            <entry><literal>toInt</literal></entry>
 
-            <entry><xref linkend="section.lib-String"
+            <entry><xref linkend="section.lib-Boolean"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
+            xrefstyle="template:%t" />,<xref linkend="section.lib-String"
             xrefstyle="template:%t" /></entry>
           </row>
 
           <row>
-            <entry><literal>toInt</literal></entry>
+            <entry><literal>toReal</literal></entry>
 
-            <entry><xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
-            xrefstyle="template:%t" />,<xref linkend="section.lib-String"
+            <entry><xref linkend="section.lib-Number"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-String"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -13703,7 +13475,7 @@ ok</computeroutput>
             <entry><literal>toReal</literal></entry>
 
             <entry><xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" /></entry>
           </row>
 
@@ -13725,10 +13497,9 @@ ok</computeroutput>
             <entry><literal>toString</literal></entry>
 
             <entry><xref linkend="section.lib-Boolean"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Integer"
             xrefstyle="template:%t" />, <xref linkend="section.lib-List"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Map"
-            xrefstyle="template:%t" />, <xref linkend="section.lib-Real"
+            xrefstyle="template:%t" />, <xref linkend="section.lib-Number"
             xrefstyle="template:%t" />, <xref linkend="section.lib-Set"
             xrefstyle="template:%t" /></entry>
           </row>
