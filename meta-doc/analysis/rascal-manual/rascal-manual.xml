@@ -66,13 +66,14 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="easy-workflow.png" scale="50"></imagedata>
+              <imagedata align="center" fileref="easy-workflow.png" scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
 
       <para>This is an abstract view on solving meta-programming problems, but
-      is it uncommon? No, so let's illustrate it with a few examples.</para>
+      it has wide applicability. Let's illustrate it with a few
+      examples.</para>
 
       <para><example>
           <title>Finding security breaches</title>
@@ -82,7 +83,7 @@
           system. The objects-of-interest are the system's log files. First
           relevant entries are extracted. This will include, for instance,
           messages from the SecureShell demon that reports failed login
-          attempts. From each entry login name and originating IP address are
+          attempts. From each entry, login name and originating IP address are
           extracted and put in a table (the internal representation in this
           example). These data are analyzed by detecting duplicates and
           counting frequencies. Finally results are synthesized by listing the
@@ -95,13 +96,14 @@
           of the German government. His daily work is to find common patterns
           in files stored on digital media that have been confiscated during
           criminal investigations. Text, audio and video files are stored in
-          zillions of different data formats and each data format requires its
-          own analysis technique. For each new investigation ad hoc
-          combinations of tools are used. This makes the process very
-          labour-intensive and error-prone. Bernd convinces his manager that
-          designing a new domain-specific language (DSL) for forensic
-          investigations may relieve the pressure on their lab. After
-          designing the DSL---let's call it DERRICK---he makes an EASY
+          many different data formats and each data format requires its own
+          analysis technique. For each new investigation, ad hoc combinations
+          of tools are used. This makes the process very labour-intensive and
+          error-prone. Bernd convinces his manager that designing a new
+          domain-specific language (DSL) for forensic investigations may
+          relieve the pressure on their lab. The DSL should at least be able
+          to define multiple data formats and generate recognizers for them.
+          After designing the DSL---let's call it DERRICK---he makes an EASY
           implementation for it. Given a DERRICK program for a specific case
           under investigation, he first extracts relevant information from it
           and analyzes it: which media formats are relevant? Which patterns to
@@ -154,15 +156,14 @@
           Programming these multi-core chips is difficult and many programs
           that worked fine on a single CPU contain hard to detect concurrency
           errors due to subtle differences in the order of execution that
-          results from executing the code on more than one CPU. Here is where
-          Daniel enters the picture. He is working on tools for finding
-          concurrency errors. First he extracts facts from the code that are
-          relevant for concurrency problems and have to do with calls,
-          threads, shared variables and locks. Next, he analyzes these facts
-          and synthesizes an abstract model that captures the essentials of
-          the concurrency behaviour of the program. Finally he runs a
-          third-party verification tool with this model as input to do the
-          actual verification.</para>
+          results from executing the code on more than one CPU. He is working
+          on tools for finding concurrency errors. First he extracts facts
+          from the code that are relevant for concurrency problems and have to
+          do with calls, threads, shared variables and locks. Next, he
+          analyzes these facts and synthesizes an abstract model that captures
+          the essentials of the concurrency behaviour of the program. Finally
+          he runs a third-party verification tool with this model as input to
+          do the actual verification.</para>
         </example><example>
           <title>Model driven engineering</title>
 
@@ -226,7 +227,8 @@
           most errors before the program is executed and by making common
           errors like missing initializations or invalid pointers
           impossible.<remark> At the time of writing, this checking is done
-          during execution.</remark></para>
+          during execution but a static typechecker is near
+          completion.</remark></para>
         </listitem>
 
         <listitem>
@@ -286,8 +288,8 @@
         comprehensive overview of the Rascal language and to offer problem
         solving strategies to handle realistic problems that require
         meta-programming. Problems may range from security analysis and model
-        extraction to software renovation, domain-specific languages and code
-        generation.</para>
+        extraction to software renovation, domain-specific language
+        development and code generation.</para>
       </formalpara>
 
       <formalpara>
@@ -321,8 +323,9 @@
     <section>
       <title>Installing and Running Rascal</title>
 
-      <para>See http://www.meta-environment.org/Meta-Environment/Rascal for
-      information.</para>
+      <para>See <link
+      xlink:href="http://www.rascal-mpl.org/">http://www.rascal-mpl.org/</link>
+      for information.</para>
     </section>
 
     <section>
@@ -384,7 +387,7 @@
 
       <para>Rascal code fragments are always shown as a listing like
       this:<programlisting>  .. here is some Rascal code ...</programlisting>Interactive
-      sessions are show as a screen like this:<!--Make a more clear typographic distinction between lsitings and screens--><screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
+      sessions are shown as a screen like this:<!--Make a more clear typographic distinction between lsitings and screens--><screen><prompt>rascal&gt;</prompt> <userinput><replaceable>Command</replaceable>;</userinput>
 <computeroutput><replaceable>Type</replaceable>: <replaceable>Value</replaceable></computeroutput></screen>where:</para>
 
       <itemizedlist>
@@ -434,10 +437,10 @@ coding voorbeelden leesbaarder (en de library consistenter).-->
       values determines how they may be used.</para>
 
       <para>Rascal is a value-oriented language. This means that values are
-      immutable and are always freshly constructed from existing parts and
-      that sharing and aliasing problems are completely avoided. The language
-      also provides variables. A value can be associated with a variable as
-      the result of an explicit assignment statement: during the lifetime of a
+      immutable and are always freshly constructed from existing parts;
+      sharing and aliasing problems are completely avoided. The language also
+      provides variables. A value can be associated with a variable as the
+      result of an explicit assignment statement: during the lifetime of a
       variable different (immutable) values may be assignment to it. Other
       ways to associate a value with a variable is by way of function calls
       (binding of formal parameters to actual values) and as the result of a
@@ -445,12 +448,12 @@ coding voorbeelden leesbaarder (en de library consistenter).-->
     </section>
 
     <section>
-      <title>Data structures</title>
+      <title>Data Types</title>
 
       <!--Kan dit nog iets beter?-->
 
       <para>Rascal provides a rich set of datatypes. From Booleans
-      (<keysym>bool</keysym>), infinite precision integers
+      (<keysym>bool</keysym>), arbitrary precision integers
       (<keysym>int</keysym>) and reals (<keysym>real</keysym>) to strings
       (<keysym>str</keysym>) that can act as templates with embedded
       expressions and statements. Reals and strings included in a number type
@@ -465,7 +468,12 @@ coding voorbeelden leesbaarder (en de library consistenter).-->
       are the result of parsing source files are represented as datatypes
       (<keysym>Tree</keysym>). There is a wealth of built-in operators and
       library functions available on the standard datatypes. The basic Rascal
-      datatypes are illustrated in <xref linkend="table.types" />.</para>
+      datatypes are illustrated in <xref linkend="table.types" />. Some types
+      have another type as argument, for instance,
+      <literal>list[int]</literal> denotes a list of integers. In the table,
+      <firstterm>T</firstterm>,
+      <replaceable>T</replaceable><subscript>i</subscript> and
+      <replaceable>U</replaceable> denote such type arguments.</para>
 
       <para>These builtin datatypes are closely related to each other:</para>
 
@@ -485,19 +493,19 @@ coding voorbeelden leesbaarder (en de library consistenter).-->
         </listitem>
 
         <listitem>
-          <para>In a tuple alle elements (may) have a different static type.
+          <para>In a tuple all elements (may) have a different static type.
           Each element of a tuple may have a label that can be used to select
           that element of the tuple.</para>
         </listitem>
 
         <listitem>
-          <para>A relation is a set of tuples which all have the same static
+          <para>A relation is a set of tuples that all have the same static
           tuple type.</para>
         </listitem>
 
         <listitem>
-          <para>A map is an asosciative table of (key, value) pairs. Key and
-          value (may) have different static type and a key can only be
+          <para>A map is an associative table of (key, value) pairs. Key and
+          value (may) have different static types and a key can only be
           associated with a value once</para>
         </listitem>
       </itemizedlist>
@@ -619,7 +627,7 @@ coding voorbeelden leesbaarder (en de library consistenter).-->
         </table></para>
     </section>
 
-    <section>
+    <section xml:id="section.pattern-matching">
       <title>Pattern Matching</title>
 
       <para>Pattern matching determines whether a given pattern matches a
@@ -669,16 +677,23 @@ coding voorbeelden leesbaarder (en de library consistenter).-->
       abstract syntax of a while statement defined earlier: <programlisting>whileStat(EXP Exp, list[STAT] Stats)</programlisting></para>
 
       <para>Variables in a pattern are either explicitly declared in the
-      pattern itself---as done in the example---or they may be declared in the
-      context in which the pattern occurs. So-called
-      <emphasis>multi-variables</emphasis> in list and set patterns are
-      declared by a <literal>*</literal> suffix: <literal>X*</literal> is thus
-      an abbreviation for <literal>list[...] X</literal> or <literal>set[...]
-      X</literal>, where the precise element type depends on the context. The
-      above pattern can then be written as</para>
+      pattern itself---as done in the example, e.g., <literal>EXP
+      Exp</literal> declares the variable <literal>Exp</literal> and
+      <literal>list[STAT] Stats</literal> declares the variable
+      <literal>Stats</literal>----or they may be declared in the context in
+      which the pattern occurs. So-called <emphasis>multi-variables</emphasis>
+      in list and set patterns are declared by a <literal>*</literal> suffix:
+      <literal>X*</literal> is thus an abbreviation for <literal>list[...]
+      X</literal> or <literal>set[...] X</literal>, where the precise element
+      type depends on the context. The above pattern can then be written
+      as</para>
 
-      <para><programlisting>whileStat(EXP Exp, Stats*)</programlisting>or, if
-      you are not interested in the actual value of the statements as</para>
+      <para><programlisting>whileStat(EXP Exp, Stats*)</programlisting>where
+      <literal>Stats*</literal> is an abbreviation for the declaration
+      <literal>list[STAT] Stats</literal>. The choice whether
+      <literal>Stats</literal> is a list or a set depends on the context. If
+      you are not interested in the actual value of the statements the pattern
+      can be written as</para>
 
       <para><programlisting>whileStat(EXP Exp, _*)</programlisting></para>
 
@@ -709,8 +724,12 @@ int x &lt;- [ 1 .. 10 ]
       <literal>P</literal> (that is assumed to have a
       <literal>PROGRAM</literal> as value) and only yields statements that
       match the assignment pattern (<literal>asgStat</literal>) we have seen
-      earlier. Note the use of an anonymous variable at the
-      <literal>EXP</literal> position in the pattern.</para>
+      earlier. The descendant operator is part of the pattern and has as
+      effect that the pattern is not only tried at the root of the subject to
+      which it is applied (in this case <literal>P</literal>) but also to all
+      its descendants, e.g., subtrees, list elements, and the like. Note the
+      use of an anonymous variable at the <literal>EXP</literal> position in
+      the pattern.</para>
     </section>
 
     <section>
@@ -745,7 +764,7 @@ int x &lt;- [ 1 .. 10 ]
       <title>Control structures</title>
 
       <para>Control structures like <literal>if</literal> and
-      <literal>while</literal> statement are driven by Boolean expressions,
+      <literal>while</literal> statements are driven by Boolean expressions,
       for instance<programlisting>if(N &lt;= 0)
      return 1; 
   else
@@ -770,41 +789,46 @@ for(/asgStat(Id name, _) &lt;- P, size(name) &gt; 10){
 
       <para>The switch statement as known from C and Java is generalized: the
       subject value to switch on may be an arbitrary value and the cases are
-      arbitrary patterns followed by a statement. Each case is comparable to a
-      <emphasis>transaction</emphasis>: when the pattern succeeds and the
-      following statement is executed successfully, all changes to variables
-      made by the statement are <emphasis>committed</emphasis> and thus become
-      permanent. The variables bound by the pattern are always local to the
-      statement associated with the case. When a match fails or when the
-      associated statement fails, a <emphasis>rollback</emphasis> takes place
-      and all side-effects are undone. External side-effects like I/O and
-      side-effects in user-defined Java code are not undone. Here is an
-      example where we take a program P and distinguish two cases for while
-      and if statement:<programlisting>switch (P){
+      arbitrary patterns followed by a statement. Here is an example where we
+      take a program P and distinguish two cases for while and if
+      statement:<programlisting>switch (P){
 case whileStat(_, _):
      println("A while statement");
 case ifStat(_, _, _):
      println("An if statement");
 }</programlisting></para>
+
+      <para>The switch statement (and related statements like visit) are even
+      more general than their counterpart in languages like C and Java. Each
+      case is comparable to a <emphasis>transaction</emphasis>: when the
+      pattern succeeds and the following statement is executed successfully,
+      all changes to variables made by the statement are
+      <emphasis>committed</emphasis> and thus become permanent. The variables
+      bound by the pattern are always local to the statement associated with
+      the case. When a match fails or when the associated statement fails, a
+      <emphasis>rollback</emphasis> to the execution point just before the
+      case takes place and all side-effects are undone. External side-effects
+      like I/O and side-effects in user-defined Java code are not
+      undone.</para>
     </section>
 
     <section>
       <title>Visiting</title>
 
-      <para>Visiting the elements of a datastructure is one of the most common
-      operations in our domain and the visitor design pattern is a solution
-      known to every software engineer. Given a tree-like datastructure we
-      want to perform an operation on some (or all) nodes of the tree. The
-      purpose of the visitor design pattern is to decouple the logistics of
-      visiting each node from the actual operation on each node. In Rascal the
-      logistics of visiting is completely automated.</para>
+      <para>Visiting the elements of a data structure is one of the most
+      common operations in our domain and the visitor design pattern is a
+      solution known to every software engineer. Given a tree-like data
+      structure we want to perform an operation on some (or all) nodes of the
+      tree. The purpose of the visitor design pattern is to decouple the
+      logistics of visiting each node from the actual operation on each node.
+      In Rascal the logistics of visiting is completely automated.</para>
 
       <para>Visiting is achieved by way of visit expressions that resemble the
-      switch statement. A visit expressions traverses an arbitrarily complex
-      subject value and applies a number of cases to all its subtrees. All the
-      elements of the subject are visited and when one of the cases matches
-      the statements associated with that case are executed. These cases
-      may:</para>
+      switch statement. A visit expression traverses an arbitrarily complex
+      subject value and applies a number of cases (defined in the same way as
+      cases in a switch statement) to all its subtrees. All the elements of
+      the subject are visited and when one of the cases matches the statements
+      associated with that case are executed. These cases may:</para>
 
       <itemizedlist>
         <listitem>
@@ -868,7 +892,9 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
       the second argument of f is an anonymous function.</para>
 
       <para>Rascal is a higher-order language in which functions are
-      first-class values.</para>
+      first-class values. Our motivation to include first-class functions is
+      to provide sufficient mechanisms for writing re-usable analysis and
+      transformation functions.</para>
     </section>
 
     <section>
@@ -882,8 +908,7 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
         <listitem>
           <para><emphasis>Lexical information</emphasis>: Use regular
           expressions to extract useful, but somewhat superficial, flat,
-          information. This can be achieved using regular expression
-          patterns.</para>
+          information.</para>
         </listitem>
 
         <listitem>
@@ -901,7 +926,9 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
       <para>SDF modules define grammars and these modules can be imported in a
       Rascal module. These grammar rules can be applied in writing concrete
       patterns to match parts of parsed source code. Here is an example of the
-      same pattern we saw above, but now in concrete form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
+      same while-pattern we saw in <xref
+      linkend="section.pattern-matching" />, but now in concrete
+      form:<programlisting>while &lt;Exp&gt; do &lt;Stats&gt; od</programlisting></para>
 
       <para>Importing an SDF module has the following effects:</para>
 
@@ -909,18 +936,18 @@ int f(int x, int (int) multi){ return multi(x); }</programlisting></para>
         <listitem>
           <para>All non-terminals (<emphasis>sorts</emphasis> in SDF jargon)
           that are used in the imported grammar are implicitly declared as
-          Rascal types. For each SDF sort <replaceable>S</replaceable> also
+          Rascal types. For each SDF sort <replaceable>S</replaceable>,
           composite symbols like
-          <literal><replaceable>S</replaceable>*</literal>,
+          <literal><replaceable>S</replaceable>*</literal> and
           <literal>{<replaceable>S</replaceable> ","}+</literal> also become
-          available as type. This makes it possible to handle parse trees and
-          parse tree fragments as fully typed values and assign them to
-          variables, store them in larger datastructures or pass them as
-          arguments to functions and use them in pattern matching.</para>
+          available as types. This makes it possible to handle parse trees and
+          parse tree fragments as fully typed values. They can be assigned to
+          variables, can be stored in larger datastructures, can be passed as
+          arguments to functions and can be used in pattern matching.</para>
         </listitem>
 
         <listitem>
-          <para>For all <emphasis>start symbols</emphasis> of the grammar
+          <para>For all <emphasis>start symbols</emphasis> of the grammar,
           <emphasis>parse functions</emphasis> are implicitly declared that
           can parse source files according to a specific start symbol.</para>
         </listitem>
@@ -952,25 +979,27 @@ public int countMethods(loc file){
 
       <para>First observe that importing the Java grammar has as effect that
       non-terminals like <literal>MethodDeclaration</literal> and
-      <literal>CompilationUnit</literal> become available as type in the
+      <literal>CompilationUnit</literal> become available as types in the
       Rascal program.</para>
 
       <para>The implicitly declared function <literal>parse</literal> takes a
-      reified type (<literal>#CompilationUnit</literal>) and a location as
+      reified type (<literal>#CompilationUnit</literal>, recall that all
+      non-terminals are implicitly declared as types) and a location as
       arguments and parses the contents of the location according to the given
       non-terminal. Next, a match for embedded
-      <literal>MethodDeclaration</literal>s is done in the enumetrator of the
+      <literal>MethodDeclaration</literal>s is done in the enumerator of the
       <keysym>for</keysym> statement. This example ignores many potential
-      error conditions but does illustrate some of Rascal's syntax and parsing
-      features.</para>
+      error conditions (like error in opening or reading the file, or syntax
+      error during parsing) but does illustrate some of Rascal's syntax and
+      parsing features.</para>
     </section>
 
     <section>
       <title>Rewrite Rules</title>
 
-      <para>A <emphasis>rewrite rule</emphasis> is a recipe on how to simplify
-      values. Remember: <literal>(a + b)<superscript>2</superscript> =
-      a<superscript>2</superscript> + 2ab +
+      <para>A <emphasis>rewrite rule</emphasis> is a recipe recipe for
+      simplifying values. Remember: <literal>(a +
+      b)<superscript>2</superscript> = a<superscript>2</superscript> + 2ab +
       b<superscript>2</superscript></literal>? A rewrite rule has a pattern as
       left-hand side (here: <literal>(a +
       b)<superscript>2</superscript></literal>) and a replacement as
@@ -991,21 +1020,24 @@ rule simplify2 product(Expression e, num(1)) =&gt; e;
 rule simplify3 product(num(0), Expression e) =&gt; num(0);
 rule simplify4 product(Expression e, num(0)) =&gt; num(0);
 rule simplify5 sum(num(0), Expression e)     =&gt; e;
-rule simplify6 sum(Expression e, num(0))     =&gt; e;</programlisting>Whenever
-      a new expression is constructed during symbolic differentiation, these
-      rules are <emphasis>implicitly</emphasis> applied to that expression and
-      all its subexpressions and when a pattern at the left-hand side of a
-      rule applies the matching subexpression is replaced by the right-hand
-      side of the rule. This is repeated as long as any rule can be
-      applied.</para>
+rule simplify6 sum(Expression e, num(0))     =&gt; e;</programlisting></para>
 
-      <para>Since rewrite rules are activated automatically, one may always
-      assume that expressions are in simplified form.</para>
+      <para>Whenever a new value of type <literal>Expression</literal> is
+      constructed, these rules are <emphasis>implicitly</emphasis> applied to
+      that expression and all its subexpressions. When a pattern at the
+      left-hand side of a rule applies, the matching subexpression is replaced
+      by the right-hand side of the rule. This is repeated as long as any rule
+      can be applied.</para>
+
+      <para>Rewrite rules are activated automatically when a value of some
+      specific type is created and one may always assume that values of that
+      type are in simplified form, i.e., all applicable rewrite rules have
+      been applied to it.</para>
 
       <para>Rewrite rules are <emphasis>Turing complete</emphasis>, in other
       words any computable function can be defined using rewrite rules,
-      including functions that do not terminate. This is a point of attention
-      when using rewrite rules.</para>
+      including functions that do not terminate. The programmer should be
+      aware of this when defining rewrite rules.</para>
     </section>
 
     <section>
@@ -1015,7 +1047,7 @@ rule simplify6 sum(Expression e, num(0))     =&gt; e;</programlisting>Whenever
       solving</emphasis>. This is a declarative way of programming: specify
       the constraints that a problem solution should satisfy and how potential
       solutions can be generated. The actual solution (if any) is found by
-      enumerating solutions and testing their compliance with the
+      enumerating possible solutions and testing their compliance with the
       constraints.</para>
 
       <para>Rascal provides a <literal>solve</literal> statement that helps
@@ -1034,27 +1066,29 @@ rule simplify6 sum(Expression e, num(0))     =&gt; e;</programlisting>Whenever
 
       <itemizedlist>
         <listitem>
-          <para>Rascal programs consist of modules that are organized in
-          packages.</para>
+          <para>A Rascal programs consists of a set of modules that are
+          organized in packages.</para>
         </listitem>
 
         <listitem>
-          <para>Modules can import other modules.</para>
+          <para>A module can import other modules. These can be Rascal modules
+          or SDF modules (as shown in <xref
+          linkend="section.syntax-defintion-and-parsing" />).</para>
         </listitem>
 
         <listitem>
-          <para>The visibility of entities declared in modules can be
-          controlled using <keysym>public</keysym>/<keysym>private</keysym>
-          modifiers.</para>
+          <para>The visibility of an entity declared in a module can be
+          controlled using a <keysym>public</keysym>/<keysym>private</keysym>
+          modifier.</para>
         </listitem>
 
         <listitem>
-          <para>Datastructures may have annotations that can be explicitly
+          <para>A data structure may have annotations that can be explicitly
           used and modified.</para>
         </listitem>
 
         <listitem>
-          <para>There is an extensive library for builtin datatypes,
+          <para>There is an extensive library for builtin data types,
           input/output, fact extraction from Java source code, visualization,
           and more.</para>
         </listitem>
@@ -1066,12 +1100,13 @@ rule simplify6 sum(Expression e, num(0))     =&gt; e;</programlisting>Whenever
 
       <para>Rascal has a statically checked type system that prevents type
       errors and uninitialized variables at runtime. There are no runtime type
-      casts as in Java and there are therefore less opportunities for run-time
-      errors. The language provides <emphasis>higher-order, parametric
-      polymorphism</emphasis>. A type aliasing mechanism allows documenting
-      specific uses of a type. Built-in operators are heavily overloaded. For
-      instance, the operator + is used for addition on integers and reals but
-      also for list concatenation, set union etc.</para>
+      casts as in Java and there are therefore fewer opportunities for
+      run-time errors. The language provides <emphasis>higher-order,
+      parametric polymorphism</emphasis>. A type aliasing mechanism allows
+      documenting specific uses of a type. Built-in operators are heavily
+      overloaded. For instance, the operator + is used for addition on
+      integers and reals but also for list concatenation, set union
+      etc.</para>
 
       <para>The flow of Rascal program execution is completely explicit.
       Boolean expressions determine choices that drive the control structures.
@@ -1177,8 +1212,8 @@ public int fac(int N)
      return N * fac(N - 1);
 }</programlisting></para>
 
-      <para>It uses a conditional statement to distinguish cases and here is
-      how to use it:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Factorial;</userinput>
+      <para>It uses a conditional statement to distinguish cases. The
+      <literal>fac</literal> function can be used as follows:<screen><prompt>rascal&gt;</prompt> <userinput>import demo::Factorial;</userinput>
 <computeroutput>ok</computeroutput>
 
 <prompt>rascal&gt;</prompt> <userinput>fac(47);</userinput>
@@ -1292,8 +1327,9 @@ rare fouten krijgen (i.e. zonder melding)]-->
       <para>Suppose you are in the publishing business and are responsible for
       the systematic layout of publications. Authors do not systematically
       capitalize words in titles---"Word replacement" instead of Word
-      Replacement"--- and you want to correct this. Here is one way to solve
-      this problem:<programlisting>module demo::WordReplacement
+      Replacement"--- and you want to correct this. We solve this problem in
+      two steps. The first step is to define the capitalization of a single
+      word:<programlisting>module demo::WordReplacement
 import String;
 
 public str capitalize(str word)
@@ -1326,8 +1362,8 @@ public str capitalize(str word)
           </callout>
         </calloutlist></para>
 
-      <para>The next challenge is how to capitalize all the words in a string.
-      Here are two solutions:<programlisting>// continuing module demo::WordReplacement
+      <para>The second step is to capitalize all the words in a string. Here
+      are two solutions:<programlisting>// continuing module demo::WordReplacement
 
 public str capAll1(str S)
 {
@@ -1405,7 +1441,7 @@ public str capAll2(str S)
    "name" : "String",
    "age" : "Integer",
    "address" : "String"
-);</programlisting>we expect the call<programlisting>genClass("Person", fields)</programlisting>to
+);</programlisting>we want the call<programlisting>genClass("Person", fields)</programlisting>to
       produce the following output:<programlisting>    public class Person {
 
         private Integer age;
@@ -1459,10 +1495,39 @@ public str genClass(str name, map[str,str] fields) {
      &lt;}&gt;
    }
 ";
-}</programlisting>Observe how the <keysym>for</keysym> statement and
-      expressions that access the map fields that are embedded in the string
-      constant customize the given template for a Java class. The details of
-      string interpolation are explained in <xref
+}</programlisting></para>
+
+      <para>This code makes extensive use of Rascal's string interpolation
+      mechanism. All characters inside the string quotes (<literal>"</literal>
+      and <literal>"</literal>) are taken literally, except for interpolations
+      that are indicated by angle brackets(<literal>&lt;</literal> and
+      <literal>&gt;</literal>). An interpolation is an expression that is
+      evaluated when the string is constructed; the value of the expression
+      replaces the interpolation in the resulting string. Interpolation may
+      contain nested interpolations. The above example contains several
+      examples:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The interpolation <literal>&lt;name &gt;</literal> consists of
+          a single variable and will, in this example, be replaced by
+          <literal>"Person "</literal>. Observe that spaces and layout are
+          significant inside interpolations.</para>
+        </listitem>
+
+        <listitem>
+          <para>The interpolation <literal>&lt;for (x &lt;- fields){ ...
+          &lt;}&gt;</literal> consists of a complete for statement that will
+          generate all field names, getters and setters. Observe how the
+          closing brace of the for statement has to be escaped using
+          <literal>&lt;}&gt;</literal>. Embedded interpolations may occur
+          inside an interpolation. Observe how interpolations that are
+          embedded in the for-interpolation access the map fields and
+          customize the template for a Java class.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The details of string interpolation are explained in <xref
       linkend="section.string" />.</para>
     </section>
 
@@ -1491,7 +1556,7 @@ public str genClass(str name, map[str,str] fields) {
     trans b: S2 -&gt; S1;
     trans a: S1 -&gt; S3</programlisting>and here is where the idea is born to
       design a Domain-Specific Language for finite state machines (aptly
-      called FSM). This always proceeds in three steps:</para>
+      called FSM). The design of a DSL always proceeds in three steps:</para>
 
       <orderedlist>
         <listitem>
@@ -1507,8 +1572,8 @@ public str genClass(str name, map[str,str] fields) {
 
         <listitem>
           <para><emphasis role="bold">Define operations</emphasis>. Define
-          operations on DSL programs. This maybe, for example, be
-          typechecking, validation, or execution.</para>
+          operations on DSL programs. This may be, for example, typechecking,
+          validation, or execution.</para>
         </listitem>
       </orderedlist>
 
@@ -1552,20 +1617,22 @@ exports
 
       <para>Two standard modules for whitespace and identifiers are imported
       and next a fairly standard grammar for state machines is defined.
-      Observe that in SDF rules are written in reverse order as compared to
-      standard BNF notation.</para>
+      Observe that SDF syntax rules are written in (horizontally) reverse
+      order as compared to standard BNF notation, with the nonterminal
+      appearing on the right.</para>
 
       <formalpara>
-        <title><emphasis role="bold">Define Operations</emphasis>.</title>
+        <title><emphasis role="bold">Define Operations</emphasis></title>
 
         <para>There are various operations one could define on a FSM:
         executing it for given input tokens, reducing a non-deterministic
         automaton to a deterministic one, and so on. Here we select a
-        reachability check on FSMs as example.</para>
+        reachability check on FSMs as an example.</para>
       </formalpara>
 
       <para>We start with the usual imports and define a function
-      getTransitions that extracts all transitions from an FSM:</para>
+      <literal>getTransitions</literal> that extracts all transitions from an
+      FSM:</para>
 
       <para><programlisting>module demo::StateMachine::CanReach
 
@@ -1574,22 +1641,25 @@ import Relation;
 import Map;
 import IO;
 
-// Extract from a give FSM all transitions as a relation
+// Extract from a given FSM all transitions as a relation
 
 public rel[str, str] getTransitions(FSM fsm){
    return {&lt;"&lt;from&gt;", "&lt;to&gt;"&gt; | 
            /`trans &lt;IdCon a&gt;: &lt;IdCon from&gt; -&gt; &lt;IdCon to&gt;` &lt;- fsm };
 }</programlisting>The function <literal>getTransitions</literal> illustrates
-      several issues. Given a concrete fsm, a deep pattern match (/) is done
-      searching for <literal>trans</literal> constructs. For each match three
-      identifiers (<literal>IdCon</literal>) are extracted from it and
-      assigned to the variables<literal> a</literal>, <literal>from</literal>,
-      respectively, <literal>to</literal>. Next from and to are converted to a
-      string (using the string interpolations "&lt;from&gt;" and "&lt;to&gt;")
-      and finally they are placed in a tuple in the resulting relation. The
-      net effect is that transitions encoded in the syntax tree of
-      <literal>fsm</literal> are collected in a relation for further
-      processing.</para>
+      several issues. Given a concrete FSM, a deep pattern match (/) is done
+      searching for <literal>trans</literal> constructs. Since FSM is a type
+      that corresponds to a nonterminal, we use a concrete pattern to achieve
+      this: it is enclosed by backquotes (<literal>`</literal> and
+      <literal>`</literal>) and consists of a grammar rule with embedded
+      variable declarations. For each match three identifiers
+      (<literal>IdCon</literal>) are extracted and assigned to the
+      variables<literal>a</literal>, <literal>from</literal>, respectively,
+      <literal>to</literal>. Next from and to are converted to a string (using
+      the string interpolations "&lt;from&gt;" and "&lt;to&gt;") and finally
+      they are placed in a tuple in the resulting relation. The net effect is
+      that transitions encoded in the syntax tree of <literal>fsm</literal>
+      are collected in a relation for further processing.</para>
 
       <para>Next, we compute all reachable states in the function
       <literal>canReach</literal>:<programlisting>// continuing module demo::StateMachine::CanReach
@@ -1600,8 +1670,9 @@ public map[str, set[str]] canReach(FSM fsm){
 }</programlisting>Here <literal>str s &lt;- carrier(transitions)</literal>
       enumerates all elements that occur in the relations that is extracted
       from <literal>fsm</literal>. A map comprehension is used to construct a
-      map from each state to all states that can be reached it. Here
-      <literal>transitions+</literal> is the transitive closure of the
+      map from each state to all states that can be reached it. Transitive
+      closure is denoted by a postfix <literal>+</literal>-operator and
+      <literal>transitions+</literal> is thus the transitive closure of the
       transition relation and <literal>(transitions+)[s]</literal> gives the
       image of that closure for a given state; in other words all states that
       can be reached from it.</para>
@@ -1612,13 +1683,13 @@ public map[str, set[str]] canReach(FSM fsm){
       <para><programlisting>// continuing module demo::StateMachine::CanReach
 
 public FSM example = 
-       finite-state machine
+       `finite-state machine
           state S1;
           state S2;
           state S3;
           trans a: S1 -&gt; S2;
           trans b: S2 -&gt; S1;
-          trans a: S1 -&gt; S3;</programlisting>Testing the above functions
+          trans a: S1 -&gt; S3`;</programlisting>Testing the above functions
       gives the following results:</para>
 
       <para><screen><prompt>rascal&gt;</prompt> <userinput>import demo::StateMachine::CanReach;</userinput>
@@ -1666,7 +1737,7 @@ public FSM example =
         <para><emphasis role="bold">Model extraction</emphasis>: extract facts
         from source code and use them to build an abstract model of the source
         code. An example is extracting lock and unlock calls from source code
-        and to build an automaton that guarantees that lock/unlock occurs in
+        and building an automaton that guarantees that lock/unlock occurs in
         pairs along every control flow path.</para>
       </listitem>
 
@@ -1679,16 +1750,17 @@ public FSM example =
 
       <listitem>
         <para><emphasis role="bold">Source-to-source
-        transformation</emphasis>: large-scale, fully automated, source code
-        transformation with certain objectives like removing deprecated
-        language features, upgrading to newer APIs and the like.</para>
+        transformation</emphasis>: given certain objectives like removing
+        deprecated language features, upgrading to newer APIs and the like,
+        perform large-scale, fully automated, source code
+        transformation.</para>
       </listitem>
 
       <listitem>
         <para><emphasis role="bold">Interactive refactoring</emphasis>: given
-        known "code smells" a user can interactively indicate how these smells
-        should be removed. The refactoring features in Eclipse and Visual
-        Studio are examples.</para>
+        known "code smells" allow a user to interactively indicate how these
+        smells should be removed. The refactoring features in Eclipse and
+        Visual Studio are examples.</para>
       </listitem>
     </itemizedlist>
 
@@ -1698,19 +1770,19 @@ public FSM example =
 
     <itemizedlist>
       <listitem>
-        <para>Is <emphasis role="bold">extraction needed</emphasis> to solve
-        the problem, then define the extraction phase, see <xref
+        <para>If <emphasis role="bold">extraction</emphasis> is needed to
+        solve the problem, then define the extraction phase, see <xref
         linkend="section.defining-extraction" />.</para>
       </listitem>
 
       <listitem>
-        <para>Is <emphasis role="bold">analysis needed</emphasis>, then define
-        the analysis phase, see <xref
+        <para>If <emphasis role="bold">analysis</emphasis> is needed, then
+        define the analysis phase, see <xref
         linkend="section.defining-analysis" />.</para>
       </listitem>
 
       <listitem>
-        <para>Is <emphasis role="bold">synthesis needed</emphasis>, then
+        <para>If <emphasis role="bold">synthesis</emphasis> is needed, then
         define the synthesis phase, see <xref
         linkend="section.defining-synthesis" />.</para>
       </listitem>
@@ -1784,9 +1856,8 @@ public FSM example =
         </mediaobject>
       </figure></para>
 
-    <para>You will have no problem in identifying requirements for each phase
-    when you apply them to a specific example from the list given
-    earlier.</para>
+    <para>You will have to identify requirements for each phase when you apply
+    them to a specific example from the list given earlier.</para>
 
     <para>When these requirements have been established, it becomes much
     easier to actually carry out the project using the three phases of <xref
@@ -1797,19 +1868,17 @@ public FSM example =
 
       <para>How can we extract facts from the <emphasis>System under
       Investigation</emphasis> (SUI) that we are interested in? The extraction
-      workflow is shown in <xref linkend="figure.define-extraction" />and
+      workflow is shown in <xref linkend="figure.define-extraction" /> and
       consists of the following steps:</para>
 
       <itemizedlist>
         <listitem>
           <para>First and foremost we have to determine which facts we need.
-          This sounds trivial, but it is not. The problem is that we have to
-          anticipate which facts will be needed in the next---not yet
-          defined---analysis phase. A common approach is to use look-ahead and
-          to sketch the queries that are likely to be used in the analysis
-          phase and to determine which facts are needed for them. Start with
-          extracting these facts and refine the extraction phase when the
-          analysis phase is completely defined.</para>
+          This sounds trivial, but it is not. A common approach is to use
+          look-ahead and to sketch the queries that are likely to be used in
+          the analysis phase and to determine which facts are needed for them.
+          Start with extracting these facts and refine the extraction phase
+          when the analysis phase is completely defined.</para>
         </listitem>
 
         <listitem>
@@ -1870,8 +1939,8 @@ public FSM example =
               write your own definition. In both cases you can profit from
               Rascal's seamless integration with SDF. Be aware, however, that
               writing a grammar for a non-trivial language is a major
-              undertaking and may require weeks to month of work. Whatever
-              approach you choose, validate that the result.</para>
+              undertaking and may require weeks to months of work. Whatever
+              approach you choose, validate the resulting grammar.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -1895,19 +1964,20 @@ public FSM example =
           procedure <literal>Q</literal> but this is contradicted by a source
           code inspection. This may happen when the fact extractor uses a
           conservative approximation when precise information is not
-          statically available. In the language C, when procedure P performs
+          statically available. In the C language, when procedure P performs
           an indirect call via a pointer variable, the approximation may be
-          that P calls all procedures in the procedures.</para>
+          that P calls all procedures in the program.</para>
         </listitem>
 
         <listitem>
-          <para>Extracted facts are <emphasis>incomplete</emphasis>: the
-          inheritance between certain classes in Java code is missing.</para>
+          <para>Extracted facts are <emphasis>incomplete</emphasis>: for
+          example, the inheritance between certain classes in Java code is
+          missing.</para>
         </listitem>
       </itemizedlist>
 
       <para>The strategy to validate extracted facts differ per case but here
-      are three strategies:</para>
+      are three possibilities:</para>
 
       <itemizedlist>
         <listitem>
@@ -2066,7 +2136,7 @@ public FSM example =
 
       <itemizedlist>
         <listitem>
-          <para>Determine the results of the synthesis phase. Wide range of
+          <para>Determine the results of the synthesis phase. A wide range of
           results is possible including:</para>
 
           <itemizedlist>
@@ -2076,7 +2146,7 @@ public FSM example =
 
             <listitem>
               <para>Generated abstract representations, like finite automata
-              or other formals models that capture properties of the
+              or other formal models that capture properties of the
               SUI.</para>
             </listitem>
 
@@ -2093,19 +2163,24 @@ public FSM example =
 
           <itemizedlist>
             <listitem>
-              <para>Print strings with embedded variables.</para>
+              <para>Print strings that are customized using string
+              interpolation.</para>
             </listitem>
 
             <listitem>
-              <para>Convert abstract syntax trees to strings (perhaps using
-              forms of pretty printing).</para>
+              <para>First generate the desired output in the form ofan
+              abstract syntax tree and then convert this tree to a string
+              (perhaps using forms of pretty printing).</para>
             </listitem>
 
             <listitem>
-              <para>Use a grammar of the target source language, also for code
-              generation. Note that this approach guarantees the generation of
-              syntactically correct source code as opposed to code generation
-              using print statements or string templates.</para>
+              <para>Generate the desired output directly as syntactically
+              correct structured text. This is achieved by use a grammar of
+              the target source language and composing syntactically correct
+              program fragments during code generation. Note that this
+              approach guarantees the generation of syntactically correct
+              source code as opposed to code generation using print statements
+              or string templates.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -2145,7 +2220,7 @@ public FSM example =
         </listitem>
 
         <listitem>
-          <para>Visits of datastructures and on-the-fly code
+          <para>Visits of data structures and on-the-fly code
           generation.</para>
         </listitem>
 
@@ -2396,6 +2471,12 @@ public FSM example =
                   &lt;"d", "c"&gt;, &lt;"d","e"&gt;, &lt;"f", "e"&gt;, 
                   &lt;"f", "g"&gt;, &lt;"g", "e"&gt;, &lt;"a", "c"&gt;, 
                   &lt;"a", "d"&gt;, &lt;"b", "e"&gt;, &lt;"a", "e"&gt;}</computeroutput></screen>
+
+          <para>It is easy to get rid of all the direct calls in the above
+          result, by substracting (using the set difference operator
+          <literal>-</literal>) the original call relation from it:<screen><prompt>rascal&gt;</prompt> <userinput>indirectClosureCalls = closureCalls - Calls;</userinput>
+<computeroutput>rel[proc, proc]: {&lt;"a", "c"&gt;, &lt;"a", "d"&gt;, 
+                  &lt;"b", "e"&gt;, &lt;"a", "e"&gt;}</computeroutput></screen></para>
         </section>
 
         <section>
@@ -2406,9 +2487,9 @@ public FSM example =
           (<literal>"a" </literal>and <literal>"f"</literal>) and the indirect
           call relations. Combining this information, we can determine which
           procedures are called from each entry point. This is done by
-          indexing <literal>closureCalls</literal> with appropriate procedure
-          name. The index operator yields all right-hand sides of tuples that
-          have a given value as left-hand side. This gives the
+          indexing <literal>closureCalls</literal> with an appropriate
+          procedure name. The index operator yields all right-hand sides of
+          tuples that have a given value as left-hand side. This gives the
           following:</para>
 
           <screen><prompt>rascal&gt;</prompt> <userinput>calledFromA = closureCalls["a"];</userinput>
@@ -2424,7 +2505,8 @@ public FSM example =
           <title>Which procedures are called from all entry points?</title>
 
           <para>Finally, we can determine which procedures are called from
-          both entry points by taking the intersection of the two sets
+          both entry points by taking the intersection
+          (<literal>&amp;</literal>) of the two sets
           <literal>calledFromA</literal> and
           <literal>calledFromF:</literal></para>
 
@@ -2752,6 +2834,11 @@ public rel[varname,expr] UNINIT =
 
           <itemizedlist>
             <listitem>
+              <para><literal>PRED</literal> is the relation for which the
+              reachability has to be determined.</para>
+            </listitem>
+
+            <listitem>
               <para><literal>{ROOT}</literal> represents the initial set of
               nodes from which all path should start.</para>
             </listitem>
@@ -2765,15 +2852,9 @@ public rel[varname,expr] UNINIT =
             </listitem>
 
             <listitem>
-              <para><literal>PRED</literal> is the relation for which the
-              reachability has to be determined.</para>
-            </listitem>
-
-            <listitem>
               <para>The result of <literal>reachX(PRED, {ROOT}, DEFS[V])
               </literal>is a set that contains all nodes that are reachable
-              from the <literal>ROOT</literal> (as well as all intermediate
-              nodes on each path).</para>
+              from the <literal>ROOT</literal>.</para>
             </listitem>
 
             <listitem>
@@ -2873,9 +2954,9 @@ public int cyclomaticComplexity(Graph[&amp;T] PRED){
         </listitem>
 
         <listitem>
-          <para>Available expressions: an expression is available if it is
-          computed along each path from the start of the program to the
-          current statement.</para>
+          <para>Available expressions: which expressions are computed along
+          each path from the start of the program to the current
+          statement?</para>
         </listitem>
       </itemizedlist>
 
@@ -2999,8 +3080,11 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
             </mediaobject>
           </figure></para>
 
-        <para>We assume the following basic definitions to represent
-        information about the program:<programlisting>module demo::ReachingDefs
+        <para>We introduce the notions <literal>definition</literal> and
+        <literal>use</literal> to represent information about the program. The
+        former describes that a certain statement defines some variable and
+        the latter that a statement uses some variable. They are defined as
+        follows:<programlisting>module demo::ReachingDefs
 
 import Relation;
 import Graph;
@@ -3044,11 +3128,9 @@ DEFS elementen van de
        vorm <X,<X,Y>> te gebruiken in plaats van het voor de hand liggende 
 <X,Y>-->
 
-        <para>For convenience, we have introduced above a notion
-        <literal>def</literal> that describes that a certain statement defines
-        some variable and we revamp the basic relations into a more convenient
-        format using this new type and the auxiliary functions
-        <literal>definition</literal> and <literal>use</literal>:<screen><prompt>rascal&gt;</prompt> <userinput>definition(DEFS);</userinput>
+        <para>The functions <literal>definition</literal> and
+        <literal>use</literal> have the following effect on our sample
+        data:<screen><prompt>rascal&gt;</prompt> <userinput>definition(DEFS);</userinput>
 <computeroutput>rel[stat,def]: { &lt;1, &lt;1, "i"&gt;&gt;, &lt;2, &lt;2, "j"&gt;&gt;, 
                  &lt;3, &lt;3, "a"&gt;&gt;, &lt;4, &lt;4, "i"&gt;&gt;, 
                  &lt;5, &lt;5, "j"&gt;&gt;, &lt;6, &lt;6, "a"&gt;&gt;, 
@@ -3142,17 +3224,15 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
         predecessors of a statement for a given control flow graph.</para>
 
         <para><figure xml:id="figure.reaching-definitions">
-            <title>Reaching definitions for flow graph in <xref
-            linkend="figure.dataflow-graph" /></title>
+            <title>Reaching definitions for example</title>
 
             <mediaobject>
               <imageobject>
                 <imagedata fileref="reach.png" scale="50"></imagedata>
               </imageobject>
             </mediaobject>
-          </figure> For our running example (<xref
-        linkend="figure.reaching-definitions" />) the results are as follows
-        (see <xref linkend="figure.reaching-definitions" />). Relation
+          </figure> For our running example the results are as follows (see
+        <xref linkend="figure.reaching-definitions" />). Relation
         <literal>IN</literal> has as value:<programlisting>{ &lt;2, &lt;1, "i"&gt;&gt;, &lt;3, &lt;2, "j"&gt;&gt;, &lt;3, &lt;1, "i"&gt;&gt;, 
   &lt;4, &lt;3, "a"&gt;&gt;, &lt;4, &lt;2, "j"&gt;&gt;, &lt;4, &lt;1, "i"&gt;&gt;, 
   &lt;4, &lt;7, "i"&gt;&gt;, &lt;4, &lt;5, "j"&gt;&gt;, &lt;4, &lt;6, "a"&gt;&gt;, 
@@ -3370,8 +3450,8 @@ public rel[stat,def] kill(rel[stat,var] DEFS) {
         <listitem>
           <para>Compute the relation <literal>rel[use,def] use-def</literal>
           that relates all uses to their corresponding definitions. The
-          function <literal>reaching-definitions</literal> as shown earlier in
-          <xref linkend="section.reaching-definitions" />does most of the
+          function <literal>reaching-definitions</literal> shown earlier in
+          <xref linkend="section.reaching-definitions" /> does most of the
           work.</para>
         </listitem>
 
@@ -3498,7 +3578,7 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 <computeroutput>set[use]: { &lt;1, "EXEC"&gt;, &lt;2, "EXEC"&gt;,  &lt;3, "EXEC"&gt;, 
             &lt;5, "i"&gt;, &lt;5, "n"&gt;, &lt;6, "sum"&gt;, &lt;6, "i"&gt;, 
             &lt;6, "EXEC"&gt;, &lt;8, "i"&gt;, &lt;8, "EXEC"&gt;, 
-            &lt;9, "sum"&gt; }</computeroutput></screen>Take the domain of
+            &lt;9, "sum"&gt; }</computeroutput></screen>Taking the domain of
       this result and we get exactly the statements in (b) of the
       example.</para>
     </section>
@@ -11754,21 +11834,21 @@ data Figure =
                 </row>
 
                 <row>
-                  <entry><literal>public Color gray(int gray, num
+                  <entry><literal>public Color gray(int gray, real
                   alpha)</literal></entry>
 
                   <entry>Gray value (0-255) with transparency (0-100%)</entry>
                 </row>
 
                 <row>
-                  <entry><literal>public Color gray(num
+                  <entry><literal>public Color gray(real
                   perc)</literal></entry>
 
                   <entry>Gray value (0-100%)</entry>
                 </row>
 
                 <row>
-                  <entry><literal>public Color gray(num perc, num
+                  <entry><literal>public Color gray(real perc, real
                   alpha)</literal></entry>
 
                   <entry>Gray value (0-100%) with transparency
@@ -11785,7 +11865,7 @@ data Figure =
                 </row>
 
                 <row>
-                  <entry><literal>public Color color(str colorName, num
+                  <entry><literal>public Color color(str colorName, real
                   alpha)</literal></entry>
 
                   <entry>Named color with transparency (0-100%)</entry>
@@ -11808,7 +11888,7 @@ data Figure =
 
                 <row>
                   <entry><literal>public list[Color] interpolateColor(Color
-                  from, Color to, num percentage)</literal></entry>
+                  from, Color to, real percentage)</literal></entry>
 
                   <entry>Interpolate between two colors (in RGB space)</entry>
                 </row>
@@ -11821,14 +11901,7 @@ data Figure =
                 </row>
 
                 <row>
-                  <entry><literal>public Color(int) colorScale(list[int]
-                  values, Color from, Color to)</literal></entry>
-
-                  <entry>Interpolate between two colors (in RGB space)</entry>
-                </row>
-
-                <row>
-                  <entry><literal>public Color(num) colorScale(list[num]
+                  <entry><literal>public Color(int) colorScale(list[num]
                   values, Color from, Color to)</literal></entry>
 
                   <entry>Interpolate between two colors (in RGB space)</entry>
@@ -11887,10 +11960,20 @@ data Figure =
         their input data in different formats that can be summarized as
         follows:</para>
 
-        <para><programlisting>// A named series of numbers
+        <para><programlisting>// A list of (name, number) pairs
 
-public alias numTuples  = 
-       tuple[str name,list[tuple[num, num]]  values];
+public alias NamedNumbers =
+       list[tuple[str name,num val]];
+
+// A list of named series of number pairs
+
+public alias NamedPairSeries  = 
+       list[tuple[str name,list[tuple[num xval, num yval]]  values]];
+
+// A list of named series of numbers
+
+public alias NamedNumberSeries =
+       list[tuple[str name, list[num val] value]];
 </programlisting></para>
 
         <para>All chart drawing functions take as arguments:</para>
@@ -11933,15 +12016,15 @@ public alias numTuples  =
 
               <tbody>
                 <row>
-                  <entry><literal>public void barChart(str title, map[str,num]
+                  <entry><literal>public void barChart(str title, NamedNumbers
                   facts, ChartSetting settings...)</literal></entry>
 
-                  <entry>Draw a bar chart for numbers</entry>
+                  <entry>Draw a bar chart</entry>
                 </row>
 
                 <row>
                   <entry><literal>public void barChart(str title, list[str]
-                  categories, list[numSeries] facts, ChartSetting
+                  categories, NamedNumberSeries facts, ChartSetting
                   settings...)</literal></entry>
 
                   <entry>Draw a bar chart for multiple series of
@@ -11949,41 +12032,33 @@ public alias numTuples  =
                 </row>
 
                 <row>
-                  <entry><literal>public void barChart(str title, list[str]
-                  categories, list[numSeries] facts, ChartSetting
-                  settings...)</literal></entry>
+                  <entry><literal>public void pieChart(str title, NamedNumbers
+                  facts, ChartSetting settings...)</literal></entry>
 
-                  <entry>Draw a bar chart for multiple series of nums (not yet
-                  implemented)</entry>
-                </row>
-
-                <row>
-                  <entry><literal>public void pieChart(str title, map[str,
-                  number] facts, ChartSetting settings...)</literal></entry>
-
-                  <entry>Draw a pieChart for numbers</entry>
+                  <entry>Draw a pieChart</entry>
                 </row>
 
                 <row>
                   <entry><literal>public void xyChart(str title,
-                  list[numSeries], ChartSetting settings...)</literal></entry>
+                  NamedPairSeries facts, ChartSetting
+                  settings...)</literal></entry>
 
-                  <entry>Draw an xyChart for numbers</entry>
+                  <entry>Draw an xyChart</entry>
                 </row>
               </tbody>
             </tgroup>
           </table></para>
 
         <para>In its simplest form, a <emphasis>barChart</emphasis> displays a
-        map of integer or real values. Vertical bars are drawn with length
-        according to the values and the associated keys in the map acts as
-        labels. A barChart may also display several series of integer or real
-        values. In this case a list of category names and a list of int or
-        real series are needed. The <replaceable>n</replaceable>-th category
-        name corresponds with the <replaceable>n</replaceable>-th element in
-        each series. Names of series act thus as row names and category names
-        act as column names. Each series is grouped together in the bar chart
-        and corresponding category elements in different series get the same
+        list of (name, number) pairs. Vertical bars are drawn with length
+        according to each number and the associated name acts as label. A
+        barChart may also display several series of numbers. In this case a
+        list of category names and a list of named pairs of numbers are
+        needed. The <replaceable>n</replaceable>-th category name corresponds
+        with the <replaceable>n</replaceable>-th element in each series. Names
+        of series act thus as row names and category names act as column
+        names. Each series is grouped together in the bar chart and
+        corresponding category elements in different series get the same
         color. See <link
         xlink:href="http://en.wikipedia.org/wiki/Bar_chart">http://en.wikipedia.org/wiki/Bar_chart</link>
         for further details</para>
@@ -12032,10 +12107,10 @@ public alias numTuples  =
         xlink:href="http://en.wikipedia.org/wiki/Histogram">http://en.wikipedia.org/wiki/Histogram</link>
         for details.</para>
 
-        <para><replaceable>PieCharts</replaceable> essentially take maps of
-        integers or reals as input. The strings are used to label each sector
-        of the pieChart and the number determines the relative size of the
-        sector. See <link
+        <para><replaceable>PieCharts</replaceable> essentially take a list of
+        (name, number) pairs as input. The strings are used to label each
+        sector of the pieChart and the number determines the relative size of
+        the sector. See <link
         xlink:href="http://en.wikipedia.org/wiki/Pie_chart">http://en.wikipedia.org/wiki/Pie_chart</link>
         for further details.</para>
 
@@ -12053,7 +12128,7 @@ public alias numTuples  =
    | curvePlot ()
    | horizontal()
    | linePlot()
-   | ring(int h)
+   | ring(num h)
    | stackedBars()
    | subtitle(str txt)
    | vertical() 
@@ -12092,7 +12167,7 @@ public alias numTuples  =
                 </row>
 
                 <row>
-                  <entry><literal>chartSize(int w, int h)</literal></entry>
+                  <entry><literal>chartSize(num w, num h)</literal></entry>
 
                   <entry>barChart, pieChart, xyChart</entry>
 
@@ -12124,7 +12199,7 @@ public alias numTuples  =
                 </row>
 
                 <row>
-                  <entry><literal>ring(int h)</literal></entry>
+                  <entry><literal>ring(num h)</literal></entry>
 
                   <entry>pieChart</entry>
 
@@ -12347,7 +12422,7 @@ ok</computeroutput>
             <entry>Negation</entry>
 
             <entry><xref linkend="section.lib-Number"
-            xrefstyle="template:%t" />, </entry>
+            xrefstyle="template:%t" />,</entry>
           </row>
 
           <row>
@@ -12590,8 +12665,8 @@ ok</computeroutput>
 
           <row>
             <entry><replaceable>Exp</replaceable><subscript>1</subscript>
-            <literal>&gt;</literal>
-            <replaceable>Exp</replaceable><subscript>2</subscript></entry>
+            <literal>&gt;</literal> <replaceable>
+            Exp</replaceable><subscript>2</subscript></entry>
 
             <entry>Greater than/strict superlist/ strict superset</entry>
 
@@ -14037,7 +14112,7 @@ ok</computeroutput>
 
       <glossdef>
         <para>A rewrite rule consists of a pattern and a replacement. A
-        rewrite rule is applied to all subparts of a datastructure and when
+        rewrite rule is applied to all subparts of a data structure and when
         the pattern matches the matching subpart is replaced. Pattern and
         replacement may contain variables and variables in the replacement are
         first replaced by their value before the replacement is
@@ -14109,8 +14184,8 @@ ok</computeroutput>
       <glossterm>Traversal</glossterm>
 
       <glossdef>
-        <para>The process of visiting all the sub-elements of a larger
-        datastructure. The <literal>visit</literal> expression and enumerators
+        <para>The process of visiting all the sub-elements of a larger data
+        structure. The <literal>visit</literal> expression and enumerators
         provide traversal functionality in Rascal.</para>
       </glossdef>
     </glossentry>
