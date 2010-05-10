@@ -45,6 +45,10 @@
     documentation. More information is available at <link
     xlink:href="http://www.rascal-mpl.org/">http://www.rascal-mpl.org/</link>.</para>
 
+    <para><emphasis role="bold">Acknowledgement</emphasis>. This project was
+    carried out as part of ATEAMS, a joint research project team funded by CWI
+    (Netherlands) and INRIA (France).</para>
+
     <para><emphasis role="bold">Key words:</emphasis> source code analysis,
     source code transformation, meta-programming, domain-specific
     languages.</para>
@@ -251,7 +255,7 @@
           most errors before the program is executed and by making common
           errors like missing initializations or invalid pointers
           impossible.<remark> At the time of writing, this checking is done
-          during execution but a static typechecker is near
+          during execution but a static typechecker is nearing
           completion.</remark></para>
         </listitem>
 
@@ -299,14 +303,32 @@
         </listitem>
       </itemizedlist>
 
-      <para>Interested? Read on!</para>
+      <para><figure xml:id="figure.positioning">
+          <title>Positioning of various systems</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center" fileref="positioning.png" scale="70"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
     </section>
 
     <section>
       <title>Related Work</title>
 
       <para>We discuss related tools and specific influences of earlier work
-      on the Rascal language.</para>
+      on the Rascal language. <xref linkend="figure.positioning" /> shows the
+      relative positioning of various systems to be discussed in this section.
+      On the vertical axis, the level of language-specificity is shown.
+      Systems at the bottom of the figure are language-specific and can only
+      be applied to programs in one specific language. Systems at the top of
+      the figure are language-parameterized, i.e., they are generic and can be
+      applied to arbitrary languages. On the horizontal axis, the level of
+      parameterization of analysis and transformation is displayed. Systems on
+      the left have fixed analysis/transformation properties while the systems
+      more to the right have more and more support for defining analysis and
+      transformation operations.</para>
 
       <section>
         <title>Related Tool Categories</title>
@@ -348,10 +370,10 @@
           attributes and attribute equations that express dependencies between
           attributes. In this way semantic operations like typechecking and
           code generation can be expressed at a high level. Tools in this
-          category are FNC-2 <biblioref linkend="JPJDB90" />, JastAdd
-          <biblioref linkend="HedinMagnusson03" /> and others. Attribute
-          Grammar tools are strong in program analysis but weaker in program
-          transformation.</para>
+          category are FNC-2 <biblioref linkend="Jourdan1990" />, JastAdd
+          <biblioref linkend="HedinMagnusson03" />, Silver <biblioref
+          linkend="Silver" />, and others. Attribute Grammar tools are strong
+          in program analysis but weaker in program transformation.</para>
         </formalpara>
 
         <formalpara>
@@ -361,7 +383,7 @@
           relational data. They are strong in expressing analysis problems
           like, for instance, reachability. Examples of tools in this category
           are GROK <biblioref linkend="Grok" />, Crocopat <biblioref
-          linkend="Beyer06" /> and RScript <biblioref
+          linkend="Beyer2006" /> and RScript <biblioref
           linkend="KlintRscript" />. These tools assume that the data are
           already in relational form and provide support for neither
           extraction nor transformation.</para>
@@ -387,10 +409,30 @@
           they partially overlap with the other categories. The primary
           example is Prolog that has been used for syntax analysis, analysis
           and synthesis and is still in use today. <biblioref
-          linkend="KHR07" /> gives an overview of various logic-based
+          linkend="Kniesel2007" /> gives an overview of various logic-based
           approaches. Nonetheless, these tools have never come into wide use.
-          <biblioref linkend="LR01" /> illustrates the use of Prolog for
-          analysis and transformation.</para>
+          <biblioref linkend="Lammel2001" /> illustrates the use of Prolog for
+          analysis and transformation. <biblioref linkend="Kniesel2007" />
+          describes JTransformer, a more recent Prolog-based transformation
+          tool for Java.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Miscellaneous Tools</title>
+
+          <para>There is a wide range of tools available in the space sketched
+          in <xref linkend="figure.positioning" />. Lint <biblioref
+          linkend="Lint" /> is the classical example of a command-line tool
+          that performs C-specific analysis. ORION <biblioref
+          linkend="Orion" /> is another example of a tool for fixed error
+          analysis for C/C++ programs. Codesurfer <biblioref
+          linkend="Codesurfer" /> and Coverity <biblioref
+          linkend="Coverity" /> are examples of tools for the analysis of C
+          programs that provide programmable analyses. Semmle <biblioref
+          linkend="Semmle.QL" /> is an example of a Java-specific tools with
+          highly-customizable queries. The same holds for JTransformer
+          <biblioref linkend="Kniesel2007" />, but this also supports
+          customizable transformations.</para>
         </formalpara>
 
         <formalpara>
@@ -401,7 +443,18 @@
           large variations among specific tools in each category but we
           believe that this table gives at least an impression of the relative
           strengths of the various categories and also documents the ambition
-          we have with the Rascal language.</para>
+          we have with the Rascal language. It is clear from this overview
+          that the level of integration of extraction, analysis and synthesis
+          is mostly weak. Exceptions to this are systems that explicitly
+          integrate these phases. For language-specific systems this are, for
+          example, CodeSurfer <biblioref linkend="Codesurfer" />, Coverity
+          <biblioref linkend="Coverity" />, Semmle and JTransformer. For
+          language-parametric systems examples are DMS, TXL, JastAdd and
+          Silver. All these systems differ in the level of integration and IDE
+          support. Rascal is comparable to the latter systems regarding
+          language-parametricity, provides good IDE support and outperforms
+          many other systems with respect to the integrated and advanced
+          mechanisms for specifying analysis and transformation.</para>
         </formalpara>
 
         <para><table xml:id="table.tool-categories">
@@ -506,28 +559,28 @@
       <section>
         <title>Work directly related to Rascal</title>
 
-        <para>Rascal owes a lot to other languages that aim at
-        meta-programming, in particular the user-defined, modular, syntax and
-        term rewriting of ASF+SDF <biblioref linkend="Klint93" />, <biblioref
+        <para>Rascal owes a lot to other meta-programming languages, in
+        particular the user-defined, modular, syntax and term rewriting of
+        ASF+SDF <biblioref linkend="Klint93" />, <biblioref
         linkend="BDHJJKKMOSVVV01" />, the relational calculus as used in
-        Rscript <biblioref linkend="KlintRscript" /> and pioneered by GROK
+        RScript <biblioref linkend="KlintRscript" /> and pioneered by GROK
         <biblioref linkend="Grok" />, traversal functions as introduced in
         <biblioref linkend="BKV03" />, strategies as introduced in ELAN
         <biblioref linkend="ElanBKKMR-wrla98" /> and Stratego <biblioref
         linkend="BKVV08" />, and integration of term rewriting in Java as done
-        in TOM <biblioref linkend="BallandBKMR-RTA2007" />. </para>
+        in TOM <biblioref linkend="BallandBKMR-RTA2007" />.</para>
 
         <para>We also acknowledge less specific influences by systems like TXL
         <biblioref linkend="CordyTXL06" />, ANTLR <biblioref
         linkend="ANTLRBook" />, JastAdd <biblioref
         linkend="HedinMagnusson03" />, Semmle <biblioref
         linkend="Semmle.QL" />, DMS <biblioref linkend="DMS" />, and various
-        others. </para>
+        others like, for instance, ML and Ruby.</para>
 
         <para>The application of Rascal for refactoring is described in
         <biblioref linkend="KSV-SCAM09" />. Using Rascal for collecting source
         code metrics for DSL implementations is presented in <biblioref
-        linkend="KSV10" />.</para>
+        linkend="Klint2010" />.</para>
       </section>
 
       <section>
@@ -2066,6 +2119,17 @@ public FSM example =
     easier to actually carry out the project using the three phases of <xref
     linkend="figure.problem-solving" />.</para>
 
+    <para><figure xml:id="figure.define-extraction">
+        <title>Extraction Workflow</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="define-extraction.png"
+                       scale="40"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+
     <section xml:id="section.defining-extraction">
       <title>Defining Extraction</title>
 
@@ -2203,17 +2267,6 @@ public FSM example =
           relation extracted with different tools.</para>
         </listitem>
       </itemizedlist>
-
-      <para><figure xml:id="figure.define-extraction">
-          <title>Extraction Workflow</title>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata align="center" fileref="define-extraction.png"
-                         scale="40"></imagedata>
-            </imageobject>
-          </mediaobject>
-        </figure></para>
 
       <para>The Rascal features that are most frequently used for extraction
       are:</para>
@@ -3249,14 +3302,6 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
               </imageobject>
             </mediaobject>
           </figure></para>
-      </section>
-
-      <section xml:id="section.reaching-definitions">
-        <title>Reaching Definitions</title>
-
-        <para>We illustrate the calculation of reaching definitions using the
-        example in <xref linkend="figure.dataflow-graph" /> which was inspired
-        by <biblioref linkend="AhoSethiUllman86" /> (Example 10.15).</para>
 
         <para><figure xml:id="figure.dataflow-graph">
             <title>Flow graph for various dataflow problems</title>
@@ -3267,6 +3312,14 @@ public rel[&amp;T, set[&amp;T]] dominators(rel[&amp;T,&amp;T] PRED,
               </imageobject>
             </mediaobject>
           </figure></para>
+      </section>
+
+      <section xml:id="section.reaching-definitions">
+        <title>Reaching Definitions</title>
+
+        <para>We illustrate the calculation of reaching definitions using the
+        example in <xref linkend="figure.dataflow-graph" /> which was inspired
+        by <biblioref linkend="AhoSethiUllman86" /> (Example 10.15).</para>
 
         <para>We introduce the notions <literal>definition</literal> and
         <literal>use</literal> to represent information about the program. The
@@ -3826,6 +3879,9 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     <para>Claus Brabrand, Karel Pieterson, Frank Tip and Yaroslav Usenko
     provided feedback on this manual and suggested several
     improvements.</para>
+
+    <para>We thank the anonymous reviewers for their suggestions for improving
+    this paper.</para>
   </section>
 
   <section xml:id="section.bibliography">
@@ -3834,19 +3890,27 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
     <para><bibliolist>
         <bibliomixed xml:id="AhoSethiUllman86"></bibliomixed>
 
+        <bibliomixed xml:id="Codesurfer"></bibliomixed>
+
+        <bibliomixed xml:id="Coverity"></bibliomixed>
+
         <bibliomixed xml:id="ElanBKKMR-wrla98"></bibliomixed>
 
         <bibliomixed xml:id="BallandBKMR-RTA2007"></bibliomixed>
 
         <bibliomixed xml:id="DMS"></bibliomixed>
 
-        <bibliomixed xml:id="BNL05"></bibliomixed>
-
         <bibliomixed xml:id="BDHJJKKMOSVVV01"></bibliomixed>
+
+        <bibliomixed xml:id="Beyer2006"></bibliomixed>
+
+        <bibliomixed xml:id="BNL05"></bibliomixed>
 
         <bibliomixed xml:id="BKV03"></bibliomixed>
 
         <bibliomixed xml:id="BKVV08"></bibliomixed>
+
+        <bibliomixed xml:id="Orion"></bibliomixed>
 
         <bibliomixed xml:id="CordyTXL06"></bibliomixed>
 
@@ -3856,7 +3920,13 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
         <bibliomixed xml:id="HedinMagnusson03"></bibliomixed>
 
+        <bibliomixed xml:id="Lint"></bibliomixed>
+
+        <bibliomixed xml:id="Jourdan1990"></bibliomixed>
+
         <bibliomixed xml:id="JacksonRollins94"></bibliomixed>
+
+        <bibliomixed xml:id="Kniesel2007"></bibliomixed>
 
         <bibliomixed xml:id="Klint93"></bibliomixed>
 
@@ -3866,7 +3936,11 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
         <bibliomixed xml:id="KSV-SCAM09"></bibliomixed>
 
+        <bibliomixed xml:id="Klint2010"></bibliomixed>
+
         <bibliomixed xml:id="Krikhaar99"></bibliomixed>
+
+        <bibliomixed xml:id="Lammel2001"></bibliomixed>
 
         <bibliomixed xml:id="McCabe76"></bibliomixed>
 
@@ -3876,9 +3950,13 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
 
         <bibliomixed xml:id="ANTLRBook"></bibliomixed>
 
+        <bibliomixed xml:id="Speicher2007"></bibliomixed>
+
         <bibliomixed xml:id="Tip95"></bibliomixed>
 
         <bibliomixed xml:id="Weiser84"></bibliomixed>
+
+        <bibliomixed xml:id="Silver"></bibliomixed>
       </bibliolist></para>
   </section>
 
