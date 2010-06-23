@@ -1,0 +1,26 @@
+%%% $Id: Regular.sdf 32383 2010-06-23 14:32:15Z bertl $  
+
+module languages/sdf22/syntax/Regular
+
+imports languages/sdf22/syntax/Kernel 
+imports languages/aterm/syntax/IntCon
+
+exports  
+  context-free syntax
+    "(" ")"                                       -> Sym {cons("empty")}
+    "(" head:Sym tail:Sym+ ")"              -> Sym {cons("seq")}
+    Sym "?"                                    -> Sym {cons("opt")}
+    Sym "+"                                    -> Sym {cons("iter")}
+    Sym "*"                                    -> Sym {cons("iter-star")}
+    "{" Sym sep:Sym "}" "+"                 -> Sym {cons("iter-sep")}
+    "{" Sym sep:Sym "}" "*"                 -> Sym {cons("iter-star-sep")}
+    "<" head:Sym "," rest:{Sym ","}+ ">"    -> Sym {cons("tuple")}
+    "(" arguments:Symbols "=>" results:Sym ")" -> Sym {cons("func")}
+    "left":Sym "|" "right":Sym              -> Sym {right,cons("alt")}
+    "(" "left":Sym "->" "right":Sym ")"     -> Sym {cons("strategy")}
+
+  context-free priorities
+    {Sym "?"               -> Sym
+    Sym "*"                -> Sym
+    Sym "+"                -> Sym} >
+    Sym "|" Sym         -> Sym       

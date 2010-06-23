@@ -1,0 +1,7 @@
+module languages/sdf22/syntax/Lifting
+
+imports languages/sdf22/syntax/Kernel
+
+exports 
+  context-free syntax
+    left-quote:"`" Sym right-quote:"`" -> Sym  {cons("lifting")}

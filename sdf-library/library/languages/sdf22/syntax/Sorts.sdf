@@ -1,0 +1,21 @@
+%%% $Id: Sorts.sdf 32383 2010-06-23 14:32:15Z bertl $
+                       
+module languages/sdf22/syntax/Sorts
+
+imports languages/sdf22/syntax/Kernel
+
+exports
+  sorts Sort
+  lexical syntax
+    head:[A-Z]                          -> Sort {cons("one-char")}
+    head:[A-Z] middle:[A-Za-z0-9\-]* last:[A-Za-z0-9] -> Sort 
+	{cons("more-chars")}
+
+  context-free syntax
+    Sort                                    -> Sym  {cons("sort")}
+    Sort "[[" parameters:{Sym ","}+ "]]" -> Sym  {cons("parameterized-sort")}
+
+    "sorts" Symbols -> Grammar {cons("sorts")}
+
+  lexical restrictions
+    Sort -/- [A-Za-z0-9]

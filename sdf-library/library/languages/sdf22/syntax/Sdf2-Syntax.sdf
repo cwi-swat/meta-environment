@@ -1,0 +1,33 @@
+module languages/sdf22/syntax/Sdf2-Syntax
+
+imports languages/sdf22/syntax/Kernel
+        languages/sdf22/syntax/Basic
+        languages/sdf22/syntax/Modules
+        languages/sdf22/syntax/Regular
+        languages/sdf22/syntax/Lifting
+        languages/sdf22/syntax/Priority
+        languages/sdf22/syntax/CC
+        languages/sdf22/syntax/Sorts
+        languages/sdf22/syntax/Start-Symbols
+        languages/sdf22/syntax/Literals
+        languages/sdf22/syntax/Labels
+        languages/sdf22/syntax/Restrictions
+        languages/sdf22/syntax/Aliases
+
+exports
+  sorts SDF
+
+  context-free syntax
+    "<START>" -> Sym {cons("start")}
+    "<Start>" -> Sym {cons("file-start")}
+
+    "lexical"      "priorities" Priorities      -> Grammar {cons("lexical-priorities")}
+    "context-free" "priorities" Priorities      -> Grammar {cons("context-free-priorities")}
+    "lexical"      "restrictions" Restrictions  -> Grammar {cons("lexical-restrictions")}
+    "context-free" "restrictions" Restrictions  -> Grammar {cons("context-free-restrictions")}
+
+    "definition" Definition -> SDF {cons("definition")}
+
+  context-free priorities
+    Sym "|" Sym  -> Sym >
+    Label ":" Sym -> Sym                  

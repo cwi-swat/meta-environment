@@ -1,0 +1,15 @@
+%%% $Id: Labels.sdf 32383 2010-06-23 14:32:15Z bertl $
+                               
+module languages/sdf22/syntax/Labels
+
+imports languages/sdf22/syntax/Kernel 
+        basic/StrCon
+
+exports 
+  sorts Label
+
+  context-free syntax
+    StrCon -> Label {cons("quoted")}
+    IdCon  -> Label {cons("unquoted")}
+
+    Label ":" Sym -> Sym  {cons("label")}

@@ -1,0 +1,22 @@
+%%% $Id: Kernel.sdf 32383 2010-06-23 14:32:15Z bertl $
+                                                            
+module languages/sdf22/syntax/Kernel
+
+imports languages/aterm/syntax/ATerms 
+        languages/sdf22/syntax/Symbols 
+        languages/sdf22/syntax/Grammars
+
+exports
+  sorts Attribute ATermAttribute Attributes Prod Productions
+  context-free syntax
+    aterm:ATerm    -> ATermAttribute  {cons("default")}
+    ATermAttribute -> Attribute       {cons("term")}
+
+    "{" list:{Attribute ","}* "}" -> Attributes  {cons("attrs")}
+                                  -> Attributes  {cons("no-attrs")}
+
+    Symbols "->" result:Sym Attributes -> Prod  {cons("prod")}
+
+    list:Prod* -> Productions
+
+    "syntax" Prod -> Grammar {cons("syntax")}

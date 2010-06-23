@@ -1,0 +1,11 @@
+%%% $Id: CC.sdf 32383 2010-06-23 14:32:15Z bertl $
+                  
+module languages/sdf22/syntax/CC
+
+imports languages/sdf22/syntax/Character-Class 
+        languages/sdf22/syntax/Kernel
+
+exports
+  context-free syntax
+    CharClass -> Sym {cons("char-class")}
+     
