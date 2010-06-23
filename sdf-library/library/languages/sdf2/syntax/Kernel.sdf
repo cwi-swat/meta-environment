@@ -1,13 +1,13 @@
 %%% $Id$
                                                             
-module languages/sdf22/syntax/Kernel
+module languages/sdf2/syntax/Kernel
 
 imports languages/aterm/syntax/ATerms 
-        languages/sdf22/syntax/Symbols 
-        languages/sdf22/syntax/Grammars
+        languages/sdf2/syntax/Symbols 
+        languages/sdf2/syntax/Grammars
 
 exports
-  sorts Attribute ATermAttribute Attributes Prod Productions
+  sorts Attribute ATermAttribute Attributes Production Productions
   context-free syntax
     aterm:ATerm    -> ATermAttribute  {cons("default")}
     ATermAttribute -> Attribute       {cons("term")}
@@ -15,8 +15,8 @@ exports
     "{" list:{Attribute ","}* "}" -> Attributes  {cons("attrs")}
                                   -> Attributes  {cons("no-attrs")}
 
-    Symbols "->" result:Sym Attributes -> Prod  {cons("prod")}
+    Symbols "->" result:Symbol Attributes -> Production  {cons("prod")}
 
-    list:Prod* -> Productions
+    list:Production* -> Productions
 
-    "syntax" Prod -> Grammar {cons("syntax")}
+    "syntax" Productions -> Grammar {cons("syntax")}

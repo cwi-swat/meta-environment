@@ -1,8 +1,8 @@
 %%% $Id$
                
-module languages/sdf22/syntax/Restrictions
+module languages/sdf2/syntax/Restrictions
 
-imports languages/sdf22/syntax/CC
+imports languages/sdf2/syntax/CC
 
 exports
   sorts Lookahead Lookaheads Restriction Restrictions

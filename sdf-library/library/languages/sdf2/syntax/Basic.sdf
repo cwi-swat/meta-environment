@@ -1,8 +1,8 @@
 %%% $Id$
                 
-module languages/sdf22/syntax/Basic
+module languages/sdf2/syntax/Basic
 
-imports languages/sdf22/syntax/Kernel
+imports languages/sdf2/syntax/Kernel
 
 exports
   context-free syntax
@@ -11,9 +11,9 @@ exports
     "variables"             Productions -> Grammar  {cons("variables")}
     "lexical" "variables"   Productions -> Grammar  {cons("lexical-variables")}
 
-    "<" Sym "-CF"  ">"               -> Sym  {cons("cf")}
-    "<" Sym "-LEX" ">"               -> Sym  {cons("lex")}
-    "<" Sym "-VAR" ">"               -> Sym  {cons("varsym")}
+    "<" Symbol "-CF"  ">"               -> Symbol  {cons("cf")}
+    "<" Symbol "-LEX" ">"               -> Symbol  {cons("lex")}
+    "<" Symbol "-VAR" ">"               -> Symbol  {cons("varsym")}
 
-    "LAYOUT"                            -> Sym  {cons("layout")}
+    "LAYOUT"                            -> Symbol  {cons("layout")}
 

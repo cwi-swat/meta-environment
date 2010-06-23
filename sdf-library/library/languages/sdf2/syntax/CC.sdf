@@ -1,11 +1,11 @@
 %%% $Id$
                   
-module languages/sdf22/syntax/CC
+module languages/sdf2/syntax/CC
 
-imports languages/sdf22/syntax/Character-Class 
-        languages/sdf22/syntax/Kernel
+imports languages/sdf2/syntax/Character-Class 
+        languages/sdf2/syntax/Kernel
 
 exports
   context-free syntax
-    CharClass -> Sym {cons("char-class")}
+    CharClass -> Symbol {cons("char-class")}
      

@@ -1,13 +1,13 @@
 %%% $Id$
                   
-module languages/sdf22/syntax/Aliases
+module languages/sdf2/syntax/Aliases
 
-imports languages/sdf22/syntax/Kernel
+imports languages/sdf2/syntax/Kernel
 
 exports
   sorts Alias Aliases
   context-free syntax 
     "aliases" Aliases              -> Grammar  {cons("aliases")}
-    Sym arrow:"->" alias:Sym -> Alias    {cons("alias")}
+    Symbol arrow:"->" alias:Symbol -> Alias    {cons("alias")}
     list:Alias*                    -> Aliases
 

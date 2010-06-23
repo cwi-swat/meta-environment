@@ -1,8 +1,8 @@
 %%% $Id$
                                
-module languages/sdf22/syntax/Labels
+module languages/sdf2/syntax/Labels
 
-imports languages/sdf22/syntax/Kernel 
+imports languages/sdf2/syntax/Kernel 
         basic/StrCon
 
 exports 
@@ -12,4 +12,4 @@ exports
     StrCon -> Label {cons("quoted")}
     IdCon  -> Label {cons("unquoted")}
 
-    Label ":" Sym -> Sym  {cons("label")}
+    Label ":" Symbol -> Symbol  {cons("label")}
