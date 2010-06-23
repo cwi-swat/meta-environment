@@ -1,6 +1,6 @@
-module languages/sdf2/syntax/Start-Symbols
+module languages/sdf22/syntax/Start-Symbols
 
-imports languages/sdf2/syntax/Kernel
+imports languages/sdf22/syntax/Kernel
 
 exports
   context-free syntax

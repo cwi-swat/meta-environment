@@ -1,8 +1,8 @@
 %%% $Id$
 
-module languages/sdf2/syntax/Sdf2
+module languages/sdf22/syntax/Sdf2
 
-imports languages/sdf2/syntax/Sdf2-Syntax
+imports languages/sdf22/syntax/Sdf2-Syntax
 
 exports
   lexical syntax
@@ -30,7 +30,7 @@ exports
     "sorts"             -> ModuleName {reject}
     "restrictions"      -> ModuleName {reject}
 
-     StrCon "(" arguments:{Symbol ","}* ")" -> Symbols {reject}
+     StrCon "(" arguments:{Sym ","}* ")" -> Symbols {reject}
 
      Associativity -> Label   {reject}
      Associativity -> ATermAttribute {reject}

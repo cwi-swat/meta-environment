@@ -1,14 +1,15 @@
 %%% $Id$
                      
-module languages/sdf2/syntax/Symbols
+module languages/sdf22/syntax/Symbols
 
-imports basic/Comments
+imports basic/Comments 
+        languages/sdf22/syntax/Sdf2-Syntax
 
 exports
-  sorts Symbol Symbols
+  sorts Symbols Sym
 
   context-free syntax
-    "(" Symbol ")" -> Symbol {bracket}
+    "(" Sym ")" -> Sym {bracket}
 
-    list:Symbol* -> Symbols
+    list:Sym* -> Symbols
 

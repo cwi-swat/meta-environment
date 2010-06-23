@@ -1,8 +1,8 @@
 %%% $Id$
                        
-module languages/sdf2/syntax/Sorts
+module languages/sdf22/syntax/Sorts
 
-imports languages/sdf2/syntax/Kernel
+imports languages/sdf22/syntax/Kernel
 
 exports
   sorts Sort
@@ -12,8 +12,8 @@ exports
 	{cons("more-chars")}
 
   context-free syntax
-    Sort                                    -> Symbol  {cons("sort")}
-    Sort "[[" parameters:{Symbol ","}+ "]]" -> Symbol  {cons("parameterized-sort")}
+    Sort                                    -> Sym  {cons("sort")}
+    Sort "[[" parameters:{Sym ","}+ "]]" -> Sym  {cons("parameterized-sort")}
 
     "sorts" Symbols -> Grammar {cons("sorts")}
 

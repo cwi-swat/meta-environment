@@ -1,8 +1,8 @@
 %%% $Id$
                                                   
-module languages/sdf2/syntax/Literals
+module languages/sdf22/syntax/Literals
 
-imports languages/sdf2/syntax/Kernel 
+imports languages/sdf22/syntax/Kernel 
 imports basic/StrCon
 imports basic/IdentifierCon
 
@@ -24,8 +24,8 @@ exports
     StrCon -> FunctionName {cons("quoted-fun")}
 
   context-free syntax
-    string:StrCon                -> Symbol {cons("lit")}
-    ci-string:SingleQuotedStrCon -> Symbol {cons("ci-lit")}
+    string:StrCon                -> Sym {cons("lit")}
+    ci-string:SingleQuotedStrCon -> Sym {cons("ci-lit")}
 
-    fun:FunctionName "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
-	-> Production  {avoid, cons("prefix-fun")}
+    fun:FunctionName "(" arguments:{Sym ","}* ")" "->" result:Sym Attributes 
+	-> Prod  {avoid, cons("prefix-fun")}

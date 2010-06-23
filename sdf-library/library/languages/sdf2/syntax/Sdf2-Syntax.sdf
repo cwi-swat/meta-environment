@@ -1,25 +1,25 @@
-module languages/sdf2/syntax/Sdf2-Syntax
+module languages/sdf22/syntax/Sdf2-Syntax
 
-imports languages/sdf2/syntax/Kernel
-        languages/sdf2/syntax/Basic
-        languages/sdf2/syntax/Modules
-        languages/sdf2/syntax/Regular
-        languages/sdf2/syntax/Lifting
-        languages/sdf2/syntax/Priority
-        languages/sdf2/syntax/CC
-        languages/sdf2/syntax/Sorts
-        languages/sdf2/syntax/Start-Symbols
-        languages/sdf2/syntax/Literals
-        languages/sdf2/syntax/Labels
-        languages/sdf2/syntax/Restrictions
-        languages/sdf2/syntax/Aliases
+imports languages/sdf22/syntax/Kernel
+        languages/sdf22/syntax/Basic
+        languages/sdf22/syntax/Modules
+        languages/sdf22/syntax/Regular
+        languages/sdf22/syntax/Lifting
+        languages/sdf22/syntax/Priority
+        languages/sdf22/syntax/CC
+        languages/sdf22/syntax/Sorts
+        languages/sdf22/syntax/Start-Symbols
+        languages/sdf22/syntax/Literals
+        languages/sdf22/syntax/Labels
+        languages/sdf22/syntax/Restrictions
+        languages/sdf22/syntax/Aliases
 
 exports
   sorts SDF
 
   context-free syntax
-    "<START>" -> Symbol {cons("start")}
-    "<Start>" -> Symbol {cons("file-start")}
+    "<START>" -> Sym {cons("start")}
+    "<Start>" -> Sym {cons("file-start")}
 
     "lexical"      "priorities" Priorities      -> Grammar {cons("lexical-priorities")}
     "context-free" "priorities" Priorities      -> Grammar {cons("context-free-priorities")}
@@ -29,5 +29,5 @@ exports
     "definition" Definition -> SDF {cons("definition")}
 
   context-free priorities
-    Symbol "|" Symbol  -> Symbol >
-    Label ":" Symbol -> Symbol                  
+    Sym "|" Sym  -> Sym >
+    Label ":" Sym -> Sym                  

@@ -1,7 +1,7 @@
-module languages/sdf2/syntax/Lifting
+module languages/sdf22/syntax/Lifting
 
-imports languages/sdf2/syntax/Kernel
+imports languages/sdf22/syntax/Kernel
 
-exports
+exports 
   context-free syntax
-    left-quote:"`" Symbol right-quote:"`" -> Symbol  {cons("lifting")}
+    left-quote:"`" Sym right-quote:"`" -> Sym  {cons("lifting")}

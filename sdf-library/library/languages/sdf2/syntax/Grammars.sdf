@@ -1,6 +1,6 @@
 %%% $Id$
                     
-module languages/sdf2/syntax/Grammars
+module languages/sdf22/syntax/Grammars
 
 imports basic/Comments
 

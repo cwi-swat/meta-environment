@@ -1,6 +1,6 @@
 %%% $Id$
                      
-module languages/sdf2/syntax/Character
+module languages/sdf22/syntax/Character
 
 
 

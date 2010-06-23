@@ -1,8 +1,8 @@
 %%% $Id$   
 
-module languages/sdf2/syntax/Priority
+module languages/sdf22/syntax/Priority
 
-imports languages/sdf2/syntax/Kernel
+imports languages/sdf22/syntax/Kernel
 
 exports
   sorts Associativity ArgumentIndicator Group Priority Priorities
@@ -21,13 +21,13 @@ exports
     Group ArgumentIndicator               -> Group {non-assoc,cons("with-arguments")}
     Group "."                             -> Group {non-assoc,cons("non-transitive")}
 
-    Production                            -> Group  {cons("simple-group")}
+    Prod                            -> Group  {cons("simple-group")}
     "{" Productions "}"                   -> Group  {cons("prods-group")}
     "{" Associativity ":" Productions "}" -> Group  {cons("assoc-group")}
 
     list:{Group ">"}+                                    -> Priority  {cons("chain")}
     "left":Group Associativity "right":Group             -> Priority  {cons("assoc")}
-%%    Production "<" arguments:{NatCon ","}+ ">" ">" Group -> Priority  {cons("argument")}
+%%    Prod "<" arguments:{NatCon ","}+ ">" ">" Group -> Priority  {cons("argument")}
 
     list:{Priority  ","}* -> Priorities
 

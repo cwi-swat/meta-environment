@@ -1,9 +1,9 @@
 %%% $Id$
                  
-module languages/sdf2/syntax/Modules
+module languages/sdf22/syntax/Modules
 
-imports languages/sdf2/syntax/Kernel 
-        languages/sdf2/syntax/Renaming
+imports languages/sdf22/syntax/Kernel 
+        languages/sdf22/syntax/Renaming
 
 hiddens
   sorts ModuleWord
