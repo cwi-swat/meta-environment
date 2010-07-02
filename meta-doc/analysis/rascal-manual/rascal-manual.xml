@@ -622,6 +622,14 @@ coding voorbeelden leesbaarder (en de library consistenter).-->
                 <entry><literal>f()</literal>, <literal>add(x,y)</literal>,
                 <literal>g("abc", [2,3,4])</literal></entry>
               </row>
+
+              <row>
+                <entry><literal>datetime</literal></entry>
+
+                <entry><literal>$2010-06-30</literal>,
+                <literal>$T09:15:27.321</literal>,
+                <literal>$2010-06-30T09:15:27.321+0100</literal></entry>
+              </row>
             </tbody>
           </tgroup>
         </table></para>
@@ -3885,6 +3893,114 @@ set[use] BackwardSlice(set[stat] CONTROLSTATEMENT,
             end line and column of text area.</para>
           </listitem>
         </itemizedlist>
+      </section>
+
+      <section>
+        <title>Datetime</title>
+
+        <para>Date, time, and datetime values are represented by the
+        <literal>datetime</literal> type. <literal>datetime</literal> literals
+        start with a <literal>$</literal> and are made up of either a date,
+        given in year, month, day of month order; a time, preceded by
+        <literal>T</literal> and given in hour, minute, second, millisecond,
+        (optional) timezone offset order; or a datetime, which is a date and a
+        time, in the orders given above, and separated by a
+        <literal>T</literal>. Examples include <literal>$2010-07-15</literal>,
+        <literal>$T09:15:23.123</literal>, and
+        <literal>$2010-07-15T09:15:23.123+03:00</literal>. The following
+        fields provide access to information about the value, but cannot be
+        set:</para>
+
+        <para><itemizedlist>
+            <listitem>
+              <para><literal>isDate</literal>: returns <literal>true</literal>
+              if the value is a date value, <literal>false</literal> if the
+              value is a datetime or time value</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>isTime</literal>: returns <literal>true</literal>
+              if the value is a time value, <literal>false</literal> if the
+              value is a date or datetime value</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>isDateTime</literal>: returns
+              <literal>true</literal> if the value is a datetime value,
+              <literal>false</literal> if the value is a date or time
+              value</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>justDate</literal>: returns the date component of
+              a date or datetime value</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>justTime</literal>: returns the time component of
+              a time or datetime value</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>century</literal>: returns the century of a year
+              for date or datetime values, for example, <literal>20</literal>
+              for <literal>$2010-07-15</literal></para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para>The following fields provide access to the individual components
+        of date, time, and datetime values, and can be accessed using field
+        selection and assigned using field assignment:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>year</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>month</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>day</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>hour</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>minute</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>second</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>millisecond</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>timezoneOffsetHours</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>timezoneOffsetMinutes</literal></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Not all fields are available on all values. The fields
+        <literal>year</literal>, <literal>month</literal>, and
+        <literal>day</literal> are available on date and datetime values,
+        while <literal>hour</literal>, <literal>minute</literal>,
+        <literal>second</literal>, <literal>millisecond</literal>,
+        <literal>timezoneOffsetHours</literal>, and
+        <literal>timezoneOffsetMinutes</literal> are available on time and
+        datetime values. The <literal>isDate</literal>,
+        <literal>isTime</literal>, and <literal>isDateTime</literal> fields
+        can be checked in advance to determine what kind of value is stored in
+        a variable of type <literal>datetime</literal>.</para>
       </section>
 
       <section>
@@ -7739,6 +7855,11 @@ rascal&gt;</prompt> <userinput>solve (T) {
       </listitem>
 
       <listitem>
+        <para>Datetime: operators and functions on Datetime values, see <xref
+        linkend="section.lib-Datetime" />.</para>
+      </listitem>
+
+      <listitem>
         <para>Exception: data definition of all soft exceptions that can be
         caught by Rascal programs, see <xref
         linkend="section.lib-Exception" />.</para>
@@ -7904,6 +8025,12 @@ rascal&gt;</prompt> <userinput>solve (T) {
               <entry><replaceable>Loc</replaceable></entry>
 
               <entry><keysym>loc</keysym></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Datetime</replaceable></entry>
+
+              <entry><keysym>datetime</keysym></entry>
             </row>
 
             <row>
@@ -8254,6 +8381,753 @@ rascal&gt;</prompt> <userinput>solve (T) {
           </tbody>
         </tgroup>
       </table>
+    </section>
+
+    <section xml:id="section.lib-Datetime">
+      <title>Datetime</title>
+
+      <para>The Datetime library provides functionality for working with date,
+      time, and datetime values. Two other types are introduced as well:
+      <literal>interval</literal>, defined as <literal>data interval =
+      Interval(datetime start, datetime end)</literal> and representing closed
+      datetime intervals; and <literal>duration</literal>, defined as
+      <literal>data duration = Duration(int years, int months, int days, int
+      hours, int minutes, int seconds, int milliseconds)</literal> and
+      representing durations over time (i.e., the difference between two times
+      on the timeline).</para>
+
+      <!--Add documentation of format strings used in parsing and printing.-->
+
+      <table>
+        <title>Datetime Operators</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="1*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Operator</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><replaceable>Datetime</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>Datetime</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if both arguments are
+              identical</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Datetime</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>Datetime</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if both arguments are not
+              identical</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Datetime</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>Datetime</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if both arguments are
+              identical or
+              <replaceable>Datetime</replaceable><subscript>1</subscript>
+              represents an earlier instance in time than
+              <replaceable>Datetime</replaceable><subscript>2</subscript>,
+              with date values without times given a default time of
+              <literal>$T00:00:00.000</literal> and time values without dates
+              given a default date of <literal>$01-01-1970</literal> </entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Datetime</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>Datetime</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if
+              <replaceable>Datetime</replaceable><subscript>1</subscript>
+              represents an earlier instance in time than
+              <replaceable>Datetime</replaceable><subscript>2</subscript>,
+              with date values without times given a default time of
+              <literal>$T00:00:00.000</literal> and time values without dates
+              given a default date of <literal>$01-01-1970</literal></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Datetime</replaceable><subscript>1</subscript>
+              <literal>=&gt;</literal>
+              <replaceable>Datetime</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if both arguments are
+              identical or
+              <replaceable>Datetime</replaceable><subscript>1</subscript>
+              represents a later instance in time than
+              <replaceable>Datetime</replaceable><subscript>2</subscript>,
+              with date values without times given a default time of
+              <literal>$T00:00:00.000</literal> and time values without dates
+              given a default date of <literal>$01-01-1970</literal></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>Datetime</replaceable><subscript>1</subscript>
+              <literal>&gt;</literal>
+              <replaceable>Datetime</replaceable><subscript>2</subscript></entry>
+
+              <entry>Yields <literal>true</literal> if
+              <replaceable>Datetime</replaceable><subscript>1</subscript>
+              represents a later instance in time than
+              <replaceable>Datetime</replaceable><subscript>2</subscript>,
+              with date values without times given a default time of
+              <literal>$T00:00:00.000</literal> and time values without dates
+              given a default date of <literal>$01-01-1970</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Datetime Creation Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="2*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>datetime now()</literal></entry>
+
+              <entry>Return the current instant of time as a datetime value,
+              accurate to the nearest millisecond</entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime createDate(int year, int month, int
+              day)</literal></entry>
+
+              <entry>Create a new date value representing the year, month, and
+              day provided</entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime createTime(int hour, int minute, int
+              second, int millisecond)</literal></entry>
+
+              <entry>Create a new time value representing the hour, minute,
+              second, and millisecond provided, with the timezone offset set
+              to the current timezone offset</entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime createTime(int hour, int minute, int
+              second, int millisecond, int timezoneHourOffset, int
+              timezoneMinuteOffset)</literal></entry>
+
+              <entry>Create a new time value representing the hour, minute,
+              second, and millisecond provided, with the timezone offset set
+              to the provided offset hours and minutes</entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime createDateTime(int year, int month, int
+              day, int hour, int minute, int second, int
+              millisecond)</literal></entry>
+
+              <entry>Create a new datetime value representing the year, month,
+              day, hour, minute, second, and millisecond provided, with the
+              timezone offset set to the current timezone offset</entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime createDateTime(int year, int month, int
+              day, int hour, int minute, int second, int millisecond, int
+              timezoneHourOffset, int timezoneMinuteOffset)</literal></entry>
+
+              <entry>Create a new datetime value representing the year, month,
+              day, hour, minute, second, and millisecond provided, with the
+              timezone offset set to the provided offset hours and
+              minutes</entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime joinDateAndTime(datetime date, datetime
+              time)</literal></entry>
+
+              <entry>Create a new datetime value using the given date and time
+              values</entry>
+            </row>
+
+            <row>
+              <entry><literal>tuple[datetime date, datetime time]
+              splitDateTime(datetime dt)</literal></entry>
+
+              <entry>Extract the date and time components from the given
+              datetime value, returning a pair with date and time
+              fields</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Datetime Modification Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="2*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>datetime incrementYears(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the years incremented by
+              <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementYears(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>incrementYears(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementMonths(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the months incremented
+              by <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementMonths(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>incrementMonths(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementDays(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the days incremented by
+              <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementDays(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>incrementDays(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementHours(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the hours incremented by
+              <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementHours(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>incrementHours(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementMinutes(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the minutes incremented
+              by <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementMinutes(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>incrementMinutes(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementSeconds(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the seconds incremented
+              by <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementSeconds(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>incrementSeconds(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementMilliseconds(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the milliseconds
+              incremented by <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime incrementMilliseconds(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>incrementMilliseconds(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementYears(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the years decremented by
+              <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementYears(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>decrementYears(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementMonths(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the months decremented
+              by <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementMonths(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>decrementMonths(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementDays(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the days decremented by
+              <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementDays(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>decrementDays(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementHours(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the hours decremented by
+              <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementHours(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>decrementHours(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementMinutes(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the minutes decremented
+              by <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementMinutes(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>decrementMinutes(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementSeconds(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the seconds decremented
+              by <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementSeconds(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>decrementSeconds(dt,
+              1)</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementMilliseconds(datetime dt, int
+              n)</literal></entry>
+
+              <entry>Return a new datetime value with the milliseconds
+              decremented by <literal>n</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime decrementMilliseconds(datetime
+              dt)</literal></entry>
+
+              <entry>Shorthand for <literal>decrementMilliseconds(dt,
+              1)</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Datetime Interval Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="2*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>interval createInterval(datetime start, datetime
+              end)</literal></entry>
+
+              <entry>Return a closed interval made up of the
+              <literal>start</literal> and <literal>end</literal> datetime
+              values</entry>
+            </row>
+
+            <row>
+              <entry><literal>int daysDiff(datetime start, datetime
+              end)</literal></entry>
+
+              <entry>Return the number of days in the closed interval from
+              <literal>start</literal> to <literal>end</literal>, including
+              the start and end dates; for instance, there are 10 days in the
+              interval from $2010-10-01 to $2010-10-10</entry>
+            </row>
+
+            <row>
+              <entry><literal>int daysInInterval(interval i)</literal></entry>
+
+              <entry>Return the number of days in an interval, including the
+              start and end dates; for instance, there are 10 days in the
+              interval from $2010-10-01 to $2010-10-10</entry>
+            </row>
+
+            <row>
+              <entry><literal>list[datetime] dateRangeByDay(interval
+              i)</literal></entry>
+
+              <entry>Return the days in an interval as a list of dates,
+              including the start and end dates</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Datetime Duration Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="2*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>duration createDuration(datetime start, datetime
+              end)</literal></entry>
+
+              <entry>Return the duration, given as the length in years,
+              months, days, hours, minutes, seconds, and milliseconds, between
+              two dates</entry>
+            </row>
+
+            <row>
+              <entry><literal>duration createDuration(interval
+              i)</literal></entry>
+
+              <entry>Return the duration between the two endpoints of an
+              interval</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Datetime Parsing From String Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="2*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>datetime parseDate(str inputDate, str
+              formatString)</literal></entry>
+
+              <entry>Parse the date given in <literal>inputDate</literal>,
+              using the provided <literal>formatString</literal> and the
+              current locale</entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime parseDateInLocale(str inputDate, str
+              formatString, str locale)</literal></entry>
+
+              <entry>Parse the date given in <literal>inputDate</literal>,
+              using the provided <literal>formatString</literal> and the given
+              <literal>locale</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime parseTime(str inputTime, str
+              formatString)</literal></entry>
+
+              <entry>Parse the time given in <literal>inputTime</literal>,
+              using the provided <literal>formatString</literal> and the
+              current locale</entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime parseTimeInLocale(str inputTime, str
+              formatString, str locale)</literal></entry>
+
+              <entry>Parse the time given in <literal>inputTime</literal>,
+              using the provided <literal>formatString</literal> and the given
+              <literal>locale</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime parseDateTime(str inputDateTime, str
+              formatString)</literal></entry>
+
+              <entry>Parse the datetime given in
+              <literal>inputDateTime</literal>, using the provided
+              <literal>formatString</literal> and the current locale</entry>
+            </row>
+
+            <row>
+              <entry><literal>datetime parseDateTimeInLocale(str
+              inputDateTime, str formatString, str locale)</literal></entry>
+
+              <entry>Parse the datetime given in
+              <literal>inputDateTime</literal>, using the provided
+              <literal>formatString</literal> and the given
+              <literal>locale</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Datetime Conversion to String Functions</title>
+
+        <tgroup cols="2">
+          <colspec align="left" colname="col1" colwidth="2*" />
+
+          <colspec align="left" colname="col2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Function</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>str printDate(datetime
+              inputDate)</literal></entry>
+
+              <entry>Convert the date given in <literal>inputDate</literal> to
+              a string, using the default format and the current
+              locale</entry>
+            </row>
+
+            <row>
+              <entry><literal>str printDate(datetime inputDate, str
+              formatString)</literal></entry>
+
+              <entry>Convert the date given in <literal>inputDate</literal> to
+              a string, formatted according to <literal>formatString</literal>
+              and using the current locale</entry>
+            </row>
+
+            <row>
+              <entry><literal>str printDateInLocale(datetime inputDate, str
+              locale)</literal></entry>
+
+              <entry>Convert the date given in <literal>inputDate</literal> to
+              a string, using the default format and the given
+              <literal>locale</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>str printDateInLocale(datetime inputDate, str
+              formatString, str locale)</literal></entry>
+
+              <entry>Convert the date given in <literal>inputDate</literal> to
+              a string, formatted according to <literal>formatString</literal>
+              and using the given <literal>locale</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>str printTime(datetime
+              inputTime)</literal></entry>
+
+              <entry>Convert the time given in <literal>inputTime</literal> to
+              a string, using the default format and the current
+              locale</entry>
+            </row>
+
+            <row>
+              <entry><literal>str printTime(datetime inputTime, str
+              formatString)</literal></entry>
+
+              <entry>Convert the time given in <literal>inputTime</literal> to
+              a string, formatted according to <literal>formatString</literal>
+              and using the current locale</entry>
+            </row>
+
+            <row>
+              <entry><literal>str printTimeInLocale(datetime inputTime, str
+              locale)</literal></entry>
+
+              <entry>Convert the time given in <literal>inputTime</literal> to
+              a string, using the default format and the given
+              <literal>locale</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>str printTimeInLocale(datetime inputTime, str
+              formatString, str locale)</literal></entry>
+
+              <entry>Convert the time given in <literal>inputTime</literal> to
+              a string, formatted according to <literal>formatString</literal>
+              and using the given <literal>locale</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>str printDateTime(datetime
+              inputDateTime)</literal></entry>
+
+              <entry>Convert the datetime given in
+              <literal>inputDateTime</literal> to a string, using the default
+              format and the current locale</entry>
+            </row>
+
+            <row>
+              <entry><literal>str printDateTime(datetime inputDateTime, str
+              formatString)</literal></entry>
+
+              <entry>Convert the datetime given in
+              <literal>inputDateTime</literal> to a string, formatted
+              according to <literal>formatString</literal> and using the
+              current locale</entry>
+            </row>
+
+            <row>
+              <entry><literal>str printDateTimeInLocale(datetime
+              inputDateTime, str locale)</literal></entry>
+
+              <entry>Convert the datetime given in
+              <literal>inputDateTime</literal> to a string, using the default
+              format and the given <literal>locale</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>str printDateTimeInLocale(datetime
+              inputDateTime, str formatString, str locale)</literal></entry>
+
+              <entry>Convert the datetime given in
+              <literal>inputDateTime</literal> to a string, formatted
+              according to <literal>formatString</literal> and using the given
+              <literal>locale</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para></para>
     </section>
 
     <section xml:id="section.lib-Exception">
