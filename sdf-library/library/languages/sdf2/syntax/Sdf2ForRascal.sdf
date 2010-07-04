@@ -1,4 +1,6 @@
-module languages/sdf2/syntax/Sdf2-Syntax
+%%% $Id: Sdf2ForRascal.sdf 17765 2006-02-13 12:54:52Z jurgenv $
+
+module languages/sdf2/syntax/Sdf2ForRascal
 
 imports languages/sdf2/syntax/Kernel
         languages/sdf2/syntax/Basic
@@ -17,9 +19,6 @@ imports languages/sdf2/syntax/Kernel
 exports
   sorts SDF
 
-  context-free start-symbols
-        SDF Module
-
   context-free syntax
     "<START>" -> Symbol {cons("start")}
     "<Start>" -> Symbol {cons("file-start")}
@@ -33,4 +32,10 @@ exports
 
   context-free priorities
     Symbol "|" Symbol  -> Symbol >
-    Label ":" Symbol -> Symbol                  
+    Label ":" Symbol -> Symbol 
+exports
+  context-free start-symbols
+    SDF Module
+
+  lexical syntax
+    "LAYOUT"            -> Sort    {reject}
