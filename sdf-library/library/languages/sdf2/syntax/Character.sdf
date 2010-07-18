@@ -11,6 +11,9 @@ exports
     character:[a-zA-Z0-9]                  -> ShortChar {cons("regular")}
     [\\] escape:~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar {cons("escaped")}
 
+  lexical restrictions
+    NumChar -/- [0-9]
+
   context-free syntax
     NumChar   -> Character {cons("numeric")}
     ShortChar -> Character {cons("short")}
