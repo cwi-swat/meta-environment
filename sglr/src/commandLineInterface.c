@@ -23,7 +23,7 @@
 #include "parserStatistics.h"
 
 static const char programName[] = "sglr";
-static const char myArguments[] = "2Acd:f::hi:l:mno:p:s:tvV";
+static const char myArguments[] = "2Acd:f::hi:l:mno:p:s:S:tvV";
 static const char myVersion[]   = VERSION;
 
 static const char *flag(ATbool value) {
@@ -47,6 +47,7 @@ static void usage() {
   int filterRejectFlag          = FLT_getRejectFlag();
   int filterRemoveCyclesFlag    = FLT_getRemoveCyclesFlag();
   int filterTopSort             = FLT_getSelectTopNonterminalFlag();
+  int filterTopSortATerm        = FLT_getTopNonterminalIsATermFlag();
   int verboseFlag               = PARSER_getVerboseFlag;
   int debugFlag                 = PARSER_getDebugFlag;
   int statisticsFlag            = MAIN_getStatsFlag;
@@ -77,6 +78,7 @@ static void usage() {
 	  "\t-o file     : output to |file|                       [stdout]\n"
 	  "\t-p file     : use parse table |file| (required)\n"
 	  "\t-s symbol   : select tree with start symbol          [%s]\n"
+	  "\t-S symbol   : select tree with start symbol (aterm)  [%s]\n"
 	  "\t-t          : output AsFix in textual format         [%s]\n"
 	  "\t-v          : toggle verbose mode                    [%s]\n"
 	  "\t-V          : reveal program version\n"
@@ -98,6 +100,7 @@ static void usage() {
 	  flag(outputFlag),
 	  flag(parserFlag),
       flag(filterTopSort),
+          flag(filterTopSortATerm),
 	  flag(textualOutputFlag),
 	  flag(verboseFlag)
 	  );
@@ -158,6 +161,7 @@ static void handleOptions (int argc, char **argv) {
   int flattenFlag                = MAIN_getFlattenTreeFlag();
   int countPosIndependentAmbFlag = MAIN_getCountPosIndependentAmbsFlag();
   int startSymbolFlag            = FLT_getSelectTopNonterminalFlag();
+  int startSymbolIsATermFlag     = FLT_getTopNonterminalIsATermFlag();
 
   char *startSymbol     = NULL;
   char *inputFileName   = "-";
@@ -191,6 +195,8 @@ static void handleOptions (int argc, char **argv) {
           outputToFile = ATtrue;
           break;
       case 'p':   parseTableName     = optarg;              break;
+      case 'S':
+          startSymbolIsATermFlag = !startSymbolIsATermFlag;  
       case 's':   
           startSymbolFlag = !startSymbolFlag;
           startSymbol = optarg;              
@@ -244,6 +250,7 @@ static void handleOptions (int argc, char **argv) {
   FLT_setSelectTopNonterminalFlag(startSymbolFlag);
   if (startSymbolFlag) {
     FLT_setTopNonterminal(startSymbol);
+    FLT_setTopNonterminalIsATermFlag(startSymbolIsATermFlag);
   }
   PARSER_setAmbiguityErrorFlag(ambiguityerrorflag);
 

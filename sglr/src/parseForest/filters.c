@@ -822,21 +822,37 @@ ATbool isStartInjection(PT_Production prod) {
                  NULL, NULL, NULL);
 }
 
-static ATbool isOfSort(PT_Tree t, const char* sort) {
+ATbool isStartInjectionATerm(PT_Production prod) {
+  /** \warning This unapified ATerm level code MUST go */
+  return ATmatch((ATerm) prod,
+                 "prod([cf(opt(layout)),<term>,cf(opt(layout))],"
+                 "sort(\"<START>\"),no-attrs)",
+                 NULL, NULL, NULL);
+}
+
+static ATbool isOfSort(PT_Tree t, const char* sort, ATbool sortIsATerm) {
   PT_Production prod = PT_getTreeProd(t);
 
-  if (isStartInjection(prod)) {
-    PT_Symbol sym = PT_getSymbolsSymbolAt(PT_getProductionLhs(prod), 1);
+  if (sortIsATerm) {
+    if (isStartInjectionATerm(prod)) {
+      PT_Symbol sym = PT_getSymbolsSymbolAt(PT_getProductionLhs(prod), 1);
+      return !strcmp(ATwriteToString(PT_SymbolToTerm(sym)), sort);
+    }
+  } else {
+    if (isStartInjection(prod)) {
+      PT_Symbol sym = PT_getSymbolsSymbolAt(PT_getProductionLhs(prod), 1);
 
-    assert(PT_isSymbolCf(sym));
-    sym = PT_getSymbolSymbol(sym);
-    assert(PT_isSymbolSort(sym));
+      assert(PT_isSymbolCf(sym));
+      sym = PT_getSymbolSymbol(sym);
+      assert(PT_isSymbolSort(sym));
 
-     return !strcmp(PT_getSymbolString(sym), sort);
+      return !strcmp(PT_getSymbolString(sym), sort);
+    }
   }
 
   return ATfalse;
 }
+
 
 /** 
  * For the given tree it checks to see the root node is labelled with the 
@@ -851,7 +867,7 @@ static ATbool isOfSort(PT_Tree t, const char* sort) {
  *         specified non-terminal; or a tree whose top node is ambiguous and
  *         whose children are all labelled by the specified non-terminal. 
  */
-static PT_Tree filterOnTopSort(ParseTable *pt, PT_Tree t, const char *sort) {
+static PT_Tree filterOnTopSort(ParseTable *pt, PT_Tree t, const char *sort, ATbool sortIsATerm) {
   PT_Args allambs;
   PT_Args newambs = PT_makeArgsEmpty();
   ATerm  index;
@@ -867,7 +883,7 @@ static PT_Tree filterOnTopSort(ParseTable *pt, PT_Tree t, const char *sort) {
      */
     for (; !PT_isArgsEmpty(allambs); allambs = PT_getArgsTail(allambs)) {
       PT_Tree amb = PT_getArgsHead(allambs);
-      if (isOfSort(amb, sort)) {
+      if (isOfSort(amb, sort, sortIsATerm)) {
         newambs = PT_makeArgsMany(amb, newambs);
       }
     }
@@ -886,7 +902,7 @@ static PT_Tree filterOnTopSort(ParseTable *pt, PT_Tree t, const char *sort) {
      * whether it has the sort that was expected.
      * If this tree is removed a "NULL" tree is returned.
      */
-    if (isOfSort(t, sort)) {
+    if (isOfSort(t, sort, sortIsATerm)) {
         return t;
     }
   }
@@ -1542,7 +1558,7 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
    if (FLT_getSelectTopNonterminalFlag()) {
      const char *topNonterminal = FLT_getTopNonterminal();
 
-     t = filterOnTopSort(pt, t, topNonterminal); 
+     t = filterOnTopSort(pt, t, topNonterminal, FLT_getTopNonterminalIsATermFlag()); 
 
      if (t == NULL) {
        char *errorDesc = "Entire parse tree removed during filtering because the tree's root node is not labelled by the given sort name";

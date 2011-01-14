@@ -33,6 +33,9 @@ ATbool FLT_getRemoveCyclesFlag();
 void   FLT_setTopNonterminal(const char* nonterminal);
 const char* FLT_getTopNonterminal();
 
+void   FLT_setTopNonterminalIsATermFlag(ATbool value);
+ATbool FLT_getTopNonterminalIsATermFlag();
+
 void FLT_printOptions();
 
 #endif /* __FILTER_OPTIONS_H__ */

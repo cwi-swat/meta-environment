@@ -17,6 +17,7 @@ static int REJECT_FLAG;
 static int SELECTTOPNONTERMINAL_FLAG;
 static int SELECTTOPNONTERMINAL_VALUE;
 static int REMOVECYCLES_FLAG;
+static int TOPNONTERMINALISATERM_FLAG;
 
 void FLT_initialize(){
   FILTER_FLAG = OPT_getFlagOptionId();
@@ -28,6 +29,7 @@ void FLT_initialize(){
   REJECT_FLAG = OPT_getFlagOptionId();
   SELECTTOPNONTERMINAL_FLAG = OPT_getFlagOptionId();
   SELECTTOPNONTERMINAL_VALUE = OPT_getStringOptionId();
+  TOPNONTERMINALISATERM_FLAG = OPT_getFlagOptionId();
   REMOVECYCLES_FLAG = OPT_getFlagOptionId();
 }
 
@@ -39,6 +41,7 @@ void FLT_initializeDefaultOptions() {
   FLT_setPriorityFlag(ATtrue);
   FLT_setRejectFlag(ATtrue);
   FLT_setSelectTopNonterminalFlag(ATfalse);
+  FLT_setTopNonterminalIsATermFlag(ATfalse);
   FLT_setTopNonterminal("***NOT SET***");
 }
 
@@ -52,7 +55,8 @@ void FLT_setFilterFlag(ATbool value) {
     FLT_setInjectionCountFlag(ATfalse); 
     FLT_setPriorityFlag(ATfalse); 
     FLT_setRejectFlag(ATfalse); 
-    FLT_setSelectTopNonterminalFlag(ATfalse); 
+    FLT_setSelectTopNonterminalFlag(ATfalse);
+    FLT_setTopNonterminalIsATermFlag(ATfalse);
     FLT_setRemoveCyclesFlag(ATfalse); 
   }
 }
@@ -125,6 +129,14 @@ const char* FLT_getTopNonterminal() {
   return OPT_getStringValue(SELECTTOPNONTERMINAL_VALUE);
 }
 
+void FLT_setTopNonterminalIsATermFlag(ATbool value) {
+  OPT_setFlag(TOPNONTERMINALISATERM_FLAG, value);
+}
+
+ATbool FLT_getTopNonterminalIsATermFlag() {
+  return OPT_getFlag(TOPNONTERMINALISATERM_FLAG);
+}
+
 void FLT_setRemoveCyclesFlag(ATbool value) {
   OPT_setFlag(REMOVECYCLES_FLAG, value);
 }
@@ -143,6 +155,7 @@ void FLT_printOptions() {
   ATwarning("REJECT_FLAG = %s\n", FLT_getRejectFlag()?"True":"False");
   ATwarning("SELECTTOPNONTERMINAL_FLAG = %s\n", FLT_getSelectTopNonterminalFlag()?"True":"False");
   ATwarning("SELECTTOPNONTERMINAL_VALUE = %s\n", FLT_getTopNonterminal()?"True":"False");
+  ATwarning("TOPNONTERMINALISATERM_FLAG = %s\n", FLT_getTopNonterminalIsATermFlag()?"True":"False");
   ATwarning("REMOVECYCLES_FLAG = %s\n", FLT_getRemoveCyclesFlag()?"True":"False");
 }
 
