@@ -9,11 +9,10 @@
 
 #include "minmax.h"
 #include "flattenAgain.h"
-#include "selectSort.h"
 
 static char myname[] = "filterPT";
-static char myversion[] = "0.2";
-static char myarguments[] = "hi:n:N:o:t:V";
+static char myversion[] = "0.1";
+static char myarguments[] = "hi:n:N:o:V";
 
 /*{{{  void usage(void) */
 
@@ -26,7 +25,6 @@ void usage(void)
           "\t-h              display help information (usage)\n"
           "\t-i filename     input from file (default stdin)\n"
           "\t-o filename     output to file (default stdout)\n"
-	  "\t-t topsort      top sort to filter on (in ATerm AsFiX form)\n"
 	  "\t-n sort-name    minimize occurrences of this sort name\n"
 	  "\t-N sort-name    maximize occurrences of this sort name\n"
           "\t-V              reveal program version (i.e. %s)\n"
@@ -57,7 +55,6 @@ int main(int argc, char **argv)
   char   *argument = NULL;
   ATbool minimizeSort = ATfalse;
   ATbool maximizeSort = ATfalse;
-  PT_Symbol topsort = NULL;
   ATerm inputTerm = NULL;
   ATerm outputTerm = NULL;
   PT_ParseTree inputTree = NULL;
@@ -78,14 +75,6 @@ int main(int argc, char **argv)
 	break;
       case 'o':  
 	output=optarg;     
-	break;
-      case 't':
-	topsort = PT_SymbolFromTerm(ATparse(optarg));
-	if (topsort == NULL) {
-          ATwarning("parse error in symbol %s", optarg);
-	  usage();
-	  exit (1);
-	}
 	break;
       case 'V':  
 	version();
@@ -114,9 +103,9 @@ int main(int argc, char **argv)
       PT_Symbol sort = PT_makeSymbolCf(PT_makeSymbolSort(argument));
       outputTree = minmax(inputTree, sort, minimizeSort);
     }
-
-    if (topSort != NULL) {
-      outputTree = selectSort(outputTree != NULL ? outputTree : inputTree, topSort);
+    else {
+      usage();
+      return 1;
     }
 
     if (outputTree != NULL) {
