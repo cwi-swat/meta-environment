@@ -255,7 +255,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="sdf.gif" scalefit="1" width="100%"></imagedata>
+            <imagedata fileref="sdf.gif" scalefit="0" width="100%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -394,7 +394,7 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="assoc.png" scalefit="1" width="100%"></imagedata>
+              <imagedata fileref="assoc.png" scalefit="0" width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -622,7 +622,7 @@ context-free priorities
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="transitive.png" scalefit="1" width="50%"></imagedata>
+              <imagedata fileref="transitive.png" scalefit="0" width="50%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1270,7 +1270,7 @@ context-free syntax
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="returnkeyword.png" width="100%"></imagedata>
+            <imagedata fileref="returnkeyword.png" scalefit="1" width="100%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1405,7 +1405,8 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="identifierclone.png" width="100%"></imagedata>
+              <imagedata fileref="identifierclone.png" scalefit="1"
+                         width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1509,7 +1510,8 @@ int i;</programlisting>
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="dynamicreservation.png" width="100%"></imagedata>
+              <imagedata fileref="dynamicreservation.png" scalefit="1"
+                         width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1557,24 +1559,6 @@ int i;</programlisting>
     </section>
 
     <section>
-      <title>Operator prefixes</title>
-
-      <para>TODO</para>
-    </section>
-
-    <section>
-      <title>Syntactic overloading of brackets</title>
-
-      <para>TODO</para>
-    </section>
-
-    <section>
-      <title>Lists with nullables</title>
-
-      <para>TODO</para>
-    </section>
-
-    <section>
       <title>Dangling else and related ambiguities</title>
 
       <para>This is a pretty frequently occurring ambiguity, where productions
@@ -1618,7 +1602,7 @@ context-free syntax
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="dangle1.png" width="100%"></imagedata>
+            <imagedata fileref="dangle1.png" scalefit="1" width="100%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
