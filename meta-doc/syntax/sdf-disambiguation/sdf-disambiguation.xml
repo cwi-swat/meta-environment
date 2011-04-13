@@ -255,7 +255,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="sdf.gif" scalefit="0" width="100%"></imagedata>
+            <imagedata fileref="sdf.gif" scalefit="1" width="100%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -394,7 +394,8 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="assoc.png" scalefit="0" width="100%"></imagedata>
+              <imagedata fileref="assoc.png" scale="60" scalefit="0"
+                         width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -622,7 +623,8 @@ context-free priorities
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="transitive.png" scalefit="0" width="50%"></imagedata>
+              <imagedata fileref="transitive.png" scale="60" scalefit="0"
+                         width="50%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -690,7 +692,8 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="prefix.png" scalefit="1" width="100%"></imagedata>
+              <imagedata fileref="prefix.png" scale="60" scalefit="0"
+                         width="100%"></imagedata>
             </imageobject>
           </mediaobject>
 
