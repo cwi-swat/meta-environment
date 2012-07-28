@@ -1,0 +1,34 @@
+Sat May 10 12:41:06 2008    <bruntink@cwi.nl>
+
+	* svg-support.pc.in: Added the batik.jar to the Jars that other
+	packages get on their build path.
+
+Fri May  9 09:42:22 2008    <bruntink@cwi.nl>
+
+	* Makefile.am: Included Makefile.java.meta instead of
+	Makefile.top.meta.
+
+	* svg-support.pc.in: The package now installs an empty
+	svg-support.jar to prevent the lib/batik.jar from being
+	overwritten during install.
+
+Wed May  7 09:42:45 2008    <bruntink@cwi.nl>
+
+	* svg-support.pc.in: Added all the Java packages that are in the
+	batik jars to allow other Meta packages to use them.
+
+Tue May  6 19:12:59 2008    <bruntink@cwi.nl>
+
+	* configure.ac: Added META_JAVA_SETUP to make sure that the
+          Eclipse meta data are generated.
+
+Wed Oct  3 16:35:18 CEST 2007 <kooiker@cwi.nl>
+ * Removed full source code of Batik since it made the distribution to big.
+   License of Batik is also available in the binary Batik distribution.
+
+Tue Mar 13 09:10:55 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * README: added this package to wrap the Batik SVG toolkit.
+   This package does nothing but provide it to the Meta-Environment.
+   The full source code of Batik is in the distribution for reference
+   purposes (including licenses).
+
