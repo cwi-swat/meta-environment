@@ -1,0 +1,25 @@
+
+#include "toolbus-adapter.tbi"
+
+process HELLO is
+let
+  Instances : list
+in
+  ( printf("Hello World!\n") .
+    snd-msg(toolbus-get-instances) .
+    rec-msg(toolbus-instances(Instances?)) .
+    printf("instances: %t\n", Instances) .
+    tau delay(sec(5))
+  ) * delta
+endlet
+
+process RECEIVER is
+let
+  Msg : str
+in
+  ( rec-msg(external-msg(Msg?)) .
+    printf("external message received: %s\n", Msg)
+  ) * delta
+endlet
+
+toolbus(HELLO, TB-ADAPTER-CONNECT)

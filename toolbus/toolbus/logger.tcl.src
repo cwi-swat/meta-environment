@@ -1,0 +1,315 @@
+#! __WISH__ -f        			    -*- C -*-
+#
+#    ToolBus -- The ToolBus Application Architecture
+#    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam,
+#                             The  Netherlands.
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+#
+
+# User interface for ToolBus logger
+
+# The following functions are called by the wish-adapter:
+#
+# create_proc: create a new process with given process-id and name
+# create_tool: create a new tool instance with given tool-id and name
+# update_var: update the value of a variable in a process
+# update_subs: update the subscriptions of a process
+# update_notes: update the notes of a process
+# proc_proc_comm: communication between processes pid1 and pid2
+# proc_tool_comm: communication from process pid to tool tid
+# tool_proc_comm: communication from tool tid to process pid
+# monitor_atom: execute an atom
+
+# procs(pid)        = name
+# procs(name,inst)  = # instances
+# procs(name,natom) = total # of atoms
+# procs(name,nmsg)  = total # of messages sent/received
+# procs(name,ntool) = total # of tool related actions
+# procs(name,nnote) = total # of note related actions
+
+# set procs(0) INIT
+# set procs(INIT,inst) 1
+# set procs(INIT,natom) 0
+
+# tools(tid)           = name
+# tools(name,inst)     = # instances
+# tools(name,natom)    = total # of atoms
+# tools(name,tosize)   = total volume (bytes) of communication to tool
+# tools(name,fromsize) = total volume (bytes) of communication from tool
+
+set proc_names {}
+set tool_names {}
+
+proc create_proc {pid name} {
+  global procs proc_names
+
+  if { [lsearch $proc_names $name] < 0 } {
+     lappend proc_names $name
+  }
+
+  if { [info exists procs($name,inst)] } {
+     incr procs($name,inst)
+     set procs($pid) $name
+  } else {
+     set procs($name,inst) 1
+     set procs($name,natom) 0
+     set procs($name,nmsg) 0
+     set procs($name,ntool) 0
+     set procs($name,nnote) 0
+     set procs($pid) $name
+   }
+}
+
+proc create_tool {tid name} {
+  global tools tool_names
+
+  if {$name == "logger" } {
+    return
+  }
+  if { [lsearch $tool_names $name] < 0 } {
+     lappend tool_names $name
+  }
+
+  if { [info exists tools($name,inst)] } {
+     incr tools($name,inst)     
+     set tools($tid) $name
+  } else {
+     set tools($name,inst) 1
+     set tools($name,natom) 0
+     set tools($name,tosize) 0
+     set tools($name,fromsize) 0
+     set tools($tid) $name
+   }
+}
+
+proc update_var {pid var val} {
+}
+
+proc update_subs {pid subs} {
+}
+
+proc update_notes {pid notes} {
+}
+
+# Note: for a binary communication between pid1 and pid2, we get
+#    proc_proc_com pid1 pid2
+# and
+#    proc_proc_com pid2 pid1
+# We do not draw (the same) connection for the second call.
+
+proc proc_proc_comm {pid1 pid2 dir} {
+}
+
+proc proc_tool_comm {pid tid size} {
+  global procs tools
+  if { [info exists procs($pid)] } {
+      incr procs($procs($pid),ntool)
+   }
+
+   incr tools($tools($tid),natom)
+   incr tools($tools($tid),tosize) $size
+}
+
+proc tool_proc_comm {pid tid size} {   
+   global procs tools
+   if { [info exists procs($pid)] } {
+      incr procs($procs($pid),ntool)
+   }
+   incr tools($tools($tid),fromsize) $size
+}
+
+proc monitor_atom {pid atfun src blino bpos elino epos} {
+   global procs
+
+   if { [info exists procs($pid)] } {
+      set proc_name $procs($pid)
+      incr procs($proc_name,natom)
+
+      switch $atfun {
+	  snd-msg       -
+	  rec-msg       {incr procs($proc_name,nmsg)}
+          snd-note      -
+          rec-note      {incr procs($proc_name,nnote)}
+          snd-eval      -
+          reac-value    -
+          snd-do        -
+          rec-event     -
+	  snd-ack-event {incr procs($proc_name,ntool)}
+      }
+   }
+   TBsend "snd-continue($pid)"
+}
+
+proc clear_data {} {
+   global procs proc_names tools tool_names
+
+   foreach name $proc_names {
+      set procs($name,natom) 0
+      set procs($name,ntool) 0
+      set procs($name,nmsg) 0
+      set procs($name,nnote) 0
+   }
+   foreach name $tool_names {
+     set tools($name,inst) 0
+     set tools($name,natom) 0
+     set tools($name,tosize) 0
+     set tools($name,fromsize) 0
+   }
+  clear_report
+}
+
+proc report {s} {
+#   puts -nonewline stderr $s
+   .control.text insert end $s
+}
+
+proc clear_report {} {
+   .control.text delete 1.0 end
+}
+
+proc print_proc_statistics {} {
+  global procs proc_names
+
+  set natoms 0
+  set ntools 0
+  set nmsgs 0
+  set nnotes 0
+  foreach name $proc_names {
+      incr natoms $procs($name,natom)
+      incr ntools $procs($name,ntool)
+      incr nmsgs $procs($name,nmsg)
+      incr nnotes $procs($name,nnote)
+  }
+  report [format "%25s%21s%23s%23s%23s\n" Process "Atomic Steps" Messages Notes "Tool Comm."]
+  foreach name $proc_names {
+      report [format "%25.25s" $name]
+      set proc_natom $procs($name,natom)
+      if {$natoms == 0} {set proc_natom_perc 0} else {set proc_natom_perc [expr 100.0 * $proc_natom / $natoms]}
+      report [format "%12d (%5.1f%%)  " $proc_natom $proc_natom_perc]
+
+      set proc_nmsg $procs($name,nmsg)
+      if {$nmsgs == 0} {set proc_nmsg_perc 0} else {set proc_nmsg_perc [expr 100.0 * $proc_nmsg / $nmsgs]}
+      report [format "%12d (%5.1f%%)  " $proc_nmsg $proc_nmsg_perc]
+
+      set proc_nnote $procs($name,nnote)
+      if {$nnotes == 0} {set proc_nnote_perc 0} else {set proc_nnote_perc [expr 100.0 * $proc_nnote / $nnotes]}
+      report [format "%12d (%5.1f%%)  " $proc_nnote $proc_nnote_perc]
+
+      set proc_ntool $procs($name,ntool)
+      if {$ntools == 0} {set proc_ntool_perc 0} else {set proc_ntool_perc [expr 100.0 * $proc_ntool / $ntools]}
+      report [format "%12d (%5.1f%%)  " $proc_ntool $proc_ntool_perc]
+      report "\n"
+  }
+  report [format "\n%25.25s%12d (100.0%%)  %12d (100.0%%)  %12d (100.0%%)  %12d (100.0%%)\n" "TOTAL" $natoms $nmsgs $nnotes $ntools] 
+}
+
+proc print_tool_statistics {} {
+  global tools tool_names
+
+  set natoms 0
+  set total_tosize 0
+  set total_fromsize 0
+  foreach name $tool_names {
+      incr natoms $tools($name,natom)
+      incr total_tosize $tools($name,tosize)
+      incr total_fromsize $tools($name,fromsize)
+  }
+  set total_size [expr $total_tosize + $total_fromsize]
+  report [format "%25s%21s%23s%23s%23s\n" Tool "Atomic Steps" "To Tool (bytes)" "From Tool (bytes)" "Total (bytes)"]
+  foreach name $tool_names {
+     report [format "%25.25s" $name]
+     set tool_natom $tools($name,natom)
+     if {$natoms == 0} {set tool_natom_perc 0} else {set tool_natom_perc [expr 100.0 * $tool_natom / $natoms]}
+     report [format "%12d (%5.1f%%)  " $tool_natom $tool_natom_perc]
+
+     set tool_tosize $tools($name,tosize)
+     if {$total_tosize == 0} {set tool_tosize_perc 0} else {set tool_tosize_perc [expr 100.0 * $tool_tosize / $total_tosize]}
+     report [format "%12d (%5.1f%%)  " $tool_tosize $tool_tosize_perc]
+
+     set tool_fromsize $tools($name,fromsize)
+     if {$total_fromsize == 0} {set tool_fromsize_perc 0} else {set tool_fromsize_perc [expr 100.0 * $tool_fromsize / $total_fromsize]}
+     report [format "%12d (%5.1f%%)  " $tool_fromsize $tool_fromsize_perc]
+
+     set tool_size [expr $tool_tosize + $tool_fromsize]
+     if {$total_size == 0} {set tool_size_perc 0} else {set tool_size_perc [expr 100.0 * $tool_size / $total_size]}
+     report [format "%12d (%5.1f%%)  " $tool_size $tool_size_perc]
+
+     report "\n"
+  }
+  report [format "\n%25.25s%12d (100.0%%)  %12d (100.0%%)  %12d (100.0%%)  %12d (100.0%%)\n" "TOTAL" $natoms $total_tosize $total_fromsize $total_size] 
+} 
+
+proc print_statistics {} {
+  clear_report
+  set sep "===================================================================================================================\n"
+  print_proc_statistics
+  report $sep
+  print_tool_statistics
+}
+
+proc rec-terminate { n } {
+  print_statistics
+  destroy .; exit
+}
+#-------------------------------------------------------------
+# Set default options
+#-------------------------------------------------------------
+
+option add *Background ivory
+option add *Foreground black
+
+option add *selectForeground snow
+option add *selectBackground SeaGreen
+
+option add *activeForeground snow
+option add *activeBackground SeaGreen
+
+option add *Scrollbar.Foreground honeydew2
+option add *Scrollbar.activeForeground SeaGreen
+
+option add *Scale.Foreground honeydew2
+option add *Scale.activeForeground SeaGreen
+
+# option add *font "-adobe-palatino-medium-r-normal--17-120-100-100-p-89-iso8859-1"
+option add *Text.font 8x13
+
+set auto_path "$tk_library/demos $auto_path"
+
+proc mkLogger {} {
+
+   set w .control
+   toplevel $w
+   frame $w.frame
+   pack $w.frame -side bottom
+   
+   button $w.frame.show -text "Show Statistics" -command print_statistics
+   button $w.frame.clear -text "Clear Data" -command clear_data
+   pack $w.frame.show -side left
+   pack $w.frame.clear -side right
+
+   text $w.text -relief raised -bd 2 -width 120 -yscrollcommand "$w.scroll set"
+   scrollbar $w.scroll -command "$w.text yview"
+   pack $w.scroll -side right -fill y
+   pack $w.text -side left -fill both -expand y
+
+   wm title $w "Logger Control Panel"
+   wm minsize .control 120 30
+}
+
+wm withdraw .      ; # withdraw the main window of wish
+
+mkLogger
+create_proc 0 INIT

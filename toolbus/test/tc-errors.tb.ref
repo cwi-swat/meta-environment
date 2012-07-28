@@ -1,0 +1,24 @@
+line 2: (warning) variable `Y' redefines formal in enclosing scope
+line 2: double declaration of let variable `Z'
+line 1: double declaration of formal `X'
+line 7: double declaration of process name `A'
+line 13: function `f' undefined
+line 26: undeclared variable `Tid'
+line 33: double declaration of tool name `tt'
+line 20: process `A': type mismatch for argument 1
+line 20: process `A': too few actuals
+line 21: process `A': type mismatch for argument 2
+line 21: process `A': too few actuals
+line 22: process `A': type mismatch for argument 3
+line 12: tool `tt': type mismatch for argument 1
+line 14: rec-connect: type of argument 1 (`int') not declared as tool name
+line 16: rec-connect: type of argument 1 (`int') not declared as tool name
+line 25: snd-eval: too few arguments
+line 26: snd-eval: argument 1 should be a variable
+line 27: snd-eval: argument 1 should be a variable
+line 28: snd-ack-event: too few arguments
+line 29: snd-ack-event: argument 1 should be a variable
+line 35: process `A': too few actuals
+line 35: undeclared process name `Z'
+line 35: undeclared process name `Z'
+ToolBus: execution stopped due to the above error(s)

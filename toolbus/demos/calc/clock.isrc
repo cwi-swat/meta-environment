@@ -1,0 +1,20 @@
+
+tool clock is { command = "./clock"}
+
+process CLOCK is
+    let Tid : clock, T : str
+    in 
+        (
+            execute(clock, Tid?).
+            (
+                (
+                    rec-msg(showTime) .
+                    snd-eval(Tid, readTime) .
+                    rec-value(Tid, time(T?)) .
+                    snd-msg(showTime, T) 
+                )*
+                delta 
+            )
+        )
+    endlet %% \noindent The definition for the \script{calc} tool is:
+

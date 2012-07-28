@@ -1,0 +1,119 @@
+#! /bin/sh
+#
+#    ToolBus -- The ToolBus Application Architecture
+#    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
+#                             The  Netherlands.
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+#
+
+#$Id$
+
+#Files and stuff needed:
+TBVIZURL="http://www.cwi.nl/~kuipers/tbviz/tbviz.html"
+version="0.1.2"
+tmpfile=/tmp/tbviz.$$
+
+Notify()
+{
+    echo $*                 1>&2
+}
+
+Usage()
+{
+    echo "\
+usage: tbgraph {-v,--version}\n\
+       tbgraph output t-script\n\
+\n\
+output is one of:\n\
+  {-g,--gif}         : Returns a gif file\n\
+  {-ps,--postscript} : Returns a PostScript file\n\
+  {-d,--dot}         : Returns a Dot file\n\
+"
+exit 0
+}
+
+case $#
+in
+    1 | 2 | 3)
+	;;
+    *) 
+	Usage
+	exit 0 ;;
+esac
+
+#parse the arguments:
+
+while [ $# -gt 1 ]
+do
+    case $1
+    in
+	-old)
+	    NOVERSION=1
+	;;
+	-v | --version)
+	    Notify ${version}
+	    exit 0
+	;;
+	-g | --gif)
+	    OUTPUT=gif 
+	;;
+	-ps | --postscript)
+	    OUTPUT=postscript
+	;;
+	-d | --dot)
+	    OUTPUT=dot
+	;;
+	*)
+	    Usage
+	;;
+    esac
+    shift
+done
+
+# Now we have one argument left. It is either a filename or -v.
+case $1
+in
+    -v | --version)
+	Notify ${version}
+	exit 0
+    ;;
+    *)
+	# Test if an output format has been selected.
+	if [ ${OUTPUT}x = x ]
+	then
+	    Usage
+	fi
+	# Test if it is a file
+	if [ -r $1 ]
+	then
+	    Notify "Preprocessing $1..."
+	    ppscript=`gcc -x c -E $1 | uri-encode`
+	    Notify "Connecting to CWI..."
+	    if [ ${NOVERSION}x = 1x ]
+	    then
+		informer ${TBVIZURL} fileformat=${OUTPUT}\&tscript=${ppscript} 
+	    else 
+		cat <<EOF > ${tmpfile}
+clversion=${version}\&fileformat=${OUTPUT}\&tscript=${ppscript}
+EOF
+		informer -f ${tmpfile} ${TBVIZURL} 
+		rm ${tmpfile}
+	    fi
+	else
+	    Notify "Can't open $1"
+	fi
+    ;;
+esac

@@ -1,0 +1,25 @@
+
+# ToolBus rules
+SUFFIXES = .idef .isrc
+
+.isrc.idef:
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+
+CLEANFILES = $(wildcard *.idef)
+
+EXTRA_DIST = $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
+CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
+
+TOOLBUS=$(top_builddir)/toolbus/toolbus
+TIFSTOC=$(top_builddir)/aterm/tifstoc
+
+stemvar = $($(shell echo "$*" | tr '-' '_')$1)
+
+.idef.c:
+	$(TOOLBUS) -output $*.tifs -gentifs $<
+	$(TIFSTOC) -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS)
+
+.idef.h:
+	$(TOOLBUS) -output $*.tifs -gentifs $<
+	$(TIFSTOC) -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS)
+

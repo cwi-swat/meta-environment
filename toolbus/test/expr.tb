@@ -1,0 +1,161 @@
+process P(N : int) is
+	printf("Test %d fails\n", N) .
+	shutdown("ERRORS IN TEST")
+
+process TermOps is
+  let X : term
+  in
+	if is-bool(true) then tau else P(1) fi .
+	if is-bool(5) then P(2) else tau fi .
+
+	if is-int(5) then tau else P(3) fi .
+	if is-int(true) then P(4) else tau fi .
+	
+ 	if is-str("abc") then tau else P(5) fi .
+	if is-str(5) then P(6) else tau fi .
+	
+	if is-appl(quote(f)) then tau else P(6) fi .
+	if is-appl(quote(f(a,b))) then tau else P(7) fi .
+	if is-appl(5) then P(8) else tau fi .
+
+	if equal(args(quote(f(a,b,c))), [a,b,c]) then tau else P(9) fi .
+
+	if is-list([]) then tau else P(10) fi .
+	if is-list([a]) then tau else P(11) fi .
+	if is-list([a, b]) then tau else P(12) fi .
+	if is-list(5) then P(13) else tau fi .
+
+	if is-var(X) then tau else P(14) fi .
+	if is-var(5) then P(15) else tau fi .
+	
+	if is-result-var(X?) then tau else P(16) fi .
+	if is-result-var(5) then P(17) else tau fi
+  endlet
+
+process IntOps is
+	if equal(17,17) then tau else P(30) fi .
+	if not-equal(17,17) then P(31) else tau fi .
+	
+	if equal(add(17,5), 22) then tau else P(32) fi .
+	if equal(sub(17,5), 12) then tau else P(33) fi .
+	if equal(mul(3,7), 21) then tau else P(34) fi .
+	if equal(mod(17, 5), 2) then tau else P(35) fi .
+
+	if less(3, 5) then tau else P(36) fi .
+	if less(5, 3) then P(37) else tau fi .
+
+	if greater(5, 3) then tau else P(38) fi .
+	if greater(3, 5) then P(39) else tau fi .
+
+	if less-equal(3, 3) then tau else P(40) fi .
+	if greater-equal(3, 3) then tau else P(41) fi
+
+process ListOps is
+  let L : list, L1 : list
+  in
+	if equal([],[]) then tau else P(70) fi .
+	if not-equal([], []) then P(71) else tau fi.
+
+	if equal([a], [a]) then tau else P(72) fi.
+	if equal([a,b], [a,b]) then tau else P(73) fi .
+
+	if equal([a,b], [b,a]) then P(74) else tau fi .
+	if equal([a,b], []) then P(75) else tau fi .
+
+	if member(a, []) then P(76) else tau fi .
+	if member(a, [a]) then tau else P(77) fi .
+	if member(a, [x,y,a,z]) then tau else P(78) fi .
+	if member(a, [x,y,z]) then P(79) else tau  fi .
+        if member([],[]) then P(80) else tau fi.
+        if member([],[a]) then P(81) else tau fi.
+        if member([],[a,[b],c]) then P(82) else tau fi.
+        if member([],[a,[b],c,[]]) then tau else P(83) fi.       
+
+	if equal(size([]),0) then tau else P(84) fi .
+	if equal(size([a]), 1) then tau else P(85) fi .
+	if equal(size([a,b]), 2) then tau else P(86) fi .
+        if equal(size([a,[b],c,[]]), 4) then tau else P(87) fi.       
+
+	if equal(first([a]), a) then tau else P(88) fi.
+	if equal(first([a,b]), a) then tau else P(89) fi.
+	if equal(first([[],b]), []) then tau else P(90) fi.
+
+	if equal(next([a]), []) then tau else P(91) fi.
+	if equal(next([a,b]), [b]) then tau else P(92) fi.	
+	if equal(next([a,b,c]), [b,c]) then tau else P(93) fi .
+	if equal(next([a,[],b,c]), [[],b,c]) then tau else P(94) fi .
+
+	if subset([], []) then tau else P(95) fi .
+	if subset([a], [a]) then tau else P(96) fi .
+	if subset([a], [b,a]) then tau else P(97) fi .
+	if subset([a, a], [b, a]) then P(98) else tau fi .
+	if subset([a, a], [a, b, a]) then tau else P(99) fi .
+	if subset([a, a], [a, [], a]) then tau else P(100) fi .
+	if subset([a, []], [a, [], a]) then tau else P(101) fi .
+
+	if equal(diff([a,b,c], [b]), [a,c]) then tau else P(102) fi .
+	if equal(diff([a,b,c], [b, a]), [c]) then tau else P(103) fi .
+	if equal(diff([a,b,a], [a]), [b,a]) then tau else P(104) fi .
+	if equal(diff([a,b,a], [a, a]), [b]) then tau else P(105) fi .
+        if equal(diff([a,[b],[]],[[]]), [a,[b]]) then tau else P(106) fi .
+
+	if equal(inter([], []), []) then tau else P(107) fi .
+	if equal(inter([a], [a]), [a]) then tau else P(108) fi .
+	if equal(inter([a], [b]), []) then tau else P(109) fi .
+	if equal(inter([a,b], [b]), [b]) then tau else P(110) fi .
+
+	if equal(inter([a,b,c], [a,c]), [a,c]) then tau else P(111) fi .
+	if equal(inter([a,b,a,c], [a,c,a]), [a,a,c]) then tau else P(112) fi .
+
+	if equal(join([],[]), []) then tau else P(113) fi .
+	if equal(join(a, b), [a,b]) then tau else P(114) fi .
+	if equal(join([a], b), [a,b]) then tau else P(115) fi .
+	if equal(join(a, [b]), [a,b]) then tau else P(116) fi .
+	if equal(join([a], [b]), [a,b]) then tau else P(117) fi .
+	if equal(join([a,b], []), [a,b]) then tau else P(118) fi .
+	if equal(join([], [a,b]), [a,b]) then tau else P(119) fi .
+	if equal(join([a,b], [c, d]), [a,b,c,d]) then tau else P(120) fi .
+	if equal(join([a, [b,c], d], [e, f]), [a, [b,c], d, e, f])
+	then tau else P(121) fi .
+
+	L := put([], a, 3) .
+	if equal(get(L, a), 3) then tau else P(122) fi .
+	L := put(L, a, 4) .
+	if equal(get(L, a), 4) then tau else P(123) fi .
+
+        L := [a,b,c] .
+        if equal(index(L,1),a) then tau else P(124) fi.
+        if equal(index(L,2),b) then tau else P(125) fi.
+        if equal(index(L,3),c) then tau else P(126) fi.
+
+	L1 := replace(L,2,x) .
+	if equal(L, L1) then P(127) else tau fi.
+        if equal(index(L1,1),a) then tau else P(128) fi.
+        if equal(index(L1,2),x) then tau else P(129) fi.
+        if equal(index(L1,3),c) then tau else P(130) fi
+  endlet
+
+process MiscOps is
+  let Nm : str, Tm : [int,int,int,int,int,int], N : int, NP : [int, int], T : term,
+      TFA : f(a)
+  in
+     %% sec, msec, process-id
+     Tm := current-time . 
+     printf("current-time [year,month,day,hour,minute,second] is %t\n", Tm) .
+     if not-equal(process-name, "All") then P(200) else tau fi .
+     if not-equal(process-id, 1) then P(201) else tau fi .
+     N := quote(3) .
+     NP := quote([2,3]) .
+     T := quote(f(a)) .
+     TFA := quote(f(a))
+  endlet
+
+process All is
+	TermOps .
+	IntOps  . 
+	ListOps .
+	MiscOps .
+	shutdown("")	
+
+toolbus(All)
+

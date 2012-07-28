@@ -1,0 +1,42 @@
+process CHK(N : int, Given : int, Required : int) is
+        if equal(Given, Required) then tau
+    	else
+	   printf("Test %d: given, but required %d\n", N, Given, Required) .
+	   shutdown("ERRORS IN MSG TEST")
+        fi
+
+
+process A is
+  let X : int, Y : int
+  in
+	snd-msg(a) .
+	snd-msg(b, 10) .
+	snd-msg(c, 10, 20) .
+	X := 10 . Y := 20 .
+	snd-msg(d, X) .
+	snd-msg(e, X, Y) .
+	snd-msg(f, X?) . 	CHK(1, X, 30) .
+	snd-msg(g, X?, 50) . 	CHK(2, X, 40) .
+	snd-msg(h, g(X,Y?)) . 	CHK(3, X, 40) . CHK(4, Y, 50) .
+	snd-msg(done)
+  endlet
+
+process B is
+  let X : int, Y : int
+  in
+	rec-msg(a) .
+	rec-msg(b, X?) . 	CHK(10, X, 10) . 
+	rec-msg(c, X?, Y?) . 	CHK(11, X, 10) . CHK(12, Y, 20) .
+	rec-msg(d, X?) . 	CHK(10, X, 10) . 
+	rec-msg(e, X?, Y?) . 	CHK(13, X, 10) . CHK(14, Y, 20) .
+        rec-msg(f, 30) .
+	rec-msg(g, 40, Y?) . 	CHK(15, Y, 50) .
+	rec-msg(h, g(40, 50)) . 
+	rec-msg(done) .
+	shutdown("")
+  endlet
+
+process C is
+	shutdown("Test is hanging, aborted\n") delay(sec(5))
+
+toolbus(A, B, C)

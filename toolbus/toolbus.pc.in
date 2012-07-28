@@ -1,0 +1,7 @@
+prefix=@prefix@
+Maintainers=paulk@cwi.nl,jurgenv@cwi.nl
+
+Name: toolbus
+Version: 1.7
+Description:
+Requires: aterm,toolbuslib

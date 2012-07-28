@@ -1,0 +1,19 @@
+
+#include "toolbus-adapter.tbi"
+
+process SPAWN is
+let
+  Id : int,
+  Port : int,
+  Host : str
+in
+  snd-msg(toolbus-start("hello.tb", [])) .
+  rec-msg(toolbus-started(Id?)) .
+  printf("toolbus started: %d\n", Id) .
+  snd-msg(toolbus-get-location(Id)) .
+  rec-msg(toolbus-location(Host?, Port?)) .
+  printf("location of toolbus %d = %d at %s\n", Id, Port, Host)
+endlet
+
+
+toolbus(TB-ADAPTER-EXECUTE, SPAWN)

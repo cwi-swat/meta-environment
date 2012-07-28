@@ -1,0 +1,20 @@
+
+tool batch is { command = "./batch"}
+process BATCH is
+    let Tid : batch, E : str, V : int
+    in 
+        (
+            execute(batch, Tid?).
+            (
+                (
+                    snd-eval(Tid, fromFile) .
+                    rec-value(Tid, expr(E?)) .
+                    snd-msg(compute, E) .
+                    rec-msg(compute, E, V?) .
+                    snd-do(Tid, toFile(E, V)) 
+                )*
+                delta 
+            )
+        )
+    endlet 
+%% i.e., a function \script{compute} with a string and an integer as arguments.

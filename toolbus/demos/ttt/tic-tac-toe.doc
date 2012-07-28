@@ -1,0 +1,33 @@
+Programmeeromgevingen II - Eindopdracht
+
+Filename		: tic-tac-toe.doc
+Last update		: 29-09-1995
+
+Timme Dekker 9212396 tkdekker@fwi.uva.nl
+
+One of the options of this assignment was to design a boardgame for two persons
+using the ToolBus and Tcl/Tk at least. One of the obvious games to choose for
+such an assignment was Tic Tac Toe. I don't describe the game here, because it
+should be common knowledge ;).
+
+Implementation was done using an array in Tcl/Tk to hold an X if the coordinate
+was occupied by X, and similar for O. The implementation was quite straight
+forward. No Makefile is needed because there are no files that need to be 
+compiled. No real design problems, except for the normal debugging occured.
+
+Possible extensions of this program could be: Tic Tac Toe in 3D, Tic Tac Toe
+with size n instead of size 3, and a maybe implementation of 4 in a row. 
+
+Start the game up by typing:
+
+toolbus tic-tac-toe.tcl &
+
+and activate users by typing the command:
+
+t 
+
+If you are playing from another station then where the toolbus is started use:
+
+t -TB_HOST <toolbus-host>
+
+Have fun !!!

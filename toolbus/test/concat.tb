@@ -1,0 +1,26 @@
+process A is
+let
+ Result1 : str,
+ Result2 : str,
+ Result3 : str,
+ Result4 : str,
+ Str1 : str,
+ Str2 : str
+in
+  Str1 := "hoi"
+  . Str2 := "hallo"
+  . Result1 := concat("hoi", "hallo")
+  . Result2 := concat(Str1, "hallo")
+  . Result3 := concat("hoi", Str2)
+  . Result4 := concat(Str1, Str2)
+  .
+  if or(or(or(not-equal(Result1, "hoihallo"), not-equal(Result2, "hoihallo")), not-equal(Result3, "hoihallo")), not-equal(Result4, "hoihallo")) then
+    printf("FAIL")
+  else
+    printf("SUCCESS")
+  fi
+   
+endlet
+
+toolbus(A) 
+  

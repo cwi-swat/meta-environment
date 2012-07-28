@@ -1,0 +1,59 @@
+process CHK(N : int, Given : int, Required : int) is
+  if equal(Given, Required) then tau
+  else
+     printf("Test %d: given %d but required %d\n", N, Given, Required) .
+     shutdown("ERRORS IN BIND TEST")
+  fi
+
+process A(X : int) is
+  let  XX : int, Y : int
+  in
+     CHK(1, X, 1) .
+     Y := 2 .
+     B .	 CHK(2, X, 1) . CHK(3, Y, 2) .
+     XX := X .
+     C(XX?,Y?) . CHK(8, XX, 10) . CHK(9, Y, 20) .
+     XX := 1 . Y := 2 .
+     D(XX?, Y?) . CHK(12, XX, 10) . CHK(13, Y, 20) .
+     shutdown("")
+  endlet
+	
+process B is
+  let X : int, Y : int
+  in
+     X := 10 . Y := 20
+  endlet
+
+process C(X : int?, Y : int?) is
+  X := 10 . Y := 20
+
+process D(X : int?, Y : int?) is
+  C(X?, Y?)
+
+
+process E(N : int, X : int, Y : int) is 
+  let XX : int
+  in XX := Y . CHK(N, XX, Y) . CHK(N, XX, Y) . CHK(N, XX, Y)
+  endlet
+
+process F is
+	E(100, 3, 4) || E(101, 3, 5) || E(102, 3, 6)
+
+process Inc(Old : int, New : int?) is
+ let R : int, N : int
+ in
+     R := Old .
+     if equal(R, Old) then N := 1 else N := 2 fi .
+
+     New := add(R,N)
+ endlet
+
+process Cnt is
+  let N : int, V : int
+  in
+      V := 5 . N := 1 .
+      if less(N,10) then N := add(N,1) . Inc(V, V?) fi *
+     if greater-equal(N,10) then CHK(110, V, 14) fi
+  endlet
+
+toolbus(A(1), F, Cnt)

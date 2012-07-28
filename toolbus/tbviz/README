@@ -1,0 +1,57 @@
+
+    ToolBus -- The ToolBus Application Architecture
+    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
+                             The  Netherlands.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+$Id$
+tbviz -- Visualization for the ToolBus
+
+author: Tobias Kuipers, <tobias@acm.org>, 1997--1999
+
+To get started, install the ToolBus as described in the toplevel
+ToolBus directory. You'll need to have an executable called
+perl5.00404 (Don't blame me for this name :-) in your PATH. tbviz
+needs the LWP/UserAgent and URI/URL perl modules (and a fairly recent 
+version at that), so make sure you have these.
+
+An executable called
+  tbgraph
+will be installed in your bin directory. 
+
+To visualize a T-script file.tb type
+  tbgraph o file.tb
+
+where o is one of 
+  -g for Gif output
+  -ps for PostScript output
+  -d for dot output
+
+The resulting graph will be written to standard out.
+
+type tbgraph -h for help
+
+Note that tbgraph is only the client side of the ToolBus
+visualization. The server is contacted automatically by the client, so 
+you can only do this if you have a Net connection.
+
+See <http://www.cwi.nl/~kuipers/tbviz/tbviz.html> for more details.
+
+Please let me know if you have any complaints/bugs/praise
+
+Have fun,
+
+Tobias

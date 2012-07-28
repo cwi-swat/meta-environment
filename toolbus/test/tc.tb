@@ -1,0 +1,35 @@
+process A(X:int, Y:int, X:int) is
+  let Y: str, Z : term, Z : term
+  in
+	delta
+  endlet
+
+process A is delta
+
+process B is
+  let T : int, X : term, Y : term, Bid : int, Cid : int
+  in
+	execute(tt(3), T?) .
+	X := [a,Y, f(3)] . C(2) .
+	rec-connect(Bid?) .
+	T := 1 .
+	rec-connect(Cid?)
+  endlet
+
+process C(X : int) is
+	A("abc") .
+	A(3, "abc") .
+	A(3,4,"abc")
+
+process D is
+        snd-eval() .
+	snd-eval(tt(Tid), 3) .
+	snd-eval(3) .
+	snd-ack-event() .
+	snd-ack-event(2)
+
+tool tt(S:str) is { }
+
+tool tt is { }
+
+toolbus(A, Z(a), Z)

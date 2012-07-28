@@ -1,0 +1,916 @@
+$Id$
+
+Wed Sep 26 19:48:30 CEST 2007 <kooiker@cwi.nl>
+ * adapters/{gen-adapter/bc-adapter,perl-adapter/perl-adapter}.c: sentinel of
+   execlp function must be cast to char *
+
+Tue Sep 20 10:49:39 CEST 2007 <kooiker@cwi.nl>
+ * Bumped to version 1.7
+
+Thu Sep 13 18:21:02 CEST 2007 <jurgenv@cwi.nl>
+ * adapters/tcltk*/Makefile.am: removed usage of fig2dev in Makefile
+   rules to fix maxosx build.
+
+Thu Aug 23 10:29:02 CEST 2007 <{kooiker,jurgenv,lankamp}@cwi.nl>
+ * libdeprecated*/*.c,toolbus/*.c: added a new atomic action snd-kill,
+   which (if the tool was executed from the bus) will kill the tool using
+   SIGKILL. If the tool was not executed from the bus, a rec-connect, then
+   the script will stop and an error message will be printed.
+
+Thu Apr  5 18:09:08 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.toolbus: added make rules for generating C toolbus interfaces
+   using the local toolbus as build in ./toolbus. This fixes the
+   distcheck
+ * Bumped to version 1.6
+
+Fri Mar  9 09:14:58 CET 2007 <kooiker@cwi.nl>
+ * libdep...adapter/terms.c: allow assignment of undefined to any term
+   variable, even if it does not match the term pattern used for declaration.
+   This allows to use undefined as NULL in ToolBus scripts.
+
+Thu Feb  8 09:39:35 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * libdep...adapter/utils.c: adapter term parser to produce booleans
+   instead of appls for true and false.
+
+Wed Feb  7 17:20:37 CET 2007 <{paulk,kooiker,jurgenv}@cwi.nl>
+ * toolbus/script.[ly]: added parsing of true and false as booleans
+   instead of function symbols. This fixes issues with the evaluation
+   of equal and if-then-else.
+ * toolbus/interpreter.c,calls.c: create does not propagate subscriptions
+   of notes anymore, nor the note queue.
+ * toolbus/interpreter.c,calls.c: binding of parameters of created processes
+   and dynamic processes used to be implemented by substitution at call time.
+   This is wrong, since it could introduce unquoted terms at positions
+   that would be evaluated (right hand side of assignments, if-then-else).
+   Now we create new processes in the context of an environment that binds
+   actual to formal parameters (closes #690). 
+
+Tue Jan 16 12:51:48 CET 2007 <jurgenv@cwi.nl>
+ * toolbus/typechecker.c: type checking errors are not printed to stderr
+   anymore when the ToolBus is running. This is too prevent spamming of the
+   terminal when a number of dynamic process calls are tried until one
+   of the calls finds a suitable process to run. The implementation trick
+   is too see whether there are currently any running processes via
+   inspecting the AllProcesses global variable. Not too pretty.
+
+Wed Jan 10 21:40:29 CET 2007 <{jurgenv,paulk}@cwi.nl>
+ * toolbus/interpreter.c: create used to inherited all subscriptions
+   to notes, and also the current note queue. We've turned this
+   off to fix a number of bugs in the Meta-Environment. The
+   tests still succeed.
+
+Wed Jan 10 10:19:09 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * libdeprecated*adapter/utils.c: fixed a terrific bug. A next pointer
+   in a dummy head of a list that was never allocated was used anyway.
+   Apparantly, this worked because older versions of gcc (< 4) initialized
+   more memory to NULL than the 4 series do.
+
+Mon Jan 8  16:02:09 CET 2006 <jurgenv@cwi.nl>
+ * libdeprecated*adapter/*.[ch]: changed the interface to the 
+   deprecated toolbus adapter for C. Each tool now declares in the
+   interface whether or not the tool will want to understand the syntax
+   of ToolBus variables. If this argument is set to TBtrue, the tool
+   will interpret terms that start with a capital letter as a variable.
+   If the argument is TBfalse, this means that terms with a capital letter
+   will be terms. This means that if it is set to TBtrue, the tool will
+   not be able to understand terms with capital letters.
+
+Mon Dec 18 16:02:09 CET 2006 <jurgenv@cwi.nl>
+ * aterms/{tifs,tifstoc}.[ch]: made tifstoc usage simpler. You can
+   omit the -tool argument (which is always wrong) if there is only
+   one tool interface in the tifs file. This is typically so for generating
+   tifs from .idef files. 
+
+Thu Oct 19 11:47:58 CEST 2006 <jurgenv@cwi.nl>
+ * toolbus/calls.c: if a dynamic call fails because no such
+   process can be found or the signature of the arguments do
+   no match, the process call reduces to 'delta'.
+ * toolbus/*: added <+, the left-biased choice operator.   
+ * toolbus/*: replaced <+ by right-biased choise +>. The reason is 
+   that the current interpreter optimizes by normalizing only one
+   of the arguments to head normal form. The +> fitted the code
+   much better, so we chose for the easy solution.
+
+Thu Oct 12 14:21:17 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * toolbus/{interpreter,procs}.c:
+   - Extended ToolBus script language with |concat| keyword
+   libdeprecated-toolbus-adapter/terms.{c,h},procs.h:
+   - Implementation of concat returns str1str2 on input of str1 and str2
+
+Mon Sep 25 11:49:45 CEST 2006 <kooiker@cwi.nl>
+ * toolbus/main.c:
+   - Check on ToolBus script argument fixes null pointer for script name 
+     (closes #644)
+
+Fri May 19 14:26:51 CEST 2006 <jurgenv@cwi.nl>
+ * toolbus/script.l: changed the maximum length of a string
+   from BUFSIZ (??) to 5000. BUFSIZ is OS dependent and is 
+   apparently much smaller on MacOSX than on Linux.
+
+Thu May 18 13:38:27 CEST 2006 <jurgenv@cwi.nl>
+ * test/*.out: renamed .out files to .ref, because .out may
+   trigger a GNU make implicit rule which simply copies the
+   stem to stem.out. 
+ * package: bumped to version 1.5
+
+Sat Apr 22 18:36:50 CEST 2006 <jurgenv@cwi.nl>
+ * package: bumped to version 1.4
+
+Mon Apr 17 15:54:34 EDT 2006 <jurgenv@cwi.nl,dennis@lucent.com>
+ * libtb/symbol.c: fixed serious array out of bounds error, that 
+   would only not make the system crash because of lucky alignment.
+ * {libtb,toolbus}/*.c: fixed several NULL pointer dereference warnings
+   of Orion (a static analysis tool) by adding asserts. Implicitly 
+   these pointers could not be NULL (by construction properties of 
+   term_lists mostly), but explicitly asserting this is not wrong. 
+   This happens mostly in code that expects non-empty lists.
+
+Mon Apr 11 17:05:00 CET 2006 <jurgenv@cwi.nl>
+ * libtb/term.c: increased mark stack by a factor of 4 to be able to
+   deal with 1MB size files in the Meta-Environment editor and the
+   highlighting slices that come with that size of terms. The
+   trick of packing the slice does not work here, since the slice is
+   transported to a Java tool. The java adapter does not support
+   packed terms.
+
+Mon Mar 20 17:05:00 CET 2006 <jurgenv@cwi.nl>
+ * Makefile.am, configure.in: removed doc subdir from SUBDIRS, to
+   increase portability to different platforms (this works because
+   now we don't need tools like gpic anymore).
+
+Fri Mar 10 11:54:34 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
+Wed Mar  8 17:32:28 CET 2006 <jurgenv@cwi.nl>
+ * toolbus/tools.c: changed the tool protocol. A tool may send
+   a disconnect even when in waiting on a result from the
+   snd-eval or snd-do.
+
+Wed Feb 22 11:11:35 CET 2006 <{jurgenv,kooiker}@cwi.nl>
+ * libtb/utils.c: added underscore as one of the characters acceptible
+   in a function application term and a variable term.
+ * libtb/utils.c:
+   - Add parameter to parse_term0() so you can make the choice to parse input 
+     as variable. Only parse a variable when parsing ToolBus scripts. When
+     sending terms using sockets we don't parse variables.
+   - Changed calls to parse_term0() so they use the new choice.
+
+Wed Jan  4 15:21:01 CET 2006 <{jurgenv,kooiker,paulk}@cwi.nl>
+ * toolbus/interpreter.c: fixed a bug in expansion of dynamic calls,
+   the result variables of a dyncall were not propagated to the
+   rest of the execution of a process.
+
+Fri Dec 16 13:03:52 CET 2005 <kooiker@cwi.nl>
+ * test/Makefile.am:
+   - added bug-481.tb{,.out} to extra dist
+
+Thu Dec 15 16:32:54 CET 2005 <jurgenv@cwi.nl>
+ * adapters/toolbus-adapter/toolbus-adapter.tbi: wrapped Msg by
+   toolbus-msg(Msg) in the script, because of new requirement.
+
+Thu Dec 15 15:49:54 CET 2005 <{kooiker,jurgenv}@cwi.nl>
+ * toolbus/{typecheck.c,script.y}: Extended typechecker to not accept
+   snd-msg or rec-msg with a first argument that is not a function
+   application. This is necessary for the communication partner cache
+   to work properly. This closes Bug #481.
+ * test/Makefile.am: flipped test case for bug 481 to a fail test.
+
+Tue Dec 13 13:03:48 CET 2005 <jong@cwi.nl>
+ * test/bug-481.tb: testcase exercising Bug #481
+
+Thu Oct 20 15:15:24 CEST 2005 <{gerco,jong}@cwi.nl>
+ * configure.in:
+   - add --enable-maintainer-mode
+	 - remove --with-cflags
+	 - fix CFLAGS used during ./configure run
+
+Tue Aug 16 11:41:48 CEST 2005 <jong@cwi.nl>
+ * configure.in: check for availability of mkdtemp()
+ * toolbus/Makefile.am, toolbus/mkdtemp.c:
+   - added mkdtemp implementation for platforms without native mkdtemp
+
+Mon Aug 15 14:50:34 CEST 2005 <kooiker@cwi.nl>
+ * libtb/sockets.{c,h}: change int to socklen_t in accept_in_interval
+ * libtb/symbol.h: 
+   - removed unnecessary extern declaration of hash_table and idx_table
+
+Mon Aug 15 14:53:14 CEST 2005 <jong@cwi.nl>
+ * configure.in: add AC_PROG_LIBTOOL to cope with dynamic ATerm library
+
+Fri May 27 09:23:00 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * toolbus/calls.c: Fixed declaration after statement error.
+
+Tue May 24 09:14:40 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * toolbus/partners.c: Added memset after realloc to ensure all new 
+   cells are set to zero in the implementations of the communication 
+   partner cache.
+	
+Sun May 22 22:16:36 CEST 2005 <paulk@cwi.nl>
+* Checked all numbers produced by logger. The to/from data for
+  communication with tools is now correct.
+* Reimplemented the UI of the logger. All statistics are now shown in 
+  a text pane and there are two buttons:
+  Show Statistics: prints all statistcs about processes and tools
+  Clear Data:      sets all counters to zero (this allows detailed
+                   profiling of specific scenarios)
+
+Fri May 20 02:42:56 CEST 2005 <paulk@cwi.nl>
+* Extended logger.tcl with tool statistics.
+  Warning: do not yet believe any of these numbers :-)
+
+Fri May 20 01:59:49 CEST 2005 <paulk@cwi.nl>
+ * Extended logger.tcl: at the end of execution of the ToolBus application
+   a summary of execution statistics for processes is printed.
+	
+Thu May 19 23:37:57 CEST 2005 <paulk@cwi.nl>
+ * Fixed bug in dynamic calls: only local variables of type string
+   lead to dynamic calls (as promised).
+	
+Thu May 19 09:47:08 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * Merged find_comm_optimization into trunk
+
+Wed May 18 18:23:52 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
+ * Optimization experiment: find_comm uses a statically created
+   cache of which processes might communicate with each other.
+   A significant speedup is expected.
+
+Sat May 14 22:46:34 CEST 2005 Paul Klint <paulk@cwi.nl>
+ * Extended expansion of process calls P(A1, A2, ...) inside process definitions:
+   - Old situation: P was required to be a process defined somewhere
+     in the script.
+   _ New situation: P may also be a string variable defined in the current
+     process (as formal parameter or let-variable). The string value of P
+     is taken as the process name.
+   - The above implies run-time typechecking (only for these "dynamic calls").
+   - Example:
+       process A(S : str) is printf("%s A\n", S)
+       process B(S : str) is printf("%s B\n", S)
+       process Main is
+       let P: str
+       in
+          P := "B" .
+          P("MESSAGE")
+       endlet
+
+       toolbus(Main)
+	
+     will print: "MESSAGE B"
+   - Possible errors:
+	. The string value is not a name that occurs in some process
+	  definition.
+	. The actual/formal parameters do not match.
+   - Caveat: if P occurs as a variable of a type other than string, the
+     old interpretation applies.
+
+ * Extended the command line options to allow multiple Tscript source files.
+
+Fri Apr 29 13:45:43 CEST 2005 <jong@cwi.nl>
+ * toolbus/script.l:
+   - increase size of string buffer from 512 to BUFSIZ
+
+Mon Apr 11 13:25:33 CEST 2005 <jong@cwi.nl>
+ * toolbus/script.y:
+   - Removed the chdir(2) part in the temporary file name issue (see below).
+     Since we use absolute pathnames anyway, we don't have to "chdir" (which
+     broke things like "-I .")
+   - Use the tail of the incoming filename, as it is sometimes "../../file.c",
+     which makes for nasty pathnames: /var/tmp/TBxkdhf/../../file.c"
+
+Mon Apr 11 09:20:13 CEST 2005 <jong@cwi.nl>
+ * package:
+   - Bumped version to 1.3.1
+ * toolbus/script.y:
+   - Removed TBtmpname which constructed a filename based on getpid(2) which
+     was not enough to ensure uniqueness of the temporary file;
+   - We cannot use mkstemp(3) instead, because it dictates that the filename
+     end in 'XXXXXX' which conflicts with the preprocessor which demands that
+     the filenames end in ".c" and ".i", respectively;
+   - Therefore, use mkdtemp(3) to create a unique temporary directory in which
+     to store the temporary files;
+   - We now depend on getcwd(3), chdir(2), mkdtemp(3), unlink(2), and rmdir(2).
+
+Tue Jul 13 14:06:30 CEST 2004 <jurgenv@cwi.nl>
+ * Moved toolbus java adapter to its own separate package
+ * Bumped version to 1.3
+
+Thu Jun 10 15:06:28 CEST 2004 <jurgenv@cwi.nl>
+ * Merged changed in java toolbus adapter (locking functionality)
+
+Wed Apr 21 10:45:32 CEST 2004 <jurgenv@cwi.nl>
+ * Removed #include <sys/sockets.h> from toolbus/main.c because it somehow
+   breaks the build on the newest Darwin release (7.3.0). This include was
+   not needed apparently, because the code still compiles on Linux.
+
+Fri Mar 19 08:24:48 CET 2004 <jong@cwi.nl>
+ * toolbus/{main.c,script.l}:
+   - add missing (int) casts to isspace functions
+
+Wed Apr  7 16:11:00 CEST 2004 <jurgenv@cwi.nl>
+ * Prints only the stopped processed with CTRL+\
+
+Thu Mar 11 18:37:51 CET 2004 <jurgenv@cwi.nl>
+ * -ltb library from the toolbuslib package is deprecated and was only used 
+   inside of the toolbus package. So I moved it into the toolbus package
+   as a library that is NOT installed only used here.
+
+Fri Feb 27 11:54:54 CET 2004 <{jong,kooiker}@cwi.nl>
+ * toolbus/script.y: increase CMD_MAX tenfold to 10240 to accomodate
+   long '-I' paths
+
+Tue Feb 10 15:24:54 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+ * version bump to 1.1
+
+Tue Feb 10 10:53:28 CET 2004 <kooiker@cwi.nl>
+ * adapters/toolbus-adapter/toolbus-adapter.c,
+   demos/calc/log.c, batch.c, calc.c: 
+   - added const to char* arguments
+
+Mon Feb  9 14:48:28 CET 2004 <jurgenv@cwi.nl>
+ * Generating 'const char*' instead of 'char*' pointers to be able
+   to find errors quicker in ToolBus components.
+
+Mon Feb  2 16:34:09 CET 2004 <{jong,kooiker}@cwi.nl>
+ * upgraded several Makefile.am files to get 'distcheck' working
+
+2003/11/07 <{jong,jurgenv}@cwi.nl>
+ * Set version of toolbus to 1.0. Notice that versions 0.3 and 0.3.1 
+   are strange because the version before 0.3 was 0.25 (a later version).
+
+Tue Oct 14 09:51:09 CEST 2003 <jong@cwi.nl>
+ * toolbus/tools.c:
+   - only warn about lost connections if TBverbose is set. Closes #75.
+
+
+2003/09/30 <kooiker@cwi.nl>
+ * toolbus/viewer.tcl.src:
+   - walk over existing array elements. Closes #4.
+
+Thu Sep 11 11:39:49 CEST 2003 <jong@cwi.nl>
+ * adapters/gen-adapter:
+   - add generic-adapter.idef, crafted from meta's "gen.tb"
+
+2003/08/01 <jurgenv@cwi.nl>
+ * Bumped to version 0.3.1
+ * Set dependency on aterm-java-1.3.2
+
+2003/07/02 <jurgenv@cwi.nl>
+ * Bumped to version 0.3 and release
+
+2003/06/26 <jurgenv@cwi.nl>
+Tue Jul  1 14:38:00 CEST 2003 <jong@cwi.nl>
+ * aterm:
+   - added first version of 'merge-tifs' which merges two tifs files.
+     This version is *not* robust against commandline mistakes.
+
+Mon Jun 30 10:03:16 CEST 2003 <jong@cwi.nl>
+ * add "--with-trans-adapter" to enable transparent TB-adapter
+ * adapters/trans:
+   - fix Taeke's renaming of java files in Makefile.am
+
+2003-06-27 <{jong,kooiker}@cwi.nl>
+ * adapters/java-adapter/AbstractTool.java:
+   - fixed missing initialization of port (now set to -1)
+ * toolbus/trans:
+   - Added first version of transparent toolbus-to-toolbus adapter
+   - Both sides of the adapter are generic now
+   - Added startup parameters:
+     -TB_MASKERADE_HOST, -TB_DELEGATE_HOST,
+     -TB_MASKERADE_PORT, -TB_DELEGATE_PORT,
+     -TB_MASKERADE_TOOL, -TB_DELEGATE_TOOL
+   - Refactoring: connection1 has become the maskerade side
+                  connection2 has become the delegate side
+ 
+2003-06-26 <jurgenv@cwi.nl>
+ * Added package definition file
+
+2003-06-17 <jurgenv@cwi.nl>
+  * Added an error message for when no 'toolbus' command at all are contained
+    in the script. 
+  * Added \r to layout to prevent strange parse errors when parsing a script
+    that was written in Windows.
+
+2003-06-17 <kooiker@cwi.nl>
+ * toolbus/viewer.tcl.src:
+   - Fixed variable viewer displaying quotes and own processname
+
+2003-06-17 <kooiker@cwi.nl>
+ * toolbus/viewer.tcl.src: added slider to be able to shorten the delay
+   time dynamically
+
+2003-06-13 <kooiker@cwi.nl>
+ * fix toolbus/viewer.tcl.src: for some reason double click to show the
+   process variables didn't work anymore
+
+2003-06-13 <kooiker@cwi.nl>
+ * toolbus/viewer.tcl.src:
+   - Tool and process breakpoints do work now
+   - Right click (re-)sets breakpoint at line or on process/tool
+   - After extending the toolbus view with a new line of processes, tool 
+     breakpoints stay visible
+   - After changing scriptview, breakpoints are colored again
+   - Reaching a linebreak causes the scriptview to switch to the breaking 
+     script
+   - By resizing the viewer window, hidden tools will be displayed 
+
+2003-06-11 <kooiker@cwi.nl>
+ * fix toolbus/viewer.tcl.src: bug introduced in previous version prevented 
+   resetting of breakpoints 
+
+2003-06-11 <kooiker@cwi.nl>
+ * fix viewer.tcl.src: lsearch only checked if breakpoint was first in the
+   list
+
+2003-06-10 <kooiker@cwi.nl>
+ * Debugger stops running at breakpoints.
+ * Breakpoints possible in more than one toolbus script (now recording
+   process and linenumber, was linenumber only)
+
+2003-03-30 <jurgenv@cwi.nl>
+ * Multiple toolbus(...) declarations allowed from now on
+
+Tue May 13 14:02:52 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * fix toolbus/idef2tif.src: handle "command = EDITOR" kind of #defines
+
+2003-03-30 <jurgenv@cwi.nl>
+ * Used backquotes to delay calling *-config scripts to after
+   configure phase. Otherwise autobundle can't configure all packages
+   before building them.
+
+2003-03-28 <jurgenv@cwi.nl>
+ * Moved dot-adapter (actually the dot tool) to graph-support package
+ * removed dependency on graphviz
+
+2003-03-20 <jurgenv@cwi.nl>
+ * removed dependency on shared-objects and jjtraveler. This is taken care
+   of by aterm-java-config from now on.
+
+2003-03-18 <jurgenv@cwi.nl>
+ * Use shared-objects-config and aterm-java-config to obtain last versions
+   of their jar files in configure.in
+
+Mon Mar 17 10:11:35 CET 2003 <jong@cwi.nl>
+ * Major hack to fix unexpected dependency on jjtraveler:
+   expect it in the same location as aterm-java.jar and use
+   it to build tifstojava.
+ * and another: aterm-java distribution was changed to 1.2beta, so
+   now toolbus (in a clean build-environment) cannot find
+   aterm-java-1.1.jar anymore.
+
+Wed Feb 26 09:38:06 CET 2003 <jong@cwi.nl>
+ * fix perl-adapter: use mkstemp instead of unsafe tmpnam.
+   Closes some security-conscious user reports.
+
+Tue Feb 25 12:42:59 CET 2003 <jong@cwi.nl>
+ * fix java-adapter: do not generate import statements for unused imports.
+
+Thu Feb 13 11:39:43 CET 2003 <{jong,olivierp}@cwi.nl>
+ * version 0.26beta
+ * java-adapter/SwingTool.java: downgraded to work with JDK1.3
+ * fix parsing of dot-files: accept \
+   in attribute values
+ * HACK: fix PATH in adapters/dot-adapter to get idef2tif working
+
+2003-02-12 <olivierp@cwi.nl>
+ * Added the '-m' option to the shell: SIGQUIT is now passed on to the
+   child processes, so a thread dump can be forced by sending this signal
+   to the Java child!
+ * Introduced the notion of 'swing' tools: if you supply the '-swing'
+   option to tifstojava SwingTool will be subclassed instead of AbstractTool.
+   This causes all toolbus callbacks to be called from within the Swing
+   event thread instead of the ToolBus thread.
+
+2003-01-23 <{jong,jurgenv}@cwi.nl>
+ * Recover missing ChangeLog entries
+ * Compatibalize --with-java option in all meta-pkgs
+
+2003-01-22 <{jong,jurgenv}@cwi.nl>
+  * Release 0.25
+  * LGPL license
+
+2002-11-25  Hayco de Jong  <jong@cwi.nl>
+  * ChangeLog:
+    - adopted new ChangeLog style which seems to be in use :-)
+  * toolbus/script.y:
+    - fix: new version of bison found 7 missing ';' separators
+  * adapters/java-adapter/toolbus/tifstojava.in:
+    - add: shared_objects' location via @SHARED_OBJECTS@
+    - fix: aterm-java classes are in @ATERM_JAVA@, no longer in @ATERM@
+
+2002/10/30 (vinju@cwi.nl)
+ * Added new dependency on aterm-java package
+ * Added new dependency on shared-objects package
+ * Changed code of java-adapter according to changed makeAppl interface.
+
+2002/10/28 (vinju@cwi.nl)
+ * Added output file commandline options to 'toolbus -gentifs' and idef2tif
+
+2002/10/10 (vinju@cwi.nl)
+ * On ctrl+\ only the pending snd-msgs are printed, such that you can see
+   immediately which messages are not received.
+
+2002/09/09 (vandenbr@loria.fr)
+ * Started 0.25beta.
+ * Added "#!/bin/sh" to generated scripts in order to make it
+   work for CYGWIN.
+
+2002/07/03 (jurgenv@cwi.nl)
+ * Fixed bug in building the documentation.
+ * Release 0.24
+
+2002/07/03 ({jong,olivierp}@cwi.nl)
+ * Fixed bug in handling 'endlet' atoms that could cause toolbus hangs
+ * Added debug support (just hit ctrl-\ for a process alternative dump)
+
+2002/05/15 (vandenbr@loria.fr)
+ * Added an alternative to deal with input which are terms:
+   cmd(Cmd, input-term(Inp))
+
+2002/05/01 (jong@cwi.nl)
+ * start 0.24beta
+ * fix postpone init_monitoring() until WellKnownSocket has been established.
+
+2002/04/19 (jurgenv@cwi.nl)
+ * Release 0.23
+ * removed --with-dot (was redundant, use --with-graphviz)
+
+2002/04/03 (jurgenv@cwi.nl)
+ * Fixed CLASSPATH in tifstojava to locate aterm classes correctly.
+
+2002/03/27 (jurgenv@cwi.nl)
+ * Made toolbus take CPPFLAGS into account when calling the C preprocessor.
+   This should partly fix some portability issue for MacOS X.
+ * Added substitution of CPP and CPPFLAGS to configure.in.
+
+2002/03/05 (jong@cwi.nl)
+ * Several adapters 'omgeSPECt' from 8 to 12 bytes
+
+2002/02/14 (olivierp@cwi.nl)
+ * Bumped to 0.23beta
+ * Added dot-adapter
+
+2002/02/07 (jurgenv@cwi.nl)
+ * Release 0.22
+
+2001/11/25 (mdejonge@cwi.nl)
+ * Bumped to 0.22
+ * Libraries libtb, libATB extracted from ToolBus source tree and put in the
+   separate package toolbuslib.
+
+2001/11/16 (jong@cwi.nl)
+ * patchlevel 0.21.1
+ * sleep 1 second between issuing shutdown of emacs and exiting adapter
+   to fix mysterious 'hangup'.
+
+2001/11/12 (jong@cwi.nl)
+ * Released version 0.21
+ * Documented jurgen's change: removed demos/game which uses obsolete
+   ToolBus/ATerm interface
+ * Documented jurgen's change: added 'b' to all fopen calls that open a
+   file in binary mode.
+
+2001/08/30 (jong@cwi.nl)
+ * Moved java-adapter from aterm/java/... to adapters/java-adapter
+ * Added several #includes to fix gcc-2.96.0 generated warnings.
+
+2001/08/29 (jong@cwi.nl)
+ * Reinstated support for java-adapter which got wiped out mysteriously.
+
+2001/08/23 (jong@cwi.nl)
+ * Implemented support for reals in aterm/tifstoc.c
+   (Closes bugreport #2 by Tommy de Roos)
+
+2001/08/21 (mdejonge@cwi.nl)
+ * Fixed search for header files in configure.in
+
+2001/08/21 (jong@cwi.nl)
+ * switched to new ChangeLog format (more compatible with meta-env)
+ * version 0.21beta
+ * fixed bug in libtb/utils.c in parsing of TBreals.
+   (Closes bugreport by Tommy de Roos)
+
+Date:   Mon Jul 30 10:35:41 MEST 2001 (Merijn)
+- Bumped version to 0.20 because version 0.19 was released on Jul 18 (not 0.18)
+- Added EXTRA_DIST variable to Makefile.am to also distribute
+  program-check.m4, reconf, and DEVELOPERS_INFO files.
+
+Date:   Tue Jul 17 10:24:44 CEST 2001
+- 0.18 released, version bumped to 0.19
+
+Date:   Thu Jul 12 10:49:22 CEST 2001
+- Moved Java-sources of ATB (ATerm ToolBus support)
+  from ATerm-distribution to ToolBus distribution. (jong@cwi.nl)
+
+Date:   Wed Jul 11
+- Moved C-sources of ATB (ATerm ToolBus support)
+  from ATerm-distribution to ToolBus distribution. (jong@cwi.nl)
+
+Date:   Thu Jul  5 11:37:43 CEST 2001
+- Version is now 0.18
+- Added toolbus-adapter
+
+Date:   Wed May 23 13:35:52 CEST 2001
+Released Verion 0.16
+Increased version number to 0.17
+removed BUILT_SOURCES in demos/*/Makefile.am because it yields an undesired
+toolbus dependency at distribution time.
+ 
+
+Date:	Tue Apr 24 11:19:23 CEST 2001
+Version 0.16
+Author: {jong,olivierp}@cwi.nl
+interpreter.c: Fix bug in single linked list code of dequeueing of queued events
+
+Date:   Tue Jan 30 22:35:49 MET 2001
+Version 0.15
+Author:  Merijn de Jonge
+./test: distribute read.src instead of read
+
+Date:   Tue Apr 18 15:27:26 CEST 2000
+Version 0.15
+Author: Pieter Olivier
+- Fixed 'disappearing annotation' bug.
+
+Date:   Tue Jun 13 15:39:30 MET DST 2000
+Version 0.14
+Author:  Merijn de Jonge
+wish8.1 or above is required. Configure now searches for wish8.1+
+
+Date:   Tue Apr 18 15:18:27 MET DST 2000
+Version 0.14
+Author:  Merijn de Jonge
+-removed test/Makefile.in from repository
+
+Date:   Sun Apr 16 12:51:36 MET DST 2000
+Version 0.14
+Author:  Merijn de Jonge
+-Because building the documentation requires the toolbus and other programs, 
+ all programs are now build automatically prior to making the documentation. 
+-Also build everything before making a distribution.
+
+Date:   Tue Apr 11 20:03:33 MET DST 2000
+Version 0.14
+-annoying bug in emacs-adapter solved which occurs when path-names contain
+double slashes
+
+Date:	Mon Apr  3 16:59:03 MET DST 2000
+Version: 0.13
+Author:  Merijn de Jonge
+
+-Toolbus is now configured/build using automake
+-GPL copyright added
+-Made documentation (in README) more up-to-date
+-LaTeX documentation now works with LaTeX2e
+-Generate LaTeX demo files in directory ./doc not in ./demos/*/
+-Documentation sources stored in a deeper directory (doc/src) to make a
+ clearer distribution. The directory ./doc now only contains the postscript
+ files.
+-The tools script2latex and verbatim are moved from the toolbus source
+ directory to doc/src
+------------------------------------------------------------------------------
+
+Date:   Tue Mar  7 18:08:23 MET 2000
+Version: 0.12
+Author:  Merijn & Tobias
+
+- Fixed dangling socketfile bug
+------------------------------------------------------------------------------
+Date:		Fri Mar  3 17:07:59 MET 2000
+Version:	0.11.7
+Author:		Merijn
+
+- Added tool idef2tif and scripts directory
+------------------------------------------------------------------------------
+Date:		Fri Feb 23 11:10:17 MET 1996
+Version:	0.9.16f
+Author:		Pieter
+
+- Added the new python-adapter.
+------------------------------------------------------------------------------
+Date:		Wed Dec  6 14:28:38 MET 1995
+Version:	0.9.16c
+Author:		Pieter
+
+- Added the new tcltk-adapter. (configure using --with-tcltk=<Tcl/Tk-base-dir>)
+------------------------------------------------------------------------------
+Date:		Wed Dec  5 11:20:23 MET 1995
+Version:	0.9.16c
+Author:		Pieter
+
+- Renamed CHANGES.log into CHANGES.txt, because 'make clean' removes all the
+  files ending in .log.
+------------------------------------------------------------------------------
+Date:		Fri Nov 17 16:41:17 MET 1995
+Version:	0.9.16b
+Author:		Pieter
+
+- Fixed some problems with the gen-adapter and bc-adapter.
+------------------------------------------------------------------------------
+Date:		Wed Nov 15 21:26:02 MET 1995
+Version:	0.9.16
+Author:		Paul
+
+- Further work done eliminating subtle bugs related to variable management. The
+  prototypical  case to worry about is:
+	let X : int in ... endlet || let X : int in ... endlet
+  Major step: environments are from now on attached to *atoms* as opposed to
+  a whole process (as was done until now).
+- ``Make dist'' now generates the tar.gz in .. rather than in .
+- The gen-adapter was not made, adjusted (the doc still has to be fixed).
+- Test procedures now compare their output with previous output (reduces the
+  amount of output of testing).
+- Compiled with ``-pedantic -Wall'' and removed some minor stilistic errors
+  in various files.
+------------------------------------------------------------------------------
+Date:           Wed Oct 25 13:51:17 MET 1995
+Version:        0.9.15b
+Author:         Pieter
+
+- Changed packing of viewer help widget. Now there is more room for the
+  canvas widget to expand.
+------------------------------------------------------------------------------
+Date:           Tue Oct 24 14:40:45 MET 1995
+Version:        0.9.15b
+Author:         Pieter
+
+- Added TBexit/TBatexit functions.
+- Paul showed me a temporary fix for the environment bug.
+- Fixed the problem of tools surviving the ToolBus, using
+  the newly introduced TBexit/TBatexit functions.
+------------------------------------------------------------------------------
+Date:		Mon Oct 16 12:05:05 MET 1995
+Version:	0.9.15
+Author:		Paul
+
+- Incorporated Paul's changes that fix bug toolbus/57
+  (Variables declared in outer scopes are not known)
+------------------------------------------------------------------------------
+Date:		Thu Oct 12 09:24:09 MET 1995
+Version:	0.9.14
+Author:		Pieter
+
+- Finally came around to fixing the spurious ctif error bug.
+------------------------------------------------------------------------------
+Date:		Wed Oct 11 11:29:43 MET 1995
+Version:	0.9.15
+Author:		Pieter.
+
+- Changed directory structure under adapters. Now every adapter has its
+  own subdirectory.
+- Added configure options:
+  --with-tcl/--without-tcl (default: yes) is tcl/tk present?
+  --with-perl/--without-perl (default: yes) is perl present?
+  --with-swipl/--without-swipl (default: no) is swi-prolog present?
+  Both the adapter building and demo building now depends on these options.
+- Cleaned up --with-gel option
+- Added python and swi-prolog adapters.
+- Added the following demos:
+  - battleships (written by Hayco de Jong)
+  - go-moku (written by Jan Kort)
+  - ttt (tic-tac-toe, written by Timme Dekker)
+  - swipl-ttt (written by Monajemi Ramin) 
+- Added CHANGES.log file.
+------------------------------------------------------------------------------
+Date:		Wed Nov 15 21:26:02 MET 1995
+Version:	0.9.16
+Author:		Paul.
+
+- I have appended here the old CHANGES file that I maintained privately.
+
+December, 1994
+
+- Incorporated Simon Gray's bstring changes
+- Renaming of some common parameters of adapters
+- Improvements on asf+sdf-adapter, spec demo is now working
+- Added a TB_LOCAL_PORTS flag (for systems with dial-up slip
+  connections, like mine since a week)
+- Updated documentation
+
+November, 1994
+
+- Major reorganisation of the distribution and complete
+  switch to Autoconf 2.0, for configuration management.
+
+October 12, 1994
+
+- Added a TB_TRACING option to toolbus with values:
+  . none	no tracing
+  . internal	print textual trace on stdout
+  . external	execute an external trace tool
+
+October 5, 1994
+
+- wish-adapter now tests existence of tb.tcl and of argument script
+  before calling wish
+
+September 19, 1994
+
+- Added a "test" directory
+- Added a test program for match/TBmakeTerm and fixed several minor
+  bugs in TBmatch.
+
+September 14, 1994:
+
+- CONFIG replaced by a configuration file generated by autoconf;
+  consequently all Makefiles replaced by Makefile.in templates.
+
+September 11, 1994:
+
+- Added a destroy_ports functions in toolbus.c that unlinks
+  all unix domain sockets in use.
+
+September 5, 1994:
+
+- Added a "details" field to tool definitions which is passed as
+  string value of the switch -details of adapters.
+- Rearranged standard arguments of adapters.
+- Added an asf+sdf-adapter that directly reads/writes binary
+  gel (for interfacing with compiled Asf+Sdf specifications only)
+
+April 20, 1994:
+
+- Several off-by-one errors (e.g. ntools, nproc, ncall, ...)
+  in the interpreter have been fixed (thanks to Casper Dik)
+- The "host" directive in tool definitions is now implemented.
+  [Note: take care that the executable of the tool appears
+   in the search path at the remote host]
+- CONFIG and all Makefiles further reorganized;
+  . CONFIG now takes a parameter naming a specific host
+  . Support for Solaris included
+  . Several Make variables have been added, in particular the
+    way the C compiler is called from makefiles is changed.
+
+April 19, 1994:
+
+- The "spec" demo now also includes pretty printing
+  (albeit not yet perfect)
+
+April 6, 1994:
+
+- Major progress with "spec" demo aiming at the construction of
+  a term editor for the Booleans a la the ASF+SDF Meta-environment
+- As a side effect several adapters have been written:
+  . parser-adapter -- a general parser interface
+  . gen-adapter    -- a generic adapter for Unix commands
+
+April 1, 1994:
+
+- bc-adapter written which allows the use of the Unix "bc" command
+  in the calc demo
+
+March 30, 1994:
+
+- Complete reorganization of the directory structure into directories
+	src		(the ToolBus interpreter)
+	demos		(all demo's)
+	adapters	(a collection of standard adapters, see below)
+- A CONFIG program is introduced for better parameterization of the
+  source code.
+- All "ui.c" style programs in the demo's have been eliminated in favour
+  of the use of one generic "wish-adapter". All tcl script are updated and
+  now do the recognition of TB terms themselves.
+- The processing of the "command" in a tool definition is improved,
+  it is now possible to give arguments to Unix commands.
+
+March 27, 1994:
+
+- Fixed bug that prevents execution on multiple machines
+- Added the flags (to ToolBus and tools)
+	. TB_INPORT
+	. TB_OUTPORT
+ for explicitly defining the input/output socket to be used for the
+ communication between ToolBus and tools (only relevant when more than
+ one ToolBus interpreter is executting on the network).
+
+March 24, 1994:
+
+- Added: character input ports:
+  . removed TBaddInPort
+  . added TBaddTermPort (identical to the old TBaddInPort)
+  . added TBaddCharPort:
+	int TBaddCharPort(int, TBcallbackChar);
+    where TBcallbackChar is defined by:
+    	typedef term *(*TBcallbackChar)(int);
+    
+    Notes: - the int argument is the file descriptor on which
+             character input is available.
+	   - CONTRARY TO TERM PORTS THIS INPUT MUST BE READ BY THE HANDLER.
+	   - the handler may return a term to be send to the ToolBus.
+
+March 22, 1994:
+
+- Reorganized the demo's and added a CONFIG file that contains
+  site specific information (like, e.g., the path name of the
+  wish interpreter used in the demo's)
+- Completed the Constraints demo (demo-cons).
+
+
+March 20, 1994:
+
+- TBVERBOSE renamed to TB_VERBOSE
+- TBDELAY renamed to TB_DELAY
+- added TB_SINGLE flag for stand-alone execution of ToolBus
+  or tool (as suggested by Calin Groza), e.g.
+	calc -TB_SINGLE
+  will ask for term input from standard input.
