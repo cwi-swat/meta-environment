@@ -1,0 +1,155 @@
+definition
+module languages/asf/syntax/Asf[Tree]
+
+imports languages/asf/syntax/Module[Tree]
+module languages/asf/syntax/Characters
+hiddens
+  sorts CHAR
+exports
+  lexical syntax
+    [\"] value:~[\257] [\"] -> CHAR {cons("default")}
+
+
+module languages/asf/syntax/Conditions[Tree]
+
+exports
+   sorts ASF-Condition ASF-Conditions Tree
+
+   context-free syntax
+
+       lhs:Tree unequal:"!=" rhs:Tree -> ASF-Condition {cons("negative")}
+       lhs:Tree equality:"==" rhs:Tree   -> ASF-Condition {cons("equality")}
+       lhs:Tree match:":=" rhs:Tree   -> ASF-Condition {cons("match")}
+       lhs:Tree match:"!:=" rhs:Tree  -> ASF-Condition {cons("no-match")}
+
+  context-free syntax
+
+       list:{ASF-Condition ","}+ -> ASF-Conditions
+
+module languages/asf/syntax/Constructors
+
+imports languages/asf/syntax/Characters
+exports
+sorts Tree
+
+context-free syntax
+
+       "amb" "(" ambs:{Tree ","}* ")" -> Tree {cons("ambiguity-constructor")}
+       name:Tree "(" list:CHAR* ")"   -> Tree {cons("lexical-constructor")}
+
+
+module languages/asf/syntax/Equations[Tree]
+
+imports languages/asf/syntax/Conditions[Tree]
+imports languages/asf/syntax/Tags
+exports
+  sorts ASF-Implies ASF-Equation ASF-ConditionalEquation ASF-BarEnd
+
+exports
+  lexical syntax
+                                      -> ASF-BarEnd {cons("Absent")}
+    [\>]                              -> ASF-BarEnd {cons("Present")}
+
+    start:"===" bar:[\=]* end:ASF-BarEnd  -> ASF-Implies {cons("default")}
+
+  lexical restrictions
+    ASF-Implies -/- [\=]
+
+  context-free syntax
+
+    ASF-Tag ASF-Equation -> ASF-ConditionalEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
+    ASF-Tag ASF-Equation "when" ASF-Conditions  -> ASF-ConditionalEquation {cons("when")}
+
+  context-free syntax
+
+    lhs:Tree "=" rhs:Tree -> ASF-Equation
+
+module languages/asf/syntax/Module[Tree]
+
+imports basic/Whitespace
+imports languages/asf/syntax/Equations[Tree]
+imports languages/asf/syntax/Tests[Tree]
+
+imports languages/sdf2/syntax/Character[
+	Character => CHAR 
+	NumChar => ASF-NumChar 
+	ShortChar => ASF-ShortChar
+]
+
+hiddens
+  context-free start-symbols
+    ASF-Module ASF-Section
+
+exports
+  sorts ASF-Module ASF-Section ASF-NumChar ASF-ShortChar
+
+context-free syntax
+
+  list:ASF-Section* -> ASF-Module {cons("default")}
+
+  "equations" list:ASF-ConditionalEquation* -> ASF-Section {cons("equations")}
+  "tests" test-list:ASF-TestEquation* -> ASF-Section {cons("tests")}
+
+module languages/asf/syntax/Tags
+
+exports
+
+sorts ASF-TagId ASF-Tag
+
+lexical syntax
+
+    head:[A-Za-z0-9\"\'] 
+	-> ASF-TagId {avoid,cons("one-char")}
+
+    head:[A-Za-z0-9\"\'] middle:[A-Za-z0-9\"\'\-]* last:[A-Za-z0-9\"\'] 
+	-> ASF-TagId {avoid,cons("many-chars")}
+
+context-free syntax
+
+    "[" "]"           -> ASF-Tag {cons("empty")}
+    "[" ASF-TagId "]" -> ASF-Tag {cons("not-empty")}
+
+module languages/asf/syntax/Tests[Tree]
+
+imports languages/asf/syntax/Equations[Tree]
+
+exports
+
+sorts ASF-TestEquation
+
+context-free syntax
+    ASF-Tag ASF-Condition -> ASF-TestEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Condition -> ASF-TestEquation {cons("implies")}
+    ASF-Tag ASF-Condition "when" ASF-Conditions  -> ASF-TestEquation {cons("when")}
+
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r]	-> LAYOUT {cons("whitespace")}
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+%%% $Id$
+                     
+module languages/sdf2/syntax/Character
+
+
+
+exports
+  sorts Character NumChar ShortChar
+  lexical syntax
+    [\\] number:[0-9]+                     -> NumChar   {cons("digits")}
+    character:[a-zA-Z0-9]                  -> ShortChar {cons("regular")}
+    [\\] escape:~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar {cons("escaped")}
+
+  context-free syntax
+    NumChar   -> Character {cons("numeric")}
+    ShortChar -> Character {cons("short")}
+    "\\TOP"   -> Character {cons("top")}
+    "\\EOF"   -> Character {cons("eof")}
+    "\\BOT"   -> Character {cons("bot")}
+    "\\LABEL_START" -> Character {cons("label_start")}
+
+   

@@ -1,0 +1,221 @@
+# $Id$
+
+Mon Jun  9 13:21:08 CEST 2008 <jurgenv@cwi.nl>
+ * asf-support.pc.in: Bumped version to 1.7
+
+Wed Apr 16 11:06:27 CEST 2008 <jurgenv@cwi.nl>
+ * lib/*.c: regenerated API with cast functions that fix type punned
+   aliasing issues.
+
+Thu Mar 27 10:28:15 EDT 2008 <jurgenv@cwi.nl>
+ * lib/ASFME-utils.c: little change due to API change in pt-support 
+
+Wed May 30 11:31:57 CEST 2007 <jurgenv@cwi.nl>
+ * lib/lift.c: added parameter for lifting cache, such that the user can
+   provide her own cache for memoization. This is to prevent memory leaks.
+
+Thu Mar 15 15:15:16 CET 2007 <{economop,kooiker}@cwi.nl>
+ * lib/*: regenerated api fixing macro bug
+ * lib/{lift,lower}.c: fix errors introduced by missing cilit definition and
+ wrong tree cycle definition
+
+Fri Mar  9 19:15:50 CET 2007 <jurgenv@cwi.nl>
+ * lib/ASFME.[ch]: regenerated with more brackets around macro arguments
+ * lib/{lift,lower}.c: added functionality for sharing the results of lifting
+   while lowering. In case nothing happened in between lifting and lowering,
+   lowering is the exact inverse operation of lifting.
+
+Thu Mar  8 19:03:58 CET 2007 <{economop,kooiker,jurgenv}@cwi.nl>
+ * **: regenerated all API's in this package with a new version of 
+   ApiGen that generates more efficient code for the is-alternative 
+   predicates.
+
+Thu Jul 27 12:02:40 CEST 2006 <martin.bravenboer@gmail.com>
+
+ * utils: removed asf-support-config generation, which is obsolete
+   now we are using pkg-config.
+
+Wed May  3 13:44:09 CEST 2006 <jurgenv@cwi.nl>
+ * Bumped to 1.5
+
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
+Mon Feb  7 16:38:15 CET 2005 <jurgenv@cwi.nl>
+ * Added manual implementation of liftModule and lowerModule. These functions
+   find the user-defined terms in an ASF module and lift them to parsed
+   AsFix trees.
+
+Thu Jan 27 11:35:06 CET 2005 <jurgenv@cwi.nl>
+ * Bumped to 1.4.3
+
+Wed Jan 26 11:10:55 CET 2005 <jurgenv@cwi.nl>
+ * YES! Threw away subs-eqs tool because Apigen now supports enough
+   about parameterized modules
+ * ASF syntax changed, no support for "=" conditions anymore
+ * Regenerated API for structured lexicals
+ * Removed lex-cons.c, this is implemented by the ASF normalizer now.
+
+Mon Oct 18 23:45:46 CEST 2004 <jurgenv@cwi.nl>
+ * Merged 1.5 developments
+
+Tue Sep 28 15:47:04 CEST 2004 <{jong,jurgenv}@cwi.nl>
+ * Added an extra parameter to ASF_unionASFCondEquationList for the layout 
+   that should be used in between every equation.
+
+Fri Aug 27 14:42:55 CEST 2004 <jong@cwi.nl>
+ * refactor to use new PT_yield functions in MEPT API
+
+Thu Jun 10 09:41:41 CEST 2004 <{jong,jurgenv}@cwi.nl>
+ * ./lib/lex-cons.c: explicit cast to (int) in PT_makeTreeChar
+
+Wed Jun  9 11:53:18 CEST 2004 <{jong,jurgenv}@cwi.nl>
+ * configure.in: bumped to version 1.3
+ * lib: regenerated API using APIGen 2.1 and fix resulting errors
+
+Tue Mar 23 09:59:48 CET 2004 <{kooiker,jong}@cwi.nl>
+ * lib/lex-cons.c: update wrt new MEPT API
+
+Tue May 25 13:38:07 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 1.4
+ * Conversion of lexical constructor function keeps annotations better.
+
+Fri May  7 11:20:39 CEST 2004 <jurgenv@cwi.nl>
+ * 1.2 was released before, so bumped to 1.3
+
+Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+2003/01/13 (jurgenv@cwi.nl)
+ * added dependency on error-support
+ 
+2003/11/09 (jurgenv@cwi.nl)
+ * An ASF file is now an ASF-Module which consists of a list of ASF-Sections.
+   An ASF-Section is either an equations sections or a tests sections for now.
+
+2003/11/06 (jurgenv@cwi.nl)
+ * Added "!:=" the condition operator that fails if a match succeeds and
+   succeeds when a match fails
+
+2003/11/05 (jurgenv@cwi.nl)
+ * Added "==" (equality) and ":=" (match) to replace the "=" condition syntax.
+
+2003/10/16 (jurgenv@cwi.nl)
+ * Added syntax for conditional tests
+
+2003/10/15 (jurgenv@cwi.nl)
+ * Added syntax for tests to ASF
+ * Regenerated asf-support library
+ * Added concatTestEquationTestList function
+
+2003/10/08 (markvdb@cwi.nl)
+ * Bumped into version 1.2.
+
+2003/10/02 (markvdb@cwi.nl)
+ * Added the prefix ASF to all sorts.
+ * Generated without the -r option.
+
+2003/08/01 (jurgenv@cwi.nl)
+ * Set version to  1.1.1
+
+2003/07/02 (jurgenv@cwi.nl)
+ * Release 1.1
+
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+ * Bumped to 1.1beta
+
+2003/01/22 (vinju@loria.fr)
+ * Release 1.0
+ * LGPL license
+
+2002/11/05 (vinju@loria.fr)
+ * Moved libME to lib
+
+2002/11/04 (vinju@loria.fr)
+ * Regenerated library with new sdf-apigen features
+ * Removed dependency on pt-support where possible
+
+2002/10/07 (vinju@loria.fr)
+ * Regenerated library to obtain improved start constructors
+
+2002/10/03 (jurgenv@cwi.nl)
+ * Bumped to 1.0beta
+ * Added ASF_makeCondEquationListFromParseTrees
+ * Made all non start sorts in Asf.label.def hidden
+ * Regenerated ASFME to get new start constructors
+
+2002/07/24 (jurgenv@cwi.nl)
+ * Release 0.8
+
+2002/07/01 (vandenbr@loria.fr)
+ * Bumped version to 0.8beta.
+ * Lexical constructor attribute added to lexical constructor
+   production.
+ * Ambiguity constructor attribute added to ambiguity production.
+
+2002/02/07 (jurgenv@cwi.nl)
+ * Released 0.7
+
+2001/12/19 (jurgenv@cwi.nl)
+ * Bumped version to 0.7beta
+
+2001/11/29 (jurgenv@cwi.nl)
+ * Adapted library to cope with new production attributes (no 
+   automatic quoting anymore).
+
+2001/11/13 (jong@cwi.nl)
+ * released version 0.6
+
+2001/11/05 ({jurgenv,markvdb}@cwi.nl)
+ * Removed module identifiers from productions:
+   - regenerated the library.
+   - subeqs adapted.
+
+2001/10/30 (jurgenv@cwi.nl)
+ * Added ASF_isTreeTraversalFunction to the library.
+
+2001/10/10 (jurgenv@cwi.nl)
+ * Bumped to version 0.6beta
+
+2001/10/01 (jurgenv@cwi.nl)
+ * Regenerated library for changes in parse tree format. (See apigen and
+   pt-support ChangeLogs)
+ * Added lex-cons file that contains functionality for manipulating lexical 
+   constructor functions.
+
+2001/08/08 (jurgenv@cwi.nl)
+ * Added new library function: ASF_getConditionListLength
+
+2001/07/17 (jong@cwi.nl)
+ * version 0.4 released, bumped to 0.5
+
+2001/07/16 (jong@cwi.nl)
+ * documented change to version 0.4
+
+2001/07/06 (markvdb@cwi.nl)
+ * Removed AsFix1 depending functionality.
+
+2001/07/03 (markvdb@cwi.nl)
+ * Added a union function for CondEquationLists based on indexed sets.
+
+2001/06/21 (jurgenv@cwi.nl)
+ * added a function that checks if a tree is a lexical constructor function:
+   ASF_isTreeLexicalConstructorFunction. Do not use the generated function
+   ASF_isTreeLexicalConstructor, because it will always return true when
+   DISABLE_DYNAMIC_CHECKING is defined.
+
+2001/04/23 (markvdb@cwi.nl)
+ * Released version 0.2, and bumped into 0.3. 
+ * Bumped into version 0.2 in order to make distribution.      
+
+2001/04/23 (markvdb@cwi.nl)
+ * Added ASF support based on AsFix2ME.
+
+2001/02/08 (jong@cwi.nl)
+ * inserted several brainstorm-results for asf-apigen-library into lib/
+ * added subst-eqs.c (aka "asf-hack-prod" ;-)
+
+2001/02/07 (jurgenv@cwi.nl)
+ * initial version of asf-support
