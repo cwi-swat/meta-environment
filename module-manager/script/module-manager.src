@@ -1,0 +1,9 @@
+#! /bin/sh
+
+set -e
+#set -x
+
+CLASSPATH=__EXTERNAL_JARS__
+CLASSPATH=$CLASSPATH:__JARDIR__/__JARFILE__
+
+__JAVA__ -classpath $CLASSPATH __MAINCLASS__ $@

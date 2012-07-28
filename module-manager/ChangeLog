@@ -1,0 +1,160 @@
+Tue Apr 29 15:16:43 2008    <bruntink@cwi.nl>
+
+	* module-manager.pc.in: Changed dependency on graph-support to graph-support-java.
+
+Mon Apr 28 17:20:44 2008    <bruntink@cwi.nl>
+
+	* module-manager.pc.in: Removed spurious packages like nl, nl.cwi, etc. 
+	* Removed .project and .classpath from repository.
+
+Mon Apr 28 13:38:10 2008    <bruntink@cwi.nl>
+
+	* Changed dependency on module-support to module-support-java.
+
+$Id$
+
+Tue Jun  5 11:00:06 CEST 2007 <{kooiker,lankamp}@cwi.nl>
+ * src/**/ModuleManager.java: fix null pointer in GetAllAttributes
+
+Wed Mar 21 15:10:16 CET 2007 <jurgenv@cwi.nl>
+ * ModuleDatabase.java: made robust against undefined module id's.
+
+Wed Mar  7 11:22:52 CET 2007 <kooiker@cwi.nl>
+ * module-manager.idef.src:
+   - Strongly typed variable declarations
+
+Thu Jan  4 14:16:04 CET 2007 <kooiker@cwi.nl>
+ * src/**/model/ModuleDatabase.java:
+   - Added check for violation of use of predicate values within new rules
+
+Wed Dec  6 14:17:03 CET 2006 <kooiker@cwi.nl>
+ * src/**/model/ModuleDatabase.java:
+   - Pattern matching on ATerms was not efficient enough when evaluating for
+     lots of modules. Now use equal on AFun's.
+   - Added caching for computation of transitive closure of children
+
+Fri Oct 20 13:25:27 CEST 2006 <kooiker@cwi.nl>
+ * src/**/model/ModuleDatabase.java:
+   - Use innermost modal logic evaluator so any modal logic formula can be
+     used now (without the limits of the earlier version)
+
+Tue Jun 20 16:27:40 CEST 2006 <kooiker@cwi.nl>
+ * src/**/model/ModuleDatabase.java:
+   - Use modal logic to compute predicate values, which fixes problems with
+     propagation through cycles/SCC's
+   - Use of SCC graphs not needed anymore
+
+Tue Jun 20 16:27:40 CEST 2006 <kooiker@cwi.nl>
+ * src/**/model/{ModuleDatabase,SCC}.java:
+   - Applied Tarjan's algorithm to construct a SCC graph
+   - SCC graph used to propagate inherited attributes
+
+Mon Mar 27 16:55:46 CEST 2006 <kooiker@cwi.nl>
+ * toolbus_make_rules:
+   - remove -swing from tiftojava
+
+Thu Feb 23 16:52:51 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use generics to type maps, sets, and lists
+
+Mon Feb  6 18:36:00 CET 2006 <{markvdb,jurgenv}@cwi.nl>
+ *  src/**/*.java: added a new element of an inherited attribute:
+    the child value in order to make a distinction between the
+    old value of the current module, and the old value of the child
+    modules when inheriting an attribute. The precondition is now
+    that all (or one) child modules must be set to the ChildValue, AND
+    the current module must be set to OldValue before the attribute
+    can be set to NewValue.
+ * All inherited attributes are now triggered on all set attributes,
+   not just the ones that would be set to the NewValue. We have to
+   look at this with an optimization eye.
+
+Mon Jan 23 09:05:52 CET 2006 <jurgenv@cwi.nl>
+ * src/**/ModuleManager.java: Mapping of dependencies to a graph
+   can now handle any well known graph attribute, such as color
+   and shape.
+ * src/**/*.java,module-manager.idef: changed nomenclature:
+	- [Dd]epending -> [Cc]hildren
+	- [Dd]ependent -> [Pp]arents
+ * src/**/*.java,module-manager.idef: added get-parents next to
+   get-all-parents
+
+Fri Jan 13 08:52:56 CET 2006 <kooiker@cwi.nl>
+ * module-manager.idef, src/**/*.java:
+   - get-all-attributes get all attributes for a given moduleid
+
+Wed Jan  4 15:27:04 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * src/**/*.java: added getAllParents functionality.
+
+Tue Jan  3 13:11:35 CET 2006 <kooiker@cwi.nl>
+ * module-manager.idef, src/**/*.java:
+   - Remove unused convenience method getAllModulesByAttribute
+
+Tue Dec 20 13:24:03 CET 2005 <kooiker@cwi.nl>
+ * src/**/ModuleDatabase.java:
+   - Add private removeAllDependencies, used when removing a module
+
+Mon Dec 19 14:46:37 CET 2005 <kooiker@cwi.nl>
+ * src/**/ModuleDatabase.java:
+   - Only delete children dependencies of module when deleting all
+     dependencies
+
+Fri Nov 11 15:38:11 CET 2005 <kooiker@cwinl>
+ * src/nl/cwi/sen1/modulemanager/module/ModuleGraph.java:
+   - Add attribute shape (defaults to Box)
+
+Fri Nov  4 11:58:07 CET 2005 <kooiker@ciw.nl>
+ * src/nl/cwi/sen1/modulemanager/module/ModuleDatabase.java:
+   - Add method getAllModulesByAttribute
+
+Tue Nov  1 11:47:07 CET 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager/module/ModuleDatabase.java:
+   - Fix bug in deletedependencies where some dependencies were not removed
+   - Fix delete module also deleting the dependencies
+ * module-manager.idef:
+   - Add mm-get-closable-modules message
+
+Mon Oct 31 15:17:30 CET 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager/module/ModuleDatabase.java:
+   - Remove module from dependency lists when deleting it
+ * module-manager.idef:
+   - Add mm-get-all-depending-modules message
+
+Tue Oct 11 13:29:01 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager/module/ModuleGraph.java:
+   - Remove quotes from labels
+
+Mon Oct 10 11:51:58 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager:
+   - Remove debug output
+
+Thu Sep 22 10:13:43 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager:
+   - Add ModuleGraph for conversion from internal database to Graph adt format
+   - Add support for creating graph labels
+
+Wed Sep 21 14:33:04 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager:
+   - Refactored database into class
+
+Mon Sep 19 11:35:43 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager:
+   - ModuleId is of type ATerm
+
+Tue Sep 13 14:39:01 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager:
+   - Add method GetAllDependenciesByAttribute
+   - TODO: remove aforementioned method
+
+Wed Sep  7 10:34:16 CEST 2005 <kooiker@cwi.nl>
+ * build.xml: switch to j2sdk 5.0
+
+Fri Sep  2 14:24:02 CEST 2005 <kooiker@cwi.nl>
+ * Reimplemented modulemanager: use Java type object hierarchy and integrated
+   data structures
+
+Wed Aug 31 15:32:59 CEST 2005 <{markvdb,kooiker}@cwi.nl>
+ * Additional functionality in idef and java source
+
+Fri Aug 26 11:22:25 CEST 2005 <kooiker@cwi.nl>
+ * Initial version

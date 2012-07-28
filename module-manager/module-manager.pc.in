@@ -1,0 +1,14 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl
+
+Name: module-manager
+Version: 1.2
+Description:
+Requires: aterm-java,graph-support-java,module-support-java,toolbus-java-adapter
+JarFile=module-manager.jar
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.modulemanager,nl.cwi.sen1.modulemanager.model
+MainClass=nl.cwi.sen1.modulemanager.ModuleManager
+TestClass=
+ToolBusFlags=-I${prefix}/share/module-manager
+
