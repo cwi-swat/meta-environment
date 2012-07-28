@@ -1,0 +1,30 @@
+tool diff-gui is {  }
+
+process DiffGui is
+let
+  T : diff-gui,
+  File1 : str,
+  File2 : str,
+  Report : term
+in
+  StartDiffGui()
+  . rec-connect(T?)
+  . 
+  (
+    rec-msg(dg-show-diff(File1?, File2?))
+    . snd-do(T, show-diff(File1, File2))
+  +
+    rec-msg(dg-show-diff-report(Report?))
+    . snd-do(T, show-diff-report(Report))
+  )
+  *
+  rec-disconnect(T)
+endlet
+
+process StartDiffGui is
+  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
+  
+process TestDiffGui is
+  snd-msg(dg-show-diff("file1","file2"))
+
+toolbus(StartDiffGui,DiffGui, TestDiffGui)
