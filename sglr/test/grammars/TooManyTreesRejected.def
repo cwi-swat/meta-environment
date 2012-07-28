@@ -1,0 +1,20 @@
+definition
+module Main
+imports RobsReject
+
+module RobsReject
+
+exports 
+  context-free start-symbols S
+  sorts S A B C D
+  context-free syntax
+    "b" S A B C -> S
+    D           -> S
+    "a"         -> S {reject}
+                -> A
+    "a"         -> B
+                -> B
+    "a"         -> D
+                -> D 
+                -> C 
+

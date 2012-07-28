@@ -1,0 +1,37 @@
+definition
+
+module Main
+imports Trav
+
+module Trav
+imports Layout
+
+exports
+  context-free start-symbols Symbol Condition
+
+  sorts Symbol Condition ImportSet Sort Literal
+
+  lexical syntax
+    [a-z][A-Za-z0-9]* -> Literal
+    
+    [A-Z][A-Za-z0-9]* -> Sort
+
+  context-free syntax
+    Literal          -> Symbol  
+    Sort             -> Symbol                  
+
+  context-free syntax
+    Sort "=" Sort           -> Condition
+    ImportSet "=" ImportSet -> Condition  
+
+  variables
+    "Literal"[0-9]*   -> Literal {prefer}
+    "ImportSet"[0-9]* -> ImportSet {prefer}   
+
+
+module Layout
+   exports
+      lexical syntax
+         [\ \n]          -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \n]

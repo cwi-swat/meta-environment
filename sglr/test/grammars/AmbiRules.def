@@ -1,0 +1,27 @@
+definition 
+module Main
+
+imports AmbiRules
+
+module AmbiRules
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Eq
+  sorts Eq Symbol
+
+  lexical syntax
+    [A-Z]+ -> Symbol
+
+  context-free syntax
+    Symbol "=" Symbol -> Eq
+    Symbol+ "=" Symbol+ -> Eq
+
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n]    -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]

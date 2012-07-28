@@ -1,0 +1,29 @@
+definition 
+module Main
+imports Injection
+
+module Injection
+exports
+  lexical syntax
+    [\ \n\t]     -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \n\t]
+
+  context-free start-symbols Test
+
+  sorts Identifier Name Expression Test Dummy
+
+  lexical syntax
+    [A-Za-z\_\$] [A-Za-z0-9\_\$]* -> Identifier
+
+  context-free syntax
+    Identifier -> Name
+    Identifier -> Dummy
+    Dummy -> Expression
+    Name -> Expression
+
+    "test" "(" Expression ")" -> Test
+
+  variables
+    "#Ident" [0-9]* -> Identifier

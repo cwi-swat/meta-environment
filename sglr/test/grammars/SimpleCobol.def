@@ -1,0 +1,336 @@
+definition
+module Main
+imports L-EXP
+
+
+module A-EXP
+imports DATA-NAMES LIT
+
+exports
+
+  sorts A-exp A-exp-p A-term A-factor A-pow LorD LorD-p
+
+    context-free syntax
+
+      Data-name "(" A-exp-p ")"          -> Data-name
+
+      Data-name "(" A-exp ":" A-exp ")"  -> Data-name
+
+      Lit                        -> LorD
+      Data-name                  -> LorD
+
+      A-factor "**" C A-pow      -> A-factor
+      A-term   "*"  C A-factor   -> A-term
+      A-term   "/"  C A-factor   -> A-term
+      A-exp    "+"  C A-term     -> A-exp
+      A-exp    "-"  C A-term     -> A-exp
+
+      "(" A-exp ")" C -> A-pow
+      "-" "(" A-exp ")" C -> A-pow
+      LorD            -> A-pow
+      "-" LorD        -> A-pow
+      A-pow         -> A-factor
+      A-factor      -> A-term
+      A-term        -> A-exp
+
+%%%%%%%%%% THIS CAN BE REMOVED IN SDF2 %%%%%%%%%%%%%%%%%%%
+
+  A-exp+   -> A-exp-p
+  LorD+    -> LorD-p
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module COMMENT
+imports Layout
+
+exports
+
+  sorts COMMENT C
+
+  lexical syntax
+
+    "%*" ~[\n]*             -> COMMENT
+    "%/" ~[\n]*             -> COMMENT
+    "SKIP" [1-3]            -> COMMENT
+    "EJECT"                 -> COMMENT
+    "SUPPRESS"              -> COMMENT
+
+  context-free syntax
+
+    COMMENT* -> C
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module DATA-NAMES
+imports ID
+
+exports
+
+  sorts In-of In-of-s In-of-p
+        Data-name Data-name-p Data-name-r Data-name-r-p
+        Rounded
+
+  context-free syntax
+
+    "IN" C Id   -> In-of
+    "OF" C Id   -> In-of
+
+    Id In-of-s        -> Data-name
+    Data-name Rounded -> Data-name-r
+
+                      -> Rounded
+    "ROUNDED" C       -> Rounded
+
+%%%%%%%%%% THIS CAN BE REMOVED IN SDF2 %%%%%%%%%%%%%%%%%%%
+
+   Data-name+           -> Data-name-p
+   Data-name-r+         -> Data-name-r-p
+
+   In-of+               -> In-of-p
+   In-of*               -> In-of-s
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module DEC
+imports NAT
+
+exports
+
+  sorts Lex-Dec Dec
+
+  lexical syntax
+
+    Lex-Nat "." Lex-Nat       -> Lex-Dec
+    Lex-Nat "," Lex-Nat       -> Lex-Dec
+    [\.\,] Lex-Nat            -> Lex-Dec
+
+    [\-\+] Lex-Nat "." Lex-Nat -> Lex-Dec
+    [\-\+] Lex-Nat "," Lex-Nat -> Lex-Dec
+    [\-\+] [\.\,] Lex-Nat      -> Lex-Dec
+    [\-\+] Lex-Nat             -> Lex-Dec
+
+  context-free syntax
+    Lex-Nat C                 -> Dec
+    Lex-Dec C                 -> Dec
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module ID
+imports COMMENT
+
+exports
+
+  sorts %%Left Right
+        Lex-Id Id Id-p
+
+  lexical syntax
+
+    %%[A-Z0-9]+ [\-]*     -> Left
+    %%[\-]* [A-Za-z0-9]+     -> Right
+    %%Left* [A-Z] Right*  -> Lex-Id
+    [0-9]* [A-Z]                            -> Lex-Id
+    [0-9]* [A-Z] [A-Za-z0-9\-]* [A-Za-z0-9] -> Lex-Id
+
+  context-free syntax
+
+    Lex-Id C   -> Id
+
+%%%%%%%%%% THIS CAN BE REMOVED IN SDF2 %%%%%%%%%%%%%%%%%%%
+
+    Id+         -> Id-p
+
+%%%%%%%%%% ADDED FOR DISAMBIGUATION IN SDF2 %%%%%%%%%%%%%%%%%%%
+  lexical restrictions
+    Lex-Id -/- [A-Za-z0-9\-]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module L-EXP
+imports PRED REL
+
+exports
+  context-free start-symbols L-exp
+  sorts L-exp L-term L-factor Lit-exp
+
+  context-free syntax
+    Data-name                -> L-factor
+    A-exp Rel Lit-exp        -> L-factor {prefer}
+    A-exp Rel-exp            -> L-factor
+    A-exp Pred-exp           -> L-factor
+
+    "NOT" C L-factor         -> L-factor
+    L-term "AND" C L-factor  -> L-term
+    L-exp   "OR" C L-term    -> L-exp
+
+    "(" L-exp ")" C          -> L-factor
+    L-factor                 -> L-term
+    L-term                   -> L-exp
+
+    LorD "AND" C Lit-exp     -> Lit-exp  %% for A = B AND 6
+    LorD "OR"  C Lit-exp     -> Lit-exp
+    Lit                      -> Lit-exp
+
+    "(" Lit-exp ")"          -> Lit
+
+%% sdf2 extension
+    "AND"                 -> Lex-Id {reject}
+    "OR"                  -> Lex-Id {reject}
+    "NOT"                 -> Lex-Id {reject}
+
+    "SKIP"                -> Lex-Id {reject}
+    "EJECT"               -> Lex-Id {reject}
+    "SUPPRESS"            -> Lex-Id {reject}
+
+    "IN"                  -> Lex-Id {reject}
+    "OF"                  -> Lex-Id {reject}
+    "ROUNDED"             -> Lex-Id {reject}
+
+    "SPACE"               -> Lex-Id {reject}
+    "Space"               -> Lex-Id {reject}
+    "LOW-VALUE"           -> Lex-Id {reject}
+    "HIGH-VALUE"          -> Lex-Id {reject}
+    "QUOTE"               -> Lex-Id {reject}
+    "ANY"                 -> Lex-Id {reject}
+    "CURRENT-DATE"        -> Lex-Id {reject}
+    "ALL"                 -> Lex-Id {reject}
+
+    "NUMERIC"             -> Lex-Id {reject}
+    "ALPHABETIC"          -> Lex-Id {reject}
+    "ALPHABETIC-LOWER"    -> Lex-Id {reject}
+    "ALPHABETIC-UPPER"    -> Lex-Id {reject}
+    "POSITIVE"            -> Lex-Id {reject}
+    "NEGATIVE"            -> Lex-Id {reject}
+    "ZERO"                -> Lex-Id {reject}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module LIT
+imports DEC 
+imports STR
+
+exports
+
+  sorts Lit
+
+  context-free syntax
+
+    "ZERO" C            -> Lit
+    "SPACE" C           -> Lit
+    "Space" C           -> Lit
+    "LOW-VALUE" C       -> Lit
+    "HIGH-VALUE" C      -> Lit
+    "QUOTE" C           -> Lit
+    "ANY" C             -> Lit
+    "CURRENT-DATE" C    -> Lit
+
+    "ALL" C Lit         -> Lit
+
+  context-free syntax
+    Str                 -> Lit
+    Dec                 -> Lit
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module Layout
+exports
+  lexical syntax
+    "%%" ~[\n]* [\n]  -> LAYOUT
+    [\ \t\n]          -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\%]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module NAT
+imports COMMENT
+
+exports
+
+  sorts Lex-Nat Nat Lex-Sub-elem-num Sub-elem-num
+
+  lexical syntax
+
+    [0-9]+  -> Lex-Nat
+
+    [1-5][0-9]       -> Lex-Sub-elem-num
+    [0][2-9]         -> Lex-Sub-elem-num
+%%    "88"             -> Lex-Sub-elem-num  not relevant in L-EXP context
+
+  context-free syntax
+
+    Lex-Nat C           -> Nat
+    Lex-Sub-elem-num C  -> Sub-elem-num
+
+%%    "01"                -> Lex-Nat
+%%    "66"                -> Lex-Nat
+%%    "77"                -> Lex-Nat
+%%    "78"                -> Lex-Nat
+
+%%    "01" C              -> Elem-num
+%%    "66" C              -> Elem-num
+%%    "77" C              -> Elem-num
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module PRED
+imports COMMENT
+
+exports
+
+  sorts Pred Pred-exp
+
+  context-free syntax
+
+    "NUMERIC" C           -> Pred
+    "ALPHABETIC" C        -> Pred
+    "ALPHABETIC-LOWER" C  -> Pred
+    "ALPHABETIC-UPPER" C  -> Pred
+    "POSITIVE" C          -> Pred
+    "NEGATIVE" C          -> Pred
+    "ZERO" C              -> Pred
+
+
+    Pred "OR"  C Pred-exp -> Pred-exp
+    Pred "AND" C Pred-exp -> Pred-exp
+    Pred                  -> Pred-exp
+    "NOT" C Pred-exp      -> Pred-exp
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module REL
+imports COMMENT A-EXP
+
+exports
+
+  sorts Rel Rel-exp Rel-term Rel-factor
+
+  context-free syntax
+
+    "=" C  -> Rel
+    "<" C  -> Rel
+    ">" C  -> Rel
+    "<=" C -> Rel
+    ">=" C -> Rel
+    "<>" C -> Rel
+    "NOT" C Rel -> Rel
+
+    Rel A-exp                   -> Rel-factor
+
+    Rel-term "AND" C Rel-factor -> Rel-term
+    Rel-exp  "OR"  C Rel-term   -> Rel-exp
+
+    "(" Rel-exp ")" C           -> Rel-factor
+    Rel-factor                  -> Rel-term
+    Rel-term                    -> Rel-exp
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+module STR
+imports COMMENT
+
+exports
+
+  sorts Str Lex-Str
+
+  lexical syntax
+
+    "'" ~[\']* "'"   -> Lex-Str
+    [\"] ~[\"]* [\"] -> Lex-Str
+
+  context-free syntax
+
+    Lex-Str C -> Str
+
+module Nothing

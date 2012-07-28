@@ -1,0 +1,59 @@
+definition
+module Main
+imports CIG-If
+
+module CIG-Drop
+exports
+ sorts CIG-Drop
+
+ lexical restrictions
+	CIG-Drop -/- ~[\ \t\n\.]
+
+ lexical syntax
+	~[\ \t\n\.]+ -> CIG-Drop
+
+
+module CIG-If 
+imports CIG-Drop CIG-Layout
+exports
+ context-free start-symbols CIG-If
+ sorts
+	CIG-OpenIf CIG-ClosedIf CIG-SubIf CIG-If
+	CIG-ClosedIfNesting CIG-ClosedIfNestings
+	CIG-OpenIfNesting CIG-OpenIfNestings
+
+ context-free syntax
+
+	"IF" CIG-OpenIfNestings            -> CIG-OpenIf
+	"IF" CIG-ClosedIfNestings "END-IF" -> CIG-ClosedIf
+
+	CIG-OpenIf               -> CIG-SubIf
+	CIG-OpenIf CIG-SubIf     -> CIG-SubIf
+
+	CIG-ClosedIf     -> CIG-SubIf
+
+	CIG-ClosedIf     -> CIG-ClosedIfNesting 
+	CIG-Drop         -> CIG-ClosedIfNesting	
+	"ELSE"           -> CIG-ClosedIfNesting {reject}
+	"IF"             -> CIG-ClosedIfNesting {reject}
+	"END-IF"         -> CIG-ClosedIfNesting {reject}
+
+	CIG-ClosedIfNesting -> CIG-OpenIfNesting
+	CIG-ClosedIf        -> CIG-OpenIfNesting {reject}
+	
+	CIG-ClosedIfNesting* -> CIG-ClosedIfNestings
+	CIG-OpenIfNesting*   -> CIG-OpenIfNestings
+	
+	CIG-SubIf "." -> CIG-If
+
+context-free priorities
+	CIG-ClosedIf -> CIG-ClosedIfNesting >
+	CIG-Drop -> CIG-ClosedIfNesting
+module CIG-Layout 
+exports
+ restrictions
+    <LAYOUT?-CF> -/- [\ \n\t]
+
+ lexical syntax
+    [\ \n\t]     -> LAYOUT
+

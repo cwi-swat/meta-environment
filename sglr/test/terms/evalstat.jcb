@@ -1,0 +1,6 @@
+     EVALUATE X
+       WHEN A    MOVE A TO B
+       WHEN B    MOVE B TO C
+       WHEN C    MOVE C TO D
+       WHEN D    MOVE D TO E
+     END-EVALUATE

@@ -1,0 +1,9 @@
+definition
+module Main
+exports
+  context-free start-symbols   A
+  sorts   A
+  context-free syntax
+                -> A
+          A  A  -> A
+          "a"   -> A

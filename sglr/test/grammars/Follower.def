@@ -1,0 +1,15 @@
+definition
+
+module Main
+exports
+  context-free start-symbols S
+  sorts S
+  lexical syntax
+    [\ \t\n]   ->  LAYOUT
+  context-free restrictions
+     LAYOUT?  -/-  [\ \t\n]
+  lexical syntax
+     [a-zA-Z]  -> S
+     S S       -> S {left}
+  lexical restrictions
+     S       -/-  [X] . [X]

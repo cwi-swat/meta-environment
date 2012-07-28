@@ -1,0 +1,109 @@
+/** \mainpage SGLR Documentation Index Page
+ * \section intro_sec Introduction
+ *
+ * 
+ */
+
+#\htmlonly <a href="../Parsing/parsing.html#SCOTT00">Scott ref</a> 
+#\endhtmlonly
+
+#Module definitions
+/** \defgroup gss gss
+ *
+ * This is the module containing the construction and accessor functions of the
+ * Graph Structured Stack (GSS).
+ */
+
+/** \defgroup parseForest parseForest
+ *
+ * This is the module containing the parse forest construction and filtering 
+ * functions.
+ *
+ * Most applications that use a parser require the syntactic representation of 
+ * the parse to be output. Whilst deterministic parsers can only derive 
+ * strings in one way, non-deterministic, or more specifically ambiguous, 
+ * parsers can have multiple derivations for the same string.
+ * 
+ * Deterministic parsers usually build a parse tree representation of a 
+ * derivation. Parse trees are straightforward to counstruct during a parse 
+ * and are reletively space efficient. However, if multiple derivations of a 
+ * single string are possible, as is the case with non-deterministic parsers, 
+ * then a more efficient structure is required. There are three different 
+ * approaches that have been suggested in the literature: 
+ * \li construct a grammar whose language is the derivation(s) of the 
+ * sentence~\cite{Lang}, 
+ * \li build a graph representation of the derivation(s)~\cite{Earley,Tomita}, 
+ * \li produce the well-formed substring table used during recognition of the 
+ * string~\cite{Cocke,Younger,Kasami}. 
+ *
+ * The best representation is one that can be constructed efficiently in 
+ * time and space, and from which a single derivation can be easily extracted.
+ * -- How can we justify the selection of a parse forest representation based 
+ * on the above criteria? (Paul has suggested using relations to represent 
+ * the links between nodes in the forest. Can this be discussed here?)
+ * 
+ * An important goal of a generalised parser, such as SGLR, is the efficient 
+ * construction of a parse's parse forests; the size of the structure, and the 
+ * time taken to build it, should be minimal. Unfortunately, these two 
+ * properties are in tension with each other. The sharing of nodes should be 
+ * optimal to reduce the size of the forest, but this requires extra searching 
+ * during a parse, which inadvertently makes the algorithm slower. (Clearly,
+ * choosing the right data structure to represent the parse forests is critical 
+ * to the performance of a generalised parser.) Parse forests in SGLR are 
+ * represented by the ATerm data-type and are constructed using the ATerm 
+ * Library.
+ * 
+ * Two of the features that the ATerm Library provides simplify the 
+ * construction of parse forests: all nodes (ATerms) are maximally shared, which
+ * ensures that the size of the forest is minimal, and garbage 
+ * collection is automatic. The maximal sharing of nodes is achieved by 
+ * checking to see if a node already exists before it is created. However, for 
+ * this to be possible nodes cannot be modified after creation, or in other 
+ * words, only non-destructive updates of nodes is allowed. Unfortunatelly 
+ * this complicates the construction of a forest during parsing (elaborate).
+ *
+ * The size of the parse forest can be controlled by implementing sub-tree 
+ * sharing and local ambiguity packing.
+ *
+ * \section parseForests Parse forest representation in SGLR
+ *
+ * What SGLR calls ambiguity nodes are actually packing nodes. Their children 
+ * are sub-trees that derive the same portion of the input string in different 
+ * ways. These ambiguity nodes are introduced to pack the different derivations
+ * into one tree, effectively sharing the tree above.
+ *
+ * 
+ * Think about implementing temporary parse tree nodes that allow destructive 
+ * updates while new ambiguous sub-trees can be created and then convert them 
+ * to ATerms as soon as possible. This would make filtering faster as better 
+ * memoization could be done and new nodes would only need to be created when a 
+ * tree is filtered. Can this node creation for filtering be improved upon? 
+ * What would happen if we used a specific data structure.
+ *
+ * \subsection AmbiTables
+ * An entry in the ambiTable contains all parse trees of an ambiguous node and 
+ * is indexed on a single parse tree and the start position of the string it 
+ * derives. 
+ *
+ * \todo publish an algorithm that filters parse forests based on our
+ * disambiguation filters with complexity and actual performance analysis.
+ * 
+ */
+
+/** \defgroup parseTable parseTable
+ *
+ * This is the module containing the functions to convert the ATerm 
+ * representation of the parse table to the internal representation.
+ */
+
+/** \defgroup parser parser
+ *
+ * This is the module containing the SGLR parser functions.
+ *
+ */
+
+/** \defgroup utils utils
+ *
+ * This is the module that contains the utility functions used by the SGLR 
+ * package.
+ */

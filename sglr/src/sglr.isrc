@@ -1,0 +1,32 @@
+/* $Id: sglr.idef 17400 2006-01-23 14:18:12Z economop $ */
+
+tool sglr is { command = "__PREFIX__/bin/sglr" }
+
+process SGLR is
+let
+  SGLR: sglr,
+  TopSort: str,
+  Input: str,
+  ParseTable: term,
+  ParseForest: term,
+  ParseTree: term,
+  ErrorSummary: term,
+  Heuristics: term
+in
+  (
+    rec-msg(sglr-parse(Input?, ParseTable?, TopSort?, Heuristics?))
+    . execute(sglr, SGLR?)
+    . snd-eval(SGLR, parse(Input, ParseTable, TopSort, Heuristics))
+    .
+    (
+      rec-value(SGLR, parse-succeeded(ParseTree?, ErrorSummary?))
+      . snd-msg(sglr-parse-tree(ParseTree, ErrorSummary))
+    +
+      rec-value(SGLR, parse-failed(ErrorSummary?))
+      . snd-msg(sglr-parse-error(ErrorSummary))
+    )
+    . snd-terminate(SGLR, "done")
+  ) * delta
+endlet
+
+toolbus(SGLR)

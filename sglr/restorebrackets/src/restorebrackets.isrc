@@ -1,0 +1,34 @@
+tool restorebrackets is { command = "__PREFIX__/bin/restorebrackets" }
+
+process RestoreBrackets is
+let
+  RESTORE : restorebrackets,
+  Term    : term,
+  NewTerm : term,
+  Table   : term
+in
+  (
+    rec-msg(restore-brackets(Term?, Table?)) 
+    . execute(restorebrackets, RESTORE?) 
+    . snd-eval(RESTORE, restore-brackets(Term, Table)) 
+    .
+    (
+      rec-value(RESTORE, brackets-restored(NewTerm?)) 
+      . snd-terminate(RESTORE, "done") 
+      . snd-msg(brackets-restored(NewTerm))
+    )
+  +
+    rec-msg(add-brackets(Term?, Table?)) 
+    . execute(restorebrackets, RESTORE?) 
+    . snd-eval(RESTORE, add-brackets(Term, Table)) 
+    . 
+    (
+      rec-value(RESTORE, brackets-restored(NewTerm?)) 
+      . snd-terminate(RESTORE, "done") 
+      . snd-msg(brackets-added(NewTerm))
+    )
+  ) 
+  * delta
+endlet
+
+toolbus(RestoreBrackets)

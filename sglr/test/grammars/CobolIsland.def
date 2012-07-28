@@ -1,0 +1,33 @@
+definition
+
+module Main
+imports CobolOpen
+
+module CobolOpen
+imports Layout
+exports
+  context-free start-symbols Program
+  sorts Program Open Token Id Water
+  lexical syntax
+    ~[ ]                       -> Water {avoid}
+    [a-z A-Z][a-z A-Z 0-9]+    -> Id    {prefer}
+
+  context-free restrictions
+    Id -/- [a-z A-Z 0-9]
+
+
+  context-free syntax
+    Water                    -> Token
+    Open                     -> Water {reject}
+    "OPEN" "INPUT" Id        -> Open  {cons("open"),prefer}
+    Open                     -> Token
+    Token*                   -> Program {cons("program")}
+
+module Layout
+exports
+  lexical syntax
+    "%%" ~[\n]* [\n]    -> LAYOUT
+    [\ \t\n]            -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+    LAYOUT? -/- [\%].[\%]

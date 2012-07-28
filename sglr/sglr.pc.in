@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,economop@cwi.nl
+Name: sglr
+Version: 4.5.4
+Description:
+Requires: aterm,c-library,config-support,error-support,ptable-support,pt-support,toolbuslib
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lsglr
+#uninstalled Libs: -L@abs_top_builddir@/src -lsglr
+#uninstalled Cflags: -I@abs_top_builddir@/src -I@abs_top_builddir@/src/parser -I@abs_top_builddir@/src/parseForest
+ToolBusFlags=-I${prefix}/share/sglr
+

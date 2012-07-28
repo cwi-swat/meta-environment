@@ -1,0 +1,40 @@
+definition
+
+module Main
+imports AN-Full
+
+module AN-Full
+
+imports Layout
+
+exports 
+
+context-free start-symbols Action
+
+sorts
+
+  Action	Yielder		DataOp
+
+context-free syntax
+
+	Action Yielder		-> Action
+
+	"give" Yielder		-> Action
+  	"give" DataOp		-> Action
+  	"skip1"			-> Action
+  	"skip2"			-> Action
+  	"skip3"			-> Action
+  	Action "then" Action	-> Action {left}
+
+  	"it"			-> DataOp
+
+  	Action 		        -> Yielder {avoid}
+	DataOp			-> Yielder {avoid}
+	Yielder "then" Yielder	-> Yielder {left}
+
+module Layout
+   exports
+      lexical syntax
+         [\ \n]          -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \n]

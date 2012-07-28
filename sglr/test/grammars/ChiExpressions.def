@@ -1,0 +1,142 @@
+definition
+module Main
+imports ChiExpression
+
+module ChiExpression
+
+imports
+  basic/Whitespace
+
+exports
+    context-free start-symbols
+	Chi-expression
+    sorts
+	Chi-expression
+        Chi-number Chi-identifier
+
+   lexical syntax
+     [a-z]+ -> Chi-identifier
+     [0-9]+ -> Chi-number
+    context-free syntax
+	"time"						-> Chi-expression
+	"false"						-> Chi-expression
+	"true"						-> Chi-expression
+	Chi-number					-> Chi-expression
+	%% Chi-imported-identifier is done through the binary . operator
+	Chi-identifier					-> Chi-expression
+	"[" {Chi-expression ","}* "]"			-> Chi-expression
+	"{" {Chi-expression ","}* "}"			-> Chi-expression
+	"<" {Chi-expression ","}+ ">"			-> Chi-expression
+	"<|" {Chi-expression ","}+ "|>"			-> Chi-expression
+	"(" Chi-expression ")"				-> Chi-expression {bracket}
+
+	Chi-expression "." Chi-expression		-> Chi-expression {right}
+
+	Chi-expression "(" {Chi-expression ","}* ")"	-> Chi-expression
+
+	"sample" Chi-expression				-> Chi-expression
+	"pick" Chi-expression				-> Chi-expression
+	"+" Chi-expression				-> Chi-expression
+	"-" Chi-expression				-> Chi-expression
+
+	Chi-expression "^"   Chi-expression		-> Chi-expression {right}
+
+	Chi-expression "*"   Chi-expression		-> Chi-expression {left}
+	Chi-expression "/"   Chi-expression		-> Chi-expression {left}
+	Chi-expression "div" Chi-expression		-> Chi-expression {left}
+	Chi-expression "mod" Chi-expression		-> Chi-expression {left}
+
+	Chi-expression "+"   Chi-expression		-> Chi-expression {left}
+	Chi-expression "-"   Chi-expression		-> Chi-expression {left}
+	Chi-expression "++"  Chi-expression		-> Chi-expression {left,prefer}
+	Chi-expression "--"  Chi-expression		-> Chi-expression {left,prefer}
+
+	Chi-expression "min" Chi-expression		-> Chi-expression {left}
+	Chi-expression "max" Chi-expression		-> Chi-expression {left}
+
+	"not" Chi-expression				-> Chi-expression
+
+	Chi-expression "<"   Chi-expression		-> Chi-expression {left}
+	Chi-expression "<="  Chi-expression		-> Chi-expression {left}
+	Chi-expression "="   Chi-expression		-> Chi-expression {left}
+	Chi-expression "/="  Chi-expression		-> Chi-expression {left}
+	Chi-expression ">="  Chi-expression		-> Chi-expression {left}
+	Chi-expression ">"   Chi-expression		-> Chi-expression {left}
+	Chi-expression "in"  Chi-expression		-> Chi-expression {left}
+	Chi-expression "sub" Chi-expression		-> Chi-expression {left}
+
+	Chi-expression "and" Chi-expression		-> Chi-expression {left}
+
+	Chi-expression "or"  Chi-expression		-> Chi-expression {left}
+
+	Chi-expression ":"   Chi-expression		-> Chi-expression {left}
+
+
+	"time"		    -> Chi-identifier {reject}
+	"false"		    -> Chi-identifier {reject}
+	"true"		    -> Chi-identifier {reject}
+	"pick"		    -> Chi-identifier {reject}
+	"div"		    -> Chi-identifier {reject}
+	"mod"		    -> Chi-identifier {reject}
+	"min"		    -> Chi-identifier {reject}
+	"max"		    -> Chi-identifier {reject}
+	"not"		    -> Chi-identifier {reject}
+	"in"		    -> Chi-identifier {reject}
+	"sub"		    -> Chi-identifier {reject}
+	"and"		    -> Chi-identifier {reject}
+	"or"		    -> Chi-identifier {reject}
+	"sample"	    -> Chi-identifier {reject}
+	"pick"		    -> Chi-identifier {reject}
+
+    context-free priorities
+    {
+	Chi-expression "." Chi-expression		-> Chi-expression
+    } > {
+	Chi-expression "(" {Chi-expression ","}* ")"	-> Chi-expression
+    } > {
+	"sample" Chi-expression				-> Chi-expression
+	"pick" Chi-expression				-> Chi-expression
+	"+" Chi-expression				-> Chi-expression
+	"-" Chi-expression				-> Chi-expression
+    } > {
+	Chi-expression "^"   Chi-expression		-> Chi-expression
+    } > {left:
+	Chi-expression "*"   Chi-expression		-> Chi-expression
+	Chi-expression "/"   Chi-expression		-> Chi-expression
+	Chi-expression "div" Chi-expression		-> Chi-expression
+	Chi-expression "mod" Chi-expression		-> Chi-expression
+    } > {left:
+	Chi-expression "+"   Chi-expression		-> Chi-expression
+	Chi-expression "-"   Chi-expression		-> Chi-expression
+	Chi-expression "++"  Chi-expression		-> Chi-expression
+	Chi-expression "--"  Chi-expression		-> Chi-expression
+    } > {left:
+	Chi-expression "min" Chi-expression		-> Chi-expression
+	Chi-expression "max" Chi-expression		-> Chi-expression
+    } > {
+	"not" Chi-expression				-> Chi-expression
+    } > {left:
+	Chi-expression "<"   Chi-expression		-> Chi-expression
+	Chi-expression "<="  Chi-expression		-> Chi-expression
+	Chi-expression "="   Chi-expression		-> Chi-expression
+	Chi-expression "/="  Chi-expression		-> Chi-expression
+	Chi-expression ">="  Chi-expression		-> Chi-expression
+	Chi-expression ">"   Chi-expression		-> Chi-expression
+	Chi-expression "in"  Chi-expression		-> Chi-expression
+	Chi-expression "sub" Chi-expression		-> Chi-expression
+    } > {
+	Chi-expression "and" Chi-expression		-> Chi-expression
+    } > {
+	Chi-expression "or"  Chi-expression		-> Chi-expression
+    } > {
+	Chi-expression ":"   Chi-expression		-> Chi-expression
+    }
+
+
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n]	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]

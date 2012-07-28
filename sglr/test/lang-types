@@ -1,0 +1,35 @@
+#
+# Extensions mapping
+# Ext	Lang         (use TABS between extension and language!!!)
+sdf	Sdf2
+sdf2	Sdf2
+amb	Ambi
+casl	Casl
+cycle	Cyclops
+cycle2	Cyclops2
+c	C
+flow	Follower
+h	C
+m	ObjectiveC
+isle	Isle
+java	Java
+pico	Pico
+rmo	Risla
+simcob	SimpleCobol
+tcbl	TestCobol
+flt	Flat
+jcb	Jacob
+pfr	Prefer
+acts	Actions
+acts2	Actions2
+cobisl	CobolIsland
+pre	Prefix
+rjct	Reject
+exp	Expression
+inj	Injection
+chi	ChiExpressions
+ambrule	AmbiRules
+lst	Lists
+nss	NoStartSymbol
+rrjct	RobsReject
+ppprio	PostParsePriorityFilter

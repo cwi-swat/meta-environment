@@ -1,0 +1,569 @@
+definition
+module Main
+imports ZCasl-Top ZCasl-Arch-disamb
+
+module ZCasl-Top
+imports ZCasl-Arch
+
+module ZCasl-Arch
+
+imports ZCasl-Struct
+
+
+exports
+  sorts
+    Arch-Spec-Defn  Arch-Spec Basic-Arch-Spec
+    Unit-Decl-Defn Unit-Spec-Defn Unit-Spec
+    Unit-Expression Unit-Binding Unit-Term
+    Fit-Arg-Unit Arch-Spec-Name Fit-Unit-Arg
+    Unit-Name Unit-Defn Unit-Decl Group-Arch-Spec Group-Unit-Term
+
+  context-free syntax
+
+%% Arch-Spec-Defn
+    "arch" "spec" Arch-Spec-Name "=" Arch-Spec Opt-End     -> Arch-Spec-Defn
+
+%% Arch-Spec
+    Basic-Arch-Spec -> Arch-Spec
+    Group-Arch-Spec -> Arch-Spec
+
+%% Group-Arch-Spec
+    "{" Arch-Spec "}" -> Group-Arch-Spec
+    Arch-Spec-Name    -> Group-Arch-Spec
+
+%% Basic-Arch-Spec
+    Unit-S {Unit-Decl-Defn ";"}+ Opt-Semi "result" Unit-Expression Opt-Semi -> Basic-Arch-Spec
+
+%% Unit-Decl-Defn
+    Unit-Decl -> Unit-Decl-Defn
+    Unit-Defn -> Unit-Decl-Defn
+
+%% Unit-Decl
+    Unit-Name ":" Unit-Spec "given" {Unit-Term ","}+ -> Unit-Decl
+    Unit-Name ":" Unit-Spec                          -> Unit-Decl
+
+%% Unit-Defn
+    Unit-Name "=" Unit-Expression -> Unit-Defn
+
+%% Unit-Spec-Defn
+    "unit" "spec" Unit-Name "=" Unit-Spec Opt-End -> Unit-Spec-Defn
+
+%% Unit-Spec
+    Group-Spec                        -> Unit-Spec
+    {Group-Spec "*"}+ "->" Group-Spec -> Unit-Spec
+    "arch" "spec" Group-Arch-Spec     -> Unit-Spec
+    "closed" Unit-Spec                -> Unit-Spec
+
+%% Unit-Expression
+    "lambda" {Unit-Binding ";"}+ "." Unit-Term ->  Unit-Expression
+    Unit-Term                                  ->  Unit-Expression
+
+%% Unit-Binding
+    Unit-Name ":" Unit-Spec -> Unit-Binding
+
+%% Unit-Term
+    Unit-Term Renaming                                   -> Unit-Term
+    Unit-Term Restriction                                -> Unit-Term
+    Unit-Term "and" { Unit-Term "and" }+                 -> Unit-Term
+    "local" {Unit-Defn ";"}+ Opt-Semi "within" Unit-Term -> Unit-Term
+    Group-Unit-Term                                      -> Unit-Term
+
+%% Group-Unit-Term
+    "{" Unit-Term "}"       -> Group-Unit-Term
+    Unit-Name               -> Group-Unit-Term
+    Unit-Name Fit-Unit-Arg+ -> Group-Unit-Term
+
+%% Fit-Arg
+    "[" Fit-Arg-Unit "]" -> Fit-Unit-Arg
+
+%% Fit-Arg-Unit
+    Unit-Term                             -> Fit-Arg-Unit
+    Unit-Term "fit" {Symb-Map-Items ","}+ -> Fit-Arg-Unit
+
+
+Simple-Id      -> Arch-Spec-Name
+Simple-Id      -> Unit-Name
+
+module ZCasl-Arch-disamb
+imports
+  ZCasl-Arch ZCasl-Struct-disamb
+
+module ZCasl-Struct
+
+imports ZCasl-BasicItems
+
+exports
+  context-free start-symbols Spec-Defn
+  sorts
+    Spec-Name Spec-Defn Spec-1 Spec-2
+    View-Name View-Defn View-Type Some-Generics
+    Spec Group-Spec Renaming Restriction
+    Fit Fit-Arg Symb-Items Symb-Map-Items
+    Some-Symb-Kind
+    Symb Symb-Map Symb-Or-Map Some-Params Some-Imports
+    Param Opt-End
+
+  context-free syntax
+
+%% Spec
+    Spec-2                         -> Spec-1
+    Spec-1                         -> Spec
+
+    Basic-Spec                     -> Spec-2
+
+    Spec-2 Renaming                -> Spec-2
+    Spec-2 Restriction             -> Spec-2
+
+    Spec-2 "and" {Spec-2 "and"}+   -> Spec-1
+    Spec-1 "then" {Spec-1 "then"}+ -> Spec
+    "free" Group-Spec              -> Spec-2
+    "local" Spec "within" Spec-1   -> Spec-1
+    "closed" Group-Spec            -> Spec-2
+    Group-Spec                     -> Spec-2
+
+%% Group-Spec
+    Spec-Name       -> Group-Spec
+    "{" Spec "}"    -> Group-Spec
+    Spec-Name Fit+  -> Group-Spec
+
+%% new Fit, not in concrete syntax
+    "[" Fit-Arg "]" -> Fit
+
+%% Renaming
+    "with" {Symb-Map-Items ","}+ -> Renaming
+
+%% Restriction
+    "hide" {Symb-Items ","}+       -> Restriction
+    "reveal" {Symb-Map-Items ","}+ -> Restriction
+
+%% Spec-Defn
+    "spec" Spec-Name "=" Spec Opt-End               -> Spec-Defn
+    "spec" Spec-Name Some-Generics "=" Spec Opt-End -> Spec-Defn
+
+%% Some-Generics
+    Some-Params              -> Some-Generics
+    Some-Params Some-Imports -> Some-Generics
+
+%% Some-Params
+    Param+       -> Some-Params
+    "[" Spec "]" -> Param
+
+%% Imports
+    "given" {Spec-Name ","}+ -> Some-Imports
+
+
+%% Fit-Arg
+    Spec "fit" {Symb-Map-Items ","}+ -> Fit-Arg
+    Spec                             -> Fit-Arg
+    "view" View-Name                 -> Fit-Arg
+    "view" View-Name Fit+            -> Fit-Arg
+
+%% View-Defn
+    "view" View-Name ":" View-Type Opt-End                                          -> View-Defn
+    "view" View-Name ":" View-Type "=" {Symb-Map-Items ","}+ Opt-End                -> View-Defn
+    "view" View-Name Some-Generics ":" View-Type Opt-End                            -> View-Defn
+    "view" View-Name Some-Generics ":" View-Type "=" {Symb-Map-Items ","}+ Opt-End -> View-Defn
+
+%% View-Type
+    Group-Spec "->" Group-Spec  -> View-Type
+
+%% Symb-Items
+   Symb                       -> Symb-Items
+   Some-Symb-Kind {Symb ","}+ -> Symb-Items
+
+%% Symb-Map-Items
+    Symb-Or-Map                       -> Symb-Map-Items
+    Some-Symb-Kind {Symb-Or-Map ","}+ -> Symb-Map-Items
+
+%% Some-Symb-Kind
+    Sort-S -> Some-Symb-Kind
+    Op-S   -> Some-Symb-Kind
+    Pred-S -> Some-Symb-Kind
+
+%% Symb
+    Id              -> Symb
+    Qual-Pred-Name  -> Symb
+    Qual-Op-Name    -> Symb
+
+%% Symb-Map
+    Symb "|->" Symb -> Symb-Map
+
+%% Symb-Or-Map
+    Symb            -> Symb-Or-Map
+    Symb-Map        -> Symb-Or-Map
+
+    Simple-Id       -> Spec-Name
+    Simple-Id       -> View-Name
+
+    Token "[" {Id ","}+ "]"          -> Token-Id
+    Token-or-Place "[" {Id ","}+ "]" -> Mixfix-Id
+
+%% Opt-End
+         -> Opt-End
+   "end" -> Opt-End
+
+module ZCasl-Struct-disamb
+imports
+  ZCasl-Struct ZCasl-BasicItems-disamb
+exports
+  context-free syntax
+    "["      -> Signs {reject}
+    "]"      -> Signs {reject}
+    "|->"    -> Signs {reject}
+
+
+module ZCasl-BasicItems
+
+%% written/changed by Bjarke Wedemeijer
+%% january 1998
+
+imports ZCasl-Keywords ZCasl-Lexical
+
+exports
+  sorts
+    Basic-Item Basic-Spec Sig-Items Var-Decl Datatype-Decl
+    Formula Sort-Item Op-Item Pred-Item Op-Type Op-Attr Op-Head
+    Term Some-Sorts  Op-Symb Arg-Decl Pred-Type Pred-Head
+    Alternative Components Quantifier Formula-1 Formula-2 Formula-3
+    Simple-Term Pred-Symb Qual-Pred-Name 
+    Qual-Op-Name Atom Op-Name Pred-Name Var-Or-Const Formula-2-or
+    Formula-2-and
+
+  context-free syntax
+%% Basic-Items section
+    "{" "}"     -> Basic-Spec
+    Basic-Item+ -> Basic-Spec
+
+    Sig-Items                                            -> Basic-Item
+    "free" Datatype-S { Datatype-Decl ";" }+ Opt-Semi    -> Basic-Item
+    "generated" Datatype-S {Datatype-Decl ";"}+ Opt-Semi -> Basic-Item
+    "generated" "{" Sig-Items+ Opt-Semi "}" Opt-Semi     -> Basic-Item
+    Var-S {Var-Decl ";"}+ Opt-Semi                       -> Basic-Item
+    Var-S {Var-Decl ";"}+ "." {Formula "."}+ Opt-Semi    -> Basic-Item
+    Axiom-S {Formula ";"}+ Opt-Semi                      -> Basic-Item
+
+%% Sig-Items
+    Sort-S {Sort-Item ";"}+ Opt-Semi         -> Sig-Items
+    Op-S {Op-Item ";"}+    Opt-Semi          -> Sig-Items
+    Pred-S {Pred-Item ";"}+ Opt-Semi         -> Sig-Items
+    Datatype-S {Datatype-Decl ";"}+ Opt-Semi -> Sig-Items
+
+%% Sort-Item
+    {Sort ","}+                               -> Sort-Item
+    {Sort ","}+ "<" Sort                      -> Sort-Item
+    Sort "=" "{" Var ":" Sort "." Formula "}" -> Sort-Item
+    Sort "=" { Sort "=" }+                    -> Sort-Item %% minimal form S1= S2
+
+%% Op-Item
+    {Op-Name ","}+ ":" Op-Type                    -> Op-Item
+    {Op-Name ","}+ ":" Op-Type "," {Op-Attr ","}+ -> Op-Item
+    Op-Name Op-Head "=" Term                      -> Op-Item
+
+%% Op-Type
+    Some-Sorts "->" Sort  -> Op-Type
+    Sort                  -> Op-Type
+    Some-Sorts "->?" Sort -> Op-Type
+    "?" Sort              -> Op-Type
+
+%% Sorts
+    {Sort "*"}+ -> Some-Sorts
+
+%% Op-Attr
+    "assoc"                 -> Op-Attr
+    "comm"                  -> Op-Attr
+    "idem"                  -> Op-Attr
+    "unit" Term             -> Op-Attr
+
+%% Op-Head
+    "(" {Arg-Decl ";"}+ ")" ":" Sort  -> Op-Head
+    ":" Sort                          -> Op-Head
+    "(" {Arg-Decl ";"}+ ")" ":?" Sort -> Op-Head
+    ":?" Sort                         -> Op-Head
+
+%% Arg-Decl
+    {Var ","}+ ":" Sort -> Arg-Decl
+
+%% Pred-Item
+    {Pred-Name ","}+ ":" Pred-Type    -> Pred-Item
+    Pred-Name Pred-Head "<=>" Formula -> Pred-Item
+    Pred-Name "<=>" Formula           -> Pred-Item
+
+%% Pred-Type
+    Some-Sorts -> Pred-Type
+    "(" ")"    -> Pred-Type
+
+%% Pred-Head
+    "(" {Arg-Decl ";"}+ ")" -> Pred-Head
+
+%% Datatype-Decl
+    Sort "::=" {Alternative "|"}+ -> Datatype-Decl
+
+%% Alternative
+    Op-Name"(" {Components ";"}+ ")"     -> Alternative
+    Op-Name"(" {Components ";"}+ ")" "?" -> Alternative
+    Op-Name                              -> Alternative
+    Sort-S {Sort ","}+                   -> Alternative
+
+%% Component
+    {Op-Name","}+ ":" Sort  -> Components
+    {Op-Name","}+ ":?" Sort -> Components
+    Sort                    -> Components
+
+%% Var-Decl
+    {Var ","}+  ":" Sort -> Var-Decl
+
+%% Formula
+    Formula-1 -> Formula
+    Formula-2 -> Formula-1
+    Formula-3 -> Formula-2
+    Atom      -> Formula-3
+
+    Quantifier {Var-Decl ";"}+ "." Formula -> Formula-2
+    Formula-3 "/\\" Formula-2-and          -> Formula-2
+    Formula-3 "\\/" Formula-2-or           -> Formula-2
+    Formula-3                              -> Formula-2-and
+    Quantifier {Var-Decl ";"}+ "." Formula -> Formula-2-and
+    Formula-3 "/\\" Formula-2-and          -> Formula-2-and
+    Formula-3                              -> Formula-2-or
+    Quantifier {Var-Decl ";"}+ "." Formula -> Formula-2-or
+    Formula-3 "\\/" Formula-2-or           -> Formula-2-or
+
+    Formula-3 "=>" Formula-2  -> Formula-1
+    Formula-3 "if" Formula-2  -> Formula-1
+    Formula-3 "<=>" Formula-2 -> Formula-1
+
+    "not" Formula-3 -> Formula-3
+    "true"          -> Atom
+    "false"         -> Atom
+
+    Pred-Symb                              -> Atom
+    Pred-Symb "(" Term ")"                 -> Atom
+    Pred-Symb "(" Term "," {Term ","}+ ")" -> Atom
+    Simple-Term Simple-Term+               -> Atom
+
+    "def" Term      -> Atom
+    Term "=e=" Term -> Atom
+    Term "=" Term   -> Atom
+    Term "in" Sort  -> Atom
+    "(" Formula ")" -> Formula-3
+
+%% Quantifier
+    "forall"     -> Quantifier
+    "exists"     -> Quantifier
+    "exists" "!" -> Quantifier
+
+%% Pred-Symb
+    Pred-Name                              -> Pred-Symb
+    "(" "pred" Pred-Name ":" Pred-Type ")" -> Pred-Symb
+
+%% Term
+    Simple-Term+     -> Term
+
+%% Simple-Term
+    Var-Or-Const                   -> Simple-Term
+%% officially Id -> Simple-Term
+
+    "(" "var" Var ":" Sort ")"     -> Simple-Term
+    "(" "op"  Qual-Op-Name ")"     -> Simple-Term
+    Op-Symb "(" Term ")"           -> Simple-Term
+%% officially Op-Symb (Term)-> Simple-Term
+
+    Op-Symb "(" Term "," {Term ","}+ ")" -> Simple-Term
+
+    Simple-Term ":" Sort                          -> Simple-Term
+    Simple-Term "as" Sort                         -> Simple-Term
+    "(" Term ")"                                  -> Simple-Term
+    Simple-Term "when" Formula "else" Simple-Term -> Simple-Term {right}
+
+%%  Op-Symb
+    Op-Name                   -> Op-Symb
+    "(" "op" Qual-Op-Name ")" -> Op-Symb
+
+%% Qual-Op-Name
+    Op-Name ":" Op-Type        -> Qual-Op-Name
+
+    Token-Id        -> Sort
+    Id              -> Op-Name
+    Id              -> Pred-Name
+    Simple-Id       -> Var
+    Token-Id        -> Var-Or-Const
+
+  context-free priorities
+    Op-Symb "(" Term ")"           -> Simple-Term >
+    {Var-Or-Const        -> Simple-Term
+     "(" Term ")"        -> Simple-Term}
+
+  context-free priorities
+    Pred-Symb "(" Term ")" -> Atom >
+    "(" Term ")"           -> Simple-Term
+
+module ZCasl-Keywords
+
+%% written/changed by Bjarke Wedemeijer
+%% April 1998
+
+
+imports ZCasl-Lexical
+
+exports
+  sorts Var-S Axiom-S Sort-S Op-S Pred-S Datatype-S Import-S Unit-S
+
+context-free syntax
+
+"var"     -> Var-S
+"vars"    -> Var-S
+
+"axiom"   -> Axiom-S
+"axioms"  -> Axiom-S
+
+
+"sort"    -> Sort-S
+"sorts"   -> Sort-S
+
+"op"      -> Op-S
+"ops"     -> Op-S
+
+"pred"    -> Pred-S
+"preds"   -> Pred-S
+
+"type" -> Datatype-S
+"types"-> Datatype-S
+
+"import"  -> Import-S
+"imports" -> Import-S
+
+"unit"    -> Unit-S
+"units"   -> Unit-S
+
+module ZCasl-Lexical
+
+
+%% written/changed by Bjarke Wedemeijer
+%% january 1998
+
+exports
+  sorts
+    Sort Id Word
+    Mixfix-Id Simple-Id Token-Place Token-and-Place
+    Token-or-Place Var Token Signs Words Opt-Semi Token-Id
+    WHITESPACE COMMENT 
+
+ lexical syntax
+    [\ \n\t]+        -> WHITESPACE
+    WHITESPACE       -> LAYOUT
+    "%%" ~[\n]* "\n" -> COMMENT
+    COMMENT          -> LAYOUT
+
+    [\.] Word                                          -> Token
+    [A-Za-z0-9\']+                                     -> Word {avoid}
+    [\+\-\*\&\^\#\$\47\~\>\=\<\@\?\!\|\\\:\.\{\}\[\]]+ -> Signs
+
+ context-free syntax
+    Words       -> Token
+    Signs       -> Token
+    {Word "_"}+ -> Words
+
+    Words  -> Simple-Id %% ask peter
+
+    Mixfix-Id                 -> Id
+
+    Token-Place               -> Mixfix-Id
+
+    Token                     -> Token-Id
+
+    Token                     -> Token-Place
+    Token-and-Place           -> Token-Place
+
+    "__"                      -> Token-and-Place
+    "__" Token-or-Place       -> Token-and-Place
+    Token Token-and-Place     -> Token-and-Place
+
+    Token                     -> Token-or-Place
+    "__"                      -> Token-or-Place
+    "__" Token-or-Place       -> Token-or-Place
+    Token Token-or-Place      -> Token-or-Place
+
+                        -> Opt-Semi
+    ";"                 -> Opt-Semi
+
+
+module ZCasl-BasicItems-disamb
+imports
+  ZCasl-BasicItems
+exports
+  context-free syntax
+%% These are the official ones.
+    ":"         -> Signs {reject}
+    ":?"        -> Signs {reject}
+    "::="       -> Signs {reject}
+    "="         -> Signs {reject}
+    "=>"        -> Signs {reject}
+    "<=>"       -> Signs {reject}
+    "."         -> Signs {reject}
+    "|"         -> Signs {reject}
+    "|->"       -> Signs {reject}
+    "/\\"       -> Signs {reject}
+    "\\/"       -> Signs {reject}
+    "{"         -> Signs {reject}
+    "}"         -> Signs {reject}
+    "["         -> Signs {reject}
+    "]"         -> Signs {reject}
+    "_"         -> Signs {reject}
+    "__"        -> Signs {reject}
+    "=e="       -> Signs {reject}
+    "->?"       -> Signs {reject}
+    "->"        -> Signs {reject}
+%%    "("         -> Signs {reject}
+%%    ")"         -> Signs {reject}
+%%    ","         -> Signs {reject}
+%%    "!"         -> Signs {reject}
+%%    "?"         -> Signs {reject}
+%%    "*"         -> Signs {reject}
+%%    "<"         -> Signs {reject}
+
+  restrictions
+    <Word -CF>
+    "generated"
+    "free"
+    "assoc"
+    "comm"
+    "idem"
+    "unit"
+    "units"
+    "if"
+    "not"
+    "true"
+    "false"
+    "def"
+    "in"
+    "forall"
+    "exists"
+    "pred"
+    "preds"
+    "var"
+    "vars"
+    "axiom"
+    "axioms"
+    "op"
+    "ops"
+    "as"
+    "when"
+    "else"
+    "sort"
+    "sorts"
+    "type"
+    "types"
+    "import"
+    "imports" -/- [A-Za-z0-9\']
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\%]
+
+  context-free restrictions
+    {Word "_"}* -/- [\_]
+
+  lexical restrictions
+    WHITESPACE -/- [\ \t\n]
+
+  lexical restrictions
+    Signs -/- [\+\-\*\&\^\#\$\47\~\>\=\<\@\?\!\|\\\:\.\{\}\[\]]

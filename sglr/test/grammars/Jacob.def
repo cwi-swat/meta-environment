@@ -1,0 +1,37 @@
+definition
+
+module Main
+imports Jacob
+
+module Jacob
+
+imports Layout
+exports
+  context-free start-symbols Prog EvalStat
+
+  sorts Prog Keyw Follow Stat
+  lexical syntax
+    [A-Z][A-Z0-9]* -> Follow  {avoid}
+
+  lexical restrictions
+    Follow -/- [A-Z0-9]
+
+  context-free syntax
+   "MOVE"       -> Keyw
+   "ADD"        -> Keyw
+   Keyw Follow* -> Stat
+   Stat*        -> Prog
+
+  sorts  EvalStat Expression WhenPart EvEnd 
+  context-free syntax
+   "WHEN" Follow+ Stat+                  -> WhenPart
+   "EVALUATE" Expression WhenPart+ EvEnd -> EvalStat
+   Follow+                               -> Expression
+   "END-EVALUATE"                        -> EvEnd
+
+module Layout
+   exports
+      lexical syntax
+         [\ \n]          -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \n]

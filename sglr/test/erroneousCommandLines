@@ -1,0 +1,11 @@
+
+$SGLR -2 -p $TABLES/Ambi.tbl -i $ERRORTERMS/empty.amb -fi -fe
+
+$SGLR -2 -p $TABLES/Reject.tbl -i $ERRORTERMS/r.rjct -fi -fe
+
+$SGLR -2 -p $TABLES/Injection.tbl -i $ERRORTERMS/test.inj -fi -fe
+
+$SGLR -2 -p $TABLES/NoStartSymbol.tbl -i $ERRORTERMS/true.nss -fi -fe
+
+$SGLR -2 -p $TABLES/Follower.tbl -i $ERRORTERMS/x-rated.flow -fi -fe
+

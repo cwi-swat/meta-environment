@@ -1,0 +1,12 @@
+%% $Id$
+definition
+
+module Main
+
+exports
+  context-free start-symbols Any
+  sorts Any
+  lexical syntax
+    ~[ ]*         ->  Any
+
+

@@ -1,0 +1,114 @@
+definition
+module Main
+imports Expression
+
+module Expression
+
+imports Log-Arg
+imports Layout
+
+exports
+  context-free start-symbols EXPRESSION 
+  sorts EXPRESSION LOG-MACRO
+  context-free syntax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%NUMBERS AND IDENTIFIERS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	[a-zA-Z]					-> EXPRESSION
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%BRACKETING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	"(" EXPRESSION ")"				-> EXPRESSION {bracket}
+	"\\left(" EXPRESSION "\\right)"			-> EXPRESSION {bracket}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%BASIC OPERATORS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	EXPRESSION "/" EXPRESSION			-> EXPRESSION {non-assoc}
+	EXPRESSION "+" EXPRESSION			-> EXPRESSION {left}
+	EXPRESSION "*" EXPRESSION			-> EXPRESSION {left}
+	EXPRESSION "-" EXPRESSION			-> EXPRESSION {left}
+	EXPRESSION EXPRESSION				-> EXPRESSION {left}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%UNARY OPERATORS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	EXPRESSION [\']					-> EXPRESSION
+	EXPRESSION [\!]					-> EXPRESSION
+	"-" EXPRESSION					-> EXPRESSION
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Log MACROS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	"\\sin"						-> LOG-MACRO
+	"\\cos"						-> LOG-MACRO
+	"\\log"						-> LOG-MACRO
+	LOG-MACRO  LOG-ARG				-> EXPRESSION {prefer}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Unparanthesised stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	LOG-ARG					-> EXPRESSION {avoid}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  context-free priorities
+    LOG-MACRO  LOG-ARG		-> EXPRESSION >
+    EXPRESSION [\']		-> EXPRESSION >
+    EXPRESSION [\!]		-> EXPRESSION >
+    EXPRESSION "/" EXPRESSION	-> EXPRESSION >
+    EXPRESSION "*" EXPRESSION	-> EXPRESSION >
+    EXPRESSION  EXPRESSION	-> EXPRESSION >
+    "-" EXPRESSION		-> EXPRESSION >
+    EXPRESSION "+" EXPRESSION	-> EXPRESSION >
+    EXPRESSION "-" EXPRESSION	-> EXPRESSION
+
+
+
+module Log-Arg
+
+imports Expression
+  imports Layout
+
+exports
+  sorts LOG-ARG LOG-ARG-1
+  context-free syntax
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%NUMBERS AND IDENTIFIERS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	[a-zA-Z]				-> LOG-ARG-1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%BASIC OPERATORS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	LOG-ARG-1 "/" LOG-ARG-1			-> LOG-ARG {non-assoc}
+	LOG-ARG-1 "*" LOG-ARG-1			-> LOG-ARG-1 {left}
+	LOG-ARG-1 LOG-ARG-1			-> LOG-ARG-1 {left}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%UNARY OPERATORS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	LOG-ARG-1 [\']					-> LOG-ARG-1
+	LOG-ARG-1 [\!]					-> LOG-ARG-1
+	"-" LOG-ARG-1					-> LOG-ARG-1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Unparanthesised stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	LOG-ARG-1				-> LOG-ARG
+	LOG-ARG					-> EXPRESSION {avoid}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+module Layout
+  exports
+  lexical syntax
+    [\ \t\n]         -> LAYOUT {avoid}
+    "%%" ~[\n]*"\n"  -> LAYOUT {avoid}
+    "%" ~[\%\n]+ "%" -> LAYOUT {avoid}
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\%]

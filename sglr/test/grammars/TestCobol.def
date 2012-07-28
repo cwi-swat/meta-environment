@@ -1,0 +1,47 @@
+definition
+
+module Main
+imports TestCobol
+
+module TestCobol
+imports Layout
+
+exports
+  context-free start-symbols Paragraph
+
+  sorts Paragraph Identifier Identifier-filename Statement Sentence
+        Alphabetic-user-defined-word
+
+  lexical syntax
+    [0-9\-]* [A-Za-z] [A-Za-z0-9\-]* -> Alphabetic-user-defined-word 
+
+  lexical restrictions
+    Alphabetic-user-defined-word  -/- [A-Za-z0-9\-]
+
+  context-free syntax
+    Sentence* -> Paragraph 
+
+    Statement+ "."                     -> Sentence    
+
+    "CALL" Identifier-filename         -> Statement
+%%    Alphabetic-user-defined-word       -> Identifier
+%%    Alphabetic-user-defined-word "IN"  -> Identifier
+    Alphabetic-user-defined-word "IN"? -> Identifier
+    Identifier                         -> Identifier-filename
+    Alphabetic-user-defined-word       -> Identifier-filename  {avoid}
+
+  context-free syntax
+    "IN"                -> Alphabetic-user-defined-word {reject}  
+    "CALL"              -> Alphabetic-user-defined-word {reject}  
+  
+
+module Layout 
+ exports
+
+   lexical syntax
+    "%" ~[\n]* [\n]    -> LAYOUT
+    [\ \t\n]           -> LAYOUT
+
+context-free restrictions
+    LAYOUT? -/- [\ \t\n\%]
+
