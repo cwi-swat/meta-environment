@@ -1,0 +1,152 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Creating an aterm</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="../index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="user_s_guide.html" title="User's Guide">
+<link rel="prev" href="quick_start.html" title="Quick Start">
+<link rel="next" href="aterm_properties.html" title="Aterm properties">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="../images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="quick_start.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="user_s_guide.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="aterm_properties.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="aterm__.creating_an_aterm"></a>Creating an aterm</h3></div></div></div>
+<p>
+All aterm types have their own appropriate constructors for creating them:</p>
+<pre class="programlisting"><tt class="literal"><span class="identifier">aterm_int</span><span class="identifier"> i</span><span class="special">(</span><span class="number">10</span><span class="special">);</span><span class="identifier">
+aterm_real</span><span class="identifier"> r</span><span class="special">(</span><span class="number">2.5</span><span class="special">);</span><span class="identifier">
+aterm_appl</span><span class="identifier"> f</span><span class="special">(</span><span class="identifier">function_symbol</span><span class="special">(</span><span class="string">"f"</span><span class="special">,</span><span class="number"> 2</span><span class="special">),</span><span class="identifier"> aterm</span><span class="special">(</span><span class="string">"x"</span><span class="special">),</span><span class="identifier"> aterm</span><span class="special">(</span><span class="string">"y"</span><span class="special">));</span></tt></pre>
+<p>
+There is also a convenience function <tt class="computeroutput"><span class="identifier">make_term</span></tt> for easily creating aterms from
+strings: <tt class="computeroutput"><span class="identifier">make_term</span><span class="special">(</span><span class="keyword">const</span><span class="identifier"> std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span><span class="identifier"> format</span><span class="special">,</span><span class="special"> ...)</span></tt>. The <tt class="computeroutput"><span class="identifier">format</span></tt> argument is
+a string that may contain several patterns as given in the table below. For each
+occurrence of a pattern, one or more additional arguments need to be supplied to
+the function <tt class="computeroutput"><span class="identifier">make_term</span></tt>.</p>
+<div class="informaltable">
+<h4>
+<a name="id4735466"></a><span class="table-title">ATerm++ patterns</span>
+</h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>type          </th>
+<th>pattern       </th>
+<th>argument                    </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Application   </td>
+<td>&lt;appl&gt;        </td>
+<td><tt class="computeroutput"><span class="identifier">string</span><span class="identifier"> pattern</span><span class="special">,</span><span class="identifier"> arguments</span></tt></td>
+</tr>
+<tr>
+<td>Blob          </td>
+<td>&lt;blob&gt;        </td>
+<td><tt class="computeroutput"><span class="keyword">int</span><span class="identifier"> length</span><span class="special">,</span><span class="keyword"> void</span><span class="special">*</span><span class="identifier"> data</span></tt></td>
+</tr>
+<tr>
+<td>Integer       </td>
+<td>&lt;int&gt;         </td>
+<td><tt class="computeroutput"><span class="keyword">int</span><span class="identifier"> value</span></tt></td>
+</tr>
+<tr>
+<td>List          </td>
+<td>&lt;list&gt;        </td>
+<td><tt class="computeroutput"><span class="identifier">aterm</span></tt></td>
+</tr>
+<tr>
+<td>Placeholder   </td>
+<td>&lt;placeholcer&gt; </td>
+<td><tt class="computeroutput"><span class="identifier">string</span><span class="identifier"> type</span></tt></td>
+</tr>
+<tr>
+<td>Real          </td>
+<td>&lt;real&gt;        </td>
+<td><tt class="computeroutput"><span class="keyword">double</span><span class="identifier"> value</span></tt></td>
+</tr>
+<tr>
+<td>String        </td>
+<td>&lt;str&gt;         </td>
+<td><tt class="computeroutput"><span class="identifier">string</span><span class="identifier"> pattern</span><span class="special">,</span><span class="identifier"> arguments</span></tt></td>
+</tr>
+<tr>
+<td>Term          </td>
+<td>&lt;term&gt;        </td>
+<td><tt class="computeroutput"><span class="identifier">aterm</span></tt></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+The following program illustrates the usage of <tt class="computeroutput"><span class="identifier">make_term</span></tt>.</p>
+<pre class="programlisting"><tt class="literal"><span class="preprocessor">#include</span><span class="special"> &lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span><span class="preprocessor">
+#include</span><span class="string"> "atermpp/aterm.h"</span><span class="keyword">
+
+using</span><span class="keyword"> namespace</span><span class="identifier"> genspect</span><span class="special">;</span><span class="keyword">
+
+void</span><span class="identifier"> foo</span><span class="special">()</span><span class="special">
+{</span><span class="keyword">
+  const</span><span class="keyword"> int</span><span class="identifier"> i</span><span class="special">       =</span><span class="number"> 42</span><span class="special">;</span><span class="keyword">
+  const</span><span class="keyword"> char</span><span class="special">*</span><span class="identifier"> s</span><span class="special">     =</span><span class="string"> "example"</span><span class="special">;</span><span class="keyword">
+  const</span><span class="keyword"> char</span><span class="special">*</span><span class="identifier"> blob</span><span class="special">  =</span><span class="string"> "12345678"</span><span class="special">;</span><span class="keyword">
+  const</span><span class="keyword"> double</span><span class="identifier"> r</span><span class="special">    =</span><span class="number"> 3.14</span><span class="special">;</span><span class="keyword">
+  const</span><span class="keyword"> char</span><span class="special"> *</span><span class="identifier">func</span><span class="special">  =</span><span class="string"> "f"</span><span class="special">;</span><span class="identifier">
+
+  aterm</span><span class="identifier"> term</span><span class="special">[</span><span class="number">4</span><span class="special">];</span><span class="identifier">
+  aterm</span><span class="identifier"> list</span><span class="special">[</span><span class="number">3</span><span class="special">];</span><span class="identifier">
+  aterm</span><span class="identifier"> appl</span><span class="special">[</span><span class="number">3</span><span class="special">];</span><span class="identifier">
+
+  term</span><span class="special">[</span><span class="number">0</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"&lt;int&gt;"</span><span class="special"> ,</span><span class="identifier"> i</span><span class="special">);</span><span class="comment">         // integer value: 42
+</span><span class="identifier">  term</span><span class="special">[</span><span class="number">1</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"&lt;str&gt;"</span><span class="special"> ,</span><span class="identifier"> func</span><span class="special">);</span><span class="comment">      // quoted application: "f", no args
+</span><span class="identifier">  term</span><span class="special">[</span><span class="number">2</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"&lt;real&gt;"</span><span class="special">,</span><span class="identifier"> r</span><span class="special">);</span><span class="comment">         // real value: 3.14
+</span><span class="identifier">  term</span><span class="special">[</span><span class="number">3</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"&lt;blob&gt;"</span><span class="special">,</span><span class="number"> 8</span><span class="special">,</span><span class="identifier"> blob</span><span class="special">);</span><span class="comment">   // blob of size 8, data: 12345678
+</span><span class="identifier">
+  list</span><span class="special">[</span><span class="number">0</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"[]"</span><span class="special">);</span><span class="identifier">
+  list</span><span class="special">[</span><span class="number">1</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"[1,&lt;int&gt;,&lt;real&gt;]"</span><span class="special">,</span><span class="identifier"> i</span><span class="special">,</span><span class="identifier"> r</span><span class="special">);</span><span class="identifier">
+  list</span><span class="special">[</span><span class="number">2</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"[&lt;int&gt;,&lt;list&gt;]"</span><span class="special">,</span><span class="identifier"> i</span><span class="special">+</span><span class="number">1</span><span class="special">,</span><span class="identifier"> list</span><span class="special">[</span><span class="number">1</span><span class="special">]);</span><span class="identifier"> 
+
+  appl</span><span class="special">[</span><span class="number">0</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"&lt;appl&gt;"</span><span class="special">,</span><span class="identifier"> func</span><span class="special">);</span><span class="identifier">
+  appl</span><span class="special">[</span><span class="number">1</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"&lt;appl(&lt;int&gt;)&gt;"</span><span class="special">,</span><span class="identifier"> func</span><span class="special">,</span><span class="identifier"> i</span><span class="special">);</span><span class="identifier"> 
+  appl</span><span class="special">[</span><span class="number">2</span><span class="special">]</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"&lt;appl(&lt;int&gt;, &lt;term&gt;, &lt;list&gt;)&gt;"</span><span class="special">,</span><span class="identifier"> func</span><span class="special">,</span><span class="number"> 42</span><span class="special">,</span><span class="identifier"> term</span><span class="special">[</span><span class="number">3</span><span class="special">],</span><span class="identifier"> list</span><span class="special">[</span><span class="number">2</span><span class="special">]);</span><span class="identifier">
+
+  std</span><span class="special">::</span><span class="identifier">cout</span><span class="special"> &lt;&lt;</span><span class="string"> "appl[2] = "</span><span class="special"> &lt;&lt;</span><span class="identifier"> appl</span><span class="special">[</span><span class="number">2</span><span class="special">]</span><span class="special"> &lt;&lt;</span><span class="identifier"> std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span><span class="special">
+}</span><span class="keyword">
+
+int</span><span class="identifier"> main</span><span class="special">(</span><span class="keyword">int</span><span class="identifier"> argc</span><span class="special">,</span><span class="keyword"> char</span><span class="special"> *</span><span class="identifier">argv</span><span class="special">[])</span><span class="special">
+{</span><span class="identifier">
+  foo</span><span class="special">();</span><span class="keyword">
+  return</span><span class="number"> 0</span><span class="special">;</span><span class="special">
+}</span></tt></pre>
+<p>
+The function <tt class="computeroutput"><span class="identifier">match</span></tt> can be used to extract pieces of aterms, as illustrated by the
+following program fragment:</p>
+<pre class="programlisting"><tt class="literal"><span class="identifier">aterm</span><span class="identifier"> t</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"and(a,not(b))"</span><span class="special">);</span><span class="identifier">
+aterm</span><span class="identifier"> t1</span><span class="special">;</span><span class="identifier">
+aterm</span><span class="identifier"> t2</span><span class="special">;</span><span class="keyword">
+if</span><span class="special"> (</span><span class="identifier">match</span><span class="special">(</span><span class="identifier">t</span><span class="special">,</span><span class="string"> "and(&lt;term&gt;,&lt;term&gt;)"</span><span class="special">,</span><span class="identifier"> t1</span><span class="special">,</span><span class="identifier"> t2</span><span class="special">))</span><span class="special">
+{</span><span class="identifier">
+  assert</span><span class="special">(</span><span class="identifier">t1</span><span class="special"> ==</span><span class="identifier"> aterm</span><span class="special">(</span><span class="string">"a"</span><span class="special">));</span><span class="identifier">
+  assert</span><span class="special">(</span><span class="identifier">t2</span><span class="special"> ==</span><span class="identifier"> aterm</span><span class="special">(</span><span class="string">"not(b)"</span><span class="special">));</span><span class="special">
+}</span></tt></pre>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="quick_start.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="user_s_guide.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="aterm_properties.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

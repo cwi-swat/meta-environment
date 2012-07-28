@@ -1,0 +1,92 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Class table</title>
+<link rel="stylesheet" href="boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="aterm__/reference.html#id4567071" title="Header &lt;atermpp/aterm.h&gt;">
+<link rel="prev" href="indexed_set.html" title="Class indexed_set">
+<link rel="next" href="id4594973.html" title="Function operator==">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="indexed_set.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="id4594973.html"><img src="images/next.png" alt="Next"></a>
+</div>
+<div class="refentry" lang="en">
+<a name="table"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class table</span></h2>
+<p>genspect::table &#8212; </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis">
+<span class="bold"><b>class</b></span> table {
+<span class="bold"><b>public</b></span>:
+  <span class="emphasis"><em>// <a href="table.html#tableconstruct-copy-destruct">construct/copy/destruct</a></em></span>
+  <a href="table.html#id4594916-bb">table</a>(<span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span>, <span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span>);
+  <a href="table.html#id4594954-bb">~table</a>();
+
+  <span class="emphasis"><em>// <a href="table.html#id4594766-bb">public member functions</a></em></span>
+  <span class="type"><span class="bold"><b>void</b></span></span> <a href="table.html#id4594770-bb">reset</a>();
+  <span class="type"><span class="bold"><b>void</b></span></span> <a href="table.html#id4594793-bb">put</a>(<a href="aterm.html" title="Class aterm">aterm</a>, <a href="aterm.html" title="Class aterm">aterm</a>);
+  <span class="type"><a href="aterm.html" title="Class aterm">aterm</a></span> <a href="table.html#id4594834-bb">get</a>(<a href="aterm.html" title="Class aterm">aterm</a>);
+  <span class="type"><span class="bold"><b>void</b></span></span> <a href="table.html#id4594865-bb">remove</a>(<a href="aterm.html" title="Class aterm">aterm</a>);
+  <span class="type"><a href="aterm_list.html" title="Class aterm_list">aterm_list</a></span> <a href="table.html#id4594891-bb">table_keys</a>();
+};</pre></div>
+<div class="refsect1" lang="en">
+<a name="id4808117"></a><h2>Description</h2>
+<div class="refsect2" lang="en">
+<a name="id4808120"></a><h3>
+<a name="tableconstruct-copy-destruct"></a><tt class="computeroutput">table</tt> construct/copy/destruct</h3>
+<div class="orderedlist"><ol type="1">
+<li>
+<pre class="literallayout"><a name="id4594916-bb"></a>table(<span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span> initial_size, <span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span> max_load_pct);</pre>
+<p>Create an table. This function creates an table given an initial size and a maximum load percentage. Whenever this percentage is exceeded (which is detected when a new entry is added using table_put), the table is automatically expanded and all existing entries are rehashed into the new table. If you know in advance approximately how many items will be in the table, you may set it up in such a way that no resizing (and thus no rehashing) is necessary. For example, if you expect about 1000 items in the table, you can create it with its initial size set to 1333 and a maximum load percentage of 75%. You are not required to do this, it merely saves a runtime expansion and rehashing of the table which increases efficiency.</p>
+</li>
+<li>
+<pre class="literallayout"><a name="id4594954-bb"></a>~table();</pre>
+<p>Destroy an table. Contrary to aterm_dictionaries, aterm_tables are themselves not aterms. This means they are not freed by the garbage collector when they are no longer referred to. Therefore, when the table is no longer needed, the user should release the resources allocated by the table by calling table_destroy. All references the table has to aterms will then also be removed, so that those may be freed by the garbage collector (if no other references to them exist of course).</p>
+</li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id4735035"></a><h3>
+<a name="id4594766-bb"></a><tt class="computeroutput">table</tt> public member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span></span> <a name="id4594770-bb"></a>reset();</pre>
+<p>Reset an table. This function resets an ermtable, without freeing the memory it occupies. Its effect is the same as the subsequent execution of a destroy and a create of a table, but as no memory is released and obtained from the C memeory management system this function is gen- erally cheaper. but if subsequent tables differ very much in size, the use of table_destroy and table_create may be prefered, because in such a way the sizes of the table adapt automatically to the requirements of the application.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span></span> <a name="id4594793-bb"></a>put(<a href="aterm.html" title="Class aterm">aterm</a> key, <a href="aterm.html" title="Class aterm">aterm</a> value);</pre>
+<p>Add / update a (key, value)-pair in a table. If key does not already exist in the table, this function adds the (key, value)-pair to the table. Otherwise, it updates the value to value.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><a href="aterm.html" title="Class aterm">aterm</a></span> <a name="id4594834-bb"></a>get(<a href="aterm.html" title="Class aterm">aterm</a> key);</pre>
+<p>Get the value belonging to a given key in a table.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span></span> <a name="id4594865-bb"></a>remove(<a href="aterm.html" title="Class aterm">aterm</a> key);</pre>
+<p>Remove the (key, value)-pair from table.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><a href="aterm_list.html" title="Class aterm_list">aterm_list</a></span> <a name="id4594891-bb"></a>table_keys();</pre>
+<p>Get an aterm_list of all the keys in a table. This function can be useful if you need to iterate over all elements in a table. It returns an aterm_list containing all the keys in the table. The corresponding values of each key you are interested in can then be retrieved through respective calls to table_get.</p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="indexed_set.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="id4594973.html"><img src="images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

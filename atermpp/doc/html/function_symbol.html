@@ -1,0 +1,91 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Class function_symbol</title>
+<link rel="stylesheet" href="boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="aterm__/reference.html#id4567071" title="Header &lt;atermpp/aterm.h&gt;">
+<link rel="prev" href="dictionary.html" title="Class dictionary">
+<link rel="next" href="indexed_set.html" title="Class indexed_set">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="dictionary.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="indexed_set.html"><img src="images/next.png" alt="Next"></a>
+</div>
+<div class="refentry" lang="en">
+<a name="function_symbol"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class function_symbol</span></h2>
+<p>genspect::function_symbol &#8212; </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis">
+<span class="bold"><b>class</b></span> function_symbol {
+<span class="bold"><b>public</b></span>:
+  <span class="emphasis"><em>// <a href="function_symbol.html#function_symbolconstruct-copy-destruct">construct/copy/destruct</a></em></span>
+  <a href="function_symbol.html#id4594507-bb">function_symbol</a>(<span class="bold"><b>const</b></span> std::string &amp;, <span class="bold"><b>int</b></span>, <span class="bold"><b>bool</b></span> = false);
+  <a href="function_symbol.html#id4594538-bb">function_symbol</a>(AFun);
+
+  <span class="emphasis"><em>// <a href="function_symbol.html#id4594398-bb">public member functions</a></em></span>
+  <span class="type"><span class="bold"><b>void</b></span></span> <a href="function_symbol.html#id4594403-bb">protect</a>();
+  <span class="type"><span class="bold"><b>void</b></span></span> <a href="function_symbol.html#id4594421-bb">unprotect</a>();
+  <span class="type">std::string</span> <a href="function_symbol.html#id4594436-bb">name</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span></span> <a href="function_symbol.html#id4594452-bb">arity</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><span class="bold"><b>bool</b></span></span> <a href="function_symbol.html#id4594471-bb">is_quoted</a>() <span class="bold"><b>const</b></span>;
+  <a href="function_symbol.html#id4594489-bb"><span class="bold"><b>operator</b></span> AFun</a>() <span class="bold"><b>const</b></span>;
+};</pre></div>
+<div class="refsect1" lang="en">
+<a name="id4807135"></a><h2>Description</h2>
+<div class="refsect2" lang="en">
+<a name="id4807139"></a><h3>
+<a name="function_symbolconstruct-copy-destruct"></a><tt class="computeroutput">function_symbol</tt> construct/copy/destruct</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><a name="id4594507-bb"></a>function_symbol(<span class="bold"><b>const</b></span> std::string &amp; name, <span class="bold"><b>int</b></span> arity, <span class="bold"><b>bool</b></span> quoted = false);</pre></li>
+<li><pre class="literallayout"><a name="id4594538-bb"></a>function_symbol(AFun function);</pre></li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id4807207"></a><h3>
+<a name="id4594398-bb"></a><tt class="computeroutput">function_symbol</tt> public member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span></span> <a name="id4594403-bb"></a>protect();</pre>
+<p>Protect the function symbol. Just as aterms which are not on the stack or in registers must be protected through a call to protect, so must function_symbols be protected by calling protect.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span></span> <a name="id4594421-bb"></a>unprotect();</pre>
+<p>Release an function_symbol's protection.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">std::string</span> <a name="id4594436-bb"></a>name() <span class="bold"><b>const</b></span>;</pre>
+<p>Return the name of the function_symbol.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span></span> <a name="id4594452-bb"></a>arity() <span class="bold"><b>const</b></span>;</pre>
+<p>Return the arity (number of arguments) of the function symbol (function_symbol).</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>bool</b></span></span> <a name="id4594471-bb"></a>is_quoted() <span class="bold"><b>const</b></span>;</pre>
+<p>Determine if the function symbol (function_symbol) is quoted or not.</p>
+</li>
+<li>
+<pre class="literallayout"><a name="id4594489-bb"></a><span class="bold"><b>operator</b></span> AFun() <span class="bold"><b>const</b></span>;</pre>
+<p>Conversion to AFun.</p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="dictionary.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="indexed_set.html"><img src="images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

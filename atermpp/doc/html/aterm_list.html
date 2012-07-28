@@ -1,0 +1,137 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Class aterm_list</title>
+<link rel="stylesheet" href="boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="aterm__/reference.html#id4567071" title="Header &lt;atermpp/aterm.h&gt;">
+<link rel="prev" href="aterm_int.html" title="Class aterm_int">
+<link rel="next" href="aterm_list_iterator.html" title="Class aterm_list_iterator">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="aterm_int.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="aterm_list_iterator.html"><img src="images/next.png" alt="Next"></a>
+</div>
+<div class="refentry" lang="en">
+<a name="aterm_list"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class aterm_list</span></h2>
+<p>genspect::aterm_list &#8212; </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis">
+<span class="bold"><b>class</b></span> aterm_list : <span class="bold"><b>public</b></span> genspect::aterm {
+<span class="bold"><b>public</b></span>:
+  <span class="emphasis"><em>// types</em></span>
+  <span class="bold"><b>typedef</b></span> <a href="aterm.html" title="Class aterm">aterm</a>               value_type;     
+  <span class="bold"><b>typedef</b></span> <a href="aterm.html" title="Class aterm">aterm</a> *             pointer;        
+  <span class="bold"><b>typedef</b></span> <a href="aterm.html" title="Class aterm">aterm</a> &amp;             reference;      
+  <span class="bold"><b>typedef</b></span> <span class="bold"><b>const</b></span> <a href="aterm.html" title="Class aterm">aterm</a>         const_reference;
+  <span class="bold"><b>typedef</b></span> size_t              size_type;      
+  <span class="bold"><b>typedef</b></span> ptrdiff_t           difference_type;
+  <span class="bold"><b>typedef</b></span> <a href="aterm_list_iterator.html" title="Class aterm_list_iterator">aterm_list_iterator</a> iterator;       
+  <span class="bold"><b>typedef</b></span> <a href="aterm_list_iterator.html" title="Class aterm_list_iterator">aterm_list_iterator</a> const_iterator; 
+
+  <span class="emphasis"><em>// <a href="aterm_list.html#aterm_listconstruct-copy-destruct">construct/copy/destruct</a></em></span>
+  <a href="aterm_list.html#id4594014-bb">aterm_list</a>();
+  <a href="aterm_list.html#id4594023-bb">aterm_list</a>(ATermList);
+  <span class="bold"><b>template</b></span>&lt;<span class="bold"><b>typename</b></span> Iter&gt; <a href="aterm_list.html#id4594041-bb">aterm_list</a>(Iter, Iter);
+
+  <span class="emphasis"><em>// <a href="aterm_list.html#id4593804-bb">public member functions</a></em></span>
+  <span class="type">const_iterator</span> <a href="aterm_list.html#id4593808-bb">begin</a>() <span class="bold"><b>const</b></span>;
+  <span class="type">const_iterator</span> <a href="aterm_list.html#id4593826-bb">end</a>() <span class="bold"><b>const</b></span>;
+  <span class="type">size_type</span> <a href="aterm_list.html#id4593844-bb">size</a>();
+  <span class="type">size_type</span> <a href="aterm_list.html#id4593859-bb">max_size</a>();
+  <span class="type"><span class="bold"><b>bool</b></span></span> <a href="aterm_list.html#id4593875-bb">empty</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><span class="bold"><b>void</b></span></span> <a href="aterm_list.html#id4593892-bb">swap</a>(aterm_list &amp;);
+  <span class="type"><a href="aterm.html" title="Class aterm">aterm</a></span> <a href="aterm_list.html#id4593915-bb">front</a>() <span class="bold"><b>const</b></span>;
+  <span class="type">const_iterator</span> <a href="aterm_list.html#id4593935-bb">previous</a>(const_iterator) <span class="bold"><b>const</b></span>;
+  <span class="type"><span class="bold"><b>void</b></span></span> <a href="aterm_list.html#id4593963-bb">clear</a>();
+  <a href="aterm_list.html#id4593978-bb"><span class="bold"><b>operator</b></span> ATermList</a>() <span class="bold"><b>const</b></span>;
+  <span class="type">ATermList</span> <a href="aterm_list.html#id4593995-bb">list</a>() <span class="bold"><b>const</b></span>;
+};</pre></div>
+<div class="refsect1" lang="en">
+<a name="id4805493"></a><h2>Description</h2>
+<div class="refsect2" lang="en">
+<a name="id4805496"></a><h3>
+<a name="aterm_listconstruct-copy-destruct"></a><tt class="computeroutput">aterm_list</tt> construct/copy/destruct</h3>
+<div class="orderedlist"><ol type="1">
+<li>
+<pre class="literallayout"><a name="id4594014-bb"></a>aterm_list();</pre>
+<p>Creates an empty aterm_list.</p>
+</li>
+<li>
+<pre class="literallayout"><a name="id4594023-bb"></a>aterm_list(ATermList l);</pre>
+<p>The copy constructor.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="bold"><b>template</b></span>&lt;<span class="bold"><b>typename</b></span> Iter&gt; <a name="id4594041-bb"></a>aterm_list(Iter first, Iter last);</pre>
+<p>Creates an aterm_list with a copy of a range.</p>
+</li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id4805580"></a><h3>
+<a name="id4593804-bb"></a><tt class="computeroutput">aterm_list</tt> public member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li>
+<pre class="literallayout"><span class="type">const_iterator</span> <a name="id4593808-bb"></a>begin() <span class="bold"><b>const</b></span>;</pre>
+<p>Returns an iterator pointing to the end of the aterm_list.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">const_iterator</span> <a name="id4593826-bb"></a>end() <span class="bold"><b>const</b></span>;</pre>
+<p>Returns a const_iterator pointing to the beginning of the aterm_list.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">size_type</span> <a name="id4593844-bb"></a>size();</pre>
+<p>Returns the size of the aterm_list.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">size_type</span> <a name="id4593859-bb"></a>max_size();</pre>
+<p>Returns the largest possible size of the aterm_list.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>bool</b></span></span> <a name="id4593875-bb"></a>empty() <span class="bold"><b>const</b></span>;</pre>
+<p>true if the list's size is 0.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span></span> <a name="id4593892-bb"></a>swap(aterm_list &amp; l);</pre>
+<p>Swaps the contents of two aterm_lists.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><a href="aterm.html" title="Class aterm">aterm</a></span> <a name="id4593915-bb"></a>front() <span class="bold"><b>const</b></span>;</pre>
+<p>Returns the first element.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">const_iterator</span> <a name="id4593935-bb"></a>previous(const_iterator pos) <span class="bold"><b>const</b></span>;</pre>
+<p>pos must be a valid iterator in *this. The return value is an iterator prev such that ++prev == pos. Complexity: linear in the number of iterators in the range [begin(), pos).</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span></span> <a name="id4593963-bb"></a>clear();</pre>
+<p>Erases all of the elements.</p>
+</li>
+<li>
+<pre class="literallayout"><a name="id4593978-bb"></a><span class="bold"><b>operator</b></span> ATermList() <span class="bold"><b>const</b></span>;</pre>
+<p>Conversion to ATermList.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">ATermList</span> <a name="id4593995-bb"></a>list() <span class="bold"><b>const</b></span>;</pre>
+<p>Returns the ATermList that is contained by the aterm_list.</p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="aterm_int.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="aterm_list_iterator.html"><img src="images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Aterm properties</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="../index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="user_s_guide.html" title="User's Guide">
+<link rel="prev" href="creating_an_aterm.html" title="Creating an aterm">
+<link rel="next" href="lists_and_function_applications.html" title="Lists and function applications">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="../images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="creating_an_aterm.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="user_s_guide.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="lists_and_function_applications.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="aterm__.aterm_properties"></a>Aterm properties</h3></div></div></div>
+<p>
+The aterms in the ATerm++ Library have some properties that need to be understood
+to use the library effectively. The aterm classes all wrap pointers to ATerm objects
+of the underlying ATerm Library. Copying an aterm is thus a very cheap operation.</p>
+<a name="aterm_properties.constant_objects"></a><h2>
+<a name="id4799967"></a>Constant objects</h2>
+<p>
+A very important property of aterm objects is that they are constant.
+All member functions of the aterm classes (except the assignment operator) are constant.</p>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td>
+<span class="inlinemediaobject"><img src="../images/note.png"></span> All aterm objects are constant. Whenever you want to
+modify an attribute of an aterm, a new object has to be created.</td></tr></tbody>
+</table></div>
+<a name="aterm_properties.conversions"></a><h2>
+<a name="id4800001"></a>Conversions</h2>
+<p>
+The class <tt class="computeroutput"><span class="identifier">aterm</span></tt> is a base class for all other aterm types. To simplify the conversion
+between <tt class="computeroutput"><span class="identifier">aterm</span></tt> and its derivatives, there are member functions <tt class="computeroutput"><span class="identifier">to_int</span></tt>, <tt class="computeroutput"><span class="identifier">to_appl</span></tt> etc.
+available, like in the following example:</p>
+<pre class="programlisting"><tt class="literal"><span class="identifier">aterm_int</span><span class="identifier"> x</span><span class="special">(</span><span class="number">10</span><span class="special">);</span><span class="identifier">
+aterm</span><span class="identifier"> y</span><span class="special"> =</span><span class="identifier"> x</span><span class="special">;</span><span class="identifier">
+aterm_int</span><span class="identifier"> z</span><span class="special"> =</span><span class="identifier"> y</span><span class="special">.</span><span class="identifier">to_int</span><span class="special">();</span><span class="identifier">
+assert</span><span class="special">(</span><span class="identifier">z</span><span class="special">.</span><span class="identifier">value</span><span class="special">()</span><span class="special"> ==</span><span class="number"> 10</span><span class="special">);</span><span class="identifier">
+aterm_appl</span><span class="identifier"> f</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"f(x,y)"</span><span class="special">).</span><span class="identifier">to_appl</span><span class="special">();</span></tt></pre>
+<p>
+One might expect that by the assignment to <tt class="computeroutput"><span class="identifier">y</span></tt> all information
+about being an <tt class="computeroutput"><span class="identifier">aterm_int</span></tt> would be lost. This is not the case! After the
+assignment both <tt class="computeroutput"><span class="identifier">x</span></tt> and <tt class="computeroutput"><span class="identifier">y</span></tt> wrap the same ATerm pointer. And thus it is
+possible to convert <tt class="computeroutput"><span class="identifier">y</span></tt> back to an <tt class="computeroutput"><span class="identifier">aterm_int</span></tt>.</p>
+<a name="aterm_properties.maximal_sharing"></a><h2>
+<a name="id4800279"></a>Maximal sharing</h2>
+<p>
+The ATerm Library uses maximal sharing of terms, which makes it very memory efficient.
+Any time a new aterm is created, a lookup is done to see if it already exists. If so,
+that term is reused and no new term is created. The following code fragment illustrates
+how this works:</p>
+<pre class="programlisting"><tt class="literal"><span class="identifier">aterm_appl</span><span class="identifier"> f</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"f(g(a,b),c)"</span><span class="special">).</span><span class="identifier">to_appl</span><span class="special">();</span><span class="identifier">
+aterm_appl</span><span class="identifier"> g</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"g(a,b)"</span><span class="special">).</span><span class="identifier">to_appl</span><span class="special">();</span><span class="identifier">
+assert</span><span class="special">(</span><span class="identifier">f</span><span class="special">.</span><span class="identifier">argument</span><span class="special">(</span><span class="number">0</span><span class="special">)</span><span class="special"> ==</span><span class="identifier"> g</span><span class="special">);</span><span class="identifier">
+
+aterm_list</span><span class="identifier"> v</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"[1,2,3,4]"</span><span class="special">).</span><span class="identifier">to_list</span><span class="special">();</span><span class="identifier">
+aterm_list</span><span class="identifier"> w</span><span class="special"> =</span><span class="identifier"> make_term</span><span class="special">(</span><span class="string">"[0,1,2,3,4]"</span><span class="special">).</span><span class="identifier">to_list</span><span class="special">();</span><span class="identifier">
+assert</span><span class="special">(</span><span class="identifier">pop_front</span><span class="special">(</span><span class="identifier">w</span><span class="special">)</span><span class="special"> ==</span><span class="identifier"> v</span><span class="special">);</span></tt></pre>
+<p>
+If two lists have the same tail, these tails will be shared.</p>
+<a name="aterm_properties.global_aterm_objects"></a><h2>
+<a name="id4800559"></a>Global aterm objects</h2>
+<p>
+The garbage collector of the ATerm Library assumes that all aterms that are in
+use can be found on the stack. Any aterm that isn't on the stack (for example
+global variables) needs to be protected explicitly.</p>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td>
+<span class="inlinemediaobject"><img src="../images/caution.png"></span> Aterm objects that are not on the stack must be protected from
+being garbage collected, using the <tt class="computeroutput"><span class="identifier">protect</span></tt> member function.</td></tr></tbody>
+</table></div>
+<a name="aterm_properties.annotations"></a><h2>
+<a name="id4800603"></a>Annotations</h2>
+<p>
+Aterm objects may be annotated by other aterms. In the following
+example <tt class="computeroutput"><span class="identifier">y</span></tt> is an annotated version of <tt class="computeroutput"><span class="identifier">x</span></tt>.</p>
+<pre class="programlisting"><tt class="literal"><span class="identifier">aterm</span><span class="identifier"> x</span><span class="special">(</span><span class="string">"f(a)"</span><span class="special">);</span><span class="identifier">
+aterm</span><span class="identifier"> label</span><span class="special">(</span><span class="string">"label"</span><span class="special">);</span><span class="identifier">
+aterm</span><span class="identifier"> annotation</span><span class="special">(</span><span class="string">"annotation"</span><span class="special">);</span><span class="identifier">
+aterm</span><span class="identifier"> y</span><span class="special"> =</span><span class="identifier"> set_annotation</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span><span class="identifier"> label</span><span class="special">,</span><span class="identifier"> annotation</span><span class="special">);</span><span class="identifier">
+assert</span><span class="special">(</span><span class="identifier">x</span><span class="special"> !=</span><span class="identifier"> y</span><span class="special">);</span></tt></pre>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td>
+<span class="inlinemediaobject"><img src="../images/note.png"></span> Aterms with different annotations are considered to be different.</td></tr></tbody>
+</table></div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="creating_an_aterm.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="user_s_guide.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="lists_and_function_applications.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

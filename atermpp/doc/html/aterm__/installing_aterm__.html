@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Installing ATerm++</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="../index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="user_s_guide.html" title="User's Guide">
+<link rel="prev" href="user_s_guide.html" title="User's Guide">
+<link rel="next" href="quick_start.html" title="Quick Start">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="../images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="user_s_guide.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="user_s_guide.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="quick_start.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="aterm__.installing_aterm__"></a>Installing ATerm++</h3></div></div></div>
+<a name="installing_aterm__.building_with_aterm__"></a><h2>
+<a name="id4737077"></a>Building with ATerm++</h2>
+<p>
+The ATerm++ Library is a header-only template library, which means you don't need to alter your build scripts
+or link to any separate lib file to use it. All you need to do is <tt class="computeroutput"><span class="preprocessor">#include</span><span class="string"> "atermpp/aterm.h"</span></tt>.</p>
+<a name="installing_aterm__.requirements"></a><h2>
+<a name="id4737108"></a>Requirements</h2>
+<p>
+The ATerm++ Library has two dependencies.</p>
+<p>
+In the first place it depends on the ATerm Library. You can download the latest version of the ATerm
+Library from <a href="http://www.cwi.nl/projects/MetaEnv/aterm/" target="_top">
+CWI</a>. Version 2.3.1 or higher is required.</p>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td>
+<span class="inlinemediaobject"><img src="../images/caution.png"></span> In versions before 2.3.1 of the ATerm library a patch <tt class="computeroutput"><span class="identifier">aterm2</span><span class="special">.</span><span class="identifier">h</span></tt> of the
+ATerm library needs to be patched with the following <a href="../aterm2.h.diff" target="_top">
+patch</a>.</td></tr></tbody>
+</table></div>
+<p>
+The effect of the patch is that anonymous structs like</p>
+<pre class="programlisting"><tt class="literal"><span class="keyword">typedef</span><span class="keyword"> struct</span><span class="special">
+{</span><span class="identifier">
+	header_type</span><span class="identifier"> header</span><span class="special">;</span><span class="identifier">
+	ATerm</span><span class="identifier">       next</span><span class="special">;</span><span class="keyword">
+	int</span><span class="identifier">         value</span><span class="special">;</span><span class="special">
+}</span><span class="special"> *</span><span class="identifier">ATermInt</span><span class="special">;</span></tt></pre>
+<p>
+are named, in this case <tt class="computeroutput"><span class="identifier">_ATermInt</span></tt>.</p>
+<p>
+The ATerm++ Library also depends on Boost. You can download the latest version of the Boost
+libraries from <a href="http://www.boost.org" target="_top">
+www.boost.org</a>. The ATerm++ Library requires Boost version 1.32 or higher.
+There is no need to install any library from Boost. Specifying the Boost include path is all that
+is needed.</p>
+<a name="installing_aterm__.supported_compilers"></a><h2>
+<a name="id4736160"></a>Supported Compilers</h2>
+<p>
+Currently, the ATerm++ Library has only been tested on the following compilers:</p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+Visual C++ .NET 2003 (7.1)
+</li>
+<li>
+GNU C++ 3.3.3
+</li>
+</ul></div>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td>
+<span class="inlinemediaobject"><img src="../images/note.png"></span> Please send any questions, comments and bug reports to J.W.Wesselink at tue dot nl.</td></tr></tbody>
+</table></div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="user_s_guide.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="user_s_guide.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="quick_start.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

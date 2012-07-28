@@ -1,0 +1,74 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Class aterm_blob</title>
+<link rel="stylesheet" href="boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="aterm__/reference.html#id4567071" title="Header &lt;atermpp/aterm.h&gt;">
+<link rel="prev" href="aterm_appl.html" title="Class aterm_appl">
+<link rel="next" href="aterm_int.html" title="Class aterm_int">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="aterm_appl.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="aterm_int.html"><img src="images/next.png" alt="Next"></a>
+</div>
+<div class="refentry" lang="en">
+<a name="aterm_blob"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class aterm_blob</span></h2>
+<p>genspect::aterm_blob &#8212; </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis">
+<span class="bold"><b>class</b></span> aterm_blob : <span class="bold"><b>public</b></span> genspect::aterm {
+<span class="bold"><b>public</b></span>:
+  <span class="emphasis"><em>// <a href="aterm_blob.html#aterm_blobconstruct-copy-destruct">construct/copy/destruct</a></em></span>
+  <a href="aterm_blob.html#id4520743-bb">aterm_blob</a>(ATermBlob);
+  <a href="aterm_blob.html#id4520755-bb">aterm_blob</a>(<span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span>, <span class="bold"><b>void</b></span> *);
+
+  <span class="emphasis"><em>// <a href="aterm_blob.html#id4520706-bb">public member functions</a></em></span>
+  <span class="type"><span class="bold"><b>void</b></span> *</span> <a href="aterm_blob.html#id4520711-bb">data</a>();
+  <span class="type"><span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span></span> <a href="aterm_blob.html#id4520725-bb">size</a>() <span class="bold"><b>const</b></span>;
+};</pre></div>
+<div class="refsect1" lang="en">
+<a name="id4804725"></a><h2>Description</h2>
+<div class="refsect2" lang="en">
+<a name="id4804728"></a><h3>
+<a name="aterm_blobconstruct-copy-destruct"></a><tt class="computeroutput">aterm_blob</tt> construct/copy/destruct</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><a name="id4520743-bb"></a>aterm_blob(ATermBlob t);</pre></li>
+<li>
+<pre class="literallayout"><a name="id4520755-bb"></a>aterm_blob(<span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span> size, <span class="bold"><b>void</b></span> * data);</pre>
+<p>Build a Binary Large OBject given size (in bytes) and data. This function can be used to create an aterm of type blob, holding the data pointed to by data. No copy of this data area is made, so the user should allocate this himself. Note: due to the internal representation of a blob, size cannot exceed 224 in the current implementation. This limits the size of the data area to 16 Mb.</p>
+</li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id4804809"></a><h3>
+<a name="id4520706-bb"></a><tt class="computeroutput">aterm_blob</tt> public member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span> *</span> <a name="id4520711-bb"></a>data();</pre>
+<p>Get the data section of the blob.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span></span> <a name="id4520725-bb"></a>size() <span class="bold"><b>const</b></span>;</pre>
+<p>Get the size (in bytes) of the blob.</p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="aterm_appl.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="aterm_int.html"><img src="images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Quick Start</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="../index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="user_s_guide.html" title="User's Guide">
+<link rel="prev" href="installing_aterm__.html" title="Installing ATerm++">
+<link rel="next" href="creating_an_aterm.html" title="Creating an aterm">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="../images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="installing_aterm__.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="user_s_guide.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="creating_an_aterm.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="aterm__.quick_start"></a>Quick Start</h3></div></div></div>
+<p>
+There are 6 different types of terms supported, as shown in the following table.
+The class <tt class="computeroutput"><span class="identifier">aterm</span></tt> is a base class for all other aterms.</p>
+<div class="informaltable">
+<h4>
+<a name="id4736216"></a><span class="table-title">ATerm++ terms</span>
+</h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>type</th>
+<th>description                                </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>aterm</td>
+<td>a general aterm                            </td>
+</tr>
+<tr>
+<td>aterm_appl</td>
+<td>an aterm containing a function application </td>
+</tr>
+<tr>
+<td>aterm_int</td>
+<td>an aterm containing an int                 </td>
+</tr>
+<tr>
+<td>aterm_real</td>
+<td>an aterm containing a real                 </td>
+</tr>
+<tr>
+<td>aterm_blob</td>
+<td>an aterm containing binary data            </td>
+</tr>
+<tr>
+<td>aterm_list</td>
+<td>an aterm containing a list of aterms       </td>
+</tr>
+<tr>
+<td>aterm_place_holder</td>
+<td>a place holder for aterms                  </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+Besides that the library contains a few more data types that use
+aterms internally.</p>
+<div class="informaltable">
+<h4>
+<a name="id4736287"></a><span class="table-title">ATerm++ other data types</span>
+</h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>type</th>
+<th>description                                </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>dictionary     </td>
+<td>a dictionary based on aterms               </td>
+</tr>
+<tr>
+<td>table          </td>
+<td>a table based on aterms                    </td>
+</tr>
+<tr>
+<td>indexed_set    </td>
+<td>an indexed set based on aterms             </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+For the latter types alternatives are available in the C++
+standard library like <tt class="computeroutput"><span class="identifier">set</span></tt>, <tt class="computeroutput"><span class="identifier">multiset</span></tt>, <tt class="computeroutput"><span class="identifier">map</span></tt> and <tt class="computeroutput"><span class="identifier">multimap</span></tt>.</p>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td>
+<span class="inlinemediaobject"><img src="../images/note.png"></span> The ATerm++ Library doesn't support user defined terms.</td></tr></tbody>
+</table></div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="installing_aterm__.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="user_s_guide.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="creating_an_aterm.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

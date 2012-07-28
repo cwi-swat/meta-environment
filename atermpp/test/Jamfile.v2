@@ -1,0 +1,25 @@
+# ATerm++ Library test Jamfile
+# (C) Copyright Wieger Wesselink 2004.
+
+project atermpp/test
+   : requirements
+       <include>../../boost_1_32_0
+       <include>..
+       <source>/aterm//libaterm
+   ;
+
+# bring in rules for testing
+import testing ;
+
+{
+   test-suite "atermpp"
+       :
+         [ run make_match_test.cpp ]
+         [ run aterm_list_test.cpp ]
+         [ run aterm_test.cpp ]
+         [ run function_test.cpp ]
+         [ run make_term.cpp ]
+         [ run constructors.cpp ]
+         [ run is_quoted.cpp ]
+       ;
+}

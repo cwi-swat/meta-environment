@@ -1,0 +1,44 @@
+--- d:\cpp\downloads\aterm-2.2\aterm\aterm2.h	Thu Nov 25 12:49:39 2004
++++ d:\cpp\aterm-2.2\aterm\aterm2.h	Sat Sep 04 19:36:44 2004
+@@ -24,21 +24,21 @@
+   * We define some new datatypes.
+   */
+ 
+-typedef struct
++typedef struct _ATermInt
+ {
+ 	header_type header;
+ 	ATerm       next;
+ 	int         value;
+ } *ATermInt;
+ 
+-typedef struct
++typedef struct _ATermReal
+ {
+ 	header_type header;
+ 	ATerm       next;
+ 	double      value;
+ } *ATermReal;
+ 
+-typedef struct
++typedef struct _ATermAppl
+ {
+ 	header_type header;
+ 	ATerm       next;
+@@ -52,14 +52,14 @@
+ 	struct _ATermList *tail;
+ } *ATermList;
+ 
+-typedef struct
++typedef struct _ATermPlaceholder
+ {
+ 	header_type header;
+ 	ATerm       next;
+ 	ATerm       ph_type;
+ } *ATermPlaceholder;
+ 
+-typedef struct
++typedef struct _ATermBlob
+ {
+ 	header_type header;
+ 	ATerm       next;

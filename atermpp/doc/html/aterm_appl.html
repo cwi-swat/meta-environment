@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Class aterm_appl</title>
+<link rel="stylesheet" href="boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="aterm__/reference.html#id4567071" title="Header &lt;atermpp/aterm.h&gt;">
+<link rel="prev" href="aterm.html" title="Class aterm">
+<link rel="next" href="aterm_blob.html" title="Class aterm_blob">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="aterm.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="aterm_blob.html"><img src="images/next.png" alt="Next"></a>
+</div>
+<div class="refentry" lang="en">
+<a name="aterm_appl"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class aterm_appl</span></h2>
+<p>genspect::aterm_appl &#8212; </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis">
+<span class="bold"><b>class</b></span> aterm_appl : <span class="bold"><b>public</b></span> genspect::aterm {
+<span class="bold"><b>public</b></span>:
+  <span class="emphasis"><em>// <a href="aterm_appl.html#aterm_applconstruct-copy-destruct">construct/copy/destruct</a></em></span>
+  <a href="aterm_appl.html#id4520682-bb">aterm_appl</a>();
+  <a href="aterm_appl.html#id4520684-bb">aterm_appl</a>(ATermAppl);
+
+  <span class="emphasis"><em>// <a href="aterm_appl.html#id4592278-bb">public member functions</a></em></span>
+  <span class="type"><a href="function_symbol.html" title="Class function_symbol">function_symbol</a></span> <a href="aterm_appl.html#id4592282-bb">function</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><span class="bold"><b>bool</b></span></span> <a href="aterm_appl.html#id4592303-bb">is_quoted</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><a href="aterm.html" title="Class aterm">aterm</a></span> <a href="aterm_appl.html#id4592314-bb">argument</a>(<span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span>) <span class="bold"><b>const</b></span>;
+  <span class="type"><a href="aterm_list.html" title="Class aterm_list">aterm_list</a></span> <a href="aterm_appl.html#id4592342-bb">argument_list</a>() <span class="bold"><b>const</b></span>;
+  <span class="type">ATermAppl</span> <a href="aterm_appl.html#id4592363-bb">appl</a>() <span class="bold"><b>const</b></span>;
+};</pre></div>
+<div class="refsect1" lang="en">
+<a name="id4804349"></a><h2>Description</h2>
+<p>Filter entries from a list using a predicate. This function can be used to filter entries that satisfy a given predicate from a list. Each item in list is judged through a call to predicate. If predicate returns true the entry is added to a list, otherwise it is skipped. The function returns the list containing exactly those items that satisfy predicate.</p>
+<div class="refsect2" lang="en">
+<a name="id4804360"></a><h3>
+<a name="aterm_applconstruct-copy-destruct"></a><tt class="computeroutput">aterm_appl</tt> construct/copy/destruct</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><a name="id4520682-bb"></a>aterm_appl();</pre></li>
+<li><pre class="literallayout"><a name="id4520684-bb"></a>aterm_appl(ATermAppl a);</pre></li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id4804409"></a><h3>
+<a name="id4592278-bb"></a><tt class="computeroutput">aterm_appl</tt> public member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li>
+<pre class="literallayout"><span class="type"><a href="function_symbol.html" title="Class function_symbol">function_symbol</a></span> <a name="id4592282-bb"></a>function() <span class="bold"><b>const</b></span>;</pre>
+<p>Get the function symbol (function_symbol) of the application.</p>
+</li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><b>bool</b></span></span> <a name="id4592303-bb"></a>is_quoted() <span class="bold"><b>const</b></span>;</pre></li>
+<li>
+<pre class="literallayout"><span class="type"><a href="aterm.html" title="Class aterm">aterm</a></span> <a name="id4592314-bb"></a>argument(<span class="bold"><b>unsigned</b></span> <span class="bold"><b>int</b></span> i) <span class="bold"><b>const</b></span>;</pre>
+<p>Get the i-th argument of the application.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><a href="aterm_list.html" title="Class aterm_list">aterm_list</a></span> <a name="id4592342-bb"></a>argument_list() <span class="bold"><b>const</b></span>;</pre>
+<p>Get the list of arguments of the application.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">ATermAppl</span> <a name="id4592363-bb"></a>appl() <span class="bold"><b>const</b></span>;</pre>
+<p>Returns the ATermAppl that is contained by the aterm_appl.</p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="aterm.html"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="aterm_blob.html"><img src="images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

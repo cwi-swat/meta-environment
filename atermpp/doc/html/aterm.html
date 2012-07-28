@@ -1,0 +1,116 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Class aterm</title>
+<link rel="stylesheet" href="boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="index.html" title="Chapter 1. ATerm++ 0.1">
+<link rel="up" href="aterm__/reference.html#id4567071" title="Header &lt;atermpp/aterm.h&gt;">
+<link rel="prev" href="aterm__/reference.html#id4567071" title="Header &lt;atermpp/aterm.h&gt;">
+<link rel="next" href="aterm_appl.html" title="Class aterm_appl">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><td valign="top"><img alt="ATerm++" width="214" height="91" src="images/atermpp.png"></td></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="aterm__/reference.html#id4567071"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="aterm_appl.html"><img src="images/next.png" alt="Next"></a>
+</div>
+<div class="refentry" lang="en">
+<a name="aterm"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class aterm</span></h2>
+<p>genspect::aterm &#8212; </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis">
+<span class="bold"><b>class</b></span> aterm {
+<span class="bold"><b>public</b></span>:
+  <span class="emphasis"><em>// <a href="aterm.html#atermconstruct-copy-destruct">construct/copy/destruct</a></em></span>
+  <a href="aterm.html#id4592161-bb">aterm</a>();
+  <a href="aterm.html#id4592163-bb">aterm</a>(ATerm);
+  <a href="aterm.html#id4592175-bb">aterm</a>(ATermList);
+  <a href="aterm.html#id4592186-bb">aterm</a>(ATermInt);
+  <a href="aterm.html#id4592198-bb">aterm</a>(ATermReal);
+  <a href="aterm.html#id4592210-bb">aterm</a>(ATermBlob);
+  <a href="aterm.html#id4592221-bb">aterm</a>(ATermAppl);
+  <a href="aterm.html#id4592233-bb">aterm</a>(ATermPlaceholder);
+  <a href="aterm.html#id4592244-bb">aterm</a>(<span class="bold"><b>const</b></span> std::string &amp;);
+
+  <span class="emphasis"><em>// <a href="aterm.html#id4554359-bb">public member functions</a></em></span>
+  <span class="type"><span class="bold"><b>const</b></span> ATerm &amp;</span> <a href="aterm.html#id4554364-bb">term</a>() <span class="bold"><b>const</b></span>;
+  <span class="type">ATerm &amp;</span> <a href="aterm.html#id4554374-bb">term</a>();
+  <a href="aterm.html#id4554382-bb"><span class="bold"><b>operator</b></span> ATerm</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><span class="bold"><b>void</b></span></span> <a href="aterm.html#id4554393-bb">protect</a>();
+  <span class="type"><span class="bold"><b>void</b></span></span> <a href="aterm.html#id4554409-bb">unprotect</a>();
+  <span class="type"><span class="bold"><b>int</b></span></span> <a href="aterm.html#id4554426-bb">type</a>() <span class="bold"><b>const</b></span>;
+  <span class="type">std::string</span> <a href="aterm.html#id4554445-bb">to_string</a>() <span class="bold"><b>const</b></span>;
+  <span class="type">aterm</span> <a href="aterm.html#id4554461-bb">annotation</a>(aterm) <span class="bold"><b>const</b></span>;
+  <span class="type"><a href="aterm_blob.html" title="Class aterm_blob">aterm_blob</a></span> <a href="aterm.html#id4554488-bb">to_blob</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><a href="aterm_real.html" title="Class aterm_real">aterm_real</a></span> <a href="aterm.html#id4592106-bb">to_real</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><a href="aterm_int.html" title="Class aterm_int">aterm_int</a></span> <a href="aterm.html#id4592119-bb">to_int</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><a href="aterm_list.html" title="Class aterm_list">aterm_list</a></span> <a href="aterm.html#id4592133-bb">to_list</a>() <span class="bold"><b>const</b></span>;
+  <span class="type"><a href="aterm_appl.html" title="Class aterm_appl">aterm_appl</a></span> <a href="aterm.html#id4592146-bb">to_appl</a>() <span class="bold"><b>const</b></span>;
+};</pre></div>
+<div class="refsect1" lang="en">
+<a name="id4803636"></a><h2>Description</h2>
+<div class="refsect2" lang="en">
+<a name="id4803640"></a><h3>
+<a name="atermconstruct-copy-destruct"></a><tt class="computeroutput">aterm</tt> construct/copy/destruct</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><a name="id4592161-bb"></a>aterm();</pre></li>
+<li><pre class="literallayout"><a name="id4592163-bb"></a>aterm(ATerm term);</pre></li>
+<li><pre class="literallayout"><a name="id4592175-bb"></a>aterm(ATermList term);</pre></li>
+<li><pre class="literallayout"><a name="id4592186-bb"></a>aterm(ATermInt term);</pre></li>
+<li><pre class="literallayout"><a name="id4592198-bb"></a>aterm(ATermReal term);</pre></li>
+<li><pre class="literallayout"><a name="id4592210-bb"></a>aterm(ATermBlob term);</pre></li>
+<li><pre class="literallayout"><a name="id4592221-bb"></a>aterm(ATermAppl term);</pre></li>
+<li><pre class="literallayout"><a name="id4592233-bb"></a>aterm(ATermPlaceholder term);</pre></li>
+<li><pre class="literallayout"><a name="id4592244-bb"></a>aterm(<span class="bold"><b>const</b></span> std::string &amp; s);</pre></li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id4803794"></a><h3>
+<a name="id4554359-bb"></a><tt class="computeroutput">aterm</tt> public member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><span class="type"><span class="bold"><b>const</b></span> ATerm &amp;</span> <a name="id4554364-bb"></a>term() <span class="bold"><b>const</b></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">ATerm &amp;</span> <a name="id4554374-bb"></a>term();</pre></li>
+<li><pre class="literallayout"><a name="id4554382-bb"></a><span class="bold"><b>operator</b></span> ATerm() <span class="bold"><b>const</b></span>;</pre></li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span></span> <a name="id4554393-bb"></a>protect();</pre>
+<p>Protect the aterm. Protects the aterm from being freed at garbage collection.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>void</b></span></span> <a name="id4554409-bb"></a>unprotect();</pre>
+<p>Unprotect the aterm. Releases protection of the aterm which has previously been protected through a call to protect.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><b>int</b></span></span> <a name="id4554426-bb"></a>type() <span class="bold"><b>const</b></span>;</pre>
+<p>Return the type of term. Result is one of AT_APPL, AT_INT, AT_REAL, AT_LIST, AT_PLACEHOLDER, or AT_BLOB.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">std::string</span> <a name="id4554445-bb"></a>to_string() <span class="bold"><b>const</b></span>;</pre>
+<p>Writes the term to a string.</p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">aterm</span> <a name="id4554461-bb"></a>annotation(aterm label) <span class="bold"><b>const</b></span>;</pre>
+<p>Retrieve the annotation with the given label.</p>
+</li>
+<li><pre class="literallayout"><span class="type"><a href="aterm_blob.html" title="Class aterm_blob">aterm_blob</a></span> <a name="id4554488-bb"></a>to_blob() <span class="bold"><b>const</b></span>;</pre></li>
+<li><pre class="literallayout"><span class="type"><a href="aterm_real.html" title="Class aterm_real">aterm_real</a></span> <a name="id4592106-bb"></a>to_real() <span class="bold"><b>const</b></span>;</pre></li>
+<li><pre class="literallayout"><span class="type"><a href="aterm_int.html" title="Class aterm_int">aterm_int</a></span> <a name="id4592119-bb"></a>to_int() <span class="bold"><b>const</b></span>;</pre></li>
+<li><pre class="literallayout"><span class="type"><a href="aterm_list.html" title="Class aterm_list">aterm_list</a></span> <a name="id4592133-bb"></a>to_list() <span class="bold"><b>const</b></span>;</pre></li>
+<li><pre class="literallayout"><span class="type"><a href="aterm_appl.html" title="Class aterm_appl">aterm_appl</a></span> <a name="id4592146-bb"></a>to_appl() <span class="bold"><b>const</b></span>;</pre></li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2004 Wieger Wesselink</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="aterm__/reference.html#id4567071"><img src="images/prev.png" alt="Prev"></a><a accesskey="u" href="aterm__/reference.html#id4567071"><img src="images/up.png" alt="Up"></a><a accesskey="h" href="index.html"><img src="images/home.png" alt="Home"></a><a accesskey="n" href="aterm_appl.html"><img src="images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
