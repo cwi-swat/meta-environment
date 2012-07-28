@@ -1,0 +1,30 @@
+
+
+Wed Nov 12 14:47:52 CET 2008 <jurgenv@cwi.nl>
+ * resources/**: added resources to EXTRA_DIST
+
+Wed May  7 11:42:28 2008    <bruntink@cwi.nl>
+
+	* vis-plugin-generic.pc.on: Changed relation-stores dependency to rstore-support-java.
+
+Mon Apr 28 16:05:34 2008    <bruntink@cwi.nl>
+
+	* vis-plugin-generic.pc.in: Changed config-support dependency to config-support-java.
+
+Fri Feb 29 14:40:59 CEST 2008 <basten@cwi.nl>
+ * **/src: fixed nullpointer in table visualization when displaying empty
+   set, now displaying message "This fact is empty.".
+
+Wed Aug 22 15:20:44 CEST 2007 <jurgenv@cwi.nl>
+ * **/src: adapted table visualization to be able to visualize any type
+   of data.
+
+Wed Aug 22 12:01:18 CEST 2007 <jurgenv@cwi.nl>
+ * **/src: added generic textual visualization of rstore.
+
+Wed Aug 22 09:58:01 CEST 2007 <jurgenv@cwi.nl>
+ * Merging vis-plugin-table and vis-plugin-csv, and adding vis-plugin-text
+   to this package.
+
+Tue Mar 20 08:08:08 CET 2007 <jurgenv@cwi.nl>
+ * *: initial import from Dancing Bear project
