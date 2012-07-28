@@ -1,0 +1,14 @@
+installed
+configure
+Makefile.in
+meta-build
+config.log
+INSTALL
+meta-build-env.pc
+Makefile
+config.status
+svn-commit.tmp
+autom4te.cache
+config
+aclocal.m4
+

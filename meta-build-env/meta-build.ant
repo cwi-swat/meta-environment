@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <property environment="env"/>
+  <property name="build" value="build"/>
+  <property name="dist" value="dist"/>
+  <property name="src" value="src"/>
+  <property name="resources" value="resources"/>
+  <property name="doc" value="doc/html"/> 
+  <property environment="env"/>
+
+  <path id="project.classpath">
+    <pathelement path="${env.JAVA_LOCAL_JARS}"/>
+    <pathelement path="${env.JAVA_EXTERNAL_JARS}"/>
+  </path>
+
+  <target name="build">
+    <mkdir dir="${env.BUILDDIR}/${build}"/>
+    <javac destdir="${env.BUILDDIR}/${build}" debug="true" source="1.5" target="1.5">
+      <src path="${env.SRCDIR}/${src}"/>
+      <classpath refid="project.classpath"/>
+    </javac>
+  </target>
+
+  <target name="dist" depends="build">
+    <mkdir dir="${env.BUILDDIR}/${dist}/src"/>
+    <copy todir="${env.BUILDDIR}/${dist}/resources" failonerror="false">
+      <fileset dir="${env.SRCDIR}/${resources}"/>
+    </copy>
+    <copy todir="${env.BUILDDIR}/${dist}">
+      <fileset dir="${env.BUILDDIR}/${build}"/>
+    </copy>
+    <copy todir="${env.BUILDDIR}/${dist}/src">
+      <fileset dir="${env.SRCDIR}/${src}" includes="**/*.java"/>
+    </copy>
+    <copy todir="${env.BUILDDIR}/${dist}">
+      <fileset dir="${env.SRCDIR}/${src}" excludes="**/*.java"/>
+    </copy>
+    <jar destfile="${env.BUILDDIR}/${env.JAVA_JAR}" manifest="${env.SRCDIR}/META-INF/MANIFEST.MF" >
+      <fileset dir="${env.BUILDDIR}/${dist}"/>
+    </jar>
+  </target>
+
+
+  <target name="check" depends="build">
+    <mkdir dir="${env.BUILDDIR}/testresults"/>
+    <junit printsummary="withOutAndErr" showoutput="yes">
+      <classpath>
+	<pathelement path="project.classpath"/>
+        <pathelement path="${env.JAVA_LOCAL_JARS}"/>
+        <pathelement path="${env.JAVA_EXTERNAL_JARS}"/>
+	<pathelement location="${env.BUILDDIR}/${build}"/>
+      </classpath>
+      <formatter type="plain"/>
+      <batchtest todir="${env.BUILDDIR}/testresults" >
+	<fileset dir="${env.SRCDIR}/${src}">
+	  <include name="**/${env.JAVA_TEST_CLASS}.java"/>
+	</fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="doc">
+    <mkdir dir="${doc}"/>
+    <javadoc 
+      sourcepath="${env.SRCDIR}/${src}"
+      destdir="${env.BUILDDIR}/${doc}"
+      author="true"
+      overview="${src}/overview.html"
+      packagenames="${env.JAVA_PACKAGES}"
+      private="true"
+      use="true"
+      linksource="yes"
+      version="true"
+      windowtitle="${env.PACKAGE}"
+      header="${env.DOCHEADER}"
+    >
+      <classpath refid="project.classpath"/>
+    </javadoc>
+    <replace file="${env.SRCDIR}/${doc}/overview-summary.html" token="__VERSION__" value="${env.PKG_VERSION}"/>	
+  </target> 
+
+
+  <target name="clean">
+    <delete dir="${env.BUILDDIR}/${build}"/>
+    <delete dir="${env.BUILDDIR}/${dist}"/>
+    <delete dir="${env.BUILDDIR}/${doc}"/>
+    <delete dir="${env.BUILDDIR}/testresults"/>
+    <delete file="${env.BUILDDIR}/${env.JAVA_JAR}"/>
+  </target>
+
+</project>

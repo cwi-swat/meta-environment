@@ -1,0 +1,73 @@
+
+SUFFIXES   =
+CLEANFILES = 
+EXTRA_DIST =
+
+pkgconfigdir  = $(libdir)/pkgconfig
+docdatadir    = $(datadir)/doc/$(PACKAGE)
+
+EXTRA_DIST += $(wildcard *.m4) \
+	     reconf \
+	     Makefile.fragment.meta \
+	     meta-build.ant 
+
+CLEANFILES += $(PACKAGE)-uninstalled.pc 
+
+DISTCLEANFILES = .project \
+		.classpath \
+		build.properties \
+		.settings/org.eclipse.jdt.ui.prefs \
+		.settings/org.eclipse.jdt.core.prefs \
+		META-INF/MANIFEST.MF 
+
+pkgconfig_DATA = $(PACKAGE).pc
+
+JARFILE_ENV = JAR=$(JAVA_JAR)
+data_DATA = $(JAVA_JAR)
+
+export
+
+dummy:
+
+copyDir=\
+	if [ -d $1/$2 ]; then \
+	   cp -rf $1/$2 ${top_builddir}/installed; \
+	fi
+
+installDir: dummy
+	mkdir -p ${top_builddir}/installed
+	PATHS="" ; \
+	for dep in ${PACKAGE_ALL_DEPS}; do \
+	        prefix=`pkg-config --variable prefix $${dep}`; \
+		if [ ! -z $${prefix} ]; then \
+			if [ "`echo "$${PATHS}" | grep $${prefix}`x" == "x" ]; then \
+				PATHS+=" $${prefix}" ; \
+			fi ; \
+		else  \
+		  echo "prefix is empty" ; \
+	          exit 1 ; \
+	        fi ; \
+	done ; \
+	for path in $${PATHS}; do \
+                $(call copyDir,$${path},bin); \
+                $(call copyDir,$${path},lib); \
+                $(call copyDir,$${path},share); \
+                $(call copyDir,$${path},libexec); \
+        done ; \
+	SEDCMD="" ; \
+	for path in $${PATHS}; do \
+	        newpath=`printf "%-$${#path}s" ".." | tr " " "/"` ; \
+	        SEDCMD="$${SEDCMD} -e s@$${path}@$${newpath}@g"  ; \
+	done ; \
+	for file in `find installed -type f`; do \
+          size=`wc -c $${file} | awk '{ print $$1 }'` ; \
+	  sed $${SEDCMD} < $${file} > $${file}.tmp ;\
+	  dd bs="$${size}" count=1 if=$${file}.tmp of=$${file} ; \
+          rm $${file}.tmp ; \
+	done
+
+${JAVA_JAR}: installDir
+	jar -cMf ${JAVA_JAR} META-INF/MANIFEST.MF
+
+clean-local:
+	rm -rf installed

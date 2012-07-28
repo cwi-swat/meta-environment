@@ -1,0 +1,510 @@
+
+
+Thu Jul 16 13:58:23 CEST 2009 <{jurgenv,lankamp}@cwi.nl>
+ * Makefile.fragment.meta: fixed problems with using sed (it's a text based
+   tool that might add newlines.
+
+Wed Feb  4 11:19:36 CET 2009 <{lankamp,jurgenv}@cwi.nl>
+ * meta-build.m4: added JUNIT3 to build classpath of all Eclipse Java packages
+
+Mon Nov 10 16:58:44 CET 2008 <jurgenv@cwi.nl,storm@cwi.nl>
+ * meta-build.m4,Makefile.fragment.java: added support for Eclipse 
+   fragment packages.
+
+Thu Oct 30 15:09:10 CET 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: added generation of Bundle-RequiredExecutionEnvironment
+   entry in MANIFEST.MF files for Java packages, such that we are all
+   required to use the same compatibility level.
+
+Thu Aug 14 13:30:27 CEST 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: added generation of Main-Class attribute in
+   MANIFEST.MF, such that Meta-Environment 2.0 can load its plugins again.
+
+Mon Jul 07 09:48:11 CEST 2008 <lankamp@cwi.nl>
+ * The dist ant target is now retrieving the META-INF/MANIFEST.MF from the correct directory.
+
+Mon Jun 30 15:26:38 CEST 2008 <{storm,jurgenv}@cwi.nl>
+ * meta-build.ant: use generated MANIFEST.MF in jar target such that
+   eclipse plugins will work.
+ * meta-build.m4: generates build id in pc files when BUILD_ID environment
+   variable is set.
+
+Thu Jun 12 16:16:08 CEST 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: added another trick to generate newlines in MANIFEST.MF,
+   the code was not portable to macosx, now it is.
+
+Tue Jun  3 09:32:00 CEST 2008 <jurgenv@cwi.nl>
+ * Makefile.meta: made all binaries that are made in a Makefile that
+   includes Makefile.meta relocatable. The precondition is that the
+   libraries used are installed in ../lib. This works only on platforms
+   that support $ORIGIN substitution.
+
+Tue May 13 18:27:50 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: Added generation of Eclipse meta data for basic
+	META packages, i.e., those that call META_SETUP. Java packages
+	overwrite that meta data.
+
+Tue May 13 12:49:34 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: Fixed the problem that empty clauses or empty
+	lines could be generated in META-INF/MANIFEST.MF. Also cleaned up
+	the manifest generation.
+
+Fri May  9 15:14:30 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: Added the --with-eclipse configure switch that is
+	required for packages that use EclipseRequires. It needs to be set
+	to $ECLIPSE_HOME.
+
+	If a package has EclipseRequires, it will now get *all* the jars
+	in $ECLIPSE_HOME/plugins on its EXTERNAL_JARS list, such that it
+	can be build from the command line.
+
+	The Eclipse meta data are now generated every time configure is
+	run, overwriting meta data that are already present.
+
+	* meta-build.m4: Allow patterns beginning with META_ECLIPSE.
+
+Fri May  9 09:29:03 2008    <bruntink@cwi.nl>
+
+	* Makefile.java.meta: Fixed CLEANFILE specification.
+
+Thu May  8 11:30:41 2008    <bruntink@cwi.nl>
+
+	* Makefile.java.meta, Makefile.top.meta: Added Eclipse meta data
+	files to CLEANFILES.
+
+Wed May  7 16:05:56 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: Required Eclipse and Meta bundles are now all put on a separate line to prevent lines becoming too long.
+	* meta-build.m4: Corrected Eclipse meta data generation for C packages.
+
+Tue May  6 16:27:56 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: Fixed various things such that MANIFEST.MF, build.properties, and .classpath files are correctly generated.
+
+Tue May  6 11:34:30 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: There now is a META_GENERATE_ECLIPSE_PLUGIN_FILES_FOR_C target that is used to generate Eclipse meta data for C packages.
+
+Tue Apr 29 17:14:41 2008    <bruntink@cwi.nl>
+
+	* meta-build.m4: The Require-Bundle part of MANIFEST.MF is split
+	  over multiple lines to prevent generating a line that would be
+	  too long.
+
+Mon Apr 28 15:50:13 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
+ * meta-build.m4: fixed generation of MANIFEST.MF using line continuations
+   such that Eclipse does not complain about lines that are too long
+
+Fri Apr 25 15:42:01 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
+ * meta-build.m4: added generation of .settings directory and contents for
+   default Eclipse settings (like source compliance level)
+
+Fri Apr 03 11:43:54 CEST 2008 <lankamp@cwi.nl>
+ * Modified the gentifs stuff to work with the updated version.
+
+Thu Mar 27 11:41:30 CEST 2008 <lankamp@cwi.nl>
+ * We now check if a .project file is present or not before generating it.
+ This prevents peoples personal configuration from getting messed up when they
+ run the configure script.
+
+Wed Mar 26 11:48:15 CEST 2008 <lankamp@cwi.nl>
+ * Added workaround for the "ERROR: files left in build directory after
+ distclean" problem, so distcheck stops complaining. .project, .classpath,
+ build.properties and META-INF/MANIFEST.MF are now being ignored.
+ * Fixed a problem in meta-build.ant. The build, dist and doc directories were
+ being created in the wrong place (the project prefix was being appended).
+
+Thu Mar 20 16:42:14 EDT 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: use of LOCAL_JARS to fill .classpath entries
+
+Thu Mar 20 15:38:22 EDT 2008 <jurgenv@cwi.nl>
+ * meta-build.m4: added PACKAGE_ALL_DEPS variable which contains the
+   transitive dependencies of the current package without double entries.
+ * meta-build.m4: added generation of META-INF/MANIFEST.MF,
+   build.properties, .project and .classpath files when META_JAVA_SETUP is 
+   called.  This makes proper Eclipse plugin bundles from every Java-based 
+   package we have, based on the information in the .pc.in files.
+   It's a step towards a seemless integration of our Java code into Eclipse.
+
+Mon Feb 25 13:17:41 EST 2008 <jurgenv@cwi.nl>
+ * meta-build.ant: Added LOCAL_JARS and EXTERNAL_JARS to class path 
+   of check target.
+
+Fri Jan 18 12:00:00 CEST 2008 <lankamp@cwi.nl>
+ * meta-build.ant: The resources are now being packaged into the JAR files
+ again.
+
+Sat Jan  5 13:13:09 EST 2008 <jurgenv@cwi.nl>
+ * Makefile.java.meta,meta-build.ant: allow building jars outside maintainer-
+   mode, and made distcheck target working too.
+
+Fri Nov 30 11:51:19 CEST 2007 <kooiker@cwi.nl>
+ * Makefile.java.meta: allow building jars outside maintainer-mode
+
+Thu Sep 27 11:15:00 CEST 2007 <kooiker@cwi.nl>
+ * Makefile.meta: EXTRA_DIST and CLEANFILES not only for maintainer mode
+   anymore fixes distdir and distclean problems on MacOS X.
+
+Mon Aug 20 17:52:23 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.meta: changed EXTRA_DIST in maintainer mode for generation
+   of ToolBus interface code. In some cases the interface code is not
+   necessary (for example when compiling an ASF+SDF ToolBus tool). The
+   extra dist would ask for a .c file for every .idef file, which would
+   not be there. Fixed this by changing the wildcard to add every 
+   *.[ch] file to EXTRA_DIST regardless.
+
+Mon Aug 13 19:04:25 CEST 2007 <jurgenv@cwi.nl>
+ * meta-build.m4: added { } curly's around generated dereferences of
+   long shell variable names. This fixes "Bad string" warnings by autoconf
+   on Solaris 10.
+
+Mon Aug  6 11:28:02 CEST 2007 <{storm,jurgenv}@cwi.nl>
+ * Makefile.meta: Changed make rules of generation of c files from idef
+   files. The current rules did not work always in distribution that were
+   not compiled in maintainer-mode. This depended on what the timestamps
+   of the generated source files where. 
+ * Makefile.meta: in non-maintainer-mode many generated files are in the 
+   distribution. They get copied to the build directory in this case, but
+   not cleaned. The distcheck-clean target fails because of this. We can not
+   add the files to CLEANFILES, because then 'make clean' would throw them
+   away leaving the user nothing but to unpack the distribution again. We
+   found a fix in the automake manual, which will not demand removal of
+   all generated files anymore when doing distclean-check in 
+   non-maintainer-mode.
+
+Thu Aug  2 16:19:02 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.meta: The 'which' command on SunOs and MacOS X does not
+   have a return value unequal to 0 when the command is not found. 
+   There is no portable alternative command to which which does the job.
+   So, I've implemented a rudimentary for loop that checks whether a command
+   is to be found in any of the paths in ${PATH}.
+
+Sun Jun 10 09:12:25 CEST 2007 <jong@metamud.org>
+ * README: corrected some typos
+
+Wed May  2 12:35:58 CEST 2007 <jurgenv@cwi.nl>
+ * meta-build.m4: removed "function" keyword from shell function
+   definitions to see if we can get meta-build.m4 more 'sh'-compliant.
+
+Thu Apr  5 14:11:50 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.java.meta: removed inclusion of Makefile.meta in
+   Makefile.java.meta. This is essential for separating automatic make rules
+   for generation of ToolBus interfaces for different programming languages.
+
+
+Tue Mar 27 19:11:49 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.meta: added checking for ToolBus bootstrapping utils, and using 
+  touch if not available. This requires that all generated files are 
+  stored in the version repository. 
+
+Tue Mar 27 10:46:40 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.meta: added automatic rules for ToolBus interface generation,
+   starting from a .isrc file, which is transformed to a .idef file by
+   substituying __PREFIX__, and ending with a .c and .h file that implement
+   the bridge for C. Add blabla.idef to your _SOURCES variable to use it.
+   Example:
+   bin_PROGRAMS=foo
+   foo_SOURCES=main.c foo.idef
+   Make sure not the let foo.idef have the same basename as another source
+   file, since the rules compute foo.o and link it into the program.
+
+Thu Feb 15 14:52:40 CET 2007 <kooiker@cwi.nl>
+ * meta-projectSet.psf: Add Eclipse team environment
+
+Mon Sep 25 17:19:34 CEST 2006 <jurgenv@cwi.nl>
+ * Makefile.top.meta: if the including Makefile.am defines the
+   EXTRA_DOC variable, then this variable defines the dependencies
+   of the 'doc' target, otherwise doxygen will be used to generate
+   documentation.
+
+Wed Aug  9 19:31:18 CEST 2006 <jurgenv@cwi.nl>
+ * Makefile.rules: added definitions of generic make rules for
+   ToolBus, Apigen and ASF. In progress, and will be merged with
+   Makefile.meta as soon as it is working.
+
+Wed Aug  9 09:23:23 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
+ * meta-build.m4: META_IF_CONTAINS used ' ' quotes which prevented
+   substitution of variables.
+
+Tue Aug  8 15:25:16 CEST 2006 <kooiker@cwi.nl>
+ * meta-build.m4: fixed processing of PkgConfigPath by translating : into
+   space
+
+Mon Jul 31 13:39:18 CEST 2006 <kooiker@cwi.nl>
+ * meta-build.m4: fixed passing paramater to META_IF_CONTAINS in 
+   meta_recursive_requires
+
+Mon Jul 31 12:55:44 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
+ * meta-build.m4: added META_IF_CONTAINS, which replaces the old
+   'grep -q' hack (not portable), with a different implementation
+   that should be portable using test and expr.
+ * meta-build.m4: transitively closed PKG_CONFIG_PATH is stored
+   in the installed .pc file, and used to construct a PKG_CONFIG_PATH
+   BEFORE using pkg-config. This solves the problem of using
+   pkg-config while every package is installed in a different prefix.
+
+Fri Jul 28 15:15:46 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
+ * meta-build-m4: fixed nasty bugs. If a package name is a prefix
+   of another package name, the grep trick does not work. The
+   workaround is to add a space " " to the end of the regular
+   expression. This works, but it ain't pretty.
+
+Fri Jul 28 11:53:45 CEST 2006 <jurgenv@cwi.nl>
+ * meta-build-m4: refactored META_INSPECT_PACKAGE to
+   call META_INSPECT_PACKAGE_JAVA and added call to
+   META_INSPECT_PACKAGE_TOOLBUS.
+ 
+
+Fri Jul 28 04:49:07 CEST 2006  <martin.bravenboer@gmail.com>
+  * meta-build.m4: major refactoring of the macros, after
+  discovering a few nasty bugs.
+
+  -----------------------------------------------------
+  1) previously, the basic structure of META_SETUP was:
+
+  for each Dep
+    check for --with option
+    extend the pkg-config path
+    find the Dep with pkg-config
+    inspect the Dep for all kinds of variables
+  end
+
+  This breaks if Requires are not a topological sort and the packages
+  are not installed at the same prefix. Example: error-support
+  requires toolbuslib. Assume the line Requires: error-support
+  toolbuslib. On inspecting error-support, the possible --with
+  option for toolbuslib has not been handled yet, which might cause
+  a failure in finding toolbuslib, which is a dependency of
+  error-support. Worse, it might load an incorrect toolbuslib.
+
+  The solution is to split the for loop, and make sure that the
+  PKG_CONFIG_PATH is completely ok before starting checking the
+  packages.
+
+  Another advantage of this pkg-config will check every dependency
+  itself before we starting messing with searching and grepping
+  pkg-config files.
+
+  So, where the old approach was:
+
+  for each Dep
+    META_ARG_WITH_PACKAGE(Dep)
+    META_CHECK_PACKAGE(Dep)
+    META_INSPECT_PACKAGE(Dep)
+  end
+
+  The new approach is:
+
+  for each Dep
+    META_ARG_WITH_PACKAGE(Dep)
+  end
+
+  for each Dep	
+    META_CHECK_PACKAGE(Dep)
+  end
+
+  for each Dep	
+    META_INSPECT_PACKAGE(Dep)
+  end
+
+  This is what the new macro META_REQUIRE_PACKAGES does.
+
+  -----------------------------------------------------
+  2) The transitive requires closure took pkg-config files from the
+  prefix, which is incompatible with uninstalled
+  packages. Pkg-config does not allow us the get the pkg-config file
+  for a given package name (too bad), so we have to reimplement this
+  searching. For this, I've added a function that walks the
+  PKG_CONFIG_PATH to look for -uninstalled and installed pkg-config
+  files.
+
+  For debugging and clearity, the closure is now also reported.
+
+  -----------------------------------------------------
+
+  Other fixes:
+  - the transitive closure functions are now a bit more hygienic by
+  declaring variables as local. For example, using a non-local
+  variable PREFIX is quite dangerous.
+  - added some more documentation to all the macros.
+  - improved reporting to the user at several places.
+	
+
+Fri Jul 28 02:21:27 CEST 2006 <martin.bravenboer@gmail.com>
+ * meta-build.m4: implemented support for uninstalled jars. The
+   variables are documented in meta-build.m4. A copy:
+
+   PACKAGE_JARS: JARS to use at build time.
+   PACKAGE_INSTALLED_JARS: JARS to use after installation.
+
+   EXTERNAL_JARS: JARS to use at build time.
+   EXTERNAL_INSTALLED_JARS: JARS to use after installation.
+
+ * meta-build.m4: dropped the AC_SUBST of JAVA_EXTERNAL_JARS. It is
+   kind of confusing, considering that we already substitute
+   EXTERNAL_JARS.
+
+ * Makefile.java.meta: improved the handling of local jars. Of
+   course, always passing a -lib option will break if JAVA_LOCAL_JARS
+   is empty. JAVA_LOCAL_JARS is now in a foreach.
+
+Thu Jul 27 14:25:38 CEST 2006 <{jurgenv,kooiker}@cwi.nl,martin.bravenboer@gmail.com>
+ * meta-build.ant: changed default target from Java 1.4 to Java 1.5
+ * meta-build.m4: changed implementation of construction of CLASSPATH.
+   Every Java package now declares both a JarFile and Jars. Jars says
+   where the Jars of this package are installed. JarFile says which jar to
+   build from the source code of this package.
+
+Wed Jul 27 09:57:01 CEST 2006 <{storm,kooiker,martinrw}@cwi.nl>
+ * Makefile.am: removed stale pkg-requires target.
+
+Wed Jul 27 09:53:01 CEST 2006 <{storm,kooiker,martinrw}@cwi.nl>
+ * meta-build.m4: removed incorrect call of AC_REQUIRE.
+
+Wed Jul 27 09:49:01 CEST 2006 <{storm,kooiker,martinrw}@cwi.nl>
+ * reverted previous changes.
+	
+Wed Jul 26 16:54:01 CEST 2006 <{storm,kooiker,jurgenv}@cwi.nl>
+ * configure, reconf, Makefile.src: build interface of meta-build-env now
+   does not depend on auto-tools anymore; instead it installs them
+   itself. This is implemented using a fake ./configure script which
+   instantiates a Makefile that mimics standard automake Makefile
+   targets. Make install will download autoconf, automake, libtool and
+   pkg-config and install them in the prefix passed to the fake ./configure
+   script.
+
+Wed Jul 26 14:57:01 CEST 2006 <{storm,kooiker,jurgenv}@cwi.nl>
+ * meta-build.m4: added AC_REQUIRE for PKG_CONFIG and m4_allow'd patterns 
+   _PKG_ERRORS.
+
+Wed Jul 26 10:45:01 CEST 2006 <{storm,kooiker}@cwi.nl>
+ * meta-build.m4: in macro META_REQUIRE_SOFTWARE finding a dependency's
+   prefix by executing a program in a path resulted in _PREFIX variables
+   containing the path of the executable instead of the prefix proper.
+
+Tue Jul 25 22:39:01 CEST 2006 <jurgenv@cwi.nl>
+ * pkg-requires.src: a script that prints the reflexive and
+   transitive requirements of a pkg-config package.
+
+Tue Jul 25 20:19:22 CEST 2006 <martin.bravenboer@gmail.com>
+  * meta-build.m4: META_JAVA_SETUP: ExternalJars is subsituted, so
+    we cannot get it from the pkg-config file. For now, the value of
+    JAVA_EXTERNAL_JARS is the variable EXTERNAL_JARS, which has been
+    determined earlier.
+
+    However, I'm afraid we'll have to revise the use of ExternalJars
+    completely. The essential reason why building against uninstalled
+    packages works with pkg-config is that a package should only list
+    *its own* properties in a pkg-config file. The ExternalJars is a
+    property of a required package, which breaks. So, a package should
+    only list the jars that it provides and the required packages. If
+    the closure needs to be determined, then this should be done by a
+    configure script (meta-build.m4). The  result of that closure
+    should not be stored in a pkg-config file.
+
+Tue Jul 25 15:58:43 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * meta-build.m4: added META_C_SETUP, common macro calls for
+   C packages. Except that AC_PROG_LIBTOOL can not go in there because
+   autoreconf scans for it in configure.ac to be able to call
+   libtoolize if necessary.
+ * meta-build.m4: added META_REQUIRE_SOFTWARE, a macro for adding
+   dependencies on third-party packages, like graphviz.
+
+Mon Jul 24 10:55:42 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * meta-build.m4: 'Requires' field is comma separated, while we expected
+   space separated. Fixed.
+ * meta-build.m4: More use of tr to remove accidental newlines
+   in data retrieved from pkg-config files.
+
+Thu Jul 20 16:54:24 CEST 2006 <martin.bravenboer@gmail.com>
+ * meta-build.m4: the generated PACKAGE-uninstalled.pc where
+   broken, since the LocalLibs and LocalCflags did not use the
+   required colon syntax. I've tweaked the generator to uncomment
+   lines from PACKAGE.pc that start with #uninstalled. Looks much
+   better as well :)
+
+   We'll probably need a mechanism to remove configuration lines as
+   well (for tools), but that's a matter of coming up with some nice
+   convention.
+
+Thu Jul 20 13:16:05 CEST 2006 <jurgenv@cwi.nl>
+ * meta-build.m4: generates PACKAGE-uninstalled.pc.in file
+   from PACKAGE.pc.in file using the LocalLibs and LocalCFlags 
+   variables.
+
+Thu Jul 20 01:45:22 CEST 2006 <martin.bravenboer@gmail.com>
+ * meta-build.m4: added PACKAGE-uninstalled.pc to the
+   AC_CONFIG_FILES. This introduces the requirement for all packages
+   to include this file.
+
+ * meta-build.m4: improved the META_GET_PKG_VARIABLE macro to deal
+   with multiple pkg-config files in the same directory. It now picks
+   only the first one. Maybe this should even be improved further,
+   since stuff might break if the uninstalled package is first in the
+   list (which would be very strange).
+
+Thu Jul 20 09:40:23 CEST 2006 <jurgenv@cwi.nl>
+ * meta-build.m4: calls META_REQUIRE_PACKAGE automatically using the
+   Requires variables from the pc.in file.
+ * meta-build.m4: builds up a EXTERNAL_JARS file to be used in the
+   setting of ClassPath. This requires each .pc.in file that needs
+   to export a classpath to set a variable:
+      ExternalJars=@EXTERNAL_JARS@
+
+Wed Jul 19 11:18:07 CEST 2006 <{jurgenv,storm}@cwi.nl>
+ * meta-build.m4: call to AM_INIT_AUTOMAKE uses information from
+   <package>.pc.in from now on, instead of from 'package'. This makes
+   the package files redundant.
+ * meta-build.m4: factored out the esyscmd call into a macro, such
+   that we can extract any variable from a <package>.pc.in file.
+ * meta-build.m4: changed :blank: to :space: in the call to esyscmd,
+   such that we can remove the wrapping `printf ` call.
+ * Makefile.am,meta-build.src,meta-build.xml: renamed meta-build.xml
+   to meta-build.ant
+ * Makefile.*.meta: removed use and generation of autobundle 'package' file
+
+Wed Jul 19 09:50:13 CEST 2006 <jurgenv@cwi.nl>
+ * meta-build.m4: added a $ to dereference META_FOUND_PREFIX instead
+   of putting the variable name itself in it.
+
+Wed Jul 19 01:18:49 CEST 2006 <martin.bravenboer@gmail.com>
+  * meta-build.m4: Fix in the determination of the filename for the
+    .pc in AC_CONFIG_FILES. Strange that this worked at all ...
+
+    Directories of --with-pkg arguments are now placed in front of the
+    PKG_CONFIG_PATH. This can deal with a bit more usual installation
+    scenario's.
+
+    Major fix in the check on the found prefix of packages. Of course,
+    comparing paths by string comparison is a very bad idea, for
+    example /foo will not be equal to /foo/ and also symbolic links
+    are not supported. The check now fetches the actual prefix from
+    the .pc file in the given prefix itself and compares that value to
+    the found prefix. This check had to be disabled for bundles.
+
+    Fix in the reporting of prefixes if the value was not explicitly
+    specified.
+	
+Tue Jul 18 22:56:29 CEST 2006 <martin.bravenboer@gmail.com>
+ * meta-build.m4: 
+   Added a new macro META_BUNDLE_PKG_CONFIG_PATH, which is invoked
+   from META_SETUP. This macro handles the --with-bundled-packages
+   argument of autobundle and extends the PKG_CONFIG_PATH with the
+   top-level directories of the packages that are available in the
+   bundle. In this way, the uninstalled packages can be found by
+   pkg-config.
+
+   Basic bundling now works, though there was one minor problem with
+   the way autobundle passes the prefix to the subpackages. This
+   still needs to be resolved.
+
+Tue Jul 18 10:53:01 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
+ * package: a package for the standard (really!) build environment of
+   all meta-environment packages, including C, Java, ToolBus
+   and ASF+SDF stuff. This package will not depend on anything
+   but standard GNU stuff like M4, autoconf, automake, libtool.
+   One can see it as an extension to the auto* GNU tools.
+

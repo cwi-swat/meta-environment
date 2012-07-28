@@ -1,0 +1,102 @@
+#
+# \file 
+#
+# This Makefile provides support for compiling Meta-Environment 
+# packages in a standard way 
+#
+#
+
+# Put very common AM_CPPFLAGS, LDADD here, also here 
+# because of pkgconfig:
+AM_CPPFLAGS = 
+
+# Note: this makes all binaries relocatable as long as the ../lib directory
+# moves with it. The extra /foo in front is to work around a check in libtool
+# which demands that all rpaths are absolute. Note that this 'solution'
+# will only work on platforms that have support for $ORIGIN substitution.
+AM_LDFLAGS = 
+#-rpath '/foo:\$$ORIGIN/../lib'
+AM_LIBTOOLFLAGS= 
+LDADD = 
+
+SUFFIXES   =
+CLEANFILES = 
+DISTCLEANFILES = 
+EXTRA_DIST =
+
+pkgconfigdir  = $(libdir)/pkgconfig
+docdatadir    = $(datadir)/doc/$(PACKAGE)
+
+if MAINTAINER_MODE
+
+# In maintainer mode we assume that bootstrapping utilities such as
+# toolbus -gentifs, tifstoc, tifstojava, apigen and asfc are available
+# on the path. If not, we will use touch to update the timestamp of
+# the needed file if it exists, and fail if it does not exist.
+# Alas, the 'which' command is not portable, so we have to hack it here:
+
+check_available = \
+  @found="";  \
+  for p in `echo ${PATH} | tr ':' ' '`; do \
+    if [ -f $$p/$1 ]; then \
+      found=$$p; \
+    fi; \
+  done; \
+  if [ -f $${found}/$1 ]; then \
+    echo "$2"; $2; \
+  else \
+    echo "missing $1 to generate $@";  \
+    if [ -f $@ ]; then \
+      echo "touch $@"; touch $@; \
+    else \
+      echo "missing $@!";  \
+      false; \
+    fi;  \
+  fi
+
+stemvar = $($(shell echo "$*" | tr '-' '_')$1)
+
+endif
+
+# ToolBus rules
+SUFFIXES += .idef .isrc
+.isrc.idef:
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+
+CLEANFILES += $(wildcard *.idef)
+
+EXTRA_DIST += $(wildcard *.c) $(wildcard *.h)
+
+if MAINTAINER_MODE 
+
+CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
+
+.idef.c:
+	$(call check_available,toolbus,toolbus-gentifs -output $*.tifs -S$<)
+	$(call check_available,tifstoc,tifstoc -tool $* $*.tifs $(call stemvar,_TIF_OPTIONS))
+
+.idef.h:
+	$(call check_available,toolbus,toolbus-gentifs -output $*.tifs -S$<)
+	$(call check_available,tifstoc,tifstoc -tool $* $*.tifs $(call stemvar,_TIF_OPTIONS))
+
+else
+.idef.c: 
+	if [ -e $*.h ]; then touch $*.h; else cp ${srcdir}/$*.h ./$*.h; fi
+	if [ -e $*.c ]; then touch $*.c; else cp ${srcdir}/$*.c ./$*.c; fi
+
+.idef.h: 
+	if [ -e $*.h ]; then touch $*.h; else cp ${srcdir}/$*.h ./$*.h; fi
+	if [ -e $*.c ]; then touch $*.c; else cp ${srcdir}/$*.c ./$*.c; fi
+
+#Hide distclean errors, see 'info automake, 13.4 Checking the distribution'
+#distcleancheck_listfiles = \
+#	find -type f -exec sh -c 'test -f $(srcdir)/{} || echo {}' ';'
+
+endif
+
+#ApiGen
+
+#SUFFIXES += .adt
+#
+#EXTRA_DIST += $(wildcard *.adt) $(foreach i,$(basename $(wildcard *.adt)),$i.c $i.h $i_dict.c $i_dict.h)
+
