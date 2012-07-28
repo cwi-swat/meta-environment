@@ -1,0 +1,11 @@
+#ifndef __TRANSACTION_MANAGEMENT__
+#define __TRANSACTION_MANAGEMENT__
+
+process TransactionManager(Token : term) is
+  (
+    rec-msg(tm-request-transaction(Token))
+    . rec-msg(tm-end-transaction(Token))
+  )
+  * delta
+
+#endif /* __TRANSACTION_MANAGEMENT__ */

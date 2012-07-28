@@ -1,0 +1,633 @@
+#ifndef __EDITING__
+#define __EDITING__
+
+#include <editor-manager.idef>
+#include <editor-plugin.idef>
+#include <structure-editor.idef>
+
+#include <module-manager.tb>
+#include <io-utils.tb>
+#include <config-utils.tb>
+#include <editor-error-display.tb>
+#include <text-utils.tb>
+
+/**
+ * Starts an editor without a language for structure editing.
+ */
+process EditAnonymousLocation(Path: str, Area: term) is
+let
+  AlreadyExists: bool,
+  EditorType: term,
+  Offset: int,
+  Line: int,
+  Column: int,
+  Sid: session-id
+in
+  Edit(Path, Sid?)
+  . EditorType := quote(anonymous-editor)
+  . EditText(Sid, EditorType, AlreadyExists?)
+  .
+  if equal(AlreadyExists, false) then
+    snd-msg(te-set-selection(Sid, Area))
+    .
+    (
+      MenuSelected(Sid, EditorType)
+    +
+      rec-msg(te-mouse-click-at-offset(Sid, Offset?))
+    +
+      rec-msg(te-mouse-click-at-line-column(Sid, Line?, Column?))
+    +
+      rec-msg(te-contents-changed(Sid))
+    )
+    *
+    EditorDisconnected(Sid)
+    . DeleteSession(Sid)
+  else
+    snd-msg(te-set-selection(Sid, Area))
+  fi
+endlet
+
+process DisplayMessage(EditorId : session-id, Message : str) is
+  snd-msg(te-display-message(EditorId, Message))
+
+process GetModuleId(Sid: session-id, ModuleId: module-id?) is
+  snd-msg(em-get-moduleid(Sid))
+  .
+  (
+    rec-msg(em-moduleid(Sid, ModuleId?))
+  +
+    rec-msg(em-no-such-session(Sid))
+    . printf("FIX ME: PushActiveModule: No such session\n")
+    . ModuleId := UNDEFINED
+  +
+    rec-msg(em-session-not-bound(Sid))
+    . printf("FIX ME: PushActiveModule: Session not bound\n")
+    . ModuleId := UNDEFINED
+  )
+ 
+process GetFocus(Sid: session-id, Tree: term?) is
+let
+  Registered: bool
+in
+  IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true) then
+    snd-msg(se-get-cursor(Sid))
+    .
+    (
+      rec-msg(se-cursor(Sid, Tree?))
+    +
+      rec-msg(se-no-cursor(Sid))
+      . Tree := UNDEFINED
+    )
+  else
+    Tree := UNDEFINED
+  fi
+endlet
+
+process ReplaceFocus(Sid: session-id, Tree: term) is
+let
+  Text: str,
+  Filename: str,
+  Error: str
+in
+  snd-msg(unparse(Tree))
+  . rec-msg(unparsed-text(Text?))
+  . snd-msg(te-set-contents(Sid, Text))
+  . UpdateTextRepository(Sid)
+  . SE-UpdateTree(Sid, Tree)
+  . snd-msg(te-clear-focus(Sid))
+endlet
+
+process GetPath(Sid: session-id, Path: str?) is
+  snd-msg(em-get-path(Sid))
+  . rec-msg(em-path(Sid, Path?))
+
+process Edit(Path: str, Sid: session-id?) is
+let
+  TooBig: bool
+in
+  CheckFileSize(Path, TooBig?)
+  .
+  if equal(TooBig, true) then
+    Sid := UNDEFINED
+  else
+    snd-msg(em-create-session(Path))
+    . rec-msg(em-session(Path, Sid?))
+  fi
+endlet
+
+process IsStructureEditorRegistered(Sid: session-id, Registered: bool?) is
+  snd-msg(em-is-editor-registered(Sid, structure))
+  .
+  (
+    rec-msg(em-editor-registered(Sid, structure))
+    . Registered := true
+  +
+    rec-msg(em-editor-not-registered(Sid, structure))
+    . Registered := false
+  )
+
+process IsTextEditorRegistered(Sid: session-id, Registered: bool?) is
+  snd-msg(em-is-editor-registered(Sid, text))
+  .
+  (
+    rec-msg(em-editor-registered(Sid, text))
+    . Registered := true
+  +
+    rec-msg(em-editor-not-registered(Sid, text))
+    . Registered := false
+  )
+
+/**
+ * This is the basic utility for constructing a new editor. Call it
+ * to start an fresh editor process, or to bring an existing editor
+ * to the front.
+ */
+process EditText(Sid: session-id, Type: term, AlreadyExists: bool?) is
+let
+  Path: str,
+  Categories: list
+in
+  IsTextEditorRegistered(Sid, AlreadyExists?)
+  .
+  if equal(AlreadyExists, true) then
+    snd-msg(te-editor-to-front(Sid))
+  else
+    snd-msg(em-register-editor(Sid, text))
+    . GetPath(Sid, Path?)
+    . snd-msg(te-edit-text(Sid, Path))
+    . SetEditActions(Sid, Type)
+    . snd-msg(get-text-categories)
+    . rec-msg(text-categories(Categories?)) 
+    . snd-msg(te-register-text-categories(Sid, Categories))
+  fi
+endlet
+
+process SetEditActions(Sid: session-id, Type: term) is
+let
+  Events: list
+in
+  snd-msg(cm-get-events(Type))
+  . rec-msg(cm-events(Events?))
+  . snd-msg(te-add-actions(Sid, Events))
+endlet
+
+process SE-UpdateTree(Sid: session-id, Tree: term) is
+let
+  Registered: bool,
+  Slices: list
+in
+  if not-equal(Tree, UNDEFINED) then
+    IsStructureEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true) then
+      snd-msg(se-update(Sid, Tree))
+    else
+      snd-msg(em-register-editor(Sid, structure))
+      . snd-msg(se-create(Sid, Tree))
+    fi
+    . AddJob("Highlighting")
+    . snd-msg(se-get-tree-slices(Sid))
+    .
+    (
+      rec-msg(se-tree-slices(Sid, Slices?))
+      . JobDone("Highlighting")
+      . snd-msg(te-highlight-slices(Sid, Slices))
+    +
+      rec-msg(se-no-tree-slices(Sid))
+    )
+  else
+    tau 
+  fi
+endlet
+
+process SynchronizeFocus(Sid: session-id) is
+let
+  Focus: term,
+  Sortname: str
+in
+  snd-msg(se-get-sort-at-cursor(Sid))
+  .
+  (
+    rec-msg(se-sort-at-cursor(Sid, Sortname?))
+    . snd-msg(se-get-focus-at-cursor(Sid))
+    . rec-msg(se-focus-at-cursor(Sid, Focus?))
+    . snd-msg(te-set-focus(Sid, Focus))
+    . snd-msg(te-display-message(Sid, Sortname))
+  +
+    rec-msg(se-no-cursor(Sid))
+  )
+endlet
+
+process GetFocusSort(Sid: session-id, Sort: str?) is
+  Sort := ""
+  . snd-msg(se-get-sort-at-cursor(Sid))
+  .
+  (
+    rec-msg(se-sort-at-cursor(Sid, Sort?))
+  +
+    rec-msg(se-no-cursor(Sid))
+  )
+
+process UpdateTextRepository(Sid: session-id) is
+let
+  Contents: str,
+  ModuleId: module-id,
+  Path: str
+in
+  snd-msg(te-get-contents(Sid))
+  . rec-msg(te-contents(Sid, Contents?))
+  . GetPath(Sid, Path?)
+  . PutCachedValue(TEXT_REPOSITORY, Path, Contents)
+endlet
+
+/**
+ * Default handler that an editor may use in its event loop
+ * for dealing with menu's
+ */
+process MenuSelected(Sid: session-id, EditorType: term) is
+let
+  Event: term,
+  Pid: int
+in
+  rec-msg(te-event(Sid, Event?)) 
+  . create(AsyncMenuSelected(Sid, EditorType, Event), Pid?)
+endlet
+
+process AsyncMenuSelected(Sid: session-id, EditorType: term, Event: term) is
+let
+  Action: str,
+  ModuleId: module-id,
+  Sort: str
+in
+  snd-msg(em-request-transaction(Sid))
+  .
+  (
+    rec-msg(em-no-transaction(Sid))
+  +
+    rec-msg(em-transaction-started(Sid))
+    . GetModuleId(Sid, ModuleId?)
+    . GetFocusSort(Sid, Sort?)
+    . snd-msg(cm-get-action(EditorType, Sort, Event))
+    . rec-msg(cm-action(Action?))
+    . UpdateTextRepository(Sid)
+    . 
+    (
+      printf("Warning: process %s was not found\n", Action)
+    +>
+      Action(Sid, EditorType, Sort)
+    +>
+      Action(Sid)
+    )
+    . snd-msg(em-end-transaction(Sid))
+  )
+endlet
+
+/**
+ * Default handler that an editor may use in its event loop
+ * for dealing with mouse clicks
+ */
+process MouseClicked(Sid: session-id) is
+let
+  Column: int,
+  Line: int,
+  Offset: int,
+  Pid: int,
+  Registered: bool
+in
+  (
+    rec-msg(te-mouse-click-at-offset(Sid, Offset?))
+    . create(OffsetHandler(Sid, Offset), Pid?)
+  +
+    rec-msg(te-mouse-click-at-line-column(Sid, Line?, Column?))
+    . create(LineColumnHandler(Sid, Line, Column), Pid?)
+  ) 
+  . snd-msg(em-request-transaction(Sid))
+  .
+  (
+    rec-msg(em-no-transaction(Sid))
+  +
+    rec-msg(em-transaction-started(Sid))
+    . IsStructureEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true) then
+      snd-msg(handle-mouse-event(Pid))
+      . SynchronizeFocus(Sid)
+    else
+      tau
+    fi
+    . snd-msg(em-end-transaction(Sid))
+  )
+endlet
+
+/**
+ * Default handler that an editor may use for synchronizing
+ * with the structure editor
+ */
+process OffsetHandler(Sid: session-id, Offset: int) is
+let
+  Pid: int
+in
+  Pid := process-id
+  . rec-msg(handle-mouse-event(Pid))
+  . snd-msg(se-set-cursor-at-offset(Sid, Offset))
+endlet
+
+process LineColumnHandler(Sid: session-id, Line: int, Column: int) is
+let
+  Pid: int
+in
+  Pid := process-id
+  . rec-msg(handle-mouse-event(Pid))
+  . snd-msg(se-set-cursor-at-line-column(Sid, Line, Column))
+endlet
+
+process EditorDisconnected(Sid: session-id) is
+  (
+    rec-msg(te-text-editor-disconnected(Sid))
+  +
+    rec-msg(kill-editor(Sid))
+  )
+
+process DeleteTextEditor(Sid: session-id) is
+  snd-msg(te-kill-text-editor(Sid))
+  . snd-msg(em-unregister-editor(Sid, text))
+
+process DeleteStructureEditor(Sid: session-id) is
+let
+  Registered: bool
+in
+  snd-msg(se-delete(Sid))
+endlet
+
+process DeleteSession(Sid: session-id) is
+let
+  Registered: bool
+in
+  snd-msg(em-request-transaction(Sid))
+  .
+  (
+    rec-msg(em-no-transaction(Sid))
+  +
+    rec-msg(em-transaction-started(Sid))
+    . IsTextEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true) then
+      DeleteTextEditor(Sid)
+    else
+      tau
+    fi
+    . IsStructureEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true) then
+      DeleteStructureEditor(Sid)
+    else
+      tau
+    fi
+    . snd-msg(em-delete-session(Sid))
+    . snd-msg(em-end-transaction(Sid))
+  )
+endlet
+
+process DeleteSessions(ModuleId: module-id) is
+let
+  Sid: session-id,
+  Sids: list
+in
+  snd-msg(em-get-sessions-by-moduleid(ModuleId))
+  .
+  (
+    rec-msg(em-sessions(ModuleId, Sids?))
+    .
+    (
+      if not-equal(Sids, []) then
+        Sid := first(Sids)
+        . DeleteSession(Sid)
+        . Sids := next(Sids)
+      fi
+    )
+    *
+    if equal(Sids, []) then
+      tau
+    fi
+  +
+    rec-msg(em-no-such-session(ModuleId))
+  )
+endlet
+
+process GetModuleByPath(Path: str, ModuleId: module-id?) is
+let
+  Sid: session-id
+in
+  GetEditorByPath(Path, Sid?)
+  .
+  if not-equal(Sid, UNDEFINED) then
+    snd-msg(em-get-moduleid(Sid))
+    . rec-msg(em-moduleid(Sid, ModuleId?))
+  else
+    ModuleId := UNDEFINED
+  fi
+endlet
+
+process GetEditorByPath(Path: str, Sid: session-id?) is
+  snd-msg(em-get-session-by-path(Path))
+  .
+  (
+    rec-msg(em-session(Path, Sid?))
+  +
+    rec-msg(em-no-such-session(Path))
+    . Sid := UNDEFINED
+  )
+
+process CheckFileSize(Path: str, TooBig: bool?) is
+let
+  Size: int
+in
+  snd-msg(io-get-file-size(Path))
+  . rec-msg(io-file-size(Path, Size?))
+  . 
+  if less(Size, 1048576) then
+    TooBig := false
+  else
+    TooBig := true
+  fi
+endlet
+
+process CheckSanity(Path: str, RequestedModuleId: module-id, Valid: bool?) is
+let
+  Available: bool,
+  CurrentModuleId: module-id
+in
+  GetModuleByPath(Path, CurrentModuleId?)
+  . 
+  if equal(CurrentModuleId, UNDEFINED) then
+    Valid := true
+  else
+    Valid := equal(CurrentModuleId, RequestedModuleId)
+  fi
+endlet
+
+process MoveCursorLeftAction(EditorId : session-id) is
+  MoveCursor(EditorId, left)
+
+process MoveCursorRightAction(EditorId : session-id) is
+  MoveCursor(EditorId, right)
+
+process MoveCursorUpAction(EditorId : session-id) is
+  MoveCursor(EditorId, up)
+
+process MoveCursorDownAction(EditorId : session-id) is
+  MoveCursor(EditorId, down)
+
+process MoveCursor(Sid: session-id, Direction: term) is
+let
+  Registered: bool
+in
+  IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true) then
+    snd-msg(se-move-cursor(Sid, Direction))
+    . SynchronizeFocus(Sid)
+  else
+    tau
+  fi
+endlet
+
+/**
+ * This process is the default function to call when you
+ * want to start an editor for a location. It uses the
+ * configuration manager to find out if for certain files
+ * (based on the extension) a specialized editor process
+ * has been registered. If not it starts an editor without
+ * parsing/structure editing capabilities. If an editor
+ * is already open for that file, it will not create a
+ * new editor.
+ */
+process EditLocation(Location: term) is
+let
+  Extension: str,
+  EditorAction: str,
+  Filename: str,
+  Path: str,
+  Prefix: str,
+  Sid: session-id,
+  Area: area
+in
+  snd-msg(get-location-filename(Location))
+  . rec-msg(location-filename(Path?))
+  . snd-msg(has-location-area(Location))
+  . 
+  (
+    rec-msg(location-has-area(Location))
+    . snd-msg(get-location-area(Location))
+    . rec-msg(location-area(Area?))
+  +
+    rec-msg(location-has-no-area(Location))
+    . Area := quote(area(0,0,0,0,0,0))
+  )
+  . snd-msg(em-get-session-by-path(Path))
+  .
+  (
+    rec-msg(em-session(Path, Sid?))
+    . snd-msg(te-editor-to-front(Sid))
+    . snd-msg(te-set-selection(Sid, Area))
+    . GoToEditorArea(Sid, Area)
+  +
+    rec-msg(em-no-such-session(Path))
+    . SplitFilename(Path, Filename?, Prefix?, Extension?)
+    . snd-msg(cm-get-extension-editor(Extension))
+    .
+    (
+      rec-msg(cm-extension-editor(Extension, EditorAction?))
+      . 
+      (
+        EditAnonymousLocation(Path, Area)
+        +>
+        EditorAction(Path, Area)
+      )
+    +
+      rec-msg(cm-no-extension-editor(Extension))
+      . EditAnonymousLocation(Path, Area)
+    )
+  )
+endlet
+
+process ShowOriginAction(EditorId : session-id) is
+let
+  Origin: term
+in
+  GetFocusOrigin(EditorId, Origin?)
+  . 
+  if equal(Origin, no-origin) then
+    DisplayMessage(EditorId, "No origin information available")
+  else
+    ShowAreaAction("Origin", Origin)
+  fi
+endlet
+    
+process ShowAreaAction(Message : str, Location : term) is
+  EditLocation(Location)
+
+process ShowFeedbackLocation(Location : term) is
+  EditLocation(Location)
+
+process ShowSubjectHandler(Subject: term) is
+let
+  Pid: int,
+  Sid: session-id
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(session(Pid, Sid?))
+    . ShowSubject(Sid, Subject)
+  +
+    rec-msg(no-such-session(Pid))
+  )
+endlet
+
+process ShowErrorHandler(Location: term) is
+let
+  Pid: int,
+  Sid: session-id
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(session(Pid, Sid?))
+    . ShowLocation(Sid, Location)
+  +
+    rec-msg(no-such-session(Pid))
+  )
+endlet
+
+process CleanupEditTerm(Sid: session-id) is
+  TODO("Dit werkt dus niet!\n")
+
+process GetFocusOrigin(EditorId : session-id, Origin: term?) is
+let
+  Cursor : term
+in
+  snd-msg(se-get-cursor(EditorId))
+  . rec-msg(se-cursor(EditorId, Cursor?))
+  . snd-msg(pa-get-origin(Cursor))
+  .
+  (
+    rec-msg(pa-origin(Origin?))
+  +
+    rec-msg(pa-no-origin)
+    . Origin := no-origin
+  )
+endlet
+
+process EditorPopup(Sid : session-id, EditorType: term, FocusSort: term) is
+let
+  MenuList : list
+in
+  snd-msg(cm-get-events(EditorType, FocusSort))
+  . rec-msg(cm-events(MenuList?))
+  . snd-msg(te-show-popup(Sid, MenuList)) 
+endlet
+
+#endif /* __EDITING__ */

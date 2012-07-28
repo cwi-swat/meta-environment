@@ -1,0 +1,79 @@
+#ifndef __EDITOR_ERROR_DISPLAY__
+#define __EDITOR_ERROR_DISPLAY__
+
+#include <error-support.idef>
+
+process GoToEditorArea(Sid: session-id, Area: area) is
+let
+  Offset: int
+in
+  snd-msg(get-area-offset(Area))
+  . rec-msg(area-offset(Offset?))
+  . snd-msg(te-set-cursor-at-offset(Sid, Offset))
+  . snd-msg(te-set-selection(Sid, Area))
+endlet
+
+process ShowDescription(Sid: session-id, Description: str) is
+  snd-msg(te-display-message(Sid, Description))
+
+process ShowLocation(Sid: session-id, Location: term) is
+let
+  Area: area
+in
+  snd-msg(has-location-area(Location))
+  .
+  (
+    rec-msg(location-has-area(Location))
+    . snd-msg(get-location-area(Location))
+    . rec-msg(location-area(Area?))
+    . GoToEditorArea(Sid, Area)
+  +
+    rec-msg(location-has-no-area(Location))
+    . tau
+  )
+endlet
+
+process ShowSubject(Sid: session-id, Subject: term) is
+let
+  Location: term,
+  Description: str
+in
+  snd-msg(has-subject-location(Subject))
+  .
+  (
+    rec-msg(subject-has-location(Subject))
+    . snd-msg(get-subject-location(Subject))
+    . rec-msg(subject-location(Location?))
+    . snd-msg(get-subject-description(Subject))
+    . rec-msg(subject-description(Description?))
+    . ShowLocation(Sid, Location)
+    . ShowDescription(Sid, Description)
+  +
+    rec-msg(subject-has-no-location(Subject))
+    . tau
+  )
+endlet
+
+process ShowError(Sid: session-id, Error: term) is
+let
+  Subject: term,
+  Subjects: list
+in
+  snd-msg(get-error-subjects(Error))
+  . rec-msg(error-subjects(Subjects?))
+  . Subject := first(Subjects)
+  . ShowSubject(Sid, Subject)
+endlet
+
+process ShowSummary(Sid: session-id, Summary: summary) is
+let
+  Error: term,
+  Errors: list
+in
+  snd-msg(get-summary-errors(Summary))
+  . rec-msg(summary-errors(Errors?))
+  . Error := first(Errors)
+  . ShowError(Sid, Error)
+endlet
+
+#endif /* __EDITOR_ERROR_DISPLAY__ */

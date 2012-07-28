@@ -1,0 +1,7 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
+Name: meta
+Version: 2.2
+Description:
+Requires: aterm-java,config-manager,console-gui,dialog-gui,editor-manager,editor-plugin,error-gui,error-support,error-support-java,graph-gui,graph-support,graph-support-java,io-support,io-support-java,meta-studio,module-details-gui,module-manager,navigator-gui,pandora,progress-gui,pt-support,sglr,structure-editor,term-store,tide,tide-support,console-grabber,svg-gui
+ToolBusFlags=-I${prefix}/share/meta

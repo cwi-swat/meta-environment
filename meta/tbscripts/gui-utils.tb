@@ -1,0 +1,167 @@
+#ifndef __GUI_UTILS__
+#define __GUI_UTILS__
+
+#include <gui-actions.tb>
+#include <gui.idef>
+#include <console-gui.idef>
+#include <dialog.idef>
+#include <graph-painter.idef>
+#include <progress.idef>
+#include <moduledetails.idef>
+#include <error-viewer.idef>
+#include <svg-gui.idef>
+
+process AddJob(Message: str) is
+  snd-msg(gui-add-job(Message))
+
+process JobDone(Message: str) is
+  snd-msg(gui-job-done(Message))
+
+process ConsoleMessage(Message: str) is
+  snd-msg(cg-add-message(Message))
+
+process Error(Message: str) is
+  printf("error: %s\n", Message)
+
+process Warning(Message: str) is
+  printf("warning: %s\n", Message)
+
+process RemoveSummaryFor(SummaryId: str) is
+  snd-msg(ui-remove-feedback-summary("Issues", SummaryId))
+  
+process RemoveSummary(Producer: str, SummaryId: str) is
+  snd-msg(ui-remove-feedback-summary("Issues", Producer, SummaryId))
+  
+process DisplaySummary(Summary: summary) is
+  snd-msg(ui-show-feedback-summary("Issues", Summary))
+
+process RefreshSummary(Summary: summary) is
+  snd-msg(ui-refresh-feedback-summary("Issues", Summary))
+
+process HandleEvent(Type: term, Event: term) is
+let
+  Actions: list,
+  Action: str
+in
+  snd-msg(cm-get-action(Type, Event))
+  . rec-msg(cm-action(Action?))
+  .
+  (
+    printf("Warning: process not found %s\n", Action)
+  +>
+    Action()
+  )
+endlet
+
+process LocationSelected(Location: term) is
+let
+  Action: str
+in
+  snd-msg(cm-get-action(feedback-list, click))
+  . rec-msg(cm-action(Action?))
+  . 
+  (
+    printf("Warning: process not found %s\n", Action)
+  +>
+    Action(Location)
+  )
+endlet
+
+process MessageSelected(Modulename: str, Tree: term) is
+let
+  Action: str
+in
+  snd-msg(get-action(click, message-list, Modulename))
+  . rec-msg(action(click, message-list, Modulename, Action?))
+  . 
+  (
+    printf("Warning: process not found %s\n", Action)
+  +>
+    Action(Tree, Modulename)
+  )
+endlet
+
+process NodeSelected(GraphId: str, Node: term) is
+let
+  Action: str,
+  Location: term
+in
+  snd-msg(gc-get-node-origin(Node))
+  .
+  (
+    rec-msg(gc-origin(Location?))
+    . snd-msg(cm-get-action(tree-panel, click))
+    . rec-msg(cm-action(Action?))
+    .
+    (
+      printf("Warning: process not found %s\n", Action)
+    +>
+      Action("Tree Panel selection", Location)
+    )
+  +
+    rec-msg(gc-no-origin)
+  )
+endlet
+
+process UserInterfaceHandler is
+let
+  Error: term,
+  Event: term,
+  GraphId: str,
+  Modulename: str,
+  Node: term,
+  Pid: int,
+  Tree: term,
+  Type: term
+in
+  (
+    rec-msg(ui-button-selected(Type?, Event?))
+    . create(HandleEvent(Type, Event), Pid?)
+  +
+    rec-msg(ui-location-selected(Error?))
+    . create(LocationSelected(Error), Pid?)
+  +
+    rec-msg(ui-node-selected(GraphId?, Node?))
+    . create(NodeSelected(GraphId, Node), Pid?)
+  +
+    rec-msg(ui-message-selected(Modulename?, Tree?))
+    . create(MessageSelected(Modulename, Tree), Pid?)
+  +
+    rec-msg(gui-window-closing)
+    . ExitAction
+  )
+  *
+  delta
+endlet
+
+toolbus(UserInterfaceHandler)
+
+/* StatusDisplay should be removed. Errors should be handled by error-support */
+process StatusDisplay is
+let
+  Lst: list,
+  Str: str,
+  Summary: summary
+in
+  subscribe(ui-status(<term>))
+  .
+  (
+    rec-note(ui-status(error(Str?)))
+    . printf("TODO: Remove this process and use error-support or Display processes\n")
+    . printf("Error: %s", Str)
+  +
+    rec-note(ui-status(errorf(Str?, Lst?)))
+    . printf("TODO: Remove this process and use error-support or Display processes\n")
+    . printf("Error: %s [%t]\n", Str, Lst)
+  +
+    rec-note(ui-status(messagef(Str?, Lst?)))
+    . printf("TODO: Remove this process and use error-support or Display processes\n")
+    . printf("Message: %s [%t]\n", Str, Lst)
+  )
+  *
+  delta
+endlet
+
+toolbus(StatusDisplay)
+
+#endif /* __GUI_UTILS__ */

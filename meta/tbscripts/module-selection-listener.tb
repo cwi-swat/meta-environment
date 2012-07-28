@@ -1,0 +1,49 @@
+#ifndef __MODULE_SELECTION_LISTENER__
+#define __MODULE_SELECTION_LISTENER__
+
+#include <navigator.idef>
+#include <graph-painter.idef>
+#include <moduledetails.idef>
+#include <undefined.h>
+
+process SynchronizeModuleSelection(GraphId: term) is
+let
+  Event: attribute-changed-event,
+  EventModuleId: module-id,
+  ModuleId: module-id
+in
+  ModuleId := UNDEFINED
+  . subscribe(nav-module-selected(<term>))
+  . subscribe(gp-node-selected(<str>,<term>,<term>))
+  . MM-Subscribe-Attribute-Changed(<module-id>,<term>,<term>,<term>,<term>)
+  .
+  (
+    rec-note(nav-module-selected(ModuleId?))
+    . snd-msg(gp-select-node("import-graph", GraphId, ModuleId))
+    . ShowModuleDetails(ModuleId)
+  +
+    rec-note(gp-node-selected("import-graph", GraphId, ModuleId?))
+    . snd-msg(nav-select-module(ModuleId))
+    . ShowModuleDetails(ModuleId)
+  +
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, EventModuleId?)
+    . 
+    if equal(ModuleId, EventModuleId) then
+      ShowModuleDetails(ModuleId)
+    else
+      tau
+    fi
+  ) 
+  * delta
+endlet
+
+process ShowModuleDetails(ModuleId: module-id) is
+let
+  Attributes: list
+in
+  MM-GetAllAttributes(ModuleId, Attributes?)
+  . snd-msg(md-set-details(Attributes))
+endlet
+
+#endif /* __MODULE_SELECTION_LISTENER__ */

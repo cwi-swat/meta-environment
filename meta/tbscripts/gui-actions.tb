@@ -1,0 +1,123 @@
+#ifndef __GUI_ACTIONS__
+#define __GUI_ACTIONS__
+
+#include <graph-utils.tb>
+#include <module-manager.tb>
+#include <dialog.idef>
+
+process AskQuestion(Question : str, Answer : term?) is
+  snd-msg(ask-question(Question))
+  . rec-msg(ask-question-result(Answer?))
+
+process PromptForDirectory(Title : str, 
+                      Paths : list, 
+		      Cancel: bool?,
+		      Path : str?) is
+  snd-msg(ask-for-directory(Title, Paths))
+  .
+  (
+    rec-msg(ask-for-directory-result(Path?))
+    . Cancel := false
+  +
+    rec-msg(ask-for-directory-cancel)
+    . Cancel := true
+  )
+
+process PromptForFile(Title : str, 
+                      Paths : list, 
+		      Modulename : str, 
+		      Cancel: bool?,
+		      Filename : str?) is
+let
+  Extension : str
+in
+  snd-msg(cm-get-language-extension(Modulename))
+  .
+  (
+    rec-msg(cm-language-extension(Modulename, Extension?))
+  +
+    rec-msg(cm-no-language-extension(Modulename))
+    . Extension := ".trm"
+  )
+  . snd-msg(ask-for-file(Title, Paths, Extension))
+  .
+  (
+    rec-msg(ask-for-file-result(Filename?))
+    . Cancel := false
+  +
+    rec-msg(ask-for-file-cancel)
+    . Cancel := true
+  )
+endlet
+
+process PromptForFileWithExtension(String : str, 
+                                   Paths : list, 
+				   Extension : str, 
+				   Cancel: bool?,
+				   Filename : str?) is
+  snd-msg(ask-for-file(String, Paths, Extension))
+  .
+  (
+    rec-msg(ask-for-file-result(Filename?))
+    . Cancel := false
+  +
+    rec-msg(ask-for-file-cancel)
+    . Cancel := true
+  )
+
+process ExitAction is
+  shutdown("")
+
+process ShowTreeAction(EditorId : session-id) is
+let
+  Tree : term
+in
+  GetFocus(EditorId, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    ShowTree(Tree, false, false, false)
+  else
+    tau
+  fi
+endlet
+
+process ShowFullTreeWithoutLayoutAction(EditorId : session-id) is
+let
+  Tree : term
+in
+  GetFocus(EditorId, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    ShowTree(Tree, false, true, false)
+  else
+    tau
+  fi
+endlet
+
+process ShowFullTreeAction(EditorId : session-id) is
+let
+  Tree : term
+in
+  GetFocus(EditorId, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    ShowTree(Tree, true, true, false)
+  else
+    tau
+  fi
+endlet
+
+process ShowSharedTreeAction(EditorId : session-id) is
+let
+  Tree : term
+in
+  GetFocus(EditorId, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    ShowTree(Tree, true, true, true)
+  else
+    tau
+  fi
+endlet
+
+#endif /*__GUI_ACTIONS__*/

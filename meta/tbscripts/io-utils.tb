@@ -1,0 +1,97 @@
+#ifndef __IO_UTILS__
+#define __IO_UTILS__
+
+#include <in-output.idef>
+
+process RemoveFile(Path: str) is
+let
+  Summary: summary
+in
+  snd-msg(io-remove-file(Path))
+  .
+  (
+    rec-msg(io-file-removed(Path))
+  +
+    rec-msg(io-file-not-removed(Path, Summary?))
+    . DisplaySummary(Summary)
+  )
+endlet
+
+process ReadFile(Path: str, Contents: str?) is
+let
+  Summary: summary
+in
+  snd-msg(io-read-file(Path))
+  .
+  (
+    rec-msg(io-file-contents(Contents?))
+  +
+    rec-msg(io-error-reading(Summary?))
+    . Contents := ""
+  )
+endlet
+
+process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) is
+  snd-msg(io-get-filename(Directory, Filename, Extension))
+  . rec-msg(io-filename(Path?))
+
+process ReplaceExtension(SrcPath: str, NewExtension: str, DstPath: str?) is
+let
+  Directory: str,
+  OldExtension: str,
+  Filename: str
+in
+  SplitFilename(SrcPath, Filename?, Directory?, OldExtension?)
+  . BuildPath(Directory, Filename, NewExtension, DstPath?)
+endlet
+
+process DealWithMultipleOccurrences(Chosen: str, Name: str, Extension: str,
+                                    Peers: list) is
+let
+  Directories: list,
+  Directory: str,
+  FileName: str,
+  PeerName: str
+in
+  Directories := Peers
+  .
+  if not-equal(Directories, []) then
+    Directory := first(Directories)
+    . Directories := next(Directories)
+    . BuildPath(Directory, Name, Extension, FileName?)
+    . BuildPath(Chosen, Name, Extension, PeerName?)
+    . snd-msg(io-compare-files(PeerName, FileName))
+    .
+    (
+      rec-msg(io-files-equal)
+    +
+      rec-msg(io-files-differ)
+      . snd-note(ui-status(messagef("Multiple occurrences of %s. Continuing with %s",
+                                    [Name, PeerName])))
+    )
+  fi
+  *
+  if equal(Directories, []) then
+    tau
+  fi
+endlet
+
+process SplitFilename(Path : str, 
+                      FileName : str?,
+		      Directory : str?, 
+		      Extension : str?) is
+  snd-msg(io-get-path-filename(Path))
+  . rec-msg(io-filename(Path, FileName?))
+  . snd-msg(io-get-path-directory(Path))
+  . rec-msg(io-directory(Path, Directory?))
+  . snd-msg(io-get-path-extension(Path))
+  . rec-msg(io-extension(Path, Extension?))
+
+process UnPackTree(Tree : term, UnpackedTree : term?) is
+  snd-msg(io-unpack-term(Tree))
+  . rec-msg(io-term(UnpackedTree?))
+
+process PackTree(Tree : term, PackedTree : term?) is
+  snd-msg(io-pack-term(Tree))
+  . rec-msg(io-term(PackedTree?))
+#endif

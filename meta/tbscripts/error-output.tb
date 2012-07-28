@@ -1,0 +1,28 @@
+#ifndef __ERROR_OUTPUT__
+#define __ERROR_OUTPUT__
+
+#include <error-support.idef>
+
+/* This is for commandline error output only */
+process AddJob(Message: str) is
+  tau
+
+process JobDone(Message: str) is
+  tau
+
+process ConsoleMessage(Message: str) is
+  printf("%s\n", Message)
+
+process Error(Message: str) is
+  printf("error: %s\n", Message)
+
+process Warning(Message: str) is
+  printf("warning: %s\n", Message)
+
+process DisplaySummary(Summary: summary) is
+  snd-msg(display-feedback(Summary))
+
+process RemoveSummary(Producer: str, SummaryId: str) is
+  tau
+
+#endif /* __ERROR_OUTPUT__ */

@@ -1,0 +1,84 @@
+#ifndef __SERIALIZATION_UTILS__
+#define __SERIALIZATION_UTILS__
+
+#include <module-manager.tb>
+
+process InitializeTermStore(Name: str) is
+  if not-equal(Name, "") then
+    snd-msg(register-termstore-name(Name))
+    . rec-msg(termstore-name-registered)
+    . TermStoreActivation
+  else
+    tau
+  fi
+
+process TermStoreActivation is
+let
+  Checking: bool,
+  TermStoreContents: term,
+  Summary: summary,
+  ModuleNames: list,
+  ModuleName: str,
+  Name: str,
+  Id: int,
+  Pairs: list
+in
+  Id := process-id
+  . snd-note(ui-status(start(Id, "Load TermStore")))
+  . snd-msg(get-termstore-name)
+  . rec-msg(termstore-name(Name?))
+  . snd-msg(io-exists-file(Name))
+  .
+  (
+    rec-msg(io-file-exists)
+    . snd-note(ui-status(stat(Id, "Retrieving saved term-store")))
+    . snd-msg(io-read-term(Name))
+    .
+    (
+      rec-msg(io-term(TermStoreContents?))
+      . snd-msg(ts-load-snapshot(TermStoreContents))
+      . rec-msg(ts-snapshot-loaded)
+      . snd-msg(get-all-module-names)
+      . rec-msg(all-module-names(ModuleNames))
+      . snd-note(ui-status(stat(Id,
+                                "Checking consistency of term-store content")))
+      .
+      if not-equal(ModuleNames, []) then
+        ModuleName := first(ModuleNames)
+        . ModuleNames := next(ModuleNames)
+        . CheckModuleConsistency(ModuleName)
+      fi
+      *
+      if equal(ModuleNames, []) then
+        tau
+      fi
+    +
+      rec-msg(io-error-reading(Summary?))
+      . printf("TODO: fix this error %t\n", Summary)
+    )
+    . snd-note(ui-status(endstat(Id)))
+  +
+    rec-msg(io-file-not-exists)
+    . snd-note(ui-status(errorf("Termstore %s does not exist!", [Name])))
+  )
+  . snd-note(ui-status(stop(Id)))
+endlet
+
+process TermStoreName is
+let
+  TermStoreName: str
+in
+  TermStoreName := "meta.termstore"
+  .
+  (
+    rec-msg(register-termstore-name(TermStoreName?))
+    . snd-msg(termstore-name-registered)
+  +
+    rec-msg(get-termstore-name)
+    . snd-msg(termstore-name(TermStoreName))
+  )
+  *
+  delta
+endlet
+
+#endif /* __SERIALIZATION_UTILS__ */

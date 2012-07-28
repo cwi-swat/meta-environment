@@ -1,0 +1,29 @@
+#ifndef __PRETTY_PRINT_UTILS__
+#define __PRETTY_PRINT_UTILS__
+
+#include <pandora.idef>
+
+process PrettyPrint(Path : str,
+		    Tree : term, 
+		    Result : term?) is
+let
+  Id : int,
+  Feedback: summary
+in
+  Id := process-id
+  . AddJob("Generic pretty printing")
+  . RemoveSummary("pandora", "all")
+  . snd-msg(pretty-print(Tree))
+  .
+  (
+    rec-msg(pretty-print-result(Result?))
+    . AnnotateTree(Result, Path, Result?)
+  +
+    rec-msg(pretty-print-error(Feedback?))
+    . DisplaySummary(Feedback)
+    . Result := UNDEFINED
+  )
+  . JobDone("Generic pretty printing")
+endlet
+
+#endif /* __PRETTY_PRINT_UTILS__ */

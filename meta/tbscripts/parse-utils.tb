@@ -1,0 +1,160 @@
+#ifndef __PARSE_FOCUSES__
+#define __PARSE_FOCUSES__
+
+#include <sglr.idef>
+#include <unparser.idef>
+#include <position-annotator.idef>
+#include <error-support.idef>
+#include <restorebrackets.idef>
+#include <ambiguity-reporter.idef>
+
+process AnnotateTree(Tree: term, File: str, AnnotatedTree: term?) is
+  AddJob("Adding position information")
+  . snd-msg(add-posinfo-packed(File, Tree))
+  . rec-msg(tree-with-pos-info(AnnotatedTree?))
+  . JobDone("Adding position information")
+
+process ReportAmbs(Tree: term, File: str, Summary: summary?) is
+  AddJob("Computing ambiguity report")
+  . snd-msg(ar-report-ambiguities(Tree, File))
+  . rec-msg(ar-ambiguity-report(Summary?, File))
+  . JobDone("Computing ambiguity report")
+
+process HasTextChanged(Sid: session-id, TextChanged: bool?) is
+  snd-msg(te-is-modified(Sid))
+  . rec-msg(te-is-modified(Sid, TextChanged?))
+
+process AddFilenameToParseError(Error: term, Filename: str, Result: term?) is
+  snd-msg(es-add-filename-in-error(Filename, Error))
+  . rec-msg(es-filename-in-error(Filename, Result?))
+
+process ParseText(Pid: int, Text: str, Table: term, Nonterminal: term, Heuristics: term) is
+let
+  ErrorSummary: term,
+  ParseResult: term
+in
+  snd-msg(sglr-parse(Text, Table, Nonterminal, Heuristics))
+  . AddJob("Parsing")
+  .
+  (
+    rec-msg(sglr-parse-tree(ParseResult?, ErrorSummary?))
+    . snd-msg(sglr-parse-tree(Pid, ParseResult, ErrorSummary))
+  +
+    rec-msg(sglr-parse-error(ErrorSummary?))
+    . snd-msg(sglr-parse-error(Pid, ErrorSummary))
+  )
+  . JobDone("Parsing")
+endlet
+
+process AmbiguityHandler(ParseResult: term, Path: str) is
+let
+  Summary : summary
+in
+    RemoveAmbiguitySummary(Path)
+    . ReportAmbs(ParseResult, Path, Summary?)
+    . DisplaySummary(Summary)
+endlet
+
+process RemoveAmbiguitySummary(Path: str) is
+  RemoveSummary("ambtracker", Path)
+
+process ParseTreeHandler(ModuleId: module-id, Path: str) is
+let
+  ParseSummary: term,
+  ParseResult: term,
+  Pid: int,
+  Summary: summary,
+  P : int
+in
+  Pid := process-id
+  . RemoveSummary("parser", Path)
+  .
+  (
+    (
+      rec-msg(sglr-parse-tree(Pid, ParseResult?, ParseSummary?))
+      .
+      if not-equal(ParseSummary, UNDEFINED) then
+        snd-msg(es-set-summary-id(ParseSummary, Path))
+        . rec-msg(es-summary(Summary?))
+        . AddFilenameToSummary(Summary, Path, Summary?)
+        . DisplaySummary(Summary)
+      else
+        tau
+      fi
+    )
+    . snd-msg(parse-handler-done(Pid, ModuleId, ParseResult))
+  +
+    rec-msg(sglr-parse-error(Pid, ParseSummary?))
+    . snd-msg(es-set-summary-id(ParseSummary, Path))
+    . rec-msg(es-summary(Summary?))
+    . AddFilenameToSummary(Summary, Path, Summary?)
+    . DisplaySummary(Summary)
+    . snd-msg(parse-handler-done(Pid))
+  )
+endlet
+
+process UnParseTerm(Tree: term, Text: str?) is
+  snd-msg(unparse(Tree))
+  . rec-msg(unparsed-text(Text?))
+
+process AddFilenameToSummary(ParseSummary: summary, Path: str, Summary: summary?) is
+let
+  Error: term,
+  Errors: list,
+  Id: str,
+  NewErrors: list,
+  Producer: str
+in
+  snd-msg(get-summary-errors(ParseSummary))
+  . rec-msg(summary-errors(Errors?))
+  . NewErrors := []
+  .
+  if not-equal(Errors, []) then
+    Error := first(Errors)
+    . Errors := next(Errors)
+    . snd-msg(es-add-filename-in-error(Path, Error))
+    . rec-msg(es-filename-in-error(Path, Error?))
+    . NewErrors := join(NewErrors, [Error])
+  fi
+  *
+  if equal(Errors, []) then
+    snd-msg(get-feedback-producer(ParseSummary))
+    . rec-msg(producer(Producer?))
+    . snd-msg(get-feedback-identification(ParseSummary))
+    . rec-msg(identification(Id?))
+    . snd-msg(es-make-summary(Producer, Id, NewErrors))
+    . rec-msg(es-summary(Summary?))
+  fi
+endlet
+
+process RestoreTermBrackets(ModuleId: module-id, Tree: term, Result: term?) is
+let
+  Table: term
+in
+  GetParseTable(ModuleId, trm, Table?)
+  . 
+  if not-equal(Table, UNDEFINED) then
+    snd-msg(restore-brackets(Tree, Table))
+    . rec-msg(brackets-restored(Result?))
+  else
+    Result := UNDEFINED
+  fi
+endlet
+
+process AddTermBrackets(ModuleId: module-id, Tree: term, Result: term?) is
+let
+  Table: term
+in
+  GetParseTable(ModuleId, trm, Table?)
+  . 
+  if not-equal(Table, UNDEFINED) then
+    snd-msg(add-brackets(Tree, Table))
+    . rec-msg(brackets-added(Result?))
+  else
+    Result := UNDEFINED
+  fi
+endlet
+
+
+
+#endif /*__PARSE_FOCUSES__*/

@@ -1,0 +1,12 @@
+#ifndef __ASSERT__
+#define __ASSERT__
+
+process AssertEqual(Term1: term, Term2: term) is
+  if not-equal(Term1, Term2) then
+    printf("Assertion failed: \nTerm1: [%t]\nTerm2: [%t]\n", Term1, Term2)
+    . shutdown("")
+  else
+    tau
+  fi
+
+#endif /*__ASSERT__*/

@@ -1,0 +1,46 @@
+#ifndef __CACHE_UTILS__
+#define __CACHE_UTILS__
+
+#include <term-store.idef>
+
+/* sort of generic caching processes */
+process ClearCacheHandler(TableName: str, 
+                          Namespace: term, 
+                          AttributeName: term, 
+                          OldValue: term,
+                          NewValue: term) is
+let
+  AttributeEvent: attribute-changed-event,
+  ModuleId: module-id,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<module-id>,Namespace,AttributeName,OldValue,NewValue)
+  .
+  (
+    rec-note(mm-attribute-changed(AttributeEvent?))
+    . ACE-GetModuleId(AttributeEvent, ModuleId?)
+    . snd-msg(ts-remove-value(TableName, ModuleId))
+  )
+  * delta
+endlet
+
+process InitCache(TableName: str) is
+  snd-msg(ts-add-table(TableName, "term"))
+
+process GetCachedValue(TableName: str, Key: term, Value: term?) is
+  snd-msg(ts-get-term-value(TableName, Key))
+  .
+  (
+    rec-msg(ts-value(TableName, Key, Value?)) 
+  +
+    rec-msg(ts-no-value(TableName, Key))
+    . Value := UNDEFINED
+  )
+
+process PutCachedValue(TableName: str, Key: term, Value: term) is
+  snd-msg(ts-put-term-value(TableName, Key, Value))
+
+process ClearCachedValue(TableName: str, Key: term) is
+  snd-msg(ts-remove-value(TableName, Key))
+
+#endif /* __CACHE_UTILS__ */

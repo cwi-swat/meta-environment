@@ -1,0 +1,3066 @@
+Tue Apr 29 14:38:32 2008    <bruntink@cwi.nl>
+
+	* meta.pc.in: Added dependency to error-support-java.
+	* meta.pc.in: Added dependency to graph-support-java.
+	* meta.pc.in: Added dependency to io-support-java.
+
+Wed Dec 5 9:24:45 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/gui-utils.tb: 
+   - Start StatusDisplay process to be able to show errors on console. This 
+     process should be substituted by proper error handling.
+   - Already removed unused notes
+
+Tue Sep 18 10:30:11 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/parsetable-utils.tb: Add namespace parameterized DumpParseTable 
+   function 
+
+Thu Aug 23 11:23:04 CEST 2007 <{kooiker,jurgenv,lankamp}@cwi.nl>
+ * tbscripts/editing.tb: processing of menu events is done asynchronously
+   from now on, such that an editor can do other stuff after it has initiated
+   something.
+
+Tue Aug 14 08:57:24 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/error-utils.tb: Add ReplaceSummaryInfo process that replaces the
+   producer and id by the given producer and id.
+
+Wed Jul 11 14:27:37 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/editing.tb: Process Edit returns UNDEFINED for Sid when term
+   is too big (> 1 Mb) (closes #763)
+
+Wed Jun  6 11:55:49 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/editing.tb: Add ShowLocation after selection has been set lets
+   the cursor jump to the selection
+
+Tue Jun  5 11:00:53 CEST 2007 <{kooiker,lankamp}@cwi.nl>
+ * tbscripts/module-manager.tb: Catch no-such-module when getting all
+   attributes for module
+
+Wed May  9 08:39:03 CEST 2007 <jurgenv@cwi.nl>
+ * tbscript/editing.tb: some radical changes in the editing interface.
+   Starting up editors from an anonymous location is now supported via
+   the EditLocation(Location: term) process. This process uses the
+   configuration manager to ask for a specific edit process for this
+   extension. For example, for ".sdf" files a process may be registered
+   called "StartSDFEditor(Path,Area)". This process is required to 
+   spawn/create an editor. If no registered editor exists, for now an
+   editor without parsing or structured editing capabilities is started.
+
+Wed Mar 21 11:06:42 CET 2007 <jurgenv@cwi.nl>
+ * tbscript/parse-utils.tb: reactivated support for parsing with
+   heuristic disambiguation filters. Otherwise all specifications break.
+
+Mon Mar 19 10:50:36 CET 2007 <{economop,kooiker}@cwi.nl>
+ * tbscripts/parse-utils.tb:
+   - Removed unused process ParseErrorToSummary
+   - Add process that adds the filename to the errorlist of a summary
+
+Wed Mar 14 15:51:36 CET 2007 <{economop,kooiker}@cwi.nl>
+ * Merged sglr-reject-postparse branch into trunk.
+
+Wed Mar 14 15:47:27 CET 2007 <{economop,kooiker}@cwi.nl>
+ * Merged r21161-21910 via svnmerge from trunk.
+
+Sun Mar 11 17:52:23 CET 2007 <jurgenv@cwi.nl>
+ * meta.pc.in: added dependency on svg-gui package
+
+Mon Feb 26 20:39:27 CET 2007 <jurgenv@cwi.nl>
+ * tbscripts/*.tb: changed more complicated error handling to simple
+   printf("error: ...\n"), and printf("warning: ...") coding convention.
+
+Fri Feb 23 10:39:08 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/gui-utils.tb:
+   - Send errors to console window
+
+Wed Feb 21 10:49:23 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * tbscripts/transaction-management.tb:
+   - Changed to allow multiple transactions
+
+Fri Feb  9 11:42:36 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/module-selection-listener.tb:
+   - parameterized SynchronizeModuleSelection with GraphId
+
+Thu Feb  8 15:27:25 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/text-utils.tb:
+   - Generic text repository that stores text by path
+ * tbscripts/editing.tb:
+   - ReplaceFocus does not write text file anymore, but instead sets the 
+     contents of the editor directly
+   - Update text repository before editor action is executed
+
+Tue Jan 30 13:39:53 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Refactored editText 
+
+Mon Jan 22 15:16:15 CET 2007 <economop@cwi.nl>
+ * tbscripts/parse-utils.tb: Added the path as an id to the summary produced by 
+   sglr so that the meta-environment can correctly remove error messages once
+   the term is corrected.
+
+Mon Jan 22 14:24:42 CET 2007 <economop@cwi.nl>
+ * Merged r20884-20974 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/meta/trunk
+
+Wed Jan 10 16:59:18 CET 2007 <economop@cwi.nl>
+ * Merged r20282,20288,20370,20459,20463,20542,20548,20563,20599-20600,20702,
+   20706,20857,20872,20883 via svnmerge from trunk.
+
+Tue Jan  9 12:53:39 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/navigator.tb:
+   - Add support for updating the navigator module-by-module
+
+Mon Jan  8 13:37:01 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/graph-utils.tb:
+   - Implemented UpdateGraphAttribute
+
+Fri Jan  5 14:30:32 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/transaction-management.tb:
+   - Add support for transactions
+ * tbscripts/module-manager.tb:
+   - Send note when new module has been created
+
+Tue Oct 31 10:14:26 CET 2006 <jurgenv@cwi.nl>
+ * tbscripts:
+   - added support for 'sub-gui's', a naming scheme of gui actions where
+     a more specialized part of a gui can have a more specialed menu.
+
+Fri Oct 20 13:27:48 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/module-manager.tb:
+   - Use new attribute update rule registrar
+
+Wed Oct  4 15:29:59 CEST 2006 <jurgenv@cwi.nl>
+ * config: removed plugin configuration tool.
+
+Mon Sep 25 10:22:46 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * tbscripts/parse-utils.tb:
+   - Ambiguity Handler not called by default
+
+Fri Sep 22 13:45:48 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/{gui-actions,graph-utils}.tb:
+   - Add layout option for ShowTree
+
+Tue Sep 19 16:00:02 CEST 2006 <economop@cwi.nl>
+ * tbscripts/gen.sh: removed test script.
+ * tbscripts/start-meta-studio.tb: removed generated file.
+
+Tue Sep 19 15:51:00 CEST 2006 <economop@cwi.nl>
+ * Merged r17747-17859 from trunk.
+
+Tue Sep 19 15:45:22 CEST 2006 <economop@cwi.nl>
+ * Some earlier revisions were not correctly merged from the branch so re-
+   initialised svnmerge:
+   Initialized merge tracking via "svnmerge" with revisions 
+   "0-17738,17860-20258" from svn+ssh://svn.cwi.nl/meta/trunk
+
+Tue Sep 19 13:57:32 CEST 2006 <economop@cwi.nl>
+ * svn merge -r 18671:20222 svn+ssh://svn.cwi.nl/meta/trunk .
+
+Wed Sep  6 14:16:02 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/module-selection-listener.tb:
+   - fixed: now also uses GraphId
+
+Fri Jul 28 11:50:54 CEST 2006 <jurgenv@cwi.nl>
+ * src: removed generation of config script (replaced by pkg-config)
+
+Tue Jun 20 13:36:47 CEST 2006 <jurgenv@cwi.nl>
+ * tbscripts/graph-utils.tb: creating an editor session for
+   each parse tree that is viewed, such that viewers with
+   unique id's can be started. Now we can view several trees
+   next to eachother.
+ * tbscripts/graph-utils.tb: removed SDF specific import graph
+   vizualization processes.
+
+Thu May 18 14:35:50 CEST 2006 <economop@cwi.nl>
+ * Committing changes missed during migration from CVS.
+
+Tue May  2 11:02:54 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/graph-utils.tb:
+   - Import Graph is non closable, others graph panels are (closes #600)
+
+Thu Apr 20 11:57:15 CEST 2006 <kooiker@cwi.nl>
+ * config/*:
+   - Add plugin configuration tool that generates a toolbusscript using an
+     ATerm repository. initialize-config.tb is generated by plugin-config.
+     Plugins can use plugin-config -add somefile.tb to add extra configuration
+     scripts
+
+Wed Apr 19 16:20:39 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/initialize-plugins.tb.src:
+   - Initalization of the config-manager using files listed in
+   ${HOME}/.metaenv
+
+Mon Apr  3 10:43:44 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/{error-output,gui-utils}.tb:
+   - Add processes for job control
+
+Fri Mar 10 15:01:47 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Removed race condition using transactions in DeleteSession
+
+Tue Mar  7 13:28:29 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/gui-actions.tb:
+   - Add PromptForDirectory process
+
+Tue Mar  7 11:15:05 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/graph-utils.tb:
+   - Add process SelectModule that selects a certain module
+
+Mon Feb 13 09:58:11 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Removed StartEditor and GetEditorType processes
+   - Fixed EditLocation process
+
+Fri Feb 10 14:13:10 CET 2006 <{economop,kooiker}@cwi.nl>
+ * Resolved conflicts in |parse-utils.tb| after cvsmerge import-from-trunk.
+
+Thu Feb  9 11:47:15 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/parse-utils.tb:
+   - Add generic ParsetreeHandler
+ * tbscripts/{gui-utils,error-output}.tb:
+   - Add extra layer to route errors to gui or commandline
+
+Mon Feb  6 18:44:41 CET 2006 <jurgenv@cwi.nl>
+ * Module manager adapted with an extra argument: ChildValue
+
+Tue Jan 31 10:02:25 CET 2006 <kooiker@cwi.nl>
+ * termstore:
+   - Moved into its own package
+ * tbscripts/*.tb:
+   - Move SDF specific scripts to sdf-meta
+ * tbscripts/io-utils.tb,package,configure.ac:
+   - Add dependency on io-support
+
+Mon Jan 30 10:48:14 CET 2006 <kooiker@cwi.nl>
+ * in-output:
+   - Moved in-output tool into its own package
+ * editors:
+   - Moved structure editor and editor manager into their own package
+ * gui:
+   - Moved all plugins into their own package
+
+Fri Jan 27 13:21:52 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Create structure editor if it does not already exists when updating the
+     tree.
+
+Tue Jan 24 14:46:55 CET 2006 <{economop,kooiker}@cwi.nl>
+ * Modified toolbus scripts to communicate with new version of SGLR.
+
+Fri Jan 13 10:12:44 CET 2006 <kooiker@cwi.nl>
+ * gui/plugin/{moduledetails,navigator}:
+   - Replaced ImportHieracy by Moduledetails plugin
+
+Thu Jan 12 16:45:30 CET 2006 <jurgenv@cwi.nl>
+ * meta/tbscripts: parsing and checking ASF files is now done
+   via listeners.
+ * meta/tbscripts: parsing ASF files is cached transparently
+ * meta/tbscripts: now more Parse buttons for ASF and SDF files
+
+Wed Jan 11 08:25:38 CET 2006 <{jurgenv,kooiker}@cwi.nl>
+ * meta/tbscripts:
+   - Split into asf and sdf particular scripts 
+ * meta/config:
+   - remove unused directory
+
+Tue Jan 10 08:44:50 CET 2006 <{jurgenv,kooiker}@cwi.nl>
+ * in-output/src/{main.c,in-output.idef}:
+   - return also prefix path when computing relative filename
+ * tbscripts/asfsdf-module-actions.tb:
+   - fix open module for modules like <prefix>/<modulename>
+
+Mon Jan  9 08:57:44 CET 2006 <jurgenv@cwi.nl>
+ * in-output/src/*: added dependency on ConfigApi. The in-output
+   tool now reads AND writes CFG_Properties when dealing with
+   searchPaths.
+
+Fri Jan  6 15:21:08 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * gui/plugin/dialog/**.java: FileDialog supports limiting the view
+   to a set of root directories. This prevents the user from opening
+   SDF modules that are outside the search path for example.
+
+Tue Jan  3 13:54:11 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Add UpdateStructure listener that updates the structure editor
+ * tbscripts/close-all.tb:
+   - fix scenario
+
+Wed Jan  4 15:27:48 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * tbscripts/*.tb: reimplemented get-parsetable.
+   - introduced reusable caching processes
+   - introcuced reusable BuildParseTable process
+   - localized caching of parsetables to relevant processes
+   - removed tables for caching parsetables from module-db
+   - added new event: child-attribute-changed-event, which fires
+     for any module that has a child that changed.
+
+Wed Dec 21 10:00:33 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/dump-parsetable.tb:
+   - receive parsetable with type
+
+Mon Dec 19 09:54:36 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/term-actions.tb:
+   - fixed missing application function in equal-trees
+ * tbscripts/process-eqs.tb:
+   - fixed hanging rec-msg
+ * tbscripts/editing.tb:
+   - add editortype as argument in TextChanged
+   - delete correct tree on text changed (syntax or equations)
+ * tbscripts/idle-state.tb:
+   - Calculates if the environment is in idle state
+
+Tue Dec 13 14:04:38 CET 2005 <kooiker@cwi.nl>
+ * termstore-actions.tb:
+   - No longer used
+ * gui-actions.tb:
+   - Remove clear history action
+ * open-modules.tb:
+   - Set relative path when file is unavailable
+   - Use GetParseTable iso snd-msg(get-parsetable)
+ * parse-actions.tb:
+   - Remove ParseSyntax since syntax is parsed when saving the syntax
+
+Mon Dec 12 11:32:04 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Handle contents saved event
+   - Check if editable attribute exists
+ * tbscripts/open-modules.tb:
+   - More generic parse listener
+ * tbscripts/get-parsetable.tb:
+   - Restructured get-parsetable scenario
+ * tbscripts/module-db.tb:
+   - Remove references to import-relations and module-path
+ * tbscripts/graph-utils.tb:
+   - Factor out UpdateWorklist
+
+Fri Dec  9 10:52:22 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/module-utils.tb:
+   - Remove use of check consistency hooks
+
+Thu Dec  1 08:36:53 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/editing.tb: pass modulename over which a term is edited to editor
+ * gui/plugins/navigator: use statusbar
+
+Mon Nov 28 08:15:45 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/status-to-progress.tb:
+   - Use new progress window
+
+Wed Nov 23 08:15:31 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/open-modules.tb:
+   - Use listener to annotate tree after parsing
+ * gui/plugins/progress:
+   - Progress plugin shows progress of a scenario 
+
+Tue Nov 22 11:10:33 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/graph-utils.tb:
+   - Add worklist counter that only draws the import graph when there is no
+     work left
+ * tbscripts/open-modules.tb:
+   - Fix bug in IsLibraryModule
+ * tbscripts/*.tb:
+   - Add #includes
+
+Mon Nov 21 16:14:38 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/*.tb:
+   - When module is a librarymodule set editor to readonly
+
+Wed Nov 16 08:33:37 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/asfsdf-module-actions.tb:
+   - Use ModuleId through scenarios
+
+Mon Nov 14 08:50:04 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/{gui-actions,graph-utils}.tb:
+   - Remove unused name argument in call to ShowTree and graphconverter
+ * gui/plugin/dialog/src/nl/cwi/sen1/gui/plugin/Dialog.java:
+   - Add filefilter to filechooser
+ * in-output/src/main.{idef,c}:
+   - Add function get-relative-filename that returns the filename relatave to
+   one of the searchpaths
+ * gui/plugin/dialog/src/nl/cwi/sen1/gui/plugin/GraphPanel.java:
+   - Set no animation as default
+
+Wed Nov  9 09:22:36 CET 2005 <jurgenv@cwi.nl>
+ * Added possibility for exporting pictures from the graph viewer.
+ * Added rendering of curved edges to graph viewer (computed by graphviz).
+
+Fri Nov  4 11:56:38 CET 2005 <kooiker@cwi.nl>
+ * tbscripts:
+   - Reduce term scenario works with ModuleIds
+
+Thu Nov  3 11:35:26 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/parse-actions.tb:
+   - Remove unused ParseString and handler
+ * tbscripts/term-editor-actions.tb:
+   - Inline ActionEditTerm process
+   - Use moduleId
+
+Wed Nov  2 10:06:18 CET 2005 <kooiker@cwi.nl>
+ * in-output/src/main.c:
+   - get-path-filename returns the true filename without prefixes
+ * tbscripts/open-modules.tb:
+   - add Tree setters and getters for equations
+   - ReplaceExtension simplified
+ * tbscripts/asf-editor-actions.tb:
+   - Use SetModulePath for setting the path, which also casts the string path
+     to a term path
+ * tbscripts/editing.tb:
+   - remove process GetEquationsTree, use getter in stead
+ * tbscripts/term-actions.tb:
+   - SplitFileName does not use search paths anymore
+ * tbscripts/get-parsetable.tb,process-eqs.tb:
+   - Remove Checking parameter: a listener pattern has yet to be introduced
+
+Tue Nov  1 11:50:01 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/module-utils.tb
+   - Removed computation of recursive closing of modules
+ * tbscripts/module-manager.tb
+   - Add interface process to get-closable-modules
+
+Mon Oct 31 15:18:33 CET 2005 <kooiker@cwi.nl>
+ * tbscripts:
+   - Close a single module works again
+
+Wed Oct 26 10:00:55 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/parse-actions.tb:
+   - Change the deletion of the dependencies before parsing to setting the
+     status attribute of the module to unknown
+ * gui/plugins/navigator/src:
+   - Show ModuleId in navigator tree when label has not been set yet
+
+Tue Oct 25 13:22:25 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/scenarios:
+   - Add NonExistingImport scenario
+ * tbscipts:
+   - Edit syntax of nonexisting module results in creating this module
+ * gui/plugins/navigator/src:
+   - Return ModuleId on mouseclick
+   - Display label iso moduleid
+
+Tue Oct 11 15:19:09 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/scenarios:
+   - Test directory for common scenarios
+
+Tue Oct 11 11:17:51 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts:
+   - Add dependencies-changed-event api
+
+Tue Oct  4 11:09:56 CEST 2005 <markvdb@cwi.nl>
+ * in-output/src
+   - get-filename uses the search directories.
+ * tbscripts
+   - search directories obtained and passed on to IO.
+ * tbscripts
+   - improved the editing of syntaxes. It is not yet
+     finished.
+
+Thu Sep 22 16:36:29 CEST 2005 <kooiker@cwi.nl>
+ * Use moduleId of type term
+ * tbscripts/start-meta-studio.tb.src:
+   - remove reference to removed sdf-import-graph.idef
+
+Mon Sep 19 12:45:14 CEST 2005 <{kooiker,markvdb}@cwi.nl>
+ * tbscripts:
+   - Use term type for moduleId
+   - Split asfsdf-editor-actions into asf and sdf actions
+
+Tue Sep 13 14:37:57 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts:
+   - Introduced producer/consumer observer pattern
+   - Add manual written api for attribute-changed-event as an example for a
+     future toolbusscript api generator
+   - attribute-changed-event includes unittests
+   - Add assert library for unit tests
+
+Wed Sep  7 11:46:54 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/start-meta-studio.tb.src:
+   - Use same scenario entrypoint for opening a module via the menu and via a
+     commandline argument. 
+ * tbscripts/open-modules.tb:
+   - Use set-module-syntax-text-hook for sdf, too
+
+Tue Sep  6 09:43:03 CEST 2005 <kooiker@cwi.nl>
+ * configure.ac:
+   - Add error-gui to EXTERNAL_JARS
+
+Wed Aug 31 15:35:48 CEST 2005 <{markvdb,kooiker}@cwi.nl>
+ * module-manager.tb: Add interface to module-manager
+
+Fri Aug 26 11:21:42 CEST 2005 <kooiker@cwi.nl>
+ * Factored out module-manager to module-manager package
+
+Tue Aug 23 13:46:23 CEST 2005 <kooiker@cwi.nl>
+ * configuration-manager:
+   - Moved to package config-manager
+ * {meta,module-actions}.tb:
+   - include config-manager/*.tb
+
+Mon Aug 22 14:23:40 CEST 2005 <kooiker@cwi.nl>
+ * gui/plugin/dialog/dialog.idef:
+   - sets Cancel flag true if dialog has been canceled
+
+Mon Aug 22 10:29:10 CEST 2005 <kooiker@cwi.nl>
+ * configure.ac: Removed strange dependency on asf-library package.
+
+Fri Aug 19 09:21:08 CEST 2005 <kooiker@cwi.nl>
+ * Merge editor-plugin branch:
+   - Vi and Emacs support has been removed. In stead we use our own -
+     Java-based - integrated editor.
+
+Tue Aug  9 10:50:16 CEST 2005 <{jurgenv,kooiker,jong}@cwi.nl>
+ * Updated the StudioPlugins to the new interface that deals
+   better with closing.
+
+Fri Aug  5 11:59:01 CEST 2005 <jurgenv@cwi.nl>
+ * Prevented meta gui plugins to be closed, because they can not
+   be retrieved after they have been closed (unlike an editor).
+ * Gave parse errors an identity by using the Sid to find the Path.
+   Now parse errors dissappear when solved, and when the editor
+   is closed.
+ * Replaced gui/lib/prefuse.jar with the latest checkout of prefuse,
+   since the older version started a Thread that could never be stopped.
+
+Thu Aug  4 13:55:48 CEST 2005 <jurgenv@cwi.nl>
+ * tbscripts/button-actions.tb: moved all process from this file
+   to topical files to facilitate debugging, and as another step
+   in the separation-of-concerns-crusade.
+
+Wed Aug  3 13:12:54 CEST 2005 <kooiker@cwi.nl>
+ * Merged predefined-gui-layout branch
+ * Import from trunk
+
+Thu Jun 23 18:30:21 CEST 2005 <jurgenv@cwi.nl>
+ * gui/**/graph-painter/**/GraphColoring.java: fixed a bug in the
+   selected module visualization.
+
+Fri Jun 17 09:06:19 CEST 2005 <jurgenv@cwi.nl>
+ * tbscripts/editing.tb: brought action handler of editors up-to-date
+   with dynamic calls design.
+
+Thu Jun 16 15:08:02 CEST 2005 <jurgenv@cwi.nl>
+ * Synchronized editor-plugin branch with trunk.
+
+Wed Jun 15 16:01:04 CEST 2005 <kooiker@cwi.nl>
+ * editors/structure/structure-editor.c:
+   - Set focus by line-column
+
+Tue Jun 14 10:29:42 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
+ * Merged the dynamic buttons branch with the trunk. 
+
+Thu Jun  2 15:28:13 CEST 2005 <kooiker@cwi.nl>
+ * editors/structure/structure-editor.c:
+   - Remove ATBpack when sending slices to the toolbus, the Java editor can't
+     handle packed terms
+ * *.java:
+   - Use StudioComponentImpl iso StudioComponentAdapter
+ * tbscripts/editing.tb:
+   - EditText only asks for module events, because these consists of both
+     events for the given type as well as the events for the given module
+
+Fri May 27 11:52:17 CEST 2005 <kooiker@cwi.nl>
+ * configure.ac: 
+   - Remove libltdl dependency
+   - Add RANLIB
+ * editors:
+   - Remove text editors, because these are replaced by editor-plugin
+
+Wed May 25 14:19:37 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - OpenModuleAction: checks on empty Path
+   - removed argument Modulename from GetTree and GetRoot, fixed calling
+     actions that needed Modulename themselves
+   - GetTree does a GetActiveModule to get the Modulename
+
+Wed May 25 14:58:02 CEST 2005 <kooiker@cwi.nl>
+ * gui:
+   - Solved Eclipse warnings: removed unneeded else, unused arguments
+
+Tue May 24 15:34:21 CEST 2005 <markvdb@cwi.nl>
+ * Created a branch for experiment with button-actions based on
+   dynamic TB calls.
+   
+Mon May 23 16:37:53 CEST 2005 <jurgenv@cwi.nl>
+ * Prefuse now replaces our own drawing routines, and adds some other
+   layouts next to the old graphviz layout
+
+Thu May 12 08:50:58 CEST 2005 <jurgenv@cwi.nl>
+ * Prefuse-experiment: started experimenting with Prefuse 
+   to replace graphviz.
+     * Local copy of graph-support API no longer needed
+     * Rendering of graphs done by prefuse
+     * Added choice of layouts
+
+Tue May 10 08:57:55 CEST 2005 <{jong,kooiker}@cwi.nl>
+ * gui/plugin/dialog:
+   - Add error dialog
+   - Close progressdialog when error occurs
+   - Default file dialogs to working directory (was home folder)
+   - File dialogs remember directory of last selected file
+
+Mon May  9 14:23:00 CEST 2005 <kooiker@cwi.nl>
+ * gui/plugin/dialog:
+   - Add progress dialog
+   - Add question dialog
+
+Wed May  4 11:13:57 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - ActionShowArea builds a subject and calls the ShowSubjectHandler
+ * tbscripts/feedback.tb:
+   - ShowSubject calls ShowLocation without description and calls
+   ShowDescription
+
+Tue May  3 13:25:06 CEST 2005 <jong@cwi.nl>
+ * editors/text/swing:
+   - deactivated because it didn't configure. Further work should
+     be on a separate branch ?
+ * gui/plugin:
+   - unnecessary 'final' removed
+
+Wed Apr 27 10:35:19 CEST 2005 <kooiker@cwi.nl>
+ * Create JDK 1.4 compatible jars
+ * configure.ac,gui/Makefile.am:
+   - Remove subdir lib
+   - Remove subdir gui/script
+ * tbscripts/start-meta-studio.tb.src:
+   - Add classpath to loadjar
+
+Thu Apr  7 11:41:12 CEST 2005 <kooiker@cwi.nl>
+ * src/Makefile.am:
+   - Readded missing sed action for __EXTERNAL_JARS__
+ * configure.ac:
+   - Added jlfgr-1_0.jar to $EXTERNAL_JARS containing the Java look and feel
+     Graphics Repository
+ * meta-studio/metastudio/components/toolbar/ToolBar.java:
+   - Changed ImageIcon path
+ * configuration-manager/src/meta-kernel.properties:
+   - Use Java look and feel Graphics Repository
+
+Wed Apr  6 14:54:18 CEST 2005 <{jong,kooiker}@cwi.nl>
+ * tbscripts:
+   - Update scripts to generate unique errors for each scenario
+   - Untangle ui internals in parsesyntax scenario
+
+Thu Mar 24 11:25:35 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - When the modulename for a termfile cannot be determined by its extension
+     we now check if the termfile is already being edited, so we can get the
+     modulename by its path (closes #456). 
+   - Refactor -> Extract to process of GetModuleByPath
+ * tbscripts/button-actions.tb:
+   - Guard open module en close module use cases to prevent updating graph
+     panel (closes #432)
+ * tbscripts/{graph-utils,open-modules}.tb:
+   - More generic name for start-open-modules-batch: start-modules-batch
+
+Wed Mar 23 14:01:41 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - Guarded get-subject-location with has-subject-location in
+   ActionShowFeedbackLocation
+
+Wed Mar 23 10:54:30 CET 2005 <jong@cwi.nl>
+ * configuration-manager/src/meta-kernel.properties
+   - fix rgb value out of range in text category "Comment"
+
+Tue Mar 22 10:36:11 CET 2005 <jong@cwi.nl>
+ * meta-studio/META-INF/default.properties
+   - reset colour of graphpane to white (asf-sdf-meta now sets the version
+   number in the title, so we don't need 1 colour per version we have, but
+   can have a "normal" colour again)
+ * meta-studio/metastudio/MetaStudio.java
+   - removed call to setTitle, as title gets set later on via TB script
+
+Tue Mar  1 14:07:44 CET 2005 <jurgenv@cwi.nl>
+ * Syntax highlighting improved. There are now three levels, in increasing
+   priority:
+	* default level: categorizes sub-tree into a few classes: MetaKeyword,
+	  MetaAmbiguity, MetaVariable
+	* production level: the user can annotate a production with the
+	  category(<str>) attribute. A number of predefined categories exist
+	  for the users convenience, but new ones can be added. Currently
+	  we have: Comment, Constant, Variable, Identifier, Type, and Todo.
+	* annotation level: the user can annotate a parse tree with an
+	  annotation having the "category" label. For example using the
+	  set-term-anno builtin in ASF. For this purpose we have predefined
+	  the categories: Error, Warning, Info and Fatal (parallel to the
+	  Error data-structure). Again, the user might add his own categories
+	  by editing his meta.properties file.
+
+Thu Feb 24 10:49:43 CET 2005 <jurgenv@cwi.nl>
+ * Speed up of syntax highlighting by applying ATBpack to the slices
+   that the structure editor computes.
+
+Fri Jan 28 13:22:29 CET 2005 <kooiker@cwi.nl>
+ * action-interpreter/action-interpreter.c:
+   - process_result sets ready ATfalse if result is a failure
+ * action-interpreter:
+   - Use - as word separator according to naming convention
+ * action-interpreter/action-interprecter.c:
+   - Fix incorrect folding
+ * meta-studio/metastudio/components/errorlist/ErrorList.java:
+   - Fix exception when parent is null in scrollToLast
+ * editors/text/gvim/connector.c:
+   - Fix create selfdestructing syntax files with unique name for gvim on /tmp
+   
+Wed Jan 26 13:19:42 CET 2005 <kooiker@cwi.nl>
+ * editors/text/swing/metaedit/EditorModel.java:
+   - Removed superfluous line
+
+Wed Jan 26 11:19:30 CET 2005 <jurgenv@cwi.nl>
+ * Slice-tree adapted to deal with structured lexicals (for syntax
+   highlighting)
+ * Structure editor adapted to deal with structured lexicals
+ * button-actions.tb: added receival of term-editor-not-started messages
+   at two locations in the script.
+
+Mon Jan 10 17:58:39 CET 2005 <markvdb@cwi.nl>
+ * First version of action-interpreter in C added.
+   Modified files:
+   - tb-scripts/button-actions.tb
+   - tb-scripts/editing.tb
+   - tb-scripts/meta.tb
+   - tb-scripts/user-interface.tb
+   - configuration-manager/src/configmanager.c
+   - configuration-manager/src/meta-kernel.properties
+   - Makefile.am
+   - configure.ac
+
+Thu Jan  4 10:50:12 CET 2005 <{markvdb,kooiker}@cwi.nl>
+ * in-output/src/main.c:
+   - Readded normalizeFileName for Cygwin purposes
+   - get_path_directory returns UNIX style path
+ * editors/text/swing/metaedit/toolbus/editor-swing.idef:
+   - Added te-register-text-categories and te-highlight-slices
+
+Thu Dec  9 13:30:12 CET 2004 <kooiker@cwi.nl>
+ * meta-studio/metastudio/components/statushistory/StatusHistory.java:
+   - Added setLayout to make panel resize to its parents size 
+
+Tue Dec  7 09:57:30 CET 2004 <kooiker@cwi.nl>
+ * meta/src/generic-meta.sh.src:
+   - Removed Eclipse gui option  
+
+Tue Jan 18 10:51:10 CET 2005 <jurgenv@cwi.nl>
+ * Added a number of rec-msg(editor-not-opened...) messages to
+   button-actions.tb, to make the system more robust.
+ * Changed implementation of structure editor to cope with structured
+   lexicals.
+
+Tue Nov 30 14:39:34 CET 2004 <kooiker@cwi.nl>
+ * tbscripts/{meta,start-meta-studio}.tb:
+   - Moved GUI specific process creates from meta.tb to start-meta-studio.tb.
+     Commandline meta environment does not depend on gui related stuff
+     anymore.
+ * tbscripts/{button-actions,open-modules}.tb:
+   - Moved LocateFile process from button-actions.tb to open-module.tb in
+     which other file utilities already exist
+ * tbscripts/standalone-errorlist.tb:
+   - Handles feedback in commandline runs
+ * tbscripts/Makefile.am:
+   - Added standalone-errorlist.tb
+ * tbscripts/start-meta-eqs-dumper.tb:
+   - Add creation of StandaloneErrorList
+
+Mon Nov 29 11:38:48 CET 2004 <{jurgenv,kooiker,jong}@cwi.nl>
+ * Graph layout algorithm fixed such that arrows point in the
+   right direction.
+ * NOTA BENE: we no depend on the '-y' switch of graphviz's dot, which
+   does not appear in all released versions of graphviz (not in 1.5 for
+   example).
+
+Fri Nov 26 09:38:08 CET 2004 <jurgenv@cwi.nl>
+ * Factored out separate GraphNodeSizer tool from meta-studio.idef
+ * Factored out modulebrowser and treebrowser
+
+Thu Nov 25 10:45:32 CET 2004 <jurgenv@cwi.nl>
+ * As an example, factored out StatusBar as a separate ToolBus tool
+   from meta-studio.
+ * Also created DialogTool, ErrorList and InfoList as separate tools
+
+Fri Nov 19 17:44:53 CET 2004 <jurgenv@cwi.nl>
+ * Made tide working in 1.6 branch
+ * Added two new ugly primitive actions in buttons.tb that need to
+   be factored out.
+
+Fri Nov 12 11:42:00 CET 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts/module-db.tb:
+   - fix remove redundant module database updates 
+
+Fri Nov 12 09:56:51 CET 2004 <{jong,kooiker}@cwi.nl>
+ * configure.ac:
+   - fix EXTERNAL_JARS uses both ToolBus jar and installed classes
+ * meta-studio/metastudio/data/AbstractModuleTreeModel.java:
+   - use Set and Iterator i.s.o. Enumeration and Vector
+ * meta-studio/metastudio/data/Module.java:
+   - fix String.compareTo(Object) does not exist in java 1.5,
+     use String.compareTo(String)
+ * tbscripts/feedback.tb:
+   - fix editor not jumping to location of error
+   - fix display message needs to be performed last (vim specific)
+
+Wed Nov 10 10:57:58 CET 2004 <kooiker@cwi.nl>
+ * term-store/term-store.idef:
+   - fix assignment of Values to be a list 
+
+Mon Nov  8 14:22:08 CET 2004 <{jong,kooiker}@cwi.nl>
+ * term-store:
+   - remove knowledge about import-relations table from term-store.idef 
+
+Mon Oct 25 13:15:47 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * fix loading images in swing editor
+
+Mon Oct 25 11:26:32 CEST 2004 <kooiker@cwi.nl>
+ * configuration-manager/src/Makefile.am,
+   editors/text/common/Makefile.am:
+   - Added missing / in generated config files 
+
+Mon Oct 25 11:16:09 CEST 2004 <jong@cwi.nl>
+ * meta/editors/swing/metaedit/{util,style}/Makefile.am:
+   - fix distcheck issues
+
+Sun Oct 24 12:07:55 CEST 2004 <jong@cwi.nl>
+ * editors/text/gvim/Makefile.am
+   - add configuration-manager path to INCLUDES
+
+Thu Oct 21 16:08:43 CEST 2004 <jong@cwi.nl>
+ * editors/text/gvim:
+   - add syntax highlighting based on slices and categories
+   - color scheme now dictated by meta configuration
+   - focus request now done on mouse-double-click, so single
+     click+drag can still be used for select/copy/paste
+   - note: minor glitch in mapping between offset/length vs
+     row/column notation still to be dealt with
+
+Wed Oct 20 15:12:01 CEST 2004 <kooiker@cwi.nl>
+ * editors/text/swing:
+   - removed generated swing-editor
+ * editors/text/swing/metaedit:
+   - Merged Said's editor
+ * configuration-manager/src:
+   - Added metaconfig-config.src
+ * editors/text/common:
+   - Added texteditorapi-config.src
+
+Tue Oct 19 00:07:36 CEST 2004 <jurgenv@cwi.nl>
+ * Merged in dependency on tide
+
+Thu Oct 8 09:05:27 CEST 2004 <fagidiot@daimi.au.dk>
+ * tbscripts/button-actions.tb:
+   - process GetAsfModule, removed locale variable filename, which was
+   uninitialized, and changed the call to ParseErrorToSummary to use the
+   formal argument ModuleId as parameter.
+	
+Wed Sep 1 14:20:06 CEST 2004 <fagidiot@daimi.au.dk>
+ * tbscripts/button-actions.tb:
+   - process LocateFile, added
+      extra-mod-path-hook.
+ * tbscripts/module-utils.tb:
+   - process CheckModuleConsistency, added
+      do-consistency-check-hook.
+   - process TermStoreActivation, added
+      get-modulenames-for-consistency-checking-hook,
+      termstore-consistency-check-hook.
+ * tbscripts/open-modules.tb:
+   - process OpenSyntax, added
+      set-module-syntax-text-hook,
+      get-open-syntax-parse-handler-hook.
+ * tbscripts/process-eqs.tb:
+   - process ParseEquationsText, added
+      get-parse-equation-checking-hook.
+   - process GetAsfModule, added 
+      get-asf-equations-text-hook.
+	
+Tue Aug 17 13:34:17 CEST 2004 <kooiker@cwi.nl>
+ * editors/text/gvim/connector.c:
+   - Escape double quotes in displayMessage
+
+Mon Aug  2 09:19:26 CEST 2004 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - Defuse variable error removed in edit equations causing equations editor
+     not always being started. 
+   - Add posinfo after prettyprinting 
+
+Fri Jul 30 10:52:28 CEST 2004 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - Remove unused StackIsEmpty process
+ * term-store/term-store.idef:
+   - Add table updated note to notify ImportGraphPainter of loaded term-store 
+
+Fri Jul 16 15:09:30 CEST 2004 <kooiker@cwi.nl>
+ * tbscripts/{editing,open-modules}.tb:
+   - Register weak modulename as soon as it is known, without passing it all
+     the way down
+ * tbscript/button-actions.tb:
+   - Removed rest of StackEmpty checks 
+
+Wed Jul 14 10:03:26 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 1.6
+ * ./reconf: Added generation of libltdl directory using libtoolize
+ * Renamed configure.in to configure.ac (necessary to get ./libltdl
+   compiled)
+ * Added recursive configure using AC_CONFIG_SUBDIRS to get ./libltdl
+   configured properly
+ * Added ESSENTIAL --warnings=gnu to call to autoreconf. Due to a bug
+   in libtoolize (or the files that it add links too), the distcheck
+   target in the libltdl directory only works when in gnu warning mode.
+ * editors/text/Makefile.am: linking editor-hive now with local copy
+   of ltdl library. 
+ * Users do not need to install libtool any more before compiling meta.
+
+Wed Jul 14 08:12:08 CEST 2004 <kooiker@cwi.nl>
+ * Removed 10 unused processes 
+
+Tue Jul 13 14:24:42 CEST 2004 <jurgenv@cwi.nl>
+ * Made dependency on new package toolbus-java-adapter
+ * Bumped to 1.5
+
+Tue Jul 13 15:14:35 CEST 2004 <{markvdb,kooiker}@cwi.nl>
+ * tbscripts/*.tb:
+   - Added notion of weak modulenames
+
+Mon Jul 12 11:34:39 CEST 2004 <kooiker@cwi.nl>
+ * in-output/src/Makefile.am: added ERROR_SUPPORT to includes 
+
+Fri Jul  9 14:30:41 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * removed 97 unused variables as reported by our relation calculus script
+
+Thu Jul  8 09:40:17 CEST 2004 <{jurgenv,kooiker}@cwi.nl>
+ * editors/structure/structure-editor.c: removed special case for ambiguities 
+
+Tue Jul  6 19:20:08 CEST 2004 <jurgenv@cwi.nl>
+ * Fully implemented highlighting API for emacs editors
+
+Fri Jul  2 18:16:35 CEST 2004 <jurgenv@cwi.nl>
+ * Implemented very rudimentaty syntax highlighting in emacs editor
+   (only keywords are highlighted bold in a very ad-hoc fashion)
+
+Fri Jul  2 13:04:28 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * remove 16 explicit invocations of DrawImportGraph by
+   applying the Observer pattern to term store tables.
+ * "normalized" all tbscripts by pulling them through
+   pandora (for better readability and statistics gathering)
+
+Thu Jul  1 14:31:28 CEST 2004 <jurgenv@cwi.nl>
+ * Added jar generation for configuration api
+
+Thu Jul  1 11:50:21 CEST 2004 <jong@cwi.nl>
+ * editors/manager:DeleteSession:
+   - also remove edit session from "bindings" table
+ * tbscripts/button-actions.tb:
+   - register (path,modulename) for syntax sessions
+ * tbscripts/editing.tb:EditSyntax
+   - Explicit redraw of import graph needed until we have some sort
+     of observer pattern to detect changes to import graph :-(
+
+Wed Jun 30 13:24:18 CEST 2004 <{}@cwi.nl>
+ * tbscripts:
+   - remove old delete-editor note stuff
+   - fixed "Edit Equations" scenario where equations did not yet exist
+   - remove (now unused) file-creator.tb
+   - unparse current equations JIT to "print-module" them
+ * in-output/src:
+   - replaced 3-folded duplicate of reading/writing functions
+ * tbscripts, in-output/src:
+   - ErrorAPIfied I/O tool and update messages correspondingly
+
+Tue Jun 29 11:10:38 CEST 2004 <jurgenv@cwi.nl>
+ * extended configuration manager with a new type of property:
+  text-category. A text-category is a name with a number of text attributes.
+ * defined the properties of the basic text-categories in meta-kernel.properties
+
+Tue Jun 29 12:58:01 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * editors/text, tbscripts/parse-focusses:
+   - remove "get-contents", let io-tool handle reading of files
+   - make "write-contents" more synchronized, by letting hive return
+     a "contents-written" message.
+
+Mon Jun 28 15:42:00 CEST 2004 <jurgenv@cwi.nl>
+ * Added slicing subdirectory to editors: for mapping trees to slices
+   of (syntactic, or semantic) categories. This is needed for generic
+   syntax highlighting.
+ * Bumped to 1.4
+
+Thu Jun 24 12:57:18 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * meta-studio/metastudio/components/ErrorList.java:
+   - reinstate showFeedbackSummary
+ * editors/structure/structure-editor.c:
+   - use PT_findTopAmbiguity to jump to top ambiguity after mouseclick 
+ * tbscripts/user-interface.tb:
+   - ErrorSelected: fixed parameter order
+ * tbscripts/parse-focuses.tb:
+   - ParseEditor: disable automatic text selection after ambiguous parse
+
+Wed Jun 23 16:22:22 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts/editing.tb:
+   - use OpenSyntax to re-open syntax after spontaneous editor quit
+ * tbscripts/module-utils.tb:
+   - cancel content-handlers for Copy/Create scenario when any of the
+     preconditions to actually handle content fail
+
+Tue Jun 22 14:52:41 CEST 2004 <kooiker@cwi.nl>
+ * configuration-manager/src/configmanager.c: use getcwd() to get the
+   absolute path for the current working directory iso "." 
+ * tbscripts/editing.tb: DeleteSessions handles em-no-such-session for
+   modules without open sessions
+
+Mon Jun 21 11:36:04 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * editors/text/editor-hive.idef:
+   - Events from editor now create() a process that handles the event 
+ * editors/structure:
+   - Allow for no-cursor
+   - Check for cursor when moving around
+ * tbscripts/button-actions.tb:
+   - Deal with no-cursor
+ * tbscript/editing.tb:
+   - Deal with no-cursor
+
+Wed Jun 16 11:52:19 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * Improve parse scenarios: better modification detection of editors
+   reduces unnecessary writes to file
+
+Tue Jun 15 14:15:21 CEST 2004 <jong@cwi.nl>
+ * configuration-manger.c: use '.' by default as module-path
+
+Mon Jun 14 11:31:48 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * editors: implement rudimentary support for swing editor
+ * tbscripts, metastudio:
+   repair/reimplement tree panel node selection using only
+   the "node", no hidden/extra knowledge about module-ids anymore.
+
+Thu Jun 10 10:49:06 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts/: refactored ViewTree functionality
+ * meta-studio: disabled BoxTree viewer
+
+Wed Jun  9 15:46:16 CEST 2004 <jong@cwi.nl>
+ * term-store:
+  - regenerate API and fix resulting errors
+  - fix warnings that 3.3.2 comes up with
+
+Tue Jun  8 14:35:20 CEST 2004 <kooiker@cwi.nl>
+ * meta-studio/metastudio/components/graphs/ZoomableGraphPanel.java:
+   - Added check in renderGraph equals id and getId() 
+ * meta-studio/metastudio/meta-studio.idef:
+   - Added rec-ack-event to rec-event(UI, rendered-graph(...))
+
+Fri May 28 11:54:06 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * Graph rendering, layouting and displaying works again
+
+Tue May 25 13:46:41 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * MetaStudio no longer takes the initiative to layout a graph,
+   but provides functionality to layout its strings on a panel instead
+
+Mon May 24 11:58:23 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * meta/tbscripts, meta/editors:
+   towards different scenarios based on whether or not a modulename
+   is available
+
+Mon May 17 10:41:02 CEST 2004 <kooiker@cwi.nl>
+ * meta/tbscripts/button-actions.tb:
+   - Changed behaviour of Load/Save Termstore to ask for file
+ * meta/configuration-manager/src/meta-kernel.properties:
+   - Changed menus to 1.5 style
+ * meta/meta-studio/metastudio/components/ModuleTree.java:
+   - in postButtonRequest check current on null (closes #310) 
+
+Tue May  4 12:44:19 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * fix Upgrade Sdf scenario
+
+Mon May  3 10:05:06 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts:
+   - parse-focusses -> parse-focuses (Cobuild English Dictionary says so ;-)
+   - parse-utils.tb removed (empty now)
+   - fix ReplaceFocus to aid "Upgrade Sdf"
+ * editors:
+   - implement get-modified
+ * editors/text/emacs/connector.c:
+   - Now capable of working with list of sub-menu items (although
+     it only uses the first two items)
+
+Wed Apr 28 14:02:13 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts:
+   - fixed add/remove imports, but parameterized imports
+     still do not work, due to missing functionality in sdf-modules
+   - RenameXYZ now re-uses CopyXYZ and DeleteXYZ sub-scenarios
+
+Mon Apr 26 14:43:33 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * configuration-manager: upgrade configuration.adt
+
+Fri Apr 23 10:49:03 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * fix the various close-module scenarios (both "top module" and "recursive")
+ * revamped the CreateModule scenarios, so that "Create Module",
+   "New Module", and "Copy Module" all use the same implementation.
+ * implemented "copy-file" in in-output tool
+
+Tue Apr 20 16:10:53 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * worked on various "Open" scenarios.
+
+Tue Apr 20 15:06:22 CEST 2004 <jurgenv@cwi.nl>
+ * Added explicit quit action to editor hive operations. Editors are quit
+   explicitly now instead of implicitly by dissappearing pipes.
+
+Mon Apr 19 17:36:49 CEST 2004 <jurgenv@cwi.nl>
+ * The compile action retrieves an extra argument from the stack:
+   the result C file where the compiled code must be stored.
+
+Mon Apr 19 09:49:45 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts:
+   - remove EditorCreator: each process that wishes to create an
+     editing session does so by create()'ing the appropriate EditXYZ
+     process and synchronizing by rec-msg(XYZ-editor-started)
+   - upgrade "Show Origin" to properly deal with situations without origins
+ * editors/text/emacs/connector.c:displayMessage
+   - reinstated quoting (or we get [ --] instead of [\000-\255])
+ * editors/text/gvim/connector.c:
+   - reinstate "magical"  when sending to gvim, to ensure
+     gvim is in command-mode before issuing command-actions
+
+Fri Apr 16 17:24:15 CEST 2004 <jurgenv@cwi.nl>
+ * Delete module takes care of IO errors when unlinking fails
+
+Fri Apr 16 15:04:45 CEST 2004 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb: 
+   - create ParseText process iso call to be able to receive result messages
+ * tbscripts/parse-focusses.tb: 
+   - if editors are in sync send parse-editor-ok iso parse-ok 
+
+Fri Apr 16 10:02:50 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts: fixed ReduceTerm and ShowOrigin
+ * editors/text/editor-hive.c:removeEditorProcess()
+   invoke waitpid() to cleanup child process resources. (closes #204)
+
+Thu Apr 15 13:54:18 CEST 2004 <jurgenv@cwi.nl>
+ * Message-lists have been removed completely: 
+    * show-list button action is gone
+    * update-list-view in meta-studio.idef is gone
+    * message-list 'editor-type' in button scripts is gone
+   Please use the feedback lists from now on.
+
+Thu Apr 15 10:19:54 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed a nasty bug: modules would dissappear if you would rename them into
+   a non-existing directory
+
+Wed Apr 14 11:03:01 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * editors/text/{gvim,emacs}/connector.c:
+   - suppress off-by-one bug that has been solved properly on the trunk
+
+Thu Apr 15 14:51:47 CEST 2004 <jong@cwi.nl>
+ * tbscripts/process-eqs:
+   - simplified GetSpecification, improved error handling in parsing
+   and retrieving of specification/equations/tests.
+
+Thu Apr 15 14:16:19 CEST 2004 <jurgenv@cwi.nl>
+ * Added concept of ValueChangedListener to UserInterfacePanels. This
+   can be used to let other components change their behaviour when the contents
+   of any UserInterfacePanel changes. The first usage is to make Tabs visible
+   when a ZoomableGraphPanel is updated with a new graph 
+
+Thu Apr 15 10:31:44 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed a nasty bug: modules would dissappear if you would rename them into
+   a non-existing directory
+
+Wed Apr  7 15:49:26 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * editors/*
+   - fold set-focus-at-area into set-focus: only 1 set-focus remains :-)
+   - escape display-message so it correctly handles: [\000-\255]*
+ * tbscripts/*
+   - make open-modules and editing scenarios use the same "ParseText"
+   - clicking on a node in the tree-panel works again
+   - starting meta with a parse error in a syntax file works again
+
+Tue Apr  6 16:08:30 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * removed "add-module-to-db" as it is now (almost) properly
+   implemented in open-modules
+
+Mon Apr  5 16:31:20 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * implemented parsing syntax scenario with parse errors
+ * removed 'decons-filename' kludge; replaced it with three getters:
+   io-get-path-directory, io-get-path-filename, and io-get-path-extension
+ * add tbscripts/user-interface.tb which implements scenarios for the GUI
+   instead of revealing MetaEnv's bowels to user-interface.idef
+
+Fri Apr  2 15:14:06 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * again more work done on the script-refactoring.
+   at least "reduce term" is still broken.
+
+Mon Mar 29 11:09:10 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * reminder: still lots of things broken!
+ * tbscripts/editing.tb:
+   - Added EditTerm scenario
+   - Added EditEquations scenario
+   - Improved EditSyntax scenario
+   - Some refactoring in editing scenarios to improve re-use.
+
+Fri Mar 26 16:31:12 CET 2004 <{jong,kooiker}@cwi.nl>
+ * lotsa work done in refactoring the editing scripts
+   update only if you want a broken MetaEnv.
+
+Thu Mar 25 13:27:35 CET 2004 <{jong,kooiker}@cwi.nl>
+ * editors/manager: new editor-manager + API
+ * editors/text: implement get-focus-sort
+ * editors/manager/src: removed
+
+Wed Mar 24 13:18:03 CET 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - simplify implementation of move-cursor
+ * tbscripts/editors.tb:
+   - remove debug spam
+ * editors/structure/structure-editor.c:
+   - implement move-{left,right,up,down}
+
+Tue Mar 23 15:40:35 CET 2004 <{jong,kooiker}@cwi.nl>
+ * editors/structure:
+   - set-cursor-at-offset and get-focus-at-cursor are working again
+ * editors/structure/src: removed
+ * editors/text/{emacs,gvim}: remove references to old SE
+
+Wed Mar 17 14:36:14 CET 2004 <{jong,kooiker}@cwi.nl>
+ * editors/structure:
+   - started work on structure-editorNG that: uses Location API, and
+     does not include legacy code to compute length annotations.
+
+Wed Mar 17 17:22:06 CET 2004 <markvdb@cwi.nl>
+ * Moved sdf specific buttons to the asfsdf-meta package.
+
+Wed Mar 17 CET 2004 <iversen@cwi.nl>
+ * Added hook call to process-eqs.tb
+ * Made Syntaxchecking in ParseFocusses dependent on Type
+ * Added call to obtain-parse-table-hook in parse-utils.tb
+
+Tue Mar 16 16:00:20 CET 2004 <{jong,kooiker}@cwi.nl>
+ * standard.meta.buttons:
+   - split tree-panel and message-list implementation
+   - add descriptive message to both of them for the text editor
+ * editors/text/editor-hive.c:
+   - set_focus_at_location replaced by set_focus_at_area
+     (using Location API, not Error API)
+ * editors/text/gvim/connector.c:
+   - cleanup of the various escapeXYZ() functions
+   - remove arcane invocation of  in "gvim --remote-send" 
+ * meta-studio/metastudio/MultiBridge.java
+   - removeFeedbackSummary more closely resembles its dual
+     showFeedbackSummary (which should be addFeedbackSummary?)
+     parameterwise: both take an ATerm (the Summary).
+ * tbscripts/{feedback,parse-utils}.tb:
+   - Summary instead of deprecated Feedback notation
+   - Disect a Summary locally instead of complex shortcut implementation
+     in error-support library.
+   - revamped PrepareParseErrorForEditor in various smaller pieces
+
+Tue Mar 16  CET 2004 <iversen@cwi.nl>
+
+ * Added and modified several hooks to facilitate implementation of 
+   Action Environment. The hooks are pre-get-all-syntax-hook, 
+   add-initial-syntax-modules-hook, clear-module-db-hook, 
+   other-top-sort-hook.
+	
+Thu Mar 11 16:17:53 CET 2004 <markvdb@cwi.nl>
+ * Fixed a number of bugs reported by various users:
+   - Unnecessary messages suppressed.
+   - Upgrading of equations always parses before upgrading
+   - Reducing an erroneous term not longer generates a vague message.
+   - Improved some issues wrt the term-store.
+
+Thu Mar 11 10:46:32 CET 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts/editors.tb: changed "Internal error" message
+ * tbscripts/feedback.tb: remove handling of no-location-filename
+ * editors/text/{gvim,gnu-emacs}/connector.c:
+   fix off-by-one error in handling of goto-cursor-at-offset, and
+   set-focus-at-location
+
+Wed Mar 10 11:35:20 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Use new Error API 
+
+Mon Mar  8 11:00:00 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Use "location-api" instead of "error-api"
+
+Thu Mar  4 17:55:20 CET 2004 <jurgenv@cwi.nl>
+ * Fixed a portability issue with popup menus on MacOSX:
+   Popup menus are triggered differently
+   on different systems. Therefore, isPopupTrigger should be checked
+   in both mousePressed and mouseReleased for proper cross-platform
+   functionality.
+
+
+Thu Mar  4 13:30:18 CET 2004 <iversen,jurgenv@cwi.nl>
+ * Fixed a bug: Parse-Syntax was called with wrong argument order 
+   (everything is a term). Probably loading a term-store always failed
+   to see that nothing changed due to this.
+
+Wed Mar  3 11:37:44 CET 2004 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - To be solved: te-set-cursor-at-focus call changed to printf of call
+
+Wed Feb 18 12:50:28 CET 2004 <jurgenv@cwi.nl>
+ * added new action; convert-feedback to fo from an error produced
+   by an ASF+SDF specification to an error that can be handled by
+   the MetaStudio.
+
+Tue Feb 17 15:21:17 CET 2004 <kooiker@cwi.nl>
+ * meta-studio/metastudio/components/graph/GraphPanel.java:
+   - getZoomToFitFactor checks graph on null 
+   - add DEFAULT_ZOOM_FACTOR = 100 to scale to 100% by default
+
+Tue Feb 17 11:01:31 CET 2004 <jong@cwi.nl>
+ * editors/text/emacs/{connector.c,gnu-emacs.el}:
+   - explicit synchronization with hive during writing of contents
+     fixes anomalities during "autosave".
+ * editors/text/gvim/{connector.c,meta.vim.src}:
+   - explicit synchronization with hive during writing of contents
+     fixes anomalities during "autosave".
+   - refactor several reusable pieces of vim script into functions.
+ * editors/text/{common,emax,gvim}/connector.[ch]:
+   - refactored "getContents" into the common core. Both editors now
+   really use the *same* code to read the contents of the file.
+   - refactored "protocol_expect" from gvim to common core + rename
+   to protocolExpect.
+
+Mon Feb 16 15:07:46 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * tbscripts/feedback.tb: refactored and reimplemented (in error-support)
+   the ShowXXX functions
+ * editors/text/*:
+   - remove double functionality to go to a specific offset in
+     a file, "goto-cursor-at-offset" is the only one left.
+ * editors: text vs. structure
+   - fix bug where text- and structure editor were out of sync,
+     causing (a.o.) the "annoying emacs *beep* bug".
+ * editors/text/xemacs: removed
+
+2004/02/16 (markvdb@cwi.nl)
+ * The asfsdfchecker is now only called in case a parsetable
+   has to be generated for parsing terms and equations in 
+   editors. When dumping equations, the parsetable is only
+   generated for the top module.
+- The DeleteEditors has been duplicated and the new process
+  is more subtile wrt closing of editors. This new process
+  is used in reverting modules, adding and removing imports.
+
+Fri Feb 13 15:20:49 CET 2004 <{kooiker,jurgenv}@cwi.nl>
+ * Replaced ptpretty by pandora functionality
+ * Warning: pandora is out of the box!
+ * The pretty-print button now replaces the current text instead
+   of spawning a new editor.
+ * Warning: pretty-printing can not be 'undone' using the editors
+   undo buffer.
+ * Replaced ptpretty dependency by pandora package dependency
+
+Thu Feb 12 13:38:55 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * prefixed all in/outgoing structure editor messages with "se-"
+ * prefixed all in/outgoing text editor messages with "te-"
+
+Tue Feb 10 17:49:38 CET 2004 <jurgenv@cwi.nl>
+ * in-output and term-store tools run a garbage collect after 
+   every event using -TB_COLLECT_LOOP 1 in their tool definition.
+
+Tue Feb 10 14:55:38 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+Mon Feb  9 14:59:39 CET 2004 <{jong,kooiker,vinju}@cwi.nl>
+ * version bump to 1.3 (toolbus interface changed + several bugfixes)
+ * in-output/src/main.c:remove_file:
+   - change remove() into unlink() as remove() also removes directories
+ * in-output/src/main.c:decons_filename:
+   - fix illegal memory overwrite which horked an existing AFun,
+     causing the ATerm GC to break down.
+ * term-store/*.c: all char* pointers in ToolBus API changed to const char*
+ * in-output/src/main.c:get_filename:
+   - and another ... which we now found because all ToolBus functions
+     that manipulate "char *' are now const.
+
+Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
+ * fix Makefile.am to get "distcheck" working
+
+2004/01/30 <jurgenv@cwi.nl>
+ * Compliant with automake-1.6
+ * Using libtoolize instead of our own fixes to get libtool working
+
+2004/01/28 (markvdb@cwi.nl)
+ * renamed display-feedback-summary to show-feedback-summary.
+
+Tue Jan 27 16:17:47 CET 2004 <jong@cwi.nl>
+ * text/editor-hive.c:
+   invoke "write-contents" before all "get-focus-text" calls, so buffer
+   is automagically written just in time.
+ * text/editor-hive.c, text/{common,emacs,gvim}/...
+   add support for autosave: we can now ask gvim+emacs to "write-contents"
+
+2004/01/26 (jurgenv@cwi.nl)
+ * fixed recursive closing of modules. Circular imports can be closed now
+   using "Recursive closing". A more complex analysis was needed to detect
+   if a module can be closed. Solution:
+    1: get all transitive imports for the top module that is to be closed
+    2: for all transitive imports, remove all modules from this list that
+       are used by modules that are not in the transitive imports list.
+    3: all remaining modules in the list can be closed then
+    4: if the top module was closed, the operation was successfull,
+       if not, the operation returns an error message.
+
+2004/01/26 (markvdb@cw.nl)
+ * Fixed a hairy bug wrt generation of parse tables for modules with
+   syntax errors.
+
+Mon Jan 26 11:17:58 CET 2004 <jong@cwi.nl>
+ * editors/text/common/Makefile.am:
+   removed hardwired path /home/markvdb/sdf-apigen/bin/adt-to-c
+ * meta.pkg:
+   upgrade dependency on graph-support to 0.2
+   upgrade dependency on asc-support to 1.8
+
+2004/01/20 (markvdb@cwi.nl)
+ * First version of clickable parse errors.
+
+2004/01/13 (jurgenv@cwi.nl)
+ * Add and remove imports choose from a list of available names instead 
+   of a file selector.
+   
+2004/01/12 ({markvdb,jurgenv}@cwi.nl)
+ * Reimplemented module status panel to a tree
+ * Introduced the new error handling functionality
+ 
+2004/01/06 (markvdb@cwi.nl)
+ * Simplified the TB interface of SGLR. A parse request contains
+   directly the parse table.
+ * The entire functionality of setting parse tables has disappeared.
+
+2003/12/23 <jurgenv@cwi.nl>
+ * Basic functionality for dealing with the Feedback messages added.
+ * Known problems: the errorapi does not know the language of the file
+   that the error occurred in. That means that an editor is opened over
+   the "unknown language" with obvious disadvantages
+   
+
+2003/12/19 <jurgenv@cwi.nl>
+ * MetaStudio revised towards an object oriented design:
+ 	- module browsing components (tree, graph and module stats) grouped into
+ 	  one single Tab.
+ 	- module status redesigned. Contains now: the selected module name, an
+ 	  imports menu and an imported by menu.
+ 	- graph panels have an individual zooming capacity using a slidebar.
+ 	- zooming keeps the current selected node always in view
+ 	- zooming below 100% introduces Tooltips over hovered nodes
+ 	- refactored MetaStudio to extract GUI components into classes:
+ 	  HistoryPanel, StatusBar, etc.
+ 	- added a new component: FeedbackList for dealing with the new error api.
+ 	- added a dependency on the error-support package
+ 	- introduced ToolComponent, a JPanel that can act as a ToolBus tool. 
+ 	  It implements the complete UserInterfaceTif interface to do that. 
+ 	  All (most) components of the MetaStudio should extend this abstract class.
+ 	- introduced a package hierarchy below metastudio: "components" for GUI
+ 	  components, "data" for data representation.
+    - ModuleBrowser is now a separate component that can be reused and run
+      in multiple instances in a single MetaStudio.
+    - Improved efficiency of graph layout (FromTerm was executed twice!)
+ 	
+Mon Dec  8 14:12:18 CET 2003 <{jong,jurgenv,kooiker}@cwi.nl>
+ * editors/text/gvim/{connector.c,meta.vim.src}:
+   - explicitly synchronise gvim-connector and gvim instance between
+     each AddMenu call.
+   - repaint (cleanup) gvim once after *all* menu entries have been
+     i.s.o. in between each AddMenu call.
+
+2003/12/08 <markvdb@cwi.nl>
+ * Fixed a bug when the specification is incomplete wrt
+   parsed equations.
+
+2003/10/27 <markvdb@cwi.nl>
+ * Fixed bug #107, added a StackIsEmpty check.
+
+Wed Oct 15 19:00:11 CEST 2003 <jurgenv@cwi.nl>
+ * Adapted process-eqs.tb to accomodate some reuse for making the test
+   runner working
+
+2003/10/13 <markvdb@cwi.nl>
+  * Added an error message when starting the meta-environment with
+    a non-existing term store, this fixes bug #70.
+
+Thu Oct  9 14:11:48 CEST 2003 <jong@cwi.nl>
+ * editors/text/gvim:
+   - install meta.vim in pkgdata-dir: install/share/meta/meta.vim and read
+     it from that location. Closes: #18
+   - split handshaking protocol into two fases:
+     1. assert that gvim has connected to the connector;
+     2. assert that gvim has read the installed meta.vim file.
+
+Wed Oct  8 16:21:16 CEST 2003 <{jong,jurgenv}@cwi.nl>
+ * regenerated Java Graph API:
+   - why is this (still?) in Meta Studio anyway and not in graph-support?
+ * add support for border-color and background-color based on graph
+   attributes.
+
+Wed Oct  8 13:27:47 CEST 2003 <jong@cwi.nl>
+ * editors/text/emacs/connector.c:
+   - eliminate ' ', '(', and ')' from emacs menu entry names. Closes: #60
+
+Tue Oct  7 15:16:48 CEST 2003 <jong@cwi.nl>
+ * editors/text/common/*dict.[ch]:
+   - re-generated after fix in aterm/dicttoc tool to fix gcc-3.3.1 warnings
+
+2003/10/06 <markvdb@cwi.nl>
+ * check-sort("SORTNAME") changed into
+   push-string("SORTNAME"),check-sort
+   Furthermore, check-sort leaves a true or false on the stack
+   depending on whether it was successful or not.
+ * Adapted the actionchecker accordingly.
+
+Tue Sep 30 10:18:45 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * editors/text/emacs/connector.c: change function escapeQuotes to also
+   escape escape-characters. Closes: #48
+ * ./reconf: first remove generated ./libtool, so it will not be found
+   as "the" libtool when subsequently trying to find the system libtool
+
+2003/09/29 <markvdb@cwi.nl>
+ * Fixed a problem with deleting a module.
+
+2003/09/25 <{markvdb,jurgenv}@cwi.nl>
+ * Fixed the problems with close-modules.
+ * Fixed the layouting of the graph, font size and order are
+   correct.
+ * Graph no longer flips.
+
+2003/09/25 <markvdb@cwi.nl>
+ * Refactoring the manipulation of the name of the termstore.
+ * Fixed a serious bug in case the user introduced a syntax
+   error in a SDF module outside the Meta-Environment and
+   there is a valid term-store.
+
+2003/09/24 <markvdb@cwi.nl>
+ * First version of a script to check action scripts.
+
+2003/09/22 <markvdb@cwi.nl>
+ * in io_find_file the found files should be reported in order of
+   the search paths as it used to be. Otherwise the library will get
+   precedence over user-defined modules which is unwanted behaviour.
+
+2003/09/22 <markvdb@cwi.nl>
+ * First version of action/button script checker.
+
+2003/09/18 <markvdb@cwi.nl>
+ * Added an action to convert the result of prompt-for-file
+   "str(<FILENAME>)" into "file(<FILENAME>)".
+
+2003/09/18 <jurgenv@cwi.nl>
+ * Added dependency on and loading of ptpretty package
+
+2003/09/17 <jurgenv@cwi.nl>
+ * Added dump sdf definition action to the action language (alias button lang)
+
+2003/09/16 <markvdb@cwi.nl>
+ * Removed the query action.
+
+Mon Sep 15 10:55:29 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * meta-studio/metastudio/Message{List,Window}.java:
+   - refactored
+   - fixed scrollbar bug
+
+Thu Sep 11 09:17:30 CEST 2003 <jong@cwi.nl>
+ * configure.in:
+   - banish PERL :-)
+   - remove INSTLIBDIR substitution
+ * configurationmanager/src:
+   - rename configmanager.idef -> configuration-manager.idef
+ * tbscripts:
+   - move "gen.tb" to ToolBus pkg, adapters/gen-adapter/generic-adapter.idef
+     it is the interface definition of the generic-adapter.
+ * io-tool and configuration-manager idefs now start the managing process
+   themselves
+
+Mon Sep  8 14:04:42 CEST 2003 <jong@cwi.nl>
+ * editors/text/common/connector.c:
+   - workaround to be robust against multiple incoming 'modified' messages.
+
+2003/09/03 <kooiker@cwi.nl>
+ * in meta-studio/metastudio/MetaStudio.java:
+   - removed hard coded connection parameters
+
+2003/08/28 <kooiker@cwi.nl>
+ * updated generated code in meta-studio/metastudio/graph to match
+   aterm-1.5beta
+  
+2003/08/27 <kooiker@cwi.nl>
+ * fixed imports and importedby labels in tbscripts/module-db.tb
+
+Fri Aug 29 16:03:24 CEST 2003 <jong@cwi.nl>
+ * src/generic-meta.sh.src:
+   - need '=' instead of '==' for pure POSIX comparison of strings for sh
+
+Wed Aug 20 14:53:08 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * editors/structure/src/EditorData.adt:
+   change alternative Path/term -> Path/tree
+
+2003/08/19 ({jurgenv,jong}@cwi.nl)
+ * regenerated graph API because apigen now supports builtin int and doubles
+ * Makefile.am of graph API was corrected too.
+
+Tue Aug 19 09:42:51 CEST 2003 <jong@cwi.nl>
+ * editors/text/{vim,emacs,xemacs}/Makefile.am:
+   add $(SOCKLIBS) during linking (needed on SunOS)
+
+Thu Aug 14 08:45:06 CEST 2003 <jong@cwi.nl>
+ * editors/text/*/Makefile.am:
+   - add $(TOOLBUSLIB)/INCLUDE to includes
+   - add $(PT_SUPPORT)/INCLUDE to includes
+ * editors/text/Makefile.am:
+   - add editor-hive.h to editor_hive_SOURCES
+ * reconf: add -I ${LIBTOOL_INCLUDE} to aclocal's include paths
+ * configure.in:
+   - add AC_LIBTOOL_DLOPEN
+   - test if LIBTOOL actually resolved to a non-empty string
+
+2003/08/14 (jurgenv@cwi.nl)
+ * Regenerated graph API with new apigen and based on latest aterm-java lib
+ * Fixed code to handle new generated API
+ * Added experimental arrow-head drawing in graphs
+ * Removed old jar files of packages needed by meta
+ 
+Tue Aug 12 13:31:39 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * remove dependency on xemacs 20.4 from meta.pkg
+ * merge EDITOR_HIVE changes into HEAD.
+   closes separate work on EDITOR_HIVE branch
+
+Wed Jul 30 10:41:55 CEST 2003 <jong@cwi.nl>
+ * in-output/src/main.c:
+   - moved "decons_filename" functionality from MetaStudio.java
+     to the input-output tool.
+   - removed memprof related stuff including hardcoded path to
+     /ufs/markvdb/...
+
+2003/08/07 (markvdb@cwi.nl)
+ * version bumped into 1.2
+ * Added functionality to return imported and imported-by modules
+   when asking for module info.
+ * MetaStudio ignores all information except path information.
+ * Set dependency on sdf-support-1.1.2
+ * Set dependency on sglr-3.10.2
+
+2003/08/01 (jurgenv@cwi.nl)
+ * Set dependency on aterm-java-1.3.2
+ 
+2003/08/01 (markvdb@cwi.nl)
+ * Fixed the unnecessary collecting on RealModules in 
+    Open-Modules.
+
+Fri Aug  1 10:04:35 CEST 2003 <jong@cwi.nl>
+ * configmanager.{c,idef}:
+   - changed process-standard-buttons into add-predefined-actions
+     in accordance with yesterday's changes in the process names..
+
+Thu Jul 31 12:55:42 CEST 2003 <jong@cwi.nl>
+ * version bumped into 1.1
+ * configmanager.idef:
+   - renamed ProcessButtons into AddUserDefinedActions
+   - renamed ProcessStandardButtons into AddPreDefinedActions
+   - renamed "process-button-file" into "set-actions", making it
+     a procedure (snd-do) iso a function (snd-eval) since it never
+     returned anything useful anyway.
+   - added "remove-actions" to configuration manager, instead of
+     feeding it a fake, empty actions file to remove actions.
+ * configmanager.c: 
+   - implemented the above interface definition changes.
+
+2003/07/31 ({markvdb,jurgenv}@cwi.nl)
+ * Released version 1.0
+
+2003/07/30 (markvdb@cs.vu.nl)
+ * Removed a hard-coded path in the in-output tool.
+
+2003/07/29 (markvdb@cwi.nl)
+ * A parsed term was not packed yet, added the explicit packing 
+   of when adding position information and unpacking in 
+   "replace-focus".
+
+2003/07/25 (jurgenv@cwi.nl)
+ * fixed a bug, a message received the wrong term structure
+ * removed some committed debug printf's
+
+2003/07/24 (markvdb@cwi.nl)
+ * Repaired the printing of the text of a module.
+ * Introduced the notions of "warning(f)" and "message(f)" which
+   have a different appearance in the error message display of the
+   UI.
+
+2003/07/22 ({markvdb,jurgenv}@cwi.nl)
+ * Repaired a number of bugs concerning erroneous modules in conjunction
+   with compound module names.
+ * Repaired printing of error messages that occur before the MetaStudio has
+   started up completely.
+ * In in-output, get-filename does not generate files with double '/' 
+   separators anymore.
+
+2003/07/18 (markvdb@cwi.nl)
+ * Repaired the "bug" with opening a term editor for a file which
+   was already opened for a different module.
+ * Fixed the irregularity in parsing within the syntax-editors.
+ * Fixed the irregularity when showing the focus after replacing 
+   the focussed subtree.
+
+2003/07/17 (markvdb@cwi.nl)
+ * Repaired the Move-Down bug reported by Hayco.
+ * show-area now activates also syntax and equations editors correctly.
+
+2003/07/17 ({markvdb,jurgenv}@cwi.nl)
+ * Show area now sets the focus and lets the cursor jump to the beginning
+   of the focus. The normal set-focus does not set the cursor anymore.
+ * Set dependency on aterm-java-1.3.1
+
+2003/07/25 (jurgenv@cwi.nl)
+ * fixed a bug, a message received the wrong term structure
+ * removed some committed debug printf's
+
+2003/07/24 (markvdb@cwi.nl)
+ * Repaired the printing of the text of a module.
+ * Introduced the notions of "warning(f)" and "message(f)" which
+   have a different appearance in the error message display of the
+   UI.
+
+2003/07/22 ({markvdb,jurgenv}@cwi.nl)
+ * Repaired a number of bugs concerning erroneous modules in conjunction
+   with compound module names.
+ * Repaired printing of error messages that occur before the MetaStudio has
+   started up completely.
+ * In in-output, get-filename does not generate files with double '/' 
+   separators anymore.
+
+2003/07/18 (markvdb@cwi.nl)
+ * Repaired the "bug" with opening a term editor for a file which
+   was already opened for a different module.
+ * Fixed the irregularity in parsing within the syntax-editors.
+ * Fixed the irregularity when showing the focus after replacing 
+   the focussed subtree.
+
+2003/07/17 (markvdb@cwi.nl)
+ * Repaired the Move-Down bug reported by Hayco.
+ * show-area now activates also syntax and equations editors correctly.
+
+2003/07/17 ({markvdb,jurgenv}@cwi.nl)
+ * Show area now sets the focus and lets the cursor jump to the beginning
+   of the focus. The normal set-focus does not set the cursor anymore.
+ * Set dependency on aterm-java-1.3.1
+
+2003/07/15 (markvdb@cwi.nl)
+ * Button/action registration changed.
+ * Number of buttons/actions moved to ASF+SDF package.
+
+2003/07/15 (jurgenv@cwi.nl)
+ * The cursor moves only to the beginning of the focus when it
+   is not already inside the focus.
+
+2003/07/14 ({jurgenv,markvdb}@cwi.nl)
+ * Added graph attributes to the graph format (updated MetaStudio)
+ * Dot bounding box information used to calculate size of canvas
+ * Fixed a bug in Close Module use-case.
+
+2003/07/14 (markvdb@cwi.nl)
+ * Added a declaration in a TB script.
+
+2003/07/11 (j.iversen@daimi.au.dk)
+ * Added Type parameter to pre-get-all-sdf2-hook and get-all-sdf2-definitions
+
+2003/07/11 (jurgenv@cwi.nl)
+ * A lot of method extraction refactorings in MetaStudio.java
+ * Set-focus in Xemacs now also jumps to the focus if its is not in visual 
+   range.
+ 
+2003/07/11 (markvdb@cwi.nl)
+ * Added a button to read the term store from disk.
+ * Some cleanup in meta-studio
+
+2003/07/10 (markvdb@cwi.nl)
+ * Simplified the listitems of the Iversen lists.
+ * Introduced the notion of clicks in the button scripts.
+ * Removed the explicit Show Source information.
+
+Thu Jul 10 15:45:49 CEST 2003 <{jong,markvdb,jurgenv}@cwi.nl>
+ * images/*gif restored and renamed
+ * improved buttons-adt and update several files to reflect new API
+ * restored toolbar functionality
+ * changed some warnings/errors in term-store
+
+2003/07/09 (markvdb@cs.vu.nl)
+ * Introduced the button actions "pack-tree" and "unpack-tree".
+ * Made the saving and reading of the term store a bit more verbose.
+
+2003/07/07 (jurgenv@cwi.nl)
+ * Bugfix: deleting an import that does not exist was lead to a deadlock
+   because the io-tool returned an error that was not handled.
+
+2003/07/03 (markvdb@cwi.nl)
+ * Reorganized the show-list and show-area in such a way that
+   the show-area does no longer be parameterized with a module name.
+ * The "ShowSource" button is added to the standard buttons.
+ * Renamed and removed some variables.
+ * Introduced a packed write and read function in in-output,
+   adapted the reading and writing of the term store.
+
+2003/07/02 (markvdb@cs.vu.nl)
+ * The type (trm/eqs) is now made explicit.
+ * Introduced a new button to dump the parse table of the equations.
+ * Removed the save-module button.
+ * Renamed the save-all button to "save term store".
+ * Improved the reading and checking of the term store.
+ * Added the reading and checking of the term store to
+   the other "stand-alone" scripts.
+ * Activated the -s option, in order to save the term store for
+   the "stand-alone" scripts.
+
+
+2003/07/02 (jurgenv@cwi.nl)
+ * Bumped to version 0.2 and release
+ * "Save Module" is now "Dump Module". It writes the .sdf and .asf
+   file by retrieving them from the store and overwriting the files on
+   disk. It does not automagically also write the .trm.tbl file anymore,
+   you can use the "Dump Parsetable" menu option for that.
+ * Removed initialization of metastudio with extensions and library locations
+ * Fixed a very strange bug: the type of updateList in the idef and the
+   studio differed. Now reading in a string that is converted to an ATerm
+   by calling factory.parse. 
+ * Loading the term-store does not print error messages about existing tables 
+   anymore.
+   - If the user adds a table that already exists, the error message is
+     still printed
+   - An error message is printed in all cases where a table is added with
+     the same name as an existing table, but a different type
+ * Commented out icons in MetaStudio
+ * Moved scale menu to file menubar
+
+2003/07/01 (markvdb@cwi.nl)
+ * First version of the reading and writing of the snapshot
+   of the term-store.
+
+2003/07/01 (jurgenv@cwi.nl)
+ * Added ATBpack to get-parsetree of structure editor
+ * Get all equations does not use all sdf modules anymore, only those
+   imported by the module that the equations are requested for.
+
+2003/06/27 (jurgenv@cwi.nl)
+ * Added a library for creating snapshots of the term-store
+
+2003/06/27 ({jurgenv,markvdb}@cwi.nl)
+ * When illegal modulenames are supplied by the '-m' option the 
+   environment deals with it correctly now. Only the error messages
+   are not printed because of parallel computation: the module are opened
+   already while the MetaStudio is starting up.
+
+2003/06/27 (markvdb@cwi.nl)
+ * metastudio is able to deal with graphs with extra information.
+ * First prototype of connection between parsetree and editor.
+
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
+2003/06/26 (iversen@cwi.nl)
+ * Added some type parameters to processes in module database
+ * Introduced hook to do something before collecting sdf2 definitions
+
+2003/06/26 (markvdb@cwi.nl)
+ * The update-list takes a string as argument and not a term.
+ * execute-action("unparsePT") is replaced by the button action unparse,
+   this in order to be robust against ATBpack terms. The gen-adapter
+   does not know how to handle these.
+
+2003/06/25 (iversen@cwi.nl)
+ * Improved the code in the TreeModel
+
+2003/06/25 (jurgenv@cwi.nl)
+ * fixed a number of bugs in the refactoring facilities:
+   - compound module names were not supported
+   - the old path names were stored instead of the new ones
+   - the new path name was used to delete obsolete files instead
+     of the old path name
+   - several inconsistencies where a complete filename was sent instead of
+     a module name
+
+2003/06/25 ({jurgenv,iversen}@cwi.nl)
+ * Refactored a bit in the module tree panel 
+ * Removed old module-db implementation
+
+Tue Jun 24 10:07:50 CEST 2003 <{jong,markvdb}@cwi.nl>
+ * Fixed bug in button-actions.tb:read-tree
+
+2003/06/23 (markvdb@cwi.nl)
+ * Fixed an unpack action in the structure editor.
+
+2003/06/23 (iversen@cwi.nl)
+ * Changed module list panel in MetaStudio to a module tree panel.
+
+2003/06/20 (markvdb@cwi.nl)
+ * Added save and read-tree.
+ * Fixed a bug in check-sort.
+
+2003/06/19 ({jong,markvdb}@cwi.nl)
+ * Remove tbscripts/query.tb
+ * include QueryDisplay iso query-tool
+
+2003/06/18 (markvdb@cs.vu.nl)
+ * Fixed the invalidation bug of editors.
+ * Fixed the reverting module bug when closing an equation editor.
+
+2003/06/16 (iversen@cwi.nl)
+ * Made module opening and creation more generic 
+   to reduce the code duplication for ActionSdf. 
+
+2003/06/14 (iversen@cwi.nl)
+ * Made ParseSyntax more generic in order to 
+   reduce the code duplication for ActionSdf.
+
+2003/06/13 ({markvdb, iversen}@cwi.nl)
+ * Made various processes more generic in order to
+   reduce the code duplication for ActionSdf.
+
+2003/06/12 ({markvdb, iversen}@cwi.nl)
+ * Fixed the close module functionality.
+
+2003/06/10 (markvdb@cwi.nl)
+ * Improved the robustness of various operations.
+ * Fixed the delete module functionality.
+
+2003/06/05 ({markvdb,jong}@cwi.nl)
+ * List of editortypes in button descriptions introduced.
+ * Introduced the renaming of modules.
+
+2003/06/04 (markvdb@cs.vu.nl)
+ * Introduce the refactor "remove import".
+
+2003/06/03 (iversen@cwi.nl)
+ * made menuitems in MetaStudio configurable with button-scripts.
+ * added some new button actions to support this.
+ * added MetaStudio menuitems to standard.buttons.
+
+2003/06/03 (markvdb@cwi.nl)
+ * First refactoring operation (add-import) enabled.
+
+Tue Jun  3 10:38:53 CEST 2003 <jong@cwi.nl>
+ * editors/manager/src/editor-manager.idef:
+   - fix mismatch in # of params in result of get-editor-id()
+ * tbscripts/file-creator.tb:
+   - fix mismatch in # of params in create-new-module message
+   - search for existing equations in a '.asf' file, not a '.sdf' file ;-)
+
+2003/05/30 (jurgenv@cwi.nl)
+ * removed module-db subtree from configure.in, but still left it in the
+   source tree.
+ * made dump of parsetable and dump-equations use the same schema
+ * fixed bugs in dump-equations 
+ * extended term-store with 'get-values(table, keys)'.
+ * changed get-all-sdf-definitions(Name) to reuse the import relation,
+   then compute a transitive closure based on this simple relations,
+   then only get the needed modules out of the store and create a definition
+   from that.
+ * get-depending-modules also reused the cached import relation now, such
+   that no entire sdf-modules have to be transferred anymore just to throw
+   away some parsetables.
+
+2003/05/28 (markvdb@cs.vu.nl)
+ * Added a number of "empty" assignments.
+ * Replace the calculation of the import-graph by 
+   a more direct derivation and display by meta-studio.
+ * Editing of syntax modules with errors is enabled again.
+
+2003/05/28 (jurgenv@cwi.nl)
+ * The meta-studio.idef subscribes to notes before executing the studio
+   to prevent loosing any notes.
+
+2003/05/27 (jurgenv@cwi.nl)
+ * Term-store has two types of tables now: str and term. 
+ * Pos-info is added up to depth 4 for equations as it used to  be,
+   but the script now contains a magical value!
+ * Factored out common functionality between all 'main' processes such
+   as meta-studio, the standalone dumpers and the standalone editors
+ * Renamed ToolBus files for the standalone tools! See asfsdf-meta/src for 
+   examples on how to use them.
+ * Reactivated invalidation of asf-trees and parsetables 
+   (not working correctly yet)
+ 
+
+2003/05/27 (markvdb@cwi.nl)
+ * Imports are filtered against the contents of the term-store.
+ * meta.tb now has an explicit starting order of initial processes.
+ * Some variables set to dummy values.
+ * Some ATBpack and unpacks added.
+
+2003/05/27 ({jong,jurgenv}@cwi.nl)
+ * fixed a lot of stupid bugs in in-output (unneeded free calls for example)
+
+2003/05/26 ({markvdb,jurgenv}@cwi.nl)
+ * In-output idef messages are all prefix with "io-"
+ * A path in the module name is always up to the module name, not
+   even including a part of the compound module name
+ * ...-named-... functions removed from in-output because there are
+   now only two representations of a filename:
+     1. A full absolute filename including path and extension
+     2. [Path,Name,Extension] where the concatenation should form
+        a path of type 1. Name can contain directory separators.
+ * Editor-manager takes a name of type 1 and does not concatenate
+   extensions anymore
+ * All tools and processes adapted to use the new filename conventions
+ * Posinfo is now added with the correct full filenames (style 1) again
+
+2003/05/21 ({markvdb,jurgenv}@cwi.nl)
+ * The coordination part of the old module-db is now implemented
+   in ToolBus scripts.
+ * Module renaming is now implemented in the sdf-support package, not
+   in module-db and asf-operations, or elan-operations any more. The
+   tool is called sdf-renaming. It takes a module and the current import
+   relation and returns a list of modules that are copies of the original
+   module with the appropriate renamings applied.
+ * Deactivated the module-db subtree in this package. It will remain here
+   for a while to do some browsing, but it is now officially dead code.
+ * The hook message postprocess-collected-semantics-hook-result has
+   been changed to take a <str> for a module name instead of a <term>.
+   Note: asfsdf-meta and elan-env should deal with this change.
+
+Fri May 23 09:40:00 CEST 2003 <jong@cwi.nl>
+ * tbscripts/meta.tb: add #ifdef around #include of query-tool.idef
+ * src/generic-meta.sh.src: add -I<path> to meta-query tool
+
+Thu May 22 14:42:02 CEST 2003 <jong@cwi.nl>
+ * query-tool/**: move to a separate package "meta-query"
+ * tbscripts/button-actions.tb: add support for queries
+ * tbscripts/query.tb: cleanup (delete) standalone/ui stuff
+ * tbscripts/meta.tb: Query processes conditional in toolbus() call
+ * src/generic-meta.sh.src: add -q flag to enable query support
+
+2003/05/21 ({markvdb,jurgenv}@cwi.nl)
+ * working towards implementing the module-db coordination tasks in ToolBus
+   in tbscripts/module-db.tb
+ * term-store now has terms as values, not lists anymore
+ * all files in module-db/src are now deprecated, do not edit there anymore.
+
+Wed May 21 13:15:45 CEST 2003 <jong@cwi.nl>
+ * Added -Werror in in-output and module-db Makefiles.
+ * Fixed multiline string-constanct in ATmake construct in module-db/main.c
+ * Removed deprecated functionality in in-output/main.c
+
+2003/05/21 (markvdb@cwi.nl)
+ * Editing of erroneous syntax modules enabled.
+
+2003/05/20 (jurgenv@cwi.nl)
+ * To fix the immediate reduce (without first pressing 'Parse') bug,
+   the get-root button action now first pops the current module name from
+   the stack.
+
+2003/05/20 ({jurgenv,jong}@cwi.nl)
+ * added a number of new functions to the in-output tool:
+   - find-file: searches a file in a given number of paths
+   - compare-files: checks if filenames point to the same file on the system
+   - get-filename: construct filename from dir+name+ext
+ * renamed some functions in the in-output tool
+ * split parsing, conversion to absolute paths and registering of the
+   meta.conf file
+ * dialog with io tool extended
+ * brought scripts up-to-date with changes in in-output and configuration-
+   manager
+
+2003/05/19 (jurgenv@cwi.nl)
+ * Moved term-store tool to toplevel
+ * Copied sdf specific functionality from module-db to sdf-modules tool
+   located in the sdf-support package.
+ * Partly reimplemented module-db in a ToolBus script that uses only
+   the sdf-modules.idef and term-store.idef
+
+2003/05/19 ({jong,markvdb}@cwi.nl)   
+ * Added explicit ATBpack and ATBunpack.   
+ * Introduced write-term-file.
+ * Removed configuration specific stuff from IO.
+
+2003/05/16 ({jurgenv,markvdb}@cwi.nl)
+ * Major revision of UI, IO, MDB.
+ * NOT YET FINISHED, SO DO NOT UPDATE!
+
+2003/05/15 ({jurgenv,markvdb}@cwi.nl)
+ * Created a generic term-store tool
+ * Some features are turned off for the moment (module refactorings)
+
+2003/05/14 (markvdb@cwi.nl)
+ * Intermediate version of new module-db.
+
+Tue May 13 13:16:20 CEST 2003 <jong@cwi.nl>
+ * fix tbscripts/editors.tb and editors/text/text-editor.idef: 
+   process TextEditor no longer has any parameters, making it abide
+   by our coding standard for the idef of a tool. Instead the parameters
+   are passed by a message: edit-text(EditorId, FileName, ButtonList)
+
+Mon May 12 14:13:14 CEST 2003 ({jong,kooiker}@cwi.nl)
+ * Fixed bug: LAYOUT-GRAPH process was only started #if METASTUDIO was
+   defined, but this #define had been deemed "dead code" earlier
+
+2003/05/10 (jurgenv@cwi.nl)
+ * Removed dead code taking care of switching between graphbrowser
+   and metastudio.
+
+Fri May  9 11:10:03 CEST 2003 <jong@cwi.nl>
+ * Add "Clear History" functionalty to MetaStudio, clearing the bottom
+   right message pane.
+ * Fix indentation level of this ChangeLog which managed to sneak to a
+   deeper level again, and since everybody copies the previous one...
+
+2003/05/09 ({markvdb,jurgenv}@cwi.nl)
+  * First steps of the restructuring of the "module-db".
+
+2003/05/07 (markvdb@cs.vu.nl)
+ * Fixed the annoying behaviour of closing and opening the
+   term editor in the demos of Jorgen Iversen and Paul Klint.
+   A new button action `close-editor' has been introduced.
+
+2003/04/29 ({iversen,jurgenv}@cwi.nl)
+ * Added a new widget to the MetaStudio: a message list
+ * Fixed a number of typos and wrong messages in the ToolBus scripts
+   that were introduced recently by jurgenv.
+ * Added a new type of 'editor' to the button language: message-list.
+
+2003/04/28 (markvdb@cs.vu.nl)
+ * Clean up the new button language a bit.
+ * Tested it on the boolean transformations.
+ * Given some button actions more appropriate names.
+
+2003/04/25 (jurgenv@cwi.nl)
+ * Deadlock problems caused by dissappearing text editors partially solved by 
+   changing the idef of text-editor to use only notes.
+ * Processes that send messages to editors made more robust against 
+   non-existing editors, or they now listen to notes that declare an
+   editor dead.
+ * This solved the memory leak introduced by a workaround for the
+   previous problem that lead to eternally waiting Text-Editor processes.
+ * Replaced assert statements in structure editor by proper handling
+   of non-existing editors. 
+ * Replaced some assert statements in editor-manager too.
+ * All buttons in editors are now handled via the button-language.
+   The text-editor knows nothing about the details of buttons anymore.
+ * Button names are now list of strings. For example: ["Action","Parse"].
+   This will add the "Parse" button to the menu "Action".
+   Note that all button scripts will have to be adapted to deal with this.
+ * The button language was changed. All actions that had a modulename
+   as a direct argument now read it from the stack as a string.
+ * Added a new primitive to the button language: 'push-modulename' that
+   pushed the modulename of the current editor onto the stack
+ * The standard Meta-Environment buttons are now completely externalized
+   from the configuration-manager. A file called 'standard.buttons' is
+   installed and the configuration-manager reads it in when the 
+   Meta-Environment starts up.
+ * Used ApiGen to reimplement configuration manager
+
+2003/04/25 (jurgenv@cwi.nl)
+ * Refactored button-actions to use StackPush/Pop operations
+ * Fixed a bug in the structure editor, ViewTree on the root of a term
+   caused a core dump.
+ * Completely refactored editor managing scripts. All code duplication
+   removed. Editor killing simplified (must be tested thoroughly!)
+
+2003/04/24 (jurgenv@cwi.nl)
+ * All scripts related to the implementation of the button language
+   are now located in a single button-actions.tb script. This script needs
+   more refactoring
+
+2003/04/24 (markvdb@cwi.nl)
+ * ViewTree added and Meta-Environment renamed to Term-Actions.
+
+2003/04/16 (markvdb@cwi.nl)
+ * Reintroduced the save and print entries in the module menu.
+
+2003/04/15 (markvdb@cs.vu.nl)
+ * Repaired a very annoying bug wrt setting of foci. The message
+   move-focus-to-root responded with "set-focus" which causes
+   quite some interference.
+
+2003/03/30 (jurgenv@cwi.nl)
+ * Used backquotes to delay calling *-config scripts to after
+   configure phase. Otherwise autobundle can't configure all packages
+   before building them.
+
+2003/03/28 (jurgenv@cwi.nl)
+ * Added dependency on new graph-support package
+ * Added capability of drawing diamonds and ellipses to MetaStudio graph
+   panels
+
+2003/03/25 (markvdb@cwi.nl)
+ * Restructured the killing of editors, a new process introduced.
+   A number of small bugs are solved in this way. There is still
+   one major issue with respect reusing an existing term-editor.
+
+2003/03/24 ({markvdb, iversen}@cwi.nl)
+ * Added button-action show-area, which takes a modulename as 
+   argument and an 
+  aterm containing position info from the stack, and then highlights the 
+  position, using the module to parse the file containing the position. 
+
+* Also added position-info annotation to all terms.
+
+* Removed button-action add-pos-info.
+
+2003/03/20 (markvdb@cwi.nl)
+ * Added a "Delete this module" for a non-existing module, this
+   omission was reported by PDM.
+
+2003/03/20 (jurgenv@cwi.nl)
+ * Removed dependency on shared-objects and jjtraveler. This is taken care
+   of by aterm-java-config from now on.
+
+2003/03/19 (markvdb@cs.vu.nl)
+ * Reduce-button adapted to the new button actions.
+
+2003/03/19 ({iversen, jurgenv}@cwi.nl)
+ * added command add-pos-info to button-language.
+
+   add-pos-info: Annotate parse-tree on stack with position info.
+
+2003/03/18 ({iversen,markvdb}@cwi.nl
+ * Added 2 new button actions.
+
+2003/03/18 (jurgenv@cwi.nl)
+ * Use shared-objects-config and aterm-java-config scripts to obtain last
+   version of their jar files in configure.in
+
+Mon Mar 17 14:18:19 CET 2003 <jong@cwi.nl>
+ * more aterm (jjtraveler) dependency issues fixed
+
+2003/03/13 (vandenbr@loria.fr)
+ * Introduced standalone editors for syntax, equations, and terms.
+ * Introduced the notion of "application-status".
+ * snd-msg(delete-editor(...)) replaced by snd-note(...).
+ * Activation of term-editors explicitly acknownledged.
+
+Tue Mar  4 09:51:15 CET 2003 <{markvdb,jong}@cwi.nl>
+ * add new queries:
+   - find Sdf definition of production used in Asf equation
+   - find Sdf definition of variable used in Asf equation
+   - find equation(s) that "implement" an Sdf production 
+
+Thu Feb 27 09:24:54 CET 2003 <jong@cwi.nl>
+ * meta-studio: move NodeSizer.java from metastudio.graph to metastudio
+   as it is not part of the generated graph package.
+ * fix: profane usage of literal constants 0, 1, and 2 into symbolic
+   constants (JOptionPane.YES_OPTION etc.) in handling of Dialogs.
+
+Wed Feb 26 10:38:59 CET 2003 <jong@cwi.nl>
+ * MetaStudio.java: cleanup in file actions. Improved consistency,
+   added missing default-properties, refactored fileBrowser code,
+   introduced "refactor" popup submenu, and some misc. improvements.
+ * edit-syntax.tb: remove set-focus that unconditionally tries to set
+   the focus on the entire file. This interferes with tools (e.g. the
+   query tool) that need to set the focus on a different portion of
+   the term.
+ * query-tool: some work done to simplify the findProduction code.
+   Instead of two almost identical copies, we now have one iteration
+   function which takes a predicate to do the actual (deep) comparison.
+ * query-tool.tb: send query("FindProduction",..) not "FindSortDefinition"
+   when asked to find a production.
+
+Tue Feb 25 13:27:30 CET 2003 <jong@cwi.nl>
+ * refactoring: ApiGen generated sources only in metastudio.graph now
+ * cleanup: use ApiGen generated (auto)make support
+
+2003/02/18 (markvdb@cwi.nl)
+ * Activated ViewTree button.
+
+Mon Feb 17 10:00:23 CET 2003 <jong@cwi.nl>
+ * text-editor.idef: fix rec-event for Queries acknowledged a Move event
+
+Thu Feb 13 15:04:43 CET 2003 <{jong,olivierp}@cwi.nl>
+ * Several patches to fix "make distcheck"
+
+2003/02/12 <jurgenv@cwi.nl>
+ * Added ModuleName to postprocess-collected-semantics-hook
+
+Wed Feb 12 14:35:50 CET 2003 <olivierp@cwi.nl>
+ * Fixed 'hang' bug in gui.
+ * Node order is no longer changed when deleting nodes.
+
+2003/02/11 <markvdb@cwi.nl>
+ * Restructured the query handling.
+
+2003/02/07 <{markvdb,jong}@cwi.nl>
+ * Improved the query tool a bit.
+ * Added meta-studio to cleaning.
+
+Thu Feb  6 09:41:25 CET 2003 <{jong,markvdb,olivierp}@cwi.nl>
+ * Added basic support for multiple graph display
+ * Adapter graph layouting to work with generated API
+ * metastudio now uses the new dot-adapter graph format
+
+Thu Feb  6 09:41:25 CET 2003 <jong@cwi.nl>
+ * cleaned up tbscripts/Makefile.am
+
+Wed Feb  5 13:30:47 CET 2003 <jong@cwi.nl>
+ * configure/automake stuff added for C implementation of query-tool
+ * refactored query-tool directory structure into query-tool/src/{c,spec}/FILES
+ * Refactoring:
+   - query-tool.[ch] contains TB specifics
+   - findSortDefinition.[ch] implements the one query we have so far
+     (add more to QUERIES in Makefile.am as needed)
+  By separating the queries from the TB related stuff we can now write
+  (unit) tests for these queries, without having to invoke the MetaEnv.
+
+2003/02/05 (markvdb@cs.vu.nl)
+ * New message/function "close-module" which deals with "deleting"
+   a module without removing from the imports in depending modules.
+
+Wed Jan 29 10:15:44 CET 2003 <{jong,markvdb}@cwi.nl>
+ * First "meta-query" experiment:
+   given a focus in text-editor, find the "first" Module that has
+   the focus-sort as rhs in a production
+
+2003/01/28 (markvdb@cwi.nl)
+ * Release 0.12beta
+ * The error message in the equation and syntax editor was
+   lost due to a resetting of the focus.
+
+Fri Jan 24 10:09:13 CET 2003 <jong@cwi.nl>
+ * add ${top_srcdir}/meta-studio to CLASSPATH during java compilation
+   to satisfy distcheck needs
+
+2003/01/23 <{jong,jurgenv}@cwi.nl>
+ * Release 0.11
+ * LGPL license
+ * MetaStudio is now the default GUI, manual hacking of configure.in
+   needed to re-enable the "old" graph-browser
+ * showdot temporarily disabled including the GUI buttons.
+ * removed autoconf version checks for wish and graphviz
+ * added path check for java
+
+2003/01/17 (jong@cwi.nl)
+ * Removed superfluous message in text/structure editor and simplified
+   detection of dirty text-editors vs. known state in structure editor
+
+2003/01/16 (jong@cwi.nl)
+ * Fixed bug in se.c: incorrect handling of amb() as parse tree.
+
+2003/01/10 (markvdb@cwi.nl)
+ * Fixed a bug with renamings. If an imported module has
+   a parameter which is also a parameter of the surrounding
+   module, the renaming has to be renamed in a consistent
+   way.
+ * Fixed a number of error messages.
+
+2003/01/08 (markvdb@cs.vu.nl)
+ * Return full imports when asking for the equations when dealing
+   with renamings.
+
+2002/12/09 (jurgenv@cwi.nl)
+ * Changed version of aterm-java and shared-objects jarfiles
+
+2002/11/25 (vandenbr@loria.fr)
+ * Fixed a bug in the structure editors wrt "unparsed"-ness of
+   trees.
+ * Removed annotations when removing ModuleIds from the list
+   of imports.
+
+2002/11/20 (vinju@loria.fr)
+ * Set versions of shared-objects and aterm-java jarfiles to 1.0
+ * Refactored module-db to use Start symbols instead of pt-support API.
+
+2002/11/20 (vandenbr@loria.fr)
+ * Fixed a bug in opening a non-existing module.
+ * Removed dead code.
+ * Fixed a deadlock when copying and pasting.
+
+2002/11/15 (vandenbr@loria.fr)
+ * Created a separate file with parse-utilities, because the new processes
+   are needed both by meta as well as eqs-dump.
+
+2002/11/15 (markvdb@cs.vu.nl)
+ * Restructuring of the scripts with respect to setting of parse tables,
+   calling of sglr, processing of parse tree cq parse errors.
+   Scattered code is grouped into few new small processes.
+
+2002/11/13 (markvdb@cs.vu.nl)
+ * Added a number of essential components to the -V of generic-meta.
+ * Added a similar interface is used in "module-db" to "editor-manager".
+
+2002/10/30 (vinju@loria.fr)
+ * Added dependency on shared-objects package
+ * MetaStudio uses jarfiles instead of installed .class files
+
+2002/10/29 (vinju@loria.fr)
+ * Removed implicit generation of ToolBus interface. *.tif.[ch] files 
+   have been added to the repository
+ * Added dependency on aterm-java package
+
+2002/10/12 (vinju@loria.fr)
+ * Added Close Module to the Meta-Environment interface. You can close
+   modules that are not imported by other modules. It also asks if you
+   want to close imported modules recursively. Only the modules that are
+   not used by other modules will be closed in that case.
+
+2002/10/11 (vinju@loria.fr)
+ * Added functionality for non-existing modules in MetaStudio. If you click
+   on them you can create them by choosing the option from the menu.
+ * Fixed renaming of modules, old module was not removed
+ * Fixed deleting of modules, module was not really deleted
+ * Module that import a deleted module are now updated to not have the 
+   import any more
+
+2002/10/10 (vinju@loria.fr)
+ * Changed functionality concerning ambiguities in the editor. If you click 
+   inside a cluster, the focus is set around the entire cluster 
+   (to easily identify ambiguities).
+ * Added Copy Module to Meta-Environment interface
+ * Added Import Module to Meta-Environment interface
+
+2002/10/09 (vinju@loria.fr)
+ * Major refactoring of ToolBus scripts: 
+     - All ASF specific scripts are removed and put into the asf package.
+     - Toplevel meta script calls 'Meta-Interface' instead of all asf related
+       processes
+     - All asf related messages are replaced by generic 'hook' messages that 
+       ALL must be implemented by the 'Meta-Interface' process. 
+ * Added ability of setting a configuration option at runtime to MetaStudio
+ * Added configuration option for term extension to MetaStudio
+ * Graph-browser/MetaStudio are initialized with file extensions at run-time:
+     - using the generic 'hook' messages
+ * Meta script, eqs-dump script and pt-dump script are replaced by 
+   a single script called 'generic-meta'. Generic-meta:
+    - Takes additional -I options to extend the ToolBus include path
+    - Can dump equations (-E) or a parsetable (-P) and save (-S) intermediate
+      results
+    - Contains no reference to ASF related tools anymore.
+    - is called by a 'meta' script in the asf package which sets the correct
+      -I paths.
+ * dependencies on asf, asf-support and asc-support packages removed:
+    - the asf package is now dependent on the meta package instead of vice
+      versa.
+   
+2002/10/08 (vinju@loria.fr)
+ * Refactored functionality to get a list of equations from the moduledb.
+
+2002/10/03 (vandenbr@loria.fr)
+ * Renamed the fixed button "FocusToDot" to "ViewTree".
+
+2002/10/02 (vandenbr@loria.fr)
+ * Hardwired file extensions removed.
+ 
+2002/09/27 (markvdb@cs.vu.nl)
+ * ModuleDB is asf-support independent.
+ * Scripts and code are more robust.
+
+2002/09/26 (markvdb@cs.vu.nl)
+ * First step in refactoring the code of the module-database with
+   respect to renaming and parameterization.
+ * Moved the renaming and parameterization functionality for equations
+   to the asf directory.
+
+2002/09/25 (markvdb@cs.vu.nl)
+ * Fixed a bug in the parameter handling.
+ * '-m' option added to meta script in order to enable the user to give
+   the desired top-module on the command line when starting the 
+   Meta-Environment.
+
+2002/09/24 (markvdb@cs.vu.nl)
+ * Introduced the -S option to eqs-dumper and pt-dumper
+   in order to be enable the saving of intermediate files.
+
+2002/09/16 (vandenbr@loria.fr)
+ * Introduced the notion of "status-changed" in the editors
+   to know that a term has become dirty.
+
+2002/09/16 (vinju@loria.fr, vandenbr@loria.fr)
+ * Code of in-output is made more robust.
+
+2002/09/13 (jurgenv@cwi.nl, vandenbr@loria.fr)
+ * Added a function to transform "windows-like" paths into "unix-like"
+   paths.
+
+2002/08/03 (markvdb@cwi.nl)
+ * Bumped version to 0.11beta
+ * FocusToDot button always available for term editors.
+ * Editors can now deal with ambiguous trees.
+
+2002/08/03 (mdejonge@cwi.nl)
+ * configure.in: fixed configuration bug when graphviz package was not
+   specified with the --with-graphviz switch and could not be automatically
+   found. Issue an error message and terminate.
+
+2002/07/24 (jurgenv@cwi.nl)
+ * Fixed generation of graphbrowser TCL script bug
+ * Release 0.10
+
+2002/07/04 (jurgenv@cwi.nl)
+ * Fixed a bug in module parameterization for ASF. If a module parameter
+   was bound to a list symbol, variables of the parametrized symbol were not
+   properly converted to list variables.
+
+2002/06/24 (vandenbr@loria.fr)
+ * asf-checker activated.
+
+2002/06/07 ({jurgenv,jong}@cwi.nl)
+ * Refactored replace-file using revert-buffer functionality in xemacs.
+ * Renamed replace-file to reload-file.
+
+2002/06/06 (vandenbr@loria.fr)
+ * Replaced replace-text by replace-file.
+
+2002/06/04 (vandenbr@loria.fr)
+ * Introduced a separate ProcessButtonActions process, in order to
+   be able to have more than one editor with buttons active at the
+   same time.
+ *  Added extra argument (EditorId) when returning the stack.   
+
+2002/05/17 (vandenbr@loria.fr)
+ * Restructured the ToolBus code a bit, introduced a separate 
+   process errors process.
+ * Both pt-dump and eqs-dump have to be aware of the asf-libraries as
+   well.
+
+2002/05/16 (vandenbr@loria.fr)
+ * Added a message action to buttons.
+ * Added the sort name to parse action.
+ * Added a "conditional" construct to button actions.
+ * New pico version based on asf-library.
+ * Added a button to old user interface to refresh buttons.
+ * Introduced "push-string" and "push-filename".
+ * Restructured parse action.
+
+2002/05/15 (vandenbr@loria.fr)
+ * Adapted the gen-adapter script in order to deal with trees as input.
+ * Renamed the button operations.
+ * Removed all intermediate files in button definitions.
+ * Added check on existence of editor.
+ * Added an explicit way of locating a file.
+ * Added the functionality of set-root.
+ * Adapted the "fixed" reduce button script.
+ * Added a function to se interface to move focus to the root.
+
+2002/05/14 (jurgenv@cwi.nl)
+ * Added package dependency on asf-library package
+ * The location of the installed asf-library is added to the search path
+   implicitly.
+ * Added Open Library buttons to the graphbrowser and metastudio
+
+2002/05/14 (vandenbr@loria.fr)
+ * Fixed a bug in the renaming of hiddens ImportSections.
+
+2002/05/13 (vandenbr@loria.fr)
+ * Improved the button functionality:
+   - obtain information from another active editor.
+   - distribute a compound rewrite result over different sources.
+   - EditorId is added as an argument to the messages in order
+     to address the correct editor process.
+     
+2002/05/13 (jurgenv@cwi.nl)
+ * Refactored implementation of module renaming.
+ * Changed renaming widget to file browser in graphbrowser and metastudio.
+ * Made renaming work with compound module names too.
+
+2002/05/09 (jurgenv@cwi.nl)
+ * Enhanced support for compound module names. New compound module names
+   are computed automatically using the meta.conf path and the selected
+   file name. The shortest possible module name is computed using the most
+   specific path in the meta.conf file.
+ * Error message if new module is not in subtree of meta.conf path.
+
+2002/05/08 (markvdb@cwi.nl)
+ * Replaced the fixed "parse" and "reduce" button by the
+   new button mechanism.
+ * "Meta-Environment" ==> "Term-Actions"
+
+2002/05/08 (jurgenv@cwi.nl)
+ * Added check on module name consistency
+ * Support for compound module names improved (not done yet, because
+   creating and renaming compound module names is only partly supported
+   so far).
+ * Improved implementation of opening of modules and restoring 
+   saved parse tables.
+ * Improved behavior for handling modules that were edited outside of
+   the Meta-Environment containing errors.
+ * Changing the module name using the editor is handled like a parse error.
+   I.o.w, it is not allowed. The rename module functionality should be used.
+
+2002/05/07 (vandenbr@loria.fr) 
+ * Improved button manipulation:
+   - Check on top sort added.
+   - apply-function is now a toolbus component.
+   - In place replacement of result of normalization of focus
+
+2002/05/07 <olivierp@cwi.nl>
+ * Fixed 'empty module list' syndrome
+
+2002/05/06 (jurgenv@cwi.nl)
+ * Opening initial module with a compound module name fixed.
+ * Removed check on module name consistency for the moment.
+
+2002/05/06 (vandenbr@loria.fr)
+ * Improved the button manipulation.
+ * Fixed the bug that caused empty editors when there was a syntax
+   error in the Sdf spec.
+ * Improved the buttons with respect to foci.
+
+2002/04/26 (markvdb@cs.vu.nl)
+ * Experimental version with buttons.
+ * See meta.buttons in meta/demo/pico for an example of its use.
+ * Started version 0.10beta.
+
+2002/04/24 <olivierp@cwi.nl>
+ * Dragging when the menu is active no longer moves the graph
+ * Operations on multiple modules are now possible
+ * Clear all no also clears the list of modules
+ * Fixed bug that caused small graphs to jump to the lower right
+   when dragging
+ * Added status panel
+
+2002/04/19 ({jong,jurgenv}@cwi.nl)
+ * Small refactorings in configure.in to make things more clear
+ * Release 0.9
+
+2002/04/18 (jurgenv@cwi.nl)
+ * Added a tool called 'metascript' that generates scripts with a common
+   commandline interface to call the parser with a fixed parsetable and
+   to run a fixed compiled specification. 
+
+2002/04/18 (vandenbr@loria.fr)
+ * Variables are visualized with "*variable*" again, this bug
+    was the result of the bug fix on 2002/03/26.
+
+2002/04/17 (olivierp@cwi.nl)
+ * Fixed 'animation problem', greatly improving module open time
+ * Improved paint/scroll speed of graph window
+ * Fixed bugs in module list
+ * Import/imported by windows now scroll when they contain too many modules
+ * You can now use mouse dragging in the graph window to scroll the whole graph
+ * Added workaround for swing bug (fillRect cannot handle coordinates > 32k)
+
+2002/04/16 (olivierp@cwi.nl)
+ * Introduced flexible scaling (graphpane.scales[.default] properties)
+
+2002/04/03 (olivierp@cwi.nl)
+ * Added new user interface (MetaStudio), add --with-metastudio to activate
+
+2002/03/22 (jurgenv@cwi.nl)
+ * Removed superfluous tool 'parse-sdf2'; a simpler sglr wrapper with
+   the same name is located in the sglr package.
+
+2002/03/22 (vandenbr@loria.fr)
+  * Restructured the Sdf-Checker and moved to pgen and asf.
+
+2002/03/08 (jong@cwi.nl)
+ * in editors/structure, renamed Editor.[ch] to EditorData.[ch] to
+   avoid conflicts on filename-case-insensitive platforms.
+
+2002/03/05 (jong@cwi.nl)
+ * Refactored gvim-support. That is, I removed it alltogether from
+   the meta package, and put it in its own package. This should
+   fix the libtool problems until the next person decides to use
+   a dynamic library :)
+
+2002/03/04 (jurgenv@cwi.nl)
+ * Added support for lexical variables in sdf-checker
+
+2002/01/03 ({jong,jurgenv}@cwi.nl)
+ * Activated gvim support under --enable-gvim
+ * libtool is checked only if gvim is enabled.
+ * Bumped version to 0.9beta
+ * Removed dlopen check from configure
+ * Checking of tcldot and graphviz versions only if --with-graphviz
+   not explicitly given.
+ 
+2002/02/15 (jurgenv@cwi.nl)
+ * Added showdot, a command-line tool that visualizes a dot graph using tcl/tk.
+
+2002/02/12 ({markvdb,jurgenv}@cwi.nl)
+ * Release 0.8
+ * unparsePT, configmanager and restore-brackets are killed immediately
+   after they are finished. This reduces the footprint of the Meta-Environment
+   a bit. 
+
+2002/01/24 (vandenbr@cwi.nl)
+ * Improved the sdf-checker:
+   - can deal with circular imports.
+   - labels are checked.
+   - constructors are checked.
+   - injections are taken in consideration when checking priorities.
+
+2002/01/15 (jurgenv@cwi.nl)
+ * Added generation of getters, setters, predicates and constructors to
+   term syntax too.
+
+2002/01/15 (jurgenv@cwi.nl)
+ * Added generation of syntax for prefix functions and getters and setters 
+   when cons attributes or labels are used (in eqs syntax only).
+
+2002/01/15 (vandenbr@loria.fr)
+ * Finalized the Sdf-Checker, thanks to Paul.
+
+2002/01/08 (vandenbr@loria.fr)
+ * Adapted the edit-term script and moved functionality to the
+   rewriter.
+
+2001/12/21 (jurgenv@cwi.nl)
+ * The normal form after reducing can now be inspected using the
+   structure editor without parsing first. This is needed for debugging
+   specifications.
+
+2001/12/07 (vandenbr@loria.fr)
+ * Activated the restore brackets tool in Meta-Environment after
+   reducing a term.
+
+2001/12/07 (vandenbr@loria.fr)
+ * Replaced a snd-do by a snd-eval and rec-value in order to
+   synchronize, with respect to storing equation text.
+ * Fixed a bug in the complete_asf_specification top module was not
+   inspected. Restructured code and problem should be fixed now.
+
+2001/12/04  (vandenbr@loria.fr)
+ * Fixed the deadlock in both stand-alone scripts.
+
+2001/11/30 (vandenbr@loria.fr)
+ * Removed start symbols functionality from structure editor.
+ * Added functionality to obtain the start sort for rules explicitly.
+
+2001/11/29 (vandenbr@loria.fr)
+ * File extensions are now parameters of in-output.
+
+2001/11/25 (mdejonge@cwi.nl)
+ * package now uses toolbuslib package
+ * extended functionality of program-check.m4 macros
+
+2001/11/21 (jurgenv@cwi.nl)
+ * Added visualization of variables symbols in editor.
+ * Bumped to 0.8beta
+
+2001/11/20 (jurgenv@cwi.nl)
+ * disabled the gvim text-editor.
+
+2001/11/16 (jong@cwi.nl)
+ * snd-terminate functionality in emacs editor reinstated
+ * version tweaked down to patchlevel 0.7.1
+
+2001/11/15 (markvdb@cwi.nl)
+ * Version 0.8beta started
+ * switched off ToolBus interaction while inserting and
+   deleting characters in Xemacs.
+ * fixed a bug when reading stored Sdf files in baf.
+
+2001/11/14 (jong@cwi.nl)
+ * released version 0.7
+ * header weeded from tbscripts/status-display.tb
+
+2001/11/13 (jurgenv@cwi.nl)
+ * Improved gui behaviour of non-existing sdf modules.
+
+2001/11/09 (markvdb@cwi.nl)
+ * Activate and improved the module name renaming in graph-browser.
+ * Apified module-db code.
+ * Deleting of modules results in removing them from disk as well.
+
+2001/11/07 (markvdb@cwi.nl)
+ * -o options added to pt-dump and eqs-dump.
+
+2001/10/23 (markvdb@cwi.nl)
+ * Fixed the reading from terms in directories which are not
+   in meta.conf.
+ * Improved reading and creation of Sdf modules:
+  - located in directories not in meta.conf
+  - creation of files in subdirectories
+
+2001/10/11 (mdejonge@cwi.nl)
+ * Added (generated) manual pages to EXTRA_DIST variable because not
+   everybody has pod2man available
+
+2001/09/25 (jong@cwi.nl)
+ * Introduced gvim support as text-editor.
+   Requires gvim (v6.0) in $PATH, invoke "meta -g" to use it.
+
+2001/08/28 (jong@cwi.nl)
+ * Several code improvements to satisfy gcc-3.0.1
+
+2001/08/20 (jong@cwi.nl)
+ * Version 0.7beta started
+ * switched aterm and toolbus configuration options
+
+2001/07/30 (jurgenv@cwi.nl)
+ * Bumped to 0.6
+
+2001/07/19 (markvdb@cwi.nl)
+ * Added functionality to dump parsetables and equations via the
+   command line.
+
+2001/07/17 (markvdb@cwi.nl)
+ * version 0.4 released, bumped to 0.5
+
+2001/07/11 (markvdb@cwi.nl)
+ * Fixed bug in set and get-parsetable scripts.
+
+2001/07/09 (markvdb@cwi.nl)
+ * Added functionality to dump the parse table of a module to parse terms
+   over this module.
+
+2001/07/06 (jurgenv@cwi.nl, markvdb@cwi.nl)
+ * Removed AsFix1 dependency, parse-file, header/license stuff, 
+   change-extension stuff.
+ * Removed all AsFix1 legacy code from Module-DB.
+ * Removed directory containing headers stuff.
+
+2001/07/04 (jurgenv@cwi.nl)
+ * activated new compiler that supports almost all SDF2 constructs.
+   (See also asf package)
+ * Bumped to 0.4
+
+2001/07/03 (markvdb@cwi.nl)
+ * Added parameterization and symbol renaming to the module database.
+   We support now almost full Sdf2.
+
+2001/06/28 (markvdb@cwi.nl)
+ * Added code to deal with parametrization and symbol renaming.
+ * Print button added, a new file FN.txt is generated which
+   contains both the Sdf and Asf text.
+ * Rename button added (does not yet work correctly!)
+ * "Save" button renamed to "Save All" button and added.
+ * "Clear" button renamed to "Clear All" button.
+ * Module database caches the equations.
+
+2001/05/28 (jong@cwi.nl)
+ * Released version 0.3.3
+ * Updated NEWS file
+ * Increased version to 0.3.4
+ * examples are now installed in
+      ${prefix}/share/meta/demo/{pico.user-manual-examples}
+
+2001/05/22 (jong@cwi.nl)
+ * version 0.3.3
+ * user-manual.ps and exercises.ps are now included in the distribution.
+
+2001/05/21 (markvdb@cwi.nl)
+ * Fixed a bug in module-db, equations of module of which the syntax
+   was changed were not made unavailable.
+
+2001/05/16 (jong@cwi.nl)
+ * version 0.2.3
+ * in-output-tool now ignores duplicate entries in search-path.
+ * in-output-tool also requires inodes to be different before complaining
+   about duplicate entries. This reduces overzealous complaints involving
+   entries duplicated by a soft- or hardlink.
+
+2001/05/15 ({jong,jurgenv}@cwi.nl)
+ * Fixed a bug. Closing unparsed equations resulted in module-db inconsistency.
+ * And the same bug fixed for unparsed syntax definitions.
+ * Another bug fixed, deadlock occurred when dumping equations over incomplete
+   specifications
+
+2001/05/14 ({jong,markvdb}@cwi.nl)
+ * restructured {in-output,module-db.tbscripts} so that asf-sections,
+   .sdf.baf, .asf.baf, and parsetables are now read/looked up/written 
+   in the same directory that its respective .sdf file is situated.
+ * adapated tests accordingly
+
+2001/05/11 (markvdb@cwi.nl)
+  * Fixed a bug with respect initializing structure editors with
+    start symbols when tree is already parsed.
+
+2001/04/11 (jurgenv@cwi.nl)
+  * Debugged cut&paste operations in the structure editor.
+  * Adapted structure editor to support AsFix2Me structured lexicals and lists.
+
+2001/05/04 (markvdb@cwi.nl)
+  * Enabled the compilation of specifications.
+  * Various bug fixes in structure editor.
+
+2001/04/23 (markvdb@cwi.nl)
+  * Modified module-db in order to support AsFix2ME.
+  * Bumped version number of module-db to 2.0 in order to indicate
+    a new era.
+  * Modified structure editor in order to support AsFix2ME.
+
+2001/02/26 (jurgenv@cwi.nl)
+  * relaxed the version checking of wish. If the script is unable to
+    check the version of wish, it generates a warning banner. After that
+    it assumes the right version is available in the environment.
+  * changed the .eqs extension to .asf. The following extensions change:
+      .eqs     -> .asf
+      .asf.baf -> .eqs
+      .eqs.baf -> .asf.baf
+      .eqs.tbl -> .asf.tbl
+  * added change-eqs-ext tool that does the above renamings for all files
+    in a directory.
+
+2001/02/20 (markvdb@cwi.nl)
+  * Removed from IO-tool unused constants.
+
+2001/02/20 (jong@cwi.nl)
+  * bugfix in config-manager: searchpaths were delivered in reverse order
+
+2001/02/15 (jong@cwi.nl)
+  * support for --with-sdf-support added to configure.in
+
+2001/02/15 (jong@cwi.nl)
+  * module-db.c: uses libPT and libSDF instead of direct asfix-pattern
+    matching. The ASF-related patterns are itching to be done as well!
+
+2001/02/14 (jong@cwi.nl)
+  * version 0.2
+  * frozen release after internal CWI-repository move
+  * this release is much smaller than previous releases because several
+    components are now distributed separately:
+    - sglr
+    - pgen
+    - asfix (is now split into pt-support, sdf-support, asf-support)
+    - evaluator
+    - compiler
+  * Basically only meta-environment specific tools (module-db, editors)
+    and ToolBus scripts are packed in this version.
+
+2001/02/02 (mdejonge@cwi.nl)
+  * Fixed wish version checking
+  * aclocal now _always_ reads macros from ./config directory
+  * --with-wish switch replaced by --with-tk (name of wish binary is
+     now derived by consulting tkConfig.sh)
+
+2001/02/02 (jurgenv@cwi.nl)
+  * Removed compiler and old asfix2c compiler to asf component.
+
+  * Simplified configure.in by using (meta env specific) m4 macros
+  * Improved configuration macros in ./config
+  * Added ./config directory containing m4 macro files implementing meta
+     -environment specific configuration macros used in the top-level
+     configure.in script.
+  * added check-graphviz.m4, program-check.m4, and check-wish.m4 macro
+     files for configuration checking of graphviz and wish.
+
+2001/01/31 (jurgenv@cwi.nl)
+  * moved Booleans from spec-lib to addeqs/spec.
+  * removed spec-lib
+  * moved asf-syntax/configmanager to configuration-manager
+  * renamed asf-syntax to asf
+
+2001/01/31 (mdejonge@cwi.nl)
+  * Added --with-wish and --with-xemacs configuration switches
+  * Extended PATH in meta script with location of xemacs
+
+2001/01/30 (mdejonge@cwi.nl)
+  * Factored out stand-alone components from meta repository
+
+2001/01/09 (jurgenv@cwi.nl)
+  * removed generation of syntax for traversal functions. From now
+     on, write a traversal production for each sort that you wish to
+     write an equation for.
+
+2001/01/08 (jurgenv@cwi.nl)
+  * added printing of versions of wish and tcldot to meta -V
+
+2000/12/19 (mdejonge@cwi.nl)
+  * Added TOOLBUSDEFS to configure.in
+
+2000/12/13 (mdejonge@cwi.nl)
+  * Re-added --with-layout and --with-traversal switches
+
+2000/12/13 (mdejonge@cwi.nl)
+  * Removed invalid definition of TOOLBUSDEF from top-level Makefile.am
+
+2000/12/12 (mdejonge@cwi.nl)
+  * Changed build and configuration process because evaluator is now a
+     stand-alone package.
+
+2000/12/01 (mdejonge@cwi.nl)
+  * genamakefile: removed BUILT_SOURCES definition because it causes
+     dependency problems.
+
+2000/11/08 ({markvdb,jurgenv,olivierp,jong}@cwi.nl)
+  * in-output tool refactorized
+  * configuration manager tool introduced.
+  * evaluator optimized for traversal functions
+  * added annotated version of Sdf spec.
+
+2000/11/01 (mdejonge@cwi.nl)
+  * Makefile.am as generated by genamakefile now also contains Makefile as
+     dependency for init.c
+
+2000/9/4 (jurgenv@cwi.nl)
+  * Fixed unneccessary generation of parsetables bug
+  * Status display shows more detailed information
+  * Saved parsed equations are reused from now on
+  * Changed modules that are saved to disk but not parsed (dirty)
+     are reread from disk automatically to prevent inconsistencies.
+
+2000/8/23 ({jong,olivierp}@cwi.nl)
+  * Fixed genamakefile.sh.src to also generate executable 
+  * Fixed bug in genamakefile.sh that caused corrupt 
+     Makefile.am's to be generated
+
+2000/7/31 ({jong,olivierp}@cwi.nl)
+  * Replaced obsolete -at-symboltable option in sglr-main.c with
+     -at-afuntable
+
+2000/7/31 ({jong,olivierp}@cwi.nl)
+  * Fixed bug in in-output that caused characters after % signs to dissappear
+
+2000/7/31 (jurgenv@cwi.nl)
+  * added -l option to standalone evaluator to 
+     toggle rewriting with layout.
+
+2000/7/28 ({jong,olivierp}@cwi.nl)
+  * Fixed evaluator stack depth checking
+  * Added support for interrupting evaluator using signal USR1
+  * Version is now 0.1.2
+
+2000/7/26 (markvdb@cwi.nl)
+  * changed .sdf2 extension standard into .sdf
+  * compilation of prefix functions enabled
+  * improved efficiency of parsetable generator
+
+2000/7/18 (markvdb@cwi.nl)
+  * fixed bug where old parsetable was reused.
+  * avoid attribute added to prefix functions
+
+2000/7/12 (jong@cwi.nl)
+  * clear-all now removes all editors as well.
+
+2000/7/11 (jong@cwi.nl)
+  * text-editor.tb moved to editors/text/text-editor.idef
+
+2000/7/11 (jong@cwi.nl)
+  * Version bumped to 0.1
+
+2000/7/11 (mdejonge@cwi.nl)
+  * removed obsolete stuff in ./meta-distribution
+
+2000/7/7 (jong@cwi.nl)
+  * editor-manager now knows the module each editor is related to.
+  * upon closing of a module, all related structure-editors,
+     text-editors and ToolBus-processes are removed.
+
+2000/7/5 (jong@cwi.nl)
+  * Revamped editors' directory structure.
+  * An editor-manager now dispenses editor-ids. This implies you
+     cannot get multiple instances of editors editing the same file
+     anymore
+  * Closing a text-editor causes the corresponding structure-editor
+     to be killed as well.
+
+2000/6/27 (js@cwi.nl)
+  * Modified a few ToolBus scripts to reflect sglr v2.35's
+     strengthened ambiguity report, that includes a set of
+     (position, related-productions) tuples
+
+2000/6/20 (jong@cwi.nl)
+  * In-output warns when it encounters unresolvable entries in searchpath.
+  * In-output warns when more than one match for a given module is found.
+  * In-output refuses to operate without a sensible searchpath.
+  * In-output is no longer linked against AsFix and asc-support libraries.
+
+2000/6/15 (jurgenv@cwi.nl)
+  * Terms are now opened via two common dialogs: open term and new term.
+  * Only terms in the paths of meta.conf can be openened.
+  * Xemacs opens new window for each file.
+
+2000/5/12 (markvdb@cwi.nl)
+  * C version of the structure editor activated. It is still a prototype
+     further improvements are still needed.
+
+2000/5/01 (mdejonge@cwi.nl)
+  * bug fix: editor/editor.sh.src make sure no double slash (//) occurs in
+     argument passed to start-emacs
+
+2000/4/26 (markvdb@cwi.nl)
+  * Code added for dealing with {<symbol>}<nr>+ and {<symbol> <symbol>}<nr>+
+     Sdf2 constructions.
+ 
+2000/4/25 (markvdb@cwi.nl)
+  * Memory leak in parsetablegen fixed.   
+
+2000/4/25 (mdejonge@cwi.nl)
+  * utils/genamakefile.sh.src added. A script to generate an automake file
+     for a compiled ASF+SDF sepecification.
+
+2000/4/17 (mdejonge@cwi.nl)
+  * Updated README file and refer to the Meta Completa distribution
+  * Upgraded to version 0.0.13
+
+2000/4/16 (mdejonge@cwi.nl)
+  * Online help files are now installed in <prefix>/share/meta
+  * replaced --with-tcldot option by --with-graphviz option to make
+     configuration more easy.
+
+2000/4/15 (mdejonge@cwi.nl)
+  * ASF+SDF Meta-Environment is now configured/build using automake
+

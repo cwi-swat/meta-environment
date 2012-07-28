@@ -1,0 +1,65 @@
+#ifndef __GRAPH_UTILS__
+#define __GRAPH_UTILS__
+
+#include <graph-namespace.h>
+#include <layoutgraph.idef>
+#include <graph-converter.idef>
+#include <graph-painter.idef>
+
+process GraphCleanup(GraphType: str, GraphId: term, Sid: session-id) is
+  GP-AddCloseListener(GraphType, GraphId)
+  . rec-note(gp-panel-closed(GraphType, GraphId)) 
+  . snd-msg(em-delete-session(Sid)) 
+
+process RenderGraph(GraphType: str, GraphId: term, Shared: bool, 
+                   Closable: bool, Graph: term?) is
+let
+  Sid: session-id,
+  PanelId: term,
+  Id: int
+in
+  AddJob("Rendering")
+  .
+  if equal(Shared, false) then
+    snd-msg(em-create-session)
+    . rec-msg(em-session(Sid?))
+    . PanelId := Sid
+    . create(GraphCleanup(GraphType, GraphId, Sid), Id?)
+  else
+    PanelId := GraphId
+  fi
+  . snd-msg(gp-create-panel(GraphType, PanelId, Shared, Closable))
+  . rec-msg(gp-panel-created(GraphType, PanelId))
+  . snd-msg(gp-render-graph(GraphType, PanelId, Graph))
+  . rec-msg(gp-rendered-graph(GraphType, PanelId, Graph?))
+  . snd-msg(gl-layout-graph(Graph))
+  . rec-msg(gl-graph(Graph?))
+  . snd-msg(gp-display-graph(GraphType, PanelId, Graph))
+  . JobDone("Rendering")
+endlet
+
+/**
+ * Merges a changed attribute with an already displayed graph.
+ *
+ * \param GraphType type of the graph
+ * \param GraphId   unique graph identification
+ * \param NodeId    the node id of the node having a changed attribute
+ * \param Key       key of the changed attribute
+ * \param Value     new value of the changed attribute
+ */
+process UpdateGraphAttribute(GraphType: str, GraphId: term, NodeId: term, Key: term, Value: term) is
+  snd-msg(gp-update-graph(GraphType, GraphId, NodeId, Key, Value))
+
+process ShowTree(Tree: term, ShowLayout: bool, ShowLeafs: bool, 
+                 SharingOn: bool) is
+let
+  Graph: term
+in
+  snd-msg(gc-tree-to-graph(Tree, ShowLayout, ShowLeafs, SharingOn))
+  . rec-msg(gc-graph(Graph?))
+  . TODO("Change the way GraphType and GraphId are used\n")
+  . RenderGraph("parsetree","0",false,true,Graph?)
+endlet
+
+
+#endif /*__GRAPH_UTILS__*/

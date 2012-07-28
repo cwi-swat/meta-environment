@@ -1,0 +1,16 @@
+#ifndef __META__
+#define __META__
+
+#include <editing.tb>
+#include <error-utils.tb>
+#include <graph-utils.tb>
+#include <gui-actions.tb>
+#include <gui-utils.tb>
+#include <module-selection-listener.tb>
+#include <module-utils.tb>
+#include <text-utils.tb>
+#include <tide.tb>
+#include <transaction-management.tb>
+#include <console-grabber.tb>
+
+#endif /* __META__ */

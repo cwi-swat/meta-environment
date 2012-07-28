@@ -1,0 +1,10 @@
+#ifndef __NAVIGATOR__
+#define __NAVIGATOR__
+
+process NAV-UpdateModule(ModuleId: module-id, File: file) is
+  snd-msg(nav-update-module(ModuleId, File))
+
+process NAV-DeleteModule(ModuleId: module-id) is
+  snd-msg(nav-delete-module(ModuleId))
+
+#endif /* __NAVIGATOR__ */

@@ -1,0 +1,31 @@
+#ifndef __MODULE_UTILS__
+#define __MODULE_UTILS__
+
+/* This file extends the generic module concept with a path for each module */
+
+#define EMPTY_PATH ""
+
+process GetModulePath(ModuleId: module-id, Namespace: term, Path: str?) is
+let
+  Term: path,
+  HasAttribute: bool
+in
+  MM-HasAttribute(ModuleId, Namespace, "path", HasAttribute?)
+  .
+  if equal(HasAttribute, true) then
+    MM-GetAttribute(ModuleId, Namespace, "path", Term?)
+    . Path := first(args(Term))
+  else
+    Path := EMPTY_PATH
+  fi
+endlet
+
+process SetModulePath(ModuleId: module-id, Namespace: term, Path: str) is
+let
+  Term: path
+in
+  Term := quote(path(Path))
+  . MM-SetAttribute(ModuleId, Namespace, "path", Term)
+endlet
+
+#endif /* __MODULE_UTILS__ */

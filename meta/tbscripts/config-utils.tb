@@ -1,0 +1,40 @@
+#ifndef __CONFIG_UTILS__
+#define __CONFIG_UTILS__
+
+#include <io-utils.tb>
+#include <configuration-manager.idef>
+
+#define EMPTY_PATH ""
+
+process GetSearchPaths(Paths: list?) is
+  snd-msg(cm-get-module-paths)
+  . rec-msg(cm-module-paths(Paths?))
+
+process LocateFile(Modulename: str, Extension: str, Path: str?) is
+let
+  Directory: str,
+  Directories: list,
+  ExtraModules : list
+in
+  snd-msg(cm-get-module-paths)
+  . rec-msg(cm-module-paths(Directories?))
+  . snd-msg(io-find-file(Directories, Modulename, Extension))
+  .
+  (
+    rec-msg(io-file-not-found)
+    . Path := ""
+  +
+    rec-msg(io-file-found(Directories?))
+    . Directory := first(Directories)
+    . Directories := next(Directories)
+    .
+    if not-equal(Directories, []) then
+      DealWithMultipleOccurrences(Directory, Modulename, Extension, Directories)
+    else
+      tau
+    fi
+    . BuildPath(Directory, Modulename, Extension, Path?)
+  )
+endlet
+
+#endif /* __CONFIG_UTILS__ */

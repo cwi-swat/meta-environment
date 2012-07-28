@@ -1,0 +1,16 @@
+#ifndef __ERROR_UTILS__
+#define __ERROR_UTILS__
+
+#include <error-support.idef>
+
+process ReplaceSummaryInfo(Summary: summary?, Toolname: str, Modulename: str) is
+let
+  Errors: list
+in
+  snd-msg(get-summary-errors(Summary))
+  . rec-msg(summary-errors(Errors?))
+  . snd-msg(es-make-summary(Toolname, Modulename, Errors))
+  . rec-msg(es-summary(Summary?))
+endlet
+
+#endif

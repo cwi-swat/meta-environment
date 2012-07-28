@@ -1,0 +1,25 @@
+#ifndef __TEXT_UTILS__
+#define __TEXT_UTILS__
+
+#include <io-utils.tb>
+#include <undefined.h>
+
+#define TEXT_REPOSITORY "text-repository"
+ 
+process ReadText(Path: str, Contents: str?) is
+let
+  Value: term
+in
+  GetCachedValue(TEXT_REPOSITORY, Path, Value?)
+  .
+  if equal(Value, UNDEFINED) then
+    ReadFile(Path, Contents?)
+    . PutCachedValue(TEXT_REPOSITORY, Path, Contents)
+  else
+    Contents := Value
+  fi
+endlet
+
+toolbus(InitCache(TEXT_REPOSITORY))
+
+#endif /*__TEXT_UTILS__*/
