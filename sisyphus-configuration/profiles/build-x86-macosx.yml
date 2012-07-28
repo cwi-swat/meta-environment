@@ -1,0 +1,48 @@
+user: daybuild
+build_dir: /Volumes/scratch/sisyphus-builds/build-x86-macosx/1234567890123456789023457890123456789012345678901234567890123456789123456789012345678901234567890123456789012345678901234567890/build
+install_dir: /Volumes/scratch/sisyphus-builds/build-x86-macosx/1234567890123456789023457890123456789012345678901234567890123456789123456789012345678901234567890123456789012345678901234567890/install
+distributes: true
+source_dist_dir: ssh://www.meta-environment.org:/srv/www/vhosts/www.meta-environment.org/www/sisyphus-distributions
+collect_url: http://sisyphus.meta-environment.org/downloads
+build-env: [meta-autotools, meta-build-env, meta-javatools]
+environment: |
+ CLASSPATH=/usr/share/junit/junit.jar:/usr/share/ant/lib/ant-junit.jar
+ export CLASSPATH
+ ANT_HOME=/usr/share/ant
+ export ANT_HOME
+ PATH=/ufs/daybuild/software/installed/graphviz-2.20.3/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
+ export PATH
+ ECLIPSE="/ufs/daybuild/software/installed/eclipse-daybuild"
+ JDK="/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/"
+ EXTRA_CONFIGURE_FLAGS="--with-eclipse=${ECLIPSE} --with-jdk=${JDK}"
+ MAKE_BINARY_DISTS=1
+ BINARY_DIST_HOST=daybuild@www.meta-environment.org
+ BINARY_DIST_SITE=/srv/www/vhosts/www.meta-environment.org/www/sisyphus-distributions/binaries
+ BINARY_DIST_PKGS="asfsdf-meta rscript-meta sdf sdf-apigen aterm-xml rascal"
+world-version: 7
+script:
+ order:
+  - reconf
+  - configure
+  - install
+  - bindist
+ templates:
+  reconf: time ./reconf
+  configure: time ./configure --prefix=<%= prefix%> <%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%> --with-cflags="-m32 -O2 -g -Wall -Werror" ${EXTRA_CONFIGURE_FLAGS}
+  make: time make
+  install: time make install
+  bindist: |
+   if [ $MAKE_BINARY_DISTS ] ; then
+     current="<%= name %>"
+     installer=`echo "<%= binary_dist_name %>" | sed 's@\.bin\.sh@\.zip@'`
+     tmpdir=`echo "<%= binary_dist_name %>" | sed 's@\.bin\.sh@@'`
+     for pkg in ${BINARY_DIST_PKGS} ; do
+       if [ ${current} == ${pkg} ] ; then
+         mkdir /tmp/${tmpdir}
+         cp -r <%tr_deps.each do |d| %> <%= d.prefix%>/* <%end%> /tmp/${tmpdir}
+         cd /tmp
+         zip -r ${installer} ${tmpdir}
+         scp ${installer} ${BINARY_DIST_HOST}:${BINARY_DIST_SITE}
+       fi
+     done
+   fi

@@ -1,0 +1,9 @@
+user: daybuild
+build_dir: /home/jong/sisyphus/mail.metamud.org/build
+install_dir: /home/jong/sisyphus/mail.metamud.org/install
+distributes: false
+collect_url: http://sisyphus.sen.cwi.nl:8080/downloads
+build-env: [meta-autotools, meta-build-env]
+environment: |
+  export PATH=/usr/bin:/bin
+world-version: 0

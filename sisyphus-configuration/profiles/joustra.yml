@@ -1,0 +1,25 @@
+user: daybuild
+build_dir: /export/scratch1/daybuild/sisyphus-builds/build
+install_dir: /export/scratch1/daybuild/sisyphus-builds/install
+distributes: true
+source_dist_dir: /ufs/daybuild/sisyphus-www/wo-sisyphus/public/downloads
+collect_url: http://sisyphus.sen.cwi.nl:8080/downloads
+build-env: [meta-autotools, meta-build-env, meta-javatools]
+environment: |
+ CLASSPATH=/ufs/sen1/software/installed/junit3.8.1/junit.jar
+ PATH=/ufs/sen1/software/installed/ruby-1.8.4/linux/i386/bin:/ufs/sen1/software/installed/doxygen-1.4.6/linux/i386/bin:/ufs/sen1/software/installed/gcc-3.4.4/linux/i386/bin:/ufs/sen1/software/installed/xfig-3.2.3d/linux/i386/bin:/ufs/sen1/software/installed/java/linux/i386/j2sdk1.5-LATEST/bin:/ufs/sen1/software/installed/graphviz-2.10/linux/i386/bin:/usr/bin:/bin
+ export PATH
+ BUILDS_DOCUMENTATION=1
+ export BUILDS_DOCUMENTATION
+ DOCUMENTATION_HOST=daybuild@build-homepages.cwi.nl
+ DOCUMENTATION_SITE=/ufs/daybuild/public_html
+ DOCUMENTATION_REFRESH_CACHE_URL=http://www.cwi.nl/htbin/sen1/twiki/bin/fresh/Meta-Environment/Documentation
+ DOCUMENTATION_BOOKS_SITE=/ufs/daybuild/public_html/daily-books
+ MAKES_BINARY_DISTS=1
+ BINARY_DIST_HOST=daybuild@sjofar.sen.cwi.nl
+ BINARY_DIST_SITE=/ufs/daybuild/sisyphus-www/wo-sisyphus/public/downloads/binaries
+ BINARY_DIST_PKGS="asfsdf-meta rscript-meta sdf toolbus"
+ DOCBOOK_XSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0"
+ FOP="/ufs/sen1/software/installed/fop-0.93"
+ EXTRA_CONFIGURE_FLAGS="--with-docbook-xsl=${DOCBOOK_XSL} --with-fop=${FOP}"
+world-version: 20
