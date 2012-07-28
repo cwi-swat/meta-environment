@@ -1,0 +1,3 @@
+process StartVisPluginCharts is
+  snd-msg(load-jar("file://__PKGDATA__/vis-plugin-charts.jar", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
+  

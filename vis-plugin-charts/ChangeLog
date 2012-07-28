@@ -1,0 +1,22 @@
+
+
+Wed Nov 12 14:44:00 CET 2008 <jurgenv@cwi.nl>
+ * resources: removed unused clones
+
+Fri Oct  3 16:41:26 CEST 2008 <jurgenv@cwi.nl>
+ * Bumped version
+
+Wed May  7 12:40:48 2008    <bruntink@cwi.nl>
+
+	* lib/log4j-1.2.14.jar: Added missing jar.
+
+Wed May  7 11:45:38 2008    <bruntink@cwi.nl>
+
+	* Changed dependency on relation-stores to rstore-support-java.
+
+Mon Apr 28 16:14:13 2008    <bruntink@cwi.nl>
+
+	* Changed dependency on module-support to module-support-java.
+
+Thu Sep 13 10:52:42 CEST 2007 <jurgenv@cwi.nl>
+ * src/**/barchart: added rel[int,int] as supported type.
