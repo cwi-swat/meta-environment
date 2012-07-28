@@ -1,0 +1,2 @@
+ * make this package independent of meta and asfsdf-meta, since it
+   is supposed to be a generic ToolBus regression test tool.

@@ -1,0 +1,3 @@
+cd $1
+tifstojava -tool $2 -tifs $3
+

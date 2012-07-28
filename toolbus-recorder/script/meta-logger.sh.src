@@ -1,0 +1,12 @@
+#! /bin/sh -m
+#
+#
+
+DEFS="-Dtide.enabled=true -Dcom.apple.macos.useScreenMenuBar=true -Dcom.apple.mrj.application.apple.menu.about.name=Meta-Environment" 
+
+
+CLASSPATH=__EXTERNALS__:${CLASSPATH}
+export CLASSPATH
+
+java -Xmx256m metalogger.MetaLogger $@
+
