@@ -1,0 +1,14 @@
+equations
+
+[transform-strings]
+  StrCon = string-to-bytes(StrCon)
+
+equations
+
+[empty-string]
+  empty = bytes()
+
+equations
+
+[fwd]
+  length(Bytes) = num-of-bytes(Bytes)

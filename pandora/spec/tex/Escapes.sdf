@@ -1,0 +1,16 @@
+module Escapes
+
+imports languages/box/syntax/Fonts
+imports basic/Strings
+
+exports
+  context-free syntax
+    "T-ESC""[" StrCon "]" -> Box
+    "MTH""[" StrCon "]"   -> StrCon
+
+hiddens
+  variables
+    [abc] -> StrCon
+    [c]"*"[0-9\']* -> CHAR*
+
+%%%

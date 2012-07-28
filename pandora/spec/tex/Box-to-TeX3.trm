@@ -1,0 +1,393 @@
+tex(
+V      [
+V      [
+"data"   "module"   I  [ "PipeliningFunctions" ]   "begin"   I  [ H  [  ] ]
+I  [ H  [  ] ] I  [ H  [  ] ]  I  [ H  [  ] ]  I  [ H  [  ] ]  I  [ H  [  ] ]
+I      [
+H      [
+"equations"
+V      [
+HV      [
+V  [ "[" I  [ "1" ] "]" ]
+HV      [
+"init-sw"   "="
+HV      [
+"slwindow"
+V      [
+"("
+I      [
+V      [
+H hs = 0 [ HV  [ "nat" V  [ "(" I  [ V  [ HV  [ "^" "0" ] ] ] ")" ] ] "," ]
+H hs = 0 [ HV  [ "nat" V  [ "(" I  [ V  [ HV  [ "^" "0" ] ] ] ")" ] ] "," ]
+"empty-table" ] ] ")" ] ] ] ]
+HV      [
+V  [ "[" I  [ "2" ] "]" ]
+HV      [
+HV  [ "inc" V  [ "(" I  [ V  [ "n" ] ] ")" ] ]   "="
+HV      [
+"mod"
+V      [
+"("
+I      [
+V      [
+H   hs = 0   [
+HV  [ "n" "+" HV  [ "nat" V  [ "(" I  [ V  [ HV  [ "^" "1" ] ] ] ")" ] ] ] ","
+]
+"fnrange"
+]
+]
+")"
+]
+]
+]
+]
+HV      [
+V  [ "[" I  [ "3" ] "]" ]
+HV      [
+HV  [ "dec" V  [ "(" I  [ V  [ "n" ] ] ")" ] ]   "="
+HV      [
+"mod"
+V      [
+"("
+I      [
+V      [
+H   hs = 0   [
+HV  [ "n" "-" HV  [ "nat" V  [ "(" I  [ V  [ HV  [ "^" "1" ] ] ] ")" ] ] ] "," ]
+"fnrange"
+]
+]
+")"
+]
+]
+]
+"when"
+V      [
+HV      [
+HV      [
+"gt"
+V      [
+"("
+I      [
+V      [
+H hs = 0 [ "n" "," ] HV  [ "nat" V  [ "(" I  [ V  [ HV  [ "^" "0" ] ] ] ")" ] ]
+]
+]
+")"
+]
+]
+"=" "true"
+]
+]
+]
+HV      [
+V  [ "[" I  [ "4" ] "]" ]
+HV      [
+HV  [ "dec" V  [ "(" I  [ V  [ "n" ] ] ")" ] ]   "="
+HV  [ "fnrange" "-" HV  [ "nat" V  [ "(" I  [ V  [ HV  [ "^" "1" ] ] ] ")" ] ] ]
+]
+"when"
+V      [
+HV      [
+HV      [
+"eq"
+V      [
+"("
+I      [
+V      [
+H hs = 0 [ "n" "," ] HV  [ "nat" V  [ "(" I  [ V  [ HV  [ "^" "0" ] ] ] ")" ] ]
+]
+]
+")"
+]
+]
+"=" "true"
+]
+]
+]
+HV      [
+V  [ "[" I  [ "5" ] "]" ]
+HV      [
+HV      [
+"top"
+V      [
+"("
+I      [
+V      [
+HV      [
+"slwindow"
+V  [ "(" I  [ V  [ H hs = 0 [ "n" "," ] H hs = 0 [ "m" "," ] "T" ] ] ")" ] ]
+]
+]
+")"
+]
+]
+"=" "m"
+]
+]
+HV      [
+V  [ "[" I  [ "6" ] "]" ]
+HV      [
+HV      [
+"bottom"
+V      [
+"("
+I      [
+V      [
+HV      [
+"slwindow"
+V  [ "(" I  [ V  [ H hs = 0 [ "n" "," ] H hs = 0 [ "m" "," ] "T" ] ] ")" ] ]
+]
+]
+")"
+]
+]
+"=" "n"
+]
+]
+HV      [
+V  [ "[" I  [ "7" ] "]" ]
+HV      [
+HV      [
+"update"
+V      [
+"("
+I      [
+V      [
+H   hs = 0   [
+HV      [
+"slwindow"
+V  [ "(" I  [ V  [ H hs = 0 [ "n" "," ] H hs = 0 [ "m" "," ] "T" ] ] ")" ] ]
+","
+]
+HV      [
+"frame"
+V  [ "(" I  [ V  [ H hs = 0 [ "d" "," ] H hs = 0 [ "r" "," ] "s" ] ] ")" ] ]
+]
+]
+")"
+]
+]
+"="
+HV      [
+"slwindow"
+V      [
+"("
+I      [
+V      [
+H hs = 0 [ "n" "," ]
+H hs = 0 [ HV  [ "inc" V  [ "(" I  [ V  [ "m" ] ] ")" ] ] "," ]
+HV      [
+"insert"
+V  [ "(" I  [ V  [ H hs = 0 [ "T" "," ] H hs = 0 [ "d" "," ] "m" ] ] ")" ] ]
+]
+]
+")"
+]
+]
+]
+]
+HV      [
+V  [ "[" I  [ "8" ] "]" ]
+HV      [
+HV      [
+"contract"
+V      [
+"("
+I      [
+V      [
+HV      [
+"slwindow"
+V  [ "(" I  [ V  [ H hs = 0 [ "n" "," ] H hs = 0 [ "m" "," ] "T" ] ] ")" ] ]
+]
+]
+")"
+]
+]
+"="
+HV      [
+"slwindow"
+V      [
+"("
+I      [
+V      [
+H hs = 0 [ HV  [ "inc" V  [ "(" I  [ V  [ "n" ] ] ")" ] ] "," ]
+H hs = 0 [ "m" "," ]
+HV  [ "delete" V  [ "(" I  [ V  [ H hs = 0 [ "T" "," ] "n" ] ] ")" ] ] ] ]
+")" ] ]
+]
+]
+HV      [
+V  [ "[" I  [ "9" ] "]" ]
+HV      [
+HV      [
+"full"
+V      [
+"("
+I      [
+V      [
+HV      [
+"slwindow"
+V  [ "(" I  [ V  [ H hs = 0 [ "n" "," ] H hs = 0 [ "m" "," ] "T" ] ] ")" ] ]
+]
+]
+")"
+]
+]
+"="
+HV      [
+"eq"
+V      [
+"("
+I      [
+V  [ H hs = 0 [ "n" "," ] HV  [ "inc" V  [ "(" I  [ V  [ "m" ] ] ")" ] ] ] ]
+")"
+]
+]
+]
+]
+HV      [
+V  [ "[" I  [ "10" ] "]" ]
+HV  [ HV  [ "error" V  [ "(" I  [ V  [ "ce" ] ] ")" ] ] "=" "true" ] ]
+HV      [
+V  [ "[" I  [ "11" ] "]" ]
+HV      [
+HV      [
+"error"
+V      [
+"("
+I      [
+V      [
+HV      [
+"frame"
+V  [ "(" I  [ V  [ H hs = 0 [ "d" "," ] H hs = 0 [ "r" "," ] "s" ] ] ")" ] ]
+]
+]
+")"
+]
+]
+"=" "false"
+]
+]
+HV      [
+V  [ "[" I  [ "12" ] "]" ]
+HV      [
+HV      [
+"expected"
+V      [
+"("
+I      [
+V      [
+H   hs = 0   [
+HV      [
+"frame"
+V  [ "(" I  [ V  [ H hs = 0 [ "d" "," ] H hs = 0 [ "r" "," ] "s" ] ] ")" ] ]
+","
+]
+"f"
+]
+]
+")"
+]
+]
+"=" HV  [ "eq" V  [ "(" I  [ V  [ H hs = 0 [ "r" "," ] "f" ] ] ")" ] ]
+]
+]
+HV      [
+V  [ "[" I  [ "13" ] "]" ]
+HV      [
+HV      [
+"fnr-in-window"
+V      [
+"("
+I      [
+V      [
+H   hs = 0   [
+HV      [
+"slwindow"
+V  [ "(" I  [ V  [ H hs = 0 [ "n" "," ] H hs = 0 [ "m" "," ] "T" ] ] ")" ] ]
+","
+]
+"f"
+]
+]
+")"
+]
+]
+"="
+HV      [
+"or"
+V      [
+"("
+I      [
+V      [
+H   hs = 0   [
+HV      [
+"seq"
+V  [ "(" I  [ V  [ H hs = 0 [ "f" "," ] H hs = 0 [ "n" "," ] "m" ] ] ")" ] ]
+","
+]
+HV      [
+"wrap"
+V  [ "(" I  [ V  [ H hs = 0 [ "f" "," ] H hs = 0 [ "n" "," ] "m" ] ] ")" ] ]
+]
+]
+")"
+]
+]
+]
+]
+HV      [
+V  [ "[" I  [ "14" ] "]" ]
+HV      [
+HV      [
+"getdata"
+V      [
+"("
+I      [
+V      [
+H   hs = 0   [
+HV      [
+"slwindow"
+V  [ "(" I  [ V  [ H hs = 0 [ "n" "," ] H hs = 0 [ "m" "," ] "T" ] ] ")" ] ]
+","
+]
+"r"
+]
+]
+")"
+]
+]
+"=" HV  [ "retrieve" V  [ "(" I  [ V  [ H hs = 0 [ "T" "," ] "r" ] ] ")" ] ]
+]
+]
+HV      [
+V  [ "[" I  [ "15" ] "]" ]
+HV      [
+HV      [
+"getack"
+V      [
+"("
+I      [
+V      [
+HV      [
+"frame"
+V  [ "(" I  [ V  [ H hs = 0 [ "d" "," ] H hs = 0 [ "r" "," ] "s" ] ] ")" ] ]
+]
+]
+")"
+]
+]
+"=" "s"
+]
+]
+
+
+
+
+]
+]
+]
+"end" I  [ "PipeliningFunctions" ]
+]
+]
+)

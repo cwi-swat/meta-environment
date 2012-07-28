@@ -1,0 +1,22 @@
+module Fonts-to-TeX
+
+imports Basic-to-TeX 
+imports Escapes
+
+exports
+  context-free syntax
+    fname(FontOperator) -> StrCon
+hiddens
+%%  context-free syntax
+%%    texstr(StrCon) -> TEX
+  variables
+    "Char*"[0-9]* -> CHAR*
+
+hiddens
+  variables
+    [ab][0-9]*     -> StrCon
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "f"[0-9]*      -> FontOperator
+%%%

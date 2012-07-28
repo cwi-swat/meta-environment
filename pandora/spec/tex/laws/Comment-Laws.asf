@@ -1,0 +1,155 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+equations
+
+%% \paragraph{HPAR}
+
+  [0] Hso* [B*           HPAR a ""[C*] D+]   = Hso*[B* V[HPAR a ""[C*]
+                                                         H so*[D+]]]
+
+  [0] Hso*1[B*1 Hso*2[C* HPAR a ""[D*]] B*2] = Hso*2[Hso*1[B*1 Hso*2[C*]] HPAR a ""[D*] Hso*1[B*2]]
+
+  [0] ROW [B*1 Hso*2[C* HPAR a ""[D*]] B*2] = ROW [B*1 Hso*2[C*] HPAR a ""[D*] B*2]
+  [0] ROW [B*1 HPAR a ""[D*] "" B*2]        = ROW [B*1 "" HPAR a ""[D*] B*2]
+
+  [0] HV so*[ B* HPAR a "" [ C* ] D+] = Vso*[ HV so*[ B* HPAR a "" [ C* ]] HV so*[ D+ ] ]
+  [0] HOVso*[ B* HPAR a "" [ C* ] D+] = Vso*[ HOVso*[ B* HPAR a "" [ C* ]] HOVso*[ D+ ] ]
+
+%% \paragraph{VPAR}
+
+%% consecutive VPARs can be joined
+
+  [0] B* VPAR a b [C*] VPAR a b [D*] E* = B* VPAR a b [C* D*] E*
+
+%% VPAR behaves as V
+
+  [0] HOVso*[C*1 VPAR a b [D*] C+2] = Vso*[C*1        VPAR a b [D*] C+2]
+  [0] HV so*[C*1 VPAR a b [D*] C+2] = Vso*[HVso*[C*1] VPAR a b [D*] HVso*[C+2]]
+
+%% Moving up
+
+  [0] B* H  o*[C* VPAR a b [D*]] E*  =  B* H  o*[C*] VPAR a b [D*] E*
+  [0] B* V  o*[C* VPAR a b [D*]] E*  =  B* V  o*[C*] VPAR a b [D*] E*
+  [0] B* HOVo*[C* VPAR a b [D*]] E*  =  B* HOVo*[C*] VPAR a b [D*] E*
+  [0] B* HV o*[C* VPAR a b [D*]] E*  =  B* HV o*[C*] VPAR a b [D*] E*
+
+  [0] B* Io*1[H  o*2[C* VPAR a b [D*]]] E*  = B* Io*1[H  o*2[C*]] Io*1 [VPAR a b [D*]] E*
+  [0] B* Io*1[V  o*2[C* VPAR a b [D*]]] E*  = B* Io*1[V  o*2[C*]] Io*1 [VPAR a b [D*]] E*
+  [0] B* Io*1[HOVo*2[C* VPAR a b [D*]]] E*  = B* Io*1[HOVo*2[C*]] Io*1 [VPAR a b [D*]] E*
+  [0] B* Io*1[HV o*2[C* VPAR a b [D*]]] E*  = B* Io*1[HV o*2[C*]] Io*1 [VPAR a b [D*]] E*
+
+  [0] B* H  o*[C* Io*1[VPAR a b [D*]]] E*  =  B* H  o*[C*] VPAR a b [D*] E*
+  [0] B* V  o*[C* Io*1[VPAR a b [D*]]] E*  =  B* V  o*[C*] VPAR a b [D*] E*
+  [0] B* HV o*[C* Io*1[VPAR a b [D*]]] E*  =  B* HV o*[C*] VPAR a b [D*] E*
+  [0] B* HOVo*[C* Io*1[VPAR a b [D*]]] E*  =  B* HOVo*[C*] VPAR a b [D*] E*
+
+  [0] B* VPAR a b [D*] Io*1[B]  E* = B* Io*1[VPAR a b [D*]] Io*1[B] E*
+  [0] B* VPAR a b [D*] Vo*1[C*] E* = B* Vo*1[VPAR a b [D*] C*]      E*
+
+%% VPARs align with the next box, therefore extra indentation can be
+%% removed.
+
+  [0] B* Io*1[VPAR a b [D*]] H  o*[C*] E*  =  B* VPAR a b [D*] H  o*[C*] E*
+  [0] B* Io*1[VPAR a b [D*]] V  o*[C*] E*  =  B* VPAR a b [D*] V  o*[C*] E*
+  [0] B* Io*1[VPAR a b [D*]] HV o*[C*] E*  =  B* VPAR a b [D*] HV o*[C*] E*
+  [0] B* Io*1[VPAR a b [D*]] HOVo*[C*] E*  =  B* VPAR a b [D*] HOVo*[C*] E*
+
+%% VPAR and ic
+
+  [0] B* VPARab[C*] ic D* = B* VPARab[C*] D*
+
+%% \paragraph{PAR}
+
+  [0] B* PAR a b [C*] PAR a b [D*] E* = B* PAR a b [C* D*] E*
+
+%% PARs break all boxes and move up to the highest level
+
+  [0] B* H  o*[C*1 PAR a b [D*] C*2] E*         =  B* H  o*[C*1] PAR a b [D*] H  o*[C*2] E*
+
+
+  %%[0] B* V  o*[C*1 PAR a b [D*] C*2] E*    =  B* V  o*[C*1] PAR a b [D*] V  o*[C*2] E*
+
+  [0] H o*1 [B* V  o*2 [C*1 PAR a b [D*]]]    =  V o*2 [H o*1 [B* V  o*2[C*1]]
+                                                               PAR a b [D*]]
+
+  [0] H o*1 [B* V  o*2 [C*1 PAR a b [D*]] E+]    =  V o*2 [H o*1 [B* V  o*2[C*1]]
+                                                               PAR a b [D*]
+                                                               H o*1 [WD [H o*1 [B*]] E+]]
+
+  [0] H o*1 [B* V  o*2 [C*1 PAR a b [D*] C+2] E*]    =  V o*2 [H o*1 [B* V  o*2[C*1]]
+                                                               PAR a b [D*]
+                                                               H o*1 [WD [H o*1 [B*]] V  o*2[C+2] E*]]
+
+  [0] B*1 V o*1 [B*2 V o*2 [C*1 PAR a b [D*] C*2] E*] B*3 = B*1 V o*1 [B*2 V o*2 [C*1]]
+                                                                PAR a b [D*]
+                                                                V o*1 [V o*2 [C*2] E*] B*3
+
+  [0] B* HV o*[C*1 PAR a b [D*] C*2] E*    =  B* Vo*[HV o*[C*1] PAR a b [D*] HV o*[C*2]] E*
+  [0] B* HOVo*[C*1 PAR a b [D*] C*2] E*    =  B* Vo*[HOVo*[C*1] PAR a b [D*] HOVo*[C*2]] E*
+
+  [0] B* Io*1[H  o*2[C*1 PAR a b [D*] C*2]] E*  = B* Io*1[H  o*2[C*1]] PAR a b [D*] Io*1[H  o*2[C*2]] E*
+  [0] B* Io*1[V  o*2[C* PAR a b [D*]]] E*  = B* Io*1[V  o*2[C*]] PAR a b [D*] E*
+  [0] B* Io*1[HV o*2[C* PAR a b [D*]]] E*  = B* Io*1[HV o*2[C*]] PAR a b [D*] E*
+  [0] B* Io*1[HOVo*2[C* PAR a b [D*]]] E*  = B* Io*1[HOVo*2[C*]] PAR a b [D*] E*
+
+  [0] Io*[PAR a b[B*]]                     = PAR a b[B*]
+
+%% \paragraph{FONTS and PARs}
+
+  [0] f [ HPAR a b [ B* ] ] = HPAR a b [ f(B*) ]
+  [0] f [ VPAR a b [ B* ] ] = VPAR a b [ f(B*) ]
+  [0] f [ PAR a b [ B* ] ]  = PAR a b [ f(B*) ]
+
+%% \paragraph{Alignments and PARs}
+
+  [0] AL(ao*) so* [ B* PAR  a b [ C* ] D* ] = V[ AL(ao*) so* [ B* ] PAR  a b [ C* ] AL(ao*) so* [ D* ] ]
+  [0] AL(ao*) so* [ B* VPAR a b [ C* ] D* ] = V[ AL(ao*) so* [ B* ] VPAR a b [ C* ] AL(ao*) so* [ D* ] ]
+
+  [0] B* ROW [C*1 PAR  a b[D*] C*2] E* = B* ROW [C*1 C*2] PAR  a b[D*] E*
+  [0] B* ROW [C*  VPAR a b[D*]]     E* = B* ROW [C*]      VPAR a b[D*] E*
+
+%% \paragraph{Crossreferences and PARs}
+
+  [0] LBL[c, Hso*[B* HPAR a b[C*]]] = Hso*[ LBL[c, Hso*[B*]] HPAR a b[C*]]
+  [0] LBL[c, Hso*[B* VPAR a b[C*]]] = Hso*[ LBL[c, Hso*[B*]] VPAR a b[C*]]
+  [0] LBL[c, Hso*[B* PAR  a b[C*]]] = Hso*[ LBL[c, Hso*[B*]] PAR  a b[C*]]
+
+  [0] REF[c, Hso*[B* HPAR a b[C*]]] = Hso*[ REF[c, Hso*[B*]] HPAR a b[C*]]
+  [0] REF[c, Hso*[B* VPAR a b[C*]]] = Hso*[ REF[c, Hso*[B*]] VPAR a b[C*]]
+  [0] REF[c, Hso*[B* PAR  a b[C*]]] = Hso*[ REF[c, Hso*[B*]] PAR  a b[C*]]
+
+%% \paragraph{Strings in PARs}
+
+  [0]
+        rm-occ(" ", c) = box-str-con(""" chr*1 chr chr*2 """), box-str-con(""" chr """) = " "
+        =============================================================================
+        break(c) = break(box-str-con(""" chr*1 """)) ++ break(box-str-con(""" chr*2 """))
+  [default-0]
+        break(c) = c
+
+  [0]
+        break(rm-occ(" ", c)) = D*, D* != c
+        ======================================
+        HPAR a b[B* c C*] = HPAR a b[B* D* C*]
+  [0]
+        break(rm-occ(" ", c)) = D*, D* != c
+        ======================================
+        VPAR a b[B* c C*] = VPAR a b[B* D* C*]
+  [0]
+        break(rm-occ(" ", c)) = D*, D* != c
+        ====================================
+        PAR a b[B* c C*] = PAR a b[B* D* C*]
+
+%%%

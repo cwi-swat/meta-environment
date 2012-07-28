@@ -1,0 +1,10 @@
+module NewLine
+
+imports basic/Bytes
+
+exports
+  context-free syntax
+    "newlinechar" -> Bytes
+
+hiddens
+  imports basic/Whitespace

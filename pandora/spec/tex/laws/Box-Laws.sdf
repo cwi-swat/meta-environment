@@ -1,0 +1,18 @@
+module laws/Box-Laws
+
+imports laws/Basic-Box-Laws
+        laws/Empty-Box-Laws
+        laws/Alignment-Laws
+        laws/Font-Laws
+
+        %%% Comment-Laws
+        %%Comments 
+        languages/box/syntax/Crossreferences
+
+hiddens
+  context-free start-symbols Box
+  variables
+    [abc][0-9]*    -> String
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*

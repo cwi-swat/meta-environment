@@ -1,0 +1,3 @@
+equations
+
+  [nlc] newlinechar = bytes(byte(\n))

@@ -1,0 +1,23 @@
+module laws/Font-Laws
+
+imports languages/box/syntax/Fonts
+imports basic/Integers
+
+hiddens
+  context-free syntax
+    FontOperator "(" Box* ")" -> Box*
+    -> FontOption*
+
+hiddens
+  variables
+    [ij][0-9]*     -> NatCon
+    [ab][0-9]*     -> StrCon
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "f"[0-9]*      -> FontOperator
+    "o*"[0-9]*     -> SpaceOption*
+    "fo*"[0-9]*    -> FontOption*
+    "fp"[0-9]*     -> FontParam
+    "Id"[0-9\']*   -> FontId
+%%%

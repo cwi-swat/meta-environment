@@ -1,0 +1,28 @@
+module Alignments-to-TeX
+
+imports Basic-to-TeX 
+imports laws/Basic-Box-Laws 
+imports laws/Alignment-Laws
+
+hiddens
+  context-free syntax
+     rows(Box*)                          -> TEX
+     tex(AlignmentOption)                -> TEX
+     tex(SpaceOption*, AlignmentOptions) -> TEX
+     col(AlignmentOption)                -> TEX
+     "@{}"                               -> TEX
+     "#"                                 -> TEX
+     "&"                                 -> TEX
+     "="                                 -> TEX
+     NatCon "pt"                         -> TEX
+
+hiddens
+  variables
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "ao"[0-9]*     -> AlignmentOption
+    "ao*"[0-9]*    -> {AlignmentOption ","}*
+    "ao+"[0-9]*    -> {AlignmentOption ","}+
+    "so*"[0-9]*    -> SpaceOption*
+%%%

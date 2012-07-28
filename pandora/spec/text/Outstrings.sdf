@@ -1,0 +1,36 @@
+module Outstrings
+
+imports
+    basic/Strings 
+
+exports
+  context-free start-symbols String
+
+exports
+  context-free syntax
+    "string" "of" Integer "layoutchars"  -> Bytes 
+    "string" "of" Integer Bytes "chars" -> Bytes
+
+  context-free syntax
+    %% visible concatenation 
+    Bytes "||" Bytes -> Bytes {left}
+
+hiddens
+  imports basic/Whitespace
+  context-free syntax
+  %% invisible concatenation
+    Bytes Bytes -> Bytes {non-assoc}
+    "(" Bytes ")" -> Bytes {bracket}
+
+  lexical variables
+    "byte"[0-9]* -> Byte {strict}
+    "byte*"[0-9]* -> Byte* {strict}
+    "any"[0-9]*  -> ~[]  {strict}
+
+  lexical variables
+    "_byte"[0-9]* -> Byte {wild}
+
+  variables
+    "Int"[0-9]*    -> Integer
+    "String"[0-9]* -> String
+    "Bytes"[0-9]*  -> Bytes

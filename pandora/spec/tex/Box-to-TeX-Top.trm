@@ -1,0 +1,14 @@
+tex(
+ V[
+ H hs = 2 [
+  F fn = KWf [ "func" ]
+    A
+      (
+        l,
+        l,
+        l ) [
+      R[H hs = 0 [ F fn = VARf [ "T" ] ESC [ ":" ] ] ESC [ "" ]
+          H [ ESC [ "->" ] "Bool" ]]
+        R[H hs = 0 [ F fn = VARf [ "f" ] ESC [ ":" ] ] "Bool"
+            H [ ESC [ "->" ] "Bool" ]] ] ] ]
+)

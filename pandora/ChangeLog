@@ -1,0 +1,285 @@
+/* $Id$ */
+
+Mon Jun  9 13:28:26 CEST 2008 <jurgenv@cwi.nl>
+ * pandora.pc.in: Bumped version to 1.5
+
+Fri Nov  9 15:40:20 EST 2007 <jurgenv@cwi.nl>
+ * spec/text/Normalize-Groups.asf: fixed a non-confluence issue with the
+   removal of nested G group boxes. If two G boxes where directly nested,
+   the deepest being a plain G [ ] group with no gs and op options, the
+   innermost G would not be spliced into the outermost first. Fixed by
+   adding a [default] tag to the outermost reduction, such that it waits
+   properly.
+
+Fri Nov  9 15:13:39 EST 2007 <jurgenv@cwi.nl>
+ * spec/text/LengthOfBoxes.asf: fixed non-rewriting of very long I boxes
+   with multiple child boxes. This bug was introduced by letting I boxes
+   have more than one child. The fix lets the I boxes degenerate to normal
+   H boxes in horizontal contexts, instead of relying on a in-place
+   computation of the length of the children of the I box. This also makes the
+   I boxes implement the hs option correctly from now on.
+ * spec/text/Basic-to-Text.asf: HV boxes did not respect nested I boxes. This
+   was a not so nice bug. Fixed by splitting the case for the hvplace
+   function. When a box flows to the next line it is placed in a vertical 
+   context, such that possible I boxes can implement their proper semantics.
+   When a box does not flow to the next line, it is placed in a horizontal
+   context as before.
+ * spec/text/Integer-ops.{asf,sdf}: removed because basic/Integers now
+   has all of this functionality. Had to fix the other modules to make this
+   work of course.
+ * spec/text/*.sdf: removed all occurences of Natural sorts
+ * spec/text/*.sdf: added hidden imports of basic/Whitespace where necessary.
+
+Fri Jan 26 09:34:56 CET 2007 <jurgenv@cwi.nl>
+ * src/pandora.c: adapted to new interface of toasfix.
+
+Mon Jan 22 16:47:12 CET 2007 <jurgenv@cwi.nl>
+ * src/pandora.c: added new production attribute {layout-to-box} for
+   transporting comments to boxes. Example:
+   context-free syntax
+     "_" "_" -> LAYOUT {layout-to-box}
+   equations
+   [] E1 L1 + L2 E2 = to-box(H [ from-box(E1) _L1_ "+" _L2_ from-box(E2) ])
+
+Fri Jan 19 14:12:45 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * spec/text/*.asf,src/pandora.c: fixed several small issues with
+   tabular material and splicing lists.
+
+Wed Jan 17 10:53:50 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * spec/text/*.asf: made I and WD boxes work with more than one argument.
+ * src/pandora.c: fixed bugs with the generation of empty H boxes for
+   whitespace layout. Instead of nested boxes, it now only generates
+   one toplevel empty H box for each LAYOUT? tree that contains only
+   whitespace.
+
+Wed Jan 17 08:17:29 CET 2007 <jurgenv@cwi.nl>
+ * spec/text/Group-Normalization.{asf,sdf}: groups fill out the
+   last group with empty H [] boxes, such that each group contains 
+   the same amount of elements. This is good for building tables, with
+   A and R boxes, sinces they need to be complete.
+ * added some reasonable error messages.
+
+Tue Jan 16 10:21:04 CET 2007 <jurgenv@cwi.nl>
+ * spec/text/Groups.{asf,sdf}: added a new operator to Box: G. The G grouping
+   operator splits a list of boxes a list of smaller lists, wrapped by
+   another box operator. The result is spliced into the surrounding box.
+   Example: V [ G gs=2 op=H [ "1" "2" "3" "4" ] ]
+   Means:   V [ H [ "1" "2" ] H [ "3" "4" ] ]
+ * spec/text/Groups.{asf,sdf}: added a new operator to Box: SL. SL is 
+   an abbreviation for "G gs=3", which is a typical grouping for separated
+   lists.
+ * src/pandora.c: *drastic change*. Instead of returning NULL for whitespace
+   pandora now generates the empty HBox "H []". This is needed for the
+   consistency of lists. When no comment is in between elements, the list
+   would be shorter, but with comments in between elements, there would be
+   an extra box node. For the Grouping operator to work nicely, it is
+   necessary to have all lists look the same.
+ * src/pandora.c: added a new semantics for to-box productions. If a to-box
+   productions wraps a list and returns a Box* list, the elements of the
+   wrapped lists are all converted to box by the default pretty printer,
+   and then spliced into the surrounding box. Example:
+   context-free syntax
+     from-box(Box)   -> Program
+     to-box( Decl* ) -> Box {to-box}
+   equations
+     \[] begin Decl* end = from-box(H ["begin" to-box(Decl*) "end"])
+   This would place begin, end and the elements of Decl* all
+   next to eachother.
+ * spec/text/*: the syntax of Box has been refactored. A generic application
+   operator replaces the specific Box operators: BoxOperator "[" Box* "]" ->
+   Box. This made it possible for the G operator to have any BoxOperator as
+   an argument.
+ * src/Box-to-Text.c: recompiled with new ASF+SDF sources for the above
+   functionality.
+
+Sun Jan 14 17:31:55 CET 2007 <jurgenv@cwi.nl>
+ * generator: renamed to src
+ * formatter: renamed to spec
+
+Fri Sep  1 11:31:45 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
+ * generator/pandora.c: fixed a bug. When a to-box function returned
+   nothing (an empty list of boxes) pandora would crash with 
+   very unclear symptoms.
+
+Wed Jun 21 10:02:54 CEST 2006 <jurgenv@cwi.nl>
+ * generator/pandora.c: choosing first alternative of an ambiguity
+   cluster while emiting a warning message.
+
+Tue Jun 20 15:48:04 CEST 2006 <jurgenv@cwi.nl>
+ * generator/main.c: removed use of binary ATerms, because they do
+   not scale to very long ATerm lists (As box2text generally produces).
+   Also, changed the output format to strings of characters instead of
+   of parse tree of Bytes, to improve general efficiency of pretty printing.
+   Also, added verbose messages to see in which of the three phases
+   pandora is: mapping to BOX, rendering BOX to Bytes, yielding Bytes.
+
+Wed Jan 18 16:29:16 CET 2006 <{jurgenv,kooiker}@cwi.nl>
+ * src/Makefile.am,package,configure.in: got rid of transitive
+   dependencies of asc-support by using asc-support-config script
+   at configure time.
+
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
+Tue Mar 22 11:46:43 CET 2005 <kooiker@cwi.nl>
+ * generator/Makefile.am:
+   - Fix dependency on ATerm-dbg
+
+Thu Mar 10 11:03:54 CET 2005 <{jong,kooiker}@cwi.nl>
+ * generator/main.c:
+   - fix compilation error
+
+Fri Feb 18 11:24:08 CET 2005 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - Remove empty boxes
+
+Fri Feb 18 10:35:38 CET 2005 <{jurgenv, kooiker}@cwi.nl>
+ * generator/pandora.c:
+   - Applied structured lexicals
+ * generator/main.c:
+   - Added -b commandline option for dumping box term
+
+Thu Jan 27 12:49:13 CET 2005 <{jurgenv,kooiker}@cwi.nl>
+ * generator/pandora.c:
+   - try to fix transformToBox
+
+Mon Dec 13 15:59:29 CET 2004 <kooiker@cwi.nl>
+ * formatter/text/Frame.{asf,sdf},Basic-to-Text.{asf,sdf}:
+   - add support for ts space-option
+ * formatter/text/Alignments-to-Text.asf:
+   - fixed stack overflow when prettyprinting alignments with missing R box
+ * generator/Box-to-Text.c:
+   - regenerated
+
+Fri Nov 19 14:29:07 CET 2004 <jurgenv@cwi.nl>
+ * Replaced dependency on Tide to dependency on small package tide-support
+
+Fri Nov 12 13:11:15 CET 2004 <kooiker@cwi.nl>
+ * add initial TeX backend 
+
+Wed Oct 13 11:23:07 CEST 2004 <kooiker@cwi.nl>
+ * formatter/text/Text-Operators.{asf,sdf}:
+   - Introduced Text concat operator 
+
+Mon Oct 11 17:47:49 CEST 2004 <jurgenv@cwi.nl>
+ * Temporarily added dependency on Tide, until the Tide package
+   is split up such that it can become a dependency on the
+   tide-c-adapter.
+ * Added -t option to pandora for exporting its result in textual
+   ATerm format.
+
+Mon Sep 20 15:10:13 CEST 2004 <kooiker@cwi.nl>
+ * formatter/text:
+   - Added Alignments-to-Text 
+ * generator/Box-to-Text.c:
+   - regenerated
+
+Fri Aug 27 14:57:12 CEST 2004 <jong@cwi.nl>
+ * refactor to use new PT_yield functions in MEPT API
+
+Wed Aug 25 15:12:43 CEST 2004 <kooiker@cwi.nl>
+ * generator/main.c:
+   - Initialize aterm term table on 21, decreases number of rehashes 
+
+Fri Aug 20 10:56:04 CEST 2004 <kooiker@cwi.nl>
+ * formatter/text/Outstrings.{asf,sdf}:
+   - use library string length function
+   - removed unused slash and noslash
+
+Wed May 12 13:32:34 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * generator/main.c: default in/out to - (stdin)
+
+Fri Jul  2 10:17:32 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 1.1
+
+Mon May 10 13:35:12 CEST 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - argsManyToBox uses isLayout on a yieldTree in stead of PT_isTreeLayout to
+     save comments
+
+Tue Mar 23 11:05:55 CET 2004 <{kooiker,jong}@cwi.nl>
+ * generator/main.c: #include <Error.h>
+
+Thu Mar 11 08:35:20 CET 2004 <kooiker@cwi.nl>
+ * Use new Error API.
+
+Fri Mar  5 10:08:44 CET 2004 <kooiker@cwi.nl>
+ * formatter/Text.{asf,sdf}:
+   - Concatenation of bytes with newlines fixed
+ * generator/Box-to-Text.c:
+   - Regenerated: concatenates bytes with newlines correct now
+ * generator/pandora.c:
+   - Return Box term on first match in processBox(tree)
+   - List separators are concatenated to the previous listelement without
+     separating space
+ * generator/Makefile.am:
+   - added target asfc 
+
+Wed Mar  3 10:20:15 CET 2004 <kooiker@cwi.nl>
+ * Bumped to version 1.1 
+
+Tue Mar  2 15:21:26 CET 2004 <{jurgenv,kooiker}@cwi.nl>
+ * generator/main.c: 
+   - Pack term before sending it to the toolbus. 
+
+Fri Feb 20 13:51:44 MET 2004 <markvdb@cwi.nl>
+ * Context switches from and to box added.
+
+Tue Feb 17 14:01:28 CET 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - Skip layout in argsmanytobox
+
+Fri Feb 13 16:31:13 CET 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - Fixed number of escapes (missed one) 
+
+Fri Feb 13 15:23:47 CET 2004 <{kooiker,jurgenv}@cwi.nl>
+ * Pandora is now ToolBus enabled
+ * Removed some debug stuff
+
+Fri Feb 13 10:34:32 CET 2004 <kooiker@cwi.nl>
+ * generator/Box-utils.{c,h}:
+   - Added functions for creation of Box(lists) without layout and spaceoptions
+ * generator/pandora.c:
+   - lists (with elements) can be pretty printed 
+   - some refactorings
+
+Thu Feb 12 11:15:37 CET 2004 <jong@cwi.nl>
+ * pandora.pkg: list explicit version dependencies
+ * configure.in: add configure options for required packages
+ * generator/Makefile.am: add -I and -L options for required headers/libs
+
+Wed Feb 11 16:18:46 CET 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - empty lists result in empty H box 
+
+Tue Feb 10 20:45:32 CET 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - if number of symbols at lhs of a production is more or equal to 3 it
+     might be a indented type production
+
+Wed Feb 11 16:18:29 CET 2004 <kooiker@cwi.nl>
+ * 
+
+Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+Tue Feb  3 18:16:41 CET 2004 <kooiker@cwi.nl>
+ * Reverse boxlist before returning it 
+
+Fri Jan 30 08:17:07 CET 2004 <kooiker@cwi.nl>
+ * Removed debug statement 
+
+Thu Jan 29 17:57:18 CET 2004 <kooiker@cwi.nl>
+ * Added pattern matching on rules of type indented
+ * If appl contains only 1 argument don't loop over it 
+
+Thu Jan 29 09:57:17 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Fixed bug due to statement before declaring variables in pandora.c 
+
+2004-01-28	Taeke Kooiker	<kooiker@cwi.nl>
+ * First working version only uses HBoxes
+
+2004-01-26	Taeke Kooiker	<kooiker@cwi.nl>
+ * Initial framework derived from ptpretty package

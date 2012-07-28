@@ -1,0 +1,26 @@
+module Text
+
+imports Outstrings
+imports NewLine
+
+exports
+  sorts Text
+
+  context-free syntax
+    Bytes* -> Text {constructor}
+
+  context-free syntax
+    concat-reverse(Text) -> Bytes
+
+hiddens
+  imports basic/Whitespace
+  context-free syntax
+    concat-reverse(Text,Bytes) -> Bytes
+
+  variables
+    "bytes"[0-9]* -> Bytes
+    "bytes*"[0-9]* -> Bytes*
+    "text"[0-9]* -> Text
+ 
+  lexical variables
+    "byte*"[0-9]* -> Byte*

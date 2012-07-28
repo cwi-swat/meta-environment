@@ -1,0 +1,37 @@
+equations
+
+%% \paragraph{Font Operators}
+%%
+%% A fontname is translated to a command sequence that calls
+%% the font.
+
+   [Fname]
+        fname(F fn = fontid(Char*)) = strcon(""" "\" Char* "{" "}" """)
+
+   [Fnt]
+        b := fname(f), 
+        a2 := replace("~", " ", rm-adj(" ", specials(deslash(a1))))
+        ====>
+        tex(f [a1]) = (\S{rmq(b || a2)})
+
+   [default-Fnt] tex(F fn = fontid(Char*) [B]) = ({cs("\" Char* "{" "}")tex(B)})
+
+%% We do not yet give a translation for the other font options. These were
+%% designed for use with the New Font Selection Scheme of \LaTeX, and will
+%% be supported in the near future.
+%%
+%% The abbreviations might for instance be defined, using
+%% \LaTeX's fontnames, as
+
+   [ABR'MATH]    tex(MATH [a])  = (\MATH{ rmq(a) })
+
+   [default-ESC] tex(ESC[a])    = tex(MATH[T-ESC[a]])
+
+   [0] tex(MTH[a]) = (\S{rmq("$" || a || "$")})
+
+%%   [0] tex(a * b) = (\H{texstr(a*b)})
+
+%%   [0]         texstr(a * b) = (texstr(a)texstr(b))
+%%   [default-0] texstr(a)     = tex(a)
+
+%%%

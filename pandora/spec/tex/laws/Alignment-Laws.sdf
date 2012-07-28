@@ -1,0 +1,18 @@
+module laws/Alignment-Laws
+
+imports laws/Empty-Alignment-Laws
+
+hiddens
+  context-free syntax
+    "RWD"          "[" Box* "]"                      -> Box*
+    "H*" SpaceOption* "[" Box* "," Box* "," Box* "]" -> Box*
+  variables
+    [ab]           -> StrCon
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "ao*"[0-9]*    -> {AlignmentOption ","}*
+    "so*"[0-9]*    -> SpaceOption*
+
+
+%%%

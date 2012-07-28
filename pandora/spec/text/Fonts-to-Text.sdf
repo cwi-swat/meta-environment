@@ -1,0 +1,16 @@
+module Fonts-to-Text
+
+imports Basic-to-Text
+
+hiddens
+  variables
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "Frame"[0-9]*  -> Frame
+    "'C"[0-9]*     -> Context
+    "Point"[0-9]*  -> Point
+    [f][0-9]*     -> BoxOperator
+    "Struct"[0-9]*  -> TextStruct
+    "fo*"           -> FontOption*
+

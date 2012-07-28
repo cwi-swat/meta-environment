@@ -1,0 +1,168 @@
+
+definition
+module languages/box/syntax/Box
+
+imports languages/box/syntax/Alignments
+imports languages/box/syntax/Comments
+imports languages/box/syntax/Fonts
+imports languages/box/syntax/Groups
+
+hiddens
+  context-free start-symbols
+    Box
+module languages/box/syntax/Groups
+
+imports languages/box/syntax/Basic
+
+exports
+
+sorts GroupOption
+
+context-free syntax
+"gs" "=" NatCon      -> GroupOption {cons("size")}
+"op" "=" BoxOperator -> GroupOption {cons("operator")}
+
+context-free syntax
+%% the group operator wraps another operator around every nth 
+%% elements of a list of boxes.
+
+"G"  group-options:GroupOption* -> BoxOperator {cons("grouping")}
+
+context-free syntax
+%% the SL operator is an abbreviation of G gs=4, which is typically
+%% applicable to separated lists
+
+"SL" group-options:GroupOption* -> BoxOperator {cons("separated-list")}
+module basic/NatCon
+
+exports
+
+sorts NatCon
+
+lexical syntax
+  
+ [0-9]+ -> NatCon {cons("digits")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+module languages/box/syntax/Comments
+
+%% The comments occurring in the orginal text must be
+%% restored in the resulting text. 
+
+imports languages/box/syntax/Basic
+exports
+  context-free syntax
+    "COMM" -> BoxOperator {cons("comment")}
+module languages/box/syntax/Alignments
+
+imports languages/box/syntax/Basic
+
+exports
+  sorts AlignmentOption AlignmentOptions
+  context-free syntax
+    "A" alignments:AlignmentOptions options:SpaceOption* -> BoxOperator {cons("alignment")}
+    "R"                                                  -> BoxOperator {cons("row")}
+
+    "l" options:SpaceOption* -> AlignmentOption {cons("left")}
+    "c" options:SpaceOption* -> AlignmentOption {cons("centre")}
+    "r" options:SpaceOption* -> AlignmentOption {cons("right")}
+
+    "(" {AlignmentOption ","}* ")" -> AlignmentOptions
+
+module languages/box/syntax/Basic
+
+imports basic/Comments
+imports basic/StrCon
+imports basic/NatCon
+        
+exports
+  sorts SpaceSymbol SpaceOption
+
+  context-free syntax
+    "hs"                    -> SpaceSymbol {cons("horizontal")}
+    "vs"                    -> SpaceSymbol {cons("vertical")}
+    "is"                    -> SpaceSymbol {cons("indentation")}
+    "ts"                    -> SpaceSymbol {cons("tabstop")}
+    SpaceSymbol "=" NatCon  -> SpaceOption     
+
+exports
+  sorts Box
+
+  context-free syntax
+    StrCon                                       -> Box {cons("string")}
+    operator:BoxOperator "[" list:Box* "]"       -> Box {cons("appl")}
+
+    "H" options:SpaceOption*                     -> BoxOperator {cons("h")}
+    "V" options:SpaceOption*                     -> BoxOperator {cons("v")}
+    "HV" options:SpaceOption*                    -> BoxOperator {cons("hv")}
+    "HOV" options:SpaceOption*                   -> BoxOperator {cons("hov")}
+    "I" options:SpaceOption*                     -> BoxOperator {cons("i")}
+    "WD"                                         -> BoxOperator {cons("wd")}
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r]	-> LAYOUT {cons("whitespace")}
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+module basic/Comments
+
+imports
+  basic/Whitespace
+
+exports
+  lexical syntax
+    "%%" line:~[\n]* "\n"	-> LAYOUT {cons("line"),category("Comment")}
+    "%" content:~[\%\n]+ "%"	-> LAYOUT {cons("nested"),category("Comment")}
+  context-free restrictions
+    LAYOUT? -/- [\%]
+module languages/box/syntax/Fonts
+
+imports languages/box/syntax/Basic
+imports basic/Comments
+
+exports
+  sorts FontId
+  lexical syntax
+    [A-Za-z]+ -> FontId {cons("default")}
+
+exports
+  sorts FontParam FontOption FontValue FontOperator
+  context-free syntax
+    NatCon                   -> FontValue {cons("natural")}
+    FontId                   -> FontValue {cons("font-id")}
+    FontParam "=" FontValue  -> FontOption
+    "F" FontOption*          -> BoxOperator {cons("font")}
+
+    "fn" -> FontParam {cons("name")}
+    "fm" -> FontParam {cons("family")}
+    "se" -> FontParam {cons("series")}
+    "sh" -> FontParam {cons("shape")}
+    "sz" -> FontParam {cons("size")}
+    "cl" -> FontParam {cons("color")}
+
+    "KW"      -> FontOperator {cons("keyword")}
+    "VAR"     -> FontOperator {cons("variable")}
+    "NUM"     -> FontOperator {cons("number")}
+    "MATH"    -> FontOperator {cons("math")}
+    "ESC"     -> FontOperator {cons("escape")}
+    "COMM"    -> FontOperator {cons("comment")}
+    "STRING"  -> FontOperator {cons("string")}
+module basic/StrCon
+
+exports
+
+sorts StrCon StrChar
+
+lexical syntax
+    "\\n"                      -> StrChar {cons("newline")}
+    "\\t"                      -> StrChar {cons("tab")}
+    "\\\""                     -> StrChar {cons("quote")}
+    "\\\\"                     -> StrChar {cons("backslash")}
+    "\\" a:[0-9]b:[0-9]c:[0-9] -> StrChar {cons("decimal")}
+    ~[\0-\31\n\t\"\\]          -> StrChar {cons("normal")}
+
+    [\"] chars:StrChar* [\"]   -> StrCon  {cons("default")}

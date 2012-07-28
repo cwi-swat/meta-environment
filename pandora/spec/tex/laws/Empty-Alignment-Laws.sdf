@@ -1,0 +1,17 @@
+module laws/Empty-Alignment-Laws
+
+imports languages/box/syntax/Alignments
+
+hiddens
+  context-free syntax
+    -> Box*
+
+hiddens
+  variables
+    [ab]           -> StrCon
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "ao*"[0-9]*    -> {AlignmentOption ","}*
+    "so*"[0-9]*    -> SpaceOption*
+%%%

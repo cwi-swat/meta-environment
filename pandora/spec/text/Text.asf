@@ -1,0 +1,11 @@
+equations
+
+[fwd]
+  concat-reverse(text) = concat-reverse(text, bytes())
+
+[one]
+  concat-reverse(, bytes) = bytes
+
+[more]
+  concat-reverse(bytes1 bytes*, bytes2) =
+    concat-reverse(bytes*, bytes1 || newlinechar || bytes2)

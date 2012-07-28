@@ -1,0 +1,18 @@
+module Comments-to-TeX
+
+imports Basic-to-TeX 
+imports languages/box/syntax/Comments 
+imports Fonts-to-TeX 
+imports Escapes
+
+hiddens
+  context-free syntax
+    texs4(TEX,Box*)  -> TEX
+    pbox(Box)            -> TEX
+  variables
+    [ab][0-9]*     -> String
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+
+%%%

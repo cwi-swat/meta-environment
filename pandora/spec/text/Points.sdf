@@ -1,0 +1,13 @@
+module Points
+
+imports 
+  basic/Integers
+
+exports
+  sorts Point
+  context-free syntax
+    "(" x:Integer "," y:Integer ")" -> Point
+
+hiddens
+  variables
+    "Point"[0-9]* -> Point

@@ -1,0 +1,12 @@
+module Conditionals[X]
+
+imports basic/Booleans
+
+exports
+  context-free syntax
+    "if" Boolean "then" X "else" X "fi" -> X
+
+hiddens
+  imports basic/Whitespace
+  variables
+    "Statement"[0-9]* -> X

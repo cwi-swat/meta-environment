@@ -1,0 +1,39 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+equations
+
+  [0] tex(HPAR a b [ B* ]) = (\HPAR{tex(ESC[a])}{tex(ESC[b])}{texs4((\PSEP{}),B*)})
+
+  [0] tex(VPAR a b [ B* ]) = (\VPAR{tex(ESC[a])}{tex(ESC[b])}{texs4((\PSEP{}),B*)})
+
+  [0] tex(PAR a b [ B* ])  = (\PAR {tex(ESC[a])}{tex(ESC[b])}{texs4((\PSEP{}),B*)})
+
+
+  [0] tex(f [ HPAR a b [ B* ]]) = (\HPAR{tex(ESC[a])}{tex(ESC[b])}{rmq(fname(f))texs4((\PSEP{}),B*)})
+
+  [0] tex(f [ VPAR a b [ B* ]]) = (\VPAR{tex(ESC[a])}{tex(ESC[b])}{rmq(fname(f))texs4((\PSEP{}),B*)})
+
+  [0] tex(f [ PAR a b [ B* ]])  = (\PAR {tex(ESC[a])}{tex(ESC[b])}{rmq(fname(f))texs4((\PSEP{}),B*)})
+
+
+  [TeX'0] texs4(t,)        = ()
+  [TeX'n] texs4(t, B)      = pbox(B)
+  [TeX'n] texs4(t, B B+)   = (pbox(B) t texs4(t, B+))
+
+  [0] pbox(a)         = rmq(a)
+  [0] pbox(f[a])      = rmq(a)
+  [default-0] pbox(B) = tex(B)
+
+%%%

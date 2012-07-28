@@ -1,0 +1,4 @@
+equations
+
+  [0] B* A (ao*) so* [ ] C*     = B* C*
+  [0] A (ao*) so* [ B* R [] C* ] = A (ao*) so* [ B* C* ]

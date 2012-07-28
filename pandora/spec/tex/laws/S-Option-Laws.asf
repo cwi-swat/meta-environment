@@ -1,0 +1,26 @@
+equations
+
+%% \paragraph{Redundant Options}
+%%
+%% We saw that space options are not relevant in all situations.
+%% Therefore, we can throw away those options that are irrelevant.
+%% For instance, in a {\sf H} box only horizontal space (indicated
+%% by the \fun{hs} option) is relevant, so we can remove options
+%% for indentation and vertical space [equations (\ref{Eq:C'SinH'is})
+%% and (\ref{Eq:C'SinH'vs})].
+
+   [C'SinH'is] H o*1 is = i o*2 [B*] = H o*1 o*2 [B*]
+   [C'SinH'vs] H o*1 vs = i o*2 [B*] = H o*1 o*2 [B*]
+   [C'SinV'hs] V o*1 hs = i o*2 [B*] = V o*1 o*2 [B*]
+   [C'SinV'is] V o*1 is = i o*2 [B*] = V o*1 o*2 [B*]
+   [C'SinI'hs] I o*1 hs = i o*2 [B]  = I o*1 o*2 [B]
+   [C'SinI'vs] I o*1 vs = i o*2 [B]  = I o*1 o*2 [B]
+
+%% Furthermore, we saw that only the first option for some
+%% category is relevant for the function that looks up the
+%% space for some context in a list of options. Therefore,
+%% we can remove any extra options for the same category
+%% \var{ss}.
+
+   [C'S] 
+      o*1 ss = h1 o*2 ss = h2 o*3   =   o*1 ss = h1 o*2 o*3

@@ -1,0 +1,65 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+equations
+
+%% \paragraph{Maximal Nesting Depth}
+
+  [0] mnd()             = 0
+  [0] mnd(B B+)         = max(mnd(B), mnd(B+))
+
+  [0] mnd(a)            = 1
+
+  [0] mnd(H  o*[B*])    = 1 + mnd(B*)
+  [0] mnd(V  o*[B*])    = 1 + mnd(B*)
+  [0] mnd(HV o*[B*])    = 1 + mnd(B*)
+  [0] mnd(HOVo*[B*])    = 1 + mnd(B*)
+  [0] mnd(I  o*[B])     = 1 + mnd(B)
+  [0] mnd(WD   [B])     = 1 + mnd(B)
+
+  [0] mnd(f[B])         = 1 + mnd(B)
+  [0] mnd(f(B*))        = 1 + mnd(B*)
+  [0] mnd(ESC[B])       = 1 + mnd(B)
+
+  [0] mnd(HPARab[B*])   = 1 + mnd(B*)
+  [0] mnd(VPARab[B*])   = 1 + mnd(B*)
+  [0] mnd(PARab[B*])    = 1 + mnd(B*)
+
+%% \paragraph{Maximal Nesting Depth}
+
+  [0]           mnd'('C, )             = 0
+  [0]           mnd'('C, B B+)         = max(mnd'('C, B), mnd'('C, B+))
+
+  [0]           mnd'('C, a)            = 1
+
+  [0]           mnd'(H,  H  o*[B*])    = mnd'(H, B*)
+  [default-0]   mnd'('C, H  o*[B*])    = 1 + mnd'(H, B*)
+
+  [0]           mnd'(V,  V  o*[B*])    = mnd'(V, B*)
+  [default-0]   mnd'('C, V  o*[B*])    = 1 + mnd'(V, B*)
+
+  [0]           mnd'('C, HV o*[B*])    = 1 + mnd'(none, B*)
+  [0]           mnd'('C, HOVo*[B*])    = 1 + mnd'(none, B*)
+  [0]           mnd'('C, I  o*[B])     = 1 + mnd'(none, B)
+  [0]           mnd'('C, WD   [B])     = 1 + mnd'(none, B)
+
+  [0]           mnd'('C, f[B])         = 1 + mnd'(none, B)
+  [0]           mnd'('C, f(B*))        = 1 + mnd'(none, B*)
+  [0]           mnd'('C, ESC[B])       = 1 + mnd'(none, B)
+
+  [0]           mnd'('C, HPARab[B*])   = 1 + mnd'(none, B*)
+  [0]           mnd'('C, VPARab[B*])   = 1 + mnd'(none, B*)
+  [0]           mnd'('C, PARab[B*])    = 1 + mnd'(none, B*)
+
+%%%

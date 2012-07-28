@@ -1,0 +1,18 @@
+module Strings
+
+imports languages/box/syntax/Box
+imports basic/Bytes
+
+exports
+
+context-free syntax
+  Bytes -> Box 
+  "empty" -> Bytes
+  length(Bytes) -> Integer
+
+hiddens
+
+variables
+
+"StrCon" -> StrCon {strict}
+"Bytes" -> Bytes {strict}
