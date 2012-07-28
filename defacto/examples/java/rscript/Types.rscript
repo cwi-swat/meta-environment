@@ -1,0 +1,24 @@
+%%%%%%%% Types.rscript
+
+%%%%%% Extracted facts:
+
+set[node] PARAM-DECL
+rel[node, node] DECL-TYPE
+rel[node, node] NEW
+
+
+%%%%%% Enriched facts:
+
+%% we are not going to do the following yet:
+%% - name resolution
+%% - type checking (finding the type of an expression, subtyping)
+
+
+%% rel STATEMENT -> EXCEPTION TYPE
+rel[node, str] THROW-TYPE = THROW o NEW o Syntax %% assume exceptions are only thrown using new ....()
+yield THROW-TYPE
+
+%% rel CATCH -> EXCEPTION TYPE
+rel[node, str] CATCH-TYPE = CATCH o DECL-TYPE o Syntax
+yield CATCH-TYPE
+

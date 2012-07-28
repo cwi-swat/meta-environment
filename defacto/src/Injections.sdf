@@ -1,0 +1,45 @@
+module Injections
+
+imports RStoreTree
+imports Roles
+
+exports
+context-free syntax
+
+  process-inject-annotations(Tree, TreeTable) -> TreeTable { traversal(accu, top-down, continue) }
+
+  replace-tree-id(TreeTable, Integer, Integer) -> TreeTable { traversal(trafo, top-down, continue) }
+  replace-tree-id(<Tree, Integer>, Integer, Integer) -> <Tree, Integer> { traversal(trafo, top-down, continue) }
+
+  traverse-injection-chain(Tree, Integer, Integer, TreeTable) -> TreeTable
+
+
+
+hiddens
+imports basic/Whitespace
+
+variables
+
+"Attr*"[0-9\']* -> {Attr ","}*
+"Attr+"[0-9\']* -> {Attr ","}+
+"Attributes"[0-9\']* -> Attributes
+"ATerm"[0-9\']* -> ATerm
+"ATerm*"[0-9\']* -> {ATerm ","}*
+"ATerm+"[0-9\']* -> {ATerm ","}+
+"Id"[0-9\']* -> IdCon
+"Int"[0-9\']* -> Integer
+"Location"[0-9\']* -> Location
+"N"[0-9\']* -> NatCon
+"Production"[0-9\']* -> Production
+"RElem"[0-9\']* -> RElem
+"RElem*"[0-9\']* -> {RElem ","}*
+"RStore"[0-9\']* -> RStore
+"StrCon"[0-9\']* -> StrCon
+"Symbols"[0-9\']* -> Symbols
+"Symbol"[0-9\']* -> Symbol
+"Symbol*"[0-9\']* -> {Symbol ","}*
+"Symbol+"[0-9\']* -> {Symbol ","}+
+"Tree"[0-9\']* -> Tree
+"Tree*"[0-9\']* -> {Tree ","}*
+"Tree+"[0-9\']* -> {Tree ","}+
+"TreeTable"[0-9\']* -> TreeTable

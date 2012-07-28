@@ -1,0 +1,47 @@
+module ExtRStores
+
+imports utilities/RStores
+
+exports
+context-free start-symbols
+  RElem
+
+context-free syntax
+
+  insert-many(RStore, IdCon, RElem) -> RStore
+  keys(RStore, var: IdCon) -> RElem
+  quicksort(RElem) -> RElem
+
+  
+hiddens
+imports basic/Comments
+
+context-free syntax
+
+  quickfilter(set:RElem, number:RElem, smaller:RElem, greater:RElem) -> RElem
+
+
+
+
+
+variables
+  "Store" [0-9\']*  -> RStore        {strict} 
+  "Key" [0-9\']*    -> RElem         {strict} 
+  "Value" [0-9\']*  -> RElem         {strict} 
+  "Set" [0-9\']*    -> RElem         {strict} 
+  "Bag" [0-9\']*    -> RElem         {strict} 
+  "Rel" [0-9\']*    -> RElem         {strict}
+  "Var" [0-9\']*    -> IdCon
+  "Value+" [0-9\']* -> {RElem ","}+  {strict} 
+  "Value*" [0-9\']* -> {RElem ","}*
+  "Type" [0-9\']*   -> RType         {strict} 
+  "Tuple*" [0-9\']* -> {RTuple ","}* {strict} 
+  "Type+" [0-9\']*  -> {RType ","}+  {strict} 
+  "Int"[0-9\']*     -> Integer       {strict}
+  "Bool"[0-9\']*    -> Boolean       {strict}
+
+  "RElem" [0-9\']* -> RElem
+  "RElem*" [0-9\']* -> {RElem ","}*
+
+  "_Type" [0-9\']*   -> RType         {wild} 
+  "_Tuple*" [0-9\']* -> {RTuple ","}* {wild} 

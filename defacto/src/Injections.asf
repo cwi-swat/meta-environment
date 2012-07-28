@@ -1,0 +1,20 @@
+equations
+
+[]
+  appl(prod( [Symbol*], Symbol, attrs([ Attr*1, term(inject(N)), Attr*2 ]) ),
+       [Tree*]
+      ){ATerm*1, [pos-info, ATerm], ATerm*2} := Tree,
+  Int0 := lookup(TreeTable, Tree),
+  Int0 != not-in-table,
+  Int1 := N,
+  Int1 != 0,
+  Tree' := get-nth-tree(Tree*, Int1),
+  Int2 := lookup(TreeTable, Tree'),
+  Int2 != not-in-table,
+  TreeTable' := replace-tree-id(TreeTable, Int2, Int0)
+  ===>
+  process-inject-annotations(Tree, TreeTable) = TreeTable'
+
+[]
+  replace-tree-id(<Tree, Int0>, Int0, Int1) = <Tree, Int1>
+  

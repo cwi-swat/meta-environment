@@ -1,0 +1,101 @@
+module Roles
+
+imports containers/Set[RoleDef]
+imports languages/asfix/syntax/Tree
+imports ExtRStores
+imports RStoreTree
+imports Types
+
+exports
+context-free syntax
+
+extract-roles(Tree, RStore, TreeTable) -> RStore
+
+
+hiddens
+imports basic/Whitespace
+
+aliases
+Set[[RoleDef]] -> RoleDefSet
+
+sorts RoleDef RoleDefSet Set
+
+context-free syntax
+
+"(" IdCon "," {RType ","} + ")" -> RoleDef
+
+collect-used-roles(Tree, RoleDefSet) -> RoleDefSet { traversal(accu, top-down, continue) }
+collect-used-roles(ATerm, RoleDefSet) -> RoleDefSet { traversal(accu, top-down, continue) }
+
+declare-roles(RoleDefSet, RStore) -> RStore { traversal(accu, top-down, continue) }
+declare-roles(RoleDef, RStore) -> RStore { traversal(accu, top-down, continue) }
+
+declare-used-roles(Tree, RStore) -> RStore
+
+extract-node-roles({Tree ","}*, RStore, TreeTable) -> RStore { traversal(accu, top-down, break) }
+extract-node-roles(Tree, RStore, TreeTable) -> RStore { traversal(accu, top-down, break) }
+
+exports
+context-free syntax
+
+tree-is-layout(Tree) -> Boolean
+get-nth-tree({Tree ","}*, Integer) -> Tree
+get-first-tree({Tree ","}*) -> Tree
+get-last-tree({Tree ","}*) -> Tree
+get-node-ids({Tree ","}*, TreeTable) -> RElem
+get-list-indexes({Tree ","}*, TreeTable, Integer, RElem) -> RElem
+get-list-sequence({Tree ","}*, TreeTable, RElem) -> RElem
+get-list-length({Tree ","}*) -> Integer
+has-children(Tree) -> Boolean
+
+hiddens
+context-free syntax
+
+set-to-relation(RElem) -> RElem
+unary-relation-to-set(RElem) -> RElem
+multi-product4(RElem, RElem) -> RElem
+multi-product3(RElem, RElem) -> RElem
+multi-product2(RElem, {RElem ","}*) -> RElem
+multi-product({RElem ","}*) -> RElem
+
+extract-role-elem2(ATerm, Tree, TreeTable, {Tree ","}*, RStore) -> RElem
+extract-role-elem(ATerm, Tree, TreeTable, RStore) -> RElem
+extract-role-elems({ATerm ","}+, Tree, TreeTable, RStore) -> {RElem ","}+
+
+store-next-rel-elems({Tree ","}*, RStore, IdCon, TreeTable) -> RStore
+store-next-rel(IdCon, {ATerm ","}+, Tree, TreeTable, {Tree ","}*, RStore) -> RStore
+
+extract-role-data(Attributes, RStore, Tree, TreeTable) -> RStore { traversal(accu, top-down, break) }
+extract-role-data({ATerm ","}*, RStore, Tree, TreeTable) -> RStore { traversal(accu, top-down, break) }
+extract-role-data(ATerm, RStore, Tree, TreeTable) -> RStore { traversal(accu, top-down, break) }
+
+extract-fact-data(Attributes, RStore, Tree, TreeTable) -> RStore
+
+variables
+
+"RStore"[0-9\']* -> RStore
+"RElem"[0-9\']* -> RElem
+"RElem*"[0-9\']* -> {RElem ","}*
+"RElem+"[0-9\']* -> {RElem ","}+
+"RType"[0-9\']* -> RType
+"RType+"[0-9\']* -> {RType ","}+
+"ATerm"[0-9\']* -> ATerm
+"ATerm*"[0-9\']* -> {ATerm ","}*
+"ATerm+"[0-9\']* -> {ATerm ","}+
+"RoleDefSet"[0-9\']* -> RoleDefSet
+"Tree"[0-9\']* -> Tree
+"Tree*"[0-9\']* -> {Tree ","}*
+"TreeTable"[0-9\']* -> TreeTable
+"Production"[0-9\']* -> Production
+"Symbols"[0-9\']* -> Symbols
+"Symbol"[0-9\']* -> Symbol
+"Symbol*"[0-9\']* -> {Symbol ","}*
+"Location"[0-9\']* -> Location
+"Area"[0-9\']* -> Area
+"Attributes"[0-9\']* -> Attributes
+"Attr*"[0-9\']* -> {Attr ","}*
+"Attr+"[0-9\']* -> {Attr ","}+
+"StrCon"[0-9\']* -> StrCon
+"N"[0-9\']* -> NatCon
+"Int"[0-9\']* -> Integer
+"Id"[0-9\']* -> IdCon

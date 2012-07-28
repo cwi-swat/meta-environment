@@ -1,0 +1,32 @@
+
+#include "Scope.defacto"
+
+MethodDeclaration:"MethodHeader-MethodBody"  <= { fact(METHOD, MethodDeclaration),
+                                                  fact(METHOD-BODY, MethodDeclaration, MethodBody) }
+
+FormalParameter:"Type-VariableDeclaratorId"  <= { fact(PARAM-DECL, FormalParameter),
+                                                  fact(DECL-TYPE, FormalParameter, Type) }
+
+ConstructorDeclaration:"Modifier-s-ConstructorDeclarator-Throws-opt-ConstructorBody" <= {
+    fact(METHOD, ConstructorDeclaration),
+    fact(METHOD-BODY, ConstructorDeclaration, ConstructorBody) }
+
+StaticInitializer:"static1"                  <= { fact(METHOD, StaticInitializer),
+                                                  fact(METHOD-BODY, StaticInitializer, Block) }
+
+ClassInstanceCreationExpression:"new-comma"  <= { fact(NEW, ClassInstanceCreationExpression, ClassType) }
+ClassInstanceCreationExpression:"new-comma1" <= { fact(NEW, ClassInstanceCreationExpression, ClassType) }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

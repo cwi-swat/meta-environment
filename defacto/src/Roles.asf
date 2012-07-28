@@ -1,0 +1,391 @@
+equations
+
+[]
+  role(Id, ATerm+) := ATerm,
+  RType+ := role-type(ATerm+),
+  RoleDefSet' := union({(Id, RType+)}, RoleDefSet0)
+  ===>
+  collect-used-roles(ATerm, RoleDefSet0) = RoleDefSet'
+
+[multi-ary-roles]
+  RStore' := declare(RStore0, Id, rel[RType, RType+])
+  ===>
+  declare-roles((Id, RType, RType+), RStore0) = RStore'
+
+[unary-roles]
+  RStore' := declare(RStore0, Id, set[RType])
+  ===>
+  declare-roles((Id, RType), RStore0) = RStore'
+
+[]
+  RoleDefSet := collect-used-roles(Tree, {}),
+  RStore' := declare-roles(RoleDefSet, RStore0)
+  ===>
+  declare-used-roles(Tree, RStore0) = RStore'
+
+
+
+
+equations
+
+[is-layout]
+  tree-is-layout(appl(prod( [Symbol*], cf(opt(layout)), Attributes ), [Tree*])) = true
+
+[default]
+  tree-is-layout(Tree) = false
+
+[]
+  tree-is-layout(Tree) == true
+  ===>
+  get-nth-tree(Tree, Tree*, Int0) = get-nth-tree(Tree*, Int0)
+
+[]
+  Int0 == 1,
+  tree-is-layout(Tree) == false
+  ===>
+  get-nth-tree(Tree, Tree*, Int0) = Tree
+
+[]
+  tree-is-layout(Tree) == false,
+  Int0 != 1,
+  Int1 := Int0 - 1
+  ===>
+  get-nth-tree(Tree, Tree*, Int0) = get-nth-tree(Tree*, Int1)
+
+[]
+  get-first-tree(Tree, Tree*) = Tree
+
+[]
+  get-last-tree(Tree*, Tree) = Tree
+
+[]
+  RElem1 := lookup(TreeTable, Tree),
+  RElem2 := get-node-ids(Tree*, TreeTable),
+  RElem' := union({RElem1}, RElem2)
+  ===>
+  get-node-ids(Tree, Tree*, TreeTable) = RElem'
+
+[]
+  get-node-ids( , TreeTable) = {}
+
+[]
+  RElem1 := lookup(TreeTable, Tree),
+  RElem' := union(RElem0, {<Int, RElem1>})
+  ===>
+  get-list-indexes(Tree, Tree*, TreeTable, Int, RElem0) = 
+  get-list-indexes(Tree*, TreeTable, Int + 1, RElem')
+
+[]
+  get-list-indexes( , TreeTable, Int, RElem0) = RElem0
+
+[]
+  RElem1 := lookup(TreeTable, Tree1),
+  RElem2 := lookup(TreeTable, Tree2),
+  RElem' := union(RElem0, {<RElem1, RElem2>})
+  ===>
+  get-list-sequence(Tree1, Tree2, Tree*, TreeTable, RElem0) = 
+  get-list-sequence(Tree2, Tree*, TreeTable, RElem')
+
+[]
+  get-list-sequence( , TreeTable, RElem0) = RElem0
+
+[]
+  get-list-sequence(Tree , TreeTable, RElem0) = RElem0
+
+[]
+  tree-is-layout(Tree) == false
+  ===>
+  get-list-length(Tree, Tree*) = 1 + get-list-length(Tree*)
+
+[]
+  tree-is-layout(Tree) == true
+  ===>
+  get-list-length(Tree, Tree*) = get-list-length(Tree*)
+
+[]
+  get-list-length() = 0
+
+
+
+
+[]
+  appl(prod( [], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree
+  ===>
+  has-children(Tree) = false
+
+[]
+  appl(prod( [], Symbol, Attributes ),
+       [Tree*]
+      ) := Tree
+  ===>
+  has-children(Tree) = false
+
+[default]
+  has-children(Tree) = true
+
+
+equations
+
+[subtree-number-deprecated]
+  appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree,
+  Int := N,
+  Int != 0,
+  Tree1 := get-nth-tree(Tree*, Int),
+  Tree' := find-subtrees(Tree1, TreeTable),
+  Int' := lookup(TreeTable, Tree')
+  ===>
+  extract-role-elem(N, Tree, TreeTable, RStore) = {Int'}
+
+[subtree-number]
+  appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree,
+  Int := N,
+  Int != 0,
+  Tree1 := get-nth-tree(Tree*, Int),
+  Tree*1 := find-subtrees(Tree1, TreeTable),
+  RElem' := get-node-ids(Tree*1, TreeTable)
+  ===>
+  extract-role-elem2(N, Tree, TreeTable, Tree*0, RStore) = RElem'
+
+[top-node]
+  Int' := lookup(TreeTable, Tree)
+  ===>
+  extract-role-elem2(0, Tree, TreeTable, Tree*0, RStore) = {Int'}
+
+[strcon]
+  extract-role-elem2(StrCon, Tree, TreeTable, Tree*0, RStore) = {StrCon}
+
+[parent]
+  Int := lookup(TreeTable, Tree),
+  {RElem} := left-image(get(RStore, Child), {Int}),
+  N := RElem
+  ===>
+  extract-role-elem2(parent, Tree, TreeTable, Tree*0, RStore) = {N}
+
+[functions-with-multiple-arguments]
+  appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree,
+  Int := N,
+  Int != 0,
+  Tree' := get-nth-tree(Tree*, Int),
+  Tree*1:= find-subtrees(Tree', TreeTable)
+  ===>
+  extract-role-elem2(Id(N, ATerm+0), Tree, TreeTable, Tree*0, RStore) = 
+  extract-role-elem2(Id(ATerm+0), Tree, TreeTable, Tree*0,Tree*1, RStore)
+
+[functions-with-multiple-arguments]
+  appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree,
+  Int := N,
+  Int != 0,
+  Tree' := get-nth-tree(Tree*, Int),
+  Tree*1:= find-subtrees(Tree', TreeTable)
+  ===>
+  extract-role-elem2(Id(N), Tree, TreeTable, Tree*0, RStore) = 
+  extract-role-elem2(Id, Tree, TreeTable, Tree*0,Tree*1, RStore)
+
+[functions-with-multiple-arguments]
+  extract-role-elem2(Id(0), Tree, TreeTable, Tree*0, RStore) = 
+  extract-role-elem2(Id, Tree, TreeTable, Tree*0,Tree, RStore)
+
+
+
+
+
+[first-of-list]
+  Tree' := get-first-tree(Tree*0),
+  Int' := lookup(TreeTable, Tree'),
+  Int' != not-in-table
+  ===>
+  extract-role-elem2(first, Tree0, TreeTable, Tree*0, RStore) = {Int'}
+
+[last-of-list]
+  Tree' := get-last-tree(Tree*0),
+  Int' := lookup(TreeTable, Tree'),
+  Int' != not-in-table
+  ===>
+  extract-role-elem2(last, Tree0, TreeTable, Tree*0, RStore) = {Int'}
+
+[each-element-in-list]
+  RElem' := get-node-ids(Tree*0, TreeTable)
+  ===>
+  extract-role-elem2(each, Tree, TreeTable, Tree*0, RStore) = RElem'
+
+[next-sequence-of-list]
+  RElem' := get-list-sequence(Tree*0, TreeTable, {})
+  ===>
+  extract-role-elem2(next, Tree, TreeTable, Tree*0, RStore) = RElem'
+
+[index-in-list]
+  RElem' := get-list-indexes(Tree*0, TreeTable, 0, {})
+  ===>
+  extract-role-elem2(index, Tree, TreeTable, Tree*0, RStore) = RElem'
+
+[size-of-list]
+  Int' := get-list-length(Tree*0)
+  ===>
+  extract-role-elem2(size, Tree, TreeTable, Tree*0, RStore) = {Int'}
+
+[default]
+  extract-role-elem2(ATerm, Tree, TreeTable, Tree*0, RStore) = {}
+
+
+
+
+
+equations
+
+[]
+  unary-relation-to-set({ <RElem>, RElem* }) = union({RElem}, unary-relation-to-set({RElem*}))
+
+[]
+  unary-relation-to-set({}) = {}
+
+[default]
+  unary-relation-to-set(RElem) = RElem
+
+[]
+  set-to-relation({}) = {}
+
+[]
+  <RElem+> !:= RElem
+  ===>
+  set-to-relation({ RElem, RElem* }) = union({<RElem>}, set-to-relation({RElem*}))
+
+[]
+  set-to-relation({ <RElem+>, RElem* }) = union({<RElem+>}, set-to-relation({RElem*}))
+
+[]
+  <RElem+'> !:= RElem
+  ===>
+  multi-product4(<RElem+>, {RElem, RElem*}) = union(
+    {<RElem+, RElem>}, multi-product4(<RElem+>, {RElem*}))
+
+[]
+  multi-product4(<RElem+1>, {<RElem+2>, RElem*}) = union(
+    {<RElem+1, RElem+2>}, multi-product4(<RElem+1>, {RElem*}))
+
+[]
+  multi-product4(RElem, {}) = {}
+
+[]
+  multi-product3({RElem0, RElem*0}, RElem1) = union(
+    multi-product4(RElem0, RElem1), multi-product3({RElem*0}, RElem1))
+
+[]
+  multi-product3({}, RElem1) = {}
+
+[]
+  RElem' := multi-product3(RElem0, RElem1)
+  ===>
+  multi-product2(RElem0, RElem1, RElem*) = multi-product2(RElem', RElem*)
+
+[]
+  multi-product2(RElem0, ) = RElem0
+
+[]
+  RElem' := set-to-relation(RElem)
+  ===>
+  multi-product(RElem, RElem*) = multi-product2(RElem', RElem*)
+
+[]
+  multi-product() = {}
+
+
+
+
+
+
+
+
+
+
+equations
+
+[]
+  RElem := extract-role-elem2(ATerm, Tree, TreeTable, , RStore),
+  RElem+ := extract-role-elems(ATerm+, Tree, TreeTable, RStore)
+  ===>
+  extract-role-elems(ATerm, ATerm+, Tree, TreeTable, RStore) = RElem, RElem+
+
+[]
+  RElem := extract-role-elem2(ATerm, Tree, TreeTable, , RStore)
+  ===>
+  extract-role-elems(ATerm, Tree, TreeTable, RStore) = RElem
+
+[default]
+  RElem+ := extract-role-elems(ATerm+, Tree, TreeTable, RStore0),
+  RElem0 := multi-product(RElem+),
+  RElem' := unary-relation-to-set(RElem0),
+  RStore' := insert-many(RStore0, Id, RElem')
+  ===>
+  extract-role-data(role(Id, ATerm+), RStore0, Tree, TreeTable) = RStore'
+
+[]
+ appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree,
+  Int := N,
+  Tree' := get-nth-tree(Tree*, Int),
+  has-children(Tree') == true,
+  RStore' := extract-role-data(ATerm*1, RStore0, Tree, TreeTable)
+  ===>
+  extract-role-data(if(N, [ATerm*1], [ATerm*2]), RStore0, Tree, TreeTable) = RStore'
+
+[]
+ appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree,
+  Int := N,
+  Tree' := get-nth-tree(Tree*, Int),
+  has-children(Tree') == false,
+  RStore' := extract-role-data(ATerm*2, RStore0, Tree, TreeTable)
+  ===>
+  extract-role-data(if(N, [ATerm*1], [ATerm*2]), RStore0, Tree, TreeTable) = RStore'
+
+[]
+ appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree,
+  Int := N,
+  Tree' := get-nth-tree(Tree*, Int),
+  has-children(Tree') == true,
+  RStore' := extract-role-data(ATerm*1, RStore0, Tree, TreeTable)
+  ===>
+  extract-role-data(if(N, [ATerm*1]), RStore0, Tree, TreeTable) = RStore'
+
+[default]
+  extract-role-data(if(N, [ATerm*1]), RStore0, Tree, TreeTable) = RStore0
+
+[]
+  extract-fact-data(attrs([Attr*1, term(no-facts), Attr*2]), RStore, Tree, TreeTable) = RStore
+
+[default]
+  extract-fact-data(Attributes, RStore, Tree, TreeTable) = extract-role-data(Attributes, RStore, Tree, TreeTable)
+
+[]
+  Int0 := lookup(TreeTable, Tree),
+  Int0 != not-in-table,
+  appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm*1, [pos-info, ATerm], ATerm*2} := Tree,
+  RStore1 := extract-fact-data(Attributes, RStore0, Tree, TreeTable),
+  RStore' := extract-node-roles(Tree*, RStore1, TreeTable)
+  ===>
+  extract-node-roles(Tree, RStore0, TreeTable) = RStore'
+
+[]
+  RStore1 := declare-used-roles(Tree, RStore0),
+  RStore' := extract-node-roles(Tree, RStore1, TreeTable)
+  ===>
+  extract-roles(Tree, RStore0, TreeTable) = RStore'
+
+
+

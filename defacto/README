@@ -1,0 +1,18 @@
+This is the first prototype of the DeFacto Fact Extractor, as described in:
+
+H.J.S.Basten and P.Klint, DeFacto: Language-Parametric Fact Extraction from Source Code, 1st International Conference on Software Language Engineering, September 2008, Toulouse, France.
+
+
+External dependencies:
+
+SdfWeaver 0.1.2 by Jeroen Arnoldus
+http://www.repleo.nl
+
+
+DeFacto can be used as follows:
+
+Create a file with fact annotations according to the SdfWeaver syntax.
+The annotations need to be weaved into an SDF grammar, with the option -w. The result is a term parse table.
+This table then needs to be used to parse terms of which facts need to be extracted.
+With the -e option (which is the default) facts can be extracted from the parsed term, into an RStore.
+

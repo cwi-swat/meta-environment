@@ -1,0 +1,283 @@
+equations
+
+[main]
+  RStore1 := declare(RStore0, Location, rel[int, loc]),
+  RStore2 := declare(RStore1, Sort, rel[int, str]),
+  RStore3 := declare(RStore2, Syntax, rel[int, str]),
+  RStore4 := declare(RStore3, Child, rel[int, int]),
+  RStore5 := declare(RStore4, Sibling, rel[int, int]),
+  RStore6 := declare(RStore5, IntValue, rel[int, int]),
+  RStore' := node-to-rstore(Tree, 0, TreeTable, RStore6)%%,
+%%  RStore' := build-sibling-info(RStore7)
+  ===>
+  tree-to-rstore(Tree, RStore0, TreeTable) = RStore'
+
+
+
+
+equations
+
+[] extract-sort(cf(sort( StrCon ))) = StrCon
+[] extract-sort(cf(opt(sort( StrCon )))) = StrCon
+[] extract-sort(cf(opt(layout))) = ""
+[] extract-sort(cf(opt(lit( StrCon )))) = ""
+[] extract-sort(cf(seq( Symbols ))) = ""
+[] extract-sort(lex(sort( StrCon ))) = ""
+[] extract-sort(lit( StrCon )) = ""
+[] StrCon' := StrCon || "*"
+   ===>
+   extract-sort(cf(iter-star(sort( StrCon )))) = StrCon'
+%%[] extract-sort(sort( StrCon )) = "" %%"<START>"
+%%cf(iter-star(sort()))
+
+[]
+  TreeTable1 := collect-nodes(Tree, TreeTable0),
+  TreeTable' := collect-child-nodes(Tree+, TreeTable1, 0)
+  ==== 
+  collect-child-nodes(Tree, Tree+, TreeTable0, Int0) = TreeTable'
+
+
+[injection]
+  Int0 != 0, %% this is the only child
+  appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree,
+  StrCon1 := extract-sort(Symbol),
+  StrCon1 != "", %% and it is a 'normal' sort (not optional or a list)
+  TreeTable1 := store(TreeTable0, Tree, Int0),
+  TreeTable' := collect-child-nodes(Tree*, TreeTable1, Int0)
+  ====
+  collect-child-nodes(Tree, TreeTable0, Int0) = TreeTable'
+
+
+[default]
+%%  Int0 == 0 %% this is not the first child
+%%  ====
+  collect-child-nodes(Tree, TreeTable0, Int0) = collect-nodes(Tree, TreeTable0)
+
+
+[]
+  collect-child-nodes(, TreeTable0, Int0) = TreeTable0
+
+
+[]
+  appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm+} := Tree,
+  StrCon1 := extract-sort(Symbol),
+  StrCon1 != "",
+  attrs([Attr*1, term(no-facts), Attr*2]) !:= Attributes,
+  Int0 := lookup(TreeTable0, 0), %% running id
+  Int1 := Int0 + 1,
+  TreeTable1 := store(TreeTable0, 0, Int1),
+  TreeTable2 := store(TreeTable1, Tree, Int1),
+  TreeTable' := collect-child-nodes(Tree*, TreeTable2, Int1)
+  ===>
+  collect-nodes(Tree, TreeTable0) = TreeTable'
+
+[default]
+  appl(Production,
+       [Tree*]
+      ){ATerm+} := Tree%%,
+%%  StrCon1 := extract-sort(Symbol),
+%%  StrCon1 == ""
+  ===>
+  collect-nodes(Tree, TreeTable0) = collect-child-nodes(Tree*, TreeTable0, 0)
+
+[default]
+  appl(Production,
+       [Tree*]
+      ) := Tree%%,
+%%  StrCon1 := extract-sort(Symbol),
+%%  StrCon1 == ""
+  ===>
+  collect-nodes(Tree, TreeTable0) = collect-child-nodes(Tree*, TreeTable0, 0)
+
+[]
+  collect-nodes(N, TreeTable0) = TreeTable0
+  
+
+
+
+
+[]
+  TreeTable1 := new-table,
+  TreeTable2 := store(TreeTable1, 0, 0), %% running id
+  TreeTable' := collect-nodes(Tree, TreeTable2)
+  ===>
+  create-node-ids(Tree) = TreeTable'
+
+
+
+
+equations
+
+[cf-sort]
+  appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm*1, [pos-info, ATerm], ATerm*2} := Tree,
+  cf(opt(sort( StrCon ))) !:= Symbol,
+  cf(alt( Symbol1 , Symbol2 )) !:= Symbol,
+  Int' := lookup(TreeTable, Tree),
+  Int' != not-in-table
+  ===>
+  find-subtree(Tree, TreeTable) = Tree
+
+[lists]
+  appl( list( Symbol ) , [Tree*] ) {ATerm+} := Tree,
+  Tree*' := find-subtrees(Tree*, TreeTable)
+  ===>
+  find-subtree(Tree, TreeTable) = Tree*'
+
+[optional]
+   appl(prod( [Symbol+], cf(opt(sort( StrCon ))), Attributes ),
+       [Tree*]
+      ){ATerm*1, [pos-info, ATerm], ATerm*2} := Tree,
+  Tree*' := find-subtrees(Tree*, TreeTable)
+  ===>
+  find-subtree(Tree, TreeTable) = Tree*'
+
+
+
+[alternative]
+   appl(prod( [Symbol*], cf(alt( Symbol1 , Symbol2 )), Attributes ),
+       [Tree*]
+      ){ATerm*1, [pos-info, ATerm], ATerm*2} := Tree,
+  Tree*' := find-subtrees(Tree*, TreeTable)
+  ===>
+  find-subtree(Tree, TreeTable) = Tree*'
+
+[default]
+  find-subtree(Tree, TreeTable) = 
+
+[]
+  Tree*1 := find-subtree(Tree, TreeTable),
+  Tree*2 := find-subtrees(Tree*, TreeTable)
+  ===>
+  find-subtrees(Tree, Tree*, TreeTable) = Tree*1, Tree*2
+
+[]
+  find-subtrees( , TreeTable) = 
+
+
+
+
+
+
+
+equations
+
+[]strchar-to-int(0) = 0
+[]strchar-to-int(1) = 1
+[]strchar-to-int(2) = 2
+[]strchar-to-int(3) = 3
+[]strchar-to-int(4) = 4
+[]strchar-to-int(5) = 5
+[]strchar-to-int(6) = 6
+[]strchar-to-int(7) = 7
+[]strchar-to-int(8) = 8
+[]strchar-to-int(9) = 9
+
+[]
+  strcon(\"c*c\") := StrCon
+  ===>
+  str-to-int(StrCon) = strchar-to-int(c) + str-to-int(strcon(\"c*\")) * 10
+
+[]
+  str-to-int("") = 0
+
+[]
+  N := str-to-int(StrCon2),
+  RStore' := insert(RStore, IntValue, Int, N)
+  ===>
+  insert-natcon-value(RStore, "NatCon", Int, StrCon2) = RStore'
+
+[default]
+  insert-natcon-value(RStore, StrCon1, Int, StrCon2) = RStore
+
+
+
+equations
+
+[]
+  insert-child-relation(RStore0, Int0, Int0) = RStore0
+
+[default]
+  insert-child-relation(RStore0, Int0, Int1) = insert(RStore0, Child, Int0, Int1)
+
+[cf-sort]
+  appl(prod( [Symbol*], Symbol, Attributes ),
+       [Tree*]
+      ){ATerm*1, [pos-info, ATerm], ATerm*2} := Tree,
+  Int0 := lookup(TreeTable, Tree),
+  Int0 != not-in-table,
+  StrCon1 := extract-sort(Symbol),
+  StrCon2 := tree-to-string(Tree),
+  Location := posinfo-to-location(ATerm),
+  RStore1 := insert(RStore0, Location, Int0, Location),
+  RStore2 := insert(RStore1, Sort, Int0, StrCon1),
+  RStore3 := insert(RStore2, Syntax, Int0, StrCon2),
+  RStore4 := insert-natcon-value(RStore3, StrCon1, Int0, StrCon2),
+  RStore5 := insert-child-relation(RStore4, Int, Int0),
+  Tree*' := find-subtrees(Tree*, TreeTable),
+  RStore' := traverse-children(Tree*', Int0, TreeTable, RStore5)
+  ===>
+  node-to-rstore(Tree, Int, TreeTable, RStore0) = RStore'
+
+[default]
+  node-to-rstore(Tree, Int', TreeTable, RStore0) = RStore0
+
+
+
+
+equations
+
+[parent-child-empty]
+  traverse-children(, Int1, TreeTable, RStore0) = RStore0
+
+[parent-child]
+  RStore1 := node-to-rstore(Tree, Int, TreeTable, RStore0),
+  RStore' := traverse-children(Tree*, Int, TreeTable, RStore1)
+  ===>
+  traverse-children(Tree, Tree*, Int, TreeTable, RStore0) = RStore'
+
+
+
+
+equations
+
+[]
+  store-siblings({}, RStore) = RStore
+
+[]
+  store-siblings({RElem}, RStore) = RStore
+
+[]
+  Int1 := RElem1,
+  Int2 := RElem2,
+  RStore1 := insert(RStore0, Sibling, Int1, Int2),
+  RStore' := store-siblings({RElem2, RElem*}, RStore1)
+  ===>
+  store-siblings({RElem1, RElem2, RElem*}, RStore0) = RStore'
+
+[]
+  RElem1 := lookup(RStore0, Child, Int),
+  RElem2 := quicksort(RElem1), 
+  RStore' := store-siblings(RElem2, RStore0)
+  ===>
+  build-sibling-rel(Int, RStore0) = RStore'
+
+[]
+  RElem := keys(RStore0, Child),
+  RStore' := build-sibling-rel(RElem, RStore0)
+  ===>
+  build-sibling-info(RStore0) = RStore'
+
+
+
+
+equations
+
+[]
+  posinfo-to-location(area-in-file(StrCon, area(N1, N2, N3, N4, N5, N6))) =
+     area-in-file(StrCon, area(N1, N2, N3, N4 ,N5, N6))

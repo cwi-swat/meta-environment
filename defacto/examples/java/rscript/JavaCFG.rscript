@@ -1,0 +1,415 @@
+%%%%%%%% Java Call Graph Extraction
+
+
+%%%%%%%% defacto.h
+
+%%%%%% Tree structure
+type node = int
+type sort = str
+type graph = rel[node, node]
+
+rel[node, node] Child
+rel[node, sort] Sort
+rel[node, str] Syntax
+rel[node, loc] Location
+rel[node, int] IntValue
+
+%%yield Child
+%%yield Sibling
+%%yield Sort
+yield Syntax
+%%yield Location
+%%yield IntValue
+
+
+%%%%%% supporting functions
+
+type vgraph = rel[<str, loc>, <str,loc>]
+vgraph visualize-graph(rel[node, node] G) =
+  { <<S1, L1>, <S2 ,L2>> | <node N1, node N2> : G,
+    str S1 : Syntax[N1], loc L1 : Location[N1],
+    str S2 : Syntax[N2], loc L2 : Location[N2] }
+
+
+
+
+%% all bottom nodes of relation Rel, reachable from node Start
+%% TODO: take set as first parameter?
+set[node] reachBottom(node Start, graph Rel) = bottom(Rel) inter Rel*[Start]
+
+%% returns Start if not in Rel
+set[node] reachBottom2(node Start, graph Rel) = Result where
+    set[node] Bottom = reachBottom(Start, Rel)
+    set[node] Result = Bottom union { Start | Bottom == {} }
+  end where
+
+
+
+
+%% the shortest distance (+ initDist) of each node in Relation to StartNode
+rel[&N, int] distances(&N StartNode, rel[&N, &N] Relation, int initDist) = Dist where
+  equations
+    initial
+      rel[&N, int] Dist init {<StartNode, initDist>}
+    satisfy
+      Dist = Dist union { <Y, min({D+1} union Dist[Y])> | <&N X, int D> : Dist, &N Y : Relation[X] }
+  end equations
+end where
+
+
+
+
+%%set[int] dist(&N From, &N To, rel[&N, &N] Relat) = distances(From, Relat, 0)[To]
+
+
+
+
+%% the element(s) of the domain of R with the lowest value
+set[&N] minimal(rel[&N, int] R) = R[-,min(range(R))]
+
+
+
+
+%% the element(s) of Candidates closest to node Start in relation Rel
+%% TODO: maybe rename to closest?
+set[&N] firstReach(&N Start, set[&N] Candidates, rel[&N, &N] Rel) = minimal(domainR(distances(Start, Rel, 0), Candidates))
+
+
+
+
+%% contract graph of Rel, using only nodes from Restr,
+%% keeping connectivity
+rel[&N, &N] contract(rel[&N, &N] Rel, set[&N] Restr) = Res where
+  equations
+    initial
+      rel[&N, &N] Temp init domainR(Rel, Restr)
+      rel[&N, &N] Res init {}
+    satisfy
+      Res = Res union Temp inter Restr x Restr
+      Temp = (Temp \ Restr x Restr) o Rel
+  end equations
+end where
+
+
+
+
+%% replaces every node in Rel according to mapping Map
+rel[&N, &N] map(rel[&N, &N] Rel, rel[&N, &N] Map) = inv(Map) o Rel o Map
+
+
+
+
+%% all edges of relation Rel that are on paths between Node1 and Node2
+rel[&N, &N] between(&N Node1, &N Node2, rel[&N, &N] Rel) = carrierR(Rel, Rel*[Node1] inter inv(Rel)*[Node2] union Rel*[Node2] inter inv(Rel)*[Node1] )
+
+
+
+
+%% replace in range
+rel[&N, &N] replaceR(&N Search, &N Replace, rel[&N, &N] Rel) = rangeX(Rel, {Search}) union Rel o {<Search, Replace>}
+rel[&N, &N] replaceR2(&N Search, set[&N] Replace, rel[&N, &N] Rel) = rangeX(Rel, {Search}) union Rel o ({Search} x Replace)
+
+
+
+
+%% expand nodes
+rel[&N, &N] expand(rel[&N, &N] Rel, set[&N] Nodes, rel[&N, &N] Expansions) = carrierX(Rel, Nodes) union rangeR(Rel, Nodes) o Expansions union Expansions o domainR(Rel, Nodes)
+
+%% paths from top of Rel to nodes Nodes
+rel[&N, &N] branch(set[&N] Nodes, rel[&N, &N] Rel) = carrierR(Rel, Rel*[-,Nodes])
+
+
+
+
+%% build a Control Flow Graph
+
+graph buildCFG(graph IN, graph OUT, graph NEXT) =
+{ <N1, N4> | <node N2, node N3> : NEXT, node N1 : reachBottom2(N2, OUT), node N4 : reachBottom2(N3, IN) }
+
+
+
+
+graph buildCFG2(graph IN, graph OUT, graph NEXT) = ControlFlow
+  where
+    equations
+      initial
+        set[node] SUPER-STATS init domain(IN) union domain(OUT)
+        graph ControlFlow init NEXT
+      satisfy
+        ControlFlow = (ControlFlow o IN) union (inv(OUT) o ControlFlow) union carrierX(ControlFlow, SUPER-STATS)
+    end equations
+  end where
+
+
+%%%%%% CFGJava.h
+%%%%%% Extracted facts
+
+set[node] METHOD
+
+rel[node, node] METHOD-BODY %% rel METHOD -> STATEMENT
+rel[node, node] CF-IN %% rel STATEMENT -> STATEMENT
+rel[node, node] CF-OUT %% rel STATEMENT -> STATEMENT
+rel[node, node] CF-NEXT %% rel STATEMENT -> final STATEMENT
+
+%% TODO these can be accessed from Sort
+set[node] RETURN
+set[node] BREAK
+set[node] CONTINUE
+
+rel[node, node] BREAK-LABEL
+rel[node, node] CONTINUE-LABEL
+rel[node, node] LABEL %% rel STATEMENT -> LABEL
+rel[node, node] LOOP %% rel LOOP(BLOCK) -> CONT
+
+rel[node, node] TRY-CATCH
+rel[node, node] TRY-FINALLY
+rel[node, node] CATCH
+rel[node, node] THROW
+
+%%%%%%%% Scopes.rscript
+
+%%%%%% Extracted facts
+
+rel[node, node] SUB-STAT %% rel STAT -> STAT
+rel[node, node] SCOPE %% rel STAT -> SCOPE
+
+yield SUB-STAT
+yield SCOPE
+
+%%%%%% Enriched facts
+
+set[node] SCOPES = domain(SCOPE)
+
+rel[node, node] SCOPE-RAW = SCOPE union SUB-STAT
+
+%% rel SCOPE -> STAT
+rel[node, node] STAT-SCOPE = { <SC, ST> | node SC : SCOPES, node ST : reachX({SC}, SCOPES \ {SC}, SCOPE-RAW) }
+yield STAT-SCOPE
+
+%% rel SCOPE -> SUB-SCOPE
+rel[node, node] SUB-SCOPE = contract(SCOPE-RAW, SCOPES)
+yield SUB-SCOPE
+
+%%%%%%%% Types.rscript
+
+%%%%%% Extracted facts:
+
+set[node] PARAM-DECL
+rel[node, node] DECL-TYPE
+rel[node, node] NEW
+
+
+%%%%%% Enriched facts:
+
+%% we are not going to do the following yet:
+%% - name resolution
+%% - type checking (finding the type of an expression, subtyping)
+
+
+%% rel STATEMENT -> EXCEPTION TYPE
+rel[node, str] THROW-TYPE = THROW o NEW o Syntax %% assume exceptions are only thrown using new ....()
+yield THROW-TYPE
+
+%% rel CATCH -> EXCEPTION TYPE
+rel[node, str] CATCH-TYPE = CATCH o DECL-TYPE o Syntax
+yield CATCH-TYPE
+
+
+
+
+%%%%%% calculated facts
+
+%%%% basic CFG
+
+%% All statements
+set[node] Statements = carrier(CF-IN union CF-OUT union CF-NEXT)
+
+%% Non-atomic statements
+%%set[node] NAS = Statements inter Sort[-, {"Block", "LabeledStatement", "LabeledStatementNoShortIf", "SwitchBlock",
+%% "SwitchBlockStatementGroup", "StatementExpressionList", "TryStatement", "CatchClause", "Finally", "ConstructorBody"}]
+
+graph CFG1 = buildCFG(CF-IN, CF-OUT, CF-NEXT)
+
+%% First and Last atomic statements of each block
+%% Atomic statements are their own First and Last
+graph First = { <S, F> | node S : Statements, node F : reachBottom2(S, CF-IN) }
+graph Last = { <S, L> | node S : Statements, node L : reachBottom2(S, CF-OUT) }
+
+yield CFG1
+yield First
+yield Last
+%%%% calculate intermediate relations between try, catch, finally
+
+graph TRY-END-CATCH = inv(Last) o TRY-CATCH
+yield TRY-END-CATCH
+
+%% all try and catch scopes that have a finally
+graph TRY-SCOPES-FINALLY = TRY-FINALLY union inv(TRY-CATCH o SUB-STAT) o TRY-FINALLY
+yield TRY-SCOPES-FINALLY
+
+
+
+
+%%%%%% grammar specific support functions
+
+%% return the CFG for a jump from statement From to outside a method.
+%% It visits all finallies in upward scopes, and returns to From statement
+graph handleFinallyReturn(node From) = VAR6 where
+
+  %% 1. get path from top scope to From through intermediate scopes (downwards)
+  graph VAR1 = branch(STAT-SCOPE[-, From], SUB-SCOPE) union rangeR(STAT-SCOPE, {From}) union {From} x top(SUB-SCOPE)
+
+  %% 2. contract path to use only scopes that have finallies
+  graph VAR2 = contract(VAR1, domain(TRY-SCOPES-FINALLY) union { From } )
+
+  %% 3. map scopes to their finallies
+  graph VAR3 = map(VAR2, TRY-SCOPES-FINALLY union id({ From }))
+
+  %% 4. invert path to go from From upwards
+  graph VAR4 = inv(VAR3)
+
+  %% 5. expand finallies to their entry and exit statements
+  graph VAR5 = expand(VAR4, range(TRY-SCOPES-FINALLY), First union inv(Last))
+
+  %% 6. remove identity relation of From, in case no finallies are visited
+  graph VAR6 = VAR5 \ id({From})
+
+end where
+
+%% return the CFG for a jump from statement From to statement To, visiting intermediate finally blocks.
+%% TopScope is the smallest scope enclosing both From and To statements
+graph handleFinally(node From, node To, node TopScope) = VAR6 where
+
+  %% 1. get path from To to From through intermediate scopes (downwards)
+  graph VAR1 = between(To, From, SUB-SCOPE union rangeR(STAT-SCOPE, {From}) union {<To, TopScope>} )
+
+  %% 2. ignore top scope
+  graph VAR2 = contract(VAR1, carrier(VAR1) \ {TopScope} )
+
+  %% 3. contract path to use only scopes that have finallies
+  graph VAR3 = contract(VAR2, domain(TRY-SCOPES-FINALLY) union { From, To } )
+
+  %% 4. map scopes to their finallies
+  graph VAR4 = map(VAR3, TRY-SCOPES-FINALLY union id({ From, To }))
+
+  %% 5. invert path to go from From to To
+  graph VAR5 = inv(VAR4)
+
+  %% 6. expand finallies to their entry and exit statements
+  graph VAR6 = expand(VAR5, range(TRY-SCOPES-FINALLY), First union inv(Last))
+
+end where
+
+
+
+
+%%%%%% continuation of calculated facts
+
+%%%% return statements
+
+%% handle returns inside finallies
+graph RETURN-FINALLY-CFG = { <N1, N2> | node R : RETURN, <node N1, node N2> : handleFinallyReturn(R) }
+yield RETURN-FINALLY-CFG
+
+
+
+
+%%%% break and continue (goto)
+
+%% find enclosing loops (while, do, for, switch) for unlabeled break and continue
+
+%% unlabeled break goes to switch, while, do, or for
+%% unlabeled continue goes to while, do, or for
+
+graph UNLABELED-GOTO-TARGETS = { <GS, EL> | node GS : (BREAK union CONTINUE) \ domain(BREAK-LABEL union CONTINUE-LABEL),
+  node EL : firstReach(GS, domain(LOOP), inv(STAT-SCOPE union SUB-SCOPE)) }
+yield UNLABELED-GOTO-TARGETS
+
+
+%% find matching labeled statement for each break and continue
+
+%% labeled break targets can be any block, while, do, for, switch
+%% labeled continue targets must be a while, do or for.
+
+graph LABELED-GOTO-TARGETS = { <GS, LS> | <node GS, node L> : BREAK-LABEL union CONTINUE-LABEL,
+  node LS : (LABEL o Syntax)[-,Syntax[L]],
+  set[node] GScope <- STAT-SCOPE[-, GS], set[node] LScope <- STAT-SCOPE[-, LS],
+  ((GScope >= SUB-SCOPE*[LScope]) or (LScope >= SUB-SCOPE*[GScope])) }
+yield LABELED-GOTO-TARGETS
+
+
+%% find next statements for break and continues
+
+graph BREAK-CFG = { <N1, N2> | node B : BREAK, node TS : (UNLABELED-GOTO-TARGETS union LABELED-GOTO-TARGETS)[B],
+  node T : First[TS], set[node] TNext <- CFG1[T] \ (CF-IN union CF-NEXT)*[TS],
+  <node N1, node N2> : replaceR2(T, TNext, handleFinally(B, T, TS)) }
+yield BREAK-CFG
+
+graph CONTINUE-CFG = { <N1, N2> | node C : CONTINUE, node TS : (UNLABELED-GOTO-TARGETS union LABELED-GOTO-TARGETS)[C],
+  node LS : First[LOOP[TS]], <node N1, node N2> : handleFinally(C, LS, TS) }
+yield CONTINUE-CFG
+
+
+
+
+%%%% exception handling
+
+%% Intraprocedural does not look at exceptions thrown from called methods.
+
+%% find catch for each thrown exception
+graph EXCEPTION-CATCH = { <EO, C> | <node EO, str ET> : THROW-TYPE,
+  node C : firstReach(EO, CATCH-TYPE[-,ET], CFG1 union TRY-END-CATCH) }
+yield EXCEPTION-CATCH
+
+%% add edge from throw to catch start, respecting finallies
+graph HANDLED-EXCEPTION-CFG = { <N1, N2> | <node EO, node C> : EXCEPTION-CATCH, node T : TRY-CATCH[-,C],
+  node TE : Last[T], <node N1, node N2> : replaceR2(TE, First[C], handleFinally(EO, TE, T)) }
+yield HANDLED-EXCEPTION-CFG
+
+%% deal with uncaught exceptions just like returns (respecting finallies)
+graph UNHANDLED-EXCEPTION-CFG = { <N1, N2> | node UE : domain(THROW-TYPE) \ domain(EXCEPTION-CATCH),
+  <node N1, node N2> : handleFinallyReturn(UE) }
+yield UNHANDLED-EXCEPTION-CFG
+
+graph EXCEPTION-CFG = HANDLED-EXCEPTION-CFG union UNHANDLED-EXCEPTION-CFG
+yield EXCEPTION-CFG
+
+
+
+
+%%%%%% collect all CFG parts
+
+%%%% collect method entry points
+
+yield graph METHOD-ENTRY = METHOD-BODY o First
+
+%%%% collect method exit points
+
+yield graph METHOD-EXIT = (ME1 union { <M, E> | node E : RETURN union domain(THROW-TYPE) \ domain(EXCEPTION-CATCH),
+  node M : reachBottom(E, CFG1 union inv(ME1)) }) where graph ME1 = METHOD-BODY o Last end where
+
+%%%% collect final CFG
+
+graph CFG2 = domainX(CFG1, RETURN union BREAK union CONTINUE union domain(THROW-TYPE))
+yield CFG2
+
+yield graph CFG =
+%%contract(
+CFG2 union RETURN-FINALLY-CFG union EXCEPTION-CFG union BREAK-CFG union CONTINUE-CFG
+%%, Statements \ NAS)
+
+
+
+
+%%%%%% visualize entire graph
+
+vgraph vCFG = visualize-graph(CFG union METHOD-ENTRY union METHOD-EXIT)
+yield vCFG
+
+vgraph vSCOPE = visualize-graph(SUB-SCOPE union inv(STAT-SCOPE))
+yield vSCOPE
+
+vgraph vAST = visualize-graph(Child)
+yield vAST
+
+yield METHOD

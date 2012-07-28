@@ -1,0 +1,6 @@
+prefix=@prefix@
+Maintainers=basten@cwi.nl
+Name: defacto
+Version: 0.1
+Description:
+Requires: sglr,pt-support,asc-support,sdf-support,rstore-support,asf,pgen

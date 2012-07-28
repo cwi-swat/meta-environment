@@ -1,0 +1,57 @@
+module SortsToIds
+
+imports languages/sdf2/syntax/Sdf2
+imports basic/Booleans
+imports basic/Integers
+imports basic/Strings
+imports utilities/Parsing[Sort]
+imports utilities/Parsing[IdCon]
+imports FactDeclarations
+
+exports
+context-free start-symbols
+  Module SDF
+
+context-free syntax
+  sorts-to-ids(SDF)                             -> SDF                                                     
+  sorts-to-ids(Module)                          -> Module                                                  
+  sorts-to-ids-t(SDF)                           -> SDF              {traversal(trafo, top-down, continue)} 
+  sorts-to-ids-t(Module)                        -> Module           {traversal(trafo, top-down, continue)} 
+  sorts-to-ids-t(Production)                    -> Production       {traversal(trafo, top-down, continue)} 
+  convert-attr-annos({Attribute ","}+, Symbol*) -> {Attribute ","}+                                        
+  convert-attr-anno(Attribute, Symbol*)         -> Attribute                                               
+  convert-term-annos({ATerm ","}+, Symbol*)     -> {ATerm ","}+                                            
+  convert-term-anno(ATerm, Symbol*)             -> ATerm                                                   
+  get-sort-id(IdCon, Integer, Symbol*, Integer) -> Integer                                                 
+  get-sort-id(IdCon, Symbol*, Integer)          -> Integer                                                 
+  equals(IdCon, Symbol)                         -> Boolean                                                 
+  get-list-sort(Symbol)                         -> Sort                                                    
+  "symbol-is-not-a-list-symbol"                 -> Symbol                                                  
+
+hiddens
+variables
+  "$SDF" [\'0-9]*        -> SDF               
+  "$Mod" [\'0-9]*        -> Module
+  "$Sort" [\'0-9]*       -> Sort              
+  "$Symbol" [\'0-9]*     -> Symbol            
+  "$Symbol*" [\'0-9]*    -> Symbol*           
+  "$Symbol+" [\'0-9]*    -> Symbol+           
+  "$Attribute" [\'0-9]*  -> Attribute         
+  "$Attribute*" [\'0-9]* -> {Attribute ","}*  
+  "$Attribute+" [\'0-9]* -> {Attribute ","}+  
+  "$ATerm" [\'0-9]*      -> ATerm             
+  "$ATerm*" [\'0-9]*     -> {ATerm ","}*      
+  "$ATerm+" [\'0-9]*     -> {ATerm ","}+      
+  "$AFun" [\'0-9]*       -> AFun              
+  "$Int" [\'0-9]*        -> Integer           
+  "$N" [\'0-9]*          -> NatCon            
+  "$Id" [\'0-9]*         -> IdCon             
+  "$Str" [\'0-9]*        -> StrCon            
+
+lexical variables
+  "c" [\'0-9]*  -> StrChar         
+  "c*" [\'0-9]* -> StrChar*        
+  "$a" [\'0-9]* -> [A-Za-z]        
+  "$m" [\'0-9]* -> [A-Za-z\-]      
+  "$n" [\'0-9]* -> [A-Za-z\-0-9]*  
+  "$d" [\'0-9]* -> [0-9]           

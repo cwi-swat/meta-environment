@@ -1,0 +1,37 @@
+module FactDeclarations
+
+imports languages/sdf2/syntax/Sdf2
+imports basic/RStores
+imports Types
+
+
+exports
+sorts
+  FactDecl FactDeclarations
+
+context-free start-symbols
+  FactDeclarations
+
+context-free syntax
+
+  FactDecl* -> FactDeclarations
+  RType IdCon ";" -> FactDecl
+
+  collect-fact-declarations(SDF) -> FactDeclarations
+
+hiddens
+context-free syntax
+
+  collect-fact-decls(SDF, FactDecl*) -> FactDecl* { traversal(accu, top-down, continue) }
+  collect-fact-decls(ATerm, FactDecl*) -> FactDecl* { traversal(accu, top-down, continue) }
+
+
+
+variables
+
+"SDF"[0-9\']* -> SDF
+"ATerm+"[0-9\']* -> {ATerm ","}+
+"Id"[0-9\']* -> IdCon
+"FactDecl*"[0-9\']* -> FactDecl*
+"RType"[0-9\']* -> RType
+"RType+"[0-9\']* -> {RType ","}+

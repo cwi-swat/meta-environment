@@ -1,0 +1,47 @@
+module TreeYield
+
+imports basic/Strings
+imports basic/NatCon
+imports languages/asfix/syntax/Tree
+
+exports
+
+context-free start-symbols
+StrCon
+
+context-free syntax
+
+tree-to-string(Tree) -> StrCon
+
+
+hiddens
+imports basic/Whitespace
+
+context-free syntax
+
+yield(Tree, Bytes)      -> Bytes {traversal(accu,bottom-up,continue)}
+lex-to-string(NatCon)   -> StrCon {memo}
+decimal-to-byte(NatCon) -> Byte {memo} 
+
+
+variables
+
+"Attributes"[0-9\']* -> Attributes
+"ATerm"[0-9\']*      -> ATerm
+"ATerm*"[0-9\']*     -> {ATerm ","}*
+"ATerm+"[0-9\']*     -> {ATerm ","}+
+"N"[0-9\']*          -> NatCon
+"Production"[0-9\']* -> Production
+"StrCon"[0-9\']*     -> StrCon
+"String"[0-9\']*     -> String
+"Symbol"[0-9\']*     -> Symbol
+"Symbol*"[0-9\']*    -> {Symbol ","}*
+"Symbols"[0-9\']*    -> Symbols
+"Tree"[0-9\']*       -> Tree
+"Tree*"[0-9\']*      -> {Tree ","}*
+
+
+lexical variables
+
+"Byte"[0-9\']*  -> Byte
+"Bytes"[0-9\']* -> Byte*

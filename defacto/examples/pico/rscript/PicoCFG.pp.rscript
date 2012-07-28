@@ -1,0 +1,9 @@
+
+#include "../../../include/defacto.h"
+
+#include "PicoFacts.h"
+
+
+yield graph CFG = buildCFG(CF-ENTRY, CF-EXIT, CF-SUCC)
+
+yield vgraph visualCFG = visualize-graph(CFG)

@@ -1,0 +1,105 @@
+
+#include "Types.defacto"
+
+
+ConstructorBody:"ExplicitConstructorInvocation-opt-BlockStatement-s" <= {
+    fact(CF-IN, ConstructorBody, first(ExplicitConstructorInvocation-opt, BlockStatement-list)),
+    fact(CF-NEXT, next(ExplicitConstructorInvocation-opt, BlockStatement-list)),
+    fact(CF-OUT, ConstructorBody, last(ExplicitConstructorInvocation-opt, BlockStatement-list)) }
+
+Block:"BlockStatement-s"               <= { fact(CF-IN, Block, first(BlockStatement-list)),
+                                            fact(CF-OUT, Block, last(BlockStatement-list)),
+                                            fact(CF-NEXT, next(BlockStatement-list)) }
+ 
+LabeledStatement:"colon"               <= { fact(LABEL, Statement, Identifier),
+                                            fact(CF-IN, LabeledStatement, Statement),
+                                            fact(CF-OUT, LabeledStatement, Statement) }
+ 
+LabeledStatementNoShortIf:"colon1"     <= { fact(LABEL, StatementNoShortIf, Identifier),
+                                            fact(CF-IN, LabeledStatementNoShortIf, StatementNoShortIf),
+                                            fact(CF-OUT, LabeledStatementNoShortIf, StatementNoShortIf) }
+ 
+IfThenStatement:"if"                   <= { fact(CF-IN, IfThenStatement, Expression),
+                                            fact(CF-NEXT, Expression, Statement),
+                                            fact(CF-OUT, IfThenStatement, each(Expression, Statement)) }
+
+IfThenElseStatement:"if-else"          <= { fact(CF-IN, IfThenElseStatement, Expression),
+    fact(CF-NEXT, Expression, each(StatementNoShortIf, Statement)),
+    fact(CF-OUT, IfThenElseStatement, each(StatementNoShortIf, Statement)) }
+
+
+SwitchStatement:"switch"               <= { fact(CF-IN, SwitchStatement, Expression),
+                                            fact(CF-NEXT, Expression, SwitchBlock),
+                                            fact(CF-OUT, SwitchStatement, SwitchBlock),
+                                            fact(LOOP, SwitchStatement, Expression) }
+
+SwitchBlock:"SwitchBlockStatementGroup-s-SwitchLabel-s" <= {
+    fact(CF-IN, SwitchBlock, each(SwitchBlockStatementGroup-list, SwitchLabel-list)),
+    fact(CF-NEXT, next(SwitchBlockStatementGroup-list, SwitchLabel-list)),
+    fact(CF-OUT, SwitchBlock, last(SwitchBlockStatementGroup-list, SwitchLabel-list)) }
+
+SwitchBlockStatementGroup:"SwitchLabel-p-BlockStatement-p" <= {
+    fact(CF-IN, SwitchBlockStatementGroup, first(BlockStatement-list)),
+    fact(CF-OUT, SwitchBlockStatementGroup, last(BlockStatement-list)),
+    fact(CF-NEXT, next(BlockStatement-list)) }
+
+WhileStatement:"while"                 <= { fact(CF-IN, WhileStatement, Expression),
+                                            fact(CF-NEXT, next(Expression, Statement, Expression)),
+                                            fact(CF-OUT, WhileStatement, Expression),
+                                            fact(LOOP, WhileStatement, Expression) }
+
+WhileStatementNoShortIf:"while1"       <= { fact(CF-IN, WhileStatementNoShortIf, Expression),
+                                            fact(CF-NEXT, next(Expression, StatementNoShortIf, Expression)),
+                                            fact(CF-OUT, WhileStatementNoShortIf, Expression),
+                                            fact(LOOP, WhileStatementNoShortIf, Expression) }
+
+DoStatement:"do-while-semicolon"       <= { fact(CF-IN, DoStatement, Statement),
+                                            fact(CF-NEXT, next(Statement, Expression, Statement)),
+                                            fact(CF-OUT, DoStatement, Expression),
+                                            fact(LOOP, DoStatement, Expression) }
+
+ForStatement:"for-semicolon-semicolon" <= { extr-empty(Expression-opt),
+    fact(CF-IN, ForStatement, first(ForInit-opt, Expression-opt)),
+    fact(CF-NEXT, next(ForInit-opt, Expression-opt, Statement, ForUpdate-opt, Expression-opt)),
+    fact(CF-OUT, ForStatement, Expression-opt),
+    fact(LOOP, ForStatement, first(ForUpdate-opt, Expression-opt))}
+
+StatementExpressionList:"comma1"       <= { fact(CF-IN, StatementExpressionList, first(StatementExpression-list)),
+                                            fact(CF-OUT, StatementExpressionList, last(StatementExpression-list)),
+                                            fact(CF-NEXT, next(StatementExpression-list)) }
+
+BreakStatement:"break-semicolon"       <= { fact(BREAK, BreakStatement),
+                                            fact(BREAK-LABEL, BreakStatement, Identifier-opt) }
+ 
+ContinueStatement:"continue-semicolon" <= { fact(CONTINUE, ContinueStatement),
+                                            fact(CONTINUE-LABEL, ContinueStatement, Identifier-opt) }
+ 
+ReturnStatement:"return-semicolon"     <= { fact(RETURN, ReturnStatement) }
+
+ThrowStatement:"throw-semicolon"       <= { fact(THROW, ThrowStatement, Expression) }
+
+SynchronizedStatement:"synchronized"   <= { fact(CF-IN, SynchronizedStatement, Block),
+                                            fact(CF-OUT, SynchronizedStatement, Block) }
+
+TryStatement:"try"                     <= { fact(TRY-CATCH, Block, each(CatchClause-list)),
+                                            fact(CF-IN, TryStatement, Block),
+                                            fact(CF-OUT, TryStatement, each(Block, CatchClause-list)) }
+
+TryStatement:"try1"                    <= { fact(TRY-CATCH, Block, each(CatchClause-list)),
+                                            fact(TRY-FINALLY, Block, Finally),
+                                            fact(CF-IN, TryStatement, Block),
+                                            fact(CF-OUT, TryStatement, Finally),
+                                            fact(CF-NEXT, each(Block, CatchClause-list), Finally) }
+ 
+CatchClause:"catch"                    <= { fact(CATCH, CatchClause, FormalParameter),
+                                            fact(CF-IN, CatchClause, Block),
+                                            fact(CF-OUT, CatchClause, Block) }
+
+Finally:"finally"                      <= { fact(CF-IN, Finally, Block),
+                                            fact(CF-OUT, Finally, Block) }
+
+
+
+
+
+

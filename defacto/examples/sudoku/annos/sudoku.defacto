@@ -1,0 +1,5 @@
+Puzzle:"puzzle" <= { fact(DIMENSION, Dimension) }
+
+Field:"field"   <= { fact(ROWS, index(Row-list)) }
+
+Cells:"cells"   <= { fact(CELLS, parent, index(CellValue-list)) }

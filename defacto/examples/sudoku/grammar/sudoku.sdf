@@ -1,0 +1,18 @@
+module grammar/sudoku
+
+imports basic/NatCon
+imports basic/Whitespace
+
+exports
+sorts Puzzle Field Row Cells Dimension CellValue
+
+context-free start-symbols
+  Puzzle
+
+context-free syntax
+  "Puzzle" "(" Dimension ")" "=" Field -> Puzzle    {cons("puzzle")} 
+  Row*                                 -> Field     {cons("field")}  
+  "Row" "(" Cells ")"                  -> Row       {cons("row")}    
+  {CellValue ","}+                     -> Cells     {cons("cells")}  
+  NatCon                               -> Dimension                  
+  NatCon                               -> CellValue                  

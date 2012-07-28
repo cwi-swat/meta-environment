@@ -1,0 +1,37 @@
+equations
+
+[]
+  role-param-type(N) = int
+
+[]
+  role-param-type(StrCon) = str
+
+[]
+  role-param-type(parent) = int
+
+[]
+  role-param-type(first(ATerm+)) = int
+
+[]
+  role-param-type(last(ATerm+)) = int
+
+[]
+  role-param-type(next(ATerm+)) = int, int
+
+[]
+  role-param-type(each(ATerm+)) = int
+
+[]
+  role-param-type(index(ATerm+)) = int, int
+
+[]
+  role-param-type(size(ATerm+)) = int
+
+[]
+  RType+1 := role-param-type(ATerm),
+  RType+2 := role-type(ATerm+)
+  ===>
+  role-type(ATerm, ATerm+) = RType+1, RType+2 
+
+[]
+  role-type(ATerm) = role-param-type(ATerm)
