@@ -1,0 +1,13 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl
+Name: progress-gui
+Version: 1.1
+Description:
+Requires: aterm-java,meta-studio,toolbus-java-adapter
+JarFile=progress.jar
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.data
+MainClass=nl.cwi.sen1.gui.plugin.Progress
+TestClass=
+ToolBusFlags=-I${prefix}/share/progress-gui
+

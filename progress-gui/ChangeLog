@@ -1,0 +1,24 @@
+$Id$
+
+Thu Mar  8 15:09:56 CET 2007 <kooiker@cwi.nl>
+ * src/**/TableSorter.java:
+   - Table Decorator for sorting table columns on mouse click
+
+Fri Jan  5 14:32:55 CET 2007 <kooiker@cwi.nl>
+ * progress.idef.src:
+   - Split status message into message en value parts
+ * src/**/ProgressTableModel.java:
+   - Fixed setElementAt using a string iso ProgressCell
+
+Mon Apr 24 23:34:43 CEST 2006 <jurgenv@cwi.nl>
+ * **/*.java: added functionality to remove a status row
+ * ProgressCell.java: a cell may hold an ATerm to identify it, this
+   is used to identify status rows by moduleId, such that we can
+   remove a row by moduleId.
+
+Mon Mar 13 18:50:43 CET 2006 <kooiker@cwi.nl>
+ * **/data/ProgressTableModel.java:
+   - override isCellEditable returning false
+
+Mon Jan 30 10:55:40 CET 2006 <kooiker@cwi.nl>
+ * Initial version 
