@@ -1,0 +1,66 @@
+
+type stat = int
+type var = str
+
+stat ROOT = 1 
+
+rel[stat,stat]  PRED   = {<1, 3>,<3,4>,<4,5>,<5,6>,<5,8>,<6,10>,<8,10>}
+
+rel[stat, var] DEFS  = {<3, "x">, <4, "p">, <6, "z">, <8, "x">, <10, "y">}
+
+rel[stat,var] USES    = {<5, "q">, <6,"y">, <6, "x">, <10, "z">}
+
+rel[stat, var]  UNINIT = { <S, V> | <stat S, var V> : USES, <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED) }
+
+bool tst(int N) = true
+
+rel[int, str]  UN1 = { <N, V> | <int N, str V> : USES,  <ROOT, N> in carrierX(PRED, DEFS[-,V])+ }
+
+<&T1,&T2> swap(<&T2,&T1> P) = <second(P), first(P)>
+
+bag[str] Bag1     = {"a", "b", "c"}
+bag[str] Bag2     = {"d", "e", "f"}
+rel[str,int] Rel1     = {<"a", 1>, <"b", 2>, <"c", 3>}
+rel[int,int] Rel2     = {<1, 10>, <3, 30>}
+
+<str,int> P1 = swap(<0,"a">)
+
+rel[int,str] SRel1 = { swap(<V, N>) | <str V, int N> : Rel1  }
+ 
+rel[int,bag[int]] VERT = { <V, {10,20,30}> |  int V : {1,2,3} }
+
+bag[int] BBB = {<1,10>, <2, 20>, <3,30>}[2]
+
+bag[str] Tst      = {X |  str X : Bag1  }
+rel[str,str] REL   = {<X, Y> | str X : Bag1, str Y : Bag2}
+
+rel[&T2,&T1] finv(rel[&T1,&T2] REL1) = {<Y, X> | <&T1 X, &T2 Y> : REL1 }
+
+bag[&T1] fdom(rel[&T1,&T2] REL1) = {X | <&T1 X, &T2 Y> : REL1 }
+
+rel[&T1,&T2] pair(bag[&T1] R1, bag[&T2] R2) = { <X, Y> | &T1 X : R1, &T2 Y : R2 }
+
+rel[&T1,&T3] comp(rel[&T1,&T2] R1, rel[&T2,&T3] R2) =
+    { <X, T> | <&T1 X, &T2 Y> : R1, <&T2 S, &T3 T> : R2, Y == S }
+
+bag[int] bag6     = fdom(DEFS)
+
+bool B1 = Bag1 < Bag2
+bool B2 = Bag1 <= Bag2
+bool B3 = Bag1 == Bag2
+bool B4 = Bag1 >= Bag2
+bool B5 = Bag1 > Bag2
+
+bool BB1 = Rel1 < Rel1
+bool B2B = Rel1 <= Rel1
+bool BB3 = Rel1 == Rel1
+bool BB4 = Rel1 >= Rel1
+bool BB5 = Rel1 > Rel1
+
+bool C = Bag1 x Bag2 <= Bag2 x Bag1
+
+rel[str,str] C2 = (Bag1 x Bag2)+
+
+rel[int,int] C3 = PRED *
+
+int mysize(bag[int] B) = # C2

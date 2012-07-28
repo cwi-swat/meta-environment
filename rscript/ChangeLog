@@ -1,0 +1,146 @@
+# $Id$
+
+2008-11-03    <basten@cwi.nl>
+ * spec/languages/rscript/run/RscriptCalculator.asf:
+     Added default values for facts that are not available in the rstore.
+ * spec/languages/rscript/test/Rscript.{sdf,asf}, util/rscript.sh.src:
+     Fixed eval-rscript-testsuite-with-rstore.
+	
+Fri Aug 29 14:11:20 CEST 2008 <jurgenv@cwi.nl>
+ * utils/rscript.spec.sh,rscript.pc.in: added dependency on rstore-support.
+   More importantly, fixed the rscript command to properly deal with the
+   latest format in which rstores are currently represented. This is the
+   plain ATerm encoding of an rstore. Before the interpreter runs the
+   lift-rstore command is applied and after the lower rstore command is
+   applied.
+
+Thu May 22 18:36:54 CEST 2008 <basten@cwi.nl>
+ * spec/languages/rscript/run/RscriptCalculator.sdf: fixed bug in Rscript
+   interpreter where declaration of variables in rstores results in empty
+   variables.
+	
+Thu May 22 14:46:02 CEST 2008 <basten@cwi.nl>
+ * util/rscript.sh.src: Fixed command line rscript interpreter.
+ * Added dependency to error-support
+
+Tue Sep 18 11:44:57 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts: Removed
+ * bin/test: Added TestSuite
+
+2007-08-27    <storm@cwi.nl>
+ * spec/languages/rscript/check/Rscript.sdf: fixed a bug in the
+ checker. User defined tuple types weren't checked properly. 
+
+Thu Aug 23 10:31:25 CEST 2007 <{kooiker,jurgenv,lankamp}@cwi.nl>
+ * bin/run/*.isrc: added possibility to kill a running interpreter.
+
+Tue Aug 14 10:21:46 CEST 2007 <kooiker@cwi.nl>
+ * bin/checker: Add checker binary with ToolBus support
+
+2007-07-31    <storm@cwi.nl>
+ * rscripts/tests3.rscript
+   A test rscript for testing user defined function evaluation.
+
+2007-07-31    <storm@cwi.nl>
+ * spec/languages/rscript/{check,run}/*
+   - Fixed evaluation of user-defined functions
+   - Removed REXPTYPE IdCon -> REXPTYPE and replaced with
+     a sort "Formal" (this is used for tuple fields and
+     function arguments)
+   - adapted checker/evaluator to deal with this
+   - NB: a type <int, int foo> is not allowed anymore   
+
+Thu Mar  8 14:13:38 CET 2007 <kooiker@cwi.nl>
+ * spec/languages/rscript/run/Sets-and-Relations.{asf,sdf}:
+   - promoted to asf-library/containers module
+
+Thu Mar  1 11:28:12 CET 2007 <kooiker@cwi.nl>
+ * Merged rscript-migration branch
+
+Mon Jul 31 13:53:00 CEST 2006 <jurgenv@cwi.nl>
+ * utils/Makefile.am: reactivated without testing 
+ * demo/*: removed Java specific stuff and put it into 
+   the new package java-source-analysis. This code will not
+   work, but we keep it anyway in that package for future reference.
+
+Thu Mar  9 15:38:10 CET 2006 <jurgenv@cwi.nl>
+ * *: working on making relation-calculus an ASF+SDF library that can
+   be included in the distribution:
+     - tbscripts: contains .tb scripts and configuration files for the
+       Meta-Environment. This replaces the old button scripts.
+     - spec: contains the implementation of RScript, which will be 
+       made available as a separate ASF+SDF library in the GUI
+ * Currently, no tools are compiled or generated anymore. 
+ * rviz: is currently disabled too
+ * TODO: fix generation and compilation of commandline tools
+
+Tue Oct 11 11:56:00 CEST 2005 <jurgenv@cwi.nl>
+ * Bumped version to 0.3 (since 0.1 and 0.2 have been released
+   previously for a Software Evolution lab).
+ * rscript.sh.src could not deal anymore with a commandline where
+   an initial RSTORE was NOT provided. Adapted the logic to
+   accomodate.
+
+2004-10-27  Paul Klint  <paulk@heelal.lan>
+ * spec/RscriptCalculator.asf: added += and -= operators
+
+2004-10-27  Paul Klint  <paulk@heelal.lan>
+ * Cleanup up definitions of Bags and Relations
+ * Removed typos from manual
+
+Thu Oct 14 08:56:14 CEST 2004 <jurgenv@cwi.nl>
+ * Added spec/TopologicalSort.{asf,sdf}. 
+
+2004-10-13  Paul Klint  <paulk@heelal.lan>
+ * Undone change to diff operator
+ * Added a built-in "unique" that transforms a bag to a set
+ * Redefined "top" and "bottom" using the unique function
+ * Updated the documentation
+ * Added test cases
+ * Most examples are running again.
+	
+Tue Oct 12 11:00:41 CEST 2004 <{kooiker,storm}@cwi.nl>
+ * Difference operator on bags now removes all righthand 
+   side elements (and not just one).
+	
+Fri Jul  9 14:08:06 CEST 2004 <jong@cwi.nl>
+ * include make_rules so pkg file can be generated
+
+Thu Jul  8 23:04:23 CEST 2004 <jurgenv@cwi.nl>
+ * Added a generic mapping from parse trees to RSTORE. The parse trees
+   must contain pos-info. After using the lift-to-tree builtin, it extracts:
+      a) which trees there are
+      b) which lists there are
+      c) which trees are children of which trees/lists
+      d) which trees have which constructor names
+      e) which trees have which types (only simple cf non-terminals supported)
+   The user must import the parameterized BasicFactExtraction module
+   with the top sort of the tree she wants to extract facts from and
+   call the 'extract-basic-facts' function.
+
+Thu Apr 29 11:15:45 CEST 2004 <jurgenv@cwi.nl,paulk@cwi.nl>
+ * Brought RscriptChecker up-to-date with changes in Error api
+ * Compiled specifications are configured for rewriting with annotations
+   in make_rules.
+
+Thu Apr 29 10:22:37 CEST 2004 <jurgenv@cwi.nl>
+ * Added basic/AreaOperations and basic/LocationOperations as imports
+   to MyArea to be up-to-date with latest asf-library.
+
+Tue Jan 20 16:57:03 CET 2004 <jong@cwi.nl>
+ * remove MyPosInfo as its contents are in the asf-library now
+ * remove access functions from MyArea that are in the asf-library
+
+Tue Jan  6 13:08:00 CET 2004 <jong@cwi.nl>
+ * Bag[[Elem]] and BagIterator[[Elem]] are now context-free start-symbols
+   (fixes another warning)
+ * export sort <Elem, Elem> which is needed for exported add-tuple production
+ * retracted exporting of sort <Elem, Elem>: I didn't realize this was renamed
+   to Tuple (and Tuple is now an Elem-list) and Tuple is already exported by
+   Relations.sdf
+ * fix deprecated use of unquoted symbol "export-pair" by adding quotes
+
+Mon Jan  5 14:52:57 CET 2004 <jong@cwi.nl>
+ * ChangeLog added
+ * {Bags, ExtendedIntegers, Relations, RscriptElem, Rstore}.asf:
+   upgraded condition syntax

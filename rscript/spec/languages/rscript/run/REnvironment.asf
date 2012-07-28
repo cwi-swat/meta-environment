@@ -1,0 +1,228 @@
+equations
+
+[new-environment-top]
+	$TypeStore := new-table,
+	$FunctionStore := new-table,
+	$RStore := rstore([]),
+	$YieldStore := {}
+	===
+	new-renvironment() = <$TypeStore, $FunctionStore, $YieldStore, $RStore>
+
+equations
+
+[rstore-to-environment-top]
+         $REnv := new-renvironment()
+         ===
+         rstore-to-renvironment($RStore) = update($RStore, $REnv)
+
+equations
+
+[define-type-base]
+	define-type($IdCon, $RExpType, $REnv) = update(store(type-store($REnv), $IdCon, $RExpType), $REnv)
+
+
+equations
+
+[bind-function-base]
+	$Lambda := <$Formals, $RExp>
+	===
+	bind-function($IdCon, $Formals, $RExp, $REnv) = update(store(function-store($REnv), $IdCon, $Lambda), $REnv)
+
+equations
+
+[assign-variable-1]
+	rstore([$RTuple*1, <$IdCon, $RType', $RElem'>, $RTuple*2]) := rstore($REnv),
+	$RType := rexp-type-to-rtype($RExpType, $REnv)
+	===
+	assign-variable($IdCon, $RExpType, $RElem, $REnv) =
+		update(rstore([$RTuple*1, <$IdCon, $RType, $RElem>, $RTuple*2]), $REnv)
+
+[default-assign-variable-2]
+	rstore([$RTuple*]) := rstore($REnv),
+	$RType := rexp-type-to-rtype($RExpType, $REnv)
+	===	
+	assign-variable($IdCon, $RExpType, $RElem, $REnv) = update(rstore([$RTuple*, <$IdCon, $RType, $RElem>]), $REnv)
+
+
+equations
+
+[assign-variable-wo-type-1]
+	rstore([$RTuple*1, <$IdCon, $RType, $RElem'>, $RTuple*2]) := rstore($REnv)
+	===
+	assign-variable($IdCon, $RElem, $REnv) =
+		update(rstore([$RTuple*1, <$IdCon, $RType, $RElem>, $RTuple*2]), $REnv)
+
+[default-assign-variable-wo-type-2]
+	assign-variable($IdCon, $RElem, $REnv) =
+		assign-variable($IdCon, undefined-type, $RElem, $REnv)
+
+equations
+
+[union-with-variable-1]
+	rstore([$RTuple*1, <$IdCon, $RType', $RElem'>, $RTuple*2]) := rstore($REnv),
+	$RElem'' := union($RElem', $RElem)
+	===
+	union-with-variable($IdCon, $RElem, $REnv) =
+		update(rstore([$RTuple*1, <$IdCon, $RType', $RElem''>, $RTuple*2]), $REnv)
+
+%% No case when such a variable does not exist.
+
+equations
+
+[yield-top]
+	$YieldStore := yield-store($REnv),
+	$YieldStore' := union($YieldStore, {$IdCon})
+	===
+	yield($IdCon, $REnv) = update($YieldStore', $REnv)
+
+equations
+
+[formals-top]
+	<$Formals, $RExp> := lookup(function-store($REnv), $IdCon)
+	===
+	formals($IdCon, $REnv) = $Formals
+
+equations
+
+[body-top]
+	<$Formals, $RExp> := lookup(function-store($REnv), $IdCon)
+	===
+	body($IdCon, $REnv) = $RExp
+
+equations
+
+[type-top]
+	type($IdCon, $REnv) = lookup(type-store($REnv), $IdCon)
+
+equations
+
+[value-1]
+	rstore([$RTuple*1, <$IdCon, $RType, $RElem>, $RTuple*2]) := rstore($REnv)
+	===
+	value($IdCon, $REnv) = $RElem
+
+[default-value-2]
+	value($IdCon, $REnv) = *undefined*
+
+
+equations
+
+[yielded-top]
+	{$IdCon*} := yield-store($REnv)
+	===
+	yielded($REnv) = $IdCon*
+
+equations
+
+[rexp-type-to-rtype-1]
+	rexp-type-to-rtype(bool, $REnv) = bool
+
+[rexp-type-to-rtype-2]
+	rexp-type-to-rtype(int, $REnv) = int
+
+[rexp-type-to-rtype-3]
+	rexp-type-to-rtype(str, $REnv) = str
+
+[rexp-type-to-rtype-4]
+	rexp-type-to-rtype(loc, $REnv) = loc
+
+[rexp-type-to-rtype-5]
+	rexp-type-to-rtype(<$RExpType $IdCon>, $REnv) = <rexp-type-to-rtype($RExpType, $REnv)>
+
+[rexp-type-to-rtype-6]
+	$RType := rexp-type-to-rtype($RExpType, $REnv),
+	<$RType+> := rexp-type-to-rtype(<$Formals>, $REnv)
+	===
+	rexp-type-to-rtype(<$RExpType $IdCon, $Formals>, $REnv) = <$RType, $RType+>
+
+[rexp-type-to-rtype-7]
+	rexp-type-to-rtype(rel[$RExpType], $REnv) =  rel[rexp-type-to-rtype($RExpType, $REnv)]
+
+[rexp-type-to-rtype-8]
+	$RType := rexp-type-to-rtype($RExpType, $REnv),
+	rel[$RType+] := rexp-type-to-rtype(rel[$RExpType+], $REnv)
+	===
+	rexp-type-to-rtype(rel[$RExpType, $RExpType+], $REnv) = rel[$RType, $RType+]
+
+[rexp-type-to-rtype-9]
+	rexp-type-to-rtype(bag[$RExpType], $REnv) = bag[rexp-type-to-rtype($RExpType, $REnv)]
+
+[rexp-type-to-rtype-10]
+	rexp-type-to-rtype(set[$RExpType], $REnv) = set[rexp-type-to-rtype($RExpType, $REnv)]
+
+
+[rexp-type-to-rtype-11]
+	$RExpType := lookup(type-store($REnv), $IdCon)
+	===
+	rexp-type-to-rtype($IdCon, $REnv) = rexp-type-to-rtype($RExpType, $REnv)
+
+[rexp-type-to-rtype-12]
+	rexp-type-to-rtype(& $IdCon, $REnv) = & $IdCon
+
+[rexp-type-to-rtype-13]
+	rexp-type-to-rtype(<$RExpType>, $REnv) = <rexp-type-to-rtype($RExpType, $REnv)>
+
+[rexp-type-to-rtype-14]
+	<$RType+> := rexp-type-to-rtype(<$RExpType+>, $REnv)
+	===
+	rexp-type-to-rtype(<$RExpType, $RExpType+>, $REnv) = <rexp-type-to-rtype($RExpType, $REnv), $RType+>
+
+equations
+
+[type-store-top]
+	type-store(<$TypeStore, $FunctionStore, $YieldStore, $RStore>) = $TypeStore
+
+equations
+
+[function-store-top]
+	function-store(<$TypeStore, $FunctionStore, $YieldStore, $RStore>) = $FunctionStore
+
+equations
+
+[rstore-top]
+	rstore(<$TypeStore, $FunctionStore, $YieldStore, $RStore>) = $RStore
+
+equations
+
+[yield-store-top]
+	yield-store(<$TypeStore, $FunctionStore, $YieldStore, $RStore>) = $YieldStore
+
+equations
+
+[update-type-store]
+	update($TypeStore', <$TypeStore, $FunctionStore, $YieldStore, $RStore>) = 
+		<$TypeStore', $FunctionStore, $YieldStore, $RStore>
+
+equations
+
+[update-function-store]
+	update($FunctionStore', <$TypeStore, $FunctionStore, $YieldStore, $RStore>) = 
+		<$TypeStore, $FunctionStore', $YieldStore, $RStore>
+
+equations
+
+[update-yield-store]
+	update($YieldStore', <$TypeStore, $FunctionStore, $YieldStore, $RStore>) = 
+		<$TypeStore, $FunctionStore, $YieldStore', $RStore>
+
+
+equations
+
+[update-rstore]
+	update($RStore', <$TypeStore, $FunctionStore, $YieldStore, $RStore>) = 
+		<$TypeStore, $FunctionStore, $YieldStore, $RStore'>
+
+
+
+equations
+
+[filter-1]
+	rstore([$RTuple*1, <$IdCon, $RType, $RElem>, $RTuple*2]) := rstore($REnv),
+	$IdCon*1, $IdCon, $IdCon*2 !:= $IdCon*
+	===
+	filter($REnv, $IdCon*) = filter(update(rstore([$RTuple*1, $RTuple*2]), $REnv), $IdCon*)
+
+[default-filter-2]
+	filter($REnv, $IdCon*) = $REnv
+
+

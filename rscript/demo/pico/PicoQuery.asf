@@ -1,0 +1,73 @@
+equations
+
+%% Example of fact extraction/querying
+
+%% Style 1:
+%% - Extract facts from program and return an Rstore
+%% - Later use a given Rscript and apply to this extracted Rstore
+
+%% ---- extractRelations
+
+[er-1]  $Start := get-location($Program),
+        <$Entry, $Rel, $Exit> := cflow($Program),
+ 
+       $Loc :=  get-location($Program),
+       $Rstore1 := assign(ROOT, node, $Loc, rstore()),
+       $Rstore2 := assign(PRED, rel[node,node], 
+				$Rel union ({$Start} x $Entry), $Rstore1),
+       $Rstore3 := assign(DEFS, rel[assignment,name], defs($Program, {}), $Rstore2),
+       $Rstore4 := assign(USES, rel[reference,name], uses($Program, {}), $Rstore3)
+	============================================
+        extractRelations($Program) = $Rstore4
+
+%% ---- pico-query
+
+[pq1] pico-query($Script, $Rstore, $StrCon1, $StrCon2) =
+      convert2summary($StrCon2, 
+		      eval-rscript-with-rstore-and-yield($Script, $Rstore, $StrCon1))
+
+%% Style 2:
+%% - Extract facts and build an Rstore
+%% - Immediately apply an embedded Rscript to this store
+
+[ui-1] begin $Decls $Stat+ end := $Program,
+       $Start := get-location($Program),
+       <$Entry, $Rel, $Exit> := cflow($Stat+),
+       $Rel1 := $Rel union ({$Start} x $Entry),
+       $Rval := [| type expr = loc
+		   type var  = loc
+		   type varname = str
+
+		   expr ROOT = $Start
+		 
+		   rel[expr,expr] PRED = $Rel1
+		   rel[expr,varname] DEFS  = defs($Program, {})
+		   rel[var,varname] USES  = uses($Program, {})
+		   set[varname] VARNAMES  = range(DEFS) union range(USES)
+
+		   rel[var, varname] UNINIT =
+		   { <V, VN>| var-name VN : VARNAMES, 
+                              var V : USES[-,VN], 
+			      expr E : reachX({ROOT}, DEFS[-,VN], PRED),
+			      V <= E
+	           }
+
+                |] yield UNINIT
+       ==========================================================
+       uninit($Program) = convert2summary("Uninitialized variable", $Rval)
+
+%% ---- Utilities for error handling
+
+[cvt-1] convert2error($StrCon1, <$Loc, $StrCon2>) = error($StrCon1, [localized($StrCon2, $Loc)])
+
+[cvt-2] convert2errorlist($StrCon1, {<$Loc, $StrCon2>, $Elem*}) = 
+	convert2error($StrCon1, <$Loc, $StrCon2>),  convert2errorlist($StrCon1, {$Elem*})
+
+[cvt-3] convert2errorlist($StrCon, {}) = 
+
+[cvt-4]	convert2summary($StrCon, $Elem) = 
+        summary("PicoQuery", "PicoQuery", [convert2errorlist($StrCon, $Elem)])
+
+[cvt-5]	convert2summary($StrCon, $Summary) = $Summary
+
+

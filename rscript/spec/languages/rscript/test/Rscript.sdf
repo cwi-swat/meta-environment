@@ -1,0 +1,43 @@
+module languages/rscript/test/Rscript
+
+imports languages/rscript/run/RscriptCalculator
+        utilities/PosInfo[RSTAT]
+        utilities/PosInfo[RSCRIPT]
+        basic/Errors
+
+hiddens
+context-free start-symbols
+  Summary REnvironment
+
+exports
+sorts Summary
+
+context-free syntax
+  testsuite-report(Integer, Integer, {Error ","}*)          -> Summary       
+  eval-rscript-testsuite(RSCRIPT)                           -> Summary       
+  eval-rscript-testsuite-with-rstore(RSCRIPT, REnvironment) -> Summary       
+  eval-rscript-testsuite-with-rstore(RSCRIPT, RStore)       -> Summary       
+  increment(IdCon, REnvironment)                            -> REnvironment  
+
+hiddens
+imports basic/Comments
+
+context-free syntax
+  "test-environment"   -> REnvironment  
+  "[" {Error ","}* "]" -> RElem         
+
+variables
+  "$REnv" [0-9\']*    -> REnvironment  
+  "$RStore" [0-9\']*  -> RStore        
+  "$NatCon" [0-9\']*  -> NatCon        
+  "$Integer" [0-9\']* -> Integer       
+  "$Val" [0-9\']*     -> RElem         
+  "$Var" [0-9\']*     -> IdCon         
+  "$Exp" [0-9\']*     -> REXP          
+  "$StrCon" [0-9\']*  -> StrCon        
+  "$Stat*" [0-9\']*   -> RSTAT*        
+  "$Stat" [0-9\']*    -> RSTAT         
+  "$Rscript" [0-9\']* -> RSCRIPT       
+  "$Summary" [0-9\']* -> Summary       
+  "$Error" [0-9\']*   -> Error         
+  "$Error*" [0-9\']*  -> {Error ","}*  

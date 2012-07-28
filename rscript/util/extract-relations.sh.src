@@ -1,0 +1,134 @@
+#! /bin/sh
+
+# set -e
+
+# {{{  variables
+
+prefix=__PREFIX__
+bindir=__BINDIR__
+datadir=__DATADIR__
+
+PRG=`basename $0`
+VERBOSE=
+CHECK_ONLY=
+
+RSCRIPT_PARSE_TABLE=${datadir}/Rscript.trm.tbl
+RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
+EVALUATOR=${bindir}/RscriptCalculator
+
+PRG=`basename $0`
+TOP_SORT=
+INPUT_FILES=
+EXTRACTION_FUNCTION=extractRelations
+RESULTING_RSTORE=result.rstore.pt
+
+ADDPOSINFO=__PT_SUPPORT__/bin/addPosInfo
+SGLR=__SGLR__/bin/sglr
+
+
+# }}}
+
+# {{{  usage
+
+usage() {
+cat << ENDCAT >&2
+Usage: $PRG [options] <input-files>
+
+Parameters:
+
+  -o | --output <file>      specify resulting rstore (default: $RESULTING_RSTORE)
+  -e | --executable <file>  specify executable for performing extraction (default: none)
+  -s | --sort <sort>        specify top sort for parsing input files (default: none)
+  -f | --function <name>    specificy the extraction function to be applied (default: extractRelations)
+  -p | --parse-table <file> specify parse table for input files (default: none)
+
+  -t | --table <file>       specify parse table for input files (DEPRECATED)
+
+Example:
+  $PRG -e TBExtraction -s Tscript -p Tscript.trm.tbl tbscripts/*.tb
+
+ENDCAT
+}
+
+# }}}
+# {{{  add_input_file
+
+add_input_file() {
+ INPUT_FILES="$INPUT_FILES $1"
+}
+
+# }}}
+# {{{  parse
+
+parse() {
+  $SGLR -p ${PARSE_TABLE} -i $1 -o $1.pt -s ${TOP_SORT}
+}
+
+# }}}
+# {{{  addposinfo
+
+addposinfo() {
+  $ADDPOSINFO -i $1.pt -o $1.pos -p $1
+}
+
+# }}}
+# {{{  extract
+
+extract() {
+   ${EXECUTABLE} -f  ${EXTRACTION_FUNCTION} -r "RSTORE" -i $1.pos -i ${RESULTING_RSTORE} -o ${RESULTING_RSTORE}
+}
+
+# }}}
+# {{{  cleanup
+
+cleanup() {
+  rm -f $1.{pt,pos}
+}
+
+# }}}
+# {{{  extract_relations_from_source_file
+
+extract_relations_from_source_file() {
+  parse $1
+  addposinfo $1
+  extract $1
+  cleanup $1
+}
+
+# }}}
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -o | --output)
+      shift; RESULTING_RSTORE=$1 ;;
+    -e | --executable)
+      shift; EXECUTABLE=$1 ;;
+    -f | --function)
+      shift; EXTRACTION_FUNCTION=$1 ;;
+    -h | --help)
+      usage; exit 0 ;;
+    -s | --sort)
+      shift; TOP_SORT=$1 ;;
+    -p | --parse-table)
+      shift; PARSE_TABLE=$1 ;;
+    -t | --table)
+      echo Deprecated option $1. Use -p or --parse-table
+      shift; PARSE_TABLE=$1 ;;
+    *)
+      add_input_file $1 ;;
+  esac
+  shift
+done
+
+$EVALUATOR -f empty-rstore -r RSTORE -o $RESULTING_RSTORE
+
+for f in $INPUT_FILES; do
+  echo $f
+  extract_relations_from_source_file $f
+done

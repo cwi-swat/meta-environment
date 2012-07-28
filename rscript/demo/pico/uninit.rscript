@@ -1,0 +1,20 @@
+type node = loc
+type assignment = loc
+type reference  = loc
+type name = str
+node ROOT
+
+rel[node,node] PRED
+rel[assignment,name] DEFS
+rel[reference,name] USES
+
+set[name] VARNAMES  = range(USES)
+
+
+		   rel[name, reference] UNINIT =
+		   { <N, V>| name N : VARNAMES, 
+                             reference V : USES[-,N],
+			     node E : reachX({ROOT}, DEFS[-,N], PRED),
+			     V <= E
+		}
+

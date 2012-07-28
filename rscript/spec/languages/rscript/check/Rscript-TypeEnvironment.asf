@@ -1,0 +1,135 @@
+equations
+
+[initial-type-environment-top]
+	initial-type-environment() = <built-ins, errors[]>
+
+
+equations
+
+%% ---- well-formed-type
+
+[wft1]	well-formed-type(set[$Etype], $Tenv) = well-formed-type($Etype, $Tenv)
+
+[wft2]	well-formed-type(rel[$Etype+], $Tenv) = well-formed-type(<$Etype+>,$Tenv)
+
+[wft3]	$Tenv' := well-formed-type($Etype, $Tenv),
+	$Tenv'' := well-formed-type(<$Etype+>, $Tenv')
+	========================================================
+	well-formed-type(<$Etype, $Etype+>, $Tenv) = $Tenv''
+
+[wft4]	well-formed-type(<$Etype>, $Tenv) = well-formed-type($Etype, $Tenv)
+
+[wft3-1]	$Tenv' := well-formed-type($Etype, $Tenv),
+	$Tenv'' := well-formed-type(<$Formal+>, $Tenv')
+	========================================================
+	well-formed-type(<$Etype $Var, $Formal+>, $Tenv) = $Tenv''
+
+[wft4-2]	well-formed-type(<$Etype $Var>, $Tenv) = well-formed-type($Etype, $Tenv)
+
+
+[wft5]	$Etype := lookup($Tenv, $Var),
+         $Etype == undefined-type
+	=======================================================
+	well-formed-type($Var, $Tenv) = $Tenv + Undeclared $Var
+
+[wft6]	$Tenv' := well-formed-type(<$Etype+>, $Tenv),
+	$Tenv'' := well-formed-type($Etype, $Tenv')
+	======================================================
+	well-formed-type(fun [$Etype+] to $Etype, $Tenv) = $Tenv''
+
+[wft6]	$Etype := lookup($Tenv, $Var),
+	$Etype != undefined-type
+	=======================================================
+	well-formed-type($Var, $Tenv) = well-formed-type($Etype, $Tenv)
+
+[default-wft]
+	well-formed-type($Etype, $Tenv) = $Tenv
+
+
+
+
+equations
+
+%% ---- Lookup/store/delete
+
+[te2]	$Etype := lookup($Table, $Var),
+	$Etype != not-in-table
+	==============================================
+	lookup(<$Table, $Errors>, $Var) = $Etype
+
+[default-te]
+	lookup(<$Table, $Errors>, $Var) = undefined-type
+
+[te3]	$Tenv' := well-formed-type($Etype, $Tenv),
+	<$Table, $Errors> := $Tenv'
+	===================================================================
+	store($Tenv, $Var, $Etype) = <store($Table, $Var, $Etype), $Errors>
+
+[te4]	delete(<$Table, $Errors>, $Var)  = <delete($Table, $Var), $Errors>
+
+
+%% ---- The types of the built-in functions
+
+[bi-1]  built-ins = [
+		<id,      	fun [ set[&T] ] 			to rel[&T,&T]>,
+      		<domain,  	fun [ rel[&T1,&T2] ] 			to set[&T1]>,
+     		<range,   	fun [ rel[&T1,&T2] ] 			to set[&T2]>,
+       		<carrier, 	fun [ rel[&T,&T] ] 			to set[&T]>,
+		<top,     	fun [ rel[&T,&T] ] 			to set[&T]>,
+		<bottom,  	fun [ rel[&T,&T] ] 			to set[&T]>,
+       		<inv,     	fun [ rel[&T1,&T2] ] 			to rel[&T2,&T1]>,
+		<compl,   	fun [ rel[&T1, &T2] ] 			to rel[&T1,&T2]>,
+		<unique,      	fun [ set[&T] ] 			to set[&T]>,
+
+       		<domainR, 	fun [ rel[&T1,&T2], set[&T1] ]		to rel[&T1,&T2]>,
+       		<rangeR,    	fun [ rel[&T1,&T2], set[&T2] ] 		to rel[&T1,&T2]>,
+       		<carrierR,    	fun [ rel[&T,&T], set[&T] ] 		to rel[&T,&T]>,
+
+       		<domainX,    	fun [ rel[&T1,&T2], set[&T1] ] 		to rel[&T1,&T2]>,
+       		<rangeX,    	fun [ rel[&T1,&T2], set[&T2] ] 		to rel[&T1,&T2]>,
+       		<carrierX,    	fun [	rel[&T,&T], set[&T] ] 		to rel[&T,&T]>,
+                <first,     	fun [ <&T1,&T2>] 			to &T1>,
+                <second,     	fun [ <&T1,&T2> ] 			to &T2>,
+
+		<power0,	fun[ set[&T] ]				to set[set[&T]]>,
+		<power1,	fun[ set[&T] ]				to set[set[&T]]>,
+
+		<all-paths-from,fun[ rel[&T,&T], set[&T] ]		to set[rel[&T,&T]]>,
+
+                <reachX,  	fun [ set[&T], set[&T], rel[&T,&T] ] 	to set[&T] >,
+                <reachR,  	fun [ set[&T], set[&T], rel[&T,&T] ] 	to set[&T] >,
+
+		<filename,	fun [ loc ]				to str >,
+		<beginline,	fun [ loc ]				to int >,
+		<begincol,	fun [ loc ]				to int >,
+
+		<endline,	fun [ loc ]				to int >,
+		<endcol,	fun [ loc ]				to int >,
+
+		<sum,		fun [ set[int] ]			to int >,
+		<sum-domain,	fun [ rel[int,&T] ]			to int >,
+		<sum-range,	fun [ rel[&T,int] ]			to int >,
+		<average,	fun [ set[int] ]			to int >,
+		<average-domain,fun [ rel[int,&T] ]			to int >,
+		<average-range,	fun [ rel[&T,int] ]			to int >,
+		<max,		fun [ set[int] ]			to int >,
+		<min,		fun [ set[int] ]			to int >,
+		<gprod,		fun [ set[set[&T]] ]		to set[set[&T]]>
+
+        ]
+
+%% ---- If-then-else on type environments
+
+[ite1]	if true then $Tenv1 else $Tenv2 fi = $Tenv1
+
+[ite2]	if false then $Tenv1 else $Tenv2 fi = $Tenv2
+
+%% ---- If-then-else on <Type, TypeEnv>
+
+[ite3]	if true then <$Etype1, $Tenv1> else <$Etype2, $Tenv2> fi = <$Etype1, $Tenv1>
+
+[ite4]	if false then <$Etype1, $Tenv1> else <$Etype2, $Tenv2> fi = <$Etype2, $Tenv2>
+
+%% ---- Add error message
+
+[te1]	<$Table, errors[$Error*]> + $Error = <$Table, errors[$Error*; $Error]>

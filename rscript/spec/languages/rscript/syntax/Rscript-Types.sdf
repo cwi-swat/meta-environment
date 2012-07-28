@@ -1,0 +1,36 @@
+module languages/rscript/syntax/Rscript-Types
+
+imports basic/IdentifierCon
+
+exports
+sorts ElemType REXPTYPE Formal
+
+hiddens
+imports basic/Whitespace
+
+context-free start-symbols
+  REXPTYPE Formal
+
+exports
+context-free syntax
+  "bool" -> IdCon {reject} 
+  "int"  -> IdCon {reject} 
+  "str"  -> IdCon {reject} 
+  "loc"  -> IdCon {reject} 
+  "bag"  -> IdCon {reject} 
+  "set"  -> IdCon {reject} 
+  "rel"  -> IdCon {reject} 
+
+context-free syntax
+  "bool" | "int" | "str" | "loc" -> ElemType  
+  ElemType                       -> REXPTYPE  
+  "<" {Formal ","}+ ">"          -> REXPTYPE  
+  "<" {REXPTYPE ","}+ ">"        -> REXPTYPE  
+  REXPTYPE IdCon                 -> Formal    
+  IdCon                          -> REXPTYPE  
+  "&" IdCon                      -> REXPTYPE  
+
+context-free syntax
+  "bag" "[" REXPTYPE "]"        -> REXPTYPE  
+  "set" "[" REXPTYPE "]"        -> REXPTYPE  
+  "rel" "[" {REXPTYPE ","}+ "]" -> REXPTYPE  

@@ -1,0 +1,3 @@
+equations
+
+[main] start(RSCRIPT, $Rscript) = start(RStore, rstore(eval-rscript($Rscript)))

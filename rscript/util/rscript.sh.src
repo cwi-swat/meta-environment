@@ -1,0 +1,260 @@
+#! /bin/sh
+
+# rscript -- check and execute an Rscript
+# This utility provides the following functionality
+# - parse and check an Rscript
+# - parse, check and evaluate an Rscript
+# - parse, check and evaluate an Rscript with a given Rstore
+# - parse and check an Rscript and run it as test suite
+
+#set -e
+#set -x
+
+#   variables
+prefix=__PREFIX__
+bindir=__BINDIR__
+datadir=__DATADIR__
+
+PRG=`basename $0`
+VERBOSE=
+CHECK_ONLY=
+OUTPUT_READABLE=
+OUTPUTFILE="-"
+
+RSCRIPT_PARSE_TABLE=${datadir}/rscript.trm.tbl
+LIFT=__RSTORE_SUPPORT__/bin/lift-rstore
+LOWER=__RSTORE_SUPPORT__/bin/lower-rstore
+
+EVALUATOR=${bindir}/rscriptcalculator
+RSTORE_SORT=RStore
+SUMMARY_SORT=Summary
+EVALUATOR_RESULT=$RSTORE_SORT
+
+ADDPOSINFO=__PT_SUPPORT__/bin/addPosInfo
+APPLYFUNCTION=__PT_SUPPORT__/bin/apply-function
+SGLR=__SGLR__/bin/sglr
+UNPARSEPT=__PT_SUPPORT__/bin/unparsePT
+
+THE_EVALUATOR=$EVALUATOR
+EVALUATOR_FUN=eval-rscript-to-rstore
+EVALUATOR_WITH_STORE_FUN=eval-rscript-with-rstore
+CHECKER_FUN=check-rscript
+
+TESTSUITES=${bindir}/rscripttestsuite
+USE_TESTSUITES=no
+YIELD=
+TESTREPORT=Summary
+
+THE_RSCRIPT=
+OUTPUT=
+DISPLAY_OUTPUT=__ERROR_SUPPORT__/bin/display-error
+RSTORE=
+TYPE_CHECKER=${bindir}/rscriptchecker
+OUTPUT_TYPE_CHECKER=./.checker.feedback
+TMP_FILES=$OUTPUT_TYPE_CHECKER
+
+# 
+#   usage
+usage() {
+cat << ENDCAT >&2
+Usage: $PRG [options] [filename]
+
+Options:
+  -h (--help)                         print usage info
+  -i (--input)              filename  input from file (default: stdin)
+  -o (--output)             filename  output to filename (default: stdout)
+  -r (--readable)                     output readable for human beings (default:aterm rstore)
+  -s (--store)              filename  initial Rstore (default: none)
+  -c (--check-only)                   only check the Rscript, do not evaluate it
+  -t (--testsuite)                    execute as test suite (excludes -y option)
+  -v (--verbose)                      verbose output (default:not verbose)
+  -y (--yield)              name      yield the value of variable "name" (default: the complete Rstore)
+
+Examples:
+  $PRG query.rscript
+  $PRG -i query.rscript -s previous.rstore -o result.rstore.pt
+  $PRG -y nCalls calls.rscript
+  $PRG -t tests1.rscript
+
+ENDCAT
+}
+
+# 
+# 
+die(){
+  echo $PRG: $1
+  exit 1
+}
+# 
+# 
+check_rscript_file_type(){
+  case "$1" in
+  *.rscript) ;;
+  *) die "$1 is not an rscript"
+  esac
+  if [ ! -r $1 ]
+  then
+     die "$1 is not readable"
+  fi
+}
+
+# 
+check_rstore_file_type(){
+  case "$1" in
+  *.rstore) ;;
+  *) die "$1 is not an rstore"
+  esac
+}
+
+# 
+set_output_style(){
+  if [ "$OUTPUTFILE" == "-" ]; then
+	OUTPUT="$UNPARSEPT -o $OUTPUTFILE || exit 1"
+  else
+    if test -z "$OUTPUT_READABLE"
+    then
+	OUTPUT="$LOWER -o $OUTPUTFILE || exit 1"
+    else
+	OUTPUT="$UNPARSEPT -o $OUTPUTFILE || exit 1"
+    fi
+  fi
+}
+# 
+#   add_tmp_file
+
+add_tmp_file() {
+    TMP_FILES="$TMP_FILES $1"
+}
+# 
+#   cleanup
+
+cleanup() {
+  rm -f $TMP_FILES
+}
+
+#   parse_rscript
+
+parse_rscript() {
+  $SGLR $VERBOSE -p $RSCRIPT_PARSE_TABLE -s RSCRIPT -i $THE_RSCRIPT -o $THE_RSCRIPT.pt
+  add_tmp_file  $THE_RSCRIPT.pt
+
+  if test $USE_TESTSUITES = "yes"
+  then
+    $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt -o $THE_RSCRIPT.pt.pos
+    mv $THE_RSCRIPT.pt.pos $THE_RSCRIPT.pt
+  fi
+}
+
+# 
+#   parse_rstore
+
+parse_rstore() {
+  $LIFT -i $RSTORE -o $RSTORE.pt || exit 1
+  PARSED_RSTORE=$RSTORE.pt
+  add_tmp_file  $RSTORE.pt
+}
+
+# 
+#   check
+
+
+check() {
+  $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt  | $APPLYFUNCTION -f $CHECKER_FUN -s $SUMMARY_SORT -o $THE_RSCRIPT.pt.pos
+  add_tmp_file $THE_RSCRIPT.pt.pos
+  $TYPE_CHECKER -i $THE_RSCRIPT.pt.pos | $UNPARSEPT > $OUTPUT_TYPE_CHECKER
+}
+
+# 
+
+#  evaluate
+
+evaluate() {
+  if test -n "$RSTORE" 
+  then
+    parse_rstore 
+    $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT -i $THE_RSCRIPT.pt -i $PARSED_RSTORE | $THE_EVALUATOR | $OUTPUT
+  else
+    $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT -i $THE_RSCRIPT.pt | $THE_EVALUATOR | $OUTPUT
+  fi
+  echo ""
+}
+   
+# 
+
+if test $# -eq 0
+then
+  usage
+  exit 1
+fi
+
+while test $# -gt 0
+do
+  case "$1" in
+    -h | --help)
+      usage; exit 0;;
+    -o | --output)
+      shift; OUTPUTFILE=$1 ;;
+    -r | --readable)
+      OUTPUT_READABLE=1 ;; 
+    -i | --input)
+      shift; THE_RSCRIPT=$1 ; check_rscript_file_type ${THE_RSCRIPT};;
+    -s | --store)
+      shift; RSTORE=$1;  check_rstore_file_type ${RSTORE};;
+    -t | --testsuite)
+      USE_TESTSUITES=yes; THE_EVALUATOR=$TESTSUITES; EVALUATOR_FUN=eval-rscript-testsuite; EVALUATOR_WITH_STORE_FUN=eval-rscript-testsuite-with-rstore; EVALUATOR_RESULT=$TESTREPORT;;
+     -c | --check-only)
+      CHECK_ONLY=yes ;;
+     -y | --yield)
+      shift; YIELD="-s $1"; EVALUATOR_RESULT="Elem" ; AND_YIELD=-and-yield;;
+    -v | --verbose)
+      VERBOSE=-v ;;
+    *.rscript)
+      THE_RSCRIPT=$1 
+      check_rscript_file_type ${THE_RSCRIPT};; 
+    *)
+      usage; exit 1 ;;
+  esac
+  shift
+done
+
+if test -n "$YIELD" -a  "(" $USE_TESTSUITES = "yes" ")"
+then
+    echo "$PRG: -y (--yield) and -t (--testsuite) cannot be combined"
+    usage
+    exit 1
+else
+  if test -n "$RSTORE" 
+  then
+    EVALUATOR_FUN=${EVALUATOR_WITH_STORE_FUN}${AND_YIELD}
+  else
+    EVALUATOR_FUN=${EVALUATOR_FUN}${AND_YIELD}
+  fi
+fi
+
+#if 0 
+
+set_output_style
+parse_rscript
+check
+
+if test "$CHECK_ONLY" = "yes"
+then
+    if $DISPLAY_OUTPUT -i $OUTPUT_TYPE_CHECKER
+    then
+	echo $THE_RSCRIPT is type correct
+    else	
+	echo ""
+    fi
+    exit
+fi
+   
+if $DISPLAY_OUTPUT -i $OUTPUT_TYPE_CHECKER
+then
+    evaluate
+else    
+    echo ""
+    echo "There are type errors in $THE_RSCRIPT; script is not executed"
+fi
+
+cleanup
+

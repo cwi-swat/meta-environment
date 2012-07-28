@@ -1,0 +1,11 @@
+module languages/rscript/run/Rscript
+
+imports languages/rscript/run/RscriptCalculator
+
+exports
+context-free start-symbols
+  REnvironment RStore
+
+hiddens
+variables
+  "$Rscript" [0-9\']* -> RSCRIPT

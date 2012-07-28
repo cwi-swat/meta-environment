@@ -1,0 +1,68 @@
+module NewPicoExtraction
+
+imports languages/pico/syntax/Pico-Syntax
+imports basic/Integers
+imports utilities/PosInfo[PROGRAM]
+imports utilities/PosInfo[STATEMENT]
+imports utilities/PosInfo[EXP]
+imports utilities/PosInfo[PICO-ID]
+imports basic/Errors RscriptCalculator
+
+exports
+   imports Rstore
+
+   context-free syntax
+      uninit(PROGRAM)			-> Summary
+      id2str(PICO-ID)		 	-> String
+
+   context-free start-symbols
+	<Set[[Elem]], Rel[[Elem]], Set[[Elem]]>
+	Summary
+
+hiddens
+  context-free syntax 
+
+      cflow({ STATEMENT ";"}*)	        -> <Set[[Elem]], Rel[[Elem]], Set[[Elem]]>
+
+      uses(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,continue)}
+      uses(EXP, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,continue)}
+ 
+      defs(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
+      defs(STATEMENT, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
+
+      convert2summary(String, RVALUE)	        -> Summary
+      convert2errorlist(String, Elem)		-> {Error ","}*
+      convert2error(String, <String, Location>) -> Error
+
+ hiddens
+%%  imports asf/syntax/Comments
+
+  variables
+      "$Rstore" [0-9\']*  	-> RSTORE
+      "$Entry" [0-9\']*		-> Set[[Elem]]
+      "$Exit" [0-9\']*		-> Set[[Elem]]
+      
+      "$Rel" [0-9\']*     	-> Set[[Elem]]
+      "$Loc" [0-9\']*	 	-> Location
+      "$Start" [0-9\']*	 	-> Location
+      "$Control" [0-9\']* 	-> Location
+ 	
+      "$Decls" [0-9\']*         -> DECLS
+      "$Stat" [0-9\']*          -> STATEMENT
+      "$Stat*"[0-9\']*          -> {STATEMENT ";"}*
+      "$Stat+"[0-9\']*          -> {STATEMENT ";"}+
+      "$Exp" [0-9\']*           -> EXP
+      "$Id" [0-9\']*            -> PICO-ID
+      "$Program" [0-9\']*       -> PROGRAM
+
+      "$Char*" [0-9]*   	-> CHAR*
+      "$StrCon" [0-9\']*  	-> StrCon
+      "$Error*" [0-9\']*	-> {Error ","}*
+      "$Elem" [0-9\']*		-> Elem
+      "$Elem*" [0-9\']*		-> {Elem ","}*
+
+      "$String" [0-9\']*	-> String
+
+      "$Rval" [0-9\']*		-> RVALUE
+      "$Summary" [0-9\']*	-> Summary
+	
