@@ -1,0 +1,8 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl
+
+Name: asf
+Version: 2.5.1
+Description: 
+Requires: error-support,asc-support,asf-support,sdf-support,pt-support,ptable-support,aterm,toolbuslib,tide-support
+ToolBusFlags=-I${prefix}/share/asf

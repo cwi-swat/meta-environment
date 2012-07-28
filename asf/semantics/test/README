@@ -1,0 +1,26 @@
+To add a specification to the test set:
+
+1. mkdir ./spec/<TopModuleName>
+2. put all .sdf and .asf files there
+3. cd ./spec/<TopModuleName>
+4. eqs-dump -m <TopModuleName> -o ../../eqs/<TopModuleName>.eqs
+5. pt-dump -m <TopModuleName>
+6. parse a number of test files and give them a number like:
+sglr -p <TopModuleName>.trm.tbl -i <input> -o ../../input/<TopModuleName>.1.pt
+
+7. cd ../..
+8. add <TopModuleName> to the list of tested specifications in ./Makefile.am
+9. make check
+   This generates a few scripts <TopModuleName>.{asfe,asfc,check}.sh and 
+   an error message an a new .cvsignore file
+10. mv <TopModuleName>.1.pt.asfe.test.out output/<TopModuleName>.1.pt
+   To fix the normal form as the correct one.
+11. run <TopModuleName>.asfe.sh to check
+    run <TopModuleName>.asfc.sh to check
+    run <TopModuleName>.check.sh to check
+12. cvs add spec/<TopModuleName>
+13. cvs add spec/<TopModuleName>/*.{asf,sdf} eqs/*.eqs input/*.pt \
+            output/*.pt c-code/*.c
+14. type make check to verify that everything works.
+15. cvs commit, make check.
+16. DONE! 

@@ -1,0 +1,22 @@
+module Flatten
+
+exports
+
+sorts S
+
+lexical syntax
+
+[\ \t\n] -> LAYOUT
+
+[a-z] -> E
+
+context-free syntax
+
+"[" E* "]" -> S
+S          -> E
+
+variables
+
+"E*"[0-9]* -> E*
+"S"[0-9]* -> S
+

@@ -1,0 +1,15 @@
+module EmptyTraversal
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+
+context-free start-symbols
+  NatCon
+
+context-free syntax
+
+"start-nothing"    -> NatCon
+nothing(NatCon) -> NatCon {traversal(trafo,top-down,break)}
+

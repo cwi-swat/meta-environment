@@ -1,0 +1,91 @@
+equations
+
+[] test = fork(fork(node(3,node(2,node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1)))),node(2,node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))))),node(3,node(2,node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1)))),node(2,node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1)))))),fork(node(3,node(2,node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1)))),node(2,node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))))),node(3,node(2,node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1)))),node(2,node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1)))))))
+
+
+[] simple-test = fork(fork(node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1)))),fork(node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1))),node(1,node(1,leaf(1),leaf(1)),node(1,leaf(1),leaf(1)))))
+
+equations
+
+[] top-down-trafo-break(node(i1,node(i2,t1,t2),node(i3,t3,t4))) = 
+   node(i1 - i2 - i3,node(i2,t1,t2),node(i3,t3,t4))
+[] top-down-accu-break(node(i1,node(i2,t1,t2),node(i3,t3,t4)), i) =
+     i - i1 - i2 - i3
+[] top-down-accutrafo-break(node(i1,node(i2,t1,t2),node(i3,t3,t4)), i) =
+   <node(i1 - i2 - i3,node(i2,t1,t2),node(i3,t3,t4)), i - i1 - i2 - i3>
+
+[] top-down-trafo-continue(node(i1,node(i2,t1,t2),node(i3,t3,t4))) = 
+   node(i1 - i2 - i3,node(i2,t1,t2),node(i3,t3,t4))
+[] top-down-accu-continue(node(i1,node(i2,t1,t2),node(i3,t3,t4)), i) =
+     i - i1 - i2 - i3
+[] top-down-accutrafo-continue(node(i1,node(i2,t1,t2),node(i3,t3,t4)), i) =
+   <node(i1 - i2 - i3,node(i2,t1,t2),node(i3,t3,t4)), i - i1 - i2 - i3>
+
+[] bottom-up-trafo-break(node(i1,node(i2,t1,t2),node(i3,t3,t4))) = 
+   node(i1 - i2 - i3,node(i2,t1,t2),node(i3,t3,t4))
+[] bottom-up-accu-break(node(i1,node(i2,t1,t2),node(i3,t3,t4)), i) =
+     i - i1 - i2 - i3
+[] bottom-up-accutrafo-break(node(i1,node(i2,t1,t2),node(i3,t3,t4)), i) =
+   <node(i1 - i2 - i3,node(i2,t1,t2),node(i3,t3,t4)), i - i1 - i2 - i3>
+
+[] bottom-up-trafo-continue(node(i1,node(i2,t1,t2),node(i3,t3,t4))) = 
+   node(i1 - i2 - i3,node(i2,t1,t2),node(i3,t3,t4))
+[] bottom-up-accu-continue(node(i1,node(i2,t1,t2),node(i3,t3,t4)), i) =
+     i - i1 - i2 - i3
+[] bottom-up-accutrafo-continue(node(i1,node(i2,t1,t2),node(i3,t3,t4)), i) =
+   <node(i1 - i2 - i3,node(i2,t1,t2),node(i3,t3,t4)), i - i1 - i2 - i3>
+
+tests
+
+%% For this test term, and with all left and right hand side of all rules
+%% equal, the difference in traversal attributes should lead to different
+%% anwers! For each type {trafo,accu,accu-trafo} there are 6 test cases,
+%%
+%% top-down,break  ------ top-down,continue
+%%     |             X          |
+%% bottom-up,break ------ bottom-up,continue
+
+[] start-top-down-trafo-break(test) != start-top-down-trafo-continue(test)
+[] start-top-down-trafo-break(test) != start-bottom-up-trafo-continue(test)
+[] start-top-down-trafo-break(test) != start-bottom-up-trafo-break(test)
+[] start-bottom-up-trafo-break(test) != start-bottom-up-trafo-continue(test)
+[] start-bottom-up-trafo-break(test) != start-top-down-trafo-continue(test)
+[] start-bottom-up-trafo-continue(test) != start-top-down-trafo-continue(test)
+
+[] start-top-down-accu-break(test) != start-top-down-accu-continue(test)
+[] start-top-down-accu-break(test) != start-bottom-up-accu-continue(test)
+[] start-top-down-accu-break(test) != start-bottom-up-accu-break(test)
+[] start-bottom-up-accu-break(test) != start-bottom-up-accu-continue(test)
+[] start-bottom-up-accu-break(test) != start-top-down-accu-continue(test)
+[] start-bottom-up-accu-continue(test) != start-top-down-accu-continue(test)
+
+[] start-top-down-accutrafo-break(test) != 
+   start-top-down-accutrafo-continue(test)
+[] start-top-down-accutrafo-break(test) != 
+   start-bottom-up-accutrafo-continue(test)
+[] start-top-down-accutrafo-break(test) != 
+   start-bottom-up-accutrafo-break(test)
+[] start-bottom-up-accutrafo-break(test) != 
+   start-bottom-up-accutrafo-continue(test)
+[] start-bottom-up-accutrafo-break(test) != 
+   start-top-down-accutrafo-continue(test)
+[] start-bottom-up-accutrafo-continue(test) != 
+   start-top-down-accutrafo-continue(test)
+
+equations
+
+[] start-top-down-trafo-break(t) = top-down-trafo-break(t)
+[] start-top-down-accu-break(t) = top-down-accu-break(t,0)
+[] start-top-down-accutrafo-break(t) = top-down-accutrafo-break(t,0)
+
+[] start-top-down-trafo-continue(t) = top-down-trafo-continue(t)
+[] start-top-down-accu-continue(t) = top-down-accu-continue(t,0)
+[] start-top-down-accutrafo-continue(t) = top-down-accutrafo-continue(t,0)
+
+[] start-bottom-up-trafo-break(t) = bottom-up-trafo-break(t)
+[] start-bottom-up-accu-break(t) = bottom-up-accu-break(t,0)
+[] start-bottom-up-accutrafo-break(t) = bottom-up-accutrafo-break(t,0)
+
+[] start-bottom-up-trafo-continue(t) = bottom-up-trafo-continue(t)
+[] start-bottom-up-accu-continue(t) = bottom-up-accu-continue(t,0)
+[] start-bottom-up-accutrafo-continue(t) = bottom-up-accutrafo-continue(t,0)

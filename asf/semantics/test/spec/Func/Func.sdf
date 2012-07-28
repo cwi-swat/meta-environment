@@ -1,0 +1,26 @@
+module Func
+
+imports basic/Whitespace
+imports basic/Integers
+imports languages/pico/syntax/Pico-Identifiers
+
+exports
+  sorts Pico-Func
+  context-free start-symbols
+	Integer
+	Pico-Func
+  context-free syntax
+
+    "f" -> Pico-Func
+
+    "apply" "(" Boolean "," Integer "," Pico-Func ")" -> Integer
+
+  aliases
+    (Boolean Integer => Integer) -> Pico-Func
+
+  hiddens
+  variables
+    "vf"[0-9]* -> Pico-Func
+    "Int" -> Integer
+    "Bool" -> Boolean
+ 

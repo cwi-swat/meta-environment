@@ -1,0 +1,3 @@
+equations
+
+  [0] give(1) = give(2)

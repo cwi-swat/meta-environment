@@ -1,0 +1,22 @@
+module List
+
+exports
+
+
+lexical syntax
+
+[\ \t\n] -> LAYOUT
+
+context-free start-symbols
+	("a" | "b" | "c")*
+
+context-free restrictions
+
+LAYOUT? -/- [\ \t\n]
+
+context-free syntax
+
+hiddens
+variables
+
+"abc*"[0-9]* ->  ("a" | "b" | "c")*

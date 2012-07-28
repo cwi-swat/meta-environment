@@ -1,0 +1,31 @@
+(
+
+module AUX-Kernel-Sdf-Projection12 signature lf_AUX_Kernel_Sdf_Projection12_1(_,_,_);
+ef4(_,_) {external};
+ef5(_,_) {external};
+ef6(_,_) {external};
+ef7 {external};
+ef8(_,_) {external};
+ef9(_,_) {external};
+ef10(_) {external};
+ef1(_) {external};
+ef2(_) {external};
+"{sort(\"Symbol\")}"(_);
+ef3(_) {external};
+"{sort(\"Production\")}"(_) 
+
+rules 
+
+lf_AUX_Kernel_Sdf_Projection12_1('u,ef1(ef2("{sort(\"Symbol\")}"(null))),ef3("{sort(\"Production\")}"(*Ps))) = 
+  ef3("{sort(\"Production\")}"(null));
+
+ef6(AA,U1) == ef7 &
+ef8(AA,ef3("{sort(\"Production\")}"(*Ps1))) == ef3("{sort(\"Production\")}"(*Ps2)) &
+ef9(ef10(ef3("{sort(\"Production\")}"(*Ps2))),U1) == U2 
+==> 
+lf_AUX_Kernel_Sdf_Projection12_1(U1,ef1(ef2("{sort(\"Symbol\")}"(cons(AA,*Pa)))),ef3("{sort(\"Production\")}"(*Ps1))) = 
+  ef4(ef3("{sort(\"Production\")}"(*Ps2)),lf_AUX_Kernel_Sdf_Projection12_1(ef5(U1,ef1(ef2("{sort(\"Symbol\")}"(AA)))),ef5(U2,ef1(ef2("{sort(\"Symbol\")}"(*Pa)))),ef3("{sort(\"Production\")}"(*Ps1))));
+
+ default: lf_AUX_Kernel_Sdf_Projection12_1(U1,ef1(ef2("{sort(\"Symbol\")}"(cons(AA,*Pa)))),ef3("{sort(\"Production\")}"(*Ps))) = lf_AUX_Kernel_Sdf_Projection12_1(U1,ef1(ef2("{sort(\"Symbol\")}"(*Pa))),ef3("{sort(\"Production\")}"(*Ps))),
+
+(("prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[ql(\"reachable\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)",lf_AUX_Kernel_Sdf_Projection12_1,),("prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"constructor\")],w(\"\"),l(\"}\")))",ef1,constructor),("prod(id(\"Symbols\"),w(\"\"),[iter(sort(\"Symbol\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),no-attrs)",ef2,constructor),("{sort(\"Symbol\")}",lf2,),("prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)",ef3,constructor),("{sort(\"Production\")}",lf3,),("prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))",ef4,right),("prod(id(\"Symbol-Sets\"),w(\"\"),[sort(\"SymbolSet\"),w(\"\"),ql(\"||\"),w(\"\"),sort(\"SymbolSet\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))",ef5,right),("prod(id(\"Symbol-Sets\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),ql(\"(-\"),w(\"\"),sort(\"SymbolSet\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))",ef6,memo),("prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)",ef7,),("prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[ql(\"P\"),w(\"\"),ql(\"_\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))",ef8,memo),("prod(id(\"Symbol-Sets\"),w(\"\"),[sort(\"SymbolSet\"),w(\"\"),ql(\"/\"),w(\"\"),sort(\"SymbolSet\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))",ef9,left),("prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[ql(\"symbols\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),no-attrs)",ef10,),ef,11,4))

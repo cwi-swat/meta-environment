@@ -1,0 +1,25 @@
+optimize-muasf(
+
+module AUX-Symbols-Projection4 
+
+signature 
+
+lf_AUX_Symbols_Projection4_1(_,_);
+ef2 {external};
+ef3 {external};
+ef1(_) {external};
+"{sort(\"Symbol\")}"(_) 
+
+rules 
+
+lf_AUX_Symbols_Projection4_1(A,ef1("{sort(\"Symbol\")}"(null))) = ef2;
+
+lf_AUX_Symbols_Projection4_1(A,ef1("{sort(\"Symbol\")}"(cons(A,a)))) = ef3;
+
+A != B 
+==> 
+lf_AUX_Symbols_Projection4_1(A,ef1("{sort(\"Symbol\")}"(cons(B,a)))) = 
+lf_AUX_Symbols_Projection4_1(A,ef1("{sort(\"Symbol\")}"(a))),
+
+
+(("prod(id(\"Symbols-Projection\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),ql(\"(-\"),w(\"\"),sort(\"Symbols\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)",lf_AUX_Symbols_Projection4_1,),("prod(id(\"Symbols\"),w(\"\"),[iter(sort(\"Symbol\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"constructor\")],w(\"\"),l(\"}\")))",ef1,),("{sort(\"Symbol\")}",lf2,),("prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)",ef2,),("prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)",ef3,),ef,4,3))

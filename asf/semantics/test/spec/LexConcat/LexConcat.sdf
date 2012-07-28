@@ -1,0 +1,22 @@
+module LexConcat
+
+imports basic/Whitespace
+
+exports
+
+sorts ID
+
+lexical syntax
+
+[a-z]+ -> ID
+
+context-free syntax
+
+concat(ID,ID) -> ID
+
+context-free start-symbols
+	ID
+
+lexical variables
+
+"c+"[0-9]* -> [a-z]+

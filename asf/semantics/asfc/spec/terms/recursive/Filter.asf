@@ -1,0 +1,5 @@
+equations
+
+[] filter(E,E*1 E E*2) = filter(E, E*1 E*2)
+
+[default] filter(E,E*) = E*

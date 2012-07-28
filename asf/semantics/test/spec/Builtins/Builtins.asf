@@ -1,0 +1,33 @@
+equations
+
+[] read(bytes(Bytes)) := unparse-to-bytes(PROGRAM1)
+   ===>
+   test-unparsing(PROGRAM1) = bytes-to-string(bytes(Bytes))
+
+[] test-lifting-to-term(PROGRAM1) = lift-to-term(PROGRAM1)
+[] test-lifting-to-tree(PROGRAM1) = lift-to-tree(PROGRAM1)
+[] test-term-compare(PROGRAM1,PROGRAM2) = PROGRAM1 < PROGRAM2
+
+
+[] appl(prod([cf(layout)],cf(opt(layout)),no-attrs),ATermList) =
+     appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32])
+   when ATermList != [32]
+
+[] appl(prod([],cf(opt(layout)),no-attrs),ATermList) =
+    appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32]) 
+     when ATermList == []
+
+[] AFun ( ATerm+ ) Ann = AFun ( ATerm+ )
+  
+[] appl(prod([cf(layout)],cf(opt(layout)),no-attrs),Args) =
+     appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32])
+    when Args != [32]
+
+[] appl(prod([],cf(opt(layout)),no-attrs),Args) =
+    appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32])
+    when Args == []
+
+[] Tree Ann = Tree
+
+
+

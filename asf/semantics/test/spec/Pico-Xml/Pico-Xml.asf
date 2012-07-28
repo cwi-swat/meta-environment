@@ -1,0 +1,7 @@
+equations
+
+[] <Program2,Int> := xml(Program, 0)
+   ===>
+   xml(Program) = Program2
+
+[] xml(Str-con, Int) = <<string Id=Int> Str-con </string>, Int + 1>

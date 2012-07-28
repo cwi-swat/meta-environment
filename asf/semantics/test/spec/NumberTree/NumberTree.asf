@@ -1,0 +1,15 @@
+equations
+
+[a] do-collect(T) = collect(T,)
+
+[b] collect(N,N*) = N*;N
+
+[c] N*2 := collect(T+,N*;N)
+    ===>
+    collect(N(T+),N*) = N*2
+
+[a] do-collect2(T) = collect2(T,)
+
+[b] collect2(N,N*) = N*;N
+
+[c] collect2(N(T+),N*) = N*; N

@@ -1,0 +1,20 @@
+module Pico-set
+
+imports languages/pico/syntax/Pico-Syntax
+
+exports
+
+sorts PICO-SET
+
+context-free start-symbols
+	PICO-SET
+
+context-free syntax
+
+"{" {PICO-ID ","}* "}" -> PICO-SET
+
+hiddens
+variables
+
+"Id*"[0-9]* -> {PICO-ID ","}*
+"Id"[0-9]* -> PICO-ID

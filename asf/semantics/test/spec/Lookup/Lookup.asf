@@ -1,0 +1,9 @@
+equations
+
+  [T2a] [Pair*] := Tenv,
+        Pair*1, (Id:Type), Pair*2 := Pair*
+        ================================
+        lookup (Id, Tenv) = Type
+
+  [default-T2b] lookup(Id,Tenv) = nil-type
+

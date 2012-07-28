@@ -1,0 +1,24 @@
+module ReturnsList
+
+imports basic/Whitespace
+
+exports
+
+sorts B 
+
+context-free start-symbols
+	{B ";"}*
+
+context-free syntax
+
+"true" -> B
+"false" -> B
+
+f({B ";"}*) -> {B ";"}*
+
+hiddens
+variables
+
+"B"[0-9]* -> B
+"B*"[0-9]* -> {B ";"}*
+

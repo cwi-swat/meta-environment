@@ -1,0 +1,20 @@
+module Filter
+
+exports
+
+sorts E*
+
+lexical syntax
+
+[\ \t\n] -> LAYOUT
+
+[a-z] -> E
+
+context-free syntax
+
+filter(E,E*) -> E*
+
+variables
+
+"E"[0-9]* -> E
+"E*"[0-9]* -> E*

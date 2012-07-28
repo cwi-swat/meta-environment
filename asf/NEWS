@@ -1,0 +1,6 @@
+Version 0.2:
+asc-support.h replaced by asc-support2.h in order to make
+recompilation of generated code independent of changes in
+libMEPT.
+
+Adapted asfe to support AsFix2ME to its full extent.

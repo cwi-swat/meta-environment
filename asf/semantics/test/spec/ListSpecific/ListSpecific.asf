@@ -1,0 +1,6 @@
+equations
+
+  [f2] f(vA*, vB, vC) = false
+
+  [f1] f( , vB, vC) = true
+  
