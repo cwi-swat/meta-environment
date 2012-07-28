@@ -1,0 +1,40 @@
+Wed May  7 11:44:29 2008    <bruntink@cwi.nl>
+
+	* vis-plugin-graph.pc.in: Changed dependency on relation-stores to rstore-support-java.
+
+Mon Apr 28 16:13:16 2008    <bruntink@cwi.nl>
+
+	* vis-plugin-graph.pc.in: Changed dependency on module-support to module-support-java.
+
+Thu Aug 16 14:34:21 CEST 2007 <jurgenv@cwi.nl>
+ * **/GraphBuilder.java: removed author names per method, and fixed
+   a serious bug. The rel[str,str] visualization was not up-to-date
+   with the new graph interface.
+
+Tue Apr 10 09:42:26 CEST 2007 <jurgenv@cwi.nl>
+ * **/*.java: debugged generic bridge to dot, and debugged labels
+   in shaped nodes. Now using the Decorator interface of prefuse.
+
+Thu Mar 29 19:45:03 CEST 2007 <jurgenv@cwi.nl>
+ * **/*.java: added support for varying the width and the height of nodes 
+  from an RStore, also you may select shapes (ellipse, circle, box).
+  The type of the relation that is supported by this viz is:
+   rel[<str,rel[str,str]>,str], where the first element is an attributed
+   "from" node, and the second is the id of the "to node"
+
+
+Thu Mar 29 13:11:37 CEST 2007 <jurgenv@cwi.nl>
+ * **/*.java: added a new bridge for dot. This works directly on the
+   prefuse data model by wrapping the Graph class, and providing specialized
+   Renderers for Nodes and Edges. The current form is taken mainly from
+   the graph-gui package, but abstracts now from the graph data-structure
+   completely. Extensions to be added are node shapes and colors, etc.
+ * **/*.java: the treeLayout is replaced by dotlayout now.
+
+Wed Mar 21 15:03:47 CET 2007 <jurgenv@cwi.nl>
+ * *: added some try catch blocks to make the graph visualizer more robust
+   against RTuples that have contents that does not correspond to the declared
+   types.
+
+Tue Mar 20 08:06:11 CET 2007 <jurgenv@cwi.nl>
+ * *: initial import from Dancing Bear project

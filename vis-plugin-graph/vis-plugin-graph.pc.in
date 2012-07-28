@@ -1,0 +1,15 @@
+prefix=@prefix@
+
+Name: vis-plugin-graph
+Version: 1.2
+Description: 
+Requires: aterm-java,config-support-java,toolbus-java-adapter,meta-studio,vis-plugin,tunit,rstore-support-java
+Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
+JarFile=vis-plugin-graph.jar
+Jars=${prefix}/share/${JarFile}:${prefix}/share/jcommon-1.0.8.jar:${prefix}/share/junit-4.1.jar:${prefix}/share/prefuse.jar
+LocalJars=lib/jcommon-1.0.8.jar:lib/junit-4.1.jar:lib/prefuse.jar
+MainClass=nl.cwi.sen1.visplugin.graphplugin.GraphVisualizationController
+Packages=nl.cwi.sen1.gui.plugin.prefusedot,nl.cwi.sen1.visplugin.graphplugin
+TestClass=
+ToolBusFlags=-I${prefix}/share/vis-plugin-graph
+
