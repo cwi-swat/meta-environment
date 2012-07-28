@@ -1,0 +1,14 @@
+prefix=@prefix@
+
+Name: vis-plugin
+Version: 1.2
+Description: 
+Requires: aterm-java,config-support-java,toolbus-java-adapter,meta-studio,tunit,rstore-support-java,vis-base
+Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
+JarFile=vis-plugin.jar
+Jars=${prefix}/share/${JarFile}:${prefix}/share/jcommon-1.0.8.jar:${prefix}/share/jfreechart-1.0.4.jar:${prefix}/share/junit-4.1.jar:${prefix}/share/prefuse.jar
+LocalJars=lib/jcommon-1.0.8.jar:lib/jfreechart-1.0.4.jar:lib/junit-4.1.jar:lib/prefuse.jar
+MainClass=nl.cwi.sen1.visplugin.ExampleVisualizationController
+Packages=nl.cwi.sen1.visplugin,nl.cwi.sen1.visplugin.screenshotmaker
+TestClass=
+ToolBusFlags=-I${prefix}/share/vis-plugin

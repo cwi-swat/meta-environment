@@ -1,0 +1,9 @@
+#include <vpcp.tb>
+#include <vpitest.tb>
+
+%% Start The stub, the VPCP starts itself.
+toolbus(VPISTUB, NOTIFY-START)
+
+process NOTIFY-START is
+  %% Let the TestCase know when the Toolbus is initialized and started.
+  printf("Toolbus started...\n")
