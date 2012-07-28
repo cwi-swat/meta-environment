@@ -1,0 +1,16 @@
+Index: spec/Makefile.am
+===================================================================
+--- spec/Makefile.am	(revision 29439)
++++ spec/Makefile.am	(working copy)
+@@ -3,9 +3,9 @@
+ pkgdata_DATA = rascal.tbl rascal-header.tbl
+ 
+ rascal.tbl: ${top_srcdir}/spec/languages/rascal/syntax/*.sdf
+-	${PGEN_PREFIX}/bin/sdf2table -c -m languages/rascal/syntax/RascalForConcreteSyntax -p "${top_srcdir}/spec:${SDF_LIBRARY_PREFIX}/share/sdf-library/library" -o $@
++	/ufs/sen1/software/installed/PGen/bin/sdf2table -c -m languages/rascal/syntax/RascalForConcreteSyntax -p "${top_srcdir}/spec:${SDF_LIBRARY_PREFIX}/share/sdf-library/library" -o $@
+ 
+ rascal-header.tbl: ${top_srcdir}/spec/languages/rascal/syntax/*.sdf
+-	${PGEN_PREFIX}/bin/sdf2table -c -m languages/rascal/syntax/RascalForImportExtraction -p ${top_srcdir}/spec:${SDF_LIBRARY_PREFIX}/share/sdf-library/library -o $@
++	/ufs/sen1/software/installed/PGen/bin/sdf2table -c -m languages/rascal/syntax/RascalForImportExtraction -p ${top_srcdir}/spec:${SDF_LIBRARY_PREFIX}/share/sdf-library/library -o $@
+ 
+ CLEANFILES=$(wildcard *.tbl)

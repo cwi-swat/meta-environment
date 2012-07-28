@@ -1,0 +1,13 @@
+Index: utils/sdf-modules/src/main.c
+===================================================================
+--- utils/sdf-modules/src/main.c	(revision 29361)
++++ utils/sdf-modules/src/main.c	(working copy)
+@@ -19,7 +19,7 @@
+ /*{{{  defines */
+ 
+ #define SEP '/'
+-#define PATH_LEN (_POSIX_PATH_MAX)
++#define PATH_LEN (256)
+ 
+ /*}}}  */
+ /*{{{  variables */

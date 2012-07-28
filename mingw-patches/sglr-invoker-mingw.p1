@@ -1,0 +1,54 @@
+Index: buildCompleteLib.sh
+===================================================================
+--- buildCompleteLib.sh	(revision 30780)
++++ buildCompleteLib.sh	(working copy)
+@@ -1,23 +0,0 @@
+-#!/bin/sh
+-
+-# Find all .a files located in dependencies.
+-ALL_ARCHIVES=""
+-for dep in ${ALL_DEPS}; do
+-   prefix=`pkg-config --variable prefix ${dep}`
+-   for library in `find ${prefix}/lib/lib*.a`; do
+-      if [ "`echo '${ALL_ARCHIVES}' | grep ${library}`" == "" ]; then
+-         ALL_ARCHIVES="${ALL_ARCHIVES} ${library}"
+-      fi
+-   done
+-done
+-
+-# Extract all .o files from the .a files. 
+-mkdir -p ${TOP_DIR}/libbuild
+-cd ${TOP_DIR}/libbuild
+-for archive in ${ALL_ARCHIVES}; do 
+-   ar -x ${archive}
+-done
+-cd -
+-ALL_OBJECTS="`find ../libbuild/*.o | grep -v SGLRInvoker | grep -v 'parsetree-spec'`"
+-
+-echo $ALL_OBJECTS
+Index: lib/Makefile.am
+===================================================================
+--- lib/Makefile.am	(revision 30780)
++++ lib/Makefile.am	(working copy)
+@@ -1,6 +1,6 @@
+ include $(top_srcdir)/Makefile.meta
+ 
+-lib_LTLIBRARIES = libSGLRInvoker.la libCompleteSGLR.la
++lib_LTLIBRARIES = libSGLRInvoker.la
+ 
+ AM_CPPFLAGS = -I$(srcdir)
+ 
+@@ -31,13 +31,3 @@
+         $(SGLR_LIBS) \
+         $(C_LIBRARY_LIBS)
+ 
+-libCompleteSGLR_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+-libCompleteSGLR_la_LIBADD = $(shell \
+-                        export TOP_DIR="$(top_srcdir)"; \
+-                        export ALL_DEPS="$(PACKAGE_ALL_DEPS)"; \
+-                        export PREFIX="$(prefix)"; \
+-                        export PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"; \
+-                        . $(top_srcdir)/buildCompleteLib.sh)
+-libCompleteSGLR_la_SOURCES = SGLRInvoker.c parsetree-spec.c
+-
+-CLEANFILES += ../libbuild/*.o

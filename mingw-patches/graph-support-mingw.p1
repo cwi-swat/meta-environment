@@ -1,0 +1,64 @@
+Index: utils/layoutgraph/layout.c
+===================================================================
+--- utils/layoutgraph/layout.c	(revision 29361)
++++ utils/layoutgraph/layout.c	(working copy)
+@@ -6,7 +6,6 @@
+ #include <unistd.h>
+ #include <errno.h>
+ #include <sys/types.h>
+-#include <sys/wait.h>
+ #include <assert.h>
+ #include "dot.h"
+ #include "Graph.h"
+@@ -278,20 +277,15 @@
+ 
+ Graph layoutGraph(Graph graph)
+ {
+-  char dot_input[] = "/tmp/dotto-XXXXXX";
+-  char dot_output[] = "/tmp/dotfrom-XXXXXX";
++  char *dot_input;
++  char *dot_output;
+   int fd;
+   FILE *f;
+   char invoke_dot[BUFSIZ];
+   extern FILE *yyin;
+ 
+-  fd = mkstemp(dot_input);
+-  if (fd < 0) {
+-    perror("mkstemp:dot_input");
+-    return NULL;
+-  }
+-
+-  f = fdopen(fd, "w");
++  dot_input = tempnam(".", "dotto");
++  f = fopen(dot_input, "w");
+   if (f == NULL) {
+     perror("fdopen:dot_input");
+     return NULL;
+@@ -307,14 +301,9 @@
+     perror("fclose:dot_input");
+     return NULL;
+   }
+-
+-  fd = mkstemp(dot_output);
+-  if (fd < 0) {
+-    perror("mkstemp:dot_output");
+-    return NULL;
+-  }
+-
+-  yyin = fdopen(fd, "r");
++  
++  dot_output = tempnam(".", "dotfrom");
++  yyin = fopen(dot_output, "r");
+   if (yyin == NULL) {
+     perror("fdopen:dot_output");
+     return NULL;
+@@ -327,7 +316,7 @@
+ 	    perror("could not exec dot");
+ 	    return NULL;
+     }
+-    else if (WEXITSTATUS(result) != 0) {
++    else if (result != 0) {
+ 	ATwarning("execution of dot failed");
+ 	return NULL;
+     }
