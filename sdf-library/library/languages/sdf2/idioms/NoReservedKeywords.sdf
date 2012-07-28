@@ -1,0 +1,19 @@
+module languages/sdf2/idioms/NoReservedKeywords
+
+exports
+
+sorts S E
+
+context-free start-symbols
+  S 
+
+lexical syntax
+  [A-Za-z][A-Za-z0-9]* -> E
+  [\ \t\n]             -> LAYOUT
+
+context-free syntax
+  "IF" E "THEN" S "ELSE" S  -> S
+  E "=" E ";"               -> S
+
+%% example term:
+%% IF IF THEN THEN = ELSE; ELSE ELSE = THEN;

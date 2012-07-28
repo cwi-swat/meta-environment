@@ -1,0 +1,6 @@
+module languages/fdl/syntax/Names
+
+imports languages/fdl/syntax/AtomicFeatures
+	languages/fdl/syntax/CompositeFeatures
+
+ 

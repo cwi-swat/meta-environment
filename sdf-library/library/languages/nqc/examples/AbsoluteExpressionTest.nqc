@@ -1,0 +1,10 @@
+task main()
+{
+	int a;
+	a = abs(3);
+	a = abs(a);
+	abs((a+1));
+	abs(-3);
+}
+
+

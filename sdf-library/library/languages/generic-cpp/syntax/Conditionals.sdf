@@ -1,0 +1,25 @@
+module languages/generic-cpp/syntax/Conditionals[
+  Identifier
+  Condition
+  Body
+  Result
+]
+
+exports
+  sorts IfPart ElifPart ElsePart
+
+context-free syntax
+  IfPart Body ElifPart[[Body]]* ElsePart[[Body]]? "#" "endif" -> Result
+  
+  "#" "if" Condition      -> IfPart
+  "#" "ifdef" Identifier  -> IfPart
+  "#" "ifndef" Identifier -> IfPart
+  
+  "#" "elif" Condition Body -> ElifPart[[Body]]
+  "#" "else" Body            -> ElsePart[[Body]]
+
+   "if" | "ifdef" | "ifndef" | "elif" | "else" | "endif" -> Identifier {reject}
+
+lexical restrictions
+  "if" -/- [d].[e].[f]
+  "if" -/- [n].[d].[e].[f]

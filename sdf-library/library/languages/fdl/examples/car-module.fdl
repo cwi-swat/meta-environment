@@ -1,0 +1,13 @@
+module Payment
+  Payment: one-of(cash, creditcard)
+end
+
+module Car
+  Car: all(carBody, Transmission, Engine, HorsePower, pullsTrailer?)
+  Engine: more-of(gasoline, electric)
+  HorsePower: one-of(high, medium, low)
+end
+
+module CheapCar < Car
+  HorsePower: low
+end

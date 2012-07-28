@@ -1,0 +1,49 @@
+begin %% an example Pico program
+%% comments will be in italics off course!
+declare
+  input : natural,
+  output : string,
+  i : natural,
+  j : natural,
+  k : natural,
+  s : string,
+  t : % funny how this is a comment % string
+;
+input := 14;
+if
+  input
+then
+  i := input;
+  s := "";
+  while
+    i
+  do
+    j := 0;
+    k := 0;
+    while
+      i
+    do
+      i := i - 1;
+      if
+        j
+      then
+        j := 0;
+        k := k + 1
+      else
+        j := 1
+      fi
+    od;
+    if
+      j
+    then
+      t := "1"
+    else
+      t := "0"
+    fi;
+    s := t || s;
+    i := k
+  od;
+  output := s
+else
+  output := "0"
+fi end

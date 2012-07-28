@@ -1,0 +1,89 @@
+$Id$
+
+Tue Jan 27 16:36:60 EST 2009 <basten@cwi.nl>
+ * library/languages/aterm/syntax/IntCon.sdf: hid import of basic/Whitespace
+	
+Wed May  9 08:36:05 CEST 2007 <jurgenv@cwi.nl>
+ * library/basic/Configuration.sdf: removed old language-extension
+   configuration options and replaced by editor(process,language,extension)
+
+Thu May  3 10:26:31 CEST 2007 <jurgenv@cwi.nl>
+ * library/basic/RStores.sdf: fixed ambiguity reported in #748
+
+Thu Mar 15 12:40:47 CET 2007 <{economop,jurgenv,kooiker}@cwi.nl>
+ * library/languages/asfix/syntax/Symbol.sdf:
+   - Added definition of cilit
+ * library/languages/asfix/syntax/Tree.sdf:
+   - Changed tree cycle production arguments
+
+Wed Mar  7 16:32:49 CET 2007 <kooiker@cwi.nl>
+ * library/basic/ParsetreeCon.sdf:
+   - exports sorts Parsetree
+
+Fri Feb  2 11:40:48 CET 2007 <jurgenv@cwi.nl>
+ * languages/c: renamed to ansi-c to prevent confusion. The idea is to
+   include a iso-c-99 grammar in the near future.
+
+2007-01-03    <storm@cwi.nl>
+
+  * library/basic/RStores: Integer, not IntCon is a now an RElem.
+  * library/basic/IntCon: added priorities to disallow ---++-+n Integers. 
+
+
+2006-12-14    <storm@cwi.nl>
+
+  * library/basic/RStores.sdf: imported basic/BoolCon.
+
+  * library/basic/RStores.sdf: Renamed cons/label attributes to
+    prevent name clashes with ATerm and Java identifiers when
+    generating a Java API using apigen. 
+
+
+2006-12-14    <storm@cwi.nl>
+
+ * library/basic/Rstores.sdf: changed "name" labels to "type-name" and
+   "parameter-name" respectively, as it bites sdf2-to-java generated
+   apis.
+
+2006-12-13    <storm@cwi.nl>
+ * library/basic/Rstores.sdf: made a proper syntax (with curlies and all), and
+   added cons attributes and labels for imploded apigen.
+ * library/basic/IntCon: added module with lexical syntax for possibly
+   negative integer constants.
+
+Mon Nov 13 10:42:34 CET 2006 <economop@cwi.nl>
+ * library/languages/sdf2/syntax/{Properties,Nullables,RightNullables}.sdf:
+   removed and implemented in the branch: enable-rn-analysis.
+
+Tue Oct 31 13:56:32 CET 2006 <jurgenv@cwi.nl>
+ * library/basic/BoolCon.sdf: removed BoolAnd, BoolOr and stuff because
+   that breaks the bootstrap process, and it is not used by
+   basic/Booleans anyway.
+ * library/basic/Configuration.sdf: added support for all kinds of
+   mouse clicks
+
+Mon Oct 16 10:05:08 CEST 2006 <kooiker@cwi.nl>
+ * library/languages/java:
+   - Added Java grammar
+
+Wed Sep 27 15:57:01 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/syntax/Nullables.sdf: Modified syntax to work with
+   Productions instead of Symbols.
+
+Wed Sep 13 15:57:47 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/syntax/Properties.sdf: Added Properties production 
+   to be consistent with other definitions.
+
+Wed Sep  6 16:06:42 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/syntax/{Properties,Nullables,RightNullables}.sdf:
+   added a new type of 'Grammar' which contains derived facts from
+   SDF2 syntax definitions. These facts may be used by static checkers
+   or by the parse table generator. So far, we have a list of all
+   nullable non-terminals, and a list of all right nullable productions.
+   This will be used for constructing RN tables for the RNGLR algorithm.
+
+Mon Feb 13 13:47:36 CET 2006 <jurgenv@cwi.nl>
+ * package: Initial version 1.0
+ * library: Copied all syntax definitions from asf-library
+
+

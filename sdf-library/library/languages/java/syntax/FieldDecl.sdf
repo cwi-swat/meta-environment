@@ -1,0 +1,19 @@
+module languages/java/syntax/FieldDecl
+
+imports languages/java/syntax/JavaTypes
+imports languages/java/syntax/Expressions 
+imports languages/java/syntax/Modifiers
+
+exports
+  sorts FieldDeclaration VariableDeclaratorId VariableDeclarator ArrayInitializer VariableInitializer
+
+  context-free syntax
+    Modifier* Type {VariableDeclarator ","}+ ";" -> FieldDeclaration {cons("comma-semicolon")}
+    VariableDeclaratorId -> VariableDeclarator {cons("VariableDeclaratorId")}
+    VariableDeclaratorId "=" VariableInitializer -> VariableDeclarator {cons("equal2")}
+    Identifier -> VariableDeclaratorId {cons("Identifier1")}
+    VariableDeclaratorId "[" "]" -> VariableDeclaratorId {cons("VariableDeclaratorId1")}
+    Expression -> VariableInitializer {cons("Expression")}
+    ArrayInitializer -> VariableInitializer {cons("ArrayInitializer")}
+    "{" {VariableInitializer ","}* ","? "}" -> ArrayInitializer {cons("comma-comma")}
+

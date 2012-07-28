@@ -1,0 +1,31 @@
+module languages/java/syntax/JavaTypes
+
+imports languages/java/syntax/Names
+
+exports
+  sorts ClassType InterfaceType ClassOrInterfaceType PrimitiveType ReferenceType Type ArrayType FloatingPointType IntegralType NumericType
+
+  context-free syntax
+    PrimitiveType -> Type {cons("PrimitiveType")}
+    ReferenceType -> Type {cons("ReferenceType")}
+    NumericType -> PrimitiveType {cons("NumericType")}
+    "boolean" -> PrimitiveType {cons("boolean")}
+    IntegralType -> NumericType {cons("IntegralType")}
+    FloatingPointType -> NumericType {cons("FloatingPointType")}
+    "byte" -> IntegralType {cons("byte")}
+    "short" -> IntegralType {cons("short")}
+    "int" -> IntegralType {cons("int")}
+    "long" -> IntegralType {cons("long")}
+    "char" -> IntegralType {cons("char")}
+    "float" -> FloatingPointType {cons("float")}
+    "double" -> FloatingPointType {cons("double")}
+    ClassOrInterfaceType -> ReferenceType {cons("ClassOrInterfaceType")}
+    ArrayType -> ReferenceType {cons("ArrayType")}
+    Name -> ClassOrInterfaceType {cons("Name")}
+    ClassOrInterfaceType -> ClassType {cons("ClassOrInterfaceType1")}
+    ClassOrInterfaceType -> InterfaceType {cons("ClassOrInterfaceType2")}
+    PrimitiveType "[" "]" -> ArrayType {cons("PrimitiveType1")}
+    Name "[" "]" -> ArrayType {cons("Name1")}
+    ArrayType "[" "]" -> ArrayType {cons("ArrayType1")}
+    Type "." "class" -> Name {cons("class")}
+

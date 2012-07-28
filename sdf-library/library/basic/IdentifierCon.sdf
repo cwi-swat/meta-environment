@@ -1,0 +1,14 @@
+module basic/IdentifierCon
+
+exports
+
+sorts IdCon
+
+lexical syntax
+
+head:[A-Za-z] tail:[A-Za-z\-0-9]* -> IdCon {cons("default")}
+
+lexical restrictions
+
+IdCon -/- [A-Za-z\-0-9]
+

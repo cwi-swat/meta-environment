@@ -1,0 +1,12 @@
+module languages/generic-cpp/syntax/Whitespace
+
+exports
+
+lexical syntax
+
+[\ \t\n\r\11\12] -> LAYOUT
+
+context-free restrictions
+
+LAYOUT? -/- [\ \t\n\r\11\12]
+

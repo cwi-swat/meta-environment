@@ -1,0 +1,106 @@
+module languages/nqc/syntax/NQC-Expressions
+
+imports languages/nqc/syntax/NQC-Lexicals
+
+exports
+  sorts Expression
+
+  context-free syntax
+    ConstantExpression       -> Expression {cons("constant")}
+    VarNameExpression        -> Expression {cons("varname")}
+
+  sorts ConstantExpression
+  context-free syntax
+    NUMBER -> ConstantExpression 
+
+  sorts VarNameExpression
+  context-free syntax
+    VarName -> VarNameExpression
+
+  sorts VarName
+  context-free syntax
+    Identifier -> VarName
+
+  context-free syntax
+    VarName "++" -> Expression {cons("increase")}
+    VarName "--" -> Expression {cons("decrease")}
+
+  context-free syntax
+    "abs" "(" Expression ")" -> Expression {cons("abs")}
+
+  context-free syntax
+    "sign" "(" Expression ")" -> Expression {cons("sign")}
+
+  context-free syntax
+    "-" Expression -> Expression {cons("umin")}
+    "!" Expression -> Expression {cons("not")}
+
+  context-free syntax
+    Expression "+" Expression -> Expression {left, cons("plus")} 
+    Expression "-" Expression -> Expression {left, cons("minus")}
+    Expression "*" Expression -> Expression {left, cons("times")}
+    Expression "/" Expression -> Expression {left, cons("div")}
+    Expression "%" Expression -> Expression {left, cons("mod")} 
+
+  context-free syntax
+    Expression "?" Expression ":" Expression -> Expression {cons("cond")}
+
+  context-free syntax 
+    "true" -> Expression {cons("true")}
+    "false" -> Expression {cons("false")}
+
+  context-free syntax
+    Expression "==" Expression -> Expression {left, cons("equal")}
+    Expression "!=" Expression -> Expression {left, cons("notequal")}
+
+  context-free syntax
+    Expression "<" Expression  -> Expression {left, cons("less")}
+    Expression ">" Expression  -> Expression {left, cons("gtr")}
+    Expression "<=" Expression -> Expression {left, cons("leq")}
+    Expression ">=" Expression -> Expression {left, cons("geq")}
+
+  context-free syntax 
+    Expression "&&" Expression -> Expression {left, cons("and")}
+    Expression "||" Expression -> Expression {left, cons("or")}
+
+  context-free syntax
+    "(" Expression ")" -> Expression {bracket}
+
+  context-free syntax
+    FunctionName "(" ArgumentList ")" -> Expression {cons("call")}
+
+  sorts FunctionName
+  context-free syntax
+    Identifier -> FunctionName {cons("fname")}
+
+  sorts ArgumentList
+  context-free syntax
+    {Expression ","}* -> ArgumentList
+
+  context-free syntax
+    ArrayName -> Expression {cons("array")}
+
+  sorts ArrayName
+  context-free syntax
+    Identifier "[" ConstantExpression "]" -> ArrayName {cons("constant")}
+    Identifier "[" VarNameExpression "]"  -> ArrayName {cons("variable")}
+
+  context-free priorities
+    {"-" Expression -> Expression
+     "!" Expression -> Expression} >
+    {left: Expression "*" Expression -> Expression
+           Expression "/" Expression -> Expression
+           Expression "%" Expression -> Expression} >
+    {left: Expression "+" Expression -> Expression
+           Expression "-" Expression -> Expression} >
+    {left: 
+    Expression "<" Expression  -> Expression 
+    Expression ">" Expression  -> Expression
+    Expression "<=" Expression -> Expression
+    Expression ">=" Expression -> Expression} >
+    {left: 
+    Expression "==" Expression -> Expression
+    Expression "!=" Expression -> Expression} >
+    Expression "&&" Expression -> Expression >
+    Expression "||" Expression -> Expression >
+    Expression "?" Expression ":" Expression -> Expression

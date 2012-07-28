@@ -1,0 +1,12 @@
+module basic/File
+
+imports basic/Path
+imports basic/StrCon
+
+exports
+
+context-free start-symbols File
+
+sorts File
+context-free syntax
+  "file" "(" path:Path "," name:StrCon "," extension:StrCon ")" -> File {cons("file")}

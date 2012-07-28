@@ -1,0 +1,11 @@
+module basic/Comments
+
+imports
+  basic/Whitespace
+
+exports
+  lexical syntax
+    "%%" line:~[\n]* "\n"	-> LAYOUT {cons("line"),category("Comment")}
+    "%" content:~[\%\n]+ "%"	-> LAYOUT {cons("nested"),category("Comment")}
+  context-free restrictions
+    LAYOUT? -/- [\%]

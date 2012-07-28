@@ -1,0 +1,16 @@
+module basic/ReadWriteCon
+
+imports basic/BytesCon
+imports basic/Errors
+
+exports 
+
+sorts Read Write
+
+context-free syntax
+
+  "read" "(" value:Bytes ")"    -> Read  {cons("success")}
+  "read-error" "(" Summary ")"  -> Read  {cons("failure")}
+
+  "written"                     -> Write {cons("success")}
+  "write-error" "(" Summary ")" -> Write {cons("failure")}

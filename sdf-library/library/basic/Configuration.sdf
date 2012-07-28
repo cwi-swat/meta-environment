@@ -1,0 +1,69 @@
+module basic/Configuration
+
+imports basic/Keys
+imports basic/Colors
+
+exports
+
+context-free start-symbols Configuration
+
+sorts TermCon NatCon StrCon
+
+sorts Configuration
+context-free syntax
+  "configuration" "(" "[" list:{Property ","}* "]" ")" -> Configuration {cons("configuration")} 
+
+sorts Property
+context-free syntax
+  "import" "(" path:StrCon ")" -> Property {cons("import")}
+  "load-script" "(" path:StrCon ")" -> Property {cons("script")}
+  "script-path" "(" path:StrCon ")" -> Property {cons("script-path")}
+
+  "action" "(" "[" list:{ActionDescription ","}* "]" "," action:StrCon ")" -> Property {cons("action")}
+  "editor" "(" editor:StrCon "," language:StrCon "," extension:StrCon ")" -> Property {cons("editor")}
+  "library-path" "(" label:StrCon "," path:StrCon ")" -> Property {cons("library-path")}
+  "module-path" "(" label:StrCon "," path:StrCon ")" -> Property {cons("module-path")}
+  "text-category" "(" category:TextCategoryName "," "[" map:{TextAttribute ","}* "]" ")" -> Property {cons("text-category")}
+
+sorts ActionDescription
+context-free syntax
+  "description" "(" context:TermCon "," event:Event ")" -> ActionDescription {cons("description")}
+
+sorts Event
+context-free syntax
+  "popup" -> Event {cons("popup")}
+  "click" "(" "[" list:{KeyModifier ","}* "]" "," button:VirtualButton ")" -> Event {cons("click")}
+
+  "icon" "(" title:StrCon "," path:StrCon ")" -> Event {cons("icon")}
+  "menu" "(" "[" labels:{Item ","}* "]" "," info:StrCon ")" -> Event {cons("menu")}
+  "menu-shortcut" "(" "[" labels:{Item ","}* "]" "," shortcut:ShortCut "," info:StrCon ")" -> Event {cons("menu-shortcut")}
+
+sorts Item
+context-free syntax
+  "label" "(" name:StrCon ")" -> Item {cons("label")}
+
+sorts TextCategoryName
+context-free syntax
+  "focus" -> TextCategoryName {cons("focus")}
+  "selection" -> TextCategoryName {cons("selection")}
+  "normal" -> TextCategoryName {cons("normal")}
+  "extern" "(" name:StrCon ")" -> TextCategoryName {cons("extern")}
+
+sorts TextAttribute
+context-free syntax
+  "foreground-color" "(" color:Color ")" -> TextAttribute {cons("foreground-color")}
+  "background-color" "(" color:Color ")" -> TextAttribute {cons("background-color")}
+  "style" "(" style:TextStyle ")" -> TextAttribute {cons("style")}
+  "font" "(" name:StrCon ")" -> TextAttribute {cons("font")}
+  "size" "(" point:NatCon ")" -> TextAttribute {cons("size")}
+
+sorts ShortCut
+context-free syntax
+  "shortcut" "(" "[" list:{KeyModifier ","}* "]" "," key:VirtualKey ")" -> ShortCut {cons("shortcut")}
+
+sorts TextStyle
+context-free syntax
+  "bold" -> TextStyle {cons("bold")}
+  "italics" -> TextStyle {cons("italics")}
+  "underlined" -> TextStyle {cons("underlined")}
+

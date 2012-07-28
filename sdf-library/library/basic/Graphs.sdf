@@ -1,0 +1,62 @@
+module languages/rscript/syntaxGraph
+
+imports languages/aterm/syntax/ATerms basic/Integers basic/Strings
+
+exports
+   sorts 
+	Graph NodeList Node NodeId
+	AttributeList Attribute Color
+	Shape Style Direction EdgeList Edge Polygon Point
+
+   context-free syntax
+	graph(NodeList, EdgeList,AttributeList)		-> Graph
+	"[" {Node ","}* "]"				-> NodeList
+	node(NodeId, AttributeList)			-> Node
+	String						-> NodeId
+	"[" {Attribute ","}* "]"			-> AttributeList
+
+	bounding-box(Point, Point)			-> Attribute
+	color(Color)					-> Attribute
+	curve-points(Polygon)				-> Attribute
+	direction(Direction)				-> Attribute
+	fill-color(Color)				-> Attribute
+	info(String, ATerm)				-> Attribute	
+	label(String)					-> Attribute
+	location(Integer,Integer)			-> Attribute
+	shape(Shape)					-> Attribute
+	size(Integer, Integer)				-> Attribute
+	style(Style)					-> Attribute
+
+	rgb(Integer, Integer, Integer)			-> Color
+
+	"bold"						-> Style
+	"dashed"					-> Style
+	"dotted"					-> Style
+	"filled"					-> Style
+	"invisible"					-> Style
+	"solid"						-> Style
+
+	"box"						-> Shape
+	"circle"					-> Shape
+	"diamond"					-> Shape
+	"egg"						-> Shape
+	"ellipse"					-> Shape
+	"hexagon"					-> Shape
+	"house"						-> Shape
+	"octagon"					-> Shape
+	"parallelogram"					-> Shape	
+	"plaintext"					-> Shape
+	"trapezium"					-> Shape
+	"triangle"					-> Shape
+
+	"forward"					-> Direction
+	"back"						-> Direction
+	"both"						-> Direction
+	"none"						-> Direction
+
+	"[" {Edge ","}*	"]"				-> EdgeList
+	edge(NodeId, NodeId, AttributeList)		-> Edge
+
+	"[" {Point ","}* "]"				-> Polygon
+	point(Integer, Integer)				-> Point
+		

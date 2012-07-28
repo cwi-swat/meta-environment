@@ -1,0 +1,15 @@
+
+task main() 
+{
+	;;;;;;;;;;;;;;;
+
+	if(false)
+	;
+	else
+	;
+	
+	while(true){;;}
+	
+	until(false);
+
+}

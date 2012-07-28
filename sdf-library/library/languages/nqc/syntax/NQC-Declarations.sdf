@@ -1,0 +1,23 @@
+module languages/nqc/syntax/NQC-Declarations
+
+imports languages/nqc/syntax/NQC-Types 
+        languages/nqc/syntax/NQC-Expressions
+
+exports
+  sorts VarDeclarationList
+  context-free syntax
+    (TypeVarsDeclaration ";")+ -> VarDeclarationList
+
+  sorts TypeVarsDeclaration
+  context-free syntax
+    TypeDenoter VarMultipleDeclaration -> TypeVarsDeclaration {cons("typevarsdecl")}
+
+  sorts VarMultipleDeclaration
+  context-free syntax
+    {VarDeclaration ","}+  -> VarMultipleDeclaration
+
+  sorts VarDeclaration
+  context-free syntax
+    VarName "=" Expression             -> VarDeclaration {cons("assign")}
+    VarName                            -> VarDeclaration {cons("simple")}
+    VarName "[" ConstantExpression "]" -> VarDeclaration {cons("array")}

@@ -1,0 +1,12 @@
+module languages/cpp/syntax/Path
+
+exports
+
+lexical syntax
+        ~[\"\n\>]+ -> Path
+
+lexical restrictions
+        Path -/- ~[\"\n\>]
+
+hiddens
+sorts Path

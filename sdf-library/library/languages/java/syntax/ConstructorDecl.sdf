@@ -1,0 +1,16 @@
+module languages/java/syntax/ConstructorDecl
+
+imports languages/java/syntax/Statements 
+imports languages/java/syntax/MethodDecl 
+imports languages/java/syntax/Modifiers
+
+exports
+  sorts ConstructorDeclaration ConstructorBody ExplicitConstructorInvocation ConstructorDeclarator
+
+  context-free syntax
+    Modifier* ConstructorDeclarator Throws? ConstructorBody -> ConstructorDeclaration {cons("Modifier-s-ConstructorDeclarator-Throws-opt-ConstructorBody")}
+    SimpleName "(" {FormalParameter ","}* ")" -> ConstructorDeclarator {cons("comma5")}
+    "{" ExplicitConstructorInvocation? BlockStatement* "}" -> ConstructorBody {cons("ExplicitConstructorInvocation-opt-BlockStatement-s")}
+    "this" "(" {Expression ","}* ")" ";" -> ExplicitConstructorInvocation {cons("this-comma-semicolon")}
+    "super" "(" {Expression ","}* ")" ";" -> ExplicitConstructorInvocation {cons("super-comma-semicolon")}
+

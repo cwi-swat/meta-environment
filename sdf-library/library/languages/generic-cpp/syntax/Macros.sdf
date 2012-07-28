@@ -1,0 +1,51 @@
+module languages/generic-cpp/syntax/Macros[
+  Identifier
+  Expression
+  Result
+]
+
+imports languages/generic-cpp/syntax/Files
+
+exports
+  sorts RestrictedIdentifier String
+
+context-free syntax
+  "#"  "define"  Identifier                                   -> Result
+  "#"  "define"  Identifier  Expression                            -> Result
+  "#"  "define"  Identifier  "("  {(Identifier ) ","}* ")"  Expression  -> Result
+  "#"  "undef"  Expression                                        -> Result
+  "#"  "line"  Expression  Filename?                               -> Result
+  "#"  "error"  Expression?                                       -> Result
+  "#"  "pragma"  Expression?                                      -> Result
+  "#"                                                           -> Result
+
+context-free syntax
+ "#" RestrictedIdentifier                                       -> String
+  Identifier "##" Identifier                                    -> Identifier {left}
+  "defined" Identifier                                          -> Expression
+  "defined"                                                     -> Identifier {reject}
+
+context-free syntax
+  Identifier    -> RestrictedIdentifier
+  "define"      -> RestrictedIdentifier {reject}
+  "undef"       -> RestrictedIdentifier {reject}
+  "if"          -> RestrictedIdentifier {reject}
+  "ifdef"       -> RestrictedIdentifier {reject}
+  "ifndef"      -> RestrictedIdentifier {reject}
+  "elif"        -> RestrictedIdentifier {reject}
+  "else"        -> RestrictedIdentifier {reject}
+  "line"        -> RestrictedIdentifier {reject}
+  "error"       -> RestrictedIdentifier {reject}
+  "pragma"      -> RestrictedIdentifier {reject}
+
+context-free syntax
+  "__LINE__" -> Expression
+  "__LINE__" -> Identifier {reject}
+  "__FILE__" -> Expression
+  "__FILE__" -> Identifier {reject}
+  "__DATE__" -> Expression
+  "__DATE__" -> Identifier {reject}
+  "__TIME__" -> Expression
+  "__TIME__" -> Identifier {reject}
+  "__STDC__" -> Expression
+  "__STDC__" -> Identifier {reject}

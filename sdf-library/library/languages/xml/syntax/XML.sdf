@@ -1,0 +1,193 @@
+module languages/xml/syntax/XML
+  %% Transliteration of the XML v1.0 standard.
+  %% Rule numbers refer to the corresponding rule in the standard.
+  %% Known issues:
+  %% - No support for UniCode
+  %% - The Prolog element becomes ambiguous when the doctype declaration is missing.
+  %% Some rules are still commented out since ambihguity issues have not yet been resolved.
+exports
+  context-free start-symbols
+      Document 
+    sorts
+      AttDef AttType AttValue AttValueD AttValueS AttlistDecl Attribute CDSect CP Char CharData CharRef
+      Children Choice Comment ConditionalSect Content ContentSpec Dash DefaultDecl Digit Document
+      DocTypeDecl Element ETag ElementDecl EmptyElementTag EncName
+      EncodingDecl EntityDecl EntityDef EntityRef EntityValue EntityValueD EntityValueS EnumeratedType
+      Enumeration Eq %ExtParsedEnt ExtPe% ExtSubset ExtSubsetDecl ExternalId GEDecl
+      ISO639Code IanaCode %Ignore IgnoreSect IgnoreSectContents% IncludeSect LangCode
+      LanguageId Letter MarkUpDecl Misc Mixed NDataDecl Name NameChar Names Nmtoken
+      Nmtokens NonEmptyElementTag NotationDecl NotationType PEDecl PEDef PEReference PI PITarget Prolog
+      PubidChar PubidLiteral PubidLiteralD PubidLiteralS PublicID Reference S SDDecl STag Seq StringType SubCode
+      SystemLiteral SystemLiteralD SystemLiteralS TextDecl TokenizedType UserCode VersionInfo VersionNum XMLDecl
+
+    sorts %% Auxiliary sorts for the benefit of lexical equations
+      EV-CharD EV-CharS AV-CharD AV-CharS SL-CharD SL-CharS
+exports
+ context-free syntax
+   %[ 1]%  Prolog Element %Misc*%                                     -> Document  {avoid} %% Element being parsed as Document
+ lexical syntax  
+   %[ 2]%   ~[]                                                       -> Char
+   %[ 3]%  [\ \t\n\r]+                                                -> S      {cons("xml-s")}
+   %[ 3]%  [\ \t\n\r]                                                 -> LAYOUT {cons("xml-layout")}
+           [a-zA-Z]                                                   -> Letter
+           [0-9]                                                      -> Digit
+   %[ 4]%  Letter | Digit | [\.\-\_\:]                                -> NameChar
+   %[ 5]%   (Letter | "_" | ":")  NameChar*                           -> Name {category("MetaKeyword")}
+ context-free syntax
+   %[ 6]%  Name*                                                      -> Names
+ lexical syntax
+   %[ 7]%  NameChar+                                                  -> Nmtoken   
+ context-free syntax
+   %[ 8]%  Nmtoken*                                                   -> Nmtokens                                            
+ lexical syntax
+          ~[\%\&\"]                                                   -> EV-CharD
+          ~[\%\&\']                                                   -> EV-CharS
+   %[ 9]%  [\"] ( EV-CharD | PEReference | Reference)* [\"]           -> EntityValueD
+   %[ 9]%  [\'] ( EV-CharS | PEReference | Reference)* [\']           -> EntityValueS
+           EntityValueS | EntityValueD                                -> EntityValue
+
+           ~[\<\&\"]                                                  -> AV-CharD
+           ~[\<\&\']                                                  -> AV-CharS
+   %[10]%  [\"] (AV-CharD | Reference)* [\"]                          -> AttValueD
+   %[10]%  [\'] (AV-CharS | Reference)* [\']                          -> AttValueS
+           AttValueS | AttValueD                                      -> AttValue
+ 
+           ~[\"]                                                      -> SL-CharD
+           ~[\']                                                      -> SL-CharS
+   %[11]%  [\"] SL-CharD* [\"]                                        -> SystemLiteralD
+           [\'] SL-CharS* [\']                                        -> SystemLiteralS
+           SystemLiteralS | SystemLiteralD                            -> SystemLiteral
+
+   %[12]%  [\"] PubidChar* [\"]                                       -> PubidLiteralD
+           [\'] PubidChar* [\']                                       -> PubidLiteralS
+           PubidLiteralS | PubidLiteralD                              -> PubidLiteral
+   %[13]%  [\ \n\t] | [ a-zA-Z0-9] | 
+           [\-\'\(\)\+\,\.\/\:\=\?\;\!\*\#\@\$\_\%]                   -> PubidChar
+
+   %[14]%  ~[\<\&]+                                                   -> CharData {avoid}
+           ~[\<\&]* "]]>" ~[\<\&]*                                    -> CharData {reject}
+   %[15]%  "<!--" (~[\-] | Dash)* "-->"                               -> Comment  {category("Comment")}
+           "-"                                                        -> Dash
+
+   %[16]%  "<?" PITarget (S Char*)? "?>"                              -> PI 
+
+   %[17]%  Name                                                       -> PITarget
+           [xX][mM][lL]                                               -> PITarget {reject}
+   %[18-21]% 
+           "<![CDATA[" (~[\]] | "]" | "]]")* "]]>"                    -> CDSect 
+
+ context-free syntax
+   %[22]%  XMLDecl? Misc* (DocTypeDecl Misc*)?                        -> Prolog
+
+   %[23]%  "<?xml" VersionInfo EncodingDecl? SDDecl? "?>"             -> XMLDecl 
+   %[24]%  "version" Eq (("\"" VersionNum "\"") | 
+                         ("'" VersionNum "'") )                        -> VersionInfo {prefer} %% over general Attribute
+
+ lexical syntax
+   %[25]%  S? "="  S?                                                 -> Eq
+   %[26]%  [a-zA-Z0-9\_\.\:\-]+                                       -> VersionNum
+
+ context-free syntax
+   %[27]%  Comment | PI                                               -> Misc
+
+   %[28]%  "<!DOCTYPE"  Name ExternalId?
+                   ("[" (MarkUpDecl | PEReference)* "]" )? ">"        -> DocTypeDecl
+   %[29]%  ElementDecl | AttlistDecl | EntityDecl | 
+           NotationDecl | PI | Comment                                -> MarkUpDecl
+
+   %[30]%  TextDecl? ExtSubsetDecl                                    -> ExtSubset
+   %[31]%  (MarkUpDecl | ConditionalSect | PEReference)*              -> ExtSubsetDecl
+
+   %[32]%  "standalone" Eq (("'" ("yes" | "no") "'") | 
+                            ("\"" ("yes" | "no") "\""))               -> SDDecl
+ lexical syntax
+   %[33]%  LangCode ("-" SubCode)*                                    -> LanguageId
+   %[34]%  ISO639Code | IanaCode | UserCode                           -> LangCode
+   %[35]%  [a-zA-Z] [a-zA-Z]                                          -> ISO639Code
+   %[36]%  [iI] "-" [a-zA-Z]+                                         -> IanaCode
+   %[37]%  [xX] "-" [a-zA-Z]+                                         -> UserCode
+   %[38]%  [a-zA-Z]+                                                  -> SubCode 
+
+ context-free syntax
+   %[39]%  EmptyElementTag | NonEmptyElementTag                       -> Element {prefer}
+           STag Content* ETag                                         -> NonEmptyElementTag 
+   %[40]%  "<" Name Attribute* ">"                                    -> STag
+   %[41]%  Name Eq AttValue                                           -> Attribute
+   %[42]%  "</" Name ">"                                              -> ETag
+   %[43]%  (Element | CharData | Reference | CDSect | PI | Comment)   -> Content
+   %[44]%  "<" Name Attribute* "/>"                                   -> EmptyElementTag 
+ 
+ context-free syntax
+   %[45]%  "<!ELEMENT"  Name ContentSpec ">"                          -> ElementDecl
+   %[46]%  "EMPTY" | "ANY" | Mixed | Children                         -> ContentSpec
+
+   %[47]%  (Choice | Seq)  ("?" | "*" | "+")?                         -> Children
+   %[48]%  (Name | Choice | Seq) ("?" | "*" | "+")?                   -> CP
+   %[49]%  "(" {CP "|"}+ ")"                                          -> Choice
+   %[50]%  "(" {CP ","}+ ")"                                          -> Seq
+
+   %[51]%  ( "(" "#PCDATA" ("|" Name)* ")*" )  | 
+           ( "(" "#PCDATA" ")" )                                      -> Mixed
+
+   %[52]%  "<!ATTLIST" S Name AttDef* ">"                             -> AttlistDecl
+   %[53]%  Name AttType DefaultDecl                                   -> AttDef
+ 
+   %[54]%  StringType | TokenizedType | EnumeratedType                -> AttType
+   %[55]%  "CDATA"                                                    -> StringType
+
+   %[56]%  "ID" | "IDREF" | "IDREFS" | "ENTITY" | "ENTITIES" | 
+           "NMTOKEN" | "NMTOKENS"                                     -> TokenizedType
+
+   %[57]%  NotationType | Enumeration                                 -> EnumeratedType
+   %[58]%  "NOTATION"  "(" {Name "|"}+ ")"                            -> NotationType
+   %[59]%  "(" {Nmtoken "|"}+ ")"                                     -> Enumeration
+
+   %[60]%  "#REQUIRED" | "#IMPLIED" | ("#FIXED"? AttValue)            -> DefaultDecl
+
+   %[61]%  IncludeSect %| IgnoreSect%                                   -> ConditionalSect
+   %[62]%  "<![" S? "INCLUDE" S? "[" ExtSubsetDecl "]]>"              -> IncludeSect
+%%   %[63]%  "<![" S? "IGNORE" S? "[" IgnoreSectContents* "]]>"         -> IgnoreSect
+%%   %[64]%  Ignore ("<![" IgnoreSectContents "]]>" Ignore)*            -> IgnoreSectContents
+%%   %[65]%  Char+                                                      -> Ignore {avoid}
+
+ lexical syntax
+   %[66]%  ("&#" [0-9]+ ";") | ("&#x" [0-9a-fA-F]+ ";")               -> CharRef
+   %[67]%  EntityRef | CharRef                                        -> Reference 
+   %[68]%  "&" Name ";"                                               -> EntityRef
+   %[69]%  "%" Name ";"                                               -> PEReference
+
+ context-free syntax
+   %[70]%  GEDecl | PEDecl                                            -> EntityDecl
+   %[71]%  "<!ENTITY" Name EntityDef ">"                              -> GEDecl
+   %[72]%  "<!ENTITY" "%" Name PEDef ">"                              -> PEDecl
+   %[73]%  EntityValue | (ExternalId NDataDecl?)                      -> EntityDef
+   %[74]%  EntityValue | ExternalId                                   -> PEDef
+
+   %[75]%  "SYSTEM"  SystemLiteral                                   -> ExternalId
+           "PUBLIC"  PubidLiteral SystemLiteral                      -> ExternalId
+
+   %[76]%  "NDATA" Name                                              -> NDataDecl
+
+   %[77]%  "<?xml" VersionInfo? EncodingDecl "?>"                    -> TextDecl
+
+%%   %[78]%  TextDecl? Content*                                         -> ExtParsedEnt
+%%   %[79]%  TextDecl? ExtSubsetDecl                                    -> ExtPe
+
+   %[80]%  "encoding" Eq (("\"" EncName "\"") | ("'" EncName "'"))   -> EncodingDecl
+
+ lexical syntax
+   %[81]%   [A-Za-z] ([A-Za-z0-9\.\_] | "-")*                         -> EncName
+
+ context-free syntax
+   %[82]%  "<!NOTATION" Name (ExternalId | PublicID) ">"              -> NotationDecl
+   %[83]%  "PUBLIC" PubidLiteral                                      -> PublicID
+ 
+ lexical restrictions %% Enforce longest match
+    S -/- [\ \t\n\r]
+    S? -/- [\ \t\n\r]
+    Name -/- [a-zA-Z0-9\.\-\_\:] 
+    CharData -/- ~[\<\&]
+    Dash -/- [\-]
+
+ context-free restrictions %% Enforce longest match
+    LAYOUT? -/- [\ \t\n\r]

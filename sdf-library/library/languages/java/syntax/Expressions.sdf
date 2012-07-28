@@ -1,0 +1,126 @@
+module languages/java/syntax/Expressions
+
+imports languages/java/syntax/JavaTypes
+imports languages/java/syntax/FieldDecl 
+imports languages/java/syntax/ClassDecl
+
+exports sorts Expression MethodInvocation StatementExpression Assignment Dim
+  AssignmentOperator LeftHandSide ArrayAccess FieldAccess Primary
+  PrimaryNoNewArray DimExpr DimExprInitialized ArrayCreationExpression
+  ClassInstanceCreationExpression
+
+  context-free syntax
+    PrimaryNoNewArray						    -> Primary {cons("PrimaryNoNewArray")}
+    ArrayCreationExpression					    -> Primary {cons("ArrayCreationExpression")}
+    Literal							    -> PrimaryNoNewArray {avoid,cons("Literal")}
+    "this"							    -> PrimaryNoNewArray {cons("this0")}
+    Name "." "this"						    -> PrimaryNoNewArray {cons("this1")}
+    "(" Expression ")"						    -> PrimaryNoNewArray {cons("Expression1")}
+    ClassInstanceCreationExpression				    -> PrimaryNoNewArray {cons("ClassInstanceCreationExpression1")}
+    FieldAccess							    -> PrimaryNoNewArray {cons("FieldAccess")}
+    MethodInvocation						    -> PrimaryNoNewArray {cons("MethodInvocation1")}
+    ArrayAccess							    -> PrimaryNoNewArray {cons("ArrayAccess")}
+    "new" ClassType "(" {Expression ","}* ")"			    -> ClassInstanceCreationExpression {cons("new-comma")}
+    "new" ClassType "(" {Expression ","}* ")" ClassBody		    -> ClassInstanceCreationExpression {cons("new-comma1")}
+    "new" PrimitiveType DimExpr+ Dim*				    -> ArrayCreationExpression {cons("new")}
+    "new" ClassOrInterfaceType DimExpr+ Dim*			    -> ArrayCreationExpression {cons("new1")}
+    "new" PrimitiveType DimExprInitialized+ ArrayInitializer	    -> ArrayCreationExpression {cons("new2")}
+    "new" ClassOrInterfaceType DimExprInitialized+ ArrayInitializer -> ArrayCreationExpression {cons("new3")}
+    "[" Expression? "]"						    -> DimExprInitialized {cons("Expression-opt")}
+    "[" Expression "]"						    -> DimExpr {cons("Expression2")}
+    "[" "]"							    -> Dim {cons("Dim-dunno-a_0")}
+    Name							    -> FieldAccess {avoid, cons("Name11")}
+    Primary "." Identifier					    -> FieldAccess {cons("Primary-Identifier")}
+    "super" "." Identifier					    -> FieldAccess {prefer, cons("super")}
+    Name "(" {Expression ","}* ")"				    -> MethodInvocation {avoid,cons("comma11")}
+    Primary "." Identifier "(" {Expression ","}* ")"		    -> MethodInvocation {cons("comma21")}
+    Primary "." ClassInstanceCreationExpression			    -> MethodInvocation {prefer,cons("MethodInvocationConstructor")}
+    "super" "." Identifier "(" {Expression ","}* ")"		    -> MethodInvocation {prefer,cons("super-comma")}
+    Name "[" Expression "]"					    -> ArrayAccess {cons("Name-Expression")}
+    PrimaryNoNewArray "[" Expression "]"			    -> ArrayAccess {prefer,cons("PrimaryNoNewArray-Expression")}
+    Primary							    -> Expression {prefer, cons("Primary")}
+    Expression "++"						    -> StatementExpression {prefer, cons("incr21")}
+    Expression "--"						    -> StatementExpression {prefer, cons("decr21")}
+    "+" Expression						    -> Expression {cons("plus")}
+    "-" Expression						    -> Expression {cons("minus")}
+    "++" Expression						    -> StatementExpression {prefer, cons("incr31")}
+    "--" Expression						    -> StatementExpression {prefer, cons("decr31")}
+    "~" Expression						    -> Expression {cons("tilde")}
+    "!" Expression						    -> Expression {cons("not")}
+    "(" PrimitiveType Dim* ")" Expression			    -> Expression {cons("PrimitiveType-Dim-s-Expression")}
+    "(" Type ")" Expression					    -> Expression {cons("Cast-Expression")}
+    "(" Name Dim+ ")" Expression				    -> Expression {cons("Name-Dim-p-Expression")}
+    Expression "*" Expression					    -> Expression {left, cons("times1")}
+    Expression "/" Expression					    -> Expression {left, cons("div1")}
+    Expression "%" Expression					    -> Expression {left, cons("mod-Expression11")}
+    Expression "+" Expression					    -> Expression {left, cons("plus-Expression11")}
+    Expression "-" Expression					    -> Expression {left, cons("minus-Expression11")}
+    Expression "<<" Expression					    -> Expression {left, cons("shift-left1")}
+    Expression ">>" Expression					    -> Expression {left, cons("shift-right1")}
+    Expression ">>>" Expression					    -> Expression {left, cons("Expression12")}
+    Expression "<" Expression					    -> Expression {left, cons("lt1")}
+    Expression ">" Expression					    -> Expression {left, cons("gt1")}
+    Expression "<=" Expression					    -> Expression {left, cons("le1")}
+    Expression ">=" Expression					    -> Expression {left, cons("ge1")}
+    Expression "instanceof" ReferenceType			    -> Expression {cons("instanceof")}
+    Expression "==" Expression					    -> Expression {left, cons("equal1")}
+    Expression "!=" Expression					    -> Expression {left, cons("not-equal1")}
+    Expression "&" Expression					    -> Expression {left, cons("address11")}
+    Expression "^" Expression					    -> Expression {left, cons("Expression-Expression31")}
+    Expression "|" Expression					    -> Expression {left, cons("bar11")}
+    Expression "&&" Expression					    -> Expression {left, cons("and11")}
+    Expression "||" Expression					    -> Expression {left, cons("or11")}
+    Expression "?" Expression ":" Expression			    -> Expression {prefer, cons("colon2")}
+    LeftHandSide AssignmentOperator Expression			    -> Assignment {cons("LeftHandSide-AssignmentOperator-Expression")}
+    FieldAccess							    -> LeftHandSide {cons("FieldAccess1")}
+    ArrayAccess							    -> LeftHandSide {cons("ArrayAccess1")}
+    "="								    -> AssignmentOperator {cons("equal1")}
+    "*="							    -> AssignmentOperator {cons("assignMul")}
+    "/="							    -> AssignmentOperator {cons("assignDiv")}
+    "%="							    -> AssignmentOperator {cons("assignMod")}
+    "+="							    -> AssignmentOperator {cons("assignPlus")}
+    "-="							    -> AssignmentOperator {cons("assignMin")}
+    "<<="							    -> AssignmentOperator {cons("assignSL")}
+    ">>="							    -> AssignmentOperator {cons("assignSR")}
+    ">>>="							    -> AssignmentOperator {cons("AssignmentOperator-dunno-b_0")}
+    "&="							    -> AssignmentOperator {cons("assignAnd")}
+    "^="							    -> AssignmentOperator {cons("assignExp")}
+    "|="							    -> AssignmentOperator {cons("assignOr")}
+    Assignment							    -> StatementExpression {cons("Assignment")}
+    StatementExpression						    -> Expression {cons("StatementExpression")}
+    Assignment							    -> Expression {cons("Assignment1")}
+
+  context-free priorities
+    "(" Type ")" Expression -> Expression {cons("Cast-Expression")} >
+    { Expression "++" -> StatementExpression {cons("incr21")}
+      Expression "--" -> StatementExpression {cons("decr21")} } >
+    { "++" Expression -> StatementExpression {cons("incr31")}
+      "--" Expression -> StatementExpression {cons("decr31")}
+      "+" Expression -> Expression {cons("plus")}
+      "-" Expression -> Expression {cons("minus")}
+      "~" Expression -> Expression {cons("tilde")}
+      "!" Expression -> Expression {cons("not")} } >
+    "(" PrimitiveType Dim* ")" Expression -> Expression {cons("PrimitiveType-Dim-s-Expression")} >
+    "(" Name Dim+ ")" Expression -> Expression {cons("Name-Dim-p-Expression")} >
+    Expression "*" Expression -> Expression {cons("times1")} >
+    Expression "/" Expression -> Expression {cons("div1")} >
+    Expression "%" Expression -> Expression {cons("mod-Expression11")} >
+    Expression "+" Expression -> Expression {cons("plus-Expression11")} >
+    Expression "-" Expression -> Expression {cons("minus-Expression11")} >
+    Expression "<<" Expression -> Expression {cons("shift-left1")} >
+    Expression ">>" Expression -> Expression {cons("shift-right1")} >
+    Expression ">>>" Expression -> Expression {cons("Expression12")} >
+    { Expression "<" Expression -> Expression {cons("lt1")}
+      Expression ">" Expression -> Expression {cons("gt1")}
+      Expression "<=" Expression -> Expression {cons("le1")}
+      Expression ">=" Expression -> Expression {cons("ge1")} } >
+    Expression "instanceof" ReferenceType -> Expression {cons("instanceof")} >
+    Expression "==" Expression -> Expression {cons("equal1")} >
+    Expression "!=" Expression -> Expression {cons("not-equal1")} >
+    Expression "&" Expression -> Expression {cons("address11")} >
+    Expression "^" Expression -> Expression {cons("Expression-Expression31")} >
+    Expression "|" Expression -> Expression {cons("bar11")} >
+    Expression "&&" Expression -> Expression {cons("and11")} >
+    Expression "||" Expression -> Expression {cons("or11")} >
+    Assignment -> Expression {cons("Assignment1")}
+

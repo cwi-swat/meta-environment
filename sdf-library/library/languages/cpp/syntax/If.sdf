@@ -1,0 +1,24 @@
+module languages/cpp/syntax/If
+
+imports languages/cpp/syntax/Expr
+	languages/cpp/syntax/Text
+	
+
+exports
+
+context-free syntax
+	if:If then:Text elif-parts:ElifParts? else-part:ElsePart? 
+		Endif -> Line {cons("if-group")}
+
+	"#" "if" expr:Expr NewLine -> If {cons("if")}
+	"#" "ifdef" id:Id NewLine -> If {cons("ifdef")}
+	"#" "ifndef" id:Id NewLine -> If {cons("ifndef")}
+
+	"#" "elif" expr:Expr NewLine -> Elif
+	Elif text:Text -> ElifPart
+	ElifPart+ -> ElifParts
+
+	"#" "else" NewLine text:Text -> ElsePart
+
+	"#" "endif" NewLine -> Endif
+

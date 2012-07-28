@@ -1,0 +1,14 @@
+int x, y, h;
+task main()
+{	
+	switch(x)
+	{
+		case 1: y = x;
+				break;
+		case 2:	
+		case 3: h = x;
+				break;
+		default: y = 0;
+				 h = 0;	 
+	}
+}

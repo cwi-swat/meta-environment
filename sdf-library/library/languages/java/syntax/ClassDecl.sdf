@@ -1,0 +1,26 @@
+module languages/java/syntax/ClassDecl
+
+imports languages/java/syntax/Statements 
+imports languages/java/syntax/MethodDecl 
+imports languages/java/syntax/Interfaces 
+imports languages/java/syntax/ConstructorDecl
+
+exports
+  sorts ClassBody ClassDeclaration Super Interfaces ClassBodyDeclaration ClassMemberDeclaration StaticInitializer
+
+  context-free syntax
+    Modifier* "class" Identifier Super? Interfaces? ClassBody -> ClassDeclaration {cons("class1")}
+    "extends" ClassType					      -> Super {cons("extends")}
+    "implements" {InterfaceType ","}+			      -> Interfaces {cons("implements-comma")}
+    "{" ClassBodyDeclaration* "}"			      -> ClassBody {cons("ClassBodyDeclaration-s")}
+    ClassMemberDeclaration				      -> ClassBodyDeclaration {cons("ClassMemberDeclaration")}
+    StaticInitializer					      -> ClassBodyDeclaration {cons("StaticInitializer")}
+    ConstructorDeclaration				      -> ClassBodyDeclaration {cons("ConstructorDeclaration")}
+    ";"							      -> ClassBodyDeclaration {cons("semicolon11")}
+    ClassDeclaration					      -> ClassBodyDeclaration {cons("ClassDeclaration1")}
+    FieldDeclaration					      -> ClassMemberDeclaration {cons("FieldDeclaration1")}
+    MethodDeclaration					      -> ClassMemberDeclaration {cons("MethodDeclaration")}
+    "static" Block					      -> StaticInitializer {cons("static1")}
+    InterfaceDeclaration				      -> ClassBodyDeclaration {cons("ClassDeclaration2")}
+    Block						      -> ClassMemberDeclaration {cons("BlockClassMember")}
+

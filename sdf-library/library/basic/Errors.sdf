@@ -1,0 +1,39 @@
+module basic/Errors
+
+imports basic/Locations
+imports basic/StrCon
+
+hiddens
+  context-free start-symbols
+    Summary Error
+
+exports
+
+sorts Subject
+context-free syntax
+  "subject" "(" description:StrCon ")" -> Subject {cons("subject")}
+
+  "localized" "(" description:StrCon "," Location ")"
+    -> Subject {cons("localized")}
+
+
+sorts Error
+context-free syntax
+  "info" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("info")}
+
+  "warning" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("warning")}
+
+  "error" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("error")}
+
+  "fatal" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("fatal")}
+
+
+sorts Summary
+context-free syntax
+  "summary" "(" producer:StrCon "," id:StrCon "," 
+   "[" {Error ","}* "]" ")"  -> Summary {cons("summary")}
+

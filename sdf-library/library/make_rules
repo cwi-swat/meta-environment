@@ -1,0 +1,12 @@
+# $Id$
+
+LIBROOT=${top_srcdir}/lib
+
+# What gets installed, distributed, cleaned
+EXAMPLES=
+EXTRA_DIST = $(wildcard *.sdf) $(wildcard *.asf) $(EXAMPLES)
+
+# Determine installation directory
+librarydir=$(pkgdatadir)/library$(subst ./library,,$(subdir))
+
+library_DATA = $(EXTRA_DIST)

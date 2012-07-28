@@ -1,0 +1,22 @@
+module languages/nqc/syntax/NQC-Comment
+
+imports
+  basic/Whitespace
+
+exports
+  sorts Comment Asterisk
+
+  lexical syntax
+    [\/][\*] ( ~[\*] | Asterisk )* [\*][\/] -> Comment
+    [\*] -> Asterisk
+
+  lexical restrictions
+    Asterisk -/- [\/]
+
+  lexical syntax
+    Comment               -> LAYOUT
+    "//" line:~[\n]* "\n" -> LAYOUT 
+
+%%    "/*" content:~[]+ "*/" -> LAYOUT 
+  context-free restrictions
+    LAYOUT? -/- [\/].[\/\*]

@@ -1,0 +1,42 @@
+module languages/fdl/syntax/Value-FDL
+
+imports languages/fdl/syntax/Extended-FDL
+imports basic/NatCon
+imports basic/StrCon
+imports basic/Colors
+imports basic/BoolCon
+
+hiddens
+context-free start-symbols
+  FeatureDiagram FeatureName FeatureExpression AtomicFeature 
+
+exports
+sorts ValueType ValueDeclaration Value TypesKeyword
+
+context-free syntax
+  "types" -> TypesKeyword
+
+context-free syntax
+  TypesKeyword -> Keyword
+
+context-free syntax
+  TypesKeyword ValueDeclaration* -> Section  
+
+context-free syntax
+  AtomicFeature "(" Value ")" -> AtomicFeature {non-assoc} 
+  NatCon                      -> Value                     
+  StrCon                      -> Value                     
+  Color                       -> Value                     
+  BoolCon                     -> Value                     
+
+context-free syntax
+  AtomicFeature ":" ValueType -> ValueDeclaration  
+  "integer"                   -> ValueType         
+  "string"                    -> ValueType         
+  "color"                     -> ValueType         
+  "path"                      -> ValueType         
+  "date"                      -> ValueType         
+  "font"                      -> ValueType         
+  "uri"                       -> ValueType         
+  "event"                     -> ValueType         
+  "boolean"                   -> ValueType         

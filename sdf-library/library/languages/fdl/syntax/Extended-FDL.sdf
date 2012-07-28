@@ -1,0 +1,64 @@
+module languages/fdl/syntax/Extended-FDL
+
+imports languages/fdl/syntax/Fdl
+        basic/StrCon
+
+hiddens
+context-free start-symbols
+  FeatureDiagram FeatureName FeatureExpression AtomicFeature
+
+exports
+sorts Section Description Argument Sort ArgumentChar Keyword FeaturesKeyword
+      ConstraintsKeyword SpecializationKeyword ShortDescriptionKeyword
+      LongDescriptionKeyword TooltipKeyword ArgumentsKeyword PublicKeyword
+
+lexical syntax
+  [a-zA-Z0-9] -> ArgumentChar  
+
+context-free syntax
+  Section+ -> FeatureDiagram  
+
+context-free syntax
+  "features"          -> FeaturesKeyword          
+  "constraints"       -> ConstraintsKeyword       
+  "specialization"    -> SpecializationKeyword    
+  "short-description" -> ShortDescriptionKeyword  
+  "long-description"  -> LongDescriptionKeyword   
+  "tooltip"           -> TooltipKeyword           
+  "arguments"         -> ArgumentsKeyword         
+  "public"            -> PublicKeyword            
+
+context-free syntax
+  FeaturesKeyword         -> Keyword  
+  ConstraintsKeyword      -> Keyword  
+  SpecializationKeyword   -> Keyword  
+  ShortDescriptionKeyword -> Keyword  
+  LongDescriptionKeyword  -> Keyword  
+  TooltipKeyword          -> Keyword  
+  ArgumentsKeyword        -> Keyword  
+  PublicKeyword           -> Keyword  
+
+context-free syntax
+  Keyword -> Sort {reject} 
+  Keyword -> Argument {reject}
+
+context-free syntax
+  FeaturesKeyword FeatureDefinition*       -> Section  
+  ConstraintsKeyword Constraint*           -> Section  
+  SpecializationKeyword FeatureDefinition* -> Section  
+
+context-free syntax
+  FeatureName StrCon                   -> Description  
+  AtomicFeature StrCon                 -> Description  
+  ShortDescriptionKeyword Description* -> Section      
+  LongDescriptionKeyword Description*  -> Section      
+  TooltipKeyword Description*          -> Section      
+
+context-free syntax
+  AtomicFeature ArgumentChar -> Argument  
+  ArgumentsKeyword Argument* -> Section   
+
+context-free syntax
+  FeatureName         -> Sort     
+  AtomicFeature       -> Sort     
+  PublicKeyword Sort* -> Section  

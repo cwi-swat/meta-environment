@@ -1,0 +1,31 @@
+module languages/java/syntax/Java
+
+imports languages/java/syntax/ClassDecl 
+imports languages/java/syntax/ConstructorDecl 
+imports languages/java/syntax/FieldDecl 
+imports languages/java/syntax/MethodDecl 
+imports languages/java/syntax/Statements 
+imports languages/java/syntax/Comment
+
+exports
+  context-free start-symbols CompilationUnit
+
+  sorts CompilationUnit File TypeDeclaration TypeImportOnDemandDeclaration SingleTypeImportDeclaration ImportDeclaration PackageDeclaration FileHeader
+
+  lexical syntax
+    "FILE:" ~[\n]* "\n" -> FileHeader
+
+  context-free syntax
+    FileHeader CompilationUnit -> File {cons("file-with-header")}
+
+  context-free syntax
+    PackageDeclaration? ImportDeclaration* TypeDeclaration+ -> CompilationUnit {prefer,cons("PackageDeclaration-opt-ImportDeclaration-s-TypeDeclaration-s")}
+    "package" Name ";" -> PackageDeclaration {cons("package-semicolon")}
+    SingleTypeImportDeclaration -> ImportDeclaration {cons("SingleTypeImportDeclaration")}
+    TypeImportOnDemandDeclaration -> ImportDeclaration {cons("TypeImportOnDemandDeclaration")}
+    "import" Name ";" -> SingleTypeImportDeclaration {cons("import-semicolon")}
+    "import" Name "." "*" ";" -> TypeImportOnDemandDeclaration {cons("import-times-semicolon")}
+    ClassDeclaration -> TypeDeclaration {cons("ClassDeclaration11")}
+    InterfaceDeclaration -> TypeDeclaration {cons("InterfaceDeclaration")}
+    ";" -> TypeDeclaration {cons("semicolon5")}
+

@@ -1,0 +1,7 @@
+module languages/nqc/syntax/NQC-Types
+
+exports
+  sorts TypeDenoter
+  context-free syntax
+    "int" -> TypeDenoter {cons("int")}
+

@@ -1,0 +1,20 @@
+module basic/Path
+
+imports basic/StrCon
+
+exports
+
+context-free start-symbols Path
+
+sorts TermCon
+
+sorts Path
+context-free syntax
+  %% A path consists of a number of segments
+  "absolute" "(" "[" {Segment ","}* "]" ")" -> Path {cons("absolute")}
+
+  "relative" "(" "[" {Segment ","}* "]" ")" -> Path {cons("relative")}
+
+sorts Segment
+context-free syntax
+  "segment" "(" name:StrCon ")" -> Segment {cons("segment")}

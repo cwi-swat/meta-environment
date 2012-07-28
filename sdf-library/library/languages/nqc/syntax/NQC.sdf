@@ -1,0 +1,19 @@
+module languages/nqc/syntax/NQC
+
+imports languages/nqc/syntax/NQC-Tasks 
+        languages/nqc/syntax/NQC-Functions
+
+exports
+  context-free start-symbols Program
+
+  sorts Program
+  context-free syntax
+    VarDeclarationList? FunctionList? TaskList -> Program {cons("program")}
+
+
+
+
+
+
+
+    

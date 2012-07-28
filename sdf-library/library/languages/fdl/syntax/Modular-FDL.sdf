@@ -1,0 +1,38 @@
+module languages/fdl/syntax/Modular-FDL
+
+imports languages/fdl/syntax/Value-FDL
+        basic/IdentifierCon
+
+hiddens
+context-free start-symbols
+  Definitions
+
+exports
+sorts FeatureModule ImportSection Definitions Definition
+      ModuleKeyword ImportsKeyword Modulename Binding
+
+context-free syntax
+  IdCon -> Modulename  
+
+context-free syntax
+  "module"  -> ModuleKeyword   
+  "imports" -> ImportsKeyword  
+
+context-free syntax
+  ModuleKeyword  -> Keyword  
+  ImportsKeyword -> Keyword  
+
+context-free syntax
+  Keyword -> Modulename {reject} 
+
+context-free syntax
+  ImportsKeyword Modulename+ -> ImportSection  
+
+context-free syntax
+  ModuleKeyword Modulename ImportSection* FeatureDiagram -> FeatureModule  
+  FeatureModule                                          -> Definition     
+  Definition+                                            -> Definitions    
+
+context-free syntax
+  AtomicFeature "=" Value     -> Binding     
+  Modulename "[" Binding+ "]" -> Modulename  

@@ -1,0 +1,11 @@
+module languages/java/syntax/Names
+
+imports languages/java/syntax/Lexical
+
+exports
+  sorts SimpleName Name
+
+  context-free syntax
+    {Identifier "."}+  -> Name {avoid,cons("Identifier-p")}
+    Identifier         -> SimpleName {cons("Identifier")}
+

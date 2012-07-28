@@ -1,0 +1,30 @@
+module languages/generic-cpp/syntax/Substitutions[
+  Identifier
+  Expression
+  String
+]
+
+exports
+
+lexical syntax
+  [\\][\n] -> LAYOUT
+
+context-free restrictions
+  LAYOUT? -/- [\\].[\n]
+
+context-free syntax
+  String String     -> String {left}
+  Identifier String -> String 
+  String Identifier -> String 
+
+
+syntax
+  "??=" -> "#"
+  "??/" -> "\\"
+  "??'" -> "^"
+  "??(" -> "["
+  "??)" -> "]"
+  "??!" -> "|"
+  "??<" -> "{"
+  "??>" -> "}"
+  "??-" -> "~"

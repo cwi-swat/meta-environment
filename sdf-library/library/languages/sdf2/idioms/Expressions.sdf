@@ -1,0 +1,24 @@
+module languages/sdf2/idioms/Expressions
+
+exports
+
+sorts E
+
+lexical syntax
+  [\ \t\n] -> LAYOUT
+  [a-z]+   -> E
+
+context-free start-symbols
+  E
+
+context-free syntax
+  E "*" E   -> E {left}
+  E "+" E   -> E {left}
+  "(" E ")" -> E {bracket}
+
+context-free priorities
+  E "*" E   -> E >
+  E "+" E   -> E
+
+%% example term:
+%% a + b * c

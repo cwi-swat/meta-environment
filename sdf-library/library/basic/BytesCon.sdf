@@ -1,0 +1,34 @@
+module basic/BytesCon
+
+%% This modules defines the 'Byte': any character in the 0-255 range.
+%% 
+%% But.. the syntax definition is not exported. This is too prevent
+%% everything from being recognized as a byte!
+%%
+%% What IS exported are the lexical constructor functions for bytes.
+%% In this manner, we can construct bytes without having to parse them
+%% literally.
+%%
+%% Note that this module only makes sense in the context of ASF+SDF,
+%% which supports lexical constructor functions. The definition below
+%% shows some of the implementation detail of ASF. Do not try this at 
+%% home.
+
+hiddens
+  lexical syntax
+    ~[]   -> Byte  {cons("byte")}
+    Byte* -> Bytes {cons("bytes")}
+
+exports 
+  sorts Bytes Byte
+
+  context-free syntax
+   bytes(CHARS[[Byte]]*) -> CHARS[[Bytes]] {cons("bytes"),lexical-constructor}
+   byte (CHARS[[~[]]]) 	 -> CHARS[[Byte]]  {cons("byte") ,lexical-constructor}
+
+   CHARS[[Bytes]]        -> Bytes
+   CHARS[[Byte]]         -> Byte
+   CHAR                  -> CHARS[[~[]]]
+
+
+

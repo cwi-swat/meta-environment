@@ -1,0 +1,16 @@
+int a, b, c;
+function func()
+{
+	c = (a + 1) + (b + 2);
+}
+task main()
+{
+	c = (a + 1) + (b + 2);
+	{
+		c = (a + 1) + (b + 2);
+	}
+}
+task main2()
+{
+	c = (a + 1) + (b + 2);
+}

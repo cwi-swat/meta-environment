@@ -1,0 +1,111 @@
+module languages/nqc/syntax/NQC-Statements
+
+imports languages/nqc/syntax/NQC-Declarations 
+        languages/nqc/syntax/NQC-Tasks
+
+exports
+  sorts BlockStatement
+  context-free syntax
+    "{" StatementList? "}" -> BlockStatement {cons("list")}
+
+  sorts StatementList
+  context-free syntax
+    Statement+ -> StatementList
+
+  sorts Statement
+  context-free syntax
+    AssignmentStatement ";"     -> Statement {cons("assign")}
+    IfStatement                 -> Statement
+    WhileStatement              -> Statement {cons("while")}
+    DoStatement ";"             -> Statement {cons("do")}
+    VarDeclarationListStatement -> Statement {cons("vardecllist")}
+    RepeatStatement             -> Statement {cons("repeat")}
+    UntilStatement              -> Statement {cons("until")}
+    ContinueStatement ";"       -> Statement {cons("continue")}
+    BreakStatement ";"          -> Statement {cons("break")}
+    StartStatement ";"          -> Statement {cons("start")}
+    SwitchStatement             -> Statement {cons("switch")}
+    ExpressionStatement ";"     -> Statement {cons("expression")}
+    BlockStatement              -> Statement {cons("block")}
+    EmptyStatement              -> Statement {cons("empty")}
+
+  sorts EmptyStatement 
+  context-free syntax
+    ";" -> EmptyStatement
+
+  sorts AssignmentStatement
+  context-free syntax
+    VarName "=" Expression   -> AssignmentStatement {cons("varassign")} 
+    VarName "+=" Expression  -> AssignmentStatement {cons("varaddassign")}
+    VarName "-=" Expression  -> AssignmentStatement {cons("varsubassign")}
+    VarName "*=" Expression  -> AssignmentStatement {cons("varmulassign")}
+    VarName "/=" Expression  -> AssignmentStatement {cons("vardivassign")}
+    VarName "%=" Expression  -> AssignmentStatement {cons("varmodassign")}
+    VarName "||=" Expression -> AssignmentStatement {cons("varabsassign")}
+    VarName "+-=" Expression -> AssignmentStatement {cons("varsignassign")}
+    ArrayName "=" Expression   -> AssignmentStatement {cons("arrayassign")} 
+    ArrayName "+=" Expression  -> AssignmentStatement {cons("arrayaddassign")} 
+    ArrayName "-=" Expression  -> AssignmentStatement {cons("arraysubassign")} 
+    ArrayName "*=" Expression  -> AssignmentStatement {cons("arraymulassign")} 
+    ArrayName "/=" Expression  -> AssignmentStatement {cons("arraydivassign")} 
+    ArrayName "%=" Expression  -> AssignmentStatement {cons("arraymodassign")} 
+    ArrayName "||=" Expression -> AssignmentStatement {cons("arrayabsassign")} 
+    ArrayName "+-=" Expression -> AssignmentStatement {cons("arraysignassign")} 
+
+  sorts IfStatement
+  context-free syntax
+    "if" "(" Expression ")" Statement                  -> IfStatement {cons("if")}
+    "if" "(" Expression ")" Statement "else" Statement -> IfStatement {cons("ifelse")}
+
+  sorts WhileStatement
+  context-free syntax
+    "while" "(" Expression ")" Statement -> WhileStatement
+
+  sorts DoStatement
+  context-free syntax
+    "do" Statement "while" "(" Expression ")" -> DoStatement
+
+  sorts VarDeclarationListStatement
+  context-free syntax
+    TypeDenoter VarMultipleDeclaration ";" -> VarDeclarationListStatement
+
+  sorts RepeatStatement
+  context-free syntax
+    "repeat" "(" Expression ")" Statement -> RepeatStatement
+
+  sorts UntilStatement
+  context-free syntax
+    "until" "(" Expression ")" Statement -> UntilStatement
+
+  sorts BreakStatement
+  context-free syntax
+    "break" -> BreakStatement
+ 
+  sorts ContinueStatement
+  context-free syntax
+    "continue" -> ContinueStatement
+
+  sorts StartStatement
+  context-free syntax
+    "start" TaskName -> StartStatement
+
+  sorts SwitchStatement
+  context-free syntax
+    "switch" "(" Expression ")" "{" CaseList DefaultCaseStatement? "}" -> SwitchStatement
+
+  sorts CaseList
+  context-free syntax
+    CaseStatement+ -> CaseList
+
+  sorts CaseStatement
+  context-free syntax
+    "case" ConstantExpression ":" StatementList? -> CaseStatement
+
+  sorts DefaultCaseStatement
+  context-free syntax
+    "default" ":" StatementList -> DefaultCaseStatement
+
+  sorts ExpressionStatement
+  context-free syntax
+    Expression -> ExpressionStatement
+

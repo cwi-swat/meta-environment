@@ -1,0 +1,8 @@
+int x, y, i;
+task main() 
+{
+	repeat(10)
+	{
+		x++;
+	}
+}

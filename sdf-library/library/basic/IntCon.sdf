@@ -1,0 +1,17 @@
+module basic/IntCon
+
+imports basic/NatCon
+exports
+
+sorts Integer
+
+context-free syntax
+	NatCon -> Integer {cons("nat-con")}
+	"+" integer:Integer -> Integer {non-assoc, cons("positive")}
+	"-" integer:Integer -> Integer {non-assoc, cons("negative")}
+
+context-free priorities
+  {non-assoc:
+    "+" integer:Integer -> Integer {non-assoc, cons("positive")}
+    "-" integer:Integer -> Integer {non-assoc, cons("negative")}
+  }

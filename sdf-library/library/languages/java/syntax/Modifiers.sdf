@@ -1,0 +1,16 @@
+module languages/java/syntax/Modifiers
+exports
+  sorts Modifier
+
+  context-free syntax
+    "public" -> Modifier {cons("public")}
+    "protected" -> Modifier {cons("protected")}
+    "private" -> Modifier {cons("private")}
+    "static" -> Modifier {cons("static")}
+    "abstract" -> Modifier {cons("abstract")}
+    "final" -> Modifier {cons("final")}
+    "native" -> Modifier {cons("native")}
+    "synchronized" -> Modifier {cons("synchronized1")}
+    "transient" -> Modifier {cons("transient")}
+    "volatile" -> Modifier {cons("volatile")}
+

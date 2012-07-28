@@ -1,0 +1,25 @@
+module languages/java/syntax/MethodDecl
+
+imports languages/java/syntax/JavaTypes
+imports languages/java/syntax/FieldDecl 
+imports languages/java/syntax/Statements 
+imports languages/java/syntax/Modifiers
+
+exports
+  sorts MethodDeclaration FormalParameter MethodHeader MethodDeclarator Throws MethodBody
+
+exports sorts MethodRes
+  context-free syntax
+    "void" -> MethodRes {cons("void")}
+    Type -> MethodRes {cons("type")}
+
+  context-free syntax
+    MethodHeader MethodBody -> MethodDeclaration {cons("MethodHeader-MethodBody")}
+    Modifier* MethodRes MethodDeclarator Throws? -> MethodHeader {cons("MethodHeader")}
+    Identifier "(" {FormalParameter ","}* ")" -> MethodDeclarator {cons("comma2")}
+    MethodDeclarator "[" "]" -> MethodDeclarator {cons("MethodDeclarator")}
+    Modifier* Type VariableDeclaratorId -> FormalParameter {cons("Type-VariableDeclaratorId")}
+    "throws" {ClassType ","}+ -> Throws {cons("throws-comma")}
+    Block -> MethodBody {cons("Block1")}
+    ";" -> MethodBody {cons("semicolon3")}
+

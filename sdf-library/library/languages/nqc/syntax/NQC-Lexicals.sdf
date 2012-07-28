@@ -1,0 +1,38 @@
+module languages/nqc/syntax/NQC-Lexicals
+
+imports languages/nqc/syntax/NQC-Comment
+
+exports
+  sorts IDENT
+  lexical syntax  
+    [a-zA-Z][a-zA-Z0-9\_]* -> IDENT
+
+  context-free restrictions
+    IDENT -/- [a-zA-Z0-9\_]
+
+  sorts Identifier
+  context-free syntax
+    IDENT -> Identifier {cons("identifier")}
+
+  sorts NUMBER
+  lexical syntax
+    [0-9]+ -> NUMBER
+
+  context-free restrictions
+    NUMBER -/- [0-9]
+
+  context-free syntax
+    "true"     -> IDENT {reject}
+    "false"    -> IDENT {reject}
+    "abs"      -> IDENT {reject}
+    "sign"     -> IDENT {reject}
+    "if"       -> IDENT {reject}
+    "void"     -> IDENT {reject}
+    "sub"      -> IDENT {reject}
+    "function" -> IDENT {reject}
+    "break"    -> IDENT {reject}
+    "continue" -> IDENT {reject}
+    "else"     -> IDENT {reject}
+    "switch"   -> IDENT {reject}
+    "while"    -> IDENT {reject}
+    "until"    -> IDENT {reject}

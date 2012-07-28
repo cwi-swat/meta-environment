@@ -1,0 +1,27 @@
+module languages/nqc/syntax/NQC-Functions
+
+imports languages/nqc/syntax/NQC-Statements
+
+exports
+  sorts FunctionList
+  context-free syntax
+      Function+   -> FunctionList
+
+  sorts Function
+  context-free syntax
+    "void" FunctionName "(" ParameterList? ")" BlockStatement     -> Function {cons("void")}
+    "function" FunctionName "(" ParameterList? ")" BlockStatement -> Function {cons("function")}
+    "sub" FunctionName "(" ")" BlockStatement                     -> Function {cons("subroutine")}
+
+
+  sorts ParameterList
+  context-free syntax
+    {Parameter ","}+ -> ParameterList
+
+  sorts Parameter
+  context-free syntax
+    TypeDenoter ParameterName -> Parameter {cons("param")}
+
+  sorts ParameterName
+  context-free syntax
+    Identifier -> ParameterName

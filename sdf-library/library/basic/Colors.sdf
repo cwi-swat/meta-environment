@@ -1,0 +1,11 @@
+module basic/Colors
+
+imports basic/NatCon
+
+exports
+
+sorts Color 
+
+context-free syntax
+
+rgb(red:NatCon, green:NatCon, blue:NatCon) -> Color {cons("rgb")}

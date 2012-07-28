@@ -1,0 +1,10 @@
+module languages/java/syntax/Syntax
+
+imports languages/java/syntax/Main
+
+exports
+  sorts Top-sort
+
+  context-free syntax
+    CompilationUnits -> Top-sort {cons("CompilationUnits1")}
+

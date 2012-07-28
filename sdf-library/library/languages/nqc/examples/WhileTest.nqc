@@ -1,0 +1,11 @@
+int x, y, i;
+task main() 
+{
+	while(true) {}
+	while(false) {}
+	while(true && false) {}
+	while(2 != 4) { x=3; }
+	while(x != y || y > 3) { y++; }
+	while(x == x) { y += 5; i /=35; }
+	while(x < 2 && y > 3) { }
+}

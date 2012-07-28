@@ -1,0 +1,16 @@
+module languages/nqc/syntax/NQC-Tasks
+
+imports languages/nqc/syntax/NQC-Statements
+
+exports
+  sorts TaskList
+  context-free syntax
+     Task+ -> TaskList
+
+  sorts Task
+  context-free syntax
+    "task" TaskName "(" ")" BlockStatement -> Task {cons("task")}
+
+  sorts TaskName
+  context-free syntax
+    Identifier -> TaskName

@@ -1,0 +1,17 @@
+module languages/fdl/syntax/Fdl
+
+imports languages/fdl/syntax/Definitions
+	languages/fdl/syntax/Constraints
+	
+
+hiddens
+context-free start-symbols
+	FeatureDiagram FeatureName FeatureExpression AtomicFeature
+
+exports
+
+sorts FeatureDiagram 
+
+context-free syntax	
+
+FeatureDefinition* Constraint* -> FeatureDiagram {cons("featurediagram")}

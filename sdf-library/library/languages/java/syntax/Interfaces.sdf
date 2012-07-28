@@ -1,0 +1,19 @@
+module languages/java/syntax/Interfaces
+
+imports languages/java/syntax/Modifiers 
+imports languages/java/syntax/MethodDecl
+
+exports
+  sorts InterfaceDeclaration ExtendsInterfaces InterfaceBody InterfaceMemberDeclaration ConstantDeclaration AbstractMethodDeclaration
+
+  context-free syntax
+    Modifier* "interface" Identifier ExtendsInterfaces? InterfaceBody -> InterfaceDeclaration {cons("interface")}
+    "extends" {InterfaceType ","}+				      -> ExtendsInterfaces {cons("extends-comma")}
+    "{" InterfaceMemberDeclaration* "}"				      -> InterfaceBody {cons("InterfaceMemberDeclaration-s")}
+    ConstantDeclaration						      -> InterfaceMemberDeclaration {cons("ConstantDeclaration")}
+    AbstractMethodDeclaration					      -> InterfaceMemberDeclaration {cons("AbstractMethodDeclaration")}
+    InterfaceDeclaration					      -> InterfaceMemberDeclaration {cons("InnerInterfaceDeclaration")}
+    ClassDeclaration						      -> InterfaceMemberDeclaration {cons("InnerClassDeclaration")}
+    FieldDeclaration						      -> ConstantDeclaration {cons("FieldDeclaration")}
+    MethodHeader ";"						      -> AbstractMethodDeclaration {cons("semicolon4")}
+

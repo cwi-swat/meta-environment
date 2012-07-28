@@ -1,0 +1,11 @@
+module languages/cpp/syntax/CPP
+
+imports languages/cpp/syntax/Macros
+	languages/cpp/syntax/Div
+	languages/cpp/syntax/Include
+	languages/cpp/syntax/If
+	languages/cpp/syntax/Layout
+
+exports
+  context-free start-symbols
+    Text

@@ -1,0 +1,14 @@
+module basic/NatCon
+
+exports
+
+sorts NatCon
+
+lexical syntax
+  
+ [0-9]+ -> NatCon {cons("digits")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+

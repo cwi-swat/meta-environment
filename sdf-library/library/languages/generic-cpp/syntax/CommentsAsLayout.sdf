@@ -1,0 +1,10 @@
+module languages/generic-cpp/syntax/CommentsAsLayout
+imports languages/generic-cpp/syntax/Comments
+
+exports
+
+lexical syntax
+  Comment -> LAYOUT
+
+context-free restrictions
+LAYOUT? -/- [\/].[\*]

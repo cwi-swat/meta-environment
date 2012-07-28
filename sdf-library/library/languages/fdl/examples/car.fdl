@@ -1,0 +1,4 @@
+Car: all(carBody, Transmission, Engine, HorsePower, pullsTrailer?)
+Transmission: one-of(manual, automatic)
+Engine: more-of(gasoline, electric)
+HorsePower: one-of(high, medium, low)

@@ -1,0 +1,22 @@
+module languages/java/syntax/Comment
+
+imports basic/Whitespace
+
+exports
+  sorts Asterisk Comment CommentChar
+
+  lexical syntax
+    "/*" CommentChar* "*/" -> Comment
+    ~[\*] -> CommentChar
+    Asterisk -> CommentChar
+    Comment -> LAYOUT
+    [\*] -> Asterisk
+    "//" ~[\n]* [\n] -> Comment
+
+  lexical restrictions
+    Asterisk -/- [\/]
+
+  context-free restrictions
+    LAYOUT? -/- [\/].[\/]
+    LAYOUT? -/- [\/].[\*]
+

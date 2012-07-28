@@ -1,0 +1,13 @@
+module languages/fdl/syntax/AtomicFeatures
+
+exports
+
+sorts AtomicFeature
+
+lexical syntax
+	[a-z] [a-zA-Z0-9\_]* -> AtomicFeature
+
+
+
+lexical restrictions
+	AtomicFeature -/- [a-zA-Z0-9\_]

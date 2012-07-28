@@ -1,0 +1,45 @@
+module basic/RStores
+
+imports basic/StrCon
+imports basic/IntCon
+imports basic/BoolCon
+imports basic/Locations
+imports basic/IdentifierCon
+
+exports
+sorts RElem RStore RType RTuple
+
+%% This module defines a syntax for stores of typed relations
+
+context-free syntax
+  Integer                         -> RElem {cons("int")}   
+  StrCon                          -> RElem {cons("str")}   
+  BoolCon                         -> RElem {cons("bool")}  
+  Location                        -> RElem {cons("loc")}   
+  "{" elements:{RElem ","}* "}"   -> RElem {cons("set")}   
+  "{|" elements:{RElem ","}* "|}" -> RElem {cons("bag")}   
+  "<" elements:{RElem ","}+ ">"   -> RElem {cons("tuple")} 
+
+context-free syntax
+  "int"                                   -> RType {cons("int")}          
+  "bool"                                  -> RType {cons("bool")}         
+  "str"                                   -> RType {cons("str")}          
+  "loc"                                   -> RType {cons("loc")}          
+  "<" column-types:{RType ","}+ ">"       -> RType {cons("tuple")}        
+  "set" "[" element-type:RType "]"        -> RType {cons("set")}          
+  "bag" "[" element-type:RType "]"        -> RType {cons("bag")}          
+  "rel" "[" column-types:{RType ","}+ "]" -> RType {cons("relation")}     
+  type-name:IdCon                         -> RType {cons("user-defined")} 
+  "&" parameter-name:IdCon                -> RType {cons("parameter")}    
+
+context-free syntax
+  "<" variable:IdCon "," rtype:RType "," value:RElem ">" -> RTuple {cons("rtuple")} 
+  "rstore" "(" "[" rtuples:{RTuple ","}* "]" ")"         -> RStore {cons("rstore")} 
+
+context-free syntax
+  "int" | "bool" | "str" | "loc"          -> IdCon {reject}
+
+hiddens
+imports basic/Whitespace
+context-free start-symbols
+  RStore

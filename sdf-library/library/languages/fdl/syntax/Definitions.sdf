@@ -1,0 +1,11 @@
+module languages/fdl/syntax/Definitions
+
+imports languages/fdl/syntax/Expressions
+
+exports
+
+sorts FeatureDefinition
+
+context-free syntax
+
+FeatureName":" FeatureExpression -> FeatureDefinition {cons("featuredefinition")}

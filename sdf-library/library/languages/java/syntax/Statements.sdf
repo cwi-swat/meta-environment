@@ -1,0 +1,79 @@
+module languages/java/syntax/Statements
+
+imports languages/java/syntax/Expressions 
+imports languages/java/syntax/MethodDecl 
+imports languages/java/syntax/ClassDecl
+
+exports sorts Block BlockStatement Finally CatchClause TryStatement
+  SynchronizedStatement ThrowStatement ReturnStatement ContinueStatement
+  BreakStatement StatementExpressionList ForUpdate ForInit
+  LocalVariableDeclaration ForStatementNoShortIf StatementNoShortIf
+  ForStatement Statement DoStatement WhileStatementNoShortIf WhileStatement
+  SwitchLabel SwitchBlockStatementGroup SwitchBlock SwitchStatement
+  IfThenElseStatementNoShortIf IfThenElseStatement IfThenStatement
+  ExpressionStatement LabeledStatementNoShortIf LabeledStatement
+  EmptyStatement StatementWithoutTrailingSubstatement
+  LocalVariableDeclarationStatement AssertStatement
+
+  context-free syntax
+    "{" BlockStatement* "}"				            -> Block {cons("BlockStatement-s")}
+    Modifier* LocalVariableDeclarationStatement		            -> BlockStatement {cons("LocalVariableDeclarationStatement")}
+    Statement						            -> BlockStatement {cons("Statement")}
+    LocalVariableDeclaration ";"			            -> LocalVariableDeclarationStatement {cons("semicolon")}
+    Type {VariableDeclarator ","}+			            -> LocalVariableDeclaration {cons("comma")}
+    StatementWithoutTrailingSubstatement		            -> Statement {cons("StatementWithoutTrailingSubstatement")}
+    LabeledStatement					            -> Statement {cons("LabeledStatement")}
+    IfThenStatement					            -> Statement {cons("IfThenStatement")}
+    IfThenElseStatement					            -> Statement {cons("IfThenElseStatement")}
+    WhileStatement					            -> Statement {cons("WhileStatement")}
+    ForStatement					            -> Statement {cons("ForStatement")}
+    StatementWithoutTrailingSubstatement		            -> StatementNoShortIf {cons("StatementWithoutTrailingSubstatement1")}
+    LabeledStatementNoShortIf				            -> StatementNoShortIf {cons("LabeledStatementNoShortIf")}
+    IfThenElseStatementNoShortIf			            -> StatementNoShortIf {cons("IfThenElseStatementNoShortIf")}
+    WhileStatementNoShortIf				            -> StatementNoShortIf {cons("WhileStatementNoShortIf")}
+    ForStatementNoShortIf				            -> StatementNoShortIf {cons("ForStatementNoShortIf")}
+    Block						            -> StatementWithoutTrailingSubstatement {cons("Block")}
+    EmptyStatement					            -> StatementWithoutTrailingSubstatement {cons("EmptyStatement")}
+    ExpressionStatement					            -> StatementWithoutTrailingSubstatement {cons("ExpressionStatement")}
+    SwitchStatement					            -> StatementWithoutTrailingSubstatement {cons("SwitchStatement")}
+    DoStatement						            -> StatementWithoutTrailingSubstatement {cons("DoStatement")}
+    BreakStatement					            -> StatementWithoutTrailingSubstatement {cons("BreakStatement")}
+    ContinueStatement					            -> StatementWithoutTrailingSubstatement {cons("ContinueStatement")}
+    ReturnStatement					            -> StatementWithoutTrailingSubstatement {cons("ReturnStatement")}
+    SynchronizedStatement				            -> StatementWithoutTrailingSubstatement {cons("SynchronizedStatement")}
+    ThrowStatement					            -> StatementWithoutTrailingSubstatement {cons("ThrowStatement")}
+    TryStatement					            -> StatementWithoutTrailingSubstatement {cons("TryStatement")}
+    ";"							            -> EmptyStatement {cons("semicolon1")}
+    Identifier ":" Statement				            -> LabeledStatement {cons("colon")}
+    Identifier ":" StatementNoShortIf			            -> LabeledStatementNoShortIf {cons("colon1")}
+    StatementExpression ";"				            -> ExpressionStatement {cons("semicolon2")}
+    MethodInvocation						    -> StatementExpression {cons("MethodInvocation")}
+    ClassInstanceCreationExpression			            -> StatementExpression {cons("ClassInstanceCreationExpression")}
+    ClassDeclaration						    -> Statement {cons("ClassDeclaration")}
+    "if" "(" Expression ")" Statement				    -> IfThenStatement {cons("if")}
+    "if" "(" Expression ")" StatementNoShortIf "else" Statement	    -> IfThenElseStatement {cons("if-else")}
+    "switch" "(" Expression ")" SwitchBlock			    -> SwitchStatement {cons("switch")}
+    "{" SwitchBlockStatementGroup* SwitchLabel* "}"		    -> SwitchBlock {cons("SwitchBlockStatementGroup-s-SwitchLabel-s")}
+    SwitchLabel+ BlockStatement+				    -> SwitchBlockStatementGroup {cons("SwitchLabel-p-BlockStatement-p")}
+    "case" Expression ":"					    -> SwitchLabel {cons("case-colon")}
+    "default" ":"						    -> SwitchLabel {cons("default-colon")}
+    "while" "(" Expression ")" Statement			    -> WhileStatement {cons("while")}
+    "while" "(" Expression ")" StatementNoShortIf		    -> WhileStatementNoShortIf {cons("while1")}
+    "do" Statement "while" "(" Expression ")" ";"		    -> DoStatement {cons("do-while-semicolon")}
+    "for" "(" ForInit? ";" Expression? ";" ForUpdate? ")" Statement -> ForStatement {cons("for-semicolon-semicolon")}
+    StatementExpressionList					    -> ForInit {cons("StatementExpressionList")}
+    LocalVariableDeclaration					    -> ForInit {cons("LocalVariableDeclaration")}
+    StatementExpressionList					    -> ForUpdate {cons("StatementExpressionList1")}
+    {StatementExpression ","}+					    -> StatementExpressionList {cons("comma1")}
+    "break" Identifier? ";"					    -> BreakStatement {cons("break-semicolon")}
+    "continue" Identifier? ";"					    -> ContinueStatement {cons("continue-semicolon")}
+    "return" Expression? ";"					    -> ReturnStatement {cons("return-semicolon")}
+    "throw" Expression ";"					    -> ThrowStatement {cons("throw-semicolon")}
+    "synchronized" "(" Expression ")" Block			    -> SynchronizedStatement {cons("synchronized")}
+    "try" Block CatchClause+					    -> TryStatement {cons("try")}
+    "try" Block CatchClause* Finally				    -> TryStatement {cons("try1")}
+    "catch" "(" FormalParameter ")" Block			    -> CatchClause {cons("catch")}
+    "finally" Block						    -> Finally {cons("finally")}
+    AssertStatement						    -> Statement {cons("AssertStatement")}
+    "assert" Expression ";"					    -> AssertStatement {prefer, cons("assertWithExpression")}
+
