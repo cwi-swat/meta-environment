@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=economop@cwi.nl,jurgenv@cwi.nl
+Name: sdf-support
+Version: 2.5
+Description:
+Requires: aterm,error-support,pt-support,toolbuslib
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lSDFME -lSDF2PT -lPT2SDF
+#uninstalled Libs: -L@abs_top_builddir@/lib -lSDFME -lSDF2PT -lPT2SDF
+#uninstalled Cflags: -I@abs_top_builddir@/lib
+ToolBusFlags=-I${prefix}/share/sdf-support
+

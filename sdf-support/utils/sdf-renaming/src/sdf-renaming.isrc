@@ -1,0 +1,22 @@
+
+tool sdf-renaming is { command = "__PREFIX__/bin/sdf-renaming -TB_COLLECT_LOOP 1" }
+
+process SdfRenaming is
+let
+ SR : sdf-renaming,
+ Imports : term,
+ ToBeRenamed : term,
+ Renamed : list,
+ ModuleName : str
+in
+  execute(sdf-renaming, SR?) .
+  (
+    rec-msg(sr-rename-module(Imports?, ModuleName?, ToBeRenamed?)) .
+    snd-eval(SR, rename-module(Imports, ModuleName, ToBeRenamed)) .
+    rec-value(SR, renamed-module(Renamed?)) .
+    snd-msg(sr-renamed-module(Renamed))
+  )
+  *delta
+endlet
+
+toolbus(SdfRenaming)

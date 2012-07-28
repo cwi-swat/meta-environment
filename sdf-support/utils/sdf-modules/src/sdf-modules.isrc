@@ -1,0 +1,107 @@
+#ifndef __SDF_MODULES__
+#define __SDF_MODULES__
+
+tool sdf-modules is { command = "__PREFIX__/bin/sdf-modules -TB_COLLECT_LOOP 1" }
+
+
+process SdfModules is
+let
+ SM : sdf-modules,
+ Modules : list,
+ ModuleId : str,
+ Imports : term,
+ ModuleImportPairs : list,
+ Module : term,
+ Definition : term,
+ Path : str,
+ From : str,
+ To   : str,
+ ModuleNames : list,
+ Paths : list
+in
+  execute(sdf-modules, SM?) .
+  (
+    rec-msg(sm-get-module-id(Module?)) .
+    snd-eval(SM, get-module-id(Module)) .
+    rec-value(SM, module-id(ModuleId?)) .
+    snd-msg(sm-module-id(ModuleId))
+  +
+    rec-msg(sm-get-module-path(Path?, ModuleId?)) .
+    snd-eval(SM, get-module-path(Path, ModuleId)) .
+    rec-value(SM, module-path(Path?)) .
+    snd-msg(sm-module-path(Path))
+  +
+    rec-msg(sm-get-new-module-name(Paths?, Path?, ModuleId?)) .
+    snd-eval(SM, get-new-module-name(Paths, Path, ModuleId)) .
+    (
+      rec-value(SM, new-module-name(Path?, ModuleId?)) .
+      snd-msg(sm-new-module-name(Path, ModuleId))
+    +
+      rec-value(SM, module-name-inconsistent) .
+      snd-msg(sm-new-module-name-inconsistent)
+    )   
+  +
+    rec-msg(sm-get-all-needed-imports(Modules?, ModuleId?)) .
+    snd-eval(SM, get-all-needed-imports(Modules, ModuleId)) .
+    Modules := [] .
+    rec-value(SM, all-needed-imports(Imports?)) .
+    snd-msg(sm-all-needed-imports(Imports))
+  +
+    rec-msg(sm-get-imported-module-names(Module?)) .
+    snd-eval(SM, get-imported-module-names(Module)) .
+    rec-value(SM, imported-module-names(ModuleNames?)) .
+    snd-msg(sm-imported-module-names(ModuleNames))
+  +
+    rec-msg(sm-make-sdf-definition(Modules?)) .
+    snd-eval(SM, make-sdf-definition(Modules)) .
+    Modules := [] .
+    (
+      rec-value(SM, sdf-definition(Definition?)) .
+      snd-msg(sm-sdf-definition(Definition)) .
+      Definition := no-tree
+    +
+      rec-value(SM, no-sdf-definition) .
+      snd-msg(sm-no-sdf-definition)
+    )
+  +
+    rec-msg(sm-is-valid-modulename(ModuleId?)) .
+    snd-eval(SM, is-valid-modulename(ModuleId)) .
+    (
+      rec-value(SM, result(yes)) .
+      snd-msg(sm-modulename-is-valid)
+    +
+      rec-value(SM, result(no)) .
+      snd-msg(sm-modulename-is-invalid)
+    ) 
+  +
+    rec-msg(sm-rename-import-in-module(Module?, From?, To?)) .
+    printf("not yet implemented in sdf-modules.idef: sm-rename-import-in-module\n") .
+    snd-msg(sm-import-renamed-in-module(Module))
+  +
+    rec-msg(sm-remove-import-from-module(Module?, ModuleId?)) .
+    snd-eval(SM, remove-import-from-module(Module, ModuleId)) .
+    Module := no-tree .
+    rec-value(SM, module(Module?)) .
+    snd-msg(sm-import-removed-from-module(Module)) .
+    Module := no-tree
+  +
+    rec-msg(sm-rename-modulename-in-module(Module?, ModuleId?)) .
+    snd-eval(SM, rename-modulename-in-module(Module, ModuleId)) .
+    Module := no-tree .
+    rec-value(SM, module(Module?)) .
+    snd-msg(sm-modulename-renamed-in-module(Module)) .
+    Module := no-tree
+  +
+    rec-msg(sm-add-import-to-module(Module?, ModuleId?)) .
+    snd-eval(SM, add-import-to-module(Module, ModuleId)) .
+    Module := no-tree .
+    rec-value(SM, module(Module?)) .
+    snd-msg(sm-import-added-to-module(Module)) .
+    Module := no-tree
+  )
+  * delta
+endlet
+
+toolbus(SdfModules)
+
+#endif /*__SDF_MODULES__*/

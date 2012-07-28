@@ -1,0 +1,9 @@
+typedef struct _SDF_CHARLIST *SDF_CHARLIST;
+
+ATbool SDF_isValidCHARLIST(SDF_CHARLIST arg);
+ATbool SDF_isCHARLISTString(SDF_CHARLIST arg);
+char*  SDF_getCHARLISTString(SDF_CHARLIST arg);
+SDF_CHARLIST  SDF_setCHARLISTString(SDF_CHARLIST arg, char *str);
+ATerm  SDF_CHARLISTToTerm(SDF_CHARLIST arg);
+SDF_CHARLIST SDF_CHARLISTFromTerm(ATerm trm);
+SDF_CHARLIST SDF_makeCHARLISTString(char *str);
