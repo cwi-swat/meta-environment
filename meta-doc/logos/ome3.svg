@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="200.00000px"
+   height="100.00000px"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.42.2"
+   sodipodi:docbase="/home/paulk/logo"
+   sodipodi:docname="ome3.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4310">
+      <stop
+         style="stop-color:#004300;stop-opacity:1;"
+         offset="0"
+         id="stop4312" />
+      <stop
+         style="stop-color:#004300;stop-opacity:0;"
+         offset="1"
+         id="stop4314" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3555">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3557" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3559" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3545">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3547" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3549" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3545"
+       id="radialGradient3553"
+       cx="58.134892"
+       cy="50.390533"
+       fx="58.134892"
+       fy="50.390533"
+       r="68.708664"
+       gradientTransform="matrix(1.122261,0.451962,-8.382145e-2,0.929893,-2.883842,-23.94295)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3555"
+       id="radialGradient3563"
+       cx="58.134892"
+       cy="50.390533"
+       fx="58.134892"
+       fy="50.390533"
+       r="68.708664"
+       gradientTransform="matrix(1.122261,0.451962,-8.382145e-2,0.929893,-2.883842,-23.94295)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3555"
+       id="radialGradient4298"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.122261,0.451962,-8.382145e-2,0.929893,-3.114651,-23.94294)"
+       cx="58.134892"
+       cy="50.390533"
+       fx="58.134892"
+       fy="50.390533"
+       r="68.708664" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3545"
+       id="radialGradient4300"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.122261,0.451962,-8.382145e-2,0.929893,-3.114651,-23.94294)"
+       cx="58.134892"
+       cy="50.390533"
+       fx="58.134892"
+       fy="50.390533"
+       r="68.708664" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4310"
+       id="linearGradient4316"
+       x1="34.899330"
+       y1="2.3489940"
+       x2="130.20134"
+       y2="100.33557"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.9800000"
+     inkscape:cx="99.489260"
+     inkscape:cy="55.975984"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer2"
+     inkscape:window-width="745"
+     inkscape:window-height="563"
+     inkscape:window-x="252"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:1.0000000;fill:url(#linearGradient4316);fill-opacity:1.0;stroke:none;stroke-width:0.0000000;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:0.29166666"
+       id="rect1306"
+       width="198.99329"
+       height="100.00000"
+       x="0.0000000"
+       y="0.33557048"
+       rx="0.41946313"
+       ry="2.7265100" />
+    <text
+       xml:space="preserve"
+       style="font-size:20.000000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Adobe Sans MM"
+       x="3.6912744"
+       y="95.30201"
+       id="text2043"
+       sodipodi:linespacing="125.00000%"><tspan
+         sodipodi:role="line"
+         id="tspan2045"
+         x="3.6912744"
+         y="95.302010"
+         style="font-size:18.000000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"><tspan
+           style="font-size:18.000000px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"
+           id="tspan2049">Open</tspan><tspan
+           style="font-size:18.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"
+           id="tspan2047">MetaEnvironment</tspan></tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="greater">
+    <text
+       xml:space="preserve"
+       style="font-size:309.49847px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:url(#radialGradient4298);fill-opacity:1.0000000;stroke:url(#radialGradient4300);stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Adobe Sans MM"
+       x="-32.763161"
+       y="154.00554"
+       id="text2815"
+       sodipodi:linespacing="125.00000%"
+       transform="scale(1.453856,0.687826)"><tspan
+         sodipodi:role="line"
+         id="tspan2817"
+         x="-32.763161"
+         y="154.00554"
+         style="fill:url(#radialGradient4298);fill-opacity:1.0000000;stroke:url(#radialGradient4300)">&gt;</tspan></text>
+  </g>
+</svg>

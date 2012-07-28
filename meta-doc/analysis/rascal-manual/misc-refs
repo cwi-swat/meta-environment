@@ -1,0 +1,14 @@
+SETL/E, A Prototyping System Based on Sets", E.E. Doberkat et al, in Tagungsband TOOL90, W. Zorn ed, pp. 109-118, U Karlsruhe, Nov 1990].
+
+["ProSet - A Language for Prototyping with Sets", E.-E. Doberkat et al, in
+Proc Third Intl Workshop on Rapid System Prototyping, N.
+
+@article{sipelstein:blelloch:91,
+	author = "Jay Sipelstein and Guy~E. Blelloch",
+	title = "Collection-Oriented Languages",
+	journal = "Proceedings of the IEEE",
+	volume = 79,
+	number = 4,
+	pages = "504--523",
+	month = apr,
+	year = 1991 }

@@ -1,0 +1,6 @@
+module Fac
+exports
+  imports Multiplier
+
+  context-free syntax
+     fac(NUM) -> NUM

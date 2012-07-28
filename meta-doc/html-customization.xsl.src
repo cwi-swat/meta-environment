@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+
+<xsl:stylesheet  
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+    version="1.0">
+
+<xsl:import href="__DOCBOOKXSLPREFIX__/html/docbook.xsl"/>
+<xsl:include href="common-customizations.xsl" />
+
+<!-- graphics -->
+<xsl:param name="callout.graphics.path"      select="'../../images/callouts/'" />
+
+<xsl:param name="html.stylesheet" select="'meta-doc-style.css'" />
+<xsl:param name="ignore.image.scaling" select="'1'" />
+
+<xsl:param name="body.font.family"           select="'serif,Symbol'"/>
+
+</xsl:stylesheet>

@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5.0" xml:id="syntax-analysis"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>Quick Introduction to Syntax Analysis</title>
+
+    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100 (Wed,
+    13 Dec 2006)$</pubdate>
+
+    <author>
+      <personname>Paul Klint</personname>
+    </author>
+  </info>
+
+  <section xml:id="section.sa-motivation">
+    <title>Motivation</title>
+
+    <para><emphasis>Syntax analysis</emphasis> or <emphasis>parsing</emphasis>
+    is about discovering structure in text and is used to determine whether or
+    not a text conforms to an expected format. "Is this a textually correct
+    Java program?" or "Is this bibliographic entry textually correct?" are
+    typical questions that can be answered by syntax analysis. We are mostly
+    interested in syntax analysis to determine that the source code of a
+    program is correct and to convert it into a more structured representation
+    (parse tree) for further processing like semantic analysis or
+    transformation.</para>
+  </section>
+
+  <section xml:id="section.sa-introduction">
+    <title>Introduction</title>
+
+    <para>Consider the following text fragment from a program (this example is
+    taken from <biblioref linkend="AhoSethiUllman86" />):</para>
+
+    <programlisting>position := initial + rate * 60</programlisting>
+
+    <para>How can we determine that this is a correct assignment statement?
+    First of all, this is a sequence of individual characters
+    <literal>p</literal>, <literal>o</literal> , <literal>s</literal>, and so
+    on. This is shown in <xref linkend="figure.sa-example-text" />.</para>
+
+    <figure xml:id="figure.sa-example-text">
+      <title>Text of example</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="example-text.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>It makes sense to first group these character as follows:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The identifier <literal>position</literal>.</para>
+      </listitem>
+
+      <listitem>
+        <para>The assignment symbol :=.</para>
+      </listitem>
+
+      <listitem>
+        <para>The identifier <literal>initial</literal>.</para>
+      </listitem>
+
+      <listitem>
+        <para>The plus sign.</para>
+      </listitem>
+
+      <listitem>
+        <para>The identifier <literal>rate</literal>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Th multiplication sign.</para>
+      </listitem>
+
+      <listitem>
+        <para>The number <literal>60</literal>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This process of grouping individual characters is called
+    <emphasis>lexical analysis</emphasis> or <emphasis>lexical
+    scanning</emphasis>, the result is shown in <xref
+    linkend="figure.sa-example-lex" />. Observe that the spaces have
+    disappeared and are left unclassified (we will come back to this in <xref
+    linkend="section.sa-lexical-versus-context-free-grammar" />).</para>
+
+    <figure xml:id="figure.sa-example-lex">
+      <title>Lexical analysis of example</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="example-lexicals.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Next, we want to determine that this is a structurally correct
+    statement. This is the main province of syntax analysis or parsing as it
+    is usually called. The result of parsing is a <emphasis>parse
+    tree</emphasis> as shown in <xref
+    linkend="figure.sa-example-parsetree" />. This parse tree reflects the
+    usual meaning of arithmetic operators: since multiplication is done before
+    addition, the sub phrase <literal>rate * 60</literal> is grouped together
+    as a logical unit.</para>
+
+    <figure xml:id="figure.sa-example-parsetree">
+      <title>Parse tree of example</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="example-parse-tree.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The hierarchical structure of programs is usually described by
+    recursive rules like the following ones that describe expressions:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Any <emphasis>Identifier</emphasis> is an
+        <emphasis>expression</emphasis>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Any <emphasis>Number</emphasis> is an
+        <emphasis>expression</emphasis>.</para>
+      </listitem>
+
+      <listitem>
+        <para>If <emphasis>Expression</emphasis><subscript>1</subscript> and
+        <emphasis>Expression</emphasis><subscript>2</subscript> are
+        expressions, then so are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Expression</emphasis><subscript>1</subscript><literal>+</literal><emphasis>Expression</emphasis><subscript>2</subscript></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Expression</emphasis><subscript>1</subscript><literal>*</literal><emphasis>Expression</emphasis><subscript>2</subscript></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis><literal>(</literal>
+            Expression</emphasis><subscript>1</subscript><literal>)</literal></para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </orderedlist>
+
+    <para>According to rule (1) <literal>position</literal>,
+    <literal>initial</literal> and <literal>rate</literal> are expressions.
+    Rule (2) states that <literal>60</literal> in an expression. Rule (3) says
+    that <literal>rate * 60</literal> is an expression and finally that
+    <literal>initial + rate * 60</literal> is an expression. In a similar
+    fashion, language statements can be defined by rules like:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>If <emphasis>Identifier</emphasis><subscript>1</subscript> is an
+        identifier and <emphasis>Expression</emphasis><subscript>2</subscript>
+        is an expression, then</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Identifier</emphasis><subscript>1</subscript> :=
+            <emphasis>Expression</emphasis><subscript>2</subscript></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>is a statement.</para>
+      </listitem>
+
+      <listitem>
+        <para>If <emphasis>Expression</emphasis><subscript>1</subscript> is an
+        expression and <emphasis>Statement</emphasis><subscript>2</subscript>
+        is a statement, then</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>while
+            (</literal><emphasis>Expression</emphasis><subscript>1</subscript><literal>)
+            do</literal><emphasis>Statement</emphasis><subscript>2</subscript></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>if
+            (</literal><emphasis>Expression</emphasis><subscript>1</subscript><literal>)
+            then</literal><emphasis>Statement</emphasis><subscript>2</subscript></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>are statements.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>These rules are called <emphasis>grammar rules</emphasis> and a
+    collection of such rules is called a <emphasis>context-free
+    grammar</emphasis> or <emphasis>grammar</emphasis> for short.</para>
+  </section>
+
+  <section xml:id="section.sa-basic_concepts">
+    <title>Basic concepts</title>
+
+    <para>We will now discuss the basic concepts that are vital for
+    understanding syntax analysis. While doing so, we will use examples
+    written in SDF (see <olink targetdoc="sdf"></olink>), the Syntax
+    Definition Formalism used in The Meta-Environment (see, <link
+    xlink:href="???">http://www.meta-environment.org</link>)</para>
+
+    <section xml:id="section.sa-lexical-grammar">
+      <title>Lexical grammar</title>
+
+      <para>At the lowest level, the lexical notions of a language like
+      identifiers, keywords, and numbers have to be defined in one way of
+      another. The same holds for the layout symbols (or whitespace) that may
+      surround the lexical tokens of a language. The common understanding is
+      that layout symbols may occur anywhere between lexical tokens and have
+      no further meaning. Let's get the boring stuff out of the way, and let's
+      define the lexical syntax of our example:</para>
+
+      <programlisting>[ \t\n]*           -&gt; LAYOUT
+[a-z][A-zA-Z0-9]*  -&gt; Identifier
+[0-9]+             -&gt; Number</programlisting>
+
+      <para>The left-hand side of these rules describes the pattern of
+      interest and the right-hand side defines the name of the corresponding
+      lexical category. In all these left-hand sides two important notions
+      occur:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Character classes like <literal>[0-9]</literal> that describes
+          the characters from <literal>0</literal> to
+          <literal>9</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The repetition operators <literal>*</literal> (zero or more)
+          and <literal>+</literal> (one or more).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The first rule states that all spaces, tabulation or newline
+      characters are to be considered as layout. The second rules states that
+      identifiers start with a lowercase letter and may be followed by zero or
+      more letters (both cases) and digits. The last rule states that a number
+      consists of one or more digits. Note that we have not yet said anything
+      about other lexical tokens that may occur in our example statement, like
+      <literal>:=</literal>, <literal>+</literal> and <literal>*</literal> and
+      parentheses.</para>
+    </section>
+
+    <section xml:id="section.sa-context-free-grammar">
+      <title>Context-free grammar</title>
+
+      <para>It is time to move on to the definition of the structure of our
+      example language. Let's start with the expressions:</para>
+
+      <programlisting>Identifier                -&gt; Expression
+Number                    -&gt; Expression
+Expression "+" Expression -&gt; Expression
+Expression "*" Expression -&gt; Expression
+"(" Expression ")"        -&gt; Expression</programlisting>
+
+      <para>Not surprisingly, we follow the rules as we have seen above.
+      Observe, that these rules contain literal texts (indicated by double
+      quotes) and these are implicitly defined as lexical tokens of the
+      language. If you are worried about the priorities of addition and
+      multiplication, see <xref linkend="section.sa-disambiguation-methods" />
+      below.</para>
+
+      <para>The final step is to define the structure of the assignment
+      statement:</para>
+
+      <programlisting>Identifier ":=" Expression -&gt; Statement</programlisting>
+
+      <para>For completeness, we also give the rules for the while and if
+      statement shown earlier:</para>
+
+      <programlisting>"while" "(" Expression ")"  "do" Statement -&gt; Statement
+"if" "(" Expression ")" Statement          -&gt; Statement</programlisting>
+    </section>
+
+    <section xml:id="section.sa-lexical-versus-context-free-grammar">
+      <title>Lexical versus context-free grammar</title>
+
+      <para>Traditionally, a strict distinction is being made between lexical
+      syntax and context-free syntax. This distinction is strict but also
+      rather arbitrary and is usually based on the implementation techniques
+      that are being employed for the lexical scanner and the parser. In The
+      Meta-Environment we abolish this distinction and consider everything as
+      parsing. Not surprisingly our parsing method is therefore called
+      <emphasis>scannerless parsing</emphasis>.</para>
+    </section>
+
+    <section xml:id="section.sa-ambiguous-grammars-and-disambiguation">
+      <title>Ambiguous grammars and disambiguation</title>
+
+      <para>The careful reader will observe that we have skipped over an
+      important issue. Consider the expression:</para>
+
+      <programlisting>1 + 2 * 3</programlisting>
+
+      <para>Should this be interpreted as</para>
+
+      <programlisting>(1 + 2) * 3</programlisting>
+
+      <para>or rather as</para>
+
+      <programlisting>1 + (2 * 3).</programlisting>
+
+      <para>The latter is more likely, given the rules of arithmetic that
+      prescribe that multiplication has to be done before addition. The
+      grammar we have presented so far is <firstterm>ambiguous</firstterm>,
+      since for some input texts more than one structure is possible. In such
+      cases, disambiguation rules (priorities) are needed to solve the
+      problem:</para>
+
+      <programlisting>context-free priorities
+  Expression "*" Expression -&gt; Expression &gt;
+  Expression "+" Expression -&gt; Expression</programlisting>
+
+      <para>Other disambiguation mechanisms include defining left- or
+      right-associativity of operators, preferring certain rules over others,
+      and rejection of certain parses.</para>
+    </section>
+
+    <section xml:id="section.sa-recongnizing-versus-parsing">
+      <title>Recognizing versus parsing</title>
+
+      <para>In its simplest form, syntax analysis amounts to recognizing that
+      a source text adheres to the rules of a given grammar. This is shown in
+      <xref linkend="figure.sa-recognizer" />. Given a grammar, it takes a
+      source text as input and generates <emphasis>Yes</emphasis> or
+      <emphasis>No</emphasis> as answer. <emphasis>Yes</emphasis>, when the
+      source text can be parsed according to the grammar, and
+      <emphasis>No</emphasis>, when this is not the case. In practice, a
+      recognizer becomes infinitely more useful if it also generates error
+      messages that explain the negative outcome.</para>
+
+      <figure xml:id="figure.sa-recognizer">
+        <title>A recognizer</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="recognizer.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+
+        <para>Pure recognizers are seldomly used, since the parse tree
+        corresponding to the source text is needed for nearly all further
+        processing such as checking or compiling. The more standard situation
+        is shown in <xref linkend="figure.sa-parser" />. Given a grammar, a
+        parser takes a source text as input and generates as answer either a
+        parse tree or a list of error messages.</para>
+      </figure>
+
+      <figure xml:id="figure.sa-parser">
+        <title>A parser</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="parser.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section xml:id="section.sa-parsing-methods">
+      <title>Parsing methods</title>
+
+      <para>Syntax analysis is one of the very mature areas of language theory
+      and many methods have been proposed to implement parsers. Giving even a
+      brief overview of these techniques is beyond the scope of this paper,
+      but see the references in <xref linkend="section.sa-further-reading" />.
+      In the Meta-Environment we use a parsing method called Scannerless
+      Generalized Left-to-Right parsing or SGLR for short. The least we can
+      do, is explain what this method is about.</para>
+
+      <para>We have already encountered the notion of
+      <emphasis>scannerless</emphasis> parsing in <xref
+      linkend="section.sa-introduction" />. It amounts to eliminating the
+      classic distinction between the scanner (that groups characters into
+      lexical tokens) and the parser (that determines the global structure).
+      The advantage of this approach is that more interplay between the
+      character level and the structure level is possible. This is
+      particularly true in combination with the "generalized" property of
+      SGLR.</para>
+
+      <para>The most intuitive way of parsing is predicting what you expect to
+      see in the source text and checking that the prediction is right.
+      Complicated predictions ("I want to parse a program") are split into a
+      number of subsidiary predictions ("I want to parse declarations followed
+      by statements"). This continues until the lexical level is reached and
+      we can actually check that the lexical tokens that occur in the text
+      agree with the predictions. This <emphasis>predictive</emphasis> or
+      <emphasis>top-down</emphasis> parsing takes an helicopter view: you know
+      what you are looking for and check that it is there. This intuitive
+      parsing method has a major disadvantage: for certain grammars the
+      top-down parser will make endless predictions and will thus not
+      terminate.</para>
+
+      <para><emphasis>Left-to-Right</emphasis> or <emphasis>LR</emphasis>
+      indicates a specific style of parsing that is more powerful: bottom-up
+      parsing. Bottom-up parsing is like walking in the forest during a foggy
+      day. You have only limited sight and step by step you find your way. A
+      bottom-up parser considers consecutive lexical token and tries to
+      combine them into higher level notions like expressions, statements and
+      the like. LR parsers can parse more languages than top-down parsers can.
+      However, when combining the pieces together, an LR parser can only work
+      when there is precisely <emphasis>one way</emphasis> to combine them and
+      has to give up otherwise. This means that there are still languages that
+      cannot be parsed by an LR parser.</para>
+
+      <para>Here comes the <emphasis>generalized</emphasis> in SGLR to the
+      rescue: this removes the restriction that there is only one way to
+      combine recognized parts. In doing so, it becomes possible that not one
+      but <emphasis>several</emphasis> parse trees are the result of parsing.
+      The bonus is that all context-free languages can be parsed by the SGLR
+      parsing algorithm. <xref linkend="figure.sa-sglr" /> summarizes the use
+      of an SGLR parser. Using SGLR has three key advantages:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>SGLR recognizes the largest possible class of grammars: all
+          context-free grammars.</para>
+        </listitem>
+
+        <listitem>
+          <para>Context-free grammars can be combined to form another
+          context-free grammar. This enables <emphasis>modular
+          grammars</emphasis>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The integration of lexical scanning and context-free parsing
+          gives more control to the grammar writer to finetune his
+          grammars.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure xml:id="figure.sa-sglr">
+        <title>An SGLR parser</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="sglr.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section>
+    <title
+    xml:id="section.sa-extensions-of-grammars-syntax-analysis">Extensions of
+    grammars and syntax analysis</title>
+
+    <para>There are many extensions to the grammar descriptions we have seen
+    so far. We single out lists, disambiguation methods and modular grammar
+    for further clarification.</para>
+
+    <section xml:id="section.sa-lists">
+      <title>Lists</title>
+
+      <para>Repeated items are pervasive in programming language grammars:
+      lists of declarations, lists of statements, lists of parameters are very
+      common. Many grammar notations provide support for them. Here is the
+      list notation used in SDF. If we want to define a list of statements, we
+      could write the following:</para>
+
+      <programlisting>Statement                -&gt; Statements
+Statement ";" Statements -&gt; Statements</programlisting>
+
+      <para>This is a clear description of statements lists, but a shorter
+      description is possible:</para>
+
+      <programlisting>{ Statement ";" }+       -&gt; Statements</programlisting>
+
+      <para>The pattern defines a list of elements some syntactic category
+      (e.g., <literal>Statement</literal>), separated by a lexical token
+      (e.g., <literal>";"</literal>), and consists of one or more (indicated
+      the <literal>+</literal>) elements. In a similar fashion lists of zero
+      or more elements can be defined (using a <literal>*</literal> instead of
+      a <literal>+</literal>). The advantage of the list notation is twofold:
+      the grammar becomes more compact and the matching of these rules in the
+      equations becomes more easy.</para>
+    </section>
+
+    <section xml:id="section.sa-disambiguation-methods">
+      <title>Disambiguation methods</title>
+
+      <para>Many mechanisms exist to disambiguate a given grammar. We mention
+      a few:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Priorities</emphasis>. When there is a choice,
+          prefer rules with a higher priority. As a result, rules with a
+          higher priority "bind more strongly". This is, for example, the case
+          when defining the priorities of arithmetic operators.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Associativity</emphasis>. In some cases, syntax
+          rules can overlap with themselves. Is <literal>1 + 2 + 3</literal>
+          to be parsed as <literal>(1 + 2) + 3</literal> or rather as
+          <literal>1 + (2 + 3)</literal>? In the former case, the plus
+          operator is said to be <emphasis>left-associative</emphasis>, in the
+          latter case it is called <emphasis>right-associative</emphasis>. In
+          some cases, an operator is <emphasis>non-associative</emphasis> and
+          the expression has to be disambiguated explicitly by placing
+          parentheses.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Follow restrictions</emphasis>. Forbid that certain
+          constructs follow each other. Typical example: forbid that an
+          identifier is followed by letters or digits. In this way we can
+          ensure that all possible characters are part of the identifier. In
+          other words, we enforce the longest possible match for all
+          characters that may belong to the identifier.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Prefer</emphasis>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Reject</emphasis>. Reject a parse in which a certain
+          grammar rule occurs. For instance, a text like
+          <literal>while</literal> may be a keyword or an identifier. By
+          rejecting the parse with <literal>while</literal> as identifier we
+          enforce that <literal>while</literal> is only used as keyword. This
+          is usual in most languages but not in all (e.g., PL/I).</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="section.sa-modular-grammars">
+      <title>Modular grammars</title>
+
+      <para>As we have seen in <xref linkend="section.sa-parsing-methods" />,
+      using an SGLR parser enables the creation of modular grammars. This is
+      more exciting than it sounds. Consider, a huge language like Cobol (yes
+      it is still widely used!). In addition to the Cobol language itself
+      there are many extensions that are embedded in Cobol programs: CICS
+      supervisor calls, SQL queries, and the like. Each of these grammars
+      works well if we use them with a conventional parser (see <xref
+      linkend="figure.sa-modular-parser1" />). However, if we attempt to
+      combine the three grammars in ordere\ to be able to parse Cobol programs
+      with embedded CICS and SQL, then disaster strikes. Most conventional
+      parsers will complain about the interference between the three grammars
+      and just refuse to work (see <xref
+      linkend="figure.sa-modular-parser2" />). For the technically inclined:
+      shift-reduce conflict galore! However, if we try the same with an SGLR
+      parser things go smoothly (see <xref
+      linkend="figure.sa-modular-parser3" />).</para>
+
+      <figure xml:id="figure.sa-modular-parser1">
+        <title>Conventional parser works well with independent
+        grammars</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="modular-parser1.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <figure xml:id="figure.sa-modular-parser2">
+        <title>Conventional parser does not work with combined
+        grammars</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="modular-parser2.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <figure xml:id="figure.sa-modular-parser3">
+        <title>SGLR works well with combined grammars</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="modular-parser3.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section xml:id="section.sa-role-of-syntax-analysis-in-The-Meta-Environment">
+    <title>The role of syntax analysis in The Meta-Environment</title>
+
+    <para>Syntax analysis plays a prominent role in The
+    meta-Environment:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>To parse source text</emphasis>. Given a grammar for
+        some language (say Java) and a program in that language (a Java
+        program) we can parse the program and obtain its parse tree. This is
+        an example of the approach sketched in <xref
+        linkend="figure.sa-sglr" />. This parse tree can then be further
+        processed by applying rewrite rules (equations) defined in an ASF+SDF
+        specification.</para>
+      </listitem>
+
+      <listitem>
+        <para>To parse equations. The equations in ASF+SDF specifications can
+        use the grammar rules that are defined in the SDF part of the
+        specification. The equations have to be parsed first according to that
+        grammar and then they can be used for rewriting.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="section.sa-further-reading">
+    <title>Further reading</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>The classical work on grammars in natural languages is
+        <biblioref linkend="Chomsky56" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>Another monumental work on grammars in computer science is the
+        first volume of the two volume series <biblioref
+        linkend="AhoUllman72" />. </para>
+      </listitem>
+
+      <listitem>
+        <para>A more recent overview of parsing techniques is given in
+        <biblioref linkend="GruneJacobs90" />. A second edition is in
+        preparation and will be published by Springer in 2007.</para>
+      </listitem>
+
+      <listitem>
+        <para>On <link
+        xlink:href="http://www.meta-environment.org">www.meta-environment.org</link>
+        you can find several articles related to SDF.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Bibliography</title>
+
+    <bibliolist>
+      <!--Here follows a list of alle bibliography entries that are referenced in this chapter. This is needed to pull in 
+the real entries from the central bibliography and to silence the validity checker. Each entry is empty except for its
+xml:id (that is identical to the xml:id of the desired entry).-->
+
+      <title></title>
+
+      <bibliomixed xml:id="AhoUllman72"></bibliomixed>
+
+      <bibliomixed xml:id="AhoSethiUllman86"></bibliomixed>
+
+      <bibliomixed xml:id="GruneJacobs90"></bibliomixed>
+
+      <bibliomixed xml:id="Chomsky56"></bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

@@ -1,0 +1,4 @@
+equations
+
+[1] mul(0, X) = 0
+[2] mul(succ(X), Y) = add(mul(X,Y), Y)

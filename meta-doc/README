@@ -1,0 +1,40 @@
+This is the README file for the svnlog.xslt, a svn to rss xsl stylesheet.
+
+1. What is it svnlog.xslt?
+2. Licensing
+3. Warranty
+4. Installation
+
+
+1. What is svnlog.xslt?
+========================================
+
+svnlog.xslt is a XSLT stylesheet to generate a RSS 2.0 feed of your 
+subversion repository. It is supposed to be run from the post-commit
+hook and should work with most eXSLT compatible processors.
+
+Original creator of svnlog.xslt is Martin Pittenauer (www.codingmonkeys.de).
+
+
+2. Licensing
+========================================
+
+This work is licensed under the Creative Commons Attribution License. To view 
+a copy of this license, visit http://creativecommons.org/licenses/by/1.0/. 
+If you add features, please send a copy to map@codingmonkeys.de.
+
+
+3. Warranty
+========================================
+
+I offer NO WARRANTY for using svnlog.xslt in any conditions.
+
+
+4. Installation
+========================================
+
+Adjust svnlog.xslt and rssfeed.sh to your setup.
+Copy svnlog.xslt and rssfeed.sh to your repository's "hooks" directoy
+and add the following line to "post-commit":
+(cd "$REPOS/hooks"; ./rssfeed.sh $REPOS $REV &)
+

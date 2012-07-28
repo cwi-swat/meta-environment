@@ -1,0 +1,6 @@
+prefix=@prefix@
+Maintainers=paulk@cwi.nl,jurgenv@cwi.nl
+Name: meta-doc
+Version: 2.0
+Description:
+Requires: 

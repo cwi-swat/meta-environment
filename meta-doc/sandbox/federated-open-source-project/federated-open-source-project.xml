@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+<!ENTITY euro "&#8364;">
+<!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
+%dbcent;
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>Federated Open Source Project</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>This white paper proposes an organizational architecture for a
+    collection of open source projects that originated from academia. The
+    characteristics are:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>There are now a number of projects that depend on
+        eachother;</para>
+      </listitem>
+
+      <listitem>
+        <para>The projects originated from a particular institute;</para>
+      </listitem>
+
+      <listitem>
+        <para>The projects are now maintained/developed from several
+        institutes (internationally);</para>
+      </listitem>
+    </orderedlist>
+
+    <section>
+      <title>Which projects?</title>
+
+      <para>We are referring to the following projects, albeit that some of
+      these projects are currently not identifiable as separate
+      efforts:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>ATerm library</para>
+        </listitem>
+
+        <listitem>
+          <para>ToolBus</para>
+        </listitem>
+
+        <listitem>
+          <para>SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>ASF+SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>Stratego</para>
+        </listitem>
+
+        <listitem>
+          <para>StrategoXT</para>
+        </listitem>
+
+        <listitem>
+          <para>Strafunsky</para>
+        </listitem>
+
+        <listitem>
+          <para>JJTraveller</para>
+        </listitem>
+
+        <listitem>
+          <para>TOM</para>
+        </listitem>
+
+        <listitem>
+          <para>More?</para>
+        </listitem>
+      </orderedlist>
+
+      <para>These originated from a range of institutes, namely UvA, CWI,
+      Universiteit Utrecht, INRIA-LORIA, TU Eindhoven. Contributors are now
+      spread more widely than that, and have swapped institutes or migrated to
+      other institutes within Europe. Note that we do not identify projects
+      with source code packages. This means for example that the ATerm project
+      contains aterm, aterm-java, and shared-objects. The packes within a
+      project are tightly coupled, while the dependencies between projects is
+      supposed to be loose.</para>
+    </section>
+
+    <section>
+      <title>Bottlenecks</title>
+
+      <para>The future of these projects is at stake. There are several
+      perspectives on their future, each with identifiable bottlenecks. It is
+      these bottlenecks we will try to solve with a single sweeping solution,
+      namely by decoupling the originating institutes from the projects
+      completely. More on this later, let's first identify the
+      bottlenecks:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Visibility in the research community. There are loud
+          complaints about the number and kind of references to "our" work.
+          One of the possible reasons for this effect is the fragmentation of
+          the community.</para>
+        </listitem>
+
+        <listitem>
+          <para>Maintainability of software. A number of "finished" projects
+          require maintenance without a change of research yield in terms of
+          papers. If the specialists move to a different institute, or
+          dissappear completely, there is a chance of software death. </para>
+        </listitem>
+
+        <listitem>
+          <para>Unwanted competition. Sometimes research and implementation
+          work is duplicated. Competition is sometimes good, but on our small
+          scale there is much more to gain from working together.</para>
+        </listitem>
+
+        <listitem>
+          <para>Branding. Branding with institute names is a political
+          bottleneck for people to remain working on a certain project.</para>
+        </listitem>
+
+        <listitem>
+          <para>More?</para>
+        </listitem>
+      </orderedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Federation of open source projects</title>
+
+    <para>The proposal is to obtain a "pillar" for each project. A preferable
+    situation would be that each pillar is shaped similarly, such that
+    developers may migrate easily from project to project. However, this is
+    not a necessitity, allowing for a little bit of divergence and flexibility
+    is pivotal. This allows a certain kind of autonomy between the projects
+    (not within).</para>
+
+    <section>
+      <title>Pillars</title>
+
+      <para>Let's redesign the current state into a number of open source
+      projects, that each have the following features:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>A "captain". This is a person that takes responsibility for
+          the projects well being, and therefore manages every aspect of it,
+          or redirects sub-responsibilities for that.</para>
+        </listitem>
+
+        <listitem>
+          <para>A subversion root repository. A repository with separate user
+          management for each project.</para>
+        </listitem>
+
+        <listitem>
+          <para>Mailing lists. Each project has a separate developers list and
+          a separate users list.</para>
+        </listitem>
+
+        <listitem>
+          <para>A web site. Each project has it's own .org website (possibly
+          hosted as a web in a single wiki like system, but with it's
+          completely separate identity.</para>
+        </listitem>
+
+        <listitem>
+          <para>A bug tracking system. Each project will have its own
+          bugtracker, or at least a product within a bugtracking system in
+          which the separate packages of the project can be hosted.</para>
+        </listitem>
+
+        <listitem>
+          <para>Coding standards. Although we do not want to prohibit sharing
+          coding standards between projects, the idea is that in principle
+          each project may diverge.</para>
+        </listitem>
+
+        <listitem>
+          <para>Developers. For each project it is explicitly managed who
+          develops, where they come from, and where they came from.</para>
+        </listitem>
+
+        <listitem>
+          <para>Research. Each project is identified with a number of research
+          topics, on which developers/researcher within a project collaborate
+          on (as a principle, not an enforced rule). Also, research results
+          and publications that are related to the project are identified with
+          the project.</para>
+        </listitem>
+
+        <listitem>
+          <para>Documentation. Obviously</para>
+        </listitem>
+      </orderedlist>
+
+      <para>The underlying idea is of course to allow more flexibility in
+      terms of involvement and movement of people, while remaining strict
+      control of the actual software, and improving collaboration on all
+      levels. The above points trivially contributes to this idea.</para>
+    </section>
+
+    <section>
+      <title>Investments</title>
+
+      <para>What we invest is loss of corporate identity, trading it for
+      product identity and personal identity. We try to mitigate this by
+      explicitly managing a list of people and institutes (logos) on each
+      projects' website.As a developer, I do not find this a problem. However,
+      our employers may have some say in this.</para>
+
+      <para>Also, what we invest is trust. Trust is needed between the
+      captains of the separate pillars to allow project release
+      synchronization, and to allow a separate identity for each project. The
+      main issue is that in this federation of projecs, projects both depend
+      on eachother and overlap with eachother in terms of application areas.
+      This is where conflicts of interest between several projects may arise.
+      The need for trust is obvious, and the fullfilment of it would be to be
+      able to communicate openly about possible conflicting interests and the
+      possible solutions. A practical solution is to some instances of single
+      developers working on several projects.</para>
+
+      <para>Last but not least, we invest resources. Splitting up into pillars
+      requires each pillar to be maintained and organized. However, this also
+      allows distribution and parallization of the work of maintaining a
+      project. The investment in resources such as websites and version
+      repositories can be mitigated by reusing infra-structure between
+      projects. For example, CWI may host several subversion roots, under
+      different URL's, and a single Wiki webserver may host the webs of
+      several projects.</para>
+
+      <para>Each of the above investments is also a critical success factor.
+      Without it the whole approach fails and could represent a significant
+      disinvestment. So, approval, trust and infra-structure are each to be
+      executed and controlled with care. For managing this, the captains of
+      federation of projects will have to come together once in a
+      while.</para>
+    </section>
+
+    <section>
+      <title>Expected results</title>
+
+      <para>We expect a number of positive effects from this federated
+      approach:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>More developers on each separate project. Since small projects
+          are more easy to identify with, because they have a smaller scope
+          and are therefore smaller and less intimidating, we expect people to
+          more easily commit to it. Another reason is the loss of corporate
+          identity; more developers will be able to join without being nagged
+          by their employers.</para>
+        </listitem>
+
+        <listitem>
+          <para>More visibility for smaller projects. Our most popular
+          products are the smaller ones. The ATerm library is the example.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>Better quality. Implied by more developers, we should expect
+          higher quality of source code and documentation when more time is
+          invested in it.</para>
+        </listitem>
+
+        <listitem>
+          <para>More users, or more widespread transfer of knowledge and tools
+          to industry and other branches of academia. This is implied by the
+          better visibility, better quality and better continuity of the
+          software.</para>
+        </listitem>
+
+        <listitem>
+          <para>More references. It seems almost contradictory, but this
+          federated approach leads to a bigger and more unified presentation
+          of research results, which should lead to more visibility.</para>
+        </listitem>
+
+        <listitem>
+          <para>More continuity. Since developers may now move without having
+          to duplicate infra-structures or even software, the continuity of
+          the software can be guaranteed.</para>
+        </listitem>
+
+        <listitem>
+          <para>More papers. Since we try to diminish duplicate programming
+          and duplicate research, there is more time to work together on novel
+          and interesting subjects.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+</article>

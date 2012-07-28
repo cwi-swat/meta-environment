@@ -1,0 +1,1 @@
+fib(succ(succ(succ(succ(0)))))

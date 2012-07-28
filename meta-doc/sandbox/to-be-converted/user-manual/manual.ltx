@@ -1,0 +1,4952 @@
+
+% vim:ts=4:sw=4:tw=75
+\documentclass[a4paper,twoside]{article}
+\usepackage{hyperlatex} 
+\usepackage{xspace}
+\usepackage{verbatim}
+\usepackage[english]{babel}
+\usepackage{times}
+\usepackage{a4wide}
+\usepackage{alltt}
+\usepackage{moreverb}  
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\W\usepackage{longtable}
+\W\usepackage{makeidx}
+\W\usepackage{frames}
+%%%% \W\usepackage{manpanels}
+\W\usepackage{sequential}
+
+\T\usepackage{graphicx}
+
+%\begin{ifhtml}
+\makeindex
+%\end{ifhtml}
+
+\xmlattributes{body}{bgcolor= "#ffffe6"}
+\xmlattributes{TABLE}{BORDER}
+
+\htmltopname{ASF+SDF Meta-Environment User Manual}
+
+\newcommand{\printindex}{%
+  \htmlonly{\HlxSection{-5}{}*{\indexname}\label{hlxindex}}%
+  \texorhtml{\IfFileExists{manual.ind}{\input{manual.ind}}}{\htmlprintindex}}
+
+\htmlpanelfield{Contents}{hlxcontents}
+\htmlpanelfield{Index}{hlxindex}
+
+\newcommand{\ASmetaenv}{{\textsc Asf}+{\textsc Sdf} Meta-En\-vir\-on\-ment}
+\newcommand{\sdf}{{\textsc Sdf}}
+\newcommand{\asf}{{\textsc Asf}}
+\newcommand{\asfsdf}{{\textsc Asf}+{\textsc Sdf}}
+\newcommand{\ATerm}{ATerm}
+\newcommand{\ATerms}{ATerms}
+\newcommand{\xemacs}{{\tt XEmacs}}
+\newcommand{\lexyacc}{Lex+Yacc}
+\newcommand{\ebnf}{(E)BNF}
+\newcommand{\boxlanguage}{\textsc{BOX}}
+\newcommand{\rscript}{\textsc{RScript}}
+
+\newcommand{\fignegspacebefore}{\vspace*{-0.25cm}}
+\newcommand{\fignegspacebetween}{\vspace*{-0.25cm}}
+\newcommand{\fignegspaceafter}{\vspace*{-0.5cm}}        
+
+\newenvironment{Code}
+        {\begin{small}\begin{center}}
+        {\end{center}\end{small}}
+
+\newcommand{\crule}{
+   \htmlonly{\htmlrule}
+%% \htmlimage{grey-line.gif}
+  \texonly{\hrulefill}
+}
+
+\newenvironment{IncCode}
+        {\crule \begin{small}}
+        {\end{small} \crule}  
+
+\newenvironment{CodeExample}
+        {\crule \begin{center} \begin{small}}
+        {\end{small} \end{center} \crule}
+
+\newcommand{\warning}{
+	\htmlonly{\htmlimage{warning.gif}}
+	\texonly{\noindent {\bf Warning}:}
+}
+
+\newcommand{\traversalprod}[2]{\ensuremath{f(S_1 ,\dots, S_{#1}) \rightarrow #2}}
+\newcommand{\transformerprod}{\ensuremath{f(S_1 ,\dots, S_n) \rightarrow S_1} \{\traversal(\trafo)\}}
+\newcommand{\accumulatorprod}[1]{\ensuremath{f(S_1 , S_2 ,\dots, S_{#1}) \rightarrow S_2}}
+\newcommand{\combinationprod}[1]{\ensuremath{f(S_1 , S_2 ,\dots, S_{#1}) \rightarrow S_1 \# S_2}}
+\newcommand{\accu}[0]{{\tt accu}}
+\newcommand{\trafo}[0]{{\tt trafo}}
+\newcommand{\accutrafo}[0]{{\tt accu, trafo}}
+\newcommand{\traversal}[0]{{\tt traversal}}
+\newcommand{\innerm}[0]{{\tt bottom-up}}
+\newcommand{\outerm}[0]{{\tt top-down}}
+
+%----[ TITLE PAGE ]----           
+\title{\ASmetaenv\ User Manual \\ $Revision$}
+\author{M.G.J. van den Brand and P. Klint and J.J. Vinju \\
+        {\small Centrum voor Wiskunde en Informatica (CWI),}\\
+{\small Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}}
+
+\htmltitle{ASF+SDF Meta-Environment\ User Manual \\ $Revision$}
+\htmldirectory{html} 
+\htmlname{user-manual}
+\htmladdress{M.G.J. van den Brand and P. Klint and J.J. Vinju, \today}
+
+\newcommand{\homepage}{http://www.meta-environment.org}
+
+\xmlattributes{BODY}{BGCOLOR="#ffffe6"}
+\xmlattributes{TABLE}{BORDER}
+\setcounter{htmldepth}{3}
+\setcounter{secnumdepth}{3}
+
+\date{\today}
+\begin{document}
+\maketitle    
+
+
+\begin{ifhtml}
+\begin{center}
+This document is also available as a
+\xlink{pdf}{http://www.meta-environment.org/doc/manual.pdf}
+document.
+\end{center}
+\end{ifhtml}
+
+\begin{abstract}
+This is a preliminary user manual for the \ASmetaenv\ Release 2.0
+This is work under construction.
+
+\end{abstract}
+
+Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.com}.
+
+\T\tableofcontents
+
+\W\htmlmenu{0}
+
+
+
+%---- [ OVERVIEW ]---- 
+
+\section*{Changes with respect to previous version}
+
+Changes made for 2.x releases:
+\begin{itemize}
+\item Extended the overview, and introduced some pictures
+\item Added remarks on RScript 
+\end{itemize}
+\hrule
+
+Changes made for the 1.5.x releases:
+\begin{itemize}
+\item Adapted to version 1.5 of the \ASmetaenv.
+\item Added a description of the unit tests in \asf.
+\item Added a detailed description of the \link{error
+messages}[ (see Section~\Ref)]{SEC:SDF-checker}.
+\item Described the \link{{\tt context-free start-symbols}}[ (see
+Section~\Ref)]{SEC:ContextFreeStartSymbols}.
+\item Rewritten the section on stand-alone tools.
+\end{itemize}
+
+\section{Overview}
+\label{overview} 
+
+\subsection{When to use the \ASmetaenv?}
+
+\index{Asf+Sdf Meta-Environment@\ASmetaenv}
+\index{Asf+Sdf formalism@\asfsdf\ formalism}
+\index{meta programming}
+The \ASmetaenv\ is an interactive development environment (IDE) for
+\emph{meta programming}. It can be used to generate implementations of
+\begin{itemize}
+\item compilers,
+\item interpreters,
+\item source-to-source transformers,
+\item source code analyzers,
+\item pretty printers (formatters),
+\item type-checkers,
+\item syntax highlighters,
+\item source code generators,
+\item and even full blown IDE's.
+\end{itemize}
+Typical applications written using the \ASmetaenv cover several transitions
+from one representation to another (Figure
+\ref{FIG:artefacts})
+\begin{figure}[t]
+\begin{center}
+\begin{Label}{FIG:artefacts}
+\T \includegraphics[width=12cm]{artefacts}
+\W \htmlimage{artefacts.gif}
+\caption{Meta programs implement transitions between source code
+representations}
+\end{Label}
+\end{center}
+\end{figure}
+
+
+The generative process is controlled by a syntax definition of a
+(programming) language, and a semantical description of the manipulations
+you want to express on the language.
+
+The \ASmetaenv\ can help you if
+\begin{itemize}
+  \item You have to write a formal specification for some problem
+  and you need interactive support to do this.
+  \item You have developed your own (application) language and want to
+  create an interactive environment for it.
+  \item You have programs in some existing programming language and you
+   want to analyze or transform them.
+\end{itemize}
+
+The \ASmetaenv\ contains a number of formalisms, or domain specific
+languages, for the definition of several aspects of a programming
+language.  For the syntactic aspect, we have \sdf. For semantical analysis
+and transformation, we have \asf. The combination of the two is called
+\asfsdf.  For pretty-printing, we use the \boxlanguage language. Finally,
+for fact analysis and elaboration we use \rscript. See Figure
+\ref{FIG:architecture} for an overview.
+\begin{figure}[t]
+\begin{center}
+\begin{Label}{FIG:artefacts}
+\T \includegraphics[width=12cm]{architecture}
+\W \htmlimage{architecture.gif}
+\caption{Four formalisms for defining languages and meta programs.}
+\end{Label}
+\end{center}
+\end{figure}
+
+The four combined formalisms allows the definition of syntactic as
+well as semantic aspects of a (programming) language.  It can be used for
+the definition of languages. In addition it can be used for the formal
+specification of a wide variety of problems. We provide you with:
+\begin{itemize}
+  \item A general-purpose algebraic specification formalism based on
+  equational logic (\asfsdf)
+  \item Modular structuring of specifications.
+  \item Integrated definition of lexical, context-free, and abstract syntax. 
+  \item User-defined syntax, allowing you to write specifications using
+  your own notation (\sdf)
+\index{user-defined syntax@user-defined syntax}
+  \item Complete integration of the definition of syntax and semantics
+  (\asfsdf)
+ \item High-level definition of pretty printers (\asf and \boxlanguage)
+ \item High-level analysis and fact manipulation. \rscript is a language for the
+manipulation of facts encoded as relations. The \rscript language is
+relatively new, and is not fully integrated into the \ASmetaenv yet.
+\end{itemize}
+
+The \ASmetaenv\ IDE offers: 
+\begin{itemize}
+  \item Syntax-directed editing of \asfsdf\ specifications.
+  \item Automatic syntax highlighting.
+  \item Testing and interactive debugging of specifications.
+  \item Compilation of \asfsdf\ specifications into dedicated commandline tools.
+  \item A collection of ready-to-use components that can be composed into 
+  your own IDE for any programming language.
+\end{itemize}
+
+The advantages of creating (interactive) environments in this way are twofold:
+\begin{itemize}
+  \item \emph{Increased uniformity}. Similar tools for different
+  languages often suffer from a lack of uniformity.  Generating tools
+  from language definitions results in a large increase in
+  uniformity, with corresponding benefits for the user.
+
+  \item \emph{Reduced implementation effort.} Preparing a language
+  definition requires significantly less effort than developing an
+  environment from scratch. The reason is that the domain specific
+  languages in the \ASmetaenv offer a higher level of abstraction and
+  automation for common language design issues.
+\end{itemize}
+
+\subsection{Global Structure of the Meta-Environment}
+
+\index{generic syntax-directed editor@generic syntax-directed editor}
+\index{syntax-directed editor@syntax-directed editor}
+\index{term editor@term editor}
+You can create new specifications or modify and test existing ones
+using the Meta-Environment. Specifications consist of a series of
+modules, and individual modules can be edited by invoking editors
+for the syntax part and the equations part of a module.
+All editing in the Meta-Environment is done by creating
+instances of a \emph{generic syntax-directed editor}.
+
+After each editing operation on a module, its \emph{implementation} is 
+updated immediately. It consists of a parser, a pretty printer, and a 
+term rewriting system which are all derived from the module automatically.
+
+A module can be tested by invoking a \emph{term editor} to create and
+evaluate terms defined by the module. Term editors use the syntax of the
+module for parsing the textual representation of terms and for converting
+them to internal format (syntax trees). Also, terms are immediately
+highlighted in the editor. The equations of the module are then used
+to reduce the terms into normal form.  This result is, in its turn,
+converted back to textual form by pretty printing it.
+
+\subsection{About this Manual}
+
+This manual is intended for those users that want to write \asfsdf\
+specifications. This manual is always under development and we welcome
+all feed back and comments.
+
+The focus of this manual will be on how to write \asfsdf\ specifications,
+the \asfsdf\ language features are explained as well as some methodology
+in using \asfsdf\ when defining a (programming) language. In the last
+part of the manual we will address the following technical problems.
+
+\begin{itemize}
+\item How to compile a specification.
+\item How to parse a term outside the \ASmetaenv.
+\item How to rewrite a term using a compiled specification outside the
+\ASmetaenv.
+\item How to unparse parsed and/or normalized terms.
+\end{itemize}
+Finally, we assume the reader has read the \asfsdf\ guided tour and
+knows how to use the \ASmetaenv.
+
+\noindent We do \emph{not} explain in detail:
+
+\begin{itemize}
+\item The architecture and implementation of the system.
+We only give a brief sketch of the underlying 
+technology and architecture of the \ASmetaenv.
+
+\item The commandline usage of various parts of the system.
+We only describe the usage of the most important components.
+\end{itemize}
+
+\subsection{Downloading the \ASmetaenv}
+
+\index{download@download}
+You can download the \ASmetaenv\ from the following location:
+\begin{verbatim}
+   http://www.meta-environment.org
+\end{verbatim}
+
+\noindent It provides links to the software as well as to related 
+documents. Furthermore, via this link bugs can be submitted.
+
+\subsection{Further Reading}
+
+There are many publications about the \ASmetaenv\ itself, about the
+implementation techniques used, and about applications.
+Also see the overview of
+\link{architecture and implementation techniques}[ (Section~\Ref)]{SEC:TechnologyandArchitecture}. 
+We give here a brief overview of selected publications:
+
+\begin{description}
+
+\item{Overviews:} \cite{HKKL85}, \cite{Kli93}, \cite{B*97}, \cite{B*01}.
+
+\item{General ideas:} \cite{HK85b}, \cite{HK00}, \cite{H00}.
+
+\item{ASF:} \cite{BHK89}.
+
+\item{SDF:} \cite{HHKR89}, \cite{Vis97}.
+
+\item{ASF+SDF:} \cite{BHK89}, \cite{DHK96}.
+
+\item{Parser generation and parsing}: \cite{Rek87b}, \cite{HKR90},
+\cite{RK91}, \cite{R92}, \cite{Vis97}, \cite{BSVV02}, \cite{BKMV03}.
+
+\item{Pretty printing:} \cite{BV96}, \cite{Jon00}.
+
+\item{Rewriting and Compilation:} \cite{BKO99}, \cite{vdBHK00}, \cite{vdBV00},
+\cite{BKV01}, \cite{BHKO02}.
+
+\item{ToolBus}: \cite{BK98}.
+
+\item{ATerms:} \cite{BJKO00}.
+
+\item{Applications:} \cite{BDKKM96},\cite{BS00}, \cite{BR00}.
+
+\item{Generic debugging}: \cite{Oli00}.
+
+\item{Traversal functions}: \cite{BKV02}, \cite{BKV03}.
+
+\item{User manuals:} \cite{ATmanual}, \cite{TBmanual},
+\cite{MEmanual}.
+
+\end{description}
+
+\section*{Acknowledgements}
+
+We thank the following people that have provided helpful feed back and
+comments on this manual: Peter D. Mosses, Albert Hofkamp, Akim Demaille,
+Bas Terwijn.
+
+\section{An Introduction to \asfsdf}
+\label{ASF+SDF}
+
+\asfsdf\ is the result of the marriage of two formalisms \asf\ (Algebraic
+Specification Formalism) and \sdf\ (Syntax Definition Formalism).  
+\asf\ is based on the notion of a module consisting of a signature 
+defining the abstract syntax of functions and a set of conditional 
+equations defining their semantics. Modules can be imported in other 
+modules.  \sdf\ allows the simultaneous definition of concrete
+(i.e., lexical and context-free) and abstract syntax and implicitly 
+defines a translation from text strings to abstract syntax trees.
+
+The main idea of \asfsdf\ is to identify the abstract syntax defined by the
+signature in \asf\ specifications with the abstract syntax defined 
+implicitly by an \sdf\ specification, thus yielding a standard mapping 
+from text to abstract syntax tree. This allows the 
+association of semantics with (the tree representation of) text and 
+introduces user-defined notation in specifications.
+
+\asfsdf\ is therefore a modular specification formalism for the integrated
+definition of syntax and semantics of a (programming) language. 
+Other views on \asfsdf\ are:
+\begin{itemize}
+\item a first-order functional programming language. 
+\item an algebraic specification formalism.
+\end{itemize}
+Whatever viewpoint is taken, \asfsdf\ is a powerful formalism for
+the declarative description of programming languages and meta programs.
+
+\subsection{\ebnf\ and \lexyacc\ versus \sdf}
+
+\ebnf-like and \lexyacc-like grammar formalisms are well-known. 
+Although \lexyacc\ is more a domain specific language than a
+grammar formalism, the grammar of a lot of programming languages 
+are presented as \lexyacc\ definition. There a number of differences
+between both \ebnf-like and \lexyacc-like formalisms and \sdf.
+
+We assume that the reader of this manual has some experience
+with formalisms like \ebnf\ and \lexyacc.
+
+\sdf\ allows a modular definition of your syntax
+formalism. This allows re-use of parts of other grammar definitions.
+This is only possible given the fact that the underlying parsing
+technology is based on Generalized LR parsing, see \cite{R92} and 
+\cite{Vis97} for more details.
+
+\sdf\ imposes no restrictions on the grammar. In contrast
+to \lexyacc, restricted to the class of LALR(1)-grammars, we
+do not impose these restrictions. The fact that we do not impose
+these restrictions enables us to have this modular grammar definition
+formalism. Restricted classes, such as LALR(1), are not closed
+under union. Two grammars, both LALR(1) for instance, need not
+result in a LALR(1) grammar if they are combined.
+
+\sdf does not produce only one parse tree (derivation) if there exist more
+derivations. The basic assumption of \sdf is that \emph{all} derivations
+will be produced and presented in a compact manner. This makes sure that
+\emph{no implicit disambiguation} will take place at any time when you
+use \sdf. To disambiguate, the user will apply declarative disambiguation
+constructs from \sdf separately. Examples of disambiguations
+are ``longest-match'' and ''priorities''.
+
+The most striking difference between \sdf\ and \ebnf-like and
+\lexyacc-like formalisms is the way the production rules are written
+in \sdf.  In \ebnf\ and \lexyacc\ one writes production rules as
+
+\begin{verbatim}
+  P ::= 'b' D S 'e'
+\end{verbatim}
+
+whereas in \sdf\ this is written as
+
+\begin{verbatim}
+  "b" D S "e" -> P
+\end{verbatim}
+So, the left- and right-hand side of the production rules are swapped.
+
+\sdf\ provides an integrated definition of lexical and context-free
+syntax. \ebnf\ does not provide, or only very restrictive, support for
+defining lexical syntax rules. In \lexyacc\ the lexical syntax is more
+or less defined in a separate formalism.
+
+\sdf\ also allows an integrated way of defining \link{associativity and
+priorities between production rules}[, see Section~\Ref]{Priorities}.
+
+Finally, \sdf\ provides an automatic way of constructing syntax trees.
+In \lexyacc\ the specification writer has to program how syntax trees
+are constructed.
+
+
+\subsection{Modules and Modular Structure}
+\label{modules}
+
+An \asfsdf\ specification consists of a sequence of module declarations. 
+Each module may define syntax rules as well as semantic rules and the 
+notation used in the semantic rules depends on the definition of syntax 
+rules. The entities declared in a module may be visible or invisible 
+to other modules. A module can use another module from the specification 
+by importing it. As a result, all visible names of the imported module 
+become available in the importing module.
+
+The overall structure of a module is:
+
+\begin{verbatim}
+module <ModuleName>
+
+  <ImportSection>*
+ 
+  <ExportOrHiddenSection>*
+
+equations
+  <ConditionalEquation>*
+\end{verbatim}
+
+A module consists of a module header, followed by a list of zero or more
+import sections, followed by zero or more hidden or export sections and 
+an optional equations section that defines conditional equations.
+\link*{Later}[In Section~\Ref]{ParametersRenamings}
+we will see that modules can alse be \emph{parameterized} and
+that they can be \emph{renamed on import}.
+
+Conceptually, a module is a single unit but for technical reasons the
+syntax sections and the equations section are stored in physically
+separate files.  For each module $M$ in a specification two files
+exist: `{\tt $M$.sdf}' contains the syntax sections of $M$ and 
+`{\tt $M$.asf}' contains the equations section of $M$.
+
+\index{compound module name@compound module name}
+A {\tt <ModuleName>} is either a simple {\tt <ModuleId>} or a 
+{\tt <ModuleId>} followed by zero or more parameter symbols, e.g., 
+{\tt <Module>[<Symbol>*]}, the symbols will be explained in 
+\link*{Symbols}[Section~\Ref]{Symbols}. The {\tt <ModuleId>} may be
+compount module name, the {\tt ModuleId} reflects the directory 
+structure. For example {\tt basic/Booleans} means that the module
+{\tt Booleans} is found in the subdirectory {\tt basic}.
+
+\index{exports section@{\tt exports} section}
+\index{hiddens section@{\tt hiddens} section}
+An {\tt <ExportOrHiddenSection>} is either an \emph{export section} 
+or a \emph{hidden section}. The former starts with the keyword 
+{\tt exports} and makes all entities in the section visible to 
+other modules. The latter starts with the keyword {\tt hiddens} 
+and makes all entities in the section local to the module.
+
+An {\tt <ExportOrHiddenSection>} has thus one of the two forms:
+
+\begin{verbatim}
+exports 
+  <Grammar>+
+\end{verbatim}
+\noindent or
+\begin{verbatim}
+hiddens
+  <Grammar>+
+\end{verbatim}
+  
+\noindent A {\tt <Grammar>} can be a definition of one of the following: 
+\begin{itemize}
+\item \link{Imports}[ (Section~\Ref)]{Imports}.
+\item \link{Aliases}[ (Section~\Ref)]{Aliases}.
+\item \link{Sorts}[ (Section~\Ref)]{Sorts}.
+\item \link{Start-symbols}[ (Section~\Ref)]{SEC:ContextFreeStartSymbols}.
+\item \link{Lexical syntax}[ (Section~\Ref)]{LexicalSyntax}.
+\item \link{Context-free syntax}[ (Section~\Ref)]{ContexFreeSyntax}.
+%\item lexical variables;
+%\item lexical priorities;
+\item \link{Priorities}[ (Section~\Ref)]{Priorities}.
+\item \link{Variables}[ (Section~\Ref)]{Variables}.
+\end{itemize}
+
+Note that it is possible to have hidden imports as well, this means that
+the contents of a hidden imported module in some module $M$ is visible 
+in $M$ but is not exported to modules which import $M$.
+
+There are a number of related properties which have an effect across the
+various grammar items, these items are intermixed with the discussion
+of the grammars:
+\begin{itemize}
+\item \link{\sdf\ comment convention}[ (Section~\Ref)]{SdfComment}.
+
+\item \link{Symbols}[ (Section~\Ref)]{Symbols}.
+
+\item \link{Attributes of Lexical and Context-free Functions}[
+(Section~\Ref)]{Attributes}.
+
+\item \link{Disambiguation}[ (Section~\Ref)]{Disambiguation}.
+
+\item \link{Parameterization and Renamings}[ (Section~\Ref)]{ParametersRenamings}.
+
+\item \link{Libraries}[ (Section~\Ref)]{Libraries}.
+
+
+\item \link{Equations}[ (Section~\Ref)]{Equations}.
+\end{itemize}
+
+\noindent Each of these entities and properties
+will now be described and illustrated by examples.
+
+\subsection{\sdf\ comment convention} 
+\label{SdfComment}
+
+\index{Sdf comment@\sdf\ comment}
+The comment convention within an \sdf\ specification is that character
+between {\tt "\%\%"} and the end of line is comment as well as every
+character between two {\tt "\%"} including the newline character.
+An example of the use of comments is given
+\link*{below}[ in Figure~\Ref]{CODE:sdfcomment}.
+
+\begin{figure}
+\begin{Label}{CODE:sdfcomment}
+\begin{IncCode}
+\begin{verbatim}
+module basic/Comments
+
+imports basic/Whitespace
+
+%% In this module we define the 
+%% comment convention for Sdf.
+
+exports
+  lexical syntax
+    "%%" ~[\n]* "\n" -> LAYOUT
+    "%" ~[\%]+ "%" -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\%]
+\end{verbatim}
+\end{IncCode}
+\caption{\sdf\ comment}
+\end{Label}
+\end{figure}  
+
+This definition also defines the comment convention in \sdf\ itself.
+More details on defining layout can be found in
+ \link*{Restrictions}[Section~\Ref]{Restrictions}.
+
+
+\subsection{Imports}
+\label{Imports}
+
+\index{imports@{\tt imports}}
+\index{{\tt <ImportSection>}@{\tt <ImportSection>}}
+Each {\tt <ImportSection>} starts with the keyword {\tt imports} followed
+by zero or more module names:
+
+\begin{verbatim}
+imports
+  <ModuleName>*
+\end{verbatim}
+
+\noindent Modules can be combined by importing one module in another. 
+Imports can occur as {\tt <ImportSection>} at the topmost level of 
+a module or they can occur within an exports or hiddens section.
+
+When importing modules at the topmost level of a module or when 
+the import section occurs within the scope of an exports keyword, 
+all exported entities of the imported module (and of all modules 
+that are imported indirectly by it) become available in the importing 
+module. In addition, they are also exported by the importing module.  
+However, if the import section occurs within the scope of a hiddens 
+keyword, the exported entities are only visible in the importing 
+module but they are not exported by the importing module.
+
+An imported module can be parameterized or decorated with renamings, 
+see \link*{ParametersRenamings}[Section~\Ref]{ParametersRenamings}
+for more details.
+
+The name of the imported module can also be a compound module name.
+In \link*{the definition of the \sdf\ comments}[Figure~\Ref]{CODE:sdfcomment}
+the imported module {\tt basic/Whitespace} is an example of such a
+compound module name.
+
+\subsection{Symbols}
+\label{Symbols}
+
+The elementary building block of \sdf\ syntax rules is the ``symbol''.  It is
+comparable to terminals and non-terminals in other grammar definition
+formalisms. The elementary symbols are:
+
+\begin{itemize}
+\item \emph{sort}: corresponds to a non-terminal, e.g., {\tt Bool}.  
+Sort names always start with a capital letter and may be followed 
+by letters and/or digits.  Hyphens (``{\tt -}'') may be embedded 
+in a sort name.
+
+\item \emph{literal}: corresponds to a terminal, e.g., {\tt "true"} or 
+{\tt "\&"}. Terminals must always be quoted, also the terminals 
+consisting of only letters. 
+  
+\item \emph{character class}: corresponds to a set of characters, 
+e.g., {\tt [a-z]}.
+Character classes will be explained in
+\link*{Character Classes}[Section~\Ref]{CharacterClasses}, 
+they are mainly used when describing the lexical syntax of a language.
+\end{itemize}
+
+Starting with the elementary symbols, more complex symbols can 
+be constructed by way of the following operators.
+
+\htmlmenu{1}
+
+Examples of the use of the various operators will be given in
+\link*{Lexical Syntax}[ Sections~\Ref]{LexicalSyntax} and 
+\link*{Context-freeSyntax}[\Ref]{ContexFreeSyntax}. 
+
+\subsubsection{Option}
+\label{OptionOperator}
+
+\index{option operator@option operator}
+\index{{\tt ?}@{\tt ?}}
+The postfix option operator {\tt ?} describes an optional part in 
+a syntax rule. For instance, {\tt ElsePart?}  defines zero or 
+exactly one occurrence of {\tt ElsePart}.
+
+\subsubsection{Sequence}
+\label{SequenceOperator}
+
+\index{sequence operator@sequence operator}
+\index{{\tt (...)}@{\tt (...)}}
+The sequence operator {\tt (...)} describes the grouping of two 
+or more symbols, e.g., {\tt (Bool "\&")}.  Sequences are mostly 
+used to group symbols together to form a more complex symbol 
+using one of the available operators, e.g., {\tt (Bool "\&")*}.  
+It has no effect to construct a sequence consisting
+of a single symbol.  The empty sequence is represented as {\tt ()}.
+
+\subsubsection{Repetition}
+\label{RepetitionOperator}
+
+\index{repetition operator@repetition operator}
+\index{list@list}
+\index{{\tt *}@{\tt *}}
+\index{{\tt +}@{\tt +}}
+Repetition operators express that a symbol should occur several times.  
+In this way it is possible to construct flat lists and therefore we 
+usually refer to repetitions as \emph{lists}.
+
+Repetition operators come in two flavors, with and without separators.
+Furthermore, it is possible to express the minimal number of 
+repetitions of the symbol: at least zero times ({\tt *}) or at least 
+one time ({\tt +}).
+Examples are:
+
+\begin{itemize}
+
+\item {\tt Bool*} (a list of zero or more {\tt Bool}s).
+
+\item {\tt \{Bool ","\}+} (a list of one or more {\tt Bool}s 
+separated by comma's).
+
+\end{itemize}
+
+In case of a separated list the element can be an arbitrary symbol, but
+the separator can only be a plain literal.  It is possible to write,
+for instance {\tt \{Int Bool\}*} or {\tt \{Int (","|";")\}*},
+but the \link{{\tt asfsdf-checker}}[, see Section~\Ref]{SEC:SDF-checker}, 
+will produce a warning indicating that this type of symbol is not 
+supported. 
+Both the \link{interpreter}[, see Section~\Ref,]{SEC:interpretationgofterms} 
+and the \link{compiler}[, see Section~\Ref,]{SEC:reducingofterms} do
+not support this type of separated lists.
+
+\subsubsection{Alternative}
+\label{AlternativeOperator}
+
+\index{alternative operator@alternative operator}
+\index{{\tt |}@{\tt |}}
+The alternative operator {\tt |} expresses the choice between two symbols,
+e.g., {\tt true | false} represents that either a {\tt true} symbol 
+or a {\tt false} symbol may occur here.  The alternative operator is 
+right associative and binds stronger than any other operator on symbols. 
+This is important because {\tt Bool "," | Bool ";"} expresses 
+{\tt Bool ("," | Bool) ";"} instead of {\tt (Bool ",") | (Bool ";")}. 
+So, in case of doubt use the sequence operator in combination with 
+the alternative operator.
+
+\subsubsection{Tuple}
+\label{TupleOperator}
+
+\index{tuple operator@tuple operator}
+The tuple operator describes the grouping of a sequence of symbols of
+a fixed length into a tuple. 
+The notation for tuples is {\tt < , , >}, i.e., a comma-separated list 
+of elements enclosed in angle brackets.  For example,
+{\tt <Bool, Int, Id>} describes a tuple with three elements consisting 
+of a {\tt Bool}, an {\tt Int} and an {\tt Id} (in that order).  
+For instance, {\tt <true, 3, x>} is a valid example of such a tuple.  
+
+\subsubsection{Function}
+\label{FunctionOperator}
+
+\index{function operator@function operator}
+\index{{\tt (...=>...)}@{\tt (...=>...)}}
+The function operator {\tt (...=>...)} allows the definition of function
+types. Left of {\tt =>} zero or more symbols may occur, right of {\tt =>}
+exactly one symbol may occur.  For example, {\tt (Bool Int) => Int} 
+represents a function with two argument (of types {\tt Bool} and 
+{\tt Int}, respectively) and a result type {\tt Int}.
+
+\subsubsection{Parameterized Sorts}
+\label{ParameterizedSorts}
+
+\index{parameterized sort@parameterized sort}
+\index{{\tt ...[[...]]}@{\tt ...[[...]]}}
+Sort names can have parameters. This provides a way of distinguishing 
+a generic sort {\tt List} for integers, e.g. {\tt List[[Int]]},
+from booleans, e.g. {\tt List[[Bool]]}.
+These sort parameters can be instantiated via the parameters of 
+the module name. A parameterized sort may have the form
+{\tt List[[X,Y]]} where {\tt X} and {\tt Y} are generic sorts
+which will be provided via the parameters of the module name.
+See \link*{Parameterization and Renamings}[Section~\Ref]{ParametersRenamings}
+for more details.
+The context-free syntax rule describing parameterized sorts is:
+\begin{verbatim}
+   Sort "[[" {Symbol ","}+ "]]" -> Symbol
+\end{verbatim}
+
+\subsubsection{Lifted sorts}
+\label{LiftingOperator}
+\index{lifting operator@lifting operator}
+\index{{\tt `...`}@{\tt `...`}}
+The lifting operator {\tt `...`} translates the name of an arbitrary
+complex symbol to a literal syntax definition of that name. It makes a
+symbol a part of the defined syntax. An example: {\tt `X?`} defines the
+syntax {\tt ("X" "?")}. The lifting operator is typically used in
+combination with parameterized modules, and specifically for applications
+of \sdf that implement concrete syntax.
+
+\subsection{Aliases}
+\label{Aliases}
+
+In ordinary programming it is good practice to use named constants to
+represent literals or constant values.  In \sdf\ it is good practice 
+to give a name (``alias'') to complicated symbols that occur 
+repeatedly in the specification.  An alias is thus a named 
+abbreviation for a complicated symbol.  For example,
+
+\begin{verbatim}
+aliases
+  <Bool, Int, Id> -> Tuple3
+\end{verbatim}
+introduces the alias {\tt Tuple3} for the symbol {\tt <Bool, Int, Id>} and
+instead of using {\tt <Bool, Int, Id>} one can use the alias {\tt Tuple3}.
+During parse table generation the alias is replaced by the actual symbol.  
+It is not allowed to give an alias for an alias or to redefine aliases.
+For example, the following definitions are illegal:
+
+\begin{verbatim}
+aliases
+  Tuple3          -> SuperTuple
+  <Bool, Int, Id> -> Tuple3
+\end{verbatim}
+(An alias is defined for the alias {\tt Tuple3}.)
+
+\begin{verbatim}
+aliases
+  <Bool, Int, Id> -> Tuple3
+  <Bool, Int>     -> Tuple3
+\end{verbatim}
+(The alias {\tt Tuple3} is redefined.)
+
+Note, the aliases are a convenient short hand for more complex symbols,
+but a drawback is that during parse table generation the aliases completely
+disappear. They are replaced by the actual symbols. This can have some
+unexpected behaviour when parsing or reducing terms.
+
+\subsection{Sorts}
+\label{Sorts}
+Sorts are declared by listing their name in a sorts section of the form:
+
+\begin{verbatim}
+sorts
+  <Symbol>*
+\end{verbatim}
+
+Only plain {\tt Sort}s and parameterized {\tt Sort}s can be declared
+in the {\tt sorts} section, but more complex {\tt Symbol}s will be
+syntactically recognized, 
+but the \link{{\tt asfsdf-checker}}[, see Section~\Ref]{SEC:SDF-checker}, 
+will generate a warning.
+It is required that all sorts that occur in some symbol 
+in the specification are declared. 
+
+\noindent Recall that a sort name should start with a capital letter and 
+may be followed by letters and/or digits. 
+Hyphens (`{\tt -}') may be embedded in sort names.
+There is one predefined sort name ({\tt LAYOUT}). It is described in
+\link{Lexical Syntax}[ Section~\Ref]{LexicalSyntax}.
+
+It is not allowed (or necessary) to define the sorts 
+{\tt LAYOUT} and {\tt CHAR}. These two sorts are always available.
+
+\subsection{Context-free start-symbols}
+\label{SEC:ContextFreeStartSymbols}
+
+Via the context-free start symbols section the symbols are 
+explicitly defined which will serve as start symbols when 
+parsing terms. If no start symbols are defined it is not possible 
+to recognize terms. This has the effect that input sentences 
+corresponding to these symbols can be parsed. 
+So, if we want to recognize booleans terms we have to define 
+explicitly the sort {\tt Boolean} as a start symbol in the 
+module {\tt Booleans}. Any symbol, also lists, tuples, etc., can
+serve as a start-symbol.
+
+\begin{verbatim}
+context-free start-symbols
+  <Symbol>*
+\end{verbatim}
+
+Context-free start-symbol sections can either be hidden or exported. 
+The effect of defined symbols as start symbols for the grammar may lead 
+to an explosion of start states for the parser and thus lead to 
+performance loss. To prevent this it can be advisable to hide 
+start-symbol sections. The symbols defined are only visible in the 
+module containing this hidden start-symbols section, but not in 
+modules importing this module.
+
+\subsection{Lexical Syntax}
+\label{LexicalSyntax}
+\label{lexical-syntax}
+
+The lexical syntax describes the low level structure of text by means of
+\emph{lexical tokens}. A lexical token consists of a sort name (used to
+distinguish classes of tokens like identifiers and numbers), and the actual text
+of the token. The lexical syntax also defines which substrings of the text are
+layout symbols or comments and are to be skipped.
+
+A lexical syntax contains a set of declarations for \emph{lexical functions},
+each consisting of a regular expression and a result sort. All functions with
+the same result sort together define the lexical syntax of tokens of that
+sort. Regular expressions may contain any basic symbol and any symbol
+operator as described in  \link*{Symbols}[ Section~\Ref]{Symbols}.
+Spaces are only significant inside strings and character classes.
+
+The sort name {\tt LAYOUT} is predefined and may not be redeclared.  
+{\tt LAYOUT} defines which parts of the text are \emph{layout symbols} (also
+known as \emph{white space}) between lexical tokens and are to be skipped
+during lexical analysis. It may only be used as result sort of
+\link{lexical functions}[ (Section~\Ref)]{LexicalFunctions}.
+When a string is matched by both a
+LAYOUT function and by other non-LAYOUT functions, then the interpretation as
+layout symbol is ignored. {\tt LAYOUT} is typically used for defining layout
+and comment conventions.
+
+Traditionally, lexical syntax and context-free syntax are treated
+differently.  They are defined by different notations and implemented
+by means of different techniques. \sdf\ provides a much more uniform
+treatment.  In \sdf, the only significant difference between the two
+is that no layout will be accepted while recognizing the members of
+the left-hand side of a lexical function, whereas layout \emph{will}
+be accepted between the members of the left-hand side of a
+context-free function. At the implementation level, both are
+implemented using a single parsing technique.
+
+Technically, there exist only \emph{syntax} sections. Both lexical
+syntax sections and context-free syntax sections are transformed into
+such syntax sections after appropriate insertion of optional layout
+between the elements of context-free functions. In rare cases,
+the specification writer may want to control this process explicitly
+and write syntax sections directly. This will not be discussed
+in this manual, but further details can be found in \cite{Vis97}.
+
+\subsubsection{Lexical Functions}
+\label{LexicalFunctions}
+
+In their simplest form, declarations of lexical functions consist of a
+sequence of zero or more symbols followed by `$\rightarrow$' and a
+result symbol, say $L$.  A lexical function may be followed by a list
+of attributes. The regular expression associated with $L$ consists of the
+logical \emph{or} of all left-hand sides of lexical functions with result sort
+$L$.  All sort names appearing in left-hand sides of declarations are replaced
+by the regular expression associated with them. 
+%%Circular dependencies between declarations in the lexical syntax are 
+%%forbidden.\footnote{Does this limitation still apply?}  
+\T Figure \ref{CODE:simplelex} shows 
+\W \link{Below}[]{CODE:simplelex} we give
+an example of a
+simple lexical function definition for defining the first three words that
+Dutch children learn to read.  The three sorts {\tt Aap}, {\tt Noot} and {\tt
+  Mies}, each recognize, respectively, the strings {\tt aap}, {\tt noot} and
+{\tt mies}. The sort {\tt LeesPlank} (a reading-desk used in primary
+education) recognizes the single string {\tt aapnootmies}.
+
+
+\begin{figure}
+\begin{Label}{CODE:simplelex}
+\begin{IncCode}
+\begin{verbatim}
+module LeesPlank
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols LeesPlank
+  sorts Aap Noot Mies LeesPlank
+  lexical syntax
+    "aap"         -> Aap
+    "noot"        -> Noot
+    "mies"        -> Mies
+    Aap Noot Mies -> LeesPlank  
+\end{verbatim}
+\end{IncCode}
+\caption{Simple lexical functions}
+\end{Label}
+\end{figure}   
+      
+
+\paragraph{Lexical constructor functions}
+
+For each production in a lexical syntax section, a \emph{lexical
+construction function is automatically added}. Lexical construction
+functions are used to construct and deconstruct lexical syntax using
+patterns.
+
+For each production {\tt A B C -> D} in a lexical syntax section, the
+generated constructor function is of the form: {\tt d "(" A B C ")" -> D}.
+Here, ``{\tt d}'' is the name of the sort `{\tt D}` written in lowercase
+letters only.
+
+The lexical constructor functions will be discussed in more detail
+in the section on \link*{equations}[ see Section~\Ref]{Equations}.
+This part of the manual is severely different from previous versions,
+since before \asfsdf had \emph{flat lexical constructors} and since
+version 2.0 it has \emph{fully structured lexical constructors}.
+
+\subsubsection{Character Classes}
+\label{CharacterClasses}
+
+Enumerations of characters occur frequently in lexical definitions. They can
+be abbreviated by using character classes enclosed by `{\tt [}' and 
+`{\tt ]}'. 
+A character class contains a list of zero or more characters (which
+stand for themselves) or character ranges such as, for instance, {\tt [0-9]}
+as an abbreviation for the characters {\tt 0}, {\tt 1}, ..., {\tt 9}. 
+In a character range of the form {\tt $c_1$-$c_2$} one of the following 
+restrictions should apply:
+
+\begin{itemize}
+\item $c_1$ and $c_2$ are both lower-case letters and $c_2$ follows $c_1$ in
+  the alphabet, or 
+\item $c_1$ and $c_2$ are both upper-case letters and $c_2$ follows $c_1$ in
+  the alphabet, or 
+\item $c_1$ and $c_2$ are both digits and the numeric value of $c_2$ is
+  greater than that of $c_1$, or 
+\item $c_1$ and $c_2$ are both escaped non-printable characters and the 
+character code of $c_2$ is greater than that of $c_1$.
+\end{itemize}
+
+Definitions for lower-case letter ({\tt LCLetter}), upper-case letters
+({\tt UCLetter}), lower-case and upper-case letters ({\tt Letter}) and
+digits ({\tt Digit}) are shown in
+\T Figure~\ref{CODE:LettersDigits1}. 
+\W in the first example \link{below}[]{CODE:LettersDigits1}. 
+
+\begin{figure}
+\begin{Label}{CODE:LettersDigits1}
+\begin{IncCode}
+\begin{verbatim}
+module LettersDigits1
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Letter Digit
+  sorts LCLetter UCLetter Letter Digit
+  lexical syntax
+    [a-z]    -> LCLetter
+    [A-Z]    -> UCLetter
+    [a-zA-Z] -> Letter
+    [0-9]    -> Digit
+\end{verbatim}
+\end{IncCode}
+\caption{Defining letter (lower-case and upper-case) and digit}
+\end{Label}
+\end{figure}   
+
+\T Figure~\ref{CODE:LettersDigits2}
+\W The \link{next example}[]{CODE:LettersDigits2}
+gives
+a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
+(upper-case or lower-case) or digit.
+
+\begin{figure}
+\begin{Label}{CODE:LettersDigits2}
+\begin{IncCode}
+\begin{verbatim}
+module LettersDigits2
+imports basic/Whitespace
+
+exports
+  context-free start-symbols LetterOrDigit
+  sorts LetterOrDigit
+  lexical syntax
+    [a-z]    -> LetterOrDigit
+    [A-Z]    -> LetterOrDigit
+    [0-9]    -> LetterOrDigit
+\end{verbatim}
+\end{IncCode}
+\caption{Defining a single letter or digit}
+\end{Label}
+\end{figure}   
+
+\paragraph{Escape Conventions}
+
+Characters with a special meaning in \asfsdf\ may cause problems when they are
+needed as ordinary characters in the lexical syntax. The backslash character
+(`{\tt \verb+\+}') is used as escape character for 
+the quoting of special characters. You
+should use `{\tt \verb+\+$c$}' whenever you need special 
+character $c$ as ordinary character in a definition.
+All individual characters in character classes, except digits and letters,
+are {\em always} escaped with a backslash.
+
+In literal strings, the following characters are special and should be
+escaped:
+
+\begin{itemize}
+ \item {\tt "}: double quote 
+\item \verb+\+: escape character.
+\end{itemize}
+
+You may use the following abbreviations in literals and in character classes:
+
+\begin{itemize}
+
+\item \verb+\n+: newline character 
+
+\item \verb+\r+: carriage return
+
+\item \verb+\t+: horizontal tabulation 
+
+\item \verb+\+$nr$: a non-printable character with the decimal code $nr$.
+
+\end{itemize}
+
+\paragraph{Character Class Operators}
+
+The following operators are available for character classes
+\begin{itemize}
+\item {\tt \~{}}: complement of character class. Accepts all characters not in the original class.
+\item {\tt /}: difference of two character classes. Accepts all characters in
+  the first class unless they are in the second class.
+\item {\tt  /\verb+\+}: intersection of two character classes. Accepts all
+  characters that are accepted by both character classes.
+\item {\tt  \verb+\+/}: union of two character classes. Accepts all characters
+  that are accepted by either character class.
+\end{itemize}
+\noindent The first operator is a unary operator, whereas the other three are
+left-associative binary operators.
+
+The example \link*{below}[ in Figure~\Ref ]{CODE:LettersDigits3} gives
+the definion of a single letter or digit
+using the alternative operator {\tt  \verb+\+/}.
+This definition is equivalent to the one given 
+\link{earlier}[ in Figure~\Ref]{CODE:LettersDigits2}.
+
+\begin{figure}
+\begin{Label}{CODE:LettersDigits3}
+\begin{IncCode}
+\begin{verbatim}
+module LettersDigits3
+exports
+  context-free start-symbols LetterOrDigit
+  sorts LetterOrDigit
+  lexical syntax
+    [a-z] \/ [A-Z] \/ [0-9]   -> LetterOrDigit
+\end{verbatim}
+\end{IncCode}
+\caption{Defining a single letter or digit using the alternative operator}
+\end{Label}
+\end{figure}
+
+
+Another example is shown \link*{below}[in Figure \Ref]{CODE:charclasses}.
+This definition of characters contains
+all possible characters, either by means of the ordinary representation
+or via their decimal representation.
+
+\begin{figure}
+\begin{Label}{CODE:charclasses}
+\begin{IncCode}
+\begin{verbatim}
+module Characters
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols L-Char
+  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
+  lexical syntax
+    "\\" ~[]                 -> AlphaNumericalEscChar
+
+    "\\" [01] [0-9] [0-9]    -> DecimalEscChar
+    "\\" "2" [0-4] [0-9]     -> DecimalEscChar
+    "\\" "2" "5" [0-5]       -> DecimalEscChar
+
+    AlphaNumericalEscChar    -> EscChar
+    DecimalEscChar           -> EscChar
+
+    ~[\0-\31\"\\] \/ [\t\n]  -> L-Char
+    EscChar                  -> L-Char
+\end{verbatim}
+\end{IncCode}
+\caption{Example of character classes}
+\end{Label}
+\end{figure}  
+
+
+\subsubsection{Repetition}
+
+\index{repetition operator@repetition operator}
+Lexical tokens are often described by patterns that exhibit a certain
+repetition. The operator described in 
+\link*{Repetition}[ Section~\Ref]{RepetitionOperator} 
+can be used to express repetitions.
+
+The example \link*{below}[in  Figure \Ref]{CODE:repetition} demonstrates
+the use of the repetition
+operator {\tt *} for defining identifiers consisting of a letter
+followed by zero or more letters or digits.
+
+\begin{figure}
+\begin{Label}{CODE:repetition}
+\begin{IncCode}
+\begin{verbatim}
+module Identifiers-repetition
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts Letter DigitLetter Id
+  lexical syntax
+    [a-z]       -> Letter
+    [a-z0-9]    -> DigitLetter
+
+    Letter DigitLetter* -> Id
+\end{verbatim}
+\end{IncCode}
+\caption{Defining identifiers using the repetition operator {\tt *}}
+\end{Label}
+\end{figure}   
+
+\subsubsection{Option}
+
+\index{option operator@option operator}
+If zero or exactly one occurrence of a lexical token is desired the
+option operator described in 
+\link*{Option}[ Section~\Ref]{OptionOperator}
+can be used.
+
+The use of the option operator is illustrated 
+\link*{below}[ in Figure \Ref]{CODE:option}.
+Identifiers are defined consisting of one letter followed by one, optional,
+digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\tt
+  z789}.
+
+\begin{figure}
+\begin{Label}{CODE:option}
+\begin{IncCode}
+\begin{verbatim}
+module Identifiers-optional
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts Letter Digit Id
+  lexical syntax
+    [a-z]  -> Letter
+    [0-9]  -> Digit
+
+    Letter Digit? -> Id
+\end{verbatim}
+\end{IncCode}
+\caption{Defining a letter followed by an optional number using the option
+  operator {\tt ?} }
+\end{Label}
+\end{figure}   
+
+\subsubsection{Alternative}
+
+\index{alternative operator@alternative operator}
+Functions with the same result sort together define the lexical syntax of
+tokens for that sort. The left-hand sides of these function definitions form
+the alternatives for this function. Sometimes, it is more convenient to list
+these alternatives explicitly in a single left-hand side or to list
+alternative parts inside a left-hand side.  This is precisely the role of the
+alternative operator described in 
+\link*{Alternative}[ Section~\Ref]{AlternativeOperator}.
+
+The example \link*{below}[ in Figure~\Ref]{CODE:alternative1}
+shows how this operator can be used.  
+It describes identifiers starting with an upper-case letter
+followed by one of the following:
+\begin{itemize}
+\item  zero or more lower-case letters, 
+
+\item zero or more upper-case letters, or
+
+\item zero or more digits.
+\end{itemize}
+
+\noindent According to this definition, 
+{\tt Aap}, {\tt NOOT}, and {\tt B49} are acceptable, but {\tt MiES}, {\tt
+  B49a} and {\tt 007} are not.
+
+\begin{figure}
+\begin{Label}{CODE:alternative1}
+\begin{IncCode}
+\begin{verbatim}
+module Identifiers-alternative1
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts LCLetter UCLetter Digit Id
+  lexical syntax
+    [A-Z]   -> UCLetter
+    [a-z]   -> LCLetter
+    [0-9]   -> Digit
+
+  UCLetter LCLetter* | UCLetter* | Digit* -> Id
+\end{verbatim}
+\end{IncCode}
+\caption{Example of alternative operator {\tt |} }
+\end{Label}
+\end{figure}   
+
+
+Note that the relation between juxtaposition and alternative operator is best
+understood by looking at the line defining {\tt Id}. A parenthesized
+version of this same line would read as follows:
+\begin{quote}
+\begin{verbatim}
+  UCLetter (LCLetter* | UCLetter* | Digit*) -> Id
+\end{verbatim}
+\end{quote}
+As an aside, note that moving the {\tt *} outside the parentheses as in
+\begin{quote}
+\begin{verbatim}
+  UCLetter (LCLetter | UCLetter | Digit)* -> Id
+\end{verbatim}
+\end{quote}
+yields a completely different definition: it describes identifiers starting
+with an uppercase letter followed by zero or more lower-case letters,
+uppercase letters or digits. According to this definition {\tt MiES}, {\tt
+  B49a} and {\tt Bond007} would, for instance, be acceptable.
+
+\noindent A slightly more readable definition that is equivalent to the 
+\link{previous one}[ in Figure~\Ref]{CODE:alternative1}
+is shown \link*{below}[in Figure~\Ref]{CODE:alternative2}.
+In any case, we recommend to use parentheses to make the scope of alternatives
+explicit.
+
+\begin{figure}
+\begin{Label}{CODE:alternative2}
+\begin{IncCode}
+\begin{verbatim}
+module Identifiers-alternative2
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts UCLetter LCLetter Digit Id
+  lexical syntax
+    [A-Z]   -> UCLetter
+    [a-z]   -> LCLetter
+    [0-9]   -> Digit
+
+    (UCLetter LCLetter*) | (UCLetter UCLetter*) | (UCLetter Digit*) -> Id
+\end{verbatim}
+\end{IncCode}
+\caption{Example of alternative operator {\tt |} }
+\end{Label}
+\end{figure}   
+
+\subsubsection{Miscellaneous Operators}
+The other operators described in \link*{Symbols}[ Section~\Ref]{Symbols}
+are less frequently used within lexical syntax definitions 
+and will not be illustrated by means of an example.
+
+\subsubsection{Examples of Lexical Syntax Definitions}
+
+We will present a number of non-trivial lexical syntax definitions
+in order to get some ideas what can be specified using 
+\sdf.
+
+\paragraph{Defining Numbers}
+
+Definitions of integers and real numbers are shown 
+\link*{below}[in Figure~\Ref]{CODE:numbers}.
+Note the use of the alternative operator in the
+definitions of {\tt UnsignedInt} and {\tt Number}.  Also note the use
+of the option operator in the definitions of {\tt SignedInt} and {\tt
+UnsignedReal}.
+
+\begin{figure}[t]
+\begin{Label}{CODE:numbers}
+\begin{IncCode}
+\begin{verbatim}
+module Numbers
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Number
+  sorts UnsignedInt SignedInt UnsignedReal Number 
+
+  lexical syntax
+    [0] | ([1-9][0-9]*)                           -> UnsignedInt
+
+    [\+\-]? UnsignedInt                           -> SignedInt
+
+    UnsignedInt "." UnsignedInt ([eE] SignedInt)? -> UnsignedReal 
+    UnsignedInt [eE] SignedInt                    -> UnsignedReal
+
+    UnsignedInt | UnsignedReal                    -> Number
+\end{verbatim}
+\end{IncCode}
+\caption{Lexical definition of Numbers}
+\end{Label}
+\end{figure}   
+
+\paragraph{Defining Strings}
+
+\T Figure \ref{CODE:string} 
+\W The specification \link{below}[]{CODE:string}
+gives the lexical definition of
+strings which may contain escaped double quote characters.
+It defines a {\tt StringChar} as either
+\begin{itemize}
+\item zero or more
+arbitrary characters except double quote or newline, or
+\item an escaped double quote, i.e., \verb+\"+.
+\end{itemize}
+
+\noindent A string consists of zero or more {\tt StringChar}s surrounded by
+double quotes.
+
+\begin{figure}
+\begin{Label}{CODE:string}
+\begin{IncCode}
+\begin{verbatim}
+module Strings
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols String
+  sorts String StringChar
+
+  lexical syntax
+    ~[\"\n]               -> StringChar
+    [\\][\"]              -> StringChar
+    "\"" StringChar* "\"" -> String
+\end{verbatim}
+\end{IncCode}
+\caption{Lexical definition of String}
+\end{Label}
+\end{figure}   
+
+\subsection{Context-free Syntax}
+\label{ContexFreeSyntax}
+
+The context-free syntax describes the concrete and abstract syntactic
+structure of sentences in a language. A context-free syntax contains a set of
+declarations for \emph{context-free functions}, each consisting of zero or
+more symbols followed by `$\rightarrow$' and a result symbol.  They may be
+followed by attributes that control how parentheses and brackets affect the
+abstract syntax, by attributes that define the associativity of a rule, or by
+\link{attributes}[ (Section~\Ref)]{Attributes} which influence the rewriting
+process.  All functions with the same result sort together define the
+alternatives for that symbol.
+
+Elements of the left-hand side of a context-free function
+are separated by an invisible non-terminal {\tt LAYOUT?} 
+(optional {\tt LAYOUT}) in order to permit layout between these members.
+This optional layout non-terminal is automatically inserted.
+
+\subsubsection{Context-free Functions}
+
+In their simplest form, declarations of context-free functions consist of a
+sequence of zero or more symbols followed by `$\rightarrow$'
+and a result symbol. All literal strings appearing in a context-free
+function declaration are implicitly added to the lexical syntax. Consider the
+language of coordinates and drawing commands presented
+\link*{below}[in Figure~\Ref]{CODE:simple-cf}.
+
+\begin{figure}
+\begin{Label}{CODE:simple-cf}
+\begin{IncCode}
+\begin{verbatim}
+module DrawingCommands
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols CMND 
+  sorts NAT COORD CMND 
+
+  lexical syntax
+    [0-9]+ -> NAT 
+
+  context-free syntax
+    "(" NAT "," NAT ")" -> COORD
+    "line" "to" COORD   -> CMND 
+    "move" "to" COORD   -> CMND
+\end{verbatim}
+\end{IncCode}
+\caption{Simple context-free syntax definition}
+\end{Label}
+\end{figure}   
+
+
+An equivalent conventional BNF grammar (and not considering lexical syntax) 
+of the \link{above grammar}[ of Figure~\Ref]{CODE:simple-cf} is
+\T presented in Figure \ref{CODE:simple-bnf}.
+\W \link{as follows}[]{CODE:simple-bnf}.
+
+\begin{figure}
+\begin{Label}{CODE:simple-bnf}
+\begin{IncCode}
+\begin{verbatim}
+<COORD> ::= "(" <NAT> "," <NAT> ")" 
+<CMND>  ::= "line" "to" <COORD> | "move" "to" <COORD>
+\end{verbatim}
+\end{IncCode}
+\caption{BNF definition of simple grammar}
+\end{Label}
+\end{figure}   
+
+When a literal in a context-free function consists only of lower-case letters
+and digits and is not a keyword of \asfsdf, it need not be surrounded by
+quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
+\link{previous definition}[ given in Figure~\Ref]{CODE:simple-cf}. But is 
+better to always write the quotes.
+
+\subsubsection{Prefix Functions}
+\label{PrefixFunctions}
+
+Prefix functions are a special kind of context-free functions. They have
+a ``fix'' syntax. They can be considered as an abbreviation mechanism for
+functions written as expected. For instance the function {\tt f(X,Y) -> Z}
+is a prefix function. This function can also be defined as an ordinary
+context-free function {\tt "f" "(" X "," Y ")" -> Z}. The prefix functions
+are often used in combination with \asf\ equations.
+
+\subsubsection{Lists}
+
+Context-free syntax often requires the description of
+the repetition of a syntactic notion or of list structures (with or without
+separators) containing a syntactic notion. The 
+\link{repetition operator}[ described in Section~\Ref]{RepetitionOperator}
+can be used for this purpose.
+
+Lists may be used in both the left-hand side and right-hand side of a
+context-free function as well as in the right-hand side of a 
+\link{variable declaration}[ (see Section~\Ref)]{Variables}.
+
+\T Figure \ref{CODE:pascal-ids} shows 
+\W \link{Below}[]{CODE:pascal-ids} an example is given of
+how lists can be used to define 
+the syntax of a list of identifiers (occurring in a declaration
+in a Pascal-like language).
+
+\begin{figure}
+\begin{Label}{CODE:pascal-ids}
+\begin{IncCode}
+\begin{verbatim}
+module Decls
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Decl
+  sorts Id Decl Type 
+
+  lexical syntax
+    [a-z]+ -> Id 
+
+  context-free syntax
+    "decl" {Id ","}+ ":" Type -> Decl
+    "integer"                 -> Type 
+    "real"                    -> Type
+\end{verbatim}
+\end{IncCode}
+\caption{Definition of a list of identifiers}
+\end{Label}
+\end{figure}
+
+\subsubsection{Chain Functions}
+
+A context-free syntax may contain functions that do not add syntax, but serve
+the sole purpose of including a smaller syntactic notion into a larger one. 
+This notion is also known as {\em injections}. 
+Injections are functions ``without a name'' and with one argument sort
+like {\tt Id -> Data}.
+A typical example is the inclusion of identifiers in expressions or of natural
+numbers in reals. Such a \emph{chain function} has one of the following forms:
+
+\begin{itemize}
+
+\item {\tt SMALL -> BIG} 
+\item {\tt \{SMALL SEP\}* -> BIG} 
+\item {\tt SMALL* -> BIG} 
+\item {\tt \{SMALL SEP\}+ -> BIG} 
+\item {\tt SMALL+ -> BIG}
+\item {\tt \{SMALL SEP\}n+ -> BIG} 
+\item {\tt SMALLn+ -> BIG}
+
+\end{itemize}
+
+Chain functions do not appear in the abstract syntax but correspond to a
+\emph{subsort relation} between {\tt SMALL} and {\tt BIG}.
+If {\tt SORT-A} is a subsort of {\tt SORT-B} then in the abstract syntax
+tree a tree of sort {\tt SORT-A} can be put wherever a tree of
+sort {\tt SORT-B} is required.
+\T In Figure~\ref{CODE:inj-exp} 
+\W In the example \link{below}[]{CODE:inj-exp}
+the symbols {\tt Nat} and {\tt Var} are injected in {\tt Exp}.
+
+\begin{figure}
+\begin{Label}{CODE:inj-exp}
+\begin{IncCode}
+\begin{verbatim}
+module Exp
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Exp
+  sorts Nat Var Exp
+
+  lexical syntax
+    [0-9]+   -> Nat
+    [XYZ]    -> Var
+
+  context-free syntax
+    Nat                 -> Exp
+    Var                 -> Exp
+    Exp "+" Exp         -> Exp
+\end{verbatim}
+\end{IncCode}
+\caption{Definition of expressions that uses injections}
+\end{Label}
+\end{figure}
+
+\subsubsection{Miscellaneous Operators}
+
+In \link*{Symbols}[ Section~\Ref]{Symbols}
+a number of sophisticated operators, like
+alternative, option, set, function, sequence, tuple, and permutation
+are discussed. These operators allow a concise manner of defining
+grammars. There are, however, a number of issues to be taken into consideration
+when using this operators. 
+
+\paragraph{Definition of lists}
+
+In the example \link*{below}[ in Figure~\Ref]{CODE:lists-usage},
+two different lists are defined, 
+{\tt List1} represents a list of naturals separated
+by commas whereas {\tt List2} represents a list of naturals separated by
+commas and terminated by a comma.
+
+\begin{figure}[t]
+\begin{Label}{CODE:lists-usage}
+\begin{IncCode}
+\begin{verbatim}
+module Lists
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols List1 List2
+  sorts Nat List1 List2
+
+  lexical syntax
+    [0-9]+   -> Nat
+
+  context-free syntax
+    {Nat ","}+ -> List1
+    (Nat ",")+ -> List2
+\end{verbatim}
+\end{IncCode}
+\caption{Definition of two list variants}
+\end{Label}
+\end{figure}
+
+\paragraph{Alternative alternatives}
+The choice between two symbols can be defined in two different ways: by two
+separate syntax rules or by a single syntax rule using an alternative
+operator. 
+Both styles are shown
+\link*{below}[ in Figure~\Ref]{CODE:alternative-alternatives}.
+
+The definition of the binary operators {\tt "|"} and {\tt "\&"} can
+be made more concise as shown by {\tt Bool2}, however, it is now
+impossible to express that {\tt "\&"} has a higher priority
+than {\tt "|"}, see 
+\link*{Priorities}[ Section~\Ref]{Priorities}
+for more details on priority definitions.
+
+\begin{figure}
+\begin{Label}{CODE:alternative-alternatives}
+\begin{IncCode}
+\begin{verbatim}
+module Bool
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Bool1 Bool2
+  sorts Bool1 Bool2
+
+  context-free syntax
+    "true"                  -> Bool1
+    "false"                 -> Bool1
+    Bool1 "|" Bool1         -> Bool1 {left}
+    Bool1 "&" Bool1         -> Bool1 {left}
+
+    "true" | "false"        -> Bool2
+    Bool2 ("|" | "&") Bool2 -> Bool2 {left}
+\end{verbatim}
+\end{IncCode}
+\caption{Two ways of defining {\tt |} and {\tt \&}}
+\end{Label}
+\end{figure}
+
+\subsubsection{Lists in combination with optionals or empty producing
+sorts}
+
+The combination of lists and optionals or empty producing sorts leads to
+cycles in the parse tree. Cycles are considered parse errors.
+The parser will produce an error message whenever during parsing
+a cycle is detected. No parse tree is constructed in such a case.
+Cycles will not lead to non-termination during parsing.
+See \link*{below}[ Figure~\Ref]{CODE:listcycle}
+for an example of such a specification.
+
+\begin{figure}
+\begin{Label}{CODE:listcycle}
+\begin{IncCode}
+\begin{verbatim}   
+module Cycle
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols T
+  sorts A P T
+
+  context-free syntax
+    "a"        -> A
+    A?         -> P
+    "[" P+ "]" -> T
+\end{verbatim}
+\end{IncCode}
+\caption{Dangerous combination of lists and optionals}
+\end{Label}
+\end{figure}
+
+Sometimes commenting out parts of a production rule may lead to cycles,
+because a non-terminal becomes an empty producing non-terminal.
+This in combination with lists may then produce unexpected cycles.
+
+\subsection{Labels in the left-hand side of Functions}
+It is possible to decorate the members in the left-hand side of a
+production rule with labels. These labels have no effect when
+parsing input terms. However, when an SDF module is used as input
+for generating APIs these labels will be used.
+See \link*{below}[ Figure~\Ref]{CODE:labels}
+for an example of an SDF specification containing labels.
+
+\begin{figure}
+\begin{Label}{CODE:labels}
+\begin{IncCode}
+\begin{verbatim}   
+module Booleans
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Boolean
+  sorts Boolean
+
+  context-free syntax
+    lhs:Boolean "|" rhs:Boolean -> Boolean
+    lhs:Boolean "&" rhs:Boolean -> Boolean
+\end{verbatim}
+\end{IncCode}
+\caption{The module {\tt basic/Booleans} decorated with labels}
+\end{Label}
+\end{figure}
+
+\subsection{Attributes of Lexical and Context-free Functions}
+\label{Attributes}
+
+\index{attribute@attribute}
+The definition of a lexical or context-free functions may be followed by
+\emph{attributes} that define additional (syntactic or semantic) properties of
+that function.  The attributes are written between curly brackets after the
+non-terminal in the right hand side. If a production rule has more than
+one attribute they are separated by commas.
+\begin{verbatim}
+context-free syntax
+   "{" {Attribute ","}* "}" -> Attributes {cons("attrs")}
+                            -> Attributes {cons("no-attrs")}
+\end{verbatim}
+The following syntax-related attributes exist:
+
+\begin{itemize}
+
+\index{bracket attribute@bracket attribute}
+\item {\tt bracket} allows the definitions of parenthesis and other
+kinds of brackets that are mostly used for overruling the priorities
+of operators in expressions
+(see \link*{Bracket Functions}[Section~\Ref]{BracketFunctions}).
+
+\index{left attribute@left attribute}
+\index{right attribute@right attribute}
+\index{non-assoc attribute@non-assoc attribute}
+\index{assoc attribute@assoc attribute}
+\item {\tt left}, {\tt right}, {\tt non-assoc}, and {\tt assoc}
+are used to define the associativity of functions 
+(see \link*{Priorities}[Section~\Ref]{Priorities}).
+
+\index{prefer attribute@prefer attribute}
+\item {\tt prefer} is used to indicate that the attributed function should
+always be preferred over other functions (without this attribute)
+in certain cases of syntactic ambiguity
+(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+
+\index{avoid attribute@avoid attribute}
+\item {\tt avoid} is used to indicate that a function should
+only be used as a last resort in certain cases of
+syntactic ambiguity
+(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+
+\index{reject attribute@reject attribute}
+\item {\tt reject} can be used to explicitly forbid certain syntactic
+  constructs
+  (see  \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+
+
+\end{itemize}
+
+\noindent The remaining attributes define semantic properties of a function:
+
+\begin{itemize}
+
+\index{constructor attribute@constructor attribute}
+\item {\tt constructor} declares a function to be a \emph{constructor
+function}, this means that for this function \emph{no} equations
+may be defined with this function as outermost function symbol
+in the left hand side.
+
+\index{memo attribute@memo attribute}
+\item {\tt memo} declares a function to be a \emph{memo function} for
+which all calls and results will be cached during evaluation
+(see \link*{Memo Functions}[Section~\Ref]{MemoFunctions}).
+
+%%\item {\tt delay} is used to influence the evaluation order of the
+%%arguments of a function (Section~\ref{Delay}).
+
+\index{traversal attribute@traversal attribute}
+\item {\tt traversal} is used to declare so-called traversal functions
+that greatly simply the specification of functions that have to visit
+(parts of) a term 
+(see \link*{Traversal Functions}[Section~\Ref]{Traversal}).
+
+\index{ATerm attribute@ATerm attribute}
+\item arbitrary ATerms may also be used as attributes. In the context-free
+syntax definition of the {\tt Attributes}, the ATerms {\tt cons("attrs")}
+and {\tt cons("no-attrs")} are used. The {\tt cons} attribute is used by
+other tools, such as ApiGen.
+\end{itemize}
+
+Not all combinations of attributes make sense. If one uses the attribute
+{\tt left} in combination with {\tt bracket}, {\tt right}, {\tt assoc}
+or {\tt non-assoc}, this will result in an error message. The combination
+of {\tt avoid} and {\tt prefer} does not make sense either.
+Furthermore, the combination of the traversal attributes is also very strict.
+
+\subsection{Priorities}
+\label{Priorities}
+
+\index{priorities@priorities}
+The context-free syntax defined in an \asfsdf\ specification may be 
+ambiguous: there are sentences which have more than one associated tree. 
+The common example is the arithmetic expression in which definitions 
+of the priority or associativity of operators are missing. There are 
+three mechanisms for defining associativity and priority:
+
+\begin{itemize}
+  
+\item \link{Relative priorities of functions}[ (see Section~\Ref)]{RelativePriorities}
+  defined in the {\tt context-free priorities} section.
+
+\index{associativity@associativity}
+\item \link{Associativity of functions}[ (see Section~\Ref)]{AssociativeFunctions}
+ defined as attributes following the function declaration.
+  
+\item \link{Associativity of groups of functions}[ (see Section~\Ref)]{GroupAssoc}
+  defined in the {\tt context-free priorities} section.
+
+\end{itemize}
+
+Closely related with priorities are brackets that can be used to
+overrule priorities.  We will first describe bracket functions,
+and then the various methods for defining priorities.
+
+\subsubsection{Bracket Functions}
+\label{BracketFunctions}
+
+\index{bracket functions@bracket functions}
+A bracket function has the form `{\tt $open$ $S$ $close$ -> $S$}' where $open$
+and $close$ are literals acting as opening and closing parenthesis for sort
+$S$. Examples are `{\tt (}' and `{\tt )}' in arithmetic expressions.
+In most cases, such brackets are only
+introduced for grouping and disambiguation, but have no further meaning. By
+adding the attribute {\tt bracket} to the function declaration, it will not be
+included in the abstract syntax.
+The definition of a bracket function for the sort {\tt Expr} 
+is given
+\link*{below}[ in Figure~\Ref]{CODE:bracket-expr}.
+
+\begin{figure}
+\begin{Label}{CODE:bracket-expr}
+\begin{IncCode}
+\begin{verbatim}
+module BracketExpr
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+  context-free start-symbols E
+  sorts E
+
+  context-free syntax
+    NatCon    -> E
+    "(" E ")" -> E {bracket}
+\end{verbatim}
+\end{IncCode}
+\caption{Syntax definition with a bracket function}
+\end{Label}
+\end{figure}
+
+Since brackets are necessary for overruling the priority and associativity of
+functions,  it is required that bracket 
+functions are declared for the argument and result sorts of
+
+\begin{itemize}
+
+\item all functions appearing in priority declarations, and
+  
+\item all functions having one of the attributes {\tt left}, {\tt right}, 
+{\tt assoc}, or {\tt non-assoc}.
+
+\end{itemize}
+
+\subsubsection{Relative Priorities}
+\label{RelativePriorities}
+
+\index{relative priorities@relative priorities}
+The relative priority of two functions is defined 
+in the `{\tt context-free priorities}' section 
+by including {\tt $F$ > $G$},
+where $F$ and $G$ are 
+as written in the context-free grammar. Functions with a higher 
+priority bind more strongly than functions with lower priorities and 
+the nodes corresponding to them should
+thus appear at lower levels in the tree than nodes corresponding to functions
+with lower priorities. Lists of functions may be used in a priority
+declaration: {\tt $F$ > \{$G$, $H$\}} is an 
+abbreviation for {\tt $F$ > $G$, $F$ > $H$}.
+Note that this tells us nothing about the priority relation between $G$ and $H$. 
+
+\subsubsection{Associative Functions}
+\label{AssociativeFunctions}
+
+\index{associativity functions@associativity functions}
+Associativity attributes can be attached to binary functions of the form 
+`{\tt $S$ $op$ $S$ -> $S$}', where $op$ is a symbol or empty. 
+Without associativity attributes, nested occurrences of such 
+functions immediately lead to ambiguities, as is shown by the 
+sentence `{\tt S-string op S-string op S-string}' where 
+`{\tt S-string}' is a string produced by symbol $S$. 
+The particular associativity 
+associated with $op$ determines the intended interpretation of such sentences.
+  
+We call two occurrences of functions $F$ and $G$ \emph{related}, when the node
+corresponding to $F$ has a node corresponding to $G$ as first or last child.
+The associativity attributes define how to accept or reject trees containing
+related occurrences of the same function, $F$:
+
+\begin{itemize}
+
+\item {\tt left}: related occurrences of $F$ associate from left to right. 
+
+\item {\tt right}: related occurrences of $F$ associate from right to left. 
+
+\item{\tt  assoc}: related occurrences of $F$ associate from left to right.
+
+\item {\tt non-assoc}: related occurrences of $F$ are not allowed.
+
+\end{itemize}
+
+Currently, there is no syntactic or semantic difference between `{\tt left}'
+and `{\tt assoc}', but we may change the semantics of the `{\tt assoc}'
+attribute in the future.
+
+\T Figure \ref{CODE:simple-prio} gives 
+\W \link{Below}[]{CODE:simple-prio} we give
+an example of a definition of
+simple arithmetic expressions with the usual priorities and
+associativities.
+
+\begin{figure}
+\begin{Label}{CODE:simple-prio}
+\begin{IncCode}
+\begin{verbatim}
+module SimpleExpr
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+  context-free start-symbols E 
+  sorts E 
+
+  context-free syntax
+    NatCon    -> E
+    E "+" E   -> E {left}
+    E "*" E   -> E {left}
+    "(" E ")" -> E {bracket}
+
+  context-free priorities
+    E "*" E -> E > 
+    E "+" E -> E
+\end{verbatim}
+\end{IncCode}
+\caption{Simple context-free priority definition}
+\end{Label}
+\end{figure}   
+
+\subsubsection{Groups of Associative Functions}
+\label{GroupAssoc}
+
+\index{associativity groups@associativity groups}
+Groups of associative functions define how to accept or reject trees
+containing related occurrences of different functions with the same priority.
+They are defined by prefixing a list of context-free functions in a priority
+declaration with one of the following attributes:
+
+\begin{itemize}
+
+\item {\tt left}: related occurrences of $F$ and $G$ associate from left to right. 
+\item {\tt right}: related occurrences of $F$ and $G$ associate from right to left.
+\item {\tt non-assoc}: related occurrences of $F$ and $G$ are not allowed.
+
+\end{itemize}
+
+\noindent where $F$ and $G$ are functions appearing in the list.
+\link*{below}[ Figure~\Ref]{CODE:complex-prio},
+an example of the use of grouped associativity.
+
+\begin{figure}
+\begin{Label}{CODE:complex-prio}
+\begin{IncCode}
+\begin{verbatim}
+module ComplexExpr
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+  context-free start-symbols E 
+
+  sorts E 
+
+  context-free syntax
+    NatCon    -> E
+    E "+" E   -> E {left}
+    E "-" E   -> E {non-assoc}
+    E "*" E   -> E {left}
+    E "/" E   -> E {non-assoc}
+    E "^" E   -> E {right}
+    "(" E ")" -> E {bracket}
+
+  context-free priorities
+    E "^" E -> E > 
+    {non-assoc: E "*" E -> E
+                E "/" E -> E} >
+    {left: E "+" E -> E
+           E "-" E -> E}
+\end{verbatim}
+\end{IncCode}
+\caption{More complex associativity and priority definitions}
+\end{Label}
+\end{figure}   
+
+\subsubsection{Restrictions}
+\label{Restrictions}
+\label{ContextFreeRestrictions}
+\label{LexicalRestrictions}
+
+\index{restrictions@restrictions}
+\index{lexical restrictions@lexical restrictions}
+\index{context-free restrictions@context-free restrictions}
+\index{{\tt -/-}@{\tt -/-}}
+\index{{\tt <Lookaheads>}@{\tt <Lookaheads>}}
+Lexical syntax can be highly ambiguous.  Consider 
+a simple lexical definition for identifiers
+like the one given \link{earlier}[ in Figure~\Ref]{CODE:repetition}.
+When recognizing the text {\tt abc}, what should we return: {\tt a}, {\tt ab}
+or, {\tt abc}? 
+We discuss the strategy \emph{Prefer Longest Match} for
+resolving this kind of ambiguity in
+\link*{Lexical Ambiguities}[ Section~\Ref]{lex-ambiguity}.
+
+Here, we describe the notion of \emph{restrictions} that enable the formulation
+of this and other lexical disambiguation strategies.
+
+A restriction limits the \emph{lookahead} for a given symbol; it indicates
+that a symbol may not be followed by a character from a given character class.
+A lookahead may consist of more than one character class.  Restrictions come
+in two flavors:
+
+\begin{itemize}
+\item lexical restrictions;
+\item context-free restrictions.
+\end{itemize}
+
+\noindent The general form of a restriction is 
+
+\begin{verbatim}
+<Symbol>+ -/- <Lookaheads>
+\end{verbatim}
+ 
+\noindent In case of lexical restrictions {\tt <Symbol>} may be   
+either a literal or sort.  
+In case of context-free restrictions only a sort or symbol is allowed.
+The restriction operator {\tt -/-} should be read as ``may not be
+followed by''.
+Before the restriction operator {\tt -/-} a list of symbols
+is given for which the restriction holds.
+ 
+In the example\footnote{Taken from~\cite{Vis97}}
+\link*{below}[ in Figure~\Ref]{CODE:functional}
+both {\tt let} and {\tt in} may not be followed by a letter.
+This example shows how lexical restrictions can be used to prevent
+the recognition of erroneous expressions in a small functional language.
+The lexical restriction deals with the possible confusion between
+the reserved words {\tt let} and {\tt in} and variables (of sort {\tt Var}).
+It forbids the recognition of, for instance, {\tt let} as part
+of {\tt letter}. Without this restriction {\tt letter} would be recognized
+as the keyword {\tt let} followed by the variable  {\tt ter}.
+The context-free restriction forbids that a variable is directly
+followed by a letter. It does not forbid layout characters between
+the letters, e.g. {\tt a b} is a legal recognizable string.
+
+\begin{figure}
+\begin{Label}{CODE:functional}
+\begin{IncCode}
+\begin{verbatim}
+module Functional
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Term 
+  sorts Var Term
+  lexical syntax
+    [a-z]+ -> Var
+  context-free syntax
+    Var                          -> Term
+    Term Term                    -> Term {left}
+    "let" Var "=" Term "in" Term -> Term
+
+  lexical restrictions
+    "let" "in" -/- [a-z]
+
+  context-free restrictions
+    Var -/- [a-z]
+\end{verbatim}
+\end{IncCode}
+\caption{Using restrictions in the definition of a simple functional language}
+\end{Label}
+\end{figure}   
+
+{\tt <Lookaheads>} are slightly more complex.  The most compact way is to
+give the \sdf\ definition of the {\tt <Lookaheads>} and illustrate their use by
+means of some examples.
+
+\begin{verbatim}
+context-free syntax
+  CharClass                    -> Lookahead
+  CharClass "." Lookaheads     -> Lookahead
+  Lookahead                    -> Lookaheads
+  Lookaheads "|" Lookaheads    -> Lookaheads {right}
+  "(" Lookaheads ")"           -> Lookaheads {bracket}
+  "[[" {Lookahead ","}* "]]"   -> Lookaheads 
+\end{verbatim}
+
+The next example illustrates the use of restrictions to define a
+`safe' way of layout.  
+\link{Recall}[ from Section~\Ref]{LexicalSyntax}
+that optional layout, represented by the symbol {\tt LAYOUT?},
+may be recognized between the 
+members of the left-hand side of a context-free syntax rule.
+
+However, if a such a member recognizes the empty string, this gives rise to a
+\link{lexical ambiguity}[ (Section~\Ref)]{lex-ambiguity}. 
+This problem is avoided by the definition 
+given \link*{below}[in Figure~\Ref]{CODE:safe-layout}:
+it simply forbids that optional layout is followed by layout characters.
+
+\begin{figure}
+\begin{Label}{CODE:safe-layout}
+\begin{IncCode}
+\begin{verbatim}
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n] -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+\end{verbatim}
+\end{IncCode}
+\caption{Safe way of defining {\tt LAYOUT}}
+\end{Label}
+\end{figure}
+
+The example shown \link*{below}[in Figure~\Ref]{CODE:c-comment}
+illustrates the
+use of restrictions to extend the previous layout definition with C-style
+comments. For readability we give here \emph{two} restrictions whereas the
+first one is already imported from 
+\link{module {\tt basic/Whitespace}}[ (Figure~\Ref)]{CODE:safe-layout}.  
+The repetition of this first restriction is
+redundant and could be eliminated.
+
+\begin{figure}
+\begin{Label}{CODE:c-comment}
+\begin{IncCode}
+\begin{verbatim}
+module Comment
+
+imports basic/Whitespace
+
+exports
+  sorts ComWord Comment
+  lexical syntax
+    ~[\ \n\t\/]+ -> ComWord
+
+  context-free syntax
+    "/*" ComWord* "*/" -> Comment
+    Comment            -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+    LAYOUT? -/- [\/].[\*]
+\end{verbatim}
+\end{IncCode}
+\caption{Definition of C comments}
+\end{Label}
+\end{figure}
+
+A frequently asked question is when to use \emph{lexical} restrictions
+and when to use \emph{context-free} restrictions. 
+In one of the \link{previous examples}[ (Figure \Ref)]{CODE:functional}
+the lexical restrictions on {\tt let} and {\tt in}
+cannot be defined using context-free restrictions
+because these keywords do not "live" at the context-free level.
+Is it possible to put a lexical restriction on {\tt Var}?
+Yes, but it will have no effect, because internally the
+lexical {\tt Var} is injected in the context-free {\tt Var}.
+The general rule is to define the restrictions always on the
+context-free level and not on the lexical level unless a situation 
+as will be discussed in the next paragraph occurs.
+
+The specification 
+\link*{below}[in Figure~\Ref]{CODE:restrictedexpressions} is an example of
+an erroneous use of
+context-free expressions, because it prevents the recognition of
+{\tt (abc)def}. If we want to enforce the correct restriction, it
+is necessary to transform this context-free restriction into
+a lexical restriction.
+
+\begin{figure}
+\begin{Label}{CODE:restrictedexpressions}
+\begin{IncCode}
+\begin{verbatim}
+module RestrictedExpressions
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Expr
+  sorts Expr
+
+  lexical syntax
+    [a-z]+ -> Expr
+
+  context-free syntax
+    Expr Expr    -> Expr {left}
+    "(" Expr ")" -> Expr {bracket}
+
+  context-free restrictions
+    Expr -/- [a-z]
+\end{verbatim}
+\end{IncCode}
+\caption{Erroneous use of restrictions in the definition of simple expressions}
+\end{Label}
+\end{figure}   
+
+
+
+\subsubsection{Preferring, Avoiding or Rejecting Parses} 
+\label{PreferAvoidReject}
+
+Priorities can be used to define a priority between two functions or between
+two groups of functions. In both cases the functions involved have to be
+listed explicitly in the priority declaration. In certain cases, however, it
+is desirable to define that a single rule has higher or lower priority than
+all other functions or to explicitly reject certain syntactic constructs.
+The former is achieved by the attributes {\tt prefer} and {\tt avoid}. The
+latter by the attribute {\tt reject}. 
+
+The use of the {\tt reject} attribute leads also to improvements in the 
+performance of the parser, see \cite{BSVV02} for more implementation
+details.
+
+If a function $F$ is attributed with {\tt prefer} and there is a syntactic
+ambiguity in which it is involved, only the parse using $F$ will remain.
+
+If a function $F$ is attributed with {\tt avoid} and there is no ambiguity,
+then $F$ will be used. If there is an ambiguity, then $F$ will be immediately
+removed from the set of ambiguities.
+
+If a function $F$ is attributed with {\tt reject}, then independently of the
+number of ambiguities, the parse using $F$ will be removed.  While
+\link{restrictions}[ (Section~\Ref)]{Restrictions}
+only impose limitations on the
+immediate lookahead that follows a symbol, the reject mechanism can be used
+to eliminate complicated syntactic structures.
+
+Examples of the use of {\tt prefer}, {\tt avoid} and {\tt reject} in order
+to solve lexical ambiguities are discussed in
+\link*{Lexical Ambiguities}[ Section~\Ref]{lex-ambiguity}.
+In \link*{Context-free Ambiguities}[ Section~\Ref]{cf-ambiguity}
+we will give examples of how to use
+these attributes to solve context-free ambiguities, such as the
+famous dangling else problem.
+
+\subsection{Disambiguation}
+\label{Disambiguation}
+
+\subsubsection{Lexical Ambiguities}
+\label{lex-ambiguity}
+
+\sdf\ provides a number of elementary lexical disambiguation features but does
+not offer {\em fully automated} lexical disambiguation.
+As a result, the specification writer has to be aware of lexical ambiguities
+and has to specify disambiguation rules explicitly.
+We will discuss various
+approaches to lexical disambiguation and illustrate them by means of examples.
+
+\W We will discuss:
+\W \htmlmenu{1}
+
+\paragraph{Prefer Longest Match per Sort} Reject all interpretations of 
+the input text that are included in a longer interpretation of the same 
+sort. Given a standard definition of identifiers, the input `{\tt xyz}' 
+will thus lead to recognition of the identifier `{\tt xyz}' and not to 
+either `{\tt x}' or `{\tt xy}'.
+
+This is achieved by defining a restriction on this lexical sort. This
+can be done using either lexical or context-free
+\link{restrictions}[ (see Section~\Ref)]{Restrictions}.
+The specification \link*{below}[ in Figure~\Ref]{CODE:restrict-id} 
+shows how to enforce the longest match for the sort {\tt Id}.
+
+\begin{figure}
+\begin{Label}{CODE:restrict-id}
+\begin{IncCode}
+\begin{verbatim}
+module Identifiers-restrict
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts Id
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -> Id
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
+\end{verbatim}
+\end{IncCode}
+\caption{Using context-free restrictions to define a longest match for
+    identifiers}
+\end{Label}
+\end{figure}   
+
+\paragraph{Prefer Literals} 
+
+In the left-hand side of a context-free syntax rule literals (keywords
+and/or operators) may be used.  If these literals overlap with  more
+general lexical tokens (such as identifier) this causes ambiguities.
+
+The strategy \emph{Prefer Literals} gives preference to interpretation
+as a literal, over interpretation as a more general lexical token.
+For instance, the keyword {\tt begin} may be recognized as an identifier
+given the lexical definition \link*{below}[ in Figure~\Ref]{CODE:restrict-id}.
+
+There are two approaches to implement Prefer Literals.
+
+In the first approach, we can explicitly forbid the recognition of
+literals as tokens of a specific sort using the
+\link{reject mechanism}[ (see Section~\Ref)]{PreferAvoidReject}.  
+The idea is to define context-free
+grammar rules for all literals with the undesired lexical sort (e.g.,
+{\tt Id}) in the right-hand side followed by the attribute {\tt reject}.
+This is illustrated \link*{below}[in Figure~\Ref]{CODE:reject-id}.
+The {\tt reject} attribute
+indicates here that the recognition of a keyword as a literal of the sort
+{\tt Id} should be rejected. This approach has the major disadvantage
+that the addition of a literal in any context-free rule also requires
+the addition of a new reject rule for that literal.
+
+\begin{figure}
+\begin{Label}{CODE:reject-id}
+\begin{IncCode}
+\begin{verbatim}
+module Identifiers-reject
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts Id
+
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -> Id
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
+
+  context-free syntax
+    "begin" -> Id {reject}
+\end{verbatim}
+\end{IncCode}
+\caption{Using {\tt reject} to implement Prefer Literals}
+\end{Label}
+\end{figure}   
+
+The second approach is more attractive. The lexical definition of the general
+notion that interferes with our literals is written in such a way that it is
+only used as a last resort. In other words, it is avoided as much as possible
+and is only used when no alternative exists.  
+The attribute {\tt avoid} defines precisely this behaviour
+(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+\link*{The next example}[Figure~\Ref]{CODE:avoid-id} shows
+how the lexical definition of {\tt Id} is attributed with {\tt avoid}.
+
+Although the first approach is more tedious, it allows more flexibility
+than the second one.
+
+\begin{figure}
+\begin{Label}{CODE:avoid-id}
+\begin{IncCode}
+\begin{verbatim}
+module Identifiers-avoid
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts Id
+
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -> Id {avoid}
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
+\end{verbatim}
+\end{IncCode}
+\caption{Using {\tt avoid} to implement Prefer Literals}
+\end{Label}
+\end{figure}   
+
+\paragraph{Prefer Non-Layout} If there are interpretations of the text as
+layout symbol and as non-layout symbol, eliminate all interpretations as layout
+symbol. This is built-in behaviour of \asfsdf.
+
+\paragraph{Prefer Variables} Give preference to interpretation as a 
+variable (as defined in a variables section) over interpretation as a lexical
+token. Thus built-in behaviour of \asfsdf. It is achieved by automatically
+extending each variable declaration with 
+the attribute {\tt prefer}
+(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+
+\subsubsection{Context-free Ambiguities}
+\label{cf-ambiguity}
+
+Context-free grammars may be ambiguous and, as a result, the parser may yield
+different parses of a text. More precisely, the result of a parse is a single
+tree in which the ambiguities are explicitly marked. Each marked ambiguity
+consists of a set of different parse trees for that ambiguity.  Many---but not
+all!--- of these different parses can be eliminated by the following
+strategies that are built-in the \ASmetaenv. These strategies use the
+priorities and associativities as defined in the specification. In addition,
+some standard heuristics are used.
+
+\paragraph{Associativity filtering} The associativity filtering
+is performed during the generation of the parse table. Based
+on the associativity relations certain entries in the parse table
+are removed.
+
+\paragraph{Removing Trees containing Conflicts}
+
+The simplest application of priority and associativity declarations is the
+elimination of trees that contain conflicts:
+
+\begin{itemize}
+
+\item A parent node has a child with a lower priority than the parent itself.
+  
+\item A parent has a first or last child that is in conflict with
+  an associativity relation between this parent and child.
+
+\end{itemize}
+
+Reconsidering the example of complex priorities shown \link*{earlier}[in
+Figure~\Ref]{CODE:complex-prio} we will give a number of example sentences and
+the interpretation given to them by that language definition.
+
+\begin{center}
+\begin{tabular}{ll}
+  Sentence   & Interpretation \\
+\verb"1^2^3" & \verb"1^(2^3)" \\
+\verb"1^2*3" & \verb"(1^2)*3" \\
+\verb"1*2*3" & \verb"(1*2)*3" \\
+\verb"1/2/3" & error \\
+\verb"1*2/3" & error \\
+\verb"1-2-3" & error \\
+\verb"1+2+3" & \verb"(1+2)+3" \\
+\verb"1-2+3" & \verb"(1-2)+3" \\
+\verb"1+2-3" & \verb"(1+2)-3"\\
+\end{tabular}
+\end{center}
+
+\paragraph{Removing Trees using {\tt prefer}/{\tt avoid} Attributes at the Root}
+
+The priority declarations are used to eliminate trees 
+in three phases: 
+
+\begin{enumerate}
+  
+\item If there are trees of which the syntax rule at the top node has a {\tt
+    prefer} attribute, all other trees are removed.
+
+\item  If there are trees of which the syntax rule at the top node has an {\tt
+    avoid} attribute and there are other trees without an {\tt avoid} attribute at
+  the root node, then all trees with {\tt avoid} attribute are removed.
+  
+\end{enumerate}
+
+\paragraph{Removing Trees containing {\tt prefer}/{\tt avoid} Attributes}
+
+After removing all trees containing conflicts, more than one tree may
+still remain.  To further reduce this set of remaining trees, the number
+of context-free functions with {\tt prefer}/{\tt avoid} attributes is
+calculated and compared.  A tree in the set is then rejected if there
+is another tree in the set with more {\tt prefer}s and less or equal
+{\tt avoid}s, or with equal {\tt prefer}s and more {\tt avoid}s.
+
+\paragraph{Injection count}
+Finally, the number of injections in each of the resulting trees
+is calculated, the tree with the smallest number of injections
+is prefered.
+
+
+\paragraph{Examples}
+
+The following examples show how the interaction (and resulting ambiguities)
+between general context-free functions and special case functions can be
+described using {\tt prefer} attribute. 
+
+The \link{first example}[(Figure~\Ref]{CODE:eqn-exprs} concerns expressions
+for describing subscripts and superscripts in the typesetting language EQN.
+The crucial point is that, for typesetting reasons, we want to treat a
+subscript followed by a superscript in a special way. Therefore, the special
+case `{\tt E sub E sup E -> E}' is introduced, which is prefered over a
+combination of the two functions `{\tt E sub E -> E}' and `{\tt E sup E ->
+  E}'.
+
+\begin{figure}
+\begin{Label}{CODE:eqn-exprs}
+\begin{IncCode}
+\begin{verbatim}
+module Eqn
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols E
+  sorts E 
+
+  context-free syntax
+    E "sub" E         -> E {left}
+    E "sup" E         -> E {left}
+    E "sub" E "sup" E -> E {prefer}
+    "{" E "}"         -> E {bracket}
+    "a"               -> E 
+\end{verbatim}
+\end{IncCode}
+\caption{Syntax definition of EQN expressions}
+\end{Label}
+\end{figure}
+
+In the \link{second example}[ (Figure~\Ref)]{CODE:dangling-else}
+the {\tt prefer} attribute is used to
+solve the dangling else problem in a nice way.
+The input sentence {\tt "if 0 then if 1 then hi else ho"} can be parsed
+in two ways: {\tt if 0 then (if 1 then hi) else ho} and
+{\tt if 0 then (if 1 then hi else ho)}.
+We can select the latter derivation by adding the {\tt prefer}
+attribute to the production without the {\tt else} part.
+The parser will still construct an ambiguity node containing both
+deriviations,
+namely, {\tt if 0 then (if 1 then hi \{prefer\}) else ho} and
+{\tt if 0 then (if 1 then hi else ho) \{prefer\}}.
+But given the fact that the \emph{top} node of the latter derivation tree
+has the prefer attribute this derivation is selected and the other
+tree is removed from the ambiguity node.
+
+\begin{figure}
+\begin{Label}{CODE:dangling-else}
+\begin{IncCode}
+\begin{verbatim}
+module DanglingElse
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols S
+  sorts E S
+
+  context-free syntax
+    "a"                      -> E 
+    "if" E "then" S          -> S {prefer}
+    "if" E "then" S "else" S -> S
+    "s"                      -> S
+\end{verbatim}
+\end{IncCode}
+\caption{Syntax definition of conditionals}
+\end{Label}
+\end{figure}
+
+\subsection{Parameterization and Renaming}
+\label{ParametersRenamings}
+
+Parameterization and renaming were in fact features of 
+the original \asf\ as described
+in \cite{BHK89}, but they were never supported by the \asfsdf\
+used in the first version of the \ASmetaenv~\cite{Kli93}. 
+Based on the work described in \cite{Vis97}, \asfsdf\ is extended
+with parameterization and symbol renaming\footnote{In \cite{Vis97} the
+notion of production renaming is also introduced, but this
+will not be supported.}. We will first explain the notion
+of parameterization, later we will give details on symbol renaming.
+
+\subsubsection{Parameterization}
+\label{Parameters}
+
+Module parameterization allows the definition of generic modules
+for lists, pairs, sets, etc. The operations defined in these
+modules are independent of a specific type. When importing a
+parameterized module and instantiating the formal by actual
+parameters the operations become "sort" specific.
+
+Modules can have formal parameters when defining them. The module name
+is then followed by a list of symbols, representing the formal
+parameters of this module. 
+The specification \link*{below}[in Figure~\Ref]{CODE:generic-pairs} shows 
+an example of a parameterized module. In this example the
+formal parameters are used in the parameterized sorts as well,
+in order to increase readability and to avoid name clashes between
+different instances of the same module.
+
+\begin{figure}
+\begin{Label}{CODE:generic-pairs}
+\begin{IncCode}
+\begin{verbatim}
+module Pair[X Y]
+
+imports basic/Whitespace
+imports basic/Booleans
+
+hiddens
+  sorts X Y
+
+exports
+  context-free start-symbols Pair[[X,Y]]
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -> Pair[[X,Y]]
+
+    make-pair(X, Y)      -> Pair[[X,Y]]
+    first(Pair[[X,Y]])   -> X
+    second(Pair[[X,Y]])  -> Y
+    is-pair(Pair[[X,Y]]) -> Boolean
+\end{verbatim}
+\end{IncCode}
+\caption{Definition of generic pairs}
+\end{Label}
+\end{figure}
+
+When importing a parameterized module the formal parameters have
+to be replaced by actual parameters. 
+The specification \link*{below}[in Figure~\Ref]{CODE:importing-pairs} shows 
+an example of a rather complicated import of a parameterized module. 
+The symbols {\tt Pair[[Boolean,Boolean]]} and {\tt Pair[[Integer,Integer]]} are the
+actual parameters of the module {\tt Pair[X Y]} in the last import.
+
+\begin{figure}
+\begin{Label}{CODE:importing-pairs}
+\begin{IncCode}
+\begin{verbatim}
+module TestPair
+
+imports basic/Booleans 
+imports basic/Integers 
+imports Pair[Boolean Boolean]
+imports Pair[Integer Integer]
+imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]
+\end{verbatim}
+\end{IncCode}
+\caption{Use of generic pair module}
+\end{Label}
+\end{figure}
+
+\subsubsection{Symbol Renaming}
+\label{Renamings}
+
+Symbol renaming is in fact very similar to parameterization except
+that it is not necessary to add formal parameters to a module.
+The mechanism of symbol renaming allows the overriding of one
+symbol or a set of symbols by another symbol or symbols, respectively. 
+It allows a flexible and concise way of adapting specifications.
+The specification \link*{below}[in Figure~\Ref]{CODE:pairs} shows 
+an example of the {\tt Pair} module without parameters. 
+The idea is to achieve the same effect as parameterization
+by explicitly renaming {\tt X} and {\tt Y} to the desired
+names when {\tt Pair} is imported.
+
+\begin{figure}
+\begin{Label}{CODE:pairs}
+\begin{IncCode}
+\begin{verbatim}
+module Pair
+
+imports basic/Whitespace
+imports basic/Booleans
+
+hiddens
+  sorts X Y
+
+exports
+  context-free start-symbols Pair[[X,Y]]
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -> Pair[[X,Y]]
+
+    make-pair(X, Y)      -> Pair[[X,Y]]
+    first(Pair[[X,Y]])   -> X
+    second(Pair[[X,Y]])  -> Y
+    is-pair(Pair[[X,Y]]) -> Boolean
+\end{verbatim}
+\end{IncCode}
+\caption{Definition of generic pairs}
+\end{Label}
+\end{figure}
+
+During import such module symbols can be renamed via symbol renaming.
+The specification \link*{below}[in Figure~\Ref]{CODE:renaming-pairs} shows 
+an example of a rather complicated import of the module {\tt Pair}
+using renamings. Renaming {\tt X} to {\tt Boolean} is, for instance,
+written as {\tt X => Boolean}.
+
+\begin{figure}
+\begin{Label}{CODE:renaming-pairs}
+\begin{IncCode}
+\begin{verbatim}
+module TestPair
+
+imports basic/Booleans 
+imports basic/Integers 
+imports Pair[X => Boolean Y => Boolean]
+imports Pair[X => Integer  Y => Integer]
+imports Pair[X => Pair[[Boolean,Boolean]] Y => Pair[[Integer,Integer]]]
+\end{verbatim}
+\end{IncCode}
+\caption{Use of generic pair module}
+\end{Label}
+\end{figure}
+
+\subsection{Variables}
+\label{Variables}
+
+\index{variables@variables}
+Variables are declared in the `{\tt variables}' section of a module.  Like all
+other entities in a 
+module---except equations---variables may be exported
+(see \link*{Modules}[Section~\Ref]{modules}). 
+A variables section consists of a list of variable
+names followed by a symbol. In fact, a variable declaration can define an
+infinite collection of variables by using a \emph{naming scheme} instead of a
+simple variable name.  A naming scheme is a regular expression like the ones
+allowed in the \link{lexical syntax}[ (Section~\Ref)]{lexical-syntax} except that sorts
+are not allowed. A variable may represent any symbol. 
+
+In the specification \link*{below}[in Figure~\Ref]{CODE:variables},
+`{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
+are examples of variables declared by the naming schemes in 
+the {\tt variables} section.
+Strings that occur in the left-hand side of variable declarations
+should {\em always} be quoted.
+
+\begin{figure}
+\begin{Label}{CODE:variables}
+\begin{IncCode}
+\begin{verbatim}
+module VarDecls
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Decl
+  sorts Id Decl Type 
+
+  lexical syntax
+    [a-z]+ -> Id
+ 
+  context-free syntax
+    "decl" {Id ","}+ ":" Type -> Decl 
+    "integer"                 -> Type 
+    "real"                    -> Type 
+
+hiddens
+  variables
+    "Id"           -> Id 
+    "Type"[0-9]*   -> Type 
+    "Id-list"[\']* -> {Id ","}* 
+    "Id-ne-list"   -> {Id ","}+
+\end{verbatim}
+\end{IncCode}
+\caption{Variable declarations using naming schemes}
+\end{Label}
+\end{figure}         
+
+Declared variables can only be used when defining equations. It is not
+allowed to use them in terms.
+
+Ambiguities due to variables are resolved by the {\em Prefer Variables}
+strategy that was discussed in
+\link*{Lexical Ambiguities}[Section~\Ref]{lex-ambiguity}.
+
+\subsection{Libraries}
+\label{Libraries}
+
+Via the graphical user interface of the \ASmetaenv\ one has access to
+a number of predefined modules. These library modules are divided into
+4 different categories:
+\begin{enumerate}
+\item {\tt basic}
+\item {\tt containers}
+\item {\tt languages}
+\item {\tt utilities}
+\end{enumerate}
+
+Each of these categories offers a number of useful library modules, e.g.,
+the category {\tt basic} offers the library modules for {\tt Booleans},
+{\tt Integers}, {\tt Strings}, etc. The category {\tt containers} offers
+modules {\tt List}, {\tt Set}, and {\tt Table}. The category {\tt
+languages} offers a number of predefined syntax definitions. 
+
+One can import these library modules in a specification in the following
+way:
+{\tt imports basic/Booleans} for a library module without parameters and
+{\tt imports containers/List[Boolean]} if it is a parameterized library
+module. In the various examples presented upto now the library modules
+are used whenever appropriate.
+
+When developing a new specification make sure that you check the libraries
+in order to reduce the amount of work.
+
+\subsubsection{Position Information}
+In a number of cases, for instance when producing error messages, it can
+be very useful to retrieve the position information of subterms.
+\subsubsection{Error messages}
+
+\subsection{Equations}
+\label{Equations}
+
+\index{equations@equations}
+\index{Asf+Sdf@\asfsdf}
+With equations a meaning or semantics may be added to functions declared in
+the lexical and context-free syntax sections. 
+In particular, equations consist of two \emph{open terms}, i.e.
+terms possibly containing variables.
+
+In the context of \asfsdf, an open term is any string that can be parsed
+according to one of the sorts in the specification (possibly including
+variables).  
+Examples of (open) terms are `{\tt true}', `{\tt not(false)}',
+and `{\tt true | Bool}'.
+
+\W We will discuss the following aspects of equations:
+\W \htmlmenu{1}
+
+\subsubsection{Unconditional Equations}
+
+\index{unconditional equations@unconditional equations}
+An equality then consists of two (possibly open) terms $L$ (lefthand side) and $R$ (righthand
+side) such that:
+
+\begin{itemize}
+
+\item $L$ and $R$ are of the same sort.
+
+\item $L$ is not a single variable.
+  
+\item The variables that occur in $R$ also occur in $L$.
+
+\end{itemize}
+
+It is assumed that the
+variables occurring in the equation are universally quantified. In other
+words, the equality holds for all possible values of the variables.
+
+The equality of two terms $L$ and $R$ is defined  in \asfsdf\ by the following
+\emph{unconditional} equation:
+
+\begin{quote}
+{\tt [$TagId$] $L$ = $R$} 
+\end{quote}
+
+\noindent where $TagId$ is a sequence of letters, digits, and/or minus
+signs ({\tt -}) starting with a letter or a digit.
+
+
+\subsubsection{Conditional Equations}
+
+\index{conditional equations@conditional equations}
+An unconditional equation is a special case of a \emph{conditional equation},
+i.e., an equality with one or more associated conditions (premises).  The
+equality is sometimes called the \emph{conclusion} of the conditional
+equation.
+
+In \asfsdf\ a conditional equation can be written in three (syntactically
+different, but semantically equivalent) ways:
+
+\begin{tabbing}
+(a) \= {\tt [$TagId$]} \= {\tt $L$ = $R$ when $C_1$, $C_2$, ...} \\\\
+(b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ... ===> $L$ = $R$} \\ 
+(c) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ...} \\
+             \>    \> {\tt =================} \\
+             \>    \> \ \ \ \ \ {\tt $L$ = $R$}
+\end{tabbing}
+
+
+\noindent where ${\tt C}_1$, ${\tt C}_2$, ...  are conditions which may be 
+either matching (and have the form `{\tt $S$ := $T$}'),
+negative matching (and have the form `{\tt $S$ !:= $T$}'),
+positive (and have  the form `{\tt $S$ == $T$}'), 
+or negative (and have the form `{\tt $S$ != $T$}').
+
+The conditions of an equation are evaluated from left to right. Let,
+initially, $V$ be the set of variables occurring in the left-hand 
+side $L$ of the conclusion of the equation. 
+For the evaluation of matching conditions we have the following case:
+\begin{itemize}
+
+\item Left-hand side of a matching condition must contain at least one
+  new or fresh variable not in $V$.
+  Reduce the right-hand side of the matching condition to a normal form 
+  and the matching condition succeeds if this normal form and the 
+  left-hand side of the condition match. 
+  The new variables resulting from this match are added
+  to $V$. This kind of condition is called a \emph{match} condition.
+  The variables occurring in both $V$ and the left-hand side must
+  represent the syntactically the same subterm.
+
+\end{itemize}
+For the evaluation of each positive condition we
+distinguish the following cases:
+
+\begin{itemize}
+  
+\item The condition contains only variables in $V$. Reduce both sides of the
+  condition to normal form and the condition succeeds if both normal 
+  forms are identical. 
+  Technically, this is called a \emph{join} condition.
+  
+\end{itemize}
+  
+The evaluation of negative conditions is described by replacing in the above
+description `identical' and `match' by `not identical' and `do not
+match', respectively.
+ 
+\warning{}
+It is not allowed to introduce new variables in a negative condition.
+%%A warning is appropriate here: a negative condition that introduces
+%%new variables nearly always succeeds (unless the sort has exactly one
+%% element) and this is almost certainly not what you want.
+
+After the successful evaluation of the conditions, all variables occurring in
+the right-hand side of the conclusion of the equation should be in $V$.
+
+New variables (see above) should therefore {\bf not} occur on \emph{both} 
+sides of a positive condition, in a negative condition, 
+or in the right-hand side of the conclusion.
+
+
+
+
+\subsubsection{Executing Equations}
+\label{ExecutingEquations}
+
+\index{leftmost-innermost@leftmost-innermost}
+\index{rewrite rules@rewrite rules}
+\index{default equations@default equations}
+In the \ASmetaenv, equations can be executed as \emph{rewrite rules}.  The
+above equation is thus executed as the rewrite rule $L \rightarrow R$. This
+can be used to reduce some initial closed term (i.e., not containing
+variables) to a \emph{normal form} (i.e., a term that is not reducible any
+further) by repeatedly applying rules from the specification.
+
+A term is always reduced in the context of a certain module, say $M$. The
+rewrite rules that may be used for the reduction of the term are the rules
+declared in $M$ itself and in the modules that are (directly or indirectly)
+imported by $M$.
+
+The search for an applicable rule is determined by the reduction strategy,
+that is, the procedure used to select a subterm for possible reduction. In our
+case the \emph{leftmost-innermost} reduction strategy is used. This means that a
+left-to-right, depth-first traversal of the term is performed and that for
+each subterm encountered an attempt is made to reduce it.
+
+Next, the rules are traversed one after the other.  The textual order of the
+rules is irrelevant.  Instead they are ordered according to their
+\emph{specificity}: more specific rules come before more general rules and
+\link{default equations}[ (see Section~\Ref)]{DefaultEquations} come last.  
+\emph{Independent of the specificity, a specification should always be
+confluent and terminating.}
+
+If the selected subterm and the left-hand side of a
+rule (more precisely: of the left-hand side of its conclusion) match, we say
+that a \emph{redex} has been found and the following happens. The conditions
+of the rule are evaluated and if the evaluation of a condition fails, other
+rules (if any) with matching left-hand sides are tried.  If the evaluation of
+all conditions succeeds, the selected subterm is replaced by the right-hand
+side of the rule (more precisely: the right-hand side of the conclusion of the
+rule) after performing proper \emph{substitutions}. Substitutions come into
+existence by the initial matching of the rule and by the evaluation of its
+conditions.  For the resulting term the above process is repeated until no
+further reductions are possible and a normal form is reached (if any).
+
+\subsubsection{List Matching}
+
+\index{list matching@list matching}
+\index{associative matching@associative matching}
+List matching, also known as \emph{associative matching}, is a powerful
+mechanism to describe complex functionality in a compact way.  
+
+The example \link*{below}[in Figure~\Ref]{CODE:sets}
+shows a compact specification to remove double elements from a set.
+
+Unlike the matching of ordinary (non-list) variables, the matching of a list
+variable may have more than one solution since the variable can match lists of
+arbitrary length.
+
+As a result, backtracking is needed. For instance, to match {\tt X Y} (a list
+expression containing the two list variables {\tt X} and {\tt Y} indicating
+the division of a list into two sublists) with the list {\tt ab} (a list
+containing two elements) the following three alternatives have to be
+considered:
+
+\begin{quote}
+{\tt X = (empty), Y = ab, \\
+X = a, Y = b, \\
+X = ab, Y = (empty)}.
+\end{quote}
+
+In the unconditional case, backtracking occurs only during matching. When
+conditions are present, the failure of a condition following the match of a
+list variable leads to the trial of the next possible match of the list
+variable and the repeated evaluation of following conditions.
+
+\begin{figure}[tb]
+\begin{Label}{CODE:sets}
+\begin{IncCode}
+\begin{verbatim}
+module Sets
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Set
+  sorts Elem Set
+
+  lexical syntax
+    [a-z]+ -> Elem
+
+  context-free syntax
+    Set[Elem] -> Set
+
+hiddens
+  variables
+    "Elem"[0-9]*  -> Elem
+    "Elem*"[0-9]* -> {Elem ","}*
+
+equations
+  
+  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3} 
+\end{verbatim}
+\end{IncCode}
+\caption{Set specification}
+\end{Label}
+\end{figure}   
+
+Another example of list matching in combination with the evaluation
+of conditions is shown \link*{below}[ in Figure~\Ref]{CODE:split}.
+A list of elements is split into two parts of equal length, if the list
+has an even number of elements. In case of a list of uneven length
+the middle element is ignored. The first part of the list is returned
+as result.
+
+\begin{figure}[t]
+\begin{Label}{CODE:split}
+\begin{IncCode}
+\begin{verbatim}
+%% Split.sdf
+module Split
+
+imports basic/Integers
+imports basic/Whitespace
+
+exports
+  context-free start-symbols List
+  sorts El List
+
+  lexical syntax
+    [a-z]+ -> El
+  context-free syntax
+    {El ","}*          -> List
+    length(List)       -> Integer
+    split-in-two(List) -> List
+
+hiddens
+  variables
+    "El"[0-9]*  -> El
+    "El*"[0-9]* -> {El ","}* 
+
+%% Split.asf
+equations
+
+  [l-1] length() = 0
+
+  [l-2] length(El, El*) = 1 + length(El*)
+
+  [s-1] length(El*1) == length(El*2)
+        ====>
+        split-in-two(El*1, El*2) = El*1
+
+  [s-1] length(El*1) == length(El*2)
+        ====>
+        split-in-two(El*1, El, El*2) = El*1 
+\end{verbatim}
+\end{IncCode}
+\caption{Split-in-two specification}
+\end{Label}
+\end{figure}  
+
+
+
+\subsubsection{Lexical Constructor Functions}
+
+The only way to access the actual characters of a lexical token is
+by means of the so-called {\em lexical constructor functions}.
+For each lexical sort $LEX$ a lexical constructor function is automatically
+derived, the corresponding syntax definition is:
+$lex${\tt ( CHAR* ) -> }$LEX$.
+The sort {\tt CHAR} is a predefined sort to access the characters.
+
+Characters can be directly addressed by the representation or via
+variables which may be of the sorts {\tt CHAR}, {\tt CHAR*}, or
+{\tt CHAR+}.
+The latter two represent lists of characters.
+In the example \link*{below}[in Figure~\Ref]{CODE:lcfs} 
+the lexical constructor function {\tt nat-con} is used to remove the leading
+zeros from a number.
+
+\warning{}
+The argument of a lexical constructor may be an
+arbitrary list of characters and there is \emph{no check that they match
+the lexical definition of the corresponding sort}.
+This means that when writing a specification one should be aware that
+it is possible to construct illegal lexical entities, for instance,
+by inserting letters in an integer.
+In the example \link*{below}[in Figure~\Ref]{CODE:illegallcfs} 
+via the lexical constructor function {\tt nat-con} a natural
+number containing the letter {\tt a} is constructed.
+
+
+\begin{figure}[tb]
+\begin{Label}{CODE:lcfs}
+\begin{IncCode}
+\begin{verbatim}
+%% Nats.sdf
+module Nats
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Nat-con
+  sorts Nat-con
+
+  lexical syntax
+    [0-9]+ -> Nat-con 
+
+hiddens
+  variables
+    "Char+"[0-9]* -> CHAR+
+
+%% Nats.asf
+equations
+
+  [1] nat-con("0" Char+) = nat-con(Char+)  
+\end{verbatim}
+\end{IncCode}
+\caption{Use of lexical constructor functions}
+\end{Label}
+\end{figure}    
+
+\begin{figure}[tb]
+\begin{Label}{CODE:illegallcfs}
+\begin{IncCode}
+\begin{verbatim}
+%% Nats.sdf
+module Nats
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Nat-con
+  sorts Nat-con
+
+  lexical syntax
+    [0-9]+ -> Nat-con 
+
+hiddens
+  variables
+    "Char+"[0-9]* -> CHAR+
+
+%% Nats.asf
+equations
+
+  [1] nat-con(Char+) = nat-con(Char+ "a")  
+\end{verbatim}
+\end{IncCode}
+\caption{Illegal use of lexical constructor functions}
+\end{Label}
+\end{figure}    
+
+\subsubsection{Default Equations}
+\label{DefaultEquations}
+
+\index{default equations@default equations}
+The evaluation strategy for normalizing terms given the equations is
+based on innermost rewriting. All equations have the same priority.
+Given the outermost function symbol of a redex the set of equations with
+this outermost function symbol in the left-hand side is selected and all
+these rules will be tried.  However, sometimes a specification writer
+would like to write down a rule with a special status ``{\em try this rule
+if all other rules fail}''.  A kind of default behaviour is needed. \asf\
+offers functionality in order to obtain this behaviour. If the $TagId$
+of an equation starts with {\tt default-} this equation is considered to
+be a special equation which will only be applied if no other rule matches.
+The specification \link*{below}[in Figure~\Ref]{CODE:types} shows
+an example of the use of a default equation.
+
+\begin{figure}
+\begin{Label}{CODE:types}
+\begin{IncCode}
+\begin{verbatim}
+%% Types.sdf
+module Types
+
+imports basic/Whitespace
+imports basic/Booleans
+
+exports
+  context-free start-symbols Type
+  sorts Type
+
+  context-free syntax
+    "natural"     -> Type
+    "string"      -> Type
+    "nil-type"    -> Type
+    compatible(Type, Type) -> Boolean
+
+hiddens
+  variables
+    "Type"[0-9]*  -> Type
+
+%% Types.asf
+equations
+
+  [Type-1]  compatible(natural, natural) = true
+
+  [Type-2]  compatible(string, string) = true
+
+  [default-Type] compatible(Type1,Type2) = false
+\end{verbatim}
+\end{IncCode}
+\caption{Using a default equation}
+\end{Label}
+\end{figure}   
+
+\subsubsection{Memo Functions}
+\label{MemoFunctions}
+
+\index{memo functions@memo functions} 
+
+Computations may contain unnecessary repetitions.  This is the case when a
+function with the same argument values is computed more than once.  Memo
+functions exploit this behaviour and can improve the efficiency of \asfsdf\ 
+specifications.
+
+Given a set of argument values for some function the normal form can be
+obtained via rewriting. It is possible that some function is called with the
+same set of arguments over and over again. Each time the function is rewritten
+to obtain the same normal again. By means of adding the {\tt memo} attribute,
+this behaviour is improved by storing the set of argument values and the
+derived normal form in a memo-table.  For each set of argument values it is
+checked whether there exists a normal form in the memo-table. If so, this
+normal form is returned.  If not, the function given this set of argument
+values is normalized and stored in the memo-table.
+There is some overhead involved in accessing the memo-table.  Therefore,
+it is not wise to add the memo attribute to each function.  With respect
+to the operational behaviour adding a memo attribute does not have any
+effect.
+
+The Fibonacci function shown \link*{below}[in Figure~\Ref]{CODE:fib}
+is decorated with the memo attribute to improve its efficiency.
+
+\begin{figure}
+\begin{Label}{CODE:fib}
+\begin{IncCode}
+\begin{verbatim}
+%% Fib.sdf
+module Fib
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Int
+  sorts Int
+
+  context-free syntax
+    "0"             -> Int
+    "s" "(" Int ")" -> Int
+
+  context-free syntax
+    add(Int, Int) -> Int
+
+    fib(Int)      -> Int {memo}
+
+hiddens
+  variables
+    [xy][0-9]* -> Int
+
+%% Fib.asf
+equations
+
+  [add-s] add(s(x), y) = s(add(x, y))
+  [add-z] add(0, y) = y
+
+  [fib-z] fib(0) = s(0)
+  [fib-o] fib(s(0)) = s(0)
+  [fib-x] fib(s(s(x))) = add(fib(s(x)), fib(x))
+
+\end{verbatim}
+\end{IncCode}
+\caption{Using the memo attribute when defining Fibonacci}
+\end{Label}
+\end{figure}   
+
+The resulting improvement in performance is shown
+\T in Table~\ref{TABLE:fibn}.
+\W as follows:
+
+\begin{table}
+\begin{center}
+\begin{Label}{TABLE:fibn}
+
+\begin{tabular}{|l|c|c|} \hline
+fib(n) & Time without memo (sec) & Time with memo (sec) \\ \hline \hline
+fib(16)          & \ 2.0 & 0.7  \\ \hline
+fib(17)          & \ 3.5 & 1.1  \\ \hline
+fib(18)          & \ 5.9 & 1.8  \\ \hline
+fib(19)          &  10.4 & 3.3  \\ \hline
+\end{tabular}
+\caption{Execution times for the evaluation of $\mbox{\em fib}(n)$}
+
+\end{Label}
+\end{center}
+\end{table}
+
+
+
+%%\subsubsection{Delaying} \label{Delay}
+%%
+%%Both the compiler and the evaluator are based on innermost rewriting.
+%%In some cases it is more efficient to overrule this rewriting
+%%strategy. The disadvantage of innermost rewriting are redundant work
+%%in some cases and in some cases even non-termination. An example
+%%of the first point and indirectly of the second point is the
+%%evaluation of a conditional (see Figure~\ref{CODE:conditional}), 
+%%using innermost rewriting the evaluation of an conditional 
+%%amounts to evaluating the expression, then part, and else part, independent
+%%of the result of the evaluation of the expression.
+%%
+%%\begin{figure}
+%%\label{CODE:conditional}
+%%\begin{IncCode}
+%%\begin{verbatim}
+%%module Conditional
+%%
+%%imports Layout Expr Booleans
+%%
+%%exports
+%%  context-free syntax
+%%    "if" Bool "then" Expr "else" Expr "fi" -> Expr
+%%
+%%hiddens
+%%  variables
+%%    "Bool"[0-9]* -> Bool
+%%    "Expr"[0-9]* -> Expr
+%%
+%%equations
+%%
+%%  [if-t] if true then Expr1 else Expr2 fi = Expr1
+%%  [if-f] if false then Expr1 else Expr2 fi = Expr2
+%%\end{verbatim}
+%%\end{IncCode}
+%%\caption{Equations for conditions}
+%%\end{figure}   
+
+%%\subsubsection{Getters and Setters Functions}
+%%\label{GettersSetters}
+%%
+%%\index{getter functions@getter functions}
+%%\index{setter functions@setter functions}
+
+\subsubsection{Traversal Functions}
+\label{Traversal}
+
+\index{traversal functions@traversal functions}
+\index{accumulator@accumulator}
+\index{transformer@transformer}
+Program analysis and program transformation usually take the syntax
+tree of a program as starting point.  One common
+problem that one encounters is how to express the \emph{traversal} of
+the tree: visit all the nodes of the tree and extract information from
+some nodes or make changes to certain other nodes.
+
+The kinds of nodes that may appear in a program's syntax tree are
+determined by the grammar of the language the program is written
+in. Typically, each rule in the grammar corresponds to a node category
+in the syntax tree. Real-life languages are described by grammars which
+can easily contain several hundred, if not thousands of grammar rules.
+This immediately reveals a hurdle for writing tree traversals: a naive
+recursive traversal function should consider many node categories and
+the size of its definition will grow accordingly.  This becomes even
+more dramatic if we realize that the traversal function will only do
+some real work (apart from traversing) for very few node categories.
+
+Traversal functions in \asfsdf~\cite{BKV03} solve this problem.
+We distinguish three kinds of traversal functions, defined as follows.
+
+\begin{description}
+
+\item[Transformer:] a sort-preserving transformation that 
+will traverse its first argument. Possible extra arguments may contain
+additional data that can be used (but not modified) during the traversal.
+A transformer is declared as follows:
+
+\[f(S_1 , ..., S_n) \rightarrow S_1 \mbox{\tt \{traversal(trafo, ...)\}}\]
+
+Because a transformer always returns the same sort, it is type-safe. A
+transformer is used to transform a tree.
+
+\item[Accumulator:] a mapping of all node types to a single type. 
+It will traverse its first argument, while the second
+argument keeps the accumulated value. An accumulator is declared as follows:
+
+\[f(S_1 , S_2 , ..., S_n) \rightarrow S_2 \mbox{\tt \{traversal(accu, ...)\}}\] 
+
+After each application of an accumulator, the accumulated argument is updated.
+The next application of the accumulator, possibly somewhere else in the term,
+will use the \emph{new} value of the accumulated argument. In other words,
+the accumulator acts as a global, modifiable, state during the traversal.
+
+An accumulator function never changes the tree, only its accumulated argument.
+Furthermore, the type of the second argument has to be equal to the result
+type. The end-result of an accumulator is the value of the accumulated
+argument. By these restrictions, an accumulator is also type-safe for every
+instantiation.
+
+An accumulator is meant to be used to extract information from a tree.
+
+\item[Accumulating transformer:] a sort preserving transformation
+that accumulates information while traversing its first argument. The
+second argument maintains the accumulated value. The return value of
+an accumulating transformer is a tuple consisting of the transformed
+first argument and accumulated value. An accumulating transformer
+is declared as follows:
+
+\[f(S_1 , S_2 , ..., S_n) \rightarrow <S_1, S_2> \mbox{\{{\tt
+traversal(accu, trafo, ...)}\}}\]
+
+An accumulating transformer is used to simultaneously extract information from a
+tree and transform it.
+\end{description}
+
+Having these three types of traversals, they must be provided with visiting
+strategies. Visiting strategies determine the order of traversal and the
+``depth'' of the traversal. We provide the following two strategies for each
+type of traversal:
+
+\begin{description}
+\item[Bottom-up:] the traversal visits \emph{all} the subtrees of a node where
+  the visiting function applies in an \emph{bottom-up}\ fashion.  The
+  annotation {\tt bottom-up} selects this behavior.  A traversal function without an
+  explicit indication of a visiting strategy also uses the bottom-up strategy.
+  
+\item[Top-down:] the traversal visits the subtrees of a node in an top-down
+  fashion and stops recurring at the first node where the visiting function
+  applies and does not visit the subtrees of that node. The annotation
+  {\tt top-down} selects this behavior.
+\end{description}
+
+Beside the three types of traversals and the order of visiting, we can also
+influence whether we want to stop or continue at the matching occurrences:
+\begin{description}
+\item[Break:] the traversal stops at matching occurrences.
+\item[Continue:] the traversal continues at matching occurrences.
+\end{description}
+
+The visiting strategies in combination with the continuation strategies
+is visualized in the \link{``traversal cube''}[, see
+Figure~\Ref]{FIG:treetraversals}. The current implementation of the
+traversal mechanism only supports the left-to-right visiting strategy.
+
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:treetraversals}
+\T \includegraphics[width=8cm]{order}
+\W \htmlimage{order.gif}
+\caption{The ``traversal cube'': principal ways of traversing a tree}
+\end{Label}
+\end{center}
+\end{figure}
+
+
+We give two simple examples of traversal functions that are both
+based on the \link{tree language}[ defined in
+Figure~\Ref]{FIG:tree-language}
+that describes binary prefix expressions with natural numbers as leaves.
+Examples are {\tt f(0,1)} and {\tt f(g(1,2), h(3,4))}.
+
+\begin{figure}
+\begin{Label}{FIG:tree-language}
+\begin{IncCode}
+\begin{verbatim}
+module Tree-syntax
+
+imports basic/Integer
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Tree
+  sorts Tree
+
+  context-free syntax
+    Integer       -> Tree
+    f(Tree, Tree) -> Tree
+    g(Tree, Tree) -> Tree
+    h(Tree, Tree) -> Tree
+\end{verbatim}
+\end{IncCode}
+\caption{A simple tree language}
+\end{Label}
+\end{figure}     
+
+
+Our \link{first example}[ (Figure~\Ref)]{FIG:inc} 
+transforms a given tree into a new tree in which
+all numbers have been incremented. 
+
+\begin{figure}
+\begin{Label}{FIG:inc}
+\begin{IncCode}
+\begin{verbatim}
+%% Tree-inc.sdf
+module Tree-inc
+imports Tree-syntax
+
+exports
+  context-free syntax
+    inc(Tree) -> Tree {traversal(trafo, top-down, continue)}
+  
+hiddens
+  variables
+    "N"[0-9]* -> Integer
+
+%% Tree-inc.asf
+equations
+  [1] inc(N) = N + 1  
+\end{verbatim}
+\end{IncCode}
+\caption{The transformer {\tt inc} increments all numbers in a tree}
+\end{Label}
+\end{figure}   
+
+Our \link{second example}[ (Figure~\Ref)]{FIG:sum}
+computes the sum of all numbers in a tree.
+For more examples and a detailed description of traversal functions
+see~\cite{BKV01}.
+
+\begin{figure}
+\begin{Label}{FIG:sum} 
+\begin{IncCode}
+\begin{verbatim}
+%% Tree-sum.sdf
+module Tree-sum
+imports Tree-syntax
+exports
+  context-free syntax
+    sum(Tree, Integer) -> Integer {traversal(accu, top-down, continue)}
+  
+hiddens
+  variables
+    "N"[0-9]* -> Integer
+
+%% Tree-inc.asf
+equations
+  [1] sum(N1, N2) = N1 + N2
+\end{verbatim}
+\end{IncCode}
+\caption{The accumulator {\tt sum} that sums all numbers in a tree.}
+\end{Label}
+\end{figure}   
+
+The \sdf\ definition of a traversal function has to fulfill a number of 
+requirements:
+\begin{itemize}
+\item Traversal functions can only be defined in the context-free syntax
+section.
+\item Traversal functions must be \link{prefix functions}[, see Section
+\Ref]{PrefixFunctions}.
+\item The first argument of the prefix function is always a sort of a node
+of the tree that is traversed, for both accumulating as well as
+transformation functions.
+\item In case of a transformation function the result sort should always
+be same as the sort of the first argument.
+\begin{verbatim}
+tf(Tree, A_1, ..., A_n) -> Tree {traversal(trafo, ...)}
+\end{verbatim}
+\item In case of an accumulating function, the second argument represents
+the accumulator and the result sort should be of the same sort.
+\begin{verbatim}
+tf(Tree, Accu, A_1, ..., A_n) -> Accu {traversal(accu, ...)}
+\end{verbatim}
+\item In case of an accumulating transformation function, the first
+argument
+represents the tree node, the second the accumulator, and the result sort
+should be a tuple consisting of the tree node sort (first element
+of the tuple) and the accumulator (second element of the tuple).
+\begin{verbatim}
+tf(Tree, Accu, A_1, ..., A_n) -> <Tree, Accu> {traversal(accu, trafo, ...)}
+\end{verbatim}
+\item The traversal functions may have more arguments, the only restriction
+is that they should be consistent over the various occurrences of the
+same traversal function.
+\begin{verbatim}
+tf(Tree1, Accu, A_1, A_2, ..., A_n) -> Tree1 {traversal(trafo, continue, top-down)}
+tf(Tree2, Accu, A_2, A_1, ..., A_n) -> Tree2 {traversal(trafo, continue, top-down)}
+\end{verbatim}
+\item The order of the traversal attributes is free, but should be used
+consistently, for instance the following definition is not allowed.
+\begin{verbatim}
+tf(Tree1, Accu, A_1, ..., A_n) -> Tree1 {traversal(trafo, top-down, continue)}
+tf(Tree2, Accu, A_1, ..., A_n) -> Tree2 {traversal(trafo, continue, top-down)}
+\end{verbatim}
+\item If the number of arguments of the traversal function changes, you
+should introduce a new function name. The following definitions are not
+correct:
+\begin{verbatim}
+tf(Tree1, Accu, A_1, A_2) -> Tree1 {traversal(trafo, top-down, continue)}
+tf(Tree2, Accu, A_1, A_2, A_3) -> Tree2 {traversal(trafo, continue, top-down)}
+\end{verbatim}
+but should be:
+\begin{verbatim}
+tf1(Tree1, Accu, A_1, A_2) -> Tree1 {traversal(trafo, top-down, continue)}
+tf2(Tree2, Accu, A_1, A_2, A_3) -> Tree2 {traversal(trafo, continue, top-down)}
+\end{verbatim}
+
+\end{itemize}
+In the \sdf\ part of a module it is needed to define traversal functions
+for all sorts which are needed in the equations. 
+
+\subsubsection{Which Specifications are Executable?}
+
+Which \asfsdf\ specifications can be executed? 
+The \link{specification of sets}[ in
+Figure~\Ref]{CODE:itemsets} 
+illustrates a non-executable specification,
+since equation {\tt [2]}, which expresses that two elements in a set may
+be exchanged, will lead to an infinite rewriting loop.
+
+\begin{figure}
+\begin{Label}{CODE:itemsets}
+\begin{IncCode}
+\begin{verbatim}
+%% ItemSet.sdf
+module ItemSet
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Set
+  sorts Item Set 
+
+  lexical syntax
+    [a-z]+ -> Item 
+
+  context-free syntax
+    Set[Item] -> Set
+
+hiddens
+  variables
+    "i"[0-9]* -> Item
+    "l"[0-9]* -> {Item ","}* 
+
+%% ItemSet.asf
+equations
+
+  [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
+  [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3}
+\end{verbatim}
+\end{IncCode}
+\caption{Non-executable specification for sets}
+\end{Label}
+\end{figure}   
+
+\subsubsection{Common Errors when Executing Specifications}
+
+\begin{itemize}
+
+\item When using the inequality operator {\tt !=} in a condition,
+no new variables may be introduced in either side of the inequality.
+
+\item If the normal form of a term still contains function symbols
+that should have been removed during rewriting, you probably have
+forgotten one or more equations that define the function.
+A typical situation is that you have given an \emph{incomplete} set of equations
+defining the function.
+
+\item The rewriting process does not stop. Your equations probably contain
+an infinite loop.
+
+\item Be careful when a condition contains both instantiated and 
+uninstantiated variables.
+
+\end{itemize}
+
+
+\subsection{Tests}
+
+\section{Examples of \asfsdf\ Specifications}
+\label{large-examples}
+
+Here are some examples of \asfsdf\ specifications, which are selected to
+illustrate specific features of the formalism. Larger examples can be found in
+the online specifications.
+
+\subsection{A simple evaluation function}
+Suppose we want to define a very simple evaluation function for the
+expressions as defined in 
+\link*{Simple Expressions}[ Figure~\Ref]{CODE:simple-prio}.
+\link*{Below}[Figure~\Ref]{CODE:simple-eval} shows the specification.
+
+\begin{figure}
+\begin{Label}{CODE:eval}
+\begin{IncCode}
+\begin{verbatim}
+%% Eval.sdf
+module Eval 
+
+imports SimpleExpr
+imports basic/Integers
+
+exports
+  context-free syntax
+    eval(E) -> Integer
+
+hiddens
+  variables
+    "E"[0-9]* -> E
+    "N"[0-9]* -> NatCon
+
+%% Eval.asf
+equations
+ [e1] eval(E1 + E2) = eval(E1) + eval(E2)
+ [e2] eval(E1 * E2) = eval(E1) * eval(E2)
+ [e3] eval(N) = N
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification of a very simple {\tt eval} function}
+\end{Label}
+\end{figure}   
+
+\subsection{Symbolic Differentiation}
+
+Computing the derivative of an expression with respect to some variable is a
+classical problem. 
+Computing the derivative of {\tt X * (X + Y + Z)} with respect to {\tt X gives:}
+\begin{quote}
+{\tt d(X * (X + Y + Z)) / dX = X + Y + Z + X}
+\end{quote}
+
+\noindent Differentiation is defined in several stages in the specification
+\link*{below}[in Figure~\Ref]{CODE:diff}.
+First, the sorts {\tt Nat}
+(natural numbers), {\tt Var} (variables), and {\tt Exp} (expressions) are
+introduced. Next, a differentiation operator of the form {\tt d $E$ / d $V$} is
+defined. Then, the differentiation rules are defined (equations [1]-[5]).
+Finally, some rules for simplifying expressions are given. As the above
+example shows, further simplification rules could have been added to collect
+multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to 
+compute constant expressions.
+
+\begin{figure}
+\begin{Label}{CODE:diff}
+\begin{IncCode}
+\begin{verbatim}
+%% Diff.sdf
+module Diff 
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+  context-free start-symbols Exp
+  sorts Var Exp
+ 
+  lexical syntax
+    [XYZ]    -> Var
+
+  context-free syntax
+    NatCon              -> Exp 
+    Var                 -> Exp 
+    Exp "+" Exp         -> Exp {left} 
+    Exp "*" Exp         -> Exp {left} 
+    "(" Exp ")"         -> Exp {bracket} 
+    "d" Exp "/" "d" Var -> Exp
+
+ context-free priorities
+   Exp "*" Exp -> Exp > Exp "+" Exp -> Exp
+
+hiddens
+  variables
+    "N"       -> NatCon
+    "V"[0-9]* -> Var 
+    "E"[0-9]* -> Exp 
+
+%% Diff.asf
+equations 
+  [ 1] dN/dV = 0            
+  [ 2] dV/dV = 1 
+  [ 3] V1 != V2 
+       ====> 
+       dV1/dV2 = 0 
+  [ 4] d(E1+E2)/dV = dE1/dV + dE2/dV 
+  [ 5] d(E1*E2)/dV = dE1/dV * E2 + E1 * dE2/dV 
+  [ 6] E + 0 = E            
+  [ 7] 0 + E = E 
+  [ 8] E * 1 = E            
+  [ 9] 1 * E = E 
+  [10] 0 * E = 0            
+  [11] E * 0 = 0
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for differentiation}
+\end{Label}
+\end{figure}   
+
+
+\subsection{Sorting}
+
+The use of list structures is illustrated by the specification of
+the \emph{Dutch National Flag} problem presented \link*{below}[ in Figure~\Ref]{CODE:flag}: 
+given an arbitrary list of the colours red,
+white and blue, sort them in the order as they appear in the Dutch National
+Flag. We want:
+
+\noindent {\tt \{white blue red blue red white red\} $\Rightarrow$\\
+\{red red red white white blue blue\}}
+
+In this specification, the list variables {\tt Cs1} and {\tt Cs2} permit a
+succinct formulation of the search for adjacent colours that are in the wrong
+order.
+
+
+\begin{figure}
+\begin{Label}{CODE:flag}
+\begin{IncCode}
+\begin{verbatim}
+%% Flag.sdf
+module Flag
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Flag 
+  sorts Color Flag 
+
+  context-free syntax
+    "red"          -> Color 
+    "white"        -> Color 
+    "blue"         -> Color 
+    "{" Color+ "}" -> Flag 
+
+hiddens
+  variables
+    "Cs"[0-9]* -> Color* 
+    "C"[0-9]*  -> Color 
+
+%% Flag.asf
+equations
+
+  [1] {Cs1 white red Cs2}  = {Cs1 red white Cs2}
+
+  [2] {Cs1 blue white Cs2} = {Cs1 white blue Cs2} 
+
+  [3] {Cs1 blue red Cs2}   = {Cs1 red blue Cs2}
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for sorting}
+\end{Label}
+\end{figure} 
+
+\subsection{Code Generation}
+
+Consider a simple statement language (with assignment, if-statement and
+while-statement) and suppose we want to compile this language to the following
+stack machine code:
+
+\begin{tabular}{ll}
+{\tt push $N$}      & Push the number $N$\\
+{\tt rvalue $I$}    & Push the contents of data location $I$\\
+{\tt lvalue $I$}    & Push the address of data location $I$\\
+{\tt pop}           & Remove the top of the stack\\
+{\tt copy}          & Push a copy of the top value on the stack\\
+{\tt assign}        & The r-value on top of the stack is stored in the l-value
+  below it and both are popped\\
+{\tt add, sub, mul} & Replace the two values on top of the stack by their sum (difference,
+product)\\
+{\tt label $L$}     & Place a label (target of jumps)\\ 
+{\tt goto $L$}      & Next instruction is taken from statement following label
+  $L$\\
+{\tt gotrue $L$}    & Pop the top value; jump if it is nonzero\\
+{\tt  gofalse $L$}  & Pop the top value; jump if it is zero\\
+\end{tabular}
+
+\noindent The statement:
+\begin{quote}
+{\tt while a do a := a - 1; b := a * c od }
+\end{quote}
+
+\noindent will now be translated to the following instruction sequence:
+
+\begin{verbatim}
+label xx ; 
+rvalue a ; 
+gofalse xxx ; 
+lvalue a ; 
+rvalue a ; 
+push 1 ;
+sub ; 
+assign ;
+lvalue b ; 
+rvalue a ; 
+rvalue c ; 
+mul ; 
+assign ; 
+goto xx ; 
+label xxx
+\end{verbatim}
+
+%%\W Defining a code generator now proceeds in the following steps:
+\W \htmlmenu{1}
+
+\paragraph{Basic notions}
+The specification \link*{below}[in Figure~\Ref]{CODE:basicnotions} defines the 
+sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
+
+\begin{figure}
+\begin{Label}{CODE:basicnotions}
+\begin{IncCode}
+\begin{verbatim}
+module BasicNotions 
+exports
+  context-free start-symbols Nat Id
+  sorts Nat Id 
+
+  lexical syntax
+    [0-9]+         -> Nat 
+    [a-z][a-z0-9]* -> Id
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for BasicNotions}
+\end{Label}
+\end{figure}
+
+\paragraph{Expressions and Statements}
+Given these basic notions the \link{expressions}[, see Figure~\Ref]{CODE:expressions}, and 
+\link{statements}[, see Figure~\Ref,]{CODE:statements}
+of our little source language are defined.
+
+\begin{figure}
+\begin{Label}{CODE:expressions}
+\begin{IncCode}
+\begin{verbatim}
+module Expressions 
+
+imports BasicNotions
+
+exports
+  context-free start-symbols Exp
+  sorts Exp 
+
+  context-free syntax
+    Nat         -> Exp 
+    Id          -> Exp 
+    Exp "+" Exp -> Exp {left}
+    Exp "-" Exp -> Exp {left}
+    Exp "*" Exp -> Exp {left}
+
+  context-free priorities
+    Exp "*" Exp -> Exp > {left: Exp "+" Exp -> Exp
+                                Exp "-" Exp -> Exp}
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for Expressions}
+\end{Label}
+\end{figure}
+
+\begin{figure}[tb]
+\begin{Label}{CODE:statements}
+\begin{IncCode}
+\begin{verbatim}
+module Statements 
+
+imports Expressions 
+
+exports
+  context-free start-symbols Stats
+  sorts Stat Stats 
+
+  context-free syntax
+    Id ":=" Exp                 -> Stat 
+    "if" Exp "then" Stats "fi"  -> Stat 
+    "while" Exp "do" Stats "od" -> Stat
+    {Stat ";"}+                 -> Stats 
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for Statements}
+\end{Label}
+\end{figure}
+
+
+\paragraph{Assembly language}
+The instructions of the assembly language for the stack machine are defined
+\link*{below}[ in Figure~\Ref]{CODE:assemblylanguage}.
+
+\begin{figure}
+\begin{Label}{CODE:assemblylanguage}
+\begin{IncCode}
+\begin{verbatim}
+module AssemblyLanguage
+
+imports BasicNotions 
+exports 
+  context-free start-symbols Instrs
+  sorts Label Instr Instrs
+
+  lexical syntax
+    [a-z0-9]+ -> Label 
+  context-free syntax
+    "push" Nat      -> Instr
+    "rvalue" Id     -> Instr 
+    "lvalue" Id     -> Instr 
+    "assign"        -> Instr 
+    "add"           -> Instr 
+    "sub"           -> Instr 
+    "mul"           -> Instr 
+    "label" Label   -> Instr 
+    "goto" Label    -> Instr 
+    "gotrue" Label  -> Instr 
+    "gofalse" Label -> Instr
+    {Instr ";"}+    -> Instrs 
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for AssemblyLanguage}
+\end{Label}
+\end{figure}
+
+\paragraph{Label generation}
+
+Next, we define a function to construct a next label given the previous one
+\link*{as follows}[in Figure~\Ref]{CODE:nextlabel}.  It is defined on the
+lexical notion of labels ({\tt Label}).  The scheme of appending the character
+`{\tt x}' to the previous label is, of course, naive and will in real life be
+replaced by a more sophisticated one.
+
+\begin{figure}
+\begin{Label}{CODE:nextlabel}
+\begin{IncCode}
+\begin{verbatim}
+%% NextLabel.sdf
+module NextLabel
+  
+imports AssemblyLanguage
+  
+exports
+  context-free syntax
+    "nextlabel" "(" Label ")" -> Label 
+
+hiddens
+  variables
+    "Char*"[0-9]* -> CHAR*
+
+%% NextLabel.asf
+equations
+
+ [1] nextlabel(label(Char*)) = label(Char* "x")
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for NextLabel}
+\end{Label}
+\end{figure}
+
+\paragraph{Codegenerator}
+It remains to define a function `{\tt tr}' that translates statements into
+instructions. During code generation we should generate new label names for
+the translation of if- and while-statements. This is an instance of a
+frequently occurring problem: how do we maintain global information (in this
+case: the last label name generated)? A standard solution is to introduce an
+auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
+sequence and the last label name generated so far.
+The \link{\sdf\ part}[ (Figure~\Ref)]{CODE:codegenerator.sdf} and the
+\link{\asf\ part}[ (Figure~\Ref)]{CODE:codegenerator.asf} 
+of module {\tt CodeGenerator} define
+the actual translation function.
+
+
+
+\begin{figure}
+\begin{Label}{CODE:codegenerator.sdf}
+\begin{IncCode}
+\begin{verbatim}
+%% CodeGenerator.sdf
+module CodeGenerator
+
+imports Statements AssemblyLanguage NextLabel 
+  
+exports
+  context-free start-symbols Instrs
+
+  context-free syntax
+    tr(Stats) -> Instrs
+  
+hiddens
+  sorts Instrs-lab 
+  context-free syntax
+    Instrs # Label -> Instrs-lab 
+
+  context-free syntax
+    tr(Stats, Label) -> Instrs-lab 
+    tr(Exp)          -> Instrs
+
+hiddens
+  variables
+    "Exp"[0-9\']*        -> Exp 
+    "Id"[0-9\']*         -> Id
+    "Instr"[0-9\']*      -> Instr 
+    "Instr-list"[0-9\']* -> {Instr ";"}+
+    "Label"[0-9\']*      -> Label
+    "Nat"[0-9\']*        -> Nat 
+    "Stat"[0-9\']*       -> Stat
+    "Stat+"[0-9\']*      -> {Stat ";"}+
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for CodeGenerator}
+\end{Label}
+\end{figure}
+
+    
+\begin{figure}
+\begin{Label}{CODE:codegenerator.asf}
+\begin{IncCode}
+\begin{verbatim}
+%% CodeGenerator.asf
+equations 
+
+[1] <Instr-list, Label> := tr(Stat-list, x)
+    ====>
+    tr(Stat-list) = Instr-list
+
+[2] <Instr-list1, Label'> := tr(Stat, Label),
+    <Instr-list2, Label''> := tr(Stat-list, Label')
+    ====>
+    tr(Stat ; Stat-list, Label) = <Instr-list1 ; Instr-list2, Label''>
+
+[3] Instr-list := tr(Exp)
+    ====>
+    tr(Id := Exp, Label) = <lvalue Id; Instr-list; assign, Label>
+
+[4] Instr-list1 := tr(Exp), 
+    <Instr-list2, Label'> := tr(Stat-list, Label),
+    Label'' := nextlabel(Label')
+    ====>
+    tr(if Exp then Stat-list fi, Label) =
+    <Instr-list1; gofalse Label''; Instr-list2; label Label'', Label''>
+
+[5] Instr-list1 := tr(Exp), 
+    <Instr-list2, Label'> := tr(Stat-list, Label),
+    Label'' := nextlabel(Label'), 
+    Label''' := nextlabel(Label'')
+    ====>
+    tr(while Exp do Stat-list od, Label) =
+    <label Label''; Instr-list1; gofalse Label'''; Instr-list2;
+     goto Label''; label Label''', Label'''>
+
+[6] Instr-list1 := tr(Exp1), 
+    Instr-list2 := tr(Exp2)
+    ====>
+    tr(Exp1 + Exp2) = Instr-list1; Instr-list2; add
+
+[7] Instr-list1 := tr(Exp1), 
+    Instr-list2 := tr(Exp2)
+    ====>
+    tr(Exp1 - Exp2) = Instr-list1; Instr-list2; sub
+
+[8] Instr-list1 := tr(Exp1), 
+    Instr-list2 := tr(Exp2)
+    ====>
+    tr(Exp1 * Exp2) = Instr-list1; Instr-list2; mul
+
+[9] tr(Nat) = push Nat
+
+[10] tr(Id) = rvalue Id
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for
+CodeGenerator}
+\end{Label}
+\end{figure}
+
+This completes the specification of our code generator.
+
+\subsection{Large \asfsdf\ Specifications}
+
+There are a quite a few very large \asfsdf\ specifications around:
+
+\begin{itemize}
+
+\item The \asfsdf2C compiler.
+
+\item A part of the parse table generator for \sdf.
+
+\item The \sdf\ checker.
+
+\item The syntax and type checking of a domain specific language for
+describing financial products.
+
+\item A compiler from UML diagrams to various target languages (Progress, Java, DB2).
+
+\item Transformation system for improving Cobol programs.
+
+\item A system for Java refactoring.
+
+\item Tooling for Action Semantics.
+
+\item Tooling for CASL.
+
+\item Tooling for ELAN.
+
+\end{itemize}
+
+
+\section{Well-formedness checks on \sdf}
+\label{SEC:SDF-checker}
+
+In order to improve the quality of the written specifications, a number
+of checks are performed before an \sdf\ specification is transformed
+into a parse table. The checks are performed on two levels: the first
+level are \sdf\ specific check, the second level are the \asfsdf\ specific
+check.
+
+There are various categories of messages in the \ASmetaenv.
+\begin{enumerate}
+\item Parse errors.
+\item SDF type check warnings.
+\item SDF type check errors.
+\item ASF type check errors.
+\end{enumerate}
+We will briefly discuss each of the error messages and indicate what is
+exactly wrong in the specification. Furthermore we will hint at how the
+error can be fixed.
+
+\subsection{Parse Errors}
+There are three different types of parse errors:
+\begin{enumerate}
+\item A syntax error, which is reported by pinpointing the exact
+location in the file and the message {\tt Parse error near cursor} in case
+of an editor or in the message pane an error message similar to
+{\tt Parse error: character '<c>' unexpected}.
+This means that the parser detected a syntax error in the text to be parsed
+and can not proceed its parsing process.
+Clicking on the error in the {\tt Errors}-pane moves the cursor to the
+exact error location and launches if needed the editor.
+A variant of the syntax error message is: {\tt Parse error: eof
+unexpected}.
+
+\item A cycle, in case of an editor the cursor is positioned at the
+position where the first cycle is detected in the input and the message
+is {\tt Cycle: <list\_of\_production\_rules>} is printed.
+A cycle is reported whenever
+the parser detects a non terminating chain of reductions.
+All production rules on the cycle are shown as {\tt
+<list\_of\_production\_rules>}.
+
+\item An ambiguity, again in case of an editor the cursor is
+positioned at the position where the first ambiguity is detected in the
+input and the message {\tt Ambiguity: <list\_of\_production\_rules>}
+is printed. An ambiguity is reported whenever the parser was able to
+recognized a (part of) the input sentence in different ways.
+The {\tt <list\_of\_production\_rules>} shows all production rules
+that are involved in the ambiguity.
+
+\end{enumerate}
+
+\subsection{Type check warnings for plain SDF}
+\label{SEC:plainSDFwarnings}
+The warnings and error for SDF are separated into 4 sections. First we will
+discuss the type check warnings and \link{errors}[ (see
+Section~\Ref)]{SEC:plainSDFerrors} for plain SDF. This variant of SDF is
+independent of ASF. Later we will discuss the \link{warnings}[ (see
+Section~\Ref)]{SEC:ASFSDFwarnings} and \link{errors}[ (see
+Section~\Ref)]{SEC:ASFSDFerrors} for SDF used in combination with ASF.
+In this case we need to be more strict and every SDF construct is supported
+by ASF.
+
+Warnings do not break the specification, but it is advisable to fix
+them anyway. Often they point out some not well-formed part in the
+specification.
+
+\begin{itemize}
+\item {\tt undeclared sorts} This warning indicates that a sort is used
+which is not explicitly declared, or it is declared but in a hidden
+section.
+\item {\tt double declared sort} This warning points out that the sort is
+already declared somewhere in this module, or in one of the imported
+modules.
+\item {\tt double declared start-symbol}
+This warning indicates that
+the start-symbol is previously defined as start-symbol as well. This can
+be in the current module or in one of the imported modules.
+\item {\tt illegal attribute: \{bracket, left, right, assoc, non-assoc\}}
+This warning is generated because the syntactic form the production rule
+and the attribute do not match. Given this mismatch the intended behaviour
+will not be effective.
+\item {\tt used in priorities but undefined}
+This warning is generated whenever a production rule is used in a priority
+section which is not defined in this module or in one of the imported
+modules. It is possible that this production rule will be defined in
+one of the modules which imports this module. Normally, this indicates
+some typo.
+\item {\tt inconsistent rhs in priorities}
+This warning is caused by a production rule which has not the same
+right-hand side as the other production rules in the priority relation.
+Whenever this occurs the effect of the expressed priority relation will
+be ignored.  This check is performed modulo injections.
+\item {\tt unknown constructor used in priorities}
+This warning indicates the use of a constructor which is not used in
+the corresponding set of production rules with the same right-hand side.
+This is a very weak check on consistent use of constructor information.
+\item {\tt sort CHAR used in production rule}
+\item {\tt deprecated tuple notation}
+\item {\tt deprecated unquoted symbol notation}
+\item {\tt deprecated non-plain sort definition}
+\item {\tt aliased symbol already declared}
+\end{itemize}
+
+\subsection{Type check errors for plain \sdf}
+\label{SEC:plainSDFerrors}
+\begin{itemize}
+\item {\tt module not available}
+\item {\tt start-symbols in <ModuleName> not defined in any right-hand}
+\item {\tt literal in right-hand-side not allowed}
+\item {\tt only sort allowed in right-hand-side of lexical-function}
+\item {\tt double used label}
+\item {\tt constructor has already been used}
+The combination of right-hand symbol and the constructor information should
+be unique. This warning points this out. It is advisable not to ignore
+this warning. In fact, for the parser these double constructors are no
+problem, but there are tools based on SDF for which this is problematic.
+\end{itemize}
+
+\subsection{Type check warnings for \asfsdf}
+\label{SEC:ASFSDFwarnings}
+\begin{itemize}
+\item {\tt exported variables section}
+\item {\tt kernel syntax construction}
+\item {\tt production renamings not supported}
+\item {\tt not supported symbol}
+\end{itemize}
+
+\subsection{Type check errors for \asfsdf}
+\label{SEC:ASFSDFerrors}
+\begin{itemize}
+\item {\tt traversal attributes in non-prefix function}
+\item {\tt illegal traversal attribute}
+\item {\tt missing bottom-up or top-down attribute}
+\item {\tt missing break or continue attribute}
+\item {\tt missing trafo and/or accu attribute}
+\item {\tt accu should return accumulated type}
+\item {\tt trafo should return traversed type}
+\item {\tt accutrafo should return tuple of correct types}
+\item {\tt inconsistent arguments of traversal productions}
+\item {\tt inconsistent traversal attributes}
+\item {\tt asf equation sort must not be used}
+\item {\tt charclasses not allowed in context-free syntax}
+\end{itemize}
+
+\subsection{Type check warnings for \asf}
+\begin{itemize}
+\item {\tt Lexical probably intended to be a variable}
+\item {\tt Deprecated condition syntax "="}
+\item {\tt constructor not expected as outermost function symbol of left
+hand side}
+\end{itemize}
+
+\subsection{Type check errors for \asf}
+\begin{itemize}
+\item {\tt equations contain ambiguities}
+\item {\tt uninstantiated variable occurrence}
+\item {\tt negative condition introduces variable(s)}
+\item {\tt uninstantiated variables in both sides of condition}
+\item {\tt uninstantiated variables in equality condition}
+\item {\tt right-hand side of matching condition introduces variables}
+\item {\tt matching condition does not introduce new variables}
+\item {\tt strange condition encountered}
+\item {\tt Left hand side is contained in a list}
+\item {\tt no variables may be introduced in left hand side of test}
+\end{itemize}
+
+
+\section{Building stand-alone environments using ASF+SDF 
+Meta-En\-vir\-on\-ment technology}
+
+In this chapter we describe how to build simple and more complex
+stand-alone environments using the various components of the
+ASF+SDF Meta-Environment. It does not include building an
+environment based on the ToolBus.
+
+First we will briefly introduce the underlying technology and
+architecture of the Meta-Environment. Secondly, we will describe 
+a selection of components that are useful for
+building stand-alone tools. \emph{Be aware that the information in the
+following pages is still very much in a state of flux.}
+Note that all components mentioned have a {\tt -h} options that 
+gives an overview of their command line options.
+Finally, we will describe how these components can be combined
+into stand-alone environments. We will describes various levels
+of integration. The first level is with UNIX pipes and files
+and the second level is invoking the various components from
+within C programs. The last level, which we will not discuss,
+is by writing ToolBus scripts.
+
+\subsection{Technology and Architecture of the \ASmetaenv}
+\label{SEC:TechnologyandArchitecture}
+
+So far, we have explained the functionality of the \ASmetaenv\ as an
+interactive development environment for \asfsdf\ specifications.
+There are, however, good reasons to have a look under the hood and
+understand the architecture and technologies that have been used:
+
+\begin{itemize}
+
+\item Both architecture and technologies are very innovative
+and it is worthwhile to learn about them.
+
+\item The \ASmetaenv\ has been constructed as a collection of
+cooperating components. All of these components have merits of their
+own and can be used independently of the \ASmetaenv.
+
+\end{itemize}
+
+If you want to reuse components of the \ASmetaenv\ or want to build
+variants of it, then the following information is for you.
+
+\subsubsection{Technological Background}
+
+\paragraph{ToolBus}
+
+In many large systems control flow and actual computation are complete
+entangled. This leads to poor extensibility and maintenance problems.  To
+separate coordination from computation we use the ToolBus coordination
+architecture~\cite{BK98}, a programmable software bus based on process
+algebra.  Coordination is expressed by a formal description of the cooperation
+protocol between components while computation is expressed in components that
+may be written in any language. We thus obtain interoperability of
+heterogeneous components in a (possibly) distributed system.
+
+\paragraph{ATerms}
+
+Coordination protocol and components have to share data. We use
+ATerms~\cite{BJKO00} for this purpose. These are trees with optional annotations on
+each node.  The annotations are used to store tool-specific information
+like text coordinates or color attributes. The implementation of ATerms
+has two essential properties: terms are stored using maximal subterm
+sharing (reducing memory requirements and making deep equality tests
+very efficient) and they can be exchanged using a very dense binary encoding that
+preserves sharing. As a result very large terms (with over $1,000,000$ nodes)
+can be processed.
+
+\paragraph{SGLR}
+
+In our language-centric approach the parser is an essential tool.  We
+use scannerless, generalized-LR parsing~\cite{Vis97}.  In this way we
+can parse arbitrary context-free grammars, an essential property when
+combining and parsing large grammars for (dialects of) real-world
+languages.
+
+\paragraph{Term rewriting}
+
+\asfsdf\ specifications are executed as (conditional) rewrite rules. Both
+interpretation and compilation (using the ASF2C compiler~\cite{BKO99}) of
+these rewrite rules are supported. The compiler generates very efficient
+C code that implements pattern matching and term traversal. The generated
+code uses ATerms as its main data representation, and ensures a minimal
+use of memory during normalization of terms.
+
+\subsubsection{Architecture}
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:architecture}
+\T \includegraphics[width=15cm]{layered-arch}
+\W \htmlimage{layered-arch.gif}
+\caption{Architecture of the \ASmetaenv}
+\end{Label}
+\end{center}
+\end{figure}
+
+The architecture of the \ASmetaenv\ is shown \link*{above}[in Figure~\Ref]{FIG:architecture}.
+It consists of a ToolBus that interconnects the following components:
+
+\begin{itemize}
+\item {\bf User interface (GUI)}: the top level user-interface of the system.
+      It consists primarily of a graph browser for the import graph
+      of the current specification. Furthermore, it offers facilities
+      to visualize parse trees of selected pieces of parsed texts.
+
+\item {\bf Text Editor}: a customized version of \xemacs\ for text editing.
+\item {\bf Structure Editor}: a syntax-directed editor that closely cooperates
+with the Text Editor.
+
+\item {\bf Parser}:  scannerless, generalized-LR parser (SGLR) that is parametrized 
+with a parse table.
+\item {\bf Parsetable generator}: takes an SDF syntax definition as input and 
+generates a parse table for SGLR.
+\item {\bf Term Store}: stores all terms corresponding to specification 
+modules, parse tables, user-defined terms, etc.
+\item {\bf ASF Compiler}: the ASF2C compiler.
+\item {\bf ASF Interpreter}: executes specifiations by direct interpretation.
+\item {\bf Unparser generator}: generates prettyprinters.
+\end{itemize}
+
+\subsection{Components}
+In the previous section we have described the overall architecture and very
+briefly mentioned the main components of the Meta-Environment. In order to
+understand how to build stand-alone environments, it is necessary to 
+understand some of the "flow-of-control" and "data-flow" within the
+Meta-Environment. There are in fact two main scenarios:
+\begin{itemize}
+\item Parsing a term
+\item Reducing a term
+\end{itemize}
+
+An integrated environment as the \ASmetaenv\ takes
+care of a lot of administrative issues when developing your
+specifications. For syntax editors a fixed parse table will
+be used, namely a parse table derived from the SDF grammar.
+But when you invoke an equation or term editor 
+and hit the parse button, the environment will generate a 
+parse table, if necessary, before parsing the equations or 
+term. In order to do that the underlying syntax definition 
+will be checked on completeness and well-formedness, and if 
+this is the case the parse table will be generated and stored 
+in a repository. This storing of the parse table is just for 
+caching.
+
+If you select the reduce button in a term editor all relevant
+equations have to be parsed, checked and combined into one list
+in order to be used by the interpreter for rewriting the term.
+
+These parse tables and list of equations play an important
+role in the stand-alone setting.
+
+\subsubsection{Parse Table Generation}
+
+Before you can parse terms over a module {\tt M} outside the
+\ASmetaenv\ you have to obtain a parse table for this module.  
+There are currently three ways to achieve this:
+
+\begin{itemize}
+
+\item Interactively using the \ASmetaenv\
+by selecting module {\tt M} and pushing the {\tt Term ParseTable...} button in 
+the menu {\tt Export} for the module pop-up menu. A window pops up in which
+you can select the directory where the parse table will be saved and in
+which you have to give the desired name for the table.
+
+\item From the command line using the command {\tt pt-dump}.
+In the background the same actions are performed as in the interactive
+setting, only no user interface is activated. 
+If you want to obtain the parse table for {\tt basic/Booleans} 
+you can do this via {\tt pt-dump -m basic/Booleans -o Booleans.trm.tbl}.
+For further information use {\tt pt-dump -h}.
+
+\item From the command line using the command {\tt sdf2table}.  You should
+be aware that {\tt sdf2table} needs as input the \emph{complete} grammar
+of {\tt M}. This means in particular that all imports of {\tt M} should
+be expanded before {\tt sdf2table} can be used. Command line tools are
+available to do this, but we will not describe them here.
+
+For further information use {\tt sdf2table -h}.
+
+\end{itemize}
+
+Before a parse table is generated the \sdf\ definition is checked with
+respect to well-formedness. When using the {\tt sdf2table} only the 
+checks on \sdf\ are performed, in the other two cases the checks
+on \sdf\ and on \asfsdf\ specific features are performed as well.
+
+\subsubsection{Obtaining Equations}
+\label{SEC:obtainingequations}
+
+In order to \link{rewrite a term}[, see Section~\Ref,]{SEC:interpretationgofterms}, 
+or \link{compile a specification}[,
+see Section~\Ref,]{SEC:compilingaspecification} it is necessary
+to obtain the equations.
+The generation of equations given an \asfsdf\ specification can be
+performed in two different ways:
+\begin{itemize}
+\item Interactively using the \ASmetaenv\
+by selecting module {\tt M} and pushing the {\tt Dump Equations...} button in 
+the pop-up menu.
+
+\item From the command line using the command {\tt eqs-dump}.
+In the background the same actions are performed as in the interactive
+setting, only no user interface is activated.
+For further information use {\tt eqs-dump -h}.
+\end{itemize}
+The result is a file named {\tt M.eqs}.
+
+\subsection{Parsing}
+\label{SEC:parsingofterms}
+
+Given a parse table {\tt M.trm.tbl} for module {\tt M},
+terms can be parsed by using the command {\tt sglr}:
+
+\begin{verbatim}
+   sglr -m -p M.trm.tbl -i term.txt -o term.tree
+\end{verbatim}
+or, alternatively, via
+
+\begin{verbatim}
+   sglr -m -p M.trm.tbl < term.txt > term.tree
+\end{verbatim}
+
+The output of {\tt sglr} is either an error message (if the input
+contains a syntax error) or a parse tree in a format called AsFixMe.\
+Note that {\tt sglr} can generate parse trees in several formats:
+
+\begin{itemize}
+\item Use the flag {\tt -2} to generate AsFix2: this is the format
+introduced for the latest version of \sdf.  This format is only in use
+by some tools outside the \ASmetaenv.  AsFix2 is very verbose: even
+lexical tokens and layout are represented as trees.  For efficiency
+reasons, the \ASmetaenv\ uses the more concise format AsFixMe.
+
+\item Use the flag {\tt -m} to generate AsFix2ME: this is the preferred
+parse tree format that is becoming the standard inside the \ASmetaenv.
+
+\end{itemize}
+
+\subsection{Rewriting a Term using the Evaluator}
+\label{SEC:interpretationgofterms}
+
+In order to rewrite a term {\tt term.txt} using the \asfsdf\ evaluator 
+{\tt asfe} two inputs are required:
+
+\begin{itemize}
+
+\item The parse tree of {\tt term.txt}. See \link{parsing of
+terms}[Section~\Ref]{SEC:parsingofterms} how to do this.
+The result is {\tt term.tree}.
+
+\item The equations to be used for rewriting.  See 
+\link{obtaing of equations}[ Section\~Ref]{SEC:obtainingequations} for
+obtaining the equations given an \asfsdf\ specification.
+
+\end{itemize}
+
+Given this two inputs it is possible to call the interpreter and
+reduce terms via the command line. This can be performed in two
+different manners:
+The first is:
+\begin{verbatim}
+   asfe -e M.eqs < term.tree > reduct.tree 
+\end{verbatim}  
+The second is:
+\begin{verbatim}
+   asfe -e M.eqs -i term.tree -o reduct.tree 
+\end{verbatim}  
+
+\link*{Unparsing}[Section~\Ref]{SEC:unparsing}
+explains how {\tt reduct.tree} can be converted to a textual representation.
+
+\subsection{Compiling a Specification}
+\label{SEC:compilingaspecification}
+
+By means of the {\tt Compile ...} button in the
+pop-up menu of the import pane the \asfsdf2C
+compiler can be activated. C code is generated for the selected module
+(exactly {\em one} module can be selected for compilation) including
+the imported modules. The C code is immediately compiled into an
+executable.
+
+\warning{}
+The specification should be complete, i.e., no missing modules are
+allowed, and the equations sections should be error free.
+
+If this requirement is satisfied, C code can be generated.
+This process of C code generation is described in detail in \cite{BKO99}.
+We shall give a brief description of the main steps performed by the
+\asfsdf2C compiler.
+
+In \asfsdf\ there is {\em no} restriction in which module an equation
+is defined, except that all applied syntax rules should be defined.
+This freedom asks for a `reshuffling' of the equations given the set of
+defined syntax rules. This reshuffling is needed because for each syntax
+rule a separate C function is generated. This C function must contain
+the C code for {\em all} equations with the C function as outermost
+function symbol in the left-hand side.  By having all equations with the
+same outermost function symbol in the left-hand side together an optimal
+matching automaton can be generated.  Equations with the same outermost
+function symbol are moved to the corresponding syntax rule.  
+
+
+\subsection{Rewriting a Term using a Compiled Specification}
+\label{SEC:reducingofterms}
+
+In \link*{Compiling Specifications}[Section~\Ref]{SEC:compilingaspecification}
+we explained how a given module {\tt M}
+can be compiled into C code. Here we describe how to compile and
+use this generated C code. The steps are as follows:
+
+\begin{itemize}
+
+\item Go to the directory where the \asfsdf2C compiler has generated
+the C code.
+
+\item Check whether there is a {\tt Makefile}. If this is not the case
+or you expect it to be invalid, generate a new one as follows:
+\begin{verbatim}
+   genmakefile -m M > Makefile
+\end{verbatim}
+where {\tt M} is the name of the top module for which the C code was
+generated.  There should also exist a file {\tt
+ModuleName.module-list} in the directory with generated C code.
+
+
+\item Use {\tt make} to compile the generated C code.
+The result is both a library {\tt libM.a}
+and an executable {\tt M}. This library can be used 
+when several compiled specifications have to be combined into a single executable
+or when compiled specifications have to be combined with hand-written C code.
+
+\item
+
+After 
+\link{parsing the term}[ (as explained in
+Section~\Ref)]{SEC:parsingofterms}
+that has to be reduced, this term can
+be reduced via the compiled code as follows:
+
+\begin{verbatim}
+COMPILER_OUTPUT/ModuleName < term.tree > reduct.tree
+\end{verbatim}
+
+\link*{Unparsing}[Section~\Ref]{SEC:unparsing} 
+explains how {\tt reduct.tree} can be
+converted to a textual representation.
+\end{itemize}
+
+\subsection{Unparsing a (Parsed/Normalized) Term}
+\label{SEC:unparsing}
+
+The unparsing of parsed/normalized terms is currently quite primitive.
+It is achieved as follows:
+
+\begin{verbatim}
+   unparsePT < reduct.tree > reduct.txt
+\end{verbatim}
+
+\subsection{Applying a Function to a Term}
+
+In many applications it is desirable to apply a function to a given term
+before reducing it. A typical example is the type checking of a program: given
+a parse tree {\tt T} for a program we first want to apply the typecheck
+function {\tt tc} to it
+before reduction. In the context of term rewriting this means first
+constructing the term {\tt tc(T)} and then reducing it.
+
+The construction of this new term is achieved by the following command:
+\begin{verbatim}
+   apply-function -f <name> -s <sort> -m <modulename> -i <in> -o <out> 
+\end{verbatim}
+
+A term is constructed consisting of an application of function {\tt <name>}
+with result sort {\tt <sort>} defined in module {\tt <modulename>} to a term
+{\tt <in>}.  The resulting term is written to {\tt <out>}.
+In order to actually \emph{apply} {\tt <name>}, the term {\tt out} has to
+be reduced by \link{{\tt asfe}}[ (Section~\Ref)]{SEC:interpretationgofterms}.
+
+\section{Examples of Stand-alone Tools}
+
+\subsection{A Stand-alone Boolean Tool}
+
+A stand-alone tool for parsing and reducing Boolean terms can be created in
+the following steps:
+\begin{itemize}
+
+\item Goto the directory {\tt demo/pico}.
+
+\item Start the \ASmetaenv.
+
+\item Create a parse table for {\tt Pico-Booleans}:
+  \begin{itemize}
+  \item Right click on {\tt Pico-Booleans} and select {\tt New Term}.
+    
+  \item Enter the text {\tt true | false}.
+  \item Save this text as {\tt term.txt}.
+    
+  \item Push the {\tt Parse} button in the {\tt Meta-Environment} menu of the
+    editor.
+  \item Push the {\tt Save} button of the {\tt File} menu of the \ASmetaenv.
+  \end{itemize}
+  The parse table {\tt Pico-Booleans.trm.tbl} has now been created.
+
+\item Dump the equations for {\tt Pico-Booleans}:
+  \begin{itemize}
+  \item Right click on  {\tt Pico-Booleans} and select {\tt Dump Equations}.
+  \end{itemize}
+   The equations file {\tt Pico-Booleans.eqs} has now been created.
+
+\item Parse {\tt term.txt}:
+\begin{verbatim}
+  sglr -p Pico-Booleans.trm.tbl -i term.txt -o term.tree
+\end{verbatim}
+The result is the parse tree {\tt term.tree}
+
+\item Reduce {\tt term.tree}:
+\begin{verbatim}
+  asfe -e Pico-Booleans.eqs  <term.tree >reduct.tree   
+\end{verbatim}
+
+\item Unparse {\tt reduct.tree}:
+\begin{verbatim}
+  unparsePT <reduct.tree >reduct.txt
+\end{verbatim}
+
+The result (in textual form) of reducing {\tt term.txt} is now {\tt reduct.txt}
+\end{itemize}
+
+Of course, the last steps can be written more concisely in a pipeline:
+\begin{verbatim}
+  sglr -p Pico-Booleans.trm.tbl -i term.txt | \
+  asfe -e Pico-Booleans.eqs | asource > reduct.txt
+\end{verbatim}
+
+\subsection{A Stand-alone Pico Typechecker}
+
+Now we show how to create a stand-alone typechecker for the Pico language.  We
+follow the same steps as in the previous example, but there is one additional
+step required: given a parsed Pico program, we have to wrap the function
+symbol {\tt tcp( )} around the Pico program, before we reduce the term.  The
+steps are as follows:
+
+\begin{itemize}
+\item As before, generate a parse table for {\tt Pico-syntax} (result: {\tt
+    Pico-syntax.trm.tbl}) and equations for {\tt Pico-typecheck} (result: {\tt
+    Pico-typecheck.eqs}).
+\item Parse the input term {\tt term.txt} (result: {\tt term.tree}).
+\item Wrap  {\tt tcp(  )} around {\tt term.tree}:
+\begin{verbatim}
+  apply-function -f tcp                       \
+                 -s PICO-BOOL                 \
+                 -m Pico-typecheck            \
+                 -i term.tree -o tcterm.tree
+\end{verbatim}
+\item Reduce {\tt tcterm.tree} and unparse the result as before.
+
+\end{itemize}
+
+
+\bibliographystyle{plain}
+\bibliography{manual}
+ 
+\printindex
+
+\begin{ifhtml}
+\tableofcontents
+\end{ifhtml}
+
+\end{document}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="recommended-reading">
+<info>
+   <title>Recommended titles on programming and software engineering</title>
+  
+<pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100
+    (Wed, 13 Dec 2006)$</pubdate>
+  <authorgroup>
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+
+  </authorgroup>
+</info>
+
+  <section><title>Introduction</title>
+    
+
+    <para>Meta-Environment programmers have found the following titles
+    interesting.</para>
+  </section>
+
+  <section><title>Reading list</title>
+    
+
+    <itemizedlist>
+      <listitem>
+        <para>Alan Cooper, <emphasis>The Inmates are Running the Asylum: Why
+        High Tech Products Drive Us Crazy and How To Restore The
+        Sanity</emphasis> , </para>
+      </listitem>
+
+      <listitem>
+        <para>K. Fogel, <emphasis>Producing Open Source Software -- How to Run
+        a Successful Free Software Project,</emphasis> O"Reilly, 2006.</para>
+      </listitem>
+
+      <listitem>
+        <para>Andy Hunt, Dave Thomas, <emphasis>The Pragmatic Programmer --
+        Form Journeyman to Master</emphasis>, Addison-Wesley, 2000.</para>
+      </listitem>
+
+      <listitem>
+        <para>Steven McConnell,<emphasis> Code Complete, Second
+        Edition,</emphasis> Microsoft Press, 2004. On Software Construction in
+        general, on a low level of abstraction, full of best-practices and
+        hard facts.</para>
+      </listitem>
+
+      <listitem>
+        <para>Barry J. Rosenberg , <emphasis>Spring into Technical Writing for
+        Engineers and Scientists</emphasis>, Addison-Wesley, 2005. An
+        efficient guide to writing manuals, papers and other professional
+        documentation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Andreas Zeller, <emphasis>Why Programs Fail -- A Guide to
+        Systematic Debugging</emphasis>, Morgan Kaufmann, 2005.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</chapter>

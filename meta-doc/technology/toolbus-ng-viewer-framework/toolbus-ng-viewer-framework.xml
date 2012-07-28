@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article>
+  <title>The ToolBusNG's Viewer Framework</title>
+
+  <articleinfo>
+    <title>The ToolBusNG's Viewer Framework</title>
+
+    <author>
+      <surname>Arnold Lankamp</surname>
+    </author>
+
+    <pubdate>11 Feb 2008</pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The viewer is a tool that gives insight in the execution and state
+    of the ToolBus and its connected tools. It is mainly used for debugging
+    purposes. This document will discuss the viewer framwork of the Next
+    Generation ToolBus and will serve as a guide for developers that wish to
+    write their own viewer implementation.</para>
+
+    <para>Contrary to the viewer implementation of the old ToolBus, the new
+    viewer implementations run as a build-in of the ToolBus; this offers the
+    advantage of direct access to all required data, while having only a minor
+    impact on the performance of the ToolBus.</para>
+  </section>
+
+  <section>
+    <title>Design</title>
+
+    <para>The design of the viewer framework is fairly basic as it only
+    consists of few parts; the debug ToolBus, the IViewer interface, the
+    IPerformanceMonitor interface and the ScriptCodeStore. These will be
+    discussed in more detail below.</para>
+
+    <section>
+      <title>Debug ToolBus</title>
+
+      <para>The debug ToolBus is a specialized version of the regular ToolBus.
+      It is able to handle breakpoints, stepping and suspension of the ToolBus
+      and it deals with notifications that need to be passed to the attached
+      viewer.</para>
+
+      <para>This is a list of all the viewer related methods:</para>
+
+      <section>
+        <title>Execution</title>
+
+        <para><programlisting>void doRun()</programlisting>Notifies the debug
+        ToolBus that it should execute normally.</para>
+
+        <para><programlisting>void doStop()</programlisting>Notifies the debug
+        ToolBus that it should suspend its execution.</para>
+
+        <para><programlisting>void doStep()</programlisting></para>
+
+        <para>Notifies the debug ToolBus that it should execute one
+        step.</para>
+
+        <para><programlisting>void doTerminate()</programlisting>Requests the
+        termination of the ToolBus.</para>
+      </section>
+
+      <section>
+        <title>Breakpoint</title>
+
+        <para><programlisting>void addProcessInstanceBreakPoint(int processId)</programlisting>Adds
+        a breakpoint for the process instance with the given id. When the
+        debug ToolBus executes a state element in the associated process
+        instance, the attached viewer will be notified.</para>
+
+        <para><programlisting>void removeProcessInstanceBreakPoint(int processId)</programlisting>Removes
+        the breakpoint on the process instance with the given id (if
+        present).</para>
+
+        <para><programlisting>void addProcessBreakPoint(String processName)</programlisting>Adds
+        a breakpoint for all the process instances whos type is identified by
+        the given name. When the debug ToolBus executes a state element in one
+        of those process instances, the attached viewer will be
+        notified.</para>
+
+        <para><programlisting>void removeProcessBreakPoint(String processName)</programlisting>Removes
+        the breakpoints for the process instances whos type is identified by
+        the given name (if present).</para>
+
+        <para><programlisting>void addStateElementBreakPoint(StateElement stateElement)</programlisting>Adds
+        a breakpoint on the given state element. When the debug ToolBus
+        executes the given state element, the attached viewer will be
+        notified.</para>
+
+        <para><programlisting>void removeStateElementBreakPoint(StateElement stateElement)</programlisting>Removes
+        the breakpoint from the given state element (if present).</para>
+
+        <para><programlisting>void addSourceCodeBreakPoint(String filename, int lineNumber)</programlisting>Adds
+        a breakpoint on the given sourcecode coordinates. When the debug
+        toolbus executes a state element which's position information matches
+        the sourcecode coordiates, the attached Viewer will be notified. Note
+        that the debug toolbus assumes that line numbers start counting at
+        zero.</para>
+
+        <para><programlisting>void removeSourceCodeBreakPoint(String filename, int lineNumber)</programlisting>Removes
+        the breakpoint from the given source code coordinates (if
+        present).</para>
+      </section>
+
+      <section>
+        <title>Performance monitoring</title>
+
+        <para><programlisting>ATerm getToolBusPerformanceStats()</programlisting>Gathers
+        performance statistics related to JVM the current ToolBus is running
+        in.</para>
+
+        <para><programlisting>void startMonitoringTool(ATerm toolKey)</programlisting>Initiates
+        the monitoring of the tool associated with the given tool key (in case
+        performance monitoring is enabled for this debug ToolBus). Note that
+        it may take some time before performance statistics for the associated
+        tool arrive, since they are only requested after tool
+        interaction.</para>
+
+        <para><programlisting>void stopMonitoringTool(ATerm toolKey)</programlisting>Stops
+        monitoring the tool associated with the given tool key.</para>
+
+        <para><programlisting>void startMonitorToolType(String toolName)</programlisting>Initiates
+        the monitoring of the given tool type (in case performance monitoring
+        is enabled for this debug ToolBus). Note that it may take some time
+        before performance statistics for the given tool type arrive, since
+        they are only requested after tool interaction.</para>
+
+        <para><programlisting>void stopMonitoringToolType(String toolName)</programlisting>Stops
+        monitoring tools of the given type.</para>
+      </section>
+
+      <section>
+        <title>Process logic</title>
+
+        <programlisting>List&lt;ProcessInstance&gt; getProcesses()</programlisting>
+
+        <para>Retrieves the list of currently executing process
+        instances.</para>
+
+        <para><emphasis>Note that invoking any method other then those
+        discussed above will likely induce undefined behaviour in the
+        ToolBus.</emphasis></para>
+      </section>
+    </section>
+
+    <section>
+      <title>IViewer</title>
+
+      <para>The viewer interface lists all types of viewer related events the
+      debug ToolBus can fire and in which a viewer implementation may possibly
+      be interested.</para>
+
+      <para>This is what the interface looks like:</para>
+
+      <para><programlisting>void updateState(int state)</programlisting>Informs
+      the viewer about what the debug ToolBus is currently doing.</para>
+
+      <para>This is a complete list of possible states:</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>UNKNOWN_STATE: Bogus initial state, which is also used in
+            case the debug ToolBus gets confused (in which case it'll go to
+            sleep). Note that this currently will never happen.</para>
+          </listitem>
+
+          <listitem>
+            <para>STOPPING_STATE: Indicates that the debug ToolBus is in the
+            process of suspending it's execution. This will be fired after a
+            call to the doStop method.</para>
+          </listitem>
+
+          <listitem>
+            <para>WAITING_STATE: Indicates the debug ToolBus is unable to
+            execute any atoms and is waiting for either tool input, a delay to
+            expire or a doStep or doRun event to occur.</para>
+          </listitem>
+
+          <listitem>
+            <para>READY_STATE: Indicates that tool interaction occurred,
+            meaning there probably is work to be done.</para>
+          </listitem>
+
+          <listitem>
+            <para>RUNNING_STATE: Indicates that the debug ToolBus is executing
+            normally. This will be fired after a call to the doRun method;
+            additionally a transition from WAITING to RUNNING is also
+            possible.</para>
+          </listitem>
+
+          <listitem>
+            <para>STEPPING_STATE: Indicates that the debug ToolBus is
+            executing one step. It's execution will be suspended once one atom
+            has been executed. This will be fired after a call to the doStep
+            method; additionally a transition from WAITING to STEPPING is also
+            possible.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para><programlisting>void stepExecuted(ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners)</programlisting>Fired
+      after the successfull completion of a step. The parameters indicate
+      which state element, in which process instance was executed. Optionally,
+      in case a communication atom has been executed, the partners paramater
+      will indicate which other state elements were involved in the execution
+      of this step.</para>
+
+      <para><programlisting>void processInstanceStarted(ProcessInstance processInstance)</programlisting>Fired
+      when a new process instance is started.</para>
+
+      <para><programlisting>void processInstanceTerminated(ProcessInstance processInstance)</programlisting>Fired
+      when a process instance is terminated.</para>
+
+      <para><programlisting>void processBreakPointHit(ProcessInstance processInstance)</programlisting>Informs
+      the viewer that a registered breakpoint on a process or process instance
+      was hit. The debug ToolBus will not suspend it's execution by itself;
+      the action that will be taken is completely up to the viewer
+      implementation. In case the execution needs to be paused this will need
+      to be done explicitly by calling the doStop method.</para>
+
+      <para><programlisting>void stateElementBreakPointHit(StateElement stateElement)</programlisting>Informs
+      the viewer that a registered breakpoint on a state element was hit. The
+      debug ToolBus will not suspend it's execution by itself; the action that
+      will be taken is completely up to the viewer implementation. In case the
+      execution needs to be paused this will need to be done explicitly by
+      calling the doStop method.</para>
+
+      <para><programlisting>void sourceBreakPointHit(StateElement stateElement)</programlisting>Informs
+      the viewer that a registered breakpoint on a sourcecode coordinate was
+      hit. The debug toolbus will not suspend it's execution by itself; the
+      action that will be taken is completely up to the viewer implementation.
+      In case the execution needs to be paused this will need to be done
+      explicitly by calling the doStop method.</para>
+
+      <para><programlisting>void toolbusStarting()</programlisting>Fired right
+      before the debug ToolBus starts executing the process logic.</para>
+
+      <para><programlisting>void toolbusTerminating()</programlisting>Fired
+      right before then debug ToolBus shuts down.</para>
+    </section>
+
+    <section>
+      <title>IPerformanceMonitor</title>
+
+      <para>The performance monitor interface lists all types of tool related
+      events that the performance monitor implementation needs to
+      handle.</para>
+
+      <para>This is what the interface looks like:</para>
+
+      <para><programlisting>void toolConnected(ToolInstance toolInstance)</programlisting>Fired
+      when a tool connects.</para>
+
+      <para><programlisting>void toolConnectionClosed(ToolInstance toolInstance)</programlisting>Fired
+      when a connection with a tool is terminated.</para>
+
+      <para><programlisting>void performanceStatsArrived(ToolInstance toolInstance, ATerm aTerm)</programlisting>Fired
+      when the performance statistics that were requested by the debug ToolBus
+      arrived.</para>
+
+      <para>The ATerm containing the performance statistic information has the
+      following layout:</para>
+
+      <para><code>performance-stats(tool(type(&lt;string&gt;),
+      language(&lt;string&gt;)), memory-usage(heap-usage(&lt;int&gt;),
+      non-heap-usage(&lt;int&gt;)),
+      threads([&lt;thread_name1&gt;(user-time(&lt;int&gt;),
+      system-time(&lt;int&gt;)), &lt;thread_name2&gt;(user-time(&lt;int&gt;),
+      system-time(&lt;int&gt;)), ...]))</code></para>
+    </section>
+
+    <section>
+      <title>ScriptCodeStore</title>
+
+      <para>The script code store provides access to all, for the ToolBus,
+      reachable script source code. Additionally it provides caching of loaded
+      code.</para>
+
+      <para>It has two important functions:</para>
+
+      <programlisting>String[] getScriptNames()</programlisting>
+
+      <para>Returns a complete list of absolute paths to all, for the ToolBus,
+      reachable scripts.</para>
+
+      <programlisting>byte[] getCode(String scriptPath) throws IOException</programlisting>
+
+      <para>Retrieves the source code of the script indicated by the given
+      path.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Process logic</title>
+
+    <para>Every process instances represents a state machine. Such a state
+    machine consists out of state elements that are linked together.</para>
+
+    <para>This is the list of methods that may be of interest to viewer
+    builders:</para>
+
+    <section>
+      <title>ProcessInstance</title>
+
+      <para><programlisting>String getProcessName()</programlisting>Returns
+      the name of the process instance.</para>
+
+      <para><programlisting>int getProcessId()</programlisting>Returns the
+      process instance's unique identifier.</para>
+
+      <para><programlisting>List&lt;StateElement&gt; getStateElementSet()</programlisting>Returns
+      the collection of all state elements that the process instance
+      contains.</para>
+
+      <para><programlisting>State getProcessState()</programlisting>Returns
+      the process instance's current state.</para>
+
+      <para><programlisting>List&lt;ATerm&gt; getSubscriptions()</programlisting>Returns
+      a list containing all the types of notes the process instance is
+      subscribed on.</para>
+
+      <para><programlisting>List&lt;ATerm&gt; getNoteQueue()</programlisting>Returns
+      the collection of notes that are currently in the process instance's
+      queue.</para>
+    </section>
+
+    <section>
+      <title>State</title>
+
+      <para><programlisting>List&lt;StateElement&gt; getElementsAsList()</programlisting>Returns
+      the collection of state elements contained in the state.</para>
+
+      <para><programlisting>String toString()</programlisting>Returns a serial
+      representation of the state.</para>
+    </section>
+
+    <section>
+      <title>StateElement</title>
+
+      <para><programlisting>State getFollow()</programlisting>Returns the
+      follow state of the state element. This follow state contains all state
+      elements that are possible candidates for execution after this current
+      state element has been processed.</para>
+
+      <para><programlisting>PositionInformation getPosInfo()</programlisting>Returns
+      the position coördinates associated with a certain state element.
+      Position information will be discussed in more detail in the next
+      section.</para>
+
+      <para><programlisting>String toString()</programlisting>Returns a serial
+      representation of the state element.</para>
+
+      <para><programlisting>List&lt;ATerm&gt; getTests()</programlisting>Returns
+      a collection of all test expression of the tests that are set on the
+      state element. These test expressions restrict the conditions under
+      which the state element is allowed to execute (in other words these
+      represent the surrounding if-statements after compilation).</para>
+    </section>
+
+    <section>
+      <title>Atom</title>
+
+      <para><programlisting>Environment getEnv()</programlisting>Returns the
+      environment that is associated with the atom.</para>
+
+      <para><programlisting>int getDelay()</programlisting>Returns the amount
+      of time (in ms) that needs to pass by before the atom is allowed to be
+      executed.</para>
+
+      <para><programlisting>int getTimeout()</programlisting>Returns the time
+      (in ms) within which the atom needs to be executed before being
+      invalidated.</para>
+    </section>
+
+    <section>
+      <title>Environment</title>
+
+      <para><programlisting>List&lt;Binding&gt; getBindingsAsList()</programlisting>Returns
+      all bindings in the environment as a list. The bindings are key-value
+      pair, that contain a mapping between a variable and its value.</para>
+
+      <para><emphasis>Note that invoking any method other then those discussed
+      above may induce undefined behaviour in the ToolBus; so caution is
+      adviced.</emphasis></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Position information</title>
+
+    <para>During the parsing of the ToolBus scripts, position information will
+    be added to the constructed state elements. This position information is
+    used to relate these state elements to source code coordinates.</para>
+
+    <para>Positions contain the following data:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Name of the script.</para>
+      </listitem>
+
+      <listitem>
+        <para>Start line.</para>
+      </listitem>
+
+      <listitem>
+        <para>Start column.</para>
+      </listitem>
+
+      <listitem>
+        <para>End line.</para>
+      </listitem>
+
+      <listitem>
+        <para>End column.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Note that both the line numbers and the column numbers start at
+    0.</para>
+
+    <para>One can obtain the collection of all state elements contained in a
+    certain process instance by calling the
+    <emphasis>toolbus.process.ProcessInstance#getStateElementSet()</emphasis>
+    method, as discussed in the previous section. Not every state element may
+    have position information on it, since some are 'made up' during
+    compilation; all state elements that can directly be related to an
+    expression in a ToolBus script will however have position information
+    associated with them.</para>
+  </section>
+
+  <section>
+    <title>Tools</title>
+
+    <para>When implementing a performance viewer one has to deal with tool
+    instances. There are only two methods on the ToolInstance class that
+    should be used by a viewer implementation.</para>
+
+    <para>These are:</para>
+
+    <para><programlisting>ATerm toolbus.tool.ToolInstance#getToolKey()</programlisting>This
+    method returns a unique key which identifies the tool instance. It
+    consists of the name of the tool and its id (integer). It adheres to the
+    following format:<code> &lt;toolname&gt;(&lt;id&gt;)</code></para>
+
+    <para><programlisting>toolbus.tool.ToolInstance.getToolName()</programlisting>A
+    convience method for retrieving the name of the tool that is associated
+    with a certain tool instance.</para>
+
+    <para><emphasis>Note that invoking any method other then those discussed
+    above will likely induce undefined behaviour in the
+    ToolBus.</emphasis></para>
+  </section>
+
+  <section>
+    <title>Viewer template</title>
+
+    <para>Below follows a template which can be used to start a new viewer
+    implementation. Developers are encouraged to copy the code below and
+    modify it to their needs.</para>
+
+    <para><programlisting>public class Viewer implements IViewer{
+  private final DebugToolBus debugToolBus;
+  private final ScriptCodeStore scriptCodeStore;
+  
+  public Viewer(String[] args){
+    super();
+    
+    debugToolBus = new DebugToolBus(args, this, new ToolPerformanceViewer()); // We can also omit the performance monitor, by passing null instead.
+    
+    scriptCodeStore = new ScriptCodeStore(debugToolBus); // Optional; this is only required when implementing a source viewer.
+  }
+  
+  public DebugToolBus getDebugToolBus(){
+    return debugToolBus;
+  }
+  
+  ...
+  (Implemented IViewer methods).
+  ...
+  
+  // Optional part.
+  private static class ToolPerformanceViewer implements IPerformanceMonitor{
+    
+    public ToolPerformanceViewer(){
+      super();
+    }
+    
+    ...
+    (Implemented IPerformanceMonitor methods).
+    ...
+  }
+  // End optional part.
+  
+  public static void main(String[] args){
+    Viewer viewer = new Viewer(args);
+    DebugToolBus debugToolBus = viewer.getDebugToolBus();
+    
+    CommandLine.createCommandLine(debugToolBus, System.in, false); // Enable command line handling for the ToolBus (this is an optional action).
+    
+    debugToolBus.doStop(); // Set the initial state to stopped (recommended but not required).
+    
+    try{
+      debugToolBus.parsecup(); // Execute the parser.
+      debugToolBus.prepare(); // Initialize the ToolBus.
+      debugToolBus.execute(); // Execute the debug ToolBus.
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
+  }
+}</programlisting></para>
+  </section>
+</article>

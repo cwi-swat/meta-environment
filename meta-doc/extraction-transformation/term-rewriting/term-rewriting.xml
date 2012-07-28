@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5.0" xml:id="term-rewriting"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>Quick Introduction to Term Rewriting</title>
+
+    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100 (Wed,
+    13 Dec 2006)$</pubdate>
+
+    <author>
+      <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+    </author>
+  </info>
+
+  <section xml:id="section.tr-motivation">
+    <title>Motivation</title>
+
+    <para>Term rewriting is a surprisingly simple computational paradigm that
+    is based on the repeated application of simplification rules. It is
+    particularly suited for tasks like symbolic computation, program analysis
+    and program transformation. Understanding term rewriting will help you to
+    solve such tasks in a very effective manner.</para>
+  </section>
+
+  <section xml:id="section.tr-introduction">
+    <title>Introduction</title>
+
+    <para>Consider the following, <emphasis>back-of-an-envelope</emphasis>,
+    calculation:</para>
+
+    <programlisting>(9 - 5)<superscript>2</superscript> * (7 + 4) =
+4<superscript>2</superscript>  * (7 + 4) =
+16 * (7 + 4) =
+16 * 11 =
+176</programlisting>
+
+    <para>This is a perfect example of <emphasis>term rewriting</emphasis>:
+    the initial expression <literal>(9 - 5)<superscript>2</superscript> * (7 +
+    4)</literal> is simplified in a number of steps using the rules of
+    elementary arithmetic. The result is the number
+    <literal>176</literal>.</para>
+
+    <para>Many forms of simplification or symbolic manipulation can be
+    expressed in this way. Recall the simplification rule</para>
+
+    <para><programlisting>(<emphasis>a</emphasis> + <emphasis>b</emphasis>)<superscript>2</superscript> = <emphasis>a</emphasis><superscript>2</superscript> + 2<emphasis>ab</emphasis> + <emphasis>b</emphasis><superscript>2</superscript></programlisting>from
+    high school algebra or the rule to calculate the derivative of the sum of
+    two functions <emphasis><literal>u</literal></emphasis> and
+    <literal>v</literal>:</para>
+
+    <programlisting>d(<emphasis>u</emphasis> + <emphasis>v</emphasis>)/d<emphasis>x</emphasis> = d<emphasis>u</emphasis>/d<emphasis>x</emphasis> + d<emphasis>v</emphasis>/d<emphasis>x</emphasis></programlisting>
+
+    <para>In both cases, there is a complex <emphasis>left-hand
+    side</emphasis> that can be simplified into the expression appearing at
+    the <emphasis>right-hand side</emphasis>. These expressions are called
+    <emphasis>term</emphasis>s and this explains the name
+    <emphasis><emphasis>term rewriting</emphasis></emphasis>. The precise form
+    of such a term may differ and is explained below. Observe that some of the
+    items on the left-hand side re-appear at the right-hand side (e.g.,
+    <literal>a</literal>, <literal>b</literal>, <literal>u</literal>,
+    <literal>v</literal>); they are called <emphasis>variables</emphasis> and
+    are used during the simplification.</para>
+
+    <para>A simple view on term rewriting is shown in <xref
+    linkend="figure.tr-simple-rewriting-algorithm" />. Given a set of rewrite
+    rules and an initial term T, the rewriting algorithm is applied and will
+    yield a simplified (or normalized) term T' as answer. T' is called the
+    <emphasis>normal form</emphasis> of T. Later (in <xref
+    linkend="section.tr-term-rewriting-algorithm" />) we will further explain
+    the internals of the term rewriting algorithm.</para>
+
+    <figure xml:id="figure.tr-simple-rewriting-algorithm">
+      <title>The rewriting process</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="simple-rewriting-algorithm.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>In order to apply such a simplification rule (or better:
+    <emphasis>rewrite rule</emphasis>), several ingredients play a
+    role:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>an initial expression (a term) that is to be simplified.</para>
+      </listitem>
+
+      <listitem>
+        <para>a subexpression where the rule might be applied (this is called
+        the <emphasis>redex</emphasis>); there must be a
+        <emphasis>match</emphasis>, between the redex and the left-hand side
+        of the rule we want to apply; finding a match means that we can find
+        values for the variables in the left-hand side of the rule that make
+        the left-hand side and the redex identical.</para>
+      </listitem>
+
+      <listitem>
+        <para>next, the redex in the initial expression is replaced by the
+        right-hand side of the rule, after replacing the variables by the
+        values found during the match.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Term rewriting is a simplification process that starts with one or
+    more rewrite rules and an initial term. This initial term is gradually
+    reduced to a term that cannot be further simplified: this is the outcome
+    of the rewriting process and is called the <emphasis>normal
+    form</emphasis>.</para>
+
+    <para>In each step, a redex is searched for in (the possibly already
+    simplified) initial term and it is replaced by the rewrite rule that can
+    be applied.</para>
+  </section>
+
+  <section>
+    <title>Basic concepts</title>
+
+    <para>In order to understand term rewriting three basic concepts are
+    essential: terms, substitution and matching.</para>
+
+    <section xml:id="section.tr-terms">
+      <title>Terms</title>
+
+      <para>Traditionally, terms are defined in a strict prefix format:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A single variable is a term, e.g. <literal>X</literal>,
+          <literal>Y</literal> or <literal>Z</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>A function name applied to zero or more arguments is a term,
+          e.g., <literal>add(X,Y)</literal>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Using this definition, complex hierarchical structures of
+      arbitrary depth can be defined.</para>
+
+      <para>Occasionally, we will relax this definition of terms a bit and use
+      a more flexible notation. Instead of <literal>add(X,Y)</literal> we
+      will, for instance, also write <literal>X + Y</literal>.</para>
+    </section>
+
+    <section xml:id="section.tr-substitution">
+      <title>Substitution</title>
+
+      <para>A substitution is an important auxiliary notion that we need on
+      our road towards understanding term rewriting. A substitution is an
+      association between variables and terms. For instance,</para>
+
+      <programlisting>{ X -&gt; 0, Y -&gt; succ(0) }</programlisting>
+
+      <para>is a substitution that maps the variable <literal>X</literal> to
+      the term <literal>0</literal> (a function without arguments), and the
+      variable <literal>Y</literal> to the term
+      <literal>succ(0)</literal>.</para>
+
+      <para>Substitution can be used to create new terms from old ones. Using
+      the above substitution and applying it to the term <literal>mul(succ(X),
+      Y)</literal> will yield the new term <literal>mul(succ(0),
+      succ(0))</literal>. The basic idea is that variables are replaced by the
+      term they are mapped to by the substitution.</para>
+    </section>
+
+    <section xml:id="section.tr-matching">
+      <title>Matching</title>
+
+      <para>Matching has as goal to determine whether two terms
+      T<subscript>1</subscript> and T<subscript>2</subscript> can be made
+      equal. More precisely, whether a substitution exists that can make
+      T<subscript>1</subscript> equal to T<subscript>2</subscript>. For
+      instance, the two terms <literal>mul(succ(X), Y)</literal> and
+      <literal>mul(succ(0), succ(0))</literal> match since we can use the
+      substitution { X -&gt; 0 Y -&gt; succ(0) } to make them identical. If no
+      such substitution can be found, the two terms cannot be matched.</para>
+    </section>
+  </section>
+
+  <section xml:id="section.tr-term-rewriting-algorithm">
+    <title>The term rewriting algorithm</title>
+
+    <para>We can now assemble the ingredients we have described so far into a
+    comprehensive description of the rewriting algorithm (<xref
+    linkend="figure.tr-rewriting-algorithm" />).This algorithm still leaves
+    some aspects unspecified:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>In what way is the redex selected?</para>
+      </listitem>
+
+      <listitem>
+        <para>In what order are the rules applied?</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Various methods are possible for selecting the redex:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>From the top (root) of the term to the bottom or from the leaves
+        to the root.</para>
+      </listitem>
+
+      <listitem>
+        <para>From left to right or from right to left.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>We will mostly be using a leaves-to-root and left-to right order.
+    This is called the <emphasis>left-most innermost reduction
+    strategy</emphasis>.</para>
+
+    <para>Also various methods exist for selecting the rules to be
+    tried:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Textual order.</para>
+      </listitem>
+
+      <listitem>
+        <para>Specificity order (rules with more precise left-hand sides are
+        tried before rules with more general left-hand sides).</para>
+      </listitem>
+
+      <listitem>
+        <para>No order.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>We will be using no ordering of the rules.</para>
+
+    <figure xreflabel="" xml:id="figure.tr-rewriting-algorithm">
+      <title>The rewriting algorithm</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" dir="lro"
+                     fileref="rewriting-algorithm.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section xml:id="section.tr-examples">
+    <title>Examples</title>
+
+    <para>Let´s consider two simple examples of term rewriting systems for
+    natural numbers and booleans. More elaborate examples that fall outside
+    the scope of this article are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Typechecking of programs.</para>
+      </listitem>
+
+      <listitem>
+        <para>Interpretation (= execution) of programs.</para>
+      </listitem>
+
+      <listitem>
+        <para>Code generation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Fact extraction from source code for the benefit of quality
+        assurance or defect detection.</para>
+      </listitem>
+
+      <listitem>
+        <para>Software transformation for the benefit of translation or code
+        improvement.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>See <xref linkend="section.tr-further-reading" /> for pointers to
+    such examples.</para>
+
+    <section>
+      <title>Numerals</title>
+
+      <para>How can we specify natural numbers with 0, successor, addition and
+      multiplication using term rewriting? A usual approach is as
+      follows:</para>
+
+      <programlisting>[add1] add(0, X) = X
+
+[add2] add(succ(X), Y) = succ(add(X, Y))
+
+[mul1] mul(0, X) = 0
+
+[mul2] mul(succ(X), Y) = add(mul(X, Y), Y)</programlisting>
+
+      <para>Here, <literal>0</literal> represents the constant zero, and
+      <literal>add</literal> and <literal>mul</literal> the arithmetic
+      operations addition and multiplication. Natural numbers are represented
+      as <literal>0</literal>, <literal>succ(0)</literal>,
+      <literal>succ(succ(0))</literal>, and so on. In other words,
+      <emphasis>N</emphasis> applications of the successor function
+      <literal>succ</literal> to the constant <literal>0</literal>, represent
+      the number <emphasis>N</emphasis>. In the above rules,
+      <literal>X</literal> and <literal>Y</literal> are used as
+      variables.</para>
+
+      <para>For mere mortals, the above rules could also be written in a more
+      readable form:</para>
+
+      <para><programlisting>[add1'] 0 + X = X
+
+[add2'] succ(X) + Y = succ(X + Y)
+
+[mul1'] 0 * X = 0
+
+[mul2'] succ(X) * Y = mul(X * Y) + Y</programlisting>Now let's follow the
+      simplification of <literal>add(succ(succ(0)), succ(succ(0)))</literal>
+      as shown in <xref linkend="figure.tr-arithmetic" />. Each redex is shown
+      as a yellow box with a thick border. An arrow connects the redex with
+      its replacement that is surround by a rectangle with a thin
+      border.</para>
+
+      <para>The name of the rule that is applied in each step is shown on the
+      right of each vertical arrow. As expected, the answer is
+      <literal>succ(succ(succ(succ0))))</literal> or, in other words,
+      <literal>2 + 2</literal> equals <literal>4</literal>.</para>
+
+      <figure xml:id="figure.tr-arithmetic">
+        <title>Rewriting an arithmetic term</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" dir="lro" fileref="./two-plus-two.png"
+                       scale="100" scalefit="0"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Booleans</title>
+
+      <para>How can we define Boolean expressions with constants
+      <literal>true</literal> and <literal>false</literal> and the operations
+      <literal>and</literal>, <literal>or</literal> and
+      <literal>not</literal>? Consider the following definition that strictly
+      follows the truth table definitions of Boolean operators:</para>
+
+      <programlisting>[or1] or(true, true) = true
+[or2] or(true, false) = true
+[or3] or(false, true) = true
+[or4] or(false, false) = false
+
+[and1] and(true, true) = true
+[and2] and(true, false) = false
+[and3] and(false, true) = false
+[and4] and(false, false) = false
+
+[not1] not(true) = false
+[not2] not(false) = true</programlisting>
+
+      <para>Consider the simplification of the Boolean expression
+      <literal>not(or(false, and(true,not(false))))</literal> as shown in
+      <xref linkend="figure.tr-boolean" />.</para>
+
+      <figure dir="lro" xml:id="figure.tr-boolean">
+        <title>Rewriting as Boolean term</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="not-or.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section xml:id="section.tr-extensions">
+    <title>Extensions of term rewriting</title>
+
+    <para>Term rewriting has been extended in various ways to make it even
+    more practical. These extensions include:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>User-defined syntax</emphasis>. Instead of writing
+        <literal>and(true, false)</literal> we would rather like to write
+        <literal>true &amp; false</literal>. We want to relax the strict
+        prefix format of functions and use arbitrary notation for them.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Conditional rules</emphasis>. So far we have only seen
+        rewrite rules that are applied when they <emphasis>can</emphasis> be
+        applied. To conditional rewrite rules, one or more conditions are
+        attached that are first evaluated in order to determine whether the
+        rule should be applied at all.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Default rules</emphasis>. So far we have used no
+        ordering for the rewrite rules. Default rules are only applied when no
+        other rules can be applied an capture the idea of a
+        <emphasis>catch-all rule</emphasis> that covers the cases that are not
+        addressed by other, more specific, rules.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Lists and list matching</emphasis>. Terms can be
+        extended with a notion of lists. This is particularly handy when
+        representing repeated items in a structure such as a list of
+        identifiers in a declaration, or a list of statements in a procedure
+        body. The matching between two terms has to be extended to cover the
+        case of matching lists of terms rather than a single term. In this
+        way, one can, for instance, define patterns that match a list of
+        statements that contains a statement of a particular form.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Traversal functions</emphasis>. In many problem
+        domains it may occur that a large structure has to be searched while
+        only a few elements are relevant for the operation at hand. Consider
+        counting goto statements in C or Cobol programs: we are only
+        interested to do something when we encounter a goto statement and we
+        just want to travel over the other statements kinds. Traversal
+        functions automate this kind of behaviour and can hugely reduce the
+        number of rewrite rules that are needed in industrial size
+        applications.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>All these -- and more -- extensions are provided by the ASF+SDF
+    formalism that is supported by <link
+    xlink:href="http://www.meta-environment.org">The
+    Meta-Environment</link>.</para>
+  </section>
+
+  <section>
+    <title>The role of term rewriting in The Meta-Environment</title>
+
+    <para>The Meta-Environment supports a language called ASF+SDF that
+    supports, amongst others, defining and executing rewrite rules. One of the
+    distinguishing features of ASF+SDF is that rewrite rules may be written
+    using arbitrary (user-defined) syntax. Continuing the simple example of
+    the Booleans above, this means that we are not limited to writing
+    <literal>and(true,false)</literal> but can use any syntax we want for the
+    <literal>and</literal> function, and for all other functions of our
+    liking.</para>
+
+    <para>This does not yet sound very exciting, right? But consider that we
+    are working on something serious like analyzing Java programs. In that
+    case, we have to write rewrite rules that describe the kind of analysis we
+    want to do, say, finding calls to and data exchanges with untrusted
+    components. For all Java statements that are involved in this analysis, we
+    write rules that extract the desired information. The nice thing is that
+    we can write these rules using ordinary Java text and that we don't have
+    to resort to some complicated abstract syntax tree representation as is
+    usual in compiler-based systems. In ASF+SDF the text
+    <emphasis>is</emphasis> the tree!</para>
+
+    <para>How do the pieces now fit together? The source text of the Java
+    program is first parsed (parsing is explained elsewhere) and converted to
+    a term. Next, we can apply an analysis function to the Java program and
+    get the results we want. It is as simple and exciting as that.</para>
+  </section>
+
+  <section xml:id="section.tr-further-reading">
+    <title>Further Reading</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Several articles on th website (<link
+        xlink:href="http://www.meta-environment.org">www.meta-environment.org</link>
+        give detailed examples of term rewriting
+        applications.</para>
+      </listitem>
+
+      <listitem>
+        <para>The book <biblioref linkend="BaaderNipkow98" />
+        gives an introduction to the theory of term rewriting.</para>
+      </listitem>
+
+      <listitem>
+        <para>The book <biblioref linkend="Terese03" /> gives
+        a comprehensive overview of research in this area.</para>
+      </listitem>
+
+      <listitem>
+        <para><link xlink:href="http://www.meta-environment.org">The
+        Meta-Environment</link> is the tool suite par excellence for exploring
+        applications of term rewriting.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="section.tr-bibliography">
+    <title>Bibliography</title>
+
+    <para><bibliolist>
+        <bibliomixed xml:id="BaaderNipkow98"></bibliomixed>
+
+        <bibliomixed xml:id="Terese03"></bibliomixed>
+      </bibliolist></para>
+  </section>
+</chapter>

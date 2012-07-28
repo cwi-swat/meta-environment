@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!DOCTYPE targetset 
+       SYSTEM "__DOCBOOKXSLPREFIX__/common/targetdatabase.dtd" [
+<!ENTITY formatting-targets                     SYSTEM "doc/html/learning-about/formatting/target.db"> 
+<!ENTITY syntax-analysis-targets                SYSTEM "doc/html/learning-about/syntax-analysis/target.db">
+<!ENTITY language-definitions-targets           SYSTEM "doc/html/learning-about/language-definitions/target.db">
+<!ENTITY rscript-targets                        SYSTEM "doc/html/learning-about/rscript/target.db">
+<!ENTITY term-rewriting-targets                 SYSTEM "doc/html/learning-about/term-rewriting/target.db">
+    
+<!ENTITY architecture-meta-environment-targets  SYSTEM "doc/html/understanding/architecture-meta-environment/target.db">
+<!ENTITY sdf-targets                            SYSTEM "doc/html/understanding/sdf/target.db">
+<!ENTITY asfsdf-targets                         SYSTEM "doc/html/understanding/asfsdf/target.db">
+<!ENTITY aterm-saf-targets                      SYSTEM "doc/html/understanding/aterm-saf/target.db">
+<!ENTITY extending-meta-environment-targets     SYSTEM "doc/html/understanding/extending-meta-environment/target.db">
+
+<!ENTITY asf-errors-targets                     SYSTEM "doc/html/howto/asf-errors/target.db">
+<!ENTITY asfsdf-by-example-targets              SYSTEM "doc/html/howto/asfsdf-by-example/target.db">
+<!ENTITY sdf-disambiguation-targets             SYSTEM "doc/html/howto/sdf-disambiguation/target.db">
+<!ENTITY sdf-errors-targets                     SYSTEM "doc/html/howto/sdf-errors/target.db">
+    
+<!ENTITY coding-standards-targets               SYSTEM "doc/html/project/coding-standards/target.db">
+<!ENTITY build-environment-targets              SYSTEM "doc/html/project/build-environment/target.db">
+<!ENTITY recommended-reading-targets            SYSTEM "doc/html/project/recommended-reading/target.db">
+<!ENTITY planning-targets                       SYSTEM "doc/html/project/planning/target.db">
+<!ENTITY version-management-targets             SYSTEM "doc/html/project/version-management/target.db">
+<!ENTITY documentation-plan-targets             SYSTEM "doc/html/project/documentation-plan/target.db">
+<!ENTITY communication-plan-targets             SYSTEM "doc/html/project/communication-plan/target.db">
+
+
+]>
+
+
+<targetset> 
+  <targetsetinfo> 
+    Description of the output structure of the Meta-Environment documentation.
+    WARNING: this structure is created by website.sh and the following definitions
+    should be compatible with that generated structure.
+  </targetsetinfo>
+
+  <!-- Site map for generating relative paths between documents -->
+  <sitemap> 
+    <dir name="toplevel-container">
+
+	<!-- learning about -->
+	<dir name="learning-about"> 
+	    <dir name="formatting"> <document targetdoc="formatting" baseuri="formatting.html"> &formatting-targets; </document> </dir>
+    
+    	    <dir name="syntax-analysis"> <document targetdoc="syntax-analysis" baseuri="syntax-analysis.html"> &syntax-analysis-targets; </document> </dir>
+    
+	    <dir name="language-definitions"> <document targetdoc="language-definitions" baseuri="language-definitions.html"> &language-definitions-targets; </document> </dir>
+
+	    <dir name="rscript"> <document targetdoc="rscript" baseuri="rscript.html"> &rscript-targets; </document> </dir>
+
+	    <dir name="term-rewriting"> 
+		 <document targetdoc="term-rewriting" baseuri="term-rewriting.html"> &term-rewriting-targets; </document> </dir>
+	</dir>
+
+	<!-- understanding -->
+
+	<dir name="understanding">
+	    <dir name="architecture-meta-environment"> <document targetdoc="architecture-meta-environment" baseuri="architecture-meta-environment.html"> &architecture-meta-environment-targets;</document> </dir>
+
+	    <dir name="sdf"> <document targetdoc="sdf" baseuri="sdf.html">  &sdf-targets;</document> </dir>
+
+	    <dir name="asfsdf"> <document targetdoc="asfsdf" baseuri="asfsdf.html"> &asfsdf-targets; </document> </dir>
+
+	    <dir name="aterm-saf"> 
+		<document targetdoc="aterm-saf" baseuri="aterm-saf.html"> &aterm-saf-targets; </document> </dir>
+
+	    <dir name="extending-meta-environment"> <document targetdoc="extending-meta-environment" baseuri="extending-meta-environment.html"> &extending-meta-environment-targets;</document> </dir>
+	</dir>
+
+	<!-- howto -->
+
+	<dir name="howto">
+	     <dir name="asf-errors"> <document targetdoc="asf-errors" baseuri="asf-errors.html">&asf-errors-targets;	</document> </dir>
+
+	     <dir name="asfsdf-by-example"> <document targetdoc="asfsdf-by-example" baseuri="asfsdf-by-example.html"> &asfsdf-by-example-targets; </document> </dir>
+
+	     <dir name="sdf-disambiguation"> <document targetdoc="sdf-disambiguation" baseuri="sdf-disambiguation.html"> &sdf-disambiguation-targets; </document> </dir>
+
+	     <dir name="sdf-errors"> <document targetdoc="sdf-errors" baseuri="sdf-errors.html"> &sdf-errors-targets; </document> </dir>
+	</dir>
+
+	<!--planning -->
+
+	<dir name="project">
+
+	     <dir name="coding-standards"> <document targetdoc="coding-standards" baseuri="coding-standards.html"> &coding-standards-targets; </document> </dir>
+
+	    <dir name="build-environment"> <document targetdoc="build-environment" baseuri="build-environment.html"> &build-environment-targets; </document> </dir>
+
+	    <dir name="recommended-reading"><document targetdoc="recommended-reading" baseuri="recommended-reading.html"> &recommended-reading-targets;</document></dir>
+
+	    <dir name="planning"><document targetdoc="planning" baseuri="planning"> &planning-targets;</document> </dir>
+
+
+	    <dir name="version-management"> 
+		<document targetdoc="version-management" baseuri="version-management"> &version-management-targets;</document> </dir>
+
+	    <dir name="documentation-plan"> 
+		<document targetdoc="documentation-plan" baseuri="documentation-plan"> &documentation-plan-targets;</document> </dir>
+
+	    <dir name="commnication-plan"> 
+		<document targetdoc="communication-plan" baseuri="communication-plan"> &communication-plan-targets; </document> </dir>
+
+	</dir>
+    </dir>
+  </sitemap>
+</targetset>
+

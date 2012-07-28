@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+  <title>Application: Database Reverse Engineering</title>
+
+  <section>
+    <title>Anthony submitted this report to us: let's convert to a testimonial
+    for online presentation</title>
+
+    <para> -- already applied for real industrial projects or proof-of-concept
+    (collaboration with ReveR S.A. www.rever-sa.com) - COBOL code analyzers
+    and transformers - Source code transformations in the context of database
+    migration - COBOL files to relational database - CODASYL database to
+    relational database - Program instrumentation for test case generation -
+    DML code analyzers in the context of program slicing for data reverse
+    engineering - Dataflow analysis of Embedded SQL in COBOL programs -
+    Dataflow analysis of Call-based DB primitives in COBOL programs (on top of
+    IMS or CODASYL databases) -- research prototypes - Definition of an
+    abstract DML (LDA) and related coupled-transformations for data-intensive
+    software evolution - Language definition - Type checking and consistency
+    validation - Source code transformation rules propagated from schema
+    transformations </para>
+  </section>
+</article>

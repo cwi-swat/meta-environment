@@ -1,0 +1,20 @@
+module Booleans
+exports
+  sorts BoolCon
+  context-free syntax
+     "true"  -> BoolCon
+     "false" -> BoolCon
+
+  sorts Boolean
+  context-free start-symbols
+        Boolean
+  context-free syntax
+     BoolCon               -> Boolean
+     and(Boolean, Boolean) -> Boolean
+     or(Boolean,Boolean)   -> Boolean
+     not(Boolean)          -> Boolean
+
+hiddens
+  imports basic/Comments
+  variables
+     B -> Boolean

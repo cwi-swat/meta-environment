@@ -1,0 +1,156 @@
+Scenario for guided-tour-booleans.
+
+- Remove files bool.trm mybool.trm, MyBooleans.sdf, MyBooleans.asf
+
+- Start asfsdf-meta from the command line
+
+- Resize window to circa 20 x 14 cm (= 840 x 590 pixels)
+
+- start wink and initiate capturing (continuous mode, 4 frames per second).
+- TAKE CARE:
+  - Move VERY slowly when selecting menus; make sure that a snapshot was made
+  - Always use Open buttons rather than keyboard shortcuts (when possible)
+
+OPEN Booleans
+
+- Select Module -> Open -> ASF+SDF liberary -> basic -> Booleans.sdf
+
+- Goto import-graph -> Booleans; 
+  Right click; 
+  Goto Edit -> Syntax
+
+- Goto Navigator -> Booleans; 
+  Right click; 
+  Goto Edit -> Equations
+
+CREATE bool.trm
+
+- Goto Navigator -> Booleans; 
+  Right click; 
+  Goto Edit -> Term
+  Type: bool.trm
+  Click Edit Term
+
+- Type: true & false
+
+- Goto File -> Save
+
+VIEW STRUCTURE OF bool.trm
+
+- Select the text of the & in bool.trm
+
+- Goto Structure -> View -> Tree;
+  Close the tab
+
+- Select bool.trm
+  Goto Structure -> View -> Full Tree
+  Close the tab
+
+REDUCE bool.trm
+
+- Select bool.trm;
+  Right click;
+  Goto Term -> Reduce
+
+CREATE MyBooleans
+
+- Goto Module -> New;
+  Type: MyBooleans
+
+- Select MyBooleans In Navigator;
+  Goto Edit -> Syntax
+  Type:
+
+module MyBooleans
+  imports basic/Whitespace
+  imports basic/Booleans
+
+  exports
+    context-free syntax
+      Boolean "xor" Boolean -> Boolean
+
+- Goto File -> Save;
+
+CREATE mybool.trm
+
+- Select MyBooleans In Navigator;
+  Goto Edit -> Term
+  Type: mybool.trm
+  Select Edit Term
+
+- Select mybool.trm;
+  Type true xor false
+  Goto File -> Save
+  <Gives error message Parse table error>
+  Click on that message
+  < Gives error message (No start state).>
+  Select tab MyBooleans.sdf
+  Type:
+
+  hiddens
+    context-free start-symbols Boolean
+
+- Goto File -> Save
+
+- Select tab mybool.trm;
+  Right click;
+  Goto Term -> Reduce
+  <Gives indentical term>
+
+CREATE MyBooleans.asf
+
+- Select MyBooleans in Navigator;
+  Goto Edit -> Equations;
+  Type:
+equations
+[xor-1] true xor true = false
+[xor-2] true xor false = true
+[xor-3] false xor true = true
+[xor-4] false xor false = false
+
+- Goto File -> Save
+
+REDUCE mybool.trm
+
+- Select mybool.trm;
+  Right click;
+  Goto Term -> Reduce
+
+MAKE  mybool.trm AMBIGUOUS (missing left):
+
+- Select tab mybool.trm;
+  Type at end: xor true
+  < Gives ambiguity message >
+  Select complete text;
+  Goto Structure -> View -> Tree;
+  Close tab
+
+- Select tab MyBooleans.sdf;
+  Type after rules for "xor": {left}
+  Goto File -> Save
+  Select tab mybool.trm
+  Goto File -> Save
+
+MAKE mybool.trm AMBIGUOUS (missing priority):
+
+- Select tab mybool.trm;
+  Replace last xor by &;
+  Goto File -> Save;
+  <Gives ambiguity message>
+  Select complete text;
+  Goto structure -> View -> Tree;
+  Close tab
+
+- Select tab  MyBooleans.sdf;
+  Add text:
+
+  context-free priorities
+       Boolean "&" Boolean -> Boolean >
+       Boolean "xor" Boolean -> Boolean
+- File -> Save;
+  Select tab mybool.trm;
+  File -> Save;
+  Right click;
+  Term -> Reduce
+
+<end of capture>

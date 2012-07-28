@@ -1,0 +1,2 @@
+FILE=analysis/rascal-manual/rascal-gttse-final
+/home/paulk/software/source/fop-0.95/fop -fo $FILE.fo -pdf $FILE.pdf

@@ -1,0 +1,4125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>The ATerm Programming Guide</title>
+
+  <section xml:id="section.aterm-introduction">
+    <title>Introduction</title>
+
+    <para>Cut and paste operations on complex data structures are standard in
+    most desktop software environments: one can easily clip a part of a
+    spreadsheet and paste it into a text document. The exchange of complex
+    data is also common in distributed applications: complex queries,
+    transaction records, and more complex data are exchanged between different
+    parts of a distributed application. Compilers and programming environments
+    consist of tools such as editors, parsers, optimizers, and code generators
+    that exchange syntax trees, intermediate code, and the like.</para>
+
+    <para>Annotated Terms (ATerms) provide a solution for implementation needs
+    in the areas of compilers, interactive programming environments and
+    distributed applications but are more widely applicable in areas like
+    model checking and ontology definition. They have the following
+    characteristics:<variablelist>
+        <varlistentry>
+          <term>Open</term>
+
+          <listitem>
+            <para>Independent of any specific hardware or software
+            platform.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Simple</term>
+
+          <listitem>
+            <para>The procedural interface should contain 10 rather than 100
+            functions.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Efficient</term>
+
+          <listitem>
+            <para>Operations on data structures should be fast as
+            possible.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Concise</term>
+
+          <listitem>
+            <para>Inside an application the storage of data structures should
+            be as small as possible by using compact representations and by
+            exploiting sharing. Between applications the transmission of data
+            structures should be fast by using a compressed representation
+            with fast encoding and decoding. Transmission should preserve any
+            sharing of in-memory representation in the data structures.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Language-independent</term>
+
+          <listitem>
+            <para>Data structures can be created and manipulated in any
+            suitable programming language.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Annotations</term>
+
+          <listitem>
+            <para>Applications can transparently extend the main data
+            structures with annotations of their own to represent
+            non-structural information.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist></para>
+
+    <para>Typically, we want to exchange and process tree-like data structures
+    such as parse trees, abstract syntax trees, parse tables, generated code,
+    and formatted source texts. The applications involved include parsers,
+    type checkers, compilers, formatters, syntax-directed editors, and
+    user-interfaces written in a variety of languages. Typically, a parser may
+    add annotations to nodes in the tree describing the coordinates of their
+    corresponding source text and a formatter may add font or color
+    information to be used by an editor when displaying the textual
+    representation of the tree.</para>
+
+    <para>The ATerm data type has been designed to represent such tree-like
+    data structures and it is therefore very natural to use ATerms both for
+    the internal representation of data inside an application and for the
+    exchange of information between applications. Besides function
+    applications that are needed to represent the basic tree structure, a
+    small number of other primitives are provided to make the ATerm data type
+    more generally applicable. These include integer constants, real number
+    constants, binary large data objects (``blobs''), lists of ATerms, and
+    place holders to represent typed gaps in ATerms. Using the comprehensive
+    set of primitives and operations on ATerms, it is possible to perform
+    operations on an ATerm received from another application without first
+    converting it to an application-specific representation.</para>
+
+    <para><figure xml:id="figure.maximal-sharing">
+        <title>Maximal subterm sharing for x*(y+2) + (y+2)*z. <emphasis
+        role="bold">(a)</emphasis> Tree representation. <emphasis
+        role="bold">(b)</emphasis> Maximal subterm sharing</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="sharing.png" scale="60"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+
+    <para>One particular aspect of ATerms makes them unique and should be
+    mentioned here explicitly: ATerms are based on <emphasis>maximal subterm
+    sharing</emphasis>. This is illustrated in <xref
+    linkend="figure.maximal-sharing" /> for the expression <literal>x*(y+2) +
+    (y+2)*z</literal>. In <emphasis role="bold">(a)</emphasis> the ordinary
+    tree representation is shown and in <emphasis role="bold">(b)</emphasis>
+    the common subexpression <literal>(y+2)</literal> is shared thus turning
+    the tree into a Directed Acyclic Graph (DAG).</para>
+
+    <para>Maximal subterm sharing is a strategy to achieve "conciseness" as
+    mentioned in the characteristics of ATerms above and is a simple and
+    effective way to minimize memory usage: terms are only created when they
+    are <emphasis>new</emphasis>, i.e., do not exist already. If a term to be
+    constructed already exists, that term is reused, ensuring maximal sharing.
+    This strategy fully exploits the redundancy that is typically present in
+    the terms to be built and leads to maximal sharing of subterms. The
+    library functions that construct terms always return maximally shared
+    terms as result. The sharing of terms is thus invisible to the library
+    user. Apart from <emphasis>reduced memory usage</emphasis>, maximal
+    subterm sharing has another benefit: the <emphasis>equality check on terms
+    becomes very cheap</emphasis>: it reduces from an operation that is linear
+    in the number of subterms to be compared to a constant operation (only
+    pointer equality has to be checked).</para>
+
+    <para>Maximal subterm sharing has, however, a price. In order to optimize
+    sharing, ATerms are immutable and "updating" an ATerm in any way always
+    leads to the construction of a new ATerm that may, however, share many
+    subterms with the original ATerm. ATerm construction is also penalized by
+    an additional lookup operation to check for existing terms.</para>
+
+    <para>Despite these disadvantages, there are many application areas where
+    ATerms lead to more transparent program code and to more efficient
+    execution. Some examples are term rewriting and model checking, see <xref
+    linkend="vdBrandKlint07" /> for these and other examples.</para>
+
+    <para>Where to go from here?</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Read <xref linkend="section.aterms-at-a-glance" /> to get a
+        quick overview of the functionality of ATerms. These and the following
+        sections are written from the C perspective.</para>
+      </listitem>
+
+      <listitem>
+        <para>Read <xref linkend="section.using-aterm-library" /> for details
+        about initialization, memory management and file format.</para>
+      </listitem>
+
+      <listitem>
+        <para>A detailed description of the C ATerm library can be found in
+        <xref linkend="section.level1-interface" /> and <xref
+        linkend="section.level2-interface" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>On overview of the Java ATerm library is given in <xref
+        linkend="section.java" />. It also summarizes the differences between
+        the C and the Java version, see <xref
+        linkend="section.C-Java-differences" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>With<xref linkend="section.aterm-historical-notes" /> and <xref
+        linkend="section.aterm-bibliography" /> we complete this ATerm
+        programming guide.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="section.aterms-at-a-glance">
+    <title>ATerms at a glance</title>
+
+    <para>We now describe the constructors of the ATerm data type and the
+    operations defined on it.</para>
+
+    <section xml:id="section.aterm-datatype">
+      <title>The ATerm data type</title>
+
+      <para>The data type of ATerms (<literal>ATerm</literal>) is defined as
+      follows:<variablelist>
+          <varlistentry>
+            <term>INT</term>
+
+            <listitem>
+              <para>An integer constant is an ATerm.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>REAL</term>
+
+            <listitem>
+              <para>A real constant is an ATerm.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>APPL</term>
+
+            <listitem>
+              <para>A function application consisting of a function symbol and
+              zero or more ATerms (arguments) is an ATerm. The number of
+              arguments of the function is called the
+              <emphasis>arity</emphasis> of the function.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>LIST</term>
+
+            <listitem>
+              <para>A list of zero or more ATerms is an ATerm.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>PLACEHOLDER</term>
+
+            <listitem>
+              <para>A placeholder term containing an ATerm representing the
+              type of the placeholder is an ATerm.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>BLOB</term>
+
+            <listitem>
+              <para>A ``blob'' (Binary Large data OBject) containing a length
+              indication and a byte array of arbitrary (possibly very large)
+              binary data is an ATerm.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>ANNOTATION</term>
+
+            <listitem>
+              <para>A list of ATerm pairs may be associated with every ATerm
+              representing a list of
+              (<replaceable>label</replaceable>,<replaceable>annotation</replaceable>)
+              pairs.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist></para>
+
+      <para>Each of these constructs except the last one (i.e.,
+      <literal>INT</literal>, <literal>REAL</literal>,
+      <literal>APPL</literal>, <literal>LIST</literal>,
+      <literal>PLACEHOLDER</literal>, and <literal>BLOB</literal>) form
+      subtypes of the data type ATerm. These subtypes are needed when
+      determining the type of an arbitrary ATerm. Depending on the actual
+      implementation language the type is represented as a constant (C) or a
+      subclass (Java, C#). The last construct is the <emphasis>annotation
+      construct</emphasis> which makes it possible to annotate terms with
+      transparent information. We will now give a number of examples to show
+      some of the features of the textual representation of ATerms.<note>
+          <para>The textual representation of ATerms is readable and is useful
+          for explanation and debugging. It is hardly ever used in large
+          applications. See <xref linkend="section.aterm-formats" /> for the
+          various ATerm formats.</para>
+        </note></para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Integer and real constants are written conventionally:
+          <literal>1</literal>, <literal>3.14</literal>, and
+          <literal>-0.7E34</literal> are all valid ATerms.</para>
+        </listitem>
+
+        <listitem>
+          <para>Function applications are represented by a function name
+          followed by an open parenthesis, a list of arguments separated by
+          commas, and a closing parenthesis. When there are no arguments, the
+          parentheses may be omitted. Examples are: <literal>f(a,b)</literal>
+          and <literal>"test!"(1,2.1,"Hello world!")</literal>. These examples
+          show that double quotes can be used to delimit function names that
+          are not identifiers.</para>
+        </listitem>
+
+        <listitem>
+          <para>Lists are represented by an opening square bracket, a number
+          of list elements separated by commas and a closing square bracket:
+          <literal>[1,2,"abc"]</literal>, <literal>[]</literal>, and
+          <literal>[f,g([1,2]),x]</literal> are examples.</para>
+        </listitem>
+
+        <listitem>
+          <para>A placeholder is represented by an opening angular bracket
+          followed by a subterm and a closing angular bracket. Examples are
+          <literal>&lt;int&gt;</literal>, <literal>&lt;[3]&gt;</literal>, and
+          <literal>&lt;f(&lt;int&gt;,&lt;real&gt;)&gt;</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Blobs do not have a concrete syntax because their
+          human-readable form depends on the actual blob content.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="section.aterm-operations">
+      <title>Operations on ATerms</title>
+
+      <para>The operations on ATerms fall into three categories: making and
+      matching ATerms, reading and writing ATerms, and annotating ATerms.
+      These functions provide enough functionality for most users to build
+      simple applications with ATerms. We refer to this interface as the
+      <emphasis>level one</emphasis> interface of the ATerm data type. To
+      accommodate ``power'' users of ATerms we also provide a <emphasis>level
+      two</emphasis> interface, which contains a more sophisticated set of
+      data types and functions. It is typically used in generated C or Java
+      code that calls ATerm primitives, or in efficiency-critical
+      applications. These extensions are useful only when more control over
+      the underlying implementation is needed or in situations where some
+      operations that can be implemented using level one constructs can be
+      expressed more concisely and implemented more efficiently using level
+      two constructs. The level two interface is a strict superset of the
+      level one interface. Observe that ATerms are a purely functional data
+      type and that no destructive updates are possible.</para>
+
+      <section xml:id="section.making-matching">
+        <title>Making and Matching ATerms</title>
+
+        <para>The simplicity of the level one interface is achieved by the
+        <emphasis>make-and-match</emphasis> paradigm that is also illustrated
+        in <xref linkend="figure.make-and-match" />:<variablelist>
+            <varlistentry>
+              <term>Make</term>
+
+              <listitem>
+                <para>Compose a new ATerm by providing a pattern for it and
+                filling in the holes in the pattern.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>Match</term>
+
+              <listitem>
+                <para>Decompose an existing ATerm by comparing it with a
+                pattern and decompose it according to this pattern.</para>
+              </listitem>
+            </varlistentry>
+          </variablelist></para>
+
+        <para><figure xml:id="figure.make-and-match">
+            <title>The make-and-match paradigm</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="make-match.png" scale="60"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+
+        <para>Composition and decomposition of terms is
+        <emphasis>not</emphasis> based on the direct manipulation of the
+        underlying representation of terms. Instead, <emphasis>term
+        patterns</emphasis> are used to guide composition and decomposition.
+        Such term patterns play the same role as format strings in the
+        printf/scanf paradigm in C. In a first approximation, a term pattern
+        is a literal string that would be obtained by a preorder traversal of
+        a term. For instance, the term pattern<programlisting>"or(true, false)"</programlisting>
+        corresponds to a term whose root is labeled with the symbol
+        <literal>or</literal>, and whose children are labeled with,
+        respectively, <literal>true</literal> and <literal>false</literal>. In
+        this way, term patterns can be used to construct and to match terms.
+        Term patterns become, however, much more useful if they can be
+        parameterized with subterms that have been computed separately. To
+        this end, we introduce the notion of <emphasis>directives</emphasis>
+        as follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>&lt;int&gt;</literal>: corresponds to an integer
+            (in C: <literal>int</literal>};</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;str&gt;</literal>: corresponds to a string (in
+            C: <literal>char *</literal>);</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;blob&gt;</literal> corresponds to a binary
+            string (in C: a (length, pointer) pair represented by two values
+            of types, respectively, <literal>int</literal> and <literal>void
+            *</literal>);</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;term&gt;</literal>: corresponds to an ATerm (in
+            C: <literal>ATerm</literal>);</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;appl&gt;</literal>: corresponds to one function
+            application(in C: <literal>char
+            *<replaceable>pattern</replaceable></literal>, followed by
+            arguments);</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;list&gt;</literal>: corresponds to a list of
+            terms (in C: <literal>ATerm</literal>).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The precise interpretation of these directives depends on the
+        context in which they are used. When constructing a term, directives
+        indicate that a subterm should be obtained from some given variable.
+        When matching a term, directives indicate the assignment of subterms
+        to given variables.</para>
+
+        <para>Patterns are just ATerms containing place holders. These place
+        holders determine the places where ATerms must be substituted or
+        matched. An example of a pattern is
+        <literal>"and(&lt;int&gt;,&lt;appl&gt;)"</literal>. These patterns
+        appear as string argument of both make and match and are remotely
+        comparable to the format strings in the
+        <literal>printf</literal>/<literal>scanf</literal> functions in C. The
+        operations for making and matching ATerms are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>ATerm ATmake(String <replaceable>p</replaceable>,
+            ATerm <replaceable>a</replaceable><subscript>1</subscript>, ...,
+            ATerm
+            <replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>)</literal>:
+            Create a new term by taking the string pattern
+            <replaceable>p</replaceable>, parsing it as an ATerm and filling
+            the place holders in the resulting term with values taken from
+            <replaceable>a</replaceable><subscript>1</subscript> through
+            <replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>.
+            If the parse fails, a message is printed and the program is
+            aborted. The types of the arguments depend on the specific place
+            holders used in the pattern <replaceable>p</replaceable>. For
+            instance, when the placeholder <literal>&lt;int&gt;</literal> is
+            used an integer is expected as argument and a new integer ATerm is
+            constructed.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATbool ATmatch(ATerm <replaceable>t</replaceable>,
+            String <replaceable>p</replaceable>, ATerm
+            *<replaceable>a</replaceable><subscript>1</subscript>, ..., ATerm
+            *<replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>)</literal>:
+            Match term <replaceable>t</replaceable> against pattern
+            <replaceable>p</replaceable>, and bind subterms that match with
+            place holders in <replaceable>p</replaceable> with the result
+            variables <replaceable>a</replaceable><subscript>1</subscript>
+            through
+            <replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>.
+            Again, the type of the result variables depends on the place
+            holders used. If the parse of pattern <replaceable>p</replaceable>
+            fails, a message is printed and the program is aborted. If the
+            term itself contains place holders these may occur in the
+            resulting substitutions. The function returns true when the match
+            succeeds, false otherwise.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For instance, assuming the declarations<programlisting>int n = 10;
+char *fun = "pair", name = "any";
+ATerm yellow = ATmake("yellow"), t;</programlisting>the call<programlisting>t = ATmake("exam(&lt;appl(&lt;term&gt;,9)&gt;,&lt;int&gt;,&lt;str&gt;)", 
+           fun, yellow, n, 10, name)</programlisting>will construct the term
+        <literal>t</literal> with value<programlisting>exam(pair(yellow,9),10,10,"any")</programlisting>Binary
+        strings (<emphasis>Binary Large OBjects</emphasis> or
+        <emphasis>blobs</emphasis>) are used to represent arbitrary length,
+        binary data that cannot be represented by ordinary C strings because
+        they may contain ``null'' characters. A binary string is represented
+        by a character pointer and a length. For instance,
+        given<programlisting>char buf[12];
+ATerm bstr;
+buf[0] = 0; buf[1] = 1; buf[2] = 2;</programlisting>the call<programlisting>bstr = ATmake("exam(&lt;blob&gt;)", 3, buf);</programlisting>will
+        construct a term with function symbol <literal>exam</literal> and as
+        single argument a binary string of length 3 consisting of the three
+        values <literal>0</literal>, <literal>1</literal>, and
+        <literal>2</literal>.</para>
+
+        <para>Matching terms amounts to</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>determining whether there is a match or not,</para>
+          </listitem>
+
+          <listitem>
+            <para>selectively assigning matched subterms to given
+            variables.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For instance, in the context <programlisting>ATerm t = ATmake("exam(pair(yellow,9),10, \"any\")");
+ATerm t1;
+int n;
+char *ex, *s;</programlisting>the call<programlisting>ATmatch(t, "appl(&lt;term&gt;,&lt;int&gt;,&lt;str&gt;)", &amp;ex, &amp;t1, &amp;n, &amp;s);</programlisting>yields
+        true and is equivalent to the following assignments: <programlisting>ex = "exam";
+t1 = ATmake("pair(yellow,9)");
+n = 10;
+s = "any";</programlisting>As explained in full detail in <xref
+        linkend="section.aterms-memory-management" />, memory is managed
+        automatically by the ATerm library. As a general rule, the values for
+        <literal>ex</literal>, <literal>t1</literal>, and <literal>s</literal>
+        are pointers into the original term <literal>t</literal> rather than
+        newly created values. As a result, they have a life time that is equal
+        to that of <literal>t</literal>. Matching binary strings is the
+        inverse of constructing them. Given the term <literal>bstr</literal>
+        constructed at the end of the previous paragraph, its size and
+        contents can be extracted as follows:<programlisting>int n;
+char *p;
+
+ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>ATmatch</literal>
+        will succeed and will assign 3 to the variable <literal>n</literal>
+        and will assign a pointer to the character data in the binary string
+        to the variable <literal>p</literal>. Here, again, the value of
+        <literal>p</literal> is a pointer into the term
+        <literal>bstr</literal> rather than a newly allocated string.
+        Notes</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Double quotes (``<literal>"</literal>'') appearing
+            <emphasis>inside</emphasis> the pattern argument of both
+            <literal>ATmake</literal> and <literal>ATmatch</literal> have to
+            be escaped using ``<literal>\"</literal>''.</para>
+          </listitem>
+
+          <listitem>
+            <para>The number and type of the variables whose addresses appear
+            as arguments of <literal>ATmatch</literal> should correspond,
+            otherwise disaster will strike (as usual when using C).</para>
+          </listitem>
+
+          <listitem>
+            <para>Assignments are being made during matching. As a result,
+            some assignments may be performed, even if the match as a whole
+            fails.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="section.aterms-reading-writing">
+        <title>Reading and Writing ATerms</title>
+
+        <para>For reasons of efficiency and conciseness, reading and writing
+        can take place in several formats, see <xref
+        linkend="section.aterm-formats" />. Either format (textual or binary)
+        can be used on any linear stream, including files, sockets, pipes,
+        etc. Here, we only give examples of the pure textual representation of
+        ATerms.</para>
+
+        <para>The operations for reading and writing ATerms are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>ATerm ATreadFromString(String
+            <replaceable>s</replaceable>)</literal>: Creates a new term by
+            parsing the string <replaceable>s</replaceable>. When a parse
+            error occurs, a message is printed, and a special error value is
+            returned.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATerm ATreadFromTextFile(File
+            <replaceable>f</replaceable>)</literal>: Creates a new term by
+            parsing the data from file <replaceable>f</replaceable>. Again,
+            parse errors result in a message being printed and an error value
+            being returned.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>String ATwriteToString(ATerm
+            <replaceable>t</replaceable>)</literal>: Return the text
+            representation of term <replaceable>t</replaceable> as a
+            string.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATbool ATwriteToTextFile(ATerm
+            <replaceable>t</replaceable>, File
+            <replaceable>f</replaceable>)</literal>: Write the text
+            representation of term <replaceable>t</replaceable> to file
+            <replaceable>f</replaceable>. Returns true for success and false
+            for failure.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For instance, in the context: <programlisting>FILE *f = fopen("foo", "wb");
+ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlisting>the
+        statement<programlisting>ATwriteToTextFile(Trm1, f);</programlisting>will
+        write the value of <literal>Trm1</literal> (i.e.,
+        <literal>freq(red,17)</literal>) to file
+        ``<filename>foo</filename>''.</para>
+
+        <para>When end of file is encountered or the term could not be read,
+        the operation is aborted.The user can redefine this behaviour using
+        <literal>ATsetAbortHandler</literal>, which allows the definition of a
+        user-defined abort handler. See <xref
+        linkend="function.ATsetAbortHandler" /> for further details.</para>
+
+        <para>The last form of output that is supported by the ATerm library
+        is formatted output. The function<programlisting>int ATfprintf(FILE *<replaceable>File</replaceable>, const char *<replaceable>Pattern</replaceable>, ...)</programlisting>writes
+        formatted output to <replaceable>File</replaceable>.
+        <replaceable>Pattern</replaceable> is printed literally except for
+        occurrences of directives which are replaced by the textual
+        representation of the values appearing in <literal>...</literal>. For
+        instance,<programlisting>ATfprintf(stderr, "Wrong event \"%t\" ignored\n", 
+                   ATmake("failure(&lt;int&gt;)", 13));</programlisting></para>
+
+        <para>will print:<programlisting>Wrong event "failure(13)" ignored</programlisting>Note
+        that <literal>ATprintf</literal> uses the normal
+        <literal>printf</literal> conversion specifiers extended with
+        ATerm-specific specifiers. The most frequently used specifier is {\tt
+        \%t} which stands for an ATerm argument whose textual representation
+        is to be inserted in the output stream.</para>
+      </section>
+
+      <section xml:id="section.aterms-annotating">
+        <title>Annotating ATerms</title>
+
+        <para>Annotations are
+        (<replaceable>label</replaceable>,<replaceable>annotation</replaceable>)
+        pairs that may be attached to an ATerm. Annotations can be considered
+        to be a "third dimension" for ATerms, see <xref
+        linkend="figure.annotations" />. Ordinary ATerms (bottom plane) can be
+        extended in this dimension with arbitrary ATerms (that, indeed, may
+        again contain annotations).</para>
+
+        <para xml:id="figure.annotations"><figure>
+            <title>ATerm annotations</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="annotations.png" scale="60"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+
+        <para>The following operations for manipulating annotations are
+        available (recall that ATerms are a completely functional data type
+        and that no destructive updates are possible):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>ATerm ATsetAnnotation(ATerm
+            <replaceable>t</replaceable>, ATerm <replaceable>l</replaceable>,
+            ATerm <replaceable>a</replaceable>):</literal> Return a copy of
+            term <replaceable>t</replaceable> in which the annotation labeled
+            with <replaceable>l</replaceable> has been changed into
+            <replaceable>a</replaceable>. If <replaceable>t</replaceable> does
+            not have an annotation with the specified label, it is
+            added.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATerm ATgetAnnotation(ATerm
+            <replaceable>t</replaceable>, ATerm
+            <replaceable>l</replaceable>)</literal>: Retrieve the annotation
+            labeled with <replaceable>l</replaceable> from term
+            <replaceable>t</replaceable>. If <replaceable>t</replaceable> does
+            not have an annotation with the specified label, a special error
+            value is returned.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATerm ATremoveAnnotation(ATerm
+            <replaceable>t</replaceable>, ATerm
+            <replaceable>l</replaceable>)</literal>: Return a copy of term
+            <replaceable>t</replaceable> from which the annotation labeled
+            with <replaceable>l</replaceable> has been removed. If
+            <replaceable>t</replaceable> does not have an annotation with the
+            specified label, it is returned unchanged.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="section.using-aterm-library">
+    <title>Using the C ATerm Library</title>
+
+    <section xml:id="section.initializing-aterm-library">
+      <title>Initializing and using the ATerm library</title>
+
+      <para>Using the ATerm library requires the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Include the header file <literal>aterm1.h</literal> (or
+          <literal>aterm2.h</literal> if you want to use the level 2
+          interface). <literal>aterm1.h</literal> defines:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>ATbool</literal>: the boolean data type defined
+              by<programlisting>typedef enum ATbool {ATfalse=0, ATtrue} ATbool;</programlisting>It
+              is mainly used as the return value of library functions.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>ATerm</literal>: the type definition of ATerms.
+              The ATerm library has been designed in such a way that only
+              pointers to terms must be passed to or are returned by library
+              functions. The primitives that are provided for constructing and
+              decomposing terms are of such a high level that it is
+              unnecessary to know the internal representation of terms. When
+              necessary, you can access the internal structure of ATerms using
+              the level 2 interface.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Declare in your <literal>main</literal> program a local ATerm
+          variable that will be used to determine the bottom of C's runtime
+          stack.</para>
+        </listitem>
+
+        <listitem>
+          <para>Call <literal>ATinit</literal> to initialize the ATerm
+          library.</para>
+        </listitem>
+
+        <listitem>
+          <para>Link the ATerm library <literal>libATerm.a</literal> when
+          compiling your application. This is achieved using the
+          -<literal>lATerm</literal> option of the C compiler.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A typical usage pattern is as follows:<programlisting>#include &lt;aterm1.h&gt;
+int main(int argc, char *argv[])
+{
+  ATerm bottomOfStack;                <co xml:id="co.main.1" />
+  ATinit(argc, argv, &amp;bottomOfStack); <co xml:id="co.main.2" />
+  /* ... code that uses ATerms ... */
+}</programlisting>Notes:<calloutlist>
+          <callout arearefs="co.main.1">
+            <para>The local variable <literal>bottomOfStack</literal> is used
+            to indicate the bottom of C's run-time stack and needed when
+            initializing the ATerm library.</para>
+          </callout>
+
+          <callout arearefs="co.main.2">
+            <para>Initialize the ATerm library. Observe that the program
+            arguments are passed to ATinit (see below).</para>
+          </callout>
+        </calloutlist></para>
+
+      <para>The command line options can be passed to an application that use
+      the ATerm library are listed in <xref
+      linkend="table.commandline-options" />.</para>
+
+      <table xml:id="table.commandline-options">
+        <title>Command line options ATerm library</title>
+
+        <tgroup cols="2">
+          <colspec align="left" />
+
+          <thead>
+            <row>
+              <entry align="center">Option&#160;</entry>
+
+              <entry align="center">Description&#160;</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>-at-symboltable
+              <replaceable>nsymbols</replaceable></literal></entry>
+
+              <entry>Initial size of symbol table</entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-termtable
+              <replaceable>tableclass</replaceable></literal></entry>
+
+              <entry>Start with term table of
+              2<superscript>tableclass</superscript> entries</entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-hashinfo</literal></entry>
+
+              <entry>Write hash table statistics to the file
+              <filename>hashing.stats</filename> after execution</entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-print-gc-time</literal></entry>
+
+              <entry>Print timing information about garbage collector to
+              <filename>stderr</filename> after execution</entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-print-gc-info</literal></entry>
+
+              <entry>print verbose information about garbage collector to
+              <filename>stderr</filename> after execution</entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-silent</literal></entry>
+
+              <entry>Do not print status and version information</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="section.aterms-memory-management">
+      <title>Memory Management of ATerms</title>
+
+      <para>The functions in the ATerm library provide automatic memory
+      management of terms. Terms that have been created but are no longer
+      referenced are removed by a method called <emphasis>garbage
+      collection</emphasis>. There are two categories of terms that will
+      survive a garbage collection:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Terms that are referenced via a local variable of a currently
+          active procedure.</para>
+        </listitem>
+
+        <listitem>
+          <para>Terms that are explicitly <emphasis>protected</emphasis> by
+          the user.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Effectively, all terms referenced by local variables and all
+      protected terms (and their subterms) are conserved and all other terms
+      are considered as garbage and can be collected. It is guaranteed that no
+      garbage collection takes place during the execution of an event handler,
+      hence it is not necessary to protect temporary terms that are
+      constructed during the execution of an event handler. However, terms
+      that should have a longer life time must be protected in order to
+      survive. In order to protect terms from being collected, the function
+      <programlisting>void ATprotect(ATerm *<replaceable>TrmPtr</replaceable>)</programlisting>can
+      be used that has as single argument <emphasis>a pointer to a variable
+      with an ATerm as value</emphasis>. The protection can be undone by the
+      function<programlisting>void ATunprotect(ATerm *TrmPtr)</programlisting>
+      The interplay between garbage collection and program variables is
+      subtle. The following points are therefore worth mentioning:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Functions that return a term as value (e.g.,
+          <literal>ATBreadTermfromFile</literal>) do not explicitly protect
+          it. However, since the result will be referenced via local variable
+          it will be safe for the garbage collector.</para>
+        </listitem>
+
+        <listitem>
+          <para>The function <literal>ATmake</literal> uses strings and terms
+          and includes them into a new term <replaceable>T</replaceable>. The
+          implications for memory management are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>All string arguments (using
+              <literal>&lt;str&gt;</literal>, <literal>&lt;blob&gt;</literal>
+              or <literal>&lt;appl&gt;</literal>) are copied before they are
+              included into <literal><replaceable>T</replaceable></literal>.
+              They can thus safely be deallocated (e.g., using
+              <literal>free</literal>) by the C program in case they were
+              globally allocated.</para>
+            </listitem>
+
+            <listitem>
+              <para>All term arguments (using <literal>&lt;term&gt;</literal>)
+              are included into <replaceable>T</replaceable> by means of a
+              pointer. They thus become reachable from
+              <replaceable>T</replaceable> and their life time becomes at
+              least as large as that of <replaceable>T</replaceable>; it is
+              not required to explicitly protect them unless the user decides
+              otherwise.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>The function <literal>ATmatch</literal> assigns strings and
+          terms to program variables by extracting them from an existing term
+          <replaceable>T</replaceable>. The general rule here is that
+          extracted values have a life time that is equal to that of
+          <replaceable>T</replaceable>. The implications for memory management
+          are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>All string values (obtained using
+              <literal>&lt;str&gt;</literal>, <literal>&lt;blob&gt;</literal>
+              or <literal>&lt;appl&gt;</literal>) should be copied if they are
+              used outside the scope of the function in which they were
+              created.</para>
+            </listitem>
+
+            <listitem>
+              <para>All term values (obtained using
+              <literal>&lt;term&gt;</literal>) should be explicitly protected
+              if they should survive <replaceable>T</replaceable>.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="section.aterm-formats">
+      <title>ATerm formats</title>
+
+      <para>ATerms can be represented in four formats:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ASCII text (the textual representation discussed earlier) This
+          format is human-readable, space-inefficient, and any sharing of the
+          in-memory representation of terms is lost.</para>
+        </listitem>
+
+        <listitem>
+          <para>Textual ATerm Format (TAF), a textual format that preserves
+          maximal subterm sharing.</para>
+        </listitem>
+
+        <listitem>
+          <para>Binary ATerm Format (BAF) is a portable, machine-readable,
+          very compact format and preserves all in-memory sharing.</para>
+        </listitem>
+
+        <listitem>
+          <para>Streamable ATerm Format (SAF) allows the streaming of ATerms
+          between applications (using a fixed buffer size), also preserves
+          sharing and optimizes the balance between speed, memory usage and
+          compression.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We now briefly discuss each format and conclude with a decision
+      table when to use which format.</para>
+
+      <section>
+        <title>ASCII ATerm Format (ASCII)</title>
+
+        <para>The simplest format available for ATerms is plain ASCII text:
+        the ATerm is read and written in prefix form. Its main advantage are
+        simplicity and readability. The main disadvantage is that maximal
+        subterm sharing is lost and that size may become huge. The ASCII ATerm
+        Format is mainly used for debugging purposes.</para>
+
+        <para>The main functions are:<itemizedlist>
+            <listitem>
+              <para><literal>ATerm ATreadFromString(String
+              <replaceable>s</replaceable>)</literal>: Creates a new term by
+              parsing the string <replaceable>s</replaceable>. When a parse
+              error occurs, a message is printed, and a special error value is
+              returned.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>ATerm ATreadFromTextFile(File
+              <replaceable>f</replaceable>)</literal>: Creates a new term by
+              parsing the data from file <replaceable>f</replaceable>. Again,
+              parse errors result in a message being printed and an error
+              value being returned.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>String ATwriteToString(ATerm
+              <replaceable>t</replaceable>)</literal>: Return the text
+              representation of term <replaceable>t</replaceable> as a
+              string.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>ATbool ATwriteToTextFile(ATerm
+              <replaceable>t</replaceable>, File
+              <replaceable>f</replaceable>)</literal>: Write the text
+              representation of term <replaceable>t</replaceable> to file
+              <replaceable>f</replaceable>. Returns true for success and false
+              for failure.</para>
+            </listitem>
+          </itemizedlist></para>
+      </section>
+
+      <section xml:id="section.taf">
+        <title>Textual ATerm Format (TAF)</title>
+
+        <para>There is also a textual ATerm format which supports maximal
+        sharing but uses a much less complex algorithm than the one used to
+        encode and decode BAF files. This results in files that are somewhat
+        larger than their BAF counterparts, but are often (if the terms
+        contain redundancy) significantly smaller than their unshared form.
+        TAF files always start with a '<literal>!</literal>' character to
+        distinguish them from other ATerm formats. The format uses
+        abbreviations to refer to previously written terms. An abbreviation
+        consists of a hash character ('<literal>#</literal>') followed by a
+        number in encoded using the Base64 Alphabet (see RFC2045). Each term
+        whose unparsed representation would take up more bytes than the
+        textual representation of the next available abbreviation is assigned
+        such an abbreviation it has been written. Subsequent occurrences of
+        this term are then written by emitting the abbreviation instead of the
+        term itself. For example the term <literal>f(test,test)</literal> is
+        represented as <literal>!f(test,#A)</literal> in TAF, whereas
+        <literal>f(a,a)</literal> is represented as <literal>!f(a,a)</literal>
+        because <literal>test</literal> is longer than its abbreviation
+        <literal>#A</literal>, but <literal>a</literal> is not.</para>
+
+        <para>The main functions are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>ATerm ATreadFromSharedTextFile(FILE
+            *<replaceable>f</replaceable>)</literal>: Reads the TAF
+            representation of term <replaceable>t</replaceable> from file
+            <replaceable>f</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>long ATwriteToSharedTextFile(ATerm
+            <replaceable>t</replaceable>, FILE
+            *<replaceable>f</replaceable>)</literal>: Write the TAF
+            representation of term <replaceable>t</replaceable> to file
+            <replaceable>f</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="section.baf">
+        <title>Binary ATerm Format (BAF)</title>
+
+        <para>The ATerm library is also equipped to store and restore ATerms
+        in a compact, portable binary representation. This representation is
+        called BAF which stands for ``Binary ATerm Format''. This format can
+        be used to write a binary version of an ATerm to file, which can later
+        be restored in a much more efficient way than would be possible had
+        the ATerm's textual counterpart been used. This is due to the fact
+        that textual representations have to be (re-)parsed each time they are
+        read from file, whereas BAF directly describes how to rebuild the
+        internal representation of an ATerm, thus skipping the parsing phase.
+        Moreover, the maximal sharing of ATerms is exploited when writing
+        BAF-representations, making them take up much less space than their
+        textual representations would have needed. Users of the ATerm library
+        are encouraged to use BAF representations when saving ATerms to file.
+        BAF was designed to be platform independent, which facilitates the
+        exchange of ATerms. The ATerm library comes with a utility that is
+        able to convert an ATerm's textual representation into its BAF
+        counterpart and vice versa, see <xref linkend="section.baffle" />.
+        This conversion makes it possible to always work with BAF
+        representations, while still being able to look at the textual
+        representation any time an error is suspected. It also allows
+        conversion of textual ATerms written by programs unable to write BAF
+        which is especially convenient when these ATerms are bulky. Although
+        the ATerm library does not impose any constraints on the names of
+        ATerm-files, users are encouraged to use the extension
+        <literal>.baf</literal> for BAF files. This will avoid confusion
+        between textual representations and binary ones. Textual
+        representations could use the extension <literal>.trm</literal>. BAF
+        files always start with a NULL character followed by 0xBAF (hex) to
+        distinguish them from other ATerm formats.</para>
+
+        <para>The available functions are:</para>
+
+        <para><itemizedlist>
+            <listitem>
+              <para><literal>ATerm ATreadFromBinaryFile(File
+              <replaceable>f</replaceable>)</literal>: Creates a new term by
+              reading a BAF representation from file
+              <replaceable>f</replaceable>.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>ATbool ATwriteToBinaryFile(ATerm
+              <replaceable>t</replaceable>, File
+              <replaceable>f</replaceable>)</literal>: Write a BAF
+              representation of term <replaceable>t</replaceable> to file
+              <replaceable>f</replaceable>. Returns true for success, and
+              false for failure.</para>
+            </listitem>
+          </itemizedlist></para>
+      </section>
+
+      <section xml:id="section.saf">
+        <title>(Semi-) Streamable ATerm Format (SAF)</title>
+
+        <para>The (Semi-) Streamable ATerm Format is a recent addition of the
+        library. It is designed for usage in high-performance applications and
+        was initially developed for exchanging ATerms across network
+        connections in a portable way. It attempts to find a balance between
+        the following characteristics:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Encoding / decoding speed.</para>
+          </listitem>
+
+          <listitem>
+            <para>Streaming functionality.</para>
+          </listitem>
+
+          <listitem>
+            <para>Compression rate.</para>
+          </listitem>
+
+          <listitem>
+            <para>Memory usage.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>As the name suggests, this format enables the transmission of
+        ATerms in a semi streamlike fashion. This is achieved by reading and
+        writing the serial representation of an ATerm in blocks of a variable
+        size; allowing the encoding and decoding process to be suspended at
+        any point in time.</para>
+
+        <para>The available functions are:</para>
+
+        <para><itemizedlist>
+            <listitem>
+              <para><literal>ATerm ATreadFromSAFFile(File
+              <replaceable>f</replaceable>)</literal>: Creates a new term by
+              reading a SAF representation from file
+              <replaceable>f</replaceable>.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>ATbool ATwriteToSAFFile(ATerm
+              <replaceable>t</replaceable>, File
+              <replaceable>f</replaceable>)</literal>: Write a SAF
+              representation of term <replaceable>t</replaceable> to file
+              <replaceable>f</replaceable>. Returns true for success, and
+              false for failure.</para>
+            </listitem>
+          </itemizedlist></para>
+      </section>
+
+      <section>
+        <title>What is the best format?</title>
+
+        <para>Given these four formats it is not so easy to choose the right
+        one. Their properties are summarized in <xref
+        linkend="table.file-format-properties" />. For high performance
+        applications BAF and SAF are the most likely candidates. BAF achieves
+        a slightly better compression rates, but SAF is able to encode and
+        decode ATerms much faster. Another factor to consider is that there
+        only is a BAF implementation for C.<tip>
+            <para>Since SAF is available for C and Java and is very efficient,
+            it is a safe choice for most applications.</para>
+          </tip><warning>
+            <para>Refer to SAF implementation document for
+            measurements.</para>
+          </warning></para>
+
+        <table xml:id="table.file-format-properties">
+          <title>Properties of ATerm file formats</title>
+
+          <tgroup cols="5">
+            <colspec align="left" />
+
+            <colspec align="center" />
+
+            <colspec align="center" />
+
+            <colspec align="center" />
+
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="center">Property&#160;</entry>
+
+                <entry align="center">ASCII&#160;</entry>
+
+                <entry align="center">TAF</entry>
+
+                <entry align="center">BAF</entry>
+
+                <entry align="center">SAF</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>Readability</entry>
+
+                <entry>++</entry>
+
+                <entry>-+</entry>
+
+                <entry>--</entry>
+
+                <entry>--</entry>
+              </row>
+
+              <row>
+                <entry>Efficiency writing</entry>
+
+                <entry>--</entry>
+
+                <entry>+</entry>
+
+                <entry>-+</entry>
+
+                <entry>++</entry>
+              </row>
+
+              <row>
+                <entry>Efficiency reading</entry>
+
+                <entry>--</entry>
+
+                <entry>-+</entry>
+
+                <entry>+</entry>
+
+                <entry>++</entry>
+              </row>
+
+              <row>
+                <entry>Compression factor</entry>
+
+                <entry>--</entry>
+
+                <entry>-+</entry>
+
+                <entry>++</entry>
+
+                <entry>+</entry>
+              </row>
+
+              <row>
+                <entry>Memory usage</entry>
+
+                <entry>-</entry>
+
+                <entry>-+</entry>
+
+                <entry>-+</entry>
+
+                <entry>+</entry>
+              </row>
+
+              <row>
+                <entry>C implementation</entry>
+
+                <entry>+</entry>
+
+                <entry>+</entry>
+
+                <entry>+</entry>
+
+                <entry>+</entry>
+              </row>
+
+              <row>
+                <entry>Java implementation</entry>
+
+                <entry>+</entry>
+
+                <entry>+</entry>
+
+                <entry>-</entry>
+
+                <entry>+</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="section.level1-interface">
+    <title>Level One Interface of C ATerm Library</title>
+
+    <para>All types and functions that are defined in the level one interface
+    are declared in <literal>aterm1.h</literal>.<xref
+    linkend="section.level1-types" /> reveals the types of ATerms that are
+    used in the ATerm library, as well as the extension to the standard
+    C-types introduced in the level one interface. To avoid confusion between
+    BAF and the ATerm type <literal>AT_BLOB</literal>, <xref
+    linkend="section.blobs-baf" /> is dedicated to explaining the difference
+    between these two notions. Finally, <xref
+    linkend="section.level1-functionality" /> describes all the functions that
+    are available in the level one interface.</para>
+
+    <section xml:id="section.level1-types">
+      <title>Level One Types</title>
+
+      <para>The following C-defines are used to represent the different ATerm
+      types:<variablelist>
+          <varlistentry>
+            <term><literal>AT_INT</literal></term>
+
+            <listitem>
+              <para>An ATerm of type: integer.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><literal>AT_REAL</literal></term>
+
+            <listitem>
+              <para>An ATerm of type: real.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><literal>AT_APPL</literal></term>
+
+            <listitem>
+              <para>An ATerm of type: function application.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><literal>AT_LIST</literal></term>
+
+            <listitem>
+              <para>An ATerm of type: list.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><literal>AT_PLACEHOLDER</literal></term>
+
+            <listitem>
+              <para>An ATerm of type: placeholder</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><literal>AT_BLOB</literal></term>
+
+            <listitem>
+              <para>An ATerm of type: binary large object.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist></para>
+
+      <para>The following C-types are defined in the level one
+      interface:<variablelist>
+          <varlistentry>
+            <term><literal>ATbool</literal></term>
+
+            <listitem>
+              <para>A boolean value, either <literal>ATtrue</literal> or
+              <literal>ATfalse</literal>.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><literal>ATerm</literal></term>
+
+            <listitem>
+              <para>An annotated term.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist></para>
+    </section>
+
+    <section xml:id="section.blobs-baf">
+      <title>A note on `blobs' and BAF</title>
+
+      <para>Although the word <emphasis>binary</emphasis> is used in the
+      abbreviations of both ``blob'' and BAF, these are two very different
+      notions. A <emphasis>blob</emphasis> represents an ATerm that holds
+      binary data, with no specific meaning to the ATerm library. This notion
+      can be used as a means of escape in case you find that you need a type
+      of ATerm that is not on the list above. The notion of BAF is explained
+      in <xref linkend="section.baf" /> and refers to a specific format used
+      for reading and writing ATerms. Thus an ATerm of type
+      <literal>AT_BLOB</literal> can be saved in BAF. It could also be written
+      in its textual representation, although this does not guarantee that the
+      blob will be readable, after all it represents binary data.</para>
+    </section>
+
+    <section xml:id="section.level1-functionality">
+      <title>Level One Functionality</title>
+
+      <para>In this section, all functions are summarized. To obtain access to
+      the level one interface, your application should contain
+      <literal>#include &lt;aterm1.h&gt;</literal>.</para>
+
+      <section>
+        <title>Level one: initialization</title>
+
+        <section xml:id="function.ATinit">
+          <title><literal>ATinit</literal></title>
+
+          <para><programlisting>void ATinit(int <replaceable>argc</replaceable>, char *<replaceable>argv</replaceable>[], ATerm *<replaceable>bottomOfStack</replaceable>)</programlisting>Initialize
+          the ATerm library.</para>
+
+          <para>See <xref
+          linkend="section.initializing-aterm-library" />.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Level one: making and matching</title>
+
+        <section xml:id="function.ATmake">
+          <title><literal>ATmake</literal></title>
+
+          <para><programlisting>ATerm ATmake(const char *<replaceable>pattern</replaceable>, ...)</programlisting></para>
+
+          <para>Create an ATerm from a string pattern and a variable number of
+          arguments. Creates an ATerm given a pattern and corresponding
+          values. <xref linkend="table.atmake" /> shows which patterns can be
+          used, and which type of arguments should be passed if such a pattern
+          is used.</para>
+
+          <table xml:id="table.atmake">
+            <title>Argument types for ATmake</title>
+
+            <tgroup cols="3">
+              <colspec align="left" />
+
+              <thead>
+                <row>
+                  <entry align="center">Type&#160;</entry>
+
+                  <entry align="center">Pattern</entry>
+
+                  <entry align="center">Argument</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry>Integer</entry>
+
+                  <entry><literal>&lt;int&gt;</literal></entry>
+
+                  <entry><literal>int value</literal></entry>
+                </row>
+
+                <row>
+                  <entry>Real</entry>
+
+                  <entry><literal>&lt;real&gt;</literal></entry>
+
+                  <entry><literal>double value</literal></entry>
+                </row>
+
+                <row>
+                  <entry>Application</entry>
+
+                  <entry><literal>&lt;appl&gt;</literal></entry>
+
+                  <entry><literal>char *pattern</literal>, arguments</entry>
+                </row>
+
+                <row>
+                  <entry>String</entry>
+
+                  <entry><literal>&lt;str&gt;</literal></entry>
+
+                  <entry><literal>char *pattern</literal>, arguments</entry>
+                </row>
+
+                <row>
+                  <entry>List</entry>
+
+                  <entry><literal>&lt;list&gt;</literal></entry>
+
+                  <entry><literal>ATerm value</literal></entry>
+                </row>
+
+                <row>
+                  <entry>Term</entry>
+
+                  <entry><literal>&lt;term&gt;</literal></entry>
+
+                  <entry><literal>ATerm value</literal></entry>
+                </row>
+
+                <row>
+                  <entry>Blob</entry>
+
+                  <entry><literal>&lt;blob&gt;</literal></entry>
+
+                  <entry><literal>int length, void *data</literal></entry>
+                </row>
+
+                <row>
+                  <entry>Placeholder</entry>
+
+                  <entry><literal>&lt;placeholder&gt;</literal></entry>
+
+                  <entry><literal>char *type value</literal></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>Types <literal>&lt;appl&gt;</literal> and
+          <literal>&lt;str&gt;</literal> should contain a pattern consisting
+          of the function symbol to be used and the types of the arguments.
+          This pattern must be followed by exactly the number of arguments
+          that are used in the pattern. The types of the arguments must match
+          the respective types used in the pattern. Both
+          <literal>&lt;appl&gt;</literal> and <literal>&lt;str&gt;</literal>
+          create function applications. The difference is that
+          <literal>&lt;appl&gt;</literal> creates one with an
+          <emphasis>unquoted</emphasis> function symbol, whereas
+          <literal>&lt;str&gt;</literal> yields a <emphasis>quoted</emphasis>
+          version. Here are some examples of ATmake:</para>
+
+          <para><programlisting>#include &lt;aterm2.h&gt;
+
+int    ival = 42;
+char  *sval = "example";
+char  *blob = "12345678";
+double rval = 3.14;
+char  *func = "f";
+
+void foo()
+{
+    ATerm term[4];
+    ATerm list[3];
+    ATerm appl[3];
+
+    term[0] = ATmake("&lt;int&gt;" , ival);    <co xml:id="co.atmake-1" />
+    term[1] = ATmake("&lt;str&gt;" , func);    <co xml:id="co.atmake-2" />   
+    term[2] = ATmake("&lt;real&gt;", rval);    <co xml:id="co.atmake-3" />
+    term[3] = ATmake("&lt;blob&gt;", 8, blob); <co xml:id="co.atmake-4" />
+
+    list[0] = ATmake("[]");
+    list[1] = ATmake("[1,&lt;int&gt;,&lt;real&gt;]", ival, rval);
+    list[2] = ATmake("[&lt;int&gt;,&lt;list&gt;]", ival+1, list[1]);
+
+    appl[0] = ATmake("&lt;appl&gt;", func);
+    appl[1] = ATmake("&lt;appl(&lt;int&gt;)&gt;", func, ival);
+    appl[2] = ATmake("&lt;appl(&lt;int&gt;, &lt;term&gt;, &lt;list&gt;)&gt;", 
+                     func, 42, term[3], list[2]);
+
+    ATprintf("appl[2] = %t\n", appl[2]);
+}
+
+int main(int argc, char *argv[])
+{
+    ATerm bottomOfStack;
+
+    ATinit(argc, argv, &amp;bottomOfStack);
+    foo();
+    return 0;
+}</programlisting></para>
+
+          <para>Notes:<calloutlist>
+              <callout arearefs="co.atmake-1">
+                <para>Integer value 42.</para>
+              </callout>
+
+              <callout arearefs="co.atmake-2">
+                <para>Quoted application of "f", no arguments.</para>
+              </callout>
+
+              <callout arearefs="co.atmake-3">
+                <para>Real value 3.14.</para>
+              </callout>
+
+              <callout arearefs="co.atmake-4">
+                <para>Blob of size 8, and data 12345678.</para>
+              </callout>
+            </calloutlist></para>
+        </section>
+
+        <section xml:id="function.ATmakeTerm">
+          <title><literal>ATmakeTerm</literal></title>
+
+          <para><programlisting>ATerm ATmakeTerm(ATerm <replaceable>pattern</replaceable>, ...)</programlisting>Create
+          an ATerm from an ATerm pattern and a variable number of
+          arguments.</para>
+
+          <para>Note that <replaceable>pattern</replaceable> is here declared
+          as <literal>ATerm</literal> and not as a string as in
+          <literal>ATmake</literal>. It does not have to be parsed as in the
+          case of <literal>ATmake</literal> and therefore
+          <literal>ATmakeTerm</literal> is more efficient.</para>
+
+          <para>See <xref linkend="function.ATmake" />.</para>
+        </section>
+
+        <section xml:id="function.ATvmake">
+          <title><literal>ATvmake</literal></title>
+
+          <para><programlisting>ATerm ATvmake(const char *<replaceable>pattern</replaceable>, va_list <replaceable>args</replaceable>)</programlisting>Create
+          an ATerm from a string pattern and a list of arguments} See <xref
+          linkend="function.ATmake" />.</para>
+        </section>
+
+        <section xml:id="function.ATvmakeTerm">
+          <title><literal>ATvmakeTerm</literal></title>
+
+          <para><programlisting>ATerm ATvmakeTerm(ATerm <replaceable>pattern</replaceable>, va_list <replaceable>args</replaceable>)</programlisting>Create
+          an ATerm from an ATerm pattern and a list of arguments.</para>
+
+          <para>See <xref linkend="function.ATmake" />.</para>
+        </section>
+
+        <section xml:id="function.ATmatch">
+          <title><literal>ATmatch</literal></title>
+
+          <para><programlisting>ATbool ATmatch(ATerm <replaceable>t</replaceable>, const char *<replaceable>pattern</replaceable>, ...)</programlisting>Match
+          an ATerm against a string pattern.</para>
+
+          <para>Matches an ATerm against a pattern, attempting to fill the
+          `holes'. If the ATerm matches the pattern, <literal>ATtrue</literal>
+          is returned and the variables will be filled according to the
+          pattern, otherwise <literal>ATfalse</literal> is returned. The
+          <literal>&lt;list&gt;</literal> pattern can be used to match the
+          tail of a list as well as a variable number of arguments in a
+          function application. Thus the first few arguments may be matched
+          explicitly while the tail of the arguments is directed to a
+          list.</para>
+
+          <para>Here are a few examples of ATmatch:</para>
+
+          <para><programlisting>#include &lt;aterm2.h&gt;
+
+void foo()
+{
+    ATbool result;
+    ATerm  list;
+    double rval;
+    int    ival;
+
+    /* Sets result to ATtrue and ival to 16. */
+    result = ATmatch(ATmake("f(16)"), "f(&lt;int&gt;)", &amp;ival);
+
+    /* Sets result to ATtrue and rval to 3.14. */
+    result = ATmatch(ATmake("3.14"), "&lt;real&gt;", &amp;rval);
+
+    /* Sets result to ATfalse because f(g) != g(f) */
+    result = ATmatch(ATmake("f(g)"), "g(f)");
+
+    /* fills ival with 1 and list with [2,3] */
+    result = ATmatch(ATmake("[1,2,3]"), 
+                     "[&lt;int&gt;,&lt;list&gt;]", &amp;ival, &amp;list);
+}
+
+int main(int argc, char *argv[])
+{
+    ATerm bottomOfStack;
+
+    ATinit(argc, argv, &amp;bottomOfStack);
+    foo();
+    return 0;
+}</programlisting></para>
+        </section>
+
+        <section>
+          <title><literal>ATmatchTerm</literal></title>
+
+          <para><programlisting>ATbool ATmatch(ATerm <replaceable>t</replaceable>, ATerm <replaceable>pattern</replaceable>, ...)</programlisting>Match
+          an ATerm <replaceable>t</replaceable> against a term pattern
+          <replaceable>pattern</replaceable>. Since the pattern is
+          pre-constructed and needs not be parsed, this is a more efficient
+          variant of <literal>ATmatch</literal>.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Level one: reading</title>
+
+        <section xml:id="function.ATreadFromFile">
+          <title><literal>ATreadFromFile</literal></title>
+
+          <para><programlisting>ATerm ATreadFromFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
+          an ATerm from binary or text file.</para>
+
+          <para>This function reads an ATerm from a file. A test is performed
+          to see if the file is in plain text, BAF, TAF, or SAF format.</para>
+        </section>
+
+        <section xml:id="function.ATreadFromNamedFile">
+          <title><literal>ATreadFromNamedFile</literal></title>
+
+          <para><programlisting>ATerm ATreadFromNamendFile(char *<replaceable>filename</replaceable>)</programlisting>Read
+          an ATerm from named binary or text file.</para>
+
+          <para>This function reads an ATerm file
+          <replaceable>filename</replaceable>. A test is performed to see if
+          the file is in plain text, TAF, BAF, or SAF format. <literal>"-"
+          </literal>is standard input's filename.</para>
+        </section>
+
+        <section xml:id="function.ATreadFromString">
+          <title><literal>ATreadFromString</literal></title>
+
+          <para><programlisting>ATerm ATreadFromString(const char *<replaceable>string</replaceable>)</programlisting>Read
+          an ATerm from an ASCII text string.</para>
+
+          <para>This function parses a character string into an ATerm.</para>
+        </section>
+
+        <section xml:id="function.ATreadFromTextFile">
+          <title><literal>ATreadFromTextFile</literal></title>
+
+          <para><programlisting>ATerm ATreadFromTextFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
+          an ATerm from an ASCII text file.</para>
+
+          <para>This function reads a text file and parses the contents into
+          an ATerm.</para>
+        </section>
+
+        <section>
+          <title><literal>ATreadFromSharedString</literal></title>
+
+          <para><programlisting>ATerm ATreadFromSharedString(const char *<replaceable>string</replaceable>, int <replaceable>size</replaceable>)</programlisting>Read
+          a ATerm from a string in TAF format.</para>
+
+          <para>This function decodes a TAF-encoded character string into an
+          ATerm.</para>
+        </section>
+
+        <section xml:id="function.ATreadFromSharedTextFile">
+          <title><literal>ATreadFromSharedTextFile</literal></title>
+
+          <para><programlisting>ATerm ATreadFromBinaryFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
+          an ATerm from a shared text (TAF) file.</para>
+
+          <para>This function reads a shared text file and builds an
+          ATerm.</para>
+        </section>
+
+        <section xml:id="function.ATreadFromBinaryString">
+          <title><literal>ATreadFromBinaryString</literal></title>
+
+          <para><programlisting>ATerm ATreadFromBinaryString(const unsigned char *<replaceable>string</replaceable>, int <replaceable>size</replaceable>)</programlisting>Read
+          a ATerm from a string in BAF format.</para>
+
+          <para>This function decodes a BAF-encoded character string into an
+          ATerm.</para>
+        </section>
+
+        <section xml:id="function.ATreadFromBinaryFile">
+          <title><literal>ATreadFromBinaryFile</literal></title>
+
+          <para><programlisting>ATerm ATreadFromBinaryFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
+          an ATerm from a binary (BAF) file.</para>
+
+          <para>This function reads a BAF file and builds an ATerm.</para>
+        </section>
+
+        <section xml:id="function.ATreadFromSAFFile">
+          <title><literal>ATreadFromSAFFile</literal></title>
+
+          <para><programlisting>ATerm ATreadFromSAFFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
+          an ATerm from a streaming (SAF) file.</para>
+
+          <para>This function reads a SAF file and builds an ATerm.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Level one: term handling</title>
+
+        <section xml:id="function.ATgetType">
+          <title><literal>ATgetType</literal></title>
+
+          <para><programlisting>int ATgetType(ATerm <replaceable>term</replaceable>)</programlisting>Return
+          the type of <replaceable>term</replaceable>.</para>
+
+          <para>A macro that returns the type of an ATerm. Result is one of
+          <literal>AT_APPL</literal>, <literal>AT_INT</literal>,
+          <literal>AT_REAL</literal>, <literal>AT_LIST</literal>,
+          <literal>AT_PLACEHOLDER</literal>, or
+          <literal>AT_BLOB</literal>.</para>
+        </section>
+
+        <section xml:id="function.ATisEqual">
+          <title><literal>ATisEqual</literal></title>
+
+          <para><programlisting>ATBool ATisEqual(ATerm <replaceable>t1</replaceable>, ATerm <replaceable>t2</replaceable>)</programlisting>A
+          macro that tests equality of ATerms <replaceable>t1</replaceable>
+          and <replaceable>t2</replaceable>.</para>
+
+          <para>As ATerms are created using <emphasis>maximal
+          sharing</emphasis> (see Section~\ref{sharing}), testing equality is
+          performed in constant time by comparing the addresses of
+          <replaceable>t1</replaceable> and <replaceable>t2</replaceable>.
+          Note however that <literal>ATisEqual</literal> only returns
+          <literal>ATtrue</literal> when <replaceable>t1</replaceable> and
+          <replaceable>t2</replaceable> are completely equal, inclusive any
+          annotations they might have!</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Level one: writing</title>
+
+        <section xml:id="function.ATwriteToTextFile">
+          <title><literal>ATwriteToTextFile</literal></title>
+
+          <para><programlisting>ATBool ATwriteToTextFile(ATerm <replaceable>t</replaceable>, FILE *<replaceable>f</replaceable>)</programlisting>Writes
+          term <replaceable>t</replaceable> to file
+          <replaceable>f</replaceable> in textual format.</para>
+
+          <para>This function writes ATerm <replaceable>t</replaceable> to the
+          file <replaceable>f</replaceable> in textual format. This term can
+          later be read again by <literal>ATreadFromTextFile</literal>.</para>
+        </section>
+
+        <section xml:id="function.ATwriteToNamedTextFile">
+          <title><literal>ATwriteToNamedTextFile</literal></title>
+
+          <para><programlisting>ATbool ATwriteToNamedTextFile(ATerm <replaceable>t</replaceable>, char *<replaceable>filename</replaceable>)</programlisting>Writes
+          term <replaceable>t</replaceable> to file named
+          <replaceable>filename</replaceable> in textual format.</para>
+
+          <para>This function writes ATerm <replaceable>t</replaceable> in
+          textual representation to file <replaceable>filename</replaceable>.
+          <literal>"-"</literal> is standard output's filename.</para>
+        </section>
+
+        <section xml:id="function.ATwriteToString">
+          <title><literal>ATwriteToString</literal></title>
+
+          <para><programlisting>char *ATwriteToString(ATerm <replaceable>t</replaceable>)</programlisting>Writes
+          term <replaceable>t</replaceable> to a string.</para>
+
+          <para>Writes term <replaceable>t</replaceable> to an internal string
+          buffer. The start of this buffer is returned. Note that the contents
+          of this buffer are volatile and may be overwritten by any call to
+          the ATerm library.</para>
+        </section>
+
+        <section xml:id="function.ATwriteToSharedTextFile">
+          <title><literal>ATwriteToSharedTextFile</literal></title>
+
+          <para><programlisting>long ATwriteToSharedTextFile(ATerm <replaceable>t</replaceable>, FILE *<replaceable>f</replaceable>)</programlisting>Writes
+          term <replaceable>t</replaceable> to file
+          <replaceable>f</replaceable> in shared Textual ATerm Format
+          (TAF).</para>
+
+          <para>This function writes ATerm <replaceable>t</replaceable> to the
+          file <replaceable>f</replaceable> in TAF format, and returns the
+          number of characters written. This term can later be read again by
+          <literal>ATreadFromSharedTextFile</literal>.</para>
+        </section>
+
+        <section xml:id="function.ATwriteToSharedString">
+          <title><literal>ATwriteToSharedString</literal></title>
+
+          <para><programlisting>char *ATwriteToSharedString(ATerm <replaceable>t</replaceable>, int *<replaceable>len</replaceable>)</programlisting>Writes
+          term <replaceable>t</replaceable> to a shared text string in
+          TAF.</para>
+
+          <para>Writes term <replaceable>t</replaceable> to an internal string
+          buffer in TAF. The start of this buffer is returned, and the length
+          of the resulting string is stored in <replaceable>len</replaceable>.
+          Note that the contents of this buffer are volatile and may be
+          overwritten by any call to the ATerm library.</para>
+        </section>
+
+        <section xml:id="function.ATwriteToBinaryFile">
+          <title><literal>ATwriteToBinaryFile</literal></title>
+
+          <para><programlisting>ATbool ATwriteToBinaryFile(ATerm <replaceable>t</replaceable>, FILE *<replaceable>f</replaceable>)</programlisting>Writes
+          term <replaceable>t</replaceable> to file
+          <replaceable>f</replaceable> in Binary ATerm Format (BAF).</para>
+
+          <para>This function writes ATerm <replaceable>t</replaceable> to the
+          file <replaceable>f</replaceable> in BAF. This term can later be
+          read again by <literal>ATreadFromBinaryFile</literal>.</para>
+        </section>
+
+        <section xml:id="function.ATwriteToNamedBinaryFile">
+          <title><literal>ATwriteToNamedBinaryFile</literal></title>
+
+          <para><programlisting>ATbool ATwriteToNamedBinaryFile(ATerm <replaceable>t</replaceable>, char *<replaceable>filename</replaceable>)</programlisting>Writes
+          term <literal>t</literal> to file named
+          <replaceable>filename</replaceable> in Binary ATerm Format
+          (BAF).</para>
+
+          <para>This function writes ATerm <replaceable>t</replaceable> in
+          binary representation to file <replaceable>filename</replaceable>.
+          <literal>"-"</literal> is standard output's filename.</para>
+        </section>
+
+        <section xml:id="function.ATwriteToBinaryString">
+          <title><literal>ATwriteToBinaryString</literal></title>
+
+          <para><programlisting>char *ATwriteToBinaryString(ATerm <replaceable>t</replaceable>, int *<replaceable>len</replaceable>)</programlisting>Writes
+          term <replaceable>t</replaceable> to a shared text string in
+          BAF.</para>
+
+          <para>Writes term <replaceable>t</replaceable> to an internal string
+          buffer in BAF. The start of this buffer is returned, and the length
+          of the resulting string is stored in <replaceable>len</replaceable>.
+          Note that the contents of this buffer are volatile and may be
+          overwritten by any call to the ATerm library.</para>
+        </section>
+
+        <section xml:id="function.ATwriteToSAFFile">
+          <title><literal>ATwriteToSAFFile</literal></title>
+
+          <para><programlisting>ATbool ATwriteToSAFFile(ATerm <replaceable>t</replaceable>, char *<replaceable>filename</replaceable>)</programlisting>Writes
+          term <literal>t</literal> to file named
+          <replaceable>filename</replaceable> in Streaming ATerm Format
+          (SAF).</para>
+
+          <para>This function writes ATerm <replaceable>t</replaceable> in
+          streaming representation to file
+          <replaceable>filename</replaceable>. <literal>"-"</literal> is
+          standard output's filename.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Level one: Formatted output</title>
+
+        <section xml:id="function.ATprintf">
+          <title><literal>ATprintf</literal></title>
+
+          <para><programlisting>int ATprintf(const char *<replaceable>format</replaceable>, ...)</programlisting>ATerm
+          version of <literal>printf</literal>.</para>
+
+          <para>See ATvfprintf.</para>
+        </section>
+
+        <section xml:id="function.ATfprintf">
+          <title><literal>ATfprintf</literal></title>
+
+          <para><programlisting>int ATfprintf(FILE *<replaceable>stream</replaceable>, const char *<replaceable>format</replaceable>, ...)</programlisting>ATerm
+          version of <literal>fprintf</literal>.</para>
+
+          <para>See ATvfprintf.</para>
+        </section>
+
+        <section xml:id="function.ATvfprintf">
+          <title><literal>ATvfprintf</literal></title>
+
+          <para><programlisting>int ATvfprintf(File *<replaceable>stream</replaceable>, const char *<replaceable>format</replaceable>, va_list <replaceable>args</replaceable>)</programlisting>ATerm
+          version of <literal>vfprintf</literal>.</para>
+
+          <para>The functions <literal>ATprintf</literal>,
+          <literal>ATfprintf</literal> and <literal>ATvfprintf</literal> are
+          used for formatted output to file. The conversion specifiers
+          <literal>c</literal>, <literal>d</literal>, <literal>i</literal>,
+          <literal>o</literal>, <literal>u</literal>, <literal>x</literal>,
+          <literal>X</literal>, <literal>e</literal>, <literal>E</literal>,
+          <literal>f</literal>, <literal>g</literal>, <literal>G</literal>,
+          <literal>p</literal>, <literal>s</literal> behave as can be expected
+          from <literal>fprintf</literal>. In addition the conversion
+          specifiers <literal>a</literal>, <literal>h</literal>,
+          <literal>l</literal>, <literal>n</literal> and <literal>t</literal>
+          are supported as summarized in <xref
+          linkend="table.print-conversions" /></para>
+
+          <table xml:id="table.print-conversions">
+            <title>Specifiers for print conversion</title>
+
+            <tgroup cols="2">
+              <colspec align="center" />
+
+              <thead>
+                <row>
+                  <entry align="center">&#160;Conversion specifier</entry>
+
+                  <entry align="center">Action&#160;</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry><literal>a</literal></entry>
+
+                  <entry>Print the symbol of an ATerm-application</entry>
+                </row>
+
+                <row>
+                  <entry><literal>h</literal></entry>
+
+                  <entry>Print the MD5 checksum of an ATerm</entry>
+                </row>
+
+                <row>
+                  <entry><literal>l</literal></entry>
+
+                  <entry>Print an ATerm-list</entry>
+                </row>
+
+                <row>
+                  <entry>n</entry>
+
+                  <entry>Print information about an ATerm node</entry>
+                </row>
+
+                <row>
+                  <entry>t</entry>
+
+                  <entry>Print an ATerm</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </section>
+      </section>
+
+      <section>
+        <title>Level one: annotations</title>
+
+        <section xml:id="function.ATsetAnnotation">
+          <title><literal>ATsetAnnotation</literal></title>
+
+          <para><programlisting>ATerm ATsetAnnotation(ATerm <replaceable>t</replaceable>, ATerm <replaceable>label</replaceable>, ATerm <replaceable>anno</replaceable>)</programlisting>Annotate
+          a term with a labeled annotation.</para>
+
+          <para>Creates a version of <replaceable>t</replaceable> that is
+          annotated with annotation <replaceable>anno</replaceable> which is
+          labeled by <replaceable>label</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATgetAnnotation">
+          <title><literal>ATgetAnnotation</literal></title>
+
+          <para><programlisting>ATerm ATgetAnnotation(ATerm <replaceable>t</replaceable>, ATerm <replaceable>label</replaceable>)</programlisting>Retrieves
+          annotation of <replaceable>t</replaceable> with label
+          <replaceable>label</replaceable>.</para>
+
+          <para>This function can be used to retrieve a specific annotation of
+          a term. If <replaceable>t</replaceable> has no annotations, or no
+          annotation labeled with <replaceable>label</replaceable> exists,
+          <literal>NULL</literal> is returned. Otherwise the annotation is
+          returned.</para>
+        </section>
+
+        <section xml:id="function.ATremoveAnnotation">
+          <title><literal>ATremoveAnnotation</literal></title>
+
+          <para><programlisting>ATerm ATremoveAnnotation(ATerm <replaceable>t</replaceable>, ATerm <replaceable>label</replaceable>)</programlisting>Remove
+          a specific annotation from a term.</para>
+
+          <para>This function returns a version of
+          <replaceable>t</replaceable> which has its annotation with label
+          <replaceable>label</replaceable> removed. If
+          <replaceable>t</replaceable> has no annotations, or no annotation
+          labeled with <replaceable>label</replaceable> exists,
+          <replaceable>t</replaceable> itself is returned.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Level one: handling warnings, errors and aborts</title>
+
+        <section xml:id="function.ATsetWarningHandler">
+          <title><literal>ATsetWarningHandler</literal></title>
+
+          <para><programlisting>void ATsetWarningHandler(void (*<replaceable>handler</replaceable>)(const char *<replaceable>format</replaceable>, va_list <replaceable>args</replaceable>))</programlisting>Specify
+          a warning handler for the ATerm library.</para>
+
+          <para>Sets a warning handler for the ATerm library. This handler
+          will be called when an error message is issued via
+          <literal>ATwarning</literal>.</para>
+        </section>
+
+        <section xml:id="function.ATwarning">
+          <title><literal>ATwarning</literal></title>
+
+          <para><programlisting>void ATwarning(const char *<replaceable>format</replaceable>, ...)</programlisting></para>
+
+          <para>Issue a warning message.</para>
+
+          <para>If an error handler has been installed through a call to
+          <literal>ATsetWarningHandler</literal>, this handler will be called.
+          Otherwise <literal>ATwarning</literal> uses
+          <literal>ATvfprintf</literal> to print a formatted message to
+          <filename>stderr</filename> and returns.</para>
+        </section>
+
+        <section xml:id="function.ATsetErrorHandler">
+          <title><literal>ATsetErrorHandler</literal></title>
+
+          <para><programlisting>void ATsetErrorHandler(void (*<replaceable>handler</replaceable>)(const char *<replaceable>format</replaceable>, va_list <replaceable>args</replaceable>))</programlisting>Specify
+          an error handler for the ATerm library.</para>
+
+          <para>Sets an error handler for the ATerm library This handler will
+          be called when an error message is issued via
+          <literal>ATerror</literal>.</para>
+        </section>
+
+        <section xml:id="function.ATerror">
+          <title><literal>ATerror</literal></title>
+
+          <para><programlisting>void ATerror(const char *<replaceable>format</replaceable>, ...)</programlisting>Issue
+          an error message and exit the ATerm library.</para>
+
+          <para>If an error handler has been installed through a call to
+          <literal>ATsetErrorHandler</literal>, this handler will be called.
+          Otherwise <literal>ATerror</literal> uses
+          <literal>ATvfprintf</literal> to print a formatted message to
+          <literal>stderr</literal> and exits with errorcode 1.</para>
+        </section>
+
+        <section xml:id="function.ATsetAbortHandler">
+          <title><literal>ATsetAbortHandler</literal></title>
+
+          <para><programlisting>void ATsetAbortHandler(void (*<replaceable>handler</replaceable>)(const char *<replaceable>format</replaceable>, va_list <replaceable>args</replaceable>))</programlisting>Specify
+          an abort handler for the ATerm library.</para>
+
+          <para>Sets an abort handler for the ATerm library. This handler will
+          be called when an error message is issued via
+          <literal>ATabort</literal>.</para>
+        </section>
+
+        <section xml:id="function.ATabort">
+          <title><literal>ATabort</literal></title>
+
+          <para><programlisting>void ATabort(const char *<replaceable>format</replaceable>, ...)</programlisting>Issue
+          a error message and abort the ATerm library.</para>
+
+          <para>If an abort handler has been installed through a call to
+          <literal>ATsetAbortHandler</literal>, this handler will be called.
+          Otherwise <literal>ATabort</literal> uses
+          <literal>ATvfprintf</literal> to print a formatted message to
+          <literal>stderr</literal> and calls <literal>abort</literal>.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Level one: memory management</title>
+
+        <section xml:id="function.ATprotect">
+          <title><literal>ATprotect</literal></title>
+
+          <para><programlisting>void ATprotect(ATerm *<replaceable>atp</replaceable>)</programlisting></para>
+
+          <para>Protect an ATerm.</para>
+
+          <para>Protects an ATerm from being freed by the garbage collector.
+          See <xref linkend="section.aterms-memory-management" />.</para>
+        </section>
+
+        <section xml:id="function.ATunprotect">
+          <title><literal>ATunprotect</literal></title>
+
+          <para><programlisting>void ATunprotect(ATerm *<replaceable>atp</replaceable>)</programlisting>Unprotect
+          an ATerm.</para>
+
+          <para>Releases protection of an ATerm which has previously been
+          protected through a call to <literal>ATprotect</literal>. See<xref
+          linkend="section.aterms-memory-management" /> .</para>
+        </section>
+
+        <section xml:id="function.ATprotectArray">
+          <title><literal>ATprotectArray</literal></title>
+
+          <para><programlisting>void ATprotectArray(ATerm *<replaceable>start</replaceable>, int <replaceable>size</replaceable>)</programlisting>Protect
+          an array of ATerms.</para>
+
+          <para>Protects an entire array of <replaceable>size</replaceable>
+          ATerms starting at <replaceable>start</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATunprotectArray">
+          <title><literal>ATunprotectArray</literal></title>
+
+          <para><programlisting>void ATunprotectArray(ATerm *<replaceable>start</replaceable>)</programlisting>Unprotect
+          an array of ATerms.</para>
+
+          <para>Releases protection of the array of ATerms which starts at
+          <replaceable>start</replaceable>.</para>
+        </section>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="section.level2-interface">
+    <title>Level Two Interface of C ATerm Library</title>
+
+    <para>This section explains in detail the types and functions that are
+    defined in the level two interface of the Term library. These functions
+    are declared in <filename>aterm2.h</filename>.</para>
+
+    <section xml:id="section-types2">
+      <title>Level Two Types</title>
+
+      <para>In addition to the C-types explained in <xref
+      linkend="section.level1-types" />, the level two interface also uses the
+      following ATerm types: <variablelist>
+          <varlistentry>
+            <term>ATermInt</term>
+
+            <listitem>
+              <para>An integer value.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>ATermReal</term>
+
+            <listitem>
+              <para>A real value.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>ATermAppl</term>
+
+            <listitem>
+              <para>A function application.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>ATermList</term>
+
+            <listitem>
+              <para>A list of ATerms.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>ATermPlaceholder</term>
+
+            <listitem>
+              <para>A placeholder.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>ATermBlob</term>
+
+            <listitem>
+              <para>A Binary Large OBject.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist></para>
+
+      <para>In addition to these pure ATerm types, two additional types are
+      supported:</para>
+
+      <para><variablelist>
+          <varlistentry>
+            <term>ATermTable</term>
+
+            <listitem>
+              <para>A hash table of ATerms.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>ATermIndexedSet</term>
+
+            <listitem>
+              <para>A set of ATerms where each element has a unique
+              index.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>Both datatypes are <emphasis>containers</emphasis> for
+      ATerms and provide mutable operations on the container itself. <note>
+          <para>Of course, mutations on the containers do not affect the
+          ATerms that occur as elements in the containers!</para>
+        </note></para>
+    </section>
+
+    <section xml:id="section.level2-functionality">
+      <title>Level Two Functionality</title>
+
+      <para>This section describes all functions and macros that are available
+      in the level two interface. To obtain access to this functionality you
+      need to <literal>#include &lt;aterm2.h&gt;</literal> instead of
+      <literal>&lt;aterm1.h&gt;</literal> in your application.</para>
+
+      <section xml:id="section.ATermInt">
+        <title>Level two: the type <literal>ATermInt</literal></title>
+
+        <para>The type <literal>ATermInt</literal> is the ATerm representation
+        of an integer. It abides by the rules of the C-type:
+        <literal>int</literal>.</para>
+
+        <section xml:id="function.ATmakeInt">
+          <title><literal>ATmakeInt</literal></title>
+
+          <para><programlisting>ATermInt ATmakeInt(int <replaceable>value</replaceable>)</programlisting></para>
+
+          <para>Build an ATerm Int from an integer
+          <replaceable>value</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATgetInt">
+          <title><literal>ATgetInt</literal></title>
+
+          <para><programlisting>int ATgetInt(ATermInt <replaceable>t</replaceable>)</programlisting></para>
+
+          <para>Macro to get the integer value from the ATerm
+          <replaceable>t</replaceable>.</para>
+        </section>
+      </section>
+
+      <section xml:id="section.ATermReal">
+        <title>Level two: the type <literal>ATermReal</literal></title>
+
+        <para>The type <literal>ATermReal</literal> is the ATerm
+        representation of a real. It abides by the rules of the C-type:
+        <literal>double</literal>.</para>
+
+        <section xml:id="function.ATmakeReal">
+          <title><literal>ATmakeReal</literal></title>
+
+          <para><programlisting>ATermReal ATmakeReal(double <replaceable>value</replaceable>)</programlisting>Build
+          an ATerm Real from a real <replaceable>value</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATgetReal">
+          <title>ATgetReal</title>
+
+          <para><programlisting>double ATgetReal(ATermInt <replaceable>t</replaceable>)</programlisting>Macro
+          to get the real value from the ATerm
+          <replaceable>t</replaceable>.</para>
+        </section>
+      </section>
+
+      <section xml:id="section.ATermAppl">
+        <title>Level two: the type <literal>ATermAppl</literal></title>
+
+        <para>The type <literal>ATermAppl</literal> denotes a function
+        application. In order to build a function application, first its
+        function symbol (<literal>AFun</literal>) must be built. This symbol
+        holds the name of the function application, its arity (how many
+        arguments the function has) and whether the function name is quoted.
+        Below are some examples of function applications and the symbols
+        needed to create them.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>true</literal>: a zero arity, unquoted function
+            application that is created by: <programlisting>sym = ATmakeAFun("true", 0, ATfalse);</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>"true"</literal>; the same function application,
+            but now with quoted function symbol:<programlisting>sym = ATmakeAFun("true", 0, ATtrue);</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>f(0)</literal>: an unquoted function application of
+            arity 1:<programlisting>sym = ATmakeAFun("f", 1, ATfalse); </programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>"prod"(2, b, [])</literal>: a quoted function
+            application of arity 3:<programlisting>sym = ATmakeAFun("prod", 3, ATtrue);</programlisting></para>
+          </listitem>
+        </itemizedlist>
+
+        <section xml:id="function.ATmakeAFun">
+          <title><literal>ATmakeAFun</literal></title>
+
+          <para><programlisting>AFun ATmakeAFun(char *<replaceable>name</replaceable>, int <replaceable>arity</replaceable>, ATbool <replaceable>quoted</replaceable>)</programlisting></para>
+
+          <para>Creates a function symbol (AFun).</para>
+
+          <para>Creates an AFun, representing a function symbol with name
+          <replaceable>name</replaceable> and arity
+          <replaceable>arity</replaceable>. Quoting of the function
+          application is defined via the <replaceable>quoted</replaceable>
+          argument.</para>
+        </section>
+
+        <section xml:id="function.ATprotectAFun">
+          <title><literal>ATprotectAFun</literal></title>
+
+          <para><programlisting>void ATprotectAFun(AFun <replaceable>sym</replaceable>)</programlisting></para>
+
+          <para>Just as ATerms which are not on the stack or in registers must
+          be protected through a call to <literal>ATprotect</literal>, so must
+          AFuns be protected by calling
+          <literal>ATprotectAFun</literal>.</para>
+        </section>
+
+        <section xml:id="function.ATunprotectAFun">
+          <title><literal>ATunprotectAFun</literal></title>
+
+          <para><programlisting>void ATunprotectAFun(AFun <replaceable>sym</replaceable>)</programlisting>Release
+          an AFun's protection.</para>
+        </section>
+
+        <section xml:id="function.ATgetName">
+          <title><literal>ATgetName</literal></title>
+
+          <para><programlisting>char *ATgetName(AFun <replaceable>sym</replaceable>)</programlisting></para>
+
+          <para>Return the name of an AFun.</para>
+        </section>
+
+        <section xml:id="function.ATgetArity">
+          <title><literal>ATgetArity</literal></title>
+
+          <para><programlisting>int ATgetArity(AFun <replaceable>sym</replaceable>)</programlisting>Return
+          the arity (number of arguments) of a function symbol (AFun).</para>
+        </section>
+
+        <section xml:id="function.ATisQuoted">
+          <title><literal>ATisQuoted</literal></title>
+
+          <para><programlisting>ATbool ATisQuoted(AFun <replaceable>sym</replaceable>)</programlisting>Determine
+          if a function symbol (AFun) is quoted or not.</para>
+        </section>
+
+        <section xml:id="function.ATmakeAppl">
+          <title>ATmakeAppl</title>
+
+          <para><programlisting>ATermAppl ATmakeAppl(AFun <replaceable>sym</replaceable>, ...)</programlisting></para>
+
+          <para>Build an application from an AFun and a variable number of
+          arguments.</para>
+
+          <para>The arity is taken from the first argument
+          <replaceable>sym</replaceable>, the other arguments of
+          <literal>ATmakeAppl</literal> should be the arguments for the
+          application. For arity <replaceable>N</replaceable> = 0, 1, ... 6
+          the corresponding
+          <literal>ATmakeAppl</literal><replaceable>N</replaceable> can be
+          used instead for greater efficiency.</para>
+        </section>
+
+        <section xml:id="function.ATmakeAppl0">
+          <title><literal>ATmakeAppl0</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl0(AFun <replaceable>sym</replaceable>)</programlisting>Make
+          a function application with zero arguments.</para>
+        </section>
+
+        <section xml:id="function.ATmakeAppl1">
+          <title><literal>ATmakeAppl1</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl1(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>)</programlisting>Make
+          a function application with one argument.</para>
+        </section>
+
+        <section xml:id="function.ATmakeAppl2">
+          <title><literal>ATmakeAppl2</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl2(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>)</programlisting>Make
+          a function application with two arguments.</para>
+        </section>
+
+        <section xml:id="function.ATmakeAppl3">
+          <title><literal>ATmakeAppl3</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl3(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>)</programlisting>Make
+          a function application with three arguments.</para>
+        </section>
+
+        <section xml:id="function.ATmakeAppl4">
+          <title><literal>ATmakeAppl4</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl4(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>)</programlisting>Make
+          a function application with four arguments.</para>
+        </section>
+
+        <section xml:id="function.ATmakeAppl5">
+          <title><literal>ATmakeAppl5</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl5(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>, <replaceable>a5</replaceable>)</programlisting>Make
+          a function application with five arguments.</para>
+        </section>
+
+        <section xml:id="function.ATmakeAppl6">
+          <title><literal>ATmakeAppl6</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl6(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>, <replaceable>a5</replaceable>, <replaceable>a6</replaceable>)</programlisting>Make
+          a function application with six arguments.</para>
+        </section>
+
+        <section xml:id="function.ATgetAFun">
+          <title><literal>ATgetAFun</literal></title>
+
+          <para><programlisting>AFun ATgetAFun(ATermAppl <replaceable>appl</replaceable>)</programlisting></para>
+
+          <para>Get the function symbol (AFun) of an application.</para>
+        </section>
+
+        <section xml:id="function.ATgetArgument">
+          <title><literal>ATgetArgument</literal></title>
+
+          <para><programlisting>ATerm ATgetArgument(ATermAppl <replaceable>appl</replaceable>, int <replaceable>n</replaceable>)</programlisting>Get
+          the <replaceable>n</replaceable>-th argument of an
+          application.</para>
+        </section>
+
+        <section xml:id="function.ATsetArgument">
+          <title><literal>ATsetArgument</literal></title>
+
+          <para><programlisting>ATermAppl ATsetArgument(ATermAppl <replaceable>appl</replaceable>, ATerm <replaceable>arg,</replaceable> int <replaceable>n</replaceable>)</programlisting>Set
+          the <replaceable>n</replaceable>-th argument of an application to
+          <replaceable>arg</replaceable>.</para>
+
+          <para>This function returns a copy of
+          <replaceable>appl</replaceable> with argument
+          <replaceable>n</replaceable> replaced by
+          <replaceable>arg</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATgetArguments">
+          <title><literal>ATgetArguments</literal></title>
+
+          <para><programlisting>ATermList ATgetArguments(ATermAppl <replaceable>appl</replaceable>)</programlisting>Get
+          a list of arguments of an application.</para>
+
+          <para>Return the arguments of <replaceable>appl</replaceable> in
+          <literal>ATermList</literal> format. Note: traversing the arguments
+          of <replaceable>appl</replaceable> can be done more efficiently
+          using the <literal>ATgetArgument</literal> macro.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeApplList</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeApplList(AFun <replaceable>sym</replaceable>, ATermList <replaceable>args</replaceable>)</programlisting></para>
+
+          <para>Build an application given an AFun and a list of
+          arguments.</para>
+
+          <para>Build an application from <replaceable>sym</replaceable> and
+          the argument list <replaceable>args</replaceable>. Note: unless the
+          arguments are already in an <literal>ATermList</literal>, it is
+          probably more efficient to use the appropriate
+          <literal>ATmakeAppl</literal><replaceable>N</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATmakeApplArray">
+          <title><literal>ATmakeApplArray</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeApplArray(AFun <replaceable>sym</replaceable>, ATerm <replaceable>args</replaceable>[])</programlisting>Build
+          an application given an AFun and an array of arguments.</para>
+        </section>
+      </section>
+
+      <section xml:id="section.ATermList">
+        <title>Level two: the type <literal>ATermList</literal></title>
+
+        <para>The type ATermList is the ATerm representation of linear
+        lists.</para>
+
+        <section xml:id="function.ATmakeList">
+          <title><literal>ATmakeList</literal></title>
+
+          <para><programlisting>ATermList ATmakeList(int <replaceable>n</replaceable>, ...)</programlisting></para>
+
+          <para>Create an <literal>ATermList</literal> of
+          <replaceable>n</replaceable> elements. The elements should be passed
+          as arguments 1, ..., <replaceable>n</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATmakeList0">
+          <title><literal>ATmakeList0</literal></title>
+
+          <para><programlisting>ATermList ATmakeList0()</programlisting>Macro
+          that yields the empty list <literal>[]</literal>.</para>
+        </section>
+
+        <section xml:id="function.ATmakeList1">
+          <title><literal>ATmakeList1</literal></title>
+
+          <para><programlisting>ATermList ATmakeList1(ATerm <replaceable>a1</replaceable>)</programlisting></para>
+
+          <para>Construct a list of one element.</para>
+        </section>
+
+        <section xml:id="function.ATmakeList2">
+          <title><literal>ATmakeList2</literal></title>
+
+          <para><programlisting>ATermList ATmakeList2(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>)</programlisting></para>
+
+          <para>Construct a list of two elements.</para>
+        </section>
+
+        <section xml:id="function.ATmakeList3">
+          <title><literal>ATmakeList3</literal></title>
+
+          <para><programlisting>ATermList ATmakeList3(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>)</programlisting></para>
+
+          <para>Construct a list of three elements.</para>
+        </section>
+
+        <section xml:id="function.ATmakeList4">
+          <title><literal>ATmakeList4</literal></title>
+
+          <para><programlisting>ATermList ATmakeList4(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>)</programlisting></para>
+
+          <para>Construct a list of four elements.</para>
+        </section>
+
+        <section xml:id="function.ATmakeList5">
+          <title><literal>ATmakeList5</literal></title>
+
+          <para><programlisting>ATermList ATmakeList5(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>, <replaceable>a5</replaceable>)</programlisting></para>
+
+          <para>Construct a list of five elements.</para>
+        </section>
+
+        <section xml:id="function.ATmakeList6">
+          <title><literal>ATmakeList6</literal></title>
+
+          <para><programlisting>ATermList ATmakeList6(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>, <replaceable>a5</replaceable>, <replaceable>a6</replaceable>)</programlisting></para>
+
+          <para>Construct a list of six elements.</para>
+        </section>
+
+        <section xml:id="function.ATgetLength">
+          <title><literal>ATgetLength</literal></title>
+
+          <para><programlisting>int ATgetLength(ATermList <replaceable>l</replaceable>)</programlisting></para>
+
+          <para>Macro to get the length of list
+          <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATgetFirst">
+          <title><literal>ATgetFirst</literal></title>
+
+          <para><programlisting>ATerm ATgetFirst(ATermList <replaceable>l</replaceable>)</programlisting>Macro
+          to get the first element of list
+          <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATgetNext">
+          <title><literal>ATgetNext</literal></title>
+
+          <para><programlisting>ATermList ATgetNext(ATermList <replaceable>l</replaceable>)</programlisting>Macro
+          to get the next part (the tail) of list
+          <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATisEmpty">
+          <title><literal>ATisEmpty</literal></title>
+
+          <para><programlisting>ATbool ATisEmpty(ATermList <replaceable>l</replaceable>)</programlisting>Macro
+          to test if list <replaceable>l</replaceable> is empty.</para>
+        </section>
+
+        <section xml:id="function.ATgetTail">
+          <title><literal>ATgetTail</literal></title>
+
+          <para><programlisting>ATermList ATgetTail(ATermList <replaceable>l</replaceable>, int <replaceable>start</replaceable>)</programlisting>Return
+          the sublist from <replaceable>start</replaceable> to the end of
+          <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATreplaceTail">
+          <title><literal>ATreplaceTail</literal></title>
+
+          <para><programlisting>ATermList ATreplaceTail(ATermList <replaceable>l</replaceable>, ATermList <replaceable>tail</replaceable>, int <replaceable>start</replaceable>)</programlisting>Replace
+          the tail of <replaceable>l</replaceable> from position
+          <replaceable>start</replaceable> with
+          <replaceable>tail</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATgetPrefix">
+          <title><literal>ATgetPrefix</literal></title>
+
+          <para><programlisting>ATermList ATgetPrefix(ATermList <replaceable>l</replaceable>)</programlisting>Return
+          all but the last element of <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATgetSlice">
+          <title><literal>ATgetSlice</literal></title>
+
+          <para><programlisting>ATermList ATgetSlice(ATermList <replaceable>l</replaceable>, int <replaceable>start</replaceable>, int <replaceable>end</replaceable>)</programlisting>Get
+          a portion (slice) of a list.</para>
+
+          <para>Return the portion of <replaceable>l</replaceable> that lies
+          between <replaceable>start</replaceable> and
+          <replaceable>end</replaceable>. Thus
+          <replaceable>start</replaceable> is included,
+          <replaceable>end</replaceable> is not.</para>
+        </section>
+
+        <section xml:id="function.ATinsert">
+          <title><literal>ATinsert</literal></title>
+
+          <para><programlisting>ATermList ATinsert(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>)</programlisting>Return
+          list <replaceable>l</replaceable> with element
+          <replaceable>a</replaceable> inserted. The behaviour of
+          <literal>ATinsert</literal> is of constant complexity. That is, the
+          behaviour of <literal>ATinsert</literal> does not degrade as the
+          length of <replaceable>l</replaceable> increases.</para>
+        </section>
+
+        <section xml:id="function.ATinsertAt">
+          <title><literal>ATinsertAt</literal></title>
+
+          <para><programlisting>ATermList ATinsertAt(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          <replaceable>l</replaceable> with <replaceable>a</replaceable>
+          inserted at position <replaceable>idx</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATappend">
+          <title><literal>ATappend</literal></title>
+
+          <para><programlisting>ATermList ATappend(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>)</programlisting>Return
+          <replaceable>l</replaceable> with <replaceable>a</replaceable>
+          appended to it.</para>
+
+          <para><literal>ATappend</literal> is implemented in terms of
+          <literal>ATinsert</literal> by making a new list with
+          <replaceable>a</replaceable> as the first element and then
+          <literal>ATinsert</literal>ing all elements from
+          <replaceable>l</replaceable>. As such, the complexity of
+          <literal>ATappend</literal> is linear in the number of elements in
+          <replaceable>l</replaceable>. When <literal>ATappend</literal> is
+          needed inside a loop that traverses a list (see <xref
+          linkend="example.parse-list1" />), behaviour of the loop will
+          demonstrate quadratic complexity.</para>
+
+          <para><example xml:id="example.parse-list1">
+              <title>Parse lists, version 1</title>
+
+              <para><programlisting>/* Example of parse_list that demonstrates quadratic complexity */
+ATermList parse_list1(ATermList list)
+{
+    ATerm     elem;
+    ATermList result = ATempty;
+
+    /* while list has elements */
+    while (!ATisEmpty(list))
+    {
+        /* Get head of list */
+        elem = ATgetFirst(list);
+
+        /* If elem satisfies some predicate (not shown here)
+           then APPEND it to result */
+        if (some_predicate(elem) == ATtrue)
+            result = ATappend(result, elem);
+
+        /* Continue with tail of list */
+        list = ATgetNext(list);
+    }
+
+    /* Return the result list */
+    return result;
+}
+</programlisting></para>
+            </example></para>
+
+          <para>To avoid this behaviour, the inner loop could use
+          <literal>ATinsert</literal> instead of <literal>ATappend</literal>
+          to make the new list. This will cause the resulting list to be in
+          reverse order. A single <literal>ATreverse</literal> must therefore
+          be performed, but this can be done after the loop has terminated,
+          bringing the behaviour down from quadratic to linear complexity, but
+          at the cost of two <literal>ATinsert</literal>s per element (one for
+          each <literal>ATinsert</literal> in the loop, and an implicit one
+          for each element through the use of <literal>ATreverse</literal>).
+          An example in <xref linkend="example.parse-list2" />.</para>
+
+          <para><example xml:id="example.parse-list2">
+              <title>Parse lists, version 2</title>
+
+              <para><programlisting>/* Example of parse_list that demonstrates linear complexity,
+ * using ATinsert instead of ATappend and reversing the list
+ * outside the loop just once.  */
+ATermList parse_list2(ATermList list)
+{
+    ATerm     elem;
+    ATermList result = ATempty;
+
+    /* while list has elements */
+    while (!ATisEmpty(list))
+    {
+        /* Get head of list */
+        elem = ATgetFirst(list);
+
+        /* If elem satisfies some predicate (not shown here)
+           then INSERT it to result */
+        if (some_predicate(elem) == ATtrue)
+            result = ATinsert(result, elem);
+
+        /* Continue with tail of list */
+        list = ATgetNext(list);
+    }
+
+    /* Return result after reversal */
+    return ATreverse(result);
+}
+</programlisting></para>
+            </example></para>
+
+          <para>An even further optimisation could make use of a locally
+          allocated buffer. While traversing the list, all elements that would
+          normally be <literal>ATappend</literal>ed, are now placed in this
+          buffer. Finally, the result is obtained by starting with an empty
+          list and <literal>ATinsert</literal>ing all elements from this
+          buffer in reverse order. As the cost of allocating and freeing a
+          local buffer is by no means marginal, this solution should probably
+          only be applied when the loop appends more than just a few elements.
+          This is shown in <xref linkend="example.parse-list3" /></para>
+
+          <example xml:id="example.parse-list3">
+            <title>Parse lists, version 3</title>
+
+            <para><programlisting>/* Example of parse_list that demonstrates linear complexity,
+ * but which avoids using ATinsert twice, by inlining ATreverse
+ * using a local buffer. */
+ATermList parse_list3(ATermList list)
+{
+    int        pos = 0;
+    ATerm      elem;
+    ATerm     *buffer = NULL;
+    ATermList  result = ATempty;
+
+    /* Allocate local buffer that can hold all elements of list */
+    buffer = (ATerm *) calloc(ATgetLength(list), sizeof(ATerm));
+    if (buffer == NULL) abort();
+
+    /* while list has elements */
+    while (!ATisEmpty(list))
+    {
+        /* Get head of list */
+        elem = ATgetFirst(list);
+
+        /* If elem satisfies some predicate (not shown here)
+         * then add it to buffer at next available position */
+        if (some_predicate(elem) == ATtrue)
+            buffer[pos++] = elem;
+
+        /* Continue with tail of list */
+        list = ATgetNext(list);
+    }
+
+    /* Now insert all elems in buffer to result */
+    for(--pos; pos &gt;= 0; pos--)
+        result = ATinsert(result, buffer[pos]);
+
+    /* Release allocated resources */
+    free(buffer);
+
+    /* Return result */
+    return result;
+}</programlisting></para>
+          </example>
+        </section>
+
+        <section xml:id="function.ATconcat">
+          <title><literal>ATconcat</literal></title>
+
+          <para><programlisting>ATermList ATconcat(ATermList <replaceable>l1</replaceable>, ATermList <replaceable>l2</replaceable>)</programlisting>Return
+          the concatenation of <replaceable>l1</replaceable> and
+          <replaceable>l2</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATindexOf">
+          <title><literal>ATindexOf</literal></title>
+
+          <para><programlisting>int ATindexOf(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>start</replaceable>)</programlisting>Return
+          the index of an ATerm in a list. Return the index where element
+          <replaceable>a</replaceable> can be found in the list
+          <replaceable>l</replaceable>. Start looking at position
+          <replaceable>start</replaceable>. Returns <literal>-1</literal> if
+          <replaceable>a</replaceable> is not in the list.</para>
+        </section>
+
+        <section xml:id="function.ATlastIndexOf">
+          <title><literal>ATlastIndexOf</literal></title>
+
+          <para><programlisting>int ATlastIndexOf(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>start</replaceable>)</programlisting>Return
+          the index of an ATerm in a list (searching in reverse order).</para>
+
+          <para>Search backwards for element <replaceable>a</replaceable> in
+          the list <replaceable>l</replaceable>. Start searching at position
+          <replaceable>start</replaceable>. Return the index of the first
+          occurrence of <replaceable>a</replaceable> encountered, or
+          <literal>-1</literal> when <replaceable>a</replaceable> is not
+          present before <replaceable>start</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATelementAt">
+          <title><literal>ATelementAt</literal></title>
+
+          <para><programlisting>ATerm ATelementAt(ATermList <replaceable>l</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          a specific element of a list. Return the element at position
+          <replaceable>idx</replaceable> in list <replaceable>l</replaceable>.
+          Return <literal>NULL</literal> when <replaceable>idx</replaceable>
+          is not in the list.</para>
+        </section>
+
+        <section xml:id="function.ATremoveElement">
+          <title><literal>ATremoveElement</literal></title>
+
+          <para><programlisting>ATermList ATremoveElement(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with one occurrence of element
+          <replaceable>a</replaceable> removed.</para>
+        </section>
+
+        <section xml:id="function.ATremoveAll">
+          <title><literal>ATremoveAll</literal></title>
+
+          <para><programlisting>ATermList ATremoveAll(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with all occurrences of
+          element <replaceable>a</replaceable> removed.</para>
+        </section>
+
+        <section xml:id="function.ATremoveElementAt">
+          <title><literal>ATremoveElementAt</literal></title>
+
+          <para><programlisting>ATermList ATremoveElementAt(ATermList <replaceable>l</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with the element at position
+          <replaceable>idx</replaceable> removed.</para>
+        </section>
+
+        <section xml:id="function.ATreplace">
+          <title><literal>ATreplace</literal></title>
+
+          <para><programlisting>ATermList ATreplace(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with the element at position
+          <replaceable>idx</replaceable> replaced by
+          <replaceable>a</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATreverse">
+          <title><literal>ATreverse</literal></title>
+
+          <para><programlisting>ATermList ATreplace(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with its elements in reverse
+          order.</para>
+        </section>
+
+        <section xml:id="function.ATsort">
+          <title><literal>ATsort</literal></title>
+
+          <para><programlisting>ATermList ATsort(ATermList <replaceable>l</replaceable>, int (*<replaceable>compare</replaceable>)(ATerm <replaceable>t1</replaceable>, const ATerm <replaceable>t2</replaceable>))</programlisting></para>
+
+          <para>Sort the list <replaceable>l</replaceable> given a comparison
+          function <replaceable>compare</replaceable>. The result is a new
+          list.</para>
+        </section>
+
+        <section xml:id="function.ATfilter">
+          <title><literal>ATfilter</literal></title>
+
+          <para><programlisting>ATermList ATsort(ATermList <replaceable>l</replaceable>, ATbool (*<replaceable>predicate</replaceable>)(ATerm <replaceable>t</replaceable>))</programlisting></para>
+
+          <para>Create a new list that consists of all elements of list
+          <replaceable>l</replaceable> that satisfy the predicate
+          <replaceable>predicate</replaceable>.</para>
+        </section>
+      </section>
+
+      <section xml:id="section.ATermPlaceholder">
+        <title>Level two: the type <literal>ATermPlaceholder</literal></title>
+
+        <para>A placeholder is a special subtype used to indicate a typed hole
+        in an ATerm. This can be used to create a term of a specific type,
+        even though its actual contents are not filled in.</para>
+
+        <section xml:id="function.ATmakePlaceholder">
+          <title><literal>ATmakePlaceholder</literal></title>
+
+          <para><programlisting>ATermPlaceholder ATmakePlaceholder(ATerm <replaceable>type</replaceable>)</programlisting>Build
+          an ATerm Placeholder of a specific type. The type is taken from the
+          <replaceable>type</replaceable> parameter. See <xref
+          linkend="example.placeholders" />.</para>
+        </section>
+
+        <section xml:id="function.ATgetPlaceholder">
+          <title><literal>ATgetPlaceholder</literal></title>
+
+          <para><programlisting>ATerm ATgetPlaceholder(ATermPlaceholder <replaceable>ph</replaceable>)</programlisting>Get
+          the type of an ATerm Placeholder.</para>
+
+          <example xml:id="example.placeholders">
+            <title>Examples of place holders</title>
+
+            <para><programlisting>#include &lt;assert.h&gt;
+#include &lt;aterm2.h&gt;
+
+/* This example demonstrates the use of an ATermPlaceholder. 
+ * It creates the function application "add" defined on two 
+ * integers without actually using a specific integer:  
+ * add(&lt;int&gt;,&lt;int&gt;).
+ */
+void demo_placeholder()
+{
+    Symbol           sym_int, sym_add;
+    ATermAppl        app_add;
+    ATermPlaceholder ph_int;
+
+    /* Construct placeholder &lt;int&gt; using zero-arity function 
+       symbol "int" */
+    sym_int = ATmakeSymbol("int", 0, ATfalse);
+    ph_int = ATmakePlaceholder((ATerm)ATmakeAppl0(sym_int));
+
+    /* Construct add(&lt;int&gt;,&lt;int&gt;) using function symbol 
+       "add" with 2 args */
+    sym_add = ATmakeSymbol("add", 2, ATfalse);
+    app_add = ATmakeAppl2(sym_add, (ATerm)ph_int, (ATerm)ph_int);
+
+    /* Equal to constructing it using the level one interface */
+    assert(ATisEqual(app_add, ATparse("add(&lt;int&gt;,&lt;int&gt;)")));
+
+    /* Prints: Placeholder &lt;int&gt; is of type: int */
+    ATprintf("Placeholder %t is of type: %t\n", 
+             ph_int, ATgetPlaceholder(ph_int));
+}
+
+int main(int argc, char *argv[])
+{
+    ATerm bottomOfStack;
+
+    ATinit(argc, argv, &amp;bottomOfStack);
+    demo_placeholder();
+    return 0;
+}</programlisting></para>
+          </example>
+        </section>
+      </section>
+
+      <section xml:id="section.ATermBlob">
+        <title>Level two: the type <literal>ATermBlob</literal></title>
+
+        <section>
+          <title><literal>ATmakeBlob</literal></title>
+
+          <para><programlisting>ATermBlob ATmakeBlob(unsigned int <replaceable>size</replaceable>, void *<replaceable>data</replaceable>)</programlisting></para>
+
+          <para>Build a Binary Large OBject given
+          <replaceable>size</replaceable> (in bytes) of
+          <replaceable>data</replaceable>. This function can be used to create
+          an <literal>ATerm</literal> of type blob, holding the data pointed
+          to by <replaceable>data</replaceable>. No copy of this data area is
+          made, so the user should allocate this himself. The size of a blob
+          is limited by the maximal value of integers.</para>
+        </section>
+
+        <section xml:id="function.ATgetBlobData">
+          <title><literal>ATgetBlobData</literal></title>
+
+          <para><programlisting>void *ATgetBlobData(ATermBlob <replaceable>blob</replaceable>)</programlisting></para>
+
+          <para>Macro to get the data section of a given
+          <replaceable>blob</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATgetBlobSize">
+          <title><literal>ATgetBlobSize</literal></title>
+
+          <para><programlisting>int ATgetBlobSize(ATermBlob <replaceable>blob</replaceable>)</programlisting></para>
+
+          <para>Macro to get the size (in bytes) of the data section of a
+          given <replaceable>blob</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATregisterBlobDestructor">
+          <title><literal>ATregisterBlobDestructor</literal></title>
+
+          <para><programlisting>void ATregisterBlobDestructor(ATbool (*<replaceable>destructor</replaceable>)(ATermBlob))</programlisting></para>
+
+          <para>Register a blob-destructor function. When a blob-destructor
+          function has been registered, it will be called whenever the garbage
+          collector deletes an ATermBlob. The destructor function can then
+          handle the deletion of the data area of the blob. At most 16 blob
+          destructor functions can be registered in the current
+          implementation.</para>
+        </section>
+
+        <section xml:id="function.ATunregisterBlobDestructor">
+          <title><literal>ATunregisterBlobDestructor</literal></title>
+
+          <para><programlisting>void ATunregisterBlobDestructor(ATbool (*<replaceable>destructor</replaceable>)(ATermBlob))</programlisting></para>
+
+          <para>Unregister a blob-destructor function that has been previously
+          registered through a call to
+          <literal>ATregisterBlobDestructor</literal>.</para>
+        </section>
+      </section>
+
+      <section xml:id="section.ATermDictionary">
+        <title>Level two: the type <literal>ATermDictionary</literal></title>
+
+        <para>Dictionaries are data structures which allow looking up a
+        certain ATerm given another ATerm. The dictionary itself is also an
+        ATerm and as such is subject to the garbage collection rules of the
+        ATerm. Each dictionary consists of its own list of ATerms. For each
+        lookup in the dictionary, the list is traversed to see if the current
+        element's key matches the one being looked up. A lookup in a
+        dictionary demonstrates behaviour linear in the number of elements the
+        dictionary contains. On average fifty percent of the number of
+        elements in the dictionary are examined before a match is found (if
+        the element is present at all). For a more efficient ATerm-to-ATerm
+        mapping, see <xref linkend="section.ATermTable" />.</para>
+
+        <section xml:id="function.ATdictCreate">
+          <title><literal>ATdictCreate</literal></title>
+
+          <para><programlisting>ATerm ATdictCreate()</programlisting></para>
+
+          <para>Create a new dictionary.</para>
+        </section>
+
+        <section xml:id="function.ATdictGet">
+          <title><literal>ATdictGet</literal></title>
+
+          <para><programlisting>ATerm ATdictGet(ATerm <replaceable>dict</replaceable>, ATerm <replaceable>key</replaceable>)</programlisting></para>
+
+          <para>Get the value belonging to a given key in a dictionary.</para>
+        </section>
+
+        <section xml:id="function.ATdictPut">
+          <title><literal>ATdictPut</literal></title>
+
+          <para><programlisting>ATerm ATdictPut(ATerm <replaceable>dict</replaceable>, ATerm <replaceable>key</replaceable>, ATerm <replaceable>value</replaceable>)</programlisting></para>
+
+          <para>Add / update a (<replaceable>key</replaceable>,
+          <replaceable>value</replaceable>)-pair in a dictionary. If
+          <replaceable>key</replaceable> does not already exist in the
+          dictionary, this function adds the (<replaceable>key</replaceable>,
+          <replaceable>value</replaceable>)-pair to the dictionary. Otherwise,
+          it updates the value associated with <replaceable>key</replaceable>
+          to <replaceable>value</replaceable>. The modified dictionary is
+          returned.</para>
+        </section>
+
+        <section xml:id="function.ATdictRemove">
+          <title><literal>ATdictRemove</literal></title>
+
+          <para><programlisting>ATerm ATdictRemove(ATerm <replaceable>dict</replaceable>, ATerm <replaceable>key</replaceable>)</programlisting></para>
+
+          <para>Remove a (<replaceable>key</replaceable>,
+          <replaceable>value</replaceable>)-pair from a dictionary. If the
+          entry was actually in the dictionary, the modified dictionary is
+          returned. If the entry was not in the dictionary, the (unmodified)
+          dictionary itself is returned.</para>
+        </section>
+      </section>
+
+      <section xml:id="section.ATermTable">
+        <title>Level two: the type <literal>ATermTable</literal></title>
+
+        <para>The dictionaries described in <xref
+        linkend="section.ATermDictionary" /> are in essence nothing more than
+        linked lists, which makes them less suitable for large ATerm-to-ATerm
+        mappings. To this end, ATerm tables were created. These are
+        efficiently implemented using a hash table requiring approximately 16
+        bytes per stored entry, assuming that the hash table is filled for
+        50%.</para>
+
+        <section xml:id="function.ATtableCreate">
+          <title><literal>ATtableCreate</literal></title>
+
+          <para><programlisting>ATermTable ATtableCreate(int <replaceable>initial_size</replaceable>, int <replaceable>max_load_pct)</replaceable></programlisting></para>
+
+          <para>Create an ATermTable given an initial size and a maximum load
+          percentage. Whenever this percentage is exceeded (which is detected
+          when a new entry is added using <literal>ATtablePut</literal>), the
+          table is automatically expanded and all existing entries are
+          rehashed into the new table. If you know in advance approximately
+          how many items will be in the table, you may set it up in such a way
+          that no resizing (and thus no rehashing) is necessary. For example,
+          if you expect about 1000 items in the table, you can create it with
+          its initial size set to 1333 and a maximum load percentage of 75%.
+          You are not required to do this, it merely saves a runtime expansion
+          and rehashing of the table which increases efficiency.</para>
+        </section>
+
+        <section xml:id="function.ATtableDestroy">
+          <title><literal>ATtableDestroy</literal></title>
+
+          <para><programlisting>void ATtableDestroy(ATermTable <replaceable>table</replaceable>)</programlisting></para>
+
+          <para>Destroy an ATermTable. As opposed to ATermDictionaries,
+          ATermTables are themselves <emphasis>not</emphasis> ATerms. This
+          means they are <emphasis>not</emphasis> freed by the garbage
+          collector when they are no longer referred to. Therefore, when the
+          table is no longer needed, the user should release the resources
+          allocated by the table by calling <literal>ATtableDestroy</literal>.
+          All references the table has to ATerms will then also be removed, so
+          that those may be freed by the garbage collector (if no other
+          references to them exist of course).</para>
+        </section>
+
+        <section xml:id="function.ATtableReset">
+          <title><literal>ATtableReset</literal></title>
+
+          <para><programlisting>void ATtableReset(ATermTable <replaceable>table</replaceable>)</programlisting>Reset
+          an ATermTable. This function resets an ATermTable, without freeing
+          the memory it occupies. Its effect is the same as the subsequent
+          execution of a destroy and a create of a table, but as no memory is
+          released and obtained from the C memory management system this
+          function is generally cheaper. However, if subsequent tables differ
+          very much in size, the use of <literal>ATtableDestroy</literal> and
+          <literal>ATtableCreate</literal> may be preferred, because in such a
+          way the sizes of the table adapt automatically to the requirements
+          of the application.</para>
+        </section>
+
+        <section xml:id="function.ATtablePut">
+          <title><literal>ATtablePut</literal></title>
+
+          <para><programlisting>void ATtablePut(ATermTable <replaceable>table</replaceable>, ATerm <replaceable>key</replaceable>, ATerm <replaceable>value</replaceable>)</programlisting></para>
+
+          <para>Add / update a (<replaceable>key</replaceable>,
+          <replaceable>value</replaceable>)-pair in a table. If
+          <replaceable>key</replaceable> does not already exist in the table,
+          this function adds the (<replaceable>key</replaceable>,
+          <replaceable>value</replaceable>)-pair to the table. Otherwise, it
+          updates the value associated with <replaceable>key</replaceable> to
+          <replaceable>value</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATtableGet">
+          <title><literal>ATtableGet</literal></title>
+
+          <para><programlisting>ATerm ATtableGet(ATermTable <replaceable>table</replaceable>, ATerm <replaceable>key</replaceable>)</programlisting></para>
+
+          <para>Get the value associated with a given
+          <replaceable>key</replaceable> in a
+          <replaceable>table</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATtableRemove">
+          <title><literal>ATtableRemove</literal></title>
+
+          <para><programlisting>void ATtableRemove(ATermTable <replaceable>table</replaceable>, ATerm <replaceable>key</replaceable>)</programlisting>Remove
+          the pair with the key <replaceable>key</replaceable> from
+          <replaceable>table</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATtableKeys">
+          <title>ATtableKeys</title>
+
+          <para><programlisting>ATermList ATtableKeys(ATermTable <replaceable>table</replaceable>)</programlisting></para>
+
+          <para>Get an ATermList of all the keys in a table. This function can
+          be useful if you need to iterate over all elements in a
+          table.</para>
+        </section>
+
+        <section xml:id="function.ATtableValues">
+          <title>ATtableValues</title>
+
+          <para><programlisting>ATermList ATtableValues(ATermTable <replaceable>table</replaceable>)</programlisting></para>
+
+          <para>Get an ATermList of all the values in a table. This function
+          can be useful if you need to iterate over all values in a
+          table.</para>
+        </section>
+      </section>
+
+      <section xml:id="section.ATermIndexedSet">
+        <title>Level two: the type <literal>ATermIndexedSet</literal></title>
+
+        <para>The data type <literal>ATermIndexedSet</literal> provides a
+        mapping from ATerms to integers, with as aim to assign successive
+        integers from zero upwards to each entered term. The association
+        between a term and an integer remains fixed until the term is removed
+        from the table. When assigning integers to newly entered elements,
+        integers previously assigned to removed elements are used first. The
+        range of assigned integers is thus as compact as possible. This data
+        type can be used for various purposes. First, one can make a mapping
+        from ATerms to elements in any arbitrary domain
+        <replaceable>D</replaceable>. By entering the ATerms in an
+        <literal>ATermIndexedSet</literal> each ATerm gets a subsequent
+        integer assigned. These integers can be used as entries in an array to
+        obtain the element of domain <replaceable>D</replaceable> that is
+        associated with the ATerm. Another type of application is the use as a
+        set. Suppose that a sequence of ATerms must be processed. Suppose that
+        the sequence can contain identical ATerms, and that each unique ATerm
+        needs to be processed only once. Each processed ATerm can then be
+        entered in the indexed set. For each candidate ATerm to be processed
+        one inspection of the indexed set suffices to know whether this ATerm
+        has already been processed before. A particular instance of this kind
+        of application is the exploration of state spaces, where each state is
+        represented by an ATerm. The implementations of
+        <literal>ATermIndexedSet</literal> and ATermTable are strongly
+        related. The implementation is quite efficient both in time and space,
+        only requiring 16 bytes for each entry in an indexed set, if the hash
+        table, which forms its core, is half full.</para>
+
+        <section xml:id="function.ATindexedSetCreate">
+          <title><literal>ATindexedSetCreate</literal></title>
+
+          <para><programlisting>ATermIndexedSet ATindexedSetCreate(long <replaceable>initial_size</replaceable>, 
+                                   int <replaceable>max_load_pct</replaceable>)</programlisting></para>
+
+          <para>Create a new <literal>ATermIndexedSet</literal> with
+          approximately the size <replaceable>initial_size</replaceable>,
+          where it guarantees that the internal hash table, will be filled up
+          to <replaceable>max_load_pct</replaceable> percent. If needed, the
+          size of the hash table is dynamically extended to hold the entries
+          inserted into it. If extension of the hash table fails due to lack
+          of memory, it is attempted to fill the hash table up to 100%. All
+          elements entered into the indexed set are automatically protected.
+          Note that for each <literal>ATindexedSetCreate</literal> an
+          <literal>ATindexedSetDestroy</literal> must be carried out to free
+          memory, and to allow inserted elements to be released by the
+          automatic garbage system of the ATerm library. Carrying out a
+          <literal>ATindexedSetReset</literal> does not free the memory, but
+          allows inserted elements to be garbage collected.</para>
+        </section>
+
+        <section>
+          <title><literal>ATindexedSetDestroy</literal></title>
+
+          <para><programlisting>void ATindexedSetDestroy(ATermIndexedSet <replaceable>set</replaceable>)</programlisting></para>
+
+          <para>Releases all memory occupied by
+          <replaceable>set</replaceable>.</para>
+        </section>
+
+        <section xml:id="function.ATindexedSetReset">
+          <title><literal>ATindexedSetReset</literal></title>
+
+          <para><programlisting>void ATindexedSetReset(ATermIndexedSet <replaceable>set</replaceable>)</programlisting></para>
+
+          <para>Clear the hash table in the <replaceable>set</replaceable>,
+          but do not release the memory. Using
+          <literal>ATindexedSetReset</literal> instead of
+          <literal>ATindexedSetDestroy</literal> is preferable when indexed
+          sets of approximately the same size are being used.</para>
+        </section>
+
+        <section xml:id="function.ATindexedSetPut">
+          <title><literal>ATindexedSetPut</literal></title>
+
+          <para><programlisting>long ATindexedSetPut(ATermIndexedSet <replaceable>set</replaceable>, ATerm <replaceable>elem</replaceable>, ATbool *<replaceable>isnew</replaceable>}</programlisting></para>
+
+          <para>Enter <replaceable>elem</replaceable> into the
+          <replaceable>set</replaceable>. If <replaceable>elem</replaceable>
+          was already in the set the previously assigned index of
+          <replaceable>elem</replaceable> is returned, and
+          <replaceable>isnew</replaceable> is set to false. If
+          <replaceable>elem</replaceable> did not yet occur in
+          <replaceable>set</replaceable> a new number is assigned and
+          returned, and <replaceable>isnew</replaceable> is set to true. This
+          number can either be the number of an element that has been removed,
+          or, if such a number is not available, the lowest not-used number.
+          The lowest number that is used is 0.</para>
+        </section>
+
+        <section xml:id="function.ATindexedSetGetIndex">
+          <title><literal>ATindexedSetGetIndex</literal></title>
+
+          <para><programlisting>long ATindexedSetGetIndex(ATermIndexedSet <replaceable>set</replaceable>, ATerm <replaceable>elem</replaceable>}</programlisting></para>
+
+          <para>Find the index of <replaceable>elem</replaceable> in
+          <replaceable>set</replaceable>. When <replaceable>elem</replaceable>
+          is not in the set, a negative number is returned.</para>
+        </section>
+
+        <section xml:id="function.ATindexedSetGetElem">
+          <title><literal>ATindexedSetGetElem</literal></title>
+
+          <para><programlisting>ATerm ATindexedSetGetElem(ATermIndexedSet <replaceable>set</replaceable>, long <replaceable>index</replaceable>)</programlisting></para>
+
+          <para>Retrieve the element at <replaceable>index</replaceable> in
+          <replaceable>set</replaceable>. This function must be invoked with a
+          valid index and it returns the element assigned to this index. If it
+          is invoked with an invalid index, effects are not
+          predictable.</para>
+        </section>
+
+        <section xml:id="function.ATindexedSetRemove">
+          <title><literal>ATindexedSetRemove</literal></title>
+
+          <para><programlisting>void ATindexedSetRemove(ATermIndexedSet <replaceable>set</replaceable>, ATerm <replaceable>elem</replaceable>}</programlisting></para>
+
+          <para>Remove <replaceable>elem</replaceable> from
+          <replaceable>set</replaceable>. If a number was assigned to
+          <replaceable>elem</replaceable>, it is freed to be reassigned to an
+          element that may be put into the set at some later on.</para>
+        </section>
+
+        <section xml:id="function.ATindexedSetElements">
+          <title><literal>ATindexedSetElements</literal></title>
+
+          <para><programlisting>ATermList ATindexedSetElements(ATermIndexedSet <replaceable>set</replaceable>)</programlisting></para>
+
+          <para>Retrieve all elements in <replaceable>set</replaceable>. The
+          resulting list is ordered from element with index 0 onwards.</para>
+        </section>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="section.utilities">
+    <title>Command Line Utilities</title>
+
+    <para>This section describes the utilities that come with the ATerm
+    library. These utilities are automatically built when the ATerm library is
+    compiled and installed.</para>
+
+    <section xml:id="section.baffle">
+      <title>ATerm-conversion: <command>baffle</command></title>
+
+      <para>This utility can be used to convert between the different ATerm
+      formats: TEXT, BAF, and TAF. Usage: <programlisting><command>baffle</command> [-i &lt;input&gt;] [-o &lt;output&gt; | -c] [-v] [-rb | -rt | -rs | -rS] 
+       [-wb | -wt | -ws | -wS]</programlisting></para>
+
+      <para>The options are explained in <xref
+      linkend="table.baffle-options" />.</para>
+
+      <table xml:id="table.baffle-options">
+        <title>Command line options <command>baffle</command></title>
+
+        <tgroup cols="2">
+          <colspec align="left" colwidth="1*" />
+
+          <colspec align="left" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry align="center">Option&#160;</entry>
+
+              <entry align="center">Description&#160;</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>-i
+              <replaceable>input</replaceable></literal></entry>
+
+              <entry>Read input from file <replaceable>input</replaceable>
+              (default: stdin)</entry>
+            </row>
+
+            <row>
+              <entry><literal>-o
+              <replaceable>output</replaceable></literal></entry>
+
+              <entry>Write output to file <replaceable>output</replaceable>
+              (default: stdout)</entry>
+            </row>
+
+            <row>
+              <entry><literal>-c</literal></entry>
+
+              <entry>Check validity of input-term</entry>
+            </row>
+
+            <row>
+              <entry>-v</entry>
+
+              <entry>Print version information</entry>
+            </row>
+
+            <row>
+              <entry><literal>-h</literal></entry>
+
+              <entry>Display help information</entry>
+            </row>
+
+            <row>
+              <entry><literal>-rb</literal>, <literal>-rt</literal>,
+              <literal>-rs</literal>, <literal>-rS</literal></entry>
+
+              <entry>Choose between BAF, TEXT, TAF or SAF input (default: auto
+              detected)</entry>
+            </row>
+
+            <row>
+              <entry><literal>-wb</literal>, <literal>-wt</literal>,
+              <literal>-ws</literal>, <literal>-wS</literal></entry>
+
+              <entry>Choose between BAF, TEXT, TAF or SAF output (Default:
+              <literal>-wb</literal>)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Some small scripts are included which can be used to connect a
+      process producing one ATerm format to a process which expects another.
+      These scripts just set up <command>baffle</command> with the appropriate
+      switches and redirect <literal>stdin</literal> and
+      <literal>stdout</literal> accordingly. These scripts are appropriately
+      called: <command>trm2baf</command>, <command>baf2trm</command>,
+      <command>trm2taf</command>, <command>taf2trm</command>,
+      <command>baf2taf</command>, and <command>taf2baf</command>.</para>
+
+      <warning>
+        <para>Do we want to add <command>trm2saf</command>,
+        <command>saf2baf</command>, etc?</para>
+      </warning>
+    </section>
+
+    <section xml:id="section.termsize">
+      <title>Calculating the size of an ATerm:
+      <command>termsize</command></title>
+
+      <para><command>termsize</command> can be used to calculate three
+      things:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>core size: the amount of memory a given ATerm needs;</para>
+        </listitem>
+
+        <listitem>
+          <para>text size: the amount of memory needed to hold a textual
+          representation of an ATerm;</para>
+        </listitem>
+
+        <listitem>
+          <para>tree depth: the maximum depth of an ATerm.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Usage:</para>
+
+      <para><programlisting><command>termsize</command> &lt; <replaceable>inputfile</replaceable> </programlisting><command>termsize</command>
+      reads an ATerm from standard input
+      (<replaceable>inputfile</replaceable>) and writes the results to
+      standard output (<filename>stdout</filename>). The input term can be in
+      any format (TEXT, BAF, TAF, SAF).</para>
+    </section>
+
+    <section xml:id="section.atsum">
+      <title>Calculating MD5 checksum of an ATerm:
+      <command>atsum</command></title>
+
+      <para><command>atsum</command> calculates and prints the MD5 checksum of
+      the TAF representation of an ATerm. The algorithm used is the RSA Data
+      Security, Inc. MD5 Message-Digest Algorithm (see RFC1321).
+      Usage:<programlisting><command>atsum</command> [<replaceable>inputfile</replaceable>]</programlisting></para>
+    </section>
+
+    <section xml:id="section.atdiff">
+      <title>Calculating differences between two ATerms:
+      <command>atdiff</command></title>
+
+      <para><command>atdiff</command> compares two terms and prints a template
+      term that covers the common parts containing place holders of the form
+      <literal>&lt;diff&gt;</literal> for subterms that differed, and a list
+      of their differing subterms. Usage:</para>
+
+      <para><programlisting><command>atdiff</command> [&lt;<replaceable>options</replaceable>&gt;] <replaceable>file1</replaceable> <replaceable>file2</replaceable></programlisting>The
+      options are explained in <xref linkend="table.atdiff-options" />.</para>
+
+      <table xml:id="table.atdiff-options">
+        <title>Command line options <command>atdiff</command></title>
+
+        <tgroup cols="2">
+          <colspec align="left" colwidth="1*" />
+
+          <colspec align="left" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry align="center">Option&#160;</entry>
+
+              <entry align="center">Description&#160;</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>--nodiffs</literal></entry>
+
+              <entry>Do not generate diffs</entry>
+            </row>
+
+            <row>
+              <entry><literal>--diffs
+              <replaceable>diff-file</replaceable></literal></entry>
+
+              <entry>Write diffs to <replaceable>diff-file</replaceable>
+              (default: <filename>stdout</filename>)</entry>
+            </row>
+
+            <row>
+              <entry><literal>--notemplate</literal></entry>
+
+              <entry>Do not generate templates</entry>
+            </row>
+
+            <row>
+              <entry><literal>--template
+              <replaceable>template-file</replaceable></literal></entry>
+
+              <entry>Write templates to
+              <replaceable>template-file</replaceable> (default:
+              <filename>stdout</filename>)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+
+  <section xml:id="section.java">
+    <title>Using the Java ATerm Library</title>
+
+    <para>In addition to the C implementation discussed upto now, a Java
+    implementation of the ATerm Library is also available. The interfaces of
+    the C implementation and the Java implementation are as similar as
+    possible. Unfortunately, constraints imposed by both languages prohibit
+    the use of a single interface for both languages. In this section we will
+    discuss the Java interface, and highlight the differences with the C
+    interface where appropriate. Most differences are introduced by the fact
+    that Java is a much more structured and higher-level language than C. For
+    instance, Java provides built-in garbage collection, so no
+    <literal>ATprotect</literal> and <literal>ATunprotect</literal> functions
+    are needed in Java.</para>
+
+    <section>
+      <title>Overview of the Java ATerm Library</title>
+
+      <para>The interface <literal>ATerm</literal> defines functionality
+      relevant for all ATerm subtypes. Each of these ATerm subtypes has its
+      own interface, describing the additional functionality relevant for that
+      particular subtype. An interface <literal>ATermFactory</literal>
+      describes the various methods used to create new ATerm objects. It is
+      used to implement maximal sharing.</para>
+
+      <para>The interface hierarchy is shown in <xref
+      linkend="figure.interface-hierarchy" />.</para>
+
+      <para><figure xml:id="figure.interface-hierarchy">
+          <title>Interface hierarchy</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="interface-hierarchy.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
+      <para>The ATerm library comes with a single implementation of the ATerm
+      interfaces. For instance, the interface ATermList is implemented by the
+      class called ATermListImpl. The ATermFactory is implemented by the class
+      PureFactory. This implementation is a ``pure'' Java one, but given this
+      interface organization it would, in principle, be possible to build a
+      layer of Java code on top of the C implementation using the Java Native
+      Interface (JNI) . The advances and disadvantages of such an
+      implementation have never been explored in detail. A complete and
+      up-to-date description of the Java implementation of the ATerm library
+      can be found at <link
+      xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/</link>.</para>
+    </section>
+
+    <section>
+      <title>Java ATerm Interfaces</title>
+
+      <para>We give here, without further ado, the methods defined by the Java
+      ATerm Interfaces. For the meaning of individual methods we refer to both
+      the description given for the C implementation and to <link
+      xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/.</link></para>
+
+      <section>
+        <title>Interface <literal>ATermInt</literal></title>
+
+        <para><programlisting>public int getInt();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermInt" /> for a descriptions of
+        the corresponding C functions.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>ATermReal</literal></title>
+
+        <programlisting>public double getReal();</programlisting>
+
+        <para>See <xref linkend="section.ATermReal" /> for a descriptions of
+        the corresponding C functions.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>ATermLong</literal></title>
+
+        <para><programlisting>public long getLong();</programlisting>The
+        support for long integers is unique for the Java ATerm library.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>AFun</literal></title>
+
+        <para><programlisting>public String getName();
+public int getArity();
+public boolean isQuoted();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermAppl" /> for a descriptions of
+        the corresponding C functions.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>ATermAppl</literal></title>
+
+        <para><programlisting>public AFun getAFun();
+public String getName();
+public ATermList getArguments();
+public ATerm[] getArgumentArray();
+public ATerm getArgument(int i);
+public ATermAppl setArgument(ATerm arg, int i);
+public boolean isQuoted();
+public int getArity();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermAppl" /> for a descriptions of
+        the corresponding C functions.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>ATermBlob</literal></title>
+
+        <para><programlisting>public int getBlobSize();
+public byte[] getBlobData();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermBlob" /> for a descriptions of
+        the corresponding C functions.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>ATermFactory</literal></title>
+
+        <para><programlisting>ATerm parse(String trm);
+ATerm make(String trm);
+ATerm make(String pattern, List&lt;Object&gt; args);
+ATerm make(String pattern, Object arg1);
+ATerm make(String pattern, Object arg1, Object arg2);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3,
+             Object arg4);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3,
+             Object arg4, Object arg5);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3,
+             Object arg4, Object arg5, Object arg6);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3,
+             Object arg4, Object arg5, Object arg6, Object arg7);
+ATermInt makeInt(int val);
+ATermLong makeLong(long val);
+ATermReal makeReal(double val);
+ATermList makeList();
+ATermList makeList(ATerm single);
+ATermList makeList(ATerm head, ATermList tail);
+ATermPlaceholder makePlaceholder(ATerm type);
+ATermBlob makeBlob(byte[] data);
+AFun makeAFun(String name, int arity, boolean isQuoted);
+ATermAppl makeAppl(AFun fun);
+ATermAppl makeAppl(AFun fun, ATerm arg);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2, ATerm arg3);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2, ATerm arg3, 
+                   ATerm arg4);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2, ATerm arg3, 
+                   ATerm arg4, ATerm arg5);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2, ATerm arg3, 
+                   ATerm arg4, ATerm arg5, ATerm arg6);
+ATermAppl makeAppl(AFun fun, ATerm[] args);
+ATermAppl makeApplList(AFun fun, ATermList args);
+ATerm readFromTextFile(InputStream stream) 
+      throws IOException;
+ATerm readFromSharedTextFile(InputStream stream) 
+      throws IOException;
+ATerm readFromFile(String file) 
+      throws IOException;
+ATerm importTerm(ATerm term); /* from other factory */</programlisting></para>
+
+        <para>See <xref linkend="section.making-matching" /> for descriptions
+        of the make-like functions and <xref
+        linkend="section.aterms-reading-writing" /> for the reading-writing
+        related functions. Observe that the Java implementation does not
+        support reading or writing from BAF files.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>ATermList</literal></title>
+
+        <para><programlisting>public boolean isEmpty();
+public int getLength();
+public ATerm getFirst();
+public ATerm getLast();
+public ATermList getNext();
+public int indexOf(ATerm el, int start);
+public int lastIndexOf(ATerm el, int start);
+public ATermList concat(ATermList rhs);
+public ATermList append(ATerm el);
+public ATerm elementAt(int i);
+public ATermList remove(ATerm el);
+public ATermList removeElementAt(int i);
+public ATermList removeAll(ATerm el);
+public ATermList insert(ATerm el);
+public ATermList insertAt(ATerm el, int i);
+public ATermList getPrefix();
+public ATermList getSlice(int start, int end);
+public ATermList replace(ATerm el, int i);
+public ATermList reverse();
+public ATerm dictGet(ATerm key);
+public ATermList dictPut(ATerm key, ATerm value);
+public ATermList dictRemove(ATerm key);</programlisting></para>
+
+        <para>See <xref linkend="section.ATermList" /> and <xref
+        linkend="section.ATermDictionary" /> for a descriptions of the
+        corresponding C functions. Note that ATermIndexSet (see <xref
+        linkend="section.ATermIndexedSet" />) is not available in the Java
+        ATerm library.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>ATermPlaceholder</literal></title>
+
+        <para><programlisting>public ATerm getPlaceholder();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermPlaceholder" /> for a
+        descriptions of the corresponding C functions.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>Identifiable</literal></title>
+
+        <para><programlisting>public int getUniqueIdentifier();</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface <literal>Visitable</literal></title>
+
+        <para><programlisting>public aterm.Visitable accept(aterm.Visitor visitor) 
+       throws jjtraveler.VisitFailure;</programlisting></para>
+
+        <para>The visitor functionality is unique for the Java ATerm library.
+        See <link
+        xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/</link>
+        for details.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>Visitor</literal></title>
+
+        <para><programlisting>public aterm.Visitable visitATerm(ATerm arg) 
+       throws VisitFailure;
+public aterm.Visitable visitInt(ATermInt arg) 
+       throws VisitFailure;
+public aterm.Visitable visitLong(ATermLong arg) 
+       throws VisitFailure;
+public aterm.Visitable visitReal(ATermReal arg) 
+       throws VisitFailure;
+public aterm.Visitable visitAppl(ATermAppl arg) 
+       throws VisitFailure;
+public aterm.Visitable visitList(ATermList arg) 
+       throws VisitFailure;
+public aterm.Visitable visitPlaceholder(ATermPlaceholder arg) 
+       throws VisitFailure;
+public aterm.Visitable visitBlob(ATermBlob arg) 
+       throws VisitFailure;
+public aterm.Visitable visitAFun(AFun fun) 
+       throws VisitFailure;</programlisting></para>
+
+        <para>The visitor functionality is unique for the Java ATerm library.
+        See <link
+        xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/</link>
+        for details.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>ATerm</literal></title>
+
+        <para><programlisting>public static final int INT = 2;
+public static final int REAL = 3;
+public static final int APPL = 1;
+public static final int LIST = 4;
+public static final int PLACEHOLDER = 5;
+public static final int BLOB = 6;
+public static final int AFUN = 7;
+public static final int LONG = 8;
+public int getType();
+public int hashCode();
+public List&lt;Object&gt; match(String pattern);
+public List&lt;Object&gt; match(ATerm pattern);
+public boolean hasAnnotations();
+public ATerm getAnnotation(ATerm label);
+public ATerm setAnnotation(ATerm label, ATerm anno);
+public ATerm removeAnnotation(ATerm label);
+public ATermList getAnnotations();
+public ATerm setAnnotations(ATermList annos);
+public ATerm removeAnnotations();
+public boolean isEqual(ATerm term);
+public boolean equals(Object obj);
+public void writeToTextFile(OutputStream stream)
+      throws IOException;
+public void writeToSharedTextFile(OutputStream stream)
+      throws IOException;
+public ATerm make(List&lt;Object&gt; args);
+public ATermFactory getFactory();
+public String toString();</programlisting></para>
+
+        <para>See <xref linkend="section.making-matching" /> for descriptions
+        of the make-like functions and <xref
+        linkend="section.aterms-reading-writing" /> for the reading-writing
+        related functions. Observe that <literal>LONG</literal> is only
+        supported by the Java implementation.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Example Using the Java ATerms</title>
+
+      <para>To give a flavour of the manipulation of ATerms in Java, <xref
+      linkend="example.aterms-java" /> shows the creation of some ATerms and
+      reading of an ATerm from a stream.<example xml:id="example.aterms-java">
+          <title>Using ATerms in Java</title>
+
+          <para><programlisting>import java.io.*;
+import aterm.*;
+
+public class Basic
+{
+  private ATermFactory factory;
+
+  public static final void main(String[] args) throws IOException {
+    Basic basic = new Basic(args);
+  }
+
+  public Basic(String[] args) throws IOException {
+    factory = new aterm.pure.PureFactory();
+
+    ATermInt i = factory.makeInt(42);
+    System.out.println("i = " + i);
+
+    AFun fun = factory.makeAFun("foo", 2, false);
+    ATermAppl foo = factory.makeAppl(fun, i, i);
+    System.out.println("foo = " + foo);
+
+    ATerm t = factory.parse("this(is(a(term(0))))");
+    System.out.println("t = " + t);
+
+    try {
+      ATerm input = factory.readFromFile(System.in);
+      System.out.println("You typed a valid term: " + input);
+    } catch (ParseError error) {
+      System.out.println("Your input was not a valid term!");
+    }
+  }
+}</programlisting></para>
+        </example></para>
+    </section>
+
+    <section xml:id="section.C-Java-differences">
+      <title>Differences between C and Java Version of ATerm Library</title>
+
+      <para>The differences between the C and Java version of the ATerm
+      library are summarized in <xref
+      linkend="table.C-Java-differences" />.</para>
+
+      <table xml:id="table.C-Java-differences">
+        <title>Differences C and Java version</title>
+
+        <tgroup cols="3">
+          <colspec align="left" />
+
+          <thead>
+            <row>
+              <entry align="center">&#160;Feature</entry>
+
+              <entry align="center">C&#160;</entry>
+
+              <entry align="center">Java</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>(Un)protecting ATerms</entry>
+
+              <entry>yes</entry>
+
+              <entry>no (automatic)</entry>
+            </row>
+
+            <row>
+              <entry>LONG</entry>
+
+              <entry>no</entry>
+
+              <entry>yes</entry>
+            </row>
+
+            <row>
+              <entry>ATermTable</entry>
+
+              <entry>yes</entry>
+
+              <entry>no</entry>
+            </row>
+
+            <row>
+              <entry>AtermIndexedSet</entry>
+
+              <entry>yes</entry>
+
+              <entry>no</entry>
+            </row>
+
+            <row>
+              <entry>BAF</entry>
+
+              <entry>yes</entry>
+
+              <entry>no</entry>
+            </row>
+
+            <row>
+              <entry>Distinction level 1/level 2 interface</entry>
+
+              <entry>yes</entry>
+
+              <entry>no</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+
+  <section xml:id="section.aterm-historical-notes">
+    <title>Historical Notes</title>
+
+    <para>The first term structure to be used for data exchange in The
+    Meta-Environment was designed as part of the ToolBus coordination
+    architecture and is described in <xref linkend="BergstraKlint94" /> and
+    was implemented by Paul Klint. These "ToolBus terms" already provided the
+    make-and-match paradigm (<xref linkend="section.making-matching" />) for
+    constructing and deconstructing terms. They also provided a linear string
+    representation for the exchange of terms between components as well as
+    automatic garbage collection.</para>
+
+    <para>The ATerms as discussed here are described in detail in <xref
+    linkend="BJKO00" /> and were implemented by Hayco de Jong and Pieter
+    Olivier (both in C and Java). They introduced several innovations over the
+    original design: maximal subterm sharing, annotations, a compressed binary
+    exchange format, and a two-level Application Programming Interface (API)
+    that enables both simple and efficient use of ATerms. The Java
+    implementation uses SharedObjects as described in <xref
+    linkend="VdBrandMoreauVinju05" /> and implemented by Pierre-Etienne
+    Moreau. Erik Scheffers adapted the C ATerm Library to 64 bit
+    architectures. Arnold Lankamp added the streamable ATerm format (SAF),
+    performed major optimizations on both the C and the Java version and made
+    the Java version ready for efficient execution on multi-core
+    machines.</para>
+
+    <para>In order to further control the type safe access to ATerms, the API
+    generator <command>apigen</command> has been developed. First in C,
+    described in <xref linkend="deJongOlivier04" /> and implemented by Hayco
+    de Jong and Pieter Olivier. Later in Java, described in <xref
+    linkend="VdBrandMoreauVinju05" /> and implemented by Pierre-Etienne Moreau
+    and Jurgen Vinju.</para>
+
+    <para>Since their inception, ATerms have been used in a wide range of
+    application:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Data exchange between interoperating components.</para>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of term rewriting languages and engines.</para>
+      </listitem>
+
+      <listitem>
+        <para>Source code representation and transformation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Software renovation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Representation of web ontologies.</para>
+      </listitem>
+
+      <listitem>
+        <para>Representation of state spaces that are used for model
+        checking.</para>
+      </listitem>
+
+      <listitem>
+        <para>Representation of feature diagrams as used for domain-specific
+        engineering and software product lines.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>An overview of the application of ATerms can be found in <xref
+    linkend="vdBrandKlint07" />.</para>
+  </section>
+
+  <section xml:id="section.aterm-bibliography">
+    <title>Bibliography</title>
+
+    <para><bibliolist>
+        <bibliomixed xml:id="BergstraKlint94"></bibliomixed>
+
+        <bibliomixed xml:id="BJKO00"></bibliomixed>
+
+        <bibliomixed xml:id="VdBrandMoreauVinju05"></bibliomixed>
+
+        <bibliomixed xml:id="vdBrandKlint07"></bibliomixed>
+
+        <bibliomixed xml:id="deJongOlivier04"></bibliomixed>
+      </bibliolist></para>
+  </section>
+</chapter>

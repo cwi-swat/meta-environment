@@ -1,0 +1,1244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook"
+	xml:id="communication-plan">
+  <info>
+    <title>Documentation Plan for The Meta-Environment</title>
+
+    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100 (Wed,
+    13 Dec 2006)$</pubdate>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
+
+  <note>
+    <para>Updated October 30, 2006.</para>
+  </note>
+
+  <section>
+    <title>Background</title>
+
+    <para>The Meta-Environment is an interactive development environment
+    for</para>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>defining domain-specific languages and the tools to support
+          them, and</para>
+        </listitem>
+
+        <listitem>
+          <para>performing analysis and transformation of existing
+          software.</para>
+        </listitem>
+      </itemizedlist>See <link
+    xlink:href="http://www.meta-environment.org">www.meta-environment.org</link>
+    for further details. We want to present our documentation in a more
+    coherent fashion. The purpose of the current document is
+    three-fold:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>to describe a general documentation policy for The
+        Meta-Environment.</para>
+      </listitem>
+
+      <listitem>
+        <para>to identify the documents that will be written or will be
+        rewritten.</para>
+      </listitem>
+
+      <listitem>
+        <para>to make a selection of tools and techniques that can be used to
+        implement this policy.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Current situation</title>
+
+    <para>Currently, we use the following mechanisms to document (parts of)
+    the system:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Scientific papers that describe specific techniques or case
+        studies.</para>
+      </listitem>
+
+      <listitem>
+        <para>LaTex documents to describe either the whole system
+        (<emphasis>e.g</emphasis>. user manual) or specific tools or libraries
+        (<emphasis>e.g</emphasis>., <productname>aterm library</productname>,
+        <productname>toolbus</productname>). HyperLatex is being used for
+        generating web pages from LaTex files.</para>
+      </listitem>
+
+      <listitem>
+        <para>POD files for manual pages.</para>
+      </listitem>
+
+      <listitem>
+        <para>API documentation generated with
+        <application>javadoc</application>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Web pages in our SEN1 twiki (with frequently asked
+        questions)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The bad thing about the current situation is that it does not
+    provide:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Documentation on how to perform any specific task with the
+        software.</para>
+      </listitem>
+
+      <listitem>
+        <para>Technical documentation on how things work on an engineering
+        level (we only explain things on a scientific level).</para>
+      </listitem>
+
+      <listitem>
+        <para>Community support (the only help can be provided by the
+        developers, who do not always have the time).</para>
+      </listitem>
+
+      <listitem>
+        <para>Up-to-date documentation with respect to user-interface and
+        syntax issues.</para>
+      </listitem>
+
+      <listitem>
+        <para>An indexable overview of all documentation on the
+        Meta-Environment.</para>
+      </listitem>
+
+      <listitem>
+        <para>Online help.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>The ideal situation</title>
+
+    <para>In an ideal situation we have a coherent plan for The
+    Meta-Environment 's documentation. This includes a common style, a model
+    of our audience, a clear framework/structure for placing documents in, and
+    a list of important documents.</para>
+
+    <section>
+      <title>Requirements and design decisions</title>
+
+      <para>We have two main desires that this documentation plan must
+      fulfill:</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>To facilitate the application of The Meta-Environment by
+            more people to more applications. This implies better user
+            documentation.</para>
+          </listitem>
+
+          <listitem>
+            <para>To facilitate the maintenance and extension of the
+            Meta-Environment by our open-source community. This implies better
+            technical documentation.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>We have identified the following requirements for our
+      documents:<orderedlist continuation="restarts" inheritnum="ignore">
+          <listitem>
+            <para>Ideally, we want to present all information about our system
+            in a unified (read "predictable") manner. Documentation can be
+            organized in various manners, e.g. task-oriented,
+            technology-oriented, user-oriented, developer-oriented, etc.
+            Another critical decision is to use large, integrated, manuals or
+            more loosely coupled information. The requirement is to be
+            consistent in this organization.</para>
+          </listitem>
+
+          <listitem>
+            <para>We want the information to be targeted at specific
+            audiences; better documentation is written for a (more or less)
+            specific audience.</para>
+          </listitem>
+
+          <listitem>
+            <para>We want the documentation framework to be easily extensible
+            (to minimize the effort of maintaining/updating the information,
+            adding documents, etc.)</para>
+          </listitem>
+
+          <listitem>
+            <para>We want to publish the documents in different media (online,
+            pdf, print).</para>
+          </listitem>
+
+          <listitem>
+            <para>We want an indexable overview.</para>
+          </listitem>
+
+          <listitem>
+            <para>We want low-level API documentation to be tightly integrated
+            with the code (such that it can change or migrate with it).</para>
+          </listitem>
+
+          <listitem>
+            <para>We want documentation for specific use-cases, practical
+            information on how to apply the technology to obtain a specific
+            goal.</para>
+          </listitem>
+
+          <listitem>
+            <para>We want in-depth documentation on how the technology works
+            and what the engineering trade-offs are.</para>
+          </listitem>
+        </orderedlist>So, we have taken the following design decisions:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>We will organize the documentation in short, loosely coupled,
+          tightly integrated documents (R3,R4). Loosely coupled articles are
+          good for web presentation, and can be combined with some additional
+          glue in a paper form. Tight integration means that a single document
+          describes one issue completely, albeit at a certain level of
+          abstraction.</para>
+        </listitem>
+
+        <listitem>
+          <para>We will use a common presentation style</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Audience</title>
+
+      <para>Our audience consists of the following groups of people:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis role="bold">Users</emphasis> are people that are not
+          interested in the source code level of the software: they deal with
+          the commandline and GUI interfaces, and nothing else.<itemizedlist>
+              <listitem>
+                <para>Users of the ASF+SDF Meta-Environment.</para>
+              </listitem>
+
+              <listitem>
+                <para>ASF+SDF Meta-Environment newbies.</para>
+              </listitem>
+
+              <listitem>
+                <para>Users of SDF.</para>
+              </listitem>
+
+              <listitem>
+                <para>Users of the ATerm library and ApiGen.</para>
+              </listitem>
+
+              <listitem>
+                <para>Bachelor and master students.</para>
+              </listitem>
+
+              <listitem>
+                <para>Scientific colleagues working on related topics.</para>
+              </listitem>
+
+              <listitem>
+                <para>Scientific colleagues working on topics that could be
+                applications of the Meta-Environment.</para>
+              </listitem>
+            </itemizedlist></para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Developers</emphasis> are interested in
+          the source code level and want to know all technical details.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Developers of any of the components.</para>
+            </listitem>
+
+            <listitem>
+              <para>Advanced users (contributors of applications).</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Decision makers</emphasis> are
+          interested in global scientific impact, innovation level and
+          economic impact.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Project managers who may decide to use our technology in
+              their projects.</para>
+            </listitem>
+
+            <listitem>
+              <para>Decision makers at funding agencies who can decide to fund
+              research and development related to The Meta-Environment.</para>
+            </listitem>
+
+            <listitem>
+              <para>Decision makers in industry who can decide that using The
+              Meta-Environment has business value for them.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>We classify members of each group into maturity levels:</para>
+
+      <orderedlist continuation="restarts" inheritnum="ignore">
+        <listitem>
+          <para><emphasis role="bold">Novice</emphasis>: has expressed the
+          intention of participating, does not know where to start, or where
+          to end. Does not have an idea of scope. Has to deal with a new
+          paradigm.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Professional</emphasis>: has adequate
+          experience, has a certain overview of the system, knows the scope
+          and limitations, can provide feedback to
+          <emphasis>Novices.</emphasis></para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Specialist</emphasis>: has in-depth
+          understanding of one or more particular products, can provide
+          feedback to <emphasis>Professionals. </emphasis></para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis role="bold">Owner</emphasis>: is the representative
+          of one or more particular products or applications, can provide
+          feedback to and stimulate <emphasis>Specialists.</emphasis></para>
+        </listitem>
+      </orderedlist>
+
+      <para>This classification helps us to think about the audience of a
+      certain document. Each document should make clear at the beginning what
+      the expected audience is.</para>
+    </section>
+
+    <section>
+      <title>Topics and presentation model</title>
+
+      <para>There is a wide range of topics to discuss,
+      including:<itemizedlist>
+          <listitem>
+            <para>High-level descriptions of purpose and architecture.</para>
+          </listitem>
+
+          <listitem>
+            <para>User documentation (how-to's, demonstrations, frequently
+            asked questions).</para>
+          </listitem>
+
+          <listitem>
+            <para>Detailed technical explanations of the design, algorithms
+            and engineering trade-offs.</para>
+          </listitem>
+
+          <listitem>
+            <para>Interactive online demonstrations.</para>
+          </listitem>
+
+          <listitem>
+            <para>Descriptions of successful applications and application
+            areas.</para>
+          </listitem>
+
+          <listitem>
+            <para>Open source project management issues (coding conventions,
+            roadmaps).</para>
+          </listitem>
+        </itemizedlist>Furthermore, we have some additional information that
+      is probably more volatile:<itemizedlist>
+          <listitem>
+            <para>Download area with instructions.</para>
+          </listitem>
+
+          <listitem>
+            <para>Description of the licenses we are using.</para>
+          </listitem>
+
+          <listitem>
+            <para>Access to bugtracker.</para>
+          </listitem>
+
+          <listitem>
+            <para>Access to SVN repository.</para>
+          </listitem>
+
+          <listitem>
+            <para>Access to (archived) mailing lists.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>We will use the following three-step presentation model:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Learning about - overview of concepts and features of key
+          components.</para>
+        </listitem>
+
+        <listitem>
+          <para>How to - using key components and solve problems.</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding - detailed knowledge about concepts and
+          implementation.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Based on this model, we will use the following
+      categories:<itemizedlist>
+          <listitem>
+            <para>Learning about - For novices and professionals.</para>
+          </listitem>
+
+          <listitem>
+            <para>How to - For novices and professionals.</para>
+          </listitem>
+
+          <listitem>
+            <para>Understanding - For specialists and oweners.</para>
+          </listitem>
+
+          <listitem>
+            <para>Courses - For Novice and Advanced Users.</para>
+          </listitem>
+
+          <listitem>
+            <para>Project - For Developers.</para>
+          </listitem>
+
+          <listitem>
+            <para>Source code/API documentation - For Developers.</para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Documents</title>
+
+    <para>Each category will be described and a number of documents to be
+    written is identified. The idea is that these categories are easily
+    extensible with new material, because the documents are relatively small.
+    Still, this plan mentions a number of documents that need to be written to
+    get things started (or rather to catch up).</para>
+
+    <section>
+      <title>Learning about ...</title>
+
+      <para><emphasis>Learning about</emphasis> articles describe essential
+      concepts, global application areas and give overviews of the features of
+      components of the system. Typical subjects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Learning about the architecture of The
+          Meta-Environment.</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about software analysis</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about software transformation</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about domain-specific languages</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about syntax analysis</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about term rewriting</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about ASF+SDF</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><emphasis>Learning about</emphasis> articles:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Target novices or professionals.</para>
+        </listitem>
+
+        <listitem>
+          <para>Are amply illustrated.</para>
+        </listitem>
+
+        <listitem>
+          <para>Gives pointers to the general literature as well as to
+          Meta-Environment related documents.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>How to ...</title>
+
+      <para><emphasis>How to</emphasis> articles provide tutorials for various
+      aspects of the software. These articles are written with a particular
+      use-case in mind, and provide a domain specific view of the technology.
+      The focus is on what you can do with it, and not on how it actually
+      works. Typical subjects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>How to download and install SDF (on linux, macos,
+          windows)</para>
+        </listitem>
+
+        <listitem>
+          <para>How to download and install the ASF+SDF
+          Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto downloading and install the ToolBus</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto start the ASF+SDF Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto start the SDF Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto use the basic SDF commandline</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto use the basic ASF commandline</para>
+        </listitem>
+
+        <listitem>
+          <para>How to write a grammar in SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to write equations and functions in ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to fix a parse error</para>
+        </listitem>
+
+        <listitem>
+          <para>How to fix an ambiguity</para>
+        </listitem>
+
+        <listitem>
+          <para>How to analyse source code in ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to transform source code in ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to specify an algebra in ASF+SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to write a compiler in ASF+SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to write an interpreter in ASF+SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to use ToolBus to let tools written in different languages
+          work together</para>
+        </listitem>
+
+        <listitem>
+          <para>How to extend the Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>How to use the SDF commandline tools</para>
+        </listitem>
+
+        <listitem>
+          <para>How to use the ASF commandline tools</para>
+        </listitem>
+
+        <listitem>
+          <para>How to prototype a domain specific language in ASF+SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to use the generic debugger TIDE</para>
+        </listitem>
+
+        <listitem>
+          <para>How to write parameterized ASF+SDF modules</para>
+        </listitem>
+
+        <listitem>
+          <para>How to apply ... summarizes successful applications of the
+          software. We will invite our main users to write a few pages on
+          their particular subject.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The above articles may be cross-linked. Especially if there is a
+      hierarchical dependency such as: 'How to analyse source code in ASF',
+      which references 'How to write a grammar in SDF'.</para>
+
+      <para><emphasis>How to</emphasis> articles:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Start with a summary of tasks, including a work-flow
+          diagram</para>
+        </listitem>
+
+        <listitem>
+          <para>Target either novice or professional users</para>
+        </listitem>
+
+        <listitem>
+          <para>Mention the necessary knowledge and experience of the
+          user</para>
+        </listitem>
+
+        <listitem>
+          <para>Written by either specialists or owners</para>
+        </listitem>
+
+        <listitem>
+          <para>Reference <emphasis>Understanding</emphasis> documents where
+          the information would become too technical (example: explain how to
+          use SDF priorities and what for, but not how they work)</para>
+        </listitem>
+
+        <listitem>
+          <para>Avoid the use of screen-shots, and other volatile details
+          (provide a reference to a <emphasis>Demonstration</emphasis>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Targeted at users with modest technical background</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>How to apply articles:</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>Short (1-3) pages</para>
+          </listitem>
+
+          <listitem>
+            <para>Written by specialists or developers.</para>
+          </listitem>
+
+          <listitem>
+            <para>Targeted at users</para>
+          </listitem>
+
+          <listitem>
+            <para>References to relevant websites and scientific
+            publications</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions domain (application area)</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions software used</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions future work</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions all scientific and industrial partners</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions all people involved</para>
+          </listitem>
+
+          <listitem>
+            <para>The list itself is worth publishing first-class on the
+            website (including the names of the authors)</para>
+          </listitem>
+
+          <listitem>
+            <para>Each application is one docbook file</para>
+          </listitem>
+
+          <listitem>
+            <para>If possible, each application has a correspondong
+            <emphasis>Demonstration</emphasis></para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Understanding ...</title>
+
+      <para>Articles in the category <emphasis>understanding</emphasis> give
+      in-depth, detailed, information about concepts, technology or
+      implementation. Typical subjects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Understanding ATerm data representation and
+          manipulation</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding SDF disambiguation and filtering</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding ASF traversal functions</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding ASF conditional term rewriting</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding SDF grammar normalization</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding source code locations</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding SDF scannerless generalized LR parsing</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding ToolBus coordination middleware</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding the Relational Calculus</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding TIDE, the language independent debugging
+          interface</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding the connection between ASF and SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding SDF parse trees</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding ATerm API generation</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding SDF API generation</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding Source code tree composition</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding Sisyphus modular continuous integration
+          toolkit</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Typically these documents have the following properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Written for a more advanced audience (both developers and
+          users)</para>
+        </listitem>
+
+        <listitem>
+          <para>Provide references to scientific publications</para>
+        </listitem>
+
+        <listitem>
+          <para>Arbitrary length (average 10-15 pages), but shorter is
+          better!</para>
+        </listitem>
+
+        <listitem>
+          <para>Starts with explaining it's position relative to the rest of
+          the software</para>
+        </listitem>
+
+        <listitem>
+          <para>Provides plenty links to related work and related
+          software.</para>
+        </listitem>
+
+        <listitem>
+          <para>May also be a pointer to a scientific publication.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Courses</title>
+
+      <para>The courses section of the documentation contains slides and
+      hand-outs for use in bachelor and master level courses on
+      Meta-Environment related subjects. Since layout is very important for
+      slides, we allow powerpoint, open-office and latex documents.</para>
+    </section>
+
+    <section>
+      <title>Project managament ...</title>
+
+      <para><itemizedlist>
+          <para>The project management category contains information for
+          developers</para>
+
+          <listitem>
+            <para>Documentation plan</para>
+          </listitem>
+
+          <listitem>
+            <para>Communication plan</para>
+          </listitem>
+
+          <listitem>
+            <para>Software process standard</para>
+          </listitem>
+
+          <listitem>
+            <para>How to document source code</para>
+          </listitem>
+
+          <listitem>
+            <para>How to use version control</para>
+          </listitem>
+
+          <listitem>
+            <para>Coding standards</para>
+          </listitem>
+
+          <listitem>
+            <para>Roadmaps (per main topic such as SDF, ASF, ToolBus, ATerms,
+            Sisyphus)</para>
+          </listitem>
+
+          <listitem>
+            <para>Testing plans</para>
+          </listitem>
+
+          <listitem>
+            <para>Source code distribution and source code composition
+            manual</para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Source code documentation</title>
+
+      <para>This is the documentation located with and inside the source
+      code:</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>The documentation is organized per package</para>
+          </listitem>
+
+          <listitem>
+            <para>Every package will have a 'make doc' target, that will
+            generate a web page with in <filename>index.html</filename> file
+            in <filename>./doc/html</filename></para>
+          </listitem>
+
+          <listitem>
+            <para>The documentation resides mainly <emphasis>inside</emphasis>
+            the source code (such that it can migrate with it)</para>
+          </listitem>
+
+          <listitem>
+            <para>Only one API, or one tool in one package, such that
+            documentation is easier (work in progress)</para>
+          </listitem>
+
+          <listitem>
+            <para>For C packages we use doxygen</para>
+          </listitem>
+
+          <listitem>
+            <para>Fox Java packages we use javadoc</para>
+          </listitem>
+
+          <listitem>
+            <para>For other languages we will extend doxygen with a DSL plugin
+            (e.g. ToolBus, SDF)</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>For each package we need:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A global description of purpose and main use cases (to be
+          located in the MAIN HEADER FILE of a tool/library, using the
+          <code>\mainpage</code> command of doxygen). This should reference to
+          other documentation sources such as <emphasis>How to's</emphasis>,
+          <emphasis>Understanding</emphasis> and
+          <emphasis>Demonstrations</emphasis></para>
+        </listitem>
+
+        <listitem>
+          <para>A manpage-like description of command-line use of that package
+          (to be located in the directory that contains the
+          <function>main()</function> function of the tool, and written using
+          <productname>docbook</productname>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Description of the APIs provided by the package (using the
+          doxygen <code>\groupdef</code> command (although we strive to have
+          only on API in one package)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>How to get there?</title>
+
+    <para>It seems that the most widely used technology for documenting
+    software projects is DocBook (see, <link
+    xlink:href="http://www.docbook.org">www.docbook.org</link>). Docbook is an
+    XML-based standard for the semantic mark-up of text and can be used to
+    generate a wide variety of output formats including HTML, PDF, man pages,
+    javahelp, and eclipsehelp. This means that we can use a single source for
+    our webpages, interactive help and printed documentation.</para>
+
+    <para>The downside of using DocBook is that we have to learn yet another
+    text processing technology. The number of predefined tags in DocBook is
+    large (400) and the markup is more verbose than, for instance, LaTex.
+    Another issue to observe is that DocBook is under active development.
+    DocBook V4.5 is froozen and DocBook V5.0 is in an advanced stage of
+    development. After experimenting with both versions, it seems better to
+    start using V5.0 immediately, otherwise we start writing legacy
+    documentation and need to convert later on.</para>
+
+    <para>We have tried a number of DocBook editors including:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The <application>xxe</application> editor by XMLMind (<link
+        xlink:href="http://xmlmind.com/xmleditor">www.xmlmind.com/xmleditor</link>).
+        The standard edition of <application>xxe</application> is freely
+        available.</para>
+      </listitem>
+
+      <listitem>
+        <para>The Eclipse-based editor Vex (<link
+        xlink:href="http://vex.sourceforge.net">vex.sourceforge.net</link>).</para>
+      </listitem>
+
+      <listitem>
+        <para>The conglomerate editor (<link
+        xlink:href="http://www.conglomerate.org">www.conglomerate.org</link>).</para>
+      </listitem>
+
+      <listitem>
+        <para>The nXML extention of <application>emacs</application> (<link
+        xlink:href="http://hack.oreilly.com/pub/h/2044">hacks.oreilly.com/pub/h/2044</link>).</para>
+      </listitem>
+
+      <listitem>
+        <para>The DocBook extension of <application>openoffice</application>
+        (<link
+        xlink:href="http://xml.openoffice.org/xmerge/docbook/index.html">xml.openoffice.org/xmerge/docbook/index.html</link>).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Based on this experience we recommend to use
+    <application>xxe</application> for wysiwyg editing and
+    <application>emacs</application> for editing of the XML source. Note that
+    the DocBook V5.0 addon has to be installed explicitly after installation
+    of xxe itself (Start xxe, go to the Options-&gt;Install Add-ons... menu
+    and select either DocBook 5 + XInclude configuration or Customization of
+    the DocBook 5 configuration allowing edit &lt;xi:include&gt; elements by
+    hand).</para>
+  </section>
+
+  <section>
+    <title>Resources</title>
+
+    <section>
+      <title>DocBook resources</title>
+
+      <para>Useful links related to DocBook:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link
+          xlink:href="http://www.docbook.org">www.docbook.org</link> (see in
+          particular the DocBook wiki at <link
+          xlink:href="http://wiki.docbook.org">wiki.docbook.org</link> with
+          many tutorials, tools and examples)</para>
+        </listitem>
+
+        <listitem>
+          <para>The DocBook project (<link
+          xlink:href="http://docbook.sourceforge.net">docbook.sourceforge.net</link>)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Useful books related to DocBook are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>N. Walsh and L. Mueller, <emphasis>DocBook: The Definitive
+          Guide</emphasis>, O'Reilly, 1999. See also <link
+          xlink:href="http://docbook.org/tdg">www.docbook.org/tdg</link>. Note
+          that a <link
+          xlink:href="http://www.docbook.org/tdg5/en/html/docbook.html">new
+          version</link> describing DocBook V5.0 is in the works.</para>
+        </listitem>
+
+        <listitem>
+          <para>Bob Stayton, DocBook XSL, The Complete Guide, Sagehill, 2005.
+          See also <link
+          xlink:href="http://www.sagehill.net/docbookxsl">www.sagehill.net/docbookxsl</link>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Image resources</title>
+
+      <para>Documentation becomes more lively and inspiring with good use of
+      illustrations and pictures. Think of the following associations:</para>
+
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>analysis, parsing</entry>
+
+              <entry>measurement tools, knives, microscopes, lenses,
+              etc.</entry>
+            </row>
+
+            <row>
+              <entry>user-defined syntax</entry>
+
+              <entry>masks, cameleons</entry>
+            </row>
+
+            <row>
+              <entry>transformation</entry>
+
+              <entry>various biological analogies (from seed to plant,
+              metamorphosis of butterfies), electrical transformers</entry>
+            </row>
+
+            <row>
+              <entry>term rewriting</entry>
+
+              <entry>trees, forests, ...</entry>
+            </row>
+
+            <row>
+              <entry>software renovation</entry>
+
+              <entry>renovation of buildings, cities, ...</entry>
+            </row>
+
+            <row>
+              <entry>Software components</entry>
+
+              <entry>lego bricks, (toy) building blocks, electrical outlets,
+              power adapters,</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <para>Here is a list of links to collections of potentially relevant
+      images:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Image databases of the University of Amsterdam: <link
+          xlink:href="http://www.uba.uva.nl/dpc/beelddatabanken.cfm">www.uba.uva.nl/dpc/beelddatabanken.cfm</link>.
+          In particular the botany and map collections are interesting.</para>
+        </listitem>
+
+        <listitem>
+          <para>The electronic zoo: <link
+          xlink:href="http://netvet.wustl.edu/pix.htm">netvet.wustl.edu/pix.htm</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para>CalPhotos: <link
+          xlink:href="http://calphotos.berkeley.edu/">calphotos.berkeley.edu</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Masks: <link
+          xlink:href="http://exchanges.state.gov/culprop/bolivia/sect1.htm">exchanges.state.gov/culprop/bolivia/sect1.htm</link>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Google image search is also highly recommended for finding
+      relevant illustrations. Be consistent in your choice of illustrations
+      (one theme per topic).</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Plan</title>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>Switch to DocBook for writing all documentation.</para>
+        </listitem>
+
+        <listitem>
+          <para>Existing documentation will be converted to DocBook.</para>
+        </listitem>
+
+        <listitem>
+          <para>Split up ATerm manual into pieces: transform API to doxygen,
+          ToolBus howto for connection tools, and Understanding ATerms for the
+          rest, maybe a small 'How to program ATerms'</para>
+        </listitem>
+
+        <listitem>
+          <para>Existing javadoc documentation in Java will be rendered by
+          javadoc Doxygen and included in the Twiki pages.</para>
+        </listitem>
+
+        <listitem>
+          <para>For all non-java documentation, we will start to write Doxygen
+          comment</para>
+        </listitem>
+
+        <listitem>
+          <para>Use Doxygen to generate documentation for all non-java
+          packages, and include in the Twiki pages. (DONE)</para>
+        </listitem>
+
+        <listitem>
+          <para>Add a <emphasis>doc</emphasis> target to all our packages and
+          include the documentation in the website.</para>
+        </listitem>
+
+        <listitem>
+          <para>Man pages and API documentation will be included in each
+          package.</para>
+        </listitem>
+
+        <listitem>
+          <para>Write manpages in docbook format (in the directory that
+          contains the main() of the tool).</para>
+        </listitem>
+
+        <listitem>
+          <para>More global documents will be included in the meta-doc
+          package.</para>
+        </listitem>
+
+        <listitem>
+          <para>Publish meta-doc documentation in the Twiki pages
+          (continuously)</para>
+        </listitem>
+
+        <listitem>
+          <para>Extend meta-studio with a java help browser. See http <link
+          xlink:href="www.onjava.com/pub/a/onjave/2003/10/15/javahelp_docbook.html">www.onjava.com/pub/a/onjava/2003/10/15/javahelp_docbook.html</link></para>
+        </listitem>
+
+        <listitem>
+          <para>Start write <emphasis>How to</emphasis> and
+          <emphasis>Understanding</emphasis> articles, after prioritizing
+          them, reusing parts of the old documentation</para>
+        </listitem>
+
+        <listitem>
+          <para>Replace Pico guided tour by interactive
+          <emphasis>Demonstration</emphasis></para>
+        </listitem>
+
+        <listitem>
+          <para>Make packages smaller (one tool/library, one package)</para>
+        </listitem>
+
+        <listitem>
+          <para>Invite people to write <emphasis>Applications</emphasis>
+          documents: Ralph Oudejans (First result), Mark van den Brand (Risla,
+          Elan4), Albert Hofkamp (Chi), Eelco Visser (StrategoXT),
+          Pierre-Etienne Moreau (Tom), Peter Mosses (Action Notation),
+          Jan-Friso Groote/Jaco van der Pol (muCRL), Anthony Cleve (Data
+          reengineering).</para>
+        </listitem>
+      </itemizedlist></para>
+  </section>
+</chapter>

@@ -1,0 +1,156 @@
+Sun Apr  5 13:50:54 CEST 2009 <jurgenv@cwi.nl>
+ * triggering a build
+
+Wed Aug 27 09:08:47 CEST 2008 <jurgenv@cwi.nl>
+ * changed URL of newbie index to new website
+
+Wed May 14 11:25:56 2008    <bruntink@cwi.nl>
+ * Commit to trigger a Sisyphus build.
+
+Fri May  9 15:04:41 CEST 2008 <jurgenv@cwi.nl>
+ * architecture-meta-environment.xml: added more detail and stories to
+   the describtion of the detailed coordination view. A picture was also
+   added and some mistakes fixed.
+
+Mon May  5 16:11:34 CEST 2008 <jurgenv@cwi.nl>
+ * architecture-meta-environment.xml: added detailed information
+   on editor-management, configuration-management and transaction-management.
+
+Mon Apr 28 15:00:59 CEST 2008 <jurgenv@cwi.nl>
+ * architecture-meta-environment.xml: started view on detailed
+   communication processes within the Meta-Environment.
+
+Mon Apr 28 13:10:37 CEST 2008 <jurgenv@cwi.nl>
+ * Makefile.am: added a generic rule to generate pdf from any specific
+   docbook xml file. In the toplevel directory simple type:
+   'make path/to/doc.pdf', which will generate the pdf file for the
+   'path/to/doc.xml' docbook xml file.
+
+Fri Apr 25 13:15:02 CEST 2008 <{jurgenv,bruntink}@cwi.nl>
+ * build-environment.xml: upated example .bootrollrc file to latest version of
+   sisyphus
+
+Mon Oct  8 15:42:44 CEST 2007 <paulk@cwi.nl>
+* Adapted Makefile.am to do replacements in *.xsl.src files
+  used for the docbook customization layer
+
+Sun Oct  7 17:06:52 CEST 2007 <paulk@cwi.nl>
+* Added Rscript manual
+* Introduced a customization layer for docbook.xsl
+
+Thu Sep 13 22:32:07 CEST 2007 <jurgenv@cwi.nl>
+ * Moved ASF+SDF and SDF manuals to "understanding"
+ * Created documents on SDF warnings and errors and ASF warnings and errors
+
+Thu Sep 13 18:58:10 CEST 2007 <jurgenv@cwi.nl>
+ * getting-started: removed guided tour for 1.5 release
+
+Thu Sep 13 17:18:15 CEST 2007 <jurgenv@cwi.nl>
+ * website.xml,pubdate.xsl: documents that have a <pubdate> tag will
+   get the date of the last commit substituted inside.
+
+Mon May 14 15:31:54 CEST 2007 <jurgenv@cwi.nl>
+ * sdf.xml: wrote and moved disambiguation section.
+
+Mon May 14 13:34:54 CEST 2007 <jurgenv@cwi.nl>
+ * website.sh: added generation of log htmls from svn log
+ * svnlog2html.xsl: translation from svn log xml to html
+
+Fri May 11 13:49:02 CEST 2007 <jurgenv@cwi.nl>
+ * learning-about/sdf/*: rewrote/restructured the SDF manual
+ * website.sh: added chapter and section numbers to pdf output
+
+Thu May 10 14:06:46 CEST 2007 <jurgenv@cwi.nl>
+ * started to review SDF manual
+
+Thu Apr 19 13:13:36 CEST 2007 <economop@cwi.nl>
+ * learning-about/formatting/formatting.xml: fixed typo. 
+
+Wed Apr 18 09:14:49 CEST 2007 <jurgenv@cwi.nl>
+ * configure.ac: added explicit dependency on FOP, using the
+   --with-fop configure flag.
+
+Wed Feb 28 17:24:57 CET 2007 <{economop,jurgenv}@cwi.nl>
+ * Added a link to The Goat Book in the build-env documentation.
+
+Sat Feb 17 15:30:15 CET 2007 <jurgenv@cwi.nl>
+ * added configure option --with-docbook-xsl which is mandatory, and 
+   points to the directory that contains 'html/docbook.xsl'.
+
+Sat Feb 17 15:06:54 CET 2007 <jurgenv@cwi.nl>
+ * added document on disambiguation in sdf
+
+Wed Feb 14 09:46:33 CET 2007 <jurgenv@cwi.nl>
+ * moved 'architecture-meta-environment' from learning about to
+   understanding.
+
+Sun Oct  1 19:42:07 CEST 2006 <jurgenv@cwi.nl>
+ * website.sh: png, gif and jpg pictures in every directory are
+   also put online by website.sh
+
+Wed Jul  5 12:56:17 CEST 2006 <jurgenv@cwi.nl>
+ * applications: added directory to contain testimonials and
+   other reports on applications of Meta-Environment software.
+ * sandbox/applications/database-reverse-engineering.xml: added
+   copy of Anthony Cleve's email report.
+
+Wed Jul  5 10:04:57 CEST 2006 <jurgenv@cwi.nl>
+ * sandbox: added directory for documents that are in progress and
+   need to be kept off-line for now.
+
+Tue Jul  4 09:11:09 CEST 2006 <jurgenv@cwi.nl>
+ * website.sh: generates a website containing all docbooks.
+ * Makefile.am: doc target calls website.sh
+
+Mon Jul  3 08:54:52 CEST 2006 <jurgenv@cwi.nl>
+ * added: user-documentation, developer-documentation and
+   project-documentation to store new docbook based documentation
+   files in. Each docbook file will have its own directory, under one
+   of the above directories.
+ * moved: all old documentation to 'to-be-converted'.
+
+Sat Mar  4 09:50:06 CET 2006 <jurgenv@cwi.nl
+ * user-manual: Worked on overview of user-manual for version 2.0 of the
+   ASF+SDF Meta-Environment
+ * user-manual: Work in progress: changing URL's to www.meta-environment.org
+ * configure.in: Changed --with-build-doc option to --enable-maintainer-mode
+ * package: changed package to standard GLT package interface
+ * Makefile.am: added generation of meta-doc-config script
+
+Fri Apr 23 10:32:06 CEST 2004 <jurgenv@cwi.nl>
+  * Upgraded makefiles
+
+2003/09/18 (markvdb@cwi.nl)
+  * Worked on the traversal section.
+
+2003/07/15 (markvdb@cwi.nl)
+  * Splitted the user manual in a guided tour and a asf+sdf manual.
+
+2003/05/30 (jurgenv@cwi.nl)
+  * Changed generation of pdf file from using pdflatex to using latex
+    and then dvipdf. This is because pdflatex dumps core on manual.ltx
+    for some vague reason.
+
+2003/04/16 (markvdb@cwi.nl)
+  * Started to adapt the user manual to the new user interface.
+
+2001/05/20 (mdejonge@cwi.nl)
+  * Fixed the dailybuild of meta-doc.
+
+2002/05/06 (vandenbr@loria.fr)
+  * Tried to fix the dailybuild of meta-doc.
+  * Based the generation of the manual on pdflatex instead of latex.
+
+2001/08/27 (mdejonge@cwi.nl)
+  * All source files are now included in the meta-doc distribution
+  * Added --with-build-manual configuration switch to explicitely state that
+    the manual should be build  (useful for developers).
+  * Manual is now installed as asf+sdf-user-manual.ps in <prefix>/doc
+  * Added autobundle package description file.
+
+
+2001/07/31 (jurgenv@cwi.nl)
+  * Put the user-manual of the ASF+SDF Meta-Environment in a separate
+    package.
+  * Initial version is 0.1beta
+  * make dist creates a tarball containing only manual.ps

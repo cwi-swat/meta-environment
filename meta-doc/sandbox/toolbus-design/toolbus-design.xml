@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>ToolBus Design Issues</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>This "living" document is intended to record design issues and
+    discussions for ToolBusNG.</para>
+  </section>
+
+  <section>
+    <title>Current Situation</title>
+
+    <para>We have recently switched to ToolBusNG as replacement for good old
+    ToolBusC who has served us so well. Although the ToolBusNG implementation
+    currently still needs some additional work (see <xref
+    linkend="section.toolbusNG-todo" />), the good news is that ToolBusNG is
+    already, in some respects, better than ToolBusC:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Architecture is really flexible.</para>
+      </listitem>
+
+      <listitem>
+        <para>Better performance, both on single core and on multi-core
+        machines.</para>
+      </listitem>
+
+      <listitem>
+        <para>Good starting point for new ideas.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section xml:id="section.toolbusNG-todo">
+      <title>To Do list ToolBusNG</title>
+
+      <para>The following short-time issues have to be addressed before we
+      can, for instance, use ToolBusNG in the courses in january (with
+      priority indicated):</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>[Low] Several other adapters have to be converted (Python,
+          Perl, ...)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Desired situation</title>
+
+    <para>Recently, some features have already been added to increase
+    usability:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The "dynamic" Process calls: is <literal>P</literal> is a
+        string-values variable in the given context, then the process call
+        <literal>P(...)</literal> is interpreted as a call to
+        <literal>P</literal>'s value.</para>
+      </listitem>
+
+      <listitem>
+        <para>Cancel has been added to the tool protocol. (Historical note:
+        the cancel was already part of the original protocol but was never
+        implemented).</para>
+      </listitem>
+
+      <listitem>
+        <para>Execution profiling for tools.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The ToolBus has primarily been designed as middleware solution for
+    tool integration. What are the longer term needs for this? Some
+    thoughts:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Adding computation intensive tools (proof and model checkers)
+        increases the need for horse power and distributed
+        computations.</para>
+      </listitem>
+
+      <listitem>
+        <para>This also implies a need for fault tolerance.</para>
+      </listitem>
+
+      <listitem>
+        <para>We live in an increasingly service-oriented world. How can we
+        offer services and use third-party services (and what would these
+        services be?)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Here follows a list of wishes and (perhaps overlapping) ideas for
+    solutions. The list is ordered according to desirability.</para>
+
+    <section>
+      <title>A good ToolBus viewer/debugger</title>
+
+      <para>This is currently carried out as a student project and will
+      probably result in a usable viewer.</para>
+    </section>
+
+    <section>
+      <title>More customizability: properties</title>
+
+      <para>The need to customize ToolBus-based applications will grow. We
+      need a good property system to support this or design another
+      customization mechanism.</para>
+
+      <para>Proposal:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Add a built-in function
+          <literal>get-property(<replaceable>pname</replaceable>)</literal>
+          that returns the string value of the proprty with name
+          <replaceable>pname</replaceable>. Discussion: what to do when the
+          property does not exist?</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Work distribution: distributed process execution</title>
+
+      <para>In terms of work distribution it is reasonable to try to execute
+      the processes in the ToolBus itself on several CPU's. Issues are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Synchronous communication
+          (<literal>snd-msg</literal>/<literal>rec-msg</literal>) requires
+          global knowledge to find a match. This is undesirable from a
+          distribution perspective.</para>
+        </listitem>
+
+        <listitem>
+          <para>Synchronous communication introduces concurrency
+          bottlenecks.</para>
+        </listitem>
+
+        <listitem>
+          <para>We can analyze a given Tscript and automatically cluster the
+          processes that use synchronous communication among each other. Each
+          cluster can be executed by a separate ToolBus. It is unclear what
+          the gains of this approach can be.</para>
+        </listitem>
+
+        <listitem>
+          <para>We can also add primitives to describe the clustering
+          manually.</para>
+        </listitem>
+
+        <listitem>
+          <para>Forms of load balancing and tool migration can be
+          considered.</para>
+        </listitem>
+
+        <listitem>
+          <para>Metering of the distributed applications is needed for load
+          balancing decisions.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Proposal:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Generalize snd-msg/rec-msg to optionally include
+          receiver/sender:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>snd-msg M to P</literal> (to a known process P),
+              or</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>snd-msg M to P?</literal> (P is bound as a result
+              of sending the message).</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>rec-msg M from P</literal>, or</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>rec-msg M from P?</literal></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>In the cases with a known P, direct synchronous communication
+          is possible that does not require a global search.</para>
+        </listitem>
+
+        <listitem>
+          <para>Generalize snd-note/rec-note in a similar way. Discussion
+          point: what to do with subscribe/unsubscribe? Let's try to get rid
+          of them if possible.</para>
+        </listitem>
+
+        <listitem>
+          <para>This extension also reduces the need for other modularization
+          mechanisms.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Error detection</title>
+
+      <para>Currently error detection in the ToolBus is poor.
+      Observations:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>An error in a Tscript (syntax/typechecking) is reported; the
+          script is not executed.</para>
+        </listitem>
+
+        <listitem>
+          <para>Various error conditions lead (at most) to a message and the
+          application is left in an unclear state.</para>
+        </listitem>
+
+        <listitem>
+          <para>We need a systematic error detection (and preferably also
+          recovey) scheme.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Inventory of error sources:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Hardware errors:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>CPU failure</para>
+            </listitem>
+
+            <listitem>
+              <para>Network failure</para>
+            </listitem>
+
+            <listitem>
+              <para>Storage failure</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Errors directly related to the ToolBus implementation
+          itself</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Exception thrown by ToolBus implementation.</para>
+            </listitem>
+
+            <listitem>
+              <para>JVM exception (Out of Memory, etc.)</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Errors related to the Tscript itself:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Syntax errors</para>
+            </listitem>
+
+            <listitem>
+              <para>Typechecking errors</para>
+            </listitem>
+
+            <listitem>
+              <para>Errors while building the internal representation of the
+              Tscripts</para>
+            </listitem>
+
+            <listitem>
+              <para>Other detected errors: missing communication partner,
+              deadlocks, ...</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Tool-related errors during execution of the Tscript:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Execute fails since executable does not exist.</para>
+            </listitem>
+
+            <listitem>
+              <para>Execute fails since tool has wrong input signature.</para>
+            </listitem>
+
+            <listitem>
+              <para>Tool sends a value that violates the protocol.</para>
+            </listitem>
+
+            <listitem>
+              <para>Tool sends a value outside its output signature.</para>
+            </listitem>
+
+            <listitem>
+              <para>Executed tool crashes.</para>
+            </listitem>
+
+            <listitem>
+              <para>rec-connect fails</para>
+            </listitem>
+
+            <listitem>
+              <para>connected tool crashes</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Errors related to built-in functions:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Various error conditions exist (i.e. wrong argument types,
+              tail of empty list, etc.)</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>We can identify the following error scenarios in ToolBus-based
+      applications:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>P1 encounters an internal error condition (built-in function,
+          etc.)</para>
+        </listitem>
+
+        <listitem>
+          <para>P1 sends request to P2, but P2 never replies.</para>
+        </listitem>
+
+        <listitem>
+          <para>P1 sends a note to n processes but none takes action.</para>
+        </listitem>
+
+        <listitem>
+          <para>P1 sends eval request to tool and tool crashes.</para>
+        </listitem>
+
+        <listitem>
+          <para>P1 receives event from tool, but tool crashes before ack-event
+          can be sent.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Proposal:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Make a classification of all possible errors (severity, class,
+          etc.)</para>
+        </listitem>
+
+        <listitem>
+          <para>Generate a note when an error situation occurs.</para>
+        </listitem>
+
+        <listitem>
+          <para>Depending on the severity, we may require that there is at
+          least one receiver. Otherwise the application is aborted. Some
+          issues:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>We could associate a "monitoring" process with each
+              process and send the note to that process. Recall the Erlang
+              approach of <emphasis>process groups</emphasis>: when a process
+              dies, a message is sent to all processes in its group and they
+              decide what to do. We can easily introduce this.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Error recovery</title>
+
+      <para>What to do when an error is detected? What to do when a tool
+      crashes? What to do when the whole ToolBus crashes? We need mechanisms
+      to relieve these situations. Some issues:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ToolBusNG already implements the disrupt operator
+          (<literal>&gt;&gt;</literal>) that can be used for try/catch style
+          solutions.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Modularization</title>
+
+      <para>As suggested by Dennis Hendriks, we need some form of namespaces
+      and structure to limit the scope of messages and notes. Such a mechanism
+      can also form the basis for fault tolerance.</para>
+    </section>
+
+    <section>
+      <title>Work offloading: remote tool execution</title>
+
+      <para>In order to offload computation-intensive tools we need to be able
+      start a tool on another machine. We used to have this with
+      <productname>rsh</productname>, but this did not survive the switch to
+      <productname>ssh</productname>. For the record: tools can already
+      execute on a remote machine but then they should also be started on that
+      same machine.</para>
+    </section>
+
+    <section>
+      <title>More flexibility: dynamic scripts</title>
+
+      <para>Dynamic process calls were a first steps towards run-time
+      customization of ToolBus applications. An obvious next step (and need)
+      is to allow script additions/modifications <emphasis>after</emphasis>
+      the application has started. It is not yet clear how powerfull we want
+      this to be.</para>
+    </section>
+
+    <section>
+      <title>Tool2Tool communication</title>
+
+      <para>How does Arnold's efficient tool-to-tool communication fit
+      in?</para>
+    </section>
+
+    <section>
+      <title>Integration issues</title>
+
+      <para>ToolBus can be and is being used independently but close
+      cooperation with ASF+SDF and Rscript is desirable. Issues:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Should we add more extensive typing of terms (a la
+          APIGEN)?</para>
+        </listitem>
+
+        <listitem>
+          <para>Do we want to unify the types in the ToolBus with, for
+          instance, the Rscript types? What are the pros and cons?</para>
+        </listitem>
+
+        <listitem>
+          <para>How can we make the integration of ASF+SDF tools more
+          seamless?</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Miscellaneous Ideas</title>
+
+    <para>Here are some unordered, immature, ideas:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>We can maintain parent-child relations. A process can then ask
+        for</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>process-id: its own process id.</para>
+          </listitem>
+
+          <listitem>
+            <para>parent-id: the process id of its parent.</para>
+          </listitem>
+
+          <listitem>
+            <para>children: a list of the process ids of all its
+            children.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>An explicit kill operation on another process (or list of
+        processes).</para>
+      </listitem>
+
+      <listitem>
+        <para>A registration mechanism that abbreviates a list of
+        processes.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Wrap up</title>
+
+    <para>TBD</para>
+  </section>
+</chapter>
