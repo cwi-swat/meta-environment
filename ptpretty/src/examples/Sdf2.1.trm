@@ -1,0 +1,43 @@
+
+
+
+definition
+
+module Main
+
+imports Block
+
+Module Block
+imports Layout
+
+exports
+
+sorts Block
+
+context-free syntax
+
+"["
+  Block1
+  "."
+"]"   -> Block
+"("
+  Block2
+  "."
+")" -> Block1
+"{"
+  Block3
+  "."
+"}" -> Block2
+"<>" -> Block3
+
+module Layout
+
+exports
+
+lexical syntax
+
+[\ \t\n] -> LAYOUT
+
+context-free restrictions
+
+LAYOUT? -/- [\t\n\ ]

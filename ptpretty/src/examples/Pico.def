@@ -1,0 +1,209 @@
+
+
+
+definition
+
+module Main
+
+imports Pico-syntax
+
+module Booleans
+
+imports Layout
+
+exports
+  sorts BOOL-CON BOOL
+  context-free syntax
+    "true"  -> BOOL-CON
+    "false" -> BOOL-CON
+
+  context-free syntax
+    BOOL-CON           -> BOOL
+    BOOL "|" BOOL      -> BOOL 
+    BOOL "&" BOOL      -> BOOL {left}
+    "not" "(" BOOL ")" -> BOOL
+    "(" BOOL ")"       -> BOOL {bracket}
+  variables
+    "BoolCon"[0-9]* -> BOOL-CON
+    "Bool"[0-9]*    -> BOOL
+ 
+  context-free priorities
+    BOOL "&" BOOL -> BOOL >
+    BOOL "|" BOOL -> BOOL
+module Layout
+   exports
+      lexical syntax
+         [\ \t\n]          -> LAYOUT
+         "%%" ~[\n]* "\n" -> LAYOUT
+         "%" ~[\%\n]+ "%"  -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\%]
+module Pico-Booleans
+
+imports Layout
+
+hiddens
+  sorts PICO-BOOL-CON
+
+exports
+  sorts PICO-BOOL
+  context-free syntax
+    "true"  -> PICO-BOOL-CON
+    "false" -> PICO-BOOL-CON
+
+  context-free syntax
+    PICO-BOOL-CON -> PICO-BOOL
+
+    PICO-BOOL "|" PICO-BOOL -> PICO-BOOL 
+    PICO-BOOL "&" PICO-BOOL -> PICO-BOOL {left}
+    "not" "(" PICO-BOOL ")" -> PICO-BOOL
+    "(" PICO-BOOL ")"       -> PICO-BOOL {bracket}
+  variables
+    "Bool"[0-9]* -> PICO-BOOL
+    "Bool-con"[0-9]* -> PICO-BOOL-CON
+
+  context-free priorities
+    PICO-BOOL "&" PICO-BOOL -> PICO-BOOL >
+    PICO-BOOL "|" PICO-BOOL -> PICO-BOOL
+module Pico-Identifiers
+
+imports Layout
+
+exports
+  sorts PICO-ID
+  lexical syntax
+    [a-z] [a-z0-9]* -> PICO-ID
+  variables
+    "Id" [0-9\']*   -> PICO-ID
+
+module Pico-Integers
+
+imports Layout Pico-Booleans
+   
+exports
+  sorts PICO-NAT-CON PICO-NAT PICO-INT
+  lexical syntax
+    [0-9]+ -> PICO-NAT-CON
+  context-free syntax
+     PICO-NAT-CON                -> PICO-NAT
+     PICO-NAT "-/" PICO-NAT      -> PICO-NAT {left}
+     "(" PICO-NAT ")"            -> PICO-NAT {bracket}
+     PICO-NAT                    -> PICO-INT
+     "+" PICO-NAT                -> PICO-INT
+     "-" PICO-NAT                -> PICO-INT
+     PICO-INT "+" PICO-INT       -> PICO-INT {left}
+     PICO-INT "-" PICO-INT       -> PICO-INT {left}
+     PICO-INT "*" PICO-INT       -> PICO-INT {left}
+     PICO-INT ">" PICO-INT       -> PICO-BOOL
+     PICO-INT ">=" PICO-INT      -> PICO-BOOL
+     PICO-INT "<" PICO-INT       -> PICO-BOOL
+     PICO-INT "<=" PICO-INT      -> PICO-BOOL
+     "(" PICO-INT ")"            -> PICO-INT {bracket}
+
+  variables
+    "Nat" [0-9\']*      -> PICO-NAT 
+    "Nat-con" [0-9\']*  -> PICO-NAT-CON
+    "Int" [0-9\']*      -> PICO-INT
+
+  context-free priorities
+    PICO-INT "*" PICO-INT -> PICO-INT >
+    {left: PICO-INT "+" PICO-INT -> PICO-INT
+           PICO-INT "-" PICO-INT -> PICO-INT}
+
+hiddens
+  context-free syntax
+    gt "(" PICO-NAT "," PICO-NAT ")" -> PICO-BOOL
+    PICO-NAT "-//" PICO-NAT          -> PICO-NAT
+    PICO-NAT ">-" PICO-NAT           -> PICO-NAT
+
+  variables 
+    "n" [0-9]* -> PICO-NAT-CON
+    "c" [0-9]* -> CHAR
+    "x" [0-9]* -> CHAR*
+    "y" [0-9]* -> CHAR+
+module Pico-Strings
+
+imports Layout
+
+exports
+  sorts PICO-STR-CON PICO-STRING
+  lexical syntax
+    "\"" ~[\"\n]* "\"" -> PICO-STR-CON
+    "\"\"\""           -> PICO-STR-CON
+  context-free syntax
+    PICO-STR-CON                 -> PICO-STRING
+    PICO-STRING "||" PICO-STRING -> PICO-STRING {left}
+  variables
+    "Str-con" [0-9\']* -> PICO-STR-CON
+    "Str" [0-9\']*     -> PICO-STRING
+hiddens
+  variables
+    "Chars" [0-9]* -> CHAR*
+
+module Pico-syntax
+imports Pico-Identifiers Pico-Integers Pico-Strings Types
+exports
+  sorts PROGRAM DECLS ID-TYPE STATEMENT EXP
+  context-free syntax
+
+"begin"
+  DECLS
+
+  {STATEMENT";"
+}* 
+"end"           -> PROGRAM
+    
+"declare"
+  {ID-TYPE","
+}*";" -> DECLS
+
+PICO-ID":"TYPE                                              -> ID-TYPE
+PICO-ID ":=" EXP                                              -> STATEMENT
+"if" EXP "then"
+  {STATEMENT";"
+}* 
+"else"
+  {STATEMENT";"
+}*
+"fi" -> STATEMENT
+
+"while" EXP "do" 
+  {STATEMENT ";"
+}*
+"od" -> STATEMENT
+    
+    PICO-ID                                                       -> EXP
+    PICO-NAT-CON                                                  -> EXP
+    PICO-STR-CON                                                  -> EXP
+    EXP "+" EXP                                                   -> EXP {left}
+    EXP "-" EXP                                                   -> EXP {left}
+    EXP "||" EXP                                                  -> EXP {left}
+    "(" EXP ")"                                                   -> EXP {bracket}
+
+  context-free priorities
+    EXP "||" EXP -> EXP >
+    EXP "-" EXP -> EXP >
+    EXP "+" EXP -> EXP
+
+  variables
+    "Decls" [0-9\']*        -> DECLS
+    "Id-type*"[0-9]*     -> { ID-TYPE "," }*
+    "Series" [0-9\']*       -> {STATEMENT ";"}+
+    "Stat" [0-9\']*         -> STATEMENT
+    "Stat*"[0-9\']*       -> {STATEMENT ";"}*
+    "Stat+"[0-9\']*       -> {STATEMENT ";"}+
+    "Exp" [0-9\']*          -> EXP
+    "Program" [0-9\']*      -> PROGRAM
+module Types
+
+imports Pico-Booleans
+
+exports
+  sorts TYPE
+  context-free syntax
+    "natural"     -> TYPE
+    "string"      -> TYPE
+    "nil-type"    -> TYPE
+    "compatible" "(" TYPE "," TYPE ")" -> PICO-BOOL 
+  variables
+    "Type"[0-9]*  -> TYPE

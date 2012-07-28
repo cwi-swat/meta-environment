@@ -1,0 +1,35 @@
+# $Id$
+
+Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * fix distcheck target
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
+ * fix Makefile.am to get "distcheck" working
+
+2004-01-13	Jurgen Vinju	<jurgenv@cwi.nl>
+  * Added dependency on error-support
+
+2003-10-07	Jurgen Vinju	<jurgenv@cwi.nl>
+  * Function productions are ignored from now on
+ 
+Mon Sep 22 09:48:16 CEST 2003 <{jong,jurgenv}@cwi.nl>
+  * Attempt to fix distcheck in tests subdirectory (some fiddling with
+    DEFINITIONS variable
+
+2003-09-18	Jurgen Vinju	<jurgenv@cwi.nl>
+  * ToolBus enabled ptpretty
+
+2003-09-17	Jurgen Vinju	<jurgenv@cwi.nl>
+  * Moved repository to GLT 
+  * Bumped version number to 1.0
+  * Added generation of package definition file
+  * Added a description of the package and possible usage in the README file
+  * Version of ptpretty tool is set automatically to the version of the pkg
+
+2002-07-23	Jurgen Vinju	<jurgenv@cwi.nl>
+  * Fixed configure.in bug
+  * Fixed some compiler warnings
+
+2002-12-09	Jurgen Vinju	<jurgenv@cwi.nl>
+  * Brought up-to-date with latest sdf-support version

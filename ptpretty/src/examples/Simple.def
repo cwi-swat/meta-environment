@@ -1,0 +1,26 @@
+
+
+
+definition
+
+module Main
+
+imports Block
+
+module Block
+
+
+exports
+sorts Block
+
+lexical syntax
+
+[\ \t\n] -> LAYOUT
+
+context-free syntax
+
+"." -> Block
+
+"["
+  Block
+"]" -> Block

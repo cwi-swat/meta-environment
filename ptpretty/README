@@ -1,0 +1,92 @@
+This package contains the tool 'ptpretty'.
+
+Description
+-----------
+
+It is meant as a case-study. There is no guarantee that it is useful in any
+way. A better pretty-printer can be found in the GPP package.
+
+Ptpretty takes an AsFix parse tree and returns a formatted AsFix parse tree.
+It only affects the LAYOUT parts of the parse tree. The formatting is done
+according to the following scheme:
+
+  - the original SDF definition that was used to generate a parse-table
+    is used as input.
+  - the way each production in this definition is layouted is stored as
+    a pretty-print directive.
+  - a single traversal of the tree applies these directives to the parse tree
+
+For example:
+
+  Take an SDF production like this:
+
+context-free syntax
+"if" Exp "then" 
+  Stat 
+* 
+"fi" -> Statement
+
+ It will pretty print an if-then expression with a space after the "if"
+ and a space after the expression, a newline after the "then", after every
+ statement a newline an also after the last to start the "fi" on a new line.
+
+ The statements will be indented two spaces (indicated by the two spaces
+ before Stat.
+
+ Nested applications of productions automatically leeds to deeper indentation
+ levels.
+
+Implementation
+--------------
+
+Remember that the normalizer introduces a LAYOUT? non-terminal in
+between every non-terminal in the left-hand side of a production:
+
+A B C -> D
+becomes
+A LAYOUT? B LAYOUT? C -> D
+after normalization.
+
+So, a parse tree for d looks like:
+
+d(a,layout,b,layout,c) 
+
+In the definition for D, there is also layout in between every non-terminal:
+A B C -> D
+ ^ ^
+
+The pretty printer copies the layout above the ^ signs to the 'layout'
+positions in the parse tree for d. The algorithm is recursive over the
+structure of the parse tree.
+
+What about indentation?
+
+Every newline in the definition of a production will be printed, but it 
+will be followed by the current indentation prefix. The current indentation
+prefix is defined by the production also. For example:
+
+A
+  B
+C -> D
+
+The newline and the two spaces after the A and before the B mean:
+  - after an A a newline is printed
+  - the indentation level is augmented with two spaces
+  - after the B the indentation level will be reset to the level at
+    which the A was startedx.
+
+The indentation level is simply kept on the stack during the transformation
+of the the tree.
+    
+Usage
+-----
+ 
+The following commands are necessary to pretty-print a term:
+
+> parse-sdf2 -i mylanguage.def -o mylanguage.pt
+> sdf2table -i mylanguage.def -o mylanguage.tbl
+> sglr -p mylanguage.tbl -i myprogram.trm -o myprogram.pt
+> ptpretty -s mylanguage.pt -i myprogram.pt myprogram.pretty
+> unparsePT -i myprogram.pretty -o myprogram.trm
+
+  

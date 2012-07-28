@@ -1,0 +1,14 @@
+ptpretty
+Makefile.in
+Makefile
+.deps
+config.h.in
+aclocal.m4
+config.cache
+config.log
+config.status
+configure
+autom4te-2.53.cache
+ptpretty-*.pkg
+*.tar.gz
+
