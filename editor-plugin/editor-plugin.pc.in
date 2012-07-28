@@ -1,0 +1,14 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
+Name: editor-plugin
+Version: 1.2.1
+Description:
+Requires: aterm-java,config-support-java,error-support-java,meta-studio,toolbus-java-adapter
+JarFile=editor-plugin.jar
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.editor
+MainClass=nl.cwi.sen1.gui.plugin.EditorPlugin
+TestClass=
+ToolBusFlags=-I${prefix}/share/editor-plugin
+
+

@@ -1,0 +1,307 @@
+Wed May  7 09:47:42 2008    <bruntink@cwi.nl>
+
+	* editor-plugin.pc.in: Removed spurious packages.
+
+Tue Apr 29 14:15:22 2008    <bruntink@cwi.nl>
+
+	* editor-plugin.pc.in: Changed dependency on error-support to error-support-java.
+
+Mon Apr 28 16:20:23 2008    <bruntink@cwi.nl>
+
+	* editor-plugin.pc.in: Changed dependency on module-support to module-support-java.
+
+Wed May  9 11:53:51 CEST 2007 <kooiker@cwi.nl>
+ * src/**/EditorKit.java:
+   - remove static from undoManager. This caused undo's and redo's in other
+     editors than the active one (using a single undostack).
+
+Tue May  8 11:21:13 CEST 2007 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Remove component from studio after closing editor (closes #747)
+
+Wed Mar  7 11:22:14 CET 2007 <kooiker@cwi.nl>
+ * editor-plugin.idef.src:
+   - Strongly typed variable declarations
+
+Tue Mar  6 14:01:17 CET 2007 <kooiker@cwi.nl>
+ * src/**/EditorPlugin,SwingEditor.java:
+   - check if file is editable before saving
+   - prevent messages from being sent if file was not saved when not editable
+
+Tue Feb 20 09:28:02 CET 2007 <kooiker@cwi.nl>
+ * editor-plugin.idef.src:
+   - Add support for setting tooltips
+
+Mon Feb 12 15:57:44 CET 2007 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - Fix bug that sets the cursor behind the document lenght when using 
+     find/replace
+
+Fri Feb  9 13:48:39 CET 2007 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add cancel option to close editor (except when the system deciceds to
+     kill the editor)
+ * src/**/JaggedHighlighter.java:
+   - Shows jagged line under text
+
+Fri Feb  9 09:08:21 CET 2007 <kooiker@cwi.nl>
+ * editor-plugin.idef.src:
+   - Add support for setting and getting contents from editor
+
+Sat Feb  3 16:39:27 CET 2007 <jurgenv@cwi.nl>
+ * src/**/EditorPlugin.java: added tooltips for menu options.
+
+Tue Jan 30 13:39:08 CET 2007 <kooiker@cwi.nl>
+ * editor-plugin.idef.src:
+   - Split edit-file into edit-file and set-info
+
+Wed Jan 24 15:57:58 CET 2007 <kooiker@cwi.nl>
+ * src/**/EditorKit.java:
+   - After ending the undo sequence, update the undo and redo states
+
+Tue Jan 23 09:26:27 CET 2007 <kooiker@cwi.nl>
+ * src/**/EditorKit.java:
+   - Add support for undo sequences using CompoundEdit
+ * src/**/EditorPane.java:
+   - Only add undoableEditListener once
+   - Wrap setText in undo sequence
+
+Tue Oct 31 10:08:31 CET 2006 <jurgenv@cwi.nl>
+ * src/**/*.java: added support for popupmenu's in the editors.
+   We can have different popups for different non-terminals that
+   have the focus.
+
+Thu Oct 19 10:49:54 CEST 2006 <kooiker@cwi.nl>
+ * src/**/SwingEditor.java:
+   - Made input and output streams buffered
+   - Close streams when done
+
+Wed Sep  6 14:43:11 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - |Save Copy| now allows you to give the name of the file. Difference with
+     |Save As| functionallity is that |Save Copy| allows you to save a copy of
+     the active file and allows you to go on with this active file in stead of
+     activating the copied one (as word processors for example do). Closes
+     #626.
+
+Fri Jun 23 13:33:03 CEST 2006 <kooiker@cwi.nl>
+ * src/**/Editor{Kit,Pane}.java:
+   - Add support for CTRL-Backspace (delete previous word)
+   - Add support for CTRL-Delete (delte next word)
+
+Thu Jun 22 13:42:41 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Change CTRL-Shift-S to CTRL-Shift-A for |File|->|Save All|
+
+Fri Jun  9 14:56:04 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add |File|->|Save All| menuaction (closes #611)
+
+Wed May  3 09:26:47 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add |File|->|Refresh| menuaction that reloads the file from disk 
+     (closes #593)
+ * src/**/EditorKit.java:
+   - Add getter method for the UndoManager
+
+Tue May  2 11:59:49 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - return error when find is called with string of length 0
+ * src/**/SearchReplaceDialog.java:
+   - Register enter in comboboxes and select find string when opening a new
+     find dialog (closes #597)
+   - Don't use package prefixes in types
+
+Wed Apr 26 10:02:53 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Show dialogs using the Studio frame as parent (closes #590)
+   - Don't highlight when editor is already modified (closes #589)
+   - Add * to name of component when editor is modified
+
+Fri Apr 14 15:33:02 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add File->Save a copy that save a copy without fiddling with the undo and
+     modified states.
+
+Wed Apr  5 11:35:46 CEST 2006 <jurgenv@cwi.nl>
+ * src/**/*.java: made editor robust against IO Errors and to big
+   files. I tried, and the limit seems to be about 1MB. So, I throw
+   a FileToBigException at >1MB. 
+
+Wed Apr  5 11:35:46 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Show error dialog when saving file failed (closes #576)
+
+Tue Feb 28 15:56:29 CET 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add Close All action
+
+Tue Feb 21 13:17:05 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use new configuration api
+
+Mon Feb 20 13:49:50 CET 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - add shortcut CTRL_S to File->Save menu
+
+Tue Dec 20 13:25:26 CET 2005 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - confirm save when killing an editor
+
+Mon Dec 12 09:31:12 CET 2005 <kooiker@cwi.nl>
+ * editor-plugin.idef.src:
+   - add Modulename argument to te-edit-text
+ * src/**/SwingEditor.java:
+   - set modified to false after save
+   - send event when editor saved
+
+Fri Dec  9 11:06:22 CET 2005 <kooiker@cwi.nl>
+ * src/**,configure.ac:
+   - use config-support iso config-manager
+
+Thu Dec  1 08:35:43 CET 2005 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Create statusbar for each editor
+
+Tue Nov 22 08:15:52 CET 2005 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add editable argument to setEditable
+
+Mon Nov 21 16:12:15 CET 2005 <kooiker@cwi.nl>
+ * src/**/SwingEditor.java:
+   - setEditable can be set to true or false
+
+Mon Nov 21 13:15:45 CET 2005 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - throws EditorModified event when text has been changed
+
+Tue Aug 23 08:57:49 CEST 2005 <kooiker@cwi.nl>
+ * package:
+   - add dependency on error-support
+   - add dependency on config-manager
+ * configure.ac:
+   - add dependency on config-manager
+
+Mon Aug 22 10:16:50 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * configure.ac: Removed strange dependency on toolbus package.
+
+Fri Aug 19 16:27:31 CEST 2005 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - Add getBackgroundColor and remove setting of background color in
+     default style
+
+Fri Aug 19 15:51:03 CEST 2005 <jurgenv@cwi.nl>
+ * configure.ac: removed ujac-ui.jar from EXTERNAL_JARS.
+ * lib: removed lib directory.
+
+Wed Aug 17 09:51:31 CEST 2005 <kooiker@cwi.nl>
+ * src/**/StyleRegistrar.java:
+   - first unset styles when receiving new styles
+   - ignore background color for text styles when it equals the
+     editor's background
+ * src/**/EditorKit.java:
+   - add delete line action
+   - add setSelectionToFocus action
+
+Tue Aug 16 09:45:47 CEST 2005 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - turn off linewrap
+ * src/**/EditorUndoManager.java:
+   - undomanager that skips stylechanges
+ * src/**/EditorKit.java:
+   - remove editor from constructor
+   - use StyledTextAction which can retrieve editor from event
+   - add gotoMatchingBracketAction
+
+Mon Aug 15 09:40:23 CEST 2005 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - fixed Goto Line 1
+   - added bracket and line highlight
+
+Fri Aug 12 10:02:23 CEST 2005 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - removed deprecated show/hide methods
+   - removed unused events
+   - fixed cancel in GotoLine dialog
+
+Thu Aug 11 09:13:50 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * src/**/*.java: 
+   - reimplemented editorpane using native swing.
+   - added syntax hightlighting (it's fast!)
+   - added Search and Replace
+   - added Goto Line
+   - added Edit Menu with accelarator keys
+
+Tue Aug  9 10:47:15 CEST 2005 <{jong,kooiker,jurgenv}@cwi.nl>
+ * Updated to new StudioPlugin interface that supports nice
+   closing management.
+
+Mon Aug  8 11:03:59 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
+ * src/**/EditorPanel.java: Added scrollbars around an editor. This
+   also fixes the bug that the editor can not be resized (for an
+   unknown reason).
+ * src/**/EditorPanel.java: confirm closing, even when closed by
+   rec-terminate.
+   
+
+Fri Aug  5 13:08:19 CEST 2005 <jurgenv@cwi.nl>
+ * src: fixed out-of-bounds error in setCursorAtOffset 
+
+Thu Aug  4 14:39:12 CEST 2005 <jurgenv@cwi.nl>
+ * Makefile.am: added LOCAL_JARS variable to compile in maintainer-mode
+   and be able to find the editor jar.
+ * src: implemented setCursorAtOffset(), such that we can jump to 
+   the location of an error.
+
+Thu Jun 16 12:58:17 CEST 2005 <kooiker@cwi.nl>
+ * lib/junac-ui.jar:
+   - Editor is now based on UJAC-ui which on its turn is based on JEdit. It
+     provides find/replace dialog, goto line dialog and an undo manager.
+ * src/nl/cwi/sen1/gui/plugin/EditorTextArea.java:
+   - Turn off EOL markers
+   - Show selection in focus
+   - Paint selection text white
+ * src/nl/cwi/sen1/gui/plugin/EditorPanel.java:
+   - Fix modified notification
+   - Reset UndoManager after writing contents
+
+Wed Jun 15 15:41:36 CEST 2005 <jurgenv@cwi.nl>
+ * src/nl/cwi/sen1/gui/plugin/EditorPanel.java: can open an non-existing
+   file now.
+
+Wed Jun 15 09:39:48 CEST 2005 <kooiker@cwi.nl>
+ * editor-plugin.idef.src:
+   - Change mouse-event with offset into mouse-event with line and column
+ * src/nl/cwi/sen1/gui/plugin/EditorPlugin.java:
+   - Implements displayMessage, setCursorAtOffset
+   - Handle mouseclicks in textarea
+   - Reset modified state after saving file
+ * src/nl/cwi/sen1/gui/plugin/EditorPanel.java:
+   - Add getter for textArea
+
+Fri Jun 10 10:13:35 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * EditorPainter.java:
+   - Add focus highlight
+ * refactorings
+
+Fri Jun  3 11:47:41 CEST 2005 <kooiker@cwi.nl>
+ * EditorPanel.java:
+   - Add modified notion
+   - Add writeContents method
+ * EditorPlugin.java:
+   - Implement isModified, writeContents, editorToFront
+   - Use new addStudioComponentMenu with seperate menupath and action, build
+     menus using metaconfig api
+   - Update administration after removing editor instance
+   - Show dialog when closing unsaved editor
+ * configure.ac:
+   - EXTERNAL_JARS += metaconfig-config
+ * *.java:
+   - Remove Eclipse warnings
+ * Remove generated editor-plugin.idef
+
+Mon May 30 10:13:06 CEST 2005 <kooiker@cwi.nl>
+ * More than one file can be edited
+
+Fri May 27 11:31:42 CEST 2005 <kooiker@cwi.nl>
+ * Initial package
