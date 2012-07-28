@@ -1,0 +1,5 @@
+equations
+
+[mark]
+mark-parameterized-symbols($Symbol,$Symbol*1 $Symbol $Symbol*2) =
+<$Symbol-PARAM>

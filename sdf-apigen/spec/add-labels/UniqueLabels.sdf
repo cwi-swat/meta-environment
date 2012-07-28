@@ -1,0 +1,32 @@
+module UniqueLabels
+
+imports languages/sdf2/syntax/Sdf2
+imports basic/Integers
+
+exports
+  context-free syntax
+  
+  make-labels-unique(SDF) -> SDF
+  make-labels-unique(Module) -> Module
+
+hiddens
+
+  context-free syntax
+
+  concat(StrCon, NatCon) -> StrCon
+  StrCon "+" NatCon -> StrCon
+
+  variables
+    "$Attributes"[0-9]*  -> Attributes
+    "$Label"[0-9]*       -> StrCon
+    "$Symbol"[0-9]*      -> Symbol
+    "$Symbols"[0-9]*     -> Symbols
+    "$Symbol*"[0-9]*     -> Symbol*
+    "$Lit"               -> StrCon
+    "$Natcon"[0-9]* -> NatCon
+    "$CharClass" -> CharClass
+
+  lexical variables
+     "digit"[0-9]*  -> [0-9]
+     "digit+"[0-9]* -> [0-9]+
+     "chars"[0-9]*  -> StrChar*

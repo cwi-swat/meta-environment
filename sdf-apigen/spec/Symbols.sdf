@@ -1,0 +1,29 @@
+module Symbols
+
+imports languages/sdf2/syntax/Sdf2
+imports Literals
+imports Parameterized-Symbols
+
+exports
+
+context-free syntax
+
+    symbol-to-type(Symbol) -> StrCon
+
+hiddens
+
+variables
+ "$Label" -> StrCon {strict}
+ "$Sort" -> Sort {strict}
+ "$Symbol"[0-9]*	-> Symbol {strict}
+
+variables
+ "_Label" -> StrCon {wild}
+ "_Symbol"[0-9]* -> Symbol {wild}
+
+lexical variables
+  "$Char*"[0-9]* -> StrChar* {strict}
+  "$Head"[0-9]*  -> [A-Z]  {strict}
+  "$Middle*"[0-9]*     -> [A-Za-z0-9\-]* {strict}
+  "$Middle"[0-9]*      -> [A-Za-z0-9\-] {strict}
+  "$Last"[0-9]*       -> [A-Za-z0-9] {strict}

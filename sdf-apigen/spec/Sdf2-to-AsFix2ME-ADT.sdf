@@ -1,0 +1,88 @@
+module Sdf2-to-AsFix2ME-ADT
+
+imports ATerm-Utils
+imports Parameterized-Symbols
+imports Production-To-Pattern
+imports Constructors
+
+ 
+
+exports
+  context-free syntax
+    sdf-to-asfix2me-adt ( SDF )           -> ATerm
+    sdf-to-asfix2me-adt ( Module )        -> ATerm
+    sdf-module-to-asfix2me-adt ( Module ) -> ATerm
+
+context-free start-symbols
+	ATerm
+	SDF 
+
+
+hiddens
+
+  context-free syntax
+    grammars-to-adt (Section*,{ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+    grammars-to-adt (Grammar, {ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+
+    lists-to-adt (Section*,{ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+    lists-to-adt (Grammar,{ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+    lists-to-adt (Symbol, {ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+
+    productions-to-adt (Production*)	-> {ATerm ","}*
+    production-to-adt (Production)	-> {ATerm ","}*
+
+    parameters-to-adt(Symbol*) -> {ATerm ","}*
+
+  context-free syntax
+
+    start-symbol-to-adt(Symbol) -> ATerm
+    "layout-adt()"              -> ATerm
+
+
+
+variables
+	"$PreprocessedModule" -> Module {strict}
+	"$Production*"	-> Production* {strict}
+	"$Production"	-> Production {strict}
+	"$Tree" -> ATerm {strict}
+	"$Type"[0-9]* -> StrCon {strict}
+	"$Sep"		-> StrCon {strict}
+	"$Label"		-> StrCon {strict}
+	"$Symbol"[0-9]*	-> Symbol {strict}
+	"$Symbol*"[0-9]*    -> Symbol* {strict}
+	"$Attr*"[0-9]*	-> { Attribute "," }* {strict}
+	"$Literal"		-> StrCon {strict}
+	"$Attributes"	-> Attributes {strict}
+	"$Grammar" -> Grammar {strict}
+	"$Module" -> Module {strict}
+	"$LabeledModule" -> Module {strict}	
+	"$ADT"[0-9]* -> ATerm  {strict}
+	"$Section*"[0-9]* -> Section*  {strict}
+	"$Section" -> Section  {strict}
+	"$Entries"[0-9]* -> {ATerm ","}* {strict}
+	"$Entry"[0-9]* -> ATerm {strict}
+	"$Module*" -> Module* {strict}
+	"$AltId" -> StrCon {strict}
+
+variables
+	"_ImpSection*" -> ImpSection* {wild}
+	"_ModuleId" -> ModuleId {wild}
+	"_Symbol*"[0-9]*    -> Symbol* {wild}
+	"_Symbol"[0-9]*	-> Symbol {wild}	
+	"_Attr*"[0-9]* -> {Attribute","}* {wild}
+	"_Production*"	-> Production* {wild}
+	"_Production"	-> Production {wild}
+	"_Literal"		-> StrCon {wild}
+	"_Attributes"	-> Attributes {wild}
+	"_Label" -> StrCon {wild}
+	"_CharClass" -> CharClass {wild}
+	"_Priorities" -> Priorities {wild}
+	"_Restrictions" -> Restrictions {wild}
+
+
+

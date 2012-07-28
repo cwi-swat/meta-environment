@@ -1,0 +1,102 @@
+equations
+
+[empty]
+  sdf-to-imploded-adt(definition ) = [ ]
+
+[divide]
+  $ADT1 := sdf-module-to-imploded-adt($Module),
+  $ADT2 := merge-adts([], $ADT1),
+  $ADT3 := sdf-to-imploded-adt(definition $Module*),
+  $ADT4 := merge-adts($ADT2, $ADT3)
+  ===>
+  sdf-to-imploded-adt(definition $Module $Module*) = $ADT4
+
+equations
+
+[module-start]
+  sdf-module-to-imploded-adt(module _ModuleId _ImpSection* $Section*) = 
+    [grammars-to-adt($Section*, ), lists-to-adt($Section*, )]
+
+equations
+
+[context-free-syntax]
+  $Entries2 := productions-to-adt($Production*)
+  ===>
+  grammars-to-adt(context-free syntax $Production*, $Entries) = 
+  $Entries, $Entries2
+    
+[lexical-syntax]
+  $Entries2 :=  lexicals-to-adt($Production*)
+  ===>
+  grammars-to-adt(lexical syntax $Production*, $Entries) =
+  $Entries, $Entries2
+
+equations
+
+[empty]
+  productions-to-adt(  ) =
+
+[divide]
+  $Entries1 := production-to-adt( $Production),
+  $Entries2 := productions-to-adt( $Production*)
+  ===>
+  productions-to-adt( $Production $Production*) =
+    $Entries1, $Entries2
+
+equations
+
+[default-normal]
+	$Tree := production-to-imploded-tree($Symbol* -> $Symbol $Attributes),
+	$Type := symbol-to-type($Symbol),
+	$AltId := get-cons($Symbol* -> $Symbol $Attributes)
+	===>
+	production-to-adt($Symbol* -> $Symbol $Attributes) =
+	  constructor($Type,$AltId,$Tree)
+
+equations
+
+[empty]
+  lexicals-to-adt( ) =
+
+[divide]
+  $Entries1 := lexical-to-adt( $Production),
+  $Entries2 := lexicals-to-adt( $Production*)
+  ===>
+  lexicals-to-adt( $Production $Production*) =
+    $Entries1, $Entries2
+
+[equ-lexical-to-adt-LAYOUT]
+  lexical-to-adt(_Symbol* -> LAYOUT _Attributes) =
+
+[default-lexical-to-adt]
+  $Type := symbol-to-type($Symbol)
+  ===>
+  lexical-to-adt(_Symbol* -> $Symbol _Attributes) = 
+      constructor( $Type, $Type, <string(str)>)
+
+equations
+
+[no-lexicals]
+	lists-to-adt(lexical syntax _Production*, $Entries) = $Entries
+
+[iter]
+	$Type1 := symbol-to-type($Label:$Symbol+),
+	$Type2 := symbol-to-type($Label:$Symbol)
+	===>
+	lists-to-adt($Label:$Symbol +, $Entries) =
+	$Entries,
+	list($Type1, $Type2)
+
+[iter-star]
+	lists-to-adt($Label:$Symbol *, $Entries) =
+	lists-to-adt($Label:$Symbol +, $Entries)
+
+[iter-sep]
+	lists-to-adt($Label:{$Symbol1 _Sep} +, $Entries) =
+	lists-to-adt($Label:$Symbol1+, $Entries)
+
+[iter-sep-star]
+	lists-to-adt($Label:{$Symbol1 _Sep} *, $Entries) =
+	lists-to-adt($Label:$Symbol1 *, $Entries)
+
+

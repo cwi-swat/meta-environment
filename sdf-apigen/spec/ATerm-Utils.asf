@@ -1,0 +1,23 @@
+equations
+
+  [equ-merge-adts-empty]
+    merge-adts($ADT, []) = $ADT
+
+  [equ-merge-adts-double-ok]
+    merge-adts([$Entry*1, $Entry, $Entry*2], [$Entry, $Entry*3]) =
+	merge-adts([$Entry*1, $Entry, $Entry*2], [$Entry*3])
+
+  [equ-merge-adts-double-collision]
+    constructor($TypeId, $AltId, $Pattern1) := $Entry1,
+    constructor($TypeId, $AltId, $Pattern2) := $Entry2,
+    $Pattern1 != $Pattern2,
+    $ADT := merge-adts([$Entry*1, $Entry1, collision($Entry1, $Entry2),
+	$Entry*2], [$Entry*3])
+    ===>
+    merge-adts([$Entry*1, $Entry1, $Entry*2], [$Entry2, $Entry*3]) = $ADT
+
+  [default-merge-adts-divide]
+    merge-adts([$Entry*1], [$Entry, $Entry*2]) =
+	merge-adts([$Entry*1,
+		    $Entry], [$Entry*2])
+

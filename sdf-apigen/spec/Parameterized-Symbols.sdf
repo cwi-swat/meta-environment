@@ -1,0 +1,24 @@
+module Parameterized-Symbols
+
+imports languages/sdf2/syntax/Sdf2
+
+hiddens
+
+context-free start-symbols
+  Symbol Section*
+
+exports
+context-free syntax
+
+
+mark-parameterized-symbols(Section*, Symbols) -> Section* {traversal(trafo,top-down, break)}
+mark-parameterized-symbols(Symbol, Symbols) -> Symbol {traversal(trafo,top-down, break)}
+
+"<" Symbol "-PARAM>" -> Symbol
+
+hiddens
+
+variables
+    "$Symbol"		-> Symbol
+    "$Symbol*"[0-9]*    -> Symbol*
+  

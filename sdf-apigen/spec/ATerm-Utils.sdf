@@ -1,0 +1,17 @@
+module ATerm-Utils
+  imports languages/aterm/syntax/ATerms
+
+  exports
+    context-free syntax
+      merge-adts ( ATerm , ATerm )			-> ATerm
+   
+
+hiddens
+    variables
+      "$ADT"		-> ATerm
+      "$AltId"		-> AFun
+      "$Entry"[0-9]*	-> ATerm
+      "$Entry*"[0-9]*	-> { ATerm "," }*
+      "$Pattern"[0-9]*	-> ATerm
+      "$TypeId"		-> AFun
+

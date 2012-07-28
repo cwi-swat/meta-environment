@@ -1,0 +1,189 @@
+# $Id$
+
+Mon Aug 25 16:41:02 CEST 2008 <jurgenv@cwi.nl>
+ * test/PeanoTest.java: discovered a serious bug in the deserialization
+   code for builtins. Changed the test to trigger the bug.
+
+Fri Mar 10 11:38:23 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
+Tue Feb 28 09:14:31 CET 2006 <kooiker@cwi.nl>
+ * test/Makefile.am:
+   - Use clean-local and distclean-local to extend the clean and distclean
+     make targets
+
+Wed Jan 18 17:21:48 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * configure.in,package,spec/Makefile.am: removed transitive
+   dependencies of asc-support, using the asc-support-config script.
+
+Wed Aug 24 16:56:55 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
+ * Fixed TODO (start injections are correct now)
+ * Ported ASF+SDF specification to USE structured lexicals (bootstrapped)
+
+Mon Feb  7 18:35:42 CET 2005 <jurgenv@cwi.nl>
+ * TODO: fix major error in generation of start injections. 
+   The cf( ) is missing in the left-hand side!
+
+Fri Dec 17 13:44:24 CET 2004 <jurgenv@cwi.nl>
+ * Bumped to 3.0
+ * Reimplemented sdf-apigen. 
+ * Generates only ADT's with structured lexicals from now on.
+
+Sat Dec 11 13:28:56 CET 2004 <jurgenv@cwi.nl>
+ * spec/Makefile.am:
+  - added TIDE_SUPPORT
+
+Tue Jun 29 10:54:13 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * spec/Makefile.am:
+  - add SGLR to include paths now that asc-support-me.h needs it
+
+Mon May  3 18:02:19 CEST 2004 <jurgenv@cwi.nl>
+ * Added rudimentary support for productions that return a parameterized
+   sort. Only parameterized sorts with a single argument are allowed!
+
+Mon Apr 26 19:05:02 CEST 2004 <jurgenv@cwi.nl>
+ * Removed dependency on asf package. It was no longer used! 
+
+Sat Apr 17 11:19:32 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed automake-1.7.9 issues (similarly to the way they were fixed 
+   in the apigen package). All problems located in the test directory. 
+ * Regenerated C code of specifications to get wrid of ununused variable
+   warnings
+
+2003/02/11 (jurgenv@cwi.nl)
+ * Added dependency on toolbuslib
+
+2003/01/22 (jurgenv@cwi.nl)
+ * Added dependency on error-support
+ * Upgraded dependencies (without looking if that's really needed) to 
+    latests unreleased versions of all packages.
+
+2003/12/15 (jurgenv@cwi.nl)
+ * renamed ws-after-first to ws-after-head
+ * removed char *sep field when the separator is fixed
+ * Not String, but StrCon leads to a <str> in an imploded ADT
+
+2003/12/15 (jurgenv@cwi.nl)
+ * CHARLIST sort is not used anymore in generated APIs! Instead, 
+   for each lexical and the OptLayout sort, field are made of type <chars>.
+   This leads to an interface that uses directly 'char*' or String in C
+   and Java, but builds an ATermList of the ASCII characters.
+   For example: makeOptLayoutPresent(" "), will make a layout parse tree
+   containing somewhere a singleton [32].
+ * Generation of bottom-sorts removed accordingly
+ * Shell scripts simplified
+
+2003/12/08 (jurgenv@cwi.nl)
+ * Removed generation of mapping from strings to CHARLIST pending a new
+   solution.
+ * Added generation of list(CHARLIST, int) as the new bottom sort of
+   AsFix2ME ADTs.
+ * All specifications build on to of SDF2 syntax from asf-library.
+ * Removed inclusion of Character-Class normalization in Sdf2-To-AsFix2ME
+   because I could not figure out why it was necessary.
+
+2003/12/04 (jurgenv@cwi.nl)
+ * Sdf2-To-Imploded-ADT adapted such that fields of the type "NatCon"
+   and "String" (from asf-library/basic) are translated to holes of
+   type <int> and <str> respectively.
+
+2003/12/02 (jurgenv@cwi.nl)
+ * Brought up-to-date with commandline options of version 1.8 of apigen
+ * Changed CHARLIST_String to charlist.Chars in Java and in C
+   CHARLISTString has become CHARLISTChars. This was inevitable due
+   to the renaming of CHARLIST_String to charlist.String which is not
+   allowed in Java.
+ * Bumped to version 2.0
+
+2003/11/20 (jurgenv@cwi.nl)
+ * added support for parameterized modules. If a module is parameterized
+   and the parameterized sort is used in the left-hand side of a production
+   the sort name becomes a field of type <str> and the tree becomes a field
+   of type <term>
+
+2003/11/09 (jurgenv@cwi.nl)
+ * Made CHARLIST_String.java compatible with newest apigen code
+ * Made mapping to imploded adt up-to-date with ADT-2.0 format
+
+2003/11/07 (jurgenv@cwi.nl)
+ * Made generation of ADT file compatible with apigen-1.7 (ADT format 2.0)
+ * NOTE: imploded format is not yet adapted to the ADT-2.0 format!
+
+Tue Sep  2 10:33:54 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * utils/sdf2-to-java.sh.src:
+   - cleaned up some prints and added 'upgrade-adt' invocation
+
+2003/06/27 (jurgenv@cwi.nl)
+ * Bumped to 1.7
+ * Added package definition file
+
+2003/06/25 (jurgenv@cwi.nl)
+ * Release 1.6
+
+2003/05/30 (jurgenv@cwi.nl)
+ * Fixed errors in configure.in script
+ * Set version to 1.6
+
+2003/03/20 (jurgenv@cwi.nl)
+ * Bumped to 1.6beta
+ * Removed dependency on shared-objects, this is taken care of by 
+   aterm-java-config from now on.
+
+2003/01/22 (jurgenv@cwi.nl)
+ * Release 1.5
+ * Set versions of aterm-java and shared-objects to 1.1
+ * LGPL license
+
+2003/01/18 (jurgenv@cwi.nl)
+ * Brought compiled specifications with new asc-support-main interface
+
+2002/12/19 (jurgenv@cwi.nl)
+ * Set version numbers of shared-objects and aterm-java to 1.1beta
+
+2002/11/14 (vinju@loria.fr)
+ * CHARLIST implementation brought up-to-date with latest changes in
+   adt-to-java
+ * Tests brought up-to-date with new CHARLIST implementation
+ * Added dependencies on aterm-java and shared-objects in order to be able
+   to make tests for generated java API's
+
+2002/11/13 (vinju@loria.fr)
+ * CHARLIST implementation is put in output directory instead of
+   output/package
+
+2002/11/04 (vinju@loria.fr)
+ * Bumped to 1.5beta
+ * CHARLIST is added to the ADT automatically
+ * Only CHARLIST_String is overwritten in order to make the
+   translation: " " <-> [10] at toTerm and fromTerm time.
+
+2002/11/04 (vinju@loria.fr)
+ * Added support for lexicals and layout to sdf2-to-adt. They are no longer
+   user defined 'bottom-sorts' in a generated SDF2 api. Instead there is
+   a bottom sort CHARLIST, which is instantiated by a template
+ * Added a script sdf2-to-java that wraps sdf2-to-adt and adt-to-java and
+   the generation of a special class (the bottom-sort CHARLIST).
+ * Ignore reject productions when generating ADT (why was this never a problem
+   before?)
+ * Added a script sdf2-to-c that wraps sdf2-to-adt and adt-to-c and the
+   generation of a prologue file that implements the CHARLIST bottom sort.
+ * Release 1.4
+
+2002/10/07 (vinju@loria.fr)
+ * Changed the name of the field that gets the tree out of the start pattern.
+   The name is now 'top-<type>' to disambiguate in case of multiple start
+   sorts
+   
+2002/10/03 (vinju@loria.fr)
+ * Added generation of patterns based on start symbols. For every start
+   symbol the pattern parsetree(appl(prod( ... ),..) etc. is generated in
+   order to hide the details of AsFix completely when using an API.
+ * Bumped to 1.4beta
+
+2002/09/31 (vinju@loria.fr)
+ * Started new package sdf-apigen that contains the mapping from
+   SDF to ADT.
+ * Generating sdf-to-adt script using Makefile instead of configure.in
+ * Release 1.3
+

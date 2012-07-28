@@ -1,0 +1,153 @@
+#! /bin/sh
+
+# {{{ variables
+
+     prefix=__PREFIX__
+     bindir=__BINDIR__
+    PKGDATA=__PKGDATA__
+        PRG=`basename $0`
+     APIGEN=__APIGEN__
+    SDF2ADT="__SDF2ADT__"
+
+# }}}
+
+# {{{ usage()
+
+usage() {
+cat << ENDCAT >&2
+Usage: $PRG -i <sdf2-specification> [options]
+
+Parameters:
+ 
+  -i | --input  <FILE>	    specify input specification      [?]
+  -o | --output <STEM>	    generate <STEM>.[ch] etc.        [improvised]
+  -P | --prefix <STR>	    specify API-prefix               [""]
+  -I | --imploded	    create API for imploded terms    [off]
+  -C | --term-compatibility generate old term conv. macros   [off]
+  -v | --verbose	    be verbose during generation     [off]
+  -h | --help		    display this information
+
+Example: ${PRG} -r -i Booleans.sdf -p booleans
+
+ENDCAT
+}
+
+# }}}
+# {{{  info()
+
+info () {
+  if [ $VERBOSE -gt 0 ]; then
+    echo $* >&2
+   fi
+}
+
+# }}}
+# {{{  error()
+
+error() {
+  echo "${PRG}: $*" >&2
+  exit 1
+}
+
+# }}}
+# {{{  require()
+
+require() {
+  [ -f $1 ] || error "no such file: $1"
+}
+
+# }}}
+
+# {{{  default settings
+
+# settings/options
+INPUT=""
+OUTPUT=""
+VERBOSE=0
+VERBOSEOPT=""
+IMPLODEDOPT=""
+PREFIX=""
+COMPATTERMOPT=""
+
+# binaries
+SDF2TOADT=${SDF2ADT}
+ADTTOC=${APIGEN}/bin/adt-to-c
+# }}}
+
+# {{{  handle command line options
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+  case $1 in
+    -C | --term-compatibility)
+      COMPATTERMOPT='--term-compatibility';;
+
+    -i | --input)
+      shift; INPUT=$1 ;;
+
+    -o | --output)
+      shift; OUTPUT=$1 ;;
+
+    -P | --prefix)
+      shift; PREFIX=$1 ;;
+
+    -I | --imploded)
+      IMPLODEDOPT='-I' ;;
+
+    -v | --verbose)
+      VERBOSE=1
+      VERBOSEOPT='-v' ;;
+
+    -h | --help)
+      usage; exit 0 ;;
+
+    *)
+      error "unknown option: $1"
+  esac
+  shift
+done
+
+# }}}
+
+# {{{ sanity checks and variable setup
+
+if [ "a${INPUT}" = "a" ]; then
+  error "no input file specified (use -i <file>)"
+else
+  require ${INPUT}
+fi
+
+if [ "a${OUTPUT}" = "a" ]; then
+  BASE=`basename ${INPUT} .sdf`
+  BASE=`basename ${BASE} .def`
+  OUTPUT=${BASE}
+fi
+
+# }}}
+
+# {{{  err()
+
+err() {
+  error "Bailing out!"
+}
+
+# }}}
+# {{{  generate C from SDF
+
+
+info " generating ${OUTPUT}.adt "
+${SDF2TOADT} ${IMPLODEDOPT} ${VERBOSEOPT} \
+          -i ${INPUT} -o ${OUTPUT}.adt || err
+
+info " generating C from ADT "
+
+${ADTTOC} ${COMPATTERMOPT} ${VERBOSEOPT} \
+               --input ${OUTPUT}.adt --prefix ${PREFIX} \
+	       -n ${OUTPUT}
+
+# }}}

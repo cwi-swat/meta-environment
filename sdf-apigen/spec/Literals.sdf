@@ -1,0 +1,19 @@
+module Literals
+
+imports languages/sdf2/syntax/Sdf2
+
+exports
+
+context-free syntax
+
+%% an extra constructor for Symbol:
+nested-literal(Production) -> Symbol
+
+context-free syntax
+
+StrCon "||" StrCon -> StrCon {left}
+
+hiddens
+
+lexical variables
+	"$Char*"[0-9]* -> StrChar* {strict}

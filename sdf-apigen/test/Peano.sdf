@@ -1,0 +1,14 @@
+definition
+module Peano
+exports
+  sorts Nat
+  context-free syntax
+    "zero" -> Nat     {cons("zero")} 
+    suc(pred:Nat) -> Nat {cons("suc")} 
+
+  lexical syntax
+    [\ \t\n] -> LAYOUT {cons("whitespace")}
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+

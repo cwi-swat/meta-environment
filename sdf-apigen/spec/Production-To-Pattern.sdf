@@ -1,0 +1,49 @@
+module Production-To-Pattern
+imports Production-To-AsFix
+imports Normalization
+imports languages/sdf2/syntax/Sdf2
+
+exports
+
+context-free syntax
+
+    production-to-tree(Production) -> ATerm
+    start-symbol-to-tree(Symbol) -> ATerm
+    literal-to-tree(StrCon)  -> ATerm
+
+    symbols-to-args (Symbol* )	-> {ATerm ","}*
+    symbol-to-tree (Symbol )	-> ATerm
+
+
+hiddens
+
+context-free syntax
+    is-list(Symbol) -> Boolean
+
+variables
+
+ "$Production"	-> Production {strict}
+ "$Production*"	-> Production* {strict}
+ "$Symbol"[0-9]*	-> Symbol {strict}
+ "$Symbol*"		-> Symbol* {strict}
+ "$Symbol+"		-> Symbol+ {strict}
+ "$AFTree" -> ATerm {strict}
+ "$AFTrees" -> {ATerm ","}* {strict}
+ "$AFProd" -> ATerm {strict}
+ "$Literal" -> StrCon {strict}
+ "$Label" -> StrCon {strict}
+ "$Attributes" -> Attributes {strict}
+ "$Sort" -> Sort {strict}
+ "$AFSymbol" -> ATerm {strict}
+ "$Type" -> StrCon {strict}
+ "$Character"[0-9]* -> Character {strict}
+ "$CharRanges" -> CharRanges {strict}
+
+lexical variables
+ "$Char*"[0-9]*  -> StrChar* {strict}
+ "$digit+"[0-9]* -> [0-9]+  {strict}
+
+variables
+ "_Label" -> StrCon {wild}
+ "_Symbol"[0-9]* -> Symbol {wild}
+ "_Character"[0-9]* -> Character {wild}

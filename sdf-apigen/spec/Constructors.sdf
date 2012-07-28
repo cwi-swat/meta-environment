@@ -1,0 +1,30 @@
+module Constructors
+
+imports basic/Identifiers
+imports languages/sdf2/syntax/Sdf2
+
+exports
+  context-free syntax
+    get-cons(Production) -> IdCon
+
+hiddens
+
+variables
+	"$PreprocessedModule" -> Module {strict}
+	"$Label"		-> StrCon {strict}
+	"$Symbol"[0-9]*	-> Symbol {strict}
+	"$Symbol*"[0-9]*    -> Symbol* {strict}
+	"$Attr*"[0-9]*	-> { Attribute "," }* {strict}
+	"$Literal"[0-9]*		-> StrCon {strict}
+	"$Attributes"	-> Attributes {strict}
+
+variables
+	"_Symbol*"[0-9]*    -> Symbol* {wild}
+	"_Symbol"[0-9]*	-> Symbol {wild}	
+	"_Attr*"[0-9]* -> {Attribute","}* {wild}
+	"_Production"	-> Production {wild}
+	"_Attributes"	-> Attributes {wild}
+	"_Label" -> StrCon {wild}
+
+
+
