@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Process List</title>
+
+
+  <link rel="stylesheet" href="css/main.css" type="text/css">
+
+</head>
+
+<body>
+
+<h1>Process List</h1>
+
+<p>
+The process list is an overview of the currently active processes that are running.  The process tree has the following functionality:
+</p>
+
+<ul>
+  <li>Grouping process instances</li>
+  <li>Setting/Unsetting process breakpoints</li>
+  <li>Showing/Hiding processes in other views</li>
+  <li>Displaying source code breakpoints</li>
+</ul>
+
+<p>
+  
+  <h2>Grouping process instances</h2>
+
+When a process has only one instance, it will be displayed as a regular item in the process tree. 
+When a process has multiple instances, the instances will be grouped together into a process group. 
+Multiple instances will all be shown by default but by double clicking on the parent process, all the
+process instances will be represented as one single group.
+</p>
+
+<p>
+  
+  <h2>Setting/Unsetting process breakpoints:</h2>
+
+Process breakpoints can be set on process instances. Clicking on the breakpoint column will either set or unset the process breakpoint. 
+If there are multiple instances of a process and a process instance is set, the process group will also display a breakpoint icon,
+ depicting that one of it's instances has a process breakpoint.
+
+
+<p>
+  <h2>Showing/Hiding processes in other views</h2>
+
+The checkbox next to the process depicts wether or not it is visible in other views. Also by selecting a
+process in this view, the same process will be highlighted in other views. For example the selected process
+in the Process List will be drawn green in the MSC and used in the Process Details view as the selected process. 
+
+
+<p>
+  <h2>Displaying source code breakpoints</h2>
+
+The process tree will display wether or not a process has a source code breakpoint. When there is only one instance of a process, 
+this icon will appear next to it. When there are several instances of the process, the icon is placed next to the process group.
+
+
+</body>
+</html>

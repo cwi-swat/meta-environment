@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Message Sequence Chart</title>
+
+
+  <link rel="stylesheet" href="css/main.css" type="text/css">
+
+</head>
+<body>
+
+<h1>Message Sequence Chart</h1>
+
+<br>
+
+The Message Sequence Chart (MSC) is an overview of the running processes and tools. The communication
+is shown aswell as the executed statements.<br>
+
+<h2>History</h2>
+<p>
+When executing a Toolbus script, all the communication between processes /tools is drawn in the MSC. When
+debugging a Toolbus script, you are able to see the actions that took place by the script. This can be done either 
+after running a entire Toolbus script, or after taking some steps through the script using the stepmode. The number 
+of actions that took place can be set. See User Settings for more information. 
+</p>
+
+<h2>How it looks</h2>
+<p>
+Processes (Circles) and tools (rectangles)  are visualized in the MSC as vertical swimlanes. Executed statements and 
+the communication between the processes/tools are displayed on the swimlanes. Whenever a process or tool instance has 
+ended, it will not be be removed from the MSC. Instead the displayed process or tool instance will turn grey.
+</p>
+
+<p>
+The communication between processes/tools are dispayed as horizontal lines and a text that represent the 
+communication. The displayed lines differ for the different kinds of communication (asynchrone and synchrone).
+</p>
+
+<h2>Displaying filtered processes/tools</h2>
+<p>
+When a process or tool has communication with a hidden process/tool (because it is filtered), the communication 
+line points to a swimlane at the side of the screen. Now by holding the mouse over the swimlane at the side of the 
+screen, a tooltip appears holding the name of the hidden process or tool. 
+</p>
+
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+body 
+{ 
+	color: rgb(0, 0, 0);    
+}
+
+ul#noBullets
+{
+	list-style: none;
+}
+
+h2
+{
+	color: rgb(0, 0, 0);
+}
+
+pre
+{
+	margin-top: 10px;
+}
