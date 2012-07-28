@@ -1,0 +1,16 @@
+package 
+identification
+   name=__PACKAGE__
+   version=__VERSION__
+   location=http://www.cwi.nl/projects/MetaEnv/mod-toolbus
+   info=http://www.cwi.nl/projects/MetaEnv/mod-toolbus
+   description='An Apache module that acts as a ToolBus client'
+
+   keywords=meta-environment, apache, web server, toolbus, application server
+
+configuration interface
+
+requires
+  aterm		2.0.2
+  toolbuslib	0.5.1
+  apache	2.0.47

@@ -1,0 +1,131 @@
+\documentclass[a4paper,10pt]{article}
+
+ \usepackage{graphicx}  
+
+%opening
+\title{}
+\author{}
+
+\begin{document}
+
+
+\title{Apache/mod\_toolbus}
+\author{E.J. Post}
+\maketitle
+
+\vspace{2cm}
+\begin{centering}
+\hspace{3cm}
+\includegraphics{figures/logo-mod_toolbus-small.eps}
+\end{centering}
+\vspace{2cm}
+
+\begin{abstract}
+In this paper I describe the Apache/mod\_toolbus module which I have developed. It demonstrates a possible implementation of integrating the Discrete Time ToolBus and Apache httpd, and discusses some of the issues raised by their respective architectures.
+\end{abstract}
+
+
+\newpage
+\tableofcontents
+\newpage 
+
+\section{Introduction}
+\subsection{Motivation}
+This project was developed for the Programming Environments course at the faculty of Computer Science at the University of Amsterdam.
+
+\subsection{What it is}
+The main component is the module \texttt{mod\_toolbus.so} that can be loaded by the Apache webserver to provide generic ToolBus connectivity over the web. The main function of mod\_toolbus is relaying events; provide it with the arguments for a \texttt{snd-event()} and it will send that event to the ToolBus. It also provides facilities for constructing and displaying HTML sent from the ToolBus, and for sending arbitrary events to the ToolBus via HTTP requests.
+
+
+\subsection{How does that help?}
+One nice thing about mod\_toolbus is how easy it becomes to create graphical front-ends to control arbitrary ToolBus applications with, without having to be inducted into the arcana of writing TCL/TK scripts. Furthermore, it provides a convenient way of outputting results and making them available over the web (given some further meddling with the ATerm to HTML translation functions).
+
+\section{The platform}
+\subsection{Brief description of the ToolBus platform}
+The ToolBus is a software architecture implementing a process-algebraic way of expressing interaction between processes. For more elaborate descriptions, please see the Bergstra and Klint papers.
+
+\subsection{Brief description of the Apache 2.0 platform}
+The Apache webserver can load shared objects (.so files) and run them as 'Apache modules'. These modules are a convenient way of extending the server's funcitonality. Well-known examples are mod\_php and mod\_ssl. These modules are loaded and executed when the server starts up, as specified in Apache's configuration file.
+
+\subsection{How mod\_toolbus fits in}
+The mod\_toolbus software is implemented in C, which happily coincides with the available Apache and ToolBus APIs, written in C as well. Due to the technical nature of mod\_toolbus, and the little need for classes in the way of modeling some complex technical aspect of the software envrionment, object oriented techniques would not provide any obvious benefits.
+
+
+\section{Implementation}
+
+\subsection{Invocation}
+Our mod\_toolbus is implemented registered with Apache as an HTTP content handler. This means it is invoked every time an HTTP request is received. Then, mod\_toolbus checks to see whether the specific request was intended to be handled by it, or not. In the latter case, control is passed on to other content handlers by returning \texttt{DECLINED}. Currently, the handler processes all requests with uri \texttt{mod\_toolbus}, for example:\\
+\texttt{http://localhost/mod\_toolbus?snd-event=foo(bar)}.
+
+\subsection{Plumbing}
+Every time the mod\_toolbus handler starts processing a ToolBus request, it attempts to make a new connection to the ToolBus. This is achieved via ... . The httpd.tb ToolBus script waits for these inbound connections with a rec-connect() operation.
+
+\begin{enumerate}
+\item our \texttt{http\_req\_handler()} connects to the ToolBus and installs \texttt{toolbus\_handler()} to deal with communication with the ToolBus
+\item processes ToolBus events
+\item waits for a special event from the ToolBus which signals that the session may be terminated
+\item sets \texttt{global\_is\_tb\_session\_done} indicating we're done handling the http request, upon which \texttt{http\_req\_handler()} will terminate
+\end{enumerate} 
+
+
+\subsection{Communication}
+Actors: Client, Apache/mod\_toolbus, ToolBus running 'httpd.tb' script
+\begin{enumerate}
+\item Client sends an HTTP request to Apache (e.g. via the browser or netcat)
+\item mod\_toolbus sends the request to the ToolBus in the form of a snd-event()
+\item ToolBus processes this event, and acknowledges it via a \texttt{snd-ack-event()}
+\item Apache receives this response and sends an html/plaintext page to the client
+\end{enumerate} 
+
+HTTP-requests arrive in our request handler in the form of a \texttt{struct request\_rec}.
+
+\subsection{Monitoring what's going on}
+The mod\_toolbus writes status information to an Apache logfile, normally located in /var/log/httpd/error\_log. Also, when the VERBOSE macro is defined, some additional debugging info is written back to the client's browser.
+
+\section{Running}
+\subsection{installing and starting the system}
+Detailed installation instructions are provided in the file \texttt{INSTALLATION} (surprise!). The most important thing is the make command, whis builds the module. Running it comes down to the following steps:
+
+\begin{enumerate}
+\item start the Toolbus (with option \texttt{-viewer} on!)
+\item start the Apache httpd (this will wait for an HTTP request)
+\item send your HTTP request to your webserver (this will invoke mod\_toolbus)
+\end{enumerate}
+
+An example HTTP request would be  \texttt{http://localhost:21000/mod\_toolbus?snd-event=foo(bar)}, but please check the following section first...
+
+\section{An example}
+The file \texttt{webgui/webgui.htm} is a convenient way of sending ToolBus events via mod\_toolbus. The file \texttt{src/httpd.tb} is the ToolBus script that receives those events and can respond to them, interacting with other ToolBus scripts as the need may be. My example script just sends back an fixed and only mildly interesting HTML page, no matter what event was sent to it. (I gladly leave the thinking up up of useful applications to the people at CWI.)
+
+
+
+\section{Discussion}
+\subsection{Comments on the tractability of this project}
+I feel that the developer documentation on the Apache 2 and Toolbus platforms is ill suited for non-experts. The Apache platform offers tons of functionality, but this is difficult to appreciate without a general introduction to some concepts, like module-writing. At present, documentation is being re-written from the Apache 1.3 version which happens to have a lot of module functionality completely re-written.
+
+The ToolBus has some particularly aggravating traits that hinder learning to write and debugging ToolBus-software, for example:
+
+\begin{itemize}
+\item the ToolBus runs buggishly (e.g. dropping printf-statements), especially when not run with option '-viewer'
+\item it is not evident from the documentation who should initiate disconnection of a tool, and who is supposed to send what to whom.
+\end{itemize} 
+
+\subsection{What I did}
+Installed and built Apache and ToolBus, spent (lots of) time figuring out how to write Apache modules, wrote mod\_toolbus, wrote auxiliary functions to decode UTF8-chars, filter argments out of HTTP GET requests, translate html()-ATerms HTML.
+
+(I just discovered that the Apache group has \texttt{libapreq} available for download, which can be used to manipulate elements of http-requests. Normally, I would immediately toss my owen function in the bin, but because this was developed for a course I'll just leave it where it is until someone asks me to do smething with it.)
+
+
+\subsection{Limitations}
+Disconnecting from the ToolBus after processing an HTTP request is not implemented correctly, which manifests itself when a malformed event is sent to the ToolBus. The HTTP-handler checks this and exits, but without telling the ToolBus about doing so. (Fortunately, this is (supposedly) easily cured with the help of some of the more knowledgeable ToolBus programmers.) Also, the ATerm to HTML translation is very (VERY) basic. Again, extending the relevant functions is not at all difficult. For further details, please consult the TODO file.
+
+\subsection{Conclusion}
+This project succesfully adds webserver support to the ToolBus, but some issues remain to be investigated. The overall structure of mod\_toolbus seems like a reasonable implementation to me, and I have (not surprisingly) gained some experience in writing Apache modules, and more specifically on how they relate to ToolBus functionality and implementation. Sites with online documentation for Apache 2.0 and the ToolBus are few and far between, so I think mod\_toolbus can be a welcome and instructive project for people wanting to write a ToolBus-related Apache module (although it might not score high on best practices on every count, but then that has a lot to do with the general lack of up-to-date Apache developer docs).
+
+
+\section{Appendix}
+\subsection{Relevant concepts, glossary, etc.}
+UTF-8: Transforms non-alphanumeric characters to codes of the for \%nn where n are hexadecimal digits. For example, ( and ) are translated into \%28 and \%29.\\
+APR: Apache Portable Runtime, provides an Apache 2.0 API
+
+\end{document}

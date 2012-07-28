@@ -1,0 +1,109 @@
+%%
+%% httpd.tb
+%%
+%% Erik Post
+%% epost@science.uva.nl
+%% Universiteit van Amsterdam
+%%
+
+
+tool modToolbus is {}
+
+
+process Httpd is
+let
+  Httpd  : modToolbus,
+  Pid       : int,
+  Request  : list
+in  
+  (
+    rec-connect(Httpd?) .
+    printf("Connected, starting session\n") .
+    create(Session(Httpd), Pid?) 
+  )*
+  delta
+endlet
+
+process Session(Httpd : modToolbus) is
+let
+  Id      : int,
+  Request  : list
+in
+    printf("Session created\n") .
+    rec-event( Httpd, request(Request?) ) .
+    snd-ack-event( Httpd, request(Request) ) .
+    printf( "Request received: %t\n", Request ) .
+    snd-do(Httpd, reply-html(html([head(),body([p(Request)])]))) .
+    printf("End of session\n") .
+    rec-disconnect( Httpd )  .
+    printf("Disconnected\n") 
+endlet
+
+
+%% netcat sends commands over a tcp connection
+%% we use it to send http requests to the webserver running mod_toolbus
+%% dont forget to specify the correct  portnumber (usually 80 for http)
+%% netcat syntax: nc [-v -v] hostname portnum
+tool netcat is 
+{ 
+  command = "echo -e \"GET / HTTP/1.1\nHost: localhost\n\"| nc localhost 21000" 
+}
+
+tool apachestart is {} 
+tool apachestop is { command = "" }
+
+
+%% stuff below this line should be implemented in a future version
+
+process MainLoop is      
+let Httpd : modToolbus
+in
+  %% execute( apache, Httpd? ) .         %% start Apache/mod_toolbus
+  printf( "Waiting for inbound connections from mod_toolbus...\n" ) . 
+  ( 
+    tau
+    
+    +
+    
+    %%ConnectHttpd( Httpd? )
+    ConnectHttpd    
+  ) *                           
+  rec-event( Httpd, hey-boppa-re-bop(bla) ) .  
+  shutdown( "Httpd.tb: finishing...\n" )     %% close the auction
+endlet
+
+
+
+
+%%process ConnectHttpd( ToolId : modToolbus ) is
+process ConnectHttpd is
+let
+  ToolId  : modToolbus,
+  Id      : int,
+  Request  : term,
+  S       : str
+in  
+  %% loop, waiting for modToolbus tools to connect
+
+  rec-connect( ToolId? ) .
+
+  %%printf( "connected tool (id: %t, ToolId )\n", ToolId ) .
+  rec-event( ToolId, Request? ) .
+  printf( "event received from mod_toolbus: %t\n", Request ) .
+  snd-ack-event( ToolId, Request ) .
+  %% snd-ack-event( ToolId, html(hoideboi) ) .
+  printf( "event acknowledged\n" )
+endlet
+
+
+process SendToModToolbus( T : term ) is
+let
+  S : str,
+  NC : netcat
+in
+  execute( netcat, NC? )
+endlet
+
+
+toolbus( Httpd )
+%%toolbus( MainLoop )
