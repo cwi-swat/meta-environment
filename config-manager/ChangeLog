@@ -1,0 +1,76 @@
+# $Id$
+
+Tue May 29 16:19:22 CEST 2007 <jurgenv@cwi.nl>
+ * src/configmanager.c: menu entries can not added twice anymore.
+
+Wed May  9 08:38:05 CEST 2007 <jurgenv@cwi.nl>
+ * src/configmanager.c,configuration-manager.isrc: added support for the
+   new editor configuration option.
+
+Fri Jan 26 14:58:33 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * src/*: added add-system-property and remove-system-property.
+
+Tue Oct 31 10:06:54 CET 2006 <jurgenv@cwi.nl>
+ * src/**: improved support for 'subtyping' gui elements. Now
+   we can connect popupmenu's to non-terminals in editors.
+
+Thu Oct 19 14:45:41 CEST 2006 <jurgenv@cwi.nl>
+ * src/**: big change in the interface of the config-manager.
+   An action is tied to a GUI element, which is a free term like:
+   f(g). If an event matches this term, the process name that belongs
+   to it is returned. If it does not match, the function name (read
+   superType), of the GUI element (in this case 'f'), is used to 
+   search again. 
+   We use this to store actions for specific modulenames for example:
+   term-editor("basic/Booleans").
+
+
+Fri Mar 10 11:52:36 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
+Tue Mar  7 13:29:14 CET 2006 <kooiker@cwi.nl>
+ * src/{configmanager.c,configuration-manager.ider.src}:
+   - Add support for changing the workspace
+
+Tue Feb 21 13:16:13 CET 2006 <kooiker@cwi.nl>
+ * src/configmanager.c:
+   - Use new configuration api
+
+Fri Feb  3 10:17:59 CET 2006 <kooiker@cwi.nl>
+ * src/Config.c:
+   - Factored out add_configuration_properties so it can be reused to import
+     a configuration from file
+
+Wed Feb  1 14:29:46 CET 2006 <kooiker@cwi.nl>
+ * configure.ac:
+   - use libtool
+
+Mon Jan  9 08:56:25 CET 2006 <jurgenv@cwi.nl>
+ * src/*: 
+    - library-paths and module-paths now have labels
+    - refactored getcwd code to remove code clone
+    - named cwd directory "Workspace"
+
+Tue Dec  6 12:49:14 CET 2005 <kooiker@cwinl>
+ * src/*:
+   - use config-support package and remove .adt and libraries
+
+Mon Nov 21 16:13:06 CET 2005 <kooiker@ciw.nl>
+ * src/configuration.adt:
+   - Add notion of librarypath
+ * src/configuration-manager.idef:
+   - add get-library-paths
+
+Tue Oct  4 13:29:32 CEST 2005 <markvdb@cwi.nl>
+ * Introduced the new ModuleId as term instead of string.
+
+Thu Aug 25 08:53:00 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
+ * Removed meta-kernel.properties, and merged it into the
+   properties of the asfsdf-meta package.
+ * Removed Kernel properties loader
+ * UserProperties toolbus command added.
+
+Tue Aug 23 13:34:10 CEST 2005 <kooiker@cwi.nl>
+ * Initial version
+

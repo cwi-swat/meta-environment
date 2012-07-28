@@ -1,0 +1,103 @@
+#ifndef _CONFIGURATION_MANAGER__
+#define _CONFIGURATION_MANAGER__
+
+tool configuration-manager is { command = "__PREFIX__/bin/configmanager" }
+
+process ConfigurationManager is
+let
+  CM: configuration-manager,
+  Action: str,
+  Categories: term,
+  Contents: str,
+  Events: list,
+  Event: term,
+  Extension: str,
+  LibraryPaths: list,
+  ModuleId: term,
+  ModulePaths: list,
+  Path: str,
+  Type: term,
+  SubType: term,
+  Property: term,
+  Editor: str,
+  Language: str
+in
+  execute(configuration-manager, CM?)
+  .
+  (
+    rec-msg(cm-add-system-properties(Contents?))
+    . snd-do(CM, add-system-properties(Contents))
+  +
+    rec-msg(cm-add-system-property(Property?))
+    . snd-do(CM, add-system-property(Property))
+  +
+    rec-msg(cm-remove-system-property(Property?))
+    . snd-do(CM, remove-system-property(Property))
+  +
+    rec-msg(cm-change-workspace(Path?))
+    . snd-do(CM, change-workspace(Path))
+  +
+    rec-msg(cm-get-events(Type?))
+    . snd-eval(CM, get-events(Type))
+    . rec-value(CM, events(Events?))
+    . snd-msg(cm-events(Events))
+  +
+    rec-msg(cm-get-events(Type?, SubType?))
+    . snd-eval(CM, get-subtype-events(Type, SubType))
+    . rec-value(CM, events(Events?))
+    . snd-msg(cm-events(Events))
+  +
+    rec-msg(cm-get-action(Type?, Event?))
+    . snd-eval(CM, get-action(Type, Event))
+    . rec-value(CM, action(Action?))
+    . snd-msg(cm-action(Action))
+  +
+    rec-msg(cm-get-action(Type?, SubType?, Event?))
+    . snd-eval(CM, get-subtype-action(Type, SubType, Event))
+    . rec-value(CM, action(Action?))
+    . snd-msg(cm-action(Action))
+  +
+    rec-msg(cm-get-extension-editor(Extension?))
+    . snd-eval(CM, get-extension-editor(Extension))
+    .
+    (
+      rec-value(CM, extension-editor(Editor?))
+      . snd-msg(cm-extension-editor(Extension, Editor))
+    +
+      rec-value(CM, no-editor)
+      . snd-msg(cm-no-extension-editor(Extension))
+    )
+  +
+    rec-msg(cm-get-language-extension(Language?))
+    . snd-eval(CM, get-language-extension(Language))
+    .
+    (
+      rec-value(CM, extension(Extension?))
+      . snd-msg(cm-language-extension(Language, Extension))
+    +
+      rec-value(CM, no-extension)
+      . snd-msg(cm-no-language-extension(Language))
+    )
+  +
+    rec-msg(cm-get-module-paths)
+    . snd-eval(CM, get-module-paths)
+    . rec-value(CM, module-paths(ModulePaths?))
+    . snd-msg(cm-module-paths(ModulePaths))
+  +
+    rec-msg(cm-get-library-paths)
+    . snd-eval(CM, get-library-paths)
+    . rec-value(CM, library-paths(LibraryPaths?))
+    . snd-msg(cm-library-paths(LibraryPaths))
+  +
+    rec-msg(get-text-categories)
+    . snd-eval(CM, get-text-categories)
+    . rec-value(CM, text-categories(Categories?))
+    . snd-msg(text-categories(Categories))
+  )
+  *
+  delta
+endlet
+
+toolbus(ConfigurationManager)
+
+#endif

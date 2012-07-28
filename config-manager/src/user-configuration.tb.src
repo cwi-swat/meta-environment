@@ -1,0 +1,24 @@
+process UserConfiguration is
+let
+  Contents: str,
+  Error: str
+in
+  snd-msg(ioj-exists-file(__USER_CONFIGURATION__))
+  .
+  (
+    rec-msg(ioj-file-exists)
+    . snd-msg(ioj-read-file(__USER_CONFIGURATION__))
+    .
+    (
+      rec-msg(ioj-file-contents(Contents?))
+      . snd-msg(cm-add-system-properties(Contents))
+    +
+      rec-msg(ioj-error-reading(Error?))
+      . printf("UserConfiguration: %s\n", Error)
+    )
+  +
+    rec-msg(ioj-file-not-exists)
+  )
+endlet
+
+toolbus(UserConfiguration)
