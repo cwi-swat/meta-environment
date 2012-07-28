@@ -1,0 +1,94 @@
+Tue Apr 29 14:17:03 2008    <bruntink@cwi.nl>
+
+	* error-gui.pc.in: Changed dependency on error-support to error-support-java.
+
+Thu Aug 23 13:13:59 CEST 2007 <kooiker@cwi.nl>
+ * src/**/ErrorViewer.java: do not show summaries with an empty error list
+
+Thu Mar  1 13:30:19 CET 2007 <kooiker@cwi.nl>
+ * src/**/ErrorPanel.java:
+   - Limit number of displayed errors to 100
+
+Fri Feb  9 13:29:43 CET 2007 <kooiker@cwi.nl>
+ * src/**/ErrorPanel.java:
+   - Add tooltips to toolbar actions (buttons)
+
+Fri Feb  9 10:45:32 CET 2007 <kooiker@cwi.nl>
+ * src/**/ErrorPanel.java:
+   - Remember expansion state when reloading tree model.
+
+Tue Jan 30 08:33:06 CET 2007 <jurgenv@cwi.nl>
+ * **/ErrorViewer.java: added refreshFeedbackSummary, which removes the
+   old messages for the producer and identifier of this summary, and 
+   adds the new messages.
+ * **/ErrorViewer.java: made error viewer deal with illegal Summaries
+   more elegantly.
+
+Wed Oct 11 14:07:46 CEST 2006 <jurgenv@cwi.nl>
+ * **/*.java: this tool now handles multiple tabs of error messages
+   using a panelId (String) to identify to which panel which message
+   will go.
+
+Mon Apr 13 10:29:17 CET 2006 <jurgenv@cwi.nl>
+ * src/**/*.java: new errors arrive at the top of the list now
+ * src/**/*.java: added grouping of errors on files or on error message.
+   With HUGE amounts of errors in a grammar, the list just became too
+   longe to do anything useful with.
+
+Mon Feb 13 10:29:17 CET 2006 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/error/viewer/ErrorPanel.java:
+   - Add remove summary on path
+
+Tue Sep  6 09:30:04 CEST 2005 <{kooiker,jurgenv]@cwi.nl>
+ * error-viewer-${VERSION}.pkg: renamed to error-gui-${VERSION}.pkg
+ * error-viewer-config: renamed to error-gui-config
+
+Tue Aug  9 10:49:25 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
+ * Updated to new StudioPlugin interface.
+
+Mon Aug  8 10:50:47 CEST 2005 <{kooiker,jurgenv@cwi.nl}>
+ * **/ErrorViewer.java: throw CloseAbortedException since the
+   error viewer must always remain accesible
+ * **/*.java: remove error uses a worklist (fixes a bug)
+ * **/ErrorTreeCellRenderer.java:
+   errors are red, warnings are blue, meta-environment I love you.  
+
+Thu Aug  4 14:23:12 CEST 2005 <jurgenv@cwi.nl>
+ * Simplified string description of errors in the viewer. There was
+   no way to ignore the details. Now, to see details use 'expand all'
+   to ignore them, 'collapse all'. 
+ * Added support for removing errors when they are resolved.
+ * Simplified implementation of ErrorDecorator by introducing a
+   class for every type of node.
+ * An subject is now clickable if it has a clickable location.
+ * An error is now clickable if it has at least one clickable subject.
+ * Repeated clicking on a location will now take you to the location
+   again (solved by turning of the selection after each click).
+
+Wed Aug  3 13:16:18 CEST 2005 <kooiker@cwi.nl>
+ * Merged predefined-gui-layout branch
+
+Mon Jun 27 14:35:39 CEST 2005 <kooiker@cwi.nl>
+ * package:
+   - depends on error-support 1.2
+
+Thu Jun  2 11:01:01 CEST 2005 <kooiker@cwi.nl>
+ * ErrorViewer.java:
+   - Use StudioComponentImpl
+
+Mon May 30 10:09:06 CEST 2005 <kooiker@cwi.nl>
+ * package:
+   - Also add toolbus dependency to package
+
+Fri May 27 13:20:37 CEST 2005 <kooiker@cwi.nl>
+ * configure.ac:
+   - Add toolbus dependency
+ * toolbus_make_rules:
+   - Use JAVA_PACKAGE iso PACKAGE
+
+Wed May  4 11:08:21 CEST 2005 <kooiker@cwi.nl>
+  * src/nl.cwi.sen1.error:
+    - Decorate location with LocationNode
+    - Only sent location selected when both area and filename exists
+  * error-viewer.idef.src:
+    - Receive location from gui iso error

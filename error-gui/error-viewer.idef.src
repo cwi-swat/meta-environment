@@ -1,0 +1,40 @@
+tool error-viewer is {  }
+
+process ErrorViewer is
+let
+  T : error-viewer,
+  Error : term,
+  Location : term,
+  Path: str,
+  Producer : str,
+  Summary : term,
+  SummaryId : str,
+  Panel: str
+in
+  StartErrorViewer()
+  . rec-connect(T?)
+  . 
+  (
+    rec-msg(ui-show-feedback-summary(Panel?, Summary?))
+    . snd-do(T, show-feedback-summary(Panel, Summary))
+  +
+    rec-msg(ui-remove-feedback-summary(Panel?, Producer?, SummaryId?))
+    . snd-do(T, remove-feedback-summary(Panel, Producer, SummaryId))
+  +
+    rec-msg(ui-remove-feedback-summary(Panel?, Path?))
+    . snd-do(T, remove-feedback-summary(Panel, Path))
+  +
+    rec-msg(ui-refresh-feedback-summary(Panel?, Summary?))
+    . snd-do(T, refresh-feedback-summary(Panel, Summary))
+  +
+    rec-event(T, location-selected(Location?))
+    . snd-msg(ui-location-selected(Location))
+    . snd-ack-event(T, location-selected(Location))
+  )
+  *
+  rec-disconnect(T)
+endlet
+
+process StartErrorViewer is
+  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
+toolbus(ErrorViewer)
