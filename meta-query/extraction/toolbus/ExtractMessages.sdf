@@ -1,0 +1,68 @@
+module ExtractMessages
+
+imports ToolBusExtraction
+imports ToolBusOperations
+imports utilities/Parsing[Path]
+imports utilities/PosInfo[Atom]
+imports utilities/PosInfo[ProcessName]
+imports utilities/PosInfo[Term]
+
+exports
+  sorts Path
+  context-free syntax
+    "[" {Integer ","}+ "]" -> Path 
+    path2str(Path) -> String
+
+exports
+  context-free syntax
+    extractMessages(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+    extractMessages(ProcessDef, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractMessagesInScope(ProcessBody, RSTORE, {FormalParam ","}*, 
+                           {VarDecl ","}*, Location) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+    extractMessagesInScope(Atom, RSTORE, {FormalParam ","}*, {VarDecl ","}*, 
+                           Location) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+  context-free syntax
+    extractSignatureFromTerms({Term ","}+, Location, Path, {FormalParam ","}*,
+                              {VarDecl ","}*, RSTORE)
+	-> RSTORE
+
+    extractSignatureFromTerm(Term, Location, Path, {FormalParam ","}*,
+                             {VarDecl ","}*, RSTORE)
+	-> RSTORE
+
+    addTermSignature(Term, Location, Path, {FormalParam ","}*, {VarDecl ","}*,
+                     RSTORE)
+	-> RSTORE
+
+hiddens
+  variables
+    "$Atom"[0-9]* -> Atom
+    "$FormalParams"[0-9]* -> {FormalParam ","}*
+    "$Id"[0-9]* -> Id
+    "$MessageId" -> Location
+    "$Path"[0-9]* -> Path
+    "$ProcessBody"[0-9]* -> ProcessBody
+    "$ProcessDef"[0-9]* -> ProcessDef
+    "$ProcessName"[0-9]* -> ProcessName
+    "$ProcessNameId" -> Location
+    "$ProcessSignature"[0-9]* -> ProcessSignature
+    "$Rstore"[0-9]* -> RSTORE
+    "$Signature"[0-9]* -> Term
+    "$Step"[0-9]* -> Integer
+    "$Stepplus"[0-9]* -> {Integer ","}+
+    "$Steps"[0-9]* -> {Integer ","}*
+    "$Term"[0-9]* -> Term
+    "$TermPlus"[0-9]* -> {Term ","}+
+    "$Tuple"[0-9]* -> Tuple
+    "$Type"[0-9]* -> Term
+    "$VarDecls"[0-9]* -> {VarDecl ","}*  

@@ -1,0 +1,18 @@
+equations
+
+[extract-initial-processes-0]
+  toolbus ( $ProcessName ) := $TscriptDef,
+  $Rstore2 := addInitialProcess($Rstore1, $ProcessName)
+  ===>
+  extractInitialProcesses($TscriptDef, $Rstore1) = $Rstore2
+
+[extract-initial-processes-1]
+  toolbus ( $ProcessName ( $Terms ) ) := $TscriptDef,
+  $Rstore2 := addInitialProcess($Rstore1, $ProcessName)
+  ===>
+  extractInitialProcesses($TscriptDef, $Rstore1) = $Rstore2
+
+[add-initial-process-0]
+  $Rstore2 := add-elem(INITIAL_PROCESS, unparse-to-string($ProcessName), $Rstore1)
+  ===>
+  addInitialProcess($Rstore1, $ProcessName) = $Rstore2

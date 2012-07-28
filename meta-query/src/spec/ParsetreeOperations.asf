@@ -1,0 +1,50 @@
+equations
+
+  [] $Tree = appl($Production1,
+                  [$Tree2, 
+                   appl($Production2, [$Tree*]),
+                   $Tree3])
+     ===>
+     getTopProduction(parsetree($Tree,$NatCon)) =
+       $Production2
+
+  [] $Tree = appl($Production1,
+                  [$Tree2, 
+                   appl($Production2, [$Tree*]) $Ann,
+                   $Tree3])
+     ===>
+     getTopProduction(parsetree($Tree,$NatCon)) =
+       $Production2
+
+  [] ptProduction2String(prod([$Symbol*],$Symbol,$Attributes)) =
+      ptSymbols2String([$Symbol*])
+      || strcon(""" "-"">" """)
+      || ptSymbol2String($Symbol)
+
+  [] ptSymbols2String([]) = strcon(""" """)
+
+  [] ptSymbols2String([$Symbol]) = 
+       ptSymbol2String($Symbol)
+
+  [] ptSymbols2String([$Symbol,$Symbol*]) = 
+       ptSymbol2String($Symbol)
+       || ptSymbols2String([$Symbol*])
+
+  [default-p] ptSymbol2String(lit(literal($Char*))) = 
+       strcon(""" $Char* """)
+
+  [] ptSymbol2String(lit(literal(""" $Char* """))) = 
+       strcon(""""\"""" $Char* "\""""""")
+
+  [] ptSymbol2String(sort(literal($Char*))) = 
+       strcon($Char*)
+
+  [] ptSymbol2String(cf($Symbol)) = 
+       ptSymbol2String($Symbol)
+
+  [] ptSymbol2String(opt(layout)) = strcon(""" " " """)
+
+  [] $Symbol != layout
+     ===>
+     ptSymbol2String(cf($Symbol)) = 
+       ptSymbol2String($Symbol)

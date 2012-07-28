@@ -1,0 +1,10 @@
+module Names
+imports Lexical
+
+exports
+  sorts SimpleName Name
+
+  context-free syntax
+    {Identifier "."}+ -> Name {cons("Identifier-p")}
+    Identifier -> SimpleName {cons("Identifier")}
+

@@ -1,0 +1,26 @@
+module ExtractProcessReferences
+
+imports utilities/Parsing[ProcessName]
+imports utilities/PosInfo[ProcessName]
+imports ToolBusExtraction
+
+exports
+  context-free syntax
+    extractProcessReferences(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, bottom-up, continue)}
+
+  context-free syntax
+    extractProcessReferences(ProcessName, RSTORE) ->
+      RSTORE {traversal(accu, bottom-up, continue)}
+
+hiddens
+  context-free syntax
+    addProcessReference(RSTORE, ProcessName) -> RSTORE
+
+  variables
+    "$ProcessName" -> ProcessName
+    "$ProcessNameId" -> Location
+    "$Rstore"[0-9]* -> RSTORE
+    "$Terms" -> {Term ","}*
+    "$TscriptDef" -> TscriptDef
+    "$Tuple"[0-9]* -> Tuple

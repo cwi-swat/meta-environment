@@ -1,0 +1,36 @@
+module ExtractProcessUses
+
+imports ToolBusExtraction
+imports utilities/Parsing[ProcessName]
+
+exports
+  context-free syntax
+    extractProcessUses(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+  context-free syntax
+    extractProcessUses(ProcessDef, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractProcessUsesInScope(ProcessBody, RSTORE, ProcessName) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+    extractProcessUsesInScope(ProcessName, RSTORE, ProcessName) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addProcessUse(ProcessName, ProcessName, RSTORE) -> RSTORE
+
+hiddens
+  variables
+    "$Caller" -> ProcessName
+    "$Callee" -> ProcessName
+    "$FormalParams" -> {FormalParam ","}*
+    "$ProcessBody" -> ProcessBody
+    "$ProcessDef" -> ProcessDef
+    "$ProcessSignature" -> ProcessSignature
+    "$Rstore"[0-9]* -> RSTORE
+    "$Tuple"[0-9]* -> Tuple

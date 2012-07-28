@@ -1,0 +1,20 @@
+equations
+
+[extract-process-invocations-0]
+  $ProcessName := $ProcessInvocation,
+  $Rstore2 := addProcessInvocation($Rstore1, $ProcessName)
+  ===>
+  extractProcessInvocations($ProcessInvocation, $Rstore1) = $Rstore2
+
+[extract-process-invocations-1]
+  $ProcessName ( $Terms ) := $ProcessInvocation,
+  $Rstore2 := addProcessInvocation($Rstore1, $ProcessName)
+  ===>
+  extractProcessInvocations($ProcessInvocation, $Rstore1) = $Rstore2
+
+[add-process-invocation-0]
+  $ProcessNameId := get-location($ProcessName),
+  $Tuple1 := <$ProcessNameId, unparse-to-string($ProcessName)>,
+  $Rstore2 := add-tuple(PROCESS_INVOCATION, $Tuple1, $Rstore1)
+  ===>
+  addProcessInvocation($Rstore1, $ProcessName) = $Rstore2

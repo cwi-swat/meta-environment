@@ -1,0 +1,31 @@
+module ExtractProcessInvocations
+
+imports utilities/PosInfo[ProcessName]
+imports utilities/Parsing[ProcessName]
+imports ToolBusExtraction
+
+exports
+  context-free syntax
+    extractProcessInvocations(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+  context-free syntax
+    extractProcessInvocations(TscriptDef, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+  context-free syntax
+    extractProcessInvocations(ProcessInvocation, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addProcessInvocation(RSTORE, ProcessName) -> RSTORE
+
+  variables
+    "$ProcessInvocation" -> ProcessInvocation
+    "$ProcessName" -> ProcessName
+    "$ProcessNameId" -> Location
+    "$Rstore"[0-9]* -> RSTORE
+    "$Terms" -> {Term ","}*
+    "$TscriptDef" -> TscriptDef
+    "$Tuple"[0-9]* -> Tuple

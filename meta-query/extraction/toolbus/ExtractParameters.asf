@@ -1,0 +1,36 @@
+equations
+
+[extract-parameters-0]
+  process $ProcessSignature is $ProcessBody := $ProcessDef,
+  $ProcessName ( $FormalParams ) := $ProcessSignature,
+  $ProcessNameId := get-location($ProcessName),
+  $Rstore2 := extractParametersInScope($FormalParams, $Rstore1, $ProcessNameId)
+  ===>
+  extractParameters($ProcessDef, $Rstore1) = $Rstore2
+
+
+
+[extract-parameters-in-scope-0]
+  $Var : $Term := $FormalParam,
+  $Rstore2 := addParameter($Var, $Term, $ProcessNameId, $Rstore1)
+  ===>
+  extractParametersInScope($FormalParam, $Rstore1, $ProcessNameId) = $Rstore2
+
+[extract-parameters-in-scope-1]
+  $Var : $Term ? := $FormalParam,
+  $Rstore2 := addParameter($Var, $Term, $ProcessNameId, $Rstore1)
+  ===>
+  extractParametersInScope($FormalParam, $Rstore1, $ProcessNameId) = $Rstore2
+
+
+
+[add-parameter-0]
+  $VarId := get-location($Var),
+  $Tuple1 := <$VarId, unparse-to-string($Var)>,
+  $Rstore2 := add-tuple(PARAMETER_NAME, $Tuple1, $Rstore1),
+  $Tuple2 := <$VarId, unparse-to-string($Term)>,
+  $Rstore3 := add-tuple(PARAMETER_TYPE, $Tuple2, $Rstore2),
+  $Tuple3 := <$VarId, $ProcessNameId>,
+  $Rstore4 := add-tuple(PARAMETER_SCOPE, $Tuple3, $Rstore3)
+  ===>
+  addParameter($Var, $Term, $ProcessNameId, $Rstore1) = $Rstore4

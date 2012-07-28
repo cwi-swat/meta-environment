@@ -1,0 +1,55 @@
+tool aap is { command = "/bin/aap" }
+
+process UI is
+let
+  UI: user-interface,
+  FileName: str,
+  ParseTree: term,
+  Jurgenv: term
+in
+  execute(user-interface, UI?) .
+  (
+    rec-event(UI, parse-file(FileName?)) .
+    Parser().
+    snd-msg(parse-file(FileName)) .
+    rec-msg(parse-file-result(FileName, ParseTree?)) .
+    if equal(ParseTree, no-tree) then
+      snd-do(UI, no-tree)
+    else  
+      snd-do(UI, show-tree(ParseTree))
+    fi
+    . snd-ack-event(UI, parse-file(FileName))
+  +
+    rec-msg(test-message) .
+    rec-event(UI, quit) .
+    snd-ack-event(UI, quit) .
+    snd-note(user-quit)
+  ) * delta
+endlet
+
+process Parser is
+let
+  Parser: parser,
+  FileName: str,
+  ParseTree: term,
+  ParseTree2: term
+in
+  snd-msg(undefined-use(ParseTree2)) .
+  snd-msg(undefined-use(Parser)).
+  execute(parser, Parser?) .
+  (
+    create(UI, Pid?).
+    rec-msg(parse-file(FileName?)) .
+    snd-eval(Parser, parse(FileName)) .
+    rec-value(Parser, parse-result(ParseTree?)) .
+    snd-msg(parse-file-result(FileName, ParseTree)) .
+    snd-msg(second-definition(FileName?)) .
+    snd-msg(string("string"))
+  ) * 
+  printf("End")
+endlet
+
+process Unused is
+  tau
+
+toolbus(UI)

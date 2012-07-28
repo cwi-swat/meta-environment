@@ -1,0 +1,64 @@
+equations
+
+[A2']
+   $ProcessExpr1 + ($ProcessExpr2  + $ProcessExpr3) =
+    ($ProcessExpr1 +  $ProcessExpr2) + $ProcessExpr3 
+
+[A4]
+  ( $ProcessExpr1 + $ProcessExpr2 ) . $ProcessExpr3 =
+     ( $ProcessExpr1 . $ProcessExpr3 ) + ( $ProcessExpr2 . $ProcessExpr3 ) 
+
+[A4']
+  $ProcessExpr1 . ( $ProcessExpr2 + $ProcessExpr3 ) = 
+    ( $ProcessExpr1 . $ProcessExpr2 ) + ($ProcessExpr1 . $ProcessExpr3) 
+
+[A5]
+   ( $ProcessExpr1 . $ProcessExpr2 ) . $ProcessExpr3 =
+     $ProcessExpr1 . ( $ProcessExpr2 . $ProcessExpr3 )
+
+
+[star-normalization]
+  $Location := get-location($ProcessExpr1)
+  ===>
+  $ProcessExpr1 * $ProcessExpr2 = star{$Location} . $ProcessExpr1 . star{$Location} + star{$Location} . $ProcessExpr2
+
+%%[star-normalization]
+%%  $ProcessExpr1 * $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr1 . $ProcessExpr2 . $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr2
+
+
+[if-then-0]
+  tau != $ProcessExpr
+  ===>
+  if $Term then $ProcessExpr fi =
+    if $Term then tau fi . $ProcessExpr
+
+[if-then-else-0]
+  if $Term then $ProcessExpr1 else $ProcessExpr2 fi =
+    if $Term then $ProcessExpr1 fi + if not($Term) then $ProcessExpr2 fi
+
+
+[M1]
+  $ProcessExpr1 || $ProcessExpr2 =
+    ( $ProcessExpr1 ||_ $ProcessExpr2 ) + ( $ProcessExpr2 ||_ $ProcessExpr1 )
+
+[M2]
+  isAtomic($ProcessExpr1) == true
+  ===>
+  $ProcessExpr1 ||_ $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr2
+
+[M3]
+  isAtomic($ProcessExpr1) == true
+  ===>
+  $ProcessExpr1 . $ProcessExpr2 ||_ $ProcessExpr3 = $ProcessExpr1 . ( $ProcessExpr2 || $ProcessExpr3 )
+
+[M4]
+  ( $ProcessExpr1 + $ProcessExpr2 ) ||_ $ProcessExpr3 =
+    $ProcessExpr1 ||_ $ProcessExpr3 + $ProcessExpr2 ||_ $ProcessExpr3
+
+
+[default-isAtomic]
+  isAtomic($ProcessExpr) = false
+
+[isAtomic-0]
+  isAtomic($Atom) = true
+

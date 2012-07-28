@@ -1,0 +1,22 @@
+module ExtractPackage
+
+imports Rstore
+imports JavaOperations
+imports MyPosInfo[PackageDeclaration]
+
+exports
+  context-free syntax
+    extractPackage(CompilationUnit, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+
+    extractPackage(PackageDeclaration, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  variables
+    "&CompilationUnit" -> CompilationUnit
+    "&Name" -> Name
+    "&PackageDeclaration" -> PackageDeclaration
+    "&PackageId" -> Area
+    "&Rstore"[0-9]* -> RSTORE
+    "&Tuple" -> <Elem, Elem>

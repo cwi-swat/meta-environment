@@ -1,0 +1,34 @@
+module ExtractEvents
+
+imports utilities/Parsing[AtomArgs]
+imports utilities/Parsing[ProcessName]
+imports utilities/PosInfo[AtomArgs]
+imports utilities/PosInfo[ProcessName]
+imports ToolBusExtraction
+
+exports
+  context-free syntax
+    extractEvents(Tscript, RSTORE) -> RSTORE {traversal(accu, top-down, break)}
+    extractEvents(ProcessDef, RSTORE) -> RSTORE {traversal(accu, top-down, break)}
+
+  context-free syntax
+    extractProcessEvents(ProcessBody, RSTORE, Location) -> RSTORE {traversal(accu, top-down, break)}
+    extractProcessEvents(Atom, RSTORE, Location) -> RSTORE {traversal(accu, top-down, break)}
+
+  context-free syntax
+    addProcessEvent(AtomArgs, Location, RSTORE) -> RSTORE
+
+hiddens
+  variables
+    "$Atom" -> Atom
+    "$Event" -> AtomArgs
+    "$EventId" -> Location
+    "$FormalParams" -> {FormalParam ","}*
+    "$ProcessBody" -> ProcessBody
+    "$ProcessDef" -> ProcessDef
+    "$ProcessName" -> ProcessName
+    "$ProcessNameId" -> Location
+    "$ProcessSignature" -> ProcessSignature
+    "$Rstore"[0-9]* -> RSTORE
+    "$Tool" -> Var
+    "$Tuple"[0-9]* -> Tuple

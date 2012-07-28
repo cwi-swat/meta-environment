@@ -1,0 +1,39 @@
+# $Id$
+
+Fri Apr 23 10:45:43 CEST 2004 <jurgenv@cwi.nl>
+ * Upgraded configure.in and Makefile.am
+
+Thu Dec  4 16:11:38 CET 2003 <jong@cwi.nl>
+ * extraction/{java,toolbus}:
+   - upgrade to new tuple (*.sdf) and condition (*.asf) syntax
+
+Tue Oct  7 13:05:46 CEST 2003 <jong@cwi.nl>
+ * removed relations subdirectory from Makefile.am, leaving
+   DisplayQuery.sdf and list operations for now
+
+Thu Sep 18 13:44:49 CEST 2003 <jong@cwi.nl>
+ * generalize 'tbscan' (which did TB specific extraction)
+   to 'extract-relations', which has parse-table and equations as
+   parameters.
+
+Mon Jul 14 11:00:22 CEST 2003 <jong@cwi.nl>
+ * use configured locations for asfc, idef2tif and tifstoc
+
+2003-07-10 <markvdb@cwi.nl>
+ * Regenerated the DisplayQuery stuff.
+
+Fri Jun 27 11:18:09 CEST 2003 <jurgenv@cwi.nl>
+ * Added package definition file
+ * Brought package definition up-to-date with version numbers of other pkgs
+
+2003-06-20 <markvdb@cwi.nl>
+ * Error message text is no longer an argument of displayquery action.
+
+Thu Jun 19 11:41:55 CEST 2003 <{jong,markvdb}@cwi.nl>
+ * add relations subdir: contains compiled DisplayQuery specification
+
+Fri May 23 09:33:28 CEST 2003 <jong@cwi.nl>
+ * add utils directory: meta-query-config support
+
+Thu May 22 14:24:17 CEST 2003 <jong@cwi.nl>
+ * initial revision

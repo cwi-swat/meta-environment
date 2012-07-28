@@ -1,0 +1,25 @@
+module FindSortDefinition
+
+imports sdf2/syntax/Sdf2
+imports basic/Booleans
+
+exports
+  context-free syntax
+    find-sort-definition(Module, Sort) -> Boolean
+
+hiddens
+  context-free syntax
+    contains-sort-definition(Module, Boolean, Sort)
+      -> Boolean {traversal(accu,break,top-down)}
+
+    contains-sort-definition(Production, Boolean, Sort)
+      -> Boolean {traversal(accu,break,top-down)}
+
+  variables
+    "Module" -> Module
+    "Sort" -> Sort
+    "Symbols" -> Symbols
+    "Attributes" -> Attributes
+    "Boolean" -> Boolean
+    "Literal" -> Literal
+    "Symbol*" -> {Symbol ","}*

@@ -1,0 +1,27 @@
+equations
+
+[convert-0]
+  convert($String1, <$Area, $String2>)
+  = listitem($String1 || $String2, $Area)
+
+[convertl-0]
+  convertl({}) = []
+
+[convertl-1]
+  convertl({$Elem*}) = [$ListItem*]
+  ===>
+  convertl({<$String1,<$Area, $String2>>, $Elem*})
+  = [convert($String1, <$Area, $String2>), $ListItem*]
+
+[default-convertl]
+  convertl({$Value, $Elem*}) = convertl({$Elem*})
+
+[convert-restore-0]
+  convert-rstore(rstore()) = []
+
+[convert-restore-1]
+  convertl($Value) = [$ListItem*1],
+  convert-rstore(rstore($VPair*)) = [$ListItem*2]
+  ===>
+  convert-rstore(rstore(<$Var,$Value>, $VPair*))
+  = [$ListItem*1, $ListItem*2]

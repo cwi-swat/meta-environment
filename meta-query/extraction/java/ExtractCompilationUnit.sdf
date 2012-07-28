@@ -1,0 +1,17 @@
+module ExtractCompilationUnit
+
+imports Rstore
+imports JavaOperations
+imports MyPosInfo[CompilationUnit]
+
+exports
+  context-free syntax
+    extractCompilationUnit(CompilationUnit, RSTORE) -> RSTORE
+
+hiddens
+  variables
+    "&Area" -> Area
+    "&CompilationUnit" -> CompilationUnit
+    "&FileName" -> String
+    "&Rstore"[0-9]* -> RSTORE
+    "&Tuple" -> <Elem, Elem>

@@ -1,0 +1,27 @@
+module ExtractProcessCreations
+
+imports utilities/Parsing[ProcessName]
+imports utilities/PosInfo[ProcessName]
+imports ToolBusExtraction
+
+exports
+  context-free syntax
+    extractProcessCreations(Tscript, RSTORE)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+  context-free syntax
+    extractProcessCreations(ProcessCreation, RSTORE)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+  context-free syntax
+    addProcessCreation(RSTORE, ProcessName) -> RSTORE
+
+hiddens
+  variables
+    "$GenVar" -> GenVar
+    "$ProcessCreation" -> ProcessCreation
+    "$ProcessName" -> ProcessName
+    "$ProcessNameId" -> Location
+    "$Rstore"[0-9]* -> RSTORE
+    "$Terms" -> {Term ","}*
+    "$Tuple"[0-9]* -> Tuple

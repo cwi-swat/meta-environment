@@ -1,0 +1,12 @@
+equations
+
+[extract-process-reference-0]
+  extractProcessReferences($ProcessName, $Rstore)
+  = addProcessReference($Rstore, $ProcessName)
+
+[add-process-reference-0]
+  $ProcessNameId := get-location($ProcessName),
+  $Tuple1 := <$ProcessNameId, unparse-to-string($ProcessName)>,
+  $Rstore2 := add-tuple(PROCESS_REFERENCE, $Tuple1, $Rstore1)
+  ===>
+  addProcessReference($Rstore1, $ProcessName) = $Rstore2
