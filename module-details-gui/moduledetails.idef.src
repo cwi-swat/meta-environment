@@ -1,0 +1,26 @@
+#ifndef __MODULE_DETAILS__
+#define __MODULE_DETAILS__
+
+tool moduledetails is { }
+
+process Moduledetails is
+let
+  Details : list,
+  T: moduledetails
+in
+  rec-connect(T?)
+  .
+    (
+      rec-msg(md-set-details(Details?))
+      . snd-do(T, set-details(Details))
+    )
+    *
+      rec-disconnect(T)
+endlet
+
+process StartModuledetailsPanel is
+  snd-msg(load-jar("file://__PKGDATA__/moduledetails.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
+
+toolbus(Moduledetails)
+
+#endif /*__MODULE_DETAILS__*/

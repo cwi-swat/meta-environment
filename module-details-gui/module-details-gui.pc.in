@@ -1,0 +1,14 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
+
+Name: module-details-gui
+Version: 1.1
+Description:
+Requires: aterm-java,meta-studio,module-support-java,toolbus-java-adapter
+JarFile=moduledetails.jar
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.data
+MainClass=nl.cwi.sen1.gui.plugin.Moduledetails
+TestClass=
+ToolBusFlags=-I${prefix}/share/module-details-gui
+
