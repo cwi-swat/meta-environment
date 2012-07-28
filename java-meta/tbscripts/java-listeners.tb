@@ -1,0 +1,205 @@
+#ifndef __JAVA_LISTENERS__
+#define __JAVA_LISTENERS__
+
+#include <module-manager.tb>
+#include <java-namespace.h>
+#include <progress.idef>
+
+#define BG_ERROR_COLOR rgb(224,64,60)
+#define BG_CHILD_ERROR_COLOR rgb(255,128,114)
+#define BG_CORRECT_COLOR rgb(255,255,221)
+#define BG_GRAYED_OUT rgb (211,211,211)
+
+process InitializeInheritedStatus is
+  /* the first one must not have any <term> holes because of a ToolBus bug */
+  
+  /* Once we are opened and our kids are opened, then we become complete */
+  MM-RegisterAttributeUpdateRule(JAVA_NAMESPACE, "status", and(set(opened),all(set(opened))), complete)
+
+  /* When we are not in error and one of our kids has an error, we become child-error */
+  . MM-RegisterAttributeUpdateRule(JAVA_NAMESPACE, "status", and(not(set(error)),one(set(error))), child-error)
+
+  /* clashes with child-error */
+  /*. MM-RegisterInheritedAttribute(JAVA_NAMESPACE, "status", is-not-set, error, unavailable, incomplete, one)*/
+
+  /* Needs recompiling? */
+  /*. MM-RegisterAttributeUpdateRule(JAVA_NAMESPACE, "status", and(not(set(error)),and(one(set(edited)),one(set(error)))), probably-needs-recompiling)*/
+  . MM-RegisterAttributeUpdateRule(JAVA_NAMESPACE, "status", and(not(set(error)),one(set(edited))), probably-needs-recompiling)
+
+toolbus(InitializeInheritedStatus)
+
+process JavaModuleLabelSetter is
+let
+  Event: attribute-changed-event,
+  Extension: str,
+  File: file,
+  ModuleId: term,
+  Modulename: str,
+  Name: str,
+  Prefix: str
+in
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"name",<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Modulename?)
+    . SplitFilename(Modulename, Name?, Prefix?, Extension?)
+    . MM-SetModuleGraphAttribute(ModuleId, "label", label(Name))
+    . snd-msg(io-make-file(Modulename))
+    . rec-msg(io-file(Modulename, File?))
+    . MM-SetModuleGraphAttribute(ModuleId, "file", file(File))
+  )
+  *
+  delta
+endlet
+
+toolbus(JavaModuleLabelSetter)
+
+process JavaModuleColorChanger is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term,
+  Tree: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,error)  
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,child-error)  
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",error,<term>)  
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",child-error,<term>)  
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Value?)
+    .
+    if equal(Value, error) then
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_ERROR_COLOR))
+    else
+      if equal(Value,child-error) then
+        MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CHILD_ERROR_COLOR))
+
+      else
+        MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
+      fi
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(JavaModuleColorChanger)
+
+process JavaModuleVisualizeEditable is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term,
+  Tree: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"editable",<term>,true)  
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"editable",<term>,false)  
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Value?)
+    .
+    if equal(Value, quote(false)) then
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_GRAYED_OUT))
+    else
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
+    fi
+  )
+  *
+  delta
+endlet
+
+
+toolbus(JavaModuleVisualizeEditable)
+
+process JavaModuleParser is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,available)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . GetJavaParseTree(ModuleId, Tree?)
+    .
+    if equal(Tree, UNDEFINED) then
+       MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", error)
+    else
+       MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", parsed)
+    fi
+    . Tree := help-garbage-collector
+  )
+  *
+  delta
+endlet
+
+toolbus(JavaModuleParser)
+
+process JavaSetModuleImports is
+let
+  Event: attribute-changed-event,
+  Import: str,
+  ImportId: term,
+  Imports: list,
+  ModuleId: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,parsed)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", opening)
+    . MM-DeleteModuleDependencies(ModuleId)
+    . GetInheritedModulenames(ModuleId, Imports?)
+    .
+    if not-equal(Imports, []) then 
+      if not-equal(Imports, []) then 
+        Import := first(Imports)
+        . Imports := next(Imports)
+        . OpenModule(Import, ImportId?)
+        . MM-AddModuleDependency(ModuleId, ImportId)
+      fi
+      *
+      if equal(Imports, []) then
+        MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", opened)
+      fi
+    else
+      MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", opened) 
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(JavaSetModuleImports)
+
+process JavaRemoveDependencies is
+let
+  Event: attribute-changed-event,
+  ModuleId: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,unknown)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-DeleteModuleDependencies(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(JavaRemoveDependencies)
+
+#endif /* __JAVA_LISTENERS__ */

@@ -1,0 +1,15 @@
+#ifndef __JAVA_META__
+#define __JAVA_META__
+
+#include <java-module-actions.tb>
+#include <java-listeners.tb>
+#include <java-actions.tb>
+#include <java-utils.tb>
+#include <parsetable-utils.tb>
+#include <java-language.tb>
+#include <java-editor-actions.tb>
+#include <java-progress-listener.tb>
+#include <java-editor-listeners.tb>
+#include <generic-adapter.idef>
+
+#endif /* __JAVA_META__ */

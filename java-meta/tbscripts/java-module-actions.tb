@@ -1,0 +1,90 @@
+#ifndef __JAVA_MODULE_ACTIONS__
+#define __JAVA_MODULE_ACTIONS__
+
+#include <java-namespace.h>
+#include <graph-namespace.tb>
+#include <navigator.idef>
+#include <graph-painter.idef>
+#include <configuration-manager.idef>
+#include <graph-utils.tb>
+
+process ImportGraphPainter is
+let
+  Event: attribute-changed-event,
+  ImportGraph: term,
+  ImportRelations: term
+in
+  subscribe(is-state(<term>))
+  .
+  (
+    rec-note(is-state(idle))
+    . MM-GetModuleGraph(GRAPH_NAMESPACE, ImportGraph?)
+    . snd-msg(nav-set-modules(ImportGraph))
+    . RenderGraph("import-graph", JAVA_NAMESPACE, true, false, ImportGraph?)
+  )
+  *
+  delta
+endlet
+
+toolbus(ImportGraphPainter)
+
+process SelectModule(ModuleId: term) is
+  snd-msg(nav-select-module(ModuleId))
+  . snd-msg(gp-select-node("import-graph", JAVA_NAMESPACE, ModuleId))
+
+process HandleModuleEvent(Type: term, Event: term, ModuleId: term) is
+let
+  Action: str,
+  Modulename: str
+in
+  snd-msg(cm-get-action(Type, Event))
+  . rec-msg(cm-action(Action?))
+  . Action(ModuleId)
+endlet
+
+process HandleModulePopup is
+let
+  GraphId: str,
+  GraphType: str,
+  ModuleId: term,
+  Modulename: str,
+  Menu: term,
+  PopupMenu: list,
+  Type: term
+in
+  (
+    NAV-RequestPopup(ModuleId?)
+    . MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename?)
+    . snd-msg(cm-get-events(module-popup(Modulename)))
+    . rec-msg(cm-events(PopupMenu?))
+    . NAV-ShowPopup(ModuleId, PopupMenu)
+  +
+    NAV-PopupEvent(ModuleId?, Menu?)
+    . HandleModuleEvent(module-popup, Menu, ModuleId)
+  +
+    GP-RequestPopup(GraphType?, GraphId?, ModuleId?)
+    .
+    if equal(GraphType, "import-graph") then
+      MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename?)
+      . snd-msg(cm-get-events(module-popup(Modulename)))
+      . rec-msg(cm-events(PopupMenu?))
+      . GP-ShowPopup("import-graph", JAVA_NAMESPACE, ModuleId, PopupMenu)
+    else
+      tau
+    fi
+  +
+    GP-PopupEvent(GraphType?, GraphId?, ModuleId?, Menu?)
+    .
+    if equal(GraphType, "import-graph") then
+      HandleModuleEvent(module-popup, Menu, ModuleId)
+    else
+      tau
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(HandleModulePopup)
+
+#endif /* __JAVA_MODULE_ACTIONS__ */

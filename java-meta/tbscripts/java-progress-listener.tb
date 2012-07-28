@@ -1,0 +1,28 @@
+#ifndef __JAVA_PROGRESS_LISTENER__
+#define __JAVA_PROGRESS_LISTENER__
+
+process JAVAStatusToProgress is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Name: str,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,<term>)
+  . subscribe(mm-module-deleted(<term>))
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Name?)
+    . ACE-GetNewValue(Event, Value?)
+    . snd-msg(pro-set-status(ModuleId, Name, JAVA_NAMESPACE, Value))
+  +
+    rec-note(mm-module-deleted(ModuleId?)) 
+    . snd-msg(pro-remove-status(ModuleId))
+  ) * delta 
+endlet
+
+toolbus(JAVAStatusToProgress)
+
+#endif /* __JAVA_PROGRESS_LISTENER__ */
