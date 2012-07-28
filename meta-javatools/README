@@ -1,0 +1,2 @@
+
+This is a convience package for the Meta-Environment. It is used to set up our build environment. It currently includes junit.jar. This package is not intended for distribution. Junit.jar is supposed to be in the environment if you want to build the Meta-Environment's Java packages.

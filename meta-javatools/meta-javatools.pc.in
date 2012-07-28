@@ -1,0 +1,5 @@
+prefix=@prefix@
+
+Name: meta-javatotools
+Version: 0.1
+Description: collection of Java tools for Meta build environment
