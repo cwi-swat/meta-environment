@@ -1,0 +1,61 @@
+$Id$
+
+Thu Sep 11 09:48:46 CEST 2008 <jurgenv@cwi.nl>
+ * Bumped version number.
+
+
+Mon Jun  9 13:19:57 CEST 2008 <jurgenv@cwi.nl>
+ * config-support.pc.in: Bumped version to 1.2
+
+Thu Jan 10 11:13:39 CET 2008 <economop@cwi.nl>
+ * src/options.{c,h}: reimplemented so that memory allocation is done
+   automatically. It is no longer necessary to pass in the number of options
+   used.
+
+Wed May  9 08:37:28 CEST 2007 <jurgenv@cwi.nl>
+ * Regenerated API with new configuration option for editors.
+
+Sat Feb  3 16:37:17 CET 2007 <jurgenv@cwi.nl>
+ * Regenerated API with obligatory information field for every menu
+   definition. This is used for documentation and tooltips.
+
+Fri Feb  2 16:06:02 CET 2007 <{economop,jurgenv}@cwi.nl>
+ * lib/options.h: reimplemented the API without the use of ATerm tables.
+   The old implementation was a bottleneck for sglr.
+
+Tue Oct 31 13:53:21 CET 2006 <jurgenv@cwi.nl>
+ * Regenerated API with support for all kinds of mouse button clicks,
+   including popups. Popups are hard-wired because different kinds of
+   mouse clicks trigger a popup on different kinds of operating systems.
+
+Tue Feb 21 13:14:46 CET 2006 <kooiker@cwi.nl>
+ * Generate api from Configuration.sdf
+
+Wed Feb  8 11:53:16 CET 2006 <economop@cwi.nl>
+ * Changed |OPT_initialise()| to |OPT_initialized()|.
+ 
+Tue Feb  7 15:14:48 CET 2006 <economop@cwi.nl>
+ * Added check to see if the options have already been initialized in
+   |options.c|.
+ * Increased the default size of the table used in |options.c|.
+
+Tue Feb  7 11:30:11 CET 2006 <economop@cwi.nl>
+ * Added an int wrapper for the hash table that stores the option values in 
+   |options.c|.
+ * Added the accessor functions for int valed options in |options.{c,h}|.
+
+Mon Feb  6 11:19:36 CET 2006 <economop@cwi.nl>
+ * Added |options.{c,h}| that can be used to store tool's options.
+
+Fri Feb  3 10:16:47 CET 2006 <{jurgenv,kooiker}@cwi.nl>
+ * lib/configuration.adt:
+   - Add new property import that takes a path that points to an
+     configuration file
+
+Mon Jan  9 08:55:21 CET 2006 <jurgenv@cwi.nl>
+ * lib/configuration.adt: changed properties module-path and library-path
+   to have a label for each path. This label can be used for visualization
+   purposes.
+
+Thu Dec  1 15:52:19 CET 2005 <kooiker@cwi.nl>
+ * Initial version of config-support

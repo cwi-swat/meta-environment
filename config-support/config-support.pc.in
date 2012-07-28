@@ -1,0 +1,11 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
+Name: config-support
+Version: 1.4
+Description:
+Requires: aterm
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lConfigAPI
+#uninstalled Libs: -L@abs_top_builddir@/lib -lConfigAPI
+#uninstalled Cflags: -I@abs_top_builddir@/lib
+Jars=${prefix}/share/configapi.jar
