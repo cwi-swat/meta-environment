@@ -1,0 +1,18 @@
+%%
+%% Test of trivial ambiguity with prefer
+%%
+%% Copyright (c) 2006-2007, Karl Trygve Kalleberg <karltk@ii.uib.no>
+%%
+module basic/G-right-assoc
+
+exports
+  sorts E
+  
+context-free syntax
+
+  E "+" E -> E {right}
+  "a"     -> E
+    
+context-free start-symbols
+
+  E

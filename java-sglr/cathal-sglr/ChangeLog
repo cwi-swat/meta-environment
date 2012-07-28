@@ -1,0 +1,11 @@
+
+
+Mon Nov 13 10:41:56 CET 2006 <jurgenv@cwi.nl>
+ * java-sglr.pc.in: started a package to contain a Java version
+   of the SGLR parse table interpreter. This project was started
+   with Cahal Boogerds Master Project. Now there is an alternative
+   version written By Karl Trygve Kalleberg. For now, both versions
+   will reside in this package, and be merged in one way or another.
+   In any case, this package will be released after all regression tests
+   with the C SGLR version succeed.
+

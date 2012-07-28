@@ -1,0 +1,7 @@
+module f
+imports
+ z
+
+strategies
+
+ main = !boo

@@ -1,0 +1,11 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,economop@cwi.nl,karltk@ii.uib.no
+JarFile=sglr.jar
+Jars=${prefix}/share/${JarFile}
+#uninstalled UninstalledJars=@abs_top_srcdir@/${JarFile}
+Packages=sglr
+
+Name: java-sglr
+Description: A Java implementation of the SDF parse table interpreter
+Requires: aterm-java
+Version: 0.1

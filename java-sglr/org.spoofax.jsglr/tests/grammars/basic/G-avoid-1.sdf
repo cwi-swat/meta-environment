@@ -1,0 +1,21 @@
+%%
+%% Test of trivial ambiguity with avoid
+%%
+%% Copyright (c) 2006-2007, Karl Trygve Kalleberg <karltk@ii.uib.no>
+%%
+
+module basic/G-avoid-1
+
+exports
+  sorts A C D
+  
+context-free syntax
+
+  "a" ( "x" | "y" ) "c" "d" -> A {avoid}
+  "a" ( "y" | "z" ) "c" "d" -> C
+  
+  A | C -> D
+    
+context-free start-symbols
+
+  D

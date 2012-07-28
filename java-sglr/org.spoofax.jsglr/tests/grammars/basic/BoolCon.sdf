@@ -1,0 +1,12 @@
+module basic/BoolCon
+
+exports
+  sorts BoolCon
+  
+  context-free syntax
+    "T"   -> BoolCon {cons("true")}
+    "F"   -> BoolCon {cons("false")}
+    
+hiddens
+  context-free start-symbols
+    BoolCon
