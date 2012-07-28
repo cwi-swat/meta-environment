@@ -1,0 +1,167 @@
+module eval/an-supplement
+
+exports
+
+sorts
+
+  Action Sort PrefixDataOp Yielder Data Variable AtomicType Type
+  UserDefPrefixDataOp UserDefType Literal Constructor UQLiteral AtmYielder
+
+context-free syntax
+
+  Literal Constructor		-> Action {avoid}
+  Variable			-> Data {avoid}
+
+lexical syntax
+
+  [a-z]+	-> UserDefType
+  UserDefType	-> AtomicType {avoid}
+   
+%%  [a-z\-]+	-> UserDefData
+%%  UserDefData	-> Data {avoid}
+
+  [a-z\-]+	-> UserDefPrefixDataOp
+  UserDefPrefixDataOp -> PrefixDataOp {avoid}
+
+  [A-Z][a-z0-9]*[\*\+]?	-> Variable
+
+  "the"		-> PrefixDataOp {reject}
+
+context-free priorities
+
+  { Action AtmYielder	-> Action }
+  >
+  {Literal Constructor	-> Action }
+
+lexical restrictions
+
+%%  UserDefData -/- [a-z\-]
+  UserDefType -/- [a-z\-]
+  UserDefPrefixDataOp -/- [a-z\-]
+  Variable -/- [a-z0-9\*\+]  
+
+%%%%%%%%%%
+% Reject %
+%%%%%%%%%%
+
+lexical syntax
+
+  "copy"		-> Data {reject}
+  "skip"		-> Data {reject}
+  "then"		-> Data {reject}
+  "and-then"		-> Data {reject}
+  "and"			-> Data {reject}
+  "indivisibly"		-> Data {reject}
+  "unfold"		-> Data {reject}
+  "unfolding"		-> Data {reject}
+  "throw"		-> Data {reject}
+%%  "catch"		-> Data {reject}
+  "err"			-> Data {reject}
+  "and-catch"		-> Data {reject}
+  "fail"		-> Data {reject}
+  "maybe"		-> Data {reject}
+  "else"		-> Data {reject}
+  "choose-nat"		-> Data {reject}
+
+  "copy-bindings"	-> Data {reject}
+  "scope"		-> Data {reject}
+
+
+  "create"		-> Data {reject}
+  "inspect"		-> Data {reject}
+  "update"		-> Data {reject}
+
+  "enact"		-> Data {reject}
+  "close"		-> Data {reject}
+  "recursively"		-> Data {reject}
+
+  "give"		-> Data {reject}
+  "check"		-> Data {reject}
+  "bind"		-> Data {reject}
+  "furthermore"		-> Data {reject}
+  "before"		-> Data {reject}
+  "apply"		-> Data {reject}
+
+  "copy"		-> PrefixDataOp {reject}
+  "skip"		-> PrefixDataOp {reject}
+  "then"		-> PrefixDataOp {reject}
+  "and-then"		-> PrefixDataOp {reject}
+  "and"			-> PrefixDataOp {reject}
+  "indivisibly"		-> PrefixDataOp {reject}
+  "unfold"		-> PrefixDataOp {reject}
+  "unfolding"		-> PrefixDataOp {reject}
+  "throw"		-> PrefixDataOp {reject}
+  "catch"		-> PrefixDataOp {reject}
+  "err"			-> PrefixDataOp {reject}
+  "and-catch"		-> PrefixDataOp {reject}
+  "fail"		-> PrefixDataOp {reject}
+  "maybe"		-> PrefixDataOp {reject}
+  "else"		-> PrefixDataOp {reject}
+  "choose-nat"		-> PrefixDataOp {reject}
+
+  "copy-bindings"	-> PrefixDataOp {reject}
+  "scope"		-> PrefixDataOp {reject}
+
+
+  "create"		-> PrefixDataOp {reject}
+  "inspect"		-> PrefixDataOp {reject}
+  "update"		-> PrefixDataOp {reject}
+
+  "enact"		-> PrefixDataOp {reject}
+  "close"		-> PrefixDataOp {reject}
+  "recursively"		-> PrefixDataOp {reject}
+
+  "give"		-> PrefixDataOp {reject}
+  "check"		-> PrefixDataOp {reject}
+  "bind"		-> PrefixDataOp {reject}
+  "furthermore"		-> PrefixDataOp {reject}
+  "before"		-> PrefixDataOp {reject}
+  "apply"		-> PrefixDataOp {reject}
+
+
+
+  "copy"		-> Type {reject}
+  "skip"		-> Type {reject}
+  "then"		-> Type {reject}
+  "and-then"		-> Type {reject}
+  "and"			-> Type {reject}
+  "indivisibly"		-> Type {reject}
+  "unfold"		-> Type {reject}
+  "unfolding"		-> Type {reject}
+  "throw"		-> Type {reject}
+  "catch"		-> Type {reject}
+  "err"			-> Type {reject}
+  "and-catch"		-> Type {reject}
+  "fail"		-> Type {reject}
+  "maybe"		-> Type {reject}
+  "else"		-> Type {reject}
+  "choose-nat"		-> Type {reject}
+
+  "copy-bindings"	-> Type {reject}
+  "scope"		-> Type {reject}
+
+
+  "create"		-> Type {reject}
+  "inspect"		-> Type {reject}
+  "update"		-> Type {reject}
+
+  "enact"		-> Type {reject}
+  "close"		-> Type {reject}
+  "recursively"		-> Type {reject}
+
+  "give" Yielder	-> Type {reject}
+  "check" Yielder	-> Type {reject}
+  "bind"		-> Type {reject}
+  "furthermore"		-> Type {reject}
+  "before"		-> Type {reject}
+  "apply"		-> Type {reject}
+
+
+  "invert"		-> Type {reject}
+
+
+  "n"			-> AtomicType {reject}
+
+  "the"			-> UQLiteral {reject}
+  
+  

@@ -1,0 +1,14 @@
+equations
+
+[concat-unique-1]
+   $X := head($XS1), $XS3 := tail($XS1), elem($X,$XS2) == false
+   ======================================================================
+   concat-unique($XS1, $XS2) = cons($X, concat-unique($XS3,$XS2))
+
+[concat-unique-2]
+   $X := head($XS1), $XS3 := tail($XS1), elem($X,$XS2) == true
+   ======================================================================
+   concat-unique($XS1, $XS2) = concat-unique($XS3, $XS2)
+
+[concat-unique-3]
+   concat-unique([], $XS) = $XS

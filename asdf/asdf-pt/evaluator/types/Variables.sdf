@@ -1,0 +1,19 @@
+module types/Variables
+
+imports 
+
+  types/Lib
+
+exports
+
+sorts
+
+  TypeVariable
+
+context-free syntax
+
+  TypeVariable	-> Type
+
+lexical syntax
+
+  "S_"[0-9]*		-> TypeVariable

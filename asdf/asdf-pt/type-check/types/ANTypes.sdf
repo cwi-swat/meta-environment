@@ -1,0 +1,21 @@
+module type-check/types/ANTypes
+
+
+  "cell"	-> SortName
+  "storable"	-> SortName
+
+  "agent"		-> SortName
+  "message"		-> SortName
+  "message-tag"		-> SortName
+
+  "action"	-> SortName
+
+  "bindings" 			-> SortName
+  "token"			-> SortName
+  "bindable"		 	-> SortName
+
+  "no" LAYOUT+ "bindings"	-> DataConst
+  "binding"			-> DataOpPrefix
+  "overriding"			-> DataOpPrefix
+  "disjoint" LAYOUT+ "union"	-> DataOpPrefix
+  "bound"			-> DataOpPrefix

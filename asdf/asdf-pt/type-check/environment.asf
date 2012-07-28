@@ -1,0 +1,61 @@
+equations
+
+[empty-1] empty-env = 
+	  <sigs(), [], initial-dataop-sigs, [], Action, 0, []>
+
+[type-info-1] 
+
+   type-info-to-env(<$SIGS, $STS, $DOS, $DCS>) = 
+				  <$SIGS, $STS, $DOS, $DCS, Action, 0, []>
+
+[get-1] get-signatures(<$SIGS, $STS, $DOS, $DCS, $AT, $N, $LC>) = $SIGS
+
+[get-2] get-subtypes(<$SIGS, $STS, $DOS, $DCS, $AT, $N, $LC>) = $STS
+
+[get-3] get-dataop-sigs(<$SIGS, $STS, $DOS, $DCS, $AT, $N, $LC>) = $DOS
+
+[get-4] get-data-constants(<$SIGS, $STS, $DOS, $DCS, $AT, $N, $LC>) = $DCS
+
+[get-5] get-unfold-type(<$SIGS, $STS, $DOS, $DCS, $AT, $N, $LC>) = $AT
+
+[get-6] get-label(<$SIGS, $STS, $DOS, $DCS, $AT, $N, $LC>) = $N
+
+[get-7] get-constraints(<$SIGS, $STS, $DOS, $DCS, $AT, $N, $LC>) = $LC
+
+[set-1] set-signatures(<$SIGS1, $STS, $DOS, $DCS, $AT, $N, $LC>, $SIGS2) = 
+				      <$SIGS2, $STS, $DOS, $DCS, $AT, $N, $LC>
+
+[set-2] set-subtypes(<$SIGS, $STS1, $DOS, $DCS, $AT, $N, $LC>, $STS2) = 
+				      <$SIGS, $STS2, $DOS, $DCS, $AT, $N, $LC>
+
+[set-3] set-dataop-sigs(<$SIGS, $STS, $DOS1, $DCS, $AT, $N, $LC>, $DOS2) = 
+				      <$SIGS, $STS, $DOS2, $DCS, $AT, $N, $LC>
+
+[set-4] set-data-constants(<$SIGS, $STS, $DOS, $DCS1, $AT, $N, $LC>, $DCS2) = 
+				      <$SIGS, $STS, $DOS, $DCS2, $AT, $N, $LC>
+
+[set-5] set-unfold-type(<$SIGS, $STS, $DOS, $DCS, $AT1, $N, $LC>, $AT2) = 
+				      <$SIGS, $STS, $DOS, $DCS, $AT2, $N, $LC>
+
+[set-6] set-label(<$SIGS, $STS, $DOS, $DCS, $AT, $N1, $LC>, $N2) = 
+				      <$SIGS, $STS, $DOS, $DCS, $AT, $N2, $LC>
+
+[add-con-1] 
+
+   $LC2 := cons($CO, $LC1)
+   ===========================================================================
+   add-constraint($CO, <$SIGS, $STS, $DOS, $DCS, $AT, $N, $LC1>) = 
+				      <$SIGS, $STS, $DOS, $DCS, $AT, $N, $LC2>
+
+[new-type-var-1] $N := get-label($EN1) + 1,
+		 $EN2 := set-label($EN1, $N)
+		 =================================
+		 new-type-var($EN1) = <_V$N, $EN2>
+
+[new-action-type-var-1] 
+
+		 $N := get-label($EN1) + 1,
+		 $EN2 := set-label($EN1, $N)
+		 ========================================
+		 new-action-type-var($EN1) = <_AV$N, $EN2>
+

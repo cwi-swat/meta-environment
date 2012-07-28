@@ -1,0 +1,4 @@
+ASBIN=__META__/bin
+ASSHARE=__META__/share/asdf/asdf-pt
+$ASBIN/apply-function -f execute -i .module -i .info -s Effect | $ASBIN/asfe -e $ASSHARE/asdf/Eval.eqs | $ASBIN/unparsePT
+

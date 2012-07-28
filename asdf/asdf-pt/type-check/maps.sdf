@@ -1,0 +1,42 @@
+module type-check/maps
+
+imports
+
+  type-check/typeops
+
+exports
+
+sorts
+
+  Variable ErrorMap VariableMap
+
+context-free syntax
+
+  vmap({<Type, Type, Subject> ","}*)		-> VariableMap
+
+  "empty-map"			-> VariableMap {prefer}
+
+  single(Type, Type, Subject)		-> VariableMap
+
+  insert(VariableMap, VariableMap)	-> VariableMap
+
+  contains(<Type, Type>, VariableMap)	-> Answer
+
+  length(VariableMap)			-> Integer
+
+  ErrorMap				-> VariableMap
+
+  error(Type, Type, Subject)		-> ErrorMap
+
+hiddens variables
+
+  "$M"[0-9]?	-> VariableMap
+  "$EM"[0-9]?	-> ErrorMap
+  "$VR"[0-9]?	-> Variable
+  "$TY"[0-9]?	-> Type
+  "$ATV"[0-9]?	-> ActionTypeVariable
+  "$TV"[0-9]?	-> TypeVariable
+  "$VT"[0-9]?"*" -> {<Type, Type, Subject> ","}*
+  "$EN"[0-9]?	-> Environment
+  "$N"[0-9]?	-> Integer
+  "$SU"[0-9]?	-> Subject

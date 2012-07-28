@@ -1,0 +1,9 @@
+equations
+
+[unify-1] unify(T1, T2) = T1 when T1 subtype-of T2 = yes
+
+[unify-1] unify(T1, T2) = T2 when T2 subtype-of T1 = yes
+
+[unify-1] unify(empty, T) = T
+
+[unify-1] unify(T, empty) = T

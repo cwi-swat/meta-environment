@@ -1,0 +1,56 @@
+module type-check/types/asdf-types
+
+imports
+
+  type-check/types/Composed
+  type-check/types/Tuple
+
+exports
+
+context-free start-symbols
+
+  ActionType
+
+sorts
+
+  SingleActionType ActionType
+
+context-free syntax
+
+  AtomicType	-> Type
+
+  "Action"		-> SingleActionType
+  "using" Type		-> SingleActionType
+  "giving" Type		-> SingleActionType
+  "raising" Type	-> SingleActionType
+  "infallible" | "terminates" | "closed" | 
+  "stable" | "ineffective" | "uncreative" 	-> SingleActionType {prefer}
+
+  "infallible" | "terminates" | "closed" | 
+  "stable" | "ineffective" | "uncreative"	-> Type {reject}
+    
+  {SingleActionType "&"}*	-> ActionType 
+
+  "(" ActionType ")"	     -> Type {avoid}
+
+  get-using(ActionType)		-> Type 
+  get-giving(ActionType)	-> Type 
+  get-raising(ActionType)	-> Type 
+  rm-using(ActionType)		-> ActionType 
+  rm-giving(ActionType)		-> ActionType 
+  rm-raising(ActionType)	-> ActionType 
+  rm-ugr(ActionType)		-> ActionType 
+
+context-free restrictions
+
+  AtomicType -/- [a-z\-]  
+    
+hiddens variables
+
+   "$SAT"[0-9]?		-> SingleActionType
+   "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
+   "$AT"[0-9]?		-> ActionType
+   "$TY"[0-9]?		-> Type
+   "$AN"[0-9]?		-> Answer
+   
+

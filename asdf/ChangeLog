@@ -1,0 +1,36 @@
+/* $Id$ */
+
+Thu Oct 29 18:02:19 CET 2004 (fagidiot@daimi.au.dk)
+* Initial termstore is now being generated on installation.
+* Some stability issues solved.
+* See the file changes.
+	
+Thu Oct 14 08:47:06 CET 2004 (fagidiot@daimi.au.dk)
+* The TypeChecker is back online.
+* It is possible to reduce and evaluate in one click.
+* Some stability issues solved.
+* See the file changes.
+	
+Tue Sep 28 13:04:37 CET 2004 (fagidiot@daimi.au.dk)
+* General update of the Action environment package.
+  Furthermore support for an action evaluator has been added.
+* See the file changes.
+	
+Thu Sep 9 12:04:43 CET 2004 (fagidiot@daimi.au.dk)
+* General update of the Action environment package.
+  Primarily the sdf and asf in asdf-pt.
+* See the file changes.
+	
+Wed Sep 1 14:36:54 CET 2004 (fagidiot@daimi.au.dk)
+* General update of the Action environment package.
+  Is now working with the current version of the Meta-Env.
+* See the file changes.
+	
+Thu Mar 18 18:29:50 CET 2004 (markvdb@cwi.nl,jive@brick.dk)
+* Reformulated the calls to the gen-adapter. 
+* Introduced a compiled specification to achieve the mapping
+  from ASDF to SDF and ASF.
+
+2004/03/17 jive@brics.dk
+
+* Package created

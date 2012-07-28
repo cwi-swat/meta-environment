@@ -1,0 +1,11 @@
+module type-check/data/all
+
+imports 
+
+  type-check/data/Numbers
+  type-check/data/Boolean
+  type-check/data/Bindings
+  type-check/data/Token
+  type-check/data/Action
+  type-check/data/Tuple
+

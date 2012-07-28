@@ -1,0 +1,127 @@
+equations
+
+[tcm-1] defs() == get-function-defs($AM)
+	=====================================================
+	typecheck($AM, $TI) = gen-summary(yes)
+
+[tcm-2] <sigs($AFS1*), $STS, $DOS1, $DCS> := $TI,	
+	defs($FD+) := get-function-defs($AM),
+	sigs($AFS2*) := remove-dobble-sigs(sigs($AFS1*),type-info-to-env($TI)),
+	$EN1 := set-signatures(type-info-to-env($TI), sigs($AFS2*)),
+	$LDF1 := get-dataop-sigs($EN1),
+	$LDF2 := initial-dataop-sigs,
+	$DOS2 := concat($LDF1, $LDF2),
+        $DOS3 := remove-dobble-dataops($DOS2, $EN1),
+        $EN2 := set-dataop-sigs($EN1, $DOS3),
+	$ANS := typecheck-definitions(defs($FD+), $EN2),
+	$SUM := gen-summary($ANS)
+	=====================================================
+	typecheck($AM, $TI) = $SUM
+
+[tcd-1] $ANS1 := typecheck-definitions(defs($FD), $EN),
+	$ANS2 := typecheck-definitions(defs($FD+), $EN)
+        ====================================================
+        typecheck-definitions(defs($FD, $FD+), $EN) = $ANS1 $ANS2
+
+[tcd-2] 	
+
+      $ET $LT $CO = $AC := $FD,
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
+      $LT == get-fun-name($AFS1),
+      <$AT1, $EN2> := typecheck-action($AC, $EN),
+      $ER := $AT1
+      ===================================================
+      typecheck-definitions(defs($FD), $EN) = $ER
+
+[tcd-3] 	
+
+      $ET $LT $CO = $AC := $FD,
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
+      $LT : $SO -> $AT1 := $AFS1,
+      <$AT2, $EN2> := typecheck-action($AC, $EN),
+      $SU1 := localized("Problem with type of whole eqn", get-location($FD)),
+      $LC1 := subtype-con(($AT2), (trans-act-type($AT1)), $SU1) : get-constraints($EN2),
+      <$M1, $LC2> := solve-constraints($LC1, $EN2),
+      $M2 := solve($M1, $EN2),
+      error($TY1, $TY2, $SU2) := $M2
+      ===================================================
+      typecheck-definitions(defs($FD), $EN) = error("Type check report", [$SU2])
+
+[tcd-4] 	
+
+      $ET $LT $CO = $AC := $FD,
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
+      $LT : $SO -> $AT1 := $AFS1,
+      <$AT2, $EN2> := typecheck-action($AC, $EN),
+      $SU := localized("Problem with type of whole eqn", get-location($FD)),
+      $LC1 := subtype-con(($AT2), (trans-act-type($AT1)), $SU) : 
+							 get-constraints($EN2),
+      <$M1, $LC2> := solve-constraints($LC1, $EN2),
+      vmap($VT*) := solve($M1, $EN2),
+      $LC3 := check-last-constraints($LC2, vmap($VT*)),
+      [] != $LC3
+      ===================================================
+      typecheck-definitions(defs($FD), $EN) = 
+		error("Type check report", [get-subjects($LC3,)])
+
+[tcd-5] 	
+
+      $ET $LT $CO = $AC := $FD,
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
+      $LT : $SO -> $AT1 := $AFS1,
+      <$AT2, $EN2> := typecheck-action($AC, $EN),
+      $ER !:= $AT2,
+      $SU := localized("Problem with type of whole eqn", get-location($FD)),
+      $LC1 := subtype-con(($AT2), (trans-act-type($AT1)), $SU) : 
+							get-constraints($EN2),
+      <$M1, $LC2> := solve-constraints($LC1, $EN2),
+      vmap($VT*) := solve($M1, $EN2),
+      $LC3 := check-last-constraints($LC2, vmap($VT*)),
+      [] == $LC3
+      ===================================================
+      typecheck-definitions(defs($FD), $EN) = error("Type check report", 
+	     [subject("Type check OK")])
+
+
+[tca-function] 
+
+      sigs($AFS1*, $LT : $SO -> $AT, $AFS2*) := get-signatures($EN)
+      ============================================================
+      typecheck-action($LT $CO, $EN) = <trans-act-type($AT), $EN>
+
+[feedback-0] yes $ANS = $ANS
+
+[feedback-0] $ANS yes = $ANS
+
+[feedback-1] 
+
+  summary("","",[$ER1, $ER1*, info("Type check OK", [localized("", file($SC))]), $ER2*]) =
+	      summary("","",[$ER1, $ER1*, $ER2*])
+
+[feedback-2] 
+
+  summary("","",[$ER1*, info("Type check OK", [localized("", file($SC))]), $ER2, $ER2*]) =
+	      summary("","",[$ER1*, $ER2, $ER2*])
+
+ 
+[summary-1] $ER := $AN,
+	    summary("", "",[$ER*]) := gen-summary($ANS)
+	    ===========================================
+	    gen-summary($AN $ANS) = summary("", "", [$ER, $ER*])
+
+[default-summary-1] $ER := $AN
+	    ===========================================
+	    gen-summary($AN) = summary("", "", [$ER])
+
+[default-summary-3] 
+
+            gen-summary(yes) = summary("","",[info("Type check OK", 
+						[localized("", file(""))])])
+
+[get-subjects-1] get-subjects($SU, $SU*) = $SU, $SU*
+
+[summary-simp-1] 
+
+        summary("", "", [$ER1*, $ER2*]) != summary("","",[])
+        =====================================================
+	summary("", "", [$ER1*, error("Type check report", [subject("Type check OK")]), $ER2*]) = summary("", "", [$ER1*, $ER2*])

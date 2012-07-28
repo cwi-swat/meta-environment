@@ -1,0 +1,9 @@
+module type-check/types/all
+
+imports
+	type-check/types/Atomic
+	type-check/types/Composed
+	type-check/types/Action
+	type-check/types/Tuple
+	type-check/types/Record
+	type-check/types/Variables

@@ -1,0 +1,13 @@
+module types/Unions
+
+imports
+
+  types/Lib
+
+exports
+
+context-free syntax
+
+  union({Type "," }*)	-> UnionType
+  UnionType		-> Type
+

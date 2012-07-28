@@ -1,0 +1,119 @@
+module type-check/types/all-types
+
+imports
+
+  type-check/Layout
+  type-check/data/all-data
+
+exports
+
+sorts
+    
+  AtomicType ListType CellType TokenType
+  RecordType Row Fields RecordEntry Field
+  ActionType SimpleActionType AdvancedActionType
+  TypeVariable Type Answer
+
+context-free syntax
+
+%% Atomic
+
+  AtomicType	-> Type
+
+%% Composed
+	
+  ListType		  -> Type
+  "list" "(" Type ")"	  -> ListType 
+
+  CellType		  -> Type
+  "cell" "(" Type ")"	  -> CellType
+	
+  TokenType		  -> Type
+  "token" "(" Token? ")"  -> TokenType
+
+%% Records
+
+  RecordType	-> Type
+
+  RecordType "/\\" RecordType	  -> RecordType
+
+  Fields Row	  -> RecordType
+
+  "empty"		-> RecordType
+
+  "{" {RecordEntry ","}* "}"	-> Fields
+	
+  Token ":" Field	-> RecordEntry
+
+  Type		-> Field
+
+%% Action type
+
+  ActionType	-> Type
+
+%% Simple action type
+
+  SimpleActionType	-> ActionType
+
+  "action" "[" Using Giving Raising "]"		-> SimpleActionType
+	
+  "using" Type		-> Using
+  "giving" Type		-> Giving
+  "raising" Type	-> Raising
+
+%% Advanced action type
+
+  AdvancedActionType	-> ActionType
+
+  "(" RecordType "," RecordType ")" "->" 
+  "(" RecordType "," RecordType "," Answer ")" -> AdvancedActionType
+
+%% Typevariable
+
+  TypeVariable	-> Type
+
+
+lexical syntax
+
+%% Atomic
+
+  "data"	-> AtomicType
+  "datum"	-> AtomicType
+  "integer"	-> AtomicType
+  "boolean"	-> AtomicType
+  "storable"	-> AtomicType
+  "bindable"	-> AtomicType
+  "string"	-> AtomicType
+  "cell"	-> AtomicType
+  "bindings"	-> AtomicType
+  "token"	-> AtomicType
+
+%% Records
+
+  "V_"[0-9]*	-> Row
+  "P_"[0-9]*	-> Row
+  "E"		-> Row
+
+  "absent"	-> Field
+  "D_"[0-9]*	-> Field  
+
+%% Typevariable
+
+  "S_"[0-9]*		-> TypeVariable
+
+%% Lib
+
+  "nothing"		-> Type
+
+  "yes" | "no"	-> Answer
+
+variables
+
+  "AT"[0-9]?	-> ActionType
+
+hiddens 
+
+sorts
+
+  Using Giving Raising
+  

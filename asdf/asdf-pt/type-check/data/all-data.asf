@@ -1,0 +1,231 @@
+equations
+
+[type-of-data-1] A := D,
+		 <TA @ AT, E2> := infer-type(A, E1)
+		 =================================
+		 type-of-data(D, E1) = <{1: AT}E, E2>equations
+
+[type-of-data-1] type-of-data(no-bindings, E1) = <{1:{}E}E, E1>
+
+[type-of-data-op-1] 
+
+        <RW1, E2> := create-gamma-row(E1),
+        <RW2, E3> := create-rho-row(E2),
+        <RW3, E4> := create-rho-row(E3),
+        <RW4, E5> := create-rho-row(E4),
+	E6 := add-constraint(disj-union-constraint({}RW1, {}RW2, {}RW4), E5)
+	====================================================================
+        type-of-data-op(disj-union, E1) = 
+	    <({1: {}RW1, 2: {}RW2}E, {}RW3) -> ({1:{}RW4}E, empty, no), E6>
+
+[type-of-data-op-2] 
+
+        <RW1, E2> := create-gamma-row(E1),
+        <RW2, E3> := create-rho-row(E2), 
+        <RW3, E4> := create-rho-row(E3),
+        <RW4, E5> := create-rho-row(E4),
+	E6 := add-constraint(overriding-constraint({}RW1, {}RW2, {}RW4), E5)
+	====================================================================
+        type-of-data-op(overriding, E1) = 
+	    <({1: {}RW1, 2: {}RW2}E, {}RW3) -> ({1:{}RW4}E, empty, no), E6>
+
+[type-of-data-op-3]
+
+        <RW1, E2> := create-rho-row(E1),
+        <TV1, E3> := create-type-var(E2),
+	<TV2, E4> := create-type-var(E3),
+        <RW2, E5> := create-gamma-row(E4),
+	E6 := add-constraint(bound-constraint({}RW1, TV1, TV2), E5)
+	=============================================================
+        type-of-data-op(bound, E1) = 
+	    <({1: {}RW1, 2: TV1}E, {}RW2) -> ({1:TV2}E, empty, no), E6>
+
+[type-of-data-op-3]
+
+        <RW1, E2> := create-gamma-row(E1),
+        <TV1, E3> := create-type-var(E2),
+        <TV2, E4> := create-type-var(E3),
+        <RW2, E5> := create-rho-row(E4),
+	E6 := add-constraint(binding-constraint(TV1, TV2, {}RW2), E5)
+	=============================================================
+        type-of-data-op(binding, E1) = 
+	    <({1: TV1, 2: TV2}E, {}RW1) -> ({1:{}RW2}E, empty, no), E6>
+
+
+[code-binding-1]
+
+   An := get-normal-trans(CII),
+   I1 := lookup(An, 1),
+   I2 := lookup(An, 2),
+   Imn1 := get-max-normal(CII),
+   <I3, Imn2> := get-unused-reg(get-used-normal(CII), Imn1),
+   C := _RI3 = (int)binding((Token)_RI1, _RI2);
+   =============================================
+   generate-code-dataop(binding, AT, CII) = 
+               set-max-normal(
+                 set-excep-trans(
+		   set-normal-trans(
+		     set-code(code-info-in-to-out(CII), C),
+		     one-to-x-map(I3)),
+                   new-table),
+		 Imn2)
+
+[code-bound-1]
+
+   An := get-normal-trans(CII),
+   I1 := lookup(An, 1),
+   I2 := lookup(An, 2),
+   Imn1 := get-max-normal(CII),
+   <I3, Imn2> := get-unused-reg(get-used-normal(CII), Imn1),
+   I4 := get-excep-label(CII),
+   C := _RI3 = (int)bound((Bindings)_RI1, (Token)_RI2);
+if (dataop_exception_flag) {
+   no_data_exception_flag = 1;
+   goto _exceptionI4;
+}
+   =============================================
+   generate-code-dataop(bound, AT, CII) = 
+               set-max-normal(
+                 set-excep-trans(
+		   set-normal-trans(
+		     set-code(code-info-in-to-out(CII), C),
+		     one-to-x-map(I3)),
+                   new-table),
+		 Imn2)
+
+equations
+
+[type-of-data-1] type-of-data(B, E1) = <{1: boolean} E, E1>
+
+[type-of-data-op-1] <RW, E2> := create-gamma-row(E1)
+	            ======================================================
+                    type-of-data-op(not, E1) = 
+		<({1: boolean}E, {}RW) -> ({1: boolean}E, empty, no), E2>
+
+[code-boolean-1]
+ 
+   Imn1 := get-max-normal(CII),
+   <I2, Imn2> := get-unused-reg(get-used-normal(CII), Imn1),
+   C := _RI2 = B;
+   =============================================
+   generate-code-data(B, CII) = 
+               set-max-normal(
+                 set-excep-trans(
+		   set-normal-trans(
+		     set-code(code-info-in-to-out(CII), C),
+		     one-to-x-map(I2)),
+                   new-table),
+		 Imn2)
+
+equations
+
+[type-equal-1] 
+
+	  <TV, E2> := create-type-var(E1),
+	  <RW, E3> := create-gamma-row(E2)
+	  ======================================================
+          type-of-data-op(=, E1) = 
+		<({1: TV, 2: TV}E, {}RW) -> ({1:boolean}E, empty, no), E3>
+
+[type-the-1] 
+
+	<RW, E2> := create-gamma-row(E1)
+	========================================================
+        type-of-data-op(the TY, E1) = 
+		<({1: TY}E, {}RW) -> ({1: TY}E, {}E, no), E2>
+
+[code-the-1]
+
+        generate-code-dataop(the TY, (TR, BS) -> (TRn, TRe, AN), CII) = 
+			    set-excep-trans(
+			       set-code(code-info-in-to-out(CII), 
+			                ;),
+			       new-table)equations
+
+[type-of-data-1] type-of-data(N, E1) = <{1: integer} E, E1>
+
+[type-of-data-op-1] 
+
+   <RW, E2> := create-gamma-row(E1)
+   ======================================================
+   type-of-data-op(+, E1) = 
+	<({1: integer, 2: integer}E, {}RW) -> ({1:integer}E, empty, no), E2>
+
+
+[type-of-data-op-2] 
+
+   <RW, E2> := create-gamma-row(E1)
+   ======================================================
+   type-of-data-op(*, E1) = 
+	<({1: integer, 2: integer}E, {}RW) -> ({1:integer}E, empty, no), E2>
+
+
+[code-number-1]
+ 
+   Imn1 := get-max-normal(CII),
+   <I2, Imn2> := get-unused-reg(get-used-normal(CII), Imn1),
+   C := _RI2 = N;
+   =============================================
+   generate-code-data(N, CII) = 
+               set-max-normal(
+                 set-excep-trans(
+		   set-normal-trans(
+		     set-code(code-info-in-to-out(CII), C),
+		     one-to-x-map(I2)),
+                   new-table),
+		 Imn2)
+
+
+[code-plus-1]
+
+   An := get-normal-trans(CII),
+   I1 := lookup(An, 1),
+   I2 := lookup(An, 2),
+   Imn1 := get-max-normal(CII),
+   <I3, Imn2> := get-unused-reg(get-used-normal(CII), Imn1),
+   C := _RI3 = _RI1 + _RI2;
+   =============================================
+   generate-code-dataop(+, AT, CII) = 
+               set-max-normal(
+                 set-excep-trans(
+		   set-normal-trans(
+		     set-code(code-info-in-to-out(CII), C),
+		     one-to-x-map(I3)),
+                   new-table),
+		 Imn2)
+
+[code-less-1]
+
+   An := get-normal-trans(CII),
+   I1 := lookup(An, 1),
+   I2 := lookup(An, 2),
+   Imn1 := get-max-normal(CII),
+   <I3, Imn2> := get-unused-reg(get-used-normal(CII), Imn1),
+   C := _RI3 = _RI1 < _RI2;
+   =============================================
+   generate-code-dataop(<, AT, CII) = 
+               set-max-normal(
+                 set-excep-trans(
+		   set-normal-trans(
+		     set-code(code-info-in-to-out(CII), C),
+		     one-to-x-map(I3)),
+                   new-table),
+		 Imn2)
+equations
+
+[type-of-data-1] type-of-data(TK, E1) = <{1: token(TK)} E, E1>
+
+[generate-code-1]
+
+   Imn1 := get-max-normal(CII),
+   <I2, Imn2> := get-unused-reg(get-used-normal(CII), Imn1),
+   C := _RI2 = TK;
+   =============================================
+   generate-code-data(TK, CII) = 
+               set-max-normal(
+                 set-excep-trans(
+		   set-normal-trans(
+		     set-code(code-info-in-to-out(CII), C),
+		     one-to-x-map(I2)),
+                   new-table),
+		 Imn2)

@@ -1,0 +1,112 @@
+module asdf/functions
+
+imports
+
+  type-check/subtype
+  asdf/asdf-sem-sec
+  asdf/lower-case
+  asdf/an-supplement
+  containers/List[<DataOp, ActionType>]
+  containers/List[<DataOp, Type>]
+
+
+exports
+  context-free start-symbols TypeInfo DataConstants
+
+sorts
+
+  FunctionDefs TypeInfo SubTypes DataOpSigs AS-Argument DataConstants
+
+context-free syntax
+
+  get-type-info(AS-Module)	-> TypeInfo
+
+  <Signatures, SubTypes, DataOpSigs, DataConstants>	-> TypeInfo
+
+  List[[<DataOp, ActionType>]]		-> DataOpSigs
+
+  List[[<DataOp, Type>]]			-> DataConstants
+
+  get-signatures(AS-Module)	-> Signatures
+
+  get-sigs(AS-Module, Signatures)	
+			-> Signatures {traversal(accu, break, top-down)}
+  get-sigs(AS-Section*, Signatures)	
+			-> Signatures {traversal(accu, break, top-down)}
+  get-sigs(AS-FunctionSig, Signatures)	
+			-> Signatures {traversal(accu, break, top-down)}
+
+  get-subtypes(AS-Module, SubTypes)	
+			  -> SubTypes {traversal(accu, break, top-down)}
+  get-subtypes(AS-Requires-Production, SubTypes)	
+			  -> SubTypes {traversal(accu, break, top-down)}
+
+  get-subs(AtomicType, AS-Requires-Rhs, SubTypes)	  -> SubTypes 
+
+  get-dataop-sigs(AS-Module, DataOpSigs)  
+			     -> DataOpSigs {traversal(accu, break, top-down)}
+
+  get-dataop-sigs(AS-Requires-Production, DataOpSigs)  
+			     -> DataOpSigs {traversal(accu, break, top-down)}
+
+  get-dataop-sigs(AtomicType, AS-Requires-Rhs, DataOpSigs)	 -> DataOpSigs 
+
+  get-selectors(AtomicType, {(Literal ":" AS-Argument) ","}*)	
+					  -> List[[<DataOp, ActionType>]]
+
+  get-dataop-type({(Literal ":" AS-Argument) ","}*)	-> Type
+
+  sort-to-type(AS-Argument)	  -> AtomicType
+
+  get-data-constants(AS-Module, DataConstants)  
+			-> DataConstants {traversal(accu, break, top-down)}
+
+  get-data-constants(AS-Constant, DataConstants)  
+			-> DataConstants {traversal(accu, break, top-down)}
+
+  join-type-info(TypeInfo, TypeInfo)  -> TypeInfo
+
+  get-function-defs(AS-Module)	     -> FunctionDefs
+
+  get-fun-defs(AS-Module, FunctionDefs)	
+			  -> FunctionDefs {traversal(accu, break, top-down)}
+  get-fun-defs(AS-Section*, FunctionDefs)	
+			  -> FunctionDefs {traversal(accu, break, top-down)}
+  get-fun-defs(AS-FunctionDef, FunctionDefs)	
+			  -> FunctionDefs {traversal(accu, break, top-down)}
+
+  {AS-FunctionDef ","}* 	-> SortWithPosition
+
+%%  get-using(ActionType)		-> Type
+%%  get-giving(ActionType)		-> Type
+%%  get-raising(ActionType)	-> Type
+
+hiddens variables
+
+  "$ASM"		-> AS-Module
+  "$MN"			-> ModuleName
+  "$IS*"		-> ImpSection*
+  "$AS*"		-> AS-Section*
+  "$FS*"[0-9]?		-> {AS-FunctionSig ","}*
+  "$FS"[0-9]?		-> AS-FunctionSig
+  "$FD*"		-> {AS-FunctionDef ","}*
+  "$FD"			-> AS-FunctionDef
+  "$LT"[0-9]?		-> Literal
+  "$AT"[0-9]?		-> ActionType
+  "$SO"[0-9]?		-> Sort
+  "$TY"[0-9]?		-> Type
+  "$ATY"[0-9]?		-> AtomicType    
+  "$TY"[0-9]?"*"	-> { Type ","}*
+
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+  "$DOS"[0-9]?		-> List[[<DataOp, ActionType>]]
+  "$DCS"[0-9]?		-> List[[<DataOp, Type>]]
+
+  "$ARR"[0-9]?		-> AS-Requires-Rhs
+  "$CH"[0-9]?		-> CHAR
+  "$CH"[0-9]?"*"	-> CHAR*
+  "$CH"[0-9]?"+"	-> CHAR+
+  "$LT"[0-9]?		-> Literal
+
+  "$LS"[0-9]?"*"	-> {(Literal ":" AS-Argument) ","}*
+  "$ASA"[0-9]?		-> AS-Argument

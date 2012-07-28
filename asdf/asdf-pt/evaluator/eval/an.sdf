@@ -1,0 +1,31 @@
+module eval/an
+
+imports eval/environment
+
+exports
+
+context-free start-symbols
+
+  <Result, Environment>
+
+sorts
+
+  Result Environment
+
+context-free syntax
+
+  eval(Action, Data, Bindings, Environment)	-> <Result, Environment> {memo}
+
+hiddens variables
+
+  "C"[0-9]?	-> Cell
+  "D"[0-9]?	-> Data
+  "D*"[0-9]?	-> {Data ","}*
+  "BS"[0-9]?	-> Bindings
+  "N"[0-9]?	-> Integer
+  "A"[0-9]?	-> Action
+  "E"[0-9]?	-> Environment
+  "R"[0-9]?	-> Result
+  "IA"[0-9]?	-> InfixAction
+  "PA"[0-9]?	-> PrefixAction
+  "Y"[0-9]?	-> Yielder

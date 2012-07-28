@@ -1,0 +1,30 @@
+module type-check/types/Atomic
+
+imports 
+
+  type-check/types/Lib
+
+exports
+
+sorts
+    
+  AtomicType
+
+
+context-free syntax
+
+  AtomicType	-> Type
+	
+
+lexical syntax
+
+  "data"	-> AtomicType {prefer}
+  "datum"	-> AtomicType {prefer}
+  "integer"	-> AtomicType {prefer}
+  "boolean"	-> AtomicType {prefer}
+  "storable"	-> AtomicType {prefer}
+  "bindable"	-> AtomicType {prefer}
+  "string"	-> AtomicType {prefer}
+  "cell"	-> AtomicType {prefer}
+  "bindings"	-> AtomicType {prefer}
+  "token"	-> AtomicType {prefer}

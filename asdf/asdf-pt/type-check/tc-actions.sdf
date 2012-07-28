@@ -1,0 +1,41 @@
+module type-check/tc-actions
+
+imports
+
+  type-check/tc-dataop
+  utilities/PosInfo[SortWithPosition]
+  
+
+exports 
+
+context-free start-symbols
+
+  <ActionType, Environment>
+
+context-free syntax 
+
+  typecheck-action(Action, Environment)	-> <ActionType, Environment> {memo}
+
+hiddens 
+
+variables
+
+  "$TY"[0-9]?		-> Type
+  "$AT"[0-9]?		-> ActionType
+  "$SAT"[0-9]?		-> SingleActionType
+  "$TV"[0-9]?		-> TypeVariable
+  "$ATV"[0-9]?		-> ActionTypeVariable
+  "$EN"[0-9]*		-> Environment
+  "$A"[0-9]?		-> Action
+  "$IA"			-> InfixAction
+  "$D"[0-9]?		-> Data
+  "$DO"[0-9]?		-> DataOp
+  "$ER"[0-9]?"+"	-> Error+
+  "$CH+"[0-9]?		-> CHAR+
+  "$SC"[0-9]?		-> StrCon
+  "$SU"[0-9]?		-> Subject		
+
+
+sorts
+
+   ActionType Type 

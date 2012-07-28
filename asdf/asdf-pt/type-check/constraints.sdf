@@ -1,0 +1,23 @@
+module type-check/constraints
+
+imports
+
+  containers/List[Constraint]
+
+exports
+
+sorts
+
+  Type RecordType Constraint
+
+context-free syntax
+
+  subtype-con(Type, Type, Subject)		-> Constraint
+  concat-con(Type, Type, Type, Subject)		-> Constraint
+  not-equal-con(Type, Type, Subject)		-> Constraint
+  lub-con(Type, Type, Type, Subject)		-> Constraint
+  glb-con(Type, Type, Type, Subject)		-> Constraint
+
+variables
+
+  "$CO"[0-9]?		-> Constraint

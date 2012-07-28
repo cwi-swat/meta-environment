@@ -1,0 +1,38 @@
+module type-check/type-check
+
+imports
+
+  type-check/tc-functions
+  type-check/solve
+
+exports
+
+context-free start-symbols
+
+  <ActionType, VariableMap, VariableMap, List[[Constraint]], Environment> <Type, Environment>
+  Type <VariableMap, Boolean>
+
+sorts
+
+  Action ActionType Environment VariableMap Constraint
+
+context-free syntax
+
+  typecheck(Action, Environment)  
+       -> <ActionType, VariableMap, VariableMap, List[[Constraint]], Environment>
+
+lexical syntax
+
+  [a-z\-]+	-> AtomicType
+
+context-free restrictions
+
+  AtomicType -/- [a-z\-]  
+
+hiddens variables
+
+  "$A"[0-9]?	-> Action
+  "$AT"[0-9]?	-> ActionType
+  "$EN"[0-9]?	-> Environment
+  "$LC"[0-9]?	-> List[[Constraint]]
+  "$M"[0-9]?	-> VariableMap

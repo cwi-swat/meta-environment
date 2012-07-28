@@ -1,0 +1,368 @@
+module asdf/an
+
+%% an/full
+
+exports
+
+sorts
+
+  Action Yielder AtmYielder
+
+context-free syntax
+
+%% Data-flow
+
+  "give" AtmYielder	-> Action
+  "given" AtmYielder	-> Action 
+  "check" AtmYielder	-> Action
+  Action AtmYielder	-> Action {right}
+  Action DataOp		-> Action {right}  
+
+  Data		   -> AtmYielder
+  DataOp	   -> Yielder {avoid}
+  InfixDataOp	   -> Yielder {reject}
+
+  InfixAction	-> InfixDataOp
+  PrefixAction	-> PrefixDataOp
+
+  "it"		   -> AtmYielder
+
+  AtmYielder	   -> Yielder
+
+  "(" {Yielder ","}+ ")"   -> AtmYielder
+
+%%  "(" AtmYielder ")"	-> AtmYielder {bracket}
+%%  "(" Yielder ")"	-> Yielder {bracket}
+
+  PrefixDataOp Yielder		-> Yielder
+  Yielder InfixDataOp Yielder   -> Yielder {left}
+
+  "maybe"	-> PrefixAction
+
+%% bindings
+
+  "bound-to" Yielder	-> AtmYielder {prefer}
+
+%% Storing
+
+  "stored-at" Yielder	-> AtmYielder
+
+%% Actions as data
+
+  "closure" Yielder	-> AtmYielder
+
+lexical syntax
+
+%% Bindings
+
+  "furthermore"		-> PrefixAction
+  "before"		-> InfixAction
+
+  "bind"		-> Action
+  "current-bindings"	-> AtmYielder
+
+context-free priorities
+
+  { Action AtmYielder              -> Action }
+  >
+  { Action DataOp               -> Action }
+  >
+  { "give" DataOp		-> Action }
+  >
+  { "check" DataOp		-> Action }
+  >
+  { "give" AtmYielder           -> Action }
+  >
+  { "given" AtmYielder           -> Action }
+  >
+  { "check" AtmYielder		-> Action } 
+  >
+  { PrefixAction Action         -> Action }
+
+context-free priorities
+
+  {PrefixDataOp Yielder         -> Yielder}
+  >
+  {Yielder InfixDataOp Yielder  -> Yielder}
+
+context-free priorities
+
+  {"give" DataOp	-> Action}
+  >
+  {"give" AtmYielder	-> Action}
+  >
+  { "given" AtmYielder           -> Action }
+  >
+  { "check" AtmYielder		-> Action } 
+  >
+  {Yielder InfixDataOp Yielder  -> Yielder}
+
+
+context-free priorities
+
+  {"(" Yielder ")"	-> Yielder}
+  >
+  {AtmYielder	   -> Yielder}
+
+lexical syntax
+
+  "bound-to"		-> Token {reject}
+  "the"			-> Token {reject}
+  "cons"		-> Token {reject}
+
+hiddens 
+
+variables
+
+  "ATMY"[0-9]?		-> AtmYielder
+  "Y"[0-9]?		-> Yielder
+  "Y"[0-9]?"+"		-> {Yielder ","}+
+  "DOP"[0-9]?		-> PrefixDataOp
+  "DOI"[0-9]?		-> InfixDataOp
+  "A"[0-9]?		-> Action
+  "TK"[0-9]?		-> Token
+
+%% an/syntax
+
+exports
+
+context-free syntax
+     
+%% Data-flow   
+
+  "result" Data		-> Action
+  "give" DataOp		-> Action
+  "check" DataOp	-> Action
+
+lexical syntax
+
+%% Data-flow
+
+  "copy"	-> Action
+  "skip"	-> Action
+  "then"	-> InfixAction
+  "and-then"	-> InfixAction
+  "and"		-> InfixAction
+  "indivisibly"	-> PrefixAction
+  "unfold"	-> Action
+  "unfolding"	-> PrefixAction
+  "throw"	-> Action
+  "catch"	-> InfixAction
+  "err"		-> Action
+  "and-catch"	-> InfixAction
+  "fail"	-> Action
+  "else"	-> InfixAction
+  "choose-nat"	-> Action
+
+%% Bindings
+
+  "copy-bindings"	-> Action
+  "scope"		-> InfixAction
+
+%% Storing
+
+  "create"	-> Action
+  "inspect"	-> Action
+  "update"	-> Action
+
+%% Actions as data
+
+  "enact"	 -> Action
+  "apply"	 -> Action
+  "close"	 -> Action
+  "recursively"	 -> PrefixAction  
+
+%% Communication
+
+  "activate"		-> Action
+  "deactivate"		-> Action
+  "give-current-agent"	-> Action
+  "send"		-> Action
+  "receive"		-> Action
+  "give-current-time"	-> Action
+
+
+context-free priorities
+
+  { "result" Data	-> Action} 
+  >
+  { Action InfixAction Action	-> Action}
+
+%% an/actions
+
+exports
+
+context-free start-symbols
+
+  Action
+
+sorts
+
+  Action PrefixAction InfixAction
+
+context-free syntax
+        
+  PrefixAction Action             -> Action       
+  Action InfixAction Action       -> Action {left, prefer}
+
+  "(" Action ")"	-> Action
+        
+context-free priorities
+
+  { PrefixAction Action         -> Action }
+  >
+  { Action InfixAction Action   -> Action }
+
+
+%% data/Data.sdf
+
+exports
+
+sorts
+
+  DataOp InfixDataOp Data PrefixDataOp Index Type
+
+context-free syntax
+
+  InfixDataOp   -> DataOp
+  PrefixDataOp  -> DataOp
+
+  "the" Type	-> PrefixDataOp
+
+  "#" Index	-> PrefixDataOp
+
+  "(" { Data "," }* ")"		-> Data {prefer}
+
+lexical syntax
+
+  "="		-> InfixDataOp
+  "defined"	-> PrefixDataOp
+  "list"	-> PrefixDataOp
+
+  "invert"	-> PrefixDataOp
+  "consdata"	-> PrefixDataOp
+
+  "-1" | [1-9][0-9]*   -> Index
+
+variables
+
+  "D"[0-9]?	-> Data
+  "DO"[0-9]?	-> DataOp
+
+%% data/Action
+
+exports
+
+context-free syntax
+
+  Action        -> Data {avoid}
+
+%% data/Bindings
+
+exports
+
+context-free syntax
+
+  "no-bindings"         -> Data
+
+lexical syntax
+
+  "disj-union"          -> PrefixDataOp
+  "binding"             -> PrefixDataOp
+  "bound"               -> PrefixDataOp {avoid}
+  "overriding"          -> PrefixDataOp
+ 
+%% types/Atomic
+
+exports
+
+sorts
+    
+  AtomicType
+
+
+context-free syntax
+
+  AtomicType	-> Type
+	
+
+lexical syntax
+
+  "data"	-> AtomicType {prefer}
+  "datum"	-> AtomicType {prefer}
+  "integer"	-> AtomicType {prefer}
+  "boolean"	-> AtomicType {prefer}
+  "storable"	-> AtomicType {prefer}
+  "bindable"	-> AtomicType {prefer}
+  "string"	-> AtomicType {prefer}
+  "cell"	-> AtomicType {prefer}
+  "bindings"	-> AtomicType {prefer}
+  "token"	-> AtomicType {prefer}
+
+%% module data/Boolean
+exports
+
+context-free syntax
+
+  Boolean	-> Data
+  Integer	-> Data
+  Token		-> Data
+
+lexical syntax
+
+  "not"		-> PrefixDataOp
+
+%% module data/Numbers
+
+context-free syntax
+
+  Integer	-> Data
+
+lexical syntax
+  "+" | "*" | "<" | ">" | "-"	-> InfixDataOp
+
+%% % modulo
+%% / integer division
+
+
+%% basic/boolean
+
+exports
+  sorts Boolean
+
+  context-free syntax
+    BoolCon                     -> Boolean {cons("constant")}
+
+%% basic/BoolCon
+
+exports
+
+sorts BoolCon
+context-free syntax
+
+    "true"  -> BoolCon {cons("true")}
+    "false" -> BoolCon {cons("false")}
+
+%% basic/Integer
+exports
+
+sorts Integer Natural NatCon
+context-free syntax
+    NatCon	-> Natural
+    Natural    	-> Integer
+
+%% basic/NatCon
+
+lexical syntax
+ [0-9]+ -> NatCon {cons("default")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+
+
+%% Eval/Data/Token
+
+lexical syntax
+
+  ("\""~[\"]+"\"") | [0-9]+	-> Token {avoid}

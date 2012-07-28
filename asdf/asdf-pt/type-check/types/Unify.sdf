@@ -1,0 +1,15 @@
+module type-check/types/Unify
+
+imports
+	type-check/types/SubtypeRel
+	type-check/types/AllTypes
+
+exports
+
+sorts
+	Type
+
+context-free syntax
+
+	unify(Type, Type)	->	Type
+

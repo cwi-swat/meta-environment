@@ -1,0 +1,17 @@
+module data/Bindings
+
+imports data/Data
+
+exports
+
+context-free syntax
+
+  "no-bindings"		-> Data
+
+lexical syntax
+
+  "disj-union"          -> PrefixDataOp
+  "binding"             -> PrefixDataOp
+  "bound"               -> PrefixDataOp {avoid}
+  "overriding"          -> PrefixDataOp
+  

@@ -1,0 +1,67 @@
+module type-check/environment
+
+imports 
+
+  asdf/functions
+  type-check/constraints
+
+
+exports
+
+sorts
+
+  Environment Answers
+
+context-free syntax
+
+  <Signatures, SubTypes, DataOpSigs, DataConstants, ActionType, Integer, 
+   List[[Constraint]]>
+		-> Environment
+
+  type-info-to-env(TypeInfo)	   -> Environment
+
+  get-signatures(Environment)	   -> Signatures
+  get-subtypes(Environment)	   -> SubTypes
+  get-dataop-sigs(Environment)	   -> DataOpSigs
+  get-data-constants(Environment)  -> DataConstants
+  get-unfold-type(Environment)	   -> ActionType
+  get-label(Environment)	   -> Integer
+  get-constraints(Environment)	   -> List[[Constraint]]
+
+  set-signatures(Environment, Signatures)	-> Environment
+  set-subtypes(Environment, SubTypes)		-> Environment
+  set-dataop-sigs(Environment, DataOpSigs)	-> Environment
+  set-data-constants(Environment, DataConstants) -> Environment
+  set-unfold-type(Environment, ActionType)	-> Environment
+  set-label(Environment, Integer)		-> Environment
+
+  add-constraint(Constraint, Environment)	-> Environment
+
+  "empty-env"					-> Environment
+  "initial-dataop-sigs"				-> List[[<DataOp, ActionType>]]
+
+  new-type-var(Environment)		-> <TypeVariable, Environment>
+  new-action-type-var(Environment)	-> <ActionTypeVariable, Environment>
+
+  Error		-> Answer
+  Answer+	-> Answers
+
+hiddens variables
+
+  "$SIGS"[0-9]?		-> Signatures
+  "$AT"[0-9]?		-> ActionType
+  "$SAT"[0-9]?"*"	-> { SingleActionType "&"}*
+  "$STS"[0-9]?		-> SubTypes
+  "$EN"[0-9]?		-> Environment
+  "$DOS"[0-9]?		-> DataOpSigs
+  "$DF"[0-9]?"*"	-> {<DataOp, ActionType> "," }*
+  "$DO"[0-9]?		-> DataOp
+  "$DCS"[0-9]?		-> DataConstants
+  "$LT"[0-9]?		-> Literal
+  "$SO"[0-9]?		-> Sort
+  "$AT"[0-9]?		-> ActionType
+  "$TY"[0-9]?		-> Type
+  "$FS"[0-9]?		-> AS-FunctionSig
+  "$FS"[0-9]?"*"	-> {AS-FunctionSig ","}*
+  "$N"[0-9]?		-> Integer
+  "$LC"[0-9]?		-> List[[Constraint]]

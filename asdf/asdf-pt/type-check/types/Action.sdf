@@ -1,0 +1,43 @@
+module type-check/types/Action
+
+imports 
+
+  type-check/types/Lib 
+  type-check/types/Record
+
+exports
+
+sorts
+	
+  ActionType SimpleActionType AdvancedActionType
+
+context-free syntax
+
+  ActionType	-> Type
+
+%% Simple action type
+
+  SimpleActionType	-> ActionType
+
+  "action" "[" Using Giving Raising "]"		-> SimpleActionType
+	
+  "using" Type		-> Using
+  "giving" Type		-> Giving
+  "raising" Type	-> Raising
+
+%% Advanced action type
+
+  AdvancedActionType	-> ActionType
+
+  "(" RecordType "," RecordType ")" "->" 
+  "(" RecordType "," RecordType "," Answer ")" -> AdvancedActionType
+
+variables
+
+  "AT"[0-9]?	-> ActionType
+
+hiddens 
+
+sorts
+	Using Giving Raising
+	

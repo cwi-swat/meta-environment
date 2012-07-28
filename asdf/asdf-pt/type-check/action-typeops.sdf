@@ -1,0 +1,64 @@
+module type-check/action-typeops
+
+imports
+
+  type-check/subtype
+  type-check/types/asdf-types
+  type-check/environment
+  type-check/maps
+  type-check/constraints
+
+exports
+
+context-free start-symbols
+
+  VariableMap
+
+sorts
+
+  ActionType Environment
+
+context-free syntax
+
+  action-type-and(ActionType, ActionType, Subject, Environment)	
+					  -> <ActionType, Environment>
+
+  infallible(ActionType, ActionType)	-> ActionType
+
+  closed(ActionType, ActionType)	-> ActionType
+
+  not-in(SingleActionType, ActionType, Subject, Environment)	-> Environment
+
+  at-contains(SingleActionType, ActionType)		-> Answer
+
+  norm(ActionType)					-> ActionType
+
+  at-st(ActionType, ActionType, Subject, Environment)	-> VariableMap
+
+  at-st-def(ActionType, ActionType, Subject, Environment)	-> VariableMap
+
+  trans-act-type(ActionType)	  -> ActionType
+
+  trans-type(Type)			  -> Type
+
+  trans-has(ActionType, SingleActionType)	-> Type
+
+  action-of-vars(Environment)		-> <ActionType, Environment>
+
+hiddens variables
+
+  "$ATY"[0-9]?		-> AtomicType
+  "$TY"[0-9]*		-> Type
+  "$TY"[0-9]?"*"	-> { Type "," }*
+  "$TV"[0-9]?		-> TypeVariable
+  "$AT"[0-9]*		-> ActionType
+  "$SAT"[0-9]?		-> SingleActionType
+  "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
+  "$ATV"[0-9]?		-> ActionTypeVariable
+  "$EN"[0-9]*		-> Environment
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+  "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
+  "$M"[0-9]?		-> VariableMap
+  "$VT"[0-9]?"*"	-> {<Type, Type> ","}*
+  "$SU"[0-9]?		-> Subject
+  "$AN"[0-9]?		-> Answer

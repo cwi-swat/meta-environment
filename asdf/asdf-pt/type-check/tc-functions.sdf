@@ -1,0 +1,88 @@
+module type-check/tc-functions
+
+imports
+
+  type-check/tc-actions
+  type-check/solve  
+
+exports
+
+context-free start-symbols
+
+  Summary
+
+sorts 
+
+  Function Functions SignatureEnv Answers TypeInfo ActionType Environment 
+  DataConstants
+
+context-free syntax
+
+  typecheck(AS-Module, TypeInfo)		-> Summary
+
+  typecheck-definitions(FunctionDefs, Environment) -> Answers
+
+  gen-summary(Answers)	-> Summary
+
+  get-subjects(List[[Constraint]], {Subject ","}*)	
+			-> {Subject ","}* {traversal(accu, top-down, break)}
+  get-subjects(Subject, {Subject ","}*)	
+			-> {Subject ","}* {traversal(accu, top-down, break)}
+
+
+  {AS-FunctionDef ","}* 	-> SortWithPosition
+
+
+hiddens 
+
+variables
+
+  "$AM"[1-9]?	-> AS-Module
+  "$F"[1-9]?	-> Function
+  "$F+"		-> Functions 
+  "$FS"[1-9]?	-> FunctionSignature
+  "$FS"[1-9]?"*"	-> {FunctionSignature ","}*
+  "$AFS"[1-9]?	-> AS-FunctionSig
+  "$AFS"[1-9]?"*"	-> {AS-FunctionSig ","}*
+  "$FD"[1-9]?	-> AS-FunctionDef
+  "$FD"[1-9]?"*"	-> {AS-FunctionDef ","}*
+  "$FD"[1-9]?"+"	-> {AS-FunctionDef ","}+
+  "$TI"[0-9]?		-> TypeInfo
+  "$STS"[0-9]?		-> SubTypes
+  "$DOS"[0-9]?		-> DataOpSigs
+  "$DCS"[0-9]?		-> DataConstants
+  "$LDF"[0-9]?		-> List[[<DataOp, ActionType>]]
+
+  "$SE"[1-9]?	-> SignatureEnv
+  "$EN"[0-9]?	-> Environment
+  "$LT"[1-9]?	-> Literal
+  "$SO"[1-9]?	-> Sort
+  "$AT"[1-9]?	-> ActionType
+  "$TY"[1-9]?	-> Type
+  "$CO"[1-9]?	-> Constructor
+  "$ET"		-> AS-Eqs-Tag
+
+  "$AN"		-> Answer
+  "$ANS"[1-9]?	-> Answer+
+  "$ER"[1-9]?	-> Error
+  "$ER"[1-9]?"*"	-> {Error "," }*
+  "$ER"[1-9]?"+"	-> Error+
+  "$AC"[1-9]?	-> Action
+  "$SC"[0-9]?	-> StrCon
+  "$SU"[0-9]?	-> Subject
+  "$SU"[0-9]?"*"	-> {Subject ","}*
+
+  "$SUM"	-> Summary
+
+  "$SS"[0-9]?	-> Signatures
+
+  "$M"[0-9]?	-> VariableMap		
+  "$LC"[0-9]?	-> List[[Constraint]]
+  "$VT"[0-9]?"*"	-> {<Type, Type, Subject> ","}*
+
+
+sorts
+
+  FunctionSignature AS-FunctionDef AS-FunctionDefs LangConst 
+  SyntaxSort EquationName ExcepNoData Type ActionType 
+

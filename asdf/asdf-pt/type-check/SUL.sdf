@@ -1,0 +1,134 @@
+module SUL
+
+imports
+
+  TypeCheckFunc
+
+exports 
+
+sorts
+
+  Exp Stat Decl
+
+exports context-free syntax
+
+%% EXPRESSIONS
+
+  Exp "=" Exp	-> Exp
+  Exp "<" Exp	-> Exp
+  Exp "and" Exp	-> Exp
+  Exp "or" Exp	-> Exp
+  "not" Exp	-> Exp
+  Exp "+" Exp	-> Exp
+  Exp "*" Exp	-> Exp
+  "-" Exp	-> Exp
+  Lit		-> Exp
+  Id		-> Exp
+  "(" Exp ")"	-> Exp {bracket}
+  Id "(" Exp ")"	-> Exp
+	
+%% STATEMENTS
+
+  "{" Decls Stats "}"	-> Stat
+  "{" Stats "}"		-> Stat
+  Stat Stats		-> Stats
+  Stat			-> Stats
+  Id ":=" Exp ";"		-> Stat
+  "return" Exp ";"	-> Stat
+  ";"			-> Stat
+
+  "if" "(" Exp ")" Stat "else" Stat 	-> Stat
+  "while" "(" Exp ")" Stat 		-> Stat
+
+%% DECLARATIONS
+
+  Type Id ";"		-> Decl
+  Decl Decls		-> Decls
+  Decl			-> Decls
+  Type Id "(" Type Id ")" Stat	-> Decl
+
+%% TYPES
+
+  "int"		-> Type
+  "bool"	-> Type
+
+%% LITERALS
+
+  PosNumeral -> Lit
+  Zero	     -> Lit
+
+exports lexical syntax
+
+  "true"	-> Lit
+  "false"	-> Lit
+
+  [a-z][A-Za-z0-9]* -> Id {avoid}
+
+
+%% PRIORITIES
+
+context-free priorities
+
+  { "not" Exp	-> Exp } >
+  { "-" Exp	-> Exp } >
+  { Exp "*" Exp	-> Exp } >
+  { Exp "+" Exp	-> Exp } >	
+  { Exp "<" Exp	-> Exp } >
+  { Exp "=" Exp	-> Exp } >
+  { Exp "and" Exp	-> Exp } >
+  { Exp "or" Exp	-> Exp }
+
+%% SEMANTIC FUNCTIONS
+
+exports 
+
+context-free syntax
+
+  execute Stat	-> Action
+  execute Stats	-> Action
+  evaluate Exp	-> Action
+  declare Decl	-> Action
+  declare Decls	-> Action
+  evaluate Id	-> Action
+  typify Type	-> Action
+  typecheck Type  -> Action
+
+  Exp	-> LangConst
+  Decl	-> LangConst
+  Decls	-> LangConst
+  Stat	-> LangConst
+  Stats	-> LangConst
+  Type	-> LangConst
+
+  "Decls"	-> SyntaxSort
+  "Exp"		-> SyntaxSort
+  "Stat"	-> SyntaxSort
+  "Type"	-> SyntaxSort
+  "Id"		-> SyntaxSort
+
+
+%% VARIABLES
+
+lexical syntax
+
+  "E"[1-9]?	-> Exp
+  "D"[1-9]?	-> Decl
+  "D+"		-> Decls
+  "S"[1-9]?	-> Stat
+  "S+"		-> Stats
+  "I"[1-9]?	-> Id
+  "N"[1-9]?	-> PosNumeral
+  "T"[1-9]?	-> Type
+  "L"		-> Lit
+
+  "procedure" 	-> AtomicType
+  "value"	-> AtomicType
+
+
+
+hiddens 
+
+sorts
+
+  Lit Type Id Stats Decls SyntaxSort LangConst
+

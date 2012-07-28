@@ -1,0 +1,21 @@
+module type-check/data/Bindings
+
+%%imports type-check/data/Data
+
+exports
+
+sorts
+
+  PrefixDataOp Datum
+
+context-free syntax
+
+  "no-bindings"		-> Datum
+
+lexical syntax
+
+  "disj-union"          -> PrefixDataOp
+  "binding"             -> PrefixDataOp
+  "bound"               -> PrefixDataOp 
+  "overriding"          -> PrefixDataOp
+  

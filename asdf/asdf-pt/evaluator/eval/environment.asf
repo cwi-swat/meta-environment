@@ -1,0 +1,65 @@
+equations
+
+[init-env-1] initial-env = <new-table, 0, fail, 1, 
+			    [], [], []>
+
+
+[get-store-1] get-store(<TCD, N1, A, N2, ST, CS, DS>) = TCD
+
+[update-cell-1] 
+
+	not-in-table != lookup(TCD1, C),
+	TCD2 := store(TCD1, C, D)
+	======================================================
+	update-cell(C, D, <TCD1, N1, A, N2, ST, CS, DS>) = 
+				 <TCD2, N1, A, N2, ST, CS, DS>
+
+[inspect-cell-1] 
+
+	D := lookup(TCD1, C),
+	D != not-in-table
+	==============================================
+	inspect-cell(C, <TCD1, N1, A, N2, ST, CS, DS>) = D
+
+[create-cell-1] 
+
+	N3 := N1 + 1,
+	natcon(CH+) := N1,
+	C := cell("c"CH+),
+	TCD2 := store(TCD1, C, D)
+	==============================================
+	create-cell(D, <TCD1, N1, A, N2, ST, CS, DS>) = 
+			      <C, <TCD2, N3, A, N2, ST, CS, DS>>
+
+[get-cell-num-1] get-cell-num(<TCD, N1, A, N2, ST, CS, DS>) = N1
+
+[set-cell-num-1] set-cell-num(<TCD, N1, A, N2, ST, CS, DS>, N3) = 
+					<TCD, N3, A, N2, ST, CS, DS>
+
+[get-unfold-action-1] get-unfold-action(<TCD, N1, A, N2, ST, CS, DS>) = A
+
+[set-unfold-action-1] set-unfold-action(<TCD, N1, A1, N2, ST, CS, DS>, A2) = 
+						<TCD, N1, A2, N2, ST, CS, DS>
+
+[next-random-1] 
+
+	N3 := (2 * N1 + 5) mod 1031	
+	======================================================
+	next-random(<TCD, N1, A, N2, ST, CS, DS>) = 
+			      <N3, <TCD, N1, A, N3, ST, CS, DS>>
+
+
+[get-subtypes-1] get-subtypes(<TCD, N1, A, N2, ST, CS, DS>) = ST
+
+[set-subtypes-1] set-subtypes(<TCD, N1, A, N2, ST1, CS, DS>, ST2) = 
+					<TCD, N1, A, N2, ST2, CS, DS>
+
+[get-constants-1] get-constants(<TCD, N1, A, N2, ST, CS, DS>) = CS
+
+[set-constants-1] set-constants(<TCD, N1, A, N2, ST, CS1, DS>, CS2) = 
+					<TCD, N1, A, N2, ST, CS2, DS>
+
+[get-dataops-1] get-dataops(<TCD, N1, A, N2, ST, CS, DS>) = DS
+
+[set-dataops-1] set-dataops(<TCD, N1, A, N2, ST, CS, DS1>, DS2) = 
+					<TCD, N1, A, N2, ST, CS, DS2>

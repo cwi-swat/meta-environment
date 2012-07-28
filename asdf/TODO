@@ -1,0 +1,18 @@
+Action Environment todo list
+-----------------------------
+
+Author: Jørgen Iversen
+Email: jive@brics.dk
+
+TODO
+---------
+
+* Change Icons
+
+* Speedup opening of modules
+
+* Change install dir for meta and asfsdf-meta packages
+
+* Check all functionality
+
+* Creating a nonexisting module doesn't let you choose between SDF and ASDF

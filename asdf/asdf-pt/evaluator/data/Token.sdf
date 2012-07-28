@@ -1,0 +1,17 @@
+module data/Token
+
+imports data/Data
+
+exports
+
+sorts
+
+  Token
+
+context-free syntax
+
+  Token	-> Data
+
+lexical syntax
+
+  ("\""~[\"]+"\"") | [0-9]+	-> Token {avoid}

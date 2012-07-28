@@ -1,0 +1,27 @@
+module type-check/types/SubtypeRel
+
+imports
+	type-check/types/AllTypes
+
+exports
+
+sorts
+	Answer 
+
+context-free syntax
+
+	Type subtype-of Type 	->	Answer
+
+
+
+hiddens 
+
+variables
+
+	"T"[1-9]?	->	Type
+	"T"[1-9]?"*"	->	{ Type "," }*
+	"X"[1-9]?	->	Type
+
+sorts
+
+	Type

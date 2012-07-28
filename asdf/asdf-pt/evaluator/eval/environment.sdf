@@ -1,0 +1,80 @@
+module eval/environment
+
+imports 
+
+  eval/data
+  containers/Table[Cell Data]
+  containers/List[<AtomicType, AtomicType>]
+  containers/List[EvalData]
+  containers/List[<Data, Type>]
+
+exports
+
+context-free start-symbols
+
+  Table[[Cell, Data]]
+
+sorts
+
+  Environment Data Cell Action Integer
+
+aliases
+
+  List[[EvalData]] -> EvalDataOpSigs
+
+context-free syntax
+
+%% Memory, last free memory cell, unfold action, random number,
+%% sub type relations, user defined data constants, user def. data ops
+
+  <Table[[Cell, Data]], Integer, Action, Integer, 
+   SubTypes, Constants, EvalDataOpSigs>	-> Environment
+
+   List[[<AtomicType, AtomicType>]]	        -> SubTypes	
+   List[[<Data, Type>]]			-> Constants
+
+  (<DataOp, Datacon> | <DataOp, Datasel>) -> EvalData
+
+  "datacon" "(" Type "," Type ")" -> Datacon
+
+  "datasel" "(" Type "," Action ")" -> Datasel
+   
+%%   dataops({(DataOp ":" UserDefDataOp) ","}*)	-> DataOps
+
+  "initial-env"					-> Environment
+
+  get-store(Environment)			-> Table[[Cell, Data]]
+  update-cell(Cell, Data, Environment)		-> Environment
+  inspect-cell(Cell, Environment)		-> Data
+  create-cell(Data, Environment)		-> <Cell, Environment>
+
+  get-cell-num(Environment)		-> Integer
+  set-cell-num(Environment, Integer)	-> Environment
+
+  get-unfold-action(Environment)		-> Action
+  set-unfold-action(Environment, Action)	-> Environment
+
+  next-random(Environment)			-> <Integer, Environment>
+
+  get-subtypes(Environment)			-> SubTypes
+  set-subtypes(Environment, SubTypes)		-> Environment
+
+  get-constants(Environment)			-> Constants
+  set-constants(Environment, Constants)		-> Environment
+
+  get-dataops(Environment)			-> EvalDataOpSigs
+  set-dataops(Environment, EvalDataOpSigs)	-> Environment
+
+hiddens variables
+
+  "C"[0-9]?	-> Cell
+  "D"[0-9]?	-> Data
+  "N"[0-9]?	-> Integer
+  "CH+"[0-9]?	-> CHAR+
+  "A"[0-9]?	-> Action
+  "TCD"[0-9]?	-> Table[[Cell, Data]]
+  "ST"[0-9]?	-> SubTypes
+  "CS"[0-9]?	-> Constants
+  "DS"[0-9]?	-> EvalDataOpSigs
+  
+

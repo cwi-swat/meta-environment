@@ -1,0 +1,40 @@
+module types/Record
+
+imports 
+
+  types/Lib
+  data/Token
+
+exports
+
+sorts
+
+  RecordType Row Fields RecordEntry Field
+
+context-free syntax
+
+  RecordType	-> Type
+
+  RecordType "/\\" RecordType	  -> RecordType
+
+  RecordType "/" RecordType	  -> RecordType
+
+  Fields Row	  -> RecordType
+
+  "empty"		-> RecordType
+
+  "{" {RecordEntry ","}* "}"	-> Fields
+	
+  Token ":" Field	-> RecordEntry
+
+  Type		-> Field
+
+lexical syntax
+
+  "V_"[0-9]*	-> Row
+  "P_"[0-9]*	-> Row
+  "E"		-> Row
+
+  "absent"	-> Field
+  "D_"[0-9]*	-> Field  
+

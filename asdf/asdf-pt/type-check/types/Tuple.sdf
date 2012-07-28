@@ -1,0 +1,27 @@
+module type-check/types/Tuple
+
+imports 
+
+  type-check/types/Lib
+  type-check/types/Atomic
+
+exports
+
+sorts
+
+  TupleType 
+
+context-free syntax
+
+  TupleType		-> Type
+
+  "(" {Type ","}* ")"	-> TupleType
+
+  type-concat(Type, Type)	-> Type
+
+  "no-tuple"		-> Type
+
+hiddens variables
+
+  "T"[1-9]?	-> 	Type
+  "T"[1-9]?"*"	->	{ Type "," }*

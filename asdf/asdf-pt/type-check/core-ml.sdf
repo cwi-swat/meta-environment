@@ -1,0 +1,16 @@
+module type-check/core-ml
+
+imports
+
+  type-check/tc-functions
+
+hiddens 
+
+variables
+
+  "TY"[1-9]?	-> Type
+  "TY"[1-9]?"*"	-> {Type ","}*
+  "AT"[1-9]?	-> ActionType	
+	
+  "SE"		-> SignatureEnv
+  "EN"		-> Environment

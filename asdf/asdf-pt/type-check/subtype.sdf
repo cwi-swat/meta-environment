@@ -1,0 +1,10 @@
+module type-check/subtype
+
+imports
+
+  type-check/types
+  containers/List[<AtomicType, AtomicType>]
+
+exports context-free syntax
+
+  List[[<AtomicType, AtomicType>]]	-> SubTypes

@@ -1,0 +1,3 @@
+ASBIN=__META__/bin
+ASSHARE=__META__/share/asdf/asdf-pt
+$ASBIN/apply-function -f '$asdf2asdf-pt' -s Module | $ASBIN/asfe -e $ASSHARE/asdf/all.eqs | $ASBIN/unparsePT

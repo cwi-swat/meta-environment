@@ -1,0 +1,57 @@
+module type-check/typeops
+
+imports
+
+  type-check/action-typeops
+
+exports
+
+sorts
+
+  Type Environment ActionType VariableMap
+
+context-free syntax
+
+%% Type operators
+
+  subtype-of(Type, Type, Subject, Environment)	-> Environment
+
+
+  lub(Type, Type, Subject, Environment)		-> <Type, Environment>
+
+  glb(Type, Type, Subject, Environment)		-> <Type, Environment>
+
+  concat(Type, Type, Subject, Environment)	-> <Type, Environment>
+
+  st(Type, Type, Subject, Environment)		-> VariableMap
+
+  st-def(Type, Type, Subject, Environment)		-> VariableMap
+
+  Type "+" Type				-> Type
+
+  not-equal(Type, Type, Subject, Environment)	-> Environment
+  
+  has-variable(Type, Answer)
+		-> Answer {traversal(top-down,accu,break)}
+  has-variable(ActionTypeVariable, Answer)
+		-> Answer {traversal(top-down,accu,break)}
+
+  split-right-tuple(Type, Type)		-> <Type, Type>
+  split-left-tuple(Type, Type)		-> <Type, Type>
+
+hiddens variables
+
+  "$ATY"[0-9]?		-> AtomicType
+  "$TY"[0-9]?		-> Type
+  "$TY"[0-9]?"*"	-> { Type "," }*
+  "$TV"[0-9]?		-> TypeVariable
+  "$AT"[0-9]?		-> ActionType
+  "$SAT"[0-9]?		-> SingleActionType
+  "$ATV"[0-9]?		-> ActionTypeVariable
+  "$EN"[0-9]?		-> Environment
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+  "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
+  "$M"[0-9]?		-> VariableMap
+  "$AN"[0-9]?		-> Answer
+  "$VT"[0-9]?"*"	-> {<Type, Type, Subject> ","}*
+  "$SU"[0-9]?		-> Subject

@@ -1,0 +1,106 @@
+/* meta-kernel */
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/configuration-manager.idef"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/editor-hive.idef"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/editor-manager.idef"
+
+#include "generic-adapter.idef" 
+#include "graph-converter.idef"
+
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/in-output.idef"
+
+#include "layout-graph.idef"
+#include "position-annotator.idef"
+#include "sglr.idef"
+#include "structure-editor.idef"
+#include "unparser.idef"
+
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/user-interface.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/kernel-configuration.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/user-configuration.tb"
+
+/* sdf-meta */
+
+#include "parsetablegen.idef"
+#include "sdf-import-graph.idef"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/graph-utils.tb"
+
+/* asf-sdf-meta */
+#include "apply-function.idef"
+#include "restorebrackets.idef"
+
+/* to be resolved */
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/feedback.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/editing.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/restore-term-brackets.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/open-modules.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/module-db.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/module-utils.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/print-module.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/close-all.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/process-eqs.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/compile-module.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/save-module.tb" 
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/get-parsetable.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/dump-parsetable.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/sdf2-language.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/parse-focuses.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/button-actions.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/dump-equations.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/dump-sdf-definition.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/pretty-print.tb"
+
+#include "meta-interface.tb"
+
+process META is
+let 
+  Id : term,
+  Syntax : str,
+  Semantics : str,
+  Term : str,
+  Sort : term
+in
+  Id := process-id
+  . KernelConfiguration()
+  . UserConfiguration()
+  .
+  (
+    rec-msg(get-file-extensions) .
+    snd-msg(file-extensions-hook).
+    rec-msg(file-extensions-hook-result(Syntax?, Semantics?, Term?)).
+    snd-msg(set-file-extensions(syntax(Syntax), rules(Semantics), term(Term)))
+  +
+    rec-msg(get-rules-top-sort) .
+    snd-msg(semantics-top-sort-hook).
+    rec-msg(semantics-top-sort-hook-result(Sort?)).
+    snd-msg(set-rules-top-sort(Sort))
+  +
+    rec-msg(get-application-status) .
+    snd-msg(status(interactive)) 
+  ) * delta
+endlet
+
+process MetaCreator is
+let
+  Pid : int
+in
+  create(META, Pid?)
+  . create(MetaActions, Pid?)
+  . create(ButtonActionExecutor, Pid?)
+  . create(TermStoreName, Pid?)
+  . create(Compile-module, Pid?)
+  . create(DumpEquations, Pid?)
+  . create(DumpParseTable, Pid?)
+  . create(DumpSdfDefinition, Pid?)
+  . create(BuildParseTable, Pid?)
+  . create(Meta-Interface, Pid?)
+  . create(ModuleDB, Pid?)
+  . create(Open-Sdf2-Language, Pid?)
+  . create(PGen, Pid?)
+  . create(PrintModule, Pid?)
+  . create(RestoreBrackets, Pid?)
+  . create(RestoreTermBrackets, Pid?)
+  . create(Save-modules, Pid?)
+  . create(UserInterfaceHandler, Pid?)
+  . rec-msg(termstore-initialized) 
+  . snd-msg(creation-finished)
+endlet

@@ -1,0 +1,634 @@
+
+
+----------------- Bugs: -----------------
+
+When using dump parsetable from actions menu in term editor in
+asfsdf-meta env. ToolBus reports "type mismatch in assignment:
+Modulename$ButtonActionExecutor:str? := []"
+This is properbly due to two StackPopString operations in
+button-actions.tb, rec-msg(dump-parse-table, and only one push
+operation in standard.asfsdf.buttons.src as in:
+  action([description(term-editor, menu(["Actions","Dump ParseTable"]))],
+         [push-active-module,
+          dump-parse-table]),
+
+
+
+SetFocus when parse error occurs is not working when the error is the
+result of a single character, due to a mismatch between the area
+definition and the set-focus elisp function in
+meta/editors/text/emacs/gnu-emacs.el.
+The area definition define the start and end to be equal. When this is
+true the set-focus functions does not highlight the area, because the
+it is designed to highligt areas from and including the start and up
+to but NOT including the end! This can be changed by using the
+following fix:
+
+(defun set-focus (start end)
+
+
+  (if (equal start end)
+      (setq start (- start 1))
+  )
+
+
+  (setq must-send-modified ())
+  (let ((modified (buffer-modified-p)))
+    (clear-overlays 'FOCUS)
+    (let ((overlay (make-overlay start end nil nil)))
+      (overlay-put overlay 'face (get-focus-properties))
+      (overlay-put overlay 'category 'FOCUS)
+      (overlay-put overlay 'priority 200)
+    )
+    (set-buffer-modified-p modified)
+  )
+  (setq must-send-modified t)
+)
+
+If start is equal to 1, corresponding to the top left most, it is
+still working although start would be set to zero!?!
+
+
+
+----------------- To be changed: -----------------
+- Open imported modules, when opened, closed and opened again not all
+  included modules gets opened. - Pending on bugfix in the meta env.
+- ASDF term editor: Dump parsetable. - Pending on bugfix in the meta
+  env.
+- Popup: Reopen module, nothing seems to be going on  - Pending on
+  bugfix in the meta env.
+- Popup: Close module, import graph is not updated  - Pending on
+  bugfix in the meta env.
+
+
+- Popup: Export Eqs
+- Popup: Export Term parsetable
+- Popup: Export Eqs parsetable
+
+
+- modulo and division for integers is not supported by asf, maybe it
+  should be implemented in the evaluator.
+
+> Følgende problemer har jeg fundet (det er slet ikke sikkert der kan
+> gøres noget ved dem alle sammen):
+>
+> * "Export equations" virker ikke.
+>
+> * Undersøg hvilken functionalitet fra ASF+SDF MetaEnv der kan
+>   genbruges (fx. delete module, add import etc.)
+>
+> * Problemet med at hvis man parser men mangler en tom linie til sidst,
+>   så dør environmentet også.
+>
+> * Der skal stå Action Environment og ikke Meta-Environment i toppen af
+>   vinduet.
+>   build/meta/meta-studio/MetaStudio.java Should allso be added to
+>   the bridge thing.
+>
+> * Grafen opdateres ikke når et modul lukkes.
+
+
+--------------------- Changes: --------------------
+
+Fre, Oct 29
+Note:
+- asdf-modules.tb.src: ASDF-ModuleDB,
+  rec-msg(invalidate-asdf-in-db(Name?)). now removes the values of the
+  asf and sdf trees and texts. Fixes the bug concerning term parse
+  over a module with no valid parsetree.
+
+- buttons-actions.tb: ParseTerm, The process now test whether the returned
+  parsetable is welldefined. Calling ParseEditor with no-table makes
+  sglr crash. Fixes the bug concerning term reduce
+  over a module with no valid parsetree.
+
+
+Thu, Oct 28
+Note:
+- The files used by the evaluator have been copied to the evaluator
+  subdir in asdf-pt.
+- A statusreport on the project has been produced.
+
+
+Wed, Oct 27
+Note:
+- The initial termstore is being generated and installed during setup.
+- A list of changes have been compiled, and can be found in the file
+  filechangesaof261004.txt.
+
+
+Tue, Oct 26
+Note:
+- Created meta.tb.src, start-meta-termstore-dumper.tb.src and
+  dump-termstore.sh.src.
+  It is now possible to generate the initial termstore from the
+  commandline.
+
+
+Mon, Oct 25
+Note:
+- Looking into the termstore generation buisness.
+
+- /users/fagidiot/asenv1.5/install/share/meta/start-meta-eqs-dumper.tb,
+  line 13: process `OpenModules': too few actuals
+  ToolBus: execution stopped due to the above error(s)
+
+
+Wed, Oct 20
+Note:
+- asdf-modules.tb.src, button-actions.tb,
+  asdf/meta-scripts/error-display.tb, error-display.tb,
+  error-support.idef, asdf/meta-scripts/meta-interface.tb.src,
+  meta-interface.tb.src, module-db.tb, module-utils.tb,
+  open-modules.tb, parse-focuses.tb, position-annotator.idef,
+  process-eqs.tb, standard.asdf.buttons.src, start-meta-studio.tb:
+  Continued working on the integration.
+  Added a table module-type to open-module.tb, which saves the
+  type of each open module. Used in ASDF generate-asfsdf-for-modules
+  to distinguish.
+  Could be extended to the rules buisness.
+
+
+Tue, Oct 19
+Note:
+- asdf-modules.tb.src, button-actions.tb,
+  asdf/meta-scripts/error-display.tb, error-display.tb,
+  error-support.idef, asdf/meta-scripts/meta-interface.tb.src,
+  meta-interface.tb.src, module-db.tb, module-utils.tb,
+  open-modules.tb, parse-focuses.tb, position-annotator.idef,
+  process-eqs.tb, standard.asdf.buttons.src, start-meta-studio.tb:
+  Continued working on the integration.
+
+
+Mon, Oct 18
+Note:
+- asdf-modules.tb.src, button-actions.tb, open-modules,
+  start-meta-studio.tb, meta-interface.tb.src,
+  standard.asdf.buttons.src:
+  Extending ActionEnv to support ASF and SDF modules.
+  Implementing a rulebased opening scheme for module:
+  - It is allowed to import SDF modules from ASDF module
+  - It is NOT allowed to import ASDF modules from SDF module
+
+  - It there are modules with the same name and several types,
+    e.g. foo.asdf and foo.sdf, the ActionEnv is to prefer the module
+    of the same type as the one importing.
+
+  - When the user opens a module, and a module of the same name but a
+    different type is allready open, the user should be warned and the
+    action aborted leaving the ActionEnv in the state it was before
+    the action was initiated. - NOT implemented.
+
+
+
+Thu, Oct 14
+Note:
+- asdf-modules.tb.src: ASDFButtons, reduce and evaluate is know working.
+
+- asdf-modules.tb.src: EvalutateASDFTerm, some more comments.
+
+- standard-asdf-buttons.src: new-module-popup, it is now possible to
+  create a non existing module.
+
+- asdf-modules.tb.src: ASDFButtons, added tree editors.
+  ASDF editor for editing asdf specifications.
+  Term editor for editing programs in bas.
+  Action editor for editing actions in action notation.
+  Eval editor for displaying output of the evaluator.
+
+- editing.tb: EditTerm, added the editortype as a formal parameter.
+  It would be nice if it is possible to make termeditors with
+  different types to provide a different set of menu item.
+
+
+Wed, Oct 13
+Note:
+- asdf-modules.tb.src: TypeCheckModule, now working.
+
+- asdf-modules.tb.src: GetInfos, parameterised with respect to
+  ToolName, GetFunctionName, JoinFunctionName, InfoTermStoreLocation
+  and ResultSort.
+  Using the new paramerterised versions of GetInfo and JoinInfo.
+
+- asdf-modules.tb.src: GetInfo, parameterised with respect to
+  ToolName, FunctionName and ResultSort.
+
+- asdf-modules.tb.src: JoinInfo, parameterised with respect to
+  ToolName, FunctionName and ResultSort.
+
+- asdf-modules.tb.src: It is now possible to parse and open modules,
+  containing implecit refernces to non-exsisting modules. The
+  non-exsisting module will become visible in the graph. It is not
+  possible to do anything with the new module dough!
+
+Tue, Oct 12
+Note:
+- asdf-modules.tb.src: ASDF-ModuleDB, the update-module-in-db is not
+  called from CheckSyntaxConsistency process in module-utils.tb
+  anymore(but is still used in ParseASDFSecond).
+
+- module-utils.tb: CheckSyntaxConsistency, added a call to OpenModule,
+  this might only be temporary until the process gets fixed.
+  
+
+Mon, Oct 11
+Note:
+- asdf-modules.tb.src: Parse*, The second parse is now done before the
+  editor shows up. Not tested if reduce and evaluate works, put the
+  seems to do all right.
+
+
+Thu, Oct 07
+Note:
+- Demo day
+
+
+Wed, Oct 06
+Note:
+- Commiting changes to cvs.
+- Moved initial bindings from the evaluator to the asdf
+- A problem with the way fun is translated has been identified.
+
+
+Tue, Oct 05
+Note:
+- Fixed the data constructor issue.
+- The fac function ran for the first time!!! COOL!
+- Working the ref, !, := operators, the instroduced null-val seems to
+be buggy.
+
+
+Thu, Sep 30
+Note:
+- Working on fixing the interface issue. Most things seems to work but
+the data constructor issue still needs attending.
+
+- asdf-modules.tb.src: ASDF, added pre-get-all-syntax-hook for asdf
+  terms. This was needed due to the following bug: if a asdf term was
+  opend as the first thing after loading a asdf module and reduced the
+  env. would crash.
+  When introducing sdf modules in the action env. there is a
+  difference between asdf terms and sdf terms!
+
+- meta-interface.tb.src: Meta-Interface, removed the
+  pre-get-all-syntax-hook for asdf terms.
+
+
+Wed, Sep 29
+Note:
+- Working on fixing the interface issue.
+
+- Included Integers and Tokens in AN
+
+
+Tue, Sep 28
+Note:
+- Identified the place where the solution to the following bug lies:
+  If the generated asf won't parse, the corresponding asdf module need
+  to be opend. This can be done by changing the process GetEditorType
+  in editing.tb which is called from EditLocation in button-actions.tb.
+
+- Working on fixing the interface issue.
+
+- asdf-modules.tb.src: ASDF, when receiving a
+  generate-asfsdf-for-modules message some info is now being displayed
+  so as to let the user know some thing is happing.
+
+- asdf-modules.tb.src: GetEvalInfo, information about which module we
+  are currently gathering information from is now being displayed.
+
+- tbscript-mode.el: Update of the syntax highlighting.
+
+Mon, Sep 27
+Note:
+- Identified some interface problems between the Action Env. and the
+evaluator. Fixing is underway.
+
+Sat, Sep 25
+Note:
+Changes made to
+- asdf-modules.tb.src: ASDFButtons, It is now possible to call
+  the evaluator from the Action env.
+
+- asdf-modules.tb.src: EvalutateASDFTerm, It is now possible to call
+  the evaluator from the Action env.
+
+Fri, Sep 24
+Note:
+Changes made to
+- asdf2sdf.asf: [trhs-2], Sort1 -> Type, First letter in Sort1 is made
+lower-case.
+
+Tue, Sep 21
+Note:
+Changes made to
+- asdf-modules.tb.src: SecondParse, correcting the bug from yesterday,
+handling the case when GetParseTable returns no-table.
+
+Mon, Sep 20
+Note:
+Changes made to
+- asdf-modules.tb.src: ParseASDF, correcting a bug appearing when
+reparsing after a parseerror. Added remove asdf-text to invalidate-asdf-in-db.
+
+- Found a new bug Action Env crashes when a misspel appears in
+  rhs-productions.
+  e.g. val ::= booleeean.
+
+Fri, Sep 17
+Note:
+Changes made to
+- asdf-modules.tb.src: ParseASDF, consistent use of invalidate-modules-in-db.
+
+Tue, Wed, Thu Sep 14, 15, 16
+Note:
+Changes made to
+Integrating the evaluator into the Action Env.
+- eval.sdf, eval.asf, evaluation-function.sdf,
+evaluation-function.asf: Making sure, they conform to the same interface.
+
+- asdf-modules.tb.src: EvalutateASDFTerm, added a call to the
+  environment builder.
+
+
+Mon Sep 13
+Note:
+Changes made to
+asdf/asdf-pt/make_rules, added *.termstore, now the termstore is
+copied when installing the action package, using mkmeta.
+
+- asdf-modules.tb.src: ASDF, now using the termstore in __ASDF_PT__.
+
+Fri Sep 10
+Note:
+Changes made to
+- Done twisting the sdf and asf modules to make them parse correctly.
+
+Thu Sep 9
+Note:
+Changes made to
+- Twisting the sdf and asf modules to make them parse correctly.
+
+Wed Sep 8
+Note:
+Changes made to
+- process-eqs.tb: GetAsfModule, replaced an occurence of the variable
+  Filename with ModuleId, because Filename is no longer being used. This
+  was discovered due to an error when calling ParseErrorToSummary.
+
+Tue Sep 7
+Note:
+Changes made to
+- evaluation-function.sdf, evaluation-function.sdf: Finishing
+  concat-unique, and making it more generel.
+
+- asdf-modules.tb.src: EvalutateASDFTerm, integrating the evaluator.
+
+Mon Sep 6
+Note:
+Changes made to
+- evaluation-function.sdf, evaluation-function.sdf: Creating
+concat-unique
+
+- asdf-modules.tb.src: GetEvalInfo, Created.
+
+
+
+Thu Aug 31
+Note:
+Changes made to
+- asdf-modules.tb.src: EvalutateASDFTerm, Created.
+
+
+
+Wed Aug 30
+Note:
+Changes made to
+- evaluation-function.sdf, evaluation-function.asf: Done writing functions
+  to gather info used by the action evaluator.
+
+- Committing changes to CVS.
+
+- Figuring out why the cursor is not positioned in a parse error.
+
+
+Tue Aug 29
+Note:
+Changes made to
+- evaluation-function.sdf, evaluation-function.asf: Writing functions
+  to gather info used by the action evaluator.
+
+
+
+Mon Aug 28
+Note:
+Changes made to
+- standard.asdf.buttons.src: Some rearranging of the buttons in order
+  to make the View tree menu item appear in the Actions menu of the term
+  editor. Menues should be grouped together. - Due to a system failure
+  a backup was to be used.
+
+
+
+Sat Aug 28
+Note:
+Changes made to
+- standard.asdf.buttons.src: Some rearranging of the buttons in order
+  to make the View tree menu item appear in the Actions menu of the term
+  editor. Menues should be grouped together.
+
+- The reason why the coreml example will not reduce is properly a
+  parse error in val-or-var.asdf.
+
+
+Fre Aug 27
+Note:
+Changes made to
+- asdf-modules.tb.src: EditASDF, Added initial parse of the ASDF
+  module, now the sematics section gets parsed initially as well.
+
+- module.tb: TermStoreActivation, added
+  termstore-consistency-check-hook and
+  get-modulenames-for-consistency-checking-hook.
+
+- module.tb: CheckModuleConsistency, added
+  do-consistency-check-hook.
+
+- asdf-modules.tb.src: ActionSdf-hooks,
+  termstore-consistency-check-hook and
+  get-modulenames-for-consistency-checking-hook.
+
+- asdf-modules.tb.src: ActionSdf-hooks2,
+  do-consistency-check-hook.
+
+
+- asfsdf/meta-script/meta-interface.tb.src: Meta-Interface, 
+  termstore-consistency-check-hook and
+  get-modulenames-for-consistency-checking-hook.
+
+- asfsdf/meta-script/meta-interface.tb.src: Additional-Interface,
+  do-consistency-check-hook.
+
+
+Thu Aug 26
+Note:
+Changes made to
+- asdf-modules.tb.src: More comments and minor changes to the code.
+
+- asdf-modules.tb.src: ASDF-ModuleDB, MDB-GetAllDependingModules
+  changed to GetDependingModules.
+
+- asdf-modules.tb.src: EditASDF, look at the comments.
+
+
+Tue Aug 24
+Changes made to
+- asfsdf/meta-script/meta-interface.tb.src Meta-Interface, 
+  get-asf-equations-text-hook(ModuleId) doing the
+  BuildEquationsFilename directly, not using a call.
+
+- hooks, created a list of descriptions of the newly introduced hooks.
+
+Mon Aug 23
+Note:
+ Reduce menu item in ASDF term editor is now working
+
+Changes made to
+- asdf-modules.tb.src: ActionSdf-hooks added the
+  get-parse-equation-checking-hook.
+  get-asf-equations-text-hook(ModuleId)
+
+- process-eqs.tb: ParseEquationsText, added the
+  get-parse-equation-checking-hook.
+
+- process-eqs.tb: GetAsfModule, added the 
+  get-asf-equations-text-hook(ModuleId)
+
+- asfsdf/meta-script/met-interface.tb.src Meta-Interface, added
+  get-asf-equations-text-hook(ModuleId) and
+  get-parse-equation-checking-hook.
+
+
+Thu Aug 19
+Note:
+ Parse menu item in ASDFEditor is now working.
+ Parse menu item in ASDF term editor is now working.
+ Move menu items in ASDF term editor is now working.
+
+Changes made to
+- asdf-modules.tb.src: SecondParse, se-get-tree changed to
+  se-get-parse-tree.
+  synteax-top-sort-hook changed to other-top-sort-hook
+- asdf-modules.tb.src: RecursiveGenASFSDF,
+  MDB-GetAllImportedModuleNames changed to MDB-GetAllImportedModulenames
+
+
+Tue Aug 17
+Changes made to
+- open-modules.tb: OpenSyntax, added
+  set-module-syntax-text-hook.
+
+- asdf-modules.tb.src: ActionSdf-hooks, added set-module-syntax-text-hook.
+
+- asdf-modules.tb.src: ASDF, add-initial-syntax-modules-hook moved to ActionSdf-hooks
+
+- asdf-modules.tb.src: ActionSdf-hooks, values in InitialModules,
+  ANModules and Whitespace saved in termstore.
+
+- asdf-modules.tb.src: Termstore used exclusivly
+
+- asdf-modules.tb.src: Comments added
+
+
+Mon Aug 16
+Note:
+ New ASDF module button is now working.
+ Open ASDF module button is now working.
+ Edit ASDF popup menu is now working.
+
+Changes made to
+- asdf-modules.tb.src: ASDF, now using C preprocessor lang. to
+  enable/disable loading of the initial termstore.
+
+- asdf-modules.tb.src: ASDF-Support, io-read-packed-term-file changed
+  to io-read-term.
+
+- asdf-modules.tb.src: OpenASDFSyntaxParseHandler, Changed to use asdf
+  specific messages: asdf-get-module-id,
+  asdf-get-imported-module-names.
+
+- standard.asdf.buttons.src: introduced open-asdf-module message
+
+- asdf-modules.tb.src: ASDFButtons, implemented open-asdf-module message
+
+- asdf-modules.tb.src: EditASDF, created
+
+- asdf-modules.tb.src: GetASDFTree, created
+
+- asdf-modules.tb.src: ASDFEditorCreator, removed
+
+- asdf-modules.tb.src: OpenASDFSyntaxParseHandler, minor changes, now
+  saving the asdf-tree parsetree in the termstore.
+
+
+Fre Aug 13
+Changes made to
+- asdf-modules.tb.src: OpenASDFSyntaxParseHandler, created.
+
+- open-modules.tb: OpenSyntax, use of
+  get-open-syntax-parse-handler-hook and 
+  get-open-syntax-parse-handler-hook-result(Pid?)
+
+- asfsdf/meta-script/met-interface.tb.src  Meta-Interface, added set-extra-mod-path,
+  clear-extra-mod-path, extra-mod-path-hook,
+  get-open-syntax-parse-handler-hook,
+  get-open-syntax-parse-handler-hook-result
+
+- asdf-modules.tb.src: ActionSdf-hooks, added get-open-syntax-parse-handler-hook,
+  get-open-syntax-parse-handler-hook-result
+  
+
+Wed Aug 11
+Changes made to
+- asdf-modules.tb.src: ParseActionSdf, reimplementation to be
+  compliant with v. 1.5 of Meta env
+
+- asdf-modules.tb.src: ASDFButtons, changed parse-asdf-action to be
+  compliant with v. 1.5 of Meta env
+
+- asdf-modules.tb.src: ASDF, Now using a termstore image to load
+  initial modules.
+
+- asdf-modules.tb.src: Open-ActionSdf-Language, changed load-language
+  to get-parse-table.
+
+- asdf-modules.tb.src: Obtain-ParseTable-hooks, changed load-language
+  to get-parse-table.
+
+
+Tue Aug 10
+Changes made to
+- meta-interface.tb.src: GetActions, Meta-Interface
+
+- build/asdf/meta-scripts/Makefile __ASDF_PT__ and __ASDF__ made consistent with
+  the other __Constants__.
+
+- asdf-modules.tb.src: Comments added again.
+
+- button-actions.tb: Locatefile
+
+- asdf-modules.tb.src: ActionSdf-hooks, added set-extra-mod-path,
+  clear-extra-mod-path, extra-mod-path-hook.
+
+- asdf-modules.tb.src: ActionSdf-hooks, ASDF added use of set-extra-mod-path,
+  clear-extra-mod-path.
+
+
+Mon Aug 09
+Changes made to
+- asdf-modules.tb.src: Open-Initial-Module
+
+
+------------------ General Notes: ------------------
+
+- Biggest challange: The lack of documentation on the Meta-enviroment

@@ -1,0 +1,68 @@
+module type-check/types
+
+imports 
+
+  type-check/pos-annotate
+  type-check/types/asdf-types
+  basic/Whitespace
+  basic/Errors
+  basic/Integers
+
+exports 
+
+sorts 
+
+  ActionType Answer TypeVariable ActionTypeVariable
+
+exports
+
+context-free syntax
+
+%% Types
+
+  "std-at"	     -> {SingleActionType "&"}*
+
+  ActionType "\\" SingleActionType	-> ActionType
+
+  act(Type, Type, Type, Type, Type, Type, Type, Type, Type)  -> ActionType
+
+  set-using(ActionType, Type)	      -> ActionType
+  set-giving(ActionType, Type)      -> ActionType
+  set-raising(ActionType, Type)     -> ActionType
+
+%% Type variables
+
+  TypeVariable		-> Type
+  ActionTypeVariable	-> SingleActionType
+
+  "_V"Integer		-> TypeVariable
+  "_AV"Integer		-> ActionTypeVariable
+
+%% Error messages
+
+  Error+ 			-> ActionType
+
+context-free priorities
+
+  { ActionType "&" ActionType	-> ActionType {left}}
+  >
+  { ActionType "\\" SingleActionType	-> ActionType }
+	
+hiddens 
+
+variables
+
+  "$AN"[1-9]?	-> Answer
+  "$EN"[0-9]?	-> Environment
+  "$TY"[0-9]*	-> Type
+  "$AT"[0-9]?	-> ActionType
+  "$SAT"[0-9]?	-> SingleActionType
+  "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
+  "$TY"[1-9]?"*"	-> {Type ","}*
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+
+sorts
+
+  DataType ActionType NormalType ExceptionalType ExcepNoData 
+  AMusing AMgiving AMraising 
+

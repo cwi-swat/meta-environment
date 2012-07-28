@@ -1,0 +1,53 @@
+module type-check/solve
+
+imports
+
+  type-check/constraints
+  type-check/typeops
+
+exports
+
+sorts
+
+  VariableMap Constraint Type TypedAction Variable
+
+context-free syntax
+
+  solve(VariableMap, Environment)  	-> VariableMap
+
+  solve-constraints(List[[Constraint]], Environment)	
+				-> <VariableMap, List[[Constraint]]>
+  solve-constraint(Constraint, Environment)    -> VariableMap {memo}
+
+  transitive(VariableMap)      -> <VariableMap, Boolean>
+
+  subtype(VariableMap, Environment)      -> <VariableMap, Boolean>
+
+  handle-error(VariableMap, VariableMap, Constraint, 
+	       List[[Constraint]])
+			    -> <VariableMap, List[[Constraint]]>
+
+  check-last-constraints(List[[Constraint]], VariableMap) -> List[[Constraint]]
+
+  check-con(Constraint, VariableMap)	     -> Answer
+
+  map-diff(VariableMap, VariableMap)	     -> VariableMap
+
+hiddens variables
+
+  "$LC"[0-9]?		-> List[[Constraint]]
+  "$N"[0-9]?		-> Integer
+  "$AT"[0-9]?		-> ActionType
+  "$ATV"[0-9]?		-> ActionTypeVariable
+  "$SAT"[0-9]?		-> SingleActionType
+  "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
+  "$M"[0-9]?		-> VariableMap
+  "$EM"[0-9]?		-> ErrorMap
+  "$EN"[0-9]?		-> Environment
+  "$VT"[0-9]?"*"	-> {<Type, Type, Subject> ","}*
+  "$TY"[0-9]?		-> Type
+  "$TV"[0-9]?		-> TypeVariable
+  "$VR"[0-9]?		-> (TypeVariable | "(" ActionTypeVariable ")")
+  "$SU"[0-9]?		-> Subject
+  "$AN"[0-9]?		-> Answer
+  "$B"[0-9]?		-> Boolean

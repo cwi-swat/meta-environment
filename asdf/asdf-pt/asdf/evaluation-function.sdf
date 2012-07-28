@@ -1,0 +1,101 @@
+module asdf/evaluation-function
+
+imports
+  asdf/functions
+  containers/Table[Cell Data]
+  containers/List[EvalData]
+  containers/List[<Data, Type>] 
+  asdf/concat[EvalData]
+  asdf/concat[<Data, Type>]
+  asdf/concat[<AtomicType, AtomicType>]
+
+exports
+  context-free start-symbols  EvalInfo EvalDataOpSigs Environment
+
+sorts
+  EvalDataOpSigs Datacon Datasel DataOp EvalData
+
+aliases
+  List[[EvalData]] -> EvalDataOpSigs
+
+context-free syntax
+
+%% Equations:
+
+  get-eval-env(EvalInfo) -> Environment
+
+  get-eval-info(AS-Module)	-> EvalInfo
+
+  join-eval-info(EvalInfo, EvalInfo) -> EvalInfo
+
+  get-constants(AS-Module, Constants)  
+			-> Constants {traversal(accu, break, top-down)}
+
+  get-constants(AS-Constant, Constants)  
+			-> Constants {traversal(accu, break, top-down)}
+
+  get-eval-dataop(AS-Module, EvalDataOpSigs)  
+			     -> EvalDataOpSigs {traversal(accu, break, top-down)}
+
+  get-eval-dataop(AS-Requires-Production, EvalDataOpSigs)  
+			     -> EvalDataOpSigs {traversal(accu, break, top-down)}
+
+  get-eval-dataop(AtomicType, AS-Requires-Rhs, EvalDataOpSigs)	 ->
+  EvalDataOpSigs 
+
+  get-eval-use({(Literal ":" AS-Argument) ","}*)  -> Type
+
+  use-to-type(AS-Argument)	  -> AtomicType
+
+  get-eval-datasel(AtomicType, Integer, {(Literal ":" AS-Argument) ","}*)  -> EvalDataOpSigs
+
+  use-to-char(Literal)	  -> DataOp
+
+%% Sorts
+
+  <Table[[Cell, Data]], Integer, Action, Integer, 
+   SubTypes, Constants, EvalDataOpSigs>	-> Environment
+
+  <SubTypes, Constants, EvalDataOpSigs>	-> EvalInfo
+
+  (<DataOp, Datacon> | <DataOp, Datasel>) -> EvalData
+
+  List[[<Data, Type>]] -> Constants
+
+  "datacon" "(" Type "," Type ")" -> Datacon
+
+  "datasel" "(" Type "," Action ")" -> Datasel
+
+  Cell                                  -> Data
+
+lexical syntax
+  "c"[0-9]+             -> Cell
+
+hiddens variables
+
+  "$ASM"		-> AS-Module
+  "$LT"[0-9]?		-> Literal
+  "$SO"[0-9]?		-> Sort
+  "$ATY"[0-9]?		-> AtomicType    
+  "$TY"[0-9]?"*"	-> { Type ","}*
+  "$TY"[0-9]?		-> Type
+  "$SFR"[0-9]?"*"	-> { SingleActionType "&" }*
+
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+  "$DOS"[0-9]?		-> EvalDataOpSigs
+  "$EDOS"		-> EvalData
+  "$EDOS"[0-9]?"*"	-> {EvalData ","}*
+%%  "$EDOS"[0-9]?		-> EvalDataOpSigs
+  "$DCS"[0-9]?		-> List[[<Data, Type>]]
+
+  "$ARR"[0-9]?		-> AS-Requires-Rhs
+  "$CH"[0-9]?		-> CHAR
+  "$CH"[0-9]?"*"	-> CHAR*
+  "$CH"[0-9]?"+"	-> CHAR+
+  "$LT"[0-9]?		-> Literal
+
+  "$LS"[0-9]?"*"	-> {(Literal ":" AS-Argument) ","}*
+  "$ASA"[0-9]?		-> AS-Argument
+  "$N"[0-9]?		-> Integer
+
+

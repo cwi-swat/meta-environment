@@ -1,0 +1,245 @@
+equations
+
+[subtype-1] 
+
+   $EN2 := add-constraint(subtype-con($TY1, $TY2, $SU), $EN1)
+   =================================================
+   subtype-of($TY1, $TY2, $SU, $EN1) = $EN2
+
+[glb-1] 
+
+   has-variable($TY1, no) == no,
+   has-variable($TY2, no) == no,
+   st($TY1, $TY2, $SU, $EN1) == empty-map
+   ===================================
+   glb($TY1, $TY2, $SU, $EN1) = <$TY1, $EN1>
+
+[glb-2] 
+
+   has-variable($TY1, no) == no,
+   has-variable($TY2, no) == no,
+   st($TY2, $TY1, $SU, $EN1) == empty-map
+   ===================================
+   glb($TY1, $TY2, $SU, $EN1) = <$TY2, $EN1>
+
+[default-glb-1] 
+
+   <$TV, $EN2> := new-type-var($EN1),
+   $EN3 := add-constraint(glb-con($TY1, $TY2, $TV, $SU), $EN2)
+   =================================
+   glb($TY1, $TY2, $SU, $EN1) = <$TV, $EN3>
+
+[lub-1] 
+
+   has-variable($TY1, no) == no,
+   has-variable($TY2, no) == no,
+   st($TY1, $TY2, $SU, $EN1) == empty-map
+   ===================================
+   lub($TY1, $TY2, $SU, $EN1) = <$TY2, $EN1>
+
+[lub-2] 
+
+   has-variable($TY1, no) == no,
+   has-variable($TY2, no) == no,
+   st($TY2, $TY1, $SU, $EN1) == empty-map
+   ===================================
+   lub($TY1, $TY2, $SU, $EN1) = <$TY1, $EN1>
+
+[default-lub-1] 
+
+   <$TV, $EN2> := new-type-var($EN1),
+   $EN3 := add-constraint(lub-con($TY1, $TY2, $TV, $SU), $EN2)
+   ===========================================================
+   lub($TY1, $TY2, $SU, $EN1) = <$TV, $EN3>
+
+[concat-1] 
+
+   has-variable($TY1, no) == no,
+   has-variable($TY2, no) == no
+   ==============================================================
+   concat($TY1, $TY2, $SU, $EN1) = <$TY1+$TY2, $EN1>
+
+[default-concat-1] 
+
+   <$TV, $EN2> := new-type-var($EN1),
+   $EN3 := add-constraint(concat-con($TY1, $TY2, $TV, $SU), $EN2)
+   ==============================================================
+   concat($TY1, $TY2, $SU, $EN1) = <$TV, $EN3>
+
+[bracket-1] ($TY) = $TY
+
+[st-1] st($TY, $TY, $SU, $EN) = empty-map
+
+[default-st-1] st($TY1, $TY2, $SU, $EN) = st-def($TY1, $TY2, $SU, $EN)
+
+[st-def-2] 
+
+       $STS := get-subtypes($EN),
+       [$AA1*, <$ATY2, $ATY1>, $AA2*] := $STS
+       =======================================
+       st-def($ATY1, $ATY2, $SU, $EN) = empty-map
+
+[st-def-3] 
+
+       $STS := get-subtypes($EN),
+       [$AA1*, <$ATY3, $ATY1>, $AA2*] := $STS,
+       st($ATY3, $ATY2, $SU, $EN) == empty-map
+       =======================================
+       st-def($ATY1, $ATY2, $SU, $EN) = empty-map
+
+[st-def-4] st-def(empty, $TY, $SU, $EN) = empty-map
+
+[st-def-5a] st-def(($AT1), ($AT2), $SU, $EN) = at-st($AT1, $AT2, $SU, $EN)
+
+[st-def-5b] st-def((using $TY1), (using $TY2), $SU, $EN) = 
+                                               st($TY2, $TY1, $SU, $EN)
+
+[st-def-5c] st-def((giving $TY1), (giving $TY2), $SU, $EN) = 
+					       st($TY1, $TY2, $SU, $EN)
+
+[st-def-5d] st-def((raising $TY1), (raising $TY2), $SU, $EN) = 
+					       st($TY1, $TY2, $SU, $EN)
+
+[st-def-5e] st-def(($AT), action, $SU, $EN) = empty-map
+
+[st-def-6] 
+
+       $TV2 !:= $TY
+       =============================================
+       st-def($TV1, $TY, $SU, $EN) = single($TV1, $TY, $SU)
+
+[st-def-7] 
+
+       $TV2 !:= $TY
+       ============================================
+       st-def($TY, $TV1, $SU, $EN) = single($TY, $TV1, $SU)
+
+[st-def-8] 
+
+       $TV2 != $TV1,
+       $M := single($TV1, $TV2, $SU)
+       =================================================================
+       st-def($TV1, $TV2, $SU, $EN) = $M
+
+[st-def-9] 
+
+       $M1 := st($TY1, $TY2, $SU, $EN), 
+       $M2 := st(($TY1*), ($TY2*), $SU, $EN),
+       $M3 := insert($M1, $M2)
+       ====================================================
+       st-def(($TY1, $TY1*), ($TY2, $TY2*), $SU, $EN) = $M3
+
+[st-def-10a] 
+
+         $TV2 !:= $TY1,
+	 <$TY3, $TY4> := split-left-tuple(($TY2, $TY2*), $TY1),
+	 $M := insert(st($TY1, $TY3, $SU, $EN), single($TV1, $TY4, $SU))
+	 ====================================================
+	 st-def($TY1+$TV1, ($TY2, $TY2*), $SU, $EN) = $M
+
+[st-def-10b] 
+
+         $TV2 !:= $TY1,
+	 <$TY3, $TY4> := split-right-tuple(($TY2, $TY2*), $TY1),
+	 $M := insert(st($TY1, $TY4, $SU, $EN), single($TV1, $TY3, $SU))
+	 ====================================================
+	 st-def($TV1+$TY1, ($TY2, $TY2*), $SU, $EN) = $M
+
+[st-def-10c] 
+
+         $TV2 !:= $TY1,
+	 <$TY3, $TY4> := split-left-tuple(($TY2, $TY2*), $TY1),
+	 $M := insert(st($TY3, $TY1, $SU, $EN), single($TY4, $TV1, $SU))
+	 ====================================================
+	 st-def(($TY2, $TY2*), $TY1+$TV1, $SU, $EN) = $M
+
+[st-def-10d] 
+
+         $TV2 !:= $TY1,
+	 <$TY3, $TY4> := split-right-tuple(($TY2, $TY2*), $TY1),
+	 $M := insert(st($TY4, $TY1, $SU, $EN), single($TY3, $TV1, $SU))
+	 ====================================================
+	 st-def(($TY2, $TY2*), $TV1+$TY1, $SU, $EN) = $M
+
+[st-def-12] 
+
+        $TY != data
+	=================================
+	st-def($TY, datum, $SU, $EN) = empty-map
+
+[st-def-13] st-def($TY, data, $SU, $EN) = empty-map
+
+[default-st-def-1] st-def($TY1, $TY2, $SU, $EN) = error($TY1, $TY2, $SU)
+
+[plus-1] ($TY1*) + ($TY2*) = ($TY1*, $TY2*)
+
+[plus-2] $TV !:= $TY1
+	 ==============================
+	 $TY1 + ($TY2*) = ($TY1, $TY2*)
+
+[plus-3] $TV !:= $TY2
+	 ==============================
+	 ($TY1*) + $TY2 = ($TY1*, $TY2)
+
+[plus-4] $TV1 !:= $TY1, $TV2 !:= $TY2
+	 ==============================
+	 $TY1 + $TY2 = ($TY1, $TY2)
+
+[not-equal-1] 
+
+   $EN2 := add-constraint(not-equal-con($TY1, $TY2, $SU), $EN1)
+   ============================================================
+   not-equal($TY1, $TY2, $SU, $EN1) = $EN2
+
+[has-variable-1] has-variable($TV, $AN) = yes
+
+[has-variable-2] has-variable($ATV, $AN) = yes
+
+[split-right-tuple-1]
+
+        <($TY3*), ($TY4*)> := split-right-tuple(($TY1*), ($TY2*))
+	=========================================================
+	split-right-tuple(($TY1*, $TY1), ($TY2, $TY2*)) = 
+					 <($TY3*), ($TY4*, $TY1)>
+
+[split-right-tuple-2]
+
+	split-right-tuple(($TY1*, $TY1), $TY2) = <($TY1*), $TY1>
+
+[split-right-tuple-3]
+
+	split-right-tuple($TY1, $TY2) = <(), $TY1>
+
+[split-right-tuple-4]
+
+	split-right-tuple(($TY1*), ()) = <($TY1*), ()>
+
+[split-left-tuple-1]
+
+        <($TY3*), ($TY4*)> := split-left-tuple(($TY1*), ($TY2*))
+	=========================================================
+	split-left-tuple(($TY1, $TY1*), ($TY2, $TY2*)) = 
+					 <($TY1, $TY3*), ($TY4*)>
+
+[split-left-tuple-1]
+
+        <$TY3, ($TY4*)> := split-left-tuple(($TY1*), ($TY2*)),
+	($TY5*) !:= $TY3
+	=========================================================
+	split-left-tuple(($TY1, $TY1*), ($TY2, $TY2*)) = 
+					 <($TY1, $TY3), ($TY4*)>
+
+[split-left-tuple-2]
+
+	($TY3*) !:= $TY2
+	=======================================================
+	split-left-tuple(($TY1, $TY1*), $TY2) = <$TY1, ($TY1*)>
+
+[split-left-tuple-3]
+
+	split-left-tuple($TY1, $TY2) = <$TY1, ()>
+
+[split-left-tuple-4]
+
+	split-left-tuple(($TY1*), ()) = <(), ($TY1*)>
+

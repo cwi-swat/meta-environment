@@ -1,0 +1,46 @@
+equations
+
+[get-fun-name-1] get-fun-name($LT : $SO -> $AT) = $LT
+
+[rm-dobble-sigs-1] 
+
+    $LT : $SO -> $AT1 := $FS1,
+    $LT : $SO -> $AT2 := $FS2,
+    $AT3 := join-results($AT1, $AT2, $EN),
+    $FS3 := $LT : $SO -> $AT3
+    =======================================================================
+    remove-dobble-sigs(sigs($FS1*, $FS1, $FS2*, $FS2, $FS3*), $EN) = 
+                    remove-dobble-sigs(sigs($FS1*, $FS3, $FS2*, $FS3*), $EN)
+
+[default-rm-dobble-sigs-2] 
+
+    remove-dobble-sigs(sigs($FS1*), $EN) = sigs($FS1*)
+
+[join-res-1] 
+
+    $SU := subject(""),
+    $TY1 := get-using($AT1),
+    $TY2 := get-using($AT2),
+    <(using $TY3), $EN> := glb((using $TY1), (using $TY2), $SU, $EN),
+    $TY4 := get-giving($AT1),
+    $TY5 := get-giving($AT2),
+    <(giving $TY6), $EN> := lub((giving $TY4), (giving $TY5), $SU, $EN),
+    $TY7 := get-raising($AT1),
+    $TY8 := get-raising($AT2),
+    <(raising $TY9), $EN> := lub((raising $TY7), (raising $TY8), $SU, $EN),
+    $SAT1* := rm-ugr($AT1),
+    $SAT2* := rm-ugr($AT2),
+    $AT5 := norm(using $TY3 & giving $TY6 & raising $TY9 & $SAT1* & $SAT2*)
+    ===================================================================
+    join-results($AT1, $AT2, $EN) = $AT5
+
+[remove-dobble-dataops-1] 
+
+  $AT3 := join-results($SAT1*, $SAT2*, $EN)
+  =============================================================================
+  remove-dobble-dataops([$DF1*,<$DO, $SAT1*>, $DF2*, <$DO, $SAT2*>, $DF3*], $EN) =
+              remove-dobble-dataops([$DF1*,<$DO, $AT3>, $DF2*, $DF3*], $EN)
+
+[default-remove-dobble-dataops-1] 
+
+  remove-dobble-dataops($DOS, $EN) = $DOS

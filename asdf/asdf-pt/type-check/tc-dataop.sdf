@@ -1,0 +1,57 @@
+module type-check/tc-dataop
+
+imports
+
+  type-check/tc-actions
+  type-check/signatures
+%%  type-check/data/all
+  asdf/an
+  asdf/an-supplement
+  type-check/an-to-kernel
+  type-check/environment
+
+exports 
+
+context-free syntax 
+
+  typecheck-data(Data, Environment)		-> <SingleActionType, Environment>
+  typecheck-dataop(DataOp, Environment)		-> <ActionType, Environment>
+  typecheck-datapred(DataOp, Environment)	-> <ActionType, Environment>
+  
+hiddens 
+
+variables
+
+  "$TY"[0-9]?		-> Type
+  "$TY"[0-9]?"*"	-> {Type ","}*
+  "$AT"[0-9]?		-> ActionType	
+  "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
+  "$TV"[0-9]?		-> TypeVariable
+	
+  "$EN"[0-9]?	-> Environment
+  "$CH+"[0-9]?	-> CHAR+
+  "$SC"[0-9]?	-> StrCon		
+  "$A"[0-9]?	-> Action
+  "$IA"		-> InfixAction
+  "$D+"		-> {Data ","}+
+  "$D"[0-9]?	-> Data
+  "$N"		-> Integer
+  "$B"		-> Boolean
+  "$TK"[0-9]?	-> Token
+  "$END"[0-9]?	-> Answer
+  "$ER"[0-9]?"+"	-> Error+
+  "$DO"[0-9]?	-> DataOp
+  "$IN"[0-9]?	-> Index
+
+  "$DF"[0-9]?"*"   -> {<DataOp, ActionType> "," }*
+  "$FR"[0-9]?	   -> ActionType
+
+  "$DT"[0-9]?"*"   -> {<DataOp, Type> ","}*
+
+  "$VR"[0-9]?	   -> Variable
+
+  "$SU"[0-9]?	   -> Subject
+
+sorts
+
+  ExcepNoData SignatureEnv ActionType Type ErrorMessage	

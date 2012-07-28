@@ -1,0 +1,23 @@
+module List
+
+imports 
+  
+  languages/aterm/syntax/ATerms
+  basic/Strings 
+  Layout
+
+exports
+
+sorts
+
+  List ListItem
+
+context-free syntax
+
+  "list" "(" "[" { ListItem "," }* "]" ")"	-> List
+  "listitem" "(" String "," ATermList "," Location ")"	-> ListItem
+
+lexical syntax
+
+  [a-z]+ 		-> Literal
+

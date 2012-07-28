@@ -1,0 +1,23 @@
+module type-check/data/Numbers
+
+%%imports type-check/data/Data
+
+exports
+
+sorts
+
+  Number InfixDataOp
+
+context-free syntax
+
+  Number	-> Datum
+
+lexical syntax
+
+  "-"?[0-9]+		-> Number
+
+  "+" | "*" | "<" | ">" | "-"	-> InfixDataOp
+
+  
+
+

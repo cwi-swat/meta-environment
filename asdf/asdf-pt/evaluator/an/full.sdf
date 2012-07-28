@@ -1,0 +1,125 @@
+module an/full
+
+imports
+
+  an/syntax
+
+exports
+
+sorts
+
+  Action Yielder AtmYielder
+
+context-free syntax
+
+%% Data-flow
+
+  "give" AtmYielder	-> Action
+  "given" AtmYielder	-> Action 
+  "check" AtmYielder	-> Action
+  Action AtmYielder	-> Action {right}
+  Action DataOp		-> Action {right}  
+
+  Data		   -> AtmYielder
+  DataOp	   -> Yielder {avoid}
+  InfixDataOp	   -> Yielder {reject}
+
+  InfixAction	-> InfixDataOp
+  PrefixAction	-> PrefixDataOp
+
+  "it"		   -> AtmYielder
+
+  AtmYielder	   -> Yielder
+
+  "(" {Yielder ","}+ ")"   -> AtmYielder
+
+%%  "(" AtmYielder ")"	-> AtmYielder {bracket}
+%%  "(" Yielder ")"	-> Yielder {bracket}
+
+  PrefixDataOp Yielder		-> Yielder
+  Yielder InfixDataOp Yielder   -> Yielder {left}
+
+  "maybe"	-> PrefixAction
+
+%% bindings
+
+  "bound-to" Yielder	-> AtmYielder {prefer}
+
+%% Storing
+
+  "stored-at" Yielder	-> AtmYielder
+
+%% Actions as data
+
+  "closure" Yielder	-> AtmYielder
+
+lexical syntax
+
+%% Bindings
+
+  "furthermore"		-> PrefixAction
+  "before"		-> InfixAction
+
+  "bind"		-> Action
+  "current-bindings"	-> AtmYielder
+
+context-free priorities
+
+  { Action AtmYielder              -> Action }
+  >
+  { Action DataOp		-> Action }
+  >
+  { "give" DataOp		-> Action }
+  >
+  { "check" DataOp		-> Action }
+  >
+  { "give" AtmYielder           -> Action }
+  >
+  { "given" AtmYielder           -> Action }
+  >
+  { "check" AtmYielder		-> Action } 
+  >
+  { PrefixAction Action         -> Action }
+
+context-free priorities
+
+  {PrefixDataOp Yielder         -> Yielder}
+  >
+  {Yielder InfixDataOp Yielder  -> Yielder}
+
+context-free priorities
+
+  {"give" DataOp	-> Action}
+  >
+  {"give" AtmYielder	-> Action}
+  >
+  { "given" AtmYielder           -> Action }
+  >
+  { "check" AtmYielder		-> Action } 
+  >
+  {Yielder InfixDataOp Yielder  -> Yielder}
+
+
+context-free priorities
+
+  {"(" Yielder ")"	-> Yielder}
+  >
+  {AtmYielder	   -> Yielder}
+
+lexical syntax
+
+  "bound-to"		-> Token {reject}
+  "the"			-> Token {reject}
+  "cons"		-> Token {reject}
+
+hiddens 
+
+variables
+
+  "ATMY"[0-9]?		-> AtmYielder
+  "Y"[0-9]?		-> Yielder
+  "Y"[0-9]?"+"		-> {Yielder ","}+
+  "DOP"[0-9]?		-> PrefixDataOp
+  "DOI"[0-9]?		-> InfixDataOp
+  "A"[0-9]?		-> Action
+  "TK"[0-9]?		-> Token
