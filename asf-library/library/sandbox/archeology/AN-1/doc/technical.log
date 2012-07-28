@@ -1,0 +1,59 @@
+This is TeX, C Version 3.0 (format=lplain 93.2.19)  3 AUG 1993 15:55
+**&latex technical
+(technical.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/local/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/local/lib/tex/macros/art12.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (verbatimfiles.sty) (technical.aux)
+[1
+
+] (technical.toc)
+\tf@toc=\write3
+ [2] (../common/Layout.syn) (../common/Layout.eqs)
+(../common/Booleans.syn) (../common/Booleans.eqs) (../common/Basic-Notions.syn
+[3] [4]) (../unified-algebras/Allowed-Symbols.syn [5])
+(../unified-algebras/Allowed-Symbols.eqs)
+(../unified-algebras/Allowed-Terms.syn [6])
+(../unified-algebras/Allowed-Terms.eqs)
+(../unified-algebras/Allowed-GrammarTerms.syn)
+(../unified-algebras/Allowed-GrammarTerms.eqs)
+(../unified-algebras/MetaNotation.syn [7] [8])
+(../unified-algebras/MetaNotation.eqs) (../asdf-syntax/SDF-Syntax.syn [9])
+(../asdf-syntax/SDF-Syntax.eqs) (../asdf-syntax/ASF-Syntax.syn [10])
+(../asdf-syntax/ASF-Syntax.eqs) (../asdf-syntax/SDF-Syntax-Operations.syn
+[11] [12]) (../asdf-syntax/SDF-Syntax-Operations.eqs [13] [14] [15] [16]
+[17] [18]) (../common/Character-Operations.syn [19])
+(../common/Character-Operations.eqs [20] [21] [22]) (../grammar2sdf/Lisp.syn
+[23]) (../grammar2sdf/Lisp.eqs) (../functionality2sdf/Introduces-to-SDF.syn
+[24]) (../functionality2sdf/Introduces-to-SDF.eqs [25])
+(../functionality2sdf/Functionality-to-SDF.syn [26] [27])
+(../functionality2sdf/Functionality-to-SDF.eqs [28] [29] [30])
+(../grammar2sdf/Literals.syn [31]) (../grammar2sdf/Literals.eqs [32])
+(../grammar2sdf/Grammar-to-SDF.syn [33] [34])
+(../grammar2sdf/Grammar-to-SDF.eqs [35] [36] [37] [38] [39] [40] [41])
+(../equations2asf/Variables-in-Terms.syn [42] [43])
+(../equations2asf/Variables-in-Terms.eqs [44] [45] [46] [47])
+(../grammar2sdf/Module-to-SDF.syn [48]) (../grammar2sdf/Module-to-SDF.eqs
+[49] [50]) (../grammar2sdf/Name-of-Module.syn)
+(../grammar2sdf/Name-of-Module.eqs [51]) (../grammar2sdf/StandardLexical.syn)
+(../grammar2sdf/StandardLiteral.syn [52] [53]) (../ctasdf.conf [54])
+(../dump-grammar.ll [55] [56] [57] [58] [59] [60]) [61] (technical.aux) ) 
+Here is how much of TeX's memory you used:
+ 332 strings out of 4458
+ 4303 string characters out of 63205
+ 37480 words of memory out of 262141
+ 2109 multiletter control sequences out of 9500
+ 19500 words of font info for 75 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 16i,7n,18p,195b,337s stack positions out of 300i,40n,60p,3000b,4000s
+
+Output written on technical.dvi (61 pages, 150400 bytes).

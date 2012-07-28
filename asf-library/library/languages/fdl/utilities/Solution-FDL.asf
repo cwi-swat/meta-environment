@@ -1,0 +1,5 @@
+equations
+
+[eval-bdd-1]
+	eval-bdd(ITE($featurename, $formula1, $formula2), $featurename*1, $featurename, $featurename*2) =
+		$formula1

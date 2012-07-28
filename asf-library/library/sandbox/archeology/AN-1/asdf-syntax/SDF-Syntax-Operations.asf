@@ -1,0 +1,410 @@
+equations
+
+  [0]   (exports SDF-Section+) || (exports SDF-Section'+) =
+          (exports SDF-Section+ SDF-Section'+)
+
+  [1]   (hiddens SDF-Section+) || (hiddens SDF-Section'+) =
+          (hiddens SDF-Section+ SDF-Section'+)
+
+  [2]   nil || Section = Section
+  [3]   Section || nil = Section
+
+  [4]   nil || SDF-Sections = SDF-Sections
+  [5]   SDF-Sections || nil = SDF-Sections
+
+  [6]   exports nil = nil
+  [7]   hiddens nil = nil
+
+  [8]   SDF-Section* || SDF-Section'* = SDF-Section* SDF-Section'*
+
+ [i1]   if true then SDF-Section+ else SDF-Section'+ fi = SDF-Section+
+ [i2]   if false then SDF-Section+ else SDF-Section'+ fi = SDF-Section'+
+
+ [g1]   SDF-Definition' = simplify( SDF-Definition ),
+        SDF-Definition' =
+          Section*
+          exports
+            SDF-Section*
+            context-free syntax CF-Fun+
+            SDF-Section'*
+          Section'*
+        ==============================================
+        SDF-Definition . context-free-syntax =
+          context-free syntax CF-Fun+
+
+ [default-context-free-syntax] SDF-Definition . context-free-syntax = nil
+
+ [m1]   make-sections( ) = nil
+ [m2]   make-sections(SDF-Section+) = exports SDF-Section+
+ [m3]   make-sections-from-cfg( ) = nil
+ [m4]   make-sections-from-cfg( CF-Fun+ ) = exports context-free syntax CF-Fun+
+ [m5]   make-sections-from-lex( ) = nil
+ [m6]   make-sections-from-lex( Lex-Fun+ ) = exports lexical syntax Lex-Fun+
+
+ [a0]   nil + Section* = Section*
+ [a1]   Section* + nil = Section*
+ [default-section-plus]   Section* + Section'* = Section* Section'*
+
+ [a2]   SDF-Section+ + SDF-Section'+ = SDF-Section+ SDF-Section'+
+
+ [s0]   simplify( Section* ) = sects-sim(sec-join(Section*))
+
+ [s1]   sec-join(
+          Section*
+          exports SDF-Section+
+          Section'*
+          exports SDF-Section'+
+          Section''*
+        ) =
+        sec-join(
+          Section*
+          exports SDF-Section+ SDF-Section'+
+        Section'*
+        Section''*)
+
+ [s2]   sec-join(
+          Section*
+          hiddens SDF-Section+
+          Section'*
+          hiddens SDF-Section'+
+          Section''*
+        ) =
+        sec-join(
+          Section*
+          hiddens SDF-Section+ SDF-Section'+
+        Section'*
+        Section''*)
+
+ [s3]   sec-join(
+          Section*
+          imports #Module+
+          Section'*
+          imports #Module'+
+          Section''*
+        ) =
+        sec-join(
+          Section*
+          imports #Module+ #Module'+
+          Section'*
+          Section''*
+        )
+
+ [s4]   sec-join(
+          Section*
+          exports SDF-Section+
+          Section'*
+          imports #Module+
+          Section''*
+        ) =
+        sec-join(
+          Section*
+          imports #Module+
+          Section'*
+          exports SDF-Section+
+          Section''*
+        )
+
+ [s4]   sec-join(
+          Section*
+          hiddens SDF-Section+
+          Section'*
+          exports SDF-Section'+
+          Section''*
+        ) =
+        sec-join(
+          Section*
+          exports SDF-Section'+
+          Section'*
+          hiddens SDF-Section+
+          Section''*
+        )
+
+ [default-sec-join] sec-join( Section* ) = Section*
+
+ [s5]   sects-sim( ) =
+
+ [s6]   sects-sim( Section Section* ) =
+          sect-sim(Section) + sects-sim(Section*)
+
+ [s7]   sect-sim( imports #Module* #Module #Module'* #Module #Module''* ) =
+          sect-sim( imports #Module* #Module #Module'* #Module''* )
+
+ [s8]   sect-sim( exports SDF-Section+ ) = exports sdf-sect-sim(sdf-join(SDF-Section+))
+
+ [s9]   sect-sim( hiddens SDF-Section+ ) = hiddens sdf-sect-sim(sdf-join(SDF-Section+))
+
+ [default-sect-sim] sect-sim( Section ) = Section
+
+
+ [s09]  sdf-join(
+          SDF-Section*
+          sorts #Sort+
+          SDF-Section'*
+          sorts #Sort'+
+          SDF-Section''*
+        ) =
+        sdf-join(
+          SDF-Section*
+          sorts #Sort+ #Sort'+
+          SDF-Section'*
+          SDF-Section''*
+        )
+
+ [s10]  sdf-join(
+          SDF-Section*
+          context-free syntax CF-Fun+
+          SDF-Section'*
+          context-free syntax CF-Fun'+
+          SDF-Section''* )
+        =
+        sdf-join(
+          SDF-Section*
+          context-free syntax CF-Fun+ CF-Fun'+
+          SDF-Section'*
+          SDF-Section''* )
+
+ [s11]  sdf-join(
+          SDF-Section*
+          lexical syntax Lex-Fun+
+          SDF-Section'*
+          lexical syntax Lex-Fun'+
+          SDF-Section''* )
+        =
+        sdf-join(
+          SDF-Section*
+          lexical syntax Lex-Fun+ Lex-Fun'+
+          SDF-Section'*
+          SDF-Section''* )
+
+ [s12]  sdf-join(
+          SDF-Section*
+          variables Var-Decl+
+          SDF-Section'*
+          variables Var-Decl'+
+          SDF-Section''* )
+        =
+        sdf-join(
+          SDF-Section*
+          variables Var-Decl+ Var-Decl'+
+          SDF-Section'*
+          SDF-Section''* )
+
+ [s12]  sdf-join(
+          SDF-Section*
+          lexical syntax Lex-Fun+
+          SDF-Section'*
+          sorts #Sort+
+          SDF-Section''*
+        ) =
+        sdf-join(
+          SDF-Section*
+          sorts #Sort+
+          SDF-Section'*
+          lexical syntax Lex-Fun+
+          SDF-Section''* )
+
+ [s13]  sdf-join(
+          SDF-Section*
+          context-free syntax CF-Fun+
+          SDF-Section'*
+          lexical syntax Lex-Fun+
+          SDF-Section''* )
+        =
+        sdf-join(
+          SDF-Section*
+          lexical syntax Lex-Fun+
+          SDF-Section'*
+          context-free syntax CF-Fun+
+          SDF-Section''* )
+
+ [s14]  sdf-join(
+          SDF-Section*
+          variables Var-Decl+
+          SDF-Section'*
+          context-free syntax CF-Fun+
+          SDF-Section''*)
+        =
+        sdf-join(
+          SDF-Section*
+          context-free syntax CF-Fun+
+          SDF-Section'*
+          variables Var-Decl+
+          SDF-Section''* )
+
+ [s14'] sdf-join(
+          SDF-Section*
+          context-free syntax CF-Fun+
+          SDF-Section'*
+          sorts #Sort+
+          SDF-Section''* )
+        = sdf-join(
+          SDF-Section*
+          sorts #Sort+
+          SDF-Section'*
+          context-free syntax CF-Fun+
+          SDF-Section''* )
+
+ [default-sdf-join] sdf-join( SDF-Section* ) = SDF-Section*
+
+ [s15]  sdf-sect-sim( SDF-Section SDF-Section+ ) =
+          sdf-sect-sim( SDF-Section ) +
+          sdf-sect-sim( SDF-Section+ )
+
+ [s16]  sdf-sect-sim(
+          context-free syntax CF-Fun* CF-Fun CF-Fun'* CF-Fun CF-Fun''*
+        ) =
+        sdf-sect-sim(
+          context-free syntax CF-Fun* CF-Fun CF-Fun'* CF-Fun''*
+        )
+
+ [s17]  sdf-sect-sim(
+          context-free syntax
+            CF-Fun*
+            #Sort #String #Sort -> #Sort
+            CF-Fun'*
+        ) =
+        sdf-sect-sim(
+          context-free syntax
+            CF-Fun*
+            #Sort #String #Sort -> #Sort {left}
+            CF-Fun'*
+          )
+
+ [s17]  sdf-sect-sim(
+          context-free syntax
+            CF-Fun*
+            #Sort #String1 #String2 #Sort -> #Sort
+            CF-Fun'*
+        ) =
+        sdf-sect-sim(
+          context-free syntax
+            CF-Fun*
+            #Sort #String1 #String2 #Sort -> #Sort {left}
+            CF-Fun'*
+          )
+
+ [s17]  sdf-sect-sim(
+          lexical syntax Lex-Fun* Lex-Fun Lex-Fun'* Lex-Fun Lex-Fun''*
+        ) =
+        sdf-sect-sim(
+          lexical syntax Lex-Fun* Lex-Fun Lex-Fun'* Lex-Fun''*
+        )
+
+ [s18]  sdf-sect-sim(
+          variables Var-Decl* Var-Decl Var-Decl'* Var-Decl Var-Decl''*
+        ) =
+        sdf-sect-sim(
+          variables Var-Decl* Var-Decl Var-Decl'* Var-Decl''*
+        )
+
+ [s19]  sdf-sect-sim(
+          sorts #Sort* #Sort #Sort'* #Sort #Sort''*
+        ) =
+        sdf-sect-sim(
+          sorts #Sort* #Sort #Sort'* #Sort''*
+        )
+
+ [default-sdf-sect-sim] sdf-sect-sim(SDF-Section) = SDF-Section
+
+%%  [a3]  s( #Sort, 1 ) = append1(X, #Sort)
+%%  [a4]  s( #Sort, 2 ) = append1(Y, #Sort)
+%%  [a5]  s( #Sort, 3 ) = append1(Z, #Sort)
+%%  [default-s] s( #Sort, N ) = append1(Q,#Sort)
+
+ [unpack]  next-sym = LOWER-ALPHA (convert-to-lexical << g300 >> (gensym))
+
+ [a6]   next-sym = lower-alpha( Char Char+ )
+        =====================================
+        s( #Sort, N ) = upper-alpha( "G" Char+ )
+
+ [c1]  char2string( character("'" Char "'") ) =
+         string( """ Char """ )
+         when character("'" Char "'") != character("'" """ "'")
+
+ [c2]  char2string( character("'" """ "'") ) =
+         string( """ "\" """ """ )
+
+ [f1]  #CF-Elem-star || #CF-Elem-star' = #CF-Elem-star #CF-Elem-star'
+ [f2]  #CF-Elem-star || *error* = *error*
+ [f3]  *error* || #CF-Elem-star = *error*
+
+ [o0]  {#S*, #S, #S'*, #S, #S''*} = {#S*, #S, #S'*, #S''*}
+ [o1]  {#S*} \cup {#S'*} = {#S*, #S'*}
+ [o2]  #S \in {#S, #S*} = true
+ [o3]  #S \in {#S', #S*} = #S \in {#S*}  when #S != #S'
+ [o4]  #S \in {} = false
+
+ [o5]  {} \cap {#S*} = {}
+ [o6]  {#S, #S*} \cap {#S'*} = {#S} \cup ({#S*} \cap {#S'*})  when #S \in {#S'*} = true
+ [o6]  {#S, #S*} \cap {#S'*} = {#S*} \cap {#S'*}  when #S \in {#S'*} = false
+
+
+ [o10] output-sort( #CF-Elem-star -> #Sort Attribute ) = #Sort
+ [o11] output-sorts( CF-Fun CF-Fun+ ) =
+         { output-sort( CF-Fun ) } \cup output-sorts( CF-Fun+ )
+ [o12] output-sorts( CF-Fun ) = { output-sort(CF-Fun) }
+ [o13] #CF-Elem-star -> #Sort Attribute . cf-elem-list = #CF-Elem-star
+ [o14] input-sorts( ) = {}
+ [o15] input-sorts( #CF-Elem #CF-Elem-star ) =
+         input-sort( #CF-Elem ) \cup input-sorts( #CF-Elem-star )
+
+ [o16] input-sort( #Sort ) = { #Sort }
+ [o17] input-sort( #Lex-Elem ) = {}
+ [o18] input-sort( #Sort + ) = { #Sort }
+ [o19] input-sort( #Sort * ) = { #Sort }
+ [o20] input-sort( { #Sort #Lex-Elem }* ) = { #Sort }
+ [o21] input-sort( { #Sort #Lex-Elem }+ ) = { #Sort }
+
+ [i1]   is-injection( #Sort1 -> #Sort2 ) = true
+ [i2]   is-injection( #Sort1 + -> #Sort2 ) = true
+ [i3]   is-injection( #Sort1 * -> #Sort2 ) = true
+ [i4]   is-injection( { #Sort1 #Lex-Elem }* -> #Sort2 ) = true
+ [i5]   is-injection( { #Sort1 #Lex-Elem }+ -> #Sort2 ) = true
+[default-is-injection] is-injection( CF-Fun ) = false
+
+ [b0]  no-brackets( ) =
+ [b1]  no-brackets( Section+ Section'+ ) =
+          no-brackets( Section+ ) + no-brackets( Section'+ )
+ [b2]  no-brackets( exports SDF-Section+  ) = exports no-brackets( SDF-Section+ )
+ [b2'] no-brackets( SDF-Section+ SDF-Section'+ ) =
+          no-brackets( SDF-Section+ ) || no-brackets( SDF-Section'+ )
+ [b2]  no-brackets( imports #Module+ ) = imports #Module+
+ [b5]  no-brackets( lexical syntax Lex-Fun+ ) =  lexical syntax Lex-Fun+
+ [b6]  no-brackets( variables Var-Decl+ ) = variables Var-Decl+
+ [b7]  no-brackets( sorts #Sort+ ) = sorts #Sort+
+ [b8]  no-brackets( context-free syntax CF-Fun-Decl {bracket} ) = nil
+ [b9]  no-brackets( context-free syntax CF-Fun-Decl {left} ) =
+          context-free syntax CF-Fun-Decl {left}
+ [b9]  no-brackets( context-free syntax CF-Fun-Decl ) = context-free syntax CF-Fun-Decl
+ [b10] no-brackets( context-free syntax CF-Fun+ CF-Fun'+ ) =
+          no-brackets( context-free syntax CF-Fun+ ) ||
+          no-brackets( context-free syntax CF-Fun'+ )
+
+
+ [b0]  only-brackets( ) =
+ [b1]  only-brackets( Section+ Section'+ ) =
+          only-brackets( Section+ ) + only-brackets( Section'+ )
+ [b2]  only-brackets( exports SDF-Section+  ) = exports only-brackets( SDF-Section+ )
+ [b2'] only-brackets( SDF-Section+ SDF-Section'+ ) =
+          only-brackets( SDF-Section+ ) || only-brackets( SDF-Section'+ )
+ [b2]  only-brackets( imports #Module+ ) = nil
+ [b5]  only-brackets( lexical syntax Lex-Fun+ ) =  nil
+ [b6]  only-brackets( variables Var-Decl+ ) = nil
+ [b7]  only-brackets( sorts #Sort+ ) = nil
+ [b8]  only-brackets( context-free syntax CF-Fun-Decl {bracket} ) =
+          context-free syntax CF-Fun-Decl {bracket}
+ [b9]  only-brackets( context-free syntax CF-Fun-Decl {left} ) = nil
+ [b9]  only-brackets( context-free syntax CF-Fun-Decl ) = nil
+ [b10] only-brackets( context-free syntax CF-Fun+ CF-Fun'+ ) =
+          only-brackets( context-free syntax CF-Fun+ ) ||
+          only-brackets( context-free syntax CF-Fun'+ )
+
+
+ [i1]  get-imports( ) = {}
+ [i2]  get-imports( Section+ Section'+ ) =
+         get-imports( Section+ ) \cup get-imports( Section'+ )
+ [i3]  get-imports( exports SDF-Section+ ) = {}
+ [i4]  get-imports( hiddens SDF-Section+ ) = {}
+ [i5]  get-imports( imports #Module ) = { #Module }
+ [i6]  get-imports( imports #Module #Module+ ) =
+         get-imports( imports #Module ) \cup get-imports( imports #Module+ )

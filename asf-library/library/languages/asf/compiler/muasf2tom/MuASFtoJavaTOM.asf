@@ -1,0 +1,6 @@
+equations
+
+[] 
+muasf2javatom(Module) = wrap-rules(TomDefinition, strcon("""c*"""))
+when module modid(c*) SignatureOpt RulesOpt := Module,
+     TomDefinition := muasf2tom(Module)

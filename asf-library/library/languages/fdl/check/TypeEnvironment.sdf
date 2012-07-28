@@ -1,0 +1,32 @@
+module languages/fdl/check/TypeEnvironment
+
+imports languages/fdl/syntax/Modular-FDL
+imports containers/Table[AtomicFeature ValueType]
+
+exports
+aliases
+  Table[[AtomicFeature,ValueType]] -> TypeEnv
+
+sorts TypeEnv
+
+context-free syntax
+  construct-type-environment(FeatureModule) -> TypeEnv  
+
+hiddens
+context-free syntax
+  get-types(ValueDeclaration*, TypeEnv)     -> TypeEnv {traversal(accu, top-down, break)}  
+  get-types(ValueDeclaration, TypeEnv)      -> TypeEnv {traversal(accu, top-down, break)}  
+  get-features(FeatureDefinition*, TypeEnv) -> TypeEnv {traversal(accu, bottom-up, break)} 
+  get-features(AtomicFeature, TypeEnv)      -> TypeEnv {traversal(accu, bottom-up, break)} 
+
+hiddens
+variables
+  "AtomicFeature" [0-9]*      -> AtomicFeature       
+  "FeatureDefinition*" [0-9]* -> FeatureDefinition*  
+  "FeatureDiagram" [0-9]*     -> FeatureDiagram
+  "ImportSection*" [0-9]*     -> ImportSection*
+  "Modulename" [0-9]*         -> Modulename          
+  "Section*" [0-9]*           -> Section*            
+  "TypeEnv" [0-9]*            -> TypeEnv             
+  "ValueDeclaration*" [0-9]*  -> ValueDeclaration*   
+  "ValueType" [0-9]*          -> ValueType           

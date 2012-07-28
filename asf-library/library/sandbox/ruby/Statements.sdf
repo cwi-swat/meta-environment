@@ -1,0 +1,27 @@
+module Statements
+
+imports Expressions
+
+exports
+
+sorts Program Stmt 
+
+context-free syntax
+
+CompStmt* -> Program
+
+Stmt (Term Expr)* Term? -> CompStmt
+
+Call "do" ("|" Block-Var? "|")?  CompStmt "end" -> Stmt
+
+"undef" FName -> Stmt
+"alias" FName FName -> Stmt
+Stmt "if" Expr -> Stmt
+Stmt "while" Expr -> Stmt
+Stmt "unless" Expr -> Stmt
+Stmt "until" Expr -> Stmt
+"BEGIN" "{" CompStmt "}" -> Stmt
+"END" "{" CompStmt "}" -> Stmt
+
+LHS "=" Command ("do" ("|" Block-Var? "|")? CompStmt "end")? -> Stmt
+Expr -> Stmt

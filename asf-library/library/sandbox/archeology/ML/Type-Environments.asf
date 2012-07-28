@@ -1,0 +1,10 @@
+
+   equations
+
+      [1]   apply(subs, []) = []
+      [2]   apply(subs, [(Id, gt), pairs])
+               = (Id, apply-gt(subs, gt)) + apply(subs, [pairs])
+      
+      [3]   var elm [] = false
+      [4]   var elm [(Id, gt), pairs] = var elm gt | var elm [pairs]
+

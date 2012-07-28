@@ -1,0 +1,204 @@
+equations
+
+[main]	$rule*' := normalize-rules($rule*, )
+	===
+	start(Rules, $rule*) = start(Productions, rules-to-productions($rule*', ))
+
+equations
+
+[normalize-rules-rule]
+	$rule*' := normalize-rules($nonterminal ::= $element+, )
+	===
+	normalize-rules($nonterminal ::= $element | $element+, $rule*) =
+		$rule*
+		$nonterminal ::= $element
+		$rule*'
+
+[default-normalize-rules-rule-2]
+	normalize-rules($rule, $rule*) =
+		$rule*
+		$rule
+
+equations
+
+[rules-to-productions-rule]
+	$symbol := elements-to-symbols($nonterminal, ),
+	$symbol* := elements-to-symbols($element+, )
+	===
+	rules-to-productions($nonterminal ::= $element+, $production*) =
+		$production*
+		$symbol* -> $symbol
+
+equations
+
+[elements-to-symbols-element-nonterminal]
+	elements-to-symbols($nonterminal, $symbol*) = 
+		$symbol* nonterminal-to-sort($nonterminal)
+
+[elements-to-symbols-element-terminal]
+	elements-to-symbols($terminal, $symbol*) = 
+		$symbol* terminal-to-literal($terminal)
+
+[elements-to-symbols-element-optional-single]
+	$symbol' := elements-to-symbols($element, )
+	===
+	elements-to-symbols([ $element ], $symbol*) =
+		$symbol* $symbol'?
+
+[elements-to-symbols-element-optional-multi]
+	$symbol1 := elements-to-symbols($element, ),
+	$symbol2 ? := elements-to-symbols([ $element+ ], )
+	===
+	elements-to-symbols([ $element | $element+ ], $symbol*) =
+		$symbol* ( $symbol1 | $symbol2 ) ?
+
+[elements-to-symbols-element-group-single]
+	$symbol' := elements-to-symbols($element, )
+	===
+	elements-to-symbols({ $element }, $symbol*) =
+		$symbol* $symbol'
+
+[elements-to-symbols-element-group-multi]
+	$symbol1 := elements-to-symbols($element, ),
+	$symbol2 := elements-to-symbols({ $element+ }, )
+	===
+	elements-to-symbols({ $element | $element+ }, $symbol*) =
+		$symbol* $symbol1 | $symbol2 
+
+[elements-to-symbols-element-iteration]
+	$symbol := elements-to-symbols($element, )
+	===
+	elements-to-symbols($element ..., $symbol*) =
+		$symbol* $symbol *
+
+equations
+
+[nonterminal-to-sort-top]
+	strcon(\" strchar(\<) $strchar* strchar(\>) \") := unparse-to-string($nonterminal),
+	$bytes := string-to-bytes(strcon(\" $strchar* \")),
+	$bytes' := non-alpha-numeric-to-space($bytes),
+	$bytes'' := normalize-spaces($bytes'),
+	$bytes''' := to-camel-case($bytes''),
+	$bytes'''' := spaces-to-dashes($bytes''')
+	===
+	nonterminal-to-sort($nonterminal) = bytes-to-sort($bytes'''')
+
+equations
+
+[non-alpha-numeric-to-space-nil]
+	non-alpha-numeric-to-space(bytes()) = bytes()
+
+[non-alpha-numeric-to-space-cons-1]
+	is-alnum($byte) == true,
+	bytes($byte*') := non-alpha-numeric-to-space(bytes($byte*))
+	===
+	non-alpha-numeric-to-space(bytes($byte $byte*)) = bytes($byte $byte*')
+
+[non-alpha-numeric-to-space-cons-2]
+	is-alnum($byte) == false,
+	bytes($byte*') := non-alpha-numeric-to-space(bytes($byte*))
+	===
+	non-alpha-numeric-to-space(bytes($byte $byte*)) = bytes(byte(\ ) $byte*')
+
+
+equations
+
+[normalize-spaces-fixed]
+	squeeze-spaces($bytes) == $bytes
+	===
+	normalize-spaces($bytes) = $bytes
+
+[normalize-spaces-changing]
+	$bytes' := squeeze-spaces($bytes),
+	$bytes' != $bytes
+	===
+	normalize-spaces($bytes) = normalize-spaces($bytes')
+
+equations
+
+[squeeze-spaces-normal]
+	squeeze-spaces(bytes($byte*1 byte(\ ) byte(\ ) $byte*2)) =
+		bytes($byte*1 byte(\ ) byte(\ ) $byte*2)
+
+[default-squeeze-spaces]
+	squeeze-spaces($bytes) = $bytes
+
+equations
+
+[to-camel-case-head-1]
+	is-alpha($byte) == true,
+	is-lower($byte) == true,
+	$byte' := to-upper($byte)
+	===
+	to-camel-case(bytes($byte $byte*)) = 
+		to-camel-case(bytes($byte' $byte*))
+
+[to-camel-case-head-2]
+	is-digit($byte) == true
+	===
+	to-camel-case(bytes($byte $byte*)) = 
+		to-camel-case(bytes(byte(S) byte(o) byte(r) byte(t) byte(\-) $byte $byte*))
+
+[to-camel-case-after-space]
+	is-alpha($byte) == true,
+	is-lower($byte) == true,
+	$byte' := to-upper($byte)
+	===
+	to-camel-case(bytes($byte*1 byte(\ ) $byte $byte*2)) = 
+		to-camel-case(bytes($byte*1 byte(\ ) $byte' $byte*2))
+
+[default-to-camel-case-2]
+	to-camel-case($bytes) = $bytes
+
+
+equations
+
+[spaces-to-dashes-nil]
+	spaces-to-dashes(bytes()) = bytes()
+
+[spaces-to-dashes-cons-1]
+	is-space($byte) == true,
+	bytes($byte*') := spaces-to-dashes(bytes($byte*))
+	===
+	spaces-to-dashes(bytes($byte $byte*)) = bytes(byte(\-) $byte*')
+
+[spaces-to-dashes-cons-2]
+	is-space($byte) == false,
+	bytes($byte*') := spaces-to-dashes(bytes($byte*))
+	===
+	spaces-to-dashes(bytes($byte $byte*)) = bytes($byte $byte*')
+
+equations
+
+[bytes-to-sort-0]
+	bytes-to-sort(bytes(byte($head))) = sort($head)
+
+[bytes-to-sort-1]
+	bytes-to-sort(bytes(byte($head) byte($last))) = sort($head $last)
+
+[bytes-to-sort-2]
+	sort(A $middle* z) := bytes-to-sort(bytes(byte(A) $byte* byte(z)))
+	===
+	bytes-to-sort(bytes(byte($head) byte($middle) $byte* byte($last))) =
+		sort($head $middle $middle* $last)
+
+tests
+
+[bytes-to-sort-no-middle]
+	bytes-to-sort(bytes(byte(A) byte(z))) == Az
+
+
+[bytes-to-sort-with-middle]
+	bytes-to-sort(bytes(byte(A) byte(\-) byte(a) byte(0) byte(\-) byte(z))) == A-a0-z
+
+[bytes-to-sort-single]
+	bytes-to-sort(bytes(byte(A))) == A
+
+[bytes-to-sort-number]
+	bytes-to-sort(bytes(byte(0) byte(A))) == Sort-0A
+
+equations
+
+[terminal-to-literal-top]
+	terminal-to-literal($terminal) = unparse-to-string($terminal)
+

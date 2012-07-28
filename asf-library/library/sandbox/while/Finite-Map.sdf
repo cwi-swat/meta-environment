@@ -1,0 +1,20 @@
+module Finite-Map[Source Target Tuple Map]
+
+imports Layout
+
+exports
+
+sorts Map
+
+context-free syntax
+
+Map Source -> Target
+
+"[" Source "->" Target "]" -> Tuple
+Tuple* -> Map
+
+hiddens
+variables
+"map"[0-9\']* -> Tuple*
+"src"[0-9\']* -> Source
+"trg"[0-9\']* -> Target

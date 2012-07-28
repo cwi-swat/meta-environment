@@ -1,0 +1,12 @@
+, |- (
+begin 
+	var x := 11;
+	var y := 1;
+	begin 
+		var y := 11;
+		proc bla is y := 111 corp;
+		x:= 111;
+		call bla
+	end
+end
+, )

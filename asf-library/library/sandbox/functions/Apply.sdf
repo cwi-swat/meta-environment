@@ -1,0 +1,17 @@
+module functions/Apply[A B]
+
+exports
+
+context-free syntax
+
+(A => B) "$" A -> B
+"app" -> ((A => B) A => B)
+
+hiddens
+
+imports basic/Whitespace
+
+variables
+
+"f" -> (A=>B)
+"A" -> A

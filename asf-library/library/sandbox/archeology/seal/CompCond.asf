@@ -1,0 +1,86 @@
+equations
+
+[1a]    comp-cond ( focus _Moves' is-meta-var ) =
+                (#:SEAL:focus-is-meta-var comp-filename() comp-moves(_Moves') SEAL)
+
+[1b]    comp-cond ( focus is-meta-var ) =
+                (#:SEAL:focus-is-meta-var comp-filename() () SEAL)
+
+[1c]    comp-cond ( _Ufn' . focus is-meta-var ) =
+                (#:SEAL:focus-is-meta-var _Ufn' () SEAL)
+
+[1d]    comp-cond ( _Ufn' . focus _Moves' is-meta-var ) =
+                (#:SEAL:focus-is-meta-var _Ufn' comp-moves(_Moves') SEAL)
+
+[3a]    comp-moves(_Move') = (make-symbol("list") '_Move')
+
+[3b]    _S_expr_list' = add-moves(_Moves')
+        =================================
+        comp-moves(_Move', _Moves') = (make-symbol("list") '_Move' _S_expr_list')
+
+[4a]    comp-cond( _Cpart' and _Cpart'' ) =
+                (make-symbol("and") comp-cond(_Cpart') comp-cond(_Cpart''))
+
+[4b]    comp-cond( _Cpart' or _Cpart'' ) =
+                (make-symbol("or") comp-cond(_Cpart') comp-cond(_Cpart''))
+
+[4c]    comp-cond( not _Cpart') =(make-symbol("not") comp-cond(_Cpart'))
+
+[5a]    comp-cond(focus is sort(Cs')) =
+                (#:SEAL:focus-sort-is comp-filename() () symbol(""" Cs' """) SEAL)
+
+[5b]    comp-cond(focus _Moves' is sort(Cs')) =
+                (#:SEAL:focus-sort-is comp-filename() comp-moves(_Moves') symbol(""" Cs' """) SEAL)
+
+[5c]    comp-cond(_Ufn' . focus is sort(Cs')) =
+                (#:SEAL:focus-sort-is _Ufn' () symbol(""" Cs' """) SEAL)
+
+[5d]    comp-cond(_Ufn' . focus _Moves' is sort(Cs')) =
+                (#:SEAL:focus-sort-is _Ufn' comp-moves(_Moves') symbol(""" Cs' """) SEAL)
+
+[6a]    comp-cond(focus matches _Str') =
+                (#:SEAL:focus-matches-pattern comp-filename() () _Str' SEAL)
+
+[6b]    comp-cond(focus _Moves' matches _Str') =
+                (#:SEAL:focus-matches-pattern comp-filename() comp-moves(_Moves') _Str' SEAL)
+
+[6c]    comp-cond(_Ufn' . focus matches _Str') =
+                (#:SEAL:focus-matches-pattern _Ufn' () _Str' SEAL)
+
+[6d]    comp-cond(_Ufn' . focus _Moves' matches _Str') =
+                (#:SEAL:focus-matches-pattern _Ufn' comp-moves(_Moves') _Str' SEAL)
+
+[7a]    comp-cond(module(Cs') : function-name(Cs'') () ) =
+                (#:SEAL:reduce-condition
+                   symbol(""" Cs' """)
+                   symbol(""" Cs'' """)
+                   ()
+                   make-symbol("ui-item")
+                   SEAL
+                )
+
+[7b]    comp-cond(module(Cs') : function-name(Cs'') ( _FC-exprs' ) ) =
+                (#:SEAL:reduce-condition
+                   symbol(""" Cs' """)
+                   symbol(""" Cs'' """)
+                   comp-focus-exprs(_FC-exprs')
+                   make-symbol("ui-item")
+                   SEAL
+                )
+
+[8a]    _S_expr_list'' = comp-filename(),
+        _S_expr_list''' = add-moves(_Moves'),
+        _S_expr_list'''' = _S_expr_list'' _S_expr_list'''
+        ============================
+        comp-focus-exprs(focus _Moves') = (make-symbol("list") '(_S_expr_list''''))
+
+[8b]    _S_expr_list'' = _Ufn',
+        _S_expr_list''' = add-moves(_Moves'),
+        _S_expr_list'''' = _S_expr_list'' _S_expr_list'''
+        ============================
+        comp-focus-exprs(_Ufn' . focus _Moves') =
+                (make-symbol("list") '(_S_expr_list''''))
+
+[8c]    comp-focus-exprs(focus) = (make-symbol("list") '(comp-filename()))
+
+[8d]    comp-focus-exprs(_Ufn' . focus) = (make-symbol("list") '(_Ufn'))

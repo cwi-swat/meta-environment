@@ -1,0 +1,33 @@
+module languages/xml/utils/Attributes
+exports
+  imports languages/xml/syntax/XML
+  imports basic/IntCon
+  imports basic/StrCon
+
+  sorts X-AttValue X-AttValueD
+
+  context-free start-symbols 
+    Document X-AttValue 
+
+  context-free syntax
+    "<|" | "|>"                  -> CharData {reject}
+    "<|" AttValue "|>"           -> X-AttValue
+    "<|" AttValueD "|>"          -> X-AttValueD
+     intcon2attvalue(Integer)    -> X-AttValue
+     strcon2attvalue(StrCon)     -> X-AttValue
+
+hiddens
+  variables
+    "&N" [0-9\']*                -> NatCon
+  
+
+  lexical variables
+     "&D"                        -> [0-9]
+     "&Ds"                       -> [0-9]+
+     "&AVchars"  [0-9\']*        -> (AV-CharD | Reference)*
+     "&AVcharsS"                 -> (AV-CharS | Reference)*
+
+     "&StrChar"                  ->  StrChar
+     "&StrChars"                 -> StrChar+
+ 
+     "&StrCharRestricted"        -> ~[\&\<\"] /\ ~[\0-\31\n\t\"\\]

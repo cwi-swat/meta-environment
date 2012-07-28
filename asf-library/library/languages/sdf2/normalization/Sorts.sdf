@@ -1,0 +1,10 @@
+module languages/sdf2/normalization/Sorts
+imports
+        languages/sdf2/syntax/Sorts
+        languages/sdf2/normalization/Kernel
+
+hiddens
+  variables
+    [p]"*"[0-9\']*    -> Production*
+    "'"[s][0-9\']*    -> Sort*
+    "'"[a][0-9\']*    -> Symbol*

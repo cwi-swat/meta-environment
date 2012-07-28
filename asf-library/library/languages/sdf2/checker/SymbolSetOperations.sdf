@@ -1,0 +1,23 @@
+module languages/sdf2/checker/SymbolSetOperations
+
+imports languages/sdf2/syntax/Sdf2 basic/Booleans
+
+exports 
+  sorts SymbolsSet
+
+exports
+  context-free syntax
+    symbols(Symbol*)              -> SymbolsSet
+    diff(SymbolsSet, SymbolsSet)  -> SymbolsSet
+    add(Symbol, SymbolsSet)       -> SymbolsSet
+    merge(SymbolsSet, SymbolsSet) -> SymbolsSet
+    contains(Symbol, SymbolsSet)  -> Boolean
+    get(Symbol, SymbolsSet)       -> Symbol
+
+hiddens
+  variables
+    "SymbolPair"[0-9]*      -> Symbol
+    "SymbolsSet"[0-9]*      -> SymbolsSet
+    "$Symbol*"[0-9]*        -> Symbol*
+    "SymbolPair*"[0-9]*     -> Symbol*
+    "$Symbol"[0-9]*         -> Symbol

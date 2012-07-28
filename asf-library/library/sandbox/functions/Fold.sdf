@@ -1,0 +1,24 @@
+module functions/Fold[A B]
+
+imports containers/List[A]
+
+exports
+
+context-free syntax
+
+fold -> ((A B => B) B List[[A]] => B)
+foldr -> ((A B => B) B List[[A]] => B)
+foldl -> ((B A => B) B List[[A]] => B)
+
+hiddens
+
+sorts B A List[[A]]
+
+imports basic/Whitespace
+
+variables
+
+"A" -> A
+"B" -> B
+"f" -> (A B => B)
+"f" -> (B A => B)

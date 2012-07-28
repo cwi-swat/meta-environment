@@ -1,0 +1,50 @@
+module Choices
+
+imports Choice-Constant
+
+exports 
+
+context-free syntax
+
+{Choice ","}* -> Choices
+
+%% Note: The list of choices may be empty. As a consequence,
+
+%% inspect expr
+%% when then
+%%     do_something
+%% ...
+
+%% although meaningless, is syntactically correct. It can be thought of as
+
+%% if False then
+%% do_something
+%% ...
+
+%% However, this is not part of the recommended style.
+
+Choice-Constant | Interval -> Choice
+
+%% Note: The standard syntax specifies Constant instead of
+%% Choice_constant. However the validity rule VOMB-1-2 states that the
+%% Constant in Choice and Interval is only of type INTEGER or CHARACTER.
+
+Choice-Constant ".." Choice-Constant -> Interval
+
+
+%% Note: The lexical analyzer has to be smart enough in the following
+%% example:
+
+%% inspect expr
+%% when 1..2 then
+%% ...
+
+%% Indeed, '1..2' should be recognized as the two integer constants '1'
+%% and '2' separated by the Eiffel symbol '..', instead of as two
+%% consecutive real constants '1.' and '.2'. Visual Eiffel erroneously
+%% emits a syntax error when parsing the example above.
+
+
+
+
+

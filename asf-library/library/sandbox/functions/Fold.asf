@@ -1,0 +1,9 @@
+equations
+
+[] fold = foldr
+
+[] foldr(f B []) = B
+[] foldr(f B [A,T]) = f(A foldr(f B [T]))
+
+[] foldl(f B []) = B
+[] foldl(f B [A,T]) = foldl(f f(B A) [T])

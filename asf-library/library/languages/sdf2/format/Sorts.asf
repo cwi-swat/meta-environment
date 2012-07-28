@@ -1,0 +1,7 @@
+equations
+
+[] Sort [[ Symbol+ ]] = <H hs=0 [[Sort] "[[" H hs=0 [SL op=H hs=0 [[Symbol+]]] "]]"  ] >
+
+equations
+
+[] sorts Symbol* = <H ["sorts" HV [{Symbol*}]] >  

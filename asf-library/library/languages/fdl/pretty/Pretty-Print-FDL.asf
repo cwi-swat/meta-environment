@@ -1,0 +1,102 @@
+equations
+
+[pretty-print-fdl-top]
+	pretty-print-fdl($featurediagram) = $featurediagram
+
+[featurediagram2box-1]	
+	$featuredefinition* $constraint* =
+		box2featurediagram(
+		V vs=1 [ 
+			Vlist2box($featuredefinition*)
+			Vlist2box($constraint*)
+		]	
+		)
+
+[featuredefinition2box-1]
+	$featurename : $featureexpression =
+		box2featuredefinition(
+		V[
+		Hhs=0[featureexpression2box($featurename) ":"]
+			I[featureexpression2box($featureexpression)]
+		]
+		)
+
+[featureexpression2box-1]
+	atomicfeature($char+) = box2featureexpression(strcon("""$char+"""))
+
+[featureexpression2box-2]
+	featurename($char+) = box2featureexpression(strcon("""$char+"""))
+
+[featureexpression2box-3]
+	$featureexpression ? = 
+		box2featureexpression(
+		H hs=0 [featureexpression2box($featureexpression) KW["?"]]
+		)
+
+[featureexpression2box-4]
+	... = box2featureexpression("...")
+
+[featureexpression2box-5]
+	default = $atomicfeature =
+		box2featureexpression(
+		H hs=1 [KW["default"] "=" featureexpression2box($atomicfeature)]
+		)
+
+[featureexpression2box-6]
+	all($featureexpression+) =
+		box2featureexpression(
+		H hs=0 [KW["all"] "(" Hlist2box($featureexpression+) ")"]
+		)
+
+[featureexpression2box-8]
+	one-of($featureexpression+) =
+		box2featureexpression(
+		H hs=0 [KW["one-of"] "(" Hlist2box($featureexpression+) ")"]
+		)
+
+[featureexpression2box-10]
+	more-of($featureexpression+) =
+		box2featureexpression(
+		H hs=0 [KW["more-of"] "(" Hlist2box($featureexpression+) ")"]
+		)
+
+[constraint2box-1]
+	$atomicfeature1 requires $atomicfeature2 = 
+		box2constraint(
+			Hhs=1[
+			featureexpression2box($atomicfeature1)
+			KW["requires"]
+			featureexpression2box($atomicfeature2)
+			]
+		)
+
+[constraint2box-2]
+	$atomicfeature1 excludes $atomicfeature2 = 
+		box2constraint(
+			Hhs=1[
+			featureexpression2box($atomicfeature1)
+			KW["excludes"]
+			featureexpression2box($atomicfeature2)
+			]
+		)
+
+[constraint2box-3]
+	include $atomicfeature = 
+		box2constraint(
+			Hhs=1[
+			KW["include"]
+			featureexpression2box($atomicfeature)
+			]
+		)
+
+
+[constraint2box-4]
+	exclude $atomicfeature = 
+		box2constraint(
+			Hhs=1[
+			KW["exclude"]
+			featureexpression2box($atomicfeature)
+			]
+		)
+
+

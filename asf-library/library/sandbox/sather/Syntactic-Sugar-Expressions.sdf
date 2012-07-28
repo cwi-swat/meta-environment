@@ -1,0 +1,29 @@
+module Syntactic-Sugar-Expressions
+
+imports Array-Creation-Expressions
+
+exports
+
+sorts Expression
+
+context-free syntax
+	"-" Expression -> Expression {avoid}
+	Expression? "[" Expression-List "]" -> Expression
+	"(" Expression ")" -> Expression {bracket}
+
+	Expression "+" Expression -> Expression {assoc}
+	Expression "-" Expression -> Expression {left}
+	Expression "*" Expression -> Expression {assoc}
+	Expression "/" Expression -> Expression {left}
+	Expression "^" Expression -> Expression {left}
+	Expression "%" Expression -> Expression {left}
+
+	%% I take it to be a mistake that ~ is a binary op.
+	"~" Expression -> Expression
+
+	Expression "<" Expression -> Expression {left}
+	Expression "<=" Expression -> Expression {left}
+	Expression "=" Expression -> Expression {left}
+	Expression "/=" Expression -> Expression {left}
+	Expression ">" Expression -> Expression {left}
+	Expression ">=" Expression -> Expression {left}

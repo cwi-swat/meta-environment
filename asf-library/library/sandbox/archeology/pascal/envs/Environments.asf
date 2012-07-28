@@ -1,0 +1,25 @@
+equations
+
+  [d2]  [ Fields1, (errors, Err*), Fields2 ].errors = Err*
+  [d3]  [ Fields1, (result, C), Fields2 ].result = C
+  [d4]  [ Fields1, (context, C), Fields2 ].context = C
+  [d5]  [ Fields1, (construct, _c), Fields2 ].construct = _c
+                         
+  [a1]  set-result of Env1 to [error-entry] = Env2,
+        Env2 = [Fields1, (errors, Err*), Fields2]
+        =======================================
+        add-error [Error] to Env1 =
+          [Fields1, (errors, Err* Env1.construct : Error), Fields2]
+
+  [a2]  leave inner block of [Fields1, (context, C), Fields2] =
+          [Fields1, (context, delete inner block of C), Fields2]
+  [a3]  [Fields1, (context, C), Fields2] + Entry =
+          [Fields1, (context, add Entry to C), Fields2]
+  [a4]  set-result of [Fields1, (result, C1), Fields2] to C2 = 
+          [Fields1, (result, C2), Fields2]
+  [a5]  set-construct of [Fields1, (construct, _c1), Fields2] to "_c2" = 
+          [Fields1, (construct, _c2), Fields2]
+  [a6]  set-context of [Fields1, (context, C1), Fields2] to C2 = 
+          [Fields1, (context, C2), Fields2]   
+
+  [c1]  new-env = [(construct,),(context,init-block),(errors,),(result,[])]

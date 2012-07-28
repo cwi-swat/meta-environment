@@ -1,0 +1,10 @@
+module While-NS-Interpreter
+
+imports While-Nat-Sem
+
+exports
+
+sorts Configuration
+
+context-free syntax
+eval(Stms) -> Configuration

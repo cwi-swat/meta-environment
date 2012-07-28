@@ -1,0 +1,19 @@
+
+equations
+
+%% ------------------------------------------------------------------------- %%
+%% inst : instantiate a list of terms.                                       %%
+%%        variable bindings are annotated with `nv' to indicate that these   %%
+%%        are normal forms. (only true for innermost reduction strategies)   %%
+
+
+  [In1]  inst(_Id; _Bins) = _Id
+
+  [In2]  inst(_Var; (_Bin* _Var:_Term _Bin*')) = annotate-top(_Term; nf)
+
+  [In3]  inst(_Id(_Terms); _Bins) = _Id(inst(_Terms; _Bins))
+
+  [In4]  inst(_Term; _Bins) = _Term',
+         inst(_Term+; _Bins) = _Term+'
+         ==========================================
+         inst(_Term,_Term+; _Bins) = _Term',_Term+'

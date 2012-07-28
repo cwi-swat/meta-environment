@@ -1,0 +1,24 @@
+module functions/Map[A B]
+
+imports containers/List[A] 
+imports containers/List[B]
+
+exports
+
+context-free syntax
+
+map -> ((A => B) List[[A]] => List[[B]])
+
+hiddens
+
+imports
+  basic/Whitespace
+
+hiddens sorts A B List[[A]] List[[B]]
+variables
+
+"f" -> (A => B)
+"A" -> A
+"B"   -> B
+
+

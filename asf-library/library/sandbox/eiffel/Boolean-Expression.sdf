@@ -1,0 +1,15 @@
+module Boolean-Expression
+
+exports
+
+context-free syntax
+
+Expression -> Boolean-Expression
+
+
+
+
+%% Note: The validity rule VWBE states that a boolean expression must be
+%% of type BOOLEAN. This could eventually be partially enforced in the
+%% syntax by discarding Manifest_array, Strip and all non-boolean
+%% Manifest_constants.

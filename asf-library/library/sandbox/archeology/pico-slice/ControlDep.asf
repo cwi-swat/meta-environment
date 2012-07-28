@@ -1,0 +1,59 @@
+
+equations
+
+
+%% cd: Determine the control dependences in a labeled Pico program.
+
+    [Cd1]  Edge*  = cd(L_Series),
+           Edge*' = mk-list(control-true, entry, all-nn-refs(L_Series))
+           ============================================================
+           cd(begin Decls L_Series end) = Edge* Edge*'
+
+    [Cd2]  cd(Ref Id := Exp; L_Stat*) = cd(L_Stat*)
+
+    [Cd3]  Edge*       = mk-list(control-true, Ref, all-nn-refs(L_Series)),
+           Edge*'      = mk-list(control-false, Ref, all-nn-refs(L_Series')),
+           Edge*''     = cd(L_Series),
+           Edge*'''    = cd(L_Series'),
+           Edge*''''   = cd(L_Stat*)
+           =========================================================
+           cd(Ref if Exp then L_Series else L_Series' fi; L_Stat*) =
+             Edge* Edge*' Edge*'' Edge*''' Edge*''''
+
+    [Cd4]  Edge*        = mk-list(control-true, Ref, all-nn-refs(L_Series)),
+           Edge*'       = cd(L_Series),
+           Edge*''      = cd(L_Stat*)
+           ================================================================
+           cd(Ref while Exp do L_Series od; L_Stat*) = Edge* Edge*' Edge*''
+
+    [Cd5]  cd() =
+
+%% all-refs: Get all references in a series of labeled Pico statements.
+
+    [Ar1]  all-refs() =
+
+    [Ar2]  all-refs(L_Stat*) = Node*
+           ============================================
+           all-refs(Ref Id := Exp; L_Stat*) = Ref Node*
+
+    [Ar3]  all-refs(L_Series) = Node*,
+           all-refs(L_Stat*) = Node*'
+           ==================================================================
+           all-refs(Ref while Exp do L_Series od; L_Stat*) = Ref Node* Node*'
+
+    [Ar4]  all-refs(L_Series) = Node*,
+           all-refs(L_Series') = Node*',
+           all-refs(L_Stat*) = Node*''
+           ===============================================================
+           all-refs(Ref if Exp then L_Series else L_Series' fi; L_Stat*) =
+             Ref Node* Node*' Node*''
+
+%% all-nn-refs: Determine all references of a series of labeled Pico-statements.
+%%              does not descend into ifs and whiles
+
+    [ANN1] all-nn-refs() =
+
+    [ANN2] Node  = get-ref(L_Stat),
+           Node* = all-nn-refs(L_Stat*)
+           =========================================
+           all-nn-refs(L_Stat; L_Stat*) = Node Node*

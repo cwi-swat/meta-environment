@@ -1,0 +1,34 @@
+equations
+
+[] module ModId SignatureOpt RulesOpt = <V vs=2 [ H ["module" [ModId]] [SignatureOpt] [RulesOpt]]>
+
+[] rules Rule* = <V ["rules" V vs=2 [[Rule*]]]>
+
+[] signature FuncDef* = <V ["signature" I [ HOV [SL op=H hs=0 [[FuncDef*]]]]]>
+
+equations
+
+[] FunId { Term+ } = <HV hs=0 [[FunId] H hs=0 ["{" SL op=H [[Term+]] "}"]]>
+
+[] FunId (SigArg+) { Term+ } = <HV hs=1 [ HOV hs=0 [ H hs=0 [[FunId] "("] I [ H [ SL op=H hs=0 [[SigArg+]]]] ")"]
+                                         I [H hs=0 ["{" H [SL op=H [[Term+]]] "}"]]]>
+
+equations
+
+[] [FunId] = <H hs=0 ["[" [FunId] "]" ]>
+[] {FunId} = <H hs=0 ["{" [FunId] "}" ]>
+[] {FunId NatCon} = <H hs=0 ["{" H [[FunId] [NatCon]] "}" ]>
+
+equations
+
+[] $ FunId = <H hs=0 ["$" [FunId]]>
+[] $+ FunId = <H hs=0 ["$+" [FunId]]>
+[] $* FunId = <H hs=0 ["$*" [FunId]]>
+
+equations
+
+[] FunId(Term+) = <HOV hs=0 [H hs=0 [[FunId] "("] I is=2 [ HOV hs=1 [SL op=H hs=0 [[Term+]]]] ")"]> 
+
+equations
+
+[] Term1:Term2 = <H hs=0 [[Term1] ":" [Term2]]>

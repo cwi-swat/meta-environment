@@ -1,0 +1,124 @@
+equations
+
+[sorting-relation-top]
+	$relation := composite-dependency-relation($featurediagram, {}),
+	$relation' := sorting-relation($featurediagram, $relation)
+	===
+	sorting-relation($featurediagram) = $relation'
+
+
+equations
+
+[sorting-relation-trv]
+	sorting-relation($featureexpression+, $relation) =
+		argument-order($featureexpression+, $relation)
+
+equations
+
+[argument-order-many-1] %% Hack
+	{$featureexpression*} := { 			
+			$featureexpression*0,
+			$featureexpression*1
+			}
+	===
+	argument-order(
+		$featureexpression*0, 	
+		$featurename, 
+		$featureexpression*1, 
+		$featurename',
+		$featureexpression*2, 
+	$relation) =
+	union({<$featurename, $featurename'>}, 
+		argument-order(
+			$featureexpression*,
+			$featurename',
+			$featureexpression*2,
+			$relation
+		)
+	)
+
+[default-argument-order-2]
+	argument-order($featureexpression+, $relation) = $relation
+
+equations
+
+[dependency-relation-trv]
+	$bag := used-features($featureexpression)
+	===
+	dependency-relation($featurename: $featureexpression, $rel) =
+		union($rel, product({$featurename}, $bag))
+
+equations
+
+[composite-dependency-relation-trv]
+	$bag := used-composite-features($featureexpression)
+	===
+	composite-dependency-relation($featurename: $featureexpression, $rel) =
+		union($rel, product({$featurename}, $bag))
+
+
+
+equations
+
+[defined-composite-features-top]
+	defined-composite-features($featurediagram) = 
+		defined-composite-features($featurediagram, {})
+
+equations
+
+[defined-composite-features-trv]
+	defined-composite-features($featurename: $featureexpression, $def) =
+		union({$featurename}, $def)
+
+equations
+
+[used-composite-features-trv]
+	used-composite-features($featurename, $use) = 
+		union({$featurename}, $use)
+
+equations
+
+%% Convenience function
+[used-composite-features-top]
+	used-composite-features($featureexpression) =
+		used-composite-features($featureexpression, {})
+
+
+equations
+
+[used-atomic-features-trv-1]
+	$atomicfeature != ...
+	===
+	used-atomic-features($atomicfeature, $use) = 
+		union({$atomicfeature}, $use)
+
+[used-atomic-features-trv-2]
+	used-atomic-features(default = $atomicfeature, $use) = 
+		union({default = $atomicfeature}, $use)
+
+
+equations
+
+%% Convenience function
+[used-atomic-features-top]
+	used-atomic-features($featureexpression) =
+		used-atomic-features($featureexpression, {})
+
+
+equations
+
+%% Convenience function
+[used-features-top]
+	$bag1 := used-atomic-features($featurediagram, {}),
+	$bag2 := used-composite-features($featurediagram, $bag1)
+	===
+	used-features($featurediagram) = $bag2
+
+equations
+
+%% Convenience function
+[used-features-top]
+	$bag1 := used-atomic-features($featureexpression, {}),
+	$bag2 := used-composite-features($featureexpression, $bag1)
+	===
+	used-features($featureexpression) = $bag2

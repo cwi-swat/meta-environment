@@ -1,0 +1,3 @@
+equations
+
+  [rl-1'1] remove-labels($Label: Symbol) = remove-labels(Symbol)

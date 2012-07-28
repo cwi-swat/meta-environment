@@ -1,0 +1,35 @@
+module languages/asf/compiler/format/C
+
+imports languages/asf/compiler/c/C
+imports languages/box/syntax/Box
+
+hiddens
+
+context-free syntax
+"[" Statement+ "]" -> Box* {to-box}
+
+context-free syntax
+"<" Box ">"       -> Statement {from-box}
+
+context-free syntax
+"[" Declaration+ "]" -> Box* {to-box}
+
+context-free syntax
+"[" {Expression ","}* "]" -> Box* {to-box}
+
+context-free syntax
+"<" Box ">"         -> Declaration
+
+context-free syntax
+"<" Box ">" -> Expression {from-box}
+
+"[" Expression "]" -> Box {to-box}
+
+variables
+"Decls?"           -> Declaration-list-opt
+"Stats?"           -> Statement-list-opt
+"Decl+"            -> Declaration+
+"Statement*"[0-9]* -> Statement*
+"Statement"[0-9]*  -> Statement
+"Id"[0-9]* -> Identifier
+"Expr*"[0-9]* -> {Expression ","}*

@@ -1,0 +1,8 @@
+module Boolean-Literal-Expressions
+
+exports
+
+sorts Bool-Literal-Expression
+
+context-free syntax
+	"true" | "false" -> Bool-Literal-Expression

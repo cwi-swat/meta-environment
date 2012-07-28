@@ -1,0 +1,6 @@
+equations
+
+[Main-1] LS := runall(Commands, newLogoState),
+       Lines := LS.lines
+       ==========================================================
+       start(Commands, Commands) = start(Document, toSVG(Lines))

@@ -1,0 +1,21 @@
+module Py-Main
+
+imports Py-Statements Py-Layout
+
+exports
+
+sorts File-input Interactive-input Eval-input Input-input
+
+context-free syntax
+	Statement 	-> Input-part
+	NEWLINE 	-> Input-part
+	Input-part* 	-> File-input
+
+	Stmt-list? NEWLINE 	-> Interactive-input
+	Compound-stmt NEWLINE 	-> Interactive-input
+	
+	Expression-list NEWLINE* 	-> Eval-input
+	Expression-list NEWLINE 	-> Input-input
+
+
+

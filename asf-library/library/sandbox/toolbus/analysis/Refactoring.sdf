@@ -1,0 +1,31 @@
+module Refactoring
+
+imports Rstore
+imports Tscript
+imports MyPosInfo[Var]
+
+imports basic/Strings
+
+exports
+  context-free syntax
+    remove-unused-variables(Tscript, Elem) -> Tscript
+
+    remove-unused-variable(Tscript, Area)
+    -> Tscript {traversal(trafo, top-down, break)}
+
+    remove-unused-variable(ProcessBody, Area)
+    -> ProcessBody {traversal(trafo, top-down, break)}
+
+    remove-unused-variable(VarDecls, Area)
+    -> VarDecls {traversal(trafo, top-down, break)}
+
+variables
+  "$Area" -> Area
+  "$Elems"[0-9]* -> {Elem ","}*
+  "$ProcessExpr"[0-9]* -> ProcessExpr
+  "$String"[0-9]* -> String
+  "$Term" -> Term
+  "$Tscript"[0-9]* -> Tscript
+  "$Var"[0-9]* -> Var
+  "$VarDecls"[0-9]* -> VarDecls
+  "$VarDecl*"[0-9]* -> {VarDecl ","}*

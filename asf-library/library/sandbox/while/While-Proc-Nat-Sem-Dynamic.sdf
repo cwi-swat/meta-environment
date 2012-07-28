@@ -1,0 +1,16 @@
+module While-Proc-Nat-Sem-Dynamic
+
+imports Declared-Vars BExpr-Sem
+	While-Proc-Syntax
+	Procedure-Environment
+
+exports
+
+sorts Proc-Configuration
+
+context-free syntax
+
+update-v(VDecls, State) -> State
+
+Proc-Env "|-" "(" Stms "," State ")"  -> Proc-Configuration
+State -> Proc-Configuration

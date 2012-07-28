@@ -1,0 +1,241 @@
+equations
+
+[top-level]
+	start(FeatureDiagram, $featurediagram) = start(Document, featurediagram-to-swixml($featurediagram))
+
+equations
+
+[feature-diagram-to-swixml-top]
+        featurediagram-to-swixml($featurediagram) =
+		features-to-swixml($featurediagram, <panel Layout="gridlayout(2,2,-1,-1)"></panel>)
+
+equations
+
+[features-to-swixml-trv-top]
+        $attvalue := featurename-to-attvalue($featurename),
+        $attvalue' := concat-attvalues("TitledBorder(", $attvalue),
+        $attvalue'' := concat-attvalues($attvalue', ")"),
+%%        $element' := <hbox constraints="BorderLayout.WEST" border=$attvalue''></hbox>
+        $element' := <hbox border=$attvalue''></hbox>
+        ===
+        features-to-swixml($featurename : $featureexpression, $stag $content* $etag) =
+		$stag
+		$content*
+		featureexpression-to-widgets($featureexpression, $element')
+		$etag
+
+equations
+
+[featureexpression-to-widgets-1]
+	$element := features-to-radiobuttons($featureexpression+, <buttongroup></buttongroup>)
+	===
+        	featureexpression-to-widgets(one-of($featureexpression+), $stag $content* $etag) =
+		$stag $content* $element $etag
+
+[featureexpression-to-widgets-2]
+	$element' := features-to-checkboxes($featureexpression+, $element)
+	===
+        	featureexpression-to-widgets(more-of($featureexpression+), $element) =
+		$element'
+
+[featureexpression-to-widgets-3]
+	$element' := features-to-labels($featureexpression+, $element)
+	===
+        	featureexpression-to-widgets(all($featureexpression+), $element) =
+		$element'
+
+equations
+
+[feature-to-radiobutton-1]
+	$attvalue := atomicfeature-to-attvalue($atomicfeature)
+	===
+	feature-to-radiobutton($atomicfeature, $stag $content* $etag) =
+		$stag 
+		$content*	
+		<radiobutton name=$attvalue label=$attvalue/>
+		$etag 
+
+[feature-to-radiobutton-2]
+	$attvalue := atomicfeature-to-attvalue($atomicfeature)
+	===
+	feature-to-radiobutton($atomicfeature ?, $stag $content* $etag) =
+		$stag 
+		$content*	
+		<checkbox name=$attvalue label=$attvalue/>
+		$etag 
+
+equations
+
+[features-to-radiobuttons-single]
+	features-to-radiobuttons($featureexpression, $element) =
+		feature-to-radiobutton($featureexpression, $element)
+
+[features-to-radiobuttons-multi]
+	$element' := features-to-radiobuttons($featureexpression, $element),
+	$element'' := features-to-radiobuttons($featureexpression+, $element')
+	===
+	features-to-radiobuttons($featureexpression, $featureexpression+, $element) =
+		$element''
+
+
+
+equations
+
+[features-to-checkboxes-single]
+	features-to-checkboxes($featureexpression, $element) =
+		feature-to-checkbox($featureexpression, $element)
+
+[features-to-checkboxes-multi]
+	$element' := features-to-checkboxes($featureexpression, $element),
+	$element'' := features-to-checkboxes($featureexpression+, $element')
+	===
+	features-to-checkboxes($featureexpression, $featureexpression+, $element) =
+		$element''
+
+
+equations
+
+[feature-to-checkbox-1]
+	$attvalue := atomicfeature-to-attvalue($atomicfeature)
+	===
+	feature-to-checkbox($atomicfeature, $stag $content* $etag) =
+		$stag
+		$content*
+		<checkbox name=$attvalue label=$attvalue/>
+		$etag
+
+
+[feature-to-checkbox-2]
+	$attvalue := featurename-to-attvalue($featurename)
+	===
+	feature-to-checkbox($featurename, $stag $content* $etag) =
+		$stag
+		$content*
+		<checkbox name=$attvalue label=$attvalue/>
+		$etag
+
+equations
+
+[features-to-labels-single]
+	features-to-labels($featureexpression, $element) = feature-to-label($featureexpression, $element)
+
+[features-to-labels-multi]
+	$element' := features-to-labels($featureexpression, $element),
+	$element'' := features-to-labels($featureexpression+, $element')
+	===
+	features-to-labels($featureexpression, $featureexpression+, $element) =
+		$element''
+		
+
+equations
+
+[feature-to-label-1]
+	$attvalue := atomicfeature-to-attvalue($atomicfeature)
+	===
+	feature-to-label($atomicfeature, $stag $content* $etag) =
+		$stag
+		$content*
+		<label name=$attvalue text=$attvalue/>
+		$etag
+
+[feature-to-label-2]
+	$attvalue := featurename-to-attvalue($featurename)
+	===
+	feature-to-label($featurename, $stag $content* $etag) =
+		$stag
+		$content*
+		<label name=$attvalue text=$attvalue/>
+		$etag
+
+[feature-to-label-3]
+	$attvalue := featurename-to-attvalue($featurename)
+	===
+	feature-to-label($featurename ?, $stag $content* $etag) =
+		$stag
+		$content*
+		<checkbox name=$attvalue text=$attvalue/>
+		$etag
+
+[feature-to-label-4]
+	$attvalue := atomicfeature-to-attvalue($atomicfeature)
+	===
+	feature-to-label($atomicfeature ?, $stag $content* $etag) =
+		$stag
+		$content*
+		<checkbox name=$attvalue text=$attvalue/>
+		$etag
+
+equations
+
+[atomicfeature-to-attvalue-single]
+	atomicfeature-to-attvalue(atomicfeature($atomic-head)) = 
+		attvalue(attvalued(\" av-chard($atomic-head) \"))
+
+[atomicfeature-to-attvalue-multi]
+	attvalue(attvalued(\" av-chard($av-chard) $rest \"))
+		 := atomicfeature-to-attvalue(atomicfeature(x $tail-char*))
+	=== 
+	atomicfeature-to-attvalue(atomicfeature($atomic-head $tail-char $tail-char*)) =  
+		attvalue(attvalued(\" av-chard($atomic-head) av-chard($tail-char) $rest \"))
+
+equations
+
+[featurename-to-attvalue-single]
+	featurename-to-attvalue(featurename($featurename-head)) = 
+		attvalue(attvalued(\" av-chard($featurename-head) \"))
+
+[featurename-to-attvalue-multi]
+	attvalue(attvalued(\" av-chard($av-chard) $rest \"))
+		 := featurename-to-attvalue(featurename(X $tail-char*))
+	=== 
+	featurename-to-attvalue(featurename($featurename-head $tail-char $tail-char*)) =  
+		attvalue(attvalued(\" av-chard($featurename-head) av-chard($tail-char) $rest \"))
+
+equations
+
+[concat-attvalues-top]
+	bytes($byte*1) := attvalue-to-bytes($attvalue1),
+	bytes($byte*2) := attvalue-to-bytes($attvalue2),
+	$attvalue := bytes-to-attvalue(bytes($byte*1 $byte*2))
+	===
+	concat-attvalues($attvalue1, $attvalue2) = $attvalue
+		
+equations
+
+[bytes-to-attvalue-nil]
+	bytes-to-attvalue(bytes()) = ""
+
+[bytes-to-attvalue-cons]
+	attvalue(attvalued(\" $rest \")) := bytes-to-attvalue(bytes($byte*))
+	===
+	bytes-to-attvalue(bytes(byte($av-chard) $byte*)) =
+		attvalue(attvalued(\" av-chard($av-chard) $rest \"))
+
+equations
+
+[attvalue-to-bytes-nil]
+	attvalue-to-bytes("") = bytes()
+
+
+[attvalue-to-bytes-cons]
+	bytes($byte*) := attvalue-to-bytes(attvalue(attvalued(\" $rest \")))
+	===
+	attvalue-to-bytes(attvalue(attvalued(\" av-chard($av-chard) $rest \"))) =
+		bytes(byte($av-chard) $byte*)
+
+tests
+
+[single]	atomicfeature-to-attvalue(a) == "a"
+
+[multi]	atomicfeature-to-attvalue(abc) == "abc"
+
+[many]	atomicfeature-to-attvalue(aBCdE) == "aBCdE"
+
+
+tests
+
+[single]	featurename-to-attvalue(A) == "A"
+
+[multi]	featurename-to-attvalue(Abc) == "Abc"
+
+[many]	featurename-to-attvalue(AbcDe) == "AbcDe"

@@ -1,0 +1,18 @@
+module Writable
+
+imports Identifier
+
+exports
+
+context-free syntax
+	Identifier | "Result" -> Writable
+
+
+%% Note: The Entity syntax group from the standard syntax specification
+%% has been very much simplified to resolved many ambiguities. For
+%% example, should:
+
+%% foo
+
+%% be recognized as an Attribute, a Local or a Formal? Only a semantic
+%% analysis can give the answer.

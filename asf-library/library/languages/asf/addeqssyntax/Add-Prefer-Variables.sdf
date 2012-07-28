@@ -1,0 +1,34 @@
+module languages/asf/addeqssyntax/Add-Prefer-Variables
+
+imports languages/sdf2/syntax/Sdf2
+
+exports
+  context-free syntax
+    "add-prefer-vars" "(" Module* ")" -> Definition
+
+hiddens
+  context-free syntax
+    "add-pv-for-modules" "(" Module* ")"       -> Definition
+    "add-pv-for-module" "(" Module ")"         -> Module
+    "add-pv-for-sections" "(" Section* ")"     -> Sections
+    "add-pv-for-section" "(" Section ")"       -> Section
+    "add-pv-for-grammar" "(" Grammar ")"       -> Grammar
+    "add-pv-for-variables" "(" Productions ")" -> Productions
+
+hiddens
+  variables
+    "Attrs"[0-9]*        -> Attributes
+    "ImpSection*"[0-9]*  -> ImpSection*
+    "Grammar"[0-9]*      -> Grammar
+    "ModName"[0-9]*      -> ModuleName
+    "Module"[0-9]*       -> Module
+    "Module*"[0-9]*      -> Module*
+    "Prio"[0-9]*         -> Priority
+    "Prio*"[0-9]*        -> {Priority ","}*
+    "Prod"[0-9]*         -> Production
+    "Prod*"[0-9]*        -> Production*
+    "Section"[0-9]*      -> Section
+    "Section*"[0-9]*     -> Section*
+    "Sort"[0-9]*        -> Sort
+    "Symbol"[0-9]*       -> Symbol
+    "Symbol*"[0-9]*      -> Symbol*

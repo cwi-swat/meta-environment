@@ -1,0 +1,110 @@
+module languages/asf/compiler/muasf2muasf/Optimize-Recursive-List-Functions
+
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+
+exports
+
+context-free syntax
+
+  %% This optimization locates certain recursive functions
+  %% over lists, transforms them and adds helper functions.
+  %% It is supposed to save time by removing the overhead
+  %% of matching and building constructor symbols between
+  %% recursive calls.
+
+  optimize-recursive-list-function(RuleList,FuncDefList, NameTable) -> 
+        <RuleList , FuncDefList , NameTable>
+
+  %% a lot of helper functions for the recursive-list optimization,
+  %% also some structures are needed for keeping intermediate results
+
+hiddens
+
+sorts Embedding EmbeddingAt FunIdHasEmbeddingAt RemoveOption
+
+context-free syntax
+
+  "unavailable" -> EmbeddingAt
+  "unavailable" -> FunIdHasEmbeddingAt
+  "[" FunId* "]" -> Embedding
+	Embedding "at" Integer -> EmbeddingAt
+  FunId "has" EmbeddingAt -> FunIdHasEmbeddingAt
+
+  call-helper-rules(RuleList, FunIdHasEmbeddingAt) -> RuleList
+  change-calls-rules(RuleList, FunIdHasEmbeddingAt) -> RuleList
+  change-calls-rule(Rule, FunIdHasEmbeddingAt) -> Rule
+
+  make-recursive-funid(FunId) -> FunId
+  make-helper-signature(FunIdHasEmbeddingAt, FuncDefList) -> FuncDef
+  add-name-to-nametable(FunIdHasEmbeddingAt, NameTable) -> NameTable
+
+  make-helper-rules(RuleList, FunIdHasEmbeddingAt) -> RuleList
+  remove-emb-rules(RuleList, FunIdHasEmbeddingAt) -> RuleList
+  remove-emb-rule(Rule, FunIdHasEmbeddingAt) -> Rule
+  remove-emb-side(Term, FunIdHasEmbeddingAt) -> Term
+  remove-emb-terms(TermList, FunIdHasEmbeddingAt) -> TermList
+  remove-emb-term(Term, FunIdHasEmbeddingAt) -> Term
+  remove-emb-conds(CondList, FunIdHasEmbeddingAt,RemoveOption) -> CondList
+  remove-emb-cond(Cond, FunIdHasEmbeddingAt,RemoveOption) -> Cond
+  remove-emb-args(TermList, EmbeddingAt) -> TermList
+  remove-emb-arg(Term, Embedding) -> Term
+
+  "remove-all"                    -> RemoveOption
+  "remove-only-in-recursive-args" -> RemoveOption
+
+  get-list-embedding(RuleList, NameTable) -> FunIdHasEmbeddingAt
+  
+  is-recursive(RuleList) -> Boolean
+  is-recursive(Rule) -> Boolean
+  term-calls-function(FunId, Term) -> Boolean
+  terms-call-function(FunId, TermList) -> Boolean
+  conds-call-function(FunId, CondList) -> Boolean
+  
+  find-list-arg(RuleList, NameTable) -> FunIdHasEmbeddingAt
+  find-la-rule(Rule, NameTable) -> FunIdHasEmbeddingAt
+  find-la-terms(TermList, NameTable, Integer) -> EmbeddingAt
+  find-la-term(Term) -> Embedding
+
+  are-constructors(Embedding, NameTable) -> Boolean
+  is-constructor(FunId, NameTable) -> Boolean 
+  is-list-injection(FunId, NameTable) -> Boolean 
+
+  check-emb-term(Term, Embedding) -> Boolean
+  check-emb-terms(TermList, EmbeddingAt) -> Boolean
+  check-emb-lhs-rule(Rule, FunIdHasEmbeddingAt) -> Boolean
+  check-emb-lhs-rules(RuleList, FunIdHasEmbeddingAt) -> Boolean
+
+  check-emb-rhs-rule(Rule, FunIdHasEmbeddingAt) -> Boolean
+  check-emb-rhs-rules(RuleList, FunIdHasEmbeddingAt) -> Boolean
+  check-emb-rhs-conds(CondList, FunIdHasEmbeddingAt) -> Boolean
+  check-emb-rhs-cond(Cond, FunIdHasEmbeddingAt) -> Boolean
+  check-emb-recursive-term(Term, FunIdHasEmbeddingAt) -> Boolean
+  check-emb-recursive-terms(TermList, FunIdHasEmbeddingAt) -> Boolean
+  
+  
+variables
+
+  "Rule+"[0-9]*    -> {Rule ";"}+
+  "FunId"[0-9]*    -> FunId
+  "FunId+"[0-9]*   -> FunId+
+  "FunId*"[0-9]*   -> FunId*
+  "SigArg"[0-9]*   -> SigArg
+  "SigArg+"[0-9]*  -> {SigArg ","}+
+  "Annotations"[0-9]* -> Annotations
+  "Embedding"[0-9]* -> Embedding
+  "EmbeddingAt"[0-9]* -> EmbeddingAt
+  "FunIdHasEmbeddingAt"[0-9]* -> FunIdHasEmbeddingAt
+  "Int"[0-9]*     -> Integer
+  "Nametable"[0-9]* -> NameTable
+  "Namepair*"[0-9]* -> {NamePair ","}*
+  "RemoveOption"[0-9]* -> RemoveOption
+  "Cond"[0-9]* -> Cond
+  "Cond+"[0-9]* -> {Cond "&"}+
+  "Cond*"[0-9]* -> {Cond "&"}*
+  "Bool"[0-9]* -> Boolean
+  "Funid"[0-9]* -> FunId
+
+lexical variables
+	"h"[0-9]* -> [A-Za-z]
+	"t"[0-9]* -> [A-Za-z0-9\-]*

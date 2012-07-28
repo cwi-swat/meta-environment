@@ -1,0 +1,12 @@
+equations
+
+  [] plus(0,n) = n
+  [] plus(s(n1), n2) = s(plus(n1,n2))
+
+  [] mult(0,n) = 0
+  [] mult(s(n1), n2) = plus(mult(n1,n2), n1)
+
+  [] lt(0, s(n)) = true
+  [] lt(s(n), 0) = false
+  [] lt(n, n)    = false
+  [default-1] lt(s(n1), s(n2)) = lt(n1, n2)

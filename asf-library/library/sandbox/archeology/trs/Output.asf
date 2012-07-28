@@ -1,0 +1,33 @@
+
+equations
+
+    [Out] emit(_Dummy) = OUTPUT
+       (let*
+         ((SM (send 'lang (send 'get-SM (send 'module #:EQM:sel))))
+          (theEQM (#:EQM:EQMsel:eqm #:EQM:sel))
+         (text
+           (#:EQM:tree:pretty theEQM
+             (#:EQM:tree:leximplode theEQM << _Dummy >>)
+           )
+         ))
+         (print)
+         (print text)
+         (print)
+         << _Dummy >>
+       )
+
+    [Out2] write(_Dummy) to _Str = OUTPUT
+       (let*
+         ((SM (send 'lang (send 'get-SM (send 'module #:EQM:sel))))
+          (theEQM (#:EQM:EQMsel:eqm #:EQM:sel))
+         (text
+           (#:EQM:tree:pretty theEQM
+             (#:EQM:tree:leximplode theEQM << _Dummy >>)
+           )
+         ))
+         (with ((outchan (opena (convert-lexical-to-lisp << _Str >>))))
+           (print text)
+           (close (outchan))
+         )
+         << _Dummy >>
+       )

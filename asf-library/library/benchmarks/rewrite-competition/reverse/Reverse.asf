@@ -1,0 +1,5 @@
+equations
+  
+  [] reverse(nil) = nil
+  [] reverse(l(e,l)) = conc(reverse(l),l(e,nil))
+

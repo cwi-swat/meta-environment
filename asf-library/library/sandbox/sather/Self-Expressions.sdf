@@ -1,0 +1,8 @@
+module Self-Expressions
+
+exports
+
+sorts Self-Expression
+
+context-free syntax
+	"self" -> Self-Expression

@@ -1,0 +1,18 @@
+equations
+
+  [c-1'1] contains(Symbol, $AFun, 
+                   constructors(SymbolCons*1 
+                                [Symbol, $AFun]
+                                SymbolCons*2)) = true 
+
+  [default-c-1'1] contains(Symbol, $AFun, ConstructorSet) = false
+
+  [a-1'1] add(Symbol, $AFun, constructors(SymbolCons*)) = 
+            constructors([Symbol, $AFun] SymbolCons*)
+
+equations
+
+%% Get may seem superfluous, but the found object may contain interesting annotations
+
+  [g-1] get($AFun, constructors(SymbolCons*1 [Symbol, $AFun2] SymbolCons*2)) = $AFun2
+        when $AFun == $AFun2

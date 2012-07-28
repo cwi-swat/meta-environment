@@ -1,0 +1,43 @@
+module languages/fdl/utilities/Solution-FDL
+
+imports basic/StrCon
+	languages/fdl/utilities/Extended-FDL
+
+hiddens
+context-free start-symbols Formula FeatureDiagram
+
+exports
+
+sorts Selection
+
+context-free syntax
+	StrCon -> FeatureName {category("MetaVariable")}
+
+	{FeatureName ","}* -> Selection
+	eval-bdd(Formula, Selection) -> Formula {traversal(bottom-up, trafo, continue)}
+
+
+hiddens
+variables
+	"$atomicfeature"[0-9\']* -> AtomicFeature
+	"$featureexpression"[0-9\']* -> FeatureExpression
+	"$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+	"$featureexpression*"[0-9\']* -> {FeatureExpression ","}*
+	"$featurename"[0-9\']* -> FeatureName
+	"$featurename+"[0-9\']* -> {FeatureName ","}+
+	"$featurename*"[0-9\']* -> {FeatureName ","}*
+	"$char+"[0-9\']* -> CHAR+
+	"$featuredefinition+"[0-9\']* -> FeatureDefinition+
+	"$featuredefinition*"[0-9\']* -> FeatureDefinition*
+	"$constraint*"[0-9\']* -> Constraint*
+	"$constraint"[0-9\']* -> Constraint
+	"$featurename"[0-9\']* -> FeatureName
+	"$formula"[0-9\']* -> Formula
+	"$featurediagram"[0-9\']* -> FeatureDiagram
+
+lexical variables
+	"$head"[0-9\']* -> [A-Z]
+ 	"$tail"[0-9\']* -> [a-zA-Z0-9\-\_]*
+ 	"$tailchar"[0-9\']* -> [a-zA-Z0-9\-\_]
+
+

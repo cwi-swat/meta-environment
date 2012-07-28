@@ -1,0 +1,8 @@
+This directory contains ASF+SDF specifications of several algebra's dealing
+with numbers. Integers, Hybrid Integers, Reals, Hybrid Reals, 
+and Rationals are defined.
+
+The documentation for these modules is given in the
+LaTeX document ``package.tex'', of which a ps and dvi version is available
+in this directory.
+

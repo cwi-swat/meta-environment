@@ -1,0 +1,27 @@
+equations
+
+  [l1]  is-betha-redex?(E1 E2) = true
+        =============================
+        lm-step(E1 E2) = betha(E1 E2)
+
+  [l2]  is-betha-redex?(E1 E2) = false,
+	lm-step(E1) != E1
+	=========================
+        lm-step(E1 E2) = lm-step(E1) E2
+
+  [l3]  is-betha-redex?(E1 E2) = false,
+        lm-step(E1) = E1
+        ============================
+        lm-step(E1 E2) = E1 lm-step(E2)
+
+  [l4]  lm-step(lambda V . E) = lambda V . lm-step(E)
+
+  [l5]  lm-step(V) = V
+  
+
+  [l6]  lm-step(E) = E', E != E'
+        =======================
+        lm-red(E) = lm-red(E')
+
+  [default-rl6]
+        lm-red(E) = E

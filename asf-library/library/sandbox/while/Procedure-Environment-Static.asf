@@ -1,0 +1,11 @@
+equations
+
+[up1]	update-p(proc p is S+ corp; pdecls, envv, envp) =
+		update-p(pdecls, envv,
+		envp [p -> <S+, envv, envp>])
+
+[up2]	update-p(, envv, envp) = envp
+
+[pe1]	envp1 [p -> p3] envp2 p = p3
+
+[pe2]	envp1 [p -> p3] envp2 [p -> p3'] = envp1 [p -> p3'] envp2

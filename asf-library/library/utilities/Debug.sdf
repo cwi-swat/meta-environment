@@ -1,0 +1,21 @@
+module utilities/Debug[X]
+
+imports utilities/Tide
+imports utilities/PosInfo[X]
+
+exports
+
+context-free syntax
+
+  "tide-step"(X) -> Boolean
+  "tide-connect"(name:StrCon, X) -> Boolean
+  "tide-disconnect"(name:StrCon) -> Boolean
+
+hiddens
+
+imports basic/Whitespace
+
+variables
+
+"X"[0-9\']* -> X
+"Name" -> StrCon

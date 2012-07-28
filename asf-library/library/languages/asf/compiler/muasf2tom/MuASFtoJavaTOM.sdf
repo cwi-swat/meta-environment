@@ -1,0 +1,20 @@
+module languages/asf/compiler/muasf2tom/MuASFtoJavaTOM
+imports languages/asf/compiler/muasf2tom/JavaWrapper
+imports languages/asf/compiler/muasf2tom/MuASFtoTOM
+
+exports
+
+context-free syntax
+
+muasf2javatom(Module) -> Wrapper
+
+hiddens
+
+variables
+
+"Module"[0-9]* -> Module
+"SignatureOpt" -> SignatureOpt
+"RulesOpt" -> RulesOpt
+"Bytes" -> Bytes
+"c*" -> CHAR*
+"TomDefinition" -> TomSpecification

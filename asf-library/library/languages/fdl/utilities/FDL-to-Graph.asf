@@ -1,0 +1,137 @@
+equations
+
+[]	$table := fdl-to-table($featurediagram),
+	$nodelist := table-to-node-list($table, []),
+	$edgelist := fdl-to-edge-list($featurediagram, [], $table)
+	===
+	fdl-to-graph($featurediagram) = graph($nodelist, $edgelist, [])
+
+equations
+
+[]	<$table, $integer> := fdl-to-table($featurediagram, <new-table, 0>)
+	===
+	fdl-to-table($featurediagram) = $table
+
+equations
+
+[]	$nodeid := node-id($integer)
+	===
+	fdl-to-table($featureexpression, <$table, $integer>) = 
+		<store($table, $featureexpression, $nodeid), $integer + 1>
+
+[]	lookup($table, featurename) == not-in-table,
+	$nodeid := node-id($integer)
+	===
+	fdl-to-table($featurename: $featureexpression, <$table, $integer>) = 
+		<store($table, $featurename, $nodeid), $integer + 1>
+
+equations
+
+[]	$string := node-label($featureexpression),
+	$shape := node-shape($featureexpression)
+	===
+	table-to-node-list(<$featureexpression, $nodeid>, [$node*]) =
+		[node($nodeid, [shape($shape), label($string)]), $node*]
+
+equations
+
+[]	$nodeid1 := lookup($table, $featurename),
+	$nodeid2 := lookup($table, $featureexpression)
+	===
+	fdl-to-edge-list($featurename: $featureexpression, [$edge*], $table) =
+		[edge($nodeid2, $nodeid1, [direction(none)]), $edge*]
+
+[]	[$edge*'] := expr-to-edge-list($featureexpression, $table)
+	===
+	fdl-to-edge-list($featureexpression, [$edge*], $table) =
+		[$edge*', $edge*]
+
+equations
+
+[]	expr-to-edge-list($atomicfeature, $table) = []
+
+%% This could be neater...
+
+[]	$nodeid1 := lookup($table, $featureexpression?),
+	$nodeid2 := lookup($table, $featureexpression)
+	===
+	expr-to-edge-list($featureexpression?, $table) = 
+		[edge($nodeid2, $nodeid1,[direction(none)])]
+
+[]	$nodeid := lookup($table, all($featureexpression+)),
+	$edgelist := args-to-edge-list($nodeid, $featureexpression+, $table)
+	===
+	expr-to-edge-list(all($featureexpression+), $table) = $edgelist
+
+[]	$nodeid := lookup($table, one-of($featureexpression+)),
+	$edgelist := args-to-edge-list($nodeid, $featureexpression+, $table)
+	===
+	expr-to-edge-list(one-of($featureexpression+), $table) = $edgelist
+
+[]	$nodeid := lookup($table, more-of($featureexpression+)),
+	$edgelist := args-to-edge-list($nodeid, $featureexpression+, $table)
+	===
+	expr-to-edge-list(more-of($featureexpression+), $table) = $edgelist
+
+
+equations
+
+[]	$nodeid' := lookup($table, $featureexpression)
+	===
+	args-to-edge-list($nodeid, $featureexpression, $table)  =
+		[edge($nodeid', $nodeid, [direction(none)])]
+
+[]	$nodeid' := lookup($table, $featureexpression),
+	[$edge*] := args-to-edge-list($nodeid, $featureexpression+, $table)
+	===
+	args-to-edge-list($nodeid, 
+		$featureexpression, $featureexpression+, $table)  =
+		[edge($nodeid', $nodeid, [direction(none)]), $edge*]
+
+
+equations
+
+[]	node-id(natcon($char+)) = strcon(""""N""_"$char+""")
+
+equations
+
+[]	node-label(featurename($char+)) = strcon("""$char+""")
+
+[]	node-label(atomicfeature($char+)) = strcon("""$char+""")
+
+[]	node-label(default = atomicfeature($char+)) = 
+		"default=" || strcon("""$char+""")
+
+[]	node-label(one-of($featureexpression+)) = "one-of"
+
+[]	node-label(more-of($featureexpression+)) = "more-of"
+
+[]	node-label(all($featureexpression+)) = "all"
+
+[]	node-label($featureexpression?) = "?"
+
+[]	node-label(...) = "..."
+
+equations
+
+[]	node-shape($featurename) = ellipse
+
+[]	node-shape($atomicfeature) = box
+
+[]	node-shape(default = $atomicfeature) = box
+
+[]	node-shape(one-of($featureexpression+)) = plaintext
+
+[]	node-shape(more-of($featureexpression+)) = plaintext
+
+[]	node-shape(all($featureexpression+)) = plaintext
+
+[]	node-shape($featureexpression?) = plaintext
+
+[]	node-shape(...) = plaintext
+
+
+
+
+
+

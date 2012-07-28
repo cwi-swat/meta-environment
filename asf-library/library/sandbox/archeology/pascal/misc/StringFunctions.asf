@@ -1,0 +1,11 @@
+equations
+
+  [s1]  length( '' ) = 0   
+
+  [s2]  length( string( "'" "'" "'" chars "'" ))  = 
+          length(string("'" chars "'")) + 1
+                 
+  [s3]  string( "'" a-char "'") != string("'" "'" "'")
+        ======================================================
+        length(string("'" a-char chars "'" )) = 
+          length(string("'" chars "'")) + 1

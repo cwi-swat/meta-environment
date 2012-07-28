@@ -1,0 +1,43 @@
+
+equations
+[Tc1]   tc begin D S end  = [D] S
+
+[Tc2]   [declare Id-type-list ;] = [Pair-list]
+        ========================================
+        [declare Id:Type, Id-type-list ;] = [Id:Type, Pair-list]
+
+[Tc3]   [declare ;] = []
+
+[Tc4]   Tenv Stat ; Stat-list = Tenv Stat & Tenv Stat-list
+
+[Tc5]   Tenv = true
+
+[Tc6]   Tenv Exp := Exp' = Tenv.Exp := Tenv.Exp'
+
+[Tc7]   Tenv if Exp then S1 else S2 fi =
+        if Tenv.Exp then else fi & Tenv S1 & Tenv S2
+
+[Tc8]   Tenv while Exp do S od = while Tenv.Exp do od & Tenv S
+
+[Tc9a]  Tenv.Id = lookup Id in Tenv
+[Tc9b]  Tenv.Type = Type
+
+[Tc10]  Nat-con = natural
+[Tc11]  Str-con = string
+
+[Tc12]  Tenv.(Exp1 + Exp2) = (Tenv.Exp1) + Tenv.Exp2   %% [Exp1 + Exp2] Tenv = [Exp1] Tenv  is over TYPE = TYPE, but here EXP = EXP
+
+[Tc13]  Tenv.(Exp1 - Exp2) = (Tenv.Exp1) - Tenv.Exp2
+
+[Tc14]  Tenv.(Exp1 || Exp2) = (Tenv.Exp1) || Tenv.Exp2
+
+[Tc15] natural + natural = natural
+[Tc16] natural - natural = natural
+[Tc17] string || string = string
+
+[Tc18] natural := natural = true
+[Tc19] string  := string  = true
+[Tc20] if natural then else fi = true
+[Tc21] while natural do od = true
+
+[Ext] Id := Exp = Exp' := Exp when Exp' = Id

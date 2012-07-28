@@ -1,0 +1,4 @@
+to square
+    [ repeat 4 [forward 100 right 90] ]
+
+repeat 36  [square  right 10]

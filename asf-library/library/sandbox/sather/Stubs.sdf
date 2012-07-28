@@ -1,0 +1,10 @@
+module Stubs
+
+imports Signatures
+
+exports
+
+sorts Stub
+
+context-free syntax
+	"stub" Abstract-Signature -> Stub

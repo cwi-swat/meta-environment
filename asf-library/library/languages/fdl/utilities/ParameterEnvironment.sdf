@@ -1,0 +1,26 @@
+module languages/fdl/utilities/ParameterEnvironment
+
+imports languages/fdl/syntax/Modular-FDL
+imports containers/Table[FeatureName ArgumentChar]
+
+exports
+aliases
+  Table[[FeatureName,ArgumentChar]] -> ParameterEnv
+
+sorts ParameterEnv
+
+context-free syntax
+  construct-parameter-environment(FeatureModule) -> ParameterEnv                                    
+  get-parameters(Argument*, ParameterEnv)        -> ParameterEnv {traversal(accu, top-down, break)} 
+  get-parameters(Argument, ParameterEnv)         -> ParameterEnv {traversal(accu, top-down, break)} 
+
+hiddens
+variables
+  "AtomicFeature" [0-9]*  -> FeatureName   
+  "FeatureDiagram" [0-9]* -> FeatureDiagram  
+  "ImportSection*" [0-9]* -> ImportSection*  
+  "Modulename" [0-9]*     -> Modulename      
+  "Parameter*" [0-9]*     -> Argument*       
+  "Char" [0-9]*           -> ArgumentChar    
+  "ParameterEnv" [0-9]*   -> ParameterEnv    
+  "Section*" [0-9]*       -> Section*        

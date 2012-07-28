@@ -1,0 +1,34 @@
+module ilasm/Module-Level-Declarations
+
+imports ilasm/External-Source-Declarations
+	ilasm/Namespace-and-Type-Declarations
+
+exports
+
+sorts Decls Decl
+
+context-free syntax
+	Decl* -> Decls
+
+	ClassHead "{" ClassDecls "}" -> Decl
+	NameSpaceHead "{" Decls "}" -> Decl
+	MethodHead "{" MethodDecls "}" -> Decl
+	FieldDecl -> Decl
+	DataDecl -> Decl
+	VTFixupDecl -> Decl
+	FileDecl -> Decl
+	AssemblyHead "{" AssemblyDecls "}" -> Decl
+	AssemblyRefHead "{" AssemblyRefDecls "}" -> Decl
+	ExpTypeHead "{" ExpTypeDecls "}" -> Decl
+	ManifestResHead "{" ManifestResDecls "}" -> Decl
+	ModuleHead -> Decl
+	SecDecl -> Decl
+	CustomAttrDecl -> Decl
+	".subsystem" Int32 -> Decl
+	".corflags" Int32 -> Decl
+	".file" "alignment" Int32 -> Decl
+	".imagebase" Int64 -> Decl
+	ExtSourceSpec -> Decl
+	LanguageDecl -> Decl
+
+

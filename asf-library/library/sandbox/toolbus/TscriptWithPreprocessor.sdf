@@ -1,0 +1,39 @@
+module TscriptWithPreprocessor
+
+imports Tscript
+
+%% #include
+imports languages/c/syntax/Generic-Preprocessor[
+  Unused 
+  Unused 
+  Unused 
+  Unused 
+  TscriptDef
+]
+
+%% #ifdef a #include b #endif
+imports languages/c/syntax/Generic-Preprocessor[
+  Vname
+  Unused
+  Unused
+  TscriptDef
+  TscriptDef
+]
+
+%% #ifdef a ProcessExpr #endif
+imports languages/c/syntax/Generic-Preprocessor[
+  Vname
+  Unused
+  Unused
+  ProcessExpr
+  ProcessExpr
+]
+
+%% #define a b
+imports languages/c/syntax/Generic-Preprocessor[
+  Term
+  Term
+  Unused
+  Unused
+  TscriptDef 
+]

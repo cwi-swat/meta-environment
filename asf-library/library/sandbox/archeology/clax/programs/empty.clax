@@ -1,0 +1,7 @@
+PROGRAM aap ;
+DECLARE
+  i : INTEGER;
+  j : INTEGER;
+BEGIN
+  i := 2;
+END.

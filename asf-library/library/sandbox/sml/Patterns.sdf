@@ -1,0 +1,51 @@
+module Languages/SML/Patterns
+
+imports Languages/SML/Types
+	Languages/SML/Identifiers
+	Languages/SML/Constants
+
+
+hiddens sorts
+	SinglePatternRow PatternRow Pattern AtomicPattern
+
+exports
+
+context-free syntax
+
+%% Atomic pattern
+
+  "_"			-> AtomicPattern
+  Constant		-> AtomicPattern
+  "op"? LongValueId	-> AtomicPattern
+  "{" PatternRow? "}"	-> AtomicPattern
+  "(" ")"		-> AtomicPattern
+
+  "(" Pattern "," { Pattern "," }+ ")"	-> AtomicPattern
+  "[" { Pattern "," }* "]"		-> AtomicPattern
+  "(" Pattern  ")"			-> AtomicPattern 
+
+%% Pattern row
+
+  "..."					-> SinglePatternRow
+  Label "=" Pattern			-> SinglePatternRow
+  ValueId (":" Type)? ("as" Pattern)? 	-> SinglePatternRow
+
+  { SinglePatternRow "," }+		-> PatternRow
+
+%% Pattern
+
+  AtomicPattern				-> Pattern
+  "op"? LongValueId AtomicPattern	-> Pattern
+  Pattern ValueId Pattern		-> Pattern
+  Pattern ":" Type			-> Pattern
+
+  "op"? ValueId (":" Type)? "as" Pattern	-> Pattern
+
+
+context-free priorities
+
+  {Pattern ValueId Pattern		-> Pattern}>
+  {Pattern ":" Type			-> Pattern}>
+  {"op"? ValueId (":" Type)? "as" Pattern	-> Pattern}
+	
+

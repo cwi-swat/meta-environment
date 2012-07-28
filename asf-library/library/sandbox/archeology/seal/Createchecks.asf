@@ -1,0 +1,148 @@
+equations
+
+[96a]   _Inst' = [pairnr : _Int' uses
+                instances in condition : _Ufns'
+                _Acts-insts' _Inp-insts'
+                _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts']
+        ========================
+        lookup-cond-insts([ [_Inst'] _INSTS' ] _Int') = _Ufns'
+
+[96b]   _Inst' = [pairnr : _Int'' uses
+                _Cond-insts' _Acts-insts' _Inp-insts'
+                _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts'],
+        _Int' != _Int''
+        ========================
+        lookup-cond-insts([ [_Inst'] _INSTS'] _Int') = lookup-cond-insts([_INSTS'] _Int')
+
+[97a]   _Inst' = [pairnr : _Int' uses
+                _Cond-insts'
+                instances in actions : _Ufns'
+                input instances : _Ufns'''
+                output instances : _Ufns''
+                _Sel-insts' _Red-insts' _Asgn-insts'],
+        _Ufns'''' = remove-filenames(_Ufns' , _Ufns'')
+        ========================
+        lookup-act-insts([ [_Inst'] _INSTS' ] _Int') = remove-filenames(_Ufns'''' , _Ufns''')
+
+[97b]   _Inst' = [pairnr : _Int'' uses
+                _Cond-insts' _Acts-insts' _Inp-insts'
+                _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts'],
+        _Int' != _Int''
+        ========================
+        lookup-act-insts([ [_Inst'] _INSTS'] _Int') = lookup-act-insts([_INSTS'] _Int')
+
+[98]    get-cond-insts(_State' _Int') = lookup-cond-insts(insts(_State' ) _Int')
+
+[99]    get-act-insts(_State' _Int') = lookup-act-insts(insts(_State' ) _Int')
+
+[100]   get-inputs(_State' _Int') = lookup-inputs(insts(_State' ) _Int')
+
+[101]   get-assigns(_State' _Int') = lookup-assigns(insts(_State') _Int')
+
+[102]   get-selects(_State' _Int') = lookup-selects(insts(_State') _Int')
+
+[103a]  _Inst' = [pairnr : _Int' uses
+                _Cond-insts' _Acts-insts'
+                input instances : _Ufns'
+                _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts']
+        ========================
+        lookup-inputs([ [_Inst'] _INSTS' ] _Int') = _Ufns'
+
+[103b]  _Inst' = [pairnr : _Int'' uses
+                _Cond-insts' _Acts-insts' _Inp-insts'
+                _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts'],
+        _Int' != _Int''
+        ========================
+        lookup-inputs([ [_Inst'] _INSTS'] _Int') = lookup-inputs([_INSTS'] _Int')
+
+[104a]  _Inst' = [pairnr : _Int' uses
+                _Cond-insts' _Acts-insts' _Inp-insts' _Outp-insts' _Sel-insts' _Red-insts'
+                focus assign instances : _Ufns']
+        ========================
+        lookup-assigns([ [_Inst'] _INSTS' ] _Int') = _Ufns'
+
+[104b]  _Inst' = [pairnr : _Int'' uses
+                _Cond-insts' _Acts-insts' _Inp-insts'
+                _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts'],
+        _Int' != _Int''
+        ========================
+        lookup-assigns([ [_Inst'] _INSTS'] _Int') = lookup-assigns([_INSTS'] _Int')
+
+[105a]  _Inst' = [pairnr : _Int' uses
+                _Cond-insts' _Acts-insts' _Inp-insts' _Outp-insts'
+                select instances : _Ufns'
+                _Red-insts' _Asgn-insts']
+        ========================
+        lookup-selects([ [_Inst'] _INSTS' ] _Int') = _Ufns'
+
+[105b]  _Inst' = [pairnr : _Int'' uses
+                _Cond-insts' _Acts-insts' _Inp-insts'
+                _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts'],
+        _Int' != _Int''
+        ========================
+        lookup-selects([ [_Inst'] _INSTS'] _Int') = lookup-selects([_INSTS'] _Int')
+
+[1a]    _Errors' = check-creates-in-pairnr(
+                get-inputs(_State' _Int') ;
+                get-assigns(_State' _Int') ;
+                get-selects(_State' _Int')),
+        _Int' != _Int''
+        =====================================
+        check-creates(_State' _Int'' _Int') =
+                connect-errors(_State' _Int' _Errors') +
+                check-creates(_State' _Int'' _Int' + 1)
+
+[1a]    _Errors' = check-creates-in-pairnr(
+                get-inputs(_State' _Int') ;
+                get-assigns(_State' _Int') ;
+                get-selects(_State' _Int'))
+        =====================================
+        check-creates(_State' _Int' _Int') = connect-errors(_State' _Int' _Errors')
+
+[2]     check-creates-in-pairnr(_Ufns' ; _Ufns'' ; _Ufns''') =
+                check-select-use(_Ufns' ; _Ufns''') + check-no-assign(_Ufns' ; _Ufns'')
+
+[3a]    name-in(_Ufn'; _Ufns'') = true
+        ========================
+        check-select-use(_Ufn' _Ufns'''; _Ufns'') = check-select-use(_Ufns'''; _Ufns'')
+
+[3b]    name-in(_Ufn'; _Ufns'') = false
+        ========================
+        check-select-use(_Ufn' _Ufns'''; _Ufns'') =
+                instance : _Ufn' should be used in a select action +
+                check-select-use(_Ufns'''; _Ufns'')
+
+[3c]    check-select-use( ; _Ufns'') = empty-errors
+
+[4a]    name-in(_Ufn'; _Ufns'') = false
+        ====================
+        check-no-assign(_Ufn' _Ufns'''; _Ufns'') = check-no-assign(_Ufns'''; _Ufns'')
+
+[4b]    name-in(_Ufn'; _Ufns'') = true
+        ======================================================
+        check-no-assign(_Ufn' _Ufns'''; _Ufns'') =
+                focus assignment is not allowed for input instance : _Ufn' +
+                check-no-assign(_Ufns'''; _Ufns'')
+
+[4c]    check-no-assign( ; _Ufns'') = empty-errors
+
+[5a]    name-in(_Ufn';) = false
+
+[5b]    name-in(_Ufn'; _Ufn' _Ufns'') = true
+
+[5c]    _Ufn' != _Ufn''
+        ===============
+        name-in(_Ufn'; _Ufn'' _Ufns'') = name-in(_Ufn'; _Ufns'')
+
+[6a]    remove-filenames (_Ufns', ) = _Ufns'
+
+[6b]    name-in(_Ufn' ; _Ufns') = false
+        ===============================
+        remove-filenames(_Ufns', _Ufn' _Ufns'') = remove-filenames(_Ufns', _Ufns'')
+
+[6c]    name-in(_Ufn' ; _Ufns') = true,
+        _Ufns' = _Ufns'' _Ufn' _Ufns''',
+        _Ufns'''' = _Ufns'' _Ufns'''
+        ===============================
+        remove-filenames(_Ufns', _Ufn' _Ufns''''') =
+                remove-filenames(_Ufns'''', _Ufn' _Ufns''''')

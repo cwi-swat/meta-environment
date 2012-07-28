@@ -1,0 +1,22 @@
+module disambiguation/FilterEnv[Tree X Env]
+
+imports basic/Booleans
+imports disambiguation/Basic[X]
+
+exports
+
+context-free syntax
+
+filter(Tree, (X Env => Boolean), Env) -> Tree {traversal(trafo,bottom-up)}
+filter(X, (X Env => Boolean), Env) -> X {traversal(trafo,bottom-up)}
+
+hiddens
+
+imports basic/Whitespace
+
+variables
+
+"Amb" -> X
+"Amb*"[0-9]* -> {X ","}*
+"Env" -> Env
+"f" -> (X Env => Boolean)

@@ -1,0 +1,21 @@
+module List
+
+imports basic/Whitespace
+
+exports
+  sorts Elt List
+  context-free start-symbols List
+
+  context-free syntax
+    "a" | "b" | "c" | "d" | "e" -> Elt
+    l(Elt, List) -> List
+    "nil"        -> List
+
+  context-free syntax
+    conc(List, List) -> List
+    dup(List)        -> List
+
+hiddens
+  variables
+    "e"[0-9]* -> Elt
+    "l"[0-9]* -> List

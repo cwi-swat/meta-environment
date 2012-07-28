@@ -1,0 +1,43 @@
+equations
+
+%% This function gets a list of elements and generates 
+%% a list of lists of element (see Knuth for the algorithm).
+
+[]	permutations([]) = [[]]
+
+[]	$listlist := permutations([$x*]),
+	$listlist' := interleave-all($x, $listlist)
+	===
+	permutations([$x, $x*]) = $listlist'
+
+equations
+
+[]	interleave-all($x, []) = []
+
+[]	[$xlist*1] := interleave($x, $xlist),
+	[$xlist*2] := interleave-all($x, [$xlist*])
+	===
+	interleave-all($x, [$xlist, $xlist*]) =
+		[$xlist*1, $xlist*2]
+	
+
+
+equations
+
+[]	interleave($x, []) = [[$x]]
+
+[]	interleave($x, [$x', $x*]) =
+		cons(
+			[$x, $x', $x*],
+		 	prepend-all(
+				$x', 
+				interleave($x, [$x*])
+			)
+		)
+
+equations
+
+[]	prepend-all($x, []) = []
+
+[]	prepend-all($x, [$xlist, $xlist*]) =
+		cons(cons($x, $xlist), prepend-all($x, [$xlist*]))

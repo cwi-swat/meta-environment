@@ -1,0 +1,39 @@
+
+equations
+  [Nat1]  nat("0" _Char+) = nat( _Char+ )
+  [Nat2]  _succ(0) = 1
+  [Nat3]  _succ(1) = 2
+  [Nat4]  _succ(2) = 3
+  [Nat5]  _succ(3) = 4
+  [Nat6]  _succ(4) = 5
+  [Nat6]  _succ(5) = 6
+  [Nat7]  _succ(6) = 7
+  [Nat8]  _succ(7) = 8
+  [Nat9]  _succ(8) = 9
+  [Nat10] _succ(9) = 10
+  [Nat11] nat(_Char) != 9,
+          _succ( nat(_Char) ) = _Nat,
+          _Nat = nat(_Char')
+          ==============================================
+          _succ( nat(_Char+ _Char) ) = nat(_Char+ _Char')
+  [Nat12] _succ( nat(_Char+) ) = nat(_Char+')
+          ==========================================
+          _succ( nat(_Char+ "9") ) = nat(_Char+' "0")
+
+  [Nat13] _pred(9) = 8
+  [Nat14] _pred(8) = 7
+  [Nat15] _pred(7) = 6
+  [Nat16] _pred(6) = 5
+  [Nat17] _pred(5) = 4
+  [Nat18] _pred(4) = 3
+  [Nat19] _pred(3) = 2
+  [Nat20] _pred(2) = 1
+  [Nat21] _pred(1) = 0
+ %% [Nat22] _pred(0) = 9
+  [Nat23] nat(_Char) != 0,
+          _pred(nat(_Char)) = nat(_Char')
+          =============================================
+          _pred(nat(_Char+ _Char)) = nat(_Char+ _Char')
+  [Nat24] _pred(nat(_Char+)) = nat(_Char+')
+          ===================
+          _pred(nat(_Char+ "0")) = nat(_Char+' "9")

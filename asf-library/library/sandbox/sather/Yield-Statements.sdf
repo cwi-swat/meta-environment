@@ -1,0 +1,10 @@
+module Yield-Statements
+
+imports Expressions
+
+exports
+
+sorts Yield-Statement
+
+context-free syntax
+	"yield" Expression? -> Yield-Statement

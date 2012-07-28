@@ -1,0 +1,24 @@
+module State
+
+imports Int While-Expr
+
+exports
+
+sorts State
+
+context-free syntax
+
+State Var -> Int
+
+
+"[" Var "->" Int "]" -> Assignment
+
+"(" State ")" -> State {bracket}
+
+def(Var, State) -> Bool
+
+Assignment* -> State 
+
+
+variables
+"s"[0-9\']* -> Assignment* %%State

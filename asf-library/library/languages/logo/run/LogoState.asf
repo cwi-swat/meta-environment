@@ -1,0 +1,87 @@
+equations
+
+[lines-1] 
+      state(Venv, FunctionDef*, Color, Lines).lines       = Lines
+
+[add-1]  
+      state(Venv, FunctionDef*, Color, Lines).add(FunctionDef) =
+      state(Venv, FunctionDef* FunctionDef, Color, Lines)
+
+[default-lookup] 
+     state(Venv, FunctionDef*, Color, Lines)[Formal] = lookup(Venv, Formal)
+
+[assign-1] 
+     Venv' := store(Venv, Formal, Integer)
+     =====================================================
+     state(Venv, FunctionDef*, Color, Lines)[Formal] := Integer =
+     state(Venv', FunctionDef*, Color, Lines)
+
+[goto-1]
+     lookup(Venv, :penup) == 0,
+     Xcor1 := lookup(Venv, :xcor),
+     Ycor1 := lookup(Venv, :ycor),
+     Lines' := Lines line(Xcor1, Ycor1, Xcor2, Ycor2, Color),
+     Venv' := store(store(Venv, :xcor, Xcor2), :ycor, Ycor2)
+     ========================================================================================
+     state(Venv, FunctionDef*, Color, Lines).goto(Xcor2, Ycor2) = state(Venv', FunctionDef*, Color, Lines')
+
+[goto-2]
+     lookup(Venv, :penup) == 1,
+     Xcor1 := lookup(Venv, :xcor),
+     Ycor1 := lookup(Venv, :ycor),
+     Venv' := store(store(Venv, :xcor, Xcor2), :ycor, Ycor2)
+     =======================================================================================
+     state(Venv, FunctionDef*, Color, Lines).goto(Xcor2, Ycor2) = state(Venv', FunctionDef*, Color, Lines)
+
+[color-1]
+      state(Venv, FunctionDef*, Color, Lines).color = Color
+
+[setcolor-1]
+      state(Venv, FunctionDef*, Color1, Lines).setcolor(Color2) = state(Venv, FunctionDef*, Color2, Lines)
+
+[new-state-1]
+     Venv := store(new-table, :xcor, 0),
+     Venv' := store(Venv, :ycor, 0),
+     Venv'' := store(Venv', :heading, 0),
+     Venv''' := store(Venv'', :penup, 0)
+     ======================================
+     newLogoState = state(Venv''', , black,  )
+
+%% enter/leave a procedure
+[enter-1]
+     state(Venv, FunctionDef*, Color, Lines) := LS,
+     FunctionDef*1 to Id Formal* [ Cmds ] FunctionDef*2 := FunctionDef*,
+     LS' := bind(Formal*, E*, LS)
+     =============================================================================================
+     LS.enter(Id, E*) = < Cmds, LS' >
+
+[leave-1] 
+     state(Venv, FunctionDef*, Color, Lines) := LS,
+     FunctionDef*1 to Id Formal* [ Cmds ] FunctionDef*2 := FunctionDef*,
+     LS' := unbind(Formal*, LS)
+     =============================================================================================
+     LS.leave(Id, E*) = LS'
+
+%% bind/unbind formals
+[bind-1]
+     bind( , , LS) = LS
+[bind-2]
+     state(Venv, FunctionDef*, Color,Lines) := LS,
+     Venv' := store(Venv, Formal, eval(E, LS)),
+     LS' := state(Venv', FunctionDef*, Color, Lines)
+     =======================================================
+     bind(Formal Formal*, E E*, LS) = bind(Formal*, E*, LS')
+
+[unbind-1]
+     unbind( , LS) = LS
+[unbind-2]
+     state(Venv, FunctionDef*, Color,Lines) := LS,
+     Venv' := delete(Venv, Formal),
+     LS' := state(Venv', FunctionDef*, Color, Lines)
+     =================================================
+     unbind(Formal Formal*, LS) = unbind(Formal*, LS')
+
+
+     
+
+

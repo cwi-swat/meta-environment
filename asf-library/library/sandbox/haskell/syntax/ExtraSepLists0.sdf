@@ -1,0 +1,8 @@
+module ExtraSepLists0 [Elt Sep List]
+exports
+  context-free syntax
+    Elt          -> List {cons("Ins")}
+    List Sep Elt -> List {cons("Snoc")}
+    List Sep     -> List
+                 -> List {cons("Nil")}
+

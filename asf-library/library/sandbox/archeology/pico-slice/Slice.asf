@@ -1,0 +1,115 @@
+
+equations
+
+%% slice-nodes: determine PDG nodes corresponding to the labeled
+%%              statements in the slice.
+
+    [sl1]  Edge* = PDG(L_Program)
+           =====================================================
+           slice-nodes(L_Program, Node) = reaches(Edge*, , Node)
+
+%% slice: compute a slice w.r.t. a given PDG node.
+
+    [sl2]  Node* = slice-nodes(L_Program, Node)
+           ========================================================================
+           slice(L_Program, Node) = unlabel(find-reduced-program(L_Program, Node*))
+
+%% find-reduced-program: mapping from set of PDG nodes and labeled program to
+%%                       unlabeled program.
+
+    [fr1]  find-series(L_Series, Node*) = L_Series',
+           vars(L_Series')              = Id*,
+           find-decls(Decls, Id*)       = Decls'
+           =========================================================
+           find-reduced-program(begin Decls L_Series end, Node*) =
+             begin Decls' L_Series' end
+
+%% vars : determine all vars used in series of labeled statements.
+
+    [va1]  vars( ) =
+
+    [va2]  vars(Exp) = Id*
+           ================================
+           vars(Ref Id := Exp) = Id Id*
+
+    [va3]  vars(Exp)       = Id*,
+           vars(L_Series)  = Id*',
+           vars(L_Series') = Id*''
+           ======================================
+           vars(Ref if Exp then L_Series else L_Series' fi) =  Id* Id*' Id*''
+
+    [va4]  vars(Exp)      = Id*,
+           vars(L_Series) = Id*'
+           =============================================
+           vars(Ref while Exp do L_Series od) = Id* Id*'
+
+    [va5]  vars(L_Stat)  = Id*,
+           vars(L_Stat+) = Id*'
+           ================================
+           vars(L_Stat; L_Stat+) = Id* Id*'
+
+%% find-decls: determine the declarations of the slice.
+
+    [fd1]  find-decls(declare;, Id*) = declare;
+
+    [fd2]  imem(Id, Id*) = true,
+           find-decls(declare IdType*;, Id*) = declare IdType*';
+           =============================================
+           find-decls(declare Id:Type, IdType*;, Id*) =
+             declare Id:Type, IdType*';
+
+    [fd3]  imem(Id, Id*) = false
+           ============================================
+           find-decls(declare Id:Type, IdType*;, Id*) =
+             find-decls(declare IdType*;, Id*)
+
+%% find-series: mapping/find the series of a sliced program.
+
+    [fs1]  find-series( , Node*) =
+
+    [fs2]  L_Stat*'  = find-series(L_Stat*, Node*),
+           L_Stat*'' = IF nmem(Ref, Node*) THEN
+                              Ref Id := Exp; L_Stat*'
+                            ELSE
+                              L_Stat*'
+                            FI
+           ======================================================
+           find-series(Ref Id := Exp; L_Stat*, Node*) = L_Stat*''
+
+
+    [fs3]  L_Stat*'    = find-series(L_Stat*, Node*),
+           L_Series''  = find-series(L_Series, Node*),
+           L_Series''' = find-series(L_Series', Node*),
+           L_Stat*''   =
+             IF not(nmem(Ref, Node*)) &
+                is-empty(L_Series'')  &
+                is-empty(L_Series''') THEN
+               L_Stat*
+             ELSE
+               Ref if Exp then L_Series'' else L_Series''' fi; L_Stat*'
+             FI
+           =========================================================================
+           find-series(Ref if Exp then L_Series else L_Series' fi; L_Stat*, Node*) =
+             L_Stat*''
+
+    [fs4]  L_Stat*'  = find-series(L_Stat*, Node*),
+           L_Series' = find-series(L_Series, Node*),
+           L_Stat*'' = IF     not(nmem(Ref, Node*)) &
+                              is-empty(L_Series') THEN
+                         L_Stat*'
+                       ELSE
+                         Ref while Exp do L_Series' od; L_Stat*'
+                       FI
+           ===========================================================
+           find-series(Ref while Exp do L_Series od; L_Stat*, Node*) =
+             L_Stat*''
+
+%% reaches: find nodes in the PDG from which a node can be reached.
+
+    [R1]  reaches(Edge*, Node*, ) = Node*
+
+    [R2]  Node*'' = IF nmem(Node, Node*) THEN ELSE Node FI,
+          Node*''' = IF nmem(Node, Node*) THEN ELSE pred(Node, Edge*) FI
+          ==============================================================
+          reaches(Edge*, Node*, Node Node*') =
+            reaches(Edge*, Node* Node*'', Node*' Node*''')

@@ -1,0 +1,22 @@
+module languages/sdf2/projection/Renaming
+imports languages/sdf2/syntax/Renaming
+imports basic/Booleans
+
+exports
+  context-free syntax
+    Renamings "++" Renamings                -> Renamings {right}
+    "proj" "_" Symbol     "(" Renamings ")" -> Symbol
+    "proj" "_" Production "(" Renamings ")" -> Production
+    "(" Symbols "=>" Symbols ")"            -> Renamings
+    Renaming "(-" Renamings                 -> Boolean
+
+hiddens
+  variables
+    "!"[0-9\']*         -> Attributes
+    [p][0-9\']*         -> Production
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'R"[0-9\']*        -> Renaming
+    "'r"[0-9\']*        -> Renamings
+    "'r""*"[0-9\']*     -> Renaming*
+    "'r""+"[0-9\']*     -> Renaming+ 

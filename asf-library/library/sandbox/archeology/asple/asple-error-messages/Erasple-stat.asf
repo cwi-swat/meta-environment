@@ -1,0 +1,130 @@
+ equations
+
+[St1]  tc[Decls] in mtable () - typecheck-info: [] = Menv - Errlist
+       ======================================================>
+       tr[ begin Decls ; Stms end] =
+       if ( tc[ Stms]  in Menv + Errlist,
+              begin Decls ; tr[Stms] in Menv end)
+
+[St1a] if (typecheck-info: [], Prog-check1) = Prog-check1
+
+[St1b] if (typecheck-info: [Err, Errs], Prog-check1) =
+       typecheck-info: [Err, Errs , program cannot be translated]
+
+
+[St2]  tr[Stm] in Menv = Stm',tr[Stms] in Menv = Stms'
+       ==================================>
+       tr[ Stm ; Stms] in Menv = Stm'; Stms'
+
+[St3]  lookup Id in Menv = ref(M)
+       ==========================>
+       tr[Id := Exp] in Menv =
+       Id := tr [Exp] in  Menv to M
+
+[St4]  tr[Id] in Menv to ref(int) = Var
+       ====================================>
+       tr[input Id] in Menv = tinput Var : int
+
+[St5]  tr[Id] in Menv to ref(bool) = Var
+       ====================================>
+       tr[input Id] in Menv = tinput Var : bool
+
+[St6]  tr[Exp] in Menv to int =  Exp'
+       ========================================>
+       tr[output Exp] in Menv = output Exp'
+
+[St7]  tr[Exp] in  Menv to bool =  Exp'
+       ========================================>
+       tr[output Exp] in Menv = output Exp'
+
+[St8]  tr[Exp] in Menv to bool = Exp',
+       tr[Stms1] in Menv = Stms1'
+       ==========================================================>
+       tr[if Exp then Stms1 fi] in Menv =
+       if Exp' then Stms1' fi
+
+[St9]  tr[Exp] in Menv to bool = Exp',
+       tr[Stms1] in Menv = Stms1',
+       tr[Stms2] in Menv = Stms2'
+       ==========================================================>
+       tr[if Exp then Stms1 else Stms2 fi] in Menv =
+       if Exp' then Stms1' else Stms2' fi
+
+[St10] tr[Exp] in  Menv to bool = Exp',
+       tr[Stms] in Menv = Stms'
+       ================================================================>
+       tr[while Exp do Stms end] in Menv = while Exp' do Stms' end
+
+
+[St11] tr[Nat-con] in Menv to int =  Nat-con
+
+[St12] tr[Bool-con] in Menv to bool = Bool-con
+
+[St13] lookup Id in  Menv = M,  M1 <= M = true
+       ================================================>
+       tr[Id] in Menv to M1 = dereference Id from M to M1
+
+[St14]               M1 <= M = true
+       ===========================================>
+       dereference Id from ref(M) to M1 =
+                   deref dereference Id from M to M1
+
+[St15] dereference Id from M to M = var Id
+
+[St16] tr[Exp1] in Menv to int = Exp1',
+       tr[Exp2] in Menv to int = Exp2'
+       ===================================================>
+       tr[Exp1 + Exp2] in Menv to int =  Exp1' + Exp2'
+
+[St17] tr[Exp1] in Menv to bool = Exp1',
+       tr[Exp2] in Menv to bool = Exp2'
+       ===================================================>
+       tr[Exp1 + Exp2] in Menv to bool = Exp1' | Exp2'
+
+[St18] tr[Exp1] in Menv to int = Exp1',
+       tr[Exp2] in Menv to int = Exp2'
+       ===================================================>
+       tr[Exp1 * Exp2] in Menv to int =  Exp1' * Exp2'
+
+[St19] tr[Exp1] in Menv to bool = Exp1',
+       tr[Exp2] in Menv to bool = Exp2'
+       ===================================================>
+       tr[Exp1 * Exp2] in Menv to bool = Exp1' & Exp2'
+
+[St20] tr[Exp1] in Menv to int = Exp1',
+       tr[Exp2] in Menv to int =  Exp2'
+       ====================================================>
+       tr[(Exp1 = Exp2)]  in Menv to bool =  (Exp1' = Exp2')
+
+[St21] tr[Exp1] in Menv to bool = Exp1',
+       tr[Exp2] in Menv to bool = Exp2'
+       ====================================================>
+       tr[(Exp1 = Exp2)]  in Menv to bool =  (Exp1' = Exp2')
+
+[St22] tr[Exp1] in Menv to int = Exp1',
+       proper-exp (Exp1') = true,
+       tr[Exp2] in Menv to int =  Exp2',
+       proper-exp (Exp2') = true
+       ===================================================>
+       tr[(Exp1 != Exp2)] in Menv to bool =  (Exp1' != Exp2')
+
+[St23] tr[Exp1] in Menv to bool = Exp1',
+       proper-exp (Exp1') = true,
+       tr[Exp2] in Menv to bool = Exp2' ,
+       proper-exp (Exp2') = true
+       ===================================================>
+       tr[(Exp1 != Exp2)] in Menv to bool =  (Exp1' != Exp2')
+
+
+[St24] proper-exp (Nat-con) = true
+[St25] proper-exp (Bool-con) = true
+
+[St26] proper-var (Var) = true
+       ========================
+       proper-exp (Var) = true
+
+[St29] proper-var (var Id) = true
+
+[St28] proper-var (Var) = true
+       ========================
+       proper-var (deref Var) = true

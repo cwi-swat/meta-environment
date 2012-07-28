@@ -1,0 +1,6 @@
+equations
+
+[annotate-fdl-trv-featuredefinition]
+	annotate-fdl($featurename : $featureexpression) =
+		$featurename : $featureexpression{$featurename}
+

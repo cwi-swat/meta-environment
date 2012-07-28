@@ -1,0 +1,204 @@
+equations
+
+{ Label declarations}
+  [l1]  label-decls-tc(,E) = E
+  [l2]  label-decls-tc( _label, _label*, E ) =
+          label-decls-tc( _label*, label-decls-tc( _label, E ))
+  [l3]  label-decls-tc( _label, E ) = E + label _label
+
+
+{ Constant declarations }
+  [c1]  const-defs-tc(,E) = E
+  [c2]  const-defs-tc( Const-def; Const-defs, E ) =
+          const-defs-tc(Const-defs, const-defs-tc(Const-def, E))
+
+  [c3]  set-construct of E1 to "_id = _const" = E2,
+        _id should not be declared in inner block of E2 = E3 ,
+        const-tc( _const, E3 ) = E4
+        ==========================================
+        const-defs-tc( _id = _const, E1 ) = E4 + const _id = _const
+
+  [c4]  const-tc( _string , E ) =  _string should not be an empty string in E
+
+  [c5]  const-tc( _new-const, E) = E when is-string-const?(_new-const) != TRUE
+
+  [c6]  const-tc( _id , E ) = _id should be a constant in E
+
+  [c7]  _id should be a constant in E1 = E2,
+        (const-type of _id in E2.context) should be a number in E2 = E3
+        =====================================================================
+        const-tc( _sign _id, E1) = E3
+
+
+{ Type declarations }
+  [t1]  type-ptrs-tc(Type-defs, E1) = <Ptr-list, E2>,
+        check-pointer-identifiers(Ptr-list, E2) = E3
+        ============================================
+        type-defs-tc(Type-defs, E1) = E3
+
+  [t2]  type-ptrs-tc(, E) = <[], E>
+
+  [t3]  type-ptrs-tc( Type-def, E1 ) = <[Ptr-ids1], E2>,
+        type-ptrs-tc( Type-defs, E2 ) = <[Ptr-ids2], E3>
+        ===============================================
+        type-ptrs-tc( Type-def; Type-defs, E1 ) = <[Ptr-ids1, Ptr-ids2], E3>
+
+  [t4]   set-construct of E1 to "_id = _type-den" = E2,
+        _id should not be declared in inner block of E2 = E3,
+        type-denot-tc( _type-den, E3 ) = <Ptr-list, E4>
+        ============================================
+        type-ptrs-tc( _id = _type-den, E1 ) =
+                <Ptr-list, E4 + type _id = _type-den>
+
+  { Identier as type-denoter }
+  [t5]  type-denot-tc( _id , E) = <[], _id should be a type in E>
+
+  { Enumeration type constructor }
+  [te1] type-denot-tc((_id+), E1) = <[], (_id+) should not have double names in E1>
+
+  { Subrange type constructor }
+  [ts1] const-tc( _const1, E1 ) = E2,
+        const-tc( _const2, E2 ) = E3,
+        const-type of _const1 in E3.context = T1,
+        const-type of _const2 in E3.context = T2,
+        T1 and T2 should be the same type in E3 = E4,
+        T1 should be ordinal in E4 = E5,
+        (const-val of _const1 in E3.context) should be less than
+          (const-val of _const2 in E3.context) in E5 = E6
+       ==================================================
+        type-denot-tc( _const1 .. _const2 , E1 ) = <[], E6>
+
+  { Array type constructor }
+  [ar1] _PS array [Index-type1, Index-types+] of Component-type =
+          _PS array [Index-type1] of
+            _PS array [ Index-types+ ] of Component-type
+
+  [ar2] type-tc( Index-type, E1 ) = E2,
+        type-denot-tc( Component-type, E2 ) = <Ptr-list2, E3>,
+        E2.result should be ordinal in E3 = E4
+        =======================================
+        type-denot-tc( _PS array [ Index-type ] of Component-type , E1 ) =
+                <Ptr-list2, E4>
+
+  { Set type constructor }
+  [se1] type-tc( Component-type, E1 ) = E2,
+        E2.result should be ordinal in E2 = E3
+        =======================================
+        type-denot-tc( _PS set of Component-type, E1) = <[], E3>
+
+  { File type constructor }
+  [fi1] type-denot-tc( Component-type, E1) = <Ptr-list, E2>,
+        E2.result should be allowed as file-component in E2 = E3
+        ========================================================
+        type-denot-tc( _PS file of Component-type, E1) = <Ptr-list, E3>
+
+  { Pointer type constructor }
+  [pt1] (find _id in E1.context) defines _id as a type? = TRUE
+        ======================================================
+        type-denot-tc( ^ _id, E1 ) = <[], E1>
+
+  [pt1] (find _id in E1.context) defines _id as a type? != TRUE
+        =======================================================
+        type-denot-tc( ^ _id, E1 ) = <[_id], E1>
+
+
+
+  { Record type constructor }
+  [re1] fields-tc( _field-list, E1 + block-mark ) = <Ptr-list, E2>,
+        leave inner block of E2 = E3
+        =====================================
+        type-denot-tc( _PS record _field-list end, E1 ) = <Ptr-list, E3>
+
+  [re2] fields-tc( _field-list, E1 + block-mark ) = <Ptr-list, E2>
+        =========================================================
+        new-block-with-fields([Prefix,  type _id = record _field-list end],E1) = E2
+
+  [re3] fields-tc(, E) = <[], E>
+  [re4] fields-tc(_fixed opt;, E) = fixed-tc(_fixed, E)
+  [re5] fields-tc(_var-part opt;, E) = variant-tc(_var-part, E)
+  [re6] fixed-tc( _fixed, E1 ) = <[Ptr-ids1], E2>,
+        variant-tc( _var-part, E2 ) = <[Ptr-ids2], E3>
+        ===============================================
+        fields-tc( _fixed; _var-part opt;, E1 ) = <[Ptr-ids1, Ptr-ids2], E3>
+
+  [fx1] type-denot-tc( _type-den, E1 ) = <Ptr-list, E2>,
+        var-decls-tc( _id+: _type-den, E2 ) = E3
+        =======================================================
+        fixed-tc( _id+ : _type-den, E1 ) = <Ptr-list, E3>
+
+  [fx2] fixed-tc( _rec-section, E1 ) = <[Ptr-ids1], E2>,
+        fixed-tc( _rec-section+, E2 ) = <[Ptr-ids2], E3>
+        ===================================================
+        fixed-tc( _rec-section; _rec-section+, E1 ) = <[Ptr-ids1, Ptr-ids2], E3>
+
+  [vp1] selector-tc( _selector, E1 ) = E2,
+        E2.result.type should be ordinal in E2 = E3,
+        variant-tc(_variant+,E2.result.type, [], E3) = <Ptr-list,Val-list,E4>,
+        all elements of E2.result.type should occur in Val-list in E4 = E5
+        ===================================================================
+        variant-tc( case _selector of _variant+, E1 ) = <Ptr-list, E5>
+
+  [se1] selector-tc( _id, E ) = type-tc( _id, E )
+  [se2] selector-tc( _id1 : _id2, E ) = var-decls-tc( _id1 : _id2, E )
+
+  [va1] const-val-list-tc( _const+, T1, Val-list1, E1 ) = <Val-list2, E2>,
+        fields-tc( _field-list, E2 ) = <Ptr-list, E3>
+        ==============================================
+        variant-tc( _const+:(_field-list), T1, Val-list1, E1 ) =
+          <Ptr-list, Val-list2, E3>
+
+  [va2] variant-tc( _variant, T1, Val-list1, E1 ) =<[Ptr-ids1], Val-list2, E2>,
+        variant-tc(_variant+, T1, Val-list2, E2 ) =<[Ptr-ids2], Val-list3, E3>
+        ======================================================================
+        variant-tc(_variant ; _variant+, T1, Val-list1, E1 ) =
+          <[Ptr-ids1, Ptr-ids2], Val-list3, E3>
+
+
+  { type-tc may be called when no not-yet-existing pointer identifiers are
+    assumed to be used within in the type-denoter, e.g. in the var-decls. }
+  [ty1] type-denot-tc( _type-den, E1 ) = <Ptr-list, E2>,
+        Ptr-list should be empty in E2 = E3
+        ====================================
+        type-tc( _type-den, E1 ) = set-result of E3 to
+          get-type of _type-den in E3.context
+
+  [pe1] [] should be empty in E = E
+  [pe2] [_id+] should be empty in E = add-error
+          [Illegal pointer type definition.] to E
+
+
+  [cp1] check-pointer-identifiers([],E) = E
+  [cp2] check-pointer-identifiers([_id], E) =
+                _id should be a type in inner block of E
+  [cp3] check-pointer-identifiers([_id,_id+],E) =
+          check-pointer-identifiers([_id],
+            check-pointer-identifiers([_id+],E))
+
+
+{ Variable declarations }
+  [v1]  var-decls-tc(, E) = E
+
+  [v2]  var-decls-tc( Var-decl; Var-decls, E) =
+          var-decls-tc(Var-decls, var-decls-tc(Var-decl, E))
+
+  [v3]  var-decls-tc( _id, _id+ : _type-den, E) =
+          var-decls-tc( _id: _type-den; _id+: _type-den, E)
+
+  [v4]  set-construct of E1 to "_id : _type-den" = E2,
+        _id should not be declared in inner block of E2 = E3,
+        type-tc( _type-den, E3 ) = E4
+        ========================================
+        var-decls-tc( _id: _type-den, E1 ) = E4 + var _id: _type-den
+
+
+  [cv1] const-tc( _const, E1 ) = E2,
+        T1 and E2.result.type should be the same type in E2 = E3,
+        E2.result.value should not be a member of [Value*] in E3 = E4
+        =============================================================
+        const-val-list-tc( _const, T1, [Value*], E1 ) = <[E2.result.value, Value*], E4>
+
+  [cv2] const-val-list-tc( _const, T1, Val-list1, E1 ) = <Val-list2, E2>,
+        const-val-list-tc(_const+, T1, Val-list2, E2 ) = <Val-list3, E3>
+        =============================================================
+        const-val-list-tc(_const, _const+, T1, Val-list1, E1) =
+          <Val-list3, E3>

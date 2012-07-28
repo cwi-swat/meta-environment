@@ -1,0 +1,68 @@
+module languages/asf/compiler/format/MuASF
+
+imports languages/box/syntax/Box
+imports languages/asf/compiler/muasf/MuASF
+
+hiddens
+
+context-free start-symbols
+  Module
+
+context-free syntax
+"[" Rule "]" -> Box   {to-box}
+"<" Box ">" -> Rule   {from-box}
+
+context-free syntax
+"[" Cond "]" -> Box   {to-box}
+"<" Box ">"  -> Cond   {from-box}
+
+context-free syntax
+"[" FunId "]" -> Box   {to-box}
+"<" Box ">" -> FunId   {from-box}
+
+context-free syntax
+"[" ModId "]" -> Box   {to-box}
+"<" Box ">" -> ModId   {from-box}
+
+context-free syntax
+"[" SignatureOpt "]" -> Box   {to-box}
+"<" Box ">" -> SignatureOpt   {from-box}
+
+context-free syntax
+"[" RulesOpt "]" -> Box   {to-box}
+"<" Box ">" -> RulesOpt   {from-box}
+
+context-free syntax
+"[" SigArg "]" -> Box   {to-box}
+"<" Box ">" -> SigArg   {from-box}
+
+context-free syntax
+"[" Module "]" -> Box   {to-box}
+"<" Box ">" -> Module   {from-box}
+
+context-free syntax
+"[" {Rule ";"}* "]" -> Box*   {to-box}
+
+context-free syntax
+"[" {FuncDef ";"}* "]" -> Box*   {to-box}
+
+context-free syntax
+"[" {Term ","}+ "]" -> Box*   {to-box}
+
+context-free syntax
+"[" {SigArg ","}+ "]" -> Box*   {to-box}
+
+context-free syntax
+"[" NatCon "]" -> Box {to-box}
+
+variables
+ "NatCon" -> NatCon {strict}
+ "FunId" -> FunId {strict}
+ "ModId" -> ModId {strict}
+ "SignatureOpt" -> SignatureOpt {strict} 
+ "RulesOpt" -> RulesOpt {strict} 
+ "Rule*" -> {Rule";" }* {strict}
+ "FuncDef*" -> {FuncDef";"}* {strict}
+ "Term+" -> {Term ","}+ {strict}
+ "Term"[0-9]* -> Term {strict}
+ "SigArg+" -> {SigArg ","}+ {strict}

@@ -1,0 +1,25 @@
+module Haskell-Lexical
+exports
+  lexical syntax
+    [a-z][A-Za-z0-9]* -> VARID
+    [A-Z][A-Za-z0-9]* -> CONID
+    [] -> VARSYM
+    [] -> CONSYM
+    [] -> QVARID
+    [] -> QCONID
+    [] -> QVARSYM
+    [] -> QCONSYM
+    [] -> PRAGMA
+    "'" ~['] "'" -> CHAR
+    "\"" ~[\"]* "\" -> STRING
+    [] -> INTEGER
+    [] -> RATIONAL
+    [] -> PRIMCHAR
+    [] -> PRIMSTRING
+    [] -> PRIMINTEGER
+    [] -> PRIMFLOAT
+    [] -> PRIMDOUBLE
+    [] -> CLITLIT
+    [] -> UNKNOWN
+
+    Keyword -> VARID {reject}

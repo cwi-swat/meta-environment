@@ -1,0 +1,38 @@
+equations
+
+  [1]   exp( <Mant e Exp> ) = Exp
+  [2]   mant( <Mant e Exp> ) = Mant
+
+  [s1]  Mant != 0, Mant mod 10 = 0
+        ==========================
+        sim( <Mant e Exp> ) = sim( <Mant div 10  e  Exp + 1> )
+
+  [s2]  mant(r)  mod 10 != 0
+        ====================
+        sim(r) = r
+
+  [s3]  sim( <0 e Exp> ) = <0 e 0>
+
+  [u1]  r1' = sim(r1),  r2' = sim(r2),
+        Exp' = min(exp(r1'), exp(r2'))
+        =============================
+        un(r1,r2) = < mant(upgrade(r1', Exp')), mant(upgrade(r2', Exp')), Exp'  >
+
+  [m1]  Exp'' = Exp - Exp',
+        Exp'' \geq 0  =  true
+        ===================
+        upgrade(<Mant e Exp>, Exp') = <Mant * 10 ^ Exp'' e  Exp'>
+
+  [o1]  un(r1,r2)  = <Mant1, Mant2, Exp>
+        ============================
+        r1 + r2 = sim( <Mant1 + Mant2  e  Exp> )
+
+  [o2]  un(r1,r2)  = <Mant1, Mant2, Exp>
+        ============================
+        r1 - r2 = sim( <Mant1 - Mant2  e  Exp> )
+
+  [o3]  <Mant1 e Exp1> * <Mant2 e Exp2> = sim( <Mant1 * Mant2 e Exp1 + Exp2> )
+
+  [o4]  <Mant1 e Exp1> / <Mant2 e Exp2> = sim( < (Mant1 * 10 ^ precision) div Mant2  e  Exp1 - Exp2 - precision > )
+
+  [05]  precision = 4

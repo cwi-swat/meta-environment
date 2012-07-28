@@ -1,0 +1,39 @@
+\begin{thebibliography}{HHKR89}
+
+\bibitem[BHK89]{BHK89}
+J.A. Bergstra, J.~Heering, and P.~Klint, editors.
+\newblock {\em {A}lgebraic {S}pecification}.
+\newblock ACM Press Frontier Series. The ACM Press in co-operation with
+  Addison-Wesley, 1989.
+
+\bibitem[Deu93]{V93.horig}
+A.~van Deursen.
+\newblock Origin tracking in primitive recursive schemes.
+\newblock Technical report, Centrum voor Wiskunde en Informatica (CWI), 1993.
+\newblock To appear.
+
+\bibitem[DKT92]{DKT92}
+A.~van Deursen, P.~Klint, and F.~Tip.
+\newblock Origin tracking.
+\newblock Report {CS}-{R}9230, Centrum voor Wiskunde en Informatica (CWI),
+  1992.
+\newblock To appear in Journal of Symbolic Computation.
+
+\bibitem[DT92]{DT92}
+T.~B. Dinesh and F.~Tip.
+\newblock Animators and error reporters for generated programming environments.
+\newblock Report {CS}-{R}9253, Centrum voor Wiskunde en Informatica (CWI),
+  1992.
+
+\bibitem[HHKR89]{HHKR89}
+J.~Heering, P.R.H. Hendriks, P.~Klint, and J.~Rekers.
+\newblock {T}he syntax definition formalism {SDF} - reference manual.
+\newblock {\em SIGPLAN Notices}, 24(11):43--75, 1989.
+
+\bibitem[Kli93]{Kli93}
+P.~Klint.
+\newblock A meta-environment for generating programming environments.
+\newblock {\em ACM Transactions on Software Engineering Methodology}, 1993.
+\newblock Also CWI report {CS}-{R}9064.
+
+\end{thebibliography}

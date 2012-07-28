@@ -1,0 +1,103 @@
+equations
+
+%% ------------------------------------------------------------------------- %%
+%% rewrite : rewrite a term according to a TRS, using a leftmost-innermost   %%
+%%           reduction strategy. This is expressed in the mutually recursive %%
+%%           functions `try' and `traverse'.                                 %%
+%%                                                                           %%
+%% Note: as a *side-effect*, intermediate results are appended to file       %%
+%%       asdf.out                                                            %%
+
+
+  [Rew] _Dummy = write("ORIGINAL TERM:" _Term) to "asdf.out",
+        _Table = add-rules(_Rule*; make-table(_SigEl+))
+        ==================================================================
+        rewrite( trs signature _SigEl+ rewrite-rules _Rule* term _Term ) =
+          traverse( _Term; _Term; (); _Table; down)
+
+%% ------------------------------------------------------------------------- %%
+%% traverse :                                                                %%
+%%   - when direction is `down' descend as far as possible, until            %%
+%%       (a) a normal form is reached  [Tr2]                                 %%
+%%    or [Tr2]  a constant is reached  [Tr3]                                 %%
+%%       then change direction to up.                                        %%
+%%   - when direction is `up', try to rewrite the current term [Tr4]         %%
+
+  [Tr1] traverse( _Term; _Term*, _Annot* _Id(_SubTerm,_Term*'); (_Nat*); _Table; down) =
+          traverse( _Term; _Term*, _Annot* _Id(_SubTerm,_Term*'),_SubTerm; (_Nat* 1); _Table; down)
+
+  [Tr2] traverse(_Term; _Term*, _Annot* nf _Annot*' _Id(_SubTerm,_Term*'); _Path; _Table; down) =
+          traverse( _Term; _Term*, _Annot* nf _Annot*' _Id(_SubTerm,_Term*'); _Path; _Table; up)
+
+  [Tr3] traverse(_Term; _Term*, _Annots _Id ; _Path; _Table; down) =
+          traverse(_Term; _Term*, _Annots _Id ; _Path; _Table; up)
+
+  [Tr4] _SigEl = sig(_SubTerm),
+        _TabEl*', <_SigEl _Rule*>, _TabEl*'' = _Table
+        ========================================================
+        traverse(_Term; _Term*,_SubTerm; _Path; _Table; up) =
+          try(_Term; _Term*,_SubTerm; _Path; _Table; _Rule*)
+
+%% ------------------------------------------------------------------------- %%
+%% try :                                                                     %%
+%%   - try to rewrite the current subterm                                    %%
+%%       [Tr1] no match, try next rule                                       %%
+%%       [Tr2] match, perform rewrite step, traverse down in contractum      %%
+%%       [Tr3] no match, try next subterm to the right                       %%
+%%       [Tr4] no match, try parent                                          %%
+%%       [Tr5] no match, normal form                                         %%
+
+  [Tr1]  match(_SubTerm; _Lhs; () ) = fail
+        ==============================================================================
+        try(_Term; _Term*,_SubTerm; _Path; _Table; [_Tag] _Lhs -> _Rhs, _Rule*') =
+          try(_Term; _Term*,_SubTerm; _Path; _Table; _Rule*')
+
+
+  [Tr2] match(_SubTerm; _Lhs; () ) = (_Bin*),
+        _Dummy    = write("APPLIED RULE:" _Tag "AT" _Path) to "asdf.out",
+        _Dummy'   = write("REDEX:" _SubTerm) to "asdf.out",
+        _Term'    = inst(_Rhs; (_Bin*)),
+        _Dummy''  = write("REDUCT:" _Term') to "asdf.out",
+        _Term''   = insert(_Term; _Path; _Term'),
+        _Dummy''' = write("RESULTING TERM:" _Term') to "asdf.out",
+        _Term*'   = build-stack(_Term''; _Path)
+        ==============================================================================
+        try(_Term; _Term*,_SubTerm; _Path; _Table; [_Tag] _Lhs -> _Rhs, _Rule*') =
+          traverse(_Term''; _Term*' ; _Path ; _Table; down)
+
+  [Tr3] _Nat != nr-arguments(_Term'),
+        _Nat' = _succ(_Nat),
+        _SubTerm' = navigate(_Term'; (_Nat'))
+        =====================================================================
+        try(_Term; _Term*,_Term',_SubTerm; (_Nat* _Nat); _Table; ) =
+          traverse(_Term; _Term*,_Term',_SubTerm';(_Nat* _Nat');_Table; down)
+
+  [Tr4] _Nat = nr-arguments(_Term')
+        ================================================================
+        try(_Term; _Term*,_Term',_SubTerm; (_Nat* _Nat); _Table; ) =
+          traverse(_Term;_Term*,_Term'; (_Nat*); _Table; up)
+
+  [Tr5] _Dummy = write("NORMAL FORM:"_Term) to "asdf.out"
+        ============================================
+        try(_Term;_Term'; (); _Table ; ) = _Term
+
+%% ------------------------------------------------------------------------- %%
+%% make-table : make a table with pairs <SIGNATURE-ELEMENT, LIST-OF-RULES>   %%
+%%              initially all lists of rules are empty                       %%
+
+  [Mt1]  make-table(_SigEl) = <_SigEl >
+
+  [Mt2]  _TabEl* = make-table(_SigEl+)
+         ================================================
+         make-table(_SigEl, _SigEl+) = <_SigEl >, _TabEl*
+
+%% ------------------------------------------------------------------------- %%
+%% add-rules : add rewrite rules to a table                                  %%
+
+  [Ar1]  _TabEl*', <_SigEl _Rule*'>, _TabEl*'' = _TabEl*,
+         _SigEl = sig(_Lhs)
+         ===============================================================================
+         add-rules([_Tag] _Lhs -> _Rhs, _Rule*; _TabEl*) =
+           add-rules(_Rule*; _TabEl*', <_SigEl _Rule*', [_Tag] _Lhs -> _Rhs>, _TabEl*'')
+
+  [Ar2]  add-rules( ; _Table ) = _Table

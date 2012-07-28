@@ -1,0 +1,11 @@
+module languages/sdf2/normalization/Grammar
+imports languages/sdf2/syntax/Grammars
+exports
+  sorts Grammar-Grammar
+  context-free syntax
+    Grammar "<>" Grammar        -> Grammar-Grammar
+    "<" Grammar "," Grammar ">" -> Grammar-Grammar
+hiddens
+  variables
+    "_G"[0-9\']* -> Grammar
+

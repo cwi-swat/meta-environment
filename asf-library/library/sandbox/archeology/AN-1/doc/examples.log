@@ -1,0 +1,47 @@
+This is TeX, C Version 3.0 (format=lplain 93.2.19)  3 AUG 1993 15:54
+**&latex examples
+(examples.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/local/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/local/lib/tex/macros/art12.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (verbatimfiles.sty) (examples.aux)
+(../examples/DataNotation.asd [1
+
+]) (../examples/DataNotation-X.syn [2])
+(../examples/DataNotation-Y.asd) (../examples/DataNotation.syn [3])
+(../examples/DataNotation-Y.syn) (../examples/ActionNotation.asd [4])
+(../examples/ActionNotation-X.syn [5] [6]) (../examples/ActionNotation-Y.asd)
+(../examples/ActionNotation.syn [7] [8]) (../examples/ActionNotation-Y.syn)
+(../examples/Pico-Abstract-Syntax.asd) (../examples/Pico-Abstract-Syntax-X.syn
+[9]) (../examples/Pico-Abstract-Syntax.syn [10] [11])
+(../examples/Pico-Semantic-Entities.asd)
+(../examples/Pico-Semantic-Entities-X.syn)
+(../examples/Pico-Semantic-Entities-Y.asd) [12]
+(../examples/Pico-Semantic-Entities.syn)
+(../examples/Pico-Semantic-Entities-Y.syn)
+(../examples/Pico-Semantic-Functions.asd [13] [14])
+(../examples/Pico-Semantic-Functions-X.syn [15])
+(../examples/Pico-Semantic-Functions.syn) (../examples/GrammarNotation-X.syn)
+(../examples/MetaNotation-X.syn [16] [17]) (../common/Basic-Notions.syn
+[18] [19]) [20] (examples.toc)
+\tf@toc=\write3
+ [21] (examples.aux) ) 
+Here is how much of TeX's memory you used:
+ 262 strings out of 4458
+ 3232 string characters out of 63205
+ 38729 words of memory out of 262141
+ 2109 multiletter control sequences out of 9500
+ 19164 words of font info for 73 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 16i,5n,15p,191b,338s stack positions out of 300i,40n,60p,3000b,4000s
+
+Output written on examples.dvi (21 pages, 44940 bytes).

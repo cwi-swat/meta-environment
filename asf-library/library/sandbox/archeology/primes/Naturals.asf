@@ -1,0 +1,26 @@
+
+equations
+
+  [1]   0 < Sx  = true
+  [2]   Sx < Sy = x < y
+  [3]   x < 0   = false
+
+  [4]   0 - x = 0
+  [5]   x - 0 = x
+  [6]   Sx - Sy = x - y
+
+  [7]   x < y = true
+        ============
+        div(x,y) = 0
+
+  [8]   x < y = false
+        ======================
+        div(x,y) = S( div(x-y,y) )
+
+  [9]   x < y = true
+        ============
+        mod(x,y) = x
+
+ [10]   x < y = false
+        =================
+        mod(x, y) = mod(x - y, y)

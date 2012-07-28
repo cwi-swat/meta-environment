@@ -1,0 +1,20 @@
+module languages/sdf2/projection/Restrictions
+imports languages/sdf2/syntax/Restrictions
+exports
+  context-free syntax
+   Restrictions "++" Restrictions        -> Restrictions {right}
+    "R"(Grammar)                         -> Restrictions
+    "proj" "_" Symbol "(" Restrictions ")" -> Lookaheads
+
+hiddens
+  variables
+    "restr"[0-9\']*   -> Restriction
+    "restr*"[0-9\']*  -> Restriction*
+    "restr+"[0-9\']*  -> Restriction+
+    "la"[0-9\']*      -> Lookahead
+    "las"[0-9\']*     -> Lookaheads
+    "la*"[0-9\']*     -> {Lookahead ","}* 
+    [p]"*"[0-9\']*    -> Production*
+    "_"[ABC][0-9\']*  -> Symbol
+    "'"[abc][0-9\']*  -> Symbol* 
+    "_G"[0-9\']*      -> Grammar

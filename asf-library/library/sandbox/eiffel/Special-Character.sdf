@@ -1,0 +1,70 @@
+module Special-Character
+
+exports
+
+lexical syntax
+
+"%/" [0-9][0-9]?[0-9]? "/" -> Special-Character
+
+"%A" -> At-Sign
+"%B" -> Backspace
+"%C" -> Circumflex
+"%D" -> Dollar
+"%F" -> Form-Feed
+"%H" -> Backslash
+"%L" -> Tilde
+"%N" -> Newline
+"%Q" -> Back-Quote
+"%R" -> Carriage-Return
+"%S" -> Sharp
+"%T" -> Horizontal-Tab
+"%U" -> Null-Character
+"%V" -> Vertical-Bar
+"%%" -> Percent
+"%'" -> Single-Quote
+"%\"" -> Double-Quote
+"%(" -> Opening-Bracket
+"%)" -> Closing-Bracket
+"%<" -> Opening-Brace
+"%>" -> Closing-Brace
+
+At-Sign -> Special-Character
+Backspace -> Special-Character
+Circumflex -> Special-Character
+Dollar -> Special-Character
+Form-Feed -> Special-Character
+Backslash -> Special-Character
+Tilde -> Special-Character
+Newline -> Special-Character
+Back-Quote -> Special-Character
+Carriage-Return -> Special-Character
+Sharp -> Special-Character
+Horizontal-Tab -> Special-Character
+Null-Character -> Special-Character
+Vertical-Bar -> Special-Character
+Percent -> Special-Character
+Single-Quote -> Special-Character
+Double-Quote -> Special-Character
+Opening-Bracket -> Special-Character
+Closing-Bracket -> Special-Character
+Opening-Brace -> Special-Character
+Closing-Brace -> Special-Character
+
+
+
+
+%% Most Eiffel compilers emit a syntax error when the sequence %K is not
+%% listed in the table above. However, Visual Eiffel considers that the
+%% sequence %K represents the character K when the sequence is not listed
+%% in the table above. As a consequence %P stands for character P and %D
+%% stands for character $.
+
+%% Note: All Eiffel compilers that I have tested (i.e. ISE Eiffel,
+%% Halstenbach, SmallEiffel, Visual Eiffel, TowerEiffel) expect the
+%% letter K in %K to be in upper case to be recognized as a special
+%% character from the table above. As a consequence %d and %D are not
+%% considered the same.
+
+%% Note: It is not clear to me whether underscores are allowed in the
+%% code integer (specially when it is the code of a wide character).
+

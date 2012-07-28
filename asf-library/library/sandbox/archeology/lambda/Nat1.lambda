@@ -1,0 +1,3 @@
+lambda f .
+  lambda x .
+    f ( f ( f x ) )

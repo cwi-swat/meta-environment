@@ -1,0 +1,19 @@
+module Bubble
+
+imports Succ
+        basic/Whitespace
+
+exports
+  sorts NatList
+  context-free start-symbols NatList
+
+  context-free syntax
+    "nil" -> NatList
+    cons(Nat, NatList) -> NatList
+    rev(Nat) -> NatList
+    fact(Nat) -> Nat
+
+hiddens
+  variables
+    "n"[0-9]* -> Nat
+    "l"[0-9]* -> NatList

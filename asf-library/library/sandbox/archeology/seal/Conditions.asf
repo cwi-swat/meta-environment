@@ -1,0 +1,82 @@
+equations
+
+[1a]    used-focusses(focus _Moves' is _Sort') = "ConnectedInstanceName"
+
+[1b]    used-focusses(focus is _Sort') = "ConnectedInstanceName"
+
+[2a]    used-focusses(_Ufn'.focus _Moves' is _Sort') = _Ufn'
+
+[2b]    used-focusses(_Ufn'.focus is _Sort') = _Ufn'
+
+[3a]    used-focusses(focus _Moves' matches _Pattern') = "ConnectedInstanceName"
+
+[3b]    used-focusses(focus matches _Pattern') = "ConnectedInstanceName"
+
+[4a]    used-focusses(_Ufn'.focus _Moves' matches _Pattern') = _Ufn'
+
+[4b]    used-focusses(_Ufn'.focus matches _Pattern') = _Ufn'
+
+[5a]    used-focusses(focus _Moves' is-meta-var) = "ConnectedInstanceName"
+
+[5b]    used-focusses(focus is-meta-var) = "ConnectedInstanceName"
+
+[6a]     used-focusses(_Ufn'.focus _Moves' is-meta-var) = _Ufn'
+
+[6b]     used-focusses(_Ufn'.focus is-meta-var) = _Ufn'
+
+[7]     used-focusses(not _Cpart') = used-focusses(_Cpart')
+
+[8]     used-focusses(_Mod' : _Func' (_FC-exprs') ) = focusses-in-args(_FC-exprs')
+
+[9]     used-focusses(_Cpart' and _Cpart'') =
+                 append-filenames(used-focusses(_Cpart'),used-focusses(_Cpart''))
+
+[10]    used-focusses(_Cpart' or _Cpart'') =
+                append-filenames(used-focusses(_Cpart'),used-focusses(_Cpart''))
+
+[11]    focusses-in-args(_FC-expr') = instance-of-arg(_FC-expr')
+
+[12]    focusses-in-args(_FC-expr', _FC-exprs') =
+                append-filenames(focusses-in-args(_FC-expr'), focusses-in-args(_FC-exprs'))
+
+[13a]   instance-of-arg(focus _Moves') = "ConnectedInstanceName"
+
+[13b]   instance-of-arg(focus) = "ConnectedInstanceName"
+
+[14a]   instance-of-arg(_Ufn'.focus _Moves') = _Ufn'
+
+[14b]   instance-of-arg(_Ufn'.focus) = _Ufn'
+
+[20]     used-modules(_Mod' : _Func' (_FC-exprs') ) = _Mod'
+
+[21a]    used-modules(focus _Moves' is _Sort') = %% empty %%
+
+[21b]    used-modules(focus is _Sort') = %% empty %%
+
+[22a]    used-modules(_Ufn'.focus _Moves' is _Sort') = %% empty %%
+
+[22b]    used-modules(_Ufn'.focus is _Sort') = %% empty %%
+
+[23a]    used-modules(focus _Moves' matches _Pattern') = %% empty %%
+
+[23b]    used-modules(focus matches _Pattern') = %% empty %%
+
+[24a]    used-modules(_Ufn'.focus _Moves' matches _Pattern') = %% empty %%
+
+[24b]    used-modules(_Ufn'.focus matches _Pattern') = %% empty %%
+
+[25a]    used-modules(focus _Moves' is-meta-var) = %% empty %%
+
+[25b]    used-modules(focus is-meta-var) = %% empty %%
+
+[26a]    used-modules(_Ufn'.focus _Moves' is-meta-var) = %% empty %%
+
+[26b]    used-modules(_Ufn'.focus is-meta-var) = %% empty %%
+
+[27]     used-modules(not _Cpart') = used-modules (_Cpart')
+
+[28]     used-modules(_Cpart' and _Cpart'') =
+                append-module-names(used-modules(_Cpart'), used-modules(_Cpart''))
+
+[29]     used-modules (_Cpart' or _Cpart'') =
+                append-module-names(used-modules(_Cpart'), used-modules(_Cpart''))

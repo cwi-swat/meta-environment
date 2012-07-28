@@ -1,0 +1,28 @@
+module Type-Specifiers
+
+imports Lexical-Structure
+
+exports
+
+sorts Type-Specifier
+
+context-free syntax
+	%% Ambiguity in Sather-1.1.ps.gz.
+	(Uppercase-Identifier | Abstract-Class-Name) 
+		("{" Type-Specifier-List "}")? -> Type-Specifier
+
+	Method-Closure-Type-Specifier -> Type-Specifier
+	"SAME" -> Type-Specifier
+
+	Routine-Closure-Type-Specifier -> Method-Closure-Type-Specifier
+	Iter-Closure-Type-Specifier -> Method-Closure-Type-Specifier
+
+	"ROUT" ("{" {(Routine-Mode Type-Specifier) ","}+ "}")? 
+		(":" Type-Specifier)? -> Routine-Closure-Type-Specifier
+
+	"ITER" ("{" {(Iter-Mode Type-Specifier) ","}+ "}")? 
+		(":" Type-Specifier)? -> Iter-Closure-Type-Specifier
+
+aliases
+	{Type-Specifier ","}+ -> Type-Specifier-List
+

@@ -1,0 +1,69 @@
+equations
+
+[tts]	to-tex-state([x -> i1][y -> i2]) = s_{i1,i2,}
+[tts]	to-tex-state([x -> i1][y -> i2][z->i3]) = s_{i1,i2,i3}
+
+[tts]	to-tex-stm(while y <= x do z := z + 1; x := x - y od) = $S$
+[tts]	to-tex-stm(z := z + 1; x := x - y) = $T$
+
+[default-tts]
+	to-tex-stm(S+) = S+
+
+[tr1]	s1' = to-tex-state(s1),
+	s2' = to-tex-state(s2),
+	S+' = to-tex-stm(S+)
+	===
+	tree(lab, inftree, S+, s1, s2) = \inference[]{inftree}{\mathligsoff(\mbox{\texttt{S+'}},\mathligson s1') -> s2'}
+
+[pt]	s1' = to-tex-state(s1),
+	s2' = to-tex-state(s2),
+	S+' = to-tex-stm(S+)
+	===
+	pred-tree(S+, s1, s2) = 
+{\mathligsoff(\mbox{\texttt{S+'}},\mathligson s1' ) -> s2' }
+
+
+[tt1]	s' = (x := a, s)
+	===
+	to-tree(x := a, s) = pred-tree(x:=a, s, s')
+
+
+[tt2]	to-tree(skip, s) = pred-tree(skip, s, s')
+
+[tt2]	inftree1 = to-tree(S, s),
+	s' = (S, s),
+	inftree2 = to-tree(S+, s'),
+	s'' = (S+, s')
+	===
+	to-tree(S; S+, s) = tree(comp, inftree1 \\ inftree2, S; S+, s, s'')
+
+[tt3]	B[[b]]s = true,
+	inftree = to-tree(S+1, s),
+	s' = (S+1, s)
+	===
+	to-tree(if b then S+1 else S+2 fi, s) =
+		tree(if-tt, inftree, if b then S+1 else S+2 fi, s, s')
+
+[tt3]	B[[b]]s = false,
+	inftree = to-tree(S+2, s),
+	s' = (S+2, s)
+	===
+	to-tree(if b then S+1 else S+2 fi, s) =
+		tree(if-ff, inftree, if b then S+1 else S+2 fi, s, s')
+
+
+[tt4]	B[[b]]s = true,
+	inftree1 = to-tree(S+, s),
+	s' = (S+, s),
+	inftree2 = to-tree(while b do S+ od, s'),
+	s'' = (while b do S+ od, s')
+	===
+	to-tree(while b do S+ od, s) =
+		tree(while-tt, inftree1 & inftree2, while b do S+ od, s, s'')
+
+[tt5]	B[[b]]s = false
+	===
+	to-tree(while b do S+ od, s) = 
+		pred-tree(while b do S+ od, s, s)
+
+

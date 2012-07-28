@@ -1,0 +1,33 @@
+module Languages/SML/Types
+
+imports	Languages/SML/Identifiers
+
+hiddens sorts
+	Type TypeSequence TypeRow SingleTypeRow
+
+exports
+
+context-free syntax
+
+%% Types
+
+  TypeVariable		-> Type
+  "{" TypeRow? "}"	-> Type
+
+  TypeSequence LongTypeConstructor	-> Type
+  Type "*" Type				-> Type {left}
+  Type "->" Type			-> Type {left}
+  "(" Type ")"				-> Type 
+  
+%% Type row
+
+  Label ":" Type	-> SingleTypeRow
+  
+  { SingleTypeRow "," }+ 	-> TypeRow 
+
+%% Type sequence
+
+  Type?				-> TypeSequence
+  "(" { Type "," }+ ")" 	-> TypeSequence
+
+

@@ -1,0 +1,12 @@
+module Haskell-Statements
+imports ExtraSepLists[Stmt ";" Stmts]
+	ExtraSepLists0[Fbind "," Fbinds]
+exports
+  context-free syntax
+    "do" Stmtlist 	-> Exp10 	{cons("Do")}
+    "{" ";"? Stmts "}"  -> Stmtlist
+    Infixexp "<-" Exp 	-> Stmt 	{cons("DoBind")}
+    Exp               	-> Stmt 	{cons("DoExp")}
+    "let" Declbinds   	-> Stmt 	{cons("DoLet")}
+    Qvar "=" Exp 	-> Fbind	{cons("FBind")}
+

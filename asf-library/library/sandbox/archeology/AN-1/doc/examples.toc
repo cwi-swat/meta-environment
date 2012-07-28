@@ -1,0 +1,37 @@
+\contentsline {section}{\numberline {1}ActionNotation}{1}
+\contentsline {subsection}{\numberline {1.1}DataNotation}{1}
+\contentsline {subsubsection}{\numberline {1.1.1}MetaNotation Module}{1}
+\contentsline {subsubsection}{\numberline {1.1.2}Parsing according to DataNotation-X}{2}
+\contentsline {subsubsection}{\numberline {1.1.3}Data extended to Yielders in DataNotation-Y}{3}
+\contentsline {subsubsection}{\numberline {1.1.4}Executable using ASF+SDF syn/eqs}{3}
+\contentsline {paragraph}{Module DataNotation.syn}{3}
+\contentsline {paragraph}{Module DataNotation-Y.syn}{4}
+\contentsline {subsection}{\numberline {1.2}ActionNotation}{4}
+\contentsline {subsubsection}{\numberline {1.2.1}MetaNotation Module}{4}
+\contentsline {subsubsection}{\numberline {1.2.2}Parsing according to ActionNotation-X}{5}
+\contentsline {subsubsection}{\numberline {1.2.3}Data extended to Yielders in ActionNotation-Y}{7}
+\contentsline {subsubsection}{\numberline {1.2.4}Executable using ASF+SDF syn/eqs}{7}
+\contentsline {paragraph}{Module ActionNotation.syn}{7}
+\contentsline {paragraph}{Module ActionNotation-Y.syn}{9}
+\contentsline {section}{\numberline {2}Pico}{9}
+\contentsline {subsection}{\numberline {2.1}Pico-Abstract-Syntax}{9}
+\contentsline {subsubsection}{\numberline {2.1.1}MetaNotation Module}{9}
+\contentsline {subsubsection}{\numberline {2.1.2}Parsing according to Pico-Abstract-Syntax-X}{10}
+\contentsline {subsubsection}{\numberline {2.1.3}Executable using ASF+SDF syn/eqs}{10}
+\contentsline {paragraph}{Module Pico-Abstract-Syntax.syn}{10}
+\contentsline {subsection}{\numberline {2.2}Pico-Semantic-Entities}{12}
+\contentsline {subsubsection}{\numberline {2.2.1}MetaNotation Module}{12}
+\contentsline {subsubsection}{\numberline {2.2.2}Parsing according to Pico-Semantic-Entities-X}{12}
+\contentsline {subsubsection}{\numberline {2.2.3}Data extended to Yielders in Pico-Semantic-Entities-Y}{12}
+\contentsline {subsubsection}{\numberline {2.2.4}Executable using ASF+SDF syn/eqs}{13}
+\contentsline {paragraph}{Module Pico-Semantic-Entities.syn}{13}
+\contentsline {paragraph}{Module Pico-Semantic-Entities-Y.syn}{13}
+\contentsline {subsection}{\numberline {2.3}Pico-Semantic-Functions}{13}
+\contentsline {subsubsection}{\numberline {2.3.1}MetaNotation Module}{13}
+\contentsline {subsubsection}{\numberline {2.3.2}Parsing according to Pico-Semantic-Functions-X}{15}
+\contentsline {subsubsection}{\numberline {2.3.3}Executable using ASF+SDF syn/eqs}{16}
+\contentsline {paragraph}{Module Pico-Semantic-Functions.syn}{16}
+\contentsline {section}{\numberline {3}Auxiliary Modules}{16}
+\contentsline {subsubsection}{\numberline {3.0.4}GrammarNotation-X}{16}
+\contentsline {subsubsection}{\numberline {3.0.5}MetaNotation-X}{17}
+\contentsline {subsubsection}{\numberline {3.0.6}Basic-Notions}{19}

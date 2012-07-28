@@ -1,0 +1,35 @@
+
+equations
+
+    [Gr1]  Edge* Edge Edge*' Edge Edge*'' = Edge* Edge Edge*' Edge*''
+
+    [Mk1]  mk-list(Label, , Node*) =
+    [Mk2]  mk-list(Label, Node*, ) =
+    [Mk3]  mk-list(Label, Node, Node+') = Edge*,
+           mk-list(Label, Node+, Node+') = Edge*'
+           =========================================
+           mk-list(Label, Node Node+, Node+') = Edge* Edge*'
+    [Mk4]  mk-list(Label, Node, Node*) = Edge*
+           ==============================================================
+           mk-list(Label, Node, Node' Node*) = Label: Node -> Node' Edge*
+
+    [Su1]  succ(Node, Edge*) = succ(Node, Edge*, )
+    [Su2]  succ(Node, Label: Node -> Node' Edge*, Node*) = succ(Node, Edge*, Node* Node')
+    [Su3]  succ(Node, , Node*) = Node*
+    [Su4]  Node != Node'
+           ==========================================================================
+           succ(Node, Label: Node' -> Node'' Edge*, Node*) = succ(Node, Edge*, Node*)
+
+    [Pr1]  pred(Node, Edge*) = pred(Node, Edge*, )
+    [Pr2]  pred(Node, Label: Node' -> Node Edge*, Node*) = pred(Node, Edge*, Node* Node')
+    [Pr3]  pred(Node, , Node*) = Node*
+    [Pr4]  Node != Node'
+           ===========================================================================
+           pred(Node, Label: Node'' -> Node' Edge*, Node*) = pred(Node, Edge*, Node*)
+
+%% IF-THEN-ELSE: conditionals for NODE* and ID*
+
+    [IF1]  IF true  THEN Node* ELSE Node*' FI = Node*
+    [IF2]  IF false THEN Node* ELSE Node*' FI = Node*'
+    [IF3]  IF true  THEN Edge* ELSE Edge*' FI = Edge*
+    [IF4]  IF false THEN Edge* ELSE Edge*' FI = Edge*'

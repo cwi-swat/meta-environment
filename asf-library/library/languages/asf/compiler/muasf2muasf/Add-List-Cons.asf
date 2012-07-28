@@ -1,0 +1,76 @@
+equations
+
+[main]
+add-list-cons(Module) = alc(Module)
+
+[not-empty]
+alc({Funid}(Term+)) = {Funid}(to-cons(Term+))
+
+[empty]
+alc({Funid}) = {Funid}(null)
+
+equations
+
+[many]
+to-cons(Term, Term+) = cons(Term, to-cons(Term+))
+
+[single]
+to-cons(Term) = Term
+
+%% NOTE: an analysis of which constructions need ATinsert, and which
+%% need ATconcat will make the make_list runtime function unnecessary.
+%% make_list uses at test for ATgetType(x) == AT_LIST, an creates a
+%% singleton if it is not a list. The result is that cons() can always
+%% be used to construct a list.
+%%
+%% It would be easy to predict which args are lists, and which not, and
+%% then to generate either concat(_,_) or insert(_,_).
+%%
+%% Also note that cons(make_list(elem), list) is inefficient, first
+%% constructing the singleton [elem], which is then concatenated to list,
+%% instead of just insert(elem, list)! This might be a cause for the huge
+%% amounts of ATinserts when profiling the average ASF specification...
+
+equations
+
+%% Here we deal with separated lists, a new feature that we will implement 
+%% next to the normal lists. Although normal lists are a special case of
+%% separated lists, we will implement them separately to make the transition
+%% smoother.
+
+[not-empty]
+alc({Funid SepCount}(Term+)) = {Funid SepCount}(to-sep-cons(Term+, SepCount))
+
+[empty]
+alc({Funid SepCount}) = {Funid SepCount}(null)
+
+equations
+
+[] to-sep-cons(Term, SepCount) = Term
+[] to-sep-cons(Term, Term+, SepCount) = scons(Term, take(SepCount, Term+), to-sep-cons(drop(SepCount, Term+), SepCount))
+
+tests
+
+[] to-sep-cons(a,s1,s2,s3,b,s1,s2,s3,c, 3) == scons(a,s1,s2,s3, scons(b,s1,s2,s3, c))
+ 
+equations
+
+[] take(0, Term*) =
+[] take(SepCount, ) =
+[] take(SepCount, Term, Term*) = Term, take(SepCount - 1, Term*) when SepCount != 0
+
+tests
+
+[] take(0, a,b,c) ==
+[] take(2, a,b,c,d) == a,b
+
+equations
+
+[] drop(0, Term*) = Term*
+[] drop(SepCount, ) =
+[] drop(SepCount, Term, Term*) = drop(SepCount - 1, Term*) when SepCount != 0
+ 
+tests
+
+[] drop(0, a,b,c) == a,b,c
+[] drop(2, a,b,c,d) == c,d

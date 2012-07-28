@@ -1,0 +1,31 @@
+equations
+
+[ass]	(x := a, s) = s[x -> A[[a]]s]
+
+[skp]	(skip, s) = s
+
+[cmp]	(S, s) = s',
+	(S+, s') = s''
+	===
+	(S; S+, s) = s''
+
+[ift]	B[[b]]s = true,
+	(S+1, s) = s'
+	===
+	(if b then S+1 else S+2 fi, s) = s'
+
+[iff]	B[[b]]s = false,
+	(S+2, s) = s'
+	===
+	(if b then S+1 else S+2 fi, s) = s'
+
+[wht]	B[[b]]s = true,
+	(S+, s) = s',
+	(while b do S+ od, s') = s''
+	===
+	(while b do S+ od, s) = s''
+
+[wht]	B[[b]]s = false
+	===
+	(while b do S+ od, s) = s
+

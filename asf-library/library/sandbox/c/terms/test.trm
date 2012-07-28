@@ -1,0 +1,9 @@
+disambiguate(
+	enum {a,b};
+	int d;
+	int a;
+	int b = c;
+,
+<{},{},true>,
+<{},file(""),"",false>
+)

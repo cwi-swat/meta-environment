@@ -1,0 +1,73 @@
+module languages/asf/pretty/RenamedASFtoBox
+
+
+
+imports languages/asf/syntax/Module
+  [
+    ASF-Module => Module
+    ASF-Section => Section
+    ASF-TestEquation => TestEquation
+    ASF-Implies => Implies
+    ASF-Equation => Equation
+    ASF-ConditionalEquation => ConditionalEquation
+    ASF-Condition => Condition
+    ASF-Conditions => Conditions
+    ASF-TagId => TagId
+    ASF-Tag => Tag
+  ]
+
+
+exports
+
+sorts Module Section TestEquation Implies Equation 
+sorts ConditionalEquation Condition Conditions TagId Tag
+
+imports languages/asf/pretty/BoxMapping[Module]
+imports languages/asf/pretty/BoxMapping[Section]
+imports languages/asf/pretty/BoxMapping[TestEquation]
+imports languages/asf/pretty/BoxMapping[Implies]
+imports languages/asf/pretty/BoxMapping[Equation]
+imports languages/asf/pretty/BoxMapping[ConditionalEquation]
+imports languages/asf/pretty/BoxMapping[Condition]
+imports languages/asf/pretty/BoxMapping[Conditions]
+imports languages/asf/pretty/BoxMapping[TagId]
+imports languages/asf/pretty/BoxMapping[Tag]
+
+context-free syntax
+  conditions-to-box({Condition ","}+) -> Box
+  equations-to-box(ConditionalEquation*) -> Box
+  testequations-to-box(TestEquation*) -> Box
+  chars-to-box(CHAR*) -> Box
+
+  "RULE" "[" tag:Box rule:Box "]" -> Box
+  "CONDRULE" "[" tag:Box conds:Box rule:Box "]" -> Box
+  "WHENRULE" "[" tag:Box conds:Box rule:Box "]" -> Box
+
+  "indent" -> NatCon
+  "eqssep" -> NatCon
+
+hiddens
+
+
+variables
+ 
+  "Module"[0-9]* -> Module
+  "Section"[0-9]* -> Section
+  "Section*"[0-9]* -> Section*
+  "TestEquation"[0-9]* -> TestEquation
+  "TestEquation*"[0-9]* -> TestEquation*
+  "Implies"[0-9]* -> Implies
+  "Equation"[0-9]* -> Equation
+  "ConditionalEquation*"[0-9]* -> ConditionalEquation*
+  "ConditionalEquation"[0-9]* -> ConditionalEquation
+  "Condition"[0-9]* -> Condition
+  "Condition+"[0-9]* -> {Condition ","}+
+  "Conditions"[0-9]* -> Conditions
+  "TagId"[0-9]* -> TagId
+  "Tag"[0-9]* -> Tag
+  "Box"[0-9]* -> Box
+  "Box*" -> Box*
+  "i" -> NatCon
+
+
+

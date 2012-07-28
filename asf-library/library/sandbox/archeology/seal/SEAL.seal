@@ -1,0 +1,22 @@
+Configuration for language SEAL is
+
+button Typecheck
+when
+  focus root is SEAL-spec
+enable
+  RootVar := focus root;
+  Errors := SEAL-tc : typecheck(RootVar);
+  create("Typecheckerrors", Errors)
+doc : "typecheck SEAL specification"
+manual entry : SEAL
+
+button Compile
+when
+  focus root is SEAL-spec
+enable
+  RootVar := focus root;
+  Lispcode := SEAL-Compiler : compile(RootVar);
+  FilenameVar := SEAL-Compiler : output-filename(RootVar);
+  create(FilenameVar, Lispcode)
+doc : "compile SEAL specification"
+manual entry : SEAL

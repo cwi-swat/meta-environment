@@ -1,0 +1,12 @@
+module Protect-Statements
+
+imports Type-Specifiers
+
+exports
+
+sorts Protect-Statement
+
+context-free syntax
+	"protect" Statement-List
+	("when" Type-Specifier "then" Statement-List)*
+	("else" Statement-List)? "end" -> Protect-Statement

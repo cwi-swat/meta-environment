@@ -1,0 +1,3 @@
+equations
+
+[n1]	x != y = not(x = y)

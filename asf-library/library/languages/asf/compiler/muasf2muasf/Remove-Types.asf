@@ -1,0 +1,5 @@
+equations
+
+[remtypes] remove-types(Module) = rt(Module)
+
+[remtypes-0] rt(Term : Type) = Term

@@ -1,0 +1,15 @@
+module Equality
+
+%%imports  Expression
+
+exports
+
+context-free syntax
+
+Expression Comparison Expression -> Equality {assoc}
+"=" | "/=" -> Comparison
+
+
+
+
+%% Note: See Operator for operator precedence and associativity.

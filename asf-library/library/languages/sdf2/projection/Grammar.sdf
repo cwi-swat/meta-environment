@@ -1,0 +1,10 @@
+module languages/sdf2/projection/Grammar
+imports languages/sdf2/syntax/Grammars basic/Booleans
+exports
+  context-free syntax
+    "if" Boolean "then" Grammar "else" Grammar "fi" -> Grammar %% {delaying2,delaying3}  
+
+hiddens
+  variables
+    "_G"[0-9\']* -> Grammar
+

@@ -1,0 +1,181 @@
+equations
+
+[flatten-trv-1]
+	$featureexpression+' := flatten-feature-arguments($featureexpression+)
+	===
+	flatten(all($featureexpression+)) = all($featureexpression+')
+
+[flatten-trv-2]
+	$featureexpression+' := flatten-feature-arguments($featureexpression+)
+	===
+	flatten(more-of($featureexpression+)) = more-of($featureexpression+')
+
+[flatten-trv-3]
+	$featureexpression+' := flatten-feature-arguments($featureexpression+)
+	===
+	flatten(one-of($featureexpression+)) = one-of($featureexpression+')
+
+
+%% Helper function
+equations
+
+[flatten-feature-arguments-top] %% hack: using all
+	$bag := extract-used-features(all($featureexpression+)),
+	$featureexpression+' := feature-bag-to-arguments($bag)
+	===
+	flatten-feature-arguments($featureexpression+) = $featureexpression+'
+
+
+equations
+
+[feature-bag-to-arguments-single]
+	feature-bag-to-arguments({$featureexpression}) = $featureexpression
+
+[feature-bag-to-arguments-many]
+	feature-bag-to-arguments({$featureexpression, $featureexpression+}) =
+		$featureexpression, feature-bag-to-arguments({$featureexpression+})
+
+
+equations
+
+[add-argument-trv-1]
+	all($featureexpression+) := $featureexpression
+	===
+	add-argument($featureexpression, $featureexpression, $atomicfeature) =
+		all($featureexpression+, $atomicfeature)
+
+[add-argument-trv-2]
+	more-of($featureexpression+) := $featureexpression
+	===
+	add-argument($featureexpression, $featureexpression, $atomicfeature) =
+		more-of($featureexpression+, $atomicfeature)
+
+[add-argument-trv-3]
+	one-of($featureexpression+) := $featureexpression
+	===
+	add-argument($featureexpression, $featureexpression, $atomicfeature) =
+		one-of($featureexpression+, $atomicfeature)
+
+equations
+
+[remove-argument-trv-1]
+	all($featureexpression+1, $atomicfeature, $featureexpression*2) := 
+		$featureexpression
+	===
+	remove-argument($featureexpression, $featureexpression, $atomicfeature) =
+		all($featureexpression+1, $featureexpression*2)
+
+[remove-argument-trv-1']
+	all($featureexpression*1, $atomicfeature, $featureexpression+2) := 
+		$featureexpression
+	===
+	remove-argument($featureexpression, $featureexpression, $atomicfeature) =
+		all($featureexpression*1, $featureexpression+2)
+
+[remove-argument-trv-2]
+	more-of($featureexpression+1, $atomicfeature, $featureexpression*2) := 
+		$featureexpression
+	===
+	remove-argument($featureexpression, $featureexpression, $atomicfeature) =
+		more-of($featureexpression+1, $featureexpression*2)
+
+[remove-argument-trv-2']
+	more-of($featureexpression*1, $atomicfeature, $featureexpression+2) := 
+		$featureexpression
+	===
+	remove-argument($featureexpression, $featureexpression, $atomicfeature) =
+		more-of($featureexpression*1, $featureexpression+2)
+
+[remove-argument-trv-3]
+	one-of($featureexpression+1, $atomicfeature, $featureexpression*2) := 
+		$featureexpression
+	===
+	remove-argument($featureexpression, $featureexpression, $atomicfeature) =
+		one-of($featureexpression+1, $featureexpression*2)
+
+[remove-argument-trv-3']
+	one-of($featureexpression*1, $atomicfeature, $featureexpression+2) := 
+		$featureexpression
+	===
+	remove-argument($featureexpression, $featureexpression, $atomicfeature) =
+		one-of($featureexpression*1, $featureexpression+2)
+
+[default-remove-argument-trv]
+	remove-argument($featureexpression, $featureexpression, $atomicfeature) =
+		$featureexpression
+
+equations
+
+[mandatorize-trv-1]
+	$featureexpression'? := $featureexpression
+	===
+	mandatorize($featureexpression, $featureexpression) =
+		$featureexpression'
+
+[mandatorize-trv-2]
+	one-of($featureexpression+) := $featureexpression
+	===
+	mandatorize($featureexpression , $featureexpression) =
+		all($featureexpression+)
+
+[mandatorize-trv-3]
+	more-of($featureexpression+) := $featureexpression
+	===
+	mandatorize($featureexpression , $featureexpression) =
+		all($featureexpression+)
+
+[default-mandatorize-trv-4]
+	all($featureexpression+) !:= $featureexpression
+	===
+	mandatorize($featureexpression, $featureexpression) =
+		all($featureexpression)
+
+
+
+equations
+
+[optionalize-trv-1]
+	$featureexpression'? !:= $featureexpression
+	===
+	optionalize($featureexpression, $featureexpression) =
+		$featureexpression'?
+
+equations
+
+[inclusify-trv-1]
+	all($featureexpression+) := $featureexpression
+	===
+	inclusify($featureexpression, $featureexpression) =
+		more-of($featureexpression+)
+
+[inclusify-trv-2]
+	one-of($featureexpression+) := $featureexpression
+	===
+	inclusify($featureexpression , $featureexpression) =
+		more-of($featureexpression+)
+
+[default-inclusify-trv-3]
+	more-of($featureexpression+) !:= $featureexpression
+	===
+	inclusify($featureexpression, $featureexpression) =
+		more-of($featureexpression)
+
+equations
+
+[exclusify-trv-1]
+	all($featureexpression+) := $featureexpression
+	===
+	exclusify($featureexpression, $featureexpression) =
+		one-of($featureexpression+)
+
+[exclusify-trv-2]
+	more-of($featureexpression+) := $featureexpression
+	===
+	exclusify($featureexpression , $featureexpression) =
+		one-of($featureexpression+)
+
+[default-exclusify-trv-3]
+	one-of($featureexpression+) !:= $featureexpression
+	===
+	exclusify($featureexpression, $featureexpression) =
+		one-of($featureexpression)

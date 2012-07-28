@@ -1,0 +1,13 @@
+module languages/fdl/utilities/bdd/Implication
+
+imports languages/fdl/utilities/bdd/Disjunction
+
+exports
+
+context-free syntax
+	ant:Formula "->" cons:Formula -> Formula {cons("implication"),right}
+
+context-free priorities
+       lhs:Formula "|" rhs:Formula -> Formula {cons("disjunction"),assoc}
+        >
+       ant:Formula "->" cons:Formula -> Formula {cons("implication"),right}

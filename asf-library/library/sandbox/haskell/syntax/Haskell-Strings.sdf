@@ -1,0 +1,30 @@
+module Haskell-Strings
+exports
+  lexical syntax
+    "'" CharChar "'" 	   -> CHAR
+    "\"" StringChar* "\""  -> STRING
+
+    ~[\0-\31\"\\] 	   -> StringChar
+    Escape 		   -> StringChar
+    Gap                    -> StringChar
+
+    [\\] [\ \t\n]+ [\\]    -> Gap
+
+    [\\] (CharEsc | ASCII 
+         | Decimal 
+         | ([o] Octal) 
+         | [x] Hexadecimal) -> Escape
+
+    [abfnrtv\\\"\'\&]       -> CharEsc
+
+  lexical syntax
+    "^" [A-Z\@\[\]\\\^\_]                   -> ASCII
+
+    "NUL" | "SOH" | "STX" | "ETX" | "EOT" |
+    "ENQ" | "ACK" | "BEL" | "BS"  | "HT"  |
+    "LF"  | "VT"  | "FF"  | "CR"  | "SO"  |
+    "SI"  | "DLE" | "DC1" | "DC2" | "DC3" |
+    "DC4" | "NAK" | "SYN" | "ETB" | "CAN" |
+    "EM"  | "SUB" | "ESC" | "FS"  | "GS"  |
+    "RS"  | "US"  | "SP"  | "DEL"           -> ASCCI
+

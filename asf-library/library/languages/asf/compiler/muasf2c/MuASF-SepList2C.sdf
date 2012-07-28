@@ -1,0 +1,59 @@
+module languages/asf/compiler/muasf2c/MuASF-SepList2C
+
+%% This module is a clone of MuASF-List2C.
+
+%% There is a circular dependency here
+imports languages/asf/compiler/muasf2c/MuASF-Rules2C
+
+exports
+context-free syntax
+  asfseplistrules2cstats({Rule ";"}*, {NamePair ","}*)                                                -> SlI-tuple  {complete}
+  seplist2cstats({C-Rule ";"}+, {NamePair ","}*, Integer)                                             -> SlI-tuple  {complete} 
+  seplistpatterns2cstats({C-Rule ";"}*, Expression, {NamePair ","}*, Integer)                         -> SlI-tuple  {complete} 
+  seplistpattern2cstats({C-Rule ";"}+, Expression, {NamePair ","}*, Integer)                          -> ADSI-tuple {complete} 
+  seplistpattern2cstats(Boolean, {FV-Path ","}+, {C-Rule ";"}+, Expression, {NamePair ","}*, Integer) -> ADSI-tuple {complete}
+  seplistseparators2cstats(Boolean, {FV-Path ","}+, {C-Rule ";"}+, Expression, {NamePair ","}*, Integer) -> ADSI-tuple {complete} 
+
+hiddens
+
+context-free start-symbols
+ SlI-tuple ADSI-tuple
+
+variables
+  "Aint" [0-9]*           -> Integer      {strict}                  
+  "Aexp" [0-9]*           -> Expression                    
+  "Cint" [0-9]*           -> Integer-constant              
+  "Expression+" [0-9]*    -> {Expression ","}+             
+  "$Expression" [0-9]*    -> Expression                    
+  "MakeSelectStat" [0-9]* -> MakeSelectStat                
+  "Identifier" [0-9]*     -> Identifier                    
+  "Cond" [0-9]*           -> Cond                          
+  "Cond*" [0-9]*          -> {Cond "&"}*                   
+  "Sym"                   -> Identifier                    
+  "Func"                  -> Identifier                    
+  "IdCon"                 -> IdCon                         
+  "Bool" [0-9]*           -> Boolean                       
+  "Funid" [0-9]*          -> FunId                         
+  "Namepair*" [0-9]*      -> {NamePair ","}*               
+  "Nametable" [0-9]*      -> NameTable                     
+  "Modid"                 -> ModId                         
+  "$Ltest"                -> Expression                    
+  "Decls" [0-9]*          -> Declaration-list              
+  "Decl" [0-9]*           -> Declaration                   
+  "Decl*" [0-9]*          -> Declaration-list-opt          
+  "Decl+" [0-9]*          -> Declaration+                  
+  "$ActualArg*" [0-9\']*  -> {Expression ","}*             
+  "$ActualArgs" [0-9\']*  -> Argument-expression-list      
+  "$ActualArg+" [0-9\']*  -> {Expression ","}+             
+  "FormalArg+" [0-9\']*   -> {Parameter-declaration ","}+  
+  "Tepair*" [0-9]*        -> {TE-pair ","}*                
+  "Cenv" [0-9]*           -> C-env                         
+  "Exp" [0-9]*            -> Expression                    
+  "C-rule+" [0-9]*        -> {C-Rule ";"}+   {strict}              
+  "C-rule*" [0-9]*        -> {C-Rule ";"}*                 
+  "C-rule" [0-9]*         -> C-Rule                        
+  "Aint+" [0-9]*          -> {Integer ","}+                
+  "Fv-path+" [0-9]*       -> {FV-Path ","}+                
+  "Fv-path*" [0-9]*       -> {FV-Path ","}* 
+  "Fv-path"[0-9]*         -> FV-Path
+  "Seps"[0-9]*            -> NatCon               

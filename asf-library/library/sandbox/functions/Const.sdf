@@ -1,0 +1,17 @@
+module functions/Const[A B]
+
+exports
+
+context-free syntax
+
+const -> (A B => A)
+
+hiddens
+
+imports basic/Whitespace
+
+sorts A
+variables
+
+"c" -> A
+"B" -> B

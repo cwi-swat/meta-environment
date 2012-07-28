@@ -1,0 +1,4 @@
+static unsigned int signedToUnsignedInt(int signedInt)
+{
+	int a = signedInt;
+}

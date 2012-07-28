@@ -1,0 +1,71 @@
+module While-NS-Tree
+
+imports While-Nat-Sem
+
+exports 
+
+sorts Inference-Tree
+
+context-free syntax
+
+%%"while-tt" -> While-TT-Label
+%%"while-ff" -> While-FF-Label
+%%"if-tt" -> If-TT-Label
+%%"if-ff" -> If-FF-Label
+%%"comp" -> Comp-Label
+%%"ass" -> Ass-Label
+%%"skip" -> Skip-Label
+
+while-tt -> While-TT-Label
+while-ff -> While-FF-Label
+if-tt -> If-TT-Label
+if-ff -> If-FF-Label
+comp -> Comp-Label
+ass -> Ass-Label
+skip -> Skip-Label
+
+While-TT-Label -> Label
+While-FF-Label -> Label
+If-TT-Label -> Label
+If-FF-Label -> Label
+Comp-Label -> Label
+Ass-Label -> Label
+Skip-Label -> Label
+ -> Label
+
+"\\inference[" Label "]{" Inference-Tree "}{\\mathligsoff(\\mbox{\\texttt{" Stms "}},\\mathligson" State ") ->" State "}" -> Inference-Tree
+
+"{\\mathligsoff(\\mbox{\\texttt{" Stms "}},\\mathligson " State ") ->" State "}" -> Predicate
+
+-> Inference-Tree
+
+
+
+Inference-Tree "\\\\" Inference-Tree -> Inference-Tree
+Inference-Tree "&" Inference-Tree -> Inference-Tree
+
+tree(Label, Inference-Tree, Stms, State, State) -> Inference-Tree
+pred-tree(Stms, State, State) -> Predicate
+Predicate -> Inference-Tree
+
+
+to-tex-stm(Stms) -> Tex-Stm
+
+Tex-Stm -> Stm
+
+"$S$" -> Tex-Stm
+"$T$" -> Tex-Stm
+
+"s_{" Int "," Int "," Int? "}" -> Tex-State
+
+Tex-State -> State
+
+to-tex-state(State) -> Tex-State
+
+to-tree(Stms, State) -> Inference-Tree
+
+variables
+"inftree"[0-9\']* -> Inference-Tree
+"ts"[0-9\']* -> Tex-State
+"tS"[0-9\']* -> Tex-Stm
+"lab"[0-9\']* -> Label

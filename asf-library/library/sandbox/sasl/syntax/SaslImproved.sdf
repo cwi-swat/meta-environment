@@ -1,0 +1,146 @@
+module sasl/syntax/SaslImproved
+
+imports basic/Whitespace
+
+exports
+
+sorts 
+
+Infix Prefix CharConst AnyChar BoolConst ScaleFactor Digit Real Numeral Constant String Formal 
+NameList Name Struct Rhs Clause Expr Defs Simple Comb OpExp ListExp CondExp
+
+lexical syntax
+
+[a-z][a-z0-9\_]* -> Name
+[0-9]            -> Digit
+[\'] ~[\"]+ [\"] -> String
+~[\ \t\n]        -> AnyChar
+
+context-free syntax
+
+Expr "WHERE" Defs -> Expr
+CondExp           -> Expr
+
+OpExp "->" CondExp ";" CondExp -> CondExp
+ListExp                        -> CondExp
+
+{OpExp ","}+ ","?              -> ListExp
+
+
+context-free syntax
+"~" OpExp -> OpExp
+"+" OpExp -> OpExp
+"-" OpExp -> OpExp
+
+OpExp ":" OpExp -> OpExp {right}
+OpExp "++" OpExp -> OpExp {right}
+OpExp "|" OpExp -> OpExp {left}
+OpExp "&" OpExp -> OpExp {left}
+OpExp ">>" OpExp -> OpExp {left}
+OpExp ">" OpExp -> OpExp {left}
+OpExp ">=" OpExp -> OpExp {left}
+OpExp "=" OpExp -> OpExp {left}
+OpExp "~=" OpExp -> OpExp {left}
+OpExp "<=" OpExp -> OpExp {left}
+OpExp "<" OpExp -> OpExp {left}
+OpExp "<<" OpExp -> OpExp {left}
+OpExp "+" OpExp -> OpExp {left}
+OpExp "-" OpExp -> OpExp {left}
+OpExp "*" OpExp -> OpExp {left}
+OpExp "/" OpExp -> OpExp {left}
+OpExp "DIV" OpExp -> OpExp {left}
+OpExp "REM" OpExp -> OpExp {left}
+OpExp "**" OpExp -> OpExp {right}
+OpExp "." OpExp -> OpExp {right}
+
+context-free priorities
+
+{right: 
+OpExp "**" OpExp -> OpExp 
+OpExp "." OpExp -> OpExp 
+} >
+{ left: 
+OpExp "*" OpExp -> OpExp
+OpExp "/" OpExp -> OpExp 
+OpExp "DIV" OpExp -> OpExp 
+OpExp "REM" OpExp -> OpExp 
+} >
+{ 
+"+" OpExp -> OpExp
+"-" OpExp -> OpExp
+} >
+{left: 
+OpExp "+" OpExp -> OpExp 
+OpExp "-" OpExp -> OpExp 
+} >
+{ left: 
+OpExp ">>" OpExp -> OpExp 
+OpExp ">" OpExp -> OpExp 
+OpExp ">=" OpExp -> OpExp 
+OpExp "=" OpExp -> OpExp 
+OpExp "~=" OpExp -> OpExp 
+OpExp "<=" OpExp -> OpExp 
+OpExp "<" OpExp -> OpExp 
+OpExp "<<" OpExp -> OpExp 
+} >
+"~" OpExp -> OpExp >
+OpExp "&" OpExp -> OpExp >
+OpExp "|" OpExp -> OpExp >
+{ right: 
+OpExp ":" OpExp -> OpExp 
+OpExp "++" OpExp -> OpExp
+} 
+
+context-free syntax
+Comb              -> OpExp
+Simple+           -> Comb
+
+Name         -> Simple
+Constant     -> Simple
+"(" Expr ")" -> Simple
+
+{Clause ";"?}+ -> Defs
+
+NameList "=" Expr -> Clause
+Name Rhs          -> Clause
+
+Formal Rhs -> Rhs
+Formal "=" Rhs -> Rhs
+
+{Struct ","}+ ","?  -> NameList
+{Formal ":"}+       -> Struct     
+
+Name             -> Formal
+Constant         -> Formal
+"(" NameList ")" -> Formal
+
+Numeral   -> Constant
+CharConst -> Constant
+BoolConst -> Constant
+"()"      -> Constant
+String    -> Constant
+
+lexical syntax
+
+Real ScaleFactor     -> Numeral
+"-" Real ScaleFactor -> Numeral
+
+Digit+            -> Real
+Digit+ "." Digit+ -> Real
+
+"e" Digit+     -> ScaleFactor
+"e" "-" Digit+ -> ScaleFactor
+               -> ScaleFactor
+
+context-free syntax
+
+"true" -> BoolConst
+"false" -> BoolConst
+
+lexical syntax
+
+"%" AnyChar -> CharConst
+"SP" | "NL" | "NP" | "TAB" -> CharConst
+
+
+

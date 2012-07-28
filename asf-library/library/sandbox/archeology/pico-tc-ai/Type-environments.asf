@@ -1,0 +1,6 @@
+  equations
+     [T1a] lookup Id in [Id:Type, Pair-list] = Type
+
+     [T1b]              Id != Id'
+           ===============================================================
+           lookup Id in [Id':Type, Pair-list] = lookup Id in [Pair-list]

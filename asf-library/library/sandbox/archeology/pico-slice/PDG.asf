@@ -1,0 +1,7 @@
+
+equations
+
+    [pdg]  Edge*  = cd(L_Program),
+           Edge*' = dd(L_Program)
+           =============================
+           PDG(L_Program) = Edge* Edge*'

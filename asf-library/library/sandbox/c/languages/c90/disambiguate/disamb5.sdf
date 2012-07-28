@@ -1,0 +1,154 @@
+module languages/c90/disambiguate/disamb5
+
+%% ---------- ---------- ---------- ----------
+%% Part of the c89/c90 framework
+%% ---------- ---------- ---------- ----------
+
+
+%%----------
+%% GRAMMARS
+%%----------
+imports languages/c90/syntax/TranslationUnit
+imports languages/c90/disambiguate/symtable
+
+%%----------
+%% Utilities
+%%----------
+
+imports utilities/Parsing[Identifier]		%% for symboltable
+imports utilities/PosInfo[Identifier]		%% for symboltable
+imports utilities/PosInfo[TranslationUnit]		%% for symboltable (scoping)
+imports utilities/PosInfo[FunctionDefinition]	%% for symboltable (scoping)
+imports utilities/PosInfo[CompoundStatement]		%% for symboltable (scoping)
+imports utilities/PosInfo[IdentifierList]		%% for symboltable (scoping)
+imports utilities/PosInfo[ParameterTypeList]		%% for symboltable (scoping)
+
+exports
+	sorts Result Known Element
+	context-free syntax
+		dis-amb-error(TranslationUnit)						-> (<TranslationUnit, Result>)
+		dis-amb(TranslationUnit)							-> TranslationUnit
+
+		"<" inscope:SymbolTable "," error:Error? ">"						-> Result
+		"<" known:SymbolTable "," scope:Location "," decl-type:StrCon "," function:BoolCon ">"	-> Known
+		"<" name:StrCon "," loc:Location ">"						-> Element
+
+		dis-amb(TranslationUnit, Result, Known) 			-> <TranslationUnit, Result>		{traversal(trafo, accu, break, top-down)}
+
+		dis-amb(FunctionDefinition, Result, Known) 			-> <FunctionDefinition, Result>		{traversal(trafo, accu, break, top-down)}
+		dis-amb((DeclarationSpecifiers? Declarator), Result, Known) 	-> <(DeclarationSpecifiers? Declarator), Result>	{traversal(trafo, accu, break, top-down)}
+		dis-amb((Declaration+ CompoundStatement), Result, Known) 	-> <(Declaration+ CompoundStatement), Result>{traversal(trafo, accu, break, top-down)}
+
+		dis-amb(CompoundStatement, Result, Known) 			-> <CompoundStatement, Result>		{traversal(trafo, accu, break, top-down)}
+		dis-amb((Declaration* Statement*), Result, Known) 		-> <(Declaration* Statement*), Result>	{traversal(trafo, accu, break, top-down)}
+
+		dis-amb(Declaration, Result, Known) 			-> <Declaration, Result>	{traversal(trafo, accu, break, top-down)}
+		dis-amb((DeclarationSpecifiers { InitDeclarator "," }+), Result, Known) 		-> <(DeclarationSpecifiers { InitDeclarator "," }+), Result>	{traversal(trafo, accu, break, top-down)}
+
+		dis-amb(DirectDeclarator, Result, Known)			-> <DirectDeclarator, Result>		{traversal(trafo, accu, break, top-down)}
+		dis-amb(ParameterDeclaration, Result, Known) 		-> <ParameterDeclaration, Result>		{traversal(trafo, accu, break, top-down)}
+
+		dis-amb(UnaryExpression, Result, Known)			-> <UnaryExpression, Result>		{traversal(trafo, accu, break, top-down)}
+
+
+		%% DEFINITIONS
+		dis-amb(DirectDeclarator, Result, Known) 	-> <DirectDeclarator, Result>	{traversal(trafo, accu, break, top-down)}
+		dis-amb(Enumerator, Result, Known) 		-> <Enumerator, Result>		{traversal(trafo, accu, break, top-down)}
+		dis-amb(ConstantExpression, Result, Known) 	-> <ConstantExpression, Result>	{traversal(trafo, accu, break, top-down)}
+		dis-amb(TypedefName, Result, Known) 	-> <TypedefName, Result>		{traversal(trafo, accu, break, top-down)}
+		dis-amb(DirectDeclarator, Result, Known) 	-> <DirectDeclarator, Result>	{traversal(trafo, accu, break, top-down)}
+		dis-amb(StructDeclaration, Result, Known) 	-> <StructDeclaration, Result>	{traversal(trafo, accu, break, top-down)}
+
+		dis-amb(ParameterTypeList, Result, Known) 	-> <ParameterTypeList, Result>	{traversal(trafo, accu, break, top-down)}
+		dis-amb(AssignmentExpression, Result, Known) -> <AssignmentExpression, Result>	{traversal(trafo, accu, break, top-down)}
+		dis-amb(ObjectName, Result, Known) 		-> <ObjectName, Result>		{traversal(trafo, accu, break, top-down)}
+
+		check-typedef(DeclarationSpecifiers)		-> StrCon
+		find-typespecifier((TypeSpecifier | TypeQualifier)*)	-> BoolCon
+		get-functionname(Declarator, Element)		-> Element {traversal(accu, break, top-down)}
+		get-functionname(Identifier, Element)		-> Element {traversal(accu, break, top-down)}
+
+		check-function-parameters(ParameterTypeList?)	-> BoolCon
+
+hiddens
+	context-free start-symbols TranslationUnit <TranslationUnit, Result>
+	imports languages/c90/syntax/Whitespace
+	imports languages/generic-cpp/syntax/CommentsAsLayout
+
+	variables
+		%% symboltable
+		"$accu"[0-9]*			-> SymbolTable
+		"$known"[0-9]*			-> SymbolTable
+		"$record"			-> Record
+
+		%% disamb
+		"$scope"				-> Location
+		"$decltype"			-> StrCon
+		"$function"			-> BoolCon
+		"$error"				-> Error
+		"$error?"[0-9]*			-> Error?
+		"$strcon"			-> StrCon
+		"$location"			-> Location
+		"$result"[0-9]*			-> Result
+		"$known"[0-9]*			-> Known
+
+		"$translationunit"[0-9]*		-> TranslationUnit
+		"$functiondefinition"[0-9]*	-> FunctionDefinition
+		"$compoundstatement"[0-9]*		-> CompoundStatement
+
+		"$declaration*"[0-9]*		-> Declaration*
+		"$statement*"[0-9]*		-> Statement*
+
+		"$identifier"			-> Identifier
+		"$directdeclarator"[0-9]*		-> DirectDeclarator
+		"$unaryexpression"[0-9]*		-> UnaryExpression
+		"$typedefname"			-> TypedefName
+		"$enumerationconstant"		-> EnumerationConstant
+		"$enumerator"			-> Enumerator
+		"$constantexpression"[0-9]*	-> ConstantExpression
+		"$declaration"[0-9]*		-> Declaration
+		"$initdeclarator+"[0-9]*		-> { InitDeclarator "," }+
+
+		%% definition
+		"$declarationspecifiers"[0-9]*	-> DeclarationSpecifiers
+		"$specifiers*"[0-9]*		-> (StorageClassSpecifier | TypeSpecifier | TypeQualifier)*
+		"$specifier"			-> (StorageClassSpecifier | TypeSpecifier | TypeQualifier)
+		"$specifiers+"[0-9]*		-> (StorageClassSpecifier | TypeSpecifier | TypeQualifier)+
+		"$typespecifierorqualifier+"[0-9]*	-> (TypeSpecifier | TypeQualifier)+
+		"$typespecifierorqualifier*"[0-9]*	-> (TypeSpecifier | TypeQualifier)*
+		"$structdeclarator+"		-> { StructDeclarator "," }+
+		"$structdeclarator*"		-> { StructDeclarator "," }*
+
+		%% dis-amb
+		"$constantexpression+"		-> { ConstantExpression ","}+
+		"$constantexpression*"		-> { ConstantExpression ","}*
+		"$directdeclarator+"		-> { DirectDeclarator ","}+
+		"$directdeclarator*"		-> { DirectDeclarator ","}*
+		"$unaryexpression+"		-> { UnaryExpression ","}+
+		"$unaryexpression*"		-> { UnaryExpression ","}*
+		"$compoundstatement+"		-> { CompoundStatement ","}+
+		"$compoundstatement*"		-> { CompoundStatement ","}*
+		"$assignmentexpression+"		-> { AssignmentExpression ","}+
+		"$assignmentexpression*"		-> { AssignmentExpression ","}*
+		"$structdeclaration+"		-> { StructDeclaration ","}+
+		"$structdeclaration*"		-> { StructDeclaration ","}*
+		"$parameterdeclaration+"		-> { ParameterDeclaration ","}+
+		"$parameterdeclaration*"[0-9]*	-> { ParameterDeclaration ","}*
+		"$declaration+"			-> { Declaration ","}+
+		"$declaration*"			-> { Declaration ","}*
+		"$functiondefinition+"		-> { FunctionDefinition ","}+
+		"$functiondefinition*"		-> { FunctionDefinition ","}*
+
+		"$declarationspecifiers?"[0-9]*	-> DeclarationSpecifiers?
+		"$declarator"[0-9]*		-> Declarator
+
+		"$parametertypelist"[0-9]*		-> ParameterTypeList
+		"$identifierlist"			-> IdentifierList
+
+		"$typespecifier"			-> TypeSpecifier
+		"$structdeclaration"[0-9]*		-> StructDeclaration
+		"$structdeclarator"		-> StructDeclarator
+		"$parameterdeclaration"[0-9]*	-> ParameterDeclaration
+		"$assignmentexpression"[0-9]*	-> AssignmentExpression
+		"$abstractdeclarator"		-> AbstractDeclarator
+		"$object"			-> ObjectName

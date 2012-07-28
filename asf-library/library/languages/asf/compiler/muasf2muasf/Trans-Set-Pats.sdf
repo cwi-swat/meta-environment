@@ -1,0 +1,23 @@
+%% The module {\tt Trans-Lookup-Pats} takes care of transforming
+%% rewrite rules with lookup-like list matching patterns into
+%% rewrite rules which traverse recursively through the lists.
+module languages/asf/compiler/muasf2muasf/Trans-Set-Pats
+
+imports languages/asf/compiler/muasf2muasf/Check-List-Pats
+
+
+exports
+  context-free syntax
+    transform-special-rule(Rule,Integer) -> FuncRuleTuple
+
+hiddens
+  context-free syntax
+    transform-set-rule(FunId,{Cond "&"}+,Term,Integer) -> FuncRuleTuple
+
+variables
+	"Cond"[0-9]* -> Cond
+	"Cond*"[0-9]* -> {Cond "&"}*
+	"Cond+"[0-9]* -> {Cond "&"}+
+	"Funid"[0-9]* -> FunId
+	"Aint"[0-9]* -> Integer
+	"Varid"[0-9]* -> FunId

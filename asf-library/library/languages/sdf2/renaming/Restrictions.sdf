@@ -1,0 +1,19 @@
+module languages/sdf2/renaming/Restrictions
+imports languages/sdf2/syntax/Restrictions languages/sdf2/renaming/Kernel
+exports
+  context-free syntax
+    "(" Restrictions ")" Renamings -> Restrictions
+
+hiddens
+  variables
+    "restr"[0-9\']*   -> Restriction
+    "restr*"[0-9\']*  -> Restriction*
+    "restr+"[0-9\']*  -> Restriction+
+    "la"[0-9\']*      -> Lookahead
+    "las"[0-9\']*     -> Lookaheads
+    "la*"[0-9\']*     -> {Lookahead ","}* 
+    [p]"*"[0-9\']*    -> Production*
+    "_"[ABC][0-9\']*  -> Symbol
+    "'"[abc][0-9\']*  -> Symbol* 
+    "_G"[0-9\']*      -> Grammar
+   "'r"[0-9\']*       -> Renamings 

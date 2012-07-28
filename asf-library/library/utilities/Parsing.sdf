@@ -1,0 +1,30 @@
+module utilities/Parsing[X]
+
+imports basic/ParsetreeCon[X]
+imports basic/StrCon
+imports basic/ReadWriteCon
+imports basic/Bytes
+
+exports
+context-free syntax
+  parse-bytes(Bytes)             -> Parsetree[[X]] {built-in("parse-bytes")} 
+  parse-bytes(Bytes,file:StrCon) -> Parsetree[[X]] {built-in("parse-bytes-pos-info")}          
+  parse-file(file:StrCon)        -> Parsetree[[X]] {built-in("parse-file"), side-effect} 
+  parse-file-pos(file:StrCon)    -> Parsetree[[X]] {built-in("parse-file-pos-info"), side-effect} 
+
+context-free syntax
+  read-parse-tree(file:StrCon)     -> Parsetree[[X]] {built-in("read-term-from-file"), side-effect} 
+  write-parse-tree(file:StrCon, X) -> Write          {built-in("write-term-to-file"), side-effect}  
+
+context-free syntax
+  unparse(X)                      -> Bytes                                             
+  unparse-to-string(X)            -> StrCon                                            
+  unparse-to-bytes(X)             -> Read   {built-in("unparse-to-bytes")}             
+  unparse-to-file(file:StrCon, X) -> Write  {built-in("unparse-to-file"), side-effect} 
+
+hiddens
+imports basic/Whitespace
+
+variables
+  "Bytes" -> Bytes  
+  "Sort"  -> X      

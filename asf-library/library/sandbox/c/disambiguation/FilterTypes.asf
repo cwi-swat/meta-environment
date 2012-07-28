@@ -1,0 +1,72 @@
+equations
+
+[] ft(TranslationUnit,) = <TranslationUnit2, TypedefName*>
+   ===>
+   filter(TranslationUnit) = TranslationUnit2
+
+[disambiguate-typedef-creations]
+is-typedef(DeclarationSpecifier, false) = true,
+get-typedefname(TypedefDeclarator,) = TypedefName,
+ft(DeclarationSpecifier, TypedefName TypedefName*) = 
+  <DeclarationSpecifier2, TypedefName*2>
+===>
+ft(DeclarationSpecifier amb(_1,TypedefDeclarator,_2) InitializerOpt?,
+   TypedefName*) =
+   <DeclarationSpecifier2 TypedefDeclarator InitializerOpt?, TypedefName*2 >
+
+[disambiguate-typedef-usages]
+ft(TypedefTypeSpecifier amb(_1,IdentifierDeclarator,_2) InitializerOpt?,
+   TypedefName*) = 
+   <TypedefTypeSpecifier IdentifierDeclarator InitializerOpt?, TypedefName*>
+
+[disambiguate-non-typedef-usages]
+ft(BasicTypeSpecifier amb(_1,IdentifierDeclarator,_2) InitializerOpt?,
+   TypedefName*) = 
+   <BasicTypeSpecifier IdentifierDeclarator InitializerOpt?, TypedefName*>
+
+[disambiguate-struct-specifier]
+not-contains(TypedefName, TypedefName*) = true
+===>
+ft(struct amb(I|T1,TypedefName,I|T2) { MemberDeclarationList }, TypedefName*) =
+  ft(struct amb(I|T1,I|T2) { MemberDeclarationList}, TypedefName*)
+
+[default-disambiguate-struct-specifier]
+ft(struct amb($IdentifierOrTypedefName) { MemberDeclarationList}, TypedefName*) =
+     ft(struct $IdentifierOrTypedefName { MemberDeclarationList}, TypedefName*)
+
+
+[if-ambiguous-remove-declarations-that-use-undefined-type]
+ft(CompoundStatement,TypedefName*) = <{Declaration* Statement*},TypedefName*2>,
+has-undeclared-type(Declaration*, false, TypedefName*) = true,
+ft(amb(_1,_2), TypedefName*) = <CompoundStatement2,TypedefName*3>
+===>
+ft(amb(_1, CompoundStatement, _2), TypedefName*) = 
+  <CompoundStatement2, TypedefName*3>
+
+[if-ambiguous-remove-multiplied-statements-that-use-type-identifier-as-lhs]
+ft(CompoundStatement,TypedefName*) = <{Declaration* Statement*},TypedefName*2>,
+has-declared-identifier(Statement*, false, TypedefName*) = true,
+ft(amb(_1,_2), TypedefName*) = <CompoundStatement2,TypedefName*3>
+===>
+ft(amb(_1, CompoundStatement, _2), TypedefName*) = 
+  <CompoundStatement2, TypedefName*3>
+
+[default-return-disambiguated-compoundstatement]
+ft(CompoundStatement,TypedefName*) = <CompoundStatement2, TypedefName*2>
+===>
+ft(amb(CompoundStatement), TypedefName*) =  <CompoundStatement2, TypedefName*2>
+                                          
+
+/* Small utility functions */
+[] is-typedef(typedef, Bool) = true
+
+[] get-typedefname(TypedefName,) = TypedefName
+
+[] has-undeclared-type(TypedefName, Bool,  TypedefName*) = 
+     not-contains(TypedefName,TypedefName*)
+
+[] has-declared-identifier(Identifier * Expression, Bool,  
+                           TypedefName*1 Identifier TypedefName*2) = true
+ 
+[] not-contains(TypedefName, TypedefName*1 TypedefName TypedefName*2) = false
+[default-0] not-contains(TypedefName, TypedefName*) = true

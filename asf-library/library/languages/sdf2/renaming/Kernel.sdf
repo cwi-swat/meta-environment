@@ -1,0 +1,25 @@
+module languages/sdf2/renaming/Kernel
+imports languages/sdf2/projection/Renaming languages/sdf2/projection/Kernel
+exports
+  context-free syntax
+    "(" Symbol      ")" Renamings    -> Symbol
+    "[" Symbol      "]" Renamings    -> Symbol
+    "(" Symbols     ")*" Renamings   -> Symbols
+    "(" {Symbol ","}+ ")+" Renamings -> {Symbol ","}+
+    "(" Production  ")" Renamings    -> Production
+    "(" Productions ")*" Renamings   -> Productions
+    "(" Grammar     ")" Renamings    -> Grammar
+
+hiddens
+  variables
+    "_"[ABC][0-9\']*    -> Symbol
+    "!"[0-9\']*         -> Attributes
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+  
+    "'"[abc]",+"[0-9]*  -> {Symbol ","}+
+    "_G"[0-9\']*        -> Grammar
+    [p][0-9\']*         -> Production
+    [p]"*"[0-9\']*      -> Production*
+    [p]"+"[0-9\']*      -> Production+ 
+    "'r"[0-9\']*        -> Renamings
+

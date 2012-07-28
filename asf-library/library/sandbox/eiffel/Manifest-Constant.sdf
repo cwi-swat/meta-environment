@@ -1,0 +1,33 @@
+module Manifest-Constant
+
+imports
+	Boolean-Constant
+	Integer-Constant
+	Real-Constant
+	Bit-Constant
+	Wide-Character-Constant %% Character-Constant
+	Wide-Manifest-String %% Manifest-String
+	Hexadecimal-Constant
+
+
+exports
+
+context-free syntax
+	Boolean-Constant -> Manifest-Constant
+	Character-Constant -> Manifest-Constant
+	Integer-Constant -> Manifest-Constant
+	Real-Constant -> Manifest-Constant
+	Manifest-String -> Manifest-Constant
+	Bit-Constant -> Manifest-Constant
+	Wide-Character-Constant -> Manifest-Constant
+	Wide-Manifest-String -> Manifest-Constant
+	Hexadecimal-Constant -> Manifest-Constant
+
+
+
+%% Note: Wide_character_constant, Wide_manifest_string and
+%% Hexadecimal_constant are not part of the standard. They have been
+%% introduced in TowerEiffel to support wide characters and string, and
+%% hexadecimal integers.
+
+

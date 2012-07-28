@@ -1,0 +1,52 @@
+module languages/logo/run/LogoState
+exports
+  imports basic/Integers
+          languages/logo/syntax/Logo
+          languages/logo/run/EvalRun
+          containers/Table[Formal Integer]
+
+  sorts LogoState Lines Line VENV
+
+  aliases
+    Table[[Formal, Integer]] -> VENV
+  
+  context-free syntax
+    state(VENV, FunctionDef*, Color, Lines)               -> LogoState
+    LogoState "[" Formal "]"                              -> Integer
+    LogoState "[" Formal "]" ":=" Integer                 -> LogoState
+    LogoState "." "lines"                                 -> Lines
+    LogoState "." "goto" "(" Integer ","  Integer")"      -> LogoState
+    LogoState "." "add" "(" FunctionDef ")"               -> LogoState
+    LogoState "." "enter" "(" Id "," Exp* ")"             -> < Commands, LogoState >
+    LogoState "." "leave" "(" Id "," Exp* ")"             -> LogoState
+    LogoState "." "color"                                 -> Color
+    LogoState "." "setcolor" "(" Color ")"                -> LogoState
+    "newLogoState"                                        -> LogoState
+    "(" LogoState ")"                                     -> LogoState {bracket}
+
+    line(Integer,Integer,Integer,Integer,Color)           -> Line
+    Line*                                                 -> Lines
+
+ hiddens
+  imports basic/Comments
+  sorts FunctionDef*
+
+  context-free syntax
+    bind(Formal*, Exp*, LogoState)                        -> LogoState
+    unbind(Formal*, LogoState)                            -> LogoState
+  variables
+    "Venv" [0-9\']*                                       -> VENV
+    "LS" [0-9\']*                                         -> LogoState
+    "Id" [0-9\']*                                         -> Id
+    "Formal"                                              -> Formal
+    "Formal*" [0-9\']*                                    -> Formal*
+    "Integer" [0-9\']*                                    -> Integer
+    "FunctionDef" [0-9\']*                                -> FunctionDef
+    "FunctionDef*" [0-9\']*                               -> FunctionDef*
+    "E"                                                   -> Exp
+    "E*"                                                  -> Exp*
+    "Cmds"                                                -> Command*
+    "Lines" [0-9\']*                                      -> Line*
+    "Xcor" [0-9\']*                                       -> Integer
+    "Ycor" [0-9\']*                                       -> Integer
+    "Color" [0-9\']*                                      -> Color

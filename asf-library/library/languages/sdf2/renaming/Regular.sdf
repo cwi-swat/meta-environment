@@ -1,0 +1,13 @@
+module languages/sdf2/renaming/Regular
+imports languages/sdf2/renaming/Kernel 
+        languages/sdf2/syntax/Regular
+
+hiddens
+  variables 
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "'"[abc]",+"[0-9]*  -> {Symbol ","}+
+    [n][0-9\']*         -> NatCon 
+    "'r"[0-9\']*        -> Renamings 
+

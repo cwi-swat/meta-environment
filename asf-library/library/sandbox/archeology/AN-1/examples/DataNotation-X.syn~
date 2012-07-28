@@ -1,0 +1,137 @@
+imports MetaNotation-X Layout
+  exports
+    context-free
+    syntax
+        truth-value -> TERM
+        false -> TERM
+        "if" TERM "then" TERM "else" TERM -> TERM
+        "when" TERM "then" TERM -> TERM
+        "there" "is" TERM -> TERM
+        "not" TERM -> TERM
+        "both" TERM -> TERM
+        "either" TERM -> TERM
+        "all" TERM -> TERM
+        "any" TERM -> TERM
+        TERM "is" TERM -> TERM
+        natural -> TERM
+        "successor" TERM -> TERM
+        "0" -> TERM
+        "1" -> TERM
+        "2" -> TERM
+        "3" -> TERM
+        "4" -> TERM
+        "5" -> TERM
+        "6" -> TERM
+        "7" -> TERM
+        "8" -> TERM
+        "9" -> TERM
+        TERM "0" -> TERM
+        TERM "1" -> TERM
+        TERM "2" -> TERM
+        TERM "3" -> TERM
+        TERM "4" -> TERM
+        TERM "5" -> TERM
+        TERM "6" -> TERM
+        TERM "7" -> TERM
+        TERM "8" -> TERM
+        TERM "9" -> TERM
+        "sum" TERM -> TERM
+        "predecessor" TERM -> TERM
+        "difference" TERM -> TERM
+        character -> TERM
+        true -> TERM
+        string -> TERM
+        "string" "of" TERM -> TERM
+        TERM "^" TERM -> TERM
+        "decimal" TERM -> TERM
+
+        truth-value -> SYMBOL
+        false -> SYMBOL
+        "if" PLACE "then" PLACE "else" PLACE -> SYMBOL
+        "when" PLACE "then" PLACE -> SYMBOL
+        "there" "is" PLACE -> SYMBOL
+        "not" PLACE -> SYMBOL
+        "both"  PLACE  -> SYMBOL
+        "either"  PLACE  -> SYMBOL
+        "all" PLACE -> SYMBOL
+        "any" PLACE -> SYMBOL
+        PLACE "is" PLACE -> SYMBOL
+        natural -> SYMBOL
+        "successor" PLACE -> SYMBOL
+        "0" -> SYMBOL
+        "1" -> SYMBOL
+        "2" -> SYMBOL
+        "3" -> SYMBOL
+        "4" -> SYMBOL
+        "5" -> SYMBOL
+        "6" -> SYMBOL
+        "7" -> SYMBOL
+        "8" -> SYMBOL
+        "9" -> SYMBOL
+        PLACE "0" -> SYMBOL
+        PLACE "1" -> SYMBOL
+        PLACE "2" -> SYMBOL
+        PLACE "3" -> SYMBOL
+        PLACE "4" -> SYMBOL
+        PLACE "5" -> SYMBOL
+        PLACE "6" -> SYMBOL
+        PLACE "7" -> SYMBOL
+        PLACE "8" -> SYMBOL
+        PLACE "9" -> SYMBOL
+        "sum" PLACE  -> SYMBOL
+        "predecessor" PLACE -> SYMBOL
+        "difference"  PLACE  -> SYMBOL
+        character -> SYMBOL
+        true -> SYMBOL
+        string -> SYMBOL
+        "string" "of" PLACE -> SYMBOL
+        PLACE "^" PLACE -> SYMBOL
+        "decimal" PLACE -> SYMBOL
+
+%% Added ad hoc because of prefer-literal lexical syntax:
+
+        "0" -> NUMBER
+        "1" -> NUMBER
+        "2" -> NUMBER
+        "3" -> NUMBER
+        "4" -> NUMBER
+        "5" -> NUMBER
+        "6" -> NUMBER
+        "7" -> NUMBER
+        "8" -> NUMBER
+        "9" -> NUMBER
+
+
+priorities
+    TERM "INFIX" TERM -> TERM
+    < {non-assoc:
+        TERM "is" TERM -> TERM,
+        TERM "^" TERM -> TERM}
+    <
+    "PREFIX" TERM -> TERM
+    < { "if" TERM "then" TERM "else" TERM -> TERM,
+        "when" TERM "then" TERM -> TERM,
+        "there" "is" TERM -> TERM,
+        "not" TERM -> TERM,
+        "both" TERM -> TERM,
+        "either" TERM -> TERM,
+        "all" TERM -> TERM,
+        "any" TERM -> TERM,
+        "successor" TERM -> TERM,
+        "sum" TERM -> TERM,
+        "predecessor" TERM -> TERM,
+        "difference" TERM -> TERM,
+        "string" "of" TERM -> TERM,
+        "decimal" TERM -> TERM}
+    <
+    TERM "POSTFIX" -> TERM
+    < { TERM "0" -> TERM,
+        TERM "1" -> TERM,
+        TERM "2" -> TERM,
+        TERM "3" -> TERM,
+        TERM "4" -> TERM,
+        TERM "5" -> TERM,
+        TERM "6" -> TERM,
+        TERM "7" -> TERM,
+        TERM "8" -> TERM,
+        TERM "9" -> TERM}

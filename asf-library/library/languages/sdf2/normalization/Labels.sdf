@@ -1,0 +1,7 @@
+module languages/sdf2/normalization/Labels
+
+imports languages/sdf2/syntax/Labels languages/sdf2/normalization/Literals
+hiddens
+  variables
+    "L"[0-9\']*      -> Literal 
+    "_"[ABC][0-9\']* -> Symbol 

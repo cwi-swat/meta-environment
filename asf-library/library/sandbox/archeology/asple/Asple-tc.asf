@@ -1,0 +1,76 @@
+equations
+
+[Tc1]  tc[begin Decls ; Stms end] =
+         tc[Stms] in tc[Decls] in mtable()
+
+
+[Tc2]  tc[Decl; Decls] in Menv =
+          tc[Decls] in tc[Decl] in Menv
+
+[Tc3]  tc[Mode Id, Idlist] in Menv =
+         tc[Mode Idlist] in tc[Mode Id] in Menv
+
+[Tc4]  Id is in Menv = false
+       =======================
+       tc[Mode Id] in Menv =
+         add (Id:ref(Mode)) to Menv
+
+
+[Tc5]  tc[Stm] in Menv = true
+       ==========================
+       tc[Stm; Stms] in Menv =
+       tc[Stms] in  Menv
+
+[Tc5a] tc[Stm] in Menv != true
+       =============================
+       tc[Stm; Stms] in Menv = false
+
+[Tc6]  tc[Id] in Menv = M1,
+       tc[Exp] in Menv = M2
+       =========================================
+       tc[Id := Exp] in Menv = M1 <= ref(M2)
+
+[Tc7]  tc[input Id] in Menv = Id is in Menv
+
+[Tc8]  tc[output Exp]  in Menv =
+       proper-mode (tc[Exp] in Menv)
+
+[Tc9]  is-bool (tc[Exp] in Menv) = true
+       ====================================================
+       tc[if Exp then Stms1 fi] in Menv = tc[Stms1] in Menv
+
+[Tc10] is-bool (tc[Exp] in Menv) = true
+      ===============================================
+       tc [if Exp then Stms1 else Stms2 fi] in Menv =
+          tc [Stms1] in Menv & tc [Stms2] in Menv
+
+[Tc11] is-bool (tc[Exp] in Menv) = true
+       ===================================
+       tc[while Exp do Stms end] in Menv =
+         tc [Stms] in Menv
+
+[Tc12] tc[Nat-con] in Menv = int
+
+[Tc13] tc[Bool-con] in Menv = bool
+
+[Tc14] tc[Id] in Menv = lookup Id in Menv
+
+[Tc15] tc[Exp1] in Menv = M1,
+       tc[Exp2] in Menv = M2
+       ==============================================
+       tc[Exp1 + Exp2] in Menv = result-type (M1, M2)
+
+[Tc16] tc[Exp1] in Menv = M1, tc[Exp2] in Menv = M2
+       =============================================
+       tc[Exp1 * Exp2] in Menv = result-type(M1,M2)
+
+[Tc17]  tc[Exp1] in Menv = M1, tc[Exp2] in Menv = M2,
+        proper-mode result-type (M1, M2) = true
+        ========================================
+        tc[(Exp1 = Exp2)] in Menv = bool
+
+
+[Tc18] tc[Exp1] in Menv = M1, tc[Exp2] in Menv = M2,
+       proper-mode result-type (M1, M2) = true
+       ========================================
+       tc[(Exp1 != Exp2)] in Menv = bool

@@ -1,0 +1,16 @@
+module languages/sdf2/renaming/Modular
+imports
+        languages/sdf2/projection/Modular
+exports
+  context-free syntax
+    "(" Imports  ")" Renamings    -> Imports
+
+hiddens 
+  variables
+    "_i""*"[0-9\']* -> Import*
+    "_i""+"[0-9\']* -> Import+
+    "s""+"[0-9\']*  -> Section+
+    "s""*"[0-9\']*  -> Section*
+    "M"[0-9\']*     -> ModuleName
+    "_G"[0-9\']*    -> Grammar
+    "'r"[0-9\']* -> Renamings

@@ -1,0 +1,6 @@
+module Boolean-Constant
+
+exports
+
+context-free syntax
+	"True" | "False" -> Boolean-Constant

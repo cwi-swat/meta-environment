@@ -1,0 +1,8 @@
+equations
+
+[fp] 
+  fixedpoint(f,A) = A
+    when f(A) = A
+
+[default] 
+  fixedpoint(f,A) = fixedpoint(f,f(A))

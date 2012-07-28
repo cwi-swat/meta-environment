@@ -1,0 +1,68 @@
+equations
+
+[Hlist2box-empty]
+  Hlist2box() = H hs=get-hs(ListName) []
+
+[Hlist2box-single]
+  Hlist2box(X) = H hs=get-hs(ListName) [sort2box(X)]
+
+[Hlist2box-many]
+  Box := Hlist2box(X+),
+  HSvalue := get-hs(ListName),
+  H hs=HSvalue [Box*] := Box
+  ===>
+  Hlist2box(X X+) = 
+    H hs=HSvalue [H hs=0 [sort2box(X)] Box*]
+
+
+[HOVlist2box-empty]
+  HOVlist2box() = HOV hs=get-hs(ListName) vs=get-vs(ListName) []
+
+[HOVlist2box-single]
+  HOVlist2box(X) = HOV hs=get-hs(ListName) vs=get-vs(ListName) [sort2box(X)]
+
+[HOVlist2box-many]
+  Box := HOVlist2box(X+),
+  HSvalue := get-hs(ListName),
+  VSvalue := get-vs(ListName),
+  HOV hs=HSvalue vs=VSvalue [Box*] := Box
+  ===>
+  HOVlist2box(X X+) = 
+    HOV hs=HSvalue vs=VSvalue [H hs=0 [sort2box(X)] Box*]
+
+
+[HVlist2box-empty]
+  HVlist2box() = HV hs=get-hs(ListName) vs=get-vs(ListName) []
+
+[HVlist2box-single]
+  HVlist2box(X) = HV hs=get-hs(ListName) vs=get-vs(ListName) [sort2box(X)]
+
+[HVlist2box-many]
+  Box := HVlist2box(X+),
+  HSvalue := get-hs(ListName),
+  VSvalue := get-vs(ListName),
+  HV hs=HSvalue vs=VSvalue [Box*] := Box
+  ===>
+  HVlist2box(X X+) = 
+    HV hs=HSvalue vs=VSvalue [H hs=0 [sort2box(X)] Box*]
+
+
+[Vlist2box-empty]
+  Vlist2box() = V vs=get-vs(ListName) []
+
+[Vlist2box-single]
+  Vlist2box(X) = V vs=get-vs(ListName) [sort2box(X)]
+
+[Vlist2box-many]
+  Box := Vlist2box(X+),
+  VSvalue := get-vs(ListName),
+  V vs=VSvalue [Box*] := Box
+  ===>
+  Vlist2box(X X+) = 
+    V vs=VSvalue [H hs=0 [sort2box(X)] Box*]
+
+[default-get-hs]
+  get-hs(ListName) = 1
+
+[default-get-vs]
+  get-vs(ListName) = 1

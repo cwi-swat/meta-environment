@@ -1,0 +1,11 @@
+module Source-Files
+
+imports Abstract-Classes
+	Concrete-Classes
+
+exports
+
+sorts Source-File
+
+context-free syntax
+	{ (Abstract-Class-Definition | Class ) ";"}+ ";"? -> Source-File

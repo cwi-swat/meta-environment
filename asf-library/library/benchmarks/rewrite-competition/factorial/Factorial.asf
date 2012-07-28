@@ -1,0 +1,5 @@
+equations
+
+  [] fact(0) = s(0)
+
+  [] fact(s(n)) = mult(s(n), fact(n))

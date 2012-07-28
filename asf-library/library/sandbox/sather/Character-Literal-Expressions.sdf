@@ -1,0 +1,14 @@
+module Character-Literal-Expressions
+
+imports Integer-Literal-Expressions
+
+exports
+
+sorts Char-Literal-Expression
+
+lexical syntax
+	[\']ISO-Character [\'] -> Char-Literal-Expression
+	~[\'\\\"] -> ISO-Character 
+	"\\" Escape-Seq -> ISO-Character
+	[abfnrtv\\\'\"] | Octal-Digit+ -> Escape-Seq
+

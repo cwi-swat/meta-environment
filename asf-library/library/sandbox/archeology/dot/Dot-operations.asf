@@ -1,0 +1,28 @@
+%%%H%
+%%%H% $Id$
+%%%H%
+%%%H% This file is part of the specification
+%%%H%    "A data-flow high abstraction language"
+%%%H%
+%%%H% Copyright (c) Leon Moonen, 1996, 1997
+%%%H%
+%%%H% Programming Research Group, University of Amsterdam
+%%%H% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%H% mail:leon@fwi.uva.nl http://adam.fwi.uva.nl/~leon/
+%%%H%
+
+equations
+
+[ds-comp0]      ++ ds*; = ds*;
+[ds-comp1]      ds*; ++ = ds*;
+[ds-comp2]      ds*1; ++ ds*2; = ds*1; ds*2;
+[ds-comp3]      ++ =
+
+[node0]         node(natcon(ch+)) = Node_ ++ dotid(ch+)
+[graph0]        graph(natcon(ch+)) = Graph_ ++ dotid(ch+)
+
+[quote0]                quote(dotid(""" ch* """)) = dotid(""" ch* """)
+[default-quote1]        quote(dotid(ch+)) = dotid(""" ch+ """)
+
+[di-comp0]              dotid(""" ch*1 """) ++ dotid(""" ch*2 """) = dotid(""" ch*1 ch*2 """)
+[default-di-comp1]      dotid(ch+1) ++ dotid(ch+2) = dotid(ch+1 ch+2)

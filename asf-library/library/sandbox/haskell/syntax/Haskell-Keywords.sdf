@@ -1,0 +1,20 @@
+module Haskell-Keywords
+exports
+  lexical syntax
+    "case" 	| "class" 	| "data" 	|
+    "default" 	| "deriving" 	| "do" 		|
+    "else" 	| "if" 	        | "import" 	|
+    "in" 	| "infix" 	| "infixl" 	|
+    "infixr" 	| "instance" 	| "let" 	|
+    "module" 	| "newtype" 	| "of" 		|
+    "then" 	| "type" 	| "where" 	|
+    "_"        					-> ReservedId
+    "as" 	| "hiding" 	| "qualified" 	|
+    "export" 	| "label" 	| "dynamic" 	-> ReservedId0
+    "forall" 					-> ReservedId2
+
+    ".." | ":" | "::" | "=" | "\\" | "|" | "<-" |
+    "->" | "@" | "~" | "=>" |
+    "-" | "!" | "." | "/\\" | "{" | "}" | "[" | 
+    "]" | "(" | ")" | "(#" | "#)" | ";" | "," | "`" -> ReservedOp
+

@@ -1,0 +1,9 @@
+equations
+
+[] filter(f []) = []
+
+[] filter(f [A,T]) = A : filter(f [T])
+     when f(A) = true
+
+[] filter(f [A,T]) = filter(f [T])
+     when f(A) = false

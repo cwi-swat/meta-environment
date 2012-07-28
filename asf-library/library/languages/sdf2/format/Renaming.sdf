@@ -1,0 +1,21 @@
+module languages/sdf2/format/Renaming
+
+imports languages/sdf2/syntax/Renaming
+imports languages/sdf2/format/Kernel
+
+hiddens
+context-free syntax
+  "[" Renamings "]"  -> Box       {to-box}        
+  "[" Renaming* "]"  -> Box*      {to-box}        
+  "[" Symbol "]"     -> Box       {to-box}        
+  "[" Production "]" -> Box       {to-box}        
+  "_" "_"            -> Box       {layout-to-box} 
+  "<" Box ">"        -> Renamings {from-box}      
+
+variables
+  "Renaming*"         -> Renaming*   
+  "Symbol" [0-9]*     -> Symbol      
+  "Production" [0-9]* -> Production  
+
+lexical variables
+  "C" [0-9]* -> LAYOUT  

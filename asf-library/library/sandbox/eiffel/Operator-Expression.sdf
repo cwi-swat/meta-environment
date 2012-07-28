@@ -1,0 +1,24 @@
+module Operator-Expression
+
+%% imports Operator
+
+exports
+
+context-free syntax
+
+Parenthesized | Unary-Expression | Binary-Expression -> Operator-Expression
+
+"(" Expression ")" -> Parenthesized
+
+
+Prefix-Operator Expression -> Unary-Expression
+Expression Infix-Operator Expression -> Binary-Expression
+
+%% Move operators to this module and declare associativity and precedence.
+
+
+
+
+
+
+%% Note: See Operator for operator precedence and associativity.

@@ -1,0 +1,1 @@
+(z := o; while y <= x do z:= z+1; x := x-y od, [x->17][y->5])

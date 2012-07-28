@@ -1,0 +1,5 @@
+equations
+
+ [n1]  (let D1* D D2* D D3*) = (let D1* D D2* D3*)
+ [e1]  expand(E, (let (V:E'))) = E[E'/V]
+ [e2]  expand(E, (let D+ (V:E'))) = expand(E[E'/V], (let D+))

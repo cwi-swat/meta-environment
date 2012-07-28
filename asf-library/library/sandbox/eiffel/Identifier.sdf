@@ -1,0 +1,21 @@
+module Identifier
+
+exports
+
+%% Case insensitive
+
+lexical syntax
+	[a-zA-Z][a-zA-Z0-9\_]* -> Identifier
+
+
+
+
+%% Note: Unfortunately, SmallEiffel is case-sensitive. (Surprisingly, it
+%% is not case-sensitive for Reserved_words.)
+
+%% Note: An identifier is valid if and only if it is not one of the
+%% Reserved_words.
+
+%% Note: TowerEiffel cannot handle contiguous underscores in feature
+%% names and class names.
+

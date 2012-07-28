@@ -1,0 +1,41 @@
+module Haskell-Syntax
+imports Haskell-Layout
+
+	Haskell-Identifiers
+	Haskell-Keywords
+	Haskell-Identifier-Sorts
+
+	Haskell-Numbers
+	Haskell-Strings
+        Haskell-Literals
+
+	Haskell-Modules
+	Haskell-Import-Export
+
+	Haskell-Types
+	Haskell-Records
+	Haskell-Type-Declarations
+	Haskell-Type-Classes
+	Haskell-Signature-Declarations
+
+	Haskell-Expressions
+	Haskell-Case-Alternatives
+	Haskell-Value-Definitions
+
+	Haskell-Infix
+
+	Haskell-Qualifiers
+	Haskell-List-Comprehensions
+	Haskell-Statements
+
+	%%Haskell-Pragmas	%% GHC-specific
+	%%Haskell-Rules		%% GHC-specific
+	%%Haskell-Foreign	%% GHC-specific
+
+	ExtraSepLists1
+	ExtraSepLists 
+	ExtraSepLists0
+
+exports
+  sorts Module
+

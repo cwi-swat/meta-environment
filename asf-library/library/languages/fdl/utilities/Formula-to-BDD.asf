@@ -1,0 +1,43 @@
+equations
+
+[formula-to-bdd-top]	
+	go := formula-to-guard-order(phi)
+	===
+	formula-to-bdd(phi) = shannon(phi, go)
+
+
+[shannon-cons]
+	phi != T, phi != F,
+	<phi1,phi2> := assume2(phi, p),
+	phi1' := shannon(phi1, [p*]),
+	phi2' := shannon(phi2, [p*])
+	===
+	shannon(phi, [p, p*]) = ITE(p, phi1', phi2')
+
+[default-shannon]
+	shannon(phi, go) = phi
+
+[assume2-1]
+	assume2(p, p) = <T,F>
+
+[assume2-2]
+	<psi1,psi1'> := assume2(phi1, p),
+	<psi2,psi2'> := assume2(phi2, p)
+	===
+	assume2(phi1 & phi2, p) = <psi1 & psi2, psi1' & psi2'>
+
+[assume2-3]
+	<psi,psi'> := assume2(phi, p)
+	===
+	assume2(not(phi), p) = <not(psi), not(psi')>
+
+[assume2-4]
+	<phi1, phi1'> := assume2(psi1, p),
+	<phi2, phi2'> := assume2(psi2, p),
+	<phi3, phi3'> := assume2(psi3, p)
+	===
+	assume2(ITE(psi1, psi2, psi3), p) = 
+		<ITE(phi1,phi2,phi3),ITE(phi1',phi2',phi3')>
+
+[default-assume2-5]
+	assume2(phi,p) = <phi,phi>

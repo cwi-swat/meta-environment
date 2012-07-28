@@ -1,0 +1,4 @@
+equations
+
+[] map(f [])    = []
+[] map(f [H,T]) = f(H) : map(f [T])

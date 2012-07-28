@@ -1,0 +1,37 @@
+equations
+
+  [dup] {X*1, X, X*2, X, X*3} = {X*1, X, X*2, X*3}
+
+  [un] Set1 \/ Set2 = union(Set1, Set2)
+  [un-0] union({X*1}, {X*2}) = {X*1,X*2}
+
+  [el] X in Set = in(X, Set)
+  [el] elem(X, Set ) = in(X, Set)
+ 
+  [el-0] in(X, {X*1, X, X*2}) = true
+  [default-el-1] in(X, Set) = false
+
+  [is] Set1 /\ Set2 = intersection(Set1, Set2)
+ 
+  [is-1] elem(X, Set) == true
+          ====>
+          intersection({X,X*1},Set) = {X} \/ intersection({X*1},Set)
+
+  [is-2] elem(X, Set) == false
+          ====>
+          intersection({X,X*1},Set) = intersection({X*1},Set)
+
+  [is-3] intersection({},Set) = {}
+
+  [df] Set1 \ Set2 = difference(Set1, Set2)
+
+  [df-0] difference({X*1, X, X*2}, {X*3, X, X*4}) =
+         difference({X*1, X*2}, {X*3, X*4})
+  
+  [default-df-1] difference(Set1, Set2) = Set1 
+ 
+  [eq-0] equal(Set,Set) = true
+  [default-eq] equal(Set1,Set2) = false
+
+  [empty-0] is-empty({}) = true
+  [default-empty] is-empty(Set) = false

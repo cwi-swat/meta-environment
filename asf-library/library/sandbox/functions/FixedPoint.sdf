@@ -1,0 +1,16 @@
+module functions/FixedPoint[A]
+
+exports
+
+context-free syntax
+
+fixedpoint((A=>A),A) -> A
+
+hiddens
+
+imports basic/Whitespace
+
+variables
+
+"A"[\']? -> A
+"f" -> (A=>A)

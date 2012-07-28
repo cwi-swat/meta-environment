@@ -1,0 +1,46 @@
+equations
+  
+[n2a1] intcon2attvalue(natcon(&D)) = <| attvalue(attvalued(\" av-chard(&D) \")) |>
+
+[n2a2] <| attvalue(attvalued(\" &AVchars \")) |> := intcon2attvalue(natcon(&Ds))
+       ========================================================================================
+       intcon2attvalue(natcon(&Ds &D)) = <| attvalue(attvalued(\" &AVchars av-chard(&D) \")) |>
+
+[n2a3] <| attvalue(attvalued(\" &AVchars \")) |> := intcon2attvalue(&N)
+       =========================================================================================
+       intcon2attvalue(- &N) =  <| attvalue(attvalued(\" av-chard(\-) &AVchars \")) |>
+
+[n2a4] intcon2attvalue(+ &N) =  intcon2attvalue(&N)
+
+
+[s2a1] strcon2attvalue(strcon(\" strchar(\") \")) = 
+       <| attvalue(attvalued(\" reference(entityref(& name(letter(q) namechar(letter(u)) namechar(letter(o)) namechar(letter(t))) ;)) \")) |>
+
+[s2a2] strcon2attvalue(strcon(\" strchar(\') \")) = 
+       <| attvalue(attvalued(\" reference(entityref(& name(letter(a) namechar(letter(p)) namechar(letter(o)) namechar(letter(s))) ;)) \")) |>
+
+[s2a3] strcon2attvalue(strcon(\" strchar(\&) \")) = 
+       <| attvalue(attvalued(\" reference(entityref(& name(letter(a) namechar(letter(m)) namechar(letter(p))) ;)) \")) |>
+
+[s2a4] strcon2attvalue(strcon(\" strchar(\<) \")) = 
+       <| attvalue(attvalued(\" reference(entityref(& name(letter(l) namechar(letter(t))) ;)) \")) |>
+
+[s2a5] strcon2attvalue(strcon(\" strchar(\n) \")) = 
+       <| attvalue(attvalued(\" av-chard(\n) \")) |>
+
+[s2a6] strcon2attvalue(strcon(\" strchar(\t) \")) = 
+       <| attvalue(attvalued(\" av-chard(\t) \")) |>
+
+[s2a7] strcon2attvalue(strcon(\" strchar(\\) \")) = 
+       <| attvalue(attvalued(\" av-chard(\\) \")) |>
+
+
+[s2a8] strcon2attvalue(strcon(\" strchar(&StrCharRestricted) \")) = 
+       <| attvalue(attvalued(\" av-chard(&StrCharRestricted) \")) |>
+
+[s2a9] <| attvalue(attvalued(\" &AVchars1 \")) |> := strcon2attvalue(strcon(\" &StrChar \")),
+       <| attvalue(attvalued(\" &AVchars2 \")) |> := strcon2attvalue(strcon(\" &StrChars \"))
+       ==========================================================================================================================
+       strcon2attvalue(strcon(\" &StrChar &StrChars \")) = <| attvalue(attvalued(\"&AVchars1  &AVchars2 \")) |>
+
+

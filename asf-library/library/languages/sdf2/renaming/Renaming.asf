@@ -1,0 +1,18 @@
+equations
+
+%% \noindent
+%% A renaming $\rho_2$ applied to a renaming $\rho_1$ $(\rho_1)\rho_2$ denotes
+%% the composition of the renamings, i.e., $(x)(\rho_1)\rho_2 = ((x)\rho_1)\rho_2$.
+%% This can be expressed by means of a single
+%% renaming by renaming the targets of $\rho_1$ with $\rho_2$ and adding
+%% $\rho_2$ at the end of the list of renamings.
+
+  [0] ([]) 'r             = 'r
+  [0] %% _A => _B (- 'r == false
+      %% ====>
+      ([_A => _B 'r*]) 'r = [_A => (_B)'r] ++ (['r*])'r
+ %% [0] _A => _B (- 'r == true
+ %%     ====>
+ %%     ([_A => _B 'r*]) 'r = (['r*])'r
+  [0] ([p => p'  'r*]) 'r = [p  => (p')'r] ++ (['r*])'r
+

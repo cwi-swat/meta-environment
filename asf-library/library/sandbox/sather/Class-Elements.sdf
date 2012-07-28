@@ -1,0 +1,25 @@
+module Class-Elements
+
+imports 
+	Constant-Definitions
+	Shared-Definitions
+	Attribute-Definitions
+	Routine-Definitions
+	Iterator-Definitions
+	Include-Clauses
+	Stubs
+	
+
+exports
+
+sorts Class-Element
+
+context-free syntax
+	Const-Definition -> Class-Element
+	Shared-Definition -> Class-Element
+	Attr-Definition -> Class-Element
+	Routine-Definition -> Class-Element
+	Iter-Definition -> Class-Element
+	Include-Clause -> Class-Element
+	Stub -> Class-Element
+

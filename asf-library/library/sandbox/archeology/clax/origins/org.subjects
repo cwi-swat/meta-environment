@@ -1,0 +1,45 @@
+; org.subjects contains an assoclist ( <pattern-name> . <path-list> )
+; <path-list> is a list of paths to subjects. 
+; 
+; Note:
+;
+; - paths are relative to the root of the redex.
+; - paths are reversed formal definition paths.
+; - dots should be surrounded by at least one space character. 
+
+( 
+
+; PATTERNS for Pico:
+
+  (p1 . ( (1 1) ))			; p1 = tc [ <STATEMENT> ] in <TENV>
+  (p2 . ( (1 1) ))			; p2 = eval [ <STATEMENT> ] in <VENV>
+  (p . ( (1 1) ))			; p = eval(Stat, E)
+  (p3 . ( (1) (2 1 1 2) (1 1 1 2) ))    ; p3 = lookup Id in [ ( Id : <TYPE> ),
+					;		      <PAIR,*> ]
+  (p4 . ( (1 1 1) ))			; eval[declare <ID-TYPE>, <ID-TYPE,*>;]
+  (p5 . ( (1) ))			; eval[ <EXP> ] in <VENV>
+
+; PATTERNS for ClaX:
+; ==================
+
+; p7: execution of a statement---show the statement.
+; eval ( < [<ID>, <STAT>;<STAT;*>] <C-RECORD*>, <D-STACK> > )
+  (p7 . ( (1 2 1 1 1) ))
+
+; p8: return from procedure---show the call statement.
+; eval(<[<ID>,][<ID>,<STAT;*>,<STAT>;<STAT;*>]<C-RECORD*>,<D-STACK>>)
+  (p8 . ( (1 2 2 1 1) (1 1 1 1) ))	; (1 1 1 1) = Id of called procedure
+					; (1 2 2 1 1) = call stat
+
+; p9: evaluation of an IF/WHILE predicate---show the predicate.
+; eval-predicate( <EXPR> , <D-STACK> )
+  (p9 . ( (1) ))
+
+; p10: processing of a declaration---show the declaration.
+;  init-decls ( <DECL;+>,<PATH> )
+  (p10 . ( (1 1) ))	
+
+; p11: processing of a parameter---show the formal and the actual parameter.
+; init-params ( <EXPR,+> ,<FORMAL;+> , <D-STACK> )
+  (p11 .( (1 1) (1 2) ))
+)

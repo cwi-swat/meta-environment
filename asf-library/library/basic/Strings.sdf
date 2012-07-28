@@ -1,0 +1,46 @@
+module basic/Strings
+
+imports basic/StrCon
+imports basic/Integers
+imports basic/Bytes
+
+hiddens
+sorts Escaped Normal
+
+context-free start-symbols
+  String
+
+exports
+sorts String
+
+context-free syntax
+  StrCon                 -> String  {constructor} 
+  String "||" String     -> String  {left}        
+  concat(String, String) -> String                
+  "(" String ")"         -> String  {bracket}     
+  String "<" String      -> Boolean               
+  String "<=" String     -> Boolean               
+  String ">" String      -> Boolean               
+  String ">=" String     -> Boolean               
+  String "==" String     -> Boolean               
+
+context-free syntax
+  length(String)                                       -> Integer        
+  subst(pattern:String, replacement:String, in:String) -> String         
+  split(String, splitter:String)                       -> {String ";"}+  
+  split2(String, splitter:String)                      -> StrCon+
+
+hiddens
+imports basic/Whitespace
+
+lexical variables
+  "char" [0-9]*        -> StrChar   
+  "char*" [0-9]*       -> StrChar*  
+  "match" [0-9]*       -> StrChar*  
+  "replacement" [0-9]* -> StrChar*  
+
+variables
+  "Str" [0-9\']* -> StrCon  
+
+context-free start-symbols
+  String {String ";"}+

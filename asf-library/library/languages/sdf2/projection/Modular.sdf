@@ -1,0 +1,32 @@
+module languages/sdf2/projection/Modular
+imports
+        languages/sdf2/renaming/Modular-Sections
+exports
+  context-free syntax
+    Import "(-" Imports                      -> Boolean
+    Imports "++" Imports                     -> Imports {assoc}
+    "proj" "_" ModuleName "(" Definition ")" -> Sections
+
+    "Exp"(Sections)                          -> Grammar
+    "Hid"(Sections)                          -> Grammar
+
+hiddens 
+  variables
+    "Mid"[0-9\']*   -> ModuleId
+    "M"[0-9\']*     -> ModuleName
+    "s"[0-9\']*     -> Section
+    "s""*"[0-9\']*  -> Section*
+    "s""+"[0-9\']*  -> Section+
+    "m"[0-9\']*     -> Module
+    "m*"[0-9\']*    -> Module*
+    "m+"[0-9\']*    -> Module+
+    "d"[0-9\']*     -> Definition
+    "_i"[0-9\']*    -> Import
+    "_i""*"[0-9\']* -> Import*
+    "_i""+"[0-9\']* -> Import+
+    "is"[0-9\']*    -> ImpSection
+    "is*"[0-9\']*   -> ImpSection*
+    "_G"[0-9\']*    -> Grammar
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 

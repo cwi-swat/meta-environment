@@ -1,0 +1,43 @@
+equations
+
+[get-begin-line-0]
+  get-begin-line(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = BeginLine
+
+[get-begin-column-0]
+  get-begin-column(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = BeginColumn
+
+[get-end-line-0]
+  get-end-line(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = EndLine
+
+[get-end-column-0]
+  get-end-column(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = EndColumn
+
+[get-offset-0]
+  get-offset(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = Offset
+
+[get-length-0]
+  get-length(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = Length
+
+[equal] 
+  Area == Area = true
+
+[default-equal]
+  Area1 == Area2 = false
+
+[aleq]
+  area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length) <=
+    area(BeginLine', BeginColumn', EndLine', EndColumn', Offset', Length') =
+    ((BeginLine > BeginLine') | ((BeginLine == BeginLine') & (BeginColumn >= BeginColumn'))) &
+    ((EndLine < EndLine') | ((EndLine == EndLine') & (EndColumn <= EndColumn')))
+
+[default-aleq]
+  Area1 <= Area2 = false
+
+[alt]	
+  Area1 < Area2 = Area1 <= Area2 & not(Area1 == Area2)
+
+[ageq]
+  Area1 >= Area2 = Area2 < Area1
+
+[agt]
+  Area1 > Area2 = Area2 <= Area1

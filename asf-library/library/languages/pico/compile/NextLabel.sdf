@@ -1,0 +1,11 @@
+module languages/pico/compile/NextLabel
+
+imports languages/pico/compile/AssemblyLanguage
+
+exports
+context-free syntax
+  "nextlabel" "(" Label ")" -> Label  
+
+hiddens
+lexical variables
+  "Char+" [0-9]* -> [a-z0-9]+  

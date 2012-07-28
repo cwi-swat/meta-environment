@@ -1,0 +1,81 @@
+module Missionaries
+
+imports basic/Whitespace
+
+exports
+  sorts Bool Int Bank Text Position Move MoveList TextList PosList
+
+  context-free start-symbols TextList
+
+  context-free syntax
+    "true" -> Bool
+    "false" -> Bool
+    not(Bool) -> Bool
+    and(Bool, Bool) -> Bool
+    or(Bool, Bool) -> Bool
+
+    "0" -> Int
+    "1" -> Int
+    "2" -> Int
+    "3" -> Int
+    "-1" -> Int
+    "-2" -> Int
+    s(Int) -> Int
+    p(Int) -> Int
+    plus(Int, Int) -> Int
+    get(Int, Int) -> Bool
+    equal(Int, Int) -> Bool
+ 
+    "west" -> Bank
+    "east" -> Bank
+
+    "missionary-rows-east" -> Text
+    "two-missionaries-row-east" -> Text
+    "missionary-and-cannibal-row-east" -> Text
+    "cannibal-rows-east" -> Text
+    "two-cannibals-row-east" -> Text
+    "missionary-rows-west" -> Text
+    "two-missionaries-row-west" -> Text
+    "missionary-and-cannibal-row-west" -> Text
+    "cannibal-rows-west" -> Text
+    "two-cannibals-row-west" -> Text
+    pos(Bank, Int, Int, Int, Int) -> Position
+    mov(Text, Int, Int, Int, Int, Bank) -> Move
+    "nil-ml" -> MoveList
+    "moves" -> MoveList
+    cm(Move, MoveList) -> MoveList
+    "nil-pl" -> PosList
+    cp(Position, PosList) -> PosList
+    member(Position, PosList) -> Bool
+    "nil" -> TextList
+    "fail" -> TextList
+    ct(Text, TextList) -> TextList
+    gettl(TextList, TextList) -> Bool
+    solve(Position, Position, PosList) -> TextList
+    try(MoveList, Position, Position, PosList) -> TextList
+    apply(Move, Position, Position, PosList) -> TextList
+    check(Text, Position, Position, PosList) -> TextList
+    valid(Position) -> Bool
+    best(TextList, TextList) -> TextList
+    
+hiddens
+  variables
+    "NP" -> Position
+    "Pos" -> Position
+    "Final" -> Position
+    "Prev" -> PosList
+    "T"[0-9]* -> Text
+    "TL"[0-9]* -> TextList
+    [BD] -> Bank
+    [XY] -> Int
+    "DMW" -> Int
+    "DCW" -> Int
+    "DCE" -> Int
+    "DME" -> Int
+    "MW" -> Int
+    "CW" -> Int
+    "ME" -> Int
+    "CE" -> Int
+    "M" -> Move
+    "ML" -> MoveList
+    "L" -> Bool

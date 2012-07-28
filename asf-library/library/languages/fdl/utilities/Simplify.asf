@@ -1,0 +1,41 @@
+equations
+
+[o0]	not(not(phi)) = phi
+
+[o1]	not(phi) & phi = F
+
+[o2]	phi & not(phi) = F
+
+[s1]	F & phi = F
+
+[s2]	phi & F = F
+
+[s3]	T & phi = phi
+
+[s4]	phi & T = phi
+
+[s5]	not(T) = F
+
+[s6]	not(F) = T
+
+[s7]	ITE(T,phi,psi) = phi
+
+[s8]	ITE(F,phi,psi) = psi
+
+[s9]	ITE(phi,psi,psi) = psi
+
+%%[s10]	phi ^ T = not(phi)
+
+%%[s11]	T ^ phi = not(phi)
+
+%%[s12]	phi ^ F = phi
+
+%%[s13]	F ^ phi = phi
+
+%%[s14]	T | phi = T
+
+%%[s15]	phi | T = T
+
+%%[s16]	F | phi = phi
+
+%%[s17]	phi | F = phi

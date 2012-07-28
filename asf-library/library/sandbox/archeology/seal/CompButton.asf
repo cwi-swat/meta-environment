@@ -1,0 +1,608 @@
+equations
+
+[1200]  is-move-s-expr(' _Move') = true
+
+[1100]  (list ) = ()
+
+[1101]  _S_expr' = unix-filename(Cs'),
+        unix-filename(Cs') = "ConnectedInstanceName"
+        ======================
+        (list _S_expr_list' _S_expr' _S_expr_list'') =
+                (list _S_expr_list' _S_expr_list'')
+
+[1102]  _S_expr' = unix-filename(Cs'),
+        unix-filename(Cs') = "ConnectedInstanceName"
+        ======================
+        (list _S_expr_list' _S_expr') = (list _S_expr_list')
+
+[1103]   _S_expr' = unix-filename(Cs'),
+        unix-filename(Cs') = "ConnectedInstanceName"
+        ======================
+        (list _S_expr' _S_expr_list') = (list _S_expr_list')
+
+[1104]  _S_expr' = unix-filename(Cs'),
+        unix-filename(Cs') = "ConnectedInstanceName"
+        ======================
+        (list _S_expr') = (list )
+
+[1105]  module(Cs') = EmptyModuleName,
+        _S_expr' = add-double-quotes(module(Cs'))
+        ======================
+        (list _S_expr_list' _S_expr' _S_expr_list'') = (list _S_expr_list' _S_expr_list'')
+
+[1106]  module(Cs') = EmptyModuleName,
+        _S_expr' = add-double-quotes(module(Cs'))
+        ======================
+        (list _S_expr_list' _S_expr') = (list _S_expr_list')
+
+[1107]  module(Cs') = EmptyModuleName,
+        _S_expr' = add-double-quotes(module(Cs'))
+        ======================
+        (list _S_expr' _S_expr_list') = (list _S_expr_list')
+
+[1108]  module(Cs') = EmptyModuleName,
+        _S_expr' = add-double-quotes(module(Cs'))
+        ======================
+        (list _S_expr') = (list )
+
+[1109]  _S_expr' = source of _Vn'
+        =========================
+        (list _S_expr_list' _S_expr' _S_expr_list'') = (list _S_expr_list' _S_expr_list'')
+
+[1110]  _S_expr' = source of _Vn'
+        =========================
+        (list _S_expr' _S_expr_list'') = (list _S_expr_list'')
+
+[1111]  _S_expr' = source of _Vn'
+        =========================
+        (list _S_expr_list' _S_expr') = (list _S_expr_list')
+
+[1112]  _S_expr' = source of _Vn'
+        =========================
+        (list _S_expr') = (list )
+
+[1121]  is-move-s-expr(_S_expr') != true
+        ================================
+        (list _S_expr' _S_expr') = (list _S_expr')
+
+[1122]  is-move-s-expr(_S_expr') != true
+        ================================
+        (list _S_expr' _S_expr_list'  _S_expr') = (list _S_expr_list' _S_expr')
+
+[1123]  is-move-s-expr(_S_expr') != true
+        ================================
+        (list _S_expr' _S_expr' _S_expr_list') = (list _S_expr' _S_expr_list')
+
+[1124]  is-move-s-expr(_S_expr') != true
+        ================================
+        (list _S_expr_list' _S_expr' _S_expr') = (list _S_expr_list' _S_expr')
+
+[1125]  is-move-s-expr(_S_expr') != true
+        ================================
+        (list _S_expr_list' _S_expr' _S_expr' _S_expr_list'') = (list _S_expr_list' _S_expr' _S_expr_list'')
+
+[1126]  is-move-s-expr(_S_expr') != true
+        ================================
+        (list _S_expr' _S_expr_list' _S_expr' _S_expr_list'') = (list _S_expr_list' _S_expr' _S_expr_list'')
+
+[1127]  is-move-s-expr(_S_expr') != true
+        ================================
+        (list _S_expr_list' _S_expr' _S_expr_list'' _S_expr') = (list _S_expr_list' _S_expr' _S_expr_list'')
+
+[1128]  is-move-s-expr(_S_expr') != true
+        ================================
+        (list _S_expr_list' _S_expr' _S_expr_list'' _S_expr' _S_expr_list''') =
+                (list _S_expr_list' _S_expr' _S_expr_list'' _S_expr_list''')
+
+[500a]  _S_expr_list' = modules-exist(_Name', _Int', _Se', act) insts-exist(_Name', _Int', _Se', act)
+        ================
+        comp-rt-act-check(_Name', _Int', _Se') = _S_expr_list'
+
+[500b]  _S_expr_list' = modules-exist(_Name', _Int', _Se', cond) insts-exist(_Name', _Int', _Se', cond)
+        ================
+        comp-rt-cond-check(_Name', _Int', _Se') = _S_expr_list'
+
+[501a]  _S_expr_list' = get-module-names-in-pairnr(_Name', _Int', _Se', act)
+        =================
+        modules-exist(_Name', _Int', _Se', act) = (ifn (#:SEAL:all-mods-existsp
+                (make-symbol("list") _S_expr_list' ) SEAL) (exit error))
+
+[501b]  _S_expr_list' = get-module-names-in-pairnr(_Name', _Int', _Se', cond),
+        _S_expr_list'' = get-module-names-in-pairnr(_Name', _Int', _Se', act),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        =================
+        modules-exist(_Name', _Int', _Se', cond) = (#:SEAL:all-mods-existsp
+                (make-symbol("list") _S_expr_list''' ) SEAL)
+
+[502a]  _S_expr_list' = get-inst-names-in-pairnr(_Name', _Int', _Se', act)
+        =================
+        insts-exist(_Name', _Int', _Se', act) = (ifn (#:SEAL:all-tt-consistentp
+                (make-symbol("list") make-symbol("instance") _S_expr_list') SEAL) (exit error))
+
+[502b]  _S_expr_list' = get-inst-names-in-pairnr(_Name', _Int', _Se', cond),
+        _S_expr_list'' = get-inst-names-in-pairnr(_Name', _Int', _Se', act),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        =================
+        insts-exist(_Name', _Int', _Se', cond) = (#:SEAL:all-tt-consistentp
+                (make-symbol("list") make-symbol("instance") _S_expr_list''') SEAL)
+
+[503a]  get-module-names-in-pairnr(_Name', _Int', _Se', act) =
+                mod-names-to-strings(get-act-mods-in-pairnr(lookup-state(_Se', _Name'), _Int'))
+
+[590a]  get-act-mods-in-pairnr(_State', _Int') = lookup-act-mods( mods(_State') _Int')
+
+[590b]  get-cond-mods-in-pairnr(_State', _Int') = lookup-cond-mods( mods(_State') _Int')
+
+[591a]  _MOD' = [pairnr : _Int' uses
+                  modules in condition: _Mods'
+                  modules in actions: _Mods''
+                 ]
+        ==============
+        lookup-act-mods([ [_MOD'] _MODSs']  _Int') = _Mods''
+
+[591b]  _MOD' = [pairnr : _Int'' uses
+                  modules in condition: _Mods'
+                  modules in actions: _Mods''
+                 ],
+        _Int' != _Int''
+        ==============
+        lookup-act-mods([ [_MOD'] _MODSs']  _Int') = lookup-act-mods([_MODSs'] _Int')
+
+[591c]  _MOD' = [pairnr : _Int' uses
+                  modules in condition: _Mods'
+                  modules in actions: _Mods''
+                 ]
+        ==============
+        lookup-cond-mods([ [_MOD'] _MODSs']  _Int') = _Mods'
+
+[591d]  _MOD' = [pairnr : _Int'' uses
+                  modules in condition: _Mods'
+                  modules in actions: _Mods''
+                 ],
+        _Int' != _Int''
+        ==============
+        lookup-cond-mods([ [_MOD'] _MODSs']  _Int') = lookup-cond-mods([_MODSs'] _Int')
+
+[503b]  get-module-names-in-pairnr(_Name', _Int', _Se', cond) =
+                mod-names-to-strings(get-cond-mods-in-pairnr(lookup-state(_Se', _Name'), _Int'))
+
+[504a]  get-inst-names-in-pairnr(_Name', _Int', _Se', act) =
+                filenames-to-strings(get-act-insts(lookup-state(_Se', _Name') _Int'))
+
+[504b]  get-inst-names-in-pairnr(_Name', _Int', _Se', cond) =
+                filenames-to-strings(get-cond-insts(lookup-state(_Se', _Name') _Int'))
+
+[505a]  _S_expr' = _Ufn',
+        _S_expr_list' = filenames-to-strings(_Ufns'),
+        _S_expr_list'' = _S_expr' _S_expr_list'
+        ==============
+        filenames-to-strings(_Ufn' _Ufns') = _S_expr_list''
+
+[505b]  filenames-to-strings(_Ufn') = _Ufn'
+
+[505c]  _Ufn' = "ConnectedInstanceName"
+        ===============================
+        filenames-to-strings() = _Ufn'
+
+[506a]  module(Cs') = EmptyModuleName,
+        _S_expr' = add-double-quotes(module(Cs'))
+        ========================================
+        mod-names-to-strings() = _S_expr'
+
+[506b]  _S_expr' = add-double-quotes(_Mod'),
+        _S_expr_list' = mod-names-to-strings(_Mods'),
+        _S_expr_list'' = _S_expr' _S_expr_list'
+        ==============
+        mod-names-to-strings(_Mod' _Mods') = _S_expr_list''
+
+[600]   get-var-names-in-pairnr(_Se', _Name', _Int') =
+                variables-to-names(get-vars-in-pairnr(lookup-state(_Se', _Name') _Int'))
+
+[601a]  variables-to-names(_Var' _Vars') =
+                append-varnames(variable-to-name(_Var') variables-to-names(_Vars'))
+
+[601b]  variables-to-names(_Var') = variable-to-name(_Var')
+
+[601c]  variables-to-names() =
+
+[602a]  variable-to-name(variable-name(Cs')
+                             of type : _Var-type' _Use-or-def' in actionnr : _Int'
+                        ) = name(Cs')
+
+[602a]  variable-to-name(variable-name(Cs')
+                of type : _Var-type' _Use-or-def' in actionnr : _Int' source : _Ufn'
+                        ) = name(Cs')
+
+[603]   _Names''' = _Name' _Names''
+        ===============
+        append-varnames(_Name' _Names'') = _Names'''
+
+[700a]  _S_expr_list' = make-cond-func-name-list(name(Cs'), _Mod', _Int'),
+        _S_expr_list'' = make-var-name-list(button name(Cs') _C-A-pairs' _Doc', _Se', _Int'),
+        _S_expr_list''' = flatten(_S_expr_list''),
+        _S_expr' = _S_expr_list''',
+        _S_expr_list'''' = make-act-func-name-list(name(Cs'), _Mod', _Int')
+        =====================
+        make-create-ui-item(_Mod', button name(Cs') _C-A-pairs' _Doc', _Se', _Int') =
+                (#:SEAL:create-ui-item
+                  add-double-quotes(_Mod')
+                  make-symbol("'button")
+                  symbol(""" Cs' """)
+                  ()
+                  make-symbol("'") _S_expr_list'
+                  ()
+                  make-symbol("'") rm-double-s-exprs(_S_expr')
+                  ()
+                  make-symbol("'") _S_expr_list''''
+                  ()
+                )
+
+[700b]  _S_expr_list' = make-cond-func-name-list(name(Cs'), _Mod', _Int'),
+        _S_expr_list'' = make-var-name-list(button name(Cs') _C-A-pairs' _Doc', _Se', _Int'),
+        _S_expr_list''' = flatten(_S_expr_list''),
+        _S_expr' = _S_expr_list''',
+        _S_expr_list'''' = make-act-func-name-list(name(Cs'), _Mod', _Int')
+        =====================
+        make-create-ui-item(_Mod', start-stop button name(Cs') _C-A-pairs' _Doc', _Se', _Int') =
+                (#:SEAL:create-ui-item
+                  add-double-quotes(_Mod')
+                  make-symbol("'st-button")
+                  symbol(""" Cs' """)
+                  ()
+                  make-symbol("'") _S_expr_list'
+                  ()
+                  make-symbol("'") rm-double-s-exprs(_S_expr')
+                  ()
+                  make-symbol("'") _S_expr_list''''
+                  ()
+                )
+
+[700c]  _S_expr_list' = make-cond-func-name-list(make-entry-name(name(Cs') name(Cs'')), _Mod', _Int'),
+        _S_expr_list'' = make-var-name-list(menu entry name(Cs') in name(Cs'') _C-A-pairs' _Doc', _Se', _Int'),
+        _S_expr_list''' = flatten(_S_expr_list''),
+        _S_expr' = _S_expr_list''',
+        _S_expr_list'''' = make-act-func-name-list(make-entry-name(name(Cs') name(Cs'')), _Mod', _Int')
+        =====================
+        make-create-ui-item(_Mod', menu entry name(Cs') in name(Cs'') _C-A-pairs' _Doc', _Se', _Int') =
+                (#:SEAL:create-ui-item
+                  add-double-quotes(_Mod')
+                  make-symbol("'entry")
+                  symbol(""" Cs' """)
+                  symbol(""" Cs'' """)
+                  make-symbol("'") _S_expr_list'
+                  ()
+                  make-symbol("'") rm-double-s-exprs(_S_expr')
+                  ()
+                  make-symbol("'") _S_expr_list''''
+                  ()
+                )
+
+[700d]  _S_expr_list' = make-cond-func-name-list(name(Cs'), _Mod', _Int'),
+        _S_expr_list'' = make-var-name-list(active tool name(Cs') _Tool-CA-pairs' _ToolDoc', _Se', _Int'),
+        _S_expr_list''' = flatten(_S_expr_list''),
+        _S_expr' = _S_expr_list''',
+        _S_expr_list'''' = make-act-func-name-list(name(Cs'), _Mod', _Int')
+        =====================
+        make-create-ui-item(_Mod', active tool name(Cs') _Tool-CA-pairs' _ToolDoc', _Se', _Int') =
+                (#:SEAL:create-ui-item
+                  add-double-quotes(_Mod')
+                  make-symbol("'tool")
+                  symbol(""" Cs' """)
+                  ()
+                  make-symbol("'") _S_expr_list'
+                  ()
+                  make-symbol("'") rm-double-s-exprs(_S_expr')
+                  ()
+                  make-symbol("'") _S_expr_list''''
+                  ()
+                )
+
+
+[701a]  _Int' != 1,
+        _S_expr_list' = make-cond-func-name-list(_Name', _Mod', _Int' - 1)
+        ===============================================
+        make-cond-func-name-list(_Name', _Mod', _Int') =
+                flatten((_S_expr_list' make-cond-func-name(_Name', _Mod', _Int')))
+
+[701b]  make-cond-func-name-list(_Name', _Mod', 1) = (make-cond-func-name(_Name', _Mod', 1))
+
+[702a]  _Int' != 1,
+        _S_expr_list' = make-act-func-name-list(_Name', _Mod', _Int' - 1)
+        ===============================================
+        make-act-func-name-list(_Name', _Mod', _Int') =
+                flatten((_S_expr_list' make-act-func-name(_Name', _Mod', _Int')))
+
+[702b]  make-act-func-name-list(_Name', _Mod', 1) = (make-act-func-name(_Name', _Mod', 1))
+
+[703a]  _Int' != 1,
+        _S_expr_list' = vars-to-symbols(get-var-names-in-pairnr(_Se', _Name', _Int'))
+        =====================================================================
+        make-var-name-list(button _Name' _C-A-pairs' _Doc', _Se', _Int') =
+                (make-var-name-list(button _Name' _C-A-pairs' _Doc', _Se', _Int' - 1) _S_expr_list')
+
+[703b]  _S_expr_list' = vars-to-symbols(get-var-names-in-pairnr(_Se', _Name', 1))
+        =====================================================================
+        make-var-name-list(button _Name' _C-A-pairs' _Doc', _Se', 1) = (_S_expr_list')
+
+[703c]  _Int' != 1,
+        _S_expr_list' = vars-to-symbols(get-var-names-in-pairnr(_Se', make-entry-name(_Name' _Name''), _Int'))
+        =====================================================================
+        make-var-name-list(menu entry _Name' in _Name'' _C-A-pairs' _Doc', _Se', _Int') =
+                (make-var-name-list(menu entry _Name' in _Name'' _C-A-pairs' _Doc', _Se', _Int' - 1) _S_expr_list')
+
+[703d]  _S_expr_list' = vars-to-symbols(get-var-names-in-pairnr(_Se', make-entry-name(_Name' _Name''), 1))
+        =====================================================================
+        make-var-name-list(menu entry _Name' in _Name'' _C-A-pairs' _Doc', _Se', 1) = (_S_expr_list')
+
+[703e]  _Int' != 1,
+        _S_expr_list' = vars-to-symbols(get-var-names-in-pairnr(_Se', _Name', _Int'))
+        =====================================================================
+        make-var-name-list(active tool _Name' _Tool-CA-pairs' _ToolDoc', _Se', _Int') =
+                (make-var-name-list(active tool _Name' _Tool-CA-pairs' _ToolDoc', _Se', _Int' - 1) _S_expr_list')
+
+[703f]  _S_expr_list' = vars-to-symbols(get-var-names-in-pairnr(_Se', _Name', 1))
+        =====================================================================
+        make-var-name-list(active tool _Name' _Tool-CA-pairs' _ToolDoc', _Se', 1) = (_S_expr_list')
+
+[704a]  vars-to-symbols(name(Cs')) = symbol(Cs')
+
+[704b]  _S_expr_list' = vars-to-symbols(_Names'),
+        _S_expr_list'' = symbol(Cs') _S_expr_list'
+        ========================
+        vars-to-symbols(name(Cs') _Names') = _S_expr_list''
+
+[704c]  vars-to-symbols() = ()
+
+[705a]  _S_expr_list' = (_S_expr_list'' (_S_expr_list'''))
+        =========================
+        flatten( _S_expr_list' ) = flatten( (_S_expr_list'' _S_expr_list''') )
+
+[705b]  _S_expr_list' = ( (_S_expr_list'') _S_expr_list''')
+        =========================
+        flatten( _S_expr_list' ) = flatten( (_S_expr_list'' _S_expr_list''') )
+
+[705c]  flattenable(_S_expr_list') != true
+        ==============================
+        flatten( _S_expr_list' ) = _S_expr_list'
+
+[706a]  _S_expr_list' = (_S_expr_list'' (_S_expr_list'''))
+        =========================
+        flattenable(_S_expr_list') = true
+
+[706a]  _S_expr_list' = ((_S_expr_list'') _S_expr_list''')
+        =========================
+        flattenable(_S_expr_list') = true
+
+[707]   symbol-in(_S_expr' , _S_expr') = true
+
+[708]   _S_expr' != _S_expr''
+        ===============
+        symbol-in(_S_expr', _S_expr'') = false
+
+[709]   symbol-in(_S_expr', _S_expr' _S_expr_list') = true
+
+[710]   _S_expr' != _S_expr''
+        ===============
+        symbol-in(_S_expr', _S_expr'' _S_expr_list') = symbol-in(_S_expr', _S_expr_list')
+
+[711]   rm-double-s-exprs( (_S_expr') ) = (_S_expr')
+
+[712]   symbol-in(_S_expr', _S_expr_list') = true
+        =====================
+        rm-double-s-exprs( (_S_expr' _S_expr_list') ) = rm-double-s-exprs( (_S_expr_list') )
+
+[713]   symbol-in(_S_expr', _S_expr_list'') = false,
+        (_S_expr_list''') = rm-double-s-exprs( (_S_expr_list'') )
+        =====================
+        rm-double-s-exprs( (_S_expr' _S_expr_list'') ) = (_S_expr' _S_expr_list''')
+
+[1000a] count-pairs(lookup-state(_Se', _Name')) = _Int',
+        _S_expr_list' = make-create-ui-item(_Mod', button _Name' _C-A-pairs' _Doc', _Se', _Int'),
+        _S_expr_list'' = make-button(_Mod', button _Name' _C-A-pairs' _Doc', _Se', _Int'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===========================================
+        comp-button(_Mod' , button _Name' _C-A-pairs' _Doc', _Se') = _S_expr_list'''
+
+[1000b] count-pairs(lookup-state(_Se', _Name')) = _Int',
+        _S_expr_list' = make-create-ui-item(_Mod', start-stop button _Name' _C-A-pairs' _Doc', _Se', _Int'),
+        _S_expr_list'' = make-button(_Mod', start-stop button _Name' _C-A-pairs' _Doc', _Se', _Int'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===============================
+        comp-button(_Mod' , start-stop button _Name' _C-A-pairs' _Doc', _Se') = _S_expr_list'''
+
+[1000c] count-pairs(lookup-state(_Se', make-entry-name(_Name' _Name''))) = _Int',
+        _S_expr_list' = make-create-ui-item(_Mod', menu entry _Name' in _Name'' _C-A-pairs' _Doc', _Se', _Int'),
+        _S_expr_list'' = make-entry(_Mod', menu entry _Name' in _Name'' _C-A-pairs' _Doc', _Se', _Int'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===========================================
+        comp-entry(_Mod' , menu entry _Name' in _Name'' _C-A-pairs' _Doc', _Se') = _S_expr_list'''
+
+[1000d] count-pairs(lookup-state(_Se', _Name')) = _Int',
+        _S_expr_list' = make-create-ui-item(_Mod', active tool _Name' _Tool-CA-pairs' _ToolDoc', _Se', _Int'),
+        _S_expr_list'' = make-tool(_Mod', active tool _Name' _Tool-CA-pairs' _ToolDoc', _Se', _Int'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===========================================
+        comp-tool(_Mod' , active tool _Name' _Tool-CA-pairs' _ToolDoc', _Se') = _S_expr_list'''
+
+[1001a] _Int' = 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', _Cpart', 1, _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',1, _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===============
+        make-button(_Mod', button _Name' when _Cpart' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list'''
+
+[1001b] _Int' = 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', _Cpart', 1, _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',1, _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===============
+        make-button(_Mod', start-stop button _Name' when _Cpart' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list'''
+
+[1001c] _Int' = 1,
+        _S_expr_list' = make-cond-func(_Mod', make-entry-name(_Name' _Name''), _Cpart', 1, _Se'),
+        _S_expr_list'' = make-act-func(_Mod', make-entry-name(_Name' _Name''), _ActsSemi',1, _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===============
+        make-entry(_Mod', menu entry _Name' in _Name'' when _Cpart' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list'''
+
+[1001d] _Int' = 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', _Cpart', 1, _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',1, _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===============
+        make-tool(_Mod', active tool _Name' when _Cpart' do _ActsSemi' _ToolDoc', _Se', _Int') = _S_expr_list'''
+
+[1002a] _Int' != 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', _Cpart', _Int', _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',_Int', _Se'),
+        _Int'' = _Int' - 1,
+        _S_expr_list''' =  make-button(_Mod', button _Name' _C-A-pairs''  _Doc', _Se', _Int''),
+        _S_expr_list'''' = _S_expr_list''' _S_expr_list' _S_expr_list''
+        ===============
+        make-button(_Mod', button _Name' _C-A-pairs'' when _Cpart' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list''''
+
+[1002b] _Int' != 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', _Cpart', _Int', _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',_Int', _Se'),
+        _Int'' = _Int' - 1,
+        _S_expr_list''' =  make-button(_Mod', start-stop button _Name' _C-A-pairs''  _Doc', _Se', _Int''),
+        _S_expr_list'''' = _S_expr_list''' _S_expr_list' _S_expr_list''
+        ===============
+        make-button(_Mod', start-stop button _Name' _C-A-pairs'' when _Cpart' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list''''
+
+[1002c] _Int' != 1,
+        _S_expr_list' = make-cond-func(_Mod', make-entry-name(_Name' _Name''), _Cpart', _Int', _Se'),
+        _S_expr_list'' = make-act-func(_Mod', make-entry-name(_Name' _Name''), _ActsSemi',_Int', _Se'),
+        _Int'' = _Int' - 1,
+        _S_expr_list''' =  make-entry(_Mod', menu entry _Name' in _Name'' _C-A-pairs''  _Doc', _Se', _Int''),
+        _S_expr_list'''' = _S_expr_list''' _S_expr_list' _S_expr_list''
+        ===============
+        make-entry(_Mod', menu entry _Name' in _Name'' _C-A-pairs'' when _Cpart' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list''''
+
+[1002d] _Int' != 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', _Cpart', _Int', _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',_Int', _Se'),
+        _Int'' = _Int' - 1,
+        _S_expr_list''' =  make-tool(_Mod', active tool _Name' _Tool-CA-pairs'' _ToolDoc', _Se', _Int''),
+        _S_expr_list'''' = _S_expr_list''' _S_expr_list' _S_expr_list''
+        ===============
+        make-tool(_Mod', active tool _Name' _Tool-CA-pairs'' when _Cpart' do _ActsSemi' _ToolDoc', _Se', _Int') = _S_expr_list''''
+
+[1003a] _Int' = 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', 1, _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',1, _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===============
+        make-button(_Mod', button _Name' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list'''
+
+[1003b] _Int' = 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', 1, _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',1, _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===============
+        make-button(_Mod', start-stop button _Name' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list'''
+
+[1003c] _Int' = 1,
+        _S_expr_list' = make-cond-func(_Mod', make-entry-name(_Name' _Name''), 1, _Se'),
+        _S_expr_list'' = make-act-func(_Mod', make-entry-name(_Name' _Name''), _ActsSemi',1, _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===============
+        make-entry(_Mod', menu entry _Name' in _Name'' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list'''
+
+[1003d] _Int' = 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', 1, _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',1, _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ===============
+        make-tool(_Mod', active tool _Name' do _ActsSemi' _ToolDoc', _Se', _Int') = _S_expr_list'''
+
+[1004a] _Int' != 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', _Int', _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',_Int', _Se'),
+        _Int'' = _Int' - 1,
+        _S_expr_list''' =  make-button(_Mod', button _Name' _C-A-pairs'' _Doc', _Se', _Int''),
+        _S_expr_list'''' = _S_expr_list' _S_expr_list'' _S_expr_list'''
+        ===============
+        make-button(_Mod', button _Name' _C-A-pairs'' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list''''
+
+[1004b] _Int' != 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', _Int', _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',_Int', _Se'),
+        _Int'' = _Int' - 1,
+        _S_expr_list''' =  make-button(_Mod', start-stop button _Name' _C-A-pairs'' _Doc', _Se', _Int''),
+        _S_expr_list'''' = _S_expr_list' _S_expr_list'' _S_expr_list'''
+        ===============
+        make-button(_Mod', start-stop button _Name' _C-A-pairs'' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list''''
+
+[1004c] _Int' != 1,
+        _S_expr_list' = make-cond-func(_Mod', make-entry-name(_Name' _Name''), _Int', _Se'),
+        _S_expr_list'' = make-act-func(_Mod', make-entry-name(_Name' _Name''), _ActsSemi',_Int', _Se'),
+        _Int'' = _Int' - 1,
+        _S_expr_list''' =  make-entry(_Mod', menu entry _Name' in _Name'' _C-A-pairs'' _Doc', _Se', _Int''),
+        _S_expr_list'''' = _S_expr_list' _S_expr_list'' _S_expr_list'''
+        ===============
+        make-entry(_Mod', menu entry _Name' in _Name'' _C-A-pairs'' enable _ActsSemi' _Doc', _Se', _Int') = _S_expr_list''''
+
+[1004d] _Int' != 1,
+        _S_expr_list' = make-cond-func(_Mod', _Name', _Int', _Se'),
+        _S_expr_list'' = make-act-func(_Mod', _Name', _ActsSemi',_Int', _Se'),
+        _Int'' = _Int' - 1,
+        _S_expr_list''' =  make-tool(_Mod', active tool _Name' _Tool-CA-pairs'' _ToolDoc', _Se', _Int''),
+        _S_expr_list'''' = _S_expr_list' _S_expr_list'' _S_expr_list'''
+        ===============
+        make-tool(_Mod', active tool _Name' _Tool-CA-pairs'' do _ActsSemi' _ToolDoc', _Se', _Int') = _S_expr_list''''
+
+[1a]    _S_expr_list' = comp-rt-cond-check(_Name', _Int', _Se')
+        =======================
+        make-cond-func(_Mod', _Name', _Cpart', _Int', _Se') = (make-symbol("de") make-cond-func-name(_Name', _Mod', _Int')
+                (make-symbol("instance") make-symbol("ui-item") SEAL)
+                (make-symbol("and") _S_expr_list' comp-cond(_Cpart'))
+                )
+
+[1b]    _S_expr_list' = comp-rt-cond-check(_Name', _Int', _Se')
+        =======================
+        make-cond-func(_Mod', _Name', _Int', _Se') = (make-symbol("de") make-cond-func-name(_Name', _Mod', _Int')
+                (make-symbol("instance") make-symbol("ui-item") SEAL)
+                (make-symbol("and") _S_expr_list')
+                )
+
+[2]     _S_expr_list' = comp-actions(_ActsSemi', type(lookup-state(_Se', _Name'))),
+        _S_expr_list'' = comp-rt-act-check( _Name', _Int', _Se')
+        ====================================
+        make-act-func(_Mod', _Name', _ActsSemi', _Int', _Se') = (make-symbol("de") make-act-func-name(_Name', _Mod', _Int')
+                (make-symbol("instance") make-symbol("ui-item") SEAL)
+                  (make-symbol("tag") make-symbol("error") _S_expr_list'' _S_expr_list')
+                )
+
+[2a1]   _Type' != st-button-type,
+        _S_expr_list' = comp-act(_Act',_Type')
+        ===============================
+        comp-actions(_Act', _Type') =
+                (make-symbol("ifn") _S_expr_list'
+                  (make-symbol("exit") make-symbol("error"))
+                )
+
+[2a2]   _Type' = st-button-type,
+        _S_expr_list' = comp-act(_Act', _Type'),
+        _S_expr' = (make-symbol("ifn") _S_expr_list' (make-symbol("exit") make-symbol("error")) ) ,
+        _S_expr'' = (make-symbol("if") (#:SEAL:stopped make-symbol("instance") ui-item SEAL) (make-symbol("exit") make-symbol("error")) ),
+        _S_expr_list'' = _S_expr' _S_expr''
+        ===============================
+        comp-actions(_Act', _Type') = _S_expr_list''
+
+[2b]    _S_expr_list' = comp-actions(_Act', _Type'),
+        _S_expr_list'' = comp-actions(_ActsSemi', _Type'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        =========================================
+        comp-actions(_Act';_ActsSemi', _Type') = _S_expr_list'''
+
+[20]    make-cond-func-name(name(Cs'), module(Cs'''), nat-con(Cs'')) =
+               #:SEAL: symbol(Cs''' ":" Cs' "C" "o" "n" "d" "F" "u" "n" "c" Cs'')
+
+[21]    make-act-func-name(name(Cs'), module(Cs'''), nat-con(Cs'')) =
+               #:SEAL: symbol(Cs''' ":" Cs' "A" "c" "t" "F" "u" "n" "c" Cs'')
+
+[30]    _S_expr_list' = (make-symbol("condition") symbol("t"))
+                        (make-symbol("instance-name") (#:data:object:filename make-symbol("instance")) )
+        =============================
+        make-cond-func-let = _S_expr_list'

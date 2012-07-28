@@ -1,0 +1,93 @@
+module Py-Statements
+
+imports Py-Calls Py-Definitions
+
+exports
+
+sorts Simple-stmt Compound-stmt Statement Suite NEWLINE Stmt-list
+
+lexical syntax
+	[\n] -> NEWLINE
+	[\t]+ -> INDENT
+	%% Hiermee is deze grammatica minder restrictive dan Python
+	%% Eigenlijk moet bijgehouden worden hoeveel er geindenteerd is.
+	%% Dat is dan voor het ASF gedeelte...
+	[\t]* -> DEDENT
+
+context-free syntax
+	Expression-list 			-> Expression-stmt
+	"assert" {Expression ","}+ 		-> Assert-stmt
+	{Target-list "="}+ "=" Expression-list 	-> Assignment-stmt
+	{Target ","}+ ","? 			-> Target-list
+	Identifier 				-> Target
+	"(" Target-list ")" 			-> Target
+	"[" Target-list "]" 			-> Target
+	Attributeref 				-> Target
+	Subscription 				-> Target
+	Slicing 				-> Target
+	"pass" 					-> Pass-stmt
+	"del" Target-list 			-> Del-stmt
+	"print" {Expression ","}+ ","? 		-> Print-stmt
+	"print" 				-> Print-stmt
+	"return" Expression-list? 		-> Return-stmt
+	Expression-stmt 	-> Simple-stmt
+	Assert-stmt 		-> Simple-stmt
+	Assignment-stmt 	-> Simple-stmt
+	Pass-stmt	 	-> Simple-stmt
+	Del-stmt 		-> Simple-stmt
+	Print-stmt 		-> Simple-stmt
+	Return-stmt 		-> Simple-stmt
+	Raise-stmt 		-> Simple-stmt
+	Break-stmt 		-> Simple-stmt
+	Continue-stmt 		-> Simple-stmt
+	Import-stmt		-> Simple-stmt
+	Global-stmt 		-> Simple-stmt
+	Exec-stmt 		-> Simple-stmt
+
+	"raise" Expression 				-> Raise-stmt
+	"raise" Expression "," Expression 		-> Raise-stmt
+	"raise" Expresion "," Expression "," Expression -> Raise-stmt
+	"break" 					-> Break-stmt
+	"continue" 					-> Continue-stmt
+	"import" {Module ","}+ 				-> Import-stmt
+	"from" Module "import" {Identifier ","}+ 	-> Import-stmt
+	"from" Module "import" "*" 			-> Import-stmt
+
+	%%  Source = module: (identifier ".")* identifier
+	{Identifier "."}+ 				-> Module
+	"global" {Identifier ","}+ 			-> Global-stmt
+
+	"exec" Expression "in" Expression "," Expression -> Exec-stmt
+	"exec" Expression "in" Expression		 -> Exec-stmt
+	"exec" Expression 				 -> Exec-stmt
+	
+	If-stmt						-> Compound-stmt
+	While-stmt					-> Compound-stmt
+	For-stmt 					-> Compound-stmt
+	Try-stmt 					-> Compound-stmt
+	Funcdef 					-> Compound-stmt
+	Classdef 					-> Compound-stmt
+	Stmt-list NEWLINE 				-> Suite
+	NEWLINE INDENT Statement+ DEDENT 		-> Suite
+	Stmt-list NEWLINE 				-> Statement
+	{Simple-stmt ";"}+ ";"? 			-> Stmt-list
+	Compound-stmt 					-> Statement
+
+	"elif" Expression ":" Suite 			-> Elif-part
+	"else" ":" Suite 				-> Else-part
+	"if" Expression ":" Suite Elif-part* Else? 	-> If-stmt
+
+	"while" Expression ":" Suite Else-part? 	-> While-stmt
+	"for" Target-list "in" Expression-list ":" Suite Else-part? -> For-stmt
+
+	Try-exc-stmt 					-> Try-stmt
+	Try-fin-stmt 					-> Try-stmt
+	"except" Expression "," Target ":" Suite 	-> Except-part
+	"except" Expression ":" Suite  			-> Except-part
+	"except" ":" Suite 				-> Except-part
+	"try" ":" Suite Except-part+ Else-part? 	-> Try-exc-stmt
+	"try" ":" Suite "finally" ":" Suite 		-> Try-fin-stmt
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

@@ -1,0 +1,54 @@
+int a(){
+        typedef int a;
+        int b;
+        a * b;
+}
+int b(){
+        int a, b;
+        a * b;
+}
+int c(){
+        void a(int);
+        (a)(0);
+}
+int d(){
+        typedef long a;
+        (a)(0);
+}
+int e(){
+        typedef int t1;
+        typedef int t2;
+        struct {
+		int   : 4;
+		signed t1 : 5;
+		const t2 : 5;
+
+        };
+}
+int f(){
+        enum { a = 0 };
+        int i = a;
+}
+int g(){
+        int a = 1;
+        int i = a;
+}
+int h(){
+        int b;
+        return sizeof(b);
+}
+int i(){
+        typedef int b;
+        return sizeof(b);
+}
+typedef int a, b, c;
+int j(a, b, c);
+
+int j(){
+	int z, b;
+	{
+		enum {z = 0};
+		b = z;
+	}
+	b = z;
+}

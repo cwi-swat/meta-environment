@@ -1,0 +1,37 @@
+equations
+
+[normalize-featureexpression-stop]
+	normalize-featureexpression(f) = f
+		when normalize(f) == f
+
+[normalize-featureexpression-fix]
+	f' := normalize(f),
+	f' != f
+	===
+	normalize-featureexpression(f) =
+		normalize-featureexpression(f')
+
+[n1]	normalize(f*, f, f*', f?, f*'') = f*, f, f*', f*''
+
+[n2]	normalize(f*, f, f*', f, f*'') = f*, f, f*', f*''
+
+[n3]	normalize(f??) = f?
+
+[n4]	normalize(all(f)) = f
+
+[n5]	normalize(all(f*, all(f+), f*')) = all(f*,f+,f*')
+
+[n6]	normalize(one-of(f)) = f
+
+[n7]	normalize(one-of(f*, one-of(f+), f*')) = one-of(f*,f+,f*')
+
+[n8]	normalize(one-of(f*, f?, f*')) = one-of(f*,f,f*')?
+
+[n9]	normalize(more-of(f)) = f
+
+[n10]	normalize(more-of(f*, more-of(f+), f*')) = more-of(f*,f+,f*')
+
+[n11]	normalize(more-of(f*, f?, f*')) = more-of(f*,f,f*')?
+
+[n12]	normalize(default = a) = a
+

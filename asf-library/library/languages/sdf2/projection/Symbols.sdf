@@ -1,0 +1,16 @@
+module languages/sdf2/projection/Symbols
+imports languages/sdf2/syntax/Symbols basic/Booleans basic/Integers
+exports
+  context-free syntax
+    Symbols "++" Symbols -> Symbols {assoc}
+    "|" Symbols "|"      -> Integer
+    Symbol "(-" Symbols  -> Boolean
+  
+  lexical restrictions
+    "+" -/- [\+]
+
+hiddens
+  variables
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+

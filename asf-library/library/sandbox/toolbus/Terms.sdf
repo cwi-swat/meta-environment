@@ -1,0 +1,45 @@
+module Terms
+
+imports basic/Whitespace
+imports basic/BoolCon[BoolCon => TBBoolCon]
+imports basic/NatCon[NatCon => TBNatCon]
+imports basic/StrCon[StrCon => TBStrCon]
+
+hiddens
+  sorts EscChar
+
+exports
+  sorts TBBoolCon TBNatCon TBStrCon Real Id Vname Term TermList Var GenVar
+
+  lexical syntax
+    [a-z] [A-Za-z0-9\-]* -> Id
+
+  lexical syntax
+  %% Underscore is not part of the official definition of variable names
+  %% we include it to be able to (partially) support (preprocessor) macro names.
+    [A-Z\_] [a-zA-Z0-9\_]* -> Vname
+
+  context-free syntax
+    NatCon "." NatCon -> Real {cons("real")}
+
+  context-free syntax
+    "*undefined*" -> Term {cons("undefined-term")}
+
+    TBBoolCon -> Term {cons("boolTerm")}
+    TBNatCon -> Term {cons("intTerm")}
+    TBStrCon -> Term {cons("stringTerm")}
+    Real -> Term {cons("realTerm")}
+    Vname -> Var {cons("vnameVar")}
+    Var -> GenVar {cons("var")}
+    Var"?" -> GenVar {cons("optVar")}
+    GenVar -> Term {cons("genvarTerm")}
+    "<"Term">" -> Term {cons("placeholder")}
+    Id -> Term {cons("idTerm")}
+    Id"("TermList")" -> Term {cons("funTerm")}
+    {Term"," }* -> TermList {cons("termStar")}
+    "["TermList"]" -> Term {cons("termList")}
+
+  context-free syntax
+    "true" -> Id {reject}
+    "false" -> Id {reject}
+

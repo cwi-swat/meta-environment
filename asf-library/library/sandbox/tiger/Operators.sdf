@@ -1,0 +1,52 @@
+module Tiger-Operators
+imports Tiger-Lexicals Tiger-Literals Tiger-BinOps
+exports
+  context-free syntax
+    "-" Exp 	  -> Exp {cons("Uminus")}
+     Exp "**" Exp -> Exp {left,cons("Power")}
+     Exp "*"  Exp -> Exp {left,cons("Times")}
+     Exp "/"  Exp -> Exp {left,cons("Divide")}
+     Exp "+"  Exp -> Exp {left,cons("Plus")}
+     Exp "-"  Exp -> Exp {left,cons("Minus")}
+     Exp "+i" Exp -> Exp {non-assoc,cons("CPlus")}
+     Exp "-i" Exp -> Exp {non-assoc,cons("CMinus")}
+     Exp "="  Exp -> Exp {non-assoc,cons("Eq")}
+     Exp "<>" Exp -> Exp {non-assoc,cons("Neq")}
+     Exp ">"  Exp -> Exp {non-assoc,cons("Gt")}
+     Exp "<"  Exp -> Exp {non-assoc,cons("Lt")}
+     Exp ">=" Exp -> Exp {non-assoc,cons("Geq")}
+     Exp "<=" Exp -> Exp {non-assoc,cons("Leq")}
+     "true"       -> Exp {cons("True")}
+     "false"      -> Exp {cons("False")}
+     Exp "&"  Exp -> Exp {left,cons("And")}
+     Exp "|"  Exp -> Exp {left,cons("Or")}
+  context-free priorities
+    {"-" Exp 	     -> Exp {cons("Uminus")}
+     Exp "." Id      -> Exp {cons("FieldVar")}
+     Exp "[" Exp "]" -> Exp {cons("Subscript")}
+    }
+  > {left:
+     Exp "**"  Exp -> Exp {left,cons("Power")}
+    } 
+  > {left:
+     Exp "*"  Exp -> Exp {left,cons("Times")}
+     Exp "/"  Exp -> Exp {left,cons("Divide")}
+    } 
+  > {left:
+     Exp "+"  Exp -> Exp {left,cons("Plus")}
+     Exp "-"  Exp -> Exp {left,cons("Minus")}
+    }
+  > {non-assoc:
+     Exp "+i" Exp -> Exp {non-assoc,cons("CPlus")}
+     Exp "-i" Exp -> Exp {non-assoc,cons("CMinus")}
+     Exp "="  Exp -> Exp {non-assoc,cons("Eq")}
+     Exp "<>" Exp -> Exp {non-assoc,cons("Neq")}
+     Exp ">"  Exp -> Exp {non-assoc,cons("Gt")}
+     Exp "<"  Exp -> Exp {non-assoc,cons("Lt")}
+     Exp ">=" Exp -> Exp {non-assoc,cons("Geq")}
+     Exp "<=" Exp -> Exp {non-assoc,cons("Leq")}
+    } 
+  >  Exp "&"  Exp -> Exp {left,cons("And")}
+  >  Exp "|"  Exp -> Exp {left,cons("Or")}
+  >  TypeId "[" Exp "]" "of" Exp -> Exp {cons("Array")}
+

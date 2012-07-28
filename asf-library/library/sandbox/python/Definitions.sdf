@@ -1,0 +1,31 @@
+module Py-Definitions
+
+imports Py-Expressions
+
+exports
+
+sorts Funcdef Classdef
+
+
+context-free syntax
+	"def" Funcname "(" Parameter-list? ")" ":" Suite 	-> Funcdef
+	Defparameter Comma 					-> Parameter-item
+	"**" Identifier 					-> Double-starred-identifier
+	"*" Identifier Double-starred-identifier? 		-> Remaining-part
+	Double-starred-identifier 				-> Remaining-part
+	Defparameter ","? 					-> Remaining-part
+	Parameter-item* Remaining-part 				-> Parameter-list
+	"=" Expression 						-> Default-value
+	Parameter Default-value? 				-> Defparameter
+	{Parameter ","}+ ","? 					-> Sublist
+	Identifier 						-> Parameter
+	"(" Sublist ")" 					-> Parameter
+	Identifier 						-> Funcname
+
+	"class" Classname Inheritance? ":" Suite 		-> Classdef
+	"(" Expression-list? ")" 				-> Inheritance
+	Identifier 						-> Classname
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

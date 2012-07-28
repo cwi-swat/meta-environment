@@ -1,0 +1,3 @@
+equations
+
+[] zip([TA] [TB]) = zipWith (tuple [TA] [TB])

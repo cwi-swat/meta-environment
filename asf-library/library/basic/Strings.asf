@@ -1,0 +1,64 @@
+equations
+     
+[infix-concat]   
+Str1 || Str2 = concat(Str1, Str2)
+
+[prefix-concat]
+concat(strcon(\" char*1 \"),strcon(\" char*2 \")) = strcon(\" char*1 char*2 \")
+
+equations
+
+[match]
+subst(
+	strcon(\" match \"),
+	strcon(\" replacement \"),
+	strcon(\" char*1 match char*2 \")) =
+subst(
+	strcon(\" match \"),
+	strcon(\" replacement \"),
+	strcon(\" char*1 replacement char*2 \"))
+
+[default-done]
+subst(Str1,Str2,Str3) = Str3
+
+equations
+
+[] split(strcon(\" char*1 match char*2 \"), strcon(\" match \")) =
+   strcon(\" char*1 \"); split(strcon(\" char*2 \"), strcon(\" match \"))
+
+[default]
+   split(Str1,Str2) = Str1
+
+equations
+
+[] split2(strcon(\" char*1 match char*2 \"), strcon(\" match \")) =
+   strcon(\" char*1 \") split2(strcon(\" char*2 \"), strcon(\" match \"))
+
+[default]
+   split2(Str1,Str2) = Str1
+ 
+equations
+
+[fwd] length(Str) = num-of-bytes(string-to-bytes(Str)) 
+
+equations
+
+[forward-less]
+Str1 < Str2 = string-to-bytes(Str1) < string-to-bytes(Str2)
+
+[forward-less-equal]
+Str1 <= Str2 = string-to-bytes(Str1) <= string-to-bytes(Str2)
+
+[forward-greater-equal]
+Str1 >= Str2 = string-to-bytes(Str1) >= string-to-bytes(Str2)
+
+[forward-greater]
+Str1 > Str2 = string-to-bytes(Str1) > string-to-bytes(Str2)
+
+equations
+
+[equal] 
+Str == Str = true
+
+[default-equal] 
+Str1 == Str2 = false

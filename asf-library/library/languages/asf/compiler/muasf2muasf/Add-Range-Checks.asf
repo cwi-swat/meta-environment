@@ -1,0 +1,71 @@
+%% Range checks are added for variables that range over character classes.
+%% The check is whether the character that is matched actually fits in the
+%% range of the variable.
+
+equations
+
+[main]
+	add-range-checks(Module) = range-checks(Module)
+
+equations
+
+%% This is a top-down breaking traversal that collects conditions for 
+%% each use of a variable that ranges over a character class.
+%% The collected conditions are used, if part of a matching
+%% side of a rewrite rule, or a matching side of a condition,
+%% and immediately spliced in as the next condition after a match.
+
+[matching-cond]
+	range-checks(Lhs =: Rhs) = <Lhs =: Rhs & collect-range-checks(Rhs, )>
+
+[rule]
+	Cond+ := collect-range-checks(Lhs, )
+	===>
+	range-checks(Lhs = Rhs) = Cond+ ==> Lhs = Rhs 
+
+[defrule]
+	Cond+ := collect-range-checks(Lhs, )
+	===>
+	range-checks(default: Lhs = Rhs) = default: Cond+ ==> Lhs = Rhs 
+
+[cond-rule]
+	range-checks(Cond+ ==> Lhs = Rhs) =
+         collect-range-checks(Lhs, ) & Cond+ ==> Lhs = Rhs
+
+[defcond-rule]
+	range-checks(default: Cond+ ==> Lhs = Rhs) =
+         default: collect-range-checks(Lhs, ) & Cond+ ==> Lhs = Rhs
+
+equations
+
+[collect-char-var-condition]
+	is-char-class(Type) == true
+	===>
+	collect-range-checks($ VarId : Type, Cond*) = 
+	Cond* & is-elem($ VarId , parse-cc(Type)) =: t
+
+equations
+
+%% TODO: find another solution to this slight detection hack
+
+[is-char-class-true]
+	is-char-class(strcon(\" strchar(c) strchar(h) strchar(a) strchar(r) StrChar* \")) = true
+
+[default-is-char-class-false]
+	is-char-class(_Type) = false
+
+equations
+
+[splice] Cond*1 & < Cond*2 > & Cond*3 = Cond*1 & Cond*2 & Cond*3
+
+equations
+
+%% the above may introduce double tests
+
+[dub] Cond*1 & Cond & Cond*2 & Cond & Cond*3 = Cond*1 & Cond & Cond*2 & Cond*3
+
+
+tests
+
+
+

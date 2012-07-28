@@ -1,0 +1,17 @@
+PROGRAM errors;
+DECLARE
+  i : INTEGER;
+
+  PROCEDURE incr(VAR r : REAL);
+  BEGIN (* incr *)
+    r := r + 1.0
+  END;  (* incr *)
+
+BEGIN (* errors *)
+  i := 0.0;
+  lab: incr(i);
+  lab: WRITE(i);
+  IF i < 10 THEN
+    GOTO lab
+  END
+END.  (* errors *)

@@ -1,0 +1,47 @@
+equations
+
+[upd-v]	update-v(var x := a; vdecls, s) = 
+		update-v(vdecls, s [x -> A[[a]]s])
+
+[upd-v] update-v(, s) = s
+
+[ass]	envp |- (x := a, s) = s[x -> A[[a]]s]
+
+[skp]	envp |- (skip, s) = s
+
+[comp]	envp |- (S, s) = s',
+	envp |- (S+, s') = s''
+	====
+	envp |- (S; S+, s) = s''
+
+[ift]	B[[b]]s = true,
+	envp |- (S+1, s) = s'
+	===
+	envp |- (if b then S+1 else S+2 fi, s) = s'
+
+[iff]	B[[b]]s = false,
+	envp |- (S+2, s) = s'
+	===
+	envp |- (if b then S+1 else S+2 fi, s) = s'
+
+[wht]	B[[b]]s = true,
+	envp |- (S+, s) = s',
+	envp |- (while b do S+ od, s') = s''
+	===
+	envp |- (while b do S+ od, s) = s''
+
+[wht]	B[[b]]s = false
+	===
+	envp |- (while b do S+ od, s) = s
+
+[block]	update-v(vdecls, s) = s',
+	update-p(pdecls, envp) = envp',
+	envp' |- (S+, s') = s''
+	===
+	envp |- (begin vdecls pdecls S+ end, s) = s'' [DV(vdecls)|-->s]
+
+[ca]	envp p = S+,
+	envp |- (S+, s) = s'
+	===
+	envp |- (call p, s) = s'
+

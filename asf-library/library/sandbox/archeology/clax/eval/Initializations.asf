@@ -1,0 +1,145 @@
+
+equations
+
+(* ----------------------------------------------------------------------------- *)
+(* init : initialize locals and parameters of a new stack frame                  *)
+
+  [in1]  _DElem*' = init-params(_Actual+, _Formal+, _DStack),
+         _DElem*  = init-locals(_Block, _Path)
+         ===================================================================
+         init(_Block, _Actual+, _Formal+, _DStack, _Path) = _DElem* _DElem*'
+
+  [in2]  init(_Block, , , _DStack, _Path) = init-locals(_Block, _Path)
+
+(* ----------------------------------------------------------------------------- *)
+(* init-locals : initialize local variables                                      *)
+
+  [il1]  init-locals(BEGIN _Seq END, _Path) =
+  [il2]  init-locals(DECLARE _DeclList BEGIN _Seq END, _IntConst*) =
+           init-decls(_DeclList, _Seq, _IntConst* 1)
+
+(* ----------------------------------------------------------------------------- *)
+(* init-decls : process a list of decls                                          *)
+
+  [id1]  init-decls( , _Seq, _Path) =
+
+  [id2]  _Seq'   = find-label(_Id, _Seq),
+         _DElem  = _Id: _Seq',
+         _DElem* = init-decls(_Decl*, _Seq, _Path)
+         ===========================================================
+         init-decls(_Id:LABEL; _Decl*, _Seq, _Path) = _DElem _DElem*
+
+  [id3]  _DElem  = get-name(_ProcDecl):_Int* _Int:_ProcDecl,
+         _DElem* = init-decls(_Decl*, _Seq, _Int* incr(_Int))
+         ================================================================
+         init-decls(_ProcDecl; _Decl*, _Seq, _Int* _Int) = _DElem _DElem*
+
+  [id4]  _DElem  = _Id : initial-value(_Type),
+         _DElem* = init-decls(_Decl*, _Seq, _Path)
+         ===========================================================
+         init-decls(_Id:_Type; _Decl*, _Seq, _Path) = _DElem _DElem*
+
+  [id5]  init-decls( ; _Decl*, _Seq, _Path) = init-decls(_Decl*, _Seq, _Path)
+(* ----------------------------------------------------------------------------- *)
+(* initial-value : define initial value for every type                           *)
+
+  [iv1]  initial-value(INTEGER) = 0
+
+  [iv2]  initial-value(REAL)    = 0.0
+
+  [iv3]  initial-value(BOOLEAN) = FALSE
+
+  [iv4]  initial-value(ARRAY [_Low .. _Low] OF _Type) =
+           [_Low, _Low, initial-value(_Type)]
+
+  [iv5]  _Low != _High,
+         _Low' = incr(_Low),
+         _Value = initial-value(_Type),
+         initial-value(ARRAY [_Low' .. _High] OF _Type) = [_Low'', _High', _Value*]
+         ==============================================================================
+         initial-value(ARRAY [_Low .. _High] OF _Type) = [_Low, _High', _Value _Value*]
+
+(* ----------------------------------------------------------------------------- *)
+(* initialize-params : initialize parameters                                     *)
+
+  [ip1]  init-params( , , _DStack) =
+
+  [ip2]  init-params(_Actual*, _Formal*, _DStack) = _DElem*,
+         _Value = eval-exp(_Expr, _DStack)
+         ===========================================================
+         init-params(_Expr, _Actual*, _Id : _Type; _Formal*, _DStack) =
+           _Id: _Value _DElem*
+
+  [ip3]  init-params(_Actual*, _Formal*, _DStack) = _DElem*,
+         _IntConst* = get-index-list(_Var, _DStack),
+         _Id' = get-id(_Var),
+         _Value = ref(_Id', _IntConst*)
+         ==============================================================
+         init-params(_Var, _Actual*, VAR _Id : _Type; _Formal*, _DStack) =
+           _Id: _Value _DElem*
+
+(* find-label : find the statement sequence to be executed for a GOTO           *)
+
+  [fl1]  fl(_Label, _Stat*) = [TRUE, _Stat*']
+         ====================================
+         find-label(_Label, _Stat*) = _Stat*'
+
+  [fl2]  _Label = _Label'
+         =======================================================================
+         fl(_Label, _Label':_StatAux; _Stat*) = [TRUE, _Label':_StatAux; _Stat*]
+
+  [fl3]  _Label != _Label'
+         ===================================================================
+         fl(_Label, _Label':_StatAux; _Stat*) = fl(_Label, _StatAux; _Stat*)
+
+
+  [fl4]  fl(_Label, ;_Stat*) = fl(_Label, _Stat*)
+
+  [fl5]  fl(_Label, GOTO _Label'; _Stat*) = fl(_Label, _Stat*)
+
+  [fl6]  fl(_Label, _Var := _Expr; _Stat*) = fl(_Label, _Stat*)
+
+  [fl7]  fl(_Label, READ(_Var); _Stat*) = fl(_Label, _Stat*)
+
+  [fl8]  fl(_Label, WRITE(_Expr); _Stat*) = fl(_Label, _Stat*)
+
+  [fl9]  fl(_Label, WRITE(_String); _Stat*) = fl(_Label, _Stat*)
+
+  [fl10] fl(_Label, _Stat*') = [FALSE, _Stat*'']
+         ================================================
+         fl(_Label, WHILE _Expr DO _Stat*' END; _Stat*) =
+           fl(_Label, _Stat*)
+
+  [fl11] fl(_Label, _Stat*') = [TRUE, _Stat+]
+         ====================================================
+         fl(_Label, WHILE _Expr DO _Stat*' END; _Stat*) =
+           [TRUE, _Stat+; WHILE _Expr DO _Stat*' END; _Stat*]
+
+  [fl12] fl(_Label, _Stat*') = [FALSE, _Stat*'']
+         ===============================================
+         fl(_Label, IF _Expr THEN _Stat*' END; _Stat*) =
+           fl(_Label, _Stat*)
+
+  [fl11] fl(_Label, _Stat*') = [TRUE, _Stat+]
+         =====================================================================
+         fl(_Label, IF _Expr THEN _Stat*' END; _Stat*) = [TRUE, _Stat+;_Stat*]
+
+  [fl12] fl(_Label, _Stat*')  = [FALSE, ],
+         fl(_Label, _Stat*'') = [FALSE, ]
+         =============================================================
+         fl(_Label, IF _Expr THEN _Stat*' ELSE _Stat*'' END; _Stat*) =
+           fl(_Label, _Stat*)
+
+  [fl13] fl(_Label, _Stat*') = [TRUE, _Stat+]
+         =============================================================
+         fl(_Label, IF _Expr THEN _Stat*' ELSE _Stat*'' END; _Stat*) =
+           [TRUE, _Stat+; _Stat*]
+
+  [fl14] fl(_Label, _Stat*'') = [TRUE, _Stat+]
+         =============================================================
+         fl(_Label, IF _Expr THEN _Stat*' ELSE _Stat*'' END; _Stat*) =
+           [TRUE, _Stat+; _Stat*]
+
+  [fl15] _Stat* = _Stat*;_Stat*
+         ==============================
+         fl(_Label, _Stat*) = [FALSE, ]

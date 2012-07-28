@@ -1,0 +1,38 @@
+module Haskell-Expressions-Original
+exports   
+  context-free syntax
+    Infixexp "::" Type 			-> Exp 		{cons("TypedExp")}
+    Infixexp 		  		-> Exp
+   
+    Exp10 	       			-> Infixexp
+   
+    "\\" Aexp+ OptSig "->" Exp		-> Exp10 	{cons("Abs")}
+    "let" Declbinds "in" Exp 		-> Exp10 	{cons("Let")}
+    "if" Exp "then" Exp "else" Exp   	-> Exp10 	{cons("If")}
+    "case" Exp "of" Altslist 	    	-> Exp10 	{cons("Case")}
+
+    Fexp 				-> Exp10 
+    Fexp Aexp				-> Fexp 	{cons("AppBin")}
+    Aexp 				-> Fexp
+
+    Aexp "{" Fbinds "}" 		-> Aexp 	{cons("Labeled")}
+    Aexp1 				-> Aexp
+
+    Qvar 				-> Aexp1 	{cons("Var")}
+    Gcon 				-> Aexp1 	{cons("Constr")}
+    Literal 				-> Aexp1 	{cons("Lit")}
+    "(" Texps2 ")" 			-> Aexp1 	{cons("Product")}
+    Qvar "@" Aexp 			-> Aexp1 	{cons("AT?")}
+    "_" 				-> Aexp1 	{cons("Wildcard")}
+    "~" Aexp1 				-> Aexp1 	{cons("TILDE?")}
+    "(#" Texps "#)" 			-> Aexp1 	{cons("Unboxed?")}
+
+    "(" Exp ")" 			-> Aexp1 	{bracket}
+
+  context-free syntax
+    {Exp ","}+ 				-> Texps
+    Exp "," {Exp ","}+ 			-> Texps2 	{cons("Cons")}
+
+    Infixexp Qop Exp10 	  -> Infixexp 	{cons("OpApp")}
+
+    "-" Fexp 		  -> Exp10 	{cons("Negation")}

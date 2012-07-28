@@ -1,0 +1,12 @@
+
+equations
+
+
+  [a1]  add(x,0) = x
+  [a2]  add(x,S(y)) = S(add(x,y))
+
+
+  [f1]  fib(0) = <0, S(0)>
+  [f2]  fib(x) = <y,z>
+        ===============
+        fib(S(x)) = <z, add(y,z)>

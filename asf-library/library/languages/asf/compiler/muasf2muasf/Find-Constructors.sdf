@@ -1,0 +1,34 @@
+module languages/asf/compiler/muasf2muasf/Find-Constructors 
+
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+exports
+
+context-free syntax
+
+find-constructors(Module,NameTable) -> MN-struct
+
+hiddens
+
+context-free start-symbols
+	MN-struct
+	NameTable
+
+context-free syntax
+
+fc-funcdeflist(FuncDefList,RuleList,NameTable) -> <FuncDefList , NameTable>
+fc-funcdef(FuncDef,RuleList,NameTable)         -> <FuncDef , NameTable>
+
+has-rule(FuncDef,RuleList)            -> Boolean
+add-attr(FuncDef,Term)                -> FuncDef
+add-attr(FunId,NameTable,Term)        -> NameTable
+
+variables
+	"Aint"[0-9]* -> Integer
+	"Funid"[0-9]* -> FunId
+	"Nametable"[0-9]* -> NameTable
+	"Namepair*"[0-9]* -> {NamePair ","}*
+	"Modid"	-> ModId
+	"Type" -> TraversalType
+	"Strategy" -> TraversalStrategy
+	"Continuation" -> TraversalContinuation

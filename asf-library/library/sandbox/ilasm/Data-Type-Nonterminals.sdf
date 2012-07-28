@@ -1,0 +1,21 @@
+module ilasm/Data-Type-Nonterminals
+
+imports ilasm/Identifier-Nonterminals
+
+exports
+
+context-free syntax
+	QString -> CompQString
+	CompQString "+" CompQString -> CompQString {assoc}
+
+	INT64 -> Int32
+	INT64 -> Int64
+
+	FLOAT64 -> Float64
+	"float32" "(" Int32 ")" -> Float64
+	"float64" "(" Int64 ")" -> Float64
+
+	HEXBYTE* -> Bytes
+
+	"true" -> TrueFalse
+	"false" -> TrueFalse

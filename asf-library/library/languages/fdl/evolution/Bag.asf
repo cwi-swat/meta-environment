@@ -1,0 +1,44 @@
+equations
+
+[union-top]	
+	union({$x*1}, {$x*2}) = {$x*1, $x*2}
+
+[element-of-1]	
+	element-of($x, {$x*1, $x, $x*2}) = true
+
+[default-element-of]
+	element-of($x, $bag) = false
+
+[count-occurences-nil]
+	count-occurences($x, {}) = 0
+
+[count-occurences-cons-1]
+	count-occurences($x, {$x, $x*}) = 
+		1 + count-occurences($x, {$x*})
+
+[count-occurences-cons-2]
+	$x != $x'
+	===
+	count-occurences($x, {$x', $x*}) = 
+		count-occurences($x, {$x*})
+
+[remove-duplicates-1]
+	remove-duplicates({$x*1, $x, $x*2, $x, $x*3}) =
+		remove-duplicates({$x*1, $x, $x*2, $x*3})
+
+[default-remove-duplicates-2]
+	remove-duplicates($bag) = $bag
+
+[is-set-1]
+	remove-duplicates($bag) == $bag
+	===
+	is-set($bag) = true
+
+[default-is-set-2]
+	is-set($bag) = false
+
+[cardinality-nil]
+	cardinality({}) = 0
+
+[cardinality-cons]
+	cardinality({$x, $x*}) = 1 + cardinality({$x*})

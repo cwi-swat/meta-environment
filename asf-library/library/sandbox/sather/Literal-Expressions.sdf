@@ -1,0 +1,21 @@
+module Literal-Expressions
+
+imports Character-Literal-Expressions
+	String-Literal-Expressions
+	Boolean-Literal-Expressions
+	Integer-Literal-Expressions
+	Floating-Point-Literal-Expressions
+
+exports
+
+sorts Expression
+
+context-free syntax
+	Bool-Literal-Expression -> Expression
+	Char-Literal-Expression -> Expression
+	Str-Literal-Expression -> Expression
+	Int-Literal-Expression -> Expression
+	Flt-Literal-Expression -> Expression
+
+
+

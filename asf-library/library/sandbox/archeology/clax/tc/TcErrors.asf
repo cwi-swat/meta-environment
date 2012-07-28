@@ -1,0 +1,132 @@
+
+equations
+
+  [M-1] errors(_Program) = errors(tc(_Program))
+
+  [0] errors(true)  = no-errors
+
+  [1] _MsgList  = errors(Bool1),
+      _MsgList' = errors(Bool2)
+      =======================
+      errors(Bool1 & Bool2) = _MsgList ; _MsgList'
+
+  [2] _MsgList ; _Msg ; _MsgList' ; _Msg ; _MsgList'' = _MsgList ; _Msg ; _MsgList' ; _MsgList''
+
+  [S0x] errors(_SimpleType := _SimpleType') =
+          assignment-incompatible (_SimpleType := _SimpleType')
+
+(* Changed 03-12-92 FT
+
+  [S0y] err(_Expr) = incompatible-array-access(_Expr'')
+        ========================
+        errors(_Expr := _Expr') = incompatible-array-access(_Expr'')
+
+*)
+
+  [S0y] errors(_Expr[_Expr'] := _Expr'') = err( _Expr[_Expr'] )
+
+  [S0z] errors(LABEL := _Expr) = cannot-assign-to LABEL in :=
+
+(* Changed 03-12-92 FT
+
+  [default-S0] errors(_Expr := _Expr') = incomp(err(_Expr'))
+
+*)
+
+  [S0z1]  errors(_SimpleType := _Expr[_Expr']) = incomp(err(_Expr[_Expr']))
+
+  [S0z2]  errors(_SimpleType := _Expr _Op _Expr') = incomp(err(_Expr _Op _Expr'))
+
+  [S0z3]  errors(_SimpleType := _Uop _Expr) = incomp(err(_Uop _Expr))
+
+  [S1a] errors(isproc([]._Id(_TypeList))) = undeclared-procedure-called _Id
+  [S1b] errors(isproc(PROC(_Vtype; _VtypeList) (_Type;_TypeList) ))
+       = procedure-call () expected-arg _Vtype found-arg incomp(err(_Type))
+  [S1c] errors(isproc(PROC() (_Type;_TypeList) ))
+       = procedure-call () expected-no-more-args-but-found _Type;_TypeList
+  [S1d] errors(vararg([]._Id(_ExprList))) = undeclared-procedure-called _Id
+  [S1e] errors(vararg(PROC(_Vtype; _VtypeList) (_Expr, _ExprList) ))
+       = procedure-call () expected-variable-arg _Vtype found-arg _Expr
+
+
+  [S2] errors(IF _Expr THEN END) = Boolean-expected IF incomp(err(_Expr)) THEN
+  [S2x] errors(WHILE _Expr DO END) = Boolean-expected  WHILE incomp(err(_Expr)) DO
+
+  [S3] errors(READ(_Expr)) = only-simple-type-variable-allowed-in READ(incomp(err(_Expr)))
+
+  [S4] errors(WRITE(_Expr)) = only-simple-type-variable-allowed-in WRITE(incomp(err(_Expr)))
+
+  [S5] errors(islabel(_Expr)) = expected-label-found incomp(err(_Expr))
+
+  [E0x] err(_Uop []._Id) = err([]._Id)
+  [E0y] err(_Expr _Op []._Id) = err([]._Id)
+  [E0z] err(([]._Id) _Op _Expr) = err([]._Id)
+
+{ Changed 09/12/92 FT }
+
+  [E1a] err((_Uop _Type) _Op _Expr) = err(_Uop _Type)
+  [E1b] err((_Type _Op _Type') _Op' _Expr) = err(_Type _Op _Type')
+  [E1c] err(_Expr _Op (_Type _Op' _Type')) = err(_Type _Op' _Type')
+
+  [E1d] err(ARRAY [ _IntConst .. _IntConst' ] OF _Type[_Expr])
+        = incompatible-array-access(_Expr)
+
+  [E1e] err(_Expr') = incompatible-array-access(_Expr)
+        =============================================
+        err(_Expr' _Op _Expr'') = incompatible-array-access(_Expr)
+
+  [E1f] err(_Expr'') = incompatible-array-access(_Expr)
+        =============================================
+        err(_Expr' _Op _Expr'') = incompatible-array-access(_Expr)
+
+{ Changed 09/12/92 FT --- problems with i := NOT 3 and i := - TRUE
+
+  [E2a] err(_Uop _Type) = err(_Type)
+
+}
+
+  [E2a] err(_Uop _Type) = unary-operator _Uop not-allowed-on-operand-of-type _Type
+
+  [E2b] err([]._Id) = undeclared-identifier _Id
+
+  [O1] incomp(undeclared-identifier _Id) = undeclared-identifier _Id
+  [O2] incomp(err(_SimpleType)) = _SimpleType
+  [O3] incomp(err(_SimpleType _Op _SimpleType'))
+       = incompatible-operands(_SimpleType _Op _SimpleType')
+
+  [04] incomp(err(LABEL _Op _Expr)) = used-as-operand(LABEL)
+  [05] incomp(err(_Expr _Op LABEL)) = used-as-operand(LABEL)
+
+  [O6] err(_Expr') = err(_Expr)
+       =======================
+       incomp(incompatible-array-access(_Expr)) = incompatible-array-access(_Expr')
+
+{ Added 09/12/92 FT }
+
+  [O7] incomp(unary-operator _Uop not-allowed-on-operand-of-type _Type) =
+         unary-operator _Uop not-allowed-on-operand-of-type _Type
+
+  [O8] incomp(err((_Uop _Expr) _Op _Expr')) = incomp(err(_Uop _Expr))
+
+  [O9] incomp(err(_Expr _Op (_Uop _Expr'))) = incomp(err(_Uop _Expr'))
+
+  [O10] incomp(err( (_Expr _Op _Expr') _Op' _Expr'' )) =
+        incomp(err( (_Expr _Op _Expr') ))
+
+  [O11] incomp(err( _Expr _Op (_Expr' _Op' _Expr''))) =
+        incomp(err( (_Expr' _Op _Expr'') ))
+
+  [L0] errors(unique _Id _Id _Labels) = multiply-defined-label _Id
+  [L1] errors(_Id def) = not-defined-label _Id
+  [L2] errors(islabel([]._Id)) = not-declared-label _Id
+
+  [UE0] errors(unique-decls([_Id : _Type; _Id : _Type'; _D*])) =
+        multiple-declaration-in-same-scope _Id
+
+  [AL0] errors(_IntConst islessthan _IntConst')
+        = array-decl-must-have-positive-size(_IntConst .. _IntConst')
+
+{  [EL0] err() =
+{  [EL1] err(_Type;_TypeList) = incomp(err(_Type)); _ArgMsgs when _ArgMsgs = err(_TypeList)
+{  [EL2] incomp(err(_ArrayType)) = _ArrayType
+}

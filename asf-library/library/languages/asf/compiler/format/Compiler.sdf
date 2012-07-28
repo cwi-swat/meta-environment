@@ -1,0 +1,10 @@
+module languages/asf/compiler/format/Compiler
+
+imports languages/asf/compiler/format/MuASF
+imports languages/asf/compiler/format/C
+
+hiddens
+
+context-free start-symbols
+  Module CProgram
+

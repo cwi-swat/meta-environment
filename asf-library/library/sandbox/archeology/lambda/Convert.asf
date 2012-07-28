@@ -1,0 +1,20 @@
+equations
+  [i1]         is-betha-redex?( (lambda V . E1) E2 ) = true
+  [default-i1] is-betha-redex?( E ) = false
+
+  [2]          betha( (lambda V . E1) E2 ) = E1 [ E2/V ]
+  [default-2]  betha(E) = E
+
+
+  [3]          member-of?(V, free-vars(E)) = false
+               ===================================
+               etha( lambda V . E V ) = E
+
+  [default-3]  etha(E) = E
+
+
+  [4]          member-of?(V2, free-vars(E)) = false 
+               ==================================================
+               alpha( lambda V1 . E, V2 ) = lambda V2 . (E[V2/V1])
+
+  [default-4]  alpha(E,V) = E

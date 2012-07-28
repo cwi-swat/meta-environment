@@ -1,0 +1,98 @@
+module ilasm/Method-Body-Declarations
+
+imports ilasm/Instructions
+
+exports
+
+sorts MethodDecls MethodDecl TypeSpec ScopeBlock SEHBlock
+      TryBlock SEHClauses SEHClause FilterClause HandlerBlock
+      Instr MethodRef Labels OwnerType MemberRef
+
+context-free syntax
+	MethodDecl* -> MethodDecls
+
+	".emitbyte" Int32 -> MethodDecl
+	".maxstack" Int32 -> MethodDecl
+	".locals" "(" SigArgs ")" -> MethodDecl
+	".locals" "init" "(" SigArgs ")" -> MethodDecl
+	".entrypoint" -> MethodDecl
+	".zeroinit" -> MethodDecl
+	".export" "[" Int32 "]" -> MethodDecl
+	".export" "[" Int32 "]" "as" Id -> MethodDecl
+	".vtentry" Int32 ":" Int32 -> MethodDecl
+	".override" TypeSpec "::" MethodName -> MethodDecl
+	ScopeBlock -> MethodDecl
+	".param" "[" Int32 "]" InitOpt -> MethodDecl
+	Id ":" -> MethodDecl
+	SEHBlock -> MethodDecl
+	Instr -> MethodDecl
+	SecDecl -> MethodDecl
+	ExtSourceSpec -> MethodDecl
+	LanguageDecl -> MethodDecl
+	CustomAttrDecl -> MethodDecl
+	DataDecl -> MethodDecl
+
+	ClassRef -> TypeSpec
+	"[" CompName "]" -> TypeSpec
+	"[" ".module" CompName "]" -> TypeSpec
+	Type -> TypeSpec
+
+	"{" MethodDecls "}" -> ScopeBlock
+
+	TryBlock SEHClauses -> SEHBlock
+
+	".try" ScopeBlock -> TryBlock
+	".try" Id "to" Id -> TryBlock
+	".try" Int32 "to" Int32 -> TryBlock
+
+	SEHClause* -> SEHClauses
+
+	"catch" ClassRef HandlerBlock -> SEHClause
+	"finally" HandlerBlock -> SEHClause
+	"fault" HandlerBlock -> SEHClause
+	FilterClause HandlerBlock -> SEHClause
+
+	"filter" ScopeBlock -> FilterClause
+	"filter" Id -> FilterClause
+	"filter" Int32 -> FilterClause
+
+	ScopeBlock -> HandlerBlock
+	"handler" Id "to" Id -> HandlerBlock
+	"handler" Int32 "to" Int32 -> HandlerBlock
+
+	INSTR-NONE -> Instr
+	INSTR-VAR Int32 -> Instr
+	INSTR-VAR Id -> Instr
+	INSTR-I Int32 -> Instr
+	INSTR-I8 Int64 -> Instr
+	INSTR-R Float64 -> Instr
+	INSTR-R Int64 -> Instr
+	INSTR-R "(" Bytes ")" -> Instr
+	INSTR-BRTARGET Int32 -> Instr
+	INSTR-BRTARGET Id -> Instr
+	INSTR-METHOD MethodRef -> Instr
+	INSTR-FIELD Type TypeSpec "::" Id -> Instr
+	INSTR-FIELD Type Id -> Instr
+	INSTR-TYPE TypeSpec -> Instr
+	INSTR-STRING CompQString -> Instr
+	INSTR-STRING "bytearray" "=" "(" Bytes ")" -> Instr
+	INSTR-SIG CallConv Type "(" SigArgs ")" -> Instr
+	INSTR-TOK OwnerType -> Instr
+	INSTR-SWITCH "(" Labels ")" -> Instr
+
+	CallConv Type TypeSpec "::" MethodName "(" SigArgs ")" -> MethodRef
+	CallConv Type MethodName "(" SigArgs ")" -> MethodRef
+
+	{Label ","}* -> Labels
+	Id -> Label
+	Int32 -> Label
+
+	TypeSpec -> OwnerType
+	MemberRef -> OwnerType
+
+	"method" MethodRef -> MemberRef
+	"field" Type TypeSpec "::" Id -> MemberRef
+	"field" Type Id -> MemberRef
+
+
+

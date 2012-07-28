@@ -1,0 +1,8 @@
+module languages/sdf2/renaming/CC
+imports languages/sdf2/renaming/Kernel languages/sdf2/syntax/CC
+
+hiddens
+  variables
+    "'r"[0-9\']* -> Renamings
+    "cc"[0-9\']* -> CharClass
+

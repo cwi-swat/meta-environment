@@ -1,0 +1,39 @@
+module Basic-Statements
+
+imports Declaration-Statements
+	Assignment-Statements
+	If-Statements	
+	Return-Statements
+	Case-Statements
+	Typecase-Statements
+	Expression-Statements
+	Loop-Statements
+	Yield-Statements
+	Quit-Statements
+	Protect-Statements
+	Raise-Statements
+	Assert-Statements
+
+exports
+
+sorts Statement
+
+context-free syntax
+	Declaration-Statement -> Statement
+	Assign-Statement -> Statement
+	If-Statement -> Statement
+	Return-Statement -> Statement
+	Case-Statement -> Statement
+	Typecase-Statement -> Statement
+	Expression-Statement -> Statement
+	Loop-Statement -> Statement
+	Yield-Statement -> Statement
+	Quit-Statement -> Statement
+	Protect-Statement -> Statement
+	Raise-Statement -> Statement
+	Assert-Statement -> Statement
+
+%% To restrictive
+%% Should be:
+%% Statement? (";" Statement?)* -> Statement-List
+	{Statement ";"}* ";"? -> Statement-List

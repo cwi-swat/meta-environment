@@ -1,0 +1,55 @@
+equations
+
+[ass]	loc = envv x,
+	i = A[[a]]sto.envv
+	===
+	envv, envp |- (x := a, sto) = sto [loc -> i]
+
+[skp]	envv, envp |- (skip, sto) = sto
+
+[comp]	envv, envp |- (S, sto) = sto',
+	envv, envp |- (S+, sto') = sto''
+	===
+	envv, envp |- (S; S+, sto) = sto''
+
+[if-t]	B[[b]]sto.envv = true,
+	envv, envp |- (S+1, sto) = sto'
+	===
+	envv, envp |- (if b then S+1 else S+2 fi, sto) = sto'
+
+[if-f]	B[[b]]sto.envv = false,
+	envv, envp |- (S+2, sto) = sto'
+	===
+	envv, envp |- (if b then S+1 else S+2 fi, sto) = sto'
+
+[wh-t]	B[[b]]sto.envv = true,
+	envv, envp |- (S+1, sto) = sto',
+	envv, envp |- (while b do S+1 od, sto') = sto''
+	===
+	envv, envp |- (while b do S+ od, sto) = sto''
+
+[wh-f]	B[[b]]sto.envv = false
+	===
+	envv, envp |- (while b do S+ od, sto) = sto
+
+[block]	update-v(vdecls, envv, sto) = <envv', sto'>,
+	update-p(pdecls, envv', envp) = envp',
+	envv', envp' |- (S+, sto') = sto''
+	===	
+	envv, envp |- (begin vdecls pdecls S+ end, sto) = sto''
+
+%%[call-nonrec]	
+%%	envp p = <S+, envv', envp'>,
+%%	envv', envp' |- (S+, sto) = sto'
+%%	===
+%%	envv, envp |- (call p, sto) = sto'
+
+[cll-rec]	
+	envp p = <S+, envv', envp'>,
+	envv', envp' [p -> <S+, envv', envp'>] |- (S+, sto) = sto'
+	===
+	envv, envp |- (call p, sto) = sto'
+
+
+
+

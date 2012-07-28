@@ -1,0 +1,33 @@
+   es[        
+               lao x ;
+                s-read;
+                ldci  1    ;
+                sro  y   ;
+                ldci  1    ;
+                sro  z   ;
+                block(
+                    ldo  x   ;
+                    ldci  0    ;
+                    != ;
+                    fjp 0   ;
+                    block(
+                        lbl 0   ;
+                        ldo  z   ;
+                        ldo  x   ;
+                        != ;
+                        fjp 1   ;
+                        ldo  z   ;
+                        ldci  1    ;
+                        + ;
+                        sro  z   ;
+                        ldo  y   ;
+                        ldo  z   ;
+                        * ;
+                        sro  y   ;
+                        ujp 0   ;
+                        lbl 1  )   ;
+                    lbl 0  )   ;
+                ldo  y   ;
+                s-write
+]
+in <valenv(), stack (), input(9), output ()> and lenv ()  

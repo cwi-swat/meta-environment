@@ -1,0 +1,9 @@
+module Haskell-Records
+exports
+  context-free syntax
+    Forall? Context? Con "{" Fielddecls "}" -> Constr {cons("RecordConstr")}
+    {Fielddecl ","}+ 			    -> Fielddecls
+    Vars "::" Stype  			    -> Fielddecl
+    Type 				    -> Stype
+    "!" Type 				    -> Stype
+

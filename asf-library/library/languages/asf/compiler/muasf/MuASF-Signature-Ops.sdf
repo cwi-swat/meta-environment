@@ -1,0 +1,61 @@
+module languages/asf/compiler/muasf/MuASF-Signature-Ops
+
+imports basic/Booleans
+imports languages/asf/compiler/muasf/MuASF
+
+
+exports
+  context-free syntax
+    FuncDefList "++" FuncDefList -> FuncDefList {left}
+
+exports
+  context-free syntax
+    remove-funcdef(FunId,FuncDefList)   -> FuncDefList
+
+hiddens
+  context-free syntax
+    FuncDef "in" FuncDefList            -> Boolean
+    is-external-funcdef(FuncDef)        -> Boolean
+    add-external-funcdef(FuncDef)       -> FuncDef
+    remove-external-funcdef(FuncDef)    -> FuncDef
+    remove-funcdef(FuncDef,FuncDefList) -> FuncDefList    
+    remove-funcdef1(FuncDef,FuncDefList) -> FuncDefList    
+
+exports
+  context-free syntax
+    make-funcdef(FunId,TermList)            -> FuncDef
+    make-external-funcdef(FunId,TermList)   -> FuncDef
+    is-external(Annotations)                 -> Boolean
+    get-funcdef-funid(FuncDef)                      -> FunId
+
+  context-free syntax
+    addto-sign(SignatureOpt,{FuncDef ";"}*) -> SignatureOpt
+
+    add-attr(Term, Annotations) -> Annotations
+
+exports
+
+  variables
+    "Funcdef"[0-9]*  -> FuncDef
+    "Funcdef*"[0-9]* -> {FuncDef ";"}*
+    "Funcdef+"[0-9]* -> {FuncDef ";"}+
+    "Rule"[0-9]*     -> Rule
+    "Rule*"[0-9]*    -> {Rule ";"}*
+    "Rule+"[0-9]*    -> {Rule ";"}+
+    "Rulesopt"[0-9]* -> RulesOpt
+    "Sigarg"[0-9]*   -> SigArg
+    "Sigarg*"[0-9]*  -> {SigArg ","}*
+    "Sigarg+"[0-9]*  -> {SigArg ","}+
+    "Signopt"[0-9]*  -> SignatureOpt
+    "Term"[0-9]*     -> Term
+    "Term*"[0-9]*    -> {Term ","}*
+    "Term+"[0-9]*    -> {Term ","}+
+    "Module"[0-9]*   -> Module
+    "Attrs"[0-9]*    -> Annotations
+    "Annos"[0-9]*    -> Annotations
+    "Mname"[0-9\']*  -> ModId
+    "Funid"[0-9]*    -> FunId
+
+hiddens
+context-free start-symbols
+	Annotations

@@ -1,0 +1,39 @@
+
+equations
+
+    [out1] emit(_Dummy) = OUTPUT
+       (let*
+         ( (theEQM (#:EQM:EQMsel:eqm #:EQM:sel))
+           (text (#:EQM:tree:pretty theEQM
+             (#:EQM:tree:leximplode theEQM << _Dummy >>)))
+         )
+         (prinflush text)
+         << _Dummy >>
+       )
+
+    [out2] emit-string(_Dummy) = OUTPUT
+       (let*
+         ( (theEQM (#:EQM:EQMsel:eqm #:EQM:sel))
+           (text (string (#:EQM:tree:pretty theEQM
+             (#:EQM:tree:leximplode theEQM << _Dummy >>))))
+           start end
+           (len (plength text))
+         )
+         (setq current 1)
+         (setq end (decr len 2))
+         (while (le current end)
+           (if (neq (sref text current) 92)
+             (progn
+               (prin (substring text current 1))
+               (incr current 1) )
+             (progn
+               (if (eq (sref text (add 1 current)) 110)
+                 (print)
+               )
+               (incr current 2)
+             )
+           )
+         )
+         (prinflush)
+         << _Dummy >>
+       )

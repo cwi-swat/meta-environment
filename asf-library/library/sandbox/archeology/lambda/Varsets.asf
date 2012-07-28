@@ -1,0 +1,9 @@
+equations
+
+  [0]  [V1*] + [V2*] = [V1*,V2*]
+  [1]  [V1*, V, V2*] - V = [V1*, V2*]
+  [2]  [] - V = []
+  [3]  [V1*, V, V2*, V, V3*] = [V1*, V, V2*, V3*]
+
+  [g5] member-of?(V, [V1*,V,V2*]) = true
+  [default-g5] member-of?(V, V-list) = false

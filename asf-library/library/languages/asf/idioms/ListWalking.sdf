@@ -1,0 +1,34 @@
+module languages/asf/idioms/ListWalking
+
+imports basic/Comments
+
+exports
+
+context-free start-symbols
+	ABC* 
+	ABC-List
+
+context-free syntax
+	"a" -> ABC
+	"b" -> ABC
+	"c" -> ABC
+
+	"[" {ABC ","}* "]" -> ABC-List
+
+%% Basically, we have two types of list representations:
+%%	* Direct lists (ABC*)
+%%	* Wrapped lists (ABC-List)
+%%
+%% Of course we have separated and non-separated lists, but that
+%% difference does not affect the specification style.
+
+context-free syntax
+	a2b(ABC*) -> ABC* 
+	a2b(ABC-List) -> ABC-List
+
+hiddens
+
+variables
+	"L"[0-9]* -> ABC
+	"L*"[0-9]* -> ABC*
+	"L*"[0-9]* -> {ABC ","}*

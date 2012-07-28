@@ -1,0 +1,5 @@
+equations.
+.
+[]tab(\t)=[TAB].
+[]lf(\n)=[LF].
+[]space(\ )=[SPACE].

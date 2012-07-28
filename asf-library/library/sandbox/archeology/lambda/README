@@ -1,0 +1,13 @@
+This directory contains an algebraic specification in ASF+SDF of the
+lamda-calculus. The specification and use of the generated environment
+is described in:
+"Specification and generation of a lambda-calculus environment",
+Arie van Deursen, CWI report CS-R92??
+
+To start the generated environment, start "(new-gse)" in *this*
+directory. Enter as file a thing like "Nat.lambda".
+N.B.: Before hitting the "Expand" button, you (yes you) should first enter
+a term editor over module Lambda called "Defs" (no .lambda). You can
+use the meta-environment window for this (Edit-term).
+
+Have fun.

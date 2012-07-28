@@ -1,0 +1,29 @@
+module languages/sdf2/format/Kernel
+
+imports languages/sdf2/syntax/Kernel
+imports languages/aterm/format/ATerms
+imports languages/sdf2/format/Symbols
+imports languages/sdf2/format/Grammars
+
+hiddens
+context-free syntax
+  "[" {Attribute ","}* "]" -> Box*       {to-box}   
+  "[" Symbol* "]"          -> Box*       {to-box}   
+  "[" Attributes "]"       -> Box        {to-box}   
+  "[" Production* "]"      -> Box*       {to-box}   
+  "[" Productions "]"      -> Box        {to-box}   
+  "<" Box ">"              -> Attributes {from-box} 
+  "<" Box ">"              -> Production {from-box} 
+  "<" Box ">"              -> Grammar    {from-box} 
+
+context-free start-symbols
+  Grammar Attributes
+
+variables
+  "Attribute*"  -> {Attribute ","}*  
+  "Attributes"  -> Attributes        
+  "Symbol*"     -> Symbol*           
+  "Symbol"      -> Symbol            
+  "Production*" -> Production*       
+  "Productions" -> Productions       
+  "Box"         -> Box               

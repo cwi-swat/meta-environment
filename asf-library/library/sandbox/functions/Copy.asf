@@ -1,0 +1,3 @@
+equations
+
+[] copy(A) = <A,A>

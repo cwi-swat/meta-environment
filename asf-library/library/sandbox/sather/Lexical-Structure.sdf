@@ -1,0 +1,87 @@
+module Lexical-Structure
+
+imports basic/Whitespace
+
+exports
+
+lexical syntax
+	Letter (Letter|Decimal-Digit|[\_])* -> Identifier
+	Uppercase-Letter (Uppercase-Letter|Decimal-Digit|[\_])* -> Uppercase-Identifier
+	"$" Uppercase-Identifier -> Abstract-Class-Name
+	Identifier? "!" -> Iter-Name
+	Lowercase-Letter | Uppercase-Letter -> Letter
+	[a-z] -> Lowercase-Letter
+	[A-Z] -> Uppercase-Letter
+	[0-9] -> Decimal-Digit
+
+	"--" ~[\n]* [\n] -> LAYOUT
+
+restrictions
+	Identifier -/- [a-zA-Z\_0-9]am	
+	Uppercase-Identifier -/- [A-Z\_0-9]
+
+
+context-free syntax
+	"abstract" -> Identifier {reject}
+	"and" -> Identifier {reject}
+	"any" -> Identifier {reject}
+	"assert" -> Identifier {reject}
+	"attr" -> Identifier {reject}
+	"bind" -> Identifier {reject}
+	"break!" -> Iter-Name {reject}
+	"builtin" -> Identifier {reject}
+	"case" -> Identifier {reject}
+	"class" -> Identifier {reject}
+	"clusters" -> Identifier {reject}
+	"cohort" -> Identifier {reject}
+	"const" -> Identifier {reject}
+	"else" -> Identifier {reject}
+	"elsif" -> Identifier {reject}
+	"end" -> Identifier {reject}
+	"exception" -> Identifier {reject}
+	"external" -> Identifier {reject}
+	"false" -> Identifier {reject}
+	"far" -> Identifier {reject}
+	"fork" -> Identifier {reject}
+	"guard" -> Identifier {reject}
+	"if" -> Identifier {reject}
+	"immutable" -> Identifier {reject}
+	"inout" -> Identifier {reject}
+	"include" -> Identifier {reject}
+	"initial" -> Identifier {reject}
+	"is" -> Identifier {reject}
+	"ITER" -> Identifier {reject}
+	"lock" -> Identifier {reject}
+	"loop" -> Identifier {reject}
+	"near" -> Identifier {reject}
+	"new" -> Identifier {reject}
+	"once" -> Identifier {reject}
+	"or" -> Identifier {reject}
+	"out" -> Identifier {reject}
+	"par" -> Identifier {reject}
+	"parloop" -> Identifier {reject}
+	"post" -> Identifier {reject}
+	"pre" -> Identifier {reject}
+	"private" -> Identifier {reject}
+	"protect" -> Identifier {reject}
+	"quit" -> Identifier {reject}
+	"raise" -> Identifier {reject}
+	"readonly" -> Identifier {reject}
+	"result" -> Identifier {reject}
+	"return" -> Identifier {reject}
+	"ROUT" -> Identifier {reject}
+	"SAME" -> Identifier {reject}
+	"self" -> Identifier {reject}
+	"shared" -> Identifier {reject}
+	"sync" -> Identifier {reject}
+	"then" -> Identifier {reject}
+	"true" -> Identifier {reject}
+	"typecase" -> Identifier {reject}
+	"unlock" -> Identifier {reject}
+	"until!" -> Iter-Name {reject}
+	"void" -> Identifier {reject}
+	"when" -> Identifier {reject}
+	"while!" -> Iter-Name {reject}
+	"with" -> Identifier {reject}
+	"yield" -> Identifier {reject}
+

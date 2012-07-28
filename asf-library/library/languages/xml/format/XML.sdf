@@ -1,0 +1,47 @@
+module languages/xml/format/XML
+
+imports languages/xml/syntax/XML
+imports languages/box/syntax/Box
+
+exports
+  sorts X-Element X-Content
+  context-free syntax
+    "<|" | "|>"              -> CharData {reject}
+    "<|" Element "|>"        -> X-Element
+    "<|" Content* "|>"       -> X-Content*
+
+    "[" XMLDecl "]"            -> Box {to-box}          "<" Box ">" -> XMLDecl            {from-box}
+    "[" VersionInfo "]"        -> Box {to-box}          "<" Box ">" -> VersionInfo        {from-box}
+    "[" EncodingDecl? "]"      -> Box {to-box}          "<" Box ">" -> EncodingDecl?      {from-box}
+    "[" SDDecl? "]"            -> Box {to-box}          "<" Box ">" -> SDDecl?            {from-box}
+    "[" VersionNum "]"         -> Box {to-box}          "<" Box ">" -> VersionNum         {from-box}
+    "[" EncName "]"            -> Box {to-box}          "<" Box ">" -> EncName            {from-box}
+    "[" Attribute "]"          -> Box {to-box}          "<" Box ">" -> Attribute          {from-box}
+    "[" Name "]"               -> Box {to-box}          "<" Box ">" -> Name               {from-box}
+    "[" AttValue"]"            -> Box {to-box}          "<" Box ">" -> AttValue           {from-box}
+    "[" STag "]"               -> Box {to-box}          "<" Box ">" -> STag               {from-box}
+    "[" Attribute* "]"         -> Box {to-box}          "<" Box ">" -> Attribute*         {from-box}
+    "[" ETag "]"               -> Box {to-box}          "<" Box ">" -> ETag               {from-box}
+    "[" EmptyElementTag "]"    -> Box {to-box}          "<" Box ">" -> EmptyElementTag    {from-box}
+    "[" NonEmptyElementTag "]" -> Box {to-box}          "<" Box ">" -> NonEmptyElementTag {from-box}
+    "[" Element "]"            -> Box {to-box}          "<" Box ">" -> Element            {from-box}
+    "[" X-Element "]"          -> Box {to-box}          "<" Box ">" -> X-Element          {from-box}
+    "[" Content* "]"           -> Box {to-box, prefer}  "<" Box ">" -> Content*           {from-box}
+    "[" X-Content* "]"         -> Box {to-box, prefer}  "<" Box ">" -> X-Content*         {from-box}
+
+hiddens
+  variables
+    "&VersionInfo"    -> VersionInfo
+    "&EncodingDecl?"  -> EncodingDecl?
+    "&SDDecl?"        -> SDDecl?
+    "&VersionNum"     -> VersionNum
+    "&EncName"        -> EncName
+    "&Name"           -> Name
+    "&AttValue"       -> AttValue
+    "&Attribute*"     -> Attribute*
+    "&STag"           -> STag
+    "&ETag"           -> ETag
+    "&Content*"       -> Content*
+
+  lexical variables
+    "&C"[0-9]*  -> LAYOUT?

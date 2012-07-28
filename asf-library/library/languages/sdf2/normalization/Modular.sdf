@@ -1,0 +1,45 @@
+module languages/sdf2/normalization/Modular
+imports
+        languages/sdf2/projection/Modular
+        languages/sdf2/normalization/Kernel
+        languages/sdf2/projection/Grammar
+exports
+  context-free syntax
+    "m[[" Definition "]]" "(" ModuleName ")" -> Grammar
+    hide(ModuleName, Grammar)                -> Grammar
+    hide(ModuleName, Productions)            -> Productions
+
+hiddens
+  sorts IG
+  context-free syntax
+    "<" Imports "," Grammar ">"                         -> IG
+    "imp" "[[" Definition "]]" "(" Imports "," Import  ")" -> IG
+    "ims" "[[" Definition "]]" "(" Imports "," Imports ")" -> IG
+    "gra" "[[" Definition "]]" "(" Imports "," Grammar ")" -> IG
+
+hiddens 
+  variables
+    "Mid"[0-9\']*   -> ModuleId
+    "M"[0-9\']*     -> ModuleName
+    "s"[0-9\']*     -> Section
+    "s""*"[0-9\']*  -> Section*
+    "s""+"[0-9\']*  -> Section+
+    "m"[0-9\']*     -> Module
+    "m*"[0-9\']*    -> Module*
+    "m+"[0-9\']*    -> Module+
+    "d"[0-9\']*     -> Definition
+    "_i"[0-9\']*    -> Import
+    "_i""*"[0-9\']* -> Import*
+    "_i""+"[0-9\']* -> Import+
+    "is"[0-9\']*    -> ImpSection
+    "is*"[0-9\']*   -> ImpSection*
+    [p][0-9\']*     -> Production
+    [p]"*"[0-9\']*  -> Production*
+    [p]"+"[0-9\']*  -> Production+
+    "_G"[0-9\']*    -> Grammar
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "!"[0-9\']*         -> Attributes
+    "attr""*"[0-9\']*   -> {Attribute ","}* 
+    "'r"[0-9\']*        -> Renamings   

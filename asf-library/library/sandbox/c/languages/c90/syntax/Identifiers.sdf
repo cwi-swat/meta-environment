@@ -1,0 +1,19 @@
+%% ---------- ---------- ----------
+%% ANSI X3.159-1989
+%% ---------- ---------- ----------
+%% page 20
+%% In translation phase 7 and 8, an identifier shall not consist of the same sequence of characters
+%% as a keyword
+%% ---------- ---------- ----------
+module languages/c90/syntax/Identifiers
+
+imports languages/c90/syntax/Keywords
+exports
+	sorts Identifier
+	lexical syntax
+		[\_a-zA-Z][\_a-zA-Z0-9]*		-> Identifier
+
+	lexical restrictions
+		Identifier -/- [\_0-9a-zA-Z]
+	lexical syntax
+		Keyword	-> Identifier {reject}

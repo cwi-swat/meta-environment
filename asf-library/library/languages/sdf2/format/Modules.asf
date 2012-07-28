@@ -1,0 +1,23 @@
+equations
+
+[] exports C Grammar = <V ["exports" _C_  [Grammar]]>
+
+equations
+
+[] hiddens C Grammar = <V ["hiddens" _C_ [Grammar]]>
+
+equations
+
+[] imports C Import* = <V [ _C_ H ["imports" V [[Import*]] ] ]>
+
+equations
+
+[] module ModuleName C1 ImpSection* C2 Section* = <V vs=2[ H ["module" [ModuleName] ] V vs=1 [ _C1_ [[ImpSection*]] _C2_] V vs=2 [[Section*]] ]>
+
+equations
+
+[] ModuleId [ Symbol* ] = <H hs=0[ [ModuleId] "[" H [[Symbol*]] "]"]>
+
+equations
+
+[] ModuleName C Renamings = <H hs=1 [[ModuleName] _C_ [Renamings] ]>

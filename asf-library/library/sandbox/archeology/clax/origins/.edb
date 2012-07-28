@@ -1,0 +1,5 @@
+; .edb contains an assoclist ( <pattern-name> . <sort-name> )
+
+( 
+  (p9 . "EXPR")
+)

@@ -1,0 +1,17 @@
+equations
+
+[quoted] 
+	strcon(\" c*1 \") ++ strcon(\" c*2 \") = strcon(\" c*1 c*2 \")
+
+[unquoted]
+	idcon(h1 t1) ++  idcon(h2 t2) = idcon(h1 t1 h2 t2)
+
+
+equations
+
+[quoted] 
+	strcon(\" c*1 \") +-+ strcon(\" c*2 \") = 
+	strcon(\" c*1 strchar(\-) c*2 \")
+
+[unquoted]
+	idcon(h1 t1) +-+  idcon(h2 t2) = idcon(h1 t1 \- h2 t2)

@@ -1,0 +1,10 @@
+equations
+
+[unparse-to-string-sort]
+  unparse-to-string(Sort) = bytes-to-string(unparse(Sort))
+
+
+[unparse-sort]
+  read(Bytes) := unparse-to-bytes(Sort)
+  ===>
+  unparse(Sort) = Bytes

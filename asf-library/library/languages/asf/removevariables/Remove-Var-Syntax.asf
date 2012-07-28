@@ -1,0 +1,15 @@
+equations
+
+[main-with-module]
+	remove-var-syntax(Name, SDF) = remove(SDF)
+
+[main]
+	remove-var-syntax(SDF) = remove(SDF)
+
+equations
+
+[delete-variable-productions]
+	remove(variables Prod+) = variables
+
+[delete-lexical-variable-productions]
+	remove(lexical variables Prod+) = lexical variables

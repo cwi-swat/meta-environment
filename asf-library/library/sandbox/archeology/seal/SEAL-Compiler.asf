@@ -1,0 +1,127 @@
+equations
+
+[1a]    _Se' = tc[Configuration for language _Mod' is _Spec-parts'],
+        errors(_Se') = true
+        ==========
+        compile(Configuration for language _Mod' is _Spec-parts' ) =
+                make-configuration(_Mod', comp-all-items(_Mod', _Spec-parts', _Se'))
+
+[1b]    _Se' = tc[Configuration for language _Mod' is _Spec-parts'],
+        errors(_Se') != true
+        ==========
+        compile(Configuration for language _Mod' is _Spec-parts' ) = ()
+
+[1c]    output-filename(Configuration for language module(Cs') is _Spec-parts' ) =
+                string(""" Cs' "." "s" "e" "a" "l" "." "l" "l" """)
+
+[100]   _S_expr_list' = comp-button(_Mod', _But' , _Se'),
+        _S_expr_list'' = comp-all-items(_Mod', _Spec-parts', _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        =============
+        comp-all-items(_Mod', _But' _Spec-parts', _Se') = _S_expr_list'''
+
+[101]   _S_expr_list' = comp-entry(_Mod', _Mentry' , _Se'),
+        _S_expr_list'' = comp-all-items(_Mod', _Spec-parts', _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        =============
+        comp-all-items(_Mod', _Mentry' _Spec-parts', _Se') = _S_expr_list'''
+
+[102a]  _Spec-parts' = menu-to-entry-parts(_Menu'),
+        _Spec-parts''' = _Spec-parts' _Spec-parts''
+        =============
+        comp-all-items(_Mod', _Menu' _Spec-parts'', _Se') =
+                comp-all-items(_Mod', _Spec-parts''', _Se')
+
+[102b]  _S_expr_list' = comp-tool(_Mod', _Tool' , _Se'),
+        _S_expr_list'' = comp-all-items(_Mod', _Spec-parts', _Se'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        =============
+        comp-all-items(_Mod', _Tool' _Spec-parts', _Se') = _S_expr_list'''
+
+[103]   _Spec-parts' = menu-to-entry-parts(_Menu')
+        =============
+        comp-all-items(_Mod', _Menu', _Se') = comp-all-items(_Mod', _Spec-parts', _Se')
+
+[104]   comp-all-items(_Mod', _But', _Se') = comp-button(_Mod', _But' , _Se')
+
+[105]   comp-all-items(_Mod', _Mentry', _Se') = comp-entry(_Mod', _Mentry', _Se')
+
+[106]   comp-all-items(_Mod', _Tool', _Se') = comp-tool(_Mod', _Tool', _Se')
+
+[3]     _S_expr_list'' = all-functions(_S_expr_list'),
+        _S_expr_list''' = all-create-ui-items(_Mod', _S_expr_list'),
+        _S_expr_list'''' = make-configure-function(_Mod', _S_expr_list'''),
+        _S_expr_list''''' = _S_expr_list'' _S_expr_list''''
+        =======================
+        make-configuration( _Mod', _S_expr_list' ) = _S_expr_list'''''
+
+[100]   make-configure-function(_Mod', _S_expr_list') =
+          (de #:SEAL: make-func-head(_Mod') (SEAL)
+             (#:SEAL:add-item-to-table
+               (#:SEAL:create-item add-double-quotes(_Mod') make-symbol("'try-config") (list
+                   _S_expr_list'
+               ))
+               SEAL
+             )
+          )
+
+[101]   make-func-head(module(Cs')) =
+                symbol("c" "o" "n" "f" "i" "g" "u" "r" "e" "-" Cs')
+
+[4]     is-ui-item( (#:SEAL:create-ui-item _S_expr_list') ) = true
+
+[5]     is-function( (de _S_expr_list') ) = true
+
+[6]     is-function(_S_expr') = true
+        =========
+        all-functions(_S_expr') = _S_expr'
+
+[7]     is-function(_S_expr') != true
+        =========
+        all-functions(_S_expr') = empty-s-expr
+
+[8]     is-function(_S_expr') = true,
+        _S_expr_list'' = all-functions(_S_expr_list'),
+        _S_expr_list''' = _S_expr' _S_expr_list''
+        =========
+        all-functions(_S_expr' _S_expr_list') = _S_expr_list'''
+
+[9]     is-function(_S_expr') != true
+        =========
+        all-functions(_S_expr' _S_expr_list') = all-functions(_S_expr_list')
+
+[16]    is-ui-item(_S_expr') = true
+        =========
+        all-create-ui-items(_Mod', _S_expr') = convert-ui-item(_Mod', _S_expr')
+
+[17]    is-ui-item(_S_expr') != true
+        =========
+        all-create-ui-items(_Mod', _S_expr') = empty-s-expr
+
+[18]    is-ui-item(_S_expr') = true,
+        _S_expr_list'' = all-create-ui-items(_Mod', _S_expr_list'),
+        _S_expr_list''' = convert-ui-item(_Mod', _S_expr') _S_expr_list''
+        =========
+        all-create-ui-items(_Mod', _S_expr' _S_expr_list') = _S_expr_list'''
+
+[19]    is-ui-item(_S_expr') != true
+        =========
+        all-create-ui-items(_Mod', _S_expr' _S_expr_list') =
+                all-create-ui-items(_Mod', _S_expr_list')
+
+[10a]   empty-s-expr _S_expr_list'= _S_expr_list'
+
+[10b]   _S_expr_list' empty-s-expr = _S_expr_list'
+
+[20]    add-double-quotes(_Mod') = language(_S_expr')
+        ============
+        convert-ui-item(_Mod', _S_expr') = delete-language(_S_expr')
+
+[21]    add-double-quotes(_Mod') != language(_S_expr')
+        ============
+        convert-ui-item(_Mod', _S_expr') = empty-s-expr
+
+[22]    language( (#:SEAL:create-ui-item _S_expr' _S_expr_list') ) = _S_expr'
+
+[23]    delete-language( (#:SEAL:create-ui-item _S_expr' _S_expr_list') ) =
+                (#:SEAL:create-ui-item _S_expr_list')

@@ -1,0 +1,35 @@
+module basic/Identifiers
+
+imports basic/IdentifierCon
+imports basic/StrCon
+imports basic/NatCon
+
+exports
+
+context-free syntax
+	idcon2strcon(IdCon) -> StrCon {complete}
+	strcon2idcon(StrCon) -> IdCon {complete}
+
+context-free syntax
+	natcon2strcon(NatCon) -> StrCon {complete}
+	strcon2natcon(StrCon) -> NatCon {complete}
+
+hiddens
+
+context-free start-symbols
+	NatCon
+	StrCon
+	IdCon
+
+imports basic/Whitespace
+
+lexical variables
+
+"digit"[0-9]* -> [0-9]
+"digit+"[0-9]* -> [0-9]+
+"head"[0-9]* -> [A-Za-z]
+"middle"[0-9]* -> [A-Za-z0-9\-]
+"tail"[0-9]* -> [A-Za-z0-9\-]*
+"char*"[0-9]* -> StrChar*
+"char+"[0-9]* -> StrChar+
+"char"[0-9]* -> StrChar

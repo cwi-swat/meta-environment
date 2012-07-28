@@ -1,0 +1,596 @@
+equations
+
+[300]   (list _S_expr_list') = make-move-list(_Move'),
+        (list _S_expr_list'') = make-move-list(_Moves'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        =========
+        make-move-list(_Move', _Moves') = (list _S_expr_list''')
+
+[301]   make-move-list(_Move') = (list ' _Move')
+
+[200]   _S_expr' = comp-wc(_WC'),
+        _S_expr_list' = comp-wacts(_ActsSemi' , _Type')
+        ======================================
+        comp-act(while _WC' do _ActsSemi' od, _Type') =
+           (progn
+                (make-symbol("while") _S_expr' _S_expr_list')
+                't
+           )
+
+[201]   comp-wc(_FC-expr' is _Sort') = comp-cond(_FC-expr' is _Sort')
+
+[202]   comp-wc(_FC-expr' matches _Pattern') = comp-cond(_FC-expr' matches _Pattern')
+
+[203]   comp-wc(_FC-expr' is-meta-var) = comp-cond(_FC-expr' is-meta-var)
+
+[204]   _S_expr_list' = make-argument-list(_Vnscomma')
+        ==============================================
+        comp-wc(_Mod' : _Func' (_Vnscomma')) = (#:SEAL:is-true-constantp
+          (#:SEAL:reduce
+            add-double-quotes(_Mod')
+            (#:SEAL:create-action-term
+              add-double-quotes(_Mod')
+              add-double-quotes(_Func')
+              (_S_expr_list')
+              SEAL
+            )
+            SEAL
+          )
+          (send 'SM-select (send 'get-module (#:SEAL:get-meta SEAL) add-double-quotes(_Mod')))
+        )
+
+[205]   comp-wc(_Mod' : _Func' ()) = (#:SEAL:is-true-constantp
+          (#:SEAL:reduce
+            add-double-quotes(_Mod')
+            (#:SEAL:create-action-term
+              add-double-quotes(_Mod')
+              add-double-quotes(_Func')
+              ()
+              SEAL
+            )
+            SEAL
+          )
+          (send 'SM-select (send 'get-module (#:SEAL:get-meta SEAL) add-double-quotes(_Mod')))
+        )
+
+[206]   comp-wc(not _WC') = (make-symbol("not") comp-wc(_WC'))
+
+[207]   comp-wc(_WC' and _WC'') = (make-symbol("and") comp-wc(_WC') comp-wc(_WC''))
+
+[208]   comp-wc(_WC' or _WC'') = (make-symbol("or") comp-wc(_WC') comp-wc(_WC''))
+
+[209]   comp-wc(focus _Moves') = (#:SEAL:moves-possiblep make-symbol("instance") make-move-list(_Moves') SEAL)
+
+[210]   comp-wc(_Ufn' . focus _Moves') = (#:SEAL:moves-possiblep _Ufn' make-move-list(_Moves') SEAL)
+
+[211]   comp-wc(_Vn' . focus _Moves') = (#:SEAL:moves-possiblep
+                (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+                make-move-list(_Moves') SEAL)
+
+[290a]  _Type' != st-button-type,
+        _S_expr_list' = comp-act(_Act', _Type'),
+        _S_expr_list'' = comp-wacts(_ActsSemi', _Type'),
+        _S_expr_list''' = (ifn _S_expr_list' (exit error)) _S_expr_list''
+        ===========================================
+        comp-wacts(_Act'; _ActsSemi', _Type') = _S_expr_list'''
+
+[290b]  _Type' = st-button-type,
+        _S_expr_list' = comp-act(_Act', _Type'),
+        _S_expr_list'' = comp-wacts(_ActsSemi', _Type'),
+        _S_expr_list''' = (ifn _S_expr_list' (exit error))
+                          (if (#:SEAL:stopped make-symbol("instance") ui-item SEAL) (exit error))
+                         _S_expr_list''
+        ===========================================
+        comp-wacts(_Act'; _ActsSemi', _Type') = _S_expr_list'''
+
+[291a]  _Type' != st-button-type,
+        _S_expr_list' = comp-act(_Act', _Type')
+        ====================
+        comp-wacts(_Act', _Type') = (ifn _S_expr_list' (exit error))
+
+[291b]  _Type' = st-button-type,
+        _S_expr_list' = comp-act(_Act', _Type'),
+        _S_expr_list'' = (ifn _S_expr_list' (exit error))
+                         (if (#:SEAL:stopped make-symbol("instance") ui-item SEAL) (exit error))
+        ====================
+        comp-wacts(_Act', _Type') = _S_expr_list''
+
+[100]   comp-act(variable-name(Cs') := focus , _Type') = (#:SEAL:var:check
+    add-double-quotes(variable-name(Cs'))
+    make-symbol("'term")
+    (#:SEAL:get-focus-phylum make-symbol("instance") () SEAL)
+    ()
+    make-symbol("instance")
+    (#:SEAL:get-focus-tree
+       make-symbol("instance")
+       ()
+       SEAL
+    )
+    ()
+    make-symbol("ui-item")
+    SEAL
+  )
+
+[100a]   comp-act(variable-name(Cs') := focus _Moves' , _Type') = (#:SEAL:var:check
+    add-double-quotes(variable-name(Cs'))
+    make-symbol("'term")
+    (#:SEAL:get-focus-phylum make-symbol("instance") make-move-list(_Moves') SEAL)
+    ()
+    make-symbol("instance")
+    (#:SEAL:get-focus-tree
+       make-symbol("instance")
+       make-move-list(_Moves')
+       SEAL
+    )
+    ()
+    make-symbol("ui-item")
+    SEAL
+  )
+
+[101]   comp-act(variable-name(Cs') := _Ufn' . focus , _Type') = (#:SEAL:var:check
+    add-double-quotes(variable-name(Cs'))
+    make-symbol("'term")
+    (#:SEAL:get-focus-phylum _Ufn' () SEAL)
+    ()
+    _Ufn'
+    (#:SEAL:get-focus-tree _Ufn' () SEAL)
+    ()
+    make-symbol("ui-item")
+    SEAL
+  )
+
+[101a]  comp-act(variable-name(Cs') := _Ufn' . focus _Moves', _Type') = (#:SEAL:var:check
+    add-double-quotes(variable-name(Cs'))
+    make-symbol("'term")
+    (#:SEAL:get-focus-phylum _Ufn' make-move-list(_Moves') SEAL)
+    ()
+    _Ufn'
+    (#:SEAL:get-focus-tree _Ufn' make-move-list(_Moves') SEAL)
+    ()
+    make-symbol("ui-item")
+    SEAL
+  )
+
+[101b]  comp-act(variable-name(Cs') := variable-name(Cs'') . focus , _Type') = (#:SEAL:var:check
+    add-double-quotes(variable-name(Cs'))
+    make-symbol("'term")
+    (#:SEAL:get-focus-phylum
+        (#:SEAL:term-to-filename add-double-quotes(variable-name(Cs'')) make-symbol("ui-item") SEAL)
+        ()
+        SEAL
+    )
+    ()
+    (#:SEAL:term-to-filename add-double-quotes(variable-name(Cs'')) make-symbol("ui-item") SEAL)
+    (#:SEAL:get-focus-tree
+       (#:SEAL:term-to-filename add-double-quotes(variable-name(Cs'')) make-symbol("ui-item") SEAL)
+       ()
+       SEAL
+    )
+    ()
+    make-symbol("ui-item")
+    SEAL
+  )
+
+[101c]  comp-act(variable-name(Cs') := variable-name(Cs'') . focus _Moves', _Type') = (#:SEAL:var:check
+    add-double-quotes(variable-name(Cs'))
+    make-symbol("'term")
+    (#:SEAL:get-focus-phylum
+        (#:SEAL:term-to-filename add-double-quotes(variable-name(Cs'')) make-symbol("ui-item") SEAL)
+        make-move-list(_Moves')
+        SEAL
+    )
+    ()
+    (#:SEAL:term-to-filename add-double-quotes(variable-name(Cs'')) make-symbol("ui-item") SEAL)
+    (#:SEAL:get-focus-tree
+       (#:SEAL:term-to-filename add-double-quotes(variable-name(Cs'')) make-symbol("ui-item") SEAL)
+       make-move-list(_Moves')
+       SEAL
+    )
+    ()
+    make-symbol("ui-item")
+    SEAL
+  )
+
+[102a]  comp-act(variable-name(Cs') := select(_Ufn' , _Sort'), _Type') = (#:SEAL:var:check
+    add-double-quotes(variable-name(Cs'))
+    make-symbol("'term")
+    add-double-quotes(_Sort')
+    ()
+    make-symbol("'config")
+    (#:SEAL:make-symbol("select") _Ufn' add-double-quotes(_Sort') SEAL)
+    (#:SEAL:instance-name-to-module-name _Ufn' SEAL)
+    make-symbol("ui-item")
+    SEAL
+  )
+
+[102b]  comp-act(variable-name(Cs') := select(_Vn' , _Sort'), _Type') = (#:SEAL:var:check
+    add-double-quotes(variable-name(Cs'))
+    make-symbol("'term")
+    add-double-quotes(_Sort')
+    ()
+    make-symbol("'config")
+    (#:SEAL:make-symbol("select")
+        (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+        add-double-quotes(_Sort')
+        SEAL
+    )
+    (#:SEAL:instance-name-to-module-name
+        (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+        SEAL
+    )
+    make-symbol("ui-item")
+    SEAL
+  )
+
+[103a]  comp-act(create(_Ufn' , _Vn''), _Type') =
+        (#:SEAL:create-output
+            _Ufn'
+            (#:SEAL:var:modulename (#:SEAL:lookup-var-by-name make-symbol("ui-item") add-double-quotes(_Vn'')) SEAL)
+            (#:SEAL:lookup-var-by-name make-symbol("ui-item") add-double-quotes(_Vn''))
+            SEAL
+        )
+
+[103b]  comp-act(create(_Vn''' , _Vn''), _Type') =
+        (#:SEAL:create-output
+            (#:SEAL:lookup-var-by-name make-symbol("ui-item") add-double-quotes(_Vn'''))
+            (#:SEAL:var:modulename (#:SEAL:lookup-var-by-name make-symbol("ui-item") add-double-quotes(_Vn'')) SEAL)
+            (#:SEAL:lookup-var-by-name make-symbol("ui-item") add-double-quotes(_Vn''))
+            SEAL
+        )
+
+[104a]  _S_expr_list' =  make-text-list(_Text')
+        ======================
+        comp-act(create(_Ufn', _Mod', _Text', _Sort'), _Type') =
+        (#:SEAL:create-input
+            _Ufn'
+            add-double-quotes(_Mod')
+            (make-symbol("list") _S_expr_list')
+            add-double-quotes(_Sort')
+            SEAL
+        )
+
+[104b]  _S_expr_list' =  make-text-list(_Text')
+        ======================
+        comp-act(create(_Vn', _Mod', _Text', _Sort'), _Type') =
+        (#:SEAL:create-input
+            (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+            add-double-quotes(_Mod')
+            (make-symbol("list") _S_expr_list')
+            add-double-quotes(_Sort')
+            SEAL
+        )
+
+[105a1] comp-act(focus := select(_Ufn', _Sort'), _Type') = (#:SEAL:assign-focus
+    comp-filename()
+    (#:SEAL:make-symbol("select")
+        _Ufn'
+        add-double-quotes(_Sort')
+        SEAL
+    )
+    SEAL
+    )
+
+[105a2] comp-act(focus := select(_Vn', _Sort'), _Type') = (#:SEAL:assign-focus
+    comp-filename()
+    (#:SEAL:make-symbol("select")
+        (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+        add-double-quotes(_Sort')
+        SEAL
+    )
+    SEAL
+    )
+
+[105b1] comp-act(_Ufn'.focus := select(_Ufn'', _Sort'), _Type') = (#:SEAL:assign-focus
+    _Ufn'
+    (#:SEAL:make-symbol("select")
+        _Ufn''
+        add-double-quotes(_Sort')
+        SEAL
+    )
+    SEAL
+    )
+
+[105b2] comp-act(_Ufn'.focus := select(_Vn', _Sort'), _Type') = (#:SEAL:assign-focus
+    _Ufn'
+    (#:SEAL:make-symbol("select")
+        (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+        add-double-quotes(_Sort')
+        SEAL
+    )
+    SEAL
+    )
+
+[106a]  _S_expr_list'' = make-argument-list(_Vnscomma')
+        ==========================================
+        comp-act(focus := _Mod' : _Func'(_Vnscomma'), _Type') = (#:SEAL:assign-focus
+    comp-filename()
+      (#:SEAL:reduce
+        add-double-quotes(_Mod')
+        (#:SEAL:create-action-term
+          add-double-quotes(_Mod')
+          add-double-quotes(_Func')
+          (_S_expr_list'')
+          SEAL
+        )
+        SEAL
+      )
+    SEAL)
+
+[106b] comp-act(focus := _Mod' : _Func'(), _Type') = (#:SEAL:assign-focus
+    comp-filename()
+        (#:SEAL:reduce
+          add-double-quotes(_Mod')
+          (#:SEAL:create-action-term
+            add-double-quotes(_Mod')
+            add-double-quotes(_Func')
+            ()
+            SEAL
+          )
+          SEAL
+        )
+    SEAL
+    )
+
+[106c]  _S_expr_list'' = make-argument-list(_Vnscomma')
+        ==========================================
+        comp-act(_Ufn'.focus := _Mod' : _Func'(_Vnscomma'), _Type') = (#:SEAL:assign-focus
+    _Ufn'
+      (#:SEAL:reduce
+        add-double-quotes(_Mod')
+        (#:SEAL:create-action-term
+          add-double-quotes(_Mod')
+          add-double-quotes(_Func')
+          (_S_expr_list'')
+          SEAL
+        )
+        SEAL
+      )
+    SEAL)
+
+[106d]  comp-act(_Ufn'.focus := _Mod' : _Func'(), _Type') = (#:SEAL:assign-focus
+    _Ufn'
+    (make-symbol("if")
+      (#:SEAL:reduce
+        add-double-quotes(_Mod')
+        (#:SEAL:create-action-term
+          add-double-quotes(_Mod')
+          add-double-quotes(_Func')
+          ()
+          SEAL
+        )
+        SEAL
+      )
+    )
+    SEAL)
+
+[107]   comp-act(_Vn' := _Vn'', _Type') = (#:SEAL:assign-var-to-var
+                add-double-quotes(_Vn')
+                add-double-quotes(_Vn'')
+                SEAL
+        )
+
+[108a]  _S_expr_list' = make-action-reduction(_Mod' : _Func'(_Vnscomma')),
+        _S_expr_list'' = make-argument-list(_Vnscomma')
+        =========================
+        comp-act(variable-name(Cs') := _Mod' : _Func'(_Vnscomma'), _Type') =
+    (#:SEAL:var:check
+        add-double-quotes(variable-name(Cs'))
+        make-symbol("'term")
+        (#:SEAL:find-function-sort
+            add-double-quotes(_Mod')
+            add-double-quotes(_Func')
+            (_S_expr_list'')
+            SEAL
+        )
+        ()
+        make-symbol("'config")
+        _S_expr_list'
+        add-double-quotes(_Mod')
+        make-symbol("ui-item")
+        SEAL
+    )
+
+[108b]  _S_expr_list' = make-action-reduction(_Mod' : _Func'()),
+        _S_expr_list'' = make-argument-list()
+        =========================
+        comp-act(variable-name(Cs') := _Mod' : _Func'(), _Type') =
+    (#:SEAL:var:check
+        add-double-quotes(variable-name(Cs'))
+        make-symbol("'term")
+        (#:SEAL:find-function-sort
+            add-double-quotes(_Mod')
+            add-double-quotes(_Func')
+            (_S_expr_list'')
+            SEAL
+        )
+        ()
+        make-symbol("'config")
+        _S_expr_list'
+        add-double-quotes(_Mod')
+        make-symbol("ui-item")
+        SEAL
+    )
+
+[109a]  _S_expr_list' = make-action-reduction(_Mod' : _Func'(_Vnscomma'))
+        =====================
+        comp-act(_Mod' : _Func'(_Vnscomma'), _Type') = (#:SEAL:std-reduction
+        add-double-quotes(_Mod')
+        _S_expr_list'
+        SEAL)
+
+[109b]  _S_expr_list' = make-action-reduction(_Mod' : _Func'())
+        =====================
+        comp-act(_Mod' : _Func'(), _Type') = (#:SEAL:std-reduction
+        add-double-quotes(_Mod')
+        _S_expr_list'
+        SEAL)
+
+[140a]  _S_expr_list'' = make-argument-list(_Vnscomma')
+        ==========================================
+        make-action-reduction(_Mod' : _Func'(_Vnscomma')) =
+    (#:SEAL:reduce
+        add-double-quotes(_Mod')
+        (#:SEAL:create-action-term
+            add-double-quotes(_Mod')
+            add-double-quotes(_Func')
+            (_S_expr_list'')
+            SEAL
+        )
+        SEAL
+    )
+
+[140b]  make-action-reduction(_Mod' : _Func'()) = (#:SEAL:reduce
+                add-double-quotes(_Mod')
+                (#:SEAL:create-action-term
+                  add-double-quotes(_Mod')
+                  add-double-quotes(_Func')
+                  ()
+                  SEAL
+                )
+                SEAL)
+
+[150]   _S_expr_list'' = make-var-checks(_Vnscomma'),
+        _S_expr_list''' = make-symbol("and") _S_expr_list''
+        =======================================
+        make-var-check-list(_Vnscomma') = _S_expr_list'''
+
+[151]   _S_expr_list' = make-var-check(_Vn'),
+        _S_expr_list'' = make-var-checks(_Vnscomma'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        =======================================
+        make-var-checks(_Vn', _Vnscomma') = _S_expr_list'''
+
+[152]   make-var-checks(_Vn') = make-var-check(_Vn')
+
+[153]   make-var-check(variable-name(Cs')) = (#:SEAL:var:check
+                add-double-quotes(variable-name(Cs'))
+                make-symbol("'term")
+                (#:SEAL:get-focus-phylum (#:SEAL:var: make-symbol("source") (#:SEAL:lookup-var-by-name
+                        make-symbol("ui-item")
+                        add-double-quotes(variable-name(Cs'))
+                  ))
+                  ()
+                  SEAL
+                )
+                ()
+                (#:SEAL:var: make-symbol("source") (#:SEAL:lookup-var-by-name
+                        make-symbol("ui-item")
+                        add-double-quotes(variable-name(Cs'))
+                ))
+                make-symbol("ui-item")
+                SEAL
+        )
+
+[154]   make-var-check-list() = make-symbol("'true")
+
+[160]   make-argument-list() = make-symbol("list")
+
+[161]   _S_expr_list'' = sum-up-var-names(_Vnscomma'),
+        _S_expr_list''' = make-symbol("list") _S_expr_list''
+        ==============================================
+        make-argument-list(_Vnscomma') = _S_expr_list'''
+
+[162]   _S_expr_list' = sum-up-var-names(_Vn'),
+        _S_expr_list'' = sum-up-var-names(_Vnscomma'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ==============================================
+        sum-up-var-names(_Vn', _Vnscomma') = _S_expr_list'''
+
+[163]   sum-up-var-names(_Vn') = (#:SEAL:lookup-var-by-name
+                make-symbol("ui-item")
+                add-double-quotes(_Vn')
+        )
+
+[90a]   make-text-list(_Str') = _Str'
+
+[90b]   _S_expr_list'' = make-text-list(_Strs'),
+        _S_expr_list''' = _Str' _S_expr_list''
+        =====================
+        make-text-list(_Str' _Strs') = _S_expr_list'''
+
+[1a]    comp-act(focus := _Vn', _Type') =
+                (#:SEAL:assign-focus comp-filename() comp-var-of-type-term(_Vn') SEAL)
+
+[1b]    comp-act(_Ufn' . focus := _Vn', _Type') =
+                (#:SEAL:assign-focus _Ufn' comp-var-of-type-term(_Vn') SEAL)
+
+[1c0]   comp-act(focus _Moves', _Type') = comp-act(_Moves', _Type')
+
+[1c1]   comp-act(save, _Type') = (#:SEAL:save-focus-route comp-filename() SEAL)
+
+[1c2]   comp-move(_Ufn' save) = (#:SEAL:save-focus-route _Ufn' SEAL)
+
+[1c3]   comp-move(_Vn' save) = (#:SEAL:save-focus-route
+          (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+          SEAL)
+
+[1d1]   comp-act(up, _Type') = (#:SEAL:move-focus comp-filename() 'up SEAL)
+
+[1d2]   comp-move(_Ufn' up) = (#:SEAL:move-focus _Ufn' 'up SEAL)
+
+[1d3]   comp-move(_Vn' up) = (#:SEAL:move-focus
+          (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+          'up SEAL)
+
+[1e1]   comp-act(down, _Type') = (#:SEAL:move-focus comp-filename() 'down SEAL)
+
+[1e2]   comp-move(_Ufn' down) = (#:SEAL:move-focus _Ufn' 'down SEAL)
+
+[1e3]   comp-move(_Vn' down) = (#:SEAL:move-focus
+          (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+          'down SEAL)
+
+[1f1]   comp-act(previous, _Type') = (#:SEAL:move-focus comp-filename() 'previous SEAL)
+
+[1f2]   comp-move(_Ufn' previous) = (#:SEAL:move-focus _Ufn' 'previous SEAL)
+
+[1f3]   comp-move(_Vn' previous) = (#:SEAL:move-focus
+          (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+          'previous SEAL)
+
+[1g1]   comp-act(next, _Type') = (#:SEAL:move-focus comp-filename() 'next SEAL)
+
+[1g2]   comp-move(_Ufn' next) = (#:SEAL:move-focus _Ufn' 'next SEAL)
+
+[1g3]   comp-move(_Vn' next) = (#:SEAL:move-focus
+          (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+          'next SEAL)
+
+[1h1]   comp-act(restore, _Type') = (#:SEAL:restore-focus comp-filename() SEAL)
+
+[1h2]   comp-move(_Ufn' restore) = (#:SEAL:restore-focus _Ufn' SEAL)
+
+[1h3]   comp-move(_Vn' restore) = (#:SEAL:restore-focus
+          (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+          SEAL)
+
+[1i1]   comp-act(root, _Type') = (#:SEAL:move-focus comp-filename() 'root SEAL)
+
+[1i2]   comp-move(_Ufn' root) = (#:SEAL:move-focus _Ufn' 'root SEAL)
+
+[1i3]   comp-move(_Vn' root) = (#:SEAL:move-focus
+          (#:SEAL:term-to-filename add-double-quotes(_Vn') make-symbol("ui-item") SEAL)
+          'root SEAL)
+
+[9a]    comp-act(_Ufn' . focus _Move', _Type') = comp-move(_Ufn' _Move')
+
+[9b]    _S_expr_list'' = comp-act(_Ufn' . focus _Moves'', _Type'),
+        _S_expr_list''' = comp-move(_Ufn' _Move') _S_expr_list''
+        =======================================
+        comp-act(_Ufn' . focus _Move',_Moves'', _Type') = (make-symbol("and") _S_expr_list''')
+
+[9c]    comp-act(_Vn' . focus _Move', _Type') = comp-move(_Vn' _Move')
+
+[9d]    _S_expr_list'' = comp-act(_Vn' . focus _Moves'', _Type'),
+        _S_expr_list''' = comp-move(_Vn' _Move') _S_expr_list''
+        =======================================
+        comp-act(_Vn' . focus _Move',_Moves'', _Type') = (make-symbol("and") _S_expr_list''')
+
+[9e]    _S_expr_list' = comp-act(_Moves'', _Type'),
+        _S_expr_list'' = comp-act(_Move', _Type'),
+        _S_expr_list''' = _S_expr_list'' _S_expr_list'
+        =======================================
+        comp-act(_Move',_Moves'', _Type') = (make-symbol("and") _S_expr_list''')
+
+[10]    comp-var-of-type-term(_Vn') =
+               (#:SEAL:lookup-var-by-name make-symbol("ui-item") add-double-quotes(_Vn'))

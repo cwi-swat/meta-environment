@@ -1,0 +1,20 @@
+module languages/logo/draw/Logo
+
+imports
+    languages/logo/syntax/Logo
+    languages/logo/run/LogoState
+    languages/logo/run/EvalRun
+    languages/logo/run/GenSVG
+    languages/xml/syntax/XML
+
+hiddens
+  %% imports basic/Comments
+  context-free start-symbols 
+     Program Document 
+
+  variables
+    "LS" [0-9\']*       -> LogoState
+    "Commands"          -> Commands
+    "Lines"             -> Lines
+ 
+  

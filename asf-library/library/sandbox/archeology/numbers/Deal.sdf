@@ -1,0 +1,15 @@
+module Deal
+imports Real-op Meal
+
+hiddens
+  context-free syntax
+     e2r( EREAL )               -> REAL
+     r2e( REAL )                -> EREAL
+     output( REAL )             -> REAL
+
+
+
+hiddens
+  variables
+     r[0-9\']*           -> REAL
+     x[0-9\']*           -> INT

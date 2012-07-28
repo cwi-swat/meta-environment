@@ -1,0 +1,51 @@
+equations
+[Tc1a]  [D] S = true
+        =======================
+        tc begin D S end = true
+
+[Tc1b]  [D] S != true
+        ========================
+        tc begin D S end = false
+
+[Tc2]   [declare Id-type-list ;] = [Pair-list]
+        ========================================================
+        [declare Id:Type, Id-type-list ;] = [Id:Type, Pair-list]
+
+[Tc3]   [declare ;] = []
+
+[Tc4]   Tenv Stat = true, Tenv Stat-list = true
+        =======================================
+        Tenv Stat ; Stat-list = true
+
+[Tc5]   Tenv  = true
+
+[Tc6]   compatible(Tenv.Id, Tenv.Exp) = true
+        ====================================
+        Tenv Id := Exp = true
+
+[Tc7]   Tenv.Exp = natural, Tenv S1 = true, Tenv S2 = true
+        ==================================================
+        Tenv if Exp then S1 else S2 fi = true
+
+[Tc8]   Tenv.Exp = natural, Tenv S = true
+        =================================
+        Tenv while Exp do S od = true
+
+[Tc9]   Tenv.Exp1 = natural, Tenv.Exp2 = natural
+        ========================================
+        Tenv.Exp1 + Exp2 = natural
+
+[Tc10]  Tenv.Exp1 = natural, Tenv.Exp2 = natural
+        ========================================
+        Tenv.Exp1 - Exp2 = natural
+
+[Tc11]  Tenv.Exp1 = string, Tenv.Exp2 = string
+        ======================================
+        Tenv.Exp1 || Exp2 = string
+
+[Tc12]  Tenv.Id = lookup Id in Tenv
+[Tc13]  Tenv.Nat-con = natural
+[Tc14]  Tenv.Str-con = string
+
+[Tca] compatible(natural,natural) = true
+[Tcb] compatible(string,string) = true

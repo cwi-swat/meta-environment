@@ -1,0 +1,8 @@
+module Void-Expressions
+
+exports
+
+sorts Void-Expression
+
+context-free syntax
+	"void" -> Void-Expression

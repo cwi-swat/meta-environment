@@ -1,0 +1,114 @@
+   equations
+
+      [1]   check(Exp) = errors
+               when check(Exp, [], s0) = <type, subs, errors, var>
+
+      [2]   check(true, env, var)  = <bool, [], [], var>
+      [3]   check(false, env, var) = <bool, [], [], var>
+      [4]   check(Nat, env, var)   = <nat, [], [], var>
+      [5]      lookup Id in env = <found, gt>,
+               instant(gt, var) = <type, var1>
+            ===============================================================
+            check(Id, env, var) 
+               = if found
+                 then <type, [], [], var1>
+                 else <next(var1), [], [unbound identifier Id], next(var1)>
+                 fi
+      [6]      check(Exp1, env, var)
+                  = <type1, subs1, [ers1], var1>,
+               check(Exp2, apply(subs1, env), var1)
+                  = <type2, subs2, [ers2], var2>,
+               unify(apply-type(subs2, type1) is type2 -> next(var2))
+                  = <unifiable, u-subs>
+            ===========================================================
+            check((Exp1 Exp2), env, var)
+               = if unifiable
+                 then <apply-type(u-subs, next(var2)),
+                       u-subs o subs2 o subs1,
+                       [ers1, ers2],
+                       next(var2)>
+                 else <next(var2),
+                       [],
+                       [ers1, ers2, incorrect application (Exp1 Exp2)],
+                       next(var2)>
+                 fi
+      [7]      check(Exp, (Id, next(var)) + env, next(var))
+                  = <type, subs, errors, var1>
+            ==============================================================
+            check(lambda Id . Exp, env, var)
+               = <apply-type(subs, next(var)) -> type, subs, errors, var1>
+      [8]      check(Exp1, env, var) 
+                  = <type1, subs1, [ers1], var1>,
+               apply(subs1, env)       = env1,
+               generalize(type1, env1) = gt,
+               check(Exp2, (Id, gt) + env1, var1)
+                  = <type2, subs2, [ers2], var2> 
+            ===============================================
+            check(let Id = Exp1 in Exp2, env, var)
+               = <type2, subs2 o subs1, [ers1, ers2], var2>
+      [9]      check(Exp1, (Id, next(var)) + env, next(var))
+                  = <type1, subs1, [ers1], var1>,
+               unify(type1 is apply-type(subs1, next(var)))
+                  = <unifiable, u-subs>,
+               apply(u-subs o subs1, env)                  = env1,
+               generalize(apply-type(u-subs, type1), env1) = gt,
+               check(Exp2, (Id, gt) + env1, var1)
+                  = <type2, subs2, [ers2], var2> 
+            ===============================================================
+            check(letrec Id = Exp1 in Exp2, env, var)
+               = if unifiable
+                 then <type2, subs2 o u-subs o subs1, [ers1, ers2], var2>
+                 else <next(var2),
+                       [],
+                       [ers1, incorrect recursive declaration of Id, ers2],
+                       next(var2)>
+                 fi
+      [10]     check(Exp1, env, var)
+                  = <type1, subs1, [ers1], var1>,
+               unify(type1 is bool)
+                  = <unifiable1, u-subs1>,
+               check(Exp2, apply(u-subs1 o subs1, env), var1)
+                  = <type2, subs2, [ers2], var2>,
+               check(Exp3, apply(subs2 o u-subs1 o subs1, env), var2)
+                  = <type3, subs3, [ers3], var3>,
+               unify(apply-type(subs3, type2) is type3)
+                   = <unifiable2, u-subs2>
+            ==========================================================
+            check(if Exp1 then Exp2 else Exp3 fi, env, var)
+               = if unifiable1
+                 then if unifiable2
+                      then <apply-type(u-subs2, type3),
+                            u-subs2 o subs3 o subs2 o u-subs1 o subs1,
+                            [ers1, ers2, ers3],
+                            var3>
+                      else <next(var3),
+                            [],
+                            [ers1, ers2, ers3,
+			     incompatible then Exp2 else Exp3],
+                            next(var3)>
+                      fi
+                 else if unifiable2
+		      then <next(var3),
+			    [],
+                            [ers1, incorrect test Exp1, ers2, ers3],
+                            next(var3)>
+		      else <next(var3),
+			    [],
+			    [ers1, incorrect test Exp1, ers2, ers3,
+			     incompatible then Exp2 else Exp3],
+			    next(var3)>
+		      fi
+                 fi
+      [11]     check(Exp1, env, var)
+                  = <type1, subs1, [ers1], var1>,
+               check(Exp2, apply(subs1, env), var1)
+                  = <type2, subs2, [ers2], var2>
+            =======================================
+            check((Exp1, Exp2), env, var)
+               = <apply-type(subs2, type1) # type2,
+                  subs2 o subs1, 
+                  [ers1, ers2], 
+                  var2>
+
+      [12]  if true then check-out1 else check-out2 fi  = check-out1
+      [13]  if false then check-out1 else check-out2 fi = check-out2

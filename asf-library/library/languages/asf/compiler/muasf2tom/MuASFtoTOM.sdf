@@ -1,0 +1,28 @@
+module languages/asf/compiler/muasf2tom/MuASFtoTOM
+imports languages/asf/compiler/Compiler
+imports languages/asf/compiler/tom/TomSyntax
+imports languages/asf/compiler/muasf2tom/RenameFunctions
+
+
+exports
+context-free syntax
+
+muasf2tom(Module) -> TomSpecification
+
+hiddens
+
+context-free syntax
+
+translate({Rule ";"}*) -> TomRuleSection*
+
+variables
+
+"default?"[0-9]* -> "default:"?
+"TomRuleSection*"[0-9]* -> TomRuleSection*
+"TomRule*"[0-9]* -> TomRule*
+"FunId"[0-9]* -> FunId
+"Term"[0-9]* -> Term
+"Term+"[0-9]* -> {Term ","}+
+"Rule*"[0-9]* -> {Rule ";"}*
+"SignatureOpt"[0-9]* -> SignatureOpt
+"ModuleId"[0-9]* -> ModId

@@ -1,0 +1,19 @@
+equations
+
+[1]     count-pairs(_State') = _Int',
+        _Se' = _State' + empty-se,
+        _Se' = [_Sym-tab', _Errors', _Names']
+        ==============================
+        check-state(_State' ) =
+                [_Sym-tab',
+                check-creates(_State' _Int' 1) +
+                check-vars(_State' _Int' 1) +
+                check-moves(_State' _Int' 1) +
+                _Errors',
+                _Names']
+
+[2]     _State' = [_Type' , _Name' , _Name'' ,
+                [_VARSs' [ [ config-variables in pairnr : _Int' : _Vars' ] ] ] ,
+                _Inst-list' , _Mods-list' , _Moves-list' ]
+        =============
+        count-pairs(_State') = _Int'

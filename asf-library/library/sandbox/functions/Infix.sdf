@@ -1,0 +1,19 @@
+module functions/Infix[A B C]
+
+exports
+
+context-free syntax
+ 
+A ("`" (A B => C) "`")  B -> C {left}
+
+hiddens
+
+imports basic/Whitespace
+
+variables
+
+"A" -> A
+"B" -> B
+"f" -> (A B => C) 
+
+

@@ -1,0 +1,47 @@
+module Basic-Expressions
+
+imports 
+	Self-Expressions
+	Local-Variable-Access-Expressions
+	Method-Call-Expressions
+	Void-Expressions
+	Void-Test-Expressions
+	New-Expressions
+	Creation-Expressions
+	Array-Creation-Expressions
+	And-Expressions
+	Or-Expressions
+	Syntactic-Sugar-Expressions
+	WhileX-Expressions
+	UntilX-Expressions
+	BreakX-Expressions
+	Exception-Expressions
+	Initial-Expressions
+	Result-Expressions
+	Closure-Creation-Expressions
+
+exports
+
+sorts Expression
+
+context-free syntax
+	Self-Expression -> Expression
+	Local-Expression -> Expression
+	Call-Expression -> Expression
+	Void-Expression -> Expression
+	Void-Test-Expression -> Expression
+	New-Expression -> Expression
+	Create-Expression -> Expression
+	Array-Expression -> Expression
+%%	And-Expression -> Expression
+%%	Or-Expression -> Expression
+%%	Sugar-Expression -> Expression
+	WhileX-Expression -> Expression
+	UntilX-Expression -> Expression
+	BreakX-Expression -> Expression
+	Except-Expression -> Expression
+	Initial-Expression -> Expression
+	Result-Expression -> Expression
+	Closure-Create-Expression -> Expression
+
+

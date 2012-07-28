@@ -1,0 +1,24 @@
+module languages/sdf2/renaming/Priority
+
+imports languages/sdf2/renaming/Basic
+imports languages/sdf2/projection/Priority
+
+exports
+  context-free syntax
+    "(" Priorities ")" Renamings -> Priorities
+    "(" Group ")G"     Renamings -> Group
+
+hiddens
+  variables
+    "g"[0-9\']*       -> Group
+    "gg*"[0-9\']*     -> {Group ">"}*
+    "gg+"[0-9\']*     -> {Group ">"}+
+    "pr"[0-9\']*      -> Priority
+    "pr""*"[0-9\']*   -> {Priority ","}*
+    "pr""+"[0-9\']*   -> {Priority ","}+
+    "as"[0-9\']*      -> Associativity
+    [p][0-9\']*       -> Production
+    [p]"*"[0-9\']*    -> Production*
+    [p]"+"[0-9\']*    -> Production+
+    "'r"[0-9\']*      -> Renamings 
+    "n+"[0-9]*        -> {NatCon ","}+ 

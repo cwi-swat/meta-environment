@@ -1,0 +1,251 @@
+\section{\label{AlgSpec}Algebraic specifications and term rewriting systems}
+
+%something about algebraic specifications,
+
+Algebraic specifications are typically used as formalisms to
+specify abstract data types. An abstract data type (ADT) is an
+{\em algebra}, i.e., a collection of {\em carrier sets}
+and associated {\em functions}. 
+In an algebraic specification formalism, the properties of the data type to
+be specified have to be expressed in terms of {\em equations}. 
+
+ASF is an algebraic specification formalism that allows modular
+construction of specifications \cite{BHK89}. 
+A {\em basic} ASF module consists of
+\begin{itemize}
+\item 
+      A set of {\em sorts} and {\em function} declarations.
+      Together these constitute the so-called {\em signature} of
+      the module. Sorts are names of the carrier sets and functions
+      correspond to functions in the algebra described by the module.
+\item 
+      A set of {\em Variable declarations}, which together with the
+      signature define a language of terms.
+\item 
+      A set of {\em equations} over the terms defined by the language.
+\end{itemize}
+An ADT specification describes many algebras, all
+of them satisfying the equations it contains -- the {\em models} of an ADT.
+The model closest to ordinary programming practice is the so-called
+{\em initial} algebra. Characteristic properties of initial algebra 
+are 1) no junk (only contains objects expressible using its signature)
+and 2) no confusion (all equational properties can be deduced from
+its equations).
+In ASF, a typical specification is a sequence of modules. A module
+can be normalized in the context of the specification in which it 
+belongs by eliminating all imports. The semantics of a module is
+the initial algebra of its normal form.
+
+%and their implementation as term rewriting systems
+
+An interesting consequence of algebraic specifications is that
+they can be executed if they can be interpreted as {\em term
+rewriting systems} (TRS). For a specification to be a TRS, it
+must obey two rules:
+\begin{itemize}
+\item 
+      No variable may occur on the right-hand side of an equation
+      which does not occur on the left-hand side.
+\item
+      The left-hand side of an equation cannot be a sole variable.
+\end{itemize}
+
+%basic terminology: redex, contractum, substitutions, contexts
+
+In such a specification (TRS), an equation $s = t$ is interpreted
+as a rewrite rule $s\rightarrow t$, meaning that $s$
+can be rewritten to $t$. A term is said to be in its {\em normal form}
+if it cannot be further rewritten.
+A term containing variables is called {\em open},
+otherwise it is called a {\em ground term}. A {\em substitution}
+assigns values (terms) to the variables in term. An {\em instantiation}
+of an open term is obtained by substituting, for each of its variables,
+an assigned value.
+
+If $s = t$ is an equation in ASF, it is interpreted as a reduction
+rule $s \rightarrow t$. If $s^\phi$ is an instantiation of $s$ using 
+substitution $\phi$, then $s^\phi \rightarrow t^\phi$ is called a 
+basic reduction step. In this reduction step $s^\phi$ is called a
+{\em redex} (for reducible expression). A term with a hole, i.e.,
+an unknown subterm is referred to as a {\em context} and is
+denoted as $C[ ]$. A {\em reduction sequence} $t_0 \rightarrow
+t_1 \rightarrow \cdots \rightarrow t_n$ means that elementary
+reduction steps $t_i \rightarrow t_{i+1}$ are used to obtain $t_n$.
+Applying a rewrite rule $r: s \rightarrow t$ in a context $C$
+using the substitution $\phi$ is denoted by 
+$C[s^\phi] \rightarrow_r C[t^\phi]$.  Also, $t^\phi$ is often
+referred to as reduct or contractum.
+ 
+%    something about \asdf 
+
+\subsection{\label{ASDF}\asdf }
+
+  ASF, an acronym for Algebraic Specification Formalism, \cite{BHK89}
+  is a formalism supporting modularization and conditional equations.
+  SDF, Syntax Definition Formalism, has been developed \cite{HHKR89} to
+  support the definition of lexical, context-free and abstract syntax.
+  These two formalisms have been combined into one algebraic specification
+  formalism called \asdf.
+
+  Specifying in the \asdf\ formalism is supported by the
+  \asdf\ {\em system} \cite{Kli93}.
+  This system is able to generate parsers from \asdf\ specifications
+  and derive term rewriting systems, %for specifications in \asdf,
+  thus allowing the execution of \asdf\ specifications.
+%  Moreover, it can generate syntax-directed editors for
+%  modules in the specification as well as for terms over the signature.
+%  The system is able to perform several static and semantic checks on the
+%  specifications, and support testing of specifications.
+
+
+%%\subsection{Lexical Syntax}
+%%
+%%  SDF allows the definition of lexical syntax, i.e., the definition of 
+%%  the elementary ``words'' of the syntax.
+%%  There are two important corollaries for the specifier:
+%%  \begin{itemize}
+%%  \item
+%%  The specifier must define layout symbols (white space and
+%%  comments recognition) %, for equations and terms,
+%%  using the designated sort \ULEX{LAYOUT}.
+%%  %First of all the \ULEX{LAYOUT} for the equations must be defined,
+%%  %i.e., the specifier himself can (and must) define what symbols constitute
+%%  %white space, and how comments can be recognized.
+%%  A typical layout definition is:
+%%  
+%%  \MODULEBEGIN{Layout}
+%%  \EXPORTSBEGIN{}
+%%  \LEXSYNBEGIN{}
+%%  \LEXFUN{\LEX{$[$\ $\backslash$t$\backslash$n$]$}}{\ULEX{LAYOUT}}
+%%   \LEXFUN{\QLEX{\%\%} $\sim$\LEX{$[$$\backslash$n$]$}\LEX{$*$}
+%%  \QLEX{$\backslash$n}}{\ULEX{LAYOUT}}
+%%  \LEXSYNEND{}
+%%  \EXPORTSEND{}
+%%  \MODULEEND{}
+%%
+%%  A space, tab, or new line is a layout symbol, as well as everything between
+%%  two percent signs and a new line.
+%%  If tokens of sort \ULEX{LAYOUT} %{\footnotesize \tt LAYOUT}
+%%  are detected in a text, they are ignored.  
+%%
+%%  \item
+%%  Variable declarations are treated as declarations of lexical
+%%  syntax. 
+%%  This implies that any construct allowed in the lexical syntax definition
+%%  is allowed in the variable definition section as well.
+%%  Consequently it is possible to define the variables
+%%  %{\footnotesize \tt p1}, {\footnotesize \tt p2}, {\footnotesize \tt p3}, 
+%%  \SLEX{i_1}, \SLEX{i_2}, \SLEX{i_3}, $\cdots$ all at once:
+%%
+%%  \begin{tabular}{ll}
+%%  \VARDECL{\LEX{i} \LEX{$[$0-9$]*$}}{\ULEX{ELEMENT}}
+%%  \end{tabular}
+%%
+%%  This declares all  words starting with %a {\footnotesize \tt p}
+%%  an \SLEX{i} followed
+%%  by zero or more characters in the range \LEX{0-9} %{\footnotesize \tt 0-9} 
+%%  to be variables of sort \ULEX{ELEMENT}.  %{\footnotesize \tt NAT}.
+%%  \end{itemize}
+
+A brief introduction to the \asdf\ formalism is given below,
+by means of describing {\em list functions}.
+
+\subsubsection{List functions}
+
+  An important feature of the \asdf\ formalism is the existence
+  of list functions and list variables.
+  List functions have a variable number of arguments,
+  and list variables may range over any number of arguments of a list
+  function.
+
+  As an example, suppose we would like to have a function
+  [] for the empty set, %{\footnotesize \tt [ ]} for the empty set,
+  [ E1 ] for a set with one element, %{\footnotesize \tt [ E1 ]} 
+  [ E1, E2 ]  for a set with two elements, %{\footnotesize \tt [ E1, E2 ]} 
+  and so on.
+  
+  The way to define this in \asdf\ is as follows:
+  \begin{tabbing}
+  m\=m\=m\=m\=m\=m\=m\=m\=\kill
+  \+\+\SORTS{\ULEX{ELEMENT} \ULEX{SET}}
+   \CFGBEGIN{}
+  \CFGFUN{\QLEX{$[$} \{\ULEX{ELEMENT} \QLEX{$,$}\}\LEX{$*$}
+  \QLEX{$]$}}{\ULEX{SET}
+  }{}
+  \CFGEND{}
+  \end{tabbing}
+
+  The asterisk * says that we want %{\footnotesize \tt *} says that we want
+  zero or more \ULEX{ELEMENT}s, %{\footnotesize \tt ELEMENT}s,
+  while the comma says that these should be separated by commas.
+  Thus, a set consists of \ULEX{ELEMENT}s, separated by commas
+  and the set itself is delimited by [ and ]. 
+  %{\footnotesize \tt [} and {\footnotesize \tt ]}.
+
+  This list notation is simply an abbreviation for the declaration of
+  infinitely many functions [ $\cdots$ ], %{\footnotesize \tt [ ... ]}, 
+  each with a different number of arguments.
+  Likewise, the same (concrete) syntax could have been
+  obtained without using lists by the following:
+  %``normal'' BNF grammar rules:
+
+\begin{tabbing}
+m\=m\=m\=m\=m\=m\=m\=m\=\kill
+%\EXPORTSBEGIN{}
+\+\+\SORTS{\ULEX{ELEMENT} \ULEX{ELEMENTS} \ULEX{SET}}
+ \CFGBEGIN{}
+\CFGFUN{\QLEX{$[$} \ULEX{ELEMENTS} \QLEX{$]$}}{\ULEX{SET}}{}
+ \CFGFUN{}{\ULEX{ELEMENTS}}{}
+ \CFGFUN{\ULEX{ELEMENT}}{\ULEX{ELEMENTS}}{}
+ \CFGFUN{\ULEX{ELEMENTS} \QLEX{$,$}
+\ULEX{ELEMENTS}}{\ULEX{ELEMENTS}}{\{\KW{\LEX{left}}\}}
+\CFGEND{}
+%\EXPORTSEND{}
+\end{tabbing}
+
+%  {\footnotesize \begin{verbatim}
+%context-free syntax
+%   "[" ELEMENTS "]"      -> SET
+%   "[" "]"               -> SET  
+%   ELEMENT               -> ELEMENTS
+%   ELEMENTS "," ELEMENT  -> ELEMENTS   \end{verbatim}}
+
+%\noindent Attributes, between \{\} 
+%      brackets, may be associated with functions, stating for instance
+%      that the function is {\bf left} or {\bf right} associative.
+
+  In order to define equations over list functions, we need 
+  list variables:
+\begin{tabbing}
+m\=m\=m\=m\=m\=m\=m\=m\=\kill
+\+\+\VARIABLESBEGIN{}
+\VARDECL{\LEX{Elts} \LEX{$[$123$]$}}{\{\ULEX{ELEMENT} \QLEX{$,$}\}\LEX{$*$}}
+ \VARDECL{\LEX{i}}{\ULEX{ELEMENT}}
+\VARIABLESEND{}
+\EQUATIONSBEGIN{}
+\EQU{\LEX{$[$}\LEX{eq1}
+\LEX{$]$}}{\LEX{$[$}\IVAR{\LEX{Elts}}{1},\VAR{\LEX{i}},
+\IVAR{\LEX{Elts}}{2},\VAR{\LEX{i}},\IVAR{\LEX{Elts}}{3}\LEX{$]$}}
+{\LEX{$[$}
+\IVAR{\LEX{Elts}}{1},\VAR{\LEX{i}},\IVAR{\LEX{Elts}}{2},\IVAR{\LEX{Elts}  
+  }{3}\LEX{$]$} 
+}
+\EQUATIONSEND{}
+\end{tabbing}
+
+  \SLEX{Elts_1}, \SLEX{Elts_2}, and \SLEX{Elts_3} are  list variables,
+  ranging over list of zero or more \ULEX{ELEMENT}s 
+  \underline{separated} by commas.
+
+  Here we have specified in one single equation that
+  elements of sets do not have multiplicity:
+  any set containing element \SLEX{i} %{\footnotesize \tt i} 
+  at least two times is 
+  equal to  the set containing one occurrence less of \SLEX{i}.
+  %{\footnotesize \tt i}.
+  However, the alternative way of defining the \ULEX{SET} syntax using
+  explicit ``,'' operator for \ULEX{ELEMENTS} sort would require
+  many more equations to capture this effect.
+  %associativity of \ULEX{SET} elements.
+
+

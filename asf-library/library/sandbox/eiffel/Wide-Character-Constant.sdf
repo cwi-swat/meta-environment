@@ -1,0 +1,16 @@
+module Wide-Character-Constant
+
+imports Character-Constant
+
+exports
+
+lexical syntax
+	"$" Character-Constant -> Wide-Character-Constant
+
+
+%% Note: Wide_character_constant is not part of the standard. It has been
+%% introduced in TowerEiffel to support wide characters.
+
+%% Note: No intervening character is allowed between the dollar sign and
+%% the Character_constant.
+

@@ -1,0 +1,37 @@
+module languages/sdf2/format/Sdf2-Syntax
+
+imports languages/sdf2/syntax/Sdf2-Syntax
+imports languages/sdf2/format/Sorts
+imports languages/sdf2/format/Basic
+imports languages/sdf2/format/Modules
+imports languages/sdf2/format/Regular
+imports languages/sdf2/format/Restrictions
+imports languages/sdf2/format/Priority
+imports languages/sdf2/format/Start-Symbols
+imports languages/sdf2/format/Aliases
+imports languages/sdf2/format/Literals
+imports languages/sdf2/format/Lifting
+imports languages/sdf2/format/Labels
+
+hiddens
+context-free start-symbols
+  Grammar Module
+
+context-free syntax
+  "[" {Priority ","}* "]" -> Box*    {to-box}        
+  "[" Restriction* "]"    -> Box*    {to-box}        
+  "[" Module* "]"         -> Box*    {to-box}        
+  "_" "_"                 -> Box     {layout-to-box} 
+  "<" Box ">"             -> Grammar {from-box}      
+  "<" Box ">"             -> SDF     {from-box}      
+
+variables
+  "Production*" [0-9]* -> Production*      
+  "Production" [0-9]*  -> Production       
+  "Priority" [0-9]*    -> Priority         
+  "Priority*"          -> {Priority ","}*  
+  "Restriction*"       -> Restriction*     
+  "Module*"            -> Module*          
+
+lexical variables
+  "C" [0-9]* -> LAYOUT  

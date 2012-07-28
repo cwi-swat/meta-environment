@@ -1,0 +1,134 @@
+equations
+
+[argument-permutations-string-top]
+	argument-permutations-string($featureexpression) =
+		permutations-to-string(
+			argument-permutations($featureexpression)
+		)
+
+equations
+
+[argument-permutations-1]
+	argument-permutations(all($featureexpression+)) =
+		permutations([$featureexpression+])
+
+[argument-permutations-2]
+	argument-permutations(more-of($featureexpression+)) =
+		permutations([$featureexpression+])
+
+[argument-permutations-3]
+	argument-permutations(one-of($featureexpression+)) =
+		permutations([$featureexpression+])
+
+[default-argument-permutations-4]
+	argument-permutations($featureexpression) = [[$featureexpression]]
+
+
+equations
+
+[permutations-to-string-single]
+	permutations-to-string([$permutation]) = 
+		permutation-to-string($permutation)
+[permutations-to-string-many]
+	permutations-to-string([$permutation, $permutation+]) = 
+		permutation-to-string($permutation) || "; " ||
+		permutations-to-string([$permutation+])
+
+equations
+
+[permutation-to-string-single]
+	permutation-to-string([$featureexpression]) =
+		unparse-to-string($featureexpression)
+
+[permutation-to-string-many]
+	permutation-to-string([$featureexpression, $featureexpression+]) =
+		unparse-to-string($featureexpression) || " | " ||
+		permutation-to-string([$featureexpression+])
+
+
+
+equations
+
+[extract-definition-order-trv-1]
+	extract-preorder($featurename, $list) =
+		cons($featurename, $list)
+
+equations
+
+%% Very inefficient...
+[sort-definitions-1]
+	sort-definitions(
+		$featuredefinition*1
+		$featurename: $featureexpression
+		$featuredefinition*2
+		$featurename': $featureexpression'
+		$featuredefinition*3
+		$constraint*, 
+		[
+		$featurename*1,
+		$featurename',
+		$featurename*2,
+		$featurename,
+		$featurename*3
+		]
+	) = 	sort-definitions(
+			$featuredefinition*1
+			$featurename': $featureexpression'
+			$featuredefinition*2
+			$featurename: $featureexpression
+			$featuredefinition*3
+			$constraint*, 
+			[
+			$featurename*1,
+			$featurename*2,
+			$featurename*3 
+			]
+		)
+
+[default-sort-definitions-2]
+	sort-definitions($featuredefinition* $constraint*, $list) = 
+		$featuredefinition* $constraint*
+
+equations
+
+[get-definition-top]
+	get-definition(
+		$featuredefinition*1 
+		$featurename: $featureexpression
+		$featuredefinition*2
+		$constraint*, 
+		$featurename
+	) = $featureexpression
+
+equations
+
+[add-definition-top]
+	add-definition(
+		$featuredefinition*
+		$constraint*, 
+		$featurename, 
+		$featureexpression
+	) = 	$featuredefinition*
+		$featurename: $featureexpression
+		$constraint*
+
+equations
+
+[remove-definition-top]
+	remove-definition(
+		$featuredefinition*1 
+		$featurename: $featureexpression
+		$featuredefinition*2
+		$constraint*, 
+		$featurename
+	) = $featuredefinition*1 $featuredefinition*2 $constraint* 
+
+equations
+
+[replace-trv-top]
+	replace-expression(
+		$featureexpression, 
+		$featureexpression, 
+		$featureexpression') =
+		$featureexpression'
+

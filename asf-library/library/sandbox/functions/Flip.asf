@@ -1,0 +1,3 @@
+equations
+
+[] flip ( f ) ( B  A ) = f ( A B ) 

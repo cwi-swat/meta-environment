@@ -1,0 +1,16 @@
+module languages/sdf2/renaming/Aliases
+imports languages/sdf2/renaming/Kernel languages/sdf2/projection/Aliases
+exports
+  context-free syntax
+    "(" Aliases ")a" Renamings -> Aliases
+
+hiddens
+  variables
+    "_"[ABC][0-9\']*    -> Symbol
+    "_G"[0-9\']*        -> Grammar 
+    "al"[0-9\']*        -> Alias
+    "al*"[0-9\']*       -> Alias*
+    "al+"[0-9\']*       -> Alias+
+    "'r"[0-9\']*        -> Renamings
+
+

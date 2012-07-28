@@ -1,0 +1,68 @@
+
+equations
+
+  [a1]  add Entry to [Prefix] = [Prefix, Entry]
+
+  [cf0] complete find _symbol in <C, error-entry, []> = <C1, Entry, C2>,
+        [Entry] is definition-point for _symbol? = TRUE
+        ===============================================
+        complete find _symbol in C = <C1, Entry, C2>
+
+  { Avoid having to take the predefined identifiers always with you,
+    only look in predefined identifiers if normal search fails. }
+  [cf0'] complete find _symbol in <[Entry1*], error-entry, []> =
+                <[], error-entry, [Entry1*]>,
+        complete find _symbol in predefined-block =
+                <[Entry2*], Entry, [Entry3*]>
+        =====================================================================
+        complete find _symbol in [Entry1*] =
+            <[Entry2*], Entry, [Entry3*, Entry1*]>
+
+  [cf1] [Entry] is definition-point for _symbol? = TRUE
+        =============================================
+        complete find _symbol in <[], Entry, C2> = <[], Entry, C2>
+
+  [cf2] [Entry] is definition-point for _symbol? != TRUE
+        =============================================
+        complete find _symbol in <[], Entry, C2> = <[], error-entry, C2>
+
+  [cf3] [Prefix, Entry] is definition-point for _symbol? = TRUE
+        ==========================================
+        complete find _symbol in <[Prefix], Entry, [Postfix]> =
+                <[Prefix], Entry, [Postfix]>
+
+  [cf4] [Prefix, Entry2, Entry1] is definition-point for _symbol? != TRUE
+        =======================================================
+        complete find _symbol in <[Prefix, Entry2], Entry1, [Postfix]> =
+          complete find _symbol in <[Prefix], Entry2, [Entry1, Postfix]>
+
+
+  [f1]  complete find _symbol in C = <[Prefix], Entry, C2>
+        ==================================================
+        find _symbol in C = [Prefix, Entry]
+
+  [dl1] complete find block-mark in C = <[Prefix], Entry, C2>
+        ====================================================
+        delete inner block of C = [Prefix]
+
+  [fi1] complete find block-mark in C1 = <[Prefix], block-mark, C2>,
+        find _symbol in C2 = [Entry*]
+        ================================
+        find _symbol in inner block of C1 = [Prefix, block-mark, Entry*]
+
+  [ex1] find _symbol in C = [Prefix, Entry],
+        Entry != error-entry
+        ======================
+        _symbol exists in C? = TRUE
+
+  [ex2] find _symbol in inner block of C = [Prefix, Entry],
+        Entry != error-entry
+        ======================
+        _symbol exists in inner block of C? = TRUE
+
+
+  [pd1] integer-type = find integer in init-block
+  [pd2] boolean-type = find Boolean in init-block
+  [pd3] char-type = find char in init-block
+  [pd4] text-type = find text in init-block
+  [pd5] real-type = find real in init-block

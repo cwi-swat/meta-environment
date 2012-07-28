@@ -1,0 +1,14 @@
+module Fibbonaci
+
+imports basic/Whitespace
+        Succ
+
+exports
+  context-free start-symbols Nat
+
+  context-free syntax
+    fibb(Nat) -> Nat
+
+hiddens
+  variables
+    "n"[0-9]* -> Nat

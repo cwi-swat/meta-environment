@@ -1,0 +1,17 @@
+module languages/sdf2/format/Regular
+
+imports languages/sdf2/syntax/Regular
+imports languages/sdf2/format/Kernel
+
+hiddens
+context-free syntax
+  "[" Symbol "]"          -> Box    {to-box}   
+  "{" Symbol* "}"         -> Box*   {to-box}   
+  "[[" {Symbol ","}* "]]" -> Box*   {to-box}   
+  "<" Box ">"             -> Symbol {from-box} 
+
+variables
+  "Symbol" [0-9]*   -> Symbol         
+  "Symbol+" [0-9]*  -> Symbol+        
+  "Symbol,*" [0-9]* -> {Symbol ","}*  
+  "Symbol,+" [0-9]* -> {Symbol ","}+  

@@ -1,0 +1,20 @@
+module languages/sdf2/normalization/Restrictions
+imports languages/sdf2/syntax/Restrictions languages/sdf2/normalization/CC
+
+hiddens
+  context-free syntax
+    head(Lookahead) -> CharClass
+
+hiddens
+  variables
+    "restr"[0-9\']*   -> Restriction
+    "restr*"[0-9\']*  -> Restriction*
+    "restr+"[0-9\']*  -> Restriction+
+    "la"[0-9\']*      -> Lookahead
+    "las"[0-9\']*     -> Lookaheads
+    "la*"[0-9\']*     -> {Lookahead ","}* 
+    [p]"*"[0-9\']*    -> Production*
+    "_"[ABC][0-9\']*  -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "cc"[0-9\']*      -> CharClass  
+    "attr""*"[0-9\']* -> {Attribute ","}*  

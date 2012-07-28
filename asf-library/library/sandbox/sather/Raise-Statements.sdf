@@ -1,0 +1,10 @@
+module Raise-Statements
+
+imports Expressions
+
+exports
+
+sorts Raise-Statement
+
+context-free syntax
+	"raise" Expression -> Raise-Statement

@@ -1,0 +1,6 @@
+module Booleans
+  %%
+%% Booleans
+%%
+
+   imports B-syntax

@@ -1,0 +1,8 @@
+equations
+
+
+   [0]  name( <module> Path <body> Spec </module> ) = flatten(Path)
+
+   [1]  flatten( Item ) = Item
+
+   [2]  flatten( Item / Item+ ) = append2(Item, flatten( Item+ ) )

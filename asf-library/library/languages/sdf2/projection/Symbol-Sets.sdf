@@ -1,0 +1,21 @@
+module languages/sdf2/projection/Symbol-Sets
+imports
+        languages/sdf2/projection/Symbols
+exports
+  sorts SymbolSet
+  context-free syntax
+    "{" Symbols "}"          -> SymbolSet {constructor}
+    SymbolSet "||" SymbolSet -> SymbolSet {right}
+    SymbolSet "/" SymbolSet  -> SymbolSet {left}
+    "(" SymbolSet ")"        -> SymbolSet {bracket}
+    Symbol "(-" SymbolSet    -> Boolean {memo}
+  context-free priorities
+    SymbolSet "/" SymbolSet -> SymbolSet  >
+    SymbolSet "||" SymbolSet -> SymbolSet
+hiddens
+  variables
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+
+    "'u"[0-9\']*        -> SymbolSet
+

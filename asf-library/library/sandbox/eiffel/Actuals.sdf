@@ -1,0 +1,24 @@
+module Actuals
+
+imports Expression Address
+
+exports
+
+context-free syntax
+
+"(" Actual-List ")" -> Actuals
+{Actual ","}* -> Actual-List
+
+
+%% Note: The list of actuals may be empty. As a consequence, foo() is
+%% valid and means the same as foo. However, this is not recommended
+%% style.
+
+Expression | Address -> Actual
+
+
+
+%% Note: TowerEiffel treats Address as a normal expression (i.e. as an
+%% alternative in the Expression construct). As a consequence, an address
+%% does not need to occur only in actual lists.
+

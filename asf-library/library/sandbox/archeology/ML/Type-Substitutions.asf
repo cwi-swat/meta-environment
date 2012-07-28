@@ -1,0 +1,24 @@
+
+   equations
+
+      [1]   apply-type(subs, var) = var
+	       when lookup var in subs = <false, type>
+      [2]   apply-type(subs, var) = type
+	       when lookup var in subs = <true, type>
+      [3]   apply-type(subs, bool) = bool
+      [4]   apply-type(subs, nat)  = nat
+      [5]   apply-type(subs, type1 -> type2)
+               = apply-type(subs, type1) -> apply-type(subs, type2)
+      [6]   apply-type(subs, type1 # type2)
+               = apply-type(subs, type1) # apply-type(subs, type2)
+      
+      [7]   apply-gt(subs, type) = apply-type(subs, type)
+      [8]   apply-gt(subs, gv)   = gv
+      [9]   apply-gt(subs, gt1 -> gt2)
+               = apply-gt(subs, gt1) -> apply-gt(subs, gt2)
+      [10]  apply-gt(subs, gt1 # gt2)
+               = apply-gt(subs, gt1) # apply-gt(subs, gt2)
+
+      [11]  subs o [] = subs
+      [12]  subs o [(var, type), pairs]
+               = (var, apply-type(subs, type)) + (subs o [pairs])

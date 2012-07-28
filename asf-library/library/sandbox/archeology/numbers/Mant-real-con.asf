@@ -1,0 +1,73 @@
+equations
+
+  [m1]  mantissa( mant-real-con( c+ "e" c'+ ) ) = unique(dot-real-con( c+ ))
+  [m2]  mantissa( s ) = s
+
+  [e1]  exponent( mant-real-con( c+ "e"  c "0" ) ) = 0
+
+  [e2]  digit(c') != digit( "0" )
+        =========================================================
+        exponent( mant-real-con( c+ "e" "+" c' c* ) ) = pos(c' c*)
+
+  [e3]  digit(c') != digit( "0" )
+        =========================================================
+        exponent( mant-real-con( c+ "e" "-" c' c* ) ) = - pos(c' c*)
+
+  [e4]  exponent( s )  = 0
+
+  [e5]  mant-exp( dot-real-con(c+), 0 ) = mant-real-con(c+ "e" "+" "0")
+  [e6]  mant-exp( dot-real-con(c+), pos(c'+)) = mant-real-con(c+ "e" "+" c'+)
+  [e7]  mant-exp( dot-real-con(c+), - pos(c'+)) =
+          mant-real-con(c+ "e" "-" c'+ )
+
+
+
+ [mv1]  mvl(q) = mant-exp(mvl(mantissa(q)), S(exponent(q)) )
+ [mv2]  mvr(q) = mant-exp(mvr(mantissa(q)), P(exponent(q)) )
+
+
+  [d1]  normalize(0) = 0
+
+  [d2]  s != 0
+        ==========
+        normalize(s) = normalize(mant-exp(unique(s),0))
+
+ [no1]  mantissa(q) = 0
+        ===============
+        normalize(q) = 0
+
+ [no2]  bfd(mantissa(q)) != 0
+        ====================
+        normalize(q) = normalize(mvl(q))
+
+ [no3]  mantissa(q) = s, s != 0,
+        bfd(s) = 0,
+        fsta(s) = 0
+        ====================
+        normalize(q) = normalize(mvr(q))
+
+ [default-no4]
+      %%  mantissa(q) = s,
+      %%  bfd(s) = 0,
+      %%  fsta(s) != 0
+      %%  ====================
+      normalize(q) = q
+
+
+
+
+  [d1]  dot2mant( s ) = normalize(s)
+  [d2]  dot2mant( q ) = normalize(q)
+  [d3]  mant2dot( s ) = unique(s)
+
+  [d4]  exponent( q ) = 0
+        ===========================
+        mant2dot( q ) = mantissa(q)
+
+  [d4]  exponent( q ) = n
+        ==============================
+        mant2dot( q ) = mant2dot(mvr(q))
+
+  [d4]  exponent( q ) = z
+        ==============================
+        mant2dot( q ) = mant2dot(mvl(q))

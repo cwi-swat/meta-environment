@@ -1,0 +1,35 @@
+module Free-Operator
+
+imports Break
+
+exports
+
+lexical syntax
+	[\040-\176] /\ ~[\ \t\n] -> Free-Operator-Char
+	"@" Free-Operator-Char* -> Free-Operator
+	"#" Free-Operator-Char* -> Free-Operator
+	"|" Free-Operator-Char* -> Free-Operator
+	"&" Free-Operator-Char* -> Free-Operator
+
+
+
+
+%% Note: Printable characters do not include, in this case, characters
+%% allowed in Breaks. Compare that to Character_constant.
+
+%% Note: The following code
+
+%% a@1
+
+%% is scanned as
+
+%% a @1
+
+%% which is not syntactically correct. See Eiffel gotchas for details.
+
+%% Note: Eiffel: The Language, second printing, allows Special_characters
+%% (although printable) in free operators. No Eiffel compiler supports
+%% that.
+
+%% Note: SmallEiffel and Visual Eiffel are case-sensitive for free
+%% operators.

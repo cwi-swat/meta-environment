@@ -1,0 +1,29 @@
+module utilities/TermCompare[Sort]
+
+imports basic/Booleans
+
+exports
+
+context-free syntax
+
+  %% 'less' compares two terms modulo LAYOUT and annotations.
+  %%
+  %% The ordering is arbitrary, but complete and stable.
+
+  less(Sort,Sort) -> Boolean {built-in("term-less")}
+  less-equal(Sort,Sort) -> Boolean 
+  greater(Sort,Sort) -> Boolean 
+  greater-equal(Sort,Sort) -> Boolean 
+  equal(Sort,Sort) -> Boolean 
+
+  Sort "<" Sort -> Boolean
+  Sort "<=" Sort -> Boolean
+  Sort ">=" Sort -> Boolean
+  Sort ">" Sort -> Boolean
+  
+hiddens
+
+  imports basic/Whitespace
+
+  variables
+  "X"[0-9]* -> Sort

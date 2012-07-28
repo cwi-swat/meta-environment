@@ -1,0 +1,61 @@
+module Py-Expressions
+
+imports Py-Atoms
+
+exports
+
+sorts Expression Expression-list
+
+context-free syntax
+	%% No priorities needed here.
+	Primary "**" U-expr 	-> Power
+	Atom 			-> U-expr
+	Power 			-> U-expr
+	"-" U-expr 		-> U-expr
+	"+" U-expr 		-> U-expr
+	"~" U-expr 		-> U-expr
+	U-expr 			-> M-expr
+	M-expr "*" U-expr 	-> M-expr
+	M-expr "%" U-expr 	-> M-expr
+	M-expr 			-> A-expr
+	A-expr "+" M-Expr 	-> A-expr
+	A-expr "-" M-Expr 	-> A-expr
+	A-expr 			-> Shift-expr
+	Shift-expr "<<" A-expr 	-> Shift-expr
+	Shift-expr ">>" A-expr 	-> Shift-expr
+	Shift-expr 		-> And-expr
+	And-expr "&" Shift-expr -> And-expr
+	And-expr 		-> Xor-expr
+	Xor-expr "^" And-expr 	-> Xor-expr
+	Xor-expr 		-> Or-expr
+	Or-expr "|" Xor-expr 	-> Or-expr
+
+	"<" 		-> Comp-operator
+	">" 		-> Comp-operator
+	"==" 		-> Comp-operator
+	">=" 		-> Comp-operator
+	"<=" 		-> Comp-operator
+	"<>" 		-> Comp-operator
+	"!=" 		-> Comp-operator
+	"is" "not"? 	-> Comp-operator
+	"not"? "in" 	-> Comp-operator
+
+	Comp-operator Or-expr 		-> Comparison-tail
+	Or-expr Comparison-tail*	-> Comparison
+	
+	Or-test		-> Expression
+	Lambda-form 	-> Expression
+	
+	And-test 		-> Or-test
+	Or-test "or" And-test 	-> Or-test
+	Not-test 		-> And-test
+	And-test "and" Not-test -> And-test
+	Comparison 		-> Not-test  
+	"not" Not-test 		-> Not-test  
+
+	%% Argument-list comes from module Calls
+	"lambda" Argument-list? ":" Expression 	-> Lambda-form
+	{Expression ","}+ ","? 			-> Expression-list
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

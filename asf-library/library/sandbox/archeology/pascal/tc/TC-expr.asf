@@ -1,0 +1,197 @@
+equations
+
+  { Direct the basic expressions:, constants and simple expressions,
+    variables accesses, and function calls. }
+
+  [e1]  is-simple-expr?( _expr, Env.context ) = TRUE
+        ==========================================
+        expr-tc( _expr, Env ) = sim-expr-tc( _expr, Env )
+
+  [e2]  is-var-access?( _expr, Env1.context ) = TRUE,
+        var-access-tc( _expr, Env1 ) = Env2
+        ========================================
+        expr-tc( _expr, Env1 ) = set-result of Env2 to Env2.result.type.canonical
+
+  [e3]  is-function-call?( _expr, Env1.context ) = TRUE
+        ===============================================
+        expr-tc( _expr, Env1 ) = fun-call-tc( _expr, Env1 )
+
+  [e4]  is-simple-expr?( _id, E.context ) != TRUE,
+        is-var-access?( _id, E.context ) != TRUE,
+        is-function-call?( _id, E.context ) != TRUE
+        ===========================================
+        expr-tc( _id, E ) = add-error
+          [Identifier _id is not a constant, variable, or function.] to E
+
+
+  { Type check expressions constructed of arithmetic and relational
+    operators. }
+
+  [ot1] arithm-op-table =
+                Operator  | Operand1  | Operand2  | Result
+                ----------+-----------+-----------+--------
+                   +      | int       | int       | int
+                   +      | int       | real      | real
+                   +      | real      | int       | real
+                   +      | real      | real      | real
+                   +      | int       | undef     | int
+                   +      | real      | undef     | real
+                   +      | set       | set       | set
+
+                   -      | int       | int       | int
+                   -      | int       | real      | real
+                   -      | real      | int       | real
+                   -      | real      | real      | real
+                   -      | int       | undef     | int
+                   -      | real      | undef     | real
+                   -      | set       | set       | set
+
+                   *      | int       | int       | int
+                   *      | int       | real      | real
+                   *      | real      | int       | real
+                   *      | real      | real      | real
+                   *      | set       | set       | set
+
+                   /      | int       | int       | real
+                   /      | int       | real      | real
+                   /      | real      | int       | real
+                   /      | real      | real      | real
+
+                  div     | int       | int       | int
+                  div     | int       | int       | int
+
+                  mod     | int       | int       | int
+                  mod     | int       | int       | int
+
+                  and     | boolean   | boolean   | boolean
+                  or      | boolean   | boolean   | boolean
+                  not     | boolean   | undef     | boolean
+                ;
+
+  [ot2] relational-op-table =
+                Operator  | Operand1  | Operand2  | Result
+                ----------+-----------+-----------+--------
+                  in      | ordinal   | set       | boolean
+                  <       | string    | string    | boolean
+                  <       | simple    | simple    | boolean
+                  <=      | simple    | simple    | boolean
+                  <=      | string    | string    | boolean
+                  <=      | set       | set       | boolean
+                  >       | string    | string    | boolean
+                  >       | simple    | simple    | boolean
+                  >=      | simple    | simple    | boolean
+                  >=      | string    | string    | boolean
+                  >=      | set       | set       | boolean
+                  =       | simple    | simple    | boolean
+                  =       | pointer   | pointer   | boolean
+                  =       | set       | set       | boolean
+                  =       | string    | string    | boolean
+                  <>      | simple    | simple    | boolean
+                  <>      | pointer   | pointer   | boolean
+                  <>      | set       | set       | boolean
+                  <>      | string    | string    | boolean
+                ;
+
+  { Type check the operators in the expressions. }
+  { To do this, find the types of the operators, and check in a type-table
+    whether these operator types can be matched in that type-table.
+    If not raise an error. }
+
+  [u1]  expr-tc( +   _expr, E ) = unop-tc( +, _expr, E )
+  [u2]  expr-tc( -   _expr, E ) = unop-tc( -, _expr, E )
+  [u3]  expr-tc( not _expr, E ) = unop-tc( not, _expr, E)
+
+  [u4]  expr-tc( _expr, E1 ) = E2,
+        match-ops(arithm-op-table, _Operator, map(E2.result), undef, E2) = E3
+        ===================================================================
+        unop-tc(_Operator, _expr, E1) = E3
+
+
+  [b1]  expr-tc( _expr1 /   _expr2, E ) = binop-tc( /,   _expr1, _expr2, E )
+  [b2]  expr-tc( _expr1 div _expr2, E ) = binop-tc( div, _expr1, _expr2, E )
+  [b3]  expr-tc( _expr1 mod _expr2, E ) = binop-tc( mod, _expr1, _expr2, E )
+  [b4]  expr-tc( _expr1 and _expr2, E ) = binop-tc( and, _expr1, _expr2, E )
+  [b5]  expr-tc( _expr1 or  _expr2, E ) = binop-tc( or,  _expr1, _expr2, E )
+  [b6]  expr-tc( _expr1 +   _expr2, E ) = binop-tc( +,   _expr1, _expr2, E)
+  [b7]  expr-tc( _expr1 *   _expr2, E ) = binop-tc( *,   _expr1, _expr2, E)
+  [b8]  expr-tc( _expr1 -   _expr2, E ) = binop-tc( -,   _expr1, _expr2, E)
+
+  [b9]  expr-tc( _expr1, E1 ) = E2,
+        expr-tc( _expr2, E2 ) = E3,
+        match-ops(arithm-op-table,
+          _Operator, map(E2.result), map(E3.result), E3) = E4,
+        check-sets (E2.result, E3.result) in E4 = E5
+        =========================================================
+        binop-tc(_Operator, _expr1, _expr2, E1) = E5
+
+
+  [r1]  expr-tc( _expr1 =  _expr2, E ) = relop-tc( =,  _expr1, _expr2, E )
+  [r2]  expr-tc( _expr1 <> _expr2, E ) = relop-tc( <>, _expr1, _expr2, E )
+  [r3]  expr-tc( _expr1 <  _expr2, E ) = relop-tc( <,  _expr1, _expr2, E )
+  [r4]  expr-tc( _expr1 >  _expr2, E ) = relop-tc( <,  _expr1, _expr2, E )
+  [r5]  expr-tc( _expr1 <= _expr2, E ) = relop-tc( <=, _expr1, _expr2, E )
+  [r6]  expr-tc( _expr1 >= _expr2, E ) = relop-tc( >=, _expr1, _expr2, E )
+
+  [r8]  expr-tc( _expr1, E1 ) = E2,
+        expr-tc( _expr2, E2 ) = E3,
+        E2.result _Operator E3.result should be compatible, numbers,
+          or of the same set in E3 = E4,
+        match-ops(relational-op-table,
+          _Operator, rmap(E2.result), rmap(E3.result), E3) = E4
+        ====================================================
+        relop-tc(_Operator, _expr1, _expr2, E1) = E4
+
+  [r9]  expr-tc( _expr1, E1 ) = E2,
+        expr-tc( _expr2, E2 ) = E3,
+        match-ops(relational-op-table, in,
+          omap(E2.result), rmap(E3.result), E3) = E4,
+        E2.result should be the set-component of E3.result in E4 = E5
+        ============================================================
+        expr-tc( _expr1 in  _expr2, E1) = E5
+
+
+{ If the operators of +, -, or * where sets, extra checks need to be done.
+  The sets must be of the same component-type.
+  The result should be set (if possible) to the non-empty list argument }
+
+ [cs0]  is-set-type?(T1) | is-set-type?(T2) != TRUE
+        ==========================================
+        check-sets(T1, T2) in E1 = E1
+
+ [cs1]  is-set-type?(T1) & is-set-type?(T2) = TRUE,
+        T1 and T2 should be the same set-of-T type in E1 = E2
+        ====================================================
+        check-sets(T1, T2) in E1 = set-result of E2 to get-result(T1, T2)
+
+ [cs2]  get-result(T1, T2) = T1 when is-non-empty-set-type?(T1) = TRUE
+ [cs3]  get-result(T1, T2) = T2 when is-non-empty-set-type?(T2) = TRUE
+ [cs3]  get-result(T1, T2) = T1 when
+          is-empty-set-type?(T1) & is-empty-set-type?(T2) = TRUE
+
+
+  [f1]  look-for(Optor, Op1, Op2, OpTable) = <TRUE, Result-type>
+        ==================================================
+        match-ops(OpTable, Optor, Op1, Op2, E) =
+          set-result of E to map(Result-type)
+
+  [f2]  look-for(Optor, Op1, Op2, OpTable) = <FALSE, Result-type>
+        ============================================================
+        match-ops(OpTable, Optor, Op1, Op2, E) =
+          add-error [Illegal operand types for operator Optor.] to E
+
+
+  [ma1] map(T) = int when T = integer-type
+  [ma2] map(T) = boolean when T = boolean-type
+  [ma3] map(T) = real when T = real-type
+  [ma4] map(T) = set when is-set-type?(T) = TRUE
+
+  [mb1] map(int) = integer-type
+  [mb2] map(real) = real-type
+  [mb3] map(boolean) = boolean-type
+
+  [rm1] rmap(T) = simple when is-simple-type?(T) = TRUE
+  [rm2] rmap(T) = set when is-set-type?(T) = TRUE
+  [rm3] rmap(T) = pointer when is-pointer-type?(T) = TRUE
+  [rm4] rmap(T) = string when is-string-type?(T) = TRUE
+
+  [om1] omap(T) = ordinal when is-ordinal-type?(T) = TRUE

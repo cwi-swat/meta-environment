@@ -1,0 +1,118 @@
+equations
+
+ [P0] tc(PROGRAM _Id ; _Block .) =  [] [] ^ _Block
+
+ [T0] _C* [_D*] ^ DECLARE _EmptyDecl ; _Decl* BEGIN _StatSeq END =
+      _C* [_D*] ^ DECLARE _Decl* BEGIN _StatSeq END
+
+ [T1] _LabelDecl = _Id : LABEL
+      ========================
+      _C* [_D*] ^ DECLARE _LabelDecl ; _Decl* BEGIN _StatSeq END =
+      _C* [_D*; _Id : LABEL] ^ DECLARE _Decl* BEGIN _StatSeq END
+
+ [T2] _ProcDecl = _ProcHead ; _Block
+      , _D = signature _ProcHead
+      , _Tenv = formals _ProcHead
+      , Bool1 = _C* [_D* ; _D] _Tenv ^ _Block
+      , Bool2 = _C* [_D* ; _D] ^ DECLARE _Decl* BEGIN _StatSeq END
+      ==============================================================
+      _C* [_D*] ^ DECLARE _ProcDecl ; _Decl* BEGIN _StatSeq END =
+      nonemptyarray(_Tenv) & Bool1 & Bool2
+
+ [T3] _C* [_D*] ^ DECLARE _VarDecl ; _Decl* BEGIN _StatSeq END =
+      nonemptyarray([_VarDecl]) & _C* [_D*; _VarDecl] ^ DECLARE _Decl* BEGIN  _StatSeq END
+      {checking nonemptyarray should also be done in formals :-) }
+
+ [T4] _C* _Tenv _Tenv' ^ BEGIN _StatSeq END = _C* _Tenv _Tenv' ^ DECLARE BEGIN _StatSeq END
+
+ [T5] _StatSeq' = flat _StatSeq,
+      _Labels = gotos _StatSeq',
+      _Labels' = defines _StatSeq'
+      ==================================
+      _C* _Tenv ^ DECLARE BEGIN _StatSeq END =
+         _Labels def _Labels' & unique _Labels' &
+         unique-decls(_Tenv) & tenv(_C* _Tenv) ^ BEGIN _StatSeq' END
+
+ [T6] _Tenv ^ BEGIN _Stat ; _StatSeq END =     (* flattened stats  *)
+      _Tenv ^ BEGIN _Stat END & _Tenv ^ BEGIN _StatSeq END
+
+ [TS0] _Tenv ^ BEGIN END = true
+
+ [TS1] _Tenv ^ BEGIN  _Id : _StatAux  END = islabel(_Tenv._Id) & _Tenv ^ BEGIN  _StatAux  END
+
+ [TS2] _Tenv ^ BEGIN _Expr := _Expr' END = _Tenv._Expr := _Tenv._Expr'
+ [TS2x]  _SimpleType := _SimpleType  = true
+ [TS2y]  REAL := INTEGER = true
+
+ [TS3] _Tenv ^ BEGIN _Id END = isproc((_Tenv._Id) ())
+
+ [TS4] _Tenv ^ BEGIN _Id ( _ExprList ) END
+       = isproc(_Tenv._Id (_Tenv.((_ExprList)) ))  & vararg(_Tenv._Id (_ExprList) )
+
+ [TS5] _Tenv ^ BEGIN IF _Expr THEN ELSE END END =
+       IF _Tenv._Expr THEN END
+
+ [TS5x] IF BOOLEAN THEN END  = true
+
+ [TS6]  _Tenv ^ BEGIN IF _Expr THEN END END =
+       IF _Tenv._Expr THEN END
+
+ [TS7]  _Tenv ^ BEGIN WHILE _Expr DO END END =
+        WHILE _Tenv._Expr DO END
+
+ [TS7x] WHILE BOOLEAN DO END = true
+
+ [TS8] _Tenv ^ BEGIN READ ( _Expr ) END =  READ ( _Tenv._Expr )
+ [TS8x]  READ ( _SimpleType ) = true
+
+ [TS8] _Tenv ^ BEGIN WRITE ( _Expr ) END =  WRITE ( _Tenv._Expr )
+ [TS8x] WRITE ( _SimpleType ) = true
+ [TS8y] _Tenv ^ BEGIN WRITE ( _String ) END = true
+
+ [S9] _Tenv ^ BEGIN GOTO _Id END = islabel(_Tenv._Id)
+
+ [FL0] flat _StatAux = _StatAux' ; _StatSeq'*
+       ======================================
+       flat _Id : _StatAux = _Id : _StatAux' ; _StatSeq'*
+
+ [FL1] flat _Expr := _Expr' = _Expr := _Expr'
+ [FL2] flat _Id = _Id
+ [FL3] flat _Id ( _ExprList ) = _Id ( _ExprList )
+ [FL4] flat READ ( _Expr ) = READ ( _Expr )
+ [FL5] flat WRITE ( _Expr ) = WRITE ( _Expr )
+ [FL6] flat WRITE ( _String ) = WRITE ( _String )
+ [FL7] flat GOTO _Id = GOTO _Id
+ [FL8] flat =
+
+ [FL9] _StatSeq' = flat _StatSeq
+        =========================
+        flat IF _Expr THEN _StatSeq END = IF _Expr THEN END ; _StatSeq'
+
+ [FL10] _StatSeq'' = flat _StatSeq ; _StatSeq'
+        ======================================
+        flat IF _Expr THEN _StatSeq ELSE _StatSeq' END =
+        IF _Expr THEN END ; _StatSeq''
+
+ [FL11] _StatSeq' = flat _StatSeq
+        =========================
+        flat WHILE _Expr DO _StatSeq END = WHILE _Expr DO END ; _StatSeq'
+
+ [FL12] _StatSeq' = flat _Stat, _StatSeq'' = flat _StatSeq
+        ==============================================
+        flat _Stat ; _StatSeq = _StatSeq' ; _StatSeq''
+
+ [IB0] isbool(BOOLEAN) = true
+
+ [U0] unique-decls([]) = true
+ [U1] unique-decls([_Id : _Type]) = true
+ [U2] _Id != _Id'
+      ==========
+      unique-decls([_Id : _Type ; _Id' : _Type' ; _D*])
+      = unique-decls([_Id : _Type ; _D*]) & unique-decls([_Id' : _Type' ; _D*])
+
+ [NA0] nonemptyarray([_Id : _SimpleType]) = true
+ [NA1] nonemptyarray([_Id : LABEL]) = true
+ [NA2] nonemptyarray([_Id : ARRAY [_IntConst .. _IntConst'] OF _Type])
+       = _IntConst islessthan _IntConst' & nonemptyarray([_Id : _Type])
+ [NA3] nonemptyarray([]) = true
+ [NA4] nonemptyarray([_D;_D+]) = nonemptyarray([_D]) & nonemptyarray([_D+])

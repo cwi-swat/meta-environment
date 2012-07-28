@@ -1,0 +1,91 @@
+module languages/sdf2/checker/ProductionChecker
+
+imports languages/sdf2/checker/Sdf-Type-Environment
+imports utilities/PosInfo[Symbol]
+imports utilities/PosInfo[Production]
+
+exports
+  context-free syntax
+    check-module-prods(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
+
+hiddens
+  context-free syntax
+    get-exported-cf-prods(Module, ProductionsSet)  -> ProductionsSet {traversal(accu, break, top-down)}
+    get-exported-cf-prods(Section, ProductionsSet) -> ProductionsSet {traversal(accu, break, top-down)}
+    get-hidden-cf-prods(Module, ProductionsSet)    -> ProductionsSet {traversal(accu, break, top-down)}
+    get-hidden-cf-prods(Section, ProductionsSet)   -> ProductionsSet {traversal(accu, break, top-down)}
+    get-cf-prods(Grammar, ProductionsSet)          -> ProductionsSet {traversal(accu, break, top-down)}
+    get-prods(Production*, ProductionsSet)         -> ProductionsSet {traversal(accu, break, top-down)}
+    get-prods(Production, ProductionsSet)          -> ProductionsSet {traversal(accu, break, top-down)}
+    get-prods-in-prios(Module, ProductionsSet)     -> ProductionsSet {traversal(accu, break, top-down)}
+    get-prods-in-prios(Grammar, ProductionsSet)    -> ProductionsSet {traversal(accu, break, top-down)}
+    get-prods-in-prios(Priorities, ProductionsSet) -> ProductionsSet {traversal(accu, break, top-down)}
+    get-prods-in-prios(Production, ProductionsSet) -> ProductionsSet {traversal(accu, break, top-down)}
+
+hiddens
+  context-free syntax
+    check-priorities(Module, {Error ","}*, ModuleId, ProductionsSet)   -> {Error ","}* {traversal(accu, break, top-down)}
+    check-priorities(Priority, {Error ","}*, ModuleId, ProductionsSet) -> {Error ","}* {traversal(accu, break, top-down)}
+
+  context-free syntax
+    check-priorities-given-symbol(Group, {Error ","}*, ModuleId, Symbol, ProductionsSet)        -> {Error ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol({Group ">"}+, {Error ","}*, ModuleId, Symbol, ProductionsSet) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol(Production, {Error ","}*, ModuleId, Symbol, ProductionsSet)   -> {Error ","}* {traversal(accu, break, top-down)}
+
+  context-free syntax
+    get-rhs-production(Group, SymbolsSet)                                      -> SymbolsSet {traversal(accu, break, top-down)}
+    get-rhs-production(Production, SymbolsSet)                                 -> SymbolsSet {traversal(accu, break, top-down)}
+
+  context-free syntax
+    is-injection-production(Symbol, Symbol, ProductionsSet)                    -> Boolean
+
+  context-free syntax
+    check-right-hand-sides(Module, {Error ","}*, ModuleId)     -> {Error ","}* {traversal(accu, break, top-down)}
+    check-right-hand-sides(Production, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+
+  context-free syntax
+    check-right-hand-side-lexical-prod(Module, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Grammar, {Error ","}*, ModuleId)     -> {Error ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Production*, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Production, {Error ","}*, ModuleId)  -> {Error ","}* {traversal(accu, break, top-down)}
+
+  context-free syntax
+    make-production-warnings(Production*, String) -> {Error ","}*
+
+
+hiddens
+  variables
+    "Grammar"[0-9]*         -> Grammar
+    "Prod"[0-9]*            -> Production
+    "Prod*"[0-9]*           -> Production*
+    "ProductionsSet"[0-9]*  -> ProductionsSet
+
+    "Priorities"[0-9]*      -> Priorities
+
+    "Module"[0-9]*          -> Module
+    "Module*"[0-9]*         -> Module*
+    "$ModuleId"[0-9]*       -> ModuleId
+
+    "Msg"[0-9]*             -> Error
+    "Msg*"[0-9]*            -> {Error ","}*
+    "Msgs"[0-9]*            -> {Error ","}*
+
+    "Import*"[0-9]*         -> Import*
+    
+    "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
+    "ModuleInfoTable"[0-9]* -> Module-Info-Table
+
+    "Attrs"[0-9]*           -> Attributes
+    "Assoc"[0-9]*           -> Associativity
+    "$IdCon"[0-9]*          -> IdCon
+    "$StrCon"[0-9]*         -> StrCon
+    "$FuncName"[0-9]*       -> FunctionName
+    "$Sort"[0-9]*           -> Sort
+    "Symbol"[0-9]*          -> Symbol
+    "Symbol*"[0-9]*         -> Symbol*
+    "Symbol,*"[0-9]*        -> {Symbol ","}*
+    "Group"[0-9]*           -> Group
+    "Group+"[0-9]*          -> {Group ">"}+
+
+    "$String"[0-9]*         -> StrCon
+    "$Location"[0-9]*       -> Location

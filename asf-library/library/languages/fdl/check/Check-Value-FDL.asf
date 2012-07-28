@@ -1,0 +1,112 @@
+equations
+
+[check-value-fdl-top]
+  $featurediagram2 := normalize-sections($featurediagram1),
+  $featurediagram3 := normalize-atomic-features($featurediagram2),
+  $section*1 features $featuredefinition*1 $section*2 := $featurediagram3,
+  $fdl-errorlist1 := check-fdl($featuredefinition*1),
+  $typeenv := build-type-environment($featurediagram3),
+  <$typeenv, $fdl-errorlist2> := check-for-type-mismatch($featurediagram1, <$typeenv, $fdl-errorlist1>)
+  ===
+  check-value-fdl($featurediagram1) = $fdl-errorlist2
+
+[normalize-sections-top]
+  $featurediagram2 := normalize-features-section($featurediagram1),
+  $featurediagram3 := normalize-constraints-section($featurediagram2),
+  $featurediagram4 := normalize-types-section($featurediagram3),
+  $featurediagram5 := normalize-specialization-section($featurediagram4)
+  ===
+  normalize-sections($featurediagram1) = $featurediagram4
+
+
+equations
+
+[normalize-features-section-top]
+  normalize-features-section($section*1 features $featuredefinition*1 $section*2 features $featuredefinition*2 $section*3) =
+    normalize-features-section($section*1 features $featuredefinition*1 $featuredefinition*2 $section*2 $section*3)
+
+[default-normalize-features-section]
+  normalize-features-section($featurediagram) = $featurediagram
+
+[normalize-constraints-section-top]
+  normalize-constraints-section($section*1 constraints $constraint*1 $section*2 constraints $constraint*2 $section*3) =
+    normalize-constraints-section($section*1 constraints $constraint*1 $constraint*2 $section*2 $section*3)
+
+[default-normalize-constraints-section]
+  normalize-constraints-section($featurediagram) = $featurediagram
+
+[normalize-types-section-top]
+  normalize-types-section($section*1 types $valuedeclaration*1 $section*2 types $valuedeclaration*2 $section*3) =
+    normalize-types-section($section*1 types $valuedeclaration*1 $valuedeclaration*2 $section*2 $section*3)
+
+[default-normalize-types-section]
+  normalize-types-section($featurediagram) = $featurediagram
+
+[normalize-specialization-section-top]
+  normalize-specialization-section($section*1 specialization $featuredefinition*1 $section*2 specialization $featuredefinition*2 $section*3) =
+    normalize-specialization-section($section*1 specialization $featuredefinition*1 $featuredefinition*2 $section*2 $section*3)
+
+[default-normalize-specialization-section]
+  normalize-specialization-section($featurediagram) = $featurediagram
+
+
+equations
+
+[normalize-atomic-features-top]
+  $atomicfeature2($featuretype) := $atomicfeature1
+  ===
+  normalize-atomic-features($atomicfeature1) = $atomicfeature2
+
+[default-normalize-atomic-features]
+  normalize-atomic-features($atomicfeature) = $atomicfeature
+
+
+equations
+
+[build-type-environment-top]
+  build-type-environment($section*1 types $valuedeclaration* $section*2) = 
+    build-type-environment($valuedeclaration*, new-table)
+
+[build-type-environment-top]
+  build-type-environment($atomicfeature : $valuetype $valuedeclaration*, $typeenv) = 
+    build-type-environment($valuedeclaration*, add-feature-type($atomicfeature:$valuetype, $typeenv))
+
+[default-build-type-environment]
+  build-type-environment(, $typeenv) = $typeenv
+
+[add-feature-type-top]
+  lookup($typeenv, $atomicfeature) == not-in-table
+  ===
+  add-feature-type($atomicfeature:$valuetype, $typeenv) = store($typeenv, $atomicfeature, $valuetype)
+
+[default-add-feature-type]
+  add-feature-type($atomicfeature:$valuetype, $typeenv) = $typeenv
+
+
+equations
+
+[check-for-type-mismatch-0]
+  lookup($typeenv, $atomicfeature) == not-in-table,
+  $fdl-error := make-untyped-feature-error($atomicfeature)
+  ===
+  check-for-type-mismatch($atomicfeature($featuretype), <$typeenv, $fdl-errorlist>) =
+    <$typeenv, cons($fdl-error, $fdl-errorlist)>
+
+[check-for-type-mismatch-1]
+  $valuetype := lookup($typeenv, $atomicfeature),
+  $valuetype != not-in-table,
+  check-type($valuetype, $featuretype) == false,
+  $fdl-error := make-type-error($atomicfeature)
+  ===
+  check-for-type-mismatch($atomicfeature($featuretype), <$typeenv, $fdl-errorlist>) =
+    <$typeenv, cons($fdl-error, $fdl-errorlist)>
+
+
+equations
+
+[] check-type(integer, $natcon) = true
+[] check-type(boolean, $boolcon) = true
+[] check-type(string, $strcon) = true
+[] check-type(color, $color) = true
+[default-check-type] check-type($valuetype, $featuretype) = false
+

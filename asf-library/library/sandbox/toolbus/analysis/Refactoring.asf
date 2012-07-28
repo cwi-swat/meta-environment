@@ -1,0 +1,30 @@
+equations
+
+[ruvs-0]
+  remove-unused-variables($Tscript, {}) = $Tscript
+
+[ruvs-1]
+  remove-unused-variable($Tscript, $Area) = $Tscript2,
+  remove-unused-variables($Tscript2, {$Elems}) = $Tscript3
+  ===>
+  remove-unused-variables($Tscript, {<$String1, <$Area, $String2>>, $Elems})
+  = $Tscript3
+
+[ruv-pb-0]
+  remove-unused-variable($VarDecls, $Area) =
+  ===>
+  remove-unused-variable(let $VarDecls in $ProcessExpr endlet, $Area)
+  = $ProcessExpr
+
+[ruv-pb-1]
+  remove-unused-variable($VarDecls, $Area) = $VarDecls2,
+  $VarDecls2 !=
+  ===>
+  remove-unused-variable(let $VarDecls in $ProcessExpr endlet, $Area)
+  = let $VarDecls2 in $ProcessExpr endlet
+
+[ruvv-0]
+  get-area($Var) = $Area
+  ===>
+  remove-unused-variable($VarDecl*1, $Var : $Term, $VarDecl*2, $Area)
+  = $VarDecl*1, $VarDecl*2

@@ -1,0 +1,19 @@
+module functions/Copy[A]
+
+imports functions/Tuple[A A]
+
+exports
+
+context-free syntax
+
+"copy" -> (A => A#A)
+
+hiddens
+
+sorts A#A
+
+imports basic/Whitespace
+
+variables
+
+"A" -> A

@@ -1,0 +1,25 @@
+PROGRAM test ;
+DECLARE
+  n : REAL;
+  i : INTEGER;
+  PROCEDURE square (n : INTEGER);
+  DECLARE x    : REAL;
+          step : LABEL;
+  BEGIN
+    x := 0; step := n; step := step * 0.01;
+    WHILE x < 1.0 DO
+      WRITE (x); WRITE (" ^2 = "); WRITE (x * x); WRITE ("\n");
+      step: x := x + step
+    END ;
+    GOTO step ;
+    step:
+  END ;
+BEGIN  (* main program *)
+    i := 0;
+    WHILE i < 0 DO
+     WRITE("Enter number greater than 0");
+     READ(i);
+    END;
+    square(n)
+END.
+

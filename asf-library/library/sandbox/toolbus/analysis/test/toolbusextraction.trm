@@ -1,0 +1,6 @@
+assert extractRelations() = [] "empty processes"
+
+assert "0" = "0" "0-0"
+assert "00" = "0" || "0" "00-00"
+assert path2str([0]) = path2str([0]) "path2str-path2str"
+assert path2str([0]) = "0" "path2str-0"

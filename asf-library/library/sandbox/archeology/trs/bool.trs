@@ -1,0 +1,18 @@
+trs
+  signature
+    AND/2, OR/2, NOT/1, TRUE/0, FALSE/0
+  rewrite-rules
+    [B1] AND (TRUE, $X)         -> $X,
+    [B2] AND (FALSE, $X)        -> FALSE,
+    [B3] OR(TRUE, $X)           -> TRUE,
+    [B4] OR(FALSE, $X)          -> $X,
+    [B5] NOT(TRUE)              -> FALSE,
+    [B6] NOT(FALSE)             -> TRUE
+  term
+    AND(
+      AND(
+        NOT(AND(FALSE,TRUE)),
+        NOT(TRUE)
+      ),
+      OR(FALSE,TRUE)
+    )

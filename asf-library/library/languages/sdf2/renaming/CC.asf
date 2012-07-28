@@ -1,0 +1,10 @@
+%%%% $Id$
+%%%%
+equations
+
+%% \noindent
+%% Renaming character classes.
+
+  [0] [cc] 'r = cc
+
+%%%

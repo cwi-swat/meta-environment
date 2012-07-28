@@ -1,0 +1,51 @@
+equations
+
+   [0] lift[[_G]] = lift(_G)
+
+   [0] lift(`_A`) = sym2syntax(_A)
+
+   [0] sym2syntax(())      = ("(" ")")
+   [0] sym2syntax((_A _B)) = ("(" sym2syntax(_A) sym2syntax(_B) ")")
+   [0] sym2syntax((_A _B 'a+)) = ("(" _A'  _B' 'a+' ")")
+          when _A' := sym2syntax(_A),
+               ("(" _B' 'a+' ")") := sym2syntax((_B 'a+))
+ 
+   [0] sym2syntax(_A ?) = (sym2syntax(_A) "?")
+   [0] sym2syntax(_A *) = (sym2syntax(_A) "*")
+   [0] sym2syntax(_A +) = (sym2syntax(_A) "+")
+   [0] sym2syntax({_A _B}+) = ("{" sym2syntax(_A) sym2syntax(_B) "}" "+") 
+   [0] sym2syntax({_A _B}*) = ("{" sym2syntax(_A) sym2syntax(_B) "}" "*") 
+
+   [0] sym2syntax(( => _B))  = ("(" "=>" sym2syntax(_B) ")")
+   [0] sym2syntax((_A 'a => _B)) = ( "(" sym2syntax(_A) 'a' "=>" _B' ")" )
+          when ( "(" 'a' "=>" _B' ")" ) := sym2syntax(('a => _B)) 
+
+   [0] sym2syntax(_A | _B) = ( sym2syntax(_A) "|" sym2syntax(_B) )
+   [0] sym2syntax(<_A , 'a,+>) = 
+         ( "<" sym2syntax(_A) "," symbols2syntax('a,+) ">" )
+   [0] sym2syntax((_A -> _B)) = ("(" sym2syntax(_A) "->" sym2syntax(_B) ")")
+   [0] sym2syntax(strcon(\" C* \")) = strcon(\" strchar(\") C* strchar(\") \")
+   [0] sym2syntax(Sort) = sort2str(Sort)
+
+   [0] sym2syntax(Sort [[ 'a,+ ]]) = 
+         ( sym2syntax(Sort) "[[" symbols2syntax('a,+) "]]" )
+
+   [s2s] symbols2syntax('a,+ , 'b,+) = 
+           symbols2syntax('a,+) "," symbols2syntax('b,+)
+   [default-s2s] symbols2syntax(_A) = sym2syntax(_A)
+
+equations
+
+ [0]
+	sort2str(sort(h)) = strcon(\" strchar(h) \")
+
+ [0]
+	sort2str(sort(h l)) = strcon(\" strchar(h) strchar(l) \")
+
+ [0]
+	sort2str(sort(h m l)) = strcon(\" strchar(h) strchar(m) strchar(l) \")
+
+ [0]
+	sort2str(sort(h1 m m+ l)) = strcon(\" strchar(h1) strchar(m) C* strchar(l) \")
+		when strcon(\" strchar(X) C* strchar(l) \") := sort2str(sort(X m+ l))
+

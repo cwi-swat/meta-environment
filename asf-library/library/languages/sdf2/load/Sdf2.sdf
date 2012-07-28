@@ -1,0 +1,70 @@
+module languages/sdf2/load/Sdf2
+
+imports languages/sdf2/syntax/Sdf2
+imports utilities/Files
+imports utilities/Parsing[Module]
+imports utilities/Parsing[ModuleName]
+
+exports
+
+context-free syntax
+  load(filename:StrCon, path:StrCon) -> SDF | Summary { }
+  load(filenames:StrCon*, path:StrCon) -> SDF | Summary { }
+  failed(SDF | Summary)              -> Boolean       { }
+  
+
+hiddens
+
+context-free start-symbols
+  SDF | Summary  Foo
+
+imports basic/Whitespace
+sorts Foo
+context-free syntax
+  StrCon* -> Foo
+  load(filename:StrCon, paths:ATerm) -> Module* | Error { }
+  split(StrCon) -> ATerm
+  load-all(StrCon*, ATerm, StrCon*) -> Module* | Error { }
+  head(StrCon*) -> StrCon
+  tail(StrCon*) -> StrCon*
+  read-file(StrCon, ATerm) -> <Bytes, StrCon> | Error { }
+  compose(StrCon, StrCon) -> StrCon
+  parse(Bytes,StrCon) -> Module | Error
+  imports(Module, StrCon*) -> StrCon* {traversal(accu,top-down,break)}
+  imports(Import, StrCon*) -> StrCon* {traversal(accu,top-down,break)}
+
+  "bogus" -> Parsetree[[Module]]
+
+variables
+
+"Error"[0-9]* -> Error
+"Filename"[0-9]* -> StrCon {strict}
+"_Filename"[0-9]* -> StrCon {wild}
+"Module"[0-9]* -> Module {strict}
+"Module*"[0-9]* -> Module* {strict}
+"_Module*"[0-9]* -> Module* {wild}
+"_Module"[0-9]* -> Module {wild}
+"Paths"[0-9]* -> ATerm {strict}
+"_Paths"[0-9]* -> ATerm {wild}
+"Path"[0-9]*  -> StrCon {strict}
+"_Path"[0-9]*  -> StrCon {wild}
+"Path*"[0-9]* -> {ATerm ","}* {strict}
+"_Path*"[0-9]* -> {ATerm ","}* {wild}
+"Filename*"[0-9]* -> StrCon* {strict}
+"_Filename*"[0-9]* -> StrCon* {wild}
+"Summary"[0-9]* -> Summary
+"Contents"[0-9]* -> Bytes
+"Layout"[0-9]* -> Bytes
+"Ambs"[0-9]* -> NatCon
+"ModuleName"[0-9]* -> ModuleName
+"ModuleId"[0-9]* -> ModuleId
+"Symbols"[0-9]* -> Symbol*
+"_Renamings"[0-9]* -> Renamings {wild}
+"Error*"[0-9]* -> {Error ","}* {strict}
+"_Error*"[0-9]* -> {Error ","}* {wild}
+"Producer"[0-9]* -> StrCon
+"Id"[0-9]* -> StrCon
+
+lexical variables
+"c*"[0-9]* -> StrChar*
+"c+"[0-9]* -> StrChar+

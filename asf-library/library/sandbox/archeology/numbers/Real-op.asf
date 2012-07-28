@@ -1,0 +1,35 @@
+equations
+
+  [a1]  - r = mant-exp( neg(mantissa(r)), exponent( r ) )
+  [a2]  + r = r
+  [m1]  max(r,r') = r                      when r \geq r' = true
+  [m2]  max(r,r') = r'                     when r \leq r' = true
+  [m3]  min(r,r') = r                      when r \leq r' = true
+  [m4]  min(r,r') = r'                     when r \geq r' = true
+
+  [a3]  | r | = r    when is-neg?(r) = false
+  [a4]  | r | = -r   when is-neg?(r) = true
+
+  [c1]  \pi = 3.1415926535897932384626433832795
+  [c2]  e = 2.71828182845904523536028747135
+
+
+  [a1]  is-neg?(r) = hsg(mantissa(normalize(r)))
+  [i2]  is-zero?(r) = true   when  normalize(r) = 0
+  [default-i3]  is-zero?(r) = false
+  [i4]  is-pos?(r) = not is-zero?(r) and  not is-neg?(r)
+
+  [a8]  r < r'  = is-pos?( r' - r )
+  [a9]  r > r'  = is-neg?( r' - r )
+ [a10]  r \leq r' = not r > r'
+ [a11]  r \geq r' = not r < r'
+
+ [a12]  normalize(r) = normalize(r')
+        ===========================
+        eq(r,r') = true
+
+ [default-a12]  eq(r,r') = false
+
+ [v1]   real2int( q ) = dotreal2int(mant2dot(q))
+ [v2]   real2int( s ) = dotreal2int(s)
+ [v3]   int2real( x ) = normalize(int2dotreal(x))

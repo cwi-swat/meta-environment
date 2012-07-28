@@ -1,0 +1,87 @@
+module Args
+
+imports Lexical
+
+exports
+
+sorts Arg
+
+context-free syntax
+
+LHS "=" Arg -> Arg 
+LHS Op-Asgn Arg -> Arg 
+Arg ".." Arg -> Arg
+Arg "..." Arg -> Arg
+Arg "+" Arg -> Arg {assoc}
+Arg "-" Arg -> Arg {lef}
+Arg "*" Arg -> Arg {assoc}
+Arg "/" Arg -> Arg {non-assoc}
+Arg "%" Arg -> Arg
+Arg "**" Arg -> Arg
+"+" Arg -> Arg
+"-" Arg -> Arg
+Arg "|" Arg -> Arg
+Arg "^" Arg -> Arg
+Arg "&" Arg -> Arg
+Arg "<=>" Arg -> Arg
+Arg ">" Arg -> Arg
+Arg ">=" Arg -> Arg
+Arg "<" Arg -> Arg
+Arg "<=" Arg -> Arg
+Arg "==" Arg -> Arg
+Arg "===" Arg -> Arg
+Arg "!=" Arg -> Arg
+Arg "=~" Arg -> Arg
+Arg "!~" Arg -> Arg
+"!" Arg -> Arg
+"~" Arg -> Arg
+Arg "<<" Arg -> Arg
+Arg ">>" Arg -> Arg
+Arg "&&" Arg -> Arg
+Arg "||" Arg -> Arg
+"defined?" Arg -> Arg
+Primary -> Arg
+
+
+Args ("," "*" Arg) -> When-Args
+"*" Arg -> When-Args
+
+
+LHS -> Block-Var
+MLHS -> Block-Var
+
+MHLS-Item "," {MLHS-Item ","}* "*" LHS? -> MLHS
+MHLS-Item "," {MLHS-Item ","}*  -> MLHS
+"*" LHS -> MLHS
+
+Variable -> LHS 
+Primary "[" Args? "]" -> LHS
+Primary "." Identifier -> LHS
+
+Args ("," "*" Arg)? -> MRHS
+"*" Arg -> MRHS
+
+Args -> Call-Args
+Args ("," Assocs)? ("," "*" Arg)? ("," "&" Arg)? -> Call-Args
+Assocs ("," "*" Arg)? ("," "&" Arg)? -> Call-Args
+"*" Arg ("," "&" Arg)?
+"&" Arg -> Call-Arg
+Command -> Call-Arg
+
+{Arg ","}+ -> Args
+
+"(" ArgList ")" -> ArgDecl
+ArgList Term -> ArgDecl
+
+{Identifier ","}+ "," "*" Identifier? ("," "&" Identifier)? -> ArgList
+{Identifier ","}+ ("," "&" Identifier)? -> ArgList
+
+"*" Identifier ("," "&" Identifier)? -> ArgList
+("&" Identifier)? -> ArgList
+
+Variable -> Singleton
+"(" Expr ")" -> Singleton
+
+{Assoc ","}+ -> Assocs
+
+Arg "=>" Arg -> Assoc

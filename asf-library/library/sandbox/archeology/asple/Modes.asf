@@ -1,0 +1,46 @@
+equations
+
+[Mo1]    basic int = int
+
+[Mo2]    basic bool = bool
+
+[Mo3]    basic result-type (M, M1) =
+              result-type (M, M1)
+
+[Mo4]    basic ref M = basic M
+
+[Mo5]    M <= M = true
+
+[Mo6]    M <= M1  = true
+        ======================>
+        M <= ref(M1)  = true
+
+[Mo7]    basic M != basic M1
+        ===================>
+        M <= M1 = false
+
+[Mo8]    ref (M) <= M = false
+
+[Mo9]    M1 <= M = false
+        ================>
+        ref (M1) <= M = false
+
+[Mo10]   basic M = basic M1
+        =========================>
+        result-type (M, M1) = basic M
+
+[Mo11]   basic M  = bool
+        ==================>
+        is-bool M = true
+
+[Mo12]   basic M != bool
+        ==================>
+        is-bool M = false
+
+[Mo13]   basic M  = int
+        ==============================>
+        proper-mode (M) = true
+
+[Mo14]   basic M != int
+        ==============================>
+        proper-mode (M) = is-bool (M)

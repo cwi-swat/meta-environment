@@ -1,0 +1,112 @@
+equations
+
+[] 
+  Error := load(Filename, split(Path))
+  ===>
+  load(Filename, Path) = summary("sdf-load", Filename, [Error])
+
+[] Module* := load(Filename, split(Path))
+   ===>
+   load(Filename, Path) = definition Module*
+
+equations
+
+[] 
+  Error := load-all(Filename*, split(Path), )
+  ===>
+  load(Filename*, Path) = summary("sdf-load", "files", [Error])
+
+[] Module* := load-all(Filename*, split(Path), )
+   ===>
+   load(Filename*, Path) = definition Module*
+
+equations
+
+[] load(Filename, Paths) = load-all(Filename, Paths, )
+
+equations
+
+[done] 
+  load-all(, _Paths, _Filename*) = 
+
+[default-report-file-error]
+  Error := read-file(Filename, Paths)
+  ===>
+  load-all(Filename _Filename*, Paths, _Filename*2) = Error
+
+[default-report-parse-error]
+  <Contents, Filename2> := read-file(Filename, Paths),
+  Error    := parse(Contents, Filename2)
+  ===>
+  load-all(Filename _Filename*, Paths, _Filename*2) = Error
+
+[default-fresh-module] 
+   <Contents, Filename2> := read-file(Filename, Paths),
+   Module   := parse(Contents, Filename2),
+   Module*  := load-all(Filename* imports(Module,), Paths, Filename Filename*2)
+   ===>
+   load-all(Filename Filename*, Paths, Filename*2) = Module Module*
+
+[default-propagate] 
+   <Contents, Filename2> := read-file(Filename, Paths),
+   Module   := parse(Contents, Filename2),
+   Error    := load-all(Filename* imports(Module,), Paths, Filename Filename*2)
+   ===>
+   load-all(Filename Filename*, Paths, Filename*2) = Error
+
+[skip-previously-loaded] 
+   load-all(Filename Filename*, Paths, Filename*1 Filename Filename*2) = 
+   load-all(Filename*, Paths, Filename*1 Filename Filename*2)
+
+equations
+
+[]imports(ModuleId, Filename*) = bytes-to-string(unparse(ModuleId)) Filename*
+[]imports(ModuleId [ Symbols ], Filename*) = imports(ModuleId, Filename*)
+[]imports(ModuleName _Renamings, Filename*) = imports(ModuleName, Filename*)
+
+
+equations
+
+[] Filename2 := compose("",Filename),
+   read(Contents) := read-bytes(Filename2)
+   ===>
+   read-file(Filename, []) = <Contents,Filename2>
+
+[default]
+   read-file(Filename, []) = error("Module could not be found anywhere in the search path",
+                                   [subject(Filename)])
+
+[] Filename2 := compose(Path, Filename),
+   read(Contents) := read-bytes(Filename2)
+   ===>
+   read-file(Filename, [Path, _Path*]) = <Contents, Filename2>
+
+[default]  read-file(Filename, [_Path, Path*]) = read-file(Filename, [Path*])
+
+equations
+
+[] parse(Contents,Filename) = Module when parse-tree(Layout1, Module, Layout2, Ambs) := parse-bytes(Contents, Filename)
+
+[] parse(Contents,Filename) = Error when parse-error(summary(Producer, Id, [Error, _Error*])) := parse-bytes(Contents, Filename)
+
+equations
+
+[] compose(strcon(\" c*1 \"), strcon(\" c*2 \")) = 
+   strcon(\" c*1 strchar(\/) c*2 strchar(\.) strchar(s) strchar(d) strchar(f) \")
+
+equations
+
+[] 
+  [Path*1] := split(strcon(\" c+1 \")),
+  [Path*2] := split(strcon(\" c+2 \"))
+  ===>
+  split(strcon(\" c+1 strchar(\:) c+2 \")) = [Path*1, Path*2] 
+
+[] split(strcon(\" strchar(\:) c+ \")) = split(strcon(\" c+ \"))
+
+[] split(strcon(\" c+ strchar(\:) \")) = split(strcon(\" c+ \"))
+
+[] split(strcon(\"\")) = []
+
+[default]
+  split(Filename) = [Filename]

@@ -1,0 +1,21 @@
+module languages/sdf2/normalization/Character-Class-Membership
+imports
+        languages/sdf2/syntax/Character-Class
+        languages/sdf2/normalization/Character-Arithmetic
+exports
+  context-free syntax
+    Character "in" OptCharRanges -> Boolean
+    Character "in" CharClass     -> Boolean
+    CharClass "sub" CharClass    -> Boolean
+    CharClass "equiv" CharClass  -> Boolean
+
+hiddens
+  sorts CharRanges OptCharRanges CharRange
+  imports basic/Comments
+
+  variables
+    "_c"[0-9\']*    -> Character
+    "cr"[0-9\']*    -> CharRange
+    "cr""*"[0-9\']* -> OptCharRanges
+    "cr""+"[0-9\']* -> CharRanges
+    "cc"[0-9\']*    -> CharClass

@@ -1,0 +1,9 @@
+module utilities/Implode[Sort]
+
+imports languages/aterm/syntax/ATerms
+
+exports
+
+context-free syntax
+	implode(Sort) -> ATerm {built-in("implode")}
+

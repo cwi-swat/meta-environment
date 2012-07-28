@@ -1,0 +1,220 @@
+equations
+
+[799a]  _Vars'' = derive-types(_Vars' , ),
+        _Vars'' = _Vars'
+        =====================================
+        derive-types-until-no-change(_Vars') = _Vars''
+
+[799b]  _Vars'' = derive-types(_Vars' , ),
+        _Vars'' != _Vars'
+        =====================================
+        derive-types-until-no-change(_Vars') = derive-types-until-no-change(_Vars'')
+
+[800]   should-be-derived(_Vn' of type : to-be-derived _Use-or-def' in actionnr : _Int' ) = true
+
+[801a]  _Var' = _Vn' of type : to-be-derived used in actionnr : _Int',
+        _Var'' = derive-type(_Var' from _Vars''')
+        ====================================================
+        derive-types(_Vars''' _Var' , _Vars'' ) =
+                derive-types(_Vars''', _Var'' _Vars'' )
+
+[801b]  _Var' = _Vn' of type : to-be-derived defined in actionnr : _Int',
+        _Vars'''' = uses-in-action(_Int' , _Vars''),
+        _Var'' = derive-type(_Var' from _Vars'''' _Vars''')
+        ====================================================
+        derive-types(_Vars''' _Var', _Vars'' ) =
+                derive-types(_Vars''', _Var'' _Vars'' )
+
+[802]   should-be-derived(_Var') != true
+        ====================================================
+        derive-types(_Vars''' _Var', _Vars'' ) =
+                derive-types(_Vars''', _Var' _Vars'' )
+
+[803]   derive-types( , _Vars' ) = _Vars'
+
+[804]   _Var' = _Vn' of type : _Var-type' used in actionnr : _Int',
+        _Vars''' = uses-in-action(_Int' , _Vars''),
+        _Vars'''' = _Var' _Vars'''
+        ================================
+        uses-in-action(_Int' , _Var' _Vars'') = _Vars''''
+
+[805a]  _Var' = _Vn' of type : _Var-type' defined in actionnr : _Int'
+        ================================
+        uses-in-action(_Int' , _Var' _Vars'') =
+                uses-in-action(_Int' , _Vars'')
+
+[805b]  _Var' = _Vn' of type : _Var-type' defined in actionnr : _Int'',
+        _Int'' > _Int' = true
+        ================================
+        uses-in-action(_Int' , _Var' _Vars'') =
+
+[806]   _Var' = _Vn' of type : _Var-type' used in actionnr : _Int'',
+        _Int'' > _Int' = true
+        ================================
+        uses-in-action(_Int' , _Var' _Vars'') =
+
+[807]   uses-in-action(_Int' , ) =
+
+[804]   derive-type(_Var' from ) = _Var'
+
+[805]   _Vars' = _Vars'' _Vn' of type : _Var-type'' _Use-or-def'' in actionnr : _Int'',
+        _Var' = _Vn' of type : _Var-type' _Use-or-def' in actionnr : _Int'
+        ===============================
+        derive-type(_Var' from _Vars') =
+                _Vn' of type : _Var-type'' _Use-or-def' in actionnr : _Int'
+
+[806]   _Vars' = _Vars'' _Vn'' of type : _Var-type'' _Use-or-def'' in actionnr : _Int'',
+        _Var' = _Vn' of type : _Var-type' _Use-or-def' in actionnr : _Int',
+        _Vn' != _Vn''
+        ===============================
+        derive-type(_Var' from _Vars') = derive-type(_Var' from _Vars'')
+
+[807]   should-be-derived(_Var') = true,
+        _Var' = _Vn' of type : _Var-type' _Use-or-def' in actionnr : _Int'
+        ==========================================================
+        check-non-derived-types(_Var' _Vars'') =
+                unable to type variable : _Vn' in action nr : _Int' +
+                check-non-derived-types(_Vars'')
+
+[808]   should-be-derived(_Var') != true
+        ==========================================================
+        check-non-derived-types(_Var' _Vars'') =
+                check-non-derived-types(_Vars'')
+
+[809]   check-non-derived-types( ) = empty-errors
+
+[699]   check-use-before-def ( ) = empty-errors
+
+[700a]  check-use-before-def (_Vn' of type : _Var-type' defined in actionnr : _Int') = empty-errors
+
+[700b]  check-use-before-def (_Vn' of type : _Var-type' defined in actionnr : _Int' source : _Ufn') = empty-errors
+
+[701a]  check-use-before-def (_Vn' of type : _Var-type' used in actionnr : _Int') =
+                variable : _Vn' is undefined in action nr : _Int'
+
+[701b]  check-use-before-def (_Vn' of type : _Var-type' used in actionnr : _Int' source : _Ufn') =
+                variable : _Vn' is undefined in action nr : _Int'
+
+[702a]  _Var' = _Vn' of type : _Var-type' defined in actionnr : _Int'
+        ============================================
+        check-use-before-def (_Var' _Vars'') =
+                check-use-before-def (remove-uses-or-redefs(_Vn' _Vars''))
+
+[702b]  _Var' = _Vn' of type : _Var-type' defined in actionnr : _Int' source : _Ufn'
+        ============================================
+        check-use-before-def (_Var' _Vars'') =
+                check-use-before-def (remove-uses-or-redefs(_Vn' _Vars''))
+
+[703a]  _Var' = _Vn' of type : _Var-type' used in actionnr : _Int'
+        ============================================
+        check-use-before-def (_Var' _Vars'') =
+                variable : _Vn' is undefined in action nr : _Int' +
+                check-use-before-def (_Vars'')
+
+[703b]  _Var' = _Vn' of type : _Var-type' used in actionnr : _Int' source : _Ufn'
+        ============================================
+        check-use-before-def (_Var' _Vars'') =
+                variable : _Vn' is undefined in action nr : _Int' +
+                check-use-before-def (_Vars'')
+
+[704]   remove-uses-or-redefs(_Vn' ) =
+
+[705a]  _Var' = _Vn' of type : _Var-type' _Use-or-def' in actionnr : _Int'
+        ===============================
+        remove-uses-or-redefs(_Vn' _Var' _Vars'') =
+                remove-uses-or-redefs(_Vn' _Vars'')
+
+[705b]  _Var' = _Vn' of type : _Var-type' _Use-or-def' in actionnr : _Int' source : _Ufn'
+        ===============================
+        remove-uses-or-redefs(_Vn' _Var' _Vars'') =
+                remove-uses-or-redefs(_Vn' _Vars'')
+
+[706a]  _Var' = _Vn'' of type : _Var-type' _Use-or-def' in actionnr : _Int',
+        _Vn' != _Vn'',
+        _Vars''' = remove-uses-or-redefs(_Vn' _Vars''),
+        _Vars'''' = _Var' _Vars'''
+        ===============================
+        remove-uses-or-redefs(_Vn' _Var' _Vars'') = _Vars''''
+
+[706b]  _Var' = _Vn'' of type : _Var-type' _Use-or-def' in actionnr : _Int' source : _Ufn',
+        _Vn' != _Vn'',
+        _Vars''' = remove-uses-or-redefs(_Vn' _Vars''),
+        _Vars'''' = _Var' _Vars'''
+        ===============================
+        remove-uses-or-redefs(_Vn' _Var' _Vars'') = _Vars''''
+
+[20]    check-vars(_State' _Int' _Int') =
+    connect-errors(_State' _Int' check-vars-in-pairnr(get-vars-in-pairnr(_State' _Int')))
+
+[21]    _Vars'' = derive-types-until-no-change(_Vars')
+        =============================================
+        check-vars-in-pairnr(_Vars' ) =
+                check-non-derived-types(_Vars'' ) +
+                check-var-types(_Vars'' ) +
+                check-use-before-def (_Vars'' )
+
+[22]    _Int' != _Int''
+        ===================================================================
+        check-vars(_State' _Int' _Int'') =
+ connect-errors(_State' _Int'' check-vars-in-pairnr(get-vars-in-pairnr(_State' _Int''))) +
+ check-vars(_State' _Int' _Int'' + 1)
+
+[23]    get-vars-in-pairnr(_State' _Int') = lookup-vars(vars(_State') _Int')
+
+[24a]   lookup-vars([[[config-variables in pairnr : _Int' : _Vars']] _VARSs'] _Int') =
+                _Vars'
+
+[24b]   _Int' != _Int''
+        =============
+        lookup-vars([[[config-variables in pairnr : _Int'' : _Vars']] _VARSs'] _Int') =
+                lookup-vars([_VARSs'] _Int')
+
+[25]    check-var-types( ) = empty-errors
+
+[26a]   _Var' = _Vn' of type : _Var-type' _Use-or-def' in actionnr : _Int'
+        =======================================
+        check-var-types(_Var' _Vars'') =
+                type-of( _Vn' _Int' should be _Var-type' , _Vars'') +
+                check-var-types( _Vars'' )
+
+[26b]   _Var' = _Vn' of type : _Var-type' _Use-or-def' in actionnr : _Int' source : _Ufn'
+        =======================================
+        check-var-types(_Var' _Vars'') =
+                type-of(_Vn' _Int' should be _Var-type' , _Vars'') +
+                check-var-types(_Vars'' )
+
+[27]    type-of(_Vn' _Int' should be _Var-type' , ) = empty-errors
+
+[28a]   _Var' = _Vn'' of type : _Var-type'' _Use-or-def' in actionnr : _Int'',
+        _Vn'' != _Vn'
+        =============
+        type-of(_Vn' _Int' should be _Var-type' , _Var' _Vars'') =
+                type-of(_Vn' _Int' should be _Var-type' , _Vars'')
+
+[28b]   _Var' = _Vn'' of type : _Var-type'' _Use-or-def' in actionnr : _Int'' source : _Ufn',
+        _Vn'' != _Vn'
+        =============
+        type-of(_Vn' _Int' should be _Var-type' , _Var' _Vars'') =
+                type-of(_Vn' _Int' should be _Var-type' , _Vars'')
+
+[29a]   _Var' = _Vn' of type : _Var-type' _Use-or-def' in actionnr : _Int''
+        =============
+        type-of(_Vn' _Int' should be _Var-type' , _Var' _Vars'') =
+                type-of(_Vn' _Int' should be _Var-type' , _Vars'')
+
+[29b]   _Var' = _Vn' of type : _Var-type' _Use-or-def' in actionnr : _Int'' source : _Ufn'
+        =============
+        type-of(_Vn' _Int' should be _Var-type' , _Var' _Vars'') =
+                type-of(_Vn' _Int' should be _Var-type' , _Vars'')
+
+[30a]   _Var' = _Vn' of type : _Var-type'' _Use-or-def' in actionnr : _Int'',
+        _Var-type' != _Var-type''
+        =======================
+        type-of(_Vn' _Int' should be _Var-type' , _Var' _Vars'') =
+                incompatible types of variable : _Vn' actions : _Int' and _Int''
+
+[30b]   _Var' = _Vn' of type : _Var-type'' _Use-or-def' in actionnr : _Int'' source : _Ufn',
+        _Var-type' != _Var-type''
+        =======================
+        type-of(_Vn' _Int' should be _Var-type' , _Var' _Vars'') =
+                incompatible types of variable : _Vn' actions : _Int' and _Int''

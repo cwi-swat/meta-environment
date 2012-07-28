@@ -1,0 +1,16 @@
+
+   equations
+
+      [1]   succ(lex-nat(m "0"))  = lex-nat(m "1")            
+      [2]   succ(lex-nat(m "1"))  = lex-nat(m "2")            
+      [3]   succ(lex-nat(m "2"))  = lex-nat(m "3")            
+      [4]   succ(lex-nat(m "3"))  = lex-nat(m "4")            
+      [5]   succ(lex-nat(m "4"))  = lex-nat(m "5")            
+      [6]   succ(lex-nat(m "5"))  = lex-nat(m "6")            
+      [7]   succ(lex-nat(m "6"))  = lex-nat(m "7")            
+      [8]   succ(lex-nat(m "7"))  = lex-nat(m "8")            
+      [9]   succ(lex-nat(m "8"))  = lex-nat(m "9")            
+      [10]  succ(9)               = 10            
+      [11]  succ(lex-nat(k1 "9")) = lex-nat(k2 "0")
+               when succ(lex-nat(k1)) = lex-nat(k2)
+

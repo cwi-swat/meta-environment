@@ -1,0 +1,16 @@
+module languages/sdf2/format/Grammars
+
+imports languages/sdf2/syntax/Grammars
+imports languages/box/syntax/Box
+
+hiddens
+context-free syntax
+  "[" Grammar "]" -> Box     {to-box}        
+  "<" Box ">"     -> Grammar {from-box}      
+  "_" "_"         -> Box     {layout-to-box} 
+
+variables
+  "Grammar" [0-9]* -> Grammar  
+
+lexical variables
+  "C" -> LAYOUT  

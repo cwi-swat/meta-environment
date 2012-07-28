@@ -1,0 +1,11 @@
+module Retry
+
+exports
+
+context-free syntax
+"retry" -> Retry
+
+
+%% Note: The validity rule VXRT states that the Retry instruction is only
+%% valid in a Rescue clause. This could eventually be enforced by the
+%% syntax.

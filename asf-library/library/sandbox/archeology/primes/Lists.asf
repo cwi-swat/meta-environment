@@ -1,0 +1,13 @@
+equations
+
+   [1]  sort(empty) = empty
+   [2]  sort(cons(x,L)) = insert(x, sort(L))
+
+   [3]  insert(x,empty) = cons(x,empty)
+   [4]  y < x = true
+        =======================================
+        insert(x,cons(y,L)) = cons(y,insert(x,L))
+
+   [5]  y < x  = false
+        =======================================
+        insert(x,cons(y,L)) = cons(x,cons(y,L))

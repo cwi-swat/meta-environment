@@ -1,0 +1,13 @@
+module Attribute
+
+imports Identifier
+
+exports
+
+context-free syntax
+
+Identifier -> Attribute
+
+
+%% Note: According to validity rule VFFD-5, an Attribute can also be a Prefix.
+

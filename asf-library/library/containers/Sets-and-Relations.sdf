@@ -1,0 +1,244 @@
+module containers/Sets-and-Relations
+
+imports basic/Integers
+        basic/Booleans
+        basic/Locations
+        basic/StrCon
+
+exports
+sorts RElem
+
+context-free syntax
+  Integer  -> RElem  
+  BoolCon  -> RElem  
+  StrCon   -> RElem  
+  Location -> RElem  
+
+context-free syntax
+  "{" elements:{RElem ","}* "}" -> RElem {cons("set")}   
+  "<" elements:{RElem ","}+ ">" -> RElem {cons("tuple")} 
+
+context-free syntax
+  compose(RElem, RElem) -> RElem  
+
+hiddens
+imports basic/Whitespace
+
+context-free start-symbols
+  RElem
+
+variables
+  "x" [0-9\']*     -> RElem         
+  "xy*" [0-9\']*   -> {RElem ","}*  
+  "xyrel" [0-9\']* -> RElem         
+  "y" [0-9\']*     -> RElem         
+  "yz*" [0-9\']*   -> {RElem ","}*  
+  "yzrel" [0-9\']* -> RElem         
+  "z" [0-9\']*     -> RElem         
+  "xz*" [0-9\']*   -> {RElem ","}*  
+  "xzrel" [0-9\']* -> RElem         
+
+exports
+context-free syntax
+  equal(RElem, RElem) -> Boolean  
+
+context-free syntax
+  identity(RElem)   -> RElem  
+  total(RElem)      -> RElem  
+  complement(RElem) -> RElem  
+
+context-free syntax
+  reflexive-closure(RElem)            -> RElem  
+  symmetric-closure(RElem)            -> RElem  
+  transitive-closure(RElem)           -> RElem  
+  transitive-reflexive-closure(RElem) -> RElem  
+
+context-free syntax
+  carrier(RElem) -> RElem  
+  top(RElem)     -> RElem  
+  bottom(RElem)  -> RElem  
+
+context-free syntax
+  carrier-restriction(RElem, RElem) -> RElem  
+  carrier-exclusion(RElem, RElem)   -> RElem  
+
+context-free syntax
+  reach-restriction(rel:RElem, start:RElem, restrict:RElem) -> RElem  
+  reach-exclusion(rel:RElem, start:RElem, exclude:RElem)    -> RElem  
+
+hiddens
+context-free syntax
+  least-fixpoint-union-compose(relation:RElem, fixed:RElem) -> RElem        
+  union-compose(relation:RElem, fixed:RElem)                -> RElem {memo} 
+
+variables
+  "x" [0-9\']*    -> RElem         
+  "x*" [0-9\']*   -> {RElem ","}*  
+  "xx*" [0-9\']*  -> {RElem ","}*  
+  "xset" [0-9\']* -> RElem         
+  "xrel" [0-9\']* -> RElem         
+
+hiddens
+context-free start-symbols
+  RElem
+
+exports
+context-free syntax
+  inverse(RElem)           -> RElem  
+  left-image(RElem, RElem) -> RElem  
+
+hiddens
+variables
+  "x" [0-9\']*     -> RElem         
+  "y" [0-9\']*     -> RElem         
+  "xy*" [0-9\']*   -> {RElem ","}*  
+  "yx*" [0-9\']*   -> {RElem ","}*  
+  "yset" [0-9\']*  -> RElem         
+  "xyrel" [0-9\']* -> RElem         
+
+exports
+context-free syntax
+  nary-as-binary(RElem) -> RElem  
+
+hiddens
+imports basic/Comments
+
+variables
+  "elem" [0-9\']*  -> RElem         
+  "elem*" [0-9\']* -> {RElem ","}*  
+  "elem+" [0-9\']* -> {RElem ","}+  
+
+exports
+context-free syntax
+  first(RElem)  -> RElem  
+  second(RElem) -> RElem  
+
+hiddens
+variables
+  "p" [0-9\']* -> RElem  
+  "x" [0-9\']* -> RElem  
+  "y" [0-9\']* -> RElem  
+
+exports
+context-free syntax
+  product-space(RElem) -> RElem  
+
+hiddens
+context-free syntax
+  generalized-product(RElem)       -> RElem  
+  relation-to-powerset(RElem)      -> RElem  
+  n-tuple-to-set(RElem)            -> RElem  
+  set-to-singleton-relation(RElem) -> RElem  
+
+variables
+  "x" [0-9\']*       -> RElem         
+  "xx" [0-9\']*      -> RElem         
+  "xsetset" [0-9\']* -> RElem         
+  "x*" [0-9\']*      -> {RElem ","}*  
+  "x+" [0-9\']*      -> {RElem ","}+  
+  "xset" [0-9\']*    -> RElem         
+  "xset*" [0-9\']*   -> {RElem ","}*  
+  "xset+" [0-9\']*   -> {RElem ","}+  
+  "xx*" [0-9\']*     -> {RElem ","}*  
+
+exports
+context-free syntax
+  power(RElem)                    -> RElem  
+  generalized-union(RElem)        -> RElem  
+  generalized-intersection(RElem) -> RElem  
+
+hiddens
+context-free syntax
+  add-to-each(RElem, RElem) -> RElem  
+
+variables
+  "x" [0-9\']*       -> RElem         
+  "x*" [0-9\']*      -> {RElem ","}*  
+  "xset" [0-9\']*    -> RElem         
+  "xset*" [0-9\']*   -> {RElem ","}*  
+  "xsetset" [0-9\']* -> RElem         
+
+exports
+context-free syntax
+  product(RElem, RElem) -> RElem  
+
+context-free syntax
+  domain(RElem) -> RElem  
+  range(RElem)  -> RElem  
+
+context-free syntax
+  image(RElem, RElem) -> RElem  
+
+context-free syntax
+  domain-restriction(RElem, RElem) -> RElem  
+  range-restriction(RElem, RElem)  -> RElem  
+
+context-free syntax
+  domain-exclusion(RElem, RElem) -> RElem  
+  range-exclusion(RElem, RElem)  -> RElem  
+
+hiddens
+variables
+  "x" [0-9\']*    -> RElem         
+  "y" [0-9\']*    -> RElem         
+  "x*" [0-9\']*   -> {RElem ","}*  
+  "y*" [0-9\']*   -> {RElem ","}*  
+  "x+" [0-9\']*   -> {RElem ","}+  
+  "y+" [0-9\']*   -> {RElem ","}+  
+  "xy" [0-9\']*   -> RElem         
+  "xy*" [0-9\']*  -> {RElem ","}*  
+  "rel" [0-9\']*  -> RElem         
+  "xset" [0-9\']* -> RElem         
+  "yset" [0-9\']* -> RElem         
+
+exports
+context-free syntax
+  insert(RElem, RElem) -> RElem  
+  delete(RElem, RElem) -> RElem  
+
+context-free syntax
+  element-of(RElem, RElem) -> Boolean  
+
+context-free syntax
+  subset(RElem, RElem)   -> Boolean  
+  superset(RElem, RElem) -> Boolean  
+
+context-free syntax
+  strict-subset(RElem, RElem)   -> Boolean  
+  strict-superset(RElem, RElem) -> Boolean  
+
+context-free syntax
+  union(RElem, RElem)        -> RElem  
+  difference(RElem, RElem)   -> RElem  
+  intersection(RElem, RElem) -> RElem  
+
+context-free syntax
+  unique(RElem) -> RElem  
+
+context-free syntax
+  size(RElem) -> Integer  
+
+hiddens
+variables
+  "set" [0-9\']* -> RElem         
+  "x*" [0-9\']*  -> {RElem ","}*  
+  "x" [0-9\']*   -> RElem         
+
+exports
+context-free syntax
+  term-equal(RElem, RElem) -> Boolean  
+
+hiddens
+variables
+  "x" [0-9\']* -> RElem  
+
+exports
+context-free syntax
+  %% All paths from roots in the second set.
+  all-paths-from(RElem, RElem) -> RElem  
+
+hiddens
+context-free syntax
+  chain-set(RElem)             -> RElem  
+  chain-each(RElem)            -> RElem  
+  all-nodes-from(RElem, RElem) -> RElem  

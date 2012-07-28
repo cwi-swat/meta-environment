@@ -1,0 +1,495 @@
+equations
+
+  %%  Produce SDF rules for a series of grammar equations.
+
+  [e1]  grammar2sdf( G-Basics ) = grammar2sdf(G-Basics, X)
+
+  [e2]  grammar2sdf( G-Basic G-Basic+, #U ) =
+           gram2sdf(G-Basic, s(#U,1))
+           || grammar2sdf(G-Basic+, s(#U,2))
+
+  [e3]  grammar2sdf( G-Basic, #U ) = gram2sdf( G-Basic, #U )
+
+  [e3]  gram2sdf( * #ResultSort = #G-term . , #U ) =
+          declare-sort( #ResultSort ) ||  2sdf( #ResultSort = #G-term, #U )
+
+
+  %% Produce SDF rules for one grammar equation.
+  %% The result can be
+  %%   *  sort declarations for auxiliary sorts (e.g. for ? or < >)
+  %%   *  context-free syntax rules
+  %%   *  lexical syntax rules.
+
+
+  %%  case Sort1 = Sort2  (a simple chain rule)
+
+  [r1]  is-lexical(#Sort) = true
+        ===========================
+        2sdf( #ResultSort = #Sort, #U ) =
+          exports lexical syntax #Sort -> #ResultSort
+
+  [r2]  is-lexical(#Sort) != true
+        =========================
+        2sdf( #ResultSort = #Sort, #U) =
+          exports context-free syntax #Sort -> #ResultSort
+
+
+
+  %%  case Sort = StringConstant  (a context-free terminal symbol)
+  %%  generate for e.g., string "if":
+  %%    "if"             -> AUX-IF
+  %%    "\"" AUX-IF "\"" -> AUX-IF {bracket}
+  %%
+  %%  This allows keywords to be quoted (in semantic equations)
+  %% or unquoted (in actual term). Also see module Literals.
+
+  [r31] is-standard-defined( #String ) = true
+        =====================================
+        2sdf( #ResultSort = #String, #U ) =
+          exports context-free syntax get-standard-sort(#String) -> #ResultSort
+
+  [r3]  is-standard-defined( #String ) = false,
+        get-sort( #String, s(#U,1)) = #ResultSort'
+        ==========================================
+        2sdf( #ResultSort = #String, #U) =
+          declare-sort( #ResultSort' ) ||
+          do-string-elem( #ResultSort', #String ) ||
+          exports context-free syntax #ResultSort' -> #ResultSort
+
+
+  [r3']  do-string-elem( #Sort, #String ) =
+            exports context-free syntax
+               #String          -> #Sort
+               "\"" #Sort "\""  -> #Sort {bracket}
+
+  %%  case Sort = CharacterConstant  (a lexical terminal symbol)
+
+  [r4]  2sdf( #ResultSort = #Character, #U ) =
+          exports lexical syntax  char2string(#Character) -> #ResultSort
+
+
+
+  %%  case Sort = Term1 | Term2   (alternative: produce two SDF rules).
+
+  [r5]  2sdf( #ResultSort = #G-term1 | #G-term2, #U ) =
+          2sdf( #ResultSort = #G-term1, s(#U,1) )  ||
+          2sdf( #ResultSort = #G-term2, s(#U,2) )
+
+
+
+  %%  case Sort = Term?     Optional part of grammar definition.
+  %%  introduce an auxiliary sort, unless Term is already a sort.
+  %%  Model optionality using the empty production.
+
+  [r6]  is-lexical(#Sort) = true
+        ========================
+        2sdf( #ResultSort = #Sort?, #U ) =
+          exports lexical syntax  #Sort -> #ResultSort
+                  lexical syntax        -> #ResultSort
+
+  [r7]  is-lexical(#Sort) != true
+        ========================
+        2sdf( #ResultSort = #Sort?, #U ) =
+          exports context-free syntax  #Sort -> #ResultSort
+                  context-free syntax        -> #ResultSort
+
+  [r8]  is-chain-rule(#G-term) != true,
+        is-lexical(#G-term) = true,
+        get-sort(#G-term?, s(#U,1)) = #ResultSort'
+        ==========================================
+        2sdf( #ResultSort = #G-term?, #U ) =
+          declare-sort( #ResultSort' ) ||
+          exports
+            lexical syntax #ResultSort'  -> #ResultSort
+            lexical syntax               -> #ResultSort'
+        || 2sdf( #ResultSort' = #G-term, s(#U,2))
+
+  [r9]  is-chain-rule(#G-term) != true,
+        is-lexical(#G-term) != true,
+        get-sort(#G-term?, s(#U,1)) = #ResultSort'
+        ==========================================
+        2sdf( #ResultSort = #G-term?, #U ) =
+          declare-sort-tuplified( #ResultSort' ) ||
+          exports
+            context-free syntax #ResultSort'  -> #ResultSort
+            context-free syntax               -> #ResultSort'
+        || 2sdf( #ResultSort' = #G-term, s(#U,2))
+
+
+
+  %% case  Sort = Term*     Zero or more repetitions.
+  %% In SDF, only sort repetition is allowed;
+  %% introduce new sort unless Term is a chain rule.
+
+ [r10]  is-lexical(#Sort) = true
+        ========================
+        2sdf( #ResultSort = #Sort *, #U ) =
+          exports lexical syntax #Sort * -> #ResultSort
+
+ [r11]  is-lexical(#Sort) != true
+        =========================
+        2sdf( #ResultSort = #Sort *, #U ) =
+          exports context-free syntax #Sort * -> #ResultSort
+
+ [r12]  is-chain-rule(#G-term) != true,
+        is-lexical(#G-term) = true,
+        get-sort( #G-term, s(#U,1)) = #ResultSort'
+        ====================================================
+        2sdf( #ResultSort = #G-term *, #U ) =
+          declare-sort(#ResultSort') ||
+          exports
+            lexical syntax #ResultSort' * -> #ResultSort
+        || 2sdf( #ResultSort' = #G-term, s(#U,2) )
+
+ [r13]  is-chain-rule(#G-term) != true,
+        is-lexical(#G-term) != true,
+        get-sort(  #G-term, s(#U,1)) = #ResultSort'
+        ====================================================
+        2sdf( #ResultSort = #G-term *, #U ) =
+          declare-sort-tuplified( #ResultSort' ) ||
+          exports
+            context-free syntax #ResultSort' * -> #ResultSort
+        || 2sdf( #ResultSort' = #G-term, s(#U,2) )
+
+
+  %% case  Sort = Term+     Zero or more repetitions.
+  %% In SDF, only sort repetition is allowed;
+  %% introduce new sort unless Term is a chain rule.
+
+ [r14]  is-lexical(#Sort) = true
+        ========================
+        2sdf( #ResultSort = #Sort +, #U ) =
+          exports lexical syntax #Sort + -> #ResultSort
+
+ [r15]  is-lexical(#Sort) != true
+        =========================
+        2sdf( #ResultSort = #Sort +, #U ) =
+          exports context-free syntax #Sort + -> #ResultSort
+
+ [r16]  is-chain-rule(#G-term) != true,
+        is-lexical(#G-term) = true,
+        get-sort( #G-term, s(#U,1)) = #ResultSort'
+        ====================================================
+        2sdf( #ResultSort = #G-term +, #U ) =
+          declare-sort( #ResultSort' ) ||
+          exports
+            lexical syntax #ResultSort' + -> #ResultSort
+        || 2sdf( #ResultSort' = #G-term, s(#U,2) )
+
+ [r17]  is-chain-rule(#G-term) != true,
+        is-lexical(#G-term) != true,
+        get-sort( #G-term, s(#U,1)) = #ResultSort'
+        ====================================================
+        2sdf( #ResultSort = #G-term +, #U ) =
+          declare-sort-tuplified( #ResultSort' ) ||
+          exports
+            context-free syntax #ResultSort' + -> #ResultSort
+        || 2sdf( #ResultSort' = #G-term, s(#U,2) )
+
+
+
+  %%  so far for the easy cases ( +, *, ? );
+  %%  now let's deal with [[ ... ]] and < ... >.
+  %%  SDF cannot deal distinguish between [[ ]] and < >.
+  %%  Therefore, [[ ]] is simply translated to < >.
+
+ [r18]  is-lexical( #G-terms-star ) = true
+        ==================================
+        2sdf( #ResultSort = [[ #G-terms-star ]], #U ) =
+          lex-cons2sdf( #ResultSort =  #G-terms-star  , #U )
+
+ [r19]  is-lexical( #G-terms-star ) != true
+        ====================================
+        2sdf( #ResultSort = [[ #G-terms-star ]], #U ) =
+          constructor-brackets( #ResultSort ) ||
+          cfg-cons2sdf( #ResultSort = #G-terms-star, #U )
+
+
+  %%  special case  < #Sort < #String #Sort > * >
+
+ [r200] is-standard-defined(#String) = true
+        ===================================
+        2sdf( #ResultSort = <#Sort < #String #Sort > * > , #U ) =
+          tuple-brackets( #ResultSort ) ||
+          exports context-free syntax
+            #Sort                                        -> #ResultSort
+            #Sort get-standard-sort(#String) #ResultSort -> #ResultSort
+
+ [r20]  is-standard-defined(#String) = false,
+        get-sort( #String, s(#U,1) ) = #Sort0
+        =====================================================
+        2sdf( #ResultSort = < #Sort < #String #Sort > * >, #U ) =
+          declare-sort(#Sort0) ||
+          do-string-elem( #Sort0, #String ) ||
+          tuple-brackets( #ResultSort ) ||
+          exports context-free syntax
+             #Sort                      -> #ResultSort
+             #Sort #Sort0 #ResultSort   -> #ResultSort
+
+ [r22] #G-term = < #G-terms-star >,
+       easy-SDF-list( #G-term ) != true,
+       is-lexical(  #G-term ) = true
+       =====================================
+       2sdf( #ResultSort = #G-term, #U ) =
+          lex-cons2sdf( #ResultSort = #G-terms-star, #U )
+
+ [r23] #G-term = < #G-terms-star >,
+       easy-SDF-list( #G-term ) != true,
+       is-lexical( #G-term ) != true
+       ==============================
+       2sdf( #ResultSort = #G-term, #U ) =
+         tuple-brackets( #ResultSort ) ||
+         cfg-cons2sdf( #ResultSort = #G-terms-star, #U )
+
+
+  %% The remaining case is:  Sort = < G-term1 ... G-termN >.
+  %% The simplest SDF rules to derive are:
+  %%    Cfe1 ... CfeM   -> AuxS1       (for G-term1)
+  %%    .....
+  %%    Cfe1' ... CfeM' -> AuxSN       (for G-termN)
+  %%    AuxS1 ... AuxSn -> Sort
+  %%
+
+ [c1]   get-sort( #G-term, s(#U,1) ) = #Sort1,
+        get-sort( #G-terms-plus, s(#U,2) ) = #Sort2,
+        lex-cons2sdf( #Sort1 =  #G-term, s(#U,3) ) = Section1,
+        lex-cons2sdf( #Sort2 =  #G-terms-plus, s(#U,4)) = Section2,
+        main-lex-def( Section1, #Sort1 ) = #Lex-elems-star1,
+        main-lex-def( Section2, #Sort2 ) = #Lex-elems-star2
+        ====================================================
+        lex-cons2sdf( #ResultSort = #G-term #G-terms-plus, #U ) =
+          aux-sections( Section1, #Sort1 ) ||
+          aux-sections( Section2, #Sort2 ) ||
+          exports
+            lexical syntax
+              #Lex-elems-star1 #Lex-elems-star2 -> #ResultSort
+
+ [c2]   lex-cons2sdf( #ResultSort = #G-term, #U ) =  2sdf( #ResultSort = #G-term, #U )
+
+ [c3]   lex-cons2sdf( #ResultSort =  , #U ) = nil
+
+
+ [c4]   get-sort( #G-term, s(#U,1) ) = #Sort1,
+        get-sort( #G-terms-plus, s(#U,2) ) = #Sort2,
+        2sdf( #Sort1 =  #G-term, s(#U,3) ) = Section1,
+        cfg-cons2sdf( #Sort2 = #G-terms-plus, s(#U,4)) = Section2,
+        main-cfg-def( Section1, #Sort1 ) = #Cfg-elems-star1,
+        main-cfg-def( Section2, #Sort2 ) = #Cfg-elems-star2
+        ====================================================
+        cfg-cons2sdf( #ResultSort = #G-term #G-terms-plus, #U ) =
+          aux-sections( Section1, #Sort1 ) ||
+          aux-sections( Section2, #Sort2 ) ||
+          exports
+            context-free syntax
+              #Cfg-elems-star1 #Cfg-elems-star2 -> #ResultSort
+
+
+ [c5]  cfg-cons2sdf( #ResultSort = #G-term, #U ) = 2sdf( #ResultSort = #G-term, #U)
+
+ [c6]  cfg-cons2sdf( #ResultSort =  , #U ) = nil
+
+
+
+  %% Extract the context-free definition of #Sort from a Section.
+
+  [m1]  nr-of-defining-rules( sect-sim(Section), #Sort ) = 1,
+        Section =
+          exports
+            SDF-Section*
+            context-free syntax
+              #Cf-rules-star1
+              #Cfg-elems-star -> #Sort'
+              #Cf-rules-star2
+            SDF-Section'*,
+        #Sort = #Sort'
+        =========================================================
+        main-cfg-def( Section, #Sort ) = #Cfg-elems-star
+
+  [m2]  nr-of-defining-rules( sect-sim(Section), #Sort ) != 1
+        ==========================================================
+        main-cfg-def( Section, #Sort ) = #Sort
+
+
+  %% Extract the lexical definition of #Sort from a Section.
+
+  [m3]  nr-of-defining-rules( sect-sim(Section), #Sort ) = 1,
+        Section =
+          exports
+            SDF-Section*
+            lexical syntax
+              #Lex-rules-star1
+              #Lex-elems-star -> #Sort'
+              #Lex-rules-star2
+            SDF-Section'*,
+        #Sort = #Sort'
+        =========================================================
+        main-lex-def( Section, #Sort ) = #Lex-elems-star
+
+  [m4]  nr-of-defining-rules( sect-sim(Section), #Sort ) != 1
+        ==========================================================
+        main-lex-def( Section, #Sort ) = #Sort
+
+
+
+  %% Extract the auxiliary sections needed to define #Sort.
+
+  [m5]  nr-of-defining-rules( sect-sim(Section), #Sort ) = 1,
+        Section =
+          exports
+            SDF-Section*
+            context-free syntax
+              #Cf-rules-star
+              #Cfg-elems-star -> #Sort'
+              #Cf-rules-star'
+            SDF-Section'*,
+        #Sort = #Sort'
+        =========================================================
+        aux-sections( Section, #Sort ) =
+          make-sections( SDF-Section* ) ||
+          make-sections-from-cfg( #Cf-rules-star #Cf-rules-star' ) ||
+          make-sections( SDF-Section'* )
+
+  [m6]  nr-of-defining-rules( sect-sim(Section), #Sort ) = 1,
+        Section =
+          exports
+            SDF-Section*
+            lexical syntax
+              #Lex-rules-star
+              #Lex-elems-star -> #Sort'
+              #Lex-rules-star'
+            SDF-Section'*,
+         #Sort = #Sort'
+        =========================================================
+        aux-sections( Section, #Sort ) =
+          make-sections( SDF-Section* ) ||
+          make-sections-from-lex( #Lex-rules-star #Lex-rules-star' ) ||
+          make-sections( SDF-Section'* )
+
+ [m7]   aux-sections( Section, #Sort ) = declare-sort(#Sort) || Section
+        when nr-of-defining-rules( sect-sim(Section), #Sort ) = 2
+
+
+ [l1]  easy-SDF-list( < #Sort < #String #Sort > * > ) = true
+
+
+
+
+
+  %%  N.B. nr-of-defining rules should be called *after* simplifying !!
+
+ [n1]   nr-of-defining-rules(
+        exports
+          SDF-Section*
+          lexical syntax
+            #Lex-rules-star
+            #Lex-elems-star  -> #Sort
+            #Lex-rules-star'
+            #Lex-elems-star' -> #Sort
+            #Lex-rules-star''
+          SDF-Section'*,
+        #Sort) = 2
+
+ [n2]  nr-of-defining-rules(
+        exports
+          SDF-Section*
+          context-free syntax
+            #Cf-rules-star
+            #Cfg-elems-star  -> #Sort
+            #Cf-rules-star'
+            #Cfg-elems-star' -> #Sort
+            #Cf-rules-star''
+          SDF-Section'*,
+        #Sort) = 2
+
+ [n3] nr-of-defining-rules(
+        exports
+          SDF-Section*
+          lexical syntax
+            #Lex-rules-star
+            #Lex-elems-star -> #Sort
+            #Lex-rules-star'
+          SDF-Section'*
+          context-free syntax
+            #Cf-rules-star
+            #Cfg-elems-star -> #Sort
+            #Cf-rules-star'
+          SDF-Section''*
+        , #Sort ) = 2
+
+ [default-nr-of-defining-rules]
+        nr-of-defining-rules(Section, #Sort) = 1
+
+
+ [c2]  is-chain-rule( #Sort ) = true
+
+
+ [c3]  declare-sort( #Sort ) =
+          exports
+            sorts #Sort
+
+ [c5]  tuple-brackets( #Sort ) =
+          exports context-free syntax "<" #Sort ">" -> #Sort {bracket}
+
+ [c6]  constructor-brackets( #Sort ) =
+          exports context-free syntax "[" #Sort "]" -> #Sort {bracket}
+
+ [c7]  declare-sort-bracketed( #Sort ) =
+         declare-sort(#Sort) || tuple-brackets(#Sort) || constructor-brackets(#Sort)
+
+ [c8]  declare-sort-tuplified( #Sort ) =
+         declare-sort( #Sort ) || tuple-brackets(#Sort)
+
+
+ %% Derive a sort name for auxiliary sorts.
+ %% try to derive meaningful names (for syntax directed editing)
+ %% e.g. S0 = (S1 | S2)*  will result in
+ %%  S1-OR-S2 *   -> S0
+ %%  S1           -> S1-OR-S2
+ %%  S2           -> S1-OR-S2
+
+ [d0]   get-sort( #G-term, #U ) = append2(#U, derive-aux-sort-name(#G-term))
+
+ [d1]   derive-aux-sort-name( #Sort ) = #Sort
+ [d2]   derive-aux-sort-name( #String ) = 2upper(#String)
+ [d3]   derive-aux-sort-name( #Character ) = C
+ [d4]   derive-aux-sort-name( #G-term1 | #G-term2 ) =
+          append2(derive-aux-sort-name(#G-term1),
+            append2(OR, derive-aux-sort-name(#G-term2)))
+ [d5]   derive-aux-sort-name( [[ #G-terms-plus ]] ) =
+          derive-aux-sort-name( #G-terms-plus )
+ [d6]   derive-aux-sort-name( < #G-terms-plus > ) =
+          derive-aux-sort-name( #G-terms-plus )
+ [d7]   derive-aux-sort-name( #G-term ? ) =
+          append2(derive-aux-sort-name(#G-term), OPT)
+ [d8]   derive-aux-sort-name( #G-term * ) =
+          append1(derive-aux-sort-name(#G-term), STAR)
+ [d9]   derive-aux-sort-name( #G-term + ) =
+          append1(derive-aux-sort-name(#G-term), PLUS)
+[d10]   derive-aux-sort-name( #G-term #G-terms-plus ) =
+          append2(
+            derive-aux-sort-name(#G-term),
+            derive-aux-sort-name(#G-terms-plus) )
+
+
+ %% Check whether a grammar term describes a lexical notion.
+ %% N.B. sorts Digit, Letter, UppercaseLetter, LowercaseLetter,
+ %% and Graphic-Character are considered "Built-in" in the meta-notation,
+ %% and are defined in module StandardLexical which is imported in
+ %% every SDF module derived from a MetaNotation grammar section
+
+ [l1]  is-lexical( Digit ) = true
+ [l2]  is-lexical( Letter ) = true
+ [l3]  is-lexical( UppercaseLetter ) = true
+ [l4]  is-lexical( LowercaseLetter ) = true
+ [l5]  is-lexical( Graphic-Character ) = true
+ [default-lexical-sort] is-lexical( #Sort ) = false
+ [l5]  is-lexical( #String ) = false
+ [l6]  is-lexical( #Character ) = true
+ [l7]  is-lexical( #G-term1 | #G-term2 ) = is-lexical(#G-term1) and is-lexical(#G-term2)
+ [l8]  is-lexical( [[ #G-terms-plus ]] ) = is-lexical( #G-terms-plus )
+ [l9]  is-lexical( < #G-terms-plus > ) = is-lexical(  #G-terms-plus )
+[l10]  is-lexical( #G-term ? ) = is-lexical( #G-term )
+[l11]  is-lexical( #G-term * ) = is-lexical( #G-term )
+[l12]  is-lexical( #G-term + ) = is-lexical( #G-term )
+[l13]  is-lexical( #G-term #G-terms-plus ) =
+         is-lexical(#G-term) and is-lexical(#G-terms-plus)

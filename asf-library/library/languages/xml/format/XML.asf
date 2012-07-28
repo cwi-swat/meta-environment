@@ -1,0 +1,45 @@
+equations
+  
+[xmldecl2box-1]
+  <?xml &VersionInfo &EncodingDecl? &SDDecl? ?> =
+  < H ["<?xml" [&VersionInfo] [&EncodingDecl?] [&SDDecl?] "?>"] >
+
+[versioninfo2box-1]
+  version="&VersionNum" =
+  < H hs=0 [ "version"  "=" "\"" [&VersionNum] "\""] >
+
+[encodingdecl2box-1]
+  encoding="&EncName" =
+  < H hs=0 [ "encoding" "=" "\"" [&EncName] "\""] >
+
+[sddecl2box-1]
+  standalone="yes" = < "standalone=\"yes\"" >
+
+[sddecl2box-2]
+  standalone="no" = < "standalone=\"no\"" >
+
+[attribute2box-1]
+  &Name=&AttValue =
+  < H hs=0 [[&Name] "=" [&AttValue] ] >
+
+[stag2box-1]
+  < &Name &Attribute* > =
+  < H [H hs=0 ["<" [&Name]]
+                   [&Attribute*]
+               ">"] >
+
+[etag2box-1]
+  </ &Name > =
+  < H hs=0 ["</"[&Name] ">" ] >
+
+[emptyelementtag2box-1]
+  < &Name &Attribute* /> =
+  < H [H hs=0 ["<" [&Name]] [&Attribute*] "/>"] >
+
+
+[nonemptyelement2box-1]
+  &STag &Content* &ETag =
+  <HOV vs=1 [ [&STag] [ <|&Content*|> ] [&ETag]] >
+
+[content2box-1]
+  <| &Content* |> = <HOV hs=0 vs=1 [I is=2 [ HOV hs=1 vs=1 [G gs=4 op=H hs=0 [[&Content*]]]] ]>

@@ -1,0 +1,11 @@
+module Haskell-Case-Alternatives
+imports ExtraSepLists0[Alt ";" Alts]
+exports
+  context-free syntax
+    "{" Alts "}" 			-> Altslist
+    Infixexp OptSig "->" Exp       	-> Alt   {cons("Alt")}
+    Infixexp OptSig "->" Exp Where 	-> Alt   {cons("AltW")}
+
+    Infixexp OptSig Gdpat+   Where? 	-> Alt   {cons("GdAlt")}
+    "|" Quals "->" Exp                  -> Gdpat {cons("GdPat")}
+

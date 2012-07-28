@@ -1,0 +1,37 @@
+module FactsStructure
+
+imports 
+  Fact
+  containers/Set[InvocationFact]
+  containers/Set[CreationFact]
+  containers/Set[SendFact]
+  containers/Set[ReceiveFact]
+
+exports
+  sorts InvocationFacts CreationFacts SendFacts ReceiveFacts
+  context-free syntax
+    Set[[InvocationFact]] -> InvocationFacts
+    Set[[CreationFact]]   -> CreationFacts
+    Set[[SendFact]]       -> SendFacts
+    Set[[ReceiveFact]]    -> ReceiveFacts
+
+  sorts ProcessFacts
+  context-free syntax
+    "process-facts" "[" 
+      declaration: DeclarationFact "," 
+      creations:   CreationFacts "," 
+      invocations: InvocationFacts "," 
+      sends:       SendFacts "," 
+      receive:     ReceiveFacts
+    "]" -> ProcessFacts
+
+  sorts ToolFacts
+  context-free syntax
+    "tool-facts" "[" "]" -> ToolFacts
+
+  sorts StartupFacts
+  context-free syntax
+    "startup-facts" "[" 
+      creations: CreationFacts 
+    "]" -> StartupFacts
+   

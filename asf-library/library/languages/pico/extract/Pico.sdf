@@ -1,0 +1,40 @@
+module languages/pico/extract/Pico
+
+imports utilities/RStores
+imports languages/pico/syntax/Pico
+imports basic/Integers
+imports utilities/Parsing[PICO-ID]
+imports utilities/Parsing[STATEMENT]
+imports utilities/Parsing[EXP]
+imports utilities/PosInfo[STATEMENT]
+imports utilities/PosInfo[EXP]
+
+hiddens
+context-free syntax
+  controlFlow(PROGRAM, RStore)        -> RStore  
+  statementHistogram(PROGRAM, RStore) -> RStore  
+
+context-free syntax
+  countStatements(PROGRAM, RStore)   -> RStore               {traversal(accu, bottom-up, continue)} 
+  countStatements(STATEMENT, RStore) -> RStore               {traversal(accu, bottom-up, continue)} 
+  cflow({STATEMENT ";"}*)           -> <RElem,RElem,RElem>                                        
+
+context-free start-symbols
+  PROGRAM RStore RElem
+
+variables
+  "Program" [0-9]* -> PROGRAM           
+  "Decls" [0-9]*   -> DECLS             
+  "Stat" [0-9]*    -> STATEMENT         
+  "Stat*" [0-9]*   -> {STATEMENT ";"}*  
+  "Stat+" [0-9]*   -> {STATEMENT ";"}+  
+  "Exp" [0-9]*     -> EXP               
+  "Id" [0-9]*      -> PICO-ID           
+  "Entry" [0-9]*   -> RElem             
+  "Exit" [0-9]*    -> RElem             
+  "Rel" [0-9]*     -> RElem             
+  "Control" [0-9]* -> RElem             
+
+variables
+  "Store"[0-9]* -> RStore {strict}
+  "Int" [0-9]*    -> Integer      {strict} 

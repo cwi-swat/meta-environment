@@ -1,0 +1,103 @@
+equations
+
+%% remember to strip off constraints
+[flatten-fdl-1]	
+	flatten-fdl($featurename, 
+		$featuredefinition*1 
+		$featurename: $featureexpression 
+		$featuredefinition*2 $constraint*) = 
+		expand-feature-expression($featureexpression,
+				$featuredefinition*1 
+				$featuredefinition*2)
+
+
+[flatten-fdl-2]	
+	flatten-fdl(
+		$featurename: $featureexpression 
+		$featuredefinition* $constraint*) = 
+		flatten-fdl($featurename, 
+			$featurename: $featureexpression 
+			$featuredefinition* $constraint*)
+
+%%			substitute($featureexpression, 
+%%				$featuredefinition*1
+%%				$featuredefinition*2)
+
+%% this uses the fact that a topdown traversal continues on its
+%% reduct. And is not supported in the compiler.
+[substitute-trv]	
+	substitute($featurename, 
+		$featuredefinition*1 
+		$featurename: $featureexpression 
+		$featuredefinition*2) = $featureexpression
+
+
+[expand-feature-expression-1]
+	expand-feature-expression($featurename,
+		$featuredefinition*1 
+		$featurename: $featureexpression 
+		$featuredefinition*2) = 
+			expand-feature-expression($featureexpression,		
+				$featuredefinition*1 
+				$featurename: $featureexpression 
+				$featuredefinition*2) 
+
+
+[expand-feature-expression-2]
+	$featureexpression+' := expand-feature-expression-list($featureexpression+, 
+				$featuredefinition*)
+	===
+	expand-feature-expression(more-of($featureexpression+),	$featuredefinition*) =
+		more-of($featureexpression+')
+
+
+[expand-feature-expression-3]
+	$featureexpression+' := expand-feature-expression-list($featureexpression+, 
+				$featuredefinition*)
+	===
+	expand-feature-expression(all($featureexpression+),	$featuredefinition*) =
+		all($featureexpression+')
+
+
+[expand-feature-expression-4]
+	$featureexpression+' := expand-feature-expression-list($featureexpression+, 
+				$featuredefinition*)
+	===
+	expand-feature-expression(one-of($featureexpression+),	$featuredefinition*) =
+		one-of($featureexpression+')
+
+[expand-feature-expression-5]
+	$featureexpression' := expand-feature-expression($featureexpression,$featuredefinition*)
+	====
+	expand-feature-expression($featureexpression?, $featuredefinition*) =
+		$featureexpression'?
+
+[expand-feature-expression-6]
+	$featureexpression' := expand-feature-expression($featureexpression,$featuredefinition*)
+	====
+	expand-feature-expression($featureexpression {$featurename}, $featuredefinition*) =
+		$featureexpression' {$featurename}
+	
+
+[default-expand-feature-expression]
+	expand-feature-expression($featureexpression, $featuredefinition*) = 
+		$featureexpression
+
+
+
+[expand-feature-expression-list-sing]
+	expand-feature-expression-list($featureexpression, $featuredefinition*) =
+		expand-feature-expression($featureexpression, $featuredefinition*)
+
+
+[expand-feature-expression-list-mult]
+	$featureexpression' := expand-feature-expression($featureexpression, 
+						$featuredefinition*),
+	$featureexpression+' := expand-feature-expression-list($featureexpression+, 
+						$featuredefinition*)
+	===
+	expand-feature-expression-list($featureexpression, $featureexpression+, 
+						$featuredefinition*) =
+		$featureexpression', $featureexpression+'
+
+

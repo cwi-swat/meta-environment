@@ -1,0 +1,21 @@
+module Integer-Literal-Expressions
+
+exports
+
+sorts Int-Literal-Expression
+
+lexical syntax
+	[\-]?(Binary-Int|Octal-Int|Decimal-Int|Hex-Int)"i"? -> Int-Literal-Expression
+	"0b"(Binary-Digit | "_")* -> Binary-Int
+	[01] -> Binary-Digit
+	"Oo"(Octal-Digit | "_")* -> Octal-Int
+	[0-7] -> Octal-Digit
+	Decimal-Digit (Decimal-Digit|"_")* -> Decimal-Int
+	"0x"(Hex-Digit | "_")* -> Hex-Int
+	Decimal-Digit | [a-f] -> Hex-Digit
+
+restrictions
+	Binary-Int -/- [01\_]
+	Octal-Int -/- [0-7\_]
+	Decimal-Int -/- [0-9\_]
+	Hex-Int -/- [0-9\_]

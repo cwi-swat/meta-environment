@@ -1,0 +1,18 @@
+equations
+
+%%\smallskip\noindent
+%% Nested lists are flattened by
+
+  [TeX'flat] (t*1 (t*2) t*3) = (t*1 t*2 t*3)
+
+%% This implies that any nested list we generate
+%% is reduced to a flat list.
+
+  [0] clean( (t*0) ) = t* when (t*) := (documentation t*0)
+
+  [0]         rmq("")                    = ()
+  [0]         rmq(strcon(""" chr+ """)) = strcon(chr+)
+  [default-0] rmq(a)                     = ()
+
+  [0] str2cs(a) = cs("\" chr*) when strcon(chr*) := rmq(a)
+

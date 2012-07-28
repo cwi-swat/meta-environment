@@ -1,0 +1,189 @@
+equations
+
+(* -------------------------------------------------------------------------- *)
+(* eval-program : evaluate a program.                                         *)
+
+  [ep1]  _Seq     = get-seq(_Block),
+         _CRec  = [_Id, _Seq],
+         _DElem*   = init(_Block, , , , ),
+         _DRec  = [_Id, ,_DElem*]
+         =========================================================
+         eval-program(PROGRAM _Id; _Block.) = eval(<_CRec, _DRec>)
+
+(* -------------------------------------------------------------------------- *)
+(* eval : do a single evaluation step.                                        *)
+
+(* program terminates when there is no more code to be executed.              *)
+
+  [ev1] eval(<[_Id, ], [_Id, , _DElem*]>) = values(_DElem*)
+
+(* no more code to do in current C-RECORD; return from procedure              *)
+(* remove procedure call statement from previous frame here                   *)
+
+  [ev2] eval(<[_Id, ] [_Id', _Stat;_Stat*] _CRec*, _DRec _DRec+>) =
+            eval(<[_Id', _Stat*] _CRec*, _DRec+>)
+
+(* discard labels                                                             *)
+
+  [ev3]  eval(<[_Id, _Label:_StatAux; _Stat*] _CRec*, _DStack>) =
+           eval(<[_Id, _StatAux; _Stat*] _CRec*, _DStack>)
+
+(* evaluate an assignment                                                     *)
+
+  [ev4]  _Int*    = get-index-list(_Var, _DStack),
+         _Id'     = get-id(_Var),
+         _Value   = eval-exp(_Exp, _DStack),
+         _Type    = type(_Id', _Int*, _DStack),
+         _Value'  = convert(_Type, _Value),
+         _DStack' = update(_Id', _Int*, _DStack, _Value')
+         =====================================================
+         eval(<[_Id, _Var := _Exp; _Stat*] _CRec*, _DStack>) =
+            eval(<[_Id, _Stat*] _CRec*, _DStack'>)
+
+(* evaluate an IF-THEN statement                                              *)
+
+  [ev5]  eval-predicate(_Exp, _DStack) = TRUE
+         =================================================================
+         eval(<[_Id, IF _Exp THEN _Stat*' END; _Stat*] _CRec*, _DStack>) =
+             eval(<[_Id, _Stat*';_Stat*] _CRec*, _DStack>)
+
+  [ev6]  eval-predicate(_Exp, _DStack) = FALSE
+         =================================================================
+         eval(<[_Id, IF _Exp THEN _Stat*' END; _Stat*] _CRec*, _DStack>) =
+               eval(<[_Id, _Stat*] _CRec*, _DStack>)
+
+(* evaluate an IF-THEN-ELSE statement                                         *)
+
+  [ev7]  eval-predicate(_Exp, _DStack) = TRUE
+         =============================================================================
+         eval(<[_Id, IF _Exp THEN _Stat*' ELSE _Stat*'' END; _Stat*] _CRec*, _DStack>) =
+           eval(<[_Id, _Stat*';_Stat*] _CRec*, _DStack>)
+
+  [ev8]  eval-predicate(_Exp, _DStack) = FALSE
+         =====================================================================================
+         eval(<[_Id, IF _Exp THEN _Stat*' ELSE _Stat*'' END; _Stat*] _CRec*, _DStack>) =
+             eval(<[_Id, _Stat*'';_Stat*] _CRec*, _DStack>)
+
+(* evaluate a WHILE statement                                                 *)
+
+  [ev9]  eval-predicate(_Exp, _DStack) = TRUE
+         =================================================================
+         eval(<[_Id, WHILE _Exp DO _Stat*' END;_Stat*] _CRec*, _DStack>) =
+             eval(<[_Id, _Stat*'; WHILE _Exp DO _Stat*' END; _Stat*] _CRec*, _DStack>)
+
+  [ev10] eval-predicate(_Exp, _DStack) = FALSE
+         =================================================================
+         eval(<[_Id, WHILE _Exp DO _Stat*' END;_Stat*] _CRec*, _DStack>) =
+            eval(<[_Id, _Stat*] _CRec*, _DStack>)
+
+(* evaluate a GOTO statement                                                  *)
+
+  [ev11] _Seq = lookup-seq(_Id', _DStack)
+         ==================================================
+         eval(<[_Id, GOTO _Id'; _Stat*] _CRec*, _DStack>) =
+           eval(<[_Id, _Seq] _CRec*, _DStack>)
+
+(* evaluate a WRITE(EXPR) statement                                           *)
+
+  [ev12] _Bool  = eval-exp(_Exp, _DStack),
+         _Dummy = emit-string(external-representation(_Bool))
+         =====================================================
+         eval(<[_Id,  WRITE(_Exp); _Stat*] _CRec*, _DStack>) =
+           eval(<[_Id, _Stat*] _CRec*, _DStack>)
+
+  [ev13] _Value = eval-exp(_Exp, _DStack),
+         _Dummy = emit(_Value)
+         ====================================================
+         eval(<[_Id, WRITE(_Exp); _Stat*] _CRec*, _DStack>) =
+           eval(<[_Id, _Stat*] _CRec*, _DStack>)
+
+(* evaluate a WRITE(STRING) statement                                         *)
+
+  [ev14] _Dummy = emit-string(_String)
+         =============================================================
+         eval(<[_Id, WRITE(_String); _Stat*] _CRec*, _DStack>) =
+           eval(<[_Id, _Stat*] _CRec*, _DStack>)
+
+(* evaluate an ID procedure call statement                                    *)
+(* leave the procedure call statement on the stack, create new frame          *)
+
+  [ev15] lookup-proc(_Id', _DRec*) = _Id''':_Path: PROCEDURE _Id''; _Block,
+         _DElem* = init(_Block, , , , _Path),
+         _Seq = get-seq(_Block),
+         _DRec' = [_Id'', _Path, _DElem*],
+         _CRec' = [_Id'', _Seq]
+         ============================================
+         eval(<[_Id, _Id'; _Stat*] _CRec*, _DRec*>) =
+           eval(<_CRec' [_Id, _Id';_Stat*] _CRec*, _DRec' _DRec*>)
+
+(* evaluate an ID( { ACTUAL "," }+ ) procedure call statement                 *)
+(* leave the procedure call statement on the stack, create new frame          *)
+
+  [ev16] lookup-proc(_Id', _DRec*) = _Id''':_Path: PROCEDURE _Id''(_Formal+); _Block,
+         _DElem*  = init(_Block, _Actual+, _Formal+, _DRec*, _Path),
+         _Seq = get-seq(_Block),
+         _DRec' = [_Id'', _Path, _DElem*],
+         _CRec' = [_Id'',  _Seq]
+         =======================================================
+          eval(<[_Id, _Id'(_Actual+); _Stat*] _CRec*, _DRec*>) =
+           eval(<_CRec' [_Id, _Id'(_Actual+); _Stat*] _CRec*, _DRec' _DRec*>)
+
+(* evaluate a READ(VAR) statement                                             *)
+
+  [ev17]  _Int*      = get-index-list(_Var, _DRec*),
+          _Id'       = get-id(_Var),
+          _Type      = type(_Id', _Int*, _DRec*),
+          _Value'    = read-value(_Type),
+          _DRec*'    = update(_Id', _Int*, _DRec*, _Value')
+          ===================================================
+          eval(<[_Id,  READ(_Var); _Stat*] _CRec*, _DRec*>) =
+            eval(<[_Id, _Stat*] _CRec*, _DRec*'>)
+
+(* evaluate an empty statement                                                *)
+
+  [ev18]   eval(<[_Id, ; _Stat*] _CRec*, _DRec*>) =
+             eval(<[_Id, _Stat*] _CRec*, _DRec*>)
+
+(* -------------------------------------------------------------------------- *)
+(* eval-predicate : test the predicate of a conditional statement             *)
+
+
+  [evp]  eval-predicate(_Expr, _DStack) = eval-exp(_Expr, _DStack)
+
+(* -------------------------------------------------------------------------- *)
+(* values : remove procedure definitions and label entries from the list of   *)
+(* elements                                                                   *)
+
+  [val1]  values() =
+
+  [val2]  values(_DElem*) = _DElem*'
+          ================================================
+          values(_Id:_Value _DElem*) = _Id:_Value _DElem*'
+
+  [val3]  values(_Id:_Path:_ProcDecl _DElem*) = values(_DElem*)
+
+  [val4]  values(_Id:_Seq _DElem*) = values(_DElem*)
+
+(* -------------------------------------------------------------------------- *)
+(* convert : perform INTEGER to REAL conversion, if necessary                 *)
+
+  [con1]  convert(REAL, int-const(_Char+)) = real-const(_Char+ "." "0")
+
+  [con2]  convert(REAL, _RealConst) = _RealConst
+
+  [con3]  convert(_Type, _Value) = _Value when _Type != REAL
+
+
+(* -------------------------------------------------------------------------- *)
+(* get-seq : extract the sequence from a block                                *)
+
+  [gs1]   get-seq(BEGIN _Seq END) = _Seq
+  [gs2]   get-seq(DECLARE _DeclList BEGIN _Seq END) = _Seq
+
+(* -------------------------------------------------------------------------- *)
+(* external-representation : external representation of Booleans is T or F    *)
+
+  [ex1]  external-representation(TRUE)  = "T"
+  [ex2]  external-representation(FALSE) = "F"
+
+(* -------------------------------------------------------------------------- *)

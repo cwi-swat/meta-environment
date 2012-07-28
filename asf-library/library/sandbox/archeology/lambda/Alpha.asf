@@ -1,0 +1,7 @@
+equations
+
+  [1]  alpha-norm(E) = alpha-norm(E, get-fresh(ww, E))
+  [2]  alpha-norm(E1 E2, V) = alpha-norm(E1,V) alpha-norm(E2,V)
+  [3]  alpha-norm(lambda V1 . E, V2) =
+	 alpha( lambda V1 . alpha-norm(E, get-fresh(prime(V2),E)), V2 )
+  [4]  alpha-norm(V1, V2) = V1

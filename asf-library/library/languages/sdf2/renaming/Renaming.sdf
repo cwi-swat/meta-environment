@@ -1,0 +1,13 @@
+module languages/sdf2/renaming/Renaming
+imports languages/sdf2/renaming/Kernel
+exports
+  context-free syntax
+    "(" Renamings   ")" Renamings -> Renamings
+
+hiddens
+  variables
+    [p][0-9\']*         -> Production
+    "_"[ABC][0-9\']*    -> Symbol
+    "'r"[0-9\']*        -> Renamings
+    "'r""*"[0-9\']*     -> Renaming*
+    "'r""+"[0-9\']*     -> Renaming+ 

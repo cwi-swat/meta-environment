@@ -1,0 +1,50 @@
+equations
+
+[run-test]
+    X1 == X2
+    ===>
+    assert X1 = X2 String
+      = pass
+
+[default-run-test]
+    assert X1 = X2 String
+      = FAIL: String
+
+[run-test]
+    X1 != X2
+    ===>
+    assert X1 != X2 String
+      = pass
+
+[default-run-test]
+    assert X1 != X2 String
+      = FAIL: String
+
+
+[run-suite]
+  TestResult*
+    = TestResult*
+=====
+summarize (TestResult*)
+=====
+
+[compute-summary]
+  <Integer1,Integer2> := count-failures(TestResult*),
+  Integer2 != 0
+  ===>
+  summarize(TestResult*)
+    = FAIL Integer2 out of Integer1 tests failed
+
+[default-compute-summary]
+  summarize(TestResult*)
+    = PASS
+
+[count-fails]
+  count-failures( ) = <0,0>
+[count-fails]
+  count-failures( pass TestResult* ) = <Integer1 + 1, Integer2>
+    when <Integer1,Integer2> := count-failures( TestResult* )
+
+[count-fails]
+  count-failures( FAIL : String TestResult* ) = <Integer1 + 1, Integer2 + 1>
+     when <Integer1, Integer2> := count-failures( TestResult* )

@@ -1,0 +1,64 @@
+equations
+
+{[1] int-const(_Ch+) = INTEGER [2] real-const(_Ch+) = REAL [3] bool-const(_Ch+) = BOOLEAN}
+
+[1] _IntConst = INTEGER [2] _RealConst = REAL [3] _BoolConst = BOOLEAN
+
+{ Changed 03/12/92 FT
+
+[T0] tenv([_D*; _Id : _Type'; _D*'] [_D*''; _Id : _Type ; _D*'''] _C*) =
+     tenv([_D*; _D*'] [_D*''; _Id : _Type ; _D*'''] _C*)
+
+[T1] tenv([_D*; _Id : LABEL; _D*'] [_D*''] _C*) = tenv([_D*; _D*'] [_D*''] _C*)
+
+[default-T2] tenv([_D*] [_D*'] _C*) = tenv([_D* ; _D*'] _C*)
+
+[T3] tenv(_Tenv) = _Tenv
+
+}
+
+{ occurs : check if an ID occurs in a TENV }
+
+[O1] occurs(_Id, [_Id : _Type; _D*]) = true
+
+[O2] occurs(_Id, []) = false
+
+[O3] occurs(_Id, [_Id' : _Type; _D*]) = occurs(_Id, [_D*])   when _Id != _Id'
+
+
+{ merge : combine two TENVs to one effective TENV }
+
+[M1] merge( [], _Tenv ) = _Tenv
+
+[M2] occurs(_Id, [_D*']) = true,
+     _Type != LABEL
+     =======================================================
+     merge([_Id:_Type; _D*], [_D*']) = merge( [_D*], [_D*'])
+
+[M3] occurs(_Id, [_D*']) = false,
+     merge([_D*], [_D*']) = [_D*''],
+     _Type != LABEL
+     ====================================================
+     merge([_Id:_Type; _D*], [_D*']) = [_Id:_Type; _D*'']
+
+[M4] merge([_Id:LABEL; _D*], _Tenv) = merge([_D*], _Tenv)
+
+
+{ tenv : combine a list of TENVs to one effective TENV }
+
+[T1] tenv(_Tenv _Tenv' _C*) = tenv(merge(_Tenv, _Tenv') _C*)
+
+[T2] tenv(_Tenv) = _Tenv
+
+
+[E0] _Tenv._Type = _Type
+
+[E1] [_D*; _Id : _Type ; _D*']._Id = _Type
+
+[E2] [_D*; _Id' : _Type ;_D*']._Id = [_D*;_D*']._Id  when _Id != _Id'
+
+{ [E0] [_D*; _Id : _Type ; _D*']._Id = [_D*; _Id : _Type ; _D*']._Type }
+
+[E3] _Tenv.(_Var [ _Expr' ]) = (_Tenv._Var)[ _Tenv._Expr' ]
+
+[E4] (ARRAY[_IntConst .. _IntConst'] OF _Type) [ INTEGER ] = _Type

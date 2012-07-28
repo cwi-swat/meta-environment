@@ -1,0 +1,32 @@
+module languages/casl/tocasfix/Lib
+
+imports languages/casl/tocasfix/Arch languages/casl/syntax/Lib
+
+exports
+   context-free syntax
+    "direct-link"       -> AFun
+    "indirect-link"     -> AFun
+    "lib-defn"          -> AFun
+
+
+    c2a-Path(Path)                                     -> ALit
+    c2a-Lib-Defn(Lib-Defn)                             -> ATerm
+    c2a-Lib-Id(Lib-Id)                                 -> ATerm
+    c2a-Lib-Item(Lib-Item)                             -> ATerm
+    c2a-Lib-Item-plus(Lib-Item+)                       -> ATermList
+    c2a-Lib-Name(Lib-Name)                             -> ATerm
+
+hiddens
+  variables
+    "var-Lib-Id"[0-9]*             -> Lib-Id
+    "var-Lib-Item"[0-9]*           -> Lib-Item
+    "var-Lib-Item+"[0-9]*          -> Lib-Item+
+    "var-Lib-Name"[0-9]*           -> Lib-Name
+    "var-Opt-End"[0-9]*            -> Opt-End
+    "var-Path"[0-9]*               -> Path
+    "var-Spec-Defn"[0-9]*          -> Spec-Defn
+
+    "T" [0-9]*    -> ATerm
+    "Tl"[0-9]*    -> ATermList
+    "L" [0-9]*    -> {ATerm ","}*
+    "S" [0-9]*    -> CHAR*

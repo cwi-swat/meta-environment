@@ -1,0 +1,64 @@
+equations
+
+  [cc-1'1] check-constructors(Definition, InfoMsgTuple) = 
+             check-module-constructors(Definition, InfoMsgTuple)
+	
+  [cmc-1'1] $ModuleId := get-module-name(Module),
+       
+            imports(Import*) := get-all-imports(Module),
+            constructors(SymbolCons*1) := 
+              get-constructors(Import*, 
+                             get-module-info(InfoMsgTuple1)),
+
+            [constructors(SymbolCons*2), Msgs1] := 
+              get-constructor-symbol-pairs(Module, 
+                                         [constructors(SymbolCons*1), ], 
+                                         $ModuleId),
+
+            InfoMsgTuple2 := put-messages($ModuleId, Msgs1, InfoMsgTuple1),
+
+            ModuleInfoTable1 := get-module-info(InfoMsgTuple2),
+            ModuleInfoTable2 := put-constructor-info($ModuleId, 
+                                 constructors(SymbolCons*2), 
+                                 ModuleInfoTable1),
+            InfoMsgTuple3 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple2)
+            =================================================================
+            check-module-constructors(Module, InfoMsgTuple1) = InfoMsgTuple3
+
+  [gcsp-1'3] get-constructor-symbol-pairs(Symbol* -> Symbol Attrs,
+                                          ConsMsgTuple,
+                                          $ModuleId) =
+               get-constructor-symbol-pairs2(Attrs, ConsMsgTuple, 
+                                             $ModuleId, Symbol,
+                                             Symbol* -> Symbol Attrs)
+
+  [gcsp-1'4] get-constructor-symbol-pairs($FuncName(Symbol,*) -> Symbol Attrs,
+                                          ConsMsgTuple,
+                                          $ModuleId) =
+               get-constructor-symbol-pairs2(Attrs, ConsMsgTuple, 
+                                             $ModuleId, Symbol,
+                                             $FuncName(Symbol,*) -> Symbol Attrs)
+
+equations
+
+  [gcsp-2'1] cons( $AFun ) := $Attribute,
+             contains(Symbol, $AFun, ConstructorSet) == true,
+             $AFun2 := get($AFun, ConstructorSet)
+             ====>
+             get-constructor-symbol-pairs2($Attribute, 
+                                           [ConstructorSet, Msgs], 
+                                           $ModuleId, Symbol, Prod) =
+               [ConstructorSet, 
+                Msgs, 
+                warning("constructor used more than once",
+                      [localized("first occurrence", get-location($AFun)),
+                       localized("second occurrence", get-location($AFun2))])]
+
+
+
+  [gcsp-2'2] contains(Symbol, $AFun, ConstructorSet) == false
+             ==================================================
+             get-constructor-symbol-pairs2(cons( $AFun ), 
+                                           [ConstructorSet, Msgs], 
+                                           $ModuleId, Symbol, Prod) =
+               [add(Symbol, $AFun, ConstructorSet), Msgs]

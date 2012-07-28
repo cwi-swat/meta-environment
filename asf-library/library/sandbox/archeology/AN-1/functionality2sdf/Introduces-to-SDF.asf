@@ -1,0 +1,32 @@
+equations
+
+  [1]  intro2sdf( #Sym, #Sym'+ ) =
+          sym2sdf( #Sym ) || intro2sdf(#Sym'+)
+
+
+  [2]  intro2sdf( #Sym ) = sym2sdf( #Sym )
+
+  [3]  sym2sdf( #UpperAlpha ) =  do-sort( #UpperAlpha )
+
+  [4]  #UpperAlpha = 2upper(#LowerAlpha)
+       =================================
+       sym2sdf( #LowerAlpha ) =
+         do-sort( #UpperAlpha )
+         ||
+         exports context-free syntax #LowerAlpha -> #UpperAlpha
+
+
+  [default-sym2sdf] sym2sdf( #Sym ) = nil
+
+  [5]  do-sort( #UpperAlpha ) =
+          exports
+            sorts #UpperAlpha
+            context-free syntax
+              #UpperAlpha "|" #UpperAlpha       -> #UpperAlpha
+              #UpperAlpha "&" #UpperAlpha       -> #UpperAlpha
+              "(" { #UpperAlpha "," }+ ")"      -> #UpperAlpha
+              "nothing"                         -> #UpperAlpha
+
+              %% can easily be extended with:
+              %% #UpperAlpha "is" #UpperAlpha      -> Truth-Value
+              %% "if" Truth-Value "then" #UpperAlpha "else" #UpperAlpha "fi" -> #UpperAlpha

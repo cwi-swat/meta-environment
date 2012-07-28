@@ -1,0 +1,25 @@
+module ilasm/Property-Declarations
+
+imports ilasm/External-Source-Declarations
+
+exports
+
+sorts PropHead PropAttr PropAttrs PropDecls PropDecl
+
+context-free syntax
+	".property" PropAttrs Type Id "(" SigArgs ")" InitOpt -> PropHead
+
+	PropAttr* -> PropAttrs
+
+	"rtspecialname" -> PropAttr
+	"specialname" -> PropAttr
+
+	PropDecl* -> PropDecls
+
+	".set" MethodRef -> PropDecl
+	".get" MethodRef -> PropDecl
+	".other" MethodRef -> PropDecl
+	CustomAttrDecl -> PropDecl
+	ExtSourceSpec -> PropDecl
+	LanguageDecl -> PropDecl
+

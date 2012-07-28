@@ -1,0 +1,21 @@
+module languages/sdf2/renaming/Sdf2-Renaming
+
+imports languages/sdf2/syntax/Sdf2
+        languages/sdf2/renaming/Priority
+        languages/sdf2/renaming/Regular
+        languages/sdf2/renaming/Lifting
+        languages/sdf2/renaming/Literals
+        languages/sdf2/renaming/CC
+        languages/sdf2/renaming/Sorts
+        languages/sdf2/renaming/Start-Symbols
+        languages/sdf2/renaming/Restrictions
+        languages/sdf2/renaming/Modular
+        languages/sdf2/renaming/Aliases
+        languages/sdf2/renaming/Labels
+
+hiddens
+  variables
+    "pr""*"[0-9\']*   -> {Priority ","}* 
+    "restr*"[0-9\']*    -> Restriction* 
+    "'r"[0-9\']*   -> Renamings 
+

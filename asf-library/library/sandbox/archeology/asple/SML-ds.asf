@@ -1,0 +1,128 @@
+equations
+
+[Es1] es[Coms] in <valenv(), stack(), Inp, output(), lenv()> =
+      <Valenv1, Stack, Inp1, Outp, Le>
+      ========================================================
+      es[Coms] with Inp = Outp
+
+
+[Es2] es[] in SML-State = SML-State
+
+[Es3] es[ldci Nat-con; Coms] in
+       <Valenv, stack(Vals), Inp, Outp, Le> =
+      es[Coms] in
+        <Valenv, stack(Nat-con,Vals), Inp, Outp, Le>
+
+[Es4] es[ldci Bool-con; Coms] in
+         <Valenv, stack(Vals), Inp, Outp, Le> =
+      es[Coms] in <Valenv, stack(Bool-con,Vals), Inp, Outp, Le>
+
+[Es5] es[lao Id; Coms] in
+        <Valenv, stack(Vals), Inp, Outp, Le> =
+      es[Coms] in <Valenv, stack(Id,Vals), Inp, Outp, Le>
+
+[Es6] lookup Id in Valenv = Val
+      ==========================================
+      es[ldo Id; Coms] in
+        <Valenv, stack(Vals), Inp, Outp, Le> =
+      es[Coms] in <Valenv, stack(Val,Vals), Inp, Outp, Le>
+
+[Es7] lookup Id in Valenv = Val
+      ===================================================
+      es[ind ; Coms] in
+        <Valenv, stack(Id,Vals), Inp, Outp, Le> =
+      es[Coms] in <Valenv, stack(Val,Vals) , Inp, Outp, Le>
+
+[Es8]  es[sro Id; Coms] in
+         <Valenv, stack(Val,Vals), Inp, Outp, Le> =
+         es[Coms] in < modify (Id: Val) in Valenv ,
+                                stack(Vals), Inp, Outp, Le>
+
+[Es9] es[sto; Coms] in
+        <Valenv, stack(Val,Id,Vals), Inp, Outp, Le> =
+          es[Coms] in <modify (Id: Val) in Valenv ,
+                                stack(Vals), Inp, Outp, Le>
+
+[Es10] es[s-read; Coms] in
+        <Valenv, stack(Id,Vals), input(Nat-con, IO-vals1), Outp, Le> =
+        es[Coms] in <modify (Id: Nat-con) in Valenv,
+                          stack(Vals), input(IO-vals1), Outp, Le>
+
+[Es11] es[s-read; Coms] in
+        <Valenv, stack(Id,Vals), input(Bool-con, IO-vals1), Outp, Le> =
+        es[Coms] in <modify (Id: Bool-con) in Valenv,
+                         stack(Vals), input(IO-vals1), Outp, Le>
+
+[Es12] es[s-write; Coms] in
+        <Valenv1, stack(IO-val,Vals), Inp, output(IO-vals1), Le> =
+         es[Coms] in
+        <Valenv1,stack(Vals), Inp, output(IO-val, IO-vals1), Le>
+
+[Es13] es[nop; Coms] in SML-State = es[Coms] in SML-State
+
+
+[Es14] cons-env (Coms) = Le1,
+       es[Coms] in <Valenv, Stack, Inp, Outp, Le1> =
+                          <Valenv1, Stack1, Inp1, Outp1, Le2>
+       =================================================
+       es[block(Coms); Coms1] in <Valenv, Stack, Inp, Outp, Le> =
+           es[Coms1] in <Valenv1, Stack1, Inp1,Outp1, Le>
+
+[Es15] lookup Nat-con in Le = Coms1
+        ========================================================
+        es[ujp Nat-con; Coms] in <Valenv, Stack, Inp, Outp, Le> =
+           es[Coms1] in <Valenv, Stack, Inp, Outp, Le>
+
+[Es16] es[fjp Nat-con; Coms] in
+               <Valenv,stack(true,Vals), Inp, Outp, Le> =
+       es[Coms] in <Valenv,stack(Vals), Inp, Outp, Le>
+
+[Es17] lookup Nat-con in Le = Coms1
+       ===================================================
+       es[fjp Nat-con; Coms] in
+            <Valenv, stack(false,Vals), Inp, Outp, Le> =
+       es[Coms1] in <Valenv, stack(Vals), Inp, Outp, Le>
+
+[Es18] lookup Nat-con in Le = Coms1
+       ===================================================
+       es[tjp Nat-con; Coms] in
+              <Valenv, stack(true,Vals), Inp, Outp, Le> =
+       es[Coms1] in <Valenv,stack(Vals), Inp, Outp, Le>
+
+[Es19] es[tjp Nat-con; Coms] in
+              <Valenv, stack(false,Vals), Inp, Outp, Le> =
+       es[Coms] in <Valenv,stack(Vals), Inp, Outp, Le>
+
+[Es20] es[lbl Nat-con;  Coms] in SML-State =
+                es[Coms] in SML-State
+
+[Es21] es[Op Val1, Val2] = Val
+       ===================================================
+       es[Op; Coms] in
+           <Valenv, stack(Val1,Val2, Vals), Inp,Outp, Le> =
+       es[Coms] in <Valenv, stack(Val, Vals), Inp, Outp, Le>
+
+
+[Es22]  es[+ Nat-con1, Nat-con2] = Nat-con1 + Nat-con2
+
+[Es23]  es[* Nat-con1, Nat-con2] = Nat-con1 * Nat-con2
+
+[Es24]  es[& Bool-con1, Bool-con2] = Bool-con1 & Bool-con2
+
+[Es25]  es[| Bool-con1, Bool-con2] = Bool-con1 | Bool-con2
+
+[Es26]  Val1 = Val2
+        ===============================
+        es[= Val1, Val2] = true
+
+[Es27]  Val1 != Val2
+       ===============================
+        es[= Val1, Val2] = false
+
+[Es28]  Val1 = Val2
+       ===============================
+        es[!= Val1, Val2] = false
+
+[Es29]  Val1 != Val2
+       ===============================
+        es[!= Val1, Val2] = true

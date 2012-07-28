@@ -1,0 +1,282 @@
+equations
+
+(* -------------------------------------------------------------------------- *)
+(* constants                                                                  *)
+
+  [ee1]  eval-exp(_Bool, _DStack) = _Bool
+  [ee2]  eval-exp(_Int, _DStack)  = _Int
+  [ee3]  eval-exp(_Real, _DStack) = _Real
+
+(* -------------------------------------------------------------------------- *)
+(* variable lookup                                                            *)
+
+  [ee4]  _Int* = get-index-list(_Var, _DStack),
+         _Id   = get-id(_Var)
+         =====================================================
+         eval-exp(_Var, _DStack) = lookup(_Id, _Int*, _DStack)
+
+(* -------------------------------------------------------------------------- *)
+(* simplification of unary - in integer and real expressions                  *)
+(* Problem:  conditions over sort <CHAR> are not possible                     *)
+
+  [ee5]  - - _Exp = _Exp
+
+  [ee6]  - int-const("-" _Char+) = int-const(_Char+)
+
+  [ee7]  int-const("+" _Char+) = int-const(_Char+)
+
+  [ee8]  int-const(_Char "1") != int-const("-" "1")
+         =======================================================
+         - int-const(_Char _Char*) = int-const("-" _Char _Char*)
+
+  [ee9]  - real-const("-" _Char+) = real-const(_Char+)
+
+  [ee10] real-const("+" _Char+) = real-const(_Char+)
+
+  [ee11] real-const(_Char "." "1") != real-const("-" "." "1")
+         =========================================================
+         - real-const(_Char _Char*) = real-const("-" _Char _Char*)
+
+(* -------------------------------------------------------------------------- *)
+(* simplification of add, sub, mul, div and mod                               *)
+
+  [ee12] eval-exp((- _Exp) + _Exp', _DStack) = eval-exp(_Exp' - _Exp, _DStack)
+  [ee13] eval-exp(_Exp + (- _Exp'), _DStack) = eval-exp(_Exp - _Exp', _DStack)
+
+  [ee14] eval-exp((- _Exp) - _Exp', _DStack) = - eval-exp(_Exp + _Exp', _DStack)
+  [ee15] eval-exp(_Exp - (- _Exp'), _DStack) = - eval-exp(_Exp + _Exp', _DStack)
+
+  [ee16] eval-exp((- _Exp) * _Exp', _DStack) = - eval-exp(_Exp * _Exp', _DStack)
+  [ee17] eval-exp(_Exp * (- _Exp'), _DStack) = - eval-exp(_Exp * _Exp', _DStack)
+
+  [ee18] eval-exp((- _Exp) / _Exp', _DStack) = - eval-exp(_Exp / _Exp', _DStack)
+  [ee19] eval-exp(_Exp / (- _Exp'), _DStack) = - eval-exp(_Exp / _Exp', _DStack)
+
+(* simplification of % acc. to definition p.8 CLAX document                   *)
+
+  [ee20] eval-exp(_Exp % _Exp', _DStack) =
+           eval-exp(_Exp - eval-exp(eval-exp(_Exp / _Exp', _DStack) * _Exp', _DStack),
+                    _DStack)
+
+(* -------------------------------------------------------------------------- *)
+(* _Boolean operators                                                         *)
+
+  [ee21] eval-exp(_Exp, _DStack) = _Bool
+         =============================================
+         eval-exp(NOT _Exp, _DStack) = bool-not(_Bool)
+
+  [ee22] eval-exp(_Exp, _DStack)  = _Bool,
+         eval-exp(_Exp', _DStack) = _Bool'
+         =========================================================
+         eval-exp(_Exp & _Exp', _DStack) = bool-and(_Bool, _Bool')
+
+  [ee23] eval-exp(_Exp, _DStack)  = _Bool,
+         eval-exp(_Exp', _DStack) = _Bool'
+         ========================================================
+         eval-exp(_Exp | _Exp', _DStack) = bool-or(_Bool, _Bool')
+
+(* -------------------------------------------------------------------------- *)
+(* Use hybrid functions for integer arithmetic                                *)
+
+  [ee24] eval-exp(_Exp,  _DStack) = _Int,
+         eval-exp(_Exp', _DStack) = _Int'
+         =============================================================
+         eval-exp(_Exp * _Exp', _DStack) = hybrid-int-mul(_Int, _Int')
+
+  [ee25] eval-exp(_Exp,  _DStack) = _Int,
+         eval-exp(_Exp', _DStack) = _Int'
+         =============================================================
+         eval-exp(_Exp / _Exp', _DStack) = hybrid-int-div(_Int, _Int')
+
+  [ee26] eval-exp(_Exp,  _DStack) = _Int,
+         eval-exp(_Exp', _DStack) = _Int'
+         =============================================================
+         eval-exp(_Exp + _Exp', _DStack) = hybrid-int-add(_Int, _Int')
+
+  [ee27] eval-exp(_Exp,  _DStack) = _Int,
+         eval-exp(_Exp', _DStack) = _Int'
+         =============================================================
+         eval-exp(_Exp - _Exp', _DStack) = hybrid-int-sub(_Int, _Int')
+
+(* -------------------------------------------------------------------------- *)
+(* Use hybrid functions for real arithmetic                                   *)
+
+  [ee28] eval-exp(_Exp,  _DStack) = _Real,
+         eval-exp(_Exp', _DStack) = _Real'
+         ================================================================
+         eval-exp(_Exp * _Exp', _DStack) = hybrid-real-mul(_Real, _Real')
+
+  [ee29] eval-exp(_Exp,  _DStack) = _Real,
+         eval-exp(_Exp', _DStack) = _Real'
+         ================================================================
+         eval-exp(_Exp / _Exp', _DStack) = hybrid-real-div(_Real, _Real')
+
+  [ee30] eval-exp(_Exp,  _DStack) = _Real,
+         eval-exp(_Exp', _DStack) = _Real'
+         ================================================================
+         eval-exp(_Exp + _Exp', _DStack) = hybrid-real-add(_Real, _Real')
+
+  [ee31] eval-exp(_Exp,  _DStack) = _Real,
+         eval-exp(_Exp', _DStack) = _Real'
+         ================================================================
+         eval-exp(_Exp - _Exp', _DStack) = hybrid-real-sub(_Real, _Real')
+
+(* -------------------------------------------------------------------------- *)
+(* (in)equality relational operators for integers, reals and booleans         *)
+
+  [ee32]  eval-exp(_Exp, _DStack)  = eval-exp(_Exp', _DStack)
+          ======================================
+          eval-exp(_Exp = _Exp', _DStack) = TRUE
+
+  [ee33]  eval-exp(_Exp, _DStack)  != eval-exp(_Exp', _DStack)
+          =======================================
+          eval-exp(_Exp = _Exp', _DStack) = FALSE
+
+  [ee34]  eval-exp(_Exp, _DStack)  != eval-exp(_Exp', _DStack)
+          ======================================
+          eval-exp(_Exp # _Exp', _DStack) = TRUE
+
+  [ee35]  eval-exp(_Exp, _DStack)  = eval-exp(_Exp', _DStack)
+          =======================================
+          eval-exp(_Exp # _Exp', _DStack) = FALSE
+
+(* -------------------------------------------------------------------------- *)
+(* < <= > >= relational operators for integers and reals                      *)
+
+  [ee36]  eval-exp(_Exp, _DStack)  = _Int,
+          eval-exp(_Exp', _DStack) = _Int',
+          _Int'' = hybrid-int-sub(_Int', _Int)
+          ============================================
+          eval-exp(_Exp < _Exp', _DStack) = >0(_Int'')
+
+  [ee37]  eval-exp(_Exp, _DStack)  = _Real,
+          eval-exp(_Exp', _DStack) = _Real',
+          _Real'' = hybrid-real-sub(_Real', _Real)
+          =============================================
+          eval-exp(_Exp < _Exp', _DStack) = >0(_Real'')
+
+  [ee38]  eval-exp(_Exp, _DStack)  = _Int,
+          eval-exp(_Exp', _DStack) = _Int',
+          _Int'' = hybrid-int-sub(_Int', _Int)
+          ==============================================
+          eval-exp(_Exp <= _Exp', _DStack) = >=0(_Int'')
+
+  [ee39]  eval-exp(_Exp, _DStack)  = _Real,
+          eval-exp(_Exp', _DStack) = _Real',
+          _Real'' = hybrid-real-sub(_Real', _Real)
+          ===============================================
+          eval-exp(_Exp <= _Exp', _DStack) = >=0(_Real'')
+
+  [ee40]  eval-exp(_Exp, _DStack)  = _Int,
+          eval-exp(_Exp', _DStack) = _Int',
+          _Int'' = hybrid-int-sub(_Int, _Int')
+          ============================================
+          eval-exp(_Exp > _Exp', _DStack) = >0(_Int'')
+
+  [ee41]  eval-exp(_Exp, _DStack)  = _Real,
+          eval-exp(_Exp', _DStack) = _Real',
+          _Real'' = hybrid-real-sub(_Real, _Real')
+          =============================================
+          eval-exp(_Exp > _Exp', _DStack) = >0(_Real'')
+
+  [ee42]  eval-exp(_Exp, _DStack)  = _Int,
+          eval-exp(_Exp', _DStack) = _Int',
+          _Int'' = hybrid-int-sub(_Int, _Int')
+          ==============================================
+          eval-exp(_Exp >= _Exp', _DStack) = >=0(_Int'')
+
+  [ee43]  eval-exp(_Exp, _DStack)  = _Real,
+          eval-exp(_Exp', _DStack) = _Real',
+          _Real'' = hybrid-real-sub(_Real, _Real')
+          ===============================================
+          eval-exp(_Exp >= _Exp', _DStack) = >=0(_Real'')
+
+(* -------------------------------------------------------------------------- *)
+(* < <= > >= relational operators for booleans: by definition FALSE < TRUE    *)
+
+  [ee44]  eval-exp(_Exp, _DStack) = _Bool,
+          eval-exp(_Exp', _DStack) = _Bool'
+          ========================================================
+          eval-exp(_Exp < _Exp', _DStack) = bool-lt(_Bool, _Bool')
+
+  [ee45]  eval-exp(_Exp, _DStack) = _Bool,
+          eval-exp(_Exp', _DStack) = _Bool'
+          =========================================================
+          eval-exp(_Exp <= _Exp', _DStack) = bool-le(_Bool, _Bool')
+
+  [ee46]  eval-exp(_Exp, _DStack) = _Bool,
+          eval-exp(_Exp', _DStack) = _Bool'
+          ========================================================
+          eval-exp(_Exp > _Exp', _DStack) = bool-lt(_Bool', _Bool)
+
+  [ee47]  eval-exp(_Exp, _DStack) = _Bool,
+          eval-exp(_Exp', _DStack) = _Bool'
+          =========================================================
+          eval-exp(_Exp >= _Exp', _DStack) = bool-le(_Bool', _Bool)
+
+(* -------------------------------------------------------------------------- *)
+(* Auxiliary functions for _Booleans                                          *)
+
+  [blt1]  bool-lt(FALSE, TRUE) = TRUE
+  [blt2]  bool-lt(TRUE, _Bool) = FALSE
+  [blt3]  bool-lt(FALSE, FALSE) = FALSE
+
+  [ble1] bool-le(TRUE, FALSE) = FALSE
+  [ble2] bool-le(TRUE, TRUE) = TRUE
+  [ble3] bool-le(FALSE, _Bool) = TRUE
+
+  [ba1]  bool-and(TRUE, _Bool)   = _Bool
+  [ba2]  bool-and(FALSE, _Bool)  = FALSE
+  [bo1]  bool-or(TRUE, _Bool)    = TRUE
+  [bo2]  bool-or(FALSE, _Bool)   = _Bool
+  [bn1]  bool-not(FALSE)        = TRUE
+  [bn2]  bool-not(TRUE)         = FALSE
+
+(* -------------------------------------------------------------------------- *)
+(* Auxiliary predicates positive and natural on numbers, force normalization  *)
+(* of the argument in a condition                                             *)
+
+    [gt1]  >0(int-const("-" _Char+)) =  FALSE
+
+    [gt2]  >0(real-const("-" _Char+)) =  FALSE
+
+    [gt3]  >0(int-const("0")) =  FALSE
+
+    [gt4]  >0(real-const("0" "." "0")) =  FALSE
+
+    [gt5]  _Int = hybrid-int-abs(_Int),                 (* succeeds if _Int > 0 *)
+           _Int != int-const("0")
+           ===============
+           >0(_Int) = TRUE
+
+    [gt6]  _Real = hybrid-real-abs(_Real),              (* succeeds if _Real > 0 *)
+           _Real != int-const("0" "." "0")
+           ===============================
+           >0(_Real) = TRUE
+
+    [ge1]  >=0(int-const("-" _Char+)) =  FALSE
+
+    [ge2]  >=0(real-const("-" _Char+)) =  FALSE
+
+    [ge3]  _Int = hybrid-int-abs(_Int)                  (* succeeds if _Int >= 0 *)
+           ================
+           >=0(_Int) = TRUE
+
+    [ge4]  _Real = hybrid-real-abs(_Real)               (* succeeds if _Real >= 0 *)
+           =================
+           >=0(_Real) = TRUE
+
+(* -------------------------------------------------------------------------- *)
+(* get-index-list : determine the index path of a subscripted array variable  *)
+
+    [gil1] get-index-list(_Id, _DStack) =
+
+    [gil2] eval-exp(_Exp, _DStack)       = _Int,
+           get-index-list(_Var, _DStack) = _Int*
+           ================================================
+           get-index-list(_Var[_Exp], _DStack) = _Int* _Int
+(* -------------------------------------------------------------------------- *)
+(* get-id : determine the name of a subscripted array variable                *)
+
+    [gi1]  get-id(_Var[_Exp]) = get-id(_Var)
+    [gi2]  get-id(_Id)       = _Id

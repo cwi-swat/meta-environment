@@ -1,0 +1,91 @@
+module Languages/SML/Declarations
+
+imports	Languages/SML/Expressions
+	Languages/SML/Patterns
+ 
+exports
+
+sorts
+
+   Declaration AbsDec
+
+context-free syntax
+
+%% Declarations (Figure 21)
+
+  "val" TypeVarSequence ValueBinding		-> Declaration
+  "fun" TypeVarSequence FunValueBinding		-> Declaration
+  "type" TypeBinding				-> Declaration
+
+  "datatype" DataBinding ( "withtype" TypeBinding )?		-> Declaration
+  "datatype" TypeConstructor "=" "datatype" LongTypeConstructor	-> Declaration
+  "abstype" DataBinding ( "withtype" TypeBinding )? 
+     "with" Declaration "end"					-> Declaration
+  
+  "exception" ExcBinding			-> Declaration
+  "local" Declaration "in" Declaration "end"  	-> Declaration
+  "open" LongStringId*				-> Declaration
+   
+  Declaration ";" Declaration	-> Declaration {left}
+  
+  "infix" Digit? ValueId+	-> Declaration
+  "infixr" Digit? ValueId+	-> Declaration
+  "nonfix" ValueId+		-> Declaration
+
+%% Value Binding
+
+  Pattern "=" Expression 		-> SingleValueBinding
+  SingleValueBinding			-> ValueBinding
+  SingleValueBinding "and" ValueBinding	-> ValueBinding
+  "rec" ValueBinding			-> ValueBinding
+
+%% Function Value Binding
+
+  "op"? ValueId AtomicPattern+ ( ":" Type)? "=" Expression	
+		-> SingleFunValueBinding
+  SingleFunValueBinding		-> SingleFunValueBindingBar
+  SingleFunValueBinding "|" SingleFunValueBindingBar
+		-> SingleFunValueBindingBar
+   
+  SingleFunValueBindingBar			-> FunValueBinding
+  SingleFunValueBindingBar "and" FunValueBinding	-> FunValueBinding
+  
+%% Type Binding
+
+  TypeVarSequence TypeConstructor "=" Type 	-> SingleTypeBinding
+  { SingleTypeBinding "and" }+	-> TypeBinding
+
+%% Data Binding
+
+  TypeVarSequence TypeConstructor "=" ConsBinding	-> SingleDataBinding
+  SingleDataBinding 			-> DataBinding  
+  SingleDataBinding "and" DataBinding	-> DataBinding
+  
+%% Constructor Binding
+
+  "op"? ValueId ("of" Type)? 		-> SingleConsBinding
+  SingleConsBinding			-> ConsBinding
+  SingleConsBinding "|" ConsBinding	-> ConsBinding
+
+%% Exception Binding
+
+  "op"? ValueId ("of" Type)?		-> SingleExcBinding
+  "op"? ValueId "=" "op"? LongValueId	-> SingleExcBinding
+  SingleExcBinding			-> ExcBinding
+  SingleExcBinding "and" ExcBinding	-> ExcBinding  
+  
+%% Type variable sequence
+
+  TypeVariable?				-> TypeVarSequence
+  "(" { TypeVariable "," }+ ")" 	-> TypeVarSequence
+
+
+hiddens 
+
+sorts
+
+	SingleFunValueBinding SingleFunValueBindingBar FunValueBinding
+	SingleTypeBinding TypeBinding SingleDataBinding DataBinding
+	SingleConsBinding ConsBinding SingleExcBinding ExcBinding
+	SingleValueBinding ValueBinding TypeVarSequence 
+

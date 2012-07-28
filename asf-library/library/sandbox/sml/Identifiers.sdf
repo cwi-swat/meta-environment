@@ -1,0 +1,91 @@
+module Languages/SML/Identifiers
+
+imports	Languages/SML/Layout
+
+hiddens sorts
+	LongStringId LongTypeConstructor LongValueId TypeVariable
+	ValueId Label Numeric TypeConstructor
+	LongId FunctionId SignatureId StringId   
+	Symbol Alpha
+
+exports
+context-free syntax
+
+  ValueId | LongId	-> LongValueId
+
+
+lexical syntax
+
+  [A-Za-z][A-Za-z0-9\_\']*	-> Alpha
+
+  [\-\!\%\&\#\+\/\:\<\=\>\?\@\\\~\`\|\*\^]+	-> Symbol %% removed \$ 
+
+  [1-9][0-9]*			-> Numeric
+
+  Alpha | Symbol | "*" | [1-9] | Numeric	-> Label
+ 
+  Alpha | Symbol | "*" | "=" 	-> ValueId
+  
+  Alpha | Symbol	-> TypeConstructor
+  
+  [\'][A-Za-z0-9\_\']*	-> TypeVariable
+
+  Alpha		-> StringId
+  Alpha		-> SignatureId
+  Alpha		-> FunctionId
+
+  (Alpha".")+ (Alpha | Symbol | "=" |"*" ) -> LongId
+
+  TypeConstructor | LongId 	-> LongTypeConstructor
+
+  StringId | LongId 	-> LongStringId
+
+
+%% keywords
+
+  "abstype" 	-> Alpha {reject}
+  "and" 	-> Alpha {reject}
+  "andalso" 	-> Alpha {reject}
+  "as" 		-> Alpha {reject}
+  "case"	-> Alpha {reject}
+  "datatype"	-> Alpha {reject}
+  "do" 		-> Alpha {reject}
+  "else"	-> Alpha {reject}
+  "end"		-> Alpha {reject}
+  "exception"	-> Alpha {reject}
+  "fn" 		-> Alpha {reject}
+  "fun"		-> Alpha {reject}
+  "handle"	-> Alpha {reject}
+  "if"		-> Alpha {reject}
+  "in"		-> Alpha {reject}
+  "infix"	-> Alpha {reject}
+  "infixr"	-> Alpha {reject}
+  "let"		-> Alpha {reject}
+  "local"	-> Alpha {reject}
+  "nonfix"	-> Alpha {reject}
+  "of"		-> Alpha {reject}
+  "op"		-> Alpha {reject}
+  "open"	-> Alpha {reject}
+  "orelse"	-> Alpha {reject}
+  "raise"	-> Alpha {reject}
+  "rec"		-> Alpha {reject}
+  "then"	-> Alpha {reject}
+  "type"	-> Alpha {reject}
+  "val"		-> Alpha {reject}
+  "with"	-> Alpha {reject}
+  "withtype"	-> Alpha {reject}
+  "while"	-> Alpha {reject}
+  "_"		-> Alpha {reject}
+  ":"		-> Symbol {reject}
+  "|"		-> Symbol {reject}
+  "=>"		-> Symbol {reject}
+  "->"		-> Symbol {reject}
+  "#"		-> Symbol {reject}
+  "="		-> Alpha {avoid}
+
+%% Prefer longest match
+
+lexical restrictions
+    Alpha -/- [A-Za-z0-9\_\']
+    Numeric -/- [0-9]
+

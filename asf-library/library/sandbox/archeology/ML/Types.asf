@@ -1,0 +1,21 @@
+
+   equations
+
+      [1]   error-var = s0
+
+      [2]   error-type = bool
+
+      [3]   error-gt = bool
+
+      [4]   var elm var = true
+      [5]      var1 != var2
+            =====================
+            var1 elm var2 = false
+      [6]   var elm bool           = false
+      [7]   var elm nat            = false
+      [8]   var elm type1 -> type2 = var elm type1 | var elm type2
+      [9]   var elm type1 # type2  = var elm type1 | var elm type2
+      [10]  var elm gv             = false
+      [11]  var elm gt1 -> gt2     = var elm gt1 | var elm gt2
+      [12]  var elm gt1 # gt2      = var elm gt1 | var elm gt2
+

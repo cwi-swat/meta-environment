@@ -1,0 +1,198 @@
+equations
+
+[Tc1]   tc[Decls] in mtable()-errors:[] = Menv - Errlist1
+        ===============>
+        tc[begin Decls ; Stms end] =
+                Errlist1 + tc[Stms] in Menv +
+                errors: [program checked]
+
+[Tc2]   tc[Decl; Decls] in Menverr =
+                tc[Decls] in tc[Decl] in Menverr
+
+
+[Tc3]  tc[Mode Id, Idlist] in Menverr =
+                tc[Mode Idlist] in tc[Mode Id] in Menverr
+
+[Tc4]  Id is in Menv = false
+       =======================>
+       tc[Mode Id] in Menv - Errlist =
+                add (Id:ref(Mode)) to Menv - Errlist
+
+[Tc4a]  Id is in Menv = true
+       =======================>
+       tc[Mode Id] in Menv - errors: [Errs] =
+                Menv - errors: [Errs, double declaration Id]
+
+[Tc5]  tc[Stm; Stms] in Menv =
+       tc[Stm] in Menv + tc[Stms] in Menv
+
+
+[Tc6]  tc[Id] in Menv = M1 - Errlist1,
+       tc[Exp] in Menv = M2 - Errlist2,
+       M1 <= ref(M2) = true
+       =========================================>
+       tc[Id := Exp] in Menv = Errlist1 + Errlist2
+
+[Tc6a] tc[Id] in Menv = M1 - Errlist1,
+       tc[Exp] in Menv = M2 - Errlist2,
+       M1 <= ref(M2) = false
+       =========================================>
+       tc[Id := Exp] in Menv = Errlist1 + Errlist2 +
+       errors: [ type Id and type Exp not compatible]
+
+[Tc7]  Id is in Menv = true
+       ====================>
+       tc[input Id] in Menv = errors:[]
+
+[Tc7a]  Id is in Menv = false
+       ====================>
+       tc[input Id] in Menv = errors:[Id not declared]
+
+[Tc8]  tc[Exp] in Menv = M - Errlist
+       ======================>
+       tc[output Exp]  in Menv = Errlist
+
+[Tc9]  tc[Exp] in Menv = M - Errlist,
+       is-bool M = true
+       ====================================================>
+       tc[if Exp then Stms1 fi] in Menv =
+       Errlist + tc[Stms1] in Menv
+
+
+[Tc9a]  tc[Exp] in Menv = M - Errlist,
+        is-bool M = false
+       ====================================================>
+        tc[if Exp then Stms1 fi] in Menv =
+        Errlist + errors:[Exp not of type bool] +
+        tc[Stms1] in Menv
+
+[Tc10] tc[Exp] in Menv = M - Errlist,
+       is-bool M = true
+       ===================================>
+       tc [if Exp then Stms1 else Stms2 fi] in Menv =
+       Errlist + tc [Stms1] in Menv + tc [Stms2] in Menv
+
+
+[Tc10a] tc[Exp] in Menv = M - Errlist,
+        is-bool M = false
+       ===================================>
+       tc [if Exp then Stms1 else Stms2 fi] in Menv =
+       Errlist + errors: [ Exp not of type bool ] +
+       tc [Stms1] in Menv + tc [Stms2] in Menv
+
+
+[Tc11] tc[Exp] in Menv = M - Errlist,
+       is-bool M = true
+       ===================================================>
+       tc[while Exp do Stms end] in Menv =
+       Errlist + tc [Stms] in Menv
+
+
+[Tc11a] tc[Exp] in Menv = M - Errlist,
+        is-bool M = false
+       ====================================================>
+       tc[while Exp do Stms1 end] in Menv =
+       Errlist + errors:[Exp not of type bool] +
+       tc[Stms1] in Menv
+
+
+[Tc12] tc[Nat-con] in Menv = int - errors: []
+
+[Tc13] tc[Bool-con] in Menv = bool - errors: []
+
+[Tc14] lookup Id in Menv = M,
+       proper-mode M = true
+       ========================>
+       tc[Id] in Menv = M - errors: []
+
+[Tc14a] proper-mode lookup Id in Menv = false
+       ========================>
+       tc[Id] in Menv =
+       lookup Id in Menv - errors: [Id not declared]
+
+[Tc15] tc[Exp1] in Menv = M1 - errors: [],
+       tc[Exp2] in Menv = M2 - errors: [],
+       result-type (M1, M2) = M,
+       proper-mode M = true
+       ============================================================>
+       tc[Exp1 + Exp2] in Menv = M - errors: []
+
+[Tc15a] tc[Exp1] in Menv = M1 - errors: [],
+       tc[Exp2] in Menv = M2 - errors: [],
+       result-type (M1, M2) = M,
+       proper-mode M = false
+       ============================================================>
+       tc[Exp1 + Exp2] in Menv =
+       M - errors: [types Exp1 and Exp2 not compatible]
+
+[Tc15b] tc[Exp1] in Menv = M1 - Errlist1,
+       tc[Exp2] in Menv = M2 - Errlist2,
+       Errlist1 + Errlist2 != errors: []
+       ============================================================>
+       tc[Exp1 + Exp2] in Menv =
+       result-type (M1, M2) - Errlist1 + Errlist2
+
+
+[Tc16] tc[Exp1] in Menv = M1 - errors: [],
+       tc[Exp2] in Menv = M2 - errors: [],
+        result-type (M1, M2) = M,
+        proper-mode M = true
+       ============================================================>
+       tc[Exp1 * Exp2] in Menv = M - errors: []
+
+[Tc16a] tc[Exp1] in Menv = M1 - errors: [],
+       tc[Exp2] in Menv = M2 - errors: [],
+       result-type (M1, M2) = M,
+       proper-mode M = false
+       ============================================================>
+       tc[Exp1 * Exp2] in Menv =
+       M - errors: [types Exp1 and Exp2 not compatible]
+
+[Tc16b]  tc[Exp1] in Menv = M1 - Errlist1,
+       tc[Exp2] in Menv = M2 - Errlist2,
+        Errlist1 + Errlist2 != errors: []
+       ============================================================>
+       tc[Exp1 * Exp2] in Menv =
+       result-type(M1,M2) - Errlist1 + Errlist2
+
+[Tc17] tc[Exp1] in Menv = M1 - errors: [],
+       tc[Exp2] in Menv = M2 - errors: [],
+       proper-mode result-type (M1, M2) = true
+       ============================================================>
+       tc[(Exp1 = Exp2)] in Menv = bool - errors: []
+
+[Tc17a] tc[Exp1] in Menv = M1 - errors: [],
+       tc[Exp2] in Menv = M2 - errors: [],
+       result-type (M1, M2) = M,
+       proper-mode M = false
+       ============================================================>
+       tc[(Exp1 = Exp2)] in Menv =
+       bool - errors: [types Exp1 and Exp2 not compatible]
+
+[Tc17b] tc[Exp1] in Menv = M1 - Errlist1,
+       tc[Exp2] in Menv = M2 - Errlist2,
+       Errlist1 + Errlist2 != errors: []
+       ============================================================>
+       tc[(Exp1 = Exp2)] in Menv =
+       bool - Errlist1 + Errlist2
+
+[Tc18] tc[Exp1] in Menv = M1 - errors: [],
+       tc[Exp2] in Menv = M2 - errors: [],
+       proper-mode result-type (M1, M2) = true
+       ============================================================>
+       tc[(Exp1 != Exp2)] in Menv = bool - errors: []
+
+[Tc18a] tc[Exp1] in Menv = M1 - errors: [],
+       tc[Exp2] in Menv = M2 - errors: [],
+       result-type (M1, M2) = M,
+       proper-mode M = false
+       ============================================================>
+       tc[(Exp1 != Exp2)] in Menv =
+       bool - errors: [types Exp1 and Exp2 not compatible]
+
+[Tc18b] tc[Exp1] in Menv = M1 - Errlist1,
+       tc[Exp2] in Menv = M2 - Errlist2,
+       Errlist1 + Errlist2 != errors: []
+       ============================================================>
+       tc[(Exp1 != Exp2)] in Menv =
+       bool - Errlist1 + Errlist2

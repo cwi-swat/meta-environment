@@ -1,0 +1,10 @@
+module languages/sdf2/format/CC
+
+imports languages/sdf2/syntax/CC
+imports languages/sdf2/format/Character-Class
+
+hiddens
+
+context-free syntax
+
+variables

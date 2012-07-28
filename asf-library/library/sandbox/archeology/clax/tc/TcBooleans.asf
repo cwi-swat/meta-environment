@@ -1,0 +1,4 @@
+equations
+
+  [1] true & Bool = Bool
+  [2] Bool & true = Bool

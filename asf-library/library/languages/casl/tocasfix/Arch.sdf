@@ -1,0 +1,63 @@
+module languages/casl/tocasfix/Arch
+
+imports languages/casl/tocasfix/Struct languages/casl/syntax/Arch 
+
+exports
+  context-free syntax
+    c2a-Arch-Spec(Arch-Spec)                       -> ATerm
+    c2a-Arch-Spec-Defn(Arch-Spec-Defn)             -> ATerm
+    c2a-Arch-Spec-Name(Arch-Spec-Name)             -> ATerm
+    c2a-Basic-Arch-Spec(Basic-Arch-Spec)           -> ATerm
+    c2a-Group-Arch-Spec(Group-Arch-Spec)           -> ATerm
+    "c2a-Group-Spec-*-plus"({Group-Spec "*"}+)     -> ATermList
+    c2a-Group-Unit-Term(Group-Unit-Term)           -> ATerm
+    c2a-Fit-Arg-Unit(Fit-Arg-Unit)                 -> ATerm
+    c2a-Fit-Unit-Arg(Fit-Unit-Arg)                 -> ATerm
+    c2a-Fit-Unit-Arg-plus(Fit-Unit-Arg+)           -> ATermList
+    c2a-Unit-Binding(Unit-Binding)                 -> ATerm
+    c2a-Unit-Binding-plus({Unit-Binding";"}+)      -> ATermList
+    c2a-Unit-Decl(Unit-Decl)                       -> ATerm
+    c2a-Unit-Defn(Unit-Defn)                       -> ATerm
+    c2a-Unit-Defn-plus({Unit-Defn ";"}+)           -> ATermList
+    c2a-Unit-Decl-Defn(Unit-Decl-Defn)             -> ATerm
+    c2a-Unit-Decl-Defn-plus({Unit-Decl-Defn ";"}+) -> ATermList
+    c2a-Unit-Expression(Unit-Expression)           -> ATerm
+    c2a-Unit-Name(Unit-Name)                       -> ATerm
+    c2a-Unit-Spec(Unit-Spec)                       -> ATerm
+    c2a-Unit-Spec-Defn(Unit-Spec-Defn)             -> ATerm
+    c2a-Unit-Term(Unit-Term)                       -> ATerm
+    c2a-Unit-Term-plus({Unit-Term ","}+)           -> ATermList
+    c2a-Unit-Term-and-plus({Unit-Term "and"}+)     -> ATermList
+
+hiddens
+  variables
+    "var-Arch-Spec"[0-9]*         -> Arch-Spec
+    "var-Arch-Spec-Name"[0-9]*    -> Arch-Spec-Name
+    "var-Basic-Arch-Spec"[0-9]*   -> Basic-Arch-Spec
+    "var-Fit-Arg-Unit"[0-9]*      -> Fit-Arg-Unit
+    "var-Fit-Unit-Arg"[0-9]*      -> Fit-Unit-Arg
+    "var-Fit-Unit-Arg+"[0-9]*     -> Fit-Unit-Arg+
+    "var-Group-Arch-Spec"[0-9]*   -> Group-Arch-Spec
+    "var-Group-Unit-Term"[0-9]*   -> Group-Unit-Term
+    "var-Group-Spec"[0-9]*        -> Group-Spec
+    "var-Group-Spec+"[0-9]*       -> {Group-Spec "*"}+
+    "var-Opt-End"[0-9]*           -> Opt-End
+    "var-Opt-Semi"[0-9]*          -> Opt-Semi
+    "var-Restriction"[0-9]*       -> Restriction
+    "var-Renaming"[0-9]*          -> Renaming
+    "var-Simple-Id"[0-9]*         -> Simple-Id
+    "var-Symb-Map-Items+"[0-9]*   -> {Symb-Map-Items ","}+
+    "var-Unit-Binding"[0-9]*      -> Unit-Binding
+    "var-Unit-Binding+"[0-9]*     -> {Unit-Binding ";"}+
+    "var-Unit-Decl"[0-9]*         -> Unit-Decl
+    "var-Unit-Defn"[0-9]*         -> Unit-Defn
+    "var-Unit-Defn+"[0-9]*        -> {Unit-Defn ";"}+
+    "var-Unit-Decl-Defn"[0-9]*    -> Unit-Decl-Defn
+    "var-Unit-Decl-Defn+"[0-9]*   -> {Unit-Decl-Defn ";"}+
+    "var-Unit-Expression"[0-9]*   -> Unit-Expression
+    "var-Unit-Name"[0-9]*         -> Unit-Name
+    "var-Unit-S"[0-9]*            -> Unit-S
+    "var-Unit-Spec"[0-9]*         -> Unit-Spec
+    "var-Unit-Term"[0-9]*         -> Unit-Term
+    "var-Unit-Term+"[0-9]*        -> {Unit-Term ","}+
+    "var-Unit-Term-and+"[0-9]*    -> {Unit-Term "and"}+

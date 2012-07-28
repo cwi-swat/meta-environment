@@ -1,0 +1,11 @@
+equations
+
+[] tuple(A B) = <A,B>
+[] tuple(A B C ) = <A,B,C>
+
+[] fst(<A,B>) = A
+[] snd(<A,B>) = B
+[] fst(<A,B,C>) = A
+[] snd(<A,B,C>) = B
+[] thd(<A,B,C>) = C
+

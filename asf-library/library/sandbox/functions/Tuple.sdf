@@ -1,0 +1,29 @@
+module functions/Tuple[A B C]
+
+imports basic/Integers
+
+exports
+
+context-free syntax
+
+tuple -> (A B => A#B)
+tuple -> (A B C => A#B#C)
+
+"fst" -> (A#B => A)
+"snd" -> (A#B => B)
+"fst" -> (A#B#C => A)
+"snd" -> (A#B#C => B)
+"thd" -> (A#B#C => C)
+
+hiddens
+
+imports basic/Whitespace
+
+sorts A B C A#B A#B#C
+variables
+
+"A" -> A
+"B" -> B
+"C" -> C
+
+

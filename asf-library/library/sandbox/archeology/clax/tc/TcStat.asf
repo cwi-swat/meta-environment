@@ -1,0 +1,17 @@
+
+equations
+
+  [D0] _Var := _Expr = _Var _Asgn _Expr  when _Asgn = :=
+  [D1] IF _Expr THEN _StatSeq ELSE _StatSeq' END =
+       _If _Expr _Then _StatSeq _Else _StatSeq' _End
+       when _If = IF, _Then = THEN, _Else = ELSE, _End = END
+  [D2] IF _Expr THEN _StatSeq END =
+       _If _Expr _Then _StatSeq _End
+       when _If = IF, _Then = THEN, _End = END
+  [D3] WHILE _Expr DO _StatSeq END =
+       _While _Expr _Do _StatSeq _End
+       when _While = WHILE, _Do = DO, _End = END
+  [D4] READ  ( _Var ) = _Read ( _Var ) when _Read = READ
+  [D5] WRITE ( _Var ) = _Write ( _Var ) when _Write = WRITE
+  [D6] WRITE ( _String ) = _Write ( _String ) when _Write = WRITE
+  [D7] GOTO _Label = _Goto _Label when _Goto = GOTO

@@ -1,0 +1,10 @@
+module Haskell-GHC-Pragmas
+exports
+  context-free syntax
+    "(#" Types "#)" 	   			 -> Type {cons("TUnboxed?")}
+
+    "{-# INLINE" Qvar "#-}" 		         -> Decl {cons("Inline")}
+    "{-# NOINLINE" Qvar "#-}" 		         -> Decl {cons("NoInline")}
+    "{-# SPECIALISE" Qvar "::" {Type ","}+ "#-}" -> Decl {cons("Spec")}
+    "{-# SPECIALISE" "instance" CType "#-}"      -> Decl {cons("SpecInst")}
+

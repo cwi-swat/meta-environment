@@ -1,0 +1,92 @@
+module languages/fdl/evolution/Refactor-FDL
+
+imports languages/fdl/syntax/Fdl
+	languages/fdl/evolution/Refactoring-Utils
+	languages/fdl/evolution/FDL-Relations
+
+hiddens
+context-free start-symbols
+	FeatureDiagram FeatureList
+
+exports
+
+sorts FeatureList
+
+context-free syntax
+	List[[FeatureExpression]] -> FeatureList
+
+	introduce(FeatureDiagram, FeatureName) -> FeatureDiagram
+
+	eliminate(FeatureDiagram, FeatureName) -> FeatureDiagram
+
+	duplicate(FeatureDiagram, FeatureName, FeatureName) -> FeatureDiagram
+
+	permute(FeatureDiagram, FeatureExpression,
+		FeatureList) -> FeatureDiagram
+
+	permute-trv(FeatureDiagram, FeatureExpression,
+		FeatureList) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+	permute-trv(FeatureExpression, FeatureExpression,
+		FeatureList) -> FeatureExpression
+		{traversal(bottom-up, trafo, continue)}
+
+        unfold(FeatureDiagram,
+                FeatureName) -> FeatureDiagram
+
+        fold(FeatureDiagram,
+                FeatureExpression,
+                FeatureName) -> FeatureDiagram
+
+        rename(FeatureDiagram,
+                FeatureName,
+                FeatureName) -> FeatureDiagram
+
+        rename-trv(FeatureDiagram,
+                FeatureName,
+                FeatureName) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+
+        rename-trv(FeatureName,
+                FeatureName,
+                FeatureName) -> FeatureName
+		{traversal(bottom-up, trafo, continue)}
+
+        rename-atomic(FeatureDiagram,
+                AtomicFeature,
+                AtomicFeature) -> FeatureDiagram
+
+        rename-atomic-trv(FeatureDiagram,
+                AtomicFeature,
+                AtomicFeature) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+
+        rename-atomic-trv(AtomicFeature,
+                AtomicFeature,
+                AtomicFeature) -> AtomicFeature
+		{traversal(bottom-up, trafo, continue)}
+
+
+	%% Onderscheid depth first and breadth first.
+        sort(FeatureDiagram) -> FeatureDiagram
+	sort-definitions(FeatureDiagram, Relation[[FeatureExpression]]) -> 
+		FeatureDiagram
+
+
+hiddens
+variables
+        "$featurename"[0-9\']* -> FeatureName
+        "$featurename*"[0-9\']* -> {FeatureName ","}*
+        "$featurediagram"[0-9\']* -> FeatureDiagram
+        "$atomicfeature"[0-9\']* -> AtomicFeature
+        "$featureexpression"[0-9\']* -> FeatureExpression
+        "$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+        "$featuretree"[0-9\']* -> FeatureExpression
+        "$featuredefinition*"[0-9\']* -> FeatureDefinition*
+        "$constraint*"[0-9\']* -> Constraint*
+        "$char+"[0-9\']* -> CHAR+
+	"$list"[0-9\']* -> List[[FeatureName]]
+	"$permutation"[0-9\']* -> List[[FeatureExpression]]
+	"$permutation+"[0-9\']* -> { List[[FeatureExpression]] ","}+
+	"$bag"[0-9\']* -> Bag[[FeatureExpression]]
+	"$relation"[0-9\']* -> Relation[[FeatureExpression]]

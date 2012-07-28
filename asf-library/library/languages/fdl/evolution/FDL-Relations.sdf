@@ -1,0 +1,115 @@
+module languages/fdl/evolution/FDL-Relations
+
+imports languages/fdl/syntax/Fdl
+	languages/fdl/evolution/Relation[FeatureExpression]
+
+hiddens
+context-free start-symbols Relation[[FeatureExpression]]
+
+exports
+
+context-free syntax
+	sorting-relation(FeatureDiagram) -> Relation[[FeatureExpression]] 
+
+	sorting-relation({FeatureDiagram ","}+, Relation[[FeatureExpression]]) ->
+		Relation[[FeatureExpression]] 
+		{traversal(bottom-up, accu, continue)}
+
+	sorting-relation({FeatureExpression ","}+, Relation[[FeatureExpression]]) ->
+		Relation[[FeatureExpression]] 
+		{traversal(bottom-up, accu, continue)}
+	
+	argument-order({FeatureExpression ","}+,  Relation[[FeatureExpression]]) ->
+		Relation[[FeatureExpression]] 
+
+
+	dependency-relation(FeatureDiagram, Relation[[FeatureExpression]]) ->
+		Relation[[FeatureExpression]] 
+		{traversal(bottom-up, accu, continue)}
+
+	dependency-relation(FeatureDefinition, Relation[[FeatureExpression]]) ->
+		Relation[[FeatureExpression]] 
+		{traversal(bottom-up, accu, continue)}
+
+	composite-dependency-relation(FeatureDiagram, 
+		Relation[[FeatureExpression]]) ->
+		Relation[[FeatureExpression]] 
+		{traversal(bottom-up, accu, continue)}
+
+	composite-dependency-relation(FeatureDefinition, 
+		Relation[[FeatureExpression]]) ->
+		Relation[[FeatureExpression]] 
+		{traversal(bottom-up, accu, continue)}
+
+
+	used-features(FeatureDiagram) ->
+		Bag[[FeatureExpression]]
+
+	used-features(FeatureExpression) ->
+		Bag[[FeatureExpression]]
+
+	defined-composite-features(FeatureDiagram) ->
+		Bag[[FeatureExpression]]
+
+
+	defined-composite-features(FeatureDiagram, Bag[[FeatureExpression]]) ->
+		Bag[[FeatureExpression]]
+		{traversal(bottom-up, accu, continue)}
+	defined-composite-features(FeatureDefinition, Bag[[FeatureExpression]]) ->
+		Bag[[FeatureExpression]]
+		{traversal(bottom-up, accu, continue)}
+
+
+	used-composite-features(FeatureDiagram) ->
+		Bag[[FeatureExpression]]
+
+	used-composite-features(FeatureExpression) ->
+		Bag[[FeatureExpression]]
+
+	used-composite-features(FeatureDiagram, Bag[[FeatureExpression]]) ->
+		Bag[[FeatureExpression]]
+		{traversal(bottom-up, accu, continue)}
+
+	used-composite-features(FeatureExpression, Bag[[FeatureExpression]]) ->
+		Bag[[FeatureExpression]]
+		{traversal(bottom-up, accu, continue)}
+
+
+	used-atomic-features(FeatureDiagram) ->
+		Bag[[FeatureExpression]]
+
+	used-atomic-features(FeatureExpression) ->
+		Bag[[FeatureExpression]]
+
+	used-atomic-features(FeatureDiagram, Bag[[FeatureExpression]]) ->
+		Bag[[FeatureExpression]]
+		{traversal(bottom-up, accu, continue)}
+
+	used-atomic-features(FeatureExpression, Bag[[FeatureExpression]]) ->
+		Bag[[FeatureExpression]]
+		{traversal(bottom-up, accu, continue)}
+
+
+
+
+hiddens
+variables
+        "$featurename"[0-9\']* -> FeatureName
+        "$featurename*"[0-9\']* -> {FeatureName ","}*
+        "$featurediagram"[0-9\']* -> FeatureDiagram
+        "$atomicfeature"[0-9\']* -> AtomicFeature
+        "$featureexpression"[0-9\']* -> FeatureExpression
+        "$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+        "$featureexpression*"[0-9\']* -> {FeatureExpression ","}*
+        "$featuretree"[0-9\']* -> FeatureExpression
+        "$featuredefinition*"[0-9\']* -> FeatureDefinition*
+        "$constraint*"[0-9\']* -> Constraint*
+        "$char+"[0-9\']* -> CHAR+
+	"$bag"[0-9\']* -> Bag[[FeatureExpression]]
+	"$use"[0-9\']* -> Bag[[FeatureExpression]]
+	"$def"[0-9\']* -> Bag[[FeatureExpression]]
+	"$relation"[0-9\']* -> Relation[[FeatureExpression]]
+	"$rel"[0-9\']* -> Relation[[FeatureExpression]]
+	
+	
+	

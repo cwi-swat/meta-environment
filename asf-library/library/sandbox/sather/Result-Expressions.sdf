@@ -1,0 +1,8 @@
+module Result-Expressions
+
+exports
+
+sorts Result-Expression
+
+context-free syntax
+	"result" -> Result-Expression

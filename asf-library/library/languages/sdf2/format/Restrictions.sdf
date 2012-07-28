@@ -1,0 +1,29 @@
+module languages/sdf2/format/Restrictions
+
+imports languages/sdf2/syntax/Restrictions
+imports languages/sdf2/format/CC
+imports languages/sdf2/format/Kernel
+
+hiddens
+
+context-free syntax
+"[" Symbol* "]" -> Box* {to-box}
+"[" Lookaheads "]" -> Box {to-box}
+"[" Restriction* "]" -> Box* {to-box}
+"[" {Lookahead ","}* "]" -> Box* {to-box} 
+"[" CharClass "]" -> Box {to-box}
+
+"<" Box ">" -> Restriction {from-box}
+"<" Box ">" -> Grammar {from-box}
+"<" Box ">" -> Lookaheads {from-box}
+
+variables
+"Restriction*" -> Restriction*
+"Lookahead" -> Lookahead
+"Lookaheads"[0-9]* -> Lookaheads
+"CharClass" -> CharClass
+"Symbols" -> Symbols
+"Symbol*" -> Symbol*
+"Lookahead*" -> {Lookahead ","}*
+
+

@@ -1,0 +1,50 @@
+
+equations
+
+
+ [L0] defines _StatAux =
+ [L1] defines _Id : _StatAux = _Id
+ [L2] _Labels' = defines _Stat,
+      _Labels'' = defines _StatSeq,
+      _Labels = _Labels' _Labels''
+      ============================
+      defines _Stat ; _StatSeq = _Labels
+
+ [U0] unique = true
+ [U1] unique _Id = true
+ [U2] unique _Id _Id' = true when _Id != _Id'
+ [U3] unique _Id _Id' _Labels+ =
+         unique _Id _Id' & unique _Id  _Labels+  & unique _Id' _Labels+
+
+ [G0] gotos _Id : _StatAux = gotos _StatAux
+ [G1] gotos GOTO _Id = _Id
+
+(* Changed 3/12 FT
+
+ [default-G2] gotos _StatAux =
+
+*)
+
+ [G2a] gotos _AssignStat =
+
+ [G2b] gotos _CondStat =
+
+ [G2c] gotos _LoopStat =
+
+ [G2d] gotos _InOutStat =
+
+ [G2e] gotos _ProcStat =
+
+ [G2f] gotos _EmptyStat =
+
+ [G3] _Labels = gotos _Stat, _Labels' = gotos _StatSeq,
+      _Labels'' = _Labels _Labels'
+      ===========================================
+      gotos _Stat ; _StatSeq = _Labels''
+
+ [S0] def _Labels = true
+ [S1] _Id def _Id _Labels = true
+ [S2] _Id def _Id' _Labels = _Id def _Labels when _Id != _Id'
+ [S3] _Id _Labels+ def _Labels = _Id def _Labels & _Labels+ def _Labels
+
+ [IsL0] islabel(LABEL) = true

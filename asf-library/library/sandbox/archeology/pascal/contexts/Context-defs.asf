@@ -1,0 +1,92 @@
+equations
+
+  [dp1] C is definition-point for _symbol? =
+          C defines _symbol as a label?     | C defines _symbol as a constant?  |
+          C defines _symbol as a type?      | C defines _symbol as a variable?  |
+          C defines _symbol as a function?  | C defines _symbol as a procedure? |
+          C defines _symbol as a block-mark?
+
+  [de1] [Prefix, label _label] defines _label as a label? = TRUE
+  [de2] [Prefix, const _id = _const] defines _id as a normal constant? = TRUE
+  [de3] [Prefix, type _id = _type-den] defines _id as a type? = TRUE
+  [de4] [Prefix, var _id : _type-den] defines _id as a variable? = TRUE
+
+  [de5] [Prefix, function _id _form-par-list: _id2]
+          defines _id as a normal function? = TRUE
+  [de6] [Prefix, predefined-function _id]
+          defines _id as a predefined function? = TRUE
+  [d11] C defines _id as a function? =
+          C defines _id as a normal function? |
+          C defines _id as a predefined function?
+
+  [de7] [Prefix, procedure _id _form-par-list]
+          defines _id as a procedure? = TRUE
+  [de8] [Prefix, predefined-procedure _id]
+          defines _id as a procedure? = TRUE
+  [d12] C defines _id as a procedure? =
+          C defines _id as a normal procedure?    |
+          C defines _id as a predefined procedure?
+
+  [de9] C defines _id as a constant? =
+          C defines _id as a normal constant?     |
+          C defines _id as an enumeration constant?
+
+  [d13] [Prefix, block-mark] defines block-mark as a block-mark? = TRUE
+
+
+  { Enumeration constants: New enumeration constants may be defined in each
+    occurence of a _new-type in the entry. }
+  [eo1] <TRUE, Entry> | E-out  = <TRUE, Entry>
+  [eo2] E-out | <TRUE, Entry> = <TRUE, Entry>
+
+
+  [en1] C defines _id as an enum const = <Enum?, Entry>
+        ===========================================
+        C defines _id as an enumeration constant? = Enum?
+
+  [en2] [Prefix, type _id1 = (_id1*, _id2, _id2*)] defines _id2 as an
+          enum const = <TRUE, type _id1 = (_id1*, _id2, _id2*)>
+
+  [en3] [Prefix, var _id2: _new-type] defines _id1 as an enum const =
+          [Prefix, type Generated = _new-type] defines _id1 as an enum const
+
+  [en4] [Prefix, type _id2 = _PS array [_type-den1] of _type-den2]
+          defines _id1 as an enum const =
+           [Prefix, type Generated = _type-den1] defines _id1 as an enum const |
+           [Prefix, type Generated = _type-den2] defines _id1 as an enum const
+
+  [en5] [Prefix, type _id2 = _PS file of _new-type]
+          defines _id1 as an enum const =
+            [Prefix, type Generated = _new-type] defines _id1 as an enum const
+
+  [en6] [Prefix, type _id2 = _PS set of _new-type]
+           defines _id1 as an enum const =
+             [Prefix, type Generated = _new-type] defines _id1 as an enum const
+
+  [en7] T1 defines _id as an enum const =
+          T1.fixed defines _id as an enum const in T1  |
+          T1.variant defines _id as an enum const in T1
+            when is-record?(T1) = TRUE
+
+  [fi1] _id+ : _new-type defines _id as an enum const in [Prefix] =
+          [Prefix, type Generated = _new-type] defines _id as an enum const
+
+  [fi2] _rec-section; _rec-section+ defines _id as an enum const in Context =
+          _rec-section defines _id as an enum const in Context |
+            _rec-section+ defines _id as an enum const in Context
+
+  [va1] case _selector of _const+: ( _field-list )
+          defines _id as an enum const in [Prefix, Entry] =
+            [Prefix, type Generated = record _field-list end]
+              defines _id as an enum const
+
+  [va2] case _selector of _variant; _variant+
+          defines _id as an enum const in Context =
+            case _selector of _variant defines _id as an enum const in Context
+            | case _selector of _variant+ defines _id as an enum const in Context
+
+  [re1] is-record?([Prefix, type _id = _PS record _fields-descr opt; end]) = TRUE
+  [re2] [Prefix, type _id = _PS record _fixed ; _var-part opt; end] . variant = _var-part
+  [re3] [Prefix, type _id = _PS record _fixed ; _var-part opt; end] . fixed = _fixed
+  [re4] [Prefix, type _id = _PS record _fixed opt; end] . fixed = _fixed
+  [re5] [Prefix, type _id = _PS record _var-part opt; end] . variant = _var-part

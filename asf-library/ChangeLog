@@ -1,0 +1,778 @@
+$Id$
+
+Wed Jan 23 17:47:09 CET 2008 <economop@cwi.nl>
+ * library/languages/sdf2/extract/Sdf2.{asf,sdf}: added more fact extractions.
+
+Thu Jan 10 18:28:57 CET 2008 <economop@cwi.nl>
+ * library/languages/sdf2/extract/Sdf2.{asf,sdf}: added restrictions, prefers,
+   avoids, and rejects extraction from grammar.
+
+Wed Nov 14 14:51:10 EST 2007 <jurgenv@cwi.nl>
+ * library/languages/box/format: added a formatter for Box
+
+2007-08-13    <storm@cwi.nl>
+
+ * Injected StrCon/BoolCon into RElem instead of String and Boolean; this
+   was causing ambiguities together with basic/RStores.
+
+2007-07-31    <{storm,jurgenv}@cwi.nl>
+
+ * Removed duplicated cons attributes from basic/Integers
+ * Removed import of basic/Whitespace in utilities/PosInfo
+
+Tue Jun 12 17:37:30 CEST 2007 <jurgenv@cwi.nl>
+ * NOTE: I've been making and committing changes in languages/asf/** that 
+   correspond to the "layout" branches of asc-support and asf. The 
+   asf-library package is not branched.
+ * library/languages/asf/compiler/**: the compiler now generates fully
+   functional matching and construction code for seperated lists. Alas,
+   the tests I created for testing this do not succeed not non-separated
+   lists. Apparently the old compiler did not fully implement list 
+   matching and construction correctly.
+ * library/languages/asf/normalization/**: added a Predicates module
+   that contains reusable predicates on AsFix trees. Added a phase to
+   the traversal functions module. This phase removes all layout and
+   literals from applications of traversal function productions. The idea
+   is to make the implementation of traversal functions in the ASF compiler 
+   and the interpreter independent from the rewriting with layout
+   functionality.
+
+Wed Jun  6 22:47:30 CEST 2007 <jurgenv@cwi.nl>
+ * library/languages/asf/compiler/**: adapted the source code of the ASF 
+  compiler for pattern matching
+  and construction on separated lists with 1 or 3 separators. 
+  The generated code is still somewhat buggy. The compiler is still fully
+  backward compatible for rewriting without separated lists, and
+  by keeping the code for normal lists separate from separated lists I
+  have limited the destabilizing effect of these huge adaptations to a 
+  minimum.
+ * library/languages/asf/compiler/format/**: added pretty printers 
+   for muASF and C code for debugging purposes
+ * library/languages/asf/asfsdfchecker: fixed priority constructor 
+   checker in AsfSdfChecker
+
+
+Wed Jun  6 18:09:33 CEST 2007 <economop@cwi.nl>
+ * library/languages/asf/addeqssyntax/Add-Eqs-Conds.asf: removed equation
+   added in r22498 because the dumped equations appear to trigger a bug in the 
+   generated normalizer -- restrictions in a normalized grammar do not get
+   rewritten correctly.
+
+Thu May  3 11:11:33 CEST 2007 <jurgenv@cwi.nl>
+ * library/languages/asf/normalization: 
+   added a new equation to the normalizer. If an equation rewrites
+   a lexical sort directly, the outer lex-to-cf function is removed
+   such that nested occurrences of the same lexical non-terminal will
+   be rewritten too. This fixes #749
+
+Thu Apr 19 09:05:41 CEST 2007 <kooiker@cwi.nl>
+ * containers/Set.asf:
+   - Add missing elem equations for the 4th time again!!!
+
+Fri Mar 16 12:06:58 CET 2007 <{economop,kooiker}@cwi.nl>
+ * library/languages/pico/check/Pico.asf:
+   - Add error for not declared variables
+
+Thu Mar 15 11:21:37 CET 2007 <kooiker@cwi.nl>
+ * library/basic/{Area,Location}Operations.asf:
+   - Add missing greater (and equal) then comparisons
+
+Wed Mar 14 21:05:03 CET 2007 <jurgenv@cwi.nl>
+ * added constructor names to work around a bug in the SDF2 normalizer
+  (order of attributes is different sometimes due to merging).
+  This now also triggers a bug in the SDF checker, which complains about
+  non-existing cons attributes. 
+
+Wed Mar 14 09:01:52 CET 2007 <jurgenv@cwi.nl>
+ * utilities/Parsing: does not import Strings anymore, all functions
+   use and produce StrCon. This will break existing specifications
+   that use this functionality!
+ * languages/logo: removed extra space at beginning of generated SVG file.
+
+Fri Mar  9 15:42:34 CET 2007 <kooiker@cwi.nl>
+ * library/languages/pico/extract/Pico.{asf,sdf}:
+   - Add statement controlflow extraction
+
+Thu Mar  8 14:10:58 CET 2007 <kooiker@cwi.nl>
+ * library/containers/Sets-and-Relations:
+   - add basic Sets and Relations support
+
+Wed Mar  7 16:33:54 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * library/languages/sdf2/checker/SortChecker{sdf,asf}:
+   - remove import of PosInfo over Sorts, since the PosInfo functions are only 
+     used on Symbols
+   - exporting parameterized sorts is prohibited
+   - fix checking of parameterized start-symbols 
+   - fix undeclared sort warning when using aliases
+
+Thu Mar  1 18:26:35 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * library/languages/asf/compiler/**: fixed some bugs in the compiler. It
+   still did not generate enough character range checks. And, after 
+   bootstrapping, we found out that the lexical transformations in the
+   compiler itself contained bugs in lexical transformations. These were
+   all fixed.
+
+Thu Feb 22 11:21:03 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * library/languages/asf/addeqssyntax/Add-Eqs-Conds.asf: removed generation
+   of old-style positive conditions ('=' syntax).
+
+Thu Feb 22 11:13:26 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * library/basic/Integers.asf: removing leading zeroes only on the Integer
+   level, not the NatCon level.
+ * library/languages/asf/compiler/muasf2muasf/Add-Range-Checks.asf:
+   bugfix (compiler did not generate any checks for character
+   membership in classes if there was an equality condition somewhere
+   that contained a lexical variable that ranged over a single character).
+
+
+2007-02-15    <storm@cwi.nl>
+ * languages/fdl/utilities/{Extended-FDL,Solution-FDL}.{asf,sdf}: added
+   new fdl utilies and made the BDD stuff to work in the new environment.
+
+Wed Feb 14 09:37:32 CET 2007 <jurgenv@cwi.nl>
+ * languages/sdf2/checker/Sdf-Checker.asf: fixed a weird bug (import
+   relation was inverted by an equation at post-check time). Also, I improved
+   a number of error messages, by explaining in the error message why an attribute is 'illegal'.
+
+Mon Jan 29 16:19:00 CET 2007 <kooiker@cwi.nl>
+ * basic/Integers.{asf,sdf}: added division, remainder and min
+ * basic/{Area,Location}Operations.{asf,sdf}: added access functions
+
+Thu Jan 25 18:58:51 CET 2007 <jurgenv@cwi.nl>
+ * basic/Integers.{asf,sdf}: important change in the integers. The Natural
+   sort has been removed completely, while an IntCon module has been
+   introduced. The reason for this drastic change is to accomodate the
+   creation of an API for RStores that supports both positive and negative
+   Integers. Having two different types of integers was not wanted, and
+   quickly lead to ambiguity.
+
+Thu Jan 25 18:01:10 CET 2007 <jurgenv@cwi.nl>
+ * library/languages/asf/*: added start constructors, both in 
+   add-eqs-syntax and asf-normalization.
+
+
+Tue Jan 23 13:43:49 CEST 2006 <storm@cwi.nl>
+ * library/languages/sdf2/normalization/Lifting.{sdf,asf}: fixed another
+   bug concerning the lifting of `Sort`'s to syntax. It only worked for
+   completely uppercase sort-names without dashes. Fixed now.
+
+Tue Jan 23 11:26:49 CEST 2006 <{storm,economop}@cwi.nl>
+ * library/languages/sdf2/normalization/Lifting.asf: fixed a
+   bug concerning the lifting of `Sort`'s to syntax. Only one-character
+   sort names were lifted correctly (due to a typo in the spec).
+
+Mon Dec 18 14:56:49 CET 2006 <jurgenv@cwi.nl>
+ * library/languages/asf/compiler/muasf2c/Locate-Constants.{asf,sdf}:
+   changed the way constants are located, and which code is generated
+   for located constants. Before, a constant expression was replaced
+   by an inline lookup such as (constant? constant : expr), which has
+   undefined semantics if a single constant occurs more than once in an 
+   expression. The compiler now collects all constants in an expression,
+   and checks just before the statement that contains the expression
+   whether or not to initialize the constant: 
+   if(!constant) { constant = expr; }.
+   
+   This change allows the compiler to search for more constants in more
+   locations, such as in the FUNC_EXIT (rhs of an equation). Several
+   specifications have shown 2 times more constants detected. Also, it
+   now detects instances of parse_sort and parse_cc as constants,
+   which could take up a significant amount of user time when many traversal
+   functions are used that have variable in the first argument of 
+   the traversal function on the left-hand side of an equation.
+ * library/languages/asf/normalization/Lexicals.asf: fixed an asf warning.
+   (strict variable was not used)
+
+Mon Nov 13 10:29:37 CET 2006 <economop@cwi.nl>
+ * library/languages/sdf2/analysis: removed as the code is not used in the 
+   trunk. It is implemented in the branch: enable-rn-analysis.
+
+Wed Sep 13 16:18:17 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/normalization/Sdf2-Normalization.asf: removed comma.
+
+Wed Sep 13 14:23:14 CEST 2006 <economop@cwi.nl>
+ * Removed the analysis of right nullable and nullable rules from the 
+   normaliser (the extra data will not be used in the trunk yet and the cost
+   on performace is not known).   
+ * library/languages/sdf2/analysis: created the svn:ignore props.
+
+Thu Sep  7 17:13:51 CEST 2006 <economop@cwi.nl>
+ * Added the analysis of right nullable and nullable rules to the 
+   normaliser.
+
+Thu Sep  7 13:57:38 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/analysis: added |Makefile.am|.
+
+Wed Sep  6 17:00:53 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/analysis: added a new collection
+   of modules for SDF2: analyses. Here we collect analyses of
+   grammars and store the results in a Kernel module for later
+   use by static checkers or the parsetable generator. 
+   Added Nullable analysis and right-nullable analysis for the
+   sake of RNGLR.
+
+Wed May 31 14:57:04 CEST 2006 <kooiker@cwi.nl>
+ * library/containers/Set.{sdf,asf}:
+   - Fixed merge error
+
+Wed Apr 19 20:51:40 CEST 2006 <jurgenv@cwi.nl>
+ * library/languages/sdf2/normalization:
+   There were serious errors in a number of locations:
+     - regular expressions were not expanded from productions generated
+       out of context-free priorities sections. This was because p[[.]]
+       was applied after r[[.]].
+     - the Character table was not complete enough, it still depended on 
+       the old type-less implementations of characters to work correctly.
+       Regenerated a fully complete table by enumerating all characters
+       in the classes for ShortChar
+     - fixed the lifting operator for (), the empty symbol.   
+     - literal expansion was not syntax-safe, error were generated by the
+       asf-checker.
+ * Fixed a serious bug in the normalization of groups of productions with 
+   selection of a particular argument for a priority.
+
+Tue Feb 21 14:20:28 CET 2006 <jurgenv@cwi.nl>
+ * library/asf/asfsdf-checker: moved source of asfsdf-checker here
+ * library/sdf2/checker: moved source of sdf-checker here
+ * library/sdf2/checker: fixed bug 464, add full support for renamings
+
+Mon Feb 13 13:59:27 CET 2006 <jurgenv@cwi.nl>
+ * library/**: Moved all syntax definitions to sdf-library!
+ * package: set version to 2.0
+ * package: added dependency on sdf-library package
+
+Fri Dec 23 10:37:18 CET 2005 <jurgenv@cwi.nl>
+ * library/languages/sdf2/*: added case-insensitive literals to SDF2
+
+Thu Dec 15 13:13:15 CET 2005 <kooiker@cwi.nl>
+ * library/sandbox/archeology/clax/{old,origins}/aux.ll
+   - renamed to auxiliary.ll because on Windows and thus Cygwin filenames are
+     not allowed to be called aux.*, prn.*, con.* etc.
+
+Tue Sep  6 11:49:36 CEST 2005 <kooiker@cwi.nl>
+ * library/basic/Modules.sdf:
+   - Extract dependencies from module
+
+Tue Aug 23 13:11:02 CEST 2005 <jurgenv@cwi.nl>
+ * library/basic/{Bytes,Strings},{asf,sdf}:
+	- removed circular dependency between Bytes and Strings. Strings
+	  does not imports Bytes anymore, and Bytes imports StrCon instead
+          of Strings.
+	- added implementation of 'ctype' functions for classifying Bytes.
+	- added implementation of to-upper and to-lower 
+
+Fri Aug 19 15:15:10 CEST 2005 <kooiker@cwi.nl>
+ * library/basic/Modules.sdf:
+   - Describes the syntax of the modules used in the meta-env
+
+Wed Jun  8 09:37:00 CEST 2005 <M336@cwi.nl>
+ * library/basic/Areas.sdf:
+   - Added comments describing the structure of an area
+
+Tue Apr 12 17:05:18 CEST 2005 <markvdb@cwi.nl>
+ * Improved the syntax of prefix functions.
+
+Fri Mar 25 11:28:57 CET 2005 <jurgenv@cwi.nl>
+ * Cleaned up C grammar:
+    - Onely one expression sort left (by using priorities)
+    - Choice of three topmodules: CWithComments, CAfterPreprocessor,
+      or CWithPreprocessor
+    - Copied Comments.sdf and Layout.sdf from cpp grammar. It's a clone,
+      but I think these two grammars should be allowed to evolve 
+      independently.
+
+Thu Mar 10 13:40:29 CET 2005 <{jong,kooiker}@cwi.nl>
+ * library/languages/c/syntax/Generic-Preprocessor.sdf:
+   - Filename start and ends with either < and > or ", but you cannot mix them
+   - Split IncludeFile into SystemInclude and LocalInclude 
+
+Thu Mar 10 10:52:39 CET 2005 <kooiker@cwi.nl>
+ * library/languages/basic/Bytes.asf: fixed byte-to-strchar to output space rather
+ than \032
+
+Tue Mar  1 13:43:41 CET 2005 <markvdb@cwi.nl>
+ * languages/sdf2/syntax/Literals.sdf: introduced the sort
+   FunctionName with subsorts IdCon and StrCon.
+ * Adapted the priority relations generated for non-assoc attributes.
+ * Removed equations dealing with old tuple syntax.
+
+Tue Mar  1 11:56:06 CET 2005 <kooiker@cwi.nl>
+ * utilities/Makefile.am: no install due to () iso {}
+
+Tue Feb 22 16:48:01 CET 2005 <jurgenv@cwi.nl>
+ * languages/c/syntax/Simplified-C.sdf: Added a definition of C that 
+   maximally uses priorities, optionals and lists. Priorities for
+   specific arguments are exploited such that only one Expression sort
+   remains. The priorities of operators is not guaranteed to be ANSI
+   compliant. This needs to be investigated later.
+ * languages/c/syntax/Simplified-C-Preprocessor.sdf: defines common
+   usage of C preprocessor statements, as they are usually embedded 
+   in a C program. No guarantee whatsoever, but it allows one to play
+   with C programs that contain preprocessor directives.
+
+Wed Feb  9 09:15:20 CET 2005 <jurgenv@cwi.nl>
+ * languages/asf/compiler: stored the fact that a builtin function has
+   a side-effect attribute in the name of the function. Locate-Constants
+   can then decide not to factor out a constant function application.
+ * utilities/*.sdf: annotated all builtins with side-effects with the
+   'side-effect' production attribute.
+
+Thu Feb  3 10:00:57 CET 2005 <jurgenv@cwi.nl>
+ * Added ATerm pretty printer
+
+Tue Feb  1 17:52:09 CET 2005 <jurgenv@cwi.nl>
+ * ASF-Normalization specifications now rewrites annotated specifications
+   (with pos-info), INSTEAD of removing all annotations.
+
+Thu Jan 27 09:18:01 CET 2005 <jurgenv@cwi.nl>
+ * Bumped to 1.2 version
+
+Wed Jan 26 10:13:00 CET 2005 <jurgenv@cwi.nl>
+ * Added specifications: languages/asf/compiler and
+   languages/asf/normalization. The compiler moved from the ASF package.
+   The normalizer is a new tool.
+ * TODO: reimplement muasf2tom.
+ * Reimplemented Bytes, Strings, Integers with structured lexicals
+ * CHANGED escaping notation for StrCon to decimal notation and 
+   simplified the syntax.
+ * Added cons attributes to lexical syntax where needed.
+ * Several big changes in SDF specifications, explained in pgen package.
+ * ASCII module fixed
+ * Pico-syntax imports basic/NatCon and basic/StrCon instead of Strings
+   and Integers such that the syntax does not import equations!
+
+Mon Nov 15 12:47:00 CET 2004 <markvdb@cwi.nl>
+ * Merged 1.5 and trunk.
+	
+Sat Nov 13 10:43:17 CET 2004 <{jong,kooiker}@cwi.nl>
+ * library/languages/Makefile.am:
+   add tex to SUBDIRS (fixes distcheck issue)
+
+Fri Nov 12 13:10:01 CET 2004 <kooiker@cwi.nl>
+ * library/languages/tex:
+   - Added TeX grammar
+ * configure.in:
+   - Updated for TeX
+
+Thu Nov 11 09:37:18 CET 2004 <kooiker@cwi.nl>
+ * languages/box/syntax/Basic.sdf:
+   - Added tabstop spaceoption
+
+Thu Nov 11 09:32:47 CET 2004 <jurgenv@cwi.nl>
+ * Added utilities/Ambiguity.{asf,sdf}, which provides the basic
+   necessary reductions for creating disambiguation rules. It removes
+   double occurrences and removes the cluster when only one alternative
+   is left.
+ * Added utilities/Debug.{asf,sdf} that puts Tide and PosInfo together
+   for convenience. 
+ * Copied all pico demo stuff into library for convenience. Still need to
+   figure out what to do with the meta.buttons file! 
+
+Tue Nov  9 20:25:52 CET 2004 <markvdb@cwi.nl>
+ * languages/sdf2/renaming: Fixed the manipulation of renamings in order 
+   to solve bug #404.
+
+Mon Oct 11 15:33:15 CEST 2004 <jurgenv@cwi.nl, sgmcorne@science.uva.nl>
+ * Added utilities/Tide.sdf containing builtins for connecting a tide
+   adapter and setting steps and stuff.
+ * Added a demo debugger in languages/pico/debugger
+
+Mon Sep 20 15:11:34 CEST 2004 <kooiker@cwi.nl>
+ * library/languages/box/syntax:
+   - Added alignments 
+   - Added generic pretty module
+
+Thu Sep 16 11:47:47 CEST 2004 <jurgenv@cwi.nl>
+ * Added division to basic/Integers
+
+
+Wed Sep  8 16:29:10 CEST 2004 <jurgenv@cwi.nl>
+ * added quotrem, /, mod, odd and even to basic/Integers
+
+Fri Aug 27 15:26:34 CEST 2004 <kooiker@cwi.nl>
+ * library/languages/box/syntax/Alignments.sdf
+   - Added box alignments 
+
+Thu Aug 19 11:25:08 CEST 2004 <jong@cwi.nl>
+ * repair configure.in: sdf-idioms dir is not in sdf2 subdir
+
+Wed Aug 11 15:10:23 CEST 2004 <jurgenv@cwi.nl>
+ * Added languages/sdf-idioms, a package of sdf modules that each
+   demonstrate one particular SDF idiom.
+
+Fri Jul  2 10:12:32 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 1.1
+
+Thu Jul  1 15:26:09 CEST 2004 <markvdb@cwi.nl>
+ * Different translation of (kernel/lexical/context-free) start-symbols
+   into production rules of the form X -> <START>
+
+Thu Jun 10 13:57:59 CEST 2004 <jurgenv@cwi.nl>
+ * Added directory languages/asf/pretty
+ * Put basic ASF pretty printer in that directory
+ * Added directory languages/sdf2/pretty
+ * Moved SDF2 pretty printer to that directory
+ * library/make_rules: added automated generation of .cvsignore files for library directories
+ * Added the pico example specifications (originating from the asfsdf-meta
+   package) to the library
+
+Mon Jun  7 13:56:45 CEST 2004 <kooiker@cwi.nl>
+ * library/languages/sdf2/syntax:
+   - Added prettyprint rules
+
+Wed Jun  2 11:03:57 CEST 2004 <kooiker@cwi.nl>
+ * library/languages/box/utilities:
+   - Added generic prettyprinting of lists 
+
+Fri May 28 12:04:52 CEST 2004 <markvdb@cwi.nl>
+ * Removed the Symbol Natcon+ -> Symbol
+ * Removed the "{" {Symbol Symbol "}" Natcon+ -> Symbol
+ * Changed the priorities for lists in to prioritis
+   based on arguments.
+
+Wed May 26 11:48:42 CEST 2004 <kooiker@cwi.nl>
+ * library/languages/sdf2/syntax/Modules.sdf:
+   - removed Definition from start-symbols to avoid ambiguities with sort Module
+
+Tue May 11 15:30:00 CEST 2004 <kooiker@cwi.nl>
+ * library/sandbox/toolbus: 
+   - Added Tscript-pretty-traversal which does pretty-printing using traversal
+     functions and which pretty-prints the + operator context-sensitive 
+   - Added flattening of recursive left associative + lists
+
+Mon May 10 09:37:44 CEST 2004 <kooiker@cwi.nl>
+ * library/sandbox/toolbus: 
+   - Added Tscript-pretty pretty print rules 
+	
+Thu May  6 21:16:43 CEST 2004 <markvdb@cwi.nl>
+ * Fixed the typo reported by Niels: 
+   parametrized-sort ==> parameterized-sort.
+
+Tue May  4 11:16:57 CEST 2004 <jurgenv@cwi.nl>
+ * Refactored IO module into Parsing and Files, and IOResults into
+   ParsetreeCon and ReadWriteCon.
+
+Mon May  3 13:11:18 CEST 2004 <jurgenv@cwi.nl>
+ * Added hidden context-free start-symbols in all library modules
+   where appropriate. Removed some context-free start-symbols that
+   were not appropriate.
+
+Tue Apr 27 15:15:03 CEST 2004 <markvdb@cwi.nl>
+ * Fixed some inconsistencies wrt location and area-in-file.
+
+Fri Apr 23 17:11:13 CEST 2004 <markvdb@cwi.nl>
+ * Declared symbols in the sorts section are no longer
+   promoted to start symbols.
+
+Fri Apr 16 19:33:49 CEST 2004 <jurgenv@cwi.nl>
+ * added max(Int, Int) to basic/Integers
+
+Tue Mar 30 12:56:23 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * add area alternative for Location
+
+Fri Mar  5 13:55:46 CET 2004 <kooiker@cwi.nl>
+ * library/languages/box/syntax/Pretty.sdf:
+   - added generic prettyprint module 
+
+Tue Mar  2 11:39:49 CET 2004 <jurgenv@cwi.nl>
+ * Removed C syntax from languages
+
+Fri Feb 27 15:37:00 CET 2004 <{jong,kooiker}@cwi.nl>
+ * library/basic:
+   refactor LocationOperations out of Locations.sdf
+
+Tue Feb 17 11:47:52 CET 2004 <kooiker@cwi.nl>
+ * library/languages/box/syntax/Contexts.sdf:
+   - removed unused variable
+
+Mon Feb 16 10:11:57 CET 2004 <jurgenv@cwi.nl>
+ * str-len renamed to length
+ * str-cmp renamed to <, <=, >= and >
+ * bytes-cmp renamed to <, <=, >=, >
+ * gave set operators relative priorities: \ > /\ > \/
+ * TermCompare functions also use <, <=, >= and > operators
+
+Thu Feb 12 14:24:05 CET 2004 <jurgenv@cwi.nl>
+ * Sets are completely functional (finally). The syntax is:
+  - union = \/
+  - intersection = /\
+  - difference = \
+  - element test = in
+  - for every infix, there is the corresponding prefix notation
+
+Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+
+Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
+ * fix Makefile.am to get "distcheck" working
+
+2004/01/23 ({jurgenv,jong,kooiker}@cwi.nl)
+  * separated out the syntax definitions of StrCon from Strings and
+    NatCon from Integers. This allows other languages to use the syntax
+    and non-terminals of the library without depending on the implementation
+    of the functionality on Strings and NatCons.
+  * Some SIGNIFICANT changes in the Box language intended to simplify
+    apigeneration and separate syntax from semantics:
+      - StrCon -> Box instead of String -> Box
+        (now Box does not depend on the implementation of Strings anymore
+        including the basic/Integers imported by the Strings module)
+      - SpaceSymbol "=" NatCon  -> SOption
+        (now Box does not depend on the implementation of Integers anymore,
+        only on the basic NatCon lexical definition)
+      - added cons attributes where necessary in the Box language.
+      - removed operators like "++" and ":" from the Box syntax definition.
+        I'm sorry if this broke some specifications, but they are very easy
+        to reproduce in a new Box-Operations module.
+
+Tue Jan 20 14:46:47 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * basic/Locations.{asf,sdf}:
+   - added convenience getters for Location and Area data structures
+ * utilities/PosInfo.{asf,sdf}:
+   - uses convenience methods from basic/Locations
+   - renamed some convenience methods to make things more consistent
+ * utilities/IO.{asf,sdf}:
+   - added convenience functions unparse, and unparse-to-string.
+
+2003/16/01 (markvdb@cwi.nl)
+  * First version of BOX language added to the library.
+
+2003/06/01 (jurgenv@cwi.nl)
+  * Simplified IO.sdf, renamed ParseResults.sdf to IOResults.sdf.
+    All IO builtins now return all errors that might occur using the
+    syntax of the ErrorAPI.
+
+2003/12/10 (markvdb@cwi.nl)
+  * Introduced the {lexical, context-free} start-symbols in the Sdf2 grammar. 
+  * Adapted the Sdf2-Normalization accordingly.
+  * Both sorts and start-symbols are now used as start symbols.
+
+2003/11/26 (jurgenv@cwi.nl)
+  * added first version of generic error format
+
+2003/11/20 (jurgenv@cwi.nl)
+  * unified interface of parsing, unparsing and file reading and writing
+  * added parse-file and parse-bytes builtins that produce a structure
+    containing the lifted left and right layout and the parse tree itself.
+  * read-term-from-file now produces the same structure as parse-file
+  * added write-bytes-to-file and read-bytes-from-file builtins
+  * renamed unparse to unparse-to-bytes and added unparse-to-file
+
+
+2003/11/10 (jurgenv@cwi.nl)
+  * Upgraded SDF2 normalizer specification in languages/sdf2. One ambiguity
+    occurred over a condition with lists of priorities separated by comma's.
+    Introduced a "priorities" keyword on both sides of the two involved
+    conditions to solve the problem.
+  * Solved several new warnings of the SDF checker in the normalizer too.
+
+2003/11/03 (jurgenv@cwi.nl)
+  * Added lower-from-tree function.
+
+2003/11/03 (storm@cwi.nl)
+  * Added implode function.
+
+2003/10/16 (jurgenv@cwi.nl)
+  * Added tests to basic/Booleans,Integers,Strings
+
+2003/10/13 (jurgenv@cwi.nl)
+  * Removed old C grammar
+  * ANSI-C grammar is now half-finished, waiting on SDF2 extensions
+
+2003/10/09 (markvdb@cwi.nl)
+  * Added the strategy symbol again, was removed by accident.
+
+2003/10/09 ({jurgenv,markvdb}@cwi.nl)
+  * Reorganized the literal syntax.
+  * Added constructor information to Parsetree specification.
+  * Reintroduced the strategy symbol, removed by accident.
+
+2003/10/07 (markvdb@cwi.nl)
+  * Added new syntax rule for tuples <A,B>, the old syntax is
+    still supported for some time.
+
+2003/10/07 (jurgenv@cwi.nl)
+  * Added Casl directories to configure.in
+
+2003/10/06 (markvdb@cwi.nl)
+  * Casl added.
+
+2003/10/03 (markvdb@cwi.nl)
+  * Removed the set and perm symbol from Sdf2.
+
+2003/10/01 (markvdb@cwi.nl)
+  * Added constructor information to the Sdf2 and ATerm syntax
+    in order to get in sync with Sdf.label.def in sdf-support.
+
+2003/09/26 (markvdb@cwi.nl)
+  * Removed the Layout module from the aterm syntax.
+  * Added \r to basic/Whitespace
+  * Replaced the call to aterm/Layout by basic/Whitespace in
+    the ATerms and basic/Comments in Sdf2.
+
+2003/09/26 (jurgenv@cwi.nl)
+  * Added some grammars to the sandbox
+  * Added C language to the languages
+
+2003/09/25 ({storm,jurgenv}@cwi.nl)
+  * Reimplemented TermCompare module using better ordering builtin
+  * Added Measure.sdf
+
+2003/09/22 (jurgenv@cwi.nl)
+  * Restructured the library:
+      - basic (still contains basic data-types)
+      - containers (still contains paramatrized data-structures)
+      - utilities (contains access to ASF builtins and other practical stuff)
+      - languages (contains specificiations of all kinds of languages)
+  * Promoted cpp grammar from sandbox to languages
+  * Changed module names of ATerm syntax to correspond better to the 
+    style guide
+  * Added lifting operators in utilities/Lifting (reflection)
+
+2003/09/22 (storm@cwi.nl)
+  * Added grammar for the C Preprocessor to the Sandbox.
+  * Added tentative ASCII module to basic/.
+  * Removed Hashtable, added Bounded Balanced Trees.
+  * Added module for byte sequences to library: basic/Bytes.
+    You can now convert strings with escape sequences to actual
+    byte streams and back.
+  * Fixed deprecated syntax in basic/Strings
+  * Added str-len and str-cmp function to basic/Strings.
+
+2003/09/17 (jurgenv@cwi.nl)
+  * Removed remaining unnecessary chmod calls in install and uninstall 
+    targets.
+  * Added longest match on NatCon
+
+2003/09/16 (jurgenv@cwi.nl)
+  * Extracted asf-library from the asf package. The ChangeLog in the
+    asf package between 2003/07/06 and 2003/09/16 contains some relevant
+    messages for this new package!
+  * Set version number to 1.0
+
+2003/07/06 (jurgenv@cwi.nl)
+  * Removed all .baf and .tbl files because they are not loaded anymore
+    by the Meta-Environment anyway. This saves a lot of space in the
+    distribution.
+  * Removed installation architecture for the above files too
+
+2003/05/20 (jurgenv@cwi.nl)
+  * Fixed bug in containers/Set module. It imported basic/Boolean in an
+    hiddens section, but the 'elem' function exported a Boolean result.
+    This leads inevitably to problems when a Boolean value from the
+    elem function is matched against another Boolean value (due to the
+    id(<modulename>) production attribute).
+
+2003/04/15 (jurgenv@cwi.nl)
+  * Added a number of very old specifications to the sandbox (unreleased
+    specifications). Partially converted them to new ASF+SDF syntax.
+    
+2003/04/01 (markvdb@cwi.nl)
+  * Set no longer re-use the List module. 
+  * Square brackets are replaced by curly brackets.
+
+2002/10/12 (jurgenv@cwi.nl)
+  * Moved entire library to asf package. We will maintain this ChangeLog
+    since the library is such an isolated subtree in the package.
+
+2002/07/29 (jurgenv@cwi.nl)
+  * Updated STYLE-GUIDE and README
+  * Release 0.3
+
+2002/07/25 (jurgenv@cwi.nl)
+  * Removed libraries put back.
+  * Bumped to version 0.3beta
+
+2002/07/24 (jurgenv@cwi.nl)
+  * Temporarily removed functions, strategies, containers, disambiguation
+    and asf/tools from library in order to make a stable 0.2 release.
+  * Release 0.2
+
+2002/07/11 (jurgenv@cwi.nl)
+  * Added sdf2 normalizer
+  * Strategies now support full traversal and heterogeneous data-types.
+    To use it, import the strategies/Operators for every non-terminal in
+    the traversed grammar.
+  * Added side-effect: Counter
+  * Added side-effect: Normalization (to normalize terms that have been
+    obtained by other side-effects)
+  * Restructured library for ASF
+  * Added basic library for disambiguation
+
+2002/07/03 (jurgenv@cwi.nl)
+  * Added asf/Variables. A module that defines variables for a specific sort.
+  * Added the syntax of ASF
+
+2002/07/01 (vandenbr@loria.fr)
+  * Rolled back the modifications performed on 2002/06/14.
+
+2002/06/14 (jong@cwi.nl,markvdb@cs.vu.nl)
+  * Restructured the "Literal"s in ATerm syntax and Sdf syntax.
+  * Added ATermOperations (in OO style).
+  * Added ATerm placeholder.
+  * Fixed ChangeLog dates.
+
+2002/05/24 (jurgenv@cwi.nl)
+  * Added Stratego-like programming language with simple interpreter. 
+    Heterogeneous data-types and traversals not supported (yet).
+
+2002/05/23 (jurgenv@cwi.nl)
+  * Added experimental library for functional programming in ASF containing:
+      id, const, curry, uncurry, sequence, flip, apply, map and fold[lr],
+      zip, zipWith, tuple, fst, snd etc.
+  * Added experimental library for traversal programming in ASF containing:
+      topdown, bottomup, oncetd for type-preserving and type-unifying 
+      traversals
+  * Added setting and getting of annotations in terms.
+  * Fixed some minor bugs in the built-in system.
+
+2002/05/22 (jurgenv@cwi.nl)
+  * Worked out built-in definition and compilation further. Built-in
+    implementations are next to sdf files again where they are defined.
+  * Added map function from List[[From]] to List[[To]]
+
+2002/05/21 ({jurgenv,markvdb}@cwi.nl)
+  * Made built-in compilation more sophisticated. 
+    - Every subdirectory can declare a PACKAGE_SRC variable that tells in which 
+      files the built-ins are implemented
+    - Every declared built-in in a sdf file is tested to have an
+      implementation in one of the declared PACKAGE_SRC files.
+    - Every PACKAGE_SRC is registered in ${top}/src/objects.lst
+    - Every built-in is registered in ${top}/src/builtins.lst
+    - Using these files the library is finally collected and built.
+      
+2002/05/17 ({jurgenv,markvdb}@cwi.nl)
+  * Added sdf2 syntax
+  * Refactored sdf2 syntax
+  * Moved ATerm syntax from sdf2 syntax to own toplevel library
+  * Added read-term-from-file and write-term-to-file to system library
+
+2002/05/15 (jurgenv@cwi.nl)
+  * Baffiles and tables are also installed (after sdf files such that
+    timestamps are correct.
+  * Directories are made read-only after installation
+  * Added saved baf and tables for all modules so far
+  * Added builtin architecture (see STYLE-GUIDE)
+  * Added part of ATerm level 1 interface
+
+2002/05/14 (jurgenv@cwi.nl)
+  * Added automatic installation of the library modules
+  * Removed all dependencies on other packages for the moment
+  * Set version to 0.2beta
+
+2002/05/13 (jurgenv@cwi.nl)
+  * Removed generation of configure script
+  * Restarted asf library initiative using compound module names
+
+2001/12/21 (jurgenv@cwi.nl)
+  * Added --with-pt-support, --with-sglr and --with-asf configure options.
+  * Fixed make_rules.asf to be able to handle distcheck target.
+
+2001/08/30 (markvdb@cwi.nl)
+  * improved the efficiency of the addition.
+
+2001/07/31 (jurgenv@cwi.nl)
+  * Set version to 0.1alfa
+
+2001/07/25 (joost.visser@cwi.nl)
+  * Started to create an ASF library.
+  * Started a test framework for ASF specifications.

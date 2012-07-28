@@ -1,0 +1,8 @@
+module languages/sdf2/projection/Sdf2-Projection
+
+imports languages/sdf2/projection/Kernel
+        languages/sdf2/projection/Priority
+        languages/sdf2/projection/Renaming
+        languages/sdf2/projection/Modular
+        languages/sdf2/projection/Aliases
+        languages/sdf2/projection/Restrictions

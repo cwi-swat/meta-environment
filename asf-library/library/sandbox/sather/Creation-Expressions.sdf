@@ -1,0 +1,11 @@
+module Creation-Expressions
+
+imports Method-Call-Expressions
+
+exports
+
+sorts Create-Expression
+
+context-free syntax
+	"#" Type-Specifier? ("(" Modal-List ")")? -> Create-Expression
+

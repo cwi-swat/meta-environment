@@ -1,0 +1,36 @@
+module Py-Atoms
+
+imports 
+	Py-Imaginaries Py-Expressions Py-Identifiers Py-Strings
+
+exports
+
+sorts Atom Literal
+
+context-free syntax
+	"(" Expression-list ")" 	-> Parenth-form
+	"(" ")" 			-> Parenth-form
+	"[" Expression-list "]" 	-> List-display
+	"[" "]" 			-> List-display
+	Expression ":" Expression 	-> Key-datum
+	{Key-datum ","}+ 		-> Key-datum-list
+	{Key-datum ","}+ ","? 		-> Key-datum-list
+	"`" Expression-list "`" 	-> String-conversion	
+	Parenth-form 		-> Enclosure
+	List-display 		-> Enclosure
+	Dict-display 		-> Enclosure
+	String-conversion 	-> Enclosure
+
+	%% Reduncancy in Python docs: Integer sort includes Longinteger...
+	Stringliteral	-> Literal
+	Integer 	-> Literal
+	Longinteger	-> Literal
+	Floatnumber	-> Literal
+	Imagnumber	-> Literal 
+
+	Identifier 	-> Atom
+	Literal		-> Atom
+	Enclosure 	-> Atom
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

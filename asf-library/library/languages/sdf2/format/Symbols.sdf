@@ -1,0 +1,15 @@
+module languages/sdf2/format/Symbols
+
+imports languages/sdf2/syntax/Symbols
+imports languages/box/syntax/Box
+
+hiddens
+
+context-free syntax
+
+"[" Symbol* "]" -> Box* {to-box}
+"<" Box ">"     -> Symbols {from-box}
+
+variables
+
+"Symbol*" -> Symbol*

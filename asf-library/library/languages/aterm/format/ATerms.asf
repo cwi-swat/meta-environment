@@ -1,0 +1,16 @@
+
+%% these equations simply map aterms to box expressions
+equations
+ 
+[empty-list] [] = <H hs=0 [ "[" "]" ]>
+
+[non-empty-list] [ATerm+] = <HOV hs=0 vs=1 [ "[" 
+                             I is=2 [ HOV hs=1 vs=1 [ H[] G gs=4 op=H hs=0 [ [ATerm+] ] ] ] "]" ]>
+
+[appl] AFun ( ATerm+ ) = <HOV hs=0 vs=1 [ H hs=0 [[AFun] "("] 
+                            I is=2 [ HOV hs=1 vs=1 [G gs=4 op=H hs=0 [[ATerm+]]]] ")" ]>
+
+[placeholder] <ATerm> = <H hs=0 ["<" [ATerm] ">"]>
+
+[anno] ATerm { ATerm+ } = <HOV hs=0 vs=1 [[ATerm] I is=1 [HOV hs=0 vs=1 ["{" 
+                             I is=2 [ HOV hs=1 vs=1 [ G gs=4 op=H hs=0 [ [ATerm+] ] ] ] "}" ] ]]> 

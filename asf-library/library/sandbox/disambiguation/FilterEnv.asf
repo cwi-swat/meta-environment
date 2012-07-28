@@ -1,0 +1,4 @@
+equations
+
+[] filter(amb(Amb*1, Amb, Amb*2), f, Env) = filter(amb(Amb*1,Amb*2),f, Env)
+    when f(Amb Env) = true

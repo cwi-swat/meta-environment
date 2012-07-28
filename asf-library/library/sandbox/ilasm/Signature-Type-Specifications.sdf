@@ -1,0 +1,60 @@
+module ilasm/Signature-Type-Specifications
+
+imports ilasm/Identifier-Nonterminals
+
+exports
+
+sorts Type Bounds Bound CallConv CallKind
+
+context-free syntax
+	"class" ClassRef -> Type
+	"object" -> Type
+	"string" -> Type
+	"value" "class" ClassRef -> Type
+	"valuetype" ClassRef -> Type
+	Type "[" "]" -> Type
+	Type "[" Bounds "]" -> Type
+	Type "&" -> Type
+	Type "*" -> Type
+	Type "pinned" -> Type
+	Type "modreq" "(" ClassRef ")" -> Type
+	Type "modopt" "(" ClassRef ")" -> Type
+	"method" CallConv Type "*" "(" SigArgs ")" -> Type
+	"typedref" -> Type
+	"char" -> Type
+	"void" -> Type
+	"bool" -> Type
+	"int8" -> Type
+	"int16" -> Type
+	"int32" -> Type
+	"int64" -> Type
+	"float32" -> Type
+	"float64" -> Type
+	"unsigned" "int8" -> Type
+	"unsigned" "int16" -> Type
+	"unsigned" "int32" -> Type
+	"unsigned" "int64" -> Type
+	"native" "int" -> Type
+	"native" "unsigned" "int" -> Type
+
+	{Bound ","}+ -> Bounds
+
+	-> Bound
+	"..." -> Bound
+	Int32 -> Bound
+	Int32 "..." Int32 -> Bound
+	Int32 "..." -> Bound
+
+	"instance" CallConv -> CallConv
+	"explicit" CallConv -> CallConv
+	CallKind -> CallConv
+
+	-> CallKind
+	"default" -> CallKind
+	"vararg" -> CallKind
+	"unmanaged" "cdecl" -> CallKind
+	"unmanaged" "stdcall" -> CallKind
+	"unmanaged" "thiscall" -> CallKind
+	"unmanaged" "fastcall" -> CallKind
+
+

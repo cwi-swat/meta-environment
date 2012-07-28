@@ -1,0 +1,8 @@
+equations
+
+[ff-top]
+  find-startup-facts(Tscript) = StartupFacts,
+  find-process-facts(Tscript) = ProcessFactsSet
+  ===>
+  find-facts(Tscript) = 
+    <StartupFacts,ProcessFactsSet>

@@ -1,0 +1,67 @@
+To ensure maximal reusability of ASF+SDF modules, it is useful to
+abide by a number of guidelines.
+
+Modular structure
+-----------------
+
+* hidden import of basic/Whitespace
+    The layout to be used in the equations should be imported in hidden
+    fashion. This prevents conflicts with the layout of the user of
+    the library.
+
+* all variables should be hidden.
+
+* all module names should be relative to the root of the library
+
+Formatting
+----------
+
+These are general guidelines for formatting specifications. Well-motivated
+exceptions are allowed. For example, backward compatibility is a good
+argument.
+
+* sort names should be in CamelCase: BoolCon
+* module names should be with dashes: Pico-Booleans
+* constructor names should be lowercase with dashes: cons("add-op")
+* builtin names have the same formatting rules like cons names
+* variables should look like:
+    "Boolean"[A-Za-z0-9\']* -> Boolean
+    "Boolean*"[A-Za-z0-9\']* -> Boolean*
+    "Boolean,*"[A-Za-z0-9\']* -> {Boolean ","}*
+  or you can import asf/syntax/Variables[X] to get similar syntax automagically.
+* prefix syntax is preferred for functions.
+
+Built-ins
+---------
+
+* builtins are activated by a special production attribute:
+   context-free syntax
+     warning(Message) -> Message {built-in("warning")}
+* for each builtin there should be a file <builtin>.c in the same 
+  directory as the sdf module it is defined in. This file contains at 
+  least the function definition:
+     PT_Tree <builtin>(ATerm builtin, PT_Tree input) { ... }
+* The c files for implementing builtins should be summed up in a list
+  in the local Makefile.am (i.e. PACKAGE_SRC = warning.c )
+
+Files
+-----
+
+* in every Makefile.am in the library the following line must be included:
+  include $(top_srcdir)/templates/make_rules.lib
+* all .sdf and .asf files should be committed to the repository
+* all modules in the library should be saved as baf with parsetables
+* all .asf.tbl files should be committed to the repository
+  (this prevents a circular dependency between the library and the
+   Meta Environment at configure time).
+* the EXTRA_DIST variables need no manual configuration.
+
+Miscelaneous
+-----------
+
+* constructor annotations
+    The "constructor" annotation should be added to productions that
+    represent constructors (as opposed to functions). This makes the
+    module easier to understand, and it may be used by the ASF interpreter
+    or compiler.
+

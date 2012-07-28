@@ -1,0 +1,1378 @@
+equations
+
+[alr2cs] asfseplistrules2cstats(,Namepair*) = (,0)
+
+[alr2cs]  
+C-rule+ := make-c-rules(Rule+),
+$Expression := make-c-temp(0),
+Stat*1 := $Expression = arg0;,
+(Stat*,Aint) := seplistpatterns2cstats(C-rule+,$Expression,Namepair*,1)
+===>
+asfseplistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
+
+equations
+
+  [l2cs-1'1] (Funid,Aint+) := get-first-vf-path(C-rule+1),
+             is-ignored-funid(Funid) == false,
+             $Expression := make-atmp(Aint+),
+             $Expression2 := make-c-temp(Aint1),
+             (Stat*2,Aint2) := 
+                    seplistpatterns2cstats(C-rule+1,$Expression2,Namepair*,Aint1+1),
+             $Ltest := make-c-expression((Funid,Aint+),Namepair*),
+             Stat*1 := $Expression2 = arg_0($Expression);,
+             Stat*3 := Stat*1 ++ Stat*2,
+             Stat*4 := make-cond($Ltest,Stat*3)
+             ================================
+             seplist2cstats(C-rule+1,Namepair*,Aint1) = (Stat*4,Aint2)
+
+  [dl2cs-1'1] (Funid,Aint+) := get-first-vf-path(C-rule+1),
+              is-ignored-funid(Funid) == true,
+              $Expression := make-atmp(Aint+),
+              $Expression2 := make-c-temp(Aint1),
+              (Stat*2,Aint2) := 
+                seplistpatterns2cstats(C-rule+1,$Expression2,Namepair*,Aint1+1),
+              Stat*1 := $Expression2 = $Expression;,
+              Stat*3 := Stat*1 ++ Stat*2
+             ================================
+             seplist2cstats(C-rule+1,Namepair*,Aint1) = (Stat*3,Aint2)
+
+
+equations
+
+%% When generating subparts of the matching automaton for list patterns it is assumed
+%% that the list patterns in the left hand side of the equations and of the
+%% right hand side of conditions are normalized. This means that complex
+%% nested patterns are moved to conditions, see Section Normalize-Conds.
+
+  [lps2cs-1'1] seplistpatterns2cstats(,$Expression1,Namepair*,Aint) = (,Aint)
+
+  [lps2cs-1'2] (Decl*,Stat*,Aint2) := 
+                 seplistpattern2cstats(C-rule,$Expression1,Namepair*,Aint1)
+               ==================================================================
+               seplistpatterns2cstats(C-rule,$Expression1,Namepair*,Aint1) = 
+                  (Decl* ++d Stat*,Aint2)
+
+  [lps2cs-1'3] (C-rule+2,C-rule*) := select-on-same-list-pat(C-rule;C-rule+1),
+               (Decl*,Stat*1,Aint2) := seplistpattern2cstats(C-rule+2,$Expression1,Namepair*,Aint1),
+               (Funid,Aint+) := get-first-vf-path(C-rule+2),
+               is-ignored-funid(Funid) == false,
+               $Expression1 != make-c-temp(0), %% is the list the outermost function symbol?
+               $Expression := make-atmp(Aint+),
+               (Stat*2,Aint3) := seplistpatterns2cstats(C-rule*,$Expression1,Namepair*,Aint2),
+               Stat*3 := $Expression1 = arg_0($Expression);,
+               Stat*4 := Stat*3 ++ Stat*2,
+               Stat*5 := Decl* ++d Stat*1
+               =========================
+               seplistpatterns2cstats(C-rule;C-rule+1,$Expression1,Namepair*,Aint1) =
+                 (Stat*5 ++ Stat*4,Aint3)
+
+[lps2cs-1'3] (C-rule+2,C-rule*) := select-on-same-list-pat(C-rule;C-rule+1),
+               (Decl*,Stat*1,Aint2) := seplistpattern2cstats(C-rule+2,$Expression1,Namepair*,Aint1),
+               (Funid,Aint+) := get-first-vf-path(C-rule+2),
+               is-ignored-funid(Funid) == false,
+               $Expression1 == make-c-temp(0), %% is the list the outermost function symbol?
+               $Expression := make-atmp(Aint+),
+               (Stat*2,Aint3) := seplistpatterns2cstats(C-rule*,$Expression1,Namepair*,Aint2),
+               Stat*3 := $Expression1 = $Expression;,
+               Stat*4 := Stat*3 ++ Stat*2,
+               Stat*5 := Decl* ++d Stat*1
+               =========================
+               seplistpatterns2cstats(C-rule;C-rule+1,$Expression1,Namepair*,Aint1) =
+                 (Stat*5 ++ Stat*4,Aint3)
+
+ [lps2cs-1'4] (C-rule+2,C-rule*) := select-on-same-list-pat(C-rule;C-rule+1),
+               (Decl*,Stat*1,Aint2) := seplistpattern2cstats(C-rule+2,$Expression1,Namepair*,Aint1),
+               (Funid,Aint+) := get-first-vf-path(C-rule+2),
+               is-ignored-funid(Funid) == true,
+               $Expression := make-atmp(Aint+),
+               (Stat*2,Aint3) := seplistpatterns2cstats(C-rule*,$Expression1,Namepair*,Aint2),
+               Stat*3 := $Expression1 = $Expression;,
+               Stat*4 := Stat*3 ++ Stat*2,
+               Stat*5 := Decl* ++d Stat*1
+               =========================
+               seplistpatterns2cstats(C-rule;C-rule+1,$Expression1,Namepair*,Aint1) =
+                 (Stat*5 ++ Stat*4,Aint3)
+
+%% The boolean value indicates whether there is already a conditional with a check
+%% on the emptyness of the list, {\tt false} indicate that the check is
+%% absent, {\tt true} the inverse. Of course initially there is no such check.
+  [lp2cs-1'1] (Decl*,Stat*,Aint2) := seplistpattern2cstats(false,Fv-path+,
+                                 [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*,
+                                 $Expression1,Namepair*,Aint1)
+              ===========================================================================
+              seplistpattern2cstats([((Term,Aint+),Fv-path+),Fv-path*|
+                                  Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*,
+                                  $Expression1,Namepair*,Aint1) = (Decl*,Stat*,Aint2)
+
+equations
+
+%% The base cases for singleton patterns are rather simple
+[star] 
+         C-rule+2 := add-env(C-rule+,(($*Funid,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+2, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,($*Funid,Aint+2), C-rule+, $Expression, Namepair*,Aint) =
+( , Stat*1 ,Aint2 )
+
+[plus]   C-rule+2 := add-env(C-rule+,(($+Funid,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+2, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,($+Funid,Aint+2), C-rule+, $Expression, Namepair*,Aint) =
+( , 
+if (not_empty_list($Expression)) {
+  Stat*1
+}
+,
+Aint2
+)
+
+[var] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2 := add-env(C-rule+,(($Funid,$Expression2))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+2, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,($Funid,Aint+2), C-rule+, $Expression, Namepair*,Aint) =
+(Decl*2 , 
+if (is_singleton($Expression)) {
+  $Expression2 = list_head($Expression);
+  ++ Stat*1
+}
+ ,Aint2 )
+
+[empty] 
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,(null,Aint+2), C-rule+, $Expression, Namepair*,Aint) =
+( , 
+if (is_empty_list($Expression)) {
+  Stat*1
+}
+ ,Aint2 )
+
+
+equations
+
+%% When a star variable is seen, the separator is simply skipped, otherwise it is stored in a local variable. We have
+%% the cases for the end of a list pattern first (all combinations of {var,star-var,plus-var}), and then the cases
+%% for the middle and beginning of a list pattern (again all combinations). All of these rules are duplicated: once
+%% for a single separator (lexical sep lists and context-free normal lists), and once for three separators (context-free
+%% separated lists). Each rule prepares for the next nesting level by appropiately skipping over separators whenever possible.
+%% Separators are skipped, or bound depending on whether the surrounding variables are nullable lists or not.
+
+%% first the three end patterns that start with a star var:
+[star-star-end] 
+	$Expression2   := make-atmp(Aint+3),
+         Decl*2         := make-decl(Aint+3),
+	CConstant      := make-atmp(Aint+2),
+         Decl*3         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,((Term,$Expression2))),
+	C-rule+3       := add-env(C-rule+2,(($* Funid,slice(CConstant[0],CConstant[1])))),
+         C-rule+4       := add-env(C-rule+3,(($* Funid2,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+4, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),($* Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  do {
+    Stat*1 ++
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(CConstant[1]);
+
+        if (not_empty_list(CConstant[1])) {
+          $Expression = list_tail(CConstant[1]);
+        }
+        else {
+          $Expression = CConstant[1];
+        }
+      }
+    }
+    else {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(list_tail(CConstant[1]));
+        if (not_empty_list(CConstant[1])) {
+          $Expression  = list_tail(CConstant[1]);
+        }
+        else {
+           $Expression = CConstant[1];
+        }
+      }
+      else {
+        $Expression = CConstant[1];
+      }
+    }
+  } while (not_empty_list(CConstant[1]));
+  
+,Aint2
+)
+
+[star-plus-end] 
+	$Expression2   := make-atmp(Aint+3),
+         Decl*2         := make-decl(Aint+3),
+	CConstant      := make-atmp(Aint+2),
+         Decl*3         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,((Term,$Expression2))),
+	C-rule+3       := add-env(C-rule+2,(($* Funid,slice(CConstant[0],CConstant[1])))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+3, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),($+ Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list($Expression)) {
+    if (not_empty_list($Expression)) {
+      Stat*1
+    }
+    CConstant[1] = list_tail(CConstant[1]);
+    $Expression = CConstant[1];
+    if (not_empty_list(CConstant[1])) {
+       CConstant[1] = list_tail(CConstant[1]);
+       $Expression = CConstant[1];
+    }
+    else {
+      break;
+    }
+  }
+  
+,Aint2
+)
+
+[star-var-end] 
+         CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+         C-rule+2       := add-env(C-rule+,(($*Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression2   := make-atmp(Aint+4),
+         Decl*3         := make-decl(Aint+4),
+	C-rule+3       := add-env(C-rule+2,(($Funid2,$Expression2))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+3, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),($Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+ Decl*2 ++ Decl*3,
+  if (not_empty_list($Expression)) {
+    CConstant[0] = $Expression;
+    CConstant[1] = $Expression;
+    while (not_is_singleton($Expression)) {
+      CConstant[1] = list_tail(CConstant[1]);
+      $Expression = list_tail(CConstant[1]);
+    }
+    $Expression2 = list_head($Expression);
+    ++ Stat*1
+  }
+  
+,Aint2
+)
+
+%% here the three end patterns that start with a plus var:
+[plus-star-end] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+ Funid,slice(CConstant[0],CConstant[1])))),  
+	C-rule+3       := add-env(C-rule+2,(($*Funid2,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+3, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),($*Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+ Decl*2,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list(CConstant[1])) {
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      CConstant[1] = list_tail(CConstant[1]);
+
+      if (not_empty_list(CConstant[1])) {
+        $Expression = list_tail(CConstant[1]);
+      }
+      else {
+        $Expression = CConstant[1];
+      }
+    }
+    else {
+      CConstant[1] = list_tail(list_tail(CConstant[1]));
+      if (not_empty_list(CConstant[1])) {
+        $Expression  = list_tail(CConstant[1]);
+      }
+      else {
+         $Expression = CConstant[1];
+      }
+    } ++ 
+    Stat*1
+  }
+,Aint2
+)
+
+[plus-plus-end] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+         $Expression4   := make-atmp(Aint+4),
+         Decl*4         := make-decl(Aint+4),
+	C-rule+4       := add-env(C-rule+3,(($Funid2,$Expression4))),
+	C-rule+5       := add-env(C-rule+4,(($+Funid2,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+5, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),($+Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3 ++ Decl*4,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (larger_equal(length($Expression),3)) {
+    CConstant[1] = list_tail(CConstant[1]);
+    $Expression = CConstant[1];
+    $Expression3 = list_head($Expression);
+    $Expression = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+       Stat*1
+    }
+    CConstant[1] = list_tail(CConstant[1]);
+  }
+,Aint2
+)
+
+[plus-var-end] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+         $Expression4   := make-atmp(Aint+4),
+         Decl*4         := make-decl(Aint+4),
+	C-rule+4       := add-env(C-rule+3,(($Funid2,$Expression4))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+4, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),($Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3 ++ Decl*4,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression; 
+  while (larger(length($Expression), 3)) {
+    CConstant[1] = list_tail(list_tail($Expression));
+    $Expression = CConstant[1];
+  }
+  if (int_equal(length($Expression), 3)) {
+    CConstant[1] = list_tail($Expression);
+    $Expression = CConstant[1];
+    $Expression3 = list_head($Expression);
+    $Expression = list_tail($Expression);
+    $Expression4 = list_head($Expression);
+    ++ Stat*1
+  }
+,Aint2
+)
+
+%% and now the three end patterns that start with a normal var
+[var-star-end] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+         C-rule+3       := add-env(C-rule+2,(($*Funid2, $Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+3, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),($*Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+       $Expression  = list_tail($Expression);
+    }
+    ++ Stat*1
+  }
+,Aint2
+)
+
+[var-plus-end] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+         C-rule+4       := add-env(C-rule+3,(($+Funid2,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+4, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),($+Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+      $Expression3 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+
+      if (not_empty_list($Expression)) {
+        Stat*1
+      }
+    }
+  }
+,Aint2
+)
+
+[var-var-end] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+	$Expression4   := make-atmp(Aint+4),
+         Decl*4         := make-decl(Aint+4),
+	C-rule+4       := add-env(C-rule+3,(($Funid2,$Expression4))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+4, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),($Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3 ++ Decl*4, 
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+      $Expression3 = list_head($Expression);  
+      $Expression = list_tail($Expression);
+      if (is_single_element($Expression)) {
+        $Expression4 = list_head($Expression);
+        ++ Stat*1
+      }
+    }
+  }
+,Aint2
+)
+
+equations
+
+[star-var-and-star-star-and-star-plus] 
+	CConstant      := make-atmp(Aint+2),
+	Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($*Funid,slice(CConstant[0],CConstant[1])))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),Fv-path+),C-rule+2,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),((scons,Aint+5),Fv-path+)), 
+                               C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++  Decl*2,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  do {
+    Stat*1 ++
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(CConstant[1]);
+
+        if (not_empty_list(CConstant[1])) {
+          $Expression = list_tail(CConstant[1]);
+        }
+        else {
+          $Expression = CConstant[1];
+        }
+      }
+    }
+    else {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(list_tail(CConstant[1]));
+        if (not_empty_list(CConstant[1])) {
+          $Expression  = list_tail(CConstant[1]);
+        }
+        else {
+           $Expression = CConstant[1];
+        }
+      }
+      else {
+        $Expression = CConstant[1];
+      }
+    }
+  } while (not_empty_list(CConstant[1]));
+  
+,Aint2
+)
+
+%% if a plus is followed by a star, we should ignore the separators and only skip them if the next list is not empty yet
+[plus-star] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($*Funid2,Aint+4),Fv-path+),C-rule+2,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),((scons,Aint+5),($*Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++ Decl*2,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list(CConstant[1])) {
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      CConstant[1] = list_tail(CConstant[1]);
+
+      if (not_empty_list(CConstant[1])) {
+        $Expression = list_tail(CConstant[1]);
+      }
+      else {
+        $Expression = CConstant[1];
+      }
+    }
+    else {
+      CConstant[1] = list_tail(list_tail(CConstant[1]));
+      if (not_empty_list(CConstant[1])) {
+        $Expression  = list_tail(CConstant[1]);
+      }
+      else {
+         $Expression = CConstant[1];
+      }
+    } ++ 
+    Stat*1
+  }
+,Aint2
+)
+
+[plus-plus] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($+Funid2,Aint+4),Fv-path+),C-rule+3,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),((scons,Aint+5),($+Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+ Decl*1 ++ Decl*2 ++ Decl*3,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list(CConstant[1])) {
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      CConstant[1] = list_tail(CConstant[1]);
+
+      if (not_empty_list(CConstant[1])) {
+        $Expression = CConstant[1];
+        $Expression3 = list_head($Expression);
+        $Expression = list_tail($Expression);
+      }
+      else {
+        break;
+      }
+    }
+    else {
+      CConstant[1] = list_tail(list_tail(CConstant[1]));
+      if (not_empty_list(CConstant[1])) {
+        $Expression = CConstant[1];
+        $Expression3 = list_head($Expression);
+        $Expression = list_tail($Expression);
+      }
+      else {
+         break;
+      }
+    } ++ 
+    Stat*1
+  }
+,Aint2
+)
+
+[plus-var] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression2   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression2))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($Funid2,Aint+4),Fv-path+),C-rule+3,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),((scons,Aint+5),($Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+ Decl*1 ++ Decl*2 ++ Decl*3,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list(CConstant[1])) {
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      CConstant[1] = list_tail(CConstant[1]);
+
+      if (not_empty_list(CConstant[1])) {
+        $Expression = CConstant[1];
+        $Expression2 = list_head($Expression);
+        $Expression = list_tail($Expression);
+      }
+      else {
+        break;
+      }
+    }
+    else {
+      CConstant[1] = list_tail(list_tail(CConstant[1]));
+      if (not_empty_list(CConstant[1])) {
+        $Expression = CConstant[1];
+        $Expression2 = list_head($Expression);
+        $Expression = list_tail($Expression);
+      }
+      else {
+         break;
+      }
+    } ++ 
+    Stat*1
+  }
+,Aint2
+)
+
+%% and now the three end patterns that start with a normal var
+[var-star]
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($*Funid2,Aint+4),Fv-path+),C-rule+2,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),((scons,Aint+5),($*Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++ Decl*2,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+       $Expression = list_tail($Expression);
+    }
+    ++ Stat*1
+  }
+  
+,Aint2
+)
+
+[var-plus] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($+Funid2,Aint+4),Fv-path+),C-rule+3,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),((scons,Aint+5),($+Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++ Decl*2 ++ Decl*3,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+      $Expression3 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      ++ Stat*1
+    }
+  }
+,Aint2
+)
+
+[var-var] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($Funid2,Aint+4),Fv-path+),C-rule+3,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),((scons,Aint+5),($Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++ Decl*2 ++ Decl*3,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+      $Expression3 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      ++  Stat*1
+    }
+  }
+,Aint2
+)
+
+equations
+
+%% Here comes another copy of all cases for seperated lists, now we generated code for lists with three separators.
+%% The difference is mainly in the number of variables generated, and the amount of calls to list_tail.
+
+%% first the three end patterns that start with a star var:
+[star-star-end] 
+	$Expression2   := make-atmp(Aint+3),
+         Decl*2         := make-decl(Aint+3),
+	CConstant      := make-atmp(Aint+2),
+         Decl*3         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,((Term,$Expression2))),
+	C-rule+3       := add-env(C-rule+2,(($* Funid,slice(CConstant[0],CConstant[1])))),
+         C-rule+4       := add-env(C-rule+3,(($* Funid2,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+4, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($* Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  do {
+    Stat*1 ++
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(CConstant[1]);
+
+        if (not_empty_list(CConstant[1])) {
+          $Expression = list_tail(list_tail(list_tail(CConstant[1])));
+        }
+        else {
+          $Expression = CConstant[1];
+        }
+      }
+    }
+    else {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(list_tail(list_tail(list_tail(CConstant[1]))));
+        if (not_empty_list(CConstant[1])) {
+          $Expression  = list_tail(list_tail(list_tail(CConstant[1])));
+        }
+        else {
+           $Expression = CConstant[1];
+        }
+      }
+      else {
+        $Expression = CConstant[1];
+      }
+    }
+  } while (not_empty_list(CConstant[1]));
+  
+,Aint2
+)
+
+[star-plus-end] 
+	$Expression2   := make-atmp(Aint+3),
+         Decl*2         := make-decl(Aint+3),
+	CConstant      := make-atmp(Aint+2),
+         Decl*3         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,((Term,$Expression2))),
+	C-rule+3       := add-env(C-rule+2,(($* Funid,slice(CConstant[0],CConstant[1])))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+3, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($+ Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list($Expression)) {
+    if (not_empty_list($Expression)) {
+      Stat*1
+    }
+    CConstant[1] = list_tail(CConstant[1]);
+    $Expression = CConstant[1];
+    if (not_empty_list(CConstant[1])) {
+       CConstant[1] = list_tail(list_tail(list_tail(CConstant[1])));
+       $Expression = CConstant[1];
+    }
+    else {
+      break;
+    }
+  }
+  
+,Aint2
+)
+
+[star-var-end] 
+         CConstant      := make-atmp(Aint+2),
+         Decl*3         := make-array-decl(Aint+2),
+         C-rule+2       := add-env(C-rule+,(($*Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression2   := make-atmp(Aint+4),
+         Decl*2         := make-decl(Aint+4),
+	C-rule+3       := add-env(C-rule+2,(($Funid2,$Expression2))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+3, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+ Decl*2 ++ Decl*3,
+  if (not_empty_list($Expression)) {
+    CConstant[0] = $Expression;
+    CConstant[1] = $Expression;
+    while (not_is_singleton($Expression)) {
+      CConstant[1] = list_tail(CConstant[1]);
+      $Expression = list_tail(list_tail(list_tail(CConstant[1])));
+    }
+    $Expression2 = list_head($Expression);
+      ++ Stat*1
+  }
+  
+,Aint2
+)
+
+%% here the three end patterns that start with a plus var:
+[plus-star-end] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+ Funid,slice(CConstant[0],CConstant[1])))),  
+	C-rule+3       := add-env(C-rule+2,(($*Funid2,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+3, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($*Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+ Decl*2,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list(CConstant[1])) {
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      CConstant[1] = list_tail(CConstant[1]);
+
+      if (not_empty_list(CConstant[1])) {
+        $Expression = list_tail(list_tail(list_tail(CConstant[1])));
+      }
+      else {
+        $Expression = CConstant[1];
+      }
+    }
+    else {
+      CConstant[1] = list_tail(list_tail(list_tail(list_tail(CConstant[1]))));
+      if (not_empty_list(CConstant[1])) {
+        $Expression  = list_tail(list_tail(list_tail(CConstant[1])));
+      }
+      else {
+         $Expression = CConstant[1];
+      }
+    } ++ 
+    Stat*1
+  }
+,Aint2
+)
+
+[plus-plus-end] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+	$Expression4   := make-atmp(Aint+5),
+         Decl*5         := make-decl(Aint+5),
+	C-rule+4       := add-env(C-rule+3,((Term2,$Expression4))),
+	$Expression5   := make-atmp(Aint+6),
+         Decl*6         := make-decl(Aint+6),
+	C-rule+5       := add-env(C-rule+4,((Term3,$Expression5))),
+	C-rule+6       := add-env(C-rule+5,(($+Funid2,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+6, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($+Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3 ++ Decl*5 ++ Decl*6,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (larger_equal(length(CConstant[1]),5)) {
+    CConstant[1] = list_tail(CConstant[1]);
+    $Expression = CConstant[1];
+    $Expression3 = list_head($Expression);
+    $Expression =  list_tail($Expression);
+    $Expression4 = list_head($Expression);
+    $Expression = list_tail($Expression);
+    $Expression5 = list_head($Expression);
+    $Expression = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+       Stat*1
+    }
+    CConstant[1] = list_tail(list_tail(list_tail(CConstant[1])));
+  }
+,Aint2
+)
+
+[plus-var-end] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+         $Expression4   := make-atmp(Aint+5),
+         Decl*4         := make-decl(Aint+5),
+	C-rule+4       := add-env(C-rule+3,((Term2,$Expression4))),
+	$Expression5   := make-atmp(Aint+6),
+         Decl*5         := make-decl(Aint+6),
+	C-rule+5       := add-env(C-rule+4,((Term3,$Expression5))),
+	$Expression6   := make-atmp(Aint+4),
+         Decl*6         := make-decl(Aint+4),
+	C-rule+6       := add-env(C-rule+5,(($Funid2,$Expression6))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+6, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3 ++ Decl*4 ++ Decl*5 ++ Decl*6,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression; 
+  while (larger(length($Expression),5)) {
+    CConstant[1] = list_tail(list_tail(list_tail(list_tail($Expression))));
+    $Expression = CConstant[1];
+  }
+  if (int_equal(length($Expression), 5)) {
+    $Expression  = list_tail($Expression);
+    CConstant[1] = $Expression;
+    $Expression3 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    $Expression4 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    $Expression5 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    $Expression6 = list_head($Expression);
+    ++ Stat*1
+  }
+,Aint2
+)
+
+%% and now the three end patterns that start with a normal var
+[var-star-end] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+         C-rule+3       := add-env(C-rule+2,(($*Funid2, $Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+3, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($*Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+       $Expression  = list_tail(list_tail(list_tail($Expression)));
+    }
+    ++ Stat*1
+  }
+,Aint2
+)
+
+[var-plus-end] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+	$Expression4   := make-atmp(Aint+5),
+         Decl*4         := make-decl(Aint+5),
+	C-rule+4       := add-env(C-rule+3,((Term2,$Expression4))),
+	$Expression5   := make-atmp(Aint+6),
+         Decl*5         := make-decl(Aint+6),
+	C-rule+5       := add-env(C-rule+4,((Term3,$Expression5))),
+         C-rule+6       := add-env(C-rule+5,(($+Funid2,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+6, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($+Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3 ++ Decl*4 ++ Decl*5,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+      $Expression3 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      $Expression4 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      $Expression5 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+
+      if (not_empty_list($Expression)) {
+        Stat*1
+      }
+    }
+  }
+,Aint2
+)
+
+[var-var-end] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+	$Expression4   := make-atmp(Aint+5),
+         Decl*4         := make-decl(Aint+5),
+	C-rule+4       := add-env(C-rule+3,((Term2,$Expression4))),
+	$Expression5   := make-atmp(Aint+6),
+         Decl*5         := make-decl(Aint+6),
+	C-rule+5       := add-env(C-rule+4,((Term3,$Expression5))),
+         $Expression6   := make-atmp(Aint+4),
+         Decl*6         := make-decl(Aint+4),
+	C-rule+6       := add-env(C-rule+5,(($Funid2,$Expression6))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+6, Namepair*,Aint) %% were done, continue with next conditions
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($Funid2,Aint+4)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*2 ++ Decl*3 ++ Decl*4 ++ Decl*5 ++ Decl*6, 
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+      $Expression3 = list_head($Expression);  
+      $Expression = list_tail($Expression);
+      $Expression4 = list_head($Expression);  
+      $Expression = list_tail($Expression);
+      $Expression5 = list_head($Expression);  
+      $Expression = list_tail($Expression);
+      if (is_single_element($Expression)) {
+        $Expression6 = list_head($Expression);
+        ++ Stat*1
+      }
+    }
+  }
+,Aint2
+)
+
+equations
+
+[star-var-and-star-star-and-star-plus] 
+	CConstant      := make-atmp(Aint+2),
+	Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($*Funid,slice(CConstant[0],CConstant[1])))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),Fv-path+),C-rule+2,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),(Term2,Aint+7),(Term3,Aint+8),
+                                    ((scons,Aint+5),Fv-path+)), 
+                               C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++  Decl*2,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  do {
+    Stat*1 ++
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(CConstant[1]);
+
+        if (not_empty_list(CConstant[1])) {
+          $Expression = list_tail(list_tail(list_tail(CConstant[1])));
+        }
+        else {
+          $Expression = CConstant[1];
+        }
+      }
+    }
+    else {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(list_tail(list_tail(list_tail(CConstant[1]))));
+        if (not_empty_list(CConstant[1])) {
+          $Expression  = list_tail(list_tail(list_tail(CConstant[1])));
+        }
+        else {
+           $Expression = CConstant[1];
+        }
+      }
+      else {
+        $Expression = CConstant[1];
+      }
+    }
+  } while (not_empty_list(CConstant[1]));
+  
+,Aint2
+)
+
+%% if a plus is followed by a star, we should ignore the separators and only skip them if the next list is not empty yet
+[plus-star] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+11),($*Funid2,Aint+4),Fv-path+),C-rule+2,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),
+                                    ((scons,Aint+11),($*Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++ Decl*2,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list(CConstant[1])) {
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      CConstant[1] = list_tail(CConstant[1]);
+
+      if (not_empty_list(CConstant[1])) {
+        $Expression = list_tail(list_tail(list_tail(CConstant[1])));
+      }
+      else {
+        $Expression = CConstant[1];
+      }
+    }
+    else {
+      CConstant[1] = list_tail(list_tail(list_tail(list_tail(CConstant[1]))));
+      if (not_empty_list(CConstant[1])) {
+        $Expression  = list_tail(list_tail(list_tail(CConstant[1])));
+      }
+      else {
+         $Expression = CConstant[1];
+      }
+    } ++ 
+    Stat*1
+  }
+,Aint2
+)
+
+[plus-plus] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+	$Expression4   := make-atmp(Aint+5),
+         Decl*4         := make-decl(Aint+5),
+	C-rule+4       := add-env(C-rule+3,((Term2,$Expression4))),
+	$Expression5   := make-atmp(Aint+6),
+         Decl*5         := make-decl(Aint+6),
+	C-rule+5       := add-env(C-rule+4,((Term3,$Expression5))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+11),($+Funid2,Aint+4),Fv-path+),C-rule+5,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),
+                                    ((scons,Aint+11),($+Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+ Decl*1 ++ Decl*2 ++ Decl*3 ++ Decl*4 ++ Decl*5,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list(CConstant[1])) {
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      CConstant[1] = list_tail(CConstant[1]);
+
+      if (not_empty_list(CConstant[1])) {
+        $Expression = CConstant[1];
+        $Expression3 = list_head($Expression);
+        $Expression = list_tail($Expression);
+        $Expression4 = list_head($Expression);
+        $Expression = list_tail($Expression);
+        $Expression5 = list_head($Expression);
+        $Expression = list_tail($Expression);
+      }
+      else {
+        break;
+      }
+    }
+    else {
+      CConstant[1] = list_tail(list_tail(list_tail(list_tail(CConstant[1]))));
+      if (not_empty_list(CConstant[1])) {
+        $Expression = CConstant[1];
+        $Expression3 = list_head($Expression);
+        $Expression = list_tail($Expression);
+        $Expression4 = list_head($Expression);
+        $Expression = list_tail($Expression);
+        $Expression5 = list_head($Expression);
+        $Expression = list_tail($Expression);
+      }
+      else {
+         break;
+      }
+    } ++ 
+    Stat*1
+  }
+,Aint2
+)
+
+[plus-var] 
+	CConstant      := make-atmp(Aint+2),
+         Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
+	$Expression2   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression2))),
+	$Expression3   := make-atmp(Aint+5),
+         Decl*4         := make-decl(Aint+5),
+	C-rule+4       := add-env(C-rule+3,((Term2,$Expression3))),
+	$Expression4   := make-atmp(Aint+6),
+         Decl*5         := make-decl(Aint+6),
+	C-rule+5       := add-env(C-rule+4,((Term3,$Expression4))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+11),($Funid2,Aint+4),Fv-path+),C-rule+5,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),
+                                    ((scons,Aint+11),($Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+ Decl*1 ++ Decl*2 ++ Decl*3 ++ Decl*4 ++ Decl*5,
+  CConstant[0] = $Expression;
+  CConstant[1] = $Expression;
+  while (not_empty_list(CConstant[1])) {
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      CConstant[1] = list_tail(CConstant[1]);
+
+      if (not_empty_list(CConstant[1])) {
+        $Expression = CConstant[1];
+        $Expression2 = list_head($Expression);
+        $Expression = list_tail($Expression);
+        $Expression3 = list_head($Expression);
+        $Expression = list_tail($Expression);
+        $Expression4 = list_head($Expression);
+        $Expression = list_tail($Expression);
+      }
+      else {
+        break;
+      }
+    }
+    else {
+      CConstant[1] = list_tail(list_tail(list_tail(list_tail(CConstant[1]))));
+      if (not_empty_list(CConstant[1])) {
+        $Expression = CConstant[1];
+        $Expression2 = list_head($Expression);
+        $Expression = list_tail($Expression);
+        $Expression3 = list_head($Expression);
+        $Expression = list_tail($Expression);
+        $Expression4 = list_head($Expression);
+        $Expression = list_tail($Expression);
+      }
+      else {
+         break;
+      }
+    } ++ 
+    Stat*1
+  }
+,Aint2
+)
+
+%% and now the three end patterns that start with a normal var
+[var-star]
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+11),($*Funid2,Aint+4),Fv-path+),C-rule+2,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),
+                                    ((scons,Aint+11),($*Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++ Decl*2,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+       $Expression = list_tail(list_tail(list_tail($Expression)));
+    }
+    ++ Stat*1
+  }
+  
+,Aint2
+)
+
+[var-plus] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+	$Expression4   := make-atmp(Aint+5),
+         Decl*4         := make-decl(Aint+5),
+	C-rule+4       := add-env(C-rule+3,((Term2,$Expression4))),
+	$Expression5   := make-atmp(Aint+6),
+         Decl*5         := make-decl(Aint+6),
+	C-rule+5       := add-env(C-rule+4,((Term3,$Expression5))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+11),($+Funid2,Aint+4),Fv-path+),C-rule+5,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),
+                                    ((scons,Aint+11),($+Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++ Decl*2 ++ Decl*3 ++ Decl*4 ++ Decl*5,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+      $Expression3 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      $Expression4 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      $Expression5 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      ++ Stat*1
+    }
+  }
+,Aint2
+)
+
+[var-var] 
+	$Expression2   := make-atmp(Aint+2),
+         Decl*2         := make-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
+	$Expression3   := make-atmp(Aint+3),
+         Decl*3         := make-decl(Aint+3),
+	C-rule+3       := add-env(C-rule+2,((Term,$Expression3))),
+	$Expression4   := make-atmp(Aint+5),
+         Decl*4         := make-decl(Aint+5),
+	C-rule+4       := add-env(C-rule+3,((Term2,$Expression4))),
+    	$Expression5   := make-atmp(Aint+6),
+         Decl*5         := make-decl(Aint+6),
+	C-rule+5       := add-env(C-rule+4,((Term3,$Expression5))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+11),($Funid2,Aint+4),Fv-path+),C-rule+5,$Expression,Namepair*,Aint)
+	===>
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),
+                                    ((scons,Aint+11),($Funid2,Aint+4), Fv-path+)), C-rule+,
+                               $Expression,
+                               Namepair*,Aint) =
+(
+  Decl*1 ++ Decl*2 ++ Decl*3 ++ Decl*4 ++ Decl*5,
+  if (not_empty_list($Expression)) {
+    $Expression2 = list_head($Expression);
+    $Expression  = list_tail($Expression);
+    if (not_empty_list($Expression)) {
+      $Expression3 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      $Expression4 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      $Expression5 = list_head($Expression);
+      $Expression  = list_tail($Expression);
+      ++  Stat*1
+    }
+  }
+,Aint2
+)

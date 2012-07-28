@@ -1,0 +1,30 @@
+module languages/fdl/evolution/Bag[X]
+
+imports basic/Booleans
+	basic/Integers
+	
+
+hiddens
+context-free start-symbols Bag[[X]] X
+
+exports
+
+context-free syntax
+	"{" {X ","}* "}" -> Bag[[X]]
+
+	union(Bag[[X]], Bag[[X]]) -> Bag[[X]]
+	element-of(X, Bag[[X]]) -> Boolean
+	count-occurences(X, Bag[[X]]) -> Integer
+	remove-duplicates(Bag[[X]]) -> Bag[[X]]
+	is-set(Bag[[X]]) -> Boolean
+	cardinality(Bag[[X]]) -> Integer
+
+hiddens
+
+imports basic/Whitespace
+
+variables
+	"$x"[0-9\']* -> X
+	"$x*"[0-9\']* -> {X ","}*
+	"$bag"[0-9\']* -> Bag[[X]]
+	

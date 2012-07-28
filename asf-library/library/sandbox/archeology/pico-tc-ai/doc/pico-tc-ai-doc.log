@@ -1,0 +1,322 @@
+This is TeX, C Version 3.0 (format=lplain 93.2.19)  15 APR 1993 12:04
+**&latex pico-tc-ai-doc.tex
+(pico-tc-ai-doc.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/local/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/local/lib/tex/macros/art11.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+)
+(/ufs/dinesh/utils/tex/sty/verbatimfiles.sty
+\c@lineno=\count87
+)
+(/usr/local/lib/tex/macros/a4.sty)
+(/ufs/gipe/src/ct/centaur/sources/ASDF/tolatex/ASF+SDF.tex
+\idepth=\skip41
+\idelta=\skip42
+) (nodes.tex)
+(macros.tex) (pico-tc-ai-doc.aux) (pico-intro.tex [1
+
+] (asdf.tex [2] [3]
+! Argument of \LEX has an extra }.
+<inserted text> 
+                \par 
+<to be read again> 
+                   }
+<argument> ...ic \LEX {Elts}\/} _ {3}\mbox {\LEX }
+                                                  $
+\mbox #1->\leavevmode \hbox {#1
+                               }
+<argument> ...LEX {i}},\IVAR {\LEX {Elts}}{3}\LEX 
+                                                  {$]$}}~=~\penalty -100 {\f...
+
+\@iparbox ... \fi \fi {\hsize #2\@parboxrestore #3
+                                                  }\if@pboxsw $\fi 
+l.232 }
+       
+? 
+! Argument of \LEX has an extra }.
+<inserted text> 
+                \par 
+<to be read again> 
+                   }
+<argument> ...c \LEX {Elts} \/} _ {3}\mbox {\LEX }
+                                                  $
+\mbox #1->\leavevmode \hbox {#1
+                               }
+<argument> ...ts}}{2},\IVAR {\LEX {Elts} }{3}\LEX 
+                                                  {$]$} }\VS 
+\@iparbox ... \fi \fi {\hsize #2\@parboxrestore #3
+                                                  }\if@pboxsw $\fi 
+l.232 }
+       
+? 
+
+Underfull \hbox (badness 10000) in paragraph at lines 232--232
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+) (Pico-typecheck-old.tex [4]
+Underfull \hbox (badness 10000) in paragraph at lines 19--19
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--24
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--44
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--45
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 46--46
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--49
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+) [5]
+Underfull \hbox (badness 10000) in paragraph at lines 129--129
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 146--146
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+(Pico-typecheck-new.tex [6]
+Underfull \hbox (badness 10000) in paragraph at lines 16--16
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--20
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 22--22
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--24
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 26--26
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--32
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--33
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 35--35
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 36--36
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--38
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--40
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--42
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--44
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--45
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 46--46
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 49--49
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--50
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--51
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+) [8] (/usr/local/lib/tex/macros/psfig.tex
+\@unused=\write3
+
+psfig/tex 1.3-dvips
+\ps@stream=\read0
+)
+psfig: searching snapshot.ps for bounding box
+psfig: including snapshot.ps 
+[9]
+Underfull \hbox (badness 10000) in paragraph at lines 328--328
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+(tc13a.tex
+\graph=\box25
+\graphtemp=\dimen99
+)
+Underfull \hbox (badness 10000) in paragraph at lines 353--353
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 355--355
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+(tc9b.tex) [10] (tc10.tex) (tc13b.tex) [11] (Pico-tokens.tex)
+(Pico-syntax-new.tex) [12] (tc13token.tex)) (pico-tc-ai-doc.bbl [13]) [14]
+(Pico-syntax.tex) [15] (small.pico) (Type-environments.tex
+Underfull \hbox (badness 10000) in paragraph at lines 16--16
+
+
+\hbox(0.0+0.0)x398.33858
+.\glue(\rightskip) 0.0
+
+) [16] (pico-tc-ai-doc.aux) ) 
+Here is how much of TeX's memory you used:
+ 458 strings out of 4458
+ 4438 string characters out of 63205
+ 42355 words of memory out of 262141
+ 2349 multiletter control sequences out of 9500
+ 20545 words of font info for 77 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 17i,13n,18p,651b,246s stack positions out of 300i,40n,60p,3000b,4000s
+
+Output written on pico-tc-ai-doc.dvi (16 pages, 57016 bytes).

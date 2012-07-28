@@ -1,0 +1,18 @@
+module languages/sdf2/renaming/Basic
+imports languages/sdf2/normalization/Basic languages/sdf2/renaming/Kernel
+exports
+  context-free syntax
+    "<" Renamings "-LEX" ">" -> Renamings
+    "<" Renamings "-CF" ">" -> Renamings
+
+hiddens
+  variables
+    "_"[ABC][0-9\']*    -> Symbol
+    "_G"[0-9\']*        -> Grammar 
+    "'r"[0-9\']*        -> Renamings
+    "'r""*"[0-9\']*     -> Renaming*
+    "'r""+"[0-9\']*     -> Renaming+
+    [p][0-9\']*         -> Production
+    [p]"*"[0-9\']*      -> Production*
+    [p]"+"[0-9\']*      -> Production+
+

@@ -1,0 +1,10 @@
+module Return-Statements
+
+imports Expressions
+
+exports
+
+sorts Return-Statement
+
+context-free syntax
+	"return" Expression? -> Return-Statement

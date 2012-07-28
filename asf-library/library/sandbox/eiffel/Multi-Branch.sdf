@@ -1,0 +1,15 @@
+module Multi-Branch
+
+imports Expression Choices
+
+exports
+
+context-free syntax
+
+"inspect" Expression When-Part-List? Else-Part? "end" -> Multi-Branch
+
+%% Modified from (tvds)
+%% "when" (When-Part "when")+ -> When-Part-List
+("when" When-Part)+ -> When-Part-List
+
+Choices "then" Compound -> When-Part

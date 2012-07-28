@@ -1,0 +1,38 @@
+module languages/asf/normalization/RenamedASF[Tree]
+
+imports languages/asf/syntax/Asf[P-Tree][
+	ASF-Equation => Equation
+	ASF-Condition => Condition
+	ASF-Tag	=> Tag
+	ASF-Module => Module
+	ASF-Section => Section
+	ASF-ConditionalEquation => ConditionalEquation
+	ASF-Conditions => Conditions
+	ASF-TestEquation => TestEquation
+	ASF-BarEnd => BarEnd
+	ASF-Implies => Implies
+	ASF-TagId => TagId
+	ASF-NumChar => NumChar
+	ASF-ShortChar => ShortChar
+	CHAR => Character
+]
+
+imports basic/Comments
+
+exports sorts
+	Equation
+	Condition
+	Tag
+	Module
+	Section
+	ConditionalEquation
+	Conditions
+	TestEquation
+	BarEnd
+	Implies
+	TagId
+	NumChar
+	ShortChar
+	Character
+
+sorts	P-Tree

@@ -1,0 +1,95 @@
+
+equations
+
+[] id2str(idcon(h)) = strcon(\" strchar(h) \")
+[] id2str(idcon(h m t)) = strcon(\" strchar(h) strchar(m) C* \")
+	when strcon(\" strchar(h) C* \") := id2str(idcon(h t)) 
+
+tests
+
+[] id2str(a) == "a"
+[] id2str(pico-id) == "pico-id"
+
+equations
+
+[] sort2id(sort(f)) = idcon(f)
+[] sort2id(sort(f l)) = idcon(f l)
+[] sort2id(sort(f m* l)) = idcon(f m* l)
+
+tests
+
+[] sort2id(Abcdefg012) == Abcdefg012
+[] sort2id(A-2) == A-2
+
+equations
+
+  [u2l-1'1]  upper2lower(XA) = xa
+
+  [u2l-1'2]  upper2lower(XB) = xb
+
+  [u2l-1'3]  upper2lower(XC) = xc
+
+  [u2l-1'4]  upper2lower(XD) = xd
+
+  [u2l-1'5]  upper2lower(XE) = xe
+
+  [u2l-1'6]  upper2lower(XF) = xf
+
+  [u2l-1'7]  upper2lower(XG) = xg
+
+  [u2l-1'8]  upper2lower(XH) = xh
+
+  [u2l-1'9]  upper2lower(XI) = xi
+
+  [u2l-1'10] upper2lower(XJ) = xj
+
+  [u2l-1'11] upper2lower(XK) = xk
+
+  [u2l-1'12] upper2lower(XL) = xl
+
+  [u2l-1'13] upper2lower(XM) = xm
+
+  [u2l-1'14] upper2lower(XN) = xn
+
+  [u2l-1'15] upper2lower(XO) = xo
+
+  [u2l-1'16] upper2lower(XP) = xp
+
+  [u2l-1'17] upper2lower(XQ) = xq
+
+  [u2l-1'18] upper2lower(XR) = xr
+
+  [u2l-1'19] upper2lower(XS) = xs
+
+  [u2l-1'20] upper2lower(XT) = xt
+
+  [u2l-1'21] upper2lower(XU) = xu
+
+  [u2l-1'22] upper2lower(XV) = xv
+
+  [u2l-1'23] upper2lower(XW) = xw
+
+  [u2l-1'24] upper2lower(XX) = xx
+
+  [u2l-1'25] upper2lower(XY) = xy
+
+  [u2l-1'26] upper2lower(XZ) = xz
+
+  [u2l-1'26] upper2lower(idcon(X d)) = idcon(x d)
+
+  [u2l-1'26] upper2lower(X-) = x-
+
+  [default] upper2lower(idcon(h)) = idcon(h2) when idcon(x h2) := upper2lower(idcon(X h))
+
+  [default] idcon(x h') := upper2lower(idcon(X h)),
+         idcon(x m') := upper2lower(idcon(X m)),
+         idcon(x t') := upper2lower(idcon(X t))
+         ===============================================
+         upper2lower(idcon(h m t)) = idcon(h' m' t')
+
+tests
+
+[] upper2lower(ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-A) == upper2lower(abcdefghijklmnopqrstuvwxyz0123456789-a)
+
+
+

@@ -1,0 +1,366 @@
+module Delphi
+
+%% Borland Delphi 1.0--4.0
+
+imports
+
+exports
+
+	sorts Goal Comment Ident Number String StringChar
+
+	lexical syntax
+		[\ \t\n]+ 			-> LAYOUT
+		~[\*\}]				-> Comment
+		[\*]~[\)]			-> Comment
+		[\{] Comment* [\}]		-> LAYOUT
+		"(*" Comment  "*)"	-> LAYOUT
+		[a-zA-Z\_][a-zA-Z\_0-9]* 	-> Ident
+		[0-9]+ 				-> Number
+		[\$][A-F0-9]+			-> Number
+		[0-9]* "." [0-9]* 		-> Number
+		[\'] StringChar* [\'] 		-> String
+		~[\'\n]				-> StringChar
+		[\'][\'] 			-> StringChar
+
+
+context-free syntax 
+
+	     Program		-> Goal
+	     Package		-> Goal
+	     Unit		-> Goal
+	     Library		-> Goal
+
+	     "program" Ident ("(" IdentList ")")? ";" ProgramBlock "."			-> Program
+
+	     "unit" Ident ";" InterfaceSection ImplementationSection InitSection "."	-> Unit
+
+	     "package" Ident ";" RequiresClause? ContainsClause? "end" "." -> Package
+
+	     "library" Ident ";" ProgramBlock "." -> Library
+
+	     UsesClause? Block -> ProgramBlock
+
+	     "uses" IdentList ";" -> UsesClause
+
+	     "interface" UsesClause? InterfaceDecl* -> InterfaceSection
+
+	     ConstSection -> InterfaceDecl
+	     VarSection -> InterfaceDecl
+	     TypeSection -> InterfaceDecl
+	     ExportedHeading -> InterfaceDecl
+
+	     ProcedureHeading ";" Directive? -> ExportedHeading
+	     FunctionHeading ";" Directive? -> ExportedHeading
+
+	     "implementation" UsesClause? DeclSection* -> ImplementationSection
+	     
+	     DeclSection? CompoundStmt -> Block
+	     
+	     LabelDeclSection -> DeclSection
+	     ConstSection -> DeclSection
+	     TypeSection -> DeclSection
+	     VarSection -> DeclSection
+	     ProcedureDeclSection -> DeclSection
+
+	     "label" LabelId -> LabelDeclSection
+
+	     "const" {ConstantDecl ";"}+ ";" -> ConstSection
+
+	     Ident "=" ConstExpr -> ConstantDecl
+	     Ident ":" TypeId "=" TypedConstant -> ConstantDecl
+
+	     "type" {TypeDecl ";"}+ ";" -> TypeSection
+	     
+	     Ident "=" Type -> TypeDecl
+	     Ident "=" RestrictedType -> TypeDecl
+
+	     ConstExpr -> TypedConstant
+	     ArrayConstant -> TypedConstant
+	     RecordConstant -> TypedConstant
+
+	     "(" {TypedConstant ","}+ ")" -> ArrayConstant
+
+	     "(" {RecordFieldConstant ";"}+ ")" -> RecordConstant
+
+	     Ident ":" TypedConstant -> RecordFieldConstant
+
+	     TypeId -> Type
+	     SimpleType -> Type
+	     StrucType -> Type
+	     PointerType -> Type
+	     StringType -> Type
+	     ProcedureType -> Type
+	     VariantType -> Type
+	     ClassRefType -> Type
+
+	     ObjectType -> RestrictedType
+	     ClassType -> RestrictedType
+	     InterfaceType -> RestrictedType
+
+	     "class" "of" TypeId -> ClassRefType
+
+	     OrdinalType -> SimpleType
+	     RealType -> SimpleType
+
+	     "real48" -> RealType
+	     "real"  -> RealType
+	     "single" -> RealType
+	     "double" -> RealType
+	     "extended" -> RealType
+	     "currency" -> RealType
+	     "comp" -> RealType
+
+	     SubrangeType -> OrdinalType
+	     EnumeratedType -> OrdinalType
+	     OrdIdent -> OrdinalType
+
+	     "shortint" -> OrdIdent
+	     "smallint" -> OrdIdent
+	     "integer" -> OrdIdent
+	     "byte" -> OrdIdent
+	     "longint" -> OrdIdent
+	     "int64" -> OrdIdent
+	     "word" -> OrdIdent
+	     "boolean" -> OrdIdent
+	     "char" -> OrdIdent
+	     "widechar" -> OrdIdent
+	     "longword" -> OrdIdent
+	     "pchar" -> OrdIdent
+
+	     "variant" -> VariantType
+	     "olevariant" -> VariantType
+
+	     ConstExpr ".." ConstExpr -> SubrangeType
+
+	     "(" IdentList ")" -> EnumeratedType
+
+	     "string" -> StringType
+	     "ansistring" -> StringType
+	     "widestring" -> StringType
+	     "string" "[" ConstExpr "]" -> StringType
+
+	     "packed"? ArrayType -> StrucType
+	     "packed"? SetType -> StrucType
+	     "packed"? FileType -> StrucType
+	     "packed"? RecType -> StrucType
+
+	     "array" ("[" {OrdinalType ","}+ "]")? "of" Type -> ArrayType
+
+	     "record" FieldList? "end" -> RecType
+
+	     {FieldDecl ";"}+ VariantSection? ";"? -> FieldList
+
+	     IdentList ":" Type -> FieldDecl
+
+	     "case" (Ident ":")? TypeId "of" {RecVariant ";"}+ -> VariantSection
+
+	     {ConstExpr ","}+ ":" "(" FieldList? ")" -> RecVariant
+
+	     "set" "of" OrdinalType -> SetType
+
+	     "file" "of" TypeId -> FileType
+
+	     "^" TypeId -> PointerType
+
+	     ProcedureHeading ("of" "object")? -> ProcedureType
+	     FunctionHeading ("of" "object")? -> ProcedureType
+
+	     %% May have to change this to "var" (VarDecl ";")+
+	     "var" {VarDecl ";"}+ ";" -> VarSection
+
+	     IdentList ":" Type (("absolute" (Ident | ConstExpr)) | "=" ConstExpr)? -> VarDecl
+
+	     %% ????, p. A-3,
+	     SimpleExpression -> Expression
+	     SimpleExpression RelOp Expression -> Expression
+
+	     %% ????
+	     ("+" | "-")? Term -> SimpleExpression
+	     SimpleExpression AddOp Term -> SimpleExpression
+
+	     Factor -> Term
+	     Factor MulOp Term -> Term
+
+	     Designator ("(" ExprList ")")? -> Factor
+	     %% It says Factor -> '' Designator???? p. A-3 "^" meant? Try.
+	     "^" Designator -> Factor
+	     Number -> Factor
+	     String -> Factor
+	     "nil" -> Factor
+	     "(" Expression ")" -> Factor {bracket}
+	     "not" Factor -> Factor
+	     SetConstructor -> Factor
+	     TypeId "(" Expression ")" -> Factor
+
+	     ">" -> RelOp
+	     "<" -> RelOp
+	     "<=" -> RelOp
+	     ">=" -> RelOp
+	     "<>" -> RelOp
+	     "in" -> RelOp
+	     "is" -> RelOp
+
+	     "+" -> AddOp
+	     "-" -> AddOp
+	     "or" -> AddOp
+	     "xor" -> AddOp
+
+	     "*" -> MulOp
+	     "/" -> MulOp
+	     "div" -> MulOp
+	     "mod" -> MulOp
+	     "and" -> MulOp
+	     "shl" -> MulOp
+	     "shr" -> MulOp
+
+	     QualId ("." Ident | "[" ExprList "]" | "^")? -> Designator
+
+	     "[" {SetElement ","}* "]" -> SetConstructor
+
+	     Expression (".." Expression)? -> SetElement
+
+	     {Expression ","}+ -> ExprList
+
+	     (LabelId ":")? (SimpleStatement | StructStmt)? -> Statement
+	     
+	     {Statement ";"}+ -> StmtList
+
+	     Designator ("(" ExprList ")")? -> SimpleStatement
+	     Designator ":=" Expression -> SimpleStatement
+	     "inherited" -> SimpleStatement
+	     "goto" LabelId -> SimpleStatement
+
+	     CompoundStmt -> StructStmt
+	     ConditionalStmt -> StructStmt
+	     LoopStmt -> StructStmt
+	     WithStmt -> StructStmt
+
+	     "begin" StmtList "end" -> CompoundStmt
+
+	     IfStmt -> ConditionalStmt
+	     CaseStmt -> ConditionalStmt
+
+	     "if" Expression "then" Statement ("else" Statement)? -> IfStmt
+
+	     "case" Expression "of" {CaseSelector ";"}+ ("else" Statement)? ";"? "end" -> CaseStmt
+
+	     {CaseLabel ","}+ ":" Statement -> CaseSelector
+
+	     ConstExpr (".." ConstExpr)? -> CaseLabel
+
+	     RepeatStmt -> LoopStmt
+	     WhileStmt -> LoopStmt
+	     ForStmt -> LoopStmt
+
+	     "repeat" Statement "until" Expression -> RepeatStmt
+
+	     "while" Expression "do" Statement -> WhileStmt
+
+	     "for" QualId ":=" Expression ("to" | "downto") Expression "do" Statement -> ForStmt
+
+	     "with" IdentList "do" Statement -> WithStmt
+
+	     ProcedureDecl -> ProcedureDeclSection
+	     FunctionDecl -> ProcedureDeclSection
+
+	     ProcedureHeading ";" Directive? Block ";" -> ProcedureDecl
+
+	     FunctionHeading ";" Directive? Block ";" -> FunctionDecl
+
+	     "function" QualId FormalParameters? ":" (SimpleType | "string") -> FunctionHeading
+
+	     "procedure" QualId FormalParameters? -> ProcedureHeading
+
+	     "(" {FormalParm ";"}+ ")" -> FormalParameters
+
+	     ("var" | "const" | "out" )? Parameter -> FormalParm
+
+	     IdentList (":" (( "array" "of")? SimpleType | Type | "string" | "file" ))? -> Parameter
+	     Ident ":" SimpleType "=" ConstExpr -> Parameter
+
+	     "cdecl" -> Directive
+	     "register" -> Directive
+	     "dynamic" -> Directive
+	     "virtual" -> Directive
+	     "export" -> Directive
+	     "external" -> Directive
+	     "far" -> Directive
+	     "forward" -> Directive
+	     "message" -> Directive
+	     "override" -> Directive
+	     "overload" -> Directive
+	     "pascal" -> Directive
+	     "reintroduce" -> Directive
+	     "safecall" -> Directive
+	     "stdcall" -> Directive
+
+	     "object" ObjectHeritage? ObjFieldList? MethodList? "end" -> ObjectType
+
+	     "(" QualId ")" -> ObjectHeritage
+
+	     MethodHeading (";" "virtual")? -> MethodListItem
+	     {MethodListItem ";"}+ -> MethodList
+
+	     ProcedureHeading -> MethodHeading
+	     FunctionHeading -> MethodHeading
+	     ConstructorHeading -> MethodHeading
+	     DestructorHeading -> MethodHeading
+
+	     "constructor" Ident FormalParameters? -> ConstructorHeading
+
+	     "destructor" Ident FormalParameters? -> DestructorHeading
+
+	     IdentList ":" Type -> ObjFieldListItem
+	     {ObjFieldListItem ";"}+ -> ObjFieldList
+
+	     "initialization" StmtList ("finalization" StmtList)? "end" -> InitSection
+	     "begin" StmtList "end" -> InitSection
+	     "end" -> InitSection
+
+	     "class" ClassHeritage? ClassFieldList? ClassMethodList? ClassPropertyList? "end" -> ClassType
+
+	     "(" IdentList ")" -> ClassHeritage
+
+	     ("public" | "protected" | "private" | "published")? -> ClassVisibility
+
+	     ClassVisibility ObjFieldList -> ClassFieldListItem
+	     {ClassFieldListItem ";"}+ -> ClassFieldList
+
+	     ClassVisibility MethodList -> ClassMethodListItem
+	     {ClassMethodListItem ";"}+ -> ClassMethodList
+
+	     ClassVisibility PropertyList -> ClassPropertyListItem
+	     {ClassPropertyListItem ";"}+ -> ClassPropertyList
+
+	     "property" Ident PropertyInterface? PropertySpeficiers -> PropertyList
+
+	     PropertyParameterList? ":" Ident -> PropertyInterface
+
+	     "[" {(IdentList ":" TypeId) ";"}+ "]" -> PropertyParameterList
+
+	     ("index" ConstExpr)? ("read" Ident)? ("write" Ident)? ("stored" (Ident | Constant))?
+		      (("default" ConstExpr) | "nodefault")? ("implements" TypeId)? -> PropertySpeficiers
+
+	     "interface" InterfaceHeritage? ClassMethodList? ClassPropertyList? "end" -> InterfaceType
+
+	     "(" IdentList ")" -> InterfaceHeritage
+
+	     %% Strange, why not "requires" IdentList ";", p. A-6
+	     "requires" {IdentList+ ";"}+ ";" -> RequiresClause
+
+	     "contains" {IdentList+ ";"}+ ";" -> ContainsClause
+
+	     {Ident ","}+ -> IdentList 
+
+	     (UnitId ".")? Ident -> QualId
+
+	     (UnitId ".")? TypeIdentifier -> TypeId
+
+
+	     Ident -> UnitId 
+	     Ident -> TypeIdentifier
+	     Ident -> LabelId
+
+
+	     Number -> ConstExpr
+	     String -> ConstExpr

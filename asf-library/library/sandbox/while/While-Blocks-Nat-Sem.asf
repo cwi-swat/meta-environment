@@ -1,0 +1,11 @@
+equations
+
+[upd-v]	update-v(var x := a; vdecls, s) = 
+		update-v(vdecls, s [x -> A[[a]]s])
+
+[upd-v] update-v(, s) = s
+
+[block]	update-v(vdecls, s) = s',
+	(S+, s') = s''
+	===
+	(begin vdecls S+ end, s) = s'' [DV(vdecls) |--> s]

@@ -1,0 +1,66 @@
+module languages/sdf2/normalization/Literals
+imports
+        languages/sdf2/syntax/Literals
+        languages/sdf2/normalization/CC
+        languages/sdf2/normalization/Character-Arithmetic
+
+exports
+  context-free syntax
+    "l[[" Grammar "]]"     -> Grammar
+    literals(SymbolSet)    -> Productions
+    chars(StrCon)          -> Symbols
+    ci-chars(SingleQuotedStrCon) -> Symbols
+    symbols({Symbol ","}*) -> Symbols
+
+hiddens
+  context-free syntax
+    id2str(IdCon)   -> StrCon
+    convert-chars(SingleQuotedStrCon) -> StrCon
+    convert-char(SingleQuotedStrChar) -> StrChar
+    extend(Symbols) -> Symbols
+    "extend"        -> IdCon {reject}
+
+  context-free start-symbols
+	Symbols Grammar NatCon
+
+hiddens
+  lexical variables
+    "C*" -> StrChar*
+    "C+" -> StrChar+
+    "C"  -> StrChar
+    "S*" -> SingleQuotedStrChar*
+    "S+" -> SingleQuotedStrChar+
+    "S"  -> SingleQuotedStrChar
+    "d"[0-9]*  -> [0-9]
+    "d+" -> [0-9]+
+    "h"[0-9]*  -> [A-Za-z]
+    "m"[0-9]*  -> [A-Za-z\-0-9]
+    "t"  -> [A-Za-z\-0-9]*
+    "normal"  -> ~[\0-\31\n\t\'\\]
+    "notquote" -> ~[\0-\31\n\t\'\\\"]
+    
+  %% The translation between string characters and character classes is quite
+  %% involved. All characters in StrCon fit either into regular or into
+  %% escaped ShortChars, or into both (checked this manually), so we can
+  %% do with two intersections:
+  lexical variables
+    "normal&escaped" -> (~[\0-\31\n\t\"\\] /\ ~[\0-\31A-Za-mo-qsu-z0-9]) / [a-zA-Z0-9] 
+    "normal&regular" -> ~[\0-\31\n\t\"\\] /\ [a-zA-Z0-9]
+
+  variables
+    "$"?"L"             -> StrCon
+    "$"?"l"             -> SingleQuotedStrCon
+    "I"                 -> IdCon
+    "'g"[0-9\']*        -> {Symbol ","}*
+    "'g+"[0-9\']*       -> {Symbol ","}+
+    "_G"[0-9\']*        -> Grammar 
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc]"+"[0-9\']* -> Symbol+
+    "'"[abc][0-9\']*    -> Symbol* 
+    "!"[0-9\']*         -> Attributes
+    "cc"[0-9\']*        -> CharClass 
+    "_c"[0-9\']* 	      -> Character
+    "s"[0-9\']*        -> SingleQuotedStrChar
+    "c"[0-9\']*        -> StrChar
+
+ 

@@ -1,0 +1,51 @@
+equations
+
+  [fs-make-facts] make-process-facts(Declaration, Creations, Invocations, Sends, Receives) =
+                    process-facts[Declaration, Creations, Invocations, Sends, Receives]
+
+  [fs-get-declaration] get-declaration(process-facts[Declaration, Creations, Invocations, Sends, Receives]) = Declaration
+
+  [fs-get-creations] get-creations(process-facts[Declaration, Creations, Invocations, Sends, Receives]) = Creations
+
+  [fs-get-invocations] get-invocations(process-facts[Declaration, Creations, Invocations, Sends, Receives]) = Invocations
+
+  [fs-get-sends] get-sends(process-facts[Declaration, Creations, Invocations, Sends, Receives]) = Sends
+
+  [fs-get-receives] get-receives(process-facts[Declaration, Creations, Invocations, Sends, Receives]) = Receives
+
+  [fs-set-creations] set-creations(process-facts[Declaration, Creations1, Invocations, Sends, Receives], Creations2) =
+                       process-facts[Declaration, Creations2, Invocations, Sends, Receives]
+
+  [fs-set-invocations] set-invocations(process-facts[Declaration, Creations, Invocations1, Sends, Receives], Invocations2) =
+                       process-facts[Declaration, Creations, Invocations2, Sends, Receives]
+
+  [fs-set-sends] set-sends(process-facts[Declaration, Creations, Invocations, Sends1, Receives], Sends2) =
+                       process-facts[Declaration, Creations, Invocations, Sends2, Receives]
+
+  [fs-set-receives] set-receives(process-facts[Declaration, Creations, Invocations, Sends, Receives1], Receives2) =
+                       process-facts[Declaration, Creations, Invocations, Sends, Receives2]
+
+  [fs-add-creation] get-creations(ProcessFacts) = Creations
+                    ===>
+                    add-process-creation(ProcessFacts, CreationFact) =
+                      set-creations(ProcessFacts, Creations + {CreationFact})
+
+  [fs-add-invocation] get-invocations(ProcessFacts) = Invocations
+                    ===>
+                    add-process-invocation(ProcessFacts, InvocationFact) =
+                      set-invocations(ProcessFacts, Invocations + {InvocationFact})
+
+  [fs-add-send] get-sends(ProcessFacts) = Sends
+                    ===>
+                    add-send-message(ProcessFacts, SendFact) =
+                      set-sends(ProcessFacts, Sends + {SendFact})
+
+  [fs-add-receive] get-receives(ProcessFacts) = Receives
+                    ===>
+                    add-receive-message(ProcessFacts, ReceiveFact) =
+                      set-receives(ProcessFacts, Receives + {ReceiveFact})
+
+  [fs-make-startup-facts] make-startup-facts(CreationFact) = startup-facts[{CreationFact}]
+
+  [fs-add-startup-fact] add-startup-fact(startup-facts[Creations], CreationFact) =
+                          startup-facts[Creations + {CreationFact}]

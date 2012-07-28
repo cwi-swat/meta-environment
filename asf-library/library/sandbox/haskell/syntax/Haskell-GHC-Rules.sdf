@@ -1,0 +1,11 @@
+module Haskell-GHC-Rules
+imports ExtraSepLists0[Rule ";" Rules]
+exports
+  context-free syntax
+    "{-# RULES" Rules "#-}"        -> Decl 	 {cons("Rules")}
+    STRING RuleForall Fexp "=" Exp -> Rule 	 {cons("Rule")}
+    ("forall" RuleVarList "." )?   -> RuleForall {cons("RuleForall")}
+    {RuleVar ","}+                 -> RuleVarList
+    Varid 	     		   -> RuleVar
+    Varid "::" Type 		   -> RuleVar
+   

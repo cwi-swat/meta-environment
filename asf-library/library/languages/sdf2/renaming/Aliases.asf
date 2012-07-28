@@ -1,0 +1,9 @@
+equations
+
+%% \noindent
+%% Renaming of aliases.
+
+  [0] (aliases al*)'r    = aliases (al*)a'r
+  [0] (al*)a'r           = when al* ==
+  [0] (_A -> _B)a'r      = (_A)'r -> (_B)'r
+  [0] (al+1 al+2)a'r     = (al+1)a'r ++ (al+2)a'r

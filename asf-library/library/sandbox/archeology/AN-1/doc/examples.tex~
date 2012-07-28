@@ -1,0 +1,195 @@
+\documentstyle[12pt,verbatimfiles]{article}
+
+\raggedbottom
+\setlength{\textwidth}{16cm}
+\setlength{\textheight}{22cm}
+\setlength{\oddsidemargin}{0.46cm}
+\setlength{\evensidemargin}{0.46cm}
+
+\newcommand{\asdf}{\mbox{ASF{\tt +}SDF}}
+
+
+\newcommand{\actmod}[2]{
+  \subsection{#2}
+    \subsubsection{MetaNotation Module}
+       \verbatimfile{#1/#2.asd}
+    \subsubsection{Generated \asdf}
+       \verbatimfile{#1/#2.syn}
+       \verbatimfile{#1/#2.eqs}
+    \newpage
+}
+
+\newcommand{\asdfmod}[2]{
+  \subsubsection{#2}
+  \verbatimfile{#1/#2.syn}
+  \verbatimfile{#1/#2.eqs}
+}
+
+\newcommand{\asdfmodsyn}[2]{
+  \subsubsection{#2}
+  \verbatimfile{#1/#2.syn}
+}
+
+
+\title{Executing Action Semantic Descriptions\\
+	using ASF+SDF:\\
+       Guided Tour and User Manual
+      }
+\author{
+  Arie van Deursen\\
+  {\footnotesize \sl
+     CWI -- P.O. Box 4079, 1009 AB Amsterdam, The Netherlands
+  }\\
+  {\footnotesize \sl {\rm Email:} arie@cwi.nl} \\
+  \\
+  Peter D. Mosses\\
+  {\footnotesize \sl
+    Computer Science Department, Aarhus University
+  }
+  {\footnotesize \sl
+    DK-8000 Aarhus C, Denmark}\\
+  {\footnotesize \sl
+    {\rm Email:} pdmosses@daimi.aau.dk}\\
+}
+\date{Draft!!}
+
+
+
+
+
+\begin{document}
+  \bibliographystyle{alpha}
+
+\maketitle
+
+\begin{abstract}
+
+  To be written.
+
+\end{abstract}
+
+
+
+\newpage
+\tableofcontents
+
+
+
+\newpage
+\section{Introduction}
+
+  bla bla
+
+  Motivation
+
+  
+\section{How to Use it?}
+
+ To be written.
+
+ You'll need  experience with ASF+SDF. Get the
+ ASF+SDF user manual (ftp ``ftp.cwi.nl: /pub/gipe'').
+
+
+ \begin{itemize}  
+ \item{} 
+   Start system in meta-notation directory; type ``ctasdf 120''
+  \item
+    Click ``ASF+SDF'' button.
+    Now the Meta-Environment pops up, and it starts loading
+    module MetaNotation, and the modules needed for it.
+  \item
+    Open a term editor over module MetaNotation,
+    e.g. ``DN-Truth-Values.asd''.
+  \item
+    Click somewhere, try to make some changes.
+  \item
+    To see the generated ASF+SDF modules for it, press ``Show All''
+    button
+
+    This will load the ASF+SDF modules needed to do the translation.
+    The ASF+SDF meta-environment will now process all these modules
+    for the first time; this takes a while. Please be patient.
+
+  \item
+    Before pushing any other button, first push Initialize.
+
+  \item
+    Button Dump SDF dumps the SDF part on file
+
+    (try with DN-Truth-Values.asd) The dumped file is in the same directory 
+    as the original file; you can take a look at it using vi (emacs).
+
+  \item
+    Button Dump equations dumps the equations part on file
+
+   (try with DN-Truth-Values.asd)
+  \item 
+    Button Dump All dumps both
+
+   (try with DN-Truth-Values.asd)
+
+  \item
+    Button nested dump will automatically start term editors
+    for {\em all\/} modules needed by this particular module.
+    It will generate ASF+SDF for {\em all\/} these modules, and
+    dump everyone on file.
+
+    (try with DN-Truth-Values.asd)
+
+  \item
+    Button Load will start a new ASF+SDF environment, in which
+    the generated ASF+SDF is loaded.
+    This will perform a considerable number of checks on the
+    generated modules.
+    
+    (try with ``Pico-Semantic-Equations.asd'' as edited file).
+
+  \item
+    Button dump and load dumps and loads.
+
+  \item
+    The generated Meta-Environment is not only useful for checking;
+    it can also be applied to {\em execute\/} semantic equations.
+    E.g., open a term over ``Pico-Semantic-Equations'', e.g.
+    ``Pico-Semantic-Equations.trm''.
+    Press reduce.
+    You'll see the corresponding action term.
+
+ \end{itemize}
+  
+
+
+\section{Reference Manual}
+
+  Explain in full how particular MetaNotation constructs
+  are processed.
+
+
+
+\section{Examples}
+
+  \actmod{../examples}{Pico-Identifiers}
+  \actmod{../examples}{Pico-Naturals}
+  \actmod{../examples}{Pico-Strings}
+  \actmod{../examples}{Pico-Syntax}
+  \actmod{../examples}{DN-Truth-Values}
+  \actmod{../examples}{YielderNotation}
+  \actmod{../examples}{ActionNotation}
+  \actmod{../examples}{Pico-Semantic-Equations}
+
+
+\section{Standard Modules}
+
+  \asdfmodsyn{../examples}{StandardDataYielder}
+  \asdfmodsyn{../grammar2sdf}{StandardLexical}
+  \asdfmodsyn{../grammar2sdf}{StandardLiteral}
+
+
+
+
+\end{document}
+
+
+
+

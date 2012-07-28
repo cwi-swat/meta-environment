@@ -1,0 +1,31 @@
+equations
+
+[uv1]	loc = new(sto),
+	envv' = envv [x -> loc],
+	i = A[[a]]sto.envv,
+	sto' = sto [loc -> i]
+	===
+	update-v(var x := a; vdecls, envv, sto) = 
+		update-v(vdecls, envv', sto')
+
+[uv2]	update-v(, envv, sto) = <envv, sto>
+
+[ve1]	envv1 [x -> l] envv2 x = l
+
+[ve2]	envv1 [x -> l] envv2 [x -> l'] = envv1 [x -> l'] envv2
+
+[st1]	sto1 [l -> i] sto2 l = i
+
+[st2]	sto1 [l -> i] sto2 [l -> i'] = sto1 [l -> i'] sto2
+
+
+[cmp]	sto @i = i',
+	sto . envv = s
+	===
+	sto . [x -> @i] envv = s [x -> i']
+
+[cmp]	sto . = 
+
+[nw]	new() = @0
+
+[nw]	new(sto [@i -> i']) = @i+1

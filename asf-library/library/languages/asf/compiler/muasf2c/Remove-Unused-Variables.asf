@@ -1,0 +1,55 @@
+equations
+
+[used-id] 
+collect-used(Id, Id*) = Id Id*
+
+ [block] 
+remove-unused({ Declarations Statements }) = {Declarations2 Statements}
+when Id* := collect-used(Statements, ),
+     Declarations2 := remove-unused-decls(Declarations, Id*)
+
+equations
+
+[pointer-decl] 
+used(Declaration-specifiers * Id;, Id*1 Id Id*2) = true
+
+[normal-decl] 
+used(Declaration-specifiers Id;, Id*1 Id Id*2) = true
+
+[array-decl] 
+used(Declaration-specifiers Id [IntCon];, Id*1 Id Id*2) = true
+
+[function-decl] 
+used(Declaration-specifiers Id (Params);, Id*1 Id Id*2) = true
+
+[assignment]
+used(Declaration-specifiers Declarator = $Expression;, Id*) =
+used(Declaration-specifiers Declarator;, Id*)
+
+[default-none]
+used(Declaration, Id*) = false
+
+equations
+
+[remove-single]
+used(Declaration, Id*) == false
+===>
+remove-unused-decls(Declaration, Id*) = 
+
+[keep-single]
+used(Declaration, Id*) == true
+===>
+remove-unused-decls(Declaration, Id*) = Declaration
+
+[empty]
+remove-unused-decls( , Id*) =
+
+[loop]
+remove-unused-decls(Declaration Declaration+, Id*) =
+remove-unused-decls(Declaration, Id*) ++ 
+remove-unused-decls(Declaration+, Id*)
+
+equations
+
+[main]
+remove-unused-variables(CProgram) = remove-unused(CProgram)

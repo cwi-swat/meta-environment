@@ -1,0 +1,101 @@
+module ilasm/Native-Type-Declarations
+
+imports ilasm/Data-Type-Nonterminals
+
+exports
+
+sorts NativeType VariantType
+
+context-free syntax
+	"custom" "(" CompQString "," CompQString ")" -> NativeType
+	"fixed" "sysstring" "[" Int32 "]" -> NativeType
+	"fixed" "array" "[" Int32 "]" -> NativeType
+	"variant" -> NativeType
+	"currency" -> NativeType
+	"syschar" -> NativeType
+	"void" -> NativeType
+	"bool" -> NativeType
+	"int8" -> NativeType
+	"int16" -> NativeType
+	"int32" -> NativeType
+	"int64" -> NativeType
+	"float32" -> NativeType
+	"float64" -> NativeType
+	"error" -> NativeType
+	"unsigned" "int8" -> NativeType
+	"unsigned" "int16" -> NativeType
+	"unsigned" "int32" -> NativeType
+	"unsigned" "int64" -> NativeType
+	NativeType "*" -> NativeType
+	NativeType "[" "]" -> NativeType
+	NativeType "[" Int32 "]" -> NativeType
+	NativeType "[" Int32 "+" Int32 "]" -> NativeType
+	NativeType "[" "+" Int32 "]" -> NativeType
+	"decimal" -> NativeType
+	"date" -> NativeType
+	"bstr" -> NativeType
+	"lpstr" -> NativeType
+	"lpwstr" -> NativeType
+	"lptstr" -> NativeType
+	"objectref" -> NativeType
+	"iunknown" -> NativeType
+	"idispatch" -> NativeType
+	"struct" -> NativeType
+	"interface" -> NativeType
+	"safearray" VariantType -> NativeType
+	"safearray" VariantType "," CompQString -> NativeType
+	"int" -> NativeType
+	"unsigned" "int" -> NativeType
+	"nested" "struct" -> NativeType
+	"byvalstr" -> NativeType
+	"ansi" "bstr" -> NativeType
+	"tbstr" -> NativeType
+	"variant" "bool" -> NativeType
+	"method" -> NativeType
+	"as" "any" -> NativeType
+	"lpstruct" -> NativeType
+
+	"null" -> VariantType
+	"variant" -> VariantType
+	"currency" -> VariantType
+	"void" -> VariantType
+	"bool" -> VariantType
+	"int8" -> VariantType
+	"int16" -> VariantType
+	"int32" -> VariantType
+	"int64" -> VariantType
+	"float32" -> VariantType
+	"float64" -> VariantType
+	"unsigned" "int8" -> VariantType
+	"unsigned" "int16" -> VariantType
+	"unsigned" "int32" -> VariantType
+	"unsigned" "int64" -> VariantType
+	"*" -> VariantType
+	VariantType "[" "]" -> VariantType
+	VariantType "vector" -> VariantType
+	VariantType "&" -> VariantType
+	"decimal" -> VariantType
+	"date" -> VariantType
+	"bstr" -> VariantType
+	"lpstr" -> VariantType
+	"lpwstr" -> VariantType
+	"iunknown" -> VariantType
+	"idispatch" -> VariantType
+	"safearray" -> VariantType
+	"int" -> VariantType
+	"unsigned" "int" -> VariantType
+	"error" -> VariantType
+	"hresult" -> VariantType
+	"carray" -> VariantType
+	"userdefined" -> VariantType
+	"record" -> VariantType
+	"filetime" -> VariantType
+	"blob" -> VariantType
+	"stream" -> VariantType
+	"storage" -> VariantType
+	"streamed_object" -> VariantType
+	"stored_object" -> VariantType
+	"blob_object" -> VariantType
+	"cf" -> VariantType
+	"clsid" -> VariantType
+

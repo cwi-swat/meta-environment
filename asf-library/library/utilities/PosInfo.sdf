@@ -1,0 +1,58 @@
+module utilities/PosInfo[X]
+
+imports basic/AreaOperations
+imports basic/LocationOperations
+imports utilities/ATermAnnotations[X]
+imports basic/AreaOperations
+imports basic/LocationOperations
+
+exports
+
+context-free syntax
+  set-location(X, Location) -> X
+
+context-free syntax
+  set-posinfo(X, Location) -> X
+
+context-free syntax
+  get-location(X) -> Location
+  get-lex-location(X) -> Location
+
+context-free syntax
+  get-posinfo(X) -> Location
+  get-lex-posinfo(X) -> Location
+
+context-free syntax
+  get-begin-line(X) -> NatCon
+  get-begin-column(X) -> NatCon
+  get-end-line(X) -> NatCon
+  get-end-column(X) -> NatCon
+  get-offset(X) -> NatCon
+  get-length(X) -> NatCon
+
+context-free syntax
+  get-area(X) -> Area
+  get-filename(X) -> StrCon
+  
+hiddens
+
+imports basic/Whitespace
+
+context-free start-symbols
+   Location NatCon StrCon
+
+lexical variables
+  "char*" -> StrChar*
+
+variables
+  "ATerm" -> ATerm
+  "Char*" -> CHAR*
+  "BeginColumn" -> NatCon
+  "EndColumn" -> NatCon
+  "Length" -> NatCon
+  "BeginLine" -> NatCon
+  "EndLine" -> NatCon
+  "Offset" -> NatCon
+  "Path" -> StrCon
+  "X" -> X
+  "Location" -> Location

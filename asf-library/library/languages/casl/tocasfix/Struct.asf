@@ -1,0 +1,11 @@
+equations
+
+  [c2a-1'1] c2a-Spec(var-Basic-Spec) = c2a-Basic-Spec(var-Basic-Spec)
+  [c2a-11'1] c2a-Spec-Name(var-Spec-Name) = T1,
+             c2a-Spec(var-Spec) = T2
+             =======================
+             c2a-Spec-Defn(spec var-Spec-Name = var-Spec var-Opt-End) =
+               spec-defn(T1,genericity(params([]),imports([])),T2)
+
+  [c2a-27'1] c2a-Spec-Name(var-Simple-Id) = 
+			SIMPLE-ID(c2a-Simple-Id(var-Simple-Id))

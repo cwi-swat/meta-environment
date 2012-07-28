@@ -1,0 +1,81 @@
+equations
+
+  [0]  standard-literals = context-free syntax CF-Fun+
+       ==============================================
+       dump-standard-literals =
+        simplify(
+          exports standard-literals  ||
+          quote-brackets( output-sorts( CF-Fun+ ) )  )
+
+  [1]  standard-literals =
+           context-free syntax
+                ";"             -> MN-SEMI-COLON
+                ":"             -> COLON
+                "<"             -> LESS
+                ","             -> COMMA
+                ">"             -> GREATER
+                "."             -> DOT
+                "?"             -> QUESTION
+                "/"             -> SLASH
+                "\""            -> DOUBLE-QUOTE
+                "'"             -> QUOTE
+                "`"             -> BACK-QUOTE
+                "~"             -> TILDE
+                "!"             -> BANG
+                "@"             -> AT
+                "#"             -> CROSSING
+                "$"             -> DOLLAR
+                "%"             -> PERCENT
+                "^"             -> POWER
+                "&"             -> AND
+                "*"             -> TIMES
+                "("             -> L-BRACKET
+                ")"             -> R-BRACKET
+                "-"             -> MINUS
+                "_"             -> UNDERSCORE
+                "+"             -> PLUS
+                "="             -> EQUALS
+                "{"             -> L-CURLEY-BRACKET
+                "["             -> L-SQUARE-BRACKET
+                "}"             -> R-CURLEY-BRACKET
+                "]"             -> R-SQUARE-BRACKET
+                "|"             -> PIPE
+                "\\"            -> BACKSLASH
+                ":="            -> ASSIGN
+                "=>"            -> IMPLIES
+                ">="            -> GEQ
+                "<="            -> LEQ
+
+ [2]  is-defined?( #String, #String -> #Sort CF-Fun*)  =  true
+
+ [3]  is-defined?( #String1,  #String2 -> #Sort CF-Fun*) =
+         is-defined?( #String1, CF-Fun* )
+         when #String1 != #String2
+
+ [4]  is-defined?( #String,  ) = false
+
+ [5]  get-def-sort( #String, CF-Fun*  #String -> #Sort CF-Fun'* ) = #Sort
+
+ [6]  is-standard-defined(#String) = true
+      ===============================================
+      2upper(#String) = get-standard-sort(#String)
+
+ [7]  standard-literals = context-free syntax CF-Fun+
+      ===============================================
+      is-standard-defined(#String) = is-defined?(#String, CF-Fun+)
+
+ [8]  standard-literals = context-free syntax CF-Fun+
+      =================================================
+      get-standard-sort( #String ) = get-def-sort(#String, CF-Fun+)
+
+ [7]  quote-brackets( {} ) = nil
+
+ [8]  quote-brackets( {#Sort} ) =
+         exports
+           sorts #Sort
+           context-free syntax
+             "\"" #Sort "\"" -> #Sort {bracket}
+
+ [9]  quote-brackets( {#Sort+, #Sort'+} ) =
+         quote-brackets( {#Sort+} ) ||
+         quote-brackets( {#Sort'+} )

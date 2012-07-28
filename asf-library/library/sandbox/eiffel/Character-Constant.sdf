@@ -1,0 +1,17 @@
+module Character-Constant
+
+imports Special-Character
+
+exports
+
+lexical syntax
+
+[\040-\176] /\ ~[\%\'\n] -> Character-Constant-Char
+Special-Character -> Character-Constant-Char
+"'" Character-Constant-Char "'" -> Character-Constant
+
+
+
+%% Note: Printable characters include, in this case, blanks and tab
+%% characters, but not new lines. Compare that to Free_operator.
+

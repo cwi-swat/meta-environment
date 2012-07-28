@@ -1,0 +1,3 @@
+equations
+
+[] [ C1 Renaming* C2] = < HOV hs=0 vs=1 ["[" _C1_ I is=2 [V [[Renaming*]]] _C2_ "]" ]>

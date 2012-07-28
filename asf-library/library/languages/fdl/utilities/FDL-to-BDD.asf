@@ -1,0 +1,11 @@
+equations
+
+[fdl-to-bdd-top]
+	fdl-to-bdd($featurediagram) = 
+		formula-to-bdd(fdl-to-formula($featurediagram))
+
+[fdl-to-bdd-2-top]
+	fdl-to-bdd($featurename, $featurediagram) = 
+		formula-to-bdd(fdl-to-formula($featurename,$featurediagram))
+	
+

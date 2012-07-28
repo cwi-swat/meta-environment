@@ -1,0 +1,19 @@
+module Py-Calls
+
+imports Py-Primaries 
+
+exports
+
+sorts Call Argument-list
+
+context-free syntax
+	Primary "(" {Argument-list ","}* ")" 		-> Call
+	Positional-arguments "," Keyword-arguments 	-> Argument-list
+	Positional-arguments 				-> Argument-list
+	Keyword-arguments 				-> Argument-list
+	{Expression ","}+ 				-> Positional-arguments
+	{Keyword-item ","}+ 				-> Keyword-arguments
+	Identifier "=" Expression 			-> Keyword-item
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

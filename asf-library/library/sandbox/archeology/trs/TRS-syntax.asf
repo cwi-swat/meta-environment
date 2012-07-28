@@ -1,0 +1,106 @@
+equations
+
+%% ------------------------------------------------------------------------- %%
+%% annotate-top : add annotations to the root of a tree                      %%
+
+  [At1]  annotate-top(_Annots _Id; _Annots') =
+           combine(_Annots; _Annots') _Id
+
+  [At2]  annotate-top(_Annots _Var; _Annots') =
+           combine(_Annots; _Annots') _Var
+
+  [At3]  annotate-top(_Annots _Id(_Terms); _Annots') =
+           combine(_Annots; _Annots') _Id(_Terms)
+
+%% ------------------------------------------------------------------------- %%
+%% combine : combine two sets of annotations.                                %%
+
+  [Co1]  combine(nf; _Annot*) = nf
+  [Co2]  combine(_Annot*; nf) = nf
+
+%% ------------------------------------------------------------------------- %%
+%% sig : signature of function.                                              %%
+
+  [Sg1]  sig(_Annots _Id) = _Id/0
+
+  [Sg2]  sig(_Annots _Id(_Term+)) = _Id/length(_Term+)
+
+%% ------------------------------------------------------------------------- %%
+%% nr-arguments : number of arguments of a function.                         %%
+
+  [Na1]  nr-arguments(_Annots _Id) = 0
+
+  [Na2]  nr-arguments(_Annots _Id(_Term)) = 1
+
+  [Na3]  nr-arguments(_Annots _Id(_Term, _Term+)) =
+           _succ(nr-arguments(_Annots _Id(_Term+)))
+
+%% ------------------------------------------------------------------------- %%
+%% equal : equality predicate on sort TERMS. Ignores annotations.            %%
+
+  [Eq1]  equal(_Annots _Id; _Annots' _Id) = true
+
+  [Eq2]  _Annots _Id != _Annots _Id'
+         =========================================
+         equal(_Annots _Id; _Annots' _Id') = false
+
+  [Eq3]  equal(_Annots _Var; _Annots' _Var) = true
+
+  [Eq4]  _Annots _Var != _Annots _Var'
+         ===========================================
+         equal(_Annots _Var; _Annots' _Var') = false
+
+  [Eq5]  equal(_Annots _Id; _Annots' _Id') = true
+         ====================================================
+         equal(_Annots _Id(_Terms); _Annots' _Id'(_Terms')) =
+           equal(_Terms; _Terms')
+
+  [Eq6]  equal(_Annots _Id; _Annots' _Id') = false
+         ======================================
+         equal(_Annots _Id(_Terms); _Annots' _Id'(_Terms')) = false
+
+  [Eq7]  equal(_Term; _Term') = true
+         =======================================
+         equal(_Term, _Term+; _Term', _Term+') =
+           equal(_Term+; _Term+')
+
+  [Eq8]  equal(_Term; _Term') = false
+         =============================================
+         equal(_Term, _Term+; _Term', _Term+') = false
+
+%% ------------------------------------------------------------------------- %%
+%% length: length of a list of terms                                         %%
+
+  [Le1]  length() = 0
+
+  [Le2]  length(_Term, _Term*) = _succ(length(_Term*))
+
+%% ------------------------------------------------------------------------- %%
+%% navigate: find the subterm at a given path in a term.                     %%
+
+  [Na1]  navigate(_Term; () ) = _Term
+
+  [Na2]  length(_Term*) = _pred(_Nat)
+         ==================
+         navigate(_Annots _Id(_Term*,_Term, _Term*'); (_Nat _Nat*) ) =
+           navigate(_Term; (_Nat*) )
+%% ------------------------------------------------------------------------- %%
+%% insert: insert a subterm at a given path in a term.                       %%
+
+  [In1]  insert(_Term; (); _Result) = _Result
+
+  [In2]  length(_Term*) = _pred(_Nat)
+         ====================================================================
+         insert(_Annots _Id(_Term*, _Term, _Term*'); (_Nat _Nat*); _Result) =
+           _Annots _Id(_Term*, insert(_Term; (_Nat*); _Result), _Term*')
+
+%% ------------------------------------------------------------------------- %%
+%% build-stack: build a stack of subterms, given a term and a path           %%
+
+  [Bs1]  build-stack( _Term; () ) = _Term
+
+  [Bs2]  length(_Term*) = _pred(_Nat),
+         _Term*'' = build-stack(_Term; (_Nat*) )
+         ===============================
+         build-stack(_Annots _Id(_Term*, _Term, _Term*'); (_Nat _Nat*) ) =
+           _Annots _Id(_Term*, _Term, _Term*'), _Term*''

@@ -1,0 +1,21 @@
+module languages/asf/compiler/muasf2muasf/Remove-Types
+
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+
+exports
+
+context-free syntax
+
+remove-types(Module) -> Module 
+
+hiddens
+
+context-free syntax
+
+rt(Module) -> Module {traversal(trafo,bottom-up,continue)}
+rt(Term)   -> Term   {traversal(trafo,bottom-up,continue)}
+
+variables
+
+"Type"[0-9]* -> Term

@@ -1,0 +1,50 @@
+module languages/casl/tocasfix/BasicItems
+
+imports languages/casl/tocasfix/Lexical languages/casl/syntax/BasicItems
+
+exports
+  context-free syntax
+    "TOKEN-ID"         -> AFun
+    "SIMPLE-ID"        -> AFun
+    "basic-spec"       -> AFun
+    "sort-items"       -> AFun
+    "sort-decl"        -> AFun
+    "subsort-decl"     -> AFun
+    "subsort-defn"     -> AFun
+    "iso-decl"         -> AFun
+
+    c2a-Basic-Spec(Basic-Spec)                                    -> ATerm
+    c2a-Basic-Items(Basic-Item)                                   -> ATerm
+    c2a-Basic-Items-plus(Basic-Item+)                             -> AList
+    c2a-Sig-Items(Sig-Items)                     -> ATerm
+    c2a-Sort-Item-plus({Sort-Item (";" Ann)}+)   -> AList
+    c2a-Sort-Item(Sort-Item)                     -> ATerm
+    "c2a-Sort-,-plus" "(" {Sort ","}+ ")"        -> AList
+    "c2a-Sort-*-plus" "(" {Sort "*"}+ ")"        -> AList
+    "c2a-Sort-=-plus" "(" {Sort "="}+ ")"        -> AList
+    c2a-Sort(Sort)                               -> ATerm
+    c2a-Var(Var)                                 -> ATerm
+
+  variables
+    "var-Basic-Item"[0-9]*             -> Basic-Item
+    "var-Ann"[0-9]*	               -> Ann
+
+hiddens
+  variables
+    "var-Basic-Item+"[0-9]*            -> Basic-Item+
+    "var-Sig-Items"[0-9]*              -> Sig-Items
+    "var-Sig-Items+"[0-9]*             -> Sig-Items+
+    "var-Sort"[0-9]*                   -> Sort
+    "var-Some-Sorts"[0-9]*             -> Some-Sorts
+    "var-Signs"[0-9]*                  -> Signs
+    "var-Sort,+"[0-9]*                 -> {Sort ","}+
+    "var-Sort*+"[0-9]*                 -> {Sort "*"}+
+    "var-Sort=+"[0-9]*                 -> {Sort "="}+
+    "var-Sort-Item"[0-9]*              -> Sort-Item
+    "var-Sort-Item+"[0-9]*             -> {Sort-Item (";" Ann)}+
+    "var-Sort-S"[0-9]*                 -> Sort-S
+    "var-Words"[0-9]*                  -> Words
+    "var-Opt-Semi"[0-9]*               -> Opt-Semi
+    "var-Semi-Ann"[0-9]*               -> (";" Ann)
+    "var-Var"[0-9]*                    -> Var  
+    "var-Formula"[0-9]*                -> Formula

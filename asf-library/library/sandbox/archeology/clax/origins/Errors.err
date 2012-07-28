@@ -1,0 +1,2 @@
+incompatible-operands(INTEGER + REAL) ;
+assignment-incompatible INTEGER := REAL

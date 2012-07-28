@@ -1,0 +1,35 @@
+equations
+
+  [1]  q + q'      = sim( <x + x' / n> )   when un(q,q') = pair(<x/n>,<x'/n>)
+  [2]  q - q'      = sim( <x - x' / n> )   when un(q,q') = pair(<x/n>,<x'/n>)
+  [3]  q <  q'     = x <  x'               when un(q,q') = pair(<x/n>,<x'/n>)
+  [4]  q \leq  q'  = x \leq x'             when un(q,q') = pair(<x/n>,<x'/n>)
+  [5]  q \geq q'   = x \geq x'             when un(q,q') = pair(<x/n>,<x'/n>)
+  [6]  q >  q'     = x >  x'               when un(q,q') = pair(<x/n>,<x'/n>)
+  [7]  eq(q,q')    = eq(x,x')              when un(q,q') = pair(<x/n>,<x'/n>)
+  [8]  max(q,q')   = < max(x,x')/n >       when un(q,q') = pair(<x/n>,<x'/n>)
+  [9]  min(q,q')   = < min(x,x')/n >       when un(q,q') = pair(<x/n>,<x'/n>)
+  [4]  - <x/n>     = < -x/n >
+  [5]  + <x/n>     = <  x/n >
+  [6]  | <x/n> |   = < |x|/n >
+ [14]  q / <n/n'>  = q * <n'/n>
+ [15]  q / <-n/n'> = q * <-n'/n>
+ [18]  q ^ n       = q * q ^ Pn
+ [19]  q ^ 0       = <1/1>
+ [20]  q ^ -n      = ( <1/1> / q ) ^ n
+ [10]  <x/n> * <x'/n'> = sim( <x * x' / n''> )  when n'' = n * n'
+ [16]  int2rat(x)      = <x/1>
+ [17]  rat2int(<x/n>)  = x div n
+
+
+  %% simplify to equivalent number with smallest fractional part.
+  [a]  x != 0, n0 = gcd(|x|,n), x1 = x div n0,  n1 = n div n0
+       =============================================
+       sim(<x/n>) = <x1 / n1>
+
+  [b]  sim(<0/n>) = <0/1>
+
+  %% Find equivalent denotations with same fractional part
+  [c]  n0 = gcd(n,n'),  n1 = n div n0,  n1' = n' div n0,  n2 = n1 * n1' * n0
+       =====================================================================
+       un( <x/n>, <x'/n'> ) = pair ( <x * n1' / n2>, <x' * n1 / n2> )

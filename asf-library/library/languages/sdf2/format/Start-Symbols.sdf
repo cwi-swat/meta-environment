@@ -1,0 +1,15 @@
+module languages/sdf2/format/Start-Symbols
+
+imports languages/sdf2/syntax/Start-Symbols
+imports languages/sdf2/format/Kernel
+
+hiddens
+
+context-free syntax
+
+ "[" Symbol* "]" -> Box* {to-box}
+ "<" Box ">"     -> Grammar {from-box}
+
+variables
+
+"Symbol*" -> Symbol*

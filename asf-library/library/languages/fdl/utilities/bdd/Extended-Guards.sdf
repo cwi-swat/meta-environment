@@ -1,0 +1,13 @@
+module languages/fdl/utilities/bdd/Extended-Guards
+
+imports languages/fdl/utilities/bdd/Guards
+	languages/fdl/utilities/bdd/Negation
+
+exports
+
+context-free syntax
+	lhs:Term-Var "!=" rhs:Term-Var -> Formula {cons("inequation")}
+
+hiddens
+variables
+	[xyz][0-9\']* -> Term-Var

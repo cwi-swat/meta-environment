@@ -1,0 +1,95 @@
+module Generator
+
+imports languages/fdl/syntax/Modular-FDL
+imports languages/ansi-c/syntax/Default-C-With-CPP
+imports languages/fdl/check/TypeEnvironment
+imports languages/fdl/run/ValueEnvironment
+imports languages/fdl/utilities/ParameterEnvironment
+imports basic/Bytes
+imports utilities/Parsing[Modulename]
+imports utilities/Parsing[CompositeFeature]
+
+exports
+sorts Keys
+
+context-free start-symbols
+  TranslationUnit
+
+context-free syntax
+  generate(FeatureModule) -> TranslationUnit  
+
+hiddens
+aliases
+  List[[AtomicFeature]] -> Keys
+
+context-free syntax
+  generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv) -> FunctionDefinition
+
+context-free syntax
+  genHandleOptionsFunctions(FeatureModule, TypeEnv, ValueEnv, ParameterEnv) -> ExternalDeclaration*                        
+  genHandleOptionsFunction(FeatureDefinition*, ExternalDeclaration*, Modulename, TypeEnv, ValueEnv, ParameterEnv) 
+    -> ExternalDeclaration* {traversal(accu, top-down, break)}
+  genHandleOptionsFunction(FeatureDefinition, ExternalDeclaration*, Modulename, TypeEnv, ValueEnv, ParameterEnv) 
+    -> ExternalDeclaration* {traversal(accu, top-down, break)}
+
+context-free syntax
+  generateFunctionStatements(FeatureDefinition, Statement*, ParameterEnv, TypeEnv) -> Statement* {traversal(accu, bottom-up, break)} 
+  generateFunctionStatements(FeatureName, Statement*, ParameterEnv, TypeEnv)       -> Statement* {traversal(accu, bottom-up, break)} 
+
+context-free syntax               
+  generateFunctionDeclarations(Keys, TypeEnv, ValueEnv)                       -> Declaration*                                             
+  generateGlobals(FeatureModule, ExternalDeclaration+, ParameterEnv, TypeEnv) -> ExternalDeclaration+                                     
+  addIncludeSection(ExternalDeclaration+)                                     -> ExternalDeclaration+                                     
+  generateArguments(Argument*, StringConstant, ParameterEnv, TypeEnv)         -> StringConstant       {traversal(accu, bottom-up, break)} 
+  generateArguments(FeatureName, StringConstant, ParameterEnv, TypeEnv)       -> StringConstant       {traversal(accu, bottom-up, break)} 
+
+context-free syntax
+  af2id(AtomicFeature)  -> Identifier        {complete} 
+  af2cid(AtomicFeature) -> Identifier        {complete} 
+  ac2cc(ArgumentChar)   -> CharacterConstant {complete} 
+
+context-free syntax
+  cf2handleoptions(CompositeFeature) -> Identifier {complete} 
+
+context-free syntax
+  idcon2stringconstant(IdCon) -> StringConstant {complete} 
+
+variables
+  "ArgumentChar" [0-9]*      -> ArgumentChar          
+  "Argument*" [0-9]*         -> Argument*             
+  "AtomicFeature" [0-9]*     -> AtomicFeature         
+  "AtomicFeature*" [0-9]*    -> {AtomicFeature ","}*  
+  "CharacterConstant" [0-9]* -> CharacterConstant     
+  "CompositeFeature" [0-9]*  -> CompositeFeature      
+  "C-Program" [0-9]*         -> ExternalDeclaration+ 
+  "C-Program*" [0-9]*        -> ExternalDeclaration*
+  "Declaration" [0-9]*       -> Declaration           
+  "Declaration*" [0-9]*      -> Declaration*    
+  "FeatureDefinition" [0-9]* -> FeatureDefinition
+  "FeatureDefinition*" [0-9]* -> FeatureDefinition*      
+  "FeatureDiagram" [0-9]*    -> FeatureDiagram   
+  "FeatureExpression" [0-9]* -> FeatureExpression     
+  "FeatureModule" [0-9]*     -> FeatureModule         
+  "FeatureName" [0-9]*       -> FeatureName           
+  "IdCon" [0-9]*             -> IdCon                 
+  "Identifier" [0-9]*        -> Identifier            
+  "ImportSection*" [0-9]*    -> ImportSection*        
+  "Keys" [0-9]*              -> Keys                  
+  "Modulename" [0-9]*        -> Modulename            
+  "ParameterEnv" [0-9]*      -> ParameterEnv          
+  "Section*" [0-9]*          -> Section*              
+  "Statement*" [0-9]*        -> Statement*            
+  "StringConstant" [0-9]*    -> StringConstant        
+  "TypeEnv" [0-9]*           -> TypeEnv               
+  "ValueEnv" [0-9]*          -> ValueEnv              
+
+lexical variables
+  "head" [0-9]*     -> [a-z]           
+  "caphead" [0-9]*  -> [A-Z]           
+  "tail" [0-9]*     -> [a-zA-Z0-9\_]*  
+  "argchar" [0-9]*  -> [a-zA-Z0-9]     
+  "idhead" [0-9]*   -> [A-Za-z]        
+  "idmiddle" [0-9]* -> [A-Za-z\-0-9]   
+  "idtail" [0-9]*   -> [A-Za-z\-0-9]*  
+  "char*" [0-9]*    -> StringChar*     
+  "char" [0-9]      -> StringChar      

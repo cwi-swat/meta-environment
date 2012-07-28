@@ -1,0 +1,202 @@
+equations
+  [sp1] spec-proc-tc(_id _act-par-list, E) = stc(_id _act-par-list, E)
+
+  { Procedures rewrite, put, reset, and get all should be called with
+    exactly one parameter. This parameter should be a file variable.
+    ISO section 6.6.5.2 }
+
+  [re1] stc( rewrite, E ) = add-error [Too few actual parameters.] to E
+  [pu1] stc( put    , E ) = add-error [Too few actual parameters.] to E
+  [rs1] stc( reset  , E ) = add-error [Too few actual parameters.] to E
+  [ge1] stc( get    , E ) = add-error [Too few actual parameters.] to E
+
+  [re2] stc( rewrite(_par), E)  = _par should be a file variable in E
+  [pu2] stc( put(_par), E)      = _par should be a file variable in E
+  [rs2] stc( reset(_par), E)    = _par should be a file variable in E
+  [ge2] stc( get(_par), E)      = _par should be a file variable in E
+
+  [re3] stc(rewrite(_par,_par+),E)=add-error [Too many actual parameters.] to E
+  [pu3] stc(put    (_par,_par+),E)=add-error [Too many actual parameters.] to E
+  [rs3] stc(reset  (_par,_par+),E)=add-error [Too many actual parameters.] to E
+  [ge3] stc(get    (_par,_par+),E)=add-error [Too many actual parameters.] to E
+
+
+  { The procedure read. If the first parameter is not a file variable,
+    insert file variable "input". If the file parameter is of type text,
+    (ISO section 6.9.1), the actual parameters shall be of char-type,
+    integer-type, or real-type. If the file parameter is not of type text,
+    (ISO section 6.6.5.2) the type of the actual parameter should be the
+    same as the component type of the file. }
+
+  [ea1] stc( read, E) = add-error [Too few actual parameters.] to E
+
+  [ea2] stc( read(_par), E) = add-error [Too few actual parameters.] to E
+          when is-file-variable?(_par,E) = TRUE
+
+  [ea3] stc( read(_par, _par+), E) = tcf(read(_par,_par+), E)
+          when is-file-variable?(_par,E) = TRUE
+
+  [ea4] stc( read(_par, _par*), E) = tcf(read(input,_par,_par*), E)
+          when is-file-variable?(_par,E) != TRUE
+
+  [ea5] tcf( read(_file,_par,_par+), E) =
+          tcf( read(_file,_par), tcf(read(_file,_par+), E))
+
+  [ea6] act-par-tc(var _file, E1) = E2,
+        E2.result.type = text-type,
+        act-par-tc(var _par, E2) = E3,
+        E3.result should be a character or a number in E3 = E4
+        ======================================================
+        tcf( read(_file, _par), E1) = E4
+
+  [ea7] act-par-tc(var _file, E1) = E2,
+        E2.result.type != text-type,
+        act-par-tc(var _par, E2) = E3,
+        E3.result should be assignment-compatible with
+                E2.result.type.comp-type in E3 = E4
+        ================================================
+        tcf( read(_file, _par), E1) = E4
+
+
+  { The procedure readln, ISO section 6.9.2 }
+  [ln1] stc( readln, E) = tcf( readln(input), E)
+
+  [ln2] stc( readln(_par, _par*), E) = tcf(readln(input, _par, _par*), E)
+          when is-file-variable?(_par, E) != TRUE
+
+  [ln3] stc( readln(_par, _par*), E) = tcf(readln(_par, _par*), E)
+          when is-file-variable?(_par, E) = TRUE
+
+  [ln4] tcf( readln(_file, _par+), E) =
+          tcf( readln(_file), tcf(read(_file, _par+), E))
+
+  [ln5] tcf( readln(_file), E ) = _file should be a text file variable in E
+
+
+  { The procedure write, ISO section 6.9.3, 6.6.5.2.
+    Eventually insert file-variable output. Distinguish between text-files and
+    non-text files. Check formats. }
+
+  [wr1] stc( write, E) = add-error [Too few actual parameters.] to E
+
+  [wr2] stc( write(_par), E) = add-error [Too few actual parameters.] to E
+          when is-file-variable?(_par, E) = TRUE
+
+  [wr3] stc( write(_par, _par+), E) = tcf(write(_par, _par+), E)
+          when is-file-variable?(_par, E) = TRUE
+
+  [wr4] stc( write(_par, _par*), E) = tcf(write(output, _par, _par*), E)
+          when is-file-variable?(_par, E) != TRUE
+
+  [wr5] tcf( write(_file,_par,_par+), E) =
+          tcf( write(_file, _par), tcf(write(_file, _par+), E))
+
+  [wr6] act-par-tc(var _file, E1) = E2,
+        E2.result.type = text-type,
+        write-par-tc(_par, E2) = E3,
+        E3.result should be a number, character, bool, or string in E3 = E4
+        ===================================================================
+        tcf( write(_file, _par), E1) = E4
+
+  [wr7] act-par-tc(var _file, E1) = E2,
+        E2.result.type != text-type,
+        act-par-tc(value _par, E2) = E3,
+        E3.result should be assignment-compatible with
+                E2.result.type.comp-type in E3 = E4
+        ================================================
+        tcf( write(_file, _par), E1) = E4
+
+
+  { The procedure writeln, ISO section 6.9.4. }
+  [ln6] stc( writeln, E) = tcf( writeln(output), E )
+
+  [ln7] stc( writeln(_par, _par*), E) = tcf(writeln(output,_par, _par*),E)
+          when is-file-variable?(_par, E) != TRUE
+
+  [ln8] stc( writeln(_par, _par*), E) = tcf(writeln(_par, _par*), E)
+          when is-file-variable?(_par, E) = TRUE
+
+  [ln9] tcf( writeln(_file, _par+), E) =
+          tcf( writeln(_file), tcf(write(_file, _par+), E))
+
+  [ln0] tcf( writeln(_file), E) = _file should be a text file variable in E
+
+
+  { The procedure page, ISO section 6.9.5.}
+  [pa1] stc( page, E ) = stc( page(output), E)
+
+  [pa2] stc( page(_file), E) = _file should be a text file variable in E
+
+  [pa3] stc( page(_file, _par+), E) = add-error [Too many actual parameters.] to E
+
+
+  [wp1]  write-par-tc(_expr, E) = expr-tc(_expr, E)
+
+  [wp2]  expr-tc( _expr2, E1) = E2,
+         expr-tc( _expr1, E2) = E3,
+         E3.result should be integer in E3 = E4
+         =======================================
+         write-par-tc( _expr1 : _expr2, E1 ) = E4
+
+  [wp3]  expr-tc( _expr3, E1) = E2,
+         expr-tc( _expr2, E2) = E3,
+         expr-tc( _expr1, E3) = E4,
+         E2.result should be integer in E4 = E5,
+         E3.result should be integer in E5 = E6,
+         E4.result should be real in E6 = E7
+         =======================================
+         write-par-tc( _expr1 : _expr2 : _expr3, E1 ) = E5
+
+
+  { Dynamic allocation procedures new and dispose, ISO section 6.6.5.3.}
+  [da1] act-par-tc(var _p, E1) = E2,
+        E2.result.type should be a pointer in E2 = E3
+        =============================================
+        stc( new(_p), E1) = E3
+
+  [da2] stc( new(_p), E1) = E2,
+        tag-constants-tc( _par+, E2.result.type, E2 ) = E3
+        ==========================================================
+        stc( new(_p, _par+), E1 ) = E3
+
+
+  [da3] T1 should be a variant record in E1 = E2,
+        act-par-tc( value _par, E2 ) = E3,
+        T1.selector-type and E3.result.type should be the same type in E3 = E4
+        ================================================================
+        tag-constants-tc( _par, T1, E1 ) = E4
+
+  [da4] tag-constants-tc( _par, T1, E1 ) = E2,
+        tag-constants-tc( _par+, T1.record-of-variant-part, E2 ) = E3
+        =============================================================
+        tag-constants-tc( _par, _par+, T1, E1 ) = E3
+
+  [da5] stc( new, E ) = add-error [Too few actual parameters.] to E
+  [da6] stc( dispose _act-par-list, E ) = stc( new _act-par-list, E )
+
+
+  { Transfer procedures, pack(a,i,z), unpack(z,a,j), ISO section 6.6.5.4.}
+  [tp1] act-par-tc(var   _z, E1) = E2,
+        act-par-tc(var   _a, E2) = E3,
+        act-par-tc(value _i, E3) = E4,
+        E2.result.type should be an unpacked array in E4 = E5,
+        E3.result.type should be a packed array in E5 = E6,
+        E2.result.type.comp-type and  E3.result.type.comp-type
+          should be the same type in E6 = E7,
+        E4.result should be assignment-compatible with
+          E3.result.type.index-type in E7 = E8
+        =================================================
+        stc(pack(_a, _i, _z), E1) = E8
+
+  [tp2] stc(unpack(_z, _a, _i), E) = stc(pack(_a, _i, _z), E)
+
+  [tp3] stc(pack, E) = add-error [Too few actual parameters.] to E
+  [tp4] stc(pack(_p1), E) = add-error [Too few actual parameters.] to E
+  [tp5] stc(pack(_p1,_p2), E) = add-error [Too few actual parameters.] to E
+  [tp6] stc(unpack, E) = add-error [Too few actual parameters.] to E
+  [tp7] stc(unpack(_p1), E) = add-error [Too few actual parameters.] to E
+  [tp8] stc(unpack(_p1,_p2), E) = add-error [Too few actual parameters.] to E
+  [tp9] stc(pack(_p1,_p2,_p3,_p+),E) =
+          add-error [Too many actual parameters.] to E
+  [tp0] stc(unpack(_p1,_p2,_p3,_p+),E) =
+             add-error [Too many actual parameters.] to E

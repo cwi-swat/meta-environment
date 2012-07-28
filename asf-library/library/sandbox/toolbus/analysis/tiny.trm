@@ -1,0 +1,15 @@
+process P is
+let
+in
+  snd-msg(data)
+endlet
+
+process Q is
+let
+  S: str
+in
+  rec-msg(S)
+endlet
+
+toolbus(P)
+toolbus(Q)

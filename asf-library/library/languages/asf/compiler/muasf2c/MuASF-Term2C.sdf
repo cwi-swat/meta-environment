@@ -1,0 +1,76 @@
+module languages/asf/compiler/muasf2c/MuASF-Term2C
+
+imports languages/asf/compiler/muasf2c/Rules2C-Aux
+
+
+exports
+  context-free syntax
+    cterms2cstats({Term ","}+,Expression,Integer,Integer) -> DCAS-tuple
+
+  context-free syntax
+    term2cstats(Boolean,Term,C-env,C-env,FunId,
+                {NamePair ","}*,Integer)                     -> SlI-tuple
+    term2carg(Boolean,Term,C-env,C-env,Integer,
+              Expression,FunId,{NamePair ","}*)             -> ADS-tuple
+    terms2cargs(Boolean,{Term ","}+,C-env,C-env,Integer,
+                Expression,FunId,{NamePair ","}*)           -> ADS-tuple
+    term2carg2(Boolean,Term,C-env,C-env,Integer,
+               Expression,FunId,{NamePair ","}*)            -> ADS-tuple
+
+  context-free syntax
+    find-common-terms({C-Rule ";"}*,{NamePair ","}*,Integer)  -> SRI-tuple
+    second-term-common({C-Rule ";"}*,{NamePair ","}*,Integer) -> SRI-tuple
+
+  context-free syntax
+    transform-call(Primary-expression,FunId,
+                   {NamePair ","}*,{Expression ","}*)        -> Expression
+  
+    is-special-name(Identifier)                              -> Boolean
+   
+hiddens
+  context-free start-symbols
+	Boolean
+	E-tuple
+	SlI-tuple
+	ADS-tuple
+
+  variables
+    
+    "Int"[0-9]*     -> Integer
+    "Identifier"[0-9]* -> Identifier
+    "Aint"[0-9]* -> Integer
+    "Bool"[0-9]* -> Boolean
+    "Namepair*"[0-9]* -> {NamePair ","}*
+    "Funid"[0-9]* -> FunId
+    "Cond*"[0-9]* -> {Cond "&"}*
+    "Cond"[0-9]* -> Cond
+    "Arity" -> Integer
+    "Sym" -> Identifier
+    "Func" -> Identifier
+	"Namepair*"[0-9]* -> {NamePair ","}*
+    "$Expression"[0-9]* -> Expression
+
+variables
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "$ActualArg*"[0-9]*   -> {Expression ","}*
+    "$ActualArg+"[0-9]*   -> {Expression ","}+
+    "$ActualArg"[0-9]* -> Expression
+    "$ActualArgs"[0-9]* -> Argument-expression-list
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "Exp"[0-9]*          -> Expression
+    "C-rule+"[0-9]* 	-> {C-Rule ";"}+
+    "C-rule*"[0-9]* 	-> {C-Rule ";"}*
+    "C-rule"[0-9]* 	-> C-Rule
+    "Aint+"[0-9]* 	-> {Integer ","}+
+    "Fv-path+"[0-9]* -> {FV-Path ","}+
+    "Fv-path*"[0-9]* -> {FV-Path ","}*
+
+  lexical variables
+	
+ 	"H"[0-9]* -> [a-zA-Z]
+	"T"[0-9]* -> [a-zA-Z\_0-9]*

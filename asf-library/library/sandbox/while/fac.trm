@@ -1,0 +1,6 @@
+x := 1111;
+y := 1;
+while not (x = 1) do
+	y := y * x;
+	x := x - 1
+od

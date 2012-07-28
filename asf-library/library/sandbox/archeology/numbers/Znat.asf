@@ -1,0 +1,27 @@
+equations
+
+  [l1]  length([D1]) = 1
+  [l2]  length([D1 D+]) = 1 + length([D+])
+
+  [l3]  [D1+] ; [D2+] = [D1+ D2+]
+
+  [l4]  znat2int([0 D+]) = znat2int([D+])
+  [l5]  znat2int([0]) = 0
+
+  [l6]  [digit(c)] != [digit("0")]
+        ========================
+        znat2int([digit(c)]) = pos(c)
+
+  [l7]  D != 0,
+        znat2int([D D*]) = pos(c+)
+        ====================================
+        znat2int([D D* digit(c)]) = pos(c+ c)
+
+  [l8]  int2znat(0) = [0]
+  [l9]  int2znat(pos(c)) = [digit(c)]
+ [l10]  int2znat(pos(c+ c)) = int2znat(pos(c+)) ; [digit(c)]
+ [l11]  z1 - z2 = int2znat(znat2int(z1) - znat2int(z2))
+%% [l12]  z1 \geq z2 =  not (z1 < z2)
+ [l13]  z1 < z2 = znat2int(z1) < znat2int(z2)
+ [l14]  S z = int2znat(znat2int(z) + 1)
+ [l15]  eq(z1,z2) = eq(znat2int(z1),znat2int(z2))

@@ -1,0 +1,22 @@
+module languages/sdf2/normalization/Aliases
+imports languages/sdf2/projection/Aliases languages/sdf2/normalization/Kernel languages/sdf2/renaming/Kernel
+exports
+  context-free syntax
+    "a[[" Grammar "]]" -> Grammar
+    rn(Aliases)        -> Renamings
+    symbols(Aliases)   -> SymbolSet
+
+hiddens
+  variables
+    "!"[0-9\']*         -> Attributes
+    [p][0-9\']*         -> Production
+    [p]"*"[0-9\']*      -> Production*
+    [p]"+"[0-9\']*      -> Production+ 
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "_G"[0-9\']*        -> Grammar 
+    "al"[0-9\']*        -> Alias
+    "al*"[0-9\']*       -> Alias*
+    "al+"[0-9\']*       -> Alias+
+

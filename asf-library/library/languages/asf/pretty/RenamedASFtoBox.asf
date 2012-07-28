@@ -1,0 +1,79 @@
+equations
+
+[] indent = 4
+[] eqssep = 2
+
+equations
+
+[] CONDRULE[Box1 Box2 Box3 ] =
+   HOV vs=1 hs=1 [Box1
+     I is=indent [V vs=1 [Box2
+     "===>" 
+     HV hs=1 [Box3]]]]
+
+[] WHENRULE[ Box1 Box2 Box3] =
+    HOV hs=1 vs=1 [Box1 I is=indent [V vs=1 [HV hs=1 [Box2] 
+    "when" I is=indent [Box3]]]]
+
+[] RULE[Box1 Box2] = HOV vs=1 hs=1 [Box1 I is=indent [HV hs=1[Box2]]]
+
+equations
+
+[] equations ConditionalEquation* = 
+   frombox(V vs=2 ["equations" equations-to-box(ConditionalEquation*)])
+
+[] tests TestEquation* = 
+   frombox(V vs=2 ["tests" testequations-to-box(TestEquation*)])
+
+[] [TagId] = frombox(H hs=0 [ "[" tobox(TagId) "]"])
+
+equations
+
+[] Tag Equation = frombox(RULE[tobox(Tag) tobox(Equation)])
+
+[] Tag Condition+ Implies Equation = 
+   frombox(CONDRULE[ tobox(Tag) tobox(Condition+) tobox(Equation)])
+
+[] Tag Equation when Condition+ =
+   frombox(WHENRULE[ tobox(Tag) tobox(Equation) tobox(Condition+)])
+
+equations
+
+[] Tag Condition = frombox(RULE[tobox(Tag) tobox(Condition)])
+
+[] Tag Condition+ Implies Condition =
+   frombox(CONDRULE[tobox(Tag) tobox(Condition+) tobox(Condition)])
+ 
+[] Tag Condition when Conditions =
+   frombox(WHENRULE[tobox(Tag) tobox(Condition) tobox(Condition)])
+
+equations
+
+[] Condition := Condition+
+   ===>
+   tobox(Condition+) = V vs=1 [tobox(Condition)]
+
+[] V vs=1 [Box*] := tobox(Condition+)
+   ===>
+   tobox(Condition, Condition+) =
+   V vs=1 [H hs=0 [H hs=1[tobox(Condition)] ","] Box*]
+
+equations
+
+[] equations-to-box() = V vs=eqssep []
+[] equations-to-box(ConditionalEquation) = 
+   V vs=eqssep [tobox(ConditionalEquation)]
+[] V vs=i [Box*] := equations-to-box(ConditionalEquation*)
+   ===>
+   equations-to-box(ConditionalEquation ConditionalEquation*) =
+   V vs=eqssep [tobox(ConditionalEquation) Box*]
+
+equations
+
+[] testequations-to-box() = V vs=eqssep []
+[] testequations-to-box(TestEquation) = V vs=eqssep [tobox(TestEquation)]
+[] V vs=i [Box*] := testequations-to-box(TestEquation*)
+   ===>
+   testequations-to-box(TestEquation TestEquation*) =
+   V vs=eqssep [tobox(TestEquation) Box*]
+

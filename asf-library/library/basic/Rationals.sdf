@@ -1,0 +1,83 @@
+module basic/Rationals
+exports
+  imports basic/Integers basic/Booleans
+  sorts RatCon Rational
+ 
+  context-free syntax
+    rat(Integer, Integer)    -> RatCon
+    RatCon                   -> Rational
+
+    mk-rat(Integer, Integer) -> Rational
+
+    int2rat(Integer)         -> Rational
+    rat2int(Rational)        -> Integer
+
+    Rational "==" Rational   -> Boolean
+    Integer "==" Rational   -> Boolean
+    Rational "==" Integer   -> Boolean
+
+
+    Rational ">" Rational    -> Boolean
+    Integer ">" Rational    -> Boolean
+    Rational ">" Integer    -> Boolean
+
+    Rational ">=" Rational   -> Boolean
+    Integer ">=" Rational   -> Boolean
+    Rational ">=" Integer   -> Boolean
+
+    Rational "<" Rational    -> Boolean
+    Integer "<" Rational    -> Boolean
+    Rational "<" Integer    -> Boolean
+
+    Rational "<=" Rational   -> Boolean
+    Integer "<=" Rational   -> Boolean
+    Rational "<=" Integer   -> Boolean
+
+    abs(Rational)            -> Rational
+    pow(Rational, Integer)   -> Rational
+    max(Rational, Rational)  -> Rational
+    min(Rational, Rational)  -> Rational
+    floor(Rational)          -> Integer
+    ceil(Rational)           -> Integer
+ 
+    "(" Rational ")"         -> Rational {bracket}
+
+  context-free priorities
+    { non-assoc: "-" Rational -> Rational {non-assoc}
+                 "+" Rational -> Rational {non-assoc} } >
+
+    { non-assoc: Rational "*" Rational -> Rational {left}
+                 Integer  "*" Rational -> Rational 
+                 Rational "*" Integer -> Rational 
+                 Rational "/" Rational -> Rational {non-assoc}
+                 Integer  "/" Rational -> Rational {non-assoc}    
+                 Rational "/" Integer -> Rational {non-assoc}
+    } >
+
+    { left: Rational "+" Rational -> Rational {left}
+            Integer  "+" Rational -> Rational 
+            Rational "+" Integer -> Rational 
+            Rational "-" Rational -> Rational {left}
+            Integer  "-" Rational -> Rational 
+            Rational "-" Integer -> Rational 
+   }
+ 
+  context-free priorities
+
+   { Integer  "*" Rational -> Rational
+     Rational "*" Integer -> Rational 
+     Integer  "/" Rational -> Rational {non-assoc} 
+     Rational "/" Integer -> Rational {non-assoc} } >
+
+   { Integer "+" Integer -> Integer {left}
+     Integer "-" Integer -> Integer {left} }
+     
+hiddens
+  imports basic/Whitespace basic/Comments
+
+  context-free start-symbols
+    Rational Boolean Integer
+  variables
+    "N" [0-9]*              -> NatCon
+    [ULIG][0-9]*            -> Integer
+    "R" [0-9]*              -> Rational

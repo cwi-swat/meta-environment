@@ -1,0 +1,23 @@
+equations
+
+[] new-table = []
+
+[] lookup([Pair*1,<Key,Value>,Pair*2],Key) = Value
+[default] lookup(Table,Key) = not-in-table
+
+[] store([Pair*1,<Key,Value2>,Pair*2],Key,Value) = [<Key,Value>,Pair*1,Pair*2]
+[default] store([Pair*],Key,Value) = [<Key,Value>,Pair*]
+
+[] delete([Pair*1,<Key,Value2>,Pair*2],Key) = [Pair*1,Pair*2]
+[default] delete(Table,Key) = Table
+
+[] element([Pair*1,<Key,Value2>,Pair*2],Key) = true
+[default] element(Table,Key) = false
+
+[] keys([]) = []
+[] keys([<Key,Value>,Pair*]) = [Key, Key*]
+    when [Key*] := keys([Pair*])
+
+[] values([]) = []
+[] values([<Key,Value>,Pair*]) = [Value, Value*]
+     when [Value*] := values([Pair*])

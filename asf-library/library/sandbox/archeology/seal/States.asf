@@ -1,0 +1,379 @@
+equations
+
+[0a]    empty-CA-pairs () = true
+
+[0b]    empty-TCA-pairs () = true
+
+[1]     _State' + empty-state = _State'
+
+[2]     empty-state + _State' = _State'
+
+[3a]    _Vars-list' = make-vars-list( _C-A-pairs' 1),
+        _Inst-list' = make-inst-list( _C-A-pairs' 1),
+        _Mods-list' = make-mods-list( _C-A-pairs' 1),
+        _Moves-list' = make-moves-list( _C-A-pairs' 1)
+        =======================
+        make-button-state( button _Name' _C-A-pairs' _Doc' ) =
+[ button-type, _Name', emptymenuname, _Vars-list', _Inst-list', _Mods-list', _Moves-list']
+
+[3b]    _State' = make-button-state(button _Name' _C-A-pairs' _Doc' ),
+        _State' = [ button-type, _Name', emptymenuname, _Vars-list', _Inst-list', _Mods-list', _Moves-list']
+        =======================
+        make-st-button-state(start-stop button _Name' _C-A-pairs' _Doc' ) =
+[ st-button-type, _Name', emptymenuname, _Vars-list', _Inst-list', _Mods-list', _Moves-list']
+
+[3c]    _Vars-list' = make-vars-list( _Tool-CA-pairs' 1),
+        _Inst-list' = make-inst-list( _Tool-CA-pairs' 1),
+        _Mods-list' = make-mods-list( _Tool-CA-pairs' 1),
+        _Moves-list' = make-moves-list( _Tool-CA-pairs' 1)
+        =======================
+        make-tool-state( active tool _Name' _Tool-CA-pairs' _ToolDoc' ) =
+[ tool-type, _Name', emptymenuname, _Vars-list', _Inst-list', _Mods-list', _Moves-list']
+
+[4]     _Vars-list' = make-vars-list( _C-A-pairs' 1),
+        _Inst-list' = make-inst-list( _C-A-pairs' 1),
+        _Mods-list' = make-mods-list( _C-A-pairs' 1),
+        _Moves-list' = make-moves-list( _C-A-pairs' 1)
+        =======================
+        make-menu-entry-state ( menu entry _Name' in _Name'' _C-A-pairs' _Doc' ) =
+[menu-entry-type, make-entry-name (_Name' _Name''), _Name'', _Vars-list', _Inst-list', _Mods-list', _Moves-list']
+
+[5]     _Name' = name(Cs'),
+        _Name'' = name(Cs''),
+        _Name''' = name(Cs' "I" "n" "M" "e" "n" "u" Cs'')
+        ==================================
+        make-entry-name (_Name' _Name'' ) = _Name'''
+
+[6a]    make-vars-list ( _C-A-pair' _C-A-pairs' _Int') =
+                add-vars( vars(_C-A-pair' _Int') make-vars-list(_C-A-pairs' _Int' + 1))
+
+[6a]    make-vars-list ( _Tool-CA-pair' _Tool-CA-pairs' _Int') =
+                add-vars( vars(_Tool-CA-pair' _Int') make-vars-list(_Tool-CA-pairs' _Int' + 1))
+
+[7a]    empty-CA-pairs(_C-A-pairs') = true
+        =============
+        make-vars-list (_C-A-pairs' _Int') = [[]]
+
+[7b]    empty-TCA-pairs(_Tool-CA-pairs') =true
+        =============
+        make-vars-list (_Tool-CA-pairs' _Int') = [[]]
+
+[8a]    add-vars( [_VARS'] [_VARSs'] ) = [[_VARS'] _VARSs']
+
+[8b]    [ [_VARS' ] [] ] = [[_VARS']]
+
+[9a]    _C-A-pair' = when _Cpart' enable _ActsSemi',
+        _Config-variables' = config-variables( _ActsSemi' 1)
+        =======================================
+        vars(_C-A-pair' _Int') = [[ config-variables in pairnr : _Int' : _Config-variables' ]]
+
+[9b]    _Tool-CA-pair' = when _Cpart' do _ActsSemi',
+        _Config-variables' = config-variables( _ActsSemi' 1)
+        =======================================
+        vars(_Tool-CA-pair' _Int') = [[ config-variables in pairnr : _Int' : _Config-variables' ]]
+
+[10a]   _C-A-pair' = enable _ActsSemi',
+        _Config-variables' = config-variables(_ActsSemi' 1)
+        ========================
+        vars(_C-A-pair' _Int') = [[ config-variables in pairnr : _Int' : _Config-variables' ]]
+
+[10b]   _Tool-CA-pair' = do _ActsSemi',
+        _Config-variables' = config-variables(_ActsSemi' 1)
+        ========================
+        vars(_Tool-CA-pair' _Int') = [[ config-variables in pairnr : _Int' : _Config-variables' ]]
+
+[22]    type( [_Type', _Name', _Name'', _Vars-list', _Inst-list', _Mods-list', _Moves-list'] ) = _Type'
+
+[23]    name( [_Type', _Name', _Name'', _Vars-list', _Inst-list', _Mods-list', _Moves-list'] ) = _Name'
+
+[24]    menu-name( [_Type', _Name', _Name'', _Vars-list', _Inst-list', _Mods-list', _Moves-list'] ) = _Name''
+
+[25]    vars( [_Type', _Name', _Name'', _Vars-list', _Inst-list', _Mods-list', _Moves-list'] ) = _Vars-list'
+
+[26]    insts( [_Type', _Name', _Name'', _Vars-list', _Inst-list', _Mods-list', _Moves-list'] ) = _Inst-list'
+
+[26b]   mods( [_Type', _Name', _Name'', _Vars-list', _Inst-list', _Mods-list', _Moves-list'] ) = _Mods-list'
+
+[26c]   moves( [_Type', _Name', _Name'', _Vars-list', _Inst-list', _Mods-list', _Moves-list'] ) = _Moves-list'
+
+[27a]   make-inst-list (_C-A-pair' _C-A-pairs' _Int') =
+                add-insts( insts(_C-A-pair' _Int') make-inst-list(_C-A-pairs' _Int' + 1))
+
+[27b]   make-inst-list (_Tool-CA-pair' _Tool-CA-pairs' _Int') =
+                add-insts( insts(_Tool-CA-pair' _Int') make-inst-list(_Tool-CA-pairs' _Int' + 1))
+
+[28a]   empty-CA-pairs(_C-A-pairs') = true
+        ==================================
+        make-inst-list (_C-A-pairs' _Int') = [[ ]]
+
+[28b]   empty-TCA-pairs(_Tool-CA-pairs') = true
+        ==================================
+        make-inst-list (_Tool-CA-pairs' _Int') = [[ ]]
+
+[29a]   add-insts( [_Insts'] [ _INSTS' ]) = [ [_Insts'] _INSTS' ]
+
+[29b]   [ [_Insts'] [ ] ] = [[_Insts' ]]
+
+[30a]   _C-A-pair' = when _Cpart' enable _ActsSemi',
+        _Acts-insts' = instances in actions : used-focusses(_ActsSemi'),
+        _Cond-insts' = instances in condition : used-focusses(_Cpart'),
+        _Inp-insts' = input instances : inputs(_ActsSemi'),
+        _Outp-insts' = output instances : outputs(_ActsSemi'),
+        _Sel-insts' = select instances : select-insts(_ActsSemi'),
+        _Red-insts' = instances used in reductions : red-insts(_ActsSemi'),
+        _Asgn-insts' = focus assign instances : asgn-insts(_ActsSemi')
+        =========================================
+        insts( _C-A-pair' _Int' ) =
+                [[ pairnr: _Int' uses
+                  _Cond-insts' _Acts-insts' _Inp-insts' _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts']]
+
+[30b]   _Tool-CA-pair' = when _Cpart' do _ActsSemi',
+        _Acts-insts' = instances in actions : used-focusses(_ActsSemi'),
+        _Cond-insts' = instances in condition : used-focusses(_Cpart'),
+        _Inp-insts' = input instances : inputs(_ActsSemi'),
+        _Outp-insts' = output instances : outputs(_ActsSemi'),
+        _Sel-insts' = select instances : select-insts(_ActsSemi'),
+        _Red-insts' = instances used in reductions : red-insts(_ActsSemi'),
+        _Asgn-insts' = focus assign instances : asgn-insts(_ActsSemi')
+        =========================================
+        insts( _Tool-CA-pair' _Int' ) =
+                [[ pairnr: _Int' uses
+                  _Cond-insts' _Acts-insts' _Inp-insts' _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts']]
+
+[31a]   _C-A-pair' = enable _ActsSemi',
+        _Acts-insts' = instances in actions : used-focusses(_ActsSemi'),
+        _Cond-insts' = instances in condition : ,
+        _Inp-insts' = input instances : inputs(_ActsSemi'),
+        _Outp-insts' = output instances : outputs(_ActsSemi'),
+        _Sel-insts' = select instances : select-insts(_ActsSemi'),
+        _Red-insts' = instances used in reductions : red-insts(_ActsSemi'),
+        _Asgn-insts' = focus assign instances : asgn-insts(_ActsSemi')
+        =========================================
+        insts(_C-A-pair' _Int' ) =
+                [[ pairnr: _Int' uses
+                  _Cond-insts' _Acts-insts' _Inp-insts' _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts']]
+
+[31b]   _Tool-CA-pair' = do _ActsSemi',
+        _Acts-insts' = instances in actions : used-focusses(_ActsSemi'),
+        _Cond-insts' = instances in condition : ,
+        _Inp-insts' = input instances : inputs(_ActsSemi'),
+        _Outp-insts' = output instances : outputs(_ActsSemi'),
+        _Sel-insts' = select instances : select-insts(_ActsSemi'),
+        _Red-insts' = instances used in reductions : red-insts(_ActsSemi'),
+        _Asgn-insts' = focus assign instances : asgn-insts(_ActsSemi')
+        =========================================
+        insts(_Tool-CA-pair' _Int' ) =
+                [[ pairnr: _Int' uses
+                  _Cond-insts' _Acts-insts' _Inp-insts' _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts']]
+
+[32a]   make-mods-list (_C-A-pair' _C-A-pairs' _Int') =
+                add-mods( mods(_C-A-pair' _Int') make-mods-list(_C-A-pairs' _Int' + 1))
+
+[32b]   make-mods-list (_Tool-CA-pair' _Tool-CA-pairs' _Int') =
+                add-mods( mods(_Tool-CA-pair' _Int') make-mods-list(_Tool-CA-pairs' _Int' + 1))
+
+[33a]   empty-CA-pairs(_C-A-pairs') = true
+        ==================================
+        make-mods-list (_C-A-pairs' _Int') = [[ ]]
+
+[33b]   empty-TCA-pairs(_Tool-CA-pairs') = true
+        ==================================
+        make-mods-list (_Tool-CA-pairs' _Int') = [[ ]]
+
+[34a]   add-mods( [_MODS'] [ _MODSs' ] ) = [ [_MODS'] _MODSs' ]
+
+[35b]   [ [_MODS'] [ ] ] = [[ _MODS' ]]
+
+[36a]   _C-A-pair' = when _Cpart' enable _ActsSemi',
+        _Mods' = used-modules(_ActsSemi' ),
+        _Acts-mods' = modules in actions : _Mods',
+        _Mods'' = used-modules(_Cpart' ),
+        _Cond-mods' = modules in condition : _Mods''
+        =========================================
+        mods(_C-A-pair' _Int' ) = [[ pairnr: _Int' uses _Cond-mods' _Acts-mods' ]]
+
+[36b]   _Tool-CA-pair' = when _Cpart' do _ActsSemi',
+        _Mods' = used-modules(_ActsSemi' ),
+        _Acts-mods' = modules in actions : _Mods',
+        _Mods'' = used-modules(_Cpart' ),
+        _Cond-mods' = modules in condition : _Mods''
+        =========================================
+        mods(_Tool-CA-pair' _Int' ) = [[ pairnr: _Int' uses _Cond-mods' _Acts-mods' ]]
+
+[37a]   _C-A-pair' = enable _ActsSemi',
+        _Mods' = used-modules(_ActsSemi' ),
+        _Acts-mods' = modules in actions : _Mods',
+        _Cond-mods' = modules in condition : %%empty%%
+        =========================================
+        mods(_C-A-pair' _Int' ) = [[ pairnr: _Int' uses _Cond-mods' _Acts-mods' ]]
+
+[37b]   _Tool-CA-pair' = do _ActsSemi',
+        _Mods' = used-modules(_ActsSemi' ),
+        _Acts-mods' = modules in actions : _Mods',
+        _Cond-mods' = modules in condition : %%empty%%
+        =========================================
+        mods(_Tool-CA-pair' _Int' ) = [[ pairnr: _Int' uses _Cond-mods' _Acts-mods' ]]
+
+[38a]   make-moves-list(_C-A-pair' _C-A-pairs' _Int') =
+                add-moves( moves(_C-A-pair' _Int') make-moves-list( _C-A-pairs' _Int' + 1))
+
+[38b]   make-moves-list(_Tool-CA-pair' _Tool-CA-pairs' _Int') =
+                add-moves( moves(_Tool-CA-pair' _Int') make-moves-list( _Tool-CA-pairs' _Int' + 1))
+
+[33a]   empty-CA-pairs(_C-A-pairs') = true
+        ==================================
+        make-moves-list (_C-A-pairs' _Int') = [[ ]]
+
+[33b]   empty-TCA-pairs(_Tool-CA-pairs') = true
+        ==================================
+        make-moves-list (_Tool-CA-pairs' _Int') = [[ ]]
+
+[40]    add-moves( [_MOVES'] [ _MOVESs' ] ) = [ [_MOVES'] _MOVESs' ]
+
+[41]    [ [_MOVES'] [ ] ] = [[_MOVES']]
+
+[42a]   _C-A-pair' = when _Cpart'enable _ActsSemi',
+        _ActsSemi'' = get-moves(_ActsSemi'),
+        _ActsSemi'' != empty-act-moves,
+        _Named-moves' = make-named-moves(_ActsSemi'' )
+        ===========================================
+        moves(_C-A-pair' _Int' ) = [[ pairnr : _Int' moves per instance : _Named-moves' ]]
+
+[42b]   _Tool-CA-pair' = when _Cpart'do _ActsSemi',
+        _ActsSemi'' = get-moves(_ActsSemi'),
+        _ActsSemi'' != empty-act-moves,
+        _Named-moves' = make-named-moves(_ActsSemi'' )
+        ===========================================
+        moves(_Tool-CA-pair' _Int' ) = [[ pairnr : _Int' moves per instance : _Named-moves' ]]
+
+[42c]   _C-A-pair' = when _Cpart' enable _ActsSemi',
+        _ActsSemi'' = get-moves(_ActsSemi'),
+        _ActsSemi'' = empty-act-moves
+        ===========================================
+        moves(_C-A-pair' _Int' ) = [[ pairnr : _Int' moves per instance : ]]
+
+[42d]   _Tool-CA-pair' = when _Cpart' do _ActsSemi',
+        _ActsSemi'' = get-moves(_ActsSemi'),
+        _ActsSemi'' = empty-act-moves
+        ===========================================
+        moves(_Tool-CA-pair' _Int' ) = [[ pairnr : _Int' moves per instance : ]]
+
+[43a]   _C-A-pair' = enable _ActsSemi',
+        _ActsSemi'' = get-moves(_ActsSemi'),
+        _ActsSemi'' != empty-act-moves,
+        _Named-moves' = make-named-moves(_ActsSemi'' )
+        ===========================================
+        moves(_C-A-pair' _Int' ) = [[ pairnr : _Int' moves per instance : _Named-moves' ]]
+
+[43b]   _Tool-CA-pair' = do _ActsSemi',
+        _ActsSemi'' = get-moves(_ActsSemi'),
+        _ActsSemi'' != empty-act-moves,
+        _Named-moves' = make-named-moves(_ActsSemi'' )
+        ===========================================
+        moves(_Tool-CA-pair' _Int' ) = [[ pairnr : _Int' moves per instance : _Named-moves' ]]
+
+[43c]   _C-A-pair' = enable _ActsSemi',
+        _ActsSemi'' = get-moves(_ActsSemi'),
+        _ActsSemi'' = empty-act-moves
+        ===========================================
+        moves(_C-A-pair' _Int' ) = [[ pairnr : _Int' moves per instance : ]]
+
+[43d]   _Tool-CA-pair' = do _ActsSemi',
+        _ActsSemi'' = get-moves(_ActsSemi'),
+        _ActsSemi'' = empty-act-moves
+        ===========================================
+        moves(_Tool-CA-pair' _Int' ) = [[ pairnr : _Int' moves per instance : ]]
+
+[44]    _ActsNone' = sort-by-name (_ActsSemi' ),
+        [_Ufns'] = get-names-from-act-moves( [] from _ActsNone' ),
+        _Named-moves' = get-moves-per-instance(_Ufns' _ActsNone' )
+        =============================
+        make-named-moves(_ActsSemi' ) = _Named-moves'
+
+[45]    _Act' = _Ufn' . focus _Moves',
+        _Act'' = _Ufn'' . focus _Moves''
+        ==============================
+        get-names-from-act-moves( [] from _Act' _Act'' _ActsNone' ) =
+                get-names-from-act-moves( [_Ufn'] from _Act'' _ActsNone')
+
+[46a]   _Act' = _Ufn' . focus _Moves',
+        not-in(_Ufn' _Ufns') = false
+        ===================================
+        get-names-from-act-moves( [_Ufns'] from _Act') = [_Ufns']
+
+[46b]   _Act' = _Ufn' . focus _Moves',
+        not-in(_Ufn' _Ufns') = true
+        ===================================
+        get-names-from-act-moves( [_Ufns'] from _Act') = [_Ufns' _Ufn']
+
+[47]    _Act' = _Ufn' . focus _Moves',
+        _Act'' = _Ufn'' . focus _Moves'',
+        not-in(_Ufn' _Ufns') = false
+        ==============================
+        get-names-from-act-moves( [_Ufns'] from _Act' _Act'' _ActsNone' ) =
+                get-names-from-act-moves( [_Ufns'] from _Act'' _ActsNone')
+
+[48]    _Act' = _Ufn' . focus _Moves',
+        _Act'' = _Ufn'' . focus _Moves'',
+        not-in(_Ufn' _Ufns' ) = true
+        ==============================
+        get-names-from-act-moves( [_Ufns'] from _Act' _Act'' _ActsNone') =
+                get-names-from-act-moves( [_Ufns' _Ufn'] from _Act'' _ActsNone')
+
+[49]    not-in(_Ufn' ) = true
+
+[50]    not-in(_Ufn' _Ufns' _Ufn' _Ufns'') = false
+
+[51]    _Ufns' = _Ufn'' _Ufns'',
+        _Ufn' != _Ufn''
+        ===================
+        not-in(_Ufn' _Ufns') = not-in(_Ufn' _Ufns'')
+
+[52a]   _Ufns' = _Ufn' _Ufn'' _Ufns'',
+        _Act' = _Ufn'.focus _Moves',
+        _Act'' = _Ufn''.focus _Moves'',
+        _Named-moves' = all-moves(_Ufn' _Act' _ActsNone''),
+        _Named-moves'' = get-moves-per-instance(_Ufn'' _Ufns'' _Act'' _ActsNone'''),
+        _Named-moves''' = _Named-moves' _Named-moves''
+        ==================================
+        get-moves-per-instance(_Ufns' _Act' _ActsNone'' _Act'' _ActsNone''') = _Named-moves'''
+
+[52b]   _Ufns' = _Ufn',
+        _Named-moves' = all-moves(_Ufn' _ActsNone' )
+        ===========================================
+        get-moves-per-instance(_Ufns' _ActsNone' ) = _Named-moves'
+
+[53a]   _Act' = _Ufn' . focus _Moves'
+        ==============
+        all-moves(_Ufn' _Act') = Instance : _Ufn' moves : _Moves'
+
+[53b]   _Act' = _Ufn' . focus _Moves',
+        all-moves(_Ufn' _ActsNone'') = Instance : _Ufn' moves : _Moves'',
+        _Moves''' = append-focus-actions(_Moves' , _Moves'')
+        ==========================================
+        all-moves(_Ufn' _Act' _ActsNone'') =
+                Instance : _Ufn' moves : _Moves'''
+
+[54]    (_Moves''') = (_Moves' , _Moves'')
+        ===================================================
+        append-focus-actions(_Moves' , _Moves'') = _Moves'''
+
+[132]   _Ufns' = _Ufns''' _Ufn' _Ufns'''' _Ufn' _Ufns''''',
+        _Ufns'' = _Ufns''' _Ufn' _Ufns'''' _Ufns'''''
+        ================================
+        instances in actions : _Ufns' = instances in actions : _Ufns''
+
+[133]   _Ufns' = _Ufns''' _Ufn' _Ufns'''' _Ufn' _Ufns''''',
+        _Ufns'' = _Ufns''' _Ufn' _Ufns'''' _Ufns'''''
+        ================================
+        instances in condition : _Ufns' = instances in condition : _Ufns''
+
+[134]   _Mods' = _Mods''' _Mod' _Mods'''' _Mod' _Mods''''',
+        _Mods'' = _Mods''' _Mod' _Mods'''' _Mods'''''
+        ================================
+        modules in actions : _Mods' = modules in actions : _Mods''
+
+[133]   _Mods' = _Mods''' _Mod' _Mods'''' _Mod' _Mods''''',
+        _Mods'' = _Mods''' _Mod' _Mods'''' _Mods'''''
+        ================================
+        modules in condition : _Mods' = modules in condition : _Mods''

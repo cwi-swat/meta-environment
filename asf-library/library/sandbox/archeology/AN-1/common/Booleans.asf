@@ -1,0 +1,6 @@
+equations
+
+  [1]  true  and p = p
+  [2]  false and p = false
+  [3]  true  or  p = true
+  [4]  false or  p = p

@@ -1,0 +1,24 @@
+module Fact
+
+imports
+  Tscript
+
+exports
+  sorts DeclarationFact InvocationFact CreationFact SendFact ReceiveFact
+  context-free syntax
+    process-declaration process-name:ProcessName  -> DeclarationFact
+    process-invocation process-name:ProcessName   -> InvocationFact
+    process-creation process-name:ProcessName     -> CreationFact
+    send-atom {Term ","}+                         -> SendFact
+    recv-atom {Term ","}+                         -> ReceiveFact
+
+  sorts Fact
+  context-free syntax
+    DeclarationFact -> Fact
+    InvocationFact  -> Fact
+    CreationFact    -> Fact
+    SendFact        -> Fact
+    ReceiveFact     -> Fact
+
+  
+

@@ -1,0 +1,52 @@
+equations
+
+  [a1]  n + n'  =  POS (convert-to-lexical
+                     << 1 >>
+                     (add (convert-lexical-to-lisp << n >> )
+                          (convert-lexical-to-lisp << n' >> ) ) )
+
+  [a2]  n + - n' = POS (convert-to-lexical
+                     << 1 >>
+                     (sub (convert-lexical-to-lisp << n >> )
+                          (convert-lexical-to-lisp << n' >> ) ) )
+                  when n > n' = true
+
+  [a3]  n + - n' = - (POS (convert-to-lexical
+                       << 1 >>
+                       (sub (convert-lexical-to-lisp << n'>> )
+                            (convert-lexical-to-lisp << n >> ) ) )
+                     )
+                  when n < n' = true
+
+
+
+  [m1]  n * n'      =  POS (convert-to-lexical
+                          << 1 >>
+                          (mul (convert-lexical-to-lisp << n >> )
+                               (convert-lexical-to-lisp << n' >> ) ) )
+
+
+  [m1]  n div n'    =  POS (convert-to-lexical
+                          << 1 >>
+                          (div (convert-lexical-to-lisp << n >> )
+                               (convert-lexical-to-lisp << n' >> ) ) )
+                        when n \geq n' = true
+
+  [d6]  x mod x'    =  |x| -  | x' * ( x div x' ) |
+  [d7]  x / x' \    = < x' div x, x' mod x >
+
+
+
+
+  [m0]  n ^ n'   =  POS (convert-to-lexical
+                          << 1 >>
+                          (fix (power (convert-lexical-to-lisp << n >> )
+                                  (convert-lexical-to-lisp << n' >> ) ) ) )
+
+
+
+
+  [m0]  max(n,n')   =  POS (convert-to-lexical
+                          << 1 >>
+                          (max (convert-lexical-to-lisp << n >> )
+                               (convert-lexical-to-lisp << n' >> ) ) )

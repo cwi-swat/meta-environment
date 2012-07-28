@@ -1,0 +1,82 @@
+module Languages/SML/Expressions
+
+imports Languages/SML/Constants
+       	Languages/SML/Identifiers
+       	Languages/SML/Patterns
+       	Languages/SML/Declarations
+
+hiddens sorts
+	AtomicExp InfixExp ApplicationExp ExpRow SingleExpRow Match MatchRule
+	{ Expression "," }+ { Expression ";" }+ Expression
+
+
+
+exports
+
+context-free syntax
+
+%% Atomic Expressions (Figure 20)
+
+  Constant		-> AtomicExp
+  "op"? LongValueId	-> AtomicExp
+  "{" ExpRow? "}"	-> AtomicExp
+  "#" Label		-> AtomicExp
+  "(" ")"		-> AtomicExp
+
+  "(" Expression ")"		-> AtomicExp %% {brackets}
+
+  "(" Expression "," { Expression "," }+ ")"		-> AtomicExp
+  "[" { Expression "," }* "]"				-> AtomicExp
+  "(" Expression ";" { Expression ";" }+ ")"		-> AtomicExp
+  "let" Declaration "in" { Expression ";" }+ "end"	-> AtomicExp
+
+
+  Label "=" Expression 		-> SingleExpRow
+  { SingleExpRow "," }+		-> ExpRow
+  
+%% Application Expression
+
+  AtomicExp			-> ApplicationExp
+  ApplicationExp AtomicExp	-> ApplicationExp
+
+%% Infix Expression
+
+  ApplicationExp 		-> InfixExp
+
+
+%% Expressions
+
+  InfixExp		-> Expression
+  Expression ":" Type		-> Expression
+  Expression "andalso" Expression	-> Expression {left}
+  Expression "orelse" Expression	-> Expression {left}
+  Expression "handle" Match	-> Expression 
+  "raise" Expression		-> Expression
+
+  "if" Expression "then" Expression "else" Expression	-> Expression
+  "while" Expression "do" Expression			-> Expression
+  "case" Expression "of" Match			-> Expression
+  "fn" Match				-> Expression
+
+%% Match
+
+  { MatchRule "|" }+	-> Match
+  
+  Pattern "=>" Expression	-> MatchRule
+
+%% Priorities
+
+context-free priorities
+
+  {InfixExp		-> Expression
+   Expression ":" Type		-> Expression} >
+  { Expression "andalso" Expression	-> Expression} >
+  { Expression "orelse" Expression	-> Expression} >
+  { Expression "handle" Match	-> Expression} >
+  {"raise" Expression		-> Expression 
+   "if" Expression "then" Expression "else" Expression	-> Expression
+   "while" Expression "do" Expression			-> Expression
+   "case" Expression "of" Match		-> Expression
+   "fn" Match				-> Expression} 
+
+

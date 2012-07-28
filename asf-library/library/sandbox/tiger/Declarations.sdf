@@ -1,0 +1,49 @@
+module Tiger-Declarations
+imports Tiger-Expressions Tiger-Statements
+exports
+  sorts Declarations
+  %% sorts Decs Dec TypeDec FunDec
+  context-free syntax
+    "let" Dec* "in" {Exp ";"}* "end" -> Exp  {cons("Let")}
+    TypeDec+			     -> Dec  {cons("TypeDecs")}
+    "type" Id "=" Type               -> TypeDec {cons("TypeDec")}
+    "var" Id TypeAn ":=" Exp         -> Dec  {cons("VarDec")}
+    "var" Id TypeAn                  -> Dec  {cons("VarDecNoInit")}
+    FunDec+ 			     -> Dec  {cons("FunDecs")}
+    "function"
+       Id "(" {FArg ","}* ")" TypeAn 
+          "=" Exp 	    	     -> FunDec {cons("FunDec")}
+
+    "declarations" Dec* 	     -> Declarations {cons("Declarations")}
+
+  %% sorts Type TypeField TypeId FArg
+  context-free syntax
+    Id TypeAn	         -> FArg {cons("FArg")}
+
+			 -> TypeAn {cons("NoTp")}
+    ":" TypeId		 -> TypeAn {cons("Tp")}
+
+    TypeId               -> Type   {cons("NameTy")}
+    "{" {Field ","}* "}" -> Type   {cons("RecordTy")}
+
+    Id ":" TypeId	 -> Field  {cons("Field")}
+
+    "array" "of" TypeId	 -> Type   {cons("ArrayTy")}
+    Id			 -> TypeId {cons("Tid")}
+
+  %% sorts Ty
+  context-free syntax
+    "INT" 				-> Ty {cons("INT")}
+    "STRING" 				-> Ty {cons("STRING")}
+    "NIL" 				-> Ty {cons("NIL")} 
+    "UNIT" 				-> Ty {cons("UNIT")} 
+    "NAME" Id				-> Ty {cons("NAME")}
+    "RECORD" "{" {FIELD ","}* "}" Id 	-> Ty {cons("RECORD")}
+    "ARRAY" Ty Id 			-> Ty {cons("ARRAY")}
+    "FUN" "(" {Ty ","}* ")" Ty 		-> Ty {cons("FUN")}
+
+    Id ":" Ty 				-> FIELD {cons("FIELD")}
+
+    Exp "::" Ty 			-> Exp {cons("Typed")}
+    LValue "::" Ty 			-> LValue {cons("Typed"),avoid}
+

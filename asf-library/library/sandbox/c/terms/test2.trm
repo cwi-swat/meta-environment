@@ -1,0 +1,15 @@
+int a = 0;
+int b = a;
+
+typedef int ATerm;
+int ATinit(void);
+int main(int argc, char *argv[])
+{
+	int argv;
+	int lcv;
+	char *input = "-";
+	char *output = "-";
+	ATerm term = 0;
+	int c = argv;
+	ATinit(argc, argv, &bottom);
+}

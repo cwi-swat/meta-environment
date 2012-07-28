@@ -1,0 +1,16 @@
+module Iterator-Definitions
+
+imports Signatures
+	Statements
+
+exports
+
+sorts Iter-Definition
+
+exports
+
+context-free syntax
+	"private"? Iter-Name
+	("(" {Iter-Argument ","}+ ")")? (":" Type-Specifier)?
+	("pre" Expression)? ("post" Expression)? 
+	"is" Statement-List "end" -> Iter-Definition

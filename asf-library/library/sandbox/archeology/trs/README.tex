@@ -1,0 +1,189 @@
+\documentstyle[11pt,a4]{article}
+\setlength{\textwidth}{15cm}
+\setlength{\oddsidemargin}{0.46cm}
+\setlength{\evensidemargin}{0.46cm}
+\begin{document}
+\bibliographystyle{alpha}
+\title{\bf An algebraic specification of a TRS}
+\author{Frank Tip (tip@cwi.nl)}
+\date{June 1992}
+\maketitle
+%
+\section{Modules}
+
+The syntax of a TRS is defined in module {\tt TRS-syntax}. Matching and
+instantiation of terms are defined in modules {\tt TRS-match} and
+{\tt TRS-instantiate}, respectively. In module {\tt TRS-rewrite}, term
+rewriting is specified. Module {\tt TRS-check} contains a static checker
+for term rewriting systems. Modules {\tt Layout}, {\tt Booleans},
+{\tt Integers} and {\tt Identifiers} are borrowed from {\tt Pico} and
+contain some basic data types. {\tt Lisp} and {\tt Output} define hybrid
+functions for printing intermediate terms and error messages, and for
+writing information to a ``log'' file. Lastly, module {\tt Annotations}
+defines annotations of symbols of terms.
+
+\section{Syntax}
+
+In module TRS-syntax, the syntax of a TRS is defined. Terms are defined in
+an inductive manner. Constants (see module {\tt Identifiers}) and variables
+are terms. Moreover, function symbols applied to the appropriate number of
+terms construct terms. Associated with each symbol in a term may be a list
+of zero or more annotations, defined in module {\tt Annotations}.
+Variables always start with \$, in order to distinguish them from
+function symbols and constants.
+
+According to the following rule in the specification:
+\begin{verbatim}
+  "trs" SIG-SECTION RR-SECTION TERM-SECTION       -> TRS
+\end{verbatim}
+a TRS consists of the keyword {\tt trs}, a signature section (sort
+{\tt SIG-SECTION}), a rewrite rule section (sort {\tt RR-SECTION}), and a
+term section {\tt sort TERM-SECTION}). The signature section consists of
+the keyword {\tt signature} followed by a list of one or more signature
+elements (sort {\tt SIG-ELEM}), each consisting of a function symbol
+followed by a ``/'' and its number of arguments (e.g. f/2).
+The rewrite rule section contains a list of rewrite rules separated by
+commas and preceded by the keyword {\tt rewrite-rules}. A rewrite rule
+is a {\tt TAG} between square brackets followed by a term, an arrow ({\tt ->})
+and another term. Conditional rules are not (yet) supported. Finally, the
+term section consists of the keyword {\tt term} followed by a term.
+Below, an example TRS is shown (see file bool.trs):
+\begin{verbatim}
+trs
+  signature
+    AND/2, OR/2, NOT/1, TRUE/0, FALSE/0
+  rewrite-rules
+    [B1] AND (TRUE, $X)         -> $X,
+    [B2] AND (FALSE, $X)        -> FALSE,
+    [B3] OR(TRUE, $X)           -> TRUE,
+    [B4] OR(FALSE, $X)          -> $X,
+    [B5] NOT(TRUE)              -> FALSE,
+    [B6] NOT(FALSE)             -> TRUE
+  term
+    AND(
+      AND(
+        NOT(AND(FALSE,TRUE)),
+        NOT(TRUE)
+      ),
+      OR(FALSE,TRUE)
+    )
+\end{verbatim}
+
+\section{Checking a TRS}
+
+In order to avoid errors, a TRS can be checked by applying the function
+{\tt chk} of module {\tt TRS-check} to it. The following errors will be
+detected:
+\begin{itemize}
+  \item
+    The signature contains the same element more than once.
+  \item
+    A left-hand side of a rule is a single variable.
+  \item
+    A right-hand side of a rule contains variables which do not occur
+    in the left-hand side.
+  \item
+    A rewrite rule contains function symbols which do not appear in
+    the signature.
+  \item
+    The term contains function symbols which do not appear in
+    the signature.
+\end{itemize}
+Hybrid functions \cite{ASDFman92} are used to emit error messages during
+the checking of the TRS (see module {\tt Output}).
+
+\section{Term Rewriting}
+
+\subsection{Matching}
+
+\begin{verbatim}
+     match "(" TERMS ";" TERMS ";" BINDINGS ")"   -> BINDINGS
+\end{verbatim}
+The function {\tt match} in module {\tt TRS-match} defines the matching of
+closed terms against open terms.
+Note that this function takes two {\it lists of} terms as arguments---in
+this way, the function can be expresssed in terms of itself. {\tt match}
+returns either a list of variable bindings (sort {\tt BINDINGS}), or the
+special value {\tt fail} in case the matching fails.
+
+\subsection{Instantiation}
+
+\begin{verbatim}
+     inst "(" TERMS ";" BINDINGS ")"              -> TERMS
+\end{verbatim}
+The function {\tt inst} in module {\tt TRS-instantiate} takes as arguments a
+list of open terms, and a list of variable bindings.
+It computes the list of instantiated terms. Observe that in the resulting
+term, variable bindings are annotated with the annotation {\tt nf}, indicating
+that a subterm is in normal form. This assumption can only be made when an
+innermost strategy is used for rewriting.
+
+\subsection{Rewriting}
+
+\begin{verbatim}
+     rewrite "(" TRS ")"                          -> TERM
+\end{verbatim}
+The function {\tt rewrite} in module {\tt TRS-rewrite} specifies the
+rewriting of the term in the term section according to the rewrite rules
+in the rewrite rules section. Two mutually recursive functions, {\tt try}
+and {\tt traverse} define a leftmost-innermost rewriting process. State
+information is represented {\it explicitly}: a list of subterms is
+maintained together with the current path from the root of the term. (A
+path consists of a sequence of natural numbers indicating argument positions
+in function symbols.) All rewrite rules a stored in a {\it table}; there is
+one entry for each signature element which contains the list of rules for that
+function.
+
+In equation {\tt Rew}, the table is constructed and we start by traversing
+down from the root of the term. Traversal proceeds downwards until either
+a constant, or a normal form is reached, then the direction changes to
+``up''. When the direction is up, a rewrite step is attempted ({\tt Tr4}).
+
+As mentioned, function {\tt try} tries a rewrite step. In equation {\tt Tr1},
+the matching fails and the next rule is considered. In {\tt Tr2} matching
+succeeds, the rewrite step is performed, the state is updated, information
+is written to the log file, and we traverse downwards in the contractum.
+{\tt Tr3} handles the case where no match can be found, and a ``right
+brother'' can be traversed. In {\tt Tr4}, the last argument of the function
+did not match, and we go up in the term, by traversing the ``parent''.
+Finally, in {\tt Tr5} all subterms have been considered and the normal
+form is reached.
+
+\subsection{Executing the specification}
+
+Type ``ctasdf'' in a directory containing the specification. Module
+{\tt TRS-syntax} will be loaded automatically. Type a TRS yourself, or
+load one of the \*.trs files in an editor over module {\tt TRS-syntax}.
+\begin{itemize}
+  \item bool.trs : evaluation of boolean expressions
+  \item calc.trs : simple succ---0 integer arithmetic
+  \item tc.trs : a typechecker for a small Pico-like language
+  \item ev.trs : an evaluator for a small Pico-like language
+\end{itemize}
+Selection of the buttons {\tt check TRS} and {\tt rewrite} will result in
+loading the appropriate modules, and checking/rewriting, respectively.
+Note that, as a side effect, intermediate results are {\it appended} to a file
+``asdf.out''.
+
+\section{Remarks}
+
+\begin{itemize}
+ \item
+   There is no support yet for conditional TRSs. In the ASF+SDF system,
+   CTRSs are evaluated as {\it join} systems \cite{Klo91}; negative
+   conditions are evaluated by matching the resulting normal forms;
+   positive conditions may introduce variables in at most one side. Such
+   ``new'' variables are bound by matching.
+ \item
+   Executing non-terminating TRSs will of course not terminate.
+ \item
+   Lists (i.e., functions with a variable arity) are not supported.
+ \item
+   The traverse-try algorithm for innermost rewriting is a bit obscure.
+ \item
+   The specification defines a term rewriting system (TRS), as described in
+   \cite{Klo91}. Implementation issues of TRSs are discussed in \cite{Wal91}.
+\end{itemize}
+
+\bibliography{/ufs/gipe/lib/tex/bib}
+\end{document}

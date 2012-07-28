@@ -1,0 +1,13 @@
+module While-Proc-Nat-Sem-Static-Vars
+
+imports While-Proc-Syntax BExpr-Sem
+	Procedure-Environment-Static
+
+exports
+
+sorts Store
+
+context-free syntax
+
+Var-Env "," Proc-Env "|-" "(" Stms "," Store ")" -> Store
+

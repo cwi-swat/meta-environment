@@ -1,0 +1,84 @@
+module Languages/SML/Infix-problem
+
+imports
+
+       Languages/SML/Expressions
+       Languages/SML/Environment
+
+
+exports
+
+sorts
+	
+	Exp Answer Boolean Declaration # InfixEnv Expression # InfixEnv
+
+context-free syntax
+
+	"$infix-exp" "(" InfixExp "," ValueId "," InfixExp "," InfixEnv ")"
+		-> InfixExp
+	"$\"Parse error due to left-right associative operators\""   
+		-> InfixExp
+	"$\"Missing op before infix operator\""	     -> InfixErrMsg
+	InfixErrMsg	-> AtomicExp
+	InfixErrMsg     -> SingleFunValueBinding
+	InfixErrMsg	-> SingleConsBinding
+	InfixErrMsg	-> Pattern
+
+%% filters
+
+  "$to-infix"(Declaration) -> Declaration
+  "$infixify"(Declaration, InfixEnv)	
+	-> Declaration # InfixEnv {traversal(accu, trafo, break, top-down)}
+  "$infixify"(FunValueBinding, InfixEnv)	
+	-> FunValueBinding # InfixEnv {traversal(accu, trafo, break, top-down)}
+  "$infixify"(Expression, InfixEnv)	
+	-> Expression # InfixEnv {traversal(accu, trafo, break, top-down)}
+  "$infixify"(AtomicExp, InfixEnv)	
+	-> AtomicExp # InfixEnv {traversal(accu, trafo, break, top-down)}
+  "$infixify"(SingleConsBinding, InfixEnv)	
+      -> SingleConsBinding # InfixEnv {traversal(accu, trafo, break, top-down)}
+  "$infixify"(Pattern, InfixEnv)	
+      -> Pattern # InfixEnv {traversal(accu, trafo, break, top-down)}
+
+  "$collect-infix"(Declaration, InfixEnv) 	
+	-> InfixEnv {traversal(accu, break, top-down)}
+  "$collect-infix"(Expression, InfixEnv) 	
+	-> InfixEnv {traversal(accu, break, top-down)}
+
+  "$rearrange"(Declaration)
+	-> Declaration {traversal(trafo, continue, top-down)}
+  "$rearrange"(Expression)
+	-> Expression {traversal(trafo, continue, top-down)}
+
+  "$fixra"(Declaration)			-> Declaration
+
+  "$check-op"(FunValueBinding, InfixEnv)	-> FunValueBinding
+  "$check-op"(SingleFunValueBinding, InfixEnv)	-> SingleFunValueBinding
+  "$check-op"(SingleFunValueBindingBar, InfixEnv)	
+	-> SingleFunValueBindingBar
+
+
+hiddens 
+
+variables
+
+	"$D"[1-9]?		-> Declaration
+	"$E"[1-9]?		-> Expression
+	"$T"[1-9]?		-> Type	
+	"$P"[1-9]?		-> Pattern
+	"$AtPat"[1-9]?		-> AtomicPattern
+	"$AtExp"[1-9]?		-> AtomicExp
+	"$AppExp"[1-9]?		-> ApplicationExp
+	"$InfExp"[1-9]?		-> InfixExp
+	"$Id"[1-9]?		-> ValueId
+	"$MoreId"[1-9]?		-> ValueId+
+	"Char+"[1-9]?		-> CHAR+
+	"$Env"[1-9]?		-> InfixEnv
+	"$N"[1-9]?		-> NatCon
+	"$RL"[1-9]?		-> RightLeft
+	"$FVB"[1-9]?		-> FunValueBinding
+	"$SFVB"[1-9]?		-> SingleFunValueBinding
+	"$SFVBB"[1-9]?		-> SingleFunValueBindingBar
+	"$TVS"[1-9]?		-> TypeVarSequence
+	"$AP+"[1-9]?		-> AtomicPattern+
+	

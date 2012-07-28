@@ -1,0 +1,11 @@
+module ExtraSepLists1 [A B C]
+exports
+  context-free syntax
+    {A B}+   -> C
+    {A B}+ B -> {A B}+
+  context-free priorities
+    {left: 
+	{A B}+ B	-> {A B}+
+    	{A B}+ B {A B}+ -> {A B}+
+    }
+

@@ -1,0 +1,34 @@
+module Variable-Environment
+
+imports While-Proc-Syntax AExpr-Sem
+
+exports
+
+sorts Store Var-Env
+
+context-free syntax
+
+"[" Var "->" Loc "]" -> Var-Binding
+"[" Loc "->" Int "]" -> Cell
+
+Var-Binding* -> Var-Env
+Cell* -> Store
+
+Var-Env Var -> Loc
+Store Loc -> Int
+
+Store "." Var-Env -> State
+
+"@" Int -> Loc
+
+update-v(VDecls, Var-Env, Store) -> Var-Env # Store
+new(Store) -> Loc
+
+variables
+"sto"[0-9\']* -> Cell*
+"l"[0-9\']* -> Loc
+"loc"[0-9\']* -> Loc
+"envv"[0-9\']* -> Var-Binding*
+
+
+

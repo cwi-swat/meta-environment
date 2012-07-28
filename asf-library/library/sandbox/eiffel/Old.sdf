@@ -1,0 +1,12 @@
+module Old
+
+exports
+
+context-free syntax
+
+"old" Expression -> Old
+
+
+%% Note: The validity rule VAOL-1 states that the Old expression is only
+%% valid in a Postcondition. This could eventually be enforced by the
+%% syntax.

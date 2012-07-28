@@ -1,0 +1,12 @@
+( lambda m . lambda n . lambda f . lambda x . m f ( n f x ) )
+  (
+    ( lambda n . lambda f . lambda x . n f ( f x ) )
+      (
+        ( lambda n . lambda f . lambda x . n f ( f x ) )
+          ( lambda f . lambda x . x )
+        )
+    )
+  (
+    ( lambda n . lambda f . lambda x . n f ( f x ) )
+      ( lambda f . lambda x . x )
+    )

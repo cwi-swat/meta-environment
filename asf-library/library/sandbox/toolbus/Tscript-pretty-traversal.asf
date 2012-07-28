@@ -1,0 +1,243 @@
+equations
+
+[prettyprint-0]
+  Tscript2 := ppTscriptDefs(Tscript1),
+  Tscript3 := ppProcessExpr(Tscript2),
+  Tscript4 := ppAtom(Tscript3),
+  Tscript5 := ppGenVar(Tscript4),
+  Tscript6 := ppVarDecl(Tscript5),
+  Tscript7 := ppProcessSignature(Tscript6),
+  Tscript8 := ppProcessDef(Tscript7),
+  Tscript9 := ppProcessBody(Tscript8)
+  ===>
+  prettyprint(Tscript1) = Tscript9
+
+[atom2box-snd-msg]
+  ppAtom(snd-msg ( AtomArgs )) =
+    box2atom(H hs=0 ["snd-msg" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-rec-msg]
+  ppAtom(rec-msg ( AtomArgs )) =
+    box2atom(H hs=0 ["rec-msg" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-snd-eval]
+  ppAtom(snd-eval ( AtomArgs )) =
+    box2atom(H hs=0 ["snd-eval" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-rec-value]
+  ppAtom(rec-value ( AtomArgs )) =
+    box2atom(H hs=0 ["rec-value" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-rec-event]
+  ppAtom(rec-event ( Var , AtomArgs )) =
+    box2atom(H hs=0 ["rec-event" "(" var2box(Var) "," atomargs2box(AtomArgs) ")"])
+
+[atom2box-snd-ack-event]
+  ppAtom(snd-ack-event ( Var , AtomArgs )) =
+    box2atom(H hs=0 ["snd-ack-event" "(" var2box(Var) "," atomargs2box(AtomArgs) ")"])
+
+[atom2box-snd-do]
+  ppAtom(snd-do ( AtomArgs )) =
+    box2atom(H hs=0 ["snd-do" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-subscribe]
+  ppAtom(subscribe ( AtomArgs )) =
+    box2atom(H hs=0 ["subscribe" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-unsubscribe]
+  ppAtom(unsubscribe ( AtomArgs )) =
+    box2atom(H hs=0 ["unsubscribe" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-snd-terminate]
+  ppAtom(snd-terminate ( AtomArgs )) =
+    box2atom(H hs=0 ["snd-terminate" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-rec-connect]
+  ppAtom(rec-connect ( AtomArgs )) =
+    box2atom(H hs=0 ["rec-connect" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-rec-disconnect]
+  ppAtom(rec-disconnect ( AtomArgs )) =
+    box2atom(H hs=0 ["rec-disconnect" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-execute]
+  ppAtom(execute ( AtomArgs )) =
+    box2atom(H hs=0 ["execute" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-shutdown]
+  ppAtom(shutdown ( AtomArgs )) =
+    box2atom(H hs=0 ["shutdown" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-snd-note]
+  ppAtom(snd-note ( AtomArgs )) =
+    box2atom(H hs=0 ["snd-note" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-rec-note]
+  ppAtom(rec-note ( AtomArgs )) =
+    box2atom(H hs=0 ["rec-note" "(" atomargs2box(AtomArgs) ")"])
+
+[atom2box-printf]
+  ppAtom(printf ( AtomArgs )) =
+    box2atom(H hs=0 ["printf" "(" atomargs2box(AtomArgs) ")"])
+
+[atomargs2box-0]
+   atomargs2box(Term+) = termlist2box(Term+)
+
+[formalparams2box-0]
+  formalparams2box() = HV hs=1 []
+
+[formalparams2box-1]
+  formalparams2box(FormalParam) = HV hs=1 [formalparam2box(FormalParam)]
+
+[formalparams2box-2]
+  Box := formalparams2box(FormalParam+),
+  HV hs=1 [Box*] := Box
+  ===>
+  formalparams2box(FormalParam, FormalParam+) = HV hs=1 [H hs=0 [formalparam2box(FormalParam) ","] Box*]
+
+[formalparam2box-0]
+  Var : Term = box2formalparam(H hs=1 [H hs=0 [var2box(Var) ":"] term2box(Term)])
+
+[formalparam2box-1]
+  Var : Term ? = box2formalparam(H hs=1 [H hs=0 [var2box(Var) ":"] H hs=0 [term2box(Term) "?"]])
+
+[genvar2box-0]
+  Var ? := GenVar1,
+  GenVar2 := box2genvar(H hs=0 [var2box(Var) "?"])
+  ===>
+  ppGenVar(GenVar1) = GenVar2
+
+[processcreation2box-0]
+  create ( ProcessInvocation , GenVar ) =
+    box2processcreation(H hs=0 ["create" "(" processinvocation2box(ProcessInvocation) H hs=1 ["," genvar2box(GenVar)] ")"])
+
+[processbody-0]
+  ProcessExpr := ProcessBody1,
+  ProcessBody2 := box2processbody(I [processexpr2box(ProcessExpr)])
+  ===>
+  ppProcessBody(ProcessBody1) = ProcessBody2
+
+[processdef-0]
+  process ProcessSignature is ProcessBody := ProcessDef1,
+  ProcessDef2 := box2processdef(V [H ["process" processsignature2box(ProcessSignature) "is"] processbody2box(ProcessBody)])
+  ===>
+  ppProcessDef(ProcessDef1) = ProcessDef2
+
+[processexpr-bracket-0]
+  ( ProcessExpr3 ) := ProcessExpr1,
+  ProcessExpr4 + ProcessExpr5 := ProcessExpr3,
+  ProcessExpr6 + ProcessExpr7 !:= ProcessExpr4,
+  ProcessExpr2 := box2processexpr(V vs=1 ["("
+                                          I [processexpr2box(ppProcessExpr(ProcessExpr4))]
+                                          "+"
+                                          I [processexpr2box(ppProcessExpr(ProcessExpr5))]
+                                          ")"])
+  ===>
+  ppProcessExpr(ProcessExpr1) = ProcessExpr2
+
+
+
+[processexpr-bracket]
+  ( ProcessExpr3 ) := ProcessExpr1,
+  ProcessExpr4 + ProcessExpr5 := ProcessExpr3,
+  ProcessExpr6 + ProcessExpr7 := ProcessExpr4,
+  ProcessExpr2 := box2processexpr(V vs=1 ["("
+                                          processexpr2box(ppProcessExpr(ProcessExpr4))
+                                          "+"
+                                          I [processexpr2box(ppProcessExpr(ProcessExpr5))]
+                                          ")"])
+  ===>
+  ppProcessExpr(ProcessExpr1) = ProcessExpr2
+
+[processexpr-choice-0]
+  ProcessExpr3 + ProcessExpr4 := ProcessExpr1,
+  ProcessExpr5 + ProcessExpr6 !:= ProcessExpr3,
+  ProcessExpr2 := box2processexpr(V vs=1 [I [processexpr2box(ppProcessExpr(ProcessExpr3))]
+                                          "+"
+                                          I [processexpr2box(ppProcessExpr(ProcessExpr4))]])
+  ===>
+  ppProcessExpr(ProcessExpr1) = ProcessExpr2
+
+[processexpr-choice-1]
+  ProcessExpr3 + ProcessExpr4 := ProcessExpr1,
+  ProcessExpr5 + ProcessExpr6 := ProcessExpr3,
+  ProcessExpr2 := box2processexpr(V vs=1 [processexpr2box(ppProcessExpr(ProcessExpr3))
+                                          "+" 
+                                          I [processexpr2box(ppProcessExpr(ProcessExpr4))]])
+  ===>
+  ppProcessExpr(ProcessExpr1) = ProcessExpr2
+
+[processexpr-seq]
+  ProcessExpr3 . ProcessExpr4 := ProcessExpr1,
+  ProcessExpr2 := box2processexpr(V vs=1 [processexpr2box(ProcessExpr3)
+                                          H hs=1 ["." processexpr2box(ProcessExpr4)]])
+  ===>
+  ppProcessExpr(ProcessExpr1) = ppProcessExpr(ProcessExpr2)
+
+[processexpr-if-then]
+  if Term then ProcessExpr3 fi := ProcessExpr1,
+  ProcessExpr2 := box2processexpr(V vs=1 [H hs=1 ["if" term2box(Term) "then"]
+                                  I [processexpr2box(ProcessExpr3)]
+                                  "fi"])
+  ===>
+  ppProcessExpr(ProcessExpr1) = ppProcessExpr(ProcessExpr2)
+
+[processexpr-if-then-else]
+  if Term then ProcessExpr3 else ProcessExpr4 fi := ProcessExpr1,
+  ProcessExpr2 := box2processexpr(V vs=1 [H hs=1 ["if" term2box(Term) "then"]
+                                  I [processexpr2box(ProcessExpr3)]
+                                  "else"
+                                  I [processexpr2box(ProcessExpr4)]
+                                  "fi"])
+  ===>
+  ppProcessExpr(ProcessExpr1) = ppProcessExpr(ProcessExpr2)
+
+[processinvocation2box-0]
+  ProcessName ( Term* ) = box2processinvocation(H hs=0 [processname2box(ProcessName) "(" termlist2box(Term*) ")"])
+
+
+[processsignature2box-0]
+  ProcessName ( FormalParam* ) := ProcessSignature1,
+  ProcessSignature2 := box2processsignature(H hs=0 [processname2box(ProcessName) "(" formalparams2box(FormalParam*) ")"])
+  ===>
+  ppProcessSignature(ProcessSignature1) = ProcessSignature2
+
+[term2box-0]
+  Id ( Term* ) = box2term(H hs=0 [id2box(Id) "(" termlist2box(Term*) ")"])
+
+[term2box-1]
+  [ Term* ] = box2term(H hs=0 ["[" termlist2box(Term*) "]"])
+
+[termlist2box-0]
+  termlist2box() = HV hs=1 []
+
+[termlist2box-1]
+  termlist2box(Term) = HV hs=1 [term2box(Term)]
+
+[termlist2box-1]
+  Box := termlist2box(Term+),
+  HV hs=1 [Box*] := Box
+  ===>
+  termlist2box(Term, Term+) = HV hs=1 [H hs=0 [term2box(Term) ","] Box*]
+
+[tscriptdefs-0]
+  ppTscriptDefs(TscriptDef*) = box2tscript(tscriptdefs2box(TscriptDef*)) 
+
+[tscriptdefs2box-0]
+  tscriptdefs2box() = V vs=2 []
+
+[tscriptdefs2box-1]
+  tscriptdefs2box(TscriptDef) = V vs=2 [tscriptdef2box(TscriptDef)]
+
+[tscriptdefs2box-2]
+  Box := tscriptdefs2box(TscriptDef+),
+  V vs=2 [Box*] := Box
+  ===>
+  tscriptdefs2box(TscriptDef TscriptDef+) 
+    = V vs=2 [tscriptdef2box(TscriptDef) Box*]
+
+[vardecl2box-0]
+  Var : Term := VarDecl1,
+  VarDecl2 := box2vardecl(H hs=1 [H hs=0 [var2box(Var) ":"] term2box(Term)])
+  ===>
+  ppVarDecl(VarDecl1) = VarDecl2

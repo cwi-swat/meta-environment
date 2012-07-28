@@ -1,0 +1,103 @@
+equations
+
+  [01]  pred(0) = 0		[02] pred(1) = 0 	[03] pred(2) = 1 
+  [04]  pred(3) = 2     	[05]  pred(4) = 3      	[06] pred(5) = 4
+  [07]  pred(6) = 5     	[08] pred(7) = 6       	[09] pred(8) = 7
+  [10]  pred(9) = 8
+
+  %% -- left and right rotation --
+  [11]  d  = 0 ==> {uns-ints} left d = {uns-ints}
+  [12]  d != 0 ==> {n, uns-ints} left d = {uns-ints, n} left pred(d)
+
+  [13]  d  = 0 ==> {uns-ints} right d = {uns-ints}
+  [14]  d != 0 ==> {uns-ints, n} right d = {n, uns-ints} right pred(d)
+  [15]  n != 0 ==> non-zero(n) = TRUE
+  [16]  n = 0  ==> non-zero(n) = FALSE
+
+  [17]  uns-int("0" y) = uns-int(y)
+
+  %% -- addition --
+  [18]  {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18}
+          left digit(c1) left digit(c2) = {n, uns-ints}
+        ================================================
+        uns-int(c1) + uns-int(c2) = n
+
+  [19]  uns-int(c1) + uns-int(c2) = uns-int(x c),
+        uns-int ("0" x1) + uns-int("0" x2) + uns-int("0" x) = uns-int(y)
+        ================================================================ 
+        uns-int(x1 c1) + uns-int(x2 c2) = uns-int(y c)
+
+  %% -- multiplication --
+  [20]  n * 0 = 0 
+  [21]  pred(digit(c1)) = digit(c2)
+        ===================================== 
+        n * uns-int(c1) = n + n * uns-int(c2)
+
+  [22]  uns-int(y1) * uns-int (y2) = uns-int(y)
+        ====================================================================
+        uns-int(y1) * uns-int(y2 c) = uns-int(y "0") + uns-int(y1) * uns-int(c)
+
+  %% -- greater than --
+  [23]  {0,1,2,3,4,5,6,7,8,9,0,0,0,0,0,0,0,0,0}
+          left digit(c1) right digit(c2) = {n, uns-ints}
+        ======================================================
+        uns-int(c1) > uns-int(c2) = non-zero(n)
+
+  [24]  uns-int(y1 c1) > uns-int(c2) = TRUE
+  [25]  uns-int(c1) > uns-int(y2 c2) = FALSE
+  [26]  uns-int(y c1) > uns-int(y c2) = uns-int(c1) > uns-int(c2)
+
+  [27]  uns-int(y1) > uns-int(y2) = TRUE
+        ======================================
+        uns-int(y1 c1) > uns-int(y2 c2) = TRUE
+
+  [28]  uns-int(y1) > uns-int(y2) = FALSE, uns-int(y1) != uns-int(y2)
+        ============================================================
+        uns-int(y1 c1) > uns-int(y2 c2) = FALSE
+ 
+  %% -- less than or equal --
+  [l1]  Nat1 <= Nat2 = TRUE when Nat2 > Nat1 = TRUE
+  [l2]  Nat1 <= Nat1 = TRUE
+
+
+  %% --  subtraction of naturals --
+  [28]  {10,11,12,13,14,15,16,17,18,19,0,1,2,3,4,5,6,7,8,9}
+          left digit(c1) right digit(c2) = {n, uns-ints}
+        ====================================================
+        uns-int("1" c1) - uns-int(c2) = n
+
+  [29]  {0,1,2,3,4,5,6,7,8,9,0,0,0,0,0,0,0,0,0}
+          left digit(c1) right digit(c2) = {n, uns-ints}
+        ================================================
+        uns-int(c1) - uns-int(c2) = n
+
+  [30]  uns-int(x1 c1) > uns-int(x2 c2) = TRUE,
+        uns-int("1" c1) - uns-int(c2) = uns-int(x c),
+        (uns-int("0" x) + uns-int("0" x1)) - uns-int("0" x2) - 1 = uns-int(y)
+        ===================================================================
+        uns-int(x1 c1) - uns-int(x2 c2) = uns-int(y c)
+
+  [31]  Nat1 > Nat2 = FALSE, Nat2 - Nat1 = Nat  ==> Nat1 - Nat2 = -Nat
+
+						
+  %% -- addition and subtraction of integers
+  [34]  Int1 = +Nat1                            ==> Int1 = Nat1
+
+  [35]  Int1 =  Nat1, Int2 =  Nat2              ==> Int1 + Int2 = Nat1 + Nat2
+  [36]  Int1 =  Nat1, Int2 = -Nat2              ==> Int1 + Int2 = Nat1 - Nat2
+  [37]  Int1 = -Nat1, Int2 =  Nat2              ==> Int1 + Int2 = Nat2 - Nat1
+  [38]  Int1 = -Nat1, Int2 = -Nat2, Nat1 + Nat2 = Nat
+                                                ==> Int1 + Int2 = -Nat  
+
+  [39]  Int1 =  Nat1, Int2 =  Nat2              ==> Int1 - Int2 = Nat1 - Nat2
+  [40]  Int1 =  Nat1, Int2 = -Nat2              ==> Int1 - Int2 = Nat1 + Nat2
+  [41]  Int1 = -Nat1, Int2 =  Nat2, Nat1 + Nat2 = Nat
+                                                ==> Int1 - Int2 = -Nat
+  [42]  Int1 = -Nat1, Int2 = -Nat2              ==> Int1 - Int2 = Nat2 - Nat1
+
+  [43]  Int1 =  Nat1, Int2 =  Nat2              ==> Int1 * Int2 = Nat1 * Nat2
+  [44]  Int1 =  Nat1, Int2 = -Nat2, Nat1 * Nat2 = Nat
+                                                ==> Int1 * Int2 = -Nat
+  [45]  Int1 = -Nat1, Int2 =  Nat2, Nat1 * Nat2 = Nat
+                                                ==> Int1 * Int2 = -Nat
+  [46]  Int1 = -Nat1, Int2 = -Nat2              ==> Int1 * Int2 = Nat1 * Nat2

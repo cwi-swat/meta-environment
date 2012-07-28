@@ -1,0 +1,71 @@
+
+equations
+
+%% fg/fgs: compute the flow-graph of a labeled Pico program.
+
+    [fg1]  fg(begin Decls end) = cfg: start -> stop
+
+    [fg2]  Edge*   = mk-list(cfg, start, entries(L_Stat+)),
+           Edge*'  = fgs(L_Stat+, Edge*),
+           Edge*'' = mk-list(cfg, exits(L_Stat+), stop)
+           ==================================================
+           fg(begin Decls L_Stat+ end) = Edge* Edge*' Edge*''
+
+    [fg3]  fgs( , Edge*) = Edge*
+
+    [fg4]  mk-list(cfg, Ref, entries(L_Stat*)) = Edge*'
+           ===============================================================
+           fgs(Ref Id := Exp; L_Stat*, Edge*) = fgs(L_Stat*, Edge* Edge*')
+
+    [fg5]  Edge*'     = mk-list(cfg, Ref, entries(L_Series)),
+           Edge*''    = fgs(L_Series, ),
+           Edge*'''   = mk-list(cfg, Ref, entries(L_Series')),
+           Edge*''''  = fgs(L_Series', ),
+           Edge*''''' = mk-list(cfg,
+                                exits(Ref if Exp then L_Series else L_Series' fi),
+                                entries(L_Stat*))
+           =======================================================================
+           fgs(Ref if Exp then L_Series else L_Series' fi; L_Stat*, Edge*) =
+             fgs(L_Stat*, Edge*  Edge*' Edge*'' Edge*''' Edge*'''' Edge*''''')
+
+    [fg6]  Edge*'     = mk-list(cfg, Ref, entries(L_Series)),
+           Edge*''    = fgs(L_Series, ),
+           Edge*'''   = mk-list(cfg, exits(L_Series), Ref),
+           Edge*''''  = mk-list(cfg, exits(Ref while Exp do L_Series od), entries(L_Stat*))
+           ================================================================================
+           fgs(Ref while Exp do L_Series od; L_Stat*, Edge*) =
+             fgs(L_Stat*, Edge* Edge*' Edge*'' Edge*''' Edge*'''')
+
+%%    [graph] Edge* Edge Edge*' Edge Edge*''= Edge* Edge Edge*' Edge*''
+
+%% get-ref: retrieve the label from a labeled Pico statement.
+
+    [Gr1]  get-ref(Ref Id := Exp) = Ref
+    [Gr2]  get-ref(Ref while Exp do L_Series od) = Ref
+    [Gr3]  get-ref(Ref if Exp then L_Series else L_Series' fi) = Ref
+
+%% exits: determine the flowgraph exits of a series of labeled Pico statements.
+
+    [Ex1]  exits(Ref Id := Exp) = Ref
+    [Ex2]  exits(Ref while Exp do L_Series od) = Ref
+
+    [Ex3]  Node* = exits(L_Stat+)
+           ======================
+           exits(Ref if Exp then else L_Stat+ fi) = Ref Node*
+
+    [Ex4]  Node* = exits(L_Stat+)
+           ======================
+           exits(Ref if Exp then L_Stat+ else fi) = Ref Node*
+
+    [Ex5]  Node*  = exits(L_Stat+),
+           Node*' = exits(L_Stat+')
+           =========================
+           exits(Ref if Exp then L_Stat+ else L_Stat+' fi) = Node* Node*'
+
+    [Ex6]  exits(L_Stat+; L_Stat) = exits(L_Stat)
+    [Ex7]  exits( ) =
+
+%% entries: determine the flowgraph entries of a series of labeled Pico statements.
+
+    [En1]  entries( ) =
+    [En2]  entries(L_Stat; L_Stat*) = get-ref(L_Stat)

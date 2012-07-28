@@ -1,0 +1,12 @@
+module If-Statements
+
+imports %% Expressions
+
+exports
+
+sorts If-Statement
+
+context-free syntax
+	"if" Expression "then" Statement-List
+	("elsif" Expression "then" Statement-List)*
+	("else" Statement-List)? "end" -> If-Statement

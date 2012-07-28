@@ -1,0 +1,122 @@
+equations
+
+[l]     length("") = 0
+
+[l]     length(strcon(""" char char* """)) =
+                1 + length(strcon(""" char* """))
+
+%% Ripped from Arie's pascal type checker and extended with a number of unprintables
+
+%%[0]	ascii-val("\0") = 0
+%%[7]	ascii-val("\a") = 7
+%%[8]	ascii-val("\b") = 8
+[9]	ascii-val("\t") = 9
+[10]	ascii-val("\n") = 10
+%%[11]	ascii-val("\v") = 11
+%%[12]	ascii-val("\f") = 12
+%%[13]	ascii-val("\r") = 13
+
+
+  [ 32] ascii-val(" ")= 32  [ 33] ascii-val("!")= 33  [ 34] ascii-val("\"")= 34
+  [ 35] ascii-val("#")= 35  [ 36] ascii-val("$")= 36  [ 37] ascii-val("%")= 37
+  [ 38] ascii-val("&")= 38  [ 39] ascii-val("'")= 39  [ 40] ascii-val("(")= 40
+  [ 41] ascii-val(")")= 41  [ 42] ascii-val("*")= 42  [ 43] ascii-val("+")= 43
+  [ 44] ascii-val(",")= 44  [ 45] ascii-val("-")= 45  [ 46] ascii-val(".")= 46
+  [ 47] ascii-val("/")= 47  [ 48] ascii-val("0")= 48  [ 49] ascii-val("1")= 49
+  [ 50] ascii-val("2")= 50  [ 51] ascii-val("3")= 51  [ 52] ascii-val("4")= 52
+  [ 53] ascii-val("5")= 53  [ 54] ascii-val("6")= 54  [ 55] ascii-val("7")= 55
+  [ 56] ascii-val("8")= 56  [ 57] ascii-val("9")= 57  [ 58] ascii-val(":")= 58
+  [ 59] ascii-val(";")= 59  [ 60] ascii-val("<")= 60  [ 61] ascii-val("=")= 61
+  [ 62] ascii-val(">")= 62  [ 63] ascii-val("?")= 63  [ 64] ascii-val("@")= 64
+  [ 65] ascii-val("A")= 65  [ 66] ascii-val("B")= 66  [ 67] ascii-val("C")= 67
+  [ 68] ascii-val("D")= 68  [ 69] ascii-val("E")= 69  [ 70] ascii-val("F")= 70
+  [ 71] ascii-val("G")= 71  [ 72] ascii-val("H")= 72  [ 73] ascii-val("I")= 73
+  [ 74] ascii-val("J")= 74  [ 75] ascii-val("K")= 75  [ 76] ascii-val("L")= 76
+  [ 77] ascii-val("M")= 77  [ 78] ascii-val("N")= 78  [ 79] ascii-val("O")= 79
+  [ 80] ascii-val("P")= 80  [ 81] ascii-val("Q")= 81  [ 82] ascii-val("R")= 82
+  [ 83] ascii-val("S")= 83  [ 84] ascii-val("T")= 84  [ 85] ascii-val("U")= 85
+  [ 86] ascii-val("V")= 86  [ 87] ascii-val("W")= 87  [ 88] ascii-val("X")= 88
+  [ 89] ascii-val("Y")= 89  [ 90] ascii-val("Z")= 90  [ 91] ascii-val("[")= 91
+  [ 92] ascii-val("\\")= 92 [ 93] ascii-val("]")= 93  [ 94] ascii-val("^")= 94
+  [ 95] ascii-val("_")= 95  [ 96] ascii-val("`")= 96  [ 97] ascii-val("a")= 97
+  [ 98] ascii-val("b")= 98  [ 99] ascii-val("c")= 99  [100] ascii-val("d")=100
+  [101] ascii-val("e")=101  [102] ascii-val("f")=102  [103] ascii-val("g")=103
+  [104] ascii-val("h")=104  [105] ascii-val("i")=105  [106] ascii-val("j")=106
+  [107] ascii-val("k")=107  [108] ascii-val("l")=108  [109] ascii-val("m")=109
+  [110] ascii-val("n")=110  [111] ascii-val("o")=111  [112] ascii-val("p")=112
+  [113] ascii-val("q")=113  [114] ascii-val("r")=114  [115] ascii-val("s")=115
+  [116] ascii-val("t")=116  [117] ascii-val("u")=117  [118] ascii-val("v")=118
+  [119] ascii-val("w")=119  [120] ascii-val("x")=120  [121] ascii-val("y")=121
+  [122] ascii-val("z")=122  [123] ascii-val("{")=123  [124] ascii-val("|")=124
+  [125] ascii-val("}")=125  [126] ascii-val("~")=126
+
+
+[default]
+	ascii-val(string) = -1
+
+
+[sc]	str-comp("", "") = 0
+
+[sc]	length(string) > 0 == true
+	====
+	str-comp(string, "") = 1
+
+[sc]	length(string) > 0 == true
+	====
+	str-comp("", string) = -1
+
+
+%% The following obviously begs for some refactoring...
+
+[sc]	strcon(char2) != strcon("\"),
+	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon("""char2""")) == true
+	===
+	str-comp(strcon(""" "\" char1 char*1 """), strcon(""" char2 char*2 """)) = -1
+
+
+[sc]	strcon(char1) != strcon("\"),
+	ascii-val(strcon(""" char1 """)) <  ascii-val(strcon(""" "\" char2""")) == true
+	===
+	str-comp(strcon("""  char1 char*1 """), strcon(""" "\" char2 char*2 """)) = -1
+
+[sc]	strcon(char2) != strcon("\"),
+	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon("""char2""")) == false
+	===
+	str-comp(strcon(""" "\" char1 char*1 """), strcon(""" char2 char*2 """)) = 1
+
+
+[sc]	strcon(char1) != strcon("\"),
+	ascii-val(strcon(""" char1 """)) < ascii-val(strcon(""" "\" char2""")) == false
+	===
+	str-comp(strcon("""  char1 char*1 """), strcon(""" "\" char2 char*2 """)) = 1
+
+
+[sc]	str-comp(strcon(""" "\" char char*1 """), strcon(""" "\" char char*2 """)) =
+		str-comp(strcon("""char*1"""), strcon("""char*2 """))
+
+
+[sc]	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon(""" "\" char2 """)) == true
+	===
+	str-comp(strcon(""""\" char1 char*1 """), strcon(""""\" char2 char*2 """)) = -1
+
+[sc]	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon(""" "\" char2 """)) == false
+	===
+	str-comp(strcon(""""\" char1 char*1 """), strcon(""""\" char2 char*2 """)) = 1
+
+
+[default-sc]	
+	str-comp(strcon(""" char char*1 """), strcon(""" char char*2 """)) =
+		str-comp(strcon("""char*1"""), strcon("""char*2"""))
+
+[default-sc]	
+	ascii-val(strcon("""char1""")) > ascii-val(strcon("""char2""")) == true
+	===
+	str-comp(strcon("""char1 char*1"""),strcon("""char2 char*2""")) = 1
+
+[default-sc]	
+	ascii-val(strcon("""char1""")) < ascii-val(strcon("""char2""")) == true
+	===
+	str-comp(strcon("""char1 char*1"""),strcon("""char2 char*2""")) = -1
+
+
+		

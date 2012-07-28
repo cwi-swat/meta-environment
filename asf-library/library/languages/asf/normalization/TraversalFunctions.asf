@@ -1,0 +1,108 @@
+equations
+
+[] traversals(Module) = lexical-traversals(abstract-traversals(Module))
+
+equations
+
+[] lexical-traversals(Module) = remove-lex-to-cf(Module)
+
+equations
+
+%% A transformer should remove the lex-to-cf injection from both sides of the equation
+%% The reason is that we should be able to visit nodes that are nested deeply inside
+%% of a lexical structure. For those nodes, which are not wrapped by a lex-to-cf injection,
+%% we would otherwise not be able to write down equations that visits them. 
+
+[transformer] 
+
+remove-lex-to-cf(
+appl(prod([cf(Symbol),Symbol+],cf(Symbol),attrs([Attr*1,term(traversal(Term*1, trafo, Term*2)),Attr*2])),
+	[appl(prod([lex(Symbol)],cf(Symbol),Attrs),[Tree1]) _Ann1, Tree+2]) Ann2 
+= 
+	appl(prod([lex(Symbol)],cf(Symbol),Attrs),[Tree2]) _Ann3
+) = 
+appl(prod([lex(Symbol),Symbol+],lex(Symbol),attrs([Attr*1,term(traversal(Term*1,trafo,Term*2)),Attr*2])),
+	[Tree1, Tree+2]
+    )
+Ann2 = 
+	Tree2
+
+
+%% With an accumulator, we would like to visit nested lexical nodes too. In this
+%% case we only remove the left-hand lex-to-cf wrapper
+
+[accumulator] 
+
+remove-lex-to-cf(
+appl(prod([cf(Symbol),Symbol2,Symbol*2],Symbol2,
+          attrs([Attr*1,term(traversal(Term*1,accu, Term*2)),Attr*2])),
+    [
+       appl(prod([lex(Symbol)],cf(Symbol),_Attrs), [ Tree ] ) _Ann1,
+       Tree+2]
+    ) Ann2
+= 
+	Tree2
+) = 
+appl(prod([lex(Symbol),Symbol2,Symbol*2],Symbol2,
+          attrs([Attr*1,term(traversal(Term*1,accu, Term*2)),Attr*2])),
+    [Tree, Tree+2]
+    ) Ann2
+= 
+	Tree2
+
+[accumulating-transformer] 
+
+%% This is the combination of the above...
+%% Here we have a problem. Is it possible at all to construct a tuple of a lexical symbol
+%% combined with a context-free symbol? So, we leave the right-hand side as-is, and leave
+%% it to the run-time system which should coerce tuples to the correct types after traversal.
+
+remove-lex-to-cf(
+appl(prod([cf(Symbol),cf(Symbol2),Symbol*2],cf(tuple(Symbol,[Symbol2])),
+          attrs([Attr*1,term(traversal(Term*1,trafo, Term*2)),Attr*2]))
+          , 
+     [ appl(prod([lex(Symbol)], cf(Symbol), _Attrs), [ Tree ]) _Ann1,
+       Tree+2]
+     ) Ann2 
+= 
+	Tree2
+) = 
+appl(prod([lex(Symbol),cf(Symbol2),Symbol*2],cf(tuple(Symbol,[Symbol2])),
+          attrs([Attr*1,term(traversal(Term*1,trafo, Term*2)),Attr*2]))
+          , 
+     [ Tree, Tree+2]
+     ) Ann2 
+= 
+	Tree2
+
+equations
+
+%% Traversal functions are abstract functions. We remove literals and layout from their definitions such that
+%% the compiler and the interpreter can use the same code whether rewriting with layout or not. This prevents
+%% a complicated feature interaction between rewriting with layout and traversal functions (namely finding
+%% out the parameter positions of the traversed and accumulated arguments of a traversal function)
+
+[] abstract-traversals(Module) = remove-lits-and-layout(Module)
+
+equations
+
+%% We remove all literals, layout, comma's and brackets. To retain the identity of the production, the function
+%% name is stored in a production attribute tagged "traversal-function":
+[] remove-lits-and-layout(appl(prod([lit(Name),_Layout3,lit("("),_Layout1,Symbol+,_Layout2,lit(")")],Symbol2,
+          attrs([Attr*1,term(traversal(Term+)),Attr*2]))
+          , [ _Lit1, _LayoutTree1, _Lit2, _LayoutTree2, Tree+2, _LayoutTree3, _Lit3]
+     )) = appl(prod([get-traversal-types(Symbol+)],Symbol2,
+          attrs([term(traversal-function(Name)),Attr*1,term(traversal(Term+)),Attr*2])),[get-traversal-arguments(Tree+2)])
+
+equations
+
+[] get-traversal-arguments(Tree) = Tree
+[] get-traversal-arguments(Tree1, _LayoutTree1, _Lit, _LayoutTree2, Tree+) = Tree1, get-traversal-arguments(Tree+)
+
+equations
+
+[] get-traversal-types(Symbol) = Symbol
+[] get-traversal-types(Symbol1, _Layout1, lit(","), _Layout2, Symbol+) = Symbol1, get-traversal-types(Symbol+)
+
+
+      

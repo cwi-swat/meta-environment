@@ -1,0 +1,89 @@
+trs
+  signature
+    true/0 ,false/0, and/2, or/2, not/1,
+    tcprog/1, tcseries/2, tcdecls/1, tcseries2/3,
+    tcstat/2, tcif2/4, lookup/2, lookup2/3, lookup3/3, eq/2,
+    isconst/1, typeof/1, compatible/2,
+
+    1/0, foo/0, n/0, s/0, natural/0, string/0, undeclared/0,
+    program/2, decl/2, decls/2, emptydecls/0, series/2,emptyenv/0,
+    pair/2, env/2, emptyseries/0, assign/2, if/3, while/2
+  rewrite-rules
+    [B1]  and(true, $X)  -> $X,
+    [B2]  and(false, $X) -> false,
+    [B3]  or(true, $X)   -> true,
+    [B4]  or(false, $X)  -> $X,
+    [B5]  not(true)      -> false,
+    [B6]  not(false)     -> true,
+
+    [Tc1] tcprog( program($DECLS,$SERIES) ) ->
+      tcseries($SERIES,tcdecls($DECLS)),
+    [Tc2] tcdecls( decls(decl($VAR,$TYPE),$DECLS) ) ->
+      env(pair($VAR,$TYPE),tcdecls($DECLS)),
+    [Tc3] tcdecls( emptydecls ) -> emptyenv,
+    [Tc4] tcseries(series($STAT,$STATS), $ENV) ->
+       tcseries2(tcstat($STAT,$ENV), $STATS, $ENV),
+    [Tc5] tcseries(emptyseries, $ENV) -> true,
+    [Tc6] tcseries2(true, $STATS, $ENV) ->
+       tcseries($STATS, $ENV),
+    [Tc7] tcseries2(false, $STATS, $ENV) -> false,
+    [Tc8] tcstat($STAT, emptyenv) -> false,
+    [Tc9] tcstat(assign($ID,$VALUE), $ENV) ->
+       compatible(lookup($ID,$ENV), typeof($VALUE)),
+   [Tc10] tcstat(if($ID,$SERIES1,$SERIES2), $ENV) ->
+       tcif2(
+         compatible(lookup($ID,$ENV),natural),
+         $SERIES1,
+         $SERIES2,
+         $ENV
+       ),
+   [Tc11] tcif2(true,$SERIES1,$SERIES2,$ENV)  ->
+       and(tcseries($SERIES1,$ENV),tcseries($SERIES2,$ENV)),
+   [Tc12] tcif2(false,$SERIES1,$SERIES2,$ENV) -> false,
+
+   [Com1] compatible($X, $X)         -> true,
+   [Com2] compatible(natural,string) -> false,
+   [Com3] compatible(string,natural) -> false,
+   [Com4] compatible($X,undeclared) -> false,
+   [Com5] compatible(undeclared,$X) -> false,
+
+   [Loo1] lookup($EXP,$ENV) ->
+          lookup2(isconst($EXP),$EXP,$ENV),
+
+   [Loo2] lookup2(true,$EXP,$ENV) -> typeof($EXP),
+   [LooX] lookup2(false,$EXP,emptyenv) -> undeclared,
+   [Loo3] lookup2(false,$EXP, env(pair($ID,$TYPE),$ENV) ) ->
+            lookup3(eq($EXP,$ID),$EXP, env(pair($ID,$TYPE),$ENV)),
+
+   [Loo4] lookup3(true,$ID1, env(pair($ID2,$TYPE),$ENV)) -> $TYPE,
+   [Loo5] lookup3(false,$ID1, env(pair($ID2,$TYPE),$ENV)) ->
+            lookup2(false,$ID1,$ENV),
+
+   [Isc1] isconst(n)  -> false,
+   [Isc2] isconst(s)  -> false,
+   [Isc3] isconst(1)  -> true,
+   [Isc4] isconst(foo) -> true,
+
+   [Eq1]  eq($ID,$ID) -> true,
+   [Eq2]  eq(n,s)   -> false,
+   [Eq3]  eq(s,n)   -> false,
+
+   [To1]  typeof(1)   -> natural,
+   [To2]  typeof(foo) -> string
+
+  term
+    tcprog(
+      program(
+        decls(
+          decl(n, natural),
+          emptydecls
+        ),
+        series(
+          if(1,
+            series(assign(n,1),emptyseries),
+            series(assign(s,foo),emptyseries)
+          ),
+          emptyseries
+        )
+      )
+    )

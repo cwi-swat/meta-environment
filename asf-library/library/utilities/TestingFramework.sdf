@@ -1,0 +1,38 @@
+module utilities/TestingFramework[X]
+
+%% Note: This module is here for backward compatibility.
+%%       Consider using integrated unit test sections
+%%       in ASF modules instead of using this module.
+
+imports
+  basic/Integers
+  basic/Strings
+
+exports
+  sorts
+    TestSuite TestResult TestSummary
+  context-free syntax
+    TestResult*					-> TestSuite
+    TestResult* "=====" TestSummary "====="	-> TestSuite
+    "pass"		-> TestResult
+    "FAIL" ":" String	-> TestResult
+  context-free syntax
+    "assert" X "=" X String	-> TestResult
+    "assert" X "!=" X String	-> TestResult
+
+  context-free start-symbols
+    TestSuite
+
+hiddens
+  imports
+    containers/List[TestResult]
+    basic/Comments
+
+  context-free syntax
+    summarize(TestResult*) -> TestSummary "PASS"					-> TestSummary
+    "FAIL" Integer "out" "of" Integer "tests" "failed"	-> TestSummary
+    count-failures(TestResult *) -> <Integer, Integer> variables
+    "String"[0-9\']*		-> String
+    "Integer"[0-9\']*		-> Integer
+    "X"[0-9\']*			-> X
+    "TestResult*"[0-9\']*	-> TestResult*

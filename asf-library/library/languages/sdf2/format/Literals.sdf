@@ -1,0 +1,21 @@
+module languages/sdf2/format/Literals
+
+imports languages/sdf2/syntax/Literals
+imports languages/sdf2/format/Kernel
+
+hiddens
+context-free syntax
+  "[" {Symbol ","}* "]" -> Box*       {to-box}        
+  "[" FunctionName "]"  -> Box        {to-box}        
+  "[" Attributes "]"    -> Box        {to-box}        
+  "<" Box ">"           -> Production {from-box}      
+  "_" "_"               -> Box        {layout-to-box} 
+
+lexical variables
+  "C" -> LAYOUT  
+
+variables
+  "Symbol"       -> Symbol         
+  "Symbol*"      -> {Symbol ","}*  
+  "FunctionName" -> FunctionName   
+  "Attributes"   -> Attributes     

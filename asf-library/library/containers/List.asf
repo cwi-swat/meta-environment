@@ -1,0 +1,32 @@
+equations
+
+[emp]
+  empty([]) = true
+
+[default-emp]
+  empty([X,*]) = false
+
+[list-head]
+  head([X, X,*]) = X
+
+[list-tail]
+  tail([X, X,*]) = [X,*]
+
+[list-length]
+  length ( [] ) = 0
+
+[list-length]
+  length([X,X,*]) = 1 + length([X,*])
+
+[list-elem]		
+  elem (X, [ X,*1, X, X,*2 ]) = true
+
+[default-list-elem]
+  elem (X, [X,*]) = false
+
+[list-cons] cons(X, [ X,* ]) = [ X, X,* ]
+
+[list-cons] X : [X,*] = [X , X,*]
+
+[list-concat] concat([X,*1], [X,*2]) = [X,*1 , X,*2]
+

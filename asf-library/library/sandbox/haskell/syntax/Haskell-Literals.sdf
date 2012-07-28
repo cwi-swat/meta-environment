@@ -1,0 +1,14 @@
+module Haskell-Literals
+exports
+  context-free syntax
+    INTEGER 		-> Literal {cons("Int")}
+    CHAR 		-> Literal {cons("Char")}
+    RATIONAL 		-> Literal {cons("Float")}
+    STRING 		-> Literal {cons("String")}
+    PRIMINTEGER 	-> Literal {cons("PrimInt")}
+    PRIMCHAR 		-> Literal {cons("PrimChar")}
+    PRIMSTRING 		-> Literal {cons("PrimString")}
+    PRIMFLOAT 		-> Literal {cons("PrimFloat")}
+    PRIMDOUBLE 		-> Literal {cons("PrimDouble")}
+    CLITLIT 		-> Literal {cons("CLitLit")}
+

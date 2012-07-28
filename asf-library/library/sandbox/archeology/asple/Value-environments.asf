@@ -1,0 +1,28 @@
+equations
+ [VE1]    add Pair to valenv (Pairs)  = valenv (Pair # Pairs)
+
+[VE2]    lookup Id in valenv ((Id : Val) # Pairs) = Val
+
+[VE3]                          Id != Id1
+           ======================================================>
+           lookup Id in valenv ((Id1: Val) # Pairs) =
+                                         lookup Id in valenv (Pairs)
+
+ [VE3a]   Id is in valenv() = false
+
+ [VE3b]   Id is in valenv((Id: Val) # Pairs) = true
+
+ [VE3c]    Id != Id1
+          ===========>
+          Id is in valenv((Id1: Val) # Pairs) = Id is in valenv(Pairs)
+
+  [VE4]     modify (Id : Val) in valenv ((Id : Val1) # Pairs) =
+                                         valenv ((Id : Val) # Pairs)
+
+  [VE5]                          Id != Id1,
+            modify (Id : Val) in valenv (Pairs) = valenv (Pairs1)
+            ======================================================>
+            modify (Id : Val) in valenv ((Id1 : Val1) # Pairs) =
+                                        valenv ((Id1 : Val1) # Pairs1)
+
+  [VE6]     modify (Id : Val) in valenv () =  valenv (Id : Val)

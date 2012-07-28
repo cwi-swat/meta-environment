@@ -1,0 +1,63 @@
+equations
+
+[Main] start(PROGRAM, Program) = start(Summary, summary("pico-check",get-filename(get-location(Program)), [tcp(Program)]))
+
+equations
+
+[Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls))
+
+equations
+
+[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table)
+
+equations
+
+[Tc3a] tcits(Id:Type, Id-type*, Tenv) = tcits(Id-type*, tcit(Id:Type, Tenv))
+
+[Tc3b] tcits(,Tenv) = Tenv
+
+equations
+
+[Tc4a] lookup(Tenv, Id) == not-in-table
+       ===============================
+       tcit(Id:Type, Tenv) = store(Tenv, Id, Type)
+
+[default] tcit(Id:Type, Tenv) = Tenv
+
+equations
+
+[Tc5a] tcs(Stat ; Stat*, Tenv) =
+       tcst(Stat,Tenv), tcs(Stat*,Tenv)
+
+[Tc5b] tcs(,Tenv) = 
+
+equations
+
+[Tc6a]
+    not-in-table == lookup(Tenv, Id)
+    ===>
+    tcst(Id := Exp, Tenv) = error("Variable not declared", [localized("Id", get-location(Id))])
+
+[default] tcst(Id := Exp, Tenv) = tce(Exp, lookup(Tenv, Id), Tenv) 
+
+[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) =
+        tce(Exp, natural, Tenv), tcs(Series1, Tenv), tcs(Series2, Tenv)
+
+[Tc6c]  tcst(while Exp do Series od, Tenv) = 
+        tce(Exp, natural, Tenv), tcs(Series, Tenv)
+
+equations
+
+[default] tce(Exp, natural, Tenv) = error("Expression should be of type natural", [localized("Expression", get-location(Exp))])
+[default] tce(Exp, string, Tenv) = error("Expression should be of type string", [localized("Expression", get-location(Exp))])
+
+[Tc7a]  tce(Id, Type, Tenv) = when Type == lookup(Tenv, Id)
+[Tc7b]  tce(Nat-con, natural, Tenv) = 
+[Tc7c]  tce(Str-con, string, Tenv) = 
+[Tc7d]  tce(Exp1 || Exp2, string, Tenv) = tce(Exp1, string, Tenv), tce(Exp2, string, Tenv)
+[Tc7d]  tce(Exp1 + Exp2, natural, Tenv) = tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)
+[Tc7d]  tce(Exp1 - Exp2, natural, Tenv) = tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)
+
+
+
+

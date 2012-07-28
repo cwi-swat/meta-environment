@@ -1,0 +1,18 @@
+PROGRAM fib;
+DECLARE
+  there : LABEL;
+  count : INTEGER;
+  fib   : ARRAY[1..20] OF INTEGER;
+BEGIN
+         count := 3;
+         fib[1] := 1;
+         fib[2] := 1;
+  there: fib[count] := fib[count-1] + fib[count-2];
+         count := count + 1;
+         WRITE("count = ");
+         WRITE(count);
+         WRITE("\n");
+         IF count <= 20 THEN
+           GOTO there
+         END
+END.

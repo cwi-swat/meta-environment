@@ -1,0 +1,25 @@
+module languages/box/utilities/PPList["ListName" X]
+
+imports languages/box/syntax/Box
+
+exports
+  context-free syntax
+    "Hlist2box"(X*) -> Box {to-box}
+    "HOVlist2box"(X*) -> Box {to-box}
+    "HVlist2box"(X*) -> Box {to-box}
+    "Vlist2box"(X*) -> Box {to-box}    
+
+    get-hs("ListName") -> NatCon
+    get-vs("ListName") -> NatCon
+    
+hiddens
+  context-free syntax
+    sort2box(X) -> Box {to-box}
+
+  variables
+    "Box" -> Box
+    "Box*" -> Box*
+    "HSvalue" -> NatCon
+    "VSvalue" -> NatCon
+    "X" -> X
+    "X+" -> X+

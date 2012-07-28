@@ -1,0 +1,52 @@
+module Comment
+
+exports
+
+lexical syntax
+	"--" ~[\n]* [\n] -> Comment
+	Comment -> LAYOUT {avoid}
+
+context-free syntax
+
+Comment -> Header-Comment
+
+
+%% Note: This is not the official description of Comment. However I
+%% couldn't see why the percent character (%) was not allowed in its bare
+%% form (i.e. not part of a Special_character) in a comment.
+
+%% Note: There are two kinds of comments: free comments and expected
+%% comments. Free comments can be discarded by some tools. However
+%% expected comments appear as part of four constructs: Routine,
+%% Assertion_clause, Creation_clause and Feature_clause, and should be
+%% processed by tools such as the short utility. Although, in Routine,
+%% Creation_clause and Feature_clause, the header comment is optional and
+%% may be ignored without too much harm, it is compulsory in
+%% Assertion_clause and ignoring it would be a syntax error. A solution
+%% to implement these expected comments could be to use lexical tie-ins.
+
+%% Note: TowerEiffel erroneously emits a syntax error when a comment
+%% appears between the feature keyword and the optional Clients in the
+%% Features construct. This is probably a secondary effect of the use of
+%% lexical tie-ins suggested above.
+
+%% Note: In the following Routine declaration:
+
+%% foo is
+%% -- This is the first comment.
+%% 
+%%         -- This is the second comment.
+%% 
+%%         -- This is the third comment.
+%%     do
+%% ...
+%%     end
+
+%% it is not clear which one of the three comments is the expected
+%% Header_comment and what are the two other free comments. TowerEiffel
+%% chose the first comment to be the header comment. Some other
+%% compilers, such as ISE Eiffel, Halstenbach and Visual Eiffel, actually
+%% merge the three comments into one which becomes the header comment.
+
+%% Note: Some Eiffel compilers ignore any line starting with '--|'
+%% instead of just '--' in header comments.

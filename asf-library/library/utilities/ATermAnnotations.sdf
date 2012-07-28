@@ -1,0 +1,16 @@
+module utilities/ATermAnnotations[X]
+
+imports languages/aterm/syntax/ATerms
+imports basic/StrCon
+
+exports
+  context-free syntax
+    set-term-anno(term:X,label:StrCon,anno:ATerm) -> X {built-in("set-term-anno")}   
+    get-term-anno(term:X,label:StrCon) -> ATerm {built-in("get-term-anno")}
+    get-lex-term-anno(term:X,label:StrCon) -> ATerm {built-in("get-lex-term-anno")}
+
+hiddens
+  context-free start-symbols ATerm
+
+
+

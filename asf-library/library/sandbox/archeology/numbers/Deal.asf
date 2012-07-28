@@ -1,0 +1,22 @@
+equations
+
+  [c1]  normalize(r) = r',
+        afterdot(mantissa(r')) = x1,
+        exponent(r') = x2
+        =================================
+        r2e(r) = < x1 e x2 - nr-of-digits(|x1|) >
+
+  [c2]  e2r(<x1 e x2>) =
+          normalize(mant-exp( intafterdot(x1), x2 + nr-of-digits(|x1|) ) )
+
+  [o1]  r + r' = e2r( r2e(r) + r2e(r') )
+  [o2]  r * r' = e2r( r2e(r) * r2e(r') )
+  [o3]  r - r' = e2r( r2e(r) - r2e(r') )
+  [o4]  r / r' = e2r( r2e(r) / r2e(r') )
+
+  [o5]  normalize(r) = r',
+        | exponent(r') | \leq 4  = true
+        =============================
+        output(r) = mant2dot(r')
+
+  [default-o6] output(r) = normalize(r)

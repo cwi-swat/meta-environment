@@ -1,0 +1,36 @@
+module languages/sdf2/normalization/Kernel
+imports
+        languages/sdf2/projection/Kernel
+        languages/sdf2/normalization/Grammar
+        languages/sdf2/syntax/CC
+        languages/sdf2/syntax/Basic
+
+exports
+  context-free syntax
+    "k" "[[" Grammar "]]" -> Grammar
+hiddens 
+  sorts
+    Prod-Tuple
+  context-free syntax
+    "(" Production "," Productions ")" -> Prod-Tuple
+  context-free syntax
+    merge(Productions)                    -> Productions
+    new-merge(Productions,Productions)    -> Productions
+    attr-collect(Production,Productions)  -> Production
+    prod-contains(Production,Productions) -> Boolean
+  context-free syntax
+    lexical-merge(Productions)            -> Productions
+    lex-merge(Productions,Productions)    -> Productions
+    lex-lhs-merge(Production,Productions) -> Prod-Tuple
+
+hiddens
+  variables
+    "!"[0-9\']*         -> Attributes
+    "cc"[0-9\']*        -> CharClass
+    [p][0-9\']*         -> Production
+    [p]"*"[0-9\']*      -> Production*
+    [p]"+"[0-9\']*      -> Production+ 
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "_G"[0-9\']*        -> Grammar

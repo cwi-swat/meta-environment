@@ -1,0 +1,15 @@
+module Haskell-List-Comprehensions
+exports
+  context-free syntax
+    "[" List "]" 	 -> Exp {cons("List")}
+    Exp 		 -> List
+    Lexps 		 -> List
+    Exp ".." 		 -> List
+    Exp "," Exp ".." 	 -> List
+    Exp ".." Exp 	 -> List
+    Exp "," Exp ".." Exp -> List
+    Exp "|" Quals        -> List
+   
+    Lexps "," Exp 	 -> Lexps
+    Exp "," Exp   	 -> Lexps
+     

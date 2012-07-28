@@ -1,0 +1,24 @@
+module Functions
+
+imports Primaries
+
+exports
+
+context-free syntax
+
+Function -> Call
+Command -> Call
+
+Operation Call-Args -> Command
+Primary "." Operation  Call-Args -> Command
+Primary "::" Operation Call-Args -> Command
+"super" Call-Args -> Command
+
+Operation "(" Call-Args? ")" -> Function
+Operation  -> Function
+Primary "." Operation "(" Call-Args? ")" -> Function
+Primary "::" Operation "(" Call-Args? ")" -> Function
+Primary "." Operation -> Function
+Primary "::" Operation -> Function
+"super" "(" Call-Args? ")" -> Function
+"super" -> Function

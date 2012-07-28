@@ -1,0 +1,14 @@
+module languages/sdf2/format/Labels
+
+imports languages/sdf2/syntax/Labels
+imports languages/sdf2/format/Kernel
+
+hiddens
+context-free syntax
+  "[" Symbol "]" -> Box    {to-box}   
+  "[" Label "]"  -> Box    {to-box}   
+  "<" Box ">"    -> Symbol {from-box} 
+
+variables
+  "Symbol" [0-9]* -> Symbol  
+  "Label" [0-9]*  -> Label   

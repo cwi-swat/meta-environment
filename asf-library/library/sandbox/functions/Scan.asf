@@ -1,0 +1,11 @@
+equations
+
+[] scan = scanr
+
+[] scanl ( f A [] ) = [A]
+[] scanl ( f A [H,T]) = A : [T']
+    when [A',T'] = scanl ( f f( H A ) [T]) 
+
+[] scanr (f A []) = [A]
+[] scanr (f A [H,T]) = f( A H ) :  [T']
+    when [A',T'] = scanr(f A [T])

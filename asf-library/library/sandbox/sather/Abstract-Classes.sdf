@@ -1,0 +1,20 @@
+module Abstract-Classes
+
+imports Type-Specifiers
+	Parameterization
+
+exports
+
+sorts Abstract-Class-Definition
+
+context-free syntax
+
+	%% This is to restrictive, ;'s may occur abundantly
+	%%"abstract" "class" Abstract-Class-Name Parameterization?
+	"type" Abstract-Class-Name Parameterization?
+		Subtyping-Clause? Supertyping-Clause?
+		"is" {Abstract-Signature ";"}* ";"? "end" -> Abstract-Class-Definition
+	"<" Type-Specifier-List -> Subtyping-Clause
+	">" Type-Specifier-List -> Supertyping-Clause
+
+

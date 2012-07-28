@@ -1,0 +1,15 @@
+module languages/asf/pretty/ASFtoBox
+
+imports languages/asf/pretty/RenamedASFtoBox
+[
+    Module => ASF-Module
+    Section => ASF-Section
+    TestEquation => ASF-TestEquation
+    Implies => ASF-Implies
+    Equation => ASF-Equation
+    ConditionalEquation => ASF-ConditionalEquation
+    Condition => ASF-Condition
+    Conditions => ASF-Conditions
+    TagId => ASF-TagId
+    Tag => ASF-Tag
+]

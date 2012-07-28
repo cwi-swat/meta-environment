@@ -1,0 +1,42 @@
+module languages/fdl/utilities/Extended-FDL
+
+imports languages/fdl/utilities/FDL-to-BDD [AtomicFeature => FeatureName]
+
+hiddens
+context-free start-symbols
+  FeatureDiagram Formula
+
+exports
+context-free syntax
+  FeatureName -> Logical-Var
+
+  xfdl-to-bdd(FeatureDiagram) -> Formula
+
+
+  fdl-to-formula(FeatureDiagram, Formula) -> Formula {traversal(top-down, continue, accu)}
+  fdl-to-formula(FeatureDefinition, Formula) -> Formula {traversal(top-down, continue, accu)}
+  fdl-to-formula(Constraint, Formula) -> Formula {traversal(top-down, continue, accu)}
+
+  FeatureName "and" FeatureName "requires" FeatureName -> DiagramConstraint  
+
+  featurename-to-atom(FeatureName) -> Logical-Var
+
+hiddens
+variables
+	"$atomicfeature"[0-9\']* -> AtomicFeature
+	"$featureexpression"[0-9\']* -> FeatureExpression
+	"$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+	"$featureexpression*"[0-9\']* -> {FeatureExpression ","}*
+	"$char+"[0-9\']* -> CHAR+
+	"$featuredefinition+"[0-9\']* -> FeatureDefinition+
+	"$featuredefinition*"[0-9\']* -> FeatureDefinition*
+	"$constraint*"[0-9\']* -> Constraint*
+	"$constraint"[0-9\']* -> Constraint
+	"$featurename"[0-9\']* -> FeatureName
+	"$formula"[0-9\']* -> Formula
+	"$featurediagram"[0-9\']* -> FeatureDiagram
+
+lexical variables
+	"$head"[0-9\']* -> [A-Z]
+ 	"$tail"[0-9\']* -> [a-zA-Z0-9\-\_]*
+ 	"$tailchar"[0-9\']* -> [a-zA-Z0-9\-\_]

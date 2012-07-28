@@ -1,0 +1,23 @@
+equations
+
+[x] build-env(new-env,tscript) = genv,
+    match-env(genv,snd-Syn,rec-Syn) = dss1,
+    match-env(genv,snd-Broad, rec-Broad) = dss2,
+    match-env(genv,snd-Create, rec-Create) = dss3,
+    tool-comms(genv,rec-Event) = dss4,
+    tool-comms(genv,snd-Eval) = dss5,
+    tool-comms(genv,snd-Do) = dss6,
+    tool-comms(genv, rec-Value) = dss7
+    =========================
+    vizualize(tscript) =
+      digraph TBComm {
+        subgraph synchronous {dss1};
+        subgraph broadcast {dss2};
+        subgraph creation {dss3};
+        subgraph events {dss4};
+        subgraph evals {dss5};
+        subgraph dos {dss6};
+        subgraph values {dss7};
+      }
+
+[x] ds*1; ds; ds*2; ds; ds*3; = ds*1; ds; ds*2; ds*3 ;

@@ -1,0 +1,28 @@
+module Py-Integers
+
+exports
+
+sorts Longinteger Integer Decimalinteger Octinteger Hexinteger Nonzerodigit Digit
+
+lexical syntax
+	[1-9] -> Nonzerodigit
+	[0-7] -> Octdigit
+	[0-9] -> Digit
+	[0-9a-fA-F] -> Hexdigit
+	[0][xX] -> Hexprefix
+	[lL] -> Longsuffix
+
+
+context-free syntax
+%% Convert this to lexical.
+	Hexprefix Hexdigit+ 	-> Hexinteger
+	"0" Octdigit+ 		-> Octinteger
+	Nonzerodigit Digit* 	-> Decimalinteger
+	"0" 			-> Decimalinteger
+	Decimalinteger 		-> Integer
+	Hexinteger 		-> Integer
+	Octinteger 		-> Integer
+	Integer Longsuffix 	-> Longinteger
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

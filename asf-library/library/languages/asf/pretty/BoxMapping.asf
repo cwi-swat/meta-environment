@@ -1,0 +1,4 @@
+equations
+
+[] frombox(tobox(X)) = X
+[] tobox(frombox(Box)) = Box

@@ -1,0 +1,11 @@
+module languages/sdf2/renaming/Lifting
+
+imports  languages/sdf2/renaming/Kernel 
+         languages/sdf2/syntax/Lifting
+
+hiddens
+
+ variables 
+    "_"[ABC][0-9\']*    -> Symbol 
+    "'r"[0-9\']*        -> Renamings 
+  

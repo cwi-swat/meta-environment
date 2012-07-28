@@ -1,0 +1,20 @@
+module languages/fdl/utilities/Annotated-Features
+
+imports languages/fdl/syntax/Fdl
+
+exports 
+
+context-free syntax
+	annotate-fdl(FeatureDiagram) -> FeatureDiagram
+		{traversal(bottom-up,trafo,continue)}
+
+	annotate-fdl(FeatureDefinition) -> FeatureDefinition
+		{traversal(bottom-up,trafo,continue)}
+
+	FeatureExpression "{" FeatureName "}" -> FeatureExpression
+
+
+hiddens
+variables
+	"$featurename"[0-9\']* -> FeatureName
+	"$featureexpression"[0-9\']* -> FeatureExpression

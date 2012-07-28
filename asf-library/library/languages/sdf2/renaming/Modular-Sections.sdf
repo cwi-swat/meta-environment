@@ -1,0 +1,8 @@
+module languages/sdf2/renaming/Modular-Sections
+imports
+     languages/sdf2/syntax/Modules
+     languages/sdf2/renaming/Renaming
+exports
+  context-free syntax
+    Sections "++" Sections                   -> Sections {assoc}
+   "(" Sections ")" Renamings                -> Sections

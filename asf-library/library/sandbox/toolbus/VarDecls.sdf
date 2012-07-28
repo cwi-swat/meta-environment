@@ -1,0 +1,12 @@
+module VarDecls
+
+imports Terms
+
+exports
+  sorts VarDecl VarDecls
+
+exports context-free syntax
+    Var":" Term -> VarDecl {cons("vardecl")}
+
+exports context-free syntax
+    {VarDecl"," } * -> VarDecls {cons("varDeclStar")}

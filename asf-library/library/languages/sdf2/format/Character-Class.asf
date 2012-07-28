@@ -1,0 +1,24 @@
+equations
+
+[] CharRanges1 CharRanges2 = <H hs=0 [[CharRanges1] [CharRanges2]] >
+
+equations
+
+[] [ CharRanges ] = <H hs=0 ["[" [CharRanges] "]"]>
+[] [] = <H hs=0 ["[" "]"]>
+
+equations
+
+[] Character1 - Character2 = <H hs=0 [[Character1] "-" [Character2]]>
+
+equations
+
+[] ~ CharClass = <H hs=0 ["~" [CharClass]]>
+
+equations
+
+[] CharClass1 /\ CharClass2 = <HV [[CharClass1] H ["/\\" [CharClass2]]]>
+
+equations
+
+[] CharClass1 \/ CharClass2 = <HV [[ CharClass1] H ["\\/" [CharClass2]]]>

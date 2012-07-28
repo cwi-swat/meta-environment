@@ -1,0 +1,36 @@
+module languages/asf/normalization/Lifting
+
+imports languages/asf/normalization/RenamedASF[P-Tree]
+imports languages/asf/normalization/RenamedTree
+
+imports languages/asf/normalization/RenamedLifting[Equation]
+imports languages/asf/normalization/RenamedLifting[Condition]
+imports languages/asf/normalization/LiftedEquations
+
+imports utilities/Parsing[Module]
+
+exports
+
+context-free syntax
+
+lift-module(Module) -> Module
+lower-module(Module) -> Module
+
+hiddens
+
+context-free syntax
+
+lift(Module) -> Module {traversal(trafo,top-down,break)}
+lift(Condition) -> Condition {traversal(trafo,top-down,break)}
+lift(Equation) -> Equation {traversal(trafo,top-down,break)}
+
+lower(Module)    -> Module {traversal(trafo,top-down,break)}
+lower(Condition) -> Condition {traversal(trafo,top-down,break)}
+lower(Equation) -> Equation {traversal(trafo,top-down,break)}
+
+variables
+	"Module" -> Module {strict}
+	"Equation"[0-9]* -> Equation {strict}
+	"Condition" -> Condition {strict}
+	"Tree" -> P-Tree {strict}
+	"Ann" -> P-Annotation {strict}

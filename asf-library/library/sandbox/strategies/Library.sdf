@@ -1,0 +1,24 @@
+module strategies/Library
+
+imports strategies/Operators
+
+exports
+
+context-free syntax
+
+try(Strategy)      -> Strategy
+repeat(Strategy)   -> Strategy
+bottomup(Strategy) -> Strategy
+topdown(Strategy)  -> Strategy
+downup(Strategy)   -> Strategy
+oncebu(Strategy)   -> Strategy
+oncetd(Strategy)   -> Strategy
+somebu(Strategy)   -> Strategy
+sometd(Strategy)   -> Strategy
+somedownup(Strategy) -> Strategy
+
+hiddens
+
+variables
+
+"s"[0-9\']* -> Strategy

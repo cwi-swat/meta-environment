@@ -1,0 +1,8 @@
+module Quit-Statements
+
+exports
+
+sorts Quit-Statement
+
+context-free syntax
+	"quit" -> Quit-Statement

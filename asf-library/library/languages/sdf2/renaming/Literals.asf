@@ -1,0 +1,11 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% Renaming literals.
+
+  [0] [L]'r = L
+
+%% Renaming case-insensitive literals
+  [0] [S]'r = S

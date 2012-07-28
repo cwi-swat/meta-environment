@@ -1,0 +1,60 @@
+module languages/bnf/utils/BNF-to-SDF
+
+imports 
+	languages/bnf/syntax/BNF
+	languages/sdf2/syntax/Sdf2
+	utilities/Parsing[Terminal]
+	utilities/Parsing[NonTerminal]
+
+hiddens
+context-free start-symbols Rules Productions
+
+exports
+context-free syntax
+	normalize-rules(Rules, Rules) -> Rules {traversal(bottom-up, accu, break)}
+	normalize-rules(Rule, Rules) -> Rules {traversal(bottom-up, accu, break)}
+	rules-to-productions(Rules, Productions) -> Productions {traversal(top-down, accu, continue)}
+	rules-to-productions(Rule, Productions) -> Productions {traversal(top-down, accu, continue)}
+	terminal-to-literal(Terminal) -> StrCon
+	elements-to-symbols(Elements, Symbols) -> Symbols {traversal(top-down, accu, break)}
+	elements-to-symbols(Element, Symbols) -> Symbols {traversal(top-down, accu, break)}
+
+	nonterminal-to-sort(NonTerminal) -> Sort
+	non-alpha-numeric-to-space(Bytes) -> Bytes
+	normalize-spaces(Bytes) -> Bytes
+	squeeze-spaces(Bytes) -> Bytes
+	to-camel-case(Bytes) -> Bytes
+	spaces-to-dashes(Bytes) -> Bytes
+	bytes-to-sort(Bytes) -> Sort {complete}
+	
+
+hiddens
+variables
+	"$terminal"[0-9\']* -> Terminal
+	"$nonterminal"[0-9\']* -> NonTerminal
+	"$element"[0-9\']* -> Element
+	"$element*"[0-9\']* -> {Element "|"}*
+	"$element+"[0-9\']* -> {Element "|"}+
+	"$symbol"[0-9\']* -> Symbol
+	"$symbol*"[0-9\']* -> Symbol*
+	"$symbol+"[0-9\']* -> Symbol+
+	"$production"[0-9\']* -> Production
+	"$production*"[0-9\']* -> Production*
+	"$production+"[0-9\']* -> Production+
+	"$strcon"[0-9\']* -> StrCon
+	"$rule"[0-9\']* -> Rule
+	"$rule*"[0-9\']* -> Rule*
+	"$rule+"[0-9\']* -> Rule+
+	"$bytes"[0-9\']* -> Bytes
+
+lexical variables
+	"$any"[0-9\']* -> ~[]
+	"$byte"[0-9\']* -> Byte
+	"$byte*"[0-9\']* -> Byte*
+	"$strchar"[0-9\']* -> StrChar
+	"$strchar*"[0-9\']* -> StrChar*
+	"$head"[0-9\']* -> [A-Z]
+	"$middle"[0-9\']* -> [A-Za-z0-9\-]
+	"$middle*"[0-9\']* -> [A-Za-z0-9\-]*
+	"$last"[0-9\']* -> [A-Za-z0-9]
+

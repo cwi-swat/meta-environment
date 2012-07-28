@@ -1,0 +1,88 @@
+module Reserved-Words
+
+exports
+
+context-free syntax
+
+"alias" -> Identifier {reject}
+"all" -> Identifier {reject}
+"and" -> Identifier {reject}
+"as" -> Identifier {reject}
+"check" -> Identifier {reject}
+"class" -> Identifier {reject}
+"creation" -> Identifier {reject}
+"debug" -> Identifier {reject}
+"deferred" -> Identifier {reject}
+"do" -> Identifier {reject}
+"else" -> Identifier {reject}
+"elseif" -> Identifier {reject}
+"end" -> Identifier {reject}
+"ensure" -> Identifier {reject}
+"expanded" -> Identifier {reject}
+"export" -> Identifier {reject}
+"external" -> Identifier {reject}
+"feature" -> Identifier {reject}
+"from" -> Identifier {reject}
+"frozen" -> Identifier {reject}
+"if" -> Identifier {reject}
+"implies" -> Identifier {reject}
+"indexing" -> Identifier {reject}
+"infix" -> Identifier {reject}
+"inherit" -> Identifier {reject}
+"inspect" -> Identifier {reject}
+"invariant" -> Identifier {reject}
+"is" -> Identifier {reject}
+"like" -> Identifier {reject}
+"local" -> Identifier {reject}
+"loop" -> Identifier {reject}
+"not" -> Identifier {reject}
+"obsolete" -> Identifier {reject}
+"old" -> Identifier {reject}
+"once" -> Identifier {reject}
+"or" -> Identifier {reject}
+"prefix" -> Identifier {reject}
+"redefine" -> Identifier {reject}
+"rename" -> Identifier {reject}
+"require" -> Identifier {reject}
+"rescue" -> Identifier {reject}
+"retry" -> Identifier {reject}
+"select" -> Identifier {reject}
+"separate" -> Identifier {reject}
+"then" -> Identifier {reject}
+"undefine" -> Identifier {reject}
+"until" -> Identifier {reject}
+"variant" -> Identifier {reject}
+"when" -> Identifier {reject}
+"xor" -> Identifier {reject}
+
+%% Predefined names (not case sensitive)
+"BIT" -> Identifier {reject}
+"Current" -> Identifier {reject}
+"False" -> Identifier {reject}
+"Precursor" -> Identifier {reject}
+"Result" -> Identifier {reject}
+"Strip" -> Identifier {reject}
+"True" -> Identifier {reject}
+"Unique" -> Identifier {reject}
+
+
+%% Note: The official syntax specification lists the following class
+%% names as reserved words: BOOLEAN, CHARACTER, DOUBLE, INTEGER, NONE,
+%% POINTER, REAL, STRING. I understand that these classes have to be
+%% known by Eiffel compilers, but I don't see why they should be reserved
+%% words. Note that ANY, GENERAL, PLATFORM and many other class names
+%% from the Kernel Library Standard are not listed either! Moreover,
+%% these class names appear nowhere in the syntax constructs. Finally,
+%% only Visual Eiffel considers these class names as reserved words.
+
+%% Note: In Eiffel: The Language, second printing, False, Strip, True and
+%% Unique are considered to be keywords. I do not share this point of
+%% view.
+
+%% Note: Although SmallEiffel is case-sensitive with respect to
+%% Identifier, it considers letter case not being significant for
+%% reserved words!
+
+%% Note: Precursor is not part of the standard syntax. It has been
+%% introduced to support the Precursor mechanism.
+

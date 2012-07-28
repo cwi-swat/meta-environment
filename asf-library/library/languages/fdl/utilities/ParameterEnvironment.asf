@@ -1,0 +1,11 @@
+equations
+
+[] Section*1 arguments Parameter* Section*2 := FeatureDiagram,
+   ParameterEnv := get-parameters(Parameter*, new-table)
+   ===
+   construct-parameter-environment(module Modulename ImportSection* FeatureDiagram) = ParameterEnv
+
+
+equations
+
+[] get-parameters(AtomicFeature Char, ParameterEnv) = store(ParameterEnv, AtomicFeature, Char)

@@ -1,0 +1,57 @@
+
+   equations
+
+      [1]   unify(var1 is var2)   = <true, [(var1, var2)]>
+      [2]   unify(var is bool)    = <true, [(var, bool)]>
+      [3]   unify(var is nat)     = <true, [(var, nat)]>
+      [4]      var elm type1 -> type2 = true
+            ==========================================
+            unify(var is type1 -> type2) = <false, []>
+      [5]      var elm type1 -> type2 = false
+            ==============================================================
+            unify(var is type1 -> type2) = <true, [(var, type1 -> type2)]>
+      [6]      var elm type1 # type2 = true
+            =========================================
+            unify(var is type1 # type2) = <false, []>
+      [7]      var elm type1 # type2 = false
+            ============================================================
+            unify(var is type1 # type2) = <true, [(var, type1 # type2)]>
+      [8]   unify(bool is var)            = <true, [(var, bool)]>
+      [9]   unify(bool is bool)           = <true, []>
+      [10]  unify(bool is nat)            = <false, []>
+      [11]  unify(bool is type1 -> type2) = <false, []>
+      [12]  unify(bool is type1 # type2)  = <false, []>
+      [13]  unify(nat is var)             = <true, [(var, nat)]>
+      [14]  unify(nat is bool)            = <false, []>
+      [15]  unify(nat is nat)             = <true, []>
+      [16]  unify(nat is type1 -> type2)  = <false, []>
+      [17]  unify(nat is type1 # type2)   = <false, []>
+      [18]  unify(type1 -> type2 is var)  = unify(var is type1 -> type2)
+      [19]  unify(type1 -> type2 is bool) = <false, []>
+      [20]  unify(type1 -> type2 is nat)  = <false, []>
+      [21]  unify(type1 -> type2 is type3 -> type4)
+               = unify({type1 is type3, type2 is type4})
+      [22]  unify(type1 -> type2 is type3 # type4)
+               = <false, []>
+      [23]  unify(type1 # type2 is var)   = unify(var is type1 # type2)
+      [24]  unify(type1 # type2 is bool)  = <false, []>
+      [25]  unify(type1 # type2 is nat)   = <false, []>
+      [26]  unify(type1 # type2 is type3 -> type4)
+               = <false, []>
+      [27]  unify(type1 # type2 is type3 # type4)
+               = unify({type1 is type3, type2 is type4})
+
+      [28]  unify({}) = <true, []>
+      [29]     unify(teq) = <b1, subs1>,
+               unify(apply(subs1, {pairs})) = <b2, subs2>
+            ==============================================
+            unify({teq, pairs}) = <b1 & b2, subs2 o subs1>
+
+      [30]  teq + {pairs} = {teq, pairs}
+
+      [31]  apply(subs, type1 is type2)
+               = apply-type(subs, type1) is apply-type(subs, type2)
+
+      [32]  apply(subs, {}) = {}
+      [33]  apply(subs, {teq, pairs})
+               = apply(subs, teq) + apply(subs, {pairs})

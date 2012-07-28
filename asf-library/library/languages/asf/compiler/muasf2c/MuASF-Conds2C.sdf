@@ -1,0 +1,61 @@
+module languages/asf/compiler/muasf2c/MuASF-Conds2C
+
+imports languages/asf/compiler/muasf2c/MuASF-Term2C
+
+
+exports
+  context-free syntax
+    conds2cstats({C-Rule ";"}*,{NamePair ","}*,Integer)       -> SlI-tuple
+
+hiddens
+  context-free syntax
+    first-cond2cstats({C-Rule ";"}*,{NamePair ","}*,Integer)  -> SlI-tuple
+    first-cond2cstats2({C-Rule ";"}*,{NamePair ","}*,Integer) -> SlI-tuple
+    assign-cond2cstats({C-Rule ";"}*,{C-Rule ";"}*,
+                       {NamePair ","}*,Integer,Expression)    -> SlI-tuple
+    test-cond2cstats({C-Rule ";"}*,{NamePair ","}*,Integer)   -> SlI-tuple
+
+  context-free syntax
+    listconds2cstats({C-Rule ";"}*,
+                     {NamePair ","}*,Integer,Expression)      -> SlI-tuple
+    listcondspatterns2cstats({C-Rule ";"}+,Expression,
+                             {NamePair ","}*,Integer)         -> SlI-tuple
+    listcondspattern2cstats(Boolean,{Term ","}+,{C-Rule ";"}+,
+                            Expression,
+                            {NamePair ","}*,Integer)          -> ADSI-tuple
+
+hiddens
+
+variables
+	"Funid"[0-9]* -> FunId
+	"Aint"[0-9]* -> Integer
+	"Cond"[0-9]* -> Cond
+	"Cond*"[0-9]* -> {Cond "&"}*
+	"Cond+"[0-9]* -> {Cond "&"}+
+	"Bool"[0-9]*	-> Boolean
+	"Namepair*"[0-9]* -> {NamePair ","}*
+	"$Expression"[0-9]* -> Expression
+	"$Ltest"[0-9]* -> Expression
+
+variables
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "$ActualArgs"[0-9]* -> Argument-expression-list
+    "$ActualArg*"[0-9]*   -> {Expression ","}*
+    "$ActualArg+"[0-9]*   -> {Expression ","}+
+    "$ActualArg"[0-9]* -> Expression
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "Exp"[0-9]*          -> Expression
+    "C-rule+"[0-9]* 	-> {C-Rule ";"}+
+    "C-rule*"[0-9]* 	-> {C-Rule ";"}*
+    "C-rule"[0-9]* 	-> C-Rule
+    "Aint+"[0-9]* 	-> {Integer ","}+
+    "Fv-path+"[0-9]* -> {FV-Path ","}+
+    "Fv-path*"[0-9]* -> {FV-Path ","}*
+
+lexical variables
+	"d+"[0-9]* -> [0-9]+

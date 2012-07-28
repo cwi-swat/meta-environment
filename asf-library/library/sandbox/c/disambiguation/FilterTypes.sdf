@@ -1,0 +1,73 @@
+module FilterTypes
+
+imports C
+
+exports
+
+sorts TranslationUnit # TypedefName*
+
+context-free syntax
+  filter(TranslationUnit) -> TranslationUnit
+
+hiddens
+context-free syntax
+ 
+  ft(TranslationUnit, TypedefName*) -> TranslationUnit # TypedefName*  {traversal(trafo,accu,top-down)} 
+  ft(DeclaringList  , TypedefName*) -> DeclaringList     # TypedefName* {traversal(trafo,accu,top-down)}
+  ft(CompoundStatement, TypedefName*) -> CompoundStatement # TypedefName* {traversal(trafo,accu,top-down)}
+  ft(MemberDeclarator, TypedefName*)  -> MemberDeclarator # TypedefName* {traversal(trafo,accu,top-down)}
+  ft(StructSpecifier, TypedefName*)  -> StructSpecifier # TypedefName* {traversal(trafo,accu,top-down)}
+  ft(DeclarationSpecifier, TypedefName*)  -> DeclarationSpecifier # TypedefName* {traversal(trafo,accu,top-down)}
+
+
+
+context-free syntax
+  is-typedef(DeclarationSpecifier, Boolean) -> Boolean {traversal(accu)}
+  is-typedef(StorageClass, Boolean) -> Boolean {traversal(accu)}
+
+context-free syntax
+  get-typedefname(TypedefDeclarator, TypedefName?) -> TypedefName? {traversal(accu)}
+  get-typedefname(TypedefName, TypedefName?)       -> TypedefName? {traversal(accu)}
+
+context-free syntax
+  has-undeclared-type(Declaration*,Boolean,TypedefName*) -> Boolean {traversal(accu)}
+  has-undeclared-type(TypedefName,Boolean,TypedefName*)  -> Boolean {traversal(accu)}
+
+context-free syntax
+  has-declared-identifier(Statement*,Boolean,TypedefName*) -> Boolean {traversal(accu)}
+  has-declared-identifier(Expression,Boolean,TypedefName*) -> Boolean {traversal(accu)}
+
+context-free syntax
+  not-contains(TypedefName, TypedefName*) -> Boolean
+
+aliases
+
+  "true" | "false"   -> Boolean
+  { Declarator ","}* -> AmbiguousDeclarators
+  { CompoundStatement ","}* -> AmbiguousCompoundStatements
+  { IdentifierOrTypedefName ","}* -> AmbiguousIdentifierOrTypedefName
+
+variables
+
+ "_"[0-9]*                     -> AmbiguousDeclarators 
+ "_"[0-9]*                     -> AmbiguousCompoundStatements
+ "I|T"[0-9]*                   -> AmbiguousIdentifierOrTypedefName
+ "DeclarationSpecifier"[0-9]*  -> DeclarationSpecifier
+ "IdentifierDeclarator"[0-9]*  -> IdentifierDeclarator
+ "TypedefDeclarator"[0-9]*     -> TypedefDeclarator
+ "TypedefTypeSpecifier"[0-9]*  -> TypedefTypeSpecifier
+ "InitializerOpt?"[0-9]*       -> InitializerOpt?
+ "TypedefName*"[0-9]*          -> TypedefName*
+ "Bool"[0-9]*                  -> Boolean
+ "Declaration*"[0-9]*          -> Declaration*
+ "CompoundStatement"[0-9]*     -> CompoundStatement
+ "Statement*"[0-9]*            -> Statement*
+ "TypedefName"[0-9]*           -> TypedefName
+ "Identifier"[0-9]*            -> IDENTIFIER
+ "BasicTypeSpecifier"[0-9]*    -> BasicTypeSpecifier
+ "Expression"[0-9]*            -> Expression
+ "TranslationUnit"[0-9]*       -> TranslationUnit
+ "BitFieldSizeOpt"[0-9]*       -> BitFieldSizeOpt
+ "MemberDeclarator"[0-9]*      -> MemberDeclarator
+ "MemberDeclarationList"[0-9]* -> MemberDeclarationList
+ "$IdentifierOrTypedefName"[0-9]* -> IdentifierOrTypedefName

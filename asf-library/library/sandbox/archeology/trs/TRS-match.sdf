@@ -1,0 +1,18 @@
+module TRS-match
+%%  TRS-match
+
+imports
+    Booleans TRS-syntax
+exports
+    sorts
+        BINDING BINDINGS
+    context-free syntax
+      VAR ":" TERM                                      -> BINDING
+      "(" BINDING* ")"                                  -> BINDINGS
+      "fail"                                            -> BINDINGS
+
+      match "(" TERMS ";" TERMS ";" BINDINGS ")"        -> BINDINGS
+      VAR "unbound" "in" BINDINGS                       -> BOOL
+    variables
+      [_]Bin[*][\']*                                     -> BINDING*
+      [_]Bins[\']*                                       -> BINDINGS

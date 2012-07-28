@@ -1,0 +1,47 @@
+module languages/asf/normalization/Predicates
+
+imports languages/asf/normalization/RenamedTree
+imports basic/Booleans
+
+exports
+
+context-free syntax
+is-lexical-constructor(P-Tree) -> Boolean
+is-layout(P-Tree) -> Boolean
+is-literal(P-Tree) -> Boolean
+is-layout-variable(P-Tree) -> Boolean
+is-variable(P-Tree) -> Boolean
+
+hiddens
+
+variables
+
+"Symbols"[0-9]* -> P-Symbols	{strict}
+"Symbol"[0-9]*  -> P-Symbol	{strict}
+"Attr*"[0-9]* -> {P-Attr ","}*	{strict}
+"Attributes"[0-9]* -> P-Attributes	{strict}
+"Args"[0-9]* -> P-Args		{strict}
+"Tree"[0-9]* -> P-Tree		{strict}
+"Tree*"[0-9]* -> {P-Tree ","}* 	{strict}
+"Tree+"[0-9]* -> {P-Tree ","}+ 	{strict}
+"Lhs"[0-9]* -> P-Tree 		{strict}
+"Rhs"[0-9]* -> P-Tree 		{strict}
+"Ann"[0-9]* -> P-Annotation	{strict}
+"$"?"Var"[0-9]* -> StrCon		{strict}
+"Int"[0-9]* -> Integer              {strict}
+"Nat"[0-9]* -> NatCon               {strict}
+"Lit"[0-9]* -> StrCon               {strict}
+
+variables
+
+"_Nat"[0-9]* -> NatCon              {wild}
+"_Int"[0-9]* -> Integer             {wild}
+"_Symbols"[0-9]* -> P-Symbols	{wild}
+"_Symbol"[0-9]*  -> P-Symbol	{wild}
+"_Attr*"[0-9]* -> {P-Attr ","}*	{wild}
+"_Args"[0-9]* -> P-Args		{wild}
+"_Tree*"[0-9]* -> {P-Tree ","}* {wild}
+"_Attrs"[0-9]* -> P-Attributes 	{wild}
+"_Tree"[0-9]* -> P-Tree		{wild}
+"_Ann"[0-9]* -> P-Annotation 	{wild}
+"_Lit"[0-9]* -> StrCon              {wild}

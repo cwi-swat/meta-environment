@@ -1,0 +1,8 @@
+module Exception-Expressions
+
+exports
+
+sorts Except-Expression
+
+context-free syntax
+	"exception" -> Except-Expression

@@ -1,0 +1,11 @@
+equations
+
+[] Section*1 features FeatureDefinition* Section*2 := FeatureDiagram,
+   ValueEnv := get-values(FeatureDefinition*, new-table)
+   ===
+   construct-value-environment(module Modulename ImportSection* FeatureDiagram) = ValueEnv
+
+
+equations
+
+[] get-values(AtomicFeature ( Value ), ValueEnv) = store(ValueEnv, AtomicFeature, Value)

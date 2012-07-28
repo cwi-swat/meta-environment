@@ -1,0 +1,25 @@
+module Haskell-Identifiers
+exports
+  lexical syntax
+    [a-z][A-Za-z0-9\'\_]*       -> VARID
+    [A-Z][A-Za-z0-9\'\_]*       -> CONID
+
+    %% Question: underscore in identifiers according to standard???
+
+    [\!\#\$\%\&\*\+\.\/]
+    \/ [\<\=\>\?\@\\\^\|\-\~] -> Symbol
+    Symbol (Symbol | [\:])*   -> VARSYM
+    [\:] (Symbol | [\:])*     -> CONSYM
+    ReservedOp                -> VARSYM {reject}
+    ReservedOp                -> CONSYM {reject}
+
+  lexical restrictions
+    CONID VARID -/- [A-Za-z0-9]
+    VARSYM      -/- [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
+
+   context-free syntax
+    Modid "." VARID           -> QVARID  {cons("QVarId")}
+    Modid "." CONID           -> QCONID  {cons("QConId")}
+    Modid "." VARSYM          -> QVARSYM {cons("QVarSym")}
+    Modid "." CONSYM          -> QCONSYM {cons("QConSym")}
+

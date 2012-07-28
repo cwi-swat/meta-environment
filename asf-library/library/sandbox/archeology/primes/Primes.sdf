@@ -1,0 +1,17 @@
+module Primes
+%%  Primes according to Eratosthenes; 
+%%  Yet another experiment by Arie van Deursen
+
+imports
+    Lists
+
+exports
+    context-free syntax
+        prime "(" NAT ")"               -> LIST
+        integers "(" NAT "," NAT ")"    -> LIST
+        sift "(" LIST ")"               -> LIST
+        filter "(" NAT "," LIST ")"     -> LIST
+
+hiddens
+    variables
+        <Variable>

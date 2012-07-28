@@ -1,0 +1,59 @@
+trs
+signature
+  true/0 ,false/0, and/2, or/2, not/1,
+  0/0, 1/0, 2/0, a/0, b/0, c/0, n/0, s/0, natural/0, string/0,
+  program/2, decl/2, decls/2, emptydecls/0, series/2,emptyseries/0,
+  assign/2, emptystr/0,
+  pair/2, venv/2, emptyvenv/0,
+  update/3, upd2/4, eq/2,
+  evprog/1, evdecls/1, evseries/2, evstat/2
+rewrite-rules
+  [B1]  and(true, $X)  -> $X,
+  [B2]  and(false, $X) -> false,
+  [B3]  or(true, $X)   -> true,
+  [B4]  or(false, $X)  -> $X,
+  [B5]  not(true)      -> false,
+  [B6]  not(false)     -> true,
+
+  [Ev1] evprog(program($DECLS,$SERIES)) ->
+          evseries($SERIES,evdecls($DECLS)) ,
+  [Ev2] evdecls(decls(decl($VAR,natural),$DECLS)) ->
+          venv(pair($VAR,0),evdecls($DECLS)),
+  [Ev3] evdecls(decls(decl($VAR,string),$DECLS)) ->
+          venv(pair($VAR,emptystr),evdecls($DECLS)),
+  [Ev4] evdecls(emptydecls) -> emptyvenv ,
+
+  [Ev5] evseries(emptyseries,$VENV) -> $VENV ,
+  [Ev6] evseries(series($STAT,$SERIES),$VENV) ->
+          evseries($SERIES,evstat($STAT,$VENV)),
+  [Ev7] evstat(assign($VAR,$VALUE),$VENV) ->
+          update($VAR,$VALUE,$VENV),
+
+  [Up1] update($VAR,$VAL,venv(pair($VAR2,$OLDVAL),$VENV)) ->
+          upd2(eq($VAR,$VAR2),$VAR,$VAL,venv(pair($VAR2,$OLDVAL),$VENV)) ,
+  [Up2] upd2(true, $VAR,$VAL,venv(pair($VAR2,$OLDVAL),$VENV)) ->
+          venv(pair($VAR,$VAL),$VENV) ,
+  [Up3] upd2(false, $VAR,$VAL,venv(pair($VAR2,$OLDVAL),$VENV)) ->
+          venv(pair($VAR2,$OLDVAL),update($VAR,$VAL,$VENV)),
+
+  [Eq1]  eq($ID,$ID) -> true,
+  [Eq2]  eq(n,s)   -> false,
+  [Eq3]  eq(s,n)   -> false
+term
+  evprog(
+
+  program(
+    decls(decl(n,natural),decls(decl(s,string),emptydecls)),
+    series(
+      assign(n,1),
+      series(
+        assign(s,a),
+        series(
+          assign(n,2),
+          emptyseries
+        )
+      )
+    )
+  )
+
+  )

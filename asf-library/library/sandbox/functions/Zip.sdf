@@ -1,0 +1,16 @@
+module functions/Zip[A B]
+
+imports functions/ZipWith[A B A#B]
+imports functions/Tuple[A B]
+
+exports
+
+context-free syntax
+
+zip -> (List[[A]] List[[B]] => List[[A#B]])
+
+hiddens
+
+sorts List[[A#B]]
+
+imports basic/Whitespace

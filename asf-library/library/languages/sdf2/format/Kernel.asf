@@ -1,0 +1,11 @@
+equations
+
+[] { Attribute* } = <H hs=0 [ "{" H hs=1 [ G gs=4 op=H hs=0 [ [Attribute*] ]] "}" ]>
+
+equations
+
+[] Symbol* -> Symbol Attributes = < G [ H hs=1 [[Symbol*]] "->" [Symbol] [Attributes]] >
+
+equations
+
+[] syntax Production* = <V ["syntax" I is=2 [ A(l,c,l,l,l) [ G op=R gs=5  [[Production*]] ] ] ]>

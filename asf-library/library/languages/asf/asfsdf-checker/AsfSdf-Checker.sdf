@@ -1,0 +1,35 @@
+module languages/asf/asfsdf-checker/AsfSdf-Checker
+
+imports languages/asf/asfsdf-checker/ConstructorChecker
+imports languages/asf/asfsdf-checker/ExportedVariablesChecker
+imports languages/sdf2/checker/Sdf-Checker 
+imports languages/asf/asfsdf-checker/AsfSdf-AttributeChecker 
+imports languages/asf/asfsdf-checker/KernelSyntaxChecker 
+imports languages/asf/asfsdf-checker/SymbolChecker
+imports languages/sdf2/checker/RemoveLabels
+imports languages/asf/asfsdf-checker/AsfSortChecker
+
+exports
+  context-free start-symbols Summary
+
+  context-free syntax
+    check-asfsdf(SDF)                     -> Summary
+    check-asfsdf(SDF, ModuleId)           -> Summary
+    check-asfsdf-top-module(SDF, ModuleId) -> Summary
+    check-asfsdf-equations(SDF)           -> Summary
+    check-asfsdf-equations(SDF, ModuleId) -> Summary
+
+hiddens 
+  context-free syntax
+    check-asfsdf-specificities(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+
+hiddens
+  context-free start-symbols
+    SymbolsSet
+
+  variables
+    "Definition"[0-9]*   -> Definition
+    "Msgs"[0-9]*         -> {Error ","}*
+    "$ModuleId"[0-9]*    -> ModuleId
+    "$StrCon"[0-9]*      -> StrCon
+    "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple

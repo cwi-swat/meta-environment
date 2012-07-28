@@ -1,0 +1,73 @@
+equations
+  [
+  ]
+  is-not-in-diagram-error($AtomicFeature_0 used in constraints, but not in diagram )
+  = true
+  [
+    default-equation
+  ] is-not-in-diagram-error($FDL-Error_0) = false
+  [
+  ] make-not-in-diagram-error ( $AtomicFeature_0 ) =
+  $AtomicFeature_0 used in constraints, but not in diagram 
+  [
+  ] get-feature($AtomicFeature_0 used in constraints, but not in diagram ) =
+  $AtomicFeature_0
+  [
+  ]
+  set-feature($AtomicFeature_0 used in constraints, but not in diagram ,$AtomicFeature_0')
+  = $AtomicFeature_0' used in constraints, but not in diagram 
+  [
+  ] is-multiple-uses-error($FeatureExpression_0 used multiple times ) = true
+  [
+    default-equation
+  ] is-multiple-uses-error($FDL-Error_0) = false
+  [
+  ] make-multiple-uses-error ( $FeatureExpression_0 ) =
+  $FeatureExpression_0 used multiple times 
+  [
+  ] get-feature($FeatureExpression_0 used multiple times ) =
+  $FeatureExpression_0
+  [
+  ]
+  set-feature($FeatureExpression_0 used multiple times ,$FeatureExpression_0')
+  = $FeatureExpression_0' used multiple times 
+  [
+  ] is-unused-feature-error($FeatureName_0 is defined but not used ) = true
+  [
+    default-equation
+  ] is-unused-feature-error($FDL-Error_0) = false
+  [
+  ] make-unused-feature-error ( $FeatureName_0 ) =
+  $FeatureName_0 is defined but not used 
+  [
+  ] get-feature($FeatureName_0 is defined but not used ) = $FeatureName_0
+  [
+  ] set-feature($FeatureName_0 is defined but not used ,$FeatureName_0') =
+  $FeatureName_0' is defined but not used 
+  [
+  ] is-undefined-feature-error($FeatureName_0 is used but not defined ) = true
+  [
+    default-equation
+  ] is-undefined-feature-error($FDL-Error_0) = false
+  [
+  ] make-undefined-feature-error ( $FeatureName_0 ) =
+  $FeatureName_0 is used but not defined 
+  [
+  ] get-feature($FeatureName_0 is used but not defined ) = $FeatureName_0
+  [
+  ] set-feature($FeatureName_0 is used but not defined ,$FeatureName_0') =
+  $FeatureName_0' is used but not defined 
+  [
+  ] is-multiple-definitions-error(Multiple definitions for $FeatureName_1 ) =
+  true
+  [
+    default-equation
+  ] is-multiple-definitions-error($FDL-Error_0) = false
+  [
+  ] make-multiple-definitions-error ( $FeatureName_1 ) =
+  Multiple definitions for $FeatureName_1 
+  [
+  ] get-feature(Multiple definitions for $FeatureName_1 ) = $FeatureName_1
+  [
+  ] set-feature(Multiple definitions for $FeatureName_1 ,$FeatureName_1') =
+  Multiple definitions for $FeatureName_1' 

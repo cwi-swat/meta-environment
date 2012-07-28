@@ -1,0 +1,15 @@
+module Break
+
+exports
+
+lexical syntax
+	[\ \t\n] -> Break
+	Break -> LAYOUT
+
+context-free restrictions
+LAYOUT? -/- [\ \t\n]
+
+
+%% Note: Some platforms such as Windows put a carriage return character
+%% before the new line. In such cases, it is easier to consider the
+%% carriage return as a fourth possible character making up a break.

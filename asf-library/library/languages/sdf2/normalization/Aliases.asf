@@ -1,0 +1,28 @@
+equations
+
+%% \noindent
+%% Replace all alias symbols by their definition by applying a renaming
+%% derived from the alias declarations to the non-alias parts of the
+%% grammar.
+
+  [0]         a[[ _G ]] = aliases al+ (~Al(_G)) rn(al+)  when al+ := Al(_G)
+  [default-0] a[[ _G ]] = _G
+
+%% Build a renaming from a list of aliases. The target $\Sym{B}$
+%% of the alias declaration $\Sym{A}\to\Sym{B}$ is renamed to
+%% the source $\Sym{A}$.
+
+  [0] rn()             = []
+  [0] rn(_A -> _B al*) = [_B => _A] ++ rn(al*)
+
+%% The symbols occurring in an alias declaration.
+
+  [0] symbols(aliases al*)  = symbols(al*)
+  [0] symbols(al*)          = {} when al* ==
+  [0] symbols(_A -> _B al*) = {_A _B} || symbols(al*)
+
+%% Merging and ordering of grammars.
+
+  [0] aliases                      = (/)
+  [0] aliases al*1 <> aliases al*2 = <aliases al*1 al*2, (/)>
+  [0] syntax p*    <> aliases al*  = <aliases al*, syntax p*>

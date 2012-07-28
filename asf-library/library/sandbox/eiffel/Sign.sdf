@@ -1,0 +1,6 @@
+module Sign
+
+exports
+
+lexical syntax
+	[\-\+] -> Sign
