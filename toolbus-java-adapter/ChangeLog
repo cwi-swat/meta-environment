@@ -1,0 +1,85 @@
+$Id$
+
+Wed Sep 26 09:15:30 CEST 2007 <kooiker@cwi.nl>
+ * lib/junit-4.4.jar: add junit framework allowing ant to run tests when junit
+ target is not installed for ant
+
+Wed Dec  6 14:13:18 CET 2006 <kooiker@cwi.nl>
+ * src/toolbus/JavaTif.java:
+   - Change Map with signatures into Set since the Map was only used as a Set.
+
+Thu Mar  9 13:55:30 CET 2006 <gerco@cwi.nl>
+ * src/toolbus/AbstractTool.java:
+   - To avoid a race condition, clear the variable connected earlier.
+
+Tue Mar  7 16:37:36 CET 2006 <gerco@cwi.nl>
+ * src/toolbus/JavaTif.java:
+   - Support code generation for default package again (fix regression #548).
+   - Import either AbstractTool or SwingTool, depending on -swing flag.
+
+Tue Mar  7 15:20:06 CET 2006 <gerco@cwi.nl>
+ * src/toolbus/AbstractTool.java:
+   - Properly close the connection/streams on rec-terminate and snd-disconnect.
+   - Disallow a connect() when already connected.
+   - Remove old timing calls.
+   - Small refactoring in shakeHands().
+
+Tue Mar  7 10:19:39 CET 2006 <kooiker@cwi.nl>
+ * src/toolbus/JavaTif.java:
+   - Removed folding markers
+   - Small refactorings in generated code
+
+Tue Mar  7 09:26:35 CET 2006 <{gerco,kooiker}@cwi.nl>
+ * src/toolbus/AbstractTool.java:
+   - Add TCP_NODELAY option to socket to force small messages to be send
+     immediately
+
+Tue Aug 30 11:16:49 CEST 2005 <kooiker@cwi.nl>
+ * script/tifstojava:
+   - Generate from source file
+   - Removed Makefile.am hack
+
+Wed May 25 15:44:55 CEST 2005 <kooiker@cwi.nl>
+ * src/toolbus/JavaTif.java:
+   - don't create else clause for if statement when method returns in if
+     clause
+ * src/toolbus/AbstractTool.java:
+   - remove unused parameter lock from readTerm
+
+Wed Apr 27 10:31:13 CEST 2005 <kooiker@cwi.nl>
+ * Create JDK 1.4 compatible jars
+
+Tue Apr 26 09:01:29 CEST 2005 <kooiker@cwi.nl>
+ * Move scripts from src to script directory
+ * Use ant to build toolbus-java-adapter jar
+ * Makefile.am: 
+   - generate toolbus-java-adapter-config
+
+Tue Apr 12 09:30:40 CEST 2005 <jong@cwi.nl>
+ * toolbus/AbstractTool.java:
+   - add getAddress() and getPort() to expose toolbus connection
+
+Fri Apr  8 16:18:54 CEST 2005 <kooiker@cwi.nl>
+ * toolbus/JavaTif.java:
+   - Generate directory structure according to given packagename
+   - Generate java files in created directory
+
+Fri Nov 12 09:53:58 CET 2004 <{jong,kooiker}@cwi.nl>
+ * toolbus/AbstractTool.java:
+   fix outputStream not flushed during handshake with ToolBus
+ * Makefile.am:
+   fix jar file not rebuilt even though .java files changed
+
+Mon Oct 18 19:31:02 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed CLASSPATH for running tifstojava
+
+Wed Jul 21 09:46:25 CEST 2004 <kooiker@cwi.nl>
+ * src: removed unused toolbus-java-config.sh.src, already present in root 
+
+Tue Jul 13 14:03:10 CEST 2004 <jurgenv@cwi.nl>
+ * Package has a working distcheck target now
+
+Fri Jun 18 10:49:43 CEST 2004 <jurgenv@cwi.nl>
+ * Created separate package for toolbus java adapter classes and 
+   the java-adapter script.
+

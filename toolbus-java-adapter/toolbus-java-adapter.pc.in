@@ -1,0 +1,13 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl,lankamp@cwi.nl
+
+Name: toolbus-java-adapter
+Version: 1.4
+Description:
+Requires: aterm-java,toolbus-ng
+JarFile=toolbus-java-adapter.jar
+Jars=${prefix}/share/${JarFile}
+Packages=toolbus
+MainClass=toolbus.JavaTif
+LocalJars=lib/junit-4.4.jar
+TestClass=
