@@ -1,0 +1,169 @@
+#ifndef __ERROR_SUPPORT__
+#define __ERROR_SUPPORT__
+
+tool error-support is { command = "__PREFIX__/bin/error-support" }
+
+process ErrorSupport is
+let
+  Area : area,
+  Column : int,
+  Description : str,
+  ES : error-support,
+  Error : term,
+  Errors : list,
+  Filename : str,
+  Id : str,
+  Length : int,
+  Line : int,
+  Location : term,
+  Offset : int,
+  Producer : str,
+  Subject : term,
+  Subjects : list,
+  Summary : summary,
+  Tree: term
+in
+  execute(error-support, ES?) .
+  (
+    rec-msg(get-area-begin-line(Area?)) .
+    snd-eval(ES, get-area-begin-line(Area)) .
+    rec-value(ES, begin-line(Line?)) .
+    snd-msg(area-begin-line(Line))
+  +
+    rec-msg(get-area-begin-column(Area?)) .
+    snd-eval(ES, get-area-begin-column(Area)) .
+    rec-value(ES, begin-column(Column?)) .
+    snd-msg(area-begin-column(Column))
+  +
+    rec-msg(get-area-end-line(Area?)) .
+    snd-eval(ES, get-area-end-line(Area)) .
+    rec-value(ES, end-line(Line?)) .
+    snd-msg(area-end-line(Line))
+  +
+    rec-msg(get-area-end-column(Area?)) .
+    snd-eval(ES, get-area-end-column(Area)) .
+    rec-value(ES, end-column(Column?)) .
+    snd-msg(area-end-column(Column))
+  +
+    rec-msg(get-area-offset(Area?)) .
+    snd-eval(ES, get-area-offset(Area)) .
+    rec-value(ES, offset(Offset?)) .
+    snd-msg(area-offset(Offset))
+  +
+    rec-msg(get-area-length(Area?)) .
+    snd-eval(ES, get-area-length(Area)) .
+    rec-value(ES, length(Length?)) .
+    snd-msg(area-length(Length))
+
+  +
+    rec-msg(get-location-filename(Location?)) .
+    snd-eval(ES, get-location-filename(Location)) .
+    rec-value(ES, filename(Filename?)) .
+    snd-msg(location-filename(Filename))
+  +
+    rec-msg(has-location-area(Location?)) .
+    snd-eval(ES, has-location-area(Location)) .
+    (
+      rec-value(ES, has-area(true)) .
+      snd-msg(location-has-area(Location))
+    +
+      rec-value(ES, has-area(false)) .
+      snd-msg(location-has-no-area(Location))
+    )
+  +
+    rec-msg(get-location-area(Location?)) .
+    snd-eval(ES, get-location-area(Location)) .
+    rec-value(ES, area(Area?)) .
+    snd-msg(location-area(Area))
+
+  +
+    rec-msg(get-subject-description(Subject?)) .
+    snd-eval(ES, get-subject-description(Subject)) .
+    rec-value(ES, description(Description?)) .
+    snd-msg(subject-description(Description))
+  +
+    rec-msg(has-subject-location(Subject?)) .
+    snd-eval(ES, has-subject-location(Subject)) .
+    (
+      rec-value(ES, has-location(true)) .
+      snd-msg(subject-has-location(Subject))
+    +
+      rec-value(ES, has-location(false)) .
+      snd-msg(subject-has-no-location(Subject))
+    )
+  +
+    rec-msg(get-subject-location(Subject?)) .
+    snd-eval(ES, get-subject-location(Subject)) .
+    rec-value(ES, location(Location?)) .
+    snd-msg(subject-location(Location))
+  +
+    rec-msg(get-error-description(Error?)) .
+    snd-eval(ES, get-error-description(Error)) .
+    rec-value(ES, description(Description?)) .
+    snd-msg(error-description(Description))
+  +
+    rec-msg(get-error-subjects(Error?)) .
+    snd-eval(ES, get-error-subjects(Error)) .
+    rec-value(ES, subjects(Subjects?)) .
+    snd-msg(error-subjects(Subjects))
+
+  +
+    rec-msg(get-feedback-producer(Summary?)) .
+    snd-eval(ES, get-summary-producer(Summary)) .
+    rec-value(ES, producer(Producer?)) .
+    snd-msg(producer(Producer))
+  +
+    rec-msg(get-feedback-identification(Summary?)) .
+    snd-eval(ES, get-summary-id(Summary)) .
+    rec-value(ES, id(Id?)) .
+    snd-msg(identification(Id))
+  +
+    rec-msg(get-summary-errors(Summary?)) .
+    snd-eval(ES, get-summary-errors(Summary)) .
+    rec-value(ES, errors(Errors?)) .
+    snd-msg(summary-errors(Errors))
+
+  +
+    rec-msg(convert-feedback(Tree?)) .
+    snd-eval(ES, lower-summary(Tree)) .
+    rec-value(ES, lowered-summary(Summary?)) .
+    snd-msg(converted-feedback(Summary))
+  +
+    rec-msg(display-feedback(Summary?)) .
+    snd-do(ES, display-summary(Summary))
+  +
+    rec-msg(es-add-filename-in-error(Filename?, Error?))
+    . snd-eval(ES, add-filename-in-error(Filename, Error))
+    . rec-value(ES, error(Error?))
+    . snd-msg(es-filename-in-error(Filename, Error))
+  +
+    rec-msg(es-make-summary(Producer?, Id?, Errors?))
+    . snd-eval(ES, make-summary(Producer, Id, Errors))
+    . rec-value(ES, summary(Summary?))
+    . snd-msg(es-summary(Summary))
+  +
+    rec-msg(es-set-summary-id(Summary?, Id?))
+    . snd-eval(ES, set-summary-id(Summary, Id))
+    . rec-value(ES, summary(Summary?))
+    . snd-msg(es-summary(Summary))
+  +
+    rec-msg(es-make-error(Description?, Subjects?)) 
+    . snd-eval(ES, make-error(Description, Subjects))
+    . rec-value(ES, error(Error?))
+    . snd-msg(es-error(Error))
+  +
+    rec-msg(es-make-subject(Description?, Location?))
+    . snd-eval(ES, make-localized-subject(Description, Location))
+    . rec-value(ES, subject(Subject?))
+    . snd-msg(es-subject(Subject))
+  +
+    rec-msg(es-make-subject(Description?))
+    . snd-eval(ES, make-subject(Description))
+    . rec-value(ES, subject(Subject?))
+    . snd-msg(es-subject(Subject))
+  ) * delta
+endlet
+
+toolbus(ErrorSupport)
+
+#endif /* __ERROR_SUPPORT__ */

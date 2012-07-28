@@ -1,0 +1,1 @@
+[afuns([[ERR_afun4,error(x,x)],[ERR_afun5,fatal(x,x)],[ERR_afun2,info(x,x)],[ERR_afun3,warning(x,x)],[ERR_afun0,subject(x)],[ERR_afun1,localized(x,x)],[ERR_afun10,area(x,x,x,x,x,x)],[ERR_afun11,slice(x,x)],[ERR_afun8,area(x)],[ERR_afun9,area-in-file(x,x)],[ERR_afun6,summary(x,x,x)],[ERR_afun7,file(x)]]),terms([])]

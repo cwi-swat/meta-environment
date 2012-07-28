@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
+Name: error-support
+Description: Standard Error Representation
+Version: 1.6
+Libs: -L${prefix}/lib -lErrorAPI -lLocationAPI
+Cflags: -I${prefix}/include
+#uninstalled Libs: -L@abs_top_builddir@/lib -lErrorAPI -lLocationAPI
+#uninstalled Cflags: -I@abs_top_builddir@/lib
+Requires: aterm,toolbuslib
+Jars=${prefix}/share/error-support/errorapi.jar:${prefix}/share/error-support/locationapi.jar
+ToolBusFlags=-I${prefix}/share/error-support

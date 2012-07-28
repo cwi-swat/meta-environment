@@ -1,0 +1,295 @@
+$Id$
+
+Mon Jun  9 16:32:56 CEST 2008 <jurgenv@cwi.nl>
+ * error-support.pc.in: Bumped version to 1.5.1
+
+Mon Jun  9 13:17:49 CEST 2008 <jurgenv@cwi.nl>
+ * error-support.pc.in: Bumped version to 1.5
+
+Thu May 22 02:29:61 CEST 2008 <basten@cwi.nl>
+ * lib/Error-utils.*: added function to count the number of errors, warnings,
+   etc. in error reports.
+ * utils/display-error.c: program now exits with exit code 1 if error report
+   contains (fatal) errors.
+
+Wed Apr 16 11:33:50 CEST 2008 <jurgenv@cwi.nl>
+ * lib/*.c: regenerated API to fix type punned aliasing issues.
+
+Mon Aug 20 15:04:28 CEST 2007 <kooiker@cwi.nl>
+ * util/display-error.c: commandline utility that displays errors in a user
+   readable way
+
+Tue Mar 20 16:22:51 CET 2007 <kooiker@cwi.nl>
+ * lib/lower.c: lowerError checks if an error is valid. If not it tries to
+ create an error from the origin information, otherwise it creates an error
+ with the error to be lowered as subject.
+
+Thu Mar  8 19:03:58 CET 2007 <{economop,kooiker,jurgenv}@cwi.nl>
+ * **: regenerated all API's in this package with a new version of 
+   ApiGen that generates more efficient code for the is-alternative 
+   predicates.
+
+Fri Jan 19 12:52:19 CET 2007 <kooiker@cwi.nl>
+ * utils/error-support.idef: add function to set id of summary
+
+Wed Oct 11 13:25:32 CEST 2006 <jurgenv@cwi.nl>
+ * utils/error-support.idef: added some functions to create error messages.
+
+Tue Jul 25 09:16:05 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
+ * **: adapted package to use the standard meta-build-env.
+ * error-support.pc.in: added locally generated jar files to ExternalJars,
+   such that these jars are added to the CLASSPATH of packages that depend on
+   error-support.
+
+Mon Jul 24 22:39:03 CEST 2006 <martin.bravenboer@gmail.com>
+  * configure.ac: invoke AC_LIBTOOL_WIN32_DLL to request the
+  construction of DLLs on windows.
+  * lib/Makefile.am: use libtool to construct libraries:
+  - libraries now have the extension .la
+  - use lib_LTLIBRARIES (not lib_LIBRARIES)
+  - use -avoid-version to avoid (the usually flawed) versioning if a
+  platform supports that.
+  - use -no-undefined to specify that libtool can safely make a
+  dynamic library on systems that do not support undefined symbols.
+  - Use _LIBADD to specify inter-library dependencies (again,
+  required for making dynamic libraries on some platforms)
+	
+Fri Jul 21 01:54:21 CEST 2006 <martin.bravenboer@gmail.com>
+ * utils/error-diff/Makefile.am: fix in linking order (Bug 489)
+ * utils/lift-error/Makefile.am: fix in linking order (Bug 489)
+	
+
+Thu Apr 13 21:23:30 CEST 2006 <jurgenv@cwi.nl>
+ * lib/display.c: severely changed layout of displayed summaries.
+   Also some debugging, and more support for less frequently used
+   forms of errors in the error data-structure.
+
+Fri Apr 13 11:50:22 CET 2006 <kooiker@cwi.nl>
+ * lib/display.c: added display to a chosen FILE*.
+
+Fri Mar 10 11:50:22 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
+Tue Jan  3 08:18:25 CET 2006 <kooiker@cwi.nl>
+ * lib/Makefile.am:
+   - remove INCLUDES from MAINTAINER_MODE section
+
+Mon Jan  2 11:15:00 CET 2006 <kooiker@cwi.nl>
+ * configure.ac,package:
+   - Remove toolbus dependency
+
+Tue Dec 20 13:33:58 CEST 2005 <economop@cwi.nl>
+ * Fixed bug in error-diff.
+
+Tue Sep 27 10:28:23 CEST 2005 <economop@cwi.nl>
+ * Changed ERR_getManagarSummary() -> ERR_getManagerSummary()
+	
+Mon Aug 22 14:51:06 CEST 2005 <jurgenv@cwi.nl>
+ * lib/Makefile.am: removed version numbers from generated jar filenames.
+ * Bumped to version 1.3
+
+Mon Aug 22 13:48:14 CEST 2005 <economop@cwi.nl>
+ * lib/manager.c: fixed the initialisation of the error manager to 
+   correctly set the |producer| and |id| fields.
+	
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
+Fri Jul  8 16:12:11 CEST 2005 <jurgenv@cwi.nl>
+ * lib/manager.c: added an error manager file, containing a static
+   reference to a summary that can be inspected and filled. It also
+   includes some convenience functions for creating and storing errors
+   and warnings by a single function application.
+
+Sat Jun  4 15:00:30 CEST 2005 <kooiker@cwi.nl>
+ * utils/error-support.c:
+   - Remove declaration after code
+
+Fri Jun  3 14:49:53 CEST 2005 <jurgenv@cwi.nl>
+ * Regenerated java errorapi and locationapi with newest apigen
+ * Bumped to 1.2
+
+Fri Jul  1 16:36:50 CEST 2005 <jurgenv@cwi.nl>
+ * error-diff.c: Replaced asserts by error messages with graceful exits.
+
+Mon May  9 11:14:10 CEST 2005 <kooiker@cwi.nl>
+ * package,configure.ac:
+   - Remove aterm-java dependency
+
+Wed May  4 11:11:00 CEST 2005 <kooiker@cwi.nl>
+ * utils/error-support.idef:
+   - support make subject
+
+Tue May  3 15:29:20 CEST 2005 <{markvdb,kooiker}@cwi.nl>
+ * lib/lower.c: fixed the lowering of strings, reversed
+   the order and free the intermediate strings.
+ * utils/error-support.c: added a fix in order to get around
+   an APIGEN problem.
+
+Wed Apr 27 10:07:14 CEST 2005 <kooiker@cwi.nl>
+ * gui:
+   - Move to error-gui package
+ * configure.ac:
+   - Remove dependency on toolbus-java-adapter
+
+Mon Apr 25 13:58:11 CEST 2005 <kooiker@cwi.nl>
+ * gui:
+   - Use general ant build scheme
+
+Wed Apr 13 08:26:20 CEST 2005 <kooiker@cwi.nl>
+ * gui/nl/cwi/sen1/error/viewer:
+   - Add generated ToolBus bridge
+ * package:
+   - Add toolbus dependency
+
+Tue Apr 12 08:27:29 CEST 2005 <kooiker@cwi.nl>
+ * package:
+   - Add dependency on toolbus-java-adapter
+
+Mon Apr 11 15:26:38 CEST 2005 <kooiker@cwi.nl>
+ * gui/nl/cwi/sen1/error/viewer/ErrorViewer.java:
+   - Change mouselistener to treeselectionlistener
+ * gui/build.xml:
+   - Add debug information to compiled sources
+ * gui/Makefile.am:
+   - Add error-viewer-config generation
+ * gui/nl/cwi/sen1/error/viewer:
+   - Add toolbus integration
+   - Add showroothandles to treenodes
+
+Fri Apr  8 08:47:10 CEST 2005 <kooiker@cwi.nl>
+ * add package dependency on aterm-java
+
+Thu Apr  7 16:04:59 CEST 2005 <{jong,jurgenv,kooiker}@cwi.nl>
+ * configure.ac:
+   - Renamed from configure.in
+   - Added EXTERNAL_JARS
+ * gui:
+   - Initial version of error-viewer
+   - Jar file only build when --enable-maintainer-mode is set
+   - Jar file build by ant
+
+Mon Dec  6 13:32:03 CET 2004 <kooiker@cwi.nl>
+ * utils/error-support.c:
+   - Fixed declaration after statement in add_filename_in_error 
+
+Wed Dec  1 13:24:18 CET 2004 <kooiker@cwi.nl, markvdb@cwi.nl>
+ * Transformed non-localized subjects to localized subjects.
+
+Wed Jan 26 11:15:37 CET 2005 <jurgenv@cwi.nl>
+ * Added new basic libraries to generation of parsed error API
+ * TODO: regenerate API's and reimplement lifting and lowering of errors!
+
+Wed Oct 20 14:54:04 CEST 2004 <kooiker@cwi.nl>
+ * Added location api to error-support-config 
+
+Fri Aug 20 10:18:36 CEST 2004 <markvdb@cwi.nl>
+ * Adapted error-diff to new error format.
+
+Thu Jul  1 14:25:05 CEST 2004 <jurgenv@cwi.nl>
+ * added Slices to locations api
+
+Thu Jun 10 13:31:22 CEST 2004 <M336@cwi.nl>
+ * fix error-diff to diff errors, not summaries
+
+Tue May 18 10:02:26 CEST 2004 <jurgenv@cwi.nl>
+ * Removed -Werror flag
+ * Bumped to 0.2.1
+
+Mon May  3 18:58:48 CEST 2004 <jurgenv@cwi.nl>
+ * added liftSummary
+ * fixed a bug: lowering reversed the set of errors
+
+Mon Apr  5 10:49:03 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * add add_filename_in_error
+ * add make_summary
+
+Tue Mar 30 13:00:04 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * Regenerated after change in Locations.sdf
+
+Tue Mar 16 15:59:04 CET 2004 
+ * Fully implement rest of error API at the ToolBus level
+
+Mon Mar 15 10:55:32 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Expose API to ToolBus interface level
+
+Thu Mar 11 14:40:46 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Bumped into version 0.2
+ * Regenerated api's 
+
+Thu Mar 11 10:45:01 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Finished transition to new error api names
+
+Tue Mar  9 16:57:31 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Re-implemented error-api due to changes in
+   basic/{Areas,Locations,Errors}.sdf
+
+Mon Mar  8 10:56:43 CET 2004 <{jong,kooiker}@cwi.nl>
+ * generate "location-api" instead of "location-api-api" for various
+   .[ch] files
+
+Wed Mar  3 10:17:29 CET 2004 <jurgenv@cwi.nl>
+ * Readded jar files to the repository in order to prevent some
+   circular dependencies (with sdf-apigen, asf-library, asf, ...)
+ * Bumped to version 0.2
+ * Removed implicit targets for jar files to prevent use of sdf2java
+   when some timestamp is not correct by accident in a release distribution
+ 
+Fri Feb 27 16:18:19 CET 2004 <{jong,kooiker}@cwi.nl>
+ * lib/... generate separate Location library from the same sources
+   as the Error API.
+ * lib/lift.c: fix calls to makeNatConDefault and makeStrConDefault
+
+2004/02/17 (markvdb@cwi.nl)
+ * Added error-diff functionality.
+
+Mon Feb 16 16:37:02 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * utils/error-support.{c,idef}:
+   - add get-summary-first-feedback, get-feedback-first-location,
+     get-location-filename
+
+Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+2004/02/03 (markvdb@cwi.nl)
+ * Added display functionality.
+
+Mon Feb  2 16:40:44 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Fix Makefile.am's to get distcheck working
+
+2004/01/29 (markvdb@cwi.nl)
+ * Added a ToolBus component for manipulating errors.
+
+2004/01/27 (markvdb@cwi.nl)
+ * Added the mapping from parsed errors to abstract errors.
+
+2003/12/18 (jurgenv@cwi.nl)
+ * Renamed package to error-support
+
+2003/12/16 ({jong,jurgenv}@cwi.nl)
+ * Renamed library to libErrorAPI
+ * Completed lifting of abstract errors to parsed errors.
+ * Added commandline tool for lifting errors (mainly for testing purposes)
+ * Added generated jar file with the Java version of the abstract error API
+
+2003/12/15 (jurgenv@cwi.nl)
+ * Regenerated both APIs using new apigen. 
+ * Added lexical definitions of String and NatCon manually to prevent 
+   bottom-sort generation in the parsed API (See lib/Lexicals.sdf)
+ * started on utility functions for lifting abstract errors to parsed errors
+   and vice versa.
+
+2003/12/04 (jurgenv@cwi.nl)
+ * Initial version 0.1 of meta-errors package. This package will contain
+   generated data-structures from basic/Errors and some convenience functions.
+   The data-structures are to be used as:
+     - a general error description mechanism in the Meta-Environment
+     - a reusable error description mechanism for ASF+SDF specifications
+ * Started with generated of imploded api and parse-tree api versions of
+   meta-error in lib subdirectory
+ * Generation of libraries is completely manual: missing bottom-sorts
+   NatCon and String are not generated in the parsed api (manual editing
+   of ParsedErrors.h solved this problem temporarily).
+

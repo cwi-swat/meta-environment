@@ -1,0 +1,6 @@
+
+
+- create a mapping from parsed to imploded errors and vice versa and
+  add it to the library
+- add generation a Java version (jar file) of the imploded api
+- add meta-errors-config script generation
