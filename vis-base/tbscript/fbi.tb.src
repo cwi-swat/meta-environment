@@ -1,0 +1,102 @@
+#ifndef __FBI__
+#define __FBI__
+
+tool factbrowser is { }
+
+/**
+ * @desc FactBrowser Connection Process
+ *
+ */
+
+process StartFBI is
+  snd-msg(load-jar("file://__PKGDATA__/vis-base.jar", "__PKGDATA__/relationstores.jar:__PKGDATA__/log4j-1.2.14.jar:__PKGDATA__/commons-logging-1.1.jar:__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
+
+process FBI is
+let 
+  Tid: factbrowser,
+  FactType: term,
+  Menu: term,
+  Pid: int,
+  PluginId: int,
+  PluginName: str,
+  PopupMenu: list,
+  RStorePath: str,
+  RStoreName: str,
+  RStoreId: int,
+  RStoreFacts: list,
+  FactId: int,
+  FileName: str
+in
+    rec-connect(Tid?)
+    . subscribe(fb-visualization-plugin-available(<term>,<int>,<str>))
+    .
+    (
+      rec-note(fb-visualization-plugin-available(FactType?, PluginId?, PluginName?))
+       . snd-do(Tid, fb-add-visualization-plugin(FactType, PluginId, PluginName))
+    +
+      rec-msg(fb-get-selected-rstoreid)
+      . snd-eval(Tid, get-selected-rstoreid)
+      .
+      (
+        rec-value(Tid, selected-rstoreid(RStoreId?))
+        . snd-msg(fb-selected-rstoreid(RStoreId))
+      +
+        rec-value(Tid, no-rstore-selected)
+	  . snd-msg(fb-no-rstore-selected)
+      )
+    +
+      rec-event(Tid, fb-type-selected(FactType?))
+      . snd-ack-event(Tid, fb-type-selected(FactType))
+      . snd-msg(fb-type-selected(FactType))
+    +
+      rec-msg(fb-show-rstore-facts(RStoreName?, RStoreId?, RStoreFacts?))
+      . snd-do(Tid, fb-show-rstore-facts(RStoreName, RStoreId, RStoreFacts))
+    +
+      rec-event(Tid, fb-visualization-selected(RStoreId?, FactId?, PluginId?))
+      . snd-ack-event(Tid, fb-visualization-selected(RStoreId, FactId, PluginId))
+      . snd-msg(fb-visualization-selected(RStoreId, FactId, PluginId))
+    +
+      rec-event(Tid, fb-save-rstore(RStoreId?))
+      . snd-ack-event(Tid, fb-save-rstore(RStoreId))
+      . snd-note(fb-save-rstore(RStoreId))
+    +
+      rec-event(Tid, fb-unload-rstore(RStoreId?))
+      . snd-ack-event(Tid, fb-unload-rstore(RStoreId))
+      . snd-msg(fb-unload-rstore(RStoreId))
+    +
+      rec-event(Tid, mouse-event(factbrowser(RStoreId?),popup))
+      . create(FB-RequestPopupEvent(RStoreId), Pid?)
+      . snd-ack-event(Tid, mouse-event(factbrowser(RStoreId),popup))
+    +
+      rec-msg(fb-show-popup(RStoreId?, PopupMenu?))
+      . snd-do(Tid, show-popup(RStoreId, PopupMenu))
+    +
+      rec-event(Tid, menu-event(RStoreId?, Menu?))
+      . create(FB-MenuEvent(RStoreId, Menu), Pid?)
+      . snd-ack-event(Tid, menu-event(RStoreId, Menu))
+    +
+      rec-msg(fb-rstore-unloaded(RStoreId?))
+      . snd-do(Tid, fb-rstore-unloaded(RStoreId))
+   )
+   * delta
+endlet
+
+process FB-RequestPopupEvent(RStoreId: term) is
+  snd-msg(fb-request-popup-event(RStoreId))
+
+process FB-MenuEvent(RStoreId: term, Menu: term) is
+  snd-msg(fb-menu-selected(RStoreId, Menu))
+
+process FB-RequestPopup(RStoreId: term?) is
+  rec-msg(fb-request-popup-event(RStoreId?))
+
+process FB-ShowPopup(RStoreId: term, PopupMenu: list) is
+  snd-msg(fb-show-popup(RStoreId, PopupMenu))
+
+process FB-PopupEvent(RStoreId: term?, MenuItem: term?) is
+  rec-msg(fb-menu-selected(RStoreId?, MenuItem?))
+
+toolbus(FBI)
+toolbus(StartFBI)
+
+#endif /* __FBI__ */

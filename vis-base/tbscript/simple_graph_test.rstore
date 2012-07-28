@@ -1,0 +1,1 @@
+rstore([rtuple("SIMPLE_GRAPH",relation([str,str]),set([tuple([str("a"),str("b")]),tuple([str("b"),str("c")]),tuple([str("b"),str("d")]),tuple([str("c"),str("d")])]))])

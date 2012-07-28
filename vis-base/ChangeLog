@@ -1,0 +1,54 @@
+
+
+Wed Nov 12 14:40:21 CET 2008 <jurgenv@cwi.nl>
+ * resources/**: added resources to EXTRA_DIST
+
+Wed May  7 13:01:45 2008    <bruntink@cwi.nl>
+
+	* vis-base.pc.in: Removed dependency on meta package.
+
+Wed May  7 11:47:58 2008    <bruntink@cwi.nl>
+
+	* vis-base.pc.in: Changed dependency on relation-support to rstore-support-java.
+
+Tue Apr 29 17:18:30 2008    <bruntink@cwi.nl>
+
+	* Removed .project and .classpath from repository.
+	* vis-base.pc.in: Fixed typo.
+
+Mon Apr 28 16:19:28 2008    <bruntink@cwi.nl>
+
+	* vis-base.pc.in: Changed dependency on module-support to module-support-java.
+
+Wed Jan 23 13:55:49 CET 2008 <{lankamp,basten,economop}@cwi.nl>
+ * tbscripts/fbi.tb.src, tbscripts/fbmp.tb.src: fixed deadlock.
+
+Wed Aug 22 11:07:28 CEST 2007 <kooiker@cwi.nl>
+ * src/**/FactBrowser.java: request focus on data change
+
+Fri Aug 17 09:50:03 CEST 2007 <kooiker@cwi.nl>
+ * src/**/FactBrowser.java, tbscripts/fbi.tb.src: changed the way mouse events
+   are handled
+
+Wed Aug 15 13:45:42 CEST 2007 <kooiker@cwi.nl>
+ * src/**/FactBrowser.java: return no-rstore-selected when there is currently
+   no rstore selected
+
+Tue Aug 14 17:39:03 CEST 2007 <kooiker@cwi.nl>
+ * tbscript/fbi.tb.src: add function for getting currently selected rstore
+
+Wed May  9 08:42:01 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/fbmp-edit-location.tb: will now start an editor with
+   parsing/structure editing capabilities if one is registered
+   via the configuration manager.
+
+Thu May  3 16:06:34 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/*.tb.src: removed all debug printf's, and superfluous
+   brackets and superfluous comments.
+
+Tue Mar 20 21:48:38 CET 2007 <jurgenv@cwi.nl>
+ * added dep on relation-stores
+ * removed local relation-stores.jar
+
+Tue Mar 20 08:06:11 CET 2007 <jurgenv@cwi.nl>
+ * *: initial import from Dancing Bear project

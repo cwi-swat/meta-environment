@@ -1,0 +1,71 @@
+/**
+ * @desc FactBrowser Management Process
+ *
+ */
+
+process FBMP is
+let    
+  VpiPid: int,
+  RciPid: int,
+  Path: str,
+  RstoreId: int,
+  RstoreFacts: list,
+  RstoreName: str,
+  Type: term, /*rtype*/
+  FactId: int,
+  FactData: term,
+  PluginName: str,
+  PluginId: int,
+  Location: term
+in
+  subscribe(vp-get-available-visualization-plugins(<term>, <int>, <str>))
+  .
+  (
+      rec-msg(fb-load-rstore(Path?))
+      . snd-msg(rc-load-rstore(Path))
+    +
+      rec-msg(fb-unload-rstore(RstoreId?))
+      . snd-msg(rc-unload-rstore(RstoreId))
+    +
+      rec-msg(vp-rstore-exported(Path?))
+      . snd-msg(rc-load-rstore(Path))
+    +
+      rec-msg(rc-rstore-loaded(Path?, RstoreId?))
+      . snd-msg(rc-get-rstore-facts(RstoreId))
+      . rec-msg(rc-get-rstore-facts(RstoreId?, RstoreFacts?))
+      . snd-msg(fb-show-rstore-facts(Path, RstoreId, RstoreFacts)) 
+    +
+      rec-msg(fb-type-selected(Type?))
+      . snd-note(vp-get-available-visualization-plugins(Type))
+    +
+      rec-note(vp-get-available-visualization-plugins(Type?, PluginId?, PluginName?))
+      . snd-note(fb-visualization-plugin-available(Type, PluginId, PluginName))
+    +
+      rec-msg(fb-visualization-selected(RstoreId?, FactId?, PluginId?))
+      . snd-msg(rc-get-fact-data(RstoreId, FactId))
+      . rec-msg(rc-get-fact-data(RstoreId?, FactId?, FactData?))
+      . snd-msg(vp-visualize-fact(PluginId, RstoreId, FactId, FactData))
+    +
+      rec-msg(vp-link-clicked(Location?))
+      . snd-msg(fbmp-open-location(Location))
+  ) * delta
+endlet
+
+process FBLoadRStore(Path : str) is
+  snd-msg(fb-load-rstore(Path))
+ 
+process FBLoadRStoreAction is
+let
+  Path : str
+in
+   snd-msg(ask-for-file("Load an RStore", [], ".rstore"))
+   .
+   (   
+     rec-msg(ask-for-file-result(Path?))
+     . FBLoadRStore(Path)
+   + 
+     rec-msg(ask-for-file-cancel)
+   )	
+endlet
+  
+toolbus(FBMP)
