@@ -1,0 +1,27 @@
+/* $Id$ */
+
+#ifndef UNPARSER_IDEF
+#define UNPARSER_IDEF
+
+tool unparser is { command = "__PREFIX__/bin/unparsePT" }
+
+process Unparser is
+let
+  UNP : unparser,
+  Tree : term,
+  Text : str
+in
+  (
+    rec-msg(unparse(Tree?)).
+    execute(unparser, UNP?).
+    snd-eval(UNP, unparse-asfix(Tree)).
+    rec-value(UNP, unparsed-text(Text?)).
+    snd-terminate(UNP, "done") .
+    snd-msg(unparsed-text(Text))
+  ) *
+  delta
+endlet
+
+toolbus(Unparser)
+
+#endif

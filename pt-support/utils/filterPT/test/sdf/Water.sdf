@@ -1,0 +1,8 @@
+module Water
+exports
+	sorts Water
+	lexical syntax
+		~[\ \t\n]+	-> Water {avoid}
+
+	lexical restrictions
+		Water		-/- ~[\ \t\n]

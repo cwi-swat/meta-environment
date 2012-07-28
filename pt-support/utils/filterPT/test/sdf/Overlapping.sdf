@@ -1,0 +1,31 @@
+module Overlapping
+
+imports Layout
+imports Water
+
+exports
+sorts Integer Identifier Input Chunk TypeModifier RHS Type
+
+sorts Island
+
+context-free start-symbols
+  Input
+
+lexical syntax
+  [a-zA-Z\_] [a-zA-Z\_0-9]* -> Identifier  
+  [0-9]+                    -> Integer     
+
+lexical restrictions
+  Identifier -/- [a-zA-Z\_0-9]
+  Integer -/- [0-9]
+
+context-free syntax
+  Chunk*                        -> Input        {cons("Input")}      
+  Water                         -> Chunk        {cons("Water")}      
+  Island                        -> Chunk        {cons("Island")}     
+  "const"                       -> TypeModifier                      
+  "int"                         -> Type                              
+  Integer                       -> RHS                               
+  Identifier                    -> RHS                               
+  TypeModifier? Type Identifier -> Island       {cons("VarDecl")}    
+  Identifier "=" RHS            -> Island       {cons("Assignment")} 

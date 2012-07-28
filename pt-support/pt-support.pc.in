@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,economop@cwi.nl
+Name: pt-support
+Version: 2.5
+Description:
+Requires: aterm,error-support,toolbuslib
+Cflags: -I${prefix}/include -DFAST_API
+Libs: -L${prefix}/lib -lmept -lPTMEPT
+#uninstalled Libs: -L@abs_top_builddir@/libmept -L@abs_top_builddir@/libptmept -lmept -lPTMEPT
+#uninstalled Cflags: -I@abs_top_builddir@/libmept -I@abs_top_builddir@/libptmept
+ToolBusFlags=-I${prefix}/share/pt-support
+

@@ -1,0 +1,16 @@
+module Nested
+
+imports Layout
+imports Water
+
+exports
+sorts Input Chunk Water Island
+
+context-free start-symbols
+  Input
+
+context-free syntax
+  Chunk*               -> Input  {cons("Input")}       
+  Water                -> Chunk  {cons("Water")}       
+  Island               -> Chunk  {cons("Island")}      
+  "IF" Chunk* "END-IF" -> Island {cons("IfStatement")} 

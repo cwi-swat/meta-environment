@@ -1,0 +1,60 @@
+
+tool position-annotator is { command = "__PREFIX__/bin/addPosInfo" }
+
+process PositionAnnotator is
+let
+  Depth: int,
+  Location: term,
+  PA: position-annotator,
+  Path: str,
+  Tree: term
+in
+  ( 
+    rec-msg(add-posinfo(Path?, Tree?)).
+    execute(position-annotator, PA?) .
+    snd-eval(PA, add-posinfo(Path, Tree)) .
+    rec-value(PA, tree-with-pos-info(Tree?)) .
+    snd-msg(tree-with-pos-info(Tree)) .
+    Tree := help-the-garbage-collector .
+    snd-terminate(PA,"") 
+  +
+    rec-msg(add-posinfo-packed(Path?, Tree?)).
+    execute(position-annotator, PA?) .
+    snd-eval(PA, add-posinfo-packed(Path, Tree)) .
+    rec-value(PA, tree-with-pos-info(Tree?)) .
+    snd-msg(tree-with-pos-info(Tree)) .
+    Tree := help-the-garbage-collector .
+    snd-terminate(PA,"") 
+  +
+    rec-msg(add-posinfo-to-depth(Path?, Tree?, Depth?)).
+    execute(position-annotator, PA?).
+    snd-eval(PA, add-posinfo-to-depth(Path, Tree, Depth)).
+    rec-value(PA, tree-with-pos-info(Tree?)).
+    snd-msg(tree-with-pos-info(Tree)).
+    Tree := help-the-garbage-collector .
+    snd-terminate(PA,"")
+  +
+    rec-msg(promote-posinfo-to-origin(Tree?))
+    . execute(position-annotator, PA?)
+    . snd-eval(PA, promote-posinfo-to-origin(Tree))
+    . rec-value(PA, tree(Tree?))
+    . snd-msg(promoted-posinfo-to-origin(Tree))
+    . Tree := help-the-garbage-collector
+    . snd-terminate(PA, "")
+  +
+    rec-msg(pa-get-origin(Tree?))
+    . execute(position-annotator, PA?)
+    . snd-eval(PA, get-origin(Tree))
+    .
+    (
+      rec-value(PA, origin(Location?))
+      . snd-msg(pa-origin(Location))
+    +
+      rec-value(PA, no-origin)
+      . snd-msg(pa-no-origin)
+    )
+  ) *
+  delta
+endlet
+
+toolbus(PositionAnnotator)

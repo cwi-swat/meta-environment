@@ -1,0 +1,15 @@
+module Ambiguous
+imports Layout
+imports Water
+exports
+  sorts Input Identifier Chunk Island
+  context-free start-symbols Input
+  
+  lexical syntax
+    [a-zA-Z\_][a-zA-Z0-9\_\-]*  -> Identifier
+  
+  context-free syntax
+    Chunk*                      -> Input {cons("Input")}
+    Water                       -> Chunk {cons("Water")}
+    Island                      -> Chunk {cons("Island")}
+    "PERFORM" Identifier "."    -> Island {cons("PerformStatement")}

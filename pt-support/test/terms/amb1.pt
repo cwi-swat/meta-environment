@@ -1,0 +1,9 @@
+parsetree(
+  appl(prod([sort("A")],sort("B"),no-attrs),[
+  amb([
+    appl(prod([],sort("A"),no-attrs),[1]),
+    appl(prod([],sort("A"),no-attrs),[2]),
+    appl(prod([],sort("A"),no-attrs),[3])
+  ])
+  ])
+,1)

@@ -1,0 +1,695 @@
+package software_improvers.util;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections.Transformer;
+
+import software_improvers.util.collections.IteratorUtils;
+import software_improvers.util.text.Text;
+
+import com.ice.tar.TarArchive;
+
+public final class MBE {
+    private static final int BUFFERSIZE = 4096;
+    private static final String JAR_PROTOCOL = "jar";
+    private static final String FILE_PROTOCOL = "file";
+
+    private MBE() {}
+
+    public static String getContent(File file) throws IOException {
+        long length = file.length();
+        if (length > Integer.MAX_VALUE)
+            throw new IOException("File " + file.getName() + " is too big to read");
+        char[] buffer = new char[(int)length];
+        FileReader reader = new FileReader(file);
+        reader.read(buffer, 0, (int)length);
+        return new String(buffer);
+    }
+
+    public static String getFileContent(File file) throws IOException {
+        return getContent(file);
+    }
+
+    public static Text getFileText(File file) throws IOException {
+        return Text.toText(getContent(file));
+    }
+
+    public static File createTempFile(String fileName, String suffix, String contents)
+        throws IOException {
+        File temp = File.createTempFile(fileName, suffix);
+        temp.deleteOnExit();
+        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+        out.write(contents);
+        out.close();
+        return temp;
+    }
+
+    public static File createTempDir() {
+        File file = new File(getTempDir(), "tmp" + System.currentTimeMillis());
+        file.mkdir();
+        file.deleteOnExit();
+        return file;
+    }
+
+    public static File createTempDir(File parentDir, String name) {
+        File file = new File(parentDir, name);
+        file.mkdir();
+        file.deleteOnExit();
+        return file;
+    }
+
+    public static File getTempDir() {
+        return new File(System.getProperty("java.io.tmpdir"));
+    }
+
+    public static String getRelativeFileName(File path, File file) {
+        assert path != null;
+        assert file != null;
+        //currently assuming file is in path or in a subdirectory of path:
+        String absPath = path.getAbsolutePath();
+        int start = absPath.length();
+        if (absPath.length() > 0 && absPath.charAt(absPath.length() - 1) != File.separatorChar)
+            ++start;
+        return file.getAbsolutePath().substring(start);
+    }
+
+    public static Properties loadProperties(File file) {
+        Properties result = null;
+        FileInputStream fis = null;
+        try {
+            try {
+                fis = new FileInputStream(file);
+                result = loadProperties(fis);
+            } finally {
+                if (fis != null)
+                    fis.close();
+            }
+        } catch (IOException e) {
+            result = null;
+        }
+        return result;
+    }
+
+    public static Properties loadProperties(String location, Class classForLoader) {
+        Properties result = null;
+        InputStream is = null;
+        try {
+            try {
+                is = classForLoader.getResourceAsStream(location);
+                if (is != null)
+                    result = loadProperties(is);
+            } finally {
+                if (is != null)
+                    is.close();
+            }
+        } catch (IOException e) {
+            result = null;
+        }
+        return result;
+    }
+
+    public static Properties loadProperties(InputStream is) throws IOException {
+        Properties result = new Properties();
+        result.load(is);
+        return result;
+    }
+
+    public static void pipe(InputStream in, OutputStream out) throws IOException {
+        BufferedOutputStream bufferedOut = new BufferedOutputStream(out);
+        pipeNoClose(in, bufferedOut);
+        bufferedOut.close();
+    }
+
+    private static void pipeNoClose(InputStream in, OutputStream bufferedOut)
+        throws IOException {
+        BufferedInputStream bufferedIn = new BufferedInputStream(in);
+        int bytesRead;
+        byte[] buffer = new byte[BUFFERSIZE];
+        while ((bytesRead = bufferedIn.read(buffer)) != -1) {
+            bufferedOut.write(buffer, 0, bytesRead);
+        }
+        bufferedOut.flush();
+        bufferedIn.close();
+    }
+
+    public static File appendToPath(File baseDir, String subDirName) {
+        String baseDirPath = baseDir.getAbsolutePath();
+        if (!baseDirPath.endsWith(File.separator)) {
+            baseDirPath += File.separator;
+        }
+        return new File(baseDirPath + subDirName);
+    }
+
+    public static void copyFiles(File sourceFile, File destFile) throws IOException {
+        FileInputStream inputStream = new FileInputStream(sourceFile);
+        FileOutputStream outputStream = new FileOutputStream(destFile);
+        pipe(inputStream, outputStream);
+        inputStream.close();
+        outputStream.close();
+    }
+
+    public static void copyFiles(String sourceName, String destName) throws IOException {
+        copyFiles(new File(sourceName), new File(destName));
+    }
+
+    public static File createFile(String fullFileName, String contents) throws IOException {
+        File f = new File(fullFileName);
+        return createFile(f, contents);
+    }
+
+    public static File createFile(File f, String contents) throws IOException {
+        FileOutputStream outputStream = new FileOutputStream(f);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(contents.getBytes());
+        pipe(inputStream, outputStream);
+        outputStream.close();
+        return f;
+    }
+
+    public static File createTempFile(String fileName, String contents) throws IOException {
+        return createTempFile(fileName, ".tmp", contents);
+    }
+
+    public static boolean createParentDirs(File f) {
+        return new File(f.getParent()).mkdirs();
+    }
+
+    private final static String dirsToBackPath(String[] dirs, int startIndex) {
+        String result = "";
+        for (int i = startIndex; i < dirs.length; i++) {
+            result += ".." + File.separator;
+        }
+        return result;
+    }
+
+    private final static String dirsToPath(String[] dirs, int startIndex) {
+        String result = "";
+        for (int i = startIndex; i < dirs.length; i++) {
+            result += dirs[i] + File.separator;
+        }
+        return result;
+    }
+
+    public static URL file2URL(File f) {
+        try {
+            return new URL("file", "", URLEncoder.encode(f.getAbsolutePath()));
+        } catch (MalformedURLException e) {
+            // can not occur.
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static File url2File(URL url) {
+        String fileName = URLEncoder.decode(url.getFile());
+        return new File(fileName);
+    }
+
+    public static String getAbsolutePathWithoutLastExtension(String fullFileName) {
+        int iDot = fullFileName.lastIndexOf(".");
+        int iFileSep = fullFileName.lastIndexOf(File.separator);
+        if ((iDot != -1) && (iDot > iFileSep)) {
+            return fullFileName.substring(0, iDot);
+        } else {
+            return fullFileName;
+        }
+    }
+
+    public static String getBaseName(String fullFileName) {
+        String fileName = getFileName(fullFileName);
+        int idx = fileName.lastIndexOf(".");
+        if (idx != -1) {
+            return fileName.substring(0, idx);
+        } else {
+            return fileName;
+        }
+    }
+
+    public static String getFileName(String fullFileName) {
+        int idx = fullFileName.lastIndexOf(File.separator);
+        if (idx != -1) {
+            return fullFileName.substring(idx + 1, fullFileName.length());
+        } else {
+            return fullFileName;
+        }
+    }
+
+    public static String getFileNameNoSuffix(File f) {
+        return removeAllSuffixes(f.getName()).toUpperCase();
+    }
+
+    public final static String[] getParentDirNames(File file) {
+        ArrayList parentDirs = new ArrayList();
+        File currentFile = file;
+        String curFileName = currentFile.getAbsolutePath();
+        if (curFileName.endsWith(File.separator)) {
+            currentFile = new File(curFileName.substring(0, curFileName.length()
+                - File.separator.length()));
+        }
+        String parent;
+        while ((parent = currentFile.getParent()) != null && !parent.equals(File.separator)) {
+            // we don't want root ("/")
+            currentFile = new File(parent);
+            parentDirs.add(0, currentFile.getName());
+        }
+        return (String[])parentDirs.toArray(new String[0]);
+    }
+
+    public static String getPath(String fullFileName) {
+        int idx = fullFileName.lastIndexOf(File.separator);
+        if (idx != -1) {
+            return fullFileName.substring(0, idx);
+        } else {
+            return "";
+        }
+    }
+
+    public static String getPathEndingWithFileSeparator(String dirPath) {
+        String result = dirPath;
+        if (!result.endsWith(File.separator)) {
+            result += File.separator;
+        }
+        return result;
+    }
+
+    public static String getPathWithoutLastFileSeparator(File dir) {
+        String result = dir.getAbsolutePath();
+        if (!result.equalsIgnoreCase(File.separator)) {
+            if (result.endsWith(File.separator)) {
+                result = result.substring(0, (result.length() - File.separator.length()));
+            }
+        }
+        return result;
+    }
+
+    public final static String getRelativePath(File origin, File destination) {
+        String[] originParents = getParentDirNames(origin);
+        String[] destinationParents = getParentDirNames(destination);
+        return resolvePath(originParents, destinationParents) + destination.getName();
+    }
+
+    public static String removeAllSuffixes(String fullFileName) {
+        String fileName = getFileName(fullFileName);
+        int idx = fileName.indexOf(".");
+        if (idx != -1) {
+            return fileName.substring(0, idx);
+        } else {
+            return fileName;
+        }
+    }
+
+    public static String removeBasePath(File basePath, File file) {
+        String basePathString = getPathEndingWithFileSeparator(basePath.getAbsolutePath());
+        return file.getAbsolutePath().substring(basePathString.length());
+    }
+
+    public static boolean removeDirectoryWithContents(File dir) {
+        boolean result = false;
+        if (dir.isDirectory()) {
+            String[] files = dir.list();
+            boolean deletesSucceeded = true;
+            for (int i = 0; i < files.length; i++) {
+                File curFile = new File(getPathEndingWithFileSeparator(dir.getAbsolutePath())
+                    + files[i]);
+                if (curFile.isDirectory()) {
+                    deletesSucceeded = removeDirectoryWithContents(curFile);
+                } else
+                    deletesSucceeded = deletesSucceeded && curFile.delete();
+            }
+            if (deletesSucceeded)
+                result = dir.delete();
+        }
+        return result;
+    }
+
+    public static String getExtension(File f) {
+        return getExtension(f.getName());
+    }
+
+    public static String getExtension(String fullFileName) {
+        int idx = fullFileName.lastIndexOf(".");
+        if (idx != -1) {
+            return fullFileName.substring(idx + 1, fullFileName.length());
+        } else {
+            return "";
+        }
+    }
+
+    public static boolean hasExtensionFromList(String fileName, String[] extensions) {
+        String extension = getExtension(fileName);
+        return occursIn(extension, extensions);
+    }
+
+    public static boolean hasExtension(String fileName, String extension) {
+        return getExtension(fileName).equalsIgnoreCase(extension);
+    }
+
+    public static boolean occursIn(String item, String[] items) {
+        boolean result = false;
+        for (int i = 0; i < items.length; i++) {
+            if (item.equalsIgnoreCase(items[i])) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public static String removeDoubleExtension(String filePath) {
+        String result = filePath;
+        String extension = getExtension(filePath);
+        if (extension.length() > 0) {
+            String filePathWithoutExt = getAbsolutePathWithoutLastExtension(filePath);
+            if (getExtension(filePathWithoutExt).equalsIgnoreCase(extension)) {
+                result = filePathWithoutExt;
+            }
+        }
+        return result;
+    }
+
+    public static String replaceExtension(String fullFileName, String newExtension) {
+        String path = getPath(fullFileName);
+        String base = getBaseName(fullFileName);
+        String result = "";
+        if (!path.equals("")) {
+            // if there is a path we add it to the result
+            result += path + File.separator;
+        }
+        if (!base.equals("")) {
+            // if there is a base we add it together with the new extension to
+            // the result
+            result += base + "." + newExtension;
+        } else {
+            // if there is no base we return the empty string
+            result = "";
+        }
+        return result;
+    }
+
+    private final static String resolvePath(String[] originDirs, String[] destinationDirs) {
+        int i = 0;
+        String result;
+        while (i < originDirs.length && i < destinationDirs.length
+            && originDirs[i].equals(destinationDirs[i])) {
+            i++;
+        }
+        if (i >= originDirs.length) {
+            result = dirsToPath(destinationDirs, i);
+        } else {
+            if (i >= destinationDirs.length) {
+                result = dirsToBackPath(originDirs, i);
+            } else {
+                result = dirsToBackPath(originDirs, i) + dirsToPath(destinationDirs, i);
+            }
+        }
+        return result;
+    }
+
+    public static List findAllFiles(File file) {
+        List result = new ArrayList();
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                result.addAll(findAllFiles(files[i]));
+            }
+        } else {
+            result.add(file);
+        }
+        return result;
+    }
+
+    /**
+     * Deletes dir and everything in it recursively, so use with care
+     */
+    public static void deleteFilesAndDir(File dir) {
+        if (dir != null && dir.exists()) {
+            File[] files = dir.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isFile()) {
+                    files[i].delete();
+                } else {
+                    deleteFilesAndDir(files[i]);
+                }
+            }
+            dir.delete();
+        }
+    }
+
+    public static void addFileToZip(ZipOutputStream zos, String relativeFileName,
+        InputStream content) throws IOException {
+        ZipEntry zipEntry = new ZipEntry(relativeFileName);
+        zos.putNextEntry(zipEntry);
+        pipeNoClose(content, zos);
+        zos.closeEntry();
+    }
+
+    /**
+     * Input can be a JarFile or ZipFile
+     */
+    public static void unzip(ZipFile zipFile, File destinationDir) throws IOException {
+        if (!destinationDir.exists()) {
+            destinationDir.mkdirs();
+        }
+        Enumeration entries = zipFile.entries();
+        while (entries.hasMoreElements()) {
+            ZipEntry entry = (ZipEntry)entries.nextElement();
+            unzipEntry(zipFile, destinationDir, entry);
+        }
+        zipFile.close();
+    }
+
+    private static void unzipEntry(ZipFile zipFile, File destinationDir, ZipEntry entry)
+        throws IOException {
+        File entryFile = new File(entry.getName());
+        File outputFile = new File(destinationDir, entryFile.getPath());
+        if (entry.isDirectory()) {
+            if (!outputFile.exists())
+                outputFile.mkdirs();
+        } else {
+            // Check to see if this is an entry in a directory and the directory
+            // hasn't been created yet
+            if (!outputFile.getParentFile().exists()) {
+                outputFile.getParentFile().mkdirs();
+            }
+            pipeToFile(zipFile.getInputStream(entry), outputFile);
+        }
+    }
+
+    public static void gunzip(File gzippedFile) throws IOException {
+        File outputfile = new File(getAbsolutePathWithoutLastExtension(gzippedFile
+            .getAbsolutePath()));
+        pipeToFile(new GZIPInputStream(new FileInputStream(gzippedFile)), outputfile);
+    }
+
+    private static void pipeToFile(InputStream inputStream, File outputfile)
+        throws IOException {
+        if (outputfile.createNewFile()) {
+            FileOutputStream fos = new FileOutputStream(outputfile);
+            pipe(inputStream, fos);
+        } else {
+            throw new IOException("Could not create file: " + outputfile.getAbsolutePath()
+                + ", file already exists.");
+        }
+    }
+
+    public static void untar(File packedFile, File destinationDir) throws IOException {
+        InputStream in = new FileInputStream(packedFile);
+        TarArchive archive = new TarArchive(in);
+        archive.extractContents(destinationDir);
+    }
+
+    public static Iterator traverse(File root) {
+        return traverse(root, (FileFilter)null);
+    }
+
+    public static Iterator traverse(File root, final String extension) {
+        return traverse(root, extension, false);
+    }
+
+    public static Iterator traverse(File root, final String extension,
+        final boolean includeDirs) {
+        Predicate pred = new Predicate() {
+            public boolean evaluate(Object obj) {
+                File f = (File)obj;
+                if (f.isDirectory())
+                    return includeDirs;
+                return f.getName().endsWith(extension);
+            }
+        };
+        return IteratorUtils.filter(traverse(root), pred);
+    }
+
+    public static Iterator traverse(File root, FileFilter filter) {
+        final FileFilter myFilter = filter;
+        return IteratorUtils.depthFirstBottomUp(root, new Transformer() {
+            public Object transform(Object source) {
+                File f = (File)source;
+                return f.listFiles(myFilter);
+            }
+        });
+    }
+
+    private static String makeFileNameInHomeDir(String fileName) {
+        StringBuffer result = new StringBuffer(System.getProperty("user.home"));
+        if (!fileName.startsWith("/"))
+            result.append("/");
+        result.append(fileName);
+        return result.toString();
+    }
+
+    public static void writeToHomeDir(Collection collection, String fileName, String delim)
+        throws IOException {
+        writeToFile(collection, makeFileNameInHomeDir(fileName), delim);
+    }
+
+    public static void writeToHomeDir(Collection collection, String fileName)
+        throws IOException {
+        writeToFile(collection, makeFileNameInHomeDir(fileName), "\n");
+    }
+
+    public static void writeToHomeDir(Map map, String fileName, String delim)
+        throws IOException {
+        writeToFile(map, makeFileNameInHomeDir(fileName), delim);
+    }
+
+    public static void writeToHomeDir(Map map, String fileName) throws IOException {
+        writeToFile(map, makeFileNameInHomeDir(fileName), "\n");
+    }
+
+    public static File writeToHomeDir(CharSequence string, String fileName) throws IOException {
+        return writeToFile(string, makeFileNameInHomeDir(fileName));
+    }
+
+    public static void writeToFile(Collection collection, String fileName, String delim)
+        throws IOException {
+        StringBuffer result = new StringBuffer();
+        for (Iterator iterator = collection.iterator(); iterator.hasNext();) {
+            result.append(iterator.next().toString());
+            if (delim != null && iterator.hasNext())
+                result.append(delim);
+        }
+        writeToFile(result.toString(), fileName);
+    }
+
+    public static void writeToFile(Map map, String fileName) throws IOException {
+        writeToFile(map, fileName, "\n");
+    }
+
+    public static void writeToFile(Map map, String fileName, String delim) throws IOException {
+        StringBuffer result = new StringBuffer();
+        for (Iterator iterator = map.keySet().iterator(); iterator.hasNext();) {
+            Object key = iterator.next();
+            result.append(key.toString()).append(" = ").append(map.get(key).toString());
+            if (delim != null && iterator.hasNext())
+                result.append(delim);
+        }
+        writeToFile(result.toString(), fileName);
+    }
+
+    public static void writeToFile(Collection collection, String fileName) throws IOException {
+        writeToFile(collection, fileName, "\n");
+    }
+
+    public static File writeToFile(CharSequence string, String fileName) throws IOException {
+        File file = new File(fileName);
+        File parent = file.getParentFile();
+        if (parent != null)
+            parent.mkdirs();
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new FileWriter(file));
+            out.print(string);
+        } finally {
+            if (out != null)
+                out.close();
+        }
+        return file;
+    }
+
+    public static String getResourceName(Class clazz) {
+        return File.separator + clazz.getName().replace('.', '/') + ".class";
+    }
+
+    public static void serialize(File file, Serializable object) throws IOException {
+        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
+        outputStream.writeObject(object);
+        outputStream.close();
+    }
+
+    public static Object deserialize(File file) throws IOException, ClassNotFoundException {
+        return deserialize(new FileInputStream(file));
+    }
+
+    /**
+     * Creates an objectStream from the inputStream and desializes the Object
+     * 
+     * @param inputStream
+     * @return Object which was serialized
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws ClassNotFoundException
+     */
+    public static Object deserialize(InputStream inputStream) throws IOException,
+        ClassNotFoundException {
+        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+        Object result = objectInputStream.readObject();
+        inputStream.close();
+        return result;
+    }
+
+    public static File getBase(Class clazz) {
+        File result = null;
+        String resourceName = MBE.getResourceName(clazz);
+        URL url = clazz.getResource(resourceName);
+        String protocol = url.getProtocol();
+        if (FILE_PROTOCOL.equals(protocol)) {
+            String prefix = File.separator;
+            String suffix = resourceName;
+            result = getFile(url, prefix, suffix);
+        } else if (JAR_PROTOCOL.equals(protocol)) {
+            String prefix = "file:/";
+            String suffix = "!" + resourceName;
+            result = getFile(url, prefix, suffix);
+        }
+        return result;
+    }
+
+    private static File getFile(URL url, String prefix, String suffix) {
+        File result;
+        String path = url.getFile();
+        if (!path.startsWith(prefix) || !path.endsWith(suffix))
+            result = null;
+        else
+            result = new File(File.separator
+                + path.substring(prefix.length(), path.length() - suffix.length()));
+        return result;
+    }
+}

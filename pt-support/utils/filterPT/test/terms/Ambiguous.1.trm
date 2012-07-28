@@ -1,0 +1,26 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. simple.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 MAX-VAR				PIC 9 VALUE 0.
+       01 LOOP-VAR				PIC 9 VALUE 0.
+
+       PROCEDURE DIVISION.
+
+       MAIN.
+          PERFORM DO-WORK.
+          STOP RUN.
+
+       DO-WORK.
+          PERFORM DO-INITIALIZE.
+          PERFORM DO-LOOP.
+
+       DO-INITIALIZE.
+          MOVE 5 TO MAX-VAR.
+
+       DO-LOOP.
+          PERFORM VARYING LOOP-VAR FROM 1 BY 1 UNTIL LOOP-VAR > MAX-VAR
+             DISPLAY LOOP-VAR ' ' NO ADVANCING
+          END-PERFORM.
+          DISPLAY ''.

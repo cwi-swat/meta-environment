@@ -1,0 +1,41 @@
+tool apply-function is { command = "__PREFIX__/bin/apply-function" }  
+
+process Apply-Function is
+let
+  AF       : apply-function,
+  FuncName : str,
+  SortName : str,
+  TreeList : list,
+  ArgNr    : int,
+  Tree     : term,
+  Tree2    : term,
+  Result   : term,
+  ArgTree  : term
+in
+  (
+    rec-msg(apply-function(FuncName?, SortName?, TreeList?)).
+    execute(apply-function, AF?).
+    snd-eval(AF, apply-function-to-args(FuncName, SortName, TreeList)).
+    rec-value(AF, tree(Tree?)).
+    snd-terminate(AF, "done") .
+    snd-msg(tree(Tree))
+  +
+    rec-msg(get-argument-given-number(Tree?, ArgNr?)).
+    execute(apply-function, AF?).
+    snd-eval(AF, get-argument-given-nr(Tree, ArgNr)).
+    rec-value(AF, tree(ArgTree?)).
+    snd-terminate(AF, "done") .
+    snd-msg(tree(ArgTree))
+  +
+    rec-msg(equal-trees(Tree?, Tree2?)).
+    execute(apply-function, AF?).
+    snd-eval(AF, equal-trees(Tree, Tree2)).
+    rec-value(AF, result(Result?)).
+    snd-terminate(AF, "done") .
+    snd-msg(tree-is-equal(Result))
+  ) *
+  delta
+endlet
+
+
+toolbus(Apply-Function)
