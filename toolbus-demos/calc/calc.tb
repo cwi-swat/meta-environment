@@ -1,0 +1,29 @@
+#include "calc.idef"
+#include "ui.idef"
+#include "log.idef"
+#include "batch.idef"
+
+process LOG1 is
+    let TheLog : list, E : str, V : term
+    in 
+        (
+            subscribe(compute(<str>, <term>)) .
+            TheLog := [] .
+            (
+                (
+                    (
+                        rec-note(compute(E?, V?)) .
+                        TheLog := join(TheLog, [[E, V]]) 
+                    )+
+                    (
+                        rec-msg(showLog) .
+                        snd-msg(showLog, TheLog) 
+                    )
+                )*
+                delta 
+            )
+        )
+    endlet 
+%% requests for the current time.
+
+toolbus (UI, CALC, LOG1, CLOCK)

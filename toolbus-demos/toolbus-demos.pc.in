@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: toolbus-demos
+Version: 1
+Description:
+Requires: toolbus-ng,toolbus-java-adapter,toolbus-wish-adapter,toolbuslib
