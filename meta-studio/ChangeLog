@@ -1,0 +1,231 @@
+
+
+Fri Jul 17 23:16:54 CEST 2009 <jurgenv@cwi.nl>
+ * Bumped version after minor change by Tijs.
+
+Mon Aug 18 13:00:19 CEST 2008 <jurgenv@cwi.nl>
+ * src/DefaultPopupImpl.java: fixed race condition in showing popup
+   by using SwingUtilities.invokelater();
+
+Thu Aug 14 13:44:36 CEST 2008 <jurgenv@cwi.nl>
+ * src/**/StudioImpl.java, src/**/plugin/PluginLoader.java: improved
+   error handling for loading jars (checks and reports better when
+   Main-Class is not found in MANIFEST.MF)
+
+Mon Apr 28 17:15:15 2008    <bruntink@cwi.nl>
+
+	* Removed .classpath and .project from repository.
+	* meta-studio.pc.in: Removed spurious packages.
+
+Mon Apr 28 16:15:13 2008    <bruntink@cwi.nl>
+
+	* meta-studio.pc.in: Changed dependency on module-support to module-support-java.
+
+Tue Sep 18 15:59:08 CEST 2007 <kooiker@cwi.nl>
+ * src/**/DefaultPopupImpl.java: catch IllegalStateException prevents
+ exception thrown when user hides a window by clicking on another tab, while
+ the popup request is not handled
+
+Tue Sep 11 16:22:26 CEST 2007 <kooiker@cwi.nl>
+ * lib/famfamfam_silk_icons_v013.zip: added icon set licensed under CC 2.5.
+   Credits to Mark James for developing this icon set (see also our
+   Third-party open source section on our website)
+
+Fri Aug 24 09:21:22 CEST 2007 <kooiker@cwi.nl>
+ * src/**/StudioImpl.java: readded request focus for highlighting errors in
+   the editors which won't work without focus.
+
+Thu Aug 23 15:40:21 CEST 2007 <kooiker@cwi.nl>
+ * src/**/StudioImpl.java: on requesting focus the window that needs focus
+   only becomes visible without actually getting the focus, so focus stays at
+   the window the user is working in
+
+Tue Feb 20 09:27:19 CET 2007 <kooiker@cwi.nl>
+ * src/**/StudioComponent.java:
+   - Add support for Tooltips
+
+Fri Feb  2 15:23:14 CET 2007 <kooiker@cwi.nl>
+ * Updated to DockingWindows 1.5.0
+
+Fri Jan 12 15:01:57 CET 2007 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Commented out overwriting of windowHidden method in the
+   DockingWindowAdapter. It caused the menu's and status bar to update when a
+   window was deselected or closed, but this is also handled in the focus
+   changed and window closed listeners.
+
+Tue Oct 31 10:09:22 CET 2006 <jurgenv@cwi.nl>
+ * **/utils/*.java: refactored the two implementations of menu's
+   by introducting a MenuBuilder. Both PopupMenu's and the MenuBar
+   now use the MenuBuilder, such that code duplication can be
+   avoided despite the mismatch between these two interfaces.
+ * **/utils/*.java: added reusable utilities for sending mouse-events
+   and menu-events to the ToolBus. Every plugin may use these, but
+   must add the appropriate rec-events to their .idef file!
+
+Wed Apr 26 09:54:54 CEST 2006 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Add static method that gets the Studio frame
+ * studio/**/*.java:
+   - Add NameChanged event for StudioComponents so components can change their
+     names afterwards
+ * studio/**/{component,plugin}:
+   - Add subpackages for StudioComponents and StudioPlugins
+
+Fri Apr 21 13:03:17 CEST 2006 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Remove componentId from idsByComponent when removing the component. 
+     Removing it when closing the window is to early and prevents editors from 
+     being closed (editors were still open, which was visible due to the
+     editor windows listed in the Views menu).
+
+Wed Apr 19 04:23:08 CEST 2006 <jurgenv@cwi.nl>
+ * studio/**/StudioImpl.java: added null pointer check on status
+   bar elements retrieved from a plugin.
+
+Fri Apr  7 05:13:44 CEST 2006 <jurgenv@cwi.nl>
+ * Coupled jobs and status bar with each other
+
+Mon Apr  3 10:40:07 CEST 2006 <kooiker@cwi.nl>
+ * util/**/*.java:
+   - Add new statusbar
+ * studio/**/StudioImpl.java:
+   - use new StudioStatusBar
+
+Mon Mar 13 19:13:42 CET 2006 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - change JRadioButtonMenuItem to JMenuItem (closes #559)
+
+Thu Feb 23 10:56:28 CET 2006 <kooiker@cwi.nl>
+ * utils/**/StudioMenuBar.java:
+   - Fix findSubMenu
+ * studio/**/*.java:
+   - Use generics for strong typing
+
+Wed Feb 22 14:37:04 CET 2006 <kooiker@cwi.nl>
+ * utils/**/StudioMenuBar.java:
+   - Handle multiple modifiers
+
+Tue Feb 21 16:29:45 CET 2006 <kooiker@cwi.nl>
+ * {util,studio}/**/*.java:
+   - Use configuration api for (popup)menus and shortcuts
+
+Mon Feb 20 13:51:58 CET 2006 <kooiker@cwi.nl>
+ * {utils,studio}/**/*.java:
+   - Possible to add keystroke to menuitem
+
+Wed Feb 15 16:04:49 CET 2006 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/util/*.java:
+   - Add system panel to statusbar
+
+Mon Jan 30 10:32:26 CET 2006 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/util/*.java:
+   - Added several classes from meta package
+
+Tue Jan 24 11:08:30 CET 2006 <kooiker@cwi.nl>
+ * studio/src/nl/cwi/sen1/gui/StudioImpl.java:
+   - Set frame to maximized
+
+Mon Dec 19 11:04:17 CET 2005 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Removed toolbar
+
+Fri Dec  9 08:59:32 CET 2005 <kooiker@cwi.nl>
+ * lib/idw-gpl-1.4.0.jar: new version
+
+Thu Dec  1 08:34:55 CET 2005 <kooiker@cwi.nl>
+ * studio/**/StatusBar.java:
+   - Add StatusBar for each component
+
+Mon Aug 22 13:22:54 CEST 2005 <{jong,kooiker}@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Fix duplicated close on programmatic removal of component
+
+Thu Aug 11 15:52:31 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
+ * **/StudioImpl.java: bugfix, menus did not dissappear when
+   a View was hidden.
+ * **/StudioComponent.java: added componentReceiveFocus method to
+   the interface, with the transitive closure to other classes
+   to implement a full Listener design.
+   When a View now receives the focus, this is communicated to
+   the component in this view, such that appropriate actions
+   can be implemented.
+
+
+Tue Aug  9 11:09:03 CEST 2005 <{jurgenv,kooiker,jong}@cwi.nl>
+ * **/StudioImpl.java: introduced new design for terminating
+   a Studio. Each StudioPlugin sends a message to the studio
+   when it terminates, if all plugins are terminated, and
+   the studio wants to terminate too, then System.exit is called.
+   This circumvents all kinds of problems with Threads that
+   want to live on and on (like AWT threads).
+
+Mon Aug  8 16:50:15 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
+ * **/StudioImpl.java: calls frame.dispose() in rec_terminate
+   to let AWT Threads die.
+
+Fri Aug  5 11:29:08 CEST 2005 <jurgenv@cwi.nl>
+ * StudioImpl: added menu will all active views such that they
+   can be restored even when not visible anymore.
+
+Wed Aug  3 11:47:52 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * StudioImplWithPredefinedLayout.java:
+   - Add addComponent method with viewPosition parameter
+ * StudioWithPredefinedLayout.java:
+   - Extends Studio
+
+Wed Aug  3 10:50:10 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * scripts/gui.src:
+   - Start StudioImplWithPredefinedLayout
+ * StudioImpl.java:
+   - Change methods that can be overridden to protected
+ * StudioImplWithPredefinedLayout.java:
+   - Extract code that creates the predefined layout from StudioImpl.java
+ * MenuItem.java:
+   - Extract menuitem class frome StudioImpl.java
+
+Fri Jun  3 09:56:36 CEST 2005 <kooiker@cwi.nl>
+ * Renamed StudioComponentAdapter to StudioComponentImpl (it was not a real
+   adapter)
+ * Created new StudioComponentAdapter as default implementation of
+   StudioComponentListener
+ * StudioComponentAdapter.java:
+   - addComponentMenu also allows ATerm menuPath and Action action
+ * StudioComponent.java: 
+   - when view is being closed also notify plugin by using requestClose and
+     close methods
+
+Wed May 25 14:05:53 CEST 2005 <kooiker@cwi.nl>
+ * StudioImpl.java:
+   - if top-right window is not present add a new window
+
+Fri May 13 15:08:10 CEST 2005 <kooiker@cwi.nl>
+ * StudioImpl.java: initial layout
+
+Wed May  4 17:45:12 CEST 2005 <{jurgenv,jong}@cwi.nl>
+ * StudioImpl.java: added tool.setLockObject(this) to connect()
+    - anybody that uses connect(), does not have to worry about race
+      conditions on ToolBus sockets.
+
+Tue May  3 13:07:55 CEST 2005 <jong@cwi.nl>
+ * studio/gui.idef:
+   - surround by #ifndef to allow multiple inclusion
+ * studio/*java:
+   - refactor menu support from Component.getMenu into
+     Studio.addComponentMenu
+
+Mon May  2 15:55:20 CEST 2005 <jong@cwi.nl>
+ * studio:
+   - refactor all remaining jar-loading code into PluginLoader
+
+Mon May  2 14:06:30 CEST 2005 <{markvdb,kooiker}@cwi.nl>
+ * studio/src/nl/cwi/sen1/gui/StudioImpl.java: 
+   - Change JFrame.add to JFrame.getContentPane().add to be
+     jdk1.4 compliant
+
+Wed Apr 27 14:27:26 CEST 2005 <{jong,kooiker}@cwi.nl>
+ * studio:
+   - Add classpath support for loadJar
+
+Wed Apr 27 10:29:29 CEST 2005 <kooiker@cwi.nl>
+  * Create JDK 1.4 compatible jars

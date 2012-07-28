@@ -1,0 +1,63 @@
+#ifndef __GUI_IDEF__
+#define __GUI_IDEF__
+
+tool gui is { command = "__PREFIX__/bin/gui" }
+
+process GUI is
+let
+  GUI: gui,
+  ClassName: str,
+  ClassPath: str,
+  Id : term,
+  JarName: str,
+  MenuEventList: list,
+  MenuEvent: term,
+  Message: str,
+  Step: int,
+  Steps: int,
+  Title: str,
+  URLs: list
+in
+  execute(gui, GUI?)
+  /*rec-connect(GUI?)*/
+  .
+  (
+    rec-msg(set-title(Title?))
+    . snd-do(GUI, set-title(Title))
+  +
+    rec-msg(load-jar(JarName?))
+    . snd-do(GUI, load-jar(JarName))
+  +
+    rec-msg(load-jar(JarName?, ClassPath?))
+    . snd-do(GUI, load-jar-classpath(JarName, ClassPath))
+  +
+    rec-msg(load-jar(JarName?, URLs?))
+    . snd-do(GUI, load-jar-urls(JarName, URLs))
+  +
+    rec-msg(gui-set-status(Message?))
+    . snd-do(GUI, set-status(Message))
+  +
+    rec-msg(gui-add-job(Message?))
+    . snd-do(GUI, add-job(Message))
+  +
+    rec-msg(gui-job-done(Message?))
+    . snd-do(GUI, job-done(Message))
+  +
+    rec-msg(gui-add-menu-events(MenuEventList?))
+    . snd-do(GUI, add-menu-events(MenuEventList))
+  +
+    rec-event(GUI, menu-event(Id?,MenuEvent?))
+    . snd-msg(ui-button-selected(Id, MenuEvent))
+    . snd-ack-event(GUI, menu-event(Id, MenuEvent))
+  +
+    rec-event(GUI, window-closing-event)
+    . snd-msg(gui-window-closing)
+    . snd-ack-event(GUI, window-closing-event)
+  )
+  *
+  delta
+endlet
+
+toolbus(GUI)
+
+#endif
