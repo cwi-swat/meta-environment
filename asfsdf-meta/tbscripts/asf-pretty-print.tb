@@ -1,0 +1,38 @@
+#ifndef ASF_PRETTY_PRINT
+#define ASF_PRETTY_PRINT
+
+#include <undefined.h>
+#include <asf-utils.tb>
+#include <sdf-module-utils.tb>
+
+/**
+ * \file This file coordinates the process of pretty printing a term.
+ * It links a module X to another module Y that contains a pretty printer
+ * for the language in X, then executes that specification (applies the
+ * rewrite rules), and then applies the default mapping to a box and
+ * returns the pretty printed result as text.
+ */
+
+process BoxAndPrettyPrint(ModuleId : module-id, Path: str, Tree: term, RTree :term?) is
+let
+  PrettyModuleId: module-id,
+  PrettySpec: term,
+  PrettyEquations: term,
+  UserDefined: term,
+  Result: term
+in
+  RTree := UNDEFINED
+  . LookupFeatureModuleId(ModuleId, "format", PrettyModuleId?)
+  .
+  if not-equal(PrettyModuleId, UNDEFINED) then 
+     AddJob("User defined pretty printing")
+     . Reduce(PrettyModuleId, Path, off, UserDefined?)
+     . JobDone("User defined pretty printing")
+  else 
+    UserDefined := Tree
+  fi
+  . PrettyPrint(Path, UserDefined, Result?)
+  . RTree := Result
+endlet
+
+#endif

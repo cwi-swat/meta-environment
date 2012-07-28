@@ -1,0 +1,451 @@
+#ifndef __ASF_ACTIONS__
+#define __ASF_ACTIONS__
+
+#include <asf-utils.tb>
+#include <term-utils.tb>
+#include <undefined.h>
+#include <asf-pretty-print.tb>
+#include <sdf-pretty.tb>
+#include <sdf-utils.tb>
+#include <sdf-module-utils.tb>
+#include <lower-rstore.idef>
+#include <io-utils.tb>
+
+process AbortAsfeAction(EditorId : session-id) is
+  snd-note(asfe-abort)
+ 
+process PrettyPrintSdfAction(EditorId : session-id) is
+let
+  Tree : term,
+  RTree : term,
+  ModuleId: module-id,
+  Path: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetSDFParsetree(ModuleId, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    PrettyPrintSdf(Path, Tree, RTree?)
+    .
+    if not-equal(RTree, UNDEFINED) then
+      ReplaceFocus(EditorId, RTree)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
+    else 
+      tau
+    fi
+  else
+    tau
+  fi
+endlet
+
+process PrettyPrintAction(EditorId : session-id, EditorType : term, Sort: str) is
+let
+  Tree : term,
+  RTree : term,
+  ModuleId: module-id,
+  Path: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    BoxAndPrettyPrint(ModuleId, Path, Tree, RTree?)
+    . 
+    if not-equal(RTree, UNDEFINED) then
+      ReplaceFocus(EditorId, RTree)
+    else 
+      tau
+    fi
+  else tau
+  fi
+endlet
+
+process DebugAction(EditorId : session-id) is
+let
+  ModuleId : module-id,
+  RunModuleId : module-id,
+  Path: str,
+  ResultTree: term,
+  Sid: session-id,
+  Pid: int,
+  File: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "debug", RunModuleId?)
+  .
+  if not-equal(RunModuleId, UNDEFINED) then
+    File := "debug.out"
+    . GetPath(EditorId, Path?)
+    . AddJob("Debugging while rewriting")
+    . Reduce(RunModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(em-get-session-by-path(File))
+      .
+      (
+        rec-msg(em-session(File, Sid?))
+        . DeleteSession(Sid)
+      +
+        rec-msg(em-no-such-session(File))
+      )
+      . ActivateEditorWithTree(ResultTree, ModuleId, File)
+      . create(AmbiguityHandler(ResultTree, File), Pid?)
+    else
+      tau
+    fi
+    . JobDone("Debugging while rewriting")
+  else
+    tau
+  fi
+endlet
+
+process RunAction(EditorId : session-id) is
+let
+  ModuleId : module-id,
+  RunModuleId : module-id,
+  Path: str,
+  ResultTree: term,
+  Sid: session-id,
+  Pid: int,
+  File: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "run", RunModuleId?)
+  .
+  if not-equal(RunModuleId, UNDEFINED) then
+    File := "run.out"
+    . GetPath(EditorId, Path?)
+    . AddJob("Running")
+    . Reduce(RunModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(em-get-session-by-path(File))
+      .
+      (
+        rec-msg(em-session(File, Sid?))
+        . DeleteSession(Sid)
+      +
+        rec-msg(em-no-such-session(File))
+      )
+      . ActivateEditorWithTree(ResultTree, ModuleId, File)
+      . create(AmbiguityHandler(ResultTree, File), Pid?)
+    else
+      tau
+    fi
+    . JobDone("Running")
+  else
+    tau
+  fi
+endlet
+
+process ExtractAction(EditorId : session-id) is
+let
+  ModuleId : module-id,
+  ExtractModuleId : module-id,
+  Path: str,
+  ResultTree: term,
+  Pid: int,
+  Language: str,
+  ModuleName: str,
+  RSId: int
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId, "extract", ExtractModuleId?)
+  .
+  if not-equal(ExtractModuleId, UNDEFINED) then
+    GetPath(EditorId, Path?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", ModuleName?)
+    . ComputeCanonicalLanguagename(ModuleName, Language?)
+    . AddJob("Extracting")
+    . Reduce(ExtractModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(rs-lower-rstore(ResultTree))
+      . rec-msg(rs-lowered-rstore(ResultTree?))
+      . snd-msg(rc-load-rstore(Path, ResultTree))
+    else
+      snd-note(extract-rstore-failed(Language, Path))
+    fi
+    . JobDone("Extracting")
+  else
+    tau
+  fi
+endlet
+
+process DrawAction(EditorId : session-id) is
+let
+  ModuleId : module-id,
+  DrawModuleId : module-id,
+  Path: str,
+  ResultTree: term,
+  Pid: int,
+  Language: str,
+  ModuleName: str,
+  CWD: str,
+  File: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId, "draw", DrawModuleId?)
+  .
+  if not-equal(DrawModuleId, UNDEFINED) then
+    GetPath(EditorId, Path?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", ModuleName?)
+    . ComputeCanonicalLanguagename(ModuleName, Language?)
+    . AddJob("Translating to SVG")
+    . Reduce(DrawModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(io-relative-to-absolute([library-path("CWD",".")]))
+      . rec-msg(io-absolute-directories([library-path("CWD",CWD?)]))
+      . WriteTreeToFile(ResultTree, "./result.svg")
+      . File := concat(CWD, "/result.svg")
+      . snd-msg(svg-display(Path, File))
+    else
+      printf("error: could not generate SVG picture")
+    fi
+    . JobDone("Translating to SVG")
+  else
+    tau
+  fi
+endlet
+
+process DisplayAction(EditorId : session-id) is
+let
+  ModuleId : module-id,
+  DisplayModuleId : module-id,
+  Path: str,
+  ResultTree: term,
+  Pid: int,
+  Language: str,
+  ModuleName: str,
+  CWD: str,
+  File: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId, "display", DisplayModuleId?)
+  .
+  if not-equal(DisplayModuleId, UNDEFINED) then
+    GetPath(EditorId, Path?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", ModuleName?)
+    . ComputeCanonicalLanguagename(ModuleName, Language?)
+    . AddJob("Translating to SWIXML")
+    . Reduce(DisplayModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(io-relative-to-absolute([library-path("CWD",".")]))
+      . rec-msg(io-absolute-directories([library-path("CWD",CWD?)]))
+      . WriteTreeToFile(ResultTree, "./result.swixml")
+      . File := concat(CWD, "/result.swixml")
+      . snd-msg(swixml-display(Path, File))
+    else
+      printf("error: could not generate SWIXML GUI")
+    fi
+    . JobDone("Translating to SWIXML")
+  else
+    tau
+  fi
+endlet
+
+process TestAction(EditorId : session-id) is
+let
+  ModuleId : module-id,
+  RunModuleId : module-id,
+  Path: str,
+  ResultTree: term,
+  Summary: summary
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "test", RunModuleId?)
+  .
+  if not-equal(RunModuleId, UNDEFINED) then
+    GetPath(EditorId, Path?)
+    . AddJob("Testing")
+    . Reduce(RunModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(convert-feedback(ResultTree))
+      . rec-msg(converted-feedback(Summary?))
+      . RefreshSummary(Summary)
+    else
+      tau
+    fi
+    . JobDone("Testing")
+  else
+    tau
+  fi
+endlet
+
+process CheckAction(EditorId : session-id) is
+let
+  ModuleId : module-id,
+  RunModuleId : module-id,
+  Path: str,
+  ResultTree: term,
+  Summary: summary
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "check", RunModuleId?)
+  .
+  if not-equal(RunModuleId, UNDEFINED) then
+    GetPath(EditorId, Path?)
+    . AddJob("Checking")
+    . Reduce(RunModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(convert-feedback(ResultTree))
+      . rec-msg(converted-feedback(Summary?))
+      . RefreshSummary(Summary)
+    else
+      tau
+    fi
+    . JobDone("Checking")
+  else
+    tau
+  fi
+endlet
+
+process ReduceAction(EditorId : session-id) is
+let
+  ModuleId : module-id,
+  Path: str,
+  ResultTree: term,
+  Sid: session-id,
+  Pid: int
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . AddJob("Rewriting")
+  . Reduce(ModuleId, Path, off, ResultTree?)
+  . 
+  if not-equal(ResultTree, UNDEFINED) then
+    snd-msg(em-get-session-by-path("reduct.out"))
+    .
+    (
+      rec-msg(em-session("reduct.out", Sid?))
+      . DeleteSession(Sid)
+    +
+      rec-msg(em-no-such-session("reduct.out"))
+    )
+    . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
+    . create(AmbiguityHandler(ResultTree, "reduct.out"), Pid?)
+  else
+    tau
+  fi
+  . JobDone("Rewriting")
+endlet
+
+process DebugReduceAction(EditorId : session-id) is
+let
+  ModuleId: module-id,
+  Path: str,
+  ResultTree: term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . Reduce(ModuleId, Path, on, ResultTree?)
+  . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
+endlet
+
+process DumpEquationsAction(ModuleId : module-id) is
+let
+  Cancel: bool,
+  Path : str
+in
+  PromptForFileWithExtension("Export Equations", [], ".eqs", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpEquationsGivenFile(ModuleId, Path)
+  fi
+endlet
+
+process CompileModuleAction(ModuleId : module-id) is
+let
+  Cancel: bool,
+  Path : str,
+  NewPath : str
+in
+  GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+  . ReplaceExtension(Path, ".c", NewPath?) 
+  . CompileModule(ModuleId, NewPath)
+endlet
+
+process RunAsfTestsAction(ModuleId : module-id) is
+  TestAsfSpecification(ModuleId, off) 
+
+process DebugRunAsfTestsAction(ModuleId : module-id) is
+  TestAsfSpecification(ModuleId, on)
+
+process EditorRunAsfTestsAction(EditorId : session-id) is
+let
+  ModuleId : module-id
+in
+  GetModuleId(EditorId, ModuleId?)
+  . TestAsfSpecification(ModuleId, off)
+endlet
+
+process AsfSdfApiGenAction(ModuleId: module-id) is
+let
+  Cancel: bool,
+  Path: str,
+  Paths: list
+in
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("Generate New Module", Paths, ".sdf", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    GenerateASFSDFApi(ModuleId, Path)
+  fi
+endlet
+
+process PrintModuleAction(ModuleId : module-id) is
+let
+  Cancel: bool,
+  Path : str
+in
+  PromptForFileWithExtension("Module Text (ASF+SDF)", [], ".txt", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    snd-msg(print-module(ModuleId, Path))
+    . rec-msg(module-printed(ModuleId))
+  fi
+endlet
+
+process DumpEquationsParseTableAction(ModuleId : module-id) is
+let
+  Cancel: bool,
+  Path : str
+in
+  PromptForFileWithExtension("Export Equations ParseTable", [], ".asf.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(ModuleId, ASF_NAMESPACE, Path, eqs)
+  fi
+endlet
+
+process EditorDumpEquationsParseTableAction(EditorId : session-id) is
+let
+  Cancel: bool,
+  Path : str,
+  ModuleId : module-id
+in
+  GetModuleId(EditorId, ModuleId?)
+  . PromptForFileWithExtension("Export Equations ParseTable", [], ".asf.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(ModuleId, ASF_NAMESPACE, Path, eqs)
+  fi
+endlet
+
+#endif /* __ASF_ACTIONS__ */

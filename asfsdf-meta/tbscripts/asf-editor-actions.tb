@@ -1,0 +1,34 @@
+#ifndef __ASF_EDITOR_ACTIONS__
+#define __ASF_EDITOR_ACTIONS__
+
+#include <asf-namespace.h>
+#include <asf-editor-utils.tb>
+
+process EditorEditEquationsAction(EditorId : session-id) is
+let 
+  ModuleId : module-id
+in
+  GetModuleId(EditorId, ModuleId?)
+  . EditEquationsAction(ModuleId)
+endlet
+
+
+process EditEquationsAction(ModuleId : module-id) is
+let
+  Path: str,
+  Pid: int,
+  Sid: session-id
+in
+  GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
+  .
+  if equal(Path, "") then
+    tau
+  else
+    create(EditEquations(ModuleId), Pid?)
+    . TODO("And what if it didn't start? See term-editor-utils.tb")
+    . rec-msg(equations-editor-started(ModuleId, Sid?))
+    . create(CleanupEditTerm(Sid), Pid?)
+  fi
+endlet
+
+#endif /* __ASF_EDITOR_ACTIONS__ */

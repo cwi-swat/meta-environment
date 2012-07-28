@@ -1,0 +1,69 @@
+#ifndef __ASF_GUI_LISTENERS__
+#define __ASF_GUI_LISTENERS__
+
+#include <undefined.h>
+#include <sdf-module-utils.tb>
+
+process LanguageFeatureMenuListener(Feature : str, Action : str, Info : str) is
+let
+  Event: attribute-changed-event,
+  ModuleId: module-id,
+  Path: term,
+  Menu: term,
+  Modulename: str,
+  FeatureModulename: str,
+  Languagename: str,
+  MenuName: str,
+  OldValue: term,
+  Pid: int,
+  Tip: str
+in
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",identified,<term>) 
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    .
+    if not-equal(Modulename, UNDEFINED) then
+      ComputeFeatureModulename(Modulename, Feature, FeatureModulename?)
+      .
+      if equal(Modulename, FeatureModulename) then
+         ModulenameBase(Modulename, MenuName?)
+         . ComputeCanonicalLanguagename(Modulename, Languagename?)
+         . Tip := concat(Info, concat(" using the equations of ", FeatureModulename))
+	 . Menu := quote(action([description(term-editor(Languagename),menu([label(MenuName),label(Feature)],Tip))],Action))
+         . snd-msg(cm-remove-system-property(Menu))
+	 . snd-msg(cm-add-system-property(Menu))
+         . create(LanguageFeatureRemoveListener(ModuleId, Menu), Pid?)
+      else
+        tau
+      fi	 
+    else
+      tau
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(LanguageFeatureMenuListener("format", "PrettyPrintAction","Format this term"))
+toolbus(LanguageFeatureMenuListener("run", "RunAction","Reduce this term"))
+toolbus(LanguageFeatureMenuListener("debug", "DebugAction","Debug this term"))
+toolbus(LanguageFeatureMenuListener("check", "CheckAction","Check this term"))
+toolbus(LanguageFeatureMenuListener("extract", "ExtractAction","Extract data from this term"))
+toolbus(LanguageFeatureMenuListener("draw", "DrawAction","Display using Scalable Vestor Graphics"))
+toolbus(LanguageFeatureMenuListener("test", "TestAction","Run unit tests"))
+toolbus(LanguageFeatureMenuListener("display", "DisplayAction","Display a Swing GUI"))
+
+process LanguageFeatureRemoveListener(ModuleId: module-id, Property: term) is
+  subscribe(mm-module-deleted(ModuleId))
+  .
+  (
+    rec-note(mm-module-deleted(ModuleId))
+    . snd-msg(cm-remove-system-property(Property))
+  )
+  *
+  delta
+
+#endif

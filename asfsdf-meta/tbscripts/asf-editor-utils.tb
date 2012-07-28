@@ -1,0 +1,84 @@
+#ifndef __ASF_EDITOR_UTILS__
+#define __ASF_EDITOR_UTILS__
+
+#include <editing.tb>
+#include <asf-namespace.h>
+
+process EditEquations(ModuleId: module-id) is
+let
+  AlreadyExists: bool,
+  Available: bool,
+  EditorType: term,
+  Event: attribute-changed-event,
+  HasAttribute: bool,
+  Path: str,
+  Editable: bool,
+  Sid: session-id,
+  Tree: term,
+  Modulename: str
+in
+  EditorType := equations-editor
+  . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
+  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . Edit(Path, Sid?)
+  .
+  if not-equal(Sid, UNDEFINED) then
+    EditText(Sid, EditorType, AlreadyExists?)
+    . snd-msg(te-set-tooltip(Sid, Modulename))
+    . snd-msg(equations-editor-started(ModuleId, Sid))
+    .
+    if equal(AlreadyExists, false) then
+      MM-HasAttribute(ModuleId, ASF_NAMESPACE, "editable", HasAttribute?)
+      .
+      if equal(HasAttribute, true) then
+        MM-GetAttribute(ModuleId, ASF_NAMESPACE, "editable", Editable?)
+      else
+        Editable := true
+      fi
+      . snd-msg(te-set-editable(Sid, Editable)) 
+      . snd-msg(em-bind-session(Sid, ModuleId))
+      . rec-msg(em-session-bound(Sid, ModuleId))
+      . GetASFParseTree(ModuleId, Tree?)
+      . SE-UpdateTree(Sid, Tree)
+      . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",available,parsed)
+      .
+      (
+        MenuSelected(Sid, EditorType)
+      +
+        MouseClicked(Sid)
+      +
+        rec-msg(te-contents-changed(Sid))
+        . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", edited)
+        . RemoveSummaryFor(Path)
+      +
+        rec-msg(te-contents-saved(Sid))
+        . UpdateTextRepository(Sid)
+        . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available)
+        . UpdateEquationsStructure(Sid)
+      +
+        rec-note(mm-attribute-changed(Event?))
+        . UpdateEquationsStructure(Sid)
+      )
+      *
+      EditorDisconnected(Sid)
+      . DeleteSession(Sid)
+    else
+      tau
+    fi
+  else
+    tau
+  fi
+endlet
+
+process UpdateEquationsStructure(Sid: session-id) is
+let
+  ModuleId: module-id,
+  Slices: list,
+  Tree: term
+in
+  GetModuleId(Sid, ModuleId?)
+  . GetASFParseTree(ModuleId, Tree?) 
+  . SE-UpdateTree(Sid, Tree)
+endlet
+
+#endif /* __ASF_EDITOR_UTILS__ */

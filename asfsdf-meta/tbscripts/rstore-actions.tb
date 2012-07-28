@@ -1,0 +1,53 @@
+#ifndef __RSTORE_ACTIONS__
+#define __RSTORE_ACTIONS__
+
+#include <configuration-manager.idef>
+#include <fbi.tb>
+
+process HandleRStoreEvent(Type: term, Event: term, RStoreId: term) is
+let
+  Action: str
+in
+  snd-msg(cm-get-action(Type, Event))
+  . rec-msg(cm-action(Action?))
+  . Action(RStoreId)
+endlet
+
+process GetRStorePopupEvents(PopupMenu: list?) is
+let
+  Events: list 
+in
+  snd-msg(cm-get-events(factbrowser-popup))
+  . rec-msg(cm-events(PopupMenu?))
+endlet
+
+process HandleRStorePopup is
+let
+  RStoreId: term,
+  Menu: term,
+  PopupMenu: list,
+  Type: term
+in
+  (
+    FB-RequestPopup(RStoreId?)
+    . GetRStorePopupEvents(PopupMenu?)
+    . FB-ShowPopup(RStoreId, PopupMenu)
+  +
+    FB-PopupEvent(RStoreId?, Menu?)
+    . HandleRStoreEvent(factbrowser-popup, Menu, RStoreId)
+  )
+  *
+  delta
+endlet
+
+toolbus(HandleRStorePopup)
+
+process UnloadRStoreAction(RStoreId: term) is
+  snd-msg(rc-unload-rstore(RStoreId))
+  . rec-msg(rc-rstore-unloaded(RStoreId))
+  . snd-msg(fb-rstore-unloaded(RStoreId))
+
+process SaveRStoreAction(RStoreId: term) is
+  tau
+
+#endif /* __RSTORE_ACTIONS__ */

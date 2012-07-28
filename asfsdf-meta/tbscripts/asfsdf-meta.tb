@@ -1,0 +1,14 @@
+#ifndef __ASFSDF_META__
+#define __ASFSDF_META__
+
+#include <asf-language.tb>
+#include <asf-listeners.tb>
+#include <asf-actions.tb>
+#include <asf-utils.tb>
+#include <asf-editor-actions.tb>
+#include <asf-progress-listener.tb>
+#include <asf-editor-listeners.tb>
+#include <asf-gui-listeners.tb>
+#include <asf-transactions.tb>
+
+#endif /* __ASFSDF_META__ */

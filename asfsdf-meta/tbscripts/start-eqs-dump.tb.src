@@ -1,0 +1,50 @@
+/* #define TODO(m) printf("%s:%d - TODO: %s\n", __FILE__, __LINE__, m) */
+process TODO(Msg : str) is printf("TODO: %s\n", Msg)
+
+/* meta-kernel */
+#include <module-utils.tb>
+#include <error-utils.tb>
+#include <error-output.tb>
+#include <transaction-management.tb>
+#include <text-utils.tb>
+
+/* sdf-meta */
+#include <sdf-listeners.tb>
+#include <sdf-utils.tb>
+#include <parsetable-utils.tb>
+#include <sdf2-language.tb>
+#include <sdf-transactions.tb>
+
+/* asf-sdf-meta */
+#include <asf-language.tb>
+#include <asf-utils.tb>
+#include <asf-listeners.tb>
+#include <asf-initialize.tb>
+#include <asf-transactions.tb>
+
+process StartEqsDumper is
+let
+  MenuEventList: list,
+  ModuleId: module-id,
+  Event: attribute-changed-event,
+  Value: term
+in
+  snd-msg(tm-request-transaction(module-manager))
+  . OpenModule(MODULENAME, ModuleId?)
+  . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,parsed)
+  . MM-Subscribe-Attribute-Changed(ModuleId,<term>,"status",<term>,unavailable)
+  . MM-Subscribe-Attribute-Changed(<module-id>,<term>,"status",<term>,error)
+  . snd-msg(tm-end-transaction(module-manager))
+  . rec-note(mm-attribute-changed(Event?))
+  . ACE-GetNewValue(Event, Value?)
+  . 
+  if equal(Value, error) then
+    printf("Error occurred loading %t\n", MODULENAME)
+  else
+    printf("Dumping...\n").
+    DumpEquationsGivenFile(ModuleId, OUTPUTFILE)
+  fi
+  . shutdown("")
+endlet
+
+toolbus(StartEqsDumper)

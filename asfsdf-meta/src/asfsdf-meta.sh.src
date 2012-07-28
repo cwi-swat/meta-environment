@@ -1,0 +1,61 @@
+#! /bin/sh
+
+MODULENAME=""
+
+me=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+myarguments="hm:V"
+
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname [options]
+Options:
+    -V                   reveal program version (i.e. $myversion)
+    -m <modulename>      open module <modulename>
+    --viewer             run with the (experimental) viewer
+E_O_USAGE
+}
+
+Version() {
+    echo "$me v$myversion" >&2
+}
+
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+
+# Argument interpretation...
+STARTUP_CLASS="toolbus.Main"
+
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage ; exit 0 ;;
+        -m)
+	    shift;
+            MODULENAME=$1 ;;
+        --viewer)
+            STARTUP_CLASS="toolbus.viewer.Viewer" ;;
+        -V)
+            Version ; exit 0 ;;
+        --)
+           ;;
+    # Add additional command line options here...
+    *)
+            Files="$Files $1" ;;
+    esac
+    shift
+done
+
+export CLASSPATH="__EXTERNAL_JARS__:$CLASSPATH"
+
+exec java $STARTUP_CLASS \
+  -DMODULENAME=${MODULENAME} \
+  __TBSCRIPTS__ \
+  -S__PREFIX__/share/asfsdf-meta/start-meta-studio.tb \
+  `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/asfsdf-meta/standard.asfsdf.actions` \
+  $* | __CONSOLE_GRABBER__/bin/console-grabber

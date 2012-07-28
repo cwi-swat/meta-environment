@@ -1,0 +1,577 @@
+/* $Id$ */
+
+Mon Nov 10 11:46:56 CET 2008 <jurgenv@cwi.nl>
+ * Bumped to 2.0.3. 
+
+Thu Sep 11 10:03:18 CEST 2008 <jurgenv@cwi.nl>
+ * Bumped version to 2.0.2 after fixing long path name issues.
+
+Mon Aug 27 16:04:58 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/asf-listeners.tb: register ASF module when SDF module has been
+   identified. This prevents ASF modules from using the wrong modulename,
+   since the modulename is only valid after the SDF module has been identified.
+
+Thu Aug 23 11:24:19 CEST 2007 <{kooiker,lankamp,jurgenv}@cwi.nl>
+ * tbscripts/asf-action.tb: added menu option to kill of a running asfe.
+
+Wed Aug 22 11:21:29 CEST 2007 <jurgenv@cwi.nl>
+ * asfsdf-meta.pc.in: changed dependency of csv and table vis plugins
+   to vis-plugin-generic, because they have been merged
+
+Wed Jun  6 12:02:35 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-editor-listeners.tb:
+   - Strong typing of Area
+   - set selection in stead of focus shows errors correctly
+   - Add GoToEditorArea to let the cursor jump to the selection
+
+Wed May  9 08:45:28 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/asf-editor-listeners.tb: changed to new editing interface.
+
+Fri Mar 30 16:41:37 CEST 2007 <economop@cwi.nl>
+ * asfsdf-meta.pc.in,tbscripts/start-meta-studio.tb.src: removed dependency to 
+   swixml-gui.
+
+Fri Mar 30 14:33:11 CEST 2007 <economop@cwi.nl>
+ * tbscripts/start-meta-studio.tb.src: added forgotten import.
+
+Fri Mar 30 13:33:55 CEST 2007 <economop@cwi.nl>
+ * asfsdf-meta.pc.in: added forgotten dependency to swixml-gui package.
+
+Sun Mar 11 19:10:34 CET 2007 <jurgenv@cwi.nl>
+ * tbscripts/asf-actions.tb: added implementation of draw action, which
+   uses the svg-gui to draw anything that is reduced to an SVG xml file.
+
+Fri Feb 23 08:32:47 CET 2007 <jurgenv@cwi.nl>
+ * tbscripts/asf-actions.tb: added implementation of extract action, which
+   sends a note after every successfull or failed extraction of an RStore.
+ * ChangeLog: retrieved ChangeLog from history, which got accidentally 
+   removed somehow in a previous commit.
+
+Fri Jan 26 16:22:15 CET 2007 <{kooiker,jong,jurgenv}@cwi.nl>
+ * tbscripts/*: added dynamic generation of menu's for language
+   features.
+
+Thu Jan 25 11:29:23 CET 2007 <kooiker@cwi.nl>
+ * test:
+   - Added meta.actions and timeout.tb to terminate ToolBus scripts when
+   running for more than 60 seconds
+   - Added test for eqs-dump
+
+Mon Jan 22 16:19:12 CET 2007 <jurgenv@cwi.nl>
+ * asfsdf-meta.pc.in: added dependency on sdf-pretty
+
+Fri Jan  5 14:57:05 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/*.tb:
+   - Use transaction management for opening modules
+
+Sun Dec 10 20:39:53 CET 2006 <jurgenv@cwi.nl>
+ * tbscripts/asf-actions.tb,asf-pretty-printer.tb: added a new implementation
+   of the Pretty Print menu option for term windows. The script computes
+   a new module name from the module for the current term as follows.
+   Example: languages/aterm/syntax/ATerms becomes
+   languages/aterm/pretty/ATerms. This new module is used to reduce the
+   term (the convention is that this module contains a mapping to Box),
+   and the result is given to the pandora pretty printer.
+
+Wed Oct 18 22:24:46 CEST 2006 <jurgenv@cwi.nl>
+ * asfsdf-meta.pc.in: added dependency on config-manager
+ * src/asfsdf-meta.sh.src: added loading of user defined and
+   library-defined toolbus scripts before starting.
+
+Wed Oct  4 16:03:16 CEST 2006 <jurgenv@cwi.nl>
+ * asfsdf-meta.pc.in: removed dependency on asf-library
+
+Mon Sep 25 10:25:04 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * tbscripts/asf-utils.tb:
+   - Call Ambiguity Handler after parsing
+
+Fri Sep 22 13:48:51 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/standard.asf.actions.src:
+   - Add |View| -> |Full Tree w/o Layout| menu item showing a full tree
+   without all the layout paths (closes #634)
+
+Tue Aug 29 09:11:27 CEST 2006 <kooiker@cwi.nl>
+ * src/eqs-dump.sh.src:
+   - Added missing \ on line 78. Closes #635.
+
+Fri Jun  9 13:40:30 CEST 2006 <kooiker@cwi.nl>
+ * asf-listeners.tb:
+   - Add ASFModuleRegistrar listener that listens for SDF modules to be
+     available. Registers the ASF module path when the SDF module is known
+     (closes #614).
+ * asf-utils.tb:
+   - Split OpenASFModule into RegisterASFModule and OpenASFModule
+   - Clean up of unused variables
+
+Tue Apr 25 00:25:52 CEST 2006 <jurgenv@cwi.nl>
+ * Compute ambiguities of reduct.out, in case we filtered something we
+   would like to see the effect.
+ * Updated progress listeners to new interface
+
+Thu Apr 20 12:00:33 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/Makefile.am:
+   - Register plugin
+ * tbscripts/standard.asfsdfactions:
+   - Remove now redundant import of sdf actions
+
+Wed Apr 19 16:24:30 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/Makefile.am:
+    - install standard.asfsdf.actions in ${HOME}/.metaenv
+ * tbscripts/start-*.tb.src:
+    - Include generic initialize-plugins.tb
+
+Mon Apr 17 23:46:17 CEST 2006 <jurgenv@cwi.nl>
+ * tbscripts/asf-utils.tb: made Reduce action deal with rewriting
+   that produces errors but not a normal form. This may happen when
+   the interpreter runs out of the maximally allowed stack depth
+   during rewriting or matching for example.
+
+Mon Apr  3 10:45:58 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/asf-{utils,actions}.tb:
+   - Add jobcontrol messages when starting and ending a job
+
+Tue Mar 14 15:49:54 CET 2006 <kooiker@cwi.nl>
+ * {configure.in,package}: remove dependency on meta-doc
+
+Sat Mar  4 11:57:14 CET 2006 <jurgenv@cwi.nl>
+ * {configure.in,package}: added dependency on meta-doc
+
+
+Mon Feb 13 10:01:24 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/asf-editor-listeners.tb:
+   - Add listener to start ASF editor
+
+Thu Feb  9 11:48:41 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/*.tb:
+   - Extract ASF Progress Listener
+   - Use generic ParseTreeHandler
+   - Fixed eqs-dump
+
+Wed Feb  8 16:11:21 CET 2006 <kooiker@cwi.nl>
+ * src/pt-dump.sh.src,tbscripts/start-pt-dump.tb.src:
+   - Moved to sdf-meta
+
+Mon Feb  6 11:51:34 CET 2006 <jurgenv@cwi.nl>
+ * {package,configure.in}: Added dependency on ToolBus
+
+Sat Feb  4 13:31:51 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/{asf-utils,asf-actions}.tb:
+   - Move ActivateEditorWithTree to asf-actions since it is no part of the
+     Reduce functionality
+
+Fri Feb  3 13:13:46 CET 2006 <kooiker@cwi.nl>
+ * asf-initialize.tb, start-meta-studio.tb.src:
+   - Only initialize ASF when stand alone ASF+SDF environment is used
+
+Fri Feb  3 13:07:05 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/standard.asfsdf.actions.src:
+   - Import standard.sdf.action and additional ASF actions
+
+Wed Feb  1 16:34:39 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/asfsdf-meta.tb:
+   - Separate scripts that includes all needed asf scripts 
+
+Tue Jan 31 13:01:12 CET 2006 <kooiker@cwi.nl>
+ * src/start-*-editor:
+   - Removed
+
+Fri Jan 27 13:23:25 CET 2006 <kooiker@cwi.nl>
+ * moved meta-scripts to tbscripts
+ * tbscripts/asf-utils.tb:
+   - DebugReduceAction and ReduceAction both call Reduce with Debugging
+     paramater
+ 
+Tue Jan 10 08:47:15 CET 2006 <kooiker@cwi.nl>
+ * meta-scripts/{meta-interface.tb,standard.asfsdf.buttons}.src:
+   - Remove Open Library Module, Open Module is multirooted an can handle
+     library modules
+
+Wed Dec 21 13:31:11 CET 2005 <kooiker@cwi.nl>
+ * meta-scripts/{meta-interface.tb.src,asfsdfapigen.tb}:
+   - fixed asfsdfapigen scenario (still used modulename iso moduleid)
+
+Mon Dec 19 09:53:29 CET 2005 <kooiker@cwi.nl>
+ * meta-interface.tb.src:
+   - Changed error-tree into UNDEFINED
+
+Tue Dec 13 14:15:33 CET 2005 <kooiker@cwi.nl>
+ * standard.asfsdf.buttons.src:
+   - Remove Refactore menu
+   - Remove Cache menu
+   - Remove Tools->Clear Info and Log menu entry
+ * meta-interface.tb.src:
+   - Remove Preprocess-syntax process
+   - Remove number of hooks
+
+Mon Dec 12 13:43:52 CET 2005 <kooiker@cwi.nl>
+ * package:
+   - Bumped to version 2.0
+ * meta-scripts/meta-interface.tb.src:
+   - Remove get-parsetable hooks
+
+Fri Dec  9 10:53:06 CET 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - Remove check consistency hooks
+
+Mon Nov 14 14:26:15 CET 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - OpenLibrayModule gets relative filename
+
+Tue Oct  4 11:09:56 CEST 2005 <markvdb@cwi.nl>
+ * meta-scripts/meta-interface.tb.src
+   - reactivated the OpenModule proces.
+
+Thu Sep 22 16:41:34 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/graph-arbiter.tb
+   - Adds attributes to the module-manager GRAPH namespace on attribute
+     changes
+
+Mon Sep 19 12:45:42 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - Use term type for moduleId
+
+Wed Sep  7 13:38:11 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - Add set-module-syntax-text-hook for sdf 
+
+Mon Aug 22 14:24:48 CEST 2005 <kooiker@cwi.nl>
+   - Used Cancel flag in PromptForFile cals
+
+Mon Aug  8 10:42:45 CEST 2005 <jurgenv@cwi.nl>
+ * meta-scripts/meta-interface.tb: Added ASF specific ToolBus actions,
+   that came from the meta package (button-actions.tb) originally. 
+
+Tue Jun 14 10:30:27 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
+ * Merged the dynamic buttons branch with the trunk.
+
+Wed May 25 14:15:27 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/user-interface.tb.src:
+   - Add check on empty path in OpenLibraryModuleAction
+
+Tue May 24 15:41:05 CEST 2005 <markvdb@cwi.nl>
+ * Created a branch for experiment with button-actions based on
+   dynamic TB calls.
+
+Tue May  3 15:29:20 CEST 2005 <{markvdb,kooiker}@cwi.nl>
+ * meta-scripts/meta-interface.tb.src: reactivated the "asfsdf-checker".
+ * meta-scripts/error-display.tb: the errors and warnings are displayed
+   at the appropriate place in the gui.
+
+Thu Apr  7 11:44:32 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   - Use Java look and feel Graphics Repository
+ * bumped to version 1.7
+
+Wed Mar 23 15:23:57 CET 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - Removed unused variable ModuleName from run-tests message
+
+Tue Mar 22 10:37:53 CET 2005 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/Makefile.am
+ * meta-scripts/meta-interface.tb.src
+   - use the version in the "environment name" so meta environment
+   shows the actual version in the title
+
+Fri Feb 18 10:29:46 CET 2005 <jurgenv@cwi.nl>
+ * The ASF compiler is always given a parse table too, such that
+   the resulting binary can do full source-to-source rewriting.
+
+Wed Jan 26 13:34:34 CET 2005 <jurgenv@cwi.nl>
+ * Reactivated Removevarsyntax
+
+Mon Jan 10 18:05:30 CET 2005 <markvdb@cwi.nl>
+ * Added first version of action interpreter
+   Modified files:
+   - meta-scripts/standard.asfsdf.buttons.src
+
+Wed Jan 26 11:13:10 CET 2005 <jurgenv@cwi.nl>
+ * Added button to term editors: Edit Term. For opening a new term on
+   the same module.
+ * Disabled RemoveVarSyntax until it gets fixed.
+ * Disabled SDF checker until it gets fixed.
+
+Wed Dec  1 09:54:14 CET 2004 <{kooiker,jurgenv}@cwi.nl>
+ * Bumped to 1.6
+ * Removed integration tests because they need an installed environment
+   to run them.
+
+Tue Nov 30 14:41:57 CET 2004 <kooiker@cwi.nl>
+ * test/Makefile.am:
+   - Reenabled generated tests by removing exit 1 in shellscript generator 
+ * meta-scripts/meta-interface.tb.src:
+   - get-asf-equations-text-hook returns empty string on ts-no-value
+
+Mon Nov 29 13:58:32 CET 2004 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   - fixed debug-reduce reducing twice 
+
+Fri Nov 19 17:46:06 CET 2004 <jurgenv@cwi.nl>
+ * Added debug menu to button definitions
+
+Wed Sep  1 14:29:35 CEST 2004 <fagidiot@daimi.au.dk>
+ * meta-scripts/meta-interface.tb.src:
+   - process Meta-Interface, added
+      extra-mod-path-hook,
+      get-asf-equations-text-hook,
+      get-modulenames-for-consistency-checking-hook,
+      get-open-syntax-parse-handler-hook,
+      get-parse-equation-checking-hook,
+      termstore-consistency-check-hook.
+   - process Additional-Interface, added
+      do-consistency-check-hook.
+ * See ASDF/hooks for motivations.
+	
+Mon Aug  2 14:32:37 CEST 2004 <{jurgenv,kooiker}@cwi.nl>
+ * meta-scripts/error-display.tb:
+   - Added message for clearing rewrite errors
+   - Fixed displaying of errors in ui
+ * meta-scripts/meta-interface.tb.src:
+   - Fixed displaying of errors in ui
+   - Call clear-rewrite-errors after succesful rewrite 
+
+Fri Jul  9 14:31:48 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * removed 97 unused variables as reported by our relation calculus script
+
+Wed Jun 30 10:25:20 CEST 2004 <M336@cwi.nl>
+ * test/Makefile.am: disable tests because they need this package to be
+   installed before they can test.
+
+Tue Jun 22 10:03:53 CEST 2004 <kooiker@cwi.nl>
+ * test/Demo.sdf: change path to Pico-eval and Pico-typecheck
+
+Tue Jun 15 15:01:39 CEST 2004 <kooiker@cwi.nl>
+ * meta-script/standard.meta.buttons.src: add Parse Term to term-editor 
+
+Thu Jun 10 15:29:36 CEST 2004 <jurgenv@cwi.nl>
+ * Removed demo/pico (now located in asf-library package)
+
+Mon May 17 10:41:02 CEST 2004 <kooiker@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+ - Changed menus to 1.5 style 
+
+Tue May 11 17:34:05 CEST 2004 <jurgenv@cwi.nl>
+ * Changed dependency on asf from 1.8 to 1.9
+ * After release and first change: bumped to 1.5.1
+
+Tue May  4 12:44:58 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * fix Upgrade Sdf scenario: now invoke parse-action first to make
+   sure syntax is parsed
+
+Mon May  3 16:12:49 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * rewrite "Upgrade Sdf" to use "execute-action" (iso activate-given-tree
+   plus writing to a fixed, named file "intermediate.txt")
+
+Tue Apr 20 16:29:59 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * fix split-file-name arguments
+
+Mon Apr 19 17:34:23 CEST 2004 <jurgenv@cwi.nl>
+ * Compile hook takes an extra argument for the target file name
+
+Mon Apr 19 11:45:32 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   upgrade "Show Origin" to properly deal with situations without origins
+
+Fri Apr 16 13:45:18 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   call get-focus-origin
+
+Thu Apr 15 14:54:36 CEST 2004 <jong@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - use GetSpecification, GetSpecification{Equations,Test}
+
+Mon Mar 29 16:17:14 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   - close editor based on its ID, not on a "reduct.out" heuristic
+
+Wed Mar 24 14:05:33 CET 2004 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   - simplified move-{up,down,left,right} actions
+
+Wed Mar 17 17:22:06 CET 2004 <markvdb@cwi.nl>
+ * Moved sdf specific buttons to the asfsdf-meta package.
+
+Wed Mar 17 CET 2004 <iversen@cwi.nl>
+
+ * Added obtain-parse-table-hook in new process in 
+   meta-interface.tb.src
+
+Tue Mar 16  CET 2004 <iversen@cwi.nl>
+
+ * Added and modified several hooks to facilitate implementation of 
+   Action Environment. The hooks are pre-get-all-syntax-hook, 
+   add-initial-syntax-modules-hook, clear-module-db-hook, 
+   other-top-sort-hook.
+	
+Thu Mar 11 16:17:53 CET 2004 <markvdb@cwi.nl>
+ * Fixed a number of bugs reported by various users:
+   - Unnecessary messages suppressed.
+   - Upgrading of equations always parses before upgrading
+   - Reducing an erroneous term not longer generates a vague message.
+   - Improved some issues wrt the term-store.
+
+2004/02/16 (markvdb@cwi.nl)
+ * The asfsdfchecker is now only called in case a parsetable
+   has to be generated for parsing terms and equations in
+   editors. When dumping equations, the parsetable is only
+   generated for the top module.
+
+Fri Feb 13 11:10:17 CET 2004 <jurgenv@cwi.nl>
+ * Added new button to module popup: Generate ASF+SDF API. This functionality
+   takes a module, and generates a module on top of it that implements
+   getters, setters, 'is' predicates and 'make' functions for all productions
+   defined locally in the source module. The generation is based on 
+   the cons attributes and the labels that are found the productions.
+
+Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
+ * fix Makefile.am to get "distcheck" working
+
+2004/229/01 (markvdb@cwi.nl)
+ * Error report by AsfSdfChecker are now display in the new error
+  regime.
+
+Mon Jan 26 12:59:00 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * asfsdf-meta.pkg:
+   upgrade dependency on meta to 1.2
+
+2003/12/15 (markvdb@cwi.nl)
+ * Added a "SdfUpgrade" button to the syntax editors.
+
+2003/11/09 (jurgenv@cwi.nl)
+ * Top sort of ASF module changed from ASF-Equations to ASF-Module
+ * Version bumped to 1.5
+
+2003/11/06 (jurgenv@cwi.nl)
+ * Removed addapisyntax functionality
+
+2003/10/15 (jurgenv@cwi.nl)
+ * Added functionality for running ASF tests in the Meta-Environment
+
+2003/10/07 (jurgenv@cwi.nl)
+ * Format button renamed to Pretty Print
+ * Added new menu entries in syntax and equation editors: Edit Term
+
+2003/10/03 (markvdb@cwi.nl)
+ * Switch of the AddApiSyntax functionality.
+
+2003/10/02 (markvdb@cwi.nl)
+ * Added ASF to Equations topsort.
+
+2003/09/25 (jurgenv@cwi.nl)
+ * Added Format menu option to term editor that pops up a new
+   editor with the same term formatted by ptpretty
+
+2003/09/25 (markvdb@cwi.nl)
+ * Added "Edit Equations" to syntax editor and
+   added "Edit Syntax" to equation editor.
+ * Fixed the "hanging" when reducing in the reduct.out editor.
+
+2003/09/16 (jurgenv@cwi.nl)
+ * Added dump sdf definition in the export menu
+
+2003/09/16 (jurgenv@cwi.nl)
+ * Changed location of ASF+SDF library, added dependency on new
+   asf-library package.
+
+Thu Jul 31 13:08:04 CEST 2003 <jong@cwi.nl>
+ * version bumped to 1.4.1
+ * now depending on meta 1.1
+ * meta-scripts/Makefile.am:
+   - add 'g' to substitution of META variable
+
+2003/07/24 (markvdb@cwi.nl)
+ * Introduced the notions of "warning(f)" and "message(f)" which
+   have a different appearance in the error message display of the
+   UI.
+2003/07/22 (markvdb@cwi.nl)
+ * Improved the Pico-compilation specification.
+
+2003/07/21 (markvdb@cwi.nl)
+ * Added new terms and add a button to "compile" Pico programs.
+
+2003/07/15 (markvdb@cwi.nl)
+ * Button/action registration changed.
+ * Number of buttons/actions moved to ASF+SDF package.
+
+Fri Jul 11 2003 <j.iversen@daimi.au.dk>
+ * Added Type parameter to pre-get-all-sdf2-hook
+
+Fri Jul 11 10:38:38 CEST 2003 <jong@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - removed debug print
+
+2003/07/02 (markvdb@cs.vu.nl)
+ * Added a hook to obtain the parsetable extension.
+ * The type (trm/eqs) is now made explicit.
+ 
+2003/07/02 (jurgenv@cwi.nl)
+ * Release 1.4
+
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
+2003/06/26 (iversen@cwi.nl)
+ * Introduced pre-get-all-sdf2-hook.
+
+2003/06/16 (iversen@cwi.nl)
+ * Introduced file extension to type hook.
+
+2003/06/13 ({iversen, markvdb}@cwi.nl
+ * Introduced fine-grain file extension hooks.
+
+2003/05/30 (jurgenv@cwi.nl)
+ * Enabled the dump tests again
+ 
+2003/05/27 (jurgenv@cwi.nl)
+ * The names of toplevel standalone toolbus scripts in the meta-package
+   have changed, so they had to be changed here to in the src directory
+
+2003/05/26 (jurgenv@cwi.nl)
+ * Adapted postprocess-collected-semantics-hook to receive a <str> name
+   instead of a <term>.
+ * Removed dead code for module renaming
+
+2003/05/08 (markvdb@cwi.nl)
+ * The error messages generated by the checkers are display in the
+   error window.
+
+2003/04/03 (markvdb@cwi.nl)
+ * Moved new-pico to pico and pico to old-pico.
+ * The version based on libraries is now the official Pico language.
+
+2003/03/13 (vandenbr@loria.fr)
+ * Introduced scripts for the various standalone editors.
+
+2003/02/13 (jurgenv@cwi.nl)
+ * Added ModuleName to postprocess-collected-semantics-hook
+ * Added catching of events from the rewriter. They are just printed
+   to stdout for now.
+
+2003/02/12 (markvdb@cs.vu.nl)
+ * Added support to deal with the ambiguity error messages
+   generated by the asfchecker.
+
+2003/01/29 (markvdb@cs.vu.nl)
+ * Bumped into 1.4beta
+ * Installation of new pico in the directory new-pico.
+ * Removed Types.asf.
+
+2003/01/22 (jurgenv@cwi.nl)
+ * Release 1.3
+ * LGPL license
+
+2002/11/07 (vandenbr@loria.fr)
+ * Restructured the ToolBus script for hooks by introducing process
+   which run in parallel.
+
+2002/10/13 (vinju@loria.fr)
+ * This package uses the meta package and the asf package to construct
+   an ASF+SDF Meta-Environment. It contains some ToolBus scripts that
+   communicate with the rest of the Meta-Environment and some shell scripts
+   to start everything up.
+ * Version is 1.3beta
+ * Moved the demo directory to this location.
+ * Added integration tests (there is a problem with termination in case
+   of a ToolBus deadlock here that needs to be solved)

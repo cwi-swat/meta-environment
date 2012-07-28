@@ -1,0 +1,20 @@
+#ifndef __ASF_EDITOR_LISTENERS__
+#define __ASF_EDITOR_LISTENERS__
+
+#include <asf-namespace.h>
+
+process StartASFEditor(Path: str, Area: area) is
+let
+  ModuleId: module-id,
+  Pid: int,
+  Sid: session-id
+in
+  MM-GetModuleIdByAttribute(ASF_NAMESPACE, "path", path(Path), ModuleId?)
+  . create(EditEquations(ModuleId), Pid?)
+  . TODO("And what if it didn't start? See term-editor-utils.tb")
+  . rec-msg(equations-editor-started(ModuleId, Sid?))
+  . snd-msg(te-set-selection(Sid, Area))
+  . GoToEditorArea(Sid, Area)
+endlet
+
+#endif /* __ASF_EDITOR_LISTENERS__ */

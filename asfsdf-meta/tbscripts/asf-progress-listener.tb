@@ -1,0 +1,22 @@
+#ifndef __ASF_PROGRESS_LISTENER__
+#define __ASF_PROGRESS_LISTENER__
+
+process ASFStatusToProgress is
+let
+  Event: attribute-changed-event,
+  ModuleId: module-id,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<module-id>,ASF_NAMESPACE,"status",<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Value?)
+    . snd-msg(pro-set-status(ModuleId, ASF_NAMESPACE, Value))
+  ) * delta
+endlet
+
+toolbus(ASFStatusToProgress)
+
+#endif /* __ASF_PROGRESS_LISTENER__ */

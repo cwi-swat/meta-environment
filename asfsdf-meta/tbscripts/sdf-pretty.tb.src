@@ -1,0 +1,52 @@
+#ifndef SDF_PRETTY
+#define SDF_PRETTY
+#include <undefined.h>
+
+process GetSdfToBoxEqs(Eqs : term?) is
+let
+  Error: term
+in
+  snd-msg(io-read-and-pack-term("__SDF2_PRETTY__"))
+  . 
+  (
+    rec-msg(io-packed-term(Eqs?))
+  +
+    rec-msg(io-error-reading(Error?))
+    . Eqs := UNDEFINED
+  )
+endlet
+
+process ReduceSdfToBox(In : term, Out : term?) is
+let
+  Eqs : term,
+  Errors : list
+in
+  Out := UNDEFINED
+  . Eqs := UNDEFINED
+  . GetSdfToBoxEqs(Eqs?)
+  . 
+  if not-equal(Eqs, UNDEFINED) then
+    snd-msg(asfe-rewrite("languages/sdf2/pretty/Sdf2", Eqs, UNDEFINED, In, off))
+    .
+    (
+      rec-msg(asfe-rewrite-result(Out?))
+    +
+      rec-msg(asfe-rewrite-result-with-errors(Out?, Errors?))
+    +
+      rec-msg(asfe-rewrite-errors(Errors?))
+    )
+  else
+    tau
+  fi
+ 
+endlet
+
+process PrettyPrintSdf(Path : str, In : term , Out :term?) is
+let
+  Box : term
+in
+  ReduceSdfToBox(In, Box?) 
+  . PrettyPrint(Path, Box, Out?) 
+endlet
+
+#endif

@@ -1,0 +1,69 @@
+/* #define TODO(m) printf("%s:%d - TODO: %s\n", __FILE__, __LINE__, m) */
+process TODO(Msg : str) is printf("TODO: %s\n", Msg)
+
+/* meta-kernel */
+#include <meta.tb>
+#include <meta-namespace.h>
+
+/* sdf-meta */
+#include <sdf-meta.tb>
+
+/* asf-sdf-meta */
+#include <asfsdf-meta.tb>
+#include <asf-initialize.tb>
+
+/* visualizations */
+#include <start-vis.tb> 
+#include <vis-plugin-generic.tb>
+#include <vis-plugin-charts.tb>
+#include <vis-plugin-graph.tb>
+#include <rstore-actions.tb>
+/* #include <vis-plugin-treemap.tb> */
+
+/**
+ * This process is used to configure which plugins to load
+ * The vis-plugins are loaded by their starter function
+ * and initiated, afterward they connect back to the VPCP(rec-connect)
+ * and represent themselves.
+ *
+ * @name Visualization Plugin Connection Process Starter
+ * @author Arjen van Schie
+ */
+process StartVisPlugin is
+   StartVisGenericPlugins()
+ . StartVisPluginCharts()
+ . StartVisPluginGraph()
+/* . StartVisTreeMapPlugins() */
+
+toolbus(StartVisPlugin)
+
+process InitializeASFSDFMetaEnvironment is
+let
+  Event: attribute-changed-event,
+  MenuEventList: list,
+  ModuleId: module-id
+in
+  snd-msg(set-title("ASF+SDF Meta-Environment"))
+  . snd-msg(cm-get-events(studio-menubar))
+  . rec-msg(cm-events(MenuEventList?))
+  . snd-msg(gui-add-menu-events(MenuEventList))
+  . StartConsole()
+  . StartNavigator()
+  . StartDialogTool()
+  . StartGraphPanel()
+  . StartProgressPanel()
+  . StartModuledetailsPanel()
+  . StartSVG()
+  .
+  if not-equal(MODULENAME, "") then
+    snd-msg(tm-request-transaction(module-manager))
+    . OpenModule(MODULENAME, ModuleId?)
+    . MM-Subscribe-Attribute-Changed(ModuleId,META_NAMESPACE,"idle",<term>,yes)
+    . rec-note(mm-attribute-changed(Event?))
+    . snd-msg(tm-end-transaction(module-manager))
+  else
+    tau
+  fi 
+endlet
+
+toolbus(InitializeASFSDFMetaEnvironment)

@@ -1,0 +1,144 @@
+#ifndef __ASF_LISTENERS__
+#define __ASF_LISTENERS__
+
+#include <asf-namespace.h>
+#include <asf-utils.tb>
+
+process ASFModuleRegistrar is
+let
+  Event: attribute-changed-event,
+  ModuleId: module-id,
+  NewPath: term,
+  Idle: term
+in
+  Idle := no
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,identified) 
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . RegisterASFModule(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(ASFModuleRegistrar)
+
+process ASFModuleOpener is
+let
+  Event: attribute-changed-event,
+  ModuleId: module-id,
+  NewPath: term,
+  Idle: term
+in
+  Idle := no
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,complete) 
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . OpenASFModule(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(ASFModuleOpener)
+
+process ASFSDFSyntaxChecker is
+let
+  Event: attribute-changed-event,
+  ModuleId: module-id,
+  Tree: term,
+  Result: term,
+  Parents: list
+in
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,complete)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-GetModuleParents(ModuleId, Parents?)
+    . /* we only check top modules */
+    if equal(Parents, []) then
+      CheckASFSDFSyntax(ModuleId)
+    else
+      tau
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(ASFSDFSyntaxChecker)
+
+process ASFModuleChecker is
+let
+  Event: attribute-changed-event,
+  ModuleId: module-id,
+  NewPath: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<module-id>,ASF_NAMESPACE,"status",available,parsed)  
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . CheckASFModule(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(ASFModuleChecker)
+
+process ASFModuleShapeChanger is
+let
+  Event: attribute-changed-event,
+  ModuleId: module-id,
+  NewPath: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<module-id>,ASF_NAMESPACE,"status",<term>,available)  
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-SetModuleGraphAttribute(ModuleId, "shape", shape(ellipse))
+  )
+  *
+  delta
+endlet
+
+toolbus(ASFModuleShapeChanger)
+
+process ASFModuleParser is
+let
+  Event: attribute-changed-event,
+  ModuleId: module-id,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<module-id>,ASF_NAMESPACE,"status",<term>,available)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . GetASFParseTree(ModuleId, Tree?)
+    .
+    if not-equal(Tree, UNDEFINED) then
+       MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", parsed)
+    else
+       MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", error)
+    fi
+    . Tree := UNDEFINED
+  )
+  *
+  delta
+endlet
+
+/* TODO: add syntax checker */
+
+toolbus(ASFModuleParser)
+
+#endif /* __ASF_LISTENERS__ */
