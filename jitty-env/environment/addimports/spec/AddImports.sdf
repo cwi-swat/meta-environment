@@ -1,0 +1,32 @@
+module AddImports
+
+imports
+
+sdf2/syntax/Sdf2-Syntax
+
+exports
+
+context-free syntax
+
+add-imports(ModuleName, SDF) -> SDF
+ai(SDF,ModuleName,ImpSection*) -> SDF {traversal(trafo,top-down,break)}
+ai(Module,ModuleName,ImpSection*)     -> Module     {traversal(trafo,top-down,break)}
+
+
+hiddens
+
+context-free syntax
+
+get-imports(SDF, ImpSection*) -> ImpSection* {traversal(accu,top-down,continue)}
+get-imports(Symbol,ImpSection*)      -> ImpSection* {traversal(accu,top-down,continue)}
+get-imports(Production,ImpSection*)  -> ImpSection* {traversal(accu,top-down,continue)}
+
+variables
+
+"ModuleName" -> ModuleName
+"Module*" -> Module*
+"SDF" -> SDF
+"ImpSection*"[0-9]* -> ImpSection*
+"Symbol" -> Symbol
+"Sort"   -> Sort
+"Sections" -> Sections

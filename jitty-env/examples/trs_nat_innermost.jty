@@ -1,0 +1,43 @@
+signature
+
+  S(1)
+  O(0)
+  plus(2)
+  minus(2)
+  div(2)
+  lt(2)
+
+  T(0)
+  F(0)
+  if(3)
+
+rules
+
+  p1([x],plus(O,x),x)
+  p2([x,y],plus(S(y),x),S(plus(y,x)))
+
+  lt1([x],lt(x,O),F)
+  lt2([x],lt(O,S(x)),T)
+  lt3([x,y],lt(S(x),S(y)),lt(x,y))
+
+  if1([x,y],if(T,x,y),x)
+  if2([x,y],if(F,x,y),y)
+  if3([x,y],if(x,y,y),y)
+
+  m1([x],minus(x,O),x)
+  m2([x],minus(O,x),O)
+  m3([x,y],minus(S(x),S(y)),minus(x,y))
+
+  d1([x,y],div(x,y),if(lt(x,y),O,S(div(minus(x,y),y))))
+
+default innermost
+
+strategies
+
+end
+
+  rewrite( plus(S(O),S(O)) )
+  rewrite( minus(S(O),S(O)) )
+  rewrite( div(S(S(S(S(S(O))))),S(S(O))) )
+
+stop

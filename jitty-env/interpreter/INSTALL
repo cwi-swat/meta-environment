@@ -1,0 +1,13 @@
+1. Install the ATerm library from http://www.cwi.nl/projects/MetaEnv/aterm/
+
+2. Get JITty from http://www.cwi.nl/~vdpol/jitty/jitty.tar.gz
+
+3. Type 'tar -xvzf jitty.tar.gz'
+
+4. Type 'cd jitty'
+
+5. Edit the Makefile, updating the location ATERMINCLUDE and ATERMLIB
+
+6. Type 'make' (or 'gmake')
+
+7. try the demonstrator with 'demo < examples/trs_bool'

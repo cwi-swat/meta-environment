@@ -1,0 +1,33 @@
+signature
+  T(0)
+  F(0)
+  and(2)
+  or(2)
+  loop(0)
+
+rules
+  a1([x], and(x,T), x)
+  a2([x], and(x,F), F)
+  o1([x], or(T,x),  T)
+  o2([x], or(F,x),  x)
+  l( [],  loop,  loop)
+
+default justintime
+
+strategies
+
+  and([2,a1,a2,1])
+
+end
+  rewrite( and(loop,F) )
+  rewrite( or(T,loop) )
+  rewrite( or(and(loop,F),or(T,loop)) )
+ 
+  assign(x,T)
+  enter
+  assign(x,F)
+  rewrite(x)
+  leave
+  rewrite(x)
+
+stop

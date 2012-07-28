@@ -1,0 +1,25 @@
+signature
+
+  O(0)
+  S(1)
+  nth(2)
+  cons(2)
+  nil(0)
+  from(1)
+
+rules
+
+  n1([x,y],nth(O,cons(x,y)),x)
+  n2([m,x,y],nth(S(m),cons(x,y)),nth(m,y))
+
+  f1([x],from(x),cons(x,from(S(x))))
+
+default justintime
+
+strategies
+
+  cons([1])
+
+end
+
+stop

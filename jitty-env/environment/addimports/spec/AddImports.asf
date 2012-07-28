@@ -1,0 +1,55 @@
+equations
+
+[] get-imports(SDF,) = ImpSection*,
+   ai(SDF,ModuleName,ImpSection*) = definition Module*
+   ===>
+   add-imports(ModuleName,SDF) = definition Module*
+module syntax/Jitty[Term]
+
+imports syntax/Whitespace
+
+exports
+
+sorts Module
+
+lexical syntax
+ [A-Z][a-z\-]* -> ModuleName
+ "$" [A-Za-z][a-z0-9\-]*   -> Variable
+ [a-zA-Z][a-z0-9\-]* -> Name
+ [0-9]+        -> Int
+
+context-free syntax
+
+"rules" rules:Rule*     
+"default" default:DefaultStrategy
+"strategies" strategies:Strategy* -> Module {cons("module")}
+
+"justintime" -> DefaultStrategy {cons("justintime")}
+"leftmostinnermost" -> DefaultStrategy {cons("leftmostinnermost")}
+
+"[" name:Name "-" vars : {Variable ","}* "]" lhs:Term "->" rhs:Term -> Rule {cons("rule")}
+
+
+func:Name "(" "[" {Choice ","}* "]" ")" -> Strategy {cons("strategy")}
+
+context-free syntax
+ Int -> Choice      
+ Name -> Choice     
+
+context-free syntax
+ 
+Variable -> Term {prefer}
+ 
+module syntax/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n]	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+
+[] ai(module ModuleName ImpSection* Sections,ModuleName,ImpSection*2) =
+   module ModuleName ImpSection* ImpSection*2 Sections
+
+[] get-imports(Sort,ImpSection*) = ImpSection* imports syntax/Jitty[Sort]
+    

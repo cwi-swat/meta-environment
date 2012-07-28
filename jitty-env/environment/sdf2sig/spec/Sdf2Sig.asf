@@ -1,0 +1,13 @@
+equations
+
+[] sdf2sig(SDF) = ATermList
+    when s2s(SDF,[]) = ATermList
+
+[] s2s(Symbol* -> Symbol { Attr*1, cons(AFun), Attr*2 }, [ATerm*]) = 
+    [AFun(natcon(char*)), ATerm*] when arity(Symbol*) = natcon(char*)
+
+[] arity(Literal Symbol*) = arity (Symbol*)
+[] arity() = 0
+[default] arity(Symbol Symbol*) = 1 + arity(Symbol*)
+
+

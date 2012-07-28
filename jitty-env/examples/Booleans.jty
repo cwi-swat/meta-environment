@@ -1,0 +1,10 @@
+rules
+
+[a1 - $X] $X & true  -> $X
+[a2 - $X] $X & false -> false
+
+default justintime
+
+strategies
+
+and([2,a1,a2,1])

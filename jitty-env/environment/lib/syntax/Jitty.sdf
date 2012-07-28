@@ -1,0 +1,35 @@
+module syntax/Jitty[Term]
+
+imports syntax/Whitespace
+
+exports
+
+sorts Module
+
+lexical syntax
+ [A-Z][a-z\-]* -> ModuleName
+ "$" [A-Za-z][a-z0-9\-]*   -> Variable
+ [a-zA-Z][a-z0-9\-]* -> Name
+ [0-9]+        -> Int
+
+context-free syntax
+
+"rules" rules:Rule*
+"default" strategy:DefaultStrategy
+"strategies" strategies:Strategy* -> Module {cons("module")}
+
+"justintime" -> DefaultStrategy {cons("justintime")}
+"leftmostinnermost" -> DefaultStrategy {cons("leftmostinnermost")}
+
+"[" name:Name "-" vars : {Variable ","}* "]" lhs:Term "->" rhs:Term -> Rule {cons("rule")}
+
+
+func:Name "(" "[" {Choice ","}* "]" ")" -> Strategy {cons("strategy")}
+
+context-free syntax
+ Int -> Choice {cons("position")}
+ Name -> Choice {cons("rule")}
+
+context-free syntax
+
+Variable -> Term {prefer}

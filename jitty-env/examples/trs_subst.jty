@@ -1,0 +1,54 @@
+signature
+
+  S(1)
+  O(0)
+  plus(2)
+  minus(2)
+  div(2)
+  lt(2)
+
+  T(0)
+  F(0)
+  if(3)
+
+rules
+
+  p1([x],plus(O,x),x)
+  p2([x,y],plus(S(y),x),S(plus(y,x)))
+
+default innermost
+
+strategies
+
+end
+
+  rewrite(plus(x,x))
+
+  assign(x,S(O))
+  rewrite(plus(x,x))
+
+  assign(x,S(S(O)))
+  rewrite(plus(x,x))
+
+  enter
+  rewrite(plus(x,x))
+
+  assign(x,O)
+  rewrite(plus(x,x))
+
+  clear
+  rewrite(plus(x,x))
+
+  assign(y,S(S(S(S(O)))))
+  rewrite(plus(y,x))
+
+  assign(x,O)
+  rewrite(plus(x,x))
+
+  leave
+  rewrite(plus(x,x))
+  rewrite(plus(y,y))
+
+  leave  
+
+stop
