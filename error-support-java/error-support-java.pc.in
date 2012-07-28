@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=bruntink@cwi.nl
+
+Name: error-support-java
+Version: 1.0
+Description:
+Requires: aterm-java
+JarFile=error-support-java.jar 
+Jars=${prefix}/share/${JarFile}
+Packages=errorapi,errorapi.types,errorapi.types.area,errorapi.types.error,errorapi.types.location,errorapi.types.natcon,errorapi.types.slice,errorapi.types.strchar,errorapi.types.strcon,errorapi.types.subject,errorapi.types.summary,locationapi,locationapi.types,locationapi.types.area,locationapi.types.location,locationapi.types.natcon,locationapi.types.slice,locationapi.types.strchar,locationapi.types.strcon
+MainClass=
+TestClass=
