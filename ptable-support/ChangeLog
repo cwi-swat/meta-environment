@@ -1,0 +1,73 @@
+$Id$
+
+Mon Jun  9 13:21:54 CEST 2008 <jurgenv@cwi.nl>
+ * pt-support.pc.in: Bumped version to 1.1
+
+Thu Mar 15 15:14:23 CET 2007 <{economop,kooiker}@cwi.nl>
+ * lib/*: regenerated api fixing macro bug
+
+Fri Mar  2 10:34:21 CET 2007 <economop@cwi.nl>
+ * lib/ptable.{h,c}: regenerated api to use the optimisation macros.
+
+Tue Feb 20 08:34:29 CET 2007 <economop@cwi.nl>
+ * lib/ptable.c: regenerated code using optimized apigen.
+
+Thu Sep 14 19:37:27 CEST 2006 <economop@cwi.nl>
+ * lib/Makefile.am: corrected errors.
+
+Thu Sep 14 16:59:50 CEST 2006 <economop@cwi.nl>
+ * reconf: modified to use new build env.
+ * package: removed file.
+ * *.m4: removed files.
+
+Thu Sep 14 16:32:40 CEST 2006 <economop@cwi.nl>
+ * Incorporated new build environment.
+
+Thu Jun 22 17:54:47 CEST 2006 <economop@cwi.nl>
+ * Corrected the function declaration in ptable-utils.
+ * Included header in |ptable-utils.c|.
+
+Mon Mar 27 16:52:42 CEST 2006 <economop@cwi.nl>
+ * Changed the definition of follow restrictions and lookahead reduces.
+
+Fri Feb 17 16:18:48 CET 2006 <economop@cwi.nl>
+ * Changed the names of the functions in the API without changing the
+   structure of the parse table. Intermediate commit before complete
+   restructuring.
+
+Thu Feb  9 15:27:26 CET 2006 <economop@cwi.nl>
+ * in process of changing parsetable representation
+
+Mon Jan 23 16:40:40 CET 2006 <jurgenv@cwi.nl>
+ * {configure.in,package,init-package.m4}: added standard package files
+   that were missing.
+
+2005-07-05 ({economop,jurgenv}@cwi.nl)
+ * Reincarnating this package for use in the sglr package
+ * Changed configure.in/package/Makefile.am's to fit the current
+   package standards.
+ * Changed the libraries prefix to PTBL_, and regenerated the code.
+ * Removed the manual implementations of getLength functions, because 
+   they are generated now.
+ * Added ptable-support-config.sh.src
+	
+2003-07-04 (jurgenv@cwi.nl)
+ * Added package definition file
+ * Fixed configure.in error
+
+2003-01-22 ({markvdb,jurgenv}@cwi.nl)
+ * LGPL license
+ * SGLR is not any more based on this library due to a 10% efficiency loss.
+
+2002-07-08 (vandenbr@loria.fr)
+ * SGLR is now fully based on this library.
+
+2002-06-28 (vandenbr@loria.fr)
+ * non-assoc added.
+ * lookahead-reduce added.
+
+2002/04/09 (jurgenv@cwi.nl)
+ * Set version of package to 4.0 according to current version of parse tables.
+ * Initial version of ptable support library. This library is to be used
+   in sglr, parsetablegen, the dump tools and restorebrackets.
+

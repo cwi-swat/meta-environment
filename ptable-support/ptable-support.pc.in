@@ -1,0 +1,10 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,economop@cwi.nl
+Name: ptable-support
+Version: 1.2
+Description:
+Requires: aterm,pt-support
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lptable 
+#uninstalled Libs: -L@abs_top_builddir@/lib -lptable
+#uninstalled Cflags: -I@abs_top_builddir@/lib
