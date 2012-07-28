@@ -1,0 +1,524 @@
+
+Mon Sep 15 16:54:32 CEST 2008 <jurgenv@cwi.nl>
+ * lib/builtin-io.c: added proper resetting of SGLR's error cache.
+
+Mon Jun  9 13:27:34 CEST 2008 <jurgenv@cwi.nl>
+ * asc-support.pc.in: Bumped to version 2.5
+
+Wed May  7 13:08:29 2008    <bruntink@cwi.nl>
+
+	* asc-support.pc.in: Changed dependency on relation-stores to rstore-support.
+
+Wed Apr 16 11:10:31 CEST 2008 <jurgenv@cwi.nl>
+ * lib/Library.*: regenerated with new apigen to fix problems
+   with type punned aliasing.
+
+Thu Mar 27 10:23:31 EDT 2008 <jurgenv@cwi.nl>
+ * lib/asc-traversals.c,lib/builtin-tide.c: little changes due to
+   API change in pt-support
+
+Sat Dec  1 02:39:41 EST 2007 <jurgenv@cwi.nl>
+ * lib/builtin-io.c: added two new builtins for parsing and adding
+   position information in one go. Also, the parse errors of files
+   now get the correct file name stored in their description.
+
+Thu Nov 29 09:16:04 EST 2007 <jurgenv@cwi.nl>
+ * lib/builtin-io.c: fixed another initialization bug. loadParseTable
+   did not need SGLR to be initialized before, now it does because 
+   the options data structure needs to have been initialized.
+
+Mon Aug 20 17:31:00 CEST 2007 <jurgenv@cwi.nl>
+ * lib/builtin-io.c: fixed bug #777, parse_bytes did not initialize SGLR
+   correctly.
+
+Wed Aug 15 11:01:53 CEST 2007 <kooiker@cwi.nl>
+ * lib/asc-client.c: add lifting of RStores when sending RStore to tool
+
+Tue Aug 14 14:08:13 CEST 2007 <kooiker@cwi.nl>
+ * asc-support.pc.in: add depencency on relation-stores
+ * lib/asc-client.c: lower RStore when receiving RStore from tool
+
+Wed May 30 10:31:30 CEST 2007 <jurgenv@cwi.nl>
+ * lib/asc-support.c: prepared with small modifications for rewriting
+   with layout.
+
+Thu Apr  5 18:18:05 CEST 2007 <jurgenv@cwi.nl>
+ * lib/Makefile.am: added asc-options.h to include_HEADERS to
+   fix distcheck.
+
+Thu Mar 15 15:18:32 CET 2007 <{economop,kooiker}@cwi.nl>
+ * lib/Library.def: reverted to old BytesCon definition without CHARS, because
+ sdf2-to-adt cannot handle CHARS
+ * lib/*: regenerated api
+
+Thu Mar 15 11:56:01 CET 2007 <{economop,kooiker}@cwi.nl>
+ * lib/asc-main.c: corrected bug introduced by merging
+
+Wed Mar 14 15:19:59 CET 2007 <{economop,kooiker}@cwi.nl>
+ * Merge using-sglr-refactored branch into trunk.
+
+Mon Mar 12 18:32:51 CET 2007 <economop@cwi.nl>
+ * lib/asc-main.c: corrected some errors left over from the merge.
+
+Fri Mar  9 14:33:21 CET 2007 <economop@cwi.nl>
+ * Merged revisions 20836-21786 via svnmerge from 
+   svn+ssh://svn.cwi.nl/asc-support/trunk
+
+Fri Mar  2 10:21:56 CET 2007 <economop@cwi.nl>
+ * lib/asc-options.c: using new config-support API.
+
+Mon Jan 22 14:26:34 CET 2007 <economop@cwi.nl>
+ * lib/builtin-io.c: Added casts to solve warnings; should use different type
+   really.
+
+Wed Jan 10 16:17:17 CET 2007 <economop@cwi.nl>
+ * lib/builtin-io.c: Fixed missed compiler errors.
+
+Wed Jan 10 15:54:44 CET 2007 <economop@cwi.nl>
+ * Merged r19778-20894 from trunk.
+ * lib/builtin-io.c: Improved the error reporting done in parse_result.
+
+Tue Sep 19 11:07:01 CEST 2006 <economop@cwi.nl>
+ * Merged r17384-18222 from trunk.
+
+Tue Sep 19 10:54:44 CEST 2006 <economop@cwi.nl>
+ * We gave svnmerge init an incorrect revision range when the branch was 
+   created. This is the correction:
+   Initialized merge tracking via "svnmerge" with revisions 
+   "0-17383,18223-20254" from svn+ssh://svn.cwi.nl/asc-support/trunk
+
+Mon Sep 18 11:16:23 CEST 2006 <economop@cwi.nl>
+ * Merged r18626-20254 from trunk and updated build environment.
+
+Tue Jun 27 14:43:54 CEST 2006 <economop@cwi.nl>
+ * package: removed version information from dependencies.
+
+Fri Mar 17 15:53:57 CET 2006 <economop@cwi.nl>
+ * Added the |c-library| dependecies for SGLR. 
+
+Fri Feb 10 14:10:10 CET 2006 <{economop,kooiker}@cwi.nl>
+ * Fixed loading of parse table in |asc-main| and |builtin-io|.
+ * Output error if the parse table is not loaded.
+ * Corrected errors in |configure.in| and makefiles.
+
+Thu Feb  9 11:39:33 CET 2006 <economop@cwi.nl>
+ * Removed some casting.
+
+Thu Feb  9 11:03:26 CET 2006 <economop@cwi.nl>
+ * Include and use the new interface to SGLR |sglrInterface.h| instead of 
+   |sglr.h|.
+
+Fri Jan 26 09:17:01 CET 2007 <jurgenv@cwi.nl>
+ * lib/*.h: API CHANGE! toasfix() will return a PT_Tree instead of 
+   a PT_ParseTree from now on. To create a PT_ParseTree with default
+   surrounding layout and a correct start production use the function:
+   PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree t);
+   This changes makes innermost and toasfix eachothers dual, such that
+   the way we deal with start injections can be handled outside of these
+   functions in a balanced manner.
+
+Tue Dec 26 10:02:36 CET 2006 <jurgenv@cwi.nl>
+ * lib/asc-termstore.[ch]: factored out term_store stack data-structure
+   for reuse in different functions of the ASF runtime.
+ * lib/asc-support.c,asf-muasf2pt.c: (re)use of term_store for all recursions
+   over the parse tree structures.
+ * lib/asc-support.c: use of term_store temporary arrays for optimizing
+   traversal functions. This saves about 5 to 10% running time in 
+   'traversal functions intensive' specifications. 
+
+Wed Nov 29 15:57:05 CET 2006 <economop@cwi.nl>
+ * lib/asc-muasf2pt.c: fixed Bug #662, the lvalue of an assignment
+   depended on the execution of the rvalue of an assigment via a
+   reference to a global variable. Between 3.x and 4.x versions of
+   GCC the order of execution was changed, triggering this bug.
+   We introduced a variable to fix the bug.
+
+Thu Nov 23 19:05:32 CET 2006 <jurgenv@cwi.nl>
+ * lib/asc-support*.[ch]: removed dead code that used to support delay
+   attributes. Replaced all deprecated use of Symbol with AFun.
+
+Mon Oct 16 11:03:49 CEST 2006 <jurgenv@cwi.nl>
+ * asc-support/trunk/lib/asc-muasf2pt.c:
+   - unprotected terms need to be set to NULL to prevent funny warnings 
+     from the check_term macro in the ATerm library when checking is on. 
+     (closes #643)
+
+Thu Oct 12 12:18:56 CEST 2006 <jeroen@bja-electronics.com,jurgenv@cwi.nl>
+ * lib/builtin-io.c: fixed a number of errors in the construction of
+   parse trees of errors that may occur during parsing.
+
+Tue Oct 10 10:48:17 CEST 2006 <{economop,jurgenv}@cwi.nl>
+ * lib/builtin-io.c: fixed interfacing with sglr to parse bytes.
+
+Thu Jul 27 12:12:06 CEST 2006 <martin.bravenboer@gmail.com>
+ * utils/asc-support-config.src: removed asc-support-config
+   generation which is obsolete now we are using pkg-config.
+	
+Wed May  3 13:39:38 CEST 2006 <jurgenv@cwi.nl>
+ * Bumped version to 2.3
+
+Fri Apr 21 16:44:01 CEST 2006 <jurgenv@cwi.nl>
+ * lib/asc-support.c: first support for rewriting ambiguities
+   with a compiled specification. All clusters are lifted to
+   constructors.
+ * TODO: lower ambiguity constructors back to normal amb nodes.
+ * amb clusters are memoized to prevent exponential behavior for
+   nested clusters. An absolute necessity!
+
+Thu Apr 20 06:05:35 CEST 2006 <jurgenv@cwi.nl>
+ * lib/asc-ambiguity.c: added functionality to make ambiguity
+   clusters explicit to the runtime environment
+
+Fri Mar 10 11:53:37 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainters use ATerm-dbg library
+
+Wed Mar  8 14:03:38 CET 2006 <jurgenv@cwi.nl>
+ * lib/*: added rudimentary support for rewriting with layout by
+   compiled specifications. Currently, this only works for rewriting
+   parse trees that do not contain lists.
+
+Wed Jan 18 16:27:48 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * utils/asc-support-config.src: added options --ldflags --includes
+   and --prefix to config script, such that transitive dependencies
+   may be hidden from users of asc-support.
+
+Thu Jan  5 09:21:01 CET 2006 <jurgenv@cwi.nl>
+ * Added rudimentary implementation of ciliterals. They are ignored
+   like normal literals, and restored with the spelling that is copied
+   from the SDF definition (as it can be found in a PT_Symbol).
+
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
+Sun Jun 12 00:15:34 CEST 2005 <kooiker@cwi.nl>
+ * lib/builtin-term-compare.c:
+   - Added paramters for modAmbSorting and modLayout to comparePT
+
+Thu Feb 17 16:06:56 CET 2005 <jurgenv@cwi.nl>
+ * Added possibility for parsing the input and output before
+   rewriting.
+
+Fri Jan 21 11:22:04 CET 2005 <jurgenv@cwi.nl>
+ * Compiled specifications DO NOT REWRITE TRAVERSAL FUNCTIONS when
+   they occur in an input term. The reason is for bootstrapping, 
+   traversal functions that occur in the left-hand sides of equations
+   should not dissappear. Another solution to prevent this is preferable
+   of course.
+ * Functions that return lists are treated differently now. There used to 
+   be a dynamic flattening necessary, not anymore. So "remove_list" has
+   been removed from the run-time library.
+ * Extended maximum number of argument to a function to 55.
+ * muasf2pt: TODO: check completeness of the retrieval of literal trees!
+ * lifting and lowering builtins share a cache. The cache that lift builds
+   is used for lowering.
+  
+Mon Dec 27 18:14:42 CET 2004 <jurgenv@cwi.nl>
+ * Regenerated library API's
+ * Many small changes to get structured lexicals online. Most changes are
+   a result of changed API's.
+
+Fri Nov 19 15:49:10 CET 2004 <jurgenv@cwi.nl>
+ * Merged developments of 1.5 to trunk
+
+Fri Nov 19 14:25:28 CET 2004 <jurgenv@cwi.nl>
+ * Changed dependency on Tide to dependency on small package tide-support.
+
+Tue Nov  2 13:45:14 CET 2004 <jurgenv@cwi.nl,storm@cwi.nl>
+ * Added next-id builtin (returns a new integer every time its called)
+
+Mon Oct 18 22:54:09 CEST 2004 <jurgenv@cwi.nl>
+ * Merged tide builtins from 1.5 into trunk.
+
+Mon Oct 11 14:56:32 CEST 2004 <sgmcorne@science.uva.nl,jurgenv@cwi.nl>
+ * Added ASF builtins that implement a tide adapter.
+ * Temporarily added dependency on Tide package, until that package
+   is split up into the pieces that are really needed for asc-support.
+
+Fri Aug 27 14:42:20 CEST 2004 <jong@cwi.nl>
+ * refactor to use new PT_yield functions in MEPT API
+
+Fri Jul 16 09:25:51 CEST 2004 <markvdb@cwi.nl>
+ * Adapted to the new SGLR requirements.
+
+Wed Jul 14 15:12:18 CEST 2004 <jurgenv@cwi.nl>
+ * ./lib/builtin-anno.c: Added new builtin set-term-anno.
+ * Bumped to 2.1
+
+Tue Jun  8 16:45:48 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 2.0
+ * Added new traversal run-time functions, copies of the originals that can
+   detect success and failure of rewriting. This functionality is used by the
+   compiled code for traversal functions that have bottom-up, break
+   functionality.
+
+Fri May  7 11:19:43 CEST 2004 <jurgenv@cwi.nl>
+ * 1.8 was released before, so bumped to 1.9 before release
+
+Mon May  3 19:36:50 CEST 2004 <jurgenv@cwi.nl>
+ * Had to bring builtin-io.c up-to-date with all kinds of changes in 
+   error-support and sglr.
+ * Regenerated CO_ library using the new functionality for dealing with
+   parameterized result sorts of builtin functions. ParseResult[[Sort]]
+   is returned by the parsing builtins, and the Sort is used for selecting
+   the type-correct parse tree.
+
+Tue Apr 27 14:37:06 CEST 2004 <jurgenv@cwi.nl>
+ * From now on, compiled ASF can deal with annotations!
+   - ATisEqual is replaced by ATisEqualModuloAnnotations
+   - innermost and muasf2pt preserve annotations
+   - asfc has a '-a' option to activate it.
+   - gcc must be called with -DASC_WITH_ANNOS to select the correct
+     equality implementation.
+   - before calling asc_support_main, you must call
+     setKeepAnnotations(ATtrue) to make innermost and muasf2pt behave
+     properly.
+   - TODO: refactor asc_support_main to have an extra argument.
+     This is not doable for release 1.5
+ * Fixed get_term_anno to return a proper result when no anno is found.
+
+Wed Apr 14 10:53:11 CEST 2004 <m336@cwi.nl>
+ * lib/*.c: call SGLR functions with a parsetable, not a "language"
+
+Tue Mar 23 09:39:34 CET 2004 <{jong,kooiker}@cwi.nl>
+ * lib/*.c: updated wrt new MEPT api
+
+Wed Mar 10 09:58:21 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Use new Error API
+
+Tue Feb 17 11:53:32 CET 2004 <jurgenv@cwi.nl>
+ * Added support for choosing the default layout that is inserted
+   in a normal form in the toasfix phase. Two convenience functions:
+   toasfix and toasfixNoLayout are offered. The first inserts a space
+   the second inserts empty layout.
+
+Mon Feb 16 10:26:59 CET 2004 <jurgenv@cwi.nl>
+ * term-compare builtin changed to term-less 
+
+Wed Feb 11 15:27:49 CET 2004 <jurgenv@cwi.nl>
+ * Reactivated memoization. It seems that this feature was #ifndeffed out
+   a long time ago!
+ * Every compiled specification now has the new commandline option 
+   '-s <string>' a -s replaces a -i instead of a parse tree, a string is
+   used as input to the rewriter. This string is lifted to a StrCon 
+   before rewriting. Typical usage of this functionality include extra
+   arguments to a function:
+     ./MyCompiledSpec -f myfunction -i myinput.trm -s "hello" -s "optimize!"
+ * Removed ToolBus version of asc-support. Every compiled specification
+   now depends on ToolBus lib. 
+ * NOTE: a different way of dealing with dependencies of compiled
+   specification needs to be invented, now every compiled specification
+   depends on all dependencies of all builtins....
+
+Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
+ * fix Makefile.am to get "distcheck" working
+
+2003/01/06 (jurgenv@cwi.nl)
+ * All ASFE builtin functions now have an arity corresponding to the
+   arity of the builtin, so we don't have to extract the arguments
+   ourselves anylonger.
+ * All parsing builtins provide the requested sort to the parser (to prevent
+   toplevel ambiguities).
+
+2003/01/06 (jurgenv@cwi.nl)
+ * Added dependency on error-support
+ * Changed builtin-io.c to catch and return all errors that occur
+   during IO. 
+ * Updated builtin-io.c to latest status of IO.sdf in the library.
+
+2003/12/03 ({storm,jurgenv}@cwi.nl)
+ * fixed a bug (old unquoting was still done in write-term builtin
+
+2003/11/21 (jurgenv@cwi.nl)
+ * Added a number of builtins concerning parsing
+ * Reading in parse trees from files uses the same API as parsing builtins
+ * All file IO is now implemented in a single builtin-io.c file
+ * Shell builtin takes Bytes as argument instead of Strings
+ * Parse tables can now be included in generated code
+ * reduction of a function without any input files made possible for
+   a compiled specification
+ 
+2003/11/03 (jurgenvm@cwi.nl)
+ * Added lower-from-tree builtin.
+
+2003/11/03 (storm@cwi.nl)
+ * Added implode builtin.
+
+2003/10/10 (jurgenv@cwi.nl)
+ * Reactivated ToolBus interface. I'm not happy with the way this
+   library is generated now. TODO: find a different solution that
+   avoids co-evolution.
+
+2003/10/09 (jurgenv@cwi.nl)
+ * Added generation of prototypes for ASC builtin functions
+ * Each builtin now has a declared arity in builtins/Makefile.am
+ * Merged asc-support-me and asf-builtins library
+ * Temporarily disabled ToolBus interface for generated code
+
+2003/10/08 (jurgenv@cwi.nl)
+ * Adapted package dependencies.
+
+2003/10/07 (jurgenv@cwi.nl)
+ * Moved builtins library from the asf package to this package
+ * Renamed the libME subdirectory to 'lib'
+ * Set version to 1.8
+
+2003/10/07 (markvdb@cwi.nl)
+ * Introduced the new tuple concept.
+
+2003/10/06 (jurgenv@cwi.nl)
+ * Removed attempt of retaining annotations because rewriting failed on 
+   some specificiations
+
+2003/10/05 (jurgenv@cwi.nl)
+ * First attempt at retaining annotations on terms during the mappings
+   from and to muASF representation
+
+2003/08/01 (jurgenv@cwi.nl)
+ * Set version to  0.7.1
+
+2003/07/02 (jurgenv@cwi.nl)
+ * Set version to 0.7 (this should have been done earlier!)
+ 
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
+2003/06/26
+ * Added an explicit ATBpack for the normal form.
+
+Thu Jun 19 16:15:16 CEST 2003 <jong@cwi.nl>
+ * libME/tb/client.c: add explicit ATBunpack
+
+2003/01/22 (jurgenv@cwi.nl)
+ * Release 1.6
+ * LGPL license
+
+2003/01/08 (jurgenv@cwi.nl)
+ * Created libtb-asc-support.a, this can be linked with compiled
+   specifications that are connected to the ToolBus.
+
+2002/09/14 (vinju@loria.fr, vandenbr@loria.fr)
+ * Bumped to 1.6beta
+ * Fixed a serious bug with traversal functions in asc-support. 
+
+2002/07/24 (jurgenv@cwi.nl)
+ * Release 1.5
+
+2002/05/14 (jurgenv@cwi.nl)
+ * Bumped to 1.5beta
+ * Added -t switch to compiled specification for textual ATerm output
+
+2002/04/19 (jurgenv@cwi.nl)
+ * Release 1.4
+
+2002/04/17 ({olivierp,jurgenv}@cwi.nl)
+ * Fixed a bug in traversal functions. Intermediate tuple representation
+   was not protected from the gc.
+ * Bumped to 1.4beta
+
+2002/02/07 (jurgenv@cwi.nl)
+ * Released version 1.3
+
+2001/12/20 ({olivierp,jong,jurgenv}@cwi.nl
+ * Fixed a dirty bug in the remove_list muasf primitive. 
+
+2001/12/14 (jurgenv@cwi.nl)
+ * Added experimental support for accumulating transformers in the runtime 
+   library.
+
+2001/12/13 (jurgenv@cwi.nl)
+ * Added support for traversal functions in input terms of specifications.
+ * Asc-support library now needs asf-support
+ * Bumped version to 1.3beta
+
+2001/11/14 (jong@cwi.nl)
+ * released version 1.2
+ * fixed free-bug in asc-support
+
+2001/11/12 (jurgenv@cwi.nl)
+ * moved apply-function functionality to pt-support package
+
+2001/11/07 (jurgenv@cwi.nl)
+ * added the muasf_operators parse_sort and get_sort.
+
+2001/11/05 ({jurgenv,markvdb}@cwi.nl)
+ * Removed module identifiers from productions:
+   - apply function adapted.
+
+2001/11/02 (jurgenv@cwi.nl)
+ * Added support for transformers and accumulators 
+
+2001/08/28 (jong@cwi.nl)
+ * Added #include directives to satisfy gcc-3.0.1
+
+2001/08/27 ({jong,markvdb}@cwi.nl)
+ * Version 1.2beta
+ * Fixed a bug in function listToTree. 
+
+2001/07/27 ({jong,markvdb}@cwi.nl)
+ * fixed memory-leak in call_unknown
+
+2001/07/17 (jong@cwi.nl)
+ * version 1.0 released, bumped to 1.1
+
+2001/07/16 (jong@cwi.nl)
+ * documented mysterious bump from version 0.8 to 1.0.
+
+2001/07/06 (markvdb@cwi.nl, jurgenv@cwi.nl)
+ * Removed AsFix1 depending functionality.
+ * Inserted a missing layout before the separator of a list.
+
+2001/07/03 (jurgenv@cwi.nl)
+ * Several bugfixes in list support
+
+2001/07/02 (jurgenv@cwi.nl)
+ * Version 0.8
+ * Fully implemented AsFix2ME version of asc-support
+
+2001/06/21 (jurgenv@cwi.nl)
+ * Iniated a AsFix2ME version of asc-support
+
+2001/05/23 (markvdb@cwi.nl)
+ * Released version 0.6, and bumped into 0.7.
+ * Bumped into version 0.6 in order to make distribution.
+
+2001/05/04 (markvdb@cwi.nl)
+ * Fixed a dependency bug with respect to generated code.
+
+2001/03/08 (jurgenv@cwi.nl)
+ * Apified asc-support
+ * Added ASC_applyFunction function that can be used to
+   quickly contruct an application of a prefix function.
+
+2001/03/06 (jong@cwi.nl)
+ * Added make_rules to toplevel EXTRA_DIST
+ * Cleaned up .cvsignore files
+
+2001/02/01 (mdejonge@cwi.nl)
+ * Fixed tifstoc path problem
+
+2000/11/09 (jurgenv@cwi.nl)
+ * Version is now 0.4
+ * Only minor maintenance differences
+
+2000/4/05 (mdejonge @cwi.nl)
+ * Version is now 0.3
+ * Adapted for use with separate asfix distribution (i.e., libasfix is no
+ longer distributed as part of the aterm library).
+
+2000/3/31 (mdejonge @cwi.nl)
+ * The toolbus is no longer required during the build process of
+ libasc-support.a
+
+2000/03/06 (mdejogne@cwi.nl)
+ * By default generate lib-asc-support.a, lib-asc-support-cc.a,
+ lib-asc-support-cc.a, lib-asc-support-dbg.a, and
+ lib-asc-support-prof.a.
+
+2000/03/03 (mdejonge@cwi.nl)
+ * Asf+Sdf compiler support library is now a self-cotained
+ component built and configured using automake/autoconf

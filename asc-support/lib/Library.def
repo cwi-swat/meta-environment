@@ -1,0 +1,234 @@
+definition
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r]	-> LAYOUT {cons("whitespace")}
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+module basic/StrCon
+
+exports
+
+sorts StrCon StrChar
+
+context-free start-symbols
+StrCon
+
+lexical syntax
+    "\\n"                      -> StrChar {cons("newline")}
+    "\\t"                      -> StrChar {cons("tab")}
+    "\\\""                     -> StrChar {cons("quote")}
+    "\\\\"                     -> StrChar {cons("backslash")}
+    "\\" a:[0-9]b:[0-9]c:[0-9] -> StrChar {cons("decimal")}
+    ~[\0-\31\n\t\"\\]          -> StrChar {cons("normal")}
+
+    [\"] chars:StrChar* [\"]   -> StrCon  {cons("default")}
+module basic/BoolCon
+
+exports
+
+sorts BoolCon
+context-free syntax
+
+    "true"  -> BoolCon {cons("true")}
+    "false" -> BoolCon {cons("false")}
+
+hiddens
+context-free start-symbols
+  BoolCon
+module basic/NatCon
+
+exports
+
+sorts NatCon
+
+lexical syntax
+  
+ [0-9]+ -> NatCon {cons("digits")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+
+module basic/BytesCon
+
+%% This modules defines the 'Byte': any character in the 0-255 range.
+%% 
+%% But.. the syntax definition is not exported. This is too prevent
+%% everything from being recognized as a byte!
+%%
+%% What IS exported are the lexical constructor functions for bytes.
+%% In this manner, we can construct bytes without having to parse them
+%% literally.
+%%
+%% Note that this module only makes sense in the context of ASF+SDF,
+%% which supports lexical constructor functions. The definition below
+%% shows some of the implementation detail of ASF. Do not try this at 
+%% home.
+
+hiddens
+  lexical syntax
+    ~[]   -> Byte  {cons("byte")}
+    Byte* -> Bytes {cons("bytes")}
+
+
+
+module basic/Errors
+
+imports basic/Locations
+imports basic/StrCon
+
+hiddens
+  context-free start-symbols
+    Summary Error
+
+exports
+
+sorts Subject
+context-free syntax
+  "subject" "(" description:StrCon ")" -> Subject {cons("subject")}
+
+  "localized" "(" description:StrCon "," Location ")"
+    -> Subject {cons("localized")}
+
+
+sorts Error
+context-free syntax
+  "info" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("info")}
+
+  "warning" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("warning")}
+
+  "error" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("error")}
+
+  "fatal" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("fatal")}
+
+
+sorts Summary
+context-free syntax
+  "summary" "(" producer:StrCon "," id:StrCon "," 
+   "[" {Error ","}* "]" ")"  -> Summary {cons("summary")}
+
+module basic/Locations
+
+imports basic/Areas
+imports basic/StrCon
+
+exports
+
+sorts Location
+context-free syntax
+
+  "file" "(" filename:StrCon ")" -> Location {cons("file")}
+
+  a:"area" "(" Area ")" -> Location {cons("area")}
+
+  "area-in-file" "(" filename:StrCon "," Area ")"
+    -> Location {cons("area-in-file")}
+module basic/Areas
+
+imports basic/NatCon
+
+exports
+
+sorts Area
+context-free syntax
+  %% Areas describe the boundaries of substrings in files in a one dimensional
+  %% fashion, but taking newlines into account. The begin-line, begin-column
+  %% are styled after the UNIX standard. We offer both line-column and 
+  %% offset-length representations because neither representation can be 
+  %% computed from the other without the original file.
+
+  %% All characters, including tabs and newlines, are counted as one character.
+  %% Positions are calculated based on the original file, not as the file is
+  %% displayed on screen. The '\n' character increases the line and returns
+  %% the column position to 0.
+
+  %% begin-line: the first line in a file is 1
+  %% begin-column: the first column on a line is 0
+  %% end-line: line on which the end-column occurs
+  %% end-column: first column beyond last character
+
+  %% Example: describing the area starting at T of "This" up to and including 
+  %% R of "constructoR"
+
+  %%  0123456789012345
+  %% 1  This is an
+  %% 2area constructoR
+  %%       
+  %%  area(1,2,2,16,2,26)
+
+  "area" "("
+    begin-line:NatCon "," 
+    begin-column:NatCon ","
+    end-line:NatCon ","
+    end-column:NatCon ","
+    offset:NatCon ","
+    length:NatCon ")"
+  -> Area {cons("area")}
+module basic/ReadWriteCon
+
+imports basic/BytesCon
+imports basic/Errors
+
+exports 
+
+sorts Read Write
+
+context-free syntax
+
+  "read" "(" value:Bytes ")"    -> Read  {cons("success")}
+  "read-error" "(" Summary ")"  -> Read  {cons("failure")}
+
+  "written"                     -> Write {cons("success")}
+  "write-error" "(" Summary ")" -> Write {cons("failure")}
+module basic/ParsetreeCon[X]
+
+imports basic/BytesCon
+imports basic/NatCon
+imports basic/Errors
+
+exports 
+
+context-free syntax
+
+  "parse-tree" "(" left-layout:Bytes  "," 
+                   tree:X             "," 
+                   right-layout:Bytes ","
+                   amb-cnt:NatCon
+               ")"                   -> Parsetree[[X]] {cons("success")}
+
+  "parse-error" "(" Summary ")"      -> Parsetree[[X]] {cons("failure")}
+ 
+module basic/Booleans
+
+imports basic/BoolCon
+exports
+  sorts Boolean
+
+   context-free syntax
+    BoolCon                     -> Boolean {cons("constant")}
+    lhs:Boolean "|" rhs:Boolean -> Boolean {left, cons("or")}
+    lhs:Boolean "&" rhs:Boolean -> Boolean {left, cons("and")}
+    "not" "(" Boolean ")" 	-> Boolean {cons("not")}
+    "(" Boolean ")"       	-> Boolean {bracket, cons("bracket")}
+
+  context-free priorities
+    Boolean "&" Boolean -> Boolean >
+    Boolean "|" Boolean -> Boolean
+
+hiddens
+  context-free start-symbols Boolean
+
+  imports
+    basic/Comments
+  variables
+    "Bool"[0-9]* -> Boolean
+
+ 
+
