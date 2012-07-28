@@ -1,0 +1,27 @@
+$Id$
+
+Thu Mar 27 10:41:05 EDT 2008 <jurgenv@cwi.nl>
+ * src/slice-tree.c: little change due to API change in pt-support
+
+Mon Dec  3 10:45:54 EST 2007 <jurgenv@cwi.nl>
+ * src/*.c: replaced all LOC_ calls to ERR_ calls.
+
+Fri Apr 11 11:55:57 CET 2006 <jurgenv@cwi.nl>
+ * src/slice-tree.c: added memoization to scale up to highly
+   ambiguous languages.
+
+Fri Mar 10 11:55:57 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
+Thu Mar  9 15:12:25 CET 2006 <kooiker@cwi.nl>
+ * src/structure-editor.c:
+   - Remove cursor when updating parsetree
+
+Wed Feb  1 14:29:46 CET 2006 <kooiker@cwi.nl>
+ * configure.ac:
+   - use libtool
+
+Wed Jan 18 15:31:57 CET 2006 <kooiker@cwi.nl>
+ * Initial version
+
