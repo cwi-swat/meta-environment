@@ -1,0 +1,56 @@
+#!/bin/sh
+
+me=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+myarguments="hm:V"
+
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname [options]
+Options:
+    -V                    reveal program version (i.e. $myversion)
+    -script <scriptname>  run script <scriptname>
+E_O_USAGE
+}
+
+Version() {
+    echo "$me v$myversion" >&2
+}
+
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+
+# Argument interpretation...
+SCRIPTNAME=""
+ARGUMENTS=""
+
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage ; exit 0 ;;
+        -script)
+            shift;
+            SCRIPTNAME=$1 ;;
+        -V)
+            Version ; exit 0 ;;
+        *)
+            ARGUMENTS="$ARGUMENTS $1" ;;
+    esac
+    shift
+done
+
+arg_test="x$ARGUMENTS"
+if test arg_test == "x"
+then
+	Usage
+	exit 2
+fi
+
+export CLASSPATH="__WISH_JAR__:__EXTERNAL_JARS__:$CLASSPATH"
+
+java toolbus.adapter.wish.WishAdapter -script $SCRIPTNAME -tbtcl __TBTCL__ -libdir __LIBDIR__ $ARGUMENTS
