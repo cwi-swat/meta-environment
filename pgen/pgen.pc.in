@@ -1,0 +1,9 @@
+prefix=@prefix@
+Maintainers=economop@cwi.nl,jurgenv@cwi.nl
+Name: pgen
+Version: 2.9
+Description:
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lsdftablegen
+Requires: asc-support,aterm,error-support,pt-support,sdf-support,sglr,toolbuslib,ptable-support,config-support,c-library
+ToolBusFlags=-I${prefix}/share/pgen

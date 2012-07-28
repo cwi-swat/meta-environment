@@ -1,0 +1,8 @@
+definition
+module Main
+exports
+  sorts   A B
+  context-free start-symbols A B
+  lexical syntax
+   ~[]* -> A
+   ~[]* -> B 

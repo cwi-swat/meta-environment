@@ -1,0 +1,13 @@
+
+$SDF2TABLE -i $GRAMMARS/Ambi.sdf
+$SGLR -2 -p $TABLES/Ambi.tbl -i $ERRORTERMS/empty.amb -fi -fe
+
+#$SGLR -2 -p $TABLES/Reject.tbl -i $ERRORTERMS/r.rjct
+
+#$SGLR -2 -p $TABLES/Injection.tbl -i $ERRORTERMS/test.inj
+
+$SDF2TABLE -i $GRAMMARS/NoStartSymbol.sdf
+$SGLR -2 -p $TABLES/NoStartSymbol.tbl -i $ERRORTERMS/true.nss -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Follower.sdf
+$SGLR -2 -p $TABLES/Follower.tbl -i $ERRORTERMS/x-rated.flow -fi -fe

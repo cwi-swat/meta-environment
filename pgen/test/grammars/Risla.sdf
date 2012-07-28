@@ -1,0 +1,381 @@
+definition
+
+module Main
+imports Risla-modular Comp-library-syntax Risla-disambi
+
+module Risla-modular
+imports Risla-syntax
+exports
+  sorts
+    MOD-PRODUCT-DEF COMPONENT
+    MOD-USES-ONE-BLOCK MOD-USES-MANY-BLOCK MOD-USES-BLOCK-BODY
+    MOD-INTERMEDIATE-BLOCK MOD-INFO-BLOCK
+    IMPORTED-METH-DEF IMPORTS IMPORT-DEF
+    METHOD-PARAMETERS RENAMING-TO-EXPR RENAMING-TO-ID
+    COMP-HEADER PARAMETERS
+  context-free start-symbols
+    MOD-PRODUCT-DEF COMPONENT
+    MOD-USES-ONE-BLOCK MOD-USES-MANY-BLOCK MOD-USES-BLOCK-BODY
+    MOD-INTERMEDIATE-BLOCK MOD-INFO-BLOCK
+    IMPORTED-METH-DEF IMPORTS IMPORT-DEF
+    METHOD-PARAMETERS RENAMING-TO-EXPR RENAMING-TO-ID
+    COMP-HEADER PARAMETERS
+
+  context-free syntax
+    HEADER MOD-USES-ONE-BLOCK
+    MOD-USES-MANY-BLOCK* MOD-INFO-BLOCK*   -> MOD-PRODUCT-DEF
+
+    COMP-HEADER PARAMETERS
+    INT-RESULTS INFO-VARIABLES IMPORTS
+    INT-METHODS INFO-METHODS REG-METHODS   -> COMPONENT
+
+    "uses" "one" ID
+      "with" "id" ID MOD-USES-BLOCK-BODY "enduses"   -> MOD-USES-ONE-BLOCK
+    "uses" "many" ID
+      "with" "id" ID MOD-USES-BLOCK-BODY "enduses"   -> MOD-USES-MANY-BLOCK
+
+    DATA INST-VARIABLES INT-RESULTS
+    IMPORTS INT-METHODS REG-METHODS
+    MOD-INTERMEDIATE-BLOCK*           -> MOD-USES-BLOCK-BODY
+
+    INT-RESULTS IMPORTS INT-METHODS   -> MOD-INTERMEDIATE-BLOCK
+
+    INFO-BLOCK-HEADER INT-RESULTS INFO-VARIABLES
+    IMPORTS INT-METHODS INFO-METHODS               -> MOD-INFO-BLOCK
+
+    "information"           ":" "not" "applicable"   -> INFO-VARIABLES
+    "information" "methods" ":" "not" "applicable"   -> INFO-METHODS
+
+    "define" "intermediate"     ID "as" IMPORTED-METH-DEF   -> INT-METH-DEF
+    "define" "intermediate" FUN-ID "as" IMPORTED-METH-DEF   -> INT-METH-DEF
+    "define" "information"      ID "as" IMPORTED-METH-DEF   -> INFO-METH-DEF
+    "define" "information"  FUN-ID "as" IMPORTED-METH-DEF   -> INFO-METH-DEF
+    "define" "registration"     ID "as" IMPORTED-METH-DEF   -> REG-METH-DEF
+    "define" "registration" FUN-ID "as" IMPORTED-METH-DEF   -> REG-METH-DEF
+
+    ID "using" ID METHOD-PARAMETERS
+      "with" {RENAMING-TO-EXPR ","}*   -> IMPORTED-METH-DEF
+
+    "imported" "methods" ":" {IMPORT-DEF ";"}+ ";"   -> IMPORTS
+    "imported" "methods" ":" "not" "applicable"      -> IMPORTS
+
+    "use" ID METHOD-PARAMETERS
+      "with" {RENAMING-TO-EXPR ","}*
+      "to" "define" "methods" {RENAMING-TO-ID ","}+   -> IMPORT-DEF
+
+                                                 -> METHOD-PARAMETERS
+    "with" {ID ","}+ "as" "method" "parameter"   -> METHOD-PARAMETERS
+
+    ID             -> RENAMING-TO-EXPR
+    EXPR "->" ID   -> RENAMING-TO-EXPR
+
+    ID               -> RENAMING-TO-ID
+    ID     "as" ID   -> RENAMING-TO-ID
+    FUN-ID "as" ID   -> RENAMING-TO-ID
+
+    "component" ID   -> COMP-HEADER
+
+    "parameters" ":" DECL+                -> PARAMETERS
+    "parameters" ":" "not" "applicable"   -> PARAMETERS
+
+module Risla-syntax
+imports
+  Expressions Types
+
+exports
+  sorts
+    PRODUCT-DEF HEADER
+    USES-ONE-BLOCK USES-MANY-BLOCK USES-BLOCK-BODY
+    INTERMEDIATE-BLOCK INFO-BLOCK INFO-BLOCK-HEADER
+    DATA INST-VARIABLES INT-RESULTS INFO-VARIABLES
+    INT-METHODS INFO-METHODS REG-METHODS
+    INT-METH-DEF INFO-METH-DEF REG-METH-DEF
+    DECL VAR-DECL FUN-ID STAT
+  context-free start-symbols
+    PRODUCT-DEF HEADER
+    USES-ONE-BLOCK USES-MANY-BLOCK USES-BLOCK-BODY
+    INTERMEDIATE-BLOCK INFO-BLOCK INFO-BLOCK-HEADER
+    DATA INST-VARIABLES INT-RESULTS INFO-VARIABLES
+    INT-METHODS INFO-METHODS REG-METHODS
+    INT-METH-DEF INFO-METH-DEF REG-METH-DEF
+    DECL VAR-DECL FUN-ID STAT
+
+  context-free syntax
+    HEADER USES-ONE-BLOCK USES-MANY-BLOCK* INFO-BLOCK*   -> PRODUCT-DEF
+
+    "product" ID   -> HEADER
+
+    "uses" "one"  ID "with" "id" ID USES-BLOCK-BODY "enduses" -> USES-ONE-BLOCK
+    "uses" "many" ID "with" "id" ID USES-BLOCK-BODY "enduses" -> USES-MANY-BLOCK
+
+    DATA INST-VARIABLES INT-RESULTS
+    INT-METHODS REG-METHODS INTERMEDIATE-BLOCK*   -> USES-BLOCK-BODY
+
+    INT-RESULTS INT-METHODS   -> INTERMEDIATE-BLOCK
+
+    INFO-BLOCK-HEADER INT-RESULTS
+    INFO-VARIABLES INT-METHODS INFO-METHODS   -> INFO-BLOCK
+
+                        -> INFO-BLOCK-HEADER
+    "info" "block" ID   -> INFO-BLOCK-HEADER
+
+
+    "contract" "data"        ":" VAR-DECL+            -> DATA
+    "instance" "variables"   ":" VAR-DECL+            -> INST-VARIABLES
+    "instance" "variables"   ":" "not" "applicable"   -> INST-VARIABLES
+    "intermediate" "results" ":" DECL+                -> INT-RESULTS
+    "intermediate" "results" ":" "not" "applicable"   -> INT-RESULTS
+    "information"            ":" DECL+                -> INFO-VARIABLES
+
+    ID   ":" TYPE-ID   -> DECL
+    DECL               -> VAR-DECL
+    STAT ":" TYPE-ID   -> VAR-DECL
+
+    "intermediate" "methods" ":" {INT-METH-DEF ";"}+ ";"    -> INT-METHODS
+    "intermediate" "methods" ":" "not" "applicable"         -> INT-METHODS
+    "information"  "methods" ":" {INFO-METH-DEF ";"}+ ";"   -> INFO-METHODS
+    "registration" "methods" ":" {REG-METH-DEF ";"}+  ";"   -> REG-METHODS
+    "registration" "methods" ":" "not" "applicable"         -> REG-METHODS
+
+    "define" "intermediate" ID "as" EXPR              -> INT-METH-DEF
+    "define" "intermediate" FUN-ID "as" EXPR          -> INT-METH-DEF
+    "define" "information"  ID "as" EXPR              -> INFO-METH-DEF
+    "define" "information"  FUN-ID "as" EXPR          -> INFO-METH-DEF
+    "define" "registration" ID "as" {STAT ","}+       -> REG-METH-DEF
+    "define" "registration" FUN-ID "as" {STAT ","}+   -> REG-METH-DEF
+
+    ID "(" {DECL ","}+ ")"   -> FUN-ID
+    ID ":=" EXPR             -> STAT
+
+module Expressions
+imports
+  Identifiers Risla-integer-constant Real-constant
+
+exports
+  sorts
+    SPECIAL-CONSTANT ID-PLUS ID-OR-CONSTANT
+    FUN-APPL METH-INST EXPR EXPRS EXPR-PLUS
+  context-free start-symbols
+    SPECIAL-CONSTANT ID-PLUS ID-OR-CONSTANT
+    FUN-APPL METH-INST EXPR EXPRS EXPR-PLUS
+
+  lexical syntax
+    [A-Z0-9]+"/"[A-Z0-9]*   -> SPECIAL-CONSTANT
+
+  context-free syntax
+    ID "(" {EXPR ","}+ ")"   -> FUN-APPL
+
+    ID         -> METH-INST
+    FUN-APPL   -> METH-INST
+
+    ID                 -> ID-OR-CONSTANT
+    SPECIAL-CONSTANT   -> ID-OR-CONSTANT
+    RIS-INT-CON        -> ID-OR-CONSTANT
+    REAL-CON           -> ID-OR-CONSTANT
+
+    ID-OR-CONSTANT   -> EXPR
+    FUN-APPL         -> EXPR
+
+    EXPR "." ID   -> EXPR
+
+    EXPR "+" EXPR   -> EXPR {left}
+    EXPR "-" EXPR   -> EXPR {left}
+    EXPR "*" EXPR   -> EXPR {left}
+    EXPR "/" EXPR   -> EXPR {left}
+       "-/-" EXPR   -> EXPR
+
+    EXPR "="  EXPR   -> EXPR {left}
+    EXPR "<"  EXPR   -> EXPR {left}
+    EXPR ">"  EXPR   -> EXPR {left}
+    EXPR ">=" EXPR   -> EXPR {left}
+    EXPR "<=" EXPR   -> EXPR {left}
+
+    EXPR "and" EXPR   -> EXPR {left}
+    EXPR "or"  EXPR   -> EXPR {left}
+         "not" EXPR   -> EXPR
+
+    "[" {EXPR ","}* "]"            -> EXPR
+    "<" EXPR "," {EXPR ","}+ ">"   -> EXPR
+
+    "if" EXPR "then" EXPR "else" EXPR "endif"   -> EXPR
+
+    "for" "each" ID-PLUS "in"
+       EXPR-PLUS "new" "element" "is" EXPR                -> EXPR
+
+    "for" "each" "combination" "of"
+       ID-PLUS "in" EXPR-PLUS "new" "element" "is" EXPR   -> EXPR
+
+    "for" "each" ID-PLUS "in" EXPR-PLUS "add" EXPR        -> EXPR
+
+    "for" "each" ID "add" METH-INST   -> EXPR
+
+    "(" EXPR ")"   -> EXPR {bracket}
+
+    {ID ","}+     -> ID-PLUS
+    {EXPR ","}*   -> EXPRS
+    {EXPR ","}+   -> EXPR-PLUS
+
+ context-free priorities
+    {EXPR "." ID -> EXPR} >
+    {"-/-" EXPR -> EXPR} >
+    {left: EXPR "*" EXPR -> EXPR
+           EXPR "/" EXPR -> EXPR} >
+    {left: EXPR "+" EXPR -> EXPR
+           EXPR "-" EXPR -> EXPR} >
+    {non-assoc: EXPR "="  EXPR   -> EXPR
+                EXPR "<"  EXPR   -> EXPR
+                EXPR ">"  EXPR   -> EXPR
+                EXPR ">=" EXPR   -> EXPR
+                EXPR "<=" EXPR   -> EXPR
+    } >
+    {           "not" EXPR   -> EXPR} >
+    {left: EXPR "and" EXPR   -> EXPR} >
+    {left: EXPR "or"  EXPR   -> EXPR} >
+    {"for" "each" ID-PLUS "in"
+          EXPR-PLUS "new" "element" "is" EXPR                -> EXPR
+       "for" "each" "combination" "of"
+          ID-PLUS "in" EXPR-PLUS "new" "element" "is" EXPR   -> EXPR
+       "for" "each" ID-PLUS "in" EXPR-PLUS "add" EXPR        -> EXPR
+      }
+
+module Identifiers
+imports
+  Layout
+
+exports
+  sorts
+    ID IDS
+  context-free start-symbols
+    ID IDS
+
+  lexical syntax
+    [A-Z\$][A-Z0-9\$\_\-\']*   -> ID
+
+  context-free syntax
+    {ID ","}*   -> IDS
+
+module Layout
+exports
+  lexical syntax
+     [\ \t\n]+         -> WHITESPACE
+     WHITESPACE        -> LAYOUT
+     "**" ~[\n]* [\n]  -> COMMENT
+     "%%" ~[\n]* [\n]  -> COMMENT
+     COMMENT           -> LAYOUT
+
+module Risla-integer-constant
+imports
+  Layout
+
+exports
+  sorts
+    RPOS RZERO RNEG RIS-NAT-CON RIS-INT-CON
+  context-free start-symbols
+    RPOS RZERO RNEG RIS-NAT-CON RIS-INT-CON
+
+  lexical syntax
+    [1-9][0-9]*   -> RPOS
+    "0"           -> RZERO
+
+  context-free syntax
+%%    "-/-" RPOS    -> RNEG {constructor}
+    RZERO         -> RIS-NAT-CON {constructor}
+    RPOS          -> RIS-NAT-CON {constructor}
+    RIS-NAT-CON   -> RIS-INT-CON
+%%    RNEG          -> RIS-INT-CON
+
+module Real-constant
+imports Layout
+
+exports
+  sorts REAL-CON UNS-REAL-CON
+  context-free start-symbols  REAL-CON UNS-REAL-CON
+  lexical syntax
+   %% ","[0-9]+   -> UNS-REAL-CON
+   %% [0-9]+ ","   -> UNS-REAL-CON
+   [0-9]+ "," [0-9]+   -> UNS-REAL-CON
+   UNS-REAL-CON        -> REAL-CON
+   "-/-" UNS-REAL-CON    -> REAL-CON
+
+module Types
+imports
+  Identifiers
+
+exports
+  sorts
+    TYPE-ID ID-TYPE TYPE TYPE-IDS ID-TYPES TYPES
+  context-free start-symbols
+    TYPE-ID ID-TYPE TYPE TYPE-IDS ID-TYPES TYPES
+
+  lexical syntax
+    [a-z][a-z\-0-9]*   -> TYPE-ID
+
+  context-free syntax
+    ID ":" TYPE   -> ID-TYPE
+
+    TYPE-ID                  -> TYPE
+    "[" TYPE "]"             -> TYPE
+    "<" {ID-TYPE ","}* ">"   -> TYPE
+
+    {TYPE-ID ","}*   -> TYPE-IDS
+    {ID-TYPE ","}*   -> ID-TYPES
+    {TYPE ","}*      -> TYPES
+
+%%%    "id"   -> TYPE-ID
+
+module Comp-library-syntax
+imports Risla-modular
+
+exports
+  sorts
+    COMPONENT-LIB
+  context-free start-symbols
+    COMPONENT-LIB
+
+  context-free syntax
+    COMPONENT*          -> COMPONENT-LIB
+
+module Risla-disambi
+exports
+  context-free syntax
+    "applicable"   -> ID-TYPE {reject}
+    "contract"     -> ID-TYPE {reject}
+    "enduses"      -> ID-TYPE {reject}
+    "imported"     -> ID-TYPE {reject}
+    "instance"     -> ID-TYPE {reject}
+    "intermediate" -> ID-TYPE {reject}
+    "methods"      -> ID-TYPE {reject}
+    "not"          -> ID-TYPE {reject}
+    "one"          -> ID-TYPE {reject}
+    "product"      -> ID-TYPE {reject}
+    "registration" -> ID-TYPE {reject}
+    "results"      -> ID-TYPE {reject}
+    "uses"         -> ID-TYPE {reject}
+    "variables"    -> ID-TYPE {reject}
+    "with"         -> ID-TYPE {reject}
+
+  restrictions
+    "applicable"
+    "contract"
+    "enduses"
+    "imported"
+    "instance"
+    "intermediate"
+    "methods"
+    "not"
+    "one"
+    "product"
+    "registration"
+    "results"
+    "uses"
+    "variables"
+    "with" -/- [a-z]
+
+  lexical restrictions
+    WHITESPACE    -/- [\ \t\n]
+
+  lexical restrictions
+    ID -/- [\-\47]
+
+  context-free restrictions
+    LAYOUT?  -/- [\ \t\n]

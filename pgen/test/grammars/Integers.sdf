@@ -1,0 +1,510 @@
+definition
+
+module Main
+imports basic/Integers
+
+module basic/BytesCon
+
+%% This module defines a lexical sort Bytes without defining any
+%% particular syntax for it. The Bytes sort is used to store any
+%% characters using lexical constructor functions.
+
+exports 
+  sorts Bytes Byte
+
+%% It is essential to hide this the following syntax,
+%% since ~[] is ambiguous with all languages
+
+hiddens 
+  lexical syntax
+    ~[]   -> Byte  {cons("byte")}
+    Byte* -> Bytes {cons("bytes")}
+
+context-free start-symbols
+  Bytes
+module basic/Bytes
+
+imports basic/Strings
+imports	basic/Integers	
+imports basic/BytesCon
+
+exports sorts Bytes
+
+exports
+  context-free syntax
+    string-to-bytes(String) -> Bytes 
+
+     bytes-to-string(Bytes) -> String 
+
+     num-of-bytes(Bytes)        -> Integer 
+
+     Bytes "<"  Bytes  -> Boolean
+     Bytes "<=" Bytes  -> Boolean
+     Bytes ">"  Bytes  -> Boolean
+     Bytes ">=" Bytes  -> Boolean
+
+     ascii-compare(Bytes,Bytes) -> Integer 
+
+hiddens
+  imports basic/Comments
+
+  context-free syntax
+    chars-to-bytes(String) -> Bytes 
+
+    octal-to-byte(Integer) -> Byte {memo}
+
+    bytes-to-chars(Bytes)    -> String  
+    octal-to-string(Integer) -> String 
+
+    byte-to-octal(Byte) -> Integer {memo}
+
+  variables
+    "string"[0-9\']* -> String
+    "bytes"[0-9\']* -> Bytes
+    "char*"[0-9\']* -> CHAR*
+    "char+"[0-9\']* -> CHAR+
+    "char"[0-9\']* -> CHAR
+    "n"[0-9\']* -> Integer
+	
+
+module basic/Strings
+
+%% This module defines strings with continuations and escaped newlines, 
+%% tabs and backslashes
+
+
+imports basic/StrCon
+imports basic/Integers
+imports	basic/Bytes
+
+hiddens 
+  sorts Escaped Normal
+
+  context-free start-symbols 
+    String
+  
+exports
+  sorts String
+
+  context-free syntax
+    StrCon             -> String {constructor}
+    String "||" String -> String {left}
+    "(" String ")"     -> String {bracket}
+   
+    String "<"  String  -> Boolean
+    String "<=" String  -> Boolean
+    String ">"  String  -> Boolean
+    String ">=" String  -> Boolean
+
+  context-free syntax
+    remove-continuations(String) -> String
+
+    length(String)         -> Integer
+
+hiddens
+  imports
+    basic/Whitespace
+
+  variables
+    "Chars" [0-9]* -> CHAR*
+
+  variables
+    "Str-con" [0-9\']* -> StrCon
+    "Str" [0-9\']*     -> String
+
+module languages/aterm/syntax/RealCon
+
+imports languages/aterm/syntax/IntCon
+
+hiddens
+  context-free start-symbols 
+    RealCon
+
+exports
+  sorts OptExp RealCon
+
+  context-free syntax
+    "e" IntCon -> OptExp {cons("present")}
+               -> OptExp {cons("absent")}
+
+    IntCon "." NatCon OptExp  -> RealCon {cons("real-con")}
+module languages/aterm/syntax/IntCon
+
+imports basic/Whitespace
+
+hiddens
+  context-free start-symbols 
+    IntCon
+
+exports
+
+  sorts NatCon IntCon
+  lexical syntax   
+    [0-9]+ -> NatCon  {cons("digits")}
+  context-free syntax
+    NatCon         -> IntCon {cons("natural")}
+    pos:"+" NatCon -> IntCon {cons("positive")}
+    neg:"-" NatCon -> IntCon {cons("negative")}
+module languages/aterm/syntax/Literals
+
+imports basic/Whitespace
+
+hiddens
+  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
+  context-free start-symbols
+    Literal
+
+exports
+  sorts QLiteral
+  lexical syntax
+    "\\" ~[012]                    -> AlphaNumericalEscChar {cons("default")}
+
+    "\\" [01] [0-9] [0-9]          -> DecimalEscChar {cons("dec0_199")}
+    "\\" "2" [0-4] [0-9]           -> DecimalEscChar {cons("dec200_249")}
+    "\\" "2" "5" [0-5]             -> DecimalEscChar {cons("dec250_255")}
+
+    alpha:AlphaNumericalEscChar  -> EscChar {cons("alpha-numeric")}
+    decimal:DecimalEscChar       -> EscChar {cons("decimal")}
+
+    ~[\000-\031\"\\] \/ [\t\n\r] -> L-Char {cons("normal")}
+    EscChar                      -> L-Char {cons("escaped")}
+
+    "\"" chars:L-Char* "\""        -> QLiteral {cons("quoted")}
+
+  sorts UQLiteral
+  lexical syntax
+    [a-z]                          -> UQLiteral {cons("one-char")}
+    [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral {cons("more-chars")}
+
+  sorts Literal
+  context-free syntax
+    QLiteral  -> Literal {cons("qlit")}
+    UQLiteral -> Literal {cons("uqlit")}
+
+  lexical restrictions
+    UQLiteral -/- [A-Za-z0-9]
+module languages/aterm/syntax/ATerms
+
+imports languages/aterm/syntax/Literals 
+        languages/aterm/syntax/IntCon 
+        languages/aterm/syntax/RealCon
+
+hiddens
+  context-free start-symbols 
+    ATerm
+
+exports
+  sorts ATermList ACon AFun ATerm Ann
+
+  context-free syntax
+    "[" elems:{ ATerm ","}* "]"             -> ATermList {cons("not-empty")}
+    IntCon                                  -> ACon      {cons("int")}
+    RealCon                                 -> ACon      {cons("real")}
+    Literal                                 -> AFun
+    ACon                                    -> ATerm     {cons("constant")}
+    list:ATermList                          -> ATerm     {cons("list")}
+    fun:AFun                                -> ATerm     {cons("fun")}
+    fun:AFun "(" args:{ ATerm ","}+ ")"     -> ATerm     {cons("appl")}
+    "<" type:ATerm ">"                      -> ATerm {cons("placeholder")}
+    "{" annos:{ ATerm ","}+ "}"             -> Ann       {cons("annotation")}
+    ACon Ann                                -> ATerm     {cons("annotated-constant")}
+    list:ATermList Ann                      -> ATerm     {cons("annotated-list")}
+    fun:AFun Ann                            -> ATerm     {cons("annotated-fun")}
+    fun:AFun "(" args:{ ATerm ","}+ ")" Ann -> ATerm {cons("annotated-appl")}
+    "<" type:ATerm ">" Ann                  -> ATerm {cons("annotated-placeholder")}
+module utilities/ATermAnnotations[X]
+
+imports languages/aterm/syntax/ATerms
+imports basic/Strings
+
+exports
+  context-free syntax
+    set-term-anno(term:X,label:String,anno:ATerm) -> X {built-in("set-term-anno")}   
+    get-term-anno(term:X,label:String) -> ATerm {built-in("get-term-anno")}
+
+hiddens
+  context-free start-symbols ATerm
+module basic/StrCon
+
+exports
+
+sorts StrCon Normal Escaped
+
+
+lexical syntax
+    ~[\0-\31\"\\\n] -> Normal {cons("default")}
+
+    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped {cons("special-character")}
+    "\\" [0-7][0-7][0-7]             -> Escaped {cons("octal")}
+
+    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" 
+       -> StrCon {cons("default")}
+module basic/Locations
+
+imports basic/Areas
+imports basic/StrCon
+
+exports
+
+sorts Location
+context-free syntax
+
+  "file" "(" filename:StrCon ")" -> Location {cons("file")}
+
+  "area-in-file" "(" filename:StrCon "," Area ")"
+    -> Location {cons("area-in-file")}
+module basic/LocationOperations
+
+imports basic/Locations
+
+exports
+context-free syntax
+  get-filename(Location) -> StrCon
+  get-area(Location) -> Area
+
+hiddens
+  imports basic/Whitespace
+ 
+  context-free start-symbols
+    Area StrCon
+
+  variables
+    "Filename" -> StrCon
+    "Area" -> Area
+
+module basic/Areas
+
+imports basic/NatCon
+
+exports
+
+sorts Area
+context-free syntax
+
+  "area" "("
+    begin-line:NatCon "," 
+    begin-column:NatCon ","
+    end-line:NatCon ","
+    end-column:NatCon ","
+    offset:NatCon ","
+    length:NatCon ")"
+  -> Area {cons("area")}
+module basic/AreaOperations
+
+imports basic/Areas
+imports basic/NatCon
+
+exports
+
+context-free syntax
+  get-begin-line(Area) -> NatCon
+  get-begin-column(Area) -> NatCon
+  get-end-line(Area) -> NatCon
+  get-end-column(Area) -> NatCon
+  get-offset(Area) -> NatCon
+  get-length(Area) -> NatCon
+
+hiddens
+  imports basic/Whitespace
+
+  context-free start-symbols
+    NatCon
+
+  variables
+    "BeginLine" -> NatCon
+    "BeginColumn" -> NatCon
+    "EndLine" -> NatCon
+    "EndColumn" -> NatCon
+    "Offset" -> NatCon
+    "Length" -> NatCon
+
+module utilities/PosInfo[X]
+
+imports basic/AreaOperations
+imports basic/LocationOperations
+imports utilities/ATermAnnotations[X]
+
+exports
+
+context-free syntax
+  set-location(X, Location) -> X
+
+context-free syntax
+  set-posinfo(X, Location) -> X
+
+context-free syntax
+  get-location(X) -> Location
+
+context-free syntax
+  get-posinfo(X) -> Location
+
+context-free syntax
+  get-begin-line(X) -> NatCon
+  get-begin-column(X) -> NatCon
+  get-end-line(X) -> NatCon
+  get-end-column(X) -> NatCon
+  get-offset(X) -> NatCon
+  get-length(X) -> NatCon
+
+context-free syntax
+  get-area(X) -> Area
+  get-filename(X) -> StrCon
+  
+hiddens
+
+context-free start-symbols
+   Location NatCon StrCon
+
+variables
+  "ATerm" -> ATerm
+  "Char*" -> CHAR*
+  "BeginColumn" -> NatCon
+  "EndColumn" -> NatCon
+  "Length" -> NatCon
+  "BeginLine" -> NatCon
+  "EndLine" -> NatCon
+  "Offset" -> NatCon
+  "Path" -> StrCon
+  "X" -> X
+  "Location" -> Location
+
+module basic/BoolCon
+
+exports
+
+sorts BoolCon
+context-free syntax
+
+    "true"  -> BoolCon {cons("true")}
+    "false" -> BoolCon {cons("false")}
+
+hiddens
+context-free start-symbols
+  BoolCon
+module basic/Booleans
+
+imports basic/BoolCon
+exports
+  sorts Boolean
+
+  context-free syntax
+    BoolCon                     -> Boolean {cons("constant")}
+    lhs:Boolean "|" rhs:Boolean -> Boolean {left, cons("or"),delaying}
+    lhs:Boolean "&" rhs:Boolean -> Boolean {left, cons("and")}
+    "not" "(" Boolean ")" 	-> Boolean {cons("not")}
+    "(" Boolean ")"       	-> Boolean {bracket, cons("bracket")}
+
+  context-free priorities
+    Boolean "&" Boolean -> Boolean >
+    Boolean "|" Boolean -> Boolean
+
+hiddens
+  context-free start-symbols Boolean
+
+  imports
+    basic/Comments
+  variables
+    "Bool"[0-9]* 	-> Boolean 
+    "Bool-con"[0-9]* 	-> BoolCon 
+
+
+module basic/NatCon
+
+exports
+
+sorts NatCon
+
+lexical syntax
+  
+ [0-9]+ -> NatCon {cons("default")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r]	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+module basic/Comments
+
+imports
+  basic/Whitespace
+
+exports
+  lexical syntax
+    "%%" ~[\n]* "\n"	-> LAYOUT
+    "%" ~[\%\n]+ "%"	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\%]
+module basic/Integers
+
+imports basic/NatCon
+imports basic/Booleans
+imports utilities/PosInfo[Integer]
+
+exports
+   context-free start-symbols 
+     Integer
+
+exports
+  sorts Natural Integer
+
+  context-free syntax
+     NatCon           		-> Natural
+     Natural "-/" Natural	-> Natural {left}
+     "(" Natural ")"       	-> Natural {bracket}
+     Natural               	-> Integer
+     "+" Natural           	-> Integer
+     "-" Natural           	-> Integer
+     Integer "+" Integer       	-> Integer {left}
+     Integer "-" Integer       	-> Integer {left}
+     Integer "*" Integer       	-> Integer {left}
+     Integer "/" Integer        -> Integer {left}
+     Integer "mod" Integer        -> Integer {left}
+     Integer ">" Integer       	-> Boolean
+     Integer ">=" Integer      	-> Boolean
+     Integer "<" Integer       	-> Boolean
+     Integer "<=" Integer      	-> Boolean
+     even(Integer)              -> Boolean
+     odd(Integer)               -> Boolean
+
+     max(Integer, Integer)      -> Integer
+     quotrem(Integer,Integer)   -> (Integer "rem" Integer)
+
+     "(" Integer ")"       	-> Integer {bracket}
+
+  context-free priorities
+    {left: Integer "*" Integer -> Integer
+           Integer "/" Integer -> Integer 
+           Integer "mod" Integer -> Integer 
+    } >
+    {left: Integer "+" Integer -> Integer
+           Integer "-" Integer -> Integer}
+
+
+
+hiddens
+  imports basic/Comments
+   
+  context-free start-symbols
+    Integer (Integer "rem" Integer) Boolean
+
+  context-free syntax
+    "gt" "(" Natural "," Natural ")" -> Boolean
+    Natural "-//" Natural          -> Natural
+    Natural ">-" Natural           -> Natural
+
+  variables
+    "Nat" [0-9\']*      -> Natural 
+    "Nat-con" [0-9\']*  -> NatCon
+    "Int" [0-9\']*      -> Integer
+
+  variables 
+    "n" [0-9]* -> NatCon
+    "c" [0-9]* -> CHAR
+    "x" [0-9]* -> CHAR*
+    "y" [0-9]* -> CHAR+
+

@@ -1,0 +1,9 @@
+#! /bin/sh
+
+bindir=__BINDIR__
+datadir=__DATADIR__
+
+SDF2TBL=${datadir}/Sdf2.saf
+PARSER="__SGLR__/bin/sglr -p ${SDF2TBL}"
+
+${PARSER} $*

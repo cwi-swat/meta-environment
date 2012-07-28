@@ -1,0 +1,60 @@
+spec POINT =
+    sorts Float,PosFloat,Angle;
+	  PosFloat < Float;
+	  Angle = Float
+    op zero,one,two,three : Float
+    op square : Float -> Float
+    op sqrt :  Float -> Float
+    op minus :  Float -> Float
+    op plus,minus,times,divide : Float*Float->Float
+    op pi : Float
+    op atan,cos,sin :  Float -> Float
+    preds greater,less : Float*Float
+
+
+    sorts Point, Cart, NzPolar, Origin, Polar ;
+    	  Cart, Polar < Point ;
+    	  NzPolar, Origin < Polar
+    op cart : Float*Float -> Cart
+    op x : Cart -> Float
+    op y : Cart -> Float
+    vars X, Y : Float
+    axioms x (cart( X, Y )) = X ;
+           y (cart( X, Y )) = Y
+
+    op polar : PosFloat*Angle -> NzPolar
+    op origin :  Origin
+    op rho : Polar -> Float
+    op theta : NzPolar -> Angle
+    var Rh : PosFloat   var Th : Angle
+    axioms rho (polar (Rh, Th )) = Rh;
+    	   theta (polar (Rh, Th )) = Th;
+    	   rho(origin) = zero
+
+    axioms cart( X, Y )  = polar(sqrt(plus(square(X),square(Y))) as PosFloat,atan(divide(Y,X))) if greater(X,zero) ;
+    	 cart( X, Y )  = polar(sqrt(plus(square(X),square(Y))) as PosFloat,plus(pi , atan(divide(Y,X)))) if less(X,zero) ;
+    	 cart( X, Y )  = polar(sqrt(plus(square(X),square(Y))) as PosFloat,atan(divide(Y,X))) if greater(X,zero) ;
+    	 cart( X, Y )  = polar(sqrt(plus(square(X),square(Y))) as PosFloat,plus(pi, atan(divide(Y,X)))) if less(X,zero) ;
+    	 cart( zero, Y )  = polar( Y as PosFloat, divide(pi,two) ) if  greater(Y,zero) ;
+    	 cart( zero, Y )   = polar( Y as PosFloat, divide(pi,two) ) if greater(Y,zero) ;
+    	 cart( zero, Y )  = polar( minus(Y) as PosFloat, divide(times(pi,three),two) ) if less(Y,zero) ;
+    	 cart( zero, Y )    = polar( minus(Y) as PosFloat, divide(times(pi,three),two) ) if less(Y,zero) ;
+    	 cart( zero, zero )   = origin ;
+    	 polar( Rh, Th )  = cart( times(Rh , cos(Th)), times(Rh , sin(Th)) ) ;
+    	 origin = cart( zero, zero )
+
+
+    op d : Cart * Cart -> Float
+    op plus : Cart * Cart -> Cart
+    var X1, Y1, X2, Y2 : Float
+    axioms d(cart( X1, Y1 ), cart( X2, Y2 )) = sqrt(plus(square(minus(X2 , X1)) ,square(minus (Y2 , Y1))));
+    	 plus ( cart( X1, Y1 ) , cart( X2, Y2 ) ) = cart( plus(X1 , X2), plus(Y1 , Y2 ))
+
+    op times : Float * Polar -> Polar
+    op times : Float * Cart -> Cart
+    vars F, X, Y : Float ;   Rh : PosFloat ;   Th : Angle
+    axioms times(F, cart( X, Y )) = cart( times(F , X), times(F , Y) ) ;
+    	 times(F , polar( Rh, Th ) ) = polar( times(F , Rh) as PosFloat, Th ) if less(F , zero) ;
+    	 times(F , polar( Rh, Th )) = polar( times(minus( F ), Rh) as PosFloat, plus(pi , Th )) if less(F , zero) ;
+    	 times(zero , polar( Rh, Th )) = origin ;
+    	 times(F , origin) = origin

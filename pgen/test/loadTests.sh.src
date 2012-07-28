@@ -1,0 +1,25 @@
+#! /bin/sh
+
+set -e
+
+LOADPATH="__TOP_SRCDIR__/test/modules"
+SDF2TABLE="__TOP_BUILDDIR__/src/sdf2table"
+ATCOMPARE="__ATERM__/bin/atdiff"
+TABLES="__TOP_BUILDDIR__/test/tables"
+BUILDDIR="__TOP_BUILDDIR__/test"
+
+error () {
+  printf "x -- $2"
+}
+
+success () {
+    printf "."
+}
+
+${SDF2TABLE} -p ${LOADPATH} -m Test -o Load.tbl -c
+
+if $ATCOMPARE ./Load.tbl ${TABLES}/Load.tbl >/dev/null ; then
+  success "SUCCEEDED load test"
+else
+  error "FAILED load test " 
+fi

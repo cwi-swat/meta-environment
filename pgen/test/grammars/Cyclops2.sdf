@@ -1,0 +1,14 @@
+definition
+module Main
+exports
+   sorts A B C  
+   context-free start-symbols A B C  
+
+lexical syntax
+   [\ \t\n] -> LAYOUT
+
+context-free syntax
+       -> A
+   A   -> B
+   "a" -> B
+   B+  -> C

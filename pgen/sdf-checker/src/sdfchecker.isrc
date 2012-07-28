@@ -1,0 +1,20 @@
+tool sdfchecker is {command = "__PREFIX__/bin/sdfchecker"}
+
+process SdfChecker is
+let
+  Msgs   : list,
+  Syntax : term,
+  SC     : sdfchecker
+in
+  execute(sdfchecker, SC?) .
+  (
+    rec-msg(check-sdf(Syntax?)) .
+    snd-eval(SC, check-sdf(Syntax)) .
+    rec-value(SC, messages(Msgs?)) .
+    snd-msg(messages(Msgs)) .
+    Syntax := none
+  )*
+  delta
+endlet
+
+toolbus(SdfChecker)

@@ -1,0 +1,768 @@
+product ZILVERVL
+
+uses one REKENING with id IDREK
+
+contract data:
+CATCODE:        cat-code               %% productvorm
+PA:             amount                 %% hoofdsom (= eerste inleg)
+SD:             date                   %% datum eerste inleg (valutair)
+CP:             party                  %% identificatie client
+DD:             date                   %% openingsdatum productovereenkomst (= datum afsluiten overeenkomst)
+RR:             business-unit          %% resultaatverantwoordelijke regio/kantoor/kaskantoor
+CUR:            currency               %% munt
+FD:= IN:        direction              %% hoofdrichting (OG)
+CDKNOWN:        boolean                %% is de contractdatum van de productovereenkomst ingevoerd?
+CLOSED:         boolean                %% is de overeenkomst opgezegd?
+AGECRIT:=TRUE:  boolean                %% is leeftijd een criterium voor beeindiging van de overeenkomst?
+TERMCRIT:=TRUE: boolean                %% is looptijd een criterium voor beeindiging van de overeenkomst?
+NEWYREND:=TRUE: boolean                %% eindigt de overeenkomst uiterlijk op 1 januari na max. leeftijd?
+BTHDTE:         date                   %% geboortedatum van de tegenpartij
+MAXAGE:         period                 %% maximum leeftijd van de tegenpartij
+MAXPER:         period                 %% maximum looptijd van de overeenkomst
+PCNV:           per-conv               %% conventie voor periodeconstructie
+DCNV:           date-conv              %% datumconventie voor periodeconstructie
+SCNV:           date-conv              %% conventie voor renteverrekendatum
+ICCNV:          icum-conv              %% conventie voor rentecumulatie
+CL:             currency-list          %% voor business days
+
+DEPOS:          cashflow-list          %% vervolgstortingen
+DISPOS:         cashflow-list          %% disposities
+
+MINPA:          amount                 %% minimum eerste inleg
+MINBAL:         amount                 %% minimum aan te houden saldo over de gehele looptijd
+MINDEPOSAMT:    amount                 %% minimum aanvulling op het saldo per minimumsaldoperiode (waarde bij INSERT)
+MINDEPOSPER:    period                 %% minimumsaldoperiode
+MINCHKPER:      period                 %% periodiciteit waarmee toetsing plaatsvindt
+
+MAXDEPOSAMT:    amount                 %% maximum inleg per spaarperiode (waarde bij INSERT)
+MAXDEPOSPER:    period                 %% spaarperiode waarvoor de maximum inleg van toepassing is
+MAXCHKPER:      period                 %% periodiciteit waarmee toetsing plaatsvindt
+
+CONPREM:        bonus-pct-list         %% voorwaardelijke premiepercentages bij aantal spaarjaren
+STDPREM:        bonus-pct-list         %% premiepercentages bij een gegeven aantal spaarjaren
+MARPREM:        bonus-pct-list         %% premiepercentages bij aantal spaarjaren indien gehuwd
+DECPREM:        bonus-pct-list         %% premiepercentages bij aantal spaarjaren indien overleden
+MARRIED:        boolean                %% is de client gehuwd?
+DECEASED:       boolean                %% is de client overleden?
+
+CRSPREADS:      timed-ir-set           %% spreads op creditrenteset
+CRIPSCH:        intv-scheme-list       %% creditrenteberekenschema
+DTIPSCH:        intv-scheme-list       %% debetrenteberekenschema
+PAY:= AFTER:    payment                %% verrekenmoment (achteraf)
+CRCFL:          cashflow-list          %% (geregistreerde) creditrentebedragen
+DTCFL:          cashflow-list          %% (geregistreerde) debetrentebedragen
+DC:             day-count              %% manier om rentedagen te bepalen
+
+CCRCFL:         cashflow-list          %% (berekende) creditrentebedragen
+CDTCFL:         cashflow-list          %% (berekende) debetrentebedragen
+
+instance variables:
+MDIC:           date                   %% einddatum (valutair) indien opgezegd
+CONTRDTE:       date                   %% contractdatum productovereenkomst indien ingevoerd
+CHPREMPEL:      post-el-list           %% correcties op het premiebasissaldo + inbreng spaarhistorie
+
+intermediate results:
+CREXTIRS:       ext-int-rate-set       %% uitgebreide creditrenteset
+DTEXTIRS:       ext-int-rate-set       %% uitgebreide debetrenteset
+CD:             date                   %% begindatum voor leeftijds- en looptijdcriteria
+SDALT:          date                   %% alternatieve startdatum
+MDMAX:          date                   %% uiterlijke einddatum van de overeenkomst
+FRL:            fin-rel-list           %% financiele relatie met client
+TERM:           interval               %% liquiditeitstypische looptijd
+PBTERM:         interval               %% hulpvariabele voor bonustypische looptijd
+BTERM:          interval               %% bonustypische looptijd
+NYEARS:         period                 %% aantal verstreken spaarperioden
+MYEARS:         period                 %% maximum aantal spaarperioden
+PCFL:           cashflow-list          %% de stortingen en opnamen
+CRICP:          interval-list          %% de creditrenteverrekeningsintervallen
+DTICP:          interval-list          %% de debetrenteverrekeningsintervallen
+ICP:            interval-list          %% de renteberekeningsintervallen
+CRTIRS:         timed-ir-set           %% creditrentepercentages
+DTTIRS:         timed-ir-set           %% debetrentepercentages
+CRLSTDTE:       date                   %% datum laatste creditrenteberekening
+DTLSTDTE:       date                   %% datum laatste debetrenteberekening
+CRPRVDTE:       date                   %% datum voorlaatste creditrenteberekening
+DTPRVDTE:       date                   %% datum voorlaatste debetrenteberekening
+CRLSTAMT:       amount                 %% bedrag laatste creditrenteberekening
+DTLSTAMT:       amount                 %% bedrag laatste debetrenteberekening
+CRIEL:          int-el-list            %% creditrentebedragen met de basisgegevens van de berekening
+DTIEL:          int-el-list            %% debetrentebedragen met de basisgegevens van de berekening
+FSTCHKDTE:      date                   %% 1e datum waarop toetsing aan minimum saldo-eisen plaatsvindt
+PRMREFDTE:      date                   %% premiereferentiedatum (o.a. t.b.v. saldo einddatum)
+CRLPRMDTE:      date                   %% datum laatste creditrenteverrekening voor premiereferentiedatum
+DTLPRMDTE:      date                   %% datum laatste debetrenteverrekening voor premiereferentiedatum
+PRMHISTIL:      interval-list          %% intervallen ten behoeve van historie premieopbouw vanaf contractdatum
+MINLST:         cashflow-list          %% lijst met minimum te storten bedragen per spaarperiode met vanaf-datum
+MAXLST:         cashflow-list          %% lijst van maximum te storten bedragen per spaarperiode met vanaf-datum
+MINBALLST:      cashflow-list          %% minimum aan te houden saldo per controle-interval
+MAXBALLST:      cashflow-list          %% maximum te storten bedrag per controle-interval
+PREMBASE:       amount                 %% bedrag dat de grondslag vormt voor de premieberekening
+PRMBASCFL:      cashflow-list          %% historie premiebasisbedragen
+DEFBONUS:       amount                 %% definitieve premiebedrag
+CONBONUS:       amount                 %% voorwaardelijk premierecht
+PREMTPFL:       flow-list              %% premiestromen
+CTPFL:          flow-list              %% hoofdsomstromen (stortingen, opnamen, terugstorting)
+CRITPFL:        interest-flow-list     %% de creditrenteverrekeningen
+CRPCPFL:        flow-list              %% terugstorting van de creditrenteverrekeningen
+DTITPFL:        interest-flow-list     %% de debetrenteverrekeningen
+DTPCPFL:        flow-list              %% terugstorting van de debetrenteverrekeningen
+PFL:            flow-list              %% alle stromen met de positie
+
+imported methods:
+
+use INTEREST-TO-POSITION-NOMINAL
+with    CRIEL (MDSCEN)          -> IEL
+,       CRICP (ITV)             -> ITPP
+,       SCNV
+,       CL
+,       FRL
+,       FD
+,       CUR
+,       INTP                    -> ITPLAB
+,       PAMT                    -> PCPLAB
+,       RR
+to define methods CRITPFL(MDSCEN: date, ITV: interval) as ITPFL, CRPCPFL(MDSCEN:date, ITV: interval) as PCPFL
+;
+
+use INTEREST-TO-POSITION-NOMINAL
+with    DTIEL (MDSCEN)          -> IEL
+,       DTICP (ITV)             -> ITPP
+,       SCNV
+,       CL
+,       FRL
+,       FD
+,       CUR
+,       INTP                    -> ITPLAB
+,       PAMT                    -> PCPLAB
+,       RR
+to define methods DTITPFL(MDSCEN: date, ITV: interval) as ITPFL, DTPCPFL(MDSCEN:date, ITV: interval) as PCPFL
+;
+
+
+use BONUS-RIGHTS-CALCULATION
+with    NYEARS (MDSCEN)         -> NYEARS
+,       PREMBASE (MDSCEN)       -> BASEAMT
+,       CONPREM                 -> CONBPL
+,       STDPREM                 -> STDBPL
+,       MARPREM                 -> MARBPL
+,       DECPREM                 -> DECBPL
+,       MARRIED
+,       DECEASED
+to define methods DEFBONUS (MDSCEN: date) as DEFBONUS, CONBONUS (MDSCEN: date) as CONBONUS
+;
+
+
+intermediate methods:
+define intermediate CREXTIRS as
+EXTIRS using FETCH-RATES
+with    CATCODE
+,       CUR
+,       SDALT                   -> SD
+,       CREDIT                  -> INTTYPE
+;
+
+define intermediate DTEXTIRS as
+EXTIRS using FETCH-RATES
+with    CATCODE
+,       CUR
+,       SDALT                   -> SD
+,       DEBET                   -> INTTYPE
+;
+
+define intermediate CD as
+if CDKNOWN = TRUE then
+   CONTRDTE
+else
+   DD
+endif
+;
+
+define intermediate SDALT as
+if ETL ( PCFL ) = TRUE then SD
+else if CFLFIRST ( PCFL ) . DTE < SD then
+      CFLFIRST ( PCFL ) . DTE
+   else
+      SD
+   endif
+endif
+;
+
+
+define intermediate MDMAX as
+MD using YOUTH-ACCOUNT-MAX-MD
+with    AGECRIT                 -> AGE_BOO
+,       BTHDTE                  -> BTH_DTE
+,       MAXAGE                  -> AGE_PER
+,       NEWYREND                -> NYD_BOO
+,       TERMCRIT                -> TRM_BOO
+,       CD                      -> SD
+,       MAXPER                  -> TRM_PER
+,       TRUE                    -> PYD_BOO
+,       CLOSED
+,       MDIC                    -> CLOSE_DTE
+,       S                       -> DCNV
+,       CL
+;
+
+define intermediate FRL as
+FRL using SINGLE-OWNER
+with    1                       -> SN
+,       CP
+;
+
+define intermediate TERM as
+TERM using SD-FIXED-MD-WITH-NOTICE
+with    MDSCEN as method parameter
+with    CD                      -> SD
+,       CLOSED
+,       MDIC
+;
+
+define intermediate PBTERM (MDSCEN: date) as
+TERM using SD-FIXED-MD-FIXED
+with    CD                              -> SD
+,       PRED ( TERM (MDSCEN).END_DATE ) -> MD
+;
+
+define intermediate BTERM (MDSCEN: date) as
+MTERM using LIMIT-TERM-BY-MAXMD
+with    PBTERM (MDSCEN)         -> TERM
+,       MDMAX                   -> MAXMD
+;
+
+define intermediate NYEARS (MDSCEN: date) as
+NUMPERS using PERIODS-IN-TERM
+with    BTERM (MDSCEN)         -> TERM
+,       YEAR                   -> PERUNIT
+;
+
+define intermediate MYEARS as
+NUMPERS using PERIODS-IN-TERM
+with    BTERM (MAXDATE)        -> TERM
+,       YEAR                   -> PERUNIT
+;
+
+define intermediate CRTIRS (MDSCEN: date) as
+TIRS using CALCULATION-RATES
+with    CREXTIRS                -> EXTIRS
+,       TERM (MDSCEN)           -> TERM
+;
+
+define intermediate DTTIRS (MDSCEN: date) as
+TIRS using CALCULATION-RATES
+with    DTEXTIRS                -> EXTIRS
+,       TERM (MDSCEN)           -> TERM
+;
+
+define intermediate PCFL as
+CTPCFL using PRINCIPAL-MAIN-SIMPLE
+with    PA
+,       SD
+,       DEPOS + DISPOS          -> CHPA
+;
+
+define intermediate CRICP (ITV: interval) as
+IPP using INTEREST-PAYMENT-ONCE
+with    ITV                     -> TERM
+;
+
+define intermediate DTICP (ITV: interval) as
+IPP using INTEREST-PAYMENT-ONCE
+with    ITV                     -> TERM
+;
+
+define intermediate ICP as
+IPP using INTEREST-PAYMENT-ONCE-OR-MANY
+with    CRIPSCH                 -> IPSCH
+,       TERM ( MAXDATE )        -> TERM
+,       FIXED                   -> PCNV
+,       DCNV
+,       [ CUR ]                 -> CL
+;
+
+define intermediate CRLSTDTE as
+FLWDTE using LAST-FLOWDATE-BEFORE-DATE
+with    CCRCFL                  -> BASECFL
+,       MAXDATE                 -> REFDTE
+,       SDALT                   -> ALTDTE
+;
+
+define intermediate DTLSTDTE as
+FLWDTE using LAST-FLOWDATE-BEFORE-DATE
+with    CDTCFL                  -> BASECFL
+,       MAXDATE                 -> REFDTE
+,       SDALT                   -> ALTDTE
+;
+
+define intermediate CRPRVDTE as
+FLWDTE using LAST-FLOWDATE-BEFORE-DATE
+with    CCRCFL                  -> BASECFL
+,       PRED(CRLSTDTE)          -> REFDTE
+,       SDALT                   -> ALTDTE
+;
+
+define intermediate DTPRVDTE as
+FLWDTE using LAST-FLOWDATE-BEFORE-DATE
+with    CDTCFL                  -> BASECFL
+,       PRED(DTLSTDTE)          -> REFDTE
+,       SDALT                   -> ALTDTE
+;
+
+define intermediate CRLSTAMT as
+if ETL ( CCRCFL ) = TRUE then
+        0
+else
+        CFLLAST ( CCRCFL ) . AMT
+endif
+;
+
+define intermediate DTLSTAMT as
+if ETL ( CDTCFL ) = TRUE then
+        0
+else
+        CFLLAST ( CDTCFL ) . AMT
+endif
+;
+
+define intermediate CRIEL (MDSCEN: date) as
+IEL using INTEREST-CALCULATION-LINEAR
+with    LIMBALCFL ( NETT ( PCFL, NETT( CRCFL, DTCFL )),
+                    0, MAXAM )  -> CFL
+,       CRTIRS ( MDSCEN )       -> TIRS
+,       [ < CRPRVDTE, CRLSTDTE > ,
+          < CRLSTDTE, MDSCEN > ] -> IPP
+,       DC
+;
+
+define intermediate DTIEL (MDSCEN: date) as
+IEL using INTEREST-CALCULATION-LINEAR
+with    LIMBALCFL ( NETT ( PCFL, NETT ( CRCFL, DTCFL )),
+                    MINAM, 0 )  -> CFL
+,       DTTIRS ( MDSCEN )       -> TIRS
+,       [ < DTPRVDTE, DTLSTDTE >,
+          < DTLSTDTE, MDSCEN > ] -> IPP
+,       DC
+;
+
+define intermediate FSTCHKDTE as
+REFDTE using YEAR-END-REFERENCE-DATE
+with    CD                      -> MDSCEN
+,       TRUE                    -> LOOKFWD
+,       CD                      -> MINDTE
+,       MDMAX                   -> MAXDTE
+;
+
+define intermediate PRMREFDTE as
+REFDTE using YEAR-END-REFERENCE-DATE
+with    MDSCEN as method parameter
+with    FALSE                   -> LOOKFWD
+,       CD                      -> MINDTE
+,       MDMAX                   -> MAXDTE
+;
+
+define intermediate CRLPRMDTE (MDSCEN: date) as
+FLWDTE using LAST-FLOWDATE-BEFORE-DATE
+with    CRCFL                   -> BASECFL
+,       PRMREFDTE ( MDSCEN )    -> REFDTE
+,       SDALT                   -> ALTDTE
+;
+
+define intermediate DTLPRMDTE (MDSCEN: date) as
+FLWDTE using LAST-FLOWDATE-BEFORE-DATE
+with    DTCFL                   -> BASECFL
+,       PRMREFDTE ( MDSCEN )    -> REFDTE
+,       SDALT                   -> ALTDTE
+;
+
+define intermediate PRMHISTIL ( MDSCEN: date ) as
+PER ( PRED ( CD )
+    , PRMREFDTE ( MDSCEN )
+    , < 1, YEAR >
+    , PRED (NEWYEARSDAY ( CD, TRUE ) )
+    , PRMREFDTE ( MDSCEN )
+    , S
+    , []
+    , ULTIMO )
+;
+
+define intermediate MINLST as
+MKMINLST ( CATCODE, CUR, SD )
+;
+
+define intermediate MAXLST as
+MKMAXLST ( CATCODE, CUR, SD )
+;
+
+define intermediate MINBALLST as
+CHKCFL using BOUNDARY-CASHFLOW-LIST
+with    CD                      -> FSTDTE
+,       MDMAX                   -> LSTDTE
+,       MINLST                  -> ADDLST
+,       MINDEPOSPER             -> ADDPER
+,       FSTCHKDTE               -> CHKDTE
+,       MINCHKPER               -> CHKPER
+,       MINBAL
+,       MAXAM                   -> MAXBAL
+;
+
+define intermediate MAXBALLST as
+CHKCFL using BOUNDARY-CASHFLOW-LIST
+with    CD                      -> FSTDTE
+,       MDMAX                   -> LSTDTE
+,       MAXLST                  -> ADDLST
+,       MAXDEPOSPER             -> ADDPER
+,       FSTCHKDTE               -> CHKDTE
+,       MAXCHKPER               -> CHKPER
+,       0                       -> MINBAL
+,       MAXAM                   -> MAXBAL
+;
+
+define intermediate PREMBASE (MDSCEN: date) as
+BASEAMT using BONUS-BASE-AMOUNT-ZILVERVLOOT
+with    BTERM (MDSCEN)          -> BTERM
+,       PA
+,       SD
+,       DEPOS
+,       DISPOS
+,       CRCFL
+,       DTCFL
+,       CHPREMPEL               -> CORRPEL
+,       MINBALLST               -> MINBALCFL
+,       PRMREFDTE (MDSCEN)      -> BONREFDTE
+;
+
+define intermediate PRMBASCFL (MDSCEN: date) as
+for each INTERVAL in PRMHISTIL ( MDSCEN )
+new element is
+< PREMBASE ( NXT ( INTERVAL.END_DATE, < 1, DAY >, S, [ ] ) ), INTERVAL.END_DATE >
+;
+
+define intermediate CTPFL as
+FL using CASH-FLOW-SETTLEMENT
+with    PCFL                    -> CFL
+,       FRL
+,       FD
+,       CUR
+,       PAMT                    -> LAB
+,       RR
+;
+
+define intermediate PREMTPFL (MDSCEN: date) as
+FL using CASH-FLOW-SETTLEMENT
+with  [ < DEFBONUS ( MDSCEN), MDSCEN > ] -> CFL
+,       FRL
+,       FD
+,       CUR
+,       BONP                    -> LAB
+,       RR
+;
+
+define intermediate PFL (MDSCEN: date, ITV: interval) as
+PFL using POSITION-FLOWS
+with    CTPFL
+      + CRPCPFL (MDSCEN, ITV)
+      + DTPCPFL (MDSCEN, ITV)
+      + PREMTPFL (MDSCEN)       -> CTPFL
+,       CRITPFL (MDSCEN, ITV)
+      + DTITPFL (MDSCEN, ITV)   -> ITPFL
+,       []                      -> PRTPFL
+,       []                      -> PTPFL
+;
+
+registration methods:
+
+define registration DEPOSIT as
+INCREASE using PRINCIPAL-INCREASES-IRREGULAR
+with    DEPOS                   -> INCRIRR
+;
+
+define registration DISPOSIT as
+DECREASE using PRINCIPAL-DECREASES-IRREGULAR
+with    DISPOS                  -> DECRIRR
+;
+
+define registration CRINTSET as
+INCREASE using PRINCIPAL-INCREASES-IRREGULAR
+with    CRCFL                   -> INCRIRR
+;
+
+define registration DTINTSET as
+DECREASE using PRINCIPAL-DECREASES-IRREGULAR
+with    DTCFL                   -> DECRIRR
+;
+
+define registration CALCCRIA as
+INCREASE using VALNETT-INCREASE
+with    CCRCFL                   -> CFL
+;
+
+define registration CALCDTIA as
+INCREASE using VALNETT-INCREASE
+with    CDTCFL                   -> CFL
+;
+
+define registration PREMCORR as
+INCREASE using PRINCIPAL-INCREASES-PEL-SIMPLE
+with    CHPREMPEL               -> INCRIRR
+;
+
+define registration CLOSE as
+CLOSE using SD-FIXED-MD-WITH-NOTICE
+with    SD
+,       CLOSED
+,       MDIC                    -> MDIC
+,       MDIC                    -> MDSCEN
+;
+
+define registration CDINSERT as
+CLOSE using SD-FIXED-MD-WITH-NOTICE
+with    SDALT                   -> SD
+,       CDKNOWN                 -> CLOSED
+,       CONTRDTE                -> MDIC
+,       CONTRDTE                -> MDSCEN
+;
+
+enduses
+
+intermediate results:
+END_DTE:        date                    %% maximale einddatum
+INT_IFL:        interest-flow-list      %% transitorische rente
+ALLCFL:         cashflow-list           %% alle kasstromen (zowel hoofdsom, als credit- en debetrente)
+
+information:
+SELFC:          sel-crit-list           %% selectie criteria
+PAF:            flow-list               %% hoofdsomstromen
+IAF:            flow-list               %% verrekende rentestromen
+IAFDET:         interest-flow-list      %% rentestromen vanaf laatste verrekening
+IAFTRANS:       flow-list               %% transitorische interest
+PREMAF:         flow-list               %% premiestromen
+MAXTERM:        interval                %% maximum looptijd, rekening houdend met alle criteria
+STNDSAV:        stndsav                 %% actuele stand
+TRNSCRED:       stndtrns                %% transitoria creditrente
+TRNSDEBT:       stndtrns                %% transitoria debetrente
+YTHSTAT:        yth-stat                %% statusgegevens m.b.t. premierecht
+YTHHIST:        yth-hist-list           %% historieopbouw premierechten
+POSTCFL:        typed-cf-list           %% alle geboekte stromen inclusief soort
+YTHDATE:        yth-dates               %% voor jeugdspaarvormen belangrijke datums
+LASTPOST:       typed-cf-list           %% alle laatste geboekte stromen inclusief soort
+NXTICD:         date                    %% volgende renteberekendatum
+AVGBAL:         cashflow-list           %% valutair saldo voorafgaande maand
+MIOCRSET:       amount                  %% verrekende creditrente voorafgaande maand
+MIODTSET:       amount                  %% verrekende debetrente voorafgaande maand
+VGCRED:         vgtrns                  %% transitoria credit grof
+VGDEBT:         vgtrns                  %% transitoria debet grof
+
+imported methods: not applicable
+
+intermediate methods:
+define intermediate END_DTE as
+if CLOSED = TRUE then
+        MDIC
+else
+        MDMAX
+endif
+;
+
+define intermediate INT_IFL ( $MDSCEN : date ) as
+CRITPFL ( $MDSCEN, TERM ( $MDSCEN ) ) +
+DTITPFL ( $MDSCEN, TERM ( $MDSCEN ) )
+;
+
+define intermediate ALLCFL as
+NETT ( PCFL, NETT ( CRCFL, DTCFL ) )
+;
+
+information methods:
+define information SELFC as
+SELFC using SELECT-CRITERIA-CONSTR-SIMPLE
+with    IDREK                    -> ID
+,       CP
+,       CD                       -> DD
+,       END_DTE                  -> MD
+;
+
+define information PAF ( $MDSCEN : date ) as
+CTPFL
+;
+
+define information IAF ( $MDSCEN : date ) as
+FL using CASH-FLOW-SETTLEMENT
+with    CRCFL + DTCFL           -> CFL
+,       FRL
+,       FD
+,       CUR
+,       INTA                    -> LAB
+,       RR
+;
+
+define information IAFDET ( $MDSCEN : date ) as
+INT_IFL ( $MDSCEN )
+;
+
+define information IAFTRANS ( $MDSCEN : date ) as
+for each IFL in INT_IFL ( $MDSCEN )
+new element is
+        IFL . FLW
+;
+
+define information PREMAF ( $MDSCEN : date ) as
+PREMTPFL ( $MDSCEN )
+;
+
+define information MAXTERM as
+< SD, MDMAX >
+;
+
+define information STNDSAV as
+STNDSAV using STANDARD-SAVINGS
+with    DD
+,       CUR
+,       FD
+,       ALLCFL            -> CFL
+,       CLOSED            -> CLO_BOO
+,       MDIC
+,       FALSE             -> MAX_BOO
+,       MAXAM             -> MAX_AMT
+;
+
+define information TRNSCRED ( MDSCEN : date ) as
+TRANSSAV using STANDARD-TRANSITORIA
+with    CUR
+,       FD
+,       ALLCFL            -> CFL
+,       CRIEL ( MDSCEN )  -> IEL
+,       MDSCEN
+,       CRLSTAMT          -> LSTINTAMT
+,       CRLSTDTE        -> LSTINTDTE
+,       CRPRVDTE        -> PRVINTDTE
+;
+
+define information TRNSDEBT ( MDSCEN : date ) as
+TRANSSAV using STANDARD-TRANSITORIA
+with    CUR
+,       FD
+,       ALLCFL            -> CFL
+,       DTIEL ( MDSCEN )  -> IEL
+,       MDSCEN
+,       DTLSTAMT          -> LSTINTAMT
+,       DTLSTDTE        -> LSTINTDTE
+,       DTPRVDTE        -> PRVINTDTE
+;
+
+define information YTHSTAT ( MDSCEN: date ) as
+YTHSTATUS using YOUTH-ACCOUNT-STATUS
+with    CUR
+,       SD
+,       PA
+,       DEPOS
+,       DISPOS
+,       MAXBALLST         -> MAXCHKCFL
+,       MINBALLST         -> MINCHKCFL
+,       CONBONUS (MDSCEN) -> CONAMT
+,       DEFBONUS (MDSCEN) -> DEFAMT
+,       MDSCEN
+,       FSTCHKDTE
+;
+
+define information YTHHIST ( MDSCEN: date ) as
+YTHHISTORY using YOUTH-ACCOUNT-BONUS-HISTORY
+with    PA
+,       SD
+,       FSTCHKDTE
+,       MDSCEN
+,       PRMHISTIL ( MDSCEN )    -> PRMHISTIL
+,       PRMBASCFL ( MDSCEN )    -> PRMBASCFL
+,       [ ]                     -> ACCRCFL
+,       DEPOS
+,       CHPREMPEL               -> CORRPEL
+,       DISPOS
+,       CRCFL
+,       DTCFL
+;
+
+define information POSTCFL as
+POSTCFL using ALL-POSTED-CFL
+with    [ < PA, SD > ] + DEPOS  -> DEPCFL
+,       DISPOS                  -> DISCFL
+,       CRCFL
+,       DTCFL
+,       []                      -> RRCFL
+,       []                      -> BONCFL
+,       []                      -> PREMCFL
+;
+
+define information YTHDATE ( MDSCEN : date ) as
+YTHDATES using YOUTH-ACCOUNT-DATES
+with    CDKNOWN
+,       CD
+,       BTHDTE                  -> BD
+,       MAXAGE                  -> MAX_AGE
+,       MDMAX
+,       TERMCRIT                -> TRM_BOO
+,       NYEARS (MDSCEN)         -> CMPPER
+,       MYEARS                  -> MAXPER
+,       SDALT                   -> FMU_DTE
+,       FALSE                   -> PAY_BOO
+,       < 0, YEAR>              -> MIN_PAY
+,       < 0, YEAR>              -> MAX_PAY
+;
+
+define information LASTPOST as
+LASTPOST using ALL-POSTED-CFL
+with    [ < PA, SD > ] + DEPOS  -> DEPCFL
+,       DISPOS                  -> DISCFL
+,       CRCFL
+,       DTCFL
+,       []                      -> RRCFL
+,       []                      -> BONCFL
+,       []                      -> PREMCFL
+;
+
+define information NXTICD as
+NXTICD using NEXT-INTEREST-CALCULATION
+with    ICP
+,       CRLSTDTE                -> DTE
+;
+
+define information AVGBAL ( $MDSCEN : date ) as
+AVGBAL using AVERAGE-BALANCE-CALCULATION
+with    $MDSCEN                         -> DTE
+,       ALLCFL                          -> CFL
+;
+
+define information MIOCRSET ( $MDSCEN : date ) as
+SETINTAM using SETTLED-INTEREST-AMOUNT
+with    $MDSCEN                         -> DTE
+,       CRCFL                           -> CFL
+;
+
+define information MIODTSET ( $MDSCEN : date ) as
+SETINTAM using SETTLED-INTEREST-AMOUNT
+with    $MDSCEN                         -> DTE
+,       DTCFL                           -> CFL
+;
+
+define information VGCRED ( MDSCEN : date ) as
+VGSAV using STANDARD-TRANSITORIA
+with    CUR
+,       FD
+,       ALLCFL          -> CFL
+,       CRIEL ( MDSCEN )  -> IEL
+,       MDSCEN
+,       CRLSTAMT        -> LSTINTAMT
+,       CRLSTDTE        -> LSTINTDTE
+,       CRPRVDTE        -> PRVINTDTE
+;
+
+define information VGDEBT ( MDSCEN : date ) as
+VGSAV using STANDARD-TRANSITORIA
+with    CUR
+,       FD
+,       ALLCFL          -> CFL
+,       DTIEL ( MDSCEN )  -> IEL
+,       MDSCEN
+,       DTLSTAMT        -> LSTINTAMT
+,       DTLSTDTE        -> LSTINTDTE
+,       DTPRVDTE        -> PRVINTDTE
+;
+

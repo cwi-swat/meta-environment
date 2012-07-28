@@ -1,0 +1,11 @@
+module Test2
+
+exports
+
+sorts A
+
+lexical syntax
+ "a" -> A
+
+context-free start-symbols
+  A

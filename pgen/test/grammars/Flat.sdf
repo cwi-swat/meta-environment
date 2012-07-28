@@ -1,0 +1,21 @@
+%% $Id$
+
+%% We're not sure why the Layout module is included here, and specifically why 
+%% the reject filter is used. What we do know is that it triggers the 
+%% errorneous behaviour of the parse-time reject filtering. It is commented
+%% out until we decide how to deal with the reject problem. 
+
+definition
+
+module Main
+%%imports Layout
+exports
+  sorts Any
+  context-free start-symbols Any
+  lexical syntax
+    ~[ ]*         ->  Any
+
+%%module Layout
+%%exports
+%%  lexical syntax
+%%                 ->  LAYOUT {reject}

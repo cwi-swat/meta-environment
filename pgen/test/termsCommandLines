@@ -1,0 +1,57 @@
+$SDF2TABLE -i $GRAMMARS/Ambi.sdf 
+#$SGLR -2 -p $TABLES/Ambi.tbl -i $TERMS/ar.ambrule
+
+$SDF2TABLE -i $GRAMMARS/Backquote.sdf 
+#$SGLR -2 -p $TABLES/Backquote.tbl -i $TERMS/
+
+$SDF2TABLE -i $GRAMMARS/Casl.sdf 
+#$SGLR -2 -p $TABLES/Case-insensitive.tbl -i $TERMS/
+$SGLR -2 -p $TABLES/Casl.tbl -i $TERMS/Weird.casl -fi -fe
+$SGLR -2 -p $TABLES/Casl.tbl -i $TERMS/Path.casl -fi -fe
+$SGLR -2 -p $TABLES/Casl.tbl -i $TERMS/Point.casl -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Cyclops.sdf 
+$SGLR -2 -p $TABLES/Cyclops.tbl -i $TERMS/bi.cycle 
+
+$SDF2TABLE -i $GRAMMARS/Cyclops2.sdf 
+$SGLR -2 -p $TABLES/Cyclops2.tbl -i $TERMS/mdj.cycle2
+
+$SDF2TABLE -i $GRAMMARS/Flat.sdf 
+$SGLR -2 -p $TABLES/Flat.tbl -i $TERMS/all-chars.flt -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Follower.sdf 
+$SGLR -2 -p $TABLES/Follower.tbl -i $TERMS/tippered.flow -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Integers.sdf 
+#$SGLR -2 -p $TABLES/Integers.tbl -i $TERMS/
+
+$SDF2TABLE -i $GRAMMARS/Isle.sdf 
+$SGLR -2 -p $TABLES/Isle.tbl -i $TERMS/nested.isle -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Jacob.sdf 
+$SGLR -2 -p $TABLES/Jacob.tbl -i $TERMS/program.jcb -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/List.sdf 
+$SGLR -2 -p $TABLES/List.tbl -i $TERMS/all-combos.list -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Pico.sdf 
+$SGLR -2 -p $TABLES/Pico.tbl -i $TERMS/big.pico -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Prefer.sdf 
+$SGLR -2 -p $TABLES/Prefer.tbl -i $TERMS/cond.pfr -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Prefer.sdf 
+$SGLR -2 -p $TABLES/Prefer.tbl -i $TERMS/lit.pfr -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Prefix.sdf 
+$SGLR -2 -p $TABLES/Prefix.tbl -i $TERMS/f.pre -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Risla.sdf 
+$SGLR -2 -p $TABLES/Risla.tbl -i $TERMS/zilvervl.rmo -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/Sdf2.sdf 
+$SGLR -p $TABLES/Sdf2.tbl -i $TERMS/Sdf2.sdf -fi -fe
+
+$SDF2TABLE -i $GRAMMARS/SimpleCobol.sdf 
+#$SGLR -2 -p $TABLES/SimpleCobol.tbl -i $TERMS/
+

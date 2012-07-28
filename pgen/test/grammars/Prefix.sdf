@@ -1,0 +1,13 @@
+  definition
+  module Main
+  exports
+    lexical syntax
+      [\ \t\n] -> LAYOUT
+    context-free restrictions
+      LAYOUT? -/- [\ \t\n]
+
+    sorts A B
+    context-free start-symbols A B
+    context-free syntax
+      "a" -> A
+      "f" ( A ) -> B   
