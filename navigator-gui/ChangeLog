@@ -1,0 +1,79 @@
+
+
+Wed Nov 12 14:32:12 CET 2008 <jurgenv@cwi.nl>
+ * resources/**: added Makefile.am files to make sure the resources
+   are distributed with  the source code.
+ * Bumped version
+
+Tue Apr 29 15:17:59 2008    <bruntink@cwi.nl>
+
+	* navigator-gui.pc.in: Changed dependency on graph-support to graph-support-java.
+	* navigator-gui.pc.in: Changed dependency on io-support to io-support-java.	
+
+Mon Apr 28 17:35:17 2008    <bruntink@cwi.nl>
+
+	* navigator-gui.pc.in: Removed spurious packages like nl, nl.cwi, etc.
+        * Removed .project and .classpath from repository.
+
+Mon Apr 28 16:00:15 2008    <bruntink@cwi.nl>
+
+	* navigator-gui.pc.in: Changed config-support depedency to config-support-java.
+
+Mon Aug 27 16:21:45 CEST 2007 <kooiker@cwi.nl>
+ * src/**/Navigator.java: update only added new modules. It now also really 
+   updates modules when needed.
+
+Mon Aug 20 14:36:13 CEST 2007 <kooiker@cwi.nl>
+ * src/**/ModuleTree.java: use overlay for creating error icons
+
+Fri Aug 17 11:15:11 CEST 2007 <kooiker@cwi.nl>
+ * navigator.idef.src,src/**/*.java: add icon that indicates that a module has
+   an error
+
+Thu Jun 14 09:57:40 CEST 2007 <kooiker@cwi.nl>
+ * navigator.idef.src:
+   - Fixed nav-show-popup missing ? in receiving variable
+   - Create process handling the event solves deadlock situations
+
+Tue Mar 20 22:00:04 CET 2007 <jurgenv@cwi.nl>
+ * src/**/Navigator.java: changed name of tab to a noun that describes
+   the contents, such that it is consistent with Processes & Facts.
+
+Tue Feb 13 09:20:07 CET 2007 <kooiker@cwi.nl>
+ * src/**/ModuleTreeNode.java:
+   - Fix popup menu only shows on leafs
+
+Tue Jan 23 13:36:29 CET 2007 <kooiker@cwi.nl>
+ * src/**/Navigator.java:
+   - fix null pointer exception when Navigator is not initialized when updates
+     are received
+
+Mon Jan 15 09:33:10 CET 2007 <kooiker@cwi.nl>
+ * src/**/ModuleTreeNode.java:
+   - makePath works on File segments
+
+Tue Jan  9 12:52:40 CET 2007 <kooiker@cwi.nl>
+ * navigator.idef.src:
+   - Use add and remove module for single modules
+   - Remove graph support
+ * src/**/{Navigator,ModuleTree}.java:
+   - Remember expansion state of tree
+
+Tue Oct 31 10:12:52 CET 2006 <jurgenv@cwi.nl>
+ * src/**/Navigator.java: refactored use of the mouse en menu
+   event interfaces to the ToolBus.
+
+Mon Jul 17 11:53:25 CEST 2006 <kooiker@cwi.nl>
+ * src/**/{Module,ListModel}.java:
+   - Use of generics
+
+Tue Feb 21 16:31:52 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use configuration api
+
+Fri Feb 17 15:39:13 CET 2006 <kooiker@cwi.nl>
+ * Use File attribute of graph to display tree structure
+
+Wed Jan 18 15:31:57 CET 2006 <kooiker@cwi.nl>
+ * Initial version
+

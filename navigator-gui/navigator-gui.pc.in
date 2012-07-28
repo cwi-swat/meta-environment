@@ -1,0 +1,14 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
+
+Name: navigator-gui
+Version: 1.3
+Description:
+Requires: aterm-java,config-support-java,graph-support-java,io-support-java,meta-studio,toolbus-java-adapter
+JarFile=navigator.jar
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.data
+MainClass=nl.cwi.sen1.gui.plugin.Navigator
+TestClass=
+ToolBusFlags=-I${prefix}/share/navigator-gui
+

@@ -1,0 +1,77 @@
+#ifndef __GUI_NAVIGATOR__
+#define __GUI_NAVIGATOR__
+
+tool navigator is { }
+
+process Navigator is
+let
+  T: navigator,
+  Graph: graph,
+  Menu: term,
+  ModuleId: term,
+  File: file,
+  Pid: int,
+  PopupMenu: list,
+  Str : str
+in
+  rec-connect(T?)
+  .
+  (
+    rec-msg(nav-update-module(ModuleId?, File?))
+    . snd-do(T, update-module(ModuleId, File))
+  +
+    rec-msg(nav-delete-module(ModuleId?))
+    . snd-do(T, delete-module(ModuleId))
+  +
+    rec-msg(nav-select-module(ModuleId?))
+    . snd-do(T, select-module(ModuleId))
+  +
+    rec-msg(nav-mark-module-error(ModuleId?))
+    . snd-do(T, mark-module-error(ModuleId))
+  +
+    rec-msg(nav-mark-module-normal(ModuleId?))
+    . snd-do(T, mark-module-normal(ModuleId))
+  +
+    rec-event(T, module-selected(ModuleId?))
+    . snd-note(nav-module-selected(ModuleId))
+    . snd-ack-event(T, module-selected(ModuleId))
+  +
+    rec-event(T, mouse-event(navigator(ModuleId?),popup))
+    . create(NAV-RequestPopupEvent(ModuleId), Pid?)
+    . snd-ack-event(T, mouse-event(navigator(ModuleId),popup))
+  +
+    rec-msg(nav-show-popup(ModuleId?, PopupMenu?))
+    . snd-do(T, show-popup(ModuleId, PopupMenu))
+  +
+    rec-event(T, menu-event(ModuleId?, Menu?))
+    . create(NAV-MenuEvent(ModuleId, Menu), Pid?)
+    . snd-ack-event(T, menu-event(ModuleId, Menu))
+  )
+  *
+  rec-disconnect(T)
+endlet
+
+process NAV-RequestPopupEvent(ModuleId: term) is
+  snd-msg(nav-request-popup-event(ModuleId))
+
+process NAV-MenuEvent(ModuleId: term, Menu: term) is
+  snd-msg(nav-menu-selected(ModuleId, Menu))
+
+process NAV-AddListener is
+  subscribe(nav-module-selected(<term>))
+
+process NAV-RequestPopup(ModuleId: term?) is
+  rec-msg(nav-request-popup-event(ModuleId?))
+
+process NAV-ShowPopup(ModuleId: term, PopupMenu: list) is
+  snd-msg(nav-show-popup(ModuleId, PopupMenu))
+
+process NAV-PopupEvent(ModuleId: term?, MenuItem: term?) is
+  rec-msg(nav-menu-selected(ModuleId?, MenuItem?))
+
+process StartNavigator is
+  snd-msg(load-jar("file://__PKGDATA__/navigator.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
+
+toolbus(Navigator)
+
+#endif /*__GUI_NAVIGATOR__*/
