@@ -1,0 +1,79 @@
+# -*- makefile -*-
+PACKAGE=@PACKAGE@
+VERSION=@VERSION@
+prefix=@PREFIX@
+
+STEM=$(PACKAGE)-$(VERSION)
+DIST_DIR=$(STEM)
+
+pkgdatadir=$(prefix)/share/$(PACKAGE)
+bindir=$(prefix)/bin
+
+EXTRA_DIST = \
+	     Makefile.src \
+	     meta-autotools.pc.in \
+	     configure \
+	     reconf \
+	     ChangeLog \
+	     $(wildcard *.tar.gz)
+
+AUTO_TOOLS=autoconf automake libtool pkgconfig
+
+autoconf_VERSION=2.59
+automake_VERSION=1.7.9
+libtool_VERSION=1.5.24
+pkgconfig_VERSION=0.22
+
+automake_NAME=automake
+autoconf_NAME=autoconf
+libtool_NAME=libtool
+pkgconfig_NAME=pkg-config
+
+GNU=http://ftp.gnu.org/gnu
+autoconf_URI=$(GNU)/autoconf/$(autoconf_NAME)-$(autoconf_VERSION).tar.gz
+automake_URI=$(GNU)/automake/$(automake_NAME)-$(automake_VERSION).tar.gz
+libtool_URI=$(GNU)/libtool/$(libtool_NAME)-$(libtool_VERSION).tar.gz
+pkgconfig_URI=http://pkgconfig.freedesktop.org/releases/$(pkgconfig_NAME)-$(pkgconfig_VERSION).tar.gz
+
+WGET=wget --tries=5 $($*_URI) -O $*.tar.gz
+UNZIP=gunzip -c $< | tar xvf - 
+
+CLEANFILES = meta-autotools.pc
+
+.SECONDARY: $(foreach i, $(AUTO_TOOLS), $i.dir $i.tar.gz)
+
+all: 
+	@true
+
+install: all $(foreach i,$(AUTO_TOOLS),$i.installed)
+	@echo "ADD ${prefix}/bin to your PATH!"
+
+%.tar.gz : 
+	$(WGET) 
+
+%.dir : %.tar.gz
+	$(UNZIP)
+	mv $($*_NAME)-$($*_VERSION) $*.dir
+
+%.installed: %.dir
+	cd $< ; \
+	PATH=${prefix}/bin:${PATH}; export PATH; \
+	./configure --prefix=${prefix}; \
+	make ; \
+	make install ; 
+
+dist: $(EXTRA_DIST)
+	rm -rf $(DIST_DIR)
+	mkdir $(DIST_DIR)
+	cp $(EXTRA_DIST) $(DIST_DIR)
+	tar cvf - $(DIST_DIR)/* | gzip > $(STEM).tar.gz
+	rm -rf $(DIST_DIR)
+
+check:
+	@true
+
+distcheck: dist
+	@true
+
+clean:
+	rm -rf *.dir *.tar.gz
