@@ -1,0 +1,5 @@
+Version 0.1
+    * Toolbuslib has been extracted from the ToolBus distribution. It
+      contains the toolbus libraries libATB and libtb.
+
+

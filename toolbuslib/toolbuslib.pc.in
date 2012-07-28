@@ -1,0 +1,11 @@
+prefix=@prefix@
+Maintainers=paulk@cwi.nl,jurgenv@cwi.nl,lankamp@cwi.nl
+
+Name: toolbuslib
+Description: ToolBus adapter library
+Version: 1.2
+Libs: -L${prefix}/lib -lATB @SOCKETLIBS@
+Cflags: -I${prefix}/include
+#uninstalled Libs: -L@abs_top_builddir@/src -lATB @SOCKETLIBS@
+#uninstalled Cflags: -I@abs_top_builddir@/src
+Requires: aterm

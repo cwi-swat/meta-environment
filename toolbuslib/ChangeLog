@@ -1,0 +1,126 @@
+$Id$
+
+Mon Jun  9 13:16:51 CEST 2008 <jurgenv@cwi.nl>
+ * toolbuslib.pc.in: Bumped version to 1.0
+
+Fri Jun  6 09:23:46 CEST 2008 <jurgenv@cwi.nl>
+ * toolbuslib.pc.in: removed erroneous dependency on toolbus-ng,
+   that made all of SDF dependent on ToolBus!
+
+Wed May 07 12:00:05 CEST 2008 <lankamp@cwi.nl>
+ * src/atb-tool.*: Added basic support for the request<->response stuff.
+   To guarantee sequential ordering with respect to events, changes were made to the event-queue as well
+   (e.g. it was removed since there was no point in having it).
+
+Thu Mar 03 10:19:05 CEST 2008 <lankamp@cwi.nl>
+ * tifstoc: Added the tifstoc tool.
+
+Mon Mar 19 09:41:46 CET 2007 <jurgenv@cwi.nl>
+ * src/*: adapted to new ATwriteToBinaryString interface
+
+Tue Dec 12 13:19:17 CET 2006 <jurgenv@cwi.nl>
+ * src/atb-tool.c: wrapped call to select in ATBhandleAny with a while
+   loop. As long as the select was interupted by a non-blocked signal
+   we try again. This error popped up while profiling the library, since
+   under those circumstances there are more frequent interrupts...
+
+Tue Jul 25 09:16:05 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
+ * **: adapted package to use the standard meta-build-env.
+
+Wed Jul 19 10:33:50 CEST 2006 <{jurgenv,storms}@cwi.nl>
+ * aterm/*: renamed to src/*
+ * configure.ac: cleanup of checks for header files, and removed
+   dependency on -lm math library
+ * src/atb-tool.[ch]: removed dead includes
+ * toolbuslib.pc.in: declares dependencies on system socket libraries 
+
+Fri Mar 10 11:51:51 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
+Wed Mar  8 17:13:27 CET 2006 <jurgenv@cwi.nl>
+ * aterm: a tool listens for QUIT and TERM signals and disconnects
+   from the ToolBus first before exiting.
+
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
+Fri Nov 19 16:39:49 CET 2004 <jurgenv@cwi.nl>
+ * Bumped to 0.8
+
+Thu Mar 11 18:42:34 CET 2004 <jurgenv@cwi.nl>
+* -ltb library from the toolbuslib package is deprecated and was only used 
+   inside of the toolbus package. So I moved it into the toolbus package.
+
+Thu Mar  4 13:15:02 CET 2004 <{paulk,jurgenv}@cwi.nl>
+ * Fixed a nice bug in toolbuslib: uninitialized field of a struct
+   for symbols.
+
+Tue Feb 10 17:09:13 CET 2004 <{jurgenv,jong}@cwi.nl>
+ * added new ATBinit commandline option: -TB_COLLECT_LOOP <N>
+   - if N == 0, then ATBeventloop does not do an AT_collect();
+   - if N > 0, then ATBeventloop does an AT_collect after every Nth event. 
+
+Tue Feb 10 15:20:55 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+Mon Feb  2 14:27:13 CET 2004 <jong@cwi.nl>
+ * configure.in: version bump 0.6
+ * Makefile.am: add generated package file to CLEANFILES
+
+2003/08/01 (jurgenv@cwi.nl)
+ * Set to version 0.5.1
+
+2003/07/31
+ * Release 0.5
+
+Wed Jul 30 11:52:46 CEST 2003 <jong@cwi.nl>
+ * toolbuslib/aterm/Makefile.am
+   -DTERM_SIZE_WARNING_THRESHOLD=512 removed
+
+Tue Jul  1 13:20:05 CEST 2003 <jong@cwi.nl>
+ * aterm/atb-tool.c:
+   - clear buffer before sending out a term to prevent a previous term
+     from 'leaking'
+
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
+2003/05/28 ({jong,jurgenv}@cwi.nl)
+ * Added TERM_SIZE_WARNING_THRESHOLD: when terms bigger than this threshold
+   are sent to the ToolBus, a warning is printed. If threshold is set to 0,
+   the warning code is disabled.
+
+2003/05/19 ({jong,markvdb}@cwi.nl)
+ * Added explicit ATBpack and ATBunpack.
+ * Bumped to 0.5beta
+
+2003/01/22 (jurgenv@cwi.nl)
+ * Release 0.4
+ * LGPL license
+
+2002/10/10 (jurgenv@cwi.nl)
+ * Added functionality to print only pending snd-msgs when ctrl+\ is pressed.
+
+2002/10/01 (vandenbr@loria.fr)
+ * Bumped into 0.4beta.
+ * Increased the number of sockets that can be open.
+
+2002/07/24 (jurgenv@cwi.nl)
+ * Released 0.3
+ * Some debugging utilities were added to the source code
+
+2002/04/19 (jurgenv@cwi.nl)
+ * Released 0.2
+
+2002/03/05 (jong@cwi.nl)
+ * Increased magical LENSPEC from 8 bytes to 12 bytes
+ * Improved atb-tool support wrt to use of LENSPEC define
+ * Bumped to 0.2beta
+
+2001/11/25 (mdejonge@cwi.nl)
+ * Released version 0.1
+ * Added toolbuslib-config utility
+ * Created toolbuslib package from the subdirs aterm and libtb of the toolbus
+   source tree

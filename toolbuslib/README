@@ -1,0 +1,24 @@
+This package contains C libraries and utilities for building ToolBus client
+applications.
+
+See 
+  http://www.cwi.nl/projects/metaEnv/toolbus 
+
+for information about the ToolBus coordination architecture.
+
+
+Installations
+=============
+
+1) Run ./reconf
+2) Run ./configure --prefix=installation-prefix
+3) Run make
+4) Run make install
+
+
+Compatibility
+=============
+Note that this version of toolbuslib is intended for usage with the Next Generation ToolBus.
+This renders this version incompatible with the C implementation of the ToolBus.
+The latest revision that is compatible with the C implementation of the ToolBus is 21994.
+ 
