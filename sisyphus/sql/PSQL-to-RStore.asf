@@ -1,0 +1,99 @@
+equations
+
+[psql-to-rstore-top]
+	psql-to-rstore($table*) = rstore(tables-to-rstore-elements($table*))
+
+equations
+
+[tables-to-rstore-elements-nil]
+	tables-to-rstore-elements() = 
+
+[tables-to-rstore-elements-cons]
+	$rstore-element := table-to-rstore-element($table),
+	$rstore-element* := tables-to-rstore-elements($table*)
+	===
+	tables-to-rstore-elements($table $table*) =
+		$rstore-element, $rstore-element*
+
+equations
+
+[table-to-rstore-element-top]
+	$rvar := header-to-rvar($header),
+	$elem := records-to-elem($record+),
+	$rexptype := records-to-rexptype($record+)
+	===
+	table-to-rstore-element($header $record+ $footer) =
+		<$rvar, set[$rexptype], $elem>
+
+equations
+
+[header-to-rvar-single]
+	header-to-rvar(fieldname("_" $char+)) = rvar($char+)
+
+[header-to-rvar-many]
+	rvar($char+) := header-to-rvar($fieldname),
+	rvar($char+') := header-to-rvar($fieldname+)
+	===
+	header-to-rvar($fieldname, $fieldname+) = 
+		rvar($char+ "_" $char+')
+
+equations
+
+[records-to-elem-nil]
+	records-to-elem() = {}
+
+[records-to-elem-cons]
+	$elem := record-to-elem($record),
+	{$elem*} := records-to-elem($record*)
+	===
+	records-to-elem($record $record*) = {$elem, $elem*}
+
+equations
+
+[records-to-rexptype-single]
+	records-to-rexptype($fieldvalue $record*) =
+		field-value-to-rexptype($fieldvalue)
+
+[records-to-rexptype-many]
+	$rexptype1 := records-to-rexptype($fieldvalue $record*),
+	$rexptype2 := records-to-rexptype($fieldvalue+ $record*)
+	===
+	records-to-rexptype($fieldvalue, $fieldvalue+ $record*) =
+		<$rexptype1, $rexptype2>
+
+
+equations
+
+[record-to-tuple-single]
+	record-to-elem($fieldvalue) = field-value-to-elem($fieldvalue)
+
+[record-to-tuple-many]
+	$elem1 := record-to-elem($fieldvalue),
+	$elem2 := record-to-elem($fieldvalue+)
+	===
+	record-to-elem($fieldvalue, $fieldvalue+) = <$elem1, $elem2>
+
+equations
+
+[field-value-to-elem-1]
+	field-value-to-elem(text($char+)) = strcon("""$char+""")
+
+[field-value-to-elem-2]
+	field-value-to-elem($natcon) = $natcon
+
+[field-value-to-elem-3]
+	field-value-to-elem(date($char+)) = strcon("""$char+""")
+
+equations
+
+[field-value-to-rexptype-1]
+	field-value-to-rexptype($text) = str
+
+[field-value-to-rexptype-2]
+	field-value-to-rexptype($natcon) = int
+
+[field-value-to-rexptype-3]
+	field-value-to-rexptype($date) = str
+
+
+

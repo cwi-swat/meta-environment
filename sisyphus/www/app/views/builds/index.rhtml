@@ -1,0 +1,51 @@
+
+<%# periodically_call_remote :complete => evaluate_remote_response, 
+:frequency => 10, :url => {:action => 'changes', :controller => 'builds'} %>
+
+<table>
+<thead>
+<td>&nbsp;</td>
+<% @hosts.sort.each do |h| %>
+<td>
+<table><tbody><tr><td>
+<%= h.name %>
+<% if h.busy then %>
+<%= image_tag("indicator_tiny_red.gif", :id => "indicator_#{h.id}") %>
+<% else %>
+<%= image_tag("indicator_tiny_red.gif", :id => "indicator_#{h.id}", :style => 'display: none;') %>
+<% end %>
+</td>
+</tr>
+<tr><td>
+<div id="busy_<%= h.id %>">
+&nbsp;
+</div>
+</td></tr></tbody></table>
+
+</td>
+<% end %>
+</thead>
+<tbody>
+
+<% rows = 0; @components.sort.each do |component| %>
+  <% if rows % 2 == 0 then %>
+    <tr style="background: rgb(231, 231, 231);">
+  <% else %>
+    <tr>
+  <% end %>
+  <td><%= component.name %></td>
+  <% @hosts.sort.each do |host| %>
+  <td>
+	<div id="status_<%=host.id%>_<%=component.id%>">
+	<%= render_partial 'item', @table[component][host] %>
+	</div>
+  </td>
+  <% end %>
+  </tr>
+<% rows += 1; end %>
+</tbody>
+</table>
+
+
+
+<br />

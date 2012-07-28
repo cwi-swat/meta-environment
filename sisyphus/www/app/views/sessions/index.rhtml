@@ -1,0 +1,64 @@
+
+<table style="border-collapse: collapse;">
+<thead>
+<% last_sessions = {}; @hosts.each do |host|  %>
+   <% if host != @hosts.last then style = 'border-right-style: solid; border-right-width: 1px;' end %>
+
+  <td colspan="3" style="text-align: center; border-bottom-style: solid; border-bottom-width: 1px; <%=style%>">
+  <%= host.name %>
+  </td>
+<% last_sessions[host] = nil; end %>
+
+</thead>
+
+<tbody>
+
+<% 0.upto(@max) do |i| %>
+
+<tr style="border-top-style: solid; border-width: 1px;">
+
+<% @hosts.each do |host| style='' %>
+
+   <% if host != @hosts.last then style = 'style="border-right-style: solid; border-right-width: 1px;"' end %>
+
+   <% if not @table[host][i].nil? then sess, item = @table[host][i] %>
+
+     <% if last_sessions[host] != sess then %>
+        <td><%= sess.time.strftime("%H:%M %d/%m") %></td>
+     <% last_sessions[host] = sess; else %>
+        <td>&nbsp;</td>
+     <% end %>
+
+     <% if not item.nil? then %>
+
+       <% if item.progress? then %>
+         <td colspan="2" <%=style%>>
+         <em><%= item.label %></em>
+         </td>
+       <% else %>
+         <td>
+         <%= link_to item.item.name, :action => 'show', :controller => 'si_items', :id => item.id %>
+         </td>
+         <td <%=style%>>
+         <span class="<%=item.style_class%>"><%=item.label%></span>
+         </td>
+       <% end %> 
+
+     <% else %>
+       <td colspan="2" <%=style%>>&nbsp;</td>
+     <% end %>
+
+   <% else %>
+    <td colspan="3" <%=style%>>&nbsp;</td>  
+   <% end %>
+
+<% end %>
+
+</tr>
+
+<% end %>
+
+</tbody>
+</table>
+
+<br />

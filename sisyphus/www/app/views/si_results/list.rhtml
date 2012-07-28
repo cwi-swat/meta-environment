@@ -1,0 +1,27 @@
+<h1>Listing si_results</h1>
+
+<table>
+  <tr>
+  <% for column in SiResult.content_columns %>
+    <th><%= column.human_name %></th>
+  <% end %>
+  </tr>
+  
+<% for si_result in @si_results %>
+  <tr>
+  <% for column in SiResult.content_columns %>
+    <td><%=h si_result.send(column.name) %></td>
+  <% end %>
+    <td><%= link_to 'Show', :action => 'show', :id => si_result %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => si_result %></td>
+    <td><%= link_to 'Destroy', {:action => 'destroy', :id => si_result}, :confirm => 'Are you sure?' %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @si_result_pages.current.previous } if @si_result_pages.current.previous %>
+<%= link_to 'Next page', { :page => @si_result_pages.current.next } if @si_result_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New si_result', :action => 'new' %>

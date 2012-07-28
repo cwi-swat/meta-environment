@@ -1,0 +1,30 @@
+#! /bin/sh
+
+#set -x
+
+# This file is to test (most of) the commandline options
+
+PREFIX=__PREFIX__
+SICLI=$PREFIX/bin/si-cli
+``
+$SICLI \
+    --root aterm \
+    --profile verfrol \
+    --interval 300 \
+    --weekday Mon \
+    --weekday Tue \
+    --weekday Wed \
+    --weekday Thu \
+    --weekday Fri \
+    --after 00:01 \
+    --before 23:59 \
+    --mail \
+    --from daybuild@cwi.nl \
+    --smtp smtp.cwi.nl:25 \
+    --config svn://sjofar.sen.cwi.nl/sisyphus-configuration \
+    --User daybuild \
+    --Password daybuild \
+    --dbconf ../doc/dbconf.yml \
+    --force meta-autotools \
+    --no-quiet \
+    --verbose

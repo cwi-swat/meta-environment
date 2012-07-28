@@ -1,0 +1,39 @@
+
+<h2>Available packages</h2>
+
+<table>
+<thead>
+<td><em>Component</em></td>
+<td><em>Revision</em></td>
+<td><em>Build</em></td>
+<td><em>Package</em></td>
+<td><em>Bundle</em></td>
+</thead>
+<tbody>
+<% @pkgs.keys.sort.each do |component|  start = true %>
+  <% @pkgs[component].each do |cols| %>
+    <tr>
+    <td>
+    <% if start then %>
+    <%= component %>
+    <% start = false; else %>
+    &nbsp;
+    <% end %>
+    </td>
+    <td>
+    <%= cols[0] %>
+    </td>
+    <td>
+    <%= link_to cols[1], :action => 'show', :controller => 'si_items', :id => cols[1] %>
+    </td>
+    <td>
+    <%= link_to cols[2], :action => 'package', :controller => 'packages', :archive => cols[2] %>
+    </td>
+    <td>
+     <%= link_to cols[3], :action => 'bundle', :controller => 'si_items', :id => cols[1] %>
+    </td>
+    </tr>
+  <% end %>
+<% end %>
+</tbody>
+</table>

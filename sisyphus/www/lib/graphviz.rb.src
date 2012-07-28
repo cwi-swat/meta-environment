@@ -1,0 +1,7 @@
+# -*- ruby -*-
+
+module GraphViz
+
+  PATH = File.join('__GRAPHVIZ__', 'bin')
+
+end

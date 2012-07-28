@@ -1,0 +1,80 @@
+
+
+
+<div style="float: left;">
+<table>
+<thead>
+<td>&nbsp;</td>
+</thead>
+<tbody>
+<% rows = 0; @components.each do |component| %>
+  <% if rows % 2 == 0 then %>
+    <tr style="background: rgb(231, 231, 231);">
+  <% else %>
+    <tr>
+  <% end %>
+  <td><%= component %></td>
+  </tr>
+<% rows += 1; end %>
+</tbody>
+</table>
+</div>
+
+
+<% @hosts.each do |host|  %>
+
+  <div style="float: left;" id="<%=host.uname%>">
+
+  <table>
+    <thead>
+      <td colspan="2">
+      <span style="cursor: pointer;" onClick="new Effect.SlideUp('<%=host.uname%>')">
+      <%= host.name %>
+      </span>
+      </td>
+   </thead>
+
+  <tbody>
+    <% rows = 0; @components.each do |component| item = @table[component][host] %>
+      <% if rows % 2 == 0 then %>
+         <tr style="background: rgb(231, 231, 231);">
+      <% else %>
+         <tr>
+      <% end %>
+
+     <% if not item.nil? then %>
+
+      <% if item.progress? then %>
+        <td colspan="2">
+        <em><%= item.label %></em>
+        </td>
+      <% elsif item.not_tried? then %>
+        <td>
+        not tried
+        </td>
+        <td>
+        <%= item.time %>
+        </td>
+      <% else %>
+        <td>
+        <span class="<%=item.style_class%>"><%=item.label%></span>
+        </td>
+        <td>
+        <%= link_to item.time, :action => 'show', :controller => 'si_items', :id => item.id %>
+        </td>
+      <% end %> 
+
+    <% else %>
+      <td colspan="2">&nbsp;</td>
+    <% end %>
+
+  </tr>
+  <% rows += 1; end %>
+</tbody>
+</table>
+</div>
+
+<% end %> <%# hosts.each %>
+
+
+<br />

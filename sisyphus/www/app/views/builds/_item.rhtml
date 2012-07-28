@@ -1,0 +1,42 @@
+
+
+<table>
+<tbody>
+<tr>
+
+     <% if not item.nil? then %>
+
+      <% if item.progress? then %>
+	
+        <% rs = item.item.si_results; if rs.length > 0 then %>
+ 	  <td>
+	  <%= link_to rs.last.action, :action => 'show', :controller => 'si_results', :id => rs.last.id %>
+          </td>
+          <td>
+          <%= link_to item.time, :action => 'show', :controller => 'si_items', :id => item.id %>
+          </td>
+	<% else %>
+	  <td colspan="2">
+          <em><%= item.label %></em>
+          </td>
+	<% end %>
+
+    <% else %>
+        <td>
+        <span class="<%=item.style_class%>"><%=item.label%></span>
+        </td>
+        <td>
+        <%= link_to item.time, :action => 'show', :controller => 'si_items', :id => item.id %>
+        </td>
+
+    <% end %> 
+
+   <% else %>
+	<td colspan="2">
+      &nbsp;
+	</td>
+   <% end %>
+
+</tr>
+</tbody>
+</table>

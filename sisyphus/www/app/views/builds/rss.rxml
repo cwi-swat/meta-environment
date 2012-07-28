@@ -1,0 +1,43 @@
+
+xml.instruct! :xml, :version=>"1.0" 
+xml.rss(:version=>"2.0") {
+  xml.channel{
+    xml.title("Sisyphus CWI/SEN1")
+    xml.link(@main_url)
+    xml.description("Latest Builds")
+    xml.language("en-en")
+    for item in @items
+      xml.item do
+        xml.title("#{if item.success then "[S]" else "[F]" end} #{item.si_session.time.strftime("%H:%M")} #{item.name} (#{item.si_host.name})")
+        xml.description {
+          xml << h("Status: ")
+          if item.success then
+            xml << h("<span style=\"color: green;\">success</span><br/>")
+          else
+            xml << h("<span style=\"color: red;\">failed</span><br/>")
+          end
+          xml << h("Revision: #{item.version}<br/>")
+          xml << h("Host: #{item.si_host.name}<br/>")
+          xml << h("<ul>")
+          item.si_results.each do |result|
+            xml << h("<li>")
+            xml << h("<a href=\"#{@result_links[result]}\">#{result.action}</a>")
+            xml << ": "
+            if result.success then
+              xml << h("<span style=\"color: green;\">success</span>")
+            else
+              xml << h("<span style=\"color: red;\">failed</span>")
+            end
+            xml << h("</li>")
+          end
+          xml << h("</ul>")
+          
+          
+        }	
+        # rfc822
+        xml.pubDate(item.si_session.time.strftime("%a, %d %b %Y %H:%M:%S %z"))
+        xml.link(@links[item])
+      end
+    end
+  }
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-AU">
+  <head>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+    <meta name="author" content="tvdstorm" />
+    <meta name="generator" content="tvdstorm" />
+
+ <!--   <link rel="stylesheet" type="text/css" href="/stylesheets/gila-screen.css" media="screen" title="Gila (screen)" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/gila-print.css" media="print" /> -->
+
+    <%= stylesheet_link_tag "gila-screen" %> 
+
+    <%= javascript_include_tag 'prototype' %>
+    <%= javascript_include_tag 'effects' %>
+   
+
+    <link rel="alternate" type="application/rss+xml"  title="Sisyphus"  href="<%=@main_url%><%= url_for(:controller => 'builds', :action => "rss") %>" />
+
+
+	<link rel="icon" href="<%= image_path('favicon.ico')%>" type="image/ico" />
+	<link rel="shortcut icon" href="<%=image_path('favicon.ico')%>" type="image/ico" />
+
+    <title>Web of Sisyphus</title>
+  </head>
+
+  <body>
+    <!-- For non-visual user agents: -->
+      <div id="top"><a href="#main-copy" class="doNotDisplay doNotPrint">Skip to main content.</a></div>
+
+    <!-- ##### Header ##### -->
+
+    <div id="header">
+      <h1 class="headerTitle">
+        <a href="<%= url_for(:controller => "builds", :action => "index") %>" title="Browse to homepage">Web of <span>Sisyphus</span></a>
+      </h1>
+
+      <div class="subHeader">
+        <span class="doNotDisplay">Navigation: </span>
+        <a href="<%= url_for( :controller => "builds", :action => "index") %>">Builds</a> 
+        <a href="<%= url_for( :controller => "sessions", :action => "index") %>">Sessions</a> 
+        <a href="<%= url_for( :controller => "packages", :action => "index") %>">Packages</a> 
+        <a href="<%= url_for( :controller => "hosts", :action => "index") %>">Hosts</a> 
+        <a href="<%= url_for( :controller => "si_logs", :action => "index") %>">Logs</a> 
+        <a href="<%= url_for( :controller => "sisyphus", :action => "index") %>">Sisyphus</a> 
+        <a href="<%= url_for( :controller => "stats", :action => "index") %>">Statistics</a> 
+      </div>
+    </div>
+
+    <div id="side-bar">
+
+      <!-- ##### Left Sidebar ##### -->
+
+
+      <div class="leftSideBar">
+
+	<p class="sideBarTitle">Menu</p>
+	<ul>
+	<li><a href="http://sisyphus.meta-environment.org">Home</a></li>
+	<li><a href="http://www.meta-environment.org">Meta-Environment</a></li>
+	</ul>
+
+        <p class="sideBarTitle">Status</p>
+        <ul>
+        <li><a href="<%= url_for( :controller => "builds", :action => "index") %>">Builds</a></li>
+        <li><a href="<%= url_for( :controller => "sessions", :action => "index") %>">Sessions</a></li>
+        <li><a href="<%= url_for( :controller => "packages", :action => "index") %>">Packages</a></li>
+        <li><a href="<%= url_for( :controller => "hosts", :action => "index") %>">Hosts</a></li>
+        <li><a href="<%= url_for( :controller => "si_logs", :action => "index") %>">Logs</a></li>
+        <li><a href="<%= url_for( :controller => "sisyphus", :action => "index") %>">Sisyphus</a></li>
+        </ul>
+
+        <p class="sideBarTitle">Configuration</p>
+        <ul> 
+        <li><a href="<%= url_for( :controller => "si_profiles", :action => "index") %>">Profiles</a></li>
+        <li><a href="<%= url_for( :controller => "sources", :action => "index") %>">Sources</a></li>
+        <li><a href="<%= url_for( :controller => "script", :action => "index") %>">Script</a></li>
+        </ul>
+
+        <p class="sideBarTitle">Comments</p>
+        <span class="sideBarText">
+          Comments and constructive criticisms are welcome
+          <a href="mailto:storm@cwi.nl" title="email">via email</a>.
+        </span>
+      </div>
+
+      <!-- 
+############################################################
+	##### Right Sidebar ##### 
+
+	-->
+
+      <div class="rightSideBar">
+        <p class="sideBarTitle">Recent builds</p>
+
+	<% @recent.each do |item| %>
+        <div class="sideBarText"><strong><%= item.name %>: 
+	<%= if item.success then 
+		"<span class=\"success\">success</span>" 
+	    else 
+		"<span class=\"failure\">failed</span>" 
+	end %></strong><br/>
+	<%= item.si_host.name %> at <%= link_to item.si_session.time.strftime("%H:%M %d/%m"), :action => 'show', :controller => 'si_items', :id => item.id %>
+	</div>
+	<% end %>
+
+	<a href="builds/rss" class="more"><img src="/images/rss.gif" border="0"></img></a>
+        <a href="/" class="more">More builds...</a>
+
+	<p class="sideBarTitle">Hosts</p>
+
+        <div class="sideBarText">
+	<% @hosts.each do |host| %>
+	<% if @movable_host_columns then %>
+	<span style="cursor: pointer;" onclick="new Effect.SlideDown('<%=host.uname%>')">
+	<% else %>
+	<span>
+	<% end %>
+		<%=host.name%>
+	</span>
+	<br/>
+	<% end %>
+	</div>
+
+        <a href="/hosts" class="more">More hosts...</a>
+
+
+      </div>
+
+<!--
+############################################################
+     --->
+
+    </div>
+
+    <!-- ##### Main Copy ##### -->
+
+    <div id="main-copy">
+
+ 	<div id="columns">
+
+<%= @content_for_layout %>
+
+	</div>
+
+
+    </div>
+    
+    <!-- ##### Footer ##### -->
+
+    <div id="footer">
+
+    <!--
+      <div class="doNotPrint">
+
+        <a href="./index.html">Tell a Friend</a> |
+        <a href="./index.html">Privacy Policy</a> |
+        <a href="./index.html">Site Map</a> |
+        <a href="./index.html">Feedback</a> |
+        <a href="./index.html">Help</a>
+
+      </div>
+
+     -->
+
+      <div>
+        Copyright &copy; 2005, CWI |
+        <a href="http://www.cwi.nl/~storm" title="storm">tvdstorm</a>
+      </div>
+    </div>
+
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-517924-2";
+urchinTracker();
+</script>
+  </body>
+</html>

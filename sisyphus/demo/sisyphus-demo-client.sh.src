@@ -1,0 +1,25 @@
+#! /bin/sh
+
+PREFIX=__PREFIX__
+DATADIR=__DATA_DIR__
+BINDIR=__BIN_DIR__
+SICLI=$BINDIR/si-cli
+CONFIG_SVN=file://$DATADIR/demo/config-repo/demo
+DB_CONFIG=$DATADIR/demo/dbconfig.yml
+
+exec $SICLI \
+    --root relational-aterms \
+    --profile demo \
+    --interval 3600 \
+    --trackingback \
+    --weekday Mon \
+    --weekday Tue \
+    --weekday Wed \
+    --weekday Thu \
+    --weekday Fri \
+    --after 00:01 \
+    --before 23:59 \
+    --config ${CONFIG_SVN} \
+    --dbconf ${DB_CONFIG} \
+    --no-quiet \
+    --verbose

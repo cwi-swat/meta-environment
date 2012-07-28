@@ -1,0 +1,7 @@
+:development: &defaults
+  :adapter: postgresql
+  :database: sisyphusdev
+  :username: sisyphusdev
+  :password: tantalu5
+  :host: verfrol.sen.cwi.nl
+

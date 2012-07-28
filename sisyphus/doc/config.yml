@@ -1,0 +1,15 @@
+options:
+ roots: [asfsdf-meta] 
+ profile: breezer
+ interval: 3600
+ verbose: true
+subversion:
+ url: svn://sjofar.sen.cwi.nl/sisyphus-configuration 
+ username: daybuild
+ password: daybuild
+database:
+ adapter: postgresql
+ database: sisyphusdev
+ host: sjofar.sen.cwi.nl
+ username: sisyphusdev
+ password: tantalu5

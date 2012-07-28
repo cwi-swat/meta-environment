@@ -1,0 +1,6 @@
+# -*- ruby -*-
+
+module Subversion
+  PATH = File.join('__SUBVERSION__', 'bin')
+  SVN = File.join(PATH, 'svn')
+end

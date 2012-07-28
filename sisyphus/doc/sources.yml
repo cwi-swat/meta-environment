@@ -1,0 +1,44 @@
+repositories:
+  -
+   type: cvs
+   protocol: ssh
+   location: cvs.cwi.nl/cvs
+   components:
+    - asc-support
+    - asf
+    - asf-library
+    - asf-support
+    - asfsdf-meta
+    - aterm
+    - config-manager
+    - config-support
+    - editor-plugin
+    - error-gui
+    - graph-support
+    - meta
+    - meta-studio
+    - module-manager
+    - module-support
+    - pandora
+    - pgen
+    - pt-support
+    - sdf-support
+    - sglr
+    - tide
+    - tide-support
+    - toolbus
+    - toolbusNG
+    - toolbus-java-adapter
+    - toolbuslib
+    - relational-aterms
+    - balanced-binary-aterms
+  -
+   type: cvs
+   protocol: ssh
+   location: cvs-sop.inria.fr:/CVS/aircube
+   components:
+    - error-support
+    - aterm-java
+    - JJTraveler
+    - shared-objects
+externals: [graphviz]

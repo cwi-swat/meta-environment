@@ -1,0 +1,45 @@
+development:
+  adapter: jdbcpostgresql
+  database: sisyphusdev
+  host: www.syntax-definition.org
+  username: sisyphusdev
+  password: tantalu5
+  port: 
+  sslcert: 
+  sslcapath: 
+  sslcipher: 
+  socket: 
+  sslkey: 
+  schema_order: 
+  dbfile: 
+
+production:
+  adapter: jdbcpostgresql
+  database: sisyphusdev
+  host: www.syntax-definition.org
+  username: sisyphusdev
+  password: tantalu5
+  port: 
+  sslcert: 
+  sslcapath: 
+  sslcipher: 
+  socket: 
+  sslkey: 
+  schema_order: 
+  dbfile: 
+
+test:
+  adapter: mysql
+  database: rails_test
+  host: localhost
+  username: root
+  password: 
+  port: 
+  sslcert: 
+  sslcapath: 
+  sslcipher: 
+  socket: 
+  sslkey: 
+  schema_order: 
+  dbfile: 
+

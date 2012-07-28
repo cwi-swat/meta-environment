@@ -1,0 +1,58 @@
+
+<table>
+<thead>
+<td>&nbsp;</td>
+<% @hosts.each do |host|  %>
+  <td colspan="2">
+  <%= host.name %>
+  </td>
+<% end %>
+
+</thead>
+
+<tbody>
+<% rows = 0; @components.each do |component| %>
+  <% if rows % 2 == 0 then %>
+    <tr style="background: rgb(231, 231, 231);">
+  <% else %>
+    <tr>
+  <% end %>
+
+  <td><%= component.name %></td>
+  <% @hosts.each do |host| item = @table[component][host]  %>
+
+
+  <% if not item.nil? then %>
+
+    <% if item.progress? then %>
+      <td colspan="2">
+      <em><%= item.label %></em>
+      </td>
+    <% elsif item.not_tried? then %>
+      <td>
+      not tried
+      </td>
+      <td>
+      <%= item.time %>
+      </td>
+      <% else %>
+      <td>
+      <span class="<%=item.style_class%>"><%=item.label%></span>
+      </td>
+      <td>
+      <%= link_to item.time, :action => 'show', :controller => 'si_items', :id => item.id %>
+      </td>
+    <% end %> 
+
+  <% else %>
+    <td colspan="2">&nbsp;</td>
+  <% end %>
+
+  <% end %>
+  </tr>
+<% rows += 1; end %>
+</tbody>
+</table>
+
+
+<br />

@@ -1,0 +1,18 @@
+Todo
+* Make deployment easier.
+* Let builds start when sisyphus has changed (the uber dependency).
+* Add support for branches
+* Continue building using older integration on failure of dependencies
+* Make robust against network outages
+* Separate database hassle out of dependency logic 
+   (use Visitors transforming a dependency graph of revisions)
+* Use an extended profile which contains script and externals
+   It should contain a hostname too (and the builder checks it is
+   on the right machine). This would simplify the DB enormously
+   at the cost of having a lot of similar profile files.
+* Do something about the world version in profile.
+* Separate errors field from stdout field in si_results table
+* Do a chmod -R g+w to be able to remove checkouts etc.
+* Add support for "on wednesday only" kind of "intervals"
+* Separate database in two parts: one monotonely growing, the other editable.
+* Make it work without the database.

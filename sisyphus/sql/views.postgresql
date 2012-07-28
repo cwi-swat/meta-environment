@@ -1,0 +1,59 @@
+
+
+create view si_builds 
+	(id, name, version, informative_version, si_host_id, si_config_id,  si_item_id) as
+select 
+	si_items.id, 
+	si_components.name, 
+	si_revisions.version,
+	si_revisions.informative_version,
+	si_items.si_host_id,
+	si_items.si_config_id,
+	si_items.id
+from
+	si_items, 
+	si_components,
+	si_revisions
+where
+	si_revisions.si_component_id = si_components.id and
+	si_items.si_revision_id = si_revisions.id and
+	si_items.success = true
+;
+
+
+create view si_latests (id, si_component_id, si_item_id) as
+select
+	si_items.si_host_id, si_components.id, max(si_items.id)
+from 
+	si_revisions,
+	si_components,
+	si_items
+where 
+	si_items.si_revision_id = si_revisions.id and
+	si_revisions.si_component_id = si_components.id and
+	si_items.si_host_id in (select id from si_hosts)
+group by 
+	si_items.si_host_id,
+	si_components.id
+;
+
+
+
+create view si_my_builds as
+ SELECT
+  max(si_items.id) as id, 
+  si_hosts.uname as host,
+  si_components.name AS name,
+  max(si_items.id) as si_item_id
+
+   FROM si_revisions, si_components, si_items, si_hosts
+
+  WHERE si_items.si_revision_id = si_revisions.id AND
+   si_revisions.si_component_id = si_components.id AND 
+   si_items.si_host_id = si_hosts.id and
+   si_hosts.active = 't'
+group by si_hosts.uname, si_components.name
+
+
+
+/* SiMyBuild.find(:all, :include => :si_item) */

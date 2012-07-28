@@ -1,0 +1,32 @@
+
+<table>
+<thead>
+<td>&nbsp;</td>
+<% @hostnames.sort.each do |h| %>
+  <td>
+  <table><tbody><tr><td><%= h %></td></tr><tr><td>&nbsp;</td></tr></tbody></table>
+  </td>
+<% end %>
+</thead>
+<tbody>
+<% rows = 0; @components.each do |component| %>
+  <% if rows % 2 == 0 then %>
+    <tr style="background: rgb(231, 231, 231);">
+  <% else %>
+    <tr>
+  <% end %>
+  <td><%= component %></td>
+  <% @hostnames.each do |host| %>
+  <td>
+	<%= render :partial => 'toplevel_item',
+	    :locals => {:toplevel => @table[component][host] } %>
+  </td>
+  <% end %>
+  </tr>
+<% rows += 1; end %>
+</tbody>
+</table>
+
+
+
+<br />

@@ -1,0 +1,11 @@
+Makefile
+configure
+Makefile.in
+*~
+bla
+TAGS
+si-cli
+test
+boot-roll
+release
+roll

@@ -1,0 +1,2 @@
+adapter: sqlite3
+dbfile: __DATABASE__

@@ -1,0 +1,61 @@
+
+
+%% From the RStore
+
+set[str] component
+set[<str,int>] revision_name_version
+set[<str,<int,<str,int>>>] session_build_name_version
+set[<int,<str,int>>] build_name_version
+set[<int,<str,int>>] successful_build_name_version
+set[<int,<str,<int,<int,<str,int>>>>>] build_name_version_dep_build_dep_name_dep_version
+
+
+type Component = str
+set[Component] components = component
+
+
+type Revision = <str name, int version>
+set[Revision] revisions = revision_name_version
+
+type Build = <int id, Revision revision>
+type Session = str
+
+set[Build] builds = build_name_version
+
+rel[Session,Build] sessions = session_build_name_version
+
+set[Build] successful_builds = successful_build_name_version
+
+
+rel[Build, Build] bom = 
+{ <<i, <n, v>>, dep> | <int i, <str, <int, Build>> bla> : 
+	build_name_version_dep_build_dep_name_dep_version,
+	<str n, <int, Build> bla2> <- bla,
+	<int v, Build dep> <- bla2
+}
+
+
+
+rel[Revision, Component] requires =
+{ <<n1, v>, n2> | <Build b1, Build b2> : bom,
+	str n1 <- b1.revision.name,
+	int v <- b1.revision.version,
+	str n2 <- b2.revision.name
+}
+
+yield components
+yield revisions
+yield builds
+yield sessions
+yield successful_builds
+yield bom
+yield requires
+
+
+
+
+
+
+
+
+

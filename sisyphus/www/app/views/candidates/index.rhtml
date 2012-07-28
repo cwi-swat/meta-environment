@@ -1,0 +1,20 @@
+
+<h1>Recent successful builds per component</h1>
+
+<table>
+<% @components.each do |component| %>
+	<tr>
+	<td>
+	<%= component.name %>
+	</td>
+
+	<td>
+	<% @table[component].each do |item| %>
+		<%=link_to item.id, :controller => 'si_items', :action => 'show', :id => item.id%><%=if not @table[component].last == item then '/' end%>
+	<% end %>
+	</td>
+	</tr>
+<% end %>
+</table>
+
+

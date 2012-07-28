@@ -1,0 +1,8 @@
+
+<h3>Recent messages for: <%=@asession.time %>
+
+<p>NB: lower lines are newer</p>
+
+<pre>
+<% for message in @messages %><%=h(message.line)%><% end %>
+</pre>

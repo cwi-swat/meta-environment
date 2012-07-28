@@ -1,0 +1,15 @@
+<h1>Profiles</h1>
+
+<table>
+<thead>
+<td>Name</td><td>Version</td>
+</thead>
+<tbody>
+<% @profiles.each do |profile| %>
+<tr>
+<td><%= profile.name %></td>
+<td><%= link_to profile.version, :action => 'show', :controller => 'si_profiles', :id => profile.id %></td>
+</tr>
+<% end %>
+</tbody>
+</table>

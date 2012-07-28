@@ -1,0 +1,13 @@
+cvs:
+ CVS_RSH: ssh
+ PATH: __CVS__/bin:__SSH__/bin
+svn_ssh:
+ PATH: __SUBVERSION__/bin:__SSH__/bin
+subversion:
+ PATH: __SUBVERSION__/bin
+autobundle:
+ AUTOBUNDLE: __AUTOBUNDLE__
+ PATH: __AUTOBUNDLE__/bin
+strategoxt:
+ STRATEGOXT: __STRATEGOXT__
+ PATH: __STRATEGOXT__/bin
