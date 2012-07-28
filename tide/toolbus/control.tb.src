@@ -1,0 +1,16 @@
+#ifdef TIDE_STANDALONE
+#include <gui.idef>
+#endif
+
+tool tide-control  is { }
+
+process CONTROL is
+let
+  Control : tide-control
+in
+  snd-msg(load-jar("file://__DATA__/tide.jar")) .
+  rec-connect(Control?) .
+  rec-event(Control, quit) .
+  shutdown("Thank you for using tide!\n")
+endlet
+

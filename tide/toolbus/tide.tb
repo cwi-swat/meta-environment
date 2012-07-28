@@ -1,0 +1,9 @@
+
+#include <control.tb>
+#include <tool.tb>
+#include <adapter.tb>
+
+
+
+toolbus(CONTROL, TOOL-CONNECT, TIDE-ADAPTER-CONNECT)
+

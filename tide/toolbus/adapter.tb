@@ -1,0 +1,12 @@
+#include <debug-adapter.idef>
+
+process TIDE-ADAPTER-CONNECT is
+let
+  A : debug-adapter,
+  P : int
+in
+  ( rec-connect(A?) .
+    create(TIDE-ADAPTER(A), P?)
+  ) * delta
+endlet
+

@@ -1,0 +1,173 @@
+
+
+Wed Nov 12 14:38:12 CET 2008 <jurgenv@cwi.nl>
+ * resources/**: added resources to EXTRA_DIST
+
+
+Tue May  6 11:17:56 2008    <bruntink@cwi.nl>
+
+	* configure.ac: Removed META_C_SETUP because there are no C sources in this package.
+	* .project, .classpath: Deleted.
+
+Mon Apr 28 14:11:45 CEST 2008 <jurgenv@cwi.nl>
+ * lib: removed directory with not-used jar files.
+
+Wed Jul 11 16:01:40 CEST 2007 <kooiker@cwi.nl>
+ * src/**/SourceViewer.java:
+   - Do nothing when Cancel is clicked in Add Source File
+
+Thu Jul 13 11:24:49 CEST 2006 <kooiker@cwi.nl>
+ * src/**/StackViewer.java:
+   - Add scrollbars to variable list (closes #380)
+
+Wed Apr  5 17:00:29 EDT 2006 <jurgenv@cwi.nl	>
+ * src/**: fixed StatusBar interface problem with Studio.
+
+Wed Mar  8 15:20:55 CET 2006 <{jurgenv,dzebric}@cwi.nl>
+ * scripts/tide-gdb.src: changed location of DbgAdapter class to
+   fix a bug.
+
+Fri Jan 13 11:53:02 CET 2006 <jurgenv@cwi.nl>
+ * Updated to new StudioPlugin interface (added getStatusBar)
+
+Tue Aug  9 10:48:25 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
+ * Updated to new StudioPlugin interface
+
+Mon Aug  8 11:10:38 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * src/**/TideControl.java: the process tool can not be closed 
+   anymore. From the process tool you can launch all the other
+   debugging tools, so they may be closed and reopened.
+ * organized the imports in a lot of Java files.
+
+Wed Aug  3 13:25:03 CEST 2005 <kooiker@cwi.nl>
+ * Merge predefined-gui-layout branch
+ * Indented some java files
+
+Thu Jun  2 09:02:01 CEST 2005 <kooiker@cwi.nl>
+ * toolbus/Makefile.am:
+   - -output option before -gentifs
+ * Remove unnecessary casts and else according to Eclipse warnings
+
+Mon May  9 13:23:41 CEST 2005 <jurgenv@cwi.nl>
+ * Removed complicated thread joining and interrupting stuff for closing
+   down tide. Replaced it by simple AbstractTool.stopRunning() calls.
+
+Wed May  4 16:46:57 CEST 2005 <jurgenv@cwi.nl>
+ * Replaced own code for dialogs by standard Swing components
+
+Mon Dec 13 14:31:39 CET 2004 <kooiker@cwi.nl>
+ * tide/tool/stackviewer/StackViewer.java:
+   - Update frame content in stackviewer after debug step (closes #379) 
+
+Fri Nov 19 15:43:44 CET 2004 <jurgenv@cwi.nl>
+ * Another merge
+ * Bumped to 1.1
+
+Fri Nov 19 13:47:00 CET 2004 <jurgenv@cwi.nl>
+ * Moved lib-c directory to separate package (tide-support)
+ * configure.in: removed macros for C compilation (this is a pure
+   Java package now)
+
+Mon Oct 11 14:42:05 CEST 2004 <sgmcorne@science.uva.nl,jurgenv@cwi.nl>
+ * lib-c: tide-adapter changed such that it supports multiple processes
+   and multiple adapters running in the same C process.
+ * added 'step-up' (step-return) functionality to the SourceViewer.
+ * fixed a number of small bugs in the Tide interface (lock-ups during
+   stepping)
+ * removed all debug messages
+
+Wed Sep 22 11:43:13 CEST 2004 <jurgenv@cwi.nl>
+ * Many small changes in the Makefile.am's to get tide through distcheck
+
+Thu Sep 16 10:25:37 CEST 2004 <jurgenv@cwi.nl>
+ * Split of a asf-sdf-meta_1-5 branch for Tide
+
+Mon May 24 10:42:55 CEST 2004 <{jurgenv,sgmcorne}@cwi.nl>
+ * Bumped version to 1.0
+ * Extracted MainFrame from TideControl in order to make basic Tide
+   components reusable without a JFrame
+ * Fixed cleaning up Listener objects after a debug tool such as 
+   the StackViewer is closed and reopened.
+ * StackViewer clears rules if closed to prevent sending a superfluous
+   rule deletion event (mimicked from SourceViewer).
+ * removed all unnecessary asynchronous communication from tide.tb
+ * split tide.tb into tool.tb, adapter.tb, control.tb and tide.tb
+
+
+Sat May 22 11:52:04 CEST 2004 <jurgenv@cwi.nl>
+ * Brought tide up-to-date with format of locations and areas in 
+   asf-sdf-meta 1.5
+ * TODO: many terms need to be apified in Tide!
+
+Wed May 19 15:19:09 CEST 2004
+<jurgenv@cwi.nl,pieter@gamesquare.nl,sgmcorne@science.uva.nl>
+ * Use SwingTool to prevent deadlocks with swing paint()
+ * Changed some notes to messages to prevent deadlocks
+
+Fri Apr 23 10:37:38 CEST 2004 <jurgenv@cwi.nl>
+ * Upgraded Makefile.am and configure.in
+ * Fixed distribution of gif images
+
+2003/06/27 (jurgenv@cwi.nl)
+ * Added generation of package file with correct version number
+
+2003/05/30 (jurgenv@cwi.nl)
+ * Fixed configure.in bug
+
+2003/03/28 (jurgenv@cwi.nl)
+ * Bumped to 0.5beta
+ * Updated dependencies using aterm-java-config script
+
+2003/01/22 (jurgenv@cwi.nl)
+ * Bumped to 0.4 and released immediately due to release of Meta-Environment
+   and synchronization with aterm-java and shared-objects versions of
+   jarfiles.
+ * Changed license to LGPL
+
+2002/12/09 (jurgenv@cwi.nl)
+ * Changed version numbers of aterm-java and shared-objects jarfiles
+
+2002/05/22 (mdejonge@cwi.nl)
+ * Added package definition file for tide package (tide-0.3a.pkg)
+
+2001/11/25 (mdejonge@cwi.nl)
+ * package now uses toolbuslib package
+ * extended functionality of program-check.m4 macros
+
+Improvements:
+ * Scrolling is now done more intelligently
+   (one line at a time instead of one pixel)
+ * Implemented first version of StackViewer
+
+Bugs fixed:
+ * Breakpoint/Watchpoint menu at the wrong location
+
+2001/07/03 (olivierp@cwi.nl)
+ * Version is now 0.3
+ * Fixed problems with exceptions occuring when a debug-adapter disconnected
+ * Fixed problems with freeze-ups after JOptionPane usage
+ * Added support for adding/deleting source files in the source viewer
+ * Added ToDo list
+ * Removed some debug output
+ * Added @TOOLBUS@/classes and @ATERM@/classes to tide classpath
+
+2001/06/26 (olivierp@cwi.nl)
+ * Version is now 0.2
+ * Tool instance windows can now be reopened after closing
+ * Added generic preferences support
+ * Added loading/saving of preferences
+ * Added possibility to change the font of the sourcecode/linenumbers
+
+2001/06/15 (olivierp@cwi.nl)
+ * Changed highlighting behaviour to avoid overlapping highlights
+ * Fixed step-over functionality
+ * Introduced --with-develop mode to enable/disable debug prints
+ * Introduced tabbed pane in source viewer to be able to switch between
+   source files.
+
+2001/05/04 (olivierp@cwi.nl)
+ * Initial working version of tide
+
+2001/04/10 (olivierp@cwi.nl)
+ * Initial checkin of tide
+

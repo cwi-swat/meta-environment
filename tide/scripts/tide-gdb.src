@@ -1,0 +1,6 @@
+#!/bin/sh
+
+CLASSPATH=__JARDIR__/tide.jar:__EXTERNALS__:$CLASSPATH
+export CLASSPATH
+
+java nl.cwi.sen1.tide.adapters.gdb.GdbAdapter $*
