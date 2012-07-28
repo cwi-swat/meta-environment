@@ -1,0 +1,8 @@
+Version 0.8:
+  * Added -m to normalizer.
+  * Context-free functions defined in priority section are no
+    longer promoted to ordinary syntax section. Thus it is no
+    longer possible to define a (context-free) function by giving
+    only the priority declaration.
+  * Small bug removed in normalizer which causes r[[LAYOUT]] to occur
+    as a non normalized term. 
