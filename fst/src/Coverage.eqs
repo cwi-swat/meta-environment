@@ -1,0 +1,112 @@
+equations
+
+[cov-1] equiv(&Symbols0,&Symbols1)=true
+	================================
+	covers(&Symbols0,&Symbols1)=true
+
+[cov-1-1] equiv(&Symbols1,&Symbols0)=true
+	================================
+	covers(&Symbols0,&Symbols1)=true
+
+[cov-2] &Symbol0=<< &Symbol1 &Symbol*2 >>,
+	&Symbols1=&Symbol*0 &Symbol*1,
+        covers(&Symbol1,&Symbol*0)=true,
+	covers(<<&Symbol*2>>,&Symbol*1)=true
+	====================================
+	covers(&Symbol0,&Symbols1)=true
+
+[cov-3] &Symbol0=<< &Symbol1 &Symbol*2 >>,
+	&Symbols1=&Symbol*0 &Symbol*1,
+        covers(&Symbol1,&Symbol*1)=true,
+	covers(<<&Symbol*2>>,&Symbol*0)=true
+	====================================
+	covers(&Symbol0,&Symbols1)=true
+
+[cov-3-2] covers( <<>>,&Symbols1 )=covers( ,&Symbols1 )
+
+[cov-3-3] covers( << &Symbol0 >>,&Symbols1 )=covers( &Symbol0,&Symbols1)
+
+[cov-3-4] covers( << &Symbols0 >>,<< &Symbols1 >>)=covers( << &Symbols0 >>,&Symbols1)
+
+
+[cov-4] &Symbol0=&Symbol1 | &Symbol2,
+	covers(&Symbol1,&Symbols1)=true
+	===============================
+	covers(&Symbol0,&Symbols1)=true
+
+[cov-5] &Symbol0=&Symbol1 | &Symbol2,
+	covers(&Symbol2,&Symbols1)=true
+	===============================
+	covers(&Symbol0,&Symbols1)=true
+
+[cov-5-2] &Symbol0=&Symbol2 | &Symbol3,
+	  &Symbol1=&Symbol4 | &Symbol5,
+	covers(&Symbol2,&Symbol4)=true,
+	covers(&Symbol3,&Symbol5)=true
+	===============================
+	covers(&Symbol0,&Symbol1)=true
+
+[cov-6] covers(&Symbol0 +,&Symbols2)=true
+	=================================
+	covers(&Symbol0 *,&Symbols2)=true
+
+[cov-6-2] covers(&Symbol0 ?,&Symbols2)=true
+	=================================
+	covers(&Symbol0 *,&Symbols2)=true
+
+[cov-7] covers(&Symbol0 ,&Symbols2)=true
+	==================================
+	covers(&Symbol0 ? ,&Symbols2)=true
+
+[cov-8] covers(&Symbol0,&Symbols2)=true
+	=================================
+	covers(&Symbol0 +,&Symbols2)=true
+
+[cov-9-1] &Symbols1 = &Symbol1 &Symbol+0,
+	  &Symbols2 = &Symbol+1 &Symbol*3,
+	  covers(&Symbol1,&Symbol+1)=true,
+	  covers(&Symbol+0,&Symbol*3)=true
+	  ================================
+	  covers(&Symbols1,&Symbols2)=true
+
+[cov-9-2] &Symbols1 = &Symbol1*  &Symbol*1,
+	  covers(&Symbol*1,&Symbols2)=true
+	  =================================
+	  covers(&Symbols1,&Symbols2)=true
+
+[cov-9-3] &Symbols1 = &Symbol1 ?  &Symbol*1,
+	  covers(&Symbol*1,&Symbols2)=true
+	  ==================================
+	  covers(&Symbols1,&Symbols2)=true
+
+[cov-10] &Symbols2=&Symbol0 &Symbol+0,
+	 covers(&Symbols2, &Symbols1)=true
+	 ==============================================
+	 covers(( &Symbol0 &Symbol+0 ), &Symbols1)=true
+
+[cov-10-2] covers(&Symbol0,&Symbols1)=true
+	==================================
+	covers((&Symbol0),&Symbols1)=true
+
+[cov-10-3] &Symbols2=&Symbol0 &Symbol+0,
+	 covers(&Symbols1, &Symbols2)=true
+	 ==============================================
+	 covers(&Symbols1,( &Symbol0 &Symbol+0 ))=true
+
+[cov-10-4] covers(&Symbols0,&Symbol1)=true
+	==================================
+	covers(&Symbols0,(&Symbol1))=true
+
+[cov-11] covers( &Symbol0, &Symbol1)=true
+	 ==================================
+	 covers( &Symbol0*, &Symbol1*)=true
+
+[cov-12] covers( &Symbol0, &Symbol1)=true
+	 ==================================
+	 covers( &Symbol0+, &Symbol1+)=true
+
+[cov-13] covers( &Symbol0, &Symbol1)=true
+	 ====================================
+	 covers( &Symbol0 ?, &Symbol1 ?)=true
+
+[default-cov-13] covers(&Symbols1, &Symbols2)=false

@@ -1,0 +1,63 @@
+equations
+
+[IT-dep]
+
+IT(depermutate,&SDF0,&Focus0)=depermutate(&SDF0,&Focus0)
+
+[dep-1]
+
+&Module0= module &ModuleName0 &ImpSection*0 &Sections0,
+focused(&ModuleName0,&Focus0)=false
+=========================================================
+depermutate(&Module0,&Focus0)=&Module0
+
+[dep-2]
+
+&Production0=&Symbols0 -> &Sort0 &Attributes0,
+focused(&Sort0,&Focus0)=false
+=================================================================
+depermutate(&Production0,&Focus0)=&Production0
+
+[dep-3]
+
+depermutate(<< >>,&Focus0)= ()
+
+[default-dep-4-1]
+
+depermutate(<< &Symbol0 >>,&Focus0)=(&Symbol0)*
+
+[dep-5-1]
+
+depermutate(<< &Symbol0* >>,&Focus0)=(&Symbol0)*
+
+[dep-6-1]
+
+depermutate(<< &Symbol0+ >>,&Focus0)=(&Symbol0)*
+
+[dep-7-1]
+
+depermutate(<< &Symbol0? >>,&Focus0)=(&Symbol0)*
+
+[default-dep-4]
+
+depermutate(<< &Symbol*0 >>,&Focus0)=(&Symbol1)*
+====================================================================
+depermutate(<< &Symbol0 &Symbol*0 >>,&Focus0)=(&Symbol0 | &Symbol1)*
+
+[dep-5]
+
+depermutate(<< &Symbol*0 >>,&Focus0)=(&Symbol1)*
+====================================================================
+depermutate(<< &Symbol0* &Symbol*0 >>,&Focus0)=(&Symbol0 | &Symbol1)*
+
+[dep-6]
+
+depermutate(<< &Symbol*0 >>,&Focus0)=(&Symbol1)*
+====================================================================
+depermutate(<< &Symbol0+ &Symbol*0 >>,&Focus0)=(&Symbol0 | &Symbol1)*
+
+[dep-7]
+
+depermutate(<< &Symbol*0 >>,&Focus0)=(&Symbol1)*
+====================================================================
+depermutate(<< &Symbol0? &Symbol*0 >>,&Focus0)=(&Symbol0 | &Symbol1)*

@@ -1,0 +1,92 @@
+equations
+
+[IT-1]  &Sort+0=definedSorts(&SDF0,&Focus0),
+	&Focus0=modules &ModuleFocus0 sorts &SortFocus0
+	====================================================
+	IT(alternate,&SDF0,&Focus0)=alternate(&SDF0,&Sort+0,&ModuleFocus0)
+
+[IT-2]  &Sort+0=definedSorts(&SDF0,&Focus0),
+	&Focus0=modules &ModuleFocus0 sorts &SortFocus0
+	========================================================
+	IT(dealternate,&SDF0,&Focus0)=dealternate(&SDF0,&Sort+0,&ModuleFocus0)
+
+[alt-1] &SDF1=alternate(&SDF0,&Sort0,&ModuleFocus0),
+	&SDF2=alternate(&SDF1,&Sort+0,&ModuleFocus0)
+	=====================================
+	alternate(&SDF0,&Sort0 &Sort+0,&ModuleFocus0)=&SDF2
+
+[alt-2] &Production+0=focusedRules(&SDF0,modules &ModuleFocus0 sorts &Sort0),
+	&Symbol0=or(&Production+0),
+	&SDF1=update(&SDF0,&Production+0,&Symbol0,&ModuleFocus0)
+	===========================================================
+	alternate(&SDF0,&Sort0,&ModuleFocus0)=&SDF1
+
+[dealt-1] &SDF1=dealternate(&SDF0,&Sort0,&ModuleFocus0),
+	  &SDF2=dealternate(&SDF1,&Sort+0,&ModuleFocus0)
+	  =======================================
+	  dealternate(&SDF0,&Sort0 &Sort+0,&ModuleFocus0)=&SDF2
+
+[dealt-2] &Production0=focusedRules(&SDF0,modules &ModuleFocus0 sorts &Sort0),
+	  &Production0=&Symbol0 -> &Sort0 &Attributes0,
+	  &SDF1=deor(&SDF0,&Symbol0,&Sort0,&ModuleFocus0),
+	  &SDF2=sub(&SDF1,modules &ModuleFocus0 sorts &Sort0,&Production0)
+	  ==========================================================
+	  dealternate(&SDF0,&Sort0,&ModuleFocus0)=&SDF2
+
+[or-1]  &Production0=&Symbols0 -> &Sort0 &Attributes0,
+	&Symbol0=bracket(&Symbols0) 
+	==============================================
+	or(&Production0)=&Symbol0
+
+[or-2]  &Production+0=&Production0 &Production+1,
+	&Production0=&Symbols0 -> &Sort0 &Attributes0,
+	&Symbol0=bracket(&Symbols0),
+	&Symbol1=or(&Production+1) 
+	==============================================
+	or(&Production+0)=&Symbol0 | &Symbol1
+
+[default-deor-1] unbracket[&Symbol0]=&Symbols0,
+		 &SDF1=
+	add(&SDF0,modules &ModuleFocus0 sorts &Sort0,&Symbols0 ->&Sort0)
+		 ===========================================================
+		 deor(&SDF0,&Symbol0,&Sort0,&ModuleFocus0)=&SDF1
+
+[deor-2] &Symbol0=&Symbol1 | &Symbol2,
+	 unbracket[&Symbol1]=&Symbols0,
+	 &SDF1=
+	add(&SDF0,modules &ModuleFocus0 sorts &Sort0,&Symbols0 ->&Sort0),
+	 &SDF2= deor(&SDF1,&Symbol2,&Sort0,&ModuleFocus0)
+	 ============================================================
+	 deor(&SDF0,&Symbol0,&Sort0,&ModuleFocus0)=&SDF2
+
+[upd-1] &Production0=&Symbols0 -> &Sort0 &Attributes0,
+	&SDF1=add(&SDF0,modules &ModuleFocus0 sorts &Sort0,&Symbol0 -> &Sort0),
+	&SDF2=sub(&SDF1,modules &ModuleFocus0 sorts &Sort0,&Production0)
+	================================================================
+	update(&SDF0,&Production0,&Symbol0,&ModuleFocus0)=&SDF2
+
+[upd-2] &Production+0=&Production+1 &Production0,
+	&Production0=&Symbols0 -> &Sort0 &Attributes0,
+	&SDF1=sub(&SDF0,modules &ModuleFocus0 sorts &Sort0,&Production0),
+	&SDF2=update(&SDF1,&Production+1,&Symbol0,&ModuleFocus0)
+	=======================================================
+	update(&SDF0,&Production+0,&Symbol0,&ModuleFocus0)=&SDF2
+
+[default-split-1]
+
+IT(split &SymbolsYielder0 in &ProductionYielder0, &SDF0, &Focus0)=
+IT(id,&SDF0,&Focus0)
+
+[split-2]
+
+IY(&SymbolsYielder0,&SDF0,&Focus0)=&Symbol0 | &Symbol1,
+IY(&ProductionYielder0,&SDF0,&Focus0)=
+&Symbol*0 &Symbol0 | &Symbol1 &Symbol*1 -> &Sort0
+==================================================================
+IT(split &SymbolsYielder0 in &ProductionYielder0, &SDF0, &Focus0)=
+IT(add &Symbol*0 &Symbol0 &Symbol*1 -> &Sort0;
+add &Symbol*0 &Symbol1 &Symbol*1 -> &Sort0;
+sub &Symbol*0 &Symbol0 | &Symbol1 &Symbol*1 -> &Sort0 effectively;
+split &Symbol1 in &Symbol*0 &Symbol1 &Symbol*1 -> &Sort0,
+&SDF0,&Focus0)
+

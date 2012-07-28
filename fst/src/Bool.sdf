@@ -1,0 +1,14 @@
+module Bool
+
+exports
+
+  sorts Bool
+
+  context-free syntax
+ 
+  "true" -> Bool
+  "false" -> Bool
+ 
+  variables
+
+ "&Bool"[0-9]+ -> Bool

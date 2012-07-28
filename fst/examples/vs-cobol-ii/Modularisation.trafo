@@ -1,0 +1,318 @@
+
+introduce
+ module Names
+;
+
+focus on
+ module Syntax
+do
+ move 
+  sorts
+   Alphabet-name
+   Class-name 
+   Condition-name 
+   Data-name
+   File-name  
+   Index-name 
+   Mnemonic-name 
+   Record-name 
+   Routine-name 
+   Symbolic-character 
+   Library-name 
+   Program-name 
+   Text-name 
+   Paragraph-name 
+   Section-name 
+   Computer-name 
+   Language-name 
+   Environment-name 
+   Assignment-name 
+   Basis-name 
+   Figurative-constant
+   Literal
+   Special-register 
+ to
+  module Names
+;
+
+focus on
+ module Syntax
+do
+ introduce
+  module ArithmeticExpressions
+;
+
+focus on
+ module Syntax
+do
+ move 
+  sorts
+   Arithmetic-expression
+   Times-div
+   Power
+   Basis
+ to
+  module ArithmeticExpressions
+;
+
+focus on
+ module Syntax
+do
+ (
+  introduce
+   module DataReference
+  ;
+
+  move
+   sorts
+    Procedure-name	
+    Identifier
+    Condition-name-reference
+    Subscript
+  to
+   module DataReference
+ ;
+
+ move
+  sorts reachable from
+   module DataReference
+  to
+   module DataReference
+ ) 
+;
+
+focus on
+ module Syntax
+do
+ (
+  introduce
+   module Conditions
+  ;
+
+  move
+   sort Condition
+  to
+   module Conditions
+ ;
+
+ move
+  sorts reachable from
+   module Conditions
+  to
+   module Conditions
+ )
+;
+ 
+focus on
+ module Syntax
+do
+ (
+  introduce
+   module Statements
+  ;
+
+  move
+   sorts
+    Statement
+    Compiler-directing-statement
+  to
+   module Statements
+ ;
+
+ move
+  sorts reachable from
+   module Statements
+  to
+   module Statements
+ )
+;
+ 
+focus on
+ module Syntax
+do
+(
+  introduce
+   module ProcedureDivision
+  ;
+
+  move
+   sort Procedure-division
+  to
+   module ProcedureDivision
+ ;
+
+ move
+  sorts reachable from
+   module ProcedureDivision
+  to
+   module ProcedureDivision
+ )
+;
+
+focus on
+ module Syntax
+do
+(
+  introduce
+   module DataDescriptionEntry
+  ;
+
+  move
+   sort Data-description-entry
+  to
+   module DataDescriptionEntry
+ ;
+
+ move
+  sorts reachable from
+   module DataDescriptionEntry
+  to
+   module DataDescriptionEntry
+ )
+;
+
+focus on
+ module Syntax
+do
+(
+  introduce
+   module FileAndSortDescriptionEntry
+  ;
+
+  move
+   sort File-and-sort-description-entry
+  to
+   module FileAndSortDescriptionEntry
+ ;
+
+ move
+  sorts reachable from
+   module FileAndSortDescriptionEntry
+  to
+   module FileAndSortDescriptionEntry
+ )
+;
+
+focus on
+ module Syntax
+do
+(
+  introduce
+   module DataDivision
+  ;
+
+  move
+   sort Data-division-content
+  to
+   module DataDivision
+ ;
+
+ move
+  sorts reachable from
+   module DataDivision
+  to
+   module DataDivision
+ )
+;
+
+focus on
+ module Syntax
+do
+(
+  introduce
+   module ConfigurationSection
+  ;
+
+  move
+   sort Configuration-section
+  to
+   module ConfigurationSection
+ ;
+
+ move
+  sorts reachable from
+   module ConfigurationSection
+  to
+   module ConfigurationSection
+ )
+; 
+
+focus on
+ module Syntax
+do
+ (
+  introduce
+   module InputOutputSection
+  ;
+
+  move
+   sort Input-output-section
+  to
+   module InputOutputSection
+ ;
+
+ move
+  sorts reachable from
+   module InputOutputSection
+  to
+   module InputOutputSection
+ ) 
+; 
+
+focus on
+ module Syntax
+do
+ (
+ introduce
+  module EnvironmentDivision
+ ;
+
+ move
+  sort Environment-division-content
+ to
+  module EnvironmentDivision
+ )
+; 
+
+focus on
+ module Syntax
+do
+ (
+ introduce
+  module IdentificationDivision
+ ;
+
+ move
+  sorts
+   Identification-division-content
+   Program-id-cobol-source-program
+   Program-id-nested-cobol-source-program
+ to
+  module IdentificationDivision
+)
+ 
+%% next: Generalisation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

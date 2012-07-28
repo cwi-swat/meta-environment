@@ -1,0 +1,285 @@
+#! /usr/local/bin/wish
+
+#-------------------------------------------------
+#
+#load a file
+#
+#-------------------------------------------------
+proc load {Pos} {
+
+    global TemporaryGrammar
+
+    set  FileName [.$Pos.top.filename get]
+    set  File     [open $FileName r]
+    set  Content [read $File]
+    .$Pos.textframe.text delete 0.0 end
+    .$Pos.textframe.text insert 0.0 $Content 
+    close $File
+    if {[string compare $Pos center]== 0} {
+	firstStep
+	highlightTrafos
+	
+	regexp {([^/]*)\.trafo$} $FileName All Name
+	.right.top.filename delete 0 end
+	.right.top.filename insert end "../examples/grammars/$Name.sdf"
+
+    }
+
+    if {[string compare $Pos left]== 0} {
+	set TemporaryGrammar [.left.textframe.text get 0.0 end]
+    }
+}
+
+#-------------------------------------------------
+#
+#save a file
+#
+#-------------------------------------------------
+proc save {Pos} {
+
+    set  FileName [.$Pos.top.filename get]
+    set  File     [open $FileName w+]
+    set  Content  [.$Pos.textframe.text get 0.0 end]
+    puts $File    $Content   
+    close $File
+}
+
+#-------------------------------------------------
+#
+#do all transformations
+#
+#-------------------------------------------------
+proc allTrafos {} {
+
+    .right.textframe.text delete 0.0 end
+    
+    set Trafos [.center.textframe.text get 0.0 end]
+    set Grammar [.left.textframe.text get 0.0 end]
+        
+    set TransformedGrammar [runAsfSdf $Trafos $Grammar]
+    .right.textframe.text insert 0.0 $TransformedGrammar
+    
+    .center.textframe.text tag remove Step startStep endStep
+    .center.textframe.text mark set startStep end
+    .center.textframe.text mark set endStep end
+   
+} 
+
+#-------------------------------------------------
+#
+#do next transformation step
+#
+#-------------------------------------------------
+proc stepTrafo {} {
+
+    global TemporaryGrammar
+    .right.textframe.text delete 0.0 end
+    
+    set Trafos [.center.textframe.text get startStep endStep]
+    
+    set TemporaryGrammar [runAsfSdf $Trafos $TemporaryGrammar]
+    .right.textframe.text insert 0.0 $TemporaryGrammar
+
+    .center.textframe.text tag remove Step startStep endStep
+    .center.textframe.text mark set startStep "endStep +1 char"
+    markStep
+} 
+
+#-------------------------------------------------
+#
+#parse, evaluate and asource Term
+#
+#-------------------------------------------------
+proc runAsfSdf { Trafos Grammar} {
+
+    set Term "apply $Trafos at $Grammar"
+    exec echo $Term | \
+	 /home/jurgenv/pkgs/bin/sglr -p ../src/Framework.eqs.tbl -1 | \
+	 /home/jurgenv/pkgs/bin/evaluator -e ../src/Framework.asf.baf | \
+	 /home/jurgenv/pkgs/bin/asource
+
+}   
+
+#-------------------------------------------------
+#
+#place marks arround the next step
+#
+#-------------------------------------------------
+proc markStep {} {
+
+    set Trafos [.center.textframe.text get startStep end]
+    if { [regexp -indices {[^;]*;?} $Trafos Indices]==1 } {
+
+	scan $Indices "%d %d" Start End
+	.center.textframe.text mark set endStep "startStep +$End chars"
+    }
+
+    .center.textframe.text tag add Step startStep endStep
+    .center.textframe.text see startStep
+
+}
+
+#-------------------------------------------------
+#
+#set marks for the first step
+#
+#-------------------------------------------------
+proc firstStep {} {
+
+    .center.textframe.text mark set startStep 0.0
+    .center.textframe.text mark set endStep 0.0
+    markStep
+
+}
+
+#-------------------------------------------------
+#
+#highlight the text in the center
+#
+#-------------------------------------------------
+proc highlightTrafos {} {
+
+    set Trafos [.center.textframe.text get 0.0 end]
+#    if { [regexp -indices {%%[^\n]*\n} $Trafos Indices]==1 } {
+#
+#	scan $Indices "%d %d" Start End
+#	.center.textframe.text tag add Rem "0.0 +$Start chars" "0.0 +$End chars"  
+#    }    
+}
+
+#-------------------------------------------------
+#
+#runs all transformationscripts
+#
+#-------------------------------------------------
+proc allScripts {} {
+
+    puts stdout [exec date]
+    .center.bottom.all invoke
+    .right.top.save invoke
+
+    while [regexp {%% next: ([0-9a-zA-z\-]+)[^[0-9a-zA-z\-]*$} [.center.textframe.text get 0.0 end] All Name]==1 {
+
+	puts stdout [.center.top.filename get]
+	puts stdout [exec date]
+	.left.top.filename delete 0 end
+	.left.top.filename insert end [.right.top.filename get]
+	.left.top.load invoke
+	.center.top.filename delete 0 end
+	.center.top.filename insert end "../transformations/$Name.trafo"
+	.center.top.load invoke
+	.center.bottom.all invoke
+	.right.top.save invoke
+	
+     }
+
+    puts stdout [exec date]
+	 
+}
+
+
+#-------------------------------------------------
+#
+# Main
+#
+#-------------------------------------------------
+
+global TemporaryGrammar
+set TemporaryGrammar ""
+
+# set window title
+wm title . "Grammar Transformation Utility"
+
+foreach Pos {left center right} {
+
+    # 3 columns 
+    frame .$Pos 
+    pack .$Pos -side left -fill both -expand true -padx 10 -pady 5 
+
+    # column title
+    label .$Pos.label
+    pack .$Pos.label -side top -fill x -pady 5
+
+    # frame for filename, load and save buttons
+    frame .$Pos.top 
+    pack .$Pos.top -side top -fill x -pady 5
+    
+    # filename
+    entry .$Pos.top.filename -width 25 -background white
+    pack .$Pos.top.filename -side left -fill x -expand true
+
+    # load button
+    button .$Pos.top.load -text Load -command "load $Pos"
+    pack .$Pos.top.load -side left
+    
+    # save button
+    button .$Pos.top.save -text Save -command "save $Pos"
+    pack .$Pos.top.save -side left
+  
+    # frame for text and scrollbar
+    frame .$Pos.textframe
+    pack .$Pos.textframe -side top -fill both -expand true
+  
+    # text
+    text .$Pos.textframe.text -width 48 -height 35 -setgrid true \
+	-wrap none -background white \
+	-xscrollcommand ".$Pos.scrollx set" \
+	-yscrollcommand ".$Pos.textframe.scrolly set"
+    pack .$Pos.textframe.text -side left -fill both -expand true
+
+    # vertical scrollbar
+    scrollbar .$Pos.textframe.scrolly -width 8 -orient vertical\
+	-command ".$Pos.textframe.text yview"
+    pack .$Pos.textframe.scrolly -side right -fill y 
+
+     # horizontal scrollbar
+    scrollbar .$Pos.scrollx -width 8 -orient horizontal\
+	-command ".$Pos.textframe.text xview"
+    pack .$Pos.scrollx -side top -fill x 
+
+    # frame for extra buttons
+    frame .$Pos.bottom
+    pack .$Pos.bottom -side bottom -fill x -pady 5
+
+}
+
+# set column titles
+.left.label configure -text "Input Grammar"
+.center.label configure -text "Transformations"
+.right.label configure -text "Transformed Grammar"
+
+# just an empty label
+label .left.bottom.cp
+pack .left.bottom.cp -side left -pady 5
+
+# various transformation buttons
+button .center.bottom.step -text Step -command {stepTrafo}
+# button .center.bottom.toCursor -text "To Cursor"
+button .center.bottom.all -text All -command {allTrafos}
+button .center.bottom.allScripts -text "All Scripts" -command {allScripts}
+pack .center.bottom.step  \
+    .center.bottom.all \
+    .center.bottom.allScripts \
+    -side left -padx 5 -expand true
+
+# exit button
+button .right.bottom.exit -text Exit -command {exit}
+pack .right.bottom.exit -side right
+
+#default input grammar
+.left.top.filename insert end "../examples/grammars/VS-COBOL-II-RAW.sdf"
+.left.top.load invoke
+
+#default transformation
+.center.top.filename insert end "../examples/trafos/Preparation.trafo"
+.center.top.load invoke
+
+#tag for highlighting the next step
+.center.textframe.text tag configure Step -background lightgrey
+
+#tag for remarks
+.center.textframe.text tag configure Rem -foreground red
+
+
+
+#-font *-times-bold-r-*-12-*

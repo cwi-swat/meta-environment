@@ -1,0 +1,19 @@
+module YACCify
+
+imports  Combinators
+
+exports
+
+ sorts SDF
+
+ context-free syntax
+
+  "YACCify" -> Trafo
+hiddens
+
+ context-free syntax
+
+  "YACCify" "(" SDF "," Focus ")" -> SDF
+  "YACCifySorts" "(" SDF "," Sort+ ")" -> SDF
+  "YACCifyList" "(" SDF "," Focus "," ESymbol+ ")" -> SDF
+  

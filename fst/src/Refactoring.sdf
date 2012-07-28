@@ -1,0 +1,19 @@
+module Refactoring
+
+imports Combinators Move YACCify DeYACCify Alternation
+
+exports
+
+  context-free syntax
+
+  "rename" Sort "to" Sort -> Trafo
+  "fold" SymbolsYielder "to" Sort -> Trafo
+  "unfold" Sort -> Trafo
+  "introduce" Sort "as" SymbolsYielder -> Trafo
+  "eliminate" Sort -> Trafo
+  "eliminate" "module" ModuleName -> Trafo
+  "equate" Sort "to" Sort -> Trafo
+  "simplify" SymbolsYielder "to" SymbolsYielder -> Trafo
+  "disambiguate" SymbolsYielder "in" Sort -> Trafo
+  "remove" "line" "breaks" -> Trafo
+  "minimalize" Sort -> Trafo

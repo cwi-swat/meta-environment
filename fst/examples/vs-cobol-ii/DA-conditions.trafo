@@ -1,0 +1,47 @@
+focus on 
+ sort
+  Simple-condition
+ in module
+  Conditions
+do
+(
+
+ dealternate
+ ;
+
+ unfold
+  Condition-name-condition
+ ;
+
+ unfold
+  Switch-status-condition
+ ;
+
+ disambiguate
+  Condition-name-reference
+ in
+  Simple-condition
+ ;
+
+ fold
+  Condition-name-reference
+ to
+  Condition-name-or-switch-status-condition
+ ;
+
+ alternate
+)
+;
+
+eliminate
+ Condition-name-condition
+;
+
+eliminate
+ Switch-status-condition
+
+%% next: DA-statements
+
+
+
+

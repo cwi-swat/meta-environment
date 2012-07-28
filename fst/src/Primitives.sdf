@@ -1,0 +1,30 @@
+module Primitives
+
+imports Add Sub Substitute Replace Reset Yielders
+
+exports
+
+  sorts Trafo SDF
+
+  context-free syntax
+
+  "id" -> Trafo
+  "fail" -> Trafo
+  "reset" -> Trafo
+  "add" ProductionYielder -> Trafo
+  "add" Module -> Trafo
+  "sub" ProductionYielder -> Trafo
+  "substitute" Sort "by" Sort -> Trafo
+  "replace" SymbolsYielder "by" SymbolsYielder -> Trafo
+
+  "introduce" "module" ModuleName -> Trafo
+  "delete" "module" ModuleName -> Trafo
+  "rename" "module" ModuleName "to" ModuleName -> Trafo
+ 
+  "IT" "(" Trafo "," SDF "," Focus ")" -> SDF
+  
+variables
+
+  "&Trafo"[0-9]+ -> Trafo
+
+

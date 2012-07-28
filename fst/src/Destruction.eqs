@@ -1,0 +1,24 @@
+equations
+
+[rest-1] restrict &SymbolsYielder0 to &SymbolsYielder1 = 
+	 guard &SymbolsYielder0 covers &SymbolsYielder1;
+	 replace &SymbolsYielder0 by &SymbolsYielder1 effectively
+
+[excl-1] exclude &SymbolsYielder0 from &Sort0 = 
+	 sub &SymbolsYielder0 -> &Sort0 effectively;
+	 guard defined sort &Sort0
+
+[rej-1] reject &Sort0 = 
+	guard defined sort &Sort0;
+	focus on sort &Sort0 do reset
+
+[rej-2] reject module &ModuleName0=
+	guard fresh module &ModuleName0 ;
+	delete module &ModuleName0 
+
+[sep-1] seperate &Sort0 as &Sort1 =
+	guard not fresh sort &Sort0;
+	guard fresh sort &Sort1;
+	replace &Sort0 by &Sort1;
+	guard not fresh sort &Sort0 
+

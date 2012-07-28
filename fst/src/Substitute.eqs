@@ -1,0 +1,15 @@
+equations
+
+[subst-1] &Module0= module &ModuleName0 &ImpSection*0 &Sections0,
+	  focused(&ModuleName0,&Focus0)=false
+	  ========================================================
+	  substitute(&Module0,&Focus0, &Sort1, &Sort2)=&Module0
+
+[subst-2] &Production0=&Symbols0 -> &Sort0 &Attributes0,
+	  focused(&Sort0,&Focus0)=false
+	  ================================================================
+	  substitute(&Production0,&Focus0, &Sort1, &Sort2)=&Production0
+
+[subst-3] substitute(&Sort0, &Focus0,&Sort0, &Sort1)=&Sort1
+
+[subst-4] substitute(&ModuleName0,&ModuleName0,&ModuleName1)=&ModuleName1

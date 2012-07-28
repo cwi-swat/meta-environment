@@ -1,0 +1,12 @@
+module Minimalization
+
+imports Combinators
+
+exports
+
+sorts Trafo
+
+context-free syntax
+
+ "minimalize" -> Trafo
+ 

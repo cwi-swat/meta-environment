@@ -1,0 +1,28 @@
+module IdentifierGeneration
+
+imports Extended-SDF2-Grammar Properties
+
+exports
+
+ context-free syntax
+
+ "newSort" "(" SDF "," Symbol "," Literal ")" -> Sort
+ NatCon                -> Nat
+ Nat "+" Nat            -> Nat {left}
+
+ variables
+  
+  "&Nat"[0-9]+      -> Nat 
+  "&Nat-con" [0-9]+  -> NatCon
+  "n" [0-9]* -> NatCon
+  "c" [0-9]* -> CHAR
+  "x" [0-9]* -> CHAR*
+  "y" [0-9]* -> CHAR+
+  "s" [0-9]* -> CHAR+
+
+hiddens
+
+ context-free syntax
+
+ "concat" "(" Sort "," Literal "," Nat ")" -> Sort
+ "freshSort" "(" SDF "," Sort "," Literal "," Nat ")" -> Sort

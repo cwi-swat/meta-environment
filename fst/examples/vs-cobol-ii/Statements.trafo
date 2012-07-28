@@ -1,0 +1,303 @@
+%%
+%% From the reference:
+%%
+%%  An imperative statement either specifies an unconditional action to be
+%%  taken by the program, or is a conditional statement terminated by its
+%%  explicit scope terminator (see "Delimited Scope Statements" in
+%%  topic 2.8.6.3).  A series of imperative statements can be specified
+%%  whenever an imperative statement is allowed. A conditional statement that
+%%  is terminated by its explicit scope terminator is also classified as an
+%%  imperative statement (see "Delimited Scope Statements" in topic 2.8.6.3).
+%%   Table 26 lists COBOL imperative statements.
+%%
+%% To cope with the requirement that we can have a series of
+%% imperative statement whereever a statement can be, we add
+%% and use a definition for statement lists. Finally, we also
+%% unify statement (used in IF Statements) and imperative-statement.
+%%
+%% From the reference (IF Statement):
+%%
+%%     statement-1, statement-2
+%%       Can be any one of the following:
+%%
+%%       o   An imperative statement
+%%       o   A conditional statement
+%%       o   An imperative statement followed by a conditional statement.
+%%
+
+unify
+ Imperative-statement
+to
+ Statement-list
+;
+
+%%
+%% The following definition of statement is just an enumeration
+%% of PROCEDURE DIVISION statements listed in the reference.
+%%
+
+focus on
+ sort Statement-list
+do
+ resolve
+  Statement
+ as
+  Accept-statement //
+  | Add-statement //
+  | Alter-statement //
+  | Call-statement //
+  | Cancel-statement //
+  | Close-statement //
+  | Compute-statement //
+  | Continue-statement //
+  | Delete-statement //
+  | Display-statement //
+  | Divide-statement //
+  | Entry-statement //
+  | Evaluate-statement // 
+  | Exit-statement //
+  | Exit-program-statement //
+  | Goback-statement //
+  | Go-to-statement //
+  | If-statement //
+  | Initialize-statement //
+  | Inspect-statement //
+  | Merge-statement //
+  | Move-statement //
+  | Multiply-statement //
+  | Open-statement //
+  | Perform-statement // 
+  | Read-statement //
+  | Release-statement // 
+  | Return-statement //
+  | Rewrite-statement //
+  | Search-statement //
+  | Set-statement //
+  | Sort-statement //
+  | Start-statement //
+  | Stop-statement //
+  | String-statement //
+  | Subtract-statement //
+  | Unstring-statement //
+  | Write-statement 
+;
+
+%%
+%% The following auxiliary phrases are the same. Thus, we unify them. We also
+%% enforce a simpler name.
+%%
+
+equate
+ Evaluate-statement-phrase-2
+to
+ Evaluate-statement-phrase-1
+;
+
+rename
+ Evaluate-statement-phrase-1 
+to
+ Evaluate-phrase
+;
+
+%%
+%% The nonterminal expression is used in the definition of the EVALUATE
+%% Statement as a place holder for arithmetic and conditional expressions.
+%% expression is not defined by a diagram. This correspondence is somewhat
+%% encoded in the text on the EVALUATE statement. expression is not used
+%% elsewhere in the diagrams. We prefer to replace it by its intended
+%% definition.
+%%
+ 
+focus on 
+ sort Evaluate-statement
+do
+ 
+  (
+  resolve 
+   Expression
+  as
+   Arithmetic-expression | Condition
+  ;
+  unfold
+   Expression
+  ;
+  eliminate 
+   Expression
+  )
+;
+
+%%
+%% From the reference:
+%%  The EXIT statement must be preceded by a paragraph-name and must 
+%%  appear in a sentence by itself. This sentence must be the only sentence 
+%%  in the paragraph. IBM-extension: This sentence need not be the only
+%%  sentence in the paragraph. 
+%%
+%% The syntax diagram makes the above requirements explicit in the sense
+%% that a period is part of the diagram. The period, however, is not
+%% of the statement but rather of the enclosing sentence. This is a kind
+%% of semantic error.
+%%
+
+override
+ Exit-statement
+by
+ "EXIT"
+;
+
+
+%%
+%% There is a semantic error in the diagram on the "EXIT" "PROGRAM"
+%% statement. The period should not be in the diagram.
+%%
+
+override
+ Exit-program-statement
+by
+ "EXIT" "PROGRAM"
+;
+
+%%
+%% The two formats of a MOVE statement do not cope with MOVE CORR for more
+%% than one target. From the text it is also not clear, if this should be
+%% allowed. MF COBOL, for example, compiles such MOVEs and we cannot see any
+%% reason why to disallow it.
+%%
+%% There is also some confusion regarding the documentation of this feature:
+%% According to MF COBOL for UNIX Pocket Guide, Issue 5, April, 1994, p. 1-40
+%% MOVE CORR ... TO {identifier}+ is an OSVS extension but it is not mentioned
+%% in the OSVS reference. 
+%%
+%% By the way, there is another funny statement in the reference:
+%%
+%% | After execution of a MOVE statement, the sending item(s) contain the same 
+%% | data as before execution. 
+%%
+%% MOVE FIELD TO SUB-FIELD IN FIELD is a counter example.
+%%
+
+focus on
+ sort Move-statement
+do
+ generalize
+  "TO" Identifier
+ to 
+ "TO" Identifier+
+;
+  
+%%
+%% There is a semantic error in the definition of the SEARCH Statement.
+%% NEXT-SENTENCE is used instead of NEXT SENTENCE.
+%%
+
+focus on
+ sort Search-statement
+do
+ replace
+  "NEXT-SENTENCE"
+ by
+  "NEXT" "SENTENCE"
+;
+
+%%
+%% The following definition enumerates all possible
+%% compiler directing statements as listed in the reference.
+%%
+
+focus on
+ sort before sort Basis-statement
+do
+ introduce
+  Compiler-directing-statement
+ as
+  Basis-statement //
+  | Cbl-process-statement //
+  | Control-cbl-statement //
+  | Copy-statement //
+  | Delete-compiler-directing-statement //
+  | Eject-statement //
+  | Enter-statement //
+  | Insert-statement //
+  | Ready-or-reset-trace-statement // 
+  | Replace-statement //
+  | Service-label-statement // 
+  | Service-reload-statement //
+  | Skip1-2-3-statement //
+  | Title-statement //
+  | Use-statement
+;
+
+%%
+%% Pseudo-text is to be handled at the lexical level.
+%% Therefore we consider the "=" "=" as quotes part
+%% of the pseudo-text tokens.
+%%
+
+focus on
+ sort Replace-statement
+do
+ fold
+  "=" "=" Pseudo-text "=" "=" 
+ to
+  Quoted-pseudo-text
+;
+
+reject
+ Quoted-pseudo-text
+;
+
+%%
+%% There is a real confusion going on with the sort operand. It is used for
+%% different purposes, once in the COPY Statement and once in conditional
+%% expressions.
+%%
+%% We introduce a new sort copy-operand for the use in COPY Statement.
+%%
+%% It is clear from the text in the reference that operands used in conditional
+%% expressions (i.e., the remaining kind of operand) are actually arithmetic
+%% expresssion.
+%%
+
+focus on
+ sort Copy-statement
+do
+ seperate
+  Operand
+ as
+  Copy-operand
+;
+
+unify
+ Operand
+to
+ Arithmetic-expression
+;
+
+%%
+%% From the reference (about the REPLACING Phrase of a COPY Statement):
+%%   In the discussion that follows, each operand can consist of one of the 
+%%   following: 
+%%
+%%   o   Pseudo-text 
+%%   o   An identifier 
+%%   o   A literal 
+%%   o   A COBOL word (except COPY) 
+%%
+
+resolve
+ Copy-operand
+as 
+ Quoted-pseudo-text | Identifier | Literal | Cobol-word
+;
+
+%%
+%%  References to COPY Libraries should be used in COPY Statements.
+%%  The actual syntax of references used in COPY Statements is more
+%%  general than the form covered by the diagram.
+%%
+
+eliminate
+ References-to-copy-libraries
+
+%% next: Arithmetic-expressions
+

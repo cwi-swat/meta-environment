@@ -1,0 +1,75 @@
+module Auxiliary
+
+imports Extended-SDF2-Grammar Focus Properties IdentifierGeneration Matching 
+
+exports
+
+ sorts Sort ModuleName ModulNames Sorts Productions Symbol Symbols
+
+ context-free syntax
+
+  "SortBefore" "(" SDF "," Sort ")" -> Sort 
+  "definedSorts" "(" SDF "," Focus ")" -> Sorts 
+  "usedSorts" "(" SDF "," Focus ")" -> Sorts 
+  "reachableSorts" "(" SDF "," Focus ")" -> Sorts
+  "topSorts" "(" SDF "," Sort ")" -> Sorts
+  "focusedRules" "(" SDF "," Focus ")" -> Productions 
+  "ModuleBefore" "(" SDF "," ModuleName ")" -> ModuleName 
+  "definingModules" "(" SDF "," Sorts ")" -> ModuleNames
+  "definingModules" "(" SDF "," ModuleNames "," Sorts ")" -> ModuleNames {traverse}
+  "definingModules" "(" Module "," ModuleNames "," Sorts ")" -> ModuleNames {traverse}
+  "definingModules" "(" Sections "," ModuleNames "," Sorts ")" -> ModuleNames {traverse}
+  "definingModules" "(" Productions "," ModuleNames "," Sorts ")" -> ModuleNames {traverse}
+  "bracket" "(" Symbols ")" -> Symbol
+  "unbracket" "[" Symbol "]" -> Symbols
+  "last" "(" SDF "," Focus "," Focus ")" -> Focus {traverse}
+  "last" "(" Module "," Focus "," Focus ")" -> Focus {traverse}
+  "last" "(" Production "," Focus "," Focus ")" -> Focus {traverse}
+
+ "post" "(" SDF "," Sorts "," SDF ")" -> SDF {traverse}
+ "post" "(" Module "," Sorts "," SDF ")" -> Module {traverse}
+ "post" "(" Sections "," Sorts "," SDF ")" -> Sections {traverse}
+ "post" "(" Grammar "," Sorts "," SDF ")" -> Grammar {traverse}
+
+ "pre" "(" SDF ")" -> SDF {traverse}
+ "pre" "(" Module ")" -> Module {traverse}
+ "pre" "(" Sections ")" -> Sections {traverse}
+ "pre" "(" Grammar ")" -> Grammar {traverse}
+
+hiddens 
+
+ context-free syntax
+
+  "before" "(" SDF "," Sorts "," Sort ")" -> Sorts {traverse}
+  "before" "(" Productions "," Sorts "," Sort ")" -> Sorts {traverse}
+
+  "definedSorts" "(" SDF "," Sorts "," Focus ")" -> Sorts {traverse}
+  "definedSorts" "(" Module "," Sorts "," Focus ")" -> Sorts {traverse}
+  "definedSorts" "(" Production "," Sorts "," Focus ")" -> Sorts {traverse}
+
+  "usedSorts" "(" SDF "," Sorts "," Focus ")" -> Sorts {traverse}
+  "usedSorts" "(" Module "," Sorts "," Focus ")" -> Sorts {traverse}
+  "usedSorts" "(" Production "," Sorts "," Focus ")" -> Sorts {traverse}
+  "usedSorts" "(" Symbols "," Sorts "," Focus ")" -> Sorts {traverse}
+  "usedSorts" "(" Sort "," Sorts "," Focus ")" -> Sorts {traverse}
+
+  "reachable" "(" SDF "," Sorts "," Focus "," SDF ")" -> Sorts {traverse}
+  "reachable" "(" Module "," Sorts "," Focus "," SDF ")" -> Sorts {traverse}
+  "reachable" "(" Production "," Sorts "," Focus "," SDF ")" -> Sorts {traverse}
+  "reachable" "(" Symbols "," Sorts "," Focus "," SDF ")" -> Sorts {traverse}
+  "reachable" "(" Sort "," Sorts "," Focus "," SDF ")" -> Sorts {traverse}
+
+  "rulesS" "(" SDF "," Productions "," Focus ")" -> Productions 
+  "rulesM" "(" SDF "," Productions "," Focus ")" -> Productions 
+  "rules" "(" SDF "," Productions "," Focus ")" -> Productions {traverse}
+  "rules" "(" Module "," Productions "," Focus ")" -> Productions {traverse}
+  "rules" "(" Productions "," Productions "," Focus ")" -> Productions {traverse}
+  "rules" "(" Production "," Productions "," Focus ")" -> Productions {traverse}
+
+
+ "convert" "(" ModuleNames ")" -> Imports
+ "convert" "(" Sorts ")" -> Symbols
+
+ "reservedModuleName" "(" ModuleName ")" -> Bool
+
+ "difference" "(" Sorts "," Sorts ")" -> Sorts

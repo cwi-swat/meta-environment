@@ -1,0 +1,13 @@
+Simple check
+------------
+
+cd examples/foo
+make
+
+
+VS COBOL II
+-----------
+
+cd examples/vs-cobol-ii
+make
+

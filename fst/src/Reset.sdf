@@ -1,0 +1,22 @@
+module Reset
+
+imports Auxiliary
+
+exports
+
+  sorts SDF
+
+  context-free syntax
+
+  "reset" "(" SDF "," Focus ")" -> SDF {traverse}
+  "reset" "(" Module "," Focus ")" -> Module {traverse}
+  "reset" "(" Productions "," Focus ")" -> Productions {traverse}
+
+  "reset" "(" SDF "," ModuleName ")" -> SDF 
+
+hiddens
+
+context-free syntax
+
+ "reset" "(" Modules "," ModuleName ")" -> Modules
+ 

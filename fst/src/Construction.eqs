@@ -1,0 +1,26 @@
+equations
+
+[gen-1] generalize &SymbolsYielder1 to &SymbolsYielder2 = 
+	guard &SymbolsYielder2 covers &SymbolsYielder1;
+	replace &SymbolsYielder1 by &SymbolsYielder2 effectively
+
+[incl-1] include &SymbolsYielder0 in &Sort0 = 
+	 guard defined sort &Sort0;
+	 add &SymbolsYielder0 -> &Sort0 effectively
+
+[res-1] resolve &Sort0 as &SymbolsYielder0 =
+	guard bottom sort &Sort0;
+	add &SymbolsYielder0 -> &Sort0 effectively
+
+[unify-1] unify &Sort1 to &Sort2 = 
+	  guard bottom sort &Sort1;
+	  guard not fresh sort &Sort2;
+	  replace &Sort1 by &Sort2;
+	  guard fresh sort &Sort1
+
+[r-mer-1] merge &Sort0 to &Sort1 = 
+	  guard not definition of &Sort0 equiv definition of &Sort1;
+	  move sort &Sort0 behind sort &Sort1;
+	  substitute &Sort0 by &Sort1 effectively;
+	  guard fresh sort &Sort0
+

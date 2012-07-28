@@ -1,0 +1,181 @@
+equations
+
+[match-1] match(&SDF0,&Focus0,&Pattern+0)=
+	  allMatches(&SDF0,,&Focus0,&Pattern+0)
+
+[default-matchSymbols-1] &Pattern0=&Symbol0
+			 =========================================
+			 matchSymbols(&Symbol0,&Pattern0)=&Symbol0
+
+[matchSymbols-2] matchSymbols(&Symbol0, . )=&Symbol0
+
+[matchSymbols-3] matchSymbols(&Symbol0,.?)=&Symbol0
+	         ===================================
+	         matchSymbols(&Symbol0, _ )=&Symbol0
+
+[matchSymbols-4] matchSymbols(&Symbol0,.+)=&Symbol0
+	         ===================================
+	         matchSymbols(&Symbol0, _ )=&Symbol0
+
+[matchSymbols-5] matchSymbols(&Symbol0,.*)=&Symbol0
+	         ===================================
+	         matchSymbols(&Symbol0, _ )=&Symbol0
+
+[matchSymbols-6] matchSymbols(&Symbol0,{. .}+)=&Symbol0
+	         ======================================
+	         matchSymbols(&Symbol0, _ )=&Symbol0
+
+[matchSymbols-7] matchSymbols(&Symbol0,{. .}*)=&Symbol0
+	         ======================================
+	         matchSymbols(&Symbol0, _ )=&Symbol0
+
+[matchSymbols-8] matchSymbols(&Symbol+0, ... )=&Symbol+0
+
+[matchSymbols-9] &Symbol1=matchSymbols(&Symbol0,&Pattern0),
+	         &Symbol1!=undefined
+	         ================================================
+	         matchSymbols((&Symbol0),(&Pattern0) )=(&Symbol1)
+
+
+[matchSymbols-10] &Symbol1=matchSymbols(&Symbol0,&Pattern0),
+	          &Symbol1!=undefined,
+	          &Symbol+1=matchSymbols(&Symbol+0,&Pattern+0) ,
+	          &Symbol+1!=undefined
+	          ======================================================
+	          matchSymbols((&Symbol0 &Symbol+0),(&Pattern0 &Pattern+0) )=
+		  (&Symbol1 &Symbol+1)
+
+[matchSymbols-11] &Symbol1=matchSymbols(&Symbol0,&Pattern0),
+	    	  &Symbol1!=undefined
+	    	  ================================================
+	    	  matchSymbols(&Symbol0 ?,&Pattern0 ? )=&Symbol1 ?
+
+[matchSymbols-12] &Symbol1=matchSymbols(&Symbol0,&Pattern0),
+	    	  &Symbol1!=undefined
+	    	  ================================================
+	    	  matchSymbols(&Symbol0 +,&Pattern0 + )=&Symbol1 +
+
+[matchSymbols-13] &Symbol1=matchSymbols(&Symbol0,&Pattern0),
+	    	  &Symbol1!=undefined
+	    	  ================================================
+	    	  matchSymbols(&Symbol0 *,&Pattern0 * )=&Symbol1 *
+
+[matchSymbols-14] &Symbol0=&Symbol1 | &Symbol2,
+	    	  &Symbol3=matchSymbols(&Symbol1, &Pattern0),
+	    	  &Symbol3!=undefined,
+	    	  &Symbol4=matchSymbols(&Symbol2, &Pattern1),
+	    	  &Symbol4!=undefined,
+	    	  &Symbol5=&Symbol3 | &Symbol4
+	    	  =======================================================
+	    	  matchSymbols(&Symbol0, &Pattern0 | &Pattern1 )=&Symbol5
+
+[matchSymbols-15] &Symbol+1=matchSymbols(&Symbol+0, &Pattern0),
+	    	  &Symbol+1=&Symbol*0 &Symbol0,
+	    	  &Symbol+2=&Symbol*0 &Symbol0 //
+	    	  ===============================================
+	    	  matchSymbols(&Symbol+0, &Pattern0 //)=&Symbol+2
+
+[matchSymbols-16] &Symbol+1=matchSymbols(&Symbol+0, &Pattern0),
+	    	  &Symbol+1=&Symbol0 &Symbol*0,
+	    	  &Symbol+2=// &Symbol0 &Symbol*0
+	    	  ===============================================
+	    	  matchSymbols(&Symbol+0, // &Pattern0)=&Symbol+2
+
+[matchSymbols-17] &Symbol+0=&Symbol+1 &Symbol+2,
+	    	  &Symbol+3=matchSymbols(&Symbol+1, &Pattern0),
+	    	  &Symbol+3!=undefined,
+	    	  &Symbol+4=matchSymbols(&Symbol+2, &Pattern+0),
+	    	  &Symbol+4!=undefined,
+	    	  &Symbol+5=&Symbol+3 &Symbol+4
+	    	  =======================================================
+	    	  matchSymbols(&Symbol+0, &Pattern0 &Pattern+0)=&Symbol+5
+
+[matchSymbols-18] &Symbol+1=matchSymbols(&Symbol+0, &Symbol0),
+	    	  &Symbol+1=&Symbol*0 &Symbol1,
+	    	  &Symbol+2=&Symbol*0 &Symbol1 //
+	    	  ==============================================
+	    	  matchSymbols(&Symbol+0, &Symbol0 //)=&Symbol+2
+
+[matchSymbols-19] &Symbol2=// &Symbol0,
+		  &Symbol+1=matchSymbols(&Symbol+0, &Symbol0),
+	    	  &Symbol+1=&Symbol1 &Symbol*0,
+	    	  &Symbol+2=// &Symbol1 &Symbol*0
+	    	  =============================================
+	    	  matchSymbols(&Symbol+0,&Symbol2)=&Symbol+2
+
+[matchSymbols-20] &Symbol2=matchSymbols(&Symbol0, &Pattern0),
+	     	  &Symbol3=matchSymbols(&Symbol1, &Pattern1),
+	     	  &Symbol4={ &Symbol2 &Symbol3}+
+	     	  ==========================================================
+	     	  matchSymbols({&Symbol0 &Symbol1}+,{&Pattern0 &Pattern1}+)=
+		  &Symbol4
+
+[matchSymbols-21] &Symbol2=matchSymbols(&Symbol0, &Pattern0),
+	     	  &Symbol3=matchSymbols(&Symbol1, &Pattern1),
+	     	  &Symbol4={ &Symbol2 &Symbol3}*
+	     	  ==========================================================
+	     	  matchSymbols({&Symbol0 &Symbol1}*,{&Pattern0 &Pattern1}*)=
+		  &Symbol4
+
+[default-matchSymbols-22] matchSymbols(&Symbol+0, &Pattern+0)=undefined
+
+[tryMatch-1] matchSymbols(&Symbols0,&Pattern+0)=undefined
+	     ======================================================
+	     tryMatch(&ESymbols0, &Symbols0,&Pattern+0)= &ESymbols0
+
+[default-tryMatch-2] matchSymbols(&Symbols0,&Pattern+0)=&Symbols1,
+		     &ESymbol0=: &Symbols1 :,
+		     &ESymbols0=&ESymbol*0 &ESymbol0 &ESymbol*1
+		     ======================================================
+		     tryMatch(&ESymbols0, &Symbols0,&Pattern+0)= &ESymbols0
+
+[default-tryMatch-3] matchSymbols(&Symbols0,&Pattern+0)=&Symbols1
+		     ============================================
+		     tryMatch(&ESymbol*0, &Symbols0,&Pattern+0)=
+		     &ESymbol*0 : &Symbols1 :
+
+[allMatches-1] &Module0= module &ModuleName0 &ImpSection*0 &Sections0,
+	       focused(&ModuleName0,&Focus0)=false
+	       =============================================================
+	       allMatches(&Module0,&ESymbols0,&Focus0,&Pattern+0)=&ESymbols0
+
+[allMatches-2] &Production0=&Symbols0 -> &Sort0 &Attributes0,
+	       focused(&Sort0,&Focus0)=false
+	       =======================================================
+	       allMatches(&Production0,&ESymbols0,&Focus0,&Pattern+0)=
+	       &ESymbols0
+
+[default-allMatches-3] &Production0=&Symbols0 -> &Sort0 &Attributes0,
+	  	       &Symbols1=removeLinebreaks(&Symbols0),
+	  	       &ESymbols1=allMatches(&Symbols1,
+					     &ESymbols0,
+					     &Focus0,
+					     &Pattern+0)
+	  	       =======================================================
+	   	       allMatches(&Production0,&ESymbols0,&Focus0,&Pattern+0)=
+		       &ESymbols1
+
+[allMatches-4] &Symbols0=&Symbol*0 &Symbol+0 &Symbol*1,
+	       &ESymbols1=tryMatch(&ESymbols0,&Symbol+0,&Pattern+0),
+	       &ESymbols1!=&ESymbols0,
+	       &ESymbols2=allMatches(&Symbols0,&ESymbols1,&Focus0,&Pattern+0)
+	       ==============================================================
+	       allMatches(&Symbols0,&ESymbols0,&Focus0,&Pattern+0)=&ESymbols2
+
+[allMatches-5] &Symbol0=(&Symbol1 &Symbol+0),
+	       &Symbols0=&Symbol1 &Symbol+0,
+	       &ESymbols1=allMatches(&Symbols0,&ESymbols0,&Focus0,&Pattern+0),
+	       &ESymbols2=tryMatch(&ESymbols1,&Symbol0,&Pattern+0),
+	       &ESymbols2!=&ESymbols0
+	       ===============================================================
+	       allMatches(&Symbol0,&ESymbols0,&Focus0,&Pattern+0)=&ESymbols2
+
+[default-allMatches-6] &ESymbols1=tryMatch(&ESymbols0,&Symbol0,&Pattern+0),
+	 	       &ESymbols1!=&ESymbols0,
+	 	       &ESymbols2=allMatches(&Symbol0,
+					     &ESymbols1,
+					     &Focus0,
+					     &Pattern+0)
+	 =============================================================
+	 allMatches(&Symbol0,&ESymbols0,&Focus0,&Pattern+0)=&ESymbols2
+

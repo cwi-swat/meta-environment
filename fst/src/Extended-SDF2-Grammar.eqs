@@ -1,0 +1,6 @@
+equations
+
+[remlb-1] removeLinebreaks(&Symbol0 //)=removeLinebreaks(&Symbol0)
+
+[remlb-2] removeLinebreaks(// &Symbol0)=removeLinebreaks(&Symbol0)
+

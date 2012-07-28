@@ -1,0 +1,56 @@
+%%
+%% For convenience we fold the structure of PROGRAM-ID paragraphs.
+%%
+
+(
+focus on 
+ sort Cobol-source-program
+do
+
+ fold
+  "PROGRAM-ID" "." Program-name // 
+    ("IS"? "INITIAL" "PROGRAM"?)? "."
+ to
+   Program-id-cobol-source-program
+)
+;
+
+(
+focus on 
+ sort Nested-cobol-source-program
+do
+
+ fold
+  "PROGRAM-ID" "." Program-name //
+  ("IS"? ("COMMON" "INITIAL"?) | ("INITIAL" "COMMON"?) "PROGRAM"?)? "."
+ to
+  Program-id-nested-cobol-source-program
+)
+;
+%%
+%% Some periods are optional as an IBM extension.
+%% This is usually indicated by notes in the diagrams.
+%%
+
+(
+focus on
+ sort Program-id-cobol-source-program
+do
+ generalize 
+  "." 
+ to 
+  "."?
+)
+;
+
+(
+focus on
+ sort Program-id-nested-cobol-source-program
+do
+ generalize 
+  "." 
+ to 
+  "."?
+)
+
+%% next: Identification-division

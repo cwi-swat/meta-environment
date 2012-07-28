@@ -1,0 +1,234 @@
+%%
+%% To get an effective layering for the structure of conditions we should
+%% have three classes of expressions:
+%%
+%%  - simple conditions
+%%  - combinable conditions
+%%  - conditions (supporting combination)
+%%
+%% In contrast, the reference usually talks about simple and complex 
+%% condition while restricting certain combinations of conditions further
+%% based on informal rules. We start with the top layer.
+%%
+
+resolve
+ Condition
+as
+ Combinable-condition //
+ | Combined-conditions
+;
+
+
+%%
+%% We want to provide the next layer. The reference calls a negated simple
+%% condition a COMPLEX condition. We consider negation is a form of combinable
+%% condition. We also consider abbreviated combined relation conditions
+%% as combinable rather than complex conditions.
+%%
+
+resolve
+ Combinable-condition
+as
+ Simple-condition // 
+ | Negated-simple-conditions // 
+ | Abbreviated-combined-relation-conditions
+;
+
+
+%%
+%% The first 5 forms of simple conditions are listed in the reference
+%% explicitely. From the text it seems to be clear that enclosing
+%% any condition in brackets is also a form of simple condition.
+%%
+
+resolve
+ Simple-condition
+as 
+ Class-condition //
+ | Condition-name-condition //
+ | Relation-condition //
+ | Sign-condition //
+ | Switch-status-condition // 
+ | ("(" Condition ")")
+;
+
+%%
+%% Enforcing the right order of rules defining all the various forms
+%% of conditions. We also move the rules to the bottom. All this is
+%% done for readability.
+%%
+
+%% ?
+move sort
+ Combined-conditions
+behind
+ sort Simple-condition
+;
+
+move sorts
+ Negated-simple-conditions
+ Abbreviated-combined-relation-conditions
+behind
+ sort Simple-condition
+;
+
+move sorts
+ Class-condition
+ Condition-name-condition
+ Relation-condition
+ Sign-condition
+ Switch-status-condition
+behind
+ sort Simple-condition
+;
+
+%%
+%% From the reference:
+%%
+%%  The condition to be combined can be any of the following: 
+%%   o   A simple-condition 
+%%   o   A negated simple-condition 
+%%   o   A combined condition 
+%%   ...
+%%
+%% However, a combined condition does not make sense because
+%% sequences are used already to cope with any number of ANDs/ORs.
+%%
+
+focus on
+ sorts
+  Combined-conditions
+  Negated-simple-conditions
+do
+ restrict
+  Condition
+ to
+  Combinable-condition
+;
+
+%%
+%% In the definition of abbreviated combined relation conditions the sort
+%% object is used for operands. We also have to unify object with
+%% arithmetic-expression.
+%%
+
+focus on
+ sort Abbreviated-combined-relation-conditions
+do
+ unify
+  Object
+ to
+  Arithmetic-expression
+;
+
+%%
+%% Relational operators are listed in Table 8 in Section 2.9.6.  They are also
+%% presented in the diagram for Relation Condition (Section 2.9.5). Relational
+%% operators are needed for the definition of Abbreviated Combined Relation
+%% Conditions (Section 2.9.13). So we fold the relational operators from
+%% Relation Condition to get a definition which is also useful for Abbreviated
+%% Combined Relation Conditions.
+%%
+
+focus on
+ sort Relation-condition
+do
+ fold
+  "IS"? //
+  ( "NOT"?
+    ("GREATER" "THAN"?)
+    | ">"
+    | ( "LESS" "THAN"?)
+    | "<" 
+    | ("EQUAL" "TO"?)
+    | "="
+  )//
+  | ( "GREATER" "THAN"? "OR" "EQUAL" "TO"?) //
+  | ">=" //
+  | ("LESS" "THAN"? "OR" "EQUAL" "TO"?) //
+  | ("<" "=") 
+ to
+  Relational-operator-candidate
+;
+
+unify
+ Relational-operator
+to
+ Relational-operator-candidate
+;
+ 
+rename
+ Relational-operator-candidate
+to
+ Relational-operator
+; 
+
+%%
+%% Certain forms of abbreviated combined relation conditions related to IBM
+%% extensions are not covered by the diagrams.
+%%
+
+focus on
+ sort Abbreviated-combined-relation-conditions
+do
+ fold
+  ("AND"|"OR" "NOT"? Relational-operator? Arithmetic-expression)+
+ to
+  Abbreviation-rest
+;
+
+focus on
+ sort Abbreviation-rest
+do
+ restrict
+  "NOT"?
+ to
+ 
+;
+
+include
+ Arithmetic-expression Relational-operator //
+ "(" "NOT"? Arithmetic-expression Abbreviation-rest ")"
+in
+ Abbreviated-combined-relation-conditions
+;
+
+%%
+%% In the plankode test set (file eb060v06, line 00435):
+%%
+%%     IF MUTSRT-EB060 = 'M' AND 
+%%        BASISRENTE-MUT - RENTE-PERC-UIT (1) 
+%%               (NOT < 1  OR  NOT > -1)
+%%
+
+include 
+ Arithmetic-expression 
+ "(" Relational-operator Arithmetic-expression Abbreviation-rest ")" 
+in
+ Abbreviated-combined-relation-conditions
+;
+
+focus on
+ sort Abbreviation-rest
+do
+ fold
+  Arithmetic-expression
+ to
+  Abbreviation-leaf
+;
+
+focus on
+ sort Abbreviation-leaf
+do
+ generalize
+  Arithmetic-expression
+ to
+  Arithmetic-expression
+  | ( "(" Arithmetic-expression Abbreviation-rest ")" )  
+
+%% next: Data-reference
+
+
+
+
+

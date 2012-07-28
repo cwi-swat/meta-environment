@@ -1,0 +1,277 @@
+%%
+%% We detected a disambiguity between Index-name and Identifer. We remove it.
+%%
+
+focus on
+ module Statements
+do
+(
+
+ fold
+  Identifier | Index-name
+ to
+  Identifier-candidate
+;
+
+ simplify
+  Index-name | Identifier
+ to
+  Identifier-candidate
+ ;
+
+ fold
+  Index-name | Identifier | Integer
+ to
+  Identifier-integer-candidate
+ ;
+
+ fold
+  Identifier | Index-name | Literal
+ to
+  Identifier-literal-candidate
+ 
+)
+;
+
+focus on 
+ sorts 
+  Identifier
+  Qualified-data-name
+ in module
+  DataReference
+do
+ alternate
+;
+
+focus on
+ sorts
+  Identifier-candidate
+  Identifier-integer-candidate
+  Identifier-literal-candidate
+ in module
+  Statements
+do
+(
+
+ dealternate
+ ;
+
+ unfold 
+  Identifier
+ ;
+
+ unfold
+  Qualified-data-name
+ ;
+
+ unfold
+  Index-name
+ ;
+
+ unfold
+  Data-name
+ ;
+
+ disambiguate
+  Alphabetic-user-defined-word
+ in
+  Identifier-candidate
+ ;
+
+ disambiguate
+  Alphabetic-user-defined-word
+ in
+  Identifier-integer-candidate
+ ;
+
+ disambiguate
+  Alphabetic-user-defined-word
+ in
+  Identifier-literal-candidate
+ ;
+
+ simplify
+  definition of Data-name
+ to
+  Data-name
+ ;
+
+ simplify
+  definition of Qualified-data-name
+ to
+  Qualified-data-name
+ ;
+
+ simplify
+  definition of Identifier
+ to
+  Identifier
+ ;
+
+ alternate
+ 
+)
+;
+
+focus on
+ module Statements
+do
+(
+
+ unfold
+  Identifier-candidate
+ ;
+
+ unfold
+  Identifier-integer-candidate
+ ;
+
+ unfold
+  Identifier-literal-candidate
+ ;
+
+ eliminate
+  Identifier-candidate
+ ;
+
+ eliminate
+  Identifier-integer-candidate
+ ;
+
+ eliminate
+  Identifier-literal-candidate
+)
+;
+
+focus on 
+ sorts 
+  Identifier
+  Qualified-data-name
+ in module
+  DataReference
+do
+ dealternate
+; 
+
+%% 
+%% The two formats of a CALL statement are overlappping.
+%% We solve the problem by factoring out the overflow
+%% and exception phrase which are only parts of the format
+%% to separate these formats. Note that we rely here on
+%% removal of double rules.
+%%
+
+focus on
+ sort 
+  Call-statement
+ in module
+  Statements
+do
+(
+   fold
+    ("ON"? "OVERFLOW" Statement-list)? 
+   to
+    Call-overflow-phrase
+   ;
+
+   fold
+    ("ON"? "EXCEPTION" Statement-list)?//
+    ("NOT" "ON"? "EXCEPTION" Statement-list)? 
+   to
+    Call-exception-phrase
+   ;
+
+   introduce
+    Call-rest-phrase
+   as
+    Call-overflow-phrase
+   ;
+
+   include
+    Call-exception-phrase
+   in 
+    Call-rest-phrase 
+   ;
+   
+   generalize
+    Call-overflow-phrase
+   to
+    Call-rest-phrase
+   ;
+
+   generalize 
+    Call-exception-phrase
+   to
+    Call-rest-phrase
+ )
+;
+
+
+%%
+%% From the reference:
+%%;x     o   A file-name for a QSAM file under MVS.  See VS COBOL II 
+%%;x         Application Programming Guide for MVS and CMS for details on using 
+%%;x         file-name with the CALL statement. 
+%%
+%% file-name and identifier overlap.
+%% We choose the pragmatic solution to reject the alternative
+%% for file-name with the intention that identifiers are interpreted
+%% as file-names when necessary.
+%%
+
+focus on 
+ sort
+  Call-statement
+ in module
+  Statements
+do
+ restrict
+  Identifier | ("ADDRESS" "OF" Identifier) | File-name
+ to
+  Identifier | ("ADDRESS" "OF" Identifier)
+;
+
+%%
+%% Lists of call-by-reference parameters for CALL statements
+%% can be obtained in two different ways, either by the iteration
+%% of parameter blocks (outer loop) or by iteration of parameters
+%% after the possibly empty BY REFERENCE phrase. We remove this
+%% second choice inorder to disambiguate.
+%%
+
+focus on
+ sort
+  Call-statement
+ in module
+  Statements
+do
+ restrict
+  (Identifier | ("ADDRESS" "OF" Identifier))+ 
+ to
+  Identifier | ("ADDRESS" "OF" Identifier)
+;
+
+%%------------------------------------------------------------------------------
+%% The second format is a subset of the first, so get rid of it.
+disambiguate
+ "CLOSE" (File-name ("WITH"? "LOCK")?)+ 
+in
+ Close-statement  
+;
+
+%%------------------------------------------------------------------------------
+%% The second format is a subset of the first, so get rid of it.
+disambiguate
+ "OPEN" (("INPUT" File-name+) | ("OUTPUT" File-name+) | ("I-O" File-name+) | ("EXTEND" File-name+))+
+in
+ Open-statement
+;
+
+%%------------------------------------------------------------------------------
+%% The third format is a subset of the first, so get rid of it.
+%% TODO: remove the ambiguities between format 1 and 2.
+disambiguate
+  "WRITE" Record-name ("FROM" Identifier)? "END-WRITE"?
+in
+  Write-statement 
+

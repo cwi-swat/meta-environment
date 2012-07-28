@@ -1,0 +1,57 @@
+equations
+
+[equ-1] equiv(&Symbols1,&Symbols1)=true
+
+[equ-2] equiv(&Symbol0, &Symbol1) = true
+	================================================
+	equiv( &Symbol1 *, &Symbol0 ? &Symbol1 *) = true
+
+[equ-3] equiv(&Symbol0, &Symbol1) = true
+	================================================
+	equiv( &Symbol0 *, &Symbol0 * &Symbol1 ?) = true
+
+[equ-4] equiv(&Symbol0, &Symbol1) = true,
+	covers(&Symbol1,&Symbol2) = true
+	===========================================
+	equiv(&Symbol0, &Symbol1 | &Symbol2) = true
+
+[equ-5] equiv(&Symbol0, &Symbol1) = true
+	==================================
+	equiv(&Symbol0, (&Symbol1)) = true
+
+[equ-6] equiv(&Symbol0, &Symbol1) = true
+	==================================
+	equiv((&Symbol0), &Symbol1) = true
+
+[equ-7] equiv(&Symbol0, &Symbol1) = true
+	===================================
+	equiv(&Symbol0 //, &Symbol1) = true
+
+[equ-8] equiv(&Symbol0, &Symbol1) = true
+	===================================
+	equiv(// &Symbol0, &Symbol1) = true
+
+[equ-9] equiv(&Symbol0, &Symbol1) = true
+	===================================
+	equiv(&Symbol0, &Symbol1 //) = true
+
+[equ-10] equiv(&Symbol0, &Symbol1) = true
+	 ==================================
+	 equiv(&Symbol0,// &Symbol1) = true
+
+[equ-11] equiv( ,() ) = true
+
+[equ-12] equiv(&Symbol0,&Symbol2)=true,
+	 equiv(&Symbol1,&Symbol3)=true
+	 ======================================================
+	 equiv( &Symbol0 | &Symbol1, &Symbol2 | &Symbol3)=true
+
+[equ-13] equiv(&Symbol0,&Symbol3)=true,
+	 equiv(&Symbol1,&Symbol2)=true
+	 ======================================================
+	 equiv( &Symbol0 | &Symbol1, &Symbol2 | &Symbol3)=true
+
+[equ-14] equiv( ,()* ) = true
+
+[default-equ-15] equiv(&Symbols1, &Symbols2)=false
+

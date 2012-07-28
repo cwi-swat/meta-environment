@@ -1,0 +1,14 @@
+module Destruction
+
+imports Combinators
+
+exports
+
+  context-free syntax
+
+  "restrict" SymbolsYielder "to" SymbolsYielder -> Trafo
+  "exclude" SymbolsYielder "from" Sort -> Trafo
+  "reject" Sort -> Trafo
+  "reject" "module" ModuleName -> Trafo
+  "seperate" Sort "as" Sort -> Trafo
+

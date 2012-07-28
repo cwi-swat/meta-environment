@@ -1,0 +1,10 @@
+definition
+
+module foo
+
+exports
+
+   sorts Bar
+   context-free syntax
+    "Foo" -> Bar
+

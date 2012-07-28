@@ -1,0 +1,19 @@
+focus on 
+ module IdentificationDivision
+do
+(
+
+ unfold
+  Comment-entry
+ ;
+
+ simplify 
+  ()*
+ to
+ 
+)
+;
+
+eliminate
+ Comment-entry
+

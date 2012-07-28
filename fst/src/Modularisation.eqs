@@ -1,0 +1,10 @@
+equations
+
+[rej-1] reject module &ModuleName0=
+	 guard fresh module &ModuleName0 ; delete module &ModuleName0 
+
+[elm-1] eliminate module &ModuleName0= 
+	guard not empty module &ModuleName0; delete module &ModuleName0 
+
+[ext-1] extract &FocusYielder0 to module &ModuleName0= 
+	introduce module &ModuleName0; move &FocusYielder0 to module &ModuleName0;

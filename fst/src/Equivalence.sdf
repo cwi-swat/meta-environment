@@ -1,0 +1,11 @@
+module Equivalence
+
+imports Auxiliary Coverage
+
+exports
+
+  sorts Bool
+
+  context-free syntax
+ 
+    "equiv" "(" Symbols "," Symbols ")" -> Bool

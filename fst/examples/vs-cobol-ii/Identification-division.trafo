@@ -1,0 +1,139 @@
+%%
+%% For convenience we fold the structure of PROGRAM-ID paragraphs.
+%%
+
+focus on 
+ sort Cobol-source-program
+do
+
+ fold
+  "PROGRAM-ID" "." Program-name // 
+    ("IS"? "INITIAL" "PROGRAM"?)? "."
+ to
+   Program-id-cobol-source-program
+;
+
+focus on 
+ sort Nested-cobol-source-program
+do
+
+ fold
+  "PROGRAM-ID" "." Program-name //
+  ("IS"? ("COMMON" "INITIAL"?) | ("INITIAL" "COMMON"?) "PROGRAM"?)? "."
+ to
+  Program-id-nested-cobol-source-program
+;
+
+%%
+%% Some periods are optional as an IBM extension.
+%% This is usually indicated by notes in the diagrams.
+%%
+
+focus on
+ sort Program-id-cobol-source-program
+do
+ generalize 
+  "." 
+ to 
+  "."?
+;
+
+focus on
+ sort Program-id-nested-cobol-source-program
+do
+ generalize 
+  "." 
+ to 
+  "."?
+;
+
+%%
+%% The diagrams on COBOL source programs refers to a nonterminal
+%% identification-division-content. There is no diagram directly
+%% defining the content of identification division. There is rather
+%% a diagram defining entire identification division (including
+%% the reserved words IDENTIIFICATION DIVISION and one possible
+%% form of the PROGRAM-ID paragraph. To resolve that problem, we fold
+%% the part of the diagram defining identification division corresponding
+%% the identification division content needed in the diagram for
+%% COBOL source programs. Then we connect the new definition. Finally,
+%% we reject the obsolete definition of entire identification divisions.
+%%
+
+focus on 
+ sort Identification-division
+do
+ fold
+  ("AUTHOR" ...)? //
+    ("INSTALLATION" ...)? // 
+    ("DATE-WRITTEN" ...)? //
+    ("DATE-COMPILED" ...)? //
+    ("SECURITY" ...)?
+ to
+  Identification-division-content-candidate
+;
+
+unify
+ Identification-division-content
+to
+ Identification-division-content-candidate
+;
+
+rename 
+ Identification-division-content-candidate
+to
+ Identification-division-content
+;
+
+eliminate 
+ Identification-division
+;
+
+%%
+%% From the reference (IDENTIFICATION DIVISION):
+%%
+%%  x The optional paragraphs can be in any order.
+%%
+
+focus on 
+ sort Identification-division-content
+do
+ generalize
+  definition of 
+   Identification-division-content
+ to
+  permutation of 
+   definition of 
+    Identification-division-content
+
+;
+
+
+%%
+%% There is also a note in the reference specifying the periods in the
+%% IDENTIFICATION DIVISION to be optional. Surprisingly, the period in the
+%% DATE-COMPILED is not marked to be optional. We doubt that this is intended.
+%%
+
+(
+focus on 
+ sort Identification-division-content
+do
+ generalize 
+  "." 
+ to
+  "."?
+)
+
+%% next: Environment-division
+
+
+
+
+
+
+
+
+
+
+

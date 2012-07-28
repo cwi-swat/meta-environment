@@ -1,0 +1,187 @@
+%%
+%% In the diagram for COBOL source programs the PROCEDURE DIVISION are
+%% introduced in a way that it is impossible to cope with the USING phrase,
+%% i.e., subprograms are not supported. This is a semantic error. We solve
+%% this problem by folding away the restrictive form of a PROCEDURE DIVISION
+%% and enforcing the use of the definition of complete PROCEDURE DIVISIONs.
+%%
+
+focus on 
+ sort Cobol-source-program
+do
+ fold
+  "PROCEDURE" "DIVISION" "." Procedure-division-content 
+ to
+  Incorrect-procedure-division-in-cobol-source-program
+;
+
+reject 
+ Incorrect-procedure-division-in-cobol-source-program
+;
+
+unify
+ Incorrect-procedure-division-in-cobol-source-program
+to
+ Procedure-division
+;
+
+focus on 
+ sort Nested-cobol-source-program
+do 
+ fold
+  "PROCEDURE" "DIVISION" "." Procedure-division-content 
+ to
+  Incorrect-procedure-division-in-nested-cobol-source-program
+;
+
+reject
+ Incorrect-procedure-division-in-nested-cobol-source-program
+;
+
+unify
+ Incorrect-procedure-division-in-nested-cobol-source-program
+to
+ Procedure-division
+;
+
+%%
+%% Footnotes in the diagram on the Procedure Division Structure and Common
+%% Elements declare certain section and paragraph names to be optional.
+%% The positions of the footnotes are probably not sensible.
+%%
+%% There are related remarks.
+%%
+%% From the reference:
+%%
+%% x         If there are no declaratives (Procedure Division Format-2), a 
+%% x         section-header is not required in the Procedure Division.   
+%%
+%% From the reference:
+%%
+%% x         If there are no declaratives (Procedure Division Format-2), a 
+%% x         paragraph-name is not required in the Procedure Division.
+%% 
+%% The IBM extensions should be stated as follows. The paragraph name of the
+%% FIRST paragraph is optional because it makes no sense to talk about
+%% a SECOND, THRIRD, ... paragraph without a name. The paragraph
+%% name is just what sentences breaks up into paragraphs similarly
+%% for sections. We first centralize paragraphs. Then we provide a new
+%% definition for it. This new definition does not enforce that there
+%% must be at least one paragraph. Similarly for sections.
+%%
+
+focus on
+ sort Procedure-division
+do
+ fold
+  Paragraph-name "." Sentence*
+ to
+  Paragraph
+;
+
+focus on
+ sort Procedure-division
+do
+ fold
+  Paragraph+
+ to
+  Paragraphs
+;
+
+override
+ Paragraphs 
+by
+ Sentence* Paragraph*
+;
+
+reject
+ Optional-paragraphs
+;
+
+unify
+ Optional-paragraphs 
+to
+ Paragraphs
+;
+
+focus on
+ sort Procedure-division
+do 
+ fold
+  Section-name "SECTION" Priority-number?
+ to
+  Section-header
+;
+
+equate
+ Declaratives-section-header
+to
+ Section-header
+;
+
+focus on
+ sort Procedure-division
+do
+ fold 
+  (Section-header "." Paragraphs)+
+ to
+  Sections
+;
+
+override
+ Sections 
+by
+ Paragraphs (Section-header "." Paragraphs)*
+;
+%%
+%% We have to take into consideration the special kind of paragraphs
+%% provided by altered gotos.
+%%
+
+include
+ Altered-goto
+in
+ Paragraph
+;
+
+%%
+%% We have to provide a definition of sentences since their is no diagram.
+%%
+%% From the reference:
+%%
+%%   A sentence is a sequence of one or more statements, ending with a
+%%   separator period.  Sentences are constructed in the Procedure Division.
+%%
+
+focus on
+ sort Paragraph
+do
+ resolve
+  Sentence
+ as 
+  Statement-list "."
+;
+
+fold 
+ Statement+
+to
+ Statement-list-candidate
+;
+
+unify
+  Statement-list
+ to
+  Statement-list-candidate
+;
+
+rename
+ Statement-list-candidate
+to
+ Statement-list
+
+%% next: Statements
+
+
+
+
+

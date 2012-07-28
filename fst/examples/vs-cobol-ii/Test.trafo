@@ -1,0 +1,12 @@
+
+%%disambiguate
+%%"WRITE" Record-name ("FROM" Identifier)? //
+%%    ("INVALID" "KEY"? Statement-list)? //
+%%    ("NOT" "INVALID" "KEY"? Statement-list)? //
+%%    "END-WRITE"?
+%%in
+%%  Write-statement 
+%%;
+
+
+

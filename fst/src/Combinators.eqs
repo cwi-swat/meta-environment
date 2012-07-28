@@ -1,0 +1,31 @@
+equations
+
+[IT-1] &SDF1 = IT(&Trafo0,&SDF0,&Focus0),
+       &SDF2 = IT(&Trafo1,&SDF1,&Focus0)
+       ===========================================
+       IT( &Trafo0; &Trafo1, &SDF0, &Focus0)=&SDF2
+
+[IT-2] &Focus0=IY(&FocusYielder0, &SDF0),
+       welldefined(&SDF0,&Focus0)=true,
+       &SDF1 = IT(&Trafo0, &SDF0, &Focus0 )
+       ==============================================================
+       IT( focus on &FocusYielder0 do &Trafo0 , &SDF0 , &Focus1)=&SDF1
+
+[IT-3] IC(&Cond0, &SDF0) = true,
+       &SDF1= IT(&Trafo0, &SDF0, &Focus0)
+       ===============================================================
+       IT( if &Cond0 then &Trafo0 else &Trafo1 , &SDF0, &Focus0)=&SDF1
+
+[IT-4] IC(&Cond0, &SDF0) = false,
+       &SDF1= IT(&Trafo1 , &SDF0, &Focus0)
+       ===============================================================
+       IT( if &Cond0 then &Trafo0 else &Trafo1 , &SDF0, &Focus0)=&SDF1
+
+[IT-5] IT(&Trafo0, &SDF0,&Focus0)=&SDF1,
+	&SDF1!=&SDF0
+	============================================
+	IT(&Trafo0 effectively, &SDF0,&Focus0)=&SDF1
+
+[guard-1] guard &Cond0 = if &Cond0 then id else fail
+
+

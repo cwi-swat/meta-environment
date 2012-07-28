@@ -1,0 +1,279 @@
+%%
+%% The two definitions of Procedure-naem are overlapping.
+%% We make this ambiguity visible and correct it.
+%%
+
+focus on 
+ sort
+  Procedure-name
+ in module
+  DataReference
+do
+(
+
+ fold
+  "IN" | "OF" Section-name
+ to
+  In-of-section-name
+ ;
+
+ unfold
+  Paragraph-name
+ ;
+
+ unfold
+  Section-name
+ ;
+
+ disambiguate
+  User-defined-word
+ in
+  Procedure-name
+ ;
+
+ fold
+  User-defined-word
+ to
+  Paragraph-or-section-name
+ ;
+
+ unfold 
+  In-of-section-name
+
+)
+;
+
+eliminate
+ In-of-section-name
+;
+
+%%
+%% The two definitions of Condition-name-reference are overlapping, too. 
+%% Also there is a ambiguity betwenn Data-name and File-name.
+%%
+
+focus on
+ sort
+  Condition-name-reference
+ in module 
+  DataReference
+do
+(
+
+ unfold
+  Data-name
+ ;
+
+ unfold
+  File-name
+ ;
+
+ simplify
+  ("IN" | "OF" Alphabetic-user-defined-word)* 
+  ("IN" | "OF" Alphabetic-user-defined-word)?
+ to
+  ("IN" | "OF" Alphabetic-user-defined-word)*
+ ;
+ 
+ unfold
+  Mnemonic-name
+ ;
+
+ disambiguate
+  Condition-name ("IN" | "OF" Alphabetic-user-defined-word)*
+ in
+  Condition-name-reference
+ ;
+
+ fold
+  Alphabetic-user-defined-word
+ to
+  Data-or-file-or-mnemonic-name
+)
+;
+
+%%
+%% The same ambiguity between Data-name and File-name can be found in the 
+%% definition of Qualified-data-name.
+%%
+ 
+focus on 
+ sort
+  Qualified-data-name
+ in module
+  DataReference
+do
+(
+
+ fold
+  "IN" | "OF" Data-name
+ to
+  In-of-data-name
+ ;
+
+ fold
+  "IN" | "OF" File-name
+ to
+  In-of-file-name
+)
+;
+
+focus on
+ sorts
+  In-of-data-name
+  In-of-file-name
+ in module
+  DataReference
+do
+(
+
+ unfold
+  Data-name
+ ;
+
+ unfold
+  File-name
+ ;
+
+ fold
+  Alphabetic-user-defined-word
+ to
+  Data-or-file-name
+)
+;
+
+equate
+ In-of-file-name
+to
+ In-of-data-name
+;
+
+focus on
+ sort
+  Qualified-data-name
+ in module
+  DataReference
+do
+(
+
+ simplify
+  In-of-data-name* In-of-data-name?
+ to
+  In-of-data-name*
+ ;
+
+ unfold
+  In-of-data-name
+)
+;
+
+eliminate
+ In-of-data-name
+;
+
+%%
+%% There is another ambiguity in the definition of Subscript.
+%% To make this visible we have to unfold Qualified-data-name.
+%%
+
+focus on 
+ sort
+  Qualified-data-name
+ in module
+  DataReference
+do
+ alternate
+;
+
+focus on 
+ sort
+  Subscript
+ in module
+  DataReference
+do
+(
+
+ unfold
+  Qualified-data-name
+;
+
+ unfold
+  Data-name
+ ;
+
+ unfold
+  Index-name
+ ;
+
+ simplify
+  ((Alphabetic-user-defined-word 
+  ("IN" | "OF" Data-or-file-name)*) |
+  Special-register 
+  ("+"|"-" Integer)?) |
+  (Alphabetic-user-defined-word
+  ("+"|"-" Integer)?)
+ to
+  ((Alphabetic-user-defined-word 
+  ("IN" | "OF" Data-or-file-name)*) |
+  Special-register 
+  ("+"|"-" Integer)?)
+ ;
+
+ simplify
+  definition of Data-name
+ to
+  Data-name
+ ;
+
+ simplify
+  definition of Qualified-data-name
+ to
+  Qualified-data-name
+ 
+)
+;  
+
+focus on
+ sort
+  Qualified-data-name
+ in module
+  DataReference
+do
+ dealternate
+;
+
+move 
+ sort
+  Paragraph-or-section-name
+behind
+ sort
+  Section-name
+;
+
+move
+ sort
+  Data-or-file-name
+behind
+ sort
+  File-name
+;
+
+move
+ sort
+  Data-or-file-or-mnemonic-name
+behind
+ sort
+  Mnemonic-name
+
+%% next: DA-conditions
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,438 @@
+%%	
+%% From the reference (INPUT-OUTPUT SECTION):
+%%
+%% x | (1)  If there are no files defined in the program and the INPUT-OUTPUT |
+%% x |      SECTION is specified and no file-control-entry is specified, then |
+%% x |      the FILE-CONTROL paragraph-name is optional as an IBM extension.  |
+%%   |
+%% 
+%% We assume that means the FILE CONTROL paragraph is optional in a sense.
+%%
+
+focus on
+  sort Input-output-section
+do
+ generalize
+  File-control-paragraph 
+ to 
+  File-control-paragraph?
+;
+
+
+%%
+%%  From the reference:
+%% x | (2)  If there are no files defined in the program and the FILE-CONTROL |
+%% x |      paragraph-name is specified, then the file-control-entry is       |
+%% x |      optional as an IBM extension.                                     |
+%%
+
+focus on 
+ sort File-control-paragraph
+do
+ fold
+  (Qsam-sam-vsam-sequential-file-control-entries
+    | Vsam-indexed-file-control-entries
+    | Vsam-relative-file-control-entries)+  
+ to
+  File-control-paragraph-contents
+;
+
+focus on 
+ sort File-control-paragraph-contents
+do
+ generalize
+  (Qsam-sam-vsam-sequential-file-control-entries
+    | Vsam-indexed-file-control-entries
+    | Vsam-relative-file-control-entries)+
+ to
+  (Qsam-sam-vsam-sequential-file-control-entries
+    | Vsam-indexed-file-control-entries
+    | Vsam-relative-file-control-entries)*
+;
+
+focus on
+ sort File-control-paragraph
+do 
+ unfold
+  File-control-paragraph-contents
+;
+
+eliminate
+ File-control-paragraph-contents
+;
+
+
+%%
+%% From the reference:
+%%
+%%   There are three formats for the FILE-CONTROL paragraph: 
+%%
+%%   o   QSAM, SAM, and VSAM sequential file entries 
+%%   o   VSAM indexed file entries 
+%%   o   VSAM relative file entries. 
+%%
+%%   The FILE-CONTROL paragraph begins with the word "FILE-CONTROL", followed 
+%%   by a separator period.  It must contain one and only one entry for each 
+%%   file described in an FD or SD entry in the Data Division.  Within each 
+%% | entry, the SELECT clause must appear first, followed by the ASSIGN clause.%% 
+%%   The other clauses can appear in any order. 
+%%
+%% We first merge the three different formats.
+%%
+
+rename 
+ Qsam-sam-vsam-sequential-file-control-entries
+to 
+ File-control-entry
+;
+
+merge 
+ Vsam-relative-file-control-entries 
+to 
+ File-control-entry
+;
+
+merge 
+ Vsam-indexed-file-control-entries
+to 
+ File-control-entry
+;
+
+focus on 
+ sort File-control-paragraph
+do
+ simplify 
+  ( File-control-entry
+  | File-control-entry
+  | File-control-entry
+  )
+ to
+  File-control-entry
+;
+
+
+%%
+%% We fold all the clauses of FILE-CONTROL entries.
+%%
+
+focus on
+ sort File-control-entry
+do
+ fold
+  "SELECT" "OPTIONAL"? File-name
+ to
+  Select-clause
+;
+
+focus on 
+ sort File-control-entry
+do 
+ fold
+  "ASSIGN" "TO"? (Assignment-name | Literal)+ 
+ to
+  Assign-clause
+;
+
+focus on
+ sort File-control-entry
+do 
+ fold
+  "RESERVE" Integer ("AREA"|"AREAS")? 
+ to
+  Reserve-clause
+;
+
+focus on
+ sort File-control-entry
+do 
+ fold
+  "PADDING" "CHARACTER"? "IS"? Data-name | Literal
+ to 
+  Padding-character-clause
+;
+
+focus on
+ sort File-control-entry
+do 
+ fold
+  "RECORD" "DELIMITER" "IS"? "STANDARD-1" | Assignment-name
+ to
+  Record-delimiter-clause
+;
+
+focus on
+ sort File-control-entry
+do
+ fold
+  "RECORD" "KEY"? "IS"? Data-name
+ to
+  Record-key-clause
+;
+
+focus on
+ sort File-control-entry
+do
+ fold
+  "RELATIVE" "KEY"? "IS"? Data-name
+ to
+  Relative-key-clause
+;
+
+focus on
+ sort File-control-entry
+do
+ fold
+  "PASSWORD" "IS"? Data-name
+ to
+  Password-clause
+;
+
+focus on
+ sort File-control-entry
+do 
+ fold
+  "FILE"? "STATUS" "IS"? Data-name Data-name? 
+ to
+  File-status-clause
+;
+
+move sorts
+ Select-clause 
+ Assign-clause 
+ Reserve-clause 
+ Padding-character-clause 
+ Record-delimiter-clause 
+ Record-key-clause 
+ Alternate-record-key-clause 
+ Relative-key-clause 
+ Password-clause 
+ File-status-clause
+behind
+ sort File-control-entry
+;
+
+%%
+%% From the reference:
+%% x | (1)  RECORD is optional as an IBM extension.
+%%
+
+focus on 
+ sort Alternate-record-key-clause
+do 
+ generalize
+  "RECORD"
+ to
+  "RECORD"?
+;
+
+%%
+%% The PASSWORD clause is iterated as part of the 
+%% ALTERNATE RECORD KEY clause. We fold away this redundancy.
+%%
+
+focus on 
+ sort Alternate-record-key-clause
+do
+ fold
+  "PASSWORD" "IS"? Data-name
+ to
+  Yet-another-password-clause
+;
+
+equate 
+ Yet-another-password-clause
+to
+ Password-clause
+;
+
+
+%%
+%% We fold the clauses whose order is inmaterial.
+%% We have to do that for the three different forms of FILE CONTROL entries.
+%% After folding we establish the corresponding permutation phrase.
+%% Unfolding is used then. Moreover, some // must be inserted for
+%% readability.
+%%
+
+focus on 
+ sort File-control-entry
+do
+ fold
+  ("ORGANIZATION" "IS"?)? "RELATIVE"
+ to
+  Organization-is-relative
+;
+
+focus on
+ sort File-control-entry
+do
+ fold
+  Reserve-clause? Organization-is-relative
+    ("ACCESS" "MODE"? "IS"? ("SEQUENTIAL" Relative-key-clause?) | ("RANDOM" | "DYNAMIC" Relative-key-clause))? 
+    Password-clause? File-status-clause? 
+ to
+  Relative-file-control-entry-clauses
+;
+
+focus on 
+ sort Relative-file-control-entry-clauses 
+do
+ generalize
+  definition of
+   Relative-file-control-entry-clauses
+ to
+  permutation of
+   definition of
+   Relative-file-control-entry-clauses
+;
+
+focus on
+ sort File-control-entry
+do
+ unfold
+  Relative-file-control-entry-clauses
+;
+
+eliminate
+ Relative-file-control-entry-clauses
+;
+
+focus on
+ sort File-control-entry 
+do
+ unfold
+  Organization-is-relative
+;
+
+eliminate 
+ Organization-is-relative
+;
+
+focus on
+ sort File-control-entry 
+do
+ fold
+  ("ORGANIZATION" "IS"?)? "INDEXED"
+ to
+  Organization-is-indexed
+;
+
+focus on
+ sort File-control-entry 
+do
+ fold
+  Reserve-clause? 
+  Organization-is-indexed
+  ("ACCESS" "MODE"? "IS"? "SEQUENTIAL" | "RANDOM" | "DYNAMIC")? 
+   Record-key-clause Password-clause? 
+   Alternate-record-key-clause* 
+   File-status-clause?
+ to
+  Indexed-file-control-entry-clauses
+;
+
+focus on 
+ sort File-control-entry 
+do
+ generalize
+  Indexed-file-control-entry-clauses
+ to 
+  // Indexed-file-control-entry-clauses
+;
+
+focus on
+ sort Indexed-file-control-entry-clauses 
+do
+ generalize
+  definition of
+   Indexed-file-control-entry-clauses
+ to
+  permutation of
+   definition of
+    Indexed-file-control-entry-clauses
+;
+
+focus on
+ sort File-control-entry 
+do
+ unfold 
+  Indexed-file-control-entry-clauses
+;
+
+eliminate
+ Indexed-file-control-entry-clauses
+;
+
+focus on 
+ sort File-control-entry 
+do
+ unfold
+  Organization-is-indexed
+;
+
+eliminate
+ Organization-is-indexed
+;
+
+focus on
+ sort File-control-entry 
+do
+ fold
+  Reserve-clause? 
+  (("ORGANIZATION" "IS"?)? "SEQUENTIAL")? 
+  Padding-character-clause? 
+  Record-delimiter-clause? 
+  ("ACCESS" "MODE"? "IS"? "SEQUENTIAL")? 
+  Password-clause? 
+  File-status-clause?
+ to
+  Sequential-file-control-entry-clauses
+;
+
+focus on
+ sort File-control-entry 
+do
+ generalize
+  Sequential-file-control-entry-clauses
+ to 
+  // Sequential-file-control-entry-clauses
+;
+
+focus on
+ sort Sequential-file-control-entry-clauses 
+do
+ generalize
+  definition of
+   Sequential-file-control-entry-clauses
+ to 
+  permutation of
+   definition of
+    Sequential-file-control-entry-clauses
+;
+
+focus on
+ sort File-control-entry 
+do
+ unfold
+  Sequential-file-control-entry-clauses
+;
+
+eliminate
+ Sequential-file-control-entry-clauses
+;
+
+focus on
+ sort Symbolic-characters-clause
+do
+ generalize
+  "ARE"|"IS"
+ to 
+  ("ARE"|"IS")?
+				
+%% next: Data-division
+
+
+
+
+
+

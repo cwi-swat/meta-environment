@@ -1,0 +1,172 @@
+equations
+
+[IT-1] &Sort+0=definedSorts(&SDF0,&Focus0)
+       =================================================
+       IT(deYACCify,&SDF0,&Focus0)=deYACC(&SDF0,&Sort+0)
+
+[deYACC-0] &SDF1=deYACC(&SDF0,&Sort0),
+	   &SDF2=deYACC(&SDF1,&Sort+0)
+	   ==================================
+	   deYACC(&SDF0,&Sort0 &Sort+0)=&SDF2
+
+%% plus-list
+
+[deYACC-1] &Productions0=focusedRules(&SDF0, modules all sorts &Sort0),
+	   &Productions0=&Production*0 &Production0 &Production*1,
+
+	   &Production0=&Symbol+0 -> &Sort0 &Attributes0,
+
+	   used(&Symbol+0,&Sort0)=false,
+	   &Production*0 &Production*1=&Production1,
+
+	   &Production1=&Symbol+0 &Sort0-> &Sort0 &Attributes1,
+
+	   &Symbol0=bracket(&Symbol+0),
+	   &SDF1=reset(&SDF0, modules all sorts &Sort0),
+	   &SDF2=replace(&SDF1, modules all sorts all,&Sort0,&Symbol0+)
+	   ============================================================
+	   deYACC(&SDF0,&Sort0)=&SDF2 
+
+%% star-list
+
+[deYACC-2] &Productions0=focusedRules(&SDF0,modules all sorts &Sort0),
+	   &Productions0=&Production*0 &Production0 &Production*1,
+
+	   &Production0= -> &Sort0 &Attributes0,
+
+	   &Production*0 &Production*1=&Production1,
+
+	   &Production1=&Symbol+0 &Sort0-> &Sort0 &Attributes1,
+
+	   used(&Symbol+0,&Sort0)=false,
+	   &Symbol0=bracket(&Symbol+0),
+	   &SDF1=reset(&SDF0, modules all sorts &Sort0),
+	   &SDF2=replace(&SDF1, modules all sorts all,&Sort0,&Symbol0*)
+	   ============================================================
+	   deYACC(&SDF0,&Sort0)=&SDF2 
+
+%% optional
+
+[default-deYACC-3] &Productions0=focusedRules(&SDF0, modules all sorts &Sort0),
+		   &Productions0=&Production*0 &Production0 &Production*1,
+
+		   &Production0= -> &Sort0 &Attributes0,
+
+		   &Production*0 &Production*1=&Production1,
+
+		   &Production1=&Symbol+0 -> &Sort0 &Attributes1,
+
+		   used(&Symbol+0,&Sort0)=false,
+		   &Symbol0=bracket(&Symbol+0),
+		   &SDF1=reset(&SDF0, modules all sorts &Sort0),
+		   &SDF2=replace(&SDF1, modules all sorts all,&Sort0,&Symbol0?)
+		   ============================================================
+		   deYACC(&SDF0,&Sort0)=&SDF2 
+
+%% separated star-list
+
+[deYACC-4] &Productions0=focusedRules(&SDF0, modules all sorts &Sort0),
+	   &Productions0=&Production*0 &Production0 &Production*1,
+
+	   &Production0= -> &Sort0 &Attributes0,
+
+	   &Production*0 &Production*1=&Production1,
+
+	   &Production1=&Symbol+0 &Sort1-> &Sort0 &Attributes1,
+
+	   &Sort1!=&Sort0,
+	   used(&Symbol+0,&Sort0)=false,
+	   &Symbol0=bracket(&Symbol+0),
+	   &Productions1=focusedRules(&SDF0, modules all sorts &Sort1),
+	   &Productions1=&Production*2 &Production2 &Production*3,
+
+	   &Production2= -> &Sort1 &Attributes2,
+
+	   &Production*2 &Production*3=&Production3,
+
+	   &Production3=&Symbol+1 &Symbol+0 &Sort1-> &Sort1 &Attributes3,
+
+	   used(&Symbol+0,&Sort0)=false,
+	   &Symbol1=bracket(&Symbol+1),
+	   &SDF1=reset(&SDF0, modules all sorts &Sort0),
+	   &SDF2=replace(&SDF1,
+			 modules all sorts all,
+			 &Sort0,
+			 {&Symbol0 &Symbol1}* ),
+	   &SDF3=tryReset(&SDF2,&Sort1)
+	   ==============================================================
+	   deYACC(&SDF0,&Sort0)=&SDF3 
+
+[deYACC-5] &Productions0=focusedRules(&SDF0, modules all sorts &Sort0),
+	   &Productions0=&Production*0 &Production0 &Production*1,
+
+	   &Production0= -> &Sort0 &Attributes0,
+
+	   &Production*0 &Production*1=&Production1,
+
+	   &Production1=&Symbol+0 (&Symbol0 &Symbol*0 &Symbol+0)* -> &Sort0
+	   &Attributes1,
+	   used(&Symbol+0,&Sort0)=false,
+	   &Symbol1=bracket(&Symbol+0),
+	   used(&Symbol0 &Symbol*0,&Sort0)=false,
+	   &Symbol2=bracket(&Symbol0 &Symbol*0),
+	   &SDF1=reset(&SDF0, modules all sorts &Sort0),
+	   &SDF2=replace(&SDF1,
+		         modules all sorts all,
+			 &Sort0,
+			 {&Symbol1 &Symbol2}* )
+	   ================================================================
+	   deYACC(&SDF0,&Sort0)=&SDF2 
+
+%% separated plus-list
+
+[deYACC-6] &Production1=focusedRules(&SDF0, modules all sorts &Sort0),
+
+	   &Production1=&Symbol+0 &Sort1-> &Sort0 &Attributes1,
+
+	   &Sort1!=&Sort0,
+	   used(&Symbol+0,&Sort0)=false,
+	   &Symbol0=bracket(&Symbol+0),
+	   &Productions1=focusedRules(&SDF0, modules all sorts &Sort1),
+	   &Productions1=&Production*2 &Production2 &Production*3,
+
+	   &Production2= -> &Sort1 &Attributes2,
+
+	   &Production*2 &Production*3=&Production3,
+
+	   &Production3=&Symbol+1 &Symbol+0 &Sort1-> &Sort1 &Attributes3,
+
+	   used(&Symbol+1,&Sort0)=false,
+	   &Symbol1=bracket(&Symbol+1),
+	   &SDF1=reset(&SDF0, modules all sorts &Sort0),
+	   &SDF2=replace(&SDF1,
+			 modules all sorts all,
+			 &Sort0,
+			 {&Symbol0 &Symbol1}+),
+	   &SDF3=tryReset(&SDF2,&Sort1)
+	   ==============================================================
+	   deYACC(&SDF0,&Sort0)=&SDF3 
+
+[deYACC-7] &Production1=focusedRules(&SDF0, modules all sorts &Sort0),
+	   
+	   &Production1=&Symbol+0 (&Symbol0 &Symbol*0 &Symbol+0)* -> &Sort0
+	   &Attributes1,
+	   used(&Symbol+0,&Sort0)=false,
+	   &Symbol1=bracket(&Symbol+0),
+	   used(&Symbol0 &Symbol*0,&Sort0)=false,
+	   &Symbol2=bracket(&Symbol0 &Symbol*0),
+	   &SDF1=reset(&SDF0, modules all sorts &Sort0),
+	   &SDF2=replace(&SDF1,
+			 modules all sorts all,
+			 &Sort0,
+			 {&Symbol1 &Symbol2}+ )
+	   ===============================================================
+	   deYACC(&SDF0,&Sort0)=&SDF2 
+
+[default-deYACC-8] deYACC(&SDF0,&Sort0)=&SDF0
+
+[try-1] &SDF1=reset(&SDF0,modules all sorts &Sort0),
+	 used(&SDF1,&Sort0)=false
+	==============================================
+	tryReset(&SDF0,&Sort0)=&SDF1
+

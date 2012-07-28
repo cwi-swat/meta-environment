@@ -1,0 +1,33 @@
+module Focus
+
+imports Properties
+
+exports
+
+sorts 
+ ModuleFocus SortFocus Focus Bool
+
+context-free syntax
+ 
+  ModuleName+ -> ModuleFocus
+  "all" -> ModuleFocus
+  Error -> ModuleFocus 
+  
+  Sort+ -> SortFocus
+  "all" -> SortFocus
+  Error -> SortFocus
+
+  "modules" ModuleFocus "sorts" SortFocus -> Focus
+   Error -> Focus
+ 
+ 
+ "focused" "(" ModuleName "," Focus ")" -> Bool
+ "focused" "(" Sort "," Focus ")" -> Bool
+ "welldefined" "(" SDF "," Focus  ")" -> Bool 
+ 
+variables
+
+  "&SortFocus"[0-9]* -> SortFocus
+  "&ModuleFocus"[0-9]+ -> ModuleFocus
+  "&Focus"[0-9]+ -> Focus
+  

@@ -1,0 +1,52 @@
+module Yielders
+
+imports Auxiliary
+
+exports
+
+  sorts SymbolsYielder ProductionYielder Symbol Symbols Production 
+
+  context-free syntax
+
+  Symbols -> SymbolsYielder 
+  Pattern+ -> SymbolsYielder
+  "definition" "of" Sort -> SymbolsYielder
+  "permutation" "of" SymbolsYielder -> SymbolsYielder
+  SymbolsYielder "->" Sort Attributes -> ProductionYielder
+
+ "sort" "before" "sort" Sort -> SortFocusYielder
+ "sort" "reachable" "from" FocusYielder -> SortFocusYielder
+ "sorts" "reachable" "from" FocusYielder -> SortFocusYielder
+ "all" "sorts"-> SortFocusYielder
+ "sort" Sort -> SortFocusYielder
+ "sorts" Sort+ -> SortFocusYielder
+
+ "module" "before" "module" ModuleName -> ModuleFocusYielder
+ "module" "defining" "sort" Sort -> ModuleFocusYielder
+ "modules" "defining" "sort" Sort -> ModuleFocusYielder
+ "module" ModuleName -> ModuleFocusYielder
+ "modules" ModuleName+ -> ModuleFocusYielder
+ "all" "modules" -> ModuleFocusYielder
+ 
+ ModuleFocusYielder -> FocusYielder
+ SortFocusYielder -> FocusYielder
+ SortFocusYielder "in" ModuleFocusYielder -> FocusYielder
+ 
+  "IY" "(" SymbolsYielder "," SDF "," Focus ")" -> Symbols
+  "IY" "(" ProductionYielder "," SDF "," Focus  ")" -> Production
+  "IY" "(" SortFocusYielder "," SDF ")" -> SortFocus
+  "IY" "(" ModuleFocusYielder "," SDF ")" -> ModuleFocus
+  "IY" "(" FocusYielder "," SDF ")" -> Focus
+ 
+  variables
+
+  "&SymbolsYielder"[0-9]+ -> SymbolsYielder
+  "&ProductionYielder"[0-9]+ -> ProductionYielder
+  "&ModuleFocusYielder"[0-9]+ -> ModuleFocusYielder
+  "&SortFocusYielder"[0-9]+ -> SortFocusYielder
+  "&FocusYielder"[0-9]+ -> FocusYielder
+  
+  context-free priorities
+ 
+  Symbols -> SymbolsYielder > Pattern+ -> SymbolsYielder
+

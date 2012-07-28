@@ -1,0 +1,61 @@
+equations
+
+[apply-1] &SDF1=pre(&SDF0),
+	  &SDF2=IT(&Trafo0, &SDF1, modules all sorts all),
+	  &SDF3=pp(post(&SDF2,,&SDF2))
+	  ================================================
+	  apply &Trafo0 at &SDF0=&SDF3
+
+[pp-1]
+
+&SDF0=definition &Module*0,
+&Module*1=pp(&Module*0),
+&SDF1=definition 
+
+&Module*1
+=============================
+pp(&SDF0)=&SDF1
+
+[pp-2]
+
+&Modules0=&Module0 &Module*0,
+&Module1=pp(&Module0),
+&Module*1=pp(&Module*0),
+&Modules2=&Module1
+
+&Module*1
+=============================
+pp(&Modules0)=&Modules2
+
+[pp-3]
+
+&Grammar0=context-free syntax &Productions0,
+&Productions1=pp(&Productions0),
+&Grammar1=context-free syntax
+
+&Productions1
+=======================
+pp(&Grammar0)=&Grammar1
+
+[pp-4]
+
+&Grammar0=&Grammar2 &Grammar3,
+&Grammar4=pp(&Grammar2),
+&Grammar5=pp(&Grammar3),
+&Grammar1=&Grammar4
+
+&Grammar5
+=======================
+pp(&Grammar0)=&Grammar1
+
+[pp-5]
+
+&Productions0=&Production0 &Production*1,
+&Production0=&Symbols0 -> &Sort0 &Attributes0,
+&Production1=pp(&Symbols0) -> &Sort0 &Attributes0,
+pp(&Production*1)=&Production*2,
+&Productions1=&Production1
+
+&Production*2
+================================================
+pp(&Productions0)=&Productions1 

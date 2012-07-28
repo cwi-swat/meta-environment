@@ -1,0 +1,692 @@
+%%
+%% We imprecise the grammar to get rid of ambiguities.
+%% Therefore we part Statement into Primitive, Branch and Terminator.
+%%
+
+focus on 
+ sort Statement in module Statements
+do
+ fold 
+  definition of Statement
+ to
+  Primitive
+;
+
+%%
+%% We fold each branch and remove it from the definitions of primitives.
+%%
+
+focus on 
+ module Statements
+do
+ (
+  fold
+   "ON"? "SIZE" "ERROR" Statement-list
+  to
+   On-size-branch
+  ;
+ 
+  restrict 
+   On-size-branch?
+  to
+   
+  ;
+
+  fold
+   "NOT" On-size-branch
+  to 
+   Not-on-size-branch
+  ;
+
+ 
+  restrict 
+   Not-on-size-branch?
+  to
+   
+  ;
+  fold 
+   "ON"? "EXCEPTION" Statement-list
+  to
+   On-exception-branch
+  ;
+ 
+  restrict 
+   On-exception-branch?
+  to
+   
+  ;
+
+  fold
+   "NOT" On-exception-branch
+  to
+   Not-on-exception-branch
+ ;
+ 
+  restrict 
+   Not-on-exception-branch?
+  to
+   
+  ;
+
+  fold
+   "ON"? "OVERFLOW" Statement-list
+  to
+   On-overflow-branch
+  ;
+
+   
+  restrict 
+   On-overflow-branch?
+  to
+   
+  ;
+
+  fold
+   "NOT" On-overflow-branch
+  to
+   Not-on-overflow-branch
+  ;
+
+ 
+  restrict 
+   Not-on-overflow-branch?
+  to
+   
+  ;
+
+  fold
+   "INVALID" "KEY"? Statement-list
+  to
+   Invalid-key-branch
+  ;
+ 
+  restrict 
+   Invalid-key-branch?
+  to
+   
+  ;
+
+  fold
+   "NOT" Invalid-key-branch
+  to
+   Not-invalid-key-branch
+  ;
+
+  restrict 
+   Not-invalid-key-branch?
+  to
+   
+  ;
+
+  fold
+   ("WHEN" Evaluate-phrase ("ALSO" Evaluate-phrase)*)+ Statement-list
+  to
+   When-also-branch
+  ;
+ 
+  delete 
+   When-also-branch+
+   
+  ;
+
+  fold
+   "WHEN" "OTHER" Statement-list
+  to
+   When-other-branch
+  ;
+ 
+  restrict 
+   When-other-branch?
+  to
+   
+  ;
+
+  fold
+   "THEN"? Statement-list | ("NEXT" "SENTENCE")
+  to
+   Then-branch
+  ;
+
+  delete
+   Then-branch
+  ;
+
+  fold
+   "ELSE" Statement-list | ("NEXT" "SENTENCE")
+  to
+   Else-branch
+  ;
+ 
+  restrict 
+   Else-branch?
+  to
+   
+  ;
+
+  fold
+   "AT"? "END" Statement-list
+  to 
+   At-end-branch
+  ;
+
+  restrict 
+   At-end-branch?
+  to
+   
+  ;
+
+  fold
+   "NOT" At-end-branch
+  to
+   Not-at-end-branch
+  ;
+
+  restrict 
+   Not-at-end-branch?
+  to
+   
+  ;
+
+  delete
+   At-end-branch
+  ;
+
+  fold
+   "WHEN" (Identifier "IS"? ("EQUAL" "TO"?) | "=" Identifier | Literal | Arithmetic-expression) | Condition-name-reference
+    ("AND" (Identifier "IS"? ("EQUAL" "TO"?) | "=" Identifier | Literal | Arithmetic-expression) | Condition-name-reference)* Statement-list | ("NEXT" "SENTENCE")
+  to
+   When-equal-branch
+  ;
+
+  delete 
+   When-equal-branch
+  ;
+
+  fold
+   "WHEN" Condition Statement-list | ("NEXT" "SENTENCE")
+  to
+   When-condition-branch
+  ;
+
+  delete
+   When-condition-branch+
+  ;
+
+  fold
+   "AT"? "END-OF-PAGE" | "EOP" Statement-list
+  to
+   At-eop-branch
+  ;
+
+  restrict 
+   At-eop-branch?
+  to
+   
+  ;
+
+  fold
+   "NOT" At-eop-branch
+  to
+   Not-at-eop-branch
+  ;
+ 
+  restrict 
+   Not-at-eop-branch?
+  to
+   
+)
+;
+
+focus on 
+ module Statements
+do
+ introduce
+  Branch
+ as
+  On-size-branch |
+  Not-on-size-branch |
+  On-exception-branch |
+  Not-on-exception-branch |
+  On-overflow-branch |
+  Not-on-overflow-branch |
+  Invalid-key-branch |
+  Not-invalid-key-branch |
+  When-also-branch |
+  When-other-branch |
+  Then-branch |
+  Else-branch |
+  At-end-branch |
+  Not-at-end-branch |
+  When-equal-branch |
+  When-condition-branch |
+  At-eop-branch |
+  Not-at-eop-branch
+;
+
+include
+ Branch
+in
+ Statement
+;
+
+%%
+%% Because of this definition, all occurences of Statement-list in branches
+%% should be removed.
+%%
+
+focus on
+ sorts
+  Perform-statement
+  On-size-branch 
+  On-exception-branch 
+  On-overflow-branch 
+  Invalid-key-branch 
+  When-also-branch 
+  When-other-branch
+  Then-branch 
+  Else-branch 
+  At-end-branch 
+  When-equal-branch 
+  When-condition-branch
+  At-eop-branch 
+ in module
+  Statements
+do
+ delete
+  Statement-list
+;
+ 
+%%
+%% We fold each terminator and remove it from the definitions of primitives.
+%%
+
+focus on 
+ sort Add-statement in module Statements 
+do
+ (
+  fold 
+   "END-ADD"
+  to
+   Add-terminator
+;
+
+  restrict 
+   Add-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Call-statement in module Statements  
+do
+ (
+  fold 
+   "END-CALL"
+  to
+   Call-terminator
+  ;
+
+  restrict 
+   Call-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Compute-statement in module Statements  
+do
+ (
+  fold 
+   "END-COMPUTE"
+  to
+   Compute-terminator
+  ;
+
+  restrict 
+   Compute-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Delete-statement in module Statements  
+do
+ (
+  fold 
+   "END-DELETE"
+  to
+   Delete-terminator
+  ;
+
+  restrict 
+   Delete-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Divide-statement in module Statements  
+do
+ (
+  fold 
+   "END-DIVIDE"
+  to
+   Divide-terminator
+  ;
+
+  restrict 
+   Divide-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Evaluate-statement in module Statements 
+do
+ (
+  fold 
+   "END-EVALUATE"
+  to
+   Evaluate-terminator
+  ;
+
+  restrict 
+   Evaluate-terminator?
+  to
+   
+ )
+;
+focus on 
+ sort If-statement in module Statements  
+do
+ (
+  fold 
+   "END-IF"
+  to
+   If-terminator
+  ;
+
+  restrict 
+   If-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Multiply-statement in module Statements  
+do
+ (
+  fold 
+   "END-MULTIPLY"
+  to
+   Multiply-terminator
+  ;
+
+  restrict 
+   Multiply-terminator?
+  to
+   
+ )
+;
+
+
+focus on 
+ sort Perform-statement in module Statements  
+do
+ (
+  fold 
+   "END-PERFORM"
+  to
+   Perform-terminator
+  ;
+
+  delete 
+   Perform-terminator
+   
+ )
+;
+
+focus on 
+ sort Read-statement in module Statements  
+do
+ (
+  fold 
+   "END-READ"
+  to
+   Read-terminator
+  ;
+
+  restrict 
+   Read-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Return-statement in module Statements  
+do
+ (
+  fold 
+   "END-RETURN"
+  to
+   Return-terminator
+  ;
+
+  restrict 
+   Return-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Rewrite-statement in module Statements  
+do
+ (
+  fold 
+   "END-REWRITE"
+  to
+   Rewrite-terminator
+  ;
+
+  restrict 
+   Rewrite-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Search-statement in module Statements  
+do
+ (
+  fold 
+   "END-SEARCH"
+  to
+   Search-terminator
+  ;
+
+  restrict 
+   Search-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Start-statement in module Statements  
+do
+ (
+  fold 
+   "END-START"
+  to
+   Start-terminator
+  ;
+
+  restrict 
+   Start-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort String-statement in module Statements  
+do
+ (
+  fold 
+   "END-STRING"
+  to
+   String-terminator
+  ;
+
+  restrict 
+   String-terminator?
+  to
+   
+ )
+ ;
+
+focus on 
+ sort Subtract-statement in module Statements  
+do
+ (
+  fold 
+   "END-SUBTRACT"
+  to
+   Subtract-terminator
+  ;
+
+  restrict 
+   Subtract-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Unstring-statement in module Statements 
+do
+ (
+  fold 
+   "END-UNSTRING"
+  to
+   Unstring-terminator
+  ;
+
+  restrict 
+   Unstring-terminator?
+  to
+   
+ )
+;
+
+focus on 
+ sort Write-statement in module Statements  
+do
+ (
+  fold 
+   "END-WRITE"
+  to
+   Write-terminator
+  ;
+
+  restrict 
+   Write-terminator?
+  to
+   
+ )
+;
+
+focus on
+ sorts
+  Then-branch
+  Else-branch
+  When-equal-branch
+  When-condition-branch
+ in module
+  Statements
+do
+(
+
+ fold
+  "NEXT" "SENTENCE"
+ to
+  Next-sentence-terminator
+ ;
+
+ restrict
+  () | Next-sentence-terminator
+ to
+
+)
+;
+
+focus on 
+ module Statements 
+do
+ introduce
+  Terminator
+ as
+  Add-terminator |
+  Call-terminator |
+  Compute-terminator |
+  Delete-terminator |
+  Divide-terminator |
+  Evaluate-terminator |
+  If-terminator |
+  Multiply-terminator |
+  Next-sentence-terminator |
+  Perform-terminator |
+  Read-terminator |
+  Return-terminator |
+  Rewrite-terminator |
+  Search-terminator |
+  Start-terminator |
+  String-terminator |
+  Subtract-terminator |
+  Unstring-terminator |
+  Write-terminator
+;
+
+include
+ Terminator 
+in
+ Statement
+;
+
+%% 
+%% For readibility we simplify the three new definitions of Statement to one.
+%% Following Definitions are placed in order of appearance.
+%%
+  
+focus on 
+ sort Statement in module Statements 
+do
+ alternate
+;
+
+focus on
+ module Statements
+do
+(
+ 
+ move
+  sort Compiler-directing-statement in module Statements
+ behind
+  sort Statement-list in module Statements
+ ;
+
+ move 
+  sorts reachable from sort Statement-list 
+ behind
+  sort Statement-list in module Statements
+)
+
