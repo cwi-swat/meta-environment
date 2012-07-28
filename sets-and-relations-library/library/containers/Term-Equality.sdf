@@ -1,0 +1,13 @@
+module containers/Term-Equality[X]
+
+imports basic/Booleans
+
+exports
+context-free syntax
+  term-equal(X, X) -> Boolean  
+
+hiddens
+imports basic/Whitespace
+
+variables
+  "x" [0-9\']* -> X  

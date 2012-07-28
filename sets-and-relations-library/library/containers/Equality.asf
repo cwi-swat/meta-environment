@@ -1,0 +1,4 @@
+equations
+
+[default-equal-1]
+	equal(x, x') = term-equal(x, x')

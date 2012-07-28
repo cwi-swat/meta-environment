@@ -1,0 +1,8 @@
+module containers/NestedRelations[Elem]
+
+imports containers/NestedSets[Elem]
+        containers/FlatRelations[Elem]
+
+hiddens
+context-free start-symbols
+  Elem
