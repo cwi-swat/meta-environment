@@ -1,0 +1,10 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,economop@cwi.nl
+Name: c-library
+Version: 1.2
+Description:
+Requires: aterm
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -llogging -lstatistics 
+#uninstalled Libs: -L@abs_top_builddir@/logging -llogging -L@abs_top_builddir@/statistics -lstatistics
+#uninstalled Cflags: -I@abs_top_builddir@/logging -I@abs_top_builddir@/statistics
