@@ -1,0 +1,32 @@
+equations
+ 
+[] appl(p,a) !3 = offside
+     when p = prod(s1,s2,attrs([a*1,term(offside),a*2])),
+          hm-rec(appl(p,a),h(!3)) < h(!3) = true
+
+[] amb([t*1,offside !,t*2]) !2 = amb([t*1,t*2])
+[] amb([t*1,offside,t*2]) ! = amb([t*1,t*2])
+
+[] amb([t !]) !2 = t !
+[] amb([t]) ! = t !
+[] amb([t]) = t
+
+[] t !1 !2 = t !1
+
+[] appl(p,[t*1,offside !1,t*2]) !2 = offside
+[] appl(p,[t*1,offside ,t*2]) !2 = offside
+[] appl(p,[t*1,offside !,t*2])  = offside
+[] appl(p,[t*1,offside ,t*2]) = offside
+
+[] h(t !) = h(!)
+    when t = appl(prod(s1,s2,attrs([a*1,term(offside),a*2])),a)
+
+[] h({ at*1, [pos-info,area(at,r1,c1,r2,c2)], at*2 }) = c1
+
+[] hm(t) = hm-rec(t, h(t))
+
+[] h(t) < i = true
+   ===>
+   hm-rec(t, i) = h(t)
+
+

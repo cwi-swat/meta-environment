@@ -1,0 +1,9 @@
+module AsFixWithAnnotations
+
+imports AsFix
+
+exports
+
+context-free syntax
+
+Tree Ann -> Tree

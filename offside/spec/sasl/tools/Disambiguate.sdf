@@ -1,0 +1,31 @@
+module sasl/tools/Disambiguate
+
+imports sasl/syntax/Sasl
+imports asf/tools/PosInfo[Expr]
+imports asf/tools/PosInfo[Where]
+imports basic/Integers
+
+exports
+
+context-free syntax
+
+hiddens
+
+context-free syntax
+
+"offside!" -> Expr
+"offside!" -> Clause
+
+minimal(Expr, NatCon) -> NatCon {traversal(accu,bottom-up,continue)}
+minimal(Where, NatCon) -> NatCon{traversal(accu,bottom-up,continue)}
+
+variables
+
+"Expr"[0-9]* -> Expr
+"Expr*"[0-9]* -> { Expr ","}*
+"Clause"[0-9]* -> Clause
+"NameList"[0-9]*     -> NameList
+"Col"[0-9]*      -> NatCon
+"Min"[0-9]* -> NatCon
+"Defs"[0-9]* -> Defs
+"WHERE"  -> Where
