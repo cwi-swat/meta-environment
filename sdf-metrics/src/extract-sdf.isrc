@@ -1,0 +1,25 @@
+
+#ifndef EXTRACT_SDF
+#define EXTRACT_SDF
+tool extract-sdf is { command="__PREFIX__/bin/extractsdf" }
+
+process ExtractSDF is
+let
+  Definition: term,
+  Store: term,
+  T : extract-sdf
+in
+  (
+    rec-msg(es-extract-sdf(Definition?))
+    . execute(extract-sdf, T?)
+    . snd-eval(T, normalize(Definition))
+    . rec-value(T, normalform(Store?))
+    . snd-msg(es-sdf-store(Store))
+    . snd-terminate(T, "done")
+  )
+  * delta
+endlet
+
+toolbus(ExtractSDF)
+
+#endif

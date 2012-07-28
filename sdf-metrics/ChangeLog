@@ -1,0 +1,22 @@
+
+
+Thu Jan 24 11:45:18 CET 2008 <economop@cwi.nl>
+ * sdf-metrics.pc.in: forgot to declare where the library is installed.
+
+Wed Jan 23 15:59:31 CET 2008 <economop@cwi.nl>
+ * src/ExtractSDF.c: regenerated to include new facts added to the asf-library.
+ * src/sdfMetrics.{c,h}: created wrapper functions to hide the fact that 
+   the fact-extraction is actually a compiled ASF specification.
+ * src/Makefile.am: modified to create a library that can be used by other
+   packages.
+
+Thu Sep  6 08:00:27 CEST 2007 <jurgenv@cwi.nl>
+ * src/ExtractSDF.eqs: added extraction of prefix functions.
+
+Tue Apr 10 09:58:47 CEST 2007 <jurgenv@cwi.nl>
+ * src/Makefile.am: fixed distcheck
+
+Mon Mar 26 15:34:28 CEST 2007 <jurgenv@cwi.nl>
+ * package: contains an implementation of a fact extraction tool
+   for SDF
+
