@@ -1,0 +1,77 @@
+#ifndef __TERM__UTILS__
+#define __TERM__UTILS__
+
+#include <undefined.h>
+#define NO_NONTERMINAL ""
+#define TERM_TREE_CACHE "term-annotated-tree"
+
+process GetTermParseTable(ModuleId: module-id, Table: term?) is
+  GetParseTable(ModuleId, trm, Table?)
+
+toolbus(InitCache(TERM_TREE_CACHE))
+toolbus(ClearCacheHandler(TERM_TREE_CACHE, SDF_NAMESPACE, "status", <term>, edited))
+
+process ClearTermParsetreeCacheListener is
+let
+  Path: str
+in
+  subscribe(term-modified(<str>))
+  .
+  (
+    rec-note(term-modified(Path?))
+    . snd-msg(ts-remove-value(TERM_TREE_CACHE, Path))
+  )
+  * delta
+endlet
+
+process ClearTermParsetreeCache(Path : str) is
+    snd-msg(ts-remove-value(TERM_TREE_CACHE, Path))
+
+toolbus(ClearTermParsetreeCacheListener)
+
+process GetTermParsetree(ModuleId: module-id, Path: str, Result: term?) is
+let
+  AmbPid: int,
+  ParseTable: term,
+  Pid: int,
+  Text: str,
+  Type: term,
+  Tree: term
+in
+  snd-msg(tm-request-transaction(term-parsing))
+  . GetCachedValue(TERM_TREE_CACHE, Path, Tree?)
+  .
+  if equal(Tree, UNDEFINED) then
+    Type := trm
+    . GetTermParseTable(ModuleId, ParseTable?)
+    .
+    if not-equal(ParseTable, UNDEFINED) then
+      ReadText(Path, Text?)
+      .
+      if not-equal(Text, "") then
+        create(ParseTreeHandler(ModuleId, Path), Pid?)
+	. RemoveAmbiguitySummary(Path)
+        . ParseText(Pid, Text, ParseTable, NO_NONTERMINAL, off)
+        .
+        (
+          rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
+	  . create(AmbiguityHandler(Tree, Path), AmbPid?)
+          . AnnotateTree(Tree, Path, Result?)
+	  . PutCachedValue(TERM_TREE_CACHE, Path, Result)
+        +
+          rec-msg(parse-handler-done(Pid))
+          . Result := UNDEFINED
+        )  
+      else
+        Result := UNDEFINED
+      fi
+    else
+      Result := UNDEFINED
+    fi
+  else
+    Result := Tree
+  fi
+  . snd-msg(tm-end-transaction(term-parsing))
+endlet
+
+#endif /* __TERM__UTILS__ */

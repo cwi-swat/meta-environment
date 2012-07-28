@@ -1,0 +1,25 @@
+#ifndef __SDF_EDITOR_ACTIONS__
+#define __SDF_EDITOR_ACTIONS__
+
+#include <sdf-editor-utils.tb>
+
+process EditorEditSyntaxAction(EditorId : session-id) is
+let 
+  ModuleId : module-id
+in
+  GetModuleId(EditorId, ModuleId?)
+  . EditSyntaxAction(ModuleId)
+endlet
+
+process EditSyntaxAction(ModuleId : module-id) is
+let
+  Pid: int,
+  Sid: session-id
+in
+  create(EditSyntax(ModuleId), Pid?)
+  . rec-msg(syntax-editor-started(ModuleId, Sid?))
+  . TODO("And what if it didn't start? See term-editor-utils.tb")
+  . create(CleanupEditTerm(Sid), Pid?)
+endlet
+
+#endif /* __SDF_EDITOR_ACTIONS__ */

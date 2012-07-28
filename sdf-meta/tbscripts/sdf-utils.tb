@@ -1,0 +1,547 @@
+#ifndef __SDF_UTILS__
+#define __SDF_UTILS__
+
+#include <sdf-modules.idef>
+#include <parse-utils.tb>
+#include <error-utils.tb>
+#include <io-utils.tb>
+#include <config-utils.tb>
+
+#define SDF_TREE_CACHE "sdf-annotated-tree"
+
+process NewModuleContentHandler is
+let
+  ModuleId: str,
+  Pid: int
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(get-module-contents(Pid, ModuleId?))
+    . snd-msg(module-contents(Pid, ["module ", ModuleId, "\n\n"]))
+  +
+    rec-msg(cancel-content-handler(Pid))
+  )
+endlet
+
+/*
+process DumpParseTable(ModuleId : module-id, Namespace: term, Filename : str, Type : term) is
+let
+  Directory: str,
+  Error: term,
+  Extension: str,
+  Id: term,
+  NewFilename: str,
+  NewPath: str,
+  Path: str,
+  Table: term
+in
+  AddJob(Filename)
+  . Id := process-id
+  . snd-msg(get-parsetable(ModuleId, Type))
+  .
+  (
+    rec-msg(parsetable(ModuleId, Type, Table?))
+    . GetModulePath(ModuleId, Namespace, Path?)
+    .
+    if equal(Filename, "") then
+      TODO("DumpParseTable got empty filename")
+    else
+      NewFilename := Filename
+    fi
+    . snd-msg(io-unpack-and-write-term-in-baf(NewFilename, Table))
+    .
+    (
+      rec-msg(io-file-written)
+    +
+      rec-msg(io-file-not-written(Error?))
+    )
+  +
+    rec-msg(no-parsetable(ModuleId))
+  )
+  . JobDone(Filename)
+endlet
+*/
+
+process DumpSdfDefinition(ModuleId: module-id, Filename: str) is
+let
+  Syntax: term,
+  Path: str,
+  Text: str,
+  Error: term,
+  ErrorMessage: str
+in
+  AddJob(Filename)
+  . GetSyntaxDefinition(ModuleId, Syntax?)
+  .
+  if not-equal(Syntax, UNDEFINED) then
+    GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . snd-msg(unparse(Syntax))
+    . rec-msg(unparsed-text(Text?))
+    . snd-msg(io-write-text-list(Filename, [Text]))
+    .
+    (
+      rec-msg(io-file-written)
+    +
+      rec-msg(io-file-not-written(Error?))
+    )
+  else
+    tau
+  fi
+  . JobDone(Filename)
+endlet
+
+process GetModules(ModuleIds: list, Modules: list?) is
+let
+  Runner: list,
+  Result: list,
+  ModuleTree: term,
+  ModuleId: module-id,
+  Incomplete: bool
+in
+  Runner := ModuleIds
+  . Result := []
+  .
+  if and(not-equal(Runner, []),not-equal(Incomplete,true)) then
+    ModuleId := first(Runner)
+    . GetSDFParsetree(ModuleId, ModuleTree?)
+    . 
+    if equal(ModuleTree, UNDEFINED) then
+      Incomplete := true
+    else
+      tau
+    fi
+    . Result := join(ModuleTree, Result) 
+    . Runner := next(Runner) 
+  fi
+  *
+  if or(equal(Runner, []),equal(Incomplete,true)) then
+    tau
+  fi
+  .
+  if equal(Incomplete, true) then
+    Modules := []
+  else
+    Modules := Result
+  fi
+endlet
+
+process GetSyntaxDefinition(ModuleId: module-id, Syntax: term?) is
+let
+  ModuleIds: list,
+  Modules: list,
+  Status: term
+in
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "status", Status?)
+  .
+  if equal(Status, complete) then
+    MM-GetAllModuleDependencies(ModuleId, ModuleIds?)
+    . ModuleIds := join([ModuleId], ModuleIds)
+    . GetModules(ModuleIds, Modules?)
+    . 
+    if equal(Modules, []) then
+      Syntax := UNDEFINED
+    else
+      snd-msg(sm-make-sdf-definition(Modules))
+      .
+      (
+        rec-msg(sm-sdf-definition(Syntax?))
+      +
+        rec-msg(sm-no-sdf-definition)
+        . Syntax := UNDEFINED
+      )
+    fi
+  else
+    Syntax := UNDEFINED
+  fi
+endlet
+
+process GetImportedModulenames(Tree: term, Imports: list?) is
+  snd-msg(sm-get-imported-module-names(Tree))
+  . rec-msg(sm-imported-module-names(Imports?)) 
+
+process CloseOtherModules(ModuleId: module-id) is
+let
+  Dependencies: list,
+  CloseModules: list,
+  NewTerm: term
+in
+  MM-GetAllModuleDependencies(ModuleId, Dependencies?)
+  . Dependencies := join(Dependencies, [ModuleId])
+  . MM-GetAllModules(CloseModules?)
+  . CloseModules := diff(CloseModules, Dependencies)
+  . CloseModules(CloseModules)
+endlet
+
+process CloseModule(ModuleId: module-id, Recursive: bool) is
+let
+  Dependencies: list,
+  Modulename: str,
+  CloseModules: list,
+  NewTerm: term
+in
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  .
+  if equal(Recursive, true) then
+    MM-GetClosableModules(ModuleId, CloseModules?)
+    .
+    if equal(CloseModules, []) then
+      printf("warning: Unable to close %s, it would break some import(s).\n", Modulename)
+    else
+      CloseModules(CloseModules)
+    fi
+  else
+    MM-GetModuleParents(ModuleId, Dependencies?)
+    .
+    if equal(Dependencies, []) then
+      CloseModules([ModuleId])
+    else
+      printf("warning: Unable to close %s, it would break the import of: %t\n",
+            Modulename, Dependencies)
+    fi
+  fi
+endlet
+
+process CloseModules(CloseModules: list) is
+let
+  ModuleId: module-id,
+  Modules: list
+in
+  Modules := quote(CloseModules)
+  .
+  if not-equal(Modules, []) then
+    ModuleId := first(Modules)
+    . MM-DeleteModule(ModuleId)
+    . Modules := next(Modules)
+  fi
+  *
+  if equal(Modules, []) then
+    tau
+  fi
+endlet
+
+process CancelCreateNewModule(Pid: int, Error: str, Args: list) is
+  snd-note(ui-status(errorf(Error, Args)))
+  . snd-msg(cancel-content-handler(Pid))
+
+process CreateNewModule(Pid: int, Directory: str, Filename: str) is
+let
+  BaseDir: str,
+  Contents: list,
+  Error: term,
+  Extension: str,
+  ModuleId: module-id,
+  Modulename: str,
+  Path: str,
+  SearchPaths: list
+in
+  snd-msg(cm-get-module-paths)
+  . rec-msg(cm-module-paths(SearchPaths?))
+  . snd-msg(sm-get-new-module-name(SearchPaths, Directory, Filename))
+  .
+  (
+    rec-msg(sm-new-module-name(BaseDir?, Modulename?))
+    . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", Modulename, ModuleId?)
+    .
+    if equal(ModuleId, UNDEFINED) then
+      BuildPath(BaseDir, Modulename, SDF_EXTENSION, Path?)
+      . snd-msg(io-exists-file(Path))
+      .
+      (
+        rec-msg(io-file-exists)
+        . CancelCreateNewModule(Pid, "File %s already exists", [Path])
+      +
+        rec-msg(io-file-not-exists)
+        . snd-msg(get-module-contents(Pid, Modulename))
+        . rec-msg(module-contents(Pid, Contents?))
+        . snd-msg(io-write-text-list(Path, Contents))
+        .
+        (
+          rec-msg(io-file-written)
+          . OpenModule(Modulename, ModuleId?)
+        +
+          rec-msg(io-file-not-written(Error?))
+          . snd-note(ui-status(errorf("%s: %s", [Path, Error])))
+        )
+      )
+    else
+      CancelCreateNewModule(Pid, "Module %s already exists", [Modulename])
+    fi
+  +
+    rec-msg(sm-new-module-name-inconsistent)
+    . CancelCreateNewModule(Pid,
+                         "Module %s in %s is inconsistent with module paths",
+                         [Filename, Path])
+  )
+endlet
+
+process CopySdfModule(SrcModulename: str, Directory: str, Filename: str) is
+let
+  Id: int,
+  Pid: int
+in
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Copying %s to %s", [SrcModulename, Filename])))
+  . create(CopySdfContentHandler(SrcModulename), Pid?)
+  . CreateNewModule(Pid, Directory, Filename)
+  . snd-note(ui-status(endstat(Id)))
+endlet
+
+process CopySdfContentHandler(SrcModulename: str) is
+let
+  Contents: str,
+  DestModulename: str,
+  Pid: int,
+  Syntax: term
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(get-module-contents(Pid, DestModulename?))
+    . snd-msg(ts-get-term-value("sdf-tree", SrcModulename))
+    . rec-msg(ts-value("sdf-tree", SrcModulename, Syntax?))
+    . snd-msg(sm-rename-modulename-in-module(Syntax, DestModulename))
+    . rec-msg(sm-modulename-renamed-in-module(Syntax?))
+    . snd-msg(unparse(Syntax))
+    . rec-msg(unparsed-text(Contents?))
+    . snd-msg(module-contents(Pid, [Contents]))
+  +
+    rec-msg(cancel-content-handler(Pid))
+  )
+endlet
+
+process SaveSdfModules(Modules: list, Status: term?) is
+let
+  Runner: list,
+  Module: str
+in
+  Runner := Modules
+  .
+  if not-equal(Runner, []) then
+    Module := first(Runner)
+    . snd-msg(save-module(Module, sdf))
+    . rec-msg(saved-module(Module, Status?))
+    . Runner := next(Runner)
+  fi
+  *
+  if equal(Runner, []) then
+    tau
+  fi
+endlet
+
+/* TODO: The following should be DEAD */
+process RenameImports(OldImport: str, NewImport: str) is
+let
+  ImportRelations: list,
+  ModuleId: str,
+  Depending: list
+in
+  snd-msg(ts-get-key-value-pairs("import-relations"))
+  . rec-msg(ts-pairs("import-relations", ImportRelations?))
+  . snd-msg(sm-get-depending-module-names(ImportRelations, OldImport))
+  . rec-msg(sm-depending-module-names(Depending?))
+  .
+  if not-equal(Depending, []) then
+    ModuleId := first(Depending)
+    . RenameImport(ModuleId, OldImport, NewImport)
+    . Depending := next(Depending)
+  fi
+  *
+  if equal(Depending, []) then
+    tau
+  fi
+endlet
+
+process RenameImport(Modulename: str, OldImport: str, NewImport: str) is
+let
+  Status: term,
+  Tree: term
+in
+  snd-msg(ts-get-term-value("sdf-tree", Modulename))
+  . rec-msg(ts-value("sdf-tree", Modulename, Tree?))
+  . snd-msg(sm-remove-import-from-module(Tree, OldImport))
+  . rec-msg(sm-import-removed-from-module(Tree?))
+  . snd-msg(sm-add-import-to-module(Tree, NewImport))
+  . rec-msg(sm-import-added-to-module(Tree?))
+  /* . MDB-StoreModuleTree(Modulename, Tree) dead */
+  . snd-msg(save-module(Modulename, sdf))
+  . rec-msg(saved-module(Modulename, Status?))
+endlet
+
+/* end of dead code */
+
+process IsLibraryModule(ModuleId: module-id, LibraryModule: bool?) is
+let
+  Directories: list,
+  Extension: str,
+  Filename: str,
+  Modulename: str,
+  Path: str,
+  Prefix: str
+in
+  snd-msg(cm-get-library-paths)
+  . rec-msg(cm-library-paths(Directories?))
+  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+  . snd-msg(io-get-relative-filename(Directories, Path, ".sdf"))
+  . rec-msg(io-filename(Directories, Path, ".sdf", Prefix?, Filename?))
+  .
+  if equal(Filename, "") then
+    LibraryModule := false
+  else
+    LibraryModule := true
+  fi
+endlet
+
+process CreateModule(Modulename: str, ModuleId: module-id?) is
+  MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", Modulename, ModuleId?)
+  .
+  if equal(ModuleId, UNDEFINED) then
+    MM-CreateModule(ModuleId?)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", unknown)
+  else
+    tau
+  fi
+
+process OpenModule(Modulename: str, ModuleId: module-id?) is
+let
+  Editable: bool,
+  LibraryModule: bool,
+  Path: str
+in
+  CreateModule(Modulename, ModuleId?)
+  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+  .
+  if equal(Path, EMPTY_PATH) then
+    LocateFile(Modulename, SDF_EXTENSION, Path?)
+    .
+    if equal(Path, EMPTY_PATH) then
+      printf("warning: Unable to locate %s\n", Modulename)
+      . BuildPath(".", Modulename, SDF_EXTENSION, Path?)
+      . SetModulePath(ModuleId, SDF_NAMESPACE, Path)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", true)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", unavailable)
+    else
+      SetModulePath(ModuleId, SDF_NAMESPACE, Path)
+      . IsLibraryModule(ModuleId, LibraryModule?)
+      . Editable := not(LibraryModule)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
+    fi
+  else
+    tau
+  fi
+endlet
+
+toolbus(InitCache(SDF_TREE_CACHE))
+toolbus(ClearCacheHandler(SDF_TREE_CACHE, SDF_NAMESPACE, "status", <term>, edited))
+
+process GetSDFParsetree(ModuleId: module-id, Result: term?) is
+let
+  ParseTable: term,
+  Path: str,
+  Pid: int,
+  Text: str,
+  Type: term,
+  Tree: term
+in
+  snd-msg(tm-request-transaction(sdf-parsing))
+  . GetCachedValue(SDF_TREE_CACHE, ModuleId, Tree?)
+  .
+  if equal(Tree, UNDEFINED) then
+    Type := sdf
+    . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . ReadText(Path, Text?)
+    .
+    if not-equal(Text, "") then
+      GetParseTable(ModuleId, Type, ParseTable?)
+      .
+      if not-equal(ParseTable, UNDEFINED) then
+        create(ParseTreeHandler(ModuleId, Path), Pid?)
+        . ParseText(Pid, Text, ParseTable, SDF_TOPSORT, off)
+        .
+        (
+          rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
+          . AnnotateTree(Tree, Path, Result?)
+          . PutCachedValue(SDF_TREE_CACHE, ModuleId, Result)
+        +
+          rec-msg(parse-handler-done(Pid))
+          . Result := UNDEFINED
+        )
+      else
+        Result := UNDEFINED
+      fi
+    else
+      Result := UNDEFINED
+    fi
+  else
+    Result := Tree
+  fi
+  . snd-msg(tm-end-transaction(sdf-parsing))
+endlet
+
+process SDFIdentifyModule(ModuleId: module-id, ResultStatus: term?) is
+let
+  Tree: term,
+  Path: str,
+  Directory: str,
+  Modulename: str,
+  File: str
+in
+  GetSDFParsetree(ModuleId, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . snd-msg(sm-get-module-id(Tree))
+    . rec-msg(sm-module-id(Modulename?))
+    . snd-msg(io-get-path-directory(Path))
+    . rec-msg(io-directory(Path, Directory?))
+    . snd-msg(sm-get-module-path(Directory, Modulename))
+    . rec-msg(sm-module-path(Directory?))
+    . BuildPath(Directory, Modulename, SDF_EXTENSION, File?)
+    .
+    if equal(File, Path) then
+      MM-SetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename)
+      . ResultStatus := identified
+    else
+      printf("error: Module %s should be in a file named %s\n", Modulename, File)
+      . ResultStatus := error
+    fi
+  else
+    tau
+  fi
+endlet
+
+process GetImportsForRenaming(ModuleId: module-id, ModuleIds: list, Imports: term?) is
+let
+  Modulename: str,
+  Modules: list
+in
+  GetModules(ModuleIds, Modules?)
+  .
+  if equal(Modules, []) then
+    Imports := []
+  else
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . snd-msg(sm-get-all-needed-imports(Modules, Modulename))
+    . rec-msg(sm-all-needed-imports(Imports?))
+  fi
+endlet
+
+process SDFExtraction(ModuleId: module-id) is
+let
+  Modulename: str,
+  RStore: rstore,
+  Store: term,
+  Syntax: term
+in
+  GetSyntaxDefinition(ModuleId, Syntax?)
+  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . snd-msg(es-extract-sdf(Syntax))
+  . rec-msg(es-sdf-store(Store?))
+  . snd-msg(rs-lower-rstore(Store))
+  . rec-msg(rs-lowered-rstore(RStore?))
+  . snd-msg(rc-load-rstore(Modulename, RStore))
+endlet
+
+#endif /* __SDF_UTILS__ */

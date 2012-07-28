@@ -1,0 +1,233 @@
+$Id$
+
+Mon Nov 10 11:43:18 CET 2008 <jurgenv@cwi.nl>
+ * tbscripts/Makefile.am: renamed Sdf2.baf to Sdf2.saf.
+
+Wed Oct  3 15:34:04 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/start-pt-dump.tb.src: Fix number of arguments in call to 
+   DumpParseTable process
+
+Thu Sep 13 10:37:29 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/standard.sdf.actions.src: imports ./meta.actions now, such
+   that pt-dump can find modules from user defined search paths
+
+Thu Jun 14 16:29:00 CEST 2007 <{kooiker,lankamp}@cwi.nl>
+ * tbscripts/sdf-actions.tb: Add ugly hack to fix OpenModuleAction scenario
+   not receiving notes for already opened modules.
+
+Wed Jun  6 14:42:46 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/term-{actions,utils}.tb:
+   - Remove dump parsetree action
+ * tbscripts/term-editor-{actions,utils}.tb:
+   - Add dump parsetree action
+   - Add dump focus action
+
+Wed Jun  6 11:59:10 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-editor-listeners.tb: 
+   - Strong typing of Area
+   - set selection in stead of focus shows errors correctly
+   - Add GoToEditorArea to let the cursor jump to the selection
+
+Thu May 31 15:55:36 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/term-{editor-,}actions.tb: added action for exporting the term
+   parsetree
+
+Wed May  9 08:43:08 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/sdf-editor-listeners.tb: changed to new editing interface.
+   and removed some dead code.
+
+Mon Apr 16 15:58:11 CEST 2007 <{kooiker,lankamp}@cwi.nl>
+ * tbscripts/{start-def-dump,sdf-listerers,sdf-gui-listeners}.tb: removed gui
+   specific includes from def-dump scenarion, added navigator gui to
+   sdf-gui-listeners
+
+Fri Mar 30 12:01:06 CEST 2007 <economop@cwi.nl>
+ * tbscripts/sdf-listeners.tb: added missing include needed for DeleteSessions 
+   process.
+
+Tue Mar 27 16:04:05 CEST 2007 <jurgenv@cwi.nl>
+ * sdf-meta.pc.in: added dependency on sdf-metrics
+ * tbscripts/*: added actions for triggering sdf metric computation on
+   any module.
+
+Fri Mar 16 15:31:22 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Add SDFCloseEditors process that takes care of closing all related editors
+
+Mon Mar  5 16:32:07 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-{actions,utils},standard.sdf.actions.src:
+   - Added Close others action
+
+Mon Feb 26 20:40:48 CET 2007 <jurgenv@cwi.nl>
+ * tbscripts/*.tb: simplified error messages using the new console grabber.
+   Changed to printf("error: ...\n"), and printf("warning: ...\n") 
+   coding convention.
+
+Thu Feb 15 09:47:04 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/{sdf,term}-editor-utils.tb:
+   - Remove summaries after editor is changed (closes #708).
+
+Fri Feb  9 11:46:24 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-meta.tb:
+   - Start SynchronizeModuleSelection process from sdf-meta. 
+
+Thu Feb  8 15:28:39 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/{term,sdf}-utils.tb:
+   - Get{Term,SDF}Parsetree calls ReadText instead of ReadFile, so it does 
+     not read the text from file explicitly.
+ * tbscripts/{term,sdf}-editor-utils.tb:
+   - Update text repository after saving
+
+Mon Jan 29 10:58:17 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Add listener for setting tooltips
+
+Fri Jan 26 13:22:49 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * tbscripts/sdf-module-utils.tb: added a generic process to compute
+   a module id from another by the feature name convention.
+
+Thu Jan 25 16:01:16 CET 2007 <kooiker@cwi.nl>
+ * test:
+   - Added tests for pt-dump and def-dump scenario's
+
+Thu Jan 25 10:33:52 CET 2007 <kooiker@cwi.nl>
+ * src/def-dump.sh.src:
+   - Fixed --viewer option
+ * tbscripts/sdf{-gui}-listeners.tb:
+   - Moved gui listeners in separate script
+
+Thu Jan 18 13:59:52 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Only delete dependencies when there were dependencies, to avoid
+   superfluous dependency-changed events
+
+Tue Jan  9 12:54:18 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Separated navigator and import-graph update processes by adding an
+     update process for the navigator
+
+Mon Jan  8 13:40:08 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Split ImportGraphPainter into ImportGraphPainter and ImportGraphUpdater
+   - ImportGraphPainter redraws tree on create, delete and dependency change
+   of modules
+   - ImportGraphUpdater updates existing tree on attribute change
+
+Fri Jan  5 14:38:58 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * tbscripts/*.tb:
+   - OpenModule and GraphPainter are in lock step
+   - Reimplemented idle state
+   - Navigator doesn't flicker anymore when changing graph attributes (Closes
+   #115)
+
+Fri Oct 20 13:28:35 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Changed to new attribute update rules
+
+Wed Oct  4 15:42:29 CEST 2006 <jurgenv@cwi.nl>
+ * sdf-meta.pc.in: added dependency on asf-library, for now,
+   to make sure that pt-dump will be able to find all library 
+   modules. TODO: figure out a better way to configure pt-dump
+   with newly installed libraries.
+
+Mon Sep 25 10:23:55 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * tbscripts/term-{editor-utils,utils}.tb:
+   - Clear cache when term has been edited (Closes #555)
+   - Fix caching issue where only one term could be edited over a module
+   - Call Ambiguity Handler after parsing
+
+Fri Sep 22 15:31:28 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/term-utils.tb:
+   - Initialize and add ClearCacheHandler for terms
+   - Use cache when getting parsetrees for terms
+ * tbscripts/term-editor-utils.tb:
+   - After reducing cache result in term cache (closes #556 and #625)
+
+Fri Sep 22 13:47:14 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/standard.sdf.actions.src:
+   - Add |View| -> |Full Tree w/o Layout| menu item showing a full tree
+   without all the layout paths (closes #634)
+
+Mon Aug 14 14:29:04 CEST 2006 <jurgenv@cwi.nl>
+ * sdf-meta.pc.in: changed dependency on pgen to dependency
+   on sdf package.
+ * sdf-meta.pc.in: added dependency to pgen because location
+   of Sdf2.baf is needed.
+
+
+Fri Jul 14 15:58:11 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Replaced all propagation and contra propagation rules with 2 modal logic
+     based rules
+
+Fri Jun 23 16:09:43 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/idle-state.tb:
+   - Don't send idle when the system is already idle (when the worklist is
+   already empty you don't have to check if it's empty and send the idle
+   message again).
+
+Tue Jun 20 13:38:33 CEST 2006 <jurgenv@cwi.nl>
+ * tbscripts/sdf-module-utils.tb: adapted parse tree viewing
+   functionality to new interface. Now we can watch several
+   parse trees next to eachother.
+
+Tue Apr 25 00:26:23 CEST 2006 <jurgenv@cwi.nl>
+ * tbscripts/sdf-progress-listeners.tb: added functionality to remove
+   a closed module from the progress display.
+
+Thu Apr 20 12:00:10 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/Makefile.am:
+   - Register plugin
+
+Wed Apr 19 16:22:51 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/Makefile.am:
+   - install standard.sdf.actions in ${HOME}/.metaenv
+ * tbscripts/start-*.tb.src:
+   - Include generic initialize-plugins.tb
+
+Mon Apr  3 10:45:10 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-utils.tb:
+   - Add jobcontrol messages when starting and ending a job
+
+Tue Mar  7 13:30:09 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/{standard.sdf.actions.src,sdf-actions.tb}:
+   - Add |Change Workspace...| menu to |File| menu that allows a change of the
+     workspace without exiting the environment (closes #163)
+ * tbscripts/start-def-dump.tb.src:
+   - Added definition dumper (closes #428)
+
+Tue Mar  7 11:14:33 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-actions.tb:
+   - Select module after opening (closes #153)
+
+Mon Feb 13 09:59:03 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-editor-listeners.tb:
+   - Listener for starting SDF editor
+
+Thu Feb  9 11:48:05 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-utils.tb:
+   - Use generic ParseTreeHandler
+ * tbscripts/{term-utils,sdf-utils}.tb:
+   - Simplify GetXXXParsetree process
+ * tbscripts/sdf-listeners.tb:
+   - Use brighter color for child-errors
+
+Wed Feb  8 16:17:42 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/start-pt-dump.tb.src,src/pt-dump.sh.src:
+   - Add pt-dump scenario
+
+Fri Feb  3 13:11:41 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-meta.tb,start-meta-studio.tb.src:
+   - Only start sdf-initialize when stand alone SDF environment is used
+
+Wed Feb  1 08:34:13 CET 2006 <kooiker@cwi.nl>
+ * src,tbscripts:
+   - Standalone SDF Meta Environment
+ * tbscripts:
+   - Added term scripts
+   - Renamed module-actions.tb to sdf-module-actions.tb
+   - Fixed Makefile.am
+
+Wed Jan 18 15:31:57 CET 2006 <kooiker@cwi.nl>
+ * Initial version
+

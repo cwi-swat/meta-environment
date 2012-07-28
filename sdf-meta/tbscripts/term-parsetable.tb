@@ -1,0 +1,17 @@
+#ifndef __TERM_PARSETABLE__
+#define __TERM_PARSETABLE__
+
+#include <parsetable-utils.tb>
+#include <removevarsyntax.idef>
+#include <cache-utils.tb>
+
+process RemoveVarSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
+  snd-msg(remove-var-syntax(Modulename, Syntax)) 
+  . rec-msg(changed-syntax(NewSyntax?)) 
+
+process ClearTermParseTable(ModuleId : term) is
+  ClearCachedValue("term-parsetable", ModuleId)
+  
+toolbus(BuildParsetable("term-parsetable", SDF_NAMESPACE, trm, "RemoveVarSyntax"))
+
+#endif /* __TERM_PARSETABLE__ */

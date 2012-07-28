@@ -1,0 +1,35 @@
+#ifndef __SDF_EDITOR_LISTENERS__
+#define __SDF_EDITOR_LISTENERS__
+
+#include <sdf-namespace.h>
+
+process StartSDFEditor(Path: str, Area: area) is
+let
+  ModuleId: module-id,
+  Pid: int,
+  Sid: session-id
+in
+  MM-GetModuleIdByAttribute(SDF_NAMESPACE, "path", path(Path), ModuleId?)
+  . create(EditSyntax(ModuleId), Pid?)
+  . TODO("And what if it does not start? See editing Terms")
+  . rec-msg(syntax-editor-started(ModuleId, Sid?))
+  . snd-msg(te-set-selection(Sid, Area))
+  . GoToEditorArea(Sid, Area)
+endlet
+
+process SDFCloseEditors is
+let
+  ModuleId: module-id
+in
+  subscribe(mm-module-deleted(<module-id>))
+  .
+  (
+    rec-note(mm-module-deleted(ModuleId?))
+    . DeleteSessions(ModuleId)
+  )
+  * delta
+endlet
+
+toolbus(SDFCloseEditors)
+
+#endif /* __SDF_EDITOR_LISTENERS__ */

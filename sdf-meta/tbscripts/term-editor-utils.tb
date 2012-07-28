@@ -1,0 +1,178 @@
+#ifndef __TERM_EDITOR_UTILS__
+#define __TERM_EDITOR_UTILS__
+
+#include <editing.tb>
+#include <term-utils.tb>
+#include <sdf-module-utils.tb>
+
+process EditTerm(Path: str, ModuleId: module-id, GetTree: bool) is
+let
+  Event: attribute-changed-event,
+  AlreadyExists: bool,
+  Available: bool,
+  EditorType: term,
+  Error: str,
+  Modulename: str,
+  Sid: session-id,
+  Tree: term,
+  Valid: bool,
+  Languagename: str,
+  Menuname: str
+in
+  CheckSanity(Path, ModuleId, Valid?)
+  .
+  if equal(Valid, true) then
+    Edit(Path, Sid?)
+    .
+    if not-equal(Sid, UNDEFINED) then
+      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+      . ComputeCanonicalLanguagename(Modulename, Languagename?)
+      . EditorType := quote(term-editor(Languagename))
+      . EditText(Sid, EditorType, AlreadyExists?)
+      . snd-msg(term-editor-started(Path, ModuleId, Sid))
+      .
+      if equal(AlreadyExists, false) then
+        snd-msg(te-set-info(Sid, Modulename))
+        . snd-msg(em-bind-session(Sid, ModuleId))
+        . rec-msg(em-session-bound(Sid, ModuleId))
+        . 
+        if equal(GetTree, true) then
+          GetTermParsetree(ModuleId, Path, Tree?)
+          . SE-UpdateTree(Sid, Tree)
+        else
+          tau
+        fi
+        . MM-Subscribe-Attribute-Changed(ModuleId, SDF_NAMESPACE,"status",<term>,complete)
+        .
+        (
+          MenuSelected(Sid, EditorType)
+        +
+          MouseClicked(Sid)
+        +
+          rec-msg(te-contents-changed(Sid))
+          /*. TODO("Add status of term to module manager, so it can be used to clear the cached term parsetree.")*/
+          . snd-note(term-modified(Path))
+          . RemoveSummaryFor(Path)
+        +
+          rec-msg(te-contents-saved(Sid))
+          . UpdateTextRepository(Sid)
+          . UpdateTermStructure(Sid)
+        +
+          rec-note(mm-attribute-changed(Event?))
+          /*. printf("SDF changed so must reparse editor\n")*/
+          . ClearTermParsetreeCache(Path)
+          . UpdateTermStructure(Sid)
+        )
+        *
+        EditorDisconnected(Sid)
+        . DeleteSession(Sid)
+        . RemoveSummaryFor(Path)
+      else
+        tau
+      fi
+    else
+      Error := "Term is too big."
+      . snd-msg(term-editor-not-started(Path, ModuleId, Error))
+    fi
+  else
+    Error := "Term is already being edited over a different module."
+    . snd-msg(term-editor-not-started(Path, ModuleId, Error))
+  fi
+endlet
+
+process UpdateTermStructure(Sid: session-id) is
+let
+  ModuleId: module-id,
+  Slices: list,
+  Tree: term,
+  Path: str
+in
+  GetModuleId(Sid, ModuleId?)
+  . GetPath(Sid, Path?)
+  . DeleteStructureEditor(Sid)
+  . GetTermParsetree(ModuleId, Path, Tree?) 
+  .
+  if not-equal(Tree, UNDEFINED) then
+    SE-UpdateTree(Sid, Tree)
+  else
+    tau
+  fi
+endlet
+
+process ActivateEditorWithTree(Tree: term, ModuleId: module-id, Filename: str) is
+let
+  Error: term,
+  Pid: int,
+  Sid: session-id,
+  Text: str,
+  ErrorMessage: str
+in
+  if not-equal(Tree, UNDEFINED) then
+    snd-msg(unparse(Tree))
+    . rec-msg(unparsed-text(Text?))
+    . snd-msg(io-write-text-list(Filename, [Text]))
+    .
+    (
+      rec-msg(io-file-written)
+      . create(EditTerm(Filename, ModuleId, false), Pid?)
+      .
+      (
+        rec-msg(term-editor-started(Filename, ModuleId, Sid?))
+        . SE-UpdateTree(Sid, Tree)
+	. PutCachedValue(TERM_TREE_CACHE, Filename, Tree)
+      +
+        rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
+        . printf("error: %s\n", ErrorMessage)
+      )
+    +
+      rec-msg(io-file-not-written(Error?))
+      . printf("error: %s not written, %t\n", Filename, Error)
+    )
+  fi
+endlet
+
+process DumpTermParsetree(ModuleId: module-id, Path: str, Filename: str) is
+let
+  Error: term,
+  Parsetree: term
+in
+  AddJob(Filename)
+  . GetTermParsetree(ModuleId, Path, Parsetree?)
+  . 
+  if not-equal(Parsetree, UNDEFINED) then
+    snd-msg(io-unpack-and-write-term-in-baf(Filename, Parsetree))
+    .
+    (
+      rec-msg(io-file-written)
+    +
+      rec-msg(io-file-not-written(Error?))
+    )
+  else
+    tau
+  fi
+  . JobDone(Filename)
+endlet
+
+process DumpTermFocusParsetree(EditorId: session-id, Filename: str) is
+let
+  Error: term,
+  Parsetree: term
+in
+  AddJob(Filename)
+  . GetFocus(EditorId, Parsetree?)
+  . 
+  if not-equal(Parsetree, UNDEFINED) then
+    snd-msg(io-unpack-and-write-term-in-baf(Filename, Parsetree))
+    .
+    (
+      rec-msg(io-file-written)
+    +
+      rec-msg(io-file-not-written(Error?))
+    )
+  else
+    tau
+  fi
+  . JobDone(Filename)
+endlet
+
+#endif /* __TERM_EDITOR_UTILS__ */

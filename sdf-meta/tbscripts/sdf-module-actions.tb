@@ -1,0 +1,73 @@
+#ifndef __SDF_MODULE_ACTIONS__
+#define __SDF_MODULE_ACTIONS__
+
+#include <sdf-namespace.h>
+#include <configuration-manager.idef>
+#include <graph-painter.idef> 
+
+process SelectModule(ModuleId: module-id) is
+  snd-msg(nav-select-module(ModuleId))
+  . snd-msg(gp-select-node("import-graph", SDF_NAMESPACE, ModuleId))
+
+process HandleModuleEvent(Type: term, Event: term, ModuleId: module-id) is
+let
+  Action: str,
+  Modulename: str
+in
+  snd-msg(cm-get-action(Type, Event))
+  . rec-msg(cm-action(Action?))
+  . Action(ModuleId)
+endlet
+
+process GetModulePopupEvents(Modulename: str, PopupMenu: list?) is
+let
+  Events: list 
+in
+  snd-msg(cm-get-events(module-popup(Modulename)))
+  . rec-msg(cm-events(PopupMenu?))
+endlet
+
+process HandleModulePopup is
+let
+  GraphId: str,
+  GraphType: str,
+  ModuleId: module-id,
+  Modulename: str,
+  Menu: term,
+  PopupMenu: list,
+  Type: term
+in
+  (
+    NAV-RequestPopup(ModuleId?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . GetModulePopupEvents(Modulename, PopupMenu?)
+    . NAV-ShowPopup(ModuleId, PopupMenu)
+  +
+    NAV-PopupEvent(ModuleId?, Menu?)
+    . HandleModuleEvent(module-popup, Menu, ModuleId)
+  +
+    GP-RequestPopup(GraphType?, GraphId?, ModuleId?)
+    .
+    if equal(GraphType, "import-graph") then
+      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+      . GetModulePopupEvents(Modulename, PopupMenu?)
+      . GP-ShowPopup("import-graph", SDF_NAMESPACE, ModuleId, PopupMenu)
+    else
+      tau
+    fi
+  +
+    GP-PopupEvent(GraphType?, GraphId?, ModuleId?, Menu?)
+    .
+    if equal(GraphType, "import-graph") then
+      HandleModuleEvent(module-popup, Menu, ModuleId)
+    else
+      tau
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(HandleModulePopup)
+
+#endif /* __SDF_MODULE_ACTIONS__ */

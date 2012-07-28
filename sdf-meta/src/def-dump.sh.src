@@ -1,0 +1,74 @@
+#! /bin/sh
+
+MODULENAME=""
+OUTPUTFILE=""
+
+me=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+myarguments="hm:o:V"
+
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname [options]
+Options:
+    -V                   reveal program version (i.e. $myversion)
+    -m <modulename>      open module <modulename>
+    -o <outputfile>      output filename
+E_O_USAGE
+}
+
+Version() {
+    echo "$me v$myversion" >&2
+}
+
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage ; exit 0 ;;
+        -m)
+	    shift;
+            MODULENAME=$1 ;;
+        -o)
+	    shift;
+            OUTPUTFILE=$1 ;;
+        -V)
+            Version ; exit 0 ;;
+        --)
+           ;;
+    # Add additional command line options here...
+    *)
+            Files="$Files $1" ;;
+    esac
+    shift
+done
+
+if [ "a${MODULENAME}" == "a" ]; then
+  echo "Please provide a module name"
+  Usage
+  exit 1
+fi
+
+if [ "a${OUTPUTFILE}" == "a" ]; then
+  echo "Please provide an output file"
+  Usage
+  exit 1
+fi
+
+export CLASSPATH="__EXTERNAL_JARS__:$CLASSPATH"
+
+java toolbus.Main \
+  -DMODULENAME=${MODULENAME} \
+  -DOUTPUTFILE=${OUTPUTFILE} \
+  -S__PREFIX__/share/sdf-meta/start-def-dump.tb \
+  __TBSCRIPTS__ \
+  `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/sdf-meta/standard.sdf.actions` \
+  $*

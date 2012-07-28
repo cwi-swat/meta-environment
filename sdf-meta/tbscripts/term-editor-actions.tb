@@ -1,0 +1,75 @@
+#ifndef __TERM_EDITOR_ACTIONS__
+#define __TERM_EDITOR_ACTIONS__
+
+#include <module-manager.tb>
+#include <term-editor-utils.tb>
+#include <sdf-namespace.h>
+
+process EditorEditTermAction(EditorId : session-id) is
+let
+  ModuleId : module-id
+in
+  GetModuleId(EditorId, ModuleId?)
+  . EditTermAction(ModuleId)
+endlet
+
+process EditTermAction(ModuleId : module-id) is
+let
+  Cancel: bool,
+  ErrorMessage: str,
+  Filename: str,
+  Modulename: str,
+  Pid: int,
+  Sid: session-id
+in
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . PromptForFile("Edit Term", [], Modulename, Cancel?, Filename?)
+  .  
+  if equal(Cancel, true) then
+    tau
+  else
+    create(EditTerm(Filename, ModuleId, true), Pid?)
+    .
+    (
+      rec-msg(term-editor-started(Filename, ModuleId, Sid?))
+      . create(CleanupEditTerm(Sid), Pid?)
+    +
+      rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
+      . printf("error: %s\n", ErrorMessage)
+    )
+  fi
+endlet
+
+process DumpTermParsetreeAction(EditorId : session-id) is
+let
+  Cancel: bool,
+  Filename : str,
+  ModuleId : module-id,
+  Path : str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Filename?)
+  . PromptForFileWithExtension("Export Term Parsetree", [], ".pt", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpTermParsetree(ModuleId, Filename, Path)
+  fi
+endlet
+
+process DumpTermFocusAction(EditorId : session-id) is
+let
+  Cancel: bool,
+  Path: str
+in
+  PromptForFileWithExtension("Export Focus Parsetree", [], ".pt", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpTermFocusParsetree(EditorId, Path)
+  fi
+endlet
+
+#endif /* __TERM_EDITOR_ACTIONS__ */

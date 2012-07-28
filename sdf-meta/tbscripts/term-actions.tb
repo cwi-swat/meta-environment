@@ -1,0 +1,59 @@
+#ifndef __TERM_ACTIONS__
+#define __TERM_ACTIONS__
+
+#include <pretty-print-utils.tb>
+#include <term-utils.tb>
+#include <apply-function.idef>
+
+process EqualTrees(Tree1 : term, Tree2 : term, Result : term?) is
+let
+  Value : term
+in
+  TODO("term-actions.tb bevat niet-action processes").
+  snd-msg(equal-trees(Tree1, Tree2))
+  .  rec-msg(tree-is-equal(Value?))
+  . 
+  if equal(Value, quote(true)) then
+    Result := true
+  else
+    Result := false
+  fi
+endlet
+
+process ActionAddPosInfo(EditorId : session-id, Tree : term, ResultTree : term?) is
+let
+  Filename : str
+in
+  GetPath(EditorId, Filename?)
+  . AnnotateTree(Tree, Filename, ResultTree?)
+endlet
+
+process ApplyFunction(FuncName : str, SortName : str, Arguments : list, Tree : term?) is
+  snd-msg(apply-function(FuncName, SortName, Arguments))
+  . rec-msg(tree(Tree?))
+
+process AddBracketsAction(EditorId : session-id) is
+let
+  Tree : term,
+  RTree : term,
+  ModuleId: module-id,
+  Path: str,
+  Table: term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    AddTermBrackets(ModuleId, Tree, RTree?)
+    . 
+    if not-equal(RTree, UNDEFINED) then
+      ReplaceFocus(EditorId, RTree)
+    else 
+      tau
+    fi
+  else tau
+  fi
+endlet
+
+#endif /*__TERM_ACTIONS__*/

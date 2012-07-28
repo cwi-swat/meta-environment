@@ -1,0 +1,7 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
+Name: sdf-meta
+Version: 1.0.1
+Description:
+Requires: meta,pgen,sdf,sdf-library,asf-library,sdf-support,config-manager,console-grabber,sdf-metrics,toolbus-ng
+ToolBusFlags=-I${prefix}/share/sdf-meta

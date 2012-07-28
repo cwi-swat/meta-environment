@@ -1,0 +1,46 @@
+/*#define TODO(m) printf("%s:%d - TODO: %s\n", __FILE__, __LINE__, m)*/
+process TODO(Msg : str) is printf("TODO: %s\n", Msg)
+
+/* meta-kernel */
+#include <module-utils.tb>
+#include <error-utils.tb>
+#include <error-output.tb>
+#include <transaction-management.tb>
+#include <text-utils.tb>
+
+/* sdf-meta */
+#include <sdf-listeners.tb>
+#include <sdf-utils.tb>
+#include <sdf2-language.tb>
+#include <sdf-initialize.tb>
+#include <term-parsetable.tb>
+#include <sdf-transactions.tb>
+
+process StartDefinitionDumper is
+let
+  MenuEventList: list,
+  ModuleId: module-id,
+  Event: attribute-changed-event,
+  Value: term
+in
+  snd-msg(tm-request-transaction(module-manager))
+  . OpenModule(MODULENAME, ModuleId?)
+  . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,complete)
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,error)
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,unavailable)
+  . rec-note(mm-attribute-changed(Event?))
+  . snd-msg(tm-end-transaction(module-manager))
+  . ACE-GetNewValue(Event, Value?)
+  .
+  if or(equal(Value, error), equal(Value, unavailable)) then
+    printf("Error occurred loading %t\n", MODULENAME)
+  else
+    snd-msg(tm-request-transaction(syntax-definition))
+    . DumpSdfDefinition(ModuleId, OUTPUTFILE)
+    . snd-msg(tm-end-transaction(syntax-definition))
+  fi
+  . shutdown("")
+endlet
+
+toolbus(StartDefinitionDumper)
+

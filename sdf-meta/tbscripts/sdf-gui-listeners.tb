@@ -1,0 +1,96 @@
+#ifndef __SDF_GUI_LISTENERS__
+#define __SDF_GUI_LISTENERS__
+
+#include <navigator.tb>
+
+process ImportGraphPainter is
+let
+  AllNotes: term,
+  DependenciesEvent: dependencies-changed-event,
+  ImportGraph: term,
+  ModuleId: module-id
+in
+  MM-Subscribe-Dependencies-Changed(<module-id>)
+  . subscribe(mm-module-deleted(<module-id>))
+  . subscribe(mm-module-created(<module-id>))
+  .
+  (
+    (
+      rec-note(mm-dependencies-changed(DependenciesEvent?))
+    +
+      rec-note(mm-module-deleted(ModuleId?))
+    +
+      rec-note(mm-module-created(ModuleId?))
+    )
+    .
+    (
+      rec-note(mm-dependencies-changed(DependenciesEvent?))
+    +
+      rec-note(mm-module-deleted(ModuleId?))
+    +
+      rec-note(mm-module-created(ModuleId?))
+    )
+    *
+    no-note(AllNotes?)
+    . snd-msg(tm-request-transaction(module-manager))
+    . MM-GetModuleGraph(GRAPH_NAMESPACE, ImportGraph?)
+    . RenderGraph("import-graph", SDF_NAMESPACE, true, false, ImportGraph?)
+    . snd-msg(tm-end-transaction(module-manager))
+  )
+  *
+  delta
+endlet
+
+toolbus(ImportGraphPainter)
+
+process ImportGraphUpdater is
+let
+  Event: attribute-changed-event,
+  ModuleId: module-id,
+  Key: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<module-id>,GRAPH_NAMESPACE,<term>,<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetKey(Event, Key?)
+    . ACE-GetNewValue(Event, Value?)
+    . snd-msg(tm-request-transaction(module-manager))
+    . UpdateGraphAttribute("import-graph", SDF_NAMESPACE, ModuleId, Key, Value)
+    . snd-msg(tm-end-transaction(module-manager))
+  )
+  *
+  delta
+endlet
+
+toolbus(ImportGraphUpdater)
+
+process NavigatorUpdater is
+let
+  Event: attribute-changed-event,
+  HasAttribute: bool,
+  ModuleId: module-id,
+  File: file
+in
+  MM-Subscribe-Attribute-Changed(<module-id>,GRAPH_NAMESPACE,"file",<term>,<term>)
+  . subscribe(mm-module-deleted(<module-id>))
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, File?)
+    . File := first(args(File))
+    . NAV-UpdateModule(ModuleId, File)
+  +
+    rec-note(mm-module-deleted(ModuleId?))
+    . NAV-DeleteModule(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(NavigatorUpdater)
+
+#endif /*__SDF_GUI_LISTENERS__*/
