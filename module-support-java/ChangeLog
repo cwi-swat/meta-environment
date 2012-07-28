@@ -1,0 +1,21 @@
+Mon Apr 28 13:06:21 2008    <bruntink@cwi.nl>
+
+	* Removed module-support.pc.in in preparation of rename.
+
+Mon Apr 28 12:38:43 2008    <bruntink@cwi.nl>
+	
+	* Preparation for package rename to module-support-java.
+	  Package now only has Java configuration.
+
+Mon Jan  2 11:17:22 CET 2006 <kooiker@cwi.nl>
+ * lib/Makefile.am:
+   - add "if MAINTAINER_MODE" to api generation 
+
+Tue Sep  6 11:50:17 CEST 2005 <kooiker@cwi.nl>
+ * Regenerated library incorparting Modules.sdf changes
+
+Fri Aug 26 14:02:56 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * Regenerated library incorparting Modules.sdf changes
+
+Fri Aug 26 10:52:26 CEST 2005 <kooiker@cwi.nl>
+ * Initial version of module-support
