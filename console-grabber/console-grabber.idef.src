@@ -1,0 +1,20 @@
+/* $Id: editor-plugin.idef.src 21408 2007-02-20 08:29:01Z kooiker $ */
+
+tool console-grabber is { }
+
+process ConsoleGrabber is
+let
+  T : console-grabber,
+  Message: str
+in
+  rec-connect(T?)
+  .
+  (
+    rec-event(T, console-message(Message?))
+    . snd-note(cg-console-message(Message))
+    . snd-ack-event(T, console-message(Message))
+  )
+  * rec-disconnect(T)
+endlet
+
+toolbus(ConsoleGrabber)
