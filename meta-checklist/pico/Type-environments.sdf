@@ -1,0 +1,8 @@
+module Type-environments
+
+imports Check-types Pico-Identifiers containers/Table[PICO-ID TYPE]
+
+exports 
+  sorts TENV
+  aliases
+    Table[[PICO-ID,TYPE]] -> TENV

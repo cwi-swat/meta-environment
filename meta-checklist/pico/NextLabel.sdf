@@ -1,0 +1,11 @@
+module NextLabel
+
+imports AssemblyLanguage
+  
+exports
+  context-free syntax
+    "nextlabel" "(" Label ")" -> Label 
+
+hiddens
+  variables
+    "Char*"[0-9]* -> CHAR*

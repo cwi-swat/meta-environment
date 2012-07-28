@@ -1,0 +1,26 @@
+module AmbiguousBooleans
+
+exports
+  sorts BoolCon
+  context-free syntax
+    "true"  -> BoolCon {constructor}
+    "false" -> BoolCon {constructor}
+
+  sorts Boolean
+  context-free syntax
+    BoolCon -> Boolean
+
+    Boolean "|" Boolean 	-> Boolean 
+    Boolean "&" Boolean 	-> Boolean 
+    "not" "(" Boolean ")" 	-> Boolean
+    "(" Boolean ")"       	-> Boolean {bracket}
+
+ 
+
+hiddens
+  imports
+    asf/syntax/Comments
+  variables
+    "Bool"[0-9]* 	-> Boolean
+    "Bool-con"[0-9]* 	-> BoolCon
+
