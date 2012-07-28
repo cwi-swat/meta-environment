@@ -1,0 +1,14 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
+
+Name: dialog-gui
+Version: 1.1
+Description:
+Requires: aterm-java,config-support-java,meta-studio,toolbus-java-adapter
+JarFile=dialog-gui.jar
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.gui.plugin
+MainClass=nl.cwi.sen1.gui.plugin.Dialog
+TestClass=
+ToolBusFlags=-I${prefix}/share/dialog-gui
+

@@ -1,0 +1,28 @@
+Mon Apr 28 16:22:03 2008    <bruntink@cwi.nl>
+
+	* dialog-gui.pc.in: Changed dependency on module-support to module-support-java.
+
+Wed Jan 10 11:30:13 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * src/**/Dialog.java: fixed problem with growing number of file filters.
+ * src/**/Dialog.java: added automated completion with extensions if
+   the user omits a valid extension to a file in the FileDialog.
+
+Thu Sep 21 16:44:28 CEST 2006 <kooiker@cwi.nl>
+ * src/**/Dialog.java:
+   - Show empty filename field
+
+Wed Apr 26 10:03:32 CEST 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Show dialogs using Studio frame as parent (closes #590)
+
+Tue Mar  7 13:27:51 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java,dialog.idef.src:
+   - Add directory chooser
+
+Tue Feb 21 13:16:44 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use new configuration api
+
+Wed Jan 18 15:31:57 CET 2006 <kooiker@cwi.nl>
+ * Initial version
+
