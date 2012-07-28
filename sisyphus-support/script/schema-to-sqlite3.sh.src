@@ -1,0 +1,21 @@
+#! /bin/sh
+
+
+DATA_DIR=__DATA_DIR__
+
+POSTGRESQL=__POSTGRESQL_PREFIX__/bin/psql
+
+DB_HOST=__DATABASE_HOST__
+DB_PORT=__DATABASE_PORT__
+DB_USER=__DATABASE_USER__
+DB_NAME=__DATABASE_NAME__
+
+SCHEMA=../schemas/sisyphus.postgresql
+
+
+cat ${SCHEMA} | \
+    sed -e "s@serial primary key@integer primary key autoincrement@" \
+    -e "s@serial@integer autoincrement@" \
+    -e "s@default@null@" 
+
+#    -e "s@create table \([a-z_]*\) @create table if not exists \1 @" 

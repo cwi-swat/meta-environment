@@ -1,0 +1,17 @@
+#! /bin/sh
+
+IRB=__RUBY_PREFIX__/bin/irb
+
+DATA_DIR=__DATA_DIR__
+CLIENT=sisyphus/support/irb-sisyphus.rb
+
+GEM_DIRS=`ls -d ${DATA_DIR}/gems/*`
+
+INCLUDE_FLAGS=
+for dir in ${GEM_DIRS}; do
+    INCLUDE_FLAGS="${INCLUDE_FLAGS} -I ${dir}/lib";
+done
+
+${IRB} ${INCLUDE_FLAGS} -I ${DATA_DIR} -I ${DATA_DIR} -r ${CLIENT} $@
+
+

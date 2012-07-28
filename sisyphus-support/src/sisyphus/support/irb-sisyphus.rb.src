@@ -1,0 +1,15 @@
+
+require 'active_record'
+require 'sisyphus/support/models'
+
+$dbconf = {
+  'adapter' => 'postgresql',
+  'host' => '__DATABASE_HOST__',
+  'port' => '__DATABASE_PORT__',
+  'username' => '__DATABASE_USER__',
+  'database' => '__DATABASE_NAME__'
+}
+
+ActiveRecord::Base.establish_connection($dbconf)
+
+

@@ -1,0 +1,523 @@
+/* -*- sql -*- */
+
+create table repositories (
+	id serial primary key,
+	location text not null unique
+);
+
+
+insert into repositories values (default, 'svn+ssh://svn.cwi.nl');
+
+create table platforms (
+	id serial primary key,
+	kernel_name varchar(32),
+	kernel_release varchar(32),
+	hardware_platform varchar(32),
+	hardware_class varchar(32),
+	processor_type varchar(32),
+	unique (kernel_name, kernel_release, hardware_platform, hardware_class, processor_type)
+);
+
+create table components (
+	id serial primary key,
+	name text not null unique
+);
+
+
+insert into components values (default, 'asc-support');
+insert into components values (default, 'asf');
+insert into components values (default, 'asf-library');
+insert into components values (default, 'asfsdf-meta');
+insert into components values (default, 'asf-support');
+insert into components values (default, 'aterm');
+insert into components values (default, 'balanced-binary-aterms');
+insert into components values (default, 'config-manager');
+insert into components values (default, 'config-support');
+insert into components values (default, 'dialog-gui');
+insert into components values (default, 'editor-manager');
+insert into components values (default, 'editor-plugin');
+insert into components values (default, 'error-gui');
+insert into components values (default, 'graph-gui');
+insert into components values (default, 'graph-support');
+insert into components values (default, 'io-support');
+insert into components values (default, 'meta');
+insert into components values (default, 'meta-studio');
+insert into components values (default, 'module-details-gui');
+insert into components values (default, 'module-manager');
+insert into components values (default, 'module-support');
+insert into components values (default, 'navigator-gui');
+insert into components values (default, 'pandora');
+insert into components values (default, 'pgen');
+insert into components values (default, 'progress-gui');
+insert into components values (default, 'pt-support');
+insert into components values (default, 'relational-aterms');
+insert into components values (default, 'sdf-apigen');
+insert into components values (default, 'sdf-meta');
+insert into components values (default, 'sdf-support');
+insert into components values (default, 'sdf-library');
+insert into components values (default, 'sglr');
+insert into components values (default, 'structure-editor');
+insert into components values (default, 'term-store');
+insert into components values (default, 'tide');
+insert into components values (default, 'tide-support');
+insert into components values (default, 'toolbus');
+insert into components values (default, 'toolbus-java-adapter');
+insert into components values (default, 'toolbuslib');
+insert into components values (default, 'toolbusNG');
+insert into components values (default, 'meta-doc');
+insert into components values (default, 'sisyphus');
+insert into components values (default, 'error-support');
+insert into components values (default, 'aterm-java');
+insert into components values (default, 'JJTraveler');
+insert into components values (default, 'shared-objects');
+insert into components values (default, 'apigen');
+insert into components values (default, 'mod-toolbus');
+insert into components values (default, 'aterm-xml');
+insert into components values (default, 'JRelCal');
+insert into components values (default, 'meta-build-env');
+insert into components values (default, 'meta-autotools');
+
+
+create table designators (
+	id serial primary key,
+	repository_id integer references repositories,
+	path text not null,
+	unique (repository_id, path)
+);
+
+
+insert into designators values (default, 1, 'asc-support/trunk');
+insert into designators values (default, 1, 'asf/trunk');
+insert into designators values (default, 1, 'asf-library/trunk');
+insert into designators values (default, 1, 'asfsdf-meta/trunk');
+insert into designators values (default, 1, 'asf-support/trunk');
+insert into designators values (default, 1, 'aterm/trunk');
+insert into designators values (default, 1, 'balanced-binary-aterms/trunk');
+insert into designators values (default, 1, 'config-manager/trunk');
+insert into designators values (default, 1, 'config-support/trunk');
+insert into designators values (default, 1, 'dialog-gui/trunk');
+insert into designators values (default, 1, 'editor-manager/trunk');
+insert into designators values (default, 1, 'editor-plugin/trunk');
+insert into designators values (default, 1, 'error-gui/trunk');
+insert into designators values (default, 1, 'graph-gui/trunk');
+insert into designators values (default, 1, 'graph-support/trunk');
+insert into designators values (default, 1, 'io-support/trunk');
+insert into designators values (default, 1, 'meta/trunk');
+insert into designators values (default, 1, 'meta-studio/trunk');
+insert into designators values (default, 1, 'module-details-gui/trunk');
+insert into designators values (default, 1, 'module-manager/trunk');
+insert into designators values (default, 1, 'module-support/trunk');
+insert into designators values (default, 1, 'navigator-gui/trunk');
+insert into designators values (default, 1, 'pandora/trunk');
+insert into designators values (default, 1, 'pgen/trunk');
+insert into designators values (default, 1, 'progress-gui/trunk');
+insert into designators values (default, 1, 'pt-support/trunk');
+insert into designators values (default, 1, 'relational-aterms/trunk');
+insert into designators values (default, 1, 'sdf-apigen/trunk');
+insert into designators values (default, 1, 'sdf-meta/trunk');
+insert into designators values (default, 1, 'sdf-support/trunk');
+insert into designators values (default, 1, 'sdf-library/trunk');
+insert into designators values (default, 1, 'sglr/trunk');
+insert into designators values (default, 1, 'structure-editor/trunk');
+insert into designators values (default, 1, 'term-store/trunk');
+insert into designators values (default, 1, 'tide/trunk');
+insert into designators values (default, 1, 'tide-support/trunk');
+insert into designators values (default, 1, 'toolbus/trunk');
+insert into designators values (default, 1, 'toolbus-java-adapter/trunk');
+insert into designators values (default, 1, 'toolbuslib/trunk');
+insert into designators values (default, 1, 'toolbusNG/trunk');
+insert into designators values (default, 1, 'meta-doc/trunk');
+insert into designators values (default, 1, 'sisyphus/trunk');
+insert into designators values (default, 1, 'error-support/trunk');
+insert into designators values (default, 1, 'aterm-java/trunk');
+insert into designators values (default, 1, 'JJTraveler/trunk');
+insert into designators values (default, 1, 'shared-objects/trunk');
+insert into designators values (default, 1, 'apigen/trunk');
+insert into designators values (default, 1, 'mod-toolbus/trunk');
+insert into designators values (default, 1, 'aterm-xml/trunk');
+insert into designators values (default, 1, 'JRelCal/trunk');
+insert into designators values (default, 1, 'meta-build-env/trunk');
+insert into designators values (default, 1, 'meta-autotools/trunk');
+
+
+create table trees (
+	id serial primary key,
+	designator_id integer references designators,
+	revision integer,
+	changelog text,
+	unique (designator_id, revision)
+);
+
+
+create table profiles (
+	id serial primary key,
+	name varchar(32) not null,
+	version integer not null,
+	unique (name, version)
+);
+
+insert into profiles values (default, 'test', 1);
+
+create table projects (
+	id serial primary key,
+	name text not null,
+	version integer not null,
+	unique (name, version)
+);
+
+
+insert into projects values (default, 'default', 1);
+
+
+create table projects_components (
+	project_id integer references projects,
+	component_id integer references components,
+	unique (project_id, component_id)
+);
+
+/* The only root in the default project is asfsdf-meta */
+insert into projects_components values (1, 4);
+
+create table profiles_projects (
+	profile_id integer references profiles,
+	project_id integer references projects,
+	unique (profile_id, project_id)
+);
+
+/* The test profile only has the default project */
+insert into profiles_projects values (1, 1);
+
+create table sources (
+	id serial primary key,
+	component_id integer references components,
+	designator_id integer references designators,
+	project_id integer references projects,
+	unique (component_id, designator_id, project_id)
+);	
+
+
+/* In the default project every component maps to the trunk. */
+insert into sources values(default, 1, 1, 1);
+insert into sources values(default, 2, 2, 1);
+insert into sources values(default, 3, 3, 1);
+insert into sources values(default, 4, 4, 1);
+insert into sources values(default, 5, 5, 1);
+insert into sources values(default, 6, 6, 1);
+insert into sources values(default, 7, 7, 1);
+insert into sources values(default, 8, 8, 1);
+insert into sources values(default, 9, 9, 1);
+
+insert into sources values(default, 10, 10, 1);
+insert into sources values(default, 11, 11, 1);
+insert into sources values(default, 12, 12, 1);
+insert into sources values(default, 13, 13, 1);
+insert into sources values(default, 14, 14, 1);
+insert into sources values(default, 15, 15, 1);
+insert into sources values(default, 16, 16, 1);
+insert into sources values(default, 17, 17, 1);
+insert into sources values(default, 18, 18, 1);
+insert into sources values(default, 19, 19, 1);
+
+insert into sources values(default, 20, 20, 1);
+insert into sources values(default, 21, 21, 1);
+insert into sources values(default, 22, 22, 1);
+insert into sources values(default, 23, 23, 1);
+insert into sources values(default, 24, 24, 1);
+insert into sources values(default, 25, 25, 1);
+insert into sources values(default, 26, 26, 1);
+insert into sources values(default, 27, 27, 1);
+insert into sources values(default, 28, 28, 1);
+insert into sources values(default, 29, 29, 1);
+
+insert into sources values(default, 30, 30, 1);
+insert into sources values(default, 31, 31, 1);
+insert into sources values(default, 32, 32, 1);
+insert into sources values(default, 33, 33, 1);
+insert into sources values(default, 34, 34, 1);
+insert into sources values(default, 35, 35, 1);
+insert into sources values(default, 36, 36, 1);
+insert into sources values(default, 37, 37, 1);
+insert into sources values(default, 38, 38, 1);
+insert into sources values(default, 39, 39, 1);
+
+insert into sources values(default, 40, 40, 1);
+insert into sources values(default, 41, 41, 1);
+insert into sources values(default, 42, 42, 1);
+insert into sources values(default, 43, 43, 1);
+insert into sources values(default, 44, 44, 1);
+insert into sources values(default, 45, 45, 1);
+insert into sources values(default, 46, 46, 1);
+insert into sources values(default, 47, 47, 1);
+insert into sources values(default, 48, 48, 1);
+insert into sources values(default, 49, 49, 1);
+
+insert into sources values(default, 50, 50, 1);
+insert into sources values(default, 51, 51, 1);
+insert into sources values(default, 52, 52, 1);
+
+
+
+create table targets (
+	id serial primary key,
+	profile_id integer references profiles,
+	project_id integer references projects,
+	source_id integer references sources,
+	tree_id integer references trees,
+	unique (profile_id, project_id, source_id, tree_id)
+	
+);
+
+create table environments (
+	id serial primary key,
+	profile_id integer references profiles,
+	script text not null
+);	
+
+insert into environments values (default, 1, 'PATH=/ufs/sen1/software/installed/ruby-1.8.4/linux/i386/bin:/ufs/sen1/software/installed/doxygen-1.4.6/linux/i386/bin:/ufs/sen1/software/installed/gcc-3.4.4/linux/i386/bin:/ufs/sen1/software/installed/xfig-3.2.3d/linux/i386/bin:/ufs/sen1/software/installed/java/linux/i386/j2sdk1.5-LATEST/bin:/ufs/sen1/software/installed/graphviz-1.12/linux/i386/bin:/usr/bin:/bin\nexport PATH\nBUILDS_DOCUMENTATION=1\nexport BUILDS_DOCUMENTATION\nDOCUMENTATION_HOST=daybuild@apps.cwi.nl\nDOCUMENTATION_SITE=/ufs/daybuild/public_html\nDOCUMENTATION_BOOKS_SITE=/ufs/daybuild/public_html/daily-books');
+
+
+create table hosts (
+	id serial primary key,
+	platform_id integer references platforms,
+	name varchar(512) not null,
+	unique (name, platform_id)
+);
+
+
+create table sessions (
+       id serial primary key,
+       host_id integer references hosts,
+       previous_id integer references sessions,
+       time timestamp
+);
+
+create table changes (
+       id serial primary key,
+       session_id integer references sessions,
+       designator_id integer references designators,
+       path text,
+       unique (session_id, designator_id, path)
+);
+
+create table builds (
+	id serial primary key, 
+	target_id integer references targets,
+	session_id integer references sessions,
+	created_on timestamp,
+	success boolean,
+	unique (target_id, session_id)
+);
+
+create table dependencies (
+	build_id integer references builds,
+	dependency_id integer references builds,
+	unique (build_id, dependency_id)
+);
+
+
+
+create table releases (
+	id serial primary key,
+	build_id integer references builds,
+	created_on timestamp,
+	version text not null
+);
+
+	
+
+create table scripts (
+	id serial primary key,	
+	profile_id integer references profiles,
+	name text not null,
+	version integer not null,
+	unique (name, version)
+);
+
+insert into scripts values (default, 1, 'default', 1);
+
+create table actions (
+	id serial primary key,
+	position integer,
+	script_id integer references scripts,
+	name text,
+	template text,
+	version  integer not null,
+	unique (script_id, position, name, version)
+);
+
+
+insert into actions values(default, 1, 1, 'reconf', './reconf', 1);
+insert into actions values(default, 2, 1, 'configure', './configure --prefix=<%= prefix%> <%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%> --enable-maintainer-mode --with-cflags="-Wall -Werror -g -O2"', 1);
+insert into actions values(default, 3, 1, 'make', 'make', 1);
+insert into actions values(default, 4, 1, 'install', 'make install', 1);
+insert into actions values(default, 5, 1, 'check', 'make check', 1);
+insert into actions values(default, 6, 1, 'distcheck', 'make distcheck', 1);
+insert into actions values(default, 6, 1, 'doc', '   set -x
+   if [ $BUILDS_DOCUMENTATION ]
+   then
+     make doc || true
+     DOCDIR=doc/html
+     if [ -d $DOCDIR ]
+     then
+        if [ "<%= name%>" == "meta-doc" ]
+        then
+           DOCPATH="${DOCUMENTATION_SITE}/daily-books"
+        else
+           DOCPATH="${DOCUMENTATION_SITE}/daily-docs/<%= name%>"
+        fi
+        ssh $DOCUMENTATION_HOST rm -rf ${DOCPATH}
+        scp -r $DOCDIR $DOCUMENTATION_HOST:${DOCPATH}
+     fi
+   fi
+', 1);
+
+
+
+create table results (
+	id serial primary key,
+	build_id integer references builds,
+	action_id integer references actions,
+	script text,
+	stdout text,
+	stderr text,
+	success boolean,
+	unique (build_id, action_id)
+);
+
+
+create table status (
+	id serial primary key,
+	host_id integer references hosts,
+	build_id integer references builds,
+	result_id integer references results,
+	message text not null
+);
+
+
+create table variables (
+	id serial primary key,
+	name text not null unique
+);
+
+insert into variables values (default, 'requires');
+insert into variables values (default, 'assets');
+insert into variables values (default, 'version');
+insert into variables values (default, 'distribution');
+insert into variables values (default, 'emails');
+
+create table helpers (
+	id serial primary key,
+	name text not null unique
+);
+
+insert into helpers values (default, 'default');
+
+create table profiles_helpers (
+	profile_id integer references profiles,
+	helper_id integer references profiles,
+	unique (profile_id, helper_id)
+);
+
+
+/* The default profile has the default helper. */
+insert into profiles_helpers values (1, 1);
+
+create table functions (
+	id serial primary key,
+	position integer not null,
+	helper_id integer references helpers,
+	variable_id integer references variables,
+	template text not null,
+	unique (helper_id, variable_id)
+);
+
+
+insert into functions values (
+	default, 
+	0,  /* position */
+	1,
+	1,
+	'cat <%=name%>.pc.in | grep Requires | sed -e s/Requires: \\(.*\\)/\\1/'
+);
+
+insert into functions values (
+	default, 
+	1,  /* position */
+	1,
+	2,
+	'find <%=prefix%>'
+);
+
+insert into functions values (
+	default, 
+	2,  /* position */
+	1,
+	3,
+	'cat <%=name%>.pc.in | grep Version | sed -e s/Version: \\(.*\\)/\\1/'
+);
+
+
+insert into functions values (
+	default, 
+	3,  /* position */
+	1,
+	4,
+	'echo <%=name%>-<%=version%>.tar.gz'
+);
+
+insert into functions values (
+	default, 
+	4,  /* position */
+	1,
+	5,
+	'cat <%=name%>.pc.in | grep Maintainers | sed -e s/Maintainers=\\(.*\\)/\\1/'
+);
+
+
+create view successes 
+	(id, name, revision, version, host_id, profile_id,  build_id) as
+select 
+	builds.id,
+	components.name, 
+	trees.revision,
+	releases.version,
+	sessions.host_id,
+	targets.profile_id,
+	builds.id
+from
+	builds,
+	components,
+	trees,
+	releases,
+	targets,
+	sources,
+	sessions
+where
+	builds.success = true and
+	builds.target_id = targets.id and
+	builds.session_id = sessions.id and
+	targets.tree_id = trees.id and
+	targets.source_id = sources.id and
+	sources.component_id = components.id
+;
+
+
+
+create view latests (id, component_id, build_id) as
+select
+	sessions.host_id, components.id, max(builds.id)
+from 
+	sessions,
+	components,
+	builds,
+	targets,
+	sources
+where 
+	builds.target_id = targets.id and
+	builds.session_id = sessions.id and
+	targets.source_id = sources.id and
+	sources.component_id = components.id
+group by 
+	sessions.host_id,
+	components.id
+;

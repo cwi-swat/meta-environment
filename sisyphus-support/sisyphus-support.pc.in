@@ -1,0 +1,6 @@
+prefix=@prefix@
+Maintainers=storm@cwi.nl
+Name: sisyphus-support
+Version: 0.1
+Description: model objects for sisyphus
+Requires: 

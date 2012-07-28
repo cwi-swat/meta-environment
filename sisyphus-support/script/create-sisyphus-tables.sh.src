@@ -1,0 +1,26 @@
+#! /bin/sh
+
+
+DATA_DIR=__DATA_DIR__
+
+POSTGRESQL=__POSTGRESQL_PREFIX__/bin/psql
+
+DB_HOST=__DATABASE_HOST__
+DB_PORT=__DATABASE_PORT__
+DB_USER=__DATABASE_USER__
+DB_NAME=__DATABASE_NAME__
+
+SCHEMA=${DATA_DIR}/schemas/sisyphus.postgresql
+
+echo "This will create the sisyphus tables in database ${DB_NAME}!"
+echo "Press Control-C to quit or any other key to continue."
+read
+
+${POSTGRESQL} \
+    --output /dev/null \
+    --host ${DB_HOST} \
+    --port ${DB_PORT} \
+    --username ${DB_USER} \
+    --dbname ${DB_NAME} \
+    --file ${SCHEMA} 
+
