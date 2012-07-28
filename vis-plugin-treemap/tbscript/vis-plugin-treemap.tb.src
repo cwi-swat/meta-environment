@@ -1,0 +1,4 @@
+
+process StartVisTreeMapPlugins is
+  snd-msg(load-jar("file://__PKGDATA__/vis-plugin-treemap.jar", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
+
