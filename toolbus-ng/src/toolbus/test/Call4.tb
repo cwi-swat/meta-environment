@@ -1,0 +1,20 @@
+process CHK(N : int, Given : int, Required : int) is
+printf("CHK(%d,%d,%d)\n", N, Given, Required) .
+        if equal(Given, Required) then tau
+    	else
+	   printf("Test %d: %d given, but required %d\n", N, Given, Required) .
+	   shutdown("ERRORS IN MSG TEST")
+        fi
+        
+process P is
+let X : int, Y : int in
+
+	CHK(1, 10, 10) .
+	CHK(2, 20, 20) .
+	X := 30 .
+	CHK(3, X, 30) .
+	X := 40 . Y := 40 .
+	CHK(4, X,Y)
+
+endlet
+toolbus(P)

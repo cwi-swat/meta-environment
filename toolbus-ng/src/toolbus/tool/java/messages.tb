@@ -1,0 +1,32 @@
+process P1 is 		
+let Message : str, ExitMessage : term, Tidr : receive, Tids : send
+in
+	execute(receive, Tidr?) .
+	execute(send, Tids?) .
+	(
+		(
+			rec-event(Tids, available) .
+			snd-ack-event(Tids, available) .
+			snd-eval(Tids, getText) .
+			rec-value(Tids, getText(Message?)) .
+			snd-do(Tidr, set(Message))
+		)
+		+
+		(
+			rec-event(Tids, exit(ExitMessage?)) .
+			snd-ack-event(Tids, exit(ExitMessage)) .
+			shutdown("Shutdown by sending tool")
+	    )
+		+
+		(
+			rec-event(Tidr, exit(ExitMessage?)) .
+			snd-ack-event(Tidr, exit(ExitMessage)) .
+			shutdown("Shutdown by receiving tool")
+		)
+	) * delta
+endlet
+
+tool receive is { kind = "javaNG" class = "toolbus.tool.java.ReceiveTool"}
+tool send is { kind = "javaNG" class ="toolbus.tool.java.SendTool"}
+
+toolbus(P1)

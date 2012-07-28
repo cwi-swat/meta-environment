@@ -1,0 +1,22 @@
+process M is
+let
+  Imports: list
+in
+    Imports := [1] .
+    if not-equal(Imports, []) then 
+      /*printf("Between ifs\n") . */
+      if not-equal(Imports, []) then
+         Imports := next(Imports)
+      fi
+      *
+      if equal(Imports, []) then
+        printf("--- Imports empty (1)\n")
+      fi
+    else
+      printf("--- Imports empty (2)\n")
+    fi
+
+endlet
+
+toolbus(M)
+                                                            

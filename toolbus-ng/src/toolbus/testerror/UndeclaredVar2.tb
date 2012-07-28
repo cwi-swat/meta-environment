@@ -1,0 +1,5 @@
+process P is
+let N : int in
+    N := X
+endlet
+toolbus(P)

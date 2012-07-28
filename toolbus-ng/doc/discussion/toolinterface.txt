@@ -1,0 +1,142 @@
+The ToolBus/tool interface (uopdated 15/09/2002)
+================================================
+
+The global picture:
+
+							ToolBus
+	
+			|			|				|				|
+		JavaTool	RMIJavaTool		ClassicTBTool	SOAPTool	...
+		
+All these classes implement the interface ToolInstance (see below).
+
+In the case of the JavaTool the following applies (in the current, reflection-based, implementation):
+
+		JavaTool
+		
+			|
+		
+		ToolShield
+		
+			|
+		
+		ExampleTool (constructor has argument of type ToolBridge, used to pass calls from tool to ToolBus)
+
+The tool descriptor
+-------------------
+
+A tool is characterized by the class ToolDefinition defined as follows (getters/setters omitted):
+
+public class ToolDefinition {
+  private String toolName;
+  private ATermList functionSignatures;
+}
+
+Other information is placed in a property file:
+	String hostName;
+	String launcher;
+	int restartFrequency;
+
+The meaning of these fields is as follows.
+
+- toolName: the name of the tool (for Java tools: the class name, for other tools: the command to execute the tool)
+
+- functionSignatures:
+	a list of eval/do/events
+	
+- launcher: the class that takes care of tool creation (e.g. JavaTool, ...)
+
+- hostName: the host computer on which the tool is to be executed
+
+- restartFrequency: 
+	(a) restartFrequncecy = 0 means execute tool only once and then execute requests until termination
+	(b) restartFrequency > 0 means execute tool and increment a counter (starting at 0) for each request(transaction??), 
+	    is reached then restart the tool and reset the counter.
+    (c) restartFrequency < 0: error
+
+
+The ToolBus/tool interface
+---------------------------
+
+The interface between ToolBus and tool is defined as follows:
+
+public interface ToolInstance {
+
+  public void sndEvalToTool(ATerm id, ATermAppl call);
+  // HDJ: there is no "throws ToolBusException" here? (compare sndAckToTool)
+
+  public boolean getValueFromTool(ATerm id, ATerm trm, Environment env) throws ToolBusException;
+
+  public void sndDoToTool(ATerm id, ATermAppl call);
+  // HDJ: there is no "throws ToolBusException" here? (compare sndAckToTool)
+
+  public boolean getEventFromTool(ATerm id, ATerm trm, Environment environment) throws ToolBusException;
+
+  public void sndAckToTool(ATerm id, ATerm result) throws ToolBusException;
+
+  public void terminate(ATerm id, String msg);
+
+}
+
+Notes:
+
+- Each method has an "id" as first argument. This is the transaction id of this
+  particular invocation.
+  
+- The pairs sndEvalToTool/getValueFromTool and getEventFromTool/sndAckToTool always
+  use the same id. Internally, the tool can use these id's to maintain a list of pending
+  evals/events.
+
+- getValueFromTool and getEventFromTool update the giving environment
+  in the case they succeed.
+
+- Each tool implementation should implement this interface.
+
+- The constructor for the tool implementation gets a ToolDescriptor as argument.
+
+- The following tool implementations are envisaged:
+
+	InternalTool: executed inside the ToolBus (Java tools only)
+
+	ExternalTool: arbitrary tool executed outside the ToolBus using socket communication
+
+
+Discussion
+----------
+
+- Maybe JavaTool will be split in two versions;
+  a version based on reflection (JavaTool) and a version based on tif generation (JavaTifTool)
+
+- How do we represent functionSignatures?
+    - we might split it in two lists for functions and events
+	- result type functions
+	- result type events
+	- type of ack-event (= result type of associated event)
+	- do we use int or <int>? in types?
+	
+  [Possibilities for the above:
+	
+    eval(compute(expr), int)
+    do(store(str, int))
+    event(showTime(),time)
+    
+    Note: perhaps "function" is better than "eval"
+  ]
+
+- In the current tool interface we also support viewing/monitoring. 
+  [Let's postpone that; maybe we end up with a *process* that handles this.]
+  
+- This proposal does not yet handle connect/disconnect.
+
+- What is the effect of "remote terms" (i.e. terms that are shipped via direct connection between tools)
+  on the tool interface?
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+process P is
+let N : int, M : int, X : int
+in
+    N := 0 .
+    printf("before\n") .
+    ( if less(N, 5)
+      then
+         printf("%d\n", N) . N := add(N, 1) .
+         M := 10 .
+         ( if less(M,13)
+           then
+	         X := add(M, N) .
+             printf("%d\n", X) .
+             M := add(M, 1)
+           fi
+         ) * if equal(M, 13) then tau fi
+      fi
+    ) * 
+    if equal (N,5) then tau fi
+endlet
+
+toolbus(P)
+

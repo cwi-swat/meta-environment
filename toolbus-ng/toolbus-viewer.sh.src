@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export CLASSPATH="__TOOLBUS_JAR__:__LOCAL_JARS__:__EXTERNAL_JARS__:$CLASSPATH"
+
+java toolbus.viewer.Viewer $@

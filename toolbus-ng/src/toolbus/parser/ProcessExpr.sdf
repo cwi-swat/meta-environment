@@ -1,0 +1,43 @@
+
+module ProcessExpr
+imports Atom VarDecls TimeExpr
+
+exports
+  sorts ProcessExpr ProcessName ProcessCall Invocation
+
+  lexical syntax
+    [A-Z] [a-zA-Z0-9\-]* 			         -> ProcessName	{cons("ttt-id")}
+
+%%  lexical restrictions
+%%    ProcessName -/- [a-zA-Z0-9\-]
+
+  context-free syntax
+
+    ProcessName					             -> Invocation {cons("ttt-apply")}
+    ProcessName "(" {TBTerm ","}* ")"		 -> Invocation {cons("ttt-apply")}
+
+    Atom 					                 -> ProcessExpr
+    Atom TimeExpr 							 -> ProcessExpr {cons("ttt-TimeExpr")}
+   "create" "(" Invocation  "," GenVar ")" 	 -> ProcessExpr {cons("ttt-Create")}
+    Invocation					             -> ProcessCall  {cons("ttt-ProcessCall")}
+    ProcessCall					             -> ProcessExpr
+
+    ProcessExpr "." ProcessExpr 		     -> ProcessExpr {right, cons("ttt-Sequence")}
+    ProcessExpr "+" ProcessExpr 		     -> ProcessExpr {left, cons("ttt-Alternative")}
+    ProcessExpr "+>" ProcessExpr             -> ProcessExpr {right, cons("ttt-RightBiasedAlternative")}
+    ProcessExpr "*" ProcessExpr 		     -> ProcessExpr {left, cons("ttt-Iteration")}
+    ProcessExpr "||" ProcessExpr 		     -> ProcessExpr {left, cons("ttt-Merge")}
+    ProcessExpr ">>" ProcessExpr 		     -> ProcessExpr {right, cons("ttt-Disrupt")}
+    "(" ProcessExpr ")" 			         -> ProcessExpr {bracket}
+    "let" VarDecls "in" ProcessExpr "endlet" -> ProcessExpr {cons("ttt-LetDefinition")}
+    "if" TBTerm "then" ProcessExpr "fi" 	 -> ProcessExpr {cons("ttt-IfThen")}
+    "if" TBTerm "then" ProcessExpr "else" ProcessExpr "fi" 
+						                     -> ProcessExpr {cons("ttt-IfElse")}
+
+  context-free priorities
+    ProcessExpr "*" ProcessExpr -> ProcessExpr  {left, cons("ttt-Iteration")} >
+    ProcessExpr "." ProcessExpr -> ProcessExpr  {right, cons("ttt-Sequence")}  >
+    ProcessExpr "+>" ProcessExpr -> ProcessExpr {right, cons("ttt-RightBiasedAlternative")} >
+    ProcessExpr "+" ProcessExpr -> ProcessExpr  {left, cons("ttt-Alternative")}>
+    ProcessExpr "||" ProcessExpr -> ProcessExpr {left, cons("ttt-Merge")} >
+    ProcessExpr ">>" ProcessExpr -> ProcessExpr {right, cons("ttt-Disrupt")}

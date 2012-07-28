@@ -1,0 +1,13 @@
+process P is
+printf("top\n") .
+let X : int in X := 10 . printf("X = %d\n", X) endlet .
+let X : int in X := 20  . printf("X = %d\n", X) endlet .
+let X : int in 
+    X := 100 .
+    printf("X = %d\n", X) .
+    let X : int in X := 200 . printf("X = %d\n", X) endlet .
+    printf("X = %d\n", X)
+endlet .
+printf("top\n")
+
+toolbus(P)

@@ -1,0 +1,3 @@
+#! /bin/sh
+
+CLASSPATH=../.. java casestudy.rmi.AddressBookServer &

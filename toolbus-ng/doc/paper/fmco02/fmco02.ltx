@@ -1,0 +1,1228 @@
+\documentclass{llncs}
+ 
+\usepackage[english]{babel}
+\usepackage{epsfig}
+\usepackage{url}
+\usepackage{alltt}
+\usepackage{times}
+\usepackage{verbatim}
+\usepackage{xspace}
+\usepackage{latexsym}
+\usepackage{graphics}
+\usepackage{mathptm}
+ 
+\newcommand{\TB}{\textsc{ToolBus}}
+\newcommand{\asfplussdf}{ASF+SDF}
+\newcommand{\asdf}{{\sc Asf+Sdf}}
+\newcommand{\asf}{{\sc Asf}}
+\newcommand{\sdf}{{\sc Sdf}}
+\newcommand{\Tscript}{{\sc Tscript}}
+\newcommand{\aterm}{\mbox{ATerm}}
+\newcommand{\aterms}{\mbox{ATerms}}
+\newcommand{\spec}[1]{\texttt{#1}}
+
+%%\newcommand{\note}[1]{{\bf Note}: {\it #1 }}
+
+\begin{document}
+
+\mainmatter
+
+\title{ToolBus: the Next Generation}
+
+\author{Hayco de Jong\inst{1}
+\and Paul Klint\inst{1,2}}
+
+\institute{Centrum voor Wiskunde en Informatica,\\
+Kruislaan 413, P.O.Box 94079,\\
+1090 GB Amsterdam, The Netherlands\\
+\email{\{Hayco.de.Jong,Paul.Klint\}@cwi.nl}
+\and
+Informatics Institute,
+University of Amsterdam,
+The Netherlands
+}
+
+\maketitle
+ 
+\begin{abstract}
+
+The \TB\ is a software coordination architecture for the integration
+of components written in different languages running on different
+computers. It has been used since 1994 in a variety of projects, most
+notably in the complete renovation of the \asdf\ Meta-Environment.
+In this paper we summarize the experience that has been gained in these
+projects and sketch preliminary ideas how the \TB\ can be further
+improved. Topics to be discussed include the structuring of message
+exchanges, crash recovery in distributed applications, and call-by-value
+versus call-by-reference.
+
+\end{abstract}
+
+\section{Generic Language Technology}
+
+Our primary interest is \emph{generic language technology}
+that aims at the rapid construction of tools for a wide variety
+of programming and application languages.
+Its central notion is a \emph{language definition}
+of some programming or application language.
+
+The common methodology is that a language is identified in a given
+domain, that relevant aspects of that language are formally defined
+and that desired tools are generated on the basis of this language
+definition. This generative approach is illustrated in
+Fig.~\ref{Fig:generator}. Using a definition for some language $L$
+as starting point, a generator can produce a range of tools for
+editing, manipulating, checking or executing $L$ programs.
+
+Language aspects have to be defined, analyzed, and used to generate
+appropriate tooling such as compilers, interpreters, type checkers,
+syntax-directed editors, debuggers, partial evaluators, test case
+generators, documentation generators, and more.
+
+Language definitions are used, on a daily basis, in application areas
+as disparate as Cobol renovation, Java refactoring, smart card
+verification and in application generation for domains including
+finance, industrial automation and software engineering.  In the case
+of Cobol renovation, the language in question is Cobol and those
+aspects that are relevant for renovation have to be formalized. In the
+case of application generation, the language in question is probably
+new and has to be designed from scratch.
+
+\begin{figure}[tb]
+\epsfig{figure=figs/generator.eps,width=\textwidth,height=12cm}
+\vspace*{-7.5cm}
+\caption{\label{Fig:generator}From language definition to generated
+programming environment}
+\end{figure}
+
+\subsection{One Realization: the \asdf\ Meta-Environment}
+
+The \asdf\ Meta-Environment~\cite{Klint93,BDHJJKKMOSVVV01} is an
+incarnation of the approach just described and covers both the interactive
+development of language definitions and the generation of tools based
+on these language definitions.
+
+In this paper we are primarily interested in the \emph{software
+engineering aspects} of building such a system. Starting point is the
+\asdf\ Meta-Environment as we had completed it in the beginning of the
+1990's.  This was a monolithic 200 KLOC Lisp program that was hard to
+maintain.  It had all the traits of a legacy system and was the
+primary motivation to enter the area of system and software
+renovation.
+
+\subsection{Towards a Component Based Architecture} \label{SEC:ME-history}
+
+We give a brief time line of the efforts to transform the old,
+monolithic, implementation of the Meta-Environment into a
+well-structured, component-based, implementation.
+
+In 1992, first, unsuccessful, experiments were carried out to
+decompose the system into separate parts~\cite{BakkerKoorn93}.  The
+idea was to separate the user-interface and the text editor from the
+rest of the system.  The user-interface was completely re-implemented
+as a separate component and as text editor we re-used Emacs. In
+hindsight, we were unaware of the fact that we made the transition
+from a completely sequential system to a system with several
+concurrent components. Unavoidably, we encountered hard to explain
+deadlocks and race conditions.
+
+In 1993, a next step was to write a formal specification of the desired
+system behavior~\cite{P9415} using PSF, a specification language based
+on process algebra and algebraic specifications~\cite{MauwVeltink90}.
+Simulation of this specification unveiled other, not yet observed,
+deadlocks. Although this was clearly an improvement over the existing
+situation, this specification approach also had its limitations and
+drawbacks:
+
+\begin{itemize}
+
+\item The specification lacked generality. It would, for instance, have
+been a major change to add the description of a new component.
+
+\item The effort to write the PSF specification was significant and
+there was no way to derive an actual implementation from it.
+
+\end{itemize}
+
+In 1994, the first version of the \TB\ was
+completed~\cite{BergstraKlint94,TB-COORD96}.  The key idea was to
+organize a system along the lines of a software bus and to make this bus
+programmable by way of a scripting language (\Tscript) that was based on
+ACP (Algebra of Communicating Processes, \cite{BergstraKlop86}).  Another
+idea was to use a uniform data format (called \TB\ terms) to exchange
+data between \TB\ and tools.  At the implementation level, \Tscript{}s
+were executed by an interpreter and communication between tools and \TB\
+took place using TCP/IP sockets. In this way, multi-language, distributed,
+applications could be built with significantly less effort than using
+plain C and sockets.
+
+Based on various
+experiments~\cite{P9601,DamsGroote95,LisserVanWamel97,Diertens97},
+in 1995 a new version of the \TB\ was designed and implemented: the
+Discrete Time ToolBus~\cite{BergstraKlint95,TB-AMAST96,TB-SOCP98}.
+Its main innovations were primitives for expressing timing considerations
+(delay, timeout) and for operating on a limited set of built-in data-types
+(booleans, integers, reals, lists).  The Discrete Time \TB\ has been
+used for the restructuring of the \asdf\ Meta-Environment~\cite{BHK97}. A
+first version was released in 2001~\cite{BDHJJKKMOSVVV01}.
+
+In the meantime, the exchange format has also evolved from the \TB\
+terms mentioned above to \aterms~\cite{BJKO00}: a term format that
+supports maximal subterm sharing and a very concise, sharing preserving,
+binary exchange format. \aterms\ decrease memory usage thanks to sharing
+and they permit a very fast equality test since structural equality can
+be replaced by pointer equality thanks to the maximal subterm sharing.
+
+Another line of development is the \TB\ Integrated Debugging Environment
+({\sc Tide}) described in~\cite{Olivier00}.
+
+Today, beginning 2003, it turns out that the original software engineering
+goals that triggered the development of the \TB\ have been achieved
+and that the Meta-Environment can now be even further stretched than
+anticipated~\cite{RTA03}. Therefore, it is time for some reflection.
+What have we learned from this major renovation project and what are
+the implications for the \TB\ design and implementation?
+
+\subsection{Plan of this Paper}
+
+In Sect.~\ref{Sec:toolbus-architecture} we discuss component coordination,
+representation and computation and introduce the \TB: our component
+coordination architecture. Following, in Sect.~\ref{Sec:example},
+we demonstrate some of the \TB-features by means of an example. In
+Sect.~\ref{Sec:application} we show how we used the \TB\ in the \asdf\ Meta
+Environment to migrate from a monolithic to a distributed architecture.
+Then, in Sect.~\ref{Sec:issues-NG} we elaborate on the various issues that
+we would like to tackle in a next generation of the \TB. We conclude the
+paper with an overview of the current status of our current implementation
+of this next generation \TB\ (Sect.~\ref{Sec:status}) and some concluding
+remarks (Sect.~\ref{Sec:conclusion}).
+
+
+\section{The \TB\ Architecture}\label{Sec:toolbus-architecture}
+
+In~\cite{GelernterCarriero92} it was advocated that the overall
+architecture of a software system can be improved by separating
+\emph{coordination} from \emph{computation}. In addition to this, we
+also distinguish \emph{representation} and use the following definitions:
+
+\begin{itemize}
+
+\item Coordination: the way in which program and system parts interact
+(using procedure calls, remote method invocation, middleware, and others).
+
+\item Representation: language and machine neutral data exchanged
+between components.
+
+\item Computation: program code that carries out a specialized task.
+
+\end{itemize}
+
+\noindent 
+The assumption is now that \emph{a rigorous separation of coordination,
+representation and computation leads to flexible and reusable systems.}
+This subdivision is sketched in Fig.~\ref{Fig:component-architecture}.
+Our \TB\ approach follows this paradigm and is illustrated in
+Fig.~\ref{Fig:toolbus-architecture}.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/component-architecture.eps,height=12cm}
+\end{center}
+\vspace*{-7.5cm}
+\caption{\label{Fig:component-architecture}Separating coordination
+  from computation}
+\end{figure}
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/toolbus.eps,height=14cm}
+\end{center}
+\vspace*{-9.5cm}
+\caption{\label{Fig:toolbus-architecture}The \TB\ architecture}
+\end{figure}
+
+The goal of the \TB\ is to integrate tools written in different
+languages running on different machines. This is achieved by means of
+a programmable software bus. The \TB\ coordinates the cooperation of a
+number of tools.  This cooperation is described by a \Tscript\ that
+runs inside the \TB. The result is a set of concurrent processes
+inside the \TB\ that can communicate with each other and with the
+tools. Tools can be written in any language and can run on different
+machines. They exchange data by way of \aterms.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/toolbus-scenario.eps,height=14cm}
+\end{center}
+\vspace*{-8cm}
+\caption{\label{Fig:toolbus-scenario}A typical cooperation scenario}
+\end{figure}
+
+A typical cooperation scenario is illustrated in
+Fig.~\ref{Fig:toolbus-scenario}.  A user-interface (UI) and a database
+(DB) are combined in an application. Pushing a button in the
+user-interface leads to a database action and the result is displayed
+in the user-interface. In a traditional approach, the database action
+is directly connected to the user-interface button by means of a
+call-back function. This implies that the user-interface needs some
+knowledge about the database tool and \emph{vice versa}.  In the \TB\
+approach the two components are completely decoupled: pushing the
+button only leads to an event that is handled by some process in the
+\TB. This process routes the event to the database tool (likely via
+some intermediary process) and gets the answer back via the inverse
+route. This implies that the configuration knowledge is now
+completely localized in the \Tscript\ and that UI and DB do not
+even know about each others existence.
+
+The primitives that can be used in \Tscript{}s are listed in
+Table~\ref{Tab:Tscript-features}. 
+
+\begin{table}
+\caption{\label{Tab:Tscript-features}Overview of \TB\ primitives}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline Primitive		& Description	\\ \hline \hline
+\spec{delta}			& inaction (``deadlock'') \\
+\spec{+}			& choice between two alternatives ($P_1$ or $P_2$)\\
+\spec{.}			& sequential composition ($P_1$ followed by $P_2$)\\
+\spec{*}			& iteration (zero or more times $P_1$ followed by $P_2$)\\
+\spec{create}			& process creation\\ \hline
+\spec{snd-msg}			& send a message (binary, synchronous)\\
+\spec{rec-msg}			& receive a message (binary, synchronous)\\ \hline
+\spec{snd-note}			& send a note (broadcast, asynchronous)\\
+\spec{rec-note}			& receive a note (asynchronous)	\\
+\spec{no-note}			& no notes available for process\\
+\spec{subscribe}		& subscribe to notes\\
+\spec{unsubscribe}		& unsubscribe from notes\\ \hline
+\spec{snd-eval}			& send evaluation request to tool\\
+\spec{rec-value}		& receive a value from a tool	\\
+\spec{snd-do}			& send request to tool (no return value)\\
+\spec{rec-event}		& receive event from tool\\
+\spec{snd-ack-event}		& acknowledge a previous event from a tool\\ \hline
+\spec{if ... then ... fi}	& guarded command\\
+\spec{if ... then ... else ... fi} 	& conditional\\
+				& expressions	\\
+\spec{||}			& communication-free merge (parallel composition) \\
+\spec{let ... in ... endlet}	& local variables \\
+\spec{:=}			& assignment	\\ \hline
+
+\spec{delay}			& relative time delay\\
+\spec{abs-delay}		& absolute time delay\\
+\spec{timeout}			& relative timeout\\
+\spec{abs-timeout}		& absolute timeout\\ \hline
+
+\spec{rec-connect}		& receive a connection request from a tool\\
+\spec{rec-disconnect}		& receive a disconnection request from a tool\\
+\spec{execute}			& execute a tool\\
+\spec{snd-terminate}		& terminate the execution of a tool\\
+\spec{shutdown}			& terminate \TB	\\ \hline
+
+\spec{attach-monitor}		& attach a monitoring tool to a process\\
+\spec{detach-monitor}		& detach a monitoring tool from a process \\ \hline
+\end{tabular}
+\end{center}
+
+\end{table}
+
+
+
+\section{An Example: the Address Book Service}\label{Sec:example}
+
+To make the scenario from Fig.~\ref{Fig:toolbus-scenario} more concrete,
+we describe the construction of an address book holding (name, address)
+pairs. Typical uses include creating a new address, finding an address
+based on the name, etc. First we consider some aspects of the User
+Interface. An instance of the UI connects to the \TB\ and during the
+subsequent session, the user can:
+
+\begin{description}
+  \item[create] a new entry in the address book database;
+  \item[delete] an existing entry from the database;
+  \item[search] for an entry in the database;
+  \item[update] an existing entry in the database.
+\end{description}
+
+Each of these use cases can be described as a \TB\ process which,
+together with a process that explains how these use cases interact,
+form the \TB\ script describing our Address Book Service.
+
+\subsection{\TB\ Processes for the Address Book Service}
+
+\paragraph{The \texttt{ADDRESSBOOK} process} tells the \TB\ that an
+instance of our \texttt{address-book} tool is to be executed, followed
+by a loop which invokes \emph{one of} the processes \texttt{CREATE},
+\texttt{DELETE}, \texttt{SEARCH} or \texttt{UPDATE} in each
+iteration. This construction, using the \texttt{+} operator ensures that
+at this level, the sub-processes can be regarded atomically. This means
+that for example no \texttt{DELETE} will happen during an \texttt{UPDATE}.
+
+\begin{footnotesize}
+\begin{verbatim}
+process ADDRESSBOOK is
+let AB : address-book
+in
+  execute(address-book, AB?) .
+  (
+    CREATE(AB) + DELETE(AB) + SEARCH(AB) + UPDATE(AB)
+  ) * delta
+endlet
+\end{verbatim}
+\end{footnotesize}
+
+The operating system level details of starting the tool are defined in
+a separate section (one for each tool if multiple tools are involved):
+
+\begin{footnotesize}
+\begin{verbatim}
+  tool address-book is {
+    command = "java-adapter -class AddressBookService"
+  }
+\end{verbatim}
+\end{footnotesize}
+
+In this case, the \TB\ is told that our tool is written in Java, and
+that the main class to be started is called \texttt{AddressBookService}.
+
+\paragraph{The \texttt{CREATE} process} can be described as a \TB\
+process as follows:
+
+\begin{footnotesize}
+\begin{verbatim}
+process CREATE(AB : address-book) is
+let AID : int
+in
+  rec-msg(create-address) .
+  snd-eval(AB, create-entry) .
+  rec-value(AB, new-entry(AID?)) .
+  snd-msg(address-created(AID))
+endlet
+\end{verbatim}
+\end{footnotesize}
+
+The request to create a new address book entry is received and delegated
+to the tool, so it can update its state. In this case, our tool yields
+a unique id for reference to the new entry, which is returned as
+the result of the creation message. Note that communication between
+processes involves the matching of the arguments of \texttt{snd-msg}
+and \texttt{rec-msg}. The same holds for the communication between a
+process and a tool using \texttt{snd-eval} and \texttt{rec-value}. In
+all these cases, a \emph{result variable} of the form \texttt{V?} gets
+a value assigned as the result of a successful match.
+
+\paragraph{The \texttt{DELETE} process} differs only from the CREATE
+process in that it does not need a return value:
+\begin{footnotesize}
+\begin{verbatim}
+...
+  rec-msg(delete-address(AID?) .
+  snd-do(AB, delete-entry(AID)) .
+  snd-msg(address-deleted(AID))
+...
+\end{verbatim}
+\end{footnotesize}
+
+\paragraph{The \texttt{SEARCH}\,\,process} \label{tb:search} in our example
+implements but a single query: finding an address book entry by name. It
+shows how different results from a tool-evaluation request can be
+processed in much the same way that different messages are handled. Upon
+receiving a \texttt{find-by-name} message from another process, this
+request is delegated to the tool. Depending on whether or not the entry
+exists in the database, the tool replies with a \texttt{found} or a
+\texttt{not-found} message, respectively. This result is then propagated
+to the process that sent the initial \texttt{find-by-name} message.
+
+\begin{footnotesize}
+\begin{verbatim}
+process SEARCH(AB : address-book) is
+let
+  Aid : int,
+  Name : str
+in
+  rec-msg(find-by-name(Name?)) .
+  snd-eval(AB, find-by-name(Name)) .
+  (
+    rec-value(AB, found(Aid?)) .
+    snd-msg(found(Aid))
+  +
+    rec-value(AB, not-found) .
+    snd-msg(not-found)
+  )
+endlet
+\end{verbatim}
+\end{footnotesize}
+
+\paragraph{The \texttt{UPDATE} process} is more interesting. It
+shows that each update of an address entry is \emph{guarded}. A
+process wanting to update an entry first has to announce this fact
+by sending an \texttt{update-entry} message, before it can do one or
+more updates to the entry. It then finishes the update by sending an
+\texttt{update-entry-done} message. Because matching \texttt{snd-msg} and
+\texttt{rec-msg} messages are connected synchronously, it is not possible
+for one update transaction to interfere with another. After a sender and
+receiver of the \texttt{update-entry} message are connected, all other
+processes that want to send a \texttt{update-entry} message have to wait
+until the receiving process is ready to receive an \texttt{update-entry}
+message again. This message pair thus acts as a very primitive locking
+scheme. More elaborate schemes are very well possible, but are not
+discussed in this paper. Summarizing, the \texttt{UPDATE} process shows
+that \emph{outside} the implementation of the address book service, we
+can enforce the order in which certain parts of the service are invoked,
+as well as mutual exclusion of some of its sections.
+
+\pagebreak
+
+\begin{footnotesize}
+\begin{verbatim}
+process UPDATE(AB : address-book) is
+let
+  AID : int,
+  Name : str,
+  Address : str
+in
+  rec-msg(update-entry(AID?)) .
+  ( rec-msg(set-name(Name?)) .
+    snd-do(AB, set-name(AID, Name))
+  + rec-msg(set-address(Address?)) .
+    snd-do(AB, set-address(AID, Address))
+  ) *
+  rec-msg(update-entry-done(AID))
+endlet
+\end{verbatim}
+\end{footnotesize}
+
+\subsection{\TB\ Process for the User Interface}
+
+Because users can connect at any time to the \TB\ to start a
+session with the Address Book Service, the \TB\ itself does not
+execute instances of the UI (as it did with the address book tool).
+Instead \texttt{UITool} instances can connect, make zero or more
+requests to the service, and disconnect at their convenience.
+A \texttt{ui} tool is declared to exist, but no operating system
+level details are provided. 
+The following definition of the \texttt{UI} process shows how UI
+requests for the creation of a new entry and a name-change can
+be realized:
+
+\begin{footnotesize}
+\begin{verbatim}
+tool ui is { /* the ToolBus does not execute ui-instances */ }
+
+process UI is
+let
+  UITool : ui,
+  AID : int,
+  Name : str
+in
+  rec-connect(UITool?) .
+  (
+    rec-event(UITool, create-address) .
+    snd-msg(create-address) .
+    rec-msg(address-created) .
+    snd-ack-event(UITool, create-address)
+  +
+    rec-event(UITool, update-name(AID?, Name?)) .
+    snd-msg(update-entry(AID)) .
+    snd-msg(set-name(Name)) .
+    snd-msg(update-entry-done(AID)) .
+    snd-ack-event(UITool, update-name(AID, Name))
+  +
+    ... /* more UI requests */
+  )
+  * rec-disconnect(UITool)
+endlet
+\end{verbatim}
+\end{footnotesize}
+
+\section{Application to the \asdf\ Meta-Environment}\label{Sec:application}
+
+As explained in Sect.~\ref{SEC:ME-history}, the \TB\ has been used to
+restructure the \asdf\ Meta-Environment. It consists of a cooperation of
+27 tools ranging from a user-interface, graph browser, various editors,
+compiler and interpreter, to a parser generator and a repository for
+parse trees.  A simplified view is shown in Fig.~\ref{Fig:meta-env}.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/meta-env.eps,height=12cm}
+\end{center}
+\vspace*{-8cm}
+\caption{\label{Fig:meta-env}Architecture of the \asdf\ Meta-Environment.}
+\end{figure}
+
+\begin{table}[tb]
+\caption{\label{Tab:language-stats}Facts concerning implementation languages}
+\begin{center}
+\begin{tabular}{|l|r|r|r|} \hline
+Language        & KLOC$^\dagger$ & Generated KLOC & Total KLOC\\ \hline \hline
+ASF+SDF         & 12	 & 170 (C) & \\
+C 	        & 80$^{\dagger\dagger}$  & & \\
+Java, Tcl/Tk    &  5  & &\\
+Makefiles, etc	&  5  & &\\
+\Tscript   	&  5  & &\\ \hline
+Total LOC:	& 107 & 170 & 277 \\\hline
+
+\Tscript\ &  4.6\% &  & 1.8\%\\ \hline
+\end{tabular}
+
+$^\dagger$ Kilo Lines of Code  excluding third party code
+such as emacs, dot, and the like.
+
+$^{\dagger\dagger}$ This includes 10 KLOC (C code) for the \TB\
+implementation itself.
+\end{center}
+\end{table}
+
+\begin{table}[tb]
+\caption{\label{Tab:Tscript-stats}Facts concerning \Tscript\ primitives}
+\begin{center}
+\begin{tabular}{|l|r|}\hline
+Primitive                            & Number of occurrences \\ \hline \hline
+
+process definitions                  & 104\\
+tool definitions                     & 27\\
+\texttt{.} (sequential composition)  & 4343\\
+\texttt{+} (choice)                  & 341\\
+\texttt{*} (iteration)               & 243\\
+\texttt{||} (parallel composition)   & 3\\
+
+\texttt{snd-msg}                     & 555\\
+\texttt{rec-msg}                     & 541\\
+\texttt{snd-note}                    & 100\\
+\texttt{rec-note}                    & 24\\
+\texttt{snd-do}/\texttt{snd-eval}    & 220\\
+\texttt{rec-event}                   & 56\\
+\texttt{create}                      & 58 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+Our insight can be further increased by considering some
+statistics. Table~\ref{Tab:language-stats} shows the relative sizes of
+the various implementation languages used in the Meta-Environment.
+In the column \emph{language} the various languages are listed.
+In column \emph{KLOC} the size (in Kilo Lines Of Code) is given for each
+language. The result is 107 KLOC for the whole system of which 4.6\%
+are \Tscript{}s.  If we consider the fact that \asdf\ specifications are
+compiled to C code, another view is possible as well: 12 KLOC of \asdf\
+generates 170 KLOC of C code. Taking this generated code into account,
+the total size of the whole system amounts to 277 KLOC of which 1.8\%
+are \Tscript{}s. This is compatible with the expectation that \Tscript{}s
+are relatively small and form high-level ``glue'' to connect much larger
+components.
+
+Part of the generated C code is currently done by ApiGen~\cite{apigen}.
+This is an API generator which takes an \sdf\ grammar as input and
+generates a C library which gives type-safe access to the underlying
+\aterm\ representation of the parse trees over this grammar.
+
+Another conclusion from these facts is that low-level information for
+building the software (makefiles and configuration scripts) are of the
+same size as the high level \Tscript{}s. This points into the direction
+that the level of these build scripts should be raised. This conclusion
+will, however, not be further explored in this paper.
+
+Another view is given in Table~\ref{Tab:Tscript-stats} where the frequency
+of occurrence of \Tscript\ primitives is shown.  Clearly, sequential
+composition (\spec{.}) is the dominant operator and sending/receiving
+(\spec{snd-msg}, \spec{rec-msg}) messages is the dominant communication
+mechanism, followed by communication with tools (\spec{snd-do},
+\spec{snd-eval}).  It may be surprising that parallel composition
+(\spec{||}) is used so infrequently. However, one should be aware that
+at the top level all \TB\ processes run concurrently and that \spec{||}
+is only used for explicit concurrency inside a process. The level of
+concurrency is therefore approximately 100 ($104$ process definitions
+and $3$ explicit \spec{||} operators).
+
+Empirical evidence shows that:
+
+\begin{itemize}
+
+\item The \TB-based version of the \asdf\ Meta-Environment is more
+flexible as illustrated by the fact that clones of the Meta-Environment
+start to appear for other languages than \asdf. Examples are Action
+Semantics~\cite{Mosses02} and Elan~\cite{BR01}.
+
+\item Various components of the \asdf\ Meta-Environment are being reused
+in other projects~\cite{DamsGroote95,mucrl-toolset}.
+
+\end{itemize}
+
+\section{Issues in a Next-Generation \TB}\label{Sec:issues-NG} 
+
+The \TB\ has been used in various applications of which the
+Meta-Environment is by far the largest. Some of the questions
+posed by our users and ourselves are:
+
+\begin{itemize}
+
+\item I find it difficult to see which messages are requests and
+  which are replies; can you provide support for this?
+  See Sect.~\ref{Sec:message-patterns}.
+
+\item If a tool crashes, what is the best way to describe the recovery
+  in the \Tscript?
+  See Sect.~\ref{Sec:exceptions}.
+
+\item I have huge data values that are exchanged between tools and the
+  \TB\ becomes a data bottleneck; can you improve this?
+  See Sect.~\ref{Sec:value-ref}.
+
+\item The \TB\ and tools are running as separate tasks of the operating
+  systems. Would it not be more efficient to run \TB\ and tools in a
+  single task? See Sect.~\ref{Sec:status}.
+
+\end{itemize}
+
+
+\subsection{Undisciplined Message Patterns}
+  \label{Sec:message-patterns}
+
+The classical pattern of a remote procedure call is shown in
+Fig.~\ref{Fig:rpc}: a caller performs a call to a callee. During the
+call the caller suspends execution and the callee executes until it
+has computed a reply. At that point in time, the caller continues its
+execution.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/rpc.eps,height=12cm}
+\end{center}
+\vspace*{-7.5cm}
+\caption{\label{Fig:rpc}Communication pattern for remote procedure call}
+\end{figure}
+
+Compare this simple situation with general message communication as shown
+in Fig.~\ref{Fig:message}: the caller continues execution after sending
+a message \emph{msg1} to \emph{Callee1} and may even send a message
+\emph{msg2} to \emph{Callee2}.  At a certain point in time \emph{Callee2}
+may send message \emph{msg3} back to \emph{Caller}. In this case, the
+three parties involved continue their execution while messages are being
+exchanged and there is no obvious pairing of calls and replies.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/msg.eps,height=12cm}
+\end{center}
+\vspace*{-7.5cm}
+\caption{\label{Fig:message}Communication pattern for general messages}
+\end{figure}
+
+In the \TB\ case, a \spec{snd-msg} and a \spec{rec-msg} can interact
+with each other if their arguments match. A typical sequence is:
+
+\vspace*{\baselineskip}
+\noindent
+\begin{tabular}{lll}
+\textbf{Process A}:              &\hspace*{1.5cm}&  \textbf{Process B:}\\
+
+\texttt{snd-msg(calculate(E)) .} &&  \texttt{rec-msg(calculate(E?)) .}\\
+\emph{... other actions ...}     &&  \emph{... actions that compute value V ...}\\
+\texttt{rec-msg(value(E, V?))}   &&  \texttt{snd-msg(value(E, V))}\\
+\end{tabular}
+
+\vspace*{\baselineskip}
+\noindent What we see here is that a form of call/reply regime is encoded in the
+messages: process B returns the value \spec{V} that it has computed as
+\texttt{snd-msg(value(E, V))}. The \spec{E} is completely redundant but
+serves as identification for process A to which message
+this is an answer. 
+
+The call/reply regime is thus implicitly encoded in messages.  This
+makes error handling harder (which reply did not come?)  and makes the
+\Tscript{}s harder to understand. This is particularly so, since
+unstructured combinations of \spec{snd-msg}/\spec{rec-msg} and
+sequential composition, choice, iteration and parallel composition are
+allowed.
+
+The only solution for the above problems is to limit the occurrences of
+\spec{snd-msg} or \spec{rec-msg} in such a way that a form of very
+general call/reply regime is enforced. Our approach is to
+syntactically enforce that \spec{snd-msg}/\spec{rec-msg} or
+\spec{rec-msg}/\spec{snd-msg} may only occur in (possibly nested)
+pairs and that in between arbitrary operations are allowed.
+In fact, the matching \spec{snd-msg} or \spec{rec-msg} may be an
+arbitrary expression provided that all its alternatives begin with a
+matching  \spec{snd-msg} or \spec{rec-msg}.
+
+We replace thus
+\begin{quote}
+\texttt{snd-msg(req(E)) .} 
+   \textit{arbitrary process expression} \texttt{.}
+\texttt{rec-msg(ans(A?))}
+\end{quote}
+
+\noindent by the syntactic construct
+
+\begin{quote}
+\texttt{snd-msg(req(E)) \{} \textit{arbitrary process expression}
+\texttt{\}  rec-msg(ans(A?))}
+\end{quote}
+
+\noindent and also allow more general cases like:
+
+\begin{quote}
+\texttt{snd-msg (req(E)) \{} \textit{arbitrary process
+ expression}\texttt{\}}\\
+  \texttt{( rec-msg(ans(A?))
+     + rec-msg(error(M?)
+     )}
+\end{quote}
+
+It is an interesting property of Process Algebra that every process
+expression can be normalized to a so-called \emph{action prefix form}:
+a list of choices where each choice starts with an atomic action.  An
+action prefix form has the following structure: 
+\texttt{a$_1$.P$_1$ + a$_2$.P$_2$ +...+ a$_n$.P$_n$}. 
+ Using this property we can formulate the most
+general constraint that we impose on occurrences of \spec{snd-msg} and
+\spec{rec-msg}.  Consider \texttt{P$_1$ \{ Q \} P$_2$} and let \texttt{P$_1$'}
+and \texttt{P$_2$'} be the action prefix forms of, respectively,
+\texttt{P$_1$} and \texttt{P$_2$}.  Our requirement is now that each choice
+in \texttt{P$_1$'} starts we a \texttt{snd-msg} and each choice in
+\texttt{P$_2$'} with a \texttt{rec-msg}, or \emph{vice versa}. Note that this
+constraint can be checked statically.
+
+\subsection{Exception Handling} \label{Sec:exceptions}
+
+Exception handling is notorious for its complexity and impact on the
+structure of program code. The mainstream exception handling approach as
+used in, for instance, Java associates one or more exception handlers with
+a specific method call. If the call completes successfully, the handlers
+are ignored. If the call raises an exception, it is checked whether this
+exception can be handled locally by one of the given handlers.  If not,
+the exception is propagated to the caller of the current code. This
+model does, however, not work well in a setting where multiple processes
+are active and the occurrence of an exception may require recovery in
+several processes.
+
+\paragraph{Local Exception Handling}
+
+We start with the simpler case of local error handling and introduce
+the \emph{disrupt operator} (\spec{>>}) proposed in
+LOTOS~\cite{Brinksma88}.  A process algebra variant of this operator
+is described in~\cite{Diertens94}.
+It has the form \spec{P >> E}, where \spec{P} describes the normal
+processing and \spec{E} the exceptional processing. It adds the
+exception \spec{E} as alternative to each atomic action in \spec{P}.
+If the action prefix form of \spec{P} is  \texttt{a$_1$.P$_1$ + a$_2$.P$_2$ +...+ a$_n$.P$_n$}, then
+
+\begin{quote}
+\texttt{P >> E $\equiv$ (a$_1$ + E).(P$_1$ >> E) +.. + (a$_n$ + E).(P$_n$ >> E)}.
+\end{quote}
+
+\paragraph{Global Exception Handling}
+
+Global exception handling in distributed systems is a very
+well-studied subject from the perspective of crash recovery and
+transaction management in distributed databases.  An overview of
+rollback-recovery protocols in message-passing systems is, for
+instance, given in~\cite{568525}.
+
+In the context of system reliability, the notion of a \emph{recovery
+block} has been introduced by Randell~\cite{Randell75}. Its purpose was
+to provide several alternative algorithms for doing the same computation.
+Upon completion of one algorithm, an acceptance test is made. If the test
+succeeds, the program proceeds normally, but if it fails a rollback is
+made to the system state before the algorithm was started and one of
+the alternative algorithms is tried.  In \cite{Klint85} this idea is
+applied to backtracking in string processing languages. It turns out
+that the preservation of the system state can be done efficiently by
+only saving updates to the state after the last recovery point.
+
+Recovery blocks also form the basis for Coordinated Atomic Actions
+described in~\cite{ZorzoEtAl97}. Recovery blocks are intended for the
+error recovery in a single process.  They can be generalized to
+\emph{conversations} between more than one process: several processes
+can enter a conversation at different times but they can only leave it
+simultaneously, when all participating processes satisfy their
+acceptance test. In case one participant fails to pass its test, each
+participant is rolled back to the state when it entered the
+conversation.
+
+We are currently studying this model since it can be fit easily in the
+\TB\ framework and seems to solve our problem of global exception
+handling.  It is helpful that a backtrack operator similar to the one
+described in~\cite{Klint85} has also been described for Process
+Algebra~\cite{BergstraPonseVanWamel93}. What remains to be studied is
+how the recovery of \emph{tools} has to be organized. Most likely, we
+will add a limited undo request to the tool interface to recover from
+the last few operations carried out by a tool.
+
+\subsection{Call-By-Value Versus Call-By-Reference}
+\label{Sec:value-ref}
+
+\paragraph{Background}
+
+The concepts of call-by-reference and call-by-value are well-known
+in programming languages. They describe how an actual parameter
+value is transmitted from a procedure call to the body of the called
+procedure. In the case of call-by-reference, a \emph{pointer} to the
+parameter is transmitted to the body. Call-by-reference is efficient
+(only a pointer has to be transmitted) and the parameter value can
+be changed during execution of the procedure body (via the pointer).
+In the case of call-by-value, a \emph{physical copy} of the parameter is
+transmitted to the procedure body. Call-by value is less efficient for
+large values and does not allow the called procedure to make changes to
+the parameter value in the calling procedure.
+
+These considerations also apply to value transmissions in a
+distributed setting, with the added complication that values can
+be accessed or modified by more than one party.  Call by reference
+(Fig.~\ref{Fig:reference}) is efficient for infrequent access or update.
+It is the prevalent mechanism in, for instance, CORBA~\cite{corba}.
+However, uncontrolled modifications by different parties can lead to
+disaster.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/refs.eps,height=12cm}
+\end{center}
+\vspace*{-10.5cm}
+\caption{\label{Fig:reference}Call-by-reference in a distributed application}
+\end{figure}
+
+Call-by-value (Fig.~\ref{Fig:value}) is inefficient for large values and
+any sharing between calls is lost. To us, this is of particular interest,
+because we need to preserve sharing in huge parse trees.  In the case of
+Java RMI~\cite{java-rmi}, value transmission is achieved via serialization
+and works only for communication with other Java components. Using
+IIOP~\cite{iiop} communication with non-Java components is possible.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/values.eps,height=12cm}
+\end{center}
+\vspace*{-11cm}
+\caption{\label{Fig:value}Call-by-value in a (Java-based) distributed application}
+\end{figure}
+
+
+\paragraph{Current \TB\ approach}
+
+Currently, the \TB\ provides a transport mechanism based on
+call-by-value as shown in Fig.~\ref{Fig:toolbus-values}(a). It is
+transparent since the transmitted values are \aterms\ (see
+Sect.~\ref{SEC:ME-history}) that can be exchanged with components written
+in any language. Since pure values are exchanged, there is no need for
+distributed garbage collection.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/toolbus-values.eps,height=12cm}
+\end{center}
+\vspace*{-8cm}
+\caption{\label{Fig:toolbus-values}Value-based (a) versus channel-based
+(b) transmission in the \TB}
+\end{figure}
+
+Note that the call-by-reference model can easily be mimicked in the
+\TB. For instance, one tool can maintain a shared database and can
+communicate with other tools using record keys and field names so that
+only the values of record fields have to be exchanged (as opposed to
+complete records or even the complete database).  In this way the
+access control to the shared database can be spelled out in detail and
+concurrency conflicts can be avoided. This solves one of the major
+disadvantages of the pure call-by-reference model in a distributed
+environment.
+
+The downside is, however, that the \TB\ becomes a data bottleneck when
+huge values really have to be transmitted between tools. Currently,
+two workarounds are used.  A first workaround is to get temporary
+relief by sending compressed values rather than the values
+themselves. A second workaround is to store the large value in the
+filesystem and to send a file name rather than the file itself.  It
+does scale, but it also creates an additional inter-tool dependency
+and assumes that both tools have access to the same shared file
+system.
+
+We will now first discuss how related frameworks handle
+call-by-reference and then we come back to implications for the \TB\
+design. In particular, we will discuss channel-based transmission as
+already shown in Fig.~\ref{Fig:toolbus-values}(b).
+ 
+\subsection{Related Frameworks: Java RMI, RMI-IIOP and Java IDL}
+
+Given our needs and desires for a next generation \TB\, it is
+interesting to see what other solutions are applied in similar projects.
+In this section, we briefly look at three related mechanisms:
+
+\begin{itemize}
+
+\item Java Remote Method Invocation (RMI) which connects distributed
+objects written in Java;
+
+\item Java RMI over Internet Inter-ORB Protocol (IIOP) which is like
+RMI, but uses IIOP as the underlying protocol;
+
+\item Java IDL which connects Java implementations of CORBA interfaces.
+
+\end{itemize}
+
+
+\paragraph{Java RMI}
+
+Java Remote Method Invocation is similar to the \TB\ architecture in
+the sense that it connects different tools, possibly running on different
+machines. It differs from the \TB\ setting because it is strictly
+Java based: only components written in Java can communicate via RMI.
+
+For components to work together in RMI, first a \emph{remote interface}
+is established. This is a Java interface that has a ``real'' implementation
+in the tool (or \emph{server}) and a ``stub'' implementation on the
+client sides (Fig.~\ref{Fig:rmi}). The interface is written by the
+programmer as opposed to the generated interfaces in a \TB\ setting
+where they are derived from the communication patterns found in the
+\TB\ script. The stubs in the RMI setting are then generated from
+this Java interface using \texttt{rmic}: the RMI compiler. Stubs act as
+a client-side proxy, delegating the method call via the RMI system to
+the server object. In RMI, any object that implements a remote interface
+is called a \emph{remote object}.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/rmi.eps,height=12cm}
+\end{center}
+\vspace*{-8cm}
+\caption{\label{Fig:rmi}Client-server model in RMI framework.}
+\end{figure}
+
+In RMI, arguments to or return values from remote methods can be
+primitive data (e.g. \texttt{int}), remote objects, or \emph{serializable}
+objects. In Java, an object is said to be serializable if it implements
+the \texttt{java.util.Serializable} interface. Both primitive data
+and serializable objects are passed by value using Java's object
+serialization. Remote objects are essentially passed by reference.
+This means that changes to them are actually performed on the server,
+and updates become available to all clients. Only the behavior that was
+defined in the remote interface is available to the clients.
+
+RMI programmers should be aware of the fact that any parameters,
+return values and exceptions that are not remote objects are passed
+by value.  This makes it hard to understand when looking at a system of
+RMI objects exactly which method calls will result in a \emph{local}
+(i.e. client side) state change, and which will have \emph{global}
+(server side) effect.
+
+Consider, again, our address book example. If the
+AddressBookService is implemented as a remote object in RMI, then
+client-side invocations of the \texttt{setAddress} method will cause a
+\emph{global} update. If, on the other hand, the AddressBookEntries are
+made \emph{serializable} and instances of this class are returned as
+the result of a query to the AddressBookService, then updates on these
+instances will have a \emph{local} state change only.
+
+Finally, before two RMI components can connect, the server side needs
+to register itself with an \texttt{rmiregistry}, after which the client
+needs to explicitly obtain a reference to the (remote) server object.
+
+\paragraph{Java RMI over IIOP}
+
+By making RMI programs conform to some restrictions, they can be made
+available over the Internet Inter-ORB Protocol (IIOP). This means that
+functionality offered by the RMI program can be made available to CORBA
+clients written in any (CORBA supported) language. The restrictions
+are mostly namespace oriented: programmers need to take special care
+not to use certain names that might collide with CORBA generated names,
+but some reservations should also be made regarding sharing preservation
+of object references. References to objects that are equal according to the
+\texttt{==} operator in one component, need not necessarily be equal in
+a remote component. Instead the \texttt{equals} method should be used
+to discern equality.
+
+RMI over IIOP is best used when combining several Java tools for which
+the programmer would like to use RMI, and some tools written in another
+CORBA-supported language need to use (some of) the services provided by
+the Java tools. The component's interface is established by writing a
+Java interface, just as in plain RMI.
+
+\paragraph{Java IDL}
+
+Apart from Java RMI, which is optimized for connecting components that
+are all written in Java, there is also a connection from Java to CORBA
+using the Java Interface Definition Language (IDL). This alternative
+to Java RMI is for Java programmers who want to program in the Java
+programming language, based on interfaces defined in the CORBA Interface
+Definition Language.
+
+Using this bridge, it becomes possible to let Java components communicate
+with CORBA objects written in any language that has Interface Definition
+Language (IDL) mappings.
+
+Instead of writing a Java interface as is done in RMI, in Java IDL the
+definition is written in IDL: a special purpose interface language used
+as the base for CORBA implementations. This IDL definition is then used
+to generate the necessary \emph{stubs} (client side proxies to delegate
+method invocations to the server) and \emph{skeletons}, \emph{holder}
+and \emph{helper} classes (server side classes that hide low-level
+CORBA details).
+
+\paragraph{Feature summary}
+Fig.~\ref{Fig:feature-overview} shows some of the similarities and
+differences in \TB, RMI, RMI-IIOP and Java IDL.
+
+\begin{figure}[tb]
+\begin{center}
+\begin{tabular}{|l||l|l|l|l|}\hline
+              & \TB\ & RMI & RMI-IIOP & Java IDL \\ \hline\hline
+Architecture  & Component    & Client & Client & Client \\
+              & coordination  & Server & Client & Server \\ \hline
+Interface     & \Tscript & Java Interface & Java Interface & IDL \\ \hline
+GC            & yes & yes & no & no \\ \hline
+parameters /  & by-value & local: by-value & local: by-value & depends on \\
+return values &          & remote: by-ref & remote: by-ref & signature \\ \hline
+language      & any with    & only Java & CORBA objects if &  any with \\
+              & TB adapter &         & interface in Java & IDL binding \\ \hline
+component     & yes & no & no & no \\
+coordination  &     &    &    &    \\ \hline
+
+\end{tabular}
+\caption{\label{Fig:feature-overview}Related architectures: a feature
+overview.}
+\end{center}
+\end{figure}
+
+\begin{itemize}
+
+\item RMI, RMI-IIOP and Java IDL make an explicit distinction
+between \emph{client} and \emph{server} sides of a set of cooperating
+components. In the \TB\ setting all components are considered equal
+(and none are more equal than others).
+
+\item In RMI and RMI-IIOP, the programmer writes a Java interface which
+describes the component's incoming and outgoing method signature, from
+which stubs and skeletons are generated. In Java IDL a CORBA interface
+is written. In the \TB\ setting, these signatures are generated from
+the \TB\ script which describes much more of the component's behavior
+in terms of method call interaction, rather than just method signatures.
+
+\item The \TB\ takes care of garbage collection of the \aterms\ that
+are used to represent data as it is sent from one component to another.
+RMI allows programmers access to Java's Distributed Garbage Collection
+API. In RMI-IIOP and Java IDL however, this is not possible, because
+the underlying CORBA architecture is used, which does not support
+(distributed) GC, but places this burden entirely on the developer.
+
+\item In the \TB\, all data is sent by-value. RMI and RMI-IIOP use
+both pass-by-value and pass-by-reference, depending on whether the
+relevant data is serializable (it is a primitive type, or it implements
+\texttt{Serializable}) or is a remote object. In Java IDL the components
+abide by IDL prescribed interfaces. Determination of whether a parameter
+is to be passed by-value or by-reference is made by examination of the
+parameter's formal type (i.e. in the IDL signature of the method it
+is being passed to). If it is a CORBA \emph{value type}, it is passed
+by-value. If it is an ordinary CORBA \emph{interface type} (the ``normal''
+case for all CORBA objects), it is passed by-reference.
+
+\item The \TB\ allows components in any language for which a \TB\
+adapter exists. Programming languages such as C and Java are supported,
+but adapters also exist for a wide range of languages and applications,
+including e.g., Perl, Prolog, MySQL, Tcl and \asdf. In RMI, only Java
+components can be connected; in RMI-IIOP the service is implemented in
+Java, its functionality (client-side) is available to CORBA clients. The
+Java IDL framework is fully CORBA compliant.
+
+\item Only the \TB\ has coordination support for component interaction.
+In the three other cases any undesired sequence of incoming and
+outgoing method calls will have to be prohibited by adding code to the
+component's internals. Whereas RMI, RMI-IIOP and Java IDL just perform
+the \emph{wiring} that connects the components, the \TB\ also provides
+\emph{workflow} support. In relation to this workflow support, it would
+be interesting to compare the \TB\ to related workflow description
+languages such as the Business Process Modeling language~\cite{bpml}
+and the Web Services Description Language~\cite{wsdl}.
+
+
+\end{itemize}
+
+\paragraph{Implications for the \TB\ Approach}
+
+To overcome the problems of value-based transmission,
+we envisage the introduction of channels as sketched in
+Fig.~\ref{Fig:toolbus-values}(b). This model is inspired by the second
+workaround mentioned at the end of Sect.~\ref{Sec:value-ref} and is
+completely transparent for the user.
+
+The idea is to stick to the strict call-by-value transmission model, but
+to implement the actual value transmission by data communication between
+sending tool and receiving tool thus offloading the \TB\ itself. Via
+the \TB, only an identification of the data value is transmitted between
+sender and receiver. The downside of this model is that it introduces the
+need for distributed garbage collection, since a value may be distributed
+to more than one receiving tool and the sender does not known when all
+receivers have retrieved their copy.  Adding expiration times to values
+or reference counting at the \TB\ level may solve this problem.
+
+\section{Current Status}\label{Sec:status}
+
+The current \TB\ was first specified in \asdf\ and has then been
+implemented manually in C. Its primary target was the renovation of the
+\asdf\ Meta-Environment.
+
+The next generation \TB\ is being implemented in Java and aims at
+supporting larger applications such as, for instance, a multi-user game
+site like \url{www.gamesquare.nl} with thousands of users. High
+performance and recovery of crashed game clients are then of paramount
+importance.  The Java implementation is organized in such a way that
+the actual implementation of tools is as much hidden as possible. This
+is achieved by introducing the interface \texttt{ToolInterface} that
+describes the required \TB/tool interaction. This interface can be
+implemented by a variety of classes:
+
+\begin{description}
+
+\item[\texttt{ClassicToolBusTool}:] this implements the \TB/tool
+communication as used in current applications. The tool is executed as a
+separate, operating system level, process and the \TB/tool communication
+is achieved using sockets.
+
+\item[\texttt{JavaTool}:] this implements a new model that addresses
+one of the issues mentioned in Sect.~\ref{Sec:issues-NG}: when \TB\ and
+tool run on the same computer \emph{and} the tool is written in Java,
+then the tool can be loaded dynamically in the executing \TB, e.g. using
+Java Threads. In this way, the overhead of interprocess communication
+can be eliminated.
+
+\item[\texttt{JavaRMITool}:] this is a special case where a Java tool
+runs on another computer.
+
+\item[\texttt{SOAPTool}:] this implements communication with a tool
+that has a SOAP interface.
+
+\end{description}
+
+\noindent A prototype implementation is under development that allows
+experimentation with the features mentioned in this paper.
+
+\section{Concluding Remarks}\label{Sec:conclusion}
+
+In this paper we have reflected on our experiences over the past years
+with the use of the \TB\ as a means to refactor a previously monolithic
+system: the \asdf\ Meta Environment. This real test case of the \TB\
+has taught us some of its shortcomings: its data bottleneck in case
+very large data items are sent using pass-by-value, maintenance issues
+related to undisciplined message passing and questions such as how to
+deal with exceptions caused by e.g. crashing tools.
+
+Some of the ideas we showed in this paper could be implemented by
+changing or extending the \Tscript{} (e.g. to implement a call-reply
+regime as discussed in Sect.~\ref{Sec:message-patterns}), others will
+also require extending the \TB\ and the tool-adapters (e.g. to detect
+crashed tools in combination with exception handling as discussed in
+Sect.~\ref{Sec:exceptions}).
+
+We have also studied some related ideas and frameworks and we are now
+in a position where we have a new prototype of the \TB\ in Java, with a
+very open structure which allows for all sorts of experiments and case
+studies based on the experience we have with the existing \TB\ and the
+ideas presented in this paper.
+
+\section*{Acknowledgments}
+
+We thank Pieter Olivier for his contribution and input to the many
+interesting and fruitful discussions we have had about \TB\ related
+issues, and his efforts to get \url{www.gamesquare.nl} \TB\ enabled.
+
+\bibliographystyle{splncs} 
+\bibliography{fmco02} 
+\end{document}

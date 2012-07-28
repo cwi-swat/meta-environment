@@ -1,0 +1,8 @@
+process P is
+let T : s in
+    execute(t, T?)
+endlet
+
+tool t is {}
+
+toolbus(P)

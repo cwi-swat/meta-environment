@@ -1,0 +1,131 @@
+
+
+Wed Jun 18 09:38:38 CEST 2008 <jurgenv@cwi.nl>
+ * Improved locations of error messages produces during parsing. This
+   improves the IDE a lot.
+
+Tue Jun 10 14:42:14 CEST 2008 <lankamp@cwi.nl>
+  * Merged the message matching stuff from the parallelization branch to the trunk. This speeds up inter-process communication considerably.
+
+Fri Apr 25 15:13:15 CEST 2008 <lankamp@cwi.nl>
+  * Added Request and Response atoms. These make it possible to create
+  blocking events (sort of). The adapter will guarantee thread-local
+  as-if-serial behavior of issued Requests and Events, so no reordering can
+  occur between them. All tools that currently use event -> ack-event-with-info
+  stuff, should be converted to this new, cleaner, format.
+
+Thu Mar 20 11:21:34 CEST 2008 <lankamp@cwi.nl>
+  * Fixed a problem in the debug code of the ProcessCall atom. It 'appeared' that duplicate steps where being executed, eventhough that wasn't the case.
+
+Thu Mar 20 10:09:24 CEST 2008 <lankamp@cwi.nl>
+  * The performance statistics gatherer now assumes we're only interested in the information related to the threads in the current threadgroup and it's children. Usually this will be 'main'; but in case more then one tool is running in the same virtual machine, this change provides the user with the ability to enable the adapter to filter out the correct information.
+
+Wed Mar 19 09:27:08 CEST 2008 <lankamp@cwi.nl>
+  * Fixed incompatibility in the output that the new genTifs tool generated.
+
+Tue Mar 18 15:14:30 CEST 2008 <lankamp@cwi.nl>
+  * Added toolbus-gentifs script.
+
+Tue Mar 18 14:50:06 CEST 2008 <lankamp@cwi.nl>
+  * Added genTifs tool.
+  * The 'atom signature' is now being calculated in advance instead of being updated at runtime.
+  * Fixed the missing type information in the 'atom signature'.
+  * Added more script error detection to the parser. It is now able to detect 'undeclared variable' errors.
+  * Made some minor adjustments to the ProcessCall atom.
+
+Fri Mar 14 09:35:24 CEST 2008 <lankamp@cwi.nl>
+  * Fixed concurrency problems in the other multiplexers.
+  * Reduced contended locking in the SocketWriteMultiplexer.
+
+Thu Mar 13 13:44:24 CEST 2008 <lankamp@cwi.nl>
+  * Fixed a concurrency problem in the SocketWriteMultiplexer. It was possible that a queued message would not be written into the socket, because the channel was (invalidly) deregistered prior to its transmission.
+  * Made it possible to few the queued messages for all tool instance through the console.
+
+Tue Mar 11 10:34:55 CEST 2008 <lankamp@cwi.nl>
+  * src/toolbus/viewer/DebugToolBus.java: Factored out the performance
+  statistics handling.
+  * src/toolbus/ToolBus.java: Made the process definitions accessible.
+
+Wed Mar 05 10:37:50 CEST 2008 <lankamp@cwi.nl>
+  * src/toolbus/parsercup/*: Position information is now properly being added to process definitions.
+
+Thu Feb 21 13:57:03 CEST 2008 <lankamp@cwi.nl>
+  * src/toolbus/commandline/CommandLine.java: The ToolBus no longer starts with the Console on by default. Instead it can be enabled when required by starting the ToolBus with the --with-console flag.
+
+Mon Feb 18 15:47:25 CEST 2008 <lankamp@cwi.nl>
+ * src/toolbus/viewer/ScriptCodeStore.java: Fixed a problem in the ScriptCodeStore. Not every include was being resolved.
+
+Wed Feb 13 09:28:33 CEST 2008 <lankamp@cwi.nl>
+ * src/toolbus/viewer/DebugToolBus.java: Whether or not the debug toolbus should fire breakPointHit events while stepping is now configurable.
+
+Mon Feb 11 10:21:58 CEST 2008 <lankamp@cwi.nl>
+ * src/toolbus/viewer/DebugToolBus.java: Added the possibility to add breakpoints to sourcecode coordinates.
+
+Wed Feb 06 10:04:45 CEST 2008 <lankamp@cwi.nl>
+ * src/toolbus/viewer/IViewer.java: The stepExecuted event now also contains information about the process instances that were involved with the execution of the state element. These include snd-msg/rec-msg and snd-note/subscribe pairs.
+
+Tue Feb 05 10:45:49 CEST 2008 <lankamp@cwi.nl>
+ * src/toolbus/atom/note/SndNote.java: Added a method that enables the retrieval of potential message partners.
+
+Fri Feb 01 15:58:38 CEST 2008 <lankamp@cwi.nl>
+ * src/toolbus/test/Sieve.tb: Fixed the Sieve test script.
+
+Wed Jan 23 11:12:32 CEST 2008 <lankamp@cwi.nl>
+ * src/toolbus/parsercup/toolbus.cup: The parser now generates slightly better error messages when it encounters a syntax error.
+
+Mon Jan 21 09:38:32 CEST 2008 <lankamp@cwi.nl>
+ * toolbus.*ConnectionHandler: Fixed a problem with setting IP priorities.
+ Some operation systems (Mac) have problems with this and throw an exception.
+
+Mon Jan 14 13:26:00 CEST 2008 <lankamp@cwi.nl>
+ * toolbus.*: Added better error handling for certain cases.
+ * toolbus.process.ProcessInstance: Made it possible to retrieve a list containing all state elements.
+
+Thu Jan 10 13:08:13 CEST 2008 <lankamp@cwi.nl>
+ * toolbus.viewer.ScriptCodeStore: Added a store for script source code to the viewer architecture.
+
+Tue Jan 08 13:35:28 CEST 2008 <lankamp@cwi.nl>
+ * toolbus.communication.*Multiplexer: Removed synchronization and replaced it by a 'latch'.
+
+Fri Jan 04 15:10:00 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.adapter.java.JavaToolBridge: The NG Java adapter is now able to convert aterm parameters to their corresponding Java type. The reflective calling of methods should work now.
+
+Fri Jan 04 11:53:00 CEST 2007 <lankamp@cwi.nl>
+ * toolbus-viewer.sh.src: Added a script that starts the ToolBusNG with the viewer.
+
+Fri Dec 07 15:30:10 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.TBTermFactory: Fixed a bug in the list placeholder code.
+
+Fri Dec 07 14:15:19 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.*: Added support for monitoring tool and ToolBus performance in the debugToolBus and the viewer interface.
+
+Mon Dec 03 14:56:07 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.adapter.*: Split the adapter in a generic and Java specific part to encourage subclassing.
+
+Mon Dec 03 11:01:24 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.atom.ProcessCall: Fixed a problem that could cause the viewer's execution to stall unexpectedly.
+
+Mon Dec 03 10:18:23 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.atom.ProcessCall: Fixed a problem with dynamic process calls.
+
+Fri Nov 30 15:37:01 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.commandline.*: Factored out the command line out of toolbus.Main.
+ * toolbus.*: The user can now specify the port the ToolBus should run on with -Pxxxxx (where xxxxx is a number).
+ * toolbus.adapter.*: Made a change that prevents a potential NullPointer when the AbstractTool is incorrectly used.
+
+Fri Nov 30 11:36:02 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.tool.ToolInstance: Because of a recent change rec-disconnect was unable to retrieve a reference to an 'unreachable' tool.
+
+Tue Nov 27 13:02:06 CEST 2007 <lankamp@cwi.nl>
+ * *.*: The 'new' parser now adds position information to the state elements.
+ * toolbus.viewer.Viewer: Extended the viewer, so you can see what state element a step actually executed.
+
+Wed Nov 21 11:14:11 CEST 2007 <lankamp@cwi.nl>
+ * src/toolbus/Main.java: Added more info to the help message, renamed 'quit' to 'shutdown' and replaced the System.exit(0) by a call to toolbus.shutdown(ATerm), so all tools will be notified that the ToolBus will be terminating.
+ And oh yes, I updated the changelog as well ;).
+
+Mon Nov 19 14:52:45 EST 2007 <jurgenv@cwi.nl>
+ * src/toolbus/Main.java: added "help" message to the shell commands.
+
+Mon Sep 24 10:02:51 CEST 2007 <kooiker@cwi.nl>
+ * toolbus-ng.pc.in: fix LocalJars

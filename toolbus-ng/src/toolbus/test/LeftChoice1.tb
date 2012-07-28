@@ -1,0 +1,16 @@
+process A(I:int) is tau
+
+process Test is
+let
+  P : str
+in
+  P := "A"
+  .
+  (
+    P(2) . printf("SUCCESS\n")
+  <+
+    printf("FAIL\n")
+  )
+endlet
+
+toolbus(Test)

@@ -1,0 +1,770 @@
+package toolbus.parsercup;
+
+/* CUP specification for ToolBus scripts */
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
+
+import toolbus.TBTermFactory;
+import toolbus.ToolBus;
+import toolbus.atom.Assign;
+import toolbus.atom.Atom;
+import toolbus.atom.Create;
+import toolbus.atom.Delta;
+import toolbus.atom.Print;
+import toolbus.atom.ShutDown;
+import toolbus.atom.Tau;
+import toolbus.atom.msg.RecMsg;
+import toolbus.atom.msg.SndMsg;
+import toolbus.atom.note.NoNote;
+import toolbus.atom.note.RecNote;
+import toolbus.atom.note.SndNote;
+import toolbus.atom.note.Subscribe;
+import toolbus.atom.note.UnSubscribe;
+import toolbus.atom.tool.AckEvent;
+import toolbus.atom.tool.Connect;
+import toolbus.atom.tool.DisConnect;
+import toolbus.atom.tool.Do;
+import toolbus.atom.tool.Eval;
+import toolbus.atom.tool.Event;
+import toolbus.atom.tool.Execute;
+import toolbus.atom.tool.GetPerfStats;
+import toolbus.atom.tool.RecPerfStats;
+import toolbus.atom.tool.RecRequest;
+import toolbus.atom.tool.RecVal;
+import toolbus.atom.tool.SndKill;
+import toolbus.atom.tool.SndResponse;
+import toolbus.atom.tool.Terminate;
+import toolbus.exceptions.SyntaxErrorException;
+import toolbus.exceptions.ToolBusError;
+import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusExecutionException;
+import toolbus.logging.IToolBusLoggerConstants;
+import toolbus.logging.LoggerFactory;
+import toolbus.process.Alternative;
+import toolbus.process.Disrupt;
+import toolbus.process.DynamicProcessCall;
+import toolbus.process.IfElse;
+import toolbus.process.IfThen;
+import toolbus.process.Iteration;
+import toolbus.process.LeftBiasedAlternative;
+import toolbus.process.LetDefinition;
+import toolbus.process.Merge;
+import toolbus.process.ProcessCall;
+import toolbus.process.ProcessDefinition;
+import toolbus.process.ProcessExpression;
+import toolbus.process.RightBiasedAlternative;
+import toolbus.process.Sequence;
+import toolbus.tool.ToolDefinition;
+import aterm.AFun;
+import aterm.ATerm;
+import aterm.ATermList;
+
+parser code {:
+
+	protected ToolBus toolbus;
+	protected TBTermFactory tbfactory;
+	protected String fileName;
+	protected String processName = "";
+	private HashSet<String> includedFiles = new HashSet<String>();
+	protected List<ATerm> toolbusProcessCalls = new ArrayList<ATerm>();
+	
+	protected HashMap<String, ATerm> declaredVaribles = new HashMap<String, ATerm>();
+	private boolean parseIncludes = true;
+	
+	protected Stack<Boolean> ifdefStack;
+	
+	/** ToolBus specific constructor */
+	public parser(HashSet<String> includedFiles, List<ATerm> toolbusProcessCalls, String filename, Reader input, ToolBus tb){
+		super(new Lexer(input));
+		
+		this.includedFiles = includedFiles;
+		this.toolbusProcessCalls = toolbusProcessCalls;
+		this.fileName = filename;
+		
+		includedFiles.add(filename);
+		
+		toolbus = tb;
+		tbfactory = toolbus.getTBTermFactory();
+		
+		ifdefStack = new Stack<Boolean>();
+		ifdefStack.push(Boolean.TRUE);
+	}
+	
+	/** ToolBus specific constructor */
+	public parser(ToolBus tb, String filename) throws FileNotFoundException{
+		this(new HashSet<String>(), new ArrayList<ATerm>(), filename, new FileReader(filename), tb);
+	}
+	
+	/** ToolBus specific constructor */
+	public parser(ToolBus tb, String filename, Reader input){
+		this(new HashSet<String>(), new ArrayList<ATerm>(), filename, input, tb);
+	}
+	
+	public void parseIncludes(boolean parseIncludes){
+		this.parseIncludes = parseIncludes;
+	}
+	
+	public String[] scriptsNames(){
+		List<String> scriptNamesList = new ArrayList<String>();
+		Iterator<String> scriptNamesIterator = includedFiles.iterator();
+		while(scriptNamesIterator.hasNext()){
+			scriptNamesList.add(scriptNamesIterator.next());
+		}
+		
+		String[] scriptNames = new String[scriptNamesList.size()];
+		return scriptNamesList.toArray(scriptNames);
+	}
+   
+	protected void enterIfdef (boolean yesOrno){
+		ifdefStack.push(new Boolean(yesOrno));
+	}
+	
+	protected void leaveIfdef(){
+		ifdefStack.pop();
+	}
+	
+	protected boolean generating() {
+	return ifdefStack.peek().booleanValue();
+	}
+	
+	protected void doParseInclude(String filename) throws ToolBusException{
+		if(!parseIncludes) return;
+		
+		if(filename.length() > 0 && filename.charAt(0) == File.separatorChar){
+			File f = new File(filename);
+			if(f.exists()){
+				doParse(filename);
+				return;
+			}
+		}else{
+			String path = toolbus.getProperty("include.path", ".");
+			LoggerFactory.log("unknown", "doParseInclude: path = " + path, IToolBusLoggerConstants.PARSING);
+			
+			String[] elems = path.split("[ ,\t\n\r]+");
+			for(int i = 0; i < elems.length; i++){
+				String dir = elems[i];
+				
+				if(dir.length() > 0){
+					String absoluteName = dir + File.separator + filename;
+					File f = new File(absoluteName);
+					if(f.exists()){
+						doParse(absoluteName);
+						return;
+					}
+				}
+			}
+		}
+		throw new ToolBusException("Cannot resolve include file '" + filename + "'");
+	}
+	
+	private void doParse(String filename) throws ToolBusException{
+		if(includedFiles.contains(filename)){
+			//System.err.println("Skipping include of " + filename);
+			return;
+		}
+		
+		includedFiles.add(filename);
+		//System.err.println("Parse: " + filename);
+		toolbus.parsecup1(includedFiles, toolbusProcessCalls, filename);
+        //System.err.println("Parse: back to " + filename);
+	}
+	
+	public void generateInitialProcessCalls() throws ToolBusException {
+	    for(ATerm call: toolbusProcessCalls){
+	       toolbus.addProcess(new ProcessCall(call, tbfactory, null));
+	    }
+	}
+    
+    public void syntax_error(java_cup.runtime.Symbol badToken){
+    	throw new SyntaxErrorException(fileName, badToken.left + 1, badToken.right + 1, ((Lexer) getScanner()).getPosition() + 1, badToken.sym);
+    }
+	
+	public void undeclaredVariableError(java_cup.runtime.Symbol badToken){
+		throw new UndeclaredVariableException(fileName, badToken.left + 1, badToken.right + 1, ((Lexer) getScanner()).getPosition() + 1, badToken.toString());
+	}
+	
+	public static class UndeclaredVariableException extends RuntimeException{
+		private static final long serialVersionUID = 1485650590025885587L;
+
+		public final String filename;
+		public final int line;
+		public final int column;
+		public final int position;
+		public final String var;
+
+		public UndeclaredVariableException(String filename, int line, int column, int position, String var){
+			super();
+			
+			this.filename = filename;
+			this.line = line;
+			this.column = column;
+			this.position = position;
+			this.var = var;
+		}
+		
+		public String getMessage(){
+			return "Undeclared variable in "+filename+", at line: "+line+", column: "+column+", symbol id: "+var;
+		}
+	}
+	
+	 public void report_error(String message, Object info) {
+	   if (info instanceof java_cup.runtime.Symbol) {
+	     syntax_error((java_cup.runtime.Symbol) info);
+	   }
+	 }
+	 
+	 public int getPosition() {
+	   return ((Lexer) getScanner()).getPreviousPosition();
+	 }
+:}
+
+action code {:
+  private PositionInformation makePosInfo(java_cup.runtime.Symbol beginSymbol, java_cup.runtime.Symbol endSymbol){
+    return new PositionInformation(parser.fileName, parser.getPosition(), beginSymbol.left, beginSymbol.right, endSymbol.left, endSymbol.right);
+  }
+  
+  private PositionInformation makePosInfoWithEndColumnOffset(java_cup.runtime.Symbol beginSymbol, java_cup.runtime.Symbol endSymbol, int endColumnOffset){
+    return new PositionInformation(parser.fileName, parser.getPosition(), beginSymbol.left, beginSymbol.right, endSymbol.left, endSymbol.right + endColumnOffset);
+  }
+:};
+
+/* Terminals (tokens returned by the scanner). */
+
+terminal Integer INT;
+terminal String  REAL;
+terminal String STRING;
+terminal TRUE;
+terminal FALSE;
+terminal UNDEFINED;
+terminal String IDENT;
+terminal SND_MSG;
+terminal REC_MSG;
+terminal SND_NOTE;
+terminal REC_NOTE;
+terminal NO_NOTE;
+terminal SUBSCRIBE;
+terminal UNSUBSCRIBE;
+terminal PRINTF;
+terminal READ;
+terminal REC_EVENT;
+terminal SND_ACK_EVENT;
+terminal REC_REQUEST;
+terminal SND_RESPONSE;
+terminal SND_EVAL;
+terminal SND_CANCEL;
+terminal SND_DO;
+terminal REC_VALUE;
+terminal TOOLBUS;
+terminal PROCESS;
+terminal IS;
+terminal CREATE;
+terminal REC_CONNECT;
+terminal REC_DISCONNECT;
+terminal EXECUTE;
+terminal SND_TERMINATE;
+terminal SND_KILL;
+terminal SHUTDOWN;
+terminal GET_PERF_STATS;
+terminal REC_PERF_STATS;
+terminal IF;
+terminal THEN;
+terminal ELSE;
+terminal FI;
+terminal ASSIGN;
+terminal FMERGE;
+terminal LEFTCHOICE;
+terminal RIGHTCHOICE;
+terminal DISRUPT;
+terminal REL_DELAY;
+terminal ABS_DELAY;
+terminal REL_TIMEOUT;
+terminal ABS_TIMEOUT;
+terminal LET;
+terminal IN;
+terminal ENDLET;
+terminal String NAME;
+terminal DELTA;
+terminal TAU;
+terminal TOOL;
+terminal KIND;
+terminal HOST;
+terminal COMMAND;
+terminal CLASS;
+
+terminal LPAR, RPAR, COMMA;
+terminal LBRACE, RBRACE;
+terminal LANGLE, RANGLE;
+terminal LSQUARE, RSQUARE;
+terminal QUESTION;
+terminal COLON;
+
+terminal CHOICE, SEQ, ITER;
+terminal EQUALS;
+
+terminal INCLUDE, DEFINE;
+terminal String FILENAME;
+terminal IFDEF, IFNDEF, ENDIF;
+
+
+non terminal ATerm term;
+non terminal ATerm result_var, var;
+non terminal ATermList term_list;
+non terminal Atom atom, comm_atom, note_atom, tool_atom, delta_tau, create,
+             read_print, assign, shutdown;     
+non terminal ProcessExpression proc, proc_call, let;
+non terminal ATermList actuals;
+non terminal ATermList formals;
+non terminal ATerm form_decl;
+non terminal ATermList form_list;
+non terminal ATerm type;
+non terminal ATerm var_decl;
+non terminal ATermList var_list;
+non terminal ATermList let_head;
+non terminal ProcessExpression let_tail;
+non terminal String proc_def_name;
+non terminal ProcessDefinition proc_def;
+non terminal String kind, host, command, class;
+non terminal tool_def, def_list;
+non terminal proc_call_in_tb,  proc_call_in_tb_list, toolbus_def, toolbus, script;
+
+non terminal define, include, ifdef_head, ifdef;
+
+
+precedence left FMERGE;
+precedence right RIGHTCHOICE;
+precedence left LEFTCHOICE; 
+precedence left CHOICE ;                       
+precedence right SEQ ;                      
+precedence left ITER;
+precedence left DISRUPT;
+
+
+script::=
+       def_list
+     ;
+
+term ::= 
+       INT:i                               {: RESULT = parser.tbfactory.makeInt(i); :}
+     | REAL:s                              {: RESULT = parser.tbfactory.makeReal(new Double(s).doubleValue()); :}
+     | STRING:s                            {: AFun afun = parser.tbfactory.makeAFun(s.toString(), 0, true);
+     										  RESULT = parser.tbfactory.makeAppl(afun); 
+     									   :}
+     | var:v                               {: RESULT = v; :}
+     | result_var:rv                       {: RESULT = rv; :}
+     | TRUE                                {: RESULT = parser.tbfactory.True; :}  
+     | FALSE                               {: RESULT = parser.tbfactory.False; :}  
+     | UNDEFINED                           {: RESULT = parser.tbfactory.Undefined; :}  
+     | IDENT:id                            {: AFun af = parser.tbfactory.makeAFun(id.toString(), 0, false);
+     									      RESULT = parser.tbfactory.makeAppl(af);
+     									   :}
+     | IDENT:id LPAR term_list:tl RPAR     {: AFun af = parser.tbfactory.makeAFun(id.toString(), tl.getLength(), false);
+     										  RESULT = parser.tbfactory.makeApplList(af, tl);
+     									   :}
+     | LSQUARE term_list:tl RSQUARE        {: RESULT = tl; :}       
+     | LANGLE type:t RANGLE                {: RESULT = parser.tbfactory.makePlaceholder(t); :}
+     ;
+
+result_var ::= NAME:nm QUESTION            {: AFun af = parser.tbfactory.makeAFun(nm, 0, false);
+     									      ATerm at = parser.tbfactory.makeAppl(af);
+     									      ATerm type = parser.declaredVaribles.get(nm);
+     									      if(type == null) parser.undeclaredVariableError((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1));
+     									      RESULT = parser.tbfactory.mkResVar(at, parser.processName, type);
+     									   :}
+    ;
+
+var ::=  NAME:nm                           {: AFun af = parser.tbfactory.makeAFun(nm, 0, false);
+     									      ATerm at = parser.tbfactory.makeAppl(af);
+     									      String replacement = parser.toolbus.getProperty(nm);
+				                              if(replacement != null){
+												RESULT = parser.tbfactory.make(replacement);
+										      } else {
+										        ATerm type = parser.declaredVaribles.get(nm);
+     									        if(type == null) parser.undeclaredVariableError((java_cup.runtime.Symbol) CUP$parser$stack.peek());
+     									        RESULT = parser.tbfactory.mkVar(at, parser.processName, type);
+     									      }
+     									   :}
+    ;
+
+term_list::=
+       /* empty */                          {: RESULT = parser.tbfactory.makeList(); :}
+    |
+       term:t                               {: RESULT = parser.tbfactory.makeList(t); :}   
+     | term:t COMMA term_list:tl            {: RESULT = parser.tbfactory.makeList(t, tl); :}
+     ;
+
+atom ::= 
+       comm_atom:a                          {: RESULT = a; :}
+     | note_atom:a                          {: RESULT = a; :}
+     | tool_atom:a                          {: RESULT = a; :}
+     | delta_tau:a                          {: RESULT = a; :}
+     | create:a                             {: RESULT = a; :}
+     | read_print:a                         {: RESULT = a; :}
+     | assign:a                             {: RESULT = a; :}
+     | shutdown:a                           {: RESULT = a; :}
+     ;
+
+comm_atom::=
+       SND_MSG LPAR term_list:tl RPAR       {: RESULT =  new SndMsg(tl, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+        
+     | REC_MSG LPAR term_list:tl RPAR       {: RESULT =  new RecMsg(tl, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+        
+     ;
+
+note_atom::=   
+       SUBSCRIBE LPAR term:t RPAR           {: RESULT= new Subscribe(t, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+         
+     | UNSUBSCRIBE LPAR term:t RPAR         {: RESULT= new UnSubscribe(t, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+        
+     | SND_NOTE LPAR term:t RPAR            {: RESULT= new SndNote(t, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+        
+     | REC_NOTE LPAR term:t RPAR            {: RESULT= new RecNote(t, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+         
+     | NO_NOTE LPAR term:t RPAR             {: RESULT= new NoNote(t, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     ;
+
+tool_atom::=
+       REC_CONNECT LPAR term:rv RPAR        {: RESULT = new Connect(rv, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top)), false); :}
+     
+     | REC_DISCONNECT LPAR term:rv RPAR     {: RESULT = new DisConnect(rv, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | SND_TERMINATE LPAR term:t1 COMMA term:t2 RPAR
+                                            {: RESULT= new Terminate(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | SND_KILL LPAR term:t1 COMMA term:t2 RPAR
+                                            {: RESULT= new SndKill(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | REC_EVENT LPAR term:t1 COMMA term:t2 RPAR 
+                                            {: RESULT= new Event(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | SND_ACK_EVENT LPAR term:t1 COMMA term:t2 RPAR 
+                                            {: RESULT= new AckEvent(t1, t2, null, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | REC_REQUEST LPAR term:t1 COMMA term:t2 RPAR 
+                                            {: RESULT= new RecRequest(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | SND_RESPONSE LPAR term:t1 COMMA term:t2 RPAR 
+                                            {: RESULT= new SndResponse(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | SND_ACK_EVENT LPAR term:t1 COMMA term:t2 COMMA term:t3 RPAR 
+                                            {: RESULT= new AckEvent(t1, t2, t3, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-7), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | SND_EVAL LPAR term:t1 COMMA term:t2 RPAR
+                                            {: RESULT= new Eval(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | GET_PERF_STATS LPAR term:t1 RPAR
+                                            {: RESULT= new GetPerfStats(t1, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | REC_PERF_STATS LPAR term:t1 COMMA term:t2 RPAR
+                                            {: RESULT= new RecPerfStats(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | SND_CANCEL LPAR term:t1 COMMA term:t2 RPAR /* not implemented */
+     
+     | SND_DO LPAR term:t1 COMMA term:t2 RPAR
+                                            {: RESULT= new Do(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     
+     | REC_VALUE LPAR term:t1 COMMA term:t2  RPAR
+                                            {: RESULT= new RecVal(t1, t2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     ;
+
+delta_tau::=
+       DELTA                                {: RESULT = new Delta(parser.tbfactory, makePosInfoWithEndColumnOffset((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top), 4)); :}
+           
+     | TAU                                  {: RESULT = new Tau(parser.tbfactory, makePosInfoWithEndColumnOffset((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top), 2)); :}
+         
+     ;
+create::=
+       CREATE LPAR NAME:nm actuals:act COMMA result_var:rv RPAR
+                                            {: AFun af = parser.tbfactory.makeAFun(nm.toString(), act.getLength(), false);
+     										   ATerm call = parser.tbfactory.makeApplList(af, act);
+     										   RESULT= new Create(call, rv, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-6), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); 
+     										:}
+     ;
+     
+read_print::=
+       PRINTF LPAR term_list:tl RPAR        {: RESULT = new Print(tl, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+        
+     | READ LPAR term_list RPAR             /* not implemented */
+     ;
+
+shutdown::=
+       SHUTDOWN LPAR term:t RPAR            {: RESULT = new ShutDown(t, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top))); :}
+     ;
+
+assign::=
+        NAME:nm ASSIGN term:t               {: ATerm tnm = parser.tbfactory.make(nm);
+                                               ATerm type = parser.declaredVaribles.get(nm);
+     									       if(type == null) parser.undeclaredVariableError((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2));
+        									   RESULT = new Assign(
+        												   parser.tbfactory.mkVar(tnm, parser.processName, type),
+        									               t,
+        									               parser.tbfactory, 
+        									               makePosInfoWithEndColumnOffset((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), 2));
+        								    :}
+     ;
+   
+proc ::= 
+       atom:a                                {: RESULT = a; :}  
+
+/* Delay and timeout are not fully implemented yet. */
+
+     | atom:a REL_DELAY LPAR term:d RPAR {:	a.setDelay(d);
+											RESULT = a; :}
+                                         
+     | atom:a REL_TIMEOUT LPAR term:t RPAR {:	a.setTimeout(t);
+												RESULT = a; :}
+        
+     | atom:a REL_DELAY LPAR term:d RPAR REL_TIMEOUT LPAR term:t RPAR {:	a.setDelay(d);
+																			a.setTimeout(t);
+																			RESULT = a; :}
+
+     | atom:a ABS_DELAY LPAR term_list:dl RPAR {:	a.setAbsoluteDelay(dl);
+     												RESULT = a; :}
+
+     | atom:a ABS_DELAY LPAR term_list:dl RPAR ABS_TIMEOUT LPAR term_list:tl RPAR {:	a.setAbsoluteDelay(dl);
+     																					a.setAbsoluteTimeout(tl);
+     																					RESULT = a; :}
+          
+     | atom:a ABS_TIMEOUT LPAR term_list:tl RPAR {:	a.setAbsoluteTimeout(tl);
+     												RESULT = a; :}
+     
+         
+     | proc:p1 CHOICE proc:p2               {: RESULT = new Alternative(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))); :}
+     
+     | proc:p1 LEFTCHOICE proc:p2          {: RESULT = new LeftBiasedAlternative(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))); :}
+     
+     | proc:p1 RIGHTCHOICE proc:p2          {: RESULT = new RightBiasedAlternative(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))); :}
+     
+     | proc:p1 SEQ proc:p2                  {: RESULT = new Sequence(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))); :}
+     
+     | proc:p1 ITER proc:p2                 {: RESULT = new Sequence(new Tau(parser.tbfactory, null),
+                                                                       new Iteration(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))),
+                                                                       parser.tbfactory,
+                                                                       null
+                                                                      );
+                                            :}
+                                            
+     | proc:p1 FMERGE proc:p2               {: RESULT = new Merge(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))); :}
+     
+     | proc:p1 DISRUPT proc:p2              {: RESULT = new Disrupt(p1, p2, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1))); :} 
+        
+     
+     | LPAR proc:p RPAR                     {: RESULT = p; :}
+     
+     | proc_call:p                          {: RESULT = p; :}
+     
+     | let:p                                {: RESULT = p; :}  
+                                       
+     | IF term:t THEN proc:p FI             {: RESULT = new IfThen(t, p, parser.tbfactory, null); :}
+        
+     | IF term:t THEN proc:p1 ELSE proc:p2 FI
+                                            {: RESULT= new IfElse(t, p1, p2, parser.tbfactory, null); :}
+        
+     | EXECUTE LPAR term:t COMMA term:rv RPAR
+                                            {: Execute ex = new Execute(t, rv, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top)));
+				                               Connect con = new Connect(rv, parser.tbfactory, null, true);
+				                               RESULT = new Sequence(ex, con, parser.tbfactory, null);
+				                            :}
+     ;     
+
+proc_call ::=
+       NAME:nm actuals:act                  {: PositionInformation posInfo = makePosInfoWithEndColumnOffset((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), nm.length());
+                                               if(parser.declaredVaribles.get(nm) != parser.tbfactory.StrType) RESULT = new ProcessCall(nm, act, parser.tbfactory, posInfo);
+                                               else RESULT = new DynamicProcessCall(nm, act, parser.tbfactory, posInfo);
+                                            :}
+     ;
+
+actuals::=
+       LPAR term_list:tl RPAR                {: RESULT = tl; :}
+     |  /* empty */                          {: RESULT = parser.tbfactory.makeList(); :}           
+     ;
+                                   
+formals::=
+       LPAR form_list:fml RPAR               {: RESULT = fml; :}
+     |
+        /* empty */                          {: RESULT = parser.tbfactory.makeList(); :}                         
+     ;
+     
+form_decl::=
+       NAME:nm COLON type:tp                 {: AFun af = parser.tbfactory.makeAFun(nm, 0, false);
+                                                parser.declaredVaribles.put(nm, tp);
+                                                RESULT = parser.tbfactory.mkVar(af, parser.processName, tp);
+                                             :} 
+                                             
+     | NAME:nm COLON type:tp QUESTION        {: AFun af = parser.tbfactory.makeAFun(nm, 0, false);
+                                                parser.declaredVaribles.put(nm, tp);
+                                                RESULT = parser.tbfactory.mkResVar(af, parser.processName, tp);
+                                             :}        
+     ;
+
+form_list::=   
+       form_decl:fd                          {: RESULT = parser.tbfactory.makeList(fd); :}
+        
+     | form_decl:fd COMMA form_list:fdl
+                                             {: RESULT = parser.tbfactory.makeList(fd, fdl); :}      
+     ;
+
+type::=
+       term:t                                {: RESULT = t; :}  
+     ;
+
+
+var_decl::=
+       NAME:nm COLON type:tp                 {: AFun af = parser.tbfactory.makeAFun(nm.toString(), 0, false);
+       											parser.declaredVaribles.put(nm, tp);
+                                                RESULT = parser.tbfactory.mkVar(af, parser.processName, tp);
+                                             :} 
+     ;
+
+var_list::=   
+       var_decl:vd                           {: RESULT = parser.tbfactory.makeList(vd); :}   
+       
+     | var_decl:vd COMMA var_list:vl         {: RESULT = parser.tbfactory.makeList(vd, vl); :}                   
+     ;
+
+let  ::= let_head:vl let_tail:p              {: RESULT = new LetDefinition(vl, p, parser.tbfactory, null); :}  
+     ;
+
+let_head::=
+       LET var_list:vl IN                    {: RESULT = vl; :}
+     ;
+
+let_tail::=
+       proc:p ENDLET                         {: RESULT = p; :}
+     ;
+
+proc_def_name::=
+       NAME:nm                               {: parser.processName = nm;
+                                                RESULT = nm; 
+                                             :}                
+     ;
+
+proc_def::=
+       PROCESS proc_def_name:nm formals:fml IS proc:p
+                                             {: if(parser.generating()){
+                                             	  ProcessDefinition pd = new ProcessDefinition(nm, fml, p, parser.tbfactory, makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)));
+                                             	  try{
+                                             		  parser.toolbus.addProcessDefinition(pd);
+                                             	  }catch(ToolBusError tbe){
+                                                      throw new ToolBusExecutionException(tbe.getMessage(), makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)));
+                                             	  }
+                                                  parser.processName = "";
+                                         		  parser.declaredVaribles.clear();
+                                                }
+                                             :}
+     ;
+     
+kind::=
+       KIND EQUALS STRING:s                    {: RESULT = s; :}
+     | 
+       /* empty */                            {: RESULT = null; :}
+     ;
+
+host::=
+       HOST EQUALS STRING:s                   {: RESULT = s; :} 
+     |     
+       /* empty */                            {: RESULT = null; :}       
+     ;
+
+command::=
+       COMMAND EQUALS STRING:s                {: RESULT = s; :} 
+     |   
+       /* empty */                            {: RESULT = null; :}             
+     ;
+     
+class::=
+       CLASS EQUALS STRING:s                  {: RESULT = s; :}
+     |
+       /* empty */                            {: RESULT = null; :}
+     ;
+     
+tool_def::=       
+     TOOL IDENT:nm IS LBRACE host:h kind:k command:cmd class:cls RBRACE
+                                               {: if(parser.generating()){
+                                                     ToolDefinition td = new ToolDefinition(nm, h, k, cmd, cls, parser.toolbus);
+                                                     //System.err.println("Adding: " + td);
+                                                     parser.toolbus.addToolDefinition(td);
+                                                  }
+                                               :}
+     ;                        
+
+def_list::=
+       /* empty */  
+     | proc_def def_list
+     | tool_def def_list 
+     | toolbus_def def_list
+     | include def_list
+     | define def_list
+     | ifdef def_list
+     ;
+
+proc_call_in_tb ::=
+       NAME:nm actuals:act                  {: if(parser.generating()){
+       											  AFun af = parser.tbfactory.makeAFun(nm.toString(), act.getLength(), false);
+     										      ATerm call = parser.tbfactory.makeApplList(af, act);
+     										      parser.toolbusProcessCalls.add(call);
+     										      //System.err.println("add to toolbusProcessCalls " + call);
+     										   }
+     										:}
+     ;
+
+proc_call_in_tb_list::=
+       proc_call_in_tb
+     | proc_call_in_tb COMMA proc_call_in_tb_list 
+     ;
+
+toolbus::=
+       TOOLBUS LPAR proc_call_in_tb_list RPAR
+     ;
+
+toolbus_def ::= toolbus
+              ;
+              
+include ::= INCLUDE FILENAME:fn             {: if(parser.generating()){
+		 											parser.doParseInclude(fn);
+		 								       }
+                                            :}                      
+          ;
+
+define ::= 
+         DEFINE NAME:nm                     {: if(parser.generating()){
+         										   //System.err.println("define " + nm);
+         										   parser.toolbus.setProperty(nm, ""); 
+         									   }
+         									:}
+       | DEFINE NAME:nm term:t              {: if(parser.generating()){
+          										   //System.err.println("define " + nm + " = " + t);
+       											   parser.toolbus.setProperty(nm, t.toString()); 
+       											}
+       										:}		   
+       ;
+       
+ifdef_head ::=
+         IFDEF NAME:nm                      {: //System.err.println("ifdef " + nm);
+                                                if(parser.generating()){
+         									      boolean yes = parser.toolbus.getProperty(nm) != null;
+                                                  parser.enterIfdef(yes);
+                                                }
+                                            :}
+       | IFNDEF NAME:nm                     {: //System.err.println("ifndef " + nm);
+                                               if(parser.generating()){
+                                                 boolean yes = parser.toolbus.getProperty(nm) == null;
+                                                 parser.enterIfdef(yes);
+                                               }
+                                            :}
+       ;
+        
+ifdef ::=
+        ifdef_head def_list ENDIF           {: 
+                                               parser.leaveIfdef();
+                                            :}
+      ;
+

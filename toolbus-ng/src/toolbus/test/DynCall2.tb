@@ -1,0 +1,19 @@
+process Equals(Id: term) is
+  if equal(Id, Id) then
+    tau
+  else
+    tau
+  fi
+
+process Function is
+let
+  Id: term,
+  Process: str
+in
+  Id := quote(mid(0))
+  . Process := "Equals"
+  . Process(Id)
+  . printf("SUCCESS\n")
+endlet
+
+toolbus(Function)

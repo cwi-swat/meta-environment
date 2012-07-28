@@ -1,0 +1,14 @@
+process Test is
+let
+  P : str
+in
+  P := "B"
+  .
+  (
+  	P(2) . printf("hoi")
+  <+
+    printf("SUCCESS\n")
+  )
+endlet
+
+toolbus(Test)

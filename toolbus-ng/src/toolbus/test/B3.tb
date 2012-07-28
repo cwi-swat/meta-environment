@@ -1,0 +1,3 @@
+process P is delta
+process Q is tau
+toolbus(P, Q)
