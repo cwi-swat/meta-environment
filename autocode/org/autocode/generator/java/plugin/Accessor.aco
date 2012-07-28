@@ -1,0 +1,12 @@
+plugin accessor {
+  class := "org.autocode.generator.java.plugin.Accessor"
+  provides operations {
+    field := {
+       init,
+       get, is, contains-key, contains-value,
+       set, add, put,
+       merge-collection, fetch-iterator
+    }
+  }
+}
+

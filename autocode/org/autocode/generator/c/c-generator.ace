@@ -1,0 +1,61 @@
+application c-repository {
+  generator java {
+    @import "c-compilation-unit.ace"
+
+    enabled := true
+
+    enum * {
+      package := "org.autocode.generator.c.repository"
+    }
+
+    type * {
+      package := "org.autocode.generator.c.repository"
+      field * {
+        operation := { get, set }
+      }
+    }
+
+    type C-CompilationUnit {
+      import += "org.autocode.generator.repository.CompilationUnit"
+      field header-include {
+        operation := { init, add, merge-collection, fetch-iterator }
+      }
+      field source-include {
+        operation := { init, add, merge-collection, fetch-iterator}
+      }
+      field struct { operation := { init, get, put, fetch-iterator } }
+      field enum { operation := { init, add, fetch-iterator } }
+      field macro { operation := { init, add, fetch-iterator } }
+      field function { operation := { init, add, fetch-iterator } }
+    } 
+
+    type Include {
+      operation += { equals, hash-code }
+      field system {
+        operation := { is, set }
+        operation set {
+          access := private
+        }
+      }
+    }
+
+    type Struct {
+      field field { operation := { init, add, contains-value, fetch-iterator } }
+    }
+
+    type Enum {
+      field element { operation := { init, add, fetch-iterator } }
+    }
+
+    type Macro {
+      field argument { operation := { init, add, fetch-iterator } }
+    }
+
+    type Function {
+      import += { "org.autocode.generator.repository.FormalParameter",
+                  "org.autocode.generator.repository.CodeBlock" }
+      field formal-parameter { operation := { init, add, fetch-iterator } }
+      field static { operation := { is, set } }
+    }
+  }
+}

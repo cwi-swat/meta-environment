@@ -1,0 +1,6 @@
+plugin accessor {
+  class := "org.autocode.generator.c.plugin.Accessor"
+  provides operations {
+    field := { get, set, init }
+  }
+}

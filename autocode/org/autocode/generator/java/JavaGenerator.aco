@@ -1,0 +1,170 @@
+
+class := "org.autocode.generator.java.JavaGenerator"
+
+folding := true		// Enable folding support by default
+javadoc := false
+
+type * {
+  package := { }
+  import := { }
+  access := public	// All types are public by default
+  static := false	// and are not static
+  final := false	// nor final
+  abstract := false	// nor abstract
+
+  //{{{ operation *
+
+  operation * {
+    access := public
+    abstract := false
+    static := false
+    final := false
+  }
+
+  //}}}
+  //{{{ field *
+
+  field * {
+    access := private	  // All attributes have private access by default
+    static := false	  // and are not static
+    final := false	  // nor final
+
+    //{{{ type *
+
+    type * {
+      implementation := { }
+      implementation * {
+        import := { }
+      }
+      interface := { }
+      interface * {
+        import := { }
+      }
+      reference-type := true
+    }
+
+    //}}}
+    //{{{ type boolean?
+
+    type boolean? {
+      implementation := "boolean"
+      reference-type := false
+    }
+
+    //}}}
+    //{{{ type integer?
+
+    type integer? {
+      implementation := "int"
+      reference-type := false
+    }
+
+    //}}}
+    //{{{ type real?
+
+    type real? {
+      implementation := "float"
+      reference-type := false
+    }
+
+    //}}}
+    //{{{ type string?
+
+    type string? {
+      implementation := "String"
+    }
+
+    //}}}
+    //{{{ type list?
+
+    type list? {
+      interface "List" {
+        import := "java.util.List"
+      }
+
+      implementation "LinkedList" {
+        import := "java.util.LinkedList"
+      }
+      element-type * {
+        interface := { }
+        interface * {
+          import := { }
+        }
+        implementation := { }
+        implementation * {
+          import := { }
+        }
+      }
+    }
+
+    //}}}
+    //{{{ type map?
+
+    type map? {
+      interface "Map" {
+        import := "java.util.Map"
+      }
+
+      implementation "HashMap" {
+        import := "java.util.HashMap"
+      }
+      key-type * {
+        interface := { }
+	interface * {
+	  import := { }
+	}
+        implementation := { }
+	implementation * {
+	  import := { }
+	}
+      }
+      value-type * {
+        interface := { }
+	interface * {
+	  import := { }
+	}
+        implementation := { }
+	implementation * {
+	  import := { }
+	}
+      }
+    }
+
+    //}}}
+    //{{{ type set?
+
+    type set? {
+      interface "Set" {
+        import := "java.util.Set"
+      }
+
+      implementation "HashSet" {
+        import := "java.util.HashSet"
+      }
+    }
+
+    //}}}
+
+    //{{{ operation *
+
+    operation * {
+      access := public
+      abstract := false
+      static := false
+      final := false
+    }
+
+    //}}}
+  }
+
+  //}}}
+}
+
+enum * {
+  package := { }
+}
+
+@import "org/autocode/generator/java/plugin/Constructor.aco"
+@import "org/autocode/generator/java/plugin/Accessor.aco"
+@import "org/autocode/generator/java/plugin/Equality.aco"
+

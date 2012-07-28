@@ -1,0 +1,55 @@
+application * {
+  generator * {
+    enabled := false
+
+    plugin * {
+      provides operations {
+	type := { }
+	field := { }
+      }
+    }
+
+    type := { }
+    type * {
+      super := { }
+      operation += { }
+      verbatim := { }
+      description := "no description"
+      field * {
+        operation += { }
+        description := "no description"
+        type * {
+          collection := false
+        }
+	type list? {
+          collection := true
+          element-type := { }
+        }
+	type set? {
+          collection := true
+          element-type := { }
+        }
+	type map? {
+          collection := true
+          key-type := { }
+          value-type := { }
+        }
+      }
+    }
+
+    enum := { }
+    enum * {
+      description := "no description"
+      element := { }
+    }
+
+    array := { }
+  }
+
+  generator java {
+    @import "org/autocode/generator/java/JavaGenerator.aco"
+  }
+  generator C {
+    @import "org/autocode/generator/c/CGenerator.aco"
+  }
+}

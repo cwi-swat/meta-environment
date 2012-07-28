@@ -1,0 +1,428 @@
+PARSER_BEGIN(PropertyParser)
+
+package org.autocode.property.parser;
+
+import org.autocode.property.*;
+import java.util.*;
+import java.io.*;
+
+public class PropertyParser
+{
+  //{{{ public static void main(String args[])
+
+  public static void main(String args[]) throws ParseException
+  {
+    PropertyParser parser = new PropertyParser(System.in);
+    PropertyForest forest = parser.PropertyFile();
+    PropertyContext context = new PropertyContext(forest);
+    //System.out.println("forest: " + forest);
+    context.descend("type", "Type");
+    context.descend("field", "name");
+
+    System.out.println("operations: " + context.getValueSet("operation"));
+    //System.out.println("fields: " + context.getValueSet("field"));
+  }
+
+  //}}}
+  //{{{ private static String unquote(String string)
+
+  private static String unquote(String string)
+  {
+    return string.substring(1, string.length()-1);
+  }
+
+  //}}}
+
+  //{{{ private static PropertyTree buildType(String type, List params)
+
+  private static PropertyTree buildType(String type, List params)
+  {
+    PropertyTree tree;
+
+    if (type.equals("string") || type.equals("integer") || type.equals("real")
+	|| type.equals("Date")) {
+      if (params.size() != 0) {
+	throw new IllegalArgumentException("builtin type " + type
+					   + " cannot have params");
+      }
+      tree = new PropertyTree("type", type, new PropertyForest());
+      tree.setType(PropertyTree.SET);
+    } else if (type.equals("list") || type.equals("set")) {
+      if (params.size() != 1) {
+	throw new IllegalArgumentException("type " + type
+					   + " requires exactly one param");
+      }
+      PropertyForest children = new PropertyForest();
+      PropertyTree elementType =
+	new PropertyTree("element-type", (String)params.get(0), new PropertyForest());
+      elementType.setType(PropertyTree.SET);
+      children.addTree(elementType);
+      tree = new PropertyTree("type", type, children);
+    } else if (type.equals("map")) {
+      if (params.size() != 2) {
+	throw new IllegalArgumentException("type " + type
+					   + " requires exactly two params");
+      }
+      PropertyForest children = new PropertyForest();
+      PropertyTree keyType =
+	new PropertyTree("key-type", (String)params.get(0), new PropertyForest());
+      keyType.setType(PropertyTree.SET);
+      children.addTree(keyType);
+      PropertyTree valueType =
+	new PropertyTree("value-type", (String)params.get(1), new PropertyForest());
+      valueType.setType(PropertyTree.SET);
+      children.addTree(valueType);
+      tree = new PropertyTree("type", type, children);
+    } else {
+      if (params.size() != 0) {
+	throw new IllegalArgumentException("user-defined type " + type
+					   + " cannot have params");
+      }
+      tree = new PropertyTree("type", type, new PropertyForest());
+      tree.setType(PropertyTree.SET);
+    }
+
+    return tree;
+  }
+
+  //}}}
+}
+
+PARSER_END(PropertyParser)
+
+//{{{ Whitespace
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+
+//}}}
+//{{{ Comments
+
+SPECIAL_TOKEN : /* COMMENTS */
+{
+  <HASH_LINE_COMMENT: "#" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <SLASH_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+}
+
+
+//}}}
+//{{{ Punctuation
+
+TOKEN :
+{
+  <LBRACE: "{">
+| <RBRACE: "}">
+| <COMMA: ",">
+| <PERIOD: ".">
+| <ADD: "+=">
+| <SET: ":=">
+| <OPT: "?">
+| <ARROW: "->">
+| <IMPORT: "@import">
+}   
+
+//}}}
+//{{{ Identifiers
+
+TOKEN :
+{
+  < IDENTIFIER: <WILDCARD> | ( <LETTER> ( (<LETTER>|<DIGIT>|<DASH>)* (<LETTER>|<DIGIT>)) ? )>
+| < #LETTER: ["a"-"z","A"-"Z","_"] >
+| < #DIGIT: ["0"-"9"] >
+| < #DASH: "-" >
+| < #WILDCARD: "*" >
+}
+
+
+//}}}
+//{{{ Literals
+
+TOKEN :
+{
+  < STRING_LITERAL:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
+   |  < INTEGER_LITERAL:
+        <DECIMAL_LITERAL> (["l","L"])?
+      | <HEX_LITERAL> (["l","L"])?
+      | <OCTAL_LITERAL> (["l","L"])?
+      >
+   |
+      < #DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
+   |
+      < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+   |
+  < #OCTAL_LITERAL: "0" (["0"-"7"])* >
+   |
+  < FLOATING_POINT_LITERAL:
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+   |
+  < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+
+}
+
+//}}}
+
+//{{{ Name
+
+String Name() :
+{
+  StringBuffer nameBuf;
+  Token name;
+}
+{
+  name=<IDENTIFIER>
+    { nameBuf = new StringBuffer(name.image); }
+  (
+    ( "." name=<IDENTIFIER>
+      { nameBuf.append("."); nameBuf.append(name.image); }
+    )* "->" name=<IDENTIFIER>
+      { nameBuf.append("->"); nameBuf.append(name.image); }
+  ) ?
+  { return nameBuf.toString(); }
+}
+
+
+//}}}
+
+//{{{ PropertyFile
+
+PropertyForest PropertyFile() :
+{
+  PropertyForest forest;
+}
+{
+  forest=PropertyForest() <EOF>
+  { return forest; }
+}
+
+//}}}
+
+//{{{ PropertyForest
+
+PropertyForest PropertyForest() :
+{
+  PropertyForest trees, forest = new PropertyForest();
+  PropertyTree tree;
+  String key;
+  int type;
+  List list;
+  String value;
+}
+{
+  (
+    trees=PropertyTrees() {
+      Iterator iter = trees.fetchTreeIterator();
+      while (iter.hasNext()) {
+	forest.addTree((PropertyTree)iter.next());
+      }
+    }
+  ) *
+  { return forest; }
+}
+
+//}}}
+//{{{ PropertyTrees
+
+PropertyForest PropertyTrees() :
+{
+  String key;
+  Token file, field;
+  PropertyTree fieldType;
+  int propType;
+  List list;
+  PropertyForest forest = new PropertyForest();
+  PropertyForest children;
+  String value;
+  Token superType = null;
+}
+{
+  "@import" file=<STRING_LITERAL>
+  {
+    String fileName = "/" + unquote(file.image);
+    try {
+      //FileReader reader = new FileReader(fileName);
+      InputStream stream = getClass().getResourceAsStream(fileName);
+      if (stream == null) {
+	throw new ParseException("imported file not found: " + fileName);
+      }
+
+      Reader reader = new InputStreamReader(stream);
+
+      PropertyParser parser = new PropertyParser(reader);
+      try {
+	forest = parser.PropertyFile();
+      } catch (Throwable e) {
+	System.err.println("Parse error in included file: " + fileName
+			   + " " + e.getMessage());
+	System.exit(1);
+      }
+      reader.close();
+      return forest;
+    } catch (IOException e) {
+      throw new ParseException("imported file not found: " + fileName);
+    }
+  }
+|
+  LOOKAHEAD(2)
+  field=<IDENTIFIER> ":" fieldType=FieldType()
+  {
+   children = new PropertyForest();
+   children.addTree(fieldType);
+   forest.addTree(new PropertyTree("field", field.image, children));
+   return forest;
+  }
+|
+  key=Name()
+  (
+    LOOKAHEAD(2)
+    value=PropertyValue() ("::" superType=<IDENTIFIER>)?
+      "{" children=PropertyForest() "}"
+    {
+      PropertyTree tree = new PropertyTree(key, value, children);
+      if (superType != null) {
+        if (value.equals("*") || !key.equals("type")) {
+	  throw new ParseException("not a valid type definition");
+	}
+	PropertyTree superTree = new PropertyTree("super", superType.image,
+						  new PropertyForest());
+	superTree.setType(PropertyTree.SET);
+	children.addTree(superTree);
+      } else {
+	if (value.equals("*")) {
+	  tree.setType(PropertyTree.OPT);
+	}
+      }
+      forest.addTree(tree);
+      return forest;
+    }
+  |
+    LOOKAHEAD(2)
+    value=PropertyValue() "?" "{" children=PropertyForest() "}"
+    {
+      PropertyTree tree = new PropertyTree(key, value, children);
+      tree.setType(PropertyTree.OPT);
+      forest.addTree(tree);
+      return forest;
+    }
+  |
+    ( ":=" { propType = PropertyTree.SET; }
+    | "+=" { propType = PropertyTree.ADD;  }
+    )
+    ( "{" list=PropertyValueList() "}"
+      {
+	Iterator iter = list.iterator();
+	if (iter.hasNext()) {
+	  while (iter.hasNext()) {
+	    PropertyTree tree =
+	      new PropertyTree(key, (String)iter.next(), new PropertyForest());
+	    tree.setType(propType); 
+	    propType = PropertyTree.ADD;
+	    forest.addTree(tree);
+	  }
+	} else {
+	  forest.addTree(new PropertyTree(key, propType));
+	}
+	return forest;
+      }
+    |
+      value=PropertyValue()
+      {
+	PropertyTree tree = new PropertyTree(key, value, new PropertyForest());
+	tree.setType(propType);
+	forest.addTree(tree);
+	return forest;
+      }
+    )
+  )
+}
+
+//}}}
+
+//{{{ FieldType
+
+PropertyTree FieldType() :
+{
+  Token type;
+  List params = new LinkedList();
+}
+{
+  type=<IDENTIFIER> ( "<" params=FieldParams() ">" )?
+  { return buildType(type.image, params); }
+}
+
+//}}}
+
+//{{{ FieldParams
+
+List FieldParams() :
+{
+  List params = new LinkedList();
+  Token param;
+}
+{
+  param=<IDENTIFIER> { params.add(param.image); }
+  ( "," param=<IDENTIFIER> { params.add(param.image); }
+  )*
+  { return params; }
+}
+
+//}}}
+
+//{{{ PropertyValue
+
+String PropertyValue() :
+{
+  Token string;
+  String result;
+}
+{
+   ( string=<IDENTIFIER> { result = string.image; }
+   | string=<STRING_LITERAL> { result = unquote(string.image); }
+   | string=<INTEGER_LITERAL> { result = string.image; }
+   | string=<FLOATING_POINT_LITERAL> { result = string.image; }
+   )
+   { return result; }
+}
+
+//}}}
+//{{{ PropertyValueList
+
+List PropertyValueList() :
+{
+  List result = new LinkedList();
+  String propValue;
+}
+{
+  (
+  propValue=PropertyValue() { result.add(propValue); }
+  ( "," propValue=PropertyValue() { result.add(propValue); }
+  ) *
+  |
+  { /* empty list allowed as well */ }
+  )
+
+  { return result; }
+}
+
+//}}}

@@ -1,0 +1,47 @@
+$Id$
+
+Wed Mar 13 10:00:10 CET 2002 <jong@cwi.nl>
+ * fix java-generateHashCode checked for "integer" i.s.o. "int" 
+ * add description to peerObject parameter in generateEquality
+ * add some more descriptive text to equality/hashcode generators
+
+Tue Mar 12 10:58:06 CET 2002 <jong@cwi.nl>
+ * first make at toplevel dir before going down the rest of the buildtree
+
+Sat Mar  9 18:15:03 CET 2002 <olivierp>
+ * Added hashCode support
+ * Added generation of enum's in CGenerator: client example compiles!
+
+Fri Mar  8 17:01:38 CET 2002 <olivierp>
+ * Added generation of structs and fields in structs
+ * Added Equality plugin for the JavaGenerator. It now generates
+   the 'equals' operation, but we still need the 'hashCode' operations
+   in order to be able to add generated objects to Sets.
+
+Sun Mar  3 16:35:48 CET 2002 <jong,olivierp>
+ * Added operations in JavaGenerator: fetch-iterator, get, put, ...
+ * C generator now generates typedefs and function decls
+
+Sun Feb 24 20:14:32 CET 2002 <jong,olivierp>
+ * Added support for 'verbatim' code includes
+ * Fixed enum support in Java generator
+ * Started working on C generator
+
+Fri Feb 22 14:52:29 CET 2002 <olivierp>
+ * Added support for super-types, syntax: 'type Client :: Object { ... }'
+   this construct is normalized to: 'type Client { super := Object ... }'
+
+Mon Feb 18 20:40:11 MET 2002 <olivierp>
+ * Property{Forest,Tree}.toString no pretty-print their trees
+ * generator is now a subtree from application: type's are
+   subtrees of generator. This seams to turn out quite well!
+ * Implemented @import directive: this directive imports trees
+
+Sun Feb 17 16:23:31 CET 2002 <jong,olivierp>
+ * Finished first version of generic property support
+ * Started working on AutocodeGenerator
+
+Thu Feb 14 11:55:37 CET 2002 <jong>
+ * added add/set properties
+ * added "key=value" syntax to PropertyParser
+ * inital automake stuff

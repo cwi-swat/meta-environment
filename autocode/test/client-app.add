@@ -1,0 +1,69 @@
+application client-app {
+  generator java {
+    enabled := true
+    javadoc := true
+
+    //{{{ type *
+
+    type * {
+      package := "org.autocode.test"
+    }
+
+    enum * {
+      package := "org.autocode.test"
+    }
+
+    //}}}
+    //{{{ type Client
+
+    @import "Client.add"
+    type Client {
+      operation := { constructor, equals, hash-code }
+  
+      field name {
+        access := public
+        static := true
+      }
+
+      field order {
+        operation += { init }
+	operation init { access := private }
+        type list {
+          implementation := "ArrayList"
+          implementation "ArrayList" {
+	    import := "java.util.ArrayList"
+          }
+        }
+      }
+      
+      field * {
+        operation := { get, set }
+      }
+    }
+
+    //}}}
+    //{{{ type Order
+
+    @import "Order.add"
+    type Order {
+      operation := { constructor, equals, hash-code }
+      field * {
+	operation := { get, set }
+      }
+    }
+
+    //}}}
+  }
+
+  generator C {
+    enabled := true
+    @import "Client.add"
+    @import "Order.add"
+
+    type * {
+      field * {
+        operation := { get }
+      }
+    }
+  }
+}

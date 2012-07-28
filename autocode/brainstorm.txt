@@ -1,0 +1,162 @@
+
+- expressions in constants
+
+- status of aliases:
+  expanded after parsing?
+  whereever an alias is allowed, its expansion is also allowed?
+
+
+DESIGN ISSUES
+=============
+
+Naming scheme
+-------------
+All names consists of one or more words:
+employee-name, account-number
+
+Word boundaries can be expressed in three ways:
+1. dash-separated: employee-name (or Employee-Name, or EMPLOYEE-NAME)
+2. case-separated: employeeName (or EmployeeName, or EMployeeName)
+3. underscore-separated: employee_name (or Employee_Name, or EMPLOYEE_NAME)
+
+A specific generator can decide how words will be represented in the
+target language, independent of the word boundaries used in the input.
+
+Naming of methods
+-----------------
+- At least two kinds of methods: methods with one parameterized word 
+  (getField) and methods with two parameterized words (convertAtoB)
+  (in general: N parameterized words)
+
+- When choosing the fixed parts of the names (get, convert, to) it is
+  important to make sure that it is not possible to choose the 
+  parameterized words in such a way that method names 'clash'.
+
+- The name of a field method in Java is an example of name with one
+  parameterized word. It consists of an prefix, the name of the field,
+  and an optional suffix.
+
+  getName : prefix = 'get', field = 'name', suffix is empty
+  createNameIterator: prefix = 'create', field = 'name', suffix = 'iterator'
+
+- If a method only has a prefix, it must be unique, which means that it
+  must not be a prefix from any other prefix.
+
+  Suppose we use the prefix 'get' for field accessors:
+  - getField
+
+  Now a field iterator can not be based on the prefix 'get', because
+  this would yield:
+  - getFieldIterator is not allowd!
+
+  Which would clash with the accessor for a field called 'fieldIterator'!
+
+- If a method has a generated suffix, its prefix may be 'overloaded',
+  which means that it may be a prefix from another generated prefix,
+  provided this suffix is not a suffix of any other generated suffix
+  with the same generated prefix:
+
+  add...CollectionList
+  add...List would clash, because the user could provide two fields,
+  where the second field is equal to the first field, but ends in
+  the word 'collection':
+
+  add<name>CollectionList
+  add<nameCollection>List
+
+
+Property priorities
+-------------------
+
+- Order in file is irrelevant
+- There are three separate sets of properties:
+  1. application properties [ddd]
+  2. class properties [ddd.ccc]
+  3. field properties [ddd.ccc.fff]
+- Properties within each set are ordered based on specificity,
+  the field component is the most specific, then the class component, and
+  finally the application component. Thus ordered from least specific to most
+  specific:
+
+  0 [*.*.*]
+  1 [application.*.*]
+  2 [*.class.*]
+  3 [application.class.*]
+  4 [*.*.field]
+  5 [application.*.field]
+  6 [*.class.field]
+  7 [application.class.field]
+
+- Properties are set-valued.
+
+- Property declarations appear in three forms:
+  property = { a, b, c } - assign a set of values
+  property += { a, b, c } - add a set of values (union)
+  property -= { a, b, c } - remove a set of values (subtraction)
+
+- Property updates are performed from least specific (0) to most specific (7)
+
+- For a literal singleton sets the curly braces can be omitted
+  
+Generators
+----------
+A generator is characterized by:
+- language it generates
+- representation of the datatypes (native, aterm, etc.)
+- generators can be specialized using subclassing
+
+Extensibility in Java
+---------------------
+
+Problem: adding extra methods in a generated Java class
+2 Solutions:
+1. User provides an extra file containing the extra methods:
+   [application.Class]
+   include=Class.methods
+   (where application is a Java application)
+2. User provides a subclass of the generated class that contains
+   the extra methods. In this case, generated subclasses of the
+   generated class must subclass the class provided by the user!
+   [application.Class]
+   base=BaseClass // New name of generated base class
+   implementation=a.b.c.Class // Class provided by the user
+
+
+Functionality that can be generated
+-----------------------------------
+
+Basics:
+- getters/setters
+- parser/pretty printer for enumerated values
+- compound attribute support:
+  list, map, tree, set, array
+
+Traversal combinator support
+
+Exchange and storage:
+- database support (via SQL, ODBC)
+- serialization (ToolBus, streams)
+- automatic synchronization over IPC (incremental updates)
+
+GUI form code
+- HTML
+- Java AWT/Swing
+- Gnome/GTK
+
+Documentation generation
+- XML
+- HTML
+- Pod
+- JavaDoc
+- man pages
+
+Debugging support
+- visualization of objects (toString, toHTML, TIDE)
+
+Test generation
+- ?
+
+Reuse of solutions:
+- Implement a solution in one language and reuse this solution by:
+  convert - solve - convert back
+

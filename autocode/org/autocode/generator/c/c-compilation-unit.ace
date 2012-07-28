@@ -1,0 +1,66 @@
+type C-CompilationUnit :: CompilationUnit
+{
+  module : string
+  header-include : set<Include>
+  source-include : set<Include>
+  struct : map<string,Struct>
+  enum : set<Enum>
+  macro : list<Macro>
+  function : list<Function>
+}
+
+type Include
+{
+  file : string
+  system : boolean
+}
+
+type Struct
+{
+  name : string
+  field : list<Field>
+}
+
+type Field
+{
+  name : string
+  type : string
+  static : boolean
+}
+
+type Enum
+{
+  name : string
+  element : list<EnumElement>
+}
+
+type EnumElement
+{
+  identifier : string
+  value : integer
+}
+
+type Array
+{
+  name : string
+  type : string
+  dimensions : integer
+}
+
+type Macro
+{
+  name : string
+  argument : list<string>
+  body : string
+  public : boolean
+}
+
+type Function
+{
+  name : string
+  return-value : string
+  formal-parameter : list<FormalParameter>
+  body : CodeBlock
+  static : boolean
+}
+

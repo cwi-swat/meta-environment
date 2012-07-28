@@ -1,0 +1,12 @@
+enum Article { element := { pen, pencil, note-book } }
+
+type Order
+{
+  id : integer
+  article : Article
+  amount : integer
+}
+
+Order.id->description := "order identification number"
+Order.article->description := "article purchased"
+Order.amount->description := "number of articles purchased"

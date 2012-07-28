@@ -1,0 +1,15 @@
+type Type {
+  name : list<string>
+
+  name->type := string
+
+  field name {
+    type list { 
+      element-type := string
+    }
+    type string { }
+    operation += set
+  }
+
+  name.string->length := 3
+}
