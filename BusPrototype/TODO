@@ -1,0 +1,51 @@
+Bugs:
+	Connection reset / broken pipe problem.
+		This occured very rarely and at random.
+		It might have been fixed already, because it may have been associated with a bug that was fixed recently.
+		Data could have become lost when the Toolbus was overloaded, causing the wrong data to be seen as a length specification, messing up the operation that we wanted to receive and ultimately causing the connection to be aborted (connection reset).
+
+TODO:
+	Lower CPU usage while writing (20% done).
+		-Yields properly to ensure we don't take away scheduling time from other processes / threads (DONE).
+		-Only iterates when the network output buffer has space.
+
+	Create appropriate terms for sending and receiving messages (DO / EVAL / EVENT) (30% done).	
+		Add support for EVAL.
+			-Enable the encapsulation of a optional put message inside the ack message, to serve as a response holder.
+			-Add support for return messages in the ToolBridge.
+	
+	Add tree preservation support to the variables; the variable will contain the entire tree and offer access to a node in that tree.
+	This is needed on the level of the Toolbus.
+	We want to be able to access a specific node, without messing up the GC or retrieving the value.
+	
+	Add serializable object compression.
+		-Every (non native) node should be uniquely identifiable (this identifier should not be serialized, but has to be reconstructable during deserialization) (done; tree based signature identification).
+		-Create a support for LZW like compression for serialization (if a node has been serialized before, adding only the identifier to the bytestream should be enough; there is no need to re-serialize the entire object) (25% done).
+	
+	Add a more advanced method of matching for terms (25% done).
+		-Enable matches on generic types.
+
+	Add tool identification support.
+
+
+Features:
+	Handle firewall issues.
+		-Detect passiveness.
+		-Create an alternate way of communication
+			-active -> passive (get through the bus).
+			-passive -> passive (both get and put(val) through the bus).
+
+
+Stuff that might be nice:
+	An intergrated tool for diagnostics.
+	Should support:
+		-Memory stats
+		-Runtime stats
+		-Thread stats
+		-Ability to generate Java code runtime at the Toolbus, for advanced debugging (possible security hole though, so it should be disableable).
+
+
+Future work:
+	Use streams.
+
+	Handle crashing clients (recovery).
