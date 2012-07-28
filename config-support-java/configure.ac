@@ -1,0 +1,6 @@
+dnl $Id: configure.ac 25129 2008-04-28 11:24:47Z bruntink $
+
+AC_INIT
+META_SETUP
+META_JAVA_SETUP
+AC_OUTPUT

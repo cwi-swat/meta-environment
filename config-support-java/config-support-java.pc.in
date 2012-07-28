@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=bruntink@cwi.nl
+
+Name: config-support-java
+Version: 1.1
+Description:
+Requires: aterm-java
+JarFile=config-support-java.jar 
+Jars=${prefix}/share/${JarFile}
+Packages=nl.cwi.sen1.configapi, nl.cwi.sen1.configapi.types, nl.cwi.sen1.configapi.types.actiondescription, nl.cwi.sen1.configapi.types.color, nl.cwi.sen1.configapi.types.configuration, nl.cwi.sen1.configapi.types.event, nl.cwi.sen1.configapi.types.item, nl.cwi.sen1.configapi.types.keymodifier, nl.cwi.sen1.configapi.types.property, nl.cwi.sen1.configapi.types.shortcut, nl.cwi.sen1.configapi.types.textattribute, nl.cwi.sen1.configapi.types.textcategoryname, nl.cwi.sen1.configapi.types.textstyle, nl.cwi.sen1.configapi.types.virtualbutton, nl.cwi.sen1.configapi.types.virtualkey
+MainClass=
+TestClass=
