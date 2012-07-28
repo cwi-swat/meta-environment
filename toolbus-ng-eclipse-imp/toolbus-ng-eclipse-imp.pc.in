@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl,jurgenv@cwi.nl
+
+Name: toolbus-ng-eclipse-imp
+Description: 
+Version: 1.0.3
+Requires: toolbus-ng
+EclipseRequires=org.eclipse.osgi,org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.ui.console
+JarFile=toolbus-ng-eclipse-imp.jar
+MainClass=toolbus.ToolBusEclipsePlugin
+Jars=${prefix}/share/${JarFile}
+Packages=toolbus,toolbus.adapter.eclipse
