@@ -1,0 +1,12 @@
+prefix=@prefix@
+Maintainers=lankamp@cwi.nl
+Name: io-support
+Version: 1.2
+Description:
+Requires: aterm,config-support,error-support,toolbuslib
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lIOAPI
+#uninstalled Libs: -L@abs_top_builddir@/lib -lIOAPI
+#uninstalled Cflags: -I@abs_top_builddir@/lib
+ToolBusFlags=-I${prefix}/share/io-support
+Jars=${prefix}/share/ioapi.jar

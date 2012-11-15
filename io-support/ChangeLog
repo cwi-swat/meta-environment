@@ -1,0 +1,54 @@
+$Id$
+
+Tue Aug 19 10:06:44 CEST 2008 <jurgenv@cwi.nl>
+ * src/main.c: changed all static allocation of path buffers to
+   dynamic allocation to account for large paths..
+
+Mon Aug 18 22:31:51 CEST 2008 <jurgenv@cwi.nl>
+ * src/main.c: fixed buffer overrun.
+
+Fri Aug 17 13:56:37 CEST 2007 <kooiker@cwi.nl>
+ * src/in-output.isrc: readded functionallity to write term as text (which was
+   still implemented in main.c)
+
+Wed Jul 11 14:26:33 CEST 2007 <kooiker@cwi.nl>
+ * src/{in-output.isrc,main.c}:
+   - Add get-file-size
+
+Fri Oct 13 15:10:38 CEST 2006 <kooiker@cwi.nl>
+ * src/main.c:
+   - Normalize path before comparing (removes superfluous backslashes)
+
+Wed Jun 14 16:02:12 CEST 2006 <kooiker@cwi.nl>
+ * src/main.c:
+   - Fixed declaration after statement
+
+Wed Apr 19 16:18:09 CEST 2006 <kooiker@cwi.nl>
+ * src/{in-output.idef.src,main.c}:
+   - Add functionality to return a list of files depending on a filter
+
+Fri Mar 10 08:54:27 CET 2006 <kooiker@cwi.nl>
+ * src/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
+Mon Feb 20 12:23:48 CET 2006 <kooiker@cwi.nl>
+ * src/{main.c,in-output.idef}:
+   - Add API functions for File
+
+Fri Feb 17 12:54:24 CET 2006 <kooiker@cwi.nl>
+ * lib/*:
+   - Add io library for files and paths
+ * src/main.c:
+   - Add get_file that converts const char * to IO_File
+
+Wed Feb  1 14:29:46 CET 2006 <kooiker@cwi.nl>
+ * configure.ac:
+   - use libtool
+
+Tue Jan 31 09:57:49 CET 2006 <kooiker@cwi.nl>
+ * test:
+   - Removed unused tests
+
+Wed Jan 18 15:31:57 CET 2006 <kooiker@cwi.nl>
+ * Initial version
+
