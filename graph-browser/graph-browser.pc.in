@@ -1,0 +1,9 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
+Name: graph-browser
+Description: 
+Version: 0.1
+EclipseRequires=org.eclipse.core.filesystem,org.eclipse.core.resources,org.eclipse.core.runtime,org.eclipse.gef,org.eclipse.jface.text,org.eclipse.ui,org.eclipse.ui.ide,org.eclipse.ui.workbench.texteditor,org.eclipse.zest.layouts,org.eclipse.imp.pdb.values
+JarFile=graph-browser.jar
+Jars=${prefix}/share/${JarFile}
+Packages=org.meta_environment.rascal.eclipse.lib.graph,org.dancingbear.graphbrowser.editor.gef.ui.parts,org.dancingbear.graphbrowser.model,org.dancingbear.graphbrowser.editor.ui.input
