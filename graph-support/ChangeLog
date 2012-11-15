@@ -1,0 +1,249 @@
+$Id$
+
+Wed Apr 16 11:34:49 CEST 2008 <jurgenv@cwi.nl>
+ * lib/*: regenerated API to fixed type punned aliasing issues.
+
+Fri Mar 21 15:39:01 EDT 2008 <jurgenv@cwi.nl>
+ * utils/layoutgraph/Makefile.am: added --nounput option to flex, such
+   that the newest flex implementations will work.
+
+2007-09-05    <storm@cwi.nl>
+ * utils/layoutgraph/Makefile.am: changed layoutgraph to take the location
+   of dot from the path instead of the configured path in the Makefile.
+ * utils/layoutgraph/*.{isrc,c}: fixed error handling for non-existing
+   dot command.
+
+Thu Mar  8 19:06:02 CET 2007 <jurgenv@cwi.nl>
+ * utils/tree2graph/PT2graph.c: removed illegal use of pattern variable
+   (implementation detail of generated API code).
+
+Mon Feb  5 09:18:44 CET 2007 <jurgenv@cwi.nl>
+ * lib/Graph.adt: added support for sub-graphs
+ * utils/*: added support for subgraph layouting
+            refactored a large part of the code to get this working,
+	    including several changes to the dot.y parser.
+
+Mon Jan 29 10:56:50 CET 2007 <kooiker@cwi.nl>
+ * lib/Graph.adt:
+   - Added tooltip
+
+Fri Sep 22 13:44:08 CEST 2006 <kooiker@cwi.nl>
+ * utils/tree2graph/graph-converter.idef.src:
+   - Possible to switch on/off layout when generating tree
+   - Regenerated tifs
+
+Wed May  3 14:54:21 CEST 2006 <jurgenv@cwi.nl>
+ * removed version number from jar file
+
+Wed May  3 13:55:13 CEST 2006 <jurgenv@cwi.nl>
+ * Bumped to 1.0
+
+Fri Mar 10 11:41:38 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
+Mon Mar  6 10:30:32 CET 2006 <kooiker@cwi.nl>
+ * lib/Makefile.am:
+   - Add jar file to pkgdata_DATA
+ * utils/graph-support-config.sh.src:
+   - Adapt installation directory
+
+Tue Jan  3 08:18:25 CET 2006 <kooiker@cwi.nl>
+ * lib/Makefile.am:
+   - remove INCLUDES from MAINTAINER_MODE section
+
+Mon Jan  2 11:58:01 CET 2006 <kooiker@cwi.nl>
+ * lib/Makefile.am:
+   - add MAINTAINER_MODE to api generation
+
+Sat Dec 17 19:00:43 CET 2005 <kooiker@cwi.nl>
+ * utils/tree2graph/PT2graph.c:
+   - pass ATerm to makeNodeIdDefault
+
+Mon Nov 14 08:48:36 CET 2005 <kooiker@cwi.nl>
+ * utils/layoutgraph/graph2dot.c:
+   - Quote nodenames
+ * utils/tree2graph/*:
+   - Remove unused name argument
+ * utils/layoutgraph/layoutgraph.c:
+   - Unlink dot files
+
+Fri Nov 11 13:57:49 CET 2005 <kooiker@cwi.nl>
+ * Merged from trunk
+
+Thu Nov 10 13:31:10 CET 2005 <jurgenv@cwi.nl>
+ * utils/tree2graph: The representation of cycles changed in AsFix, it now 
+   has a number that denotes the length of each cycle. We use this number 
+   to construct an edge that points up (length - 1) nodes in the tree.
+ * utils/tree2graph: When mapping a tree to a graph that contains a cycle,
+   but the cycle is not complete (because a partial tree was selected) we
+   print a dummy node to explain what happened.
+
+Wed Nov  9 09:59:05 CET 2005 <jurgenv@cwi.nl>
+ * Changed Graph.adt to use lists.
+ * Regenerated Java api
+ * Regenerated C api and adapted the corresponding code.
+ * Added support for ranking of nodes 
+ * Used support for ranking in tree2graph to put all character leaves
+   of a parse tree on a single level.
+
+Thu Sep 22 16:37:39 CEST 2005 <{jong,kooiker,markvdb}@cwi.nl>
+ * lib/graph:
+   - Use list functionality
+   - NodeId accepts a term
+ * utils/layoutgraph/dot.y:
+   - conversion from term to NodeId and the other way around
+   - createDotAttribute renamed to appendKeyValue
+
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
+Tue Jun  7 17:23:04 CEST 2005 <jurgenv@cwi.nl>
+ * Reversed production for stmt_list to use left instead of right
+   recursion such that large graphs can still be processed.
+
+Mon May 30 15:40:08 CEST 2005 <jurgenv@cwi.nl>
+ * Added support for drawing cyclic trees
+
+Thu Jan 20 14:58:49 CET 2005 <jurgenv@cwi.nl>
+ * Added support for seeing the shared representation to tree2graph
+
+Wed Dec  8 09:30:17 CET 2004 <{jong,kooiker}@cwi.nl>
+ * lib/Makefile.am:
+   - Add graph-${VERSION}.jar to EXTRA_DIST 
+
+Mon Nov 29 10:33:03 CET 2004 <{jurgenv,jong,kooiker}@cwi.nl>
+ * Execute 'dot -y' now, to flip coordinate system such that Swing
+   can deal with it better.
+ * NOTA BENE: we no depend on the '-y' switch of graphviz's dot, which
+   does not appear in all released versions of graphviz.
+ * Bugfix: half of the edge coordinates were inverted depending on dots
+   ideosynchrasies. Now we build the edge coordinates in the same fashion
+   for all edge types (s,e,whatever)
+
+Fri Nov 26 15:19:11 CET 2004 <jurgenv@cwi.nl>
+ * Removed flipping an edge in layoutgraph, somewhere else this
+   bug must be solved now ;-)
+
+Fri Jun 18 10:32:42 CEST 2004 <jurgenv@cwi.nl>
+ * Added dependency on aterm-java in .pkg file
+
+Mon Jun 14 09:32:01 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * prepend gc to graph-converter messages
+ * implement "get-node-origin" in tree2graph for now.
+   To be moved when we generate graph.idef from graph.adt
+
+Thu Jun 10 10:12:28 CEST 2004 <jong@cwi.nl>
+ * lib/Makefile.am: explicitly refer to graph*jar in top_srcdir/lib
+
+Tue May 25 16:10:55 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * add generation of java graph API
+
+Fri Apr 16 11:45:51 CEST 2004 <jurgenv@cwi.nl>
+ * Improved tree2graph on the character level
+
+Fri Mar 19 08:39:10 CET 2004 <jong@cwi.nl>
+ * graph-support/utils/layoutgraph/dot.y:
+   #define YY_NO_UNPUT to suppress generation of static yyunput() function
+
+Wed Mar 10 09:16:28 CET 2004 <kooiker@cwi.nl>
+ * Use new error-api 
+
+Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
+Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
+ * fix Makefile.am to get "distcheck" working
+
+Mon Jan 26 11:55:29 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * bump version to 0.2
+
+2003/01/13 (jurgenv@cwi.nl)
+ * Added dependency on error-support package
+
+Wed Oct  8 16:14:39 CEST 2003 <{jong,jurgenv}@cwi.nl>
+ * Added support for color, fillcolor and style attributes. Closes: #64
+ * utils/tree2graph: arbitrary colors used to draw attention to ambiguities.
+
+Thu Oct  2 13:19:41 CEST 2003 <jong@cwi.nl>
+ * utils/layoutgraph/dot.y:  Closes #54
+   - #define YYERROR_VERBOSE to get better error message
+   - relaxed dot parser, an identifier can also start with a digit now
+   - changed yyerror message a bit
+
+Thu Sep 11 12:47:17 CEST 2003 <jong.cwi.nl>
+ * graph-support:
+   - mv layoutgraph.idef -> layout-graph.idef
+   - mv tree2graph.idef -> graph-converter.idef
+
+2003/08/01 (jurgenv@cwi.nl)
+ * Set to version 0.1.1
+
+Wed Jul 23 10:31:02 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * graph-support/utils/layoutgraph/layoutgraph.c:
+   function layoutGraph() rewritten from scratch, without using fork/exec.
+   Since we were using /tmp/XYZ files anyway just use system() to invoke dot.
+
+2003/07/14 ({jurgenv,markvdb}@cwi.nl)
+ * Added graph attributes to the graph format
+ * Added reading of bounding box information from dot format
+ * Fixed a major (but subtle) bug in the conversion from dot to graph. If
+   and edge is an 'e' edge, the nodes must be reversed in order for the
+   Bezier algorithm to be able to work correctly.
+ * Fixed another bug in layoutgraph, multiple edges with the same beginning
+   and end node were lost due to the merging. We have removed the merging,
+   edge attributes of the incoming graph are lost from now on!
+
+2003/07/09 (markvdb@cwi.nl)
+ * Removed explicit ShowSource information.
+
+Thu Jul 10 15:33:16 CEST 2003 <{jong,markvdb,jurgenv}@cwi.nl>
+ * utils/tree2graph/PT2graph.c:
+   "Show Source" adapted to new button format
+
+2003/07/09 (markvdb@cwi.nl)
+ * Limited the number of nodes in the graph to MAX_NR_OF_NODES (3000)!
+
+2003/07/03 (markvdb@cwi.nl)
+ * tree2graph takes a (module) name as argument and uses this in
+   the "ShowSource" message.
+
+2003/07/02 (jurgenv@cwi.nl)
+ * Release 0.1
+
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
+2003/06/27 (markvdb@cwi.nl)
+ * Extended the graph format with a generic info container (key,value).
+ * Position information, if any, is now stored in the parsetree graph
+   as well.
+
+2003/04/24 (jurgenv@cwi.nl)
+ * In ToolBus mode layoutgraph will produce a graph with productions
+   as nodes (it used to be just the symbols)
+
+Fri Apr 11 13:37:01 CEST 2003 <jong@cwi.nl>
+ * fix #include problems
+
+2003/04/02 (jurgenv@cwi.nl)
+ * Extended dot parser with the ability to deal with direction attributes
+   on edges
+ * This means also extending the parser to deal with 4 curve points instead
+   of 5 curve points and the corresponding dot way of encoding this information
+   in a string.
+
+2003/03/31 (jurgenv@cwi.nl)
+ * Renamed dot-adapter to layoutgraph
+ * Removed tree2dot because it is obsolete. It can be simulated by
+   tree2graph | graph2dot. TODO: fix the bug that the graph is
+   displayed upside-down.
+ * Refactored layoutgraph to split into graph2dot and the rest
+ * Added edge direction as an attribute to the graph format
+
+2003/03/30 (jurgenv@cwi.nl)
+ * Fixed SOCKLIBS configuration for SunOs.
+
+2003/03/28 (jurgenv@cwi.nl)
+ * Started graph-support version 0.1beta

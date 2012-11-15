@@ -1,0 +1,28 @@
+#ifndef __TREE_TO_RELATION__
+#define __TREE_TO_RELATION__
+
+tool tree2relation is { command = "__PREFIX__/bin/tree2relation" }
+
+process TreeToRelation is
+let
+  T2R: tree2relation,
+  Tree: term,
+  LayoutOn: bool,
+  LeafsOn: bool,
+  SharingOn: bool,
+  RStore: term
+in
+  execute(tree2relation, T2R?)
+  .
+  (
+    rec-msg(gs-tree-to-relation(Tree?, LayoutOn?, LeafsOn?, SharingOn?))
+    . snd-eval(T2R, tree2relation(Tree, LayoutOn, LeafsOn, SharingOn))
+    . rec-value(T2R, relation(RStore?))
+    . snd-msg(gs-relation(RStore))
+  )
+  * delta
+endlet
+
+toolbus(TreeToRelation)
+
+#endif
