@@ -1,0 +1,89 @@
+#ifndef __GRAPH_PAINTER__
+#define __GRAPH_PAINTER__
+
+tool graph-painter is { }
+
+process GraphPainter is
+let
+  T: graph-painter,
+  Button: term,
+  Closable: bool,
+  Event: term,
+  GraphId: term,
+  Graph: graph,
+  GraphType: str,
+  Key: term,
+  Menu: term,
+  NodeId: term,
+  PopupMenu: list,
+  Shared: bool,
+  Value: term
+in
+  rec-connect(T?)
+  .
+  (
+    rec-msg(gp-display-graph(GraphType?, GraphId?, Graph?))
+    . snd-do(T, display-graph(GraphType, GraphId, Graph))
+  +
+    rec-msg(gp-update-graph(GraphType?, GraphId?, NodeId?, Key?, Value?))
+    . snd-do(T, update-graph(GraphType, GraphId, NodeId, Key, Value))
+  +
+    rec-msg(gp-create-panel(GraphType?, GraphId?, Shared?, Closable?))
+    . snd-eval(T, create-panel(GraphType, GraphId, Shared, Closable))
+    . rec-value(T, panel-created)
+    . snd-msg(gp-panel-created(GraphType, GraphId))
+  +
+    rec-msg(gp-render-graph(GraphType?, GraphId?, Graph?))
+    . snd-eval(T, size-graph(GraphType, GraphId, Graph))
+    . rec-value(T, sized-graph(Graph?))
+    . snd-msg(gp-rendered-graph(GraphType, GraphId, Graph))
+  +
+    rec-msg(gp-select-node(GraphType?, GraphId?, NodeId?))
+    . snd-do(T, select-node(GraphType, GraphId, NodeId))
+  +
+    rec-event(T, mouse-event(graph-painter(GraphType?, GraphId?, NodeId?),Event?))
+    .
+    /* \todo make mouse events configurable */
+    if equal(Event,popup) then
+      snd-msg(gp-request-popup-event(GraphType, GraphId, NodeId))
+    else
+      snd-note(gp-node-selected(GraphType, GraphId, NodeId))
+    fi
+    . snd-ack-event(T, mouse-event(graph-painter(GraphType, GraphId, NodeId),Event))
+  +
+    rec-event(T, panel-closed(GraphType?, GraphId?))
+    . snd-note(gp-panel-closed(GraphType, GraphId))
+    . snd-ack-event(T, panel-closed(GraphType, GraphId))
+  +
+    rec-msg(gp-show-popup(GraphType?, GraphId, NodeId?, PopupMenu?))
+    . snd-do(T, show-popup(GraphType, GraphId, NodeId, PopupMenu))
+  +
+    rec-event(T, menu-event(graph-node(GraphType?, GraphId?, NodeId?), Menu?))
+    . snd-msg(gp-menu-selected(GraphType, GraphId, NodeId, Menu))
+    . snd-ack-event(T, menu-event(graph-node(GraphType, GraphId, NodeId), Menu))
+  )
+  *
+  rec-disconnect(T)
+endlet
+
+process GP-AddListener is
+  subscribe(gp-node-selected(<str>,<term>,<term>))
+ 
+process GP-AddCloseListener(GraphType : str, GraphId: term)  is
+  subscribe(gp-panel-closed(GraphType,GraphId))
+
+process GP-RequestPopup(GraphType: str?, GraphId: term?, NodeId: term?) is
+  rec-msg(gp-request-popup-event(GraphType?, GraphId?, NodeId?))
+
+process GP-ShowPopup(GraphType: str, GraphId: term, NodeId: term, PopupMenu: list) is
+  snd-msg(gp-show-popup(GraphType, GraphId, NodeId, PopupMenu))
+
+process GP-PopupEvent(GraphType: str?, GraphId: term?, NodeId: term?, MenuItem: term?) is
+  rec-msg(gp-menu-selected(GraphType?, GraphId?, NodeId?, MenuItem?))
+
+process StartGraphPanel is
+  snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar", "__PKGDATA__/prefuse.jar:__EXTERNAL_JARS__"))
+
+toolbus(GraphPainter)
+
+#endif /* __GRAPH_PAINTER__ */

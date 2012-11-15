@@ -1,0 +1,15 @@
+prefix=@prefix@
+
+Maintainers=jurgenv@cwi.nl,lankamp@cwi.nl
+Name: graph-gui
+Version: 1.3
+Description:
+Requires: aterm-java,config-support-java,graph-support-java,meta-studio,module-support-java,toolbus-java-adapter
+JarFile=graph-painter.jar
+Jars=${prefix}/share/${JarFile}:${prefix}/share/prefuse.jar
+Packages=nl.cwi.sen1.gui.plugin
+MainClass=nl.cwi.sen1.gui.plugin.GraphPainter
+LocalJars=lib/prefuse.jar
+TestClass=
+ToolBusFlags=-I${prefix}/share/graph-gui
+

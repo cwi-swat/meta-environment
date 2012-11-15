@@ -1,0 +1,84 @@
+
+
+Wed Nov 12 14:35:43 CET 2008 <jurgenv@cwi.nl>
+ * resources/**: Added resources to source distribution
+
+Mon Apr 28 13:32:22 2008    <bruntink@cwi.nl>
+
+	* graph-gui.pc.in: Changed dependency on module-support to module-support-java.
+	* graph-gui.pc.in: Changed dependency on graph-support to graph-support-java.
+
+Wed Sep  5 17:50:48 CEST 2007 <{storm,jurgenv}@cwi.nl>
+ * src/**/GraphAdapter.java: made adapter robust against the non-existence
+   of node and edge attributes that should have been added by dot.
+
+Wed May  9 16:08:51 CEST 2007 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Center on node when node is selected from outside prefuse (closes #128)
+
+Fri Feb  9 11:41:07 CET 2007 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Fix focus colors abandonned after mouse hover
+
+Tue Jan 30 09:59:10 CET 2007 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Check if selected item is a node before creating a nodeselected event
+
+Mon Jan 29 10:52:40 CET 2007 <kooiker@cwi.nl>
+ * src/**/Graph{Adapter,Panel}.java:
+   - added tooltip support
+
+Wed Jan 10 10:42:26 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * **/GraphPanel.java: added RepaintActions to each layout.
+
+Mon Jan  8 13:34:51 CET 2007 <kooiker@cwi.nl>
+ * graph-painter.idef.src:
+   - Added update graph message that only updates a single attribute of a node
+     (no need to recalculate complete graph for a single change anymore)
+
+Tue Oct 31 10:12:13 CET 2006 <jurgenv@cwi.nl>
+ * **/GraphPainter.java: refactored use of the menu and mouse
+   event interfaces to the ToolBus.
+
+Thu Oct  5 22:38:53 CEST 2006 <jurgenv@cwi.nl>
+ * lib/prefuse.jar: upgraded to latest beta
+ * **/GraphPanel.java: fixed commented out layouts.
+ * **/GraphPanel.java: fixed Circle layout to use full circle.
+
+Wed Sep  6 14:14:53 CEST 2006 <kooiker@cwi.nl>
+ * graph-painter.idef.src:
+   - fixed gp-node-selected snd-note message
+
+Tue Jun 20 13:35:38 CEST 2006 <jurgenv@cwi.nl>
+ * graph-painter.idef.src,**/GraphPainter.java: split GraphId 
+   into graphType (str) and graphId (term), such that several
+   graphs of the same type can be shown in different tabs.
+
+Tue May  2 11:01:53 CEST 2006 <kooiker@cwi.nl>
+ * graph-painter.idef.src:
+   - Add boolean that indicates if panel can be closed
+
+Wed Apr 26 12:01:21 CEST 2006 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Updating graph clears old one (closes #580)
+
+Fri Apr 14 12:56:03 CEST 2006 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Update use of mousebuttons: 
+     - Button 1 single click on module selects module
+     - Button 2 single click on module shows popup
+     - Button 2 single click on background zooms to fit
+     - Button 1 click and drag moves graph
+     - Button 2 click and drag zooms in/out
+
+Fri Mar 31 15:04:56 CEST 2006 <kooiker@cwi.nl>
+ * src/**/*.java,lib/prefuse.jar:
+   - Update prefuse to beta 20060320
+
+Tue Feb 21 16:31:26 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use configuration api for menus and shortcuts
+
+Wed Jan 18 15:31:57 CET 2006 <kooiker@cwi.nl>
+ * Initial version
+
